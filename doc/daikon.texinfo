@@ -7721,6 +7721,7 @@ Defense Advanced Research Projects Agency (DARPA),
 Edison Design Group,
 IBM,
 NTT,
+MIT Oxygen Project,
 Raytheon,
 Toshiba.
 
