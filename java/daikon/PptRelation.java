@@ -108,13 +108,35 @@ public class PptRelation implements Serializable {
 
   /**
    * Relates all of the variables with the same name in parent and child.
+   * Returns true if each parent variable was related to a child variable
    */
-  public void relate_same_name() {
+  public boolean relate_same_name() {
 
+    boolean relate_all = true;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
-      relate (vp, vp.name);
+      boolean relate_var = relate (vp, vp.name);
+      if (!relate_var)
+        relate_all = false;
     }
+
+    return (relate_all);
+
+  }
+
+  /**
+   * Returns the variable in ppt that matches viname.  Returns null
+   * if viname does not exist in ppt
+   */
+  private static VarInfo find_var (PptTopLevel ppt, VarInfoName viname) {
+
+    for (int j = 0; j < ppt.var_infos.length; j++) {
+      VarInfo v = ppt.var_infos[j];
+      if (viname == v.name) {
+        return (v);
+      }
+    }
+    return (null);
   }
 
   /**
@@ -266,8 +288,10 @@ public class PptRelation implements Serializable {
     debug.fine ("child vars = " + VarInfo.toString(child.var_infos));
 
     // Connect each 'this' variable between parent and child
-    // Note that these should be the only variables whose names match
-    rel.relate_same_name();
+    // Note that these should be the only variables whose names match and
+    // that each parent variable should match one in the child.
+    boolean relate_all = rel.relate_same_name();
+    Assert.assertTrue (relate_all);
     return (rel);
   }
 
@@ -541,18 +565,23 @@ public class PptRelation implements Serializable {
         if (parent != null)
           rel = newClassObjectRel (parent, ppt);
 
-      // Else if it is an enter point and not a constructor, parent is object
-      } else if (pname.isEnterPoint() && !pname.isConstructor()) {
+      // Else if it's a method and not a constructor, parent is object or class
+      // static methods will relate to the class, while non-static methods
+      // will relate to the object.  Whether or not a method is static is
+      // not in the decls file.  We infer this by looking to see if the
+      // variables match with the object ppt or the class ppt.
+      } else if ((pname.isEnterPoint() && !pname.isConstructor()) ||
+                  pname.isCombinedExitPoint()) {
         PptTopLevel parent = all_ppts.get (pname.makeObject());
-        if (parent != null)
-          rel = newObjectMethodRel (parent, ppt);
-
-      // Else if a combined exit point, parent is object
-      } else if (pname.isCombinedExitPoint()) {
-        PptTopLevel parent = all_ppts.get (pname.makeObject());
-        if (parent != null)
-         rel = newObjectMethodRel (parent, ppt);
-
+        if (parent != null) {
+          if (find_var (ppt, parent.var_infos[0].name) != null)
+            rel = newObjectMethodRel (parent, ppt);
+          else {
+            parent = all_ppts.get (parent.ppt_name.makeClassStatic());
+            if (parent != null)
+              rel = newObjectMethodRel (parent, ppt);
+          }
+        }
       // Else if an exitNN point, parent is combined exit point
       } else if (pname.isExitPoint()) {
         PptTopLevel parent = all_ppts.get (pname.makeExit());
