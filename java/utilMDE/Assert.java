@@ -13,16 +13,23 @@ package utilMDE;
 public final class Assert {
   /** If false, the Assert class is disabled. */
   public final static boolean enabled = true;
-  /** Throw AssertionException with the argument string if the condition does not hold. */
-  public static final void assert(boolean b, String s) {
+  /**
+   * Throw AssertionException with the argument string
+   * if the condition does not hold.  Named "assertTrue" instead of
+   * "assert" because "assert" is a Java 1.4 keyword.
+   **/
+  public static final void assertTrue(boolean b, String s) {
     if (enabled && !b)
       throw new AssertionException(s);
   }
-  /** Throw AssertionException if the condition does not hold. */
-  public static final void assert(boolean b) {
-    assert(b, null);
+  /**
+   * Throw AssertionException if the condition does not hold.  Named
+   * "assertTrue" instead of "assert" because "assert" is a Java 1.4 keyword.
+   **/
+  public static final void assertTrue(boolean b) {
+    assertTrue(b, null);
   }
-  /** Error class for failed assertions. */
+  /** Error class for failed assertions. **/
   public static final class AssertionException extends Error {
     public AssertionException(String s) {
       super(s);
@@ -48,19 +55,19 @@ public final class Assert {
 //      However, if the condition in the assertion may have side effects, the
 //      condition code cannot be optimized away. For example, in the assertion
 //
-//           Assert.assert(size() <= maxSize, "Maximum size exceeded");
+//           Assert.assertTrue(size() <= maxSize, "Maximum size exceeded");
 //
 //      the call to size() cannot be optimized away unless the compiler can see
 //      that the call has no side effects. C and C++ use the preprocessor to
 //      guarantee that assertions will never cause overhead in production code.
 //      Without a preprocessor, it seems the best we can do in Java is to write
 //
-//           Assert.assert(Assert.enabled && size() <= maxSize, "Too big");
+//           Assert.assertTrue(Assert.enabled && size() <= maxSize, "Too big");
 //
 //           Alternatively, use
 //
 //               if (Assert.enabled)
-//                   Assert.assert( size() <= maxSize, "Too big" );
+//                   Assert.assertTrue( size() <= maxSize, "Too big" );
 //
 //      In this case, when Assert.enabled is false, the method call can always
 //      be optimized away totally, even if it has side effects. The relevant
@@ -71,11 +78,11 @@ public final class Assert {
 //      Assert.enabled is refered it is replaced at compile time with its
 //      value. Writing:
 //
-//            if (Assert.enabled) Assert.assert(size() <= maxSize, "Too big");
+//            if (Assert.enabled) Assert.assertTrue(size() <= maxSize, "Too big");
 //
 //      is exactly the same as writing:
 //
-//            if (false) Assert.assert(size() <= maxSize, "Too big");
+//            if (false) Assert.assertTrue(size() <= maxSize, "Too big");
 //
 //      ... assuming Assert.enabled is false at compile time. Section 14.19
 //      discusses compiling away such dead code. To sum up: the inlining of the

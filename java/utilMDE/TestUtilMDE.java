@@ -45,7 +45,7 @@ public final class TestUtilMDE extends TestCase {
 //     System.out.println("All utilMDE tests succeeded.");
 //   }
 
-// // I don't use Assert.assert() because that can be turned off by setting
+// // I don't use Assert.assertTrue() because that can be turned off by setting
 // // Assert.enabled = false, and I want these tests to always be performed.
 //   private static final void assert(boolean b) { if (!b) throw new Error(); }
 //   private static final void assert(boolean b, String s) { if (!b) throw new Error(s); }
@@ -915,43 +915,43 @@ public final class TestUtilMDE extends TestCase {
     // public static Class classForName(String className)
 
     // public static String classnameToJvm(String classname)
-    Assert.assert(UtilMDE.classnameToJvm("boolean").equals("Z"));
-    Assert.assert(UtilMDE.classnameToJvm("byte").equals("B"));
-    Assert.assert(UtilMDE.classnameToJvm("char").equals("C"));
-    Assert.assert(UtilMDE.classnameToJvm("double").equals("D"));
-    Assert.assert(UtilMDE.classnameToJvm("float").equals("F"));
-    Assert.assert(UtilMDE.classnameToJvm("int").equals("I"));
-    Assert.assert(UtilMDE.classnameToJvm("long").equals("J"));
-    Assert.assert(UtilMDE.classnameToJvm("short").equals("S"));
-    Assert.assert(UtilMDE.classnameToJvm("Integer").equals("LInteger;"));
-    Assert.assert(UtilMDE.classnameToJvm("Java.lang.Integer").equals("LJava/lang/Integer;"));
-    Assert.assert(UtilMDE.classnameToJvm("Java.lang.Integer[][][]").equals("[[[LJava/lang/Integer;"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("boolean").equals("Z"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("byte").equals("B"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("char").equals("C"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("double").equals("D"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("float").equals("F"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("int").equals("I"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("long").equals("J"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("short").equals("S"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("Integer").equals("LInteger;"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("Java.lang.Integer").equals("LJava/lang/Integer;"));
+    Assert.assertTrue(UtilMDE.classnameToJvm("Java.lang.Integer[][][]").equals("[[[LJava/lang/Integer;"));
 
     // public static String arglistToJvm(String arglist)
 
     // public static String classnameFromJvm(String classname)
-    Assert.assert(UtilMDE.classnameFromJvm("Z").equals("boolean"));
-    Assert.assert(UtilMDE.classnameFromJvm("B").equals("byte"));
-    Assert.assert(UtilMDE.classnameFromJvm("C").equals("char"));
-    Assert.assert(UtilMDE.classnameFromJvm("D").equals("double"));
-    Assert.assert(UtilMDE.classnameFromJvm("F").equals("float"));
-    Assert.assert(UtilMDE.classnameFromJvm("I").equals("int"));
-    Assert.assert(UtilMDE.classnameFromJvm("J").equals("long"));
-    Assert.assert(UtilMDE.classnameFromJvm("S").equals("short"));
-    Assert.assert(UtilMDE.classnameFromJvm("LInteger;").equals("Integer"));
-    Assert.assert(UtilMDE.classnameFromJvm("LJava/lang/Integer;").equals("Java.lang.Integer"));
-    Assert.assert(UtilMDE.classnameFromJvm("[[LJava/lang/Integer;").equals("Java.lang.Integer[][]"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("Z").equals("boolean"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("B").equals("byte"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("C").equals("char"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("D").equals("double"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("F").equals("float"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("I").equals("int"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("J").equals("long"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("S").equals("short"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("LInteger;").equals("Integer"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("LJava/lang/Integer;").equals("Java.lang.Integer"));
+    Assert.assertTrue(UtilMDE.classnameFromJvm("[[LJava/lang/Integer;").equals("Java.lang.Integer[][]"));
 
     // public static String arglistFromJvm(String arglist)
-    Assert.assert(UtilMDE.arglistFromJvm("()").equals("()"));
-    Assert.assert(UtilMDE.arglistFromJvm("(I)").equals("(int)"));
-    Assert.assert(UtilMDE.arglistFromJvm("(II)").equals("(int, int)"));
-    Assert.assert(UtilMDE.arglistFromJvm("(IJS)").equals("(int, long, short)"));
-    Assert.assert(UtilMDE.arglistFromJvm("(Ljava/lang/Integer;ILjava/lang/Integer;)").equals("(java.lang.Integer, int, java.lang.Integer)"));
-    Assert.assert(UtilMDE.arglistFromJvm("([I)").equals("(int[])"));
-    Assert.assert(UtilMDE.arglistFromJvm("([III)").equals("(int[], int, int)"));
-    Assert.assert(UtilMDE.arglistFromJvm("(I[[II)").equals("(int, int[][], int)"));
-    Assert.assert(UtilMDE.arglistFromJvm("([Ljava/lang/Integer;I[[Ljava/lang/Integer;)").equals("(java.lang.Integer[], int, java.lang.Integer[][])"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("()").equals("()"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("(I)").equals("(int)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("(II)").equals("(int, int)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("(IJS)").equals("(int, long, short)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("(Ljava/lang/Integer;ILjava/lang/Integer;)").equals("(java.lang.Integer, int, java.lang.Integer)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("([I)").equals("(int[])"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("([III)").equals("(int[], int, int)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("(I[[II)").equals("(int, int[][], int)"));
+    Assert.assertTrue(UtilMDE.arglistFromJvm("([Ljava/lang/Integer;I[[Ljava/lang/Integer;)").equals("(java.lang.Integer[], int, java.lang.Integer[][])"));
 
 
     // public static void addToClasspath(String dir)
@@ -996,26 +996,26 @@ public final class TestUtilMDE extends TestCase {
       // public static class EnumerationIterator implements Iterator
       // public static class IteratorEnumeration implements Enumeration
 
-      Assert.assert(iota0.equals(toVector(iota0.iterator())));
-      Assert.assert(iota0.equals(toVector(new UtilMDE.IteratorEnumeration(iota0.iterator()))));
-      Assert.assert(iota0.equals(toVector(iota0.elements())));
-      Assert.assert(iota0.equals(toVector(new UtilMDE.EnumerationIterator(iota0.elements()))));
-      Assert.assert(iota10.equals(toVector(iota10.iterator())));
-      Assert.assert(iota10.equals(toVector(new UtilMDE.IteratorEnumeration(iota10.iterator()))));
-      Assert.assert(iota10.equals(toVector(iota10.elements())));
-      Assert.assert(iota10.equals(toVector(new UtilMDE.EnumerationIterator(iota10.elements()))));
+      Assert.assertTrue(iota0.equals(toVector(iota0.iterator())));
+      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.IteratorEnumeration(iota0.iterator()))));
+      Assert.assertTrue(iota0.equals(toVector(iota0.elements())));
+      Assert.assertTrue(iota0.equals(toVector(new UtilMDE.EnumerationIterator(iota0.elements()))));
+      Assert.assertTrue(iota10.equals(toVector(iota10.iterator())));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.IteratorEnumeration(iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(iota10.elements())));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.EnumerationIterator(iota10.elements()))));
 
       // public static class MergedIterator2 implements Iterator {
-      Assert.assert(iota10_twice.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota10.iterator()))));
-      Assert.assert(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota0.iterator(), iota10.iterator()))));
-      Assert.assert(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota0.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota0.iterator(), iota10.iterator()))));
+      Assert.assertTrue(iota10.equals(toVector(new UtilMDE.MergedIterator2(iota10.iterator(), iota0.iterator()))));
 
       // public static class MergedIterator implements Iterator {
       Vector iota10_iterator_thrice = new Vector();
       iota10_iterator_thrice.add(iota10.iterator());
       iota10_iterator_thrice.add(iota10.iterator());
       iota10_iterator_thrice.add(iota10.iterator());
-      Assert.assert(iota10_thrice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_thrice.iterator()))));
+      Assert.assertTrue(iota10_thrice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_thrice.iterator()))));
       Vector iota10_iterator_twice_1 = new Vector();
       iota10_iterator_twice_1.add(iota0.iterator());
       iota10_iterator_twice_1.add(iota10.iterator());
@@ -1028,9 +1028,9 @@ public final class TestUtilMDE extends TestCase {
       iota10_iterator_twice_3.add(iota10.iterator());
       iota10_iterator_twice_3.add(iota10.iterator());
       iota10_iterator_twice_3.add(iota0.iterator());
-      Assert.assert(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_1.iterator()))));
-      Assert.assert(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_2.iterator()))));
-      Assert.assert(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_3.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_1.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_2.iterator()))));
+      Assert.assertTrue(iota10_twice.equals(toVector(new UtilMDE.MergedIterator(iota10_iterator_twice_3.iterator()))));
 
 
       class OddFilter implements Filter {
@@ -1046,7 +1046,7 @@ public final class TestUtilMDE extends TestCase {
       for (int i=0; i<iota10.size(); i++)
         if (i%2 == 1)
           iota10_odd.add(new Integer(i));
-      Assert.assert(iota10_odd.equals(toVector(new UtilMDE.FilteredIterator(iota10.iterator(), new OddFilter()))));
+      Assert.assertTrue(iota10_odd.equals(toVector(new UtilMDE.FilteredIterator(iota10.iterator(), new OddFilter()))));
 
     }
 
@@ -1060,9 +1060,9 @@ public final class TestUtilMDE extends TestCase {
         iota5middle.add(new Integer(i));
       UtilMDE.RemoveFirstAndLastIterator rfali = new UtilMDE.RemoveFirstAndLastIterator(iota5.iterator());
       Vector rfali_vector = toVector(rfali);
-      Assert.assert(iota5middle.equals(rfali_vector));
-      Assert.assert(rfali.getFirst().equals(new Integer(0)));
-      Assert.assert(rfali.getLast().equals(new Integer(4)));
+      Assert.assertTrue(iota5middle.equals(rfali_vector));
+      Assert.assertTrue(rfali.getFirst().equals(new Integer(0)));
+      Assert.assertTrue(rfali.getLast().equals(new Integer(4)));
     }
 
     // public static ArrayList randomElements(Iterator itor, int num_elts, Random random)
@@ -1100,7 +1100,7 @@ public final class TestUtilMDE extends TestCase {
         }
         int i_truncated = Math.min(itor_size, i);
         int grand_total = tries * i_truncated;
-        Assert.assert(ArraysMDE.sum(totals) == grand_total, "Totals = " + ArraysMDE.sum(totals));
+        Assert.assertTrue(ArraysMDE.sum(totals) == grand_total, "Totals = " + ArraysMDE.sum(totals));
         // System.out.print("chosen:\t");
         for (int k=0; k<num_elts_limit; k++) {
           int this_total = totals[k];
@@ -1108,7 +1108,7 @@ public final class TestUtilMDE extends TestCase {
           double ratio = (double)this_total / (double)expected;
           // System.out.print(((k<10) ? " " : "") + k + " " + this_total + "\t");
           // System.out.print("exp=" + expected + "\t" + "ratio=" + ratio + "\t");
-          Assert.assert(k >= itor_size || (ratio > .98 && ratio < 1.02));
+          Assert.assertTrue(k >= itor_size || (ratio > .98 && ratio < 1.02));
         }
         // System.out.println();
       }

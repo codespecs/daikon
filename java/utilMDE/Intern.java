@@ -537,7 +537,7 @@ public final class Intern {
   // 	return tmp;
   //       // I'm counting on the fact that hashCode returns a different
   //       // number for each Object in the system.  This checks that assumption.
-  //       Assert.assert(a1[i].equals(a2[i]));
+  //       Assert.assertTrue(a1[i].equals(a2[i]));
   //     }
   //     return 0;
   //   }
