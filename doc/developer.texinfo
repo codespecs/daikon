@@ -825,7 +825,8 @@ statically obvious.
 
 @emph{Non-checking}, also known as ``suppression'', cretes invariants
 but does not check them; an invariant can be suppressed (not checked)
-if some other set of true invariants implies it.
+if some other set of true invariants implies it.  For example, ``a[]
+contains no duplicates'' implies ``a[i..j] contains no duplicates''.
 
 @emph{Non-printing} is a post-pass that throws out any invariants that
 are implied by other true invariants.  It is similar to suppression,
@@ -846,9 +847,6 @@ suppressed invariants do not see all samples.  Second,
 there are invariants that are obvious by themselves, without relying
 on other invariants.
 
-The next three sections show ways that Daikon is optimized based on
-saving work for dynamically redundant invariants.
-
 More detail can be found in two theses.  See Chapter 7,
 ``Scalability'', of @cite{Automatic Generation and Checking of Program
 Specifications} (Technical report MIT-LCS-TR-852, at
@@ -858,6 +856,27 @@ Incremental Dynamic Invariant Detection'', of @cite{Theorem-proving
 distributed algorithms with dynamic analysis}
 (@uref{http://pag.lcs.mit.edu/pubs/thmprove-newin-mengthesis-abstract.html}),
 Toh Ne Win's Master's thesis.
+
+
+@node    Suppression optimization,  , Equality optimization, Daikon internals
+@subsection Suppression optimization
+
+Suppression optimization allows for elimination of redundancy based on
+how a set of invariants might imply an invariant.  For example, ``a[]
+contains no duplicates'' implies ``a[i..j] contains no duplicates''.  We
+say that a set of @emph{suppressors} suppress a @emph{suppressee}
+invariant.  Suppression also works across the program point hierarchy:
+suppressors can exist in parent program points.  Suppressed invariants
+are not eliminated during inferencing, but tagged as suppressed.  They
+are not checked against samples while suppressed.  The only way an
+invariant becomes unsuppressed is if one of its suppressors becomes
+falsified, in which case the implication for suppression no longer
+holds.
+
+Thus when certain invariants are not found in Daikon, they may be
+hidden due to suppression.  Suppression is off by default, but it can
+be enabled by the @option{--suppress} command line flag.
+
 
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
@@ -921,25 +940,6 @@ leader.  When printing invariants, Daikon reports only invariants on
 the leader.  The user can easily determine that ``odd(a)'' and ``a == b''
 imply ``odd(b)''.  Equality can be turned off at the command line with
 the @option{--noequality} flag.
-
-@node    Suppression optimization,  , Equality optimization, Daikon internals
-@section Suppression optimization
-
-Suppression optimization allows for elimination of redundancy based on
-how a set of invariants might imply an invariant.  For example, ``a[]
-contains no duplicates'' implies ``a[i..j] contains no duplicates''.  We
-say that a set of @emph{suppressors} suppress a @emph{suppressee}
-invariant.  Suppression also works across the program point hierarchy:
-suppressors can exist in parent program points.  Suppressed invariants
-are not eliminated during inferencing, but tagged as suppressed.  They
-are not checked against samples while suppressed.  The only way an
-invariant becomes unsuppressed is if one of its suppressors becomes
-falsified, in which case the implication for suppression no longer
-holds.
-
-Thus when certain invariants are not found in Daikon, they may be
-hidden due to suppression.  Suppression is off by default, but it can
-be enabled by the @option{--suppress} command line flag.
 
 
 @node     Index,  , Daikon internals, Top
