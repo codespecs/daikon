@@ -434,6 +434,8 @@ public final class VarInfo
       System.arraycopy(po_old_nonce, 0, po_new_nonce, 0, po_old.length);
       po_new[po_old.length] = higher;
       po_new_nonce[po_old.length] = nonce;
+      lower.po_higher = po_new;
+      lower.po_higher_nonce = po_new_nonce;
     }
     // higher.po_lower.add(lower)
     if (higher.po_lower == null) {
@@ -445,6 +447,7 @@ public final class VarInfo
       VarInfo[] po_new = new VarInfo[po_old.length + 1];
       System.arraycopy(po_old, 0, po_new, 0, po_old.length);
       po_new[po_old.length] = lower;
+      higher.po_lower = po_new;
     }
   }
 

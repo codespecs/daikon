@@ -210,9 +210,11 @@ public final class SeqIntComparison extends SequenceScalar {
 
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
-      EltOneOf eoo = EltOneOf.find(seqslice);
-      if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
-        return true;
+      if (seqslice != null) {
+	EltOneOf eoo = EltOneOf.find(seqslice);
+	if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
+	  return true;
+	}
       }
     }
 

@@ -614,7 +614,8 @@ public class PptTopLevel
     if (debug.isDebugEnabled())
       debug.debug("create_derived_variables for " + name);
 
-    // First make ALL of the derived variables.  The loop terminates
+    int first_new = var_infos.length;
+    // Make ALL of the derived variables.  The loop terminates
     // because derive() stops creating derived variables after some
     // depth.  Within the loop, [lower..upper) need deriving from.
     int lower = 0;

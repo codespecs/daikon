@@ -3,6 +3,7 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 /**
  * A collection of code that configures and assists the dataflow
@@ -11,15 +12,20 @@ import utilMDE.*;
 public class Dataflow
 {
 
+  public static final Category debug = Category.getInstance(Dataflow.class.getName());
+
   // Tempoary routine, for debugging
-  // Will eventually move into daikon.test.FileIOTest
+  // Will eventually move into daikon.test.DataflowTest
+  //
+  // java daikon.Dataflow `find /scratch/$USER/tests/esc-experiments/StackAr/ -name '*.decls'`
+  //
   public static void main(String[] args)
     throws Exception
   {
-    String outf = "fileio.txt";
-    if (args.length == 0) {
-      args = new String[] { "daikon/test/fileIOTest.testStackAr" };
-    }
+    Logger.setupLogs();
+    debug.setPriority(Logger.DEBUG);
+
+    String outf = "Dataflow_testing.txt";
     File[] files = new File[args.length];
     for (int i=0; i < args.length; i++) {
       files[i] = new File(args[i]);
@@ -297,7 +303,117 @@ public class Dataflow
   private static void create_derived_variables(PptMap all_ppts) {
     for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
+      int first_new = ppt.var_infos.length;
       ppt.create_derived_variables();
+      relate_derived_variables(ppt, first_new, ppt.var_infos.length);
+    }
+  }
+
+  /**
+   * Modify ppt.var_infos in the range [lower..upper) to have the
+   * proper partial ordering (drawn from the partial ordering of their
+   * base(s).
+   **/
+  public static void relate_derived_variables(PptTopLevel ppt,
+					      int lower,
+					      int upper)
+  {
+    debug.debug("relate_derived_variables on " + ppt.name);
+
+    // For all immediately higher groups of variables
+    PptsAndInts flow = compute_ppt_dataflow(ppt, true); // one step only
+    int size = flow.ppts.length - 1; // -1 because don't want self
+    debug.debug("size = " + size);
+    for (int i = 0; i < size; i++) {
+      PptTopLevel flow_ppt = flow.ppts[i];
+      int[] flow_ints = flow.ints[i];
+
+      // Determine the first nonce along the path
+      int nonce = -1;
+    nonce_search:
+      for (int search = 0; search < flow_ints.length; search++) {
+	if (flow_ints[search] != -1) {
+	  VarInfo search_vi = ppt.var_infos[search];
+	  int count = 0;
+	  for (Iterator j = search_vi.po_higher().iterator(); j.hasNext(); ) {
+	    VarInfo up_vi = (VarInfo) j.next();
+	    if (up_vi.ppt == flow_ppt) {
+	      nonce = search_vi.po_higher_nonce()[count];
+	      break nonce_search;
+	    }
+	    count++;
+	  }
+	  throw new IllegalStateException("Path was not 1-length");
+	}
+      }
+      if (nonce == -1) throw new IllegalStateException("Mapless path");
+
+      debug.debug(" nonce = " + nonce);
+
+      // For all derived variables to relate
+    forall_derived_vars:
+      for (int j = lower; j < upper; j++) {
+	VarInfo vi = ppt.var_infos[j];
+	Assert.assert(vi.isDerived());
+	debug.debug("  vi = " + vi.name);
+	// Obtain the bases of derived varable
+	VarInfo[] bases = vi.derived.getBases();
+	// See where this path maps them
+	VarInfo[] basemap = new VarInfo[bases.length];
+	for (int k = 0; k < bases.length; k++) {
+	  VarInfo base = bases[k];
+	  int newindex = flow_ints[base.varinfo_index];
+	  if (newindex == -1) {
+	    debug.debug("  vars not mapped in path: vi = " + vi.name
+			+ "; bases = " + Ppt.varNames(bases));
+	    continue forall_derived_vars;
+	  }
+	  basemap[k] = flow_ppt.var_infos[newindex];
+	}
+	// Find the derived varaible of the same class over the related bases
+	VarInfo vi_higher = null;
+	for (int k = 0; k < flow_ppt.var_infos.length; k++) {
+	  VarInfo maybe = flow_ppt.var_infos[k];
+	  if (maybe.derived == null) continue;
+	  if (vi.derived.isSameFormula(maybe.derived)) {
+	    VarInfo[] maybe_bases = maybe.derived.getBases();
+	    if (Arrays.equals(basemap, maybe_bases)) {  
+	      vi_higher = maybe;
+	      break;
+	    }
+	  }
+	}
+	if (vi_higher == null) {
+	  debug.debug("  No match found for " + vi.derived.getClass()
+		      + " using " + Ppt.varNames(basemap));
+	  continue forall_derived_vars;
+	}
+	// Create the new relation
+	vi.addHigherPO(vi_higher, nonce);
+      }
+    }
+  }
+
+  /** Our own record type for programming ease */
+  static final class VarAndSource {
+    public final VarInfo var; // variable at the head of a search path
+    public final int source;  // its source index in receiving_ppt.var_infos
+    public VarAndSource(VarInfo _var, int _source) {
+      var = _var;
+      source = _source;
+    }
+  }
+
+  /**
+   * Record type for parallel arrays of PptTopLevel and int[]
+   **/
+  public static final class PptsAndInts {
+    public final PptTopLevel[] ppts;
+    public final int[][] ints;
+    public PptsAndInts(PptTopLevel[] _ppts, int[][] _ints) {
+      Assert.assert(_ppts.length == _ints.length);
+      ppts = _ppts;
+      ints = _ints;
     }
   }
 
@@ -317,21 +433,30 @@ public class Dataflow
 	continue;
       }
 
-      // These two lists collect result that will be written to receiving_ppt
-      List dataflow_ppts = new ArrayList(); // of type PptTopLevel
-      List dataflow_transforms = new ArrayList(); // of type int[nvis]
-      int nvis = receiving_ppt.var_infos.length;
+      PptsAndInts dataflow_rec = compute_ppt_dataflow(receiving_ppt,
+						      false // full paths
+						      );
+      // Store result into receiving_ppt
+      Assert.assert(receiving_ppt.dataflow_ppts == null);
+      Assert.assert(receiving_ppt.dataflow_transforms == null);
+      receiving_ppt.dataflow_ppts = dataflow_rec.ppts;
+      receiving_ppt.dataflow_transforms = dataflow_rec.ints;
+    }
+  }
 
-      // Use our own record type for programming ease
-      class VarAndSource {
-	public VarInfo var; // variable at the head of a search path
-	public int source;  // its source index in receiving_ppt.var_infos
-	public VarAndSource(VarInfo _var, int _source) {
-	  var = _var;
-	  source = _source;
-	}
-      }
+  /**
+   * Compute the dataflow for one ppt.  Can go either for just one
+   * step up, or follow paths to completion.
+   **/
+  private static PptsAndInts compute_ppt_dataflow(PptTopLevel receiving_ppt,
+						  boolean one_step_only)
+  {
+    // These two lists collect result that will be written to receiving_ppt
+    List dataflow_ppts = new ArrayList(); // of type PptTopLevel
+    List dataflow_transforms = new ArrayList(); // of type int[nvis]
+    int nvis = receiving_ppt.var_infos.length;
 
+    if (nvis > 0) {
       // Our worklist is the heads of paths flowing up from "ppt".
       // We store the vars which specify the head and the original
       // indices in receiving_ppt that flow up to the head.
@@ -348,6 +473,9 @@ public class Dataflow
       // While worklist is non-empty, process the first element
       while (! worklist.isEmpty()) {
 	List head = (List) worklist.removeFirst();
+
+	// Use null element to signal a gap, and thus completion
+	if (head == null) break;
 
 	// Add a flow from receiving_ppt to head
 	PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
@@ -387,27 +515,29 @@ public class Dataflow
 	  Assert.assert(newpath != null);
 	  worklist.add(newpath);
 	}
+
+	// put in a null to signal the end of one pass
+	if (one_step_only) {
+	  worklist.add(null);
+	}
       }
 
       // We want to flow from the highest point to the lowest
       Collections.reverse(dataflow_ppts);
       Collections.reverse(dataflow_transforms);
-
-      // Convert results to arrays
-      PptTopLevel[] ppts_array = (PptTopLevel[])
-	dataflow_ppts.toArray(new PptTopLevel[dataflow_ppts.size()]);
-      int[][] transforms_array = (int[][])
-	dataflow_transforms.toArray(new int[dataflow_ppts.size()][]);
-      // Intern to save memory (I hope?)
-      for (int j=0; j < transforms_array.length; j++) {
-	transforms_array[j] = Intern.intern(transforms_array[j]);
-      }
-      // Store result into receiving_ppt
-      Assert.assert(receiving_ppt.dataflow_ppts == null);
-      Assert.assert(receiving_ppt.dataflow_transforms == null);
-      receiving_ppt.dataflow_ppts = ppts_array;
-      receiving_ppt.dataflow_transforms = transforms_array;
     }
+
+    // Convert results to arrays
+    PptTopLevel[] ppts_array = (PptTopLevel[])
+      dataflow_ppts.toArray(new PptTopLevel[dataflow_ppts.size()]);
+    int[][] transforms_array = (int[][])
+      dataflow_transforms.toArray(new int[dataflow_ppts.size()][]);
+    // Intern to save memory (I hope?)
+    for (int j=0; j < transforms_array.length; j++) {
+      transforms_array[j] = Intern.intern(transforms_array[j]);
+    }
+    
+    return new PptsAndInts(ppts_array, transforms_array);
   }
 
   /**
