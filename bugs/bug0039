@@ -4,9 +4,12 @@ Cc:           Toh <tohn>
 Tool:         Daikon V3
 Summary:      Stack overflow with certain derived variables or invariants?
 Severity:     Vexing
-Status:       Fixed
+Status:       Closed
 Reproducible: Yes
 Description:
+
+[tohn]
+Corrected and closed.  Thanks!
 
 [mistere]
 Toh, please confirm fix and close out.
@@ -65,7 +68,10 @@ and come from IOA.
 
 --
 $Log$
-Revision 1.4  2002-04-03 20:48:31  mistere
+Revision 1.5  2002-04-03 21:07:08  tohn
+changed bug0039
+
+Revision 1.4  2002/04/03 20:48:31  mistere
 changed bug0039
 
 Revision 1.3  2002/04/03 20:36:50  mistere
