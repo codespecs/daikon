@@ -114,6 +114,7 @@ public final class VarComparabilityExplicit
     protected String jml_name_impl() { throw new UnsupportedOperationException(); }
     protected String ioa_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl() { throw new UnsupportedOperationException(); }
+    protected String identifier_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl(String classname) { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl(boolean prestate) { throw new UnsupportedOperationException(); }
     protected Class resolveType(PptTopLevel ppt) { throw new UnsupportedOperationException(); }

@@ -229,7 +229,7 @@ public abstract class VarInfoName
   private String java_name_cached = null; // interned
   protected abstract String java_name_impl();
 
-  /**
+   /**
    * Return the String representation of this name in the JML style output format
    */
   public String jml_name() {
@@ -248,6 +248,25 @@ public abstract class VarInfoName
   protected abstract String jml_name_impl();
 
   /**
+   * Return the String representation of this name using only letters,
+   * numbers, and underscores.
+   */
+  public String identifier_name() {
+    if (identifier_name_cached == null) {
+      try {
+        identifier_name_cached = identifier_name_impl().intern();
+      } catch (RuntimeException e) {
+        System.err.println("repr = " + repr());
+        throw e;
+      }
+    }
+    // System.out.println("identifier_name = " + identifier_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    return identifier_name_cached;
+  }
+  private String identifier_name_cached = null; // interned
+  protected abstract String identifier_name_impl();
+
+  /**
    * @return name of this in the specified format
    **/
   public String name_using(OutputFormat format) {
@@ -257,6 +276,7 @@ public abstract class VarInfoName
     if (format == OutputFormat.JAVA) return java_name();
     if (format == OutputFormat.JML) return jml_name();
     if (format == OutputFormat.IOA) return ioa_name();
+    if (format == OutputFormat.IDENTIFIER) return identifier_name();
     throw new UnsupportedOperationException
       ("Unknown format requested: " + format);
   }
@@ -545,6 +565,34 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
+
+    protected String identifier_name_impl() {
+      if (name.equals("return"))
+        return "Daikon_return";
+      else if (name.equals("this"))
+        return "Daikon_this";
+      else {
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < name.length(); i++) {
+          char c = name.charAt(i);
+          if (Character.isLetterOrDigit(c))
+            buf.append(c);
+          else if (c == '_')
+            buf.append("__");
+          else if (c == '$')
+            buf.append("_dollar_");
+          else if (c == ':')
+            buf.append("_colon_");
+          else if (c == '*')
+            buf.append("star_");
+          else
+            Assert.assertTrue(false,
+                              "Unexpected character in VarInfoName$Simple");
+        }
+        return buf.toString();
+      }
+    }
+
     protected Class resolveType(PptTopLevel ppt) {
       // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
       // Also see Ast.getClass(String s)
@@ -629,11 +677,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
-
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
     }
-
     protected String ioa_name_impl() {
       return "size(" + sequence.ioa_name() + ")";
     }
@@ -642,6 +688,9 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       return sequence.term.jml_name() + ".length";
+    }
+    protected String identifier_name_impl() {
+      return "size_of" + sequence.identifier_name() + "___";
     }
 
     protected Class resolveType(PptTopLevel ppt) {
@@ -722,6 +771,9 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       return function + "(" + argument.jml_name() + ")";
+    }
+    protected String identifier_name_impl() {
+      return function + "_of_" + argument.identifier_name() + "___";
     }
     protected Class resolveType(PptTopLevel ppt) {
       return null;
@@ -815,6 +867,16 @@ public abstract class VarInfoName
         if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
+    }
+    protected String identifier_name_impl() {
+      StringBuffer sb = new StringBuffer(function);
+      sb.append("_of_");
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
+        sb.append (((VarInfoName) i.next()).identifier_name());
+        if (i.hasNext()) sb.append ("_comma_");
+      }
+      sb.append("___");
+      return sb.toString();
     }
 
     /**
@@ -939,6 +1001,9 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return term.jml_name() + "." + field;
     }
+    protected String identifier_name_impl() {
+      return term.identifier_name() + "_dot_" + field;
+    }
     protected Class resolveType(PptTopLevel ppt) {
       // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
       java.lang.reflect.Field f = resolveField(ppt);
@@ -1006,6 +1071,9 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return "\\typeof(" + term.jml_name() + ")";
     }
+    protected String identifier_name_impl() {
+      return "type_of_" + term.identifier_name() + "___";
+    }
     protected Class resolveType(PptTopLevel ppt) {
       return Class.class;
     }
@@ -1065,6 +1133,9 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       return "\\old(" + term.jml_name() + ")";
+    }
+    protected String identifier_name_impl() {
+      return "orig_of_" + term.identifier_name() + "___";
     }
     protected Class resolveType(PptTopLevel ppt) {
       return term.resolveType(ppt);
@@ -1132,6 +1203,9 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       return "post(" + term.name() + ")";
+    }
+    protected String identifier_name_impl() {
+      return "post_of_" + term.identifier_name() + "___";
     }
     protected String jml_name_impl() {
       // Figure out something to do with this
@@ -1201,6 +1275,12 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       return term.jml_name() + amount();
+    }
+    protected String identifier_name_impl() {
+      if (amount >= 0)
+        return term.identifier_name() + "_plus" + amount;
+      else
+        return term.identifier_name() + "_minus" + (-amount);
     }
     protected Class resolveType(PptTopLevel ppt) {
       return term.resolveType(ppt);
@@ -1286,6 +1366,15 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       throw new UnsupportedOperationException("JML cannot format an unquantified sequence of elements" +
                                               " [repr=" + repr() + "]");
+    }
+    protected String identifier_name_impl(String index) {
+      if (index.equals(""))
+        return term.identifier_name() + "_elems";
+      else
+        return term.identifier_name() + "_in_" + index + "_dex_";
+    }
+    protected String identifier_name_impl() {
+      return identifier_name_impl("");
     }
     protected String jml_name_impl(String index) {
       return term.jml_name() + "[" + index + "]";
@@ -1406,6 +1495,9 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return sequence.jml_name_impl(indexExplicit(sequence, index).jml_name());
     }
+    protected String identifier_name_impl() {
+      return sequence.identifier_name_impl(index.identifier_name());
+    }
     protected Class resolveType(PptTopLevel ppt) {
       Class c = sequence.resolveType(ppt);
       if (c != null) {
@@ -1498,6 +1590,11 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       throw new UnsupportedOperationException("JML cannot format an unquantified slice of elements");
+    }
+    protected String identifier_name_impl() {
+      String start = (i == null) ? "0" : i.identifier_name();
+      String end   = (j == null) ? ""  : j.identifier_name();
+      return sequence.identifier_name_impl(start + "_to_" + end);
     }
     protected Class resolveType(PptTopLevel ppt) {
       Class c = sequence.resolveType(ppt);
