@@ -117,12 +117,48 @@ if (! defined($numrepetitions)) {
   }
 }
 
-for (my $i1=0; $i1<$num_teams; $i1++) {
-  my $team1 = $teams[$i1];
-  for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
-    my $team2 = $teams[$i2];
-    for (my $count = $prev_matches[$i1][$i2]; $count<$numrepetitions; $count++) {
-      print "$team1 $team2\n";
+
+## original from MDE, depth-first repetitions
+#for (my $i1=0; $i1<$num_teams; $i1++) {
+#  my $team1 = $teams[$i1];
+#  for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
+#    my $team2 = $teams[$i2];
+#    for (my $count = $prev_matches[$i1][$i2]; $count<$numrepetitions; $count++) {
+#      print "$team1 $team2\n";
+#    }
+#  }
+#}
+
+
+
+# A breadth-first tournament in order to make
+# parallel executions on multiple machines more worthwhile.
+
+#Instead of
+
+#team1 team2
+#team1 team2
+#team1 team3
+#team1 team3
+#team2 team3
+#team2 team3
+
+#You get
+
+#team1 team2
+#team1 team3
+#team2 team3
+#team1 team2
+#team1 team3
+#team2 team3
+for (my $count = 0; $count < $numrepetitions; $count++) {
+  for (my $i1=0; $i1<$num_teams; $i1++) {
+    my $team1 = $teams[$i1];
+    for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
+      my $team2 = $teams[$i2];
+      if ($prev_matches[$i1][$i2] < $count) {
+	print "$team1 $team2\n";
+      }
     }
   }
 }
