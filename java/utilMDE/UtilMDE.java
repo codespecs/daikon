@@ -764,8 +764,13 @@ public final class UtilMDE {
     }
   }
 
-  // Converts the int to a String, the formats it using rpad
+  // Converts the int to a String, then formats it using rpad
   public static String rpad(int num, int length) {
+    return rpad(String.valueOf(num), length);
+  }
+
+  // Converts the doubleto a String, then formats it using rpad
+  public static String rpad(double num, int length) {
     return rpad(String.valueOf(num), length);
   }
 

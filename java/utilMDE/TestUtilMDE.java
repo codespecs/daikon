@@ -140,6 +140,17 @@ public final class TestUtilMDE extends TestCase {
     assert(78  == ArraysMDE.sum
            (new int[][] {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}));
 
+    // public static double sum(double[] a)
+    assert(0 == ArraysMDE.sum(new double[0]));
+    assert(3.14 == ArraysMDE.sum(new double[] {3.14}));
+    assert(8.624 == ArraysMDE.sum(new double[] {3.14, 2.718, -1.234, 4}));
+
+    // public static double sum(double[][] a)
+    assert(0 == ArraysMDE.sum(new double[0][0]));
+    assert(79.5  == ArraysMDE.sum(new double[][] {{1.1, 2.2, 3.3, 4.4},
+                                                  {5.5, 6, 7, 8},
+                                                  {9, 10, 11, 12}}));
+
     // public static int element_range(int[] a)
     assert(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
     assert(ArraysMDE.element_range(new int[] { 2,33,1 }) == 32);
@@ -1026,6 +1037,7 @@ public final class TestUtilMDE extends TestCase {
     assert(UtilMDE.rpad("abcdef", 5).equals("abcde"));
     assert(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
     assert(UtilMDE.rpad(10, 5).equals("10   "));
+    assert(UtilMDE.rpad(3.14, 5).equals("3.14 "));
 
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)

@@ -217,6 +217,27 @@ public final class ArraysMDE {
     return sum;
   }
 
+  // Returns the sum of an array of integers
+  public static double sum(double[] a) {
+    double sum = 0;
+    for (int i = 0; i < a.length; i++) {
+      sum += a[i];
+    }
+    return sum;
+  }
+
+  // Returns the sum of all the elements of a 2d array of integers
+  public static double sum(double[][] a) {
+    double sum = 0;
+    for (int i = 0; i < a.length; i++) {
+      for (int j = 0; j < a[0].length; j++) {
+        sum += a[i][j];
+      }
+    }
+    return sum;
+  }
+
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// indexOf
