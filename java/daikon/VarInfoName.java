@@ -5,6 +5,7 @@ import daikon.derive.*;         // see dbc_name_impl(VarInfo v)
 import daikon.derive.unary.*;   // see dbc_name_impl(VarInfo v)
 import daikon.derive.binary.*;  // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
+import daikon.repair.Repair;
 
 import utilMDE.*;
 
@@ -266,6 +267,19 @@ public abstract class VarInfoName
   private String java_name_cached = null; // interned
   protected abstract String java_name_impl(VarInfo v);
 
+  /**
+   * Return the String representation of this name in the repair style
+   * output format.
+   *
+   * @return the string representation (interned) of this name, in the
+   * java style output format
+   **/
+  public String repair_name(VarInfo v) {
+      return repair_name_impl(v).intern();
+  }
+  private String repair_name_cached = null; // interned
+  protected abstract String repair_name_impl(VarInfo v);
+
    /**
    * Return the String representation of this name in the JML style output format
    */
@@ -356,6 +370,7 @@ public abstract class VarInfoName
   public String name_using(OutputFormat format, VarInfo vi) {
 
     if (format == OutputFormat.DAIKON) return name();
+    if (format == OutputFormat.REPAIR) return repair_name(vi);
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
     if (format == OutputFormat.ESCJAVA) return esc_name();
     if (format == OutputFormat.JAVA) return java_name(vi);
@@ -591,6 +606,8 @@ public abstract class VarInfoName
       ioa_name_cached = ioa_name_cached.intern();
     if (java_name_cached != null)
       java_name_cached = java_name_cached.intern();
+    if (repair_name_cached != null)
+      repair_name_cached = repair_name_cached.intern();
     if (jml_name_cached != null)
       jml_name_cached = jml_name_cached.intern();
     if (dbc_name_cached != null)
@@ -657,6 +674,16 @@ public abstract class VarInfoName
     }
     protected String java_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
+    }
+
+    protected String repair_name_impl(VarInfo v) {
+	if ("return".equals(name))
+	    return "$noprint(return)";
+	if (Repair.getType(v.ppt, name).equals("int")) {
+	    Repair.getRepair().addSpecial();
+	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
+	} else
+	    return Repair.getRepair().getSet(name,v.ppt);
     }
     protected String jml_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
@@ -813,6 +840,9 @@ public abstract class VarInfoName
     protected String name_impl() {
       return "size(" + sequence.name() + ")";
     }
+    protected String repair_name_impl(VarInfo v) {
+      return "size(" + sequence.repair_name(v) + ")";
+    }
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
@@ -928,6 +958,9 @@ public abstract class VarInfoName
     protected String java_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JAVA, v);
     }
+    protected String repair_name_impl(VarInfo v) {
+      return function + "(" + argument.repair_name(v) + ")";
+    }
     protected String jml_name_impl(VarInfo v) {
       return java_family_name_impl(OutputFormat.JML, v);
     }
@@ -993,6 +1026,15 @@ public abstract class VarInfoName
       return "FunctionOfN{" + function + "}[" + sb.toString() + "]";
     }
     protected String name_impl() {
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
+        sb.append (((VarInfoName) i.next()).name());
+        if (i.hasNext()) sb.append (", ");
+      }
+      return function + "(" + sb.toString() + ")";
+    }
+
+    protected String repair_name_impl(VarInfo vi) {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).name());
@@ -1177,6 +1219,28 @@ public abstract class VarInfoName
     protected String name_impl() {
       return term.name() + "." + field;
     }
+
+    /** This method returns a set that contains the given VarInfoName.
+     */
+
+    protected String getRealSet(VarInfo v, VarInfoName term) {
+      if (term instanceof Simple) {
+	Simple simple=(Simple)term;
+	return Repair.getRepair().getRealSet(simple.name,v.ppt);
+      } else if (term instanceof Field) {
+	Field nfield=(Field)term;
+	String r=Repair.getRepair().getRelation(v.ppt,getRealSet(v,nfield.term),nfield.field,nfield.name());
+	return Repair.getRepair().getRange(v.ppt,r);
+      } else return "$error";
+    }
+
+    protected String repair_name_impl(VarInfo v) {
+      Repair.getRepair().noForceSet();
+      String base=term.repair_name(v);
+      String set=getRealSet(v,term);
+      String relation=Repair.getRepair().getRelation(v.ppt,set,field,this.name());
+      return base + "." + relation;
+    }
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
@@ -1332,6 +1396,9 @@ public abstract class VarInfoName
     protected String name_impl() {
       return term.name() + ".class";
     }
+    protected String repair_name_impl(VarInfo vi) {
+      return term.repair_name(vi);
+    }
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
     }
@@ -1407,6 +1474,9 @@ public abstract class VarInfoName
     }
     protected String ioa_name_impl() {
       return "preState(" + term.ioa_name() + ")";
+    }
+    protected String repair_name_impl(VarInfo v) {
+      return "$noprint(old(" + term.repair_name(v) + "))";
     }
     protected String java_name_impl(VarInfo v) {
       return "\\old(" + term.java_name(v) + ")";
@@ -1490,6 +1560,9 @@ public abstract class VarInfoName
     protected String name_impl() {
       return "post(" + term.name() + ")";
     }
+    protected String repair_name_impl(VarInfo vi) {
+      return "post(" + term.repair_name(vi) + ")";
+    }
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
@@ -1558,6 +1631,9 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return term.name() + amount();
+    }
+    protected String repair_name_impl(VarInfo v) {
+      return term.repair_name(v) + amount();
     }
     protected String esc_name_impl() {
       return term.esc_name() + amount();
@@ -1636,6 +1712,12 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       return name_impl("");
+    }
+    protected String repair_name_impl(VarInfo vi) {
+      return repair_name_impl("$noprint",vi);
+    }
+    protected String repair_name_impl(String index,VarInfo vi) {
+      return term.repair_name(vi)+"["+index+"]";
     }
     protected String name_impl(String index) {
       return term.name() + "[" + index + "]";
@@ -1798,6 +1880,9 @@ public abstract class VarInfoName
     protected String name_impl() {
       return sequence.name_impl(index.name());
     }
+    protected String repair_name_impl(VarInfo v) {
+      return sequence.repair_name_impl(index.repair_name(v),v);
+    }
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
@@ -1908,6 +1993,14 @@ public abstract class VarInfoName
                                 ".." +
                                 ((j == null) ? ""  : j.name())
                                 );
+    }
+
+    protected String repair_name_impl(VarInfo v) {
+      return sequence.repair_name_impl("" +
+                                ((i == null) ? "0" : i.repair_name(v)) +
+                                ".." +
+                                ((j == null) ? ""  : j.repair_name(v))
+                                ,v);
     }
     protected String esc_name_impl() {
       // return the default implementation for now.

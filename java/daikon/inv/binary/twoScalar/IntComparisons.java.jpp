@@ -570,6 +570,25 @@ public final class INTEQUAL
       return var1name + " " + comparator + " " + var2name;
     }
 
+    if (format == OutputFormat.REPAIR)
+    {
+      String comparator = EQUALSstring;
+      #if defined(EQUAL_OP)
+        comparator = "=";
+      #elif defined(NONEQUAL_OP)
+      	comparator = "!=";
+      #endif
+
+      #if (defined(EQUAL_OP)||defined(NONEQUAL_OP))
+      if (var1name.indexOf(".")!=-1)
+        return var1name + " " + comparator + " " + var2name;
+      else
+        return var2name + " " + comparator + " " + var1name;
+      #else
+        return var1name + " " + comparator + " " + var2name;
+      #endif
+    }
+
 
     if (format.isJavaFamily()) {
       #if defined(EQUALFLOAT)

@@ -690,6 +690,8 @@ public abstract class Invariant
     public static final OutputFormat JML = new OutputFormat("JML");
     /* Design-By-Contract for Java (used by Parasoft JContract) */
     public static final OutputFormat DBCJAVA = new OutputFormat("DBC/Java");
+    /* Data Structure Repair Format */
+    public static final OutputFormat REPAIR = new OutputFormat("Repair");
     /* Whole names as single C/Java style indentifiers (currently just
      * for single VarInfoNames) */
     public static final OutputFormat IDENTIFIER

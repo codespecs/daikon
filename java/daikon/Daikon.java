@@ -291,6 +291,7 @@ public final class Daikon {
   public static final String dbc_output_SWITCH = "dbc_output";
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
+  public static final String repair_output_SWITCH = "repair_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
@@ -586,6 +587,11 @@ public final class Daikon {
       new LongOpt[] {
         new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(
+          repair_output_SWITCH,
+          LongOpt.NO_ARGUMENT,
+          null,
+          0),
+        new LongOpt(
           ppt_regexp_SWITCH,
           LongOpt.REQUIRED_ARGUMENT,
           null,
@@ -790,6 +796,8 @@ public final class Daikon {
             output_style = OutputFormat.ESCJAVA;
           } else if (simplify_output_SWITCH.equals(option_name)) {
             output_style = OutputFormat.SIMPLIFY;
+          } else if (repair_output_SWITCH.equals(option_name)) {
+            output_style = OutputFormat.REPAIR;
           } else if (ioa_output_SWITCH.equals(option_name)) {
             output_style = OutputFormat.IOA;
           } else if (test_ioa_output_SWITCH.equals(option_name)) {

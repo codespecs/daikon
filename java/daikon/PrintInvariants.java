@@ -13,6 +13,7 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
+import daikon.repair.Repair;
 
 public final class PrintInvariants {
 
@@ -183,6 +184,8 @@ public final class PrintInvariants {
           Daikon.output_style = OutputFormat.ESCJAVA;
         } else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.SIMPLIFY;
+        } else if (Daikon.repair_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.REPAIR;
         } else if (Daikon.java_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JAVA;
         } else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
@@ -921,9 +924,12 @@ public final class PrintInvariants {
         }
       }
 
-    }
-
-    else {
+    } else if (Daikon.output_style==OutputFormat.REPAIR) { 
+	inv_rep = inv.format_using(Daikon.output_style);
+        if (inv_rep.indexOf ("$noprinttest") != -1) {
+	    return;
+        }
+    } else {
       throw new IllegalStateException("Unknown output mode");
     }
     if (Daikon.output_num_samples) {
@@ -947,6 +953,10 @@ public final class PrintInvariants {
       out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
       out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
       out.println("</INVINFO>");
+    } else if (Daikon.output_style == OutputFormat.REPAIR) {
+	String quantifiers=Repair.getRepair().getQuantifiers();
+	Repair.getRepair().reset();
+	out.println("["+quantifiers+"],"+inv_rep);
     } else {
       out.println(inv_rep);
     }
@@ -1114,6 +1124,20 @@ public final class PrintInvariants {
 
       print_invariant(inv, out, index, ppt);
 
+    }
+    if (Daikon.output_style == OutputFormat.REPAIR) {
+	if (Repair.getRepair().getRules(ppt)!=null) {
+	    out.println("-----------------------------------------------------------------------------");
+	    out.print(Repair.getRepair().getRules(ppt));
+	}
+	if (Repair.getRepair().getSetRelation(ppt)!=null) {
+	    out.println("-----------------------------------------------------------------------------");
+	    out.print(Repair.getRepair().getSetRelation(ppt));
+	}
+	if (Repair.getRepair().getGlobals(ppt)!=null) {
+	    out.println("-----------------------------------------------------------------------------");
+	    out.print(Repair.getRepair().getGlobals(ppt));
+	}
     }
   }
 

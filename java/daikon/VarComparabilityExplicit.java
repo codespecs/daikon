@@ -110,6 +110,7 @@ public final class VarComparabilityExplicit
       return "IndexVar{" + dim + "}[" + base.repr() + "]";
     }
     protected String name_impl() { throw new UnsupportedOperationException(); }
+    protected String repair_name_impl(VarInfo v) { throw new UnsupportedOperationException(); }
     protected String esc_name_impl() { throw new UnsupportedOperationException(); }
     protected String jml_name_impl(VarInfo v) { throw new UnsupportedOperationException(); }
     protected String ioa_name_impl() { throw new UnsupportedOperationException(); }

@@ -39,6 +39,8 @@ public class AndJoiner
     String rightFormat = right.format_using(format);
     if (format == OutputFormat.DAIKON) {
       return leftFormat + " and " + rightFormat;
+    } else if (format == OutputFormat.REPAIR) {
+	return leftFormat + " and " + rightFormat;
     } else if (format == OutputFormat.ESCJAVA || format.isJavaFamily()) {
       return "(" + leftFormat + ") && (" + rightFormat + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
