@@ -355,6 +355,21 @@ public final class ProglangType implements java.io.Serializable {
     return isIntegral();
   }
 
+  public boolean baseIsFloat() {
+    return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
+  }
+
+  public boolean isFloat() {
+    return ((dimensions == 0) && baseIsFloat());
+  }
+
+  public boolean isObject() {
+    return ((dimensions == 0)
+            && (! baseIsIntegral())
+            && (! baseIsFloat())
+            && (! (base == BASE_BOOLEAN)));
+  }
+
   public boolean comparable(ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;
