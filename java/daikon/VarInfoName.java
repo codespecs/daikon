@@ -99,6 +99,16 @@ public abstract class VarInfoName
   }
 
   // ============================================================
+  // Interesting observers
+
+  /**
+   * @return true when this is "0", "-1", "1", etc.
+   **/
+  public boolean isLiteralConstant() {
+    return false;
+  }
+
+  // ============================================================
   // The usual Object methods
 
   public boolean equals(Object o) {
@@ -132,6 +142,14 @@ public abstract class VarInfoName
     public Simple(String name) {
       Assert.assert(name != null);
       this.name = name;
+    }
+    public boolean isLiteralConstant() {
+      try {
+	Integer.parseInt(name);
+	return true;
+      } catch (NumberFormatException e) {
+	return false;
+      }
     }
     protected String name_impl() {
       return name;
@@ -336,6 +354,34 @@ public abstract class VarInfoName
   }
 
   /**
+   * An integer amount more or less than some other value
+   **/
+  public static abstract class Foocrement extends VarInfoName {
+    public final VarInfoName term;
+    public final int amount;
+    public Foocrement(VarInfoName term, int amount) {
+      Assert.assert(term != null);
+      Assert.assert(amount != 0);
+      this.term = term;
+      this.amount = amount;
+    }
+    private String amount() {
+      return (amount < 0) ? String.valueOf(amount) : "+" + amount;
+    }
+    protected String name_impl() {
+      return term.name() + amount();
+    }
+    protected String esc_name_impl() {
+      return term.esc_name() + amount();
+    }
+    protected String simplify_name_impl() {
+      return (amount < 0) ?
+	"(- " + term.simplify_name() + " " + (-amount) + ")" :
+	"(+ " + term.simplify_name() + " " + amount + ")";
+    }
+  }
+
+  /**
    * Returns a name for the decrement of this term, like "this-1".
    **/
   public VarInfoName applyDecrement() {
@@ -343,22 +389,11 @@ public abstract class VarInfoName
   }
 
   /**
-   * One less than some other value
+   * An integer amount more or less than some other value
    **/
-  public static class Decrement extends VarInfoName {
-    public final VarInfoName term;
+  public static class Decrement extends Foocrement {
     public Decrement(VarInfoName term) {
-      Assert.assert(term != null);
-      this.term = term;
-    }
-    protected String name_impl() {
-      return term.name() + "-1";
-    }
-    protected String esc_name_impl() {
-      return term.esc_name() + "-1";
-    }
-    protected String simplify_name_impl() {
-      return "(- " + term.simplify_name() + " 1)";
+      super(term, -1);
     }
     public Object accept(Visitor v) {
       return v.visitDecrement(this);
@@ -375,20 +410,9 @@ public abstract class VarInfoName
   /**
    * One more than some other value
    **/
-  public static class Increment extends VarInfoName {
-    public final VarInfoName term;
+  public static class Increment extends Foocrement {
     public Increment(VarInfoName term) {
-      Assert.assert(term != null);
-      this.term = term;
-    }
-    protected String name_impl() {
-      return term.name() + "+1";
-    }
-    protected String esc_name_impl() {
-      return term.esc_name() + "+1";
-    }
-    protected String simplify_name_impl() {
-      return "(+ " + term.simplify_name() + " 1)";
+      super(term, 1);
     }
     public Object accept(Visitor v) {
       return v.visitIncrement(this);
@@ -433,24 +457,47 @@ public abstract class VarInfoName
   }
 
   /**
+   * Caller is subscripting an orig(a[]) array.  Take the requested
+   * index and make it useful in that context.
+   **/
+  private static VarInfoName indexToPrestate(VarInfoName index) {
+    // 1 orig(a[]) . orig(index) -> orig(a[index])
+    // 2 orig(a[]) . index       -> orig(a[post(index)])
+    if (index instanceof Prestate) {
+      index = ((Prestate) index).term; // #1
+    } else {
+      if (index instanceof Foocrement) {
+	VarInfoName term = ((Foocrement) index).term;
+	if (term instanceof Prestate) {
+	  if (index instanceof Decrement) {
+	    index = ((Prestate) term).term.applyDecrement(); // #1
+	  } else {
+	    Assert.assert(index instanceof Increment);
+	    index = ((Prestate) term).term.applyIncrement(); // #1
+	  }
+	} else {
+	  index = index.applyPoststate();  // #2
+	}
+      } else if (index.isLiteralConstant()) {
+	// we don't want orig(a[post(0)]), so leave index alone
+      } else {
+	index = index.applyPoststate();  // #2
+      }
+    }
+    return index;
+  }
+
+  /**
    * Returns a name for an element selected from a sequence, like
    * "this[i]"
    **/
   public VarInfoName applySubscript(VarInfoName index) {
     Assert.assert(index != null);
-    // orig(a[]) . orig(index) -> orig(a[index])
-    // orig(a[]) . index       -> orig(a[post(index)])
-    // a[]       . orig(index) -> a[orig(index)]
-    // a[]       . index       -> a[index]
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
     Assert.assert(elems != null);
     if (finder.inPre()) {
-      if (index instanceof Prestate) {
-	index = ((Prestate) index).term; // #1
-      } else {
-	index = index.applyPoststate();  // #2
-      }
+      index = indexToPrestate(index);
     }
     Replacer r = new Replacer(elems, (new Subscript(elems, index)).intern());
     return r.replace(this).intern();
@@ -549,11 +596,11 @@ public abstract class VarInfoName
     Elements elems = finder.elems();
     Assert.assert(elems != null);
     if (finder.inPre()) {
-      if ((i != null) && !(i instanceof Prestate)) {
-	i = i.applyPrestate();
+      if (i != null) {
+	i = indexToPrestate(i);
       }
-      if ((j != null) && !(j instanceof Prestate)) {
-	j = j.applyPrestate();
+      if (j != null) {
+	j = indexToPrestate(j);
       }
     }
     Replacer r = new Replacer(finder.elems(), (new Slice(elems, i, j)).intern());
