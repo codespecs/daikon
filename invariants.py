@@ -1,3 +1,4 @@
+
 #!/uns/bin/python1.5
 # invariants.py -- detect patterns in collections of data
 # Michael Ernst <mernst@cs.washington.edu>
@@ -14,7 +15,6 @@ import util
 
 true = (1==1)
 false = (1==0)
-
 
 ###########################################################################
 ### Variables
@@ -60,6 +60,118 @@ if not locals().has_key("fn_var_infos"):
 
     # From function name to stats.  Used *only* if collect_stats = true
     fn_to_stats = {}
+
+    diff_to_ct = {}
+
+##########################################
+### jake's vars to keep track of numbers of diffing invariants
+
+inv_one_cons = 0
+inv_diff_small_no_vals = 1
+inv_one_none = 2
+ssc_miss_min = 3
+ssc_min_diff = 4
+ssc_miss_max = 5
+ssc_max_diff = 6
+ssc_one_can_be_zero = 7
+ssc_diff_mod = 8
+ssc_diff_nonmod = 9
+tsc_diff_lin_reln = 10
+tsc_one_equal = 11
+tsc_comparison_diff = 12
+tsc_diff_num_diff = 13
+tsc_diff_sum = 14
+tsc_diff_ftn_reln = 15
+tsc_diff_inv_ftn_reln = 16
+sseq_diff_elem_equality = 17
+sseq_diff_sortedness = 18
+sseq_diff_inv_all_elem = 19
+scseq_diff_membership = 20
+two_seq_diff_lin_reln = 21
+two_seq_one_equ = 22
+two_seq_diff_comp = 23
+two_seq_diff_subseq = 24
+two_seq_diff_supseq = 25
+two_seq_diff_revness = 26
+g_unary_same = 27
+g_unary_different = 28
+g_pair_same = 29
+g_pair_different = 30
+
+def init_diff_globals():
+    global diff_to_ct
+    diff_to_ct[inv_one_cons] = 0
+    diff_to_ct[inv_diff_small_no_vals] = 0
+    diff_to_ct[inv_one_none] = 0
+    diff_to_ct[ssc_miss_min] = 0
+    diff_to_ct[ssc_min_diff] = 0
+    diff_to_ct[ssc_miss_max] = 0
+    diff_to_ct[ssc_max_diff] = 0
+    diff_to_ct[ssc_one_can_be_zero] = 0
+    diff_to_ct[ssc_diff_mod] = 0
+    diff_to_ct[ssc_diff_nonmod] = 0
+    diff_to_ct[tsc_diff_lin_reln] = 0
+    diff_to_ct[tsc_one_equal] = 0
+    diff_to_ct[tsc_comparison_diff] = 0
+    diff_to_ct[tsc_diff_num_diff] = 0
+    diff_to_ct[tsc_diff_sum] = 0
+    diff_to_ct[tsc_diff_ftn_reln] = 0
+    diff_to_ct[tsc_diff_inv_ftn_reln] = 0
+    diff_to_ct[sseq_diff_elem_equality] = 0
+    diff_to_ct[sseq_diff_sortedness] = 0
+    diff_to_ct[sseq_diff_inv_all_elem] = 0
+    diff_to_ct[scseq_diff_membership] = 0
+    diff_to_ct[two_seq_diff_lin_reln] = 0
+    diff_to_ct[two_seq_one_equ] = 0
+    diff_to_ct[two_seq_diff_comp] = 0
+    diff_to_ct[two_seq_diff_subseq] = 0
+    diff_to_ct[two_seq_diff_supseq] = 0
+    diff_to_ct[two_seq_diff_revness] = 0
+    diff_to_ct[g_unary_same] = 0
+    diff_to_ct[g_unary_different] = 0
+    diff_to_ct[g_pair_same] = 0
+    diff_to_ct[g_pair_different] = 0
+    
+def print_inv_diff_tracking():
+    print "General inv diffs:"
+    print "  one constrained, one is not - ", diff_to_ct[inv_one_cons]
+    print "  different small num values - ", diff_to_ct[inv_diff_small_no_vals]
+    print "  one can be none, one can't - ", diff_to_ct[inv_one_none]
+    print "Single scalar diffs:"
+    print "  missing minimum - ", diff_to_ct[ssc_miss_min]
+    print "  different min - ", diff_to_ct[ssc_min_diff]
+    print "  missing max - ", diff_to_ct[ssc_miss_max]
+    print "  different max - ", diff_to_ct[ssc_max_diff]
+    print "  one can be zero, one can't - ", diff_to_ct[ssc_one_can_be_zero]
+    print "  different modulus - ", diff_to_ct[ssc_diff_mod]
+    print "  different nonmodulus - ", diff_to_ct[ssc_diff_nonmod]
+    print "Two scalar diffs:"
+    print "  different linear relation - ", diff_to_ct[tsc_diff_lin_reln]
+    print "  one is equal, other is not - ", diff_to_ct[tsc_one_equal]
+    print "  different comparison - ", diff_to_ct[tsc_comparison_diff]
+    print "  different numeric difference - ", diff_to_ct[tsc_diff_num_diff]
+    print "  different sum - ", diff_to_ct[tsc_diff_sum]
+    print "  different functional relation - ", diff_to_ct[tsc_diff_ftn_reln]
+    print "  different inv functional reln - ", diff_to_ct[tsc_diff_inv_ftn_reln]
+    print "Single sequence:"
+    print "  different element equality - ", diff_to_ct[sseq_diff_elem_equality]
+    print "  different sortedness - ", diff_to_ct[sseq_diff_sortedness]
+    print "  different inv over all elem - ", diff_to_ct[sseq_diff_inv_all_elem]
+    print "Scalar sequence diffs:"
+    print "  different membership - ", diff_to_ct[scseq_diff_membership]
+    print "Two sequence diffs:"
+    print "  different linear relations - ", diff_to_ct[two_seq_diff_lin_reln]
+    print "  one equal, one is not - ", diff_to_ct[two_seq_one_equ]
+    print "  different comparision - ", diff_to_ct[two_seq_diff_comp]
+    print "  different subseq - ", diff_to_ct[two_seq_diff_subseq]
+    print "  different superseq - ", diff_to_ct[two_seq_diff_supseq]
+    print "  different reverseness - ", diff_to_ct[two_seq_diff_revness]
+    print
+    print "Identical unary invariants:", diff_to_ct[g_unary_same]
+    print "Differing unary invariants:", diff_to_ct[g_unary_different]
+    print "Identical binary invariants:", diff_to_ct[g_pair_same]
+    print "Differing binary invariants:", diff_to_ct[g_pair_different]
+######end Jakes inv diff tracking
 
 def clear_variables():
     """Reset the values of some global variables."""
@@ -1290,6 +1402,7 @@ def all_numeric_invariants(fn_regexp=None):
     if collect_stats:
         collect_pre_derive_data()
         engine_begin_time = time.clock()
+        engine_begin_time_wall = time.time()
 
     fn_names = fn_var_infos.keys()
     fn_names.sort()
@@ -1364,8 +1477,9 @@ def all_numeric_invariants(fn_regexp=None):
 
     if collect_stats:
         engine_end_time = time.clock()
+        engine_end_time_wall = time.time()
         collect_post_derive_data()
-        print_stats(engine_begin_time, engine_end_time)
+        print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall)
     # print_invariants(fn_regexp)
 
 ## Testing:
@@ -1726,16 +1840,20 @@ class invariant:
     def diff(self, other):
         """Returns None or a description of the difference."""
         # print "diff(invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
         assert inv1.__class__ == inv2.__class__
         if inv1.is_unconstrained() and inv2.is_unconstrained():
             return None
         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
+            diff_to_ct[inv_one_cons] = diff_to_ct[inv_one_cons] + 1
             return "One is unconstrained, the other is not"
         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
+            diff_to_ct[inv_diff_small_no_vals] = diff_to_ct[inv_diff_small_no_vals] + 1
             return "Different small number of values"
         if inv1.can_be_None ^ inv2.can_be_None:
+            diff_to_ct[inv_one_none] = diff_to_ct[inv_one_none] + 1
             return "One can be None, the other cannot"
         # return "invariant.diff: no differences"	# debugging
         return None
@@ -1940,6 +2058,7 @@ class single_scalar_numeric_invariant(invariant):
 
     def diff(self, other):
         # print "diff(single_scalar_numeric_invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
 
@@ -1968,13 +2087,27 @@ class single_scalar_numeric_invariant(invariant):
         nonmodulus_different = (inv1.nonmodulus != inv2.nonmodulus)
 
         result = []
-        if min_missing: result.append("Missing minimum")
-        if min_different: result.append("Different minimum")
-        if max_missing: result.append("Missing maximum")
-        if max_different: result.append("Different maximum")
-        if zero_different: result.append("One can't be zero, one can")
-        if modulus_different: result.append("Different modulus")
-        if modulus_different: result.append("Different nonmodulus")
+        if min_missing:
+            result.append("Missing minimum")
+            diff_to_ct[ssc_miss_min] = diff_to_ct[ssc_miss_min] + 1
+        if min_different:
+            result.append("Different minimum")
+            diff_to_ct[ssc_min_diff] = diff_to_ct[ssc_min_diff] + 1
+        if max_missing:
+            result.append("Missing maximum")
+            diff_to_ct[ssc_miss_max] = diff_to_ct[ssc_miss_max] + 1
+        if max_different:
+            result.append("Different maximum")
+            diff_to_ct[ssc_max_diff] = diff_to_ct[ssc_max_diff] + 1
+        if zero_different:
+            result.append("One can't be zero, one can")
+            diff_to_ct[ssc_one_can_be_zero] = diff_to_ct[ssc_one_can_be_zero] + 1
+        if modulus_different:
+            result.append("Different modulus")
+            diff_to_ct[ssc_diff_mod] = diff_to_ct[ssc_diff_mod] + 1
+        if nonmodulus_different:
+            result.append("Different nonmodulus")
+            diff_to_ct[ssc_diff_nonmod] = diff_to_ct[ssc_diff_nonmod] + 1
         if result == []:
             return None
         return string.join(result, ", ")
@@ -2298,6 +2431,7 @@ class two_scalar_numeric_invariant(invariant):
 
     def diff(self, other):
         # print "diff(two_scalar_numeric_invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
 
@@ -2327,13 +2461,27 @@ class two_scalar_numeric_invariant(invariant):
         inv_functions_different = (inv1.inv_functions != inv2.inv_functions)
 
         result = []
-        if linear_different: result.append("Different linear reln")
-        if equal_different: result.append("One can be equal, other can't")
-        if comparison_different: result.append("Different comparison")
-        if difference_difference: result.append("Different numeric difference (subtraction) (" + difference_difference + ")")
-        if sum_difference: result.append("Different sum (" + sum_difference + ")")
-        if functions_different: result.append("Different functional relationship")
-        if inv_functions_different: result.append("Different inverse functional relationship")
+        if linear_different:
+            result.append("Different linear reln")
+            diff_to_ct[tsc_diff_lin_reln] = diff_to_ct[tsc_diff_lin_reln] + 1
+        if equal_different:
+            result.append("One can be equal, other can't")
+            diff_to_ct[tsc_one_equal] = diff_to_ct[tsc_one_equal] + 1
+        if comparison_different:
+            result.append("Different comparison")
+            diff_to_ct[tsc_comparison_diff] = diff_to_ct[tsc_comparison_diff] + 1
+        if difference_difference:
+            result.append("Different numeric difference (subtraction) (" + difference_difference + ")")
+            diff_to_ct[tsc_diff_num_diff] = diff_to_ct[tsc_diff_num_diff] + 1
+        if sum_difference:
+            result.append("Different sum (" + sum_difference + ")")
+            diff_to_ct[tsc_diff_sum] = diff_to_ct[tsc_diff_sum] + 1
+        if functions_different:
+            result.append("Different functional relationship")
+            diff_to_ct[tsc_diff_ftn_reln] = diff_to_ct[tsc_diff_ftn_reln] + 1
+        if inv_functions_different:
+            result.append("Different inverse functional relationship")
+            diff_to_ct[tsc_diff_inv_ftn_reln] = diff_to_ct[tsc_diff_inv_ftn_reln] + 1
         if result == []:
             return None
         return string.join(result, ", ")
@@ -2982,6 +3130,7 @@ class single_sequence_numeric_invariant(invariant):
 
     def diff(self, other):
         # print "diff(single_sequence_numeric_invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
 
@@ -2995,14 +3144,18 @@ class single_sequence_numeric_invariant(invariant):
 
         result = []
 
-        if inv1.elts_equal != inv2.elts_equal: result.append("Different element equality")
-        if (inv1.non_decreasing != inv2.non_decreasing) or (inv1.non_increasing != inv2.non_increasing): result.append("Different sortedness")
+        if inv1.elts_equal != inv2.elts_equal:
+            result.append("Different element equality")
+            diff_to_ct[sseq_diff_elem_equality] = diff_to_ct[sseq_diff_elem_equality] + 1
+        if (inv1.non_decreasing != inv2.non_decreasing) or (inv1.non_increasing != inv2.non_increasing):
+            result.append("Different sortedness")
+            diff_to_ct[sseq_diff_sortedness] = diff_to_ct[sseq_diff_sortedness] + 1
         # First two clauses here are for backward compatibility; remove once
         # the slot can no longer be None.
         elements_diff = inv1.all_index_sni and inv2.all_index_sni and inv1.all_index_sni.diff(inv2.all_index_sni)
         if elements_diff:
             result.append("Different invariants over all elements = (" + elements_diff + ")")
-
+            diff_to_ct[sseq_diff_inv_all_elem] = diff_to_ct[sseq_diff_inv_all_elem] + 1
         if result == []:
             return None
         return string.join(result, ", ")
@@ -3146,6 +3299,7 @@ class scalar_sequence_numeric_invariant(invariant):
 
     def diff(self, other):
         # print "diff(scalar_sequence_numeric_invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
 
@@ -3160,7 +3314,9 @@ class scalar_sequence_numeric_invariant(invariant):
         result = []
 
         assert inv1.seq_first == inv2.seq_first
-        if inv1.member != inv2.member: result.append("Different membership")
+        if inv1.member != inv2.member:
+            result.append("Different membership")
+            diff_to_ct[scseq_diff_membership] = diff_to_ct[scseq_diff_membership] + 1
 
         if result == []:
             return None
@@ -3336,6 +3492,7 @@ class two_sequence_numeric_invariant(invariant):
 
     def diff(self, other):
         # print "diff(two_sequence_numeric_invariant)"
+        global inv_one_cons, inv_diff_small_no_vals, inv_one_none, ssc_miss_min, ssc_min_diff, ssc_miss_max, ssc_max_diff, ssc_one_can_be_zero, ssc_diff_mod, ssc_diff_nonmod, tsc_diff_lin_reln, tsc_one_equal, tsc_comparison_diff, tsc_diff_num_diff, tsc_diff_sum, tsc_diff_ftn_reln, tsc_diff_inv_ftn_reln, sseq_diff_elem_equality, sseq_diff_sortedness, sseq_diff_inv_all_elem, scseq_diff_membership, two_seq_diff_lin_reln, two_seq_one_equ, two_seq_diff_comp, two_seq_diff_subseq, two_seq_diff_supseq, two_seq_diff_revness, diff_to_ct
         inv1 = self
         inv2 = other
 
@@ -3361,12 +3518,24 @@ class two_sequence_numeric_invariant(invariant):
         comparison_different = (comp1 != comp2)
 
         result = []
-        if linear_different: result.append("Different linear reln")
-        if equal_different: result.append("One can be equal, other can't")
-        if comparison_different: result.append("Different comparison")
-        if inv1.sub_sequence != inv2.sub_sequence: result.append("Different subsequenceness")
-        if inv1.super_sequence != inv2.super_sequence: result.append("Different supersequenceness")
-        if inv1.reverse != inv2.reverse: result.append("Different reverseness")
+        if linear_different:
+            result.append("Different linear reln")
+            diff_to_ct[two_seq_diff_lin_reln] = diff_to_ct[two_seq_diff_lin_reln] + 1
+        if equal_different:
+            result.append("One can be equal, other can't")
+            diff_to_ct[two_seq_one_equ] = diff_to_ct[two_seq_one_equ] + 1
+        if comparison_different:
+            result.append("Different comparison")
+            diff_to_ct[two_seq_diff_comp] = diff_to_ct[two_seq_diff_comp] + 1
+        if inv1.sub_sequence != inv2.sub_sequence:
+            result.append("Different subsequenceness")
+            diff_to_ct[two_seq_diff_subseq] = diff_to_ct[two_seq_diff_subseq] + 1
+        if inv1.super_sequence != inv2.super_sequence:
+            result.append("Different supersequenceness")
+            diff_to_ct[two_seq_diff_supseq] = diff_to_ct[two_seq_diff_supseq] + 1
+        if inv1.reverse != inv2.reverse:
+            result.append("Different reverseness")
+            diff_to_ct[two_seq_diff_revness] = diff_to_ct[two_seq_diff_revness] + 1
         if result == []:
             return None
         return string.join(result, ", ")
@@ -3407,12 +3576,11 @@ def read_state(filename):
 ###########################################################################
 ### Differences between invariants
 ###
-
 def diff_files(filename1, filename2):
+    diff_to_ct[inv_one_cons] = diff_to_ct[inv_one_cons] + 1
     (samples1, fn_var_infos1) = read_state(filename1)
     (samples2, fn_var_infos2) = read_state(filename2)
     diff_fn_var_infos(fn_var_infos1, fn_var_infos2)
-
 
 ## Perhaps have "strict" and "nonstrict" differences (of various sorts...)
 
@@ -3531,7 +3699,10 @@ def diff_var_infos(var_infos1, var_infos2):
     print "Differing unary invariants:", unary_different
     print "Identical binary invariants:", pair_same
     print "Differing binary invariants:", pair_different
-
+    diff_to_ct[g_unary_same] = diff_to_ct[g_unary_same] + unary_same
+    diff_to_ct[g_unary_different] = diff_to_ct[g_unary_different] + unary_different
+    diff_to_ct[g_pair_same] = diff_to_ct[g_pair_same] + pair_same
+    diff_to_ct[g_pair_different] = diff_to_ct[g_pair_different] + pair_different
 
 #     # Equality invariants
 #     for vi in var_infos:
@@ -3831,6 +4002,8 @@ class stats:
 
         self.fn_begin_time = 0.0
         self.fn_end_time = 0.0
+        self.fn_begin_time_wall = 0.0
+        self.fn_end_time_wall = 0.0
         #self.read_files_begin_time = 0
         #self.read_files_end_time = 0
 
@@ -3855,6 +4028,7 @@ class stats:
     def format(self):
         total_secs_unrounded = self.fn_end_time - self.fn_begin_time
         total_secs = round(total_secs_unrounded, 3)
+
         hours = int(total_secs / 3600.0)
         minutes = int((total_secs % 3600)/60.0)
         seconds = float(total_secs % 60)
@@ -3972,16 +4146,20 @@ def collect_post_derive_data():
 def begin_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_begin_time = time.clock()
+    fn_stats.fn_begin_time_wall = time.time()
+    
 
 def end_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_end_time = time.clock()
-
-def print_stats(engine_begin_time, engine_end_time):
+    fn_stats.fn_end_time_wall = time.time()
+    
+def print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall):
     print "Invariant Engine Stats"
     print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
 
     total_secs = engine_end_time - engine_begin_time
+    total_secs_wall = engine_end_time_wall - engine_begin_time_wall
     # for (fn_name,fn_stats) in fn_to_stats.items():
     #    total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
     hours = int(total_secs / 3600.0)
@@ -3989,7 +4167,7 @@ def print_stats(engine_begin_time, engine_end_time):
     seconds = int(total_secs % 60)
     print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
     print "CPU time in secs: ", total_secs
-
+    print "Wall time in secs: ", total_secs_wall  
     fn_names = fn_to_stats.keys()
     fn_names.sort()
     for fn_name in fn_names:
