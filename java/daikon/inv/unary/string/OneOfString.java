@@ -150,19 +150,17 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
     result = "";
     boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    if (!is_type) {
+      return "format_simplify " + this.getClass() + " cannot express Strings";
+    }
     for (int i=0; i<num_elts; i++) {
       String value = elts[i];
-      if (!is_type) {
-	result = "format_simplify " + this.getClass() + " cannot express Strings";
-	break;
-      } else {
-	if (value.startsWith("[")) {
-	  value = UtilMDE.classnameFromJvm(value);
-	} else if (value.startsWith("\"") && value.endsWith("\"")) {
-	  value = value.substring(1, value.length()-1);
-	}
-	value = "|T_" + value + "|";
+      if (value.startsWith("[")) {
+	value = UtilMDE.classnameFromJvm(value);
+      } else if (value.startsWith("\"") && value.endsWith("\"")) {
+	value = value.substring(1, value.length()-1);
       }
+      value = "|T_" + value + "|";
       result += " (EQ " + varname + " " + value + ")";
     }
     if (num_elts > 1) {
