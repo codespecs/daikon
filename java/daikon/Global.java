@@ -11,21 +11,8 @@ public final class Global {
   // There are some other variables in the Daikon class.  Probably move
   // them here eventually.
 
-  // When set, the following variables are never derived:
-  // min, max, sum, a[0], a[1], a[-2], a[-1]
-  public static boolean EXPERIMENTS = true;
-
   static {
-    String flag = System.getProperty("EXPERIMENTS");
-    if (flag != null) {
-      try {
-	int i = Integer.parseInt(flag);
-	if (i == 0) {
-	  EXPERIMENTS = false;
-	}
-      } catch (NumberFormatException e) {
-      }
-    }
+    daikon.config.Configuration.getInstance();
   }
 
 
