@@ -17,24 +17,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
-[[
-  Remember that, in general, changes are not permitted to be listed in this
-  file unless they appear in the manual (daikon.texinfo or
-  developer.texinfo).  So edit the manual first, then add a brief description
-  here (with a pointer to the appropriate manual section).
-]]
+4.0.0 (Feb 7 2005)
 
-
-3.2.0 (Feb 1 2005)
-
-The 3.2.0 version of Daikon introduces many substantial enhancements.
+The 4.0.0 version of Daikon introduces many substantial enhancements.
 These improvements include:
  * liberalized license permits unrestricted use
- * new classfile-based Java front end handles Java 5.0 (and earlier)
+ * new Java classfile front end ("Chicory") handles Java 5.0 (and earlier)
  * annotation and other source manipulation components handle Java 5.0
  * new Eclipse plug-in eases running many components of the Daikon system
  * new runtime checking tool can insert assertions into your programs
- * command-line options have been standardized across Daikon component
+ * command-line options have been standardized across Daikon components
  * many bug fixes, documentation updates, and other minor improvements
 
 License
@@ -49,22 +41,18 @@ Chicory:  classfile-based front end for Java
   command-line options.  However, Chicory has two substantial advantages
   over dfej:
    * Chicory is much easier to use:  when running your Java program,
-     just replace the "java" command with "java chicory.Chicory".  For
+     just replace the "java" command with "java daikon.Chicory".  For
      instance, if you usually run
        java mypackage.MyClass arg1 arg2 arg3
      then instead you would run
-       java chicory.Chicory mypackage.MyClass arg1 arg2 arg3
-     That's all there is to it!
-     Note that Chicory does not require you to perform separate
-     instrumentation or compilation steps, as dfej does.
-     You can also supply arguments to Chicory, after "java chicory.Chicory"
-     and before the class name.  See the Daikon manual for details.
+       java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
+     That's all there is to it!  Note that Chicory does not require you to
+     perform separate instrumentation or compilation steps, as dfej does.
+     Furthermore, a single command can both create trace files and run Daikon:
+       java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
+     See the Daikon manual for more options.
    * Chicory supports all versions of Java, including Java 5.0.  By
      contrast, dfej only supports Java 1.4 and earlier.
-  Chicory has one disadvantage relative to dfej:  Chicory's instrumentation
-  tends to slow down the target program more than dfej's does.  However,
-  Chicory is still usable, and its as fast as Daikon itself, so it is not
-  a bottleneck.  We will improve Chicory's performance in future releases.
 
 Eclipse plug-in
 
@@ -74,31 +62,30 @@ Eclipse plug-in
   Java source code. The plug-in works with Eclipse version 3.0.1 and later.
   You can find documentation for the plug-in at
   http://pag.csail.mit.edu/daikon/doc/daikonHelp.html .
-  The 3.1.9 version of the plugin supports only versions of Daikon prior
-  to (and not including) Daikon 3.2.0 and only versions of Java prior to 
-  (and not including) 5.0 (and Eclipse 3.0.1 only supports Java 1.4.2 and
-  earlier).  A version of the plug-in consistent with Eclipse 3.1 and with
-  Daikon 3.2.0 will be forthcoming.
+  The 3.1.7 version of the plugin supports versions of Daikon up to Daikon
+  3.1.7 and (like Eclipse 3.0.1) only versions of Java up to Java 1.4.2.
+  A version of the plug-in for Eclipse 3.1 and Daikon 4.0.0 is forthcoming.
 
 Daikon
 
   User changes
 
-    Daikon now permits program point declarations (which ordinarily appear
-    in .decls files) to appear in the .dtrace file as well.  Each
-    declaration must appear either in a .decls file or in a .dtrace file,
-    not in both, and any declaration in a .dtrace file must precede all
-    samples for that program point.  This feature allows incremental
+    Daikon now permits program point declarations (which previously
+    appeared only in .decls files) to appear in the .dtrace file as well.
+    Each declaration must appear either in a .decls file or in a .dtrace
+    file, not in both, and any declaration in a .dtrace file must precede
+    all samples for that program point.  This feature allows incremental
     processing of .dtrace files for languages such as Java that support
     dynamic linking.  As part of this change, it is now required that
     :::ENTER program points be declared before corresponding :::EXIT
-    program points so that the set of original variables are available
-    when processing exit point declarations.
+    program points so that the set of original variables are available when
+    processing exit point declarations.
 
-    The generation of implications has been modified.  If there are
-    multiple exclusive invariants, one is chosen as a predicate and
-    used for all of the implications.  For example, suppose that all of the
-    following are true, where the letters stand for invariants:
+    The generation of implications has been modified.  If Daikon finds
+    multiple invariants with identical run-time truth values, one is chosen
+    as a predicate and used for all of the implications.  For example,
+    suppose that all of the following implications are true, where the
+    letters stand for invariants:
       A <=> B
       A  => C
       A  => D
@@ -125,12 +112,12 @@ Daikon
 
 dfej
 
-  dfej continues to support only Java 1.4 and earlier.  (You can run dfej's
-  output on any JVM, but dfej takes as input a Java 1.4 program.)
+  The dfej front end for Java continues to support only Java 1.4 and
+  earlier.  You can run dfej's output on any JVM, but dfej takes as input a
+  Java 1.4 (or earlier) program.
 
-  The dfej front end for Java outputs more variables; in particular, you may
-  notice slightly more "foo.class" variables that give the run-time type of
-  variable foo.
+  dfej outputs more variables; in particular, you may notice slightly more
+  "foo.class" variables that give the run-time type of variable foo.
 
   The following command-line options have been renamed, for consistency
   with other components of the Daikon distribution.
@@ -151,34 +138,14 @@ dfej
     -declsfiledirflat=          --decls-flat --decls-dir=
     -instrsourcedir=            --instr-dir=
                             
-dfepl
+Annotate
 
-  The following command-line options have been renamed, for consistency
-  with other components of the Daikon distribution.
-    OLD                  NEW
-    --reference-depth=   --nesting-depth=
-    --dtrace-basedir=    --dtrace-dir=
-    --decls-basedir=     --decls-dir=
-    --instr-basedir=     --instr-dir=
+  Annotate and other components of Daikon (including runtimecheker,
+  described below) handle Java 5.0 code.  They continue to support all
+  earlier versions of Java as well.
 
-Kvasir
-
-  User Changes
-
-    Added a command-line option, --limit-static-vars, to limit the
-    amount of output in order to improve the likelihood of finding
-    more useful invariants. Added the pointer-type disambiguation feature
-    (--disambig and --disambig-file options) so that users can specify
-    control of whether pointers are printed as single elements or arrays.
-    Note: The next feature that we plan to implement for Kvasir is 
-    support for C++, but we want to first gauge the demand for this feature.
-    Please send email to daikon-developers@lists.csail.mit.edu if you
-    feel that this addition will benefit your experience with Daikon.
-
-  Bug Fixes
-
-    Numerous bug fixes result in Kvasir producing more accurate output,
-    most exposed only by obscure test cases.
+  Annotate respects tabs in the source file.  Previously, Annotate
+  converted tabs to spaces.
 
 Runtime-check instrumenter
 
@@ -193,23 +160,34 @@ Runtime-check instrumenter
   likely than random to reveal errors in programs.  You can downlaod Eclat
   from http://pag.csail.mit.edu/eclat/ .
 
-Annotate
+Kvasir
 
-  Annotate and other components of Daikon handle Java 5.0 code -- and all
-  earlier versions, since Java 5.0 is backward-compatible with all previous
-  versions of Java.
+  User Changes
 
-  Annotate respects tabs in the source file.  Previously, Annotate
-  converted tabs to spaces.
+    Added a command-line option, --limit-static-vars, to limit the output
+    of static variables.
 
+    Added pointer-type disambiguation (--disambig and --disambig-file
+    options), which permits users to specify whether pointers are printed
+    as single elements or arrays.
 
-[[
-Hopefully, this release will include:
- * incremental operation for both the new Java front end and for Kvasir
-Not going to happen:
- * Jeff Perkins's dynamic comparability analysis
- * The Daikon regression tests are available on the Daikon downloads webpage
-]]
+    Kvasir does not yet support C++.  If support for C++ is important to
+    you, please send email to daikon-developers@lists.csail.mit.edu.
+
+  Bug Fixes
+
+    Numerous bug fixes result in Kvasir producing more accurate output,
+    most exposed only by obscure test cases.
+
+dfepl
+
+  The following command-line options have been renamed, for consistency
+  with other components of the Daikon distribution.
+    OLD                  NEW
+    --reference-depth=   --nesting-depth=
+    --dtrace-basedir=    --dtrace-dir=
+    --decls-basedir=     --decls-dir=
+    --instr-basedir=     --instr-dir=
 
 ---------------------------------
 
