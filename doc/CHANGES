@@ -1,6 +1,9 @@
 History of Daikon changes
 
 This file lists significant user-visible changes to Daikon.
+For documentation of Daikon, see the Daikon manual.  Its source is file
+daikon.texinfo; formatted, it appears as daikon.html, daikon.info,
+daikon.dvi, daikon.ps, or daikon.pdf.
 
 23 June 2001:
 
