@@ -10,22 +10,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.*;
 
-import jtb.syntaxtree.BlockStatement;
-import jtb.syntaxtree.ClassBody;
-import jtb.syntaxtree.ClassBodyDeclaration;
-import jtb.syntaxtree.ConstructorDeclaration;
-import jtb.syntaxtree.FieldDeclaration;
-import jtb.syntaxtree.FormalParameter;
-import jtb.syntaxtree.MethodDeclaration;
-import jtb.syntaxtree.NameList;
-import jtb.syntaxtree.NestedClassDeclaration;
-import jtb.syntaxtree.Node;
-import jtb.syntaxtree.NodeChoice;
-import jtb.syntaxtree.NodeListOptional;
-import jtb.syntaxtree.NodeOptional;
-import jtb.syntaxtree.NodeSequence;
-import jtb.syntaxtree.NodeToken;
-import jtb.syntaxtree.UnmodifiedClassDeclaration;
+import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
@@ -35,7 +20,7 @@ import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
-import daikon.tools.jtb.Ast;
+import daikon.tools.jtb.*;
 
 /**
  * Visitor pattern that instruments a Java source file to check invariant
@@ -84,13 +69,19 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     public void visit(FieldDeclaration fd) {
         super.visit(fd);
-
-	// f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
-	Vector modifiers = fd.f0.nodes;
+        /**
+         * Grammar production for ClassOrInterfaceBodyDeclaration:
+         * f0 -> Initializer()
+         *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+         *       | ";"
+         */
+        NodeSequence seq = (NodeSequence)fd.getParent().getParent();
+        Modifiers modifiers = (Modifiers)seq.elementAt(0);
+        Vector modifierVector = modifiers.f0.nodes;
 
 	Vector/*NodeChoice*/ newModifiers = new Vector();
-	for (int i = 0 ; i < modifiers.size() ; i++) {
-	    NodeChoice nc = (NodeChoice)modifiers.get(i);
+	for (int i = 0 ; i < modifierVector.size() ; i++) {
+	    NodeChoice nc = (NodeChoice)modifierVector.get(i);
 	    NodeToken token = (NodeToken)nc.choice;
 	    if (!token.tokenImage.equals("public")
 		&& !token.tokenImage.equals("protected")
@@ -100,29 +91,24 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	}
 
 	newModifiers.add(new NodeToken("public"));
-	fd.f0.nodes = newModifiers;
+        modifiers.f0.nodes = newModifiers;
     }
 
-    public void visit(ClassBody clazz) {
+    public void visit(ClassOrInterfaceBody clazz) {
         super.visit(clazz);
 
         // add method to check object and class invariants.
-        UnmodifiedClassDeclaration ucd = (UnmodifiedClassDeclaration) clazz
+        ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
                 .getParent();
         String classname = Ast.getClassName(ucd);
-        ClassBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
+        ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
         Ast.addDeclaration(clazz, objInvDecl);
 
         boolean isNested = false;
         boolean isStatic = false;
         Node dParent = ucd.getParent();
-        if (dParent instanceof NestedClassDeclaration) {
-            isNested = true;
-            isStatic = Ast.isStatic((NestedClassDeclaration) dParent);
-        }
-
-        if (!isNested || (isStatic)) {
-            ClassBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
+        if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
+            ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
             Ast.addDeclaration(clazz, classInvDecl);
             Ast.addDeclaration(clazz, getInvariantsDecl());
             Ast.addDeclaration(clazz, isInstrumentedDecl());
@@ -189,7 +175,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Replace constructor body with instrumented code.
         BlockStatement newCtorBody = (BlockStatement) Ast.create(
                 "BlockStatement", code.toString());
-        newCtorBody.accept(new TreeFormatter(2, 0));
+        //newCtorBody.accept(new TreeFormatter(2, 0));
         ctor.f6 = new NodeListOptional(newCtorBody);
     }
 
@@ -208,7 +194,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         // Determine if method is static.
         boolean isStatic = false;
-        for (Enumeration e = method.f0.elements(); e.hasMoreElements();) {
+
+        NodeSequence seq = (NodeSequence)method.getParent().getParent();
+        Modifiers modifiers = (Modifiers)seq.elementAt(0);
+
+
+        for (Enumeration e = modifiers.f0.elements(); e.hasMoreElements();) {
             NodeChoice nodechoice = (NodeChoice) e.nextElement();
             NodeToken modifier = (NodeToken) nodechoice.choice;
             if (modifier.tokenImage.equals("static")) {
@@ -296,15 +287,34 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         // Add method to AST.
         String new_method = code.toString();
+
         MethodDeclaration wrapper = (MethodDeclaration) Ast.copy(
                 "MethodDeclaration", method);
-        Ast.setBody(wrapper, new_method);
-        wrapper.accept(new TreeFormatter(2, 0));
-        ClassBody c = (ClassBody) Ast.getParent(ClassBody.class, method);
-        ClassBodyDeclaration d = (ClassBodyDeclaration) Ast.create(
-                "ClassBodyDeclaration", Ast.print(wrapper));
+
+        Block block = (Block) Ast.create("Block", new_method);
+
+        wrapper.f4.choice = block;
+        wrapper.accept(new TreeFormatter());
+
+        NodeSequence modifiers_declaration = (NodeSequence)method.getParent().getParent();
+        ((Modifiers)modifiers_declaration.elementAt(0)).accept(new TreeFormatter());
+
+        ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+
+        StringBuffer modifiers_declaration_stringbuffer  = new StringBuffer();
+        modifiers_declaration_stringbuffer.append(Ast.print((Modifiers)modifiers_declaration.elementAt(0)));
+        modifiers_declaration_stringbuffer.append(" ");
+        modifiers_declaration_stringbuffer.append(Ast.print(wrapper));
+
+        ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create(
+                "ClassOrInterfaceBodyDeclaration",
+                new Class[] { Boolean.TYPE },
+                new Object[] { new Boolean(false) },  // isInterface == false
+                modifiers_declaration_stringbuffer.toString());
         Ast.addDeclaration(c, d);
-        MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
+        NodeSequence ns = (NodeSequence) d.f0.choice;
+        NodeChoice nc = (NodeChoice) ns.elementAt(1);
+        MethodDeclaration generated_method = (MethodDeclaration) nc.choice;
         generated_methods.add(generated_method);
 
         // Rename the original method, and make it private.
@@ -367,37 +377,49 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     /**
      * @return
      */
-    private ClassBodyDeclaration isInstrumentedDecl() {
+    private ClassOrInterfaceBodyDeclaration isInstrumentedDecl() {
         StringBuffer code = new StringBuffer();
         code.append("public static boolean isDaikonInstrumented() { return true; }");
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-                .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+
+                                                            code
+                                                            .toString());
     }
 
     /**
      * @return
      */
-    private ClassBodyDeclaration getInvariantsDecl() {
+    private ClassOrInterfaceBodyDeclaration getInvariantsDecl() {
         StringBuffer code = new StringBuffer();
         code.append("public static java.util.Set getDaikonInvariants() {");
         code.append("  return new java.util.HashSet(java.util.Arrays.asList(daikonProperties));");
         code.append("}");
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-                .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+
+                                                            code
+                                                            .toString());
     }
 
     /**
      * @return
      */
-    private ClassBodyDeclaration staticPropertyDecl() {
+    private ClassOrInterfaceBodyDeclaration staticPropertyDecl() {
         StringBuffer code = new StringBuffer();
 
 	code.append("private static daikon.tools.runtimechecker.Property[] daikonProperties;");
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-						 .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+
+                                                            code
+                                                            .toString());
     }
 
-    private ClassBodyDeclaration staticPropertyInit() {
+    private ClassOrInterfaceBodyDeclaration staticPropertyInit() {
         StringBuffer code = new StringBuffer();
 
 	code.append("static {\n");
@@ -422,13 +444,17 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         code.append("} // end static");
 
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-						 .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+
+                                                            code
+                                                            .toString());
     }
 
 
 
-    private ClassBodyDeclaration checkObjectInvariants_instrumentDeclaration(
+    private ClassOrInterfaceBodyDeclaration checkObjectInvariants_instrumentDeclaration(
             String classname) {
         StringBuffer code = new StringBuffer();
         code
@@ -441,11 +467,13 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             appendInvariantChecks(objectInvariants, code, "time");
         }
         code.append("}" + daikon.Global.lineSep + "");
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-                .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+                                                            code.toString());
     }
 
-    private ClassBodyDeclaration checkClassInvariantsInstrumentDeclaration(
+    private ClassOrInterfaceBodyDeclaration checkClassInvariantsInstrumentDeclaration(
             String classname) {
         StringBuffer code = new StringBuffer();
         code
@@ -458,8 +486,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             appendInvariantChecks(classInvariants, code, "time");
         }
         code.append("}" + daikon.Global.lineSep + "");
-        return (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code
-                .toString());
+        return (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                            new Class[] { Boolean.TYPE },
+                                                            new Object[] { new Boolean(false) },  // isInterface == false
+                                                            code.toString());
     }
 
     private static List/* Invariant */filterInvariants(

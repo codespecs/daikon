@@ -31,17 +31,21 @@ public class InstrumentObserversVisitor
   /**
    * Add fields for each observed method.
    **/
-  public void visit(ClassBody clazz) {
-    super.visit(clazz);
+  public void visit(ClassOrInterfaceBody clazzOrInterface) {
+    super.visit(clazzOrInterface);
+
+    if (Ast.isInterface(clazzOrInterface)) {
+      return;
+    }
 
     for (Iterator i = observer_methods.iterator(); i.hasNext(); ) {
       MethodDeclaration method = (MethodDeclaration) i.next();
       String fldtype = getFieldTypeFor(method);
       String fldname = getFieldNameFor(method);
       String code = "private " + fldtype + " " + fldname + ";" + Global.lineSep;
-      ClassBodyDeclaration decl =
-        (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code);
-      Ast.addDeclaration(clazz, decl);
+      ClassOrInterfaceBodyDeclaration decl =
+        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration", code);
+      Ast.addDeclaration(clazzOrInterface, decl);
     }
 
     StringBuffer code = new StringBuffer();
@@ -57,9 +61,9 @@ public class InstrumentObserversVisitor
     code.append("  }");
     code.append("}");
 
-    ClassBodyDeclaration decl = (ClassBodyDeclaration)
-      Ast.create("ClassBodyDeclaration", code.toString());
-    Ast.addDeclaration(clazz, decl);
+    ClassOrInterfaceBodyDeclaration decl = (ClassOrInterfaceBodyDeclaration)
+      Ast.create("ClassOrInterfaceBodyDeclaration", code.toString());
+    Ast.addDeclaration(clazzOrInterface, decl);
   }
 
   /**
@@ -126,9 +130,9 @@ public class InstrumentObserversVisitor
         Ast.copy("MethodDeclaration", method);
       Ast.setBody(wrapper, new_method);
       wrapper.accept(new TreeFormatter(2, 0));
-      ClassBody c = (ClassBody) Ast.getParent(ClassBody.class, method);
-      ClassBodyDeclaration d = (ClassBodyDeclaration)
-        Ast.create("ClassBodyDeclaration", Ast.print(wrapper));
+      ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+      ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration)
+        Ast.create("ClassOrInterfaceBodyDeclaration", Ast.print(wrapper));
       Ast.addDeclaration(c, d);
       MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
       if (i == 1) {

@@ -61,25 +61,29 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f3 -> [ "implements" NameList() ]
    * f4 -> ClassBody()
    */
-  public void visit(UnmodifiedClassDeclaration n) {
-    className = Ast.print(n.f1);
+  public void visit(ClassOrInterfaceDeclaration n) {
+
+    if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
+      className = Ast.print(n.f1);
+    }
     super.visit(n);
   }
 
   /**
-   * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
-   * f1 -> Type()
-   * f2 -> VariableDeclarator()
-   * f3 -> ( "," VariableDeclarator() )*
-   * f4 -> ";"
-   */
-  /**
    * Stores the field name, if it is a boolean.
    */
   public void visit(FieldDeclaration n) {
-    String resultType = Ast.print(n.f1);
+    /**
+     * Grammar production:
+     * f0 -> Type()
+     * f1 -> VariableDeclarator()
+     * f2 -> ( "," VariableDeclarator() )*
+     * f3 -> ";"
+     */
+
+    String resultType = Ast.print(n.f0);
     if (resultType.equals("boolean")) {
-      addCondition(Ast.print(n.f2.f0) + " ==  true");  // <--
+      addCondition(Ast.print(n.f1.f0) + " ==  true");  // <--
     }
     super.visit(n);
   }
@@ -233,21 +237,20 @@ class ConditionExtractor extends DepthFirstVisitor {
     addCondition(Ast.print(n.f4));
   }
 
-  /**
-   * f0 -> "for"
-   * f1 -> "("
-   * f2 -> [ ForInit() ]
-   * f3 -> ";"
-   * f4 -> [ Expression() ]
-   * f5 -> ";"
-   * f6 -> [ ForUpdate() ]
-   * f7 -> ")"
-   * f8 -> Statement()
-   */
+   /**
+    * f0 -> "for"
+    * f1 -> "("
+    * f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+    * f3 -> ")"
+    * f4 -> Statement()
+    */
   /* Extract the condition in an 'for' statement */
   public void visit(ForStatement n) {
     super.visit(n);
-    addCondition(Ast.print(n.f4));
+    if (n.f2.which == 1) {
+      addCondition(Ast.print(((NodeSequence)n.f2.choice).elementAt(2)));
+    }
+
   }
 
 
@@ -291,7 +294,7 @@ class ConditionExtractor extends DepthFirstVisitor {
         ResultType resultType = (ResultType) resultTypes.peek();
         if (resultType.f0.choice instanceof Type) {
           Type type = (Type) resultType.f0.choice;
-          if ((type.f1.size() == 0) && (type.f0.choice instanceof PrimitiveType)) {
+          if (Ast.isPrimitive(type)) {
             PrimitiveType primType = (PrimitiveType) type.f0.choice;
             if (((NodeToken) primType.f0.choice).toString().equals("boolean")) {
               addCondition(returnExpression);

@@ -14,14 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jtb.JavaParser;
-import jtb.syntaxtree.ClassDeclaration;
-import jtb.syntaxtree.CompilationUnit;
-import jtb.syntaxtree.Name;
-import jtb.syntaxtree.Node;
-import jtb.syntaxtree.NodeListOptional;
-import jtb.syntaxtree.NodeOptional;
-import jtb.syntaxtree.PackageDeclaration;
-import jtb.syntaxtree.TypeDeclaration;
+import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import utilMDE.Assert;
@@ -31,6 +24,7 @@ import daikon.FileIO;
 import daikon.Global;
 import daikon.LogHelper;
 import daikon.PptMap;
+import daikon.tools.jtb.*;
 import daikon.tools.runtimechecker.InstrumentVisitor;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
@@ -140,6 +134,8 @@ public class InstrumentHandler extends CommandHandler {
 
             try {
                 Writer output = new FileWriter(instrumentedFile);
+
+                oneClass.root.accept(new TreeFormatter());
                 oneClass.root.accept(new TreeDumper(output));
                 output.close();
             } catch (IOException e) {
@@ -152,9 +148,6 @@ public class InstrumentHandler extends CommandHandler {
             }
 
         }
-
-        // Compile instrumented files.
-        //compile(instrumentedFileNames, outputDir.getPath());
 
         return true;
     }
@@ -345,13 +338,15 @@ public class InstrumentHandler extends CommandHandler {
                             + javaFileName);
             TypeDeclaration typeDeclaration = (TypeDeclaration) typeDeclarationMaybe
                     .elementAt(0);
-            Node choice = typeDeclaration.f0.choice;
-            Assert.assertTrue(choice instanceof ClassDeclaration,
-                    "Do not give .java files that declare interfaces "
-                            + "to the instrumenter: " + javaFileName);
-            ClassDeclaration classDeclaration = (ClassDeclaration) choice;
+            NodeSequence sequence = (NodeSequence)typeDeclaration.f0.choice;
+            NodeChoice nodeChoice = (NodeChoice)sequence.elementAt(1);
+            ClassOrInterfaceDeclaration decl = (ClassOrInterfaceDeclaration)nodeChoice.choice;
 
-            results.className = classDeclaration.f1.f1.tokenImage;
+            Assert.assertTrue(!Ast.isInterface(decl),
+                              "Do not give .java files that declare interfaces "
+                              + "to the instrumenter: " + javaFileName);
+
+            results.className = decl.f1.tokenImage;
 
             // Add to the list of ParseResults that we'll return.
             retval.add(results);

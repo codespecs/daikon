@@ -30,19 +30,19 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
       for (int i=0; i<fieldDeclsArray.length; i++) {
         FieldDeclaration fd = fieldDeclsArray[i];
         boolean isFinal = hasModifier(fd, "final");
-        Type fdtype = fd.f1;
+        Type fdtype = fd.f0;
 	// See specification in Annotate.java for which fields are owned.
         // boolean isOwned = ! isPrimitive(fdtype);
-        boolean isOwned = isArray(fdtype);
+        boolean isOwned = Ast.isArray(fdtype);
         {
-          String name = name(fd.f2);
+          String name = name(fd.f1);
           allNames.add(name);
           if (isFinal)
             finalNames.add(name);
           if (isOwned)
             ownedNames.add(name);
         }
-        NodeListOptional fds = fd.f3;
+        NodeListOptional fds = fd.f2;
         if (fds.present()) {
           for (int j=0; j<fds.size(); j++) {
             // System.out.println("" + j + ": " + fds.elementAt(j));
@@ -74,23 +74,6 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     return Ast.contains(n.f0, mod);
   }
 
-  private boolean isPrimitive(Type n) {
-    // Grammar production:
-    //   f0 -> ( PrimitiveType() | Name() )
-    //   f1 -> ( "[" "]" )*
-    NodeChoice c = n.f0;
-    if (! ((c.choice instanceof PrimitiveType) || (c.choice instanceof Name))) {
-      throw new Error("Bad type choice");
-    }
-    return ((c.choice instanceof PrimitiveType) && ! n.f1.present());
-  }
-
-  private boolean isArray(Type n) {
-    // Grammar production:
-    //   f0 -> ( PrimitiveType() | Name() )
-    //   f1 -> ( "[" "]" )*
-    return n.f1.present();
-  }
 
   // Returns a list of all FieldDeclarations declared in this class or in
   // nested/inner classes.
@@ -120,19 +103,19 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // Don't continue into nested classes, but do
   // explore them if they are the root.
   private boolean in_class = false;
-  public void visit(ClassDeclaration n) {
-    Assert.assertTrue(! in_class);
+  public void visit(ClassOrInterfaceDeclaration n) {
+    //Assert.assertTrue(! in_class);
     in_class = true;
     super.visit(n);
     in_class = false;
   }
-  public void visit(NestedClassDeclaration n) {
-    if (! in_class) {
-      in_class = true;
-      super.visit(n);
-      in_class = false;
-    }
-  }
+//   public void visit(NestedClassDeclaration n) {
+//     if (! in_class) {
+//       in_class = true;
+//       super.visit(n);
+//       in_class = false;
+//     }
+//   }
 
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*

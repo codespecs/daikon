@@ -293,7 +293,7 @@ public class Violation implements Serializable {
      * violations are sorted by time, and violations of high-confidence
      * properties are prepended with "H".
      */
-    public static String toNiceString(Set/*<Violation>*/ vios,
+    public static String toNiceString(String prefix, Set/*<Violation>*/ vios,
             double confidenceThreshold) {
 
         StringBuffer retval = new StringBuffer();
@@ -308,20 +308,20 @@ public class Violation implements Serializable {
                         + Arrays.asList(onExit).toString() + "vios: " + vios);
 
         for (int i = 0; i < onEntry.length; i++) {
-
+            retval.append(prefix);
             retval
                     .append((onEntry[i].property.confidence > confidenceThreshold) ? "H "
                             : "  ");
-
+            retval.append(prefix);
             retval.append("   " + onEntry[i] + "" + daikon.Global.lineSep + "");
         }
 
         for (int i = 0; i < onExit.length; i++) {
-
+            retval.append(prefix);
             retval
                     .append((onExit[i].property.confidence > confidenceThreshold) ? "H "
                             : "  ");
-
+            retval.append(prefix);
             retval.append("   " + onExit[i] + "" + daikon.Global.lineSep + "");
         }
 

@@ -20,6 +20,8 @@ import utilMDE.ArraysMDE;
 
 import daikon.*;
 
+import java.lang.reflect.*;
+
 public class Ast {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -133,14 +135,18 @@ public class Ast {
     return print(current);
   }
 
-
   // Creates an AST from a String
   public static Node create(String type, String stringRep) {
+    return create(type, new Class[]{}, new Object[]{}, stringRep);
+  }
+
+  // Creates an AST from a String
+  public static Node create(String type, Class[] argTypes, Object[] args, String stringRep) {
     JavaParser parser = new JavaParser(new StringReader(stringRep));
     Node n = null;
     try {
-      Method m = JavaParser.class.getMethod(type, (Class[])null);
-      n = (Node) m.invoke(parser, (Object[])null);
+      Method m = JavaParser.class.getMethod(type, argTypes);
+      n = (Node) m.invoke(parser, args);
     } catch (Exception e) {
       System.err.println("create(" + type + ", \"" + stringRep + "\")");
       e.printStackTrace();
@@ -161,7 +167,7 @@ public class Ast {
   }
 
   public static String getName(FormalParameter p) {
-    String name = print(p.f2);
+    String name = print(p.f3);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
       return name;
@@ -246,33 +252,35 @@ public class Ast {
       // use the ClassDeclaration, the InterfaceDeclaration, or the ";"
       n = ((TypeDeclaration)n).f0.choice;
     }
-    if (n instanceof ClassDeclaration) {
-      n = ((ClassDeclaration)n).f1; // use the UnmodifiedClassDeclaration
+    if (n instanceof ClassOrInterfaceDeclaration) {
+      className = ((ClassOrInterfaceDeclaration)n).f1.tokenImage + ".";
     }
-    if (n instanceof InterfaceDeclaration) {
-      n = ((InterfaceDeclaration)n).f1; // use the UnmodifiedInterfaceDeclaration
-    }
-    if (n instanceof UnmodifiedClassDeclaration) {
-      className = ((UnmodifiedClassDeclaration)n).f1.tokenImage + ".";
-    }
-    if (n instanceof UnmodifiedInterfaceDeclaration) {
-      className = ((UnmodifiedInterfaceDeclaration)n).f1.tokenImage + ".";
-    }
+//     if (n instanceof InterfaceDeclaration) {
+//       n = ((InterfaceDeclaration)n).f1; // use the UnmodifiedInterfaceDeclaration
+//     }
+//     if (n instanceof UnmodifiedClassDeclaration) {
+//       className = ((UnmodifiedClassDeclaration)n).f1.tokenImage + ".";
+//     }
+//     if (n instanceof UnmodifiedInterfaceDeclaration) {
+//       className = ((UnmodifiedInterfaceDeclaration)n).f1.tokenImage + ".";
+//     }
 
     Node currentNode = n;
     while (true) {
-      ClassBody b = (ClassBody) getParent(ClassBody.class, currentNode);
+      ClassOrInterfaceBody b = (ClassOrInterfaceBody)
+        getParent(ClassOrInterfaceBody.class, currentNode);
       if (b == null) {
         break;
       }
       Node n1 = b.getParent();
-      if (n1 instanceof UnmodifiedClassDeclaration) {
-        String s = ((UnmodifiedClassDeclaration) n1).f1.tokenImage;
-        className = s + "." + className;
-        currentNode = n1;
-      } else {
+      Assert.assertTrue(n1 instanceof ClassOrInterfaceDeclaration);
+      if (isInner((ClassOrInterfaceDeclaration)n1)) {
         className = "$inner" + "." + className;
         currentNode = b;
+      } else {
+        String s = ((ClassOrInterfaceDeclaration) n1).f1.tokenImage;
+        className = s + "." + className;
+        currentNode = n1;
       }
     }
 
@@ -836,7 +844,9 @@ public class Ast {
 
   // return true if m is defined in any superclass of its class
   public static boolean isOverride(MethodDeclaration methdecl) {
-    if (getParent(InterfaceDeclaration.class, methdecl) != null) {
+    ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration)
+      getParent(ClassOrInterfaceDeclaration.class, methdecl);
+    if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
     Class c = getClass(methdecl);
@@ -864,7 +874,10 @@ public class Ast {
 
   // return true if methdecl is defined in any interface of its class
   public static boolean isImplementation(MethodDeclaration methdecl) {
-    if (getParent(InterfaceDeclaration.class, methdecl) != null) {
+
+    ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration)
+      getParent(ClassOrInterfaceDeclaration.class, methdecl);
+    if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
     Class c = getClass(methdecl);
@@ -921,7 +934,7 @@ public class Ast {
   }
 
 
-  public static void addDeclaration(ClassBody c, ClassBodyDeclaration d) {
+  public static void addDeclaration(ClassOrInterfaceBody c, ClassOrInterfaceBodyDeclaration d) {
     c.f1.addNode(d);
   }
 
@@ -929,7 +942,14 @@ public class Ast {
 
   // The "access" argument should be one of "public", "protected", or "private".
   public static void setAccess(MethodDeclaration m, String access) {
-    NodeListOptional options = m.f0;
+    // The following four confusing lines are a following of the
+    // syntax tree to get to the modifiers.
+    ClassOrInterfaceBodyDeclaration decl =
+      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, m);
+    NodeChoice nc = decl.f0;
+    NodeSequence sequence = (NodeSequence)nc.choice;
+    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+    NodeListOptional options = modifiers.f0;
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) {
       NodeChoice c = (NodeChoice) e.nextElement();
       NodeToken t = (NodeToken) c.choice;
@@ -1034,44 +1054,34 @@ public class Ast {
     // Look into replacing getClass because that requires that the compiled class
     // be in the classpath
 
-    Node innerClassNode = getParent(UnmodifiedClassDeclaration.class, cd);
-    Node outerClassNode = getParent(UnmodifiedClassDeclaration.class, innerClassNode);
+    Node innerClassNode = getParent(ClassOrInterfaceDeclaration.class, cd);
+    Node outerClassNode = getParent(ClassOrInterfaceDeclaration.class, innerClassNode);
 
-    boolean isNestedStatic = false;
-    Node nestedMaybe = innerClassNode.getParent();
-    if (nestedMaybe instanceof NestedClassDeclaration) {
-      if (isStatic((NestedClassDeclaration)nestedMaybe)) {
-        isNestedStatic = true;
-      }
-    }
+//     boolean isNestedStatic = false;
+//     Node nestedMaybe = innerClassNode.getParent();
+//     if (nestedMaybe instanceof NestedClassDeclaration) {
+//       if (isStatic((NestedClassDeclaration)nestedMaybe)) {
+//         isNestedStatic = true;
+//       }
+//     }
 
-    if (isNestedStatic) {
+    if (isInner((ClassOrInterfaceDeclaration)innerClassNode)
+        && isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
       //if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
-      NodeToken nameToken = ((UnmodifiedClassDeclaration)outerClassNode).f1;
+      NodeToken nameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
       Name name = new Name(nameToken, new NodeListOptional());
-      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1), new NodeListOptional());
+      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1));
       VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
-      FormalParameter implicitOuter = new FormalParameter(new NodeOptional(), type, blankParamName);
+      FormalParameter implicitOuter = new FormalParameter(new NodeOptional(),
+                                                          type,
+                                                          new NodeOptional(),
+                                                          blankParamName);
       v.parameters.add(0, implicitOuter);
     }
 
     return v.parameters;
   }
 
-  public static boolean isStatic(NestedClassDeclaration nestedD) {
-    boolean isStatic = false;
-    // NestedClassDeclaration grammar production:
-    // f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
-    // f1 -> UnmodifiedClassDeclaration()
-    for (Enumeration e = nestedD.f0.elements() ; e.hasMoreElements() ; ) {
-	NodeChoice n = (NodeChoice)e.nextElement();
-	NodeToken nt = (NodeToken)n.choice;
-	if (nt.equals("static")) {
-	    isStatic = true;
-	}
-    }
-    return isStatic;
-  }
 
   public static void addImport(CompilationUnit u, ImportDeclaration i) {
     u.f1.addNode(i);
@@ -1189,6 +1199,111 @@ public class Ast {
       = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
     return accepted_invariants;
+  }
+
+  public static boolean isStatic(ClassOrInterfaceDeclaration n) {
+    /**
+     * Grammar production for ClassOrInterfaceBodyDeclaration
+     * f0 -> Initializer()
+     *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+     *       | ";"
+     */
+
+    NodeSequence seq = (NodeSequence)n.getParent();
+    Modifiers modifiers = (Modifiers)seq.elementAt(0);
+    if (modifierPresent(modifiers, "static")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
+    /**
+     * Grammar production:
+     * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+     */
+
+    NodeListOptional list = modifiers.f0;
+    for (int i = 0 ; i < list.size() ; i++) {
+      NodeChoice nodeChoice = (NodeChoice)list.elementAt(i);
+      NodeToken keyword = (NodeToken)nodeChoice.choice;
+      if (keyword.toString().equals(modifierString)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean isInner(ClassOrInterfaceDeclaration n) {
+    if (getParent(ClassOrInterfaceDeclaration.class, n) != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static boolean isInterface(ClassOrInterfaceBody n) {
+    return isInterface((ClassOrInterfaceDeclaration)n.getParent());
+  }
+
+  public static boolean isInterface(ClassOrInterfaceDeclaration n) {
+    /**
+     * Grammar production for ClassOrInterfaceDeclaration:
+     * f0 -> ( "class" | "interface" )
+     * f1 -> <IDENTIFIER>
+     * f2 -> [ TypeParameters() ]
+     * f3 -> [ ExtendsList(isInterface) ]
+     * f4 -> [ ImplementsList(isInterface) ]
+     * f5 -> ClassOrInterfaceBody(isInterface)
+     */
+    NodeToken t = (NodeToken) n.f0.choice;
+    String token = t.tokenImage;
+    if (token.equals("interface")) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  public static boolean isPrimitive(jtb.syntaxtree.Type n) {
+    /**
+     * Grammar production:
+     * f0 -> ReferenceType()
+     *       | PrimitiveType()
+     */
+    return (n.f0.choice instanceof PrimitiveType);
+  }
+
+  public static boolean isReference(jtb.syntaxtree.Type n) {
+    /**
+     * Grammar production:
+     * f0 -> ReferenceType()
+     *       | PrimitiveType()
+     */
+    return (n.f0.choice instanceof ReferenceType);
+  }
+
+
+  public static boolean isArray(jtb.syntaxtree.Type n) {
+    /**
+     * Grammar production:
+     * f0 -> PrimitiveType() ( "[" "]" )+
+     *       | ( ClassOrInterfaceType() ) ( "[" "]" )*
+     */
+    if (isPrimitive(n)) {
+      return false;
+    }
+    Assert.assertTrue(isReference(n));
+    ReferenceType refType = (ReferenceType)n.f0.choice;
+    NodeSequence seq = (NodeSequence)refType.f0.choice;
+    if (seq.elementAt(0) instanceof PrimitiveType) {
+      return true; // see grammar--must be array in this case
+
+    }
+    NodeListOptional opt = (NodeListOptional)seq.elementAt(1);
+    return opt.present();
   }
 
 }
