@@ -433,6 +433,7 @@ showvars:
 	@echo JAVA = ${JAVA}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
+	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 
 list_java_files:
 	@echo $(JAVA_FILES)
@@ -444,9 +445,9 @@ list_java_files:
 
 ## First, a file not generated via java-cpp
 daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpDater.java
-	javac -J-Xmx1024M $<
+	javac -classpath `pwd` $<
 	rm -f $@
-	java daikon.test.split.SplitterFactoryTestUpDater
+	java -classpath `pwd`:${CLASSPATH} daikon.test.split.SplitterFactoryTestUpDater
 	chmod -w $@
 
 # Create the auto-generated files with jpp
