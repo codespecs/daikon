@@ -25,8 +25,8 @@ sub getline {
     my $l;
     do {
 	$l = <$fh>;
-	chomp $l;
-    } while ($l =~ m|^\#|);
+	if ($l) {chomp $l;}
+    } while ($l && ($l =~ m|^\#|));
     return $l;
 }
 
@@ -140,6 +140,8 @@ sub cmp_ppts {
 	    print "${varname} \@ ${pptname} undefined in ${dtb}\n";
 	} elsif ($$varl[1] eq "double") {
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
+		$difference = !($$la[0] eq $$lb[0]);
+	    } elsif (($$la[0] eq "nan")||($$lb[0] eq "nan")) {
 		$difference = !($$la[0] eq $$lb[0]);
 	    } else {
 		$difference = (abs($$la[0] - $$lb[0]) > 0.00001)
