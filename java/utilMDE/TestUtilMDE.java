@@ -1191,6 +1191,8 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.unquote("\\\\relax").equals("\\relax"));
     assertTrue(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
     assertTrue(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
+    assertTrue(UtilMDE.unquote("\\").equals("\\"));
+    assertTrue(UtilMDE.unquote("foo\\").equals("foo\\"));
 
     assertTrue(UtilMDE.removeWhitespaceBefore("a,b", ",").equals("a,b"));
     assertTrue(UtilMDE.removeWhitespaceBefore("a, b", ",").equals("a, b"));

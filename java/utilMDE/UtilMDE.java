@@ -8,7 +8,7 @@ import java.util.zip.*;
 import java.lang.reflect.*;
 // import Assert;
 
-// Yes, I know the name is very close to that of the package.
+// The class name "UtilMDE" is very close to the package name "utilMDE".
 /** Utility functions that do not belong elsewhere in the utilMDE package. */
 public final class UtilMDE {
 
@@ -784,7 +784,7 @@ public final class UtilMDE {
     int post_esc = 0;
     int this_esc = orig.indexOf('\\');
     while (this_esc != -1) {
-      if (this_esc == orig.length()) {
+      if (this_esc == orig.length()-1) {
         sb.append(orig.substring(post_esc, this_esc+1));
         post_esc = this_esc+1;
         break;
