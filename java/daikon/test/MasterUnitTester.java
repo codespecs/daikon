@@ -35,6 +35,8 @@ public class MasterUnitTester extends TestCase {
     //   find . -name '*Test*.java' | perl -pe 's/^\./      daikon.test/; s:/:.:g; s/.java/.class,/;' | grep -v MasterUnitTester | sort
 
     Class[] classes = new Class[] {
+      daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
+      daikon.test.TestAst.class,
       daikon.test.config.ConfigurationTest.class,
       daikon.test.diff.ConsequentCVFPairComparatorTester.class,
       daikon.test.diff.ConsequentCVFSortComparatorTester.class,
@@ -64,9 +66,9 @@ public class MasterUnitTester extends TestCase {
       result.addTest(new TestSuite(classes[i]));
     }
 
-    // This is possibly not right; the JIT needs to be disabled in order
-    // for these tests to succeed.
-    result.addTest(new TestSuite(TestUtilMDE.class));
+        // This is possibly not right; the JIT needs to be disabled in order
+        // for these tests to succeed.
+        result.addTest(new TestSuite(TestUtilMDE.class));
 
     return result;
   }

@@ -5,10 +5,13 @@ import junit.framework.*;
 import java.util.*;
 import utilMDE.*;
 
+/**
+ * Tests that Annotate respects tabs.
+ */
 public final class TestAnnotate extends TestCase {
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestUtilMDE.class));
+    junit.textui.TestRunner.run(new TestSuite(TestAnnotate.class));
   }
 
   public TestAnnotate(String name) {
