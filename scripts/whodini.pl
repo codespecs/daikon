@@ -48,13 +48,14 @@ END {
 
 sub debug {
     while ($debug && @_) {
-	print shift, "\n";
+	print STDERR "whodini.pl: ", shift, "\n";
     }
 }
 
 sub slurpfile {
     # returns the contents of the first argument (filename) as a list
     my $name = shift;
+    debug("Slurping $name");
     open(F, $name) or die("Cannot open $name");
     my @result = <F>;
     close(F);
@@ -111,16 +112,16 @@ sub copytmp {
     my $name = reltmp($arg);
     die ("source filename '$arg' does not exist") unless (-e $arg);
     die ("temporary filename '$name' already exists") if (-e $name);
-    copy($arg, $name);
+    copy($arg, $name) or die("whodini.pl: $!");
     return $name;
 }
 
 # 0 We are given a txt-esc file and some (possibly-annotated) source files
 
 if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
-    print STDERR "Debugging on\n";
     $debug = 1;
     shift @ARGV;
+    debug("Debugging is on");
 }
 
 if (($#ARGV >= 0) && ($ARGV[0] eq "--lastfile")) {
@@ -168,19 +169,24 @@ print "Houdini is generating likely invariants; please wait.." unless $output_fi
 while (1) {
     # 2 Write the txt file (from memory) to a temp file
     my $txtesctmp = writetmp($txtescfile, @txtesc);
+    debug("Wrote invariants to $txtesctmp");
 
     # 3 Copy the source files to a temp file
     my @sourcetmps;
     for my $sourcefile (@sourcefiles) {
 	my $sourcetmp = copytmp($sourcefile);
 	push @sourcetmps, $sourcetmp;
+	debug("Copied $sourcefile to $sourcetmp");
     }
 
     # 4 Merge the temp text file into the temp source files
     print STDERR `cd $tmpdir && merge-esc.pl -s $txtesctmp`;
     for my $sourcetmp (@sourcetmps) {
-	unlink($sourcetmp);
-	rename("$sourcetmp-escannotated", $sourcetmp);
+	my $sourceann = "$sourcetmp-escannotated";
+	# If there are no invariants for a class, it is not processed
+	next unless (-e $sourceann);
+	unlink($sourcetmp) or die($!);
+	rename($sourceann, $sourcetmp) or die($!);
     }
     my @merge_slurped = slurpfile($sourcetmps[0]);
 
