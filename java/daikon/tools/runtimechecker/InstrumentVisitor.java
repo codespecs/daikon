@@ -20,6 +20,7 @@ import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
+import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
 
 /**
@@ -530,28 +531,30 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                                                             code.toString());
     }
 
+    /**
+     * Return a subset of the argument list, removing invariants
+     * that do not have a properly implemented Java format.
+     **/
     private static List<Invariant> filterInvariants(
             List<Invariant> invariants) {
         List<Invariant> survivors = new ArrayList<Invariant>();
         for (Iterator i = invariants.iterator(); i.hasNext();) {
             Invariant inv = (Invariant) i.next();
 
-
-
-            String invString = inv.format_using(OutputFormat.JAVA);
-            // These are carry-overs from Annotate. Some, like "~", should
-            // actually be implemented, not removed.
-            if ((invString.indexOf("warning: ") != -1)
-                    || (invString.indexOf('~') != -1)
-                    || (invString.indexOf("\\new") != -1)
-                    || (invString.indexOf(".toString ") != -1)
-                    || (invString.indexOf(".getClass()") != -1)
-                    || (invString.indexOf("Quant.typeArray") != -1)
-                    || (invString.indexOf("warning: method") != -1)
-                    || (invString.indexOf("inexpressible") != -1)
-                    || (invString.indexOf("unimplemented") != -1)) {
+            if (! inv.isValidExpression(OutputFormat.JAVA)) {
                 continue;
             }
+            // Left and right shifts are formatted properly by Daikon,
+            // but as of 2/6/2005, a JTB bug prevents them from being
+            // inserted into code.
+            if (inv instanceof FunctionBinary) {
+                FunctionBinary fb = (FunctionBinary)inv;
+                if (fb.isLshift() || fb.isRshiftSigned() || fb.isRshiftUnsigned()) {
+                    // System.err.println("Warning: shift operation skipped: " + inv.format_using(OutputFormat.JAVA));
+                    continue;
+                }
+            }
+
             survivors.add(inv);
         }
         return survivors;

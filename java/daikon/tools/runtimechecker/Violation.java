@@ -13,6 +13,9 @@ import utilMDE.Assert;
 
 /**
  * Represents a violation of a <code>Property</code>.
+ * <p>
+ *
+ * @see Property
  */
 public class Violation implements Serializable {
 
@@ -41,10 +44,11 @@ public class Violation implements Serializable {
 
     /**
      * <p>
-     * The time at which the violation occurred.
+     * Indicates at which program point the violation occurred:
+     * at method entry or method exit.
      *
      * <p>
-     * This class contains only two objects: <code>onEntry</code> and
+     * This class contains only two (static) objects: <code>onEntry</code> and
      * <code>onExit</code>.
      */
     public static class Time implements Serializable {
@@ -198,6 +202,13 @@ public class Violation implements Serializable {
     }
 
     /**
+     * String representation.
+     */
+    public String toStringWithMethod() {
+        return time.toString() + "of " + property.method() + " : " + property.toString();
+    }
+
+    /**
      * Two violations are equal if their properties and times are equal.
      */
     public boolean equals(Object o) {
@@ -288,45 +299,39 @@ public class Violation implements Serializable {
         return (Violation[]) vios.toArray(new Violation[] {});
     }
 
+    public String toNiceString(String prefix, double confidenceThreshold) {
+        return prefix
+            + ((property.confidence > confidenceThreshold) ? "H" : " ")
+            + " " + prefix + "   " + toString() + daikon.Global.lineSep;
+    }
+
+
     /**
      * A human-readable String representation of a list of violations. The
-     * violations are sorted by time, and violations of high-confidence
-     * properties are prepended with "H".
+     * violations are sorted by "time" (which is not the same as sorting
+     * them by time!) and violations of high-confidence properties are
+     * prepended with "H".
      */
     public static String toNiceString(String prefix, Set/*<Violation>*/ vios,
             double confidenceThreshold) {
 
-        StringBuffer retval = new StringBuffer();
-
-        Violation[] onEntry = Violation.withTime((Violation[])vios
-                .toArray(new Violation[] {}), Violation.Time.onEntry);
-        Violation[] onExit = Violation.withTime((Violation[])vios
-                .toArray(new Violation[] {}), Violation.Time.onExit);
+        // TODO; It is bizarre that withTime requires conversion to an array.
+        Violation[] vios_array = (Violation[])vios.toArray(new Violation[] {});
+        Violation[] onEntry = Violation.withTime(vios_array, Violation.Time.onEntry);
+        Violation[] onExit = Violation.withTime(vios_array, Violation.Time.onExit);
 
         Assert.assertTrue(onEntry.length + onExit.length == vios.size(),
                 "onEntry: " + Arrays.asList(onEntry).toString() + "onExit:  "
                         + Arrays.asList(onExit).toString() + "vios: " + vios);
 
+        StringBuffer retval = new StringBuffer();
         for (int i = 0; i < onEntry.length; i++) {
-            retval.append(prefix);
-            retval
-                    .append((onEntry[i].property.confidence > confidenceThreshold) ? "H "
-                            : "  ");
-            retval.append(prefix);
-            retval.append("   " + onEntry[i] + "" + daikon.Global.lineSep + "");
+            retval.append(onEntry[i].toNiceString(prefix, confidenceThreshold));
         }
-
         for (int i = 0; i < onExit.length; i++) {
-            retval.append(prefix);
-            retval
-                    .append((onExit[i].property.confidence > confidenceThreshold) ? "H "
-                            : "  ");
-            retval.append(prefix);
-            retval.append("   " + onExit[i] + "" + daikon.Global.lineSep + "");
+            retval.append(onExit[i].toNiceString(prefix, confidenceThreshold));
         }
-
         return retval.toString();
-
     }
 
     // See documentation for Serializable.

@@ -69,14 +69,18 @@ public class InstrumentHandler extends CommandHandler {
         // Create instrumented-classes dir.
         File outputDir = new File("instrumented-classes");
 
-        // If instrumented-classes already exists, tell user to remove it, and
-        // exit.
-        if (outputDir.exists()) {
-            System.err
-                    .println("The directory \"instrumented-classes\" already exists. "
-                            + "Please remove it before instrumenting.");
-            return false;
-        }
+// I'm not sure the point of this.  It's always a generated file in any
+// event.  I've removed it for my convenience, but you can add it back if
+// you have an option to disable it.
+// -MDE
+//         // If instrumented-classes already exists, tell user to remove it, and
+//         // exit.
+//         if (outputDir.exists()) {
+//             System.err
+//                 .println("The directory \"instrumented-classes\" already exists.");
+//             System.err.println("Please remove it before instrumenting.");
+//             return false;
+//         }
 
         String[] realArgs = new String[args.length - 1];
         for (int i = 0; i < realArgs.length; i++) {
@@ -106,10 +110,10 @@ public class InstrumentHandler extends CommandHandler {
         //compile(arguments.javaFileNames, "");
 
         // Create filenames including temp directory and pakage directories.
-        List/* ParseResults */parseResults = parse(arguments.javaFileNames);
+        List/* ParseResults */ parseResults = parse(arguments.javaFileNames);
 
 
-        List/* String */instrumentedFileNames = new ArrayList/* String */();
+        List/* String */ instrumentedFileNames = new ArrayList/* String */();
 
         for (Iterator i = parseResults.iterator(); i.hasNext();) {
             ParseResults oneClass = (ParseResults) i.next();
