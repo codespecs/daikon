@@ -2,6 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 import utilMDE.*;
 
@@ -150,6 +151,17 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     }
   }
 
+  public boolean isObviousImplied() {
+    VarInfo v = var();
+    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      SequenceLength sl = (SequenceLength) v.derived;
+      if (sl.shift != 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public boolean isSameFormula(Invariant o)
   {
     OneOfScalar  other = (OneOfScalar ) o;
@@ -183,6 +195,16 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
+    long elts_min = Long.MAX_VALUE;
+    long elts_max = Long.MIN_VALUE;
+    for (int i=0; i < num_elts; i++) {
+      elts_min = Math.min(elts_min, elts[i]);
+      elts_max = Math.max(elts_max, elts[i]);
+    }
+    if ((o instanceof LowerBound) && (elts_max < ((LowerBound)o).min1))
+      return true;
+    if ((o instanceof UpperBound) && (elts_min > ((UpperBound)o).max1))
+      return true;
 
     return false;
   }

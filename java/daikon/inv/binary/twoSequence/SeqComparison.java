@@ -8,7 +8,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-class SeqComparison extends TwoSequence implements Comparison {
+public class SeqComparison extends TwoSequence implements Comparison {
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 

@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.Assert;
 
-class Reverse extends TwoSequence {
+public class Reverse extends TwoSequence {
 
   protected Reverse(PptSlice ppt) {
     super(ppt);

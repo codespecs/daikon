@@ -8,7 +8,7 @@ import daikon.derive.binary.*;
 import java.util.*;
 import utilMDE.*;
 
-class SubSequence extends TwoSequence {
+public class SubSequence extends TwoSequence {
 
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
@@ -94,6 +94,16 @@ class SubSequence extends TwoSequence {
         || (subvar_super == supervar.isDerivedSubSequenceOf()))
       return true;
 
+    /// To finish later.
+    // VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
+    // if (supervar_super == null)
+    //   return false;
+    // if (subvar_super == supervar_super) {
+    //   // both variables are derived from the same sequence; eg,
+    //   // a[0..i] and a[0..j-1]
+    //   // Use compare_vars to determine whether the relationship
+
+
     return false;
   }
 
@@ -110,7 +120,6 @@ class SubSequence extends TwoSequence {
   }
 
 
-  // A subseq B[0..n] => A subseq B
   // Two ways to go about this:
   //   * look at all subseq relationships, see if one is over a variable of
   //     interest
@@ -129,6 +138,10 @@ class SubSequence extends TwoSequence {
     } else {
       VarInfo subvar = (var1_in_var2 ? var1() : var2());
       VarInfo supervar = (var1_in_var2 ? var2() : var1());
+
+      // Also need to check A[0..i] subseq A[0..j] via compare_vars.
+
+      // A subseq B[0..n] => A subseq B
 
       Ppt ppt_parent = ppt.parent;
       Vector derivees = supervar.derivees;

@@ -8,7 +8,7 @@ import utilMDE.*;
 
 
 // This compares adjacent elements in the sequence.
-class EltIntComparison extends SingleSequence {
+public class EltIntComparison extends SingleSequence {
 
   final static boolean debugEltIntComparison = false;
 

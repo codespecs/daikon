@@ -2,6 +2,7 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 import utilMDE.*;
 

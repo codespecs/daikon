@@ -9,7 +9,7 @@ import utilMDE.*;
 
 // This also serves as NonNull.
 
-class NonZero extends SingleScalar {
+public class NonZero extends SingleScalar {
   long min = Long.MAX_VALUE;
   long max = Long.MIN_VALUE;
 

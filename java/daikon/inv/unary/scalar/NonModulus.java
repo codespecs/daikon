@@ -5,7 +5,7 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.util.*;
 
-class NonModulus extends SingleScalar {
+public class NonModulus extends SingleScalar {
   // Set elements = new HashSet();
   SortedSet elements = new TreeSet();
 

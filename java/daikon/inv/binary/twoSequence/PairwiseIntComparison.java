@@ -8,7 +8,7 @@ import daikon.inv.binary.twoScalar.*;
 // could argue either way, on completeness vs. efficiency grounds.)
 
 // Also see NonEqual
-class PairwiseIntComparison extends TwoSequence {
+public class PairwiseIntComparison extends TwoSequence {
 
   final static boolean debugPairwiseIntComparison = false;
 

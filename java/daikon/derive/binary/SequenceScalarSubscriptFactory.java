@@ -1,7 +1,8 @@
 package daikon.derive.binary;
 
 import daikon.*;
-import daikon.inv.binary.twoScalar.*; // for IntComparison
+import daikon.inv.binary.twoScalar.*;
+import daikon.derive.unary.SequenceLength;
 
 import utilMDE.*;
 import java.util.*;
@@ -46,7 +47,11 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     if (seqvar.derived != null)
       return null;
     // For now, do nothing if the scalar is itself derived.
-    if (sclvar.derived != null)
+    if ((sclvar.derived != null)
+        // comment out for now
+        // // ... unless it is a sequence length
+        // && (! (sclvar.derived instanceof SequenceLength))
+        )
       return null;
 
     Assert.assert(sclvar.isCanonical());

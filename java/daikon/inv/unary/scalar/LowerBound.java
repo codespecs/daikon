@@ -2,6 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 import java.util.*;
 
@@ -12,10 +13,6 @@ import java.util.*;
 // One reason not to combine LowerBound and Upperbound is that they have
 // separate justifications:  one may be justified when the other is not.
 
-// LowerBound >= 0 is implied by the variable being the length of an array or list.
-//         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
-// That affects only printing, I think.
-
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
 // naturally there are more instances of each value.
@@ -24,7 +21,7 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-class LowerBound  extends SingleScalar {
+public class LowerBound  extends SingleScalar {
 
   // min1  <  min2  <  min3 
   long min1  = Long.MAX_VALUE ;
@@ -159,6 +156,22 @@ class LowerBound  extends SingleScalar {
     return Invariant.PROBABILITY_UNJUSTIFIED;
   }
 
+  public boolean isObviousDerived() {
+    VarInfo v = var();
+    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      int vshift = ((SequenceLength) v.derived).shift;
+      if (vshift != 0) {
+        return true;
+
+      } else if (min1  == 0) {
+        // vshift == 0
+        return true;
+
+      }
+    }
+    return false;
+  }
+
   public boolean isSameFormula(Invariant other)
   {
     return min1  == ((LowerBound ) other). min1 ;
@@ -168,6 +181,9 @@ class LowerBound  extends SingleScalar {
     if (other instanceof UpperBound ) {
       if (min1  >  ((UpperBound ) other). max1 )
         return true;
+    }
+    if (other instanceof OneOfScalar) {
+      return other.isExclusiveFormula(this);
     }
     return false;
   }

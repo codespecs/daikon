@@ -26,8 +26,8 @@ public final class TwoScalarFactory {
       //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
       return null;
     }
-    // System.out.println("These have the same type (" + var1.type.format() + "):  "
-    //                    + var1.name + " " + var2.name);
+    // System.out.println("These have comparable types: :  "
+    //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
 
     Vector result = new Vector();
     if (pass == 1) {

@@ -165,13 +165,13 @@ public abstract class Invariant implements java.io.Serializable {
 
 
   // This should perhaps be merged with some kind of PptSlice comparator.
+  // I used to say the follwoing, bu tit might not be true any more.
+  // * Note: this comparator imposes orderings that are inconsistent with
+  // * equals.  That is, it may return 0 if the objects are not equal (but do
+  // * format identically).  That can happen if neither invariant is
+  // * justified; then both output as null.
   /**
    * Compare based on arity, then variable index, then printed representation.
-   *
-   * Note: this comparator imposes orderings that are inconsistent with
-   * equals.  That is, it may return 0 if the objects are not equal (but do
-   * format identically).  That can happen if neither invariant is
-   * justified; then both output as null.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator {
     public int compare(Object o1, Object o2) {

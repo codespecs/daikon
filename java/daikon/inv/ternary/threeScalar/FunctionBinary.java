@@ -5,7 +5,7 @@ import daikon.inv.Invariant;
 import java.lang.reflect.*;
 
 
-class FunctionBinary extends ThreeScalar {
+public class FunctionBinary extends ThreeScalar {
 
   final static boolean debugFunctionBinary = false;
 

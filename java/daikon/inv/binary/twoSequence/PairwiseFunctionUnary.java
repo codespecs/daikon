@@ -6,7 +6,7 @@ import daikon.inv.binary.twoScalar.*;
 import java.lang.reflect.*;
 
 
-class PairwiseFunctionUnary extends TwoSequence {
+public class PairwiseFunctionUnary extends TwoSequence {
 
   FunctionUnaryCore core;
 
@@ -57,5 +57,5 @@ class PairwiseFunctionUnary extends TwoSequence {
   {
     return core.isSameFormula(((PairwiseFunctionUnary) other).core);
   }
-  
+
 }

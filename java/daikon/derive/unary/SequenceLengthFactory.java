@@ -13,7 +13,8 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
-    return new UnaryDerivation[] { new SequenceLength(vi) };
+    return new UnaryDerivation[] { new SequenceLength(vi, 0),
+                                   new SequenceLength(vi, -1) };
   }
 
 }

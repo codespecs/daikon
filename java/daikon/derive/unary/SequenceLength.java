@@ -7,12 +7,15 @@ import utilMDE.*;
 // originally from pass1.
 public final class SequenceLength extends UnaryDerivation {
 
-  public SequenceLength(VarInfo vi) {
+  public final int shift;
+
+  public SequenceLength(VarInfo vi, int shift) {
     super(vi);
+    this.shift = shift;         // typically 0 or -1
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assert(vi.rep_type == ProglangType.INT_ARRAY);
+    Assert.assert(vi.rep_type.isArray());
 
     if (vi.derived != null) {
       Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
@@ -40,14 +43,17 @@ public final class SequenceLength extends UnaryDerivation {
 
     if (rep_type == ProglangType.INT_ARRAY) {
       len = ((long[])val).length;
+    } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
+      len = ((double[])val).length;
     } else {
       len = ((Object[])val).length;
     }
-    return new ValueAndModified(Intern.internedLong(len), source_mod);
+    return new ValueAndModified(Intern.internedLong(len+shift), source_mod);
   }
 
   protected VarInfo makeVarInfo() {
-    String name = "size(" + base.name + ")";
+    String shift_string = (shift==0) ? "" : ""+shift;
+    String name = "size(" + base.name + ")" + shift_string;
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
     VarComparability comp = base.comparability.indexType(0);

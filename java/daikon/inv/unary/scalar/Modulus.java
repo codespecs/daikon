@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 
-class Modulus extends SingleScalar {
+public class Modulus extends SingleScalar {
 
   long modulus = 0;
   long remainder = 0;

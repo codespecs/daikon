@@ -201,6 +201,40 @@ public final class IntComparison extends TwoScalar implements Comparison {
       Assert.assert(lb.core.b != 0);
       return true;
     }
+    { // Sequence length tests
+      VarInfo var1 = ppt.var_infos[0];
+      VarInfo var2 = ppt.var_infos[1];
+      SequenceLength sl1 = null;
+      if (var1.isDerived() && (var1.derived instanceof SequenceLength))
+        sl1 = (SequenceLength) var1.derived;
+      SequenceLength sl2 = null;
+      if (var2.isDerived() && (var2.derived instanceof SequenceLength))
+        sl2 = (SequenceLength) var2.derived;
+      if ((sl1 != null) && (sl2 != null)
+          && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
+        // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
+        return true;
+      }
+
+      if (core.can_be_lt && (!core.can_be_eq)) {
+        if ((sl2 != null) && (sl2.shift == 0)) {
+          // "x < size(a)"  ("x <= size(a)" would be more informative)
+          return true;
+        } else if ((sl1 != null) && (sl1.shift == -1)) {
+          // "size(a)-1 < x"  ("size(a) <= x" would be more informative)
+          return true;
+        }
+      } else if (core.can_be_gt && (!core.can_be_eq)) {
+        if ((sl1 != null) && (sl1.shift == 0)) {
+          // "size(a) > x"  ("size(a) >= x" would be more informative)
+          return true;
+        } else if ((sl2 != null) && (sl2.shift == -1)) {
+          // "x > size(a)-1"  ("x >= size(a)" would be more informative)
+          return true;
+        }
+      }
+    }
+
     return false;
   }
 

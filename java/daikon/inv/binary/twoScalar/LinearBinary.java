@@ -2,6 +2,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
 
@@ -41,6 +42,22 @@ public class LinearBinary extends TwoScalar {
   public boolean isExact() {
     return true;
   }
+
+  public boolean isObviousDerived() {
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+    // avoid "size(a)-1 = size(a) - 1"
+    if (var1.isDerived() && (var1.derived instanceof SequenceLength)
+        && var2.isDerived() && (var2.derived instanceof SequenceLength)) {
+      SequenceLength sl1 = (SequenceLength) var1.derived;
+      SequenceLength sl2 = (SequenceLength) var2.derived;
+      if (sl1.base == sl2.base) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   public boolean isSameFormula(Invariant other)
   {

@@ -2,6 +2,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
 
@@ -33,6 +34,7 @@ public final class EltNonZero extends SingleSequence {
       result.pointer_type = true;
       result.override_range = 10;
     }
+    // System.out.println("EltNonZero.instantiate: " + result.format());
     return result;
   }
 
@@ -120,5 +122,42 @@ public final class EltNonZero extends SingleSequence {
     }
     return false;
   }
+
+  public boolean isObviousImplied() {
+    // For every other EltNonZero at this program point, see if there is a
+    // subsequence relationship between that array and this one.
+
+    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if ((inv instanceof EltNonZero) && inv != this) {
+        VarInfo v1 = var();
+        VarInfo v2 = inv.ppt.var_infos[0];
+        boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
+        if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
+        Assert.assert(v1.varinfo_index < v2.varinfo_index);
+        PptSlice2 slice_2seq = parent.findSlice(v1, v2);
+        if (slice_2seq == null) {
+          // System.out.println("EltNonZero.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
+        } else  {
+          // slice_2seq != null
+          SubSequence ss = SubSequence.find(slice_2seq);
+          if (ss == null) {
+            // System.out.println("EltNonZero.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
+          } else {
+            // System.out.println("EltNonZero.isObviousImplied: found SubSequence: " + ss.repr());
+            if (this_var_first
+                ? ss.var1_in_var2
+                : ss.var2_in_var1) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
 
 }

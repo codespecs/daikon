@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 
-class PairwiseLinearBinary extends TwoSequence {
+public class PairwiseLinearBinary extends TwoSequence {
 
   LinearBinaryCore core;
 

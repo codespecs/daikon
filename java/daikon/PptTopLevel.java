@@ -63,6 +63,7 @@ public class PptTopLevel extends Ppt {
   // This is necessary because we search the graph in isWorthPrinting.
 
   public PptTopLevel entry_ppt;        // null if this isn't an exit point
+  public Vector exit_ppts = new Vector(1); // elts are PptTopLevel objects
 
   // PptTopLevel has any number of 'controlling' ppts.  Any invariants
   // which exist in the controlling ppts are necessarily true in the
@@ -160,6 +161,19 @@ public class PptTopLevel extends Ppt {
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
     return (values == null) ? values_num_samples : values.num_samples(); }
+  public boolean has_samples() {
+    if (num_samples() > 0)
+      return true;
+    if (ppt_name.isCombinedExitPoint()) {
+      Vector exits = entry_ppt.exit_ppts;
+      for (int i=0; i<exits.size(); i++) {
+        if (((PptTopLevel) exits.elementAt(i)).has_samples()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
   public int num_mod_non_missing_samples() {
       return ((values == null)
               ? values_num_mod_non_missing_samples
@@ -289,6 +303,7 @@ public class PptTopLevel extends Ppt {
   void compute_entry_ppt(PptMap all_ppts) {
     if (ppt_name.isExitPoint()) {
       entry_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeEnter());
+      entry_ppt.exit_ppts.add(this);
     }
   }
 
@@ -642,7 +657,7 @@ public class PptTopLevel extends Ppt {
     // I probably can't do anything about it if this is called
     // subsequently; but I should be putting off initial_processing for
     // each program point until it has many samples anyway.
-    if (num_samples() == 0)
+    if (!has_samples())
       return;
 
     derivation_indices = new int[derivation_passes+1];
@@ -795,28 +810,28 @@ public class PptTopLevel extends Ppt {
 
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
-  public PptSlice findSlice(VarInfo v) {
+  public PptSlice1 findSlice(VarInfo v) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 1) && (v == view.var_infos[0]))
-        return view;
+        return (PptSlice1) view;
     }
     return null;
   }
 
-  public PptSlice findSlice(VarInfo v1, VarInfo v2) {
+  public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
     Assert.assert(v1.varinfo_index < v2.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2)
           && (v1 == view.var_infos[0])
           && (v2 == view.var_infos[1]))
-        return view;
+        return (PptSlice2) view;
     }
     return null;
   }
 
-  public PptSlice findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
+  public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     Assert.assert(v1.varinfo_index < v2.varinfo_index);
     Assert.assert(v2.varinfo_index < v3.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
@@ -825,7 +840,7 @@ public class PptTopLevel extends Ppt {
           && (v1 == view.var_infos[0])
           && (v2 == view.var_infos[1])
           && (v3 == view.var_infos[2]))
-        return view;
+        return (PptSlice3) view;
     }
     return null;
   }
@@ -917,7 +932,9 @@ public class PptTopLevel extends Ppt {
     // Binary slices/invariants.
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
-      if (Daikon.invariants_check_canBeMissing && var_infos[i1].canBeMissing) {
+      // Don't depend invariants_check_canBeMissing; always check,
+      // lest equality be non-transitive
+      if ((true || Daikon.invariants_check_canBeMissing) && var_infos[i1].canBeMissing) {
         if (Global.debugDerive) {
           System.out.println("In binary equality, " + var_infos[i1].name + " can be missing");
         }
@@ -1450,21 +1467,31 @@ public class PptTopLevel extends Ppt {
   // presumably.)
   public void addImplications() {
     int num_conds = views_cond.size();
-    if (num_conds == 0) {
-      // System.out.println("addImplications: " + this.name + " has no conditional views");
-      return;
+    if (num_conds > 0) {
+      Assert.assert(num_conds == 2);
+      PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
+      PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
+      addImplications_internal(cond1, cond2, false);
+    } else if (this.ppt_name.isCombinedExitPoint()) {
+      Vector exits = this.entry_ppt.exit_ppts;
+      Assert.assert(exits.size() == 2);
+      PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(0);
+      PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(1);
+      addImplications_internal(ppt1, ppt2, true);
+    } else {
+      // System.out.println("No implications to add for " + this.name);
     }
+  }
 
-    Assert.assert(num_conds == 2);
 
-    // Find invariants in the
+  private void addImplications_internal(Ppt ppt1, Ppt ppt2, boolean add_nonimplications) {
+    // System.out.println("addImplications_internal: " + ppt1.name + ", " + ppt2.name);
 
-    PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
-    PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
-
-    PptSlice[][] matched_views = match_views(cond1, cond2);
+    PptSlice[][] matched_views = match_views(ppt1, ppt2);
+    // System.out.println("Matched views=" + matched_views.length + " from " + ppt1.views.size() + ", " + ppt2.views.size());
 
     Vector exclusive_conditions_vec = new Vector(); // elements are pairs of Invariants
+    Vector same_invariants_vec = new Vector(); // elements are Invariants
 
     for (int i=0; i<matched_views.length; i++) {
       PptSlice slice1 = matched_views[i][0];
@@ -1485,8 +1512,16 @@ public class PptTopLevel extends Ppt {
       //                    + this_excl.size() + " exclusive conditions for "
       //                    + slice1.name + " " + slice2.name);
       exclusive_conditions_vec.addAll(this_excl);
+
+      Vector this_same = same_invariants(invs1, invs2);
+      same_invariants_vec.addAll(this_same);
     }
 
+    if (add_nonimplications) {
+      for (int i=0; i<same_invariants_vec.size(); i++) {
+        implication_view.addInvariant((Invariant)same_invariants_vec.elementAt(i));
+      }
+    }
 
     if (exclusive_conditions_vec.size() == 0) {
       // System.out.println("addImplications: no exclusive conditions");
@@ -1508,6 +1543,15 @@ public class PptTopLevel extends Ppt {
     // Add an implication from each of a pair of mutually exclusive
     // invariants to everything that differs (at all) about the two
 
+    // split into two in order to use indexOf
+    Invariant[] excls1 = new Invariant[exclusive_conditions.length];
+    Invariant[] excls2 = new Invariant[exclusive_conditions.length];
+    for (int i=0; i<exclusive_conditions.length; i++) {
+      excls1[i] = exclusive_conditions[i][0];
+      excls2[i] = exclusive_conditions[i][1];
+    }
+
+
     for (int i=0; i<exclusive_conditions.length; i++) {
       Assert.assert(exclusive_conditions[i].length == 2);
       Invariant excl1 = exclusive_conditions[i][0];
@@ -1523,6 +1567,10 @@ public class PptTopLevel extends Ppt {
         Invariant diff1 = different_invariants[j][0];
         Invariant diff2 = different_invariants[j][1];
 
+        Assert.assert((diff1 == null) || (diff2 == null)
+                      || (ArraysMDE.indexOf(excls1, diff1)
+                          == ArraysMDE.indexOf(excls2, diff2)));
+
         // System.out.println("different_invariants "
         //                    + ((diff1 == null) ? "null" : diff1.format())
         //                    + ", " + ((diff2 == null) ? "null" : diff2.format()));
@@ -1531,13 +1579,63 @@ public class PptTopLevel extends Ppt {
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
         if (diff1 != null) {
-          Implication.makeImplication(this, excl1, diff1);
+          boolean iff = (ArraysMDE.indexOf(excls1, diff1) != -1);
+          Implication.makeImplication(this, excl1, diff1, iff);
         }
         if (diff2 != null) {
-          Implication.makeImplication(this, excl2, diff2);
+          boolean iff = (ArraysMDE.indexOf(excls2, diff2) != -1);
+          Implication.makeImplication(this, excl2, diff2, iff);
         }
       }
     }
+
+    HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
+    HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
+
+    for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if ((inv instanceof Implication) && ((Implication) inv).iff) {
+        Implication impl = (Implication) inv;
+        Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate);
+        Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent);
+        Assert.assert((canon1 == null) || (canon2 == null) || (canon1 == canon2));
+        Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
+        canonical_inv.put(impl.predicate, canon);
+        canonical_inv.put(impl.consequent, canon);
+        HashSet hs = (HashSet) inv_group.get(canon);
+        if (hs == null) {
+          hs = new HashSet();
+          inv_group.put(canon, hs);
+        }
+        hs.add(impl.predicate);
+        hs.add(impl.consequent);
+      }
+    }
+
+    // Now, consider adjusting which of the invariants are canonical.
+    // (That is why inv_group was computed above.)
+    // [Write that code in this space.]
+
+    // Prune out implications over non-canonical invariants
+
+    Vector to_remove = new Vector();
+    for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof Implication) {
+        Implication impl = (Implication) inv;
+        Invariant cpred = (Invariant) canonical_inv.get(impl.predicate);
+        Invariant ccons = (Invariant) canonical_inv.get(impl.consequent);
+        boolean pred_non_canon = ((cpred != null) && (impl.predicate != cpred));
+          boolean cons_non_canon = ((ccons != null) && (impl.consequent != ccons));
+        if ((! impl.iff)
+            && (pred_non_canon || cons_non_canon)) {
+          to_remove.add(inv);
+        }
+      }
+    }
+    implication_view.invs.removeAll(to_remove);
+
+
     // System.out.println("Done adding no more than "
     //                    + (exclusive_conditions.length * different_invariants.length)
     //                    + " implications.");
@@ -1592,6 +1690,9 @@ public class PptTopLevel extends Ppt {
   }
 
 
+  // Different_invariants and same_invariants should be merged.
+
+
   // Determine which elements of invs1 differ from elements of invs2.
   // Result elements are pairs of Invariants (with one or the other
   // possibly null.)
@@ -1623,6 +1724,28 @@ public class PptTopLevel extends Ppt {
       Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
       Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
       result.addAll(different_invariants(invs1, invs2));
+    }
+    return result;
+  }
+
+
+  // Determine which elements of invs1 are the same as elements of invs2.
+  // Result elements are Invariants.
+  Vector same_invariants(Invariants invs1, Invariants invs2) {
+    Vector result = new Vector();
+    SortedSet ss1 = new TreeSet(icfp);
+    ss1.addAll(invs1);
+    SortedSet ss2 = new TreeSet(icfp);
+    ss2.addAll(invs2);
+    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
+      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      if (pair.a != null && pair.b != null) {
+        Invariant inv1 = (Invariant) pair.a;
+        Invariant inv2 = (Invariant) pair.b;
+        if (inv1.justified() && inv2.justified()) {
+          result.add(inv1);
+        }
+      }
     }
     return result;
   }
@@ -1687,9 +1810,13 @@ public class PptTopLevel extends Ppt {
    * Does no output if no samples or no views.
    **/
   public void print_invariants_maybe(PrintStream out) {
-    if (num_samples() == 0)
+    // Maybe this test isn't even necessary, but will be subsumed by others
+    // (as all the invariants will be unjustified).
+    if (! has_samples()) {
+      System.out.println("No samples for " + name);
       return;
-    if (views.size() == 0) {
+    }
+    if ((views.size() == 0) && (implication_view.invs.size() == 0)) {
       if (! (this instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.

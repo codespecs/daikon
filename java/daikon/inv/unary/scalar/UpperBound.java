@@ -2,6 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-class UpperBound  extends SingleScalar {
+public class UpperBound  extends SingleScalar {
 
   // max1  >  max2  >  max3 
   long max1  = Long.MIN_VALUE ;
@@ -155,6 +156,18 @@ class UpperBound  extends SingleScalar {
     return Invariant.PROBABILITY_UNJUSTIFIED;
   }
 
+  public boolean isObviousDerived() {
+    VarInfo v = var();
+    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      int vshift = ((SequenceLength) v.derived).shift;
+      if (vshift != 0) {
+        return true;
+
+      }
+    }
+    return false;
+  }
+
   public boolean isSameFormula(Invariant other)
   {
     return max1  == ((UpperBound ) other). max1 ;
@@ -164,6 +177,9 @@ class UpperBound  extends SingleScalar {
     if (other instanceof LowerBound ) {
       if (max1  <  ((LowerBound ) other). min1 )
         return true;
+    }
+    if (other instanceof OneOfScalar) {
+      return other.isExclusiveFormula(this);
     }
     return false;
   }

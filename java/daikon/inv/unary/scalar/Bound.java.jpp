@@ -51,6 +51,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.derive.unary.*;
 
 import java.util.*;
 
@@ -62,12 +63,6 @@ import java.util.*;
 // separate justifications:  one may be justified when the other is not.
 
 
-#ifdef LOWER
-// LowerBound >= 0 is implied by the variable being the length of an array or list.
-//         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
-// That affects only printing, I think.
-#endif
-
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
 // naturally there are more instances of each value.
@@ -77,7 +72,7 @@ import java.util.*;
 // Which of these dominates?  Is the behavior what I want?
 
 
-class LOWERBOUND extends SingleScalar {
+public class LOWERBOUND extends SingleScalar {
 
   // MIN1 LT MIN2 LT MIN3
   long MIN1 = LONGMAX;
@@ -212,6 +207,22 @@ class LOWERBOUND extends SingleScalar {
     return Invariant.PROBABILITY_UNJUSTIFIED;
   }
 
+  public boolean isObviousDerived() {
+    VarInfo v = var();
+    if (v.isDerived() && (v.derived instanceof SequenceLength)) {
+      int vshift = ((SequenceLength) v.derived).shift;
+      if (vshift != 0) {
+        return true;
+#ifdef LOWER
+      } else if (MIN1 == 0) {
+        // vshift == 0
+        return true;
+#endif
+      }
+    }
+    return false;
+  }
+
   public boolean isSameFormula(Invariant other)
   {
     return MIN1 == ((LOWERBOUND) other).MIN1;
@@ -221,6 +232,9 @@ class LOWERBOUND extends SingleScalar {
     if (other instanceof UPPERBOUND) {
       if (MIN1 GT ((UPPERBOUND) other).MAX1)
         return true;
+    }
+    if (other instanceof OneOfScalar) {
+      return other.isExclusiveFormula(this);
     }
     return false;
   }

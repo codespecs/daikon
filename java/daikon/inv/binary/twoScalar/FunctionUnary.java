@@ -5,7 +5,7 @@ import daikon.inv.Invariant;
 import java.lang.reflect.*;
 
 
-class FunctionUnary extends TwoScalar {
+public class FunctionUnary extends TwoScalar {
 
   FunctionUnaryCore core;
 

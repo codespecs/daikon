@@ -6,7 +6,7 @@ import utilMDE.*;
 
 
 
-class NoDuplicates extends SingleSequence {
+public class NoDuplicates extends SingleSequence {
 
   final static boolean debugNoDuplicates = false;
 

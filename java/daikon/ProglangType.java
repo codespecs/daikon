@@ -374,7 +374,11 @@ public final class ProglangType implements java.io.Serializable {
 
   public boolean isObject() {
     return ((dimensions == 0)
-            && (! baseIsIntegral())
+            && (baseIsObject()));
+  }
+
+  public boolean baseIsObject() {
+    return ((! baseIsIntegral())
             && (! baseIsFloat())
             && (! (base == BASE_BOOLEAN)));
   }
@@ -388,9 +392,9 @@ public final class ProglangType implements java.io.Serializable {
     boolean otherIntegral = other.baseIsIntegral();
     if (thisIntegral && otherIntegral)
       return true;
-    // Make Object comparable to everything
-    if (((this.base == "Object") && (! otherIntegral)) // interned strings
-        || ((other.base == "Object") && (! thisIntegral))) // interned strings
+    // Make Object comparable to everything, except booleans
+    if (((this.base == "Object") && other.baseIsObject()) // interned strings
+        || ((other.base == "Object") && baseIsObject())) // interned strings
       return true;
 
     return false;
