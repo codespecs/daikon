@@ -270,7 +270,9 @@ public class PrintInvariants {
       }
       out.println(better_name);
     }
-    if (Daikon.output_num_samples || (Daikon.output_style == OutputFormat.ESCJAVA)) {
+    if (Daikon.output_num_samples
+	|| (Daikon.output_style == OutputFormat.ESCJAVA)
+	|| (Daikon.output_style == OutputFormat.JML)) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++)
         out.print(" " + ppt.var_infos[i].name.name());
@@ -355,7 +357,8 @@ public class PrintInvariants {
     }
     // It would be nice to collect the list of indices which are modified,
     // and create a \forall to specify that the rest aren't.
-    if (Daikon.output_style == OutputFormat.ESCJAVA) {
+    if (Daikon.output_style == OutputFormat.ESCJAVA ||
+	Daikon.output_style == OutputFormat.JML) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
@@ -407,7 +410,10 @@ public class PrintInvariants {
         }
       }
       if (mods.size() > 0) {
-        out.print("modifies ");
+	if (Daikon.output_style == OutputFormat.ESCJAVA)
+	  out.print("modifies ");
+	else
+	  out.print("assignable ");
         for (int i=0; i<mods.size(); i++) {
           if (i>0) {
             out.print(", ");
@@ -767,6 +773,11 @@ public class PrintInvariants {
       } else {
         inv_rep = "warning: invalid ESC expression; method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
       }
+    } else if (Daikon.output_style == OutputFormat.JML) {
+      //System.out.println("PrintInvariants.print_invariants under format_jml, formatting inv " + inv.getClass().getName());
+      inv_rep = inv.format_using(Daikon.output_style);
+      //inv_rep += " className: " + inv.getClass().getName();
+      // System.out.println("Representation: " + inv_rep);
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.IOA) {
@@ -807,6 +818,8 @@ public class PrintInvariants {
       debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
     }
 
+    // debug line
+    // out.println(inv.getClass().getName());
     out.println(inv_rep);
 
     // this is not guaranteed to work or even compile if uncommented.

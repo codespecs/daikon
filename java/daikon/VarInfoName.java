@@ -373,6 +373,7 @@ public abstract class VarInfoName
       return this;
 
     // Assert.assertTrue(! replacement.hasNode(node)); // no infinite loop
+
     // It doesn't make sense to assert this as we have plenty of times when
     // we want to replace x by y where y may contain x.
 
@@ -1123,8 +1124,10 @@ public abstract class VarInfoName
       return "post(" + term.name() + ")";
     }
     protected String jml_name_impl() {
-      throw new UnsupportedOperationException("JML cannot format a Poststate" +
-                                              " [repr=" + repr() + "]");
+      // Figure out something to do with this
+      return "\\new(" + term.jml_name() + ")";
+      //        throw new UnsupportedOperationException("JML cannot format a Poststate" +
+      //                                                " [repr=" + repr() + "]");
     }
     protected Class resolveType(PptTopLevel ppt) {
       return term.resolveType(ppt);

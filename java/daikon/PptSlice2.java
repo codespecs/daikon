@@ -18,7 +18,7 @@ import utilMDE.*;
 // This file looks a *lot* like part of PptTopLevel.
 // (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
-public final class PptSlice2
+public final class PptSlice2 
   extends PptSlice
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -29,7 +29,7 @@ public final class PptSlice2
   /**
    * Debug tracer
    **/
-  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice2");
+  public static final Category debugSpecific = Category.getInstance("daikon." + "PptSlice2" );
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
@@ -41,13 +41,13 @@ public final class PptSlice2
 
   public PptSlice2 (PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
-    Assert.assertTrue(var_infos.length == 2);
+    Assert.assertTrue(var_infos.length == 2 );
 
     Dataflow.init_pptslice_po(this);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled())
-      debug.info("Created PptSlice2 " + this.name);
+      debug.info("Created " + "PptSlice2"  + " " + this.name);
 
     // Make the caller do this, because
     //  1. there are few callers
@@ -120,7 +120,7 @@ public final class PptSlice2
     }
 
     if (this.debugged || debug.isDebugEnabled() || debugSpecific.isDebugEnabled()) {
-      debug.info("after instantiate_invariants PptSlice2 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+      debug.info("after instantiate_invariants " + "PptSlice2"  + " " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
     if ((this.debugged  || debugSpecific.isDebugEnabled()) && (invs.size() > 0)) {
       debug.info("the invariants are:");
@@ -193,7 +193,7 @@ public final class PptSlice2
     }
 
     // if (Global.debugInfer.isDebugEnabled()) {
-    //   Global.debugInfer.debug ("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
+    //   Global.debugInfer.debug ("PptSlice2"  + ".add(" + full_vt + ", " + count + ")" + " for " + name);
     // }
 
     // Do not bother putting values into a slice if missing.
@@ -246,8 +246,8 @@ public final class PptSlice2
       tm_total[mod_index] += count;
     }
 
-    // System.out.println("PptSlice2 " + name + ": add " + full_vt + " = " + vt);
-    // System.out.println("PptSlice2 " + name + " has " + invs.size() + " invariants.");
+    // System.out.println("PptSlice2"  + " " + name + ": add " + full_vt + " = " + vt);
+    // System.out.println("PptSlice2"  + " " + name + " has " + invs.size() + " invariants.");
 
     // defer_invariant_removal(); [INCR]
 
@@ -353,7 +353,7 @@ public final class PptSlice2
     Global.instantiated_invariants++;
     if (Global.debugStatistics.isDebugEnabled() || this.debugged || debugSpecific.isDebugEnabled())
       debug.info("instantiated_invariant: " + invariant.format()
-                 // [INCR] + "; already_seen_all=" + already_seen_all
+                 // [INCR] + "; " + "already_seen_all=" + already_seen_all
                  );
 
     /* [INCR] ... I think this is now unnecessary; not sure. XXX
