@@ -24,6 +24,17 @@ public class LinearTernary extends ThreeScalar {
     VarInfo y = ppt.var_infos[1];
     VarInfo z = ppt.var_infos[2];
 
+    if (((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0))
+        || ((y.derived instanceof SequenceLength)
+            && (((SequenceLength) y.derived).shift != 0))
+        || ((z.derived instanceof SequenceLength)
+            && (((SequenceLength) z.derived).shift != 0))) {
+      // Do not instantiate z-1 = ax + by + c.  Instead, choose a different c.
+      Global.implied_noninstantiated_invariants += 1;
+      return null;
+    }
+
     VarInfo x_summand = null;
     VarInfo y_summand = null;
     VarInfo z_summand = null;
