@@ -37,7 +37,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
-import daikon.suppress.SuppressionFactory;
+import daikon.inv.unary.scalar.UpperBound;
+
+import daikon.suppress.*;
 
 import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.derive.binary.SequencesConcat;
@@ -84,17 +86,6 @@ public class CLASSNAME
     CLASSNAME result = new CLASSNAME(ppt);
     // Don't instantiate if the variable can't have dupliates
     return result;
-  }
-
-  private static SuppressionFactory[] suppressionFactories = null;
-
-
-  public SuppressionFactory[] getSuppressionFactories() {
-    if (suppressionFactories == null) {
-      suppressionFactories = getSubsetImpliedSuppressionFactories
-        (super.getSuppressionFactories());
-    }
-    return suppressionFactories;
   }
 
   public String repr() {
@@ -257,14 +248,6 @@ public class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  /**
-   * Don't allow suppression because it will not allow us to track elts
-   * which is needed for computeProbability
-   */
-  public boolean inProcessSuppressOk() {
-    return false;
-  }
-
   protected double computeConfidence() {
     // num_no_dup_values() would be more appropriate
     // return 1 - Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
@@ -351,4 +334,57 @@ public class CLASSNAME
     Assert.assertTrue(other instanceof CLASSNAME);
     return true;
   }
+
+  // /**
+  //  * Don't allow suppression because it will not allow us to track elts
+  //  * which is needed for computeProbability
+  //  */
+  // public boolean inProcessSuppressOk() {
+  //   return false;
+  // }
+
+  // Create a suppression factory for nodups and constant
+  #define FACTORY_INVCLASS  CLASSNAME
+  #define FACTORY_CNT       1
+  #define FACTORY1          short_array_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[1]}
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+  /**
+   * Suppress invariants of the form 'a has no duplicates' by the
+   * 'size[a] <= 1' invariant.
+   */
+  public static SuppressionLink short_array_suppress (CLASSNAME inv,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    if (logOn())
+      inv.log ("Considering suppression by short array");
+
+    VarInfo array_vi = inv.var();
+    // array_vi is either a slice (a[i..j]) or a complete array (a[]).
+    // For now, punt on the issue of a slice.
+    if (array_vi.derived != null) {
+      return null;
+    }
+    VarInfo array_size_vi = array_vi.sequenceSize();
+
+    // Build a template for NoDuplicates
+    supTemplate.set(0, NoDuplicates.class, array_size_vi);
+
+    // Find a match suppresses
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
+
+    // Check the bound
+    if (sl != null) {
+      UpperBound ub = (UpperBound) supTemplate.results[0];
+      long bound = ub.core.max1;
+      if (bound >= 2) {
+        return null;
+      }
+    }
+
+    return (sl);
+  }
+
 }

@@ -27,7 +27,7 @@ public abstract class SequenceSubsequence
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).  The first (or last)
-  // element of the derived variable is seqvar()+index_shift.
+  // element of the derived variable is at index seqvar()+index_shift.
   public final int index_shift;
 
   // True for deriving from the start of the sequence to the scalar: B[0..I]

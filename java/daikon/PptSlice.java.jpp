@@ -142,8 +142,6 @@ public final class PPTSLICE1
 #endif
 
   void instantiate_invariants() {
-    Assert.assertTrue(!no_invariants);
-
     // This test should be done by caller (PptTopLevel):
     // if (isControlled()) return;
 
@@ -344,7 +342,7 @@ public final class PPTSLICE1
       if (mod_samples + unmod_samples != num_slice_samples) {
         System.out.println("num_samples(" + name() + "): " + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
 #if defined(ARITY1)
-        System.out.println("mbtracker.num_samples() = " + parent.mbtracker.num_samples());
+        System.out.println("  mbtracker.num_samples() = " + parent.mbtracker.num_samples());
 #endif
       }
       return num_slice_samples;
@@ -478,7 +476,6 @@ public final class PPTSLICE1
     //       debugFlow.fine ("    with values:" + sb);
     //     }
 
-    Assert.assertTrue(! no_invariants, "no_invariants at " + this);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {

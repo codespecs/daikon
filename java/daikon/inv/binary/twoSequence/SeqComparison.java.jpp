@@ -664,6 +664,7 @@ public class SEQSEQINTEQUAL
 #if !(defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
 
   // Create a suppression factory for pairwise and lexical
+  #define FACTORY_INVCLASS  SEQSEQINTEQUAL
   #define FACTORY_CNT       2
   #define FACTORY1          pairwise_suppress
   #define FACTORY1_INV_CNT  1
@@ -691,12 +692,8 @@ public class SEQSEQINTEQUAL
    * subsequences as well.
    */
 
-  public static SuppressionLink pairwise_suppress (Invariant arg,
+  public static SuppressionLink pairwise_suppress (SEQSEQINTEQUAL inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof SEQSEQINTEQUAL);
-    SEQSEQINTEQUAL inv = (SEQSEQINTEQUAL) arg;
 
     VarInfo v1 = inv.var1();
     VarInfo v2 = inv.var2();
@@ -730,7 +727,7 @@ public class SEQSEQINTEQUAL
       return (null);
 
     // Any matches must have the same state as this one
-    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     if (sl != null) {
       PAIRWISEINTEQUAL pw = (PAIRWISEINTEQUAL) supTemplate.results[0];
       if (pw == null) {
@@ -762,12 +759,8 @@ public class SEQSEQINTEQUAL
    * not the same variable but are equal.
    */
 
-  public static SuppressionLink lexical_suppress (Invariant arg,
+  public static SuppressionLink lexical_suppress (SEQSEQINTEQUAL inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof SEQSEQINTEQUAL);
-    SEQSEQINTEQUAL inv = (SEQSEQINTEQUAL) arg;
 
     VarInfo v1 = inv.var1();
     VarInfo v2 = inv.var2();
@@ -791,7 +784,7 @@ public class SEQSEQINTEQUAL
     supTemplate.set (0, SEQSEQINTEQUAL.class, der1.seqvar(), der2.seqvar());
 
     // Look for a matching SeqComparison
-    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     SEQSEQINTEQUAL seqcmp = (SEQSEQINTEQUAL) supTemplate.results[0];
     if (sl != null) {
       if (seqcmp == null) {

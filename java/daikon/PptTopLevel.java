@@ -113,10 +113,6 @@ public class PptTopLevel
   public static final Logger debugSuppress =
     Logger.getLogger ("daikon.suppress.suppress");
 
-  /** Debug tracer for fillSuppressionTemplate. **/
-  public static final Logger debugSuppressFill =
-    Logger.getLogger ("daikon.suppress.fill");
-
   /** Debug tracer for up-merging equality sets  **/
   public static final Logger debugMerge =
     Logger.getLogger ("daikon.PptTopLevel.merge");
@@ -3148,6 +3144,7 @@ public class PptTopLevel
       }
       SuppressionFactory[] factories = inv.getSuppressionFactories();
       for (int i = 0; i < factories.length; i++) {
+        // Assert.assertTrue(factories[i] != null, "factories[" + i + "] == null for " + inv.format());
         SuppressionLink sl = factories[i].generateSuppressionLink (inv);
         if (sl != null) {
           sl.link();
@@ -3157,176 +3154,6 @@ public class PptTopLevel
       }
     }
     return false;
-  }
-
-
-  /**
-   * Attempt to fill a given SuppressionTemplate with invariants.  If
-   * successful, returns true.  Called by SuppressionFactory's.
-   * @param supTemplate Template to fill.  Modified by this method.
-   **/
-  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate) {
-    return fillSuppressionTemplate (supTemplate, true);
-  }
-
-
-  /**
-   * Attempt to fill a given SuppressionTemplate with invariants.  If
-   * successful, returns true.  Called by SuppressionFactory's.
-   * @param supTemplate Template to fill.  Modified by this method.
-   * @param checkSelf Whether to check in this ppt.  When false, skip
-   * scanning this ppt.  This is useful for detecting identical
-   * invariants (due to weakening) across ppts.
-   **/
-  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate,
-                                          boolean checkSelf) {
-    // We do two loops for performance: attempt to fill locally, then
-    // attempt to fill using upper ppts.
-
-    // boolean firstLoopFilled = false;
-    supTemplate.filled = false;
-    supTemplate.results = new Invariant[supTemplate.invTypes.length];
-    supTemplate.transforms = new VarInfo[supTemplate.invTypes.length][];
-    Assert.assertTrue (supTemplate.invTypes.length == supTemplate.varInfos.length,
-                       "Template varInfos and invariant slots must be equal");
-    debugSuppressFill.fine ("Starting template fill");
-
-    // This is useful if this code is getting called more than expected.
-    // System.out.println ("suppressionTemplate: " + supTemplate.searchString()
-    //                    + " ppt: " + name());
-    // Throwable stack = new Throwable("debug traceback");
-    // stack.fillInStackTrace();
-    // stack.printStackTrace();
-
-    if (checkSelf) {
-      firstLoop:
-      // debugSuppressFill.fine ("  Entering first loop");
-      for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
-        supTemplate.results[iInvs] = null;
-        Class clazz = supTemplate.invTypes[iInvs];
-        VarInfo[] varInfos = supTemplate.varInfos[iInvs];
-        PptSlice slice = this.findSlice_unordered (varInfos);
-        if (slice != null) {
-          // Here's where we actually find the potential invariant.  There are
-          // two choices here: suppressed invariants can do more suppression, or
-          // they can be forbidden to suppress others.
-          Invariant inv =
-            Daikon.suppress_with_suppressed ?
-            Invariant.find (clazz, slice) :
-            Invariant.findUnsuppressed (clazz, slice);
-          if (inv != null) {
-            // firstLoopFilled = true;
-            supTemplate.results[iInvs] = inv;
-            supTemplate.transforms[iInvs] = supTemplate.varInfos[iInvs];
-          }
-        }
-      }
-      // Formerly, we used to return null if the first loop didn't get
-      // at least one invariant.  But there are some types of
-      // suppression where this optimization would lower suppression
-      // results.  For example, to show that
-      // OBJECT:::NoDuplicates(this.array) implies
-      // Method::NoDuplicates(this.array[0..i]), we need to search in
-      // the OBJECT ppt, because the Method ppt won't have the
-      // NoDuplicates(this.array) invariant, as it's in the OBJECT
-      // ppt.  This is where i is a parameter.
-      // if (!firstLoopFilled) return false;
-    }
-
-      if (Debug.logDetail())
-        Debug.log (getClass(), this, supTemplate.varInfos[0],
-                   ((dataflow_ppts == null) ? 0 : dataflow_ppts.length)
-                    + " dataflow points to process ");
-
-    // debugSuppressFill.fine ("  Entering second loop: ");
-    secondLoop:
-    for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
-      Class clazz = supTemplate.invTypes[iInvs];
-      //       if (debugSuppressFill.isLoggable(Level.FINE)) {
-      //         debugSuppressFill.fine ("  InvType: " + clazz);
-      //       }
-      if (Daikon.dkconfig_df_bottom_up || dataflow_ppts == null) {
-        // debugSuppressFill.fine ("  No dataflow_ppts");
-        break;
-      }
-      if (supTemplate.results[iInvs] != null) {
-        // debugSuppressFill.fine ("  Already filled");
-        continue secondLoop;
-      }
-
-      VarInfo[] varInfos = supTemplate.varInfos[iInvs];
-
-
-      forEachTransform:
-      // Transform the VarInfos for each upper ppt
-      // We go backwards so that we get the strongest invariants first.
-      for (int iPpts = dataflow_ppts.length - (checkSelf ? 1 : 2);
-           iPpts >= 0; iPpts--) {
-        PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
-       if (Debug.logDetail() || debugSuppressFill.isLoggable(Level.FINE))
-         Debug.log (debugSuppressFill, getClass(), this, varInfos,
-                          "  Flow ppt: " + dataflowPpt.name);
-        int[] dataflowTransform = dataflow_transforms[iPpts];
-        if (Debug.logDetail()) {
-          String new_vars = "";
-          String cur_vars = "";
-          for (int ii = 0; ii < dataflowPpt.var_infos.length; ii++)
-            new_vars += dataflowPpt.var_infos[ii].name.name() + " ";
-          for (int ii = 0; ii < var_infos.length; ii++)
-            cur_vars += var_infos[ii].name.name() + " ";
-          Debug.log (getClass(), this, varInfos, "dataflow transforms = "
-                         + ArraysMDE.toString (dataflowTransform)
-                         + ": new_vars = " + new_vars
-                         + ": cur vars = " + cur_vars);
-        }
-        VarInfo[] newVarInfos = new VarInfo[varInfos.length];
-        forEachVarInfo:
-        for (int iVarInfos = 0; iVarInfos < varInfos.length; iVarInfos++) {
-          int newIndex = dataflowTransform[varInfos[iVarInfos].varinfo_index];
-          if (newIndex >= 0) {
-            newVarInfos[iVarInfos] = dataflowPpt.var_infos[newIndex];
-            if (Debug.logDetail() || debugSuppressFill.isLoggable(Level.FINE))
-              Debug.log (debugSuppressFill, getClass(), this, varInfos,
-                           "transformed "
-                           + varInfos[iVarInfos].name.name() + " to "
-                           + newVarInfos[iVarInfos].name.name());
-          } else {
-            continue forEachTransform;
-          }
-        }
-
-        PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
-        if (Debug.logDetail())
-          Debug.log (getClass(),  this, varInfos, "found slice = " + slice
-                    + " Looking for class " + clazz);
-        if (slice != null) {
-          Invariant inv =
-            Daikon.suppress_with_suppressed ?
-            Invariant.find (clazz, slice) :
-            Invariant.findUnsuppressed (clazz, slice);
-          if (Debug.logDetail())
-            Debug.log (getClass(), this, varInfos, "Found invariant " + inv);
-          if (inv != null) {
-            supTemplate.results[iInvs] = inv;
-            supTemplate.transforms[iInvs] = newVarInfos;
-            break;
-          }
-        }
-      }
-    }
-
-    // Only for checking if template got filled
-    thirdLoop:
-    for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
-      if (supTemplate.results[iInvs] == null) {
-        debugSuppressFill.fine ("  Unsuccessful template fill");
-        return false;
-      }
-    }
-
-    supTemplate.filled = true;
-        debugSuppressFill.fine ("  Successful template fill");
-    return true;
   }
 
 

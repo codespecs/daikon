@@ -44,7 +44,7 @@ public class SuppressionLink implements Serializable {
   /**
    * List of Invariants that are suppressing this.suppressee. Never null.
    **/
-  private final List suppressors;
+  private final Invariant[] suppressors;
 
   /**
    * Suppressed invariant.  Never null.
@@ -52,36 +52,32 @@ public class SuppressionLink implements Serializable {
   private final Invariant suppressee;
 
 
+  // This is for debugging only.  For efficiency, we could remove the field.
+  // (As of 10/24/2003, "getFactory()" is never called.)
   /**
    * Original factory that generated this.  Never null.
    **/
   private final SuppressionFactory factory;
 
-
-  /**
-   * State constant: this was just created and suppressor and
-   * suppressees do not know about this.
-   **/
-  private static final int CREATED = 0;
-
-  /**
-   * State constant: created and suppressor and suppressees know about
-   * this.
-   **/
-  private static final int LINKED = 1;
-
-  /**
-   * State constant: this has been destroyed and suppressor and
-   * suppresses no longer know about this.  This should not be used
-   * again.
-   **/
-  private static final int UNLINKED = 2;
-
   /**
    * What stage of use this link is in.  Gets modified.  Can be one of
    * CREATED, LINKED or UNLINKED.
+   * <p>
+   * CREATED means this was just created.  Suppressor and
+   * suppressees do not know about this.
+   * <p>
+   * LINKED means this has been created and linked.  Suppressor and
+   * suppressees know about this.
+   * <p>
+   * UNLINKED means this has been destroyed (unlinked).  Suppressor and
+   * suppresses no longer know about this.  This should not be used again.
    **/
   private int state = CREATED;
+
+  // See documentation for state.
+  private static final int CREATED = 0;
+  private static final int LINKED = 1;
+  private static final int UNLINKED = 2;
 
 
 
@@ -110,13 +106,15 @@ public class SuppressionLink implements Serializable {
   }
 
 
+  // Not used as of 10/24/2003.
   /**
    * Get the (unmodifiable) list of invariants that suppress this
    * @return never null.
    **/
   public List getSuppressors() {
-    return Collections.unmodifiableList (suppressors);
+    return Collections.unmodifiableList (Arrays.asList(suppressors));
   }
+
 
   // Disabled because hashCode can be called before rep invariants are
   // satisfied when reading from a serialized file.
@@ -150,8 +148,8 @@ public class SuppressionLink implements Serializable {
    **/
   public String toString() {
     StringBuffer suppressorsString = new StringBuffer();
-    for (Iterator i = suppressors.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (int i=0; i<suppressors.length; i++) {
+      Invariant inv = suppressors[i];
       suppressorsString.append (inv.format() + " @" + inv.ppt.name());
       suppressorsString.append (", ");
     }
@@ -171,13 +169,15 @@ public class SuppressionLink implements Serializable {
    **/
   public SuppressionLink (SuppressionFactory argFactory,
                           Invariant argSuppressee,
-                          List argSuppressors) {
+                          Invariant[] argSuppressors) {
     this.factory = argFactory;
     this.suppressee = argSuppressee;
-    this.suppressors = argSuppressors;
+    int num_suppressors = argSuppressors.length;
+    this.suppressors = new Invariant[num_suppressors];
+    System.arraycopy(argSuppressors, 0, this.suppressors, 0, num_suppressors);
     this.state = CREATED;
-    Assert.assertTrue (suppressors.size() > 0);
-    Assert.assertTrue (!suppressors.contains(suppressee)); // Expensive
+    Assert.assertTrue (num_suppressors > 0);
+    Assert.assertTrue (utilMDE.ArraysMDE.indexOf(suppressors, suppressee) == -1); // Expensive
   }
 
   ///////////////
@@ -185,17 +185,17 @@ public class SuppressionLink implements Serializable {
 
   /**
    * Link suppressors and suppresses to this.
-   * @pre this is not yet linked and Invariants to be linked not yet
+   * <br>Requires: this is not yet linked, and invariants to be linked not yet
    * linked.
-   * @post state == LINKED;
+   * <br>Effects: state == LINKED;
    **/
   public void link() {
     Assert.assertTrue (suppressee.getSuppressor() == null,
                        "Suppressee must have null suppressor");
     Assert.assertTrue (state == CREATED);
     suppressee.setSuppressor (this);
-    for (Iterator i = suppressors.iterator(); i.hasNext(); ) {
-      Invariant suppressor = (Invariant) i.next();
+    for (int i=0; i<suppressors.length; i++) {
+      Invariant suppressor = suppressors[i];
       suppressor.addSuppressee (this);
     }
     state = LINKED;
@@ -211,8 +211,8 @@ public class SuppressionLink implements Serializable {
                        "Suppressee must be linked to this");
     Assert.assertTrue (state == LINKED);
     suppressee.setSuppressor (null);
-    for (Iterator i = suppressors.iterator(); i.hasNext(); ) {
-      Invariant suppressor = (Invariant) i.next();
+    for (int i=0; i<suppressors.length; i++) {
+      Invariant suppressor = suppressors[i];
       suppressor.removeSuppressee (this);
     }
     state = UNLINKED;
@@ -250,11 +250,11 @@ public class SuppressionLink implements Serializable {
     if (this.suppressors == null) {
       throw new Error("Must have non-null suppressors");
     }
-    if (this.suppressors.size() < 1) {
+    if (this.suppressors.length == 0) {
       throw new Error("Must have at least one suppressor");
     }
     if (this.suppressee == null) {
-      throw new Error("Must have non-null suppressees");
+      throw new Error("Must have non-null suppressee");
     }
     // This must be linked when part of PptMap's hierarchy
     Assert.assertTrue (state == LINKED);

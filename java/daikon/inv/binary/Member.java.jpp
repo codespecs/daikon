@@ -90,7 +90,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030822L;
+  static final long serialVersionUID = 20031024L;
 
   public static final Logger debug =
     Logger.getLogger ("daikon.inv.binary.Member");
@@ -607,9 +607,7 @@ public final class CLASSNAME
       new MemberSuppressionFactory1();
 
     private MemberSuppressionFactory1() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[1];
-      supTemplate.varInfos = new VarInfo[][] {new VarInfo[2]};
+      supTemplate = new SuppressionTemplate(1);
     }
 
     public static SuppressionFactory getInstance() {
@@ -634,22 +632,20 @@ public final class CLASSNAME
       }
 
       supTemplate.resetResults();
-      supTemplate.varInfos[0][0] = sclSequence;
-      supTemplate.varInfos[0][1] =  seqvar;
       // Shouldn't happen, because isObvious should
       // have handled it, but in case it does, no big deal, just say no suppression
       if (sclSequence == seqvar) return null;
       {
-        supTemplate.invTypes[0] = PairwiseIntEqual.class;
-        SuppressionLink sl = byTemplate (supTemplate, inv);
+        supTemplate.set(0, PairwiseIntEqual.class, sclSequence, seqvar);
+        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
         if (sl != null)
           return sl;
       }
       {
         // Try to see if SubSet invariant is there
         supTemplate.resetResults();
-        supTemplate.invTypes[0] = SubSet.class;
-        SuppressionLink sl = byTemplate (supTemplate, inv);
+        supTemplate.set(0, SubSet.class, sclSequence, seqvar);
+        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
         if (sl != null) {
           // First transformed var in first invariant
           VarInfo transSclSequence = supTemplate.transforms[0][0];
@@ -670,8 +666,8 @@ public final class CLASSNAME
       {
         // Try to see if SuperSet invariant is there
         supTemplate.resetResults();
-        supTemplate.invTypes[0] = SuperSet.class;
-        SuppressionLink sl = byTemplate (supTemplate, inv);
+        supTemplate.set(0, SuperSet.class, sclSequence, seqvar);
+        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
         if (sl != null) {
           // First transformed var in first invariant
           VarInfo transSclSequence = supTemplate.transforms[0][0];
@@ -692,8 +688,8 @@ public final class CLASSNAME
       {
         // Failed on finding the right SubSet/SuperSet invariants.  Now try SubSequence
         supTemplate.resetResults();
-        supTemplate.invTypes[0] = SubSequence.class;
-        SuppressionLink sl = byTemplate (supTemplate, inv);
+        supTemplate.set(0, SubSequence.class, sclSequence, seqvar);
+        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
         if (sl != null) {
           // First transformed var in first invariant
           VarInfo transSclSequence = supTemplate.transforms[0][0];

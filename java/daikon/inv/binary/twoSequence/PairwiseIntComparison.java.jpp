@@ -401,6 +401,7 @@ public class PAIRWISEINTEQUAL
   }
 
   // Create a suppression factory for pairwise
+  #define FACTORY_INVCLASS  PAIRWISEINTEQUAL
   #define FACTORY_CNT       1
   #define FACTORY1          pairwise_suppress
   #define FACTORY1_INV_CNT  1
@@ -411,12 +412,8 @@ public class PAIRWISEINTEQUAL
    * Suppress 'x[n..] cmp y[n..] (elementwise)' or 'x[..n] cmp y[..n]
    * (elementwise)' by 'x[] cmp y[] (elementwise)'
    */
-  public static SuppressionLink pairwise_suppress (Invariant arg,
+  public static SuppressionLink pairwise_suppress (PAIRWISEINTEQUAL inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof PAIRWISEINTEQUAL);
-    PAIRWISEINTEQUAL inv = (PAIRWISEINTEQUAL) arg;
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = inv.var1();
@@ -434,7 +431,7 @@ public class PAIRWISEINTEQUAL
 
     // Build the template and look for matches
     supTemplate.set (0, PAIRWISEINTEQUAL.class, der1.seqvar(), der2.seqvar());
-    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
 
     // Any matches must have the same state as this one
     if (sl != null) {

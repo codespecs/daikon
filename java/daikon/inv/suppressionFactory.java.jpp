@@ -1,9 +1,10 @@
 #ifdef 0
   //  This file is used to generate the common suppression factory
-  //  code The following parameters must be defined:
+  //  code.  The following parameters must be defined:
   //
-  //    FACTORY_CNT         - number of factories to be created.  Up to four
+  //    FACTORY_CNT         - number of factories to be created.  Up to five
   //                          can be created.
+  //    FACTORY_INVCLASS    - class of invariant being suppressed
   //    FACTORY1            - name of the suppression routine for factory 1
   //    FACTORY1_INV_CNT    - Number of invariants for the first factory
   //    FACTORY1_VAR_INFO   - Var info initializer(s) for first factory.
@@ -28,6 +29,23 @@
   //  Undefined FACTORY names are simply not created.  Factories are
   //  always named factory1, factory2, factory3, factory4, and factory5
 #endif
+
+#ifndef FACTORY1
+  #error "FACTORY1 not defined"
+#endif
+#if FACTORY_CNT >= 2 && !defined(FACTORY2)
+  #error "FACTORY2 not defined"
+#endif
+#if FACTORY_CNT >= 3 && !defined(FACTORY3)
+  #error "FACTORY3 not defined"
+#endif
+#if FACTORY_CNT >= 4 && !defined(FACTORY4)
+  #error "FACTORY4 not defined"
+#endif
+#if FACTORY_CNT >= 5 && !defined(FACTORY5)
+  #error "FACTORY5 not defined"
+#endif
+
 
   private static SuppressionFactory[] suppressionFactories = null;
 
@@ -63,9 +81,7 @@
     private static final factory1 theInstance = new factory1();
 
     private factory1() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[FACTORY1_INV_CNT];
-      supTemplate.varInfos = new VarInfo[][] FACTORY1_VAR_INFO;
+      supTemplate = new SuppressionTemplate(FACTORY1_INV_CNT);
     }
 
     public static SuppressionFactory getInstance() {
@@ -81,7 +97,7 @@
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY1 (arg, supTemplate, this));
+      return (FACTORY1 ((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 
@@ -92,9 +108,7 @@
     private static final factory2 theInstance = new factory2();
 
     private factory2() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[FACTORY2_INV_CNT];
-      supTemplate.varInfos = new VarInfo[][] FACTORY2_VAR_INFO;
+      supTemplate = new SuppressionTemplate(FACTORY2_INV_CNT);
     }
 
     public static SuppressionFactory getInstance() {
@@ -109,7 +123,7 @@
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY2 (arg, supTemplate, this));
+      return (FACTORY2 ((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -121,9 +135,7 @@
     private static final factory3 theInstance = new factory3();
 
     private factory3() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[FACTORY3_INV_CNT];
-      supTemplate.varInfos = new VarInfo[][] FACTORY3_VAR_INFO;
+      supTemplate = new SuppressionTemplate(FACTORY3_INV_CNT);
     }
 
     public static SuppressionFactory getInstance() {
@@ -138,7 +150,7 @@
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY3 (arg, supTemplate, this));
+      return (FACTORY3 ((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -150,9 +162,7 @@
     private static final factory4 theInstance = new factory4();
 
     private factory4() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[FACTORY4_INV_CNT];
-      supTemplate.varInfos = new VarInfo[][] FACTORY4_VAR_INFO;
+      supTemplate = new SuppressionTemplate(FACTORY4_INV_CNT);
     }
 
     public static SuppressionFactory getInstance() {
@@ -167,7 +177,7 @@
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY4 (arg, supTemplate, this));
+      return (FACTORY4 ((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -179,9 +189,7 @@
     private static final factory5 theInstance = new factory5();
 
     private factory5() {
-      supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[FACTORY5_INV_CNT];
-      supTemplate.varInfos = new VarInfo[][] FACTORY5_VAR_INFO;
+      supTemplate = new SuppressionTemplate(FACTORY5_INV_CNT);
     }
 
     public static SuppressionFactory getInstance() {
@@ -196,7 +204,7 @@
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY5 (arg, supTemplate, this));
+      return (FACTORY5 ((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif

@@ -41,39 +41,38 @@ public class Debug {
 
   public static String[] debugTrackClass
     = {
+      // "Bound",
+      // "DynamicConstants",
+      "EltNonZero",
+      // "EltOneOf",
+      // "Equality",
+      // "FunctionBinary"
+      // "IntEqual",
+      // "IntGreaterEqual",
+      // "IntGreaterThan",
+      // "IntLessEqual",
+      // "IntLessThan",
+      // "IntNonEqual",
+      // "LinearBinary",
+      // "LinearBinary",
+      // "LowerBound",
+      // "LowerBound",
+      // "Member",
+      // "NonZero",
+      // "OneOfSequence",
+      // "PptSlice",
+      // "PptSlice2",
       // "PptSliceEquality",
       // "PptTopLevel",
-      // "PptSlice",
-      // "DynamicConstants",
-      // "Equality",
-      // "LowerBound",
-      // "UpperBound",
-      // "LinearBinary",
       // "SeqIndexComparison",
       // "SeqIndexNonEqual",
-      // "IntEqual",
       // "SeqSeqIntEqual",
-      // "NonZero",
-      // "FunctionBinary",
-      // "OneOfSequence",
-      // "IntLessEqual",
-      // "IntGreaterEqual",
-      // "IntLessThan",
-       "IntGreaterThan",
-      // "IntNonEqual",
-      // "Member",
-      // "FunctionBinary"
-      // "EltNonZero",
+      // "SeqSeqIntGreaterThan",
+      // "SeqSeqIntLessThan",
       // "SubSet",
       // "SuperSet",
-      // "EltOneOf",
-      // "Bound",
-      // "SeqSeqIntLessThan",
-      // "SeqSeqIntGreaterThan",
-      // "OneOf"
-      // "StringComparison",
-      // "StringLessThan",
-      // "StringGreaterThan",
+      // "UpperBound",
+      // "UpperBound",
    };
 
   /**
@@ -96,9 +95,23 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
+      // "DataStructures.DisjSets.unionDisjoint(int, int):::EXIT",
+      // "DataStructures.StackAr.StackAr(int):::EXIT",
+      // "DataStructures.StackAr.makeEmpty():::EXIT",
       // "DataStructures.StackAr.makeEmpty()V:::ENTER",
+      // "DataStructures.StackAr.top():::EXIT74",
       // "GLOBAL",
-      "std.new_job(int;)int:::EXIT",
+      // "MapQuick1.StreetNumberSet.contains"
+      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271",
+      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
+      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT354",
+      // "PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT",
+      // "misc.Suppress02.f",
+      "six170.Hanoi.moveDisk(int, int):::EXIT",
+      // "six170.Hanoi.moveTower(int, int, int):::EXIT",
+      // "six170.Hanoi:::OBJECT",
+      // "std.flex_alloc(unsigned;)void *:::EXIT1",
+      // "std.new_job(int;)int:::EXIT",
     };
 
   /**
@@ -114,6 +127,30 @@ public class Debug {
   public static String[][] debugTrackVars
     = {
       // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
+      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
+      // {"size(this.theArray[])", "orig(size(this.theArray[]))"},
+      // { "argSTAT_BUF.st_mtime" }
+      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack)+1..])"},
+      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack+1)..])"},
+      // {"::printstats"},
+      // {"::yy_last_accepting_state"},
+      // {"size", "size", "size" },
+      // {"this.theArray[0..this.topOfStack]"},
+      // {"orig(this.topOfStack)", "size(this.theArray[])-1"},
+      // {"orig(this.s[post(root1)])", "orig(this.s[root1])"},
+      // {"orig(this.s[])", "orig(this.s[])" },
+      // {"orig(this.s[])"},
+      // {"root1", "orig(root1)"}
+      // {"this.numer", "this.denom"},
+      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
+      // {"::C_plus_plus", "::syntaxerror", "::numprots"}
+      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
+      // {"ts.wrapped[return]"},
+      // {"size(this.begins[])", "size(this.ends[])", "size(this.begins[])-1"},
+      // {"n"},
+      // {"size(this.theArray[])", "size(this.theArray2[])-1"},
+      // {"this.begins[]", "this.ends[]"},
+      // {"this.diskLocation[this.height..]"},
       // {"::performance_report", "ds"},
       {"::next_pid", "orig(::next_pid)"},
     };

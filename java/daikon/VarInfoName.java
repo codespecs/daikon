@@ -743,8 +743,9 @@ public abstract class VarInfoName
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
   public VarInfoName applySize() {
-    // The simple approach is wrong because this might be "orig(a[])"
-    // return (new SizeOf((Elements) this)).intern();
+    // The simple approach:
+    //   return (new SizeOf((Elements) this)).intern();
+    // is wrong because this might be "orig(a[])".
     Elements elems = (new ElementsFinder(this)).elems();
     Assert.assertTrue(elems != null,
                       "applySize should have elements to use in " + this + ";\n"

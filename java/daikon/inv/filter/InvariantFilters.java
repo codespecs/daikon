@@ -200,7 +200,8 @@ public class InvariantFilters {
       }
       if (filter.shouldDiscard( invariant )) {
         if (invariant.logOn() || df.isLoggable(Level.FINE))
-          invariant.log (df, "failed " + filter.getClass().getName() + " num_values = " + invariant.ppt.num_values()
+          invariant.log (df, "failed " + filter.getClass().getName() + " num_values = "
+                         + (Invariant.dkconfig_use_confidence ? "" : ("" + invariant.ppt.num_values()))
                          // + ",num_unmod_missing_samples==" + invariant.ppt.num_mod_samples()
                          );
         return filter;

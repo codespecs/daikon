@@ -61,21 +61,6 @@ public abstract class PptSlice
   public int arity;
 
   /**
-   * Cache of values from var_infos, to avoid repeated lookups.
-   * value_indices[i] == var_infos[i].value_index, but looking up in
-   * this array should be cheaper than looking up in var_infos.
-   * Representation invariant: value_indices.length == this.arity.
-   **/
-  public int[] value_indices;
-
-  /**
-   * If true, then we are in the process of deleting this slice.
-   * It should only be on a list of deferred to-be-deleted slices.
-   * Thus, we should never see this non-false.
-   **/
-  public boolean no_invariants = false;
-
-  /**
    * The invariants contained in this slice.
    **/
   public Invariants invs;
@@ -143,10 +128,6 @@ public abstract class PptSlice
       Assert.assertTrue(var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index);
     }
     arity = var_infos.length;
-    value_indices = new int[arity];
-    for (int i=0; i<arity; i++) {
-      value_indices[i] = var_infos[i].value_index;
-    }
     invs = new Invariants();
     invs_to_flow = new Invariants();
     invs_changed = new Invariants();
@@ -376,14 +357,12 @@ public abstract class PptSlice
 
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
-    Assert.assertTrue(! no_invariants, "no_invariants at " + this);
     Assert.assertTrue(invs.contains(inv));
     boolean removed = invs.remove(inv);
     Assert.assertTrue(removed);
     // This increment could also have been in Invariant.destroy().
     Global.falsified_invariants++;
     if (invs.size() == 0) {
-      no_invariants = true;
       if (Debug.logDetail())
         log ("last invariant removed");
     }
@@ -674,7 +653,7 @@ public abstract class PptSlice
     // Assert.assertTrue(check_modbits());
 
     if (values_cache != null) {
-      if (! no_invariants) {
+      if (invs.size != 0) {
         num_samples_post_cache = num_samples();
         num_mod_samples_post_cache = num_mod_samples();
         num_values_post_cache = num_values();
@@ -698,7 +677,7 @@ public abstract class PptSlice
   public abstract int num_values();
 
   boolean check_modbits () {
-    Assert.assertTrue(! no_invariants);
+    Assert.assertTrue(invs.size() > 0);
     /* [INCR] (we no longer track num_values)
     if (num_mod_samples() < num_values()) {
       String message = "Bad mod bits in dtrace file:" + lineSep
@@ -804,7 +783,7 @@ public abstract class PptSlice
     }
 
     // If this slice is to be deleted, then don't guard it
-    if (no_invariants) return;
+    if (invs.size() == 0) return;
 
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();
@@ -859,7 +838,7 @@ public abstract class PptSlice
   /// Miscellaneous
 
   public void processOmissions(boolean[] omitTypes) {
-    if (no_invariants) return;
+    if (invs.size() == 0) return;
     List toRemove = new ArrayList();
     for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
       Invariant inv = (Invariant)overInvs.next();

@@ -23,7 +23,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020801;
+  static final long serialVersionUID = 2001024L;
 
   /**
    * General debug tracer.
@@ -39,12 +39,14 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   }
 
   private SelfSuppressionFactory() {
-    supTemplate = new SuppressionTemplate();
-    supTemplate.invTypes = new Class[1];
-    supTemplate.varInfos = new VarInfo[1][];
   }
 
-  private transient SuppressionTemplate supTemplate;
+  // arity 1
+  private transient SuppressionTemplate supTemplate1 = new SuppressionTemplate(1);
+  // arity 2
+  private transient SuppressionTemplate supTemplate2 = new SuppressionTemplate(1);
+  // arity 3
+  private transient SuppressionTemplate supTemplate3 = new SuppressionTemplate(1);
 
   public SuppressionLink generateSuppressionLink (Invariant inv) {
     if (debug.isLoggable(Level.FINE)) {
@@ -64,10 +66,14 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
 
     PptSlice slice = inv.ppt;
 
+    SuppressionTemplate supTemplate
+      = (slice.arity == 1 ? supTemplate1
+         : slice.arity == 2 ? supTemplate2
+         : slice.arity == 3 ? supTemplate3
+         : null);
     supTemplate.resetResults();
-    supTemplate.invTypes[0] = inv.getClass();
-    supTemplate.varInfos[0] = slice.var_infos;
-    slice.parent.fillSuppressionTemplate (supTemplate, false);
+    supTemplate.set(0, inv.getClass(), slice.var_infos);
+    supTemplate.fill(slice.parent, false);
     if (inv.logOn()) {
       inv.log ("Searched for" + supTemplate.searchString());
       if (supTemplate.filled)
@@ -77,13 +83,15 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     // Yeah, the argument has to be false, because otherwise we'll
     // suppress ourselves in the same ppt
     if (supTemplate.filled && supTemplate.results[0].isSameFormula(inv)) {
-      Assert.assertTrue (supTemplate.transforms[0][0] != supTemplate.varInfos[0][0]);
+      // This assertion is commented out only because
+      // SuppressionTemplate.varInfos now has private access.  -MDE 10/24/2003
+      // Assert.assertTrue (supTemplate.transforms[0][0] != supTemplate.varInfos[0][0]);
       if (inv.logOn()) {
         inv.log ("  Self template filled with "
                 + supTemplate.results[0].format() + " from "
                 + supTemplate.results[0].ppt.parent.name);
       }
-      return linkFromTemplate (supTemplate, inv);
+      return linkFromFilledTemplate (supTemplate, inv);
     } else {
       if (supTemplate.filled) {
         inv.log ("Not same formula, returning null");

@@ -71,7 +71,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030822L;
+  static final long serialVersionUID = 20031024L;
 
   private static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoSequence." + CLASSSTRING);
@@ -914,14 +914,14 @@ public class CLASSNAME
       return theInstance;
     }
 
+    private transient SuppressionTemplate supTemplate = new SuppressionTemplate(1);
+
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       CLASSNAME inv = (CLASSNAME) arg;
 
-      SuppressionTemplate supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[] {PairwiseIntEqual.class};
-      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
+      supTemplate.set(0, PairwiseIntEqual.class, inv.var1(), inv.var2());
 
-      SuppressionLink result = byTemplate (supTemplate, inv);
+      SuppressionLink result = linkFromUnfilledTemplate (supTemplate, inv);
       return result;
     }
   }

@@ -228,7 +228,7 @@ public class CLASSNAME
       for (int i = 0; i < vis.length; i++) {
         supTemplate.varInfos[0][0] = vis[i];
         supTemplate.resetResults();
-        inv.ppt.parent.fillSuppressionTemplate (supTemplate);
+        supTemplate.fill(inv.ppt.parent);
         if (supTemplate.results[0] != null) {
           OneOf suppressor = (OneOf) supTemplate.results[0];
           if (suppressor.num_elts() <= 1) {
@@ -248,6 +248,7 @@ public class CLASSNAME
 */
 
   // Create a suppression factory for functionBinary
+  #define FACTORY_INVCLASS  CLASSNAME
   #define FACTORY_CNT       2
   #define FACTORY1          equality_suppress1
   #define FACTORY1_INV_CNT  1
@@ -267,12 +268,8 @@ public class CLASSNAME
    * And that is what happens if x, y, and z actually refer to the same variable
    * (we get var == var and var == var as our two suppressors
    **/
-  public static SuppressionLink equality_suppress1 (Invariant arg,
+  public static SuppressionLink equality_suppress1 (CLASSNAME inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof CLASSNAME);
-    CLASSNAME inv = (CLASSNAME) arg;
 
     // Check the method type for those implied by equality
     int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
@@ -286,7 +283,7 @@ public class CLASSNAME
 
     // Build the tempmlate and look for matches
     supTemplate.set (0, EQUALITY.class, inv.var2(), inv.var3());
-    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     return (sl);
   }
 
@@ -299,12 +296,8 @@ public class CLASSNAME
    * And that is what happens if x, y, and z actually refer to the same variable
    * (we get var == var and var == var as our two suppressors
    **/
-  public static SuppressionLink equality_suppress2 (Invariant arg,
+  public static SuppressionLink equality_suppress2 (CLASSNAME inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof CLASSNAME);
-    CLASSNAME inv = (CLASSNAME) arg;
 
     // Check the method type for those implied by equality
     int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
@@ -328,7 +321,7 @@ public class CLASSNAME
     // Build the tempmlate and look for matches
     supTemplate.set (0, EQUALITY.class, v1, v2);
     supTemplate.set (1, EQUALITY.class, v2, v3);
-    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     return (sl);
   }
 

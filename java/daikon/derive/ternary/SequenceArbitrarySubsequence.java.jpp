@@ -11,13 +11,13 @@ The correct way to build the system is to run 'make'.
 #if defined(SCALAR)
   #undef SCALAR
   #define SCALAR long
-  #define SEQUENCESCALARSUBSEQUENCE SequenceScalarArbitrarySubsequence
+  #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
 #elif defined(FLOAT)
   #define SCALAR double
-  #define SEQUENCESCALARSUBSEQUENCE SequenceFloatArbitrarySubsequence
+  #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
 #elif defined(STRING)
   #define SCALAR String
-  #define SEQUENCESCALARSUBSEQUENCE SequenceStringArbitrarySubsequence
+  #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceStringArbitrarySubsequence
 #else
   #error "One of SCALAR, FLOAT, or STRING must be defined"
 #endif
@@ -31,7 +31,7 @@ import daikon.derive.*;
 
 import utilMDE.*;
 
-public final class SEQUENCESCALARSUBSEQUENCE
+public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   extends TernaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -42,7 +42,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SEQUENCESCALARSUBSEQUENCE derived variables
+   * Boolean.  True iff SEQUENCESCALARARBITRARYSUBSEQUENCE derived variables
    * should be generated.
    **/
   public static boolean dkconfig_enabled = false;
@@ -81,7 +81,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
    * @param right_closed true means the range ends at j; false means
    * it ends at j-1.
    **/
-  public SEQUENCESCALARSUBSEQUENCE(VarInfo vi1, VarInfo vi2, VarInfo vi3,
+  public SEQUENCESCALARARBITRARYSUBSEQUENCE(VarInfo vi1, VarInfo vi2, VarInfo vi3,
                                    boolean left_closed, boolean right_closed) {
     super(vi1, vi2, vi3);
     this.left_closed = left_closed;
@@ -170,9 +170,9 @@ public final class SEQUENCESCALARSUBSEQUENCE
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SEQUENCESCALARSUBSEQUENCE)
-      && (((SEQUENCESCALARSUBSEQUENCE)other).left_closed == this.left_closed)
-      && (((SEQUENCESCALARSUBSEQUENCE)other).right_closed== this.right_closed);
+    return (other instanceof SEQUENCESCALARARBITRARYSUBSEQUENCE)
+      && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).left_closed == this.left_closed)
+      && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).right_closed == this.right_closed);
   }
 
 }

@@ -20,7 +20,7 @@ public abstract class SingleSequence
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020801L;
+  static final long serialVersionUID = 20031024L;
 
   protected SingleSequence(PptSlice ppt) {
     super(ppt);
@@ -77,6 +77,8 @@ public abstract class SingleSequence
     }
 
 
+    private transient SuppressionTemplate supTemplate = new SuppressionTemplate(1);
+
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       SingleSequence inv = (SingleSequence) arg;
 
@@ -94,12 +96,10 @@ public abstract class SingleSequence
 
         // Since we know f(a[i..j]) is true, searching for f(a[]) is
         // sufficient, since it cannot be the case that !f(a[]).
-        SuppressionTemplate supTemplate = new SuppressionTemplate();
-        supTemplate.invTypes = new Class[] {inv.getClass()}; // Has to be same type as inv
-        supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {orig}};
+        supTemplate.set(0, inv.getClass(), orig);
 
 
-        inv.ppt.parent.fillSuppressionTemplate (supTemplate);
+        supTemplate.fill(inv.ppt.parent);
         if (supTemplate.filled) {
           SingleSequence  suppressor = (SingleSequence) supTemplate.results[0];
           if (debug.isLoggable(Level.FINE)) {
@@ -110,7 +110,7 @@ public abstract class SingleSequence
             if (debug.isLoggable(Level.FINE)) {
               debug.fine ("  Generating link");
             }
-            return linkFromTemplate (supTemplate, inv);
+            return linkFromFilledTemplate (supTemplate, inv);
           } else {
             if (debug.isLoggable(Level.FINE)) {
               debug.fine ("  But no link made");
@@ -149,34 +149,30 @@ public abstract class SingleSequence
                  (rightDer.index_shift - leftDer.index_shift >= 0) :
                  (rightDer.index_shift - leftDer.index_shift <= 0))
                 ) {
-              SuppressionTemplate similarTemplate = new SuppressionTemplate();
-              similarTemplate.invTypes = new Class[] {inv.getClass()};
-              similarTemplate.varInfos = new VarInfo[][] {new VarInfo[] {otherVar}};
-              inv.ppt.parent.fillSuppressionTemplate (similarTemplate);
+              SuppressionTemplate similarTemplate = new SuppressionTemplate(1);
+              similarTemplate.set(0, inv.getClass(), otherVar);
+              similarTemplate.fill(inv.ppt.parent);
               if (similarTemplate.filled &&
                   similarTemplate.results[0].isSameFormula(inv)) {
                 if (debug.isLoggable(Level.FINE)) {
                   debug.fine ("  Filling with obvious subset");
                 }
-                return linkFromTemplate (similarTemplate, inv);
+                return linkFromFilledTemplate (similarTemplate, inv);
               }
             }
           }
 
           // Now search for non obvious results
-          SuppressionTemplate similarTemplate = new SuppressionTemplate();
-          similarTemplate.invTypes = new Class[] {inv.getClass()};
-          similarTemplate.varInfos = new VarInfo[][] {new VarInfo[] {otherVar}};
-          inv.ppt.parent.fillSuppressionTemplate (similarTemplate);
+          SuppressionTemplate similarTemplate = new SuppressionTemplate(1);
+          similarTemplate.set(0, inv.getClass(), otherVar);
+          similarTemplate.fill(inv.ppt.parent);
           if (similarTemplate.filled &&
               similarTemplate.results[0].isSameFormula(inv)) {
             // Success in finding f(otherVar)
             // Now have to show that thisVar subsequence otherVar
-            SuppressionTemplate subseqTemplate = new SuppressionTemplate();
-            subseqTemplate.varInfos = new VarInfo[][] {new VarInfo[] {thisVar, otherVar}};
-
-            subseqTemplate.invTypes = new Class[] {SubSequence.class};
-            inv.ppt.parent.fillSuppressionTemplate (similarTemplate);
+            SuppressionTemplate subseqTemplate = new SuppressionTemplate(1);
+            subseqTemplate.set(0, SubSequence.class, thisVar, otherVar);
+            similarTemplate.fill(inv.ppt.parent);
             if (subseqTemplate.filled) {
               // Possible success in finding thisVar subSeq otherVar
               SubSequence subSeqInv = (SubSequence) subseqTemplate.results[0];
@@ -185,10 +181,8 @@ public abstract class SingleSequence
               // Second transformed var in first invariant
               if ((subSeqInv.var1_in_var2 && subSeqInv.var1() == transThisVar) ||
                   (subSeqInv.var2_in_var1 && subSeqInv.var2() == transThisVar)) {
-                List suppressors = new ArrayList();
-                suppressors.add (similarTemplate.results[0]);
-                suppressors.add (subseqTemplate.results[0]);
-                // Now we have to add both invariants to the suppressor
+                Invariant[] suppressors = new Invariant[] { similarTemplate.results[0],
+                                                            subseqTemplate.results[0] };
                 return new SuppressionLink (this,
                                             inv,
                                             suppressors);
@@ -196,8 +190,8 @@ public abstract class SingleSequence
             }
 
             subseqTemplate.resetResults();
-            subseqTemplate.invTypes = new Class[] {SubSequenceFloat.class};
-            inv.ppt.parent.fillSuppressionTemplate (similarTemplate);
+            subseqTemplate.set(0, SubSequenceFloat.class, thisVar, otherVar);
+            subseqTemplate.fill(inv.ppt.parent);
             if (subseqTemplate.filled) {
               // Possible success in finding thisVar subSeq otherVar
               SubSequenceFloat subSeqInv = (SubSequenceFloat) subseqTemplate.results[0];
@@ -206,9 +200,9 @@ public abstract class SingleSequence
               // Second transformed var in first invariant
               if ((subSeqInv.var1_in_var2 && subSeqInv.var1() == transThisVar) ||
                   (subSeqInv.var2_in_var1 && subSeqInv.var2() == transThisVar)) {
-                List suppressors = new ArrayList();
-                suppressors.add (similarTemplate.results[0]);
-                suppressors.add (subseqTemplate.results[0]);
+                Invariant[] suppressors = new Invariant[] {
+                  similarTemplate.results[0],
+                  subseqTemplate.results[0] };
                 // Now we have to add both invariants to the suppressor
                 if (debug.isLoggable(Level.FINE)) {
                   debug.fine ("  Filling with non obvious subset");
