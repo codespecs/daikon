@@ -66,6 +66,12 @@ public final class Daikon {
   public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
   // public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
 
+  // When true, use the Simplify theorem prover (not part of Daikon)
+  // to locate logically redundant invariants, and flag them as
+  // redundant, so that they are removed from the printed output.
+  public static boolean suppress_redundant_invariants_with_simplify = false;
+  // public static boolean suppress_redundant_invariants_with_simplify = true;
+
   // Set what output style to use.  NORMAL is the default; ESC style
   // is based on JML; SIMPLIFY style uses first order logical
   // expressions with lots of parens
@@ -97,6 +103,7 @@ public final class Daikon {
   public static final String no_text_output_SWITCH = "no_text_output";
   public static final String suppress_cont_SWITCH = "suppress_cont";
   public static final String suppress_post_SWITCH = "suppress_post";
+  public static final String suppress_redundant_SWITCH = "suppress_redundant";
   public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
   public static final String simplify_output_SWITCH = "simplify_output";
@@ -136,6 +143,7 @@ public final class Daikon {
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -193,6 +201,8 @@ public final class Daikon {
 	  suppress_implied_controlled_invariants = true;
 	} else if (suppress_post_SWITCH.equals(option_name)) {
 	  suppress_implied_postcondition_over_prestate_invariants = true;
+	} else if (suppress_redundant_SWITCH.equals(option_name)) {
+	  suppress_redundant_invariants_with_simplify = true;
 	} else if (prob_limit_SWITCH.equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else if (esc_output_SWITCH.equals(option_name)) {
@@ -306,6 +316,9 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
+	if (suppress_redundant_invariants_with_simplify) {
+	  ppt.mark_implied_via_simplify();
+	}
         {
           // Clear memory
           ppt.set_values_null();
