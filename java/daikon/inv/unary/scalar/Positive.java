@@ -1,6 +1,7 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 
 // This invariant is true if the variable is always positive (greater than 0).
@@ -18,7 +19,14 @@ public class Positive
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030822L;
+  static final long serialVersionUID = 20040728L;
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff Positive invariants should be considered.
+   **/
+  public static boolean dkconfig_enabled = true;
 
   ///
   /// Required methods
@@ -28,6 +36,19 @@ public class Positive
     super(ppt);
   }
 
+  /** Returns the prototype invariant **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new Positive (null);
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  /** instantiate an invariant on the specified slice **/
   public static Positive instantiate(PptSlice ppt) {
     return new Positive(ppt);
   }
