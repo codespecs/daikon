@@ -1410,6 +1410,8 @@ public final class ONEOFSCALAR
     return result;
   }
 
+  /* Old version with interleaved #ifdefs, replaced with following version
+     using separate ELT and non-elt routines with a shared subroutine
 #if defined(IS_ELT)
   public void add_modified(INT[] a, int count) {
   OUTER:
@@ -1497,6 +1499,96 @@ public final class ONEOFSCALAR
 #else
   }
 #endif
+  */
+
+
+#if defined(IS_ELT)
+
+  public void add_modified(INT[] a, int count) {
+
+    for (int ai=0; ai <a.length; ai++) {
+      if (!add_mod_elem (a[ai], count)) {
+        destroyAndFlow();
+        discardCode = DiscardCode.bad_sample;
+        discardString = "Sample value '" + a[ai] + "' created too many "
+                      + "different values for oneof";
+        log (discardString);
+      }
+    }
+  }
+
+#else
+
+  public void add_modified(INT v, int count) {
+    if (!add_mod_elem (v, count)) {
+      destroyAndFlow();
+      discardCode = DiscardCode.bad_sample;
+      discardString = "Sample value '" + v + "' created too many different"
+                    + " values for oneof";
+      log (discardString);
+    }
+  }
+
+#endif
+
+  /**
+   * Adds a single sample to the invariant.  Returns true if the invariant
+   * is still true, false otherwise.  If the invariant is weakened, calls
+   * cloneAndFlow() internally, however callers should handle anything that
+   * needs to be done if the invariant is destroyed
+   */
+
+  public boolean add_mod_elem (INT v, int count) {
+
+    // Look for v is our list of previously seen values.  If its
+    // found, we're all set
+    for (int i=0; i<num_elts; i++) {
+      //if (logDetail())
+      //  log ("add_modified (" + v + ")");
+      if (EQUALS (elts[i], v)) {
+        return (true);
+      }
+    }
+
+    if (num_elts == dkconfig_size) {
+      return (false);
+    }
+
+    #if defined(STRING) || defined(ELTSTRING)
+      if (is_type() && (num_elts == 1)) {
+        return (false);
+      }
+    #elif defined(SEQUENCE)
+      if (is_hashcode && (num_elts == 1)) {
+        return (false);
+      }
+    #elif defined(SCALAR) || defined(ELT)
+      if ((is_boolean && (num_elts == 1)) || (is_hashcode && (num_elts == 2))) {
+        return (false);
+      }
+
+      if (is_hashcode && (num_elts == 1)) {
+        // Permit two object values only if one of them is null
+        if ((elts[0] != 0) && (v != 0)) {
+          return (false);
+        }
+      }
+    #endif
+
+    // We are significantly changing our state (not just zeroing in on
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
+
+    elts[num_elts] = v;
+    num_elts++;
+    return (true);
+  }
+
+
+
 
 #if defined(IS_ELT)
   // It is possible to have seen many (array) samples, but no (INT)
@@ -1649,6 +1741,14 @@ public final class ONEOFSCALAR
     return false;
   }
 
+
+  /**
+   * Oneof can merge different formulas from lower points to create a single
+   * formula at an upper point.
+   */
+  public boolean mergeFormulasOk() {
+    return (true);
+  }
 
   public boolean isSameFormula(Invariant o)
   {
@@ -1831,6 +1931,46 @@ public final class ONEOFSCALAR
     in.defaultReadObject();
     for (int i=0; i < num_elts; i++)
       elts[i] = Intern.intern(elts[i]);
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant.  Each must be
+   * a ONEOFSCALAR invariant.  This code finds all of the oneof values
+   * from each of the invariants and returns the merged invariant (if any).
+   *
+   * @param invs    List of invariants to merge.  The invariants must all be
+   *                of the same type and should come from the children of
+   *                ppt.  They should also all be permuted to match the variable
+   *                order in ppt.
+   * @param ppt     program point that will contain the new invariant
+   */
+  public Invariant merge (List invs, PptSlice ppt) {
+
+    // Create the initial parent invariant from the first child
+    ONEOFSCALAR  first = (ONEOFSCALAR ) invs.get(0);
+    ONEOFSCALAR result = (ONEOFSCALAR) first.clone();
+    result.ppt = ppt;
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++ ) {
+
+      // Get this invariant
+      ONEOFSCALAR inv = (ONEOFSCALAR) invs.get (i);
+
+      // Loop through each distinct value found in this child and add
+      // it to the parent.  If the invariant is falsified, there is no parent
+      // invariant
+      for (int j = 0; j < inv.num_elts; j++) {
+        if (!result.add_mod_elem (inv.elts[j], 1)) {
+          result.log ("child value '" + inv.elts[j] + "' destroyed oneof");
+          return (null);
+        }
+      }
+    }
+
+    result.log ("Merged '" + result.format() + "' from " + invs.size()
+                + " child invariants");
+    return (result);
   }
 
 }
