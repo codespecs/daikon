@@ -38,16 +38,13 @@ public final class SequenceStringFactory {
       }
     }
 
-    if (Daikon.check_program_types
-        && (! seqvar.type.elementType().castable(sclvar.type))) {
-      if (debugSequenceStringFactory) {
-        System.out.println("Non-castable types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
-      }
+    if (! seqvar.eltsCompatible(sclvar))
       return null;
-    }
 
     Vector result = new Vector();
-    if (pass == 2) {
+    if (pass == 1) {
+      // Nothing to do
+    } else {
       // I could check that the length of the sequence isn't always 0.
       result.add(Member.instantiate(ppt, seq_first));
     }

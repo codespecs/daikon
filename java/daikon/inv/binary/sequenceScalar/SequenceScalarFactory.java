@@ -38,20 +38,8 @@ public final class SequenceScalarFactory {
       }
     }
 
-    if (Daikon.check_program_types) {
-      if (! seqvar.type.elementType().castable(sclvar.type)) {
-        if (debugSequenceScalarFactory) {
-          System.out.println("Non-castable types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
-        }
-        return null;
-      }
-    }
-    if (! Daikon.ignore_comparability) {
-      if (! VarComparability.comparable(VarInfoName.parse("seqvar.name.elementName"), seqvar.comparability.elementType(),
-                                        sclvar.name, sclvar.comparability)) {
-        return null;
-      }
-    }
+    if (! seqvar.eltsCompatible(sclvar))
+      return null;
 
     Vector result = new Vector();
     if (pass == 1) {
