@@ -44,7 +44,7 @@ field_of_var1.jml_name() = no format when testCall.
 ; typeof type_of_var1 var1
 type_of_var1 = var1.class
 ; jml_name type_of_var1
-type_of_var1.jml_name() = var1.getClass().toString()
+type_of_var1.jml_name() = no format when testCall.
 ;# Test Prestate formatting
 ; prestate old_var1 var1
 old_var1 = orig(var1)
