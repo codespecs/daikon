@@ -1530,7 +1530,7 @@ public final class TestUtilMDE extends TestCase {
       for (int i=1; i<num_elts_limit; i+=3) {
         int totals[] = new int[num_elts_limit];
         for (int j=0; j<tries; j++) {
-          ArrayList chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
+          List chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
           for (int m=0; m<chosen.size(); m++) {
             for (int n=m+1; n<chosen.size(); n++) {
               if ( ((Integer)chosen.get(m)).intValue() == ((Integer)chosen.get(n)).intValue() ) {

@@ -5,19 +5,32 @@ import java.util.*;
 
 /**
  *
- * <b>RandomSelector</b> selects k elements from
- * an Iteration over n elements using only O(k) space instead of O(n)
- * space.  For example, selecting 1 element from a FileStream containing
- * 1000 elements will take O(1) space.
+ * <b>RandomSelector</b> selects k elements uniformly at random from
+ * an iteration over n elements using only O(k) space instead of O(n)
+ * space.  For example, selecting 1 element from a FileStream
+ * containing 1000 elements will take O(1) space. The class takes as
+ * input the number k during initialization and then can accept() any
+ * number of Objects in the future.  At any point in time, getValues()
+ * will either return k randomly selected elements from the elements
+ * previous accepted or if accept() was called fewer than k times, will
+ * return all elements previously accepted.
+ *
+ * <p>The random selection is independent between every constructed
+ * instance of RandomSelector objects, but for the same instance,
+ * multiple calls to getValues() are not independent. Making two calls
+ * to consecutive getValues() without an accept() in between will
+ * return two new Lists containing the same elements.
  *
  * <p>A second mode allows for a fixed probability of randomly keeping
- *  each item as opposed to a fix number of samples.
+ *  each item as opposed to a fixed number of samples.
  *
- * <P>current_values --> The values chosen based on the Objects observed
- * <BR>number_observed --> The number of Objects observed
- * <BR>number_to_take --> The number of elements to choose ('k' above)
- * <BR>keep_probability --> The percentage of elements to keep
- * <BR>selector_mode --> either fixed amount of samples or fixed percent.
+ * <P>SPECFIELDS:
+ * <BR>current_values  : Set : The values chosen based on the Objects observed
+ * <BR>number_observed : int : The number of Objects observed
+ * <BR>number_to_take  : int : The number of elements to choose ('k' above)
+ * <BR>keep_probability: double :  The percentage of elements to keep
+ * <BR>selector_mode :
+ *       {FIXED,PERCENT}  : either fixed amount of samples or fixed percent.
  **/
 
 public class RandomSelector {
@@ -37,10 +50,19 @@ public class RandomSelector {
 
     private int num_elts = -1;
     private int observed;
-    private Random seed;
-    public ArrayList values;
+    private Random generator;
+    private ArrayList values;
     private boolean coin_toss_mode = false;
     private double keep_probability = -1.0;
+
+
+    /** @param num_elts The number of elements intended to be selected
+     * from the input elements
+     **/
+    public RandomSelector (int num_elts) {
+        this (num_elts, new Random());
+    }
+
 
     /** @param num_elts The number of elements intended to be selected
      * from the oncoming Iteration. Same as 'number_to_take'
@@ -50,7 +72,7 @@ public class RandomSelector {
         values = new ArrayList();
         this.num_elts = num_elts;
         observed = 0;
-        seed = r;
+        generator = r;
     }
 
     /** @param keep_probability The probability that each element is
@@ -62,14 +84,7 @@ public class RandomSelector {
         this.keep_probability = keep_probability;
         coin_toss_mode = true;
         observed = 0;
-        seed = r;
-    }
-
-    /** @param num_elts The number of elements intended to be selected
-     * from the oncoming Iteration
-     **/
-    public RandomSelector (int num_elts) {
-        this (num_elts, new Random());
+        generator = r;
     }
 
     /** Increments the number of observed_elements, then
@@ -83,9 +98,9 @@ public class RandomSelector {
         // if we are in coin toss mode, then we want to keep
         // with probability == keep_probability.
         if (coin_toss_mode) {
-            if (seed.nextDouble() < keep_probability) {
+            if (generator.nextDouble() < keep_probability) {
                 values.add (next);
-                //                System.out.println ("ACCEPTED " + keep_probability );
+                // System.out.println ("ACCEPTED " + keep_probability );
             }
             else {
                 // System.out.println ("didn't accept " + keep_probability );
@@ -93,13 +108,14 @@ public class RandomSelector {
             return;
         }
 
-        // in fixed sample mode, the i-th element has a 1/i chance
-        // of being accepted.
-        if (seed.nextDouble() < ((double) num_elts / (++observed))) {
+        // in fixed sample mode, the i-th element has a k/i chance
+        // of being accepted where k is number_to_take.
+        if (generator.nextDouble() < ((double) num_elts / (++observed))) {
             if (values.size() < num_elts) {
                 values.add (next);
-            } else {
-                int rem = (int) (values.size() * seed.nextDouble());
+            }
+            else {
+                int rem = (int) (values.size() * generator.nextDouble());
                 values.set (rem, next);
             }
         }
@@ -107,7 +123,7 @@ public class RandomSelector {
     }
 
     /** Returns current_values, modifies none  **/
-    public ArrayList getValues() {
+    public List getValues() {
         // avoid concurrent mod errors
         ArrayList ret = new ArrayList();
         ret.addAll (values);

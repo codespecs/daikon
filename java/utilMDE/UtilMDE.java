@@ -637,23 +637,23 @@ public final class UtilMDE {
 
 
   /**
-   * Return an ArrayList containing num_elts randomly chosen
+   * Return an List containing num_elts randomly chosen
    * elements from the iterator, or all the elements of the iterator if
    * there are fewer.  It examines every element of the iterator, but does
    * not keep them all in memory.
    **/
-  public static ArrayList randomElements(Iterator itor, int num_elts) {
+  public static List randomElements(Iterator itor, int num_elts) {
     return randomElements(itor, num_elts, r);
   }
   private static Random r = new Random();
 
   /**
-   * Return an ArrayList containing num_elts randomly chosen
+   * Return an List containing num_elts randomly chosen
    * elements from the iterator, or all the elements of the iterator if
    * there are fewer.  It examines every element of the iterator, but does
    * not keep them all in memory.
    **/
-  public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
+  public static List randomElements(Iterator itor, int num_elts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == num_elts:
     //   n n/2 n/3 n/4 n/5 ...
