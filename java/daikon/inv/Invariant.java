@@ -449,7 +449,8 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn())
-      result.log ("Created via transfer");
+      result.log ("Created " + result.format() + " via transfer from "
+                  + format());
     //if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name + " "
     //                 + result.repr());
