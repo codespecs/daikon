@@ -948,8 +948,10 @@ public final class FileIO
             // at runtime.
             System.err.println("Exceptional exit from function " + fn_name
                                + ", expected to first exit from " + invoc.fn_name
-                               + "; at " + data_trace_filename + " line "
-			       + data_trace_reader.getLineNumber());
+                               + ((data_trace_filename == null) ? "" :
+				  "; at " + data_trace_filename + " line "
+				  + data_trace_reader.getLineNumber())
+			       );
             invoc = (Invocation) call_stack.pop();
           }
         } else {
