@@ -274,6 +274,10 @@ public class CLASSNAME
     return core.isActive();
   }
 
+  public boolean isFlowable() {
+    return core.isFlowable();
+  }
+
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     return core.add_modified(x, y, z, count);
   }
