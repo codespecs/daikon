@@ -45,7 +45,7 @@
 
 @sp 1
 @c Daikon version 2.3.11 date
-@center July  8, 2002
+@center July  9, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.11, released July  8, 2002.
+It describes Daikon version 2.3.11, released July  9, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.11, released July  8, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.11, released July  8, 2002.
+It describes Daikon version 2.3.11, released July  9, 2002.
 @end ifnottex
 
 @menu
@@ -3039,14 +3039,14 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 @item -l
 Indicates that the next file (only) should not produce @file{.dtrace}
 file output (@pxref{Instrumentation scope}).
-This is the only command-line switch that can be used in the midst of the
-list of filenames.  
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
 and each has its own header file, but you don't want to instrument the
 functions defined in @file{file2.c}, you would instrument as follows:
 @example
   dfec file1.c -l file2.c file1.h file2.h
 @end example
+This is the only command-line switch that can be used in the midst of the
+list of filenames; it may be specified multiple times.
 
 @item --help
 Displays a usage message.
@@ -3054,9 +3054,10 @@ Displays a usage message.
 @item --no-lackwit
 @cindex LACKWIT_HOME environment variable
 @cindex --no-lackwit flag to dfec
+@cindex Lackwit, runs slowly
 Turns off Lackwit postprocessing of the @file{.decls} file.  You can also
 turn off Lackwit postprocessing by unsetting the LACKWIT_HOME environment
-variable.
+variable.  Lackwit processing can be very slow, especially on large programs.
 
 @item --struct-depth=@var{N}
 For nested or recursive types (structs or classes that have members that
@@ -4770,11 +4771,11 @@ Daikon from doing uninteresting comparisons.
 @item 
 To make Daikon ignore some program points, use its
 @example
-  -r @var{ppt_regexp}
+  --ppt @var{ppt_regexp}
 @end example
 @noindent
-argument.  (Run "@command{java daikon.Daikon}" to see a list of
-arguments.)  With the @option{-r} flag, only program points matching
+argument (@pxref{Command line options for Daikon}).
+With the @option{-ppt} flag, only program points matching
 the regular expression are processed.  This can take the place of the
 @command{trace-purge-fns.pl} script.
 @end enumerate
@@ -4903,7 +4904,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.11, released July  8, 2002.
+This manual describes Daikon version 2.3.11, released July  9, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
