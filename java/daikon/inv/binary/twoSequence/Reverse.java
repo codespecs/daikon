@@ -3,6 +3,14 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.Assert;
+import org.apache.log4j.Category;
+
+
+/**
+ * Where one sequence is the reverse of another.
+ *
+ *
+ **/
 
 public class Reverse
   extends TwoSequence
@@ -11,6 +19,9 @@ public class Reverse
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
+
+  public static final Category debug =
+    Category.getInstance("daikon.inv.binary.twoSequence.Reverse");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -25,7 +36,17 @@ public class Reverse
 
   public static Reverse instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new Reverse(ppt);
+    Reverse result = new Reverse(ppt);
+    // Don't instantiate if the variables can't have order
+    if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Not instantitating for because order has no meaning: " +
+		     result.var1().name + " and " + result.var2().name);
+      }
+      return null;
+    }
+    return result;
   }
 
   protected Invariant resurrect_done_swapped() {

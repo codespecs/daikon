@@ -24,15 +24,23 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SequencesPredicate.dkconfig_enabled;
-    debug.debug ("Trying to instantiate");
-
     if (!enabled) return null;
+
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Trying to instantiate " + var1.name + " and " + var2.name);
+    }
+
 
     if (!(var1.rep_type.isArray()) ||
 	!(var2.rep_type.isArray())) {
       return null;
     }
 
+    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      // Order doesn't matter, then predication is meaningless
+      return null;
+    }
 
     // if (SequencesPredicate.dkconfig_boolOnly) {
     //   if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
@@ -46,9 +54,6 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
       return null;
     }
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Trying " + var1.name + " and " + var2.name);
-    }
 
     if (var1.name.equals(var2.name)) return null;
 

@@ -43,7 +43,16 @@ public class NoDuplicates
 
   public static NoDuplicates instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new NoDuplicates(ppt);
+    NoDuplicates result = new NoDuplicates(ppt);
+    // Don't instantiate if the variable can't have dupliates
+    if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Not instantitating for because dupliates has no meaning: " +
+		     result.var().name);
+      }
+      return null;
+    }
+    return result;
   }
 
   public String repr() {
@@ -83,12 +92,11 @@ public class NoDuplicates
     if (debugPrint.isDebugEnabled()) {
       debugPrint.debug ("Format_ioa: " + this.toString());
     }
-    if (var().isIOASet())
-      return "IOA Set " + var().name.ioa_name() + " contains no duplicates by definition";
 
     // We first see if we can special case for certain types of variables
     if (var().isDerived() && var().derived instanceof SequencesPredicate) {
-      VarInfoName.FunctionOfN myName = (VarInfoName.FunctionOfN) var().name;
+      VarInfoName.FunctionOfN myName =
+	(VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
       String predicateValue = myName.getArg(2).ioa_name();
 
       SequencesPredicate derivation = (SequencesPredicate) var().derived;
@@ -101,7 +109,10 @@ public class NoDuplicates
       String predicateName = varPredicateFieldName.field;
 
       VarInfoName varOrigName = varFieldName.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type, varField.file_rep_type, varField.comparability);
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type,
+					 varField.file_rep_type,
+					 varField.comparability,
+					 VarInfoAux.getDefault());
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 
@@ -128,7 +139,10 @@ public class NoDuplicates
       String fieldName2 = varFieldName2.field;
 
       VarInfoName varOrigName = varFieldName1.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type, varField1.file_rep_type, varField1.comparability);
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type,
+					 varField1.file_rep_type,
+					 varField1.comparability,
+					 VarInfoAux.getDefault());
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 

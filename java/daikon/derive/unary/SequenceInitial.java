@@ -70,6 +70,9 @@ public final class SequenceInitial
     }
     */
 
+    // If order doesn't matter
+    if (!vi.aux.getFlag (VarInfoAux.HAS_ORDER)) return false;
+
     return true;
   }
 
@@ -107,7 +110,7 @@ public final class SequenceInitial
     ProglangType ptype = base.type.elementType();
     ProglangType frtype = base.file_rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, ptype, frtype, comp);
+    return new VarInfo(name, ptype, frtype, comp, base.aux);
   }
 
   public  boolean isSameFormula(Derivation other) {

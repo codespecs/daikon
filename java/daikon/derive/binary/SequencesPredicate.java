@@ -29,7 +29,8 @@ public final class SequencesPredicate
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesPredicate");
+  public static final Category debug =
+    Category.getInstance("daikon.derive.binary.SequencesPredicate");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -191,10 +192,11 @@ public final class SequencesPredicate
 						    new VarInfoName[] {var1.name,
 								       var2.name,
 								       new VarInfoName.Simple(name)
-						    }),
+						    }).applyElements(),
 		       var1.type,
 		       var1.file_rep_type,
-		       var1.comparability
+		       var1.comparability,
+		       var1.aux
 		       );
   }
 

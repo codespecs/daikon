@@ -50,7 +50,8 @@ public class DiffTester extends TestCase {
     VarInfo result = new VarInfo(VarInfoName.parse(name),
                                  ProglangType.INT,
                                  ProglangType.INT,
-                                 null); // null Comparability
+                                 (VarComparability)null, // null Comparability
+				 VarInfoAux.getDefault());
     // equal_to no longer exists!
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;

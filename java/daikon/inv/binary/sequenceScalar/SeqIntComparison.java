@@ -9,6 +9,12 @@ import daikon.inv.binary.twoSequence.*;
 import java.util.*;
 import utilMDE.*;
 
+/**
+ * We compare each element in a sequence to a particular variable.
+ *
+ *
+ **/
+
 public final class SeqIntComparison
   extends SequenceScalar
 {

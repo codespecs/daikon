@@ -5,6 +5,7 @@ import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.Assert;
 import java.util.Iterator;
+import org.apache.log4j.Category;
 
 // Requires that the lengths are the same.  Determines a comparison that
 // holds for all (a[i], b[i]) pairs.
@@ -17,6 +18,12 @@ public class PairwiseIntComparison
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
+
+  /**
+   * Debug tracer
+   **/
+  public static final Category debug =
+    Category.getInstance ("daikon.inv.binary.twoSequence.PairwiseIntComparison");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -56,7 +63,18 @@ public class PairwiseIntComparison
       only_eq = true;
     }
 
-    return new PairwiseIntComparison(ppt, only_eq);
+    PairwiseIntComparison result = new PairwiseIntComparison(ppt, only_eq);
+    // Don't instantiate if the variables can't have order
+    if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Not instantitating for because order has no meaning: " +
+		     result.var1().name + " and " + result.var2().name);
+      }
+      return null;
+    }
+    return result;
+
   }
 
   protected Object clone() {

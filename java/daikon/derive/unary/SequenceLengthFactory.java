@@ -34,6 +34,12 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       return null;
     }
 
+    if (!vi.aux.getFlag(VarInfoAux.HAS_SIZE)) {
+      // Don't derive if auxiliary info says size of this collection
+      // has no meaning
+      return null;
+    }
+
     // Omit length of fields applied over sequences, since they always
     // have a corresponding equal-length sequence (sans-field).
     {
@@ -49,7 +55,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
 	}
       }
     }
-    
+
     if (! SequenceLength.applicable(vi)) {
       Global.tautological_suppressed_derived_variables++;
       return null;
@@ -59,8 +65,14 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       debug.debug ("Instantiating for " + vi.name + " in " + vi.ppt);
     }
 
-    return new UnaryDerivation[] { new SequenceLength(vi, 0),
-                                   new SequenceLength(vi, -1) };
+    if (vi.aux.getFlag(VarInfoAux.NULL_TERMINATING)) {
+      return new UnaryDerivation[] { new SequenceLength(vi, 0),
+				     new SequenceLength(vi, -1) };
+    } else {
+      // If it can't terminate with nulls, then all members are important,
+      // so we only need to do shift for 0
+      return new UnaryDerivation[] { new SequenceLength(vi, 0)};
+    }
   }
 
 }

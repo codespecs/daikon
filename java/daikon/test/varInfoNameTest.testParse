@@ -45,6 +45,7 @@ quantify_simplify_name p
 parse p this.field.class
 esc_name p
 simplify_name p
+postPreConverter p
 
 ;# this.field[].class
 parse p this.field[].class
@@ -60,13 +61,27 @@ quantify_simplify_name p
 parse p x[].field.foo
 quantify_esc_name p
 quantify_simplify_name p
+postPreConverter p
 
 ;# return
 parse p return
 esc_name p
 simplify_name p
+postPreConverter p
 
 ;# return.field
 parse p return.field
 esc_name p
 simplify_name p
+postPreConverter p
+
+;# x[anIndex:Int]
+parse p x[anIndex:Int]
+esc_name p
+simplify_name p
+
+;# x[anIndex:Int].y
+parse p x[anIndex:Int].y
+esc_name p
+simplify_name p
+

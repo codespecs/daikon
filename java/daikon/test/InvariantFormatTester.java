@@ -685,7 +685,9 @@ public class InvariantFormatTester extends TestCase
       arrayModifier = "[]";
     }
 
-    return new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) + arrayModifier),type,type,null);
+    return new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)})
+                                          + arrayModifier),
+                        type, type, null, VarInfoAux.getDefault());
   }
 
   /**
@@ -804,15 +806,19 @@ public class InvariantFormatTester extends TestCase
    *         null otherwise
    */
   private static Invariant instantiateClass(Class theClass,PptSlice sl) {
+    Method instanceCreator;
     try {
-      Method instanceCreator = theClass.getMethod("instantiate",new Class [] {PptSlice.class});
-
-      if (instanceCreator == null) return null;
-
-      return (Invariant)instanceCreator.invoke(null,new Object [] {sl});
+      instanceCreator = theClass.getMethod("instantiate",new Class [] {PptSlice.class});
+    } catch (Exception e) {
+      throw new RuntimeException("Error while instantiating " + theClass.getName() + ": " + e.toString());
     }
-    catch (Exception e) {
-      throw new RuntimeException(e.toString());
+
+    if (instanceCreator == null) return null;
+
+    try {
+      return (Invariant)instanceCreator.invoke(null,new Object [] {sl});
+    } catch (Exception e) {
+      throw new RuntimeException("Error while invoking \"instantiate\" on " + theClass.getName() + ": " + e.toString());
     }
 //      catch (Exception e) {
 //        throw new RuntimeException("Could not instantiate class");

@@ -8,7 +8,17 @@ import utilMDE.*;
 
 import java.util.*;
 
-// Lexically compares the two sequences.
+/**
+ * Compares two sequences.  If order does matter, then sequences are
+ * compared lexically.  We assume that if repeats don't matter, then
+ * the given data contains only one instance of an element.  If order
+ * doesn't matter, then we do a double subset comparison to test
+ * equality.  If the two Aux fields of the VarInfos are not identical,
+ * then we don't compare at all.
+ *
+ *
+ **/
+
 public class SeqComparison
   extends TwoSequence
   implements Comparison
@@ -33,12 +43,15 @@ public class SeqComparison
   boolean can_be_lt = false;
   boolean can_be_gt = false;
 
+  boolean orderMatters;
+
   int num_sc_samples = 0;
   private ValueTracker values_cache = new ValueTracker(8);
 
-  protected SeqComparison(PptSlice ppt, boolean only_eq) {
+  protected SeqComparison(PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
     only_check_eq = only_eq;
+    orderMatters = order;
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
@@ -46,6 +59,12 @@ public class SeqComparison
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
+
+    if (var1.aux != var2.aux) return null;
+    // Equality does not make sense if the auxiliary info for the two
+    // arrays are different.  Or does it??
+
+
 
     // System.out.println("Ppt: " + ppt.name);
     // System.out.println("vars[0]: " + var1.type.format());
@@ -65,7 +84,11 @@ public class SeqComparison
                           && (type2.dimensions() == 1)
                           && type2.baseIsIntegral()));
     // System.out.println("only_eq: " + only_eq);
-    return new SeqComparison(ppt, only_eq);
+    if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      return new SeqComparison(ppt, only_eq, true);
+    } else {
+      return new SeqComparison(ppt, true, false);
+    }
   }
 
   protected Object clone() {
@@ -86,10 +109,12 @@ public class SeqComparison
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
-      + ",only_check_eq=" + only_check_eq;
+      + ",only_check_eq=" + only_check_eq
+      + ",orderMatters=" + orderMatters;
   }
 
   public String format_using(OutputFormat format) {
+    // System.out.println("Calling SeqComparison.format for: " + repr());
     String comparator = IntComparisonCore.format_comparator
       (format, can_be_lt, can_be_eq, can_be_gt);
 
@@ -98,7 +123,10 @@ public class SeqComparison
     {
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);
-      return name1 + " " + comparator + " " + name1 + " (lexically)";
+      String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
+                          ? " (lexically)"
+                          : "");
+      return name1 + " " + comparator + " " + name1 + lexically;
     }
 
     if (format == OutputFormat.IOA) {
@@ -126,7 +154,14 @@ public class SeqComparison
     }
     num_sc_samples += count;
 
-    int comparison = comparator.compare(v1, v2);
+    int comparison = 0;
+    if (orderMatters) {
+      // Standard element wise comparison
+       comparison = comparator.compare(v1, v2);
+    } else {
+      // Do a double subset comparison
+      comparison = ArraysMDE.isSubset (v1, v2) && ArraysMDE.isSubset (v2, v1) ? 0 : -1;
+    }
     // System.out.println("SeqComparison" + varNames() + ": "
     //                    + "compare(" + ArraysMDE.toString(v1)
     //                    + ", " + ArraysMDE.toString(v2) + ") = " + comparison);

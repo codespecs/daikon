@@ -32,8 +32,11 @@ public final class SequencesJoinFactory  extends BinaryDerivationFactory {
       return null;
     }
 
-    /**    if (!(var1.rep_type == ProglangType.INT_ARRAY)  ||
-	   !(var2.rep_type == ProglangType.INT_ARRAY)) return null;**/
+    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      // Order doesn't matter, then joining is meaningless
+      return null;
+    }
 
     if (var1.derived != null || var2.derived != null) {
       // From derived variables.  Don't derive.

@@ -709,7 +709,7 @@ public abstract class VarInfoName
   }
 
 
-  /** A function of two variables **/
+  /** A function of multiple parameters **/
   public static class FunctionOfN extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -720,11 +720,10 @@ public abstract class VarInfoName
     public final List args;
 
     /**
-     * Construct a new function of two
+     * Construct a new function of multiple arguments.
      * @param function the name of the function
      * @param args the arguments to the function, of type VarInfoName
      **/
-
     public FunctionOfN(String function, List args) {
       Assert.assert(function != null);
       Assert.assert(args != null);
@@ -1786,6 +1785,32 @@ public abstract class VarInfoName
   }
 
   /**
+   * Replace pre states by normal variables, and normal variables by
+   * post states.  We should do this for all variables except for
+   * variables derived from return.  This piggybacks on replacer but
+   * the actual replacement is done elsewhere.
+   **/
+  public static class PostPreConverter
+    extends Replacer
+  {
+
+    public PostPreConverter() {
+      super(null, null);
+    }
+
+    public Object visitSimple(Simple o) {
+      if (o.name.equals("return")) return o;
+      return o.applyPoststate();
+    }
+
+    public Object visitPrestate(Prestate o) {
+      return o.term;
+    }
+
+
+  }
+
+  /**
    * Use to collect all elements in a tree into an inorder-traversal
    * list.  Result includes the root element.
    **/
@@ -1915,9 +1940,20 @@ public abstract class VarInfoName
       unquant.add(o);
       return super.visitElements(o);
     }
+
+    /**
+     * We do *not* want to pull out array members of FunctionOfN
+     * because a FunctionOfN creates a black-box array with respect to
+     * quantification.  (also, otherwise, there may be two or more
+     * arrays that are returned, making the quantification engine
+     * think it's working with 2-d arrays)
+     *
+     **/
+
     public Object visitFunctionOfN(FunctionOfN o) {
-      //o.arg1.accept(this);
-      return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      simples.add(o);
+      return null;
+      //return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
     public Object visitSizeOf(SizeOf o) {
@@ -2102,6 +2138,7 @@ public abstract class VarInfoName
 	  }
 
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
+
 	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
 	  VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();

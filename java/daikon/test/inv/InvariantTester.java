@@ -19,6 +19,14 @@ public class InvariantTester extends TestCase {
     super(name);
   }
 
+  public VarInfo newIntVarInfo(String name) {
+    return new VarInfo(VarInfoName.parse(name),
+		       ProglangType.INT,
+		       ProglangType.INT,
+		       null,	// null Comparability
+		       VarInfoAux.getDefault());
+  }
+
   public void testClassVarnameComparator() {
     Comparator c = new Invariant.ClassVarnameComparator();
 

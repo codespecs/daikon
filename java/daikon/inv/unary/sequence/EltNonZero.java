@@ -48,6 +48,10 @@ public final class EltNonZero
     if (! ppt.var_infos[0].type.baseIsIntegral()) {
       result.pointer_type = true;
       result.override_range = 3;
+      if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
+	// If it's not a number and null doesn't have special meaning...
+	return null;
+      }
     }
     // System.out.println("EltNonZero.instantiate: " + result.format());
     return result;

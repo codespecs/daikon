@@ -187,7 +187,8 @@ public final class SequencesJoin
 						      new VarInfoName[] {var1.name, var2.name}),
 		       decltype,
 		       ProglangType.HASHCODE_ARRAY,
-		       comparability
+		       comparability,
+		       var1.aux
 		       );
   }
 

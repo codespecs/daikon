@@ -27,14 +27,16 @@ public final class SingleSequenceFactory {
       {
         result.add(EltNonZero.instantiate(ppt));
         result.add(NoDuplicates.instantiate(ppt));
-	// result.add(CommonSequence.instantiate(ppt)); // --gustavo--
+	result.add(CommonSequence.instantiate(ppt));
         if (var.type.elementIsIntegral()) {
           result.add(EltwiseIntComparison.instantiate(ppt));
           result.add(EltLowerBound.instantiate(ppt));
           result.add(EltUpperBound.instantiate(ppt));
           result.add(SeqIndexComparison.instantiate(ppt));
           result.add(SeqIndexNonEqual.instantiate(ppt));
-        }
+        } else {
+          result.add(EltwiseIntComparison.instantiate(ppt));
+	}
       }
     }
     return result;

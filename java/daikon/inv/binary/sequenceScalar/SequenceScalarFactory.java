@@ -3,16 +3,20 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 
 import java.util.*;
+import org.apache.log4j.Category;
 
 public final class SequenceScalarFactory {
 
-  public final static boolean debugSequenceScalarFactory = false;
-  // public final static boolean debugSequenceScalarFactory = true;
+  /**
+   * Main debug tracer
+   **/
+  public static final Category debug =
+    Category.getInstance("daikon.inv.binary.sequenceScalar.SequenceScalarFactory");
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt) {
-    if (debugSequenceScalarFactory) {
+    if (debug.isDebugEnabled()) {
       System.out.println("SequenceScalarFactory instantiate " + ppt.name);
     }
 
@@ -38,8 +42,10 @@ public final class SequenceScalarFactory {
       }
     }
 
-    if (! seqvar.eltsCompatible(sclvar))
+    if (! seqvar.eltsCompatible(sclvar)) {
+      debug.debug ("Elements not compatible, returning");
       return null;
+    }
 
     Vector result = new Vector();
     // I could check that the length of the sequence isn't always 0.

@@ -86,7 +86,8 @@ public final class SequencesConcat
 						    new VarInfoName[] {var1.name, var2().name}),
 		       var1.type,
 		       var1.file_rep_type,
-		       var1.comparability);
+		       var1.comparability,
+		       var1.aux);
   }
 
   public String toString() {

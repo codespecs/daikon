@@ -19,6 +19,30 @@ public class OneOfScalarTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(OneOfScalarTester.class));
   }
 
+  public static VarInfo newIntVarInfo(String name) {
+    VarInfo result = new VarInfo(VarInfoName.parse(name),
+                                 ProglangType.INT,
+                                 ProglangType.INT,
+                                 null, // null Comparability
+				 VarInfoAux.getDefault());
+    // [INCR]
+    // // VarInfo.isCanonical() insists that equal_to be non-null.
+    // result.equal_to = result;
+    return result;
+  }
+
+  public static VarInfo newHashcodeVarInfo(String name) {
+    VarInfo result = new VarInfo(VarInfoName.parse(name),
+                                 ProglangType.HASHCODE,
+                                 ProglangType.HASHCODE,
+                                 null, // null Comparability
+				 VarInfoAux.getDefault());
+    // [INCR]
+    // // VarInfo.isCanonical() insists that equal_to be non-null.
+    // result.equal_to = result;
+    return result;
+  }
+
   public OneOfScalarTester(String name) {
     super(name);
   }

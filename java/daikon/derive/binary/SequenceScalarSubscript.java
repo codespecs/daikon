@@ -83,7 +83,7 @@ public final class SequenceScalarSubscript
     ProglangType type = seqvar.type.elementType();
     ProglangType file_rep_type = seqvar.file_rep_type.elementType();
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(name, type, file_rep_type, compar);
+    return new VarInfo(name, type, file_rep_type, compar, VarInfoAux.getDefault());
   }
 
   public  boolean isSameFormula(Derivation other) {

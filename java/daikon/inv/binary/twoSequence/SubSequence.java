@@ -52,6 +52,16 @@ public class SubSequence
       return null;
     }
 
+    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      // Doesn't make sense to instantitate if order doens't matter
+      return null;
+    }
+
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Instantiating " + var1.name + " and " + var2.name);
+    }
+
     return new SubSequence(ppt);
   }
 
@@ -291,6 +301,17 @@ public class SubSequence
       debug.debug ("Returning true because of union or intersection");
       return true;
     }
+
+    if (subvar.derived instanceof SequencesPredicate) {
+      // It's not useful that predicate(x[], b[]) is a subsequence or subset
+      // of x[]
+      SequencesPredicate derived = (SequencesPredicate) subvar.derived;
+      if (derived.var1().equals(supervar)) {
+	debug.debug ("Returning true because of predicate slicing");
+	return true;
+      }
+    }
+
 
 
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();

@@ -6,6 +6,25 @@ import junit.framework.*;
 
 import daikon.*;
 
+
+/**
+ * This tests various aspects of VarInfoName's and transforming
+ * VarInfoName's.  This calls VarInfoNameDriver after parsing all
+ * input files of the name "varInfoNameTest.<foo>".  VarInfoNameDriver
+ * does transform tests, and its output is compared to the
+ * "varInfoNameTest.<foo>.goal" file by this.
+ *
+ * <br> 
+ *
+ * To add a new test case, add a line to the <foo> file and a line to
+ * the goal file with intended output.  Format of the <foo> file is
+ * output method, followed by a variable name.  Output methods are
+ * defined in VarInfoNameDriver.  To add a new transformation method
+ * (which can then be tested in test cases) add a static Handler
+ * implementation to VarInfoNameDriver modeled after one of the ones
+ * already present and add a static {} line after to add the handler
+ * to the list of handlers.
+ **/
 public class VarInfoNameTest
   extends TestCase
 {
@@ -80,11 +99,19 @@ public class VarInfoNameTest
 	  actuals += "\t" + actual[j] + "\n";
 	}
 	fail("Diff error:\nDifferent output encountered.  Expected:\n" +
-	     goals + "Received:\n" + actuals);
+	     goals + "Received:\n" + actuals + " on line: " + i);
       }
     }
     if (actual.length > goal.length) {
-      fail("Diff error:\nActual had extra lines, starting with:\n\t" + actual[goal.length]);
+      StringBuffer extra = new StringBuffer();
+      for (int i = goal.length; i < actual.length; i++) {
+	extra.append ("\t");
+	extra.append (actual[i]);
+	extra.append ("\n");
+      }
+      fail("Diff error:\nActual had extra lines:\n" +
+	   extra.toString());
+      
     }
   }
 

@@ -75,7 +75,8 @@ public final class SequenceStringUnion
     ProglangType type = base1.type;
     ProglangType file_rep_type = base1.file_rep_type;
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(name, type, file_rep_type, compar);
+    VarInfoAux aux = base1.aux;
+    return new VarInfo(name, type, file_rep_type, compar, aux);
   }
 
   public  boolean isSameFormula(Derivation other) {

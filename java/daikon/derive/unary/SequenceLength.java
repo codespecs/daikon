@@ -95,7 +95,7 @@ public final class SequenceLength
     ProglangType ptype = ProglangType.INT;
     ProglangType frtype = ProglangType.INT;
     VarComparability comp = base.comparability.indexType(0);
-    return new VarInfo(name, ptype, frtype, comp);
+    return new VarInfo(name, ptype, frtype, comp, VarInfoAux.getDefault());
   }
 
   public  boolean isSameFormula(Derivation other) {

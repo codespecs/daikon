@@ -48,6 +48,11 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       return null;
     }
 
+    if (!seqvar.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      // Indexing doesn't make sense if order doesn't matter
+      return null;
+    }
+
     // Assert.assert(sclvar.isCanonical()); // [INCR]
     // Assert.assert(seqvar.isCanonical()); // [INCR]
 

@@ -1,16 +1,15 @@
 package daikon;
 
+import daikon.derive.ValueAndModified;
+import daikon.config.Configuration;
+
+import utilMDE.*;
+import org.apache.log4j.Category;
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import org.apache.log4j.Category;
-
-import utilMDE.*;
-
-import daikon.derive.ValueAndModified;
-import daikon.config.Configuration;
 
 public final class FileIO
 {
@@ -175,7 +174,7 @@ public final class FileIO
         } else if (line.equals("explicit")) {
           varcomp_format = VarComparability.EXPLICIT;
         } else {
-          throw new IOException("Unrecognized VarComparability: " + line);
+          throw new FileIOException("Unrecognized VarComparability", reader, filename);
         }
         continue;
       }
@@ -221,9 +220,8 @@ public final class FileIO
 
     // This program point name has already been encountered.
     if (all_ppts.containsName(ppt_name)) {
-      throw new Error("Duplicate declaration of program point " + ppt_name
-                      + " found at file " + filename
-                      + " line " + file.getLineNumber());
+      throw new FileIOException ("Duplicate declaration of program point",
+				 file, filename);
     }
 
     if (!daikon.split.SplitterList.dkconfig_all_splitters) {
@@ -280,7 +278,8 @@ public final class FileIO
 	  ProglangType file_rep_type = ProglangType.INT;
 	  VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
 	  VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
-				     prog_type, file_rep_type, comparability);
+				     prog_type, file_rep_type, comparability,
+                                     VarInfoAux.getDefault());
 	  var_infos.add(line);
 	}
       }
@@ -291,9 +290,7 @@ public final class FileIO
     while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
         if (vi.name == ((VarInfo)var_infos.get(i)).name) {
-          throw new IOException("Duplicate variable name " + vi.name
-				+ " found at file " + filename
-				+ " line " + file.getLineNumber());
+          throw new FileIOException("Duplicate variable name", file, filename);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -325,10 +322,10 @@ public final class FileIO
     if ((line == null) || (line.equals("")))
       return null;
     String varname = line;
-    String proglang_type_string = file.readLine();
+    String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ((varname == null) || (proglang_type_string == null) || (file_rep_type_string == null) || (comparability_string == null))
+    if ((varname == null) || (proglang_type_string_and_aux == null) || (file_rep_type_string == null) || (comparability_string == null))
       throw new Error("End of file " + filename + " while reading variable " + varname + " in declaration of program point " + ppt_name);
     int equals_index = file_rep_type_string.indexOf(" = ");
     String static_constant_value_string = null;
@@ -344,9 +341,32 @@ public final class FileIO
       file_rep_type_string = "java.lang.String";
     }
     /// XXX
-    ProglangType prog_type = ProglangType.parse(proglang_type_string);
-    ProglangType file_rep_type = ProglangType.rep_parse(file_rep_type_string);
-    ProglangType rep_type = file_rep_type.fileTypeToRepType();
+
+    int hash_position = proglang_type_string_and_aux.indexOf ('#');
+    String aux_string = "";
+    if (hash_position == -1) {
+      hash_position = proglang_type_string_and_aux.length();
+    } else {
+      aux_string = proglang_type_string_and_aux.substring(hash_position+1,
+							  proglang_type_string_and_aux.length());
+    }
+
+    String proglang_type_string = proglang_type_string_and_aux.substring(0, hash_position).trim();
+
+
+    ProglangType prog_type;
+    ProglangType file_rep_type;
+    ProglangType rep_type;
+    VarInfoAux aux;
+    try {
+      prog_type = ProglangType.parse(proglang_type_string);
+      file_rep_type = ProglangType.rep_parse(file_rep_type_string);
+      rep_type = file_rep_type.fileTypeToRepType();
+      aux = VarInfoAux.parse (aux_string);
+    } catch (IOException e) {
+      throw new FileIOException (e.getMessage(), file, filename);
+    }
+
     if (static_constant_value_string != null) {
       static_constant_value = rep_type.parse_value(static_constant_value_string);
       // Why can't the value be null?
@@ -357,23 +377,18 @@ public final class FileIO
     // Not a call to Assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
-      throw new IOException("Unsupported (file) representation type " +
-			    file_rep_type.format() +
-			    " (parsed as " + rep_type + ")" +
-			    " for variable " +
-			    varname + " at line " + file.getLineNumber() +
-			    " of file " + filename);
+      throw new FileIOException("Unsupported (file) representation type " +
+				file_rep_type.format() + " (parsed as " +
+				rep_type + ")" + " for variable " +
+				varname, file, filename);
     }
     if (! VarInfo.legalRepType(rep_type)) {
-      throw new IOException("Unsupported (converted) representation type " +
-			    file_rep_type.format() +
-			    " (parsed as " + rep_type + ")" +
-			    " for variable " +
-			    varname + " at line " + file.getLineNumber() +
-			    " of file " + filename);
+      throw new FileIOException("Unsupported (converted) representation type " +
+				file_rep_type.format() + " for variable " +
+				varname, file, filename);
     }
 
-    return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value);
+    return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value, aux);
   }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -807,11 +822,10 @@ public final class FileIO
       }
 
       if (!VarInfoName.parse(line).equals(vi.name)) {
-        throw new Error("Expected variable " + vi.name + ", got " + line
-                        + " for program point " + ppt.name
-                        + " at " + data_trace_filename + " line " + reader.getLineNumber()
-                        // + "\n  VarInfo detail: " + vi.repr()
-                        );
+        throw new FileIOException("Expected variable " + vi.name + ", got " + line
+                        + " for program point " + ppt.name,
+			reader, data_trace_filename);
+
       }
       line = reader.readLine();
       if (line == null) {
@@ -822,14 +836,14 @@ public final class FileIO
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
-        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
+        throw new FileIOException("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
                         + "\n  Expected modbit for variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name);
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-        throw new Error("Bad modbit"
-                        + " at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + ": " + line);
+        throw new FileIOException("Bad modbit"
+                        + " at " + data_trace_filename,
+			reader, data_trace_filename);
       }
       String mod_string = line;
       int mod = ValueTuple.parseModified(line);
@@ -1061,6 +1075,45 @@ public final class FileIO
     // } catch (InvalidClassException e) {    // already extends IOException
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException
+  }
+
+}
+
+
+
+
+class FileIOException extends IOException {
+
+  public final LineNumberReader reader;
+  public final String fileName;
+
+  public FileIOException () {
+    super();
+    reader = null;
+    fileName = null;
+  }
+
+  public FileIOException (String s) {
+    this(s, null, (String)null);
+  }
+
+  public FileIOException (String s, LineNumberReader reader, String fileName) {
+    super(s);
+    this.reader = reader;
+    this.fileName = fileName;
+  }
+
+  public FileIOException (String s, LineNumberReader reader, File file) {
+    this(s, reader, file.getName());
+  }
+
+  public String toString() {
+    if (reader == null || fileName == null) {
+      return super.toString();
+    } else {
+      return "\nError: " + super.toString() + " on line " + reader.getLineNumber() +
+	" of file " + fileName;
+    }
   }
 
 }

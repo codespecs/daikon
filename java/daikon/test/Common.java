@@ -14,7 +14,8 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
 		       ProglangType.INT,
 		       ProglangType.INT,
-		       null); // null Comparability
+		       null, // null Comparability
+                       VarInfoAux.getDefault());
   }
 
   public static VarInfo makeHashcodeVarInfo(String name)
@@ -22,7 +23,8 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
 		       ProglangType.HASHCODE,
 		       ProglangType.HASHCODE,
-		       null); // null Comparability
+		       null, // null Comparability
+                       VarInfoAux.getDefault());
   }
 
 
@@ -31,7 +33,8 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
 		       ProglangType.INT_ARRAY,
 		       ProglangType.INT_ARRAY,
-		       null); // null Comparability
+		       null, // null Comparability
+                       VarInfoAux.getDefault());
   }
 
   public static VarInfo makeHashcodeArrayVarInfo(String name)
@@ -39,7 +42,8 @@ public class Common
     return new VarInfo(VarInfoName.parse(name),
 		       ProglangType.HASHCODE_ARRAY,
 		       ProglangType.HASHCODE_ARRAY,
-		       null); // null Comparability
+		       null, // null Comparability
+                       VarInfoAux.getDefault());
   }
 
   public static PptTopLevel makePptTopLevel(String pptname, VarInfo[] vars)

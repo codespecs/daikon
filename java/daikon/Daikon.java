@@ -105,6 +105,11 @@ public final class Daikon {
   // public static OutputFormat output_style = OutputFormat.ESCJAVA;
   // public static OutputFormat output_style = OutputFormat.SIMPLIFY;
 
+  /**
+   * Whether we are doing output for testing
+   **/
+  public static boolean test_output = false;
+
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
 
@@ -139,6 +144,7 @@ public final class Daikon {
   public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
   public static final String ioa_output_SWITCH = "ioa_output";
+  public static final String test_ioa_output_SWITCH = "test_ioa_output";
   public static final String java_output_SWITCH = "java_output";
   public static final String jml_output_SWITCH = "jml_output";
   public static final String mem_stat_SWITCH = "mem_stat";
@@ -255,6 +261,7 @@ public final class Daikon {
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -349,6 +356,9 @@ public final class Daikon {
 	  output_style = OutputFormat.SIMPLIFY;
 	} else if (ioa_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.IOA;
+	} else if (test_ioa_output_SWITCH.equals(option_name)) {
+	  output_style = OutputFormat.IOA;
+	  test_output = true;
 	} else if (java_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.JAVA;
 	} else if (jml_output_SWITCH.equals(option_name)) {

@@ -6,6 +6,13 @@ import daikon.inv.binary.twoScalar.*;
 import java.lang.reflect.*;
 
 
+/**
+ * That each element from one sequence relates to each corresponding
+ * element in another sequence by a function.
+ *
+ *
+ **/
+
 public class PairwiseFunctionUnary
   extends TwoSequence
 {
@@ -30,7 +37,18 @@ public class PairwiseFunctionUnary
 
   public static PairwiseFunctionUnary instantiate(PptSlice ppt, String methodname, Method function, boolean inverse) {
     if (!dkconfig_enabled) return null;
-    return new PairwiseFunctionUnary(ppt, methodname, function, inverse);
+    PairwiseFunctionUnary result =
+      new PairwiseFunctionUnary(ppt, methodname, function, inverse);
+    // Don't instantiate if the variables can't have order
+    if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
+	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Not instantitating for because order has no meaning: " +
+		     result.var1().name + " and " + result.var2().name);
+      }
+      return null;
+    }
+    return result;
   }
 
   protected Object clone() {

@@ -125,7 +125,8 @@ public final class SequenceStringSubsequence
       }
     }
 
-    return new VarInfo(name, seqvar.type, seqvar.file_rep_type, seqvar.comparability);
+    return new VarInfo(name, seqvar.type, seqvar.file_rep_type,
+                       seqvar.comparability, seqvar.aux);
   }
 
   public  boolean isSameFormula(Derivation other) {

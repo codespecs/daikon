@@ -7,6 +7,12 @@ import junit.framework.*;
 import daikon.*;
 import utilMDE.Assert;
 
+
+/**
+ * This is called by VarInfoName to parse varInfoNameTest<foo> files
+ * and then apply various transformation tests on them.  To add your own test,
+ * follow directions in VarInfoNameTest.
+ **/
 public class VarInfoNameDriver {
 
   // for convenience
@@ -238,6 +244,22 @@ public class VarInfoNameDriver {
     }
   }
   static { handlers.put("poststate", new Poststate()); }
+
+  // VarInfoName.PostPreConverter visitor test
+  private static class PostPreConverter implements Handler {
+    private static VarInfoName.PostPreConverter converter =
+      new VarInfoName.PostPreConverter();
+
+    public void handle(Map vars, String[] args, PrintStream out) {
+      VarInfoName var = (VarInfoName) vars.get(args[0]);
+      VarInfoName result = converter.replace(var);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("postPreConverter", new PostPreConverter()); }
+
+
 
   // VarInfoName applyAdd(int);
   private static class Add implements Handler {

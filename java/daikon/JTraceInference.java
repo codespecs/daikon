@@ -107,7 +107,8 @@ class JTraceInference extends Thread
 
 		    VarInfo vi = new VarInfo(VarInfoName.parse(varname),
 					     prog_type, file_rep_type,
-					     comparability, false, null);
+					     comparability, false, null,
+                                             VarInfoAux.getDefault());
 		    var_infos.add(vi);
 		}
 		VarInfo[] vi_array =

@@ -385,6 +385,8 @@ public abstract class Invariant
     public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
     /* IOA language */
     public static final OutputFormat IOA = new OutputFormat("IOA");
+    /* IOA language, sans invariant numbering */
+    public static final OutputFormat IOATEST = new OutputFormat("IOA_test");
     /* Java boolean expression */
     public static final OutputFormat JAVA = new OutputFormat("Java");
     /* Java Modeling Language */
@@ -439,6 +441,20 @@ public abstract class Invariant
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + "needs to be implemented: " + format();
+  }
+
+  /**
+   * @return standard "format is not expressible" (indicating that the
+   * formalism is not powerful enough to express the logical formula) for
+   * the given requested format.  Made public so cores can call it.
+   **/
+  public String format_inexpressible(OutputFormat request) {
+    if ((request == OutputFormat.IOA) && debugPrint.isDebugEnabled()) {
+      debugPrint.debug ("Format_ioa: " + this.toString());
+    }
+    String classname = this.getClass().getName();
+    return "warning: method " + classname + ".format(" + request + ")"
+      + "cannot be expressed in this format: " + format();
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.

@@ -21,6 +21,30 @@ public class OneOfSequenceTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(OneOfSequenceTester.class));
   }
 
+  public static VarInfo newIntArrayVarInfo(String name) {
+    VarInfo result = new VarInfo(VarInfoName.parse(name),
+                                 ProglangType.INT_ARRAY,
+                                 ProglangType.INT_ARRAY,
+                                 null, // null Comparability
+				 VarInfoAux.getDefault());
+    // [INCR]
+    // // VarInfo.isCanonical() insists that equal_to be non-null.
+    // result.equal_to = result;
+    return result;
+  }
+
+  public static VarInfo newHashcodeArrayVarInfo(String name) {
+    VarInfo result = new VarInfo(VarInfoName.parse(name),
+                                 ProglangType.HASHCODE_ARRAY,
+                                 ProglangType.HASHCODE_ARRAY,
+                                 null, // null Comparability
+				 VarInfoAux.getDefault());
+    // [INCR]
+    // // VarInfo.isCanonical() insists that equal_to be non-null.
+    // result.equal_to = result;
+    return result;
+  }
+
   public OneOfSequenceTester(String name) {
     super(name);
   }

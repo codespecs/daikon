@@ -55,9 +55,15 @@ public class NonZero
     }
 
     NonZero result = new NonZero(ppt);
+
+
     if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
       result.pointer_type = true;
       result.override_range = 3;
+      if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
+	// If it's not a number and null doesn't have special meaning...
+	return null;
+      }
     }
     return result;
   }

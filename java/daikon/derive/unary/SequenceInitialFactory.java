@@ -2,8 +2,12 @@ package daikon.derive.unary;
 
 import daikon.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 public final class SequenceInitialFactory extends UnaryDerivationFactory {
+
+  public static final Category debug =
+    Category.getInstance("daikon.derive.binary.SequenceInitialFactory");
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");

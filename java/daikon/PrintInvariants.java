@@ -56,6 +56,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -87,6 +88,9 @@ public class PrintInvariants {
 	  Daikon.output_style = OutputFormat.JAVA;
 	} else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
 	  Daikon.output_style = OutputFormat.IOA;
+	} else if (Daikon.test_ioa_output_SWITCH.equals(option_name)) {
+	  Daikon.output_style = OutputFormat.IOATEST;
+	  Daikon.test_output = true;
 	} else if (Daikon.jml_output_SWITCH.equals(option_name)) {
 	  Daikon.output_style = OutputFormat.JML;
 	} else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
@@ -149,8 +153,6 @@ public class PrintInvariants {
     pw.flush();
   }
 
-  // In original (Python) implementation, known as print_invariants_ppt.
-  // I may still want to integrate some more of its logic here.
   /**
    * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
@@ -188,15 +190,9 @@ public class PrintInvariants {
 
   }
 
-
-  /** Print invariants for a single program point. */
-  public static void print_invariants(PptTopLevel ppt, PrintWriter out) {
-    // System.out.println("print_invariants(" + ppt.name + ")");
-
-    // make names easier to read before printing
-    ppt.simplify_variable_names();
-
-    // System.out.println("This = " + this + ", Name(2) = " + name + " = " + ppt_name);
+  public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
+  {
+    //System.out.println("entering print_sample_data\n");
     String better_name = ppt.name;
     {
       // Replace <init> with name of class
@@ -225,7 +221,6 @@ public class PrintInvariants {
         + better_name.substring(colon_pos);
     }
 
-
     if (Daikon.output_num_samples) {
       int num_samps = -111; // [[INCR]]
       out.println(better_name + "  " + nplural(num_samps, "sample"));
@@ -242,10 +237,16 @@ public class PrintInvariants {
         out.print(" " + ppt.var_infos[i].name);
       out.println();
     }
+    //System.out.println("entering print_sample_data\n");
+  }
+
+  public static void print_modified_vars(PptTopLevel ppt, PrintWriter out)
+  {
     Vector modified_vars = new Vector();
     Vector modified_primitive_args = new Vector();
     Vector unmodified_vars = new Vector();
     Vector unmodified_orig_vars = new Vector();
+
     for (int i=0; i<ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
       // This test is purely an optimization.
@@ -379,49 +380,17 @@ public class PrintInvariants {
       }
     }
 
-    // Assert.assert(check_modbits()); // [INCR]
+  }
 
-    // Dump some debugging info, if enabled
-    if (Invariant.debugPrint.isDebugEnabled()) {
-      // out.println("Views:");
-      // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      //   PptSlice slice = (PptSlice) itor.next();
-      //   out.println("  " + slice.name);
-      //   for (int i=0; i<slice.invs.size(); i++) {
-      //     Invariant inv = (Invariant) slice.invs.elementAt(i);
-      //     out.println("    " + inv.repr());
-      //   }
-      // }
-
-      Invariant.debugPrint.debug("    Variables:");
-      for (int i=0; i<ppt.var_infos.length; i++) {
-        VarInfo vi = ppt.var_infos[i];
-        PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
-        PptSlice slice1 = ppt_tl.findSlice(vi);
-        out.print("      " + vi.name
-		  + " constant=" + vi.isStaticConstant()
-		  // + " canonical=" + vi.isCanonical() // [INCR]
-		  // + " equal_to=" + vi.equal_to.name // [INCR]
-		  );
-        // if (slice1 == null) {
-        //   out.println(", no slice");
-        // } else {
-        //   out.println(" slice=" + slice1
-        //               + "=" + slice1.name
-        //               + " num_values=" + slice1.num_values()
-        //               + " num_samples=" + slice1.num_samples());
-        //   // slice1.values_cache.dump();
-        // }
-      }
-    }
-
-    // Count statistics on variables (canonical, missing, etc.)
+  // Count statistics (via Global) on variables (canonical, missing, etc.)
+  public static void count_global_stats(PptTopLevel ppt)
+  {
     for (int i=0; i<ppt.var_infos.length; i++) {
       /* [INCR]
-      if (! var_infos[i].isCanonical()) {
+      if (! ppt.var_infos[i].isCanonical()) {
         Global.non_canonical_variables++;
-      } else if (var_infos[i].canBeMissingCheck()) {
-	Global.can_be_missing_variables++;
+      } else if (ppt.var_infos[i].canBeMissingCheck()) {
+        Global.can_be_missing_variables++;
       } else {
         Global.canonical_variables++;
       }
@@ -430,268 +399,290 @@ public class PrintInvariants {
         Global.derived_variables++;
       }
     }
+  }
 
-    int invCounter = 0; // Counter printed invariants for this program point
+  /* [INCR]
+  private static Vector get_equal_vars(VarInfo vi) {
+    Vector equal_vars = null;
 
-    // First, print the equality invariants.  They don't show up in the
-    // below because one of the two variables is non-canonical!
-    // This technique is a bit non-orthogonal, but probably fine.
-    // We might do no output if all the other variables are vacuous.
-    // We should have already equal_to for each VarInfo.
+    if (includeObviouslyEqual) {
+      equal_vars = vi.equalTo();
+    } else {
+      equal_vars = vi.equalToNonobvious();
+    }
+    return(equal_vars);
+  }
+  */ // ... [INCR]
 
-    for (int i=0; i<ppt.var_infos.length; i++) {
-      VarInfo vi = ppt.var_infos[i];
-      // System.out.println("Considering equality for "
-      //                    + (vi.isCanonical() ? "" : "non")
-      //                    + "canonical var " + vi.name.name());
-      // if (vi.isCanonical()) // [INCR] XXX
+  private static Vector get_obviously_equal(VarInfo vi)
+  {
+    Vector obviously_equal = null;
+
+    /* [INCR]
+    if (includeObviouslyEqual)
       {
+	obviously_equal = new Vector(vi.equalTo());
+	obviously_equal.removeAll(vi.equalToNonobvious());
 
-	// switch commented lines to include obviously equal in output
-	Vector equal_vars = new Vector(); // vi.equalToNonobvious(); // [INCR] XXX
-	Vector obviously_equal = new Vector();
-	// Vector equal_vars = vi.equalTo();
-	// Vector obviously_equal = new Vector(equal_vars);
-	// obviously_equal.removeAll(vi.equalToNonobvious());
-
-        // System.out.println("equal_vars.size() = " + equal_vars.size());
-        // System.out.println("Redundant due to simplify = "
-        //                    + (Daikon.suppress_redundant_invariants_with_simplify
-        //                       && redundant_invs.contains(vi)));
-
-
-	if (debug.isDebugEnabled()) {
-	  debug.debug("Trying to print equality for " + ppt.ppt_name + " + " + equal_vars);
-	}
-
-
-        if (equal_vars.size() > 0 &&
-	    // suppress if the equality invariant is implied via simplify
-	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
-		ppt.redundant_invs.contains(vi)))) {
-
-
-
-	  invCounter++;
-	  if (Daikon.output_style == OutputFormat.DAIKON) {
-            StringBuffer sb = new StringBuffer(vi.name.name());
-            for (int j=0; j<equal_vars.size(); j++) {
-              VarInfo other = (VarInfo) equal_vars.elementAt(j);
-              sb.append(" == "); // "interned"
-              sb.append(other.name);
-	      if (obviously_equal.contains(other)) {
-		sb.append(" (obviously)");
-	      }
-            }
-            PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
-            PptSlice slice1 = ppt_tl.findSlice(vi);
-            if (Daikon.output_num_samples) {
-              if (slice1 != null) {
-                sb.append("\t\t(" +
-                          // [INCR] nplural(slice1.num_values(), "
-                          nplural(slice1.num_samples(), "sample") + ")");
-              } else {
-                // sb.append("\t\t(no slice)");
-              }
-            }
-            out.println(sb.toString());
-	  } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
-	    equal_vars.add(0, vi);
-	    // Separate out those variables which are valid in ESC.
-	    List valid_equiv = new ArrayList(); // [VarInfo]
-	    List invalid_equiv = new ArrayList(); // [VarInfo]
-            for (int j=0; j<equal_vars.size(); j++) {
-              VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (other.isDerivedSequenceMinMaxSum()) {
-		break;
-	      }
-	      if (other.isValidEscExpression()) {
-		valid_equiv.add(other);
-	      } else {
-		invalid_equiv.add(other);
-	      }
-	    }
-	    // Choose a leader, preferring the valid variables.
-	    VarInfo leader;
-	    if (valid_equiv.size() > 0) {
-	      leader = (VarInfo) valid_equiv.get(0);
-	    } else {
-	      Assert.assert(invalid_equiv.size() > 0);
-	      leader = (VarInfo) invalid_equiv.get(0);
-	    }
-	    // Print the equality statements, stating expressible ones first.
-	    equal_vars.clear();
-	    equal_vars.addAll(valid_equiv);
-	    equal_vars.addAll(invalid_equiv);
-            for (int j=0; j<equal_vars.size(); j++) {
-	      VarInfo other = (VarInfo) equal_vars.get(j);
-	      if (other == leader) continue;
-	      if (j >= valid_equiv.size()) {
-		out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
-	      }
-	      if (leader.rep_type.isArray()) {
-		String[] form =
-		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-		    { leader.name, other.name }, true); // elementwise
-                out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-              } else {
-		out.println(leader.name.esc_name() + " == " + other.name.esc_name());
-	      }
-	      if (obviously_equal.contains(other)) {
-		out.println("    (obviously)");
-	      }
-            }
-          } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
-            for (int j=0; j<equal_vars.size(); j++) {
-              VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (other.isDerivedSequenceMinMaxSum())
-		break;
-              if (vi.rep_type.isArray()) {
-		String[] form =
-		  VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-		    { vi.name, other.name }, true); // elementwise
-                out.println(form[0] + "(EQ " + form[1] + " " + form[2] + " )" + form[3]);
-              } else {
-		out.println("(EQ " + vi.name.simplify_name() +
-			    " " + other.name.simplify_name() + ")");
-	      }
-            }
-	  } else if (Daikon.output_style == OutputFormat.IOA) {
-	    StringBuffer sb = new StringBuffer();
-	    String invName = get_ioa_invname (invCounter, ppt);
-	    debug.debug("Printing equality for " + invName);
-	    sb.append("invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ");
-	    sb.append (get_ioa_precondition (invCounter, ppt));
-	    sb.append ("(" + vi.name.ioa_name() + " = " +
-		       ((VarInfo) equal_vars.get(0)).name.ioa_name() + ")");
-            for (int j = 1; j < equal_vars.size(); j++) {
-              VarInfo one = (VarInfo) equal_vars.get(j-1);
-              VarInfo two = (VarInfo) equal_vars.get(j);
-	      sb.append (" /\\ ");
-	      sb.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
-	    }
-	    out.println(sb.toString());
-	  } else if (Daikon.output_style == OutputFormat.JAVA) {
-	    for (int j = 0; j < equal_vars.size(); j++) {
-	      VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (other.isDerivedSequenceMinMaxSum())
-		break;
-	      if (vi.rep_type.isArray()) {
-		String[] form =
-		  VarInfoName.QuantHelper.format_java(new VarInfoName[]
-		    { vi.name, other.name }, true); // elementwise
-		out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-	      } else {
-		out.println(vi.name.java_name() + " == " + other.name.java_name());
-	      }
-	      if (obviously_equal.contains(other)) {
-		out.println("    (obviously)");
-	      }
-	    }
-	  } else {
-	    throw new IllegalStateException("Unknown output mode");
-          }
-        }
+	// System.out.println("equal_vars.size() = " + equal_vars.size());
+	// System.out.println("Redundant due to simplify = "
+	//                    + (Daikon.suppress_redundant_invariants_with_simplify
+	//                       && redundant_invs.contains(vi)));
       }
+    else
+      {
+	obviously_equal = new Vector();
+      }
+    */ // ... [INCR]
+    obviously_equal = new Vector(); // [INCR]
+
+    return(obviously_equal);
+  }
+
+  public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt)
+  {
+    // switch commented lines to include obviously equal in output
+    Vector equal_vars = new Vector(); // get_equal_vars(); // [INCR] XXX
+    Vector obviously_equal = get_obviously_equal(vi);
+
+    if (Daikon.output_style == OutputFormat.DAIKON) {
+      StringBuffer sb = new StringBuffer(vi.name.name());
+      for (int j=0; j<equal_vars.size(); j++) {
+	VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	sb.append(" == "); // "interned"
+	sb.append(other.name);
+	if (obviously_equal.contains(other)) {
+	  sb.append(" (obviously)");
+	}
+      }
+      PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+      PptSlice slice1 = ppt_tl.findSlice(vi);
+      if (Daikon.output_num_samples) {
+	if (slice1 != null) {
+	  sb.append("\t\t(" +
+		    // [INCR] nplural(slice1.num_values(), "value") + ", " +
+		    nplural(slice1.num_samples(), "sample") + ")");
+	} else {
+	  // sb.append("\t\t(no slice)");
+	}
+      }
+      out.println(sb.toString());
+    } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
+      equal_vars.add(0, vi);
+      // Separate out those variables which are valid in ESC.
+      List valid_equiv = new ArrayList(); // [VarInfo]
+      List invalid_equiv = new ArrayList(); // [VarInfo]
+      for (int j=0; j<equal_vars.size(); j++) {
+	VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	if (other.isDerivedSequenceMinMaxSum()) {
+	  break;
+	}
+	if (other.isValidEscExpression()) {
+	  valid_equiv.add(other);
+	} else {
+	  invalid_equiv.add(other);
+	}
+      }
+      // Choose a leader, preferring the valid variables.
+      VarInfo leader;
+      if (valid_equiv.size() > 0) {
+	leader = (VarInfo) valid_equiv.get(0);
+      } else {
+	Assert.assert(invalid_equiv.size() > 0);
+	leader = (VarInfo) invalid_equiv.get(0);
+      }
+      // Print the equality statements, stating expressible ones first.
+      equal_vars.clear();
+      equal_vars.addAll(valid_equiv);
+      equal_vars.addAll(invalid_equiv);
+      for (int j=0; j<equal_vars.size(); j++) {
+	VarInfo other = (VarInfo) equal_vars.get(j);
+	if (other == leader) continue;
+	if (j >= valid_equiv.size()) {
+	  out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
+	}
+	if (leader.rep_type.isArray()) {
+	  String[] form =
+	    VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	      { leader.name, other.name }, true); // elementwise
+	  out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+	} else {
+	  out.println(leader.name.esc_name() + " == " + other.name.esc_name());
+	}
+	if (obviously_equal.contains(other)) {
+	  out.println("    (obviously)");
+	}
+      }
+    } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
+      for (int j=0; j<equal_vars.size(); j++) {
+	VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	if (other.isDerivedSequenceMinMaxSum())
+	  break;
+	if (vi.rep_type.isArray()) {
+	  String[] form =
+	    VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	      { vi.name, other.name }, true); // elementwise
+	  out.println(form[0] + "(EQ " + form[1] + " " + form[2] + " )" + form[3]);
+	} else {
+	  out.println("(EQ " + vi.name.simplify_name() +
+		      " " + other.name.simplify_name() + ")");
+	}
+      }
+    } else if (Daikon.output_style == OutputFormat.IOA) {
+      StringBuffer sb = new StringBuffer();
+
+      String invName = get_ioa_invname (invCounter, ppt);
+      if (Invariant.debugPrint.isDebugEnabled()) {
+	Invariant.debugPrint.debug("Printing equality for " + invName);
+      }
+      sb.append("invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ");
+      sb.append (get_ioa_precondition (invCounter, ppt));
+
+      StringBuffer sb2 = new StringBuffer();
+      sb2.append ("(" + vi.name.ioa_name() + " = " +
+		  ((VarInfo) equal_vars.get(0)).name.ioa_name() + ")");
+      for (int j = 1; j < equal_vars.size(); j++) {
+	VarInfo one = (VarInfo) equal_vars.get(j-1);
+	VarInfo two = (VarInfo) equal_vars.get(j);
+	sb2.append (" /\\ ");
+	sb2.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
+      }
+
+      String rawOutput = sb2.toString();
+      int startPos = rawOutput.indexOf("anIndex");
+      if (startPos != -1) {
+	int endPos = rawOutput.indexOf ("]", startPos);
+	String qvar = rawOutput.substring (startPos, endPos);
+	rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
+      }
+
+      sb.append(rawOutput);
+      out.println(sb.toString());
+    } else if (Daikon.output_style == OutputFormat.JAVA) {
+      for (int j = 0; j < equal_vars.size(); j++) {
+	VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	if (other.isDerivedSequenceMinMaxSum())
+	  break;
+	if (vi.rep_type.isArray()) {
+	  String[] form =
+	    VarInfoName.QuantHelper.format_java(new VarInfoName[]
+	      { vi.name, other.name }, true); // elementwise
+	  out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+	} else {
+	  out.println(vi.name.java_name() + " == " + other.name.java_name());
+	}
+	if (obviously_equal.contains(other)) {
+	  out.println("    (obviously)");
+	}
+      }
+    } else {
+      throw new IllegalStateException("Unknown output mode");
+    }
+  }
+
+  /* [INCR]
+  public static boolean accept_equality_invariant(PptTopLevel ppt, VarInfo vi)
+  {
+    return ((get_equal_vars(vi).size() > 0) &&
+	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
+		ppt.redundant_invs.contains(vi))));
+  }
+  */ // ... [INCR]
+
+  //note - this rejects equality invariants out of hand
+  public static boolean accept_invariant(Invariant inv)
+  {
+    if ((inv instanceof Comparison) && inv.isExact())
+      {
+	return(false);
+      }
+
+    if(!inv.isWorthPrinting())
+      {
+	return(false);
+      }
+
+    if (Daikon.suppress_redundant_invariants_with_simplify &&
+	inv.ppt.parent.redundant_invs.contains(inv))
+      {
+	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
+	return(false);
+      }
+
+    if (Daikon.output_style != OutputFormat.DAIKON ||
+	Daikon.output_style != OutputFormat.IOA) {
+      // don't print out invariants with min(), max(), or sum() variables
+      boolean mms = false;
+      VarInfo[] varbls = inv.ppt.var_infos;
+      for (int v=0; !mms && v<varbls.length; v++) {
+	mms |= varbls[v].isDerivedSequenceMinMaxSum();
+      }
+      if (mms) { return(false); }
+    }
+    return(true);
+  }
+
+  public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt)
+  {
+    // [INCR] int num_vals = inv.ppt.num_values();
+    int inv_num_samps = inv.ppt.num_samples();
+    String num_values_samples = "\t\t(" +
+      // [INCR] nplural(num_vals, "value") + ", " +
+      nplural(inv_num_samps, "sample") + ")";
+
+    String inv_rep;
+    // All this should turn into simply a call to format_using.
+    if (Daikon.output_style == OutputFormat.DAIKON) {
+      inv_rep = inv.format_using(Daikon.output_style);
+    } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
+      if (inv.isValidEscExpression()) {
+	inv_rep = inv.format_using(Daikon.output_style);
+      } else {
+	inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+      }
+    } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
+      inv_rep = inv.format_using(Daikon.output_style);
+    } else if (Daikon.output_style == OutputFormat.IOA) {
+      String invName = get_ioa_invname (invCounter, ppt);
+      if (Invariant.debugPrint.isDebugEnabled()) {
+	Invariant.debugPrint.debug ("Printing normal for " + invName + " with inv " +
+			  inv.getClass().getName());
+      }
+
+      inv_rep = "invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ";
+
+      inv_rep += get_ioa_precondition (invCounter, ppt);
+      // We look for indexed variables and add fake quantifiers to
+      // the left.  Should we be doing this with visitors and the
+      // quantification engine?  Maybe, but then again, Daikon
+      // doesn't really know what it means to sample.
+      String rawOutput = inv.format_using(Daikon.output_style);
+      int startPos = rawOutput.indexOf("anIndex");
+      if (startPos != -1) {
+	int endPos = rawOutput.indexOf ("]", startPos);
+	String qvar = rawOutput.substring (startPos, endPos);
+	rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
+      }
+      inv_rep += rawOutput;
+      if (PptTopLevel.debug.isDebugEnabled()) {
+	PptTopLevel.debug.debug (inv.repr());
+      }
+    } else if (Daikon.output_style == OutputFormat.JAVA) {
+      inv_rep = inv.format_using(Daikon.output_style);
+    } else {
+      throw new IllegalStateException("Unknown output mode");
+    }
+    if (Daikon.output_num_samples) {
+      inv_rep += num_values_samples;
     }
 
-    // I could instead sort the PptSlice objects, then sort the invariants
-    // in each PptSlice.  That would be more efficient, but this is
-    // probably not a bottleneck anyway.
-    Vector invs_vector = ppt.invariants_vector();
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
-    Arrays.sort(invs_array, PptTopLevel.icfp);
+    if (Invariant.debugPrint.isDebugEnabled()) {
+      Invariant.debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
+    }
 
-    Global.non_falsified_invariants += invs_array.length;
-    for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
-      Invariant inv = invs_array[ia_index];
-      // [INCR] int num_vals = inv.ppt.num_values();
-      int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" +
-	// [INCR] nplural(num_vals, "value") + ", " +
-        nplural(inv_num_samps, "sample") + ")";
+    out.println(inv_rep);
 
-      // I could imagine printing information about the PptSlice
-      // if it has changed since the last Invariant I examined.
-      PptSlice slice = inv.ppt;
-      if (Invariant.debugPrint.isDebugEnabled()) {
-        Invariant.debugPrint.debug("Slice: " + slice.varNames() + "  "
-				   + slice.num_samples() + " samples");
-        Invariant.debugPrint.debug("    Samples breakdown: "
-				   + slice.tuplemod_samples_summary());
-        // slice.values_cache.dump();
-      }
-      Assert.assert(slice.check_modbits());
-
-      // isWorthPrinting checks many conditions for suppression
-      if (! inv.isWorthPrinting()) {
-	// out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
-	continue;
-      }
-
-      // Equality invariants were printed earlier.
-      if ((inv instanceof Comparison) && inv.isExact()) {
-	// out.println("Not worth printing exact comparison: " + inv.format() + ", " + inv.repr());
-        continue;
-      }
-
-      // Redundancy is separate from worth printing for now, but it
-      // probably should not be, in general.
-      if (Daikon.suppress_redundant_invariants_with_simplify &&
-	  inv.ppt.parent.redundant_invs.contains(inv)) {
-	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
-	continue;
-      }
-
-      if (Daikon.output_style != OutputFormat.DAIKON ||
-	  Daikon.output_style != OutputFormat.IOA) {
-	// don't print out invariants with min(), max(), or sum() variables
-	boolean mms = false;
-	VarInfo[] varbls = inv.ppt.var_infos;
-	for (int v=0; !mms && v<varbls.length; v++) {
-	  mms |= varbls[v].isDerivedSequenceMinMaxSum();
-	}
-	if (mms) { continue; }
-      }
-
-      String inv_rep;
-      invCounter++;
-      if ((Daikon.output_style == OutputFormat.JAVA)
-	  || (Daikon.output_style == OutputFormat.DAIKON)
-	  || (Daikon.output_style == OutputFormat.ESCJAVA)
-	  || (Daikon.output_style == OutputFormat.SIMPLIFY)
-	  || (Daikon.output_style == OutputFormat.JML))
-      {
-	inv_rep = inv.format_using(Daikon.output_style);
-      } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
-	if (inv.isValidEscExpression()) {
-	  inv_rep = inv.format_using(OutputFormat.ESCJAVA);
-	} else {
-	  inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
-	}
-      } else if (Daikon.output_style == OutputFormat.IOA) {
-	String invName = get_ioa_invname (invCounter, ppt);
-	if (debug.isDebugEnabled()) {
-	  debug.debug ("Printing normal for " + invName + " with inv " + inv.getClass().getName());
-	}
-	inv_rep = "invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ";
-	inv_rep += get_ioa_precondition (invCounter, ppt);
-	inv_rep += inv.format_using(OutputFormat.IOA);
-	if (PptTopLevel.debug.isDebugEnabled()) {
-	 PptTopLevel.debug.debug (inv.repr());
-	}
-      } else {
-	throw new IllegalStateException("Unknown output mode");
-      }
-      if (Daikon.output_num_samples) {
-        inv_rep += num_values_samples;
-      }
-      out.println(inv_rep);
-      if (Invariant.debugPrint.isDebugEnabled()) {
-        Invariant.debugPrint.debug("  [" + inv.repr_prob() + "]");
-      }
-      Global.reported_invariants++;
-
+    // this is not guaranteed to work or even compiled if uncommented.
 //    {
 //  	// Print out any subexpressions of this which are
 //  	// non-canonical (and thus could be replaced with a canonical
@@ -711,14 +702,112 @@ public class PrintInvariants {
 //  	  }
 //  	}
 //    }
+  }
+
+  public static boolean includeObviouslyEqual = false;
+
+  /***********************************************************/
+  /** Print invariants for a single program point. */
+  public static void print_invariants(PptTopLevel ppt, PrintWriter out) {
+    // System.out.println("print_invariants(" + ppt.name + ")");
+
+    // make names easier to read before printing
+    ppt.simplify_variable_names();
+
+    print_sample_data(ppt, out);
+    print_modified_vars(ppt, out);
+
+    // Dump some debugging info, if enabled
+    if (Invariant.debugPrint.isDebugEnabled()) {
+      Invariant.debugPrint.debug("    Variables:");
+      for (int i=0; i<ppt.var_infos.length; i++) {
+        VarInfo vi = ppt.var_infos[i];
+        PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+        PptSlice slice1 = ppt_tl.findSlice(vi);
+        out.print("      " + vi.name
+		  // + " constant=" + vi.isConstant() // [INCR]
+		  // + " canonical=" + vi.isCanonical() // [INCR]
+		  // + " equal_to=" + vi.equal_to.name // [INCR]
+                  );
+      }
+    }
+
+    // Count statistics (via Global) on variables (canonical, missing, etc.)
+    count_global_stats(ppt);
+
+    int invCounter = 0; // Count printed invariants for this program point
+
+    // First, print the equality invariants.  They don't show up in the
+    // below because one of the two variables is non-canonical!
+    // This technique is a bit non-orthogonal, but probably fine.
+    // We might do no output if all the other variables are vacuous.
+    // We should have already equal_to for each VarInfo.
+
+    for (int i=0; i<ppt.var_infos.length; i++) {
+      VarInfo vi = ppt.var_infos[i];
+
+      // if (vi.isCanonical()) // [INCR] XXX
+        {
+          // if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
+          {
+	  invCounter++;
+	  print_equality_invariants(vi, out, invCounter, ppt);
+        }
+      }
+    }
+
+    // I could instead sort the PptSlice objects, then sort the invariants
+    // in each PptSlice.  That would be more efficient, but this is
+    // probably not a bottleneck anyway.
+    Vector invs_vector = ppt.invariants_vector();
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
+    Arrays.sort(invs_array, PptTopLevel.icfp);
+
+    Global.non_falsified_invariants += invs_array.length;
+    for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
+      Invariant inv = invs_array[ia_index];
+
+      // I could imagine printing information about the PptSlice
+      // if it has changed since the last Invariant I examined.
+      PptSlice slice = inv.ppt;
+      if (Invariant.debugPrint.isDebugEnabled()) {
+        Invariant.debugPrint.debug("Slice: " + slice.varNames() + "  "
+				   + slice.num_samples() + " samples");
+        Invariant.debugPrint.debug("    Samples breakdown: "
+				   + slice.tuplemod_samples_summary());
+        // slice.values_cache.dump();
+      }
+      Assert.assert(slice.check_modbits());
+
+      if(accept_invariant(inv))
+	{
+	  invCounter++;
+	  Global.reported_invariants++;
+	  print_invariant(inv, out, invCounter, ppt);
+	}
     }
   }
 
 
+  /**
+   * Get name of invariant for IOA output, since IOA invariants have
+   * to be given unique names.  The name can be derived from a count
+   * of the invariants and the program point name.  We simply change
+   * the ppt name's characters to be valid IOA syntax.
+   *
+   *
+   **/
+
   public static String get_ioa_invname (int numbering, Ppt ppt) {
-    if (ppt.ppt_name.isClassStaticSynthetic()) return "Inv_" + numbering;
-    String replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
-    return "Inv_" + replaced + numbering;
+    if (Daikon.test_output) {
+      if (ppt.ppt_name.isClassStaticSynthetic()) return "Inv";
+      String replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+      return "Inv_" + replaced;
+    } else {
+      if (ppt.ppt_name.isClassStaticSynthetic()) return "Inv_" + numbering;
+      String replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+      return "Inv_" + replaced + numbering;
+    }
   }
 
   public static String get_ioa_precondition (int numbering, Ppt ppt) {

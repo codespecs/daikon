@@ -27,7 +27,7 @@ public final class VarInfo
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020614L;
 
   /**
    * The program point this variable is in.
@@ -59,6 +59,9 @@ public final class VarInfo
 
   /** Comparability info **/
   public VarComparability comparability;
+
+  /** Auxiliary info **/
+  public VarInfoAux aux;
 
   // Obtaining values
 
@@ -185,15 +188,17 @@ public final class VarInfo
             );
   }
 
-  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
+  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
+		 VarComparability comparability, boolean is_static_constant,
+		 Object static_constant_value, VarInfoAux aux) {
     Assert.assert(file_rep_type != null);
     Assert.assert(legalFileRepType(file_rep_type),
                   "Unsupported representation type " + file_rep_type.format()
                   + " for variable " + name);
-
     // Ensure that the type and rep type are somewhat consistent
     Assert.assert(type.pseudoDimensions() >= file_rep_type.dimensions(),
 		  "Types dimensions incompatibility: " + type + " vs. " + file_rep_type);
+    Assert.assert(aux != null);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
@@ -205,6 +210,7 @@ public final class VarInfo
     this.comparability = comparability;
     this.is_static_constant = is_static_constant;
     this.static_constant_value = static_constant_value;
+    this.aux = aux;
 
     // Indicates that these haven't yet been set to reasonable values.
     value_index = -1;
@@ -215,12 +221,14 @@ public final class VarInfo
     // exact_nonunary_invariants = new Vector(2); // [INCR]
   }
 
-  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type, VarComparability comparability) {
-    this(name, type, file_rep_type, comparability, false, null);
+  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
+		 VarComparability comparability, VarInfoAux aux) {
+    this(name, type, file_rep_type, comparability, false, null, aux);
   }
 
   public VarInfo(VarInfo vi) {
-    this(vi.name, vi.type, vi.file_rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
+    this(vi.name, vi.type, vi.file_rep_type, vi.comparability,
+	 vi.is_static_constant, vi.static_constant_value, vi.aux);
     postState = vi.postState;
   }
 
@@ -228,7 +236,7 @@ public final class VarInfo
   public static VarInfo origVarInfo(VarInfo vi) {
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.file_rep_type,
-                                 vi.comparability.makeAlias(vi.name));
+                                 vi.comparability.makeAlias(vi.name), vi.aux);
     result.postState = vi;
     return result;
   }
@@ -848,7 +856,7 @@ public final class VarInfo
       }
 
       // For esc_output and java_output, omit noting that varibles are unmodified.
-      if (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC || Daikon.output_style == Daikon.OUTPUT_STYLE_JAVA) {
+      if (Daikon.output_style == OutputFormat.ESC || Daikon.output_style == OutputFormat.JAVA) {
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }
