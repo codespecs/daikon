@@ -29,13 +29,14 @@ public class PptName
     int dot = pre_sep.lastIndexOf('.');
     int lparen = pre_sep.indexOf('(');
     if (lparen == -1) {
-      cls = pre_sep;
+      cls = pre_sep.intern();
       method = null;
     } else {
-      cls = name.substring(0, dot);
-      method = name.substring(dot + 1);
+      Assert.assert(dot < lparen);
+      cls = pre_sep.substring(0, dot).intern();
+      method = pre_sep.substring(dot + 1).intern();
     }
-    point = post_sep;
+    point = post_sep.intern();
   }
 
   /**
@@ -46,8 +47,6 @@ public class PptName
     cls = (className != null) ? className.intern() : null;
     method = (methodName != null) ? methodName.intern() : null;
     point = (pointName != null) ? pointName.intern() : null;
-
-    //System.out.println("\n\n" + className + " -- " + methodName + " -- " + pointName + "\n");
   }
 
   /**
@@ -82,6 +81,18 @@ public class PptName
   {
     return method;
   }
+
+  /**
+   * @return same as getFullMethodName(), except without the return
+    * type information
+    **/
+   public String getFullMethodNameWithoutReturn()
+   {
+     if (method == null) return null;
+     int rparen = method.indexOf(')');
+     Assert.assert(rparen >= 0);
+     return method.substring(0, rparen+1);
+  }
   
   /**
    * @return the name (identifier) of the method, not taking into
@@ -91,10 +102,8 @@ public class PptName
   {
     if (method == null) return null;
     int lparen = method.indexOf('(');
-    if (lparen == -1)
-      return method;
-    else
-      return method.substring(0, lparen);
+    Assert.assert(lparen >= 0);
+    return method.substring(0, lparen);
   }
 
   /**
