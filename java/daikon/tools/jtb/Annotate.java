@@ -207,8 +207,18 @@ class Annotate {
       debug.fine ("Processing file " + javafile);
 
       // Annotate the file
+      try {
       Ast.applyVisitorInsertComments(input, output,
                    new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight));
+      } catch (Error e) {
+        if (e.getMessage().startsWith("Didn't find class ")) {
+          System.out.println();
+          System.out.println(e.getMessage() + ".");
+          System.out.println("Be sure to compile Java classes before calling Annotate.");
+          System.exit(1);
+        }
+        throw e;
+      }
     }
   }
 }
