@@ -19,9 +19,12 @@ When this happens the java compiler threads just sit there and Daikon
 hangs, waiting.
 
  
-
+ 
 --
 $Log$
-Revision 1.1  2002-03-12 04:50:54  adonovan
+Revision 1.2  2002-03-12 04:51:38  adonovan
+changed bug0020
+
+Revision 1.1  2002/03/12 04:50:54  adonovan
 repairing repository broken during attemp to move it today... :-(
 
