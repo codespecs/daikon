@@ -314,9 +314,9 @@ public final class Daikon {
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   // Process only part of the trace file
-  public static final String ppt_regexp_SWITCH = "ppt";
-  public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
-  public static final String var_omit_regexp_SWITCH = "var_omit";
+  public static final String ppt_regexp_SWITCH = "ppt-select-pattern";
+  public static final String ppt_omit_regexp_SWITCH = "ppt-omit-pattern";
+  public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
   // Configuration options
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
@@ -444,9 +444,9 @@ public final class Daikon {
 //    for(Iterator i = proto_invs.iterator(); i.hasNext();) {
 //      System.out.println(i.next().getClass());
 //    }
-//    
+//
 //    System.exit(0);
-    
+
     if (PrintInvariants.print_discarded_invariants) {
       DiscReasonMap.initialize();
     }
@@ -981,7 +981,7 @@ public final class Daikon {
       // Range invariant (Range.java.jpp)
       proto_invs.addAll(EltRangeInt.get_proto_all());
       proto_invs.addAll(EltRangeFloat.get_proto_all());
-      
+
       // Sequence Index Comparisons (SeqIndexComparison.java.jpp)
       proto_invs.add(SeqIndexIntEqual.get_proto());
       proto_invs.add(SeqIndexIntNonEqual.get_proto());

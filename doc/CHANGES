@@ -13,7 +13,7 @@ Further documentation can be found in:
    distributed with Daikon, but you can build it by executing the command
      make -C $DAIKONDIR/java doc
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
-   
+
 ===========================================================================
 
 3.2.0 (Feb 1 2005)
@@ -39,7 +39,7 @@ dynamic linking.  As part of this change, it is now required that
 program points so that the set of original variables are available
 when processing exit point declarations.
 
-The generation of implications has been modified.  If there are 
+The generation of implications has been modified.  If there are
 multiple exclusive invariants, one is chosen as a predicate and
 used for all of the implications.  [more detail to be added, jhp]
 
@@ -50,16 +50,60 @@ used for all of the implications.  [more detail to be added, jhp]
   developer.texinfo).  So edit the manual first, then add a brief description
   here (with a pointer to the appropriate manual section).
 
-[Unified flags for dfej, Daikon, Kvasir, trace2, dfepl.]
+
+
+dfej
+
+  The following command-line options have been renamed, for consistency
+  with other components of the Daikon distribution.
+
+    OLD                         NEW
+    -daikon_debug               --debug
+    -daikon_depth=              --nesting-depth=
+    +daikon_instrument          --instrument
+    -daikon_instrument          --no-instrument
+    +daikon_listclosure         --linked-lists
+    -daikon_listclosure         --no-linked-lists
+    +daikon_exceptions          --exceptions
+    -daikon_exceptions          --no-exceptions
+    -daikon_includeonly=/RE/    --ppt-select-pattern=RE
+    -daikon_omit=/RE/           --ppt-omit-pattern=RE
+    -noajax                     --no-ajax
+    -tracefilename=             --dtrace-file=
+    -declsfiledir=              --decls-dir=
+    -declsfiledirflat=          --decls-flat --decls-dir=
+    -instrsourcedir=            --instr-dir=
+
+                            
+dfepl
+
+  The following command-line options have been renamed, for consistency
+  with other components of the Daikon distribution.
+
+    OLD                  NEW
+    --reference-depth=   --nesting-depth=
+    --dtrace-basedir=    --dtrace-dir=
+    --decls-basedir=     --decls-dir=
+    --instr-basedir=     --instr-dir=
+
+Daikon
+
+  The following command-line options have been renamed, for consistency
+  with other components of the Daikon distribution.
+
+    OLD              NEW
+    --ppt RE         --ppt-select-pattern=RE
+    --ppt_omit RE    --ppt-omit-pattern=RE
+    --var_omit RE    --var-omit-pattern=RE
 
 Kvasir
 
   User Changes
 
-    Added a command-line option, --limit-static-vars, to limit the 
-    amount of output in order to improve the likelihood of finding 
+    Added a command-line option, --limit-static-vars, to limit the
+    amount of output in order to improve the likelihood of finding
     more useful invariants. Added the pointer-type disambiguation feature
-    (--disambig and --disambig-file options) so that users can exert finer 
+    (--disambig and --disambig-file options) so that users can specify
     control of whether pointers are printed as single elements or arrays.
     Note: The next feature that we plan to implement for Kvasir is 
     support for C++, but we want to first gauge the demand for this feature.
@@ -68,10 +112,8 @@ Kvasir
 
   Bug Fixes
 
-    On the whole, Kvasir produces more accurate output than before due
-    to various fixes for bugs which caused Kvasir to produce incorrect
-    output for obscure test cases.
-
+    Numerous bug fixes result in Kvasir producing more accurate output,
+    most exposed only by obscure test cases.
 
 Annotate
 
@@ -82,10 +124,11 @@ Annotate
 
 Runtime-check instrumenter
 
-   The runtime-check instrumenter has been added to Daikon.  The
-   instrumenter modifies the methods and constructors of a class to
-   check invariants as the class executes. For more details, see the
-   "tools" section in the Daikon manual.
+   A runtime-check instrumenter (named "runtimechecker" has been added to
+   Daikon.  The instrumenter modifies the methods and constructors of a
+   class to check invariants as the class executes.  For more details, see
+   the "tools" section in the Daikon manual.
+
 
 Hopefully, this release will include:
  * Daikon supports Java 5 (also known as Java 1.5) [requires fixed JTB]
@@ -131,29 +174,29 @@ Daikon
     standard input or a named pipe.  Together with the enhancement to
     the Kvasir C front end allowing writing to a pipe, this removes the
     need for an intermediate trace file, allowing Daikon to operate on
-    larger or longer-running programs. For more details, see  
+    larger or longer-running programs. For more details, see
     the "Reading trace data on the fly" section of the manual.
 
     The printing filters were simplified and configuration
     options were added to enable/disable each filter.  See the
     "Invariant Filters" and "List of Configuration Options" sections
     of the manual for more information.  Filter configuration
-    options are named 'daikon.inv.filter.<filter>.enabled'. 
+    options are named 'daikon.inv.filter.<filter>.enabled'.
 
-    The user manual was enhanced with a section ('Loop invariants') 
+    The user manual was enhanced with a section ('Loop invariants')
     that describes how to find specific loop invariants if desired.
 
     The configuration option 'daikon.FileIO.dtrace_line_count' was
     added.  This option allows the number of lines in the dtrace
-    file to be specified and avoids the overhead of having Daikon 
-    counting them. 
+    file to be specified and avoids the overhead of having Daikon
+    counting them.
 
     Daikon no longer uses the libraries jarkarto-oro.jar and log4j
 
-    The mechanism for compiling splitter files was improved.  
-    The process is more reliable, error messages are more 
-    meaningful and the names of related configuration options 
-    were changed.  The option that selects the compiler to use is 
+    The mechanism for compiling splitter files was improved.
+    The process is more reliable, error messages are more
+    meaningful and the names of related configuration options
+    were changed.  The option that selects the compiler to use is
     'daikon.split.SplitterFactory.compiler' and the option that sets
     the compiler timeout is 'daikon.split.SplitterFactory.compile_timeout'.
 

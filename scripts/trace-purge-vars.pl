@@ -8,7 +8,7 @@
 # regular expression.  (Its name is taken from grep.)
 
 # This script reduces the size of a trace file, but typically, using
-# Daikon's --var_omit flag is a better option.
+# Daikon's --var_omit_pattern flag is a better option.
 
 # I'm intentionally not operating by paragraphs, because I want the regexp
 # to only apply to the variable lines.

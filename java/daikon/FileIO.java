@@ -145,7 +145,7 @@ public final class FileIO {
   ///////////////////////////////////////////////////////////////////////////
   /// Declaration files
   ///
-  
+
   /**
    * @param files files to be read (java.io.File)
    * @return a new PptMap containing declarations read from the files
@@ -177,9 +177,9 @@ public final class FileIO {
       Processor processor = new Processor();
       read_data_trace_file(filename.toString(), all_ppts, processor, true);
     }
-    
+
   }
-    
+
 
   // The "DECLARE" line has already been read.
   private static PptTopLevel read_declaration(LineNumberReader file,
@@ -230,13 +230,13 @@ public final class FileIO {
 
     VarInfo[] vi_array = (VarInfo[])
                             var_infos.toArray(new VarInfo[var_infos.size()]);
-    
+
     // taking care of visibility information
     // the information is needed in the variable hierarchy because private methods
     // should not be linked under the object program point
     // the ppt name is truncated before putting it in the pptMap because the visibility
     // information is only present in the decls file and not the dtrace file
-        
+
 //    if(ppt_name.startsWith("public")) {
 //      int position = ppt_name.indexOf("public");
 //      ppt_name = ppt_name.substring(7);
@@ -258,7 +258,7 @@ public final class FileIO {
 //      newppt.ppt_name.setVisibility("protected");
 //      return newppt;
 //    }
-    
+
     //TODO: add a new config variable to turn this accessibility flag processing on?
     PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
    // newppt.ppt_name.setVisibility("package-protected");
@@ -430,9 +430,9 @@ public final class FileIO {
       ProglangType.list_implementors.add(line.intern());
     }
   }
-    
-    
-    
+
+
+
 
 
 
@@ -677,7 +677,8 @@ public final class FileIO {
       if (line == declaration_header) {
         PptTopLevel ppt =
           read_declaration(reader, all_ppts, varcomp_format, file);
-        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
+        // ppt can be null if this declaration was skipped because of
+        // --ppt-select-pattern or --ppt-omit-pattern.
         if (ppt != null) {
           all_ppts.add(ppt);
           Daikon.init_ppt(ppt, all_ppts);
@@ -699,7 +700,7 @@ public final class FileIO {
       }
 
       // If we got here, we're looking at a sample and not a declaration.
-      // For compatibility with previous implementation, if this is a 
+      // For compatibility with previous implementation, if this is a
       // declaration file, skip over samples.
       if (is_decl_file) {
 	if (debugRead.isLoggable(Level.FINE))

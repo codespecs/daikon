@@ -228,7 +228,7 @@ public final class UtilMDE {
     primitiveClassesJvm.put("short", "S");
   }
 
-  /*
+  /**
    * Convert a fully-qualified classname from Java format to JVML format.
    * For example, convert "java.lang.Object[]" to "[Ljava/lang/Object;".
    **/
@@ -248,7 +248,7 @@ public final class UtilMDE {
     return result.replace('.', '/');
   }
 
-  /*
+  /**
    * Convert a fully-qualified argument list from Java format to JVML format.
    * For example, convert "(java.lang.Integer[], int, java.lang.Integer[][])"
    * to "([Ljava/lang/Integer;I[[Ljava/lang/Integer;)".

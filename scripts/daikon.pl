@@ -217,7 +217,7 @@ if (@instrument) {
 } else {
     $files = join(' ', sort (keys %interesting));
 }
-my $dfejcommand = "dfej -classpath $cp_dot -instrsourcedir=$working/daikon-instrumented/ -declsfiledir=$working/ -tracefilename=$working/the_dtrace_file.dtrace $files";
+my $dfejcommand = "dfej -classpath $cp_dot --instr-dir=$working/daikon-instrumented/ --decls-dir=$working/ --dtrace-file=$working/the_dtrace_file.dtrace $files";
 if ($verbose) {
     my($cwd) = `pwd`;
     chomp($cwd);

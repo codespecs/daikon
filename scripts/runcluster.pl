@@ -114,13 +114,13 @@ foreach my $filename (@to_cluster) {
   } elsif ($algorithm eq "xm") {
     # xmeans clustering
 
-    # filter out data that isn't a number  
+    # filter out data that isn't a number
     open (FILE ,  "$filename");
     open (OUT, ">$filename.new");
     my @lines = <FILE>;
-      
+
     foreach my $line (@lines) {
-        
+
         $line =~ s/uninit/0/g;
         $line =~ s/nan/10000/g;
 	print OUT "$line";
@@ -202,7 +202,7 @@ foreach my $dtrace_file (@trace_files) {
 }
 
 my $invfile = "runcluster_temp_$algorithm-$ncluster.inv";
-$command = "java -Xmx1024m daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit=\"class\" --no_text_output $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
+$command = "java -Xmx1024m daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
 system_or_die($command, $verbose);
 
 $invfile =~ /(.*)\.inv/;

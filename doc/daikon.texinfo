@@ -3322,16 +3322,18 @@ the first Java file name.
 @c @end table
 @c
 @c Details of the options are as follows.  
-When conflicting options are specified (for instance, both
-@option{-declsfiledir} and @option{-declsfiledirflat}), the last one
+When conflicting options are specified, the last one
 takes precedence.
 
 
-@table @t
-@item -daikon_debug
+@c Unfortunately, @option{} adds quotes in the Info and printed output
+@c which is not necessary in a table.  However, @t and @code compress
+@c the two hyphens to one in Info and HTML output, which is even worse.
+@table @option
+@item --debug
 Produce debugging information.
 
-@item -daikon_depth=@var{n}
+@item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).
 This parameter determines which variables dfej causes to be output at
 runtime.  For instance, suppose that a program contained the following
@@ -3378,16 +3380,16 @@ parameter.
 @c @item -daikon_loops
 @c Do not produce data trace output for loop invariants (default).
 
-@item +daikon_instrument
+@item --instrument
 Produce tracing output (default).
 
-@item -daikon_instrument
+@item --no-instrument
 Do not produce tracing output.
 
-@item +daikon_listclosure
+@item --linked-lists
 Render linked-lists as vectors (default).
 
-@item -daikon_listclosure
+@item --no-linked-lists
 Do not render linked-lists as vectors.
 
 @item +daikon_context
@@ -3396,10 +3398,10 @@ Produce context sensitive output.
 @item -daikon_context
 Do not produce context sensitive output (default).
 
-@item +daikon_exceptions
+@item --exceptions
 Produce data trace output for exceptions.
 
-@item -daikon_exceptions
+@item --no-exceptions
 Do not produce data trace output for exceptions (default).
 
 @item +daikon_classhier
@@ -3408,19 +3410,18 @@ Produce class hierarchy data.
 @item -daikon_classhier
 Do not produce class hierarchy data (default).
 
-@item -daikon_includeonly=@var{string}
+@item --ppt-select-pattern=@var{ppt_regexp}
 Only produce trace output for matching classes/procedures.  Cannot be used
-in conjunction with @option{-daikon_omit}.  May only be supplied once.
-The argument provided must be a regex (and be surrounded by forward
-slashes on both sides).
+in conjunction with @option{--ppt-omit-pattern}.  May only be supplied once.
+The argument provided must be a regex.
 
 If the the regular expression does not match the name of a particular
 class, then that class is omitted entirely, along with all procedures
-within it.  Thus, the @option{-daikon_includeonly} flag does not cause
-output for exactly the procedures that the @option{-daikon_omit} flag
+within it.  Thus, the @option{--ppt-select-pattern} flag does not cause
+output for exactly the procedures that the @option{--ppt-omit-pattern} flag
 omits, with the same argument.  For instance, suppose that class C
-contains procedures foo and bar.  Then @option{-daikon_omit=bar} would
-cause foo to be instrumented, but @option{-daikon_includeonly=bar}
+contains procedures foo and bar.  Then @option{--ppt-omit-pattern=bar} would
+cause foo to be instrumented, but @option{--ppt-select-pattern=bar}
 would cause nothing to be instrumented, because regular
 expression``bar'' does not match the class name C, so no part of C
 would be further considered.
@@ -3428,16 +3429,16 @@ would be further considered.
 To instrument only method bar of class C, one possible command is:
 
 @example
-dfej -daikon_includeonly='/C$|C.bar/' Foo.java
+dfej --ppt-select-pattern='C$|C.bar' Foo.java
 @end example
 
 
-@item -daikon_omit=@var{string}
+@item --ppt-omit-pattern=@var{string}
 Do not produce data trace output for matching classes/procedures.  This
 reduces the size of the data trace file and also may make the
 instrumented program run faster, since it need not output those variables.
 
-The @option{-daikon_omit} argument may be supplied multiple times, in
+The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
 if its fully qualified class, fully qualified procedure name, or
 complete program point name exactly matches one of the omitting criteria.
@@ -3445,31 +3446,29 @@ complete program point name exactly matches one of the omitting criteria.
 For example, to avoid detecting invariants over an iterator class, you
 can call dfej like so:
 @example
-dfej '-daikon_omit=HashSetLinear$HslIterator' \
+dfej '--ppt-omit-pattern=HashSetLinear$HslIterator' \
      HashSetLinear.java
 @end example
 
 As another example, to avoid detecting invariants over a particular
 method, you could use:
 @example
-dfej '-daikon_omit=StackAr.topAndPop()Ljava/lang/Object;' \
+dfej '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
      StackAr.java
 @end example
 
 Finally, to avoid detecting invariants at a particular program point,
 try:
 @example
-dfej '-daikon_omit=StackAr.<init>(I)V:::EXIT33' StackAr.java
+dfej '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' StackAr.java
 @end example
 
-The argument is treated as a literal string by default.  However, if
-surrounded by a forward slash (/) on either side, it is interpreted as a
-regular expression.
+The argument is treated as a regular expression.
 
 For example, to avoid detecting invariants over all classes in package
 daikon.util, you can call dfej like so:
 @example
-  dfej '-daikon_omit=/^daikon\.util\..*/' *.java
+  dfej '--ppt-omit-pattern=^daikon\.util\..*' *.java
 @end example
 
 
@@ -3480,7 +3479,7 @@ daikon.util, you can call dfej like so:
 @cindex trace file name
 @cindex dtrace file name
 @cindex file name, for dtrace file
-@item -tracefilename=@var{filename}
+@item --dtrace-file=@var{filename}
 Specifies the default name for the trace output (@file{.dtrace}) file
 (default @file{daikon-output/@var{CLASSNAME}.dtrace}).
 The filename is relative
@@ -3493,10 +3492,10 @@ to.  In some cases you may find a single large data trace file more
 convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
 
-@item -declsfiledir=@var{decldir}
+@item --decls-dir=@var{decldir}
 Specifies the directory in which to create
 @file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
-@file{daikon-output}, unless @option{-declsfiledirflat} is
+@file{daikon-output}, unless @option{--decls-flat} is
 specified).  @var{PACKAGES} is the relative path from the current
 directory to the source file; that is, the relative path from
 @var{decldir} to the @file{.decls} file is the same as the relative
@@ -3504,11 +3503,11 @@ path from the current directory to the source file.  The directory
 structure of the @file{.decls} files mirrors the directory structure of
 the source files.
 
-@item -declsfiledirflat=@var{decldir}
-Specifies the directory in which to create @file{@var{CLASSNAME}.decls}
-(no default).  All @file{.decls} files appear in the same directory.
+@item --decls-flat
+Specifies to create @file{@var{CLASSNAME}.decls} in a single directory,
+not in a directory hierarchy.
 
-@item -instrsourcedir=@var{instrdir}
+@item --instr-dir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
 (default @file{daikon-instrumented/}).  The instrumented files have the
 same names and directory structure as the original input files.
@@ -3553,7 +3552,7 @@ from the @file{parent/foo} directory, the instrumented version of
 is not consistent with the package structure.)
 @end quotation
 
-@item -noajax
+@item --no-ajax
 @cindex AJAX_DIR environment variable
 @cindex environment variable AJAX_DIR
 Do not use Ajax.  Ordinarily, the Ajax module
@@ -4139,6 +4138,7 @@ g++ -g -o @var{exefile} daikon-instrumented/myprog.cc\
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
+@c dfec option -- do not rename (yet)
 Now you can run your executable in the usual way.  Running the
 executable creates a @file{myprog.dtrace} file.  By default, this file
 appears in @file{daikon-output/}, and subsequent runs overwrite to that
@@ -4164,6 +4164,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 @node    dfec command-line arguments, Daikon runtime customization, Source-based C front end dfec, Source-based C front end dfec
 @subsection dfec command-line arguments
 
+@c dfec option -- do not rename (yet)
 This section describes dfec's command-line options.
 When conflicting options are specified (for instance, both
 @option{--declsfiledir} and @option{--declsfiledirflat}), the last one
@@ -4217,6 +4218,7 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @cindex trace file name
 @cindex dtrace file name
 @cindex file name, for dtrace file
+@c dfec option -- do not rename (yet)
 @item --tracefilename=@var{filename}
 Specifies the default name for the trace output (@file{.dtrace}) file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
@@ -4230,9 +4232,11 @@ variable is set to any value at runtime, the dtrace file is appended to
 instead of overwritten, which can be handy if you wish to run
 the instrumented program multiple times.
 
+@c dfec option -- do not rename (yet)
 @item --declsfiledir=@var{decldir}
 Specifies the directory in which to create
 @file{@var{PATH}/@var{myprog}.decls} (default
+@c dfec option -- do not rename (yet)
 @file{daikon-output/}, unless @option{--declsfiledirflat} is
 specified).  @var{PATH} is the relative path from the current
 directory to the source file; that is, the relative path from
@@ -4241,10 +4245,12 @@ path from the current directory to the source file.  The directory
 structure of the @file{.decls} files mirrors the directory structure of
 the source files.
 
+@c dfec option -- do not rename (yet)
 @item --declsfiledirflat=@var{decldir}
 Specifies the directory in which to create @file{@var{myprog}.decls}
 (no default).  All @file{.decls} files appear in the same directory.
 
+@c dfec option -- do not rename (yet)
 @item --instrsourcedir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
 (default @file{daikon-instrumented/}).  The instrumented files have the
@@ -5230,7 +5236,7 @@ directory @file{daikon-output}.
 
 @table @code
 @item --absolute
-@itemx --noabsolute
+@itemx --no-absolute
 @option{--absolute} stores the absolute path to the output directories
 (by default named @file{daikon-untyped}, @file{daikon-instrumented} or
 @file{daikon-output}) in the instrumented programs, so that no matter
@@ -5240,7 +5246,7 @@ the default), @option{--absolute} specifies that they should always be
 taken as relative to the directory that was the working directory when
 @command{dfepl} was run.
 
-@option{--noabsolute} specifies the opposite, causing the output paths
+@option{--no-absolute} specifies the opposite, causing the output paths
 to be interpreted relative to the current working directory each time
 the instrumented program is invoked.  The default, when neither option
 is specified, is for @file{.types} files to use an absolute path, but
@@ -5304,11 +5310,11 @@ The default is @option{tree}.  Note that @option{--decls-style} and
 one is specified, the other will use the same value.
 
 @item --dtrace-append
-@itemx --nodtrace-append
+@itemx --no-dtrace-append
 When @option{--dtrace-append} is specified, the instrumented program
 will append trace information to the appropriate
 @file{.dtrace} file each time it runs.  When
-@option{--nodtrace-append} is specified, it will overwrite the file
+@option{--no-dtrace-append} is specified, it will overwrite the file
 instead. 
 
 The default behavior is to overwrite.  This choice can also be
@@ -5343,6 +5349,7 @@ The default is @option{combined}.
 Print a short options summary.
 
 @item --instr-dir=@var{directory}
+@c dfec option -- do not rename (yet)
 @itemx --instrsourcedir=@var{directory}
 Put instrumented source files in @var{directory} and its
 subdirectories.  The default is @file{daikon-untyped}, or
@@ -5366,8 +5373,8 @@ The default is 3.
 Put all of the files that are the output of the tracing process (and
 therefore input to the Daikon invariant detection engine) in
 @var{directory} and its subdirectories.  This option is a shorthand
-equivalent to setting both @option{--decls-basedir} and
-@option{--dtrace-basedir} to the same value.
+equivalent to setting both @option{--decls-dir} and
+@option{--dtrace-dir} to the same value.
 
 The default behavior is as if @option{--output-dir=daikon-output} had
 been specified.
@@ -5399,27 +5406,27 @@ is 2 or more, it will consider @code{@@a} to be an array of references
 to hashes whose keys are integers and whose values are references to
 arrays of integers.
 
-The default reference depth is 3.
+The default nesting depth is 3.
 
 When referenced objects have accessor methods, or when accessors
 return references, the @option{--accessor-depth} and
-@option{--reference-depth} options interact.  Specifically, if these
+@option{--nesting-depth} options interact.  Specifically, if these
 depths are A and R, the behavior is as if the runtime has a budget of
 1 unit, which it can use either on accessors which cost 1/A or
 references which cost 1/R@.  It may thus sometimes be useful to specify
 fractional values for @option{--accessor-depth} and
-@option{--reference-depth}; in fact, the default accessor depth is
+@option{--nesting-depth}; in fact, the default accessor depth is
 1.5.
 
 @item --types-append
-@itemx --notypes-append
+@itemx --no-types-append
 When @option{--types-append} is specified, the instrumented program
 will append type information to the appropriate
 @file{.types} file each time it runs.  When
-@option{--notypes-append} is specified, it will overwrite the file
+@option{--no-types-append} is specified, it will overwrite the file
 instead. 
 
-The default behavior is to append.  If @option{--notypes-append} is
+The default behavior is to append.  If @option{--no-types-append} is
 specified, however, this choice can also be overridden, when the
 program is run, to append by setting the environment variable
 @code{TYPESAPPEND} to 1.  There is no way to use environment variables
@@ -5456,7 +5463,7 @@ files (irrelevant type information will be ignored).
 
 @item --types-basedir=@var{directory}
 Put files containing type information in @var{directory} and its
-subdirectories.  By default, this is whatever @option{--instr-basedir}
+subdirectories.  By default, this is whatever @option{--instr-dir}
 is, usually @file{daikon-instrumented}.
 
 @item --types-style=@var{style}
@@ -6580,7 +6587,7 @@ We do not yet have a fix, but if you find one, please let us know.
 You may find that dfej runs very slowly, even on small programs.  dfej
 itself finishes quite quickly, but it calls the external Ajax program,
 which is extremely slow.  If you disable Ajax with the
-@option{-noajax} argument to dfej, then Daikon may output slightly
+@option{--no-ajax} argument to dfej, then Daikon may output slightly
 more irrelevant invariants, but dfej will run much faster.
 
 @cindex could not find package named, dfej error
@@ -6663,7 +6670,7 @@ variables are likely to be entirely unrelated and any properties over
 them are incidental and uninformative.
 
 Use of Ajax is optional and can be disabled via the
-@option{-noajax} argument to dfej (@pxref{dfej options}).
+@option{--no-ajax} argument to dfej (@pxref{dfej options}).
 If Ajax cannot be run, then a more primitive method of determining
 comparability is used instead.  Even if Ajax cannot be run, Daikon
 proceeds without error.
@@ -7347,7 +7354,7 @@ down afterward).
 @itemize
 @item With dfej, use the 
 @example
-  -daikon_omit=@var{string}
+  --ppt-omit-pattern=@var{regexp}
 @end example
 @noindent
 argument (@pxref{dfej options}).  Dfej will not produce data trace
@@ -7391,7 +7398,7 @@ ignore any variable matching the following regular expression.
 You can reduce the number of variables that are output by instrumented
 code.  Do this by reducing the class/structure instrumentation depth.
 @itemize
-@item With dfej, use the @option{-daikon_depth=@var{N}} option.
+@item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With dfec, use the @option{--struct-depth=@var{N}} option.
 @end itemize
 

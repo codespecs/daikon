@@ -124,6 +124,7 @@ unless (exists $ENV{"DAIKONDIR"}) {
 my $opt_parse = new Getopt::Long::Parser;
 $opt_parse->configure("bundling_override");
 my $parsed =
+  # Some deprecated (outdated) option names are still supported.
   $opt_parse->getoptions("instrsourcedir|instr-basedir|instr-dir=s"
                            => \$instr_basedir,
                          "types-basedir=s" => \$types_basedir,
@@ -164,7 +165,7 @@ it may be distributed under the same terms as Daikon itself or under
 those of Perl itself. For detailed information, see the Daikon manual,
 which appears in the Daikon distribution and also at
 http://pag.csail.mit.edu/daikon/.
-Options summary: 
+Options summary:
   --absolute/--noabsolute
   --accessor-depth=NUM
   -A/--accessors-dir=DIRECTORY
