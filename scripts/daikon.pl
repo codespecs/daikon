@@ -71,12 +71,6 @@ GetOptions("instrument=s" => \@instrument,
 	   "debug" => \$debug,
 	   ) or usagedie();
 
-# jwa
-# this seems to be reversed...
-# don't you _want_ warnings if verbose is enabled?
-# orginal
-# my $nowarn = ($verbose ? "-nowarn" : ""); # for jikes
-# changed:
 my $nowarn = ($verbose ? "" : "-nowarn"); # for jikes
 
 my $runnable = shift @ARGV or usagedie();
@@ -115,9 +109,6 @@ if ($output) {
 	$sym = $sym + 1;
 	while ((length $sym) < 4) { $sym = '0' . $sym }
 	$output = "$prefix-$sym";
-	# jwa
-	# I do not think you want a -x test here....
-	# -e seems more reasonable
     } while (-e "$output.inv" or -e "$output.inv.gz" or -e "$output.src.tar.gz");
 }
 
@@ -258,12 +249,12 @@ if ($dfejerr) {
 #  	chdir($cwd);
 #  	last;
 #        }
-
+#
 #        foreach my $d (@decls) {
 #  	rename($d, $d . ".bak") || die "Cannot create backup of $d!\n";
 #  	rename($d . ".ajax", $d) || die "Cannot update $d with $d.ajax!\n";
 #        }
-
+#
 #        chdir($cwd);
 #      }
 
@@ -419,4 +410,3 @@ sub which {
     }
     return @result;
 } # which
-

@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 
 # Automatically builds and tests the software in the Daikon Distribution
 

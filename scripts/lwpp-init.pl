@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 
 # Creates the lackwit databases.  Requires that LACKWIT_HOME is set
 # correctly.  Requires that 'lh' is in your path.

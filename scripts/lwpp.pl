@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 
 # Annotate a declaration file with implicit lackwit comparability
 # information.  Overwrites the file with Lackwit comparability
