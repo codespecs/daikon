@@ -128,7 +128,8 @@ public class LogicalCompare {
         continue;
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
       if (simp.indexOf("format_simplify") != -1 ||
-          simp.indexOf("OutputFormat:Simplify") != -1) {
+          simp.indexOf("OutputFormat:Simplify") != -1 ||
+          simp.indexOf("Simplify not implemented") != -1) {
         // Noisy, since we should be able to handle most invariants now
         System.out.println("Can't handle " + inv.format() + ": " + simp);
         continue;
