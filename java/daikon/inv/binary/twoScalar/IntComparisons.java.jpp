@@ -503,7 +503,7 @@ invariants.
     return new INTEQUAL(ppt);
   }
 
-#ifdef (EQUAL_OP)
+#ifdef EQUAL_OP
   public boolean is_equality_inv() {
     return (true);
   }
@@ -1603,7 +1603,7 @@ invariants.
   }
 #endif
 
-#ifdef 0
+#if 0
   // The following creates the correct factories based on the comparison
   // type.  This is the only place where it is necessary to know all of the
   // suppressions that can be used on a particular type.  The code above can

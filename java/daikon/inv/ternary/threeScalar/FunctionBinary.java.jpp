@@ -667,7 +667,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 */
 
 
-#ifdef 0
+#if 0
   // Each of the functions is defined below.  Each must define the following
   // preprocessor variables:
   //

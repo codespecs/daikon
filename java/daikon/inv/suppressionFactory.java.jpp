@@ -1,4 +1,4 @@
-#ifdef 0
+#if 0
   //  This file is used to generate the common suppression factory
   //  code.  The following parameters must be defined:
   //
