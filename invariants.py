@@ -592,6 +592,19 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     if var_infos[sclidx].is_derived:
         return
 
+    # If the scalar is a known constant, record that.
+    if scl_inv.is_exact():
+        sclconst = scl_inv.min
+    else:
+        sclconst = None
+
+    # If the scalar is the constant 0, do nothing (we already extract array[0],
+    # and the subarrays array[0..-1] and array[0..0] are not interesting).
+    # if sclconst == 0:
+    if sclconst != None and sclconst < 1:
+            return
+
+
     # Add subsequences
     if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
         full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
@@ -599,31 +612,34 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         # holds that particular value.
         full_var_info.derived_len = 'known_var' # length is 1 more than var[sclidx]
         var_infos.append(full_var_info)
-        less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
-        less_one_var_info.derived_len = sclidx
-        var_infos.append(less_one_var_info)
+        if sclconst == None or sclconst > 1:
+            less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
+            less_one_var_info.derived_len = sclidx
+            var_infos.append(less_one_var_info)
         for new_values in var_new_values.values():
             seq = new_values[seqidx]
             scl = new_values[sclidx]
+            assert sclconst == None or scl == sclconst
             if (scl+1 <= len(seq)) and (scl+1 >= 0):
                 new_value_full = seq[0:scl+1]
             else:
                 new_value_full = None
-            if (scl <= len(seq)) and (scl >= 0):
-                new_value_less_one = seq[0:scl]
-            else:
-                new_value_less_one = None
+            new_values.append(new_value_full)
+            if sclconst == None or sclconst > 1:
+                if (scl <= len(seq)) and (scl >= 0):
+                    new_value_less_one = seq[0:scl]
+                else:
+                    new_value_less_one = None
+                new_values.append(new_value_less_one)
             if debug_derive:
                 print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
-            new_values.append(new_value_full)
-            new_values.append(new_value_less_one)
 
     # Add scalars
     # Determine whether it is constant; if so, ignore.
     # Perhaps also check that it is within range at least once
-    # (or even every time) if not, not very interesting.
+    # (or even every time); if not, not very interesting.
     if ((not var_infos[seqidx].is_derived)
-        and (not scl_inv.is_exact()) and (scl_inv.min >= 0)
+        and ((sclconst == None) or (sclconst > 1))
         and (seq_size_idx != 'known_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
         var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType, len(var_infos), true))
@@ -838,10 +854,10 @@ pass2_functions = (introduce_from_sequence_pass2,
 # to find patterns in the values recorded in one or more .inv files.
 # 
 # To detect invariants in a particular program, it is enough to insert code
-# in the application which creates a .inv file.  In Lisp, the
-# `check-for-invariants' macro performs this task.  Gries-style Lisp
+# in the application which creates a .dtrace file.  In Lisp, the
+# `write-to-data-trace' macro performs this task.  Gries-style Lisp
 # programs can be automatically instrumented -- the calls to
-# `check-for-invariants' are inserted by the `instrument' function found in
+# `write-to-data-trace' are inserted by the `instrument' function found in
 # gries-helper.lisp.  Given a file of Gries-style Lisp functions,
 # `instrument' produces a new file of instrumented Lisp code which can be
 # compiled and run.
@@ -1451,12 +1467,19 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                 continue
             if vi.equal_to == []:
                 continue
-            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = ")
+            if vi.invariant.is_exact():
+                value = "= %s" % vi.invariant.min
+            else:
+                value = ""
+            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value
         # Single invariants
         for vi in var_infos:
             if not vi.is_canonical():
                 continue
             this_inv = vi.invariant
+            if (this_inv.is_exact() and vi.equal_to != []):
+                # Already printed above in "equality invariants" section
+                continue
             if print_unconstrained or not this_inv.is_unconstrained():
                 print " ", this_inv.format((vi.name,))
         # Pairwise invariants
@@ -1528,7 +1551,8 @@ class invariant:
         self.values = len(vals)
         self.samples = util.sum(dict.values())
         self.can_be_None = None in vals
-        if len(vals) < 5 and not self.can_be_None:
+        # if len(vals) < 5 and not self.can_be_None:
+        if len(vals) < 5:
             vals.sort()
             self.one_of = vals
 
@@ -1561,7 +1585,8 @@ class invariant:
         if self.one_of:
             if len(self.one_of) == 1:
                 return "%s = %s" % (args, self.one_of[0])
-            # If few samples, don't try to infer a function over the values
+            # If few samples, don't try to infer a function over the values;
+            # just return the list.
             elif self.samples < 100:
                 return "%s in %s" % (args, util.format_as_set(self.one_of))
         self.unconstrained_internal = true
@@ -1576,6 +1601,7 @@ class single_scalar_numeric_invariant(invariant):
     nonmodulus = None
     min_justified = None
     max_justified = None
+    nonnegative_obvious = None
 
     def __init__(self, dict, var_infos):
         """DICT maps from values to number of occurrences."""
@@ -1621,6 +1647,7 @@ class single_scalar_numeric_invariant(invariant):
                 self.max_justified = true
             # print "min (%d) justified=%d: %d min elts, %d adjacent" % (self.min, self.min_justified, num_min, dict[nums[1]])
             # print "max (%d) justified=%d: %d max elts, %d adjacent" % (self.max, self.max_justified, num_max, dict[nums[-2]])
+        self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
 
         self.can_be_zero = (0 in nums)
         if self.min != None:
@@ -1713,7 +1740,7 @@ class single_scalar_numeric_invariant(invariant):
             if (self.min < 0 and self.max > 0 and nonzero):
                 result = " nonzero" + result
             return arg + result + suffix
-        if self.min_justified:
+        if self.min_justified and (self.min != 0 or not self.nonnegative_obvious):
             result = "%s >= %s" % (arg, self.min)
             if self.min < 0 and nonzero:
                 result = result + " and nonzero"
@@ -2004,7 +2031,10 @@ class three_scalar_numeric_invariant(invariant):
 
         triples = dict_of_triples.keys()
 
-        if len(triples) > 2:
+        # Can't be computed if len(triples) < 3, but
+        # not meaningful (too few values) if len(triples) < 5;
+        # instead of hard-coding a number here, could check for one_of.
+        if len(triples) > 4:
             linear_z = checked_tri_linear_relationship(triples, (0,1,2))
             linear_y = checked_tri_linear_relationship(triples, (0,2,1))
             linear_x = checked_tri_linear_relationship(triples, (1,2,0))
@@ -2012,7 +2042,8 @@ class three_scalar_numeric_invariant(invariant):
 
         global symmetric_binary_functions, non_symmetric_binary_functions
 
-        if len(triples) > 1:
+        # if len(triples) > 1:
+        if len(triples) > 4:
             functions_xyz = list(symmetric_binary_functions + non_symmetric_binary_functions)
             functions_yxz = list(non_symmetric_binary_functions)
             functions_xzy = list(symmetric_binary_functions + non_symmetric_binary_functions)
