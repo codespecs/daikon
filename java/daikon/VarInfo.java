@@ -687,6 +687,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    **/
   public String esc_name()
   {
+    // "return" -> "\result"
+    if ("return".equals(name)) {
+      return "\\result";
+    }
+
     String result = name;
 
     // "size(array[])" -> "array.length"
