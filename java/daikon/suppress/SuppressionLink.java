@@ -33,7 +33,7 @@ public class SuppressionLink implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020722L;
+  static final long serialVersionUID = 20030911L;
 
   /**
    * General debug tracer.
@@ -62,20 +62,20 @@ public class SuppressionLink implements Serializable {
    * State constant: this was just created and suppressor and
    * suppressees do not know about this.
    **/
-  private int CREATED = 0;
+  private static final int CREATED = 0;
 
   /**
    * State constant: created and suppressor and suppressees know about
    * this.
    **/
-  private int LINKED = 1;
+  private static final int LINKED = 1;
 
   /**
    * State constant: this has been destroyed and suppressor and
    * suppresses no longer know about this.  This should not be used
    * again.
    **/
-  private int UNLINKED = 2;
+  private static final int UNLINKED = 2;
 
   /**
    * What stage of use this link is in.  Gets modified.  Can be one of
