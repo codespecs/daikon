@@ -242,12 +242,28 @@ public class Chicory {
               premain_path = poss_premain;
           }
       }
+
+    // If not on the classpath look in $(DAIKONDIR)/java
+    if (premain_path == null) {
+      String daikon_dir = System.getenv ("DAIKONDIR");
+      if (daikon_dir != null) {
+        String file_separator = System.getProperty ("file.separator");
+        File poss_premain = new File (daikon_dir + file_separator + "java",
+                                      "ChicoryPremain.jar");
+        if (poss_premain.canRead())
+          premain_path = poss_premain;
+      }
+    }
+
+    // If we didn't find a premain, give up
     if (premain_path == null) {
       System.err.printf ("Can't find ChicoryPremain.jar on the classpath\n");
+      System.err.printf ("or in $DAIKONDIR/java\n");
       System.err.printf ("It should be find in directory where Daikon was "
                          + " installed\n");
       System.err.printf ("Use the --premain switch to specify its location\n");
       System.err.printf ("or change your classpath to include it\n");
+      System.exit (1);
     }
 
     // Build the command line to execute the target with the javaagent
