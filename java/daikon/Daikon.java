@@ -29,7 +29,7 @@ public final class Daikon {
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
-    + "; http://pag.lcs.mit.edu/daikon.";
+    + "; http://pag.csail.mit.edu/daikon.";
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -314,8 +314,8 @@ public final class Daikon {
   static String usage =
     UtilMDE.join(new String[] {
       release_string,
-      "Daikon invariant detector, copyright 1998-2003",
-      // " by Michael Ernst <mernst@lcs.mit.edu>",
+      "Daikon invariant detector, copyright 1998-2004",
+      // " by Michael Ernst <mernst@csail.mit.edu>",
       "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
       "For licensing information, see the License section of the manual.",
       "Usage:",
@@ -323,7 +323,7 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.lcs.mit.edu/daikon/."},
+      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/."},
                  lineSep);
 
   /**
