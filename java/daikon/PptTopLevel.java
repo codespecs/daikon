@@ -1557,24 +1557,24 @@ public class PptTopLevel extends Ppt {
       Invariants invs1 = new Invariants();
       for (int j=0; j<slice1.invs.size(); j++) {
         Invariant inv = (Invariant)slice1.invs.elementAt(j);
-        invs1.add(inv);
-        /// This didn't seem to do what I want; not sure why.
-        // if (inv.isWorthPrinting()) {
-        //   invs1.add(inv);
-        // } else {
-        //   System.out.println("Not worth printing or being mentioned: " + inv.format());
-        // }
+        // invs1.add(inv);
+        if (inv.isWorthPrinting()) {
+          invs1.add(inv);
+          // System.out.println("invs1 worth printing: " + inv.format());
+        } else {
+          // System.out.println("invs1 not worth printing: " + inv.format());
+        }
       }
       Invariants invs2 = new Invariants();
       for (int j=0; j<slice2.invs.size(); j++) {
         Invariant inv = (Invariant)slice2.invs.elementAt(j);
-        invs2.add(inv);
-        /// This didn't seem to do what I want; not sure why.
-        // if (inv.isWorthPrinting()) {
-        //   invs2.add(inv);
-        // } else {
-        //   System.out.println("Not worth printing or being mentioned: " + inv.format());
-        // }
+        // invs2.add(inv);
+        if (inv.isWorthPrinting()) {
+          invs2.add(inv);
+          // System.out.println("invs2 worth printing: " + inv.format());
+        } else {
+          // System.out.println("invs2 not worth printing: " + inv.format());
+        }
       }
 
       Vector this_excl = exclusive_conditions(invs1, invs2);
@@ -1861,12 +1861,24 @@ public class PptTopLevel extends Ppt {
 
   // Determine which elements of invs1 differ from elements of invs2.
   // Result elements are pairs of Invariants (with one or the other
-  // possibly null.)
+  // possibly null).
   Vector different_invariants(Invariants invs1, Invariants invs2) {
     SortedSet ss1 = new TreeSet(icfp);
-    ss1.addAll(invs1);
+    // ss1.addAll(invs1);
+    for (int j=0; j<invs1.size(); j++) {
+      Invariant inv = (Invariant)invs1.elementAt(j);
+      if (inv.isWorthPrinting()) {
+        ss1.add(inv);
+      }
+    }
+
     SortedSet ss2 = new TreeSet(icfp);
-    ss2.addAll(invs2);
+    for (int j=0; j<invs2.size(); j++) {
+      Invariant inv = (Invariant)invs2.elementAt(j);
+      if (inv.isWorthPrinting()) {
+        ss2.add(inv);
+      }
+    }
 
     Vector result = new Vector();
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
