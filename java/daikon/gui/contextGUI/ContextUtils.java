@@ -43,7 +43,7 @@ class ContextUtils
 		if (find_position != -1)
 			return fix_txt.substring(find_position + 1);
 
-		// didnt find string to fix
+		// didn't find string to fix
 		return fix_txt;
 	}
 }
