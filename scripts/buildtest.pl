@@ -366,7 +366,7 @@ sub dfec_system_test {
   # Short test suites
 #  my $TEST_SUITE = "summary-no-space";
 #  my $TEST_SUITE = "test print_tokens";
-  print_log("Dfec System Tests...");
+  print_log("Dfec system tests...");
 
   my $command = "make $J2 -C $INV/tests/dfec-tests $TEST_SUITE " .
     "&> dfec_system_test.out";
