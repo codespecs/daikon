@@ -1163,6 +1163,28 @@ public final class ArraysMDE {
 
 
   ///////////////////////////////////////////////////////////////////////////
+  /// nullness
+  ///
+
+  /**
+   * @return true iff some element of a is null (false if a is zero-sized)
+   **/
+  public static boolean any_null(Object[] a) {
+    return indexOfEq(a, null) >= 0;
+  }
+
+  /**
+   * @return true iff all elements of a are null (unspecified result if a is zero-sized)
+   **/
+  public static boolean all_null(Object[] a) {
+    for (int i=0; i<a.length; i++) {
+      if (! (a[i] == null))
+	return false;
+    }
+    return true;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
   /// javadoc hacks
   ///
 
