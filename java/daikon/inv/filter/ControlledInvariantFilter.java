@@ -89,7 +89,9 @@ public class ControlledInvariantFilter extends InvariantFilter {
   private boolean isWorthPrinting_sansControlledCheck(Invariant inv) {
     if (inv instanceof Implication) {
       Implication impl = (Implication) inv;
-      return isWorthPrinting(impl.predicate()) && isWorthPrinting(impl.consequent());
+      // return isWorthPrinting(impl.predicate()) && isWorthPrinting(impl.consequent());
+      // All of these checks are done elsewhere
+      return true;
     }
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
