@@ -76,7 +76,7 @@ public class StreamRedirectThread extends Thread
     {
         try
         {
-            BufferedReader br = new BufferedReader(in);
+            BufferedReader br = new BufferedReader(in, BUFFER_SIZE);
             
             char[] cbuf = new char[BUFFER_SIZE];
             int count;

@@ -10,11 +10,7 @@ When the task is complete, move it to the bottom of the file.
     their current usage.
     [etf]
 
-  - Support DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
-    just as dfej does.  This is partially in Runtime right now, but
-    we need to call the proper methods when writing so it fully
-    works.
-    [etf]
+
 
   - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
@@ -92,6 +88,14 @@ Completed Tasks (add new ones at the top)
     Feb 07 2005 jhp - Moved everything actually used to the single
     directory $inv/daikon/chicory.  Chicory.java itself was placed in
     the directly in $inv/daikon.
+    
+  - Support DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
+    just as dfej does.  This is partially in Runtime right now, but
+    we need to call the proper methods when writing so it fully
+    works.
+    [etf]
+    
+    feb 16 2005 etf - Implemented this and tested it
     
     
    - Fix the output/err stream redirection to flush on each line feed

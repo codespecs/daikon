@@ -48,6 +48,9 @@ public class Chicory {
 
   /** Daikon command line.  If null, Daikon is not run **/
   public String daikon_cmd = null;
+  
+  /**Daikon command line for online mode.  Daikon not run in online mode if null **/
+  public String daikon_cmd_online = null;
 
   /** Target program name **/
   public String target_program = null;
@@ -64,11 +67,20 @@ public class Chicory {
   /** starting time (msecs) **/
   public static long start = System.currentTimeMillis();
 
+  /** daikon process for --daikon switch **/
+  public Process daikon_proc;
+
+private List<String> cmdList;
+
+private static final String traceLimTermString = "DTRACELIMITTERMINATE";
+private static final String traceLimString = "DTRACELIMIT";
+
   /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
+      
     Chicory chicory = new Chicory();
     chicory.parse_args(args, false);
 
@@ -171,11 +183,22 @@ public class Chicory {
         usage();
         System.exit(0);
 
-      } else if (arg.equals("--daikon")) {
-        daikon_cmd = "daikon.Daikon";
+      } 
+      else if (arg.equals("--daikon")) {
+          daikon_cmd = "daikon.Daikon";
 
-      } else if (arg.startsWith ("--daikon=")) {
-        daikon_cmd = "daikon.Daikon " + arg.substring ("--daikon=".length());
+        } 
+      else if (arg.startsWith ("--daikon=")) {
+          daikon_cmd = "daikon.Daikon " + arg.substring ("--daikon=".length());
+      }
+          
+         else if (arg.equals("--daikon-online")) {
+        daikon_cmd_online = "daikon.Daikon -";
+        premain_args.add(arg);
+
+      } else if (arg.startsWith ("--daikon-online=")) {
+        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon=".length()) + "-";
+        premain_args.add(arg);
 
       } else if (arg.equals("--verbose")) {
         verbose = true;
@@ -275,6 +298,10 @@ public class Chicory {
       System.err.printf ("or change your classpath to include it\n");
       System.exit (1);
     }
+    
+    String dtraceLim, terminate;
+    dtraceLim = System.getProperty(traceLimString);
+    terminate = System.getProperty(traceLimTermString);
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
@@ -282,6 +309,10 @@ public class Chicory {
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
+    if(dtraceLim != null) 
+        cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+    if(terminate != null) 
+        cmdlist.add("-D" + traceLimTermString + "=" + terminate );
     cmdlist.add (String.format("-javaagent:%s=%s", premain_path,
                                args_to_string(premain_args)));
     for (String target_arg : target_args)
@@ -318,22 +349,56 @@ public class Chicory {
       System.out.printf ("Daikon not run\n");
       System.exit (result);
     }
+    
+    runDaikon();
+    result = waitForDaikon();
+    System.exit(result);
+  }
+ 
 
+  public void runDaikon()
+  {
+      java.lang.Runtime rt = java.lang.Runtime.getRuntime();
+      
+      // Get the current classpath
+      String cp = System.getProperty("java.class.path");
+      if (cp == null)
+        cp = ".";
+      
     // Run Daikon on the results
+      /*String tmp = String.format  ("java -Xmx500m -cp %s -ea %s %s/%s", 
+              cp, daikon_cmd, output_dir, trace_file_name);
+      System.out.printf("TMP: %s\n", tmp);
+      
+      System.out.println("cp = " + cp);*/
+      
     String cmdstr = String.format ("java -Xmx500m -cp %s -ea %s %s/%s",
                                    cp, daikon_cmd, output_dir, trace_file_name);
+    
+    //cmdstr = "java -Xmx500m -cp " + cp + " -ea " + daikon_cmd + " " + output_dir+"/"+trace_file_name;
+    
+    
+   //cmdstr = "java daikon.Daikon -o felly.inv -"; //TODO remove!
+    
+    //System.out.println("daikon command is " + daikon_cmd);
+    //System.out.println("daikon command cmdstr " + cmdstr);
+    
     if (verbose)
       System.out.printf ("\nExecuting daikon: %s\n", cmdstr);
 
-    Process daikon_proc = null;
+    daikon_proc = null;
     try {
       daikon_proc = rt.exec(cmdstr);
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'\n", e, cmdstr);
       System.exit(1);
     }
-    result = redirect_wait (daikon_proc);
-    System.exit (result);
+  }
+  
+  private int waitForDaikon()
+  {
+    int result = redirect_wait (daikon_proc);
+    return result;
   }
 
   public int redirect_wait (Process p) {

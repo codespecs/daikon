@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.lang.instrument.*;
 import java.security.*;
+import java.io.*;
 import java.io.File;
 
 import daikon.Chicory;
@@ -21,7 +22,37 @@ public class ChicoryPremain {
     chicory.parse_args (args, true);
 
     // Open the dtrace file
-    if (chicory.trace_file_name == null) {
+    if(chicory.daikon_cmd_online != null)
+    {       
+        chicory.runDaikon();
+     
+        
+        
+        final StreamRedirectThread err_thread
+          = new StreamRedirectThread("daik_err", chicory.daikon_proc.getErrorStream(), System.err);
+        final StreamRedirectThread out_thread
+          = new StreamRedirectThread("daik_out", chicory.daikon_proc.getInputStream(), System.out);
+        System.out.println("starting daikon error and output threads...");
+        err_thread.start();
+        out_thread.start();
+        
+        Runtime.setDaikonInfo(err_thread, out_thread, chicory.daikon_proc);
+       
+       
+        Runtime.setDtraceOnlineMode(chicory.daikon_proc.getOutputStream());
+        //Runtime.setDtraceMaybe("dtrace.dtrace");
+        
+        java.lang.Runtime.getRuntime().addShutdownHook(new Thread()
+                {
+                    public void run()
+                    {
+                     System.out.println("OTHER HOOK");
+                     Runtime.endDaikon();
+                     
+                    }
+                });
+    }
+    else if (chicory.trace_file_name == null) {
       File trace_file_path = new File (chicory.output_dir, "dtrace.gz");
       Runtime.setDtraceMaybe (trace_file_path.toString());
     } else {

@@ -80,6 +80,9 @@ public class DTraceWriter extends DaikonWriter
          if (shouldExcludeClass(method.getDeclaringClass().getName()))
          return;
          */
+        
+        if(Runtime.dtrace_closed)
+            return;
 
         Member member = mi.member;
 
@@ -105,6 +108,9 @@ public class DTraceWriter extends DaikonWriter
     {
         // Thread thread = Thread.currentThread();
 
+        if(Runtime.dtrace_closed)
+            return;
+        
         Member member = mi.member;
 
         // these can be removed, this is done in transform now

@@ -160,6 +160,8 @@ public class Runtime
             printf("exit ste[1] = %s\n", ste[1]);
         }
     }
+    
+    private static long c  = 0;
 
     /**
      * Called when a method is entered.
@@ -177,13 +179,23 @@ public class Runtime
             process_new_classes();
 
         // System.out.println ("in enter");
-        /*
-         Throwable stack = new Throwable ("enter");
+        
+         /*Throwable stack = new Throwable ("enter");
          stack.fillInStackTrace();
          StackTraceElement[] ste_arr = stack.getStackTrace();
          StackTraceElement ste = ste_arr[1];
+         System.out.printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());*/
+         
+        //TODO remove!!! (and the c variable TOO)!
+        /*c++;
+        if(c > 5000)
+            {
+                System.out.println("LETS GET OUT OF HERE!!!");
+                dtrace.close();
+                System.exit(1);
+            }
          */
-        // printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());
+         
         MethodInfo mi = methods.get(mi_index);
         // System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
@@ -352,6 +364,14 @@ public class Runtime
   }
 
   private static HashMap primitiveClassesFromJvm = new HashMap(8);
+
+private static OutputStream daikonStdIn;
+
+private static Process chicory_proc;
+
+private static StreamRedirectThread err_thread;
+
+private static StreamRedirectThread out_thread;
   static {
     primitiveClassesFromJvm.put("Z", "boolean");
     primitiveClassesFromJvm.put("B", "byte");
@@ -455,6 +475,27 @@ public class Runtime
     public String toString() {return Double.toString(val);}
   }
 
+      public static void setDtraceOnlineMode(OutputStream os)
+    {
+        dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
+        dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
+        // 8192 is the buffer size in BufferedReader
+        BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
+        dtrace = new PrintStream(bos);
+        
+        daikonStdIn = os;
+
+        if (supportsAddShutdownHook())
+        {
+            addShutdownHook();
+        }
+        else
+        {
+            System.err.println("Warning: .dtrace file may be incomplete if program is aborted");
+        }
+        // System.out.println("...done calling setDtrace(" + filename + ")");
+    }
+
     /** Specify the dtrace file to which to write **/
     public static void setDtrace(String filename, boolean append)
     {
@@ -478,6 +519,9 @@ public class Runtime
             dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
             dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
             // 8192 is the buffer size in BufferedReader
+            
+            //System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
+            
             BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
             dtrace = new PrintStream(bos);
         }
@@ -551,11 +595,52 @@ public class Runtime
                         dtrace.println();
                         // This lets us know we didn't lose any data.
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
+                        //System.out.println("FLUSHING!!!!"); //TODO remove
                         dtrace.close();
                     }
+                    
+                   
                 }
+                
             }
         });
+    }
+    
+    static void setDaikonInfo(StreamRedirectThread err, StreamRedirectThread out, Process proc)
+    {
+        chicory_proc = proc;
+        err_thread = err;
+        out_thread = out;
+    }
+
+    /**
+     * 
+     */
+    public static void endDaikon()
+    {
+        
+        try
+        {
+            int status = chicory_proc.waitFor();
+            System.out.println("daikon ended with status " + status);
+        }
+        catch (InterruptedException e1)
+        {
+            // TODO REMOVE Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
+        try
+        {
+        err_thread.join();
+        out_thread.join();
+        }
+        catch(InterruptedException e)
+        {
+        }
+        
+        System.out.println("Finished endDaikon");
+        
     }
 
 
