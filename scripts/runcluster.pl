@@ -202,7 +202,13 @@ $invfile =~ /(.*)\.inv/;
 ###
 
 if ($verbose) { print "\n# Creating final .spinfo file\n"; }
-$command = "java daikon.tools.ExtractConsequent $invfile > cluster-$algorithm-$ncluster.spinfo";
+my $outfile;
+if ($algorithm eq 'xm') {
+  $outfile = "cluster-$algorithm.spinfo";
+} else {
+  $outfile = "cluster-$algorithm-$ncluster.spinfo";
+}
+$command = "java daikon.tools.ExtractConsequent $invfile > $outfile";
 system_or_die($command, $verbose);
 
 #remove all temporary files
