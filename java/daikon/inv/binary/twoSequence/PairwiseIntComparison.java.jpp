@@ -128,6 +128,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 
+import utilMDE.ArraysMDE;
 import utilMDE.Assert;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -310,10 +311,12 @@ public class PAIRWISEINTEQUAL
     return quantResult[0] + quantResult[1] + " " + EQUALSstring + " " + quantResult[2] + quantResult[3];
   }
 
+  private int num_values = 0;
+
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
 
     if (logDetail() || debug.isLoggable(Level.FINE))
-      log (debug, "add_modified (" + var1().name.name() + ", " + var2().name.name() + ")");
+      log (debug, "add_modified (" + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2) + ")");
 
     if (a1.length != a2.length) {
       destroyAndFlow();
@@ -330,6 +333,7 @@ public class PAIRWISEINTEQUAL
         destroyAndFlow();
         return;
       }
+      num_values++;
       values_cache.add(v1,v2);
     }
     if (logDetail() || debug.isLoggable(Level.FINE))
@@ -339,7 +343,7 @@ public class PAIRWISEINTEQUAL
   protected double computeProbability() {
    if (falsified) {
      return Invariant.PROBABILITY_NEVER;
-   } else if (ppt.num_samples()==0)
+   } else if (num_values==0)
      return Invariant.PROBABILITY_UNJUSTIFIED;
    else {
      #if !(defined(EQUAL) || defined(EQUALFLOAT))
