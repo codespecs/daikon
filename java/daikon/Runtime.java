@@ -115,16 +115,34 @@ public final class Runtime {
     public void print(long l)      { if (count <= 1) super.print(l); }
     public void print(Object obj)  { if (count <= 1) super.print(obj); }
     public void print(String s)    { if (count <= 1) super.print(s); }
-    public void println()          { if (count <= 1) super.println(); }
-    public void println(boolean x) { if (count <= 1) super.println(x); }
-    public void println(char x)    { if (count <= 1) super.println(x); }
-    public void println(char[] x)  { if (count <= 1) super.println(x); }
-    public void println(double x)  { if (count <= 1) super.println(x); }
-    public void println(float x)   { if (count <= 1) super.println(x); }
-    public void println(int x)     { if (count <= 1) super.println(x); }
-    public void println(long x)    { if (count <= 1) super.println(x); }
-    public void println(Object x)  { if (count <= 1) super.println(x); }
-    public void println(String x)  { if (count <= 1) super.println(x); }
+    public void println()          { if (count <= 1) { super.println();
+                                                       printedLines++; }
+      // Only do the check when printing a blank line, which happens
+      // (only?) between records.  (I could only count blank lines, instead...)
+      if (printedLines > lineLimit) {
+        System.err.println("Printed " + printedLines + " lines; "
+                           + "limit was " + lineLimit + ".  Exiting.");
+        System.exit(1);
+      }
+    }
+    public void println(boolean x) { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(char x)    { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(char[] x)  { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(double x)  { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(float x)   { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(int x)     { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(long x)    { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(Object x)  { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
+    public void println(String x)  { if (count <= 1) { super.println(x);
+                                                       printedLines++; } }
 
     // useful for emitting comments during debugging:
     public void printlnAlways(String s) { super.println(s); }
@@ -136,8 +154,16 @@ public final class Runtime {
     // List object.
     public int count = 0;
 
+    private int lineLimit = Integer.MAX_VALUE;
+    public int printedLines = 0;
+
     public PrintStreamWithThrottle(OutputStream out)
     { super(out); }
+
+    // Print no more (or not much more, anyway) than lineLimit lines.
+    public PrintStreamWithThrottle(OutputStream out, int lineLimit)
+    { super(out);
+      this.lineLimit = lineLimit; }
   }
 
   // It's convenient to have an entire run in one data trace file, so
@@ -171,8 +197,10 @@ public final class Runtime {
                           + "\nCannot append to gzipped dtrace file " + filename);
         os = new GZIPOutputStream(os);
       }
+      Integer dtracelimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE);
       // 8192 is the buffer size in BufferedReader
-      dtrace = new PrintStreamWithThrottle(new BufferedOutputStream(os, 8192));
+      dtrace = new PrintStreamWithThrottle(new BufferedOutputStream(os, 8192),
+                                           dtracelimit.intValue());
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error("" + e);
