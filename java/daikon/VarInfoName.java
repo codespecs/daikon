@@ -12,7 +12,10 @@ import java.util.*;
  * some expression which includes more than one variable, term, etc.
  * We separate this from the VarInfo itself because clients wish to
  * manipulate names into new expressions independent of the VarInfo
- * which they might be associated with.
+ * which they might be associated with.  VarInfoName's child classes
+ * are specific types of names, like applying a function to something.
+ * For example, "a" is a name, and "sin(a)" is a name that is the name
+ * "a" with the function "sin" applied to it.
  **/
 public abstract class VarInfoName
   implements Serializable, Comparable
@@ -92,6 +95,8 @@ public abstract class VarInfoName
   }
 
   /**
+   * Return the String representation of this name in the default
+   * output format.
    * @return the string representation (interned) of this name, in the
    * default output format
    **/
@@ -110,6 +115,8 @@ public abstract class VarInfoName
   protected abstract String name_impl();
 
   /**
+   * Return the String representation of this name in the esc style
+   * output format
    * @return the string representation (interned) of this name, in the
    * esc style output format
    **/
@@ -129,8 +136,11 @@ public abstract class VarInfoName
   protected abstract String esc_name_impl();
 
   /**
+   * Return the string representation of this name in IOA format
    * @return the string representation (interned) of this name, in the
    * IOA style output format
+   * @param classname Name of the class of this variable so we can
+   * remove it for IOA output.
    **/
   public String ioa_name(String classname) {
     if (ioa_name_cached == null) {
@@ -144,6 +154,14 @@ public abstract class VarInfoName
     return ioa_name_cached;
   }
   private String ioa_name_cached = null;
+
+  /**
+   * Called in subclasses to return the internal implementation of
+   * ioa_name.
+   * @param classname Name of the class of this variable so we can
+   * remove it for IOA output.
+   *
+   **/
   protected abstract String ioa_name_impl(String classname);
 
   /**
@@ -298,7 +316,12 @@ public abstract class VarInfoName
   // ============================================================
   // IOA
 
-  // remove all "this." and "classname."
+  /**
+   * Format this in IOA format, and remove all "this." and
+   * "classname".
+   * @param classname the String to remove
+   * 
+   **/
   public String ioaFormatVar(String varname, String classname) {
     int this_index = varname.indexOf("this.");
     int class_index = varname.indexOf(classname+".");
@@ -442,6 +465,27 @@ public abstract class VarInfoName
   }
 
   /**
+   * Returns a name for a function of two arguments;
+   * form is like "sum(var1, var2))".
+   * @param function the name of the function
+   * @param var1
+   * @param var2 The two names to apply the function to
+   **/
+  public static VarInfoName applyFunctionOfTwo(String function, VarInfoName var1, VarInfoName var2) {
+    return (new FunctionOfTwo(function, var1, var2)).intern();
+  }
+
+  /**
+   * Returns a name for a function of two arguments over this object.
+   * Form is like sum(this, var2).
+   * @param function the name of the function
+   * @param var2 The other argument to apply the function to
+   **/
+  public VarInfoName applyFunctionOfTwo(String function, VarInfoName var2) {
+    return (new FunctionOfTwo(function, this, var2)).intern();
+  }
+
+  /**
    * A function over a term, like "sum(argument)"
    **/
   public static class FunctionOf extends VarInfoName {
@@ -475,6 +519,103 @@ public abstract class VarInfoName
       return v.visitFunctionOf(this);
     }
   }
+
+
+  /**
+   * A function of two variables
+   **/
+  public static class FunctionOfTwo extends VarInfoName {
+    public final String function;
+    public final VarInfoName arg1, arg2;
+
+    /**
+     * Construct a new function of two
+     * @param function the name of the function
+     * @param arg1 the name of the first argument
+     * @param arg2 the name of the second argument
+     **/
+
+    public FunctionOfTwo(String function, VarInfoName arg1, VarInfoName arg2) {
+      Assert.assert(function != null);
+      Assert.assert(arg1 != null);
+      Assert.assert(arg2 != null);
+      this.function = function;
+      this.arg1 = arg1;
+      this.arg2 = arg2;
+    }
+    protected String repr_impl() {
+      return "FunctionOfTwo{" + function + "}[" + arg1.repr() + ", " + arg2.repr() + "]";
+    }
+    protected String name_impl() {
+      return function + "(" + arg1.name() + ", " + arg2.name() + ")";
+    }
+    protected String esc_name_impl() {
+      return "(warning: format_esc() needs to be implemented: " +
+	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+    }
+    protected String ioa_name_impl(String classname) {
+      return function + "(" + arg1.ioa_name(classname) + ", " + arg2.ioa_name(classname) + ")";
+    }
+
+    protected String simplify_name_impl(boolean prestate) {
+      return "(warning: format_simplify() needs to be implemented: " +
+	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitFunctionOfTwo(this);
+    }
+  }
+
+  /**
+   * Returns a name for the intersection of with another sequence, like
+   * "intersect(a[], b[])"
+   **/
+  public VarInfoName applyIntersection(VarInfoName seq2) {
+    Assert.assert(seq2 != null);
+    return (new Intersection(this, seq2)).intern();
+  }
+
+  /**
+   * Returns a name for the intersection of with another sequence, like
+   * "union(a[], b[])"
+   **/
+  public VarInfoName applyUnion(VarInfoName seq2) {
+    Assert.assert(seq2 != null);
+    return (new Union(this, seq2)).intern();
+  }
+
+
+  /**
+   * Intersection of two sequences.  Extends FunctionOfTwo, and the
+   * only change is that it does special formatting for IOA.
+   **/
+  public static class Intersection extends FunctionOfTwo {
+    public Intersection(VarInfoName seq1, VarInfoName seq2) {
+      super ("intersection", seq1, seq2);
+    }
+
+    protected String ioa_name_impl(String classname) {
+      return "(" + arg1.ioa_name(classname) + " \\I " + arg2.ioa_name(classname) + ")";
+    }
+
+  }
+
+  /**
+   * Union of two sequences.  Extends FunctionOfTwo, and the
+   * only change is that it does special formatting for IOA.
+   **/
+  public static class Union extends FunctionOfTwo {
+    public Union(VarInfoName seq1, VarInfoName seq2) {
+      super ("intersection", seq1, seq2);
+    }
+
+    protected String ioa_name_impl(String classname) {
+      return "(" + arg1.ioa_name(classname) + " \\U " + arg2.ioa_name(classname) + ")";
+    }
+
+  }
+
+
 
   /**
    * Returns a 'getter' operation for some field of this name, like
@@ -844,61 +985,6 @@ public abstract class VarInfoName
 
 
   /**
-   * Returns a name for the intersection of with another sequence, like
-   * "intersect(a[], b[])"
-   **/
-  public VarInfoName applyIntersection(VarInfoName seq2) {
-    Assert.assert(seq2 != null);
-    return (new Intersection(this, seq2, true)).intern();
-  }
-
-  /**
-   * Returns a name for the intersection of with another sequence, like
-   * "union(a[], b[])"
-   **/
-  public VarInfoName applyUnion(VarInfoName seq2) {
-    Assert.assert(seq2 != null);
-    return (new Intersection(this, seq2, false)).intern();
-  }
-
-
-  /**
-   * Intersection/Union of two sequences
-   **/
-  public static class Intersection extends VarInfoName {
-    public final VarInfoName seq1, seq2;
-    public final boolean isIntersection;
-    public Intersection(VarInfoName seq1, VarInfoName seq2, boolean isIntersection) {
-      Assert.assert(seq1 != null);
-      Assert.assert(seq2 != null);
-      this.seq1 = seq1;
-      this.seq2 = seq2;
-      this.isIntersection = isIntersection;
-    }
-    protected String repr_impl() {
-      String fn = isIntersection ? "Intersection{" : "Union{";
-      return fn + seq1.repr() + ", " + seq2.repr() + "}";
-    }
-    protected String name_impl() {
-      String fn = isIntersection ? "intersection(" : "union(";
-      return fn + seq1.name() + ", " + seq2.name() + ")";
-    }
-    protected String esc_name_impl() {
-      return "(warning: format_esc() needs to be implemented: " + name_impl();
-    }
-    protected String ioa_name_impl(String classname) {
-      String fn = isIntersection ? " \\I " : " \\U ";
-      return "(" + seq1.ioa_name(classname) + fn + seq2.ioa_name(classname) + ")";
-    }
-    protected String simplify_name_impl(boolean prestate) {
-      return "(warning: format_simplify() needs to be implemented: " + name_impl();
-    }
-    public Object accept(Visitor v) {
-      return v.visitIntersection(this);
-    }
-  }
-
-  /**
    * Returns a name for a slice of element selected from a sequence,
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
@@ -967,15 +1053,20 @@ public abstract class VarInfoName
     }
   }
 
-  // ============================================================
-  // Visitor framework for easier processing
 
+  /**
+   * Accept the actions of a visitor
+   **/
   public abstract Object accept(Visitor v);
 
+  /**
+   * Visitor framework for processing of VarInfoNames
+   **/
   public static interface Visitor {
     public Object visitSimple(Simple o);
     public Object visitSizeOf(SizeOf o);
     public Object visitFunctionOf(FunctionOf o);
+    public Object visitFunctionOfTwo(FunctionOfTwo o);
     public Object visitField(Field o);
     public Object visitTypeOf(TypeOf o);
     public Object visitPrestate(Prestate o);
@@ -983,13 +1074,14 @@ public abstract class VarInfoName
     public Object visitAdd(Add o);
     public Object visitElements(Elements o);
     public Object visitSubscript(Subscript o);
-    public Object visitIntersection(Intersection o);
     public Object visitSlice(Slice o);
   }
 
   /**
    * Traverse the tree elements which have exactly one branch (so the
-   * traversal order doesn't matter).
+   * traversal order doesn't matter).  Visitors need to implement
+   * methods for traversing elements (e.g. FunctionOfTwo) with more
+   * than one branch.
    **/
   public static abstract class AbstractVisitor
     implements Visitor
@@ -1004,6 +1096,10 @@ public abstract class VarInfoName
     public Object visitFunctionOf(FunctionOf o) {
       return o.argument.accept(this);
     }
+
+    // leave abstract; traversal order and return values matter
+    public abstract Object visitFunctionOfTwo(FunctionOfTwo o);
+
     public Object visitField(Field o) {
       return o.term.accept(this);
     }
@@ -1024,19 +1120,25 @@ public abstract class VarInfoName
     }
     // leave abstract; traversal order and return values matter
     public abstract Object visitSubscript(Subscript o);
-    public Object visitIntersection(Intersection o) {
-      return o.seq1.accept(this);
-    }
+
     // leave abstract; traversal order and return values matter
     public abstract Object visitSlice(Slice o);
   }
 
   /**
    * Use to report whether a node is in a pre- or post-state context.
+   * Throws an assertion error if a given goal isn't present.
    **/
   public static class NodeFinder
     extends AbstractVisitor
   {
+    /**
+     * Creates a new NodeFinder but also tests if goal is in root or its children.
+     * Throws an assertion error if not.
+     * @param root The root of the tree to search
+     * @param goal The goal to find
+     **/
+
     public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
       Object o = root.accept(this);
@@ -1057,6 +1159,12 @@ public abstract class VarInfoName
     }
     public Object visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
+    }
+    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+      if (o == goal) return goal;
+      if (o.arg1.accept(this) != null) return goal;
+      if (o.arg2.accept(this) != null) return goal;
+      return null;
     }
     public Object visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
@@ -1083,9 +1191,6 @@ public abstract class VarInfoName
       if (o.sequence.accept(this) != null) return goal;
       if (o.index.accept(this) != null) return goal;
       return null;
-    }
-    public Object visitIntersection(Intersection o) {
-      return (o == goal) ? goal : super.visitIntersection(o);
     }
     public Object visitSlice(Slice o) {
       if (o == goal) return goal;
@@ -1119,6 +1224,11 @@ public abstract class VarInfoName
     }
 
     // visitor methods which get the job done
+    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+      Object tmp = o.arg1.accept(this);
+      if (tmp == null) tmp = o.arg2.accept(this);
+      return tmp;
+    }
     public Object visitPrestate(Prestate o) {
       pre = true;
       return super.visitPrestate(o);
@@ -1174,6 +1284,14 @@ public abstract class VarInfoName
       return (o == old) ? _new :
 	((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
     }
+    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+      // If o is getting replaced, then just replace it
+      // otherwise, create a new function and check if arguments get replaced
+      return (o == old) ? _new :
+	VarInfoName.applyFunctionOfTwo(o.function,
+				       (FunctionOfTwo) (o.arg1.accept(this)),
+				       (FunctionOfTwo) (o.arg2.accept(this)));
+    }
     public Object visitField(Field o) {
       return (o == old) ? _new :
 	((VarInfoName) super.visitField(o)).applyField(o.field);
@@ -1202,10 +1320,6 @@ public abstract class VarInfoName
       return (o == old) ? _new :
 	((VarInfoName) o.sequence.accept(this)).
 	applySubscript((VarInfoName) o.index.accept(this));
-    }
-    public Object visitIntersection(Intersection o) {
-      return (o == old) ? _new :
-	((VarInfoName) super.visitIntersection(o)).applyIntersection(o.seq2);
     }
     public Object visitSlice(Slice o) {
       return (o == old) ? _new :
@@ -1246,6 +1360,11 @@ public abstract class VarInfoName
       result.add(o);
       return super.visitFunctionOf(o);
     }
+    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+      result.add(o);
+      o.arg1.accept(this);
+      return o.arg2.accept(this);  // Return value doesn't matter
+    }
     public Object visitField(Field o) {
       result.add(o);
       return super.visitField(o);
@@ -1275,10 +1394,6 @@ public abstract class VarInfoName
       o.sequence.accept(this);
       o.index.accept(this);
       return null;
-    }
-    public Object visitIntersection(Intersection o) {
-      result.add(o);
-      return super.visitIntersection(o);
     }
     public Object visitSlice(Slice o) {
       result.add(o);
@@ -1342,6 +1457,10 @@ public abstract class VarInfoName
     public Object visitElements(Elements o) {
       unquant.add(o);
       return super.visitElements(o);
+    }
+    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+      o.arg1.accept(this);
+      return o.arg2.accept(this); // Return value doesn't matter
     }
     public Object visitSizeOf(SizeOf o) {
       // don't visit the sequence; we aren't using the elements of it,
@@ -1532,6 +1651,7 @@ public abstract class VarInfoName
      * elements are ioa-named strings for the provided roots.  It
      * distinguishes Sets from Arrays, and quantifies each accordingly.
      * --> it returns the indexes assigned at the end of the array
+     * @param classname String of class name so we can remove it for IOA output
      **/
     public static String[] format_ioa(VarInfo[] v_roots, String classname) {
       Assert.assert(v_roots != null);
