@@ -617,7 +617,7 @@ public final class Daikon {
 
     // Done
     if (!Daikon.dkconfig_quiet) {
-      System.out.println("Exiting");
+      System.out.println("Exiting Daikon.");
     }
   }
 
