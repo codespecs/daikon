@@ -5030,6 +5030,10 @@ technique is used is determined by the front end, which creates the
 
 @cindex out of memory error
 @cindex java.lang.OutOfMemoryError
+@cindex memory exhaustion
+@cindex HotSpot JVM
+@cindex JVM memory management
+@cindex permanent generation (in HotSpot JVM)
 
 If Daikon runs out of memory, generating a message like
 @example
@@ -5037,15 +5041,28 @@ If Daikon runs out of memory, generating a message like
                 <<no stack trace available>>
 @end example
 @noindent
-then the problem is likely to be an excessively large @file{.dtrace}
+then the problem is likely to be an excessively large input
 file.  In addition to the solutions discussed in @ref{Large dtrace
 files}, you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
-JVM-specific; see your JVM documentation for details.)  The default is
-only 1 megabyte; to permit use of up to 256 megabytes, you would run
-Java like so:
+JVM-specific; see your JVM documentation for details. For instance,
+its correct name in JDK versions 1.3 and later is @option{-Xmx}.)  
+The default may be 64 megabytes or less; to permit use of up to 256
+megabytes, you would run Java like so:
 @example
         java -mx256m ...
+@end example
+
+When using the Java HotSpot JVM, an additional parameter may need to
+be increased. HotSpot uses a separately-limited memory region, called
+the `permanent generation', for several special kinds of allocation,
+one of which (interned strings) Daikon sometimes uses heavily.  It may
+be necessary to increase this limit as well, with the
+@option{-XX:MaxPermSize=} option. For instance, to use 512 megabytes,
+of which at most 256 can be used for the permanent generation, you
+would run Java like so:
+@example
+        java -Xmx=512m -XX:MaxPermSize=256m
 @end example
 
 Another possible problem is the creation of too many derived variables.
