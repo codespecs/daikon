@@ -2,6 +2,7 @@ package daikon.simplify;
 
 import java.util.Vector;
 import java.util.Stack;
+import java.util.Random;
 import utilMDE.*;
 
 /**
@@ -251,6 +252,15 @@ public class LemmaStack {
     return new_invs;
   }
 
+  private static void shuffle(Object[] ary, Random rand) {
+    for (int i = 0; i < ary.length - 1; i++) {
+      int j = i + rand.nextInt(ary.length - i);
+      Object temp = ary[i];
+      ary[i] = ary[j];
+      ary[j] = temp;
+    }
+  }
+
   /** Return a minimal set of assumptions from the stack that imply a
    * given string. */
   private Vector minimizeReasons(String str) throws SimplifyError {
@@ -258,7 +268,9 @@ public class LemmaStack {
     unAssumeAll(lemmas);
     Vector result;
     try {
-      result = minimizeAssumptions((Lemma[])lemmas.toArray(new Lemma[0]), str);
+      Lemma[] lemmaAry = (Lemma[])lemmas.toArray(new Lemma[0]);
+      // shuffle(lemmaAry, new Random());
+      result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);
     } catch (TimeoutException e) {
       System.err.println("Minimzation timed out");
