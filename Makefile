@@ -358,7 +358,8 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
-	cd /tmp/${USER}/daikon-jar && jar cf $@ *
+	cd /tmp/${USER}/daikon-jar && \
+	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
 	mv /tmp/${USER}/daikon-jar/$@ $@
 	rm -rf /tmp/${USER}/daikon-jar
 
