@@ -340,7 +340,7 @@ Goal (daikon): b[] is a subsequence of a[]
 Goal (java): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:Java) needs to be implemented: b[] is a subsequence of a[]
 Goal (esc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:ESC/Java) needs to be implemented: b[] is a subsequence of a[]
 Goal (ioa): b \subseteq a
-Goal (jml): (\exists int i; 0 <= i && i <= b.length-1; (\forall int i; 0 <= i && i <= a.length-1; b[i+j] == a[i]))
+Goal (jml): (\exists int i; 0 <= i && i <= b.length-1; (\forall int j; 0 <= j && j <= a.length-1; b[i+j] == a[i]))
 Goal (simplify): (IMPLIES (AND (>= (+ (- (- (arrayLength |b|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |a|) 1) 0) 1) 0)) (AND (AND (NEQ (+ (- (- (arrayLength |b|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |a|) 1) 0) 1) (+ (- (- (arrayLength |b|) 1) 0) 1))) (EXISTS (|__shift|) (AND (<= 0 |__shift|) (<= (+ |__shift| (+ (- (- (arrayLength |b|) 1) 0) 1)) (+ (- (- (arrayLength |a|) 1) 0) 1)) (FORALL (|__index|) (IMPLIES (AND (<= 0 |__index|) (< |__index| (+ (- (- (arrayLength |b|) 1) 0) 1))) (EQ (select (select elems |b|) (+ 0 |__index|)) (select (select elems |a|) (+ (+ 0 |__index|) |__shift|)))))))))
 [1 2 3 4 5 6]
 [7 8 1 2 3 4 5 6 7 8]
