@@ -47,6 +47,8 @@ while (scalar(@ARGV) > 0) {
     $skip_dfej = 1;
   } elsif ($arg eq "--test_kvasir") {
     $test_kvasir = 1;
+  } elsif ($arg eq "--skip_kvasir") {
+    $test_kvasir = 0;
   } elsif ($arg eq "--use_ver2") {
     $use_ver2 = 1;
   } else {
