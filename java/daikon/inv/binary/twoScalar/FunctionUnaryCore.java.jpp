@@ -131,19 +131,20 @@ public final class CLASSNAME
       String result = resultname + eq + methodname[0] + argname + methodname[1];
       if (format == OutputFormat.IOA) result += " ***";
       return result;
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify(argname, resultname);
     }
 
     return wrapper.format_unimplemented(format);
   }
 
-  public String format_simplify(String vname1, String vname2) {
-    String argname = inverse ? vname2 : vname1;
-    String resultname = inverse ? vname1 : vname2;
+  public String format_simplify(String argname, String resultname) {
     if (methodname[1].equals("")) {
+      // Already in prefix form; assume it's printable as a Simplify
+      // function name
       return "(EQ " + resultname + " (" + methodname[0] + " " + argname + "))";
     } else {
-      return "format_simplify() doesn't know function " + methodname[0] + "-" +
-        methodname[1];
+      return wrapper.format_unimplemented(OutputFormat.SIMPLIFY);
     }
   }
 
