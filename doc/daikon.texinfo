@@ -834,11 +834,13 @@ You need to perform three basic tasks:  instrument the target program
 invariants (steps 8-9).
 
 You must first install Daikon if you haven't done so already; see
-@ref{Installing Daikon}.
+@ref{Installing Daikon}.  If you have any trouble with these
+instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
 
 
 @enumerate
-@item Change to the directory containing the @file{StackAr.java} program.
+@item Change to the directory containing the StackAr program.  (The
+directory contains the @file{DataStructures} directory.)
 @example
 cd examples/StackAr
 @end example
@@ -6023,9 +6025,11 @@ Rich Angros,
 Tadashi Araragi,
 Seung Mo Cho,
 David Cok,
+Dorothy Curtis,
 Engelbert Hubbers,
 Scott McMaster,
-Manos Renieris.
+Manos Renieris,
+Tao Xie.
 Many others have also been generous with their feedback, for which we
 are also grateful.
 
