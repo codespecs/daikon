@@ -16,8 +16,7 @@ while (<>) {
 	split(":");
       }
       foreach $temp (@_) {
-	if ((!defined($already_seen{$temp}))
-	    && ($temp !~ /vortex\/(M3|Smalltalk)\/bin\/shell$/)) {
+	if ((!defined($already_seen{$temp}))) {
 	      $already_seen{$temp} = 1;
 	      push(@result, $temp);
           }
