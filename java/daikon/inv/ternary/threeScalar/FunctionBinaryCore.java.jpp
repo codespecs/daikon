@@ -363,6 +363,8 @@ public final class CLASSNAME
     String func = null;
     if (methodname[1].equals(" * ")) {
       func = "*";
+    } else if (methodname[1].equals(" % ")) {
+      func = "MOD";
     } else if (methodname[1].equals(" | ")) {
       func = "|java-bitwise-or|";
     } else if (methodname[1].equals(" || ")) {
