@@ -85,9 +85,9 @@ public final class IntComparisonCore implements java.io.Serializable {
 	// return Math.pow(.5, wrapper.ppt.num_values());
 	return Invariant.PROBABILITY_JUSTIFIED;
       } else {
-	// None of the can_be_X's are set
-	// we haven't seen any samples
-	return Invariant.PROBABILITY_UNKNOWN;
+	// None of the can_be_X's are set.
+	// (We haven't seen any samples.)
+	return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
   }
