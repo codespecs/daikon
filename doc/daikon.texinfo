@@ -216,7 +216,6 @@ Perl front end dfepl
 Source-based Java front end dfej
 
 * Instrumenting Java programs::  
-* StackAr example with dfej::   
 * dfej options::                
 * Run dfej Java::               
 * Scope of instrumentation::    
@@ -224,9 +223,10 @@ Source-based Java front end dfej
 * Installing dfej::             
 * All-in-one script::           
 
-StackAr example with dfej
+Instrumenting Java programs
 
-* Summary of Daikon use::       
+* StackAr example with dfej::   
+* Summary of Daikon use with dfej::  
 * Automating the process::      
 * Second Java example::         
 
@@ -243,7 +243,7 @@ Source-based C front end dfec
 * Instrumenting C programs with dfec::  
 * dfec examples::               
 * dfec command-line arguments::  
-* Daikon runtime customization::  
+* dfec runtime customization::  
 * Instrumentation scope::       
 * dfec requirements::           
 * Installing dfec::             
@@ -834,7 +834,7 @@ representation of the invariants is written to @file{StackAr.inv.gz}.
 
 @item Examine the invariants.
 
-There are five ways to do this.
+There are various ways to do this.
 @itemize @bullet
 @item Examine the output from running Daikon.  (You may find it
 convenient to capture the output in a file; add @samp{> StackAr.txt}
@@ -1087,7 +1087,7 @@ Most of the C examples require no more than 50 megabytes of disk
 space, but the schedule and schedule2 examples require around 200
 megabytes each, and the Rijndael example requires about 600
 megabytes.  This disk usage can be reduced by recompiling the Daikon
-runtime to compress its output dtrace files; see @ref{Daikon runtime
+runtime to compress its output dtrace files; see @ref{dfec runtime
 customization}.
 
 In some cases, the time and space requirements of the examples can be
@@ -2129,7 +2129,7 @@ creates data trace (@file{.dtrace}) files, and optionally runs Daikon on
 them.  Chicory is named after the chicory plant, whose root is sometimes
 used as a coffee substitute or flavor enhancer.
 
-To use Chicory, run your program as you normally would, but replace 
+To use Chicory, run your program as you normally would, but 
 replace the @command{java} command with @command{java daikon.Chicory}.  For
 instance, if you usually run
 @example
@@ -2141,7 +2141,8 @@ then instead you would run
 java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
 @end example
 @noindent
-To create file @file{MyClass.dtrace} in the current directory.
+This runs your program and creates file @file{MyClass.dtrace} 
+in the current directory.
 Furthermore, a single command can both create a trace file and run Daikon:
 @example
 java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
@@ -2149,16 +2150,19 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @noindent
 See below for more options.
 
-That's all there is to it!  Chicory does not require you to perform
-separate instrumentation or compilation steps, as @command{dfej} does.
+That's all there is to it!  Since Chicory instruments class files 
+directly as they are loaded into Java,
+you do not need to perform separate instrumentation and recompilation steps.
 However, you should compile your program with debugging information
 enabled (the @option{-g} command-line switch to @command{javac});
 otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
-Chicory supports all versions of Java, including Java 5.0 (it must
-be run in a 5.0 JVM).  Chicory's functionality is very similar to that
-of the @command{dfej} tool, and Chicory supports most of the same
+Chicory must be run in a version 5.0 JVM, but it is backward-compatible
+with older versions of Java code.
+Chicory's functionality is very similar to that
+of the older dfej Java front end (@pxref{dfej}), and Chicory 
+supports most of the same
 command-line options.  However, Chicory has three substantial advantages
 over dfej: Chicory is much easier to use, dfej only supports Java
 1.4 and earlier, and Chicory is platform-independent (and requires no
@@ -2173,7 +2177,7 @@ special action to build) since it is written in Java.
 
 Chicory is invoked as follows:
 @example
-java daikon.Chicory @var{classname} @var{args}");
+java daikon.Chicory @var{classname} @var{args}
 @end example
 @noindent
 where
@@ -2185,9 +2189,8 @@ is a valid invocation of Java.
 
 This section lists the optional command-line arguments to Chicory, which
 appear before the @var{classname} on the Chicory command line.
-dfej accepts the same command-line arguments, plus a few more
-(@pxref{dfej options}).
-
+Unless otherwise noted, all of these options are also accepted by
+dfej (@pxref{dfej options}).
 
 @table @option
 @item --help
@@ -2236,34 +2239,38 @@ is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.
 
-@item --ppt-select-pattern=@var{ppt_regexp}
-Only produce trace output for matching classes/procedures.  Cannot be used
-in conjunction with @option{--ppt-omit-pattern}.  May be supplied multiple
-times.  The argument provided must be a regular expression.  It will match if matches any
-portion of the program point name.  Note that currently only classes are
-matched, not each full ppt name.  Thus, either all of a classes methods are
-traced or none of  them are.
+@item --ppt-select-pattern=@var{regexp}
+Only produce trace output for classes/procedures whose names match the
+given regular expression.  This option may be supplied multiple times,
+but it cannot be used in conjunction with @option{--ppt-omit-pattern}.  
+
+The regular expression may match any portion of the program point name.  
+Note that currently only classes are matched, not each full program point 
+name.  Thus, either all of a class's methods are traced or none of  them are.
 
 If the the regular expression does not match the name of a particular
 class, then that class is omitted entirely, along with all procedures
-within it.  Thus, the @option{--ppt-select-pattern} flag does not cause
-output for exactly the procedures that the @option{--ppt-omit-pattern} flag
-omits, with the same argument.  For instance, suppose that class C
-contains procedures foo and bar.  Then @option{--ppt-omit-pattern=bar} would
-cause foo to be instrumented, but @option{--ppt-select-pattern=bar}
-would cause nothing to be instrumented, because regular
-expression``bar'' does not match the class name C, so no part of C
-would be further considered.
+within it.  Thus, the @option{--ppt-select-pattern} flag does not
+cause output for exactly the procedures that the
+@option{--ppt-omit-pattern} flag omits, with the same argument.  For
+instance, suppose that class @code{C} contains procedures
+@code{foo} and @code{bar}.  Then
+@option{--ppt-omit-pattern=bar} would cause @code{foo} to be
+instrumented, but @option{--ppt-select-pattern=bar} would cause
+nothing to be instrumented, because regular expression @samp{bar} does
+not match the class name @code{C}, so no part of @code{C} would be further
+considered.
 
-To trace only method bar of class C, one possible command is:
+To trace only method @code{bar} of class @code{C}, one possible command is:
 
 @example
 java daikon.Chicory --ppt-select-pattern='C$|C.bar' ...
 @end example
 
 
-@item --ppt-omit-pattern=@var{string}
-Do not produce data trace output for matching classes/procedures.  This
+@item --ppt-omit-pattern=@var{regexp}
+Do not produce data trace output for classes/procedures whose names match
+the given regular expression.  This
 reduces the size of the data trace file and also may make the
 instrumented program run faster, since it need not output those variables.
 
@@ -2273,38 +2280,37 @@ if its fully qualified class, fully qualified procedure name, or
 complete program point name exactly matches one of the omitting criteria.
 A regular expression matches if it matches any portion of the program
 point name.  Note that currently only classes are matched, not each full
-ppt name.  Thus, either all of a classes methods are traced or none of
+program point name.  Thus, either all of a class's methods are traced, 
+or none of
 them are.
-
-The argument is treated as a regular expression.
 
 Here are examples of how to avoid detecting invariants over various
 parts of your program.
 
 @itemize
 @item omit a whole package:
-@smallexample
+@example
   java daikon.Chicory '--ppt-omit-pattern=^junit\.'
-@end smallexample
-@smallexample
+@end example
+@example
   java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
-@end smallexample
+@end example
 
 @item omit a single class:
-@smallexample
+@example
 java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
-@end smallexample
+@end example
 
 @item omit a single method:
-@smallexample
+@example
 java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
      ...
-@end smallexample
+@end example
 
 @item omit a single program point:
-@smallexample
+@example
 java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
-@end smallexample
+@end example
 
 @end itemize
 
@@ -2316,10 +2322,10 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
 @cindex dtrace file name
 @cindex file name, for dtrace file
 @item --dtrace-file=@var{filename}
-Specifies the default name for the trace output (@file{.dtrace}) file
-(default @file{daikon-output/@var{CLASSNAME}.dtrace}).
-The filename is relative
-to the current directory at runtime, or is absolute.  If the @env{DTRACEFILE}
+Specifies the default name for the trace output (@file{.dtrace}) file.
+If no explicit trace file name or directory is specified on the command line,
+the default is @file{daikon-output/@var{CLASSNAME}.dtrace}; however,
+if the @env{DTRACEFILE}
 environment variable is set when the instrumented program is run, it
 overrides this default.  Furthermore, if the @env{DTRACEAPPEND} environment
 variable is set to any value, the dtrace file will be appended to
@@ -2331,13 +2337,13 @@ give you more control over which subsets of runs to invoke Daikon on.
 @item --output-dir=@var{directory}
 Write the trace output (@file{.dtrace}) to this directory.  The default
 is the current directory.
-(Not supported by @command{dfej}, only Chicory.)
+(Not supported by dfej, only Chicory.)
 
 @item --daikon
 @itemx --daikon=@var{args}
-After creating a data dtrace (@file{.dtrace}) file, run Daikon on it,
+After creating a data trace (@file{.dtrace}) file, run Daikon on it,
 passing the specified arguments, if any, to Daikon.
-(Not supported by @command{dfej}, only Chicory.)
+(Not supported by dfej, only Chicory.)
 
 @end table
 
@@ -2353,7 +2359,7 @@ passing the specified arguments, if any, to Daikon.
 
 Daikon's front end for C, named Kvasir, executes C (and a reasonable subset 
 of C++) programs and creates  
-data trace (.dtrace) files by examining the operation of the binary at
+data trace (@file{.dtrace}) files by examining the operation of the binary at
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 
 To use Kvasir, first compile your program using the DWARF-2 debugging
@@ -2409,6 +2415,7 @@ For instance, if you normally run your program with the command
 @example
 ./program -option input.file
 @end example
+@noindent
 just say
 @example
 kvasir-dtrace ./program -option input.file
@@ -2418,31 +2425,33 @@ As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
 directory containing a @file{program.dtrace} file suitable as input to Daikon.
 
-A number of options to Kvasir may be supplied between
-@command{kvasir-dtrace} and the name of your program (@pxref{Kvasir options}).
+A number of options to Kvasir may be supplied on the command line
+before the argument that is the name of your program (@pxref{Kvasir options}).
 
-Note that Kvasir uses a different scheme for naming variables than the Java
-front end and the old C front end dfec do (@pxref{Variable names}).
-Because C does not have classes, 
-the `class' portion of a program point name (before the last period) instead holds
-the file in which a function was defined, for file-static functions, or
-is simply a single period for global functions. (Thus, global function
-names start with two periods, like @samp{..main():::ENTER}., the first 
-denoting that it is global in scope and the second denoting the separator 
-between the 'class' portion of the program point name and its actual name)  
-In variable names, by contrast, the period is used to represent the field
-selection operator, so a slash is used instead as a separator: 
-global variables are prefixed with a slash (e.g., @samp{/globalVar}), 
-and file-static variables are prefixed with their filename (with periods 
-converted into underscores) and then a slash (e.g., @samp{Global_c/staticVar} for 
-a file-static variable @var{staticVar} declared in the file @file{Global.c}).  
-For static variables which are declared within functions, an ampersand "@@" 
-separates the filename and the function name and then a slash separates the 
-function name and variable name (e.g., @samp{Global_c@@main/funcStaticVar} for a 
-static variable @var{funcStaticVar} declared within the function 
-@var{main} in the file @file{Global.c}).  This syntax ensures that each 
-program point and variable within a C program has a unique name when 
-presented to Daikon.
+Note that Kvasir uses a different scheme for naming variables than the
+Java front ends and the source-based C front end dfec do
+(@pxref{Variable names}).  Because C does not have classes, the
+``class'' portion of a program point name (before the last period)
+instead holds the file in which a function was defined, for
+file-static functions, or is simply a single period for global
+functions. (Thus, global function names start with two periods, like
+@samp{..main():::ENTER}., the first denoting that it is global in
+scope and the second denoting the separator between the ``class''
+portion of the program point name and its actual name) In variable
+names, by contrast, the period is used to represent the field
+selection operator, so a slash is used instead as a separator: global
+variables are prefixed with a slash (e.g., @samp{/globalVar}), and
+file-static variables are prefixed with their filename (with periods
+converted into underscores) and then a slash (e.g.,
+@samp{Global_c/staticVar} for a file-static variable @code{staticVar}
+declared in the file @file{Global.c}).  For static variables which are
+declared within functions, an at-sign @samp{@@} separates the filename
+and the function name and then a slash separates the function name and
+variable name (e.g., @samp{Global_c@@main/funcStaticVar} for a static
+variable @code{funcStaticVar} declared within the function @code{main}
+in the file @file{Global.c}).  This syntax ensures that each program
+point and variable within a C program has a unique name when presented
+to Daikon.
 
 
 @node Kvasir options, Pointer type disambiguation, Using Kvasir, Kvasir
@@ -2497,8 +2506,8 @@ intermixing it with the trace output.  If the given filename ends in
 
 @item --dtrace-gzip
 
-Compress trace information with the @command{gzip} program before writing
-it to the @file{.dtrace} file.  You must have the @command{gzip} program
+Compress trace information with the gzip program before writing
+it to the @file{.dtrace} file.  You must have the gzip program
 available.
 
 @item --dump-ppt-file=@var{filename}
@@ -2514,27 +2523,29 @@ then be used with the @option{--ppt-list-file} (respectively
 Omit any global or static variables from the @file{.decls} and
 @file{.dtrace} files.  Leaving these out can significantly improve Kvasir
 and Daikon's performance, at the expense of missing properties involving
-them.  The default is to keep global and static variables.
+them.  The default is to generate trace information for 
+global and static variables.
 
 @item --ignore-static-vars
 
-Omit any static variables but keep global variables in the 
-@file{.decls} and @file{.dtrace} files.
+Omit any static variables but generate trace information for 
+global variables in the  @file{.decls} and @file{.dtrace} files.
 
 @item --limit-static-vars
 
-Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
-files. File-static variables are only observed at program points for functions 
-which belong to the same file as the variable.  Static variables 
-declared within a particular function are only observed at program points 
-for that function.  This is a heuristic to reduce the amount of Kvasir
-output without greatly reducing the amount of useful output.
+Limits the output of static variables in the @file{.decls} and
+@file{.dtrace} files.  File-static variables are only observed at
+program points for functions which belong to the same file as the
+variable.  Static variables declared within a particular function are
+only observed at program points for that function.  This is a
+heuristic to reduce the amount of Kvasir output without greatly
+reducing the amount of useful output.
 
 @item --nesting-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
-are structs or classes or pointers to structs or classes of ANY TYPE), 
-N (an integer between 0 and 100) specifies approximately how many levels
+are structs or classes or pointers to structs or classes of @emph{any} type), 
+@var{N} (an integer between 0 and 100) specifies approximately how many levels
 of pointers to dereference.  This is useful for controlling the output
 of complex data structures with many references to other structures.
 The default is 2.
@@ -2542,7 +2553,8 @@ The default is 2.
 @item --struct-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
-are pointers to the SAME TYPE of struct or class), N (an integer between 
+are pointers to the @emph{same} type of struct or class),
+@var{N} (an integer between 
 0 and 100) specifies approximately how many levels of pointers to dereference. 
 This is useful for controlling the output of linked lists and trees. 
 The default is 2.
@@ -2550,7 +2562,7 @@ The default is 2.
 @item --output-fifo
 
 Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
-known as `named pipes').  Kvasir will then open first the @file{.decls}
+known as ``named pipes'').  Kvasir will then open first the @file{.decls}
 FIFO and then the @file{.dtrace} FIFO, blocking until another program
 (such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
 avoids the need for large trace files, but FIFOs are not supported by
@@ -2559,17 +2571,17 @@ some file systems, including AFS@.
 @item --ppt-list-file=@var{filename}
 @itemx --var-list-file=@var{filename}
 
-Trace only the program points (respectively variables) listed in the
+Trace only the program points (respectively, variables) listed in the
 given file.  Other program points (respectively variables) will be
 omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
-@option{--dump-ppt-file} (respectively @option{--dump-var-file}) option
+@option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
 described above.
 
 @item --program-stdout=@var{filename}
 @itemx --program-stderr=@var{filename}
 
-Redirect the standard output (respectively standard error) stream of the
+Redirect the standard output (respectively, standard error) stream of the
 program being traced to the specified path.  By default, the standard
 output and standard error streams will be left pointing to the same
 locations specified by the shell, except that if @option{--dtrace-file=-}
@@ -2580,14 +2592,14 @@ If the same filename is given for both options, the streams will be
 interleaved in the same way as if by the Bourne shell construction
 @code{2>&1}.
 
-Also as in the shell, @var{filename} can be an ampersand followed by an
+Also, as in the shell, @var{filename} can be an ampersand followed by an
 integer, to redirect to a numbered file descriptor.  For instance, to
 redirect the program's standard output and error, and Kvasir's standard
 error, to a single file, you can say @option{--program-stdout='&2'
 --program-stderr='&2' 2>@var{filename}}.
 
 @item --disambig-file=@var{filename}
-Specifies the filename for the pointer type disambiguation file 
+Specifies the name of the pointer type disambiguation file 
 (@pxref{Pointer type disambiguation}).
 If this file exists, Kvasir uses it to make decisions about how 
 to output the referents of pointer variables.  If the file does not exist, 
@@ -2601,7 +2613,7 @@ Tells Kvasir to create or read pointer type disambiguation
 which is @file{@var{myprog}.disambig} in the same
 directory as the target program, where @var{myprog} is the name of the 
 target program. This is equivalent to 
---disambig-file=@file{@var{myprog}.disambig}.
+@samp{--disambig-file=@file{@var{myprog}.disambig}}.
 
 @end table
 
@@ -2685,7 +2697,7 @@ that program point.  It also contains an entry for every user-defined
 struct, which can be used to disambiguate member variables of
 that struct.  Disambiguation information entered here will apply to all
 instances of a struct or class of that type, at all program points.
-There is also an entry called 'globals', which disambiguates global
+There is also an entry called ``globals'', which disambiguates global
 variables which are output at every program point.  The entries in the
 disambig file may appear in any order, and whole entries or individual
 variables within an entry may be omitted.  In this case, Kvasir will
@@ -2728,11 +2740,13 @@ evident that in this program, @code{bar} only refers to one element: @code{&baz}
 within @code{main}.  However, by default, Kvasir assumes that @code{bar} is an 
 array of @code{record} structs since a C pointer contains no information about 
 how many elements it refers to.  Because Kvasir must output @code{bar} as an 
-array and @code{bar->numbers} is an array of integers, it "flattens" 
-@code{bar->numbers} into 5 separate arrays named @code{bar->numbers[0]} through 
-@code{bar->numbers[4]} and creates fairly verbose output.  This is a direct 
+array and @w{@code{bar->numbers}} is an array of integers, it ``flattens'' 
+@w{@code{bar->numbers}} into 5 separate arrays named @w{@code{bar->numbers[0]}}
+through @w{@code{bar->numbers[4]}} 
+and creates fairly verbose output.  This is a direct 
 consequence of the fact that Daikon can only handle one layer of sequences 
 (it cannot handle arrays within arrays, i.e., multi-dimensional arrays).  
+
 Here is part of the Daikon output for this program:
 
 @example
@@ -2800,12 +2814,13 @@ P
 @end example
 
 This means that at the two program points corresponding to the entry and
-exit of foo(), the variable @var{bar} is treated as a @samp{P}ointer type. 
-Kvasir automatically inferred Pointer instead of Array for @var{bar} 
-because it observed that @var{bar} only pointed to one element during the 
-execution of the target program which generated the .disambig file. This 
-heuristic (which was not available in the old dfec) allows users to use 
-.disambig files more effectively with less manual editing.
+exit of @code{foo()}, the variable @code{bar} is treated as a
+@samp{P}ointer type. 
+Kvasir automatically inferred Pointer instead of Array for @code{bar} 
+because it observed that @code{bar} only pointed to one element during the 
+execution of the target program which generated the @file{.disambig} file. 
+This heuristic allows users to use 
+@file{.disambig} files more effectively with less manual editing.
 
 Then, running Kvasir again with the @option{--disambig}
 option causes Kvasir to open the existing
@@ -2815,11 +2830,13 @@ the output accordingly:
   kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
 @end example
 
-This means that @var{bar} will be output as a @samp{P}ointer to a
-single element, thus generating much cleaner invariants. Notice that 
-@code{bar->numbers} no longer has to be "flattened" because @var{bar} 
-is now a pointer to one struct so Daikon can recognize @code{bar->numbers} 
-as a single-dimensional array.
+This tells Kvasir to output @code{bar} as a @samp{P}ointer to a single
+element, which in turn causes Daikon to generate much cleaner
+invariants. Notice that @w{@code{bar->numbers}} no longer has to be
+``flattened'' because @code{bar} is now a pointer to one struct, so
+Daikon can recognize @w{@code{bar->numbers}} as a single-dimensional
+array.
+
 @example
 ===========================================================================
 ..foo():::ENTER
@@ -2914,16 +2931,8 @@ The source
 code for Kvasir is included in the main Daikon distribution, and is
 compiled by default on Linux/x86 based systems.
 
-To compile and install Kvasir, give the command @code{make kvasir}
+To compile and install Kvasir, give the command @command{make kvasir}
 from the top-level Daikon directory:
-Other sections of the manual give installation instructions for several
-special-purpose components of Daikon:  the C front end Kvasir
-(@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), and the source-based C front end dfec
-(@pxref{Installing dfec}).
-@c , and the Context GUI (@pxref{Installing the Context GUI}).
-Most users will not need to read those instructions,
-however.
 
 @example
 cd $DAIKONDIR
@@ -2974,7 +2983,7 @@ limitations are listed roughly in decreasing order of severity.
 Kvasir-traced programs take a while to start (often a good fraction of a
 second).  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir 
-run faster, try the @code{--ignore-globals} or @code{--limit-static-vars} 
+run faster, try the @option{--ignore-globals} or @option{--limit-static-vars} 
 options in order to limit the amount of generated output.
 However, please keep in mind that, when running simultaneously with
 Daikon using the @option{--output-fifo} option, Kvasir can generate
@@ -3001,8 +3010,8 @@ so that we can increase its priority on our to-do list.
 @item
 Kvasir always prints the contents of structures according to their
 compile-time type.  Programs that use generic pointers and structural
-equivalence to simulate object-orientation will have derived-`class'
-fields missing when a structure is passed via a base-`class' pointer.
+equivalence to simulate object-orientation will have derived-class
+fields missing when a structure is passed via a base-class pointer.
 
 @item
 Kvasir's support for outputting arrays is not yet complete. 
@@ -3011,15 +3020,14 @@ arrays with all of their elements or the option to flatten
 multidimensional arrays into multiple single-dimensional arrays.
 
 @item
-Not all of the options of the source-based dfec are supported.
+Not all of the options of the source-based C front end dfec are supported.
 Variable comparability information is not supported.
-(dfec used the Lackwit tool, but it did not scale and often produced
-incorrect output.)  Of the environment variables obeyed by dfec,
-only @env{DTRACEAPPEND} is recognized.
+Of the environment variables obeyed by dfec,
+only @env{DTRACEAPPEND} is recognized by Kvasir.
 
 @item
 Kvasir behaves somewhat differently with different versions of GCC@.
-We have had the best results with versions 3.3 (which we use for
+We have had the best results with GCC versions 3.3 (which we use for
 testing) and 3.4.  If feasible, we recommend that you use
 Kvasir with such a relatively recent version of GCC@.  Incompatibilities
 between Kvasir and the debugging information produced by older GCC
@@ -3032,7 +3040,7 @@ Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
 this problem, do not use the @option{-static} flag when linking programs
 for use Kvasir.  If you want to link statically with a particular
 library, supply the path to its static version (@file{libfoo.a})
-directly to @command{gcc} instead.
+directly to GCC instead.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
@@ -3087,9 +3095,9 @@ from code that captures the scalar-context return value of a
 subroutine that returns a list, has been avoided in the current
 version by disabling the warning in question.  Other warnings which
 are known to be produced innocuously in this way include
-@code{Ambiguous call resolved as CORE::foo(), qualify as such or use
+@samp{Ambiguous call resolved as CORE::foo(), qualify as such or use
 &} (caused by code that uses @code{CORE::} to distinguish a built-in
-function from a user subroutine of the same name), and @code{Constant
+function from a user subroutine of the same name), and @samp{Constant
 subroutine foo redefined} (caused by loading both instrumented and
 uninstrumented versions of a file).  Though some such warnings
 represent deficiencies in the instrumentation engine, they can be
@@ -3128,15 +3136,15 @@ dereference a supposed array reference that isn't).  Also, if a
 subroutine exit point is traced but was never encountered during type
 guessing, the generated @file{.decls} and @file{.dtrace} files will be
 incompatible in a way that will cause Daikon to abort with an error
-message of the form ``Program point foo():::EXIT22 appears in dtrace
-file but not in any decl file''.
+message of the form @samp{Program point foo():::EXIT22 appears in dtrace
+file but not in any decl file}.
 
 The workflow of instrumenting Perl code with dfepl is summarized in
 the following diagram:
 @*
 @center @image{images/dfepl-flow,4in,}
 
-The @command{dfepl} command works by reading one or more Perl programs
+dfepl works by reading one or more Perl programs
 or modules, and writing out new versions of those files, instrumented
 to capture information about their execution, by default to another
 directory.  dfepl is used in two passes: first, before type
@@ -3168,7 +3176,7 @@ where the instrumented program is run, the output will go to a fixed
 location.  Even if these directories are given as relative paths (as is
 the default), @option{--absolute} specifies that they should always be
 taken as relative to the directory that was the working directory when
-@command{dfepl} was run.
+dfepl was run.
 
 @option{--no-absolute} specifies the opposite, causing the output paths
 to be interpreted relative to the current working directory each time
@@ -3183,7 +3191,7 @@ in the current directory when the program runs.
 Controls the number of nested invocations of object accessor methods
 to examine.  For instance, suppose that the @code{Person} class has a
 method @code{mother()} that returns another person (and has been
-specified to @command{dfepl} as an accessor), and that @code{$me} is
+specified to dfepl as an accessor), and that @code{$me} is
 an instrumented variable.  If the accessor depth is 1, only
 @code{$me->mother()} will be examined.  If the depth is 2,
 @code{$me->mother()->mother()} will also be examined.  Specifying large
@@ -3199,11 +3207,11 @@ single level of accessors.
 Look for files containing accessor lists in @var{directory}, or the
 current directory if @var{directory} is omitted.  For a class
 @code{Acme::Foo}, accessors are methods that return information about
-an object but do not modify it.  @command{dfepl} cannot determine on
+an object but do not modify it.  dfepl cannot determine on
 its own which methods are accessors, but when a list of them is
 provided, it can call an object's accessors when examining a variable
 of that class to obtain more information about the object.  To tell
-@code{dfepl} about the accessors for @code{Acme::Foo}, make a file
+dfepl about the accessors for @code{Acme::Foo}, make a file
 listing the names of each accessor method, one per line with no other
 punctuation, named @file{Acme/Foo.accessors} in the same directory as
 @file{Acme/Foo.pm}.
@@ -3367,7 +3375,7 @@ before each run.
 Look for @file{.types} files in @var{directory}, or
 @file{daikon-instrumented} if @var{directory} is omitted.  When
 instrumenting a module @code{Acme::Trampoline}, used in a program
-@file{coyote.pl},  @command{dfepl} will look for
+@file{coyote.pl},  dfepl will look for
 files named @file{coyote-combined.types}, @file{Acme::Trampoline.types}, and
 @file{Acme/Trampoline.types}, corresponding to the possible choices of
 @option{--types-style}.  Once discovered, the files are used in the
@@ -3418,7 +3426,7 @@ one is specified, the other will use the same value.
 
 @item --verbose
 @itemx -v
-Print additional information about what @command{dfepl} is doing,
+Print additional information about what dfepl is doing,
 including external commands invoked.
 @end table
 
@@ -3459,24 +3467,13 @@ message.
 This section contains details about dfej, the source-based Daikon front
 end for Java.
 
-@command{dfej} has two effects:
-@itemize @bullet
-@item
-dfej writes instrumented versions of the files, by default in directory
-@file{daikon-instrumented/}
-@item
-dfej creates declaration files named
-@file{@var{filename1}.decls}, etc., by default in directory
-@file{daikon-output/}
-@end itemize
-
 For brief information about running dfej, see @ref{Instrumenting Java programs}.
 For information about installing dfej, see @ref{Installing dfej}.
 The @command{dfej} usage message also contains some usage information;
 run @command{dfej --help} to see it.
 
-@command{dfej} works on Java code that corresponds to versions 1.0--1.4
-of the Java language.  @command{dfej} does not work on Java 5.0.
+dfej works on Java code that corresponds to versions 1.0--1.4
+of the Java language.  dfej does not work on Java 5.0.
 
 The Chicory front end for Java (@pxref{Chicory}) works on
 all versions of the Java language, including Java 5.0.
@@ -3486,23 +3483,8 @@ build), since it is written in Java.
 Thus, we recommend the use of Chicory over dfej in most circumstances.
 For more details on Chicory, see @ref{Chicory}.
 
-Instrumentation with dfej performs two actions:
-@itemize @bullet
-@item
-Instrumentation adds instructions to the target program so that, in
-addition to performing its original task, it also writes variable values
-to a data trace file.  The changes are made to a copy of the target
-program; your original version is not modified.
-@item
-Instrumentation creates declaration files that describe the format of
-the data trace files.  For instance, these declaration files describe
-the names of procedures and variables that appear in the data trace file.
-@end itemize
-
-
 @menu
 * Instrumenting Java programs::  
-* StackAr example with dfej::   
 * dfej options::                
 * Run dfej Java::               
 * Scope of instrumentation::    
@@ -3512,7 +3494,7 @@ the names of procedures and variables that appear in the data trace file.
 @end menu
 
 
-@node    Instrumenting Java programs, StackAr example with dfej, dfej, dfej
+@node    Instrumenting Java programs, dfej options, dfej, dfej
 @subsection Instrumenting Java programs
 
 To instrument Java source programs, simply invoke @command{dfej}, the
@@ -3521,24 +3503,37 @@ Daikon front end for Java, on them:
       dfej @var{filename1}.java @var{filename2}.java @var{...}
 @end example
 
-After running dfej, compile the instrumented version of the code, which
-by default appears in the @file{daikon-instrumented/} directory.
 
-The Daikon front end for Java has two effects:
+Instrumentation with dfej performs two actions:
 @itemize @bullet
 @item
+Instrumentation adds instructions to the target program so that, in
+addition to performing its original task, it also writes variable values
+to a data trace file.  The changes are made to a copy of the target
+program; your original version is not modified.
 dfej writes instrumented versions of the files to a
 @file{daikon-instrumented/} directory.
+
 @item
+Instrumentation creates declaration files that describe the format of
+the data trace files.  For instance, these declaration files describe
+the names of procedures and variables that appear in the data trace file.
 dfej creates declaration files named @file{@var{filename1}.decls}, etc.@
 in a @file{daikon-output/} directory.
 @end itemize
 
-For more information about dfej, see @ref{dfej}.
+After running dfej, compile the instrumented version of the code, which
+by default appears in the @file{daikon-instrumented/} directory.
 
+@menu
+* StackAr example with dfej::   
+* Summary of Daikon use with dfej::  
+* Automating the process::      
+* Second Java example::         
+@end menu
 
-@node    StackAr example with dfej, dfej options, Instrumenting Java programs, dfej
-@subsection StackAr example with dfej
+@node    StackAr example with dfej, Summary of Daikon use with dfej, Instrumenting Java programs, Instrumenting Java programs
+@subsubsection StackAr example with dfej
 
 @c We recommend you run Daikon on Unix, but it can also be run on Windows.
 
@@ -3574,9 +3569,9 @@ javac -g DataStructures/*.java
 dfej DataStructures/StackAr.java
 @end example
 @noindent
-(These instructions assume you have the current working directory (".")
+(These instructions assume you have the current working directory (@file{.})
 in your @env{CLASSPATH}@.  If that is not the case, then run @command{dfej
--ajaxap=.}  instead of @command{dfej}.)
+-ajaxap=.} instead of @command{dfej}.)
 
 We instrument only this one file because we are only interested in the
 invariants of the StackAr class, not the other classes in the program.
@@ -3589,7 +3584,7 @@ It creates a declaration file at
 
 @item Compile the instrumented version of StackAr.java.
 @c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
-(This step requires "." to be on your classpath.)
+(This step requires @file{.} to be on your classpath.)
 
 @example
 javac daikon-instrumented/DataStructures/StackAr.java
@@ -3634,13 +3629,8 @@ description of how to do this, @xref{StackAr example}.
 
 @end enumerate
 
-@menu
-* Summary of Daikon use::       
-* Automating the process::      
-* Second Java example::         
-@end menu
-
-Summary of Daikon use:
+@node    Summary of Daikon use with dfej, Automating the process, StackAr example with dfej, Instrumenting Java programs
+@subsubsection Summary of Daikon use with dfej
 
 The steps above can be divided into three stages:
 
@@ -3674,42 +3664,7 @@ java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
 @end itemize
 
 
-@node    Summary of Daikon use, Automating the process, StackAr example with dfej, StackAr example with dfej
-@subsubsection Summary of Daikon use
-
-The steps above can be divided into three stages:
-
-@itemize @bullet
-@item Instrumentation (steps 1-4)
-@example
-cd examples/StackAr
-javac -g DataStructures/*.java
-dfej DataStructures/StackAr.java
-javac daikon-instrumented/DataStructures/StackAr.java
-@end example
-
-@c @item Trace file generation (steps 5-7)
-
-@item Trace file generation (step 5)
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use ``;'' as the path separator.)
-
-@item Invariant detection (steps 6-8)
-@example
-cd daikon-output
-java daikon.Daikon DataStructures/StackAr.decls \
-     StackAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
-@end example
-
-@end itemize
-
-
-@node    Automating the process, Second Java example, Summary of Daikon use, StackAr example with dfej
+@node    Automating the process, Second Java example, Summary of Daikon use with dfej, Instrumenting Java programs
 @subsubsection Automating the process
 
 The script @command{daikon.pl} automates all steps of the invariant
@@ -3725,7 +3680,7 @@ displays the invariants in the (deprecated) Tree GUI@.  Currently, this
 script only works on Unix.  For more details, @xref{All-in-one script}.
 
 
-@node    Second Java example,  , Automating the process, StackAr example with dfej
+@node    Second Java example,  , Automating the process, Instrumenting Java programs
 @subsubsection A second Java example
 
 A second example is located in the @file{examples/QueueAr} subdirectory.
@@ -3759,7 +3714,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv.gz
 
 @end itemize
 
-@node    dfej options, Run dfej Java, StackAr example with dfej, dfej
+@node    dfej options, Run dfej Java, Instrumenting Java programs, dfej
 @subsection dfej options
 
 The simplest way to invoke dfej is simply to supply it with a list of
@@ -3769,7 +3724,7 @@ Java files:
 @end example
 
 dfej options should be provided before the first Java file name.  dfej
-accepts all Chicory arguments (@pxref{Chicory options}), and also the
+accepts most Chicory arguments (@pxref{Chicory options}), and also the
 following additional options.
 @c
 @c The options can be divided into the following
@@ -3839,7 +3794,7 @@ Do not produce class hierarchy data (default).
 Specifies the directory in which to create
 @file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
 @file{daikon-output}, unless @option{--decls-flat} is
-specified).  @var{PACKAGES} is the relative path from the current
+specified).  @file{@var{PACKAGES}} is the relative path from the current
 directory to the source file; that is, the relative path from
 @var{decldir} to the @file{.decls} file is the same as the relative
 path from the current directory to the source file.  The directory
@@ -3874,32 +3829,30 @@ same names and directory structure as the original input files.
 @c additional set of instrumentation into the already-instrumented source
 @c code files.
 
-@quotation
 Note for Java:
 
 If you do not override the default value of this variable (and possibly
 even if you do, if you do not set it to @samp{.}), then you should run
-@command{dfej} from a directory in your classpath.  For example, if
+dfej from a directory in your classpath.  For example, if
 directory @file{parent/} is in your classpath and you want to instrument
 @file{parent/foo/Bar.java}, you should run @samp{dfej foo/Bar.java} from
 directory @file{parent/}.  This will create a file
 @file{parent/daikon-instrumented/foo/Bar.java}.  You must add directory
 @file{parent/daikon-instrumented} to your classpath.
 
-(The reason for running @command{dfej} from a directory in your
+(The reason for running dfej from a directory in your
 classpath is that it allows the directory structure to remain consistent
 with the package structure.  If @file{Bar.java} specifies its package, it
-does so with a line like @samp{package foo;}.  If you run @command{dfej}
+does so with a line like @samp{package foo;}.  If you run dfej
 from the @file{parent/foo} directory, the instrumented version of
 @file{Bar.java} will go in @file{parent/foo/daikon-instrumented/Bar.java}; this
 is not consistent with the package structure.)
-@end quotation
 
 @item --no-ajax
 @cindex AJAX_DIR environment variable
 @cindex environment variable AJAX_DIR
 Do not use Ajax.  Ordinarily, the Ajax module
-"ComparablePairsDescFileReader" updates the variable comparability
+@code{ComparablePairsDescFileReader} updates the variable comparability
 information in the @file{.decls} file.  The comparability information
 can indicate which variables should not be compared to one another.
 (For instance, the number of people that a recipe serves should not be
@@ -3929,7 +3882,7 @@ current directory.
 Classpath to give to Ajax in its @option{-cp} flag, similar to @option{-ajaxap}.
 
 @item -ajax_runnable=@var{class}
-This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
+This is a Java class, in dot-delimited form (e.g., @samp{foo.bar.Baz}), that
 contains a @samp{public static void main(String[])} method.  This class
 need not be one of the instrumented ones.  If it is not supplied, the
 first instrumented class with such a @samp{main} method is used instead.
@@ -3969,7 +3922,7 @@ Environment variable @env{DTRACELIMIT} is a number of records (that is,
 program point executions), after which the instrumented program will
 continue to run but will close the @file{.dtrace} and produce no more
 output to it.  If environment variable @env{DTRACELIMITTERMINATE} is set to
-"true", then when the specified number of records is output, the
+true, then when the specified number of records is output, the
 instrumentation throws a TerminationMessage (an unchecked Java error) in
 an attempt to halt the program.
 
@@ -4038,7 +3991,7 @@ Do not use this policy file with untrusted applets.
 @item
 Finally, run the applet:
 @example
-       appletviewer -J-Djava.security.policy=javaPolicy @var{html-file}
+appletviewer -J-Djava.security.policy=javaPolicy @var{html-file}
 @end example
 @end enumerate
 
@@ -4057,9 +4010,9 @@ dfej Foo.java Bar.java
 @end example
 @noindent
 the instrumented versions of @file{Foo.java} and @file{Bar.java} output
-information about all Foo objects (including Foo objects that are
-components of Bar objects, that are arguments to Bar procedures, etc.),
-and likewise for Bar objects.
+information about all @code{Foo} objects (including @code{Foo} objects that are
+components of @code{Bar} objects, that are arguments to @code{Bar} 
+procedures, etc.), and likewise for @code{Bar} objects.
 
 After
 @example
@@ -4067,9 +4020,9 @@ dfej Foo.java
 dfej Bar.java
 @end example
 @noindent
-the same procedures (all those in the @file{Foo} and @file{Bar} classes)
-are instrumented, but in Foo procedures, no detail is provided
-about the structure of any Bar objects that might appear.  In other
+the same procedures (all those in the @code{Foo} and @code{Bar} classes)
+are instrumented, but in @code{Foo} procedures, no detail is provided
+about the structure of any @code{Bar} objects that might appear.  In other
 words, the instrumenter assumes that the only classes instrumented (and
 about which information is desired) are those presented to it on the
 command line.  One way to determine all the @file{.java} files that are
@@ -4080,7 +4033,7 @@ javac MyProgram.java
 find . -name '*.class' -print
 @end example
 
-@command{dfej} tracks all modifications of instrumented classes; if you
+dfej tracks all modifications of instrumented classes; if you
 do not instrument all users of a class, then modifications in
 uninstrumented classes may not be detected.  This can affect Daikon's
 statistical tests, but in practice usually has little impact.  The program 
@@ -4106,8 +4059,8 @@ You can indicate the runtime type of a variable to dfej by inserting a
 @end example
 @noindent
 comment immediately before the declared type (but after any modifiers like
-"public" or "static").  For example, a list element that only contains
-@code{Integer}s might be annotated as follows:
+@code{public} or @code{static}).  For example, a list element that only 
+contains @code{Integer}s might be annotated as follows:
 @example
   class ListNode @{
     /*refined_type: Integer*/ Object element;
@@ -4127,17 +4080,15 @@ comment immediately before the declared type (but after any modifiers like
 @cindex dfej installation
 
 This manual section is optional; if you ran @command{make} from
-$DAIKONDIR (@pxref{Installing Daikon}), you can skip it.
+@file{$DAIKONDIR} (@pxref{Installing Daikon}), you can skip it.
 
 If you wish to use the dfej source-based front end for Java, you need to
-obtain or build an executable for dfej.  However, it is usually simpler
-to just use the Chicory front end for Java (@pxref{Chicory} instead.
-
+obtain or build an executable for dfej.
 
 @itemize @bullet
 @item
 You can download a precompiled version of
-@command{dfej} from @uref{http://pag.csail.mit.edu/daikon/download/}.
+dfej from @uref{http://pag.csail.mit.edu/daikon/download/}.
 Place that executable in directory
 @file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
 your path), then run @command{rehash}.  Now you are ready to run dfej.
@@ -4229,7 +4180,7 @@ Options:
   ...
 @end example
 
-You must supply at least the name of a "main" class that provides
+You must supply at least the name of a ``main'' class that provides
 the method @code{public static void main(String[] args)}.
 @command{daikon.pl} runs this class to exercise your program.
 
@@ -4303,20 +4254,17 @@ Print extra debugging information.
 @cindex C front end
 
 This section describes dfec, the Daikon source-based front end for C@.
-A binary-based front end for C, named Kvasir, is also available
-(@pxref{Kvasir}), and is preferable in most circumstances.
 For information about installing dfec, see @ref{Installing dfec}.
 
-@c TODO: repetitive
 There are two ways to instrument C programs.  Compiled programs
 originally written in C can be instrumented on the fly using the
 Kvasir tool, or C programs in source code form can be instrumented
-with the @command{dfec} tool.  We recommend use of Kvasir.
+with the dfec tool.  We recommend use of Kvasir instead of dfec.
 Kvasir can only be used on Linux/x86, but it is
 usually easier to use and more reliable.
 
 
-Recall that dynamic invariant detection over a C program requires
+Dynamic invariant detection over a C program using dfec requires
 three steps:
 @enumerate
 @item
@@ -4348,8 +4296,8 @@ the data trace files.  For instance, these declaration files describe
 the names of procedures and variables that appear in the data trace file.
 @end itemize
 
-To instrument a C file, run @command{dfec} on it.  dfec produces
-instrumented source as well as a @file{.decls} file.  @command{dfec}
+To instrument a C file, run dfec on it.  dfec produces
+instrumented source as well as a @file{.decls} file.  dfec
 must be run on all source files, including any header files that
 contain code or definitions to be instrumented (header files typically
 end in @file{.h}).  All files to be included in a single executable
@@ -4366,9 +4314,10 @@ instrumentation.
 
 Running @command{dfec @var{arguments} myprog.c} creates
 a file named @file{myprog.cc} in the @file{daikon-instrumented/}
-directory.  (It has a @file{.cc} extension, regardless of its original
-extension.)  It also creates a file named @file{myprog.decls}, which
-appears in the @file{daikon-output/} directory by default.  To change
+directory.  (The instrumented file has a @file{.cc} extension, regardless of 
+the extension of the original file.)  
+It also creates a file named @file{myprog.decls}, which
+is placed in the @file{daikon-output/} directory by default.  To change
 these defaults, see @ref{dfec command-line arguments}.
 
 
@@ -4382,7 +4331,7 @@ these defaults, see @ref{dfec command-line arguments}.
 
 Compile the instrumented program in the usual way, except that the link
 step should include @file{daikon_runtime.o}, and the compiler should be
-@command{g++}, since the instrumented files are C++ files.
+G++, since the instrumented files are C++ files.
 For instance,
 @example
 gcc -g -o @var{exefile} myprog.c
@@ -4399,7 +4348,7 @@ g++ -g -o @var{exefile} daikon-instrumented/myprog.cc\
 @c dfec option -- do not rename (yet)
 Now you can run your executable in the usual way.  Running the
 executable creates a @file{myprog.dtrace} file.  By default, this file
-appears in @file{daikon-output/}, and subsequent runs overwrite to that
+is placed in @file{daikon-output/}, and subsequent runs overwrite that
 file.  This default can be overridden via the @option{--tracefilename}
 argument to dfec or the @env{DTRACEFILE} environment variable at runtime.
 
@@ -4415,7 +4364,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Instrumenting C programs with dfec::  
 * dfec examples::               
 * dfec command-line arguments::  
-* Daikon runtime customization::  
+* dfec runtime customization::  
 * Instrumentation scope::       
 * dfec requirements::           
 * Installing dfec::             
@@ -4430,7 +4379,8 @@ header files at once:
 @example
 dfec @var{...options...} @var{myprog}.c
 @end example
-@strong{Important:}  dfec may only be run on ANSI/ISO C, not on K&R C
+@strong{Important:}  dfec may only be run on programs written in 
+ANSI/ISO C, not on K&R C
 or other dialects (@pxref{C program requirements})
 
 You may want to specify one or more command-line options;
@@ -4445,8 +4395,8 @@ g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc \
     $DFECDIR/daikon_runtime.o
 @end example
 @noindent
-In addition, you may want to specify the @option{-w} flag to g++, to
-suppress warnings.  dfec's output is valid C++ but may cause g++ to
+In addition, you may want to specify the @option{-w} flag to G++, to
+suppress warnings.  dfec's output is valid C++ but may cause G++ to
 issue warnings.
 
 The Daikon front end for C has three effects:
@@ -4553,16 +4503,17 @@ java -Xmx256m daikon.Daikon \
 The invariants are printed to standard output, and a binary representation
 of the invariants is written to @file{print_tokens.inv.gz}.
 
-@item Examine the invariants.  As described in the Daikon manual, there are
-several ways to do this:
+@item Examine the invariants.  You can do this in one of the following
+ways:
 @itemize 
 @item Examine the output from running Daikon.
-@item Use the PrintInvariants program to display the invariants.
+@item Use the PrintInvariants program (@pxref{Printing invariants}) 
+to display the invariants.
 @c @item Use the Daikon Tree GUI to browse the invariants.
 @item Use the Daikon Context GUI to browse the invariants.
 @end itemize
 @noindent
-For help understanding the invariants, see @ref{Interpreting output}.
+For help understanding the invariants, see @ref{Daikon output}.
 
 @end enumerate
 
@@ -4598,7 +4549,7 @@ java -Xmx256m daikon.Daikon \
 
 
 
-@node    dfec command-line arguments, Daikon runtime customization, dfec examples, dfec
+@node    dfec command-line arguments, dfec runtime customization, dfec examples, dfec
 @subsection dfec command-line arguments
 
 @c dfec option -- do not rename (yet)
@@ -4695,8 +4646,11 @@ Specifies the directory in which to write instrumented source files
 same names and directory structure as the original input @file{.c} files, with the
 slight exception that the file suffix is always set to @file{.cc}, so if you
 instrument @file{@var{myprog}.c}, you will end up with
-@file{daikon-instrumented/@var{myprog}.cc}.  Header files (files with a @file{.h} extension) are textually substituted into the instrumented @file{.cc} files, so they do not appear in the instrumented source directory.  If @var{instrdir} is ``.'',
-then instrumentation is performed in-place, first copying the source
+@file{daikon-instrumented/@var{myprog}.cc}.  
+Header files (files with a @file{.h} extension) are textually 
+substituted into the instrumented @file{.cc} files, so they do not appear 
+in the instrumented source directory.  If @var{instrdir} is @file{.},
+then instrumentation is performed in place, first copying the source
 file @file{myprog.c} to @file{myprog.c.uninst}, then overwriting
 @file{myprog.c} with instrumented source.  If @file{myprog.c.uninst}
 already exists, it is left in place:  the copy step is not performed.
@@ -4760,9 +4714,12 @@ list of filenames; it may be specified multiple times.
 @cindex LACKWIT_HOME environment variable
 @cindex --no-lackwit flag to dfec
 @cindex Lackwit, runs slowly
-Turns off Lackwit postprocessing of the @file{.decls} file.  You can also
-turn off Lackwit postprocessing by unsetting the @env{LACKWIT_HOME} environment
-variable.  Lackwit processing can be very slow, especially on large programs.
+Turns off Lackwit postprocessing of the @file{.decls} file.  
+Lackwit is a variable comparability analysis package; it can make
+invariant detection in Daikon more accurate and efficient.  However,
+Lackwit processing itself can be very slow, especially on large programs.
+You can also turn off Lackwit postprocessing by unsetting the 
+@env{LACKWIT_HOME} environment variable.  
 
 @item --struct-depth=@var{N}
 For nested or recursive types (structs or classes that have members that
@@ -4776,10 +4733,10 @@ struct node @{
 @end example
 @noindent
 Setting the struct instrumentation depth to 1 would cause the runtime
-library to output @var{node.val} and @var{node.next}.  Setting the
+library to output @code{node.val} and @code{node.next}.  Setting the
 struct instrumentation depth to 2 would cause the runtime library to
-output @var{node.val}, @var{node.next}, @var{node.next->val}, and
-@var{node.next->next}.  The default instrumentation depth is 3, which
+output @code{node.val}, @code{node.next}, @w{@code{node.next->val}}, and
+@w{@code{node.next->next}}.  The default instrumentation depth is 3, which
 allows Daikon to capture invariants about nonadjacent nodes, but results
 in larger dtrace files than smaller values do.
 
@@ -4796,13 +4753,13 @@ address-of-array operations in the older, pcc-style manner.
 @end table
 
 
-@node    Daikon runtime customization, Instrumentation scope, dfec command-line arguments, dfec
-@subsection Daikon runtime customization
+@node    dfec runtime customization, Instrumentation scope, dfec command-line arguments, dfec
+@subsection dfec runtime customization
 
 @cindex dfec customizations
 @cindex Daikon C runtime customizations
 @cindex daikon_runtime.h file
-Many customization options for the Daikon C front end appear in the
+Many customization options for the dfec front end appear in the
 file @file{$DAIKONDIR/front-end/c/daikon_runtime.h}.
 Each option in the file has a comment explaining its function and how
 to enable it.
@@ -4817,14 +4774,14 @@ available on your system.)
 You can allocate extra space at the ends of arrays, so that your
 program can continue despite (some) memory errors.  You can customize
 what error code is returned if your program contains a memory error
-and is terminated by the Daikon runtime.  You can (dangerously) tell
-the Daikon runtime not to check for specific memory errors.
+and is terminated by the dfec runtime.  You can (dangerously) tell
+the dfec untime not to check for specific memory errors.
 @item
-You can turn specific Daikon warnings on and off.
+You can turn specific dfec warnings on and off.
 @end itemize
 
 
-@node    Instrumentation scope, dfec requirements, Daikon runtime customization, dfec
+@node    Instrumentation scope, dfec requirements, dfec runtime customization, dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope
@@ -4832,13 +4789,14 @@ You can turn specific Daikon warnings on and off.
 @cindex uninstrumented libraries
 @cindex libraries, uninstrumented
 
-When you run an instrumented C program to produce a @file{.dtrace}
+When you run a C program that has been instrumented with dfec to 
+produce a @file{.dtrace}
 file, the executable may contain three varieties of code:  fully
 instrumented code that produces @file{.dtrace} file output (and also
 tracks memory), partially instrumented code that only tracks memory,
 and entirely uninstrumented code.  The default level of
 instrumentation is full instrumentation.  The @option{-l} command-line
-argument to @command{dfec} (@pxref{dfec command-line arguments})
+argument to dfec (@pxref{dfec command-line arguments})
 specifies partial instrumentation for a
 file.  Uninstrumented code is only included by being linked from a
 library that was not processed with dfec --- for instance, system
@@ -4886,13 +4844,13 @@ linker errors or other problems.
 Instrumented
 programs perform memory tracking, which checks and records the
 program's memory accesses.  This has many benefits.  It tracks whether
-pointers are valid, so Daikon does not attempt to dereference
+pointers are valid, so dfec's runtime does not attempt to dereference
 uninitialized or deallocated pointers.  It tracks how many elements of
-memory have been initialized, so Daikon does not output garbage
+memory have been initialized, so the runtime does not output garbage
 values.  It catches memory errors in user programs.  It protects
-Daikon's runtime data structures from program memory errors that would
+dfec's runtime data structures from program memory errors that would
 otherwise corrupt them (and which would then appear to the user as
-Daikon errors).
+dfec errors).
 
 Memory tracking is implemented by converting all pointers and arrays
 in the program to ``smart pointers'' and ``smart arrays'', implemented
@@ -4911,7 +4869,7 @@ char * mystring = malloc(100);
 strcpy(mystring, "hello");
 @end example
 @noindent
-Even though @samp{mystring} has 100 elements, only the first six of them are
+Even though @code{mystring} has 100 elements, only the first six of them are
 valid.  dfec will only communicate those first six elements to
 Daikon.  After a subsequent operation:
 @example
@@ -4954,7 +4912,8 @@ manually adjusts the max_seen pointers in the basemap to their correct values,
 based on semantic knowledge about the function itself.  For examples, see
 the implementations provided for @file{string.h}.
 The signature of the function must be changed in two ways:  the name should
-have "DAIKON_" prepended to it, to avoid namespace pollution (the calls are
+have @code{DAIKON_} 
+prepended to it, to avoid namespace pollution (the calls are
 resolved through a macro definition explained below), and the argument and
 return value types must be changed as well to reflect the use of
 smartpointers.  In this example, @code{foo()} as above would be declared as
@@ -4989,13 +4948,10 @@ compile.
 @node    dfec requirements, Installing dfec, Instrumentation scope, dfec
 @subsection dfec requirements
 
-@command{dfec} does not output the contents of C unions.  This section
-of the manual lists other requirements and limitations.
-
-If you have trouble with @command{dfec}, you should first ensure that
-the input to @command{dfec} (the program being instrumented) is
+If you have trouble with dfec, you should first ensure that
+the input to dfec (the program being instrumented) is
 proper, according to the requirements set out in this section.
-@command{dfec} sometimes issues obscure error messages when provided
+dfec sometimes issues obscure error messages when provided
 invalid input.
 For additional help troubleshooting dfec, see @ref{dfec problems}.
 
@@ -5008,12 +4964,11 @@ For additional help troubleshooting dfec, see @ref{dfec problems}.
 @node    C program requirements, Header file dependencies, dfec requirements, dfec requirements
 @subsubsection C program requirements
 
-
-@command{dfec} only instruments ANSI/ISO C programs.  (More
-specifically, @command{dfec} only instruments programs that are both
+dfec only instruments ANSI/ISO C programs.  (More
+specifically, dfec only instruments programs that are both
 legal C and legal C++.  This is essentially the same as C, but
-avoiding C++ keywords.)  @command{dfec} does not support K&R C or
-other non-ANSI/ISO C dialects.  Before running @command{dfec}, you
+avoiding C++ keywords.)  dfec does not support K&R C or
+other non-ANSI/ISO C dialects.  Before running dfec, you
 should ensure that your code is legal ANSI/ISO C (and legal ANSI/ISO
 C++) and that it compiles cleanly.
 
@@ -5024,9 +4979,9 @@ C++) and that it compiles cleanly.
 @cindex K&R C
 
 Running your code through a C compiler is necessary, but not
-sufficient, to verify that your program is valid C@.  (@command{dfec}
-issues warnings about a number of erroneous C constructs that
-@command{gcc} and other compilers accept.)  You should remove all
+sufficient, to verify that your program is valid C; GCC and
+other compilers accept a number of erroneous or nonstandard 
+C constructs for which dfec issues warnings.  You should remove all
 warnings produced by @command{gcc -g -Wall -ansi -pedantic}.  (Lack of
 errors from that command does not guarantee your code is ANSI/ISO C,
 or that your code is acceptable to dfec.  However, errors from that
@@ -5089,14 +5044,14 @@ changed.
 
 Furthermore, certain functions have different types in the C and C++
 standard libraries.  In particular, more functions have parameters
-annotated as ``const'' in the C++ library, and in more modern C
+annotated as @code{const} in the C++ library, and in more modern C
 libraries, than in older C libraries. 
 In order to satisfy the type checker, you may need to change the types
-of variables, for instance by adding ``const'' the types of variables
+of variables, for instance by adding @code{const} the types of variables
 that are assigned string literals, or assigned the results of functions
-that return ``const'' pointers.
-Alternatively, you can add casts every time a value of type ``char *''
-(for instance) must be converted to a value of type ``const char *''.
+that return @code{const} pointers.
+Alternatively, you can add casts every time a value of type @code{char *}
+(for instance) must be converted to a value of type @code{const char *}.
 Adding such casts is only safe if your program never actually modifies
 the value pointed to.
 In some cases, changing the declaration of a variable may be easier,
@@ -5123,7 +5078,7 @@ C++ reserves the following keywords that are not reserved words in C:
 (Those in the second group are defined as macros in the 1999 ISO C
 standard).
 Additionally, the C++ standard libraries define certain other
-identifiers, such as ``string''.
+identifiers, such as @code{string}.
 Any use of these words as identifiers must be changed.
 
 @item daikon_runtime.h file
@@ -5147,14 +5102,17 @@ uses local type `...'} may indicate this problem.
 @end table
 
 
-@command{dfec} does not accept every legal program in the intersection
+dfec does not accept every legal program in the intersection
 of ANSI/ISO C and ANSI/ISO C++.  Here are the exceptions.
 @enumerate
 
+@item 
+dfec does not output the contents of C unions.
+
 @item
-If g++ gives an error message while compiling the instrumented code,
-then first try compiling the uninstrumented code with @command{g++},
-and remove any errors that g++ issues.  For instance, C++ requires
+If G++ gives an error message while compiling the instrumented code,
+then first try compiling the uninstrumented code with G++,
+and remove any errors that G++ issues.  For instance, C++ requires
 declaration of prototypes, whereas C can sometimes guess the types for
 missing prototypes.
 
@@ -5175,7 +5133,7 @@ functions are not, so you should use the declaration in
 @file{stdlib.h} rather than repeating it in your own code.
 
 @item
-@command{dfec} redefines certain functions defined in system headers.
+dfec redefines certain functions defined in system headers.
 Your program must not define these as macros or otherwise use them
 in a non-standard way.
 
@@ -5184,7 +5142,7 @@ Instrumented programs must not use nested structures or enums that are
 declared inside procedures.
 You should raise all nested structures to
 the top level (and after raising them, remove any
-``static'' modifier, which is not relevant to top-level definitions).
+@code{static} modifier, which is not relevant to top-level definitions).
 
 You should also separate all declarations from uses.  For example, change
 @example
@@ -5197,14 +5155,14 @@ to
 @end example
 
 @item
-@command{dfec} does not deal properly with bitfields (declared like
+dfec does not deal properly with bitfields (declared like
 @samp{unsigned int env:1} for a single bit).  Change any bitfield
 variables to full-width variables.
 
 @item
 @cindex realloc, use in C programs
 The @code{realloc} function of standard C, used to change the size of
-a memory block allocated with @code{malloc}, is not supported by the C
+a memory block allocated with @code{malloc}, is not supported by the dfec
 runtime.  Calls to @code{realloc} will instrument and compile without
 errors, but if @code{realloc} is called, the runtime will not notice
 that the amount of accessible memory has increased after the call, and
@@ -5232,8 +5190,8 @@ contains the following test on line 179 (in textutils version 2.0):
   (current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
 @end example
 @noindent
-However, Linux's header files define @samp{off_t} as @samp{__quad_t},
-and @file{bits/types.h} in turn defines @samp{__quad_t} as
+However, Linux's header files define @code{off_t} as @code{__quad_t},
+and @file{bits/types.h} in turn defines @code{__quad_t} as
 follows:
 @example
   #ifdef __GNUC__
@@ -5246,8 +5204,8 @@ follows:
   #endif
 @end example
 
-dfec uses the non-@samp{__GNUC__} branch.  (Many non-standard
-extensions are enabled when @samp{__GNUC__} is defined, and dfec can
+dfec uses the non-@code{__GNUC__} branch.  (Many non-standard
+extensions are enabled when @code{__GNUC__} is defined, and dfec can
 understand many but not all of them.)  In C, it is legal to cast the
 number 0 to a struct.  Such a cast is not legal in C++.  Because
 dfec's input must be both legal C and legal C++, dfec issues an error
@@ -5261,8 +5219,8 @@ a local copy of @file{bits/types.h}:
 @end example
 @noindent
 and then edit @file{$DFECDIR/bits/types.h} to remove all but the
-second line of the above snippet.  This will define @samp{__quad_t} as
-@samp{long long int} instead of as a struct.  dfec uses files found
+second line of the above snippet.  This will define @code{__quad_t} as
+@code{long long int} instead of as a struct.  dfec uses files found
 under @file{$DFECDIR} in preference to other system headers, so
 @file{wc.c} will compile.
 
@@ -5279,13 +5237,13 @@ other problems.
 @cindex gcc 3, does not work with dfec
 @cindex gcc 2.96
 
-@command{dfec} works with gcc 2.95.3 or 2.95.2, so long as you do not
+dfec works with GCC 2.95.3 or 2.95.2, so long as you do not
 include both C's @file{math.h} and C++'s @file{complex.h}.
-@command{dfec} also works with gcc 2.96; this is not an official gcc
+dfec also works with GCC 2.96; this is not an official GCC
 release, but it does appear in some Linux distributions, such as Red Hat's.
-@command{dfec} does not currently work with other
-compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does the pre-release version labeled ``gcc 2.95.4'' that
+dfec does not currently work with other
+compilers or other versions of GCC.  In particular, GCC 3 does not
+work, nor does the pre-release version labeled ``GCC 2.95.4'' that
 appears in some Linux distributions (including some versions of
 Debian).
 
@@ -5293,15 +5251,15 @@ Debian).
 @cindex gcc 2.95.3, installing
 @cindex installing gcc 2.95.3
 
-You can download gcc 2.95.3, which is the last official release in the
-gcc 2.x series, from @uref{http://gcc.gnu.org/releases.html}.
+You can download GCC 2.95.3, which is the last official release in the
+GCC 2.x series, from @uref{http://gcc.gnu.org/releases.html}.
 
-gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
+GCC is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
 GCC installations instructions}.  If you do not wish to read them,
 then the following commands may work for you.  They do not require
 that you have superuser privileges on your machine.  They create
-directory @file{/tmp/build-gcc-2.95.3}, then build gcc and install
-gcc under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
+directory @file{/tmp/build-gcc-2.95.3}, then build GCC and install
+GCC under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
 You may wish to adjust those directory names.
 
 @example
@@ -5327,8 +5285,9 @@ which gcc
 gcc -v
 @end example
 
-Now you can just use it; "gcc" refers to the new version.  You should
-also add the "set path" command to your .cshrc file.  If you use sh or
+Now you can just use it; @command{gcc} refers to the new version.  You should
+also add the @command{set path} command to your @file{.cshrc} file.  
+If you use sh or
 bash rather than csh, then add the following to your @file{.bashrc} or
 equivalent file.
 @example
@@ -5341,9 +5300,8 @@ equivalent file.
 @cindex installing dfec
 @cindex dfec installation
 
-Daikon's older, source-code based front end for the C language, named
-dfec, is distributed separately.  If you wish to use dfec,
-first perform the following installation
+dfec is distributed separately from Daikon itself.
+If you wish to use dfec, first perform the following installation
 steps.
 
 @enumerate
@@ -5361,7 +5319,7 @@ cd $DAIKONDIR/front-end
 tar zxvf dfec-linux-x86.tar.gz
 @end example
 @item
-Compile the Daikon C runtime library.
+Compile the dfec C runtime library.
 @example
 cd $DAIKONDIR/front-end/c
 make
@@ -5373,7 +5331,7 @@ when compiling C and C++ programs in which you wish to detect invariants.
 @end enumerate
 
 For information about customizing the behavior of your instrumented
-programs, @pxref{Daikon runtime customization}.
+programs, @pxref{dfec runtime customization}.
 
 @menu
 * dfec EDG sources::            
@@ -7803,10 +7761,10 @@ then you have not correctly installed the dfec distribution
 in the directory referred to by environment variable @env{DFECDIR}@.  (That
 directory is placed on your path by the standard Daikon dotfiles.)
 
-Note, lackwit may have different preprocessor parameters set than
-@command{gcc} or @command{g++} (and @command{dfec}) do.  As a result,
+Note, Lackwit may have different preprocessor parameters set than
+GCC or G++ (and dfec) do.  As a result,
 you may get errors about undefined function definitions with
-@command{lackwit}, but not with @command{dfec} proper.  Check if the
+Lackwit, but not with dfec proper.  Check if the
 preprocessor is following the wrong branch, and adjust your code to
 follow the right branch.  
 
@@ -7814,7 +7772,7 @@ follow the right branch.
 @subsection Problems compiling and linking instrumented programs
 
 This section discusses errors encountered when compiling instrumented
-code (with g++) and linking the resulting compiled files.  (In some
+code (with G++) and linking the resulting compiled files.  (In some
 cases, compiling and linking may be performed by a single command line
 invocation, but the two steps are still logically distinct.)
 
@@ -7834,7 +7792,7 @@ buffer to comment out the @samp{#line} directives:
 @subsubsection Compiler problems
 
 When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
-where @file{myfile.cc} was created by dfec from @file{myfile.c}), g++
+where @file{myfile.cc} was created by dfec from @file{myfile.c}), G++
 produces error messages referring to lines of the original file
 @file{myfile.c}.  Often this indicates the problem, but in other
 cases, you may wish to know which line in the @file{.cc} file is the
@@ -7893,7 +7851,7 @@ instrumented (or partially instrumented) code contains a declaration
 of @samp{foo(bar *)}, but the definition appears in uninstrumented
 code.  The instrumented version uses smart pointers, but the
 uninstrumented version does not.  You should supply the @file{.c} file
-containing the definition to @command{dfec} (preceded by @option{-l}
+containing the definition to dfec (preceded by @option{-l}
 if you do not wish to fully instrument the file).
 
 If you cannot specify the @file{.c} containing the definition of
@@ -7905,22 +7863,22 @@ command line.
 
 Other linker problems may indicate a mismatch between part of
 your code that was compiled with gcc and part of it that was compiled
-with g++.  gcc creates files using ``C linkage'', and g++ creates
+with G++.  GCC creates files using ``C linkage'', and G++ creates
 files using ``C++ linkage''; the two are not compatible.  (It is
-possible to direct g++ to use C linkage in certain circumstances;
+possible to direct G++ to use C linkage in certain circumstances;
 @xref{Instrumentation scope}.)
-While g++ can compile and link in the same step,
+While G++ can compile and link in the same step,
 you should never provide the link step (the one that creates an
 executable) with uninstrumented C code.  You should only provide the
-link invocation of g++ with either
+link invocation of G++ with either
 @itemize @bullet
 @item
 @file{.cc} files (or their @file{.o} versions) that were output
 by dfec, or
 @item
 @file{.o} or @file{.a} files for (completely) uninstrumented code;
-these files should be created by calling gcc, never
-g++.
+these files should be created by compiling with GCC, never
+G++.
 @end itemize
 
 
@@ -7942,21 +7900,21 @@ program attempts to read or write memory beyond the end of an array.
 You should fix this error before proceeding to try to detect
 invariants.  If you do not do so, then the program's results cannot be
 relied on, because the erroneous array access might corrupt (or access
-meaningless values from) other variables, the Daikon runtime data
-structures, or your program's stack.  When this occurs, the Daikon
+meaningless values from) other variables, the dfec runtime data
+structures, or your program's stack.  When this occurs, the dfec
 runtime immediately halts your program to let you know where the error
-occurred and to prevent memory corruption.  The Daikon runtime's
+occurred and to prevent memory corruption.  The dfec runtime's
 discovery of these errors, while not directly related to invariant
-detection, is a pleasant side effect of using Daikon.  You also might
+detection, is a pleasant side effect of using dfec.  You also might
 want to consider using the Valgrind tool for Linux on x86 processors
 (@uref{http://valgrind.kde.org/}), which can help you correct
 memory errors; this reduces the number of warnings/errors produced by
-the Daikon runtime, and it also improves your code.
+the dfec runtime, and it also improves your code.
 
 @cindex daikon_runtime.h file
 @cindex customizing the Daikon C runtime
 
-The Daikon runtime's behavior when a program
+The dfec runtime's behavior when a program
 contains a memory error is customizable.
 For instance, it can halt immediately; it
 can allocate extra buffer space around arrays (but cannot do so around
@@ -7964,7 +7922,7 @@ dynamically allocated (malloced) blocks, because the type is not known
 at the time of the malloc call) and only halt if the program goes
 beyond those bounds; or the checking can be turned off entirely, which
 is extremely dangerous.  These and many other customizations for the
-Daikon C runtime library are described in the @file{daikon_runtime.h}
+dfec C runtime library are described in the @file{daikon_runtime.h}
 file.
 
 
