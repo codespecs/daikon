@@ -241,12 +241,20 @@ class FormatTestCase {
   public boolean passes() {
     boolean passTest = true;
     boolean currentResult;
-
+    try {
     for (int i=0; i<testCases.size(); i++) {
+      System.out.println ("FormatTestCase: passTest");
       currentResult = ((SingleOutputTestCase)testCases.get(i)).performTest(invariantToTest);
       passTest = passTest &&  currentResult;
+
     }
     return passTest;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+
   }
 
   /**
@@ -455,12 +463,22 @@ class FormatTestCase {
       if (goalOutput != null && !InvariantFormatTester.isWhitespace(goalOutput)) {
         // System.out.println("Using format: " + format);
 
-        try {
-          outputProducer = classToTest.getMethod("format_" + format, null);
-          outputProducerArgs = null;
-        }
-        catch (NoSuchMethodException e) {
-          try {
+
+        // Update 2-27-2004: For some reason, this test used to
+        // attempt to find a format_java() or format_esc(), etc inside
+        // the invariant method and only if that method did not exist would
+        // format_using (OutputFormat) be used.  I suspect it is due to
+        // a different person writing the OutputFormat that simply decided
+        // to add on to what was existing. In any event, there seems to be
+        // no reason to rely on the old format_xxx(), we want to eliminate
+        // those and only use the format_using (OutputFormat)
+
+        //        try {
+        //    outputProducer = classToTest.getMethod("format_" + format, null);
+        //   outputProducerArgs = null;
+        //   }
+        //   catch (NoSuchMethodException e) {
+           try {
             outputProducer =
               classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
             outputProducerArgs = new Object [] {getOutputFormat(format)};
@@ -468,7 +486,7 @@ class FormatTestCase {
           catch (NoSuchMethodException e2) {
             throw new RuntimeException("Could not find format method");
           }
-        }
+           //     }
 
         // System.out.println("Adding a test case");
 
