@@ -1,3 +1,5 @@
+// In Java 1.4, this is called "IdentityHashMap"
+
 /*
  * @(#)HashMap.java	1.29 99/04/22
  *
