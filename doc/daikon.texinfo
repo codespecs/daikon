@@ -2034,9 +2034,9 @@ They can be divided into the following categories:
 --nohierarchy
 --suppress_redundant
 @item Process only part of the trace file
---ppt
---ppt_omit
---var_omit
+--ppt-select-pattern
+--ppt-omit-pattern
+--var-omit-pattern
 @item Configuration options
 --config
 --config_option
@@ -2068,7 +2068,7 @@ conjunction with the @option{-o} option.
 Produce output in the given format.  See @ref{Invariant syntax}.
 
 @item --show_progress
-@item --no_show_progress
+@itemx --no_show_progress
 Prints (respectively, suppresses) timing information as major portions of Daikon are executed.
 
 @item --noversion
@@ -2174,16 +2174,16 @@ using the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
 
-@item --ppt @var{ppt_regexp}
+@item --ppt-select-pattern=@var{ppt_regexp}
 Only process program points whose names match the regular expression,
 which uses Perl syntax.
 
-@item --ppt_omit @var{ppt_regexp}
+@item --ppt-omit-pattern=@var{ppt_regexp}
 Do not process program points whose names match the regular expression,
 which uses Perl syntax.  This takes priority over the
-@option{--ppt} argument.
+@option{--ppt-select-pattern} argument.
 
-@item --var_omit @var{var_regexp}
+@item --var-omit-pattern=@var{var_regexp}
 Ignore variables (whether in the trace file or derived) whose names
 match the regular expression, which uses Perl syntax.
 
@@ -2196,7 +2196,7 @@ Specify a single configuration setting.
 @xref{Configuration options}, for details.
 
 @item --dbg @var{category}
-@item --debug
+@itemx --debug
 @cindex debugging flags
 @cindex category, for debugging
 @cindex logging, for debugging Daikon
@@ -2308,22 +2308,22 @@ the method @code{public static void main(String[] args)}.
 
 @table @option
 @item -i @var{file}
-@item --instrument @var{file}
+@itemx --instrument @var{file}
 Only instrument FILE@.  Can be specified multiple times.
 Otherwise, all files that are used by the main file are instrumented.
 
 @item -o @var{file}
-@item --output @var{file}
+@itemx --output @var{file}
 Save invariants in @file{@var{file}.inv} and source in
 @file{@var{file}.src.tar.gz}.  If no name 
 is given, a name is automatically generated and used.
 
 @item -t
-@item --textfile
+@itemx --textfile
 Save a textual listing of invariants to a @file{.txt} file.
 
 @item -n
-@item --nogui
+@itemx --nogui
 Create the invariants file (and @file{.txt} file,
 if @option{-t} is given), but do not start the Tree GUI@.
 
@@ -2335,11 +2335,11 @@ to the shell and may be viewed as multiple arguments or reinterpreted
 (which may or may not be what you want).
 
 @item -v
-@item --verbose
+@itemx --verbose
 Display progress messages while running.
 
 @item -c
-@item --cleanup
+@itemx --cleanup
 Remove files left over from an interrupted session before starting.
 Should be used only when @code{daikon.pl} detects left-over files and instructs
 you to use this option.
@@ -2349,14 +2349,14 @@ Do not remove temporary files when exiting.
 This option is intended for debugging.
 
 @item -s
-@item --src
+@itemx --src
 Make an archive of the source code for later reference.  All the code
 that is instrumented will be recorded in the compressed tarfile
 @file{@var{file}.src.tar.gz}, where @var{file} is the name that was
 supplied via the @option{-o} or @option{--output} arguments.
 
 @item -d
-@item --debug
+@itemx --debug
 Print extra debugging information.
 @end table
 
@@ -2456,7 +2456,7 @@ helper methods defined in class @code{daikon.Quant}.
 @cindex ESC/Java output format
 @cindex output format, ESC/Java
 @item ESC/Java format
-@item ESC format
+@itemx ESC format
 The Extended Static Checker for Java (ESC/Java) is a programming tool
 for finding errors in Java programs by checking annotations that are
 inserted in source code; for more details, see
@@ -2883,7 +2883,7 @@ Specify a single configuration setting.
 @xref{Configuration options}, for details.
 
 @item --dbg @var{category}
-@item --debug
+@itemx --debug
 Enable debug loggers
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
@@ -2927,7 +2927,7 @@ invariants must be justified.  Does not print "uninteresting" invariants
 Include "uninteresting" invariants in the tree of differing invariants.
 
 @item -y
-@item --ignore_unjustified
+@itemx --ignore_unjustified
 Include (statistically) unjustified invariants. 
 
 @item -a
@@ -2996,8 +2996,8 @@ For debugging use only.  Prints logging information describing the state
 of the program as it runs.
 
 @item --invSortComparator1 @var{classname}
-@item --invSortComparator2 @var{classname}
-@item --invPairComparator @var{classname}
+@itemx --invSortComparator2 @var{classname}
+@itemx --invPairComparator @var{classname}
 Use the specified class as a custom comparator.  A custom comparator can
 be used for any of 3 operations: sorting the first set of invariants,
 sorting the second set of invariants, and combining the two sets into
@@ -5333,7 +5333,6 @@ would be @file{Acme/Trampoline.dtrace} and
 The default is @option{combined}.
 
 @item --help
-@itemx -h
 Print a short options summary.
 
 @item --instr-dir=@var{directory}
@@ -5996,7 +5995,7 @@ The options are:
 @cindex hierarchical cluster analysis
 @cindex xm cluster analysis
 @item -a @var{ALG}
-@item --algorithm @var{ALG}
+@itemx --algorithm @var{ALG}
 @var{ALG} specifies a clustering algorithm.
 Current options are @samp{km} (for kmeans), @samp{hierarchical},
 and @samp{xm} (for xmeans).  The default is @samp{xm}.
@@ -6177,36 +6176,35 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
-@node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
-@section Runtime-check instrumenter
 
-The instrumenter modifies the methods and constructors of a class to check
-invariants as the class executes. To instrument class
+@node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
+@section Runtime-check instrumenter (runtimechecker)
+
+The runtimechecker instrumenter inserts, into a Java file,
+instrumentation code that checks invariants as the program executes.
+To instrument file
 @code{ubs/BoundedStack.java} with the invariants in the invariant file
-@code{BoundedStack.inv.gz}, you type:
+@code{BoundedStack.inv.gz}, then run the instrumented program, do:
 
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
 @end example
 
-For a list of options, type
+(For a list of options, type @code{java daikon.tools.runtimechecker.Main help}.)
 
-@example
-java daikon.tools.runtimechecker.Main help
-@end example
-
-The result of the @code{instrument} command is a new directory
-@code{instrumented-classes} containing a new version of
-@code{BoundedStack.java}, instrumented to check invariants at runtime.
+The @code{instrument} command creates a new directory
+@file{instrumented-classes} containing a new version of
+@file{BoundedStack.java}, instrumented to check invariants at runtime.
 
 The instrumented class will reference classes in the
 @code{daikon.tools.runtimechecker} package, so those classes must be
-present in the classpath when the class is used.
+present in the classpath when the class is executed.
 
-Invariants are evaluated at the program points at which they should hold. ``Evaluating an invariant'' means 
-executing an expression that evaluates to @code{true} if the invariant holds and @code{false}
-if the invariant doesn't hold.
-Three things can happen when evaluating an invariant:
+Invariants are evaluated at the program points at which they should
+hold. ``Evaluating an invariant'' means executing an expression that
+evaluates to @code{true} if the invariant holds and @code{false} if the
+invariant doesn't hold.  Three things can happen when evaluating an
+invariant:
 
 @itemize @bullet
 @item
@@ -6220,21 +6218,21 @@ hold. In this case the corresponding
 class @code{daikon.tools.runtimechecker.Runtime}. A programmer can
 obtain the growing list of violated invariants through the method
 @code{daikon.tools.runtimechecker.Runtime.getViolations()}. (See
-that class for other useful methods).
+that class for other useful methods.)
 
 @item
 A throwable is thrown when evaluating the invariant. In this case, the
-  throwable is added to the list
+throwable is added to the list
 @code{daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors}.
-  The throwable is not rethrown.
+The throwable is not rethrown.
 
 @end itemize
 
 
-As suggested above, the instrumented class handles violations silently: it simply adds them
-to a list in the class @code{daikon.tools.runtimechecker.Runtime.}
-In other words,
-no "invariant violation" exceptions are thrown, and the violated
+As indicated above, the instrumented class handles violations silently:
+it simply adds them to a list in the class
+@code{daikon.tools.runtimechecker.Runtime.}  
+No "invariant violation" exceptions are thrown, and the violated
 invariants can only be obtained dynamically from class
 @code{daikon.tools.runtimechecker.Runtime}.
 
@@ -6244,7 +6242,6 @@ The code detects if any violations occurred, and if so, prints
 a message.
 
 @example
-
 daikon.tools.runtimechecker.Runtime.resetViolations();
 daikon.tools.runtimechecker.Runtime.resetErrors();
 
@@ -6254,7 +6251,6 @@ List<Violation> vs = daikon.tools.runtimechecker.Runtime.getViolations();
 
 if (!vs.isEmpty())
   System.out.println("Violations occurred.");
-
 @end example
 
 In addition, the instrumenter adds the following two methods to the
@@ -6262,13 +6258,11 @@ instrumented class:
 
 @itemize @bullet
 @item
-
-@code{isDaikonInstrumented()}. Returns true (you can imagine calling
+@code{isDaikonInstrumented()}.  Returns true (you could calling
 this method to see if the class has been instrumented).
 
 @item
-
-@code{getDaikonInvariants()}. Returns the array of properties being checked.
+@code{getDaikonInvariants()}.  Returns the array of properties being checked.
 @end itemize
 
 
@@ -6297,7 +6291,6 @@ contains @file{.dtrace}, or @file{.inv}.
 The options are:
 @table @option
 
-@item -h
 @item --help
 Print usage message.
 
@@ -6305,8 +6298,8 @@ Print usage message.
 Write any violations to the specified file.
 
 @item --config_option @var{name}=@var{value}
-@item --dbg @var{category}
-@item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
+@itemx --dbg @var{category}
+@itemx --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
 These switches are the same as for Daikon.  They are described in
 @ref{Command line options}.
 
@@ -6447,7 +6440,6 @@ points.
 The default set of filters corresponds to the letters ``ijmp''.
 
 @item --help
-@itemx -h
 Print a brief summary of available command-line options.
 
 @item --no-post-after-pre-failure
@@ -7311,12 +7303,12 @@ points (functions) in your program.
 @item 
 You can make Daikon ignore some program points.  With the
 @example
-  --ppt @var{ppt_regexp}
+  --ppt-select-pattern=@var{ppt_regexp}
 @end example
 @noindent
 flag (@pxref{Command line options}), only program points matching
 the regular expression are processed.  Likewise, the
-``@option{--ppt_omit} @var{ppt_omit_regexp} option causes program points
+``@option{--ppt-omit-pattern=}@var{ppt_omit_regexp} option causes program points
 matching the regular expression to be ignored.
 
 Also, the configuration variable @var{ppt_perc} allows a percentage of
@@ -7385,7 +7377,7 @@ that use a lot of memory (such as some arrays).
 @item
 You can make Daikon ignore certain variables rather than modifying
 the @file{.dtrace} file directly.  Analogously with the
-@option{--ppt_omit} flag, the @option{--var_omit} flag makes Daikon
+@option{--ppt-omit-pattern} flag, the @option{--var-omit-pattern} flag makes Daikon
 ignore any variable matching the following regular expression.
 
 @item
