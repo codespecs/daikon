@@ -1268,7 +1268,7 @@ when development on it ceased.
 @section Branches
 
 The Daikon CVS repository contains two branches:  a main trunk and a
-branch (named ENGINE_V2_PATCHES) for Daikon version 3.1.6.
+branch (named ENGINE_V2_PATCHES) for version 2 of Daikon.
 
 The CVS manual
 @ifinfo
@@ -1294,7 +1294,7 @@ describes CVS branches:
 In early January 2002 (or perhaps in late 2001), we created the
 ENGINE_V2_PATCHES branch at the @file{invariants/java/daikon level} of
 the Daikon CVS repository.  Primary development continued along the CVS
-branch ENGINE_V2_PATCHES, which we called ``Daikon version 3.1.6''.  We
+branch ENGINE_V2_PATCHES, which we called ``Daikon version 2''.  We
 called the CVS trunk ``Daikon version 3''; it was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
