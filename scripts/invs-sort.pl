@@ -1,5 +1,15 @@
 #! /uns/bin/perl -wn
 # Lexically sort invariants (from the Python engine)
+# Also suppress warnings about non-symmetric comparabilities.
+# This makes two invariant output files much easier to compare (via diff or
+# by eye).
+# Output goes to standard out.  Input comes from argument file(s) or from
+# standard in if no files are specified.
+# Run like this:
+#   invs-sort.pl foo.invs > file.invs-sorted
+# or as a filter:
+#   cat foo.invs | invs-sort.pl | ...
+
 
 BEGIN {
   # Read a paragraph at a time
