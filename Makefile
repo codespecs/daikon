@@ -71,13 +71,14 @@ TAGS:  $(LISP_PATHS)
 
 DISTTESTDIR := $(HOME)/tmp/daikon.dist
 
-dist-test: dist dist-test-no-update-dist
+dist-test: dist-notest dist-test-no-update-dist
 
+# A very simple test:  just verify that the distributed system compiles.
 dist-test-no-update-dist:
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
-	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
+	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; rm `find . -name '*.class'`; make)
 
 cvs-test:
 	-rm -rf $(HOME)/tmp/daikon.cvs
@@ -94,7 +95,9 @@ cvs-test:
 
 # Main distribution
 
-dist: $(DIST_DIR)/daikon.tar.gz
+dist: dist-test
+
+dist-notest: $(DIST_DIR)/daikon.tar.gz
 	$(MAKE) -n dist-dfej
 
 # Is this the right way to do this?
