@@ -1856,6 +1856,7 @@ public class PptTopLevel extends Ppt {
 
       // isWorthPrinting checks many conditions for suppression
       if (! inv.isWorthPrinting()) {
+        // System.out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
 	continue;
       }
 
