@@ -39,5 +39,7 @@ $(HIERDIR)/cluster: $(HIERDIR)/cluster.c
 $(HIERDIR)/clgroup: $(HIERDIR)/clgroup.c
 	$(MAKE) -C $(HIERDIR) clgroup
 
-$(KMDIR)/cluster: cluster.cpp $(KMDIR)/kmeans.cpp $(KMDIR)/main.cpp $(KMDIR)/point.h $(KMDIR)/cluster.h $(KMDIR)/kmeans.h $(KMDIR)/point.cpp
-	$(MAKE) -C $(KMDIR) cluster
+# This rule lists no dependencies, because doing so would just duplicate
+# what is already in that Makefile.
+$(KMDIR)/kmeans:
+	$(MAKE) -C $(KMDIR) kmeans
