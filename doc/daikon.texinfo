@@ -320,13 +320,13 @@ Troubleshooting
 
 Problems running Daikon
 
+* Too much output::             
 * No samples::                  
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
 * Contradictory invariants::    
 * Method needs to be implemented::  
-* JVM initialization error::    
 * Daikon runs slowly::          
 
 Large data trace (.dtrace) files
@@ -340,6 +340,7 @@ Problems with dfej
 * dfej installation problems::  
 * dfej invocation problems::    
 * dfej javac problems::         
+* JVM initialization error::    
 
 Problems running dfej
 
@@ -6866,18 +6867,18 @@ understand Daikon's operation; @xref{Command line options}.
 
 
 @menu
+* Too much output::             
 * No samples::                  
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
 * Contradictory invariants::    
 * Method needs to be implemented::  
-* JVM initialization error::    
 * Daikon runs slowly::          
 @end menu
 
 
-@node    Too much output, No return from procedure, Daikon problems, Daikon problems
+@node    Too much output, No samples, Daikon problems, Daikon problems
 @subsection Too much output
 
 @cindex too much output from Daikon
@@ -6899,7 +6900,7 @@ useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
 
-@node    No samples, No return from procedure, Daikon problems, Daikon problems
+@node    No samples, No return from procedure, Too much output, Daikon problems
 @subsection No samples and no output
 
 @cindex no output from Daikon
@@ -7076,7 +7077,7 @@ can be time consuming.  The removal process can be disabled with the
 @option{daikon.simplify.LemmaStack.remove_contradictions}
 configuration option.
 
-@node    Method needs to be implemented, JVM initialization error, Contradictory invariants, Daikon problems
+@node    Method needs to be implemented, Daikon runs slowly, Contradictory invariants, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -7101,7 +7102,7 @@ or else use an output formatting that can handle those invariants.
 Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 
 
-@node    Daikon runs slowly,  , JVM initialization error, Daikon problems
+@node    Daikon runs slowly,  , Method needs to be implemented, Daikon problems
 @subsection Daikon runs slowly
 
 @cindex slow operation, of Daikon
@@ -7370,6 +7371,7 @@ as comments, and runtimechecker silently ignores them.)
 * dfej installation problems::  
 * dfej invocation problems::    
 * dfej javac problems::         
+* JVM initialization error::    
 @end menu
 
 @node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
@@ -7551,7 +7553,7 @@ should solve the problem.
 
 
 
-@node    dfej javac problems,  , dfej invocation problems, dfej problems
+@node    dfej javac problems, JVM initialization error, dfej invocation problems, dfej problems
 @subsection Problems compiling dfej output
 
 @cindex javac errors on dfej output
@@ -7588,7 +7590,7 @@ because the name @samp{link.foo} is ambiguous to people as well as to the
 compiler.
 
 
-@node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
+@node    JVM initialization error,  , dfej javac problems, dfej problems
 @subsection JVM initialization error
 
 @cindex JVM initialization error
