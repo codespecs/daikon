@@ -48,7 +48,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   public SuppressionLink generateSuppressionLink (Invariant inv) {
     if (debug.isDebugEnabled()) {
       debug.debug ("Attempting on: " + inv.repr());
-      debug.debug ("  in ppt     : " + inv.ppt.parent);
+      debug.debug ("  in ppt     : " + inv.ppt.parent.ppt_name);
     }
 
     PptSlice slice = inv.ppt;
@@ -62,7 +62,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     if (template.filled && template.results[0].isSameFormula(inv)) {
       Assert.assertTrue (template.transforms[0][0] != template.varInfos[0][0]);
       if (debug.isDebugEnabled()) {
-        debug.debug ("Self template filled:");
+        debug.debug ("  Self template filled:");
         debug.debug ("  suppressee: " + inv.repr());
         debug.debug ("      in ppt: " + inv.ppt.parent.name);
         debug.debug ("  with      : " + template.results[0].repr());
@@ -70,6 +70,9 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
       }
       return linkFromTemplate (template, inv);
     } else {
+      if (template.filled) {
+        debug.debug ("Not same formula, returning null");
+      }
       return null;
     }    
   }
