@@ -188,6 +188,13 @@ public final class FileIO {
     // Possibly abstract this out into a separate function??
     VarInfo vi;
     while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name)) != null) {
+      for (int i=0; i<var_infos.size(); i++) {
+        if (vi.name == ((VarInfo)var_infos.elementAt(i)).name) {
+          throw new Error("Duplicate variable name " + vi.name
+                          + " found at file " + filename
+                          + " line " + file.getLineNumber());
+        }
+      }
       var_infos.add(vi);
     }
 
