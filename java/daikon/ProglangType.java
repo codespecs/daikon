@@ -392,13 +392,19 @@ public final class ProglangType implements java.io.Serializable {
   }
 
   public boolean baseIsIntegral() {
-    return (// (base == BASE_BOOLEAN) ||
-            (base == BASE_BYTE)
-            || (base == BASE_CHAR)
-            || (base == BASE_INT)
-            || (base == BASE_LONG)
-            || (base == BASE_SHORT)
-            || (base == BASE_INTEGER));
+    if (Daikon.compare_byte_char_to_integer) {
+      return ((base == BASE_INT) ||
+              (base == BASE_LONG) ||
+              (base == BASE_SHORT) ||
+              (base == BASE_INTEGER));
+    } else {
+      return ((base == BASE_BYTE) ||
+              (base == BASE_CHAR) ||
+              (base == BASE_INT) ||
+              (base == BASE_LONG) ||
+              (base == BASE_SHORT) ||
+              (base == BASE_INTEGER));
+    }
   }
 
   public boolean isIntegral() {
