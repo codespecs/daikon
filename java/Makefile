@@ -341,8 +341,8 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # Note that this excludes Ajax
-JDOC_FILES = $(shell find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#')
-JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
+JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#'`
+#JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 javadoc: doc
 
@@ -354,7 +354,7 @@ doc: $(JAVA_FILES) doc-dkconfig
 ## Make doc with private fields for people working on source code
 doc-private: $(JAVA_FILES)
 	mkdir -p doc
-	javadoc $(JAVADOC_FLAGS) -private $(JAVADOC_PACKAGES)
+	javadoc $(JAVADOC_FLAGS) -private $(JDOC_FILES)
 
 ## Fix up generated .html files for use by the Emacs `jdk-lookup' function.
 doc-jdk-lookup: doc
@@ -364,7 +364,7 @@ doc-jdk-lookup: doc
 ../doc/invariants-doc.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
-		$(JAVADOC_PACKAGES)
+		$(JDOC_FILES)
 
 doc-invariant: ../doc/invariants-doc.texinfo
 
@@ -375,19 +375,19 @@ doc-invariant: ../doc/invariants-doc.texinfo
 ../doc/config-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
-		$(JAVADOC_PACKAGES)
+		$(JDOC_FILES)
 
 doc-dkconfig: ../doc/config-options.texinfo
 
 daikon/config/configurable.txt: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--list $@ \
-		$(JAVADOC_PACKAGES)
+		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
-		$(JAVADOC_PACKAGES)
+		$(JDOC_FILES)
 
 doc-category: ../doc/category-options.texinfo
 
