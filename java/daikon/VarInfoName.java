@@ -3452,8 +3452,13 @@ public abstract class VarInfoName
           if (elementwise && (i >= 1)) {
             VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
             VarInfoName _idx = _boundv[0], _low = _boundv[1];
-            conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
-            conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+            if (_low.simplify_name().equals(low.simplify_name())) {
+              conditions.append(" (EQ " + _idx.simplify_name() + " "
+                                + idx.simplify_name() + ")");
+            } else {
+              conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+              conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+            }
           }
           if (i == 1 && (adjacent || distinct)) {
             VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
