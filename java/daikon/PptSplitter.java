@@ -25,7 +25,7 @@ public class PptSplitter implements Serializable {
   static final long serialVersionUID = 20031031L;
 
   /**
-   * Integer. A value of zero indicates that dummy invariants should
+   * Integer. A value of zero indicates that DummyInvariant objects should
    * not be created. A value of one indicates that dummy invariants
    * should be created only when no suitable condition was found in
    * the regular output. A value of two indicates that dummy
@@ -43,7 +43,7 @@ public class PptSplitter implements Serializable {
   public transient Splitter splitter;
 
   /**
-   * PptConditionals for each splitter output.  ppts[0] is used when the
+   * PptConditionals for each splitter output.  ppts[0] is used
    * when the splitter is true, ppts[1] when the splitter is false.  The
    * contents are PptConditional objects if the splitter is valid, but are
    * PptTopLevel if the PptSplitter represents two exit points (for which
@@ -55,7 +55,7 @@ public class PptSplitter implements Serializable {
                             = new Invariant.InvariantComparatorForPrinting();
 
   /**
-   * Create a binary splitter with the specied splitter for the specified
+   * Create a binary PptSplitter with the specied splitter for the specified
    * PptTopLevel parent.  The parent should be a leaf (ie, a numbered
    * exit point)
    */
@@ -76,7 +76,7 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Creats a PptSplitter over two exit points.  No splitter is required.
+   * Creates a PptSplitter over two exit points.  No splitter is required.
    */
   public PptSplitter (PptTopLevel parent, PptTopLevel exit1,
                       PptTopLevel exit2) {
@@ -92,20 +92,20 @@ public class PptSplitter implements Serializable {
    */
   public boolean splitter_valid() {
 
-    if (!((PptConditional) ppts[0]).splitter_valid())
-      return (false);
-    Assert.assertTrue (((PptConditional)ppts[1]).splitter_valid());
-    return (true);
+    Assert.assertTrue (((PptConditional)ppts[1]).splitter_valid()
+                       == ((PptConditional) ppts[0]).splitter_valid());
+    return ((PptConditional) ppts[0]).splitter_valid();
   }
 
   /** Adds the sample to each conditional ppt in the split. */
   public void add_bottom_up (ValueTuple vt, int count) {
 
     // Choose the appropriate conditional point based on the condition result
-    PptConditional ppt_cond = choose_conditional (vt, count);
+    PptConditional ppt_cond = choose_conditional (vt);
     if (ppt_cond == null)
       return;
 
+/// ??? MDE
     // If any parent variables were missing out of bounds on this
     // sample, apply that to this conditional as well.  A more
     // efficient way to do this would be better.
@@ -124,7 +124,7 @@ public class PptSplitter implements Serializable {
   /**
    * Chooses the correct conditional point based on the values in this sample.
    */
-  public PptConditional choose_conditional (ValueTuple vt, int count) {
+  public PptConditional choose_conditional (ValueTuple vt) {
 
     boolean splitter_test;
     try {
@@ -158,7 +158,7 @@ public class PptSplitter implements Serializable {
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
 
-    add_implications_pair (false);
+    add_implications_pair ();
 
     // Remove all of the NIS suppressed invariants that we previously created
     for (int i = 0; i < ppts.length; i++)
@@ -170,8 +170,8 @@ public class PptSplitter implements Serializable {
    * invariants true at each one.  The algorithm divides the invariants
    * into two groups:
    * <ol>
-   *   <li>the "same" invariants are true at both program points
-   *   <li>the "different" invariants are all the others.
+   *   <li>the "same" invariants are true at both program points, and
+   *   <li>the "different" invariants are all other invariants.
    * </ol>
    * The "exclusive" invariants (a subset of the "different" inviariants)
    * are true at one program point, and their negation is true at the other
@@ -192,26 +192,23 @@ public class PptSplitter implements Serializable {
    * but in fact that is a false inference.  Note that this situation can
    * occur if the splitting condition uses variables that can ever be missing.
    */
-  private void add_implications_pair (boolean add_nonimplications) {
+  private void add_implications_pair () {
 
     debug.fine ("Adding Implications for " + parent.name);
 
     // Maps permuted invariants to their original invariants
-    Map orig_invs = new LinkedHashMap();
+    Map /*Invariant->Invariant*/ orig_invs = new LinkedHashMap();
 
-    // elements are Invariants
-    Vector same_invs_vec = new Vector();
+    Vector/*Invariant*/ same_invs_vec = new Vector();
 
-    // elements are pairs of Invariants
-    Vector exclusive_invs_vec = new Vector();
+    Vector /*Invariant[2]*/ exclusive_invs_vec = new Vector();
 
-    // elements are pairs of Invariants
-    Vector different_invs_vec = new Vector();
+    Vector /*Invariant[2]*/ different_invs_vec = new Vector();
 
+/// ??? MDE
     // Loop through each possible parent slice
-    List slices = possible_slices();
+    List /*VarInfo[]*/ slices = possible_slices();
 
-    slice_loop:
     for (Iterator itor = slices.iterator(); itor.hasNext(); ) {
       VarInfo[] vis = (VarInfo[]) itor.next();
 
@@ -232,7 +229,7 @@ public class PptSplitter implements Serializable {
         Assert.assertTrue (child_ppt.equality_view != null);
         Assert.assertTrue (parent.equality_view != null);
 
-        invs[childno] = new Invariants();
+        invs[childno] = new Invariants(); // permuted to parent
 
         // Get the child vis in the correct order
         VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
@@ -240,7 +237,7 @@ public class PptSplitter implements Serializable {
         VarInfo[] cvis_sorted = new VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
           cvis_non_canonical[kk] = matching_var (child_ppt, parent, vis[kk]);
-          cvis[kk] = matching_var (child_ppt, parent, vis[kk]).canonicalRep();
+          cvis[kk] = cvis_non_canonical[kk].canonicalRep();
           cvis_sorted[kk] = cvis[kk];
         }
         Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
@@ -283,7 +280,8 @@ public class PptSplitter implements Serializable {
           continue;
         }
 
-        // Copy each invariant permuted to the parent
+        // Copy each invariant permuted to the parent.
+        // This permits them to be directly compared to one another.
         int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
         for (int j = 0; j < cslice.invs.size(); j++) {
           Invariant orig_inv = (Invariant) cslice.invs.get (j);
@@ -320,20 +318,7 @@ public class PptSplitter implements Serializable {
       different_invs_vec.addAll (different_invariants (invs[0], invs[1]));
 
 
-    } // slice_loop: slices.iterator() loop
-
-
-    // This is not tested.
-    if (add_nonimplications) {
-      // Add to the join point all invariants that appeared at both children.
-      for (int i=0; i<same_invs_vec.size(); i++) {
-        Invariant same_inv = (Invariant)same_invs_vec.elementAt(i);
-        // This test doesn't seem to be productive.  (That comment may date
-        // from the time that all not-worth-printing invariants were
-        // already eliminated.)
-        parent.joiner_view.addInvariant(same_inv);
-      }
-    }
+    } // slices.iterator() loop
 
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       debug.fine ("Found " + exclusive_invs_vec.size()
@@ -355,7 +340,6 @@ public class PptSplitter implements Serializable {
       }
     }
 
-    Vector dummies = new Vector();
     PptTopLevel ppt1 = ppts[0];
     PptTopLevel ppt2 = ppts[1];
 
@@ -375,12 +359,12 @@ public class PptSplitter implements Serializable {
           Assert.assertTrue(!cond1.splitter_inverse);
           Assert.assertTrue(cond2.splitter_inverse);
           dummy2.negate();
-          exclusive_invs_vec.add(new Invariant[] {dummy1, dummy2});
-          dummies.add(new Invariant[] {dummy1, dummy2});
+          Invariant[] dummy_pair = new Invariant[] {dummy1, dummy2};
+          exclusive_invs_vec.add(dummy_pair);
+          different_invs_vec.add(dummy_pair);
         }
       }
     }
-    different_invs_vec.addAll(dummies);
 
 
     // If there are no exclusive conditions, we can do nothing here
@@ -425,8 +409,8 @@ public class PptSplitter implements Serializable {
         Invariant diff2 = different_invariants[j][1];
 
         Assert.assertTrue((diff1 == null) || (diff2 == null)
-                      || (ArraysMDE.indexOf(excls1, diff1)
-                          == ArraysMDE.indexOf(excls2, diff2)));
+                          || (ArraysMDE.indexOf(excls1, diff1)
+                              == ArraysMDE.indexOf(excls2, diff2)));
 
         // This adds an implication to itself; bad.
         // If one of the diffs implies the other, then should not add
@@ -455,23 +439,19 @@ public class PptSplitter implements Serializable {
     }
 
 
+/// Does this work?
+/// ??? MDE
     // Given bi-implications "A<=>B", "B<=>C", "C<=>D", etc., mark one of
     // the equivalent implications as the canonical one, to avoid
     // repeatedly printing the same fact (as both "A=>Z" and "B=>Z", for
     // example).
-    // (Question:
 
-    // Invariant -> Invariant
-    HashMap canonical_inv = new LinkedHashMap();
+    HashMap /* Invariant->Invariant */ canonical_inv = new LinkedHashMap();
     {
-      // Invariant -> HashSet[Invariant]
-      // The key is he canonical invariant for each element in the set.
-      HashMap inv_group = new LinkedHashMap();
+      // The key is the canonical invariant for each element in the set.
+      // This information can be computed from canonical_inv.
+      HashMap /* Invariant -> HashSet[Invariant] */ inv_group = new LinkedHashMap();
 
-      // Problem: I am not iterating through the invariants in any
-      // particular order that will guarantee that I don't see A and
-      // B, then C and D, and then A and C (which both already have
-      // different canonical versions).
       // System.out.println(name + "implication canonicalization");
       for (Iterator itor = parent.joiner_view.invs.iterator();
                                                             itor.hasNext(); ) {
@@ -483,6 +463,11 @@ public class PptSplitter implements Serializable {
           Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent());
           if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
             // Move all the invariants for canon2 over to canon1
+            // This solves the potential problem: that I am not iterating
+            // through the invariants in any particular order that will
+            // guarantee that I don't see A and B, then C and D, and then A
+            // and C (which both already have different canonical
+            // versions).
             HashSet hs1 = (HashSet) inv_group.get(canon1);
             HashSet hs2 = (HashSet) inv_group.get(canon2);
             inv_group.remove(canon2);
@@ -619,7 +604,7 @@ public class PptSplitter implements Serializable {
    * from its child conditionals.
    *
    * This is different from the slices that actually exist at the parent
-   * becaue there make be implications created from invariants in child
+   * because there may be implications created from invariants in child
    * slices that only exist in one child.
    **/
   private List /*VarInfo[]*/ possible_slices() {
@@ -646,6 +631,8 @@ public class PptSplitter implements Serializable {
       }
     }
 
+/// Expensive!
+/// ??? MDE
     // Create ternary views
     List ternary_slices = new ArrayList();
     for (int i = 0; i < leaders.length; i++) {
@@ -661,9 +648,27 @@ public class PptSplitter implements Serializable {
   }
 
 
+  // Could be used in assertion that all invariants are at same point.
+  private boolean at_same_ppt(Invariants invs1, Invariants invs2) {
+    PptSlice ppt = null;
+    Iterator itor = new UtilMDE.MergedIterator2(invs1.iterator(), invs2.iterator());
+    for (; itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (ppt == null) {
+        ppt = inv.ppt;
+      } else {
+        if (inv.ppt != ppt)
+          return false;
+      }
+    }
+    return true;
+  }
+
+
   /**
    * Determine which elements of invs1 are mutually exclusive with
    * elements of invs2.  Result elements are pairs of Invariants.
+   * All the arguments should be over the same program point.
    */
   Vector /*Invariants[2]*/ exclusive_conditions (Invariants invs1,
                                                  Invariants invs2) {
@@ -695,6 +700,7 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 differ from elements of invs2.
    * Result elements are pairs of Invariants (with one or the other
    * possibly null).
+   * All the arguments should be over the same program point.
    */
   Vector /*Invariant[2]*/ different_invariants (Invariants invs1,
                                                 Invariants invs2) {
@@ -720,6 +726,7 @@ public class PptSplitter implements Serializable {
   /**
    * Determine which elements of invs1 are the same as elements of invs2.
    * Result elements are Invariants (from the invs1 list)
+   * All the arguments should be over the same program point.
    */
   Vector /*Invariant*/ same_invariants(Invariants invs1, Invariants invs2) {
 
@@ -742,8 +749,8 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Creates the invariant specified by predicate and consequent and
-   * if it is a valid implication, adds it to the joiner view of
+   * If the implication specified by predicate and consequent
+   * is a valid implication, adds it to the joiner view of
    * parent.
    * @param orig_invs Maps permuted invariants to their original invariants
    **/
@@ -756,12 +763,12 @@ public class PptSplitter implements Serializable {
     Assert.assertTrue (orig_pred != null);
     Assert.assertTrue (orig_cons != null);
 
-    // JHP: if this code is enabled, other implications are added.  It
+    // JHP: If this code is enabled, other implications are added.  It
     // is not at all clear to me how/why that happens.  This should be
     // investigated.  For now, though, the implication is created here
-    // and noted as obvious in Implication.isObviousDynamically_SomeInEquality
+    // and noted as obvious in Implication.isObviousDynamically_SomeInEquality.
     // Also, this could possibly be better implemented by changing the
-    // way that we create the list of invariants that is one conditional
+    // way that we create the list of invariants that is in one conditional
     // and not in the other to not include an invariant if it is suppressed
     // on the other side.  This would have the pleasant side effect of not
     // forcing all of the suppressed invariants to be created before
@@ -780,6 +787,8 @@ public class PptSplitter implements Serializable {
     Implication imp = Implication.makeImplication (ppt, predicate, consequent,
                                                    iff, orig_pred, orig_cons);
     if (imp == null)
+      // The predicate is the same as the consequent, or the implication
+      // already exists.
       return;
 
     ppt.joiner_view.addInvariant (imp);
@@ -787,7 +796,7 @@ public class PptSplitter implements Serializable {
 
   /**
    * Adds the specified relation from each conditional ppt in this
-   * to the corresponding conditional ppt in ptp_split.  The relation
+   * to the corresponding conditional ppt in ppt_split.  The relation
    * specified should be a relation from this.parent to ppt_split.parent.
    */
   public void add_relation (PptRelation rel, PptSplitter ppt_split) {
@@ -801,12 +810,12 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Returns the VarInfo in ppt1 that matches the specified VarInfo in ppt2
-   * The variables at each point must match exactly.  This is reasonable
+   * Returns the VarInfo in ppt1 that matches the specified VarInfo in ppt2.
+   * The variables at each point must match exactly.  This is a reasonable
    * assumption for the ppts in PptSplitter and their parent.
    */
   private VarInfo matching_var (PptTopLevel ppt1, PptTopLevel ppt2,
-                               VarInfo ppt2_var) {
+                                VarInfo ppt2_var) {
 
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
     Assert.assertTrue (v.name.equals (ppt2_var.name));

@@ -236,7 +236,7 @@ public class InvariantChecker {
       if (ppt.has_splitters()) {
         for (Iterator ii = ppt.splitters.iterator(); ii.hasNext(); ) {
           PptSplitter ppt_split = (PptSplitter) ii.next();
-          PptConditional ppt_cond = ppt_split.choose_conditional (vt, 1);
+          PptConditional ppt_cond = ppt_split.choose_conditional (vt);
           if (ppt_cond != null)
             add (ppt_cond, vt);
           else
