@@ -213,6 +213,13 @@ public final class Member extends SequenceString  {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
+  public String format_ioa(String classname) {
+    String scl = sclvar().name.ioa_name(classname);
+    String[] form =
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar()}, classname);
+    return "~(" + form[0] + form[1] + " ~= " + scl + form[2] + ")";
+  }
+
   public String format_esc() {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
