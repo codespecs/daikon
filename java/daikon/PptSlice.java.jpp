@@ -13,16 +13,19 @@ The correct way to build the system is to run 'make'.
   #define PPTSLICE1STRING "PptSlice1"
   #define NUM_TM 2
   #define ARITY 1
+  #define VT_CLASS ValueTracker.ValueTracker1
 #elif defined(ARITY2)
   #define PPTSLICE1 PptSlice2
   #define PPTSLICE1STRING "PptSlice2"
   #define NUM_TM 4
   #define ARITY 2
+  #define VT_CLASS ValueTracker.ValueTracker2
 #elif defined(ARITY3)
   #define PPTSLICE1 PptSlice3
   #define PPTSLICE1STRING "PptSlice3"
   #define NUM_TM 8
   #define ARITY 3
+  #define VT_CLASS ValueTracker.ValueTracker3
 #else
   #error "One of ARITY1, ARITY2, or ARITY3 must be defined"
 #endif
@@ -40,20 +43,20 @@ package daikon;
 import daikon.inv.*;
 
 #if defined(ARITY1)
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.stringsequence.*;
+  import daikon.inv.unary.*;
+  import daikon.inv.unary.scalar.*;
+  import daikon.inv.unary.string.*;
+  import daikon.inv.unary.sequence.*;
+  import daikon.inv.unary.stringsequence.*;
 #elif defined(ARITY2)
-import daikon.inv.binary.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.binary.sequenceScalar.*;
+  import daikon.inv.binary.*;
+  import daikon.inv.binary.twoScalar.*;
+  import daikon.inv.binary.twoSequence.*;
+  import daikon.inv.binary.twoString.*;
+  import daikon.inv.binary.sequenceScalar.*;
 #elif defined(ARITY3)
-import daikon.inv.ternary.*;
-import daikon.inv.ternary.threeScalar.*;
+  import daikon.inv.ternary.*;
+  import daikon.inv.ternary.threeScalar.*;
 #endif
 
 import java.util.logging.Logger;
@@ -78,6 +81,8 @@ public final class PPTSLICE1
    * Debug tracer
    **/
   public static final Logger debugSpecific = Logger.getLogger("daikon." + PPTSLICE1STRING);
+
+  public static final Logger debugMerge = Logger.getLogger ("daikon.PptSlice.merge");
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
@@ -126,6 +131,8 @@ public final class PPTSLICE1
     */ // [INCR]
     if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("Created " + PPTSLICE1STRING + " " + this.name);
+    if (Debug.logOn())
+      Debug.log (getClass(), this, "Created");
 
     // Make the caller do this, because
     //  1. there are few callers
@@ -474,6 +481,10 @@ public final class PPTSLICE1
             inv.log ("destroyed because " + var_infos[i].name.name()
                      + "array index out of bounds");
         }
+        if (VarInfo.debugMissing.isLoggable (Level.FINE))
+          VarInfo.debugMissing.fine ("Removing slice " + this +
+                          " because var " + var_infos[i].name.name() +
+                          " array index out of bounds");
         return flow_and_remove_falsified();
       }
     }
@@ -831,5 +842,153 @@ public final class PPTSLICE1
     result.repCheck();
     return result;
   }
+  /**
+   * Creates invariants at this ppt by merging invariants from each of its
+   * children.  An invariant must exist at each of the children in order
+   * for it to be created here (at the parent).  Additionally, some invariants
+   * have state information that must be merged.  This is done by the invariant
+   * itself.
+   */
 
+  public void merge_invariants() {
+
+    if (debugMerge.isLoggable (Level.FINE)) {
+      debugMerge.fine ("merging invs for " + ppt_name);
+    }
+
+    // This map is from the invariant type to a list of all of the invariants
+    // of that type.  In most cases invariant type is equivalent to invariant
+    // class.  See class InvMatch for more info.
+    Map inv_map = new LinkedHashMap();
+    int slice_count = 0;
+
+    // Child variable info
+    VarInfo cvis[] = new VarInfo[var_infos.length];
+    VarInfo cvis_sorted[] = new VarInfo[var_infos.length];
+    int permute[] = new int[var_infos.length];
+
+    // List of value caches from each child slice.
+    List vtlist = new ArrayList();
+
+    // Loop through all of the children of our top level parent
+    child_loop:
+    for (int i = 0; i < parent.children.size(); i++) {
+      PptRelation rel = (PptRelation) parent.children.get(i);
+      PptTopLevel ppt = rel.child;
+
+      // Skip any children that have not seen any samples
+      if (ppt.num_samples() == 0)
+        continue;
+
+      // Build the corresponding array of VarInfos for the child.  If any
+      // of the vars don't exist in this child, skip the child (since we
+      // won't have data for each variable).
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo pv = var_infos[j];
+        VarInfo cv = rel.childVar (pv);
+        if (cv == null)
+          continue child_loop;
+        cvis[j] = cv.canonicalRep();
+        cvis_sorted[j] = cv.canonicalRep();
+      }
+
+      // The child variables must be sorted by their index (in the child)
+      Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
+
+      // Build the permutation array from child to parent slice
+      for (int j = 0; j < cvis_sorted.length; j++) {
+        for (int k = 0; k < cvis.length; k++) {
+          if (cvis_sorted[j] == cvis[k]) {
+            permute[j] = k;
+            cvis[k] = null;  // don't match the same one twice
+            break;
+          }
+        }
+      }
+
+      // Debug print child vars and permute to parent
+      if (debugMerge.isLoggable (Level.FINE)) {
+        debugMerge.fine ("-- Processing child " + ppt.ppt_name + " ("
+                         + rel.getRelationType() + ")");
+        debugMerge.fine ("-- -- child vars = " + VarInfo.toString (cvis_sorted));
+        debugMerge.fine ("-- -- permute = " + ArraysMDE.toString (permute));
+      }
+
+      // Keep track of the number of valid slices
+      slice_count++;
+
+      // Find the corresponding slice.  If the slice does not exist or
+      // has no invariants, there can be no invariants to merge (since
+      // invariants must exist at each slice to exist at the parent)
+      PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
+      if ((cslice == null) || (cslice.invs.size() == 0))
+        return;
+      debugMerge.fine ("-- -- found slice " + cslice.ppt_name);
+
+      // Update sample count info
+      for (int j = 0; j < tm_total.length; j++) {
+        tm_total[j] += cslice.tm_total[j];
+      }
+
+      // Keep track of the values cache from each child
+      vtlist.add (cslice.values_cache);
+      if (Debug.logOn())
+        Debug.log (getClass(), this, "Adding value cache "
+                   + cslice.values_cache + "from ppt" + cslice.ppt_name);
+
+      // Loop through each invariant in this slice, adding it to the
+      // matching list in inv_map
+      for (int j = 0; j < cslice.invs.size(); j++) {
+        Invariant orig_inv = (Invariant) cslice.invs.get (j);
+        Invariant inv = orig_inv.clone_and_permute (permute);
+        InvMatch imatch = new InvMatch (inv);
+        ArrayList invs = (ArrayList) inv_map.get (imatch);
+        if (inv.logOn()) {
+          inv.log ("Adding to " + ppt_name + " invs list " + invs
+                  + ": with permuation " + ArraysMDE.toString (permute));
+        }
+        if (invs == null) {
+          invs = new ArrayList();
+          inv_map.put (imatch, invs);
+        }
+        invs.add (inv);
+      }
+    }
+
+    // Create value tracker information for the parent.
+    if (vtlist.size() > 0)
+      values_cache = (VT_CLASS) ValueTracker.merge (vtlist);
+
+    // Attempt to create a parent invariant for each invariant that appeared
+    // at each slice.  Note that some invariants will not exist at the parent
+    // even if they exist at each child (eg, LinearBinary)
+    for (Iterator j = inv_map.values().iterator(); j.hasNext(); ) {
+      ArrayList child_invs = (ArrayList) j.next();
+      if (child_invs.size() > slice_count) {
+        System.out.println ("Found " + child_invs.size() + " invariants at "
+                            + ppt_name + " (" + slice_count + " children)");
+        for (int k = 0; k < child_invs.size(); k++ )
+          System.out.println ("-- Invariant = "
+                            + ((Invariant) child_invs.get(k)).format());
+      Assert.assertTrue (child_invs.size() <= slice_count);
+      }
+      if (child_invs.size() == slice_count) {
+        Invariant first = (Invariant) child_invs.get(0);
+        if (Debug.logOn())
+          first.log ("Attempting merge");
+        Invariant parent_inv = first.merge (child_invs, this);
+        if (parent_inv != null) {
+          invs.add (parent_inv);
+          if (Debug.logOn())
+            parent_inv.log ("Merge successful");
+        }
+      } else {
+        if (Debug.logOn()) {
+          Invariant inv = (Invariant) child_invs.get(0);
+          inv.log ("Not merging invariant up, Found " + child_invs.size()
+                    + "child invariants in " + slice_count + " children");
+        }
+      }
+    }
+  }
 }
