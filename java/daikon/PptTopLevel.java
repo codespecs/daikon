@@ -106,6 +106,10 @@ public class PptTopLevel
   public static final Logger debugSuppressFill =
     Logger.getLogger ("daikon.suppress.fill");
 
+  /** Debug tracer for up-merging equality sets  **/
+  public static final Logger debugMerge =
+    Logger.getLogger ("daikon.PptTopLevel.merge");
+
   /** Holds the falsified invariants under this PptTopLevel */
   public ArrayList falsified_invars = new ArrayList();
 
@@ -1183,6 +1187,8 @@ public class PptTopLevel
   public void add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
+
+    // System.out.println ("Processing samples at " + ppt_name);
 
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars,
                       name);
@@ -2421,6 +2427,11 @@ public class PptTopLevel
       // if (!firstLoopFilled) return false;
     }
 
+      if (Debug.logDetail())
+        Debug.log (getClass(), this, supTemplate.varInfos[0],
+                   ((dataflow_ppts == null) ? 0 : dataflow_ppts.length)
+                    + " dataflow points to process ");
+
     // debugSuppressFill.fine ("  Entering second loop: ");
     secondLoop:
     for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
@@ -2439,17 +2450,18 @@ public class PptTopLevel
 
       VarInfo[] varInfos = supTemplate.varInfos[iInvs];
 
+
       forEachTransform:
       // Transform the VarInfos for each upper ppt
       // We go backwards so that we get the strongest invariants first.
       for (int iPpts = dataflow_ppts.length - (checkSelf ? 1 : 2);
            iPpts >= 0; iPpts--) {
         PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
-//         if (Debug.logOn() || debugSuppressFill.isLoggable(Level.FINE))
-//           Debug.log (debugSuppressFill, getClass(), this, varInfos,
-//                          "  Flow ppt: " + dataflowPpt.name);
+       if (Debug.logDetail() || debugSuppressFill.isLoggable(Level.FINE))
+         Debug.log (debugSuppressFill, getClass(), this, varInfos,
+                          "  Flow ppt: " + dataflowPpt.name);
         int[] dataflowTransform = dataflow_transforms[iPpts];
-        if (false && Debug.logOn()) {
+        if (Debug.logDetail()) {
           String new_vars = "";
           String cur_vars = "";
           for (int ii = 0; ii < dataflowPpt.var_infos.length; ii++)
@@ -2467,25 +2479,31 @@ public class PptTopLevel
           int newIndex = dataflowTransform[varInfos[iVarInfos].varinfo_index];
           if (newIndex >= 0) {
             newVarInfos[iVarInfos] = dataflowPpt.var_infos[newIndex];
-//             if (Debug.logOn() || debugSuppressFill.isLoggable(Level.FINE))
-//               Debug.log (debugSuppressFill, GetClass(), this, varInfos,
-//                             "transformed "
-//                             + varInfos[iVarInfos].name.name() + " to "
-//                             + newVarInfos[iVarInfos].name.name());
+            if (Debug.logDetail() || debugSuppressFill.isLoggable(Level.FINE))
+              Debug.log (debugSuppressFill, getClass(), this, varInfos,
+                           "transformed "
+                           + varInfos[iVarInfos].name.name() + " to "
+                           + newVarInfos[iVarInfos].name.name());
           } else {
             continue forEachTransform;
           }
         }
 
         PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
+        if (Debug.logDetail())
+          Debug.log (getClass(),  this, varInfos, "found slice = " + slice
+                    + " Looking for class " + clazz);
         if (slice != null) {
           Invariant inv =
             Daikon.suppress_with_suppressed ?
             Invariant.find (clazz, slice) :
             Invariant.findUnsuppressed (clazz, slice);
+          if (Debug.logDetail())
+            Debug.log (getClass(), this, varInfos, "Found invariant " + inv);
           if (inv != null) {
             supTemplate.results[iInvs] = inv;
             supTemplate.transforms[iInvs] = newVarInfos;
+            break;
           }
         }
       }
@@ -3254,7 +3272,7 @@ public class PptTopLevel
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine ("PostProcessingEquality for: " + this.ppt_name);
     }
-    Assert.assertTrue (equality_view != null);
+    Assert.assertTrue (equality_view != null, "ppt = " + ppt_name);
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
@@ -3922,7 +3940,7 @@ public class PptTopLevel
   }
 
   /**
-   * Debug method to print children recursively
+   * Debug method to print children (in the partial order) recursively
    */
   public void debug_print_tree (Logger l, int indent, PptRelation parent_rel) {
 
@@ -3931,11 +3949,10 @@ public class PptTopLevel
     for (int i = 0; i < indent; i++)
       indent_str += "--  ";
 
-    // Get the class of the parent relation
-    String cls = "";
+    // Get the type of the parent relation
+    String rel_type = "";
     if (parent_rel != null)
-      cls = UtilMDE.replaceString (parent_rel.getClass().getName(),
-                      parent_rel.getClass().getPackage().getName() + ".", "");
+      rel_type = parent_rel.getRelationType();
 
     // Calculate the variable relationships
     String var_rel = "[]";
@@ -3943,13 +3960,13 @@ public class PptTopLevel
       var_rel = "[" + parent_rel.parent_to_child_var_string() +"]";
 
     // Put out this item
-    l.fine (indent_str + ppt_name + ": " + cls + ": " + var_rel);
+    l.fine (indent_str + ppt_name + ": " + rel_type + ": " + var_rel);
 
-    // Put out children if this is the primary relationship.  I consider
-    // (somewhat arbitrarily) the ObjectUser and EnterExit realtionships not
-    // to be primary.  This simplifies the tree for viewing.
-    if (!(parent_rel instanceof Dataflow.ObjectUserRel) &&
-        !(parent_rel instanceof Dataflow.EnterExitRel)) {
+    // Put out children if this is the primary relationship.  Limiting
+    // this to primary relations simplifies the tree for viewing while
+    // not leaving anything out.
+    if ((parent_rel == null) || parent_rel.is_primary()
+         || (Daikon.ppt_regexp != null)) {
       for (Iterator i = children.iterator(); i.hasNext(); )
         ((PptRelation)(i.next())).debug_print_tree (l, indent+1);
     }
@@ -3961,6 +3978,9 @@ public class PptTopLevel
    * each in an equality set.  Should be used only for debugging.
    */
   public String equality_sets_txt () {
+
+    if (equality_view == null)
+      return ("null");
 
     String out = "";
     for (int i = 0; i < equality_view.invs.size(); i++) {
@@ -3996,11 +4016,13 @@ public class PptTopLevel
   }
 
   /**
-   * Recursively merge invariants from children to create invariant
+   * Recursively merge invariants from children to create an invariant
    * list at this ppt.
    *
    * First, equality sets are created for this ppt.  These are the
-   * interesection of the equality sets from each child.
+   * intersection of the equality sets from each child.  Then create
+   * unary, binary, and ternary slices for each combination of equality
+   * sets and build the invariants for each slice.
    */
 
   public void mergeInvs() {
@@ -4019,21 +4041,116 @@ public class PptTopLevel
         rel.child.mergeInvs();
     }
 
+    // Debug print where we are
+    if (debugMerge.isLoggable(Level.FINE))
+      debugMerge.fine ("Processing ppt " + ppt_name);
+
+    // Number of samples here is the sum of all of the child samples, presuming
+    // there are some variable relationships with the child (note that
+    // some ppt relationships such as constructor ENTER ppts to their
+    // object ppts do not have any variable relationships)
+    for (int i = 0; i < children.size(); i++) {
+      PptRelation rel = (PptRelation) children.get(i);
+      if (rel.size() > 0)
+        values_num_samples += rel.child.values_num_samples;
+    }
+
+    // Create the (empty) equality view for this ppt
+    Assert.assertTrue (equality_view == null);
+    equality_view = new PptSliceEquality (this);
+
     // Get all of the binary relationships from the first child's
     // equality sets.
     PptRelation c1 = (PptRelation) children.get(0);
-    List elist = c1.get_child_equalities_as_parent();
+    Set eset = c1.get_child_equalities_as_parent();
+    debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + eset);
 
     // Loop through the remaining children, intersecting the equal
-    // variables as we go
+    // variables and incrementing the sample count as we go
     for (int i = 1; i < children.size(); i++) {
       PptRelation rel = (PptRelation) children.get(i);
-      List elist_new = rel.get_child_equalities_as_parent();
-      List elist_merge = new ArrayList();
-      for (int j = 0; j < elist.size(); j++) {
+      List eq_new = new ArrayList (rel.get_child_equalities_as_parent());
+      for (Iterator j = eset.iterator(); j.hasNext(); ) {
+        VarInfo.Pair curpair = (VarInfo.Pair) j.next();
+        int index = eq_new.indexOf (curpair);
+        if (index == -1)
+          j.remove();
+        else
+          curpair.samples += ((VarInfo.Pair) eq_new.get (index)).samples;
+      }
+    }
+    if (debugMerge.isLoggable (Level.FINE)) {
+      debugMerge.fine ("Found equality pairs ");
+      for (Iterator i = eset.iterator(); i.hasNext(); )
+        debugMerge.fine ("-- " + (VarInfo.Pair) i.next());
+    }
+
+    // Build actual equality sets that match the pairs we found
+    equality_view.instantiate_from_pairs (eset);
+    if (debugMerge.isLoggable (Level.FINE)) {
+      debugMerge.fine ("Built equality sets ");
+      for (int i = 0; i < equality_view.invs.size(); i++) {
+        Equality e = (Equality) equality_view.invs.get (i);
+        debugMerge.fine ("-- " + e.shortString());
       }
     }
 
+    // There shouldn't be any slices when we start
+    Assert.assertTrue (views.size() == 0);
+
+    // Create unary views and related invariants
+    for (int i = 0; i < equality_view.invs.size(); i++) {
+      Equality e = (Equality) equality_view.invs.get (i);
+      VarInfo vi = e.leader();
+      PptSlice1 slice1 = new PptSlice1 (this, vi);
+      slice1.merge_invariants();
+      addSlice (slice1);
+    }
+
+    // Create binary views and related invariants
+    for (int i = 0; i < equality_view.invs.size(); i++) {
+      Equality e1 = (Equality) equality_view.invs.get (i);
+      VarInfo v1 = e1.leader();
+      for (int j = i; j < equality_view.invs.size(); j++) {
+        Equality e2 = (Equality) equality_view.invs.get (j);
+        VarInfo v2 = e2.leader();
+        PptSlice2 slice2 = new PptSlice2 (this, v1, v2);
+        slice2.merge_invariants();
+        if (slice2.invs.size() > 0)
+          addSlice (slice2);
+      }
+    }
+
+    // Create ternary views and related invariants.  Since there
+    // are no ternary array invariants, those slices don't need to
+    // be created.
+    for (int i = 0; i < equality_view.invs.size(); i++) {
+      Equality e1 = (Equality) equality_view.invs.get (i);
+      VarInfo v1 = e1.leader();
+      if (v1.rep_type.isArray())
+        continue;
+      for (int j = i; j < equality_view.invs.size(); j++) {
+        Equality e2 = (Equality) equality_view.invs.get (j);
+        VarInfo v2 = e2.leader();
+        if (v2.rep_type.isArray())
+          continue;
+        for (int k = j; k < equality_view.invs.size(); k++) {
+          Equality e3 = (Equality) equality_view.invs.get (k);
+          VarInfo v3 = e3.leader();
+          if (v3.rep_type.isArray())
+            continue;
+          if (!v1.compatible(v2) || !v1.compatible(v3))
+            continue;
+          PptSlice3 slice3 = new PptSlice3 (this, v1, v2, v3);
+          slice3.merge_invariants();
+          if (slice3.invs.size() > 0)
+            addSlice (slice3);
+        }
+      }
+    }
+
+    // Mark this ppt as merged, so we don't process it multiple times
+    invariants_merged = true;
   }
 
 }
