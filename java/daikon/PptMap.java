@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import utilMDE.*;
-import daikon.gui.treeGUI.InvariantsGUI; // for InvariantsGUI.PLEASE_REPORT_ERROR_STRING, in getPptMapFromFile()
 
 /** Maps from a name (a String) to a PptTopLevel. */
 public class PptMap
@@ -91,7 +90,7 @@ public class PptMap
       else if (e.getClass() == InvalidClassException.class)
 	errorMessage = "Error: Invalid invariants object file: " + fileName + "\nMake sure the file was made with your current version of Daikon.";
       else
-	errorMessage = "Unknown error while reading invariants object file " + fileName + ": " + e.getClass() + InvariantsGUI.PLEASE_REPORT_ERROR_STRING;
+	errorMessage = "Unknown error while reading invariants object file " + fileName + ": " + e.getClass();
       throw new IOException( errorMessage );
     }
   }
