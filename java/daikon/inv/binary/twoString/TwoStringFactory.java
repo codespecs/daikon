@@ -20,19 +20,8 @@ public final class TwoStringFactory {
     Assert.assert((var1.rep_type == ProglangType.STRING)
                   && (var2.rep_type == ProglangType.STRING));
 
-    if (Daikon.check_program_types
-        && (! var1.type.castable(var2.type))) {
-      // System.out.println("These have different program types: :  "
-      //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+    if (! var1.compatible(var2))
       return null;
-    }
-    // System.out.println("These have castable program types: :  "
-    //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
-    if (! Daikon.ignore_comparability) {
-      if (! VarComparability.comparable(var1, var2)) {
-        return null;
-      }
-    }
 
     Vector result = new Vector();
     if (pass == 1) {
