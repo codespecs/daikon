@@ -84,7 +84,7 @@ public class PrintInvariants {
       "  --" + Daikon.suppress_cont_SWITCH,
       "      Suppress display of implied invariants (by controlling ppt).",
       "  --" + Daikon.no_suppress_cont_SWITCH,
-      "      Don't suppress display of implied invariants.",
+      "      Don't suppress display of implied invariants (by controlling ppt).",
       "  --" + Daikon.suppress_post_SWITCH,
       "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,

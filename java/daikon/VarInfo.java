@@ -752,7 +752,7 @@ public final class VarInfo
       return true;
     }
     if (Global.debugSuppressParam.isDebugEnabled()) {
-      Global.debugSuppressParam.debug ("Testing isDerivedParamUninteresting for: " + name.name());
+      Global.debugSuppressParam.debug ("Testing isDerivedParamAndUninteresting for: " + name.name());
       Global.debugSuppressParam.debug (aux);
       Global.debugSuppressParam.debug ("At ppt " + ppt.name);
     }

@@ -313,6 +313,7 @@ public final class Daikon {
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(suppress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -399,6 +400,8 @@ public final class Daikon {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
           show_progress = true;
+        } else if (suppress_SWITCH.equals(option_name)) {
+          suppress_invariants = true;
         } else if (suppress_cont_SWITCH.equals(option_name)) {
           suppress_implied_controlled_invariants = true;
         } else if (no_suppress_cont_SWITCH.equals(option_name)) {
