@@ -245,8 +245,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
   //  Used by constructTreeModel().
   protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
-    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-      DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
+    for (Enumeration e = node.children(); e.hasMoreElements(); ) {
+      DefaultMutableTreeNode child = ((DefaultMutableTreeNode) e.nextElement());
       Assert.assertTrue( child != null );
       Assert.assertTrue( child.toString() != null );
       if (child.toString().equals( name ))

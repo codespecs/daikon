@@ -49,8 +49,8 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
   public JScrollPane getScrollPane() { return scrollPane; }
 
-  public void valueChanged( TreeSelectionEvent e ) {
-    TreePath[] paths = e.getPaths();
+  public void valueChanged( TreeSelectionEvent tse ) {
+    TreePath[] paths = tse.getPaths();
     for (int i=0; i < paths.length; i++) {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
       Object userObject = node.getUserObject();
@@ -58,7 +58,7 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
       //  A leaf node (PptTopLevel node) was selected or deselected.  Add or remove
       //  the appropriate invariant tables.
       if (userObject.getClass() == daikon.PptTopLevel.class) {
-	if (e.isAddedPath( paths[i] )) {
+	if (tse.isAddedPath( paths[i] )) {
 	  setupTable( (PptTopLevel) userObject );
 	} else {	// paths[i] was deselected -- it should be in invariantTableNames.
 	  String name = ((PptTopLevel) userObject).name;
@@ -75,14 +75,14 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
 	//  A non-leaf node was selected or deselected.  Select or deselect its children.
       } else {
-	if (e.isAddedPath( paths[i] )) // Add children.
-	  for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+	if (tse.isAddedPath( paths[i] )) // Add children.
+	  for (Enumeration e = node.children(); e.hasMoreElements(); ) {
+	    TreePath newPath = paths[i].pathByAddingChild( e.nextElement());
 	    treeSelectionModel.addSelectionPath( newPath );
 	  }
 	else		// Remove children.
-	  for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+	  for (Enumeration e = node.children(); e.hasMoreElements(); ) {
+	    TreePath newPath = paths[i].pathByAddingChild( e.nextElement());
 	    treeSelectionModel.removeSelectionPath( newPath );
 	  }
       }
@@ -90,17 +90,17 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
     //  Scroll to the last invariant table that was added.
     String lastTableName = "";
-    TreePath leadPath = (TreePath) e.getNewLeadSelectionPath();
+    TreePath leadPath = (TreePath) tse.getNewLeadSelectionPath();
     if (leadPath == null)
-      leadPath = (TreePath) e.getOldLeadSelectionPath();
+      leadPath = (TreePath) tse.getOldLeadSelectionPath();
     DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
     if (leadNode.getUserObject().getClass() == daikon.PptTopLevel.class)
       lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
     else {			//  The last selected node was not a leaf node -- ie, it was a method or a class node.
 	                        //  If any of this node's children are selected, display their table.
       DefaultMutableTreeNode child;
-      for (Enumeration enum = leadNode.children(); enum.hasMoreElements(); ) {
-	child = (DefaultMutableTreeNode) enum.nextElement();
+      for (Enumeration e = leadNode.children(); e.hasMoreElements(); ) {
+	child = (DefaultMutableTreeNode) e.nextElement();
 	if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child )))
 	  if (child.getUserObject().getClass() == daikon.PptTopLevel.class) {
 	    lastTableName = ((PptTopLevel) child.getUserObject()).name;

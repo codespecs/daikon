@@ -55,10 +55,10 @@ public class CoverageStats
     // hits = getHits(); misses = getMisses();
     {
       Method m;
-      m = clazzListHits.getMethod("getHits", null);
-      hits = (Map) m.invoke(null, null);
-      m = clazzListHits.getMethod("getMisses", null);
-      misses = (Map) m.invoke(null, null);
+      m = clazzListHits.getMethod("getHits", (Class[])null);
+      hits = (Map) m.invoke(null, (Object[])null);
+      m = clazzListHits.getMethod("getMisses", (Class[])null);
+      misses = (Map) m.invoke(null, (Object[])null);
     }
 
     // Compute coverage

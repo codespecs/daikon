@@ -100,8 +100,8 @@ public class Ast {
     JavaParser parser = new JavaParser(new StringReader(stringRep));
     Node n = null;
     try {
-      Method m = JavaParser.class.getMethod(type, null);
-      n = (Node) m.invoke(parser, null);
+      Method m = JavaParser.class.getMethod(type, (Class[])null);
+      n = (Node) m.invoke(parser, (Object[])null);
     } catch (Exception e) {
       System.err.println("create(" + type + ", \"" + stringRep + "\")");
       e.printStackTrace();
@@ -965,7 +965,7 @@ public class Ast {
       //if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
       NodeToken nameToken = ((UnmodifiedClassDeclaration)outerClassNode).f1;
       Name name = new Name(nameToken, new NodeListOptional());
-      Type type = new Type(new NodeChoice(name, 1), new NodeListOptional());
+      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1), new NodeListOptional());
       VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
       FormalParameter implicitOuter = new FormalParameter(new NodeOptional(), type, blankParamName);
       v.parameters.add(0, implicitOuter);

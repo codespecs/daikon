@@ -35,7 +35,7 @@ public final class FileCompiler {
    * Splitters.  This can be the full path name or whatever is used on
    * the commandline.
    **/
-  public static String dkconfig_compiler = "jikes";
+  public static String dkconfig_compiler = "javac";
 
 
   /**
