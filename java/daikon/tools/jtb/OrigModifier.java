@@ -6,7 +6,7 @@ import jtb.visitor.*;
 
 /**
  * OrigModifier is a visitor that places "orig()" around varible names
- * and corrisondingly corrects positioning fields of all the tokens in
+ * and correspondingly corrects positioning fields of all the tokens in
  * tree to accomodate the change.  For example, the expression get(this.x)
  * would be changed to get(orig(this.x)).
  **/

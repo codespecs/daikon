@@ -14,7 +14,7 @@ import daikon.Global;
  * the value of the observer at every procedure entry and exit.
  *
  * <b>Be careful</b> with this tool, as it overwrites the files passed
- * on the comman line!
+ * on the command line!
  **/
 public class InstrumentObserversVisitor
   extends DepthFirstVisitor
