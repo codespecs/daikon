@@ -12,6 +12,11 @@ import java.util.*;
 public class Daikon {
 
   static final boolean disable_splitting = false;
+  // static final boolean disable_splitting = true;
+
+  static final boolean disable_ternary_invariants = false;
+  // static final boolean disable_ternary_invariants = true;
+
 
   // The two arguments to daikon.Daikon are a comma-separated list of
   // declaration files, and a comma-separated list of data trace files.
@@ -50,12 +55,16 @@ public class Daikon {
     for (Iterator itor = new TreeSet(all_ppts.keySet()).iterator() ; itor.hasNext() ; ) {
       String ppt_name = (String) itor.next();
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-      ppt.initial_processing();
-      if (! disable_splitting) {
-        Splitter[] pconds = ppt.getSplitters();
-        ppt.addConditions(pconds);
+      if (ppt.num_samples() > 0) {
+        ppt.initial_processing();
+        if (! disable_splitting) {
+          Splitter[] pconds = ppt.getSplitters();
+          if (Global.debugPptSplit)
+            System.out.println("Got " + pconds.length + " splitters for " + ppt.name);
+          ppt.addConditions(pconds);
+        }
+        ppt.print_invariants_maybe();
       }
-      ppt.print_invariants_maybe();
     }
 
     // Old implementation that didn't interleave invariant inference and

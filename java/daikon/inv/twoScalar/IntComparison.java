@@ -200,14 +200,19 @@ class IntComparison extends TwoScalar implements Comparison {
 
   // For Comparison interface
   public double eq_probability() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
-    if (can_be_eq && (!can_be_lt) && (!can_be_gt))
+    if (isExact())
       return computeProbability();
     else
       return Invariant.PROBABILITY_NEVER;
   }
+
+  public boolean isExact() {
+    boolean can_be_eq = core.can_be_eq;
+    boolean can_be_lt = core.can_be_lt;
+    boolean can_be_gt = core.can_be_gt;
+
+    return (can_be_eq && (!can_be_lt) && (!can_be_gt));
+  }
+
 
 }

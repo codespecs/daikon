@@ -38,7 +38,7 @@ public class TwoSequenceFactory {
         SuperSequence.instantiate(ppt);
 
         PairwiseIntComparison.instantiate(ppt);
-        PairwiseLinear.instantiate(ppt);
+        PairwiseLinearBinary.instantiate(ppt);
         for (int i=0; i<2; i++) {
           boolean invert = (i==1);
           VarInfo arg = (invert ? var1 : var2);

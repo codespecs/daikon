@@ -36,7 +36,7 @@ class FunctionUnary extends TwoScalar {
     if (justified()) {
       String argname = inverse ? var2().name : var1().name;
       String resultname = inverse ? var1().name : var2().name;
-      return resultname + " = " + function + "(" + argname + ")";
+      return resultname + " = " + function.getName() + "(" + argname + ")";
     } else {
       return null;
     }
@@ -50,6 +50,10 @@ class FunctionUnary extends TwoScalar {
 
   protected double computeProbability() {
     return core.computeProbability();
+  }
+
+  public boolean isExact() {
+    return true;
   }
 
 }

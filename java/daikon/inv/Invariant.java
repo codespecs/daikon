@@ -55,6 +55,11 @@ public abstract class Invariant {
     return (!no_invariant) && (getProbability() <= probability_limit);
   }
 
+  // Subclasses should override.
+  public boolean isExact() {
+    return false;
+  }
+
   // Implementations of this need to examine all the data values already
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
@@ -187,6 +192,28 @@ public abstract class Invariant {
       return format1.compareTo(format2);
     }
   }
+
+
+
+
+  public static boolean hasExactInvariant(VarInfo var1, VarInfo var2, PptTopLevel ppt) {
+    PptSlice slice = ppt.findSlice(var1, var2);
+    if (slice == null)
+      return false;
+    return hasExactInvariant(slice);
+  }
+
+  public static boolean hasExactInvariant(PptSlice slice) {
+    for (Iterator itor = slice.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv.isExact() && inv.justified()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 
 
 }

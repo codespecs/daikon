@@ -43,10 +43,12 @@ public class Global {
   public final static boolean debugDerive = false;
   public final static boolean debugInfer = false;
   public final static boolean debugPptSliceGeneric = false;
+  public final static boolean debugPptSplit = false;
 
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
   // public final static boolean debugInfer = true;
   // public final static boolean debugPptSliceGeneric = true;
+  // public final static boolean debugPptSplit = true;
 }

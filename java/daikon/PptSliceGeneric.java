@@ -7,6 +7,7 @@ import daikon.inv.twoScalar.*;
 import daikon.inv.sequence.*;
 import daikon.inv.twoSequence.*;
 import daikon.inv.sequenceScalar.*;
+import daikon.inv.threeScalar.*;
 import java.util.*;
 
 import utilMDE.*;
@@ -80,7 +81,12 @@ public class PptSliceGeneric extends PptSlice {
         TwoScalarFactory.instantiate(this, pass);
       }
     } else if (arity == 3) {
-      throw new Error("arity 3 not yet implemented");
+      boolean array1 = var_infos[0].type.isArray();
+      boolean array2 = var_infos[1].type.isArray();
+      boolean array3 = var_infos[2].type.isArray();
+      if (! (array1 || array2 || array3)) {
+        ThreeScalarFactory.instantiate(this, pass);
+      }
     } else {
       throw new Error("bad arity");
     }
@@ -262,20 +268,28 @@ public class PptSliceGeneric extends PptSlice {
         throw new Error("impossible");
       }
     } else if (arity == 3) {
-      throw new Error("arity 3 not yet implemented");
-      //       VarInfo vi1 = var_infos[0];
-      //       VarInfo vi2 = var_infos[1];
-      //       VarInfo vi3 = var_infos[2];
-      //       for (int i=0; i<invs.size(); i++) {
-      // 	ThreeScalar inv = (ThreeScalar)invs.elementAt(i);
-      // 	int value1 = vi1.getIntValue(vt);
-      // 	int mod1 = vi1.getModified(vt);
-      // 	int value2 = vi2.getIntValue(vt);
-      // 	int mod2 = vi2.getModified(vt);
-      // 	int value3 = vi3.getIntValue(vt);
-      // 	int mod3 = vi3.getModified(vt);
-      // 	inv.add(value1, mod1, value2, mod2, value3, mod3, count);
-      //       }
+      VarInfo vi1 = var_infos[0];
+      VarInfo vi2 = var_infos[1];
+      VarInfo vi3 = var_infos[2];
+      int num_arrays = 0;
+      if (vi1.rep_type.isArray()) num_arrays++;
+      if (vi2.rep_type.isArray()) num_arrays++;
+      if (vi3.rep_type.isArray()) num_arrays++;
+      if (num_arrays == 0) {
+        for (int i=0; i<invs.size(); i++) {
+          ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
+          int value1 = vi1.getIntValue(full_vt);
+          int mod1 = vi1.getModified(full_vt);
+          int value2 = vi2.getIntValue(full_vt);
+          int mod2 = vi2.getModified(full_vt);
+          int value3 = vi3.getIntValue(full_vt);
+          int mod3 = vi3.getModified(full_vt);
+          inv.add(value1, mod1, value2, mod2, value3, mod3, count);
+        }
+      } else {
+        // temporarily do nothing:  efficiency hack, and there are currently
+        // no ternary invariants over non-scalars
+      }
     } else {
       throw new Error("bad arity " + arity);
     }

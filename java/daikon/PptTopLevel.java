@@ -24,7 +24,7 @@ import utilMDE.*;
 // This probably doesn't do any direct computation, instead deferring that
 // to its views that are slices.
 
-class PptTopLevel extends Ppt {
+public class PptTopLevel extends Ppt {
 
   // do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_dreived_vars for the number of variables
@@ -753,7 +753,7 @@ class PptTopLevel extends Ppt {
 
   // Vector of PptSliceGeneric.
   // Maybe this should return the rejected views.
-  void addViews(Vector slices_vector_) {
+  public void addViews(Vector slices_vector_) {
     // Don't modify the argument
     Vector slices_vector = (Vector) slices_vector_.clone();
     // use an array because iterating over it will be more efficient, I suspect.
@@ -828,7 +828,7 @@ class PptTopLevel extends Ppt {
   // }
 
 
-  void removeView(Ppt slice) {
+  public void removeView(Ppt slice) {
     if (views_to_remove_deferred != null) {
       views_to_remove_deferred.add(slice);
     } else {
@@ -840,7 +840,7 @@ class PptTopLevel extends Ppt {
 
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
-  PptSliceGeneric findSlice(VarInfo v) {
+  public PptSliceGeneric findSlice(VarInfo v) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSliceGeneric view = (PptSliceGeneric) itor.next();
       if ((view.arity == 1) && (v == view.var_infos[0]))
@@ -849,7 +849,7 @@ class PptTopLevel extends Ppt {
     return null;
   }
 
-  PptSliceGeneric findSlice(VarInfo v1, VarInfo v2) {
+  public PptSliceGeneric findSlice(VarInfo v1, VarInfo v2) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSliceGeneric view = (PptSliceGeneric) itor.next();
       if ((view.arity == 2)
@@ -860,6 +860,17 @@ class PptTopLevel extends Ppt {
     return null;
   }
 
+  public PptSliceGeneric findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
+    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
+      PptSliceGeneric view = (PptSliceGeneric) itor.next();
+      if ((view.arity == 3)
+          && (v1 == view.var_infos[0])
+          && (v2 == view.var_infos[1])
+          && (v3 == view.var_infos[2]))
+        return view;
+    }
+    return null;
+  }
 
   // At present, this needs to occur after deriving variables, because
   // I haven't integrated derivation and inference yet.
@@ -970,7 +981,7 @@ class PptTopLevel extends Ppt {
 
     // Binary slices/invariants.
     Vector binary_views = new Vector();
-    for (int i1=0; i1<var_infos.length; i1++) {
+    for (int i1=0; i1<vi_index_limit; i1++) {
       if (var_infos[i1].canBeMissing) {
         if (Global.debugDerive) {
           System.out.println(var_infos[i1].name + " can be missing");
@@ -1141,7 +1152,76 @@ class PptTopLevel extends Ppt {
 
     // 5. ternary invariants
     // (However, arity 3 is not yet implemented.)
+    if (! Daikon.disable_ternary_invariants) {
+      Vector ternary_views = new Vector();
+      for (int i1=0; i1<vi_index_limit; i1++) {
+        VarInfo var1 = var_infos[i1];
+        if (var1.canBeMissing) {
+          if (Global.debugDerive) {
+            System.out.println(var1.name + " can be missing");
+          }
+          continue;
+        }
+        if (!var1.isCanonical())
+          continue;
 
+
+        boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+        for (int i2=i1+1; i2<vi_index_limit; i2++) {
+          VarInfo var2 = var_infos[i2];
+          if (var2.canBeMissing) {
+            if (Global.debugDerive) {
+              System.out.println(var2.name + " can be missing");
+            }
+            continue;
+          }
+          if (!var2.isCanonical())
+            continue;
+          if (Invariant.hasExactInvariant(var1, var2, this))
+            continue;
+
+          boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
+          int i3_min = ((target1 || target2) ? i2+1 : Math.max(i2+1, vi_index_min));
+          if (Global.debugInfer)
+            System.out.println("instantiate_views"
+                               + "(" + vi_index_min + "," + vi_index_limit + ")"
+                               + " i1=" + i1
+                               + " i2=" + i2
+                               + ", i3_min=" + i3_min
+                               );
+          for (int i3=i3_min; i3<vi_index_limit; i3++) {
+            Assert.assert(((i1 >= vi_index_min) && (i1 < vi_index_limit))
+                          || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
+                          || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
+            Assert.assert((i1 < i2) && (i2 < i3));
+            VarInfo var3 = var_infos[i3];
+            if (var3.canBeMissing) {
+              if (Global.debugDerive) {
+                System.out.println(var3.name + " can be missing");
+              }
+              continue;
+            }
+            if (!var3.isCanonical())
+              continue;
+            if (Invariant.hasExactInvariant(var1, var3, this)
+                || Invariant.hasExactInvariant(var2, var3, this))
+              continue;
+
+            // For now, only ternary invariants not involving any arrays
+            if (var1.rep_type.isArray()
+                || var2.rep_type.isArray()
+                || var3.rep_type.isArray())
+              continue;
+
+            PptSliceGeneric slice3 = new PptSliceGeneric(this, var1, var2, var3);
+            slice3.instantiate_invariants(1);
+            slice3.instantiate_invariants(2);
+            ternary_views.add(slice3);
+          }
+        }
+      }
+      addViews(ternary_views);
+    }
 
     if (Global.debugPptTopLevel)
       System.out.println(views.size() - old_num_views + " new views for " + name);
@@ -1149,7 +1229,7 @@ class PptTopLevel extends Ppt {
     // This method didn't add any new variables.
     Assert.assert(old_num_vars == var_infos.length);
 
-    // now unary_views and binary_views get garbage-collected.
+    // now unary_views, binary_views, and ternary_views get garbage-collected.
   }
 
   // // At present, this needs to occur after deriving variables, because
@@ -1191,7 +1271,7 @@ class PptTopLevel extends Ppt {
 
   public Splitter[] getSplitters() {
     Splitter[] from_fullname = SplitterList.get(name);
-    if (Global.debugPptTopLevel)
+    if (Global.debugPptSplit)
       System.out.println("getSplitters "
                          + ((from_fullname != null) ? "succeeded" : "failed")
                          + " with " + name);
@@ -1201,7 +1281,7 @@ class PptTopLevel extends Ppt {
     if (tag_index != -1) {
       String untagged_name = name.substring(0, tag_index);
       Splitter[] from_untagged_name = SplitterList.get(untagged_name);
-      if (Global.debugPptTopLevel)
+      if (Global.debugPptSplit)
         System.out.println("getSplitters "
                            + ((from_untagged_name != null) ? "succeeded" : "failed")
                            + " with " + untagged_name);
@@ -1213,17 +1293,22 @@ class PptTopLevel extends Ppt {
 
   public void addConditions(Splitter[] splits) {
     if (splits == null) {
-      // System.out.println("No splits for " + name);
+      if (Global.debugPptSplit)
+        System.out.println("No splits for " + name);
       return;
     }
 
     Vector pconds_vector = new Vector(2 * splits.length);
     for (int i=0; i<splits.length; i++) {
       PptConditional cond1 = new PptConditional(this, splits[i], false);
-      if (! cond1.splitter_valid())
+      if (! cond1.splitter_valid()) {
+        if (Global.debugPptSplit)
+          System.out.println("Splitter not valid: " + cond1.name);
         continue;
+      }
       pconds_vector.add(cond1);
       PptConditional cond2 = new PptConditional(this, splits[i], true);
+      Assert.assert(cond2.splitter_valid());
       pconds_vector.add(cond2);
     }
     PptConditional[] pconds
@@ -1236,7 +1321,8 @@ class PptTopLevel extends Ppt {
       int count = ((Integer) entry.getValue()).intValue();
       // I do not want to use the same ValueTuple every time through
       // because the ValueTuple is modified in place.
-      // It's OK to reuse its elements, though; so use clone().
+      // It's OK to reuse its elements, though; so use clone() (actually
+      // shallowcopy()).
       ValueTuple vt_trimmed = vt.trim(num_tracevars + num_orig_vars);
       for (int i=0; i<num_pconds; i++)
         pconds[i].add(vt_trimmed.shallowcopy(), count);
@@ -1246,8 +1332,14 @@ class PptTopLevel extends Ppt {
     for (int i=0; i<num_pconds; i++) {
       // Don't bother with this conditioned view if it contains all or no samples.
       int this_num_samples = pconds[i].num_samples();
-      if ((this_num_samples > 0) && (this_num_samples < parent_num_samples))
+      if ((this_num_samples > 0) && (this_num_samples < parent_num_samples)) {
         views_cond.add(pconds[i]);
+      } else {
+        if (Global.debugPptSplit)
+          System.out.println("Omitting " + pconds[i].name + ": "
+                             + this_num_samples + "/" + parent_num_samples
+                             + " samples");
+      }
     }
     for (int i=0; i<views_cond.size(); i++) {
       PptConditional pcond = (PptConditional) views_cond.elementAt(i);

@@ -530,18 +530,23 @@ class FileIO {
       } else {
 	PptTopLevel entry_ppt = (PptTopLevel) entry_ppts.get(ppt);
 	if (entry_ppt != null) {
-	  Invocation invoc = (Invocation) call_stack.pop();
-	  if (invoc.fn_name != fn_name)
-	    // Should actually just mark as a function that made an
-	    // exceptional exit at runtime and keep looking down the stack
-	    // for the proper matching function entry.
-	    throw new Error("Unexpected function name " + invoc.fn_name
-			    + ", expected " + fn_name);
-          Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars);
-	  for (int i=0; i<ppt.num_orig_vars; i++) {
-	    vals[ppt.num_tracevars+i] = invoc.vals[i];
-	    mods[ppt.num_tracevars+i] = invoc.mods[i];
-	  }
+          if (call_stack.empty()) {
+            System.out.println("Function exit without corresponding entry: "
+                               + ppt.name);
+          } else {
+            Invocation invoc = (Invocation) call_stack.pop();
+            if (invoc.fn_name != fn_name)
+              // Should actually just mark as a function that made an
+              // exceptional exit at runtime and keep looking down the stack
+              // for the proper matching function entry.
+              throw new Error("Unexpected function name " + invoc.fn_name
+                              + ", expected " + fn_name);
+            Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars);
+            for (int i=0; i<ppt.num_orig_vars; i++) {
+              vals[ppt.num_tracevars+i] = invoc.vals[i];
+              mods[ppt.num_tracevars+i] = invoc.mods[i];
+            }
+          }
 	}
       }
 

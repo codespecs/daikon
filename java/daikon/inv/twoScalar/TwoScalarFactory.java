@@ -26,13 +26,13 @@ public class TwoScalarFactory {
         // Skip if the argument is a constant (but not if the result
         // is constant, as we might get something like y=abs(x)).
         if (! arg.isConstant()) {
-          FunctionUnary.instantiate(ppt, Functions.Math_abs, invert);
-          FunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert);
-          FunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
+          for (int j=0; j<Functions.unaryFunctions.length; j++) {
+            FunctionUnary.instantiate(ppt, Functions.unaryFunctions[j], invert);
+          }
         }
       }
       if ((! var1.isConstant()) && (! var2.isConstant())) {
-        Linear.instantiate(ppt);
+        LinearBinary.instantiate(ppt);
         // new NonAliased(ppt);
         NonEqual.instantiate(ppt);
       }

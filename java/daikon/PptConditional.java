@@ -53,9 +53,17 @@ class PptConditional extends PptTopLevel {
 
 
   void add(ValueTuple vt, int count) {
-    boolean splitter_test = splitter.test(vt);
-    if (splitter_inverse ? (! splitter_test) : splitter_test)
-      super.add(vt, count);
+    // This try block may be a very inefficient way to do this computation.
+    // Perhaps figure out another way, or invalidate the whole PptConditional
+    // if any exception is thrown.
+    try {
+      boolean splitter_test = splitter.test(vt);
+      if (splitter_inverse ? (! splitter_test) : splitter_test)
+        super.add(vt, count);
+    } catch (Exception e) {
+      // If an exception is thrown, don't put the data on either side
+      // of the split.
+    }
   }
 
 }

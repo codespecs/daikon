@@ -23,7 +23,8 @@ public class FunctionUnaryCore {
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  int values_seen = 0;
+  // Not currently being maintained
+  // int values_seen = 0;
 
   Invariant wrapper;
 
@@ -60,8 +61,9 @@ public class FunctionUnaryCore {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    if (values_seen < 5)
-      return Invariant.PROBABILITY_UNKNOWN;
+    // Not currently being maintained
+    // if (values_seen < 5)
+    //   return Invariant.PROBABILITY_UNKNOWN;
     // This isn't right, is it?
     // The actual value probably depends on the function.
     return 0;
