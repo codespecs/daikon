@@ -9,8 +9,8 @@ JAVA ?= java
 JAVAC ?= jikes -g +E +F
 
 
-JAVA_FILES := $(shell find . -name '*.java' -print)
-JAVA_CPP_FILES := $(shell find . -name '*.java.jpp' -print)
+JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
+JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 AUTO_GENERATED_FILES = \
 	MathMDE.java
