@@ -133,6 +133,7 @@ Example use of Daikon
 * Understanding the invariants::  
 * Second Java example::         
 * C examples::                  
+* Perl examples::               
 
 C examples
 
@@ -150,6 +151,7 @@ Instrumentation
 
 * Instrumenting Java programs::  
 * Instrumenting C/C++ programs::  
+* Instrumenting Perl programs::  
 
 Run the instrumented program
 
@@ -209,6 +211,7 @@ Front ends
 
 * Java front end dfej::         
 * C/C++ front end dfec::        
+* Perl front end dfepl::        
 
 Java front end dfej
 
@@ -238,6 +241,10 @@ dfec requirements
 * C program requirements::      
 * Header file dependencies::    
 * gcc version::                 
+
+Perl front end dfepl
+
+* dfepl options::               
 
 Enhancing Daikon output
 
@@ -772,6 +779,7 @@ Daikon.
 * Understanding the invariants::  
 * Second Java example::         
 * C examples::                  
+* Perl examples::               
 @end menu
 
 @node    Step-by-step instructions, Summary of Daikon use, Example use, Example use
@@ -1064,7 +1072,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 
 @end itemize
 
-@node    C examples,  , Second Java example, Example use
+@node    C examples, Perl examples, Second Java example, Example use
 @section C examples
 
 The Daikon distribution comes with several example C programs in the
@@ -1233,6 +1241,108 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
       daikon-output/rijndael.decls daikon-output/rijndael.truncated.dtrace
 @end example
 
+@node Perl examples,  , C examples, Example use
+@section Perl examples
+
+The Daikon distribution includes sample Perl programs suitable for use
+with Daikon in the @file{examples/perl-examples} directory.
+
+To use the Daikon Perl front end, you need to have installed Daikon
+(see @ref{Installing Daikon}), and you need version 5.8 or later of
+Perl.
+
+The Perl front end requires a few extra steps to run compared with the
+Java and C front ends, because Perl programs don't pre-specify the
+types of their variables. Using the Perl front end is a two-pass
+process: first you must run the annotated program so that the runtime
+system can dynamically infer the kind of data stored in each variable,
+and then you must re-annotate and re-run the program with the added
+type information. Here are step-by-step instructions for a sample
+program:
+
+@enumerate
+@item Change to the directory containing the @file{Birthday.pm}
+module.
+@example
+cd examples/perl-examples
+@end example
+
+@item Instrument the @file{Birthday.pm} file.
+@example
+dfepl Birthday.pm
+@end example
+
+This command creates a directory @file{daikon-instrumented}, and puts
+the instrumented version of @file{Birthday.pm} into
+@file{daikon-instrumented/Birthday.pm}. Note than unlike the C or Java
+front ends, it does not create a @file{.decls} file yet.
+
+@item Run a test suite using the instrumented @file{Birthday.pm}
+file.
+@example
+dtrace-perl test_bday.pl 5
+@end example
+
+The @file{dtrace-perl} is a script that runs Perl with the appropriate
+command line options to find the modules used by the Daikon Perl
+runtime tracing modules, and to use the instrumented versions of
+modules in preference to their original ones. The number 5 is an
+argument to the @file{test_bday.pl} script telling it to run a
+relatively short test.
+
+Besides the results of the tests, this will also generate a file
+@file{daikon-instrumented/Birthday.types} recording the type of each
+variable seen during the execution of the instrumented program.
+
+@item Re-annotate the module using the type information.
+@example
+dfepl Birthday.pm -T
+@end example
+
+This step repeats step 2, except that the @option{-T} flag to
+@command{dfepl} tells it to use the type information generated in the
+previous step.
+
+@item Run the full test suite with the type-instrumented
+@file{Birthday.pm}.
+@example
+dtrace-perl test_bday.pl 50
+@end example
+
+Here we run another test suite, which happens to be the same
+@file{test_bday.pl}, but running for longer. (If you are impatient,
+low on disk space, or using a slow computer, you can replace 50 with a
+smaller number).
+
+This creates a directory @file{daikon-output} and files
+@file{Birthday.decls} and @file{Birthday.dtrace} within it. The
+@file{Birthday.decls} file declares each traced subroutine encountered
+during the test, and @file{Birthday.dtrace} is a trace file containing
+the values of variables at each invocation.
+
+@item Change to the @file{daikon-output} directory to analyze the
+output.
+@example
+cd daikon-output
+@end example
+
+@item Run Daikon on the trace file
+@example
+java daikon.Daikon -o Birthday.inv Birthday.decls Birthday.dtrace
+@end example
+
+The invariants are printed to the standard output, and a binary
+representation of them is also written in the @file{Birthday.inv}
+file.
+
+@item Examine the invariants.
+@example
+java daikon.gui.treeGUI.InvariantsGUI Birthday.inv
+@end example
+
+Invariants produced from Perl programs can be examined using the same
+tools as other Daikon invariants. 
+@end enumerate
 
 @node    Detecting invariants, Daikon output, Example use, Top
 @chapter Using Daikon to detect invariants
@@ -1240,7 +1350,8 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 Detecting invariants involves three steps:
 @enumerate
 @item
-Run @command{dfej} or @command{dfec} to instrument the target program
+Run @command{dfej}, @command{dfec}, or @command{dfepl} to instrument
+the target program
 (@pxref{Instrumentation}).
 This modifies a copy of the target program so that, in addition to
 performing its original task, it also writes variable values to a data
@@ -1283,11 +1394,12 @@ the data trace files.  For instance, these declaration files describe
 the names of procedures and variables that appear in the data trace file.
 @end itemize
 
-Two instrumenters are part of Daikon:  @command{dfej} for Java programs and
-@command{dfec} for C and C++.  The names @command{dfej} and @command{dfec} stand
-for "Daikon front end for Java" and "Daikon front end for C/C++".  The
-Java front end is robust; the C front end is moderately robust, and
-the C++ front end is experimental.
+Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
+@command{dfec} for C and C++, and @command{dfepl} for Perl. The
+letters @command{dfe} in the names stand for ``Daikon front-end'', and
+@command{c}, @command{j}, and @command{pl} abbreviate ``Java'',
+``C/C++'', and ``Perl''. The Java front end is robust; the C front end
+is moderately robust, and the C++ and Perl front ends are experimental.
 
 A front end for the IOA programming language is distributed separately
 (see @url{http://theory.lcs.mit.edu/tds/ioa.html}).
@@ -1297,6 +1409,7 @@ longer supported.
 @menu
 * Instrumenting Java programs::  
 * Instrumenting C/C++ programs::  
+* Instrumenting Perl programs::  
 @end menu
 
 @node    Instrumenting Java programs, Instrumenting C/C++ programs, Instrumentation, Instrumentation
@@ -1324,7 +1437,7 @@ in a @file{daikon-output/} directory.
 For more information about dfej, see @ref{Java front end dfej}.
 
 
-@node    Instrumenting C/C++ programs,  , Instrumenting Java programs, Instrumentation
+@node    Instrumenting C/C++ programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
 @subsection Instrumenting C/C++ programs
 
 To instrument C/C++ source, invoke @command{dfec} on all the source and
@@ -1401,6 +1514,39 @@ on its command-line options, see @ref{C/C++ front end dfec}.
 @c      usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
 @c </ol>
 
+@node Instrumenting Perl programs,  , Instrumenting C/C++ programs, Instrumentation
+@subsection Instrumenting Perl programs
+
+Perl programs must be instrumented twice. First they must be
+instrumented without type information.  Then, once the first
+instrumented version has been run to produce type information, they
+must be instrumented again taking the type information into account.
+
+To instrument a stand-alone Perl program, invoke @command{dfepl} with
+the name of the program as an argument.
+
+@example
+dfepl program.pl
+@end example
+
+To instrument a Perl module or a collection of modules, invoke
+@command{dfepl} either with the name of each module, or with the name
+of a directory containing the modules. To instrument all the modules
+in the current directory, give @command{dfepl} the argument @file{.}.
+For instance, if the current directory contains a module
+@code{Acme::Trampoline} in @file{Acme/Trampoline.pm} and another
+module @code{Acme::Date} in @file{Acme/Date.pm}, they can be annotated
+by either of the following two commands:
+
+@example
+dfepl Acme/Trampoline.pm Acme/Date.pm
+dfepl .
+@end example
+
+Once type information is available, add the @option{-T} or @option{-t}
+options to the instrumentation command.
+
+For more information about dfepl, see @ref{Perl front end dfepl}.
 
 @node    Run the instrumented program, Detect invariants, Instrumentation, Detecting invariants
 @section Run the instrumented program
@@ -2531,6 +2677,7 @@ reducing load up time, then use the ConvertInvToDci Java program:
 @menu
 * Java front end dfej::         
 * C/C++ front end dfec::        
+* Perl front end dfepl::        
 @end menu
 
 @node    Java front end dfej, C/C++ front end dfec, Front ends, Front ends
@@ -2964,7 +3111,7 @@ comment immediately before the declared type (but after any modifiers like
 
 
 
-@node    C/C++ front end dfec,  , Java front end dfej, Front ends
+@node    C/C++ front end dfec, Perl front end dfepl, Java front end dfej, Front ends
 @section C/C++ front end dfec
 
 @cindex front end for C/C++
@@ -3860,6 +4007,292 @@ equivalent file.
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
 
+@node Perl front end dfepl,  , C/C++ front end dfec, Front ends
+@section Perl front end dfepl
+
+@cindex front end for Perl
+@cindex Perl front end
+@cindex dfepl (Daikon front end for Perl)
+
+This section contains details about dfepl, the Daikon front end for
+Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
+@ref{Instrumenting Perl programs}.
+
+dfepl works with Perl versions 5.8 and later. (To be precise, Perl
+programs instrumented with dfepl can also be run with Perl 5.6, but
+the instrumentation engine, which is itself written in Perl, requires
+version 5.8).
+
+The @command{dfepl} command works by reading one or more Perl programs
+or modules, and writing instrumented versions of those files, by
+default to a subdirectory named @file{daikon-instrumented}. When run,
+these files programs or modules will themselves write more files: if
+they were instrumented without type information, they will write files
+containing dynamically inferred type information (with the extension
+@file{.types}), by default to the @file{daikon-instrumented}
+directory. If the files were instrumented with type information, then
+they will instead output declaration and trace files, with extensions
+@file{.decls} and @file{.dtrace}, by default to a directory named
+@file{daikon-output}.
+
+@menu
+* dfepl options::               
+@end menu
+
+@node dfepl options,  , Perl front end dfepl, Perl front end dfepl
+@subsection dfepl options
+
+@table @code
+@item --absolute
+@itemx --noabsolute
+@option{--absolute} stores the absolute path to the output directories
+(by default named @file{daikon-instrumented} and @file{daikon-output})
+in the instrumented programs, so that no matter where the instrumented
+program is run, the output will go to a fixed location. If these
+directories are specified as relative paths (as is the default), the
+absolute path will always be based on the directory that was the
+working directory when @command{dfepl} was run. @option{--noabsolute}
+specifies the opposite, causing the output paths to be interpreted
+relative to the current working directory each time the instrumented
+program is invoked. The default, when neither option is specified, is
+for @file{.types} files to use an absolute path, but all others to use
+relative path, so that the @file{.types} files will always be in the
+same place as the instrumented source files that generated them, but
+the @file{daikon-output} directory will always be created in the
+current directory when the program runs.
+
+@item --accessor-depth=@var{num}
+Controls the number of nested invocations of object accessor methods
+to examine. For instance, suppose that the @code{Person} class has a
+method @code{mother()} that returns another person (and has been
+specified to @command{dfepl} as an accessor), and that @code{$me} is
+an instrumented variable. If the accessor depth is 1, only
+@code{$me->mother()} will be examined. If the depth is 2,
+@code{$me->mother()->mother()} will also be examined. Specifying large
+accessor depths is generally not advisable, especially with many
+accessor methods, as the number of variables examined can be too many
+for Daikon to process efficiently.
+
+By default, the Daikon Perl trace runtime will examine only a single
+level of accessors.
+
+@item --accessors-dir
+@itemx --accessors-dir=@var{directory}
+@itemx -A
+@itemx -A @var{directory}
+Look for files containing accessor lists in @var{directory}, or the
+current directory if @var{directory} is omitted. For a class
+@code{Acme::Foo}, accessors are methods that return information about
+an object but do not modify it. @command{dfepl} cannot determine on
+its own which methods are accessors, but when a list of them is
+provided, it can call an object's accessors when examining a variable
+of that class to obtain more information about the object. To tell
+@code{dfepl} about the accessors for @code{Acme::Foo}, make a file
+listing the names of each accessor method, one per line with no other
+punctuation, named @file{Acme/Foo.accessors} in the same directory as
+@file{Acme/Foo.pm}.
+
+@item --decls-append
+@itemx --nodecls-append
+When @option{--decls-append} is specified, the instrumented program
+will append a new set of declarations to the appropriate
+@file{.decls} file each time it runs. When
+@option{--nodecls-append} is specified, it will overwrite the file
+instead. 
+
+The current version of the Daikon Perl tracing runtime does not know
+how to add only new declarations to a @file{.decls} file. In
+particular, it can add conflicting declarations that will cause Daikon
+to fail with odd error messages. Thus the current default is not to
+append, but this will be changed once appending correctly is
+supported. This choice can also be overridden, when the
+program is run, to always append by setting the environment variable
+@code{DECLSAPPEND} to 1.
+
+@item --decls-basedir=@var{directory}
+Put generated declaration files in @var{directory} and its
+subdirectories. The default is @file{daikon-output}.
+
+@item --decls-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}. A style of @option{combined} specifies that the
+declarations for all packages should be merged, in a file named
+@file{combined.decls}. A style of @option{flat} specifies that the
+declarations for each package should be in a separate file named after
+the package, but that these files should go in a single directory; for
+instance, the declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}. A
+style of @option{tree} specifies that each package should have its own
+declarations file, and that those files should be arranged in
+directories whose structure matches the structure of their package
+names; in the example above, the files would be
+@file{Acme/Trampoline.decls} and @file{Acme/Skates/Rocket.decls}.
+
+The default is @option{tree}.
+
+@item --dtrace-append
+@itemx --nodtrace-append
+When @option{--dtrace-append} is specified, the instrumented program
+will append trace information to the appropriate
+@file{.dtrace} file each time it runs. When
+@option{--nodtrace-append} is specified, it will overwrite the file
+instead. 
+
+The default behavior is to overwrite. This choice can also be
+overridden, when the program is run, to always append by setting the
+environment variable @code{DTRACEAPPEND} to 1.
+
+@item --dtrace-basedir=@var{directory}
+Put generated trace files in @var{directory} and its
+subdirectories. The default is @file{daikon-output}.
+
+@item --dtrace-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}. A style of @option{combined} specifies that the traces
+for all packages should be merged, in a file named
+@file{combined.dtrace}. A style of @option{flat} specifies that the
+traces for each package should be in a separate file named after the
+package, but that these files should go in a single directory; for
+instance, the declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.dtrace} and
+@file{Acme::Skates::Rocket.dtrace}. A style of @option{tree} specifies
+that each package should have its own trace file, and that
+those files should be arranged in directories whose structure matches
+the structure of their package names; in the example above, the files
+would be @file{Acme/Trampoline.dtrace} and
+@file{Acme/Skates/Rocket.dtrace}.
+
+The default is @option{tree}.
+
+@item --instr-basedir=@var{directory}
+@itemx --instrsourcedir=@var{directory}
+Put instrumented source files in @var{directory} and its
+subdirectories. The default is @file{daikon-instrumented}.
+
+@item --list-depth=@var{DEPTH}
+Consider as many as @var{DEPTH} of the first elements of a list to be
+distinct entities. When subroutines return a list of values, each
+value may have a distinct meaning, or the list may be homogeneous.
+When trying to assign types to the elements of a list, the Daikon Perl
+trace runtime will try making separate guesses about the types of the
+elements of a short list, but it would be inefficient to make retain
+this distinction for many elements. This parameter controls how many
+elements of a list will be examined individually; all the others will
+be treated uniformly.
+
+The default is 3.
+
+@item --perl=@var{path}
+Use @var{path} as the location of Perl when calling the annotation
+back end (a module named @code{B::DeparseDaikon}), rather than the
+version of Perl under which @command{dfepl} itself is running, which
+is probably the first @command{perl} that occurs on your path. For
+instance, if the first version of @command{perl} on your path isn't
+version 5.8 or later, you should this option to specify another
+@command{perl} program that is.
+
+@item --reference-depth=@var{num}
+When examining nested data structures, traverse as many as @var{num}
+nested references. For instance, suppose that @code{@@a} is the array
+
+@example
+@@a = (@{1 => [2, 3]@}, @{5 => [4, 2]@})
+@end example
+
+If the depth is 0, then when examining @code{@@a}, Daikon's Perl trace
+runtime will consider it to be an array whose elements are references,
+but it won't examine what those references point to. If the depth is
+1, it will consider it to be an array of references to hashes whose
+keys are integers and whose values are references, but it won't
+examine what @emph{those} references point to. Finally, if the depth
+is 2 or more, it will consider @code{@@a} to be an array of references
+to hashes whose keys are integers and whose values are references to
+arrays of integers.
+
+The default reference depth is 3.
+
+When referenced objects have accessor methods, or when accessors
+return references, the @option{--accessor-depth} and
+@option{--reference-depth} options interact. Specifically, if these
+depths are A and R, the behavior is as if the runtime has a budget of
+1 unit, which it can use either on accessors which cost 1/A or
+references which cost 1/R. It may thus sometimes be useful to specify
+fractional values for @option{--accessor-depth} and
+@option{--reference-depth}; in fact, the default accessor depth is
+1.5.
+
+@item --types-append
+@itemx --notypes-append
+When @option{--types-append} is specified, the instrumented program
+will append type information to the appropriate
+@file{.types} file each time it runs. When
+@option{--notypes-append} is specified, it will overwrite the file
+instead. 
+
+The default behavior is to append. If @option{--notypes-append} is
+specified, however, this choice can also be overridden, when the
+program is run, to append by setting the environment variable
+@code{TYPESAPPEND} to 1.
+
+@item --types-dir
+@itemx --types-dir=@var{directory}
+@itemx -T
+@itemx -T @var{directory}
+Look for @file{.types} files in @var{directory}, or
+@file{daikon-instrumented} if @var{directory} is omitted. When
+instrumenting @code{Acme::Trampoline}, @command{dfepl} will look for
+files named @file{combined.types}, @file{Acme::Trampoline.types}, and
+@file{Acme/Trampoline.types}, corresponding to the possible choices of
+@option{--types-style}. Once discovered, the files are used in the
+same way as for @option{-t}.
+
+@item --types-file=@var{file}
+@itemx -t @var{file}
+Include type information from @var{file} when instrumenting programs
+or modules. Since Daikon needs to know the types of variables when
+they are declared, useful @file{.decls} and @file{.dtrace} files can
+only be produced by source code instrumented with type
+information. Since Perl programs don't include this information to
+begin with, and it would be cumbersome to produce by hand, type
+information must usually be produced by running a version of the
+program that has itself been annotated, but without type
+information. The Daikon Perl trace runtime will automatically decide
+whether to output types, or declarations and traces, depending on
+whether the source was instrumented without or with types. This option
+may occur multiple times, to read information from multiple types
+files (irrelevant type information will be ignored).
+
+@item --types-basedir=@var{directory}
+Put files containing type information in @var{directory} and its
+subdirectories. By default, this is whatever @option{--instr-basedir}
+is, usually @file{daikon-instrumented}.
+
+@item --types-style=@var{style}
+@var{style} should be one of @option{combined}, @option{flat}, or
+@option{tree}. A style of @option{combined} specifies that the types
+for all packages should be merged, in a file named
+@file{combined.types}. A style of @option{flat} specifies that the
+types for each package should be in a separate file named after the
+package, but that these files should go in a single directory; for
+instance, the declarations for @code{Acme::Trampoline} and
+@code{Acme::Skates::Rocket} would go in files named
+@file{Acme::Trampoline.types} and
+@file{Acme::Skates::Rocket.types}. A style of @option{tree} specifies
+that each package should have its own trace file, and that
+those files should be arranged in directories whose structure matches
+the structure of their package names; in the example above, the files
+would be @file{Acme/Trampoline.types} and
+@file{Acme/Skates/Rocket.types}.
+
+The default is @option{tree}.
+
+@item --verbose
+@itemx -v
+Print additional information about what @command{dfepl} is doing,
+including external commands invoked.
+@end table
 
 @node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
