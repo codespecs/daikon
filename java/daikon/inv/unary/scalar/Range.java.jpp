@@ -84,7 +84,7 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
     if (format == OutputFormat.IOA)
-      fmt_str = fmt_str.replaceAll ("==", "=");
+      fmt_str = fmt_str.replaceAll ("==", "="); // "interned"
     return (fmt_str);
   }
 
@@ -114,7 +114,7 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
   /**
    * All range invariants are obvious since they are all represented
-   * by some version of OneOf or Bound
+   * by some version of OneOf or Bound.
    */
   public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
@@ -129,13 +129,13 @@ public abstract class RANGE extends SINGLE_SCALAR {
   public abstract String get_format_str (OutputFormat format);
 
   /**
-   * Returns true if x and y don't invalidate the invariant
+   * Returns true if x and y don't invalidate the invariant.
    */
   public abstract boolean eq_check (PRIMITIVE x);
 
   /**
    * Returns a list of all of the range invariants instantiated
-   * for the specified slice
+   * for the specified slice.
    */
   public static List instantiate_all (PptSlice slice) {
 

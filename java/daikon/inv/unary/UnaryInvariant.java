@@ -17,7 +17,7 @@ public abstract class UnaryInvariant
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /** Pass-through */
+  /** Pass-through. */
   protected UnaryInvariant(PptSlice ppt) {
     super(ppt);
   }

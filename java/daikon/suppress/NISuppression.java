@@ -3,7 +3,6 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -17,10 +16,10 @@ import java.util.*;
  */
 public class NISuppression {
 
-  /** set of suppressor invariants **/
+  /** Set of suppressor invariants. **/
   NISuppressor[] suppressors;
 
-  /** suppressee invariant **/
+  /** Suppressee invariant. **/
   NISuppressee suppressee;
 
   public NISuppression (NISuppressor[] suppressor_set,
@@ -118,7 +117,7 @@ public class NISuppression {
   }
 
   /**
-   * clears the suppressor state in each suppressor
+   * Clears the suppressor state in each suppressor.
    */
   public void clear_state () {
     for (int i = 0; i < suppressors.length; i++) {

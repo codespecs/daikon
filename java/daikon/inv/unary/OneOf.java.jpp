@@ -885,7 +885,6 @@ public final class ONEOFSCALAR
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null

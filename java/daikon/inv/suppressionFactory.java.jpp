@@ -88,7 +88,7 @@
   }
 
   // Factory 1
-  public static class factory1 extends SuppressionFactory {
+  public static final class factory1 extends SuppressionFactory {
 
     private static final factory1 theInstance = new factory1();
 
@@ -115,7 +115,7 @@
 
 #if defined (FACTORY2)
   // Factory 2
-  public static class factory2 extends SuppressionFactory {
+  public static final class factory2 extends SuppressionFactory {
 
     private static final factory2 theInstance = new factory2();
 
@@ -142,7 +142,7 @@
 
 #if defined (FACTORY3)
   // Factory 3
-  public static class factory3 extends SuppressionFactory {
+  public static final class factory3 extends SuppressionFactory {
 
     private static final factory3 theInstance = new factory3();
 
@@ -169,7 +169,7 @@
 
 #if defined (FACTORY4)
   // Factory 4
-  public static class factory4 extends SuppressionFactory {
+  public static final class factory4 extends SuppressionFactory {
 
     private static final factory4 theInstance = new factory4();
 
@@ -196,7 +196,7 @@
 
 #if defined (FACTORY5)
   // Factory 5
-  public static class factory5 extends SuppressionFactory {
+  public static final class factory5 extends SuppressionFactory {
 
     private static final factory5 theInstance = new factory5();
 

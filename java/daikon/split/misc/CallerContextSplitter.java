@@ -17,7 +17,7 @@ public final class CallerContextSplitter
   static final long serialVersionUID = 20030112L;
 
   /**
-   * Create a new splitter for the given ppt using this as a prototype
+   * Create a new splitter for the given ppt using this as a prototype.
    **/
   public Splitter instantiate(Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);

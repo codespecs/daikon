@@ -38,39 +38,39 @@ class FormatTestCase {
   static class SingleOutputTestCase {
 
     /**
-     * A method that produces the formatting output when invoked
+     * A method that produces the formatting output when invoked.
      **/
     private Method outputProducer;
 
     /**
-     * The arguments that must be passed to outputProducer to create the output
+     * The arguments that must be passed to outputProducer to create the output.
      **/
     private Object [] outputProducerArgs;
 
     /**
-     * The goal output for this particular test case
+     * The goal output for this particular test case.
      **/
     private String goalOutput;
 
     /**
      * The line number in the input file in which the goalOutput should occur in
-     * the output file
+     * the output file.
      **/
     private int goalLineNumber;
 
     /**
-     * A cached copy of the result achieved by invoking the output method
+     * A cached copy of the result achieved by invoking the output method.
      **/
     private String resultCache;
 
     /**
-     * A string containing the format that this particular test case represented
+     * A string containing the format that this particular test case represented.
      **/
     private String formatString;
 
     /**
      * This constructor initializes all of the fields without any
-     * checking for legality (that should be done by the callers)
+     * checking for legality (that should be done by the callers).
      *
      * @param outputProducer the output producing function (should return a String)
      * @param outputProducerArgs the arguments to be passed to the outputProducer
@@ -95,7 +95,7 @@ class FormatTestCase {
     }
 
     /**
-     * This function invokes the output producing function inside the object
+     * This function invokes the output producing function inside the object.
      *
      * @param inv the Invariant object on which to invoke the function
      * @return a String representing the output
@@ -120,7 +120,7 @@ class FormatTestCase {
     }
 
     /**
-     * This function tests whether this test is passed
+     * This function tests whether this test is passed.
      *
      * @param inv the Invariant object on which to perform the test
      * @return true if the test is passed, false otherwise
@@ -131,7 +131,7 @@ class FormatTestCase {
 
     /**
      * This function returns the line number that the goal should be listed on
-     * in the commands file
+     * in the commands file.
      *
      * @return the line number that the goal should be listed on
      *         in the commands file
@@ -141,7 +141,7 @@ class FormatTestCase {
     }
 
     /**
-     * This function returns the format string of which the test case is a part
+     * This function returns the format string of which the test case is a part.
      *
      * @return the format string of which the test case is a part
      **/
@@ -151,7 +151,7 @@ class FormatTestCase {
 
     /**
      * This function creates a String representing the differences between the
-     * goal output and the actual output; empty if there are no differences
+     * goal output and the actual output; empty if there are no differences.
      *
      * @return a String as described above
      **/
@@ -167,18 +167,18 @@ class FormatTestCase {
   // End of SingleOutputTestCase
 
   /**
-   * Prefix to each goal line in the file for identitication
+   * Prefix to each goal line in the file for identitication.
    **/
   private static final String GOAL_PREFIX = "Goal";
 
   /**
    * A list of all of the test cases (which are SingleOutputTestCase
-   * objects) that are to be performed on the contained Invariant
+   * objects) that are to be performed on the contained Invariant.
    **/
   private List testCases;
 
   /**
-   * The Invariant object to be tested
+   * The Invariant object to be tested.
    **/
   private Invariant invariantToTest;
 
@@ -239,7 +239,7 @@ class FormatTestCase {
   }
 
   /**
-   * Checks to see whether all tests on this invariant are passed
+   * Checks to see whether all tests on this invariant are passed.
    *
    * @return true if all the tests on this invariant passed, false otherwise
    **/
@@ -295,7 +295,7 @@ class FormatTestCase {
 
   /**
    * This function takes in a String representing a goal statement
-   * and returns the actual String to be returned by a test
+   * and returns the actual String to be returned by a test.
    *
    * @return the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
@@ -339,7 +339,7 @@ class FormatTestCase {
 
   /**
    * This function returns a FormatTestCase instance after parsing it
-   * from file or null if the end of the file has been reached
+   * from file or null if the end of the file has been reached.
    *
    * @param commands a reader object representing the file to be parsed that
    *        contains data necessary to initialize the new object. The file
@@ -358,7 +358,7 @@ class FormatTestCase {
     // daikon.inv/binary.twoScalar.NumericInt$divides boolean true
     String line = getNextRealLine((BufferedReader)commands);
     if (line == null) return null;
-    String tokens[] = line.split ("  *");
+    String[] tokens = line.split ("  *");
     String className = tokens[0];
     int arg_count = (tokens.length - 1) / 2;
     Class[] arg_types  = new Class[arg_count+1];
@@ -372,10 +372,10 @@ class FormatTestCase {
       String arg_val = tokens[i+1];
       Object val;
       Class val_type;
-      if (arg_type_name == "boolean") {
+      if (arg_type_name == "boolean") { // interned
         val = Boolean.valueOf (arg_val);
         val_type = boolean.class;
-      } else if (arg_type_name == "int") {
+      } else if (arg_type_name == "int") { // interned
         val = Integer.valueOf (arg_val);
         val_type = int.class;
       } else {
@@ -403,8 +403,8 @@ class FormatTestCase {
     // appear
     String typeString = getNextRealLine((BufferedReader)commands);
 
-    ProglangType types[] = getTypes(typeString);
-    VarInfo vars[] =
+    ProglangType[] types = getTypes(typeString);
+    VarInfo[] vars =
       getVarInfos(classToTest, types);
     PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
 
@@ -420,7 +420,7 @@ class FormatTestCase {
     int goalLineNumber = commands.getLineNumber();
 
     Method outputProducer = null;
-    Object outputProducerArgs[] = null;
+    Object[] outputProducerArgs = null;
     String format = null;
 
     Iterator formatStrings = null;
@@ -545,13 +545,13 @@ class FormatTestCase {
    * @return an array of VarInfo objects that have the types corresponding
    *         to those in types
    **/
-  private static VarInfo [] getVarInfos(Class classToTest, ProglangType types[]) {
+  private static VarInfo [] getVarInfos(Class classToTest, ProglangType[] types) {
     int numInfos = getArity(classToTest);
 
     if (numInfos == -1)
       throw new RuntimeException("Class arity cannot be determined.");
 
-    VarInfo result[] = new VarInfo [numInfos];
+    VarInfo[] result = new VarInfo [numInfos];
 
     for (int i=0; i<numInfos; i++) {
       result[i] = getVarInfo(types[i], i);
@@ -561,7 +561,7 @@ class FormatTestCase {
   }
 
   /**
-   * This function determines the arity of a given invariant given its class
+   * This function determines the arity of a given invariant given its class.
    *
    * @param classToTest the invariant type in question
    * @return the arity of the invariant if it can be determined, -1 otherwise
@@ -613,14 +613,14 @@ class FormatTestCase {
 
   /**
    * This function parses a format string -- a space separated list of
-   * types -- and determines the types of objects to be collected
+   * types -- and determines the types of objects to be collected.
    *
    * @param typeNames the type string for an invariant
    * @return an array of ProglangTypes representing the data in typeNames
    **/
   private static ProglangType [] getTypes(String typeNames) {
     StringTokenizer stok = new StringTokenizer(typeNames);
-    ProglangType result[] = new ProglangType [stok.countTokens()];
+    ProglangType[] result = new ProglangType [stok.countTokens()];
 
     for (int i=0; i<result.length; i++) {
       String typeName = stok.nextToken();
@@ -699,15 +699,15 @@ class FormatTestCase {
 
 //    private static void getSamples(Class classToTest, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
 
-  private static void getSamples(ProglangType types[], BufferedReader commands, List samples) {
+  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples) {
     getSamples(types, commands, samples, false, null);
   }
 
-  private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals) {
+  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals) {
     getSamples(types, commands, samples, generateGoals, null);
   }
 
-  private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
+  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
                                        firstLine);
 
@@ -715,7 +715,7 @@ class FormatTestCase {
     // System.out.println("currentLine line in getSamples: " + currentLine);
 
     try {
-      // Read until end of file or seperator (whitespace line) encountered
+      // Read until end of file or separator (whitespace line) encountered
       while (currentLine != null && !InvariantFormatTester.isWhitespace(currentLine)) {
         // Skip over goal lines and comments
         while (InvariantFormatTester.isComment(currentLine) ||
@@ -731,7 +731,7 @@ class FormatTestCase {
         // if current line is not whitespace then we have a valid line (that is, end hasn't been reached
         if (!InvariantFormatTester.isWhitespace(currentLine)) {
           // System.out.println(InvariantFormatTester.isComment(currentLine));
-          Object sample[] = new Object [types.length];
+          Object[] sample = new Object [types.length];
           for (int i=0; i<types.length; i++) {
             // Parse each line according to a type in the paramTypes array
             // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
@@ -758,7 +758,7 @@ class FormatTestCase {
   //     * @param sample the array in which the result is to be stored
   //     * @param toBeParsed the String to be parsed for the result
   //     */
-  //    public static void parse(Class type, int sampleIndex, Object sample[], String toBeParsed) {
+  //    public static void parse(Class type, int sampleIndex, Object[] sample, String toBeParsed) {
   //      Method parser;
   //      String typeName = type.getName();
   //      String arrayFunctionName;
@@ -932,8 +932,8 @@ class FormatTestCase {
     for (int i=0; i<samples.size(); i++) {
 
       // Last slot is for "count" parameter
-      Object params[] = new Object [sampleSize+1];
-      Object currentSample[] = (Object [])samples.get(i);
+      Object[] params = new Object [sampleSize+1];
+      Object[] currentSample = (Object [])samples.get(i);
 
       for (int j=0; j<sampleSize; j++) {
         currentClass = currentSample[j].getClass();
@@ -999,13 +999,13 @@ class FormatTestCase {
   }
 
   /**
-   * This function returns the add_modified method from the class type provided
+   * This function returns the add_modified method from the class type provided.
    *
    * @param theClass the class in which to find the add_modified method
    * @return the add_modified method if it exists, null otherwise
    */
   private static Method getAddModified(Class theClass) {
-    Method methods[] = theClass.getMethods();
+    Method[] methods = theClass.getMethods();
 
     Method currentMethod;
     for (int i=0; i<methods.length; i++) {
@@ -1019,7 +1019,7 @@ class FormatTestCase {
 
   /**
    * This function creates an appropriate PptSlice for a given set of
-   * VarInfos and a PptTopLevel
+   * VarInfos and a PptTopLevel.
    *
    * @param vars an array of VarInfo objects for which the slice is
    *        to be created
@@ -1027,7 +1027,7 @@ class FormatTestCase {
    * @return a new PptSlice object if the creation of one is possible,
    *         else throws a RuntimeException
    */
-  private static PptSlice createSlice(VarInfo vars[], PptTopLevel ppt) {
+  private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
     if (vars.length == 1)
       return new PptSlice1(ppt, vars);
     else if (vars.length == 2)
@@ -1070,7 +1070,7 @@ class FormatTestCase {
 
   /**
    * This function instantiates an invariant class by using the
-   * static instantiate method with the specified arguments
+   * static instantiate method with the specified arguments.
    *
    * @param theClass  - the invariant class to be instantiated
    * @param arg_types - the types of each argument

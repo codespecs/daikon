@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 /**
  * This factory creates Splitters from map files.  The splitters
- * partition the data based upon the the caller (i.e. which static
+ * partition the data based upon the the caller (i.e., which static
  * callgraph edge was taken).
  **/
 public class ContextSplitterFactory
@@ -16,11 +16,11 @@ public class ContextSplitterFactory
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 
-  /** Callsite granularity at the line level */
+  /** Callsite granularity at the line level. */
   public static final int GRAIN_LINE = 0;
-  /** Callsite granularity at the method level */
+  /** Callsite granularity at the method level. */
   public static final int GRAIN_METHOD = 1;
-  /** Callsite granularity at the class level */
+  /** Callsite granularity at the class level. */
   public static final int GRAIN_CLASS = 2;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -51,7 +51,7 @@ public class ContextSplitterFactory
 
       PptNameAndSplitters[] splitters;
       try {
-        MapfileEntry entries[] = parse_mapfile(file);
+        MapfileEntry[] entries = parse_mapfile(file);
         splitters = make_context_splitters(entries, grain);
       } catch (IOException e) {
         throw new Error(e.toString());
@@ -105,7 +105,7 @@ public class ContextSplitterFactory
   }
 
   /**
-   * Read and parse a map file
+   * Read and parse a map file.
    **/
   public static MapfileEntry[] parse_mapfile(File mapfile)
     throws IOException

@@ -1217,8 +1217,8 @@ public final class PPTSLICE1
       }
 
       // Child variable info
-      VarInfo cvis[] = new VarInfo[var_infos.length];
-      VarInfo cvis_sorted[] = new VarInfo[var_infos.length];
+      VarInfo[] cvis = new VarInfo[var_infos.length];
+      VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
 
       // Build the corresponding array of VarInfos for the child.  If any
       // of the vars don't exist in this child, skip the child (since we
@@ -1427,8 +1427,8 @@ public final class PPTSLICE1
       }
 
       // Child variable info
-      VarInfo cvis[] = new VarInfo[var_infos.length];
-      VarInfo cvis_sorted[] = new VarInfo[var_infos.length];
+      VarInfo[] cvis = new VarInfo[var_infos.length];
+      VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
 
       // Build the corresponding array of VarInfos for the child.  If any
       // of the vars don't exist in this child, skip the child (since we

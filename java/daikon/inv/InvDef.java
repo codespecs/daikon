@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class InvDef {
 
-  /** Debug Tracer **/
+  /** Debug tracer. **/
   public static final Logger debug
                           = Logger.getLogger ("daikon.inv.InvDef");
 
@@ -33,16 +33,16 @@ public class InvDef {
   int v2_index = -1;
   int v3_index = -1;
 
-  /** invariant class **/
+  /** invariant class. **/
   Class inv_class;
 
-  /** State to check for invariants with state **/
+  /** State to check for invariants with state. **/
   Object state;
 
-  /** true if the order of the variables was swapped **/
+  /** True if the order of the variables was swapped. **/
   boolean swap = false;
 
-  /** true if invariant permutes by changing its class **/
+  /** True if invariant permutes by changing its class. **/
   boolean swap_class = false;
 
   public static final long[] elts_zero = {0};

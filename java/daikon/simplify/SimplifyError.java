@@ -14,4 +14,3 @@ public class SimplifyError
   public SimplifyError() { super(); }
   public SimplifyError(String s) { super(s); }
 }
-  

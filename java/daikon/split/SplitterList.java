@@ -40,7 +40,7 @@ public abstract class SplitterList
   private static final Perl5Compiler re_compiler = new Perl5Compiler();
 
   /**
-   * Associate an array of splitters with the program point <pptname>
+   * Associate an array of splitters with the program point pptname.
    */
   public static void put(String pptname, Splitter[] splits) {
     // for (int i=0; i<splits.length; i++) {

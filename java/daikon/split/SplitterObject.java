@@ -114,14 +114,14 @@ public class SplitterObject implements Comparable {
   }
 
   /**
-   * set the unique ID of this splitterObject
+   * Set the unique ID of this splitterObject.
    */
   public void setGUID(int ID) {
     this.guid = ID;
   }
 
   /**
-   * return the unique ID of this splitterObject
+   * Return the unique ID of this splitterObject.
    */
   public int getGUID( ) {
     return this.guid;
@@ -142,7 +142,7 @@ public class SplitterObject implements Comparable {
   }
 
   /**
-   * set the className of this Splitter
+   * Set the className of this Splitter.
    */
   public void setClassName(String className) {
     this.className = className;

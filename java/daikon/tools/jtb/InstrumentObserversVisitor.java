@@ -29,7 +29,7 @@ public class InstrumentObserversVisitor
   private final List observer_methods;
 
   /**
-   * Add fields for each observed method
+   * Add fields for each observed method.
    **/
   public void visit(ClassBody clazz) {
     super.visit(clazz);
@@ -167,7 +167,7 @@ public class InstrumentObserversVisitor
   }
 
   /**
-   * Constructs a list of "@ obvserver"-annotated methods.
+   * Constructs a list of "@ observer"-annotated methods.
    **/
   public static final class GrepObserversVisitor
     extends DepthFirstVisitor

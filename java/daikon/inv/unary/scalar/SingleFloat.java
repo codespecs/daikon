@@ -6,7 +6,7 @@ import daikon.inv.unary.UnaryInvariant;
 import utilMDE.*;
 
 /**
- * Abstract base class used to evaluate single double scalars
+ * Abstract base class used to evaluate single double scalars.
  **/
 public abstract class SingleFloat
   extends UnaryInvariant

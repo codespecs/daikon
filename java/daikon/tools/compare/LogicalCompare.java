@@ -28,6 +28,8 @@ import gnu.getopt.*;
  **/
 
 public class LogicalCompare {
+  private LogicalCompare() { throw new Error("do not instantiate"); }
+
   // Options corresponding to command-line flags
   private static boolean opt_proofs         = false;
   private static boolean opt_show_count     = false;

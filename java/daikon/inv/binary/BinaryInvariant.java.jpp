@@ -80,14 +80,14 @@ public abstract class CLASSNAME extends BinaryInvariant {
   // if true, swap the order of the invariant variables
   protected boolean swap = false;
 
-  /** Pass-through */
+  /** Pass-through. */
   protected CLASSNAME (PptSlice ppt) {
     super(ppt);
   }
 
   /**
    * Returns whether or not the variable order is currently swapped
-   * for this invariant
+   * for this invariant.
    */
   public boolean get_swap() {
     return (swap);
@@ -95,7 +95,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Checks to see if the variable order was swapped and calls the
-   * correct routine to handle it
+   * correct routine to handle it.
    */
   protected Invariant resurrect_done(int[] permutation) {
     Assert.assertTrue(permutation.length == 2);
@@ -117,7 +117,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
    /**
    * Subclasses can override in the rare cases they need to fix things
-   * even when not swapped
+   * even when not swapped.
    **/
   protected Invariant resurrect_done_unswapped() {
     // do nothing
@@ -126,7 +126,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Returns the first variable.  This is the only mechanism by which
-   * subclasses should access variables
+   * subclasses should access variables.
    **/
   public VarInfo var1() {
     if (swap)
@@ -137,7 +137,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Returns the first variable.  This is the only mechanism by which
-   * subclasses should access variables
+   * subclasses should access variables.
    **/
   public VarInfo var2() {
     if (swap)
@@ -148,7 +148,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Returns the first variable from the specified vis.  This is the
-   * only mechanism by which subclasses should access variables
+   * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var1 (VarInfo[] vis) {
     if (swap)
@@ -159,7 +159,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Returns the first variable in the specified vis.  This is the
-   * only mechanism by which subclasses should access variables
+   * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var2 (VarInfo[] vis) {
     if (swap)
@@ -220,7 +220,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Default implementation simply calls check.  Subclasses can override
+   * Default implementation simply calls check.  Subclasses can override.
    */
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return (check_modified (v1, v2, count));
@@ -236,7 +236,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Returns a representation of the class.  This includes the classname,
-   * variables, and swap state
+   * variables, and swap state.
    **/
   public String repr() {
     return getClass().getName() + " (" + var1().name.name() + ", "
@@ -245,7 +245,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Return true if both invariants are the same class and the order
-   * of the variables (swap) is the same
+   * of the variables (swap) is the same.
    **/
   public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;

@@ -60,7 +60,7 @@ public final class PrintInvariants {
    **/
   public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
 
-  /** debug tracer for variable bound information **/
+  /** Debug tracer for variable bound information. **/
   public static final Logger debugBound  = Logger.getLogger ("daikon.bound");
 
   public static final String lineSep = Global.lineSep;

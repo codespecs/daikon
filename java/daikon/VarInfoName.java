@@ -34,7 +34,7 @@ public abstract class VarInfoName
   implements Serializable, Comparable
 {
 
-  /** Debugging Logger **/
+  /** Debugging Logger. **/
   public static Logger debug = Logger.getLogger("daikon.VarInfoName");
 
   // We are Serializable, so we specify a version to allow changes to
@@ -170,7 +170,7 @@ public abstract class VarInfoName
 
   /**
    * Return the String representation of this name in the esc style
-   * output format
+   * output format.
    * @return the string representation (interned) of this name, in the
    * esc style output format
    **/
@@ -213,12 +213,12 @@ public abstract class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private String simplify_name_cached[] = new String[2]; // each interned
+  private String[] simplify_name_cached = new String[2]; // each interned
   protected abstract String simplify_name_impl(boolean prestate);
 
 
   /**
-   * Return the string representation of this name in IOA format
+   * Return the string representation of this name in IOA format.
    * @return the string representation (interned) of this name, in the
    * IOA style output format
    **/
@@ -892,7 +892,7 @@ public abstract class VarInfoName
     return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
-  /** A function over a term, like "sum(argument)" **/
+  /** A function over a term, like "sum(argument)". **/
   public static class FunctionOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -961,7 +961,7 @@ public abstract class VarInfoName
   }
 
 
-  /** A function of multiple parameters **/
+  /** A function of multiple parameters. **/
   public static class FunctionOfN extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1070,7 +1070,7 @@ public abstract class VarInfoName
     }
 
     /**
-     * Shortcut getter to avoid repeated type casting
+     * Shortcut getter to avoid repeated type casting.
      **/
     public VarInfoName getArg (int n) {
       return (VarInfoName) args.get(n);
@@ -1089,7 +1089,7 @@ public abstract class VarInfoName
 
   /**
    * Returns a name for the intersection of with another sequence, like
-   * "intersect(a[], b[])"
+   * "intersect(a[], b[])".
    **/
   public VarInfoName applyIntersection(VarInfoName seq2) {
     Assert.assertTrue(seq2 != null);
@@ -1118,7 +1118,7 @@ public abstract class VarInfoName
 
   /**
    * Returns a name for the union of this with another sequence, like
-   * "union(a[], b[])"
+   * "union(a[], b[])".
    **/
   public VarInfoName applyUnion(VarInfoName seq2) {
     Assert.assertTrue(seq2 != null);
@@ -1155,7 +1155,7 @@ public abstract class VarInfoName
     return (new Field(this, field)).intern();
   }
 
-  /** A 'getter' operation for some field, like a.foo **/
+  /** A 'getter' operation for some field, like a.foo. **/
   public static class Field extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1380,7 +1380,7 @@ public abstract class VarInfoName
     }
   }
 
-  /** The prestate value of a term, like "orig(term)" or "\old(term)" **/
+  /** The prestate value of a term, like "orig(term)" or "\old(term)". **/
   public static class Prestate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1618,7 +1618,7 @@ public abstract class VarInfoName
     return (new Elements(this)).intern();
   }
 
-  /** The elements of a container, like "term[]" **/
+  /** The elements of a container, like "term[]". **/
   public static class Elements extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1747,7 +1747,7 @@ public abstract class VarInfoName
 
   /**
    * Returns a name for an element selected from a sequence, like
-   * "this[i]"
+   * "this[i]".
    **/
   public VarInfoName applySubscript(VarInfoName index) {
     Assert.assertTrue(index != null);
@@ -1776,7 +1776,7 @@ public abstract class VarInfoName
     return sequence.applySize().applyAdd(i);
   }
 
-  /** An element from a sequence, like "sequence[index]" **/
+  /** An element from a sequence, like "sequence[index]". **/
   public static class Subscript extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1879,7 +1879,7 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
-  /** A slice of elements from a sequence, like "sequence[i..j]" **/
+  /** A slice of elements from a sequence, like "sequence[i..j]". **/
   public static class Slice extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -2037,10 +2037,10 @@ public abstract class VarInfoName
   }
 
 
-  /** Accept the actions of a visitor **/
+  /** Accept the actions of a visitor. **/
   public abstract Object accept(Visitor v);
 
-  /** Visitor framework for processing of VarInfoNames **/
+  /** Visitor framework for processing of VarInfoNames. **/
   public static interface Visitor {
     public Object visitSimple(Simple o);
     public Object visitSizeOf(SizeOf o);
@@ -2062,7 +2062,7 @@ public abstract class VarInfoName
    * methods for traversing elements (e.g. FunctionOfN) with more
    * than one branch.
    **/
-  public static abstract class AbstractVisitor
+  public abstract static class AbstractVisitor
     implements Visitor
   {
     public Object visitSimple(Simple o) {
@@ -2077,7 +2077,7 @@ public abstract class VarInfoName
     }
 
     /**
-     * By default, return effect on first argument, but traverse all, backwards
+     * By default, return effect on first argument, but traverse all, backwards.
      **/
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
@@ -2299,7 +2299,7 @@ public abstract class VarInfoName
   // of a conjunctive nature (true only if true on all subparts),
   // returning null for false and an arbitrary non-null Object for
   // true.
-  public static abstract class BooleanAndVisitor
+  public abstract static class BooleanAndVisitor
     extends AbstractVisitor
   {
     private boolean result;
@@ -2945,7 +2945,7 @@ public abstract class VarInfoName
     }
 
     /**
-     * Record type for return value of the quantify method below
+     * Record type for return value of the quantify method below.
      **/
     public static class QuantifyReturn {
       public VarInfoName[] root_primes;
@@ -3682,8 +3682,8 @@ public abstract class VarInfoName
       else
          result[0] = quant_format_exists(format);
 
-      result[0] += (int_list + quant_seperator1(format) +
-                    conditions + quant_seperator2(format) +
+      result[0] += (int_list + quant_separator1(format) +
+                    conditions + quant_separator2(format) +
                     closing + quant_step_terminator(format));
       result[result.length-1] = ")";
 
@@ -3780,7 +3780,7 @@ public abstract class VarInfoName
 
     /**
      * This function returns a string representing how to format a forall statement in a
-     * given output mode
+     * given output mode.
      */
     protected static String quant_format_forall(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
@@ -3792,7 +3792,7 @@ public abstract class VarInfoName
 
     /**
      * This function returns a string representing how to format an exists statement in a
-     * given output mode
+     * given output mode.
      */
     protected static String quant_format_exists(OutputFormat format) {
       return "(\\exists int ";
@@ -3801,9 +3801,9 @@ public abstract class VarInfoName
     /**
      * This function returns a string representing how to format the first seperation in
      * the quantification, that is, the one between the intial condition and the execution
-     * condition
+     * condition.
      */
-    protected static String quant_seperator1(OutputFormat format) {
+    protected static String quant_separator1(OutputFormat format) {
       if (format == OutputFormat.JML) {
         return "; ";
       } else {
@@ -3814,9 +3814,9 @@ public abstract class VarInfoName
     /**
      * This function returns a string representing how to format the second seperation in
      * the quantification, that is, the one between the execution condition and the
-     * assertion
+     * assertion.
      */
-    protected static String quant_seperator2(OutputFormat format) {
+    protected static String quant_separator2(OutputFormat format) {
       if (format == OutputFormat.ESCJAVA) {
         return ") ==> ";
       } else {
@@ -3826,7 +3826,7 @@ public abstract class VarInfoName
 
     /**
      * This function returns a string representing how to format the final seperation in
-     * the quantification, that is, the one between the assertion and any closing symbols
+     * the quantification, that is, the one between the assertion and any closing symbols.
      */
     protected static String quant_step_terminator(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
@@ -3862,7 +3862,7 @@ public abstract class VarInfoName
    **/
   public interface Transformer
   {
-    /** Perform a transformation on the argument */
+    /** Perform a transformation on the argument. */
     public VarInfoName transform(VarInfoName v);
   }
 

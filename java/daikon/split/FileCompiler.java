@@ -7,9 +7,10 @@ import utilMDE.*;
 
 /**
  * This class has a method compile_source which can be used to compile Java source.
- * It invokes the external command javac/jikes
+ * It invokes the external command javac/jikes.
  **/
 public final class FileCompiler {
+  private FileCompiler() { throw new Error("do not instantiate"); }
 
   public static Runtime commander = java.lang.Runtime.getRuntime();
   private static Perl5Matcher re_matcher = new Perl5Matcher();

@@ -193,7 +193,7 @@ public final class MakeInvariantChecker {
    *           <li> --assertion_behavior [none]
    *     </ul>
    */
-  protected static Set[] readOptions(String args[]) {
+  protected static Set[] readOptions(String[] args) {
     if (args.length == 0) {
       System.out.println("MakeInvariantChecker error: "
                           + "no files supplied on command line.");

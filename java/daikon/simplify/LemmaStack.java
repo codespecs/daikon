@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.Iterator;
-import daikon.simplify.SimpUtil;
 import utilMDE.*;
 
 /**
@@ -63,14 +62,14 @@ public class LemmaStack {
     session.request(new CmdAssume(lemma.formula));
   }
 
-  /** Assume a list of lemmas */
+  /** Assume a list of lemmas. */
   private void assumeAll(Vector/*<Lemma>*/ invs) throws TimeoutException {
     for (int i = 0; i < invs.size(); i++) {
       assume((Lemma)invs.elementAt(i));
     }
   }
 
-  /** Pop a lemma off Simplify's stack */
+  /** Pop a lemma off Simplify's stack. */
   private void unAssume() {
     try {
       session.request(CmdUndoAssume.single);
@@ -88,7 +87,7 @@ public class LemmaStack {
     }
   }
 
-  /** Try to start Simplify */
+  /** Try to start Simplify. */
   private void startProver() throws SimplifyError {
     session = SessionManager.attemptProverStartup();
     if (session == null) {
@@ -113,7 +112,7 @@ public class LemmaStack {
       pushLemmas(Lemma.lemmasVector());
   }
 
-  /** Pop a lemma from our and Simplify's stacks */
+  /** Pop a lemma from our and Simplify's stacks. */
   public void popLemma() {
     unAssume();
     lemmas.pop();
@@ -451,7 +450,7 @@ public class LemmaStack {
   }
 
   /** Dump the state of the stack to a file, for debugging manually in
-   * Simplify */
+   * Simplify. */
   public void dumpLemmas(java.io.PrintStream out) {
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma l = (Lemma)lemmas.elementAt(i);
@@ -462,7 +461,7 @@ public class LemmaStack {
   private static SortedSet ints_seen = new TreeSet();
 
   /** Keep track that we've seen this number in formulas, for the sake
-   * of assumeOrdering */
+   * of assumeOrdering. */
   public static void noticeInt(long i) {
     ints_seen.add(new Long(i));
   }
@@ -472,7 +471,7 @@ public class LemmaStack {
   }
 
   /** For all the integers we've seen, tell Simplify about the
-   * ordering between them */
+   * ordering between them. */
   public void pushOrdering() throws SimplifyError {
     Iterator longs_it = ints_seen.iterator();
     long last_long = Long.MIN_VALUE;

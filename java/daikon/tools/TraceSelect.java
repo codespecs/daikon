@@ -252,7 +252,7 @@ public class TraceSelect {
 	return;
     }
 
-    /** Used when I used to select by probability, not absolute number */
+    /** Used when I used to select by probability, not absolute number. */
     private static boolean myRand (String[] args) {
 	if (args.length >= 2) try {
 	    double prob = Double.parseDouble (args[3]);
@@ -293,7 +293,7 @@ public class TraceSelect {
 
 class InvocationComparator implements Comparator {
     /** Requires:  (o1 and o2 are String representations of invocations
-     *  from a tracefile*/
+     *  from a tracefile. */
     public int compare (Object o1, Object o2) {
 	String s1 = (String) o1;
 	String s2 = (String) o2;

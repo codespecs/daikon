@@ -36,7 +36,6 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
 import java.util.*;
-import java.lang.Math;
 import java.util.logging.Level;
 
 
@@ -182,7 +181,7 @@ public final class CLASSNAME
   }
 
   /**
-   * Suppress is not ok since we keep track of min/max values
+   * Suppress is not ok since we keep track of min/max values.
    */
   public boolean inProcessSuppressOk() {
     return false;

@@ -5,7 +5,7 @@ import daikon.inv.*;
 import utilMDE.*;
 
 /**
- * Abstract base class used to evaluate single double sequences
+ * Abstract base class used to evaluate single double sequences.
  **/
 
 public abstract class SingleFloatSequence

@@ -4,12 +4,12 @@ import java.io.*;
 import daikon.Daikon;
 
 /**
- * Reads in and loads compiled Java source and returns a Java Object
+ * Reads in and loads compiled Java source and returns a Java Object.
  **/
 public class SplitterLoader extends ClassLoader {
 
   /**
-   * read in the bytes of the .class file
+   * Read in the bytes of the .class file.
    **/
   private byte[] read_Class_Data(String fileName) {
 

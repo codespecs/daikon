@@ -6,7 +6,7 @@ import daikon.inv.unary.UnaryInvariant;
 import utilMDE.*;
 
 /**
- * Abstract base class used to evaluate single long scalars
+ * Abstract base class used to evaluate single long scalars.
  **/
 public abstract class SingleScalar
   extends UnaryInvariant

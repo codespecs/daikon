@@ -110,35 +110,30 @@ public final class CLASSNAME {
   }
 
   public static PRIM invokeUnary(int methodnumber, PRIM arg) {
-#if defined(LONG)
     switch (methodnumber) {
+#if defined(LONG)
     case 0: return MathMDE.bitwiseComplement(arg);
     case 1: return MathMDE.negate(arg);
     case 2: return Math.abs(arg);
-    }
 #else
-    switch (methodnumber) {
     case 0: return MathMDE.negate(arg);
     // case 1: return Math.abs(arg);
-    }
 #endif
-    throw new Error("bad argument " + methodnumber + " to invokeUnary");
+    default: throw new Error("bad argument " + methodnumber + " to invokeUnary");
+    }
     // System.out.println("returning 0, unary");
     // return 0;
   }
 
   public static PRIM invokeBinary(int methodnumber, PRIM arg, PRIM arg2) {
-
-#if defined(FLOAT)
     switch (methodnumber) {
+#if defined(FLOAT)
     case 0: return MathMDE.mul(arg, arg2);
     case 1: return Math.min(arg, arg2);
     case 2: return Math.max(arg, arg2);
     case 3: return MathMDE.div(arg, arg2);
     case 4: return Math.pow(arg, arg2);
-    }
 #elif defined(LONG)
-    switch (methodnumber) {
     case 0:  return MathMDE.mul(arg, arg2);
     case 1:  return MathMDE.bitwiseAnd(arg, arg2);
     case 2:  return MathMDE.logicalAnd(arg, arg2);
@@ -161,9 +156,9 @@ public final class CLASSNAME {
                throw new ArithmeticException ("arg2 (" + arg2 + ") out of range 0..63");
              return MathMDE.rshiftUnsigned(arg, arg2);
     case 15: return MathMDE.pow(arg, arg2);
-    }
 #endif
-    throw new Error("bad argument " + methodnumber + " to invokeBinary");
+    default: throw new Error("bad argument " + methodnumber + " to invokeBinary");
+    }
     // System.out.println("returning 0 binary");
     // return 0;
   }

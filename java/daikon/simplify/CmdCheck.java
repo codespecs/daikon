@@ -26,7 +26,7 @@ public class CmdCheck
     SimpUtil.assert_well_formed(proposition);
   }
 
-  /** Read the class overview */
+  /** For documentation, read the class overview. */
   public void apply(Session s) {
     try {
 

@@ -16,7 +16,7 @@ class SplitterJavaSource {
   /** The text contents of the splitter file, a java class. */
   private StringBuffer fileText = new StringBuffer();
 
-  /** The name of the class from which this Ppt is from */
+  /** The name of the class from which this Ppt is from. */
   private String className;
 
   /** The name of the class that is being written. */
@@ -24,7 +24,7 @@ class SplitterJavaSource {
 
   /**
    * A data structure defined in an inner-class that contains information
-   * about all the variables to be defined in fileText
+   * about all the variables to be defined in fileText.
    */
   private VariableManager[] vars;
 
@@ -429,7 +429,7 @@ class SplitterJavaSource {
   }
 
   /**
-   * Print out a message if the debugPptSplit variable is set to "true"
+   * Print out a message if the debugPptSplit variable is set to "true".
    **/
   private static void debugPrintln(String s) {
     Global.debugSplit.fine(s);
@@ -627,13 +627,13 @@ class SplitterJavaSource {
    */
   private static class VariableManager {
 
-    /** VarInfo for the variable */
+    /** VarInfo for the variable. */
     private VarInfo varInfo;
 
     /** Name of variable as how it appears in the original file. */
     private String name;
 
-    /** Name of variable in the baseName format.*/
+    /** Name of variable in the baseName format. */
     private String baseName;
 
     /** Name of variable in a compilable format. */

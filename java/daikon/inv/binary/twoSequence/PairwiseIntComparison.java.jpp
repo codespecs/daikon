@@ -284,7 +284,7 @@ public class PAIRWISEINTEQUAL
 
   /**
    * Returns the class that corresponds to this class with its variable
-   * order swapped
+   * order swapped.
    */
   public static Class swap_class () {
     return PAIRWISEINTEQUAL_SWAP.class;
@@ -427,7 +427,7 @@ public class PAIRWISEINTEQUAL
 
   /**
    * Suppress 'x[n..] cmp y[n..] (elementwise)' or 'x[..n] cmp y[..n]
-   * (elementwise)' by 'x[] cmp y[] (elementwise)'
+   * (elementwise)' by 'x[] cmp y[] (elementwise)'.
    */
   public static SuppressionLink pairwise_suppress (PAIRWISEINTEQUAL inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {

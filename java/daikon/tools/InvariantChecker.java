@@ -15,6 +15,7 @@ import java.util.logging.Level;
  * for any invariants that are violated by the trace file.
  */
 public class InvariantChecker {
+  private InvariantChecker() { throw new Error("do not instantiate"); }
 
   public static final String lineSep = Global.lineSep;
 
@@ -153,7 +154,7 @@ public class InvariantChecker {
     System.out.println ("" + error_cnt + " Errors Found");
   }
 
-  /** class to track matching ppt and its values */
+  /** Class to track matching ppt and its values. */
   static final class EnterCall {
 
     public PptTopLevel ppt;

@@ -115,7 +115,7 @@ public final class VarInfo
   /** Whether and how derived.  Null if this is not derived. **/
   public Derivation derived;
 
-  /** Vector of Derivation objects **/
+  /** Vector of Derivation objects. **/
   /* [INCR] is now computed on the fly by derivees() method
   public Vector derivees;
   */

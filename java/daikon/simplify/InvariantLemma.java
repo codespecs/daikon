@@ -23,7 +23,7 @@ public class InvariantLemma extends Lemma {
     return summary + " from " + from;
   }
 
-  /** If this lemma came from an invariant, get its class */
+  /** If this lemma came from an invariant, get its class. */
   public Class invClass() {
     Class c;
     if (invariant instanceof GuardingImplication) {

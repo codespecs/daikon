@@ -90,7 +90,7 @@ public class SuppressionTemplate {
 
 
   /**
-   * Fill in the invariant and variable for unary invariants
+   * Fill in the invariant and variable for unary invariants.
    *
    * @param index    index in invTypes and varInfos to set
    * @param cls     Invariant to search for
@@ -110,7 +110,7 @@ public class SuppressionTemplate {
   }
 
   /**
-   * Fill in the invariant and variables for binary invariants
+   * Fill in the invariant and variables for binary invariants.
    *
    * @param index    index in invTypes and varInfos to set
    * @param cls     Invariant to search for
@@ -133,7 +133,7 @@ public class SuppressionTemplate {
   }
 
   /**
-   * Fill in the invariant and variables for ternary invariants
+   * Fill in the invariant and variables for ternary invariants.
    *
    * @param index    index in invTypes and varInfos to set
    * @param cls     Invariant to search for
@@ -159,7 +159,7 @@ public class SuppressionTemplate {
   }
 
   /**
-   * Fill in the invariant and variables
+   * Fill in the invariant and variables.
    *
    * @param index    index in invTypes and varInfos to set
    * @param cls     Invariant to search for

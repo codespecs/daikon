@@ -86,6 +86,6 @@ public abstract class Splitter
   public void instantiateDummy(PptTopLevel ppt) { }
 
   /** On an instantiated Splitter, give back an appropriate instantiated
-   * DummyInvariant */
+   * DummyInvariant. */
   public abstract DummyInvariant getDummyInvariant();
 }

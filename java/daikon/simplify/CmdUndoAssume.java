@@ -9,7 +9,7 @@ public class CmdUndoAssume
 {
   public static CmdUndoAssume single = new CmdUndoAssume();
 
-  /** Read the class overview */
+  /** For documentation, read the class overview. */
   public void apply(Session s) {
 
     synchronized(s) {

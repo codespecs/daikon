@@ -85,13 +85,14 @@ public class DtracePartitioner
     return s.substring (0, s.indexOf ('\n'));
   }
 
+  // TODO: this should be a Javadoc link
   /** Same as this.patchValues (enters, false)
    */
   public List patchValues (List enters) {
     return patchValues (enters, false);
   }
 
-  /** Finds the exits that correspond to Enters
+  /** Finds the exits that correspond to Enters.
    *  <br>Modifies: none
    *  <br>Returns: An ArrayList containing all of the elements of 'enters'
    *  <br> @param includeUnreturnedEnters

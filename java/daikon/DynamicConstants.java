@@ -58,24 +58,24 @@ public class DynamicConstants implements Serializable {
    */
   public static boolean dkconfig_OneOf_only = false;
 
-  /** Debug Tracer **/
+  /** Debug tracer. **/
   public static final Logger debug
                           = Logger.getLogger ("daikon.DynamicConstants");
 
-  /** list of dynamic constants **/
+  /** List of dynamic constants. **/
   List /*Constant*/ con_list = new ArrayList();
 
-  /** list of variables that have always been missing */
+  /** List of variables that have always been missing. **/
   List /*Constant*/ missing_list = new ArrayList();
 
-  /** list of all variables **/
+  /** List of all variables. **/
   Constant[] all_vars;
   List /*Constant*/ all_list = new ArrayList();
 
-  /** program point of these constants **/
+  /** Program point of these constants. **/
   PptTopLevel ppt = null;
 
-  /** number of sample received **/
+  /** Number of sample received. **/
   int sample_cnt = 0;
 
   /**
@@ -91,19 +91,19 @@ public class DynamicConstants implements Serializable {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20030913L;
 
-    /** The value of the constant **/
+    /** The value of the constant. **/
     public Object val;
 
-    /** The sample count of the constant **/
+    /** The sample count of the constant. **/
     public int count;
 
-    /** The variable that has this value **/
+    /** The variable that has this value. **/
     public VarInfo vi;
 
-    /** Whether or not this has been missing for every sample to date **/
+    /** Whether or not this has been missing for every sample to date. **/
     boolean always_missing = true;
 
-    /** Whether or not this is constant **/
+    /** Whether or not this is constant. **/
     boolean constant = false;
 
     /**

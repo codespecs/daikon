@@ -6,7 +6,7 @@ import daikon.inv.unary.UnaryInvariant;
 import utilMDE.*;
 
 /**
- * Abstract base class used to evaluate single string sequences
+ * Abstract base class used to evaluate single string sequences.
  **/
 public abstract class SingleStringSequence
   extends UnaryInvariant

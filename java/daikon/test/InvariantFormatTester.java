@@ -34,28 +34,28 @@ public class InvariantFormatTester extends TestCase
 
   /**
    * Indicates a string that when it starts a line signifies that the
-   * line is a comment
+   * line is a comment.
    **/
   public static final String COMMENT_STARTER_STRING = ";";
 
   /**
-   * A list containing all of the test formats
+   * A list containing all of the test formats.
    **/
   public static final List TEST_FORMAT_LIST = getTestFormatList();
 
   /**
-   * Allows for the configuring of Daikon options
+   * Allows for the configuring of Daikon options.
    **/
   static Configuration config;
 
   /**
    * Any instance of InvariantFormatTester has its generateGoals value
-   * initialized to the value of this variable
+   * initialized to the value of this variable.
    **/
   private static boolean goalGenerationForNext;
 
   /**
-   * Determines whether the object will generate goal statements
+   * Determines whether the object will generate goal statements.
    **/
   private boolean generateGoals;
 
@@ -99,7 +99,7 @@ public class InvariantFormatTester extends TestCase
 
   /**
    * This function produces the format list for intialization of the
-   * static format list variable
+   * static format list variable.
    **/
   static List getTestFormatList() {
     List result = new Vector();
@@ -136,7 +136,7 @@ public class InvariantFormatTester extends TestCase
   }
 
   /**
-   * Returns the next non-comment, non-whitespace line of the input buffer
+   * Returns the next non-comment, non-whitespace line of the input buffer.
    *
    * @param input the input buffer
    * @return the next non-comment, non-whitespace line of the input buffer or
@@ -378,7 +378,7 @@ public class InvariantFormatTester extends TestCase
   }
 
   /**
-   * Determines whether a line is a comment or not
+   * Determines whether a line is a comment or not.
    *
    * @param line the line in question
    * @return true if the line is a comment (that is, not to be interpretted as a command)
@@ -389,7 +389,7 @@ public class InvariantFormatTester extends TestCase
   }
 
   /**
-   * Determines whether a given line is made only of whitespcae
+   * Determines whether a given line is made only of whitespace.
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise

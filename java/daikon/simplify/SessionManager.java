@@ -21,7 +21,7 @@ public class SessionManager
   private String error = null;
 
   /**
-   * Debug tracer common to all Simplify classes
+   * Debug tracer common to all Simplify classes.
    **/
   public static final Logger debug = Logger.getLogger("daikon.simplify");
 
@@ -168,7 +168,7 @@ public class SessionManager
   {
     private SessionManager mgr = SessionManager.this; // just sugar
 
-    /** The associated session, or null if the thread should shutdown */
+    /** The associated session, or null if the thread should shutdown. */
     private Session session = new Session();
 
     private boolean finished = false;

@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * which creates Splitters from a .spinfo file.
  **/
 public class SplitterFactory {
+  private SplitterFactory() { throw new Error("do not instantiate"); }
 
   private static Perl5Matcher re_matcher = new Perl5Matcher();
   private static Perl5Compiler re_compiler = new Perl5Compiler();
@@ -49,7 +50,7 @@ public class SplitterFactory {
 
   /**
    * Reads the Splitter info.
-   * @param infofile <filename>.spinfo
+   * @param infofile filename.spinfo
    * @param all_ppts a PptMap for the Ppts of this run of Daikon.
    * @return an array of arrays of SplitterObjects for each Ppt.
    **/
@@ -290,7 +291,7 @@ public class SplitterFactory {
   }
 
   /**
-   * Print out a message if the debugPptSplit variable is set to "true."
+   * Print out a message if the debugPptSplit variable is set to "true".
    **/
   private static void debugPrintln(String s) {
     Global.debugSplit.fine(s);

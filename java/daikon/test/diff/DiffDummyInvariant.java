@@ -6,7 +6,7 @@ import daikon.*;
 import daikon.inv.*;
 
 /**
- * A dummy invariant used for testing purposes
+ * A dummy invariant used for testing purposes.
  **/
 public class DiffDummyInvariant
   extends Invariant

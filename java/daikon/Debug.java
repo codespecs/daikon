@@ -26,7 +26,7 @@ import utilMDE.*;
 
 public class Debug {
 
-  /** Debug Logger */
+  /** Debug Logger. */
   public static final Logger debugTrack = Logger.getLogger ("daikon.Debug");
 
   /**
@@ -148,7 +148,7 @@ public class Debug {
   // cached standard parts of the debug print so that multiple calls from
   // the same context don't have to repeat these each time
 
-  /** true if the cached variables are printable **/
+  /** True if the cached variables are printable. **/
   public boolean cache_match = true;
 
   /** cached class */

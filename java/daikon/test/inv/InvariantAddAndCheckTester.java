@@ -92,17 +92,17 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   /**
    * Indicates a string that when it starts a line signifies that the
-   * line is a comment
+   * line is a comment.
    **/
   public static final String COMMENT_STARTER_STRING = "#";
 
   /**
-   * A list containing all of the test formats
+   * A list containing all of the test formats.
    **/
   public static final List TEST_FORMAT_LIST = getTestFormatList();
 
   /**
-   * Allows for the configuring of Daikon options
+   * Allows for the configuring of Daikon options.
    **/
   static Configuration config = Configuration.getInstance();
 
@@ -148,7 +148,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   /**
    * This function produces the format list for intialization of the
-   * static format list variable
+   * static format list variable.
    **/
   static List getTestFormatList() {
     List result = new Vector();
@@ -185,7 +185,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * Returns the next non-comment, non-whitespace line of the input buffer
+   * Returns the next non-comment, non-whitespace line of the input buffer.
    *
    * @param input the input buffer
    * @return the next non-comment, non-whitespace line of the input buffer or
@@ -365,7 +365,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * Determines whether a line is a comment or not
+   * Determines whether a line is a comment or not.
    *
    * @param line the line in question
    * @return true if the line is a comment (that is, not to be interpretted as a command)
@@ -376,7 +376,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * Determines whether a given line is made only of whitespcae
+   * Determines whether a given line is made only of whitespcae.
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
@@ -392,7 +392,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   private static class AddAndCheckTestCase {
 
     /**
-     * The Invariant object to be tested
+     * The Invariant object to be tested.
      **/
     private static Invariant invariantToTest;
 
@@ -520,7 +520,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
       types = getTypes(typeString);
 
-      VarInfo vars[] = getVarInfos(classToTest, types);
+      VarInfo[] vars = getVarInfos(classToTest, types);
       PptSlice sl = createSlice(vars, daikon.test.Common.makePptTopLevel("Test:::OBJECT", vars));
 
 
@@ -672,14 +672,14 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function returns the add_modified method from the class type provided
+     * This function returns the add_modified method from the class type provided.
      *
      * @param theClass the class in which to find the add_modified method
      * @return the add_modified method if it exists, null otherwise
      * @throws RuntimeException if check_modified does not exist.
      */
     private static Method getAddModified(Class theClass) {
-      Method methods[] = theClass.getMethods();
+      Method[] methods = theClass.getMethods();
 
       Method currentMethod;
       for (int i=0; i<methods.length; i++) {
@@ -692,14 +692,14 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function returns the check_modified method from the class type provided
+     * This function returns the check_modified method from the class type provided.
      *
      * @param theClass the class in which to find the check_modified method
      * @return the check_modified method if it exists
      * @throws RuntimeException if check_modified does not exist.
      */
     private static Method getCheckModified(Class theClass) {
-      Method methods[] = theClass.getMethods();
+      Method[] methods = theClass.getMethods();
 
       Method currentMethod;
       for (int i=0; i<methods.length; i++) {
@@ -716,7 +716,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *  that produces a String representation of the invariant.
      */
     private static Method getOutputProducer(Class theClass) {
-      Method methods[] = theClass.getMethods();
+      Method[] methods = theClass.getMethods();
 
       Method currentMethod;
       for (int i=0; i<methods.length; i++) {
@@ -785,13 +785,13 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return an array of VarInfo objects that have the types corresponding
      *         to those in types
      **/
-    private static VarInfo [] getVarInfos(Class classToTest, ProglangType types[]) {
+    private static VarInfo [] getVarInfos(Class classToTest, ProglangType[] types) {
       int numInfos = getArity(classToTest);
 
       if (numInfos == -1)
         throw new RuntimeException("Class arity cannot be determined.");
 
-      VarInfo result[] = new VarInfo [numInfos];
+      VarInfo[] result = new VarInfo [numInfos];
 
       for (int i=0; i<numInfos; i++) {
         result[i] = getVarInfo(types[i], i);
@@ -835,7 +835,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function determines the arity of a given invariant given its class
+     * This function determines the arity of a given invariant given its class.
      *
      * @param classToTest the invariant type in question
      * @return the arity of the invariant if it can be determined, -1 otherwise
@@ -853,14 +853,14 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * This function parses a format string -- a space separated list of
-     * types -- and determines the types of objects to be collected
+     * types -- and determines the types of objects to be collected.
      *
      * @param typeNames the type string for an invariant
      * @return an array of ProglangTypes representing the data in typeNames
      **/
     private static ProglangType [] getTypes(String typeNames) {
       StringTokenizer stok = new StringTokenizer(typeNames);
-      ProglangType result[] = new ProglangType [stok.countTokens()];
+      ProglangType[] result = new ProglangType [stok.countTokens()];
 
       for (int i=0; i<result.length; i++) {
         String typeName = stok.nextToken();
@@ -921,7 +921,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * This function creates an appropriate PptSlice for a given set of
-     * VarInfos and a PptTopLevel
+     * VarInfos and a PptTopLevel.
      *
      * @param vars an array of VarInfo objects for which the slice is
      *        to be created
@@ -929,7 +929,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a new PptSlice object if the creation of one is possible,
      *         else throws a RuntimeException
      */
-    private static PptSlice createSlice(VarInfo vars[], PptTopLevel ppt) {
+    private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
       if (vars.length == 1) {
         Assert.assertTrue(vars[0] != null);
         return new PptSlice1(ppt, vars);

@@ -82,7 +82,7 @@ public class TimedProcess {
 
   /**
    * The command used to create this process is re-executed for
-   * <dkconfig_compile_timeout> (in seconds). This value is set in the
+   * dkconfig_compile_timeout (in seconds). This value is set in the
    * configuration settings. The resulting process is terminated after
    * that time, if it's not done */
 
@@ -102,7 +102,7 @@ public class TimedProcess {
 
   /**
    * At the scheduled time, this TimerTask destroys the process
-   * represented by this TimedProcess
+   * represented by this TimedProcess.
    */
   class timerTask extends TimerTask {
     public void run() {

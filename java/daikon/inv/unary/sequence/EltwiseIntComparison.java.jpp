@@ -40,7 +40,7 @@ public abstract class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030109L;
 
-  abstract public boolean hasSeenNonTrivialSample();
+  public abstract boolean hasSeenNonTrivialSample();
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);

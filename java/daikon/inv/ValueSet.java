@@ -50,13 +50,13 @@ public abstract class ValueSet extends LimitedSizeIntSet
     }
   }
 
-  /** track the specified object **/
+  /** Track the specified object. **/
   public abstract void add(Object v1);
 
-  /** add stats from the specified value set */
+  /** Add stats from the specified value set. */
   protected abstract void add_stats (ValueSet other);
 
-  /** returns a short description of the values seen **/
+  /** Returns a short description of the values seen. **/
   public abstract String repr_short();
 
   public void add(ValueSet other) {

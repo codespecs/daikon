@@ -4,7 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.binary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -31,25 +30,25 @@ public class NISuppressor {
   int v2_index = -1;
   int v3_index = -1;
 
-  /** invariant class **/
+  /** Invariant class. **/
   Class inv_class;
 
-  /** true if the order of the variables was swapped **/
+  /** True if the order of the variables was swapped. **/
   boolean swap = false;
 
-  /** true if invariant permutes by changing its class **/
+  /** True if invariant permutes by changing its class. **/
   boolean swap_class = false;
 
   /**
    * State of the suppressor for the current check.  The state must be
-   * one of the defined above.  They can always be compared with ==
+   * one of the defined above.  They can always be compared with ==.
    **/
   String state = NIS.NONE;
 
   Invariant sample_inv;
 
   /**
-   * Defines a unary suppressor
+   * Defines a unary suppressor.
    */
   public NISuppressor (int v1_index, Class cls) {
 
@@ -73,7 +72,7 @@ public class NISuppressor {
   }
 
   /**
-   * Defines a binary suppressor
+   * Defines a binary suppressor.
    */
   public NISuppressor (int v1_index, int v2_index, Class cls) {
 

@@ -8,6 +8,7 @@ import daikon.*;
  **/
 public class Common
 {
+  private Common() { throw new Error("do not instantiate"); }
 
   public static VarInfo makeIntVarInfo(String name) {
     return new VarInfo(VarInfoName.parse(name),

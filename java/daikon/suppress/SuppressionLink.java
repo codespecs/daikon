@@ -102,7 +102,7 @@ public class SuppressionLink implements Serializable {
 
   // Not used as of 10/24/2003.
   /**
-   * Get the (unmodifiable) list of invariants that suppress this
+   * Get the (unmodifiable) list of invariants that suppress this.
    * @return never null.
    **/
   public List getSuppressors() {

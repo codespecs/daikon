@@ -17,7 +17,7 @@ public abstract class InvariantFilter {
     this( true );
   }
 
-  abstract public String getDescription();
+  public abstract String getDescription();
 
   public void turnOn()  { isOn = true; }
   public void turnOff() { isOn = false; }

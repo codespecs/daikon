@@ -16,7 +16,7 @@ public abstract class TernaryInvariant
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /** Pass-through */
+  /** Pass-through. */
   protected TernaryInvariant(PptSlice ppt) {
     super(ppt);
   }

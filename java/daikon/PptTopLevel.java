@@ -82,25 +82,25 @@ public class PptTopLevel
    */
   public static boolean dkconfig_flow_globals_immed = false;
 
-  /** number of invariants after equality set processing for the last sample */
+  /** Number of invariants after equality set processing for the last sample. */
   public int instantiated_inv_cnt = 0;
 
-  /** number of slices after equality set processing for the last sample */
+  /** Number of slices after equality set processing for the last sample. */
   public int instantiated_slice_cnt = 0;
 
-  /** Main debug tracer **/
+  /** Main debug tracer. **/
   public static final Logger debug =
     Logger.getLogger("daikon.PptTopLevel");
 
-  /** debug tracer for instantiated slices **/
+  /** Debug tracer for instantiated slices. **/
   public static final Logger debugInstantiate =
     Logger.getLogger ("daikon.PptTopLevel.instantiate");
 
-  /** debug tracer for timing merges **/
+  /** Debug tracer for timing merges. **/
   public static final Logger debugTimeMerge =
     Logger.getLogger ("daikon.PptTopLevel.time_merge");
 
-  /** Debug tracer for equalTo checks **/
+  /** Debug tracer for equalTo checks. **/
   public static final Logger debugEqualTo =
     Logger.getLogger("daikon.PptTopLevel.equal");
 
@@ -108,7 +108,7 @@ public class PptTopLevel
   public static final Logger debugAddImplications =
     Logger.getLogger("daikon.PptTopLevel.addImplications");
 
-  /** Debug tracer for adding and processing conditional ppts */
+  /** Debug tracer for adding and processing conditional ppts. */
   public static final Logger debugConditional =
     Logger.getLogger("daikon.PptTopLevel.conditional");
 
@@ -124,11 +124,11 @@ public class PptTopLevel
   public static final Logger debugSuppress =
     Logger.getLogger ("daikon.suppress.suppress");
 
-  /** Debug tracer for up-merging equality sets  **/
+  /** Debug tracer for up-merging equality sets.  **/
   public static final Logger debugMerge =
     Logger.getLogger ("daikon.PptTopLevel.merge");
 
-  /** Debug tracer for global ppt **/
+  /** Debug tracer for global ppt. **/
   public static final Logger debugGlobal =
     Logger.getLogger ("daikon.PptTopLevel.global");
 
@@ -140,10 +140,10 @@ public class PptTopLevel
     return name;
   }
 
-  /** Holds the falsified invariants under this PptTopLevel */
+  /** Holds the falsified invariants under this PptTopLevel. */
   public ArrayList falsified_invars = new ArrayList();
 
-  /** list of constant variables */
+  /** List of constant variables. */
   public DynamicConstants constants = null;
 
   // Do we need both a num_tracevars for the number of variables in the
@@ -226,15 +226,15 @@ public class PptTopLevel
     return new CondIterator();
   }
 
-  /** returns whether or not this ppt has any splitters */
+  /** Returns whether or not this ppt has any splitters. */
   public boolean has_splitters() {
     return (splitters != null) && (splitters.size() > 0);
   }
 
-  /** all children relations in the hierarchy */
+  /** All children relations in the hierarchy. */
   public List /* PptRelation */ children = new ArrayList();
 
-  /** all parent relations in the hierarchy */
+  /** All parent relations in the hierarchy. */
   public List /* PptRelation */ parents = new ArrayList();
 
   /**
@@ -247,7 +247,7 @@ public class PptTopLevel
 
   /**
    * Flag that indicates whether or not invariants that are duplicated
-   * at the parent have been removed
+   * at the parent have been removed..
    */
   public boolean invariants_removed = false;
 
@@ -267,10 +267,10 @@ public class PptTopLevel
   /** @see #global_transform_orig */
   public int[] global_transform_post = null;
 
-  /** Global ppt (if any) **/
+  /** Global ppt (if any.) **/
   public static PptTopLevel global = null;
 
-  /** list of weakened invariants at the global ppt */
+  /** List of weakened invariants at the global ppt. */
   public static List weakened_invs = new ArrayList();
 
   public static int weakened_start_index = 0;
@@ -279,7 +279,7 @@ public class PptTopLevel
    * Set of all PptTopLevels where the ordering provided by the
    * links is sorted from the smallest offset to the largest offset
    * This takes advantage of LinkedHashSet predictable ordering over
-   * elements (insertion-order)
+   * elements (insertion-order).
    */
   public static Set /* PptTopLevel */ weakened_offsets = new LinkedHashSet();
 
@@ -1910,7 +1910,7 @@ public class PptTopLevel
   }
 
   /**
-   * Returns whether or not the specified variable is dynamically constant
+   * Returns whether or not the specified variable is dynamically constant.
    */
   public boolean is_constant (VarInfo v) {
     return ((constants != null) && constants.is_constant (v));
@@ -2025,7 +2025,7 @@ public class PptTopLevel
 
     // Transform the invariants global variables to local ones.  If any
     PptSlice global_slice = global_inv.ppt;
-    VarInfo vis[] = new VarInfo[global_slice.var_infos.length];
+    VarInfo[] vis = new VarInfo[global_slice.var_infos.length];
     for (int j = 0; j < vis.length; j++ ) {
       VarInfo v = global_slice.var_infos[j];
       vis[j] = var_infos[transform[v.varinfo_index]];
@@ -2102,7 +2102,7 @@ public class PptTopLevel
     }
   }
 
-  /** returns the number of suppressed invariants at this ppt **/
+  /** Returns the number of suppressed invariants at this ppt. **/
   public int suppressed_invariant_cnt() {
 
     int suppress_cnt = 0;
@@ -2118,7 +2118,7 @@ public class PptTopLevel
     return (suppress_cnt);
   }
 
-  /** returns the number of true invariants at this ppt **/
+  /** Returns the number of true invariants at this ppt. **/
   public int invariant_cnt() {
 
     int inv_cnt = 0;
@@ -2130,7 +2130,7 @@ public class PptTopLevel
     return (inv_cnt);
   }
 
-  /** returns the number of slices that contain one or more constants **/
+  /** Returns the number of slices that contain one or more constants. **/
   public int const_slice_cnt() {
 
     int const_cnt = 0;
@@ -2147,7 +2147,7 @@ public class PptTopLevel
     return (const_cnt);
   }
 
-  /** returns the number of invariants that contain one or more constants **/
+  /** Returns the number of invariants that contain one or more constants. **/
   public int const_inv_cnt() {
 
     int const_cnt = 0;
@@ -2229,7 +2229,7 @@ public class PptTopLevel
     return (inv_map);
   }
 
-  /** returns the number of slices at this ppt **/
+  /** Returns the number of slices at this ppt. **/
   public int slice_cnt() {
     return (views.size());
   }
@@ -2322,7 +2322,7 @@ public class PptTopLevel
   }
 
   /**
-   * Add a collection of slices to the views of a PptTopLevel
+   * Add a collection of slices to the views of a PptTopLevel.
    **/
   private void addSlices(Collection slices) {
     for (Iterator i=slices.iterator(); i.hasNext(); ) {
@@ -2809,7 +2809,7 @@ public class PptTopLevel
   }
 
   /**
-   * Returns whether or not the specified slice should be created
+   * Returns whether or not the specified slice should be created.
    */
   public boolean is_slice_ok (VarInfo[] vis, int arity) {
     if (arity == 1)
@@ -2975,7 +2975,7 @@ public class PptTopLevel
   /**
    * Returns whether or not the specified slice is made up of only
    * variables linked to those in the global ppt (ie, whether they are
-   * globals)
+   * globals).
    */
   public boolean is_slice_global (VarInfo[] vis) {
     if (vis.length == 1)
@@ -2988,7 +2988,7 @@ public class PptTopLevel
 
   /**
    * Returns whether or not this slice is made up of only variables linked
-   * to those in the global ppt (ie, whether they are globals)
+   * to those in the global ppt (ie, whether they are globals).
    */
   public boolean is_slice_global (VarInfo vi) {
 
@@ -4033,7 +4033,7 @@ public class PptTopLevel
     }
   }
 
-  /** Mark an invariant as redundant */
+  /** Mark an invariant as redundant. */
   private void flagRedundant(Invariant inv) {
     if (inv instanceof Equality) {
       // ick ick ick
@@ -4175,7 +4175,7 @@ public class PptTopLevel
   }
 
 
-  public final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+  public static final Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
@@ -4186,7 +4186,7 @@ public class PptTopLevel
   // This function guards all of the invariants in a PptTopLevel
   public void guardInvariants() {
     // To avoid concurrent modification exceptions using arrays
-    Object viewArray[] = viewsAsCollection().toArray();
+    Object[] viewArray = viewsAsCollection().toArray();
     for (int i=0; i < viewArray.length; i++) {
       PptSlice currentView = (PptSlice)viewArray[i];
       currentView.guardInvariants();
@@ -4213,7 +4213,7 @@ public class PptTopLevel
 
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
-    Object viewArray[] = viewsAsCollection().toArray();
+    Object[] viewArray = viewsAsCollection().toArray();
     for (int i=0; i < viewArray.length; i++) {
       PptSlice currentView = (PptSlice)viewArray[i];
       currentView.processOmissions(omitTypes);
@@ -4259,7 +4259,7 @@ public class PptTopLevel
   }
 
   /**
-   * Debug method to display all slices
+   * Debug method to display all slices.
    **/
   public String debugSlices() {
     StringBuffer result = new StringBuffer();
@@ -4272,7 +4272,7 @@ public class PptTopLevel
   }
 
   /**
-   * Debug method to print children (in the partial order) recursively
+   * Debug method to print children (in the partial order) recursively.
    */
   public void debug_print_tree (Logger l, int indent, PptRelation parent_rel) {
 
@@ -4684,10 +4684,10 @@ public class PptTopLevel
 
       // Matching parent variable info.  Skip this slice if there isn't a
       // match for each variable (such as with an enter-exit relation)
-      VarInfo pvis[] = parent_vis (rel, cslice);
+      VarInfo[] pvis = parent_vis (rel, cslice);
       if (pvis == null)
         continue;
-      VarInfo pvis_sorted[] = (VarInfo[]) pvis.clone();
+      VarInfo[] pvis_sorted = (VarInfo[]) pvis.clone();
       Arrays.sort (pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Create the parent slice
@@ -4870,10 +4870,10 @@ public class PptTopLevel
 
       // Build the varlist for the parent.  If any variables are not present in
       // the parent, skip this slice
-      VarInfo pvis[] = parent_vis (rel, slice);
+      VarInfo[] pvis = parent_vis (rel, slice);
       if (pvis == null)
         continue;
-      VarInfo pvis_sorted[] = (VarInfo[]) pvis.clone();
+      VarInfo[] pvis_sorted = (VarInfo[]) pvis.clone();
       Arrays.sort (pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Find the parent slice.  If it doesn't exist, there is nothing to do
@@ -4952,7 +4952,7 @@ public class PptTopLevel
 
   }
 
-  /** prints out any suppressed invariants at the ppt and their suppressors **/
+  /** Prints out any suppressed invariants at the ppt and their suppressors. **/
   public void print_suppressed_invs (Logger debug) {
 
     for (Iterator j = views_iterator(); j.hasNext(); ) {
@@ -4984,7 +4984,7 @@ public class PptTopLevel
 
   /**
    * Insures that there are no invariants at this level that are duplicated
-   * at the global level
+   * at the global level.
    */
   public boolean check_vs_global () {
 
@@ -5120,7 +5120,7 @@ public class PptTopLevel
 
   /**
    * Returns the local variable that corresponds to the specified global
-   * variable via the post transform
+   * variable via the post transform.
    */
   public VarInfo local_postvar (VarInfo global) {
 
@@ -5129,7 +5129,7 @@ public class PptTopLevel
 
   /**
    * Returns the local variable that corresponds to the specified global
-   * variable via the orig transform
+   * variable via the orig transform.
    */
   public VarInfo local_origvar (VarInfo global) {
 
@@ -5448,7 +5448,7 @@ public class PptTopLevel
   }
 
   /**
-   * Stores various statistics about a ppt
+   * Stores various statistics about a ppt.
    */
   public static class Stats {
 
@@ -5609,8 +5609,8 @@ public class PptTopLevel
   }
 
   /**
-   * print statistics concerning equality sets over the entire set of
-   * ppts to the specified logger
+   * Print statistics concerning equality sets over the entire set of
+   * ppts to the specified logger.
    */
   public static void print_equality_stats (Logger debug, PptMap all_ppts) {
 

@@ -7,30 +7,31 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /**
- * This class consists solely of static method which are useful when
+ * This class consists solely of static methods that are useful when
  * working with jtb syntax tree visitors.
  */
 class Visitors {
+  private Visitors() { throw new Error("do not instantiate"); }
 
   /** The jtb value for an identifier. */
   private static final int IDENTIFIER = 71;
 
- /** The jtb value for a left bracket. */
+  /** The jtb value for a left bracket. */
   private static final int LBRACKET = 78;
 
- /** The jtb value for a dot. */
+  /** The jtb value for a dot. */
   private static final int DOT = 82;
 
   /** The jtb syntax tree value for "this". */
   private static final int THIS = 54;
 
-  /** The jtb syntax tree value for left paren.*/
+  /** The jtb syntax tree value for left paren. */
   private static final int LPAREN = 74;
 
-  /** jtb value for null */
+  /** jtb value for null. */
   private static final int NULL = 43;
 
-  /** jtb value for a string */
+  /** jtb value for a string. */
   public static final int STRING_LITERAL = 70;
 
   /**

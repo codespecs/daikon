@@ -5,7 +5,7 @@ import daikon.inv.*;
 import utilMDE.*;
 
 /**
- * Abstract base class used to evaluate single long sequences
+ * Abstract base class used to evaluate single long sequences.
  **/
 
 public abstract class SingleScalarSequence

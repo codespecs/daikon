@@ -7,6 +7,8 @@ import utilMDE.Assert;
  **/
 public class SimpUtil
 {
+  private SimpUtil() { throw new Error("do not instantiate"); }
+
   public static void assert_well_formed(String s) {
     if (!Assert.enabled) {
       return;
@@ -59,7 +61,7 @@ public class SimpUtil
    **/
   public static String formatInteger(long i) {
     int sign;
-    int limbs[] = new int[5]; // limbs[0] is most significant
+    int[] limbs = new int[5]; // limbs[0] is most significant
     if (i == 0) {
       sign = limbs[0] = limbs[1] = limbs[2] = limbs[3] = limbs[4] = 0;
     } else if (i == Long.MIN_VALUE) {

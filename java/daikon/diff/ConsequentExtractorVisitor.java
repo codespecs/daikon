@@ -64,7 +64,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
 
   /** The idea is to check if the node is an Implication Invariant.If not,
    *  immediately remove the invariant.  Otherwise, extract the Consequent,
-   *  remove the Implication, and then add the consequent to the list */
+   *  remove the Implication, and then add the consequent to the list. */
      public void visit (InvNode node) {
        Invariant inv1 = node.getInv1();
        // do nothing if the invariant does not exist

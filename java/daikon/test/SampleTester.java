@@ -37,7 +37,7 @@ public class SampleTester extends TestCase {
   LineNumberReader fp;
   PptMap all_ppts;
   PptTopLevel ppt;
-  VarInfo vars[];
+  VarInfo[] vars;
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -196,7 +196,7 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Reads in the specified decl file and sets all_ppts accordingly
+   * Reads in the specified decl file and sets all_ppts accordingly.
    */
   private void proc_decl (String decl_file) throws IOException {
 
@@ -221,7 +221,7 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Looks up the specified ppt name and set ppt accordingly
+   * Looks up the specified ppt name and set ppt accordingly.
    */
   private void proc_ppt (String ppt_name) {
 
@@ -363,8 +363,8 @@ public class SampleTester extends TestCase {
       if (!stok.word() && !stok.qstring())
         parse_error (Fmt.spf ("%s found where argument expected", arg));
       args.add (arg);
-    } while (stok.nextToken() == ",");
-    if (stok.token() != ")")
+    } while (stok.nextToken() == ","); // interned
+    if (stok.token() != ")")    // interned
       parse_error (Fmt.spf ("%s found where ')' expected", stok.token()));
 
     // process the specific assertion

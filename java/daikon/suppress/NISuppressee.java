@@ -3,7 +3,6 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -38,7 +37,7 @@ public class NISuppressee {
   }
 
   /**
-   * Instantiates the suppressee invariant on the specified slice
+   * Instantiates the suppressee invariant on the specified slice.
    */
   public Invariant instantiate (PptSlice slice) {
 

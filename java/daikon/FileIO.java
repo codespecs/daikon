@@ -101,7 +101,7 @@ public final class FileIO {
    */
   public static boolean dkconfig_read_samples_only = false;
 
-  /** Boolean.  When true don't print unmatched procedure entries **/
+  /** Boolean.  When true, don't print unmatched procedure entries. **/
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
 /// Variables
@@ -124,15 +124,15 @@ public final class FileIO {
 
   // Logging Categories
 
-  /** Debug tracer for reading **/
+  /** Debug tracer for reading. **/
   public static final Logger debugRead =
     Logger.getLogger("daikon.FileIO.read");
 
-  /** Debug tracer for printing **/
+  /** Debug tracer for printing. **/
   public static final Logger debugPrint =
     Logger.getLogger("daikon.FileIO.printDtrace");
 
-  /** Debug tracer for printing variable values **/
+  /** Debug tracer for printing variable values. **/
   public static final Logger debugVars
     = Logger.getLogger ("daikon.FileIO.vars");
 

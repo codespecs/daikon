@@ -128,7 +128,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Map from function name (eg, MultiplyLong, MinimumFloat) to an array
-   * of instances (one for each valid permutation) for that function
+   * of instances (one for each valid permutation) for that function.
    */
   private static Map functions = null;
 
@@ -137,7 +137,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * each valid permutation) for that function.  The array is the same
    * one as is stored in the functions Map.  This provides a faster access
    * mechanism once we have the function id (which are calculated the first
-   * time through)
+   * time through).
    */
   private static List func_list = new ArrayList();
 
@@ -251,24 +251,24 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (result);
   }
 
-  /** permuted result var */
+  /** Permuted result var. */
   public VarInfo resultVar() {
     return ppt.var_infos[var_indices[get_var_order()][0]];
   }
 
-  /** permuted arg1 var */
+  /** Permuted arg1 var. */
   public VarInfo argVar1() {
     return ppt.var_infos[var_indices[get_var_order()][1]];
   }
 
-  /** permuted arg2 var */
+  /** Permuted arg2 var. */
   public VarInfo argVar2() {
     return ppt.var_infos[var_indices[get_var_order()][2]];
   }
 
   /**
    * Apply the specified sample to the function, returning the result
-   * The caller is responsible for permuting the arguments
+   * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus check_ordered (PRIMITIVE result, PRIMITIVE arg1,
                                       PRIMITIVE arg2, int count) {
@@ -284,7 +284,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Apply the specified sample to the function, returning the result
-   * The caller is responsible for permuting the arguments
+   * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,
                                       PRIMITIVE arg2, int count) {
@@ -295,7 +295,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Reorganize our already-seen state as if the variables had shifted
    * order underneath us (re-arrangement given by the permutation).
    * We accomplish this by returning the class that corresponds to the
-   * the new permutation
+   * the new permutation.
    */
   protected Invariant resurrect_done (int[] permutation) {
 
@@ -522,6 +522,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (sl);
   }
 
+  // TODO: This should be a Javadoc link.
   /**
    * See comment for equality_suppress_repeated_arg.
    **/

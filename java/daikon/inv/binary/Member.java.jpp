@@ -35,7 +35,9 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
   #define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
   #define ARBITRARYSUBSEQUENCE SequenceStringArbitrarySubsequence
+#if 0
   // XXX There is no SubSequenceString(?)
+#endif
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
   #define INDEXOF ArraysMDE.indexOf

@@ -3,7 +3,6 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -309,7 +308,7 @@ public class NISuppressionSet {
 
 
   /**
-   * clears the suppressor state in each suppression
+   * Clears the suppressor state in each suppression.
    */
   public void clear_state () {
     for (int i = 0; i < suppression_set.length; i++ ) {
@@ -318,7 +317,7 @@ public class NISuppressionSet {
   }
 
   /**
-   * Returns a string containing each suppression separated by commas
+   * Returns a string containing each suppression separated by commas.
    */
   public String toString() {
     return UtilMDE.join(suppression_set, ", ");

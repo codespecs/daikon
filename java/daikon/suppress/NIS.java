@@ -4,7 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.threeScalar.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -29,7 +28,7 @@ import java.util.*;
  */
 public class NIS {
 
-  /** Debug Tracer **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.suppress.NIS");
 
   /**
@@ -37,7 +36,7 @@ public class NIS {
    */
   public static boolean dkconfig_enabled = true;
 
-  /** possible states for suppressors and suppressions **/
+  /** Possible states for suppressors and suppressions. **/
   static final String NONE = "none";
   static final String MATCH = "match";
   static final String VALID = "valid";
@@ -83,7 +82,7 @@ public class NIS {
 
   /**
    * Instantiates any invariants that are no longer suppressed because
-   * inv has been falsified
+   * inv has been falsified.
    */
   public static void falsified (Invariant inv) {
 
@@ -172,7 +171,7 @@ public class NIS {
   }
 
   /**
-   * Dump out the suppressor map
+   * Dump out the suppressor map.
    */
 
   public static void dump (Logger debug) {

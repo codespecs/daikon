@@ -19,12 +19,12 @@ public class Lemma implements Comparable {
     formula = f;
   }
 
-  /** Return a human-readable description */
+  /** Return a human-readable description. */
   public String summarize() {
     return summary;
   }
 
-  /** If this lemma came from an invariant, get its class */
+  /** If this lemma came from an invariant, get its class. */
   public Class invClass() {
     return null;
   }

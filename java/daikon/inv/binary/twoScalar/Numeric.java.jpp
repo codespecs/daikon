@@ -533,7 +533,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public abstract String get_format_str (OutputFormat format);
 
   /**
-   * Returns true if x and y don't invalidate the invariant
+   * Returns true if x and y don't invalidate the invariant.
    */
   public abstract boolean eq_check (PRIMITIVE x, PRIMITIVE y);
 
@@ -547,7 +547,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Returns a list of all of the numeric invariants instantiated
-   * for the specified slice
+   * for the specified slice.
    */
   public static List instantiate_all (PptSlice slice) {
 
@@ -579,7 +579,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the divides without remainder invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 % VAR2 == 0'
+   * COMMENT_TXT.  Prints as ' VAR1 % VAR2 == 0'.
    */
   public static class Divides extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -612,7 +612,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       /**
        * This needs to be an obvious check and not a suppression for
        * sequences because there is no consistent way to check that
-       * var1 and var2 have the same length (for derivations)
+       * var1 and var2 have the same length (for derivations).
        */
       public InvDef[][] obvious_checks (VarInfo[] vis) {
 
@@ -648,7 +648,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the square invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 = VAR2**2'
+   * COMMENT_TXT.  Prints as ' VAR1 = VAR2**2'.
    **/
   public static class Square extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -675,7 +675,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** Check to see if x == y squared **/
+    /** Check to see if x == y squared. **/
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS (x, y*y));
     }
@@ -683,7 +683,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the zero tracks invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 = 0 ==> VAR2 = 0'
+   * COMMENT_TXT.  Prints as ' VAR1 = 0 ==> VAR2 = 0'.
    **/
   public static class ZeroTrack extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -708,7 +708,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /**
-     * This is only interesting for suppressions
+     * This is only interesting for suppressions.
      */
     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
@@ -728,7 +728,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise complement invariant between
-   * COMMENT_TXT. Prints as ' VAR1 = ~VAR2 '
+   * COMMENT_TXT. Prints as ' VAR1 = ~VAR2 '.
    **/
   public static class BitwiseComplement extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -756,7 +756,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("%var1% == ~%var2%");
     }
 
-    /** Check to see if x == ~y **/
+    /** Check to see if x == ~y . **/
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS (x, ~y));
     }
@@ -764,7 +764,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise subset invariant between
-   * COMMENT_TXT. Prints as ' VAR1 = VAR2 | VAR1 '
+   * COMMENT_TXT. Prints as ' VAR1 = VAR2 | VAR1 '.
    **/
   public static class BitwiseSubset extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -798,7 +798,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       /**
        * This needs to be an obvious check and not a suppression for
        * sequences because there is no consistent way to check that
-       * var1 and var2 have the same length (for derivations)
+       * var1 and var2 have the same length (for derivations).
        */
       public InvDef[][] obvious_checks (VarInfo[] vis) {
 
@@ -828,7 +828,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the BitwiseAnd == 0 invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 & VAR2 == 0'
+   * COMMENT_TXT.  Prints as ' VAR1 & VAR2 == 0'.
    **/
   public static class BitwiseAndZero extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -860,7 +860,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return ((x & y) == 0);
     }
 
-    /** This is only interesting for suppressions */
+    /** This is only interesting for suppressions. */
     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
       return new DiscardInfo (this, DiscardCode.obvious,
@@ -870,7 +870,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the ShiftZero invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 >> VAR2 = 0'
+   * COMMENT_TXT.  Prints as ' VAR1 >> VAR2 = 0'.
    **/
   public static class ShiftZero  extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -900,7 +900,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return ((x >> y) == 0);
     }
 
-    /** This is only interesting for suppressions */
+    /** This is only interesting for suppressions. */
     public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
       return new DiscardInfo (this, DiscardCode.obvious,

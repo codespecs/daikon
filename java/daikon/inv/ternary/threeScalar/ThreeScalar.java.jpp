@@ -31,7 +31,7 @@ import utilMDE.*;
 
 
 /**
- * Abstract base class used for comparing three PRIMITIVE scalars
+ * Abstract base class used for comparing three PRIMITIVE scalars.
  **/
 public abstract class CLASSNAME
   extends TernaryInvariant

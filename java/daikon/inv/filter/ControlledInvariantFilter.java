@@ -13,10 +13,8 @@ public class ControlledInvariantFilter extends InvariantFilter {
   // of them are worth printing.  If any are, then this invariant does not need
   // to be printed.
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    if (!isWorthPrinting(invariant) && !IsEqualityComparison.it.accept(invariant))
-      return true;
-    else
-      return false;
+    return (!isWorthPrinting(invariant)
+            && !IsEqualityComparison.it.accept(invariant));
   }
 
   private boolean isWorthPrinting(Invariant inv) {

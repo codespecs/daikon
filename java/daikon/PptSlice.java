@@ -37,7 +37,7 @@ public abstract class PptSlice
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.PptSlice");
 
-  /** Debug tracer for debugging both this and PptSlices **/
+  /** Debug tracer for debugging both this and PptSlices. **/
   public static final Logger debugGeneral = Logger.getLogger("daikon.PptSlice.general");
   public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
