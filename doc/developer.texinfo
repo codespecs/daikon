@@ -105,7 +105,7 @@ Track logging
 
 Daikon internals
 
-* Invariant suppression::       
+* Avoiding work for redundant invariants::  
 * Dataflow hierarchy::          
 * Equality optimization::       
 * Suppression optimization::    
@@ -793,7 +793,7 @@ writable for log2html.php to work correctly.
 @chapter Daikon internals
 
 @menu
-* Invariant suppression::       
+* Avoiding work for redundant invariants::  
 * Dataflow hierarchy::          
 * Equality optimization::       
 * Suppression optimization::    
@@ -804,118 +804,63 @@ it efficient in terms of time and space needed.  These techniques can
 be enabled or disabled at the Daikon command line, as described in
 @ref{Command line options,,,./daikon,Daikon User Manual}.
 
-@node   Invariant suppression, Dataflow hierarchy, Daikon internals, Daikon internals
-@section Invariant suppression
+@node   Avoiding work for redundant invariants, Dataflow hierarchy, Daikon internals, Daikon internals
+@section Avoiding work for redundant invariants
 
-This section explains the relation between four different ways Daikon
-reduces the number of invariants that are checked or printed:
-isObviousStatically, isObviousDynamically, suppression, and
-non-instantiation.
+Daikon reduces runtime and memory by avoiding performing work for
+redundant invariants that provide no useful information to the user.
+There are three basic types of optimization that can be performed for
+uninteresting invariants:  non-instantiation, non-checking, and
+non-printing.
 
-@emph{Similarities}: They are all means of handling invariants that provide
-no useful information to the user.  The invariants may be redundant,
-or they may be obvious because of their value.
+@emph{Non-instantiation} prevents the creation of an invariant because
+the invariant's truth value is statically obvious (from the semantics
+of the programming language), no matter what values may be seen at run
+time.  Two examples are ``A[i] is an element of A[]'' and ``size(A[])
+>= 0''.  Non-instantiation is implemented by the by the
+isObviousStatically method.
+With the equality sets optimization (@pxref{Equality optimization}),
+non-instantiation can only happen if all equality permutations are
+statically obvious.
 
-@emph{Differences}: They are used in different places in the code, and have
-different meanings in Daikon.  However, their meanings are not
-mutually exclusive, so some places of use in the code can be
-interchanged.
+@emph{Non-checking}, also known as ``suppression'', cretes invariants
+but does not check them; an invariant can be suppressed (not checked)
+if some other set of true invariants implies it.
 
-@table @asis
-@c Each of these needs an example
+@emph{Non-printing} is a post-pass that throws out any invariants that
+are implied by other true invariants.  It is similar to suppression,
+but it differs in that it can implement checks that are not sound to
+perform until all data samples have been seen.  Non-printing is implemented by
+the isObviousDynamically method.  The isObviousStatically method is
+also used by the non-printing checks.  (Why?  It was already called at
+the beginning for non-instantiation, so it seems it shouldn't have any
+effect when called during printing.)
 
-@item isObviousStatically
+Non-printing can do anything that non-checking can, and more.
+However, implication checks that do not require all data samples to be
+seen should be implemented as suppressions, not as non-printing.
+There are two cases in which non-printing must be used.  First,
+invariants that must see every data sample, because they cache
+information about all samples, cannot be suppressed, because
+suppressed invariants do not see all samples.  Second,
+there are invariants that are obvious by themselves, without relying
+on other invariants.
 
-An invariant is statically obvious if it is true from a fact that can
-be known from just the semantics of the programming language.
-IsObviousStatically handles
-any invariants that are statically true.  IsObviousStatically is
-called at the beginning of inferencing for non-instantiation (see
-below) and at the end for printing.
+The next three sections show ways that Daikon is optimized based on
+saving work for dynamically redundant invariants.
 
-@item isObviousDynamically
-
-An invariant is dynamically obvious if it is implied by some other
-invariant (or another fact) that
-requires sample data.  IsObviousDynamically handles any invariants
-that are dynamically true.  IsObviousDynamically is only called
-after inferencing is complete, for it would not be sound to call it before all
-data samples have been seen. IsObviousDynamically can use facts on
-the invariant itself, or search for other invariants to support the
-obviousness of the invariant.
-
-@item Non-instantiation
-
-Preventing the creation of an invariant because it is statically
-obvious.  With equality, non-instantiation can only happen if all
-equality permutations are statically obvious.
-
-@item Suppression
-
-Mechanism for having an invariant implied by another set of
-invariants not checked.  It is the sound method to avoid the
-checking of such invariants during inferencing.
-
-@end table
-
-How these relate:
-
-isObviousStatically is the way that non-instantiation is determined.
-
-isObviousDynamically can do everything suppression does, once
-inferencing is done.  A set of suppressors makes an invariant
-obviously true dynamically.  However, isObviousDynamically is not
-sound for during inferencing, unlike suppression.
-
-Suppression is limited to a specific set of dynamic obviousness, the
-ones involving other invariants.  Dynamic obviousness also includes
-singletons like ``size(x[]) >= 0''.
-
-The last question to ask is: ``Can suppression handle everything
-isObviousDynamically can?''
-
-The short answer is, ``No.''  Suppression is efficient because it saves
-time during inferencing.  However, it is not adequate.  There are two
-issues.
-
-First, for invariants that cache data, it is unsound to run
-suppression during inferencing.  However, running suppression only
-after inferencing (like with isObviousDynamically) would solve this
-issue.
-
-Second, there are invariants that are obvious by themselves.  For
-these, suppression has no solution.  However, suppression augmented
-with the erasure of such invariants (i.e. immediate destruction) would
-be adequate.
+More detail can be found in two theses.  See Chapter 7,
+``Scalability'', of @cite{Automatic Generation and Checking of Program
+Specifications} (Technical report MIT-LCS-TR-852, at
+@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
+Jeremy W. Nimmer's Master's thesis.  Also see Chapter 5, ``Enabling
+Incremental Dynamic Invariant Detection'', of @cite{Theorem-proving
+distributed algorithms with dynamic analysis}
+(@uref{http://pag.lcs.mit.edu/pubs/thmprove-newin-mengthesis-abstract.html}),
+Toh Ne Win's Master's thesis.
 
 
-@c @node    Elimination of redundant invariants, Daikon internals, Top
-@c @section Elimination of redundant invariants
-
-The major way Daikon optimizes its use of computer resources is to
-avoid performing work for redundant invariants.  For example, if
-Daikon does not check a redundant invariant for some data samples,
-some time can be saved.  If Daikon does not instantiate redundant
-invariants, then space and time can be saved.  Some invariants are
-redundant @emph{statically} --- that is, their redundancy can be known
-without any sample data.  For example, ``A[i] is an element of A[]'' can
-be known statically.  Other invariants are redundant
-@emph{dynamically} --- Daikon can only know they are redundant after
-some or all sample data is seen.  The next three sections show ways
-that Daikon is optimized based on saving work for dynamically
-redundant invariants.
-
-More detail can be found in Chapter 7, ``Scalability'', of
-@cite{Automatic Generation and Checking of Program Specifications}
-(Technical report MIT-LCS-TR-852, at
-@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.hull}),
-Jeremy W. Nimmer's Master's thesis.  and in Chapter 5, ``Enabling
-Incremental Dynamic Invariant Detection'', of Toh Ne Win's Master's
-thesis (Technical report to be filed, at
-@uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
-
-
-@node    Dataflow hierarchy, Equality optimization, Invariant suppression, Daikon internals
+@node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
 
 Dataflow hierarchy is a means to relate variables in different program
