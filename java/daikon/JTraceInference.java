@@ -10,7 +10,7 @@
  */
 
 package daikon;
- 
+
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +34,7 @@ import utilMDE.Assert;
 
 class JTraceInference extends Thread
 {
-    JTraceInference() { 
+    JTraceInference() {
 	start(); // execute run() in a new thread
     }
 
@@ -44,15 +44,15 @@ class JTraceInference extends Thread
     class TraceSample {
 	PptTopLevel	ppt;
 	Object[]	vals;
-	int[]		mods;	
+	int[]		mods;
     };
 
     private Vector/*<TraceSample>*/ samples = new Vector();
 
     public void	run()
-    {	
+    {
 	JTrace.println(JTrace.V_INFO, "JTrace: Inference thread start.");
-	
+
 	PptMap all_ppts = new PptMap();
 
 	/////////
@@ -66,8 +66,8 @@ class JTraceInference extends Thread
 	{
 	    byte control = getControl();
 	    JTrace.print(JTrace.V_INFO, "JTrace: getControl : " + types[control] + " = " );
-	    
-	    switch(control) 
+
+	    switch(control)
 	    {
 	    case CT_PptTrace: { // Header of a Trace program point
 		int key = getInteger();
@@ -80,7 +80,7 @@ class JTraceInference extends Thread
 	    case CT_PptDeclStart: { // Header of a Decl program point
 		int key = getInteger();
 		String pptname = getPptName(key);
-		JTrace.println(JTrace.V_INFO, pptname);		
+		JTrace.println(JTrace.V_INFO, pptname);
 		Vector var_infos = new Vector();
 		while((control = getControl()) != CT_PptDeclEnd)
 		{
@@ -93,22 +93,22 @@ class JTraceInference extends Thread
 		    JTrace.println(JTrace.V_INFO, "\tname=" + varname +
 			    ", type=" + proglang_type_string);
 
-		    ProglangType prog_type = 
+		    ProglangType prog_type =
 			ProglangType.parse(proglang_type_string);
 
 		    ProglangType file_rep_type = prog_type;
 		    List prims = Arrays.asList(new String[] {
-			"int", "byte", "char", "short", "long", "double", 
+			"int", "byte", "char", "short", "long", "double",
 			"float", "boolean", "java.lang.String" });
 		    // not a prim => hashcode
 		    if(!prims.contains(proglang_type_string))
 			file_rep_type = ProglangType.parse("hashcode");
 		    VarComparability comparability =
-			VarComparability.parse(VarComparability.NONE, 
+			VarComparability.parse(VarComparability.NONE,
 					       null, null);
 
 		    VarInfo vi = new VarInfo(VarInfoName.parse(varname),
-					     prog_type, file_rep_type, 
+					     prog_type, file_rep_type,
 					     comparability, false, null);
 		    var_infos.add(vi);
 		}
@@ -121,8 +121,8 @@ class JTraceInference extends Thread
 
 	    case CT_NoData:
 		JTrace.println(JTrace.V_INFO, "<NoData>");
-		for(;;) 
-		    try { 		    
+		for(;;)
+		    try {
 			currentThread().sleep(100); // sleep and try again
 			break;
 		    } catch(InterruptedException e) {}
@@ -150,7 +150,7 @@ class JTraceInference extends Thread
 
 	// XXX this stuff should be done when we create TraceSamples,
 	// which should eventually not exist.
-	
+
 	// Now add some additional variable values that don't appear directly
 	// in the data trace file but aren't traditional derived variables.
 
@@ -158,7 +158,7 @@ class JTraceInference extends Thread
 	{
 	    TraceSample sample = (TraceSample)samples.get(ii);
 
-	    JTrace.println(JTrace.V_DEBUG, "doing sample " + ii + " for " + 
+	    JTrace.println(JTrace.V_DEBUG, "doing sample " + ii + " for " +
 			   sample.ppt.name);
 
 	    // XXX doesn't handle static constants yet
@@ -173,11 +173,11 @@ class JTraceInference extends Thread
 	    try {
 		FileIO.add_orig_variables(sample.ppt, sample.vals, sample.mods,
 					  null);
-		
+
 		if (! sample.ppt.ppt_name.isExitPoint()) {
 		    continue;
 		}
-		FileIO.add_derived_variables(sample.ppt, sample.vals, 
+		FileIO.add_derived_variables(sample.ppt, sample.vals,
 					     sample.mods);
 	    } catch(java.io.IOException e) {
 		Assert.assert(false, "uh oh"); // XXX
@@ -186,17 +186,17 @@ class JTraceInference extends Thread
 // XXX is this just an optimisation or what? We could get memory hungry here...
 	    sample.vals = Intern.intern(sample.vals);
 	    Assert.assert(Intern.isInterned(sample.vals));
-	    
+
 	    // Done adding additional variable values that don't
 	    // appear directly in the data trace file.
-	    
+
 	    ValueTuple vt = new ValueTuple(sample.vals, sample.mods);
 
 	    sample.ppt.add_and_flow(vt, 1);
 	}
 
 	JTrace.println(JTrace.V_INFO,"JTrace: Inference thread stop.");
-	
+
 	// disable  debugIsWorthPrinting: ???X
 //	Configuration.getInstance().apply("daikon.inv.Invariant = 0");
 //	Configuration.getInstance().apply("daikon.inv.Invariant.isWorthPrinting = 0");
@@ -206,10 +206,10 @@ class JTraceInference extends Thread
     private void	doPpt(String ppt_name, PptMap all_ppts)
     {
 	// from FileIO:
-	
+
 	PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
 	Assert.assert(ppt != null);
-	
+
 	// not vis.length, as that includes constants, derived variables, etc.
 	// Actually, we do want to leave space for _orig vars.
 	// And for the time being (and possibly forever), for derived variables.
@@ -217,10 +217,10 @@ class JTraceInference extends Thread
 	int num_tracevars = ppt.num_tracevars;
 	int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
 	Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
-	
+
 	Object[] vals = new Object[vals_array_size];
 	int[] mods = new int[vals_array_size];
-	
+
 	// XXX modbits -- skipped
 
 	// XXX invocation nonce -- skipped
@@ -262,8 +262,8 @@ class JTraceInference extends Thread
 
 		switch(control)
 		{
-		case CT_boolean: 
-		case CT_byte: 
+		case CT_boolean:
+		case CT_byte:
 		case CT_char:
 		case CT_short:
 		case CT_int:
@@ -286,7 +286,7 @@ class JTraceInference extends Thread
 		    value = Intern.internedLong(getInteger());
 		    break;
 		default:
-		    Assert.assert(false, "freak-up in control stream!"); 
+		    Assert.assert(false, "freak-up in control stream!");
 //			    abort();
 		    break;
 		}
@@ -323,7 +323,7 @@ class JTraceInference extends Thread
     // called from another thread:
     public void			joinX() { // join, but suppress failure
 	for(;;)
-	    try { 
+	    try {
 		join(); // wait for thread to exit
 		return;
 	    } catch(InterruptedException e) {}
@@ -341,12 +341,12 @@ class JTraceInference extends Thread
     private native int[]	getIntegers();
     private native String[]	getStrings();
     private native byte[]	getControls();
-    
+
     private double[]		_theDoubles;	private int _doubleCount;
     private long[]		_theLongs;	private int _longCount;
     private int[]		_theIntegers;	private int _integerCount;
     private String[]		_theStrings;	private int _stringCount;
-    private byte[]		_theControls;	private int _controlCount;    
+    private byte[]		_theControls;	private int _controlCount;
 
     // dispense one at a time:
     private double	getDouble() {
