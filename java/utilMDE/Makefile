@@ -9,7 +9,7 @@ JAVAC ?= jikes -g +E +F
 
 
 JAVA_FILES := $(shell find . -name '*.java' -print)
-JAVA_CPP_FILES := $(shell find . -name '.java.cpp' -print)
+JAVA_CPP_FILES := $(shell find . -name '*.java.cpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 AUTO_GENERATED_FILES = \
 	MathMDE.java
@@ -62,7 +62,7 @@ audit:
 
 # No need to do "make doc" or "make all" before running this.
 # (This includes .class files, so users don't need to recompile.)
-utilMDE.tar.gz: $(JAVA_FILES) Makefile README
+utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
 	rm -rf /tmp/utilMDE
 	mkdir /tmp/utilMDE
 	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
@@ -76,6 +76,7 @@ utilMDE.tar.gz: $(JAVA_FILES) Makefile README
 showvars:
 	@echo ALL_JAVA_FILES = $(ALL_JAVA_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo JAVA_CPP_FILES = $(JAVA_CPP_FILES)
 
 
 ###########################################################################
