@@ -7,7 +7,7 @@
 -include Makefile.user
 
 JAVAC ?= javac
-JAVAC_ARGS ?= -g -J-Xmx512m
+JAVAC_ARGS ?= -g -J-Xmx800m
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 JAR ?= jar
 JAVA ?= java
@@ -546,7 +546,7 @@ doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
 	#echo "JDOC_FILES: ${JDOC_FILES}"
 	# This requires that jdk/lib/tools.jar be on your classpath
-	javadoc -J-Xmx200m $(JAVADOC_FLAGS) $(JDOC_FILES)
+	javadoc -J-Xmx800m $(JAVADOC_FLAGS) $(JDOC_FILES)
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
