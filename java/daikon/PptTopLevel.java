@@ -44,7 +44,7 @@ public class PptTopLevel extends Ppt {
   int num_tracevars;            // number of variables in the trace file
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
-
+  
   // Indicates which derived variables have been introduced.
   // First number: invariants are computed up to this index, non-inclusive.
   // Remaining numbers: values have been derived from up to these indices.
@@ -157,9 +157,18 @@ public class PptTopLevel extends Ppt {
   /// Accessing data
   ///
 
-  int num_vars() {
+  public int num_vars() {
     return var_infos.length;
   }
+
+  public int num_array_vars() {
+    int num_arrays=0;
+    for (int i=0; i<var_infos.length; i++) 
+      if (var_infos[i].rep_type.isArray())
+	num_arrays++;
+    return num_arrays;
+  }				  
+
   Iterator var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
   }
@@ -454,6 +463,10 @@ public class PptTopLevel extends Ppt {
       { },
       // pass2
       { new SequenceScalarSubscriptFactory(),
+	//new ScalarSequencesIntersectionFactory(),
+	//new StringSequencesIntersectionFactory(),
+	//new ScalarSequencesUnionFactory(),
+	//new StringSequencesUnionFactory(),	
         new SequenceStringSubscriptFactory(), }
     };
 
@@ -2420,6 +2433,12 @@ public class PptTopLevel extends Ppt {
         + better_name.substring(colon_pos);
     }
 
+    // IOA, quick fix
+    String classname = better_name.substring(0, better_name.indexOf(":::"));  
+    classname = (classname.indexOf(".")==-1) ? classname :
+      classname.substring(0, classname.indexOf("."));
+    // end IOA
+
     if (Daikon.output_num_samples) {
       int num_samps = num_samples();
       out.println(better_name + "  " + nplural(num_samps, "sample"));
@@ -2617,6 +2636,17 @@ public class PptTopLevel extends Ppt {
 	      }
             }
 	    break;
+	  case Daikon.OUTPUT_STYLE_IOA:
+            sb = new StringBuffer();
+            for (int j=0; j<equal_vars.size(); j++) {	      
+              VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	      if (j>0) sb.append("\n");
+	      sb.append("invariant of " + classname + ": ");
+	      sb.append(vi.name.ioa_name(classname) + " = ");
+	      sb.append(other.name.ioa_name(classname)); 
+	    }
+	    out.println(sb.toString());
+	    break;
 	  default:
 	    throw new IllegalStateException("Unknown output mode");
           }
@@ -2666,7 +2696,8 @@ public class PptTopLevel extends Ppt {
 	continue;
       }
 
-      if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL) {
+      if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL ||
+	  Daikon.output_style != Daikon.OUTPUT_STYLE_IOA) {
 	// don't print out invariants with min(), max(), or sum() variables
 	boolean mms = false;
 	VarInfo[] varbls = inv.ppt.var_infos;
@@ -2686,6 +2717,11 @@ public class PptTopLevel extends Ppt {
 	break;
       case Daikon.OUTPUT_STYLE_SIMPLIFY:
 	inv_rep = inv.format_simplify();
+	break;
+      case Daikon.OUTPUT_STYLE_IOA:
+	inv_rep = "invariant of " + classname + ": ";
+	inv_rep += inv.format_ioa(classname);
+	inv_rep += "\n" + inv.repr();
 	break;
       default:
 	throw new IllegalStateException("Unknown output mode");

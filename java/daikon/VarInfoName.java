@@ -46,6 +46,9 @@ public abstract class VarInfoName
 	  protected String esc_name_impl() {
 	    return term.esc_name();
 	  }
+	  protected String ioa_name_impl(String classname) {
+	    return term.ioa_name(classname);
+	  }
 	  protected String simplify_name_impl(boolean prestate) {
 	    return term.simplify_name(prestate);
 	  }
@@ -124,6 +127,24 @@ public abstract class VarInfoName
   }
   private String esc_name_cached = null;
   protected abstract String esc_name_impl();
+
+  /**
+   * @return the string representation (interned) of this name, in the
+   * IOA style output format
+   **/
+  public String ioa_name(String classname) {
+    if (ioa_name_cached == null) {
+      try {
+	ioa_name_cached = ioa_name_impl(classname).intern();
+      } catch (RuntimeException e) {
+	System.err.println("name = " + name());
+	throw e;
+      }
+    }
+    return ioa_name_cached;
+  }
+  private String ioa_name_cached = null;
+  protected abstract String ioa_name_impl(String classname);
 
   /**
    * @return the string representation (interned) of this name, in the
@@ -271,6 +292,33 @@ public abstract class VarInfoName
     // return repr();
   }
 
+
+  // ============================================================
+  // IOA
+  
+  // remove all "this." and "classname."
+  public String ioaFormatVar(String varname, String classname) {
+    int this_index = varname.indexOf("this.");
+    int class_index = varname.indexOf(classname+".");
+    String ioa_name = varname;
+    
+    while ((this_index>=0) || (class_index>=0)) {
+      if (this_index>=0) {
+	ioa_name = varname.substring(this_index+5, varname.length());
+	if (this_index>0)
+	  ioa_name = varname.substring(0, this_index) + ioa_name;
+      } else if (class_index>=0) {	
+	ioa_name = varname.substring(class_index+classname.length(), varname.length());
+	if (class_index>0)
+	  ioa_name = varname.substring(0, class_index) + ioa_name;
+      }
+      this_index = ioa_name.indexOf("this.");
+      class_index = ioa_name.indexOf(classname+".");
+    }
+    return ioa_name;
+  }
+  
+
   // ============================================================
   // Static inner classes which form the expression langugage
 
@@ -300,6 +348,11 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
+
+    protected String ioa_name_impl(String classname) {
+      return ioaFormatVar(name, classname);
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
 	return name;
@@ -364,9 +417,15 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
+
+    protected String ioa_name_impl(String classname) {
+      return "size(" + sequence.ioa_name(classname) + ")";
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
     }
+
     public Object accept(Visitor v) {
       return v.visitSizeOf(this);
     }
@@ -402,6 +461,10 @@ public abstract class VarInfoName
       return "(format_esc needs to be changed: " +
 	function + " on " + argument.repr() + ")";
     }
+    protected String ioa_name_impl(String classname) {
+      return function + "(" + argument.ioa_name(classname) + ")**";
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       return "(format_simplify needs to be changed: " +
 	function + " on " + argument.repr() + ")";
@@ -440,6 +503,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname) + "." + field;
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
     }
@@ -473,6 +539,9 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
+    }
+    protected String ioa_name_impl(String classname) {
+      return "(typeof " + term.ioa_name(classname) + ")**"; 
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
@@ -508,6 +577,10 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\old(" + term.esc_name() + ")";
     }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname);
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(true);
     }
@@ -558,6 +631,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname) + "'";
+    }
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(false);
     }
@@ -596,6 +672,9 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       return term.esc_name() + amount();
+    }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname) + amount();
     }
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0) ?
@@ -659,6 +738,12 @@ public abstract class VarInfoName
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
     }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname);
+    }	
+    protected String ioa_name_impl(String classname, String index) {
+      return term.ioa_name(classname) + "[" + index + "]";
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select elems " + term.simplify_name(prestate) + ")";
     }
@@ -713,15 +798,15 @@ public abstract class VarInfoName
     if (!index.isLiteralConstant()) {
       return index;
     }
-
+    
     int i = Integer.parseInt(index.name());
     if (i >= 0) {
       return index;
     }
-
+  
     return sequence.applySize().applyAdd(i);
   }
-
+  
   /**
    * An element from a sequence, like "sequence[index]"
    **/
@@ -743,12 +828,71 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
+    protected String ioa_name_impl(String classname) {
+      return sequence.ioa_name_impl(classname, indexExplicit(sequence, index).ioa_name(classname));
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + sequence.simplify_name(prestate) + " " +
 	indexExplicit(sequence, index).simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitSubscript(this);
+    }
+  }
+
+
+  /**
+   * Returns a name for the intersection of with another sequence, like
+   * "intersect(a[], b[])"
+   **/
+  public VarInfoName applyIntersection(VarInfoName seq2) {
+    Assert.assert(seq2 != null);
+    return (new Intersection(this, seq2, true)).intern();
+  }
+
+  /**
+   * Returns a name for the intersection of with another sequence, like
+   * "union(a[], b[])"
+   **/
+  public VarInfoName applyUnion(VarInfoName seq2) {
+    Assert.assert(seq2 != null);
+    return (new Intersection(this, seq2, false)).intern();
+  }
+
+
+  /**
+   * Intersection/Union of two sequences
+   **/
+  public static class Intersection extends VarInfoName {
+    public final VarInfoName seq1, seq2;
+    public final boolean isIntersection;
+    public Intersection(VarInfoName seq1, VarInfoName seq2, boolean isIntersection) { 
+      Assert.assert(seq1 != null);
+      Assert.assert(seq2 != null);
+      this.seq1 = seq1;
+      this.seq2 = seq2;
+      this.isIntersection = isIntersection;
+    }
+    protected String repr_impl() {
+      String fn = isIntersection ? "Intersection{" : "Union{";
+      return fn + seq1.repr() + ", " + seq2.repr() + "}";
+    }
+    protected String name_impl() {
+      String fn = isIntersection ? "intersection(" : "union(";
+      return fn + seq1.name() + ", " + seq2.name() + ")";
+    }
+    protected String esc_name_impl() {
+      return "(format_esc needs to be changed: " + name_impl();
+    }
+    protected String ioa_name_impl(String classname) {
+      String fn = isIntersection ? " \\I " : " \\U ";
+      return "(" + seq1.ioa_name(classname) + fn + seq2.ioa_name(classname) + ")";
+    }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(format_simplify needs to be changed: " + name_impl();
+    }
+    public Object accept(Visitor v) {
+      return v.visitIntersection(this);
     }
   }
 
@@ -804,6 +948,15 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
+    protected String ioa_name_impl(String classname) {
+      // Need to be in form: \A e (i <= e <= j) => seq[e]"
+      String result = "\\A e:Int (";
+      result += ((i == null) ? "0" : i.ioa_name(classname)) + " <= e <= ";
+      result += ((j == null) ? "size("+sequence.ioa_name_impl(classname)+")" :
+		 j.ioa_name(classname)) + ") => ";
+      result += sequence.ioa_name_impl(classname, "e");
+      return result;
+    }
     protected String simplify_name_impl(boolean prestate) {
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
     }
@@ -828,6 +981,7 @@ public abstract class VarInfoName
     public Object visitAdd(Add o);
     public Object visitElements(Elements o);
     public Object visitSubscript(Subscript o);
+    public Object visitIntersection(Intersection o);
     public Object visitSlice(Slice o);
   }
 
@@ -868,6 +1022,9 @@ public abstract class VarInfoName
     }
     // leave abstract; traversal order and return values matter
     public abstract Object visitSubscript(Subscript o);
+    public Object visitIntersection(Intersection o) {
+      return o.seq1.accept(this);
+    }
     // leave abstract; traversal order and return values matter
     public abstract Object visitSlice(Slice o);
   }
@@ -924,6 +1081,9 @@ public abstract class VarInfoName
       if (o.sequence.accept(this) != null) return goal;
       if (o.index.accept(this) != null) return goal;
       return null;
+    }
+    public Object visitIntersection(Intersection o) {
+      return (o == goal) ? goal : super.visitIntersection(o);
     }
     public Object visitSlice(Slice o) {
       if (o == goal) return goal;
@@ -1041,6 +1201,10 @@ public abstract class VarInfoName
 	((VarInfoName) o.sequence.accept(this)).
 	applySubscript((VarInfoName) o.index.accept(this));
     }
+    public Object visitIntersection(Intersection o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitIntersection(o)).applyIntersection(o.seq2);
+    }
     public Object visitSlice(Slice o) {
       return (o == old) ? _new :
 	((VarInfoName) o.sequence.accept(this)).
@@ -1109,6 +1273,10 @@ public abstract class VarInfoName
       o.sequence.accept(this);
       o.index.accept(this);
       return null;
+    }
+    public Object visitIntersection(Intersection o) {
+      result.add(o);
+      return super.visitIntersection(o);
     }
     public Object visitSlice(Slice o) {
       result.add(o);
@@ -1352,6 +1520,75 @@ public abstract class VarInfoName
 
       return result;
     }
+
+
+    // <root*> -> <string*>
+    /**
+     * Given a list of roots, return a String array where the first
+     * element is a IOA-style quantification over newly-introduced
+     * bound variables, the last element is a closer, and the other
+     * elements are ioa-named strings for the provided roots.  It
+     * distinguishes Sets from Arrays, and quantifies each accordingly.
+     * --> it returns the indexes assigned at the end of the array
+     **/
+    public static String[] format_ioa(VarInfo[] v_roots, String classname) {
+      Assert.assert(v_roots != null);
+
+      VarInfoName[] roots = new VarInfoName[v_roots.length];
+      for (int i=0; i<v_roots.length; i++)
+	roots[i] = v_roots[i].name;
+      
+      QuantifyReturn qret = quantify(roots);
+      String[] result = new String[2*roots.length+2];
+      StringBuffer ptr_list = new StringBuffer();
+      StringBuffer conditions = new StringBuffer();
+      int numConditions = 0;
+      
+      for (int i=0; i < qret.bound_vars.size(); i++) {
+	Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+	if (i != 0)
+	  ptr_list.append(", ");
+	
+	// if the corresponding var is of type 'Set':
+	//    - 'ptr' is an IOA Set element, of type elementTypeIOA()
+	//    - the following condition must be added: (ptr /in set)
+	// otherwise, if type is IOA Array, ptr is an integer index
+	
+	if (v_roots[i].isIOASet()) {
+	  ptr_list.append(ptr + ":" + v_roots[i].elementTypeIOA());
+	  if (conditions.length()>0)
+	    conditions.append(" /\\ ");
+	  conditions.append("("+ptr.ioa_name(classname) +" \\in ");
+	  conditions.append(roots[i].ioa_name(classname)+")");
+	  numConditions++;
+	} else 
+	  ptr_list.append(ptr.ioa_name(classname) + ":Int");	
+      }
+      
+      result[0] = "\\A " + ptr_list + " (";
+      result[roots.length+1] = ")";
+
+      if (numConditions>0) {
+	  result[0] += (numConditions==1) ? conditions+" => (" : 
+	      "(" + conditions + ") => (";
+	result[roots.length+1] += ")";
+      }
+
+      // stringify the terms.  If root is 'Set' type, the pointer is sent instead
+      for (int i=0; i < roots.length; i++) {
+	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];  
+	if (v_roots[i].isIOASet()) {
+	  result[i+1] = ptr.ioa_name(classname);
+	  result[roots.length+i+2] = result[i+1];
+	} else { 
+	  result[i+1] = qret.root_primes[i].ioa_name(classname);
+	  result[roots.length+i+2] = ptr.ioa_name(classname);
+	}
+      }
+      return result;
+    }
+
 
     // <root*> -> <string string*>
     /**

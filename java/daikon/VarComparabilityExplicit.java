@@ -99,6 +99,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     }
     protected String name_impl() { throw new UnsupportedOperationException(); }
     protected String esc_name_impl() { throw new UnsupportedOperationException(); }
+    protected String ioa_name_impl(String classname) { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl(boolean prestate) { throw new UnsupportedOperationException(); }
     public Object accept(VarInfoName.Visitor v) { throw new UnsupportedOperationException(); }
   }

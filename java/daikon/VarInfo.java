@@ -708,6 +708,41 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return ((derived != null) && (derived.isDerivedFromNonCanonical()));
   }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// IOA functions
+  ///
+
+  /**
+   * return true if declared type is Set (IOA syntax)
+   **/
+  public boolean isIOASet() {
+    return type.base().startsWith("Set");
+  }
+
+  /**
+   * return true if declared type is Set (IOA syntax)
+   **/
+  public boolean isIOAArray() {
+    return type.base().startsWith("Array");
+  }
+
+  /** 
+   * return declared element type (in string) of IOA Set or Array
+   **/
+  public String elementTypeIOA() {
+    String result;
+    int begin;
+    int end = type.base().indexOf(')');
+    if (this.isIOASet()) 
+      begin = type.base().indexOf('(') + 1;
+    else if (this.isIOAArray()) 
+      begin = type.base().indexOf(',') + 1;
+    else
+      return null;
+    return type.base().substring(begin, end);
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /// Utility functions
   ///
