@@ -44,13 +44,13 @@ Diff.class: Diff.java
 # .class files and it's bad to continue to use an orphaned class file
 # (whose source file was renamed).  Or, run "orphaned-class-files".
 clean:
-	rm -f `find . -name "*.class" -print`
+	-rm -f `find . -name "*.class" -print`
 
 dist_clean: clean
-	rm -f TAGS
+	-rm -f TAGS
 
 very_clean: dist_clean
-	rm -f ${AUTO_GENERATED_FILES}
+	-rm -f ${AUTO_GENERATED_FILES}
 
 run:	all
 	java daikon.Daikon
@@ -89,48 +89,56 @@ list_java_files:
 
 ## Automatically generated files
 
+
+# ":=" does not work here; the variables get expanded too soon.
+# "-e" means exit immediately if any error, rather than returning 
+# the status of the last command.
+
+JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
+
+## Here are alternate ways of writing the same command:
+## I could use "define", but that's specific to GNU Make
+## I can't do this because the CPP defined variable changes.
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
+## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
+# JAVA_CPP_START = (mv -f $@ $@-bak; set -e; java-cpp $<
+# JAVA_CPP_END = > $@; chmod -w $@)
+
+
 inv/scalar/LowerBound.java: inv/scalar/Bound-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DLOWER > $@
-	chmod -w $@
+	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
 inv/scalar/UpperBound.java: inv/scalar/Bound-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DUPPER > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DUPPER $(JAVA_CPP_END)
 
 inv/scalar/OneOfScalar.java: inv/OneOf-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DSCALAR > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DSCALAR $(JAVA_CPP_END)
 
 inv/string/OneOfString.java: inv/OneOf-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DSTRING > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DSTRING $(JAVA_CPP_END)
 
 inv/sequence/OneOfSequence.java: inv/OneOf-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DSEQUENCE > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DSEQUENCE $(JAVA_CPP_END)
 
 inv/sequence/EltOneOf.java: inv/OneOf-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DELT > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DELT $(JAVA_CPP_END)
 
 PptSlice1.java: PptSlice-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DARITY1 > $@
-	chmod -w $@
+	$(JAVA_CPP:DEFINEDVAR=ARITY1)
 
 PptSlice2.java: PptSlice-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DARITY2 > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DARITY2 $(JAVA_CPP_END)
 
 PptSlice3.java: PptSlice-cpp.java
-	-mv -f $@ $@-bak
-	java-cpp $< -DARITY3 > $@
-	chmod -w $@
+	$(JAVA_CPP_START) -DARITY3 $(JAVA_CPP_END)
 
+
+###########################################################################
+###
+###
+
+# Existence of this rule means that a target is deleted if has just changed
+# and its rule commands exit with nonzero status.  It's needed for the
+# java-cpp rules above.
+
+.DELETE_ON_ERROR:
