@@ -227,6 +227,12 @@ public final class FileIO {
     }
     VarComparability comparability
       = VarComparability.parse(varcomp_format, comparability_string, prog_type);
+    // Not a call to assert.assert in order to avoid doing the (expensive)
+    // string concatenations.
+    if (! VarInfo.legalRepType(rep_type)) {
+      throw new Error("Unsupported representation type " + rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+    }
+
     return new VarInfo(varname, prog_type, rep_type, comparability, static_constant_value);
   }
 
@@ -244,14 +250,36 @@ public final class FileIO {
       this.vals = vals;
       this.mods = mods;
     }
+
+    // Print the Invocation on two lines, indented by two spaces
+    void format(PrintStream out) {
+      System.out.println("  " + fn_name);
+      System.out.print("    ");
+      for (int j=0; j<vals.length; j++) {
+        if (j != 0)
+          System.out.print(", ");
+        Object val = vals[j];
+        if (val instanceof int[])
+          System.out.print(ArraysMDE.toString((int[]) val));
+        else if (val instanceof String)
+          System.out.print((String)val);
+        else
+          System.out.print(val);
+      }
+      System.out.println();
+    }
   }
+
+  // call_hashmap is for functions with a nonce to indicate which returns
+  // are associated with which entries.
+  // call_stack is for functions without nonces.
 
   // Reading a data trace file first initializes this.  I could save some
   // Object overhead by using two parallel stacks instead of Invocation
   // objects; but that's not worth it.
   static Stack call_stack;		// stack of Invocation objects
 
-
+  static HashMap call_hashmap; 	// map from Integer to Invocation
 
 
   // Only processes the ppts in the given Vector.
@@ -495,6 +523,7 @@ public final class FileIO {
 
     // init_ftn_call_ct();          // initialize function call counts to 0
     call_stack = new Stack();
+    call_hashmap = new HashMap();
     // Maps from a function to the cumulative modification bits seen for
     // the entry since the time other elements were seen.  There is one tag
     // for each exit point associated with this entry.
@@ -537,7 +566,7 @@ public final class FileIO {
         String ppt_name = line; // already interned
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-        Assert.assert(ppt != null, "Didn't find program point " + ppt_name);
+        Assert.assert(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
 
         VarInfo[] vis = ppt.var_infos;
 
@@ -551,13 +580,26 @@ public final class FileIO {
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
 
+        Integer nonce = null;
+        {
+          reader.mark(22);
+          char[] nonce_name_maybe = new char[22];
+          reader.read(nonce_name_maybe, 0, 22);
+          reader.reset();
+          if (new String(nonce_name_maybe).equals("this_invocation_nonce\n")) {
+            String nonce_name = reader.readLine();
+            Assert.assert(nonce_name.equals("this_invocation_nonce"));
+            nonce = new Integer(reader.readLine());
+          }
+        }
+
         // Fills up vals and mods arrays by side effect.
         read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods);
 
         // Now add some additional variable values that don't appear directly
         // in the data trace file but aren't traditional derived variables.
 
-        add_orig_variables(ppt, cumulative_modbits, vals, mods);
+        add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce);
 
         // // Add invocation counts
         // if not no_invocation_counts {
@@ -602,27 +644,25 @@ public final class FileIO {
     //   throw e;
     // }
 
-    if (!call_stack.empty()) {
+    if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println("\nDetected abnormal termination of "
-			 + call_stack.size() + " functions.");
-      System.out.println("Remaining call stack:");
-      int size = call_stack.size();
-      for (int i=0; i<size; i++) {
-	Invocation invok = (Invocation)call_stack.elementAt(i);
-	System.out.println("  " + invok.fn_name);
-        System.out.print("    ");
-        for (int j=0; j<invok.vals.length; j++) {
-          if (j != 0)
-            System.out.print(", ");
-          Object val = invok.vals[j];
-          if (val instanceof int[])
-            System.out.print(ArraysMDE.toString((int[]) val));
-          else if (val instanceof String)
-            System.out.print((String)val);
-          else
-            System.out.print(val);
+			 + (call_stack.size() + call_hashmap.size())
+                         + " functions.");
+      if (!call_hashmap.isEmpty()) {
+        System.out.println("Unmatched calls with unique ids:");
+        for (Iterator itor = call_hashmap.values().iterator() ; itor.hasNext() ; ) {
+          Invocation invok = (Invocation) itor.next();
+          invok.format(System.out);
         }
-        System.out.println();
+      }
+
+      if (!call_stack.empty()) {
+        System.out.println("Remaining call stack:");
+        int size = call_stack.size();
+        for (int i=0; i<size; i++) {
+          Invocation invok = (Invocation)call_stack.elementAt(i);
+          invok.format(System.out);
+        }
       }
       System.out.println("End of abnormal termination report");
     }
@@ -686,13 +726,18 @@ public final class FileIO {
   }
 
 
-  static void add_orig_variables(PptTopLevel ppt, HashMap cumulative_modbits, Object[] vals, int[] mods) throws IOException {
+  static void add_orig_variables(PptTopLevel ppt, HashMap cumulative_modbits, Object[] vals, int[] mods, Integer nonce) throws IOException {
 
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.fn_name();
     String ppt_name = ppt.name;
     if (ppt_name.endsWith(enter_tag)) {
-      call_stack.push(new Invocation(fn_name, vals, mods));
+      Invocation invok = new Invocation(fn_name, vals, mods);
+      if (nonce == null) {
+        call_stack.push(invok);
+      } else {
+        call_hashmap.put(nonce, invok);
+      }
       HashMap subhash = (HashMap) cumulative_modbits.get(ppt);
       // System.out.println("Entry " + ppt_name + " has " + subhash.size() + " exits");
       for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
@@ -703,18 +748,28 @@ public final class FileIO {
     } else {
       PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt;
       if (entry_ppt != null) {
-        if (call_stack.empty()) {
-          throw new Error("Function exit without corresponding entry: "
-                          + ppt.name);
-        }
-        Invocation invoc = (Invocation) call_stack.pop();
-        while (invoc.fn_name != fn_name) {
-          // Should also mark as a function that made an exceptional exit
-          // at runtime.
-          System.err.println("Exceptional exit from function " + fn_name
-                             + ", expected to first exit from " + invoc.fn_name
-                             + "; at " + data_trace_filename + " line " + data_trace_reader.getLineNumber());
+        Invocation invoc;
+        // Set invoc
+        if (nonce == null) {
+          if (call_stack.empty()) {
+            throw new Error("Function exit without corresponding entry: "
+                            + ppt.name);
+          }
           invoc = (Invocation) call_stack.pop();
+          while (invoc.fn_name != fn_name) {
+            // Should also mark as a function that made an exceptional exit
+            // at runtime.
+            System.err.println("Exceptional exit from function " + fn_name
+                               + ", expected to first exit from " + invoc.fn_name
+                               + "; at " + data_trace_filename + " line " + data_trace_reader.getLineNumber());
+            invoc = (Invocation) call_stack.pop();
+          }
+        } else {
+          if (! call_hashmap.containsKey(nonce)) {
+            throw new Error("Didn't find call to " + ppt.name + " with nonce " + nonce);
+          }
+          invoc = (Invocation) call_hashmap.get(nonce);
+          call_hashmap.remove(nonce);
         }
         Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars
                       // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"

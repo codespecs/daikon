@@ -51,15 +51,19 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
                                 //   so slow.
 
 
+  static boolean legalRepType(ProglangType rep_type) {
+    return ((rep_type == ProglangType.INT)
+            || (rep_type == ProglangType.DOUBLE)
+            || (rep_type == ProglangType.STRING)
+            || (rep_type == ProglangType.INT_ARRAY)
+            || (rep_type == ProglangType.DOUBLE_ARRAY)
+            || (rep_type == ProglangType.STRING_ARRAY));
+  }
+
   public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability, Object static_constant_value) {
     // Watch out:  some Lisp and C .decls files have other (unsupported) types.
     Assert.assert(rep_type != null);
-    Assert.assert((rep_type == ProglangType.INT)
-                  || (rep_type == ProglangType.DOUBLE)
-                  || (rep_type == ProglangType.STRING)
-                  || (rep_type == ProglangType.INT_ARRAY)
-                  || (rep_type == ProglangType.DOUBLE_ARRAY)
-                  || (rep_type == ProglangType.STRING_ARRAY),
+    Assert.assert(legalRepType(rep_type),
                   "Unsupported representation type " + rep_type.format() + " for variable " + name);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
