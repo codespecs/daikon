@@ -14,8 +14,10 @@ p = x[]
 (\forall int i; (0 <= i && i <= x.length-1) ==> 
 	x[i]
 )
-; simplify_name p
-(select elems x)
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
+	(select (select elems x) i)
+))
 ;# x.class
 ; parse p x.class
 p = x.class
@@ -30,8 +32,10 @@ p = x[].class
 (\forall int i; (0 <= i && i <= x.length-1) ==> 
 	\typeof(x[i])
 )
-; simplify_name p
-(typeof (select elems x))
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
+	(typeof (select (select elems x) i))
+))
 ;# this.field
 ; parse p this.field
 p = this.field
@@ -46,8 +50,10 @@ p = this.field[]
 (\forall int i; (0 <= i && i <= this.field.length-1) ==> 
 	this.field[i]
 )
-; simplify_name p
-(select elems (select field this))
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength (select field this)) 1))) 
+	(select (select elems (select field this)) i)
+))
 ;# this.field.class
 ; parse p this.field.class
 p = this.field.class
@@ -62,5 +68,29 @@ p = this.field[].class
 (\forall int i; (0 <= i && i <= this.field.length-1) ==> 
 	\typeof(this.field[i])
 )
-; simplify_name p
-(typeof (select elems (select field this)))
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength (select field this)) 1))) 
+	(typeof (select (select elems (select field this)) i))
+))
+;# x[].field
+; parse p x[].field
+p = x[].field
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= x.length-1) ==> 
+	x[i].field
+)
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
+	(select field (select (select elems x) i))
+))
+;# x[].field.foo
+; parse p x[].field.foo
+p = x[].field.foo
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= x.length-1) ==> 
+	x[i].field.foo
+)
+; quantify_simplify_name p
+(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
+	(select foo (select field (select (select elems x) i)))
+))

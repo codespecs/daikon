@@ -126,6 +126,22 @@ public class VarInfoNameDriver {
   }
   static { handlers.put("quantify_esc_name", new QuantifyEscName()); }
 
+  // String[] QuantHelper.format_simplify(VarInfoName[] roots)
+  private static class QuantifySimplifyName implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      VarInfoName[] roots = new VarInfoName[args.length];
+      for (int i=0; i < args.length; i++) {
+	roots[i] = (VarInfoName) vars.get(args[i]);
+      }
+      String[] result = VarInfoName.QuantHelper.format_simplify(roots);
+      for (int i=0; i < result.length; i++) {
+	if (i != 0 && i != result.length-1) { out.print('\t'); }
+	out.println(result[i]);
+      }
+    }
+  }
+  static { handlers.put("quantify_simplify_name", new QuantifySimplifyName()); }
+
   // VarInfoName intern();
   // TODO
 

@@ -9,7 +9,7 @@ simplify_name p
 ;# x[]
 parse p x[]
 quantify_esc_name p
-simplify_name p
+quantify_simplify_name p
 
 ;# x.class
 parse p x.class
@@ -19,7 +19,7 @@ simplify_name p
 ;# x[].class
 parse p x[].class
 quantify_esc_name p
-simplify_name p
+quantify_simplify_name p
 
 ;# this.field
 parse p this.field
@@ -29,7 +29,7 @@ simplify_name p
 ;# this.field[]
 parse p this.field[]
 quantify_esc_name p
-simplify_name p
+quantify_simplify_name p
 
 ;# this.field.class
 parse p this.field.class
@@ -39,4 +39,15 @@ simplify_name p
 ;# this.field[].class
 parse p this.field[].class
 quantify_esc_name p
-simplify_name p
+quantify_simplify_name p
+
+;# x[].field
+parse p x[].field
+quantify_esc_name p
+quantify_simplify_name p
+
+;# x[].field.foo
+parse p x[].field.foo
+quantify_esc_name p
+quantify_simplify_name p
+
