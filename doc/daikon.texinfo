@@ -4593,6 +4593,31 @@ You may safely ignore this message if Ajax does not produce any
 further warnings or errors.  The message results from Ajax's inability
 to handle JDK 1.2 libraries.
 
+@cindex classpath cycles
+@cindex Too many levels of symbolic links, Ajax exception
+
+Ajax may throw a RuntimeException with a message stating
+that there are too many levels of symbolic links.  This can be caused
+by cycles in the classpath (for example, a link from a directory to
+itself).  To locate the problem link, rerun the the the failing command
+as before, except with "strace " in front of it, as shown here:
+@example
+  wc ~/.emacs         
+@end example
+would become
+@example
+  strace wc ~/.emacs
+@end example
+Search the resulting output for the exception stack trace, containing
+the message, "Too many levels of symbolic links".  On the line just
+before the stack trace begins should appear the name of the link being
+processed.  For example,
+@example
+lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
+@end example
+Removing the link identified, in this case a/sources/sources, should solve
+the problem.
+
 
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems with dfec
