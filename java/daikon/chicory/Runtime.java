@@ -316,7 +316,7 @@ public class Runtime
             if (dtraceLimitTerminate)
             {
                 System.out.println("Printed " + printedRecords + " records to dtrace file.  Exiting.");
-                // throw new TerminationMessage("Printed " + printedRecords + " records to dtrace file.  Exiting.");
+                throw new TerminationMessage("Printed " + printedRecords + " records to dtrace file.  Exiting.");
                 // System.exit(1);
             }
             else
