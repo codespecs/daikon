@@ -31,6 +31,11 @@ public class FunctionUnary extends TwoScalar {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    return core.format_ioa(var1().name.ioa_name(classname), var2().name.ioa_name(classname));
+  }
+
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }

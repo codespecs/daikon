@@ -35,6 +35,11 @@ public class LinearBinary extends TwoScalar {
   public String format_esc() {
     return core.format(var1().name.esc_name(), var2().name.esc_name());
   }
+  
+  /* IOA */
+  public String format_ioa(String classname) {
+    return core.format_ioa(var1().name.ioa_name(classname), var2().name.ioa_name(classname));
+  }
 
   public String format_reversed() {
     return core.format_reversed(var1().name.name(), var2().name.name());

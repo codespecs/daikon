@@ -190,6 +190,14 @@ public final class LinearBinaryCore implements java.io.Serializable {
     return format(x, y, a, b);
   }
 
+  /* IOA */
+  public String format_ioa(String x, String y) {
+    if ((a==0) && (b==0)) {
+      return y + " = (? * " + x + ") + ? ***";
+    }
+    return y + " = " + formatTerm(a, x, true) + formatTerm(b, null, false);
+  }
+
   public String format_simplify(VarInfoName x, VarInfoName y) {
     return format_simplify(x, y, a, b);
   }

@@ -94,6 +94,13 @@ public final class FunctionUnaryCore implements java.io.Serializable {
     return resultname + " == " + function + "(" + argname + ")";
   }
 
+  /* IOA */
+  public String format_ioa(String vname1, String vname2) {
+    String argname = (inverse ? vname2 : vname1 );
+    String resultname = (inverse ? vname1 : vname2);
+    return resultname + " = " + function + "(" + argname + ") ***";
+  }
+
   public String repr() {
     return "FunctionUnaryCore" + wrapper.varNames() + ": "
       + "function=" + function

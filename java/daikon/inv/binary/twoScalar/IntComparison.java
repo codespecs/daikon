@@ -139,6 +139,13 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return var1().name.esc_name() + " " + comparator + " " + var2().name.esc_name();
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String comparator = core.format_comparator();
+    comparator = comparator.equals("==") ? "=" : comparator;
+    return var1().name.ioa_name(classname)+" "+comparator+" "+var2().name.ioa_name(classname);
+  }
+
   public String format_simplify() {
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) { comparator = "EQ"; } // "interned"
