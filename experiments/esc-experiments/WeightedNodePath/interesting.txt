@@ -1,0 +1,18 @@
+
+This file lists interesting things which this example has shown:
+
+=====================================================================
+
+The Daikon engine fails an assertion
+
+Exception in thread "main" utilMDE.Assert$AssertionException
+	at utilMDE.Assert.assert(Assert.java:19)
+	at utilMDE.Assert.assert(Assert.java:23)
+	at daikon.inv.binary.sequenceScalar.SeqIntComparison.instantiate(SeqIntComparison.java:69)
+	at daikon.inv.binary.sequenceScalar.SequenceScalarFactory.instantiate(SequenceScalarFactory.java:53)
+	at daikon.PptSlice2.instantiate_invariants(PptSlice2.java:68)
+	at daikon.PptTopLevel.instantiate_views(PptTopLevel.java:1077)
+	at daikon.PptTopLevel.initial_processing(PptTopLevel.java:669)
+	at daikon.Daikon.main(Daikon.java:251)
+
+=====================================================================
