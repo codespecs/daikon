@@ -53,6 +53,9 @@ public class SubSequence extends TwoSequence {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(long[] a1, long[] a2, int count) {
     if (var1_in_var2 && (ArraysMDE.indexOf(a2, a1) == -1)) {

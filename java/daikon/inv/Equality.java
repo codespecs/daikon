@@ -46,6 +46,10 @@ public final class Equality extends Invariant {
     throw new Error( "Equality.format_esc(): this method should not be called" );
   }
 
+  public String format_simplify() {
+    throw new Error( "Equality.format_simplify(): this method should not be called" );
+  }
+
   //  This method isn't going to be called, but it's declared abstract in Invariant.
   public boolean isSameFormula( Invariant other ) {
     throw new Error( "Equality.isSameFormula(): this method should not be called" );

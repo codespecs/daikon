@@ -30,6 +30,9 @@ public class FunctionUnary extends TwoScalar {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(long x_int, long y_int, int count) {
     core.add_modified(x_int, y_int, count);

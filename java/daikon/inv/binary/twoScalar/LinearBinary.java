@@ -26,19 +26,23 @@ public class LinearBinary extends TwoScalar {
   }
 
   public String format() {
-    return core.format(var1().name, var2().name);
+    return core.format(var1().name.name(), var2().name.name());
   }
 
   public String format_esc() {
-    return core.format(var1().esc_name, var2().esc_name);
+    return core.format(var1().name.esc_name(), var2().name.esc_name());
   }
 
   public String format_reversed() {
-    return core.format_reversed(var1().name, var2().name);
+    return core.format_reversed(var1().name.name(), var2().name.name());
   }
 
   public String format_esc_reversed() {
-    return core.format_reversed(var1().esc_name, var2().esc_name);
+    return core.format_reversed(var1().name.esc_name(), var2().name.esc_name());
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long x, long y, int count) {

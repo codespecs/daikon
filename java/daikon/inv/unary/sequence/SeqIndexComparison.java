@@ -60,20 +60,27 @@ public final class SeqIndexComparison extends SingleSequence {
   }
 
   public String format() {
-    // Don't do this; format() shouldn't check justification (in general...).
-    // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String comparator = core.format_comparator();
-    String array_base = var().name;
-    if (array_base.endsWith("[]"))
-      array_base = array_base.substring(0, array_base.length() - 2);
-    return array_base + "[i] " + comparator + " i";
+    // this is wrong because "a[i:k..] < i" doesn't need the subscript
+    // return var().name.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";
+    VarInfoName name = var().name;
+    if ((new VarInfoName.ElementsFinder(name)).elems() != null) {
+      return name.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";
+    } else {
+      return name.name() + " " + comparator + " (index)";
+    }
   }
 
   public String format_esc() {
     String comparator = core.format_comparator();
-    String[] esc_forall = var().esc_forall();
-    return "(" + esc_forall[0]
-      + "(" + esc_forall[1] + " " + comparator + " i))";
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var().name });
+    return "(" + form[0] + "(" + form[1] + " " + comparator + " i))";
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long [] a, int count) {

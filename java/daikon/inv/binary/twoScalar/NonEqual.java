@@ -37,13 +37,16 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String format() {
-    return var1().name + " != " + var2().name;
+    return var1().name.name() + " != " + var2().name.name();
   }
 
   public String format_esc() {
-    return var1().esc_name + " != " + var2().esc_name;
+    return var1().name.esc_name() + " != " + var2().name.esc_name();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(long v1, long v2, int count) {
     if (ppt.debugged) {

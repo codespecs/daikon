@@ -103,7 +103,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   public String format() {
-    String varname = var().name + " elements" ;
+    String varname = var().name.name() + " elements" ;
     if (num_elts == 1) {
 
       if (is_boolean) {
@@ -126,7 +126,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
   public String format_esc() {
 
-    String[] esc_forall = var().esc_forall();
+    String[] esc_forall = null; // var().esc_forall(); XXX
     String varname = esc_forall[1];
 
     String result = "";
@@ -152,6 +152,10 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     result = "(" + esc_forall[0] + "(" + result + "))";
 
     return result;
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long [] a, int count) {

@@ -63,6 +63,10 @@ public class Implication extends Invariant {
     return "(" + predicate.format_esc() + ")" + arrow + "(" + consequent.format_esc() + ")";
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
+
   /// Completely confused ESC implementation; use better, briefer one.
   // private String make_impl(String pred, String cons) {
   //   return "(" + pred + ")  ==>  (" + cons + ")";

@@ -39,6 +39,9 @@ public class NoDuplicates extends SingleSequence {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {

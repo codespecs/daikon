@@ -122,6 +122,9 @@ public final class StringComparison extends TwoString implements Comparison {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(String v1, String v2, int count) {
     if (ppt.debugged) {

@@ -41,6 +41,9 @@ public class NonModulus extends SingleScalar {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   // Set either modulus and remainder, or no_result_yet.
   void updateResults() {

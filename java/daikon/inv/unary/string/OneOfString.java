@@ -95,7 +95,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
   }
 
   public String format() {
-    String varname = var().name ;
+    String varname = var().name.name() ;
     if (num_elts == 1) {
 
       return varname + " == \"" + UtilMDE.quote( elts[0] ) + "\"" ;
@@ -107,7 +107,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().esc_name ;
+    String varname = var().name.esc_name() ;
 
     String result = "";
 
@@ -140,6 +140,10 @@ public final class OneOfString  extends SingleString  implements OneOf {
     }
 
     return result;
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(String  v, int count) {

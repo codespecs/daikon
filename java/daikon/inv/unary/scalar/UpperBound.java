@@ -47,17 +47,17 @@ public class UpperBound  extends SingleScalar  {
   }
 
   public String format() {
-    return var().name + " <= " + core.max1 ;
+    return var().name.name() + " <= " + core.max1 ;
   }
 
   public String format_esc() {
-    String esc_name = var().esc_name;
-    if (esc_name != null) {
-      return esc_name + " <= " + core.max1 ;
-    } else {
-      return "format_esc " + this.getClass() + " could not speak about: " + format();
-    }
+    String esc_name = var().name.esc_name();
+    return esc_name + " <= " + core.max1 ;
   }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }  
 
   public void add_modified(long  value, int count) {
     // System.out.println("UpperBound"  + varNames() + ": "

@@ -48,9 +48,14 @@ public final class EltNonZero extends SingleSequence {
   }
 
   public String format_esc() {
-    String[] esc_forall = var().esc_forall();
-    return "(" + esc_forall[0]
-      + "(" + esc_forall[1] + " != " + (pointer_type ? "null" : "0") + "))";
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var().name });
+    return "(" + form[0] + "(" + form[1] + " != " + (pointer_type ? "null" : "0") + "))";
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long[] a, int count) {

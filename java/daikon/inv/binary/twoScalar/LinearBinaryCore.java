@@ -1,5 +1,6 @@
 package daikon.inv.binary.twoScalar;
 
+import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 

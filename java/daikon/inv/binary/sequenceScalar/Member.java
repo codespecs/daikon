@@ -172,8 +172,8 @@ public final class Member extends SequenceScalar  {
     //   header.next.element in header.~ll~next~.element
     //   header.next in header.next.~ll~next~
     //   return.current in return.current.~ll~next~
-    String sclname = sclvar.name;
-    String seqname = seqvar.name;
+    String sclname = sclvar.name.name(); // mistere adds: this code
+    String seqname = seqvar.name.name(); // looks pretty sketchy
     int llpos = seqname.indexOf("~ll~");
     if (llpos != -1) {
       int tildepos = seqname.indexOf("~", llpos+5);
@@ -211,6 +211,10 @@ public final class Member extends SequenceScalar  {
 
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long [] a, long  i, int count) {

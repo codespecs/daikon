@@ -103,7 +103,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
   public String format() {
-    String varname = var().name ;
+    String varname = var().name.name() ;
     if (num_elts == 1) {
 
       if (is_boolean) {
@@ -126,7 +126,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().esc_name ;
+    String varname = var().name.esc_name() ;
 
     String result = "";
 
@@ -149,6 +149,10 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     }
 
     return result;
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long  v, int count) {

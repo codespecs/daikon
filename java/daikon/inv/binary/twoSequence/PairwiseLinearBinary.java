@@ -24,11 +24,15 @@ public class PairwiseLinearBinary extends TwoSequence {
   }
 
   public String format() {
-    return core.format(var1().name, var2().name);
+    return core.format(var1().name.name(), var2().name.name());
   }
 
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long[] x_arr, long[] y_arr, int count) {

@@ -47,12 +47,18 @@ public class NonZero extends SingleScalar {
       + !no_invariant + ",min=" + min + ",max=" + max;
   }
 
+  private String zero() { return pointer_type ? "null" : "0"; }
+
   public String format() {
-    return var().name + " != " + (pointer_type ? "null" : "0");
+    return var().name.name() + " != " + zero();
   }
 
   public String format_esc() {
-    return var().esc_name + " != " + (pointer_type ? "null" : "0");
+    return var().name.esc_name() + " != " + zero();
+  }
+
+  public String format_simplify() {
+    return "(NEQ " + var().name + "  " + zero() + ")";
   }
 
   public void add_modified(long v, int count) {

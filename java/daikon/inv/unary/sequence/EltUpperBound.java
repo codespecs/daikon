@@ -47,14 +47,19 @@ public class EltUpperBound  extends SingleSequence  {
   }
 
   public String format() {
-    return var().name + " elements <= " + core.max1 ;
+    return var().name.name() + " elements <= " + core.max1 ;
   }
 
   public String format_esc() {
-    String[] esc_forall = var().esc_forall();
-    return "(" + esc_forall[0]
-      + "(" + esc_forall[1] + " <= " + core.max1  + "))";
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var().name });
+    return "(" + form[0] + "(" + form[1] + " <= " + core.max1  + "))";
   }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }  
 
   public void add_modified(long[]  value, int count) {
     // System.out.println("EltUpperBound"  + varNames() + ": "
