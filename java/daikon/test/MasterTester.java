@@ -1,5 +1,7 @@
 package daikon.test;
 
+import daikon.Logger;
+
 import junit.framework.*;
 import utilMDE.*;
 
@@ -14,6 +16,8 @@ public class MasterTester extends TestCase {
   }
 
   public static Test suite() {
+    Logger.setupLogs (Logger.INFO);
+
     TestSuite result = new TestSuite();
     // This is possibly not right; the JIT needs to be disabled in order
     // for these tests to succeed.

@@ -11,6 +11,7 @@ public class VarInfoNameDriver {
 
   // for convenience
   public static void main(String[] args) {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     run(System.in, System.out);
   }
 

@@ -12,6 +12,7 @@ public class LinearTernaryCoreTest
 
   // for convenience
   public static void main(String[] args) {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(LinearTernaryCoreTest.class));
   }
 

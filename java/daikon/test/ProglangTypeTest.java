@@ -8,6 +8,7 @@ import utilMDE.ArraysMDE;
 public class ProglangTypeTest extends TestCase {
 
   public static void main(String[] args) {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(ProglangTypeTest.class));
   }
 
