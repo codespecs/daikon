@@ -5,6 +5,7 @@ export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
 export DAIKONDIR=${DAIKONPARENT}/invariants
 export INV=${DAIKONPARENT}/invariants
 export inv=${INV}
+export PERLLIB=${INV}/scripts:${PERLLIB}
 export DAIKONCLASS_SOURCES=1
 
 source ${INV}/scripts/daikon.bashrc

@@ -5,6 +5,7 @@ if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
 setenv DAIKONDIR ${DAIKONPARENT}/invariants
 setenv INV ${DAIKONPARENT}/invariants
 setenv inv ${INV}
+setenv PERLLIB ${INV}/scripts:${PERLLIB}
 setenv DAIKONCLASS_SOURCES 1
 
 source ${INV}/scripts/daikon.cshrc
