@@ -105,7 +105,9 @@ public final class CLASSNAME
   }
 
   public double computeConfidence() {
-    return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
+    // num_values is more appropriate, perhaps
+    // return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
+    return Invariant.conf_is_ge(wrapper.ppt.num_samples(), 5);
   }
 
   public double computeProbability() {

@@ -55,8 +55,8 @@ public final class CLASSNAME
   public int var_order;
   public int methodNumber;
   // Not currently being maintained
-  int values_seen = 0;
-  int equal_values = 0;
+  int samples_seen = 0;
+  int equal_samples = 0;
 
   public Invariant wrapper;
 
@@ -131,9 +131,9 @@ public final class CLASSNAME
   }
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
-    values_seen++;
+    samples_seen++;
     if (x == y && y == z) {
-      equal_values++;
+      equal_samples++;
     }
 
     PRIMITIVE result;
@@ -198,16 +198,17 @@ public final class CLASSNAME
   }
 
   public double computeConfidence() {
-    Assert.assertTrue(equal_values <= values_seen);
-    if (equal_values == values_seen) {
+    Assert.assertTrue(equal_samples <= samples_seen);
+    if (equal_samples == samples_seen) {
       return Invariant.CONFIDENCE_NEVER;
     }
-    return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
+    // values_seen would be more appropriate than samples_seen
+    return Invariant.conf_is_ge(samples_seen, 5);
   }
 
   public double computeProbability() {
-    Assert.assertTrue(equal_values <= values_seen);
-    if (equal_values == values_seen) {
+    Assert.assertTrue(equal_samples <= samples_seen);
+    if (equal_samples == samples_seen) {
       return Invariant.PROBABILITY_NEVER;
     }
     return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);

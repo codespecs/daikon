@@ -350,27 +350,31 @@ public class PAIRWISEINTEQUAL
   }
 
   protected double computeConfidence() {
-    if (((PptSlice2) ppt).num_elt_values()==0) {
+    // num_elt_values() would be more appropriate
+    // int num_values = ((PptSlice2) ppt).num_elt_values();
+    int num_values = ppt.num_samples();
+    if (num_values == 0) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
 #if (defined(EQUAL) || defined(EQUALFLOAT))
       // It's an equality invariant
       return Invariant.CONFIDENCE_JUSTIFIED;
 #else
-      return 1 - Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
+      return 1 - Math.pow(.5, num_values);
 #endif
     }
   }
 
   protected double computeProbability() {
-    if (((PptSlice2) ppt).num_elt_values()==0) {
+    int num_values = ((PptSlice2) ppt).num_elt_values();
+    if (num_values == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
 #if (defined(EQUAL) || defined(EQUALFLOAT))
       // It's an equality invariant
       return Invariant.PROBABILITY_JUSTIFIED;
 #else
-      return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
+      return Math.pow(.5, num_values);
 #endif
     }
   }

@@ -266,7 +266,9 @@ public class CLASSNAME
   }
 
   protected double computeConfidence() {
-    return 1 - Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
+    // num_no_dup_values() would be more appropriate
+    // return 1 - Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
+    return 1 - Math.pow(.9, ((PptSlice1) ppt).num_samples());
   }
 
   protected double computeProbability() {

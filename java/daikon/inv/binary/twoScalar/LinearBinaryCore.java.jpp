@@ -58,6 +58,7 @@ public final class CLASSNAME
 
   public Invariant wrapper;
 
+  // The number of distinct values (not samples) observed.
   public int values_seen = 0;
 
   // We delay computation of a and b until we have seen several pairs so
@@ -314,15 +315,15 @@ public final class CLASSNAME
   }
 
   public boolean enoughSamples() {
-    return (wrapper.ppt.num_values() >= MINPAIRS);
+    return (values_seen >= MINPAIRS);
   }
 
   public double computeConfidence() {
-    return Invariant.conf_is_ge(wrapper.ppt.num_values(), MINPAIRS);
+    return Invariant.conf_is_ge(values_seen, MINPAIRS);
   }
 
   public double computeProbability() {
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), MINPAIRS);
+    return Invariant.prob_is_ge(values_seen, MINPAIRS);
   }
 
   public String repr() {

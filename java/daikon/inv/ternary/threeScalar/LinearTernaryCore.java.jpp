@@ -84,6 +84,7 @@ public final class CLASSNAME
 
   public Invariant wrapper;
 
+  // The number of distinct values (not samples) seen.
   public int values_seen = 0;
 
   final static int MINTRIPLES = 5;
@@ -550,11 +551,11 @@ public final class CLASSNAME
   }
 
   public double computeConfidence() {
-    return Invariant.conf_is_ge(wrapper.ppt.num_values(), MINTRIPLES);
+    return Invariant.conf_is_ge(values_seen, MINTRIPLES);
   }
 
   public double computeProbability() {
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), MINTRIPLES);
+    return Invariant.prob_is_ge(values_seen, MINTRIPLES);
   }
 
   public String repr() {

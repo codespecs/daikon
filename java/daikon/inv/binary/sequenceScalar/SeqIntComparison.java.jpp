@@ -299,7 +299,12 @@ public final class SEQINTEQUAL
   }
 
   protected double computeConfidence() {
-    if (ppt.num_values() == 0) {
+    // num_values is more appropriate, because there may be samples but no
+    // values if the arrays are of length 0.
+    // if (ppt.num_values() == 0) {
+    //   return CONFIDENCE_UNJUSTIFIED;
+    // }
+    if (ppt.num_samples() == 0) {
       return CONFIDENCE_UNJUSTIFIED;
     }
     #if (defined(EQUAL) || defined(EQUALFLOAT))
@@ -309,7 +314,7 @@ public final class SEQINTEQUAL
     // return Math.pow(.5, ppt.num_samples());
     return Invariant.CONFIDENCE_JUSTIFIED;
     #else
-    return 1 - Math.pow(.5, ppt.num_values());
+    return 1 - Math.pow(.5, ppt.num_samples());
     #endif
   }
 

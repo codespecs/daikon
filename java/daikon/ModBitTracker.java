@@ -66,7 +66,7 @@ public class ModBitTracker
     this.num_vars = num_vars;
     modbits_arrays = new BitSet[num_vars];
     if (num_vars > 0) {
-    modbits_arrays[0] = new BitSet();
+      modbits_arrays[0] = new BitSet();
     }
     num_samples = 0;
     index = new int[num_vars];

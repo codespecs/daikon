@@ -343,6 +343,7 @@ public final class PPTSLICE1
   }
 
   // These accessors are for abstract methods declared in Ppt
+  /** Returns the number of samples observed at this slice. **/
   public int num_samples() {
 #if defined(ARITY1)
     int result = tm_total[0] + tm_total[1];
@@ -356,8 +357,10 @@ public final class PPTSLICE1
     return result;
   }
 
-  // Returns the number of distinct values stored in the ValueTracker
-  // of this.
+  /**
+   * Returns (an approximation to) the number of distinct values observed
+   * at this slice.  This is not the number of samples observed.
+   **/
   public int num_values() {
     if (Invariant.dkconfig_use_confidence) {
       throw new Error("to be implemented");

@@ -35,7 +35,7 @@ public class Modulus
   // first actual value seen.
   long value1 = 2222;
   // used for initializing value1
-  boolean no_values_seen = true;
+  boolean no_samples_seen = true;
 
   private Modulus(PptSlice ppt) {
     super(ppt);
@@ -91,9 +91,9 @@ public class Modulus
       // Assert.assertTrue(falsified);
       // // We already know this probability fails
       // return;
-    } else if (no_values_seen) {
+    } else if (no_samples_seen) {
       value1 = value;
-      no_values_seen = false;
+      no_samples_seen = false;
       return InvariantStatus.NO_CHANGE;
     } else if (value == value1) {
       // no new information, so nothing to do

@@ -443,7 +443,8 @@ public class SEQSEQINTEQUAL
       return Invariant.CONFIDENCE_JUSTIFIED;
     }
 #else
-    return 1 - Math.pow(.5, ppt.num_values());
+    // num_values() would be more appropriate
+    return 1 - Math.pow(.5, ppt.num_samples());
 #endif
   }
 
