@@ -4848,13 +4848,18 @@ public class PptTopLevel
     return var_infos[global_transform_orig[global.varinfo_index]];
   }
 
+  /**
+   * Create an equality invariant over the specified variables.  Samples
+   * should be the number of samples for the slice over v1 and v2.  The
+   * slice should not already exist.
+   */
   public PptSlice create_equality_inv (VarInfo v1, VarInfo v2, int samples) {
 
     ProglangType rep = v1.rep_type;
     boolean rep_is_scalar = rep.isScalar();
     boolean rep_is_float = rep.isFloat();
 
-    // Assert.assertTrue (findSlice_unordered (v1, v2) == null);
+    Assert.assertTrue (findSlice_unordered (v1, v2) == null);
     PptSlice newSlice = get_or_instantiate_slice (v1, v2);
 
     // Copy over the number of samples from this to the new slice,
