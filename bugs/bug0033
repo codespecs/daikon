@@ -1,0 +1,117 @@
+Version:      $Id$
+Owner:        tohn <tohn>, Jeremy <mistere>
+Tool:         Daikon V3
+Summary:      Equality check not working in IOA example.  Problem with PptSlice2.isControlled?
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+
+V3 seems to be skipping the printing of equality invariants, at least
+in IOA output.  I don't know if this is true of Java, since I haven't
+created a similar example there.  
+
+For the Peterson example, whose dtrace and decls files can be found at
+~tohn/research/IOA_Toolkit/Examples/Peterson, the V3 and V2 outputs
+differ in that V3 lacks any equality checks.  I've annotated what's
+missing and what's not relevant to this report.
+
+Please note that pc[turn] is a CLASS level variable, while pc[p] is
+specific to the checkFlag program point.
+
+V3 output:
+
+===========================================================================
+Peterson.checkFlag(p):::ENTER
+pc[turn] has only one value    <= Irrelevant, should be suppressed by equality to constant trying2
+pc[p] has only one value       <= ditto
+flag[turn] == true
+flag[p] == true
+critCount one of { 0, 1 }      <= Irrelevant
+p != null
+
+
+
+V2 output:
+
+===========================================================================
+Peterson.checkFlag(p):::ENTER
+pc[turn] == pc[p] == trying2   <= This is missing in D3
+flag[turn] == flag[p]
+flag[turn] == true
+p != null
+
+
+Now, the "trying2" part is missing because D3 doesn't do anything yet
+with static constants (I'll bring this up in the next email), but D3
+should be able to find that pc[turn] = pc[p].
+
+The problem seems to be that TwoScalarFactory is never called on the
+PptSlice2 of checkFlag:::ENTER(pc[turn], pc[p]), because the PptSlice2
+is "controlled" by something else.  When I run D3 with the following
+log4j options (please update first; I've added some extra reporting
+to make this detection clearer):
+
+[tohn@shallot Peterson]$ djava Peterson.decls Peterson.dtrace --dbg \
+  daikon.inv.binary.twoScalar --dbg daikon.PptSlice2 --dbg \
+  daikon.PptTopLevel --dbg daikon.infer -o Peterson.inv
+
+Part of the output includes:
+
+
+@      daikon.PptSlice: Created PptSlice2 Peterson.checkFlag(p):::ENTER(pc[turn], pc[p])
+@         daikon.infer: isControlled check: 
+@         daikon.infer:  Peterson:::CLASS Peterson.checkFlag(p):::ENTER
+@         daikon.infer: Skipping Peterson.checkFlag(p):::ENTER(pc[turn], pc[p]); is controlled(2).
+
+The first line is from PptSlice2's constructor.  The next two lines
+are from PptSlice.isControlled().  The last is from PptTopLevel, whose
+code is shown below (this code also is the one that causes the first 3
+lines of output).:
+
+
+    /// 2. all binary views
+
+    // Binary slices/invariants.
+    Vector binary_views = new Vector();
+    for (int i1=0; i1<vi_index_limit; i1++) {
+      VarInfo var1 = var_infos[i1];
+      if (var1.isStaticConstant())
+        continue;
+      boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+      int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
+      for (int i2=i2_min; i2<vi_index_limit; i2++) {
+	VarInfo var2 = var_infos[i2];
+	if (var2.isStaticConstant())
+	  continue;
+        PptSlice2 slice2 = new PptSlice2(this, var1, var2);
+	if (slice2.isControlled()) {
+	  // let invariant flow from controlling slice
+	  if (Global.debugInfer.isDebugEnabled())
+	    Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled(2).");
+	  continue;
+	}
+        slice2.instantiate_invariants();
+        binary_views.add(slice2);
+      }
+    }
+    addViews(binary_views);
+    binary_views = null;
+
+
+
+isControlled check says that this particular PptSlice2 is controlled
+because the PptAndInts structure returned by DataFlow.compute_ppt_flow
+includes 2 or more parental Ppts.  The problem might be that one of
+the parental program points are inappropriate here: pc[p] isn't part
+of Peterson:::CLASS.
+
+(I know the equality printing is disabled in PrintInvariants, but
+IntEqual should get instantiated for pc[turn] and pc[p])
+
+--
+$Log$
+Revision 1.1  2002-03-28 07:07:24  tohn
+new bug0033
+
