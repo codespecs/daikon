@@ -60,7 +60,9 @@ my $J2 = "";
 # bug.  The bug is present in version 1.3.1_02; have not tested with 1.4.
 # A similar bug has been reported against solaris:
 # http://developer.java.sun.com/developer/bugParade/bugs/4305128.html
-my $RUN_JAVA = '\'java -classic -Xmx256m\'';
+
+# Commented out 2002-Aug-13 because -classic apparently causes outOfMemoryError's
+# my $RUN_JAVA = '\'java -classic -Xmx256m\'';
 
 # The success of each step in the build/test process
 my %success = ();
