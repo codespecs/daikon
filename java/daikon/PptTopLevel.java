@@ -1468,7 +1468,7 @@ public class PptTopLevel extends Ppt {
     }
 
 
-    // Install the new continditional ppts, if they are not trivial.
+    // Install the new conditional ppts, if they are not trivial.
     int parent_num_samples = num_samples();
     for (int i=0; i<num_pconds; i++) {
       // Don't bother with this conditioned view if it contains all or no samples.
