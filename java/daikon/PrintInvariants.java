@@ -1416,7 +1416,7 @@ public class PrintInvariants {
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
                            "var '" + inv.ppt.var_infos[j].name.name()
-                            + "' out of bounds");
+                            + "' out of bounds in " + inv.format());
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
 
