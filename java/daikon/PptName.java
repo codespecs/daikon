@@ -1,5 +1,6 @@
 package daikon;
 
+import java.io.Serializable;
 import utilMDE.*;
 
 /**
