@@ -33,7 +33,7 @@
 @titlepage
 @sp 10
 @c Could also use @title, @subtitle, @author here.
-@center @titlefont{The Daikon Invariant Detector}
+@center @titlefont{The Daikon Invariant Detector User Manual}
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -681,7 +681,7 @@ daikon.pl DataStructures.StackArTester
 
 This command instruments your program, generates a trace file, and
 displays the invariants in the GUI.  Currently, this script only works
-on Unix.
+on Unix.  For more details, @xref{All-in-one script}.
 
 
 @node    Understanding the invariants, Second example, Automating the process, Example use
@@ -1125,6 +1125,8 @@ for debugging.
 The @command{daikon.pl} script automates all steps of the invariant
 detection process:  instrumentation, trace file generation, invariant
 display.  Currently, this script only works on Unix.
+This script is not currently the preferred way to run Daikon, but some
+users may find it helpful.
 
 Running @command{daikon.pl} without without any arguments will display usage information:
 @example
@@ -1248,7 +1250,7 @@ differentiated by suffixing them with their line numbers; for instance,
 this example, @code{StackAr.top():::EXIT}) collects the postconditions
 that are true at every numbered exit point.
 
-To other program point tags are @code{:::OBJECT} and @code{:::CLASS}.
+Two other program point tags are @code{:::OBJECT} and @code{:::CLASS}.
 The former indicates object invariants (sometimes called representation
 invariants or class invariants) that always hold for any object of the
 given class, from the point of view of a client or user.  These
@@ -1711,11 +1713,12 @@ Produce data trace output for class invariants (default).
 @item -daikon_classes
 Do not produce data trace output for class invariants.
 
-@item +daikon_loops
-Produce data trace output for loop invariants.
-
-@item -daikon_loops
-Do not produce data trace output for loop invariants (default).
+@c @item +daikon_loops
+@c Produce data trace output for loop invariants.
+@c @emph{This option has no effect:  loop invariants are not currently supported.}
+@c 
+@c @item -daikon_loops
+@c Do not produce data trace output for loop invariants (default).
 
 @item -daikon_omit=@var{string}
 Do not produce data trace output for matching classes/functions.  This
@@ -1804,9 +1807,11 @@ is not consistent with the package structure.)
 Do not fill in the variable comparability information in the
 @file{.decls} file.  By default, the Ajax module
 "ComparablePairsDescFileReader" does this rewriting.
+Use of Ajax also requires environment variable AJAX_DIR to be set to a
+directory containing various Ajax helper files.
 
 @item -ajaxap=@var{apdir}
-This is the directory in the which the Ajax comparability module looks
+This is the directory in which the Ajax comparability module looks
 for @file{.class} files for the current application.  (It is a classpath
 entry, so the @file{.class} files might appear in a subdirectory named
 for the appropriate package.  If this option is not supplied, the
@@ -1814,7 +1819,7 @@ for the appropriate package.  If this option is not supplied, the
 code that (for example) calls libraries which do not appear under the
 current directory.
 
-@item -ajax_runnable=@var{classes}
+@item -ajax_runnable=@var{class}
 This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
 contains a @samp{public static void main(String[])} method.  This class
 need not be one of the instrumented ones.  If it is not supplied, the
