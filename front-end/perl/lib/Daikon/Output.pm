@@ -213,7 +213,7 @@ sub daikon_output_spec {
             # maybe it should be that.
 #            push @specs, ["", ".Class", "String",
 #                         "java.lang.String", sub { '"'. ref($_[0]).'"' }];
-            for my $k (keys %{$t->[1]}) {
+            for my $k (sort keys %{$t->[1]}) {
                 for my $spec (daikon_output_spec($t->[1]{$k}, $single)) {
                     my($prefix, $suffix, $type, $rep_type, $output, $flags)
                       = @$spec;
@@ -224,7 +224,7 @@ sub daikon_output_spec {
                                   $flags];
                 }
             }
-            for my $k (keys %{$t->[2]}) {
+            for my $k (sort keys %{$t->[2]}) {
                 for my $spec (daikon_output_spec($t->[2]{$k}, $single)) {
                     my($prefix, $suffix, $type, $rep_type, $output, $flags)
                       = @$spec;
