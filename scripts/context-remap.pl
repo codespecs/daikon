@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-26 17:28:53 mistere>
+# Time-stamp: <2001-11-29 17:04:21 mistere>
 
 # The input is ... TODO
 
@@ -59,14 +59,14 @@ for my $filename (@ARGV) {
     next if ($line =~ /^\s*$/);  # skip blank lines
 
     # lines e.g.
-    # 0x85a6a24 RandomMean main [RandomMean.java:6:13] -> compute [()V] RandomMean
+    # 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP
 
     my @rec;
-    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\.]+)\s+([\w\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+([\w\.]+)\s+\[(.*?)\]\s+([\w\.]+)$/)) {
+    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\.]+)\s+([\w\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([\w\.]+)"\s+\[(.*?)\]\s+([\w\.]+)$/)) {
       # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
       push @records, \@rec;
     } else {
-      print STDERR "Unknown line format: $line";
+      die("Unknown line format: $line");
     }
   }
 
