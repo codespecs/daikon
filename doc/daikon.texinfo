@@ -3777,7 +3777,7 @@ boolean procedure returns true or false.  Additionally, Daikon can read
 predicates from a file called a splitter info (@file{.spinfo}) file and find
 implications based on those predicates. The splitter info file can be produced
 automatically, such as by static analysis of the program using the CreateSpinfo
-program (or the @command{createspinfo.pl} program) or by cluster analysis of the
+and CreateSpinfoC programs or by cluster analysis of the
 traced values in the data trace file. Details of these techniques and usage
 guides can be found in @ref{Enhancing conditional invariant detection}.  Users
 can also create splitter info files by hand or manually augment
@@ -3920,7 +3920,7 @@ daikon.split.SplitterList.all_splitters = false
 @subsection Example splitter info file
 
 Below is an implementation of a simple Queue for positive integers and
-the @file{.spinfo} file that @command{createspinfo.pl} would create for
+the @file{.spinfo} file that @command{CreateSpinfo} would create for
 that class.
 
 @menu
@@ -4019,8 +4019,8 @@ automatically create splitter info files for use by Daikon.
 
 @cindex splitting conditions, static analysis
 @cindex static analysis for splitters
-@cindex createspinfo.pl
 @cindex CreateSpinfo
+@cindex CreateSpinfoC
 
 In static analysis, all explicitly stated boolean statements in the program
 source are extracted and used as splitting conditions.  The assumption is that
@@ -4041,11 +4041,16 @@ have important semantic properties.  This simple heuristic of using
 these conditional statements as predicates for conditional invariant
 detection is often quite effective.  
 
-The @command{createspinfo.pl} program (found in the @file{$DAIKONDIR/bin}
-directory) performs the same function, for C/C++ source code.  It can be used
-with the command line
+The @command{CreateSpinfoC} program performs the same function, for
+C/C++ source code.  It can only be run on postprocessed source
+files---that is, source files contain no CPP commands.  CPP commands
+are lines starting with @samp{#}, such as @samp{#include}.  To
+expand CPP commands into legal C, run either @command{cpp -P} or
+@command{gcc -P -E}.  For instance, here is how you could use it.
 @example
-createspinfo.pl foo.c
+cpp -P foo.c foo.c-expanded
+cpp -P bar.c bar.c-expanded
+java daikon.tools.jtb.cparser.CreateSpinfoC foo.c-expanded bar.c-expanded
 @end example
 @noindent
 
@@ -4056,17 +4061,18 @@ createspinfo.pl foo.c
 @cindex cluster analysis for splitters
 @cindex runcluster.pl program
 
-Cluster analysis is a statistical method that is used to find groups or clusters
-in data.  If the data at a program point is divided into clusters, it could be
-the result of conditional properties in the program. This is because a
-conditional property at a program point separates the data into those that
-satisfy it and those that do not.  Any invariant which is discovered over one
-cluster but not over another is a conditional invariant (the predicate for the
-conditional invariant being membership in the cluster in which the invariant was
-found), and is used as a splitting condition.  The cluster analysis mechanism
-finds clusters in the data trace file, infers invariants over any clusters that
-it finds, and writes these invariants into a splitter info file for conditional
-invariant detection.
+Cluster analysis is a statistical method that finds groups or clusters
+in data.  The clusters may indicate conditional properties in the
+program.  A conditional property at a program point separates the data
+into those that satisfy it and those that do not, and conditional
+invariants can be induced by clutering.  Any invariant that is
+discovered over one cluster but not over another is a conditional
+invariant---the predicate for the conditional invariant being
+membership in the cluster in which the invariant was found.  The
+cluster analysis mechanism finds clusters in the data trace file,
+infers invariants over any clusters that it finds, and writes these
+invariants into a splitter info file for conditional invariant
+detection.
 
 To find splitting conditions using cluster analysis, run the
 @command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
@@ -4080,27 +4086,27 @@ The options are:
 
 @item -a @var{ALG}
 @item --algorithm @var{ALG}
-        @var{ALG} specifies an implementation of a clustering algorithm.
-           Current options are @samp{km} (for kmeans), @samp{hierarchical}
-           and @samp{xm} (for xmeans). Default is xmeans.
+@var{ALG} specifies a clustering algorithm.
+Current options are @samp{km} (for kmeans), @samp{hierarchical},
+and @samp{xm} (for xmeans).  The default is @samp{xm}.
 
 @item -k
-           The number of clusters to use (for algorithms which require
-           this input, which is everything except xmeans). The default is 4.
+The number of clusters to use (for algorithms which require
+this input, which is everything except xmeans).  The default is 4.
 
 @item --keep    
-           Don't delete the temporary files created by the clustering
-           process.  This is a debugging flag.
+Don't delete the temporary files created by the clustering
+process.  This is a debugging flag.
 @end table
 
-Three clustering programs are currently catered for by the runcluster.pl script,
-but it can be modified to cater to other clustering algorithm implementations
-fairly easily. They are implementations of the kmeans algorithm, hierarchical
-clustering and the xmeans algorithm (kmeans algorithm with efficient discovery
-of the number of clusters). The kmeans and hierarchical clustering tools are
-provided in the daikon distribution. The xmeans code and executable are publicly
-available at  @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html,
-,http://www.cs.cmu.edu/~dpelleg/kmeans.html }
+The @command{runcluster.pl} script currently supports three clustering
+programs. They are implementations of the kmeans algorithm,
+hierarchical clustering and the xmeans algorithm (kmeans algorithm
+with efficient discovery of the number of clusters). The kmeans and
+hierarchical clustering tools are provided in the daikon
+distribution. The xmeans code and executable are publicly available at
+@url{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
+form and mail it in).
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
 @chapter Tools
