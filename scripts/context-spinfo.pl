@@ -1,14 +1,16 @@
-: # Use -*- Perl -*- without knowing its path
-  eval 'exec perl -S -w $0 "$@"'
-  if 0;
-# context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
-# Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-09 18:58:12 mistere>
+#!/usr/bin/env perl
 
-# The input is ... TODO
+# context-spinfo.pl -- Read dfej's context-sensitivity .map files and
+# produce a spinfo file from them to stdout.
+
+# Jeremy Nimmer <jwnimmer@lcs.mit.edu>
+# Time-stamp: <2002-03-11 16:21:22 mistere>
 
 use Carp;
 use File::Find;
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
 
 my $debug = 0;
 

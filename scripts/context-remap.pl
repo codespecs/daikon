@@ -1,11 +1,11 @@
 #!/usr/bin/env perl
 
-# context.pl -- Read dfej's context-sensitivity .map files and
+# context-remap.pl -- Read dfej's context-sensitivity .map files and
 # textually re-write daikon invariants in a more human-readable form,
 # translating $callsite numbers to names of classes or methods.
 
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-11 16:18:15 mistere>
+# Time-stamp: <2002-03-11 16:21:41 mistere>
 
 use Carp;
 use File::Find;
