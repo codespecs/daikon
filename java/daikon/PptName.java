@@ -22,13 +22,22 @@ public class PptName
   /**
    * @param name non-null ppt name as given in the decls file
    **/
-  public PptName(String name)
+  public PptName( String name )
   {
+    // If the name is well-formed, like "mvspc.setupGUI()V:::EXIT75",
+    // then this constructor will extract the class and method names.
+    // If not (eg for lisp code), it's okay because only the GUI uses
+    // this class/method information.
+
     fullname = name.intern();
-    int sep = name.indexOf(FileIO.ppt_tag_separator);
-    Assert.assert(sep >= 0);
-    String pre_sep = name.substring(0, sep);
-    String post_sep = name.substring(sep + FileIO.ppt_tag_separator.length());
+    int seperatorPosition = name.indexOf( FileIO.ppt_tag_separator );
+    //    Assert.assert( seperatorPosition >= 0 );
+    if (seperatorPosition == -1) {
+      cls = method = point = null;
+      return;			// probably a lisp program, which was instrumented differently
+    }
+    String pre_sep = name.substring(0, seperatorPosition);
+    String post_sep = name.substring(seperatorPosition + FileIO.ppt_tag_separator.length());
 
     int dot = pre_sep.lastIndexOf('.');
     int lparen = pre_sep.indexOf('(');
@@ -36,7 +45,11 @@ public class PptName
       cls = pre_sep.intern();
       method = null;
     } else {
-      Assert.assert(dot < lparen);
+      //      Assert.assert(dot < lparen);
+      if (dot == -1  ||  dot >= lparen) {
+	cls = method = point = null;
+	return;			// probably a lisp program, which was instrumented differently
+      }
       cls = pre_sep.substring(0, dot).intern();
       method = pre_sep.substring(dot + 1).intern();
     }
