@@ -22,6 +22,13 @@ public final class Runtime {
   public class Unique {}
   public static Unique unique;
 
+  ////////////////////////////////////////////////////////////////////////
+  /// The context-sensitive instrumentation pass creates bodies for
+  /// abstract methods that throw this very object; that way we don't 
+  /// have to inspect their return type since they never return. They
+  /// Thanks to this global instance, they don't need to call "new" either.
+  public class AbstractException extends Error {}
+  public static AbstractException abstractException;
 
   ///////////////////////////////////////////////////////////////////////////
   /// Timestamps
