@@ -227,19 +227,20 @@ Context GUI
 
 Front ends
 
-* Java front end dfej::         
-* Binary C front end Kvasir::   
+* Java front end Chicory::      
+* Source-based Java front end dfej::  
+* C front end Kvasir::          
 * Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 
-Java front end dfej
+Source-based Java front end dfej
 
 * dfej options::                
 * Scope of instrumentation::    
 * Refined runtime types::       
 
-Binary C front end Kvasir
+C front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
@@ -675,7 +676,7 @@ Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
 you have set up the Daikon environment according to the instructions
 above, it should already be in your @code{PATH}.  For instructions on using
-Kvasir, see @ref{Binary C front end Kvasir}.
+Kvasir, see @ref{C front end Kvasir}.
 
 @node    Installing dfec, Installing the Context GUI, Installing Kvasir, Installing Daikon
 @section Installing dfec, the source-based Daikon front end for C
@@ -1728,7 +1729,7 @@ dfej creates declaration files named @file{@var{filename1}.decls}, etc.@
 in a @file{daikon-output/} directory.
 @end itemize
 
-For more information about dfej, see @ref{Java front end dfej}.
+For more information about dfej, see @ref{Source-based Java front end dfej}.
 
 
 @node    Instrumenting C programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
@@ -1754,7 +1755,7 @@ been compiled with DWARF-2 format debugging information, such as by
 giving the @code{-gdwarf-2} flag to GCC when compiling.  Then, run your
 program as usual, but prepend @code{kvasir-dtrace} to the command line.
 For more information about Kvasir, including more detailed
-documentation on its command-line options, see @ref{Binary C
+documentation on its command-line options, see @ref{C
 front end Kvasir}.
 
 @node    Instrumenting C programs with dfec,  , Instrumenting C programs with Kvasir, Instrumenting C programs
@@ -3260,14 +3261,15 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 
 
 @menu
-* Java front end dfej::         
-* Binary C front end Kvasir::   
+* Java front end Chicory::      
+* Source-based Java front end dfej::  
+* C front end Kvasir::          
 * Source-based C front end dfec::  
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 @end menu
 
-@node    Java front end Chicory, Binary C front end Kvasir, Front ends, Front ends
+@node    Java front end Chicory, Source-based Java front end dfej, Front ends, Front ends
 @section Java front end Chicory
 
 @cindex front end for Java
@@ -3283,7 +3285,7 @@ sometimes used as a substitute for coffee.
 
 
 
-@node    Source-based Java front end dfej, Binary C front end Kvasir, Front ends, Front ends
+@node    Source-based Java front end dfej, C front end Kvasir, Java front end Chicory, Front ends
 @section Source-based Java front end dfej
 
 @cindex front end for Java, source-based
@@ -3330,7 +3332,7 @@ dfej creates declaration files named
 * Refined runtime types::       
 @end menu
 
-@node    dfej options, Scope of instrumentation, Java front end dfej, Java front end dfej
+@node    dfej options, Scope of instrumentation, Source-based Java front end dfej, Source-based Java front end dfej
 @subsection dfej options
 
 The simplest way to invoke dfej is simply to supply it with a list of
@@ -3668,7 +3670,7 @@ java -classpath daikon-instrumented:$CLASSPATH -DDTRACELIMIT=10000 -DDTRACELIMIT
 @noindent
 
 
-@node    Scope of instrumentation, Refined runtime types, dfej options, Java front end dfej
+@node    Scope of instrumentation, Refined runtime types, dfej options, Source-based Java front end dfej
 @subsection Controlling what classes are instrumented
 
 Only the specified Java files are instrumented; other files are
@@ -3715,7 +3717,7 @@ makes approximations to the missing modification information.
 @c modification information.
 
 
-@node    Refined runtime types,  , Scope of instrumentation, Java front end dfej
+@node    Refined runtime types,  , Scope of instrumentation, Source-based Java front end dfej
 @subsection Refined runtime types
 
 Daikon uses the declared types of variables to determine what fields
@@ -3791,7 +3793,7 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
-@node C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
+@node C front end Kvasir, Source-based C front end dfec, Source-based Java front end dfej, Front ends
 @section C front end Kvasir
 
 @cindex Kvasir (binary front end for C)
@@ -3839,7 +3841,7 @@ For information about installing Kvasir, see @ref{Installing Kvasir}.
 * Kvasir limitations::          
 @end menu
 
-@node Using Kvasir, Kvasir options, Binary C front end Kvasir, Binary C front end Kvasir
+@node Using Kvasir, Kvasir options, C front end Kvasir, C front end Kvasir
 @subsection Using Kvasir
 
 The first step in using Kvasir is to compile your program using the
@@ -3883,7 +3885,7 @@ selection operator, so a slash is used instead: global variables are
 prefixed with a slash, and file-static variables are prefixed with their
 filename (with periods converted into underscores) and then a slash.
 
-@node Kvasir options, Kvasir limitations, Using Kvasir, Binary C front end Kvasir
+@node Kvasir options, Kvasir limitations, Using Kvasir, C front end Kvasir
 @subsection Kvasir options
 
 @table @code
@@ -4017,7 +4019,7 @@ directory as the target program.
 
 @end table
 
-@node Kvasir limitations,  , Kvasir options, Binary C front end Kvasir
+@node Kvasir limitations,  , Kvasir options, C front end Kvasir
 @subsection Kvasir limitations
 
 @c Be sure to remove this once it becomes out of date
@@ -4090,7 +4092,7 @@ optimization.
 
 @end itemize
 
-@node    Source-based C front end dfec, Perl front end dfepl, Binary C front end Kvasir, Front ends
+@node    Source-based C front end dfec, Perl front end dfepl, C front end Kvasir, Front ends
 @section Source-based C front end dfec
 
 @cindex dfec (Daikon front end for C)
@@ -4099,7 +4101,7 @@ optimization.
 
 This section describes dfec, the Daikon source-based front end for C@.
 A binary-based front end for C, named Kvasir, is also available
-(@pxref{Binary C front end Kvasir}), and is preferable in most circumstances.
+(@pxref{C front end Kvasir}), and is preferable in most circumstances.
 For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
 
