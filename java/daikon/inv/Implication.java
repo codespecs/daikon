@@ -62,22 +62,14 @@ public class Implication extends Invariant {
     String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
     String pred_fmt = predicate.format_esc();
     String consq_fmt = consequent.format_esc();
-    if (pred_fmt.startsWith("format") || consq_fmt.startsWith("format")) {
-      return "format_esc needs to be changed (" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
-    } else {
-      return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
-    }
+    return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
   }
 
   public String format_simplify() {
     String cmp = (iff ? "IFF" : "IMPLIES");
     String pred_fmt = predicate.format_simplify();
     String consq_fmt = consequent.format_simplify();
-    if (pred_fmt.startsWith("format") || consq_fmt.startsWith("format")) {
-      return "format_simplify needs to be changed (" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
-    } else {
-      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
-    }
+    return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
   }
 
   /// Completely confused ESC implementation; use better, briefer one.
