@@ -468,12 +468,27 @@ public abstract class Invariant
 
     if (logOn())
       result.log ("Created " + result.format() + " via transfer from "
-                  + format());
+                  + format() + "using permuation "
+                  + ArraysMDE.toString (permutation));
     //if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name + " "
     //                 + result.repr());
 
     return result;
+  }
+
+  /**
+   * Clones the invariant and then permutes it as specified.  Normally
+   * used to make child invariant match the variable order of the parent
+   * when merging invariants bottom up.
+   */
+
+  public Invariant clone_and_permute (int[] permutation) {
+
+    Invariant result = (Invariant) this.clone();
+    result = result.resurrect_done (permutation);
+
+    return (result);
   }
 
   /**
@@ -510,6 +525,34 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     return result;
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant.  This implementation
+   * merely returns a clone of the first invariant in the list.  This is
+   * correct for simple invariants whose equation or statistics don't depend
+   * on the actual samples seen.  It should be overriden for more complex
+   * invariants (eg, bound, oneof, linearbinary, etc).
+   *
+   * @param invs    List of invariants to merge.  The invariants must all be
+   *                of the same type and should come from the children of
+   *                ppt.  They should also all be permuted to match the variable
+   *                order in ppt.
+   * @param ppt     program point that will contain the new invariant
+   *
+   * @return the merged invariant or null if the invariants didn't represent
+   * the same invariant.
+   */
+  public Invariant merge (List invs, PptSlice ppt) {
+
+
+    Invariant first = (Invariant) invs.get(0);
+    Invariant result = (Invariant) first.clone();
+    result.ppt = ppt;
+    result.log ("Merged '" + result.format() + "' from " + invs.size()
+                + " child invariants");
+    return (result);
+
   }
 
   /**
@@ -690,8 +733,8 @@ public abstract class Invariant
     if (attempt == null) {
       attempt = varNames();
     }
-    return "warning: too few samples for " + classname
-      + " invariant: " + attempt;
+    return "warning- too few samples for " + classname
+      + " invariant- " + attempt;
   }
 
   /**
@@ -911,6 +954,19 @@ public abstract class Invariant
    **/
   public boolean isSameFormula(Invariant other) {
     return false;
+  }
+
+  /**
+   * Returns whether or not it is possible to merge invariants of the same
+   * class but with different formulas when combining invariants from lower
+   * ppts to build invariants at upper program points.  Invariants that
+   * have this characteristic (eg, bound, oneof) should override this
+   * function.  Note that invariants that can do this, normally need special
+   * merge code as well (to merge the different formulas into a single formula
+   * at the upper point
+   */
+  public boolean mergeFormulasOk () {
+    return (false);
   }
 
   public static interface IsSameInvariantNameExtractor
@@ -1909,6 +1965,9 @@ public abstract class Invariant
     return (Debug.log (getClass(), ppt, msg));
   }
 
+  public String toString() {
+    return format();
+  }
 }
 
 
