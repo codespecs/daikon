@@ -82,7 +82,7 @@ public abstract class VarComparability {
 					   ((VarComparabilityExplicit) old).dimensions,
 					   null);
     } else if (old instanceof VarComparabilityNone) {
-      return VarComparabilityNone.it;      
+      return VarComparabilityNone.it;
     } else {
       throw new Error ("Not implemented for implicity comparables");
     }
