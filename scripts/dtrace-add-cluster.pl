@@ -141,6 +141,7 @@ sub insert_cluster_info ( $ ) {
   my $invoc;			# the invocation nonce for this execution.
   my $line = <DTRACE_IN>;
   if ($line !~ /this.invocation.nonce/) {
+    die "No nonces present, and this program adds them incorrectly.";
     $pptname_to_nonces{$pptname}++;
     $invoc = $pptname_to_nonces{$pptname};
   } else {
