@@ -135,9 +135,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    istream.close();
 	    return pptMap;
 	} catch (Exception e) {
-	    if (e.getClass() == java.io.FileNotFoundException.class)
+	    if (e.getClass() == FileNotFoundException.class)
 		System.out.println( "Error: invariants object file not found." );
-	    else if (e.getClass() == java.io.StreamCorruptedException.class)
+	    else if (e.getClass() == StreamCorruptedException.class)
 		System.out.println( "Error: invariants object file is corrupted." );
 	    else
 		System.out.println( "Error: " + e.getMessage() );
@@ -456,6 +456,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 
 class InvariantTableModel extends AbstractTableModel {
     static final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
+    static final Class[] columnClasses = { String.class, Integer.class, Integer.class, Double.class, Boolean.class };
     static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
 
     List allInvariants;
@@ -484,7 +485,10 @@ class InvariantTableModel extends AbstractTableModel {
 	return null;
     }
 
-    //  Methods called by InvariantsGUI to control/filter what invariants are being displayed.
+    //  Must override this method so TableSorter will sort numerical columns properly.
+    public Class getColumnClass( int column ) {
+	return columnClasses[ column ];
+    }
     
     public void updateInvariantList( InvariantFilters invariantFilters ) {
 	filteredInvariants = new ArrayList();
