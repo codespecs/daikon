@@ -152,7 +152,7 @@ public final class OneOfString
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
-      return format_esc();  
+      return format_esc();
     } else {
       return format_unimplemented(format);
     }
@@ -370,6 +370,16 @@ public final class OneOfString
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
+  }
+
+  // Use isObviousDerived since some isObviousImplied methods already exist.
+  public boolean isObviousDerived() {
+    // Static constants are necessarily OneOf precisely one value.
+    if (var().isStaticConstant()) {
+      Assert.assert(num_elts <= 1);
+      return true;
+    }
+    return super.isObviousDerived();
   }
 
   public boolean isSameFormula(Invariant o)
