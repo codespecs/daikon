@@ -167,7 +167,7 @@ public final class SequencesPredicate
           j++;
         }
       }
-      return new ValueAndModified(Intern.intern(result), mod);
+      return new ValueAndModified (Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
       Object[] result = new Object[count];
       Object[] values = (Object[]) val1;
@@ -178,9 +178,9 @@ public final class SequencesPredicate
           j++;
         }
       }
-      return new ValueAndModified(Intern.intern(result), mod);
+      return new ValueAndModified (Intern.intern(result), mod);
     } else if (val1 == null) {
-      return new ValueAndModified(null, mod);
+      return new ValueAndModified (null, mod);
     } else {
       throw new RuntimeException("Invalid input arrays");
     }

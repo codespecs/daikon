@@ -173,7 +173,7 @@ public class UpperBound
           EltUpperBound eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb.core.max1 == core.max1 ) {
+              && eb.core.max1 == core.max1) {
             return true;
           }
         }
@@ -185,7 +185,7 @@ public class UpperBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBound) {
-      if (core.max1 < ((LowerBound) other). core.min1)
+      if (core.max1 < ((LowerBound) other).core.min1)
         return true;
     }
     if (other instanceof OneOfScalar) {

@@ -86,8 +86,8 @@ public class NoDuplicatesFloat
       VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var().name,var().name});
       String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,false);
 
-      VarInfoName index1 = ((VarInfoName[])qret.bound_vars.get(0))[0];
-      VarInfoName index2 = ((VarInfoName[])qret.bound_vars.get(1))[0];
+      VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
+      VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
 
       return quantResult[0] + "(" + index1.jml_name() + " != " + index2.jml_name() + ") ==> (" + quantResult[1] + " != " +
         quantResult[2] + ")" + quantResult[3];
@@ -118,7 +118,7 @@ public class NoDuplicatesFloat
       String predicateName = varPredicateFieldName.field;
 
       VarInfoName varOrigName = varFieldName.term;
-      VarInfo fakeVarOrig = new VarInfo(varOrigName, varField.type,
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type,
                                          varField.file_rep_type,
                                          varField.comparability,
                                          VarInfoAux.getDefault());
@@ -149,7 +149,7 @@ public class NoDuplicatesFloat
       String fieldName2 = varFieldName2.field;
 
       VarInfoName varOrigName = varFieldName1.term;
-      VarInfo fakeVarOrig = new VarInfo(varOrigName, varField1.type,
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type,
                                          varField1.file_rep_type,
                                          varField1.comparability,
                                          VarInfoAux.getDefault());

@@ -55,7 +55,7 @@ public final class OneOfFloatSequence
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for OneOfSequenceFloat" );
+                  "ProglangType must be pseudo-array for OneOfSequenceFloat");
 
     // Elements are interned, so can test with == (except that NaN != NaN)
     // (in the general online case, it's not worth interning).
@@ -120,7 +120,7 @@ public final class OneOfFloatSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -134,7 +134,7 @@ public final class OneOfFloatSequence
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(ArraysMDE.toString( elts[i] ));
+      sb.append(ArraysMDE.toString(elts[i]));
     }
     sb.append(" }");
     return sb.toString();
@@ -185,7 +185,7 @@ public final class OneOfFloatSequence
     String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + ArraysMDE.toString( elts[0]);
+      return varname + " == " + ArraysMDE.toString(elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -195,7 +195,7 @@ public final class OneOfFloatSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString( elts[i]));
+    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString(elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -362,7 +362,7 @@ public final class OneOfFloatSequence
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -376,7 +376,7 @@ public final class OneOfFloatSequence
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

@@ -9,15 +9,15 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if defined(SCALAR) || defined(STRING)
-  #define INTEQUAL IntEqual
-  #define INTGREATEREQUAL IntGreaterEqual
-  #define INTLESSEQUAL IntLessEqual
-  #define LINEARBINARY LinearBinary
+#  define INTEQUAL IntEqual
+#  define INTGREATEREQUAL IntGreaterEqual
+#  define INTLESSEQUAL IntLessEqual
+#  define LINEARBINARY LinearBinary
 #else
-  #define INTEQUAL FloatEqual
-  #define INTGREATEREQUAL FloatGreaterEqual
-  #define INTLESSEQUAL FloatLessEqual
-  #define LINEARBINARY LinearBinaryFloat
+#  define INTEQUAL FloatEqual
+#  define INTGREATEREQUAL FloatGreaterEqual
+#  define INTLESSEQUAL FloatLessEqual
+#  define LINEARBINARY LinearBinaryFloat
 #endif
 
 

@@ -60,7 +60,7 @@ public final class OneOfSequence
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for OneOfSequence" );
+                  "ProglangType must be pseudo-array for OneOfSequence");
 
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -133,7 +133,7 @@ public final class OneOfSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -147,7 +147,7 @@ public final class OneOfSequence
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(ArraysMDE.toString( elts[i] ));
+      sb.append(ArraysMDE.toString(elts[i]));
     }
     sb.append(" }");
     return sb.toString();
@@ -214,7 +214,7 @@ public final class OneOfSequence
           return varname + " has only one value, of length " + value.length;
         }
       } else {
-        return varname + " == " + ArraysMDE.toString( elts[0]);
+        return varname + " == " + ArraysMDE.toString(elts[0]);
       }
 
     } else {
@@ -226,7 +226,7 @@ public final class OneOfSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString( elts[i]));
+    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString(elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -255,10 +255,10 @@ public final class OneOfSequence
           length = var().name.applySize().java_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -333,10 +333,10 @@ public final class OneOfSequence
           length = var().name.applySize().esc_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -374,10 +374,10 @@ public final class OneOfSequence
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
           forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
           forall = form[0] + form[1] + " == null" + form[2];
         }
       }
@@ -412,10 +412,10 @@ public final class OneOfSequence
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
         forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
         forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
@@ -528,7 +528,7 @@ public final class OneOfSequence
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -542,7 +542,7 @@ public final class OneOfSequence
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

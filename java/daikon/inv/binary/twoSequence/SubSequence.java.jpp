@@ -347,7 +347,7 @@ public class CLASSNAME
     if (supervar.derived instanceof  SEQUENCESCALARINTERSECTION ||
         supervar.derived instanceof SEQUENCESCALARUNION ||
         subvar.derived instanceof SEQUENCESCALARINTERSECTION ||
-        subvar.derived instanceof SEQUENCESCALARUNION ) {
+        subvar.derived instanceof SEQUENCESCALARUNION) {
       debug.debug ("Returning true because of union or intersection");
       return true;
     }
@@ -512,7 +512,7 @@ public class CLASSNAME
               System.err.println ("In: " + repr());
               throw new Error();
             }
-                                            
+
             PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name.name());
             // if (ss_ppt == null) {
@@ -589,7 +589,7 @@ public class CLASSNAME
         }
       }
       return null;
-    
+
     }
 
 

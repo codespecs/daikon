@@ -176,7 +176,7 @@ public class LowerBound
           EltLowerBound eb = EltLowerBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb.core.min1 == core.min1 ) {
+              && eb.core.min1 == core.min1) {
             return true;
           }
         }
@@ -188,7 +188,7 @@ public class LowerBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UpperBound) {
-      if (core.min1 > ((UpperBound) other). core.max1)
+      if (core.min1 > ((UpperBound) other).core.max1)
         return true;
     }
     if (other instanceof OneOfScalar) {

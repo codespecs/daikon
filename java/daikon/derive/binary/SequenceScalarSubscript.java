@@ -59,7 +59,7 @@ public final class SequenceScalarSubscript
                 && (mod2 == ValueTuple.UNMODIFIED))
                ? ValueTuple.UNMODIFIED
                : ValueTuple.MODIFIED);
-    return new ValueAndModified(Intern.internedLong( val ) , mod);
+    return new ValueAndModified(Intern.internedLong(val), mod);
   }
 
   protected VarInfo makeVarInfo() {

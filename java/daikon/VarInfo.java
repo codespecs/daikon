@@ -718,13 +718,20 @@ public final class VarInfo
   private Boolean isDerivedParamAndUninterestingCached = null;
 
   /**
-   * Returns true if a given VarInfo is derived from a parameter
-   * variable and printing it would be uninteresting.  There are 2
-   * cases when this would return true for x:
-   * <li> If x is a parameter
-   * <li> If x is in the form p.a, and it is not true that p = orig(p)
-   * In both cases, x.name has to be a postState VarInfoName.  This can
-   * only be called after equality invariants are known.
+   * Returns true if a given VarInfo is a parameter or derived from
+   * one in such a way that changes to it wouldn't be visible to the
+   * method's caller. There are 3 such cases:
+   *
+   * <li> The variable is a pass-by-value parameter "p".
+   * <li> The variable is of the form "p.prop" where "prop" is an
+   * immutable property of an object, like its type, or (for a Java
+   * array) its size.
+   * <li> The variable is of the form "p.prop", and "p" has been
+   * modified to point to a different object. We assume "p" has been
+   * modified if we don't have an invariant "orig(p) == p".
+   *
+   * In any case, the variable must have a postState VarInfoName, and
+   * equality invariants need to have already been computed.
    **/
   public boolean isDerivedParamAndUninteresting() {
     // if (isDerivedParamAndUninterestingCached != null) {
@@ -770,7 +777,7 @@ public final class VarInfo
     if (isDerivedParam()) {
       // I am uninteresting if I'm a derived param from X and X's
       // type or X's size, because these things are boring if X
-      // changes (the default for the rest of the code here, and
+      // changes (the default for the rest of the code here), and
       // boring if X stays the same (because it's obviously true).
       if (name instanceof VarInfoName.TypeOf) {
         VarInfoName base = ((VarInfoName.TypeOf) name).term;
@@ -1670,6 +1677,7 @@ public final class VarInfo
   /** Debug tracer **/
   private static final Logger debug = Logger.getLogger("daikon.VarInfo");
 
+
   /** Debug tracer for simplifying expressions **/
   private static final Logger debugSimplifyExpression = Logger.getLogger("daikon.VarInfo.simplifyExpression");
 
@@ -1831,7 +1839,7 @@ public final class VarInfo
         && (var1.file_rep_type != var2.file_rep_type)) {
       return false;
     }
-    return true;    
+    return true;
   }
 
   /**

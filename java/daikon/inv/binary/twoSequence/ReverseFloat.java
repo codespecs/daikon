@@ -76,7 +76,7 @@ public class ReverseFloat
   }
 
   public String format_java() {
-    // ( (new StringBuffer(var1().name.name())).reverse().toString(
+    // ( (new StringBuffer (var1().name.name())).reverse().toString(
     //       ).equals (var2().name.name()))
     return "( (new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
@@ -114,10 +114,10 @@ public class ReverseFloat
     else
       upperExtent = seq.applySize().jml_name();
 
-    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {name1});
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {name1});
     String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
 
-    VarInfoName index = ((VarInfoName[])qret.bound_vars.get(0))[0];
+    VarInfoName index = ((VarInfoName [])qret.bound_vars.get(0))[0];
 
     // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
     // parse appears to choke on that output... until it works, using this

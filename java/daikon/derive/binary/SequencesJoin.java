@@ -108,10 +108,10 @@ public final class SequencesJoin
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof long[]) {
-        e1 = new Long(((long[]) val1) [i]);
+        e1 = new Long (((long[]) val1) [i]);
       }
       if (val2 instanceof long[]) {
-        e2 = new Long(((long[]) val2) [i]);
+        e2 = new Long (((long[]) val2) [i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1) [i];

@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class IntLessEqual
-  extends TwoScalar
+  extends TwoScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -219,14 +219,14 @@ public final class IntLessEqual
 
     { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
       IntEqual ie = IntEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */) {
+      if ((ie != null) /* && ie.enoughSamples() */ ) {
         return true;
       }
     }
 
     { // If we know x<y, then x<=y is uninteresting
       IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */) {
+      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
         return true;
       }
     }

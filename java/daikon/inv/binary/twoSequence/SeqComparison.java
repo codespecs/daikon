@@ -35,7 +35,7 @@ public class SeqComparison
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE. LongArrayComparatorLexical();
+  static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
   public final boolean only_check_eq;
 
@@ -114,7 +114,7 @@ public class SeqComparison
       + ",only_check_eq=" + only_check_eq
       + ",orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
-     ;
+      ;
   }
 
   public String format_using(OutputFormat format) {

@@ -18,8 +18,8 @@ public final class SequencesPredicateFactory extends BinaryDerivationFactory {
   /**
    * Debug tracer
    **/
-  public static final Logger debug =
-    Logger.getLogger ("daikon.derive.binary.SequencesPredicateFactory");
+ public static final Logger debug =
+    Logger.getLogger("daikon.derive.binary.SequencesPredicateFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SequencesPredicate.dkconfig_enabled;
@@ -78,9 +78,9 @@ public final class SequencesPredicateFactory extends BinaryDerivationFactory {
     }
 
     return new BinaryDerivation[] {
-      new SequencesPredicate(var1, var2, 0, "false"),
-      new SequencesPredicate(var1, var2, 1, "true"),
-      // new SequencesPredicate(var1, var2, 0, "nonNull", false),
+      new SequencesPredicate (var1, var2, 0, "false"),
+      new SequencesPredicate (var1, var2, 1, "true"),
+      // new SequencesPredicate (var1, var2, 0, "nonNull", false),
     };
 
   }
@@ -127,8 +127,8 @@ public final class SequencesPredicateFactory extends BinaryDerivationFactory {
     }
 
     return new BinaryDerivation[] {
-      new SequencesPredicate(var1, var2, 0, "false"),
-      new SequencesPredicate(var1, var2, 1, "true"),
+      new SequencesPredicate (var1, var2, 0, "false"),
+      new SequencesPredicate (var1, var2, 1, "true"),
     };
   }
   */

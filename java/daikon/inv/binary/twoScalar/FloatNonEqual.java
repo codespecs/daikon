@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class FloatNonEqual
-  extends TwoFloat
+  extends TwoFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -216,11 +216,11 @@ public final class FloatNonEqual
 
     { // If we know x<y or x>y, then x!=y is uninteresting
       FloatLessThan ilt = FloatLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */) {
+      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
         return true;
       }
       FloatGreaterThan igt = FloatGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */) {
+      if ((igt != null) /* && igt.enoughSamples() */ ) {
         return true;
       }
     }

@@ -60,7 +60,7 @@ public final class EltOneOf
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOf" );
+                  "ProglangType must be pseudo-array for EltOneOf");
 
     elts = new long[dkconfig_size];
 
@@ -104,7 +104,7 @@ public final class EltOneOf
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts);
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public long min_elt() {
@@ -127,7 +127,7 @@ public final class EltOneOf
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -141,7 +141,7 @@ public final class EltOneOf
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
+      sb.append((((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"))));
     }
     sb.append(" }");
     return sb.toString();
@@ -186,10 +186,10 @@ public final class EltOneOf
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
-           ;
+            ;
         }
       } else {
-        return varname + " == " + ((( elts[0] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")));
+        return varname + " == " + (((elts[0] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf(elts[0]) : (String.valueOf(elts[0]) + "L")));
       }
 
     } else {
@@ -201,7 +201,7 @@ public final class EltOneOf
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
+    sb.append (" || (" + var().name.java_name() + " == " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"))));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -213,7 +213,7 @@ public final class EltOneOf
     // have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -231,14 +231,14 @@ public final class EltOneOf
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+        result += varname + " == " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")));
       }
     }
 
@@ -272,7 +272,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) + ")";
+        result += "(" + varname + " = " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"))) + ")";
       }
     }
 
@@ -284,7 +284,7 @@ public final class EltOneOf
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -301,7 +301,7 @@ public final class EltOneOf
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
@@ -312,13 +312,13 @@ public final class EltOneOf
         // Do nothing
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
-        throw new Error("Contains more than 2 elements");
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+        result += varname + " == " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")));
       }
     }
 
@@ -329,7 +329,7 @@ public final class EltOneOf
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -347,13 +347,13 @@ public final class EltOneOf
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+        result += varname + " == " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")));
       }
     }
 
@@ -365,7 +365,7 @@ public final class EltOneOf
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -385,12 +385,12 @@ public final class EltOneOf
       } else if (num_elts == 0) {
         return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
-        throw new Error("Contains more than 2 elements");
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) + ")";
+        result += " (EQ " + varname + " " + (((elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"))) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -539,7 +539,7 @@ public final class EltOneOf
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -553,7 +553,7 @@ public final class EltOneOf
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

@@ -108,10 +108,10 @@ public final class SequencesJoinFloat
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof double[]) {
-        e1 = new Double(((double[]) val1) [i]);
+        e1 = new Double (((double[]) val1) [i]);
       }
       if (val2 instanceof double[]) {
-        e2 = new Double(((double[]) val2) [i]);
+        e2 = new Double (((double[]) val2) [i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1) [i];

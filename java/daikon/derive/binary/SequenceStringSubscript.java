@@ -59,7 +59,7 @@ public final class SequenceStringSubscript
                 && (mod2 == ValueTuple.UNMODIFIED))
                ? ValueTuple.UNMODIFIED
                : ValueTuple.MODIFIED);
-    return new ValueAndModified( val , mod);
+    return new ValueAndModified(val, mod);
   }
 
   protected VarInfo makeVarInfo() {

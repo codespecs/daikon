@@ -88,7 +88,7 @@ public class UpperBoundCore
 
   private long calc_range() {
     // If I used Math.abs, the order of arguments to minus would not matter.
-    return - (min - max1 ) + 1;
+    return -(min - max1) + 1;
   }
 
   private long calc_modulus() {
@@ -123,7 +123,7 @@ public class UpperBoundCore
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
-
+      
       max3 = max2;
       num_max3 = num_max2;
       max2 = max1;
@@ -180,7 +180,7 @@ public class UpperBoundCore
     /// Compute value "a" from above.
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
-    double bound_samples_prob = prob_is_ge(num_max1 , required_samples_at_bound);
+    double bound_samples_prob = prob_is_ge(num_max1, required_samples_at_bound);
     utilMDE.Assert.assertTrue(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
     long modulus = calc_modulus();
@@ -196,17 +196,17 @@ public class UpperBoundCore
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // Value "c" from above
-    double trunc_prob = prob_is_ge(num_max1 , 5*avg_samples_per_val);
+    double trunc_prob = prob_is_ge(num_max1, 5*avg_samples_per_val);
 
     // Value "d" from above
-    boolean unif_mod_OK = ((- (max3 - max2 ) == modulus)
-                           && (- (max2 - max1 ) == modulus));
+    boolean unif_mod_OK = ((-(max3 - max2) == modulus)
+                           && (-(max2 - max1) == modulus));
     double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
-      double unif_prob_1 = prob_is_ge(num_max1 , half_avg_samp);
-      double unif_prob_2 = prob_is_ge(num_max2 , half_avg_samp);
-      double unif_prob_3 = prob_is_ge(num_max3 , half_avg_samp);
+      double unif_prob_1 = prob_is_ge(num_max1, half_avg_samp);
+      double unif_prob_2 = prob_is_ge(num_max2, half_avg_samp);
+      double unif_prob_3 = prob_is_ge(num_max3, half_avg_samp);
       unif_prob = Invariant.prob_and(unif_prob_1, unif_prob_2, unif_prob_3);
       // System.out.println("Unif_probs: " + unif_prob + " <-- " + unif_prob_1 + " " + unif_prob_2 + " " + unif_prob_3);
     }

@@ -111,7 +111,7 @@ public final class OneOfString
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -125,7 +125,7 @@ public final class OneOfString
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
+      sb.append(((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\""));
     }
     sb.append(" }");
     return sb.toString();
@@ -161,7 +161,7 @@ public final class OneOfString
     String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"");
+      return varname + " == " + ((elts[0]==null) ? "null" : "\"" + UtilMDE.quote(elts[0]) + "\"");
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -175,7 +175,7 @@ public final class OneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + ".equals(" + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") + ")");
+    sb.append (" || (" + var().name.java_name() + ".equals(" + ((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\"") + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -198,7 +198,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")";
+        result += ".equals(" + ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"") + ")";
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -228,7 +228,7 @@ public final class OneOfString
     result = "";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
-      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") + ")";
+      result += varname + " = " + ((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\"") + ")";
     }
     result += ")";
 
@@ -239,7 +239,7 @@ public final class OneOfString
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
+        result += ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"");
       } else {
         if ((str == null) || "null".equals(str)) {
           result += "\\typeof(null)";
@@ -317,7 +317,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")";
+        result += ".equals(" + ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"") + ")";
       } else {
         result += " == \\type";
         if ((str == null) || "null".equals(str)) {
@@ -436,7 +436,7 @@ public final class OneOfString
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -450,7 +450,7 @@ public final class OneOfString
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

@@ -173,7 +173,7 @@ public class UpperBoundFloat
           EltUpperBoundFloat eb = EltUpperBoundFloat.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb.core.max1 == core.max1 ) {
+              && eb.core.max1 == core.max1) {
             return true;
           }
         }
@@ -185,7 +185,7 @@ public class UpperBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBoundFloat) {
-      if (core.max1 < ((LowerBoundFloat) other). core.min1)
+      if (core.max1 < ((LowerBoundFloat) other).core.min1)
         return true;
     }
     if (other instanceof OneOfFloat) {

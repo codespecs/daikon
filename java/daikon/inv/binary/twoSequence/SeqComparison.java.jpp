@@ -81,7 +81,7 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE.ARRAYCOMPARATOR ;
+  static Comparator comparator = new ArraysMDE.ARRAYCOMPARATOR;
 
   public final boolean only_check_eq;
 
@@ -310,7 +310,7 @@ public class CLASSNAME
     super.repCheck();
     if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
         && ppt.num_samples() != 0) {
-      System.err.println (this.repr());          
+      System.err.println (this.repr());
       System.err.println (this.ppt.num_samples());
       throw new Error();
     }

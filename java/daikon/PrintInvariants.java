@@ -347,7 +347,7 @@ public class PrintInvariants {
     for (int i=0; i<ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
       if (debugPrintModified.isDebugEnabled()) {
-        debugPrintModified.debug ("  Testing var: " + vi.name.name());        
+        debugPrintModified.debug ("  Testing var: " + vi.name.name());
       }
       // This test is purely an optimization.
       if (! vi.isPrestate()) {

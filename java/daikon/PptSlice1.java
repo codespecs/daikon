@@ -42,7 +42,7 @@ public final class PptSlice1
   int[] tm_total = new int[2];  // "tm" stands for "tuplemod"
 
   /**
-   * Create a new PptSlice1 .  Warning: do not rearrange the contents
+   * Create a new PptSlice1.  Warning: do not rearrange the contents
    * of var_infos once this has been created, as flow order is already
    * set up after construction.
    **/
@@ -193,7 +193,7 @@ public final class PptSlice1
     //       }
     //       debugFlow.debug ("    with values:" + sb);
     //     }
-
+    
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -430,11 +430,11 @@ public final class PptSlice1
     // Why not just clone?  Because then index order wouldn't be
     // preserved
     Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
-    PptSlice1 result = new PptSlice1(this.parent, newVarInfos);
+    PptSlice1 result = new PptSlice1 (this.parent, newVarInfos);
 
     // Why do we have to pick out the permutation again?  Because we
     // sort it above by index order
-    int[] permutation = new int[arity];
+    int [] permutation = new int[arity];
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i] == leader) {
         permutation[i] = ArraysMDE.indexOfEq (newVarInfos, newLeader);
@@ -493,11 +493,11 @@ public final class PptSlice1
     // Why not just clone?  Because then index order wouldn't be
     // preserved
     Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
-    PptSlice1 result = new PptSlice1(this.parent, newVarInfos);
+    PptSlice1 result = new PptSlice1 (this.parent, newVarInfos);
 
     // Why do we have to pick out the permutation again?  Because we
     // sort it above by index order
-    int[] permutation = new int[arity];
+    int [] permutation = new int[arity];
     for (int i = 0; i < var_infos.length; i++) {
       permutation[i] = ArraysMDE.indexOfEq (newVarInfos,
                                             var_infos[i].canonicalRep());

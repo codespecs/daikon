@@ -162,7 +162,7 @@ public class FunctionBinaryFloat
       SuppressionTemplate template = new SuppressionTemplate();
 
       template.invTypes = new Class[] {OneOfFloat.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[1]};
+      template.varInfos = new VarInfo [][] {new VarInfo[1]};
 
       VarInfo[] vis = new VarInfo[] {inv.var1(), inv.var2(), inv.var3()};
       for (int i = 0; i < vis.length; i++) {
@@ -174,7 +174,7 @@ public class FunctionBinaryFloat
           if (suppressor.num_elts() <= 1) {
             List suppressors = new ArrayList();
             suppressors.add (suppressor);
-            SuppressionLink sl = new SuppressionLink(this, inv, suppressors);
+            SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
             if (debug.isDebugEnabled()) {
               debug.debug ("Success: " + template.results[0].repr());
             }

@@ -198,7 +198,7 @@ public final class CLASSNAME
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(PRIMITIVE [] a, int count) {
+  public void add_modified(PRIMITIVE[] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)

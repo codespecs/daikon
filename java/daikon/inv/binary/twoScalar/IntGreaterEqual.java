@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class IntGreaterEqual
-  extends TwoScalar
+  extends TwoScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -219,14 +219,14 @@ public final class IntGreaterEqual
 
     { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
       IntEqual ie = IntEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */) {
+      if ((ie != null) /* && ie.enoughSamples() */ ) {
         return true;
       }
     }
 
     { // If we know x>y, then x>=y is uninteresting
       IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */) {
+      if ((igt != null) /* && igt.enoughSamples() */ ) {
         return true;
       }
     }

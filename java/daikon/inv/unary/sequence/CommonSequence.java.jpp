@@ -124,7 +124,7 @@ public class CLASSNAME
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
 
-    intersect = (PRIMITIVE []) Intern.intern(intersect);
+    intersect = (PRIMITIVE[]) Intern.intern(intersect);
     elts++;
   }
 

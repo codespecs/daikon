@@ -55,7 +55,7 @@ public final class EltOneOfFloat
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOfFloat" );
+                  "ProglangType must be pseudo-array for EltOneOfFloat");
 
     elts = new double[dkconfig_size];
 
@@ -89,7 +89,7 @@ public final class EltOneOfFloat
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts);
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public double min_elt() {
@@ -112,7 +112,7 @@ public final class EltOneOfFloat
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -126,7 +126,7 @@ public final class EltOneOfFloat
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(String.valueOf( elts[i] ));
+      sb.append(String.valueOf(elts[i]));
     }
     sb.append(" }");
     return sb.toString();
@@ -162,7 +162,7 @@ public final class EltOneOfFloat
     String varname = var().name.name() + " elements";
     if (num_elts == 1) {
 
-      return varname + " == " + String.valueOf( elts[0]);
+      return varname + " == " + String.valueOf(elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -172,7 +172,7 @@ public final class EltOneOfFloat
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + String.valueOf( elts[i]));
+    sb.append (" || (" + var().name.java_name() + " == " + String.valueOf(elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -184,7 +184,7 @@ public final class EltOneOfFloat
     // have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -194,7 +194,7 @@ public final class EltOneOfFloat
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -217,7 +217,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + String.valueOf( elts[i] ) + ")";
+        result += "(" + varname + " = " + String.valueOf(elts[i]) + ")";
       }
     }
 
@@ -229,7 +229,7 @@ public final class EltOneOfFloat
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -238,7 +238,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -249,7 +249,7 @@ public final class EltOneOfFloat
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -258,7 +258,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -270,7 +270,7 @@ public final class EltOneOfFloat
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -278,7 +278,7 @@ public final class EltOneOfFloat
     {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + String.valueOf( elts[i] ) + ")";
+        result += " (EQ " + varname + " " + String.valueOf(elts[i]) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -382,7 +382,7 @@ public final class EltOneOfFloat
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -396,7 +396,7 @@ public final class EltOneOfFloat
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

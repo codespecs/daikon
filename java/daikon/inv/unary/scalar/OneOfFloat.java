@@ -86,7 +86,7 @@ public final class OneOfFloat
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts);
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public double min_elt() {
@@ -109,7 +109,7 @@ public final class OneOfFloat
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! (( elts[i] == other_elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other_elts[i]))) ) // elements are interned
+      if (! ((elts[i] == other_elts[i]) || (Double.isNaN(elts[i]) && Double.isNaN(other_elts[i])))) // elements are interned
         return false;
     return true;
   }
@@ -123,7 +123,7 @@ public final class OneOfFloat
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(String.valueOf( elts[i] ));
+      sb.append(String.valueOf(elts[i]));
     }
     sb.append(" }");
     return sb.toString();
@@ -159,7 +159,7 @@ public final class OneOfFloat
     String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + String.valueOf( elts[0]);
+      return varname + " == " + String.valueOf(elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -169,7 +169,7 @@ public final class OneOfFloat
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + ".equals(" + String.valueOf( elts[i] ) + ")");
+    sb.append (" || (" + var().name.java_name() + ".equals(" + String.valueOf(elts[i]) + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -190,7 +190,7 @@ public final class OneOfFloat
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -209,7 +209,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + String.valueOf( elts[i] ) + ")";
+        result += "(" + varname + " = " + String.valueOf(elts[i]) + ")";
       }
     }
 
@@ -227,7 +227,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -244,7 +244,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i]);
+        result += varname + " == " + String.valueOf(elts[i]);
       }
     }
 
@@ -261,7 +261,7 @@ public final class OneOfFloat
     {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + String.valueOf( elts[i] ) + ")";
+        result += " (EQ " + varname + " " + String.valueOf(elts[i]) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -368,7 +368,7 @@ public final class OneOfFloat
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! (( elts[i] == other.elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[i] ))))
+      if (! ((elts[i] == other.elts[i]) || (Double.isNaN(elts[i]) && Double.isNaN(other.elts[i]))))
         return false;
     }
 
@@ -382,7 +382,7 @@ public final class OneOfFloat
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if ((( elts[i] == other.elts[j] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[j]))) ) // elements are interned
+          if (((elts[i] == other.elts[j]) || (Double.isNaN(elts[i]) && Double.isNaN(other.elts[j])))) // elements are interned
             return false;
         }
       }

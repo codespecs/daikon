@@ -105,7 +105,7 @@ public final class SeqIndexNonEqualFloat
 
     String[] form = VarInfoName.QuantHelper.format_jml(qret);
 
-    VarInfoName index1 = ((VarInfoName[])qret.bound_vars.get(0))[0];
+    VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
 
     return form[0] + form[1] + " != " + index1.name() + form[2];
   }

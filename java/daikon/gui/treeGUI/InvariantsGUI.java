@@ -303,7 +303,10 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     contentPane.add( createPropertyFilterSection());
     contentPane.add( createVariableFilterSection());
     controlPanel.pack();
-    controlPanel.setSize( 400, 500 );
+    // I couldn't tell what this line was for. 400x500 is close to the
+    // dialog box's natural size, but a little bit off, making it look
+    // subtly wrong. Looks better to me without it.
+    //controlPanel.setSize( 400, 500 );
     controlPanel.setVisible( true );
   }
 

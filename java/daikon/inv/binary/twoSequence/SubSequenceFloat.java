@@ -130,7 +130,7 @@ public class SubSequenceFloat
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
-    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name});
+    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
     Assert.assertTrue(qret.bound_vars.size() == 2);
     Assert.assertTrue(qret.root_primes.length == 2);
 
@@ -206,17 +206,17 @@ public class SubSequenceFloat
 
     // Bound the following quantification
     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
-    VarInfoName superIndexName = ((VarInfoName[])superQuantifyReturn.bound_vars.get(0))[0];
+    VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-    VarInfoName subIndexGroup[] = (VarInfoName[])subQuantifyReturn.bound_vars.get(0);
+    VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
 
     VarInfoName subIndexName = subIndexGroup[0];
 
     // If indicies have same name modify the quantify return before forming string
     if (superIndexName.equals(subIndexName)) {
-      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char[] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
+      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
     }
 
     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
@@ -552,7 +552,6 @@ public class SubSequenceFloat
         }
       }
       return null;
-
     }
 
   }

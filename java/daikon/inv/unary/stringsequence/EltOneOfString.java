@@ -55,7 +55,7 @@ public final class EltOneOfString
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOfString" );
+                  "ProglangType must be pseudo-array for EltOneOfString");
 
     elts = new String[dkconfig_size];
 
@@ -114,7 +114,7 @@ public final class EltOneOfString
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -128,7 +128,7 @@ public final class EltOneOfString
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
+      sb.append(((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\""));
     }
     sb.append(" }");
     return sb.toString();
@@ -164,7 +164,7 @@ public final class EltOneOfString
     String varname = var().name.name() + " elements";
     if (num_elts == 1) {
 
-      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"");
+      return varname + " == " + ((elts[0]==null) ? "null" : "\"" + UtilMDE.quote(elts[0]) + "\"");
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -178,7 +178,7 @@ public final class EltOneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
+    sb.append (" || (" + var().name.java_name() + " == " + ((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\""));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -190,7 +190,7 @@ public final class EltOneOfString
     // have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -202,7 +202,7 @@ public final class EltOneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
+        result += " == " + ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"");
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -236,7 +236,7 @@ public final class EltOneOfString
     result = "";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
-      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") + ")";
+      result += varname + " = " + ((elts[i]==null) ? "null" : "\"" + UtilMDE.quote(elts[i]) + "\"") + ")";
     }
     result += ")";
 
@@ -247,7 +247,7 @@ public final class EltOneOfString
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
+        result += ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"");
       } else {
         if ((str == null) || "null".equals(str)) {
           result += "\\typeof(null)";
@@ -291,7 +291,7 @@ public final class EltOneOfString
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -340,7 +340,7 @@ public final class EltOneOfString
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -352,7 +352,7 @@ public final class EltOneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
+        result += " == " + ((str==null) ? "null" : "\"" + UtilMDE.quote(str) + "\"");
       } else {
         result += " == \\type";
         if ((str == null) || "null".equals(str)) {
@@ -377,7 +377,7 @@ public final class EltOneOfString
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -484,7 +484,7 @@ public final class EltOneOfString
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -498,7 +498,7 @@ public final class EltOneOfString
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

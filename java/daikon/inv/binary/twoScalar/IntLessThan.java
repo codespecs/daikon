@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class IntLessThan
-  extends TwoScalar
+  extends TwoScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

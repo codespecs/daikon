@@ -164,7 +164,7 @@ public class CLASSNAME
     }
   }
 
-  public void add_modified(PRIMITIVE [] a, int count) {
+  public void add_modified(PRIMITIVE[] a, int count) {
     for (int i=1; i<a.length; i++) {
       core.add_modified(a[i-1], a[i], count);
       if (falsified)

@@ -18,7 +18,7 @@ The correct way to build the system is to run 'make'.
 #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
 #define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
 #define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
-  #define SEQUENCEINITIAL SequenceInitial
+#  define SEQUENCEINITIAL SequenceInitial
 #elif defined(STRING)
 #define CLASSNAME Member
 #define SEQUENCESCALAR SequenceString
@@ -31,17 +31,17 @@ The correct way to build the system is to run 'make'.
 #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
 #define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
 #define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
-  #define SEQUENCEINITIAL SequenceInitial
+#  define SEQUENCEINITIAL SequenceInitial
 #elif defined(FLOAT)
-  #define CLASSNAME MemberFloat
-  #define SEQUENCESCALAR SequenceFloat
-  #define SEQUENCESCALARPKG sequenceScalar
-  #define SCALAR double
-  #define PROGLANG_INT ProglangType.DOUBLE
-  #define PROGLANG_INT_ARRAY ProglangType.DOUBLE_ARRAY
-  #define SEQUENCESCALARSUBSCRIPT SequenceFloatSubscript
-  #define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
-  #define SEQUENCEINITIAL SequenceInitialFloat
+#  define CLASSNAME MemberFloat
+#  define SEQUENCESCALAR SequenceFloat
+#  define SEQUENCESCALARPKG sequenceScalar
+#  define SCALAR double
+#  define PROGLANG_INT ProglangType.DOUBLE
+#  define PROGLANG_INT_ARRAY ProglangType.DOUBLE_ARRAY
+#  define SEQUENCESCALARSUBSCRIPT SequenceFloatSubscript
+#  define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
+#  define SEQUENCEINITIAL SequenceInitialFloat
 #else
 #error "One of SCALAR or STRING should be defined"
 #endif

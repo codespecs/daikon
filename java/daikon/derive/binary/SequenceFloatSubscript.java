@@ -59,7 +59,7 @@ public final class SequenceFloatSubscript
                 && (mod2 == ValueTuple.UNMODIFIED))
                ? ValueTuple.UNMODIFIED
                : ValueTuple.MODIFIED);
-    return new ValueAndModified(Intern.internedDouble( val ) , mod);
+    return new ValueAndModified(Intern.internedDouble(val), mod);
   }
 
   protected VarInfo makeVarInfo() {

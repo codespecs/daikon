@@ -358,7 +358,7 @@ public final class MemberFloat
    * that A[i] could also be max(A), etc.
    **/
   public static class MemberSuppressionFactory1 extends SuppressionFactory {
-
+    
     public static final Logger debug =
       Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory");
 
@@ -409,7 +409,7 @@ public final class MemberFloat
           }
         }
       }
-
+      
       {
         // Try to see if SubSet invariant is there
         template.resetResults();
@@ -432,7 +432,7 @@ public final class MemberFloat
           }
         }
       }
-
+      
       {
         // Failed on finding the right SubSet invariant.  Now try SubSequence
         template.resetResults();
@@ -458,7 +458,7 @@ public final class MemberFloat
    * Suppression in the form of <pre>  0<=i<=j  ==>  b[i] in b[0..j] </pre>
    **/
   public static class MemberSuppressionFactory2 extends SuppressionFactory {
-
+    
     public static final Logger debug =
       Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory2");
 
@@ -529,7 +529,7 @@ public final class MemberFloat
 
       int interval = 0;
       if (ssss.from_start) {
-        interval = sssc.index_shift - ssss.index_shift;
+        interval = sssc.index_shift - ssss.index_shift ;
         return findLessEqual (leftIndex, rightIndex, inv, interval);
       } else {
         interval = ssss.index_shift + sssc.index_shift;

@@ -1902,6 +1902,88 @@ public final class FeatureExtractor {
   }
 
   /*********************************************
+   * A tool for normalizing a C5 file.
+   *********************************************/
+
+  public static final class NormalizeC5Files {
+
+    private static String USAGE =
+      "\tArguments:\n\t-i FileName:\ta C5 input file root\n";
+
+    static public void main(String[] args)
+      throws IOException, ClassNotFoundException {
+
+      // First parse the arguments
+      if (args.length != 2) {
+        System.out.println(USAGE);
+        System.exit(0);
+      }
+      String input = new String();
+
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equals("-i"))
+          input = args[++i] + ".data";
+        else
+          throw new IOException("Invalid argument: " + args[i]);
+      }
+
+      // Load the input files into 2 HashSets, pos and neg.
+      HashSet pos = new HashSet();
+      HashSet neg = new HashSet();
+      BufferedReader br = new BufferedReader(new FileReader(input));
+      br.readLine();
+      while (br.ready()) {
+        String vector = br.readLine();
+
+        boolean ispos = (vector.indexOf("good") > -1);
+        if (ispos == (vector.indexOf("bad") > -1))
+          throw new IOException("Invalid input data in " + input);
+
+        if (ispos)
+          pos.add(vector.substring(0, vector.lastIndexOf("good")));
+        else
+          neg.add(vector.substring(0, vector.lastIndexOf("bad")));
+      }
+      br.close();
+
+      // Now create two vectors, posvectors and negvectors, of the
+      // positive and negative TrainFu vectors respectively.
+      Vector posvectors = new Vector();
+      Vector negvectors = new Vector();
+
+      for (Iterator i = neg.iterator(); i.hasNext(); ) {
+        String vector = (String) i.next();
+        if (!(pos.contains(vector)))
+          negvectors.add(vector + "bad");
+      }
+
+      for (Iterator i = pos.iterator(); i.hasNext(); )
+        posvectors.add(((String) i.next()) + "good");
+
+      // Set the appropriate repeat values.
+      int posrepeat = 1 , negrepeat = 1;
+      if (posvectors.size() > negvectors.size())
+        negrepeat = posvectors.size() / negvectors.size();
+      else
+        posrepeat = negvectors.size() / posvectors.size();
+
+      // Print the output to the output file.
+      FileWriter fw = new FileWriter(input);
+      for (int repeat = 0; repeat < negrepeat; repeat++)
+        for (Iterator i = negvectors.iterator(); i.hasNext(); )
+          fw.write((String) i.next() + " \n");
+      for (int repeat = 0; repeat < posrepeat; repeat++)
+        for (Iterator i = posvectors.iterator(); i.hasNext(); )
+          fw.write((String) i.next() + " \n");
+      fw.close();
+
+      // Print a summary of positives and negatives to stdout.
+      System.out.println(posvectors.size() + "*" + posrepeat + " " +
+                         negvectors.size() + "*" + negrepeat);
+    }
+  }
+
+  /*********************************************
    * A tool for permuting TrainFu files.
    *********************************************/
 

@@ -47,7 +47,7 @@ public class SeqComparisonFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE. DoubleArrayComparatorLexical();
+  static Comparator comparator = new ArraysMDE.DoubleArrayComparatorLexical();
 
   public final boolean only_check_eq;
 
@@ -126,7 +126,7 @@ public class SeqComparisonFloat
       + ",only_check_eq=" + only_check_eq
       + ",orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
-     ;
+      ;
   }
 
   public String format_using(OutputFormat format) {

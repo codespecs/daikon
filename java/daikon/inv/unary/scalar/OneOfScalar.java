@@ -99,7 +99,7 @@ public final class OneOfScalar
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts);
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public long min_elt() {
@@ -122,7 +122,7 @@ public final class OneOfScalar
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
+      if (! (elts[i] == other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -136,7 +136,7 @@ public final class OneOfScalar
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+      sb.append(((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")));
     }
     sb.append(" }");
     return sb.toString();
@@ -181,10 +181,10 @@ public final class OneOfScalar
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
-           ;
+            ;
         }
       } else {
-        return varname + " == " + ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L"));
+        return varname + " == " + ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf(elts[0]) : (String.valueOf(elts[0]) + "L"));
       }
 
     } else {
@@ -196,7 +196,7 @@ public final class OneOfScalar
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name() + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+    sb.append (" || (" + var().name.java_name() + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -225,14 +225,14 @@ public final class OneOfScalar
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"));
       }
     }
 
@@ -262,7 +262,7 @@ public final class OneOfScalar
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) + ")";
+        result += "(" + varname + " = " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")) + ")";
       }
     }
 
@@ -288,7 +288,7 @@ public final class OneOfScalar
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
@@ -299,13 +299,13 @@ public final class OneOfScalar
         // Do nothing
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
-        throw new Error("Contains more than 2 elements");
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"));
       }
     }
 
@@ -331,13 +331,13 @@ public final class OneOfScalar
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-         ;
+          ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"));
       }
     }
 
@@ -366,12 +366,12 @@ public final class OneOfScalar
       } else if (num_elts == 0) {
         return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
-        throw new Error("Contains more than 2 elements");
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) + ")";
+        result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L")) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -523,7 +523,7 @@ public final class OneOfScalar
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i] == other.elts[i] ))
+      if (! (elts[i] == other.elts[i]))
         return false;
     }
 
@@ -537,7 +537,7 @@ public final class OneOfScalar
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i] == other.elts[j] ) ) // elements are interned
+          if ((elts[i] == other.elts[j])) // elements are interned
             return false;
         }
       }

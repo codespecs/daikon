@@ -17,7 +17,7 @@ public final class SequencesJoinFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   public static final Logger debug =
-    Logger.getLogger ("daikon.derive.binary.SequencesJoinFactory");
+    Logger.getLogger("daikon.derive.binary.SequencesJoinFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 
@@ -65,7 +65,7 @@ public final class SequencesJoinFactory extends BinaryDerivationFactory {
     }
 
     return new BinaryDerivation[] {
-      new SequencesJoin(var1, var2),
+      new SequencesJoin (var1, var2),
     };
   }
 

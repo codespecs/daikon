@@ -226,7 +226,7 @@ public class EltLowerBoundFloat
           EltLowerBoundFloat eb = EltLowerBoundFloat.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb.core.min1 == core.min1 ) {
+              && eb.core.min1 == core.min1) {
             return true;
           }
         }
@@ -238,7 +238,7 @@ public class EltLowerBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof EltUpperBoundFloat) {
-      if (core.min1 > ((EltUpperBoundFloat) other). core.max1)
+      if (core.min1 > ((EltUpperBoundFloat) other).core.max1)
         return true;
     }
     if (other instanceof OneOfFloat) {
