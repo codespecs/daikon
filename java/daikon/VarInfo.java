@@ -10,20 +10,53 @@ import utilMDE.*;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Represents information about a particular variable for a program
+ * point.  This object doesn't hold the value of the variable at a
+ * particular step of the program point, but can get the value it
+ * holds when given a ValueTuple using the getValue() method.  VarInfo
+ * also includes info on the variable's name, its declared type, its
+ * file representation type, its internal type and its comparability.
+ *
+ *
+ **/
+
 public final class VarInfo implements Cloneable, java.io.Serializable {
 
   // Name and type
   public VarInfoName name;      // interned
-  public ProglangType type;	// as declared in the program
-  public ProglangType file_rep_type;	// as written to the data trace file;
-                                	//   this is an interface detail.
-  public ProglangType rep_type;	// as internally stored;
-                                //   this in an implementation detail.
+  
+  /**
+   * Type as declared in the program.
+   **/
+  public ProglangType type;
+
+  /**
+   * Type as written in the data trace file.  This is an interface
+   * detail.
+   **/
+  public ProglangType file_rep_type;  
+
+
+  /**
+   * Type as internally stored.  This is an interface detail.
+   **/
+  public ProglangType rep_type;
+
+  /**
+   * Comparability info
+   **/
   public VarComparability comparability;
 
   // Obtaining values
   public int varinfo_index;	// index in lists of VarInfo objects
+
+  /**
+   * The actual value that this variable would point to in a
+   * ValueTuple
+   **/
   public int value_index;	// index in lists of values, VarTuple objects
+
   public boolean is_static_constant;  // required if static_constant_value==null
 				//   (is_static_constant
                                 //   iff (value_index == -1)
@@ -34,9 +67,20 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
 
   // Derived variables
-  public Derivation derived;	// whether (and how) derived
-  public Vector derivees;	// vector of Derivation objects
 
+  /**
+   * Whether and how derived.  Null if this is not derived.
+   **/
+  public Derivation derived;
+
+  /**
+   * Vector of Derivation objects
+   **/
+  public Vector derivees;	
+
+  /**
+   * The program point this variable is in.
+   **/
   public PptTopLevel ppt;
 
   boolean canBeMissing = false;
@@ -212,9 +256,12 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return true;
   }
 
+  private Object checkNull (Object o) {
+    return (o == null) ? "null" : o;
+  }
 
   String repr() {
-    return "<VarInfo " + name + ": "
+    return "<VarInfo " + checkNull(name) + ": "
       + "type=" + type
       + ",file_rep_type=" + file_rep_type
       + ",rep_type=" + rep_type
@@ -223,11 +270,18 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       + ",varinfo_index=" + varinfo_index
       + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
-      + ",derived=" + derived
+      + ",derived=" + checkNull (derived)
       + ",derivees=" + derivees
       + ",ppt=" + ppt
       + ",equal_to=" + equal_to
       + ">";
+  }
+
+  /**
+   * For debugging only
+   **/
+  public String getDebugString() {
+    return repr();
   }
 
   public boolean isConstant() {
@@ -324,6 +378,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public boolean isUnmodified(ValueTuple vt) { return ValueTuple.modIsUnmodified(getModified(vt)); }
   public boolean isModified(ValueTuple vt) { return ValueTuple.modIsModified(getModified(vt)); }
   public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
+
+  /**
+   * Get the value of this variable at a particular step (i.e. ValueTuple) 
+   * @param vt The ValueTuple from which to extract the value
+   **/
 
   public Object getValue(ValueTuple vt) {
     if (is_static_constant)
