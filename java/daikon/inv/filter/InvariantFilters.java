@@ -1,9 +1,6 @@
 package daikon.inv.filter;
 
 import utilMDE.Assert;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Appender;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
@@ -146,14 +143,6 @@ public class InvariantFilters {
       PrintInvariants.debugFiltering.debug("\t\t(type: " + invariant.getClass().getName() +  ")");
     }
 
-    PatternLayout pattern = null;
-
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      Appender appender = PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename);
-      pattern = (PatternLayout)appender.getLayout();
-      appender.setLayout(new PatternLayout("\t" + pattern.getConversionPattern()));
-    }
-
     if (invariant instanceof GuardingImplication) {
       invariant = ((Implication) invariant).right;
     }
@@ -186,14 +175,12 @@ public class InvariantFilters {
       if (filter.shouldDiscard( invariant )) {
         if (PrintInvariants.debugFiltering.isDebugEnabled()) {
           PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName());
-          PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
         }
         return false;
       }
     }
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)");
-      PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
     }
     return true;
   }

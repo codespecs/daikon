@@ -49,8 +49,6 @@ public class PrintInvariants {
    **/
   public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
 
-  public static final String daikonFilteringOutputFilename = "filtering_transcript";
-
   public static final String lineSep = Global.lineSep;
 
   /**

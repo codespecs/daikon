@@ -67,32 +67,6 @@ public class LogHelper {
    **/
   public static void setPriority (String s, Priority p) {
     Logger.getLogger(s).setPriority(p);
-    if (s.equals (PrintInvariants.debugFiltering.getName())
-        && PrintInvariants.debugFiltering.isDebugEnabled()) {
-      // Set up filter logging to go to a file.  It's better that way.
-      PrintInvariants.debugFiltering.setAdditivity(false);
-      PrintInvariants.debugFiltering.removeAllAppenders();
-      FileAppender fa = null;
-      try {
-        fa = new FileAppender( new PatternLayout("%m"),
-                               PrintInvariants.daikonFilteringOutputFilename, true);
-        fa.setName (PrintInvariants.daikonFilteringOutputFilename);
-      } catch (IOException ioe) {
-        System.err.println("Error; unable to open file " +
-                           PrintInvariants.daikonFilteringOutputFilename +
-                           " for debuging filtering");
-        throw new Error();
-      }
-      if (fa != null) {
-        PrintInvariants.debugFiltering.addAppender(fa);
-        fa.activateOptions();
-      } else {
-        System.err.println("Error; unable to open file " +
-                           PrintInvariants.daikonFilteringOutputFilename +
-                           " for debuging filtering");
-        throw new Error();
-      }
-    }
   }
 
 }
