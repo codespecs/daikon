@@ -1,14 +1,17 @@
-: # Use -*- Perl -*- without knowing its path
-  eval 'exec perl -S -w $0 "$@"'
-  if 0;
-# context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
-# Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-09 19:36:26 mistere>
+#!/usr/bin/env perl
 
-# The input is ... TODO
+# context.pl -- Read dfej's context-sensitivity .map files and
+# textually re-write daikon invariants in a more human-readable form,
+# translating $callsite numbers to names of classes or methods.
+
+# Jeremy Nimmer <jwnimmer@lcs.mit.edu>
+# Time-stamp: <2002-03-11 16:18:15 mistere>
 
 use Carp;
 use File::Find;
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
 
 my $debug = 0;
 
