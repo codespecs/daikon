@@ -834,7 +834,7 @@ public class CLASSNAME
         // If that variable is "B[0..n]"
         VarInfo supervar_part = der.getVarInfo();
         // Get the canonical version; being equal to it is good enough.
-        if (supervar_part.equalitySet.leader() == subvar) {
+        if (supervar_part.get_equalitySet_leader() == subvar) {
           Debug.log (debug, inv.getClass(), inv.ppt, vis,
                 "ObvSubSeq- True from canonical leader");
           return true;
