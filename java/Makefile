@@ -79,7 +79,7 @@ all_directly: ${AUTO_GENERATED_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 
 ## Use this when you don't want $inv/tests makefiles to restart
-JAVA_FILES_EXCEPT_DAIKON := $(subst ./Daikon.java,,${JAVA_FILES})
+JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${JAVA_FILES_EXCEPT_DAIKON}
 	@echo ${JAVAC} '*.java ... (except Daikon.java)'
 	@${JAVAC} ${JAVA_FILES_EXCEPT_DAIKON}
