@@ -1,5 +1,13 @@
 Todo list sorted in approximate order of importance.
 
+  - ChicoryPremain.jar and BCEL were not properly included in the
+    release distribution file [jhp]
+
+  - The nightly build (2/10) failed when running chicory. [sjl]
+
+  - Static variables are not named correctly when a class with
+    a static variable is referenced from another class. [sjl]
+
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
