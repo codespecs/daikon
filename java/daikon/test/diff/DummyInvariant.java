@@ -9,15 +9,27 @@ public class DummyInvariant extends Invariant {
 
   public String formula;
   public boolean justified;
+  public boolean interesting;
 
   public DummyInvariant(PptSlice ppt, String formula, boolean justified) {
+    this(ppt, formula, justified, true);
+  }
+
+  public DummyInvariant(PptSlice ppt, String formula,
+                        boolean justified, boolean interesting) {
     super(ppt);
     this.formula = formula;
     this.justified = justified;
+    this.interesting = interesting;
   }
+
 
   public boolean justified() {
     return justified;
+  }
+
+  public boolean isInteresting() {
+    return interesting;
   }
 
   public boolean isSameInvariant(Invariant other) {
