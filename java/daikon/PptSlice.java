@@ -21,6 +21,8 @@ public abstract class PptSlice extends Ppt {
   // Put off implementing this for the nonce.  It should probably
   // appear in the concrete children, anyway.
   // This is a local cache.
+  // Note that it isn't a VarValues; we may be able to use a specialized
+  // representation for certain types of PptSlice.
   // HashMap values_cache;		// map from ValueTuple to Integer (a count)
 
   public Invariants invs;

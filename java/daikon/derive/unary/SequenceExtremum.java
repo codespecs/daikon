@@ -19,6 +19,10 @@ public class SequenceExtremum extends UnaryDerivation {
       minLength = index+1;
   }
 
+  public VarInfo seqvar() {
+    return var_info;
+  }
+
   public static boolean applicable(VarInfo vi) {
     if (!vi.rep_type.isArray())
       return false;

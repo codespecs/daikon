@@ -73,6 +73,24 @@ public abstract class Invariant {
   }
 
 
+  /**
+   * Returns true if this invariant is necessarily true, due to derived
+   * variables, other invariants, etc.
+   * Intended to be overridden by subclasses.
+   */
+  public boolean isObvious() {
+    return false;
+  }
+
+  /**
+   * Returns true if this invariant implies the argument invariant.
+   * Intended to be overridden by subclasses.
+   */
+  public boolean implies(Invariant inv) {
+    return false;
+  }
+
+
   // For printing invariants, there are two interfaces:
   //   repr gives a low-level representation
   //   format gives a high-level representation (eg, for user output)

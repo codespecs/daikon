@@ -3,7 +3,8 @@ package daikon.inv.sequenceScalar;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
-
+import daikon.derive.unary.*;
+import daikon.derive.binary.*;
 
 // Similar to NonAliased; if I change this, consider changing it, too.
 public class Member extends SequenceScalar {
@@ -43,6 +44,27 @@ public class Member extends SequenceScalar {
     else
       return 0;
   }
+
+  public boolean isObvious() {
+    VarInfo sclvar = sclvar();
+    // System.out.println("Member.isObvious being called for " + repr());
+    // System.out.println("sclvar.derived=" + sclvar.derived);
+    if (sclvar.derived != null) {
+      if (sclvar.derived instanceof SequenceScalarSubscript) {
+        SequenceScalarSubscript sss = (SequenceScalarSubscript) sclvar.derived;
+        // System.out.println("sss.seqvar()=" + sss.seqvar() + "seqvar()=" + seqvar());
+        if (sss.seqvar() == seqvar())
+          return true;
+      } else if (sclvar.derived instanceof SequenceExtremum) {
+        SequenceExtremum se = (SequenceExtremum) sclvar.derived;
+        // System.out.println("se.seqvar()=" + se.seqvar() + "seqvar()=" + seqvar());
+        if (se.seqvar() == seqvar())
+          return true;
+      }
+    }
+    return false;
+  }
+
 }
 
 //         # For each (num, sequence), determine if num is a member of seq

@@ -7,7 +7,8 @@ public abstract class BinaryDerivation implements Derivation {
 
   public BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     var_info1 = vi1;
-    var_info2 = vi2; }
+    var_info2 = vi2;
+  }
 
   VarInfo var_info1;
   VarInfo var_info2;
@@ -30,4 +31,9 @@ public abstract class BinaryDerivation implements Derivation {
   // }
 
   public abstract VarInfo makeVarInfo();
+
+  public boolean isDerivedFromNonCanonical() {
+    return !(var_info1.isCanonical() || var_info2.isCanonical());
+  }
+
 }

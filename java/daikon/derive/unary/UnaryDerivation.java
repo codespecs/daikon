@@ -12,4 +12,8 @@ public abstract class UnaryDerivation implements Derivation {
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
   public abstract VarInfo makeVarInfo();
+
+  public boolean isDerivedFromNonCanonical() {
+    return ! var_info.isCanonical();
+  }
 }

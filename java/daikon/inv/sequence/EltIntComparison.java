@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 
 
+// This compares adjacent elements in the sequence.
 // Also see NonEqual, NonAliased
 class EltIntComparison extends SingleSequence {
 

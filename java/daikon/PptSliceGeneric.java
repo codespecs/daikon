@@ -9,6 +9,8 @@ import daikon.inv.twoSequence.*;
 import daikon.inv.sequenceScalar.*;
 import java.util.*;
 
+import utilMDE.*;
+
 // This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
 // is similar and mostly subsumed by VarValues.)
 
@@ -17,10 +19,13 @@ import java.util.*;
 
 public class PptSliceGeneric extends PptSlice {
 
-  // This is in Ppt; don't repeat it here!
+  // This is in PptSlice; don't repeat it here!
   // Invariants invs;
 
   // local cache.  (temporarily public)
+  // This should not be confused with the values slot of a PptTopLevel.
+  // In some subclasses of PptSlice, it isn't a VarValues but can be a
+  // specialized representation.
   public VarValues values_cache;
 
   PptSliceGeneric(Ppt parent_, VarInfo[] var_infos_) {
@@ -91,11 +96,17 @@ public class PptSliceGeneric extends PptSlice {
     Object[] vals = new Object[arity];
     int[] mods = new int[arity];
     for (int i=0; i<arity; i++) {
-      vals[i] = full_vt.getValue(i);
-      mods[i] = full_vt.getModified(i);
+      // The values in parens were incorrectly "i" instead of value_index.
+      // How could anything have possibly worked before?
+      int value_index = var_infos[i].value_index;
+      vals[i] = full_vt.getValue(value_index);
+      mods[i] = full_vt.getModified(value_index);
     }
     ValueTuple vt = new ValueTuple(vals, mods);
     values_cache.increment(vt, count);
+    // System.out.println(name + " values_cache.increment("
+    //                    + ArraysMDE.toString(vals) + ", "
+    //                    + ArraysMDE.toString(mods) + ")");
 
     // System.out.println("PptSliceGeneric " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSliceGeneric " + name + " has " + invs.size() + " invariants.");

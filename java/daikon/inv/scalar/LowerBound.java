@@ -33,8 +33,24 @@ class LowerBound extends SingleScalar {
 
   public String repr() {
     double probability = getProbability();
-    return "LowerBound(" + var().name + "): "
+    return "LowerBound" + varNames() + ": "
       + min1 + "; probability = " + probability;
+  }
+
+  public String repr_long() {
+    // doesn't include result of getProbability because this
+    // is called from computeProbability.
+    return "LowerBound" + varNames() + ": "
+      + "min1=" + min1
+      + ", num_min1=" + num_min1
+      + ", mod_min1=" + mod_min1
+      + ", min2=" + min2
+      + ", num_min2=" + num_min2
+      + ", mod_min2=" + mod_min2
+      + ", min3=" + min3
+      + ", num_min3=" + num_min3
+      + ", mod_min3=" + mod_min3
+      + ", max=" + max;
   }
 
   public String format() {
@@ -47,6 +63,9 @@ class LowerBound extends SingleScalar {
   public void add(int value, int modified, int count) {
     probability_cache_accurate = false;
 
+    // System.out.println("LowerBound" + varNames() + ": "
+    //                    + "add(" + value + ", " + modified + ", " + count + ")");
+
     int mod_count = (modified == ValueTuple.MODIFIED) ? count : 0;
     int v = value;
 
@@ -58,7 +77,7 @@ class LowerBound extends SingleScalar {
     } else if (v < min1) {
       min3 = min2;
       num_min3 = num_min2;
-      mod_min3 = mod_min3;
+      mod_min3 = mod_min2;
       min2 = min1;
       num_min2 = num_min1;
       mod_min2 = mod_min1;
@@ -100,13 +119,27 @@ class LowerBound extends SingleScalar {
     //    as many elements as they ought to by chance alone, and at
     //    least 3.
 
-    double avg_samples_per_val = ppt.num_mod_non_missing_samples() / values;
+    int range = max - min1 + 1;
+    double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) / range;
 
     // System.out.println("  [Need to fix computation of LowerBound.computeProbability()]");
-    boolean truncated_justified = num_min1 > 2*avg_samples_per_val;
-    boolean uniform_justified = ((num_min1 > avg_samples_per_val/2)
-                                 && (num_min2 > avg_samples_per_val/2)
-                                 && (num_min3 > avg_samples_per_val/2));
+    boolean truncated_justified = mod_min1 > 5*avg_samples_per_val;
+    boolean uniform_justified = (((min3 - min2) == (min2 - min1))
+                                 && (mod_min1 > avg_samples_per_val/2)
+                                 && (mod_min2 > avg_samples_per_val/2)
+                                 && (mod_min3 > avg_samples_per_val/2));
+    // System.out.println("LowerBound.computeProbability(): ");
+    // System.out.println("  " + repr_long());
+    // System.out.println("  ppt=" + ppt
+    //                    + ", ppt.num_mod_non_missing_samples()=" + ppt.num_mod_non_missing_samples()
+    //                    + ", values=" + values
+    //                    + ", avg_samples_per_val=" + avg_samples_per_val
+    //                    + ", truncated_justified=" + truncated_justified
+    //                    + ", uniform_justified=" + uniform_justified);
+    // PptSliceGeneric pptsg = (PptSliceGeneric) ppt;
+    // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
+    //                    + pptsg.values_cache.tuplemod_samples_summary());
+
     if (truncated_justified || uniform_justified)
       return 0;
     else

@@ -1,6 +1,9 @@
 package daikon;
 
 import daikon.derive.*;
+import daikon.inv.*;
+import utilMDE.*;
+
 import java.util.*;
 
 public class VarInfo {
@@ -40,10 +43,13 @@ public class VarInfo {
   // a set of variables, return a list of all their micro-invariants,
   // possibly partially ordered according to implication.]
 
-  // Perhaps it would be better to just point at the representative object
-  Vector equal_to;		// list of other variables equal to this one
+  // Perhaps it would be better (more efficient) to just point at the
+  // representative object.  This does make printing a touch easier.
+  // Public temporarily, for debugging (and to let
+  // PptTopLevel.computeCanonical set them).
+  public Vector equal_to;		// list of other variables equal to this one
 				// Do I want this?
-  boolean canonical;
+  public boolean canonical;    // private so clients will use isCanonical()
 
   // list of indices of equal variables;
   //   could be derived from invariants
@@ -148,9 +154,21 @@ public class VarInfo {
     return ((Integer)getValue(vt)).intValue();
   }
 
+  static class usesVarFilter implements Filter {
+    VarInfo var;
+    public usesVarFilter(VarInfo var_) { var = var_; }
+    public boolean accept(Object o) { return ((Invariant) o).usesVar(var); }
+  }
 
-  // def is_sequence(self):
-  //     return self.type.is_array()
+  Iterator invariants() {
+    // This assertion will need to be relaxed eventually.
+    Assert.assert(ppt instanceof PptTopLevel,
+                  "Ppt " + ppt + " is not instanceof PptTopLevel");
+    // Could alternately have used ppt.invs.lookup(vi).
+    // In fact, that's better, because it doesn't look at so many variables.
+    Iterator all_invs = ((PptTopLevel) ppt).invariants();
+    return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
+  }
 
   // def canonical_var(self):
   //     """Return index of the canonical variable that is always equal to this one.
@@ -166,14 +184,39 @@ public class VarInfo {
   // any more values come in, then the equal_to slot should probably be
   // reset to null so that whether the variable is canonical is recomputed.
   public boolean isCanonical() {
-    if (equal_to != null)
-      return canonical;
+    Assert.assert(equal_to != null);
+    return canonical;
 
+    /// The above is adequate, if PptTopLevel.computeCanonical() has been called.
+    // // This is the wrong approach (too inefficient).  If equal_to isn't
+    // // set, then we should compute the equal_to for all variables at the
+    // // PptTopLevel, simultaneously.
+    // equal_to = new Vector();
+    // int min_index = varinfo_index;
+    // for (Iterator equal_invs = new UtilMDE.FilteredIterator(invariants(), IsEquality.it) ; equal_invs.hasNext() ; ) {
+    //   Comparison inv = (Comparison) equal_invs.next();
+    //   Assert.assert(inv.ppt.var_infos.length == 2);
+    //   // we know that var_infos[0] has a lower index than var_infos[1]
+    //   Assert.assert(inv.var1().varinfo_index
+    //                 < inv.var2().varinfo_index);
+    //   min_index = Math.min(min_index, inv.var1().varinfo_index);
+    // }
+    // equal_to.trimToSize();
+    // canonical = (min_index == varinfo_index);
+    // return canonical;
+  }
 
-    // assert self.index != None
-    // assert self.equal_to == [] or self.canonical_var() != None
-    // return self.index == self.canonical_var()
-    throw new Error("to be implemented");
+  /**
+   * Returns non-nil if this variable is derived from non-canonical variables.
+   * There might be other reasons for a variable never to appear, also;
+   * I will add them as I discover them.
+   */
+  public boolean isVacuous() {
+    if (! isDerived())
+      return false;
+    if (derived.isDerivedFromNonCanonical())
+      return true;
+    return false;
   }
 
   static boolean compatible(VarInfo[] vis1, VarInfo[] vis2) {

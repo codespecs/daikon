@@ -7,7 +7,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-class SeqComparison extends TwoSequence {
+class SeqComparison extends TwoSequence implements Comparison {
 
   static Comparator comparator = new ArraysMDE.IntArrayComparatorLexical();
 
@@ -66,6 +66,14 @@ class SeqComparison extends TwoSequence {
       // I don't know how to compute a better probability for this.
       return 0;
     }
+  }
+
+  // For Comparison interface
+  public double eq_probability() {
+    if (can_be_eq && (!can_be_lt) && (!can_be_gt))
+      return computeProbability();
+    else
+      return Invariant.PROBABILITY_NEVER;
   }
 
 }

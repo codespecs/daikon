@@ -5,7 +5,7 @@ import daikon.inv.*;
 
 
 // Also see NonEqual, NonAliased
-class IntComparison extends TwoScalar {
+class IntComparison extends TwoScalar implements Comparison {
 
   final static boolean debugIntComparison = false;
 
@@ -55,6 +55,18 @@ class IntComparison extends TwoScalar {
 
   protected double computeProbability() {
     return core.computeProbability();
+  }
+
+  // For Comparison interface
+  public double eq_probability() {
+    boolean can_be_eq = core.can_be_eq;
+    boolean can_be_lt = core.can_be_lt;
+    boolean can_be_gt = core.can_be_gt;
+
+    if (can_be_eq && (!can_be_lt) && (!can_be_gt))
+      return computeProbability();
+    else
+      return Invariant.PROBABILITY_NEVER;
   }
 
 }

@@ -52,7 +52,7 @@ class UpperBound extends SingleScalar {
     } else if (v > max1) {
       max3 = max2;
       num_max3 = num_max2;
-      mod_max3 = mod_max3;
+      mod_max3 = mod_max2;
       max2 = max1;
       num_max2 = num_max1;
       mod_max2 = mod_max1;
@@ -94,13 +94,15 @@ class UpperBound extends SingleScalar {
     //    as many elements as they ought to by chance alone, and at
     //    least 3.
 
-    double avg_samples_per_val = ppt.num_mod_non_missing_samples() / values;
+    int range = max1 - min + 1;
+    double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) / range;
 
     // System.out.println("  [Need to fix computation of UpperBound.computeProbability()]");
-    boolean truncated_justified = num_max1 > 2*avg_samples_per_val;
-    boolean uniform_justified = ((num_max1 > avg_samples_per_val/2)
-                                 && (num_max2 > avg_samples_per_val/2)
-                                 && (num_max3 > avg_samples_per_val/2));
+    boolean truncated_justified = mod_max1 > 5*avg_samples_per_val;
+    boolean uniform_justified = (((max1 - max2) == (max2 - max3))
+                                 && (mod_max1 > avg_samples_per_val/2)
+                                 && (mod_max2 > avg_samples_per_val/2)
+                                 && (mod_max3 > avg_samples_per_val/2));
     if (truncated_justified || uniform_justified)
       return 0;
     else

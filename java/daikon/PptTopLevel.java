@@ -22,7 +22,8 @@ class PptTopLevel extends Ppt {
   final static boolean debugPptTopLevel = false;
   // final static boolean debugPptTopLevel = true;
 
-  final static boolean debugPptTopLevelDerive = true;
+  final static boolean debugPptTopLevelDerive = false;
+  // final static boolean debugPptTopLevelDerive = true;
 
 
   // do we need both a num_tracevars for the number of variables in the
@@ -62,6 +63,7 @@ class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       var_infos[i].value_index = i;
       var_infos[i].varinfo_index = i;
+      var_infos[i].ppt = this;
     }
 
     values = new VarValues();
@@ -182,6 +184,7 @@ class PptTopLevel extends Ppt {
     for (int i=old_length; i<new_var_infos.length; i++) {
        new_var_infos[i].value_index = i;
        new_var_infos[i].varinfo_index = i;
+       new_var_infos[i].ppt = this;
     }
     var_infos = new_var_infos;
   }
@@ -195,6 +198,7 @@ class PptTopLevel extends Ppt {
       new_var_infos[i+old_length] = vi;
       vi.value_index = i+old_length;
       vi.varinfo_index = i+old_length;
+      vi.ppt = this;
     }
     var_infos = new_var_infos;
 
@@ -304,6 +308,35 @@ class PptTopLevel extends Ppt {
   ///////////////////////////////////////////////////////////////////////////
   /// Derived variables
   ///
+
+  public void computeCanonical() {
+    for (int i=0; i<var_infos.length; i++)
+      var_infos[i].equal_to = new Vector();
+
+    for (Iterator equal_invs = new UtilMDE.FilteredIterator(invariants(), IsEquality.it) ; equal_invs.hasNext() ; ) {
+      Comparison inv = (Comparison) equal_invs.next();
+      VarInfo vi1 = inv.var1();
+      VarInfo vi2 = inv.var2();
+      vi1.equal_to.add(vi2);
+      vi2.equal_to.add(vi1);
+    }
+
+    for (int i=0; i<var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      vi.equal_to.trimToSize();
+      if (vi.equal_to.size() == 0) {
+        vi.canonical = true;
+      } else {
+        int min_index = vi.varinfo_index;
+        for (int j=0; j<vi.equal_to.size(); j++) {
+          VarInfo other = (VarInfo) vi.equal_to.elementAt(j);
+          min_index = Math.min(min_index, other.varinfo_index);
+        }
+        vi.canonical = (min_index == vi.varinfo_index);
+      }
+    }
+  }
+
 
   // This is here because I think it doesn't make sense to derive except
   // from a PptTopLevel (and possibly a PptConditional?).  Perhaps move it
@@ -564,6 +597,20 @@ class PptTopLevel extends Ppt {
   }
 
 
+  public Iterator invariants() {
+    Iterator itorOfItors = new Iterator() {
+        Iterator views_itor = views.iterator();
+        public boolean hasNext() { return views_itor.hasNext(); }
+        public Object next() {
+          PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
+          Invariants invs = slice.invs;
+          return invs.iterator();
+        }
+        public void remove() { throw new UnsupportedOperationException(); }
+      };
+    return new UtilMDE.MergedIterator(itorOfItors);
+  }
+
 
   // In original implementation, known as print_invariants_ppt
   /*
@@ -587,6 +634,95 @@ class PptTopLevel extends Ppt {
 		       + num_samples() + " samples");
     System.out.println("    Samples breakdown: "
 		       + values.tuplemod_samples_summary());
+    computeCanonical();
+    // System.out.println("    Variables:");
+    // for (int i=0; i<var_infos.length; i++) {
+    //   System.out.println("      " + var_infos[i].name
+    //                      + " canonical=" + var_infos[i].isCanonical()
+    //                      + " equal_to=" + var_infos[i].equal_to);
+    // }
+
+    // First, do the equality invariants.  They don't show up in the below
+    // because one of the two variables is non-canonical!
+    // This technique is a bit non-orthogonal, but probably fine.
+    // We might do no output if all the other variables are vacuous.
+    for (int i=0; i<var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      if (vi.isCanonical() && (vi.equal_to.size() > 0)) {
+        StringBuffer sb = new StringBuffer();
+        for (int j=0; j<vi.equal_to.size(); j++) {
+          VarInfo other = (VarInfo) vi.equal_to.elementAt(j);
+          if (other.isVacuous())
+            continue;
+          if (sb.length() == 0)
+            sb.append(vi.name);
+          sb.append(" = ");
+          sb.append(other.name);
+        }
+        if (sb.length() > 0)
+          System.out.println(sb.toString());
+      }
+    }
+
+    for (Iterator inv_itor = invariants() ; inv_itor.hasNext() ; ) {
+      Invariant inv = (Invariant) inv_itor.next();
+
+      // // I could imagine printing information about the PptSliceGeneric
+      // // if it has changed since the last Invariant I examined.
+      // PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+      // if (debugPptTopLevel) {
+      //   System.out.println("Slice: " + slice.varNames() + "  "
+      //                      + slice.num_samples() + " samples");
+      //   System.out.println("    Samples breakdown: "
+      //                      + slice.values_cache.tuplemod_samples_summary());
+      // }
+
+      // It's hard to know in exactly what order to do these checks that
+      // eliminate some invariants from consideration.  Which is cheapest?
+      // Which is most often successful?
+
+      {
+        boolean all_canonical = true;
+        VarInfo[] vis = inv.ppt.var_infos;
+        for (int i=0; i<vis.length; i++) {
+          if (! vis[i].isCanonical()) {
+            // System.out.println("Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical");
+            all_canonical = false;
+            break;
+          }
+        }
+        if (! all_canonical)
+          continue;
+      }
+
+      if (inv.isObvious())
+        continue;
+
+      if (!inv.justified())
+        continue;
+
+      String inv_rep = inv.format();
+      if (inv_rep != null) {
+        System.out.println(inv_rep);
+        if (debugPptTopLevel) {
+          System.out.println("  " + inv.repr());
+        }
+      } else {
+        if (debugPptTopLevel) {
+          System.out.println("[suppressed: " + inv.repr() + " ]");
+        }
+      }
+    }
+  }
+
+
+  // To be deleted (already exists in commented-out form).
+  /** Print invariants for a single program point. */
+  public void print_invariants_old() {
+    System.out.println(name + "  "
+		       + num_samples() + " samples");
+    System.out.println("    Samples breakdown: "
+		       + values.tuplemod_samples_summary());
     // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
     for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
       PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
@@ -599,7 +735,7 @@ class PptTopLevel extends Ppt {
       Invariants invs = slice.invs;
       int num_invs = invs.size();
       for (int i=0; i<num_invs; i++) {
-	Invariant inv = invs.elementAt(i);
+	Invariant inv = (Invariant) invs.elementAt(i);
 	String inv_rep = inv.format();
 	if (inv_rep != null) {
 	  System.out.println(inv_rep);
@@ -615,30 +751,47 @@ class PptTopLevel extends Ppt {
     }
   }
 
+
+  // /** Print invariants for a single program point. */
+  // public void print_invariants() {
+  //   System.out.println(name + "  "
+  //                      + num_samples() + " samples");
+  //   System.out.println("    Samples breakdown: "
+  //                      + values.tuplemod_samples_summary());
+  //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
+  //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
+  //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+  //     if (debugPptTopLevel) {
+  //       System.out.println("Slice: " + slice.varNames() + "  "
+  //                          + slice.num_samples() + " samples");
+  //       System.out.println("    Samples breakdown: "
+  //                          + slice.values_cache.tuplemod_samples_summary());
+  //     }
+  //     Invariants invs = slice.invs;
+  //     int num_invs = invs.size();
+  //     for (int i=0; i<num_invs; i++) {
+  //       Invariant inv = invs.elementAt(i);
+  //       String inv_rep = inv.format();
+  //       if (inv_rep != null) {
+  //         System.out.println(inv_rep);
+  //         if (debugPptTopLevel) {
+  //           System.out.println("  " + inv.repr());
+  //         }
+  //       } else {
+  //         if (debugPptTopLevel) {
+  //           System.out.println("[suppressed: " + inv.repr() + " ]");
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
   /// I need to incorporate all this into the above.
 
   // def print_invariants_ppt(fn_name, print_unconstrained=0):
   //   """Print invariants for a single program point."""
   //   print fn_name, fn_samples[fn_name], "samples"
   //   var_infos = fn_var_infos[fn_name]
-  //
-  //   # Equality invariants
-  //   for vi in var_infos:
-  //       if not vi.is_canonical():
-  //           continue
-  //       if vi.equal_to == []:
-  //           # Not equal to anything else, so not an equality invariant
-  //           continue
-  //       if vi.invariant.is_exact():
-  //           # was vi.invariant.min
-  //           value = "= %s" % (vi.invariant.one_of[0],) # this value may be a sequence
-  //       else:
-  //           value = ""
-  //       print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value,
-  //       if vi.invariant.values == 1:
-  //           print "\t(1 value)"
-  //       else:
-  //           print "\t(%d values)" % (vi.invariant.values,)
   //
   //   # Single invariants
   //   for vi in var_infos:

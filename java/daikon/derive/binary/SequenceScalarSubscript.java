@@ -7,6 +7,8 @@ public class SequenceScalarSubscript extends BinaryDerivation {
 
   // var_info1 is the sequence
   // var_info2 is the scalar
+  public VarInfo seqvar() { return var_info1; }
+  public VarInfo sclvar() { return var_info2; }
 
   private final int index_shift;
 
