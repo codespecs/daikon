@@ -54,7 +54,9 @@ setenv DFEJ_VERBOSE 1
 
 # Enable use of group bibliographies, and the "bibfind" command.
 setenv BIBINPUTS .:/afs/csail.mit.edu/u/m/mernst/bib:..:
-alias bibfind /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde
+setenv HELPPROG /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help
+alias help    $HELPPROG .w .f ~mernst/wisdom/HELP.non-mde
+alias bibfind $HELPPROG .n .F ~mernst/bib/bibroot.non-mde
 
 if (! $?EDITOR) setenv EDITOR emacsclient
 if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs

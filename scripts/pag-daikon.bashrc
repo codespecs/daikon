@@ -55,8 +55,10 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 export DFEJ_VERBOSE=1
 
 # Enable use of group bibliographies, and the "bibfind" command.
-alias bibfind='/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde'
 export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
+export HELPPROG=/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help
+alias help="$HELPPROG .w .f ~mernst/wisdom/HELP.non-mde"
+alias bibfind="$HELPPROG .n .F ~mernst/bib/bibroot.non-mde"
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
