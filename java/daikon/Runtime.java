@@ -115,7 +115,7 @@ public final class Runtime {
   // Increment the number of records that have been printed.
   public static void incrementRecords() {
     printedRecords++;
-    if (printedRecords > dtraceLimit) {
+    if (printedRecords >= dtraceLimit) {
       noMoreOutput();
     }
   }
