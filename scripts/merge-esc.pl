@@ -324,6 +324,9 @@ END {
 		    # change ary[*].field to ary[*]
 		    grep(s/\[\*\]\..*/[*]/g, @mods);
 
+		    # remove size(foo[*])
+		    @mods = grep(!/^size\(.*\)$/, @mods);
+
 		    for my $field (@final_fields) {
 		      @mods = grep(!/^this.$field$/, @mods);
 		    }
@@ -424,7 +427,11 @@ END {
 	my ($spaces, $mods, $body, $fieldname) = ($1, $2, $3, $4);
 	$mods = "" unless defined($mods); # to prevent warnings
 	my $is_owned = grep(/^$fieldname$/, @owned_fields);
-	print OUT "$spaces/*@ spec_public */ $mods$body\n";
+	unless ($mods =~ /public/) {
+	  print OUT "$spaces/*@ spec_public */ $mods$body\n";
+	} else {
+	  print OUT "$spaces $mods$body\n";
+	}
 	if ($is_owned) {
 	  print OUT "/*@ invariant $fieldname.owner == this */\n";
 	} else {
