@@ -60,10 +60,8 @@ public class FunctionUnaryCore {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    // Not currently being maintained
-    // if (values_seen < 5)
-    //   return Invariant.PROBABILITY_UNKNOWN;
-    // This isn't right, is it?
+    if (wrapper.ppt.num_values() < 5)
+      return Invariant.PROBABILITY_UNKNOWN;
     // The actual value probably depends on the function.
     return 0;
   }

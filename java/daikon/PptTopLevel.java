@@ -1145,6 +1145,8 @@ public class PptTopLevel extends Ppt {
                              + var.name + " is not canonical");
         continue;
       }
+      if (unary_view.var_info.isConstant())
+        continue;
       if (views.contains(unary_view)) {
         // There is only one type of unary invariant in pass 1:
         // OneOf{Scalar,Sequence}.  It must have been successful, or this
@@ -1184,6 +1186,10 @@ public class PptTopLevel extends Ppt {
         continue;
       if (!var2.isCanonical())
         continue;
+      if (var1.isConstant())
+        continue;
+      if (var2.isConstant())
+        continue;
       if (views.contains(binary_view)) {
         // There is only one type of binary invariant in pass 1:
         // {Int,Seq}Comparison.  It must have been successful, or this view
@@ -1200,18 +1206,31 @@ public class PptTopLevel extends Ppt {
       binary_view.instantiate_invariants(2);
     }
     addViews(binary_views_pass2);
-    // Save some space
-    for (int i=0; i<binary_views.size(); i++) {
-      ((PptSlice) binary_views.elementAt(i)).clear_cache();
+    // Compute exact_nonunary_invariants, then save some space
+    for (int j=0; j<binary_views.size(); j++) {
+      PptSlice binary_view = (PptSlice) binary_views.elementAt(j);
+      for (int k=0; k<binary_view.invs.size(); k++) {
+        Invariant inv = (Invariant) binary_view.invs.elementAt(k);
+        if (inv.isExact() && inv.justified()) {
+          binary_view.var_infos[0].exact_nonunary_invariants.add(inv);
+        }
+      }
+      binary_view.clear_cache();
     }
-    for (int i=0; i<binary_views_pass2.size(); i++) {
-      ((PptSlice) binary_views_pass2.elementAt(i)).clear_cache();
+    for (int j=0; j<binary_views_pass2.size(); j++) {
+      PptSlice binary_view = (PptSlice) binary_views_pass2.elementAt(j);
+      for (int k=0; k<binary_view.invs.size(); k++) {
+        Invariant inv = (Invariant) binary_view.invs.elementAt(k);
+        if (inv.isExact() && inv.justified()) {
+          binary_view.var_infos[0].exact_nonunary_invariants.add(inv);
+        }
+      }
+      binary_view.clear_cache();
     }
     binary_views = null;
     binary_views_pass2 = null;
 
     // 5. ternary invariants
-    // (However, arity 3 is not yet implemented.)
     if (! Daikon.disable_ternary_invariants) {
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
@@ -1224,7 +1243,8 @@ public class PptTopLevel extends Ppt {
         }
         if (!var1.isCanonical())
           continue;
-
+        if (var1.isConstant())
+          continue;
 
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
@@ -1237,7 +1257,9 @@ public class PptTopLevel extends Ppt {
           }
           if (!var2.isCanonical())
             continue;
-          if (Invariant.hasExactInvariant(var1, var2, this)) {
+          if (var2.isConstant())
+            continue;
+          if (var1.hasExactInvariant(var2)) {
             // This isn't quite right:  it depends on what the type of var3
             // will be.  But leave it as a conservative approximation
             // (because we would save this many for many different var3).
@@ -1269,8 +1291,10 @@ public class PptTopLevel extends Ppt {
             }
             if (!var3.isCanonical())
               continue;
-            if (Invariant.hasExactInvariant(var1, var3, this)
-                || Invariant.hasExactInvariant(var2, var3, this)) {
+            if (var3.isConstant())
+              continue;
+            if (var1.hasExactInvariant(var3)
+                || var2.hasExactInvariant(var3)) {
               // This is an overapproximation if one of the variables isn't
               // a scalar.  But we underapproximated elsewhere, so leave it.
               Global.subexact_noninstantiated_invariants
@@ -1294,8 +1318,15 @@ public class PptTopLevel extends Ppt {
         }
       }
       addViews(ternary_views);
-      for (int i=0; i<ternary_views.size(); i++) {
-        ((PptSlice) ternary_views.elementAt(i)).clear_cache();
+      for (int j=0; j<ternary_views.size(); j++) {
+        PptSlice ternary_view = (PptSlice) ternary_views.elementAt(j);
+        for (int k=0; k<ternary_view.invs.size(); k++) {
+          Invariant inv = (Invariant) ternary_view.invs.elementAt(k);
+          if (inv.isExact() && inv.justified()) {
+            ternary_view.var_infos[0].exact_nonunary_invariants.add(inv);
+          }
+        }
+        ternary_view.clear_cache();
       }
     }
 
@@ -1457,6 +1488,10 @@ public class PptTopLevel extends Ppt {
           System.out.println("Omitting " + pconds[i].name + ": "
                              + this_num_samples + "/" + parent_num_samples
                              + " samples");
+        // Unconditional output, because it's too confusing otherwise.
+        if (this_num_samples == parent_num_samples) {
+          System.out.println(pconds[i].name + " == " + this.name);
+        }
       }
     }
     if (Global.debugPptSplit)
@@ -1681,7 +1716,6 @@ public class PptTopLevel extends Ppt {
       // eliminate some invariants from consideration.  Which is cheapest?
       // Which is most often successful?
 
-      // This "5" should be a symbolic constant, not an integer literal.
       // Note exception for OneOf invariants.
       int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
       if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
@@ -1710,6 +1744,7 @@ public class PptTopLevel extends Ppt {
         }
       } else {
         boolean all_canonical = true;
+        boolean some_nonconstant = false;
         VarInfo[] vis = inv.ppt.var_infos;
         for (int i=0; i<vis.length; i++) {
           if (! vis[i].isCanonical()) {
@@ -1717,6 +1752,11 @@ public class PptTopLevel extends Ppt {
               System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
             all_canonical = false;
             break;
+          }
+          if (! vis[i].isConstant()) {
+            some_nonconstant = true;
+            // Don't break out of the loop; this is computed as a side
+            // effect but isn't the main point of the loop.
           }
         }
         if (! all_canonical) {
@@ -1733,6 +1773,19 @@ public class PptTopLevel extends Ppt {
           }
           Global.non_canonical_invariants++;
           continue;
+        }
+        if (! some_nonconstant) {
+          Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison),
+                        "Unexpected invariant with none nonconstant: "
+                        + inv + "  " + inv.repr() + "  " + inv.format());
+          if (inv instanceof Comparison) {
+            Assert.assert(! IsEquality.it.accept(inv));
+            if (Global.debugPrintInvariants) {
+              System.out.println("  [over constants:  " + inv.repr() + " ]");
+            }
+            Global.obvious_invariants++;
+            continue;
+          }
         }
       }
 

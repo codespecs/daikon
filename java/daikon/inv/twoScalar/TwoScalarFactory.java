@@ -32,10 +32,12 @@ public class TwoScalarFactory {
     } else if (pass == 2) {
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);
-        VarInfo arg = (invert ? var1 : var2);
+        VarInfo argvar = (invert ? var1 : var2);
+        VarInfo resultvar = (invert ? var2 : var1);
         // Skip if the argument is a constant (but not if the result
         // is constant, as we might get something like y=abs(x)).
-        if (arg.isConstant()) {
+        // On second though, also skip if the result is constant.
+        if (argvar.isConstant() || resultvar.isConstant()) {
           Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
         } else {
           for (int j=0; j<Functions.unaryFunctions.length; j++) {

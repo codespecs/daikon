@@ -17,7 +17,27 @@ public abstract class SplitterList {
   public static void put(String pptname, Splitter[] splits) {
     // System.out.println("SplitterList.put(" + pptname + ")");
     Assert.assert(! ppt_splitters.containsKey(pptname));
+    // Assert.assert(! ppt_splitters.containsKey(pptname),
+    //               "SplitterList already contains " + pptname
+    //               + " which maps to\n " + ArraysMDE.toString(get_raw(pptname))
+    //               + "\n which is " + formatSplitters(get_raw(pptname)));
     ppt_splitters.put(pptname, splits);
+  }
+
+  public static String formatSplitters(Splitter[] splits) {
+    if (splits == null)
+      return "null";
+    StringBuffer sb = new StringBuffer();
+    sb.append("[");
+    for (int i=0; i<splits.length; i++) {
+      if (i != 0)
+        sb.append(", ");
+      sb.append("\"");
+      sb.append(splits[i].condition());
+      sb.append("\"");
+    }
+    sb.append("]");
+    return sb.toString();
   }
 
   public static Splitter[] get_raw(String pptname) {

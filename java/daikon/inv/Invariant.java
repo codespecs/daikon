@@ -16,8 +16,9 @@ public abstract class Invariant {
   // Has to be public because of wrappers.
   public boolean no_invariant = false;
 
-  // true if we've seen all values and should ignore further add() methods.
+  // True if we've seen all values and should ignore further add() methods.
   // This is rather a hack and should be removed later.
+  // Actually, it's not used any longer, except to be checked in assertions.
   public boolean finished = false;
 
   // Subclasses should set these; Invariant never does.
@@ -213,22 +214,24 @@ public abstract class Invariant {
 
 
 
-  public static boolean hasExactInvariant(VarInfo var1, VarInfo var2, PptTopLevel ppt) {
-    PptSlice slice = ppt.findSlice(var1, var2);
-    if (slice == null)
-      return false;
-    return hasExactInvariant(slice);
-  }
 
-  public static boolean hasExactInvariant(PptSlice slice) {
-    for (Iterator itor = slice.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
-      if (inv.isExact() && inv.justified()) {
-        return true;
-      }
-    }
-    return false;
-  }
+  /// Use VarInfo.hasExactInvariant instead.
+  // public static boolean hasExactInvariant(VarInfo var1, VarInfo var2, PptTopLevel ppt) {
+  //   PptSlice slice = ppt.findSlice(var1, var2);
+  //   if (slice == null)
+  //     return false;
+  //   return hasExactInvariant(slice);
+  // }
+  //
+  // public static boolean hasExactInvariant(PptSlice slice) {
+  //   for (Iterator itor = slice.invs.iterator(); itor.hasNext(); ) {
+  //     Invariant inv = (Invariant) itor.next();
+  //     if (inv.isExact() && inv.justified()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
 
 

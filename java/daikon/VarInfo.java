@@ -54,6 +54,10 @@ public class VarInfo implements Cloneable {
                                 // if it is canonical.
   public Object dynamic_constant;
 
+  // Does not include equal_to, which is dealt with elsewhere.
+  // An invariant is only listed on the first VarInfo, not all VarInfos.
+  public Vector exact_nonunary_invariants;
+
   public Vector views;          // All views containing this object.
                                 // This is needed because findSlice can be
                                 //   so slow.
@@ -105,6 +109,7 @@ public class VarInfo implements Cloneable {
     // Don't set equal_to yet; leave it null until it's set.
     // equal_to = new Vector(3);
 
+    exact_nonunary_invariants = new Vector(2);
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_) {
@@ -221,6 +226,32 @@ public class VarInfo implements Cloneable {
     } else {
       throw new Error("Variable " + name + " is not constant");
     }
+  }
+
+  public boolean hasExactInvariant(VarInfo other) {
+    for (int i=0; i<exact_nonunary_invariants.size(); i++) {
+      Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
+      Assert.assert(inv.ppt.var_infos[0] == this);
+      Assert.assert(inv.isExact());
+      if ((inv.ppt.arity == 2) && (inv.ppt.var_infos[1] == other)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean hasExactInvariant(VarInfo other1, VarInfo other2) {
+    for (int i=0; i<exact_nonunary_invariants.size(); i++) {
+      Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
+      Assert.assert(inv.ppt.var_infos[0] == this);
+      Assert.assert(inv.isExact());
+      if ((inv.ppt.arity == 3)
+          && (inv.ppt.var_infos[1] == other1)
+          && (inv.ppt.var_infos[2] == other2)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 

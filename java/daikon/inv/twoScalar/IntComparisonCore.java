@@ -68,8 +68,9 @@ public class IntComparisonCore {
   public double computeProbability() {
     if (wrapper.no_invariant) {
       return Invariant.PROBABILITY_NEVER;
+    } else if (can_be_lt || can_be_gt) {
+      return Math.pow(.5, wrapper.ppt.num_values());
     } else {
-      // I don't know how to compute a better probability for this.
       return 0;
     }
   }
