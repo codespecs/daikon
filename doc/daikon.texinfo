@@ -2017,7 +2017,6 @@ They can be divided into the following categories:
 
 @table @asis
 @item Control output of the Daikon tool
--h
 --help
 -o
 --no_text_output
@@ -2053,7 +2052,6 @@ They can be divided into the following categories:
 @c which is not necessary in a table.  However, @t and @code compress
 @c the two hyphens to one in Info and HTML output, which is even worse.
 @table @option
-@item -h
 @item --help
 Print usage message.
 
@@ -2865,7 +2863,6 @@ PrintInvariants is invoked as follows:
 PrintInvariants shares many flags with Daikon:
 
 @table @option
-@item -h
 @item --help
 Print usage message.
 
@@ -2916,7 +2913,7 @@ with the "-o" flag.  If @file{file2} is not specified,
 This section describes the optional flags.
 
 @table @option
-@item -h
+@item --help
 Print usage message.
 
 @item -d
