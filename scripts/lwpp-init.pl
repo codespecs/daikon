@@ -48,6 +48,7 @@ foreach my $file (@files) {
   } else {
     `lh -w --gen_c_file_name $int_file $file`;
   }
+  die "lh failed processing file $file\n" if ($CHILD_ERROR != 0);
   my $ret = `gcc -c $int_file -o /dev/null 2>&1`;
   $ret =~ /^(.*)Launching real compiler/s;
   die "Error processing $int_file\n$1\n" if ($1);
