@@ -453,6 +453,12 @@ public final class ArraysMDE {
     return result;
   }
 
+  public static String[] subarray(String[] a, int startindex, int length) {
+    String[] result = new String[length];
+    System.arraycopy(a, startindex, result, 0, length);
+    return result;
+  }
+
   public static byte[] subarray(byte[] a, int startindex, int length) {
     byte[] result = new byte[length];
     System.arraycopy(a, startindex, result, 0, length);

@@ -304,7 +304,7 @@ public final class Intern {
   }
 
   /**
-   * Intern (canonicalize) an long[].
+   * Intern (canonicalize) a long[].
    * Returns a canonical representation for the long[] array.
    * Arrays are compared according to their elements.
    **/
@@ -353,7 +353,7 @@ public final class Intern {
   // that really improve performance even in that case?)
 
   /**
-   * Intern (canonicalize) an double[].
+   * Intern (canonicalize) a double[].
    * Returns a canonical representation for the double[] array.
    * Arrays are compared according to their elements.
    **/
@@ -385,6 +385,7 @@ public final class Intern {
       return a;
     }
   }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Interning arrays:  old implementation #1
