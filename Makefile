@@ -578,6 +578,7 @@ showvars:
 
 
 
+# Only run (one of) the "setup" targets once.
 setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
 
 setup-v2-and-v3-daikon:
@@ -597,11 +598,10 @@ setup-v2-and-v3-tests:
 
 use-%: daikon-is-symlink
 	[ -e daikon.$* ]
+	[ -e tests.$* ]
 	rm -f java/daikon
 	ln -s ../daikon.$* java/daikon
-	cd java; $(MAKE) tags
-
-	[ -e tests.$* ]
+	$(MAKE) tags
 	rm -f tests
 	ln -s tests.$* tests
 
