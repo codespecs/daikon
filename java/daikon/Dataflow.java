@@ -20,11 +20,11 @@ public class Dataflow
   // Nobody should be instantiating a Dataflow.
   private Dataflow() { }
 
-  public static final Category debug = Category.getInstance("daikon.DataFlow");
+  public static final Category debug = Category.getInstance("daikon.flow");
 
 
   /** Debug tracer for ppt initialization.   **/
-  public static final Category debugInit = Category.getInstance("daikon.DataFlow.init");
+  public static final Category debugInit = Category.getInstance("daikon.flow.init");
 
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
@@ -34,7 +34,7 @@ public class Dataflow
   public static void main(String[] args)
     throws Exception
   {
-    // debug.setPriority(Logger.DEBUG);
+    debug.setPriority(Logger.DEBUG);
 
     String outf = "Dataflow_testing.txt";
     File[] files = new File[args.length];
@@ -143,6 +143,14 @@ public class Dataflow
 	VarInfo lower_vi = lower[j];
 	VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
 	if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
+	  // Commented because it's inside a loop
+	  // 	  if (debugInit.isDebugEnabled()) {
+	  // 	    debugInit.debug ("Lower and higher: " + lower_vi_name.name() + " " + higher_vi_name.name());
+	  // 	    debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name + " " + higher_vi.ppt.name);
+	  
+	  // 	  }
+
+	  
 	  lower_vi.addHigherPO(higher_vi, static_po_group_nonce);
 	}
       }
@@ -844,8 +852,8 @@ public class Dataflow
 	  for (int k = 0; k < ppt.var_infos.length; k++) {
 	    int map = df_ints[k];
 	    if (map != -1) {
-	      out.println("      " + ppt.var_infos[k].name
-			  + " -> " + df_ppt.var_infos[map].name);
+	      out.println("      " + ppt.var_infos[k].name.name()
+			  + " -> " + df_ppt.var_infos[map].name.name());
 	    }
 	  }
 	}

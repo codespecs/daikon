@@ -415,7 +415,14 @@ public final class VarInfo
     VarInfo lower = this;
 
     Assert.assert(lower != higher, "lower != higher");
-    Assert.assert(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
+    //Assert.assert(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
+    // We remove this assertion because it could be that A has a member a
+    // of type A, so A::this should be < A::this.a.  The only thing we want
+    // to prevent is cycles, so the first assertion above is sufficient.
+    // Presumably, if the above situation happens, the transformers will
+    // handle recursing properly.
+
+
     Assert.assert(lower.type == higher.type, "lower.type == higher.type");
     Assert.assert(lower.rep_type == higher.rep_type, "lower.rep_type == higher.rep_type");
     Assert.assert(lower.file_rep_type == higher.file_rep_type, "lower.file_rep_type == higher.file_rep_type");

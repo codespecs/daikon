@@ -77,6 +77,10 @@ public class PptTopLevel
   public static final Category debugAddImplications =
     Category.getInstance ("daikon.PptTopLevel.addImplications");
 
+  /** Debug tracer for data flow. **/
+  public static final Category debugFlow =
+    Category.getInstance ("daikon.flow.flow");
+
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
@@ -614,6 +618,10 @@ public class PptTopLevel
    * ppts along the way (via the add method).
    **/
   public void add_and_flow(ValueTuple vt, int count) {
+    //     if (debugFlow.isDebugEnabled()) {
+    //       debugFlow.debug ("add_and_flow for " + ppt_name);
+    //     }
+
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
@@ -621,13 +629,19 @@ public class PptTopLevel
     // points that have any VarInfos that are higher than this point's
     // VarInfos, and a transformation vector that maps the variable
     // index at this point to the variable index in the higher point.
-    // Simply walk down that list.
+    // Simply walk down that list, transforming value tuples according
+    // to transormation vectors.  Then call add of the right program points.
+
     Assert.assert(dataflow_ppts != null, name);
     Assert.assert(dataflow_transforms != null, name);
     Assert.assert(dataflow_ppts.length == dataflow_transforms.length, name);
 
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
+      //       if (debugFlow.isDebugEnabled()) {
+      // 	debugFlow.debug ("add_and_flow: A parent is " + ppt.ppt_name);
+      //       }
+
       int[] transform = dataflow_transforms[i];
       Assert.assert(transform.length == var_infos.length);
 
@@ -645,8 +659,8 @@ public class PptTopLevel
 	vals[ppt_value_index] = vt.vals[this_value_index];
 	mods[ppt_value_index] = vt.mods[this_value_index];
       }
-
       ValueTuple ppt_vt = new ValueTuple(vals, mods);
+
       ppt.add(ppt_vt, count);
     }
 
@@ -661,19 +675,39 @@ public class PptTopLevel
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars, name);
 
+    //     if (debugFlow.isDebugEnabled()) {
+    //       debugFlow.debug ("Add for " + this.name);
+    //     }
+
+
     if (values_num_samples == 0) {
+      //       debugFlow.debug ("  Instantiating views for the first time");
       instantiate_views_and_invariants();
     }
     values_num_samples += count;
 
+
+    Set viewsCopy = new HashSet(views);
+    // Why?  Because flow modifies a ppt's views, so we want to prevent
+    // concurrent modification.  This code just reads the views first, so
+    // this is possible.
+
     // Add to all the views
-    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = viewsCopy.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if (view.invs.size() == 0) {
 	System.err.println("No invs for " + view.name);
 	continue;
       }
-      view.add(vt, count);
+      if (!view.no_invariants) {
+	// We have to check here now because there may be some views
+	// we go over before removal in the loop below.
+	view.add(vt, count);
+      }
+    }
+
+    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
+      PptSlice view = (PptSlice) itor.next();
       if (view.invs.size() == 0) {
         itor.remove();
 	if (Global.debugInfer.isDebugEnabled()) {
@@ -2038,7 +2072,9 @@ public class PptTopLevel
 	Invariant inv = (Invariant) _invs.next();
 	if (test.include(inv)) { // think: inv.isWorthPrinting()
 	  String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-	  if (fmt.indexOf("format_simplify") < 0) {
+	  if (fmt.indexOf("Simplify") < 0) {
+	  // If format_simplify is not defined for this invariant, don't
+	  // confuse Simplify with the error message
 	    printing.add(inv);
 	  }
 	}
@@ -2111,7 +2147,9 @@ public class PptTopLevel
 	  continue;
 	}
 	String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-	if (fmt.indexOf("format_simplify") >= 0) {
+	if (fmt.indexOf("Simplify") >= 0) {
+	  // If format_simplify is not defined for this invariant, don't
+	  // confuse Simplify with the error message
 	  continue;
 	}
 	// We could also consider testing if the controlling invariant

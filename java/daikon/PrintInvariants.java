@@ -840,11 +840,11 @@ public class PrintInvariants {
         VarInfo vi = ppt.var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
-        debugPrint.debug("      " + vi.name
-                         // + " constant=" + vi.isConstant() // [INCR]
-                         // + " canonical=" + vi.isCanonical() // [INCR]
-                         // + " equal_to=" + vi.equal_to.name // [INCR]
-                         );
+        debugPrint.debug("      " + vi.name.name()
+			 // + " constant=" + vi.isConstant() // [INCR]
+			 // + " canonical=" + vi.isCanonical() // [INCR]
+			 // + " equal_to=" + vi.equal_to.name // [INCR]
+			 );
       }
     }
 
@@ -862,16 +862,22 @@ public class PrintInvariants {
 
     Global.non_falsified_invariants += invs_array.length;
 
+    InvariantFilters fi = null;
+    if (final_output_should_use_new_filtering) {
+      fi = new InvariantFilters();
+    }
     List accepted_invariants = new Vector();
 
     for(int i = 0; i < invs_array.length; i++){
       Invariant inv = invs_array[i];
-      InvariantFilters fi = new InvariantFilters();
-      fi.ppt_map = ppt_map;
 
       boolean pi_accepted = accept_invariant(inv);
-      //boolean fi_accepted = true;
-      boolean fi_accepted = fi.shouldKeep(inv);
+      boolean fi_accepted = true;
+      
+      if (final_output_should_use_new_filtering) {
+	fi.ppt_map = ppt_map;
+	fi_accepted = fi.shouldKeep(inv);
+      }
 
       if((fi_accepted != pi_accepted) && should_gather_data) {
 	FileWriter outputFile = null;
@@ -919,15 +925,15 @@ public class PrintInvariants {
 	//if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
 	{
 	  invCounter++;
-	  if (Invariant.debugPrintEquality.isDebugEnabled()) {
-	    Invariant.debugPrint.debug("Equality set for ppt "  + ppt.name + " " + vi.name.name());
+	  if (debugPrintEquality.isDebugEnabled()) {
+	    debugPrint.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
 	    //appears not to work (compile) b/c ver 3 uses something
 	    //other than vi.equalTo.
 	    //StringBuffer sb = new StringBuffer();
 	    //for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
 	    //  sb.append ("  " + ((VarInfo) j.next()).name.name());
 	    //}
-	    //Invariant.debugPrintEquality.debug (sb);
+	    //debugPrintEquality.debug (sb);	
 	  }
 	  print_equality_invariants(vi, out, invCounter, ppt);
 	}
