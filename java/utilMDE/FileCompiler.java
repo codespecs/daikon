@@ -61,13 +61,15 @@ public final class FileCompiler {
     // Wait for all the compilation processes to terminate.
     for (int i = 0; i < processes.size(); i++) {
       TimeLimitProcess tp = (TimeLimitProcess) processes.get(i);
+      String theseErrors = "";
       try {
+        theseErrors = UtilMDE.streamString(tp.getErrorStream());
         tp.waitFor();
       } catch (InterruptedException e) {
         // nothing to do
       }
       errorString.append(lineSep);
-      errorString.append(UtilMDE.streamString(tp.getErrorStream()));
+      errorString.append(theseErrors);
     }
 
     // javac tends to stop without completing the compilation if there
