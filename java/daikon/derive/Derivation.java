@@ -21,6 +21,7 @@ public interface Derivation {
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
 
+  public abstract VarInfo makeVarInfo();
 
   // // I guess this makes a new VarInfo which is just a slice.  (What is the
   // // point of that??)

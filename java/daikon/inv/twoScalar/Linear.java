@@ -5,6 +5,8 @@ import daikon.inv.*;
 
 class Linear extends TwoScalar {
 
+  final static boolean debug_linear = false;
+
   // y == ax + b;
   int a, b;
   boolean no_invariant = false;
@@ -23,6 +25,14 @@ class Linear extends TwoScalar {
 //   public Linear(Ppt ppt_, VarInfo var_info1_, VarInfo var_info2_) {
 //     super(ppt_, var_info1_, var_info2_);
 //   }
+
+  // Need to add these two methods for all subclasses of Invariant
+  public String name() {
+    return "Linear" + varNames();
+  }
+  public String long_name() {
+    return name() + "@" + ppt.name;
+  }
 
   public String repr() {
     double probability = getProbability();
@@ -77,18 +87,28 @@ class Linear extends TwoScalar {
 	// Set a and b based on that pair
 	set_bi_linear(x_array[max_i], x_array[max_j], y_array[max_i], y_array[max_j]);
 	// Check all values against a and b.
-	for (int i=0; i<MINPAIRS; i++) {
-	  // I should permit a fudge factor here.
-	  if (y_array[i] != a*x_array[i]+b) {
-	    no_invariant = true;
-	    break;
-	  }
-	}
+        if (!no_invariant) {
+          for (int i=0; i<MINPAIRS; i++) {
+            // I should permit a fudge factor here.
+            if (y_array[i] != a*x_array[i]+b) {
+              no_invariant = true;
+              if (debug_linear) {
+                System.out.println("Suppressing " + long_name() + " at index " + i + ": "
+                                   + y_array[i] + " != " + a + "*" + x_array[i] + "+" + b);
+              }
+              break;
+            }
+          }
+        }
       }
     } else {
       // Check the new value against a and b.
       if (y != a*x+b) {
 	no_invariant = true;
+        if (debug_linear) {
+          System.out.println("Suppressing " + long_name() + " at new value: "
+                             + y + " != " + a + "*" + x + "+" + b);
+        }
       }
     }
   }
@@ -100,6 +120,9 @@ class Linear extends TwoScalar {
   void set_bi_linear(int x0, int x1, int y0, int y1) {
     if (x0 == x1) {
       no_invariant = true;
+      if (debug_linear) {
+        System.out.println("Suppressing " + long_name() + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+      }
       return;
     }
 

@@ -186,14 +186,14 @@ public class ValueTuple {
   // This modifies the ValueTuple in place!!
   // I think that's OK, because I only compare using equality and hashing
   // doesn't depend on the elements.
-  void extend(IndexedDerivation[] derivs) {
+  void extend(Derivation[] derivs) {
     int old_len = vals.length;
     Object[] new_vals = new Object[old_len + derivs.length];
     System.arraycopy(vals, 0, new_vals, 0, old_len);
     int[] new_mods = new int[old_len + derivs.length];
     System.arraycopy(mods, 0, new_mods, 0, old_len);
     for (int i=0; i<derivs.length; i++) {
-      IndexedDerivation deriv = derivs[i];
+      Derivation deriv = derivs[i];
       // It might be slightly more efficient to pass in the mods and vals
       // arrays instead of the ValueTuple; then add
       // VarInfo.getModified(Object[]) and VarInfo.getValue(Object[]).

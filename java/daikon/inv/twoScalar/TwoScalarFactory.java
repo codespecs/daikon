@@ -39,7 +39,7 @@ public class TwoScalarFactory {
 	  && (ppt.var_infos[1].type.dimensions() == 0)))
       return;
 
-    new Comparison(ppt);
+    new IntComparison(ppt);
     for (int i=0; i<2; i++) {
       boolean b = (i==1);
       new Function(ppt, Math_abs, b);

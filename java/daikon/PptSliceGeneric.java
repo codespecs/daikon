@@ -17,8 +17,8 @@ public class PptSliceGeneric extends PptSlice {
   // This is in Ppt; don't repeat it here!
   // Invariants invs;
 
-  // local cache.
-  VarValues values_cache;
+  // local cache.  (temporarily public)
+  public VarValues values_cache;
 
   PptSliceGeneric(Ppt parent_, VarInfo[] var_infos_) {
     super(parent_, var_infos_);

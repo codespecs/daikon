@@ -7,6 +7,8 @@ import daikon.inv.*;
 // Also see NonEqual, NonAliased
 class IntComparison extends TwoScalar {
 
+  final static boolean debugIntComparison = false;
+
   boolean can_be_eq = false;
   boolean can_be_lt = false;
   boolean can_be_gt = false;
@@ -32,7 +34,12 @@ class IntComparison extends TwoScalar {
     if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
-      return var1().name + " " + comparison + " " + var2().name;
+      if (debugIntComparison) {
+        System.out.println(repr()
+                           + "; inequality=\"" + inequality + "\""
+                           + ",comparison=\"" + comparison + "\"");
+      }
+      return var1().name + " " + inequality + comparison + " " + var2().name;
     } else {
       return null;
     }

@@ -169,10 +169,12 @@ class FileIO {
     while ((line != null) && (!line.equals(""))) {
       String varname = line;
       String proglang_type_string = file.readLine();
+      String rep_type_string = file.readLine();
       String comparability_string = file.readLine();
-      if ((proglang_type_string == null) || (comparability_string == null))
+      if ((proglang_type_string == null) || (rep_type_string == null) || (comparability_string == null))
 	throw new Error("End of file while reading variable " + varname + " in declaration of program point " + ppt_name);
       int equals_index = proglang_type_string.indexOf(" = ");
+      // constant_value is a future enhancement
       String constant_value_string = null;
       Object constant_value = null;
       if (equals_index != -1) {
@@ -180,12 +182,13 @@ class FileIO {
 	proglang_type_string = proglang_type_string.substring(0, equals_index);
       }
       ProglangType prog_type = ProglangType.parse(proglang_type_string);
+      ProglangType rep_type = ProglangType.parse(rep_type_string);
       if (constant_value != null) {
 	constant_value = ProglangType.parse(constant_value_string);
       }
       ExplicitVarComparability comparability
 	= ExplicitVarComparability.parse(comparability_string, prog_type);
-      var_infos.add(new VarInfo(varname, prog_type, prog_type, comparability, constant_value));
+      var_infos.add(new VarInfo(varname, prog_type, rep_type, comparability, constant_value));
       line = file.readLine();
     }
     VarInfo[] vi_array = (VarInfo[]) var_infos.toArray(new VarInfo[0]);

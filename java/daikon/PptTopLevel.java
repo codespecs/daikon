@@ -19,6 +19,8 @@ import utilMDE.*;
 
 class PptTopLevel extends Ppt {
 
+  final static boolean debugPptTopLevel = false;
+
   // do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_dreived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
@@ -81,7 +83,8 @@ class PptTopLevel extends Ppt {
 	// }
       }
     }
-    System.out.println("" + views.size() + " views for " + name);
+    if (debugPptTopLevel)
+      System.out.println("" + views.size() + " views for " + name);
 
   }
 
@@ -448,16 +451,16 @@ class PptTopLevel extends Ppt {
   // them after being computed.
 
   void addDerivedVariables(Vector derivs) {
-    IndexedDerivation[] derivs_array
-      = (IndexedDerivation[]) derivs.toArray(new IndexedDerivation[0]);
+    Derivation[] derivs_array
+      = (Derivation[]) derivs.toArray(new Derivation[0]);
     addDerivedVariables(derivs_array);
   }
 
-  void addDerivedVariables(IndexedDerivation[] derivs) {
+  void addDerivedVariables(Derivation[] derivs) {
 
     VarInfo[] vis = new VarInfo[derivs.length];
     for (int i=0; i<derivs.length; i++) {
-      vis[i] = derivs[i].makeVarInfo(this);
+      vis[i] = derivs[i].makeVarInfo();
     }
     addVarInfos(vis);
 
@@ -535,7 +538,13 @@ class PptTopLevel extends Ppt {
 		       + values.tuplemod_samples_summary());
     // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
     for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
-      PptSlice slice = (PptSlice) itor2.next();
+      PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+      if (debugPptTopLevel) {
+        System.out.println("Slice: " + slice.varNames() + "  "
+                           + slice.num_samples() + " samples");
+        System.out.println("    Samples breakdown: "
+                           + slice.values_cache.tuplemod_samples_summary());
+      }
       Invariants invs = slice.invs;
       int num_invs = invs.size();
       for (int i=0; i<num_invs; i++) {
@@ -543,9 +552,13 @@ class PptTopLevel extends Ppt {
 	String inv_rep = inv.format();
 	if (inv_rep != null) {
 	  System.out.println(inv_rep);
-	  System.out.println("  " + inv.repr());
+          if (debugPptTopLevel) {
+            System.out.println("  " + inv.repr());
+          }
 	} else {
-	  System.out.println("[suppressed: " + inv.repr() + " ]");
+          if (debugPptTopLevel) {
+            System.out.println("[suppressed: " + inv.repr() + " ]");
+          }
 	}
       }
     }

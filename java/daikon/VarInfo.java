@@ -7,8 +7,8 @@ public class VarInfo {
 
   // Name and type
   public String name;		// interned
-  public ProglangType rep_type;	// as written to the data trace file
   public ProglangType type;	// as declared in the program
+  public ProglangType rep_type;	// as written to the data trace file
   // Turn this back into "VarComparability" if we ever need to support multiple types.  Or something.
   public ExplicitVarComparability comparability; // in Python, this could also be a VarInfo
 				//   (meaning treat this variable like that one)

@@ -13,9 +13,15 @@ all_force:	all_directly
 all_javac:
 	javac -g ${JAVA_FILES}
 
-# Wrong, becaue daikon.class might be up to date even if other files aren't
-daikon.class:
-	jikes -g +E +F daikon.java
+# Wrong, becaue Daikon.class might be up to date even if other files aren't
+# Daikon.class:
+# 	jikes -g +E +F Daikon.java
+
+# It's good to do this occasionally, because it costs little to regenerate
+# .class files and it's bad to continue to use an orphaned class file
+# (whose source file was renamed).  Or, run "orphaned_class_files".
+clean:
+	rm -f `find . -name "*.class" -print`
 
 run:	all
 	java daikon.Daikon
