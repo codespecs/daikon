@@ -54,16 +54,18 @@ help:
 	@echo "  make instrument     : 2 instruments the source under test"
 	@echo "  make compile        : 3 compiles the source under test"
 	@echo "  make data           : 4 runs the source under test"
-	@echo "  make txt-daikon     : 5 detects invariants, writes in daikon style"
-	@echo "  make txt-esc        : 6 detects invariants, writes in esc style"
+	@echo "  make txt-esc        : 5 detects invariants, writes in esc style"
 	@echo "  make merge          : merges the esc-style output into the original source"
 	@echo "  make esc            : runs escjava on the merged files"
 	@echo "  make stats          : reports invariant counts"
 	@echo ""
-	@echo "  make clean          : "
-	@echo "  make all            : does 1-6, merge, esc"
+	@echo "  make inv            : detects invariants, writes in serialized style"
+	@echo "  make txt-daikon     : detects invariants, writes in daikon style"
 	@echo ""
-	@echo "Note that 1->6 are a chain, and invoking any of them will invoke"
+	@echo "  make clean          : "
+	@echo "  make all            : does 1-5, merge, esc"
+	@echo ""
+	@echo "Note that 1->5 are a chain, and invoking any of them will invoke"
 	@echo "  previous steps if there is a dirty dependency in the chain"
 
 all: txt-esc merge esc
@@ -76,6 +78,7 @@ copy-uninst: ${SCRATCH_FOR_DAIKON}/.copy-timestamp ${PROJECT}/.copy-timestamp
 instrument: ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 compile: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 data: ${SCRATCH_FOR_DAIKON}/.run-timestamp
+inv: ${PROJECT}.inv
 txt-daikon: ${PROJECT}.txt-daikon
 txt-esc: ${PROJECT}.txt-esc
 esc: ${PROJECT}.esc
@@ -86,7 +89,7 @@ clean: reset-scratch
 	@echo \#\#\# clean
 	@echo
 	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
-	# rm -rf ${PACKAGE}
+#	rm -rf ${PACKAGE}
 
 
 ###########################################################################
@@ -152,13 +155,19 @@ ${SCRATCH_FOR_DAIKON}/.run-timestamp: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 	modbit-munge.pl `find ${SCRATCH_FOR_DAIKON} -name '*.dtrace'`
 	touch ${SCRATCH_FOR_DAIKON}/.run-timestamp
 
+${PROJECT}.inv: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
+	@echo
+	@echo \#\#\# inv
+	@echo
+	${DAIKON} -o $@ ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'`
+
 ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
 	@echo \#\#\# txt-daikon
 	@echo
 	-rm -f $@-failed
 	${DAIKON} --output_num_samples ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
-	# ../remove-conditional-ppts.pl $@
+#	../remove-conditional-ppts.pl $@
 
 ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
@@ -166,7 +175,7 @@ ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
 	-rm -f $@-failed
 	${DAIKON} --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
-	# ../remove-conditional-ppts.pl $@
+#	../remove-conditional-ppts.pl $@
 
 #../DataStructures/StackAr.java-escannotated: txt-esc
 PWD:=$(shell pwd)
