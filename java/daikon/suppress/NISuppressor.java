@@ -163,7 +163,7 @@ public class NISuppressor {
     Assert.assertTrue (v3_index == -1);
     Assert.assertTrue (v1_index != -1);
 
-    if (NIS.debug.isLoggable (Level.FINE))
+    if (Debug.logDetail() && NIS.debug.isLoggable (Level.FINE))
       NIS.debug.fine ("checking suppressor " + this + " against inv "
                     + ((inv != null) ? inv.format() : "null") + " over vars "
                     + VarInfo.toString(vis) + " in ppt " + ppt.name);
@@ -299,7 +299,7 @@ public class NISuppressor {
    * inv's variables already match (ie, that it was looked up in
    * compatible slice
    */
-  private boolean match (Invariant inv) {
+  public boolean match (Invariant inv) {
 
     if (v2_index == -1)
       return (inv.getClass() == inv_class);
