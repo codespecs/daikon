@@ -6,8 +6,10 @@ public class PrintAllVisitor implements NodeVisitor {
   
   private StringWriter sw;
   private PrintWriter pw;
+  private boolean verbose;
 
-  public PrintAllVisitor() {
+  public PrintAllVisitor(boolean verbose) {
+    this.verbose = verbose;
     sw = new StringWriter();
     pw = new PrintWriter(sw);
   }
@@ -41,13 +43,19 @@ public class PrintAllVisitor implements NodeVisitor {
     if (node.getInv1() == null) {
       pw.print((String) null);
     } else {
-      pw.print(node.getInv1().format());
+      if (verbose)
+        pw.print(node.getInv1().repr_prob());
+      else
+        pw.print(node.getInv1().format());
     }
     pw.print(", ");
     if (node.getInv2() == null) {
       pw.print((String) null);
     } else {
-      pw.print(node.getInv2().format());
+      if (verbose)
+        pw.print(node.getInv2().repr_prob());
+      else
+        pw.print(node.getInv2().format());
     }
     pw.println(">");
   }

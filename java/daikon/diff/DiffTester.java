@@ -496,8 +496,8 @@ public class DiffTester extends TestCase {
 
     StatisticsVisitor v = new StatisticsVisitor();
     root.accept(v);
-    System.out.println();
-    System.out.println(v.format());
+    //    System.out.println();
+    //    System.out.println(v.format());
 
     Assert.assertEquals(0, v.getIdenticalNullary());
     Assert.assertEquals(0, v.getMissingNullary());
@@ -525,13 +525,14 @@ public class DiffTester extends TestCase {
   }
 
   private static String printTree(RootNode root) {
-    PrintAllVisitor v = new PrintAllVisitor();
+    PrintAllVisitor v = new PrintAllVisitor(true);
     root.accept(v);
     return v.getOutput();
   }
 
   private static String printDifferences(RootNode root) {
-    PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor();
+    PrintDifferingInvariantsVisitor v =
+      new PrintDifferingInvariantsVisitor(true);
     root.accept(v);
     return v.getOutput();
   }

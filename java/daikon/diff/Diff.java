@@ -17,7 +17,8 @@ public final class Diff {
     "  -d  Display the tree of differing invariants (default)" + lineSep +
     "  -a  Display the tree of all invariants" + lineSep +
     "  -c  Display the number of differing invariants" + lineSep +
-    "  -s  Display the statistics between two sets of invariants" + lineSep
+    "  -s  Display the statistics between two sets of invariants" + lineSep +
+    "  -v  Verbose output" + lineSep
     ;
 
 
@@ -27,13 +28,14 @@ public final class Diff {
   private static final int COUNT_DIFF_INV = 2;
   private static final int STATS_INV = 3;
   private static int mode = PRINT_DIFF_INV;
+  private static boolean verbose = false;
 
   /** Read two PptMap objects from their respective files and diff them. */
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hdacs");
+    Getopt g = new Getopt("daikon.Diff", args, "hdacsv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -53,6 +55,9 @@ public final class Diff {
       case 's':
         mode = STATS_INV;
         break;
+      case 'v':
+        verbose = true;
+        break;        
       case '?':
         break; // getopt() already printed an error
       default:
@@ -85,14 +90,14 @@ public final class Diff {
     case PRINT_DIFF_INV:
       {
         PrintDifferingInvariantsVisitor v =
-          new PrintDifferingInvariantsVisitor();
+          new PrintDifferingInvariantsVisitor(verbose);
         root.accept(v);
         System.out.println(v.getOutput());
       }
       break;
     case PRINT_ALL_INV:
       {
-        PrintAllVisitor v = new PrintAllVisitor();
+        PrintAllVisitor v = new PrintAllVisitor(verbose);
         root.accept(v);
         System.out.println(v.getOutput());
       }

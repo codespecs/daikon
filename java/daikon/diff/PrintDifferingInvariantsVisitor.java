@@ -4,6 +4,10 @@ import daikon.inv.Invariant;
 
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
+  public PrintDifferingInvariantsVisitor(boolean verbose) {
+    super(verbose);
+  }
+
   public void visitInvNode(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
