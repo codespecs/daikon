@@ -3037,9 +3037,10 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 @ref{Pointer type disambiguation}.
 
 @item -l
+Indicates that the next file (only) should not produce @file{.dtrace}
+file output (@pxref{Instrumentation scope}).
 This is the only command-line switch that can be used in the midst of the
-list of filenames.  It precedes a file that should not produce
-@file{.dtrace} file output (@pxref{Instrumentation scope}).
+list of filenames.  
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
 and each has its own header file, but you don't want to instrument the
 functions defined in @file{file2.c}, you would instrument as follows:
