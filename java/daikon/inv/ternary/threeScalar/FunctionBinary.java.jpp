@@ -70,6 +70,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031030L;
 
+  /**
+   * Boolean. True if CLASSNAME invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public static Logger debug
