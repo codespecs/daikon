@@ -29,12 +29,17 @@ We use \\ as the path separartor, which the shell reads as a single
 backslash (\), since this is a windows path.
 
 (2) In addition to the Daikon engine, you also need a front end.  Dfec
-is the front end for C.  Obtain dfec.zip and set it up as follows.
+is the front end for C.  Obtain dfec-cygwin.zip (from
+http://sdg.lcs.mit.edu/daikon/download/binaries/dfec-cygwin.zip), create a
+directory for it, and unzip the file into that directory.  Then proceed
+with setup as follows.
 
 (We will refer to the directory DFEC is unzipped in as $DFECDIR.  This
 path, and all other paths discussed in these instructions, should be
 in terms of the cygwin file namespace unless explicitly noted
-otherwise; e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
+otherwise; e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt.  You may
+find it convenient to set these environment variables, so that you can cut
+and paste these instructions into your bash shell.)
 
 Compile the daikon runtime library.  At a cygwin prompt:
 
@@ -81,20 +86,16 @@ $ export INC_SEARCH="-I/usr/include/g++-3 -I/usr/lib/gcc-lib/i686-pc-cygwin/2.95
 There are a lot of defines that need to get sent to dfec to get it to
 process the system headers correctly.
 
-$ export DFEC_OPTS="-w \"-D__SIZE_TYPE__=unsigned int\" -D__attribute__\(x\)=\"\" \"-D__extension__=\" -D__null=0 -D__GNUG__=1 -D_WIN32"
+$ export DFEC_OPTS='-w -D__SIZE_TYPE__="unsigned int" -D__attribute__\(x\)="" -D__extension__="" -D__null=0 -D__GNUG__=1 -D_WIN32"
 
-XXX I can't get the quoting right on the above line.  Should be the
-XXX same in bash on linux, so maybe someone there can debug it?  The
-XXX quotes are the thing.
-
-Now set DFEC to be the correct dfec, plus include paths (note the
+Now set alias "dfec" to be the correct dfec, plus include paths (note the
 order!); recall that all paths are cygwin paths.
 
-$ export DFEC="$DFECDIR/dfec.exe $INC_PATH $INC_SEARCH $INC_AFTER $DFEC_OPTS"
+$ alias dfec="$DFECDIR/dfec.exe $INC_PATH $INC_SEARCH $INC_AFTER $DFEC_OPTS"
 
 Then, to invoke dfec from the cygwin bash shell, you can call just run $DFEC.
 
-$ $DFEC program.c ... (more explanation later)
+$ dfec program.c ... (more explanation later)
 
 Now dfec is set up.  Let's move on to some examples
 
@@ -125,7 +126,7 @@ $ cp $DFECDIR/daikon_runtime.h .
 
 Then run the front-end:
 
-$ $DFEC print_tokens.c stream.h tokens.h
+$ dfec print_tokens.c stream.h tokens.h
 
 We instrument the source file and all the user-created header files it
 depends on.  This command creates two directories, daikon-instrumented
@@ -137,9 +138,8 @@ Now, under Windows, you have to then fix the instrumented file with a
 sed script to put in a gcc-specific __attribute__ for the _ctype_
 variable, which is used in our test suite.  Run it like this:
 
-$ cd daikon-instrumented
-$ sed -f $DFECDIR/fix.sed print_tokens.cc > print_tokens_fixed.cc
-$ cd ..
+$ alias fix="sed -f $DFECDIR/fix.sed"
+$ (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
 
 This fixes the above problem.
 
@@ -171,7 +171,7 @@ of the invariants is written to print_tokens.inv.
      the end of the command that runs Daikon.)
 
    - Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-     contains a tree which hierarchically organizes program points
+     contains a tree that hierarchically organizes program points
      according to their class and method.  Using the GUI, you can look
      at invariants for only the methods and program points you care
      about.
@@ -194,10 +194,8 @@ The above steps can be divided into three stages:
 Instrumentation (Steps 1-3)
    cd $EXAMPLES/print_tokens
    cp $DFECDIR/daikon_runtime.h .
-   ${DFEC} print_tokens.c stream.h tokens.h
-   cd daikon-instrumented
-   sed -f $DFECDIR/fix.sed print_tokens.cc > print_tokens_fixed.cc
-   cd ..
+   dfec print_tokens.c stream.h tokens.h
+   (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
    g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc \
      $DFECDIR/daikon_runtime.o
 
@@ -225,7 +223,7 @@ First, it is recommended that you set the TRACE_KAT_MCT variable when
 you run the C front end, so you will see some output when running the
 test suite.
 
-2.  $DFEC -DTRACE_KAT_MCT rijndael.c \
+2.  dfec -DTRACE_KAT_MCT rijndael.c \
       rijndael-alg-ref.h rijndael-api-ref.h
 
 Second, you will need to manually reduce the size of the dtrace file.
