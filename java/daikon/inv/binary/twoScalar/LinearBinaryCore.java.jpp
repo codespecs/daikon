@@ -642,7 +642,7 @@ public final class CLASSNAME
                                   VarInfoName var,
                                   VarInfo vi,
                                   boolean first) {
-    int ncoeff = (int) coeff;
+    double ncoeff = coeff;
 
     if (ncoeff == 0)
       return "";
@@ -653,16 +653,18 @@ public final class CLASSNAME
       } else {
         sign = " - ";
       }
-      ncoeff = -ncoeff;
     } else if (first) {
       sign = "";
     } else {
       sign = " + ";
     }
-    String coeff_string = (ncoeff == (int)ncoeff) ? "" + (int)ncoeff : "" + ncoeff;
+    
+    //we want to ensure that the positive value is used because the sign has already been determined
+  
+    String coeff_string = (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
     if (var == null)
       return sign + coeff_string;
-    if (ncoeff == 1)
+    if (ncoeff == 1 || ncoeff == -1)
       return sign + var.name_using(format, vi);
     else
       return sign + coeff_string + " * " + var.name_using(format, vi);
@@ -691,13 +693,13 @@ public final class CLASSNAME
       if (viy.type.isFloat() || vix.type.isFloat()) {
         return
           "daikon.Quant.fuzzy.eq(0"
-          + formatTerm(format, a, x, viy, true)
-          + formatTerm(format, b, y, vix, false)
+          + formatTerm(format, a, x, vix, true)
+          + formatTerm(format, b, y, viy, false)
           + formatTerm(format, c, null, null, false)
           + ")";
       } else {
-        return formatTerm(format, a, x, viy, true)
-          + formatTerm(format, b, y, vix, false)
+        return formatTerm(format, a, x, vix, true)
+          + formatTerm(format, b, y, viy, false)
           + formatTerm(format, c, null, null, false)
            + " == 0";
       }
@@ -891,9 +893,6 @@ public final class CLASSNAME
       return false;
     }
 
-//**********TODO: what's this
- //   return ((a == other.a)
- //           && (b != other.b));
       return ((-a/b == -other.a/other.b)
             && (-c/b != -other.c/other.b));
   }
