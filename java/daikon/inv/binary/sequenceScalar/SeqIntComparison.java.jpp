@@ -304,15 +304,11 @@ public final class SEQINTEQUAL
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
       + " " + x);*/
     for (int i=0; i<a.length; i++) {
-      #if (defined(EQUAL) || defined(EQUALFLOAT))
-      if (! EQUALS(a[i], x) ) {
-        return InvariantStatus.FALSIFIED;
-      }
-      #else
-      if (! EQUALS(a[i], x) || !seqvar().type.elementIsIntegral()) {
-        return InvariantStatus.FALSIFIED;
-      }
+      #if (!defined(EQUAL) && !defined(EQUALFLOAT))
+        // Assert.assertTrue (seqvar().type.elementIsIntegral());
       #endif
+      if (!EQUALS(a[i], x))
+        return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
   }
