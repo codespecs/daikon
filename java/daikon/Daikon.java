@@ -229,7 +229,7 @@ public final class Daikon {
   public static final String var_omit_regexp_SWITCH = "var_omit";
   public static final String no_text_output_SWITCH = "no_text_output";
   public static final String show_progress_SWITCH = "show_progress";
-  public static final String use_dataflow_hierarchy_SWITCH = "nohierarchy";
+  public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String use_suppression_optimization_SWITCH = "suppress";
   public static final String suppress_cont_SWITCH = "suppress_cont";
   public static final String no_suppress_cont_SWITCH = "no_suppress_cont";
@@ -415,7 +415,7 @@ public final class Daikon {
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(use_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(use_suppression_optimization_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -512,7 +512,7 @@ public final class Daikon {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
           show_progress = true;
-        } else if (use_dataflow_hierarchy_SWITCH.equals(option_name)) {
+        } else if (no_dataflow_hierarchy_SWITCH.equals(option_name)) {
           use_dataflow_hierarchy = false;
         } else if (use_suppression_optimization_SWITCH.equals(option_name)) {
           use_suppression_optimization = true;
