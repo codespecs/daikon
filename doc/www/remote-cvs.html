@@ -19,7 +19,7 @@ as "the local machine".
 
 <li>Test the SSH installation.  From the local machine, run:
 
-<pre>ssh -l <i>username</i> pag.lcs.mit.edu</pre>
+<pre>ssh -l <i>username</i> pag.csail.mit.edu</pre>
 
 where <tt><i>username</i></tt> is your PAG username. You should be prompted
 for your password, and then logged in.  If not, there's a problem with
@@ -45,11 +45,11 @@ specify a key type (-t)</tt>, add the option <tt>-t ssh-dss</tt>.
 Now you need to set up the server to accept your keys.  Use the secure
 copy command to send the identity.pub key to the server:
 
-<pre>scp ~/.ssh/identity.pub <i>username</i>@pag.lcs.mit.edu:identity.pub</pre>
+<pre>scp ~/.ssh/identity.pub <i>username</i>@pag.csail.mit.edu:identity.pub</pre>
 
 Then log in to the server using the ssh command:
 
-<pre>ssh -l <i>username</i> pag.lcs.mit.edu</pre>
+<pre>ssh -l <i>username</i> pag.csail.mit.edu</pre>
 
 Now type the following commands into the SSH session, to copy the
 public key into the list of those allowed for logging in:
@@ -111,7 +111,7 @@ set every time you log in.
 <li>To obtain the invariants module, use:
 
 <pre>
-cvs -d :ext:<i>username</i>@pag.lcs.mit.edu:/g4/projects/invariants/.CVS co invariants
+cvs -d :ext:<i>username</i>@pag.csail.mit.edu:/g4/projects/invariants/.CVS co invariants
 </pre>
 
 Other modules can be obtained by replacing the final
@@ -119,7 +119,7 @@ Other modules can be obtained by replacing the final
 the dfej module, use:
 
 <pre>
-cvs -d :ext:<i>username</i>@pag.lcs.mit.edu:/g4/projects/invariants/.CVS co dfej
+cvs -d :ext:<i>username</i>@pag.csail.mit.edu:/g4/projects/invariants/.CVS co dfej
 </pre>
 
 After executing these commands, you should be able to issue CVS

@@ -363,10 +363,10 @@ Daikon can detect invariants in Perl programs.  See the "Perl examples" and
 "Instrumenting Perl programs" sections of the manual.
 
 Three new mailing lists have been set up:
-  daikon-announce@pag.lcs.mit.edu
-  daikon-discuss@pag.lcs.mit.edu
-  daikon-developers@pag.lcs.mit.edu
-To subscribe, visit http://pag.lcs.mit.edu/mailman/listinfo.
+  daikon-announce@pag.csail.mit.edu
+  daikon-discuss@pag.csail.mit.edu
+  daikon-developers@pag.csail.mit.edu
+To subscribe, visit http://pag.csail.mit.edu/mailman/listinfo.
 
 The Context GUI now shares the same look and feel as the Tree GUI.
 Furthermore, .dci files are no longer necessary for the Context GUI, and
@@ -497,7 +497,7 @@ array element processing.
 2.3.8 (10 May 2002):
 
 This release coordinates with a new release of the dfec binaries (at
-http://pag.lcs.mit.edu/daikon/download/).
+http://pag.csail.mit.edu/daikon/download/).
 
 Remove some innocuous syntax anachronisms from example C programs.
 Add the example C programs to the distribution.
