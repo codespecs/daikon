@@ -29,7 +29,6 @@ public final class Configuration
 
   // ============================== STATIC COMPONENT ==============================
 
-  private static final String CONFIGURABLE_LIST = "configurable.txt";
   protected static final String PREFIX = "dkconfig_";
 
   /**
@@ -48,58 +47,20 @@ public final class Configuration
   private static Configuration instance = null;
 
   /**
-   * Load the defaults.
+   * This used to read a file containing all of the configurable
+   * options so that when the options were saved, they would reflect
+   * not only those options specified, but the default values as well.
+   * This would guarantee that changes to the default options would be
+   * overridden by the file.
    *
-   * In order to permit accurate reconstruction of the current
-   * configuration (in a later run, say, or when loading state from a
-   * file), the private "statements" list in this class should contain the
-   * name and value of every configuration option.  Reading
-   * configurable.txt file supplies that list with every configuration
-   * option.  (Omitted configuration options receive their default values;
-   * but the default might change from one version of Daikon to another.)
-   *
-   * As of 1/2003, the configurable.txt file is out of date.  It should be
-   * automatically generated, or the list of all configuration options
-   * should be obtained in some other way, or the problem regarding changes
-   * to default values should be simply accepted (and documented).
-   **/
+   * Unfortunately, that required maintaining a list of all of the
+   * configuration variables by hand.  This list quickly became out of
+   * date and it seemed that the random results were better than no
+   * attempt at all.  The file has thus been removed.  If a
+   * configuration is changed it only contains those items specified,
+   * not the default values of unspecified options
+   */
   private Configuration() {
-    InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
-    // System.out.println("CONFIGURABLE_LIST stream: " + stream);
-    Assert.assertTrue(stream != null, "Cannot load list of configurable "
-                      + "fields from '" + CONFIGURABLE_LIST + "'");
-    try {
-
-      LineNumberReader lines = new LineNumberReader(new BufferedReader(new InputStreamReader(stream)));
-      String line;
-      while ((line = lines.readLine()) != null) {
-        line = line.trim();
-        if (line.length() == 0) continue;    // skip blank lines
-        if (line.charAt(0) == '#') continue; // skip comments
-
-        int n = line.lastIndexOf('.');
-        String classname = line.substring(0, n);
-        String fieldname = line.substring(n+1);
-        String unparsed;
-        try {
-          Class c = Class.forName(classname);
-          Field f = c.getField(Configuration.PREFIX + fieldname);
-          Object value = f.get(null);
-          Assert.assertTrue(value != null);
-          unparsed = String.valueOf(value);
-        } catch (Exception e) {
-          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(e);
-          throw new Error(message);
-        } catch (Error e) {     // especially NoClassDefFoundError
-          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(e);
-          throw new Error(message);
-        }
-        addRecord(classname, fieldname, unparsed);
-      }
-
-    } catch (IOException e) {
-      throw new ConfigException("Cannot read from stream.\n" + e);
-    }
   }
 
   public static class ConfigException extends RuntimeException {
