@@ -232,6 +232,7 @@ Example splitter info file
 Tools
 
 * MergeESC::                    
+* CreateSpinfo::                
 
 Extending Daikon
 
@@ -805,8 +806,8 @@ into the Java source program.
 java daikon.tools.jtb.MergeESC StackAr.inv ../DataStructures/StackAr.java
 @end example
 
-Now examine file @file{../DataStructures/StackAr.java-escannotated}.  
-For more information about the MergeESC program, @xref{MergeESC}.
+Now examine file @file{../DataStructures/StackAr.java-escannotated}.  For more
+information about the MergeESC program, @xref{MergeESC}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 contains a tree which hierarchically organizes program points according
@@ -3122,22 +3123,22 @@ For instance, the postcondition for the absolute value procedure is
 @example
 if arg < 0
   then return == -arg
-  else return == arg
+else return == arg
 @end example
 The invariant @code{return == -arg} is a conditional invariant because
-it depends on the condition @code{arg < 0} being true.  The compound
-invariant that includes both the condition and the conditional invariant
+it depends on the predicate @code{arg < 0} being true.  The compound
+invariant that includes both the predicate and the conditional invariant
 is called an implication.
 
-Daikon must be supplied with the predicate for an implication.  Certain
-such conditions are built into Daikon; examples are which return
-statement was executed in a procedure and whether a boolean procedure
-returns true or false.  Additionally, Daikon can read predicates from a
-file called a splitter info (@file{.spinfo}) file.  The splitter info
-file can be produced automatically, such as by the
-@command{createspinfo.pl} script (see below).  Users can also create
-splitter info files by hand or manually augment automatically-created
-ones.
+Daikon must be supplied with the predicate for an implication.  Daikon has
+certain built-in predicates that it uses for finding conditional invariants;
+examples are which return statement was executed in a procedure and whether a
+boolean procedure returns true or false.  Additionally, Daikon can read
+predicates from a file called a splitter info (@file{.spinfo}) file and find
+implications based on those predicates. The splitter info file can be produced
+automatically, such as by the @command{createspinfo.pl} script or with the
+CreateSpinfo tool (see below).  Users can also create splitter info files by
+hand or manually augment automatically-created ones.
 
 To detect condition invariants and implications:
 @enumerate
@@ -3151,29 +3152,38 @@ java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end enumerate
 
 @cindex createspinfo.pl program
+@cindex CreateSpinfo program
+
+The CreateSpinfo program takes Java source code as input and creates a splitter
+info file;  for instance,
+@example
+java daikon.tools.jtb.CreateSpinfo Foo.java
+@end example
+@noindent
+creates the splitter info file @file{Foo.spinfo}.  The splitter info file
+contains each boolean expression that appears in the source code.  The
+conditional statements that the programmer used in the source code are likely to
+have important semantic properties.  This simple heuristic of using these
+conditional statements as predicates for conditional invariant detection is
+often quite effective.  Users may optionally edit the splitter info file to
+enhance it, or may create a splitter info file by hand.
 
 The @command{createspinfo.pl} program (found in the @file{daikon/bin}
-directory) takes Java source code as input and
-creates a splitter info file; for instance,
+directory) is an older tool which performs the same function. It additionally
+works for C/C++ source code also. It can be used with the commandline
 @example
 createspinfo.pl Foo.java
 @end example
 @noindent
-creates the splitter info file @file{Foo.spinfo}.  The splitter info
-file contains each boolean expression that appears in the source code.
-The conditions that the programmer used are likely to be important
-semantic properties, so this simple heuristic is often quite effective.
-Users may optionally edit the splitter info file to enhance it, or may
-create a splitter info file by hand.
 
-The term ``splitter'' comes from Daikon's technique for detecting
-implications and conditional invariants.  Daikon creates new conditional
-program points --- one each for the condition and its negation --- and
-splits the data trace into parts based on a predicate called the
-splitting condition (in the example above, it was @code{arg < 0}).
-Invariant detection is then performed on the conditional program points
-(that is, the parts of the data trace) separately and any invariants
-detected are reported as conditional invariants (as implications).
+The term ``splitter'' comes from Daikon's technique for detecting implications
+and conditional invariants.  For each predicate, Daikon creates two conditional
+program points --- one each for program executions that satisfy the condition
+and those that don't --- and splits the data trace into two parts (in the
+example above, it was @code{arg < 0}).  Invariant detection is then performed on
+the conditional program points (that is, the parts of the data trace) separately
+and any invariants detected are reported as conditional invariants (as
+implications).
 
 
 @menu
@@ -3187,14 +3197,12 @@ detected are reported as conditional invariants (as implications).
 @cindex splitter info file
 @cindex .spinfo file
 
-A splitter info file contains the conditions that Daikon should use to
-create conditional invariants.
-
-Each section in the @file{.spinfo} consists of a sequence of non-blank lines;
-sections are separated by blank lines.  Program point sections have a line
-specifying a program point name followed by lines specifying the
-condition(s) associated with that program point, each condition on its own
-line.  For example, a typical entry is
+A splitter info file contains the conditions that Daikon should use to create
+conditional invariants.  Each section in the @file{.spinfo} consists of a
+sequence of non-blank lines; sections are separated by blank lines.  Program
+point sections have a line specifying a program point name followed by lines
+specifying the condition(s) associated with that program point, each condition
+on its own line.  For example, a typical entry is
 
 @example
 PPT_NAME @var{pptname}
@@ -3203,11 +3211,18 @@ condition2
 ...
 @end example
 
-Each condition is a Java expression of boolean type.  All variables that
-appear in the condition must also appear in the declaration of the program
-point in the @file{.decls} file.  (In other words, all the variables must be in
-scope at the program point(s) where the Splitter is intended to
-operate.)
+@var{pptname} can be any string which matches a part of the desired program
+point as printed in the decls file. An examples is @code{QueueAr.isEmpty}, which
+matches the @code{isEmpty} method of the program QueueAr.  In finding matching
+program points, Daikon uses the first program point which matches
+@code{pptname}.  
+
+Each condition is a Java expression of boolean type.  All variables that appear
+in the condition must also appear in the declaration of the program point in the
+@file{.decls} file.  (In other words, all the variables must be in scope at the
+program point(s) where the Splitter is intended to operate.) The automatically
+generated Splitter source code fails to compile if a variable name in a
+condition is not found at the matching program point.
 
 @c Exceptions to this are described in the REPLACEMENT section.
 
@@ -3362,9 +3377,10 @@ distribution.
 
 @menu
 * MergeESC::                    
+* CreateSpinfo::                
 @end menu
 
-@node    MergeESC,  , Tools, Tools
+@node    MergeESC, CreateSpinfo, Tools, Tools
 @section MergeESC
 
 @cindex MergeESC tool
@@ -3385,6 +3401,18 @@ arguments are .java files.  The original .java files are left
 unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
+@node    CreateSpinfo,  , MergeESC, Tools
+@section CreateSpinfo
+
+@cindex CreateSpinfo tool
+@cindex splitter info file
+
+The CreateSpinfo program creates a splitter info file from Java source. For each
+input file @file{Foo.java}, CreateSpinfo creates a splitter info file
+@file{Foo.spinfo} containing all the conditional statements and booleans in that
+file. The splitter info file can then be supplied as an argument to Daikon (with
+optional modification by hand.) @xref{Splitter info file}, for more information
+about splitter info files.
 
 @node    Extending Daikon, Troubleshooting, Tools, Top
 @chapter Extending Daikon
