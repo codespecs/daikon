@@ -775,10 +775,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("Simplify not implemented");
-      else
+      } else if (format.isJavaFamily()) {
+        return ("(!(%var1% == 0)) || (%var2% == 0)");
+      } else {
         return ("(%var1% == 0) ==> (%var2% == 0)");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {

@@ -1407,15 +1407,27 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return "(typeof " + term.ioa_name() + ")**";
     }
-    protected String java_name_impl(VarInfo v) {
-      return term.java_name(v) + ".getClass().toString()";
+
+    protected String javaFamilyFormat(String varname, boolean isArray) {
+      if (isArray) {
+        return "daikon.Quant.typeArray(" + varname + ")";
+      } else {
+        return varname + ".getClass().toString()";
+      }
     }
-    // [[[ FIXME: this is wrong (term can be an array) ]]]
+
+    protected String java_name_impl(VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
+      return javaFamilyFormat(term.java_name(v), v.type.isArray());
+    }
+
     protected String jml_name_impl(VarInfo v) {
-      return term.jml_name(v) + ".getClass().toString()";
+      if (testCall) { return "no format when testCall."; }
+      return javaFamilyFormat(term.jml_name(v), v.type.isArray());
     }
     protected String dbc_name_impl(VarInfo v) {
-      return term.dbc_name(v) + ".getClass().toString()";
+      if (testCall) { return "no format when testCall."; }
+      return javaFamilyFormat(term.dbc_name(v), v.type.isArray());
     }
     protected String identifier_name_impl() {
       return "type_of_" + term.identifier_name() + "___";
