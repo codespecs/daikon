@@ -211,6 +211,10 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     return false;
   }
 
+  public boolean isInteresting() {
+    return false;
+  }
+
   // Look up a previously instantiated invariant.
   public static OneOfSequence  find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);

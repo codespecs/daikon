@@ -85,6 +85,10 @@ public class LowerBound  extends SingleScalar  {
     return core.isSameFormula(((LowerBound ) other).core);
   }
 
+  public boolean isInteresting() {
+    return false;
+  }
+
   public boolean isObviousDerived() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {

@@ -189,6 +189,12 @@ public class LOWERBOUND extends SINGLESCALAR {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
+#if (defined(LOWER) || defined(UPPER))
+  public boolean isInteresting() {
+    return false;
+  }
+#endif
+
   public boolean isObviousDerived() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {

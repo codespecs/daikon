@@ -188,6 +188,10 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     return false;
   }
 
+  public boolean isInteresting() {
+    return false;
+  }
+
   // Look up a previously instantiated invariant.
   public static OneOfStringSequence  find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);

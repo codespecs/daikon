@@ -243,6 +243,10 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     return false;
   }
 
+  public boolean isInteresting() {
+    return false;
+  }
+
   // Look up a previously instantiated invariant.
   public static EltOneOfString  find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);

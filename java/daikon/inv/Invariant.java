@@ -723,6 +723,11 @@ public abstract class Invariant implements java.io.Serializable {
     return result;
   }
 
+  // Uninteresting invariants will override this method to return
+  // false
+  public boolean isInteresting() {
+    return true;
+  }
 
   // Orders invariants by class, then by variable names.  If the
   // invariants are both of class Implication, they are ordered by

@@ -289,6 +289,10 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     return false;
   }
 
+  public boolean isInteresting() {
+    return false;
+  }
+
   // Look up a previously instantiated invariant.
   public static EltOneOf  find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);
