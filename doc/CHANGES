@@ -73,7 +73,7 @@ Annotate
 
    Annotate has been updated so that it now respects placement of tabs in
    the source file: if there was a tab in the original source file,
-   then the same tab will appear in the annotated file (module
+   then the same tab will appear in the annotated file (modulo
    displacements caused by inserted annotations).
 
 Runtime-check instrumenter
