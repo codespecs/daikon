@@ -353,7 +353,7 @@ public final class CLASSNAME
 
    if (Debug.logDetail())
       wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z + " to invariant");
-	
+
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
       // so that we can compute a and b based on a far-separated triple.  If
@@ -361,10 +361,10 @@ public final class CLASSNAME
       // computation of the slope can be non-negligible.
 
       // skip points we've already seen
-      for (int i = 0; i < values_seen; i++)
-        if (def_points[i].equals (x, y, z))
+      for (int i = 0; i < values_seen; i++) 
+        if (def_points[i].equals (x, y, z)) 
           return InvariantStatus.NO_CHANGE;
-
+				
       def_points[values_seen] = new Point (x, y, z);
      
       values_seen++;
@@ -561,13 +561,14 @@ public final class CLASSNAME
 		for (int i = 0; i < def_point.length; i++)
 			dummy[i] = def_point[i];
 			
-
 		// find the max separation points		
 		maxsep_doubles(dummy);
 
-
+		//dummy[0] could be null when all the points are NaN
+		if(dummy[0] != null) {
 		//find the equation (constants and coeffs now stored in constants[])
 		calc_bi_linear(dummy);
+		
 		
 		//check the other points against the constants and coefficients
 		for(int i = 0; i < def_point.length; i++) {
@@ -581,6 +582,7 @@ public final class CLASSNAME
 				constants[j] = -999;		//reset constants array
 			break;
 			}
+		}
 		}
 	}
 
