@@ -40,16 +40,9 @@ public class ValueTracker
   // justified
   public final static int max_elt_values = 8;
 
-  // Also 8 because SeqIndexComparison only needs to see 8
-  // values before becoming justified
-  public final static int max_seq_index_values = 8;
-
   // These fields are protected so that subclasses can view them, for debugging.
 
   protected int[] values_cache;
-
-  // Only SeqIndexComparison uses this
-  protected int[] seq_index_cache;
 
   // Only PairwiseIntComparison uses this
   protected int[] elt_values_cache;
@@ -58,30 +51,16 @@ public class ValueTracker
   // of active elements (equivalently, the first unused index).
   private int values_end = 0;
   private int elt_values_end = 0;
-  private int seq_index_values_end = 0;
-
-  // number of arrays with length > 1, for the NoDuplicates invariant
-  protected int no_dup_elt_count;
 
   public ValueTracker(int max_values) {
     Assert.assertTrue(max_values > 0);
     this.max_values = max_values;
-    this.no_dup_elt_count = 0;
     this.values_cache = new int[max_values];
     this.elt_values_cache = new int[max_elt_values];
-    this.seq_index_cache = new int[max_seq_index_values];
-  }
-
-  public int num_no_dup_values() {
-    return no_dup_elt_count;
   }
 
   public int num_values() {
     return values_end;
-  }
-
-  public int num_seq_index_values() {
-    return seq_index_values_end;
   }
 
   public int num_elt_values() {
@@ -125,22 +104,6 @@ public class ValueTracker
       elt_values_cache = null;
   }
 
-  public void seq_index_add(int v1) {
-    if (seq_index_cache == null) return;
-
-    for (int i = 0; i < max_seq_index_values; i++) {
-      int elt = seq_index_cache[i];
-      if (elt == v1) {
-        return;
-      }
-    }
-    seq_index_cache[seq_index_values_end++] = v1;
-
-    if (seq_index_values_end == max_seq_index_values)
-      seq_index_cache = null;
-  }
-
-
   public Object clone() {
     try {
       ValueTracker result = (ValueTracker) super.clone();
@@ -149,9 +112,6 @@ public class ValueTracker
       }
       if (elt_values_cache != null) {
         result.elt_values_cache = (int[]) elt_values_cache.clone();
-      }
-      if (seq_index_cache != null) {
-        result.seq_index_cache = (int[]) seq_index_cache.clone();
       }
       return result;
     } catch (CloneNotSupportedException e) {
@@ -186,14 +146,15 @@ public class ValueTracker
           result.add_int (vt.values_cache[j]);
       }
 
-      // Merge these values into the sequence index cache
-      if (vt.seq_index_cache == null) {
-        result.seq_index_cache = null;
-        result.seq_index_values_end = vt.seq_index_values_end;
-      } else {
-        for (int j = 0; j < vt.num_seq_index_values(); j++)
-          result.seq_index_add (vt.seq_index_cache[j]);
-      }
+      // TODO
+      // // Merge these values into the sequence index cache
+      // if (vt.seq_index_cache == null) {
+      //   result.seq_index_cache = null;
+      //   result.seq_index_values_end = vt.seq_index_values_end;
+      // } else {
+      //   for (int j = 0; j < vt.num_seq_index_values(); j++)
+      //     result.seq_index_add (vt.seq_index_cache[j]);
+      // }
 
       // Merge these values into the elt_values_cache
       if (vt.elt_values_cache == null) {
@@ -209,9 +170,7 @@ public class ValueTracker
   }
 
   public String toString() {
-    return ("[num_values=" + num_values() + ", num_seq_index_values=" +
-            num_seq_index_values() + ", num_elt_values=" + num_elt_values()
-            + "]");
+    return ("[num_values=" + num_values() + "]");
   }
 
 
@@ -275,7 +234,53 @@ public class ValueTracker
     }
   }
 
-  public static class ValueTrackerScalarArray extends ValueTracker1 {
+  public static abstract class ValueTrackerOneArray extends ValueTracker1 {
+    // number of arrays with length > 1, for the NoDuplicates invariant
+    protected int no_dup_elt_count = 0;
+
+    // SeqIndexComparison only needs to see 8 values before becoming justified
+    public final static int max_seq_index_values = 8;
+    // Only SeqIndexComparison uses this
+    protected int[] seq_index_cache;
+    // The number of active elements (equivalently, the first unused index)
+    private int seq_index_values_end = 0;
+
+    public ValueTrackerOneArray(int max_values) {
+      super(max_values);
+      this.seq_index_cache = new int[max_seq_index_values];
+    }
+
+    public int num_no_dup_values() {
+      return no_dup_elt_count;
+    }
+    public int num_seq_index_values() {
+      return seq_index_values_end;
+    }
+
+    public void seq_index_add(int v1) {
+      if (seq_index_cache == null) return;
+      for (int i = 0; i < max_seq_index_values; i++) {
+        int elt = seq_index_cache[i];
+        if (elt == v1) {
+          return;
+        }
+      }
+      seq_index_cache[seq_index_values_end++] = v1;
+      if (seq_index_values_end == max_seq_index_values)
+        seq_index_cache = null;
+    }
+
+    public Object clone() {
+      ValueTrackerOneArray result = (ValueTrackerOneArray) super.clone();
+      if (seq_index_cache != null) {
+        result.seq_index_cache = (int[]) seq_index_cache.clone();
+      }
+      return result;
+    }
+
+  }
+
+  public static class ValueTrackerScalarArray extends ValueTrackerOneArray {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -284,6 +289,7 @@ public class ValueTracker
     public ValueTrackerScalarArray(int max_values) {
       super(max_values);
     }
+
     protected void add_val(Object v1) {
       long[] a = (long[]) v1;
       if (a.length > 1)
@@ -295,17 +301,22 @@ public class ValueTracker
         seq_index_add(UtilMDE.hash(a[i], i));
       }
     }
+
   }
 
-  public static class ValueTrackerFloatArray extends ValueTracker1 {
+  public static class ValueTrackerFloatArray extends ValueTrackerOneArray {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    // number of arrays with length > 1, for the NoDuplicates invariant
+    protected int no_dup_elt_count = 0;
+
     public ValueTrackerFloatArray(int max_values) {
       super(max_values);
     }
+
     protected void add_val(Object v1) {
       double[] a = (double[]) v1;
       if (a.length > 1)
@@ -317,6 +328,7 @@ public class ValueTracker
         seq_index_add(UtilMDE.hash(a[i], i));
       }
     }
+
   }
 
   public static class ValueTrackerString extends ValueTracker1 {

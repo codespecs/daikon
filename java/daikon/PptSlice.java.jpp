@@ -393,10 +393,12 @@ public final class PPTSLICE1
     if (Invariant.dkconfig_use_confidence) {
       throw new Error("to be implemented");
     } else {
-      if (values_cache == null) {
+      ValueTracker.ValueTrackerOneArray vt1a = (ValueTracker.ValueTrackerOneArray) values_cache;
+      if (vt1a == null) {
+        // Shouldn't this be the max value rather than zero??
         return 0;
       } else {
-        return this.values_cache.num_no_dup_values();
+        return vt1a.num_no_dup_values();
       }
     }
   }
@@ -408,10 +410,12 @@ public final class PPTSLICE1
     if (Invariant.dkconfig_use_confidence) {
       throw new Error("to be implemented");
     } else {
-      if (values_cache == null) {
+      ValueTracker.ValueTrackerOneArray vt1a = (ValueTracker.ValueTrackerOneArray) values_cache;
+      if (vt1a == null) {
+        // Shouldn't this be the max value rather than zero??
         return 0;
       } else {
-        return this.values_cache.num_seq_index_values();
+        return vt1a.num_seq_index_values();
       }
     }
   }
