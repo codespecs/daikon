@@ -170,7 +170,7 @@ public class PptTopLevel extends Ppt {
       for (int i=0; i<exits.size(); i++) {
         PptTopLevel exit = (PptTopLevel) exits.elementAt(i);
         // System.out.println("Recursive call from " + name + " via " + entry_ppt.name + ": " + exit.name);
-        if (exit.has_samples()) {
+        if ((exit != this) && exit.has_samples()) {
           return true;
         }
       }
@@ -1487,11 +1487,11 @@ public class PptTopLevel extends Ppt {
           System.out.println("Omitting " + pconds[i].name + ": "
                              + this_num_samples + "/" + parent_num_samples
                              + " samples");
-        // Unconditional output, because it's too confusing otherwise.
-        if (this_num_samples == parent_num_samples) {
-          System.out.println("Condition always satisfied: "
-                             + pconds[i].name + " == " + this.name);
-        }
+        // // Unconditional output, because it's too confusing otherwise.
+        // if (this_num_samples == parent_num_samples) {
+        //   System.out.println("Condition always satisfied: "
+        //                      + pconds[i].name + " == " + this.name);
+        // }
       }
     }
     if (Global.debugPptSplit)
