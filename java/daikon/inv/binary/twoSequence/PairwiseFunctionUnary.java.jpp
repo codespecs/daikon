@@ -108,7 +108,7 @@ public class CLASSNAME
       return format_simplify();
     }
 
-    return core.format_using(format, var1().name, var2().name);
+    return core.format_using(format, var1().name, var1(), var2().name, var2());
   }
 
   public String format_simplify() {
@@ -137,8 +137,8 @@ public class CLASSNAME
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-                          quant1.getVarName(0),
-                          quant2.getVarName(0))
+                          quant1.getVarName(0), null,
+                          quant2.getVarName(0), null)
       + quant1.getClosingExp();
   }
 
