@@ -438,21 +438,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (null);
   }
 
-
-  /**
-   * Checks to see if the specified antecedent exists.  If it does, returns
-   * the appropriate DiscardInfo.  Otherwise returns null.
-   */
-  public DiscardInfo check_obvious (InvDef antecedent) {
-
-    Invariant inv = antecedent.find();
-    if (inv == null)
-      return (null);
-
-    return (new DiscardInfo (this, DiscardCode.obvious, "Implied by "
-                              + inv.format()));
-  }
-
 #if defined (SEQ)
   /**
    * Returns an invariant that is true when the size(v1) == size(v2).

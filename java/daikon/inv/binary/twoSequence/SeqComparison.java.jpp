@@ -354,12 +354,6 @@ public class SEQSEQINTEQUAL
     return (new SEQSEQINTEQUAL(slice, has_order));
   }
 
-#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-  public boolean is_equality_inv() {
-    return (true);
-  }
-#endif
-
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return this;
