@@ -14,7 +14,7 @@
 ###
 
 ## Built-in Python modules
-import glob, gzip, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
+import glob, gzip, math, operator, os, pickle, posix, re, resource, string, sys, time, types, whrandom
 # Do NOT use cPickle.  It is buggy!  (Or so it seems, as of 1.5.1.)
 # As of 1.5.1, gzip's readline() result omits trailing "\n"; fixed in 1.5.2.
 
@@ -39,8 +39,10 @@ false = (1==0)
 # But if they're indented, maybe my future tools for variable decls won't work.
 if not locals().has_key("fn_var_infos"):
     ### User configuration variables
-    no_ternary_invariants = true
-    no_invocation_counts = true
+    # These first two used to default to true, for speed; but I've set them
+    # back to false, for completeness.
+    no_ternary_invariants = false
+    no_invocation_counts = false
     collect_stats = true                # performance statistics
     lackwit_type_format = "explicit"    # types list the comparable values
     # lackwit_type_format = "implicit"  # types name a symbol
@@ -73,7 +75,7 @@ if not locals().has_key("fn_var_infos"):
     ## Function variables
     # Used to add invocation count variables for each program function.
     # (What do we do now, if not that??)
-    # Note the function name does not include the suffix ':::END...'
+    # Note the function name does not include the suffix ':::END' or ':::EXIT'
     functions = []
     fn_invocations = {}       # from function name to invocation count
     # From function name to stack of parameter values.
@@ -273,7 +275,7 @@ def fn_var_values_invalid(fvv, modincount):
     """MODINCOUNT is true if the value should be a length-2 tuple
     and the key should be a list of integers.
     MODINCOUNT is false if the value should be an integer
-    and the key shoudl be a list of length-2 tuples."""
+    and the key should be a list of length-2 tuples."""
     for ppt in fvv.keys():
         subresult = var_values_invalid(fvv[ppt], modincount)
         if subresult:
@@ -348,16 +350,16 @@ def parse_vartype(str):
         dimensions = dimensions+1
         str = str[9:]
     if not (str in known_types):
-        # hack for Java
-        if str == "java.lang.String":
+        # hack for Java.  (I want to avoid the short names if possible.)
+        if (str == "java.lang.String") or (str == "String"):
             str = "char"
             dimensions = dimensions+1
-        elif str == "java.util.Vector":
+        elif (str == "java.lang.Vector") or (str == "Vector"):
             str = "java_object"
             dimensions = dimensions+1
         else:
             jtmatch = java_type_re.match(str)
-            if jtmatch != None:
+            if (jtmatch != None) or (str == "Object"):
                 str = "java_object"
     if dimensions == 0:
         return str
@@ -1714,9 +1716,11 @@ def after_processing_all_declarations():
     # Add "_orig"inal values
     for ppt in fns_to_process:
         (ppt_sans_suffix, ppt_suffix) = (string.split(ppt, ":::", 1) + [""])[0:2]
-        if (ppt_suffix != "END") and (ppt_suffix != "EXIT"):
+        if ((ppt_suffix != "END") and (ppt_suffix != "EXIT")
+            and (ppt_suffix[0:4] != "EXIT")):
             continue
         these_var_infos = fn_var_infos[ppt]
+        # "BEGIN" and "END" correspond; "ENTER" and "EXIT" correspond.
         if (ppt_suffix == "END"):
             begin_ppt = ppt_sans_suffix + ":::BEGIN"
         else:
@@ -1864,7 +1868,7 @@ def read_data_trace_file(filename, fn_regexp=None):
                 assert (this_var_type in integral_types) or (this_var_type == "pointer") or (this_var_type == "address") or (this_var_type == "java_object")
                 if this_value == "uninit":
                     this_value = None
-                elif this_value == "NIL":
+                elif (this_value == "NIL") or (this_value == "null"):
                     # HACK
                     this_value = 0
                 elif (this_var_type == "pointer") or (this_var_type == "address"):
@@ -1887,6 +1891,7 @@ def read_data_trace_file(filename, fn_regexp=None):
 	    these_values.append((this_value,this_var_modified))
 
         line = file.readline()
+        # Expecting the end of a block of values.
         assert (line == "\n") or (line == "")
 
         # Add invocation counts
@@ -1899,13 +1904,15 @@ def read_data_trace_file(filename, fn_regexp=None):
                 current_var_index = current_var_index + 1
 
         ## Original values.
-        params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
         # If beginning of function, store the original param val
         if (tag_suffix == "ENTER") or (tag_suffix == "BEGIN"):
+            params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
             params_to_orig_val_stack.append(these_values)
         # If end of function call, pop previous original param value and
         # add to current parameter values.
-        if (tag_suffix == "EXIT") or (tag_suffix == "END"):
+        if ((tag_suffix == "EXIT") or (tag_suffix == "END")
+            or (tag_suffix[0:4] == "EXIT")):
+            params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
             # Equivalently, in Python 1.5.2:
             #   these_values = these_values + params_to_orig_val_stack.pop()
             old_values = params_to_orig_val_stack[-1]
@@ -2121,11 +2128,13 @@ def all_numeric_invariants(fn_regexp=None):
 
         assert len(var_infos) == len(var_values.keys()[0])
 
-        # I hope this doesn't give too many results
-        print_invariants("^" + re.escape(fn_name) + r'($|\b)')
+        print "==========================================================================="
+        print_invariants_ppt(fn_name)
 
         # if collect_stats:
         #     end_fn_timing(fn_name)
+
+    print "==========================================================================="
 
     # if collect_stats:
     #     engine_end_time = time.clock()
@@ -2350,72 +2359,83 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             # if fn_regexp:  print fn_name, "does not match", fn_regexp.pattern
             continue
         print "==========================================================================="
-        print fn_name, fn_samples[fn_name], "samples"
-        var_infos = fn_var_infos[fn_name]
+        print_invariants_ppt(fn_name, print_unconstrained)
+    print "==========================================================================="
 
-        # Equality invariants
-        for vi in var_infos:
-            if not vi.is_canonical():
+
+def print_invariants_ppt(fn_name, print_unconstrained=0):
+    """Print invariants for a single program point."""
+    print fn_name, fn_samples[fn_name], "samples"
+    var_infos = fn_var_infos[fn_name]
+
+    # Equality invariants
+    for vi in var_infos:
+        if not vi.is_canonical():
+            continue
+        if vi.equal_to == []:
+            # Not equal to anything else, so not an equality invariant
+            continue
+        if vi.invariant.is_exact():
+            value = "= %s" % (vi.invariant.min,) # this value may be a sequence
+        else:
+            value = ""
+        print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value,
+        if vi.invariant.values == 1:
+            print "\t(1 value)"
+        else:
+            print "\t(%d values)" % (vi.invariant.values,)
+
+    # Single invariants
+    for vi in var_infos:
+        if not vi.is_canonical():
+            continue
+        this_inv = vi.invariant
+        if (this_inv.is_exact() and vi.equal_to != []):
+            # Already printed above in "equality invariants" section
+            continue
+        if print_unconstrained or not this_inv.is_unconstrained():
+            print " ", this_inv.format((vi.name,))
+    # Pairwise invariants
+    nonequal_constraints = []
+    # Maybe this is faster than calling "string.find"; I'm not sure.
+    nonequal_re = re.compile(" != ")
+    for vi in var_infos:
+        if not vi.is_canonical():
+            continue
+        vname = vi.name
+        for (index,inv) in vi.invariants.items():
+            if type(index) != types.IntType:
                 continue
-            if vi.equal_to == []:
-                # Not equal to anything else, so not an equality invariant
+            if not var_infos[index].is_canonical():
                 continue
-            if vi.invariant.is_exact():
-                value = "= %s" % (vi.invariant.min,) # this value may be a sequence
+            if (not print_unconstrained) and inv.is_unconstrained():
+                continue
+            formatted = inv.format((vname, var_infos[index].name))
+            # Not .match(...), which only checks at start of string!
+            if nonequal_re.search(formatted):
+                nonequal_constraints.append(formatted)
             else:
-                value = ""
-            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value, "\t(%d values)" % (vi.invariant.values,)
-
-        # Single invariants
-        for vi in var_infos:
-            if not vi.is_canonical():
+                print "   ", formatted
+    for ne_constraint in nonequal_constraints:
+        print "    ", ne_constraint
+    # Three-way (and greater) invariants
+    for vi in var_infos:
+        if not vi.is_canonical():
+            continue
+        vname = vi.name
+        for (index_pair,inv) in vi.invariants.items():
+            if type(index_pair) == types.IntType:
                 continue
-            this_inv = vi.invariant
-            if (this_inv.is_exact() and vi.equal_to != []):
-                # Already printed above in "equality invariants" section
+            (i1, i2) = index_pair
+            if not var_infos[i1].is_canonical():
+                # Perhaps err; this shouldn't happen, right?
                 continue
-            if print_unconstrained or not this_inv.is_unconstrained():
-                print " ", this_inv.format((vi.name,))
-        # Pairwise invariants
-        nonequal_constraints = []
-        # Maybe this is faster than calling "string.find"; I'm not sure.
-        nonequal_re = re.compile(" != ")
-        for vi in var_infos:
-            if not vi.is_canonical():
+            if not var_infos[i2].is_canonical():
+                # Perhaps err; this shouldn't happen, right?
                 continue
-            vname = vi.name
-            for (index,inv) in vi.invariants.items():
-                if type(index) != types.IntType:
-                    continue
-                if not var_infos[index].is_canonical():
-                    continue
-                if (not print_unconstrained) and inv.is_unconstrained():
-                    continue
-                formatted = inv.format((vname, var_infos[index].name))
-                # Not .match(...), which only checks at start of string!
-                if nonequal_re.search(formatted):
-                    nonequal_constraints.append(formatted)
-                else:
-                    print "   ", formatted
-        for ne_constraint in nonequal_constraints:
-            print "    ", ne_constraint
-        # Three-way (and greater) invariants
-        for vi in var_infos:
-            if not vi.is_canonical():
-                continue
-            vname = vi.name
-            for (index_pair,inv) in vi.invariants.items():
-                if type(index_pair) == types.IntType:
-                    continue
-                (i1, i2) = index_pair
-                if not var_infos[i1].is_canonical():
-                    # Perhaps err; this shouldn't happen, right?
-                    continue
-                if not var_infos[i2].is_canonical():
-                    # Perhaps err; this shouldn't happen, right?
-                    continue
-                if print_unconstrained or not inv.is_unconstrained():
-                    print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
+            if print_unconstrained or not inv.is_unconstrained():
+                print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
+    sys.stdout.flush()
 
 
 ###########################################################################
@@ -3010,7 +3030,10 @@ class two_scalar_numeric_invariant(invariant):
 
         (x,y) = arg_tuple
 
-        suffix = " \t(%d values)" % (self.values,)
+        if self.values == 1:
+            suffix = " \t(1 value)"
+        else:
+            suffix = " \t(%d values)" % (self.values,)
 
         if self.comparison == "=":
             return "%s = %s" % (x,y) + suffix
@@ -3196,13 +3219,13 @@ class three_scalar_numeric_invariant(invariant):
         # not meaningful (too few values) if len(triples) < 5;
         # instead of hard-coding a number here, could check for one_of.
         if len(triples) > 4:
-            linear_z = checked_tri_linear_relationship(triples, (0,1,2))
-            linear_y = checked_tri_linear_relationship(triples, (0,2,1))
-            linear_x = checked_tri_linear_relationship(triples, (1,2,0))
+            self.linear_z = checked_tri_linear_relationship(triples, (0,1,2))
+            self.linear_y = checked_tri_linear_relationship(triples, (0,2,1))
+            self.linear_x = checked_tri_linear_relationship(triples, (1,2,0))
         else:
-            linear_z = None
-            linear_y = None
-            linear_x = None
+            self.linear_z = None
+            self.linear_y = None
+            self.linear_x = None
 
         global symmetric_binary_functions, non_symmetric_binary_functions
 
@@ -3320,7 +3343,10 @@ class three_scalar_numeric_invariant(invariant):
 
         (x,y,z) = arg_tuple
 
-        suffix = " \t(%s values)" % (self.values,)
+        if self.values == 1:
+            suffix = " \t(1 value)"
+        else:
+            suffix = " \t(%s values)" % (self.values,)
 
         if self.linear_z or self.linear_y or self.linear_x:
             results = []
@@ -3732,7 +3758,10 @@ class single_sequence_numeric_invariant(invariant):
         # Do we care more that it is sorted, or that it is in given range?
         # How much of this do we want to print out?
 
-        suffix = " \t(%s values)" % (self.values,)
+        if self.values == 1:
+            suffix = " \t(1 value)"
+        else:
+            suffix = " \t(%s values)" % (self.values,)
         result = []
         ## For now, comment this out; too much extraneous output.
         # if self.min_justified and self.max_justified:
@@ -3921,7 +3950,10 @@ class scalar_sequence_numeric_invariant(invariant):
         # if self.size:
         #     result.append("%s is the size of %s" % (sclvar,seqvar))
 
-        suffix = " \t(%s values)" % (self.values,)
+        if self.values == 1:
+            suffix = " \t(1 value)"
+        else:
+            suffix = " \t(%s values)" % (self.values,)
         if result != []:
             return string.join(result, " and ") + suffix
 
@@ -4061,7 +4093,10 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values)" % (self.values,)
+        if self.values == 1:
+            suffix = " \t(1 value)"
+        else:
+            suffix = " \t(%s values)" % (self.values,)
 
         (x, y) = arg_tuple
         if self.comparison == "=":
@@ -4169,7 +4204,8 @@ class two_sequence_numeric_invariant(invariant):
 
 
 # Perhaps I don't really need fn_samples.
-# Skip fn_var_values for now.
+# Notice that at present this does not store fn_var_values, from which the
+# invariants are computed -- it just stores the invariants themselves.
 
 def write_state(filename):
     """Write global invariants variables to FILENAME."""
@@ -4187,18 +4223,66 @@ def read_state(filename):
     """Read global invariants variables from FILENAME,
     and return the values rather than setting the globals."""
     filename = util.expand_file_name(filename)
+    ## This doesn't work because TextFile doesn't support the read() operation.
+    # file = TextFile.TextFile(filename, "r")
     if (filename[-3:] == ".gz"):
         file = gzip.open(filename, "r")
     elif (filename[-2:] == ".Z"):
         raise "Can't read from .Z state files; uncompress or convert to .gz"
     else:
         file = open(filename, "r")
-    ## This doesn't work because TextFile doesn't support the read() operation.
-    # file = TextFile.TextFile(filename, "r")
     result_fn_samples = pickle.load(file)
     result_fn_var_infos = pickle.load(file)
     file.close()
     return (result_fn_samples, result_fn_var_infos)
+
+
+## This version of write_state only writes fn_var_values (and related
+## variables).
+## I'm not sure that all of these are required, but just in case...
+#     fn_var_infos
+#     fn_truevars
+#     fn_var_values
+#     fn_samples
+#     fn_derived_from
+#     functions
+
+
+def write_state_values(filename):
+    filename = util.expand_file_name(filename)
+    file = TextFile.TextFile(filename, "w")
+    pickle.dump(fn_var_infos, file)
+    pickle.dump(fn_truevars, file)
+    pickle.dump(fn_var_values, file)
+    pickle.dump(fn_samples, file)
+    pickle.dump(fn_derived_from, file)
+    pickle.dump(functions, file)
+    file.close()
+
+def read_state_values(filename):
+    """Read global invariants variables from FILENAME,
+    and return the values rather than setting the globals."""
+    filename = util.expand_file_name(filename)
+    ## This doesn't work because TextFile doesn't support the read() operation.
+    # file = TextFile.TextFile(filename, "r")
+    if (filename[-3:] == ".gz"):
+        file = gzip.open(filename, "r")
+    elif (filename[-2:] == ".Z"):
+        raise "Can't read from .Z state files; uncompress or convert to .gz"
+    else:
+        file = open(filename, "r")
+    result_fn_var_infos = pickle.load(file)
+    result_fn_truevars = pickle.load(file)
+    result_fn_var_values = pickle.load(file)
+    result_fn_samples = pickle.load(file)
+    result_fn_derived_from = pickle.load(file)
+    result_functions = pickle.load(file)
+    file.close()
+    return (result_fn_var_infos, result_fn_truevars, result_fn_var_values, result_fn_samples, result_fn_derived_from, result_functions)
+
+def read_set_state_values(filename):
+    global fn_var_infos, fn_truevars, fn_var_values, fn_samples, fn_derived_from, functions
+    (fn_var_infos, fn_truevars, fn_var_values, fn_samples, fn_derived_from, functions) = read_state_values(filename)
 
 
 ###########################################################################

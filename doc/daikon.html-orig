@@ -186,10 +186,9 @@ All this is obsolete.
 <h3><a name="run-program">Step 2:  Run the program</a></h3>
 
 You can run the instrumented program in just the same way you did before;
-the only behavioral change will be writing a <tt>.dtrace</tt> file (for the
-Lisp and Java front ends) or a <tt>.trace</tt> file (for the C front end).
+the only behavioral change will be writing a <tt>.dtrace</tt> file.
 Run the program over some test suite in order to create a collection of
-trace files.<p>
+data trace files.<p>
 
 <h4><a name="run-program-examples">Examples</a></h4>
 
@@ -286,8 +285,8 @@ Miscellaneous files
 
 <h2><a name="license">License</a></h2>
 
-Daikon is made available for education and research purposes (not for
-direct commercial gain), and there is no warranty.  All rights are
+Daikon is made available for education, research, and evaluation purposes
+(not for direct commercial gain), and there is no warranty.  All rights are
 reserved, and copyright is held by the authors.  If you have difficulties
 with the software, let us know and we will try to correct the problem, but
 we cannot make any guarantees of support, or any other guarantees regarding
