@@ -1041,7 +1041,7 @@ public class Ast {
     Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name but not in invs[1].
     // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);
-    Assert.assertTrue(invs[2].startsWith("    Variables: "));
+    Assert.assertTrue(invs[2].startsWith("    Variables:"));
     return ArraysMDE.subarray(invs, 3, invs.length-1-3);
   }
 
