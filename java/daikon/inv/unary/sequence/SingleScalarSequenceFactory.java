@@ -41,8 +41,8 @@ public final class SingleScalarSequenceFactory {
           result.add(SeqIndexNonEqual.instantiate(ppt));
         }
 
-        // Must now instantiate one of each type... perhaps this functionality can
-        // be moved to their superclass EltwiseIntComparison
+        // Must now instantiate one of each type... perhaps this functionality
+        // can be moved to their superclass EltwiseIntComparison.
 
         result.add(EltwiseIntEqual.instantiate(ppt));
         result.add(EltwiseIntNonEqual.instantiate(ppt));

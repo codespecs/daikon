@@ -41,8 +41,8 @@ public final class SingleFloatSequenceFactory {
           result.add(SeqIndexNonEqualFloat.instantiate(ppt));
         }
 
-        // Must now instantiate one of each type... perhaps this functionality can
-        // be moved to their superclass EltwiseIntComparison
+        // Must now instantiate one of each type... perhaps this functionality
+        // can be moved to their superclass EltwiseIntComparison.
 
         result.add(EltwiseFloatEqual.instantiate(ppt));
         result.add(EltwiseFloatNonEqual.instantiate(ppt));
