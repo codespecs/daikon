@@ -7,10 +7,10 @@ TRACE_NAME=RatNum.dtrace
 
 PACKAGE=PolyCalc
 
-SOURCE_UNCHANGED:=${PACKAGE}/RatNumTest.java
+SOURCE_UNCHANGED:=${PACKAGE}/RatNumTest.java ${PACKAGE}/RatNumTest2.java
 SOURCE_TO_DFEJ:=${PACKAGE}/RatNum.java
 
-MAIN_RUN:=junit.textui.TestRunner ${PACKAGE}.RatNumTest
+MAIN_RUN:=junit.textui.TestRunner ${PACKAGE}.RatNumTest2
 
 include ../Makefile-fora-project
 
