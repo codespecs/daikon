@@ -203,11 +203,8 @@ public final class CLASSNAME
     return form[0] + form[1] + " " + comparator + index1.name() + form[2];
   }
 
-  // RRN: unsure of this
   public String format_dbc() {
-    String comparator = core.format_comparator();
-    String[] form = VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name });
-    return form[0] + "(" + form[1] + " " + comparator + " i)" + form[2];
+    return format_unimplemented(OutputFormat.DBCJAVA);
   }
 
   public String format_simplify() {

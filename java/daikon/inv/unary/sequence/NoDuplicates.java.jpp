@@ -131,7 +131,7 @@ public class CLASSNAME
     }
 
     if (format == OutputFormat.DBCJAVA) {
-      return format_dbc();
+      return format_unimplemented(format);
     }
 
     return format_unimplemented(format);
@@ -234,7 +234,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-    return "warning: dbc can't handle NoDuplicates invariant.";
+    return format_unimplemented(OutputFormat.DBCJAVA);
   }
 
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {

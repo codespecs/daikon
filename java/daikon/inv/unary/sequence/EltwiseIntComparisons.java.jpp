@@ -246,14 +246,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-    String[] form =
-      VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name, var().name });
-    String comparator = COMPARATORSTRING;
-    if ("==".equals(comparator)) {
-      return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
-    } else {
-      return form[0] + "((i+1 == j) $implies (" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
-    }
+    return format_unimplemented(OutputFormat.DBCJAVA);
   }
 
   public String format_simplify() {
