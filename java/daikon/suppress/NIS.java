@@ -182,7 +182,7 @@ public class NIS {
     for (Iterator i = suppressor_map.keySet().iterator(); i.hasNext(); ) {
       Class sclass = (Class) i.next();
       List suppression_set_list = (List) suppressor_map.get (sclass);
-      for (ListIterator j = suppression_set_list.listIterator(); j.hasNext();){
+      for (ListIterator j = suppression_set_list.listIterator(); j.hasNext();) {
         NISuppressionSet ss = (NISuppressionSet) j.next();
         if (j.previousIndex() > 0)
           debug.fine (Fmt.spf ("        : %s", ss));

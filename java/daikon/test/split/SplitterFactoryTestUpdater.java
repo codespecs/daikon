@@ -116,6 +116,8 @@ public class SplitterFactoryTestUpdater {
    * Moves the generated splitter files from the tempDir to the target Dir.
    */
   private static void moveFiles() {
+    // TODO: Should this reuse the field "tempDir" rather than declaring a
+    // new local variable?
     File tempDir = new File(SplitterFactory.getTempDir());
     SplitterFactoryTestUpdater.tempDir = tempDir;
     String[] fileNames = tempDir.list();

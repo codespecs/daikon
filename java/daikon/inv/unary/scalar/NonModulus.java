@@ -155,6 +155,7 @@ public class NonModulus
     }
   }
 
+  /** Returns true if this has the given modulus and remainder. **/
   public boolean hasModulusRemainder(long modulus, long remainder) {
     updateResults();
     if (no_result_yet)

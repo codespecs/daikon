@@ -224,7 +224,7 @@ public class CLASSNAME
 
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     InvariantStatus status = check_modified(a, count);
-    if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)){
+    if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
       debug.fine ("Destroying myself with: " + var().name.repr());
       debug.fine (ArraysMDE.toString(a));
     }

@@ -129,7 +129,7 @@ public final class MakeInvariantChecker {
     try {
       Iterator outputFiles = java_files.iterator();
       Iterator inputFiles = inv_files.iterator();
-      while (outputFiles.hasNext()){
+      while (outputFiles.hasNext()) {
         File outputFile = (File) outputFiles.next();
         File inputFile = (File) inputFiles.next();
         HashMap invariants = processInvariants(inputFile);
@@ -154,7 +154,7 @@ public final class MakeInvariantChecker {
         }
       }
     }
-    catch (IOException e){
+    catch (IOException e) {
       System.out.println(e.toString());
       e.printStackTrace();
     }
@@ -368,7 +368,7 @@ public final class MakeInvariantChecker {
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(pptMap);
 
-      while(invariants.hasNext()){
+      while(invariants.hasNext()) {
         Invariant inv = (Invariant) invariants.next();
         if (fi.shouldKeep (inv) == null)
           continue;
@@ -551,7 +551,7 @@ public final class MakeInvariantChecker {
     else {
       String retString = "";
       for (int i = 0; i < javaIdentifier.length() ; i++) {
-        if (!Character.isJavaIdentifierPart(javaIdentifier.charAt(i))){
+        if (!Character.isJavaIdentifierPart(javaIdentifier.charAt(i))) {
 
           // Character does not have a getByte method.
           // So convert to string to get the bytes.
@@ -831,7 +831,7 @@ public final class MakeInvariantChecker {
                                          Daikon.lineSep));
 
     Iterator pptPoints = invariantInformation.keySet().iterator();
-    while (pptPoints.hasNext()){
+    while (pptPoints.hasNext()) {
       PptTopLevel atoplevel = (PptTopLevel) pptPoints.next();
       String pptPointName = makeValidJavaIdentifier(atoplevel.name());
       javaSourceWriter.print(UtilMDE.join (new String [] {
@@ -845,7 +845,7 @@ public final class MakeInvariantChecker {
 
     Iterator pptPoints2 = invariantInformation.keySet().iterator();
 
-    while (pptPoints2.hasNext()){
+    while (pptPoints2.hasNext()) {
       String initialization = Daikon.lineSep;
       PptTopLevel atoplevel = (PptTopLevel) pptPoints2.next();
       String pptPointName = makeValidJavaIdentifier(atoplevel.name());
@@ -870,7 +870,7 @@ public final class MakeInvariantChecker {
       int count = 0;
       int procedureCount = 0;
 
-      while (variableIterator.hasNext()){
+      while (variableIterator.hasNext()) {
         VarInfo aVarInfo = (VarInfo) variableIterator.next();
         VarInfoName aVarInfoName = aVarInfo.name;
         ProglangType representationType = aVarInfo.file_rep_type;
@@ -909,7 +909,7 @@ public final class MakeInvariantChecker {
             List otherVarInfos = (List) otherPptInfo[0];
             Iterator variableIt = otherVarInfos.iterator();
             int other_count = 0;
-            while (variableIt.hasNext()){
+            while (variableIt.hasNext()) {
               VarInfo aVarInfo = (VarInfo) variableIt.next();
               VarInfoName aVarInfoName = aVarInfo.name;
               ProglangType representationType = aVarInfo.file_rep_type;

@@ -229,7 +229,7 @@ public class InvariantChecker {
 
       // if this is a numbered exit, apply to the combined exit as well
       if (!(ppt instanceof PptConditional)
-          && ppt.ppt_name.isNumberedExitPoint()){
+          && ppt.ppt_name.isNumberedExitPoint()) {
         PptTopLevel parent = all_ppts.get (ppt.ppt_name.makeExit());
         if (parent != null) {
           parent.get_missingOutOfBounds (ppt, vt);
