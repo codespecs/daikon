@@ -35,6 +35,13 @@ public class StackArTester
     }
   }
 
+  public void push_noobserve(int i)
+  {
+    try {
+      s.push(createItem(i));
+    } catch (Overflow e) { }
+  }
+
   public void push(int i)
   {
     try {
@@ -67,6 +74,20 @@ public class StackArTester
       int x = (int)(1000 * Math.random());
       push(x);
     }
+  }
+
+  public void repPush_noobserve(int n)
+  {
+    for (int i=0; i < n; i++) {
+      int x = (int)(1000 * Math.random());
+      push_noobserve(x);
+    }
+  }
+
+  public void repPushOne()
+  {
+    int x = (int)(1000 * Math.random());
+    push(x);
   }
 
   public void popAll()
@@ -123,6 +144,20 @@ public class StackArTester
       fillWithSame(7);
       fillWithSame(22);
     }
+    // Avoid invariant about size <= 100
+    doNew(110);
+    topAndPop();
+    repPushOne();
+    topAndPop();
+    repPush_noobserve(110);
+    observe();
+    top();
+    topAndPop();
+    doNew(111);
+    // observe();
+    repPushOne();
+    observe();
+    makeEmpty();
   }
 
   public void run_short()
