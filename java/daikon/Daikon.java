@@ -565,10 +565,10 @@ public final class Daikon {
   }
 
   static public void create_splitters(PptMap all_ppts)throws IOException{
-    SplitterFactory factory = new SplitterFactory(all_ppts);
+    
     Vector sps = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
-      sps = factory.read_spinfofile((String)i.next());
+      sps = SplitterFactory.read_spinfofile((String)i.next(), all_ppts);
     }
     int siz = sps.size();
     Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
