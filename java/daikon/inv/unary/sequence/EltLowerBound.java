@@ -58,6 +58,14 @@ public class EltLowerBound  extends SingleSequence  {
     return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
+  public String format_ioa(String classname) {
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()},
+						       classname);
+    String result = form[0]+form[1]+" "+ ">" +"= "+ core.min1 +form[2];
+    return result;
+  }
+					     
+
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]

@@ -53,6 +53,11 @@ public class FunctionBinary extends ThreeScalar {
     return core.format();
   }
 
+  /* IOA */
+  public String format_ioa(String automaton) {
+    return core.format_ioa(automaton);
+  }
+
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }

@@ -55,6 +55,11 @@ public class LowerBound  extends SingleScalar  {
     return varname + " >= " + core.min1 ;
   }
 
+  public String format_ioa(String classname) {
+    String varname = var().name.ioa_name(classname);
+    return varname + " >= " + core.min1 ;
+  }
+
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(>= " + varname + " " + core.min1  + ")";

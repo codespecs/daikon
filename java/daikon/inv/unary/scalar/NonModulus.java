@@ -42,6 +42,17 @@ public class NonModulus extends SingleScalar {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    updateResults();
+    String vname = var().name.ioa_name(classname);
+    if (no_result_yet) {
+      return vname+" ~= ? (mod ?) ***";
+    } else {
+      return "mod("+vname+", "+modulus+") ~= "+remainder;
+    }
+  }
+
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }

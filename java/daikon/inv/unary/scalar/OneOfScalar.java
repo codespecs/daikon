@@ -126,6 +126,36 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+
+    String varname = var().name.ioa_name(classname);
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " = " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " = null ***";
+      } else {
+        result = varname + " has only one value"
+	  + " (hashcode=" + elts[0] + ") ***";
+      }
+    } else {
+      result = "(";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " \\/ ("; }
+        result += varname + " = " +  elts[i]   + ")";
+      }
+    }
+
+    return result;
+  }
+
   public String format_esc() {
 
     String varname = var().name.esc_name();

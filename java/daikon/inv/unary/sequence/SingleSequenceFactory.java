@@ -25,6 +25,7 @@ public final class SingleSequenceFactory {
       if (!((eoo != null) && (eoo.num_elts() == 1))) {
         result.add(EltNonZero.instantiate(ppt));
         result.add(NoDuplicates.instantiate(ppt));
+	result.add(CommonSequence.instantiate(ppt));
         if (var.type.elementIsIntegral()) {
           result.add(EltwiseIntComparison.instantiate(ppt));
           result.add(EltLowerBound.instantiate(ppt));

@@ -66,6 +66,14 @@ public final class SeqIndexNonEqual extends SingleSequence {
     return form[0] + "(" + form[1] + " != i)" + form[2];
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var().isIOASet())
+      return "Not valid for sets: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+    return form[0] + form[1] + " ~= " + form[3] + form[2];
+  }
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]

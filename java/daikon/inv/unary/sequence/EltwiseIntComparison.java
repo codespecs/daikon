@@ -44,6 +44,19 @@ public class EltwiseIntComparison extends SingleSequence {
     }
   }
 
+
+  /* IOA */
+  public String format_ioa(String classname) {    
+    String[] form =
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var(), var() }, classname);
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      return form[0] + form[1] + " = " + form[2] + form[3];
+    } else {
+      return form[0] + "(i+1 = j) => ("+ form[1] + " " + comparator + " " + form[2] + ")" + form[3];
+    }
+  }
+
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]

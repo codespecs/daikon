@@ -142,6 +142,16 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     return argresult.name + " == "
       + methodname + "(" + arg1.name + ", " + arg2.name + ")";
   }
+ 
+  /* IOA */
+  public String format_ioa(String cname) {
+    PptSlice ppt = wrapper.ppt;
+    String result = ppt.var_infos[var_indices[var_order][0]].name.ioa_name(cname);
+    String arg1 = ppt.var_infos[var_indices[var_order][1]].name.ioa_name(cname);
+    String arg2 = ppt.var_infos[var_indices[var_order][2]].name.ioa_name(cname);
+    
+    return result + " = " + methodname + "(" + arg1 + ", " + arg2 + ") ***";
+  }
 
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();

@@ -258,11 +258,104 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
   }
 
+
 #if defined(STRING) || defined(ELTSTRING)
   private boolean is_type() {
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 #endif
+
+  /* IOA */
+  public String format_ioa(String classname) {
+#if defined(ELT) || defined(ELTSTRING)
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+    String varname = form[1];
+#elif defined(SCALAR) || defined(STRING)
+    String varname = var().name.ioa_name(classname);
+#endif
+    String result;
+
+#if defined(STRING) || defined(ELTSTRING)
+    result = "(";
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " \\/ ("; }
+      result += varname + " = ";
+      String str = elts[i];
+      if (!is_type()) {
+	result += TOSTRING(str);
+      } else {
+	if ((str == null) || "null".equals(str)) {
+	  result += "\\typeof(null)";
+	} else if (str.startsWith("[")) {
+	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "\\type(" + str + ")";
+	}
+	result += "***";   // to denote that it's not correct IOA syntax
+      }
+      result += ")";
+    } // end for
+#elif defined(SCALAR) || defined(ELT)
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " = " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " = " + "null ***";
+      } else {
+        result = varname + " has only one value"
+	  + " (hashcode=" + elts[0] + ") ***";
+      }
+    } else {
+      result = "(";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " \\/ ("; }
+        result += varname + " = " + TOSTRING(elts[i]) + ")";
+      }
+    }
+#elif defined(SEQUENCE) 
+    String length = "";
+    String forall = "";
+    if (is_hashcode) {
+      // we only have one value, b/c add_modified dies if more
+      INT value = elts[0];
+      if (var().name.isApplySizeSafe()) {
+	length = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+      }
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+	forall = form[0] + form[1] + " ~= null ***" + form[2];
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname );
+	forall = form[0] + form[1] + " = null ***" + form[2];
+      }
+    }
+    if (length == "" && forall == "") { // interned
+      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if ((forall == "")||(elts[0].length==0)) { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") /\\ (" + forall + ")";
+    }
+#elif defined(STRINGSEQUENCE)
+    INT value = elts[0];
+    if (var().name.isApplySizeSafe()) 
+      result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+    else
+      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+#endif
+#if defined(ELT) || defined(ELTSTRING)
+    result = form[0] +  result + form[2];
+#endif
+    return result;
+  }
 
   public String format_esc() {
 #if defined(ELT) || defined(ELTSTRING)

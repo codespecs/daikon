@@ -128,6 +128,39 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+    String varname = form[1];
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " = " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " = null ***";
+      } else {
+        result = varname + " has only one value"
+	  + " (hashcode=" + elts[0] + ") ***";
+      }
+    } else {
+      result = "(";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " \\/ ("; }
+        result += varname + " = " + ((!var().type.elementIsIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] )))  + ")";
+      }
+    }
+
+    result = form[0] +  result + form[2];
+
+    return result;
+  }
+
   public String format_esc() {
 
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );

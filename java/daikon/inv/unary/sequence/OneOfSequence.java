@@ -147,6 +147,40 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+
+    String result;
+
+    String length = "";
+    String forall = "";
+    if (is_hashcode) {
+      // we only have one value, b/c add_modified dies if more
+      long[]  value = elts[0];
+      if (var().name.isApplySizeSafe()) {
+	length = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+      }
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+	forall = form[0] + form[1] + " ~= null ***" + form[2];
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname );
+	forall = form[0] + form[1] + " = null ***" + form[2];
+      }
+    }
+    if (length == "" && forall == "") { // interned
+      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if ((forall == "")||(elts[0].length==0)) { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") /\\ (" + forall + ")";
+    }
+
+    return result;
+  }
+
   public String format_esc() {
 
     String result;

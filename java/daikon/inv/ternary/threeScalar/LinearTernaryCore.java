@@ -258,6 +258,15 @@ public final class LinearTernaryCore implements java.io.Serializable {
     return z + " == " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
   }
 
+  /* IOA */
+  public String format_ioa(String x, String y, String z) {
+    if ((a == 0) && (b == 0) && (c == 0)) {
+      return z + " = (0 * " + x + ") + (0 * " + y + ") + 0";
+    }
+    return z + " = " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
+  }
+    
+
   public String format(String x, String y, String z) {
     return format(x, y, z, a, b, c);
   }

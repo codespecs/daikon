@@ -35,6 +35,15 @@ public class NoDuplicates extends SingleSequence {
     return (var().name + " contains no duplicates");
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var().isIOASet())
+      return "IOA Set " + var().name.ioa_name(classname) + " contains no duplicates by definition";
+    String[] form = 
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var(),var()}, classname);
+    return form[0]+"("+form[1]+"="+form[2]+") => ("+form[4]+"="+form[5]+")"+form[3];
+  }
+
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }

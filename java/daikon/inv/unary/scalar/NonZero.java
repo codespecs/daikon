@@ -57,6 +57,13 @@ public class NonZero extends SingleScalar {
     return var().name.esc_name() + " != " + zero();
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String result = var().name.ioa_name(classname)+" ~= ";
+    result += (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0"); 
+    return result;
+  }
+
   public String format_simplify() {
     return "(NEQ " + var().name.simplify_name() + " " + zero() + ")";
   }

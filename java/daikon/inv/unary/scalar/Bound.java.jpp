@@ -66,7 +66,6 @@ The correct way to build the system is to run 'make'.
 #define SCALAR sequence
 #define LONG long[]
 #endif
-
 #if ! defined(LOWERBOUND)
 #error "LOWERBOUND is not defined"
 #endif
@@ -133,6 +132,11 @@ public class LOWERBOUND extends SINGLESCALAR {
     return varname + " " + GTSTR + "= " + MIN1;
   }
 
+  public String format_ioa(String classname) {
+    String varname = var().name.ioa_name(classname);
+    return varname + " " + GTSTR + "= " + MIN1;
+  }
+
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(" + GTSTR + "= " + varname + " " + MIN1 + ")";
@@ -149,6 +153,14 @@ public class LOWERBOUND extends SINGLESCALAR {
 	{ var().name });
     return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
   }
+
+  public String format_ioa(String classname) {
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()},
+						       classname);
+    String result = form[0]+form[1]+" "+GTSTR+"= "+MIN1+form[2];
+    return result;
+  }
+					     
 
   public String format_simplify() {
     String[] form =

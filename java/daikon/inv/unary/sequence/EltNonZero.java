@@ -54,6 +54,13 @@ public final class EltNonZero extends SingleSequence {
     return form[0] + "(" + form[1] + " != " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String[] form =
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()}, classname);
+    return form[0] + form[1] + " ~= " + (pointer_type ? "null ***" : "0") + form[2];
+  }
+    
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]

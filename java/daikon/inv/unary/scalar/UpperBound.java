@@ -55,6 +55,11 @@ public class UpperBound  extends SingleScalar  {
     return varname + " <= " + core.max1 ;
   }
 
+  public String format_ioa(String classname) {
+    String varname = var().name.ioa_name(classname);
+    return varname + " <= " + core.max1 ;
+  }
+
   public String format_simplify() {
     String varname = var().name.simplify_name();
     return "(<= " + varname + " " + core.max1  + ")";

@@ -33,8 +33,14 @@ public class Modulus extends SingleScalar {
     return var().name + " == " + remainder + "  (mod " + modulus + ")";
   }
 
+    
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
+  /* IOA */
+  public String format_ioa(String classname) {
+    return "mod("+var().name.ioa_name(classname)+", "+modulus+") = "+remainder;
   }
 
   public String format_simplify() {

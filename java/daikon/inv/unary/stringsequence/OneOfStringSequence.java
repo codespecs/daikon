@@ -108,6 +108,20 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+
+    String result;
+
+    String[]  value = elts[0];
+    if (var().name.isApplySizeSafe()) 
+      result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+    else
+      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+
+    return result;
+  }
+
   public String format_esc() {
 
     String result;

@@ -111,6 +111,39 @@ public final class OneOfString  extends SingleString  implements OneOf {
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+
+    String varname = var().name.ioa_name(classname);
+
+    String result;
+
+    result = "(";
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " \\/ ("; }
+      result += varname + " = ";
+      String str = elts[i];
+      if (!is_type()) {
+	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+      } else {
+	if ((str == null) || "null".equals(str)) {
+	  result += "\\typeof(null)";
+	} else if (str.startsWith("[")) {
+	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "\\type(" + str + ")";
+	}
+	result += "***";   // to denote that it's not correct IOA syntax
+      }
+      result += ")";
+    } // end for
+
+    return result;
+  }
+
   public String format_esc() {
 
     String varname = var().name.esc_name();

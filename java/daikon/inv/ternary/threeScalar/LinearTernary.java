@@ -176,6 +176,12 @@ public class LinearTernary extends ThreeScalar {
     return core.format(var1().name.name(), var2().name.name(), var3().name.name());
   }
 
+  /* IOA */
+  public String format_ioa(String cname) {
+    return core.format_ioa(var1().name.ioa_name(cname), var2().name.ioa_name(cname), var3().name.ioa_name(cname));
+  }
+
+
   public String format_esc() {
     return core.format(var1().name.esc_name(), var2().name.esc_name(), var3().name.esc_name());
   }

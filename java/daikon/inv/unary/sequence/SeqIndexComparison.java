@@ -78,6 +78,17 @@ public final class SeqIndexComparison extends SingleSequence {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var().isIOASet())
+      return "Not valid for Sets: " + format();
+    String comparator = (core.format_comparator().equals("==")) ? 
+	"=" : core.format_comparator();
+    String[] form =
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+    return form[0] + form[1] + " " + comparator + " " + form[3] + form[2];
+  }
+
   public String format_esc() {
     String comparator = core.format_comparator();
     String[] form =
