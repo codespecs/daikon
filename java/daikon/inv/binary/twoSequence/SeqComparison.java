@@ -47,17 +47,20 @@ public class SeqComparison
 
   private ValueTracker values_cache = new ValueTracker(8);
 
-  protected SeqComparison(PptSlice ppt, boolean only_eq, boolean order) {
+  protected SeqComparison(PptSlice ppt, boolean only_eq,
+                      boolean order, boolean excludeEquality) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
+    if (excludeEquality) can_be_eq = true;
   }
 
-  public static SeqComparison instantiate(PptSlice ppt) {
-    return instantiate (ppt, false);
-  }
+  //   public static SeqComparison instantiate(PptSlice ppt) {
+  //     return instantiate (ppt, false);
+  //   }
 
-  public static SeqComparison instantiate(PptSlice ppt, boolean onlyEq) {
+  public static SeqComparison instantiate(PptSlice ppt, boolean onlyEq,
+                                      boolean excludeEquality) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -84,9 +87,9 @@ public class SeqComparison
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new SeqComparison(ppt, only_eq, true);
+      return new SeqComparison(ppt, only_eq, true, excludeEquality);
     } else {
-      return new SeqComparison(ppt, true, false);
+      return new SeqComparison(ppt, true, false, excludeEquality);
     }
   }
 
@@ -98,7 +101,7 @@ public class SeqComparison
 
   protected Invariant resurrect_done_swapped() {
     boolean tmp = can_be_lt;
-    can_be_gt = can_be_lt;
+    can_be_lt = can_be_gt;
     can_be_gt = tmp;
     return this;
   }
@@ -172,13 +175,13 @@ public class SeqComparison
     boolean changed = false;
     if (comparison == 0) {
       new_can_be_eq = true;
-      changed = true;
+      if (!can_be_eq) changed = true;
     } else if (comparison < 0) {
       new_can_be_lt = true;
-      changed = true;
+      if (!can_be_lt) changed = true;
     } else {
       new_can_be_gt = true;
-      changed = true;
+      if (!can_be_gt) changed = true;
     }
 
     if (! changed) {
@@ -199,6 +202,8 @@ public class SeqComparison
     can_be_gt = new_can_be_gt;
 
     values_cache.add(v1, v2);
+    Assert.assertTrue (!(can_be_lt && can_be_gt));
+    Assert.assertTrue (can_be_gt || can_be_lt || can_be_eq);
   }
 
   protected double computeProbability() {
@@ -251,8 +256,16 @@ public class SeqComparison
         && (pic.core.can_be_gt == can_be_gt)) {
       return true;
     }
-
     return false;
   }
 
+  public void repCheck() {
+    super.repCheck();
+    if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
+        && ppt.num_samples() != 0) {
+      System.err.println (this.repr());
+      System.err.println (this.ppt.num_samples());
+      throw new Error();
+    }
+  }
 }

@@ -66,7 +66,7 @@ public final class TwoSequenceFactory {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SeqComparison.instantiate(ppt)); // FIXME for equality
+        result.add(SeqComparison.instantiate(ppt, false, excludeEquality));
       }
     }
     { // previously (pass == 2)

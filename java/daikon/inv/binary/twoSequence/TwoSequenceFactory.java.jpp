@@ -104,7 +104,7 @@ public final class CLASSNAME {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SEQCOMPARISON.instantiate(ppt)); // FIXME for equality
+        result.add(SEQCOMPARISON.instantiate(ppt, false, excludeEquality));
       }
     }
     { // previously (pass == 2)

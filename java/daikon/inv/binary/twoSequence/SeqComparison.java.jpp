@@ -93,17 +93,20 @@ public class CLASSNAME
 
   private VALUETRACKER values_cache = new VALUETRACKER(8);
 
-  protected CLASSNAME(PptSlice ppt, boolean only_eq, boolean order) {
+  protected CLASSNAME(PptSlice ppt, boolean only_eq,
+                      boolean order, boolean excludeEquality) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
+    if (excludeEquality) can_be_eq = true;
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    return instantiate (ppt, false);
-  }
+  //   public static CLASSNAME instantiate(PptSlice ppt) {
+  //     return instantiate (ppt, false);
+  //   }
 
-  public static CLASSNAME instantiate(PptSlice ppt, boolean onlyEq) {
+  public static CLASSNAME instantiate(PptSlice ppt, boolean onlyEq,
+                                      boolean excludeEquality) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -130,9 +133,9 @@ public class CLASSNAME
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new CLASSNAME(ppt, only_eq, true);
+      return new CLASSNAME(ppt, only_eq, true, excludeEquality);
     } else {
-      return new CLASSNAME(ppt, true, false);
+      return new CLASSNAME(ppt, true, false, excludeEquality);
     }
   }
 
@@ -144,8 +147,8 @@ public class CLASSNAME
 
   protected Invariant resurrect_done_swapped() {
     boolean tmp = can_be_lt;
-    can_be_gt = can_be_lt;
-    can_be_lt = tmp;
+    can_be_lt = can_be_gt;
+    can_be_gt = tmp;
     return this;
   }
 
@@ -300,8 +303,16 @@ public class CLASSNAME
         && (pic.core.can_be_gt == can_be_gt)) {
       return true;
     }
-
     return false;
   }
 
+  public void repCheck() {
+    super.repCheck();
+    if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
+        && ppt.num_samples() != 0) {
+      System.err.println (this.repr());          
+      System.err.println (this.ppt.num_samples());
+      throw new Error();
+    }
+  }
 }
