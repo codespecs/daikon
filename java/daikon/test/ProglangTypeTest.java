@@ -3,15 +3,15 @@ package daikon.test;
 import junit.framework.*;
 import daikon.*;
 
-public class ProglangTypeTester extends TestCase {
+public class ProglangTypeTest extends TestCase {
 
   private static ProglangType CHAR = ProglangType.parse("char");
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(ProglangTypeTester.class));
+    junit.textui.TestRunner.run(new TestSuite(ProglangTypeTest.class));
   }
 
-  public ProglangTypeTester(String name) {
+  public ProglangTypeTest(String name) {
     super(name);
   }
 
