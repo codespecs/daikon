@@ -913,6 +913,9 @@ cd examples/StackAr
 
 @item Compile the original version of the program.  You must use the
 @option{-g} flag to include debugging information in the compiled classfiles.
+You may compile with any Java compiler you like (such as javac), but
+your code must be compilable with the @command{jikes} Java compiler (see
+@uref{http://www.ibm.com/developerworks/oss/jikes/}).
 @example
 javac -g DataStructures/*.java
 @end example
@@ -2932,7 +2935,7 @@ The @command{dfej} usage message also contains some usage information;
 run @command{dfej --help} to see it.
 
 @command{dfej} works on Java code that corresponds to any version of
-the Java language, from 1.0 to 1.3.
+the Java language, from 1.0 to 1.4.
 
 The Daikon front end for Java has two effects:
 @itemize @bullet
