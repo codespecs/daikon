@@ -5,6 +5,10 @@ STEP-BY-STEP INSTRUCTIONS
 
 ******************** INSTALLATION ********************
 
+(0) To use Daikon on Windows, you must install the Cywin utilities:
+
+http://sources.redhat.com/cygwin/
+
 (1) First, install the Daikon invariant detector.  This is
 well-documented in the daikon manual.  Download and install the most
 recent distribution from http://sdg.lcs.mit.edu/daikon/download/
