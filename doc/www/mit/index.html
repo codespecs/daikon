@@ -432,8 +432,9 @@ HTML, info, or printed (PostScript and PDF) output.
 </p>
 
 <p>
-You can edit the manual using an ordinary text editor.  You can either
-mimic the formatting commands that already appear in the manual or read the
+You can edit the manual using an ordinary text editor.  Emacs has a
+useful Texinfo mode.  You can mimic the formatting commands that 
+already appear in the manual, but it's also a good idea to read the
 <a href="http://texinfo.org">Texinfo documentation</a>.
 </p>
 
@@ -451,6 +452,46 @@ for you automatically), you select the short and the long titles (which may
 even be the same), and you may replace "@chapter" by "@section",
 "@subsection", or "@subsubsection".
 </p>
+
+<p>
+Follow the Texinfo conventions for marking up text.  In particular:
+</p>
+
+<ul>
+
+<p><li> Don't use regular double quotes (") in running text.  Instead, use 
+two single backquotes and two regular quotes, ``like this''.  Emacs will
+do this substitution for you if you are using its Texinfo mode.
+</p>
+
+<p><li> Often, some other kind of markup is better than quotes:
+<ul>
+<li>@code is for names of classes, functions, variables, keywords, and
+other fragments of source code.
+<li>@var is for meta-syntactic variables, not for referring to variables 
+that appear literally in the source code.
+<li>@file is for the names of files.
+<li>@option is for command-line options.
+<li>@samp is for sample input or output.  (Alternatively, you can use
+@example to set off longer input/output strings.)
+<li>@command should be avoided.  If you are referring to the program 
+itself, just use the name of the program without special markup, e.g. GCC.
+If you are referring to how to invoke the program from the shell, 
+@samp is better, e.g. @samp{gcc -E}.
+</ul>
+</p>
+
+<p><li>Examples shouldn't include extra spaces on the left for 
+indentation since Texinfo already adds some indentation.  Remember 
+that in code examples you need to replace all curly braces with @{ and @} 
+to quote them for Texinfo.
+</p>
+
+<p><li>Don't mix @example and @smallexample in the same section since it
+looks funny to have examples in two different sized fonts.  If your example
+is too wide to fit on the page with @example, it's better to insert some
+line breaks to make it more readable than to shrink the font.
+</ul>
 
 <p>
 Once you have edited the manual, run <tt>make</tt> twice (yes, you must run
