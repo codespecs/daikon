@@ -369,6 +369,13 @@ sub daikon_system_test {
     return 0;
   }
 
+  $command = "make -C $INV/tests/daikon-tests inv-checker " .
+    "2>&1 | tee daikon_inv_checker.out";
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  }
+
   $command = "make -C $INV/tests/daikon-tests summary " .
     "2>&1 | tee daikon_system_test_summary.out";
   my $result = `$command`;
