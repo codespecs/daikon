@@ -91,7 +91,12 @@ public final class LinearTernaryCore
     // Could assert that caches sync with a,b,c (?)
   }
 
-  public void add_modified(long x, long y, long z, int count) {
+  public void add_modified(long x, long y, long z, int count)
+  {
+    // XXX TODO FIXME: This method does not correctly deal with
+    // calling addToFlow.  A proper clone, etc. should be created and
+    // dealt with.  This will complicate the logic below, I'll bet.
+
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
       // so that we can compute a and b based on a far-separated triple.  If

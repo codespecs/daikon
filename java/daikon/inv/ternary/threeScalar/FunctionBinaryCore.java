@@ -112,10 +112,12 @@ public final class FunctionBinaryCore
           // System.out.println("FunctionBinaryCore failed: "
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
+	  wrapper.flowThis();
 	  wrapper.destroy();
           return;
         }
     } catch (Exception e) {
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }
@@ -180,7 +182,7 @@ public final class FunctionBinaryCore
     String arg1_name = arg1.name_using(format);
     String arg2_name = arg2.name_using(format);
 
-    if (format == OutputFormat.DAIKON) { 
+    if (format == OutputFormat.DAIKON) {
       return argresult_name + " == " + methodname + "(" + arg1_name + ", " + arg2_name + ")";
     }
 
