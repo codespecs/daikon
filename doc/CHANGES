@@ -76,7 +76,9 @@ Eclipse plug-in
   http://pag.csail.mit.edu/daikon/doc/daikonHelp.html .
   The 3.1.9 version of the plugin supports only versions of Daikon prior
   to (and not including) Daikon 3.2.0 and only versions of Java prior to 
-  (and not including) 5.0.
+  (and not including) 5.0 (and Eclipse 3.0.1 only supports Java 1.4.2 and
+  earlier).  A version of the plug-in consistent with Eclipse 3.1 and with
+  Daikon 3.2.0 will be forthcoming.
 
 Daikon
 
