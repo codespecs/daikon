@@ -6,7 +6,7 @@
 
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
 
-@c I can't get this to work.  Dunno why
+@c I can't get this to work, don't know why.  MDE 4/2001.
 @c @alias directory = file
 
 @c texi2html doesn't work if I use this macro
@@ -90,9 +90,13 @@ Installing Daikon
 * Installing dfec::             
 * Requirements::                
 
-Installing the Daikon front end for C/C++
+Installing dfec, the Daikon front end for C/C++
 
 * Requirements::                
+
+Requirements for running Daikon
+
+* Windows requirements::        
 
 Example use of Daikon
 
@@ -210,7 +214,7 @@ Examples
 @node    Introduction, Installing, Top, Top
 @chapter Introduction
 
-The @uref{foo/bar, ,Daikon invariant detector}
+The @uref{http://sdg.lcs.mit.edu/daikon, ,Daikon invariant detector}
 reports properties that are likely to hold at certain points in a
 program.  The reported properties are arithmetic equations such as you
 might write in an assert statement or a formal specification; for
@@ -375,7 +379,7 @@ build a new binary.
 @end enumerate
 
 @node    Installing dfec, Requirements, Installing dfej, Installing
-@section Installing the Daikon front end for C/C++
+@section Installing dfec, the Daikon front end for C/C++
 
 
 If you wish to detect invariants in C programs, perform the following
@@ -450,11 +454,9 @@ using a precompiled binary provided at
 detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
 
-
 @menu
-* Windows requirements::                
+* Windows requirements::        
 @end menu
-
 
 @node    Windows requirements,  , Requirements, Requirements
 @subsection Windows requirements for running Daikon
@@ -533,12 +535,6 @@ This command creates two directories, @file{daikon-java} and
 @file{StackAr.java} at @file{daikon-java/DataStructures/StackAr.java}.
 It creates a declaration file at
 @file{daikon-output/DataStructures/StackAr.decls}.
-
-@example
-  topLevel.bottomLevel:::pptInfo
-@end example
-
-
 
 @item Compile the instrumented version of StackAr.java.
 
@@ -748,19 +744,21 @@ java daikon.gui.InvariantsGUI QueueAr.inv
 Detecting invariants involves three steps:
 @enumerate
 @item
-Run @file{dfej} or @file{dfec} to instrument the target program.
+Run @file{dfej} or @file{dfec} to instrument the target program
+(@pxref{Instrumentation}).
 This adds instructions to the target program so that, in addition to
 performing its original task, it also writes variable values to a data
 trace file.
 
 @item
-Run the instrumented program in the usual way (probably using a
-test suite).  This creates data trace files.
+Run the instrumented program in the usual way, probably using a test
+suite (@pxref{Run the instrumented program}).  This creates data trace
+files.
 
 @item
-Run the Daikon invariant detector over the data trace files.  This
-detects invariants in the data trace files and displays them,
-textually or via a graphical user interface.
+Run the Daikon invariant detector over the data trace files
+(@pxref{Detect invariants}).  This detects invariants in the data trace
+files and displays them, textually or via a graphical user interface.
 @end enumerate
 
 
@@ -826,16 +824,20 @@ See the @file{dfej} usage message for more information.  See
 @command{dfej} works on Java code which
 corresponds to any version of the Java language, from 1.0 to 1.3.
 
-@command{dfej} is intended to be run from a directory on your classpath.
-For instance, if you have @file{foo/Bar.java} file in package "foo",
-then you should run @samp{dfej foo/Bar.java} from the parent directory
-of @file{foo} rather than running @samp{dfej Bar.java} from directory
-@file{foo}.  The reason is that in the latter case, you will end up with
-file @file{foo/daikon-java/Bar.java}, whereas in the former case you
-will end up with file @file{daikon-java/foo/Bar.java}.  In the former
-case the directory structure does not correspond to the package
-structure, whereas in the latter case, it does (just add
-@file{daikon-java} to your classpath).
+You should run @command{dfej} from a directory in your classpath.  For
+example, if directory @file{parent/} is in your classpath and you want
+to instrument @file{parent/foo/Bar.java}, you should run @samp{dfej
+foo/Bar.java} from directory @file{parent/}.  This will create a file
+@file{parent/daikon-java/foo/Bar.java}.  You must add directory
+@file{parent/daikon-java} to your classpath.
+
+(The reason for running @command{dfej} from a directory in your
+classpath is that it allows the directory structure to remain consistent
+with the package structure. If @file{Bar.java} specifies its package, it
+does so with a line like @samp{package foo;}.  If you run @command{dfej}
+from the @file{parent/foo} directory, the instrumented version of
+@file{Bar.java} will go in @file{parent/foo/daikon-java/Bar.java}; this is not
+consistent with the package structure.)
 
 
 @menu
@@ -878,6 +880,13 @@ find . -name '*.class' -print | xargs rm -f
 javac MyProgram.java
 find . -name '*.class' -print
 @end example
+
+@command{dfej} tracks all modifications of instrumented classes; if you
+do not instrument all users of a class, then modifications in
+un8instrumented classes may not be detected.  This can affect Daikon's
+statistical tests, but in practice usually has little impact.  (The
+@command{modbit-munge.pl} script makes approximations to the missing
+modification information.
 
 
 @node    C programs,  , Java programs, Instrumentation
@@ -1184,6 +1193,14 @@ if @option{-t} is given), but do not start the GUI.
 
 @node    Interpreting output, GUI, Daikon output, Daikon output
 @section Interpreting Daikon output
+
+If nothing gets printed before the @samp{Exiting} line, then Daikon
+found no invariants.  You can get a little bit more information by using
+the @option{--output_num_samples} flag to Daikon; for example,
+@example
+  java -mx128m daikon.Daikon --output_num_samples ...
+@end example
+
 
 
 @menu
@@ -1796,8 +1813,11 @@ The following individuals have contributed to Daikon:
 @uref{http://www.cs.washington.edu/homes/csk/,,Craig Kaplan} carved the
 Daikon logo.
 
-Many of our colleagues have been generous with their feedback and advice,
-for which we are grateful.
+The feedback of Daikon users has been very valuable.  We are
+particularly grateful to Rich Angros and Manos Renieris.
+
+Many of our other colleagues have also been generous with their feedback
+and advice, for which we are grateful.
 
 This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
 an IBM Cooperative Fellowship, and a gift from Edison Design Group.
@@ -1882,7 +1902,7 @@ Program point information includes:
    name ("tag") of this program point, an arbitrary string containing no
    tab or newline characters.  This name contains information such as the
    class name or method name; what information is contained depends on
-   which instrumenter is being used.  @xref{pptname format} for a full
+   which instrumenter is being used.  @xref{pptname format}, for a full
    specification of the naming format.
 
    By convention, the entry and exit points for a function have names of
