@@ -21,7 +21,7 @@ INV_DIR := $(MERNST_DIR)/research/invariants
 
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
-C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.c
+C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # Old C front end
 # EDG_DIR := $(INV_DIR)/edg/dist
 # EDG_DIR := $(INV_DIR)/c-front-end
