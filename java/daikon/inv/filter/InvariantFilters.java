@@ -42,6 +42,7 @@ public class InvariantFilters {
     addPropertyFilter( (InvariantFilter) new OnlyConstantVariablesFilter());
     addPropertyFilter( (InvariantFilter) new ImpliedPostconditionFilter());
     //    addPropertyFilter( (InvariantFilter) new RedundantFilter());
+    addPropertyFilter( (InvariantFilter) new ObviousEqualityFilter());
 
     // This filter should be added last for speed, because its shouldDiscard()
     // is more complicated in that it evaluates shouldDiscard() for other
@@ -183,13 +184,10 @@ public class InvariantFilters {
 	VarInfo[] variables = invariant.ppt.var_infos;
 	Assert.assert( variables.length == 2 );
 	for (int i = 0; i < variables.length; i++)
-	  if (variables[i].isCanonical())
-	    // Test if the non-canonical variable is "nonobvious".  This test
-	    // rarely fails, but is necessary for correctness.
-	    if (variables[i].equalToNonobvious().contains( variables[1-i] )) {
-	      canonicalVariables.add( variables[i] );
-	      ppts.add( invariant.ppt );
-	    }
+	  if (variables[i].isCanonical()) {
+	    canonicalVariables.add( variables[i] );
+	    ppts.add( invariant.ppt );
+	  }
       }
     }
     for (Iterator iter = canonicalVariables.iterator(); iter.hasNext(); ) {
