@@ -3,6 +3,7 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.*;
+import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.VarInfoName.QuantHelper;
@@ -322,7 +323,26 @@ public class SubSequence extends TwoSequence {
 
       // A subseq B[0..n] => A subseq B
 
-      Vector derivees = supervar.derivees;
+      Vector derivees = new Vector(); // = supervar.derivees; [INCR]
+      {
+	VarInfo[] vis = supervar.ppt.var_infos;
+	for (int i=0; i<vis.length; i++) {
+	  VarInfo vi = vis[i];
+	  Derivation der = vi.derived;
+	  if (der == null) continue;
+	  // perhaps a getBases() method in Derivation would be better
+	  if (der instanceof UnaryDerivation) {
+	    UnaryDerivation uder = (UnaryDerivation) der;
+	    if (uder.base == supervar) derivees.add(der);
+	  } else if (der instanceof BinaryDerivation) {
+	    BinaryDerivation bder = (BinaryDerivation) der;
+	    if (bder.base1 == supervar) derivees.add(der);
+	    if (bder.base2 == supervar) derivees.add(der);
+	  } else {
+	    throw new Error();
+	  }
+	}
+      }
       // For each variable derived from supervar ("B")
       for (int i=0; i<derivees.size(); i++) {
         Derivation der = (Derivation) derivees.elementAt(i);
@@ -331,7 +351,7 @@ public class SubSequence extends TwoSequence {
           VarInfo supervar_part = der.getVarInfo();
           // if (supervar_part.isCanonical()) // [INCR]
 	  {
-            PptSlice ss_ppt = ppt_parent.findSlice(subvar, supervar_part);
+            PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {
             //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
