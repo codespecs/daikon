@@ -1,0 +1,50 @@
+
+:::OBJECT
+
+  === Missing ==
+  /*@ invariant (\forall int i; (0 <= i) && (i <= this.s.length-1) ==> this.s[i] >= -1) */
+  /*@ invariant (\forall int i; (0 <= i) && (i <= this.s.length-1) ==> this.s[i] <= this.s.length-1) */
+
+public void unionDisjoint( int root1, int root2 )
+
+  === Hand fix; can daikon get this? ==
+  /*@ modifies this.s[root2] */
+
+  === Test Suite ===
+  /*!! requires this.s[this.s.length-2] == -1 */
+  /*!! requires this.s[this.s.length-1] == -1 */
+  /*!! requires (\forall int i; (root1 <= i & i <= this.s.length-1) ==> (this.s[i] == -1)) */
+  /*!! requires (\forall int i; (root2 <= i & i <= this.s.length-1) ==> (this.s[i] == -1)) */
+  /*!! ensures (\forall int i; (root1 <= i & i <= this.s.length-1) ==> (this.s[i] == -1 || this.s[i] == 0)) */
+
+  === Missing ===
+  /*@ requires root1 != root2 */
+
+  === Needed to have guards added ===
+  /*@ requires (this.s.length >= 2) ==> (this.s[this.s.length-2] >= -1) */
+  /*@ requires (this.s.length >= 2) ==> (this.ROOT <= this.s[1]) */
+  /*@ requires (this.s.length >= 2) ==> (this.s.length-1 >= this.s[this.s.length-2]) */
+  /*@ requires (this.s.length >= 1) ==> (this.s.length-1 >= this.s[0]) */
+  /*@ requires (this.s.length >= 2) ==> (this.s.length-1 >= this.s[1]) */
+
+public void unionCareful( int set1, int set2 )
+
+  === True, but can't be done via modular checking (I think?) ===
+  /*!! ensures this.s[set1] == \old(this.s[set1]) */
+
+public int find( int x )
+
+  === True, but probably would have to have it in OBJECT to prove this (?) ===
+      (so why isn't it in object? hmm)
+  /*!! requires this.s[0] != 0 */
+
+  === Can be invalidated via the test suite, I believe ===
+  /*!! ensures (this.ROOT < this.s[x]) ==> (this.s[this.s.length-2] != 0) */
+  /*!! ensures (this.ROOT < this.s[x]) ==> ((\forall int i; (\result <= i & i <= this.s.length-1) ==> (this.s[i] == {-1,0}))) */
+  /*!! ensures (this.s[x] == -1)  ==>  ((\forall int i; (x <= i & i <= this.s.length-1) ==> (this.s[i] == -1))) */
+  /*!! ensures (x == \result)  ==>  ((\forall int i; (x <= i & i <= this.s.length-1) ==> (this.s[i] == -1))) */
+  /*!! ensures (\forall int i; (\result <= i & i <= this.s.length-1) ==> (this.s[i] == -1)) */
+
+  === Would follow from requires above, if we could prove that ===
+  /*!! ensures this.s[0] != 0 */
+  /*!! ensures this.s[0] != 0 */
