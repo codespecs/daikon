@@ -98,7 +98,10 @@ public final class ProglangType implements java.io.Serializable {
     }
   }
 
-  /** For serialization. **/
+  /**
+   * For serialization; indicates which object to return instead of the
+   * one that was just read from the file.
+   **/
   public Object readResolve() throws ObjectStreamException {
     return intern(base.intern(), dimensions);
   }
