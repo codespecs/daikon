@@ -81,9 +81,6 @@ public class InvariantTester extends TestCase {
     inv6 = Implication.makeImplication(ppt, inv4, inv1, false);
     Assert.assertTrue(c.compare(inv5, inv6) < 0);
 
-
-
-
     VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);
