@@ -104,3 +104,4 @@ public final class SequenceScalarSubsequence  extends BinaryDerivation {
   }
 
 }
+

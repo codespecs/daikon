@@ -289,3 +289,4 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
 }
+

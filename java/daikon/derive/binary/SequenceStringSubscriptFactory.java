@@ -195,3 +195,4 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
   }
 
 }
+

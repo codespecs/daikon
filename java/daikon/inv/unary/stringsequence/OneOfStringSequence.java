@@ -191,3 +191,4 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   }
 
 }
+

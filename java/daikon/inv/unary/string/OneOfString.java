@@ -214,3 +214,4 @@ public final class OneOfString  extends SingleString  implements OneOf {
   }
 
 }
+

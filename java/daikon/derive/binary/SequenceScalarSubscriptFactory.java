@@ -195,3 +195,4 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
   }
 
 }
+

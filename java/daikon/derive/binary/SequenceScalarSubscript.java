@@ -118,3 +118,4 @@ public final class SequenceScalarSubscript  extends BinaryDerivation {
   }
 
 }
+

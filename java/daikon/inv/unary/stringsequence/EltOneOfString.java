@@ -219,3 +219,4 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
   }
 
 }
+

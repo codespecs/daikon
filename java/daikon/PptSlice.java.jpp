@@ -743,3 +743,10 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
 }
+
+
+#if 0
+// Local Variables:
+// mode: java
+// End:
+#endif

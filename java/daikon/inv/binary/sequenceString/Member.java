@@ -235,3 +235,4 @@ public final class Member extends SequenceString  {
     return true;
   }
 }
+

@@ -260,3 +260,4 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
 }
+

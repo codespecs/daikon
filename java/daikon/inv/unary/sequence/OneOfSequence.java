@@ -191,3 +191,4 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
 }
+

@@ -1,5 +1,4 @@
 #if 0
--*- Java -*-
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
@@ -27,3 +26,10 @@ The correct way to build the system is to run 'make'.
 #error "One of PARAM_INT or PARAM_LONG should be defined"
 #endif
 
+
+
+#if 0
+// Local Variables:
+// mode: java
+// End:
+#endif
