@@ -334,5 +334,5 @@ if ($gzerr) {
 # run the gui
 unless ($nogui) {
     print "Starting the gui...\n" if $verbose;
-    system("java -classpath $cp_lib daikon.gui.InvariantsGUI $output.inv.gz");
+    system("java -classpath $cp_lib daikon.gui.treeGUI.InvariantsGUI $output.inv.gz");
 }
