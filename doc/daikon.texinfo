@@ -1836,6 +1836,13 @@ Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
 filtering.
 
+@item --fuzzy @var{pct}
+Set the limit of the percentage difference between two floats for
+fuzzy comparisons.  @var{pct} must be between 0 and 0.1; the default
+is 0.0001 (0.01%).  Larger values will result in floats that are relatively
+farther apart being treated as equal.  A value of 0 essentially disables
+fuzzy comparisons.
+
 @item --esc_output
 Write output in ESC-like format.
 
