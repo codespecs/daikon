@@ -2,6 +2,7 @@ package daikon;
 
 import daikon.split.*;
 import daikon.inv.*;
+import daikon.suppress.*;
 import utilMDE.*;
 
 import java.util.*;
@@ -148,7 +149,19 @@ public class PptSplitter implements Serializable {
     // Currently only binary implications are supported
     Assert.assertTrue (ppts.length == 2);
 
+    // Create any NIS suppressed invariants in each conditional
+    List /*Invariant*/ suppressed_invs[] = new ArrayList[ppts.length];
+    for (int i = 0; i < ppts.length; i++)
+      suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
+
     add_implications_pair (false);
+
+    // Remove all of the NIS suppressed invariants that we previously created
+    for (int i = 0; i < ppts.length; i++)
+      ppts[i].remove_invs (suppressed_invs[i]);
+
+
+
   }
 
   /**
