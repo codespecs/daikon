@@ -280,7 +280,7 @@ Troubleshooting
 
 Problems with dfej
 
-* dfej compilation problems::   
+* dfej installation problems::  
 * dfej invocation problems::    
 
 Problems running dfej
@@ -1151,7 +1151,7 @@ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 @node    Rijndael example,  , C examples summary, C examples
 @subsection Rijndael example
 
-The rijndael program requires some special instructions, due to the
+The Rijndael program requires some special instructions, due to the
 size of its data trace file.  The data trace file is over 1GB in size
 when first created, so make sure you have adequate disk space.
 
@@ -1285,11 +1285,6 @@ or other dialects (@pxref{C program requirements})
 
 You may want to specify one or more command-line options;
 see @ref{dfec command-line arguments}.
-If the @command{dfec} command produces errors, first check whether running
-@command{gcc -g -Wall -ansi -pedantic} on the code produces errors; if so,
-fix them before proceeding to use @command{dfec}.  (Lack of errors
-from that command does not guarantee your code is ANSI C, but errors
-from that command do indicate that your code is not ANSI C@.)
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
@@ -2210,12 +2205,12 @@ displayed by default.
 @item Suppress obvious equality invariants
 
 Like ``Suppress obvious invariants'', but applies only to equality
-invarians fo the form ``x==y''.
+invariants of the form ``x==y''.
 
 @item Eliminate invariants based on Simplify
 
 Daikon can use the Simplify theorem-prover to eliminate even more
-implied invariants than Daikon's built-in tests are able to eliminte.
+implied invariants than Daikon's built-in tests are able to eliminate.
 Simplify must be separately obtained (from
 @url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this filter.
@@ -3261,7 +3256,7 @@ char * mystring = malloc(100);
 strcpy(mystring, "hello");
 @end example
 @noindent
-Even though mystring has 100 elements, only the first six of them are
+Even though @samp{mystring} has 100 elements, only the first six of them are
 valid.  dfec will only communicate those first six elements to
 Daikon.  After a subsequent operation:
 @example
@@ -3358,13 +3353,13 @@ compilers accept.
 
 To convert K&R prototypes to ANSI/ISO prototypes, use the
 @command{protoize} program; you may wish to check that it has no
-effect even if you believe your code to be ANSI/ISO C@.  Protize is
+effect even if you believe your code to be ANSI/ISO C@.  Protoize is
 distributed with gcc, among other places; you can find documentation
 at @url{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
 
 To check your code for ANSI/ISO compliance, compile it with
 @command{gcc -g -Wall -ansi -pedantic}.  Removing all warnings
-produced by @command{gcc} will reduce the number of confusing warning
+produced by @command{gcc} will reduce the number of warning
 messages produced by dfec.  (Lack of errors from that command does not
 guarantee your code is ANSI C, but errors from that command do
 indicate that your code is not ANSI C@.)
@@ -3401,6 +3396,59 @@ non-standard way, you may experience trouble.
 @end enumerate
 
 
+@node    Header file dependencies, gcc version, dfec requirements, dfec requirements
+@subsubsubsection Header file dependencies
+
+Some programs contain dependences on header files that make code that
+is legal C but not legal C++.  dfec's input must be both legal C and
+legal C++ (@pxref{C program requirements}).  This section shows how to
+work around such problems by modifying the header files.
+
+For example, the GNU @command{wc} program
+(@url{http://www.gnu.org/software/textutils/}; download from
+@url{ftp://ftp.gnu.org/pub/gnu/textutils/textutils-2.0.tar.gz})
+contains the following test on line 179 (in textutils version 2.0):
+@example
+  (current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
+@end example
+However, Linux's header files defines @samp{off_t} as @samp{__quad_t},
+and @file{/usr/include/bits/types.h} defines @samp{__quad_t} as
+follows:
+@example
+  #ifdef __GNUC__
+  __extension__ typedef long long int __quad_t;
+  #else
+  typedef struct
+    {
+      long int __val[2];
+    } __quad_t;
+  #endif
+@end example
+
+dfec uses the non-@samp{__GNUC__} branch.  (Many non-standard
+extensions are enabled when @samp{__GNUC__} is defined, and dfec can
+many but not all of them.)  In C, it is legal to cast the number 0 to
+a struct.  Such a cast is not legal in C++.  Because dfec's input must
+be both legal C and legal C++, dfec issues an error message for line
+179 of @file{wc.c}.
+
+To work around the problem, execute the following two lines to create
+a local copy of @file{bits/types.h}:
+@example
+  mkdir -p $DFECDIR/bits
+  cp -p /usr/include/bits/types.h $DFECDIR/bits/types.h
+@end example
+and then edit @file{$DFECDIR/bits/types.h} to remove all but the
+second line of the above snippet.  This will define @samp{__quad_t} as
+@samp{long long int} instead of as a struct.  dfec uses files found
+under @file{$DFECDIR} in preference to other system headers, so
+@file{wc.c.} will compile.
+
+You may need to make similar changes to other header files in order to
+ensure that your code is both legal C and legal C++, or to work around
+other problems.
+
+
 @node    gcc version,  , C program requirements, dfec requirements
 @subsubsection gcc version
 
@@ -3418,7 +3466,7 @@ You can download gcc 2.95.3 from @url{http://gcc.gnu.org/releases.html}.
 gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
 GCC installations instructions}.  If you do not wish to read them,
 then the following commands may work for you.  They do not require
-that you have superuser priviliges on your machine.  They create
+that you have superuser privileges on your machine.  They create
 directory @file{/tmp/build-gcc-2.95.3}, then build gcc and install
 gcc under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
 You may wish to adjust those directory names.
@@ -3674,7 +3722,7 @@ program point.  In this case, Daikon prints a warning message and
 proceeds, using conditions wherever they are valid.
 
 By default, Daikon uses indiscriminate splitting.  To use
-non-indiscriminate spliting, place the following line in a file that is
+non-indiscriminate splitting, place the following line in a file that is
 passed to Daikon via the @option{--config} flag (@pxref{Command line
 options}):
 @example
@@ -3809,7 +3857,7 @@ detection is often quite effective.
 
 The @command{createspinfo.pl} program (found in the @file{$DAIKONDIR/bin}
 directory) performs the same function, for C/C++ source code.  It can be used
-with the commandline
+with the command line
 @example
 createspinfo.pl foo.c
 @end example
@@ -3869,7 +3917,7 @@ algorithm, hierarchical clustering and the xmeans algorithm (kmeans algorithm
 with efficient discovery of the number of clusters).
 
 @item Writes new data and decls files and, to each point in the data trace file,
-addsinformation about the cluster to which it belongs.
+adds information about the cluster to which it belongs.
 
 @item Runs Daikon on the augmented data trace and decls files, splitting the
 data by cluster number and performing invariant detection in each cluster. The
@@ -4262,7 +4310,7 @@ possible that some filenames (including the one contained in
 @section Problems with dfej
 
 @menu
-* dfej installation problems::   
+* dfej installation problems::  
 * dfej invocation problems::    
 @end menu
 
@@ -4296,7 +4344,7 @@ Ast *>::pair (Ast *&, void *)'
 We do not yet have a fix, but if you find one, please let us know.
 
 
-@node    dfej invocation problems,  , dfej compilation problems, dfej problems
+@node    dfej invocation problems,  , dfej installation problems, dfej problems
 @subsection Problems running dfej
 
 @cindex could not find package named, dfej error
@@ -4678,7 +4726,7 @@ Your bug report will be most helpful if you include:
 @itemize @bullet
 @item
 the version of Daikon, which appears in the file @file{daikon/README}
-and is also printend when you run Daikon.
+and is also printed when you run Daikon.
 If you are not using the most recent version, download a newer version
 from @uref{http://pag.lcs.mit.edu/daikon/} to see whether your problem
 has already been corrected.
@@ -4791,7 +4839,7 @@ Daikon 2 was a complete rewrite in the Java programming language and was
 the first version to contain a substantive manual.  Daikon 2 uses the
 same Java front end as did Daikon 1, though with certain enhancements.
 (Actually, there have been 5 Java front ends; the first two were
-binary rewriters; the next two were source code rewriters; and the
+binary re-writers; the next two were source code re-writers; and the
 last (experimental as of May 2002) one is a binary rewriter.)
 Its C/C++ front end is rewritten from scratch; it instruments only
 procedure entries and exits.  A front end also exists for the IOA
