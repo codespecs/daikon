@@ -314,7 +314,7 @@ public final class SEQINTEQUAL
       discardCode = DiscardCode.not_enough_samples;
       discardString = "No samples seen for this Invariant";
       return PROBABILITY_UNJUSTIFIED;
-      }
+    }
     #if (defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT) || defined(LESSEQUALFLOAT))
     double answer = Math.pow(.5, ppt.num_values());
     if (answer > Invariant.dkconfig_probability_limit) {
