@@ -116,7 +116,7 @@ sub is_array_element {
 
 
 sub get_comparable_variables {
-  my ($variable, $function, $global) = @_;
+  my ($variable, $function) = @_;
 
   my %comparable_variables = ();
 
