@@ -62,10 +62,13 @@ public final class LinearTernaryCore
     b = pclever[1] * d;
     c = c * d;
     // Fix caches
-    long[][] caches = { x_cache, y_cache, z_cache };
-    x_cache = caches[permutation[0]];
-    y_cache = caches[permutation[1]];
-    z_cache = caches[permutation[2]];
+    long[][] caches = new long[3][];
+    caches[permutation[0]] = x_cache;
+    caches[permutation[1]] = y_cache;
+    caches[permutation[2]] = z_cache;
+    x_cache = caches[0];
+    y_cache = caches[1];
+    z_cache = caches[2];
     // Could assert that caches sync with a,b,c (?)
   }
 
