@@ -71,30 +71,53 @@ class var_info:
     type = None                         # type information
     # index = None                        # index in lists of variables.  Necessary?  No, but possibly useful...
 
-    # For these two, am I interested in indexing off just this variable,
-    # or would I rather index by pairs?  (I'm not sure...)
-    derived = None                      # info about derived variables (both what this is derived from and what is derived from this?)
+    # info about derived variables: both derivees from this and derivers of this
+    derived_len = None                  # index of len variable
+    derived = None
+    is_derived = None                   # boolean (for now)
+
     invariant = None                   # not sure
+    # To find the invariant over a pair of variables, do a double-dispatch:
+    # first look up the "invariants" field of one of the variables, then
+    # look up the other variable in that map.
 
-    # To find the invariant over a pair of variables, one must do a
-    # double-dispatch:  first look up the "invariants" field of one of the
-    # variables, then look up the other variable in that map.  This isn't
-    # beautiful, but I guess it will work.
     invariants = None         # map from indices to multiple-arity invariants
+    equal_to = None                     # list of indices of equal variables;
+                                        #   could be derived from invariants
+                                        #   by checking for inv.comparision == "="
 
-    def __init__(self, name, type):
+    def __init__(self, name, type, is_derived=false):
         self.name = name
         self.type = type
         # self.index = index
         self.derived = {}
+        self.is_derived = is_derived
         self.invariant = None
         self.invariants = {}
+        self.equal_to = []
 
     def __repr__(self):
         return "<var %s %s>" % (self.name, self.type)
 
     def is_sequence(self):
         return self.type == types.ListType
+
+    def canonical_var(self):
+        """Return index of the canonical variable that is always equal to this one.
+        Return None if no such variable exists."""
+
+        assert util.sorted(self.equal_to)
+        if self.equal_to == []:
+            return None
+        else:
+            return self.equal_to[0]
+
+    # Cleaner if we didn't have to pass the index in, but read it out of an
+    # instance variable.
+    def is_non_canonical(self, index):
+        if self.equal_to == []:
+            return false
+        return self.canonical_var() < index
 
 
 def var_info_name_compare(vi1, vi2):
@@ -139,6 +162,7 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     All the key tuples in the input have the same length unless optional argument
     TUPLE_LEN is provided, in which case all tuples have at least that length.
     If TUPLE_LEN is a tuple, then only those indices are extracted.
+    if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
     Output: a tuple of dictionaries, each mapping a single element to a count.
     The first output dictionary concerns the first element of the original keys,
     the second output the second element of the original keys, and so forth."""
@@ -146,9 +170,16 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     if tuple_len == None:
         tuple_len = len(dot.keys()[0])
     if type(tuple_len) == types.IntType:
+        assert tuple_len <= len(dot.keys()[0])
+        if tuple_len == 0:
+            return ()
         tuple_indices = range(0, tuple_len)
+    elif tuple_len == []:
+        return ()
     else:
         assert type(tuple_len) in [types.TupleType, types.ListType]
+        assert max(tuple_len) < len(dot.keys()[0])
+        assert min(tuple_len) >= 0
         tuple_indices = tuple_len
     # Next four lines accomplish "result = ({},) * tuple_len", but with
     # distinct rather than identical dictionaries in the tuple.
@@ -157,8 +188,8 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
         result.append({})
     result = tuple(result)
     for (key_tuple, count) in dot.items():
-        for i in tuple_indices:
-            this_key = key_tuple[i]
+        for i in range(0, len(tuple_indices)):
+            this_key = key_tuple[tuple_indices[i]]
             this_dict = result[i]
             util.mapping_increment(this_dict, this_key, count)
     return result
@@ -295,15 +326,20 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     in this function, we operate over only one function, not all functions.
     """
 
+    # print "introduce_new_variables_one_pass: indices %s (limit %s), functions %s" % (indices, len(var_infos), functions)
+
     (intro_from_sequence, intro_from_scalar,
      intro_from_sequence_sequence, intro_from_sequence_scalar,
      intro_from_scalar_sequence, intro_from_scalar_scalar) = functions
+
+    assert len(var_infos) == len(var_values.keys()[0])
 
     # We will modify this mutable list, then reinstall it as a tuple at the end.
     var_new_values = {}       # map from old values to new values
     for value in var_values.keys():
         var_new_values[value] = list(value)
 
+    orig_len_var_infos = len(var_infos)
     all_indices = range(0, len(var_infos))
 
     for i in indices:
@@ -312,22 +348,33 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
             intro_from_sequence(var_infos, var_new_values, i)
         else:
             intro_from_scalar(var_infos, var_new_values, i)
-    for indices in util.choose(2, all_indices):
-        (i1,i2) = indices
-        if not (i1 in indices or i2 in indices):
-            # Neither of these variables is under consideration.
-            continue
-        this_dict = dict_of_tuples_slice(fn_var_values[fn_name], indices)
-        these_vars = util.slice_by_sequence(var_infos, indices)
-        if these_vars[0].is_sequence() and these_vars[1].is_sequence():
-            intro_from_sequence_sequence(var_infos, var_new_values, i1, i2)
-        elif these_vars[0].is_sequence():
-            intro_from_sequence_scalar(var_infos, var_new_values, i1, i2)
-        elif these_vars[1].is_sequence():
-            intro_from_scalar_sequence(var_infos, var_new_values, i1, i2)
-        else:
-            intro_from_scalar_scalar(var_infos, var_new_values, i1, i2)
 
+    # It's cleaner to do "for (i1,i2) in util.choose(2, all_indices):", but
+    # also less efficient due to creation of long list of pairs.
+    for i1 in range(0,orig_len_var_infos-1):
+        if var_infos[i1].is_non_canonical(i1):
+            continue
+        for i2 in range(i1+1,orig_len_var_infos):
+            if var_infos[i2].is_non_canonical(i2):
+                continue
+            if not (i1 in indices or i2 in indices):
+                # Do nothing if neither of these variables is under consideration.
+                continue
+            this_dict = dict_of_tuples_slice(var_values, (i1, i2))
+            these_vars = util.slice_by_sequence(var_infos, (i1, i2))
+            if these_vars[0].is_sequence() and these_vars[1].is_sequence():
+                intro_from_sequence_sequence(var_infos, var_new_values, i1, i2)
+            elif these_vars[0].is_sequence():
+                intro_from_sequence_scalar(var_infos, var_new_values, i1, i2)
+            elif these_vars[1].is_sequence():
+                intro_from_scalar_sequence(var_infos, var_new_values, i1, i2)
+            else:
+                intro_from_scalar_scalar(var_infos, var_new_values, i1, i2)
+
+    # if len(var_infos) == orig_len_var_infos:
+    #     print "introduce_new_variables_one_pass: added no variables"
+    # if len(var_infos) > orig_len_var_infos:
+    #     print "introduce_new_variables_one_pass: added variables", range(orig_len_var_infos, len(var_infos)), map(lambda i, vis=var_infos: vis[i].name, range(orig_len_var_infos, len(var_infos)))
     # Done adding; install the new, expanded list of variables
     for (vals, count) in var_values.items():
         del var_values[vals]
@@ -340,16 +387,19 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
 
 def introduce_from_sequence_pass1(var_infos, var_new_values, index):
     """Add size (only)."""
-    seqvar = var_infos[index].name
+    seq_var_info = var_infos[index]
+
+    assert len(var_infos) == len(var_new_values.values()[0])
 
     ## For now, add size unconditionally; fix later.
     # Add size only if this is an original
     # sequence, not a subsequence (sequence slice) we have added
-    if true or not known_symbolic_size(seqvar):
-        # Add size
-        name_size = "size(%s)" % (seqvar,)
-        var_infos.append(var_info("size(%s)" % (seqvar,), types.IntType))
-        # Also add some "derived"-style info.
+    if (seq_var_info.derived_len == None and not seq_var_info.is_derived):
+        name_size = "size(%s)" % (seq_var_info.name,)
+        seq_len_var_info = var_info(name_size, types.IntType, true)
+        var_infos.append(seq_len_var_info)
+        seq_var_info.derived_len = len(var_infos)-1
+        print "set derived_len for", seq_var_info, "to", len(var_infos)-1
 
         for new_values in var_new_values.values():
             this_seq = new_values[index]
@@ -361,18 +411,23 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
 
 
 def introduce_from_scalar_pass1(var_infos, var_new_values, index):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_sequence_sequence_pass1(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_sequence_scalar_pass1(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_scalar_sequence_pass1(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_scalar_scalar_pass1(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 pass1_functions = (introduce_from_sequence_pass1,
@@ -383,12 +438,15 @@ pass1_functions = (introduce_from_sequence_pass1,
                    introduce_from_scalar_scalar_pass1)
 
 
-def introduce_from_sequence_pass2(var_infos, var_new_values, index):
-    # Add scalars from sequences (but don't examine any of the new scalars)
-    seqvar = var_infos[index].name
+def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
+    """Add scalars from sequences (but don't examine any of the new scalars)."""
+    assert len(var_infos) == len(var_new_values.values()[0])
+
+    seq_var_info = var_infos[seqidx]
+    seqvar = seq_var_info.name
 
     # Add sum (unconditionally)
-    var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType))
+    var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType, true))
     for new_values in var_new_values.values():
         this_seq = new_values[seqidx]
         if this_seq == None:
@@ -398,15 +456,16 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, index):
         new_values.append(this_seq_sum)
 
     # Add each individual element.
-    ## For now, add unconditionally; fix later.
-    # (only if not a prefix subsequence (sequence slice) we have added).
-    if true or not prefix_subsequence(seqvar):
-        seq_len_inv = length_inv_of(seqvar)
+    ## For now, add if not a derived variable; a better test is if
+    ## not a prefix subsequence (sequence slice) we have added.
+    if not seq_var_info.is_derived:
+        seq_len_inv = var_infos[seq_var_info.derived_len].invariant
+        assert isinstance(seq_var_info, var_info)
         if seq_len_inv.min > 0:
-            for i in range(0, seq_len_min):
-                var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType))
+            for i in range(0, seq_len_inv.min):
+                var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, true))
             for new_values in var_new_values.values():
-                for i in range(0, seq_len_min):
+                for i in range(0, seq_len_inv.min):
                     seq = new_values[seqidx]
                     if seq == None:
                         elt_val = None
@@ -414,10 +473,10 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, index):
                         elt_val = seq[i]
                     new_values.append(elt_val)
             if seq_len_inv.min != seq_len_inv.max:
-                for i in range(-seq_len_min, 0):
-                    var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType))
+                for i in range(-seq_len_inv.min, 0):
+                    var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, true))
                 for new_values in var_new_values.values():
-                    for i in range(-seq_len_min, 0):
+                    for i in range(-seq_len_inv.min, 0):
                         seq = new_values[seqidx]
                         if seq == None:
                             elt_val = None
@@ -427,43 +486,64 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, index):
 
 
 def introduce_from_scalar_pass2(var_infos, var_new_values, index):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_sequence_sequence_pass2(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, sclidx):
+    assert len(var_infos) == len(var_new_values.values()[0])
+
     seqvar = var_infos[seqidx].name
     sclvar = var_infos[sclidx].name
     scl_inv = var_infos[sclidx].invariant
-    seq_size_idx = var_infos[sclidx].derived['index']
-    seq_size_inv = var_infos[seq_size_idx].invariant
+    seq_size_idx = var_infos[seqidx].derived_len
+
+    # Do nothing if this scalar is actually the size of this sequence
+    if seq_size_idx == sclidx:
+        return
+
+    #     if seq_size_idx == 'no_var':
+    #         print "sequence %s (size: no_var) and scalar %s (index: %s) unrelated" % (seqvar, sclvar, sclidx)
+    #     else:
+    #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %s) unrelated" % (seqvar, var_infos[seq_size_idx].name, seq_size_idx, sclvar, sclidx)
 
     # Add subsequences
-
-    var_infos.append(var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType))
-    var_infos.append(var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType))
-    for new_values in var_new_values.values():
-        seq = new_values[seqidx]
-        scl = new_values[sclidx]
-        if (scl+1 <= len(seq)) and (scl+1 >= 0):
-            new_value_full = seq[0:scl+1]
-        else:
-            new_value_full = None
-        if (scl <= len(seq)) and (scl >= 0):
-            new_value_less_one = seq[0:scl]
-        else:
-            new_value_less_one = None
-        # print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
-        new_values.append(new_value_full)
-        new_values.append(new_value_less_one)
+    if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
+        full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, true)
+        full_var_info.derived_len = sclidx
+        var_infos.append(full_var_info)
+        less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, true)
+        # 'no_var' means there is a known value, but no variable
+        # holds that particular value.
+        less_one_var_info.derived_len = 'no_var'
+        var_infos.append(less_one_var_info)
+        for new_values in var_new_values.values():
+            seq = new_values[seqidx]
+            scl = new_values[sclidx]
+            if (scl+1 <= len(seq)) and (scl+1 >= 0):
+                new_value_full = seq[0:scl+1]
+            else:
+                new_value_full = None
+            if (scl <= len(seq)) and (scl >= 0):
+                new_value_less_one = seq[0:scl]
+            else:
+                new_value_less_one = None
+            # print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
+            new_values.append(new_value_full)
+            new_values.append(new_value_less_one)
 
     # Add scalars
     # Determine whether it is constant; if so, ignore.
     # Perhaps also check that it is within range at least once
     # (or even every time) if not, not very interesting.
-    if not scl_inv.is_exact() and scl_inv.max >= 0 and scl_inv.min <= seq_size_inv.max:
-        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType))
+    if ((not var_infos[seqidx].is_derived)
+        and (not scl_inv.is_exact()) and (scl_inv.min >= 0)
+        and (seq_size_idx != 'no_var')
+        and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
+        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType, true))
         for new_values in var_new_values.values():
             this_seq = new_values[seqidx]
             this_scl = new_values[sclidx]
@@ -476,12 +556,15 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
 
 
 def introduce_from_scalar_sequence_pass2(var_infos, var_new_values, sclidx, seqidx):
+    assert len(var_infos) == len(var_new_values.values()[0])
+
     # Is there any subtlety here with respect to index ordering?  (Eg, do we
     # always expect the lesser index to appear first?)
-    introduce_from_sequence_scalar_pass2(var_infos, var_new_values, var_derived, seqidx, sclidx)
+    introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, sclidx)
 
 
-def introduce_from_scalar_scalar_pass2(var_infos, var_new_values, var_derived, i1, i2):
+def introduce_from_scalar_scalar_pass2(var_infos, var_new_values, i1, i2):
+    assert len(var_infos) == len(var_new_values.values()[0])
     pass
 
 pass2_functions = (introduce_from_sequence_pass2,
@@ -971,8 +1054,48 @@ def all_numeric_invariants(fn_regexp=None):
         var_infos = fn_var_infos[fn_name]
         var_values = fn_var_values[fn_name]
 
-        numeric_invariants_over_index(
-            range(0,len(var_infos)), var_infos, var_values)
+        derivation_functions = (None, pass1_functions, pass2_functions)
+        derivation_passes = len(derivation_functions)-1
+        # First number: invariants are computed up to this index, non-inclusive
+        # Remaining numbers: values have been derived from up to these indices
+        derivation_index = (0,) * (derivation_passes+1)
+
+        # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
+        #   >= derivation_index[1] >= ...
+
+        while derivation_index[-1] < len(var_infos):
+            assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
+            for i in range(0,derivation_index[1]):
+                vi = var_infos[i]
+                assert vi.type != types.ListType or vi.derived_len != None
+            print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
+
+            # If derivation_index == (a, b, c) and n = len(var_infos), then
+            # the body of this loop:
+            #     * computes invariants over a..n
+            #     * does pass1 introduction for b..a
+            #     * does pass2 introduction for c..a
+            # and afterward, derivation_index == (n, a, b).
+
+            # original number of vars; this body may well add more
+            num_vars = len(var_infos)
+            numeric_invariants_over_index(
+                range(derivation_index[0], num_vars), var_infos, var_values)
+
+            for pass_no in range(1,derivation_passes+1):
+                print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
+                if derivation_index[pass_no] == derivation_index[pass_no-1]:
+                    continue
+                introduce_new_variables_one_pass(
+                    var_infos, var_values,
+                    range(derivation_index[pass_no], derivation_index[pass_no-1]),
+                    derivation_functions[pass_no])
+
+            derivation_index = (num_vars,) + derivation_index[:-1]
+            print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
+
+
+        assert len(var_infos) == len(var_values.keys()[0])
 
     print_invariants(fn_regexp)
 ## Testing:
@@ -985,8 +1108,17 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     VAR_INFOS and VAR_VALUES are elements of globals `fn_var_infos' and
     `fn_var_values'."""
 
-    # introduce_new_variables_one_pass(var_infos, var_values, indices, pass1_functions)
-    # introduce_new_variables_one_pass(var_infos, var_values, indices, pass2_functions)
+    if indices == []:
+        return
+
+    print "numeric_invariants_over_index", indices
+
+    # (Intentionally) ignores anything added by body,
+    # though probably nothing should be added by this body.
+    index_limit = len(var_infos)
+    # all_indices = range(0, len(var_infos))
+
+    assert len(var_infos) == len(var_values.keys()[0])
 
     # Single invariants
     dicts = dict_of_tuples_to_tuple_of_dicts(var_values, indices)
@@ -1004,68 +1136,119 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         # print "Setting invariant for index", i, "to", this_inv
         this_var_info.invariant = this_inv
 
-    all_indices = range(0, len(var_infos))
+    print "numeric_invariants_over_index: done with single invariants, starting pairs"
+
     # Invariant pairs
-    for (i1,i2) in util.choose(2, all_indices):
-        if i1 == i2:
+    ## Don't do this; the large list of pairs can exhaust memory, though
+    ## the code is cleaner in that case.
+    # for (i1,i2) in util.choose(2, all_indices):
+    for i1 in range(0,index_limit-1):
+        inv1 = var_infos[i1].invariant
+        if inv1.is_exact():
             continue
-        if (not i1 in indices) and (not i2 in indices):
-            # Do nothing if neither variable is under consideration.
+        if inv1.can_be_None:
             continue
-        if (var_infos[i1].invariant.is_exact()
-            or var_infos[i2].invariant.is_exact()):
-            # Do nothing if either of the variables is a constant.
+        if var_infos[i1].is_non_canonical(i1):
             continue
-        values = dict_of_tuples_slice(var_values, (i1,i2))
-        these_var_infos = util.slice_by_sequence(var_infos, (i1,i2))
-        if these_var_infos[0].is_sequence() and these_var_infos[1].is_sequence():
-            this_inv = two_sequence_numeric_invariant(values)
-        elif these_var_infos[0].is_sequence() or these_var_infos[1].is_sequence():
-            this_inv = scalar_sequence_numeric_invariant(values)
-        else:
-            this_inv = two_scalar_numeric_invariant(values)
+        for i2 in range(i1+1, index_limit):
+            # if i1 == i2:
+            #     continue
+            if (not i1 in indices) and (not i2 in indices):
+                # Do nothing if neither variable is under consideration.
+                continue
+            inv2 = var_infos[i2].invariant
+            if inv2.is_exact():
+                # Do nothing if either of the variables is a constant.
+                continue
+            if inv2.can_be_None:
+                # Do nothing if either of the variables can be missing.
+                continue
+            if var_infos[i2].is_non_canonical(i2):
+                continue
+            values = dict_of_tuples_slice(var_values, (i1,i2))
+            these_var_infos = util.slice_by_sequence(var_infos, (i1,i2))
+            if these_var_infos[0].is_sequence() and these_var_infos[1].is_sequence():
+                this_inv = two_sequence_numeric_invariant(values)
+            elif these_var_infos[0].is_sequence() or these_var_infos[1].is_sequence():
+                this_inv = scalar_sequence_numeric_invariant(values)
+            else:
+                this_inv = two_scalar_numeric_invariant(values)
 
-        #### NEED TO REIMPLEMENT THIS.
-        # if this_inv.is_equality():
-        #     # arbitrarily remove second one; fix this later
-        #     non_exact_single_invs.remove(indices[1])
-        # elif this_inv.is_exact():
-        #     exact_pair_invs.append(indices)
+            #### NEED TO REIMPLEMENT THIS.
+            # if this_inv.is_equality():
+            #     # arbitrarily remove second one; fix this later
+            #     non_exact_single_invs.remove(indices[1])
+            # elif this_inv.is_exact():
+            #     exact_pair_invs.append(indices)
 
-        assert not var_infos[i1].invariants.has_key(i2)
-        var_infos[i1].invariants[i2] = this_inv
+            assert not var_infos[i1].invariants.has_key(i2)
+            var_infos[i1].invariants[i2] = this_inv
+            if ((isinstance(this_inv, two_scalar_numeric_invariant)
+                 or isinstance(this_inv, two_sequence_numeric_invariant))
+                and (this_inv.comparison == "=")):
+                var_infos[i1].equal_to.append(i2)
+                var_infos[i2].equal_to.append(i1)
+
+
+    print "numeric_invariants_over_index: done with pairs, starting triples"
 
     # Invariant triples
-    for (i1,i2,i3) in util.choose(3, all_indices):
-        if i1 == i2 or i1 == i3 or i2 == i3:
+    ## Don't do this; the large list of triples can exhaust memory, though
+    ## the code is cleaner in that case.
+    # for (i1,i2,i3) in util.choose(3, all_indices):
+    for i1 in range(0,index_limit-2):
+        print "triples: index1 =", i1
+        if var_infos[i1].invariant.is_exact():
             continue
-        if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
-            # Do nothing if none of the variables is under consideration.
+        if var_infos[i1].invariant.can_be_None:
             continue
-        if (var_infos[i1].invariant.is_exact()
-            or var_infos[i2].invariant.is_exact()
-            or var_infos[i3].invariant.is_exact()):
-            # Do nothing if any of the variables is a constant.
+        if var_infos[i1].is_non_canonical(i1):
             continue
-        if ((var_infos[i1].invariants.has_key(i2)
-             and var_infos[i1].invariants[i2].is_exact())
-            or (var_infos[i1].invariants.has_key(i3)
-                and var_infos[i1].invariants[i3].is_exact())
-            or (var_infos[i2].invariants.has_key(i3)
-                and var_infos[i2].invariants[i3].is_exact())):
-            # Do nothing if any of the pairs are exactly related.
-            continue
-        values = dict_of_tuples_slice(var_values, (i1,i2,i3))
-        these_var_infos = util.slice_by_sequence(var_infos, (i1,i2,i3))
-        if (these_var_infos[0].is_sequence()
-            or these_var_infos[1].is_sequence()
-            or these_var_infos[2].is_sequence()):
-            # print "got sequence in a triple"
-            this_inv = invariant(values)
-        else:
-            this_inv = three_scalar_numeric_invariant(values)
-        assert not var_infos[i1].invariants.has_key((i2,i3))
-        var_infos[i1].invariants[(i2,i3)] = this_inv
+        for i2 in range(i1+1, index_limit-1):
+            # print "triples: index2 =", i2
+            if i1 == i2:
+                continue
+            if var_infos[i2].invariant.is_exact():
+                continue
+            if (var_infos[i1].invariants.has_key(i2)
+                and var_infos[i1].invariants[i2].is_exact()):
+                continue
+            if var_infos[i2].invariant.can_be_None:
+                continue
+            if var_infos[i2].is_non_canonical(i1):
+                continue
+            for i3 in range(i2+1, index_limit):
+                if i1 == i3 or i2 == i3:
+                    continue
+                if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
+                    # Do nothing if none of the variables is under consideration.
+                    continue
+                if var_infos[i3].invariant.is_exact():
+                    # Do nothing if any of the variables is a constant.
+                    continue
+                if ((var_infos[i1].invariants.has_key(i3)
+                     and var_infos[i1].invariants[i3].is_exact())
+                    or (var_infos[i2].invariants.has_key(i3)
+                        and var_infos[i2].invariants[i3].is_exact())):
+                    # Do nothing if any of the pairs are exactly related.
+                    continue
+                if var_infos[i3].invariant.can_be_None:
+                    # Do nothing if any of the variables can be missing.
+                    continue
+                if var_infos[i3].is_non_canonical(i1):
+                    continue
+
+                values = dict_of_tuples_slice(var_values, (i1,i2,i3))
+                these_var_infos = util.slice_by_sequence(var_infos, (i1,i2,i3))
+                if (these_var_infos[0].is_sequence()
+                    or these_var_infos[1].is_sequence()
+                    or these_var_infos[2].is_sequence()):
+                    # print "got sequence in a triple"
+                    this_inv = invariant(values)
+                else:
+                    this_inv = three_scalar_numeric_invariant(values)
+                assert not var_infos[i1].invariants.has_key((i2,i3))
+                var_infos[i1].invariants[(i2,i3)] = this_inv
 
 
 ### A lot of the logic here should be moved into invariant computation;
@@ -1127,6 +1310,7 @@ class invariant:
                                         # maintain this as a range rather
                                         # than an exact number...
     samples = None                  # number of samples; >= values
+    # Perhaps this should be a count.
     can_be_None = None                  # only really sensible for single
                                         # invariants, not those over pairs, etc. (?)
     unconstrained_internal = None   # None, true, or false
@@ -1165,9 +1349,9 @@ class invariant:
             args = args[0]
         if self.one_of:
             if len(self.one_of) == 1:
-                return "%s = %s" % (args, self.one_of[0])
+                return "%s = %s \t(%s samples)" % (args, self.one_of[0], self.samples)
             elif self.samples < 100:
-                return "%s in %s" % (args, self.one_of)
+                return "%s in %s \t(%s samples)" % (args, self.one_of, self.samples)
         self.unconstrained_internal = true
         return None
 
@@ -1290,10 +1474,16 @@ class single_scalar_numeric_invariant(invariant):
             return as_base
         self.unconstrained_internal = false
 
+        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+        if self.can_be_None:
+            suffix = suffix + ", can be None)"
+        else:
+            suffix = suffix + ")"
+
         if self.modulus and self.modulus_justified():
-            return arg + " = %d (mod %d)" % self.modulus
+            return arg + " = %d (mod %d)" % self.modulus + suffix
         elif self.nonmodulus and self.nonmodulus_justified():
-            return arg + " != %d (mod %d)" % self.nonmodulus
+            return arg + " != %d (mod %d)" % self.nonmodulus + suffix
 
         nonzero = (not self.can_be_zero) and self.nonzero_justified()
 
@@ -1301,25 +1491,25 @@ class single_scalar_numeric_invariant(invariant):
             result = " in [%s..%s]" % (self.min, self.max)
             if (self.min < 0 and self.max > 0 and nonzero):
                 result = " nonzero" + result
-            return arg + result
+            return arg + result + suffix
         if self.min_justified:
             result = "%s >= %s" % (arg, self.min)
             if self.min < 0 and nonzero:
                 result = result + " and nonzero"
-            return result
+            return result + suffix
         if self.max_justified:
             result = "%s <= %s" % (arg, self.max)
             if self.max > 0 and nonzero:
                 result = result + " and nonzero"
-            return result
+            return result + suffix
         if nonzero:
-            return arg + "!= 0"
+            return arg + "!= 0" + suffix
 
         if self.one_of:
             return "%s in %s" % (arg, self.one_of)
 
         self.unconstrained_internal = true
-        return arg + " unconstrained"
+        return arg + " unconstrained" + suffix
 
 
 # single_scalar_numeric_invariant(dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])[0])
@@ -1377,7 +1567,8 @@ class two_scalar_numeric_invariant(invariant):
         self.b_max = max(b_nums)
 
         ## Linear relationship -- try to fit y = ax + b.
-        # Should I also try x = ax + b?
+        # Should I also try x = ax + b?  I do not plan to call this with
+        # the arguments reversed, so that is a reasonable idea.
         try:
             if len(pairs) > 1:
                 (a,b) = bi_linear_relationship(pairs[0], pairs[1])
@@ -1398,40 +1589,7 @@ class two_scalar_numeric_invariant(invariant):
         self.difference_invariant = single_scalar_numeric_invariant(diff_dict)
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict)
 
-        ## Less-than or greater-than (or less-or-equal, greater-or-equal)
-        maybe_eq = true
-        maybe_lt = true
-        maybe_le = true
-        maybe_gt = true
-        maybe_ge = true
-        maybe_noneq = true
-        for (x, y) in pairs:
-            c = cmp(x,y)
-            if c == 0:
-                maybe_lt = maybe_gt = maybe_noneq = false
-            elif c < 0:
-                maybe_eq = maybe_gt = maybe_ge = false
-            elif c > 0:
-                maybe_eq = maybe_lt = maybe_le = false
-            else:
-                raise "no relationship -- impossible"
-            if not(maybe_eq or maybe_lt or maybe_le or maybe_gt or maybe_ge):
-                break
-        else:
-            if maybe_eq:
-                self.comparison = "="
-            elif maybe_lt:
-                self.comparison = "<"
-            elif maybe_le:
-                self.comparison = "<="
-            elif maybe_gt:
-                self.comparison = ">"
-            elif maybe_ge:
-                self.comparison = ">="
-        # Watch out: with few data points (say, even 100 data points when
-        # values are in the range -100..100), we oughtn't conclude without
-        # basis that the values are nonequal.
-        self.can_be_equal = not(maybe_noneq)
+        (self.comparison, self.can_be_equal) = compare_pairs(pairs)
 
         if len(pairs) > 1:
             # Could add "int", but only interesting if it isn't always identity
@@ -1507,22 +1665,24 @@ class two_scalar_numeric_invariant(invariant):
 
         (x,y) = arg_tuple
 
+        suffix = " \t(%s samples, %s values)" % (self.values, self.samples)
+
         if self.comparison == "=":
-            return "%s = %s" % (x,y)
+            return "%s = %s" % (x,y) + suffix
         if self.linear:
             (a,b) = self.linear
             if a == 1:
                 if b < 0:
-                    return "%s = %s - %s" % (y,x,abs(b))
+                    return "%s = %s - %s" % (y,x,abs(b)) + suffix
                 else:
-                    return "%s = %s + %s" % (y,x,b)
+                    return "%s = %s + %s" % (y,x,b) + suffix
             elif b == 0:
-                return "%s = %s %s" % (y,a,x)
+                return "%s = %s %s" % (y,a,x) + suffix
             else:
                 if b < 0:
-                    return "%s = %s %s - %s" % (y,a,x,abs(b))
+                    return "%s = %s %s - %s" % (y,a,x,abs(b)) + suffix
                 else:
-                    return "%s = %s %s + %s" % (y,a,x,b)
+                    return "%s = %s %s + %s" % (y,a,x,b) + suffix
 
         if self.functions or self.inv_functions:
             results = []
@@ -1532,15 +1692,15 @@ class two_scalar_numeric_invariant(invariant):
             if self.inv_functions:
                 for fn in self.inv_functions:
                     results.append("%s = %s(%s)" % (x,util.function_rep(fn),y))
-            return string.join(results, " and ")
+            return string.join(results, " and ") + suffix
 
         if self.comparison:
             if self.comparison in ["<", "<="]:
-                return "%s %s %s" % (x, self.comparison, y)
+                return "%s %s %s" % (x, self.comparison, y) + suffix
             if self.comparison == ">":
-                return "%s < %s" % (y, x)
+                return "%s < %s" % (y, x) + suffix
             if self.comparison == ">=":
-                return "%s <= %s" % (y, x)
+                return "%s <= %s" % (y, x) + suffix
             raise "Can't get here"
 
         # Note that invariant.format(diff_inv, ...) is quite differerent from
@@ -1554,17 +1714,17 @@ class two_scalar_numeric_invariant(invariant):
         diff_as_base = invariant.format(diff_inv, ("%s - %s" % (x,y),))
 
         if diff_as_base:
-            return diff_as_base
+            return diff_as_base + suffix
         if diff_inv.modulus:
             (a,b) = diff_inv.modulus
             if a == 0:
-                return "%s = %s (mod %d)" % (x,y,b)
+                return "%s = %s (mod %d)" % (x,y,b) + suffix
             else:
-                return "%s - %s = %d (mod %d)" % (x,y,a,b)
+                return "%s - %s = %d (mod %d)" % (x,y,a,b) + suffix
         if diff_inv.min > 1:
-            return "%s >= %s + %d" % (x,y,diff_inv.min)
+            return "%s >= %s + %d" % (x,y,diff_inv.min) + suffix
         if diff_inv.max < -1:
-            return "%s >= %s + %d" % (x,y,diff_inv.min)
+            return "%s >= %s + %d" % (x,y,diff_inv.min) + suffix
 
         # What can be interesting about a sum?  I'm not sure...
         sum_inv = self.sum_invariant
@@ -1573,15 +1733,15 @@ class two_scalar_numeric_invariant(invariant):
             return sum_as_base
         if sum_inv.modulus:
             (a,b) = sum_inv.modulus
-            return "%s + %s = %d (mod %d)" % (x,y,a,b)
+            return "%s + %s = %d (mod %d)" % (x,y,a,b) + suffix
 
         if (not self.can_be_equal) and self.nonequal_justified():
-            return "%s != %s" % (x,y)
+            return "%s != %s" % (x,y) + suffix
         elif self.one_of:
-            return "%s in %s" % ("(%s, %s)" % arg_tuple, self.one_of)
+            return "%s in %s" % ("(%s, %s)" % arg_tuple, self.one_of) + suffix
         else:
             self.unconstrained_internal = true
-            return "(%s, %s) unconstrained" % (x,y)
+            return "(%s, %s) unconstrained" % (x,y) + suffix
 
 
 
@@ -1719,6 +1879,8 @@ class three_scalar_numeric_invariant(invariant):
 
         (x,y,z) = arg_tuple
 
+        suffix = " \t(%s samples, %s values)" % (self.values, self.samples)
+
         if self.linear_z or self.linear_y or self.linear_x:
             results = []
             if self.linear_z:
@@ -1728,7 +1890,7 @@ class three_scalar_numeric_invariant(invariant):
             if self.linear_x:
                 results.append(tri_linear_format(self.linear_x, (1,2,0)))
             if len(results) > 0:
-                return string.join(results, " and ")
+                return string.join(results, " and ") + suffix
 
         if (self.functions_xyz or self.functions_yxz
             or self.functions_xzy or self.functions_zxy
@@ -1755,10 +1917,10 @@ class three_scalar_numeric_invariant(invariant):
                 for fn in self.functions_zyx:
                     results.append("%s = %s(%s, %s)" % (x,fnrep(fn),z,y))
             if len(results) > 0:
-                return string.join(results, " and ")
+                return string.join(results, " and ") + suffix
 
         self.unconstrained_internal = true
-        return "(%s, %s, %s) unconstrained" % (x,y,z)
+        return "(%s, %s, %s) unconstrained" % (x,y,z) + suffix
 
 
 
@@ -1790,6 +1952,48 @@ def bi_linear_relationship(pair1, pair2):
     # Should I check the results, as I do for tri_linear_relationship?
 
     return (a,b)
+
+
+def compare_pairs(pairs):
+    """Given a sequence of PAIRS, return a tuple of (comparison, can_be_equal).
+    COMPARISON is one of "=", "<", "<=", ">", ">=", or None.
+    CAN_BE_EQUAL is boolean."""
+
+    comparison = None
+    ## Less-than or greater-than (or less-or-equal, greater-or-equal)
+    maybe_eq = true
+    maybe_lt = true
+    maybe_le = true
+    maybe_gt = true
+    maybe_ge = true
+    maybe_noneq = true
+    for (x, y) in pairs:
+        c = cmp(x,y)
+        if c == 0:
+            maybe_lt = maybe_gt = maybe_noneq = false
+        elif c < 0:
+            maybe_eq = maybe_gt = maybe_ge = false
+        elif c > 0:
+            maybe_eq = maybe_lt = maybe_le = false
+        else:
+            raise "no relationship -- impossible"
+        if not(maybe_eq or maybe_lt or maybe_le or maybe_gt or maybe_ge or maybe_noneq):
+            break
+    else:
+        if maybe_eq:
+            comparison = "="
+        elif maybe_lt:
+            comparison = "<"
+        elif maybe_le:
+            comparison = "<="
+        elif maybe_gt:
+            comparison = ">"
+        elif maybe_ge:
+            comparison = ">="
+    # Watch out: with few data points (say, even 100 data points when
+    # values are in the range -100..100), we oughtn't conclude without
+    # basis that the values are nonequal.
+    return (comparison, not(maybe_noneq))
 
 
 # May return None
@@ -2032,6 +2236,7 @@ class single_sequence_numeric_invariant(invariant):
         # Do we care more that it is sorted, or that it is in given range?
         # How much of this do we want to print out?
 
+        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
         result = ""
         if self.min_justified and self.max_justified:
             if self.min == self.max:
@@ -2064,8 +2269,8 @@ class single_sequence_numeric_invariant(invariant):
 
         if result == "":
             self.unconstrained_internal = true
-            return arg + " unconstrained"
-        return arg + "\n" + result
+            return arg + " unconstrained" + suffix
+        return arg + suffix + "\n" + result
 
 
 ###########################################################################
@@ -2161,6 +2366,8 @@ class scalar_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
+        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+
         # arg_tuple is a pair of names; it contains no info about types
         if self.seq_first:
             (seqvar, sclvar) = arg_tuple
@@ -2168,12 +2375,12 @@ class scalar_sequence_numeric_invariant(invariant):
             (sclvar, seqvar) = arg_tuple
 
         if self.member:
-            return "%s is a member of %s" % (sclvar,seqvar)
+            return "%s is a member of %s" % (sclvar,seqvar) + suffix
         if self.size:
-            return "%s is the size of %s" % (sclvar,seqvar)
+            return "%s is the size of %s" % (sclvar,seqvar) + suffix
 
         self.unconstrained_internal = true
-        return "(%s,%s) are unconstrained" % (arg_tuple)
+        return "(%s,%s) are unconstrained" % (arg_tuple) + suffix
 
 
 class two_sequence_numeric_invariant(invariant):
@@ -2223,40 +2430,7 @@ class two_sequence_numeric_invariant(invariant):
             except OverflowError:
                 pass
 
-        ## Less-than or greater-than (or less-or-equal, greater-or-equal)
-        maybe_eq = true
-        maybe_lt = true
-        maybe_le = true
-        maybe_gt = true
-        maybe_ge = true
-        maybe_noneq = true
-        for (x, y) in pairs:
-            c = cmp(x,y)
-            if c == 0:
-                maybe_lt = maybe_gt = maybe_noneq = false
-            elif c < 0:
-                maybe_eq = maybe_gt = maybe_ge = false
-            elif c > 0:
-                maybe_eq = maybe_lt = maybe_le = false
-            else:
-                raise "no relationship -- impossible"
-            if not(maybe_eq or maybe_lt or maybe_le or maybe_gt or maybe_ge):
-                break
-        else:
-            if maybe_eq:
-                self.comparison = "="
-            elif maybe_lt:
-                self.comparison = "<"
-            elif maybe_le:
-                self.comparison = "<="
-            elif maybe_gt:
-                self.comparison = ">"
-            elif maybe_ge:
-                self.comparison = ">="
-        # Watch out: with few data points (say, even 100 data points when
-        # values are in the range -100..100), we oughtn't conclude without
-        # basis that the values are nonequal.
-        self.can_be_equal = not(maybe_noneq)
+        (self.comparison, self.can_be_equal) = compare_pairs(pairs)
 
         self.reverse = true
         for (x, y) in pairs:
@@ -2294,42 +2468,44 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
+        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+
         (x, y) = arg_tuple
         if self.comparison == "=":
-            return "%s = %s" % (x,y)
+            return "%s = %s" % (x,y) + suffix
         if self.linear:
             (a,b) = self.linear
             if a == 1:
                 if b < 0:
-                    return "%s = %s - %s" % (y,x,abs(b))
+                    return "%s = %s - %s" % (y,x,abs(b)) + suffix
                 else:
-                    return "%s = %s + %s" % (y,x,b)
+                    return "%s = %s + %s" % (y,x,b) + suffix
             elif b == 0:
-                return "%s = %s %s" % (y,a,x)
+                return "%s = %s %s" % (y,a,x) + suffix
             else:
                 if b < 0:
-                    return "%s = %s %s - %s" % (y,a,x,abs(b))
+                    return "%s = %s %s - %s" % (y,a,x,abs(b)) + suffix
                 else:
-                    return "%s = %s %s + %s" % (y,a,x,b)
+                    return "%s = %s %s + %s" % (y,a,x,b) + suffix
 
         if self.sub_sequence:
-            return "%s is a subsequence of %s" % (x,y)
+            return "%s is a subsequence of %s" % (x,y) + suffix
         if self.super_sequence:
-            return "%s is a subsequence of %s" % (y,x)
+            return "%s is a subsequence of %s" % (y,x) + suffix
         if self.reverse:
-            return "%s is the reverse of %s" % (x,y)
+            return "%s is the reverse of %s" % (x,y) + suffix
 
         if self.comparison:
             if self.comparison in ["<", "<="]:
-                return "%s %s %s" % (x, self.comparison, y)
+                return "%s %s %s" % (x, self.comparison, y) + suffix
             if self.comparison == ">":
-                return "%s < %s" % (y, x)
+                return "%s < %s" % (y, x) + suffix
             if self.comparison == ">=":
-                return "%s <= %s" % (y, x)
+                return "%s <= %s" % (y, x) + suffix
             raise "Can't get here"
 
         self.unconstrained_internal = true
-        return "(%s,%s) unconstrained" % (x,y)
+        return "(%s,%s) unconstrained" % (x,y) + suffix
 
 
 
@@ -2382,6 +2558,11 @@ def read_invs(files, clear=0):
         read_file_ftns(file)
     for file in files:
         read_merge_file(file)
+
+    # For loop is outside assert, yuck
+    for fname in fn_var_values.keys():
+        assert len(fn_var_infos[fname]) == len(fn_var_values[fname].keys()[0])
+
     # # This comes late, because the number of variables introduced depends
     # # on the values (eg, sequence lengths).  It can't be done before
     # # merging different files, because different variables would be
