@@ -1792,7 +1792,8 @@ public final class VarInfo
       }
     }
     if (postexpr == null) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE)) debugSimplifyExpression.fine ("** Punt because no post()");
+      if (debugSimplifyExpression.isLoggable(Level.FINE))
+        debugSimplifyExpression.fine ("** Punt because no post()");
       return;
     }
 
