@@ -625,16 +625,21 @@ public abstract class Invariant implements java.io.Serializable {
     return null;
   }
 
-  // Orders invariants by class, then by variable names.
+  // Orders invariants by class, then by variable names.  If the
+  // invariants are both of class Implication, they are ordered by
+  // comparing the predicate, then the consequent.
   public static final class ClassVarnameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
       Invariant inv1 = (Invariant) o1;
       Invariant inv2 = (Invariant) o2;
       
+      if (inv1 instanceof Implication && inv2 instanceof Implication)
+        return compareImplications((Implication) inv1, (Implication) inv2);
+
       int compareClass = compareClass(inv1, inv2);
       if (compareClass != 0)
         return compareClass;
-      
+
       return compareVariables(inv1, inv2);
     }
     
@@ -669,6 +674,14 @@ public abstract class Invariant implements java.io.Serializable {
       
       // All the variable names matched
       return 0;
+    }
+
+    private int compareImplications(Implication inv1, Implication inv2) {
+      int comparePredicate = compare(inv1.predicate, inv2.predicate);
+      if (comparePredicate != 0)
+        return comparePredicate;
+
+      return compare(inv1.consequent, inv2.consequent);
     }
   }
 
