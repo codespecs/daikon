@@ -44,6 +44,9 @@
 
 # -------------------------------------------------------------------------
 
+# Autoflush
+$| = 1;
+
 # Trim a string
 sub trim ( $ ) {
     my ($str) = (@_);
@@ -57,7 +60,26 @@ sub trim ( $ ) {
 sub filetowin( $ ) {
     my ($unix) = @_;
     my $win = trim(`cygpath -ws $unix`);
-    return $win unless ($win eq '');
+    if ($win ne '') {
+	# The file actually existed.
+
+	my ($unixdir, $unixnotdir);
+	my ($windir, $winnotdir);
+	if ($unix =~ m|^(.*/)(.*)$|) {
+	    ($unixdir, $unixnotdir) = ($1, $2);
+	    $win =~ m|^(.*\\)(.*)$|;
+	    ($windir, $winnotdir) = ($1, $2);
+	} else {
+	    ($unixdir, $unixnotdir) = ("", $unix);
+	    ($windir, $winnotdir) = ("", $win);
+	}
+	# If the original filename didn't have spaces, use that name
+	# instead, so we preserve the filename extension.
+	unless ($unixnotdir =~ m/\s/) {
+	    $win = $windir . $unixnotdir;
+	}
+	return $win;
+    }
 
     # Repeated prune off directories until we have none left
     my ($first, $rest) = ($unix, "");
@@ -128,7 +150,7 @@ my @ARGS = map { smartconvert($_); } @ARGV;
 my $command = filetowin($bin) . "\\" . $program . " " . join(' ', @ARGS);
 my $wincwd = filetowin(trim(`pwd`));
 $toexec = "CMD /D /C \"cd $wincwd && $command\"";
+#print "[[ $toexec ]]\n";
 
-print "[[ $toexec ]]\n";
-print `$toexec`;
-
+# Use exec instead of backticks so that error code is propogated
+exec($toexec);
