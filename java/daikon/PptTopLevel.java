@@ -2002,7 +2002,7 @@ public class PptTopLevel extends Ppt {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
-            System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
+            // System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             modified_vars.add(vi);
           }
         }
