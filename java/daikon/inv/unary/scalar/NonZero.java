@@ -81,7 +81,7 @@ public class NonZero
 
     if (format == OutputFormat.IOA) {
       return name + " ~= "
-	+ (pointer_type ? "Null(nil)" : "0");
+	+ (pointer_type ? "nil" : "0");
     }
 
     return format_unimplemented(format);
