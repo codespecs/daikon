@@ -8,7 +8,7 @@ public interface Comparison {
   /**
    * If the invariant is a equality invariant, then its probability.
    * Otherwise, Invariant.PROBABILITY_NEVER.
-   */
+   **/
   public double eq_probability();
 
   public VarInfo var1();
