@@ -94,7 +94,7 @@ public class DTraceWriter extends DaikonWriter
         // since that is a valid return value.
         traceMethod(mi, args, !mi.is_constructor(), obj, nonsenseValue);
         outFile.println();
-        
+
         Runtime.incrementRecords();
     }
 
@@ -128,7 +128,7 @@ public class DTraceWriter extends DaikonWriter
         // pass object as well as argList in here.
         traceMethod(mi, args, true, obj, ret_val);
         outFile.println();
-        
+
         Runtime.incrementRecords();
     }
 
@@ -332,8 +332,7 @@ public class DTraceWriter extends DaikonWriter
             }
         }*/
 
-        // System.out.printf ("declaring class = %s\n", declaringClass);
-
+        // System.out.printf ("Field %s has type %s\n", classField, fieldType);
         // It seems easier (and it seems to work) to pass the normal
         // Integer, Float, etc wrappes back and let them be handled there
         // rather than wrapping them in our wrappers.
@@ -341,7 +340,10 @@ public class DTraceWriter extends DaikonWriter
         {
             try
             {
-                return new Runtime.IntWrap(classField.getInt(theObj));
+                Runtime.IntWrap val
+                    = new Runtime.IntWrap(classField.getInt(theObj));
+                //System.out.printf ("field %s has val %s\n", classField, val);
+                return val;
             }
             catch (IllegalArgumentException e)
             {
@@ -531,7 +533,7 @@ public class DTraceWriter extends DaikonWriter
             Object val;
             if (Modifier.isStatic(classField.getModifiers()))
             {
-                val = getStaticValue(classField.getDeclaringClass(), classField);
+                val = getStaticValue(classField);
             }
             else
             {
@@ -549,14 +551,15 @@ public class DTraceWriter extends DaikonWriter
      * @param classField
      * @return
      */
-    private Object getStaticValue(Class declaringClass, Field classField)
+    private Object getStaticValue(Field classField)
     {
         //Class declaringClass = declareInfo.clazz;
 
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
-        if (declaringClass.equals(int.class))
+        Class fieldType = classField.getType();
+        if (fieldType.equals(int.class))
         {
             try
             {
@@ -571,7 +574,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(long.class))
+        else if (fieldType.equals(long.class))
         {
             try
             {
@@ -586,7 +589,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(boolean.class))
+        else if (fieldType.equals(boolean.class))
         {
             try
             {
@@ -601,7 +604,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(float.class))
+        else if (fieldType.equals(float.class))
         {
             try
             {
@@ -616,7 +619,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(byte.class))
+        else if (fieldType.equals(byte.class))
         {
             try
             {
@@ -631,7 +634,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(char.class))
+        else if (fieldType.equals(char.class))
         {
             try
             {
@@ -646,7 +649,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(short.class))
+        else if (fieldType.equals(short.class))
         {
             try
             {
@@ -661,7 +664,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(double.class))
+        else if (fieldType.equals(double.class))
         {
             try
             {

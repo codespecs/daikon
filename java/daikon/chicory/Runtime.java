@@ -14,7 +14,7 @@ public class Runtime
     public static int nonce = 0;
 
     /** debug flag **/
-    public static boolean debug = true;
+    public static boolean debug = false;
 
     /**
      * List of classes recently transformed.  This list is examined in
@@ -247,7 +247,8 @@ public class Runtime
         while (new_classes.size() > 0) {
           ClassInfo class_info = new_classes.get (0);
           new_classes.remove (0);
-          // System.out.printf ("processing class %s\n", class_info.class_name);
+          if (debug)
+            System.out.printf ("processing class %s\n", class_info.class_name);
           if (first_class) {
             decl_writer.printHeaderInfo (class_info.class_name);
             first_class = false;
