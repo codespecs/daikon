@@ -5,99 +5,20 @@ STEP-BY-STEP INSTRUCTIONS
 
 ******************** INSTALLATION ********************
 
-(0) To use Daikon on Windows, you must install the Cywin utilities:
-
-http://sources.redhat.com/cygwin/
+(0) For Windows users only:  To use Daikon on Windows, you must install the
+Cywin utilities:  http://sources.redhat.com/cygwin/
 
 (1) First, install the Daikon invariant detector.  This is
-well-documented in the daikon manual.  Download and install the most
-recent distribution from http://sdg.lcs.mit.edu/daikon/download/
-The pre-compiled version (daikon-jar.tar.gz) is fine.
+documented in the Daikon manual.  http://pag.lcs.mit.edu/daikon/download/
 
-Unzip the .tar.gz file.  At a cygwin prompt:
+(2) In addition to the Daikon engine, you also need a front end.  The front
+end for C is dfec.  Obtain dfec from http://pag.lcs.mit.edu/daikon/download/.
+The Daikon manual describes how to install it.
 
-$ tar zxvf daikon-jar.tar.gz
-
-Now, set your CLASSPATH variable.  Since this variable is used by Java
-(compiled for windows) and not cygwin, it need to be in the Windows
-namespace.  You set it via the regular windows mechanisms (control
-panels, user preferences), or else at a cygwin prompt via:
-
-$ export CLASSPATH=C:\\place-unzipped\\daikon\\daikon.jar
-
-We use \\ as the path separartor, which the shell reads as a single
-backslash (\), since this is a windows path.
-
-(2) In addition to the Daikon engine, you also need a front end.  Dfec
-is the front end for C.  Obtain dfec-cygwin.zip (from
-http://sdg.lcs.mit.edu/daikon/download/binaries/dfec-cygwin.zip), create a
-directory for it, and unzip the file into that directory.  Then proceed
-with setup as follows.
-
-(We will refer to the directory DFEC is unzipped in as $DFECDIR.  This
-path, and all other paths discussed in these instructions, should be
-in terms of the cygwin file namespace unless explicitly noted
-otherwise; e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt.  You may
-find it convenient to set these environment variables, so that you can cut
-and paste these instructions into your bash shell.)
-
-Compile the daikon runtime library.  At a cygwin prompt:
-
-$ cd $DFECDIR; gcc -c daikon_runtime.cc
-
-This generates the file daikon_runtime.o in $DFECDIR.
-
-Set the DTRACEAPPEND environment variable.  The bash syntax is shown
-here.
+(3) Set the DTRACEAPPEND environment variable.  The bash syntax is shown
+here ("$" is the shell prompt).
 
 $ export DTRACEAPPEND=1
-
-Next, determine paths and options for your system by running g++.
-At a cygwin prompt:
-
-$ touch empty.cc
-$ g++ -v -E empty.cc
-Reading specs from /usr/lib/gcc-lib/i686-pc-cygwin/2.95.3-4/specs
-gcc version 2.95.3-4 (cygwin special)
- /usr/lib/gcc-lib/i686-pc-cygwin/2.95.3-4/cpp0.exe -lang-c++ -v -D__GNUC__=2 -D__GNUG__=2 -D__GNUC_MINOR__=95 -D__cplusplus -D_X86_=1 -D_X86_=1 -Asystem(winnt)-D__EXCEPTIONS -Acpu(i386) -Amachine(i386) -Di386 -D__i386 -D__i386__ -Di686 -Dpentiumpro -D__i686 -D__i686__ -D__pentiumpro -D__pentiumpro__ -D__stdcall=__attribute__((__stdcall__)) -D__cdecl=__attribute__((__cdecl__)) -D_stdcall=__attribute__((__stdcall__)) -D_cdecl=__attribute__((__cdecl__)) -D__declspec(x)=__attribute__((x)) -D__CYGWIN32__ -D__CYGWIN__ -Dunix -D__unix__ -D__unix -isystem /usr/local/include -idirafter /usr/include -idirafter /usr/include/w32api -isystem /usr/include/g++-3 -isystem /usr/include/g++ empty.cc
-GNU CPP version 2.95.3-4 (cygwin special) (80386, BSD syntax)
-#include "..." search starts here:
-#include <...> search starts here:
- /usr/include/g++-3
- /usr/lib/gcc-lib/i686-pc-cygwin/2.95.3-4/include
- /usr/include
- /usr/include/w32api
-End of search list.
- The following default directories have been omitted from the search path:
-End of omitted list.
-# 1 "empty.cc"
-
-$ rm empty.cc
-
-Set INC_PATH to be everything following an -isystem in the cpp0.exe
-invocation above, INC_AFTER to be everything following an -idirafter,
-and INC_SEARCH to be the search path after the "#include <...> search
-starts here:", yielding this:
-
-$ export INC_PATH="-I/usr/local/include -I/usr/include/g++-3 -I/usr/include/g++"
-$ export INC_AFTER="-I/usr/include -I/usr/include/w32api"
-$ export INC_SEARCH="-I/usr/include/g++-3 -I/usr/lib/gcc-lib/i686-pc-cygwin/2.95.3-4/include -I/usr/include -I/usr/include/w32api"
-
-There are a lot of defines that need to get sent to dfec to get it to
-process the system headers correctly.
-
-$ export DFEC_OPTS='-w -D__SIZE_TYPE__="unsigned int" -D__attribute__\(x\)="" -D__extension__="" -D__null=0 -D__GNUG__=1 -D_WIN32"
-
-Now set alias "dfec" to be the correct dfec, plus include paths (note the
-order!); recall that all paths are cygwin paths.
-
-$ alias dfec="$DFECDIR/dfec.exe $INC_PATH $INC_SEARCH $INC_AFTER $DFEC_OPTS"
-
-Then, to invoke dfec from the cygwin bash shell, you can call just run $DFEC.
-
-$ dfec program.c ... (more explanation later)
-
-Now dfec is set up.  Let's move on to some examples
 
 ******************** EXAMPLES ********************
 
@@ -134,14 +55,16 @@ and daikon-output.  It creates an instrumented and preprocessed
 version of print_tokens.c at daikon-instrumented/print_tokens.cc.  It
 creates a declaration file at daikon-output/print_tokens.decls.
 
-Now, under Windows, you have to then fix the instrumented file with a
-sed script to put in a gcc-specific __attribute__ for the _ctype_
-variable, which is used in our test suite.  Run it like this:
+##### Windows only
+  Now, under Windows, you have to then fix the instrumented file with a
+  sed script to put in a gcc-specific __attribute__ for the _ctype_
+  variable, which is used in our test suite.  Run it like this:
 
-$ alias fix="sed -f $DFECDIR/fix.sed"
-$ (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
+  $ alias fix="sed -f $DFECDIR/fix.sed"
+  $ (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
 
-This fixes the above problem.
+  This fixes the above problem.
+##### end of Windows only
 
 3. Compile and link the instrumented program.
 
@@ -164,27 +87,13 @@ $ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 The invariants are printed to standard out, and a binary representation
 of the invariants is written to print_tokens.inv.
 
-6. Examine the invariants. There are three ways to do this.
-
-   - Examine the output from running Daikon.  (You may find it convenient
-     to capture the output in a file; add "> print_tokens.txt" to
-     the end of the command that runs Daikon.)
-
-   - Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-     contains a tree that hierarchically organizes program points
-     according to their class and method.  Using the GUI, you can look
-     at invariants for only the methods and program points you care
-     about.
-
-     java daikon.gui.treeGUI.InvariantsGUI print_tokens.inv
-
-   - Use the Daikon Context GUI to browse the invariants.  As you move
-     the cursor in an editor window, the Context GUI displays the
-     invariants applicable to the current location (class or
-     method).  For details on running the Context GUI, see the Daikon
-     manual.  The Context GUI can also be run from the command line:
-
-     java daikon.gui.contextGUI.ContextGUI print_tokens.inv
+6. Examine the invariants.  As described in the Daikon manual, there are
+several ways to do this:
+   - Examine the output from running Daikon.
+   - Use the PrintInvariants program to display the invariants.
+   - Use the Daikon Tree GUI to browse the invariants.
+   - Use the Daikon Context GUI to browse the invariants.
+For help understanding the invariants, see the Daikon manual.
 
 
 SUMMARY
@@ -195,7 +104,9 @@ Instrumentation (Steps 1-3)
    cd $EXAMPLES/print_tokens
    cp $DFECDIR/daikon_runtime.h .
    dfec print_tokens.c stream.h tokens.h
-   (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
+     ##### Windows only   
+     (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
+     ##### end of Windows only   
    g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc \
      $DFECDIR/daikon_runtime.o
 
@@ -208,20 +119,15 @@ Invariant Detection (Steps 5-6)
    java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 
 
-UNDERSTANDING THE INVARIANTS
-
-For help understanding the invariants, see the Daikon manual.
-
-
 RIJNDAEL EXAMPLE
 
 The rijndael program requires some special instructions, due to the
 size of its data trace file.  The data trace file is over 1GB in size
 when first created, so make sure you have adequate disk space.
 
-First, it is recommended that you set the TRACE_KAT_MCT variable when
-you run the C front end, so you will see some output when running the
-test suite.
+First, it is recommended that you set the TRACE_KAT_MCT variable (this is
+used by the Rijndael program) when you run the C front end, so you will see
+some output when running the test suite.
 
 2.  dfec -DTRACE_KAT_MCT rijndael.c \
       rijndael-alg-ref.h rijndael-api-ref.h
