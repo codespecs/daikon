@@ -2973,7 +2973,14 @@ Do not produce data trace output for class invariants.
 Only produce trace output for matching classes/functions. Cannot be used
 in conjunction with @option{-daikon_omit}. May only be supplied once.
 The argument provided must be a regex (and be surrounded by forward
-slashes on both sides).
+slashes on both sides). Note that if a class does not match the includeonly 
+regexp, then all functions or methods within that class will automatically
+be omitted as well.  To instrument only method bar of class Foo, one
+possible command is:
+
+@example
+dfej -daikon_includeonly='/Foo$|Foo.bar/' Foo.java
+@end example
 
 @item -daikon_omit=@var{string}
 Do not produce data trace output for matching classes/functions.  This
