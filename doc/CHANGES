@@ -9,7 +9,7 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.4.3 (...):
+2.4.3 (1 February 2003):
 
 dfej now produces output with program points named in Java, not JVML
 format:  "foo(int, java.lang.String[])", not "foo(I[Ljava/lang/String;)".

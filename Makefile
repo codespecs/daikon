@@ -211,7 +211,7 @@ update-dist-dir: dist-ensure-directory-exists
 	cd java/daikon && $(MAKE) all_via_javac
 	cd java/daikon && $(MAKE) junit
 	$(MAKE) update-dist-doc
-	$(MAKE) www
+	$(MAKE) www-dist
 	$(MAKE) update-dist-version-file
 
 doc-all:
@@ -273,8 +273,6 @@ www-dist:
 	cd doc/www && cp -pfP $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 	/g2/users/mernst/bin/share/update-link-dates $(DIST_DIR)/index.html
-
-.PHONY: www
 
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
