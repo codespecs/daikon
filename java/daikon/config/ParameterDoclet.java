@@ -116,7 +116,7 @@ public class ParameterDoclet
 		      "These options control whether Daikon looks for invariants involving certain forms of derived variables.  See @ref{Variable names}, for more about derived variables."),
       new DocCategory("daikon.simplify.", null,
 		      "Simplify interface configuration options",
-		      "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Command line options}."),
+		      "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
       new DocCategory(null, null,
 		      "General configuration options",
 		      "This section lists miscellaneous configuration options for Daikon.") };
