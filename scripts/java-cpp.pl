@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-07-10 17:29:30 mernst>
+# Time-stamp: <2002-07-10 23:17:08 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -142,7 +142,7 @@ sub run_cpp {
     # Remove all extra spaces in import list
     while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
     # convert " );" to ");"; requires "=" somewhere earlier in line
-    s/(=.*[^ \t\n]) (\);\n)/$1$2/g;
+    s/(=.*[^ \t\n\}]) (\);\n)/$1$2/g;
     # convert "(Foo )" to "(Foo)"
     s/\((\b[A-Za-z]\w*) \)/($1)/g;
     # convert "a .b" to "a.b".
