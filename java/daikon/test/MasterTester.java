@@ -21,10 +21,10 @@ public class MasterTester extends TestCase {
     //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
 
     result.addTest(new TestSuite(DiffTester.class));
-    result.addTest(new TestSuite(DetailedStatisticsVisitorTester.class));    
+    result.addTest(new TestSuite(DetailedStatisticsVisitorTester.class));
     result.addTest(new TestSuite(InvariantTester.class));
     result.addTest(new TestSuite(LinearTernaryCoreTest.class));
-    result.addTest(new TestSuite(ProglangTypeTester.class));
+    result.addTest(new TestSuite(ProglangTypeTest.class));
     result.addTest(new TestSuite(VarComparabilityTest.class));
     result.addTest(new TestSuite(VarInfoNameTest.class));
     return result;
