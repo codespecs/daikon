@@ -1200,6 +1200,28 @@ public final class ArraysMDE {
     return true;
   }
 
+  // This implementation is O(n^2) when the smaller really is a subset, but
+  // might be quicker when it is not.  Sorting both sets has (minimum
+  // and maximum) running time of Theta(n log n).
+  /**
+   * Whether smaller is a subset of bigger.  The implmentation is to
+   * use collections because we want to take advantage of HashSet's
+   * constant time membership tests.
+   **/
+  public static boolean isSubset(String[] smaller, String[] bigger) {
+    Set setBigger = new HashSet();
+
+    for (int i = 0; i < bigger.length; i++) {
+      setBigger.add(bigger[i]);
+    }
+
+    for (int i = 0; i < smaller.length; i++) {
+      if (!setBigger.contains(smaller[i])) return false;
+    }
+
+    return true;
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /// Array comparators
   ///
@@ -1265,6 +1287,30 @@ public final class ArraysMDE {
         if (tmp != 0) {
           return (compare_result (tmp));
         }
+      }
+      return a1.length - a2.length;
+    }
+  }
+
+   public static final class StringArrayComparatorLexical implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      String[] a1 = (String[])o1;
+      String[] a2 = (String[])o2;
+      int len = Math.min(a1.length, a2.length);
+      for (int i=0; i<len; i++) {
+        int tmp = 0;
+        if ((a1[i] == null) && (a2[i] == null))
+          tmp = 0;
+        else if (a1[i] == null)
+          tmp = -1;
+        else if (a2[i] == null)
+          tmp = 1;
+        else
+          tmp = a1[i].compareTo (a2[i]);
+        if (tmp != 0)
+          return (tmp);
       }
       return a1.length - a2.length;
     }
