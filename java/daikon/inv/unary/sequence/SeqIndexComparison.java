@@ -14,8 +14,8 @@ import utilMDE.*;
  * and the indices of those elements; for instance, * "for all i,
  * a[i] > i".
  **/
-public final class SeqIndexComparison
-  extends SingleSequence
+public final class SeqIndexComparison 
+  extends SingleSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -35,7 +35,7 @@ public final class SeqIndexComparison
 
   protected SeqIndexComparison (PptSlice ppt) {
     super(ppt);
-    Assert.assertTrue(var().rep_type == ProglangType. INT_ARRAY);
+    Assert.assertTrue(var().rep_type == ProglangType. INT_ARRAY );
     core = new IntComparisonCore (this);
     if (debugSeqIndexComparison) {
       System.out.println("Instantiated: " + format());
@@ -50,14 +50,14 @@ public final class SeqIndexComparison
     // if (isEqualToObviousSeqIndexComparison(sclvar, seqvar)) {
     //   Global.implied_noninstantiated_invariants += 1;
     //   if (debugSeqIndexComparison) {
-    //     System.out.println("SeqIndexComparison not instantiated (obvious): "
+    //     System.out.println("SeqIndexComparison"  + " not instantiated (obvious): "
     //                        + sclvar.name + " in " + seqvar.name);
     //   }
     //   return null;
     // }
 
     if (debugSeqIndexComparison) {
-      System.out.println("SeqIndexComparison instantiated: " + seqvar.name);
+      System.out.println("SeqIndexComparison"  + " instantiated: " + seqvar.name);
     }
 
     // Don't compare indices to object addresses.
@@ -200,7 +200,7 @@ public final class SeqIndexComparison
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SeqIndexComparison)
+      if (inv instanceof SeqIndexComparison )
         return (SeqIndexComparison) inv;
     }
     return null;

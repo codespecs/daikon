@@ -21,7 +21,7 @@ import java.io.Serializable;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class LowerBoundCoreFloat
+public class LowerBoundCoreFloat 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -32,7 +32,7 @@ public class LowerBoundCoreFloat
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
 
-  // min1  <  min2  <  min3
+  // min1  <  min2  <  min3 
   public double  min1  = Double.MAX_VALUE ;
   int num_min1  = 0;
   double  min2  = Double.MAX_VALUE ;
@@ -63,13 +63,13 @@ public class LowerBoundCoreFloat
     double  modulus = calc_modulus();
     double  range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
-    return "min1=" + min1
-      + ", num_min1=" + num_min1
-      + ", min2=" + min2
-      + ", num_min2=" + num_min2
-      + ", min3=" + min3
-      + ", num_min3=" + num_min3
-      + ", max=" + max  + ", range=" + range + ", " +
+    return "min"  + "1=" + min1 
+      + ", num_" + "min"  + "1=" + num_min1 
+      + ", " + "min"  + "2=" + min2 
+      + ", num_" + "min"  + "2=" + num_min2 
+      + ", " + "min"  + "3=" + min3 
+      + ", num_" + "min"  + "3=" + num_min3 
+      + ", " + "max"  + "=" + max  + ", " + "range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
@@ -206,7 +206,7 @@ public class LowerBoundCoreFloat
     // Final result
     double result = prob_and(bound_samples_prob, bound_prob);
 
-    // System.out.println("LowerBoundCoreFloat.computeProbability(): ");
+    // System.out.println("LowerBoundCoreFloat"  + ".computeProbability(): ");
     // System.out.println("  " + repr());
     // System.out.println("  ppt=" + wrapper.ppt.name
     //                    + ", wrapper.ppt.num_mod_non_missing_samples()="

@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class EltOneOfFloat
-  extends SingleFloatSequence
+public final class EltOneOfFloat 
+  extends SingleFloatSequence 
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -55,7 +55,7 @@ public final class EltOneOfFloat
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOfFloat" );
+                  "ProglangType must be pseudo-array for " + "EltOneOfFloat" );
 
     elts = new double [dkconfig_size];
 
@@ -358,7 +358,7 @@ public final class EltOneOfFloat
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltOneOfFloat) {
+      if (inv instanceof EltOneOfFloat ) {
         EltOneOfFloat  other = (EltOneOfFloat) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
@@ -388,7 +388,7 @@ public final class EltOneOfFloat
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof EltOneOfFloat) {
+    if (o instanceof EltOneOfFloat ) {
       EltOneOfFloat  other = (EltOneOfFloat) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -401,7 +401,7 @@ public final class EltOneOfFloat
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof EltNonZeroFloat) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof EltNonZeroFloat ) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     double  elts_min = Double.MAX_VALUE;
@@ -434,7 +434,7 @@ public final class EltOneOfFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltOneOfFloat)
+      if (inv instanceof EltOneOfFloat )
         return (EltOneOfFloat) inv;
     }
     return null;

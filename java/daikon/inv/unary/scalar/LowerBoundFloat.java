@@ -21,8 +21,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class LowerBoundFloat
-  extends SingleFloat
+public class LowerBoundFloat 
+  extends SingleFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -85,11 +85,11 @@ public class LowerBoundFloat
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " >= " + core.min1 ;
+      return name + " " + ">"  + "= " + core.min1 ;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(>= " + name + " " + core.min1  + ")";
+      return "(" + ">"  + "= " + name + " " + core.min1  + ")";
     }
 
     return format_unimplemented(format);
@@ -180,11 +180,11 @@ public class LowerBoundFloat
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof UpperBoundFloat) {
+    if (other instanceof UpperBoundFloat ) {
       if (core.min1  >  ((UpperBoundFloat) other). core.max1 )
         return true;
     }
-    if (other instanceof OneOfFloat) {
+    if (other instanceof OneOfFloat ) {
       return other.isExclusiveFormula(this);
     }
     return false;
@@ -195,7 +195,7 @@ public class LowerBoundFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LowerBoundFloat)
+      if (inv instanceof LowerBoundFloat )
         return (LowerBoundFloat) inv;
     }
     return null;

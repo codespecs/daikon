@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class EltOneOfString
-  extends SingleStringSequence
+public final class EltOneOfString 
+  extends SingleStringSequence 
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -55,7 +55,7 @@ public final class EltOneOfString
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOfString" );
+                  "ProglangType must be pseudo-array for " + "EltOneOfString" );
 
     elts = new String [dkconfig_size];
 
@@ -130,7 +130,7 @@ public final class EltOneOfString
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
+      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") );
     }
     sb.append(" }");
     return sb.toString();
@@ -352,17 +352,18 @@ public final class EltOneOfString
       if (!is_type) {
         result += " == " +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   ;
       } else {
-        result += " == ";
-        if ((str == null) || "null".equals(str)) {
-          result += "== null)";
-        } else if (str.startsWith("[")) {
-          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-        } else {
-          if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length()-1);
-          }
-          result += "(" + str + ")";
-        }
+	result += " == \\type";
+	if ((str == null) || "null".equals(str)) {
+	  // "null" is not a type... Going to print as Object... should actually not print
+	  result += "(java.lang.Object)";
+	} else if (str.startsWith("[")) {
+	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "(" + str + ")";
+	}
       }
     }
 
@@ -477,7 +478,7 @@ public final class EltOneOfString
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof EltOneOfString) {
+    if (o instanceof EltOneOfString ) {
       EltOneOfString  other = (EltOneOfString) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -508,7 +509,7 @@ public final class EltOneOfString
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltOneOfString)
+      if (inv instanceof EltOneOfString )
         return (EltOneOfString) inv;
     }
     return null;

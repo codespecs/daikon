@@ -10,8 +10,8 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
-public final class SeqIndexNonEqualFloat
-  extends SingleFloatSequence
+public final class SeqIndexNonEqualFloat 
+  extends SingleFloatSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class SeqIndexNonEqualFloat
     super(ppt);
 
     VarInfo var = var();
-    Assert.assertTrue(var.rep_type == ProglangType. DOUBLE_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType. DOUBLE_ARRAY );
     Assert.assertTrue(var.type. elementIsFloat() );
     core = new NonEqualCoreFloat (this, 0);
 
@@ -151,7 +151,7 @@ public final class SeqIndexNonEqualFloat
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof SeqIndexComparisonFloat) {
+    if (other instanceof SeqIndexComparisonFloat ) {
       if (((SeqIndexComparisonFloat)other).isExact()) {
         return true;
       }
@@ -164,7 +164,7 @@ public final class SeqIndexNonEqualFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SeqIndexNonEqualFloat)
+      if (inv instanceof SeqIndexNonEqualFloat )
         return (SeqIndexNonEqualFloat) inv;
     }
     return null;

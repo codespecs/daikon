@@ -10,8 +10,8 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
-public final class SeqIndexNonEqual
-  extends SingleSequence
+public final class SeqIndexNonEqual 
+  extends SingleSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class SeqIndexNonEqual
     super(ppt);
 
     VarInfo var = var();
-    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY );
     Assert.assertTrue(var.type. elementIsIntegral() );
     core = new NonEqualCore (this, 0);
 
@@ -151,7 +151,7 @@ public final class SeqIndexNonEqual
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof SeqIndexComparison) {
+    if (other instanceof SeqIndexComparison ) {
       if (((SeqIndexComparison)other).isExact()) {
         return true;
       }
@@ -164,7 +164,7 @@ public final class SeqIndexNonEqual
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SeqIndexNonEqual)
+      if (inv instanceof SeqIndexNonEqual )
         return (SeqIndexNonEqual) inv;
     }
     return null;

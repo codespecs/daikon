@@ -21,8 +21,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class UpperBound
-  extends SingleScalar
+public class UpperBound 
+  extends SingleScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -85,11 +85,11 @@ public class UpperBound
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " <= " + core.max1 ;
+      return name + " " + "<"  + "= " + core.max1 ;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(<= " + name + " " + core.max1  + ")";
+      return "(" + "<"  + "= " + name + " " + core.max1  + ")";
     }
 
     return format_unimplemented(format);
@@ -177,11 +177,11 @@ public class UpperBound
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof LowerBound) {
+    if (other instanceof LowerBound ) {
       if (core.max1  <  ((LowerBound) other). core.min1 )
         return true;
     }
-    if (other instanceof OneOfScalar) {
+    if (other instanceof OneOfScalar ) {
       return other.isExclusiveFormula(this);
     }
     return false;
@@ -192,7 +192,7 @@ public class UpperBound
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof UpperBound)
+      if (inv instanceof UpperBound )
         return (UpperBound) inv;
     }
     return null;

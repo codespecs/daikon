@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfFloat
-  extends SingleFloat
+public final class OneOfFloat 
+  extends SingleFloat 
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -340,7 +340,7 @@ public final class OneOfFloat
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltOneOfFloat) && inv.enoughSamples()) {
+      if ((inv instanceof EltOneOfFloat ) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println("isObviousImplied: calling  Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
@@ -380,7 +380,7 @@ public final class OneOfFloat
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfFloat) {
+    if (o instanceof OneOfFloat ) {
       OneOfFloat  other = (OneOfFloat) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -393,7 +393,7 @@ public final class OneOfFloat
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof NonZero ) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     double  elts_min = Double.MAX_VALUE;
@@ -426,7 +426,7 @@ public final class OneOfFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfFloat)
+      if (inv instanceof OneOfFloat )
         return (OneOfFloat) inv;
     }
     return null;

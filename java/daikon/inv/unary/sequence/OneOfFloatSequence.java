@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfFloatSequence
-  extends SingleFloatSequence
+public final class OneOfFloatSequence 
+  extends SingleFloatSequence 
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -55,7 +55,7 @@ public final class OneOfFloatSequence
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for OneOfSequenceFloat" );
+                  "ProglangType must be pseudo-array for " + "OneOfSequenceFloat" );
 
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -236,7 +236,7 @@ public final class OneOfFloatSequence
 
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
       String thisclassname = this.getClass().getName();
-      result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
+      result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
     } else if (length == "") { // interned; can't say anything about size
       result = forall;
     } else if ((forall == "") || (elts[0].length == 0)) { // interned; can't say anything about elements
@@ -361,7 +361,7 @@ public final class OneOfFloatSequence
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfFloatSequence) {
+    if (o instanceof OneOfFloatSequence ) {
       OneOfFloatSequence  other = (OneOfFloatSequence) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -392,7 +392,7 @@ public final class OneOfFloatSequence
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfFloatSequence)
+      if (inv instanceof OneOfFloatSequence )
         return (OneOfFloatSequence) inv;
     }
     return null;

@@ -10,8 +10,8 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class CommonFloatSequence
-  extends SingleFloatSequence
+public class CommonFloatSequence 
+  extends SingleFloatSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -43,7 +43,7 @@ public class CommonFloatSequence
   // public Object clone();
 
   public String repr() {
-    return "CommonFloatSequence " + varNames() + ": "
+    return "CommonFloatSequence"  + " " + varNames() + ": "
       + "elts=\"" + elts;
   }
 
@@ -119,7 +119,7 @@ public class CommonFloatSequence
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof CommonFloatSequence);
+    Assert.assertTrue(other instanceof CommonFloatSequence );
     return true;
   }
 }

@@ -21,7 +21,7 @@ import java.io.Serializable;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class UpperBoundCore
+public class UpperBoundCore 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -32,7 +32,7 @@ public class UpperBoundCore
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
 
-  // max1  >  max2  >  max3
+  // max1  >  max2  >  max3 
   public long  max1  = Long.MIN_VALUE ;
   int num_max1  = 0;
   long  max2  = Long.MIN_VALUE ;
@@ -63,13 +63,13 @@ public class UpperBoundCore
     long  modulus = calc_modulus();
     long  range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
-    return "max1=" + max1
-      + ", num_max1=" + num_max1
-      + ", max2=" + max2
-      + ", num_max2=" + num_max2
-      + ", max3=" + max3
-      + ", num_max3=" + num_max3
-      + ", min=" + min  + ", range=" + range + ", " +
+    return "max"  + "1=" + max1 
+      + ", num_" + "max"  + "1=" + num_max1 
+      + ", " + "max"  + "2=" + max2 
+      + ", num_" + "max"  + "2=" + num_max2 
+      + ", " + "max"  + "3=" + max3 
+      + ", num_" + "max"  + "3=" + num_max3 
+      + ", " + "min"  + "=" + min  + ", " + "range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
@@ -206,7 +206,7 @@ public class UpperBoundCore
     // Final result
     double result = prob_and(bound_samples_prob, bound_prob);
 
-    // System.out.println("UpperBoundCore.computeProbability(): ");
+    // System.out.println("UpperBoundCore"  + ".computeProbability(): ");
     // System.out.println("  " + repr());
     // System.out.println("  ppt=" + wrapper.ppt.name
     //                    + ", wrapper.ppt.num_mod_non_missing_samples()="

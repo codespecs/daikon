@@ -21,8 +21,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class EltLowerBoundFloat
-  extends SingleFloatSequence
+public class EltLowerBoundFloat 
+  extends SingleFloatSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -96,27 +96,27 @@ public class EltLowerBoundFloat
 
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements >= " + core.min1 ;
+    return var().name.name() + " elements " + ">"  + "= " + core.min1 ;
   }
 
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + ">"  + "= " + core.min1  + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + ">"  + "= " + core.min1  + ")" + form[2];
   }
 
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " >" +"= " + core.min1  + quant.getClosingExp();
+      " => " + quant.getVarIndexed(0) + " " + ">" +"= " + core.min1  + quant.getClosingExp();
     return result;
   }
 
@@ -124,13 +124,13 @@ public class EltLowerBoundFloat
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var().name });
-    return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
+    return form[0] + "(" + ">"  + "= " + form[1] + " " + core.min1  + ")" + form[2];
   }
 
   public String format_java() {
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + ">"  + "= " + core.min1  + ")" + form[2];
   }
 
   // XXX need to flow invariant if bound changed
@@ -186,7 +186,7 @@ public class EltLowerBoundFloat
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltLowerBoundFloat) {
+      if (inv instanceof EltLowerBoundFloat ) {
         EltLowerBoundFloat  other = (EltLowerBoundFloat) inv;
         if (isSameFormula(other)
             && SubSequenceFloat.isObviousDerived(v, other.var())) {
@@ -231,11 +231,11 @@ public class EltLowerBoundFloat
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof EltUpperBoundFloat) {
+    if (other instanceof EltUpperBoundFloat ) {
       if (core.min1  >  ((EltUpperBoundFloat) other). core.max1 )
         return true;
     }
-    if (other instanceof OneOfFloat) {
+    if (other instanceof OneOfFloat ) {
       return other.isExclusiveFormula(this);
     }
     return false;
@@ -246,7 +246,7 @@ public class EltLowerBoundFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltLowerBoundFloat)
+      if (inv instanceof EltLowerBoundFloat )
         return (EltLowerBoundFloat) inv;
     }
     return null;

@@ -10,8 +10,8 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class CommonSequence
-  extends SingleSequence
+public class CommonSequence 
+  extends SingleSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -43,7 +43,7 @@ public class CommonSequence
   // public Object clone();
 
   public String repr() {
-    return "CommonSequence " + varNames() + ": "
+    return "CommonSequence"  + " " + varNames() + ": "
       + "elts=\"" + elts;
   }
 
@@ -119,7 +119,7 @@ public class CommonSequence
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof CommonSequence);
+    Assert.assertTrue(other instanceof CommonSequence );
     return true;
   }
 }
