@@ -27,7 +27,7 @@ chomp($cwd);
 
 # This list includes both arguments and also ADTs they use.
 # We won't use it if no txt-esc file is found.
-my @javafiles = ();
+my %javafiles = ();
 
 # List of relevant whodini annotation (.who.txt-esc) files.
 my @txtescfiles = ();
@@ -46,19 +46,19 @@ if ((scalar(@ARGV) > 0) && ($ARGV[0] eq '-d')) {
 # Create a list of all files listed on the command line, plus any
 # ADTs that they use.
 for my $arg (@ARGV) {
-  push @javafiles, $arg;
+  $javafiles{$arg} = 1;
   # Look for the ADT file.
   # This assumes that the ADT for FooCheck.java is Foo.java (in the same
   # directory).
   my $adtfile = $arg;		# new var to avoid side-effecting @ARGV
   if (($adtfile =~ s/Check\.java/.java/)
       && -f $adtfile) {
-    push @javafiles, $adtfile;
+    $javafiles{$adtfile} = 1;
   }
 }
 
 # Find whodini annotation files for all java files from previous step.
-for my $jfile (@javafiles) {
+for my $jfile (keys %javafiles) {
   my $base = $jfile;
   $base =~ s/\.java$//;
   # print "$jfile => $base\n";
@@ -79,7 +79,7 @@ if (scalar(@txtescfiles) == 0) {
 } elsif (scalar(@txtescfiles) > 1) {
   die "Found multiple whodini background files: " . join(' ', @txtescfiles);
 } else {
-  my $cmd = "$whodini_executable $txtescfiles[0] " . join(' ', @javafiles);
+  my $cmd = "$whodini_executable $txtescfiles[0] " . join(' ', keys %javafiles);
   if ($debug) { print STDERR "Executing: $cmd\n"; }
   # this call never returns
   exec $cmd;
