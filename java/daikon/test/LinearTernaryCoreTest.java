@@ -36,8 +36,9 @@ public class LinearTernaryCoreTest
     } catch (ArithmeticException e) {
       // In the future, we should perhaps test triples that that don't
       // determine a plane; but none of the current ones do.
-      assertTrue(false);
-      coef = null; // not reached
+      throw new Error("Not reached");
+      // assertTrue(false);
+      // coef = null; // not reached
     }
    //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
    //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
