@@ -4,8 +4,11 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
+import java.io.Serializable;
 
-public final class LinearTernaryCore implements java.io.Serializable {
+public final class LinearTernaryCore
+  implements Serializable, Cloneable
+{
 
   final static boolean debugLinearTernaryCore = false;
   // final static boolean debugLinearTernaryCore = true;
@@ -13,7 +16,7 @@ public final class LinearTernaryCore implements java.io.Serializable {
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a, b, c;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   public int values_seen = 0;
 
@@ -26,6 +29,18 @@ public final class LinearTernaryCore implements java.io.Serializable {
 
   public LinearTernaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
+  }
+
+  public Object clone() {
+    try {
+      LinearTernaryCore result = (LinearTernaryCore) super.clone();
+      result.x_cache = (long[]) x_cache.clone();
+      result.y_cache = (long[]) y_cache.clone();
+      result.z_cache = (long[]) z_cache.clone();
+      return result;
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
+    }
   }
 
   /**

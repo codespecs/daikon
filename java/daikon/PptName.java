@@ -7,19 +7,33 @@ import java.io.Serializable;
 import java.io.IOException;
 
 /**
- * PptName is an ADT that represents naming data associated with a
+ * PptName is an immutable ADT that represents naming data associated with a
  * given program point, such as the class or method.
+ * 
+ * <p> Examples below are as if the full value of this PptName were
+ * "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
  **/
 public class PptName
   implements Serializable
 {
 
-  // any of these can be null
   // cannot be "final", because they must be re-interned upon deserialization
-  private String cls;        // interned
-  private String method;     // interned
-  private String point;      // interned
   private String fullname;   // interned
+  private String fn_name;    // interned, nullable; derived from fullname
+  private String cls;        // interned, nullable; derived from fullname
+  private String method;     // interned, nullable; derived from fullname
+  private String point;      // interned, nullable; derived from fullname
+
+  // Represenatation invariant:
+  //
+  // Fullname is always present.  If fullname does not contain :::,
+  // then all of the other fields are null.  Otherwise, fn_name is the
+  // part of fullname before the ::: and point is the part after.  If
+  // fn_name does not contain '(' then class is the same as fn_name
+  // and method is full.  If fn_name does contain a '(' and a '.' then
+  // comes before it, then class is the portion before the dot and
+  // method if the portion after; otherwise (fn_name contains '(' but
+  // no dot) class is null and method is the same as fn_name.
 
   // ==================== CONSTRUCTORS ====================
 
@@ -35,29 +49,30 @@ public class PptName
 
     fullname = name.intern();
     int seperatorPosition = name.indexOf( FileIO.ppt_tag_separator );
-    //    Assert.assert( seperatorPosition >= 0 );
     if (seperatorPosition == -1) {
-      cls = method = point = null;
-      return;			// probably a lisp program, which was instrumented differently
+      // probably a lisp program, which was instrumented differently
+      cls = method = point = fn_name = null;
+      return;			
     }
-    String pre_sep = name.substring(0, seperatorPosition);
-    String post_sep = name.substring(seperatorPosition + FileIO.ppt_tag_separator.length());
+    fn_name = name.substring(0, seperatorPosition).intern();
+    point = name.substring(seperatorPosition + FileIO.ppt_tag_separator.length()).intern();
 
-    int dot = pre_sep.lastIndexOf('.');
-    int lparen = pre_sep.indexOf('(');
+    int dot = fn_name.lastIndexOf('.');
+    int lparen = fn_name.indexOf('(');
     if (lparen == -1) {
-      cls = pre_sep.intern();
+      cls = fn_name;
       method = null;
-    } else {
-      //      Assert.assert(dot < lparen);
-      if (dot == -1  ||  dot >= lparen) {
-	cls = method = point = null;
-	return;			// probably a lisp program, which was instrumented differently
-      }
-      cls = pre_sep.substring(0, dot).intern();
-      method = pre_sep.substring(dot + 1).intern();
+      return;
     }
-    point = post_sep.intern();
+    if (dot == -1  ||  dot >= lparen) {
+      // probably a lisp program, which was instrumented differently
+      method = fn_name;
+      cls = null;
+      return;
+    }
+    // now 0 <= dot < lparen
+    cls = fn_name.substring(0, dot).intern();
+    method = fn_name.substring(dot + 1).intern();
   }
 
   /**
@@ -65,18 +80,47 @@ public class PptName
    **/
   public PptName(String className, String methodName, String pointName)
   {
-    cls = (className != null) ? className.intern() : null;
-    method = (methodName != null) ? methodName.intern() : null;
-    point = (pointName != null) ? pointName.intern() : null;
-    fullname = (((cls == null) ? "" : cls)
-                + ((method == null) ? "" : "."+method)
-                + ((point == null) ? "" : FileIO.ppt_tag_separator+point));
+    if ((className == null) && (methodName == null)) {
+      throw new UnsupportedOperationException
+	("One of class or method must be given");
+    }
+    // First set class name
+    if (className != null) {
+      cls = className.intern();
+      fn_name = cls;
+    }
+    // Then add method name
+    if (methodName != null) {
+      method = methodName.intern();
+      if (cls != null) {
+	fn_name = (cls + "." + method).intern();
+      } else {
+	fn_name = method;
+      }
+    }
+    // Then add point
+    if (pointName != null) {
+      point = pointName.intern();
+      fullname = (fn_name + FileIO.ppt_tag_separator + point).intern();
+    } else {
+      point = null;
+      fullname = fn_name;
+    }
   }
 
   // ==================== OBSERVERS ====================
 
   /**
+   * @return getName() [convenience accessor]
+   * @see getName()
+   **/
+  public String name() {
+    return getName();
+  }
+
+  /**
    * @return the complete program point name
+   * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
    **/
   public String getName() {
     return fullname;
@@ -85,6 +129,8 @@ public class PptName
   /**
    * @return the fully-qualified class name, which uniquely identifies
    * a given class.
+   * May be null.
+   * e.g. "DataStructures.StackAr"
    **/
   public String getFullClassName()
   {
@@ -94,6 +140,8 @@ public class PptName
   /**
    * @return the short name of the method, not including any
    * additional context, such as the package it is in.
+   * May be null.
+   * e.g. "StackAr"
    **/
   public String getShortClassName()
   {
@@ -102,13 +150,15 @@ public class PptName
     if (pt == -1)
       return cls;
     else
-      return cls.substring(0, pt);
+      return cls.substring(pt+1);
   }
 
   /**
    * @return the full name which can uniquely identify a method within
    * a class.  The name includes symbols for the argument types and
    * return type.
+   * May be null.
+   * e.g. "pop()Ljava/lang/Object;"
    **/
   public String getFullMethodName()
   {
@@ -117,19 +167,23 @@ public class PptName
 
   /**
    * @return same as getFullMethodName(), except without the return
-    * type information
+    * type information.
+    * May be null.
+    * e.g. "pop()"    
     **/
-   public String getFullMethodNameWithoutReturn()
-   {
-     if (method == null) return null;
-     int rparen = method.indexOf(')');
-     Assert.assert(rparen >= 0);
-     return method.substring(0, rparen+1);
+  public String getFullMethodNameWithoutReturn()
+  {
+    if (method == null) return null;
+    int rparen = method.indexOf(')');
+    Assert.assert(rparen >= 0);
+    return method.substring(0, rparen+1);
   }
 
   /**
    * @return the name (identifier) of the method, not taking into
    * account any arguments, return values, etc.
+   * May be null.
+   * e.g. "pop"
    **/
   public String getShortMethodName()
   {
@@ -140,10 +194,26 @@ public class PptName
   }
 
   /**
+   * @return the fully-qualified class and method name (and signature).
+   * Does not include any point information (such as ENTER or EXIT).
+   * Similar function lives in Ppt.fn_name(String)
+   * May be null.
+   * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;"
+   **/
+  public String getNameWithoutPoint() {
+    if (cls == null && method == null) return null;
+    if (cls == null) return method;
+    if (method == null) return cls;
+    return (cls + "." + method).intern();
+  }
+
+  /**
    * @return something interesting and descriptive about the point in
    * question, along the lines of "ENTER" or "EXIT" or somesuch.  The
    * semantics of this method are not yet decided, so don't try to do
    * aynthing useful with this result.
+   * May be null.
+   * e.g. "EXIT84"
    **/
   public String getPoint() {
     return point;
@@ -152,6 +222,8 @@ public class PptName
   /**
    * @return a numberical subscript of the given point, or
    * Integer.MIN_VALUE if none exists.
+   * e.g. "84"
+   * @see exitLine
    **/
   public int getPointSubscript()
   {
@@ -218,6 +290,7 @@ public class PptName
   /**
    * @return a string containing the line number, if this is an exit point;
    *         otherwise, return null
+   * @see getPointSubscript
    **/
   public String exitLine() {
     if (!isExitPoint())
@@ -264,7 +337,7 @@ public class PptName
   }
 
   /**
-   * @requires this.isExitPoint() || this.isEnterPoint()
+   * @requires this.isExitPoint() || this.isEnterPoint() || this.isObjectInstanceSynthetic()
    * @return a name for the corresponding class-static invariant
    **/
   public PptName makeClassStatic()
@@ -278,10 +351,7 @@ public class PptName
   /* @return interned string such that this.equals(new PptName(this.toString())) */
   public String toString()
   {
-    return (cls +
-	    ((method == null) ? "" : ("." + method)) +
-	    FileIO.ppt_tag_separator +
-	    point).intern();
+    return fullname;
   }
 
   public boolean equals(Object o)
@@ -291,23 +361,12 @@ public class PptName
 
   public boolean equals(PptName o)
   {
-    return
-      (o != null) &&
-      (cls == o.cls) &&
-      (method == o.method) &&
-      (point == o.point) &&
-      true;
+    return (o != null) && (o.fullname == fullname);
   }
 
   public int hashCode()
   {
-    // If the domains of the components overlap, we should multiply by
-    // primes, but I think they are fairly disjoint.
-    return
-      ((cls == null) ? 0 : cls.hashCode()) +
-      ((method == null) ? 0 : method.hashCode()) +
-      ((point == null) ? 0 : point.hashCode()) +
-      0;
+    return fullname.hashCode();
   }
 
   // Interning is lost when an object is serialized and deserialized.
@@ -316,14 +375,16 @@ public class PptName
     throws IOException, ClassNotFoundException
   {
     in.defaultReadObject();
+    if (fullname != null)
+      fullname = fullname.intern();
+    if (fn_name != null)
+      fn_name = fn_name.intern();
     if (cls != null)
       cls = cls.intern();
     if (method != null)
       method = method.intern();
     if (point != null)
       point = point.intern();
-    if (fullname != null)
-      fullname = fullname.intern();
   }
 
 

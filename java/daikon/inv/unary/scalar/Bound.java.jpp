@@ -130,6 +130,13 @@ public class LOWERBOUND extends SINGLESCALAR {
     core = new LOWERBOUNDCORE(this);
   }
 
+  protected Object clone() {
+    LOWERBOUND result = (LOWERBOUND) super.clone();
+    result.core = (LOWERBOUNDCORE) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public static LOWERBOUND instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new LOWERBOUND(ppt);

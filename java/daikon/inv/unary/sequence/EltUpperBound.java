@@ -46,6 +46,13 @@ public class EltUpperBound  extends SingleSequence  {
     core = new UpperBoundCore (this);
   }
 
+  protected Object clone() {
+    EltUpperBound  result = (EltUpperBound ) super.clone();
+    result.core = (UpperBoundCore ) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public static EltUpperBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new EltUpperBound (ppt);

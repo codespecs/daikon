@@ -31,6 +31,13 @@ public class EltwiseIntComparison extends SingleSequence {
     return new EltwiseIntComparison(ppt, only_eq);
   }
 
+  protected Object clone() {
+    EltwiseIntComparison result = (EltwiseIntComparison) super.clone();
+    result.core = (IntComparisonCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public String repr() {
     return "EltwiseIntComparison" + varNames() + ": "
       + core.repr()

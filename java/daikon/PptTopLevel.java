@@ -70,6 +70,13 @@ public class PptTopLevel
   private int values_num_values;
   private String values_tuplemod_samples_summary;
 
+  /**
+   * Together, lower_ppts and lower_tranforms describe how data 
+   **/
+  public PptTopLevel[] lower_ppts;
+  /** @see lower_ppts */
+  public int[][] lower_transforms;
+
   // [INCR] ...
   // Assumption: The "depends on" graph is acyclic
   // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
@@ -95,7 +102,7 @@ public class PptTopLevel
   // mark_implied_via_simplify.  Contents are either Invariant
   // objects, or, in the case of Equality invariants, the canonical
   // VarInfo for the equality.
-  public Set redundant_invs = new HashSet();
+  public Set redundant_invs = new HashSet(0);
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
     super(name);
@@ -162,6 +169,11 @@ public class PptTopLevel
 	return pptName.getPoint();
   }
 
+  /** Trim the collections used in this PptTopLevel */
+  public void trimToSize() {
+    super.trimToSize();
+    // Nothing new here to trim!
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding variables
@@ -474,14 +486,21 @@ public class PptTopLevel
   /// Manipulating values
   ///
 
+  /**
+   * The way adding samples works: Precompute program points that have
+   * any VarInfos that are higher than this point's VarInfos.  Store
+   * them in topological sort order, highest first.  Also precompute a
+   * transformation vector that maps the variable index at this point
+   * to the variable index in the higher point.
+   **/
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
     // XXX (for now, until front ends are changed)
     {
-      if (ppt_name.isObjectInstanceSynthetic()) return;
-      if (ppt_name.isEnterPoint()) return;
+      if (!ppt_name.isObjectInstanceSynthetic()) return;
+      // if (ppt_name.isEnterPoint()) return;
     }
 
     // Add to all the views
@@ -491,6 +510,9 @@ public class PptTopLevel
       view.flow_and_remove_falsified();
       if (view.invs.size() == 0) {
         itor.remove();
+	if (Global.debugInfer.isDebugEnabled()) {
+	  Global.debugInfer.debug("add(ValueTulple,int): slice died: " + name + view.varNames());
+	}
       }
     }
 
@@ -618,6 +640,37 @@ public class PptTopLevel
   }
 
 
+  // The nouns "view" and "slice: are putatively different.  Slices
+  // limit the variables but examine all data.  Views may ignore data,
+  // etc.  In practive, getView always returns a slice anyway (see
+  // comments on class daikon.Ppt).
+
+  /**
+   * Typically one should use the dynamic_constant or canBeMissing slots,
+   * which cache the invariants of most interest, instead of this function.
+   **/
+  public PptSlice1 getView(VarInfo vi) {
+    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
+      PptSlice slice = (PptSlice) itor.next();
+      if ((slice.arity == 1) && slice.usesVar(vi))
+        return (PptSlice1) slice;
+    }
+    return null;
+  }
+
+  /**
+   * Typically one should use the equal_to slot, which caches the
+   * invariants of most interest, instead of this function.
+   **/
+  public PptSlice2 getView(VarInfo vi1, VarInfo vi2) {
+    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
+      PptSlice slice = (PptSlice) itor.next();
+      if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
+        return (PptSlice2) slice;
+    }
+    return null;
+  }
+
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
   public PptSlice1 findSlice(VarInfo v) {
@@ -671,6 +724,16 @@ public class PptTopLevel
     if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
     if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
     return findSlice(v1, v2, v3);
+  }
+
+  public PptSlice findSlice_unordered(VarInfo[] vis) {
+    switch (vis.length) {
+    case 1: return findSlice(vis[0]);
+    case 2: return findSlice_unordered(vis[0], vis[1]);
+    case 3: return findSlice_unordered(vis[0], vis[1], vis[2]);
+    default:
+      throw new RuntimeException("Bad length " + vis.length);
+    }
   }
 
   public int indexOf(String varname) {
@@ -763,12 +826,18 @@ public class PptTopLevel
         VarInfo var1 = var_infos[i1];
         if (var1.isStaticConstant())
           continue;
+	// For now, only ternary invariants not involving any arrays
+	if (var1.rep_type.isArray())
+	  continue;
 
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
           if (var2.isStaticConstant())
             continue;
+	  // For now, only ternary invariants not involving any arrays
+	  if (var2.rep_type.isArray())
+	    continue;
 
           boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
           int i3_min = ((target1 || target2) ? i2+1 : Math.max(i2+1, vi_index_min));
@@ -780,13 +849,8 @@ public class PptTopLevel
             VarInfo var3 = var_infos[i3];
             if (var3.isStaticConstant())
               continue;
-
-            // (For efficiency, I could move this earlier.  But that's not
-            // completely fair, so I won't for now.)
             // For now, only ternary invariants not involving any arrays
-            if (var1.rep_type.isArray()
-                || var2.rep_type.isArray()
-                || var3.rep_type.isArray())
+            if (var3.rep_type.isArray())
               continue;
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
@@ -803,6 +867,52 @@ public class PptTopLevel
 
     // This method didn't add any new variables.
     Assert.assert(old_num_vars == var_infos.length);
+  }
+
+  /**
+   * Return a slice that contains the given VarInfos (creating if needed).
+   **/
+  public PptSlice get_or_instantiate_slice(VarInfo[] vis) {
+    PptSlice result = findSlice_unordered(vis);
+    if (result != null) return result;
+
+    switch (vis.length) {
+    case 1: {
+      VarInfo vi = vis[0];
+      Assert.assert(! vi.isStaticConstant());
+      result = new PptSlice1(this, vi);
+      break;
+    }
+    case 2: {
+      VarInfo v1 = vis[0];
+      VarInfo v2 = vis[1];
+      Assert.assert(! v1.isStaticConstant());
+      Assert.assert(! v2.isStaticConstant());
+      VarInfo tmp;
+      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+      result = new PptSlice2(this, v1, v2);
+      break;
+    }
+    case 3: {
+      VarInfo v1 = vis[0];
+      VarInfo v2 = vis[1];
+      VarInfo v3 = vis[2];
+      Assert.assert(! v1.isStaticConstant());
+      Assert.assert(! v2.isStaticConstant());
+      Assert.assert(! v3.isStaticConstant());
+      VarInfo tmp;
+      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+      if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
+      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+      result = new PptSlice3(this, v1, v2, v3);
+      break;
+    }
+    default:
+      throw new IllegalArgumentException("bad length = " + vis.length);
+    }
+
+    views.add(result);
+    return result;
   }
 
   /* [INCR] ... We can't know this anymore

@@ -222,6 +222,15 @@ public abstract class Invariant
     // ppt.removeInvariant(this);
   }
 
+  /** Do nothing special.  Overridden to remove exception from declaration */
+  protected Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can never happen
+    }
+  }
+
   /**
    * Take a falsified invariant and resurrect it in a new PptSlice.
    * @param new_ppt must have the same arity and types
@@ -245,12 +254,8 @@ public abstract class Invariant
 
     Invariant result;
     // Clone it
-    try {
-      result = (Invariant) this.clone();
-    } catch (CloneNotSupportedException e) {
-      // can never happen
-      throw new Error();
-    }
+    result = (Invariant) this.clone();
+
     // Fix up the fields
     result.no_invariant = false;
     result.ppt = new_ppt;
@@ -713,9 +718,11 @@ public abstract class Invariant
     if (this instanceof OneOf) {
       // A OneOf should have at least as many samples as it has values.
       // Was an assert...
+      /* [INCR]
       if (((OneOf) this).num_elts() > num_mod_non_missing_samples) {
         System.out.println("OneOf problem: num_elts " + ((OneOf) this).num_elts() + ", num_mod " + num_mod_non_missing_samples + ": " + format());
       }
+      */
       return false;
     } else {
       boolean result = (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);

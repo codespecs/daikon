@@ -46,6 +46,13 @@ public class EltLowerBound  extends SingleSequence  {
     core = new LowerBoundCore (this);
   }
 
+  protected Object clone() {
+    EltLowerBound  result = (EltLowerBound ) super.clone();
+    result.core = (LowerBoundCore ) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public static EltLowerBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new EltLowerBound (ppt);

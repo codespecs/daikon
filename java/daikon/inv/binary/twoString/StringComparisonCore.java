@@ -3,9 +3,12 @@ package daikon.inv.binary.twoString;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
+import java.io.Serializable;
 
 // Also see NonEqual
-public final class StringComparisonCore implements java.io.Serializable {
+public final class StringComparisonCore
+  implements Serializable, Cloneable
+{
 
   public boolean can_be_eq = false;
   public boolean can_be_lt = false;
@@ -26,7 +29,7 @@ public final class StringComparisonCore implements java.io.Serializable {
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   public StringComparisonCore(Invariant wrapper) {
     this(wrapper, false, false, false, false, false);
@@ -45,6 +48,14 @@ public final class StringComparisonCore implements java.io.Serializable {
     obvious_can_be_ge = obvious_ge;
     if (only_eq || obvious_lt || obvious_gt || obvious_le || obvious_ge) {
       Global.partially_implied_invariants++;
+    }
+  }
+
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
     }
   }
 

@@ -56,34 +56,36 @@ public abstract class PptSlice extends Ppt {
   public Invariants invs;
 
   // Keep private, modifiable copies and public read-only views
-  private final Collection _po_higher = new ArrayList(2);
-  private final Collection _po_lower = new ArrayList(2);
-  // Map[PptSlice -> int[arity]]; store as the key a permutation array
-  // where this.var_infos[i] corresponds to key.var_infos[value[i]].
-  private final Map higher_permute = new HashMap();
-  private final Map lower_permute = new HashMap();
+  private final Collection private_po_higher = new ArrayList(2); // [PptTopLevel]
+  private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
+  // Map[PptTopLevel -> List[VarInfo[arity]]]; store as the value an array
+  // where this.var_infos corresponds to the VarInfos in value.
+  private final Map po_higher_vis = new HashMap();
+  private final Map po_lower_vis = new HashMap();
 
   /**
    * Slices immediately higher in the partial order (compared to this).
    * If A is higher than B then every value seen at B is seen at A.
-   * Elements are PptSlices.  Contains no duplicates.
+   * Elements are PptTopLevels, since PptSlices are transient.
+   * Contains no duplicates.
    * PptSlice partial ordering is a direct function of VarInfo partial
    * ordering, and is the minimal nearest set of slices which are
    * higher for all VarInfos.
    * @see po_lower
    **/
-  public final Collection po_higher = Collections.unmodifiableCollection(_po_higher);
+  public final Collection po_higher = Collections.unmodifiableCollection(private_po_higher);
 
   /**
    * Slices immediately lower in the partial order (compared to this).
    * If A is higher than B then every value seen at B is seen at A.
-   * Elements are VarInfos.  Contains no duplicates.
+   * Elements are PptTopLevels, since PptSlices are transient.
+   * Contains no duplicates.
    * PptSlice partial ordering is a direct function of VarInfo partial
    * ordering, and is the minimal nearest set of slices which are
    * higher for all VarInfos.
    * @see po_higher
    **/
-  public final Collection po_lower = Collections.unmodifiableCollection(_po_lower);
+  public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
 
   // This holds keys and elements of different types, depending on
   // he concrete child of PptSlice.
@@ -128,6 +130,12 @@ public abstract class PptSlice extends Ppt {
     }    
   }
 
+  /** Trim the collections used in this PptSlice */
+  public void trimToSize() {
+    super.trimToSize();
+    invs.trimToSize();
+  }
+
   public boolean usesVar(VarInfo vi) {
     return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
   }
@@ -145,31 +153,26 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Ensures that parent is in this.po_higher and this in in parent.po_lower.
-   * Parent must be of the same arity.
+   * ...
    **/
-  protected void addHigherPO(PptSlice parent,
-			     int permutation[])
+  protected void addToOnePO(boolean lower,
+			    PptTopLevel adj,
+			    VarInfo[] slice_vis)
   {
-    // Code copied in VarInfo; edit both copies.
-    Assert.assert(this.arity == parent.arity);
-    Assert.assert(permutation.length == arity);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(slice_vis.length == arity);
 
-    if (this._po_higher.contains(parent)) {
-      Assert.assert(parent._po_lower.contains(this));
-      return;
+    Collection private_po = lower ? private_po_lower : private_po_higher;
+    Map po_vis = lower ? po_lower_vis : po_higher_vis;
+
+    if (!private_po.contains(adj)) {
+      private_po.add(adj);
+      List slices = (List) po_vis.get(adj);
+      if (slices == null) {
+	slices = new ArrayList(1);
+	po_vis.put(adj, slices);
+      }
+      slices.add(slice_vis);
     }
-    Assert.assert(! parent._po_lower.contains(this));
-
-    // clone for safety; intern for space
-    int[] forward = Intern.intern((int[]) permutation.clone());
-    int[] reverse = Intern.intern(ArraysMDE.inverse(forward));
-
-    this._po_higher.add(parent);
-    this.higher_permute.put(parent, forward);
-    parent._po_lower.add(this);
-    parent.lower_permute.put(this, reverse);
   }
 
   /* [INCR]
@@ -223,15 +226,6 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
-   * Discover the set of slices H such that:
-   * <li> H.arity == this.arity
-   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
-   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
-   **/
-  abstract void init_po();
-
-  /**
    * Flow falsified invariants to lower ppts, and remove them from
    * this ppt.
    **/
@@ -243,18 +237,28 @@ public abstract class PptSlice extends Ppt {
       if (inv.no_invariant)
 	worklist.add(inv);
     }
-    // For each lower PptSlice
-    for (Iterator j = _po_lower.iterator(); j.hasNext(); ) {
-      PptSlice lower = (PptSlice) j.next();
-      int[] permute = (int[]) lower_permute.get(lower);
-      Assert.assert(permute != null);
-      // For each invariant
-      for (Iterator i = worklist.iterator(); i.hasNext(); ) {
-	Invariant inv = (Invariant) i.next();
-	Assert.assert(inv.no_invariant);
-	// Let it be reborn
-	Invariant reborn = inv.resurrect(lower, permute);
-	lower.addInvariant(reborn);
+    // For each lower PptTopLevel
+    for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
+      PptTopLevel lower = (PptTopLevel) j.next();
+      // For all of the slices
+      List slices_vis = (List) po_lower_vis.get(lower);
+      for (Iterator k = slices_vis.iterator(); k.hasNext(); ) {
+	VarInfo[] slice_vis = (VarInfo[]) k.next();
+	// Ensure the slice exists
+	PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
+	// Compute the permutation
+	int[] permutation = new int[slice.arity];
+	for (int i=0; i < arity; i++) {
+	  permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
+	}
+	// For each invariant
+	for (Iterator i = worklist.iterator(); i.hasNext(); ) {
+	  Invariant inv = (Invariant) i.next();
+	  Assert.assert(inv.no_invariant);
+	  // Let it be reborn
+	  Invariant reborn = inv.resurrect(slice, permutation);
+	  slice.addInvariant(reborn);
+	}
       }
     }
     removeInvariants(worklist);

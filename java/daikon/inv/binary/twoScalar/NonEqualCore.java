@@ -3,9 +3,11 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
+import java.io.Serializable;
 
-
-public final class NonEqualCore implements java.io.Serializable {
+public final class NonEqualCore
+  implements Serializable, Cloneable
+{
   long min1 = Long.MAX_VALUE;
   long min2 = Long.MAX_VALUE;
   long max1 = Long.MIN_VALUE;
@@ -18,7 +20,7 @@ public final class NonEqualCore implements java.io.Serializable {
 
   int samples = 0;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   // public NonEqualCore(Invariant wrapper) {
   //   this(wrapper, 0);
@@ -27,6 +29,14 @@ public final class NonEqualCore implements java.io.Serializable {
   public NonEqualCore(Invariant wrapper, long override_range) {
     this.wrapper = wrapper;
     this.override_range = override_range;
+  }
+
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
+    }
   }
 
   protected void permute(int[] permutation) {

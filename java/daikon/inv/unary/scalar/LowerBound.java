@@ -46,6 +46,13 @@ public class LowerBound  extends SingleScalar  {
     core = new LowerBoundCore (this);
   }
 
+  protected Object clone() {
+    LowerBound  result = (LowerBound ) super.clone();
+    result.core = (LowerBoundCore ) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public static LowerBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new LowerBound (ppt);

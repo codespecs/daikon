@@ -57,6 +57,13 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     return new OneOfScalar (ppt);
   }
 
+  protected Object clone() {
+    OneOfScalar  result = (OneOfScalar ) super.clone();
+    result.elts = (long []) elts.clone();
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

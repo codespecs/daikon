@@ -51,6 +51,13 @@ public final class OneOfString  extends SingleString  implements OneOf {
     return new OneOfString (ppt);
   }
 
+  protected Object clone() {
+    OneOfString  result = (OneOfString ) super.clone();
+    result.elts = (String []) elts.clone();
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

@@ -25,6 +25,9 @@ public class CommonStringSequence extends SingleStringSequence {
     return new CommonStringSequence(ppt);
   }
 
+  // Don't write clone, because this.intersect is read-only
+  // protected Object clone();
+
   public String repr() {
     return "CommonStringSequence " + varNames() + ": "
       + "elts=\"" + elts;

@@ -78,6 +78,13 @@ public final class SeqIntComparison extends SequenceScalar {
     return new SeqIntComparison(ppt, seq_first, only_eq, obvious_le, obvious_ge);
   }
 
+  protected Object clone() {
+    SeqIntComparison result = (SeqIntComparison) super.clone();
+    result.core = (IntComparisonCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   // public boolean isObviousImplied() {
   //   return isEqualToObviousSeqIntComparison(sclvar(), seqvar());
   // }

@@ -141,6 +141,8 @@ public final class FileIO
     setup_orig_decls(all_ppts);
     // Set up OBJECT on arguments relationships
     setup_argument_relations(all_ppts);
+    // Set up the data flow vectors
+    setup_dataflow(all_ppts);
     return all_ppts;
   }
 
@@ -226,6 +228,11 @@ public final class FileIO
       //then we need to create all the program points because the
       //creation of splitters requires information from the program
       //points
+
+      // JWN: The above is crazy!  Program points are now EXPENSIVE --
+      // they create all derived variables and possible invariants.
+      // I am turning off all_splitters by default.
+
       if (((Daikon.ppt_omit_regexp != null)
 	   && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
 	  || ((Daikon.ppt_regexp != null)
@@ -562,6 +569,53 @@ public final class FileIO
     }
   }
 
+  /**
+   * Create the dataflow injection vectors in all of the PptTopLevels.
+   * Must be done after VarInfo partial ordering relations have been
+   * fully set up.
+   **/
+  private static void setup_dataflow(PptMap all_ppts)
+  {
+    // Compute topological sort of all_ppts based on VarInfo partial order
+    List rev_topol = new ArayList(all_ppts.size()); // [PptTopLevel]
+    {
+      // Keep a redundant set for lookup efficiency
+      Set rev_topol_set = new HashSet(); // [PptTopLevel]
+      // Start with those ppts which have nothing lower
+    outer:
+      for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
+	PptTopLevel ppt = (PptTopLevel) i.next();
+	for (int j=0; j < ppt.var_infos.length; j++) {
+	  if (ppt.var_infos[j].po_lower() != 0)
+	    continue outer;
+	}
+	rev_topol.add(ppt);
+	rev_topol_sort.add(ppt);
+      }
+      // Then work up through those, appending as new ones are found
+      for (int i=0; i < rev_topol.size(); i++) {
+	PptTopLevel ppt = (PptTopLevel) rev_topol.get(i);
+	for (int j=0; j < ppt.var_infos.length; j++) {
+	  VarInfo vi = ppt.var_infos[j];
+	  for (Iterator k = vi.po_higher().iterator(); k.hasNext(); ) {
+	    VarInfo vi_higher = (VarInfo) k.next();
+	    PptTopLevell ppt_higher = vi_higher.ppt;
+	    if (! rev_topol_set.contains(ppt_higher)) {
+	      rev_topol.add(ppt_higher);
+	      rev_topol_set.add(ppt_higher);
+	    }
+	  }
+	}
+      }
+    }
+
+    // Work through the reverse topological order and set up dataflow
+    for (Iterator i = rev_topol.iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      // xyxyxy
+    }
+  }
+  
   /**
    * @param outstream the stream to send output to
    * @param ppts the program points to dump

@@ -46,7 +46,8 @@ public final class PptSlice1  extends PptSlice {
 
     var_info = var_infos[0];
 
-    init_po();
+    init_po(true);
+    init_po(false);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
@@ -62,26 +63,26 @@ public final class PptSlice1  extends PptSlice {
     this(parent, new VarInfo[] { var_info });
   }
 
-  /** Implements specification as defined in superclass PptSlice */
-  void init_po() {
+  /**
+   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
+   * Discover the set of slices H such that:
+   * <li> H.arity == this.arity
+   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
+   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
+   **/
+  void init_po(boolean lower) {
   outer:
-    for (Iterator i = var_infos[0].closurePO(false); i.hasNext(); ) {
-      VarInfo vi0_higher = (VarInfo) i.next();
-      PptTopLevel ppt_higher = vi0_higher.ppt;
+    for (Iterator i = var_infos[0].closurePO(lower); i.hasNext(); ) {
+      VarInfo vi0_adj = (VarInfo) i.next();
+      PptTopLevel ppt_adj = vi0_adj.ppt;
 
-	  // (slice_higher == null) can happen if a view was skipped
-	  // due to no invariants (which means we will probably skip
-	  // this view too; oh well).
-	  // Assert.assert(slice_higher != null);
+	  // Don't find the slice, just record the VarInfos.  Slices
+	  // come and go as things flow around; we can't depend on
+	  // them.
 
-	  PptSlice slice_higher = ppt_higher.findSlice(vi0_higher);
+	  VarInfo[] vis_adj = new VarInfo[] { vi0_adj };
 
-	  if (slice_higher == null) continue;
-	  int[] permute = new int[] {
-	    ArraysMDE.indexOf(slice_higher.var_infos, vi0_higher),
-
-	  };
-	  addHigherPO(slice_higher, permute);
+	  addToOnePO(lower, ppt_adj, vis_adj);
 	  continue outer;
 
     } // i (outer)

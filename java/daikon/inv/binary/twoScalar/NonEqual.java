@@ -45,6 +45,13 @@ public final class NonEqual extends TwoScalar {
     return result;
   }
 
+  protected Object clone() {
+    NonEqual result = (NonEqual) super.clone();
+    result.core = (NonEqualCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

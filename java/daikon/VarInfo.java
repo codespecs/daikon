@@ -76,8 +76,8 @@ public final class VarInfo
   // Partial ordering relationships between variables
 
   // Keep private, modifiable copies and public read-only views
-  private final Collection _po_higher = new ArrayList(2);
-  private final Collection _po_lower = new ArrayList(2);
+  private final Collection private_po_higher = new ArrayList(2);
+  private final Collection private_po_lower = new ArrayList(2);
 
   /**
    * Variables immediately higher in the partial order (compared to this).
@@ -85,7 +85,7 @@ public final class VarInfo
    * Elements are VarInfos.  Contains no duplicates.
    * @see po_lower
    **/
-  public final Collection po_higher = Collections.unmodifiableCollection(_po_higher);
+  public final Collection po_higher = Collections.unmodifiableCollection(private_po_higher);
 
   /**
    * Variables immediately lower in the partial order (compared to this).
@@ -93,7 +93,7 @@ public final class VarInfo
    * Elements are VarInfos.  Contains no duplicates.
    * @see po_higher
    **/
-  public final Collection po_lower = Collections.unmodifiableCollection(_po_lower);
+  public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
 
   // Derived variables
 
@@ -292,23 +292,33 @@ public final class VarInfo
     return true;
   }
 
+  /** Trims the collections used by this VarInfo */
+  public void trimToSize() {
+    ((ArrayList) private_po_higher).trimToSize();
+    ((ArrayList) private_po_lower).trimToSize();
+    if (derivees != null) { derivees.trimToSize(); }
+    // Derivation derived; probably can't be trimmed
+  }
+
   /**
    * Ensures that parent is in this.po_higher and this in in parent.po_lower.
    **/
-  public void addHigherPO(VarInfo parent) {
-    // Code copied in PptSlice; edit both copies.
-    Assert.assert(this != parent);
-    Assert.assert(this.ppt != parent.ppt);
-    Assert.assert(this.type == parent.type);
-    Assert.assert(this.rep_type == parent.rep_type);
-    Assert.assert(this.file_rep_type == parent.file_rep_type);
-    if (this._po_higher.contains(parent)) {
-      Assert.assert(parent._po_lower.contains(this));
+  public void addHigherPO(VarInfo higher) {
+    VarInfo lower = this;
+
+    Assert.assert(lower != higher);
+    Assert.assert(lower.ppt != higher.ppt);
+    Assert.assert(lower.type == higher.type);
+    Assert.assert(lower.rep_type == higher.rep_type);
+    Assert.assert(lower.file_rep_type == higher.file_rep_type);
+
+    boolean already = lower.private_po_higher.contains(higher);
+    Assert.assert(already == higher.private_po_lower.contains(lower));
+    if (already) 
       return;
-    }
-    Assert.assert(! parent._po_lower.contains(this));
-    this._po_higher.add(parent);
-    parent._po_lower.add(this);
+
+    lower.private_po_higher.add(higher);
+    higher.private_po_lower.add(lower);
   }
 
   /**
@@ -316,12 +326,12 @@ public final class VarInfo
    **/
   public Iterator closurePO(boolean lower) {
     List result = new ArrayList();
-    LinkedList worklist = new LinkedList(lower ? _po_lower : _po_higher);
+    LinkedList worklist = new LinkedList(lower ? private_po_lower : private_po_higher);
     while (! worklist.isEmpty()) {
       VarInfo head = (VarInfo) worklist.removeFirst();
       if (! result.contains(head)) {
 	result.add(head);
-	worklist.addAll(lower ? head._po_lower : head._po_higher);
+	worklist.addAll(lower ? head.private_po_lower : head.private_po_higher);
       }
     }
     Assert.assert(! result.contains(this));

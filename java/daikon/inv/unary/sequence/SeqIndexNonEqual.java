@@ -48,6 +48,13 @@ public final class SeqIndexNonEqual extends SingleSequence {
     return new SeqIndexNonEqual(ppt);
   }
 
+  protected Object clone() {
+    SeqIndexNonEqual result = (SeqIndexNonEqual) super.clone();
+    result.core = (NonEqualCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public String repr() {
     return "SeqIndexNonEqual" + varNames() + ": "
       + core.repr()

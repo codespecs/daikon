@@ -34,6 +34,12 @@ public class NonModulus extends SingleScalar {
     return new NonModulus(ppt);
   }
 
+  protected Object clone() {
+    NonModulus result = (NonModulus) super.clone();
+    result.elements = new TreeSet(this.elements);
+    return result;
+  }
+
   public String repr() {
     return "NonModulus" + varNames() + ": "
       + "m=" + modulus + ",r=" + remainder;

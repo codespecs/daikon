@@ -24,6 +24,13 @@ public class PairwiseFunctionUnary extends TwoSequence {
     return new PairwiseFunctionUnary(ppt, methodname, function, inverse);
   }
 
+  protected Object clone() {
+    PairwiseFunctionUnary result = (PairwiseFunctionUnary) super.clone();
+    result.core = (FunctionUnaryCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

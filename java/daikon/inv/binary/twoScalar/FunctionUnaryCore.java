@@ -19,7 +19,9 @@ import utilMDE.*;
 //          types, not Object
 //        - must convert existing functions to this format.
 
-public final class FunctionUnaryCore implements java.io.Serializable {
+public final class FunctionUnaryCore
+  implements Serializable, Cloneable
+{
 
   transient public Method function;  // transient:  Method not serializable
   public final String methodname;   // provided to permit serialization
@@ -31,7 +33,7 @@ public final class FunctionUnaryCore implements java.io.Serializable {
   // Not currently being maintained
   // int values_seen = 0;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   public FunctionUnaryCore(Invariant wrapper, String methodname, Method function, boolean inverse) {
     this.wrapper = wrapper;
@@ -42,6 +44,14 @@ public final class FunctionUnaryCore implements java.io.Serializable {
 
   public FunctionUnaryCore(Invariant wrapper, String methodname, boolean inverse) throws ClassNotFoundException, NoSuchMethodException {
     this(wrapper, methodname, UtilMDE.methodForName(methodname), inverse);
+  }
+
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
+    }
   }
 
   public void permute(int[] permutation) {

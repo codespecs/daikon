@@ -22,6 +22,13 @@ public class PairwiseLinearBinary extends TwoSequence {
     return new PairwiseLinearBinary(ppt);
   }
 
+  protected Object clone() {
+    PairwiseLinearBinary result = (PairwiseLinearBinary) super.clone();
+    result.core = (LinearBinaryCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

@@ -27,6 +27,13 @@ public class LinearBinary extends TwoScalar {
     return new LinearBinary(ppt);
   }
 
+  protected Object clone() {
+    LinearBinary result = (LinearBinary) super.clone();
+    result.core = (LinearBinaryCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

@@ -46,6 +46,13 @@ public class UpperBound  extends SingleScalar  {
     core = new UpperBoundCore (this);
   }
 
+  protected Object clone() {
+    UpperBound  result = (UpperBound ) super.clone();
+    result.core = (UpperBoundCore ) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   public static UpperBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new UpperBound (ppt);

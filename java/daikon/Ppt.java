@@ -2,7 +2,6 @@
 
 package daikon;
 
-
 import java.util.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
@@ -65,61 +64,18 @@ public abstract class Ppt implements java.io.Serializable {
   // two methods that add:  one that puts all the values in, one that doesn't.
   Vector views_cond;
 
-  /** Add a new derived Ppt. */
-  /* [INCR] These were never used on a Ppt, always on PptTopLevel, so move their declaration there.
-  void addView(Ppt slice) {
-    Vector slices = new Vector(1);
-    slices.add(slice);
-    addViews(slices);
-  }
-  */
-  /** This may be more efficient than repeated calls to addView. */
-  /* [INCR]
-  abstract void addViews(Vector slices);
-  */
+  // [INCR] add/remove view methods were never used on a Ppt, always
+  // on PptTopLevel, so move their declaration there (in fact they
+  // don't make sense in PptSlice, so PptTopLevel is a better place
+  // anyway.
 
-
-  abstract void removeView(Ppt slice);
-  // A reasonable default implementation:
-  // {
-  //   boolean removed = views.remove(slice);
-  //   Assert.assert(removed);
-  // }
-
-  /**
-   * Typically one should use the dynamic_constant or canBeMissing slots,
-   * which cache the invariants of most interest, instead of this function.
-   **/
-  public PptSlice1 getView(VarInfo vi) {
-    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
-      if ((slice.arity == 1) && slice.usesVar(vi))
-        return (PptSlice1) slice;
+  /** Trim the collections used in this Ppt */
+  public void trimToSize() {
+    for (int i=0; i < var_infos.length; i++) {
+      var_infos[i].trimToSize();
     }
-    return null;
+    if (views_cond != null) { views_cond.trimToSize(); }
   }
-
-  /**
-   * Typically one should use the equal_to slot, which caches the
-   * invariants of most interest, instead of this function.
-   **/
-  public PptSlice2 getView(VarInfo vi1, VarInfo vi2) {
-    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
-      if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
-        return (PptSlice2) slice;
-    }
-    return null;
-  }
-
-  /* [INCR]
-  public void clear_view_caches() {
-    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
-      slice.clear_cache();
-    }
-  }
-  */
 
   /** Number of samples, not including missing values. */
   // public abstract int num_samples(); // [[INCR]]
@@ -158,25 +114,6 @@ public abstract class Ppt implements java.io.Serializable {
   //  * Or, it might be used before deriving new variables.
   //  */
   // abstract void process();
-
-  // /**
-  //  * Returns whether the ValueTuple appears in this map.
-  //  * This can be more efficient than @link{count} because, for
-  //  * views, it can stop after finding one occurrence.
-  //  */
-  // abstract boolean contains(ValueTuple vt);
-
-  // /** Returns the number of occurrences of this ValueTuple in the map. */
-  // abstract int count(ValueTuple vt);
-
-  // /**
-  //  * This oughtn't return a Set because it might be expensive to produce
-  //  * such a thing (with no duplicates, that is).  And it might not even be
-  //  * possible to return this set if we have already discarded some info.
-  //  *
-  //  * Maybe have another method that does return a Set.
-  //  */
-  // abstract Iterator entrySet();
 
   String fn_name() {
     return Ppt.fn_name(name);

@@ -61,6 +61,13 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     return new EltOneOf (ppt);
   }
 
+  protected Object clone() {
+    EltOneOf  result = (EltOneOf ) super.clone();
+    result.elts = (long []) elts.clone();
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

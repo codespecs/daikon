@@ -6,11 +6,14 @@ import java.io.*;
 import java.util.Arrays;
 import java.lang.reflect.*;
 import utilMDE.*;
+import java.io.Serializable;
 
 // See FunctionUnaryCore for discussion of tradeoffs between constructing
 // from java.lang.reflect.Method objects vs. Invokable objects.
 
-public final class FunctionBinaryCore implements java.io.Serializable {
+public final class FunctionBinaryCore
+  implements Serializable, Cloneable
+{
 
   transient public Method function;
   public final String methodname;
@@ -20,7 +23,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
   // Not currently being maintained
   // int values_seen = 0;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   public FunctionBinaryCore(Invariant wrapper, String methodname, Method function, int var_order) {
     this.wrapper = wrapper;
@@ -33,6 +36,15 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     this(wrapper, methodname, UtilMDE.methodForName(methodname), var_order);
   }
 
+  public Object clone() {
+    try {
+      FunctionBinaryCore result = (FunctionBinaryCore) super.clone();
+      result.function = function;
+      return result;
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
+    }
+  }
 
   /**
    * Reorganize our already-seen state as if the variables had shifted

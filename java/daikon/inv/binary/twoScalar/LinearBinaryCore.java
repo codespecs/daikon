@@ -3,8 +3,11 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
+import java.io.Serializable;
 
-public final class LinearBinaryCore implements java.io.Serializable {
+public final class LinearBinaryCore
+  implements Serializable, Cloneable
+{
 
   final static boolean debugLinearBinaryCore = false;
   // final static boolean debugLinearBinaryCore = true;
@@ -12,7 +15,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   // y == ax + b; first argument is x, second is y
   public double a, b;
 
-  Invariant wrapper;
+  public Invariant wrapper;
 
   public int values_seen = 0;
 
@@ -23,6 +26,17 @@ public final class LinearBinaryCore implements java.io.Serializable {
 
   public LinearBinaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
+  }
+
+  public Object clone() {
+    try {
+      LinearBinaryCore result = (LinearBinaryCore) super.clone();
+      result.x_cache = (long[]) x_cache.clone();
+      result.y_cache = (long[]) y_cache.clone();
+      return result;
+    } catch (CloneNotSupportedException e) {
+      throw new Error(); // can't happen
+    }
   }
 
   public void permute(int[] permutation) {

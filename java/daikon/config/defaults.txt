@@ -91,4 +91,4 @@ daikon.derive.binary.SequencesConcat.enabled = 0
 ### OTHER SETTINGS
 
 daikon.FileIO.add_changed = 1
-daikon.split.SplitterList.all_splitters = 1
+daikon.split.SplitterList.all_splitters = 0

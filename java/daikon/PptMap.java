@@ -97,4 +97,12 @@ public class PptMap
   // }
 
 
+  /** Iterate over the PptTopLevels and trim them */
+  public void trimToSize() {
+    for (Iterator i = nameToPpt.values().iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      ppt.trimToSize();
+    }
+  }
+
 }

@@ -52,6 +52,17 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     return new OneOfStringSequence (ppt);
   }
 
+  protected Object clone() {
+    OneOfStringSequence  result = (OneOfStringSequence ) super.clone();
+    result.elts = (String[] []) elts.clone();
+
+    for (int i=0; i < num_elts; i++) {
+      result.elts[i] = (String[] ) elts[i].clone();
+    }
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

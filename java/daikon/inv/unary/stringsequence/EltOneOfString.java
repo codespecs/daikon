@@ -51,6 +51,13 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     return new EltOneOfString (ppt);
   }
 
+  protected Object clone() {
+    EltOneOfString  result = (EltOneOfString ) super.clone();
+    result.elts = (String []) elts.clone();
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

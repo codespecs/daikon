@@ -62,6 +62,13 @@ public final class SeqIndexComparison extends SingleSequence {
     return new SeqIndexComparison(ppt);
   }
 
+  protected Object clone() {
+    SeqIndexComparison result = (SeqIndexComparison) super.clone();
+    result.core = (IntComparisonCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   // public boolean isObviousImplied() {
   //   return isEqualToObviousSeqIndexComparison(sclvar(), seqvar());
   // }

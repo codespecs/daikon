@@ -133,6 +133,13 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
   }
 
+  protected Object clone() {
+    IntComparison result = (IntComparison) super.clone();
+    result.core = (IntComparisonCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

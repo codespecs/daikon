@@ -136,6 +136,17 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return new ONEOFSCALAR(ppt);
   }
 
+  protected Object clone() {
+    ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
+    result.elts = (INT[]) elts.clone();
+#if defined(SEQUENCE) || defined(STRINGSEQUENCE)
+    for (int i=0; i < num_elts; i++) {
+      result.elts[i] = (INT) elts[i].clone();
+    }
+#endif
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

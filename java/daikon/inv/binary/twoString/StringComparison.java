@@ -93,12 +93,18 @@ public final class StringComparison extends TwoString implements Comparison {
           } else if (max2) {
             obvious_le = true;
           }
-        }
-      }
+        }      }
     }
 
     return new StringComparison(ppt, only_eq, obvious_lt, obvious_gt, obvious_le, obvious_ge);
 
+  }
+
+  protected Object clone() {
+    StringComparison result = (StringComparison) super.clone();
+    result.core = (StringComparisonCore) core.clone();
+    result.core.wrapper = result;
+    return result;
   }
 
   protected Invariant resurrect_done(int[] permutation) {

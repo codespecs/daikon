@@ -183,6 +183,13 @@ public class LinearTernary extends ThreeScalar {
     return result;
   }
 
+  protected Object clone() {
+    LinearTernary result = (LinearTernary) super.clone();
+    result.core = (LinearTernaryCore) core.clone();
+    result.core.wrapper = result;
+    return result;
+  }
+
   protected Invariant resurrect_done(int[] permutation) {
     core.permute(permutation);
     return this;

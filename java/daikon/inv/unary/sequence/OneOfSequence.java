@@ -62,6 +62,17 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     return new OneOfSequence (ppt);
   }
 
+  protected Object clone() {
+    OneOfSequence  result = (OneOfSequence ) super.clone();
+    result.elts = (long[] []) elts.clone();
+
+    for (int i=0; i < num_elts; i++) {
+      result.elts[i] = (long[] ) elts[i].clone();
+    }
+
+    return result;
+  }
+
   public int num_elts() {
     return num_elts;
   }

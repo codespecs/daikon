@@ -291,12 +291,14 @@ public class SubSequence extends TwoSequence {
       VarInfo subvar = (var1_in_var2 ? var1() : var2());
       VarInfo supervar = (var1_in_var2 ? var2() : var1());
 
+      PptTopLevel ppt_parent = (PptTopLevel) ppt.parent;
+
       // If the elements of supervar are always the same (EltOneOf),
       // we aren't going to learn anything new from this invariant,
       // since each sequence should have an EltOneOf over it.
       if (false) {
 	System.out.println("Checking " + format());
-	PptSlice1 slice = ppt.parent.getView(supervar);
+	PptSlice1 slice = ppt_parent.findSlice(supervar);
 	if (slice == null) {
 	  System.out.println("No slice: ppt=" + ppt + " parent =" + ppt.parent);
 	} else {
@@ -320,7 +322,6 @@ public class SubSequence extends TwoSequence {
 
       // A subseq B[0..n] => A subseq B
 
-      Ppt ppt_parent = ppt.parent;
       Vector derivees = supervar.derivees;
       // For each variable derived from supervar ("B")
       for (int i=0; i<derivees.size(); i++) {
@@ -330,7 +331,7 @@ public class SubSequence extends TwoSequence {
           VarInfo supervar_part = der.getVarInfo();
           // if (supervar_part.isCanonical()) // [INCR]
 	  {
-            PptSlice ss_ppt = ppt.parent.getView(subvar, supervar_part);
+            PptSlice ss_ppt = ppt_parent.findSlice(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {
             //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
