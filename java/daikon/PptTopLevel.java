@@ -1657,78 +1657,107 @@ public class PptTopLevel extends Ppt {
     }
 
     HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
-    HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
+    {
+      HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
 
-    // Problem: I am not iterating through the invariants in any particular
-    // order that will guarantee that I don't see A and B, then C and D,
-    // and then A and C (which both already have different canonical versions).
-    // System.out.println(name + " implication canonicalization");
-    for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof Implication) && ((Implication) inv).iff) {
-        Implication impl = (Implication) inv;
-        // System.out.println("Implication: " + impl.format());
-        Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate);
-        Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent);
-        if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
-          // Move all the invariants for canon2 over to canon1
-          HashSet hs1 = (HashSet) inv_group.get(canon1);
-          HashSet hs2 = (HashSet) inv_group.get(canon2);
-          inv_group.remove(canon2);
-          for (Iterator itor2=hs2.iterator(); itor2.hasNext(); ) {
-            Invariant inv2 = (Invariant) itor2.next();
-            hs1.add(inv2);
-            canonical_inv.put(inv2, canon1);
+      // Problem: I am not iterating through the invariants in any particular
+      // order that will guarantee that I don't see A and B, then C and D,
+      // and then A and C (which both already have different canonical versions).
+      // System.out.println(name + " implication canonicalization");
+      for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
+        Invariant inv = (Invariant) itor.next();
+        if ((inv instanceof Implication) && ((Implication) inv).iff) {
+          Implication impl = (Implication) inv;
+          // System.out.println("Bi-implication: " + impl.format());
+          Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate);
+          Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent);
+          if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
+            // Move all the invariants for canon2 over to canon1
+            HashSet hs1 = (HashSet) inv_group.get(canon1);
+            HashSet hs2 = (HashSet) inv_group.get(canon2);
+            inv_group.remove(canon2);
+            for (Iterator itor2=hs2.iterator(); itor2.hasNext(); ) {
+              Invariant inv2 = (Invariant) itor2.next();
+              hs1.add(inv2);
+              canonical_inv.put(inv2, canon1);
+            }
+            // System.out.print("Current set:");
+            // for (Iterator itor2=hs1.iterator(); itor2.hasNext(); ) {
+            //   Invariant inv2 = (Invariant) itor2.next();
+            //   System.out.print("    " + inv2.format());
+            // }
+            // System.out.println();
+          } else {
+            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
+            // System.out.println("Canonical: " + canon.format());
+            canonical_inv.put(impl.predicate, canon);
+            canonical_inv.put(impl.consequent, canon);
+            HashSet hs = (HashSet) inv_group.get(canon);
+            if (hs == null) {
+              hs = new HashSet();
+              inv_group.put(canon, hs);
+            }
+            hs.add(impl.predicate);
+            hs.add(impl.consequent);
+            // System.out.print("Current set (2):");
+            // for (Iterator itor2=hs.iterator(); itor2.hasNext(); ) {
+            //   Invariant inv2 = (Invariant) itor2.next();
+            //   System.out.print("    " + inv2.format());
+            // }
+            // System.out.println();
           }
-        } else {
-          Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
-          // System.out.println("Canonical: " + canon.format());
-          canonical_inv.put(impl.predicate, canon);
-          canonical_inv.put(impl.consequent, canon);
-          HashSet hs = (HashSet) inv_group.get(canon);
-          if (hs == null) {
-            hs = new HashSet();
-            inv_group.put(canon, hs);
+        }
+      }
+
+      // Now adjust which of the invariants are canonical.
+      // (That is why inv_group was computed above.)
+
+      for (Iterator itor=inv_group.keySet().iterator(); itor.hasNext(); ) {
+        Invariant canon_orig = (Invariant) itor.next();
+        // System.out.println("Outer loop: " + canon_orig.format());
+        HashSet hs = (HashSet) inv_group.get(canon_orig);
+        if (hs.size() == 1) {
+          continue;
+        }
+        Invariant canon_new = null;
+        String canon_new_formatted = null;
+        for (Iterator cand_itor=hs.iterator(); cand_itor.hasNext(); ) {
+          Invariant candidate = (Invariant) cand_itor.next();
+          String candidate_formatted = candidate.format();
+          // System.out.println("Comparing:\n    " + candidate_formatted + "\n    " + canon_new_formatted);
+          // It is also desirable to be over the prestate;
+          // but that is only true for variables that are modified.
+          // A variable without "orig()" is fine if it's not modified.
+          boolean canon_new_undesirable
+            = ((canon_new == null) // avoid NullPointerException
+               || (canon_new_formatted.indexOf("\"null\"") != -1)
+               || (canon_new_formatted.indexOf("return") != -1));
+          boolean candidate_undesirable
+            = ((candidate_formatted.indexOf("\"null\"") != -1)
+               || (candidate_formatted.indexOf("return") != -1));
+          if ((canon_new == null)
+              || canon_new_undesirable
+              || ((! candidate_undesirable)
+                  && (candidate_formatted.length() < canon_new_formatted.length()))) {
+            canon_new = candidate;
+            canon_new_formatted = candidate_formatted;
           }
-          hs.add(impl.predicate);
-          hs.add(impl.consequent);
+        }
+        if (canon_new != canon_orig) {
+          // Don't set inv_group, lest I get a ConcurrentModificationException
+          // inv_group.put(canon_new, hs);
+          // inv_group.remove(canon_orig);
+          for (Iterator inv_itor=hs.iterator(); inv_itor.hasNext(); ) {
+            Invariant inv = (Invariant) inv_itor.next();
+            Assert.assert(canonical_inv.get(inv) == canon_orig);
+            canonical_inv.put(inv, canon_new);
+          }
         }
       }
+      // inv_group is no longer up-to-date now.
+      // I could have created an inv_group_2 during the above computation
+      // and set inv_group to it if I liked.
     }
-
-    // Now adjust which of the invariants are canonical.
-    // (That is why inv_group was computed above.)
-    for (Iterator itor=inv_group.keySet().iterator(); itor.hasNext(); ) {
-      Invariant canon_orig = (Invariant) itor.next();
-      HashSet hs = (HashSet) inv_group.get(canon_orig);
-      if (hs.size() == 1) {
-        continue;
-      }
-      Invariant canon_new = null;
-      String canon_new_formatted = null;
-      for (Iterator cand_itor=hs.iterator(); itor.hasNext(); ) {
-        Invariant candidate = (Invariant) itor.next();
-        String candidate_formatted = candidate.format();
-        if ((canon_new == null)
-            || (canon_new_formatted.indexOf("\"null\"") != -1)
-            || ((canon_new_formatted.indexOf("orig") != -1)
-                && (candidate_formatted.indexOf("orig") == -1))
-            || (canon_new_formatted.length() > candidate_formatted.length())) {
-          canon_new = candidate;
-          canon_new_formatted = candidate_formatted;
-        }
-      }
-      if (canon_new != canon_orig) {
-        inv_group.put(canon_new, hs);
-        inv_group.remove(canon_orig);
-        for (Iterator inv_itor=hs.iterator(); itor.hasNext(); ) {
-          Invariant inv = (Invariant) itor.next();
-          Assert.assert(canonical_inv.get(inv) == canon_orig);
-          canonical_inv.put(inv, canon_new);
-        }
-      }
-    }
-
 
     // Prune out implications over non-canonical invariants
 
