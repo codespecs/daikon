@@ -82,8 +82,7 @@ DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
-# CVS_REPOSITORY := /g4/projects/invariants/.CVS/
-CVS_REPOSITORY := :ext:$(USER)@pag.csail.mit.edu:/g4/projects/invariants/.CVS
+CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
 
 # It seems like these should come from their standard locations (jhp)
 #RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
@@ -141,17 +140,30 @@ clean-java:
 
 ### Kvasir (C front end)
 
-kvasir/Makefile.in:
+kvasir/kvasir/Makefile.in:
 	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
 	ln -s valgrind-kvasir kvasir
-	touch $@
-
-kvasir/kvasir/Makefile.in: kvasir/Makefile.in
 	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
 	touch $@
 
-build-kvasir: kvasir/kvasir/Makefile.in
-	cd kvasir && ./configure --prefix=`pwd`/inst && make && make install
+kvasir/config.status: kvasir/kvasir/Makefile.in
+	cd kvasir && ./configure --prefix=`pwd`/inst
+
+kvasir/coregrind/valgrind: kvasir/config.status
+	cd kvasir && $(MAKE)
+
+kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind kvasir/kvasir/*.[ch]
+	cd kvasir/kvasir && $(MAKE)
+
+kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
+	cd kvasir && $(MAKE) install
+
+kvasir/inst/lib/valgrind/vgskin_kvasir.so: kvasir/kvasir/vgskin_kvasir.so
+	cd kvasir/kvasir && $(MAKE) install
+
+kvasir: kvasir/inst/bin/valgrind kvasir/inst/lib/valgrind/vgskin_kvasir.so
+
+build-kvasir: kvasir
 
 ### Testing the code
 
