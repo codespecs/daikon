@@ -2598,60 +2598,57 @@ public class PptTopLevel
     binary_views = null;
 
     // 3. all ternary views
-    if (! Daikon.disable_ternary_invariants) {
-      if (Global.debugInfer.isLoggable(Level.FINE)) {
-        Global.debugInfer.fine ("Trying ternary slices for " + this.name());
-      }
+    if (Global.debugInfer.isLoggable(Level.FINE)) {
+      Global.debugInfer.fine ("Trying ternary slices for " + this.name());
+    }
 
-      Vector ternary_views = new Vector();
-      for (int i1=0; i1<vi_index_limit; i1++) {
-        VarInfo var1 = var_infos[i1];
-        if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+    Vector ternary_views = new Vector();
+    for (int i1=0; i1<vi_index_limit; i1++) {
+      VarInfo var1 = var_infos[i1];
+      if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+        continue;
+
+      // Eventually, add back in this test as "if constant and no
+      // comparability info exists" then continue.
+      // if (var1.isStaticConstant()) continue;
+      // For now, only ternary invariants not involving any arrays
+      if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
+        continue;
+
+      boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+      for (int i2=i1; i2<vi_index_limit; i2++) {
+        VarInfo var2 = var_infos[i2];
+        if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
           continue;
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
-        // if (var1.isStaticConstant()) continue;
+        // if (var2.isStaticConstant()) continue;
         // For now, only ternary invariants not involving any arrays
-        if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
+        if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
           continue;
 
-        boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-        for (int i2=i1; i2<vi_index_limit; i2++) {
-          VarInfo var2 = var_infos[i2];
-          if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
+        boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
+        int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
+        for (int i3=i3_min; i3<vi_index_limit; i3++) {
+          Assert.assertTrue(((i1 >= vi_index_min) && (i1 < vi_index_limit))
+                        || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
+                        || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
+          Assert.assertTrue((i1 <= i2) && (i2 <= i3));
+          VarInfo var3 = var_infos[i3];
+
+          if (!is_slice_ok (var1, var2, var3))
             continue;
 
-          // Eventually, add back in this test as "if constant and no
-          // comparability info exists" then continue.
-          // if (var2.isStaticConstant()) continue;
-          // For now, only ternary invariants not involving any arrays
-          if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
-            continue;
-
-          boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
-          int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
-          for (int i3=i3_min; i3<vi_index_limit; i3++) {
-            Assert.assertTrue(((i1 >= vi_index_min) && (i1 < vi_index_limit))
-                          || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
-                          || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
-            Assert.assertTrue((i1 <= i2) && (i2 <= i3));
-            VarInfo var3 = var_infos[i3];
-
-            if (!is_slice_ok (var1, var2, var3))
-              continue;
-
-            PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
-            slice3.instantiate_invariants();
-            if (Debug.logOn() || debug_on)
-              Debug.log (debug, getClass(), slice3, "Created Ternary Slice");
-            ternary_views.add(slice3);
-          }
+          PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
+          slice3.instantiate_invariants();
+          if (Debug.logOn() || debug_on)
+            Debug.log (debug, getClass(), slice3, "Created Ternary Slice");
+          ternary_views.add(slice3);
         }
       }
-      addViews(ternary_views);
     }
-
+    addViews(ternary_views);
 
     if (debug.isLoggable(Level.FINE))
       debug.fine (views.size() - old_num_views + " new views for " + name());
