@@ -286,14 +286,19 @@
  method-level granularity; 2 is class-level granularity.
 
 @item daikon.split.FileCompiler.compiler
-  (no description provided)
+  String. Used to control which compiler is used to compile
+ Splitters. This can be the full path name or whatever is used on
+ the commandline
 
 @item daikon.split.SplitterList.all_splitters
   Boolean.  Enables indiscriminate splitting (see Daikon manual for
  an explanation of this technique).
 
-@item daikon.split.TimedProcess.compile_wait
-  (no description provided)
+@item daikon.split.TimedProcess.compile_timeout
+  int. Used to control the timeout Splitter compilation timeout,
+ after which the compilation process is retried and
+ terminated. This is necessary to prevent compilation of Splitters
+ from taking a long time or hanging.
 
 @c END AUTO-GENERATED CONFIG OPTIONS LISTING
 

@@ -7,6 +7,18 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.7:
+
+Rewrite of dfec documentation.  dfec is now easier to use, more robust, and
+supports new options, such as struct instrumentation depth.
+
+Remove incorrect dfej documentation for "-instrsourcedir=.".
+
+Add documentation for CreateSpinfo program.
+
+Add new configuration options daikon.split.FileCompiler.compiler and
+daikon.split.TimedProcess.compile_wait.
+
 2.3.6 (5 April 2002):
 
 MergeESC tool inserts Daikon output into Java source files as ESC/Java

@@ -540,12 +540,12 @@ steps.
 
 @enumerate
 @item
-Download the dfec distribution from @uref{http://pag.lcs.mit.edu/daikon/};
+Download the dfec distribution from
+@uref{http://pag.lcs.mit.edu/daikon/download};
 choose the version for your architecture and operating system.  The
-distribution includes a statically-linked and a dynamically-linked version
-of the dfec executable, and for the linux version, it also includes a
-distribution of Lackwit, a variable comparability analysis package that
-makes invariant detection more efficient.
+distribution includes both the dfec executable and
+Lackwit.  Lackwit is a variable comparability analysis package that
+makes invariant detection more accurate and efficient.
 @item
 Unpack the tarfile.
 @example
@@ -562,15 +562,10 @@ make
 This creates the file @file{daikon_runtime.o}; you will use it and
 @file{daikon_runtime.h}, which also appears in @file{front-end/c},
 when compiling C and C++ programs in which you wish to detect invariants.
+@end enumerate
 
-@c  @item
-@c  Obtain a dfec executable.
-
-@c  The easiest approach is to download a precompiled version of dfec from
-@c  @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that executable
-@c  somewhere on your path.  (If no executable is available for your
-@c  architecture, send mail to @email{daikon@@pag.lcs.mit.edu} and we may be able to produce
-@c  an executable for you.)
+@node    dfec EDG sources, Installing the Context GUI, Installing dfej, Installing
+@subsection Installing dfec from EDG sources
 
 @cindex EDG C/C++ front end
 @cindex Edison Design Group C/C++ front end
@@ -588,8 +583,6 @@ subdirectory.  This installs new Makefiles and adds the dfec source
 modifications.
 @item Run @command{make} from the @file{release_2.45/} subdirectory.
 This creates the dfec executable,  @file{release_2.45/bin/dfec}.
-@end enumerate
-
 @end enumerate
 
 @c how to put something on your path:
@@ -635,7 +628,7 @@ You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
 need a Java compiler such as @command{javac} or @command{jikes}.  If you
 wish to analyze C or C++ programs, you need a C or C++ compiler such as
-@command{gcc}.  (In fact, @file{dfec} assumes that @command{gcc} is
+@command{gcc}.  (In fact, @command{dfec} assumes that @command{gcc} is
 installed.)
 
 If you wish to build the Daikon front end for Java (dfej) yourself,
@@ -806,8 +799,8 @@ into the Java source program.
 java daikon.tools.jtb.MergeESC StackAr.inv ../DataStructures/StackAr.java
 @end example
 
-Now examine file @file{../DataStructures/StackAr.java-escannotated}.  For more
-information about the MergeESC program, @xref{MergeESC}.
+Now examine file @file{../DataStructures/StackAr.java-escannotated}.
+For more information about the MergeESC program, @xref{MergeESC}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 contains a tree which hierarchically organizes program points according
@@ -986,7 +979,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 Detecting invariants involves three steps:
 @enumerate
 @item
-Run @file{dfej} or @file{dfec} to instrument the target program
+Run @file{dfej} or @command{dfec} to instrument the target program
 (@pxref{Instrumentation}).
 This modifies a copy of the target program so that, in addition to
 performing its original task, it also writes variable values to a data
@@ -1030,7 +1023,7 @@ the names of procedures and variables that appear in the data trace file.
 @end itemize
 
 Two instrumenters are part of Daikon:  @file{dfej} for Java programs and
-@file{dfec} for C and C++.  The names @file{dfej} and @file{dfec} stand
+@command{dfec} for C and C++.  The names @file{dfej} and @command{dfec} stand
 for "Daikon front end for Java" and "Daikon front end for C/C++".  The
 Java front end is fairly robust; the C/C++ front end is
 experimental.
@@ -1072,9 +1065,8 @@ For more information about dfej, see @ref{Java front end dfej}.
 @node    Instrumenting C/C++ programs,  , Instrumenting Java programs, Instrumentation
 @subsection Instrumenting C/C++ programs
 
-
-To instrument C/C++ source, invoke @file{dfec}, the Daikon front end for
-C/C++, on a single source file at a time.  @file{dfec} must be run from
+To instrument C/C++ source, invoke @command{dfec}, on all the source and
+header files at once.  @command{dfec} must be run from
 a directory that contains the file @file{daikon_runtime.h}, the header
 file for the Daikon runtime library:
 @example
@@ -1084,6 +1076,9 @@ file for the Daikon runtime library:
 
 You may want to specify one or more command-line options;
 see @ref{dfec command-line arguments}.
+The @command{dfec} command produces errors, first check whether running
+@command{gcc -Wall} on the code produces errors; if so, fix them before
+proceeding to use @command{dfec}.
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
@@ -1093,8 +1088,8 @@ library.  By default, dfec places instrumented source in the
       g++ -o @var{myprog}.exe daikon-instrumented/@var{myprog}.cc $DAIKONDIR/front-end/c/daikon_runtime.o
 @end example
 
-In addition, you may want to specify the @option{-w} flag to gcc, to
-suppress warnings.  dfec's output is valid C++ but may cause gcc to
+In addition, you may want to specify the @option{-w} flag to g++, to
+suppress warnings.  dfec's output is valid C++ but may cause g++ to
 issue warnings.
 
 The Daikon front end for C/C++ has three effects:
@@ -1163,7 +1158,8 @@ each source file) when the program was instrumented.
 
 By default, the instrumented Java or C/C++ program creates its @file{.dtrace}
 file in the @file{daikon-output/} subdirectory of the current directory,
-and if defaults to overwriting any previously existing @file{.dtrace} file.
+and it defaults to overwriting any previously existing @file{.dtrace} file.
+
 @c    For C/C++
 @c  programs, however, you can set the DTRACEAPPEND environmental variable,
 @c  which will cause each subsequent run of the program to append to the
@@ -2632,20 +2628,17 @@ Run Daikon on the declaration files and data trace files.
 This section discusses the steps in more detail, with an emphasis on the
 first step.
 
-@c The three crucial files are @file{dfec}, 
+@c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
 @c @file{daikon_runtime.o}.
 
 To instrument a C file, run @command{dfec} on it.  
-@c  (You must supply the
-@c  @option{-I} argument, and possibly others; @xref{dfec command-line
-@c  arguments}.)  
 dfec produces instrumented source as well as a
 @file{.decls} file.  dfec must also be run on header files that contain
 code or definitions to be instrumented (header files typically end in
 @file{.h}), not only on C or C++ source files.  All files to be included
 in a single executable must be instrumented simultaneously, by passing
-them as multiple arguments to dfec - for example,
+them as multiple arguments to dfec --- for example,
 @example
   dfec file1.c file2.c file1.h file2.h
 @end example
@@ -2711,9 +2704,10 @@ This section describes the command-line options dfec accepts.
 @item -I@var{path}
 Adds @var{path} to the end of the system include path.  The system
 include path that @command{gcc} uses is automatically detected by dfec,
-so you should not have to use this;  if there are additional include
-paths you wish to use, or if @command{gcc} defaults to using header files
-that cannot be processed by @command{dfec}, you should use this option.
+so you should not have to use the @option{-I} option unless you wish to
+use additional include
+paths or @command{gcc} defaults to using header files
+that cannot be processed by @command{dfec}
 For example,
 @example
   dfec -I/usr/local/.../2.95.3/include myprog.c
@@ -2810,7 +2804,7 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 This is the only command-line switch which can be used in the midst of the
 list of filenames.  It precedes a file which should not be instrumented.
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
-and each has their own header file, but you don't want to instrument the
+and each has its own header file, but you don't want to instrument the
 functions defined in @file{file2.c}, you would instrument as follows:
 @example
   dfec file1.c -l file2.c file1.h file2.h
@@ -2834,13 +2828,13 @@ struct node @{
   int val;
 @} list;
 @end example
-Setting the struct instrumentation depth to 1 would cause the runtime library
-to output @var{node.val} and @var{node.next}, but setting it to 2 would cause
-the runtime library to output @var{node.val}, @var{node.next},
-@var{node.next->val}, and @var{node.next->next}.  The default instrumentation
-depth is 3, which allows Daikon to capture invariants about nonadjacent nodes,
-but also causes the dtrace file to increase dramatically in size.
-
+Setting the struct instrumentation depth to 1 would cause the runtime
+library to output @var{node.val} and @var{node.next}.  Setting the
+struct instrumentation depth to 2 would cause the runtime library to
+output @var{node.val}, @var{node.next}, @var{node.next->val}, and
+@var{node.next->next}.  The default instrumentation depth is 3, which
+allows Daikon to capture invariants about nonadjacent nodes, but also
+causes the dtrace file to increase dramatically in size.
 
 @end table
 
@@ -3006,7 +3000,7 @@ The disambig file contains an entry for each program point and for every
 user-defined class or struct in instrumentation scope.  Members of structs
 or classes can be disambiguated just like variables at a program point.
 These entries must appear in the order that they are defined in program
-source - even though there are names in the disambig file, they are there
+source --- even though there are names in the disambig file, they are there
 only for human reference, and if the source code is modified in a manner
 that rearranges function or class definitions, then the disambig file will
 need to be regenerated by dfec, and re-edited to produce the correct
@@ -3014,18 +3008,25 @@ disambiguation.  Because of this, is it not recommended to use disambig
 files generated by external programs until later versions of dfec, when
 the disambiguation mechanism is more robust.
 
-@node    Limitations,  , Pointer type disambiguation example, C/C++ front end dfec
-@subsection Limitations
+@node    dfec limitations,  , Pointer type disambiguation example, C/C++ front end dfec
+@subsection dfec limitations
+
+Before running @command{dfec}, you should ensure that your code compiles
+cleanly; we recommend that you use @command{gcc -Wall}, as
+@command{dfec} issues warnings about a number of erroneous C constructs
+that @command{gcc} and other compilers accept.
 
 @cindex gcc version for use with dfec
+@cindex gcc 3
+@cindex gcc 2.96
 
-@file{dfec} works with gcc 2.95.3.  It is not known to work with other
+@command{dfec} works with gcc 2.95.3.  It is not known to work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
 work, nor does ``gcc 2.96'' (which is not an official gcc release).
 
 @cindex K&R C
 
-@file{dfec} technically only instruments C++ programs.  However, most
+@command{dfec} technically only instruments C++ programs.  However, most
 ANSI C programs are also legal C++ programs.  Programs that define
 symbols that are C++ keywords, such as @samp{bool}, require some
 additional effort to process with dfec.  dfec does not support K&R C or
@@ -3123,7 +3124,7 @@ For instance, the postcondition for the absolute value procedure is
 @example
 if arg < 0
   then return == -arg
-else return == arg
+  else return == arg
 @end example
 The invariant @code{return == -arg} is a conditional invariant because
 it depends on the predicate @code{arg < 0} being true.  The compound
