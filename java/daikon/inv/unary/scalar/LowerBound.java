@@ -64,7 +64,12 @@ public class LowerBound  extends SingleScalar {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    String esc_name = var().esc_name();
+    if (esc_name != null) {
+      return esc_name + " >= " + min1 ;
+    } else {
+      return "format_esc " + this.getClass() + " could not speak about: " + format();
+    }
   }
 
   public void add_modified(long value, int count) {
