@@ -24,7 +24,7 @@ Point::~Point () {
  */
 void Point::init (float *x) {
   //the first value in the array 'x' is the point name/id
-  name = (int) x[0];
+  id = (int) x[0];
   for (int i = 1; i < dimensions + 1; i++ ) {
     data[i-1] = x[i];
   }
@@ -43,10 +43,10 @@ void Point::setClusterNum(int number) {
 }
 
 /*
- * set the name of this point to 'nam'
+ * set the id of this point to 'i'
  */
-void Point::setName(int nam) {
-  name = nam;
+void Point::setId(int i) {
+  id = i;
 }
 
 /**
@@ -54,7 +54,7 @@ void Point::setName(int nam) {
  */
 Point* Point::copy() {
   Point *q = new Point(dimensions);
-  q->setName(name);
+  q->setId(id);
   for(int j = 0; j < dimensions; j++) {
     q->data[j] = data[j];
   }
@@ -83,7 +83,7 @@ float Point::distanceSquared(Point *p) {
 }
 
 void Point::print(void) {
-  printf ("name: %i, cluster: %i\n", name, clusterNum);
+  printf ("id: %i, cluster: %i\n", id, clusterNum);
   for(int i = 0; i < dimensions; i++) {
     printf("%f\n", data[i]);
   }
