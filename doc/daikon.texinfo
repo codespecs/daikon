@@ -7733,6 +7733,7 @@ its users.
 The following individuals have contributed to Daikon:
 Yuriy Brun,
 Jake Cockrell,
+David Cok,
 Adam Czeisler,
 Brian Demsky,
 Alan Donovan,
@@ -7772,15 +7773,13 @@ B. Thomas Adler,
 Rich Angros,
 Tadashi Araragi,
 Seung Mo Cho,
-David Cok,
 Dorothy Curtis,
 Madeline Hardojo,
 Engelbert Hubbers,
 Scott McMaster,
 Alex Orso,
 Manos Renieris,
-Rosie Wacha,
-Tao Xie.
+Rosie Wacha.
 Many others have also been generous with their feedback, for which we
 are also grateful.
 
