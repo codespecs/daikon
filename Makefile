@@ -365,7 +365,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 
 java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 	-rm -rf $@ /tmp/${USER}/ajax-jar
-	mkdir /tmp/${USER}/ajax-jar
+	mkdir -p /tmp/${USER}/ajax-jar
 	javac -g -d /tmp/${USER}/ajax-jar $(AJAX_JAVA_FILES)
 	cd /tmp/${USER}/ajax-jar && jar cf ajax.jar *
 	mv /tmp/${USER}/ajax-jar/ajax.jar $@
