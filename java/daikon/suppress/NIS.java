@@ -152,6 +152,8 @@ public class NIS {
   /**
    * Instantiates any invariants that are no longer suppressed because
    * inv has been falsified.
+   *
+   * @deprecated  Use NIS.process_falsified_invs() instead.
    */
   public static void falsified (Invariant inv) {
 
