@@ -425,7 +425,9 @@ public final class Equality
       }
 
       PptSlice newSlice = parent.get_or_instantiate_slice (leader, vars[i]);
-
+      // Copy over the number of samples from this to the new slice,
+      // so that all invariants on the slice report the right number
+      // of samples.
       newSlice.set_samples (this.numSamples());
       Invariant invEquals = null;
 
