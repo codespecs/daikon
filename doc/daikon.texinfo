@@ -2597,11 +2597,11 @@ Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
 the instrumented program).  The filename is relative to the current
 directory at runtime, or is absolute.  If the DTRACEFILE environment
-variable is set when the instrumented program is run, it overrides this
-default.  Furthermore, if the DTRACEAPPEND environment variable is set to any
-value, the dtrace file will be appended to instead of overwritten, which
-can be handy if you have a script to run the instrumented program multiple
-times.
+variable is set (to a file name) when the instrumented program is run,
+it overrides this default.  Furthermore, if the DTRACEAPPEND environment
+variable is set to any value, the dtrace file will be appended to
+instead of overwritten, which can be handy if you have a script to run
+the instrumented program multiple times.
 
 @item --declsfiledir=@var{decldir}
 Specifies the directory in which to create
