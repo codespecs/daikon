@@ -11,13 +11,20 @@ The correct way to build the system is to run 'make'.
 #if (defined(TYPELONG))
   #define CLASSNAME LinearTernaryCore
   #define PRIMITIVE long
+  #define LINEAR_BINARY LinearBinary
+  #define ONEOF OneOfScalar
   #define CLASSSTRING "LinearTernaryCore"
-  #define EQUAL(a,b) ((a) == (b))
+  // #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define GET_VAL(a) (((Long)a).longValue())
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
   #define PRIMITIVE double
+  #define LINEAR_BINARY LinearBinaryFloat
+  #define ONEOF OneOfFloat
   #define CLASSSTRING "LinearTernaryCoreFloat"
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define GET_VAL(a) (((Double)a).doubleValue())
 #else
   #error "Either TYPELONG or TYPEDOUBLE must be defined"
 #endif
@@ -29,7 +36,8 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.LinearBinaryCore;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
 import utilMDE.*;
 import java.io.Serializable;
 
@@ -194,6 +202,105 @@ public final class CLASSNAME
   }
 
   /**
+   * Sets up the invariant from a LinearBinary invariant and a constant
+   * value for the third variable.  Points are taken from the LinearBinary
+   * cache and its min_x/y and max_x/y points and combined with the
+   * constant value.
+   *
+   * @return InvariantStatus.NO_CHANGE if the invariant is valid,
+   * InvariantStatus.FALSIFIED if one of the points invalidated the
+   * LinearTernary invariant
+   */
+  public InvariantStatus setup (LINEAR_BINARY lb, VarInfo con_var,
+                                PRIMITIVE con_val) {
+
+    if (Debug.logOn())
+      wrapper.log ("setup from lb " + lb + " con var " + con_var +
+                   " con_val " + con_val);
+
+    int con_index = con_var.varinfo_index;
+    int lb_v1_index = lb.ppt.var_infos[0].varinfo_index;
+    int lb_v2_index = lb.ppt.var_infos[1].varinfo_index;
+
+    PRIMITIVE[] con_vals = new PRIMITIVE [lb.core.values_seen+2];
+    PRIMITIVE[] lb1_vals = new PRIMITIVE [lb.core.values_seen+2];
+    PRIMITIVE[] lb2_vals = new PRIMITIVE [lb.core.values_seen+2];
+
+    int mi = lb.core.values_seen;
+    for (int i = 0; i < mi; i++) {
+      con_vals[i] = con_val;
+      lb1_vals[i] = lb.core.x_cache[i];
+      lb2_vals[i] = lb.core.y_cache[i];
+    }
+    if (lb.isActive()) {
+      con_vals[mi] = con_val;
+      lb1_vals[mi] = lb.core.min_x;
+      lb2_vals[mi] = lb.core.min_y;
+      con_vals[mi+1] = con_val;
+      lb1_vals[mi+1] = lb.core.max_x;
+      lb2_vals[mi+1] = lb.core.max_y;
+      mi += 2;
+    }
+
+    InvariantStatus sts = InvariantStatus.NO_CHANGE;
+    for (int i = 0; i < mi; i++ ) {
+      if (con_index < lb_v1_index) {
+        sts = add_modified (con_vals[i], lb1_vals[i], lb2_vals[i], 1);
+      } else if (con_index < lb_v2_index) {
+        sts = add_modified (lb1_vals[i], con_vals[i], lb2_vals[i], 1);
+      } else {
+        sts = add_modified (lb1_vals[i], lb2_vals[i], con_vals[i], 1);
+      }
+      if (sts != InvariantStatus.NO_CHANGE)
+        break;
+    }
+
+    if (sts != InvariantStatus.NO_CHANGE) {
+      Fmt.pf ("lb.core.values_seen=" + lb.core.values_seen);
+      for (int i = 0; i < mi; i++ )
+        Fmt.pf ("LTCore: vals %s %s %s", "" + con_vals[i], "" + lb1_vals[i],
+                "" + lb2_vals[i]);
+      Fmt.pf ("in inv " + wrapper.format() + " " + wrapper.ppt);
+      Assert.assertTrue (sts == InvariantStatus.NO_CHANGE);
+    }
+    return (sts);
+  }
+
+  /**
+   * Sets up the invariant from a OneOf and a two constants
+   * Points are taken from the OneOf cache and the constant values
+   *
+   * @return InvariantStatus.NO_CHANGE if the invariant is valid,
+   * InvariantStatus.FALSIFIED if one of the points invalidated the
+   * LinearTernary invariant
+   */
+  public InvariantStatus setup (ONEOF oo, VarInfo v1, PRIMITIVE con1,
+                                VarInfo v2, PRIMITIVE con2) {
+
+    int oo_index = oo.ppt.var_infos[0].varinfo_index;
+    int con1_index = v1.varinfo_index;
+    int con2_index = v2.varinfo_index;
+
+    InvariantStatus sts = InvariantStatus.NO_CHANGE;
+    for (int i = 0; i < oo.num_elts(); i++ ) {
+      if (oo_index < con1_index) {
+        sts = add_modified (GET_VAL(oo.elt(i)), con1, con2, 1);
+      } else if (oo_index < con2_index) {
+        sts = add_modified (con1, GET_VAL(oo.elt(i)), con2, 1);
+    } else
+        sts = add_modified (con1, con2, GET_VAL(oo.elt(i)), 1);
+      if (sts != InvariantStatus.NO_CHANGE)
+        break;
+    }
+
+    if (Debug.logOn())
+      wrapper.log ("setup from OneOf " +  oo + " v1=" + con1 +
+                   " v2=" + con2 + " status = " + sts);
+
+    return (sts);
+  }
+
+  /**
    * Looks for points that define a plane (ax + by + cz + d = 0).  Collects
    * MINTRIPLE points before attempting to define the plane (to
    * hopefully get at least some spread between the points, so that
@@ -272,8 +379,8 @@ public final class CLASSNAME
             // so comparing the sum of everything to 0 won't work.
             if (!EQUAL (-c * def_points[i].z,
                         a*def_points[i].x + b*def_points[i].y + d)) {
-              if (debug.isLoggable(Level.FINE)) {
-                debug.fine ("Destroying at index " + i + ": "
+              if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
+                wrapper.log (debug, "Destroying at index " + i + ": "
                             + "0 != "
                             + a + "*" + def_points[i].x
                             + "+" + b + "*" + def_points[i].y + "+" + c
@@ -283,6 +390,9 @@ public final class CLASSNAME
               return InvariantStatus.FALSIFIED;
             }
           }
+          if (Debug.logOn())
+            wrapper.log ("equation = " + a + "*x " + b + "*y" + c + "*z = "
+                          + (-d));
 
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
@@ -294,8 +404,11 @@ public final class CLASSNAME
           PptSlice gslice = wrapper.ppt.find_global_slice
                                                     (wrapper.ppt.var_infos);
           if (gslice != null) {
-            if (gslice.contains_inv_exact (wrapper))
+            if (gslice.contains_inv_exact (wrapper)) {
+              if (Debug.logOn())
+                wrapper.log ("Matched at global");
               return InvariantStatus.FALSIFIED;
+            }
           }
 
         }
@@ -469,6 +582,8 @@ public final class CLASSNAME
     pa[1] = p2;
     pa[2] = p3;
 
+    if (Debug.logDetail())
+      wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
     return (max_separation);
   }
 
@@ -530,13 +645,13 @@ public final class CLASSNAME
                        + (p0.x * p1.y - p1.x * p0.y));
     if (denominator == 0)
       throw new ArithmeticException();
-    float a_numerator = (float) ((p1.z * p2.y - p2.z * p1.y)
+    double a_numerator = (double) ((p1.z * p2.y - p2.z * p1.y)
                                 - (p0.z * p2.y - p2.z * p0.y)
                                 + (p0.z * p1.y - p1.z * p0.y));
-    float b_numerator = (float) ((p1.x * p2.z - p2.x * p1.z)
+    double b_numerator = (double) ((p1.x * p2.z - p2.x * p1.z)
                                 - (p0.x * p2.z - p2.x * p0.z)
                                 + (p0.x * p1.z - p1.x * p0.z));
-    float c_numerator = (float) (p0.z * (p1.x * p2.y - p2.x * p1.y)
+    double c_numerator = (double) (p0.z * (p1.x * p2.y - p2.x * p1.y)
                                 - p1.z * (p0.x * p2.y - p2.x * p0.y)
                                 + p2.z * (p0.x * p1.y - p1.x * p0.y));
     double[] coef = new double[] { a_numerator / denominator,

@@ -11,6 +11,8 @@ The correct way to build the system is to run 'make'.
 #if (defined(TYPELONG))
   #define CLASSNAME LinearTernary
   #define SUPERCLASS ThreeScalar
+  #define LINEAR_BINARY LinearBinary
+  #define ONEOF OneOfScalar
   #define PRIMITIVE long
   #define CORECLASS LinearTernaryCore
   #define CLASSSTRING "LinearTernary"
@@ -22,6 +24,8 @@ The correct way to build the system is to run 'make'.
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryFloat
   #define SUPERCLASS ThreeFloat
+  #define LINEAR_BINARY LinearBinaryFloat
+  #define ONEOF OneOfFloat
   #define PRIMITIVE double
   #define CORECLASS LinearTernaryCoreFloat
   #define CLASSSTRING "LinearTernaryFloat"
@@ -42,6 +46,8 @@ import daikon.*;
 import daikon.inv.*        ;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
 import java.util.*;
 import utilMDE.*;
 
@@ -274,6 +280,16 @@ public class CLASSNAME
 
   public boolean isFlowable() {
     return core.isFlowable();
+  }
+
+  public InvariantStatus setup (LINEAR_BINARY lb, VarInfo con_var,
+                                PRIMITIVE con_val) {
+    return core.setup (lb, con_var, con_val);
+  }
+
+  public InvariantStatus setup (ONEOF oo, VarInfo v1, PRIMITIVE con1,
+                                VarInfo v2, PRIMITIVE con2) {
+    return core.setup (oo, v1, con1, v2, con2);
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
