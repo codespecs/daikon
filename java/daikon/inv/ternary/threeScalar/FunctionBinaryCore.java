@@ -86,10 +86,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    if (wrapper.ppt.num_values() < 5)
-      return Invariant.PROBABILITY_UNKNOWN;
-    // The actual value probably depends on the function.
-    return Invariant.PROBABILITY_JUSTIFIED;
+    return Invariant.prob_is_gt(wrapper.ppt.num_values(), 5);
   }
 
 
@@ -142,14 +139,14 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     return argresult.name + " == "
       + methodname + "(" + arg1.name + ", " + arg2.name + ")";
   }
- 
+
   /* IOA */
   public String format_ioa(String cname) {
     PptSlice ppt = wrapper.ppt;
     String result = ppt.var_infos[var_indices[var_order][0]].name.ioa_name(cname);
     String arg1 = ppt.var_infos[var_indices[var_order][1]].name.ioa_name(cname);
     String arg2 = ppt.var_infos[var_indices[var_order][2]].name.ioa_name(cname);
-    
+
     return result + " = " + methodname + "(" + arg1 + ", " + arg2 + ") ***";
   }
 

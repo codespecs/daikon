@@ -126,12 +126,15 @@ public class UpperBoundCore  implements java.io.Serializable {
     return samples > required_samples;
   }
 
-  // Return 0 if x>=goal.
-  // This value is 0 if x>=goal, 1 if x=1, and otherwise grades between
-  private static final double prob_gt(double x, double goal) {
-    if (x>=goal)
-      return 0;
-    return (goal - x)/(goal-1);
+  // Convenience methods; avoid need for "Invariant." prefix.
+  private final double prob_is_gt(double x, double goal) {
+    return Invariant.prob_is_gt(x, goal);
+  }
+  private final double prob_and(double p1, double p2) {
+    return Invariant.prob_and(p1, p2);
+  }
+  private final double prob_or(double p1, double p2) {
+    return Invariant.prob_or(p1, p2);
   }
 
   public double computeProbability() {
@@ -154,7 +157,7 @@ public class UpperBoundCore  implements java.io.Serializable {
     /// Compute value "a" from above.
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
-    double bound_samples_prob = prob_gt(num_max1 , required_samples_at_bound);
+    double bound_samples_prob = prob_is_gt(num_max1 , required_samples_at_bound);
 
     long modulus = calc_modulus();
 
@@ -169,7 +172,7 @@ public class UpperBoundCore  implements java.io.Serializable {
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // Value "c" from above
-    double trunc_prob = prob_gt(num_max1 , 5*avg_samples_per_val);
+    double trunc_prob = prob_is_gt(num_max1 , 5*avg_samples_per_val);
 
     // Value "d" from above
     boolean unif_mod_OK = ((- (max3  - max2 ) == modulus)
@@ -177,20 +180,18 @@ public class UpperBoundCore  implements java.io.Serializable {
     double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
-      double unif_prob_1 = prob_gt(num_max1 , half_avg_samp);
-      double unif_prob_2 = prob_gt(num_max2 , half_avg_samp);
-      double unif_prob_3 = prob_gt(num_max3 , half_avg_samp);
-      unif_prob = 1 - (1 - unif_prob_1) * (1 - unif_prob_2) * (1 - unif_prob_3);
+      double unif_prob_1 = prob_is_gt(num_max1 , half_avg_samp);
+      double unif_prob_2 = prob_is_gt(num_max2 , half_avg_samp);
+      double unif_prob_3 = prob_is_gt(num_max3 , half_avg_samp);
+      unif_prob = Invariant.prob_and(unif_prob_1, unif_prob_2, unif_prob_3);
       // System.out.println("Unif_probs: " + unif_prob + " <-- " + unif_prob_1 + " " + unif_prob_2 + " " + unif_prob_3);
     }
 
     // Value "b" from above
-    double bound_prob = Math.min(trunc_prob, unif_prob);
+    double bound_prob = prob_or(trunc_prob, unif_prob);
 
     // Final result
-    // equivalently: 1 - (1 - bound_samples_prob) * (1 - bound_prob);
-    double result = (bound_samples_prob + bound_prob
-                     - bound_samples_prob * bound_prob);
+    double result = prob_and(bound_samples_prob, bound_prob);
 
     // System.out.println("UpperBoundCore.computeProbability(): ");
     // System.out.println("  " + repr());

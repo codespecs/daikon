@@ -107,7 +107,7 @@ public class Modulus extends SingleScalar {
     if (modulus == 1)
       return Invariant.PROBABILITY_NEVER;
     if (modulus == 0)
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     double probability_one_elt_modulus = 1 - 1.0/modulus;
     return Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
   }

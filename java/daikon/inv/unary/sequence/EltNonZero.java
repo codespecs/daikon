@@ -60,7 +60,7 @@ public final class EltNonZero extends SingleSequence {
       VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()}, classname);
     return form[0] + form[1] + " ~= " + (pointer_type ? "null ***" : "0") + form[2];
   }
-    
+
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
@@ -91,7 +91,7 @@ public final class EltNonZero extends SingleSequence {
     // the non-zeroness.)  In that case, do still check for no values yet
     // received.
     if ((override_range == 0) && ((min > 0) || (max < 0)))
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
       long range;
       if (override_range != 0) {

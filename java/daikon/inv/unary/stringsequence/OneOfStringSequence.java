@@ -163,7 +163,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   protected double computeProbability() {
     // This is not ideal.
     if (num_elts == 0) {
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
 
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;

@@ -242,7 +242,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
   protected double computeProbability() {
     // This is not ideal.
     if (num_elts == 0) {
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
 
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;

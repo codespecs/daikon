@@ -87,7 +87,7 @@ public class NonZero extends SingleScalar {
     // the non-zeroness.)  In that case, do still check for no values yet
     // received.
     if ((override_range == 0) && ((min > 0) || (max < 0)))
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
       long range;
       if (override_range != 0) {

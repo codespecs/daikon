@@ -58,7 +58,7 @@ public class NonModulus extends SingleScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   // Set either modulus and remainder, or no_result_yet.
@@ -93,7 +93,7 @@ public class NonModulus extends SingleScalar {
   protected double computeProbability() {
     updateResults();
     if (no_result_yet)
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
     return Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_non_missing_samples());
   }
