@@ -846,7 +846,7 @@ instrumented source as well as a @file{.decls} file.  When you run dfec,
 supply a @option{-I} argument for each directory on the system include path;
 for instance,
 @example
-dfec -I/usr/local/include -I/usr/local/i686-pc-linux-gnu/include ... myfile.c
+dfec -I/usr/local/include -I/usr/include myfile.c
 @end example
 @noindent
 You can find the name of your system directories by running
