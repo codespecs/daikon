@@ -255,6 +255,16 @@ public class Chicory {
       }
     }
 
+    // If not found, try the daikon.jar file itself
+    if (premain_path == null) {
+      for (String path : cp.split(separator)) {
+        File poss_premain = new File(path);
+        if (poss_premain.getName().equals ("daikon.jar"))
+          if (poss_premain.canRead())
+            premain_path = poss_premain;
+        }
+    }
+
     // If we didn't find a premain, give up
     if (premain_path == null) {
       System.err.printf ("Can't find ChicoryPremain.jar on the classpath\n");
