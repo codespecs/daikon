@@ -580,10 +580,16 @@ public class LOWERBOUND
 
 
   public boolean isExclusiveFormula(Invariant other) {
+#ifdef IS_ELT
+    /* N.B. "x[] elements >= 200" is not mutually exclusive with "x[]
+     * elements <= 100"; they could both be true if x[] were always
+     * empty. */
+#else
     if (other instanceof UPPERBOUND) {
       if (MIN() GT ((UPPERBOUND) other).MAX())
         return true;
     }
+#endif
     if (other instanceof ONEOFSCALAR) {
       return other.isExclusiveFormula(this);
     }
