@@ -134,6 +134,7 @@ if (! $skip_dfej) {
 if ($test_kvasir and $success{"daikon_checkout"}) {
   $success{"kvasir_checkout"} = kvasir_checkout();
   if ($success{"kvasir_checkout"}) {
+    `chmod -R a+r valgrind-kvasir`;  # make sure we can read the results on AFS
     $success{"kvasir_compile"} = kvasir_compile();
   }
   if ($success{"kvasir_compile"}) {
