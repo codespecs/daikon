@@ -52,7 +52,7 @@ public class PptSliceEquality
     if (debug.isDebugEnabled()) {
       debug.debug ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
     }
-    Map map = new HashMap(); /* value -> List[VarInfo]*/
+    Map map = new HashMap(); /* comparable -> List[VarInfo]*/
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       Comparables comparable = new Comparables(vi);
@@ -61,56 +61,26 @@ public class PptSliceEquality
         debug.debug ("  " + vi.name.name());
       }
     }
-    List result = new LinkedList();
     if (debug.isDebugEnabled()) {
       debug.debug (new Integer(map.keySet().size()));
     }
-    int count = 0;
+    Equality[] result = new Equality[map.keySet().size()];
+    int varCount = 0;
+    int invCount = 0;
     for (Iterator i = map.values().iterator(); i.hasNext(); ) {
       List list = (List) i.next();
-      count += list.size();
+      varCount += list.size();
       Equality eq = new Equality (list, this);
-      invs.add (eq);
+      result[invCount] = eq;
       if (debug.isDebugEnabled()) {
         debug.debug (" Created: " + eq);
       }
+      invCount ++;
     }
-
-    Assert.assertTrue (count == total); // Check that we get all vis
-  }
-
-  private static class Comparables {
-    public ProglangType type;
-    public ProglangType rep_type;
-    public ProglangType file_rep_type;
-    
-    public int hashCode() {
-      return type.hashCode() ^ rep_type.hashCode() ^ file_rep_type.hashCode();
-    }
-
-    public boolean equals (Object o) {
-      if (o instanceof Comparables) return equals((Comparables) o);
-      return false;
-    }
-
-    public boolean equals (Comparables o) {
-      return (o.type == this.type &&
-              o.rep_type == this.rep_type &&
-              o.file_rep_type == this.file_rep_type);
-    }
-
-    public Comparables (ProglangType type, ProglangType rep_type,
-                        ProglangType file_rep_type) {
-      this.type = type;
-      this.rep_type = rep_type;
-      this.file_rep_type = file_rep_type;
-    }
-
-    public Comparables (VarInfo vi) {
-      this (vi.type, vi.rep_type, vi.file_rep_type);
-    }
-
-
+    // Ensure determinism
+    Arrays.sort (result, EqualityComparator.getInstance()); 
+    invs.addAll (Arrays.asList (result));
+    Assert.assertTrue (varCount == total); // Check that we get all vis
   }
 
   /**
@@ -192,7 +162,8 @@ public class PptSliceEquality
         addOrCreateList (vi.getValue(vt), vi, map);
       }
     }
-    List result = new LinkedList();
+    Equality[] resultArray = new Equality[map.values().size() + (missings.size() > 0 ? 1 : 0)];
+    int resultCount = 0;
     for (Iterator i = map.values().iterator(); i.hasNext(); ) {
       List list = (List) i.next();
       Assert.assertTrue (list.size() > 0);
@@ -201,7 +172,8 @@ public class PptSliceEquality
       if (debug.isDebugEnabled()) {
         debug.debug ("  created new inv: " + eq + " samples: " + eq.numSamples());
       }
-      result.add (eq);
+      resultArray[resultCount] = eq;
+      resultCount++;
     }
     if (missings.size() > 0) {
       Equality missingEq = new Equality (missings, this);
@@ -209,8 +181,12 @@ public class PptSliceEquality
       if (debug.isDebugEnabled()) {
         debug.debug ("  created new inv: " + missingEq + " samples: " + missingEq.numSamples());
       }
-      result.add (missingEq);
+      resultArray[resultCount] = missingEq;
+      resultCount++;
     }
+    // Sort for determinism
+    Arrays.sort (resultArray, EqualityComparator.theInstance);
+    List result = Arrays.asList (resultArray);
     Assert.assertTrue (result.size() > 0);
     return result;
   }
@@ -419,4 +395,56 @@ public class PptSliceEquality
     return result.toString();
   }
 
+  /**
+   * Tuple of types associated with VarInfos.
+   **/
+  private static class Comparables {
+    public ProglangType type;
+    public ProglangType rep_type;
+    public ProglangType file_rep_type;
+    
+    public int hashCode() {
+      return type.hashCode() ^ rep_type.hashCode() ^ file_rep_type.hashCode();
+    }
+
+    public boolean equals (Object o) {
+      if (o instanceof Comparables) return equals((Comparables) o);
+      return false;
+    }
+
+    public boolean equals (Comparables o) {
+      return (o.type == this.type &&
+              o.rep_type == this.rep_type &&
+              o.file_rep_type == this.file_rep_type);
+    }
+
+    public Comparables (ProglangType type, ProglangType rep_type,
+                        ProglangType file_rep_type) {
+      this.type = type;
+      this.rep_type = rep_type;
+      this.file_rep_type = file_rep_type;
+    }
+
+    public Comparables (VarInfo vi) {
+      this (vi.type, vi.rep_type, vi.file_rep_type);
+    }
+  }
+
+  /**
+   * Compare Equality invariants by their leaders.
+   **/
+  public static class EqualityComparator implements Comparator {
+    public static final EqualityComparator theInstance = new EqualityComparator();
+    private EqualityComparator() {
+
+    }
+    public int compare(Object o1,
+                       Object o2) {
+      Equality eq1 = (Equality) o1;
+      Equality eq2 = (Equality) o2;
+      return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
+    }
+    public static EqualityComparator getInstance() {return theInstance;}
+
+  }
 }
