@@ -66,7 +66,6 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
     (setq daikon-context-gui-started t)))
 
 (defun daikon-context-gui-end-gui ()
-	(interactive)
   "Terminate the Daikon Context GUI."
   (when daikon-context-gui-started
     (setq daikon-context-gui-started nil)
@@ -74,14 +73,11 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
   )
 )
 
-(defun daikon-context-gui-restart ()
-	(interactive)
-  "Terminate the Daikon Context GUI."
-  (when daikon-context-gui-started
-    (setq daikon-context-gui-started t)
-    (bsh-eval "daikon.gui.treeGUI.InvariantsGUI.start(\"\");")
-  )
+(defun daikon-context-gui-end ()
+  (interactive)
+  (daikon-context-gui -1)
 )
+
   
 
 ;;; Borrowed in part from jde-which-method-update.
