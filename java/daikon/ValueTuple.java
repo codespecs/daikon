@@ -212,8 +212,6 @@ public final class ValueTuple implements Cloneable {
 
   /** Default constructor that interns its argument. */
   ValueTuple(Object[] vals, int[] mods) {
-    for (int i=0; i<vals.length; i++)
-      Assert.assertTrue(Intern.isInterned(vals[i]));
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
