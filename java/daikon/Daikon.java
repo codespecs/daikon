@@ -1023,16 +1023,8 @@ public final class Daikon {
       // debugProgress.fine ("  Adding Implications for " + ppt.name);
       ppt.addImplications();
     }
+    stopwatch.stop();
     debugProgress.fine ("Time spent adding implications: " + stopwatch.format());
-    debugProgress.fine ("  adding implications: possible slices = " + PptSplitter.stopwatch_possible_slices.format());
-    debugProgress.fine ("  adding implications: children_loop = " + PptSplitter.stopwatch_children_loop.format());
-    debugProgress.fine ("  adding implications: same_invs = " + PptSplitter.stopwatch_same_invs.format());
-    debugProgress.fine ("  adding implications: add_implications_1 = " + PptSplitter.stopwatch_add_implications_1.format());
-    debugProgress.fine ("  adding implications: add_implications_2 = " + PptSplitter.stopwatch_add_implications_2.format());
-    debugProgress.fine ("  adding implications: add_implications_2_indexop = " + PptSplitter.stopwatch_add_implications_2_indexof.format());
-    debugProgress.fine ("  adding implications: add_implications_2_add_implication = " + PptSplitter.stopwatch_add_implications_2_add_implication.format());
-    debugProgress.fine ("  adding implications: add_implications_3 = " + PptSplitter.stopwatch_add_implications_3.format());
-
 
     // debug print suppressed invariants
     if (false && debugStats.isLoggable (Level.FINE)) {

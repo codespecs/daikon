@@ -92,28 +92,30 @@ public class PptSlice0
     Assert.assertTrue(invariantsSeen == null || invs.size() == invariantsSeen.size());
   }
 
+  /**
+   * The invariant is typically an Implication; but PptSlice0 can contain other joiners than than implications,
+   * such as "and" or "or".  That feature isn't used as of November 2003.
+   **/
   public void addInvariant(Invariant inv) {
-    checkRep();
     Assert.assertTrue(inv != null);
-    // The assertion that "inv instanceof Implication" used to be commented out; why? -smcc
-    // (The reason is that PptSlice0 can contain other joiners than implications,
-    // such as "and" or "or".  I don't think this feature is used rigth now.  -MDE)
     Assert.assertTrue(inv instanceof Implication);
-    Assert.assertTrue(! hasImplication((Implication) inv));
+    // checkRep();
+    // Assert.assertTrue(! hasImplication((Implication) inv));
     initInvariantsSeen();
     invs.add(inv);
     invariantsSeen.add(new ImplicationByFormatWrapper((Implication)inv));
-    checkRep();
+    // checkRep();
   }
 
   public void removeInvariant(Invariant inv) {
-    checkRep();
+    Assert.assertTrue(inv != null);
     Assert.assertTrue(inv instanceof Implication);
-    Assert.assertTrue(hasImplication((Implication) inv));
+    // checkRep();
+    // Assert.assertTrue(hasImplication((Implication) inv));
     initInvariantsSeen();
     invs.remove(inv);
     invariantsSeen.remove(new ImplicationByFormatWrapper((Implication)inv));
-    checkRep();
+    // checkRep();
   }
 
   public void removeInvariants(Collection c) {
@@ -154,7 +156,6 @@ public class PptSlice0
   // check this is replacing (used to be in makeImplication())
   // compared two invariants by their format() values, so I'm
   // assuming there's some good reason. -SMcC
-
   // Yes, it is a hack and should be fixed.  Note that there are certain
   // invariants that print identically but are internally different:
   // "this.theArray[this.topOfStack..] == this.theArray[this.topOfStack..]"
@@ -184,19 +185,24 @@ public class PptSlice0
 
     public int hashCode() {
       if (hashCode == 0) {
-        hashCode = format().hashCode();
+        // hashCode = format().hashCode();
+        hashCode = (theImp.iff ? 1 : 0);
+        hashCode = 37 * hashCode + theImp.predicate().getClass().hashCode();
+        hashCode = 37 * hashCode + theImp.consequent().getClass().hashCode();
       }
       return hashCode;
     }
 
     public boolean equals(Object o) {
-      if (o == null || !(o instanceof ImplicationByFormatWrapper))
+      if (o == null)
         return false;
+      Assert.assertTrue(o instanceof ImplicationByFormatWrapper);
       ImplicationByFormatWrapper other = (ImplicationByFormatWrapper)o;
       if (hashCode() != other.hashCode()) {
         return false;
       }
-      return format().equals(other.format());
+      // return format().equals(other.format());
+      return theImp.isSameInvariant(other.theImp);
     }
 
   }
