@@ -303,7 +303,6 @@ Enhancing conditional invariant detection
 Tools
 
 * Annotate::                    
-* MergeESC::                    
 * InvariantChecker::            
 * LogicalCompare::              
 
@@ -5800,12 +5799,11 @@ distribution and are not described elsewhere in the manual.
 
 @menu
 * Annotate::                    
-* MergeESC::                    
 * InvariantChecker::            
 * LogicalCompare::              
 @end menu
 
-@node    Annotate, MergeESC, Tools, Tools
+@node    Annotate, InvariantChecker, Tools, Tools
 @section Annotate
 
 @cindex Annotate tool
@@ -5896,7 +5894,7 @@ belongs to (@code{null} for object invariants).
 @end table
 
 
-@node    InvariantChecker, LogicalCompare, MergeESC, Tools
+@node    InvariantChecker, LogicalCompare, Annotate, Tools
 @section InvariantChecker
 
 @cindex InvariantChecker tool
@@ -6850,7 +6848,7 @@ Daikon cannot output it in ESC format, so Daikon prints the above
 message instead.  The message also shows exactly what Java method needs
 to be implemented to correct the problem.  You can ignore such messages,
 or else use an output formatting that can handle those invariants.
-MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
+Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 
 
 @node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
