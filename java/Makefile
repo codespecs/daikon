@@ -491,6 +491,12 @@ showvars:
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 
+showvar_JAVA_FILES:
+	@echo ${JAVA_FILES}
+
+showvar_CLASS_FILES:
+	@echo $(subst .java,.class,${JAVA_FILES})
+
 list_java_files:
 	@echo $(JAVA_FILES)
 
