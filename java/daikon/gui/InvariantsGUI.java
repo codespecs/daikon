@@ -599,7 +599,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	//  Make invariant column (first column) wider.
 	for (int i = 0; i < table.getColumnCount(); i++) {
 	    TableColumn column = table.getColumnModel().getColumn( i );
-	    if (i == 0)		column.setPreferredWidth( 200 );
+	    if (i == 0)		column.setPreferredWidth( 400 );
 	    else		column.setPreferredWidth( 10 );
 	}
 
@@ -765,6 +765,7 @@ class InvariantTableModel extends AbstractTableModel {
     public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
 	allInvariants = invariants;
 	updateInvariantList( invariantFilters );
+	//	System.out.println( "Finished InvariantTableModel() constructor" );
     }
 
     public int getRowCount() { return filteredInvariants.size(); }
@@ -789,12 +790,17 @@ class InvariantTableModel extends AbstractTableModel {
     }
 
     public void updateInvariantList( InvariantFilters invariantFilters ) {
+	//	System.out.println( "updateInvariantList() started" );
 	filteredInvariants = new ArrayList();
 	for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
 	    Invariant invariant = (Invariant) iter.next();
 	    if (invariantFilters.shouldKeep( invariant ))
 		filteredInvariants.add( invariant );
 	}
+	filteredInvariants = InvariantFilters.addEqualityInvariants( filteredInvariants );
+
 	fireTableDataChanged();
+	//	System.out.println( "updateInvariantList() ended" );
     }
 }
+
