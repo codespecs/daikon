@@ -166,7 +166,8 @@ public final class FileIO {
                       + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
-    int varcomp_format = VarComparability.NONE;
+    // Default VarComparability
+    int varcomp_format = VarComparability.IMPLICIT;
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
 
@@ -311,6 +312,7 @@ public final class FileIO {
     }
 
     // Each iteration reads a variable name, type, and comparability.
+    // Possibly abstract this out into a separate function??
     VarInfo vi;
     while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
@@ -805,7 +807,7 @@ public final class FileIO {
           ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
           exit_ppt.add(exit_vt, 1);
         }
-        */
+        */ // ... INCR
       }
     }
 
@@ -1139,7 +1141,7 @@ public final class FileIO {
                           // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
                           );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
-        */
+        */ // ... INCR
         for (int i=0; i<ppt.num_orig_vars; i++) {
           vals[ppt.num_tracevars+i] = invoc.vals[i];
           int mod = invoc.mods[i];
@@ -1149,7 +1151,7 @@ public final class FileIO {
             // System.out.println("Entrymods made a difference.");
             mod = ValueTuple.MODIFIED;
           }
-          */
+          */ // ... INCR
           mods[ppt.num_tracevars+i] = mod;
           // Functionality moved to PptTopLevel.add(ValueTuple,int).
           // Possibly more efficient to set this all at once, late in
@@ -1161,7 +1163,7 @@ public final class FileIO {
         }
         /* [INCR] punt again
         Arrays.fill(entrymods, 0);
-        */
+        */ // ... INCR
       }
     }
   }
