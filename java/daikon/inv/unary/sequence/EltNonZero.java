@@ -32,7 +32,7 @@ public final class EltNonZero extends SingleSequence {
     EltNonZero result = new EltNonZero(ppt);
     if (! ppt.var_infos[0].type.baseIsIntegral()) {
       result.pointer_type = true;
-      result.override_range = 10;
+      result.override_range = 3;
     }
     // System.out.println("EltNonZero.instantiate: " + result.format());
     return result;
