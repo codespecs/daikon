@@ -9,11 +9,24 @@ import daikon.*;
 /**
  * This class's main method can be used to update both the
  * target files of SplitterFactoryTest and the code of the
- * SplitterFactoryTest it self.  Therefore, after running the
+ * SplitterFactoryTest it self.
+ *
+ * To use this program to update SplitterFactoryTest
+ * and the target files, run "rm *.java.goal" while in the
+ * target directory ($inv/java/daikon/test/split/target).
+ * Then simply run the main method with out any arguments
+ * in the $INV/java directory. After running the
  * main method one should re-compile the SplitterFactoryTest.
- * Also to avoid build up of no longer needed goal files one
- * should run "rm *.java.goal" while in the target directory.
- * This class should be ran from the java directory.
+ *
+ * To add additional tests to this test program, place the .spinfo
+ * and decls files into the target directory then add a call to
+ * generateSplitters with the new files.  generateSplitters is
+ * overloaded; therefore if there are only one .spinfo file and
+ * only decls file then only the names of those two files need to be
+ * used as arguments to generateSplitters.  However, if there are
+ * multiple .spinfo files or multiple decls files, the file names
+ * should be placed into Lists then passed to generateSplitters.
+ * See generateSplitters for more information.
  */
 public class SplitterFactoryTestUpDater {
   public static java.lang.Runtime commander = java.lang.Runtime.getRuntime();
@@ -30,9 +43,9 @@ public class SplitterFactoryTestUpDater {
   private SplitterFactoryTestUpDater() {} //blocks public constructor
 
   /**
-   * If one has changed the test case used below, for best results run "rm *.java.goal
-   * while in the targets directory before running this method.
-   * Creates new splitter java files, move the new files into
+   * If one has changed the test case used below, for best results run
+   * "rm *.java.goal while in the targets directory before running this
+   * method. Creates new splitter java files, move the new files into
    * target directory, rewrites the code of SplitterFactoryTest
    * to use the new files.  One should recompile SplitterFactoryTest
    * after running this method.
@@ -69,9 +82,8 @@ public class SplitterFactoryTestUpDater {
    */
   private static void generateSplitters(List /*String*/ spinfos,
                                         List /*String*/ decls) {
-    Set /*String*/ declsFileSet = new HashSet();
+    Set /*File*/ declsFileSet = new HashSet();
     List /*String*/ spinfoFiles = new ArrayList();
-    PptMap allPpts = new PptMap();
     for (int i = 0; i < spinfos.size(); i++) {
       String spinfoFile = (String) spinfos.get(i);
       spinfoFile = targetDir + spinfoFile;
@@ -81,24 +93,21 @@ public class SplitterFactoryTestUpDater {
     for (int i = 0; i < decls.size(); i++) {
       String declsFile = (String) decls.get(i);
       declsFile = targetDir + declsFile;
-      declsFileSet.add(declsFile);
+      declsFileSet.add(new File(declsFile));
     }
     declsFileLists.add(new ArrayList(declsFileSet));
-    /* JHP V2/V3 merge hack 7/24/03, these calls are different in V3
-    FileIO.read_declaration_files(declsFileSet, allPpts);
-    Daikon.add_combined_exits(allPpts);
-    end JHP merge hack */
-    //ensure the files are not deleted before they are copied
-    SplitterFactory.dkconfig_delete_splitters_on_exit = false;
-    for (int i = 0; i < spinfoFiles.size(); i++) {
-      try {
+    try {
+      PptMap allPpts = FileIO.read_declaration_files(declsFileSet);
+      Dataflow.init_partial_order(all_ppts);
+      Dataflow.create_combined_exits(allPpts);
+      for (int i = 0; i < spinfoFiles.size(); i++) {
         //create the java files
         String spinfoFile = (String) spinfoFiles.get(i);
         SplitterObject[][] splitters =
-          SplitterFactory.read_spinfofile( new File (spinfoFile), allPpts);
-      } catch(IOException e) {
-        throw new RuntimeException(e);
+          SplitterFactory.read_spinfofile( new File(spinfoFile), allPpts);
       }
+    } catch(IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -231,7 +240,6 @@ public class SplitterFactoryTestUpDater {
     code.append("      while ((c = g.getopt()) != -1) {" + lineSep);
     code.append("        switch(c) {" + lineSep);
     code.append("        case 's':" + lineSep);
-    code.append("          System.out.println(\"saving\");" + lineSep);
     code.append("          saveFiles = true;" + lineSep);
     code.append("          break;" + lineSep);
     code.append("        case 'h':" + lineSep);
@@ -260,25 +268,26 @@ public class SplitterFactoryTestUpDater {
     code.append("   * Sets up the test by generating the needed splitter java files. " + lineSep);
     code.append("   */" + lineSep);
     code.append("  private static void createSplitterFiles(List /*String*/ spinfos, List /*String*/ decls) {" + lineSep);
-    code.append("    PptMap allPpts = new PptMap();" + lineSep);
-    code.append("    /* JHP V2/V3 merge hack 7/24/03, these calls are different in V3" + lineSep);
-    code.append("    FileIO.read_declaration_files(decls, allPpts);" + lineSep);
-    code.append("    Daikon.add_combined_exits(allPpts);" + lineSep);
-    code.append("    end JHP merge hack */" + lineSep);
-    code.append("    //ensure the files are not deleted before they are copied" + lineSep);
-    code.append("    if (saveFiles) {" + lineSep);
-    code.append("      SplitterFactory.dkconfig_delete_splitters_on_exit = false;" + lineSep);
+    code.append("    List declsFiles = new ArrayList();" + lineSep);
+    code.append("    for (int i = 0; i < decls.size(); i++) {" + lineSep);
+    code.append("      declsFiles.add(new File((String) decls.get(i)));" + lineSep);
     code.append("    }" + lineSep);
-    code.append("    for (int i = 0; i < spinfos.size(); i++) {" + lineSep);
-    code.append("      try {" + lineSep);
+    code.append("    try {" + lineSep);
+    code.append("      PptMap allPpts = FileIO.read_declaration_files(declsFiles);" + lineSep);
+    code.append("      Dataflow.init_partial_order(all_ppts);" + lineSep);
+    code.append("      Dataflow.create_combined_exits(allPpts);" + lineSep);
+    code.append("      if (saveFiles) {" + lineSep);
+    code.append("        SplitterFactory.dkconfig_delete_splitters_on_exit = false;" + lineSep);
+    code.append("      }" + lineSep);
+    code.append("      for (int i = 0; i < spinfos.size(); i++) {" + lineSep);
     code.append("        //create the java files" + lineSep);
     code.append("        String spinfoFile = (String) spinfos.get(i);" + lineSep);
     code.append("        SplitterObject[][] splitters =" + lineSep);
     code.append("          SplitterFactory.read_spinfofile(new File(spinfoFile), allPpts);" + lineSep);
     code.append("        tempDir = SplitterFactory.getTempDir();" + lineSep);
-    code.append("      } catch(IOException e) {" + lineSep);
-    code.append("        throw new RuntimeException(e);" + lineSep);
     code.append("      }" + lineSep);
+    code.append("    } catch(IOException e) {" + lineSep);
+    code.append("        throw new RuntimeException(e);" + lineSep);
     code.append("    }" + lineSep);
     code.append("   }" + lineSep);
     code.append(lineSep);
@@ -332,7 +341,7 @@ public class SplitterFactoryTestUpDater {
     code.append("    return suite;" + lineSep);
     code.append( "  } " + lineSep);
     code.append(lineSep);
-    code.append( "}");
+    code.append( "}" + lineSep);
 
     return code.toString();
   }
