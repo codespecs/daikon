@@ -24,10 +24,18 @@ index.html:
 	../pubs-sources/fix-homedir-tilde.pl $@
 
 # Creates *-abstract.html files.
-abstracts:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -to abstracts-unsplit.html -authorurls ${MDEWWW}/pubs/author-urls -filter '(defined($$rec{"usesdaikon"}) || defined($$rec{"usesdaikonastestsubject"})) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+abstracts: abstracts-methodology abstracts-testsubject
+
+abstracts-methodology:
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -to abstracts-unsplit.html -authorurls ${MDEWWW}/pubs/author-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot.html abstracts-unsplit.html
+	rm abstracts-unsplit.html
+
+abstracts-testsubject:
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -to abstracts-unsplit.html -authorurls ${MDEWWW}/pubs/author-urls -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
+	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot-testsubject.html abstracts-unsplit.html
 	rm abstracts-unsplit.html
 
 .PHONY: abstracts index.html
