@@ -16,6 +16,9 @@ public class LinearBinary extends TwoScalar {
   }
 
   public static LinearBinary instantiate(PptSlice ppt) {
+    if (ppt.debugged) {
+      System.out.println("LinearBinary.instantiate(" + ppt.name + ")");
+    }
     return new LinearBinary(ppt);
   }
 
@@ -42,7 +45,7 @@ public class LinearBinary extends TwoScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long x, long y, int count) {
