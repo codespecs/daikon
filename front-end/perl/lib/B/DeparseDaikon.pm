@@ -22,6 +22,9 @@ sub null {
 use strict;
 
 # This could be any name that isn't used in the code being annotated.
+# Something with Daikon in the name is a pretty good bet not to be
+# used, except if we're trying to annotate some already annotated
+# code, which won't work right anyway.
 my $dv_name = '@Daikon_variables';
 
 # indexed by {program point name}{variable name}
@@ -68,6 +71,26 @@ sub read_types {
     close TYPES;
 }
 
+# Read and return the method names in a given file, skipping blank
+# lines and comments.
+sub read_accessors {
+    my($fname) = @_;
+    open(ACC, "<$fname") or die "Can't open $fname: $!";
+    my $l;
+    my @acc = ();
+    while ($l = <ACC>) {
+	$l =~ s/#.*$//;
+	next if $l =~ /^\s*$/;
+	chomp $l;
+	if ($l !~ /^\w+$/) {
+	    warn "`$l' is a strange name for a method\n";
+	}
+	push @acc, $l;
+    }
+    close ACC;
+    return @acc;
+}
+
 # This is the entry point called first when you run this module with
 # -MO=DeparseDaikon. Mainly, it returns a subroutine to call after the
 # program has been compiled (into an internal form by the perl
@@ -75,11 +98,17 @@ sub read_types {
 sub compile {
     my(@args) = @_;
     my @output_style = ();
+    my @accessors = ();
     return sub {
 	# Parse and remove any Daikon-specific args from @args
 	for my $i (0 .. $#args) {
 	    next unless defined($args[$i]);
-	    if ($args[$i] eq "-t") {
+	    if ($args[$i] eq "-a") {
+		# -a: read a list of accessor methods from a given file
+		my $fname = $args[$i+1];
+		push @accessors, read_accessors($fname);
+		$args[$i] = $args[$i+1] = undef;
+	    } elsif ($args[$i] eq "-t") {
 		# -t: read type information from a given file
 		my $fname = $args[$i+1];
 		read_types($fname);
@@ -106,7 +135,12 @@ sub compile {
 	    print "); }\n";
 	}
 	$self->deparse_program();
-   }
+	if (@accessors) {
+	    print "sub DAIKON_ACCESSORS { (";
+	    print join(", ", map(qq/"$_"/, @accessors));
+	    print "); }\n";
+	}
+    }
 }
 
 # This sub is a bunch of code that was factored out of the B::Deparse
