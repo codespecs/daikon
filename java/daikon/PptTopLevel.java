@@ -50,19 +50,40 @@ public class PptTopLevel extends Ppt {
   int[] derivation_indices = new int[derivation_passes+1];
 
   transient VarValuesOrdered values;
+  // these are used only when values is null
+  int values_num_samples;
+  int values_num_mod_non_missing_samples;
+  int values_num_values;
+  String values_tuplemod_samples_summary;
 
   PptTopLevel entry_ppt;        // null if this isn't an exit point
 
   // These accessors are for abstract methods declared in Ppt
-  public int num_samples() { return values.num_samples(); }
-  public int num_mod_non_missing_samples() { return values.num_mod_non_missing_samples(); }
+  public int num_samples() {
+    return (values == null) ? values_num_samples : values.num_samples(); }
+  public int num_mod_non_missing_samples() {
+      return ((values == null)
+              ? values_num_mod_non_missing_samples
+              : values.num_mod_non_missing_samples()); }
   // WARNING!  This is the number of distinct ValueTuple objects,
   // which can be as much as 2^arity times as many as the number of
   // distinct tuples of values.
-  public int num_values() { return values.num_values(); }
+  public int num_values() {
+    return (values == null) ? values_num_values : values.num_values(); }
   // public int num_missing() { return values.num_missing; }
-  public String tuplemod_samples_summary() { return values.tuplemod_samples_summary();
+  public String tuplemod_samples_summary() {
+      return ((values == null)
+              ? values_tuplemod_samples_summary
+              : values.tuplemod_samples_summary());
   }
+  public void set_values_null() {
+    values_num_samples = num_samples();
+    values_num_mod_non_missing_samples = num_mod_non_missing_samples();
+    values_num_values = num_values();
+    values_tuplemod_samples_summary = tuplemod_samples_summary();
+    values = null;
+  }
+
 
 
   // These are now in PptSlice objects instead.
@@ -1492,7 +1513,7 @@ public class PptTopLevel extends Ppt {
     System.out.println(name + "  " + num_samps
                        + " sample" + ((num_samps == 1) ? "" : "s"));
     System.out.println("    Samples breakdown: "
-		       + values.tuplemod_samples_summary());
+		       + tuplemod_samples_summary());
     System.out.print("    Variables:");
     for (int i=0; i<var_infos.length; i++)
       System.out.print(" " + var_infos[i].name);

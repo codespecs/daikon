@@ -193,11 +193,11 @@ public final class Daikon {
         ppt.print_invariants_maybe();
         {
           // Clear memory
-          ppt.values = null;
+          ppt.set_values_null();
           ppt.clear_view_caches();
           for (int i=0; i<ppt.views_cond.size(); i++) {
             PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
-            pcond.values = null;
+            pcond.set_values_null();
             pcond.clear_view_caches();
           }
         }
