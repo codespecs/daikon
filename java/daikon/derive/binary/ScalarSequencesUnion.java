@@ -12,6 +12,10 @@ import utilMDE.*;
 
 public final class ScalarSequencesUnion  extends BinaryDerivation {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public ScalarSequencesUnion (VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
