@@ -11,6 +11,8 @@
 # creates a .conds file, and then it creates the splitter info file from
 # the .conds file.
 
+die("Do not use createspinfo.pl; instead, use CreateSpinfo.java");
+
 use English;
 # use strict;
 $WARNING = 1;			# "-w" flag
