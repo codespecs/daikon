@@ -75,7 +75,7 @@ public class VarInfoNameDriver {
       String expr = args[1];
       VarInfoName parse = VarInfoName.parse(expr);
       vars.put(var, parse);
-      out.println(var + " = " + parse);
+      out.println(var + " = " + parse.name());
     }
   }
   static { handlers.put("parse", new Parse()); }
