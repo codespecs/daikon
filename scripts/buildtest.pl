@@ -21,11 +21,13 @@ my $usage = "Usage: buildtest.pl [--quiet]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej] [--use_ver2]\n";
 my $quiet = 0;
 my $nocleanup = 0;
-# These three flags permit only part of the tests to be run; good for debugging.
+# These flags permit only part of the tests to be run; good for debugging.
+my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
 my $skip_dfec = 0;
 my $skip_dfej = 0;
+my $test_kvasir = 0;
 # When on, use version 3 of Daikon
 my $use_ver2 = 0;
 
@@ -35,12 +37,16 @@ while (scalar(@ARGV) > 0) {
     $quiet = 1;
   } elsif ($arg eq "--nocleanup") {
     $nocleanup = 1;
+  } elsif ($arg eq "--skip_daikon_build") {
+    $skip_daikon = $skip_daikon_build = 1;
   } elsif ($arg eq "--skip_daikon") {
     $skip_daikon = 1;
   } elsif ($arg eq "--skip_dfec") {
     $skip_dfec = 1;
   } elsif ($arg eq "--skip_dfej") {
     $skip_dfej = 1;
+  } elsif ($arg eq "--test_kvasir") {
+    $test_kvasir = 1;
   } elsif ($arg eq "--use_ver2") {
     $use_ver2 = 1;
   } else {
@@ -56,7 +62,7 @@ my $DAIKONPARENT = cwd() . "/$date";
 $ENV{"DAIKONPARENT"} = $DAIKONPARENT;
 
 # Set other initial variables
-my $CVS_REP = "/g4/projects/invariants/.CVS/";
+my $CVS_REP = "/afs/csail.mit.edu/group/pag/projects/invariants/.CVS";
 my $CVS_TAG = "ENGINE_V2_PATCHES";
 $ENV{"JAVAC"} = "javac -g";
 
@@ -88,12 +94,14 @@ if ($success{"daikon_checkout"}) {
 }
 my $INV = $ENV{"INV"};
 
-if ($success{"daikon_checkout"}) {
-  $success{"daikon_update"} = daikon_update();
-  $success{"tests_update"} = tests_update();
-}
-if ($success{"daikon_update"}) {
-  $success{"daikon_compile"} = daikon_compile();
+if (! $skip_daikon_build) {
+  if ($success{"daikon_checkout"}) {
+    $success{"daikon_update"} = daikon_update();
+    $success{"tests_update"} = tests_update();
+  }
+  if ($success{"daikon_update"}) {
+    $success{"daikon_compile"} = daikon_compile();
+  }
 }
 
 if (! $skip_daikon) {
@@ -119,6 +127,19 @@ if (! $skip_dfej) {
   }
   if ($success{"dfej_configure"}) {
     $success{"dfej_compile"} = dfej_compile();
+  }
+}
+
+if ($test_kvasir and $success{"daikon_checkout"}) {
+  $success{"kvasir_checkout"} = kvasir_checkout();
+  if ($success{"kvasir_checkout"}) {
+    $success{"kvasir_compile"} = kvasir_compile();
+  }
+  if ($success{"kvasir_compile"}) {
+    $success{"kvasir_regression_test"} = kvasir_regression_test();
+  }
+  if ($success{"kvasir_compile"} and $success{"daikon_compile"}) {
+    $success{"kvasir_daikon_test"} = kvasir_daikon_test();
   }
 }
 
@@ -172,7 +193,7 @@ if (@failed_steps != 0) {
 # checkouts
 mkdir("diffs", 0777) or die "can't make directory diffs: $!\n";
 
-foreach my $subdir ("daikon", "diff", "dfec") {
+foreach my $subdir ("daikon", "diff", "dfec", "kvasir") {
   mkdir("diffs/$subdir", 0777) or die "can't make directory diffs/$subdir: $!\n";
   my $diffs = `find invariants/tests/$subdir-tests -name "*.diff"`;
   foreach my $file (split '\n',$diffs) {
@@ -440,6 +461,115 @@ sub dfec_system_test {
   return 1;
 }
 
+sub kvasir_checkout {
+  print_log("Checking out Kvasir...");
+  my $log = "$DAIKONPARENT/kvasir_checkout.out";
+  chdir($INV) or die "can't chdir to $INV: $!\n";
+  `cvs -d $CVS_REP co valgrind-kvasir 2>&1 | tee $log`;
+  symlink("valgrind-kvasir", "kvasir");
+  chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
+  `cvs -d $CVS_REP co kvasir 2>&1 | tee -a $log`;
+  chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
+  if (-e "$INV/kvasir/kvasir/Makefile.in") {
+    print_log("OK\n");
+  } else {
+    print_log("FAILED\n");
+  }
+}
+
+sub kvasir_compile {
+  print_log("Compiling Kvasir...");
+  my $log = "$DAIKONPARENT/kvasir_compile.out";
+  chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
+  qx[./configure --prefix=`pwd`/inst 2>&1 | tee $log];
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
+    return 0;
+  }
+  `make 2>&1 | tee -a $log`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
+    return 0;
+  }
+  `make install 2>&1 | tee -a $log`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
+    return 0;
+  } else {
+    print_log("OK\n");
+    chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
+    return 1;
+  }
+}
+
+sub kvasir_regression_test {
+  # Standard test suite
+  my $TEST_SUITE = "nightly-summary";
+  print_log("Kvasir regression tests...");
+
+  my $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE " .
+    "&> kvasir_regression_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  }
+
+  $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-only " .
+    "2>&1 | tee kvasir_regression_test_summary.out";
+  my @results = `$command`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  }
+
+  foreach my $line (@results) {
+    next if ($line =~ /^make/);
+    if ($line =~ /^FAILED\s/) {
+      print_log("FAILED\n");
+      return 0;
+    }
+  }
+
+  print_log("OK\n");
+  return 1;
+}
+
+sub kvasir_daikon_test {
+  # Standard test suite
+  my $TEST_SUITE = "nightly-summary";
+  print_log("Kvasir Daikon tests...");
+
+  my $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-w-daikon " .
+    "&> kvasir_daikon_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  }
+
+  $command = "make -C $INV/tests/kvasir-tests $TEST_SUITE-only-w-daikon " .
+    "2>&1 | tee kvasir_daikon_test_summary.out";
+  my @results = `$command`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  }
+
+  foreach my $line (@results) {
+    next if ($line =~ /^make/);
+    if ($line =~ /^FAILED\s/) {
+      print_log("FAILED\n");
+      return 0;
+    }
+  }
+
+  print_log("OK\n");
+  return 1;
+}
 
 # Appends its arguments to the log file.  If the quiet option was *not*
 # specified, also prints its arguments to STDOUT.
