@@ -137,7 +137,8 @@ public final class Runtime {
       System.err.println("Printed " + printedRecords + " records.  Exiting.");
       System.exit(1);
     } else {
-      System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
+      // By default, no special output if the system continues to run.
+      // System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
       // prevent any future output
       no_dtrace = true;
       ps_count++;
