@@ -21,6 +21,8 @@ public abstract class PptSlice extends Ppt {
   // cache of values from var_infos, to avoid repeated lookups
   public int[] value_indices;
 
+  public boolean no_invariants = false;
+
   // Put off implementing this for the nonce.  It should probably
   // appear in the concrete children, anyway.
   // This is a local cache.
@@ -66,6 +68,7 @@ public abstract class PptSlice extends Ppt {
     boolean removed = invs.remove(inv);
     Assert.assert(removed);
     if (invs.size() == 0) {
+      no_invariants = true;
       parent.removeView(this);
       // for good measure; shouldn't be necessary, but just in case there
       // is some other pointer to this.

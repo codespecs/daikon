@@ -270,4 +270,15 @@ public class ValueTuple implements Cloneable {
     return sb.toString();
   }
 
+  /** For each index i, do dest[i] = dest[i] or other[i]. */
+  public static void orModsInto(int[] dest, int[] other) {
+    Assert.assert(dest.length == other.length);
+    int len = dest.length;
+    for (int i=0; i<len; i++)
+      if ((dest[i] == UNMODIFIED) && (other[i] == MODIFIED))
+        dest[i] = MODIFIED;
+  }
+
+
+
 }

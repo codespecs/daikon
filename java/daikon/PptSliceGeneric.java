@@ -72,6 +72,8 @@ public class PptSliceGeneric extends PptSlice {
   }
 
   void instantiate_invariants(int pass) {
+    Assert.assert(!no_invariants);
+
     // Instantiate invariants
     if (Global.debugPptSliceGeneric)
       System.out.println("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
@@ -133,6 +135,7 @@ public class PptSliceGeneric extends PptSlice {
   // One can just use this one (and be sure to clear it out afterward).
   private Vector itrd_cache = new Vector(1);
   public void removeInvariant(Invariant inv) {
+    Assert.assert(! no_invariants);
     if (Global.debugPptSliceGeneric)
       System.out.println("PptSliceGeneric.removeInvariant(" + inv.name() + ")" +
                          ((invs_to_remove_deferred != null)
@@ -161,6 +164,7 @@ public class PptSliceGeneric extends PptSlice {
 
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
+    Assert.assert(! no_invariants);
     if (values_cache == null) {
       return num_samples_post_cache;
     } else {
@@ -168,6 +172,7 @@ public class PptSliceGeneric extends PptSlice {
     }
   }
   public int num_mod_non_missing_samples() {
+    Assert.assert(! no_invariants);
     if (values_cache == null) {
       return num_mod_non_missing_samples_post_cache;
     } else {
@@ -185,6 +190,7 @@ public class PptSliceGeneric extends PptSlice {
   // which can be as much as 2^arity times as many as the number of
   // distinct tuples of values.
   public int num_values() {
+    Assert.assert(! no_invariants);
     if (values_cache == null) {
       return num_values_post_cache;
     } else {
@@ -192,6 +198,7 @@ public class PptSliceGeneric extends PptSlice {
     }
   }
   public String tuplemod_samples_summary() {
+    Assert.assert(! no_invariants);
     if (values_cache == null) {
       return tuplemod_samples_summary_post_cache;
     } else {
@@ -200,6 +207,7 @@ public class PptSliceGeneric extends PptSlice {
   }
 
   boolean check_modbits () {
+    Assert.assert(! no_invariants);
     // The value "0" can be had for missing samples.
     if ((num_mod_non_missing_samples() << arity) < num_values()) {
       if (values_cache == null) {
@@ -256,6 +264,7 @@ public class PptSliceGeneric extends PptSlice {
   ///
 
   void add(ValueTuple full_vt, int count) {
+    Assert.assert(! no_invariants);
     Assert.assert(invs.size() > 0);
 
     // System.out.println("PptSliceGeneric.add(" + full_vt + ", " + count + ")"

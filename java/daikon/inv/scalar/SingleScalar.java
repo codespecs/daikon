@@ -42,6 +42,7 @@ public abstract class SingleScalar extends Invariant {
    * Subclasses can override this.
    */
   public void add_unmodified(int value, int count) {
+    // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
     if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
       add_modified(value, count);
       return;

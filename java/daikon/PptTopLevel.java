@@ -1551,8 +1551,12 @@ public class PptTopLevel extends Ppt {
           PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
           PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
           if (slice1 != null) {
-            sb.append("\t\t(" + slice1.num_values() + " values, "
-                      + slice1.num_samples() + " samples)");
+            int num_values = slice1.num_values()
+            int num_samples = slice1.num_samples()
+            sb.append("\t\t(" + num_values + " value"
+                      + ((num_values == 1) ? "" : "s") + ", "
+                      + num_samples + " sample"
+                      + ((num_samples == 1) ? "" : "s") + ")");
           } else {
             sb.append("\t\t(no slice)");
           }

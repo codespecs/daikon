@@ -480,6 +480,25 @@ class FileIO {
 
     // init_ftn_call_ct();          // initialize function call counts to 0
     call_stack = new Stack();
+    // Maps from a function to the cumulative modification bits seen for
+    // the entry since the time other elements were seen.  There is one tag
+    // for each exit point associated with this entry.
+    HashMap cumulative_modbits = new HashMap();
+    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      PptTopLevel entry_ppt = ppt.entry_ppt(all_ppts);
+      if (entry_ppt != null) {
+        int num_vars = entry_ppt.num_vars();
+        int[] mods = new int[num_vars];
+        Arrays.fill(mods, 0);
+        HashMap subhash = (HashMap) cumulative_modbits.get(entry_ppt);
+        if (subhash == null) {
+          subhash = new HashMap();
+          cumulative_modbits.put(entry_ppt, subhash);
+        }
+        subhash.put(ppt, mods);
+      }
+    }
 
 
     for (String line_ = reader.readLine(); line_ != null; line_ = reader.readLine()) {
@@ -560,6 +579,12 @@ class FileIO {
       String fn_name = ppt.fn_name();
       if (ppt_name.endsWith(enter_tag)) {
 	call_stack.push(new Invocation(fn_name, vals, mods));
+        HashMap subhash = (HashMap) cumulative_modbits.get(ppt);
+        // System.out.println("Entry " + ppt_name + " has " + subhash.size() + " exits");
+        for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
+          int[] exitmods = (int[]) itor.next();
+          ValueTuple.orModsInto(exitmods, mods);
+        }
       } else {
 	PptTopLevel entry_ppt = (PptTopLevel) entry_ppts.get(ppt);
 	if (entry_ppt != null) {
@@ -575,9 +600,16 @@ class FileIO {
               throw new Error("Unexpected function name " + invoc.fn_name
                               + ", expected " + fn_name + " at " + filename + " line " + reader.getLineNumber());
             Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars);
+            int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
             for (int i=0; i<ppt.num_orig_vars; i++) {
               vals[ppt.num_tracevars+i] = invoc.vals[i];
-              mods[ppt.num_tracevars+i] = invoc.mods[i];
+              int mod = invoc.mods[i];
+              if ((mod == ValueTuple.UNMODIFIED)
+                  && (entrymods[i] == ValueTuple.MODIFIED)) {
+                // System.out.println("Entrymods made a difference.");
+                mod = ValueTuple.MODIFIED;
+              }
+              mods[ppt.num_tracevars+i] = mod;
               // Possibly more efficient to set this all at once, late in
               // the game; but this gets it done.
               if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
@@ -585,6 +617,7 @@ class FileIO {
                 Assert.assert(vals[ppt.num_tracevars+i] == null);
               }
             }
+            Arrays.fill(entrymods, 0);
           }
 	}
       }
