@@ -143,7 +143,6 @@ public final class IntEqual
 
     // we don't care if things swap; we have symmetry
     return this;
-
   }
 
   // Look up a previously instantiated IntEqual  relationship.
@@ -175,7 +174,6 @@ public final class IntEqual
       String comparator = "==" ;
 
       if (format == OutputFormat.IOA) comparator = "=";
-      if (format == OutputFormat.JAVA) comparator = "=";
 
       return var1name + " " + comparator + " " + var2name;
     }
@@ -225,7 +223,6 @@ public final class IntEqual
     // equality non-transitive.
     // return Math.pow(.5, num_values());
     return Invariant.PROBABILITY_JUSTIFIED;
-
   }
 
   public boolean enoughSamples() {
@@ -243,7 +240,6 @@ public final class IntEqual
   public boolean isExact() {
 
     return true;
-
   }
 
   // // Temporary, for debugging

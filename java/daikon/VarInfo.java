@@ -27,7 +27,7 @@ public final class VarInfo
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020626L;
+  static final long serialVersionUID = 20020629L;
 
   /**
    * The program point this variable is in.
@@ -606,6 +606,11 @@ public final class VarInfo
   public VarInfo derivedParamCached = null;
 
   /**
+   * Cached value for getDerivedParam()
+   **/
+  public VarInfo derivedParamCached = null;
+
+  /**
    * Cached value for isDerivedParam()
    **/
   // Boolean rather than boolean so we can use "null" to indicate "not yet set".
@@ -666,7 +671,6 @@ public final class VarInfo
   }
 
 
-
   private Boolean isDerivedParamAndUninterestingCached = null;
 
   /**
@@ -724,18 +728,18 @@ public final class VarInfo
 	}
       }
 
-      
+
       VarInfo base = getDerivedParam();
       // Actually we should be getting all the derivations that could
       // be params, and if any of them are uninteresting, this is
       // uninteresting.
-      
+
       // Remember that if this is derived from a true param, then this
       // is a param too, so we don't need to worry.  However, if this
       // is derived from a derivedParam, then we need to find all
       // derivation parents that could possibly fail under these
       // rules.  Right now, we just get the first one.
-      
+
       // So if x = Foo(this.y, p.y) and this hasn't changed then we
       // will be ignoring the fact that y has changed.
 
@@ -744,12 +748,12 @@ public final class VarInfo
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
 	Global.debugSuppress.debug ("No orig variable for base, returning true ");
-	return true; // There can't be an equal invariant without orig	
+	return true; // There can't be an equal invariant without orig
       }
       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       if (slice == null) {
 	Global.debugSuppress.debug ("No slice for equality in base, so uninteresting");
-	return true; // There can't be an equal invariant in a null slice	
+	return true; // There can't be an equal invariant in a null slice
       }
       if (Global.debugSuppress.isDebugEnabled()) {
 	Global.debugSuppress.debug ("Parent and orig slice for finding equality: " + slice.name);
@@ -761,10 +765,10 @@ public final class VarInfo
       }
       if (!seenEqual) {
 	Global.debugSuppress.debug ("Didn't see equality in base, so uninteresting");
-	return true;	
+	return true;
       }
       Global.debugSuppress.debug ("Saw equality.  Derived worth printing.");
-      
+
     }
     return false;
   }
@@ -904,6 +908,10 @@ public final class VarInfo
 
     HashSet controlling_equalTo = new HashSet(); // of VarInfoName
     {
+      // The point of this iteration is to pull out all the variables
+      // in program points above this that are equal to this (in the
+      // upper program point).  When we see these variables in
+      // this.ppt, they are "obviously" equal to this.
       Iterator controllers = ppt.controlling_ppts.iterator();
       while (controllers.hasNext()) {
         PptTopLevel controller = (PptTopLevel) controllers.next();
@@ -929,8 +937,12 @@ public final class VarInfo
       VarInfo vi = vis[i];
       if (vi.equal_to != this)
         continue;
-      if (controlling_equalTo.contains(vi.name))
+      if (controlling_equalTo.contains(vi.name)) {
+	if (PrintInvariants.debugPrintEquality.isDebugEnabled()) {
+	  PrintInvariants.debugPrintEquality.debug ("Obviously equal because of controlling ppt: " + vi.name.name());
+	}
         continue;
+      }
 
       // System.out.println("Considering " + vi.name);
 
@@ -973,7 +985,13 @@ public final class VarInfo
           if (! sansclass.isCanonical()) {
             // We will omit vi.
             VarInfo a = sansclass.equal_to;
-            VarInfo a_class = ppt.findVar(a.name.applyTypeOf());
+            VarInfo a_class;
+	    if (a.name instanceof VarInfoName.Prestate) {
+	      VarInfoName.Prestate a_name = (VarInfoName.Prestate) a.name;
+	      a_class = ppt.findVar(a_name.term.applyTypeOf());
+	    } else {
+	      a_class = ppt.findVar(a.name.applyTypeOf());
+	    }
             Assert.assert(a_class != null);
             Assert.assert(a_class.equal_to == this);
             continue;
@@ -1024,8 +1042,9 @@ public final class VarInfo
         VarInfo seq_object = ppt.findVar(seq_object_name);
 
         // First part of test is for Lisp output files; shouldn't happen in general
-        if (seq_object != null && ! seq_object.isCanonical())
+        if (seq_object != null && ! seq_object.isCanonical()) {
           continue;
+	}
       }
 
       // For esc_output and java_output, omit noting that varibles are unmodified.

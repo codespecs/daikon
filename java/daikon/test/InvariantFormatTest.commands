@@ -242,7 +242,7 @@ Goal (simplify): format_simplify class daikon.inv.unary.stringsequence.EltOneOfS
 daikon.inv.binary.twoScalar.IntEqual
 int int
 Goal (daikon): a == b
-Goal (java): a = b
+Goal (java): a == b
 Goal (esc): a == b
 Goal (ioa): a = b
 Goal (jml): a == b

@@ -157,7 +157,6 @@ public final class IntLessEqual
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
     return new IntGreaterEqual (ppt);
-
   }
 
   // Look up a previously instantiated IntLessEqual  relationship.
@@ -246,7 +245,6 @@ public final class IntLessEqual
   public boolean isExact() {
 
     return false;
-
   }
 
   // // Temporary, for debugging
@@ -455,7 +453,6 @@ public final class IntLessEqual
 //     }
 
     return false;
-
   } // isObviousImplied
 
 }

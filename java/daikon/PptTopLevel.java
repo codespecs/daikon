@@ -440,7 +440,7 @@ public class PptTopLevel
       // Alternately, and probably more usefully
       for (int i=0; i<result.size(); i++) {
         Global.debugDerive.debug
-	  ("  " + ((Derivation)result.elementAt(i)).getVarInfo().name);
+	  ("  " + ((Derivation)result.get(i)).getVarInfo().name.name());
       }
     }
     return result;
@@ -465,18 +465,24 @@ public class PptTopLevel
     BinaryDerivationFactory[] binary = binaryDerivations;
 
     if (Global.debugDerive.isDebugEnabled())
-      Global.debugDerive.debug("derive: vi_index_min=" + vi_index_min
-                         + ", vi_index_limit=" + vi_index_limit
-                         + ", unary.length=" + unary.length
-                         + ", binary.length=" + binary.length);
+      Global.debugDerive.debug("Deriving one pass for ppt " + this.name);
+      Global.debugDerive.debug("  vi_index_min=" + vi_index_min
+			       + ", vi_index_limit=" + vi_index_limit
+			       + ", unary.length=" + unary.length
+			       + ", binary.length=" + binary.length);
 
     Collection result = new ArrayList();
 
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
+      if (Global.debugDerive.isDebugEnabled()) {
+	Global.debugDerive.debug("Unary: trying to derive from " + vi.name.name());
+      }
       if (!worthDerivingFrom(vi)) {
         if (Global.debugDerive.isDebugEnabled()) {
-          Global.debugDerive.debug("Unary: not worth deriving from " + vi.name);
+          Global.debugDerive.debug("Unary: not worth deriving from " + vi.name.name());
+	  // [INCR] Global.debugDerive.debug("Canonicality is: " + vi.isCanonical());
+	  // [INCR] Global.debugDerive.debug("Equal_to: " + vi.equal_to.name.name());
         }
 	continue;
       }
@@ -505,7 +511,7 @@ public class PptTopLevel
       VarInfo vi1 = var_infos[i1];
       if (!worthDerivingFrom(vi1)) {
         if (Global.debugDerive.isDebugEnabled()) {
-          Global.debugDerive.debug("Binary first VarInfo: not worth deriving from " + vi1.name);
+          Global.debugDerive.debug("Binary first VarInfo: not worth deriving from " + vi1.name.name());
         }
 	continue;
       }
@@ -530,7 +536,9 @@ public class PptTopLevel
 	if (!worthDerivingFrom(vi2)) {
           if (Global.debugDerive.isDebugEnabled()) {
             Global.debugDerive.debug("Binary: not worth deriving from ("
-                               + vi1.name + "," + vi2.name + ")");
+                               + vi1.name.name() + "," + vi2.name.name() + ")");
+	    // [INCR] Global.debugDerive.debug("Canonicality is: " + vi2.isCanonical());
+	    // [INCR] Global.debugDerive.debug("Equal_to: " + vi2.equal_to.name.name());
           }
           continue;
         }
@@ -556,6 +564,9 @@ public class PptTopLevel
       Global.debugDerive.debug ("Number of derived variables at program point " + this.name + ": " + result.size());
     }
 
+    if (Global.debugDerive.isDebugEnabled()) {
+      Global.debugDerive.debug("Derived: " + result);
+      }
     Derivation[] result_array =
       (Derivation[]) result.toArray(new Derivation[result.size()]);
     return result_array;
@@ -1261,7 +1272,13 @@ public class PptTopLevel
               // There is a real problem if this arises, but I have
               // commented it out to avoid confusing users, and so we can
               // concentrate on version 3.
-              // System.out.println("Internal Daikon error: Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
+	      if (debugEqualTo.isDebugEnabled()) {
+		debugEqualTo.debug("Internal Daikon error: Variables not equal: " + var1.name +
+				   " (= " + var1.equal_to.name + "), " + var2.name + " (= " +
+				   var2.equal_to.name + ") [indices " + var1.varinfo_index +
+				   ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index +
+				   ", " + var2.equal_to.varinfo_index + "] at " + name);
+	      }
             }
             Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
             Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
@@ -1271,6 +1288,7 @@ public class PptTopLevel
         binary_view.clear_cache();
       }
     }
+    // Set equal_to for VarInfos that  aren't equal to anything but themselves
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
       if (vi.equal_to == null) {
@@ -1280,6 +1298,79 @@ public class PptTopLevel
         vi.equal_to = vi;
       }
     }
+
+    // Now, remap the equal_to fields so that they point to
+    // interesting VarInfos, if possible.  For this part,
+    // "interesting" is when isDerivedParamAndUninteresting returns
+    // false.  If a canonical VarInfo is interesting, then we do
+    // nothing.  If it's uninteresting and all of the variables it
+    // equals to are uninteresting, then also do nothing.  If it's
+    // unintersting and one of its equals are intersting, change the
+    // equal_to fields of all the variables in that equivalence set to
+    // the interesting variable.  This may be repeated for derived
+    // variables.  However, since isDerivedParamAndUninteresting is
+    // cached in VarInfo, we should remember that param checking
+    // should be "stable" when new VarInfos appear.  This doesn't seem
+    // to be a problem.
+
+    if (ppt_name.isExitPoint()) {
+      Map equalMap = new HashMap();  // Map of canonicals to lists of non canonicals
+      for (int i = 0; i < var_infos.length; i++) {
+	VarInfo vi = var_infos[i];
+	if (vi.isCanonical()) {
+	  if (equalMap.containsKey(vi)) {
+	    // Do nothing because case 4 handles this
+	  } else {
+	    // Case 2
+	    List newList = new ArrayList();
+	    newList.add(vi);
+	    equalMap.put (vi, newList);
+	  }
+	} else {
+	  VarInfo eq = vi.equal_to;
+	  if (equalMap.containsKey(eq)) {
+	    // Case 3
+	    List oldList = (List) equalMap.get(eq);
+	    oldList.add (vi);
+	  } else {
+	    List newList = new ArrayList();
+	    // Case 4
+	    newList.add (eq);
+	    newList.add (vi);
+	    equalMap.put (eq, newList);
+	  }
+	}
+
+      }
+      if (debugEqualTo.isDebugEnabled()) {
+	debugEqualTo.debug ("Doing equality mapping for " + this.name);
+	debugEqualTo.debug ("mapping: " + equalMap);
+
+      }
+
+      for (Iterator i = equalMap.keySet().iterator(); i.hasNext(); ) {
+	VarInfo canonical = (VarInfo) i.next();
+	if (canonical.isDerivedParamAndUninteresting()) {
+	  List equalTo = (List) equalMap.get(canonical);
+	  VarInfo viInteresting = null;
+	  for (Iterator iterEquals = equalTo.iterator(); iterEquals.hasNext(); ) {
+	    VarInfo vi = (VarInfo) iterEquals.next();
+	    if (!vi.isDerivedParamAndUninteresting()) {
+	      viInteresting = vi;
+	      break;
+	    }
+	  }
+	  if (viInteresting != null) {
+	    for (Iterator iterEquals = equalTo.iterator(); iterEquals.hasNext(); ) {
+	      VarInfo vi = (VarInfo) iterEquals.next();
+	      vi.equal_to = viInteresting;
+	    }
+	  }
+	}
+      }
+    }
+
+
   }
   */ // ... [INCR]
 
@@ -2239,7 +2330,7 @@ public class PptTopLevel
   ///
 
   /**
-   * Cached (VarInfoName) parameters
+   * Cached VarInfoNames that are parameter variables.
    **/
   private Set paramVars = null;
 

@@ -178,7 +178,7 @@ public final class Runtime {
 	    {
 	      dtrace.println();
               // this lets us know we didn't lose any
-	      dtrace.println("# EOF due to daikon.Runtime.addShutdownHook");
+	      dtrace.println("# EOF (added by daikon.Runtime.addShutdownHook)");
 	      dtrace.close();
 	    }
           }

@@ -63,15 +63,17 @@ public final class VarInfoAux
    **/
   public static final String HAS_NULL = "hasNull";
 
-  public static final String TRUE = "true".intern();
+  public static final String TRUE = "true";
+  public static final String FALSE = "false";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
    * Elements are separated by commas, in the form:
-   * <li> x = a, y = b
-   * Parse rules do not allow for quoted elements.  White space
-   * to the left and right of keys and values do not matter, but
-   * within
+   *
+   * <li> x = a, "a key" = "a value"
+   * <br>
+   * Parse allow for quoted elements.  White space to the left and
+   * right of keys and values do not matter, but inbetween does.
    **/
   public static VarInfoAux parse (String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
@@ -105,14 +107,14 @@ public final class VarInfoAux
 
       debug.debug ("Token info: " + tokInfo + " " + token);
 
-      if (token == ",".intern()) {
+      if (token == ",") {
 	if (!seenEqual)
 	  throw new IOException ("Aux option did not contain an '='");
 	map.put (key.intern(), value.intern());
 	key = "";
 	value = "";
 	seenEqual = false;
-      } else if (token == "=".intern()) {
+      } else if (token == "=") {
 	if (seenEqual)
 	  throw new IOException ("Aux option contained more than one '='");
 	seenEqual = true;
@@ -186,12 +188,12 @@ public final class VarInfoAux
   private VarInfoAux () {
     HashMap defaultMap = new HashMap();
     // The following are default values.
-    defaultMap.put (HAS_DUPLICATES, "true");
-    defaultMap.put (HAS_ORDER, "true");
-    defaultMap.put (HAS_SIZE, "true");
-    defaultMap.put (HAS_NULL, "true");
-    defaultMap.put (NULL_TERMINATING, "true");
-    defaultMap.put (IS_PARAM, "false");
+    defaultMap.put (HAS_DUPLICATES, TRUE);
+    defaultMap.put (HAS_ORDER, TRUE);
+    defaultMap.put (HAS_SIZE, TRUE);
+    defaultMap.put (HAS_NULL, TRUE);
+    defaultMap.put (NULL_TERMINATING, TRUE);
+    defaultMap.put (IS_PARAM, FALSE);
     this.map = defaultMap;
     this.isInterned = false;
   }
@@ -241,6 +243,7 @@ public final class VarInfoAux
     if (theMap.containsKey(this)) {
       result = (VarInfoAux) theMap.get(this);
     } else {
+      // Intern values in map
       theMap.put (this, this);
       result = this;
       this.isInterned = true;
@@ -251,7 +254,7 @@ public final class VarInfoAux
 
   public boolean getFlag(String key) {
     Object value = map.get(key);
-    if (value == TRUE) {
+    if (value.equals(TRUE)) {
       return true;
     } else {
       return false;

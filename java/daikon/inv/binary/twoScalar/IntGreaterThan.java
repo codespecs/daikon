@@ -157,7 +157,6 @@ public final class IntGreaterThan
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
     return new IntLessThan (ppt);
-
   }
 
   // Look up a previously instantiated IntGreaterThan  relationship.
@@ -246,7 +245,6 @@ public final class IntGreaterThan
   public boolean isExact() {
 
     return false;
-
   }
 
   // // Temporary, for debugging
@@ -449,7 +447,6 @@ public final class IntGreaterThan
 //     }
 
     return false;
-
   } // isObviousImplied
 
 }

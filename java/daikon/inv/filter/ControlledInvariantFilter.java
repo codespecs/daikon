@@ -23,25 +23,37 @@ class ControlledInvariantFilter extends InvariantFilter {
   // to be printed.
   boolean shouldDiscardInvariant( Invariant invariant ) {
     /* // [INCR]
-    if (invariant.find_controlling_invariants().size() == 0)
-      return false;
+    //if (invariant.find_controlling_invariants().size() == 0)
+    //  return false;
 
-    // Get all the controlling invariants, not just the parent ones.
-    Vector controllingInvariants = getAllControllingInvariants( invariant );
-    //    if (invariant.find_controlling_invariants().size() != controllingInvariants.size())
-    //      System.out.println( "****   " + invariant.find_controlling_invariants().size() + " -> " + controllingInvariants.size() + "   ****");
-    for (int i=0; i < controllingInvariants.size(); i++) {
-      Invariant controllingInvariant = (Invariant) controllingInvariants.get( i );
-      // Temporarily turn off Simplify filter.  If a controlling invariant is
-      // eliminated by Simplify, then the controlled invariant will also be
-      // eliminated.  Not recursively calling Simplify saves a lot of time.
-      boolean simplifyFilterOn = filters.getFilterSetting( SimplifyFilter.description );
-      filters.changeFilterSetting( SimplifyFilter.description, false );
-      boolean shouldKeep = filters.shouldKeep( controllingInvariant );
-      filters.changeFilterSetting( SimplifyFilter.description, simplifyFilterOn );
-      if (shouldKeep)
-	return true;
+    //This is a hack to make this filter behave more like
+    //PrintInvariants.  Basically, isWorthPrinting performs a (better)
+    //controlled check.  However, it also does some stuff that really
+    //shouldn't be in here, so this should be looked at a gain later.
+    if (!invariant.isWorthPrinting()) {
+      return true;
     }
+    else {
+      return false;
+    }
+
+//      // Get all the controlling invariants, not just the parent ones.
+//      Vector controllingInvariants = getAllControllingInvariants( invariant );
+//      //    if (invariant.find_controlling_invariants().size() != controllingInvariants.size())
+//      //      System.out.println( "****   " + invariant.find_controlling_invariants().size() + " -> " + controllingInvariants.size() + "   ****");
+//      for (int i=0; i < controllingInvariants.size(); i++) {
+//        Invariant controllingInvariant = (Invariant) controllingInvariants.get( i );
+//        // Temporarily turn off Simplify filter.  If a controlling invariant is
+//        // eliminated by Simplify, then the controlled invariant will also be
+//        // eliminated.  Not recursively calling Simplify saves a lot of time.
+//        boolean simplifyFilterOn = filters.getFilterSetting( SimplifyFilter.description );
+//        filters.changeFilterSetting( SimplifyFilter.description, false );
+//        boolean shouldKeep = filters.shouldKeep( controllingInvariant );
+//        filters.changeFilterSetting( SimplifyFilter.description, simplifyFilterOn );
+//        if (shouldKeep)
+//  	return true;
+//      }
+//      return false;
     */
     return false;
   }

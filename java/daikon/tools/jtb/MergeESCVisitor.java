@@ -605,9 +605,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
       varname += "[].class";
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // This happens, for example, for final static vars (see
-        // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
-        System.out.println("Variable not found: " + varname + " at " + ppt);
+        // This happens, for example, for .class variables
+        System.out.println("Warning: MergeESC: Variable not found: " + varname + " at " + ppt);
       } else {
         Assert.assert(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);

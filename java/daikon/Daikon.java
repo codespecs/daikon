@@ -105,11 +105,6 @@ public final class Daikon {
   // public static OutputFormat output_style = OutputFormat.ESCJAVA;
   // public static OutputFormat output_style = OutputFormat.SIMPLIFY;
 
-  /**
-   * Whether we are doing output for testing
-   **/
-  public static boolean test_output = false;
-
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
 
@@ -363,7 +358,7 @@ public final class Daikon {
 	  output_style = OutputFormat.IOA;
 	} else if (test_ioa_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.IOA;
-	  test_output = true;
+	  PrintInvariants.test_output = true;
 	} else if (java_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.JAVA;
 	} else if (jml_output_SWITCH.equals(option_name)) {

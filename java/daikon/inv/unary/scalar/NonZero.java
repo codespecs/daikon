@@ -162,6 +162,10 @@ public class NonZero
     if (var.name.name() == "this") { // interned
       return true;
     }
+    if (var.name instanceof VarInfoName.Prestate &&
+	((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
+      return true;
+    }
 
     // System.out.println("isObviousImplied: " + format());
 

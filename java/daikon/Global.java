@@ -184,6 +184,9 @@ public final class Global {
   /** Debug tracer for debugging invariant suppression **/
   public static Category debugSuppress = Category.getInstance("daikon.suppress");
 
+  /** Debug tracer for debugging invariant printing **/
+  public static Category debugPrint = Category.getInstance("daikon.print");
+
 
   //public final static boolean debugStatistics = false;             Use Global.debugStatistics
   //public final static boolean debugRead = false;                   Use FileIO.debugRead

@@ -155,7 +155,6 @@ public final class IntNonEqual
 
     // we don't care if things swap; we have symmetry
     return this;
-
   }
 
   // Look up a previously instantiated IntNonEqual  relationship.
@@ -246,7 +245,6 @@ public final class IntNonEqual
   public boolean isExact() {
 
     return false;
-
   }
 
   // // Temporary, for debugging
@@ -449,7 +447,6 @@ public final class IntNonEqual
 //     }
 
     return false;
-
   } // isObviousImplied
 
 }

@@ -76,6 +76,11 @@ public final class FileIO {
 
 /// Variables
 
+  // I'm not going to make this static because then it doesn't get restored
+  // when reading from a file; and it won't be *that* expensive to add yet
+  // one more slot to the Ppt object.
+  // static HashMap entry_ppts = new HashMap(); // maps from Ppt to Ppt
+
   // This hashmap maps every program point to an array, which contains the
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been

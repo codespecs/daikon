@@ -264,7 +264,6 @@ public final class INTEQUAL
       String comparator = EQUALSstring;
 #if defined(EQUAL)
       if (format == OutputFormat.IOA) comparator = "=";
-      if (format == OutputFormat.JAVA) comparator = "=";
 #elif defined(NONEQUAL)
       if (format == OutputFormat.IOA) comparator = "~=";
 #endif

@@ -2259,7 +2259,7 @@ public abstract class VarInfoName
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i=0; i < roots.length; i++) {
 	if (QuantHelper.debug.isDebugEnabled()) {
-	  QuantHelper.debug.debug ("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
+	  QuantHelper.debug.debug("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
 	}
 
 	helper[i] = new QuantifierVisitor(roots[i]);
@@ -2528,13 +2528,13 @@ public abstract class VarInfoName
     }
 
 
-    // <root*> -> <string string*>
+    // <root*> -> <string string* string>
     /**
      * Given a list of roots, return a String array where the first
      * element is a ESC-style quantification over newly-introduced
      * bound variables, the last element is a closer, and the other
      * elements are esc-named strings for the provided roots (with
-     * sequenced subscripted by one of the new bound variables).
+     * sequences subscripted by one of the new bound variables).
      **/
     public static String[] format_esc(VarInfoName[] roots) {
       return format_esc(roots, false);
@@ -2734,7 +2734,6 @@ public abstract class VarInfoName
 
       return result;
     }
-
 
     // This set of functions are helper functions to the quantification function.
 

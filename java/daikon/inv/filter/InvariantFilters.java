@@ -42,6 +42,7 @@ public class InvariantFilters {
 
   public InvariantFilters() {
     addPropertyFilter( new NonCanonicalVariablesFilter());
+    addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());
     addPropertyFilter( new ObviousFilter());
     addPropertyFilter( new FewModifiedSamplesFilter());
