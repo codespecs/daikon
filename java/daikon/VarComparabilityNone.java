@@ -2,6 +2,7 @@ package daikon;
 
 /**
  * Used when no VarComparability information is available (in the .dtrace file).
+ * Every variable is considered comparable to every other variable.
  **/
 public final class VarComparabilityNone extends VarComparability implements java.io.Serializable {
 

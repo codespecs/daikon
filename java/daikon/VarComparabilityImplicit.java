@@ -1,6 +1,16 @@
 package daikon;
 
 /**
+ * A VarComparabilityImplicit is an arbitrary integer, and comparisons
+ * succeed exactly if the two integers are equal, except that negative
+ * integers compare equal to everything.  This is called "implicit" because
+ * the comparability objects do not refer to one another or refer directly
+ * to variables; whether two variables are comparable depends on their
+ * comparability objects.  Implicit comparability has the flavor of types
+ * in programming languages.<p>
+ *
+ * It would be nice to permit this to take arbitrary strings instead of
+ * arbitrary integers.
  **/
 public final class VarComparabilityImplicit extends VarComparability implements java.io.Serializable {
   private int index;
@@ -39,4 +49,3 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return type1.index < 0 || type2.index < 0 || type1.index == type2.index;
   }
 }
-

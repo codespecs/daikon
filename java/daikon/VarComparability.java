@@ -6,28 +6,25 @@ package daikon;
 // language; for instance, C uses "*array" in place of "array[]-element".
 
 
+/**
+ * VarComparability types have three formats: implicit, explicit, and none.<p>
+ *
+ * A VarComparabilityImplicit is an arbitrary string, and comparisons
+ * succeed exactly if the two VarComparabilitys are identical.<p>
+ *
+ * A VarComparabilityExplicit is a list of other variable names, and
+ * comparisons succeed if each variable is in the list of the other.<p>
+ *
+ * VarComparabilityNone means no comparability information was provided.<p>
+ **/
 public abstract class VarComparability {
-
-  // VarComparability types have two formats.
-  //  * An implicit VarComparability is an arbitrary string, and
-  //    comparisons succeed exactly if the two VarComparabilitys are identical.
-  //    For now, we don't support implicit VarComparabilitys.  However, tests
-  //    over programming language types look like that (so I could set the
-  //    VarComparabilitys to the programming language types and use the
-  //    implicit format).
-  //  * An explicit VarComparability is a list of other variable names, and
-  //    comparisons succeed if each variable is in the list of the other.
-
 
   final static int NONE = 0;
   final static int IMPLICIT = 1;
   final static int EXPLICIT = 2;
-  // // Setting this is temporary; eventually we will read it from the decl file.
-  // static int format = EXPLICIT;
 
   static VarComparability parse(int format, String rep, ProglangType vartype) {
     if (format == NONE) {
-      // Should I return a dummy object that responds to VarComparability methods?
       return VarComparabilityNone.parse(rep, vartype);
     } else if (format == IMPLICIT) {
       return VarComparabilityImplicit.parse(rep, vartype);
@@ -39,7 +36,6 @@ public abstract class VarComparability {
     }
   }
 
-  // Can't make static methods abstract, so have it throw an error
   public static VarComparability makeAlias(VarInfo vi) {
     return vi.comparability.makeAlias(vi.name);
   }
@@ -48,16 +44,20 @@ public abstract class VarComparability {
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
+  public final static String lineSep = System.getProperty("line.separator");
+
   static boolean compatible(VarInfoName name1, VarComparability type1,
                             VarInfoName name2, VarComparability type2) {
 
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities " +
-                      "of different types");
+                      "of different types: " + lineSep
+                      + "    " + name1 + " " + type1 + linesep
+                      + "    " + name2 + " " + type2);
 
     if (type1 instanceof VarComparabilityNone) {
       return VarComparabilityNone.compatible
-        (name1,(VarComparabilityNone)type1,
+        (name1, (VarComparabilityNone)type1,
          name2, (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
 	return VarComparabilityImplicit.compatible
@@ -73,4 +73,3 @@ public abstract class VarComparability {
   }
 
 }
-

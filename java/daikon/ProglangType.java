@@ -440,6 +440,11 @@ public final class ProglangType implements java.io.Serializable {
             && (! (base == BASE_BOOLEAN)));
   }
 
+  /**
+   * Return true if these two types can be sensibly compared to one
+   * another.  For instance, int is comparable to long, but boolean is not
+   * comparable to float, and int is not comparable to int[].
+   **/
   public boolean comparable(ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;

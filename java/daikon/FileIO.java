@@ -140,7 +140,7 @@ public final class FileIO {
         } else if (line.equals("explicit")) {
           varcomp_format = VarComparability.EXPLICIT;
         } else {
-          throw new Error("Bad VarComparability: " + line);
+          throw new Error("Unrecognized VarComparability: " + line);
         }
         continue;
       }

@@ -9,6 +9,17 @@ import utilMDE.*;
 
 
 /**
+ * A VarComparabilityExplicit is a list of other variable names, and
+ * comparisons succeed if each variable is in the list of the other.  It is
+ * called explicit because a given variable's comparability object
+ * explicitly lists all other variables that are comparable to it.<p>
+ *
+ * <!-- I *think* this description is accurate. -->
+ * Explicit VarComparability objects may also be "aliases".  This permits
+ * one variable name to masquerade as another.  For instance, if x is
+ * comparable to a, b, and c, then d can be added to the list by making its
+ * comparability object an alias for (say) a.<p>
+ *
  * A (explicit) VarComparable is:
  * <ul>
  *   <li>a list of names of comparable variables (in the "base" slot).
@@ -32,7 +43,9 @@ public final class VarComparabilityExplicit extends VarComparability implements 
   // All strings that appear in VarComparabilityExplicit objects are interned.
 
   String[] base;
-  String[][] indices;
+  String[][] indices;           // indices[0] is a list of the names of
+                                // variables comparable to the first index
+                                // of this array.
   int dimensions;		// indicates how many of the indices are in use;
 				// there may be more indices than this
   VarInfoName alias;
@@ -70,8 +83,8 @@ public final class VarComparabilityExplicit extends VarComparability implements 
   }
 
   /**
-   * A special variable name for describing indicies.  This is a bit
-   * of a hack, but isn't really so bad in retrospect.
+   * A special variable name for describing indicies.
+   * This is a bit of a hack, but isn't really so bad in retrospect.
    **/
   public static class IndexVar extends VarInfoName {
     public final VarInfoName base;
@@ -133,8 +146,6 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
     } else {
       // scalar variable
-      // would this be faster?
-      //   ((rep.charAt(0) == '(') && (rep.charAt(rep.length-1) == '('))
       if (rep.startsWith("(") && rep.endsWith(")")) {
 	rep = rep.substring(1, rep.length()-1);
       }
@@ -190,19 +201,20 @@ public final class VarComparabilityExplicit extends VarComparability implements 
       return false;
     int dims = type1.dimensions;
 
-    VarInfoName name1 = name1_, name2 = name2_;
+    VarInfoName name1 = name1_, name2 = name2_; // for debugging
     if (type1.alias != null)
       name1 = type1.alias;
     if (type2.alias != null)
       name2 = type2.alias;
 
+    // Consistency check:
+    // Either both objects refer to the other name, or neither does.
     Assert.assert((ArraysMDE.indexOf(type1.base, name2) == -1)
 		  == (ArraysMDE.indexOf(type2.base, name1) == -1));
     if (ArraysMDE.indexOf(type1.base, name2) == -1)
       return false;
 
-    // Check each dimension of array
-
+    // The base matches.  Now check each dimension, if an array.
     for (int i=0; i<dims; i++) {
       VarInfoName indexvar1 = new IndexVar(name1, i);
       VarInfoName indexvar2 = new IndexVar(name2, i);
