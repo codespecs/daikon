@@ -334,7 +334,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
-		// anything mod 0 is undefined
+    // anything mod 0 is undefined
         // (r == arg1) && (arg1 < arg2) && (arg2 != 0) && (r >= 0) ==> r = arg1 % arg2
         new NISuppression (result_eq_arg1, arg1_lt_arg2, arg2_ne_0, result_ge_0, suppressee),
 
