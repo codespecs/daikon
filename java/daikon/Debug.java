@@ -43,7 +43,9 @@ public class Debug {
     = {
       // "PptSliceEquality",
       // "PptTopLevel",
-      // "PptSlice2",
+      // "PptSlice",
+      // "DynamicConstants",
+      // "Equality",
       // "LowerBound",
       // "UpperBound",
       // "LinearBinary",
@@ -56,20 +58,23 @@ public class Debug {
       // "OneOfSequence",
       // "IntLessEqual",
       // "IntGreaterEqual",
-      //  "IntLessThan",
-      //  "IntGreaterThan",
-        "DynamicConstants",
+      // "IntLessThan",
+       "IntGreaterThan",
       // "IntNonEqual",
       // "Member",
       // "FunctionBinary"
       // "EltNonZero",
-      //  "SubSet",
-      //  "SuperSet",
-      //"EltOneOf",
-      //  "Bound",
-      "SeqSeqIntLessThan",
-      "SeqSeqIntGreaterThan",
-    };
+      // "SubSet",
+      // "SuperSet",
+      // "EltOneOf",
+      // "Bound",
+      // "SeqSeqIntLessThan",
+      // "SeqSeqIntGreaterThan",
+      // "OneOf"
+      // "StringComparison",
+      // "StringLessThan",
+      // "StringGreaterThan",
+   };
 
   /**
    * Restrict function binary prints to the specified method.  Implementation
@@ -92,17 +97,8 @@ public class Debug {
   public static String[] debugTrackPpt
     = {
       // "DataStructures.StackAr.makeEmpty()V:::ENTER",
-      // "DataStructures.StackAr.top():::EXIT74",
-      // "std.flex_alloc(unsigned;)void *:::EXIT1",
-      // "DataStructures.StackAr.makeEmpty():::EXIT",
-      // "DataStructures.StackAr.StackAr(int):::EXIT",
-      // "DataStructures.DisjSets.unionDisjoint(int, int):::EXIT",
-      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
-      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT354",
-      // "PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT",
-      //  "MapQuick1.StreetNumberSet.contains"
-      // "misc.Suppress02.f",
-      "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271",
+      // "GLOBAL",
+      "std.new_job(int;)int:::EXIT",
     };
 
   /**
@@ -117,31 +113,9 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
       // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
-      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
-      // {"size(this.theArray[])", "orig(size(this.theArray[]))"},
-      // { "argSTAT_BUF.st_mtime" }
-      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack)+1..])"},
-      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack+1)..])"},
-      // {"::printstats"},
-      // {"::yy_last_accepting_state"},
-      // {"size", "size", "size" },
-      // {"this.theArray[0..this.topOfStack]"},
-      // {"orig(this.topOfStack)", "size(this.theArray[])-1"},
-      // {"orig(this.s[post(root1)])", "orig(this.s[root1])"},
-      // {"orig(this.s[])", "orig(this.s[])" },
-      // {"orig(this.s[])"},
-      // {"root1", "orig(root1)"}
-      // {"this.numer", "this.denom"},
-      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
-      // {"::C_plus_plus", "::syntaxerror", "::numprots"}
-      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
-      // {"ts.wrapped[return]"},
-      // {"size(this.begins[])", "size(this.ends[])", "size(this.begins[])-1"},
-      // {"n"},
-      // {"size(this.theArray[])", "size(this.theArray2[])-1"},
-      {"this.begins[]", "this.ends[]"},
+      // {"::performance_report", "ds"},
+      {"::next_pid", "orig(::next_pid)"},
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -264,9 +238,11 @@ public class Debug {
       System.out.println ("ppt = null");
     if (vis == null)
       System.out.println ("vis = null");
-    for (int i = 0; i < vis.length; i++)
-      if (vis[i] == null)
-        System.out.println ("vis[" + i + "] == null");
+    else {
+      for (int i = 0; i < vis.length; i++)
+        if (vis[i] == null)
+          System.out.println ("vis[" + i + "] == null");
+    }
     cache_match = class_match (c) && ppt_match (ppt) && var_match (vis);
   }
 
@@ -515,7 +491,7 @@ public class Debug {
    * Returns whether or not the specified class matches the classes being
    * tracked
    */
-  private static boolean class_match (Class inv_class) {
+  public static boolean class_match (Class inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
       return (strContainsElem (inv_class.getName(), debugTrackClass));
@@ -526,7 +502,7 @@ public class Debug {
   /**
    * Returns whether onot the specified ppt matches the ppts being tracked
    */
-  private static boolean ppt_match (Ppt ppt) {
+  public static boolean ppt_match (Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
       return (strContainsElem (ppt.name(), debugTrackPpt));
@@ -540,10 +516,12 @@ public class Debug {
    * are not the leader of their equality sets
    */
 
-  private static boolean var_match (VarInfo vis[]) {
+  public static boolean var_match (VarInfo vis[]) {
 
     if (debugTrackVars.length == 0)
       return (true);
+    if (vis == null)
+      return (false);
 
     boolean match = false;
 
@@ -572,7 +550,7 @@ public class Debug {
             evars = vis[k].equalitySet.getVars();
 
           // If there is an equality set
-          if (evars != null) {
+          if ((evars != null) && vis[k].isCanonical()) {
 
             // Loop through each variable in the equality set
             for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
@@ -610,13 +588,11 @@ public class Debug {
   /**
    * Looks for an element in arr that is a substring of str.
    */
-
   private static boolean strContainsElem (String str, String[] arr) {
 
     for (int i = 0; i < arr.length; i++) {
       if (str.indexOf (arr[i]) >= 0)
         return (true);
-
     }
     return (false);
   }
@@ -646,6 +622,26 @@ public class Debug {
   }
 
   /**
+   * Returns a string containing the integer variables and their
+   * values
+   */
+  public static String int_vars (PptTopLevel ppt, ValueTuple vt) {
+
+    String out = "";
+
+    for (int i = 0; i < ppt.var_infos.length; i++) {
+      VarInfo v = ppt.var_infos[i];
+      if (!v.isCanonical())
+        continue;
+      if (v.file_rep_type != ProglangType.INT)
+        continue;
+      out += v.name.name() + "=" + toString (v.getValue(vt))
+        + " [" + vt.getModified(v) + "]: ";
+    }
+    return out;
+  }
+
+  /**
    * Returns a string containing the variable values for any variables
    * that are currently being tracked in ppt.  The string is of the
    * form 'v1 = val1: v2 = val2, etc.
@@ -669,6 +665,8 @@ public class Debug {
               out += " (missing)";
             if (v.missingOutOfBounds())
               out += " (out of bounds)";
+            if (!v.isCanonical())
+              out += " (leader=" + v.canonicalRep().name.name() + ")";
             // out += " mod=" + mod;
             out += ": ";
           }
