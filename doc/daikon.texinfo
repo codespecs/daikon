@@ -460,7 +460,7 @@ wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS.  If you desire such
 access, send email to the
-@email{daikon-developers@@pag.lcs.mit.edu} mailing list..
+@email{daikon-developers@@pag.lcs.mit.edu} mailing list.
 
 You may wish to subscribe to one of the mailing lists (@pxref{Mailing
 lists}), in order to be notified of new releases or join discussions
@@ -2029,7 +2029,12 @@ the method @code{public static void main(String[] args)}.
 @subsection Command line options for daikon.pl
 
 @table @option
-@item -o
+@item -i @var{file}
+@item --instrument @var{file}
+Only instrument FILE.  Can be specified multiple times.
+Otherwise, all files that are used by the main file are instrumented.
+
+@item -o @var{file}
 @item --output @var{file}
 Save invariants in @file{@var{file}.inv} and source in
 @file{@var{file}.src.tar.gz}.  If no name 
@@ -2038,6 +2043,18 @@ is given, a name is automatically generated and used.
 @item -t
 @item --textfile
 Save a textual listing of invariants to a @file{.txt} file.
+
+@item -n
+@item --nogui
+Create the invariants file (and @file{.txt} file,
+if @option{-t} is given), but do not start the Tree GUI.
+
+@item --daikonarg @var{arg}
+Supply additional argument(s) to Daikon proper.
+Can be specified multiple times.
+Warning:  be careful with quoting, as the argument is supplied directly
+to the shell and may be viewed as multiple arguments or reinterpreted
+(which may or may not be what you want).
 
 @item -v
 @item --verbose
@@ -2049,10 +2066,20 @@ Remove files left over from an interrupted session before starting.
 Should be used only when @code{daikon.pl} detects left-over files and instructs
 you to use this option.
 
-@item -n
-@item --nogui
-Create the invariants file (and @file{.txt} file,
-if @option{-t} is given), but do not start the Tree GUI.
+@item --nocleanup
+Do not remove temporary files when exiting.
+This option is intended for debugging.
+
+@item -s
+@item --src
+Make an archive of the source code for later reference.  All the code
+that is instrumented will be recorded in the compressed tarfile
+@file{@var{file}.src.tar.gz}, where @var{file} is the name that was
+supplied via the @option{-o} or @option{--output} arguments.
+
+@item -d
+@item --debug
+Print extra debugging information.
 @end table
 
 
@@ -2968,10 +2995,10 @@ is @code{null} on a particular execution of a program point, then
 parameter.
 
 @item +daikon_functions
-Produce data trace output at function entry/exit (default).
+Produce data trace output at procedure entry/exit (default).
 
 @item -daikon_functions
-Do not produce data trace output at function entry/exit.
+Do not produce data trace output at procedure entry/exit.
 
 @item +daikon_classes
 Produce data trace output for class invariants (default).
@@ -2987,26 +3014,37 @@ Do not produce data trace output for class invariants.
 @c Do not produce data trace output for loop invariants (default).
 
 @item -daikon_includeonly=@var{string}
-Only produce trace output for matching classes/functions. Cannot be used
-in conjunction with @option{-daikon_omit}. May only be supplied once.
+Only produce trace output for matching classes/procedures. Cannot be used
+in conjunction with @option{-daikon_omit}.  May only be supplied once.
 The argument provided must be a regex (and be surrounded by forward
-slashes on both sides). Note that if a class does not match the includeonly 
-regexp, then all functions or methods within that class will automatically
-be omitted as well.  To instrument only method bar of class Foo, one
-possible command is:
+slashes on both sides).
+
+If the the regular expression does not match the name of a particular
+class, then that class is omitted entirely, along with all procedures
+within it.  Thus, the @option{-daikon_includeonly} flag does not cause
+output for exactly the procedures that the @option{-daikon_omit} flag
+omits, with the same argument.  For instance, suppose that class C
+contains procedures foo and bar.  Then @option{-daikon_omit=bar} would
+cause foo to be instrumented, but @option{-daikon_includeonly=bar}
+would cause nothing to be instrumented, because regular
+expression``bar'' does not match the class name C, so no part of C
+would be further considered.
+
+To instrument only method bar of class C, one possible command is:
 
 @example
-dfej -daikon_includeonly='/Foo$|Foo.bar/' Foo.java
+dfej -daikon_includeonly='/C$|C.bar/' Foo.java
 @end example
 
+
 @item -daikon_omit=@var{string}
-Do not produce data trace output for matching classes/functions.  This
+Do not produce data trace output for matching classes/procedures.  This
 reduces the size of the data trace file and also may make the
 instrumented program run faster, since it need not output those variables.
 
 The @option{-daikon_omit} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
-if its class, fully qualified function name, or complete program point
+if its class, fully qualified procedure name, or complete program point
 name exactly matches one of the omitting criteria.
 
 For example, to avoid detecting invariants over an iterator class, you
@@ -3195,7 +3233,7 @@ dfej Foo.java Bar.java
 @noindent
 the instrumented versions of @file{Foo.java} and @file{Bar.java} output
 information about all Foo objects (including Foo objects that are
-components of Bar objects, that are arguments to Bar functions, etc.),
+components of Bar objects, that are arguments to Bar procedurees, etc.),
 and likewise for Bar objects.
 
 After
@@ -3204,8 +3242,8 @@ dfej Foo.java
 dfej Bar.java
 @end example
 @noindent
-the same functions (all those in the @file{Foo} and @file{Bar} classes)
-are instrumented, but in Foo functions, no detail is provided
+the same procedures (all those in the @file{Foo} and @file{Bar} classes)
+are instrumented, but in Foo procedures, no detail is provided
 about the structure of any Bar objects that might appear.  In other
 words, the instrumenter assumes that the only classes instrumented (and
 about which information is desired) are those presented to it on the
@@ -3464,7 +3502,7 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @item --tracefilename=@var{filename}
 Specifies the default name for the trace output (@file{.dtrace}) file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
-the instrumented program file that contains the main() function).
+the instrumented program file that contains the main() procedure).
 A relative filename is interpreted with respect
 to the current directory at runtime, not at compile time.
 If the DTRACEFILE environment
@@ -3546,7 +3584,7 @@ Indicates that the next file (only) should not produce @file{.dtrace}
 file output (@pxref{Instrumentation scope}).
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
 and each has its own header file, but you don't want to instrument the
-functions defined in @file{file2.c}, you would instrument as follows:
+procedures defined in @file{file2.c}, you would instrument as follows:
 @example
   dfec file1.c -l file2.c file1.h file2.h
 @end example
@@ -3880,7 +3918,7 @@ this problem, see @ref{Memory tracking in libraries}.
 @item
 If there are calls from uninstrumented code to instrumented code, your
 program will not link, because the instrumented code is C++ and the
-uninstrumented code is C@.  If certain functions are called from
+uninstrumented code is C@.  If certain procedures are called from
 uninstrumented code (an example is @code{usage} in @file{wc.c}), then
 you can place
 @example
@@ -3889,7 +3927,7 @@ extern "C"
 #endif
 @end example
 @noindent
-in front of the function definition (and declaration).
+in front of the procedure definition (and declaration).
 This will not affect calls from within the file, nor will it affect
 compilation of the program, but it will enable dfec to process it.
 @end enumerate
@@ -4040,6 +4078,7 @@ compilers accept.
 @cindex prototypes, C
 @cindex protoize tool
 @cindex function declarations, C
+@cindex procedure declarations, C
 @cindex declaration formats, of C functions
 
 To convert K&R function declarations to ANSI/ISO prototypes, use the
