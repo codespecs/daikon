@@ -88,7 +88,8 @@ public class Runtime {
     // use java.lang.Object.hashCode rather than some overriding
     // version that might err, especially in a constructor.
     try {
-      ps.print(x.getClass().getName() + "@" + Integer.toHexString(x.hashCode()));
+      ps.print(x.hashCode());
+      // ps.print(x.getClass().getName() + "@" + Integer.toHexString(x.hashCode()));
     } catch (Throwable e) {
       // (new java.text.DateFormat()).hashCode() throws an Exception
       ps.print("error");

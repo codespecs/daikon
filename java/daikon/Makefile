@@ -2,7 +2,7 @@ JAVA_FILES := $(shell find . -name '*.java' -print)
 
 all:	all_via_daikon
 
-all_via_daikon:
+all_via_daikon:	Runtime.class
 	jikes -g +E +F Daikon.java
 
 all_directly: 
@@ -12,6 +12,9 @@ all_force:	all_directly
 
 all_javac:
 	javac -g ${JAVA_FILES}
+
+Runtime.class: Runtime.java
+	jikes -g +E +F Runtime.java
 
 # Wrong, becaue Daikon.class might be up to date even if other files aren't
 # Daikon.class:

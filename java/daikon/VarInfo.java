@@ -14,8 +14,7 @@ public class VarInfo {
   public String name;		// interned
   public ProglangType type;	// as declared in the program
   public ProglangType rep_type;	// as written to the data trace file
-  // Turn this back into "VarComparability" if we ever need to support multiple types.  Or something.
-  public ExplicitVarComparability comparability; // in Python, this could also be a VarInfo
+  public VarComparability comparability; // in Python, this could also be a VarInfo
 				//   (meaning treat this variable like that one)
 
   // Obtaining values
@@ -73,7 +72,7 @@ public class VarInfo {
     // self.invariants = {}	// map from indices to multiple-arity invariants
   }
 
-  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, ExplicitVarComparability comparability_, Object constant_value_) {
+  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object constant_value_) {
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.
@@ -92,7 +91,7 @@ public class VarInfo {
     // equal_to = new Vector(3);
   }
 
-  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, ExplicitVarComparability comparability_) {
+  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_) {
     this(name_, type_, rep_type_, comparability_, null);
   }
 

@@ -53,7 +53,7 @@ public class SequenceScalarSubscript extends BinaryDerivation {
       + "[" + sclvar().name + index_shift_string + "]";
     ProglangType type = seqvar.type.elementType();
     ProglangType rep_type = seqvar.rep_type.elementType();
-    ExplicitVarComparability compar = var_info1.comparability.elementType();
+    VarComparability compar = var_info1.comparability.elementType();
     return new VarInfo(name, type, rep_type, compar);
   }
 

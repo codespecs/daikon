@@ -8,6 +8,18 @@ import java.util.*;
 
 public class Daikon {
 
+  // The two arguments to daikon.Daikon are a comma-separated list of
+  // declaration files, and a comma-separated list of data trace files.
+  //
+  // So you should be able to do
+  //
+  //   java daikon.Daikon a.decls,b.decls,c.decls  g.dtrace
+  //
+  // I realize this isn't the ideal user interface; I can change it if you
+  // like.  (For instance, it would probably be more convenient for you if you
+  // just supplied all the files on the command line and I inferred which was a
+  // declaration file and which was a trace file, right?)
+
   /**
    * Two arguments:  comma-separated list of declaration files,
    * comma-separated list of data trace files.

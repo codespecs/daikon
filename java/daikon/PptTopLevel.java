@@ -6,6 +6,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 
 import java.util.*;
+import com.oroinc.text.regex.*;
 
 import utilMDE.*;
 
@@ -223,6 +224,16 @@ class PptTopLevel extends Ppt {
     return PptTopLevel.entry_ppt(this, all_ppts);
   }
 
+  final static PatternMatcher re_matcher = Global.regexp_matcher;
+  public final static Pattern exit_tag_regexp;
+  static {
+    try {
+      exit_tag_regexp = Global.regexp_compiler.compile(FileIO.exit_tag + "[0-9]+$");
+    } catch (Exception e) {
+      throw new Error(e.toString());
+    }
+  }
+
   static PptTopLevel entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
 
     // Don't do this, because it returns a value for :::LOOP, etc.
@@ -233,9 +244,17 @@ class PptTopLevel extends Ppt {
     //   return null;
     // String entry_ppt_name = (fn_name + FileIO.enter_tag).intern();
 
-    if (!ppt.name.endsWith(FileIO.exit_tag))
+    // This isn't right because it doesn't catch :::EXIT0, etc.
+    // if (!ppt.name.endsWith(FileIO.exit_tag))
+    //   return null;
+    // String fn_name = ppt.name.substring(0, ppt.name.length() - FileIO.exit_tag.length());
+
+    if (!re_matcher.contains(ppt.name, exit_tag_regexp))
       return null;
-    String fn_name = ppt.name.substring(0, ppt.name.length() - FileIO.exit_tag.length());
+    MatchResult match = re_matcher.getMatch();
+    int match_begin = match.beginOffset(0);
+    String fn_name = ppt.name.substring(0, match_begin);
+
     String entry_ppt_name = (fn_name + FileIO.enter_tag).intern();
 
     return (PptTopLevel) all_ppts.get(entry_ppt_name);
@@ -253,7 +272,7 @@ class PptTopLevel extends Ppt {
       VarInfo vi = begin_vis[i];
       if (vi.isConstant() || vi.isDerived())
 	continue;
-      new_vis.add(new VarInfo(vi.name + "_orig", vi.type, vi.rep_type, ExplicitVarComparability.makeAlias(vi.name, vi.comparability)));
+      new_vis.add(new VarInfo(vi.name + "_orig", vi.type, vi.rep_type, vi.comparability.makeAlias(vi.name)));
     }
     addVarInfos(new_vis);
   }

@@ -28,7 +28,7 @@ public class SequenceMax extends UnaryDerivation {
     String name = "max(" + var_info.name + ")";
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
-    ExplicitVarComparability comp = var_info.comparability.elementType();
+    VarComparability comp = var_info.comparability.elementType();
     return new VarInfo(name, ptype, rtype, comp);
   }
 

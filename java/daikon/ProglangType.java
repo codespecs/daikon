@@ -138,22 +138,26 @@ public final class ProglangType {
     return ProglangType.intern(base, dimensions-1);
   }
 
+  // These used to all be private.  Why??
+
   // Primitive types
-  private final static String TYPE_BOOLEAN = "boolean";
-  private final static String TYPE_BYTE = "byte";
-  private final static String TYPE_CHAR = "char";
-  private final static String TYPE_DOUBLE = "double";
-  private final static String TYPE_FLOAT = "float";
-  private final static String TYPE_INT = "int";
-  private final static String TYPE_LONG = "long";
-  private final static String TYPE_SHORT = "short";
+  public final static String TYPE_BOOLEAN = "boolean";
+  public final static String TYPE_BYTE = "byte";
+  public final static String TYPE_CHAR = "char";
+  public final static String TYPE_DOUBLE = "double";
+  public final static String TYPE_FLOAT = "float";
+  public final static String TYPE_INT = "int";
+  public final static String TYPE_LONG = "long";
+  public final static String TYPE_SHORT = "short";
 
   // Nonprimitive types
-  private final static String TYPE_ADDRESS = "address";
-  private final static String TYPE_JAVA_OBJECT = "java_object";
+  public final static String TYPE_ADDRESS = "address";
+  // Hmmm, not sure about the difference between these two.
+//   public final static String TYPE_JAVA_OBJECT = "java_object";
+//   public final static String TYPE_OBJECT = "Object";
   // deprecated; use "address" in preference to "pointer"
-  private final static String TYPE_POINTER = "pointer";
-  private final static String TYPE_STRING = "String";
+  public final static String TYPE_POINTER = "pointer";
+  public final static String TYPE_STRING = "String";
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
@@ -169,8 +173,8 @@ public final class ProglangType {
 	return value.intern();
       } else if ((base == TYPE_ADDRESS) || (base == TYPE_POINTER)) {
 	return Integer.valueOf(value, 16);
-      } else if (base == TYPE_JAVA_OBJECT) {
-	return Integer.valueOf(value.substring(value.indexOf('@')+1));
+      // } else if ((base == TYPE_JAVA_OBJECT) || (base == TYPE_OBJECT)) {
+      //   return Integer.valueOf(value.substring(value.indexOf('@')+1));
       } else if ((base == TYPE_CHAR) || (base == TYPE_INT)) {
 	return Integer.valueOf(value);
 	// Old implementation
@@ -216,12 +220,15 @@ public final class ProglangType {
       } else {
 	// Deal with [] surrounding Java array output
 	if (value.startsWith("[") && value.endsWith("]")) {
-	  value = value.substring(1, value.length() - 2);
+	  value = value.substring(1, value.length() - 1);
 	}
 
 	// This isn't right if a string contains embedded spaces.
 	// I could instead use StreamTokenizer.
-	Vector value_strings_vector = Util.split(Global.regexp_matcher, Global.ws_regexp, value);
+	Vector value_strings_vector
+          = ((value.length() == 0)
+             ? (new Vector(0))  // parens for Emacs indentation
+             : Util.split(Global.regexp_matcher, Global.ws_regexp, value));
 	String[] value_strings = (String[]) value_strings_vector.toArray(new String[0]);
 	int len = value_strings.length;
 
@@ -232,8 +239,13 @@ public final class ProglangType {
 	  for (int i=0; i<len; i++)
 	    result[i] = new Integer(value_strings[i]).intValue();
 	  return result;
+        // } else if ((base == TYPE_JAVA_OBJECT) || (base == TYPE_OBJECT)) {
+        //   int[] result = new int[len];
+        //   for (int i=0; i<len; i++)
+        //     result[i] = Integer.parseInt(value.substring(value.indexOf('@')+1));
+        //   return result;
 	} else {
-	  throw new Error("Can't deal with that type of array");
+	  throw new Error("Can't deal with array of base type " + base);
 	}
 
 	// This is a more general technique; but when will we need

@@ -32,7 +32,9 @@ public class SequenceLength extends UnaryDerivation {
     else {
       int len;
       // Can't use "==" because ProglangType objecs are not interned.
-      if (var_info.rep_type.equals(ProglangType.INT_ARRAY)) {
+      ProglangType rep_type = var_info.rep_type;
+
+      if (rep_type.equals(ProglangType.INT_ARRAY)) {
         len = ((int[])val).length;
       } else {
         len = ((Object[])val).length;
@@ -45,7 +47,7 @@ public class SequenceLength extends UnaryDerivation {
     String name = "size(" + var_info.name + ")";
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
-    ExplicitVarComparability comp = var_info.comparability.indexType(0);
+    VarComparability comp = var_info.comparability.indexType(0);
     return new VarInfo(name, ptype, rtype, comp);
   }
 

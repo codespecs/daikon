@@ -99,6 +99,9 @@ class FileIO {
   }
 
 
+  // Yes, this prohibits concurrency.  Big deal.
+  static int varcomp_format = VarComparability.NONE;
+
   // Maybe the caller should deal with converting this into a regular
   // expression.
   /**
@@ -128,6 +131,19 @@ class FileIO {
 	all_ppts.put(ppt.name, ppt);
 	continue;
       }
+      if (line.equals("VarComparability")) {
+        line = reader.readLine();
+        if (line.equals("none")) {
+          varcomp_format = VarComparability.NONE;
+        } else if (line.equals("implicit")) {
+          throw new Error("Implicit varcomparability not yet supported");
+        } else if (line.equals("explicit")) {
+          varcomp_format = VarComparability.EXPLICIT;
+        } else {
+          throw new Error("Bad VarComparability: " + line);
+        }
+      }
+
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
       if (debug_read)
@@ -190,8 +206,8 @@ class FileIO {
       if (constant_value != null) {
 	constant_value = ProglangType.parse(constant_value_string);
       }
-      ExplicitVarComparability comparability
-	= ExplicitVarComparability.parse(comparability_string, prog_type);
+      VarComparability comparability
+	= VarComparability.parse(varcomp_format, comparability_string, prog_type);
       var_infos.add(new VarInfo(varname, prog_type, rep_type, comparability, constant_value));
       line = file.readLine();
     }

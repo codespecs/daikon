@@ -68,7 +68,7 @@ public class SequenceExtremum extends UnaryDerivation {
     String name = var_info.name + "[" + index + "]";
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
-    ExplicitVarComparability comp = var_info.comparability.elementType();
+    VarComparability comp = var_info.comparability.elementType();
     return new VarInfo(name, ptype, rtype, comp);
   }
 
