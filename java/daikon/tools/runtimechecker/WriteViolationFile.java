@@ -78,13 +78,29 @@ class WriteViolationFile {
       // written to disk.
       try {
         BufferedWriter writer = new BufferedWriter(new FileWriter("violations.txt"));
-        writer.write("Number of times an invariant was evaluated: "
+        writer.write(  "# Times an invariant was evaluated ----------- "
                      + Long.toString(Runtime.numEvaluations)
                      + daikon.Global.lineSep
-                     + "Violations: ");
+                     + "# Entry program points traversed ------------- "
+                     + Long.toString(Runtime.numPptEntries)
+                     + daikon.Global.lineSep
+                     + "# Normal-exit program points traversed ------- "
+                     + Long.toString(Runtime.numNormalPptExits)
+                     + daikon.Global.lineSep
+                     + "# Exceptional-exit program points traversed -- "
+                     + Long.toString(Runtime.numExceptionalPptExits)
+                     + daikon.Global.lineSep
+                     + "# Total exit program points traversed -------- "
+                     + Long.toString(Runtime.numNormalPptExits
+                                     + Runtime.numExceptionalPptExits)
+                     + daikon.Global.lineSep
+                     + daikon.Global.lineSep
+                     + "# Violations: ");
+
         if (vios.size() == 0) {
           writer.write("none." + daikon.Global.lineSep);
         } else{
+          writer.write(daikon.Global.lineSep);
           for (Violation v : vios) {
             writer.write(v.toStringWithMethod());
             writer.newLine();

@@ -113,30 +113,34 @@ public class InstrumentHandler extends CommandHandler {
         //compile(arguments.javaFileNames, "");
 
         // Create filenames including temp directory and pakage directories.
-        List/* ParseResults */ parseResults = parse(arguments.javaFileNames);
+        List<ParseResults> parseResults = ParseResults.parse(arguments.javaFileNames);
 
 
-        List/* String */ instrumentedFileNames = new ArrayList/* String */();
+        List<String> instrumentedFileNames = new ArrayList<String>();
 
         for (Iterator i = parseResults.iterator(); i.hasNext();) {
-            ParseResults oneClass = (ParseResults) i.next();
+            ParseResults oneFile = (ParseResults) i.next();
 
-            System.out.println("Instrumenting " + oneClass.packageName
-                    + (oneClass.packageName.equals("") ? "" : ".")
-                    + oneClass.className);
 
-            oneClass.root.accept(new InstrumentVisitor(ppts, oneClass.root));
-            oneClass.root.accept(new TreeFormatter(2, 80));
+            System.out.println("Instrumenting " + oneFile.fileName);
+
+            for (int j = 0 ; j < oneFile.roots.size() ; j++) {
+
+                TypeDeclaration decl = oneFile.roots.get(j);
+
+                decl.accept(new InstrumentVisitor(ppts, decl));
+
+            }
 
             File instrumentedFileDir = new File(outputDir.getPath()
                     + File.separator
-                    + oneClass.packageName.replaceAll("\\.", File.separator));
+                    + oneFile.packageName.replaceAll("\\.", File.separator));
 
             if (!instrumentedFileDir.exists()) {
                 instrumentedFileDir.mkdirs();
             }
 
-            String instrumentedFileName = oneClass.className + ".java";
+            String instrumentedFileName = oneFile.fileName;
 
             File instrumentedFile = new File(instrumentedFileDir,
                     instrumentedFileName);
@@ -149,8 +153,9 @@ public class InstrumentHandler extends CommandHandler {
             try {
                 Writer output = new FileWriter(instrumentedFile);
 
-                oneClass.root.accept(new TreeFormatter());
-                oneClass.root.accept(new TreeDumper(output));
+                oneFile.compilationUnit.accept(new TreeFormatter());
+                oneFile.compilationUnit.accept(new TreeDumper(output));
+
                 output.close();
             } catch (IOException e) {
                 System.err
@@ -248,89 +253,4 @@ public class InstrumentHandler extends CommandHandler {
         ret.javaFileNames = javaFileNames;
         return ret;
     }
-
-    /**
-     * The wrapped result of parsing a .java source file. The packageName and
-     * className arguments can be obtained from root, but they are returned here
-     * for convenience.
-     */
-    public static class ParseResults {
-        public String packageName;
-
-        public String className;
-
-        public CompilationUnit root;
-
-        public String toString() {
-            return "package name: " + packageName + ", " + "class name: "
-                    + className;
-        }
-    }
-
-    /**
-     * If one of the files declares an interfaces, an error will occur.
-     *
-     * This method assumes that each java file contains only one top-level
-     * jtb.syntaxTree.TypeDeclaration, and that such declaration matches the
-     * name given the source file. (The grammar in jtb.syntaxtree allows for
-     * none or multiple type declaration.)
-     */
-    public static List parse(List/* String */javaFileNames) {
-
-        List/* ParseResults */retval = new ArrayList/* ParseResults */();
-
-        for (Iterator i = javaFileNames.iterator(); i.hasNext();) {
-            String javaFileName = (String) i.next();
-            ParseResults results = new ParseResults();
-
-            System.out.println("Parsing file " + javaFileName);
-
-            try {
-                Reader input = new FileReader(javaFileName);
-                JavaParser parser = new JavaParser(input);
-                results.root = parser.CompilationUnit();
-                input.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new Error(e);
-            }
-
-            // Construct the package name.
-            NodeOptional packageDeclarationMaybe = results.root.f0;
-            if (packageDeclarationMaybe.present()) {
-                PackageDeclaration packageDeclaration = (PackageDeclaration) packageDeclarationMaybe.node;
-                Name packageName = packageDeclaration.f1;
-                StringWriter stringWriter = new StringWriter();
-                TreeDumper dumper = new TreeDumper(stringWriter);
-                dumper.visit(packageName);
-                results.packageName = stringWriter.toString().trim();
-            } else {
-                results.packageName = "";
-            }
-
-            // Find the class name.
-            NodeListOptional typeDeclarationMaybe = results.root.f2;
-            Assert.assertTrue(typeDeclarationMaybe.size() == 1,
-                    "The runtime-check instrumenter assumes that every source file only defines "
-                            + "one top-level class, and this file doesn't: "
-                            + javaFileName);
-            TypeDeclaration typeDeclaration = (TypeDeclaration) typeDeclarationMaybe
-                    .elementAt(0);
-            NodeSequence sequence = (NodeSequence)typeDeclaration.f0.choice;
-            NodeChoice nodeChoice = (NodeChoice)sequence.elementAt(1);
-            ClassOrInterfaceDeclaration decl = (ClassOrInterfaceDeclaration)nodeChoice.choice;
-
-            Assert.assertTrue(!Ast.isInterface(decl),
-                              "Do not give .java files that declare interfaces "
-                              + "to the instrumenter: " + javaFileName);
-
-            results.className = decl.f1.tokenImage;
-
-            // Add to the list of ParseResults that we'll return.
-            retval.add(results);
-        }
-        debug.fine("Parse results: " + retval.toString());
-        return retval;
-    }
-
 }

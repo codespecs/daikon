@@ -53,7 +53,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * Create a visitor that will insert code to check the invariants
      * contained in pptmap.
      */
-    public InstrumentVisitor(PptMap pptmap, CompilationUnit root) {
+    public InstrumentVisitor(PptMap pptmap, TypeDeclaration root) {
         this.pptmap = pptmap;
         this.pptMatcher = new PptNameMatcher(root);
 
@@ -143,6 +143,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         super.visit(clazz);
 
+        if (Ast.isInterface(clazz)) {
+            return;
+        }
+
         // add method to check object and class invariants.
         ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
                 .getParent();
@@ -189,6 +193,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Create the code for a new BlockStatement that will be the new
         // body of the constructor.
         code.append("{");
+
+        // Count this program point entry.
+        code.append("daikon.tools.runtimechecker.Runtime.numPptEntries++;");
 
         // Check class invariants.
         code.append("checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time.onEntry);");
@@ -246,6 +253,15 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         super.visit(method);
 
+        ClassOrInterfaceDeclaration clsdecl =
+            (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
+
+        Assert.assertTrue(clsdecl != null);
+
+        if (Ast.isInterface(clsdecl)) {
+            return;
+        }
+
         method.accept(new TreeFormatter());
 
 //         System.out.println("@@@0");
@@ -274,7 +290,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
 
         StringBuffer code = new StringBuffer();
+
         code.append("{");
+
+        // Count this program point entry.
+        code.append("daikon.tools.runtimechecker.Runtime.numPptEntries++;");
 
         // Check object invariants.
         if (!isStatic) {
@@ -616,20 +636,30 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	declaredThrowablesLocal.remove("java.lang.Error");
 	declaredThrowablesLocal.remove("Error");
 
+
+        // Count this program point exit.
+        code.append("daikon.tools.runtimechecker.Runtime.numNormalPptExits++;");
+
         // [[ TODO: Figure out what could go wrong here (e.g. what if
         // method declaration says "throws Throwable") and prepare for
         // it. ]]
         for (Iterator i = declaredThrowablesLocal.iterator(); i.hasNext();) {
             String declaredThrowable = (String) i.next();
             code.append("} catch (" + declaredThrowable + " t_instrument) {");
+            // Count this program point exit.
+            code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
             code.append("  methodThrewSomething_instrument = true;");
             code.append("  throw t_instrument;");
         }
 
 	code.append("} catch (java.lang.RuntimeException t_instrument) {");
 	code.append("  methodThrewSomething_instrument = true;");
+        // Count this program point exit.
+        code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
 	code.append("  throw t_instrument;");
 	code.append("} catch (java.lang.Error t_instrument) {");
+        // Count this program point exit.
+        code.append("daikon.tools.runtimechecker.Runtime.numExceptionalPptExits++;");
 	code.append("  methodThrewSomething_instrument = true;");
 	code.append("  throw t_instrument;");
 
@@ -639,6 +669,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // normally--check method postconditions (If the method didn't
         // complete normally, it makes no sense to check postconditions,
         // because Daikon only reports normal-exit postconditions.)
+
         code.append(" if (!methodThrewSomething_instrument) {");
 
         // Check postconditions.
@@ -679,6 +710,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         StringBuffer code = new StringBuffer();
 
         String daikonrep = inv.format_using(OutputFormat.DAIKON);
+
+        String javarep = inv.format_using(OutputFormat.JAVA);
+
         if (daikonrep.indexOf("\"") != -1 || daikonrep.indexOf("\\") != -1) {
             // Now comes some real ugliness: [[ ... ]] It's easier to do
             // this transformation on a character list than by pattern
@@ -704,6 +738,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("<INVINFO>");
         code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
         code.append("<DAIKON>" + daikonrep + "</DAIKON>");
+        code.append("<INV>" + utilMDE.UtilMDE.escapeNonJava(javarep) + "</INV>");
         code.append("<DAIKONCLASS>" + inv.getClass().toString()
                     + "</DAIKONCLASS>");
         code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature()

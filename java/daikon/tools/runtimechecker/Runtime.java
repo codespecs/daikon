@@ -21,6 +21,15 @@ public class Runtime {
     // check succeeded or failed).
     public static long numEvaluations = 0;
 
+    // The number of entry program points traversed.
+    public static long numPptEntries = 0;
+
+    // The number of normal-exit program points traversed.
+    public static long numNormalPptExits = 0;
+
+    // The number of exceptional-exit program points traversed.
+    public static long numExceptionalPptExits = 0;
+
     /**
      * Returns the list of violations.
      */
