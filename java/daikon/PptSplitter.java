@@ -122,7 +122,7 @@ public class PptSplitter implements Serializable {
         System.out.println ("Adding sample to " + ppt_cond + " with vars "
                             + Debug.related_vars (ppt_cond, vt));
 
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
       System.out.println ("Exception thrown in add for " + ppts[0].name());
@@ -160,7 +160,7 @@ public class PptSplitter implements Serializable {
    */
   private void add_implications_pair (boolean add_nonimplications) {
 
-
+    Daikon.debugProgress.fine ("  Adding Implications for " + parent.name + ", " + possible_slices().size() + " slices");
     debug.fine ("Adding Implications for " + parent.name);
 
     orig_invs = new LinkedHashMap();
@@ -184,6 +184,8 @@ public class PptSplitter implements Serializable {
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
+
+      // Daikon.debugProgress.fine ("    slice: " + pslice.name());
 
       // Loop through each child ppt
       match = false;
