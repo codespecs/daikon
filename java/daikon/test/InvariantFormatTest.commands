@@ -199,11 +199,11 @@ Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLen
 daikon.inv.unary.sequence.SeqIndexIntGreaterThan
 int_array
 Goal (daikon): a[i] > i
-Goal (java): daikon.Quant.indexGT(a)
+Goal (java): daikon.Quant.gtIndex(a)
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
-Goal (jml): daikon.Quant.indexGT(a)
-Goal (dbc): daikon.Quant.indexGT(a)
+Goal (jml): daikon.Quant.gtIndex(a)
+Goal (dbc): daikon.Quant.gtIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
@@ -211,11 +211,11 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.SeqIndexIntNonEqual
 int_array
 Goal (daikon): a[i] != i
-Goal (java): daikon.Quant.indexNotEqual(a)
+Goal (java): daikon.Quant.notEqualIndex(a)
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (ioa): \A i : Int (i \in a => i ~= a[i])
-Goal (jml): daikon.Quant.indexNotEqual(a)
-Goal (dbc): daikon.Quant.indexNotEqual(a)
+Goal (jml): daikon.Quant.notEqualIndex(a)
+Goal (dbc): daikon.Quant.notEqualIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
@@ -529,11 +529,11 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.binary.sequenceScalar.SeqIntLessEqual
 int_array int
 Goal (daikon): a[] elements <= b
-Goal (java): daikon.Quant.eltsLEQ(a, b)
+Goal (java): daikon.Quant.eltsLTE(a, b)
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] <= b))
 Goal (ioa): \A i : Int (i \in a => a[i]<=b)
-Goal (jml): daikon.Quant.eltsLEQ(a, b)
-Goal (dbc): daikon.Quant.eltsLEQ(a, b)
+Goal (jml): daikon.Quant.eltsLTE(a, b)
+Goal (dbc): daikon.Quant.eltsLTE(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (<= (select (select elems |a|) |i|) |b|)))
 [20 8 -7 6 -5 4 -3 2 -1 0]
 20

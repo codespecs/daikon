@@ -21,38 +21,48 @@ The correct way to build the system is to run 'make'.
   #define _TYPE boolean
   #define _TYPE_WRAPPER_NAME Boolean
   #define _TYPE_WRAPPER_GETVAL_METHOD booleanValue
+  #define COLLECT_TYPE collectboolean
 #elif defined(BYTE)
   #define _TYPE byte
   #define _TYPE_WRAPPER_NAME Byte
   #define _TYPE_WRAPPER_GETVAL_METHOD byteValue
+  #define COLLECT_TYPE collectbyte
 #elif defined(CHAR)
   #define _TYPE char
   #define _TYPE_WRAPPER_NAME Character
   #define _TYPE_WRAPPER_GETVAL_METHOD charValue
+  #define COLLECT_TYPE collectchar
 #elif defined(DOUBLE)
   #define _TYPE double
   #define _TYPE_WRAPPER_NAME Double
   #define _TYPE_WRAPPER_GETVAL_METHOD doubleValue
+  #define COLLECT_TYPE collectdouble
 #elif defined(FLOAT)
   #define _TYPE float
   #define _TYPE_WRAPPER_NAME Float
   #define _TYPE_WRAPPER_GETVAL_METHOD floatValue
+  #define COLLECT_TYPE collectfloat
 #elif defined(INT)
   #define _TYPE int
   #define _TYPE_WRAPPER_NAME Integer
   #define _TYPE_WRAPPER_GETVAL_METHOD intValue
+  #define COLLECT_TYPE collectint
 #elif defined(LONG)
   #define _TYPE long
   #define _TYPE_WRAPPER_NAME Long
   #define _TYPE_WRAPPER_GETVAL_METHOD longValue
+  #define COLLECT_TYPE collectlong
 #elif defined(SHORT)
   #define _TYPE short
   #define _TYPE_WRAPPER_NAME Short
   #define _TYPE_WRAPPER_GETVAL_METHOD shortValue
+  #define COLLECT_TYPE collectshort
 #elif defined(OBJECT)
   #define _TYPE Object
+  #define COLLECT_TYPE collectObject
 #elif defined(STRING)
   #define _TYPE String
+  #define COLLECT_TYPE collectString
 #endif
 
 #if defined(INT)
@@ -75,7 +85,11 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 
   /**
-   * Pairwise divides
+   * Meaning (in pseudo-FOL):
+   *
+   * /\ seq1.length == seq2.length
+   * /\ forall i in { 0..seq2.length-1) : seq2[i] divides seq1[i]
+   *
    */
   /*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
@@ -101,7 +115,11 @@ The correct way to build the system is to run 'make'.
 }
 
   /**
-   * Pairwise aquare
+   * Meaning (in pseudo-FOL):
+   *
+   * /\ seq1.length == seq2.length
+   * /\ forall i in { 0..seq2.length-1) : seq1[i] ==  seq2[i] * seq2[i]
+   *
    */
   /*@ pure */ public static boolean pairwiseSquare(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
@@ -131,7 +149,11 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG))
 
   /**
-   * Pairwise bitwise complement
+   * Meaning (in pseudo-FOL):
+   *
+   * /\ seq1.length == seq2.length
+   * /\ forall i in { 0..seq2.length-1) : seq1[i] == ~ seq2[i]
+   *
    */
   /*@ pure */ public static boolean pairwiseBitwiseComplement(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
@@ -157,7 +179,11 @@ The correct way to build the system is to run 'make'.
 }
 
   /**
-   * Pairwise bitwise subset
+   * Meaning (in pseudo-FOL):
+   *
+   * /\ seq1.length == seq2.length
+   * /\ forall i in { 0..seq2.length-1) : seq1[i] == (seq2[i] | seq1[i])
+   *
    */
   /*@ pure */ public static boolean pairwiseBitwiseSubset(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
@@ -186,10 +212,11 @@ The correct way to build the system is to run 'make'.
 
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
-/**
- * min
- */
 
+/**
+ * Requires: seq.length > 0
+ * Returns the minimum element in the array.
+ */
 /*@ pure */ public static _TYPE min(_TYPE[] seq) {
   Assert.assertTrue(seq.length > 0);
   _TYPE retval = seq[0];
@@ -202,9 +229,9 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * max
+ * Requires: seq.length > 0
+ * Returns the minimum element in the array.
  */
-
 /*@ pure */ public static _TYPE max(_TYPE[] seq) {
   Assert.assertTrue(seq.length > 0);
   _TYPE retval = seq[0];
@@ -219,20 +246,12 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * concat
+ * Returns the array { seq1[0], ..., seq1[seq1.length-1], seq2[0], ... , seq2[seq2.length-1] }
+ * If either (or both) array is (are) empty, returns only those elements
+ * in the other array (or none at all).
  */
-
 /*@ pure */ public static _TYPE[] concat(_TYPE[] seq1, _TYPE[] seq2) {
-  int newLength = seq1.length + seq2.length;
-  _TYPE[] retval = new _TYPE[newLength];
-  int i = 0;
-  for ( ; i < seq1.length ; i++) {
-    retval[i] = seq1[i];
-  }
-  for (int j = 0 ; j < seq2.length ; j++) {
-    retval[i+j] = seq2[j];
-  }
-  return retval;
+  return utilMDE.ArraysMDE.concat(seq1, seq2);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
@@ -251,9 +270,11 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * union
+ * Returns an array that is equivalent to the set union of seq1 and seq2.
+ * This method gives no assurances about the order or repetition of elements:
+ * elements may be repeated, and their order may be different from the
+ * order of elements in seq1 and seq2.
  */
-
 /*@ pure */ public static _TYPE[] union(_TYPE[] seq1, _TYPE[] seq2) {
   return concat(seq1, seq2);
 }
@@ -265,11 +286,11 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * intersection -- quick dumb implementation, don't care about
- *                 repetitions.
+ * Returns an array that is equivalent to the set intersection of seq1 and seq2.
+ * This method gives no assurances about the order or repetition of elements:
+ * elements may be repeated, and their order may be different from the
+ * order of elements in seq1 and seq2.
  */
-
-
 /*@ pure */ public static _TYPE[] intersection(_TYPE[] seq1, _TYPE[] seq2) {
   _TYPE[] intermediate = new _TYPE[seq1.length + seq2.length];
   int length = 0;
@@ -313,7 +334,10 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- *  seq1 \ seq2
+ * Returns an array that is equivalent to the set difference of seq1 and seq2.
+ * This method gives no assurances about the order or repetition of elements:
+ * elements may be repeated, and their order may be different from the
+ * order of elements in seq1 and seq2.
  */
 /*@ pure */ public static _TYPE[] setDiff(_TYPE[] seq1, _TYPE[] seq2) {
   _TYPE[] intermediate = new _TYPE[seq1.length];
@@ -348,27 +372,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lastIdx
+ * Retuns true iff seq1 and seq2 are equal when considered as sets.
  */
-
-
-/*@ pure */ public static int lastIdx(_TYPE[] seq) {
-  return seq.length;
-}
-
-
-/**
- * size
- */
-
-/*@ pure */ public static int size(_TYPE[] seq) {
-  return seq.length;
-}
-
-/**
- * setEqual
- */
-
 /*@ pure */ public static boolean setEqual(_TYPE[] seq1, _TYPE[] seq2) {
   for (int i = 0; i < seq1.length ; i++) {
     if ( !memberOf(seq1[i], seq2) ) {
@@ -401,9 +406,12 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * isReverse
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == seq2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] == seq2[seq2.length-1-i]
+ *
  */
-
 /*@ pure */ public static boolean isReverse(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
@@ -417,6 +425,11 @@ The correct way to build the system is to run 'make'.
   return true;
 }
 
+#if (defined(OBJECT))
+/*@ pure */ public static boolean isReverse(Collection seq1, _TYPE[] seq2) {
+  return isReverse(seq1.toArray(new _TYPE[]{}), seq2);
+}
+#endif
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean isReverse(_TYPE[] seq1, COMPATIBLE[] seq2) {
@@ -434,22 +447,14 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * isReverse
+ * Returns true iff seq contains no duplicate elements.
  */
-
 /*@ pure */ public static boolean noDups(_TYPE[] seq) {
-  for (int i = 0 ; i < seq.length ; i++) {
-    for (int j = 0 ; j < seq.length ; j++) {
-      if (i != j && seq[i] == seq[j]) {
-        return false;
-      }
-    }
-  }
-  return true;
+  return utilMDE.ArraysMDE.noDuplicates(seq);
 }
 
 /**
- * memberOf
+ * Returns true iff elt is in array arr.
  */
 
 /*@ pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
@@ -469,9 +474,11 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * eltsOneOf
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..elt.length-1) : elt[i] element_of arr
+ *
  */
-
 /*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, _TYPE[] arr) {
   for (int c = 0 ; c < elt.length ; c++) {
     if (!memberOf(elt[c], arr)) {
@@ -493,21 +500,16 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * slice
+ * Return
  */
-
 /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, int start , int end) {
   int sliceStart = start;
   int sliceEnd = end;
   if (start < 0) { sliceStart = 0; }
   if (end > seq.length-1) { sliceEnd = seq.length-1; }
   if (sliceStart > sliceEnd) { return new _TYPE[] { }; }
-  _TYPE[] retval = new _TYPE[sliceEnd - sliceStart + 1];
-  int retvalIdx = 0;
-  for (int i = sliceStart ; i <= sliceEnd ; i++) {
-    retval[retvalIdx++] = seq[i];
-  }
-  return retval;
+  int length = sliceEnd - sliceStart + 1;
+  return utilMDE.ArraysMDE.subarray(seq, sliceStart, length);
 }
 
 /*@ pure */ public static _TYPE[] slice(_TYPE[] seq, long start , int end) {
@@ -522,9 +524,11 @@ The correct way to build the system is to run 'make'.
 
 
 /**
- * eltsEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] == elt
+ *
  */
-
 /*@ pure */ public static boolean eltsEqual(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] != elt) { return false; }
@@ -542,9 +546,11 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * eltsNotEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] != elt
+ *
  */
-
 /*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] == elt) { return false; }
@@ -564,9 +570,11 @@ The correct way to build the system is to run 'make'.
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * eltsGT
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] > elt
+ *
  */
-
 /*@ pure */ public static boolean eltsGT(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] <= elt) { return false; }
@@ -584,18 +592,16 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * eltsGEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] >= elt
+ *
  */
-
 /*@ pure */ public static boolean eltsGTE(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] < elt) { return false; }
   }
   return true;
-}
-
-/*@ pure */ public static boolean eltsGEQ(_TYPE[] arr, _TYPE elt) {
-  return eltsGTE(arr, elt);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
@@ -605,16 +611,15 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
-/*@ pure */ public static boolean eltsGEQ(_TYPE[] arr, COMPATIBLE elt) {
-  return eltsGTE(arr, elt);
-}
 
 #endif
 
 /**
- * eltsLT
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] < elt
+ *
  */
-
 /*@ pure */ public static boolean eltsLT(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] >= elt) { return false; }
@@ -632,28 +637,24 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * eltsLEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..arr.length-1) : arr[i] <= elt
+ *
  */
-
-/*@ pure */ public static boolean eltsLEQ(_TYPE[] arr, _TYPE elt) {
+/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] > elt) { return false; }
   }
   return true;
-}
-/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
-  return eltsLEQ(arr, elt);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
-/*@ pure */ public static boolean eltsLEQ(_TYPE[] arr, COMPATIBLE elt) {
+/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
     if (arr[i] > elt) { return false; }
   }
   return true;
-}
-/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
-  return eltsLEQ(arr, elt);
 }
 
 #endif
@@ -661,9 +662,12 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * pairwiseEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] == seq2[i]
+ *
  */
-
 /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
@@ -691,9 +695,12 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * pairwiseNotEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] != seq2[i]
+ *
  */
-
 /*@ pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
@@ -723,9 +730,12 @@ The correct way to build the system is to run 'make'.
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * pairwiseLT
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] < seq2[i]
+ *
  */
-
 /*@ pure */ public static boolean pairwiseLT(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
@@ -753,10 +763,13 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * pairwiseLEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] <= seq2[i]
+ *
  */
-
-/*@ pure */ public static boolean pairwiseLEQ(_TYPE[] seq1, _TYPE[] seq2) {
+/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
   }
@@ -766,14 +779,10 @@ The correct way to build the system is to run 'make'.
     }
   }
   return true;
-}
-
-/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, _TYPE[] seq2) {
-  return pairwiseLEQ(seq1, seq2);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
-/*@ pure */ public static boolean pairwiseLEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
   }
@@ -783,18 +792,17 @@ The correct way to build the system is to run 'make'.
     }
   }
   return true;
-}
-
-/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
-  return pairwiseLEQ(seq1, seq2);
 }
 
 #endif
 
 /**
- * pairwiseGT
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] > seq2[i]
+ *
  */
-
 /*@ pure */ public static boolean pairwiseGT(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
@@ -822,10 +830,13 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * pairwiseGEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * /\ seq1.length == se2.length
+ * /\ forall i in { 0..seq1.length-1) : seq1[i] >= seq2[i]
+ *
  */
-
-/*@ pure */ public static boolean pairwiseGEQ(_TYPE[] seq1, _TYPE[] seq2) {
+/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
   }
@@ -835,14 +846,10 @@ The correct way to build the system is to run 'make'.
     }
   }
   return true;
-}
-
-/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, _TYPE[] seq2) {
-  return pairwiseGEQ(seq1, seq2);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
-/*@ pure */ public static boolean pairwiseGEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
   }
@@ -852,9 +859,6 @@ The correct way to build the system is to run 'make'.
     }
   }
   return true;
-}
-/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
-  return pairwiseGEQ(seq1, seq2);
 }
 
 #endif
@@ -862,9 +866,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lexEqual
+ * Returns true iff seq1 is lexically equal to seq2
  */
-
 /*@ pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
   return pairwiseEqual(seq1, seq2);
 }
@@ -877,9 +880,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lexNotEqual
+ * Returns true iff seq1 is lexically not equal to seq2
  */
-
 /*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
   return !lexEqual(seq1, seq2);
 }
@@ -893,10 +895,8 @@ The correct way to build the system is to run 'make'.
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * lexLT
+ * Returns true iff seq1 is lexically < to seq2
  */
-
-
 /*@ pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
@@ -913,7 +913,7 @@ The correct way to build the system is to run 'make'.
       return false; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] < seq2[i]) {
       return true;
     }
@@ -942,7 +942,7 @@ The correct way to build the system is to run 'make'.
       return false; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] < seq2[i]) {
       return true;
     }
@@ -955,10 +955,9 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lexLEQ
+ * Returns true iff seq1 is lexically <= to seq2
  */
-
-/*@ pure */ public static boolean lexLEQ(_TYPE[] seq1, _TYPE[] seq2) {
+/*@ pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
   // pairwise equal up to j.
@@ -974,7 +973,7 @@ The correct way to build the system is to run 'make'.
       return false; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] < seq2[i]) {
       return true;
     }
@@ -987,7 +986,7 @@ The correct way to build the system is to run 'make'.
 
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
-/*@ pure */ public static boolean lexLEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+/*@ pure */ public static boolean lexLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
   // pairwise equal up to j.
@@ -1003,7 +1002,7 @@ The correct way to build the system is to run 'make'.
       return false; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] < seq2[i]) {
       return true;
     }
@@ -1016,9 +1015,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lexGT
+ * Returns true iff seq1 is lexically > to seq2
  */
-
 /*@ pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
@@ -1035,7 +1033,7 @@ The correct way to build the system is to run 'make'.
       return true; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] > seq2[i]) {
       return true;
     }
@@ -1064,7 +1062,7 @@ The correct way to build the system is to run 'make'.
       return true; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] > seq2[i]) {
       return true;
     }
@@ -1077,10 +1075,9 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * lexGEQ
+ * Returns true iff seq1 is lexically >= to seq2
  */
-
-/*@ pure */ public static boolean lexGEQ(_TYPE[] seq1, _TYPE[] seq2) {
+/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
   // pairwise equal up to j.
@@ -1096,7 +1093,7 @@ The correct way to build the system is to run 'make'.
       return true; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] > seq2[i]) {
       return true;
     }
@@ -1105,13 +1102,10 @@ The correct way to build the system is to run 'make'.
     }
   }
   throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
-}
-/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
-  return lexGEQ(seq1, seq2);
 }
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
-/*@ pure */ public static boolean lexGEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
   int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
   // we maintain the invariant that for j < i, seq1 and seq2 are
   // pairwise equal up to j.
@@ -1127,7 +1121,7 @@ The correct way to build the system is to run 'make'.
       return true; // both equal up to i-1 and seq1 longer than seq2
     }
     // case 2 : we haven't reached the end of either sequence
-    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    Assert.assertTrue(seq1.length > i && seq2.length > i);
     if (seq1[i] > seq2[i]) {
       return true;
     }
@@ -1137,18 +1131,17 @@ The correct way to build the system is to run 'make'.
   }
   throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
 }
-/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
-  return lexGEQ(seq1, seq2);
-}
 
 #endif
 
 #endif
 
 /**
- * eltwiseEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] == seq[i+1]
+ *
  */
-
 /*@ pure */ public static boolean eltwiseEqual(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
@@ -1161,9 +1154,11 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * eltwiseNotEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] != seq[i+1]
+ *
  */
-
 /*@ pure */ public static boolean eltwiseNotEqual(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
@@ -1178,9 +1173,11 @@ The correct way to build the system is to run 'make'.
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * eltwiseLT
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] < seq[i+1]
+ *
  */
-
 /*@ pure */ public static boolean eltwiseLT(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
@@ -1193,10 +1190,12 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * eltwiseLEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] <= seq[i+1]
+ *
  */
-
-/*@ pure */ public static boolean eltwiseLEQ(_TYPE[] seq) {
+/*@ pure */ public static boolean eltwiseLTE(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
       if (seq[i] > seq[i+1]) {
@@ -1208,9 +1207,11 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * eltwiseGT
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] > seq[i+1]
+ *
  */
-
 /*@ pure */ public static boolean eltwiseGT(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
@@ -1223,10 +1224,12 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * eltwiseGEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-2) : seq[i] >= seq[i+1]
+ *
  */
-
-/*@ pure */ public static boolean eltwiseGEQ(_TYPE[] seq) {
+/*@ pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (i < seq.length-1) {
       if (seq[i] < seq[i+1]) {
@@ -1236,19 +1239,18 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
-/*@ pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
-  return eltwiseGEQ(seq);
-}
 
 #endif
 
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * indexEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] == i
+ *
  */
-
-/*@ pure */ public static boolean indexEqual(_TYPE[] seq) {
+/*@ pure */ public static boolean equalIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] != i) {
       return false;
@@ -1258,10 +1260,12 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * indexNotEqual
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] != i
+ *
  */
-
-/*@ pure */ public static boolean indexNotEqual(_TYPE[] seq) {
+/*@ pure */ public static boolean notEqualIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] == i) {
       return false;
@@ -1271,10 +1275,12 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * indexLT
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] < i
+ *
  */
-
-/*@ pure */ public static boolean indexLT(_TYPE[] seq) {
+/*@ pure */ public static boolean ltIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] >= i) {
       return false;
@@ -1284,10 +1290,12 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * indexLEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] <= i
+ *
  */
-
-/*@ pure */ public static boolean indexLEQ(_TYPE[] seq) {
+/*@ pure */ public static boolean lteIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] > i) {
       return false;
@@ -1296,16 +1304,13 @@ The correct way to build the system is to run 'make'.
   return true;
 }
 
-/*@ pure */ public static boolean indexLTE(_TYPE[] seq) {
-  return indexLEQ(seq);
-}
-
-
 /**
- * indexGT
-*/
-
-/*@ pure */ public static boolean indexGT(_TYPE[] seq) {
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] > i
+ *
+ */
+/*@ pure */ public static boolean  gtIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] <= i) {
       return false;
@@ -1314,13 +1319,13 @@ The correct way to build the system is to run 'make'.
   return true;
 }
 
-
 /**
- * indexGEQ
+ * Meaning (in pseudo-FOL):
+ *
+ * forall i in { 0..seq.length-1) : seq[i] >= i
+ *
  */
-
-// CP should change name to GEQ here and in Daikon's output format.
-/*@ pure */ public static boolean indexGTE(_TYPE[] seq) {
+/*@ pure */ public static boolean gteIndex(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
     if (seq[i] < i) {
       return false;
@@ -1328,38 +1333,10 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
-/*@ pure */ public static boolean indexGEQ(_TYPE[] seq) {
-  return indexGTE(seq);
-}
 #endif
 
-/**
- *
- * ONLY works for field sequences with exactly one field representing
- * a collection (e.g it doesn't work for a[].b.c[].d).
- *
- * for anything non-primitive, inst should be an Object, and we'll
- * lose any more precise type information.
- *
- * CP: not sure about the below anymore...
- * Unlike fieldArray(..), collect(..) could have been implemented
- * without passing inst as an argument -- since we always return a
- * Collection, we don't have the need for inst, which is to allow us
- * to have multiple signatures for methods with different return
- * types. But I don't lose anything by passing inst. Also, by having
- * different version of collect, I don't need to compare the collected
- * Objects against every primitive type to figure out which type it
- * is.
- */
-
-/*@@ pure */  public static _TYPE[] collect(_TYPE inst, Object object,
-                                                  String[] fields, int fieldsStartIdx) {
-
-//   System.out.println("ENTERING COLLECT "
-//                      + "inst=" + inst + ", object=" + object
-//                      + "fields=" + utilMDE.ArraysMDE.toString(fields)
-//                      + "fieldsStartIdx=" + fieldsStartIdx);
-
+/*@ pure */  public static _TYPE[] COLLECT_TYPE (Object object,
+                                                String[] fields, int fieldsStartIdx) {
 
   Field field = null;
   Class cls = null;
@@ -1370,23 +1347,23 @@ The correct way to build the system is to run 'make'.
     fieldObj = field.get(object);
     //System.out.println("***fieldObj="+fieldObj);
   } catch (NoSuchFieldException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: NoSuchFieldException: "
-                               + "inst=" + inst + ", object=" + object
+    throw new RuntimeException("daikon.Quant.fieldArray: NoSuchFieldException: "
+                               + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (NullPointerException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: NullPointerException: "
-                               + "inst=" + inst + ", object=" + object
+    throw new RuntimeException("daikon.Quant.fieldArray: NullPointerException: "
+                               + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (SecurityException e) {
-    throw new RuntimeException("quant.Quant.fieldArray: SecurityException: "
-                               + "inst=" + inst + ", object=" + object
+    throw new RuntimeException("daikon.Quant.fieldArray: SecurityException: "
+                               + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (Exception e) {
-    throw new RuntimeException("quant.Quant.fieldArray: Exception: "
-                               + "inst=" + inst + ", object=" + object
+    throw new RuntimeException("daikon.Quant.fieldArray: Exception: "
+                               + ", object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   }
@@ -1396,15 +1373,20 @@ The correct way to build the system is to run 'make'.
 
 #if (defined(OBJECT) || defined(STRING))
 
-    //Assert.assertTrue(inst.getClass().equals(fieldObj.getClass()));
-    //return new _TYPE[] { (_TYPE)fieldObj };
-    return new _TYPE[] { (_TYPE)fieldObj };
-
+    if (fieldObj.getClass().isArray()) {
+      // last field is the array
+      return (_TYPE[])fieldObj;
+    } else {
+      return new _TYPE[] { (_TYPE)fieldObj };
+    }
 #else
-
-    Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
-    return
-      new _TYPE[] { ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_WRAPPER_GETVAL_METHOD() };
+    if (fieldObj.getClass().isArray()) {
+      return (_TYPE[])fieldObj;
+    } else {
+      Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
+      return
+        new _TYPE[] { ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_WRAPPER_GETVAL_METHOD() };
+    }
 
 #endif
 
@@ -1413,13 +1395,11 @@ The correct way to build the system is to run 'make'.
 
     if (fieldObj.getClass().isArray()) {
 
-      //System.out.println("ITS AN ARRAY");
-
       // collect elements across array
       _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
       for (int i = 0 ; i < intermediate.length ; i++) {
-        _TYPE[] oneEltArray = collect(inst, Array.get(fieldObj, i),
-                                      fields, fieldsStartIdx + 1);
+        _TYPE[] oneEltArray = COLLECT_TYPE (Array.get(fieldObj, i),
+                                           fields, fieldsStartIdx + 1);
         Assert.assertTrue(oneEltArray.length == 1);
         intermediate[i] = oneEltArray[0];
       }
@@ -1427,24 +1407,42 @@ The correct way to build the system is to run 'make'.
 
     } else {
 
-      return collect(inst, fieldObj, fields, fieldsStartIdx + 1);
+      return COLLECT_TYPE (fieldObj, fields, fieldsStartIdx + 1);
     }
   }
 }
 
 /**
- * ONLY works for field sequences with exactly one field representing
- * a collection.
- * requires: fieldStr.length() > 0
- * at least one of the fields in fieldStr represents a collection [explain]
+ * Daikon creates invariants over "variables" such as
+ *
+ * x.arr[].z   The result of collecting all elements y.z for all y's
+ *             in array x.arr.
+ * arr[].y.z   The result of collecting all elements x.y.z for all x's
+ *             in array arr.
+ * x.y.z[]     The result of collecting all elements in array x.y.z[]
+ *
+ * The collect() method does this collecting work.
+ *
+ * Given an object (x, arr, or x, correspondingly, in the above examples)
+ * and a "field string" (arr.z, y.z, or y.z, correspondingly, in the
+ * above example), the collect method collects the elements the result
+ * from following the fields, one of which is assumed to be an array.
+ *
+ * requires: fieldStr.length() > 0 and object != null
+ * requires: fieldStr contains only field names, no "[]" strings.
+ *
+ * requires: the method only works for field sequences with exactly
+ * one field representing an array. For example, the collection
+ * a[].b[].c will fail.
+ *
+ * If the resulting collection is of non-primitive type, then collect
+ * returns an array of type Object[].
  */
-
-/*@@ pure */ public static _TYPE[] collect(_TYPE inst, Object object, String fieldStr) {
+/*@ pure */ public static _TYPE[] COLLECT_TYPE (Object object, String fieldStr) {
 
   Assert.assertTrue(fieldStr != null && !"".equals(fieldStr));
   String[] splits = fieldStr.split("\\.");
-
-  _TYPE[] retval = collect(inst, object, splits, 0);
-  //System.out.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
+  _TYPE[] retval = COLLECT_TYPE (object, splits, 0);
+  //System.err.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
   return retval;
 }

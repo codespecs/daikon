@@ -302,21 +302,21 @@ public class CLASSNAME extends SUPERCLASS {
     String comparator = EQUALSstring;
     String comparatorDBC = "";
     if (comparator.equals("==")) {
-      comparatorDBC = "Equal";
+      comparatorDBC = "equal";
     } else if (comparator.equals("<")) {
-      comparatorDBC = "LT";
+      comparatorDBC = "lt";
     } else if (comparator.equals("<=")) {
-      comparatorDBC = "LTE";
+      comparatorDBC = "lte";
     } else if (comparator.equals(">")) {
-      comparatorDBC = "GT";
+      comparatorDBC = "gt";
     } else if (comparator.equals(">=")) {
-      comparatorDBC = "GTE";
+      comparatorDBC = "gte";
     } else if (comparator.equals("!=")) {
-      comparatorDBC = "NotEqual";
+      comparatorDBC = "notEqual";
     } else {
       comparatorDBC = "?comparatorDBC?";
     }
-    return "daikon.Quant.index" + comparatorDBC + "(" + var().name.name_using(format, var()) + ")";
+    return "daikon.Quant." + comparatorDBC + "Index(" + var().name.name_using(format, var()) + ")";
   }
 
   public String format_simplify() {

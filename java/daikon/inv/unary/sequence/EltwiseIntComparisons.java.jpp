@@ -57,7 +57,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntLessEqual"
   #define COMPARATOR(a,b) ((a) <= (b))
   #define COMPARATORSTRING "<="
-  #define COMPARATORSTRINGDBC "eltwiseLEQ"
+  #define COMPARATORSTRINGDBC "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
 #elif defined(GREATERTHAN)
   #define CLASSNAME GREATERTHANCLASS
@@ -71,7 +71,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntGreaterEqual"
   #define COMPARATOR(a,b) ((a) >= (b))
   #define COMPARATORSTRING ">="
-  #define COMPARATORSTRINGDBC "eltwiseGEQ"
+  #define COMPARATORSTRINGDBC "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME EQUALFLOATCLASS
@@ -92,7 +92,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatLessEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.lte (a,b))
   #define COMPARATORSTRING "<="
-  #define COMPARATORSTRINGDBC "eltwiseLEQ"
+  #define COMPARATORSTRINGDBC "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME GREATERTHANFLOATCLASS
@@ -106,7 +106,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.gte (a,b))
   #define COMPARATORSTRING ">="
-  #define COMPARATORSTRINGDBC "eltwiseGEQ"
+  #define COMPARATORSTRINGDBC "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
 #endif
 

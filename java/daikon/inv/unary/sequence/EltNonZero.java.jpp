@@ -167,9 +167,11 @@ public final class CLASSNAME
     VarInfo v = ppt.var_infos[0];
     VarInfoName viname = var().name;
 
-    return
+    String retval =
       "daikon.Quant.eltsNotEqual(" + var().name.name_using(format, var())
       + (is_pointer() ? ", null" : ", 0") + ")";
+
+    return retval;
   }
 
   /* IOA */

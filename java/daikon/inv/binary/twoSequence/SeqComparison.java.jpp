@@ -162,7 +162,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
-  #define EQUALSstringDBC "lexLEQ"
+  #define EQUALSstringDBC "lexLTE"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseIntLessEqual
 #elif defined(LESSEQUALFLOAT)
@@ -172,7 +172,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
-  #define EQUALSstringDBC "lexLEQ"
+  #define EQUALSstringDBC "lexLTE"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
 #elif defined(LESSEQUALSTRING)
@@ -182,7 +182,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
-  #define EQUALSstringDBC "lexLEQ"
+  #define EQUALSstringDBC "lexLTE"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseStringLessEqual
 #elif defined(GREATEREQUAL)
@@ -192,7 +192,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
-  #define EQUALSstringDBC "lexGEQ"
+  #define EQUALSstringDBC "lexGTE"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
 #elif defined(GREATEREQUALFLOAT)
@@ -202,7 +202,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
-  #define EQUALSstringDBC "lexGEQ"
+  #define EQUALSstringDBC "lexGTE"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
 #elif defined(GREATEREQUALSTRING)
@@ -212,7 +212,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
-  #define EQUALSstringDBC "lexGEQ"
+  #define EQUALSstringDBC "lexGTE"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
 #endif
@@ -374,7 +374,14 @@ public class SEQSEQINTEQUAL
     if (format.isJavaFamily()) {
       String name1 = var1().name.name_using(format, var1());
       String name2 = var2().name.name_using(format, var2());
+      #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
+      return "daikon.Quant." + (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
+                                ? EQUALSstringDBC
+                                : "setEqual" )
+        + "(" + name1 + ", " + name2 + ")";
+      #else
       return "daikon.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
+      #endif
     }
 
     if (format == OutputFormat.IOA) {

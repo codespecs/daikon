@@ -52,12 +52,6 @@ public class Quant {
   // an array, pass a java.util.List. They do so by converting the list
   // to an array.
 
-  /*@ pure */ public static int lastIdx(java.util.List seq) {
-    return lastIdx((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
-  }
-  /*@ pure */ public static int size(java.util.List seq) {
-    return size((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
-  }
   /*@ pure */ public static boolean noDups(java.util.List seq) {
     return noDups((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
   }

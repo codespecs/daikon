@@ -74,6 +74,31 @@ public class PrintInvariants {
    **/
   public static boolean print_discarded_invariants = false;
 
+  /**
+   * If true, then each invariant is printed using the current
+   * OutputFormat, but it's wrapped inside xml tags, along with other
+   * information about the invariant.  For example, if this switch is
+   * true and if the output format is JAVA, and the invariant prints
+   * as "x == null", the results of print_invariant would look
+   * something like:
+   *
+   * <INVINFO>
+   * <INV> x == null </INV> <SAMPLES> 100 </SAMPLES> <DAIKON> x == null </DAIKON>
+   * <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
+   * <METHOD> foo() </METHOD>
+   * </INVINFO>
+   *
+   * The above output is actually all in one line, although in this
+   * comment it's broken up into multiple lines for clarity.
+   *
+   * Note the extra information printed with the invariant: the number of samples
+   * from which the invariant was derived, the daikon representation
+   * (i.e. the Daikon output format), the Java class that the invariant
+   * corresponds to, and the method that the invariant belongs to ("null" for
+   * object invariants).
+   */
+  public static boolean wrap_xml = false;
+
   // Fields that will be used if the --disc_reason switch is used
   private static String discClass = null;
   private static String discVars = null;
@@ -1253,19 +1278,18 @@ public class PrintInvariants {
     //        out.println(invVarInfos[i].toString());
     //      }
 
-    if(Daikon.output_style == OutputFormat.DBCJAVA) {
-      out.print("<DBC> ");
+    if(wrap_xml) {
+      out.print("<INVINFO>");
+      out.print("<INV> ");
       out.print(inv_rep);
-      out.print(" </DBC> ");
-      // the fist "/**" and the last "*/" are inserted by AnnotateVisitor.java
+      out.print(" </INV> ");
       out.print(" <SAMPLES> " + Integer.toString(inv.ppt.num_samples()) + " </SAMPLES> ");
-      //out.print(" <PROBCHANCE> " + Double.toString(1-inv.getProbability()) + " </PROBCHANCE>");
       out.print(" <DAIKON> " + inv.format_using(OutputFormat.DAIKON) + " </DAIKON> ");
       out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
-      out.println(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
+      out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
+      out.println("</INVINFO>");
     } else {
-      //out.println(inv.getClass().toString());
-    out.println(inv_rep);
+      out.println(inv_rep);
     }
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (inv.repr());

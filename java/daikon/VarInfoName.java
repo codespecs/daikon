@@ -290,9 +290,11 @@ public abstract class VarInfoName
   // causes trouble with VarInfoNameDriver (a class for testing
   // VarInfoName), because there are no VarInfo's to pass to the
   // formatting methods. So in places where the VarInfo argument is
-  // used, we use this variable to check whether we're doing
-  // testing. If we are, then we know that the VarInfo is probably
-  // null, and we do something other than the normal thing.
+  // required by the formatting code, we use this variable to check
+  // whether we're doing testing. If we are, then we know that the
+  // VarInfo is probably null, and we do something other than the
+  // normal thing. (Unfortunately, this prevents testing of some
+  // those formats that make use of VarInfo information).
   public static boolean testCall = false;
 
   /**
@@ -829,7 +831,10 @@ public abstract class VarInfoName
       return java_family_impl(OutputFormat.DBCJAVA, v);
     }
     protected String java_family_impl(OutputFormat format, VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
@@ -929,7 +934,10 @@ public abstract class VarInfoName
       return java_family_name_impl(OutputFormat.DBCJAVA, v);
     }
     protected String java_family_name_impl(OutputFormat format, VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
@@ -1033,7 +1041,10 @@ public abstract class VarInfoName
     // Only works for two-argument functions.  There are currently no
     // ternary (or greater) function applications in Daikon.
     protected String java_family_name_impl(OutputFormat format, VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
@@ -1188,28 +1199,30 @@ public abstract class VarInfoName
     // For JAVA, JML and DBC formats.
     protected String java_family_name(OutputFormat format, VarInfo v) {
 
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      String term_name = null;
-      if (format == OutputFormat.JML) {
-        term_name = term.jml_name(v);
-      } else if (format == OutputFormat.JAVA) {
-        term_name = term.java_name(v);
-      } else {
-        term_name = term.dbc_name(v);
-      }
-
-      if (term_name.indexOf("daikon.Quant.slice") != -1) {
-        // [[[ FIXME: We run into problems when we ask for things like
-        // arr[i..].x because this translates into
-        // daikon.Quant.collect(new java.lang.Object,daikon.Quant.slice(arr,i,arr.length),"x").
-        // Method collect() will then query for the field "x" of type Object.]]]
+      if (term.name().indexOf("..") != -1) {
+        // We cannot translate arr[i..].x because this translates into
+        //
+        //    "daikon.Quant.collect(daikon.Quant.slice(arr,i,arr.length),"x")"
+        //
+        // but slice() returns an array of Objects, so an error will
+        // occur when method collect() tries to query for field "x".
         return "(warning: " + format + " format cannot express a field applied to a slice:"
           + " [repr=" + repr() + "])";
       }
 
       if (term.name().indexOf("[]") == -1) {
         // Case 1: Not an array collection
+        String term_name = null;
+        if (format == OutputFormat.JML) {
+          term_name = term.jml_name(v);
+        } else if (format == OutputFormat.JAVA) {
+          term_name = term.java_name(v);
+        } else {
+          term_name = term.dbc_name(v);
+        }
         return term_name + "." + field;
       } else {
         // Case 2: An array collection
@@ -1221,56 +1234,30 @@ public abstract class VarInfoName
 
         // x.y.foo[].bar.f
         // ---translates-into--->
-        // daikon.Quant.collect(x, "y.foo[].bar.f")
+        // daikon.Quant.collect_TYPE_(x, "y.foo[].bar.f")
 
         // The method Quant.collect takes care of the "y.foo[].bar.f"
         // mess for object x.
 
-        // In order to invoke the correct version of
-        // daikon.Quant.collect(), we need to communicate to it the
-        // base type of the array it should produce. This information
-        // needs to affect the signature of collect(), so it must be
-        // reflected in the type of one of the arguments passed to it.
-        String v_type_base = v.type.base();
-        String type_instance = null;
-        if (v_type_base == ProglangType.BASE_BOOLEAN) {
-          type_instance = "false";
-        } else if(v_type_base == ProglangType.BASE_BYTE) {
-          type_instance = "(byte)0";
-        } else if(v_type_base == ProglangType.BASE_CHAR) {
-          type_instance = "(char)0";
-        } else if(v_type_base == ProglangType.BASE_DOUBLE) {
-          type_instance = "(double)0";
-        } else if(v_type_base == ProglangType.BASE_FLOAT) {
-          type_instance = "(float)0";
-        } else if(v_type_base == ProglangType.BASE_INT) {
-          type_instance = "(int)0";
-        } else if(v_type_base == ProglangType.BASE_LONG) {
-          type_instance = "(long)0";
-        } else if(v_type_base == ProglangType.BASE_SHORT) {
-          type_instance = "(short)0";
-        } else {
-          type_instance = "new java.lang.Object()";
-        }
-
-        String[] splits = term.name().split("\\.");
-        if (splits[0].equals(term.name())) {
-          // Simple case: foo[].bar
-          return  "daikon.Quant.collect(" + type_instance + ", " + term_name + ", " + "\"" + field + "\"" + ")";
-
-        } else {
-          // complicated case: x.y.foo[].bar
-          String object = splits[0].replaceAll("\\[\\]", ""); // remove brackets
-          if (object.equals("return")) { object = "$return"; }
-          Assert.assertTrue(splits.length > 1);
-          String fields = "";
-          for (int j = 1 ; j < splits.length ; j++) {
-            if (j != 1) { fields += "."; }
-            fields += splits[j].replaceAll("\\[\\]", ""); // remove brackets
+        String term_name_no_brackets = term.name().replaceAll("\\[\\]", "") + "." + field;
+        String[] splits = term_name_no_brackets.split("\\.");
+        Assert.assertTrue(splits.length > 1, term_name_no_brackets);
+        String object = splits[0];
+        if (object.equals("return")) {
+          if (format == OutputFormat.DBCJAVA) {
+            object = "$return";
+          } else {
+            object = "\\result";
           }
-          return
-            "daikon.Quant.collect(" + type_instance + ", " + object + ", " + "\"" + fields + "." + field + "\"" + ")";
         }
+        String collectType =  (v.type.isPrimitive() ? v.type.base() : "Object");
+        String fields = "";
+        for (int j = 1 ; j < splits.length ; j++) {
+          if (j != 1) { fields += "."; }
+          fields += splits[j];
+        }
+        return
+          "daikon.Quant.collect" + collectType + "(" + object + ", " + "\"" + fields + "\"" + ")";
       }
     }
 
@@ -1411,7 +1398,10 @@ public abstract class VarInfoName
       return "\\old(" + term.jml_name(v) + ")";
     }
     protected String dbc_name_impl(VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       String brackets = "";
       Assert.assertTrue(v != null);
       String preType = v.type.base();
@@ -1807,7 +1797,10 @@ public abstract class VarInfoName
       return java_family_impl(OutputFormat.DBCJAVA, v);
     }
     protected String java_family_impl(OutputFormat format, VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
@@ -1925,7 +1918,10 @@ public abstract class VarInfoName
 
     // Helper for JML, Java and DBC formats
     protected String slice_helper(OutputFormat format, VarInfo v) {
+
+      // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
+
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
