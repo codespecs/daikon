@@ -59,4 +59,3 @@ alias bibfind /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail
 if (! $?EDITOR) setenv EDITOR emacsclient
 if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs
 if (! $?VISUAL) setenv VISUAL emacsclient
-

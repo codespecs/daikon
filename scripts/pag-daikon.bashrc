@@ -14,7 +14,7 @@ if [ ! -d "${DAIKONDIR}" ] then
   # Default to Michael Ernst's version of Daikon, just so references to
   # ${INV} don't die, preventing this script from completing.  This is not
   # tested.
-  if [ -d /afs/csail.mit.edu/u/m/mernst/research/invariants ]
+  if [ -d /afs/csail.mit.edu/u/m/mernst/research/invariants ] then
     export DAIKONDIR=/afs/csail.mit.edu/u/m/mernst/research/invariants
   fi
 fi
@@ -61,4 +61,3 @@ export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
 export VISUAL=${VISUAL:-emacsclient}
-
