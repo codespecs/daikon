@@ -101,21 +101,21 @@ public class InvariantTester extends TestCase {
 
   public void test_prob_and() {
 
-    Assert.assert(Invariant.prob_and(0, 0) == 0);
-    Assert.assert(Invariant.prob_and(0, 1) == 1);
-    Assert.assert(Invariant.prob_and(1, 0) == 1);
-    Assert.assert(Invariant.prob_and(1, 1) == 1);
-    Assert.assert(Invariant.prob_and(0, .5) == .5);
-    Assert.assert(Invariant.prob_and(.5, 0) == .5);
-    Assert.assert(Invariant.prob_and(1, .5) == 1);
-    Assert.assert(Invariant.prob_and(.5, 1) == 1);
-    Assert.assert(Invariant.prob_and(0, .1) == .1);
-    Assert.assert(Invariant.prob_and(.1, 0) == .1);
-    Assert.assert(Invariant.prob_and(1, .1) == 1);
-    Assert.assert(Invariant.prob_and(.1, 1) == 1);
-    Assert.assert(Invariant.prob_and(.5, .5) == .75);
-    Assert.assert(Invariant.prob_and(.1, .9) == .91);
-    Assert.assert(Invariant.prob_and(.9, .1) == .91);
+    Assert.assertTrue(Invariant.prob_and(0, 0) == 0);
+    Assert.assertTrue(Invariant.prob_and(0, 1) == 1);
+    Assert.assertTrue(Invariant.prob_and(1, 0) == 1);
+    Assert.assertTrue(Invariant.prob_and(1, 1) == 1);
+    Assert.assertTrue(Invariant.prob_and(0, .5) == .5);
+    Assert.assertTrue(Invariant.prob_and(.5, 0) == .5);
+    Assert.assertTrue(Invariant.prob_and(1, .5) == 1);
+    Assert.assertTrue(Invariant.prob_and(.5, 1) == 1);
+    Assert.assertTrue(Invariant.prob_and(0, .1) == .1);
+    Assert.assertTrue(Invariant.prob_and(.1, 0) == .1);
+    Assert.assertTrue(Invariant.prob_and(1, .1) == 1);
+    Assert.assertTrue(Invariant.prob_and(.1, 1) == 1);
+    Assert.assertTrue(Invariant.prob_and(.5, .5) == .75);
+    Assert.assertTrue(Invariant.prob_and(.1, .9) == .91);
+    Assert.assertTrue(Invariant.prob_and(.9, .1) == .91);
 
     Random r = new Random(20010907);
     for (int i=0; i<100; i++) {
@@ -125,28 +125,28 @@ public class InvariantTester extends TestCase {
       double r1 = Invariant.prob_and(x, y, z);
       double r2 = Invariant.prob_and(x, Invariant.prob_and(y, z));
       double r3 = Invariant.prob_and(Invariant.prob_and(x, y), z);
-      Assert.assert(Math.abs(r1-r2) < .000001);
-      Assert.assert(Math.abs(r1-r3) < .000001);
-      Assert.assert(Math.abs(r2-r3) < .000001);
+      Assert.assertTrue(Math.abs(r1-r2) < .000001);
+      Assert.assertTrue(Math.abs(r1-r3) < .000001);
+      Assert.assertTrue(Math.abs(r2-r3) < .000001);
     }
   }
 
   public void test_prob_or() {
-    Assert.assert(Invariant.prob_or(0, 0) == 0);
-    Assert.assert(Invariant.prob_or(0, 1) == 0);
-    Assert.assert(Invariant.prob_or(1, 0) == 0);
-    Assert.assert(Invariant.prob_or(1, 1) == 1);
-    Assert.assert(Invariant.prob_or(0, .5) == 0);
-    Assert.assert(Invariant.prob_or(.5, 0) == 0);
-    Assert.assert(Invariant.prob_or(1, .5) == .5);
-    Assert.assert(Invariant.prob_or(.5, 1) == .5);
-    Assert.assert(Invariant.prob_or(0, .1) == 0);
-    Assert.assert(Invariant.prob_or(.1, 0) == 0);
-    Assert.assert(Invariant.prob_or(1, .1) == .1);
-    Assert.assert(Invariant.prob_or(.1, 1) == .1);
-    Assert.assert(Invariant.prob_or(.5, .5) == .5);
-    Assert.assert(Invariant.prob_or(.1, .9) == .1);
-    Assert.assert(Invariant.prob_or(.9, .1) == .1);
+    Assert.assertTrue(Invariant.prob_or(0, 0) == 0);
+    Assert.assertTrue(Invariant.prob_or(0, 1) == 0);
+    Assert.assertTrue(Invariant.prob_or(1, 0) == 0);
+    Assert.assertTrue(Invariant.prob_or(1, 1) == 1);
+    Assert.assertTrue(Invariant.prob_or(0, .5) == 0);
+    Assert.assertTrue(Invariant.prob_or(.5, 0) == 0);
+    Assert.assertTrue(Invariant.prob_or(1, .5) == .5);
+    Assert.assertTrue(Invariant.prob_or(.5, 1) == .5);
+    Assert.assertTrue(Invariant.prob_or(0, .1) == 0);
+    Assert.assertTrue(Invariant.prob_or(.1, 0) == 0);
+    Assert.assertTrue(Invariant.prob_or(1, .1) == .1);
+    Assert.assertTrue(Invariant.prob_or(.1, 1) == .1);
+    Assert.assertTrue(Invariant.prob_or(.5, .5) == .5);
+    Assert.assertTrue(Invariant.prob_or(.1, .9) == .1);
+    Assert.assertTrue(Invariant.prob_or(.9, .1) == .1);
   }
 
 }
