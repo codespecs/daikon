@@ -5572,6 +5572,12 @@ then you have not correctly installed the dfec distribution
 in the directory referred to by environment variable DFECDIR.  (That
 directory is placed on your path by the standard Daikon dotfiles.)
 
+Note, lackwit may have different preprocessor parameters set than
+@command{gcc} or @command{g++} (and @command{dfec}) do.  As a result,
+you may get errors about undefined function definitions with
+@command{lackwit}, but not with @command{dfec} proper.  Check if the
+preprocessor is following the wrong branch, and adjust your code to
+follow the right branch.  
 
 @node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
 @subsection Problems compiling and linking instrumented programs
