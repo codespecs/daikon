@@ -81,7 +81,7 @@ public class DTraceWriter extends DaikonWriter
          return;
          */
         
-        if(Runtime.dtrace_closed)
+        if(Runtime.no_dtrace)
             return;
 
         Member member = mi.member;
@@ -108,7 +108,7 @@ public class DTraceWriter extends DaikonWriter
     {
         // Thread thread = Thread.currentThread();
 
-        if(Runtime.dtrace_closed)
+        if(Runtime.no_dtrace)
             return;
         
         Member member = mi.member;

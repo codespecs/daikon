@@ -304,17 +304,23 @@ public class Runtime
             // ourselves, lest the call to System.exit cause deadlock.
             dtrace.println();
             dtrace.println("# EOF (added by no_more_output)");
-            dtrace.close();
+            
+            //don't close the stream, might still need to write decls info!
+            //dtrace.close();
 
             // Don't set dtrace to null, because if we continue running, there will
             // be many attempts to synchronize on it.  (Is that a performance
             // bottleneck, if we continue running?)
             // dtrace = null;
-            dtrace_closed = true;
+            
+            //don't set this to true, so we close the stream later!
+            //dtrace_closed = true;
 
 
             if (dtraceLimitTerminate)
             {
+                no_dtrace = true;
+                
                 System.out.println("Printed " + printedRecords + " records to dtrace file.  Exiting.");
                 throw new TerminationMessage("Printed " + printedRecords + " records to dtrace file.  Exiting.");
                 // System.exit(1);
@@ -605,7 +611,6 @@ private static StreamRedirectThread out_thread;
                         dtrace.println();
                         // This lets us know we didn't lose any data.
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
-                        //System.out.println("FLUSHING!!!!"); //TODO remove
                         dtrace.close();
                     }
 

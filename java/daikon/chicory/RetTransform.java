@@ -113,7 +113,7 @@ public class RetTransform implements ClassFileTransformer {
         }
       }
       if (!match) {
-        //System.out.printf ("not instrumenting %s, it doesn't match any regex\n", className);
+        ////System.out.printf ("not instrumenting %s, it doesn't match any regex\n", className);
         log ("not instrumenting %s, it doesn't match any regex\n", className);
         return (null);
       }
@@ -143,6 +143,7 @@ public class RetTransform implements ClassFileTransformer {
       JavaClass njc = cg.getJavaClass();
       if (debug)
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
+      
       return (cg.getJavaClass().getBytes());
 
     } catch (Throwable e) {
@@ -150,6 +151,7 @@ public class RetTransform implements ClassFileTransformer {
       e.printStackTrace();
       return (null);
     }
+   
   }
 
   /**
