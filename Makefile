@@ -28,7 +28,6 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
-# DIST_DIR := $(MERNST_DIR)/www/daikon/dist
 DIST_DIR := /home/httpd/html/daikon/dist
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 # Files that appear in the top level of the distribution directory
@@ -111,10 +110,11 @@ DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
 # Both make and test the distribution.
 # (Must make it first in order to test it!)
-dist-test: dist-notest dist-test-no-update-dist
+dist-and-test: dist-notest test-the-dist
 
-# A very simple test:  just verify that the distributed system compiles.
-dist-test-no-update-dist: dist-ensure-directory-exists
+# Test that the distributed system compiles.
+# Don't create any new distribution.
+test-the-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
@@ -144,12 +144,13 @@ cvs-test:
 
 # Main distribution
 
-dist: dist-test
+dist: dist-and-test
 
 dist-ensure-directory-exists: $(DIST_DIR)
 
+# Create the distribution, but don't test it.
 dist-notest: dist-ensure-directory-exists $(DIST_DIR_PATHS)
-	$(MAKE) update-dist-dir 
+	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
 # Is this the right way to do this?
@@ -161,9 +162,10 @@ dist-force:
 # 	# echo DAIKON_JAVA_FILES: ${DAIKON_JAVA_FILES}
 # 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
 update-dist-dir: dist-ensure-directory-exists
+	$(MAKE) update-doc-dist-date
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
-	# Jikes 1.14 doesn't seem to work here; apparently tries to build
-	# method or class with more than 0xFFFF bytecodes.
+	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
+	# a method or class with more than 0xFFFF bytecodes.
 	cd java/daikon && $(MAKE) all_via_javac 
 	cd java/daikon && $(MAKE) junit
 	cd doc && $(MAKE) html html-chap
@@ -178,13 +180,34 @@ update-dist-dir: dist-ensure-directory-exists
 	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
-
 	update-link-dates $(DIST_DIR)/index.html
+	$(MAKE) update-dist-version
+
+TODAY := $(shell date "+%B %d, %Y")
+
+# Update the documentation with a new distribution date (today).
+# This is done immediately before releasing a new distribution.
+update-doc-dist-date:
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*\n/$$1${TODAY}\n/;' doc/daikon.texinfo
+	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html
+
+# Update the version number, and update the documentation accordingly.
+# This is done immediately after releasing a new version.
+update-dist-version: update-dist-version-file
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
+
+# This isn't a part of the "update-dist-version" target because if it is,
+# the "shell cat" command gets the old VERSION file.
+# (Note that the last element of VERSION may be negative, such as "-1".
+# This is useful in order to make the next version end with ".0".)
+update-dist-version-file:
+	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
 www:
 	html-update-toc doc/www/index.html
 	cd doc/www && cp -Ppf $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
+	update-link-dates $(DIST_DIR)/index.html
 
 .PHONY: www
 
@@ -242,7 +265,6 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	# Keep .java files, delete everything else
 	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 
-	date > /tmp/daikon/VERSION
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
 	# Now we are ready to make the daikon-jar distribution
