@@ -6,7 +6,7 @@ works:
 <p>
 
 An invariant is suppressed if it is implied by another invariant.  A
-suppressed invariant is nor checked as long as its suppressor is true.
+suppressed invariant is not checked as long as its suppressor is true.
 This saves time for checking long data trace files, and reduces output
 spam for obvious invariants.  Suppression is NOT:
 
@@ -33,7 +33,7 @@ more than one invariant to suppress another).  The class that
 generates SuppressionLink objects is a SuppressionFactory.  There are
 many different kinds of SuppressionFactory's, one for each suppression
 rule we have.  Most SuppressionFactory's are attached to the
-invariants that they would suppress.
+invariant classes that they would suppress.
 
 <p>
 
