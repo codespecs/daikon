@@ -197,7 +197,7 @@ public final class Global {
     for (int i=0; i<dpss.length; i++) {
       if (dpss[i].length == slice.arity) {
         for (int j=0; j<slice.arity; j++) {
-          if (dpss[i][j] != slice.var_infos[j].name)
+          if (!dpss[i][j].equals(slice.var_infos[j].name.name()))
             continue outer;
         }
         return true;
