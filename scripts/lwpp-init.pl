@@ -25,8 +25,8 @@ $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
 $ENV{LACKWIT_ARGS} = "-ignore __restrict";
 
-`EmitHeaders $lackwit_home/lib/Default.sigs`;
-die "EmitHeaders failed\n" if ($CHILD_ERROR != 0);
+my $emitheaders_output = `~mernst/research/invariants/front-end/c/lackwit/bin/EmitHeaders $lackwit_home/lib/Default.sigs`;
+die "EmitHeaders failed:\n$emitheaders_output\n" if ($CHILD_ERROR != 0);
 
 unshift @files, "$lackwit_home/lib/libc.c";
 
@@ -42,17 +42,18 @@ foreach my $file (@files) {
   $int_file =~ s!(.*)/(.*)\.c!$2.c!; # strip leading directories
   $int_file = "$lackwitdb/$int_file";
 
+  my $lh_output;
   if ($file =~ /libc\.c/) {
-      my $lhflags = "";
-      if (`uname` =~ /Linux/) {
-	  $lhflags = "-D_LINUX_IN_H -D_LIBIO_H";
-      }
-    `lh -\$ -w $lhflags --gen_c_file_name $int_file $file`;
+    my $lhflags = "";
+    if (`uname` =~ /Linux/) {
+      $lhflags = "-D_LINUX_IN_H -D_LIBIO_H";
+    }
+    $lh_output = `lh -\$ -w $lhflags --gen_c_file_name $int_file $file`;
   } else {
-    `lh -w --gen_c_file_name $int_file $file`;
+    $lh_output = `lh -w --gen_c_file_name $int_file $file`;
   }
-  die "lh failed processing file $file\n" if ($CHILD_ERROR != 0);
-  my $ret = `gcc -c $int_file -o /dev/null 2>&1`;
-  $ret =~ /^(.*)Launching real compiler/s;
+  die "lh failed processing file $file:\n$lh_output\n" if ($CHILD_ERROR != 0);
+  my $gcc_output = `gcc -c $int_file -o /dev/null 2>&1`;
+  $gcc_output =~ /^(.*)Launching real compiler/s;
   die "Error processing $int_file\n$1\n" if ($1);
 }
