@@ -43,13 +43,14 @@ public class ContextSplitterFactory
    * Read all the map files in the given collection, create callsite
    * splitters from them, and put the splitters into SplitterList.
    **/
-  public static void load_mapfiles_into_splitterlist(Collection files, // [String]
+  public static void load_mapfiles_into_splitterlist(Collection files, // [File]
                                                      int grain
                                                      )
   {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
-      String filename = (String) i.next();
-      File file = new File(filename);
+      File file = (File)i.next();
+      String filename = file.getName();
+
       System.out.print(".");  // show progress
       debug.debug("Reading mapfile " + filename);
 
