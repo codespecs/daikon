@@ -164,6 +164,11 @@ Instrumentation
 * Instrumenting C programs::    
 * Instrumenting Perl programs::  
 
+Instrumenting C programs
+
+* Instrumenting C programs with Kvasir::  
+* Instrumenting C programs with dfec::  
+
 Run the instrumented program
 
 * Run Java::                    
@@ -663,12 +668,12 @@ make kvasir
 
 This will check that you have the appropriate prerequisites (such as
 GCC), configure Kvasir for your machine, compile it, and install
-binaries for it in the directory @file{kvasir/inst}.
+it in the directory @file{kvasir/inst}.
 
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dfec} script in the @file{$DAIKONDIR/bin} directory; if
 you have set up the Daikon environment according to the instructions
-above, it should be in your @code{PATH}. For instructions on using
+above, it should already be in your @code{PATH}. For instructions on using
 Kvasir, see @ref{Binary C front end Kvasir}.
 
 @node    Installing dfec, Installing the Context GUI, Installing Kvasir, Installing Daikon
@@ -1240,7 +1245,8 @@ Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
 older source-based front end dfec are in a subdirectory
 @file{dfec-examples}.  It should be possible to instrument the dfec
 examples with Kvasir, though we will not give directions here.
-Instrumenting the Kvasir examples with dfec is not recommended.
+Instrumenting the Kvasir examples with dfec is not recommended (and is
+not likely to work).
 
 In order to detect invariants over C programs, you must
 install either Kvasir, the binary-based front end for C programs (for
@@ -1273,9 +1279,9 @@ code you wish invariants about. For simplicity in this example, we
 have combined all the files from the original bzip2 application into a
 single file.
 
-@item Run the program using the kvasir-dfec script
+@item Run the program using the kvasir-dfec script.
 @example
-kvasir-dfec ./bzip2 -vvc bzip2.c >bzip2.c.bz2
+kvasir-dfec ./bzip2 -vvc bzip2.c > bzip2.c.bz2
 @end example
 
 Run the program just as you normally would, but prepend
@@ -1287,9 +1293,9 @@ specified the program as @file{./bzip2}, rather than simply
 @file{bzip2}, to unambiguously specify that the program in the current
 directory was meant, rather than one elsewhere in your @code{PATH}.
 
-Executing under Kvasir, the program will run normally, but with
-additional checks and collecting trace information (for this reason,
-the program will run more slowly that usual). Kvasir creates a
+Executing under Kvasir, the program runs normally, but Kvasir will
+executes additional checks and collects trace information (for this
+reason, the program will run more slowly than usual). Kvasir creates a
 directory named @file{daikon-output} under the current directory, and
 creates files @file{bzip2.decls} and @file{bzip2.dtrace} describing
 its observations.
@@ -1312,8 +1318,8 @@ java daikon.Daikon -o bzip2.inv \
 The invariants are printed to standard out, and a binary representation
 of the invariants is written to @file{bzip2.inv}.
 
-@item Examine the invariants.  As described in the Daikon manual, there are
-several ways to do this:
+@item Examine the invariants.  As described in @xref{Step-by-step
+instructions}, there are several ways to do this:
 @itemize 
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
@@ -1728,8 +1734,17 @@ For more information about dfej, see @ref{Java front end dfej}.
 There are two ways to instrument C programs. Compiled programs
 originally written in C can be instrumented on the fly using the
 Kvasir tool, or C programs in source code form can be instrumented
-with the @command{dfec} tool. Kvasir can only be used on Linux/x86,
-but when it's available, it's usually easier to use.
+with the @command{dfec} tool.  We recommend use of Kvasir.
+Kvasir can only be used on Linux/x86, but when it's available, it's
+usually easier to use and more reliable.
+
+@menu
+* Instrumenting C programs with Kvasir::  
+* Instrumenting C programs with dfec::  
+@end menu
+
+@node    Instrumenting C programs with Kvasir, Instrumenting C programs with dfec, Instrumenting C programs, Instrumenting C programs
+@subsubsection Instrumenting C programs with Kvasir
 
 To use Kvasir with your program, first make sure that your program has
 been compiled with DWARF-2 format debugging information, such as by
@@ -1738,6 +1753,9 @@ program as usual, but prepend @code{kvasir-dfec} to the command line.
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{Binary C
 front end Kvasir}.
+
+@node    Instrumenting C programs with dfec,  , Instrumenting C programs with Kvasir, Instrumenting C programs
+@subsubsection Instrumenting C programs with dfec
 
 To instrument C source, invoke @command{dfec} on all the source and
 header files at once:
@@ -3629,12 +3647,13 @@ comment immediately before the declared type (but after any modifiers like
 @node Binary C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
 @section Binary C front end Kvasir
 
-Daikon's older C front end, known as dfec, works by rewriting the
+Daikon's older C front end, known as dfec (@pxref{Source-based C front
+end dfec}), works by rewriting the
 source code for your C program. To avoid some of the limitations of
 this approach, Daikon's new front end for C, named Kvasir, instead
 works by examining the operation of an unmodified binary at
-runtime. Kvasir is named after the Norse god of beet juice (and
-knowledge).
+runtime.  Kvasir is named after the Norse god of knowledge and beet
+juice.
 
 Kvasir is based on the Valgrind dynamic program supervision framework
 (which is best known for its memory error detection tool). Using
@@ -3642,10 +3661,9 @@ Valgrind allows Kvasir to interrupt your program's execution, read its
 variables, and examine its memory usage, all transparently to the
 program. Also, rather than using your program's source code to find
 the names and types of functions and variables, Kvasir obtains them
-from debugging information included in an executable in a standard
-format. These differences should make Kvasir much easier to use than
-the source-rewriting-based dfec, as well as allowing it to operate on
-larger programs.
+from debugging information included in the executable in a standard
+format. These differences should Kvasir both much easier to use and
+more robust than the source-rewriting-based dfec.
 
 However, Kvasir has some limitations of its own. Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
@@ -3688,32 +3706,33 @@ just say
 @example
 kvasir-dfec ./program -option input.file
 @end example
-As well as running your program (more slowly that usual), this command
-will also create a directory @file{daikon-output} in the current
+As well as running your program (more slowly than usual), this command
+also creates a directory @file{daikon-output} in the current
 directory containing @file{program.decls} and @file{program.dtrace}
 files suitable as input to Daikon.
 
-By default, Kvasir will overwrite the @file{program.decls} and
+By default, Kvasir overwrites the @file{program.decls} and
 @file{program.dtrace} files on each program run. To collect
 information about a number of runs of a program, set the
-@code{DTRACEAPPEND} environment variable to 1; this will cause Kvasir
-to append to rather than overwrite the @file{program.dtrace} file
+@code{DTRACEAPPEND} environment variable to 1; this causes Kvasir
+to append to rather than overwrite the @file{program.dtrace} file.
 
 @node Kvasir limitations,  , Using Kvasir, Binary C front end Kvasir
 @subsection Kvasir limitations
 
-@c Be sure to remove this once it becomes our of date
-As of Daikon version 3.0.5, Kvasir is still in an active stage of
+@c Be sure to remove this once it becomes out of date
+@c (This version number should be automatically updated, though.)
+As of Daikon version 3.0.4, Kvasir is still in an active stage of
 development. While it works well on many programs, it does not yet
 support all of the options that the older dfec did, nor all of its
 features. This subsection lists some of the known limitations of the
-first Kvasir release; if you encounter any problems other than listed
-here, please report them as bugs. The limitations are listed roughly
-in decreasing order of severity.
+current Kvasir release; if you encounter any problems other than listed
+here, please report them as bugs (@pxref{Reporting bugs}). The
+limitations are listed roughly in decreasing order of severity.
 
-@itemize
+@itemize @bullet
 @item
-Kvasir does not support arrays. Arrays are instead treated as
+Kvasir does not fully output arrays. Arrays are instead treated as
 pointers, so that only the directly pointed-to value (that is, the 0th
 element) is printed. Character arrays are a partial exception;
 pointers to characters are always treated as pointing to
@@ -7323,6 +7342,10 @@ if not, write to the Free
 Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
 
+
+@node    Mailing lists reminder, Credits, History, Details
+@section Mailing lists reminder
+
 If you use Daikon, please subscribe to the daikon-announce and
 daikon-discuss mailing lists (@pxref{Mailing lists}).  The
 daikon-announce list will inform you of new versions, enhancements,
@@ -7379,16 +7402,23 @@ David Cok,
 Dorothy Curtis,
 Engelbert Hubbers,
 Scott McMaster,
+Alex Orso,
 Manos Renieris,
 Tao Xie.
 Many others have also been generous with their feedback, for which we
 are also grateful.
 
-@c This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
-@c an IBM Cooperative Fellowship, and a gift from Edison Design Group.
-
 If your name has been inadvertently omitted from this section, please
 let us know so we can correct the oversight.
+
+Financial support has been provided by:
+National Science Foundation (NSF),
+Defense Advanced Research Projects Agency (DARPA),
+Edison Design Group,
+IBM,
+NTT,
+Raytheon,
+Toshiba.
 
 
 @node     File formats, Index, Details, Top
