@@ -32,7 +32,7 @@ import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
 
-  public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon@pag.lcs.mit.edu.";
+  public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon-developers@pag.lcs.mit.edu.";
 
   InvariantTablesPanel invariantsTablesPanel;
   InvariantFilters invariantFilters = new InvariantFilters();
