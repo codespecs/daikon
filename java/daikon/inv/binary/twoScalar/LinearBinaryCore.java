@@ -142,11 +142,18 @@ public final class LinearBinaryCore implements java.io.Serializable {
 
   public boolean isSameFormula(LinearBinaryCore other)
   {
-    return
-      (values_seen >= MINPAIRS) &&
-      (other.values_seen >= MINPAIRS) &&
-      (a == other.a) &&
-      (b == other.b);
+    boolean thisMeaningless = values_seen < MINPAIRS;
+    boolean otherMeaningless = other.values_seen < MINPAIRS;
+
+    if (thisMeaningless && otherMeaningless) {
+      return true;
+    } else {
+      return
+        (values_seen >= MINPAIRS) &&
+        (other.values_seen >= MINPAIRS) &&
+        (a == other.a) &&
+        (b == other.b);
+    }
   }
 
   public boolean isExclusiveFormula(LinearBinaryCore other)
