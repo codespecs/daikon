@@ -286,7 +286,7 @@ all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
 # all_directly: ${AUTO_GENERATED_FILES} ajax
 all_directly: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ...'
-	${JAVAC_COMMAND} ${JAVA_FILES}
+	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
