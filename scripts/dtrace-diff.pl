@@ -58,7 +58,7 @@ sub gzopen ( $$ ) {
     my ($fh, $fn) = @_;
     if ($fn =~ /\.gz$/) {
         my $gzcat = `which gzcat 2>&1`;
-	if ($gzcat =~ /Command not found|which: no gzcat in/) {
+	if ($gzcat =~ /not found|which: no gzcat in/ or $gzcat eq "") {
 	  $gzcat = 'zcat';
 	} else {
 	  $gzcat = 'gzcat';	# command output contains newline, etc.
