@@ -181,7 +181,8 @@ public class PptRelation implements Serializable {
 
   public Map /*VarInfo.Pair*/ get_child_equalities_as_parent(){
 
-    debug.fine ("get_child_equalities for " + child.ppt_name);
+    debug.fine ("get_child_equalities for " + child.ppt_name
+                + " for parent " + parent.ppt_name + " " + relationship);
     Map emap = new LinkedHashMap();
 
     if (child.equality_view == null)
