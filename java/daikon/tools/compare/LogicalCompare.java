@@ -107,7 +107,8 @@ public class LogicalCompare {
         if (filters['O'])
           continue;
       }
-      if (filters['m'] && inv.ppt.num_mod_samples() == 0)
+      // test used to be "(filters['m'] && inv.ppt.num_mod_samples() == 0)"
+      if (filters['m'] && inv.ppt.num_samples() == 0)
         continue;
       if (filters['j'] && !inv.justified())
         continue;
