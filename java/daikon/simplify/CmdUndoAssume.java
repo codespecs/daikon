@@ -24,4 +24,8 @@ public class CmdUndoAssume
 	
   }
 
+  public String toString() {
+    return "CmdUndoAssume";
+  }
+
 }
