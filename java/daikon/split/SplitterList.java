@@ -19,10 +19,10 @@ public abstract class SplitterList {
     // System.out.println("SplitterList.put(" + pptname + ")");
     if (pptname.equals("") && ppt_splitters.containsKey(pptname)) {
       Splitter[] old = (Splitter[]) ppt_splitters.get(pptname);
-      Splitter[] new = new Splitter[old.length + splits.length];
-      System.arraycopy(old, 0, new, 0, old.length);
-      System.arraycopy(splits, 0, new, old.length, splits.length);
-      ppt_splitters.put(pptname, new);
+      Splitter[] new_splits = new Splitter[old.length + splits.length];
+      System.arraycopy(old, 0, new_splits, 0, old.length);
+      System.arraycopy(splits, 0, new_splits, old.length, splits.length);
+      ppt_splitters.put(pptname, new_splits);
     } else {
       Assert.assert(! ppt_splitters.containsKey(pptname));
       // Assert.assert(! ppt_splitters.containsKey(pptname),
