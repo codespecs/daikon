@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2003-01-18 18:14:52 mernst>
+# Time-stamp: <2003-03-19 15:21:21 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -86,6 +86,7 @@ my $file_handle_nonce = 'fh00';
 
 exit();
 
+
 ###########################################################################
 ### Subroutines
 ###
@@ -111,10 +112,12 @@ sub escape_comments ( $ ) {
   open($inhandle, $filename)
     || die "escape_comments:  cannot open $filename: $!\n";
 
-  my $JAVACPP_WHITESPACE_SEPARATOR = "JAVACPP_WHITESPACE_SEPARATOR";
+  # my $JAVACPP_WHITESPACE_SEPARATOR = "JAVACPP_WHITESPACE_SEPARATOR";
 
   while (<$inhandle>) {
     # print STDERR "// top of escape_comments loop: $_";
+
+    s/^[ \t]+\#/\#/;
 
     if (/^\#include "(.*)"/) {
       escape_comments($1);
