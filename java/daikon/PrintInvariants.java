@@ -617,27 +617,34 @@ public class PrintInvariants {
   }
   */ // ... [INCR]
 
-  //note - this rejects equality invariants out of hand
+  //This is just a temporary thing to provide more info about the
+  //reason invariants are rejected.
+  private static String reason = "";
 
+  //note - this rejects equality invariants out of hand
   /**
    * Determines whether an invariant should be printed.
    * @return true if the invariant should be printed.
    **/
   public static boolean accept_invariant(Invariant inv)
   {
-    if ((inv instanceof Comparison) && inv.isExact())
-      {
-	return(false);
-      }
+    reason = "";
+
+    if (IsEqualityComparison.it.accept(inv)) {
+      reason = "is an equality invariant";
+      return(false);
+    }
 
     if (!inv.isWorthPrinting())
       {
+	reason = "isn't worth printing";
 	return(false);
       }
 
     if (Daikon.suppress_redundant_invariants_with_simplify &&
 	inv.ppt.parent.redundant_invs.contains(inv))
       {
+	reason = "is redundant";
 	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
 	return(false);
       }
@@ -650,18 +657,23 @@ public class PrintInvariants {
       for (int v=0; !mms && v<varbls.length; v++) {
 	mms |= varbls[v].isDerivedSequenceMinMaxSum();
       }
-      if (mms) { return(false); }
+      if (mms) { 
+	reason = "has min/max/sum";
+	return(false); 
+      }
     }
 
     if (inv.ppt.ppt_name.isExitPoint()) {
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
 	VarInfo vi = inv.ppt.var_infos[i];
 	if (vi.isDerivedParam()) {
+	  reason = "is derived parameter & uninteresting";
 	  return false;
 	}
       }
     }
-
+    
+    reason = "";
     return(true);
   }
 
@@ -784,23 +796,6 @@ public class PrintInvariants {
 
     int invCounter = 0; // Count printed invariants for this program point
 
-    // First, print the equality invariants.  They don't show up in the
-    // below because one of the two variables is non-canonical!
-    // This technique is a bit non-orthogonal, but probably fine.
-    // We might do no output if all the other variables are vacuous.
-    // We should have already equal_to for each VarInfo.
-
-    for (int i=0; i<ppt.var_infos.length; i++) {
-      VarInfo vi = ppt.var_infos[i];
-
-      // if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
-      {
-	invCounter++;
-	print_equality_invariants(vi, out, invCounter, ppt);
-      }
-    }
-
-
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
@@ -809,50 +804,118 @@ public class PrintInvariants {
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;
-    for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
-      Invariant inv = invs_array[ia_index];
 
-      // I could imagine printing information about the PptSlice
-      // if it has changed since the last Invariant I examined.
-      PptSlice slice = inv.ppt;
-      if (Invariant.debugPrint.isDebugEnabled()) {
-        Invariant.debugPrint.debug("Slice: " + slice.varNames() + "  "
-				   + slice.num_samples() + " samples");
-        Invariant.debugPrint.debug("    Samples breakdown: "
-				   + slice.tuplemod_samples_summary());
-        // slice.values_cache.dump();
+    List accepted_invariants = new Vector();
+
+    for(int i = 0; i < invs_array.length; i++){
+      Invariant inv = invs_array[i];
+      InvariantFilters fi = new InvariantFilters();
+      fi.ppt_map = ppt_map;
+
+      boolean pi_accepted = accept_invariant(inv);
+      //boolean fi_accepted = true;
+      boolean fi_accepted = fi.shouldKeep(inv);
+
+      if((fi_accepted != pi_accepted) && should_gather_data) {
+	FileWriter outputFile = null;
+	try {
+	  outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
+	  outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.isWorthPrinting() + "\t" + inv.getClass().getName() + "\t" + reason + "\t" + inv.format() + "\n");
+	  outputFile.close();
+	}
+	catch(IOException e) {
+	  System.out.println(e);
+	}
       }
-      Assert.assert(slice.check_modbits());
 
-//        InvariantFilters fi = new InvariantFilters();
-//        fi.ppt_map = ppt_map;
+      if(should_gather_data) {
+	FileWriter outputFile = null;
+	try {
+	  outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/rejection_reasons", true);
+	  outputFile.write(pi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\t" + reason + "\n");
+	  outputFile.close();
+	}
+	catch(IOException e) {
+	  System.out.println(e);
+	}
+      }
 
-//        boolean fi_accepted = fi.shouldKeep(inv);
-//        boolean pi_accepted = accept_invariant(inv);
+      if(fi_accepted && final_output_should_use_new_filtering) {
+	invCounter++;
+	Global.reported_invariants++;
+	accepted_invariants.add(inv);
+      }
+      if(pi_accepted && !final_output_should_use_new_filtering) {
+	invCounter++;
+	Global.reported_invariants++;
+	accepted_invariants.add(inv);
+      }
+    }
+ 
+    if(final_output_should_use_new_filtering) {
+      accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
+    }
+    else {
+      for (int i=0; i<ppt.var_infos.length; i++) {
+	VarInfo vi = ppt.var_infos[i];
 
-//        if(fi_accepted != pi_accepted)
-//  	{
-//  	  FileWriter outputFile = null;
-//  	  try
-//  	    {
-//  	      outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
-//  	      outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\n");
-//  	      outputFile.close();
-//  	    }
-//  	  catch(IOException e)
-//  	    {
-//  	      System.out.println(e);
-//  	    }
-//  	}
-      if(accept_invariant(inv))
+	//if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
 	{
 	  invCounter++;
-	  Global.reported_invariants++;
-	  print_invariant(inv, out, invCounter, ppt);
+	  if (Invariant.debugPrintEquality.isDebugEnabled()) {
+	    Invariant.debugPrint.debug("Equality set for ppt "  + ppt.name + " " + vi.name.name());
+	    //appears not to work (compile) b/c ver 3 uses something
+	    //other than vi.equalTo.
+	    //StringBuffer sb = new StringBuffer();
+	    //for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+	    //  sb.append ("  " + ((VarInfo) j.next()).name.name());
+	    //}
+	    //Invariant.debugPrintEquality.debug (sb);	
+	  }
+	  print_equality_invariants(vi, out, invCounter, ppt);
 	}
+      }
     }
+    finally_print_the_invariants(accepted_invariants, out, ppt);
   }
 
+  private static final boolean should_gather_data = false;
+  private static final boolean final_output_should_use_new_filtering = false;
+
+  /**
+   * Does the actual printing of the invariants.  Note that it creates
+   * this totally bogus internal value index which is for the purpose
+   * of patently lying to the IOA stuff about what the value of
+   * InvariantCounter is.
+   **/
+  private static void finally_print_the_invariants(List invariants, PrintWriter out, PptTopLevel ppt)
+  {
+    int index = 0;
+    Iterator inv_iter = invariants.iterator();
+    while(inv_iter.hasNext()) {
+      index++;
+      Invariant inv = (Invariant)inv_iter.next();
+      
+      // I could imagine printing information about the PptSlice
+      // if it has changed since the last Invariant I examined.
+      //
+      // this code may fail in some cases because slice might be
+      // null if the invariant is of type Equality.  if you want
+      // this to work, you'll want to modify it to handle that case
+      // first.
+      //PptSlice slice = inv.ppt;
+      //if (debugPrint.isDebugEnabled()) {
+      //  debugPrint.debug("Slice: " + slice.varNames() + "  "
+      //		   + slice.num_samples() + " samples");
+      //  debugPrint.debug("    Samples breakdown: "
+      //		   + slice.tuplemod_samples_summary());
+      // slice.values_cache.dump();
+      //}
+      //Assert.assert(slice.check_modbits());
+	
+      print_invariant(inv, out, index, ppt);
+    }      
+  }
 
   /**
    * Get name of invariant for IOA output, since IOA invariants have
