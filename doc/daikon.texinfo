@@ -1792,6 +1792,12 @@ redundant invariants.
 @item --suppress_post
 Suppress display of obvious postconditions on prestate.
 
+@item --suppress_redundant
+Suppress display of logically redundant invariants, using Simplify.
+Simplify must be separately obtained (from
+@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this option.
+
 @item --prob_limit @var{pct}
 Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
@@ -1802,6 +1808,12 @@ Write output in ESC-like format.
 
 @item --simplify_output
 Write output in Simplify format.
+
+@item --ioa_output
+Write output in IOA format.
+
+@item --java_output
+Write output as Java expressions.
 
 @item --output_num_samples
 @cindex samples breakdown output
@@ -2218,11 +2230,23 @@ redundant invariants.
 @item --suppress_post
 Suppress display of obvious postconditions on prestate.
 
+@item --suppress_redundant
+Suppress display of logically redundant invariants, using Simplify.
+Simplify must be separately obtained (from
+@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this option.
+
 @item --esc_output
 Write output in ESC-like format.
 
 @item --simplify_output
 Write output in Simplify format.
+
+@item --ioa_output
+Write output in IOA format.
+
+@item --java_output
+Write output as Java expressions.
 
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
