@@ -117,13 +117,31 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
 	    String programPointName = pptName.getPoint();
 	    DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
+
+	    //  Create a node for this program point.  If this is the first program point
+	    //  node under this method, simply add the node.  If there are already some
+	    //  program point nodes, add this node in order.  Eg, make sure EXIT23 goes
+	    //  after ENTER and EXIT97.
 	    if (programPointNode == null) {
 		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-		methodNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
-	    }
+		if (methodNode.getChildCount() == 0)
+		    methodNode.add( new DefaultMutableTreeNode( topLevel ));
+		else {
+		    int exitNumber = pptName.getPointSubscript();
+		    int childIndex;
+		    for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
+			Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+			int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
+			if (currentChildExitNumber > exitNumber)
+			    break;
+		    }
+		    methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
+		}
+	    } else
+	      throw new Error( "InvariantsGUI.constructTreeModel():  ppt '" + name + "' has already been added to tree" );
 	}
 
-	//  Sort the method nodes within a class.  Sort according to a method's exit number.
+	//  TODO:  Sort the method nodes within a class.  Sort according to a method's exit number.
 	
 	return new DefaultTreeModel( root );
     }
@@ -294,6 +312,7 @@ class InvFileFilter extends FileFilter {
 }
 
 
+
 class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
     JScrollPane scrollPane;	 // the main scrollPane, which contains the main panel
     JPanel panel = new JPanel(); // the main panel
@@ -404,7 +423,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
 	JPanel tablePanel = new JPanel();
 	tablePanel.setLayout( new BoxLayout( tablePanel, BoxLayout.Y_AXIS ));
 
-	PptName pptName = new PptName( topLevel.name );
+	PptName pptName = topLevel.ppt_name;
 	String headingString;
 	if (pptName.getShortMethodName() == null)
 	    headingString = pptName.getFullClassName() + " : " + pptName.getPoint();
