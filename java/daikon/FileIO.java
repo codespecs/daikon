@@ -1,18 +1,43 @@
 package daikon;
 
-import daikon.derive.*;
+import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
 
-import utilMDE.*;
-import org.apache.oro.text.regex.*;
+import utilMDE.ArraysMDE;
+import utilMDE.Assert;
+import utilMDE.Intern;
+import utilMDE.UtilMDE;
+
 import org.apache.log4j.Category;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.LineNumberReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public final class FileIO {
+public final class FileIO
+{
 
 // We get all the declarations before reading any traces because at each
 // program point, we need to know the names of all the available variables,
@@ -32,21 +57,18 @@ public final class FileIO {
 //     - tricky for online operation
 
 
-
+  /** Nobody should ever instantiate a FileIO. **/
+  private FileIO() { throw new Error(); }
+  
 /// Constants
-
-  // If true, prints the unmatched procedure entries verbosely
-  private static final boolean VERBOSE_UNMATCHED_PROCEDURE_ENTRIES = false;
 
   final static String comment_prefix = "//";
   final static String declaration_header = "DECLARE";
-
-
   // Program point name tags
   public final static String ppt_tag_separator = ":::";
   public final static String enter_suffix = "ENTER";
   public final static String enter_tag = ppt_tag_separator + enter_suffix;
-  // This does not necessarily appear at the end of the program point name;
+  // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
   public final static String exit_suffix = "EXIT";
   public final static String exit_tag = ppt_tag_separator + exit_suffix;
@@ -55,45 +77,54 @@ public final class FileIO {
   public final static String class_static_suffix = "CLASS";
   public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
 
-
-  /// Settings
+/// Settings
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface.  When false, set modbits
-  // to 1 iff the printed representation has changed.  When true, set
-  // modbits to 1 if the printed representation has changed; leave
-  // other modbits as is.
+  // daikon.config.Configuration interface.
+
+  // If true, prints the unmatched procedure entries verbosely
+  public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
+
+  // When false, set modbits to 1 iff the printed representation has
+  // changed.  When true, set modbits to 1 if the printed
+  // representation has changed; leave other modbits as is.
   public static boolean dkconfig_add_changed = true;
 
-
-  /// Variables
-
-  // I'm not going to make this static because then it doesn't get restored
-  // when reading from a file; and it won't be *that* expensive to add yet
-  // one more slot to the Ppt object.
-  // static HashMap entry_ppts = new HashMap(); // maps from Ppt to Ppt
+/// Variables
 
   // This hashmap maps every program point to an array, which contains the
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
   // modified since this program point was last executed.
-    static HashMap ppt_to_value_reps = new HashMap();
+  static HashMap ppt_to_value_reps = new HashMap();
 
   //for debugging purposes: printing out a modified trace file with changed modbits
-  static boolean to_write_nonce = false;
-  static String nonce_value, nonce_string;
+  private static boolean to_write_nonce = false;
+  private static String nonce_value, nonce_string;
 
-  // Logging Categories
+// Logging Categories
 
   public static final Category debugRead =
     Category.getInstance (FileIO.class.getName() + ".read");
   public static final Category debugPrint =
     Category.getInstance (FileIO.class.getName() + ".printDtrace");
 
+  // Tempoary routine, for debugging
+  // Will eventually move into daikon.test.FileIOTest
+  public static void main(String[] args)
+    throws Exception
+  {
+    String inf = "daikon/test/fileIOTest.testStackAr";
+    String outf = "daikon/test/fileIOTest.testStackAr.goal";
+    PptMap map = read_declaration_files(Arrays.asList(new File[] { new File(inf) } ));
+    dump_ppts(new FileOutputStream(new File(outf)), map);
+  }
+
+
+  
 ///////////////////////////////////////////////////////////////////////////
 /// Declaration files
 ///
-
 
   /** This is intended to be used only interactively, while debugging. */
   static void reset_declarations() {
@@ -101,40 +132,47 @@ public final class FileIO {
   }
 
   /**
-   * Calls @link{read_declaration_file(String)} for each element
-   * of files.  See the definition of that function.
+   * @param files files to be read (java.io.File)
+   * @return a new PptMap containing declarations read from the files
+   * listed in the argument; connection information (controlling
+   * variables and entry ppts) is set correctly upon return.
    **/
-  static void read_declaration_files(Collection files, PptMap all_ppts) {
+  public static PptMap read_declaration_files(Collection files // [File]
+					      )
+    throws IOException
+  {
+    PptMap all_ppts = new PptMap();
+    // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext(); ) {
-      String file = (String) i.next();
+      File file = (File) i.next();
       System.out.print(".");  // show progress
-      try {
-	read_declaration_file(file, all_ppts);
-      } catch (IOException e) {
-	e.printStackTrace();
-	throw new Error(e.toString());
-      }
+      read_declaration_file(file, all_ppts);
     }
+    // Set up EXIT points to control EXITnn points
+    setup_combined_exits(all_ppts);
+    // Set up OBJECT and CLASS relationships
+    setup_object_relations(all_ppts);
+    // Set up orig() declarations and relationships
+    setup_orig_decls(all_ppts);
+    // Set up OBJECT on arguments relationships
+    // XXX
+    return all_ppts;
   }
 
-
-  /**
-   * @param filename
-   * @return a vector of PptTopLevel objects
-   **/
-  static Vector read_declaration_file(String filename, PptMap all_ppts) throws IOException {
-
+  /** Read one decls file; add it to all_ppts. **/
+  private static void read_declaration_file(File filename,
+					    PptMap all_ppts)
+    throws IOException
+  {
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_declaration_file " + filename
 		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
 		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
-    Vector new_ppts = new Vector();
-
     int varcomp_format = VarComparability.NONE;
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
 
     String line = reader.readLine();
 
@@ -142,13 +180,12 @@ public final class FileIO {
     for ( ; line != null; line = reader.readLine()) {
       if (debugRead.isDebugEnabled())
 	debugRead.debug("read_declaration_file line: " + line);
-      if (line.equals("") || line.startsWith("//") || line.startsWith("#"))
-	continue;
+      if (line.equals("") || line.startsWith("//") || line.startsWith("#"))	continue;
       if (line.equals(declaration_header)) {
 	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
 	// ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
-          new_ppts.add(ppt);
+          all_ppts.add(ppt);
         }
 	continue;
       }
@@ -161,7 +198,7 @@ public final class FileIO {
         } else if (line.equals("explicit")) {
           varcomp_format = VarComparability.EXPLICIT;
         } else {
-          throw new Error("Unrecognized VarComparability: " + line);
+          throw new IOException("Unrecognized VarComparability: " + line);
         }
         continue;
       }
@@ -179,17 +216,16 @@ public final class FileIO {
       }
       continue;
     }
-    for (int i=0; i<new_ppts.size(); i++) {
-      PptTopLevel ppt = (PptTopLevel) new_ppts.elementAt(i);
-      all_ppts.add(ppt);
-    }
-    after_processing_file_declarations(new_ppts, all_ppts);
-    return new_ppts;
   }
 
 
   // The "DECLARE" line has alredy been read.
-  static PptTopLevel read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, String filename) throws IOException {
+  private static PptTopLevel read_declaration(LineNumberReader file,
+					      PptMap all_ppts,
+					      int varcomp_format,
+					      File filename)
+    throws IOException
+  {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 
@@ -221,21 +257,15 @@ public final class FileIO {
       }
     }
 
-
-    // if (ppt_name.endsWith(":::ENTER"))
-    //   functions.add(ppt_name.substring(0, ppt_name.length() - 8));
-
-    Vector var_infos = new Vector();
-
     // Each iteration reads a variable name, type, and comparability.
-    // Possibly abstract this out into a separate function??
+    List var_infos = new ArrayList();
     VarInfo vi;
     while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
-        if (vi.name == ((VarInfo)var_infos.elementAt(i)).name) {
-          throw new Error("Duplicate variable name " + vi.name
-                          + " found at file " + filename
-                          + " line " + file.getLineNumber());
+        if (vi.name == ((VarInfo)var_infos.get(i)).name) {
+          throw new IOException("Duplicate variable name " + vi.name
+				+ " found at file " + filename
+				+ " line " + file.getLineNumber());
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -247,7 +277,7 @@ public final class FileIO {
       var_infos.add(vi);
     }
 
-    VarInfo[] vi_array = (VarInfo[]) var_infos.toArray(new VarInfo[0]);
+    VarInfo[] vi_array = (VarInfo[]) var_infos.toArray(new VarInfo[var_infos.size()]);
     return new PptTopLevel(ppt_name, vi_array);
   }
 
@@ -257,7 +287,12 @@ public final class FileIO {
    * Return null after reading the last variable in this program point
    * declaration.
    **/
-  static VarInfo read_VarInfo(LineNumberReader file, int varcomp_format, String filename, String ppt_name) throws IOException {
+  private static VarInfo read_VarInfo(LineNumberReader file,
+				      int varcomp_format,
+				      File filename,
+				      String ppt_name)
+    throws IOException
+  {
     String line = file.readLine();
     if ((line == null) || (line.equals("")))
       return null;
@@ -294,14 +329,220 @@ public final class FileIO {
     // Not a call to Assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
-      throw new Error("Unsupported (file) representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+      throw new IOException("Unsupported (file) representation type " +
+			    file_rep_type.format() + " for variable " +
+			    varname + " at line " + file.getLineNumber() +
+			    " of file " + filename);
     }
     if (! VarInfo.legalRepType(rep_type)) {
-      throw new Error("Unsupported (converted) representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+      throw new IOException("Unsupported (converted) representation type " +
+			    file_rep_type.format() + " for variable " +
+			    varname + " at line " + file.getLineNumber() +
+			    " of file " + filename);
     }
 
     return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value);
   }
+
+  /**
+   * For every variable that has the same name in higher and lower,
+   * add a link in the po relating them.  See the definitions of lower
+   * and higher in VarInfo for their semantics.
+   * @see VarInfo.po_higher
+   * @see VarInfo.po_lower
+   **/
+  private static void setup_po_same_name(VarInfo[] higher,
+					 VarInfo[] lower)
+  {
+    for (int i=0; i<higher.length; i++) {
+      VarInfo higher_vi = higher[i];
+      for (int j=0; j<lower.length; j++) {
+	VarInfo lower_vi = lower[j];
+	if (higher_vi.name == lower_vi.name) { // interned
+	  lower_vi.addHigherPO(higher_vi);
+	}
+      }
+    }
+  }
+
+  /**
+   * For each fooENTER point, add a fooEXIT point that contains all of
+   * the common variables from the fooEXITnn points.  It is an error
+   * if one of the fooEXIT points already exists.
+   **/
+  public static void setup_combined_exits(PptMap ppts)
+  {
+    List new_ppts = new ArrayList(); // worklist to avoid concurrent mod exn
+    for (Iterator itor = ppts.iterator(); itor.hasNext(); ) {
+      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
+      if (!enter_ppt.ppt_name.isEnterPoint())
+	continue;
+      // Construct the combined EXIT name
+      PptName exit_name = enter_ppt.ppt_name.makeExit();
+      Assert.assert(ppts.get(exit_name) == null);
+      // Find all of the EXITnn points
+      List exits = new ArrayList();
+      for (Iterator it = ppts.iterator(); it.hasNext(); ) {
+	PptTopLevel exitnn = (PptTopLevel) it.next();
+	if (exitnn.ppt_name.isExitPoint()) {
+	  Assert.assert(!exitnn.ppt_name.isCombinedExitPoint());
+	  if (exit_name.equals(exitnn.ppt_name.makeExit())) {
+	    exits.add(exitnn);
+	  }
+	}
+      }
+      // Find common vars in EXITnn points, and make a new ppt from them
+      VarInfo[] exit_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
+      PptTopLevel exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
+      // Set up the PO between EXIT and EXITnn
+      for (Iterator it = exits.iterator(); it.hasNext(); ) {
+	PptTopLevel exitnn = (PptTopLevel) it.next();
+	setup_po_same_name(exitnn.var_infos, exit_ppt.var_infos);
+      }
+      // Put new ppt on worklist to be added once iteration is complete
+      new_ppts.add(exit_ppt);
+    }
+    // Avoid ConcurrentModificationException by adding after the above loop
+    for (int i=0; i<new_ppts.size(); i++) {
+      ppts.add((PptTopLevel) new_ppts.get(i));
+    }
+  }
+
+  /**
+   * Set up the "controlling program point" partial ordering on
+   * VarInfos using the OBJECT, CLASS, ENTER-EXIT program point
+   * naming.
+   **/
+  private static void setup_object_relations(PptMap ppts)
+  {
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      PptName ppt_name = ppt.ppt_name;
+      // Find the ppt which controlls this one.
+      // CLASS controls OBJECT controls ENTER/EXIT.
+      PptTopLevel controlling_ppt = null;
+      if (ppt_name.isEnterPoint() || ppt_name.isCombinedExitPoint()) {
+	// TODO: also require that this is a public method (?)
+	controlling_ppt = ppts.get(ppt_name.makeObject());
+	if (controlling_ppt == null) {
+	  // If we didn't find :::OBJECT, fall back to :::CLASS
+	  controlling_ppt = ppts.get(ppt_name.makeClassStatic());
+	}
+      } else if (ppt_name.isObjectInstanceSynthetic()) {
+	controlling_ppt = ppts.get(ppt_name.makeClassStatic());
+      }
+      // Create VarInfo relations with the controller when names match.
+      if (controlling_ppt != null) {
+	setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
+      }
+    }
+  }
+
+  /**
+   * Add orig() variables to all EXIT or EXITnn program points.
+   * Should be performed after combined exits and controlling ppts
+   * have been added.
+   **/
+  private static void setup_orig_decls(PptMap ppts)
+  {
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel entry_ppt = (PptTopLevel) itor.next();
+      if (! entry_ppt.ppt_name.isEnterPoint()) {
+	continue;
+      }
+      for (Iterator it = ppts.iterator() ; it.hasNext() ; ) {
+	PptTopLevel exit_ppt = (PptTopLevel) it.next();
+	if (! exit_ppt.ppt_name.isExitPoint()) {
+	  continue;
+	}
+	if (! entry_ppt.ppt_name.equals(exit_ppt.ppt_name.makeEnter())) {
+	  continue;
+	}
+	// comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
+	PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
+	// Add "orig(...)" (prestate) variables to the program point.
+	// Don't bother to include the constants.  Walk through
+	// entry_ppt's vars.  For each non-constant, put it on the
+	// new_vis worklist after fixing its comparability information.
+	exit_ppt.num_orig_vars = entry_ppt.var_infos.length - entry_ppt.num_static_constant_vars;
+	VarInfo[] new_vis = new VarInfo[exit_ppt.num_orig_vars];
+	{
+	  VarInfo[] begin_vis = entry_ppt.var_infos;
+	  Assert.assert(exit_ppt.num_orig_vars == entry_ppt.num_tracevars);
+	  int new_vis_index = 0;
+	  for (int i=0; i<begin_vis.length; i++) {
+	    VarInfo vi = begin_vis[i];
+	    Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
+	    if (vi.isStaticConstant())
+	      continue;
+	    VarInfo origvar = VarInfo.origVarInfo(vi);
+	    // Fix comparability
+	    VarInfo postvar = exit_ppt.findVar(vi.name);
+	    Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
+	    origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+	    // Setup PO
+	    if (exit_ppt.ppt_name.isCombinedExitPoint()) {
+	      origvar.addHigherPO(vi);
+	    } else {
+	      // (We depend on the fact that we see EXIT before EXITnn
+	      // in the iterator (eep!).)
+	      VarInfo combvar = comb_exit_ppt.findVar(origvar.name);
+	      origvar.addHigherPO(combvar);
+	    }
+	    // Add to new_vis
+	    new_vis[new_vis_index] = origvar;
+	    new_vis_index++;
+	  }
+	  Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
+	}
+	exit_ppt.addVarInfos(new_vis);
+      }
+    }
+  }
+
+  /**
+   * @param outstream the stream to send output to
+   * @param ppts the program points to dump
+   *
+   * Writes a textual (debugging) form of the program point hierarchy
+   * and relationships to the given stream.
+   **/
+  public static void dump_ppts(OutputStream outstream,
+			       PptMap ppts
+			       )
+  {
+    PrintStream out = new PrintStream(outstream);
+
+    for (Iterator iter = ppts.iterator(); iter.hasNext(); ) {
+      Ppt ppt = (Ppt) iter.next();
+
+      out.println(ppt.name);
+      for (int i=0; i < ppt.var_infos.length; i++) {
+	VarInfo vi = ppt.var_infos[i];
+	out.println(vi.name.toString());
+	out.println("  Declared type: " + vi.type.format() );
+	out.println("  File rep type: " + vi.file_rep_type.format() );
+	out.println("  Internal type: " + vi.rep_type.format() );
+	out.println("  Comparability: " + vi.comparability );
+	out.println("  PO higher:");
+	for (Iterator vs = vi.po_higher.iterator(); vs.hasNext(); ) {
+	  VarInfo v = (VarInfo) vs.next();
+	  out.println("    " + v.name + " in " + v.ppt.name);
+	}
+	out.println("  PO lower:");
+	for (Iterator vs = vi.po_lower.iterator(); vs.hasNext(); ) {
+	  VarInfo v = (VarInfo) vs.next();
+	  out.println("    " + v.name + " in " + v.ppt.name);
+	}
+      }
+      out.println();
+
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////////
+/// invocation tracking for dtrace files entry/exit grouping
+///
 
   static final class Invocation {
     String fn_name;		// not interned:  not worth the bother
@@ -364,22 +605,6 @@ public final class FileIO {
   static Stack call_stack;		// stack of Invocation objects
 
   static HashMap call_hashmap; 	// map from Integer to Invocation
-
-
-  // Only processes the ppts in the given Vector.
-  static void after_processing_file_declarations(Vector ppts, PptMap all_ppts) {
-
-    /// Add _orig vars.
-
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.set_controlling_ppts(all_ppts);
-      ppt.compute_entry_ppt(all_ppts);
-      if (ppt.entry_ppt != null) {
-        ppt.add_orig_vars(ppt.entry_ppt);
-      }
-    }
-  }
 
 
 // This should call the new version; but as of 1/9/2000, it isn't called at all.
@@ -574,7 +799,7 @@ public final class FileIO {
 
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       System.out.print(".");
-      String file = (String) i.next();
+      File file = (File) i.next();
       read_data_trace_file(file, all_ppts);
     }
 
@@ -584,7 +809,7 @@ public final class FileIO {
 
   // for debugging only.  We stash values here to be examined/printed later.
   static public LineNumberReader data_trace_reader;
-  static public String data_trace_filename;
+  static public File data_trace_filename;
 
   static void init_call_stack_and_hashmap() {
     call_stack = new Stack();
@@ -594,7 +819,7 @@ public final class FileIO {
   /**
    * Read data from .dtrace file.
    **/
-  static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
+  static void read_data_trace_file(File filename, PptMap all_ppts) throws IOException {
 
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_data_trace_file " + filename
@@ -602,7 +827,7 @@ public final class FileIO {
 		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
     data_trace_reader = reader;
     data_trace_filename = filename;
 
@@ -618,7 +843,7 @@ public final class FileIO {
     HashMap cumulative_modbits = new HashMap();
     for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      PptTopLevel entry_ppt = ppt.entry_ppt;
+      PptTopLevel entry_ppt = null; // ppt.entry_ppt; // XXXXXX
       if (entry_ppt != null) {
         int num_vars = entry_ppt.num_vars() - entry_ppt.num_static_constant_vars;
         int[] mods = new int[num_vars];
@@ -732,13 +957,13 @@ public final class FileIO {
         }
         ppt.add(vt, 1);
 
-        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
+        PptTopLevel exit_ppt = null; // (PptTopLevel) ppt.combined_exit; // XXXXXXXX
         if (exit_ppt != null) {
           VarInfo[] exit_vis = exit_ppt.var_infos;
           // System.out.println("ppt = " + ppt.name);
           // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
           // System.out.println(" vt = " + vt.toString());
-          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
+          ValueTuple exit_vt = null; // vt.slice(ppt.combined_exit_var_indices); // XXXXXXX
           exit_ppt.add(exit_vt, 1);
         }
 
@@ -786,10 +1011,11 @@ public final class FileIO {
   }
 
   static void print_invocations(Collection invocations) {
-    if (VERBOSE_UNMATCHED_PROCEDURE_ENTRIES)
+    if (dkconfig_verbose_unmatched_procedure_entries) {
       print_invocations_verbose(invocations);
-    else
+    } else {
       print_invocations_grouped(invocations);
+    }
   }
 
   static void print_invocations_verbose(Collection invocations) {
@@ -992,7 +1218,7 @@ public final class FileIO {
         }
       }
     } else {
-      PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt;
+      PptTopLevel entry_ppt = null; // (PptTopLevel) ppt.entry_ppt; // XXXXXXXX
       if (entry_ppt != null) {
         Invocation invoc;
         // Set invoc
@@ -1073,7 +1299,8 @@ public final class FileIO {
   /**
    * Use a special record type.  Saving as one object allows for
    * reference-sharing, easier saves and loads, and potential for
-   * later overriding of readObject if the save format changes.
+   * later overriding of SerialFormat.readObject if the save format
+   * changes (ick).
    **/
   private final static class SerialFormat implements Serializable
   {
