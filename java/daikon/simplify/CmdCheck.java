@@ -36,7 +36,8 @@ public class CmdCheck
 	if (result == null) {
 	  throw new SimplifyError("Probable core dump");
 	}
-	Assert.assert(!result.startsWith("Bad input:"), result);
+	Assert.assert(!result.startsWith("Bad input:"),
+                      result + "\n" + proposition);
 	if (result.equals("Abort (core dumped)")) {
 	  throw new SimplifyError(result);
 	}
