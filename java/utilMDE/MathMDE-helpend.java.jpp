@@ -10,6 +10,7 @@ The correct way to build the system is to run 'make'.
 #undef modulus_INT
 #undef modulus_strict_INT
 #undef nonmodulus_strict_INT
+#undef nonmodulus_strict_INT_internal
 #undef MissingNumbersIteratorINT
 #undef CastToInt
 
@@ -17,5 +18,6 @@ The correct way to build the system is to run 'make'.
 #if 0
 // Local Variables:
 // mode: java
+// c-basic-offset: 2
 // End:
 #endif

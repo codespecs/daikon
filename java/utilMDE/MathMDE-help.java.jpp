@@ -11,6 +11,7 @@ The correct way to build the system is to run 'make'.
 #define modulus_INT modulus_int
 #define modulus_strict_INT modulus_strict_int
 #define nonmodulus_strict_INT nonmodulus_strict_int
+#define nonmodulus_strict_INT_internal nonmodulus_strict_int_internal
 #define MissingNumbersIteratorINT MissingNumbersIteratorInt
 #define CastToInt(expr) expr
 #elif defined(PARAM_LONG)
@@ -19,8 +20,9 @@ The correct way to build the system is to run 'make'.
 #define INTValue longValue
 #define modulus_INT modulus_long
 #define modulus_strict_INT modulus_strict_long
-#define MissingNumbersIteratorINT MissingNumbersIteratorLong
 #define nonmodulus_strict_INT nonmodulus_strict_long
+#define nonmodulus_strict_INT_internal nonmodulus_strict_long_internal
+#define MissingNumbersIteratorINT MissingNumbersIteratorLong
 #define CastToInt(expr) new Long(expr).intValue()
 #else
 #error "One of PARAM_INT or PARAM_LONG should be defined"
@@ -31,5 +33,6 @@ The correct way to build the system is to run 'make'.
 #if 0
 // Local Variables:
 // mode: java
+// c-basic-offset: 2
 // End:
 #endif

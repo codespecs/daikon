@@ -183,5 +183,6 @@ public final class MathMDE {
 #if 0
 // Local Variables:
 // mode: java
+// c-basic-offset: 2
 // End:
 #endif
