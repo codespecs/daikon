@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import utilMDE.Assert;
 
+import org.apache.log4j.Category;
+
 /**
  * A Check command takes a given proposition and asks the Session to
  * prove it.  The apply method returns when a result is available; the
@@ -12,6 +14,8 @@ import utilMDE.Assert;
 public class CmdCheck
   implements Cmd
 {
+  public static final Category debug = Category.getInstance("daikon.simplify.CmdCheck");
+
   public final String proposition;
   public boolean valid = false;
 
@@ -33,18 +37,25 @@ public class CmdCheck
 	// read the answer
 	// first, the real result
 	result = s.output.readLine();
+	if (debug.isDebugEnabled()) {
+	  debug.debug ("First line: " + result);
+	}
 	if (result == null) {
 	  throw new SimplifyError("Probable core dump");
 	}
-	Assert.assert(!result.startsWith("Bad input:"),
-                      result + "\n" + proposition);
+	if (result.startsWith("Bad input:")) {
+	  throw new SimplifyError(result + "\n" + proposition);
+	}
 	if (result.equals("Abort (core dumped)")) {
 	  throw new SimplifyError(result);
 	}
 	// then, a blank line
 	String blank = s.output.readLine();
-	Assert.assert("".equals(blank), "Not a blank line '" + blank +
-		      "' after output '" + result + "'");
+	if (!("".equals(blank))) {
+	  throw new SimplifyError ("Not a blank line '" + blank +
+				   "' after output '" + result + "'");
+
+	}
       }
 
       // expect "##: [Inv|V]alid."
