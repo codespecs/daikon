@@ -79,32 +79,6 @@ public final class SequenceStringSubscriptFactory extends BinaryDerivationFactor
       }
     }
 
-    // Abstract out these next two.
-
-    // If the scalar is the constant 0, do nothing.  We already extract
-    // array[0], and the subarrays array[0..-1] and array[0..0] are not
-    // interesting.
-    if (sclvar.isConstant()) {
-      String scl_constant = ((Integer) sclvar.constantValue()).StringValue();
-      if (scl_constant == 0) {
-        Global.tautological_suppressed_derived_variables += 2;
-        Global.nonsensical_suppressed_derived_variables += 2;
-        return null;
-      }
-      // If the constant 1, only extract array[0..1]; others are already
-      // derived or uninteresting.
-      if (scl_constant == 1) {
-        Global.tautological_suppressed_derived_variables += 3;
-        return new BinaryDerivation[] {
-          new SequenceStringSubsequence(seqvar, sclvar, false),
-        };
-      }
-    }
-
-    // Get the lower and upper bounds for the variable, if any.
-    // [This seems to be missing; what was it?]
-
-
     // End of applicability tests; now actually create the invariants
 
     return new BinaryDerivation[] {
