@@ -236,7 +236,9 @@ public abstract class Ppt implements java.io.Serializable {
     }
   }
 
-  // Argument is a vector of PptTopLevel objects
+  // Argument is a vector of PptTopLevel objects.
+  // Result does NOT include static constants, as it will be used to
+  // index into ValueTuple, which omits static constants.
   public static final VarInfo[] common_vars(Vector ppts) {
     Vector result = new Vector();
     Assert.assert(ppts.size() > 1);
@@ -244,6 +246,9 @@ public abstract class Ppt implements java.io.Serializable {
       PptTopLevel ppt = (PptTopLevel) ppts.elementAt(0);
       VarInfo[] vars = ppt.var_infos;
       for (int i=0; i<vars.length; i++) {
+        if (vars[i].isStaticConstant())
+          continue;
+
         result.add(vars[i]);
       }
     }

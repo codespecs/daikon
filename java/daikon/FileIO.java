@@ -651,6 +651,9 @@ public final class FileIO {
         PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
         if (exit_ppt != null) {
           VarInfo[] exit_vis = exit_ppt.var_infos;
+          // System.out.println("ppt = " + ppt.name);
+          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
+          // System.out.println(" vt = " + vt.toString());
           ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
           exit_ppt.add(exit_vt, 1);
         }

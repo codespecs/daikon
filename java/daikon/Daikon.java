@@ -375,17 +375,33 @@ public final class Daikon {
           VarInfo[] line_vars = line_exit_ppt.var_infos;
           line_exit_ppt.combined_exit = exit_ppt;
           {
+            // Indices will be used to extract values from a ValueTuple.
+            // ValueTuples do not include static constant values.
+            // comb_index doesn't include those, either.
+
             int[] indices = new int[comb_vars.length];
             int new_len = indices.length;
             int new_index = 0;
-            for (int old_index=0; old_index<line_vars.length; old_index++) {
-              if (line_vars[old_index].name == comb_vars[old_index].name) {
-                indices[new_index] = old_index;
+            int comb_index = 0;
+            for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
+              if (line_vars[lv_index].isStaticConstant()) {
+                continue;
+              }
+              if (line_vars[lv_index].name == comb_vars[comb_index].name) {
+                indices[new_index] = comb_index;
                 new_index++;
               }
+              comb_index++;
             }
             line_exit_ppt.combined_exit_var_indices = indices;
             Assert.assert(new_index == new_len);
+
+            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name);
+            // for (int i=0; i<indices.length; i++) {
+            //   // System.out.print(" " + indices[i]);
+            //   System.out.print(" " + indices[i] + " " + comb_vars[indices[i]].name);
+            // }
+            // System.out.println();
           }
         }
 
