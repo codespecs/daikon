@@ -1,4 +1,5 @@
 History of Daikon changes
+http://pag.csail.mit.edu/daikon/
 
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
@@ -16,28 +17,32 @@ Further documentation can be found in:
 
 ===========================================================================
 
-3.2.0 (Feb 1 2005)
-
-The 3.2.0 version of Daikon introduces substantial enhancements in a
-variety of areas.  Most 
-
- ...
-
-Daikon's licensing terms have been liberalized.  Daikon is now distributed
-without restrictions under an MIT/BSD-style license.
-
-
-
-*****
-
+[[
   Remember that, in general, changes are not permitted to be listed in this
   file unless they appear in the manual (daikon.texinfo or
   developer.texinfo).  So edit the manual first, then add a brief description
   here (with a pointer to the appropriate manual section).
+]]
 
 
+3.2.0 (Feb 1 2005)
 
-Chicory
+The 3.2.0 version of Daikon introduces many substantial enhancements.
+These improvements include:
+ * liberalized license permits unrestricted use
+ * new classfile-based Java front end handles Java 5.0 (and earlier)
+ * annotation and other source manipulation components handle Java 5.0
+ * new Eclipse plug-in eases running many components of the Daikon system
+ * new runtime checking tool can insert assertions into your programs
+ * command-line options have been standardized across Daikon component
+ * many bug fixes, documentation updates, and other mnior improvements
+
+License
+
+  Daikon's licensing terms have been liberalized.  Daikon is now distributed
+  without restrictions under an MIT/BSD-style license.
+
+Chicory:  classfile-based front end for Java
 
   Chicory is a new Daikon front end for Java.  Its functionality is very
   similar to that of the dfej tool, and it supports most of the same
@@ -54,21 +59,25 @@ Chicory
      instrumentation or compilation steps, as dfej does.
      You can also supply arguments to Chicory, after "java chicory.Chicory"
      and before the class name.  See the Daikon manual for details.
-   * Chicory supports all versions of Java, including Java 1.5.  By
+   * Chicory supports all versions of Java, including Java 5.0.  By
      contrast, dfej only supports Java 1.4 and earlier.
-  Chicory has one disadvantage over dfej:  Chicory's instrumentation tends
-  to slow down the target program more than dfej's does.  However, Chicory
-  is still usable, and we will improve its performance in future releases.
+  Chicory has one disadvantage relative to dfej:  Chicory's instrumentation
+  tends to slow down the target program more than dfej's does.  However,
+  Chicory is still usable, and its as fast as Daikon itself, so it is not
+  a bottleneck.  We will improve Chicory's performance in future releases.
+
+Eclipse plug-in
+
+  Daikon is now accompanied by an Eclipse plug-in (written by David Cok)
+  that provides the functionality of instrumenting files, obtaining trace
+  information, analyzing those traces, and creating appropriately annotated
+  Java source code. The plug-in works with Eclipse version 3.0.1 and later.
+  You can find documentation for the plug-in at
+  http://pag.csail.mit.edu/daikon/doc/daikonHelp.html .
 
 Daikon
 
   User changes
-
-    Daikon's source code is now written in Java version 1.5 (also known as
-    Java 5.0).  This means that you will need a Java 5 compiler to compile
-    Daikon, and you will need a Java 5 JVM to run Daikon.  (You may be able
-    to run Daikon on an older JVM by using a utility like retroweaver:
-    (http://retroweaver.sourceforge.net/.)
 
     Daikon now permits program point declarations (which ordinarily appear
     in .decls files) to appear in the .dtrace file as well.  Each
@@ -83,15 +92,31 @@ Daikon
 
     The generation of implications has been modified.  If there are
     multiple exclusive invariants, one is chosen as a predicate and
-    used for all of the implications.  [more detail to be added, jhp]
-
+    used for all of the implications.  For example, suppose that all of the
+    following are true, where the letters stand for invariants:
+      A <=> B
+      A  => C
+      A  => D
+      B  => C
+      B  => D
+    Previously, Daikon would print all of these implications.  Now, it
+    prints only the first three, since the last two are redundant and can
+    be inferred from the first three.
+      
     The following command-line options have been renamed, for consistency
     with other components of the Daikon distribution.
-
       OLD              NEW
       --ppt RE         --ppt-select-pattern=RE
       --ppt_omit RE    --ppt-omit-pattern=RE
       --var_omit RE    --var-omit-pattern=RE
+
+  Developer changes
+
+    Daikon's source code is now written in Java version 5.0.  This means
+    that you will need a Java 5 compiler to compile Daikon, and you will
+    need a Java 5 JVM to run Daikon.  (You may be able to run Daikon on an
+    older JVM by using a utility like retroweaver:
+    http://retroweaver.sourceforge.net/ .)
 
 dfej
 
@@ -104,7 +129,6 @@ dfej
 
   The following command-line options have been renamed, for consistency
   with other components of the Daikon distribution.
-
     OLD                         NEW
     -daikon_debug               --debug
     -daikon_depth=              --nesting-depth=
@@ -121,13 +145,11 @@ dfej
     -declsfiledir=              --decls-dir=
     -declsfiledirflat=          --decls-flat --decls-dir=
     -instrsourcedir=            --instr-dir=
-
                             
 dfepl
 
   The following command-line options have been renamed, for consistency
   with other components of the Daikon distribution.
-
     OLD                  NEW
     --reference-depth=   --nesting-depth=
     --dtrace-basedir=    --dtrace-dir=
@@ -153,30 +175,36 @@ Kvasir
     Numerous bug fixes result in Kvasir producing more accurate output,
     most exposed only by obscure test cases.
 
-Annotate
-
-   Annotate has been updated so that it now respects placement of tabs in
-   the source file: if there was a tab in the original source file,
-   then the same tab will appear in the annotated file (modulo
-   displacements caused by inserted annotations).
-
 Runtime-check instrumenter
 
-   A runtime-check instrumenter (named "runtimechecker" has been added to
-   Daikon.  The instrumenter modifies the methods and constructors of a
-   class to check invariants as the class executes.  For more details, see
-   the "tools" section in the Daikon manual.
+  A runtime-check instrumenter (named "runtimechecker") has been added to
+  Daikon.  The instrumenter creates a new version of Java source code; the
+  modified version checks invariants as the program executes.  For more
+  details, see the "tools" section in the Daikon manual.
+
+  The runtime-check instrumenter may be useful for external tools.  It is
+  used, for example, by the Eclat tool (which is not a part of Daikon
+  itself).  Eclat automatically creates test cases that are much more
+  likely than random to reveal errors in programs.  You can downlaod Eclat
+  from http://pag.csail.mit.edu/eclat/ .
+
+Annotate
+
+  Annotate and other components of Daikon handle Java 5.0 code -- and all
+  earlier versions, since Java 5.0 is backward-compatible with all previous
+  versions of Java.
+
+  Annotate respects tabs in the source file.  Previously, Annotate
+  converted tabs to spaces.
 
 
+[[
 Hopefully, this release will include:
- * Carlos's run-time checker
- * Annotate does not double-insert [Carlos should make this change]
- * Eric Fellheimer's Java front end
  * incremental operation for both the new Java front end and for Kvasir
- * The Daikon regression tests are available on the Daikon downloads webpage
 Not going to happen:
- * David Cok's Eclipse plug-in
  * Jeff Perkins's dynamic comparability analysis
+ * The Daikon regression tests are available on the Daikon downloads webpage
+]]
 
 ---------------------------------
 

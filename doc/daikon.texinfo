@@ -3307,10 +3307,10 @@ run @command{dfej --help} to see it.
 
 @command{dfej} works on Java code that corresponds to versions 1.0--1.4
 of the Java language between, from 1.0 to 1.4.  @command{dfej} does not
-work on Java 1.5 (also known as Java 5.0).
+work on Java 5.0.
 
 The Chicory front end for Java (@pxref{Java front end Chicory}) works on
-all versions of the Java language, including Java 1.5 (Java 5.0).
+all versions of the Java language, including Java 5.0.
 Another advantage of Chicory is that Chicory is much easier to use.
 dfej's advantage over Chicory is in terms of performance:  code
 instrumented by dfej tends to run faster than code instrumented by
