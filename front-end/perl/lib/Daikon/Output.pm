@@ -9,7 +9,7 @@ use vars qw(@ISA @EXPORT_OK);
 @ISA = 'Exporter';
 @EXPORT_OK = qw(declare_var output_var);
 
-use Daikon::PerlType qw(parse_type);
+use Daikon::PerlType qw(parse_type is_zero);
 
 # Convert an integer (given a reference to it) to a string form,
 # warning if it wasn't really an integer.
@@ -18,7 +18,7 @@ sub output_int {
     my($x_ref) = @_;
     confess "Arg to output must be a reference" unless ref($x_ref);
     my $x = $$x_ref;
-    if ($x == 0 and $x !~ /^0*$/) {
+    if ($x == 0 and length $x and !is_zero($x)) {
 	carp "`$x' isn't a number, you said it was an int";
     }
     $x = $x + 0;
@@ -33,7 +33,7 @@ sub output_num {
     my($x_ref) = @_;
     confess "Arg to output must be a reference" unless ref($x_ref);
     my $x = $$x_ref;
-    if ($x == 0 and $x !~ /^0*$/) {
+    if ($x == 0 and length $x and !is_zero($x)) {
 	carp "`$x' isn't a number, you said it was an int";
     }
     $x = $x + 0;
@@ -46,6 +46,7 @@ sub output_num {
 sub address {
     my $package = ref $_[0];
     return 0 + $_[0] unless $package;
+    return 0 + $_[0] if $package =~ /^SCALAR|REF|LVALUE|ARRAY|HASH\z/;
     bless $_[0], "overload::Fake";  # Non-overloaded package
     my $val =  0 + $_[0];
     bless $_[0], $package;          # Back
@@ -116,9 +117,6 @@ sub daikon_output_spec {
 	# "java.lang.String", though in other cases just "String"
 	# works fine.
 	return ["", "", "String", "java.lang.String", \&output_string];
-#     } elsif ($t eq "ref") { # I don't think this should happen
-# 	return ["", "", "Object", "int",
-# 		sub { output_int(\ (address($_[0]))); }];
     } elsif (ref($t)) {
 	if ($t->[0] eq "array") {
 	    if ($single) {
@@ -222,13 +220,19 @@ sub daikon_output_spec {
 # 	    } else {
 # 		$sigil = '$';
 # 	    }
-	    my @specs;
-	    for my $spec (daikon_output_spec($t->[1], $single)) {
-		my($prefix, $suffix, $type, $rep_type, $output) = @$spec;
-		push @specs, [$prefix, '.deref'.$suffix, $type, $rep_type,
-			      sub { $output->(${$_[0]}) }];
+
+	    if ($t->[1] eq "top") {
+		return ["", "", "Object", "int",
+			sub { output_int(\ (address($_[0]))); }];
+	    } else {
+		my @specs;
+		for my $spec (daikon_output_spec($t->[1], $single)) {
+		    my($prefix, $suffix, $type, $rep_type, $output) = @$spec;
+		    push @specs, [$prefix, '.deref'.$suffix, $type, $rep_type,
+				  sub { $output->(${$_[0]}) }];
+		}
+		return $single ? $specs[0] : @specs;
 	    }
-	    return $single ? $specs[0] : @specs;
 	}
     }
     return ();
