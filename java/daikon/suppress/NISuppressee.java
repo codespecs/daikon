@@ -2,6 +2,7 @@ package daikon.suppress;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.suppress.*;
@@ -30,9 +31,9 @@ public class NISuppressee {
     this.var_count = var_count;
 
     try {
-      Method instantiate = cls.getMethod ("instantiate",
-                                                new Class[] {PptSlice.class});
-      sample_inv = (Invariant)instantiate.invoke (null, new Object[] {null});
+      Method get_proto = cls.getMethod ("get_proto", new Class[] {});
+      sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
+      Assert.assertTrue (sample_inv != null, cls.getName());
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
                                   + cls.getName() + ": " + e);
@@ -44,30 +45,44 @@ public class NISuppressee {
    */
   public Invariant instantiate (PptSlice slice) {
 
-    Invariant inv = (Invariant) sample_inv.clone();
-    inv.ppt = slice;
-    if (Debug.logOn())
-      inv.log ("Created " + inv.format());
+    Invariant inv = sample_inv.instantiate_dyn (slice);
+    if (Debug.logOn()) {
+      if (inv != null)
+        inv.log ("Created " + inv.format());
+      else
+        Debug.log (sup_class, slice,
+                   "Didn't create, instantiate returned null");
+    }
     return (inv);
   }
 
+  /**
+   * Checks this invariant against the specified sample and returns
+   * the status
+   */
   public InvariantStatus check (ValueTuple vt, VarInfo[] vis) {
 
-    VarInfo v1 = vis[0];
-    VarInfo v2 = vis[1];
-    VarInfo v3 = vis[2];
 
-    if (v1.isMissing(vt) || v2.isMissing(vt) || v3.isMissing(vt))
-      return InvariantStatus.NO_CHANGE;
+    // Nothing to check if any variable is missing
+    for (int i = 0; i < vis.length; i++)
+      if (vis[i].isMissing(vt))
+        return InvariantStatus.NO_CHANGE;
 
-    // Fmt.pf ("%s [%s], %s [%s], %s [%s]", v1.name.name(), v1.file_rep_type,
-    //         v2.name.name(), v2.file_rep_type, v3.name.name(),
-    //         v3.file_rep_type);
-    // Fmt.pf ("suppressee " + this);
-    TernaryInvariant ternary_inv = (TernaryInvariant) sample_inv;
-    return ternary_inv.check (vt.getValue(v1), vt.getValue(v2),
-                                       vt.getValue(v3), 1, 1);
+    if (var_count == 3) {
+      TernaryInvariant ternary_inv = (TernaryInvariant) sample_inv;
+      return ternary_inv.check (vt.getValue(vis[0]), vt.getValue(vis[1]),
+                                vt.getValue(vis[2]), 1, 1);
+    } else if (var_count == 2) {
+      if (!(sample_inv instanceof BinaryInvariant))
+        Assert.assertTrue (false, "not binary: " + sample_inv.getClass());
+      BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
+      return binary_inv.check (vt.getValue(vis[0]), vt.getValue(vis[1]), 1, 1);
+    } else /* must be unary */ {
+      UnaryInvariant unary_inv = (UnaryInvariant) sample_inv;
+      return unary_inv.check (vt.getValue(vis[0]), 1, 1);
+    }
   }
+
   /**
    * Instantiates the suppressee invariant on the slice specified
    * by vis in the specified ppt.  If the slice is not currently there,
@@ -101,8 +116,11 @@ public class NISuppressee {
 
     // If all of the slots were full, create the invariant
     if (missing_index == -1) {
-      if (ppt.is_slice_ok (vis, vis.length))
-        created_list.add (instantiate (vis, ppt));
+      if (ppt.is_slice_ok (vis, vis.length)) {
+        Invariant inv = instantiate (vis, ppt);
+        if (inv != null)
+          created_list.add (inv);
+      }
       return (created_list);
     }
 
@@ -116,7 +134,9 @@ public class NISuppressee {
         continue;
       if (!ppt.is_slice_ok (vis, vis.length))
         continue;
-      created_list.add (instantiate (vis, ppt));
+      Invariant inv = instantiate (vis, ppt);
+      if (inv != null)
+        created_list.add (inv);
     }
 
     return (created_list);
@@ -144,7 +164,7 @@ public class NISuppressee {
     // If all of the slots were full, specify the invariant
     if (missing_index == -1) {
       if (ppt.is_slice_ok (vis, vis.length))
-        created_list.add (new NIS.SupInv (this, vis));
+        created_list.add (new NIS.SupInv (this, vis, ppt));
       return (created_list);
     }
 
@@ -158,8 +178,9 @@ public class NISuppressee {
         continue;
       if (!ppt.is_slice_ok (vis, vis.length))
         continue;
-      // Fmt.pf ("find_all: %s [%s]", v.name.name(), v.rep_type);
-      created_list.add (new NIS.SupInv (this, (VarInfo[]) vis.clone()));
+      NIS.SupInv sinv = new NIS.SupInv (this, (VarInfo[]) vis.clone(), ppt);
+      sinv.log ("Unspecified variable = " + v.name.name());
+      created_list.add (sinv);
     }
 
     return (created_list);
