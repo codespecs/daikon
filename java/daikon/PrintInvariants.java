@@ -435,7 +435,7 @@ public class PrintInvariants {
 
     PrintWriter pw = new PrintWriter(System.out, true);
     PptTopLevel combined_exit = null;
-    boolean enable_exit_swap = true; // !Daikon.df_bottom_up;
+    boolean enable_exit_swap = true; // !Daikon.dkconfig_df_bottom_up;
 
     if (Daikon.no_text_output)
       return;
