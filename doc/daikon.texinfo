@@ -197,6 +197,7 @@ C front end Kvasir
 * Using Kvasir::                
 * Kvasir options::              
 * Pointer type disambiguation::  
+* Online execution::            
 * Kvasir limitations::          
 * Installing Kvasir::           
 
@@ -332,7 +333,6 @@ Large data trace (.dtrace) files
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
-* Reading trace data on the fly::  
 
 Problems with dfej
 
@@ -2798,6 +2798,7 @@ For information about installing Kvasir, see @ref{Installing Kvasir}.
 * Using Kvasir::                
 * Kvasir options::              
 * Pointer type disambiguation::  
+* Online execution::            
 * Kvasir limitations::          
 * Installing Kvasir::           
 @end menu
@@ -2997,7 +2998,7 @@ target program. This is equivalent to
 
 @end table
 
-@node    Pointer type disambiguation, Kvasir limitations, Kvasir options, Kvasir
+@node    Pointer type disambiguation, Online execution, Kvasir options, Kvasir
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -3232,7 +3233,69 @@ size(bar.numbers[])-1 in bar.numbers[]
 @end example
 
 
-@node Kvasir limitations, Installing Kvasir, Pointer type disambiguation, Kvasir
+@node Online execution, Kvasir limitations, Pointer type disambiguation, Kvasir
+@subsection Online execution
+
+@cindex online execution of Daikon
+
+The term ``online execution'' refers to running Daikon at the same time
+as the target program, without writing any information to a file.  This
+can avoid some I/O overhead, it prevents filling up your disk with
+files, and in the future Daikon may be able to produce partial results
+as the target program is executing.
+
+@cindex pipe, as data trace file
+
+To use regular pipes in lieu of a disk file, simply use @file{-} as the
+name of the @file{.dtrace} file, and run the target program and Daikon
+in a Unix pipeline.
+
+@example
+kvasir-dtrace --dtrace-file=- ./bzip2 --help \
+   | $DAIKON -
+@end example
+
+Of course, you could also replace @option{--help} with @option{-vv1
+file.txt} to compress a text file (but start with a small one first).
+
+@noindent
+(This example assuems that you have compiled the bzip2 example (in
+@file{$DAIKONDIR/examples/kvasir-examples/bzip2} of the distribution) by
+saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
+@command{$DAIKON} stands for the command that invokes Daikon, for
+instance @command{java -Xmx512m daikon.Daikon --config_option
+daikon.Daikon.disable_derived_variables=true}.)
+
+@cindex named pipe, as data trace file
+@cindex FIFO, as data trace file
+
+Instead of a regular pipe, you can use a named pipe, also known as a
+FIFO, which is a special kind of file supported by most Unix-compatible
+systems.  When one process tries to open a FIFO
+for reading, it blocks, waiting for another process to open it for
+writing (or vice-versa).  When both a reader and a writer are ready, the
+FIFO connects the reader to the writer like a regular Unix pipe.
+
+The @option{--output-fifo} option causes Kvasir to create its output
+@file{.dtrace} file as a named pipes.  When Kvasir is
+run with this option, Daikon needs to be run at the same time to read
+from the FIFOs, such as from another terminal or using the shell's
+@code{&} operator.
+
+For instance, the following two commands have the same effect as the
+pipeline above that used ordinary pipes.  The FIFO is named
+@file{bzip2.dtrace}.
+
+@example
+kvasir-dtrace --output-fifo ./bzip2 --help &
+$DAIKON bzip2.dtrace
+@end example
+
+The two commands (before and after the ampersand) could also be run in
+two different terminals.
+
+
+@node Kvasir limitations, Installing Kvasir, Online execution, Kvasir
 @subsection Kvasir limitations
 
 This subsection lists some of the known limitations of the
@@ -3541,6 +3604,10 @@ instead.
 The default behavior is to overwrite.  This choice can also be
 overridden, when the program is run, to always append by setting the
 environment variable @env{DTRACEAPPEND} to 1.
+
+When appending to a @file{.dtrace} file, no declaration information is
+ever produced, because it would be redundant to do so and Daikon does
+not permit re-declarations of program points.
 
 @item --dtrace-dir=@var{directory}
 Put generated trace files in @var{directory} and its
@@ -7026,17 +7093,17 @@ memory}, and @ref{Large dtrace files}.
 @node    Large dtrace files, Parsing Java 5.0 code, Daikon problems, Troubleshooting
 @section Large data trace (.dtrace) files
 
+
 @cindex data trace files, too large
 @cindex large data trace files
 
 Running instrumented code can create very large @file{.dtrace} files.
 This can be a problem because writing the large files can slow the
-target programs substantially, because the large files may fill up
-your disk, or because when reading the large files, Daikon fills up
-your computer's physical or virtual memory.  There are three general
-solutions to this problem:  compute invariants over fewer program
-points (functions), compute invariants over fewer variables, or
-compute invariants over fewer samples (executions).
+target programs substantially, or because the large files may fill up
+your disk.  The solution is to create smaller data trace files, by 
+computing invariants over fewer program
+points (procedures), computing invariants over fewer variables, or
+computing invariants over fewer samples (executions).
 
 It is usually possible to create an @file{.inv} file equivalent to
 the one that Daikon would have computed, had Daikon been able to
@@ -7048,17 +7115,23 @@ Diff} to combine the resulting @file{.inv} files into one.
 @c A more correct way to merge the resulting .inv files would be with
 @c the MergeInvariants tool, but it is not yet documented,
 
-Independently from the above techniques, some front ends can generate
-trace data as a stream for Daikon to process on the fly.  Using this
-strategy avoids the problem of disk space consumption, and can reduce
-I/O overhead, but does not reduce Daikon's memory usage.
+Independently from the above techniques, you can run Daikon online.  
+The term ``online execution'' refers to running Daikon at the same time
+as the target program, without writing any information to a file.  This
+can avoid some I/O overhead, it prevents filling up your disk with
+files, and in the future Daikon may be able to produce partial results
+as the target program is executing.
+@c The Chicory front end supports online execution via use of the
+@c @option{--daikon} flag.
+The Kvasir front end supports online exeuction via use of (normal or
+named) Unix pipes (@pxref{Online execution}).
 
 @menu
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
-* Reading trace data on the fly::  
 @end menu
+
 
 @node    Reducing program points, Reducing variables, Large dtrace files, Large dtrace files
 @subsection Reducing program points (functions)
@@ -7165,7 +7238,7 @@ same variables.
 
 @end enumerate
 
-@node    Reducing executions, Reading trace data on the fly, Reducing variables, Large dtrace files
+@node    Reducing executions,  , Reducing variables, Large dtrace files
 @subsection Reducing executions
 
 Here are ways to run Daikon over fewer executions of each program
@@ -7199,76 +7272,6 @@ faster on very large files.  In order to use
 
 @end enumerate
 
-@node Reading trace data on the fly,  , Reducing executions, Large dtrace files
-@subsection Reading trace data on the fly
-
-Some Daikon front ends support writing trace data to a pipe, so that it
-can be read by Daikon on the fly without ever being written to disk.
-This section describes two techniques for achieving this, and gives
-examples using the C front end Kvasir.
-
-@subsubheading Named pipes
-
-A named pipe, also known as a FIFO, is a special kind of file supported
-by most Unix-compatible systems.  When one process tries to open a FIFO
-for reading, it blocks, waiting for another process to open it for
-writing (or vice-versa).  When both a reader and a writer are ready, the
-FIFO connects the reader to the writer like a regular Unix pipe.  Daikon
-and a front end can communicate via named pipes as long as each file
-that's a named pipe is written to and read from in the same order by
-both the front end and Daikon in the same order (if this is not the
-case, deadlock will occur).
-
-The @option{--output-fifo} option to Kvasir causes it to create its output
-@file{.dtrace} and @file{.decls} files as named pipes.  When Kvasir is
-run with this option, Daikon needs to be run at the same time to read
-from the FIFOs, such as from another terminal or using the shell's
-@code{&} operator.
-
-For instance, suppose that you have compiled the bzip2 example (in
-$DAIKONDIR/examples/kvasir-examples/bzip2 of the distribution) by saying
-
-@example
-gcc -gdwarf-2 bzip2.c -o bzip2
-@end example
-
-Then the following two commands will run @command{bzip2 --help} and examine
-that execution with Daikon:
-
-(In this and the following example, @command{$DAIKON} stands for the
-command that invokes Daikon with whatever options are necessary, for
-instance @command{java -Xmx512m daikon.Daikon
- --config_option daikon.Daikon.disable_derived_variables=true}).
-
-@example
-kvasir-dtrace --output-fifo ./bzip2 --help &
-$DAIKON daikon-output/bzip2.decls daikon-output/bzip2.dtrace
-@end example
-
-The two commands (before and after the ampersand) could also be run in
-two different terminals.  A similar command could also be used to run a
-longer execution of bzip2, without using any additional disk space; for
-instance, replace @option{--help} with @option{-vv1 file.txt} to compress a
-text file (but start with a small one first).
-
-@subsubheading Regular pipes
-
-Kvasir can also write trace data to a standard Unix pipe.  In this case,
-it is easiest to generate the @file{.decls} file on a separate
-execution.  Here's a sequence of commands with the same effect as the
-example above:
-
-@example
-kvasir-dtrace --decls-only ./bzip2 --help 
-kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./bzip2 --help \
-   | $DAIKON daikon-output/bzip2.decls -
-@end example
-
-The first command generates a @file{.decls} file, but does not execute
-the program or produce trace data.  The second Kvasir command writes
-trace data to the standard output (being careful not to overwrite the
-@file{.decls} file), which is then piped to Daikon which reads it from
-the standard input.
 
 @node    Parsing Java 5.0 code, dfej problems, Large dtrace files, Troubleshooting
 @section Parsing Java 5.0 code
