@@ -120,8 +120,9 @@ public class UpperBound  extends SingleScalar  {
     }
     OneOfScalar  oo = OneOfScalar .find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // Equivalently, core.max1  > = oo. min_elt ()
-      if (! (((Long)oo. min_elt ()).longValue() <  core.max1 )) {
+      // We could also use core.max1  == oo. max_elt (), since the LowerBound
+      // will never have a core.max1  that does not appear in the OneOf.
+      if (core.max1  >=  ((Long)oo. max_elt ()).longValue()) {
         return true;
       }
     }

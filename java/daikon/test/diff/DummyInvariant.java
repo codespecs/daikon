@@ -10,17 +10,26 @@ public class DummyInvariant extends Invariant {
   public String formula;
   public boolean justified;
   public boolean interesting;
+  public boolean isWorthPrinting;
 
   public DummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, justified, true);
+    this(ppt, formula, justified, true, true);
   }
 
   public DummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting) {
+    this(ppt, formula, justified, interesting, true);
+  }
+
+
+  public DummyInvariant(PptSlice ppt, String formula,
+                        boolean justified, boolean interesting,
+                        boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
     this.justified = justified;
     this.interesting = interesting;
+    this.isWorthPrinting = isWorthPrinting;
   }
 
   protected Invariant resurrect_done(int[] permutation) {
@@ -70,6 +79,10 @@ public class DummyInvariant extends Invariant {
 
   public String format_simplify() {
     return repr();
+  }
+
+  public boolean isWorthPrinting() {
+    return isWorthPrinting;
   }
 
 }

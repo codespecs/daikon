@@ -364,21 +364,24 @@ public abstract class Invariant
    * ESC-like representation.
    **/
   public String format_esc() {
-    return "warning format_esc() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
   /**
    * Representation for the Simplify theorem prover.
    **/
   public String format_simplify() {
-    return "warning: format_simplify() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   /**
    * IOA Representation
    **/
   public String format_ioa(String classname) {
-    return "warning: format_ioa() needs to be implemented: " + format();
+    String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + thisclassname + ".format_ioa() needs to be implemented: " + format();
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.
@@ -631,7 +634,9 @@ public abstract class Invariant
   /// Tests about the invariant (for printing)
   ///
 
-  public final boolean isWorthPrinting()
+  // DO NOT OVERRIDE.  Should be declared "final", but isn't to allow
+  // for easier testing.
+  public boolean isWorthPrinting()
   {
     if (debugIsWorthPrinting.isDebugEnabled()) {
       debugIsWorthPrinting.debug("isWorthPrinting: " + format() + " at " + ppt.name);

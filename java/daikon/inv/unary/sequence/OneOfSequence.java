@@ -206,7 +206,8 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "warning: " + this.getClass() + "format_ioa()  needs to be implemented: " + format();
+      String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if ((forall == "")||(elts[0].length==0)) { // interned
@@ -239,7 +240,8 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
+      String classname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned
@@ -272,7 +274,8 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
+      String classname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned

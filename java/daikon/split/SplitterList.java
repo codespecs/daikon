@@ -21,9 +21,12 @@ public abstract class SplitterList {
   private static final HashMap ppt_splitters = new HashMap();
   private static final PatternMatcher re_matcher = new Perl5Matcher();
   private static final PatternCompiler re_compiler = new Perl5Compiler();
-
+  
+  /* 
+   * associate an array of splitters with the program point <pptname>
+   */
   public static void put(String pptname, Splitter[] splits) {
-    if (pptname.equals(".*") && ppt_splitters.containsKey(pptname)) {
+    if (ppt_splitters.containsKey(pptname)) {
       Splitter[] old = (Splitter[]) ppt_splitters.get(pptname);
       Splitter[] new_splits = new Splitter[old.length + splits.length];
       System.arraycopy(old, 0, new_splits, 0, old.length);
@@ -164,6 +167,7 @@ public abstract class SplitterList {
 	  if (result != null) {
 	    splitterArrays.addElement(result);
 	  }
+	  //for the OBJECT program point, we want to use all the splitter.
 	}else if (re_matcher.contains(pptName, opat) && re_matcher.contains(name, opat)) {
 	  Iterator all = ppt_splitters.values().iterator();
 	  while(all.hasNext()) {

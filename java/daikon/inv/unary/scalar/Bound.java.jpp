@@ -10,7 +10,9 @@ The correct way to build the system is to run 'make'.
 
 #if defined(LOWER) || defined(ELTLOWER)
 #define LT <
+#define LTE <=
 #define GT >
+#define GTE >=
 #define MIN1 core.min1
 #define MAX max
 #define LONGMAX Long.MAX_VALUE
@@ -37,7 +39,9 @@ The correct way to build the system is to run 'make'.
 #endif
 #elif defined(UPPER) || defined(ELTUPPER)
 #define LT >
+#define LTE >=
 #define GT <
+#define GTE <=
 #define MIN1 core.max1
 #define MAX min
 #define LONGMAX Long.MIN_VALUE
@@ -241,8 +245,9 @@ public class LOWERBOUND extends SINGLESCALAR {
     }
     ONEOF oo = ONEOF.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // Equivalently, MIN1 LT= oo.MAXELT()
-      if (! (((Long)oo.MAXELT()).longValue() GT MIN1)) {
+      // We could also use MIN1 == oo.MINELT(), since the LowerBound
+      // will never have a MIN1 that does not appear in the OneOf.
+      if (MIN1 LTE ((Long)oo.MINELT()).longValue()) {
         return true;
       }
     }

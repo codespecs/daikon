@@ -62,11 +62,13 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   public String format_esc() {
-    return "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
   public String format_simplify() {
-    return "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(String[] a, int count) {

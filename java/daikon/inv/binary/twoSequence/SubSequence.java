@@ -88,7 +88,8 @@ public class SubSequence extends TwoSequence {
   }
 
   public String format_esc() {
-    return "warning: SubSequence.format_esc() needs to be implemented";
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
   public String format_simplify() {

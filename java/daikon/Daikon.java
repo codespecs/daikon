@@ -159,9 +159,9 @@ public final class Daikon {
     // Read command line options
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
-    Set decls_files = files[0];
-    Set dtrace_files = files[1];
-    Set spinfo_files = files[2];
+    Set decls_files = files[0];  // [File]
+    Set dtrace_files = files[1]; // [File]
+    Set spinfo_files = files[2]; // [File]
     
     // Set up debug traces
     Logger.setupLogs (Global.debugAll ? Logger.DEBUG : Logger.INFO);
@@ -401,7 +401,8 @@ public final class Daikon {
   }
 
   private static void load_spinfo_files(PptMap all_ppts,
-					Set spinfo_files)
+					Set spinfo_files // [File]
+					)
   {
     elapsedTime(); // reset timer
     if (!disable_splitting && spinfo_files.size() > 0) {
@@ -534,15 +535,24 @@ public final class Daikon {
   static public void create_splitters(PptMap all_ppts, Set spinfo_files)
     throws IOException
   {
-    Vector sps = new Vector();
+    Vector spnames_and_splitters = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
-      sps = SplitterFactory.read_spinfofile(filename, all_ppts);
+      spnames_and_splitters =
+	SplitterFactory.read_spinfofile(filename, all_ppts); 
     }
-    int siz = sps.size();
+    int siz = spnames_and_splitters.size();
     Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
     for (int j = 0; j < siz; j+=2) {
-      SplitterList.put( (String )sps.elementAt(j), (Splitter[]) sps.elementAt(j+1));
+      String pptname = (String) spnames_and_splitters.elementAt(j);
+      pptname.trim();
+      //if the pptname is ALL, associate it with all program points.
+      if (pptname.equals("ALL")) {
+	SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
+      } else {
+	SplitterList.put( pptname, 
+			  (Splitter[]) spnames_and_splitters.elementAt(j+1)); 
+      }
     }
   }
 

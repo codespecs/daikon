@@ -7,32 +7,46 @@ import java.util.*;
 import utilMDE.*;
 import gnu.getopt.*;
 
+
+/**
+ * Diff is the main class for the invariant diff program.  The
+ * invariant diff program outputs the differences between two sets of
+ * invariants.
+ * 
+ * The following is a high-level description of the program.  Each
+ * input file contains a serialized PptMap.  The PptMap is extracted
+ * from each file, and the two PptMaps are combined to form a tree.
+ * The tree is exactly three levels deep.  The first level contains
+ * the root, which holds no data.  Each node in the second level is a
+ * pair of Ppts, and each node in the third level is a pair of
+ * Invariants.  The tree is constructed by pairing the corresponding
+ * Ppts and Invariants in the two PptMaps.  Finally, the tree is
+ * traversed via the Visitor pattern to produce output.  The Visitor
+ * pattern makes it easy to extend the program, simply by writing a
+ * new Visitor.
+ **/
 public final class Diff {
-  public static final String lineSep = Global.lineSep;
 
   private static String usage =
-    "Usage: java daikon.diff.Diff [OPTION]... FILE1 [FILE2]" +
-    lineSep +
-    "  If FILE2 is not specified, FILE1 is compared with an empty set" +
-    lineSep +
-    "  -h  Display this usage message" +
-    lineSep +
-    "  -d  Display the tree of differing invariants (default)" +
-    lineSep +
-    "  -a  Display the tree of all invariants" +
-    lineSep +
-    "  -s  Display the statistics between two sets of invariants" +
-    lineSep +
-    "  -t  Display the statistics as a tab-separated list" +
-    lineSep +
-    "  -j  Treat justification as a continuous value" +
-    lineSep +
-    "  -p  Examine all program points" +
-    lineSep +
-    "  -v  Verbose output" +
-    lineSep;
+    UtilMDE.join(new String[] {
+      "Usage:",
+      "    java daikon.diff.Diff [flags...] file1 [file2]",
+      "  file1 and file2 are serialized invariants produced by Daikon.",
+      "  If file2 is not specified, file1 is compared with the empty set.",
+      "  For a list of flags, see the Daikon manual, which appears in the ",
+      "  Daikon distribution and also at http://pag.lcs.mit.edu/daikon/."},
+                 Global.lineSep);
 
   private boolean examineAllPpts;
+
+  /**
+   * Determine which Ppts and Invariants should be paired together in
+   * the tree.
+   **/
+  private static final Comparator PPT_COMPARATOR =
+    new Ppt.NameComparator();
+  private static final Comparator INV_COMPARATOR =
+    new Invariant.ClassVarnameComparator();
 
   public Diff() {
     this(false);
@@ -42,7 +56,9 @@ public final class Diff {
     this.examineAllPpts = examineAllPpts;
   }
 
-  /** Read two PptMap objects from their respective files and diff them. */
+  /**
+   * Read two PptMap objects from their respective files and diff them.
+   **/
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
@@ -169,21 +185,21 @@ public final class Diff {
   }
 
 
-  // Returns a tree of corresponding program points, and corresponding
-  // invariants at each program point.  This tree can be walked to
-  // determine differences between the sets of invariants.
+  /**
+   * Returns a tree of corresponding program points, and corresponding
+   * invariants at each program point.  This tree can be walked to
+   * determine differences between the sets of invariants.
+   **/
   public RootNode diffPptMap(PptMap map1, PptMap map2) {
     RootNode root = new RootNode();
 
-    Comparator comparator = new Ppt.NameComparator();
-
-    SortedSet sset1 = new TreeSet(comparator);
+    SortedSet sset1 = new TreeSet(PPT_COMPARATOR);
     sset1.addAll(map1.asCollection());
-    SortedSet sset2 = new TreeSet(comparator);
+    SortedSet sset2 = new TreeSet(PPT_COMPARATOR);
     sset2.addAll(map2.asCollection());
 
     Iterator opi = new OrderedPairIterator(sset1.iterator(), sset2.iterator(),
-                                           comparator);
+                                           PPT_COMPARATOR);
     while(opi.hasNext()) {
       Pair ppts = (Pair) opi.next();
       PptTopLevel ppt1 = (PptTopLevel) ppts.a;
@@ -197,6 +213,11 @@ public final class Diff {
     return root;
   }
 
+
+  /**
+   * Returns true if the program point should be added to the tree,
+   * false otherwise.
+   **/
   private boolean shouldAdd(PptTopLevel ppt) {
     if (examineAllPpts) {
       return true;
@@ -213,23 +234,22 @@ public final class Diff {
     }
   }
 
-
-  // Takes a pair of corresponding top-level program points, and
-  // returns a tree of the corresponding invariants.  Either of the
-  // program points may be null.
+  /**
+   * Takes a pair of corresponding top-level program points, and
+   * returns a tree of the corresponding invariants.  Either of the
+   * program points may be null.
+   **/
   private PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
-    Comparator pptComparator = new Ppt.NameComparator();
     Assert.assert(ppt1 == null || ppt2 == null ||
-                  pptComparator.compare(ppt1, ppt2) == 0,
+                  PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
                   "Program points do not correspond");
 
-    Comparator invComparator = new Invariant.ClassVarnameComparator();
     List invs1;
     if (ppt1 != null) {
       invs1 = ppt1.invariants_vector();
-      Collections.sort(invs1, invComparator);
+      Collections.sort(invs1, INV_COMPARATOR);
     } else {
       invs1 = Collections.EMPTY_LIST;
     }
@@ -237,13 +257,13 @@ public final class Diff {
     List invs2;
     if (ppt2 != null) {
       invs2 = ppt2.invariants_vector();
-      Collections.sort(invs2, invComparator);
+      Collections.sort(invs2, INV_COMPARATOR);
     } else {
       invs2 = Collections.EMPTY_LIST;
     }
 
     Iterator opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
-                                           invComparator);
+                                           INV_COMPARATOR);
     while(opi.hasNext()) {
       Pair invariants = (Pair) opi.next();
       Invariant inv1 = (Invariant) invariants.a;

@@ -120,8 +120,9 @@ public class LowerBound  extends SingleScalar  {
     }
     OneOfScalar  oo = OneOfScalar .find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // Equivalently, core.min1  < = oo. max_elt ()
-      if (! (((Long)oo. max_elt ()).longValue() >  core.min1 )) {
+      // We could also use core.min1  == oo. min_elt (), since the LowerBound
+      // will never have a core.min1  that does not appear in the OneOf.
+      if (core.min1  <=  ((Long)oo. min_elt ()).longValue()) {
         return true;
       }
     }

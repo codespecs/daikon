@@ -151,8 +151,10 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     String[]  value = elts[0];
     if (var().name.isApplySizeSafe())
       result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
-    else
-      result = "warning: " + this.getClass() + ".format_ioa() needs to be implemented: " + format();
+    else {
+      String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: " + thisclassname + ".format_ioa() needs to be implemented: " + format();
+    }
 
     return result;
   }
@@ -161,7 +163,8 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
     String result;
 
-    result = "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
 
     return result;
   }
@@ -170,7 +173,8 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
     String result;
 
-    result =  "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    result =  "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
 
     return result;
   }

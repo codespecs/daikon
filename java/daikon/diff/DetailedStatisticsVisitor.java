@@ -7,7 +7,12 @@ import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import utilMDE.*;
 
-public class DetailedStatisticsVisitor extends NodeVisitor {
+/**
+ * Computes statistics about the differences between the sets of
+ * invariants.  The statistics can be printed as a human-readable
+ * table or a tab-separated list suitable for further processing.
+ **/
+public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
   private static final int FIELD_WIDTH = 5;
   private static final int LABEL_WIDTH = 7;
@@ -26,7 +31,7 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
 
   // Relationships between invariants
   public static final int NUM_RELATIONSHIPS = 12;
-  // Both present, same invariant, justification in file1, justified in file2
+  // Both present, same invariant, justified in file1, justified in file2
   public static final int REL_SAME_JUST1_JUST2 = 0;
   // Both present, same invariant, justified in file1, unjustified in file2
   public static final int REL_SAME_JUST1_UNJUST2 = 1;
@@ -55,6 +60,10 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
   // Not present in file1, present in file2, unjustified in file2
   public static final int REL_MISS_UNJUST2 = 11;
 
+  public static final String[] RELATIONSHIP_LABELS =
+  { "SJJ", "SJU", "SUJ", "SUU", "DJJ", "DJU", "DUJ", "DUU",
+    "JM", "UM", "MJ", "MU" };
+
   // Table of frequencies, indexed by type of invariant, and
   // relationship between the invariants
   private double[][] freq = new double[NUM_TYPES][NUM_RELATIONSHIPS];
@@ -62,18 +71,22 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
   private boolean continuousJustification;
 
   public DetailedStatisticsVisitor(boolean continuousJustification) {
-    this.continuousJustification = continuousJustification;
+    this.continuousJustification = continuousJustification; 
   }
 
-  public void preVisitRootNode(RootNode node) { }
-
-  public void preVisitPptNode(PptNode node) { }
-
-  public void preVisitInvNode(InvNode node) {
-    addFrequency(node.getInv1(), node.getInv2());
+  public void visit(InvNode node) {
+    Invariant inv1 = node.getInv1();
+    Invariant inv2 = node.getInv2();
+    if (shouldAddFrequency(inv1, inv2)) {
+      addFrequency(node.getInv1(), node.getInv2());
+    }
   }
 
-  public void addFrequency(Invariant inv1, Invariant inv2) {
+  /**
+   * Adds the difference between the two invariants to the appropriate
+   * entry in the frequencies table.
+   **/
+  private void addFrequency(Invariant inv1, Invariant inv2) {
     if (continuousJustification) {
       addFrequencyContinuous(inv1, inv2);
     } else {
@@ -81,18 +94,30 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     }
   }
 
-  public void addFrequencyBinary(Invariant inv1, Invariant inv2) {
+
+  /**
+   * Treats justification as a binary value.  The table entry is
+   * incremented by 1 regardless of the difference in justifications.
+   **/
+  private void addFrequencyBinary(Invariant inv1, Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
     freq[type][relationship]++;
   }
 
-  public void addFrequencyContinuous(Invariant inv1, Invariant inv2) {
+
+  /**
+   * Treats justification as a continuous value.  If one invariant is
+   * justified but the other is unjustified, the table entry is
+   * incremented by the difference in justifications.
+   **/  
+  private void addFrequencyContinuous(Invariant inv1, Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
     switch (relationship) {
-    case REL_SAME_JUST1_UNJUST2: case REL_SAME_UNJUST1_JUST2:
+    case REL_SAME_JUST1_UNJUST2:
+    case REL_SAME_UNJUST1_JUST2:
       freq[type][relationship] += calculateProbabilityDifference(inv1, inv2);
       break;
     default:
@@ -101,7 +126,13 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     
   }
 
-  public static double calculateProbabilityDifference(Invariant inv1,
+
+  /**
+   * Returns the difference in the probabilites of the two invariants.
+   * Probability values greater than 1 (i.e. PROBABILITY_NEVER) are
+   * rounded down to 1.
+   **/
+  private static double calculateProbabilityDifference(Invariant inv1,
                                                       Invariant inv2) {
     Assert.assert(inv1 != null && inv2 != null);
     double prob1 = Math.min(inv1.getProbability(), 1);
@@ -110,13 +141,19 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     return diff;
   }
 
+
+  /**
+   * Returns the type of the invariant pair.  The type consists of the
+   * number of variables (0,1,2,3) and whether the pair is interesting
+   * or not.  A pair is interesting if at least one invariant is
+   * interesting.
+   **/
   public static int determineType(Invariant inv1, Invariant inv2) {
     int type;
 
     // Set inv to a non-null invariant
     Invariant inv = (inv1 != null) ? inv1 : inv2;
 
-    // If either invariant is interesting, the pair is interesting
     boolean interesting = ((inv1 != null && inv1.isInteresting()) ||
                            (inv2 != null && inv2.isInteresting()));
 
@@ -142,6 +179,11 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     return type;
   }
 
+  /**
+   * Returns the relationship between the two invariants.  There are
+   * twelve possible relationships, described at the beginning of this
+   * file.
+   **/
   public static int determineRelationship(Invariant inv1, Invariant inv2) {
     int relationship;
 
@@ -178,8 +220,10 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     return relationship;
   }
 
-  // Returns a tab-separated listing of its data, suitable for storing in a
-  // file
+  /**
+   * Returns a tab-separated listing of its data, suitable for
+   * post-processing.
+   **/
   public String repr() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -194,7 +238,9 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     return sw.toString();
   }
 
-  // Returns a human-readable table of its data
+  /**
+   * Returns a human-readable table of its data.
+   **/
   public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -202,7 +248,7 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     pw.println("STATISTICS");
     pw.print("       ");
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-      pw.print(UtilMDE.rpad(rel, FIELD_WIDTH));
+      pw.print(UtilMDE.rpad(RELATIONSHIP_LABELS[rel], FIELD_WIDTH));
     }
     pw.println(UtilMDE.rpad("TOTAL", FIELD_WIDTH));
 
@@ -234,10 +280,22 @@ public class DetailedStatisticsVisitor extends NodeVisitor {
     return sw.toString();
   }
 
-  // Use this method instead of making the array public, to preserve
-  // abstraction
+  /**
+   * Returns the frequency of pairs of invariants we have seen with
+   * this type and relationship.  May be a non-integer, since we may
+   * be treating justification as a continuous value.
+   **/
   public double freq(int type, int relationship) {
     return freq[type][relationship];
+  }
+
+  /**
+   * Returns true if the pair of invariants should be added to the
+   * frequency table, based on their printability.
+   **/
+  private static boolean shouldAddFrequency(Invariant inv1, Invariant inv2) {
+    return (inv1 != null && inv1.isWorthPrinting()) ||
+      (inv2 != null && inv2.isWorthPrinting());
   }
 
 }

@@ -185,7 +185,8 @@ public final class FunctionBinaryCore
   }
 
   public String format_esc() {
-    return "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
   public boolean isSameFormula(FunctionBinaryCore other)

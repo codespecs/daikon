@@ -3,9 +3,15 @@ package daikon.diff;
 import daikon.inv.Invariant;
 import utilMDE.*;
 
+/**
+ * Contains a pair of Invariants.  Resides in the third level of the
+ * tree.
+ **/
 public class InvNode extends Node {
 
-  // Either inv1 or inv2 may be null, but not both
+  /**
+   * Either inv1 or inv2 may be null, but not both.
+   **/
   public InvNode(Invariant inv1, Invariant inv2) {
     super(new Pair(inv1, inv2));
     Assert.assert(!(inv1 == null && inv2 == null),
@@ -22,9 +28,8 @@ public class InvNode extends Node {
     return (Invariant) p.b;
   }
 
-  public void accept(NodeVisitor v) {
-    v.preVisitInvNode(this);
-    v.postVisitInvNode(this);
+  public void accept(Visitor v) {
+    v.visit(this);
   }
 
 }

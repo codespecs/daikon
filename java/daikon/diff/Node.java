@@ -2,6 +2,9 @@ package daikon.diff;
 
 import java.util.*;
 
+/**
+ * All nodes must subclass this class.
+ **/
 public abstract class Node {
 
   private List children = new ArrayList();
@@ -26,6 +29,6 @@ public abstract class Node {
     return userObject;
   }
 
-  public abstract void accept(NodeVisitor v);
+  public abstract void accept(Visitor v);
 
 }

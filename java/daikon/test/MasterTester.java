@@ -27,7 +27,10 @@ public class MasterTester extends TestCase {
     //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
 
     result.addTest(new TestSuite(daikon.test.diff.DiffTester.class));
-    result.addTest(new TestSuite(daikon.test.diff.DetailedStatisticsVisitorTester.class));
+    result.addTest(new TestSuite
+      (daikon.test.diff.DetailedStatisticsVisitorTester.class));
+    result.addTest(new TestSuite
+      (daikon.test.diff.PrintDifferingInvariantsVisitorTester.class));
     result.addTest(new TestSuite(daikon.test.inv.InvariantTester.class));
     result.addTest(new TestSuite(daikon.test.LinearTernaryCoreTest.class));
     result.addTest(new TestSuite(daikon.test.ProglangTypeTest.class));

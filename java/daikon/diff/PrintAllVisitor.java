@@ -5,7 +5,11 @@ import java.text.*;
 import daikon.*;
 import daikon.inv.Invariant;
 
-public class PrintAllVisitor extends NodeVisitor {
+/**
+ * Prints all the invariant pairs, including pairs containing
+ * identical invariants.
+ **/
+public class PrintAllVisitor extends DepthFirstVisitor {
   
   private static DecimalFormat PROBABILITY_FORMAT =
     new DecimalFormat("0.####");
@@ -13,129 +17,140 @@ public class PrintAllVisitor extends NodeVisitor {
   private PrintStream ps;
   private boolean verbose;
   
-  // Stores the output generated when visiting invariant nodes.  This
-  // output cannot be printed directly to the print stream, because
-  // the ppt output must come before the invariant output.
-  private StringBuffer invariantOutput = new StringBuffer();
+  /**
+   * Stores the output generated when visiting invariant nodes.  This
+   * output cannot be printed directly to the print stream, because
+   * the Ppt output must come before the Invariant output.
+   **/
+  private StringBuffer bufOutput = new StringBuffer();
 
   public PrintAllVisitor(PrintStream ps, boolean verbose) {
     this.ps = ps;
     this.verbose = verbose;
   }
 
-  public void preVisitPptNode(PptNode node) {
+  /**
+   * Prints the pair of program points, and all the invariants
+   * contained within them.  The program points are printed only if
+   * there is output for the contained invariants.
+   **/
+  public void visit(PptNode node) {
     // Empty the string buffer
-    invariantOutput.setLength(0);
-  }
+    bufOutput.setLength(0);
 
-  public void postVisitPptNode(PptNode node) {
-    if (invariantOutput.length() > 0) {
+    super.visit(node);
+
+    if (bufOutput.length() > 0) {
       Ppt ppt1 = node.getPpt1();
       Ppt ppt2 = node.getPpt2();
       
-      print("<");
+      ps.print("<");
       if (ppt1 == null) {
-        print((String) null);
+        ps.print((String) null);
       } else {
-        print(ppt1.name);
+        ps.print(ppt1.name);
       }
       
       if (ppt1 == null || ppt2 == null || !ppt1.name.equals(ppt2.name)) {
-        print(", ");
+        ps.print(", ");
         if (ppt2 == null) {
-          print((String) null);
+          ps.print((String) null);
         } else {
-          print(ppt2.name);
+          ps.print(ppt2.name);
         }
       }
-      println(">");
-      print(invariantOutput.toString());
+      ps.println(">");
+      ps.print(bufOutput.toString());
     }
   }
 
-  public void preVisitInvNode(InvNode node) {
+  /**
+   * Prints a pair of invariants.  Includes the type of the invariants
+   * and their relationship.
+   **/
+  public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
 
-    invPrint("  " + "<");
+    bufPrint("  " + "<");
     if (inv1 == null) {
-      invPrint((String) null);
+      bufPrint((String) null);
     } else {
-      printInvariant(inv1, node);
+      printInvariant(inv1);
     }
-    invPrint(", ");
+    bufPrint(", ");
     if (inv2 == null) {
-      invPrint((String) null);
+      bufPrint((String) null);
     } else {
-      printInvariant(inv2, node);
+      printInvariant(inv2);
     }
-    invPrint(">");
+    bufPrint(">");
 
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
+    String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
 
-    invPrint(" (" + typeLabel + "," + rel + ")");
+    bufPrint(" (" + typeLabel + "," + relLabel + ")");
 
-    invPrintln();
+    bufPrintln();
   }
 
-  protected void printInvariant(Invariant inv, InvNode node) {
+  /**
+   * Prints an invariant, including its printability and possibly its
+   * probability.  Example: "argv != null {0.0001+}"
+   * 
+   **/
+  protected void printInvariant(Invariant inv) {
     if (verbose) {
-      invPrint(inv.repr_prob());
-      invPrint(" {");
+      bufPrint(inv.repr_prob());
+      bufPrint(" {");
       printPrintability(inv);
-      invPrint("}");
+      bufPrint("}");
     } else {
-      invPrint(inv.format());
-      invPrint(" {");
+      bufPrint(inv.format());
+      bufPrint(" {");
       printProbability(inv);
       printPrintability(inv);
-      invPrint("}");
+      bufPrint("}");
     }    
   }
 
+  /**
+   * Prints the probability of the invariant.  Probabilities between
+   * .0001 and 0 are rounded to .0001.
+   **/
   private void printProbability(Invariant inv) {
     double prob = inv.getProbability();
 
-    // Round small probabilities to .0001
     if (0 < prob && prob < .0001) {
       prob = .0001;
     }
 
-    invPrint(PROBABILITY_FORMAT.format(prob));
+    bufPrint(PROBABILITY_FORMAT.format(prob));
   }
 
+  /**
+   * Prints '+' if the invariant is worth printing, '-' otherwise.
+   **/
   private void printPrintability(Invariant inv) {
     if (inv.isWorthPrinting()) {
-      invPrint("+");
+      bufPrint("+");
     } else {
-      invPrint("-");
+      bufPrint("-");
     }
   }
-
-  protected void print(String s) {
-    ps.print(s);
+  
+  // "prints" by appending to a string buffer
+  protected void bufPrint(String s) {
+    bufOutput.append(s);
   }
-
-  protected void println(String s) {
-    ps.println(s);
+  protected void bufPrintln(String s) {
+    bufPrint(s);
+    bufPrintln();
   }
-
-  protected void println() {
-    ps.println();
-  }
-
-  // "prints" invariant differences by appending to a string buffer
-  protected void invPrint(String s) {
-    invariantOutput.append(s);
-  }
-  protected void invPrintln(String s) {
-    invPrint(s);
-    invPrintln();
-  }
-  protected void invPrintln() {
-    invariantOutput.append(Global.lineSep);
+  protected void bufPrintln() {
+    bufOutput.append(Global.lineSep);
   }  
 
 }

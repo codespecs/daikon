@@ -1,19 +1,16 @@
 package daikon.diff;
 
-import java.util.Iterator;
-
+/**
+ * The root of the tree.  All its children are InvNodes.
+ **/
 public class RootNode extends Node {
   
   public RootNode() {
     super();
   }
 
-  public void accept(NodeVisitor v) {
-    v.preVisitRootNode(this);
-    for (Iterator i = children(); i.hasNext(); ) {
-      Node node = (Node) i.next();
-      node.accept(v);
-    }
-    v.postVisitRootNode(this);
+  public void accept(Visitor v) {
+    v.visit(this);
   }
+
 }

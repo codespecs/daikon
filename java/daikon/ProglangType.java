@@ -348,8 +348,10 @@ public final class ProglangType implements java.io.Serializable {
             } else if (parser.ttype == StreamTokenizer.TT_WORD) {
               Assert.assert(parser.sval.equals("null"));
               v.add(null);
+            } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
+	      v.add(Integer.toString((int)parser.nval));
             } else {
-              System.out.println("Bad ttype " + (char)parser.ttype + " while parsing " + value_);
+              System.out.println("Bad ttype " + (char)parser.ttype + " [int=" + parser.ttype + "] while parsing " + value_);
               v.add(null);
             }
           }
@@ -528,3 +530,9 @@ public final class ProglangType implements java.io.Serializable {
   }
 
 }
+
+/*
+ * Local Variables:
+ * c-basic-offset:	2
+ * End:
+ */

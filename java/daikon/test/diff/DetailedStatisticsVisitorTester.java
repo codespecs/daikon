@@ -4,6 +4,7 @@ import junit.framework.*;
 import daikon.*;
 import daikon.inv.*;
 import daikon.diff.*;
+import java.lang.reflect.*;
 
 public class DetailedStatisticsVisitorTester extends TestCase {
 
@@ -29,6 +30,8 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     new DummyInvariant(slice0, "2", true, false);
   Invariant null_unint_2_unjust =
     new DummyInvariant(slice0, "2", false, false);
+
+  Invariant null_noprint = new DummyInvariant(slice0, "0", true, true, false);
 
   PptSlice slice1 = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   Invariant unary_int_1_just = new DummyInvariant(slice1, "1", true);
@@ -59,7 +62,8 @@ public class DetailedStatisticsVisitorTester extends TestCase {
 
   public static void main(String[] args) {
     daikon.Logger.setupLogs (daikon.Logger.INFO);
-    junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
+    junit.textui.TestRunner.run
+      (new TestSuite(DetailedStatisticsVisitorTester.class));
   }
 
   public DetailedStatisticsVisitorTester(String name) {
@@ -92,6 +96,8 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     pptNode.add(new InvNode(null_unint_1_unjust, null));
     pptNode.add(new InvNode(null, null_unint_1_just));
     pptNode.add(new InvNode(null, null_unint_1_unjust));
+
+    pptNode.add(new InvNode(null_noprint, null_noprint));
 
     pptNode.add(new InvNode(unary_int_1_just, unary_int_1_just));
     pptNode.add(new InvNode(unary_int_1_just, unary_int_1_unjust));
@@ -155,8 +161,31 @@ public class DetailedStatisticsVisitorTester extends TestCase {
       for (int rel = 0;
            rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS;
            rel++) {
-        Assert.assertTrue(1 == v.freq(type, rel));
+        Assert.assertEquals(1, (int) v.freq(type, rel));
       }
     }
+  }
+
+  public void testShouldAddFrequency() throws Exception {
+    // Invoke private method using reflection
+    Method m = DetailedStatisticsVisitor.class.getDeclaredMethod
+      ("shouldAddFrequency", new Class[] {Invariant.class, Invariant.class});
+    m.setAccessible(true);
+
+    Boolean b = (Boolean) m.invoke
+      (null, new Object[] {null_noprint, null_noprint});
+    Assert.assertTrue(!b.booleanValue());
+
+    b = (Boolean) m.invoke
+      (null, new Object[] {null_int_1_just, null_int_1_just});
+    Assert.assertTrue(b.booleanValue());
+
+    b = (Boolean) m.invoke
+      (null, new Object[] {null, null_noprint});
+    Assert.assertTrue(!b.booleanValue());
+
+    b = (Boolean) m.invoke
+      (null, new Object[] {null, null_int_1_just});
+    Assert.assertTrue(b.booleanValue());
   }
 }

@@ -3,6 +3,10 @@ package daikon.diff;
 import daikon.inv.Invariant;
 import java.io.*;
 
+
+/**
+ * Prints the differing invariant pairs.
+ **/
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
   public PrintDifferingInvariantsVisitor(PrintStream ps,
@@ -10,21 +14,23 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
     super(ps, verbose);
   }
 
-  public void preVisitInvNode(InvNode node) {
+  public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (shouldPrint(inv1, inv2)) {
-      super.preVisitInvNode(node);
+      super.visit(node);
     }
   }
 
-  private boolean shouldPrint(Invariant inv1, Invariant inv2) {
-    boolean shouldPrint = true;
-
+  /**
+   * Returns true if the pair of invariants should be printed,
+   * depending on their type, relationship, and printability.
+   **/
+  private static boolean shouldPrint(Invariant inv1, Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING ||
         type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
-      shouldPrint = false;
+      return false;
     }
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
@@ -33,9 +39,14 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
         rel == DetailedStatisticsVisitor.REL_DIFF_UNJUST1_UNJUST2 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST1 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST2) {
-      shouldPrint = false;
+      return false;
     }
 
-    return shouldPrint;
+    if ((inv1 == null || !inv1.isWorthPrinting()) &&
+        (inv2 == null || !inv2.isWorthPrinting())) {
+      return false;
+    }
+
+    return true;
   }
 }

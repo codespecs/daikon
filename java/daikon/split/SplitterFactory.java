@@ -112,17 +112,17 @@ public class SplitterFactory {
       try {
 	Vector splitternames = write_function_splitters(ppt_name, conditions, replace, all_ppts);
 	pptnames_and_splitterObjects.addElement(splitternames);
-
-	//compile all the Splitter classes
+	Vector compile_list = new Vector();
 	for (int j = 0; j < splitternames.size(); j++) {
 	  String className = (String)splitternames.elementAt(j);
-	  processes.addElement(FileCompiler.compile_source(tempdir + className + ".java"));
+	  compile_list.addElement(tempdir + className + ".java");
 	}
+	processes.addElement(FileCompiler.compile_source(compile_list));
       } catch(IOException ioe) {
 	System.err.println(ioe.toString() + " while writing Splitter source for " + ppt_name );
       }
     }
-
+    
     //wait for all the compilation processes to terminate
     for (int j = 0; j < processes.size(); j++) {
       try {
@@ -359,7 +359,7 @@ public class SplitterFactory {
 	  return all_ppts.get(name);
 	}
       }
-    } catch (Exception e) {
+    } catch (MalformedPatternException e) {
       debugPrint(e.toString() + " while matching " + ppt_name);
     }
     return null;
@@ -452,7 +452,7 @@ public class SplitterFactory {
 	  replace_data.addElement(replace.elementAt(i+1));
 	}
       }
-    }catch(Exception e) {
+    }catch(ClassCastException e) {
       System.out.println(e.toString());
     }
     //create the regular expression which will be used to search for each
@@ -505,7 +505,7 @@ public class SplitterFactory {
 	    new Perl5Substitution(replacement, Perl5Substitution.INTERPOLATE_ALL);
 	  condition = Util.substitute(re_matcher, re_compiler.compile("#"), replace_subst, condition, 1);
 	}
-      }catch(Exception e) {
+      }catch(MalformedPatternException e) {
 	debugPrint( e.toString() +" while performing replacement on condition " + condition);
       }
     }
@@ -550,7 +550,7 @@ public class SplitterFactory {
 	test_string =
 	  Util.substitute(re_matcher, length_pattern, length_subst, test_string, Util.SUBSTITUTE_ALL);
       }
-    }catch(Exception e) {
+    }catch(MalformedPatternException e) {
       debugPrint(e.toString() + " while writing performing substitution on teststring " + test_string + "\n");
     }
     return test_string;
@@ -563,7 +563,7 @@ public class SplitterFactory {
   static String match_Splitter_varnames_with_teststring(String[] params, String[] param_names,
 							String test_string, String class_name ) {
 
-    try {
+    
       for (int i = 0; i < params.length; i++) {
 
 	Pattern param_pattern;
@@ -572,38 +572,37 @@ public class SplitterFactory {
 	//"this.myArray", but the condition test is "myArray.length == 0". In
 	//such a situation, search the test_string for this.myArray or myArray
 	//and change the test string to this_myArray.length == 0
-	if (params[i].startsWith("this")) {
-	  String params_minus_this = params[i].substring(5);
-	  //for example for the variable 'this.myArray', we will be searching
-	  //the condition for the regex "myArray|this.myArray" and replacing
-	  //it with this_myArray as declared in the Splitter.
-	  param_pattern = re_compiler.compile(params[i] + "|" + params_minus_this);
-	}else if (params[i].startsWith(class_name)) {
-	  param_pattern = re_compiler.compile(params[i] + "|" + params[i].substring(class_name.length()));
-	}else{
-	  param_pattern = re_compiler.compile(params[i]);
-	}
-
-	Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
-	PatternMatcherInput input = new PatternMatcherInput(test_string);
-	//remove any parameters which are not used in the condition
-	if (re_matcher.contains(input, param_pattern)) {
-	  test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-	  while (re_matcher.contains(input, param_pattern)) {
-	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+	try {
+	  if (params[i].startsWith("this")) {
+	    String params_minus_this = params[i].substring(5);
+	    //for example for the variable 'this.myArray', we will be searching
+	    //the condition for the regex "myArray|this.myArray" and replacing
+	    //it with this_myArray as declared in the Splitter.
+	    param_pattern = re_compiler.compile(params[i] + "|" + params_minus_this);
+	  }else if (params[i].startsWith(class_name)) {
+	    param_pattern = re_compiler.compile(params[i] + "|" + params[i].substring(class_name.length()));
+	  }else{
+	    param_pattern = re_compiler.compile(params[i]);
 	  }
-	}else{
-	  params[i] = "**remove**"; //this parameter is not needed in the test. ignore later
+	  
+	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
+	  PatternMatcherInput input = new PatternMatcherInput(test_string);
+	  //remove any parameters which are not used in the condition
+	  if (re_matcher.contains(input, param_pattern)) {
+	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+	    while (re_matcher.contains(input, param_pattern)) {
+	      test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+	    }
+	  }else{
+	    params[i] = "**remove**"; //this parameter is not needed in the test. ignore later
+	  }
+	} catch(MalformedPatternException e) {
+	  debugPrint(e.toString());
 	}
       }
-
-    }catch(Exception e) {
-      debugPrint(e.toString());
-    }
-
-    return test_string;
+      return test_string;
   }
-
+  
   static Pattern find_index_pattern;
   static {
     try {
@@ -613,8 +612,7 @@ public class SplitterFactory {
     } catch (MalformedPatternException me){
       System.err.println("Error while compiling regular expresssion find_index_pattern in SplitterFactory");
     }
-  }
-
+  }  
 
     /**
      * Find all variables which are used to index into arrays and change their
@@ -641,7 +639,7 @@ public class SplitterFactory {
 		  arrayIndexVariables.addElement(((String)tempIndices.elementAt(i)).trim());
 		}
 	    }
-	} catch(Exception e) {
+	} catch(MalformedPatternException e) {
 	    debugPrint(e.toString());
 	}
 
@@ -671,7 +669,7 @@ public class SplitterFactory {
 	test_string =
 	  Util.substitute(re_matcher, null_pattern, null_subst, test_string, Util.SUBSTITUTE_ALL);
       }
-    }catch(Exception e) {
+    }catch(MalformedPatternException e) {
       debugPrint("Error performing subtitution of '== null' in " + test_string );
     }
     return test_string;
@@ -693,11 +691,11 @@ public class SplitterFactory {
 	tempdir = splitdir.getPath() + File.separator;
       }else{
 	tempdir = "";
-	System.out.println("Splitters being created in current directory");
       }
-    }catch(Exception e) {
+    }catch(IOException e) {
       debugPrint(e.toString());
     }
+    System.out.println("Splitters for this run created in " + tempdir);
     return tempdir;
   }
 
@@ -705,12 +703,15 @@ public class SplitterFactory {
    * Print out a message if the debugPptSplit variable is set to "true"
    **/
   static void debugPrint(String s) {
-    Global.debugSplit.debug (s);
+    System.out.println(s);
+    //Global.debugSplit.debug (s);
   }
 
   /**
-   * Print the declaration of the parameter <parameter> of type <type> in the
-   * Java source of the Splitter
+   * Declare the VarInfo for the parameter <parameter> of type <type> in the
+   * Java source of the Splitter. For example, for a variable named "myint" 
+   * of type "int", it would print "VarInfo myint_varinfo" and for an array
+   * "myarr", it would print "VarInfo myarr_array_varinfo"
    **/
   static StringBuffer print_parameter_declarations(StringBuffer splitter_source, String parameter, String type) {
     if (type.equals("int")) {
