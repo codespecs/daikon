@@ -138,7 +138,9 @@ kvasir/kvasir/Makefile.in:
 	touch $@
 
 kvasir/config.status: kvasir/kvasir/Makefile.in
-	cd kvasir && ./configure --prefix=`pwd`/inst
+	cd kvasir && ./auto-everything.sh
+# I cut the next line out and replaced it with the previous line - P. Guo
+#	cd kvasir && ./configure --prefix=`pwd`/inst
 
 kvasir/coregrind/valgrind: kvasir/config.status kvasir/coregrind/*.[ch]
 	cd kvasir && $(MAKE)
