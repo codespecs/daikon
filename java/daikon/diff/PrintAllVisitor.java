@@ -1,12 +1,13 @@
 package daikon.diff;
 
 import java.io.*;
+import daikon.inv.Invariant;
 
 public class PrintAllVisitor implements NodeVisitor {
   
   private StringWriter sw;
-  protected PrintWriter pw;
-  private boolean verbose;
+  private PrintWriter pw;
+  protected boolean verbose;
 
   public PrintAllVisitor(boolean verbose) {
     this.verbose = verbose;
@@ -19,45 +20,53 @@ public class PrintAllVisitor implements NodeVisitor {
   }
 
   public void visitRootNode(RootNode node) {
-    pw.println("root");
+    println("root");
   }
 
   public void visitPptNode(PptNode node) {
-    pw.print("  " + "<");
+    print("  " + "<");
     if (node.getPpt1() == null) {
-      pw.print((String) null);
+      print((String) null);
     } else {
-      pw.print(node.getPpt1().name);
+      print(node.getPpt1().name);
     }
-    pw.print(", ");
+    print(", ");
     if (node.getPpt2() == null) {
-      pw.print((String) null);
+      print((String) null);
     } else {
-      pw.print(node.getPpt2().name);
+      print(node.getPpt2().name);
     }
-    pw.println(">");
+    println(">");
   }
 
   public void visitInvNode(InvNode node) {
-    pw.print("    " + "<");
+    print("    " + "<");
     if (node.getInv1() == null) {
-      pw.print((String) null);
+      print((String) null);
     } else {
-      if (verbose)
-        pw.print(node.getInv1().repr_prob());
-      else
-        pw.print(node.getInv1().format());
+      printInvariant(node.getInv1(), node);
     }
-    pw.print(", ");
+    print(", ");
     if (node.getInv2() == null) {
-      pw.print((String) null);
+      print((String) null);
     } else {
-      if (verbose)
-        pw.print(node.getInv2().repr_prob());
-      else
-        pw.print(node.getInv2().format());
+      printInvariant(node.getInv2(), node);
     }
-    pw.println(">");
+    println(">");
   }
 
+  protected void printInvariant(Invariant inv, InvNode node) {
+    if (verbose)
+      print(inv.repr_prob());
+    else
+      print(inv.format());
+  }
+
+  protected void print(String s) {
+    pw.print(s);
+  }
+
+  protected void println(String s) {
+    pw.println(s);
+  }
 }

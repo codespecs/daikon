@@ -551,13 +551,6 @@ public class DiffTester extends TestCase {
     return v.getOutput();
   }
 
-  private static String printDifferences(RootNode root) {
-    PrintDifferingInvariantsVisitor v =
-      new PrintDifferingInvariantsVisitor(false);
-    root.accept(v);
-    return v.getOutput();
-  }
-
   private static int countDifferingInvariants(RootNode root) {
     StatisticsVisitor v = new StatisticsVisitor();
     root.accept(v);

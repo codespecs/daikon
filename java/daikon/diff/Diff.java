@@ -9,6 +9,16 @@ import javax.swing.tree.*;
 import utilMDE.*;
 import gnu.getopt.*;
 
+// Notes on options
+//
+// -j: Normally, the justification of invariants is taken into
+// account.  This option turns this off.  When justification is taken
+// into account, invariants inv1 and inv2 are "the same" if
+// inv1.isSameInvariant(inv2) returns true, and are both justified.  A
+// difference is worth printing if at least one invariant is
+// justified.
+
+
 public final class Diff {
   public static final String lineSep = Global.lineSep;
 
@@ -23,40 +33,54 @@ public final class Diff {
     lineSep +
     "  -s  Display the statistics between two sets of invariants (default)" +
     lineSep +
+    "  -u  Display uninteresting invariants" +
+    lineSep +
+    "  -j  Ignore justification when displaying differing invariants" +
+    lineSep +
     "  -v  Verbose output" +
     lineSep;
 
 
   // Types of output
-  private static boolean print_diff = false;
-  private static boolean print_all = false;
+  private static boolean printDiff = false;
+  private static boolean printAll = false;
   private static boolean stats = false;
+  private static boolean printUninteresting = false;
+  private static boolean considerJustification  = true;
   private static boolean verbose = false;
 
-  private static boolean option_selected = false;
+  private static boolean optionSelected = false;
 
   /** Read two PptMap objects from their respective files and diff them. */
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hdasv");
+    Getopt g = new Getopt("daikon.Diff", args, "hdasujv");
     int c;
     while ((c = g.getopt()) !=-1) {
-      option_selected = true;
       switch (c) {
       case 'h':
         System.out.println(usage);
         System.exit(1);
         break;
       case 'd':
-        print_diff = true;
+        optionSelected = true;
+        printDiff = true;
         break;
       case 'a':
-        print_all = true;
+        optionSelected = true;
+        printAll = true;
         break;
       case 's':
+        optionSelected = true;
         stats = true;
+        break;
+      case 'u':
+        printUninteresting = true;
+        break;
+      case 'j':
+        considerJustification = false;
         break;
       case 'v':
         verbose = true;
@@ -69,11 +93,12 @@ public final class Diff {
       }
     }
 
-    // stats, print_diff is the default mode
-    if (! option_selected) {
+    // stats, printDiff is the default mode
+    if (! optionSelected) {
       stats = true;
-      print_diff = true;
+      printDiff = true;
     }
+
     // The index of the first non-option argument -- the name of the
     // first file
     int firstFileIndex = g.getOptind();
@@ -107,14 +132,15 @@ public final class Diff {
       System.out.println(v.format());
     }
 
-    if (print_diff) {
+    if (printDiff) {
       PrintDifferingInvariantsVisitor v =
-        new PrintDifferingInvariantsVisitor(verbose);
+        new PrintDifferingInvariantsVisitor(verbose, printUninteresting,
+                                            considerJustification);
       root.accept(v);
       System.out.println(v.getOutput());
     }
 
-    if (print_all) {
+    if (printAll) {
       PrintAllVisitor v = new PrintAllVisitor(verbose);
       root.accept(v);
       System.out.println(v.getOutput());
