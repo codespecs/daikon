@@ -3381,6 +3381,8 @@ We do not yet have a fix, but if you find one, please let us know.
 @node    dfej invocation problems,  , dfej compilation problems, dfej problems
 @subsection Problems running dfej
 
+@cindex could not find package named, dfej error
+
 If you get an error like
 @example
 % dfej MyProg.java
