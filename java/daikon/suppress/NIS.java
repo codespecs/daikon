@@ -5,6 +5,7 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
+import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
 import utilMDE.*;
 
@@ -109,8 +110,14 @@ public class NIS {
     for (Iterator i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       NISuppressionSet ss = inv.get_ni_suppressions();
-      if (ss != null)
+      if (ss != null) {
+        for (int j = 0; j < ss.suppression_set.length; j++)
+          Assert.assertTrue (inv.getClass()
+                            == ss.suppression_set[j].suppressee.sup_class,
+                           "class " + inv.getClass() + " doesn't match "
+                            + ss.suppression_set[j]);
         all_suppressions.add (ss);
+      }
     }
 
     // map suppressor classes to suppression sets
@@ -216,7 +223,11 @@ public class NIS {
       // If no variables are missing, apply the sample
       if (!missing) {
         InvariantStatus result = inv.add_sample (vt, count);
-        Assert.assertTrue (result != InvariantStatus.FALSIFIED);
+        if (result == InvariantStatus.FALSIFIED)
+          Assert.assertTrue (false, "inv " + inv.format()
+                             + " falsified by sample "
+                             + Debug.toString (inv.ppt.var_infos, vt)
+                             + " at ppt " + inv.ppt);
       }
 
       // Add the invariant to its slice
@@ -310,6 +321,16 @@ public class NIS {
     if (!dkconfig_enabled || !dkconfig_antecedent_method)
       return;
 
+    if (false) {
+      Fmt.pf ("Variables for ppt " + ppt.name());
+      for (int i = 0; i < ppt.var_infos.length; i++) {
+        VarInfo v = ppt.var_infos[i];
+        ValueSet vs = v.get_value_set();
+        Fmt.pf ("  %s %s %s %s %s", v.comparability, v.name.name(),
+                v.file_rep_type, "" + ppt.is_constant(v), vs.repr_short());
+      }
+    }
+
     // If there are no falsified invariants, there is nothing to do
     int false_cnt = 0;
     for (Iterator i = ppt.invariants_iterator(); i.hasNext(); ) {
@@ -325,7 +346,7 @@ public class NIS {
 
     watch.start();
 
-    if (true)
+    if (debugAnt.isLoggable (Level.FINE))
       ppt.debug_invs (debugAnt);
 
     // Find all antecedents and organize them by their variables comparability
@@ -343,6 +364,46 @@ public class NIS {
 
     // Add always-comparable antecedents to each of the other maps.
     merge_always_comparable (comp_ants);
+
+    if (false) {
+      for (Iterator i = comp_ants.values().iterator(); i.hasNext(); ) {
+        Antecedents ants = (Antecedents) i.next();
+        List/*Invariants*/ eq_invs = ants.get (IntEqual.class);
+        if ((eq_invs != null) && (eq_invs.size() > 1000)) {
+          Map var_map = new LinkedHashMap();
+          Fmt.pf ("ppt %s, comparability %s has %s equality invariants",
+                  ppt.name, ants.comparability, "" + eq_invs.size());
+          for (Iterator j = eq_invs.iterator(); j.hasNext(); ) {
+            IntEqual inv = (IntEqual) j.next();
+            VarInfo v1 = inv.ppt.var_infos[0];
+            VarInfo v2 = inv.ppt.var_infos[1];
+            if (ppt.is_constant(v1) && ppt.is_constant(v2))
+              Fmt.pf ("inv %s has two constant variables", inv.format());
+            if (!v1.compatible (v2))
+              Fmt.pf ("inv %s has incompatible variables", inv.format());
+            Count cnt = (Count) var_map.get (v1);
+            if (cnt == null) {
+              cnt = new Count (0);
+              var_map.put (v1, cnt);
+            }
+            cnt.val++;
+            cnt = (Count) var_map.get (v2);
+            if (cnt == null) {
+              cnt = new Count (0);
+              var_map.put (v2, cnt);
+            }
+            cnt.val++;
+          }
+          Fmt.pf ("%s distinct variables", "" + var_map.size());
+          for (Iterator j = var_map.keySet().iterator(); j.hasNext(); ) {
+            VarInfo key = (VarInfo) j.next();
+            Count cnt = (Count) var_map.get (key);
+            Fmt.pf (" %s %s %s ", key.comparability, key.name.name(),
+                    "" + cnt.val);
+          }
+        }
+      }
+    }
 
     // Remove any Antecedents without any falsified invariants.  They can't
     // possibly create any newly unsuppressed invariants
@@ -518,6 +579,9 @@ public class NIS {
           comp_ants.put (vc, ants);
         }
         ants.add (inv);
+        //if (Debug.logOn())
+        //  inv.log ("Added to antecedent map " + inv.format() + " compare = "
+        //           + vc);
       }
     }
   }
@@ -562,9 +626,10 @@ public class NIS {
       PptSlice slice = (PptSlice) i.next();
       for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = (Invariant) j.next();
-        inv.log ("Considering removal for " + inv.format());
-        if (inv.is_ni_suppressed())
+        if (inv.is_ni_suppressed()) {
+          inv.log ("Removed because suppressed " + inv.format());
           j.remove();
+        }
       }
     }
   }
@@ -599,12 +664,10 @@ public class NIS {
 
   /**
    * Class used to describe invariants without instantiating the
-   * invariant.  The invariant is defined by its class and variables
+   * invariant.  The invariant is defined by its NISuppressee and variables
    * (Its ppt is also stored, but not used in comparisions, its
    * presumed that only SupInvs from the same ppt will every be
-   * compared) Since only the class is specified, this is only
-   * adequate for invariants determined completely by their class (all
-   * ternary invariants fall into this category)
+   * compared)
    */
   static class SupInv {
     NISuppressee suppressee;
@@ -626,11 +689,12 @@ public class NIS {
         Debug.log (suppressee.sup_class, ppt, vis, message);
     }
 
-    /** Equal iff classes and variables match exactly **/
+    /** Equal iff classes / swap variable / and variables match exactly **/
     public boolean equals (Object obj) {
       if (!(obj instanceof SupInv))
         return (false);
 
+      // Class and variables must match
       SupInv sinv = (SupInv) obj;
       if (sinv.suppressee.sup_class != suppressee.sup_class)
         return (false);
@@ -639,6 +703,13 @@ public class NIS {
       for (int i = 0; i < vis.length; i++)
         if (vis[i] != sinv.vis[i])
           return (false);
+
+      // Binary invariants must match swap var as well
+      if (suppressee.var_count == 2) {
+        if (sinv.suppressee.get_swap() != suppressee.get_swap())
+          return (false);
+      }
+
       return (true);
     }
 
@@ -665,6 +736,28 @@ public class NIS {
     /** Instantiate this invariant on the specified ppt */
     public Invariant instantiate (PptTopLevel ppt) {
       return suppressee.instantiate (vis, ppt);
+    }
+
+    /**
+     * Checks to see if the invariant already exists.  Unary and
+     * and ternary invariant must match by class (there are no
+     * permutations for unary invariants and ternary invariants handle
+     * permutations as different classes).  Binary invariants must
+     * match the class and if there is an internal swap variable for
+     * variable order, that must match as well.
+     */
+    public Invariant already_exists () {
+      Invariant cinv = ppt.find_inv_by_class (vis, suppressee.sup_class);
+      if (cinv == null)
+        return (null);
+      if (suppressee.var_count != 2)
+        return (cinv);
+      BinaryInvariant binv = (BinaryInvariant) cinv;
+      if (binv.is_symmetric())
+        return (cinv);
+      if (binv.get_swap() != suppressee.get_swap())
+        return (null);
+      return (cinv);
     }
 
     /** Return string representation of the suppressed invariant **/
@@ -717,7 +810,9 @@ public class NIS {
     }
 
     /**
-     * Adds the specified invariant to the list for its class
+     * Adds the specified invariant to the list for its class.  Falsified
+     * invariants are added to the beginning of the list, non-falsified
+     * ones to the end.
      */
     public void add (Invariant inv) {
 
@@ -747,7 +842,10 @@ public class NIS {
         antecedents = new ArrayList();
         antecedent_map.put (inv.getClass(), antecedents);
       }
-      antecedents.add (inv);
+      if (inv.is_false())
+        antecedents.add (0, inv);
+      else
+        antecedents.add (inv);
     }
 
     /**
@@ -795,6 +893,13 @@ public class NIS {
       }
 
       return (out);
+    }
+  }
+
+  static class Count {
+    public int val;
+    Count (int val) {
+      this.val = val;
     }
   }
 }
