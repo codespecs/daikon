@@ -31,6 +31,9 @@ public class PptMap
     return nameToPpt.containsKey(name);
   }
 
+  /**
+   * @see iterator()
+   **/
   public Collection asCollection()
   {
     return Collections.unmodifiableCollection(nameToPpt.values());
@@ -41,9 +44,32 @@ public class PptMap
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
+  /**
+   * @return an iterator over the PptTopLevels in this, sorted by
+   * Ppt.NameComparator on their names.  This is good for consistency.
+   **/
   public Iterator iterator()
   {
-    return asCollection().iterator();
+    TreeSet sorted = new TreeSet(new Ppt.NameComparator());
+    sorted.addAll(nameToPpt.values());
+    // Use a (live) view iterator to get concurrent modification
+    // exceptions, and an iterator over sorted to get consistency.
+    final Iterator iter_view = nameToPpt.values().iterator();
+    final Iterator iter_sort = sorted.iterator();
+    return new Iterator() {
+	public boolean hasNext() {
+	  boolean result = iter_view.hasNext();
+	  Assert.assert(result == iter_sort.hasNext());
+	  return result;
+	}
+	public Object next() {
+	  iter_view.next(); // to check for concurrent modifications
+	  return iter_sort.next();
+	}
+	public void remove() {
+	  throw new UnsupportedOperationException();
+	}
+      };
   }
 
   // // Is this of any interest?  Will I ever call it?
