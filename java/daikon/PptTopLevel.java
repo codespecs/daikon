@@ -17,8 +17,9 @@ import daikon.split.griesLisp.*;
 import daikon.split.weissDsaaMDE.*;
 import daikon.split.misc.*;
 
+import java.io.*;
 import java.util.*;
-import java.io.PrintStream;
+
 import org.apache.oro.text.regex.*;
 
 import utilMDE.*;
@@ -1971,18 +1972,34 @@ public class PptTopLevel extends Ppt {
   ///
 
   // Created upon first use, then saved
-  private static SessionManager prover;
+  private static SessionManager prover = null;
+  private static String prover_background = null;
   public static int prover_instantiate_count = 0;
 
-  // I want to eventually move this into a properties file (external
-  // to this source code).
-  private static final String UNIVERSAL_BACKGROUND_PREDICATE =
-    "(AND " +
-    "(EQ (typeof null) |T_null|) " +
-    "(EQ |T_null| (orig |T_null|)) " +
-    "(FORALL (|x|) (PATS (orig (arrayLength |x|))) (IMPLIES (EQ |x| (orig |x|)) (EQ (arrayLength |x|) (orig (arrayLength |x|))))) " +
-    "(FORALL (|x|) (PATS (orig (- (arrayLength |x|) 1))) (IMPLIES (EQ |x| (orig |x|)) (EQ (- (arrayLength |x|) 1) (orig (- (arrayLength |x|) 1))))) " +
-    ")";
+  private static String prover_background() {
+    if (prover_background == null) {
+      try {
+	StringBuffer result = new StringBuffer("(AND " + Global.lineSep);
+	InputStream bg_stream = PptTopLevel.class.getResourceAsStream("simplify/daikon-background.txt");
+	Assert.assert(bg_stream != null, "Could not find simplify/daikon-background.txt");
+	BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream));
+	String line;
+	while ((line = lines.readLine()) != null) {
+	  line = line.trim();
+	  if (line.length() == 0) continue;
+	  if (line.startsWith(";")) continue;
+	  result.append(" ");
+	  result.append(line);
+	  result.append(Global.lineSep);
+	}
+	result.append(")");
+	prover_background = result.toString();
+      } catch (IOException e) {
+	Assert.assert(false, "Could not load prover background");
+      }
+    }
+    return prover_background;
+  }
 
   // Start up simplify, and send the universal backgound
   private static void ensure_prover_started() {
@@ -1993,7 +2010,7 @@ public class PptTopLevel extends Ppt {
 	System.out.print("...");
       }
       try {
-	prover.request(new CmdAssume(UNIVERSAL_BACKGROUND_PREDICATE));
+	prover.request(new CmdAssume(prover_background()));
       } catch (TimeoutException e) {
 	throw new RuntimeException("Timeout on universal background " + e);
       }
@@ -2056,11 +2073,12 @@ public class PptTopLevel extends Ppt {
     // program points, and we don't necessarily want to lose the
     // unconditoinal version of the invariant at the conditional ppt.
     StringBuffer all_cont = new StringBuffer();
-    all_cont.append("(AND true \n");
+    all_cont.append("(AND \n");
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) ppts.next();
-      all_cont.append("\t(AND true \n");
-      for (Iterator _invs = ppt.invariants_vector().iterator(); _invs.hasNext(); ) {
+      all_cont.append("\t(AND \n");
+      Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.invariants_vector()).iterator();
+      while(_invs.hasNext()) {
 	Invariant inv = (Invariant) _invs.next();
 	if (inv instanceof Implication) {
 	  continue;
@@ -2072,6 +2090,9 @@ public class PptTopLevel extends Ppt {
 	if (fmt.indexOf("format_simplify") >= 0) {
 	  continue;
 	}
+	// We could also consider testing if the controlling invariant
+	// was removed by Simplify, but what would be point be?  Also,
+	// these "intermediate goals" might help out Simplify.
 	all_cont.append("\t\t");
 	all_cont.append(fmt);
 	all_cont.append("\n");
@@ -2112,7 +2133,7 @@ public class PptTopLevel extends Ppt {
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length-1; checking >= 0; checking--) {
       Invariant inv = invs[checking];
-      StringBuffer bg = new StringBuffer("(AND true");
+      StringBuffer bg = new StringBuffer("(AND ");
       for (int i=0; i < present.length; i++) {
 	if (present[i] && (i != checking)) {
 	  bg.append(" ");
