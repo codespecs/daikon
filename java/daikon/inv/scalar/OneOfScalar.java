@@ -76,7 +76,6 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
   public String format() {
-    Arrays.sort(elts, 0, num_elts  );
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
     if (num_elts == 1)
@@ -85,17 +84,17 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       return var().name  + " one of " + subarray_rep();
   }
 
-      public void add_modified(int  v, int count) {
+  public void add_modified(int  v, int count) {
 
-        for (int i=0; i<num_elts; i++)
-          if (elts[i] == v)
-            return;
-        if (num_elts == LIMIT) {
-          destroy();
-          return;
-        }
-        elts[num_elts] = v;
-        num_elts++;
+    for (int i=0; i<num_elts; i++)
+      if (elts[i] == v)
+        return;
+    if (num_elts == LIMIT) {
+      destroy();
+      return;
+    }
+    elts[num_elts] = v;
+    num_elts++;
 
   }
 
