@@ -1482,6 +1482,11 @@ public class PptTopLevel
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
 
+      if (debug.isDebugEnabled())
+        debug.debug ("Processing Unary var: " + vi.name.name()
+                    + (vi.isCanonical() ? " (leader) " : " (leader is "
+                        + vi.canonicalRep().name.name() + ")"));
+
       // Debug
       if (!vi.isCanonical()) continue;
 
@@ -1509,7 +1514,12 @@ public class PptTopLevel
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (!var1.isCanonical()) continue;
+      if (!var1.isCanonical()) {
+        if (debug.isDebugEnabled())
+          debug.debug ("Skipping binary: " + var1.name.name() + " (leader is "
+                       + var1.canonicalRep().name.name() + ")");
+        continue;
+      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -1518,7 +1528,16 @@ public class PptTopLevel
       int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
         VarInfo var2 = var_infos[i2];
-        if (!var2.isCanonical()) continue;
+        if (!var2.isCanonical()) {
+          if (debug.isDebugEnabled())
+            debug.debug ("Skipping binary: " + var2.name.name() + "(leader is "
+                         + var2.canonicalRep().name.name() + ")");
+          continue;
+        }
+
+        if (debug.isDebugEnabled())
+          debug.debug ("Creating binary:" + var1.name.name() + ", "
+                       + var2.name.name());
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
