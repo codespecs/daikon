@@ -68,7 +68,7 @@ public class SubSequence extends TwoSequence {
     if (var1().isIOAArray() || var2().isIOAArray()) {
       result += " *** (Invalid syntax for arrays)";
     }
-    
+
     return result;
   }
 
@@ -81,7 +81,7 @@ public class SubSequence extends TwoSequence {
 
     VarInfo subvar = (var1_in_var2 ? var1() : var2());
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
-    // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...)) 
+    // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
     QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
     Assert.assert(qret.bound_vars.size() == 2);
@@ -130,7 +130,7 @@ public class SubSequence extends TwoSequence {
 
     String index = "|__index|";
     String shift = "|__shift|";
-    String subseq_stmt = 
+    String subseq_stmt =
       "(EXISTS (" + shift + ") (AND " +
       "(<= 0 " + shift + ") " +                          // 1
       "(<= (+ " + shift + " " + aS + ") " + bS + ") " +  // 2
@@ -169,7 +169,7 @@ public class SubSequence extends TwoSequence {
     if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else if (var1_in_var2 && var2_in_var1)
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     else
       return Invariant.PROBABILITY_JUSTIFIED;
   }
