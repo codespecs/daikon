@@ -84,9 +84,17 @@ public class DaikonWriter
             // DataStructures.StackAr.StackAr().  Mimic that behavior
             String short_name = method.getName();
             int lastPeriod = short_name.lastIndexOf(".");
-            short_name = short_name.substring(lastPeriod + 1);
-            name = name.replace ("." + short_name + "(",
+            // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
+            //                   short_name, name, lastPeriod);
+            if (lastPeriod < 0)
+                name = name.replace (" " + short_name + "(",
+                                 " " + short_name + "." + short_name + "(");
+            else
+            {
+                short_name = short_name.substring(lastPeriod + 1);
+                name = name.replace ("." + short_name + "(",
                                  "." + short_name + "." + short_name + "(");
+            }
         }
 
         // System.out.println ("method name = " + name);
