@@ -562,6 +562,24 @@ public final class Intern {
   /**
    * @see internSubSequence(int[], int, int)
    **/
+  public static double[] internSubsequence (double[] seq, int start, int end) {
+    Assert.assertTrue (Intern.isInterned(seq));
+    SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
+    Object lookup = internedSequenceAndIndices.get(sai);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (double[])ref.get();
+    } else {
+      double[] subseq = ArraysMDE.subarray(seq, start, end - start);
+      subseq = Intern.intern (subseq);
+      internedSequenceAndIndices.put (sai, new WeakReference(subseq));
+      return subseq;
+    }    
+  }
+
+  /**
+   * @see internSubSequence(int[], int, int)
+   **/
   public static Object[] internSubsequence (Object[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
     SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
