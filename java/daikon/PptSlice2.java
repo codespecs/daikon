@@ -7,6 +7,8 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.binary.sequenceScalar.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 import utilMDE.*;
@@ -21,6 +23,12 @@ import utilMDE.*;
 
 public final class PptSlice2  extends PptSlice {
 
+  /**
+   * Logging Category
+   **/
+
+  public static final Category debugSpecific = Category.getInstance(PptSlice2 .class.getName());
+
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
 
@@ -34,8 +42,8 @@ public final class PptSlice2  extends PptSlice {
     Assert.assert(var_infos.length == 2 );
 
     values_cache = new HashMap();
-    if (this.debugged || Global.debugPptSlice)
-      System.out.println("Created PptSlice2 " + this.name);
+    if (this.debugged || debug.isDebugEnabled())
+      debug.info("Created PptSlice2 " + this.name);
 
     // Make the caller do this, because
     //  1. there are few callers
@@ -51,8 +59,8 @@ public final class PptSlice2  extends PptSlice {
     Assert.assert(!no_invariants);
 
     // Instantiate invariants
-    if (this.debugged || Global.debugPptSlice)
-      System.out.println("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
+    if (this.debugged || debug.isDebugEnabled())
+      debug.info("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
 
     Vector new_invs = null;
 
@@ -87,15 +95,15 @@ public final class PptSlice2  extends PptSlice {
       }
     }
 
-    if (this.debugged || Global.debugPptSlice) {
-      System.out.println("after instantiate_invariants (pass " + pass + "), PptSlice2 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+    if (this.debugged || debug.isDebugEnabled()) {
+      debug.info("after instantiate_invariants (pass " + pass + "), PptSlice2 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
     if (this.debugged && (invs.size() > 0)) {
-      System.out.println("the invariants are:");
+      debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.elementAt(i);
-        System.out.println("  " + inv.format());
-        System.out.println("    " + inv.repr());
+        debug.info("  " + inv.format());
+        debug.info("    " + inv.repr());
       }
     }
 
@@ -287,9 +295,9 @@ public final class PptSlice2  extends PptSlice {
     Assert.assert(invariant != null);
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (Global.debugStatistics || this.debugged)
-      System.out.println("instantiated_invariant: " + invariant
-                         + "; already_seen_all=" + already_seen_all);
+    if (Global.debugStatistics.isDebugEnabled() || this.debugged)
+      debug.info("instantiated_invariant: " + invariant
+		 + "; already_seen_all=" + already_seen_all);
 
     if (already_seen_all) {
       // Make this invariant up to date by supplying it with all the values
