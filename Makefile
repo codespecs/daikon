@@ -12,6 +12,8 @@ EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
 DIST_DIR := /homes/gws/mernst/www/invariants-dist
+# For really big files
+DIST_DIR_2 := /projects/se/people/mernst/www
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -39,6 +41,8 @@ TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 ###########################################################################
 ### Distribution
 ###
+
+## The update-link-dates script appears in ~mernst/bin/share/.
 
 # Main distribution
 
@@ -80,9 +84,9 @@ invariants.tar.gz: invariants.tar
 
 dist-edg: dist-edg-solaris
 
-dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
+dist-edg-solaris: $(DIST_DIR_2)/edgcpfe-solaris
 
-$(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+$(DIST_DIR_2)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 

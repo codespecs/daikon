@@ -395,7 +395,7 @@ def lackwit_type_element_type(lt):
     if (head == 'array'):
         return lt[1]
     elif (head == 'alias'):
-        return lackwit_type_element_type(lt[2])
+        return ("alias", "%s-element" % lt[1], lackwit_type_element_type(lt[2]))
     else:
         raise "Not an array Lackwit type: " + `lt`
 
@@ -409,12 +409,13 @@ def lackwit_type_element_type_alias(vi):
         return ("alias", "%s-element" % seq_var_name,
                 lackwit_type_element_type(lt))
 
+# First index is numbered "1".
 def lackwit_type_index_type(lt, dim):
     head = lt[0]
     if (head == 'array'):
         return lt[dim+1]                # indices start at third elt (index 2)
     elif (head == 'alias'):
-        return lackwit_type_index_type(lt[2], dim)
+        return ("alias", "%s-index%d" % (lt[1], dim), lackwit_type_index_type(lt[2], dim))
     else:
         raise "Not an array Lackwit type: " + `lt`
 
@@ -437,7 +438,8 @@ def parse_lackwit_vartype(raw_str, vartype):
         #  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
         dims = vartype[1]
         assert dims > 0
-        match = re.compile("^\(([^)]*)\)" + ("\[\(?([^\])]*)\)?\]" * dims) + "$").match(raw_str)
+        # Permit "[]" to appear in variable names.
+        match = re.compile("^\(([^)]*)\)" + ("\[\(?((?:[^\]\)]|\[\])*)\)?\]" * dims) + "$").match(raw_str)
         assert match != None
         assert len(match.groups()) == dims+1
         result = ("array",) + tuple(map(lambda substr: tuple(ws_regexp.split(substr)),
@@ -1250,6 +1252,11 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
 
     # For now, do nothing if the scalar is itself derived.
     if scl_info.is_derived:
+        return
+
+    if not lackwit_types_compatible(scl_info.name, scl_info.lackwit_type,
+                                    "%s-index%d" % (seq_info.name, 1),
+                                    lackwit_type_index_type(seq_info.lackwit_type, 1)):
         return
 
     # If the scalar is a known constant, record that.

@@ -65,6 +65,9 @@ Program point information includes:
 	  * for array types:  The lists are surrounded by parentheses, and
 	    variables are given in parentheses for indices, like so:
             "(a b c)[(d e)][(f g h)]".
+            The elements and indices of an array are named according to 
+            %s-element and %s-index%d, where the indices are numbered
+	    starting with 1.
           * If no information is supplied (ie, this line is blank), then
 	    the variable is compared to all other variables of the same type.
  * Future enhancements:
