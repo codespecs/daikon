@@ -145,6 +145,7 @@ Daikon output
 Interpreting Daikon output
 
 * Program points::              
+* Variable names::              
 * Invariant syntax::            
 
 Tree-structured invariant browser
@@ -165,10 +166,7 @@ Java front end dfej
 
 * dfej options::                
 * Scope of instrumentation::    
-
-dfej options
-
-* Scope of instrumentation::    
+* Refined runtime types::       
 
 Troubleshooting
 
@@ -1090,7 +1088,8 @@ This section describes the optional flags.
 
 
 @c Not @option{} or @samp{} because they add quotes in the output,
-@c which is not necessary in a table.
+@c which is not necessary in a table.  However, @t and @code compress
+@c the two hyphens to 1, which is even worse.
 @table @t
 @item -h
 @item --help
@@ -1239,19 +1238,17 @@ if @option{-t} is given), but do not start the GUI.
 
 If nothing gets printed before the @samp{Exiting} line, then Daikon
 found no invariants.  You can get a little bit more information by using
-the @option{--output_num_samples} flag to Daikon; for example,
-@example
-  java -mx128m daikon.Daikon --output_num_samples ...
-@end example
-For more details, @xref{Command line options for Daikon}.
+the @option{--output_num_samples} flag to Daikon (@pxref{Command line
+options for Daikon}).
 
 
 @menu
 * Program points::              
+* Variable names::              
 * Invariant syntax::            
 @end menu
 
-@node    Program points, Invariant syntax, Interpreting output, Interpreting output
+@node    Program points, Variable names, Interpreting output, Interpreting output
 @subsection Program points
 
 Daikon's output is organized by program points, both in the textual
@@ -1277,33 +1274,38 @@ class.  The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
 for static variables, which have only one value for all objects.
 
 
-@node    Invariant syntax,  , Program points, Interpreting output
-@subsection Invariant syntax
+@node    Variable names, Invariant syntax, Program points, Interpreting output
+@subsection Variable names
 
-In the output, the application of @code{orig(x)} to a variable
-@code{x} refers to the original value of a formal parameter.
-@code{orig()} variables appear only at @code{:::EXIT} program points.
-
-Negative array indices count backwards from the length of the array.
-For instance, @code{a[-1]} denotes the last element of array @code{a};
-it is just syntactic sugar for @code{a[a.length-1]}.
-
-When "a" is an array, then
 @itemize @bullet
 @item
-"a" is the identity of a -- think of it as a
-      comparison over hash codes
+@code{orig(x)} refers to the value of formal parameter @code{x} upon
+entry to a procedure (because the procedure body might modify the value
+of @code{x}).  These variables appear only at @code{:::EXIT} program
+points.
 @item
-"a.class" is the runtime type of a, which may
-      differ from its declared type for arrays of non-primitive type;
-      "a.class" is omitted for arrays of primitive type
+@code{a} is the identity of @code{a} --- think of it as a
+comparison over hash codes
 @item
-"a.[]" is the contents of a, namely an array; "a=b" implies "a.[] =
-      b.[]" but the reverse is not true
+@code{a.class} is the runtime type of a, which may
+differ from its declared type for arrays of non-primitive type;
+"a.class" is omitted for arrays of primitive type
 @item
-"a.[].class" is an array of types, representing the run-time classes
-      of the contents of a; it is omitted for arrays of primitive type
+"a[]" is the contents of a, namely an array; "a=b" implies "a[] =
+b[]" but the reverse is not true
+@item
+"a[].class" is an array of types, representing the run-time classes
+of the contents of a; it is omitted for arrays of primitive type
+@item
+@code{a[-1]} denotes the last element of array @code{a};
+it is just syntactic sugar for @code{a[a.length-1]}.
 @end itemize
+
+
+@node    Invariant syntax,  , Variable names, Interpreting output
+@subsection Invariant syntax
+
+(Eventually, see the JML manual.)
 
 
 @node    GUI,  , Interpreting output, Daikon output
@@ -1571,6 +1573,7 @@ The Daikon front end for Java has two effects:
 @menu
 * dfej options::                
 * Scope of instrumentation::    
+* Refined runtime types::       
 @end menu
 
 @node    dfej options, Scope of instrumentation, Java front end dfej, Java front end dfej
@@ -1741,11 +1744,7 @@ When conflicting options are specified (for instance, both
 takes precedence.
 
 
-@menu
-* Scope of instrumentation::    
-@end menu
-
-@node    Scope of instrumentation,  , dfej options, Java front end dfej
+@node    Scope of instrumentation, Refined runtime types, dfej options, Java front end dfej
 @subsection Controlling what classes are instrumented
 
 Only the specified Java files are instrumented; other files are
@@ -1792,6 +1791,35 @@ makes approximations to the missing modification information.
 @c modification information.
 
 
+@node    Refined runtime types,  , Scope of instrumentation, Java front end dfej
+@subsection Refined runtime types
+
+Daikon uses the declared types of variables to determine what fields
+those variables have and what methods may be legally applied to those
+variables.  However, sometimes the declared type is excessively general:
+the runtime value may be guaranteed to be of a more specific type.  This
+often results from use of polymorphic datatypes or methods.  For
+instance, a Java variable may be declared as @code{Object} even though
+it always holds an @code{Integer}.  In that case, methods such as
+@code{intValue} may be safely called on the object, even though it is
+not applicable to arbitrary @code{Object}s.
+
+You can indicate the runtime type of a variable to dfej by inserting a
+@example
+  /*refined_type: Integer*/ 
+@end example
+comment immediately before the declared type (but after any modifiers like
+"public" or "static").  For example, a list element that only contains
+@code{Integer}s might be annotated as follows:
+@example
+  class ListNode {
+    /*refined_type: Integer*/ Object element;
+    ListNode next;
+
+    ListNode( /*refined_type: Integer*/ Object theElement ) { ... }
+    ListNode( /*refined_type: Integer*/ Object theElement, ListNode n ) { ... }
+  }
+@end example
 
 
 
