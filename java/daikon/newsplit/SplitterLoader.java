@@ -33,18 +33,12 @@ public class SplitterLoader extends ClassLoader{
    **/
   protected Class load_Class(String className, String full_pathname) {
     Class return_class;
-    try {
-      //find the class if it's a system class
-      return_class = super.findSystemClass(className);
-    }catch(ClassNotFoundException cnf){
-      byte[] classData = read_Class_Data(full_pathname);
-      if (classData == null){
-	return null;
-      }else{
-	className = "daikon.split." + className;
-	return_class = defineClass(className, classData, 0, classData.length);
-	resolveClass(return_class);
-      }
+    byte[] classData = read_Class_Data(full_pathname);
+    if (classData == null){
+      return null;
+    }else{
+      return_class = defineClass(className, classData, 0, classData.length);
+      resolveClass(return_class);
     }
     return return_class;
   }

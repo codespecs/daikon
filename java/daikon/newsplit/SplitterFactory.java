@@ -18,6 +18,7 @@ public class SplitterFactory {
   
   private static PatternMatcher re_matcher = Global.regexp_matcher;
   private static PatternCompiler re_compiler = Global.regexp_compiler;
+  private static String tempdir = getTempdirName();
   
   /**
    * Reads the Splitter info. 
@@ -31,6 +32,7 @@ public class SplitterFactory {
     Vector ppts_and_splitters = new Vector(); //the return vector
     Vector replace = new Vector(); 
     Vector conds = new Vector();
+    
     try {
       String line = reader.readLine();
       for ( ; line != null; line = reader.readLine()) {
@@ -96,9 +98,7 @@ public class SplitterFactory {
     
     SplitterLoader loader = new SplitterLoader();
     Vector pptnames_and_splitterObjects = new Vector();
-    String tempdir = getTempdirName();
-    
-    
+        
     Vector processes = new Vector(); //the processes 
     
     for (int i = 0; i < ppts_and_conds.size(); i=i+2) {
@@ -251,8 +251,9 @@ public class SplitterFactory {
 	//obtain their values from the VarInfo.
 	identify_array_index_variables_as_int(condition, params, all_types);
 	
-	StringBuffer file_string = new StringBuffer("package daikon.split; \n\n");
+	StringBuffer file_string = new StringBuffer();
 	file_string.append("import daikon.*; \n");
+	file_string.append("import daikon.split.*; \n");
 	
 	file_string.append("public final class " + splitter_fname + " extends Splitter { \n\n");
 	
@@ -320,8 +321,7 @@ public class SplitterFactory {
 	//print the test() method
 	file_string = print_test_method(file_string, param_names, params, all_types, test_string);
 			
-	//write to the file
-	String tempdir = getTempdirName();
+	//write to the file. Assuming that the tempdir has already been set
 	try { 
 	  BufferedWriter writer = UtilMDE.BufferedFileWriter(tempdir+splitter_fname+".java");
 	  writer.write(file_string.toString());
@@ -634,9 +634,10 @@ public class SplitterFactory {
 		//if we have say myarray[ i + j ], we have to identify both i and j
 		//as array index variables and treat them as integers.
 		Pattern operator_pattern = re_compiler.compile("[+=!><-]"); //split on this pattern
-		Vector tempIndices = Util.split(re_matcher, operator_pattern, possible_varname);
+		Vector tempIndices = new Vector();
+		Util.split(tempIndices, re_matcher, operator_pattern, possible_varname);
 		for (int i = 0; i < tempIndices.size(); i++) {
-		    arrayIndexVariables.addElement(((String)tempIndices.elementAt(i)).trim());
+		  arrayIndexVariables.addElement(((String)tempIndices.elementAt(i)).trim());
 		}
 	    }
 	} catch(Exception e) {
@@ -645,8 +646,11 @@ public class SplitterFactory {
 	
 	for (int i = 0; i < arrayIndexVariables.size(); i++) {
 	    for (int j = 0; j < params.length; j++) {
-		if (((String) arrayIndexVariables.elementAt(i)).equals(params[j])) {
-		    types[j] = "int_index";
+	      String variable = (String) arrayIndexVariables.elementAt(i);
+		if ( variable.equals(params[j])) {
+		  types[j] = "int_index";
+		}else if(params[j].startsWith("this.") && (params[j].substring(5)).equals(variable)) {
+		  types[j] = "int_index";
 		}
 	    }
 	}
@@ -677,25 +681,23 @@ public class SplitterFactory {
    * get the name of the temporary directory. This is where the Splitters are created.
    **/
   static String getTempdirName() {
-    String tempdir;
-    try{
-      File fi = File.createTempFile("test", null);
-      tempdir = fi.getParent();
-      fi.delete();
-    }catch(IOException e) {
-      debugPrint("Cannot find temp directory:");
-      debugPrint("Trying to create files in current directory");
-      tempdir = ".";
-    }
     
     try {
-      File splitdir = new File(tempdir + File.separator + "daikon_Split" + File.separator);
+      File tmpfile = File.createTempFile("daikon_", "_");
+      File splitdir = new File(tmpfile.getPath() + "Split");
+      tmpfile.delete();
+      splitdir.deleteOnExit();
       splitdir.mkdirs();
-      if (splitdir.exists()) tempdir = splitdir.getPath();
+      if (splitdir.exists() && splitdir.isDirectory()){
+	tempdir = splitdir.getPath() + File.separator;
+      }else{
+	tempdir = "";
+	System.out.println("Splitters being created in current directory");
+      }
     }catch(Exception e) {
       debugPrint(e.toString());
     }
-    return tempdir + File.separator;
+    return tempdir;
   }
   
   /**
