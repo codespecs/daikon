@@ -210,7 +210,11 @@ public class SampleTester extends TestCase {
     // Read in the specified file
     PptTopLevel.global = null;
     Set decl_files = new HashSet(1);
-    decl_files.add (new File(decl_file));
+    String absolute_decl_file = find_file (decl_file);
+    if (absolute_decl_file == null)
+      fail ("Decl file " + decl_file + " not found.");
+
+    decl_files.add (new File(absolute_decl_file));
     all_ppts = FileIO.read_declaration_files (decl_files);
 
     // Setup everything to run
