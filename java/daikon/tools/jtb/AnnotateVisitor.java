@@ -3,6 +3,7 @@
 package daikon.tools.jtb;
 
 import java.util.*;
+import java.io.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
@@ -27,9 +28,6 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 // For each field assignment:
 //  * add owner annotations
 
-
-
-
 class AnnotateVisitor extends DepthFirstVisitor {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -42,6 +40,18 @@ class AnnotateVisitor extends DepthFirstVisitor {
   public boolean insert_inexpressible; // whether to insert annotations not supported by ESC
   public boolean lightweight;      // whether to use full JML specs or lightweight ESC specs instead
 
+  // whether to use reflection when trying to figure out if a method
+  // overrides/implements another method. If this variable is set to
+  // false, then Annotate will not try to determine if a method
+  // overrides/implements another method, which means that it will not
+  // try to add "also" tags to its output.
+  public boolean useReflection;
+
+  // If the --max_invariants_pp option is given, this variable is set
+  // to the maximum number of invariants out annotate per program point.
+  public int maxInvariantsPP;
+
+
   public Vector addedComments = new Vector(); // elements are NodeTokens
 
   private String[] ownedFieldNames;  // list of fields in this and related classes
@@ -51,21 +61,34 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
 
 
+  public AnnotateVisitor(PptMap ppts,
+                         boolean slashslash,
+                         boolean insert_inexpressible,
+                         boolean lightweight,
+                         boolean useReflection,
+                         int maxInvariantsPP) {
 
-  public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
-    super();
-    initialize(ppts, slashslash, insert_inexpressible, false);
+    initialize(ppts,
+               slashslash,
+               insert_inexpressible,
+               lightweight,
+               useReflection,
+               maxInvariantsPP);
+
   }
 
-  public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
-    initialize(ppts, slashslash, insert_inexpressible, lightweight);
-  }
-
-  private void initialize(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
+  private void initialize(PptMap ppts,
+                          boolean slashslash,
+                          boolean insert_inexpressible,
+                          boolean lightweight,
+                          boolean useReflection,
+                          int maxInvariantsPP) {
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
     this.lightweight = lightweight;
+    this.useReflection = useReflection;
+    this.maxInvariantsPP = maxInvariantsPP;
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -172,7 +195,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
     if (object_ppt == null) {
       // System.out.println("No object program point found for " + classname);
     } else {
-      String[] obj_invs = Ast.invariants_for(object_ppt, ppts);
+      InvariantsAndModifiedVars obj_invs = invariants_for(object_ppt, ppts);
       String inv_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@invariant" : "invariant");
       insertInvariants(n.f4.f1, inv_tag, obj_invs);
     }
@@ -202,89 +225,25 @@ class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
-  String[][] get_requires_and_ensures(PptMap ppts, Node n) {
-    String[] requires_invs = null;
-    String[] ensures_invs = null;
+  InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
+    InvariantsAndModifiedVars requires_invs = null;
+    InvariantsAndModifiedVars ensures_invs = null;
 
     Vector matching_ppts = Ast.getMatches(ppts, n);
     for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
-        requires_invs = Ast.invariants_for(ppt, ppts);
-        requires_invs = add_main_requires(requires_invs, n);
+        requires_invs = invariants_for(ppt, ppts);
       } else if (ppt.ppt_name.isExitPoint()) {
         if (! ppt.ppt_name.isCombinedExitPoint()) {
           continue;
         }
-        ensures_invs = Ast.invariants_for(ppt, ppts);
+        ensures_invs = invariants_for(ppt, ppts);
       }
     }
 
-    return new String[][] { requires_invs, ensures_invs };
-  }
-
-  // Special case for main method:  add "arg != null" and
-  // "\nonnullelements(arg)".
-  String[] add_main_requires(String[] requires_invs, Node n) {
-    if (! (n instanceof MethodDeclaration)) {
-      return requires_invs;
-    }
-
-    MethodDeclaration md = (MethodDeclaration) n;
-    if (!Ast.isMain(md)) {
-      return requires_invs;
-    }
-    FormalParameter fp = (FormalParameter) Ast.getParameters(md).get(0);
-    String param = Ast.getName(fp);
-    String nonnull_inv = param + " != null";
-    String nonnullelements_inv = "\\nonnullelements(" + param + ")";
-    int num_invs = 2;
-
-    // Null out the invariants if they already exist
-    if (requires_invs == null) {
-      requires_invs = new String[0];
-    } else {
-      if (ArraysMDE.indexOf(requires_invs, nonnull_inv) != -1) {
-        nonnull_inv = null;
-        num_invs--;
-      }
-      if (ArraysMDE.indexOf(requires_invs, nonnullelements_inv) != -1) {
-        nonnullelements_inv = null;
-        num_invs--;
-      }
-      if (num_invs == 0) {
-        return requires_invs;
-      }
-    }
-    Assert.assertTrue(requires_invs != null);
-
-    // Allocate space
-    int old_size = requires_invs.length;
-    String[] new_requires_invs = new String[old_size+num_invs];
-    System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
-    requires_invs = new_requires_invs;
-
-    // Add the invariants
-    if (nonnull_inv != null) {
-      num_invs--;
-      requires_invs[old_size + num_invs] = nonnull_inv;
-      // System.out.println("Filled in " + (old_size + num_invs));
-    }
-    if (nonnullelements_inv != null) {
-      num_invs--;
-      requires_invs[old_size + num_invs] = nonnullelements_inv;
-      // System.out.println("Filled in " + (old_size + num_invs));
-    }
-    Assert.assertTrue(num_invs == 0);
-    for (int i=0; i<requires_invs.length; i++) {
-      if (requires_invs[i] == null) {
-        throw new Daikon.TerminationMessage("Null invariant at index " + i + "/" + requires_invs.length);
-      }
-    }
-    Assert.assertTrue(ArraysMDE.indexOfEq(requires_invs, (Object)null) == -1);
-
-    return requires_invs;
+    return new InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
   }
 
 
@@ -317,22 +276,19 @@ class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // n must be a MethodDeclaration or ConstructorDeclaration
-  public void insertBehavior(Node n, boolean noExceptions, boolean noEnsures) {
+  public void insertBehavior(Node n) {
     class InsertBehaviorVisitor extends DepthFirstVisitor {
       Node n;
-      boolean noExceptions, noEnsures, behaviorInserted;
+      boolean behaviorInserted;
 
-      public InsertBehaviorVisitor(Node n, boolean noExceptions, boolean noEnsures) {
+      public InsertBehaviorVisitor(Node n) {
 	super();
 	this.n = n;
-	this.noExceptions = noExceptions;
-	this.noEnsures = noEnsures;
 	behaviorInserted = false;
       }
 
       private String getBehaviorString() {
-	return (noExceptions ? "normal_behavior" :
-		(noEnsures ? "exceptional_behavior" : "behavior"));
+	return "normal_behavior";
       }
 
       public void visit(NodeChoice nc) {
@@ -340,7 +296,11 @@ class AnnotateVisitor extends DepthFirstVisitor {
 	String modifier = (nc != null && nc.choice != null ? nc.choice.toString() : "");
 	// System.out.println("A node choice here: " + modifier);
 	if (Ast.isAccessModifier(modifier)) {
-	  addComment(n, "@ " + modifier + " " + getBehaviorString() + lineSep, true);
+	  addComment(n, "@ " + modifier + " " + getBehaviorString() +
+                     (Daikon.output_style == Invariant.OutputFormat.JML
+                      ? " // Generated by Daikon"
+                      : "") +
+                     lineSep, true);
 	  behaviorInserted = true;
 	}
       }
@@ -361,7 +321,11 @@ class AnnotateVisitor extends DepthFirstVisitor {
 	  visit((NodeChoice)nlo.nodes.get(i));
 	}
 	if (!behaviorInserted)
-	  addComment(n, "@ " + "private " + getBehaviorString() + lineSep, true);
+	  addComment(n, "@ " + "private " + getBehaviorString() +
+                     (Daikon.output_style == Invariant.OutputFormat.JML
+                      ? " // Generated by Daikon"
+                      : "") +
+                     lineSep, true);
       }
 
       public void visit(MethodDeclaration md) {
@@ -375,7 +339,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
 
-    InsertBehaviorVisitor v = new InsertBehaviorVisitor(n,noExceptions,noEnsures);
+    InsertBehaviorVisitor v = new InsertBehaviorVisitor(n);
     if (n instanceof MethodDeclaration)
       ((MethodDeclaration)n).accept(v);
     else
@@ -394,16 +358,20 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n);             // call "accept(this)" on each field
 
-    String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
-    String[] requires_invs = requires_and_ensures[0];
-    String[] ensures_invs = requires_and_ensures[1];
+    InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
 
-    HashMap exceptions = get_exceptions(ppts, n);
+    InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
+    InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
     String ensures_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@post" : "ensures");
     String requires_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@pre" : "requires");
-    boolean isOverride = Ast.isOverride(n); // of a superclass
-    boolean isImplementation = Ast.isImplementation(n); // of an interface
+
+    boolean isOverride = false;
+    boolean isImplementation = false;
+    if (useReflection) {
+      isOverride = Ast.isOverride(n); // of a superclass
+      isImplementation = Ast.isImplementation(n); // of an interface
+    }
 
     if (lightweight) {
       if (isImplementation) {
@@ -422,16 +390,17 @@ class AnnotateVisitor extends DepthFirstVisitor {
     boolean invariantInserted =
       insertInvariants(n, ensures_tag, ensures_invs, lightweight);
 
+    insertModifies(n, ensures_invs.modifiedVars, ensures_tag, lightweight);
+
     invariantInserted =
       insertInvariants(n, requires_tag, requires_invs, lightweight) ||
       invariantInserted;
 
     if (!lightweight) {
-      if (!invariantInserted)
+      if (!invariantInserted) {
         insertJMLWorkaround(n);
-      insertBehavior(n,
-                     (exceptions != null ? exceptions.isEmpty() : true),
-                     (ensures_invs != null ? (ensures_invs.length == 0) : true));
+      }
+      insertBehavior(n);
       if (isImplementation || isOverride
           // temporary fix: not processed correctly by Ast.java
           || n.f2.f0.toString().equals("clone")) {
@@ -439,9 +408,6 @@ class AnnotateVisitor extends DepthFirstVisitor {
       }
       addComment(n, JML_START_COMMENT, true);
     }
-
-    // if (!exceptions.isEmpty())
-    //  insertExceptions(n, exceptions);
   }
 
   /**
@@ -459,9 +425,9 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n);             // call "accept(this)" on each field
 
-    String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
-    String[] requires_invs = requires_and_ensures[0];
-    String[] ensures_invs = requires_and_ensures[1];
+    InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
+    InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
     String ensures_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@post" : "ensures");
     String requires_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@pre" : "requires");
@@ -476,14 +442,17 @@ class AnnotateVisitor extends DepthFirstVisitor {
     boolean invariantInserted =
       insertInvariants(n, ensures_tag, ensures_invs, lightweight);
 
+    insertModifies(n, ensures_invs.modifiedVars, ensures_tag, lightweight);
+
     invariantInserted =
       insertInvariants(n, requires_tag, requires_invs, lightweight) ||
       invariantInserted;
 
     if (!lightweight) {
-      if (!invariantInserted)
+      if (!invariantInserted) {
         insertJMLWorkaround(n);
-      insertBehavior(n, exceptions.isEmpty(), ensures_invs == null || ensures_invs.length == 0);
+      }
+      insertBehavior(n);
       addComment(n, JML_START_COMMENT, true);
     }
 
@@ -516,16 +485,64 @@ class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   public void insertJMLWorkaround(Node n) {
-    insertAssignableEverything(n);
+    //insertAssignableEverything(n);
     addComment(n, "@ requires true;" + lineSep, true);
   }
 
-  public boolean insertInvariants(Node n, String prefix, String[] invs) {
+  public boolean insertInvariants(Node n, String prefix, InvariantsAndModifiedVars invs) {
     return insertInvariants(n, prefix, invs, true);
   }
 
+  public boolean insertModifies(Node n, String modifiesString, String prefix, boolean useJavaComment) {
+
+    modifiesString = modifiesString.trim();
+
+    if (modifiesString.equals("modifies") || modifiesString.equals("assignable")) {
+      // No variables found.
+      return false;
+    }
+
+    if (!(modifiesString.startsWith("modifies") || modifiesString.startsWith("assignable"))) {
+      // Doesn't look ilke a modifies clause.
+      return false;
+    }
+
+    String inv = null;
+    boolean doInsert = true;
+
+    if (Daikon.output_style == Invariant.OutputFormat.JML) {
+      if (pureInJML(n)) {
+        doInsert = false;
+      } else {
+        //System.out.println("^^^CURRLINE:" + Ast.printCurrentLine(n) + "^^^");
+        inv = "assignable \\everything";
+      }
+    } else if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) {
+      // Modifies/assignable has no translation in Jtest DBC
+      doInsert = false;
+    } else if (lightweight && prefix.startsWith("also_")) {
+      inv = "also_" + modifiesString;
+    } else {
+      inv = modifiesString;
+    }
+
+    if (!doInsert) {
+      return false;
+    }
+
+    String commentContents = "@ " + inv + ";";
+    if (useJavaComment) {
+      commentContents = javaLineComment(commentContents);
+    } else {
+      commentContents += lineSep;
+    }
+    addComment(n, commentContents, true);
+    return true;
+  }
+
   // The "invs" argument may be null, in which case no work is done.
-  public boolean insertInvariants(Node n, String prefix, String[] invs, boolean useJavaComment) {
+  public boolean insertInvariants(Node n, String prefix, InvariantsAndModifiedVars invs,
+                                  boolean useJavaComment) {
     if (invs == null) {
       return false;
     }
@@ -533,13 +550,14 @@ class AnnotateVisitor extends DepthFirstVisitor {
     boolean invariantInserted = false;
     boolean assignableInserted = false;
 
-    int maxIndex = invs.length;
-    if (Annotate.maxInvariantsPP > 0 && Annotate.maxInvariantsPP < maxIndex) {
-      maxIndex = Annotate.maxInvariantsPP;
+    int maxIndex = invs.invariants.size();
+    if (maxInvariantsPP > 0 && maxInvariantsPP < maxIndex) {
+      maxIndex = maxInvariantsPP;
     }
 
-    for (int i=maxIndex-1; i>=0; i--) {
-      String inv = invs[i];
+    for (int i = maxIndex-1 ; i >= 0 ; i--) {
+      String inv = ((Invariant)invs.invariants.get(i)).format_using(Daikon.output_style);
+
       if (inv.startsWith("      Unmodified variables: ")
           || inv.startsWith("      Modified variables: ")
           || inv.startsWith("      Modified primitive arguments: ")) {
@@ -551,7 +569,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)
 		 || (inv.endsWith(".toString"))
-		 || (inv.indexOf(".getClass") != -1) // [[[ FIXME: fix TypeOf (a subclass of VarInfoName) ]]]
+		 || (inv.indexOf(".getClass") != -1)
                  || (inv.indexOf("warning: method") != -1)
 		 || (inv.indexOf("inexpressible") != -1)
 		 || (inv.indexOf("unimplemented") != -1)) {
@@ -560,31 +578,6 @@ class AnnotateVisitor extends DepthFirstVisitor {
           addComment(n, javaLineComment("! " + inv + ";"), true);
         }
         continue;
-      } else if (inv.startsWith("modifies ") || inv.startsWith("assignable ")) {
-        // Currently, assignable clauses produce illegal JML, like a[*].
-        if (Daikon.output_style == Invariant.OutputFormat.JML) {
-          if (!pureInJML(n)) {
-            //System.out.println("^^^CURRLINE:" + Ast.printCurrentLine(n) + "^^^");
-            inv = "assignable \\everything";
-          } else {
-            continue;
-          }
-        } else if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) {
-          // Modifies/assignable has no translation in Jtest DBC
-          continue;
-        } else {
-          if (lightweight && prefix.startsWith("also_")) {
-            inv = "also_" + inv;
-          }
-        }
-        String commentContents = "@ " + inv + ";";
-        if (useJavaComment)
-          commentContents = javaLineComment(commentContents);
-        else
-          commentContents += lineSep;
-        addComment(n, commentContents, true);
-        invariantInserted = true;
-        assignableInserted = true;
       } else {
 	String commentContents = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "  " : "@ ")
           + prefix + " " + inv
@@ -935,6 +928,40 @@ class AnnotateVisitor extends DepthFirstVisitor {
     // }
     return inv_string;
   }
+
+  public static InvariantsAndModifiedVars invariants_for(PptTopLevel ppt,
+                                                         PptMap pptmap) {
+
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    PrintInvariants.print_modified_vars(ppt, pw);
+
+    InvariantsAndModifiedVars retval = new InvariantsAndModifiedVars();
+    retval.invariants = Ast.getInvariants(ppt, pptmap);
+    retval.modifiedVars = sw.toString();
+
+    // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
+    // several lines. In such a case, we're only interested in the second
+    // one, which contains the "modified" or "assignable" clause.
+    String[] splitModVars = retval.modifiedVars.split(lineSep);
+    if (splitModVars.length > 1) {
+      for (int i = 0 ; i < splitModVars.length ; i++) {
+        if (splitModVars[i].startsWith("modifies ") ||
+            splitModVars[i].startsWith("assignable ")) {
+          retval.modifiedVars =  splitModVars[i];
+          break;
+        }
+      }
+    }
+
+    return retval;
+  }
+
+  private static class InvariantsAndModifiedVars {
+    public List/*Invariant*/ invariants;
+    public String modifiedVars;
+  }
+
 }
 
 // These are the inexpressible invariants; that is, ESC does not support
@@ -1192,4 +1219,70 @@ class AnnotateVisitor extends DepthFirstVisitor {
 //     # print "method: $methodname\n";
 //     # print "ppt: $ppt\n";
 //     # print $raw{$ppt};
+//   }
+
+
+
+//   // Special case for main method:  add "arg != null" and
+//   // "\nonnullelements(arg)".
+//   String[] add_main_requires(String[] requires_invs, Node n) {
+//     if (! (n instanceof MethodDeclaration)) {
+//       return requires_invs;
+//     }
+
+//     MethodDeclaration md = (MethodDeclaration) n;
+//     if (!Ast.isMain(md)) {
+//       return requires_invs;
+//     }
+//     FormalParameter fp = (FormalParameter) Ast.getParameters(md).get(0);
+//     String param = Ast.getName(fp);
+//     String nonnull_inv = param + " != null";
+//     String nonnullelements_inv = "\\nonnullelements(" + param + ")";
+//     int num_invs = 2;
+
+//     // Null out the invariants if they already exist
+//     if (requires_invs == null) {
+//       requires_invs = new String[0];
+//     } else {
+//       if (ArraysMDE.indexOf(requires_invs, nonnull_inv) != -1) {
+//         nonnull_inv = null;
+//         num_invs--;
+//       }
+//       if (ArraysMDE.indexOf(requires_invs, nonnullelements_inv) != -1) {
+//         nonnullelements_inv = null;
+//         num_invs--;
+//       }
+//       if (num_invs == 0) {
+//         return requires_invs;
+//       }
+//     }
+//     Assert.assertTrue(requires_invs != null);
+
+//     // Allocate space
+//     int old_size = requires_invs.length;
+//     String[] new_requires_invs = new String[old_size+num_invs];
+//     System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
+//     requires_invs = new_requires_invs;
+
+//     // Add the invariants
+//     if (nonnull_inv != null) {
+//       num_invs--;
+//       requires_invs[old_size + num_invs] = nonnull_inv;
+//       // System.out.println("Filled in " + (old_size + num_invs));
+//     }
+//     if (nonnullelements_inv != null) {
+//       num_invs--;
+//       requires_invs[old_size + num_invs] = nonnullelements_inv;
+//       // System.out.println("Filled in " + (old_size + num_invs));
+//     }
+//     Assert.assertTrue(num_invs == 0);
+//     for (int i=0; i<requires_invs.length; i++) {
+//       if (requires_invs[i] == null) {
+//         System.out.println("Null invariant at index " + i + "/" + requires_invs.length);
+//         System.exit(1);
+//       }
+//     }
+//     Assert.assertTrue(ArraysMDE.indexOfEq(requires_invs, (Object)null) == -1);
+
+//     return requires_invs;
 //   }

@@ -3,6 +3,9 @@
 package daikon.tools.jtb;
 
 import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.Invariant;
+import daikon.inv.Equality;
+import daikon.inv.filter.*;
 
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
@@ -950,7 +953,16 @@ public class Ast {
     Node innerClassNode = getParent(UnmodifiedClassDeclaration.class, cd);
     Node outerClassNode = getParent(UnmodifiedClassDeclaration.class, innerClassNode);
 
-    if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
+    boolean isNestedStatic = false;
+    Node nestedMaybe = innerClassNode.getParent();
+    if (nestedMaybe instanceof NestedClassDeclaration) {
+      if (isStatic((NestedClassDeclaration)nestedMaybe)) {
+        isNestedStatic = true;
+      }
+    }
+
+    if (isNestedStatic) {
+      //if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
       NodeToken nameToken = ((UnmodifiedClassDeclaration)outerClassNode).f1;
       Name name = new Name(nameToken, new NodeListOptional());
       Type type = new Type(new NodeChoice(name, 1), new NodeListOptional());
@@ -962,6 +974,19 @@ public class Ast {
     return v.parameters;
   }
 
+  public static boolean isStatic(NestedClassDeclaration nestedD) {
+    boolean isStatic = false;
+    // NestedClassDeclaration grammar production:
+    // f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
+    // f1 -> UnmodifiedClassDeclaration()
+    for (Enumeration e = nestedD.f0.elements() ; e.hasMoreElements() ; ) {
+      String s = ((NodeToken)e.nextElement()).tokenImage;
+      if (s.equals("static")) {
+        isStatic = true;
+      }
+    }
+    return isStatic;
+  }
 
   public static void addImport(CompilationUnit u, ImportDeclaration i) {
     u.f1.addNode(i);
@@ -1017,44 +1042,69 @@ public class Ast {
     return false;
   }
 
-  // [[ This seems like a really bad way of getting invariants. And
-  // the assumptions (see assert statements below) don't hold for all
-  // formats. This method should be replaced by something better. ]]
-  public static String[] invariants_for(PptTopLevel ppt, PptMap ppts) {
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    PrintInvariants.print_invariants_maybe(ppt, pw, ppts);
-    String[] invs = UtilMDE.split(sw.toString(), lineSep);
-    Assert.assertTrue(invs[invs.length-1].equals(""));
-    if (invs.length == 1) {
-      return new String[0];
+  /**
+   *
+   * This code is taken from and modified from
+   * daikon.PrintInvariants.print_invariants.  The main modification
+   * is that instead of printing the invariants, we return a list of
+   * them. modifications involve removing code that I don't need here,
+   * like printing of debugging info.
+   *
+   * [[ TODO: instead of duplicating code, you should add this method
+   * to PrintInvariants (or wherever it belongs) and have
+   * PrintInvariants.print_invariants call it. ]]
+   *
+   **/
+  public static List/*Invariant*/ getInvariants(PptTopLevel ppt, PptMap ppt_map) {
+
+    // make names easier to read before printing
+    ppt.simplify_variable_names();
+
+    int invCounter = 0; // Count printed invariants for this program point
+
+    // I could instead sort the PptSlice objects, then sort the invariants
+    // in each PptSlice.  That would be more efficient, but this is
+    // probably not a bottleneck anyway.
+    List invs_vector = new LinkedList(ppt.getInvariants());
+
+    Invariant[] invs_array =
+      (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
+    Arrays.sort(invs_array, PptTopLevel.icfp);
+
+    Global.non_falsified_invariants += invs_array.length;
+
+    List accepted_invariants = new Vector();
+
+    for (int i = 0; i < invs_array.length; i++) {
+      Invariant inv = invs_array[i];
+
+      Assert.assertTrue (!(inv instanceof Equality));
+      for (int j = 0; j < inv.ppt.var_infos.length; j++)
+        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
+                           "var '" + inv.ppt.var_infos[j].name.name()
+                           + "' out of bounds in " + inv.format());
+      InvariantFilters fi = new InvariantFilters();
+      fi.setPptMap(ppt_map);
+
+      boolean fi_accepted = true;
+      InvariantFilter filter_result = null;
+      filter_result = fi.shouldKeep (inv);
+      fi_accepted = (filter_result == null);
+
+      // Never print the guarding predicates themselves, they should only
+      // print as part of GuardingImplications
+      if (fi_accepted && !inv.isGuardingPredicate) {
+        invCounter++;
+        Global.reported_invariants++;
+        accepted_invariants.add(inv);
+      }
+
     }
-    if ((invs.length == 2) && (invs[0].startsWith("[No samples for "))) {
-      return new String[0];
-    }
-    // Ignore first three lines.  Also ignore last line, which is empty.
-    // System.out.println("Outputting assertion check parts in invariants_for: ");
-    // System.out.println("invs.length = " + invs.length);
-    // for (int i=0; i<invs.length; i++) {
-    //   System.out.println("invs[" + i + "] = " + invs[i]);
-    // }
 
-    Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
-    // These might differ, because return values appear in ppt.name() but not in invs[1].
-    // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name()), "Different names: " + invs[1] + ", " + ppt.name());
+    accepted_invariants
+      = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
-    //      for (int i = 0; i < invs.length; i++) {
-    //        System.out.println (invs[i]);
-    //      }
-
-
-    if (Daikon.output_style == OutputFormat.JAVA) {
-      return ArraysMDE.subarray(invs, 2, invs.length-1-2);
-    } else {
-      Assert.assertTrue(invs[2].startsWith("    Variables:"),
-                        "String doesn't start with `Variables:' " + invs[2]);
-      return ArraysMDE.subarray(invs, 3, invs.length-1-3);
-    }
+    return accepted_invariants;
   }
 
 }
