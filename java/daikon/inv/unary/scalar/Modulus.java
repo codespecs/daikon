@@ -3,6 +3,8 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
+import daikon.derive.unary.SequenceLength;
+
 
 public class Modulus extends SingleScalar {
 
@@ -21,6 +23,14 @@ public class Modulus extends SingleScalar {
   }
 
   public static Modulus instantiate(PptSlice ppt) {
+    VarInfo x = ppt.var_infos[0];
+    if ((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0)) {
+      // do not instantiate x-1 = a (mod b).  Instead, choose a different a.
+      Global.implied_noninstantiated_invariants += 1;
+      return null;
+    }
+
     return new Modulus(ppt);
   }
 
@@ -33,7 +43,7 @@ public class Modulus extends SingleScalar {
     return var().name + " == " + remainder + "  (mod " + modulus + ")";
   }
 
-    
+
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
@@ -44,7 +54,7 @@ public class Modulus extends SingleScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long value, int count) {
@@ -109,7 +119,7 @@ public class Modulus extends SingleScalar {
     boolean thisMeaningless = (modulus == 0 || modulus == 1);
     boolean otherMeaningless = (otherModulus.modulus == 0 ||
                                 otherModulus.modulus == 1);
-    
+
     if (thisMeaningless && otherMeaningless) {
       return true;
     } else {
