@@ -152,7 +152,7 @@ public class SuppressionLink implements Serializable {
     StringBuffer suppressorsString = new StringBuffer();
     for (Iterator i = suppressors.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
-      suppressorsString.append (inv.repr() + " @" + inv.ppt.ppt_name);
+      suppressorsString.append (inv.format() + " @" + inv.ppt.ppt_name);
       suppressorsString.append (", ");
     }
 
