@@ -90,6 +90,7 @@ This is the user manual for the Daikon invariant detector.
 * GUIs::                        
 * Front ends::                  
 * Enhancing Daikon output::     
+* Tools::                       
 * Extending Daikon::            
 * Troubleshooting::             
 * Details::                     
@@ -226,6 +227,10 @@ Example splitter info file
 
 * Example class::               
 * Resulting .spinfo file::      
+
+Tools
+
+* MergeESC::                    
 
 Extending Daikon
 
@@ -2907,7 +2912,7 @@ be recorded and hence the may yield sparse output.
 @c containing two variables of the same name.
 
 
-@node    Enhancing Daikon output, Extending Daikon, Front ends, Top
+@node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
 
 @menu
@@ -3201,13 +3206,17 @@ PPT_NAME  simpleQueue.dequeue
 @end smallexample
 
 
-@node    Tools, Troubleshooting, Enhancing Daikon output, Top
+@node    Tools, Extending Daikon, Enhancing Daikon output, Top
 @chapter Tools
 
 This chapter gives information about tools that are part of the Daikon
 distribution.
 
-@node    Tools, Troubleshooting, Enhancing Daikon output, Top
+@menu
+* MergeESC::                    
+@end menu
+
+@node    MergeESC,  , Tools, Tools
 @section MergeESC
 
 The MergeESC program inserts Daikon-generated invariants into Java
@@ -3225,7 +3234,7 @@ unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
 
-@node    Extending Daikon, Troubleshooting, Enhancing Daikon output, Top
+@node    Extending Daikon, Troubleshooting, Tools, Top
 @chapter Extending Daikon
 @cindex extending Daikon
 @cindex changing Daikon

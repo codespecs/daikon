@@ -64,6 +64,11 @@
 @item daikon.derive.unary.SequenceSum.enabled
   Boolean.  True iff SequenceSum derived variables should be generated.
 
+@item daikon.inv.Invariant.probability_limit
+  Real number between 0 and 1.  The probability that the invariant
+ occurred by chance must be less than this in order for it to be
+ displayed.
+
 @item daikon.inv.binary.sequenceScalar.Member.enabled
   Boolean.  True iff Member invariants should be considered.
 
