@@ -4,6 +4,8 @@ import daikon.*;
 import daikon.inv.DiscardInfo;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import utilMDE.*;
 
@@ -22,6 +24,11 @@ public class Implication
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
+
+  /** the original predicate invariant from its original conditional ppt*/
+  public Invariant orig_left;
+  /** the original consequent invariant from its original conditional ppt*/
+  public Invariant orig_right;
 
   public Invariant predicate() { return left; }
   public Invariant consequent() { return right; }
@@ -45,6 +52,8 @@ public class Implication
                                              boolean iff)
   {
     if (predicate.isSameInvariant(consequent)) {
+      PptSplitter.debug.fine ("Not creating implication " + predicate +
+                              " ==> " + consequent + " pred == conseq ");
       return null;
     }
 
@@ -62,24 +71,30 @@ public class Implication
       // Should use PptSlice identity check instead?
       if (! existing.right.format().equals(consequent.format())) continue;
       if (! existing.left.format().equals(predicate.format())) continue;
+      PptSplitter.debug.fine ("Not creating implication " + predicate +
+                              " ==> " + consequent + "- it already exists as "
+                              + existing);
       return null;
     }
 
-    // System.out.println("Adding implication: ");
-    // System.out.println("Predicate: " + predicate.format_using(OutputFormat.JML));
-    // System.out.println("Consequent: " + consequent.format_using(OutputFormat.JML));
+    if (PptSplitter.debug.isLoggable (Level.FINE))
+      PptSplitter.debug.fine ("Creating implication " + predicate + " ==> "
+                            + consequent);
     Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff);
     return result;
   }
 
   protected double computeConfidence() {
-    double pred_conf = left.computeConfidence();
-    double cons_conf = right.computeConfidence();
+    double pred_conf = orig_left.computeConfidence();
+    double cons_conf = orig_right.computeConfidence();
     if ((pred_conf == CONFIDENCE_NEVER)
         || (cons_conf == CONFIDENCE_NEVER)) {
       return CONFIDENCE_NEVER;
     }
-    return confidence_and(pred_conf, cons_conf);
+    double result = confidence_and(pred_conf, cons_conf);
+    log ("Confidence " + result + " " + pred_conf + "/"
+                              + cons_conf + " for " + format());
+    return result;
   }
 
   public String repr() {
@@ -120,7 +135,68 @@ public class Implication
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
-    return right.isObviousStatically(vis);
+    Assert.assertTrue (vis.length > 0);
+    for (int ii = 0; ii < vis.length; ii++ )
+      Assert.assertTrue (vis[ii] != null);
+    return orig_right.isObviousStatically(vis);
+  }
+
+  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+    Assert.assertTrue (vis.length > 0);
+    for (int ii = 0; ii < vis.length; ii++ )
+      Assert.assertTrue (vis[ii] != null);
+    DiscardInfo di = orig_right.isObviousDynamically (vis);
+    if (di != null)
+      log ("failed isObviousDynamically with vis = " + VarInfo.toString (vis));
+    return (di);
+  }
+
+
+  /**
+   * Return true if the right side of the implication and some
+   * equality combinations of its member variables are statically
+   * obvious.  For example, if a == b, and f(a) is obvious, then so is
+   * f(b).  We use the someInEquality (or least interesting) method
+   * during printing so we only print an invariant if all its
+   * variables are interesting, since a single, static, non
+   * interesting occurance means all the equality combinations aren't
+   * interesting.
+   *
+   * This must be overridden for Implication because the right side is
+   * the invariant of interest.  The standard version passes the vis
+   * from the slice containing the implication itself (slice 0).
+   **/
+  public DiscardInfo isObviousStatically_SomeInEquality() {
+    return orig_right.isObviousStatically_SomeInEquality();
+//     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
+//     if (result != null) return result;
+//     Assert.assertTrue (orig_right.ppt.var_infos.length > 0);
+//     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
+//       Assert.assertTrue (orig_right.ppt.var_infos[ii] != null);
+//     return isObviousStatically_SomeInEqualityHelper (orig_right.ppt.var_infos,
+//                      new VarInfo[orig_right.ppt.var_infos.length], 0);
+  }
+
+  /**
+   * Return true if the rightr side of the implication some equality
+   * combinations of its member variables are dynamically obvious.
+   * For example, a == b, and f(a) is obvious, so is f(b).  We use the
+   * someInEquality (or least interesting) method during printing so
+   * we only print an invariant if all its variables are interesting,
+   * since a single, dynamic, non interesting occurance means all the
+   * equality combinations aren't interesting.
+   *
+   * This must be overridden for Implication because the right side is
+   * the invariant of interest.  The standard version passes the vis
+   * from the slice containing the implication itself (slice 0).
+   **/
+  public DiscardInfo isObviousDynamically_SomeInEquality() {
+    return orig_right.isObviousDynamically_SomeInEquality();
+//     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);
+//     if (result != null)
+//       return result;
+//     return isObviousDynamically_SomeInEqualityHelper (orig_right.ppt.var_infos,
+//                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
   public boolean isSameFormula(Invariant other) {
@@ -161,4 +237,33 @@ public class Implication
   public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
   }
+
+  /**
+   * Logs a description of the invariant and the specified msg via the
+   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * VarInfo[], String)}.  Uses the consequent as the logger
+   */
+
+  public void log (Logger debug, String msg) {
+
+    right.log (debug, msg + "[for implication " + format() + " ("
+               + orig_right.format() + ")]");
+  }
+
+
+ /**
+  * Logs a description of the invariant and the specified msg via the
+  * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+  * VarInfo[], String)}.  Uses the consequent as the logger
+  *
+  * @return whether or not it logged anything
+  */
+
+  public boolean log (String msg) {
+
+    return (right.log (msg + "[for implication " + format() + " ("
+               + orig_right.format() + ")]"));
+  }
+
+
 }
