@@ -71,6 +71,8 @@ if not locals().has_key("fn_var_infos"):
     fn_to_stats = {}
 
     diff_to_ct = {}
+    unary_diff_to_ct = {}
+    bin_diff_to_ct = {}
 
 ##########################################
 ### jake's vars to keep track of numbers of diffing invariants
@@ -108,78 +110,103 @@ g_pair_same = 29
 g_pair_different = 30
 
 def init_diff_globals():
-    global diff_to_ct
-    diff_to_ct[inv_one_cons] = 0
-    diff_to_ct[inv_diff_small_no_vals] = 0
-    diff_to_ct[inv_one_none] = 0
-    diff_to_ct[ssc_miss_min] = 0
-    diff_to_ct[ssc_min_diff] = 0
-    diff_to_ct[ssc_miss_max] = 0
-    diff_to_ct[ssc_max_diff] = 0
-    diff_to_ct[ssc_one_can_be_zero] = 0
-    diff_to_ct[ssc_diff_mod] = 0
-    diff_to_ct[ssc_diff_nonmod] = 0
-    diff_to_ct[tsc_diff_lin_reln] = 0
-    diff_to_ct[tsc_one_equal] = 0
-    diff_to_ct[tsc_comparison_diff] = 0
-    diff_to_ct[tsc_diff_num_diff] = 0
-    diff_to_ct[tsc_diff_sum] = 0
-    diff_to_ct[tsc_diff_ftn_reln] = 0
-    diff_to_ct[tsc_diff_inv_ftn_reln] = 0
-    diff_to_ct[sseq_diff_elem_equality] = 0
-    diff_to_ct[sseq_diff_sortedness] = 0
-    diff_to_ct[sseq_diff_inv_all_elem] = 0
-    diff_to_ct[scseq_diff_membership] = 0
-    diff_to_ct[two_seq_diff_lin_reln] = 0
-    diff_to_ct[two_seq_one_equ] = 0
-    diff_to_ct[two_seq_diff_comp] = 0
-    diff_to_ct[two_seq_diff_subseq] = 0
-    diff_to_ct[two_seq_diff_supseq] = 0
-    diff_to_ct[two_seq_diff_revness] = 0
-    diff_to_ct[g_unary_same] = 0
-    diff_to_ct[g_unary_different] = 0
-    diff_to_ct[g_pair_same] = 0
-    diff_to_ct[g_pair_different] = 0
+    global diff_to_ct, unary_diff_to_ct, bin_diff_to_ct
+    for ind in range(0, g_pair_different+1):
+        diff_to_ct[ind] = 0
+        unary_diff_to_ct[ind] = 0
+        bin_diff_to_ct[ind] = 0
 
+def clear_diff_to_ct():
+    global diff_to_ct
+    for ind in range(0, g_pair_different+1):
+        diff_to_ct[ind] = 0
+
+def add_to_unary():
+    global diff_to_ct, unary_diff_to_ct, bin_diff_to_ct
+    for ind in range(0, g_pair_different+1):
+        unary_diff_to_ct[ind] = unary_diff_to_ct[ind] + diff_to_ct[ind]
+
+def add_to_binary():
+    global diff_to_ct, unary_diff_to_ct, bin_diff_to_ct
+    for ind in range(0, g_pair_different+1):
+        bin_diff_to_ct[ind] = bin_diff_to_ct[ind] + diff_to_ct[ind]
+        
 def print_inv_diff_tracking():
+    print "UNARY DIFFS"
     print "General inv diffs:"
-    print "  one constrained, one is not - ", diff_to_ct[inv_one_cons]
-    print "  different small num values - ", diff_to_ct[inv_diff_small_no_vals]
-    print "  one can be none, one can't - ", diff_to_ct[inv_one_none]
+    print "  one constrained, one is not - ", unary_diff_to_ct[inv_one_cons]
+    print "  different small num values - ", unary_diff_to_ct[inv_diff_small_no_vals]
+    print "  one can be none, one can't - ", unary_diff_to_ct[inv_one_none]
     print "Single scalar diffs:"
-    print "  missing minimum - ", diff_to_ct[ssc_miss_min]
-    print "  different min - ", diff_to_ct[ssc_min_diff]
-    print "  missing max - ", diff_to_ct[ssc_miss_max]
-    print "  different max - ", diff_to_ct[ssc_max_diff]
-    print "  one can be zero, one can't - ", diff_to_ct[ssc_one_can_be_zero]
-    print "  different modulus - ", diff_to_ct[ssc_diff_mod]
-    print "  different nonmodulus - ", diff_to_ct[ssc_diff_nonmod]
+    print "  missing minimum - ", unary_diff_to_ct[ssc_miss_min]
+    print "  different min - ", unary_diff_to_ct[ssc_min_diff]
+    print "  missing max - ", unary_diff_to_ct[ssc_miss_max]
+    print "  different max - ", unary_diff_to_ct[ssc_max_diff]
+    print "  one can be zero, one can't - ", unary_diff_to_ct[ssc_one_can_be_zero]
+    print "  different modulus - ", unary_diff_to_ct[ssc_diff_mod]
+    print "  different nonmodulus - ", unary_diff_to_ct[ssc_diff_nonmod]
     print "Two scalar diffs:"
-    print "  different linear relation - ", diff_to_ct[tsc_diff_lin_reln]
-    print "  one is equal, other is not - ", diff_to_ct[tsc_one_equal]
-    print "  different comparison - ", diff_to_ct[tsc_comparison_diff]
-    print "  different numeric difference - ", diff_to_ct[tsc_diff_num_diff]
-    print "  different sum - ", diff_to_ct[tsc_diff_sum]
-    print "  different functional relation - ", diff_to_ct[tsc_diff_ftn_reln]
-    print "  different inv functional reln - ", diff_to_ct[tsc_diff_inv_ftn_reln]
+    print "  different linear relation - ", unary_diff_to_ct[tsc_diff_lin_reln]
+    print "  one is equal, other is not - ", unary_diff_to_ct[tsc_one_equal]
+    print "  different comparison - ", unary_diff_to_ct[tsc_comparison_diff]
+    print "  different numeric difference - ", unary_diff_to_ct[tsc_diff_num_diff]
+    print "  different sum - ", unary_diff_to_ct[tsc_diff_sum]
+    print "  different functional relation - ", unary_diff_to_ct[tsc_diff_ftn_reln]
+    print "  different inv functional reln - ", unary_diff_to_ct[tsc_diff_inv_ftn_reln]
     print "Single sequence:"
-    print "  different element equality - ", diff_to_ct[sseq_diff_elem_equality]
-    print "  different sortedness - ", diff_to_ct[sseq_diff_sortedness]
-    print "  different inv over all elem - ", diff_to_ct[sseq_diff_inv_all_elem]
+    print "  different element equality - ", unary_diff_to_ct[sseq_diff_elem_equality]
+    print "  different sortedness - ", unary_diff_to_ct[sseq_diff_sortedness]
+    print "  different inv over all elem - ", unary_diff_to_ct[sseq_diff_inv_all_elem]
     print "Scalar sequence diffs:"
-    print "  different membership - ", diff_to_ct[scseq_diff_membership]
+    print "  different membership - ", unary_diff_to_ct[scseq_diff_membership]
     print "Two sequence diffs:"
-    print "  different linear relations - ", diff_to_ct[two_seq_diff_lin_reln]
-    print "  one equal, one is not - ", diff_to_ct[two_seq_one_equ]
-    print "  different comparision - ", diff_to_ct[two_seq_diff_comp]
-    print "  different subseq - ", diff_to_ct[two_seq_diff_subseq]
-    print "  different superseq - ", diff_to_ct[two_seq_diff_supseq]
-    print "  different reverseness - ", diff_to_ct[two_seq_diff_revness]
+    print "  different linear relations - ", unary_diff_to_ct[two_seq_diff_lin_reln]
+    print "  one equal, one is not - ", unary_diff_to_ct[two_seq_one_equ]
+    print "  different comparision - ", unary_diff_to_ct[two_seq_diff_comp]
+    print "  different subseq - ", unary_diff_to_ct[two_seq_diff_subseq]
+    print "  different superseq - ", unary_diff_to_ct[two_seq_diff_supseq]
+    print "  different reverseness - ", unary_diff_to_ct[two_seq_diff_revness]
     print
-    print "Identical unary invariants:", diff_to_ct[g_unary_same]
-    print "Differing unary invariants:", diff_to_ct[g_unary_different]
-    print "Identical binary invariants:", diff_to_ct[g_pair_same]
-    print "Differing binary invariants:", diff_to_ct[g_pair_different]
+    print "BINARY DIFFS"
+    print "General inv diffs:"
+    print "  one constrained, one is not - ", bin_diff_to_ct[inv_one_cons]
+    print "  different small num values - ", bin_diff_to_ct[inv_diff_small_no_vals]
+    print "  one can be none, one can't - ", bin_diff_to_ct[inv_one_none]
+    print "Single scalar diffs:"
+    print "  missing minimum - ", bin_diff_to_ct[ssc_miss_min]
+    print "  different min - ", bin_diff_to_ct[ssc_min_diff]
+    print "  missing max - ", bin_diff_to_ct[ssc_miss_max]
+    print "  different max - ", bin_diff_to_ct[ssc_max_diff]
+    print "  one can be zero, one can't - ", bin_diff_to_ct[ssc_one_can_be_zero]
+    print "  different modulus - ", bin_diff_to_ct[ssc_diff_mod]
+    print "  different nonmodulus - ", bin_diff_to_ct[ssc_diff_nonmod]
+    print "Two scalar diffs:"
+    print "  different linear relation - ", bin_diff_to_ct[tsc_diff_lin_reln]
+    print "  one is equal, other is not - ", bin_diff_to_ct[tsc_one_equal]
+    print "  different comparison - ", bin_diff_to_ct[tsc_comparison_diff]
+    print "  different numeric difference - ", bin_diff_to_ct[tsc_diff_num_diff]
+    print "  different sum - ", bin_diff_to_ct[tsc_diff_sum]
+    print "  different functional relation - ", bin_diff_to_ct[tsc_diff_ftn_reln]
+    print "  different inv functional reln - ", bin_diff_to_ct[tsc_diff_inv_ftn_reln]
+    print "Single sequence:"
+    print "  different element equality - ", bin_diff_to_ct[sseq_diff_elem_equality]
+    print "  different sortedness - ", bin_diff_to_ct[sseq_diff_sortedness]
+    print "  different inv over all elem - ", bin_diff_to_ct[sseq_diff_inv_all_elem]
+    print "Scalar sequence diffs:"
+    print "  different membership - ", bin_diff_to_ct[scseq_diff_membership]
+    print "Two sequence diffs:"
+    print "  different linear relations - ", bin_diff_to_ct[two_seq_diff_lin_reln]
+    print "  one equal, one is not - ", bin_diff_to_ct[two_seq_one_equ]
+    print "  different comparision - ", bin_diff_to_ct[two_seq_diff_comp]
+    print "  different subseq - ", bin_diff_to_ct[two_seq_diff_subseq]
+    print "  different superseq - ", bin_diff_to_ct[two_seq_diff_supseq]
+    print "  different reverseness - ", bin_diff_to_ct[two_seq_diff_revness]
+    print
+    print "SUMMARY"
+    print "Identical unary invariants:", unary_diff_to_ct[g_unary_same]
+    print "Differing unary invariants:", unary_diff_to_ct[g_unary_different]
+    print "Identical binary invariants:", unary_diff_to_ct[g_pair_same]
+    print "Differing binary invariants:", unary_diff_to_ct[g_pair_different] 
 ######end Jakes inv diff tracking
 
 def clear_variables():
@@ -3627,7 +3654,7 @@ def diff_fn_var_infos(fn_var_infos1, fn_var_infos2):
 
 def diff_var_infos(var_infos1, var_infos2):
     """Print differences between invariants in two sets of var_infos."""
-
+    global unary_diff_to_ct, g_unary_same, g_unary_different, g_pair_same, g_pair_different
     # var_infos1.sort(var_info_name_compare)
     # var_infos2.sort(var_info_name_compare)
 
@@ -3657,11 +3684,12 @@ def diff_var_infos(var_infos1, var_infos2):
     assert len(var_infos1) == len(var_infos2)
     assert var_infos_compatible(var_infos1, var_infos2)
 
+
     print len(var_infos1), "var_infos:"
 
     unary_same = 0
     unary_different = 0
-
+    clear_diff_to_ct()
     for i in range(0, len(var_infos1)):
         vi1 = var_infos1[i]
         vi2 = var_infos2[i]
@@ -3689,6 +3717,8 @@ def diff_var_infos(var_infos1, var_infos2):
             unary_different = unary_different + 1
         else:
             unary_same = unary_same + 1
+        add_to_unary()
+        clear_diff_to_ct()
 
     pair_same = 0
     pair_different = 0
@@ -3732,15 +3762,17 @@ def diff_var_infos(var_infos1, var_infos2):
                 pair_different = pair_different + 1
             else:
                 pair_same = pair_same + 1
+            add_to_binary()
+            clear_diff_to_ct()
 
     print "Identical unary invariants:", unary_same
     print "Differing unary invariants:", unary_different
     print "Identical binary invariants:", pair_same
     print "Differing binary invariants:", pair_different
-    diff_to_ct[g_unary_same] = diff_to_ct[g_unary_same] + unary_same
-    diff_to_ct[g_unary_different] = diff_to_ct[g_unary_different] + unary_different
-    diff_to_ct[g_pair_same] = diff_to_ct[g_pair_same] + pair_same
-    diff_to_ct[g_pair_different] = diff_to_ct[g_pair_different] + pair_different
+    unary_diff_to_ct[g_unary_same] = unary_diff_to_ct[g_unary_same] + unary_same
+    unary_diff_to_ct[g_unary_different] = unary_diff_to_ct[g_unary_different] + unary_different
+    unary_diff_to_ct[g_pair_same] = unary_diff_to_ct[g_pair_same] + pair_same
+    unary_diff_to_ct[g_pair_different] = unary_diff_to_ct[g_pair_different] + pair_different
 
 #     # Equality invariants
 #     for vi in var_infos:
