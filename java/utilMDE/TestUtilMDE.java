@@ -333,44 +333,44 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(!ArraysMDE.sorted(new int[] { 1,0 }));
     assertTrue(!ArraysMDE.sorted(new int[] { 0,1,2,1,2,3 }));
 
-    // public static int no_dups(int[] a)
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -2, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {42}) == true);
+    // public static int noDuplicates(int[] a)
+    assertTrue (ArraysMDE.noDuplicates(new int[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new int[] {42}) == true);
 
-    // public static int no_dups(long[] a)
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -2, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {42}) == true);
+    // public static int noDuplicates(long[] a)
+    assertTrue (ArraysMDE.noDuplicates(new long[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new long[] {42}) == true);
 
-    // public static int no_dups(double[] a)
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {1., 1.001, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {1., 2, -2.00, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {42}) == true);
+    // public static int noDuplicates(double[] a)
+    assertTrue (ArraysMDE.noDuplicates(new double[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {1., 1.001, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {1., 2, -2.00, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {}) == true);
+    assertTrue (ArraysMDE.noDuplicates(new double[] {42}) == true);
 
-    // public static int no_dups(String[] a)
-    assertTrue (ArraysMDE.no_dups(new String[] {"1", "2", "3", "5", "4","0"})
+    // public static int noDuplicates(String[] a)
+    assertTrue (ArraysMDE.noDuplicates(new String[] {"1", "2", "3", "5", "4","0"})
                 == true);
-    assertTrue (ArraysMDE.no_dups(new String[] {"A","a", "foo", "Foo",""})
+    assertTrue (ArraysMDE.noDuplicates(new String[] {"A","a", "foo", "Foo",""})
                 == true);
-    assertTrue (ArraysMDE.no_dups(new String[] {" ", " "})
+    assertTrue (ArraysMDE.noDuplicates(new String[] {" ", " "})
                 == false);
-    assertTrue (ArraysMDE.no_dups(new String[] {"  ", " "})
+    assertTrue (ArraysMDE.noDuplicates(new String[] {"  ", " "})
                 == true);
 
     // public static boolean fn_is_permutation(int[] a)
