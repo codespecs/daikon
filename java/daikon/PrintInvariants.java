@@ -226,12 +226,18 @@ public class PrintInvariants {
     // (Maybe this test isn't even necessary, but will be subsumed by others,
     // as all the invariants will be unjustified.)
     if (ppt.num_samples() == 0) {
+      if (debugPrint.isDebugEnabled()) {
+        debugPrint.debug ("[No samples for " + ppt.name + "]");
+      }
       if (Daikon.output_num_samples) {
         out.println("[No samples for " + ppt.name + "]");
       }
       return;
     }
     if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
+      if (debugPrint.isDebugEnabled()) {
+        debugPrint.debug ("[No views for " + ppt.name + "]");
+      }
       if (! (ppt instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
