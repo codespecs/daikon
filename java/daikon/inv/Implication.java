@@ -45,10 +45,7 @@ public class Implication extends Invariant {
     if ((pred_prob == PROBABILITY_NEVER)
         || (cons_prob == PROBABILITY_NEVER))
       return PROBABILITY_NEVER;
-    if ((pred_prob == PROBABILITY_UNKNOWN)
-        || (cons_prob == PROBABILITY_UNKNOWN))
-      return PROBABILITY_UNKNOWN;
-    return 1-(1-pred_prob)*(1-cons_prob);
+    return prob_and(pred_prob, cons_prob);
   }
 
   public String repr() {
