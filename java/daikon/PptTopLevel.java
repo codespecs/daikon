@@ -1171,7 +1171,8 @@ class PptTopLevel extends Ppt {
   }
 
 
-  // In original implementation, known as print_invariants_ppt
+  // In original (Python) implementation, known as print_invariants_ppt.
+  // I may still want to integrate some more of its logic here.
   /*
    * Print invariants for a single program point.
    * Does no output if no samples or no views.

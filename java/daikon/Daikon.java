@@ -42,23 +42,26 @@ public class Daikon {
     Vector dtrace_files = UtilMDE.tokens(args[1], ",");
     FileIO.read_data_trace_files(dtrace_files, all_ppts, null);
 
-    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.initial_processing();
-    }
-
-
-    // Now examine the invariants.
-    System.out.println("Examining the invariants.");
-
-    // See print_invariants_ppt for a better approach to this; I need to
-    // incorporate all that into some function somewhere.
-
     for (Iterator itor = new TreeSet(all_ppts.keySet()).iterator() ; itor.hasNext() ; ) {
       String ppt_name = (String) itor.next();
-      PptTopLevel ppt_tl = (PptTopLevel) all_ppts.get(ppt_name);
-      ppt_tl.print_invariants_maybe();
+      PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+      ppt.initial_processing();
+      ppt.print_invariants_maybe();
     }
+
+    // Old implementation that didn't interleave invariant inference and
+    // reporting.
+    // for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+    //   PptTopLevel ppt = (PptTopLevel) itor.next();
+    //   ppt.initial_processing();
+    // }
+    // // Now examine the invariants.
+    // System.out.println("Examining the invariants.");
+    // for (Iterator itor = new TreeSet(all_ppts.keySet()).iterator() ; itor.hasNext() ; ) {
+    //   String ppt_name = (String) itor.next();
+    //   PptTopLevel ppt_tl = (PptTopLevel) all_ppts.get(ppt_name);
+    //   ppt_tl.print_invariants_maybe();
+    // }
 
     System.out.println("Exiting");
 
