@@ -37,7 +37,7 @@ public class NonZero extends SingleScalar {
     NonZero result = new NonZero(ppt);
     if (! ppt.var_infos[0].type.isIntegral()) {
       result.pointer_type = true;
-      result.override_range = 10;
+      result.override_range = 3;
     }
     return result;
   }
