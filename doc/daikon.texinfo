@@ -6228,9 +6228,9 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
-KNOWN BUG. In Daikon v. 3.2.0, we have updated the Java parser
-to accept Java 1.5 syntax. An error in the new parser may
-produce illegal Java in the annotated file, if the source file to be
+KNOWN BUG (LOGICAL SHIFT IN JAVA). In Daikon v. 3.2.0, we have updated
+the Java parser to accept Java 1.5 syntax. An error in the new parser
+may produce illegal Java in the annotated file, if the source file to be
 annotated includes logical shift operators. @xref{Known bugs}.
 
 
@@ -6356,10 +6356,10 @@ this method to see if the class has been instrumented).
 @code{getDaikonInvariants()}.  Returns the array of properties being checked.
 @end itemize
 
-KNOWN BUG. In Daikon v. 3.2.0, we have updated the Java parser
-to accept Java 1.5 syntax. An error in the new parser may
-produce illegal Java in the instrumented file, if the source file to be
-instrumented includes logical shift operators. @xref{Known bugs}.
+KNOWN BUG (LOGICAL SHIFT IN JAVA). In Daikon v. 3.2.0, we have updated
+the Java parser to accept Java 1.5 syntax. An error in the new parser
+may produce illegal Java in the instrumented file, if the source file to
+be instrumented includes logical shift operators. @xref{Known bugs}.
 
 @node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools
 @section InvariantChecker
