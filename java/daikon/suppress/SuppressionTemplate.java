@@ -22,6 +22,7 @@ import utilMDE.MathMDE;
  **/
 
 public class SuppressionTemplate {
+  // I am *not* serializable.  I should never be stored to disk.
 
   /**
    * General debug tracer.
