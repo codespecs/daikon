@@ -39,7 +39,7 @@ import daikon.*;
 import daikon.derive.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -48,7 +48,7 @@ import org.apache.log4j.Category;
 public final class SCALARSEQUENCESINTERSECTION
   extends BinaryDerivation
 {
-  public static final Category debug = Category.getInstance("daikon.derive.binary." + SCALARSEQUENCESINTERSECTION_STRING);
+  public static final Logger debug = Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTION_STRING);
 
 
   // We are Serializable, so we specify a version to allow changes to

@@ -7,7 +7,7 @@ import daikon.inv.filter.*;
 import java.util.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -36,32 +36,32 @@ public abstract class Invariant
   /**
    * General debug tracer.
    **/
-  public static final Category debug = Category.getInstance("daikon.inv.Invariant");
+  public static final Logger debug = Logger.getLogger("daikon.inv.Invariant");
 
   /**
    * Debug tracer for printing invariants
    **/
-  public static final Category debugPrint = Category.getInstance ("daikon.print");
+  public static final Logger debugPrint = Logger.getLogger ("daikon.print");
 
   /**
    * Debug tracer for invariant flow.
    **/
-  public static final Category debugFlow = Category.getInstance ("daikon.flow.flow");
+  public static final Logger debugFlow = Logger.getLogger ("daikon.flow.flow");
 
   /**
    * Debug tracer for printing equality invariants
    **/
-  public static final Category debugPrintEquality = Category.getInstance ("daikon.print.equality");
+  public static final Logger debugPrintEquality = Logger.getLogger ("daikon.print.equality");
 
   /**
    * Debug tracer for isWorthPrinting() checks.
    **/
-  public static final Category debugIsWorthPrinting = Category.getInstance("daikon.print.isWorthPrinting");
+  public static final Logger debugIsWorthPrinting = Logger.getLogger("daikon.print.isWorthPrinting");
 
   /**
    * Debug tracer for guarding.
    **/
-  public static final Category debugGuarding = Category.getInstance("daikon.guard");
+  public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
   /**
    * Real number between 0 and 1.  The invariant is displayed only if
@@ -285,7 +285,8 @@ public abstract class Invariant
   public void destroy() {
     falsified = true;
     if (PptSlice.debugFlow.isDebugEnabled()) {
-      PptSlice.debugFlow.debug("Invariant destroyed " + format() + " at " + ppt.parent.name);
+      PptSlice.debugFlow.debug("Invariant destroyed " + format() +
+                               " at " + ppt.parent.name);
     }
 
     // [INCR] Commented out because removeInvariant removes this from
@@ -332,7 +333,8 @@ public abstract class Invariant
    **/
   public void destroyAndFlow () {
     if (debugFlow.isDebugEnabled()) {
-      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to destroy.");
+      debugFlow.debug(repr() + " at " + ppt.parent.name +
+                      " added to destroyed.");
     }
     flowThis();
     destroy();

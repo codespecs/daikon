@@ -16,7 +16,7 @@ import daikon.derive.binary.*;
 import daikon.suppress.*;
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class Member
   extends SequenceString
@@ -26,8 +26,8 @@ public final class Member
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  public static final Category debug =
-    Category.getInstance ("daikon.inv.binary.Member");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.inv.binary.Member");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -359,8 +359,8 @@ public final class Member
    **/
   public static class MemberSuppressionFactory1 extends SuppressionFactory {
 
-    public static final Category debug =
-      Category.getInstance("daikon.suppress.factories.MemberSuppressionFactory");
+    public static final Logger debug =
+      Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory");
 
     private static final MemberSuppressionFactory1 theInstance =
       new MemberSuppressionFactory1();
@@ -459,8 +459,8 @@ public final class Member
    **/
   public static class MemberSuppressionFactory2 extends SuppressionFactory {
 
-    public static final Category debug =
-      Category.getInstance("daikon.suppress.factories.MemberSuppressionFactory2");
+    public static final Logger debug =
+      Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory2");
 
     private static final MemberSuppressionFactory2 theInstance =
       new MemberSuppressionFactory2();

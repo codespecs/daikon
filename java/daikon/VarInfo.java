@@ -10,7 +10,7 @@ import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.io.Serializable;
@@ -1668,10 +1668,10 @@ public final class VarInfo
 
 
   /** Debug tracer **/
-  private static final Category debug = Category.getInstance("daikon.VarInfo");
+  private static final Logger debug = Logger.getLogger("daikon.VarInfo");
 
   /** Debug tracer for simplifying expressions **/
-  private static final Category debugSimplifyExpression = Category.getInstance("daikon.VarInfo.simplifyExpression");
+  private static final Logger debugSimplifyExpression = Logger.getLogger("daikon.VarInfo.simplifyExpression");
 
   /**
    * Change the name of this VarInfo by side effect into a more simplified

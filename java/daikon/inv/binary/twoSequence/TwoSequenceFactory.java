@@ -8,7 +8,7 @@ import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public final class TwoSequenceFactory {
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.inv.binary.twoSequence.TwoSequenceFactory");
+  public static final Logger debug = Logger.getLogger("daikon.inv.binary.twoSequence.TwoSequenceFactory");
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.

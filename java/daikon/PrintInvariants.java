@@ -3,7 +3,7 @@ package daikon;
 import java.util.*;
 import java.io.*;
 import gnu.getopt.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
 import utilMDE.Assert;
@@ -20,34 +20,34 @@ public class PrintInvariants {
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
-  public static final Category debug = Category.getInstance("daikon.PrintInvariants");
+  public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
 
   /**
    * Debug tracer for printing.
    **/
-  public static final Category debugRepr = Category.getInstance("daikon.PrintInvariants.repr");
+  public static final Logger debugRepr = Logger.getLogger("daikon.PrintInvariants.repr");
 
   /**
    * Debug tracer for printing.
    **/
-  public static final Category debugPrint = Category.getInstance("daikon.print");
+  public static final Logger debugPrint = Logger.getLogger("daikon.print");
 
   /**
    * Debug tracer for printing modified variables in ESC/JML output.
    **/
-  public static final Category debugPrintModified = Category.getInstance("daikon.print.modified");
+  public static final Logger debugPrintModified = Logger.getLogger("daikon.print.modified");
 
   /**
    * Debug tracer for printing equality.
    **/
-  public static final Category debugPrintEquality = Category.getInstance("daikon.print.equality");
+  public static final Logger debugPrintEquality = Logger.getLogger("daikon.print.equality");
 
   /**
    * Debug tracer for filtering.  When PrintInvariants is invoked it
    * will write a transcript of everything that the filters did to the
    * current directory, into a file called filter_transcript.
    **/
-  public static final Category debugFiltering = Category.getInstance("daikon.filtering");
+  public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
 
   public static final String daikonFilteringOutputFilename = "filtering_transcript";
 
@@ -95,7 +95,7 @@ public class PrintInvariants {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
-    daikon.Logger.setupLogs(daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -154,7 +154,7 @@ public class PrintInvariants {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
         } else if (Daikon.noinvariantguarding_SWITCH.equals(option_name)) {
           Daikon.noInvariantGuarding = true;
         } else {

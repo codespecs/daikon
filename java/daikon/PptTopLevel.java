@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.*;
 
@@ -68,32 +68,32 @@ public class PptTopLevel
   public static boolean dkconfig_pairwise_implications = false;
 
   /** Main debug tracer **/
-  public static final Category debug =
-    Category.getInstance("daikon.PptTopLevel");
+  public static final Logger debug =
+    Logger.getLogger("daikon.PptTopLevel");
 
   /** Debug tracer for equalTo checks **/
-  public static final Category debugEqualTo =
-    Category.getInstance("daikon.PptTopLevel.equal");
+  public static final Logger debugEqualTo =
+    Logger.getLogger("daikon.PptTopLevel.equal");
 
   /** Debug tracer for addImplications. **/
-  public static final Category debugAddImplications =
-    Category.getInstance("daikon.PptTopLevel.addImplications");
+  public static final Logger debugAddImplications =
+    Logger.getLogger("daikon.PptTopLevel.addImplications");
 
   /** Debug tracer for data flow. **/
-  public static final Category debugFlow =
-    Category.getInstance ("daikon.flow.flow");
+  public static final Logger debugFlow =
+    Logger.getLogger ("daikon.flow.flow");
 
   /** Debug tracer for start of suppression. **/
-  public static final Category debugSuppressInit =
-    Category.getInstance ("daikon.suppress.init");
+  public static final Logger debugSuppressInit =
+    Logger.getLogger ("daikon.suppress.init");
 
   /** Debug tracer for suppression. **/
-  public static final Category debugSuppress =
-    Category.getInstance ("daikon.suppress.suppress");
+  public static final Logger debugSuppress =
+    Logger.getLogger ("daikon.suppress.suppress");
 
   /** Debug tracer for fillSuppressionTemplate. **/
-  public static final Category debugSuppressFill =
-    Category.getInstance ("daikon.suppress.fill");
+  public static final Logger debugSuppressFill =
+    Logger.getLogger ("daikon.suppress.fill");
 
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables

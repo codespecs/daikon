@@ -13,7 +13,7 @@ import daikon.derive.binary.SequencesJoinFloat;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ public class NoDuplicatesFloat
   public static boolean dkconfig_enabled = true;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicatesFloat");
+  public static final Logger debug = Logger.getLogger("daikon.inv.unary.sequence.NoDuplicatesFloat");
   int elts = 0;
 
   protected NoDuplicatesFloat(PptSlice ppt) {

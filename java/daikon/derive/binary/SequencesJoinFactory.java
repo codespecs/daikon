@@ -7,7 +7,7 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 /**
@@ -16,8 +16,8 @@ import java.util.*;
 public final class SequencesJoinFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
-  public static final Category debug =
-    Category.getInstance ("daikon.derive.binary.SequencesJoinFactory");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.derive.binary.SequencesJoinFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 

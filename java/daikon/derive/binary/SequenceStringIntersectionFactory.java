@@ -8,7 +8,7 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 // This controls derivations which use the scalar as an index into the
@@ -18,8 +18,8 @@ import java.util.*;
 public final class SequenceStringIntersectionFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
-  private static final Category debug =
-    Category.getInstance("daikon.derive.binary.SequenceStringIntersectionFactory");
+  private static final Logger debug =
+    Logger.getLogger("daikon.derive.binary.SequenceStringIntersectionFactory");
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 

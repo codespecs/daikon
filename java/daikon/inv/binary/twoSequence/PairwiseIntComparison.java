@@ -7,7 +7,7 @@ import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.Assert;
 import java.util.Iterator;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 // Requires that the lengths are the same.  Determines a comparison that
 // holds for all (a[i], b[i]) pairs.
@@ -22,8 +22,8 @@ public class PairwiseIntComparison
   /**
    * Debug tracer
    **/
-  public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseIntComparison");
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.twoSequence.PairwiseIntComparison");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

@@ -2,7 +2,7 @@ package daikon.derive;
 
 import daikon.*;
 import java.io.Serializable;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Structure that represents a derivation; can generate values and
@@ -26,7 +26,7 @@ public abstract class Derivation
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.derive.Derivation");
+  public static final Logger debug = Logger.getLogger("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.
   // It's in DerivationFactory, though. // really?

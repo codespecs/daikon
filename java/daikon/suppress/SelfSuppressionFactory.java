@@ -7,7 +7,7 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -27,8 +27,8 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   /**
    * General debug tracer.
    **/
-  public static final Category debug =
-    Category.getInstance ("daikon.suppress.SelfSuppresionFactory");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.suppress.SelfSuppresionFactory");
 
   private static final SelfSuppressionFactory theInstance =
     new SelfSuppressionFactory();

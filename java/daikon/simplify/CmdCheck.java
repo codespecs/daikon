@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import utilMDE.Assert;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * A Check command takes a given proposition and asks the Session to
@@ -14,7 +14,7 @@ import org.apache.log4j.Category;
 public class CmdCheck
   implements Cmd
 {
-  public static final Category debug = Category.getInstance("daikon.simplify.CmdCheck");
+  public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");
 
   public final String proposition;
   public boolean valid = false;

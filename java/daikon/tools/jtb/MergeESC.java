@@ -2,7 +2,7 @@ package daikon.tools.jtb;
 
 import java.io.*;
 import gnu.getopt.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import daikon.*;
 import daikon.inv.filter.JMLCompilerWorkaroundFilter;
 import daikon.inv.Invariant.OutputFormat;
@@ -60,7 +60,7 @@ class MergeESC {
 
   public final static String lineSep = System.getProperty("line.separator");
 
-  public static final Category debug = Category.getInstance("daikon.tools.jtb.MergeESC");
+  public static final Logger debug = Logger.getLogger("daikon.tools.jtb.MergeESC");
 
   public static final String useJML_SWITCH = "jml_output";
 
@@ -83,7 +83,7 @@ class MergeESC {
     boolean setLightweight = true;
 
     Daikon.output_style = OutputFormat.ESCJAVA;
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -99,7 +99,7 @@ class MergeESC {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+          LogHelper.setPriority (g.getOptarg(), LogHelper.DEBUG);
         } else if (useJML_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
           setLightweight = false;

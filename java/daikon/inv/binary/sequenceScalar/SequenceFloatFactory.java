@@ -5,13 +5,13 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 
 import java.util.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class SequenceFloatFactory {
 
   /** Main debug tracer **/
-  public static final Category debug =
-   Category.getInstance("daikon.inv.binary.sequenceScalar.SequenceFloatFactory");
+  public static final Logger debug =
+   Logger.getLogger("daikon.inv.binary.sequenceScalar.SequenceFloatFactory");
 
   // public final static boolean debugSequenceScalarFactory = false;
   // public final static boolean debugSequenceScalarFactory = true;

@@ -6,7 +6,7 @@ import daikon.*;
 import daikon.derive.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Intersection between two comparable sequences.
@@ -14,7 +14,7 @@ import org.apache.log4j.Category;
 public final class SequenceFloatIntersection
   extends BinaryDerivation
 {
-  public static final Category debug = Category.getInstance("daikon.derive.binary.SequenceFloatIntersection");
+  public static final Logger debug = Logger.getLogger("daikon.derive.binary.SequenceFloatIntersection");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

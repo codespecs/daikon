@@ -1,6 +1,6 @@
 package daikon.test;
 
-import daikon.Logger;
+import daikon.LogHelper;
 
 import junit.framework.*;
 import junit.textui.*;
@@ -23,7 +23,7 @@ public class MasterTester extends TestCase {
   }
 
   public static Test suite() {
-    Logger.setupLogs (Logger.INFO);
+    LogHelper.setupLogs (LogHelper.INFO);
 
     TestSuite result = new TestSuite();
 

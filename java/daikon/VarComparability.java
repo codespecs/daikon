@@ -2,7 +2,7 @@ package daikon;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 
@@ -27,8 +27,8 @@ import org.apache.log4j.Category;
 public abstract class VarComparability {
 
   /** Debug tracer **/
-  public static final Category debug =
-    Category.getInstance("daikon.VarComparability");
+  public static final Logger debug =
+    Logger.getLogger("daikon.VarComparability");
 
 
   public static final int NONE = 0;

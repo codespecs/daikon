@@ -9,7 +9,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
 
 import java.util.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import utilMDE.*;
 
 // This also serves as NonNull.
@@ -30,7 +30,7 @@ public class NonZero
   public static boolean dkconfig_enabled = true;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.inv.unary.scalar.NonZero");
+  public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar.NonZero");
 
   /** Smallest value seen so far. **/
   long min = Long.MAX_VALUE;

@@ -8,7 +8,7 @@ import utilMDE.*;
 import java.util.*;
 
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 public final class ThreeScalarFactory {
@@ -16,7 +16,7 @@ public final class ThreeScalarFactory {
   /**
    * Debug tracer
    **/
-  final static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
+  final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
 
 
   public final static int max_instantiate

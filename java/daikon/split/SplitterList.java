@@ -4,7 +4,7 @@ import java.util.*;
 import daikon.*;
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 // SplitterList maps from a program point name to an array of Splitter
 // objects that should be used when splitting that program point.
@@ -19,7 +19,7 @@ public abstract class SplitterList
   // /**
   //  * Debug tracer
   //  **/
-  // public static final Category debug = Category.getInstance("daikon.split.SplitterList");
+  // public static final Logger debug = Logger.getLogger("daikon.split.SplitterList");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

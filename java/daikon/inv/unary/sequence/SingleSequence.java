@@ -7,7 +7,7 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
 import daikon.suppress.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 /**
@@ -61,8 +61,8 @@ public abstract class SingleSequence
 
   public static class SubsetImpliedSuppressionFactory extends SuppressionFactory {
 
-    public static final Category debug =
-      Category.getInstance("daikon.suppress.factories.SubsetImpliedSuppressionFactory");
+    public static final Logger debug =
+      Logger.getLogger("daikon.suppress.factories.SubsetImpliedSuppressionFactory");
 
     private static final SubsetImpliedSuppressionFactory theInstance =
       new SubsetImpliedSuppressionFactory();

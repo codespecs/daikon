@@ -62,7 +62,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   Invariant ternary_2_unjust = new DummyInvariant(slice3, "2", false);
 
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     junit.textui.TestRunner.run
       (new TestSuite(DetailedStatisticsVisitorTester.class));
   }

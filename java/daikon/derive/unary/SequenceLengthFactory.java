@@ -4,7 +4,7 @@ import daikon.*;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
@@ -15,8 +15,8 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
    *
    **/
 
-  public static final Category debug =
-    Category.getInstance("daikon.derive.unary.SequenceLengthFactory");
+  public static final Logger debug =
+    Logger.getLogger("daikon.derive.unary.SequenceLengthFactory");
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     if (!SequenceLength.dkconfig_enabled) {

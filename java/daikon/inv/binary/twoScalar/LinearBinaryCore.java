@@ -7,7 +7,7 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.io.Serializable;
 
 public final class LinearBinaryCore
@@ -19,8 +19,8 @@ public final class LinearBinaryCore
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore");
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.twoScalar.LinearBinaryCore");
 
   // y == ax + b; first argument is x, second is y
   public double a = 0, b = 0;

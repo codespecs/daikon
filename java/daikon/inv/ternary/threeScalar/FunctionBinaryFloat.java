@@ -11,7 +11,7 @@ import daikon.suppress.*;
 import utilMDE.Assert;
 import java.lang.reflect.*;
 import java.util.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class FunctionBinaryFloat
   extends ThreeFloat
@@ -28,7 +28,7 @@ public class FunctionBinaryFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinaryFloat");
+  public static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.FunctionBinaryFloat");
 
   public FunctionBinaryCoreFloat core;
 
@@ -132,7 +132,7 @@ public class FunctionBinaryFloat
 /*
   static class FunctionBinarySuppressionFactory extends SuppressionFactory {
 
-    public static final Category debug = Category.getInstance ("daikon.suppress.factories.FunctionBinarySuppressionFactory");
+    public static final Logger debug = Logger.getLogger ("daikon.suppress.factories.FunctionBinarySuppressionFactory");
 
     public static final FunctionBinarySuppressionFactory theInstance =
       new FunctionBinarySuppressionFactory();

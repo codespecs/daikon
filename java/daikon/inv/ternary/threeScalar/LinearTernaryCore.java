@@ -9,7 +9,7 @@ import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class LinearTernaryCore
   implements Serializable, Cloneable
@@ -20,7 +20,7 @@ public final class LinearTernaryCore
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  final static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.LinearTernaryCore");
+  final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.LinearTernaryCore");
 
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a = 0, b = 0, c = 0;

@@ -6,17 +6,15 @@ import daikon.*;
 import daikon.inv.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
-
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
 public final class TwoFloatFactory {
 
   /** Debugging tracer. **/
-  public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar.TwoFloatFactory");
+  public static final Logger debug
+    = Logger.getLogger("daikon.inv.binary.twoScalar.TwoFloatFactory");
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.

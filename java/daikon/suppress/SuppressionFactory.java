@@ -7,7 +7,7 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -33,8 +33,8 @@ public abstract class SuppressionFactory implements Serializable {
   /**
    * General debug tracer.
    **/
-  public static final Category debug =
-    Category.getInstance ("daikon.suppress.SuppresionFactory");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.suppress.SuppresionFactory");
 
 
 

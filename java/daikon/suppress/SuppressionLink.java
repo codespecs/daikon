@@ -9,7 +9,7 @@ import java.io.ObjectStreamException;
 import java.io.InvalidObjectException;
 import java.io.IOException;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -37,8 +37,8 @@ public class SuppressionLink implements Serializable {
   /**
    * General debug tracer.
    **/
-  public static final Category debug =
-    Category.getInstance ("daikon.suppress.SuppresionLink");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.suppress.SuppresionLink");
 
   /**
    * List of Invariants that are suppressing this.suppressee. Never null.

@@ -12,7 +12,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 public final class FloatLessThan
@@ -30,8 +30,8 @@ public final class FloatLessThan
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar.FloatLessThan");
+  public static final Logger debug
+    = Logger.getLogger("daikon.inv.binary.twoScalar.FloatLessThan");
 
   private FloatValueTracker values_cache = new FloatValueTracker(8);
 

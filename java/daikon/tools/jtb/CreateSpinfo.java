@@ -2,7 +2,7 @@ package daikon.tools.jtb;
 
 import java.io.*;
 import gnu.getopt.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import daikon.*;
 import jtb.syntaxtree.*;
 import jtb.JavaParser;
@@ -37,7 +37,7 @@ class CreateSpinfo {
 
   public final static String lineSep = System.getProperty("line.separator");
 
-  public static final Category debug = Category.getInstance("daikon.tools.jtb.CreateSpinfo");
+  public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -49,7 +49,7 @@ class CreateSpinfo {
 
   public static void main (String[] args) throws Exception {
 
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -65,7 +65,7 @@ class CreateSpinfo {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+          LogHelper.setPriority (g.getOptarg(), LogHelper.DEBUG);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

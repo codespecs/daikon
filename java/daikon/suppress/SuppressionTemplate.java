@@ -6,7 +6,7 @@ import daikon.inv.Invariant;
 import java.util.*;
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
@@ -27,7 +27,7 @@ public class SuppressionTemplate {
   /**
    * General debug tracer.
    **/
-  public static final Category debug = Category.getInstance ("daikon.suppress.SuppresionTemplate");
+  public static final Logger debug = Logger.getLogger ("daikon.suppress.SuppresionTemplate");
 
   /**
    * List of invariant types we want to template for.  Comparison is

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Derived variable representing the selecting of elements of one
@@ -30,8 +30,8 @@ public final class SequencesPredicate
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  public static final Category debug
-    = Category.getInstance("daikon.derive.binary.SequencesPredicate");
+  public static final Logger debug
+    = Logger.getLogger("daikon.derive.binary.SequencesPredicate");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

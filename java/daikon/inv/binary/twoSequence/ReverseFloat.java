@@ -5,7 +5,7 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import utilMDE.Assert;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Where one sequence is the reverse of another.
@@ -18,8 +18,8 @@ public class ReverseFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.ReverseFloat");
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.twoSequence.ReverseFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

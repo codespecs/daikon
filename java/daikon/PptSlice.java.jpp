@@ -47,7 +47,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.ternary.threeScalar.*;
 #endif
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ public final class PPTSLICE1
   /**
    * Debug tracer
    **/
-  public static final Category debugSpecific = Category.getInstance("daikon." + PPTSLICE1STRING);
+  public static final Logger debugSpecific = Logger.getLogger("daikon." + PPTSLICE1STRING);
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;

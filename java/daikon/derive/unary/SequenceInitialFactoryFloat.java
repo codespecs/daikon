@@ -4,12 +4,12 @@ package daikon.derive.unary;
 
 import daikon.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class SequenceInitialFactoryFloat extends UnaryDerivationFactory {
 
-  public static final Category debug =
-    Category.getInstance("daikon.derive.binary.SequenceInitialFactory");
+  public static final Logger debug =
+    Logger.getLogger("daikon.derive.binary.SequenceInitialFactory");
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");

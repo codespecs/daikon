@@ -8,7 +8,7 @@ import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -24,8 +24,8 @@ public final class EltNonZeroFloat
   /**
    * Debug tracer.
    **/
-  public static final Category debug =
-    Category.getInstance("daikon.inv.unary.sequence.EltNonZeroFloat");
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.unary.sequence.EltNonZeroFloat");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

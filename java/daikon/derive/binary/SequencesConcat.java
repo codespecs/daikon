@@ -5,7 +5,7 @@ import daikon.derive.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public final class SequencesConcat
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesConcat");
+  public static final Logger debug = Logger.getLogger("daikon.derive.binary.SequencesConcat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

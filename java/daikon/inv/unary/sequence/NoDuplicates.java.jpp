@@ -45,7 +45,7 @@ import daikon.derive.binary.SEQUENCESJOIN;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -66,7 +66,7 @@ public class CLASSNAME
   public static boolean dkconfig_enabled = true;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.inv.unary.sequence." + CLASSSTRING);
+  public static final Logger debug = Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);
   int elts = 0;
 
   protected CLASSNAME(PptSlice ppt) {

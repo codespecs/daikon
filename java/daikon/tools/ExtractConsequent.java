@@ -3,7 +3,7 @@ package daikon.tools;
 import java.util.*;
 import java.io.*;
 import java.lang.Math;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import gnu.getopt.*;
 import utilMDE.UtilMDE;
 import org.apache.oro.text.regex.*;
@@ -22,7 +22,7 @@ import daikon.inv.Invariant.OutputFormat;
  **/
 public class ExtractConsequent {
 
-  public static final Category debug = Category.getInstance ("daikon.ExtractConsequent");
+  public static final Logger debug = Logger.getLogger ("daikon.ExtractConsequent");
   public static final String lineSep = Global.lineSep;
   private static Perl5Matcher re_matcher = new Perl5Matcher();
   private static Perl5Compiler re_compiler = new Perl5Compiler();
@@ -44,7 +44,7 @@ public class ExtractConsequent {
   public static void main(String[] args)
     throws FileNotFoundException, IOException, ClassNotFoundException
   {
-    daikon.Logger.setupLogs(daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -76,7 +76,7 @@ public class ExtractConsequent {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

@@ -2,7 +2,7 @@ package daikon;
 
 import daikon.derive.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -20,7 +20,7 @@ import utilMDE.*;
 public final class ValueTuple implements Cloneable {
 
   /** Debug tracer **/
-  public static Category debug = Category.getInstance("daikon.ValueTuple");
+  public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
 

@@ -2004,7 +2004,7 @@ public final class FeatureExtractor {
   // the following line gets rid of some extra output that
   // otherwise gets dumped to System.out:
   static {
-    Logger.setupLogs(false ? Logger.DEBUG : Logger.INFO);
+    LogHelper.setupLogs(false ? LogHelper.DEBUG : LogHelper.INFO);
   }
 
   // the THRESHOLD is zero

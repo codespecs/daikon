@@ -9,7 +9,7 @@ import daikon.inv.binary.twoSequence.SeqComparisonFloat;
 import daikon.suppress.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 
@@ -43,11 +43,11 @@ public final class Equality
    // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20021231L;
 
-  public static final Category debug =
-    Category.getInstance ("daikon.inv.Equality");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.inv.Equality");
 
-  public static final Category debugPostProcess =
-    Category.getInstance ("daikon.inv.Equality.postProcess");
+  public static final Logger debugPostProcess =
+    Logger.getLogger ("daikon.inv.Equality.postProcess");
 
   /**
    * How many samples this has seen.

@@ -19,7 +19,7 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   Invariant null_uninteresting = new DummyInvariant(slice0, "0", true, false, true);
 
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 

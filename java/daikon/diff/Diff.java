@@ -117,7 +117,7 @@ public final class Diff {
 
     boolean optionSelected = false;
 
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
 
     LongOpt[] longOpts = new LongOpt[] {
       new LongOpt(INV_SORT_COMPARATOR1_SWITCH,

@@ -12,7 +12,7 @@ public class UnionVisitorTester extends TestCase {
   private Diff diff = new Diff(true);
 
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (Logger.INFO);
+    daikon.LogHelper.setupLogs (LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(UnionVisitorTester.class));
   }
 

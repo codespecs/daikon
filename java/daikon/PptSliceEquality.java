@@ -3,7 +3,7 @@ package daikon;
 import daikon.inv.*;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 /**
@@ -17,8 +17,8 @@ public class PptSliceEquality
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20021231L;
 
-  public static final Category debug =
-    Category.getInstance ("daikon.PptSliceEquality");
+  public static final Logger debug =
+    Logger.getLogger ("daikon.PptSliceEquality");
 
   PptSliceEquality(PptTopLevel parent) {
      super(parent, parent.var_infos);

@@ -13,7 +13,7 @@ import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.util.*;
 
 public class SubSequenceFloat
@@ -24,8 +24,8 @@ public class SubSequenceFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSequenceFloat");
+  private static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.twoSequence.SubSequenceFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -522,7 +522,7 @@ public class SubSequenceFloat
 
   static class SubSequenceSuppressionFactory extends SuppressionFactory {
 
-    public static final Category debug = Category.getInstance ("daikon.suppress.factories.SubSequenceSuppressionFactory");
+    public static final Logger debug = Logger.getLogger ("daikon.suppress.factories.SubSequenceSuppressionFactory");
 
     private static final SubSequenceSuppressionFactory theInstance =
       new SubSequenceSuppressionFactory();

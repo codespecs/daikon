@@ -7,7 +7,7 @@ import daikon.split.misc.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * This class creates Splitters from a .spinfo file. The public method is
@@ -19,7 +19,7 @@ import org.apache.log4j.Category;
 //      log error messages from compilation of splitters
 public class SplitterFactory {
 
-  public static final Category debug = Category.getInstance("daikon.split.SplitterFactory");
+  public static final Logger debug = Logger.getLogger("daikon.split.SplitterFactory");
   // These are not Global.regexp_matcher and Global.regexp_compiler
   // because you can't reference fields of Global in your static
   // initializer if you have fields that are set via dkconfig.

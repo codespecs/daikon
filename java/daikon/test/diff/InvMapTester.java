@@ -18,7 +18,7 @@ public class InvMapTester extends TestCase {
   private List invsC = new ArrayList();
 
   public static void main(String[] args) {
-    daikon.Logger.setupLogs(Logger.INFO);
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(InvMapTester.class));
   }
 

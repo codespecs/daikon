@@ -2,7 +2,7 @@ package daikon.simplify;
 
 import java.io.*;
 import java.util.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import utilMDE.Assert;
 
 /**
@@ -26,7 +26,7 @@ public class SessionManager
   /**
    * Debug tracer common to all Simplify classes
    **/
-  public static final Category debug = Category.getInstance("daikon.simplify");
+  public static final Logger debug = Logger.getLogger("daikon.simplify");
 
   // Deprecated method for setting the debug flag.
   //    // Enable to dump input and output to the console
@@ -144,7 +144,7 @@ public class SessionManager
   public static void main(String[] args)
     throws Exception
   {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     SessionManager m = new SessionManager();
     CmdCheck cc;
 

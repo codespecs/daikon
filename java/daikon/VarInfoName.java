@@ -4,7 +4,7 @@ import daikon.inv.Invariant.OutputFormat;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.lang.ref.WeakReference;
 import java.io.Serializable;
@@ -30,8 +30,8 @@ public abstract class VarInfoName
   implements Serializable, Comparable
 {
 
-  /** Debugging Category **/
-  public static Category debug = Category.getInstance("daikon.VarInfoName");
+  /** Debugging Logger **/
+  public static Logger debug = Logger.getLogger("daikon.VarInfoName");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -2133,7 +2133,7 @@ public abstract class VarInfoName
     /**
      * Debug tracer
      **/
-    public static final Category debug = Category.getInstance("daikon.inv.Invariant.print.QuantHelper");
+    public static final Logger debug = Logger.getLogger("daikon.inv.Invariant.print.QuantHelper");
 
     /**
      * A FreeVar is very much like a Simple, except that it doesn't

@@ -84,7 +84,7 @@ public class InvariantFormatTester extends TestCase
    *        is the correct output
    **/
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
 
     goalGenerationForNext = false;
     if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals"))

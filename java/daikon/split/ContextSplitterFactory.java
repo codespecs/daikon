@@ -6,7 +6,7 @@ import daikon.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * This factory creates Splitters from map files.  The splitters
@@ -18,7 +18,7 @@ public class ContextSplitterFactory
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.split.ContextSplitterFactory");
+  public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 
   /** Callsite granularity at the line level */
   public static final int GRAIN_LINE = 0;

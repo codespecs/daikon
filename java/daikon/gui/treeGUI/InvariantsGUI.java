@@ -44,7 +44,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   static JFrame ctrlPanel=null;
 
   public static void main( String args[] ) {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     if (args.length > 1) {
       showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file.\nPlease try running the gui again." );
       System.exit( 0 );
@@ -57,7 +57,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   public static void start(String dirName) {
     // InvariantsGUI gui;
     if (gui==null) {
-      daikon.Logger.setupLogs (daikon.Logger.INFO);
+      daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
       gui = new InvariantsGUI( 1, dirName );
     } else {
       gui.show();

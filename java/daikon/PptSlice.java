@@ -4,7 +4,7 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.suppress.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -41,13 +41,13 @@ public abstract class PptSlice
   public boolean debugged;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.PptSlice");
+  public static final Logger debug = Logger.getLogger("daikon.PptSlice");
 
   /** Debug tracer for debugging both this and PptSlices **/
-  public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
-  public static final Category debugFlow = Category.getInstance("daikon.flow.flow");
+  public static final Logger debugGeneral = Logger.getLogger("daikon.PptSlice.general");
+  public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
-  public static final Category debugGuarding = Category.getInstance("daikon.guard");
+  public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
 
   /** This is a slice of the 'parent' ppt. */

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Derived variable representing the "join" of two sequences.  That
@@ -34,7 +34,7 @@ public final class SequencesJoinFloat
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesJoinFloat");
+  public static final Logger debug = Logger.getLogger("daikon.derive.binary.SequencesJoinFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

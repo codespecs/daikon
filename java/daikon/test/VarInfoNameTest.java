@@ -31,7 +31,7 @@ public class VarInfoNameTest
 
   // for convenience
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(VarInfoNameTest.class));
   }
 

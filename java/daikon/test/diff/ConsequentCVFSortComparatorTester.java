@@ -12,7 +12,7 @@ import daikon.test.*;
 public class ConsequentCVFSortComparatorTester extends TestCase {
 
   public static void main(String[] args) {
-    daikon.Logger.setupLogs (Logger.INFO);
+    daikon.LogHelper.setupLogs (LogHelper.INFO);
     junit.textui.TestRunner.run
       (new TestSuite(ConsequentCVFSortComparatorTester.class));
   }

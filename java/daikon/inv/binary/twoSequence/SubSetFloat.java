@@ -13,7 +13,7 @@ import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class SubSetFloat
   extends TwoSequenceFloat
@@ -23,8 +23,8 @@ public class SubSetFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSetFloat");
+  private static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.twoSequence.SubSetFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -255,7 +255,7 @@ public class SubSetFloat
 
   static class SubSetSuppressionFactory extends SuppressionFactory {
 
-    public static final Category debug = Category.getInstance ("daikon.suppress.factories.SubSetSuppressionFactory");
+    public static final Logger debug = Logger.getLogger ("daikon.suppress.factories.SubSetSuppressionFactory");
 
     private static final SubSetSuppressionFactory theInstance =
       new SubSetSuppressionFactory();

@@ -1,10 +1,8 @@
 package daikon;
 
-import org.apache.log4j.Category;
-
 import java.util.*;
 import java.io.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -24,7 +22,7 @@ public final class VarInfoAux
   /**
    * General debug tracer.
    **/
-  public static final Category debug = Category.getInstance("daikon.VarInfoAux");
+  public static final Logger debug = Logger.getLogger("daikon.VarInfoAux");
 
   /**
    * Whether the elements in this collection are all the meaningful

@@ -38,7 +38,7 @@ import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -56,8 +56,8 @@ public final class CLASSNAME
   /**
    * Debug tracer.
    **/
-  public static final Category debug =
-    Category.getInstance("daikon.inv.unary.sequence." + CLASSSTRING);
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);
 
 
   // We are Serializable, so we specify a version to allow changes to
