@@ -309,9 +309,43 @@ public final class CLASSNAME
     String arg2_name = arg2.name_using(format, arg2vi);
 
     if (format == OutputFormat.DAIKON
-        || format == OutputFormat.JML
-        || format == OutputFormat.DBCJAVA) {  // RRN: verify the validity of this.
+        || format == OutputFormat.JML) {
       return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2];
+    }
+
+    if (format == OutputFormat.DBCJAVA) {
+
+      if (methodname[1].equals(" || ")
+          || methodname[1].equals(" && ")) {
+        return
+          "(" + argresult_name + " != 0)"
+          + " == "
+          + methodname[0]
+          + "(" + arg1_name + " != 0)"
+          + methodname[1]
+          + "(" + arg2_name + " != 0)"
+          + methodname[2];
+      }
+      if (methodname[1].equals(" * ")
+          || methodname[1].equals(" / ")
+          || methodname[1].equals(" % ")
+          || methodname[1].equals(" | ")
+          || methodname[1].equals(" & ")
+          || methodname[1].equals(" ^ ")
+          || methodname[1].equals(" << ")
+          || methodname[1].equals(" >> ")
+          || methodname[1].equals(" >>> ")) {
+        return
+          argresult_name + " == (" + arg1_name + methodname[1] + arg2_name + ")";
+      }
+      if (methodname[0].equals("java.lang.Math.min(")
+          || methodname[0].equals("java.lang.Math.max(")
+          || methodname[0].equals("java.lang.Math.pow(")
+          || methodname[0].equals("utilMDE.MathMDE.gcd(")
+          || methodname[0].equals("utilMDE.MathMDE.logicalXor(")) {
+        return argresult_name + " == " + methodname[0] + arg1_name + ", " + arg2_name + ")";
+      }
+      return wrapper.format_unimplemented(OutputFormat.DBCJAVA);
     }
 
     if (format == OutputFormat.IOA) {
