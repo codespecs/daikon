@@ -128,22 +128,6 @@ public final class Runtime {
       ps.print("null");
       return;
     }
-    // There is a better solution: call java.lang.System.identityHashCode().
-    // // I must call java.lang.Object.hashCode() rather than some overriding
-    // // version that might be instrumented (which will mess up the trace
-    // // file) or that might err (calling hashCode in a constructor can err).
-    // // There's no getting around errors, so catch them here.
-    // // For now my solution is not to instrument hashCode(); that doesn't
-    // // help if hashCode calls other instrumented methods, but let's hope
-    // // that doesn't happen.
-    // try {
-    //   ps.print(x.hashCode());
-    //   // ps.print(x.getClass().getName() + "@" + Integer.toHexString(x.hashCode()));
-    // } catch (Throwable e) {
-    //   // (new java.text.DateFormat()).hashCode() throws an Exception
-    //   ps.print("error");
-    // }
-
     ps.print(java.lang.System.identityHashCode(x));
   }
 
