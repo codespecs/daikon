@@ -1,0 +1,94 @@
+If you have any questions, can suggest ways to improve the documentation,
+find bugs in the system, or have suggestions for its improvement, please
+let me know and I'll do my best to help.
+
+
+Using the invariant detection engine
+====================================
+
+Detecting invariants involves three steps:
+ 1. Instrument the program to add instructions that output variable values.
+ 2. Run the program (probably using a test suite) to create data trace files.
+ 3. Run the invariant engine over the data trace files to detect invariants.
+
+Step 1:  Instrumentation
+------------------------
+
+There are three different front ends -- for C, Java, and Lisp -- which add
+instrumentation instructions.
+
+C front end:
+
+  The instrumenter is named "edgcpfe" and is currently found in 
+  /projects/se/people/mernst/vortex-edg-bp_invariants/vortex/C++/front-end/release/bin/edgcpfe.
+  [[This should change; and I'm not even sure that version works.]]
+
+  a. Make a copy of your source tree.
+  b. Instrument each file in your source tree;
+       edgcpfe -D__ANSIC__ -D__sparc <filename>
+     creates file foo.int.c (in directory /release/dump_trace_src, maybe?).
+  c. Do one of the following:
+      * rename that file to the original name, or
+      * change the Makefile to reference the new name.
+  d. Edit the makefile so that you link against the object file which
+     implements the instrumentation file.  [[What is its name?  Where can
+     it be found?]]
+  e. Build your program in the usual way, perhaps by running "make"; this
+     creates an instrumented executable.
+
+Lisp front end:
+  (load "invariants.lisp")	; code for writing to logs
+  (load "gries-helper.lisp")	; definitions for the Gries-style syntax;
+                                ;   also instrumentation code
+  ;; Add instrumentation code to the beginning and end of each function, and
+  ;; to each loop head.
+  ;; The instrumentation writes the values of all the live variables to a file.
+  (instrument-file "gries.lisp" "gries-instrumented.lisp")
+  (load "gries-instrumented.lisp")
+  ;; run all the test-* functions; test-* function creates one *.inv file
+  (test-all)
+
+Java front end:
+  This is still under development.
+  When complete, there will be two options:
+    * first instrument (step 1), then run the program (step 2)
+    * an integrated command that does both of these steps
+ not be separate steps for instrumentation and
+    running the program; instead, one command will accomplish both, though
+
+Step 2:  Run the program
+------------------------
+
+You should be able to run the modified program in just the same way you did
+before; the only behavioral change will be writing a .dtrace file (for the
+Lisp and Java front ends) or a .trace file (for the C front end).
+
+Step 3:  Detect invariants in the data trace files
+--------------------------------------------------
+
+Run the Python interpreter using the shell command "python" or the Emacs
+command M-x run-python.  It is convenient to run Python in the directory
+containing invariants.py and the other Python source files, so that you
+don't have to set the PYTHONPATH environment variable.  You can download
+Python from http://www.python.org/.
+
+In Python, issue the following commands:
+
+  import invariants		# load the invariants.py file
+  invariants.read_invs('p*.dtrace', 'clear first')	# read the trace files
+  invariants.all_numeric_invariants()	# compute and print invariants
+
+read_invs takes an optional regular expression for function names, so that
+only certain functions are processed.  (This can make the invariant
+detection engine run faster.)  For details, see its documentation string in
+its definition in invariants.py.
+
+To do all this from a single shell command, do the following:
+  python -O -c "__debug__ = 0; import invariants; invariants.read_invs('$inv/jake/testsuite/replace/traces/*.trace',1); invariants.all_numeric_invariants()"
+
+In the output, an "ORIG-" prefix refers to the original value of a formal
+parameter, for (var) parameters possibly modified in the function body.
+":::BEGIN", ":::END", and ":::LOOP" are tags identifying at which program
+the instrumentation was inserted; invariants are program-point-specific.
+There is some redundancy in the output (e.g., both "Z = max(Y, X)" and
+"Z = max(X, Y)" are reported, as are both "Y > X" and "X < Y").
