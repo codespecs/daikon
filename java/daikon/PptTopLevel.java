@@ -1007,7 +1007,7 @@ public class PptTopLevel
   /**
    * Remove a slice from this PptTopLevel.
    **/
-  private void removeSlice (PptSlice slice) {
+  public void removeSlice (PptSlice slice) {
     Object o = views.remove(Arrays.asList(slice.var_infos));
     Assert.assertTrue (o != null);    
   }
@@ -2662,7 +2662,7 @@ public class PptTopLevel
       PptSlice newSlice = slice.cloneAllPivots();
       if (slice != newSlice) {
         pivoted.add (newSlice);
-        iSlices.remove(); // Cuz the key is now wrong
+        iSlices.remove(); // Because the key is now wrong
       }
     }
 
@@ -2674,7 +2674,6 @@ public class PptTopLevel
         debugEqualTo.debug ("  Readded: " + oPivoted);
       }
     }
-
 
   }
 
