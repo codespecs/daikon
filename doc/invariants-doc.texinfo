@@ -442,6 +442,18 @@
    
     If the auxillary information (eg, order matters) doesn't match then
     no comparison is made at all.
+@item SeqComparisonString
+    Represents invariants between two String sequences.  If order
+    matters for each variable (which it does by default), then the
+    sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+    where [cmp] can be == < <= > >=.
+   
+    If order doesn't matter for each variable, then the sequences
+    are compared to see if they are set equivalent.  Prints as
+    "x[] == y[]"
+   
+    If the auxillary information (eg, order matters) doesn't match then
+    no comparison is made at all.
 @item SeqFloatComparison
     Represents double scalars with an invariant to each element of
     double sequences.  Prints as "x[] elements [cmp] y" where x is a
