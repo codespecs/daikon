@@ -59,6 +59,26 @@ public abstract class Invariant implements java.io.Serializable {
   }
 
   // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
+  /**
+   * Given that this invariant has been true for all values seen so far,
+   * this method returns the probability that that situation has occurred
+   * by chance alone.  The result is a value between 0 and 1 inclusive.  0
+   * means that this invariant could never have occurred by chance alone;
+   * we are fully confident that its truth is no coincidence.  1 means that
+   * the invariant is certainly a happenstance, so the truth of the
+   * invariant is not relevant and it should not be reported.  Values
+   * between 0 and 1 give differing confidences in the invariant.
+   * <p>
+   *
+   * As an example, if the invariant is "x!=0", and only one value, 22, has
+   * been seen for x, then the conclusion "x!=0" is not justified.  But if
+   * there have been 1,000,000 values, and none of them were 0, then we may
+   * be confident that the property "x!=0" is not a coincidence.
+   * <p>
+   *
+   * This method need not check the value of variable no_invariant, as the
+   * caller does that.
+   **/
   public double getProbability() {
     if (no_invariant)
       return PROBABILITY_NEVER;
@@ -81,7 +101,12 @@ public abstract class Invariant implements java.io.Serializable {
                   );
     return result;
   }
-  /** No need to check for no_invariant, as caller does that. **/
+
+  /**
+   * This method computes the probability that this invariant occurred by chance.
+   * Users should use getProbability() instead.
+   * @see     java.util.Hashtable#contains(java.lang.Object)
+   **/
   protected abstract double computeProbability();
 
   public boolean justified() {
@@ -193,7 +218,7 @@ public abstract class Invariant implements java.io.Serializable {
    * IOA Representation
    **/
   public abstract String format_ioa(String classname);
-				    
+
   // This should perhaps be merged with some kind of PptSlice comparator.
   /**
    * Compare based on arity, then printed representation.
@@ -260,7 +285,10 @@ public abstract class Invariant implements java.io.Serializable {
    * mathematical formula.  Does not consider the context such as
    * variable names, confidences, sample counts, value counts, or
    * related quantities.  As a rule of thumb, if two invariants format
-   * the same, this method returns true.
+   * the same, this method returns true.  Furthermore, in many cases,
+   * if an invariant does not involve computed constants (as "x&gt;c" and
+   * "y=ax+b" do for constants a, b, and c), then this method vacuously
+   * returns true.
    *
    * @exception RuntimeException if other.class != this.class
    **/
