@@ -2141,8 +2141,10 @@ public class PptTopLevel extends Ppt {
         && (open_paren_pos != 0)) {
       int close_paren_pos = better_name.indexOf(")");
       int colon_pos = better_name.indexOf(":::");
+      String args = better_name.substring(open_paren_pos, close_paren_pos+1);
+      String java_args = UtilMDE.arglistFromJvm(args);
       better_name = better_name.substring(0, open_paren_pos)
-        + UtilMDE.arglistFromJvm(better_name.substring(open_paren_pos, close_paren_pos+1))
+        + ((java_args != null) ? java_args : args)
         + better_name.substring(colon_pos);
     }
 
