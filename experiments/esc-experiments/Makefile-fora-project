@@ -1,0 +1,143 @@
+# This is a -*- Makefile -*- which each subdirectory (project) will include
+
+## Complete usage:
+##     make reset-stackar-java compile data daikon merge esc
+
+DAIKON_OPTS=--suppress_cont
+
+## Copied from another makefile; uncomment as needed
+# DAIKON = java -mx128m daikon.Daikon
+# DFEJ = dfej +E
+# JAVAC := jikes -g +E +F
+INV = $(HOME)/research/invariants
+# TESTS = $(INV)/tests
+# SCRIPTS = $(INV)/scripts
+# MODBIT_MUNGE = $(SCRIPTS)/modbit-munge.pl
+# TRACE_UNTRUNCATE = $(SCRIPTS)/trace-untruncate
+TRACE_PURGE_FNS = $(SCRIPTS)/trace-purge-fns.pl
+# TRACE_PURGE_VARS = $(SCRIPTS)/trace-purge-vars.pl
+DAIKON_JAVA = $(INV)/daikon/Daikon.java
+
+default: help
+
+help:
+	@echo "choose a target"
+
+all: reset-scratch copy-unchanged instrument compile data txt-esc merge
+
+#reset-stackar-java:
+#	cd DataStructures; rm StackAr.java; ln -s StackAr.java-unannotated StackAr.java
+
+#esc: StackAr.esc
+
+#data: daikon-output/StackAr.dtrace
+
+#daikon: StackAr.txt-esc
+
+###########################################################################
+
+SCRATCH_FOR_DAIKON?=/tmp/esc-experiments/${PROJECT}
+
+reset-scratch:
+	@echo
+	@echo \#\#\# reset-scratch
+	@echo
+	rm -rf daikon-java
+	rm -rf daikon-output
+	rm -rf ${SCRATCH_FOR_DAIKON}
+	mkdir -p ${SCRATCH_FOR_DAIKON}/daikon
+	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-java
+	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-output
+
+# copy files which are needed but not instrumented
+# put them in /tmp and in .
+copy-unchanged: reset-scratch
+	@echo
+	@echo \#\#\# copy-unchanged
+	@echo
+	cd .. && cp -pP --target-directory=${SCRATCH_FOR_DAIKON}/ ${SOURCE_UNCHANGED} 
+	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_UNCHANGED} 
+
+# instument files under detection
+# also copy them to . for later merging
+instrument: copy-unchanged reset-scratch
+	@echo
+	@echo \#\#\# instrument
+	@echo
+	dfej -classpath ../:${CLASSPATH} $(patsubst %,../%,${SOURCE_TO_DFEJ})
+	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_TO_DFEJ}
+
+# compile the files in /tmp
+compile: instrument
+	@echo
+	@echo \#\#\# compile
+	@echo
+	cd ${SCRATCH_FOR_DAIKON} && jikes `find . -name '*.java'`
+
+# run the program under inspection
+# StackAr/StackAr.dtrace: daikon-java/DataStructures/StackArTester.java daikon-java/DataStructures/StackAr.java
+data: compile
+	@echo
+	@echo \#\#\# data
+	@echo
+	java -classpath ${SCRATCH_FOR_DAIKON}:${CLASSPATH} ${MAIN_RUN}
+
+# StackAr.txt-daikon: StackAr/StackAr.dtrace $(DAIKON_JAVA)$
+txt-daikon: ${PROJECT}.txt-daikon
+${PROJECT}.txt-daikon: $(DAIKON_JAVA)
+	@echo
+	@echo \#\#\# txt-daikon
+	@echo
+	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@
+	../remove-conditional-ppts.pl $@
+
+# StackAr.txt-esc: daikon-output/StackAr.dtrace $(DAIKON_JAVA)
+txt-esc: ${PROJECT}.txt-esc
+${PROJECT}.txt-esc: $(DAIKON_JAVA)
+	@echo
+	@echo \#\#\# txt-esc
+	@echo
+	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@
+	../remove-conditional-ppts.pl $@
+
+#../DataStructures/StackAr.java-escannotated: txt-esc
+PWD:=$(shell pwd)
+merge:
+	@echo
+	@echo \#\#\# merge
+	@echo
+	cd ${PACKAGE} && merge-esc.pl ${PWD}/${PROJECT}.txt-esc
+	cd ${PACKAGE} && ls *.java | perl -p -e 's/^(.*)$$/mv \1 \1-unannotated/' | sh
+	cd ${PACKAGE} && ls *.java-escannotated | perl -p -e 's/^(.*)-escannotated$$/mv \1-escannotated \1/' | sh
+
+# run escjava on the annontated files
+# StackAr.esc: DataStructures/StackAr.java-escannotated
+esc:
+	escjava ${SOURCE_TO_DFEJ} > StackAr.esc
+
+# ###########################################################################
+
+# ## Extras that should be patterned after the above at some point.
+
+# daikon-output/StackAr-init.dtrace: daikon-output/StackAr.dtrace
+# 	cp -pf $< $@
+# 	trace-purge-fns.pl -v '<init>' $@
+
+# daikon-init: daikon-output/StackAr-init.dtrace
+# 	java daikon.Daikon ${DAIKON_OPTS} $< daikon-output/DataStructures/*.decls -o StackAr-init.inv > StackAr-init.txt
+
+# daikon-output/StackAr-makeEmpty.dtrace: daikon-output/StackAr.dtrace
+# 	cp -pf $< $@
+# 	trace-purge-fns.pl -v 'makeEmpty' $@
+
+# daikon-makeempty: daikon-output/StackAr-makeEmpty.dtrace
+# 	java daikon.Daikon ${DAIKON_OPTS} $< daikon-output/DataStructures/*.decls -o StackAr-init.inv > StackAr-makeEmpty.txt
+
+# daikon-output/StackAr-push.dtrace: daikon-output/StackAr.dtrace
+# 	cp -pf $< $@
+# 	trace-purge-fns.pl -v 'push' $@
+
+# daikon-push: daikon-output/StackAr-push.dtrace
+# 	java daikon.Daikon ${DAIKON_OPTS} $< daikon-output/DataStructures/*.decls -o StackAr-init.inv > StackAr-push.txt
+
+# ###########################################################################
