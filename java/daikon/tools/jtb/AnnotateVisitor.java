@@ -298,12 +298,12 @@ class AnnotateVisitor extends DepthFirstVisitor {
     if (nonnull_inv != null) {
       num_invs--;
       requires_invs[old_size + num_invs] = nonnull_inv;
-      System.out.println("Filled in " + (old_size + num_invs));
+      // System.out.println("Filled in " + (old_size + num_invs));
     }
     if (nonnullelements_inv != null) {
       num_invs--;
       requires_invs[old_size + num_invs] = nonnullelements_inv;
-      System.out.println("Filled in " + (old_size + num_invs));
+      // System.out.println("Filled in " + (old_size + num_invs));
     }
     Assert.assertTrue(num_invs == 0);
     for (int i=0; i<requires_invs.length; i++) {
@@ -1131,9 +1131,8 @@ class AnnotateVisitor extends DepthFirstVisitor {
       varname += "[].class";
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // This means that we found a variable in the source code that is
-        // not computed by Daikon.
-        System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
+        // We found a variable in the source code that is not computed by Daikon.
+        // System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
       } else {
         Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
