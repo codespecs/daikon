@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2003-10-08 12:12:12 mernst>
+# Time-stamp: <2004-07-10 13:35:16 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -183,10 +183,9 @@ sub unescape_comments ( $ ) {
 
     # Convert string concatenation ("a" + "b") into single string ("ab").
     while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
-    # Remove "# 22" lines.
-    s/^\# [0-9]+ ".*"($|\n)//g;	# don't leave blank line at start of file
-    s/(\n)\# [0-9]+ ".*"($|\n)/$1$2/g;
-
+    # Remove "# 22" lines.  (Turn them into blank lines that are removed later.)
+    # The while loop is because there may be many such lines adjacent.
+    while (s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/g) { }
 
     ## This is no longer necessary, because I use "-traditional" cpp flag.
     # ## Remove extra horizontal space
