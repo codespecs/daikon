@@ -90,14 +90,14 @@ public class SeqComparison
   }
 
   public String format_using(OutputFormat format) {
-    String name1 = var1().name.name_using(format);
-    String name2 = var2().name.name_using(format);
     String comparator = IntComparisonCore.format_comparator
       (format, can_be_lt, can_be_eq, can_be_gt);
 
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.JAVA))
     {
+      String name1 = var1().name.name_using(format);
+      String name2 = var2().name.name_using(format);
       return name1 + " " + comparator + " " + name1 + " (lexically)";
     }
 
@@ -105,6 +105,8 @@ public class SeqComparison
       if (var1().isIOASet() || var2().isIOASet()) {
 	return "Not valid for Sets: " + format();
       }
+      String name1 = var1().name.name_using(format);
+      String name2 = var2().name.name_using(format);
       return name1 + " " + comparator + " " + name2 + " ***";
     }
 
