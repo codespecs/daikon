@@ -291,10 +291,9 @@ public abstract class PptSlice
 
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
-    Assert.assertTrue (invs.contains(inv), "inv " + inv + " not in ppt "
-                       + name());
     boolean removed = invs.remove(inv);
-    Assert.assertTrue(removed);
+    if (Assert.enabled && !removed)
+      Assert.assertTrue (removed, "inv " + inv + " not in ppt " + name());
     // This increment could also have been in Invariant.destroy().
     Global.falsified_invariants++;
     if (invs.size() == 0) {
