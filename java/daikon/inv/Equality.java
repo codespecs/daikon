@@ -11,24 +11,34 @@ import java.util.*;
 // Note that this Invariant is used in a *very* different way from
 // the same-named on in V2.  In V2, this is just for printing.  In V3,
 // this does all the canonicalizing, etc.
+
+// We don't need all these implementation details in the Javadoc that is
+// reproduced in the Daikon user manual!
+//
+// During checking, Equality keeps track of variables that are
+// comparable and equal, so we only need to instantiate (other)
+// invariants for one member of each Equal set, the leader.
+//
+// During postProcessing, each instance of Equality instantiates into
+// displaying several equality Comparison invariants ("x == y", "x ==
+// z").  Equality invariants have leaders, which are the canonical
+// forms of their variables.  In the previous example, x is the
+// leader.  Equality invariants sort their variables by index ordering
+// during checking.  During printing, however, equality invariants may
+// "pivot" -- that is, switch leaders if the current leader wouldn't
+// be printed because it was not an interesting variable.  Notice that
+// when pivoting, all the other invariants based on this.leader also
+// need to be pivoted.
+
+
 /**
- * Keeps track of sets of variables that are equal.<p>
+ * Keeps track of sets of variables that are equal.  Other invariants are
+ * instantiated for only one member of the Equality set, the leader.  If
+ * variables <samp>x</samp>, <samp>y</samp>, and <samp>z</samp> are members
+ * of the Equality set and <samp>x</samp> is chosen as the leader, then
+ * the Equality will internally convert into binary comparison invariants
+ * that print as <samp>x == y</samp> and <samp>x == z</samp>.
  *
- * During checking, Equality keeps track of VarInfos that are
- * comparable and equal, so we only need to instantiate (other)
- * invariants for one member of each Equal set, the leader.  See
- * equality notes in this directory.<p>
- *
- * During postProcessing, each instance of Equality instantiates into
- * displaying several equality Comparison invariants ("x == y", "x ==
- * z").  Equality invariants have leaders, which are the canonical
- * forms of their variables.  In the previous example, x is the
- * leader.  Equality invariants sort their variables by index ordering
- * during checking.  During printing, however, equality invariants may
- * "pivot" -- that is, switch leaders if the current leader wouldn't
- * be printed because it was not an interesting variable.  Notice that
- * when pivoting, all the other invariants based on this.leader also
- * need to be pivoted.
  **/
 public final class Equality
   extends Invariant

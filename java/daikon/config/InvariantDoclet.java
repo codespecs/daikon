@@ -208,6 +208,11 @@ public class InvariantDoclet
       comment = UtilMDE.replaceString (comment, "}", "@}");
       comment = UtilMDE.replaceString (comment, "<br>", "@*");
       comment = UtilMDE.replaceString (comment, "<p>", "@*@*");
+      comment = UtilMDE.replaceString (comment, "<samp>", "@samp{");
+      comment = UtilMDE.replaceString (comment, "</samp>", "}");
+      comment = UtilMDE.replaceString (comment, "<code>", "@code{");
+      comment = UtilMDE.replaceString (comment, "</code>", "}");
+      
 
       if (dc.name().startsWith ("FunctionBinary")) {
         String[] parts = dc.name().split ("[._]");
@@ -247,7 +252,7 @@ public class InvariantDoclet
         out.println ();
         out.println("This invariant is not enabled by default.  "
                     + "See the configuration option");
-        out.println(dc + ".enabled");
+        out.println("@samp{" + dc + ".enabled}.");
       }
 
       //get a list of any other configuration variables
@@ -270,8 +275,10 @@ public class InvariantDoclet
         for (int i = 0; i < config_vars.size(); i++) {
           out.print("    @item ");
           FieldDoc f = (FieldDoc) config_vars.get (i);
-          out.println(UtilMDE.replaceString(f.qualifiedName(),
-                                            Configuration.PREFIX, ""));
+          out.println("@samp{" +
+		      UtilMDE.replaceString(f.qualifiedName(),
+                                            Configuration.PREFIX, "")
+		      + "}");
         }
         out.println("    @end itemize");
       }

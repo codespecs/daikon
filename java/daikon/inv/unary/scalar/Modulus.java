@@ -7,8 +7,9 @@ import utilMDE.*;
 import java.util.Iterator;
 
 /**
- * Represents the invariant "x == r (mod m)" where x is a long scalar, r is
- * the remainder, and m is the modulus.
+ * Represents the invariant <samp>x == r (mod m)</samp> where <samp>x</samp> 
+ * is a long scalar variable, <samp>r</samp> is the (constant) remainder,
+ * and <samp>m</samp> is the (constant) modulus.
  **/
 
 public class Modulus

@@ -93,8 +93,9 @@ import java.util.logging.Level;
 import java.util.*;
 
 /**
- * Represents two PRIMITIVE sequences where one sequence is a subsequence
- * of the other.  Prints as "x[] is a subsequence of y[]".
+ * Represents two sequences of PRIMITIVE values where one sequence is a 
+ * subsequence of the other.  Prints as
+ * <samp>x[] is a subsequence of y[]</samp>.
  **/
 
 public class CLASSNAME

@@ -146,9 +146,10 @@ import java.util.logging.Logger;
 
 
 /**
- * Represents PRIMITIVE scalars with an invariant to each element of
- * PRIMITIVE sequences.  Prints as 'x[] elements COMPARE y' where x is a
- * PRIMITIVE sequence and y is a PRIMITIVE scalar.
+ * Represents an invariant between a PRIMITIVE scalar and a
+ * a sequence of PRIMITIVE values.
+ * Prints as <samp>x[] elements COMPARE y</samp> where <samp>x</samp> is a
+ * PRIMITIVE sequence and <samp>y</samp> is a PRIMITIVE scalar.
  **/
 public final class SEQINTEQUAL
   extends SUPERCLASS

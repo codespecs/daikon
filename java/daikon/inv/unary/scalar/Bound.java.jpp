@@ -189,20 +189,16 @@ import utilMDE.*;
 
 import java.util.*;
 
-#if 0
-I cannot use "x LT c" in the comment below, because substitution
-would not happen in the string "x LT c"!
-#endif
 #if defined (IS_SCALAR)
   /**
-   * Represents the invariant 'x GTE c', where c is a constant and x is
-   * a LONG scalar.
+   * Represents the invariant <samp>x GTE c</samp>, where <samp>c</samp> 
+   * is a constant and <samp>x</samp> is a LONG scalar.
    **/
 #else
   /**
-   * Represents the invariant that each element of a LONG sequence is
-   * GREATER than or equal to a constant. Prints as 'x[] elements GTE
-   * c'.
+   * Represents the invariant that each element of a sequence of PRIMITIVE
+   * values is GREATER than or equal to a constant. Prints as 
+   * <samp>x[] elements GTE c</samp>.
    */
 #endif
 // One reason not to combine LowerBound and UpperBound into a single range

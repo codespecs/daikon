@@ -55,9 +55,12 @@ import java.util.*;
 import utilMDE.*;
 
 /**
- * Represents a Linear invariant (ie, ax + by + cz + d = 0) over three PRIMITIVE
- * scalars.  The invariant prints out as the form: ax + by + cz + d = 0.
- * The constants a, b, c, and d are mutually relatively prime and the constant a is always positive.
+ * Represents a Linear invariant over three PRIMITIVE scalars <samp>x</samp>,
+ * <samp>y</samp>, and <samp>z</samp>, of the form
+ * <samp>ax + by + cz + d = 0</samp>.
+ * The constants <samp>a</samp>, <samp>b</samp>, <samp>c</samp>, and
+ * <samp>d</samp> are mutually relatively prime, and the constant
+ * <samp>a</samp> is always positive.
  **/
 
 public class CLASSNAME

@@ -36,10 +36,12 @@ import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 
 /**
- * Represents a linear invariant (ie, y = ax + b) between the corresponding
- * elements of two PRIMITIVE sequences.  Each (x[i], y[i]) pair is examined.
- * Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
- * as "y[] = a * x[] + b"
+ * Represents a linear invariant (ie, <samp>y = ax + b</samp>) between
+ * the corresponding elements of two sequences of PRIMITIVE values.
+ * Each <samp>(x[i], y[i])</samp> pair is examined.
+ * Thus, <samp>x[0]</samp> is compared to <samp>y[0]</samp>,
+ * <samp>x[1]</samp> to <samp>y[1]</samp> and so forth.
+ * Prints as <samp>y[] = a * x[] + b</samp>.
  **/
 public class CLASSNAME
   extends SUPERCLASS

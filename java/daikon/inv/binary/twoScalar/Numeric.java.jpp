@@ -98,7 +98,7 @@
   #define VAR1 x[]
   #define VAR2 y[]
   #define PACKAGE twoSequence
-  #define COMMENT_TXT corresponding elements of two PRIMITIVE sequences
+  #define COMMENT_TXT corresponding elements of two sequences of PRIMITIVE
 #else
   #define VAR1 x
   #define VAR2 y
@@ -589,7 +589,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the divides without remainder invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 % VAR2 == 0'.
+   * COMMENT_TXT.  Prints as <samp>VAR1 % VAR2 == 0</samp>.
    */
   public static class Divides extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -695,7 +695,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the square invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 = VAR2**2'.
+   * COMMENT_TXT.  Prints as <samp>VAR1 = VAR2**2</samp>.
    **/
   public static class Square extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -754,7 +754,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the zero tracks invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 = 0 ==> VAR2 = 0'.
+   * COMMENT_TXT; that is, when <samp>VAR1</samp> is zero,
+   * <samp>VAR2</samp> is also zero.
+   * Prints as <samp>VAR1 = 0 ==> VAR2 = 0</samp>.
    **/
   public static class ZeroTrack extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -824,7 +826,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise complement invariant between
-   * COMMENT_TXT. Prints as ' VAR1 = ~VAR2 '.
+   * COMMENT_TXT.  Prints as <samp>VAR1 = ~VAR2</samp>.
    **/
   public static class BitwiseComplement extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -874,7 +876,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise subset invariant between
-   * COMMENT_TXT. Prints as ' VAR1 = VAR2 | VAR1 '.
+   * COMMENT_TXT; that is, the bits of <samp>VAR2</samp> are a subset of the
+   * bits of <samp>VAR1</samp>.  Prints as <samp>VAR1 = VAR2 | VAR1</samp>.
    **/
   public static class BitwiseSubset extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -963,7 +966,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the BitwiseAnd == 0 invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 & VAR2 == 0'.
+   * COMMENT_TXT; that is, <samp>VAR1</samp> and <samp>VAR2</samp> have no
+   * bits in common.  Prints as <samp>VAR1 & VAR2 == 0</samp>.
    **/
   public static class BitwiseAndZero extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1034,7 +1038,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the ShiftZero invariant between
-   * COMMENT_TXT.  Prints as ' VAR1 >> VAR2 = 0'.
+   * COMMENT_TXT;
+   * that is, <samp>VAR1</samp> right-shifted by <samp>VAR2</samp>
+   * is always zero.  Prints as <samp>VAR1 >> VAR2 = 0</samp>.
    **/
   public static class ShiftZero  extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to

@@ -60,12 +60,12 @@ import utilMDE.*;
 // This also serves as NonNull.
 
 /**
- * Represents long scalars that are non-zero.  Prints as "x != 0",
- * or as "x != null" for pointer types.
+ * Represents long scalars that are non-zero.  Prints as <samp>x != 0</samp>,
+ * or as <samp>x != null</samp> for pointer types.
  */
 #else
 /**
- * Represents double scalars that are non-zero.  Prints as "x != 0".
+ * Represents double scalars that are non-zero.  Prints as <samp>x != 0</samp>.
  */
 #endif
 public class NONZERO

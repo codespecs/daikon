@@ -125,13 +125,13 @@ import java.util.*;
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a
-   * PRIMITIVE sequence.  Prints as 'x[] elements are equal'.
+   * PRIMITIVE sequence.  Prints as <samp>x[] elements are equal</samp>.
    **/
 #else
   /**
    * Represents the invariant COMPARATORSTRING between adjacent elements
-   * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as 'x[] sorted by
-   * COMPARATORSTRING'.
+   * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as 
+   * <samp>x[] sorted by COMPARATORSTRING</samp>.
    **/
 #endif
 public class CLASSNAME

@@ -73,9 +73,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * Represents SCALAR scalars that are always members of SCALAR sequences.
- * Prints as "x in y[]" where x is a SCALAR scalar and y[] is a
- * SCALAR sequence.
+ * Represents SCALAR scalars that are always members of a sequence of SCALAR 
+ * values.  
+ * Prints as <samp>x in y[]</samp> where <samp>x</samp> is a SCALAR scalar
+ * and <samp>y[]</samp> is a sequence of SCALAR.
  **/
 public final class CLASSNAME
   extends SEQUENCESCALAR

@@ -61,8 +61,8 @@
 
 
 /**
- * Represents the invariant ' result = FUNCTION (arg1, arg2)' over three
- * PRIMITIVE scalars.
+ * Represents the invariant <samp>result = FUNCTION (arg1, arg2)</samp> 
+ * over three PRIMITIVE scalars.
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   // We are Serializable, so we specify a version to allow changes to

@@ -250,18 +250,20 @@ import java.util.*;
 
 
 /**
- * Represents invariants between two PRIMITIVE sequences.  If order
+ * Represents invariants between two sequences of PRIMITIVE values.  If order
  * matters for each variable (which it does by default), then the
- * sequences are compared lexically.  Prints as 'x[] COMPARE y[] lexically'.
+ * sequences are compared lexically.
+ * Prints as <samp>x[] COMPARE y[] lexically</samp>.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
  * If order doesn't matter for each variable, then the sequences
  * are compared to see if they are set equivalent.  Prints as
- * "x[] == y[]".
+ * <samp>x[] == y[]</samp>.
 #endif
  *
- * If the auxillary information (eg, order matters) doesn't match then
- * no comparison is made at all.
+ * If the auxiliary information (e.g., order matters) 
+ * doesn't match between two variables, then this invariant cannot
+ * apply to those variables.
  **/
 public class SEQSEQINTEQUAL
   extends SUPERCLASS

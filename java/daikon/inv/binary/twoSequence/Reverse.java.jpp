@@ -35,8 +35,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * Represents two PRIMITIVE sequences where one is in the reverse order
- * of the other.  Prints as "x[] is the reverse of y[]".
+ * Represents two sequences of PRIMITIVE where one is in the reverse order
+ * of the other.  Prints as <samp>x[] is the reverse of y[]</samp>.
  **/
 public class CLASSNAME
   extends SUPERCLASS

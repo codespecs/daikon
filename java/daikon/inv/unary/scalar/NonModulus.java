@@ -6,11 +6,12 @@ import utilMDE.*;
 import java.util.*;
 
 /**
- * Represents long scalars that are never equal to r (mod m) (for all
- * reasonable values of r and m) but all other numbers in the same
- * range (ie, all the values that x doesn't take from min(x) to
- * max(x)) are equal to r (mod m).  Prints as "x != r (mod m)", where r
- * is the remainder and m is the modulus.
+ * Represents long scalars that are never equal to <code>r (mod m)</code> 
+ * where all other numbers in the same range (ie, all the values that 
+ * <code>x</code> doesn't take from <code>min(x)</code> to
+ * <code>max(x)</code>) are equal to <code>r (mod m)</code>.
+ * Prints as <samp>x != r (mod m)</samp>, where <samp>r</samp>
+ * is the remainder and <samp>m</samp> is the modulus.
  **/
 
 public class NonModulus

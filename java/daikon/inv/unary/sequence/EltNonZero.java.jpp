@@ -69,7 +69,7 @@ import java.util.*;
 
 /**
  * Represents the invariant "x != 0" where x represents all of the elements
- * of a PRIMITIVE sequence.  Prints as 'x[] elements != 0'.
+ * of a sequence of PRIMITIVE.  Prints as <samp>x[] elements != 0</samp>.
  **/
 
 public final class CLASSNAME

@@ -233,7 +233,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing PRIMITIVE scalars that are equal
    * to zero.  Used for non-instantiating suppressions.  Will never
-   * print since OneOf accomplishes the same thing
+   * print since OneOf accomplishes the same thing.
    */
   public static class EqualZero extends RANGE {
 
@@ -444,7 +444,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing longs whose values are always 0
    * or 1.  Used for non-instantiating suppressions.  Will never print
-   * since OneOf accomplishes the same thing
+   * since OneOf accomplishes the same thing.
    */
   public static class BooleanVal extends RANGE {
 
@@ -578,7 +578,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing longs whose values are between 0
    * and 63.  Used for non-instantiating suppressions.  Will never print
-   * since Bound accomplishes the same thing
+   * since Bound accomplishes the same thing.
    */
   public static class Bound0_63 extends RANGE {
 

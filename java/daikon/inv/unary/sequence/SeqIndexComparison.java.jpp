@@ -147,9 +147,9 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
- * Represents an invariant over PRIMITIVE sequences between the
+ * Represents an invariant over sequences of PRIMITIVE values between the
  * index of an element of the sequence and the element itself.
- * Prints as 'x[i] COMPARE i'.
+ * Prints as <samp>x[i] COMPARE i</samp>.
  **/
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to

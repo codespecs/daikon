@@ -50,8 +50,8 @@ import java.util.logging.*;
 
 
 /**
- * Represents PRIMITIVE sequences that contain no duplicate elements.
- * Prints as 'x[] contains no duplicates'.
+ * Represents sequences of PRIMITIVE that contain no duplicate elements.
+ * Prints as <samp>x[] contains no duplicates</samp>.
  **/
 
 public class CLASSNAME

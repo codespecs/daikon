@@ -59,10 +59,11 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * Represents two LONG sequences where one of the sequences is a
- * subset (each element appears in the other sequence) of the other.
- * Prints as either "x[] is a subset of y[]" or as
- * "x[] is a superset of y[]".
+ * Represents two sequences of LONG values where one of the sequences is a
+ * subset of the other; that is each element of one sequence appears in the 
+ * other.
+ * Prints as either <samp>x[] is a subset of y[]</samp> or as
+ * <samp>x[] is a superset of y[]</samp>.
  **/
 public class SUBSET
   extends TWOSEQUENCE
