@@ -107,8 +107,10 @@ public class PptSplitter implements Serializable {
     } catch (Throwable e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
-      System.out.println ("Exception thrown in PptSplitter.add_bottom_up() for " + ppts[0].name());
-      System.out.println ("Vars = " + Debug.related_vars (ppts[0], vt));
+      if (false) {              // need to add a debugging switch
+        System.out.println ("Exception thrown in PptSplitter.add_bottom_up() for " + ppts[0].name());
+        System.out.println ("Vars = " + Debug.related_vars (ppts[0], vt));
+      }
       return;
     }
     // Choose the appropriate conditional point based on the condition result
