@@ -1,8 +1,8 @@
 package daikon.gui;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -39,7 +39,10 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 
     public PptMap getPptMapFromFile( String fileName ) {
 	try {
-	    FileInputStream istream = new FileInputStream( fileName );
+	    InputStream istream = new FileInputStream( fileName );
+	    if (fileName.endsWith(".gz")) {
+	        istream = new GZIPInputStream(istream);
+	    }
 	    ObjectInputStream o = new ObjectInputStream( istream );
 	    PptMap pptMap = (PptMap) o.readObject();
 	    istream.close();
