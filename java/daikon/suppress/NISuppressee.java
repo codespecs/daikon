@@ -183,6 +183,8 @@ public class NISuppressee {
       if (vis[i] == null) {
         Assert.assertTrue (missing_index == -1, "Multiple empty vars");
         missing_index = i;
+      } else {
+        Assert.assertTrue (!vis[i].missingOutOfBounds());
       }
 
     // If all of the slots were full, specify the invariant
@@ -200,6 +202,8 @@ public class NISuppressee {
     for (int i = 0; i < leaders.length; i++) {
       VarInfo v = leaders[i];
       vis[missing_index] = v;
+      if (v.missingOutOfBounds())
+        continue;
       if (!ppt.vis_order_ok (vis))
         continue;
       if (!ppt.is_slice_ok (vis, vis.length))
