@@ -2051,6 +2051,23 @@ public class PptTopLevel extends Ppt {
 	all_cont.append("\t\t");
 	all_cont.append(fmt);
 	all_cont.append("\n");
+	// If this is the :::OBJECT ppt, also restate all of them in
+	// orig terms, since we the conditions also held upon entry.
+	if (ppt.ppt_name.isObjectInstanceSynthetic()) {
+	  // XXX This isn't such a hot thing to do, but it isn't that
+	  // hard, and seems to work.
+	  PptSlice saved = inv.ppt;
+	  PptSlice orig = new PptSlice0(saved.parent);
+	  orig.var_infos = new VarInfo[saved.var_infos.length];
+	  for (int i=0; i<orig.var_infos.length; i++) {
+	    orig.var_infos[i] = VarInfo.origVarInfo(saved.var_infos[i]);
+	  }
+	  inv.ppt = orig;
+	  all_cont.append("\t\t");
+	  all_cont.append(inv.format_simplify());
+	  all_cont.append("\n");
+	  inv.ppt = saved;
+	}
       }
       all_cont.append(")");
     }
