@@ -104,6 +104,7 @@ reset-scratch-impl:
 	@echo \#\#\# reset-scratch
 	@echo
 	rm -rf daikon-java
+	rm -rf daikon-instrumented
 	rm -rf daikon-output
 	rm -rf ${SCRATCH_FOR_DAIKON}
 
@@ -115,6 +116,7 @@ ${SCRATCH_FOR_DAIKON}/.exists:
 	@echo
 	mkdir -p ${SCRATCH_FOR_DAIKON}/daikon
 	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-java
+	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-instrumented
 	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-output
 	touch ${SCRATCH_FOR_DAIKON}/.exists
 
