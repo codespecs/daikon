@@ -630,6 +630,8 @@ def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
     for fname in sub_fn_var_values.keys():
         sub_var_values = sub_fn_var_values[fname]
         var_infos = fn_var_infos[fname]
+        if not fn_var_values.has_key(fname):
+            fn_var_values[fname] = {}
         var_values = fn_var_values[fname]
         sub_var_values = sub_fn_var_values[fname]
         for (values, count) in sub_var_values.items():
@@ -4472,12 +4474,12 @@ def find_violations(condition, fn_regexp=None):
         # This implementation tells us the file in which the value occurs, but
         # file_fn_var_values does not contain derived variables.  So perhaps be
         # able to select between using file_fn_var_values and fn_var_values.
-        for (file, fn_var_values) in file_fn_var_values.items():
+        for (file, this_fn_var_values) in file_fn_var_values.items():
             # print "checking file", file
             # This function might not appear in this file
-            if not fn_var_values.has_key(fn):
+            if not this_fn_var_values.has_key(fn):
                 continue
-            for (vals, count) in fn_var_values[fn].items():
+            for (vals, count) in this_fn_var_values[fn].items():
                 # I should probably catch errors here
                 if not eval(cond, globals(), locals()):
                     # vals doesn't contain derived variables; vis does
