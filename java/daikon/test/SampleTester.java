@@ -360,7 +360,7 @@ public class SampleTester extends TestCase {
     List args = new ArrayList(10);
     do {
       String arg = stok.nextToken();
-      if (!stok.word() && !stok.qstring())
+      if (!stok.isWord() && !stok.isQString())
         parse_error (Fmt.spf ("%s found where argument expected", arg));
       args.add (arg);
     } while (stok.nextToken() == ","); // interned
