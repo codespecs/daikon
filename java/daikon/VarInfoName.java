@@ -118,11 +118,10 @@ public abstract class VarInfoName
     }
 
     // orig(x)
-    // This branch should really go away; orig() variables shouldn't
-    // appear in .decls files
     if (name.startsWith("orig(")) {
-      Assert.assertTrue(name.endsWith(")"));
-      return parse(name.substring(5, name.length() - 1)).applyPrestate();
+      throw new Error("orig() variables shouldn't appear in .decls files");
+      // Assert.assertTrue(name.endsWith(")"));
+      // return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
     // A.B, where A is complex: foo(x).y, x[7].y, etc.
