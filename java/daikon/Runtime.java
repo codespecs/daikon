@@ -134,7 +134,9 @@ public final class Runtime {
       System.exit(1);
     } else {
       System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
-      ps_count++;               // prevent any future output
+      // prevent any future output
+      no_dtrace = true;
+      ps_count++;
     }
   }
 
