@@ -46,6 +46,12 @@ public final class Daikon {
   public static boolean dkconfig_enable_floats = true;
 
   /**
+   * Boolean.  Just print the total number of possible invariants
+   * and exit
+   */
+  public static boolean dkconfig_calc_possible_invs;
+
+  /**
    * Integer. Percentage of ppts to process.  All ppts are sorted and
    * the first dkconfig_ppt_perc ppts are included.  A percentage of
    * 100 (default) matches all ppts.
@@ -56,15 +62,19 @@ public final class Daikon {
    * Boolean.  Controls whether or not total samples read and processed
    * are printed at the end of processing
    */
-  public static boolean dkconfig_print_sample_totals = true;
+  public static boolean dkconfig_print_sample_totals = false;
 
   // All these variables really need to be organized better.
 
   public final static String lineSep = Global.lineSep;
 
+  /**
+   * Boolean.  Controls whether or not splitting based on the built-in
+   * splitting rules is disabled.  The built-in rules look for implications
+   * based on boolean return values and also when there are exactly two
+   * exit points from a method.
+   **/
   public static boolean dkconfig_disable_splitting = false;
-
-  public static boolean disable_ternary_invariants = false;
 
   // Change this at your peril; high costs in time and space for "false",
   // because so many more invariants get instantiated.
@@ -110,9 +120,25 @@ public final class Daikon {
   public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
+   * If true no invariants will be guarded, guarding meaning that
+   * if a variable "can be missing" in a dtrace file that predicates
+   * are attached to invariants ensuring their values can be gather
+   * (for instance, if a.b "can be missing", and a.b == 5 is an
+   * invariant, then it is more properly declared as (a != null) ==>
+   * (a.b == 5))
+   **/
+  public static boolean dkconfig_noInvariantGuarding = false;
+
+  /**
+   * When true compilation errors during splitter file generation
+   * will not be reported to the user.
+   */
+  public static boolean dkconfig_suppressSplitterErrors = false;
+
+  /**
    * Whether to use general suppression mechanism.
    **/
-  public static boolean use_suppression_optimization = false;
+  public static boolean use_suppression_optimization = true;
 
   /**
    * Whether suppressed invariants can suppress others.  Eventually
@@ -198,26 +224,10 @@ public final class Daikon {
   public static boolean noversion_output = false;
 
   /**
-   * If true no invariants will be guarded, guarding meaning that
-   * if a variable "can be missing" in a dtrace file that predicates
-   * are attached to invariants ensuring their values can be gather
-   * (for instance, if a.b "can be missing", and a.b == 5 is an
-   * invariant, then it is more properly declared as (a != null) ==>
-   * (a.b == 5))
-   **/
-  public static boolean noInvariantGuarding = false;
-
-  /**
    * Whether Daikon is in its inferncing loop.  Used only for
    * assertion checks.
    **/
   public static boolean isInferencing = false;
-
-  /**
-   * When true compilation errors during splitter file generation
-   * will not be reported to the user.
-   */
-  public static boolean suppressSplitterErrors = false;
 
   /**
    * When true, omit certain invariants from the output .inv
@@ -248,13 +258,8 @@ public final class Daikon {
   public static final String show_progress_SWITCH = "show_progress";
   public static final String no_show_progress_SWITCH = "no_show_progress";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
-  public static final String use_suppression_optimization_SWITCH = "suppress";
-  public static final String suppress_cont_SWITCH = "suppress_cont";
-  public static final String no_suppress_cont_SWITCH = "no_suppress_cont";
-  public static final String suppress_post_SWITCH = "suppress_post";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   public static final String conf_limit_SWITCH = "conf_limit";
-  public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
   public static final String ioa_output_SWITCH = "ioa_output";
   public static final String test_ioa_output_SWITCH = "test_ioa_output";
@@ -264,17 +269,14 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
-  public static final String noternary_SWITCH = "noternary";
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
   public static final String noversion_SWITCH = "noversion";
-  public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String track_SWITCH = "track";
-  public static final String suppress_splitter_errors_SWITCH = "suppress_splitter_errors";
   public static final String omit_from_output_SWITCH = "omit_from_output";
 
   // A pptMap which contains all the Program Points
@@ -359,6 +361,24 @@ public final class Daikon {
     all_ppts.trimToSize();
 
 
+    // If requested, just calculate the total number of invariants
+    // possible
+    if (dkconfig_calc_possible_invs) {
+      fileio_progress.shouldStop = true;
+      setupEquality (all_ppts);
+      int total_invs = 0;
+      for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        ppt.instantiate_views_and_invariants();
+        int inv_cnt = ppt.invariant_cnt();
+        ppt.clean_for_merge();
+        System.out.println (inv_cnt + " invariants in " + ppt.name());
+        total_invs += inv_cnt;
+      }
+      System.out.println (total_invs + "invariants total");
+      System.exit(0);
+    }
+
     // Only for assertion checks
     isInferencing = true;
 
@@ -393,7 +413,7 @@ public final class Daikon {
     // Guard invariants
     if ((Daikon.output_style == OutputFormat.JML ||
          Daikon.output_style == OutputFormat.ESCJAVA) &&
-        !noInvariantGuarding)
+        !dkconfig_noInvariantGuarding)
       guardInvariants(all_ppts);
 
     // Display invariants
@@ -456,13 +476,8 @@ public final class Daikon {
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(use_suppression_optimization_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0), // @CP
@@ -472,17 +487,14 @@ public final class Daikon {
       new LongOpt(jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
@@ -562,18 +574,11 @@ public final class Daikon {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
           show_progress = true;
+          LogHelper.setLevel ("daikon.Progress", LogHelper.FINE);
         } else if (no_show_progress_SWITCH.equals(option_name)) {
           show_progress = false;
         } else if (no_dataflow_hierarchy_SWITCH.equals(option_name)) {
           use_dataflow_hierarchy = false;
-        } else if (use_suppression_optimization_SWITCH.equals(option_name)) {
-          use_suppression_optimization = true;
-        } else if (suppress_cont_SWITCH.equals(option_name)) {
-          suppress_implied_controlled_invariants = true;
-        } else if (no_suppress_cont_SWITCH.equals(option_name)) {
-          suppress_implied_controlled_invariants = false;
-        } else if (suppress_post_SWITCH.equals(option_name)) {
-          suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (suppress_redundant_SWITCH.equals(option_name)) {
           suppress_redundant_invariants_with_simplify = true;
         } else if (conf_limit_SWITCH.equals(option_name)) {
@@ -602,8 +607,6 @@ public final class Daikon {
           use_mem_monitor = true;
         } else if (output_num_samples_SWITCH.equals(option_name)) {
           output_num_samples = true;
-        } else if (noternary_SWITCH.equals(option_name)) {
-          disable_ternary_invariants = true;
         } else if (config_SWITCH.equals(option_name)) {
           String config_file = g.getOptarg();
           try {
@@ -651,10 +654,6 @@ public final class Daikon {
           break;
         } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
-        } else if (noinvariantguarding_SWITCH.equals(option_name)) {
-          noInvariantGuarding = true;
-        } else if (suppress_splitter_errors_SWITCH.equals(option_name)) {
-          suppressSplitterErrors = true;
         } else if (omit_from_output_SWITCH.equals(option_name)) {
           String f = g.getOptarg();
           for (int i = 0; i < f.length(); i++) {
