@@ -9,7 +9,45 @@ daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.  There is also a
 developer manual (source developer.texinfo) with the same formatted
 versions as the user manual.
 
+
+
 ===========================================================================
+
+2.5.1 (01 August 2003)
+
+Added the LogicalCompare program which compares two sets of invariants
+describing a software module and determines if one set of the
+invariants implies the other.  See the "LogicalCompare" section of the
+user manual for more information.
+
+Added the daikon command line option --disc_reason that will indicate
+the reason a specified invariant was not printed.  See the "Command
+line options for Daikon" section of the user manual for more
+information
+
+Added configuration options daikon.simplify.Session.trace_input, and
+daikon.simplify.LemmaStack.synchronous_errors to provide additional
+information when debugging Simplify problems.  See the "List of
+Configuration Options" section of the user manual for more
+information.
+
+Both the user manual and developer manual have been significantly
+enhanced.  The sections concerning the C and Java front ends in the
+user manual have had significant troubleshooting information added.
+The dfec (C front end) section also makes more clear that dfec only
+supports programs that are BOTH legal ANSI/ISO C programs and legal
+C++ programs.
+
+The implementation of Sequence-Scalar, Seqeuence-Sequence and Pairwise
+comparisons has been changed to create separate invariants for each
+possible comparison (<, <=, ==, >=, >).  This should have no user
+visible ramifications except that the configuration options to disable
+comparisons have individual names (eg, SeqFloatEqual,
+SeqFloatGreaterEqual, etc).  See the "List of Configuration Options"
+section of the user manual for more information.  These invariants are
+also documented in the "Invariant List" section of the user manual.
+
+-----------------
 
 2.5.0 (01 July 2003)
 

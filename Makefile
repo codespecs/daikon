@@ -561,6 +561,9 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	# cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
 
+# use this target to test building mingw without distributing anything
+mingw : mingw_exe
+
 # Creates the build_mingw_dfej directory.  This probably needs to be redone
 # when dfej is changed to include new object files or other Makefile changes.
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
