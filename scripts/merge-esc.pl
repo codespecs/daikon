@@ -3,16 +3,17 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-03 16:25:03 mernst>
+# Time-stamp: <2001-03-04 01:45:35 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
 
 # 
 
+use Carp;
+
 BEGIN {
-
-
+  # Nothing to do
 }
 
 if ((/^Inv filename = /)
@@ -21,6 +22,7 @@ if ((/^Inv filename = /)
     || (/^    Samples breakdown: /)
     || (/^    Variables: /)
     || (/^\[No views for /)
+    || (/^esc_name =/)
     || (/^Exiting$/)) {
   next;
 }
@@ -42,7 +44,72 @@ if (/:::/) {
 }
 
 s/[ \t]+\([0-9]+ values?, [0-9]+ samples?\)$//;
+# %raw contains the invariant text directly from the file.
+# It is indexed by the complete program point name.
 $raw{$methodname} .= $_;
+
+
+sub simplify_args($) {
+  my ($args) = @_;
+  $args =~ s/^\s*\(\s*//;
+  $args =~ s/\s*\)\s*$//;
+  $args =~ s/\s+([\[\]])/$1/g;
+  # remove "final" and such
+  @args = split(/\s*,\s*/, $args);
+  @newargs = ();
+  for my $arg (@args) {
+    # print "before: $arg\n";
+    $arg =~ s/(^|\s)(\w+[\[\]]*)\s+\w+([\[\]]*)$/$1$2/;
+    # print "after: $arg\n";
+    push @newargs, $arg;
+  }
+  $newargs = "(" . join(", ", @newargs) . ")";
+  return $newargs;
+}
+
+sub approx_argsmatch($$) {
+  my ($args1, $args2) = @_;
+  $args1 =~ s/^\((.*)\)$/$1/;
+  $args2 =~ s/^\((.*)\)$/$1/;
+  @args1 = split(/\s*,\s*/, $args1);
+  @args2 = split(/\s*,\s*/, $args2);
+  if (scalar(@args1) != scalar(@args2)) {
+    return 0;
+  }
+  for my $i (0..$#args1) {
+    if (! approx_argmatch($args1[$i], $args2[$i])) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+
+sub approx_argmatch($$) {
+  my ($x, $y) = @_;
+  if ($x eq $y) {
+    return 1;
+  }
+  if (($x eq "") || ($y eq "")) {
+    return 0;
+  }
+
+  if (length($x) > length($y)) {
+    ($x, $y) = ($y, $x);
+  }
+  if ($x eq substr($y, length($y)-length($x))) {
+    return 1;
+  }
+  return 0;
+}
+
+
+sub is_bogus_invariant($) {
+  my ($inv) = @_;
+  return (($inv =~ /format_esc class .* needs to be changed/)
+	  || ($inv =~ /"null"/)
+	  || ($inv =~ /\[\] ==/));
+}
 
 
 END {
@@ -50,8 +117,12 @@ END {
   my %meth_ppt = ();
   for my $ppt (keys %raw) {
     my $methodname = $ppt;
-    $methodname =~ s/\(.*$//;
-    $methodname =~ s/^(\w+)\.<init>$/$1.$1/;
+    $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
+
+    $methodname =~ s/\(([^\(\)]*)\).*$//;
+    $newargs = simplify_args($1);
+    $methodname .= $newargs;
+
     $meth_ppt{$methodname} = $ppt;
 
     # print "method: $methodname\n";
@@ -69,17 +140,16 @@ END {
 
     my $classname = $javafile;
     $classname =~ s/\.java$//;
+    @fields = ();
 
     while (defined($line = <IN>)) {
-      if ($line =~ /\bpublic\b.*\b(\w+)\s*\(/) {
+      if ($line =~ /\bpublic\b.*\b(\w+)\s*(\([^\)]*\))/) {
 	# This looks like a declaration of public method $methodname.
 	my $methodname = $1;
-	my $fullmeth = "$classname.$methodname";
-	if (! exists $meth_ppt{$fullmeth}) {
-	  print "Warning:  no invariants for method $fullmeth\n";
-	  print OUT $line;
-	  next;
-	}
+	my $args = $2;
+	my $fullmethname = "$classname.$methodname";
+	my $simple_args = simplify_args($args);
+	my $fullmeth = $fullmethname . $simple_args;
 	my $prebrace;
 	my $postbrace;
 	if ($line =~ /^(.*)\{(.*)$/) {
@@ -92,15 +162,51 @@ END {
 	  $postbrace = "";
 	}
 	print OUT $prebrace;
-	for my $inv (split("\n", $raw{$meth_ppt{$fullmeth}})) {
-	  print OUT "/*@ " . $inv . " */\n";
+	my $found = 0;
+	for my $ppt (keys %raw) {
+	  # print "Checking $fullmeth against $ppt\n";
+	  my $ppt_fullmeth = $ppt;
+	  $ppt_fullmeth =~ s/:::.*$//;
+	  $ppt_methname = $ppt_fullmeth;
+	  $ppt_methname =~ s/\(.*$//;
+	  $ppt_args = $ppt_fullmeth;
+	  $ppt_args =~ s/^.*\(/\(/;
+	  if (($fullmeth eq $ppt_fullmeth)
+	      || (($fullmethname eq $ppt_methname)
+		  && approx_argsmatch($simple_args, $ppt_args))) {
+	    $found = 1;
+	    if ($ppt =~ /:::ENTER/) {
+	      for my $inv (split("\n", $raw{$ppt})) {
+		if (is_bogus_invariant($inv)) {
+		  print OUT "/*! requires " . $inv . " */\n";
+		} else {
+		  print OUT "/*@ requires " . $inv . " */\n";
+		}
+	      }
+	    } elsif ($ppt =~ /:::EXIT/) {
+	      for my $inv (split("\n", $raw{$ppt})) {
+		if (is_bogus_invariant($inv)) {
+		  print OUT "/*! ensures " . $inv . " */\n";
+		} else {
+		  print OUT "/*@ ensures " . $inv . " */\n";
+		}
+	      }
+	    } else {
+	      die "What ppt? $ppt";
+	    }
+	  }
 	}
+
+	if (! $found) {
+	  print "Warning:  no invariants for method $fullmeth on line $line";
+	}
+
 	print OUT $postbrace;
 	next;
       }
 
-      # Alternately, put object invariants at the very end.  (Jeremy did
-      # that; is it necessary, or just something he happened to do?)
+      # This puts object invariants at the beginning.
+      # Alternately, put them at the end.
       if ($line =~ /^[^\/]*\bclass\s+$classname\b/) {
 	# Looks like the declaration of class $classname
 	print OUT $line;
@@ -113,7 +219,7 @@ END {
 	}
 	my $fullmeth = "$classname" . ":::OBJECT";
 	for my $inv (split("\n", $raw{$fullmeth})) {
-	  if ($inv =~ /format_esc class .* needs to be changed/) {
+	  if (is_bogus_invariant($inv)) {
 	    print OUT "/*! invariant " . $inv . " */\n";
 	  } else {
 	    print OUT "/*@ invariant " . $inv . " */\n";
@@ -122,9 +228,23 @@ END {
 	next;
       }
 
+      if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
+	print OUT "$1/*@ spec_public */ $2\n";
+	print OUT "/*@ invariant $3.owner == this */\n";
+	push(@fields,$3);
+	next;
+      }
+
       # default
       print OUT $line;
     }
+    if (scalar(@fields) > 0) {
+      print OUT "// BELONGS IN CONSTRUCTOR(S):\n";
+      for my $field (@fields) {
+	print OUT "/*@ set $field.owner = this */\n";
+      }
+    }
+
     close IN;
     close OUT;
   }
