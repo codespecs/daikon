@@ -6668,10 +6668,15 @@ Josh Kataoka,
 Vikash Mansinghka,
 Stephen McCamant,
 Samir Meghani,
+Jelani Nelson,
+Ryan Newton,
 Jeremy Nimmer,
 Toh Ne@w{ }Win,
 David Notkin,
-Iuliu Vasilescu.
+Carlos Pacheco,
+Matthew Tschantz,
+Iuliu Vasilescu,
+Tao Xie.
 
 Craig Kaplan carved the Daikon logo.
 
