@@ -18,9 +18,9 @@ public abstract class SplitterList {
   public static boolean dkconfig_all_splitters = true;
 
   // maps from string to Splitter[]
-  static HashMap ppt_splitters = new HashMap();
-  static PatternMatcher re_matcher = Global.regexp_matcher;
-  static PatternCompiler re_compiler = Global.regexp_compiler;
+  private static final HashMap ppt_splitters = new HashMap();
+  private static final PatternMatcher re_matcher = new Perl5Matcher();
+  private static final PatternCompiler re_compiler = new Perl5Compiler();
 
   public static void put(String pptname, Splitter[] splits) {
     if (pptname.equals(".*") && ppt_splitters.containsKey(pptname)) {

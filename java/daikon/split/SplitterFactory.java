@@ -160,6 +160,7 @@ public class SplitterFactory {
     return pptnames_and_splitterObjects;
   }
 
+  private static int guid = 0; // To give classes unique names
   /**
    * Write the Java source code for the Splitters for this program point. The
    * conditions are Strings in the Vector conditions
@@ -217,7 +218,7 @@ public class SplitterFactory {
 	String condition = (String)conditions.elementAt(numconds);
 	String test_string = condition;
 
-	String splitter_fname = splittername + "_" + numconds;
+	String splitter_fname = splittername + "_" + (guid++);
 	splitternames.addElement(splitter_fname);
 	String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1);
 
