@@ -241,4 +241,8 @@ sub swap_lineno ( $$ ) {
   if (! defined($result)) {
     die "Not defined: map[$count][$reported_line]\n";
   }
+  if ($result eq "") {
+    die "Empty: map[$count][$reported_line]\n";
+  }
+  return $result;
 }
