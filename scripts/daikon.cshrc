@@ -3,7 +3,10 @@
 ## This file should be kept in synch with daikon.bashrc.
 
 ## Set this directory to the directory containing "daikon".
-setenv DAIKONPARENT /path/to/parent/of/daikon
+if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
+
+## Set this directory to the directory containing the JDK.
+if (! $?JDKDIR) setenv JDKDIR /g2/jdk
 
 ## You should uncomment exactly one of the following lines, depending on
 ## want to run Daikon from the precompiled bytecode files in daikon.jar, or
@@ -15,12 +18,11 @@ setenv CLASSPATH $DAIKONPARENT/daikon/daikon.jar:${CLASSPATH}
 # setenv CLASSPATH $DAIKONPARENT/daikon/java:$DAIKONPARENT/daikon/java/lib/log4j.jar:${CLASSPATH}
 
 ## Add the Daikon binaries to your path
-set path = ($DAIKONPARENT/daikon/bin $path)
+set path = ($DAIKONPARENT/daikon/bin $JDKDIR/bin $path)
 
-## If you wish to use dfej, the Daikon front end for Java, you need to have
-## rt.jar on your classpath.  Set the directory appropriately.  If you do
-## not wish to use dfej, you may comment out this line.
-setenv CLASSPATH ${CLASSPATH}:/g2/jdk1.3.1/jre/lib/rt.jar
+## tools.jar must be on your classpath.  Also, if you wish to use dfej, the
+## Daikon front end for Java, you need to have rt.jar on your classpath.
+setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 
 ## Indicates where Ajax should find its helper files such as
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
