@@ -434,47 +434,8 @@ class single_field_numeric_invariant(invariant):
         result = result + ">"
         return result
 
-    ## __str__ and format should be kept in synch more nicely
-
     def __str__(self):
-        if self.one_of:
-            if len(self.one_of) == 1:
-                return "exactly " + `self.one_of[0]`
-            else:
-                return "one of " + `self.one_of`
-
-        mod_result = ""
-        if self.modulus and self.modulus_justified():
-            mod_result = "; == %d (mod %d)" % self.modulus
-        elif self.nonmodulus and self.nonmodulus_justified():
-            mod_result = "; != %d (mod %d)" % self.nonmodulus
-
-        nonzero = (not self.can_be_zero) and self.nonzero_justified()
-
-        if self.min and self.max:
-            result = "in range %s..%s" % (self.min, self.max)
-            if (self.min < 0 and self.max > 0 and nonzero):
-                result = "nonzero " + result
-            return result + mod_result
-        if self.min != None:
-            if self.min == 0:
-                return "non-negative" + mod_result
-            elif self.min == 1:
-                return "positive" + mod_result
-            else:
-                return "min " + `self.min` + mod_result
-        if self.max != None:
-            if self.max == 0:
-                return "non-positive" + mod_result
-            elif self.max == -1:
-                return "negative" + mod_result
-            else:
-                return "max " + `self.max` + mod_result
-        if mod_result:
-            return mod_result[2:]       # strip off leading semicolon
-        if nonzero:
-            return "nonzero"
-        return "unconstrained"
+        self.format(("x",))
 
     def format(self, arg_tuple):
         (arg,) = arg_tuple
