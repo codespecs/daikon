@@ -12,7 +12,7 @@
 
 @c texi2html doesn't work if I use this macro
 @c @macro daikonurl{}
-@c http://pag.lcs.mit.edu/daikon/
+@c http://pag.csail.mit.edu/daikon/
 @c @end macro
 
 @c Problem: with texinfo 4.0, the HTML formatting leaves the "{}" after
@@ -21,7 +21,7 @@
 @c Another solution would be to use "makeinfo -E" (then process the
 @c resulting file with "makeinfo --html").
 @macro daikonemail{}
-@email{daikon-developers@@pag.lcs.mit.edu}
+@email{daikon-developers@@pag.csail.mit.edu}
 @end macro
 
 @c @setchapternewpage odd
@@ -381,7 +381,7 @@ Examples
 @node    Introduction, Installing Daikon, Top, Top
 @chapter Introduction
 
-The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
+The @uref{http://pag.csail.mit.edu/daikon, ,Daikon invariant detector}
 reports likely program invariants.  An invariant is a property that
 holds a a certain point or points in a program; these are often seen
 in assert statements, documentation, and formal specifications.
@@ -395,7 +395,7 @@ Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining
 the values it computes, looking for patterns and relationships among
 those values.  Front ends (@pxref{Instrumentation}) exist for the
-Java, C, C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and
+Java, C, C++, @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA}, and
 Perl languages.  Front ends also exist for other applications, such as
 the @uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
 checker}.  It is easy to extend Daikon to other applications.
@@ -422,18 +422,18 @@ implementation and about debugging flags.
 
 The following mailing lists (and their archives) are available:
 @table @samp
-@item daikon-announce@@pag.lcs.mit.edu
+@item daikon-announce@@pag.csail.mit.edu
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
-To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/} or
-@uref{http://pag.lcs.mit.edu/mailman/listinfo/daikon-announce}.
-@item daikon-discuss@@pag.lcs.mit.edu
+To subscribe, visit @uref{http://pag.csail.mit.edu/daikon/download/} or
+@uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-announce}.
+@item daikon-discuss@@pag.csail.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://pag.lcs.mit.edu/daikon/download/} or
-@uref{http://pag.lcs.mit.edu/mailman/listinfo/daikon-discuss}.
-@item daikon-developers@@pag.lcs.mit.edu
+@uref{http://pag.csail.mit.edu/daikon/download/} or
+@uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-discuss}.
+@item daikon-developers@@pag.csail.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
@@ -453,24 +453,24 @@ in the file @file{doc/CHANGES} in the distribution.
 @enumerate
 @item
 Download Daikon.  It is available as a tar file from
-@uref{http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz}.
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz}.
 or as a zip file from
-@uref{http://pag.lcs.mit.edu/daikon/download/daikon.zip}.
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip}.
 The two files contain the same information; you only need one of them.
 One way to obtain Daikon is to use one of the following command lines:
 @example
-wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
+wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
 @end example
 @noindent
 or
 @example
-wget http://pag.lcs.mit.edu/daikon/download/daikon.zip
+wget http://pag.csail.mit.edu/daikon/download/daikon.zip
 @end example
 
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS@.  If you desire such
 access, send email to the
-@email{daikon-developers@@pag.lcs.mit.edu} mailing list.
+@email{daikon-developers@@pag.csail.mit.edu} mailing list.
 
 You may wish to subscribe to one of the mailing lists (@pxref{Mailing
 lists}), in order to be notified of new releases or join discussions
@@ -577,12 +577,12 @@ or build an executable for dfej, the Daikon front end for Java.
 @itemize @bullet
 @item
 The easiest approach is to download a precompiled version of
-@command{dfej} from @uref{http://pag.lcs.mit.edu/daikon/download/}.
+@command{dfej} from @uref{http://pag.csail.mit.edu/daikon/download/}.
 Place that executable in directory
 @file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
 your path), then run @command{rehash}.  Now you are ready to run dfej.
 (If no executable is available for your architecture, send mail to
-@email{daikon-developers@@pag.lcs.mit.edu} and we may be able to produce an
+@email{daikon-developers@@pag.csail.mit.edu} and we may be able to produce an
 executable for you.)
 
 @item
@@ -648,7 +648,7 @@ first perform the following installation steps.
 @enumerate
 @item
 Download the dfec distribution from
-@uref{http://pag.lcs.mit.edu/daikon/download}; choose the version for
+@uref{http://pag.csail.mit.edu/daikon/download}; choose the version for
 your architecture and operating system.  The distribution includes
 both the dfec executable and Lackwit.  Lackwit is a variable
 comparability analysis package; its use is optional, but it can make
@@ -687,7 +687,7 @@ programs, @pxref{Daikon runtime customization}.
 License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C front end.  If you hold such a license, send mail to
-@email{daikon-developers@@pag.lcs.mit.edu} to obtain a patch to the
+@email{daikon-developers@@pag.csail.mit.edu} to obtain a patch to the
 EDG front end.  To build dfec for yourself, perform the following steps:
 @enumerate
 @item Unpack your EDG source code (which you obtained from EDG).
@@ -768,7 +768,7 @@ installed.)
 
 If you wish to build the Daikon front end for Java (dfej) yourself,
 rather than using a precompiled binary provided at
-@uref{http://pag.lcs.mit.edu/daikon/}, you need a C++ compiler such as
+@uref{http://pag.csail.mit.edu/daikon/}, you need a C++ compiler such as
 @uref{http://gcc.gnu.org/,, gcc}.  (The dfej front end, which permits you to
 detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
@@ -1562,7 +1562,7 @@ letters @command{dfe} in the names stand for ``Daikon front-end'', and
 is moderately robust, and the C++ and Perl front ends are experimental.
 
 A front end for the IOA programming language is distributed separately
-(see @uref{http://theory.lcs.mit.edu/tds/ioa.html}).
+(see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
 An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
 
@@ -5948,8 +5948,8 @@ MyProg.java:0:0:0:0: Error: Could not find package named:
 @end example
 @noindent
 then the root of your packages in not in your classpath.  For example,
-if you have a package A in directory src/A and a class A.B, then you
-have to add the superdirectory of A (src) to your classpath so that
+if you have a package A in directory @file{src/A} and a class A.B, then you
+have to add the superdirectory of A (@file{src}) to your classpath so that
 dfej can find package A@.  For example,
 @example
 dfej -classpath src:$CLASSPATH src/A/B.java
@@ -5968,6 +5968,16 @@ then you have set your CLASSPATH incorrectly:  it names a nonexistent
 file or a file that is not a @file{.jar} Java archive.  You should adjust
 your CLASSPATH to remove the offending file.  This warning has no effect
 on the operation of dfej, however.
+
+@index SOURCEPATH environment variable
+@index environment variable SOURCEPATH
+
+The behavior of dfej is controlled by many environment variables;
+unexpected behavior may result from your settings for these
+environment variables.  For example, if SOURCEPATH is set, then dfej
+searches the indicated path for source files (ignoring class files in
+those directories); this may cause processing of files that you had
+not intended dfej to examine.
 
 
 @menu
@@ -6806,7 +6816,7 @@ your system administrator to do so.
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
-@email{daikon-developers@@pag.lcs.mit.edu}.  While Daikon is a
+@email{daikon-developers@@pag.csail.mit.edu}.  While Daikon is a
 research prototype, we will try to assist you and to correct any
 problems, so please don't hesitate to ask for help or report
 difficulties.  Additionally, if you can contribute enhancements or bug
@@ -6819,7 +6829,7 @@ the version of Daikon, which appears in the file @file{daikon/README}
 and is also printed when you run Daikon; also, whether you are running
 from the @file{.class} files or from the @file{.jar} file.
 If you are not using the most recent version, download a newer version
-from @uref{http://pag.lcs.mit.edu/daikon/} to see whether your problem
+from @uref{http://pag.csail.mit.edu/daikon/} to see whether your problem
 has already been corrected.
 @item
 a description of exactly what you did, exactly what happened, and what
@@ -6867,7 +6877,7 @@ information (we strive to incorporate that information in this
 manual), or you may find discussions on those lists helpful to you.
 
 For further reading, see the list of publications at the 
-Daikon homepage, @uref{http://pag.lcs.mit.edu/daikon/}.
+Daikon homepage, @uref{http://pag.csail.mit.edu/daikon/}.
 
 
 @node    Details, File formats, Troubleshooting, Top
@@ -6962,7 +6972,7 @@ enhancements to the authors for inclusion in a future release under
 these same conditions, and to promptly report any errors, problems, or bugs.
 If you do not agree to this license, please do
 not use or examine the software.  Other licensing terms are available;
-send mail to @email{mernst@@lcs.mit.edu}.
+send mail to @email{mernst@@csail.mit.edu}.
 
 Daikon uses the Java port of the GNU getopt library, which is
 copyright 1998 Aaron M.@: Renn.  The getopt library is free software, and
@@ -7018,7 +7028,7 @@ daikon-announce list will inform you of new versions, enhancements,
 and bug fixes.  On the daikon-discuss mailing list, you can obtain
 help from, and offer help to, other users.  We would also appreciate a
 brief description of how you are using Daikon, sent to
-@email{daikon-developers@@pag.lcs.mit.edu}.  We are curious about how
+@email{daikon-developers@@pag.csail.mit.edu}.  We are curious about how
 users exploit Daikon, and we are eager for anecdotes about its
 successes and failures, so that we can make Daikon more effective for
 its users.

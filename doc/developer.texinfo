@@ -8,7 +8,7 @@
 @c You shouldn't need to do that, though; the Makefile does it for you.
 
 @macro daikonemail{}
-@email{daikon-developers@@pag.lcs.mit.edu}
+@email{daikon-developers@@pag.csail.mit.edu}
 @end macro
 
 @c @setchapternewpage odd
@@ -132,7 +132,7 @@ Sample Testing
 @chapter Introduction
 
 This is the developer manual for the 
-@uref{http://pag.lcs.mit.edu/daikon/, ,Daikon invariant detector}.
+@uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
 For information about Daikon, see its user manual.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
@@ -154,7 +154,7 @@ Readers are also referred to Chapter 7, ``Implementation'', of
 D. Ernst, PhD dissertation, University of Washington Department of
 Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
-@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-ernst-phdthesis-abstract.html}.
+@uref{http://pag.csail.mit.edu/~mernst/pubs/invariants-ernst-phdthesis-abstract.html}.
 
 For Daikon version
 @c line break to avoid automatically updating the version number
@@ -163,7 +163,7 @@ Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
 of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
 This document is available, as 
 technical report MIT-LCS-TR-852, at
-@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
+@uref{http://pag.csail.mit.edu/~mistere/pubs/thesis-abstract.html}.
 
 
 @menu
@@ -542,7 +542,7 @@ method of the suppressor.
 @end enumerate
 
 More detailed instructions can be found in the
-@uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v3/daikon/suppress/package-summary.html,Javadoc}
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc_v3/daikon/suppress/package-summary.html,Javadoc}
 of the @samp{daikon.suppress} package.
 
 @node    Debugging Daikon, Daikon internals, Extending Daikon, Top
@@ -646,8 +646,8 @@ It will often be necessary to add new logging statements for the specific
 information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
 
-More detailed information can be found in the Javadoc for @uref{http://pag.lcs.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug} and
-@uref{http://pag.lcs.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,
+More detailed information can be found in the Javadoc for @uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug} and
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,
 daikon.inv.Invariant}.
 
 @menu
@@ -867,11 +867,11 @@ though ``a[] == b[]'' does not imply anything about the truth of
 More detail can be found in two theses.  See Chapter 7,
 ``Scalability'', of @cite{Automatic Generation and Checking of Program
 Specifications} (Technical report MIT-LCS-TR-852, at
-@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
+@uref{http://pag.csail.mit.edu/~mistere/pubs/thesis-abstract.html}),
 Jeremy W. Nimmer's Master's thesis.  Also see Chapter 5, ``Enabling
 Incremental Dynamic Invariant Detection'', of @cite{Theorem-proving
 distributed algorithms with dynamic analysis}
-(@uref{http://pag.lcs.mit.edu/pubs/thmprove-newin-mengthesis-abstract.html}),
+(@uref{http://pag.csail.mit.edu/pubs/thmprove-newin-mengthesis-abstract.html}),
 Toh Ne Win's Master's thesis.
 
 
