@@ -26,7 +26,7 @@ class DisjSetsTest
 
   public void testRandoms() {
     // Need to get lots of samples in the range 0..115
-    int[] sizes = { 0, 1, 5, 50, 10, 65, 25, 35 };
+    int[] sizes = { 1, 5, 50, 10, 65, 25, 35 };
     for (int i=0; i < sizes.length; i++) {
       int size = sizes[i];
       System.out.println("size[" + i + "] = " + size);
@@ -42,9 +42,9 @@ class DisjSetsTest
   public void testRemoveFrivolous() {
     DisjSets ds;
 
-    // we want 0 to be a lower bound on the constructor
+    // we want 1 to be a lower bound on the constructor
     for (int i=0; i<20; i++) {
-      new DisjSets(0);
+      new DisjSets(1);
     }
 
     // we want elts to be maxed at length-1
@@ -80,6 +80,12 @@ class DisjSetsTest
     ds.unionCareful(114, 0);
     ds.unionCareful(113, 114);
     ds.unionCareful(114, 114);
+
+    // kill: this.s[1] <= 33
+    ds = new DisjSets(92);
+    ds.unionCareful(88, 1);
+    ds.unionCareful(80, 1);
+    ds.unionCareful(1, 50);
   }
 
   private static Random rnd = new Random(1000);
