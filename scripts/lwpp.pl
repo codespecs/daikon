@@ -47,7 +47,7 @@ while (<DECLS>) {
       $ppt_declaration .= $variable;
 
       chomp $variable;
-      if (is_array($variable)) {
+      if (is_array_element($variable)) {
         add_array_variables_to_interesting_variables($variable);
       } else {
         $interesting_variables{$variable} = 1;
@@ -58,6 +58,7 @@ while (<DECLS>) {
       $ppt_declaration .= <DECLS>;
       $ppt_declaration .= <DECLS>;
     }
+
     
     @ppt_declaration = split(/\n/, $ppt_declaration);
     $ppt = shift @ppt_declaration;
@@ -79,11 +80,11 @@ while (<DECLS>) {
       print "$declared_type\n";
       print "$representation_type\n";
       
-      if (is_array($variable)) {
-        print_array_element_type($variable, $function);
+      if (is_array_element($variable)) {
+        print_implicit_type($variable, $function);
         print_array_index_types($variable, $function);
       } else {
-        print_nonarray_type($variable, $function);
+        print_implicit_type($variable, $function);
       }
       
       print "\n";
@@ -107,34 +108,34 @@ foreach $implicit_type (sort numerically values %implicit_types) {
 sub numerically { $a <=> $b; }
 
 
-sub is_array {
+sub is_array_element {
   my ($variable) = @_;
-  return $variable =~ /\[\]/;
+  return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
 }
 
 
 sub get_comparable_variables {
   my ($variable, $function) = @_;
 
-  %comparable_variables = ();
+  my %comparable_variables = ();
 
-  # every variable is comparable to itself
-  # note: Lackwit should provide this information, but sometimes
-  # doesn't.  Can't hurt to add it explicitly.
-  $comparable_variables{$variable} = 1;
+  # every variable is comparable to itself, except array elements,
+  # which are comparable to their _element variable
+  if (not is_array_element($variable)) {
+    $comparable_variables{$variable} = 1;
+  }
 
-  $lackwit_results = 
+  my $lackwit_results = 
     `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
   
   foreach (split /\n/, $lackwit_results) {
     chomp;
     
-    # we are looking for lines of the form "(filename:line)
-    # variable".  skip lines not matching this
-    # description.
+    # we are looking for lines of the form "(filename:line) variable".
+    # skip lines not matching this description.
     next if not /^\(.*\) (.*)$/;
     
-    $comparable = $1;
+    my $comparable = $1;
     
     # skip type-cast variables ("{") and parameters of other
     # functions ("@")
@@ -144,9 +145,9 @@ sub get_comparable_variables {
     # a function, or a function parameter.  It will be of the
     # format "function:variable".  If the name does not contain a
     # colon, it is a global variable.
-
+    my $comparable_variable;
     if ($comparable =~ /^(.*):(.*)$/) {
-      $comparable_function = $1;
+      my $comparable_function = $1;
       $comparable_variable = $2;
       
       # skip variables in other functions
@@ -155,33 +156,36 @@ sub get_comparable_variables {
       $comparable_variable = $comparable;
     }
     
-    # change array[0] to array[]
-    $comparable_variable =~ s/\[0\]/[]/;
-    
+    if (is_array_element($comparable_variable)) {
+      # change array[0][0]... to array_element
+      $comparable_variable =~ s/(\[0\])+/_element/;
+    }
+
     if (exists $interesting_variables{$comparable_variable}) {
       $comparable_variables{$comparable_variable} = 1;
     } elsif ($comparable_variable =~ /^([^\[]*)(\[\])*$/) {
       # an array may be represented in the trace file as a pointer
-      $array_base = $1;
-      $pointer = "*$array_base";
+      my $array_base = $1;
+      my $pointer = "*$array_base";
       if (exists $interesting_variables{$pointer}) {
         $comparable_variables{$pointer} = 1;
       }
     }
-  } 
+  }
+
   return (join ' ', sort keys %comparable_variables);
 }
 
 
 sub add_array_variables_to_interesting_variables {
   my ($variable) = @_;
-  $array_base = $variable;
+  my $array_base = $variable;
   $array_base =~ s/\[\]//;
-  $element_variable = $array_base . "_element";
+  my $element_variable = $array_base . "_element";
   $interesting_variables{$element_variable} = 1;
-  $count = 0;
+  my $count = 0;
   while ($variable =~ /\[\]/g) {
-    $index_variable = $array_base . "_index_" . $count;
+    my $index_variable = $array_base . "_index_" . $count;
     $interesting_variables{$index_variable} = 1;
     $count++;
   }
@@ -190,22 +194,14 @@ sub add_array_variables_to_interesting_variables {
 
 sub print_array_index_types {
   my ($variable, $function) = @_;
-  $array_base = $variable;
+  my $array_base = $variable;
   $array_base =~ s/\[\]//;
-  $count = 0;
+  my $count = 0;
   while ($representation_type =~ /\[\]/g) {
-    $index_variable = $array_base . "_index_" . $count;
-    $comparable_variables =
+    my $index_variable = $array_base . "_index_" . $count;
+    my $comparable_variables =
       get_comparable_variables($index_variable, $function);
-    if (not exists $implicit_types{$comparable_variables}) {
-      @types = sort numerically values %implicit_types;
-      if ($maximum_type = pop @types) {
-        $implicit_types{$comparable_variables} = $maximum_type + 1;
-      } else {
-        $implicit_types{$comparable_variables} = 1;
-      }
-    }
-    $implicit_type = $implicit_types{$comparable_variables};
+    my $implicit_type = get_implicit_type($comparable_variables);
     
     print "[" . $implicit_type . "]";
     $count++;
@@ -213,41 +209,23 @@ sub print_array_index_types {
 }
 
 
-sub print_array_element_type {
+sub print_implicit_type {
   my ($variable, $function) = @_;
-  $array_base = $variable;
-  $array_base =~ s/\[\]//;
-  $element_variable = $array_base . "_element";
-
-  $comparable_variables =
-    get_comparable_variables($element_variable, $function);
-
-  if (not exists $implicit_types{$comparable_variables}) {
-    @types = sort numerically values %implicit_types;
-    if ($maximum_type = pop @types) {
-      $implicit_types{$comparable_variables} = $maximum_type + 1;
-    } else {
-      $implicit_types{$comparable_variables} = 1;
-    }
-  }
-  $implicit_type = $implicit_types{$comparable_variables};
-    
+  my $comparable_variables = get_comparable_variables($variable, $function);
+  my $implicit_type = get_implicit_type($comparable_variables);
   print $implicit_type;
 }
 
 
-sub print_nonarray_type {
-  my ($variable, $function) = @_;
-  $comparable_variables = get_comparable_variables($variable, $function);
+sub get_implicit_type {
+  my ($comparable_variables) = @_;
   if (not exists $implicit_types{$comparable_variables}) {
-    @types = sort numerically values %implicit_types;
-    if ($maximum_type = pop @types) {
+    my @types = sort numerically values %implicit_types;
+    if (my $maximum_type = pop @types) {
       $implicit_types{$comparable_variables} = $maximum_type + 1;
     } else {
       $implicit_types{$comparable_variables} = 1;
     }
   }
-  $implicit_type = $implicit_types{$comparable_variables};
-  
-  print $implicit_type;
+  return $implicit_types{$comparable_variables};
 }
