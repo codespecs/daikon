@@ -608,11 +608,17 @@ public class Debug {
 
 
   /**
-   * Looks for an element in arr that is contained in str.
+   * Looks for an element in arr that is a substring of str.
    */
 
   private static boolean strContainsElem (String str, String[] arr) {
-    return (ArraysMDE.indexOf(arr, str) != -1);
+
+    for (int i = 0; i < arr.length; i++) {
+      if (str.indexOf (arr[i]) >= 0)
+        return (true);
+
+    }
+    return (false);
   }
 
   /**
