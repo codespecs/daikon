@@ -33,7 +33,8 @@
 (defvar hs-all-hidden nil "Current state of hideshow for toggling all.")
 
 (defun hide-debugging-statements ()
-  "Toggle hiding debugging statements in Java code."
+  "Toggle hiding debugging statements in Java code.
+This uses hideshow, which see."
   (interactive)
   (require 'hideshow)
   (add-to-list 'hs-special-modes-alist java-debug-hiding-hide-if)
