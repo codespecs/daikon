@@ -74,6 +74,7 @@ class Annotate {
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 
   public static final String useJML_SWITCH = "jml_output";
+  public static final String useJAVA_SWITCH = "java_output";
   public static final String useDBC_SWITCH = "dbc_output";
   public static final String wrapXML_SWITCH = "wrap_xml";
 
@@ -87,6 +88,7 @@ class Annotate {
       "  -s   Use // comments rather than /* comments",
       "  --jml_output   Insert JML specifications instead of ESC specifications",
       "  --dbc_output   Insert Jtest DBC specifications instead of ESC specifications",
+      "  --java_output   Insert Java format specifications instead of ESC specifications",
       "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags"
     },
                  lineSep);
@@ -102,6 +104,7 @@ class Annotate {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(useJML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(useJAVA_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useDBC_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
     };
@@ -122,6 +125,10 @@ class Annotate {
         } else if (useJML_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
           setLightweight = false;
+          JMLCompilerWorkaroundFilter.createNextFilterOn = true;
+        } else if (useJAVA_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.JAVA;
+          setLightweight = true;
           JMLCompilerWorkaroundFilter.createNextFilterOn = true;
         } else if (useDBC_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.DBCJAVA;
@@ -189,6 +196,8 @@ class Annotate {
         outputFile = new File(javafile + "-escannotated");
       } else if (Daikon.output_style == OutputFormat.JML) {
         outputFile = new File(javafile + "-jmlannotated");
+      } else if (Daikon.output_style == OutputFormat.JAVA) {
+        outputFile = new File(javafile + "-javaannotated");
       } else if (Daikon.output_style == OutputFormat.DBCJAVA) {
         outputFile = new File(javafile + "-dbcannotated");
       }
