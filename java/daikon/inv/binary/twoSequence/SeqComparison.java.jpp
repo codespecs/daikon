@@ -308,7 +308,7 @@ public class SEQSEQINTEQUAL
   public static Invariant get_proto() {
     if (!dkconfig_enabled)
       return (null);
-    return (new SEQSEQINTEQUAL (null, false));
+    return (new SEQSEQINTEQUAL (null, true));
   }
 
   /** instantiates the invariant on the specified slice **/
