@@ -1,0 +1,272 @@
+Utilities for performing clustering on vector data or difference
+data, creating dendrograms. 
+http://odur.let.rug.nl/~kleiweg/clustering/clustering.html
+
+This software package offers several utilities for performing clustering on data
+sets. Input can be either a set of vectors or a table with difference
+values. Several programs piped together finally result in a PostScript image of
+a dendrogram, or an on-screen image (Unix/X11 or MS-DOS).
+
+Files:
+
+* Makefile -- Unix Makefile for all programs.
+
+* difftbl.c -- For conversion of vector data into a difference table, using one
+of several difference measures. Updated 2001/12/06 
+
+* cluster.c -- Data clustering on a difference table, using one of several
+algorithms. Updated 2001/12/06
+
+* den.c -- Program for transforming clustering data into a PostScript image of a
+dendrogram. Updated 2001/12/06
+
+* denxview.c -- Unix/X11 program for transforming clustering data into an
+on-screen image of a dendrogram. Updated 2000/08/14
+
+* clgroup.c -- Display cluster grouping. Updated 2001/12/06
+
+
+Usage
+=====
+
+All programs read input either from stdin or from a file, and write to stdout,
+except for denxview and denview. You can examine the data files used in the
+examples below to learn about their syntax.
+
+A typical usage is:
+
+difftbl vector-file | cluster -w | den PostScript-file
+
+But you can substitute your own program in any part of this pipe.
+
+==========
+1) difftbl
+==========
+Updated 2001/12/06, Version 1.02: New option -o
+
+This program reads a file with data vectors, and produces a difference
+table. The program has the following options:
+
+-c 
+  Use city block distance.
+-e 
+  Use Euclidean difference (default).
+-p
+  Use 1 - Pearson correlation coefficient.
+-s
+  Use square difference.
+-o filename
+  Output file
+-P
+  Generate pair listing
+
+Example: 
+    difftbl  NLchars.vec > NLchars.dif
+
+==========
+2) cluster
+==========
+Updated 2001/12/06, Version 1.02: New option -o
+
+Updated 2001/11/15, Version 1.00: small code changes, recompiled with
+GCC for Windows (previous version had no version number)
+
+This program is an implementation of seven different clustering
+algorithms, which are described in:
+
+AnilK. Jain and RichardC. Dubes.
+Algorithms for Clustering Data; Prentice Hall, Englewood Cliffs, NJ, 1988.
+
+The program reads a difference file, and creates a clustering.
+What clustering algorithm to use is defined by the following options:
+
+-sl
+  Single Link (Nearest Neighbor)
+-cl
+  Complete Link
+-ga
+  Group Average
+-wa
+  Weighted Average
+-uc
+  Unweighted Centroid (Centroid)
+-wc
+  Weighted Centroid (Median)
+-wm
+  Ward's Method (Minimum Variance)
+
+Other options:
+
+-o filename
+  Output file
+-u
+  Unsorted
+
+
+Example:
+    cluster -wm  NLchars.dif > NLchars.clu
+
+
+Please note the order of the data in the input file. Lines starting with
+a hash (#) are only comments. They do not define the order of the data.
+
+======
+3) den
+======
+
+This program transforms a clustering file into a PostScript image of a
+dendrogram. Labels in the input data may contain all characters from the ISO
+Latin 1 character set. The program has the following options:
+
+-2
+  Produce PostScript Level 2, that is, assume the
+  ISOLatin1Encoding array has already been defined.
+-a
+  Curved links (default: rectangular).
+-b  float
+  Usually, 0 is used as the offset, or the minimum value in the
+  clustering data if that value is negative. You can use this option to
+  define the offset yourself.
+-c
+  Color links (with number of groups from 2 through 19). The colors
+  corresponds to those used by the program  ../dialects/psarea.
+-C
+  Color labels (with number of groups from 2 through 19). The colors
+  corresponds to those used by the program  ../dialects/psarea.
+-e float
+  Exponent (default: 1.0). The cluster values are raised to this
+  exponent. The values on the ruler are adjusted likewise. For example,
+  to get the square root of the values, use: -e.5
+-E
+  Print an example cluster file.
+-f int
+  Fontsize (default: 8).
+-L
+  No labels.
+-n int
+  Number of groups (default: 1). The dendrogram will be split in a
+  number of groups, with extra space between the groups. This
+  option is required if you want colors or patterns.
+-o filename
+  output file
+-p
+  Placement of labels in two columns,
+  making room for twice the number of labels.
+-P
+  Patterns (implies: -2 -L, with number of groups from 2 through 19). The patterns
+  corresponds to those used by the program  ../dialects/psarea.
+-r int
+  Line skip for ruler (in points, 1 point = 1/72 inch).
+-R
+  No ruler.
+-s int
+  Line skip within groups (in points, 1 point = 1/72 inch).
+-S int
+  Line skip between groups, see option -n (in points, 1 point = 1/72 inch).
+-t
+  Triangular links (default: rectangular).
+-T
+  Helvetica usually looks better in diagrams, Times-Roman in running text. 
+  The old version of den used Times-Roman.
+
+Example
+    den  NLchars.clu >  NLchars.ps
+
+===========
+5) denxview
+===========
+
+This program (Unix only) reads a clustering file and displays a
+dendrogram in a window on the X11 display. To quit the program, type
+'q' in the window. Options:
+
+-b  float
+  See: den.
+-f  fontname
+  A valid X11 font name. For really large dendrograms you could use
+  a 5x8 font.
+
+==========
+6) clgroup
+==========
+This program prints a cluster grouping from a cluster file. Options:
+
+-n  int
+  Number of groups
+-i
+  Indexed output
+-o filename
+  Output file
+
+With indexed output, labels are &quot;quoted&quot; if there are spaces or tabs in the
+labels, or if the label starts with a quote.
+
+Examples:
+    clgroup -n 3  NLchars.clu >  NLchars.txt
+    clgroup -n 3 -i NLchars.clu >  NLchars-i.txt
+
+Example clustering file
+
+The next example is used to illustrate the syntax of a clustering
+definition. It describes the dendrogram in the figure at the top of this document.
+
+
+    # Example cluster file
+
+    1 .12
+    L Norwegian
+    L Swedish
+
+    2 .15
+    C 1
+    L Danish
+
+    3 .3
+    L Dutch
+    L German
+
+    4 .35 Nordic group
+    L Icelandic
+    C 2
+
+    5 .7
+    C 4
+    C 3
+
+Empty lines are ignored. Anything starting with # is treated as
+a comment.
+
+A clustering definition is a set of descriptions of clusters. Each
+cluster has an index number, a value, and two links to either other
+clusters or to labels. There can also be an optional textual comment.
+
+Each cluster is defined in three lines.
+
+* The first lines contains a number used for identification. Each cluster needs
+  an unique integer index number.<br> Following the index is a value that
+  defines the difference between the two sub-clusters or labels.<br> Any text
+  following the difference value is treated as a description to be added to this
+  particular cluster.
+
+* The second lines describes what the first item of this cluster is. It can be
+  either a sub-cluster or a label.<br> A sub-cluster is indicated with a letter
+  C followed by the index number of that sub-cluster.<br> A label is indicated
+  with a letter L followed be the text of the label itself.  The third line
+  describes the second item of this cluster. The syntax is identical to the
+  second line.
+
+
+Cluster definitions can be given in any order. Swapping the second and
+third line in a definition swaps the two branches of this cluster in the
+output figure.
+
+Compare the items in the above example to the figure.<br>
+Cluster number 1 has two labels, Norwegian and Swedish.
+This cluster is indicated in the figure by the line
+connecting Norwegian to Swedish.<br>
+Cluster number 4 has one label, Icelandic and a sub-cluster with number
+2. It connects the label Icelandic to the cluster containing Norwegian,
+Swedish and Danish. The description 'Nordic group' is placed at the
+right of the connecting line.<br>
+Cluster number 5 has two sub-clusters. It connects the cluster containing
+the Nordic group to the cluster containing Dutch and German.
