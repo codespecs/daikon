@@ -41,7 +41,7 @@ public final class Assert {
 //      is not meant to be caught, we just extend Error instead of
 //      RuntimeException. As with RuntimeException, a method does not need to
 //      declare that it throws Error. In addition programmers are less likely
-//      to write "catch(Error) ..." than "catch(RuntimeException)".
+//      to write "catch (Error) ..." than "catch (RuntimeException)".
 //
 //      With a good optimizing compiler there will be no run time overhead for
 //      many uses of these assertions when Assert.enabled is set to false.
