@@ -56,7 +56,7 @@ public class NonZeroFloat
       debug.debug("NonZeroFloat.instantiate(" + ppt.name + ")");
     }
 
-    NonZeroFloat  result = new NonZeroFloat (ppt);
+    NonZeroFloat  result = new NonZeroFloat(ppt);
 
     return result;
   }
@@ -165,7 +165,7 @@ public class NonZeroFloat
     // For every EltNonZeroFloat  at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZeroFloat) && inv.enoughSamples()) {
         VarInfo v1 = var();

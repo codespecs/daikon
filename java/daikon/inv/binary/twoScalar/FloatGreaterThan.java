@@ -33,7 +33,7 @@ public final class FloatGreaterThan
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.FloatGreaterThan");
 
-  private FloatValueTracker  values_cache = new FloatValueTracker (8);
+  private FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   protected Object clone() {
     FloatGreaterThan  result = (FloatGreaterThan) super.clone();
@@ -53,7 +53,7 @@ public final class FloatGreaterThan
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat() )) {
+    if (! (var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat())) {
       return null;
     }
 
@@ -80,7 +80,7 @@ public final class FloatGreaterThan
       }
     }
 
-    return new FloatGreaterThan (ppt);
+    return new FloatGreaterThan(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -88,14 +88,14 @@ public final class FloatGreaterThan
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new FloatLessThan (ppt);
+    return new FloatLessThan(ppt);
   }
 
   // Look up a previously instantiated FloatGreaterThan  relationship.
   // Should this implementation be made more efficient?
   public static FloatGreaterThan  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof FloatGreaterThan)
         return (FloatGreaterThan) inv;
@@ -207,7 +207,7 @@ public final class FloatGreaterThan
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof FloatLessThan  ) || (other instanceof FloatLessEqual  ) || (other instanceof FloatEqual  ))
+    if ((other instanceof FloatLessThan  ) || (other instanceof FloatLessEqual  ) || (other instanceof FloatEqual ))
       return true;
 
     return false;

@@ -30,13 +30,13 @@ public class PairwiseFunctionUnary
 
   protected PairwiseFunctionUnary (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
-    core = new FunctionUnaryCore (this, methodname, function, inverse);
+    core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
 
   public static PairwiseFunctionUnary  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
      PairwiseFunctionUnary  result =
-      new PairwiseFunctionUnary (ppt, methodname, methodnumber, inverse);
+      new PairwiseFunctionUnary(ppt, methodname, methodnumber, inverse);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {

@@ -69,7 +69,7 @@ public class UpperBoundFloat
 
   public static UpperBoundFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new UpperBoundFloat (ppt);
+    return new UpperBoundFloat(ppt);
   }
 
   public String repr() {
@@ -183,7 +183,7 @@ public class UpperBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBoundFloat) {
-      if (core.max1  <  ((LowerBoundFloat) other). core.min1 )
+      if (core.max1  <  ((LowerBoundFloat) other). core.min1)
         return true;
     }
     if (other instanceof OneOfFloat) {
@@ -195,7 +195,7 @@ public class UpperBoundFloat
   // Look up a previously instantiated invariant.
   public static UpperBoundFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof UpperBoundFloat)
         return (UpperBoundFloat) inv;

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-11-23 15:10:12 mernst>
+# Time-stamp: <2002-11-23 15:44:08 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -161,7 +161,7 @@ sub unescape_comments ( $ ) {
     # Remove all trailing space
     s/[ \t]+\n/\n/g;
     # Remove space after package name
-    s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/g;
+    s/^(package .*\.) ([^ ]*) ?;/$1$2;/gm;
     # Remove all extra spaces in import list
     while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
     # convert " );" to ");"; requires "=" somewhere earlier in line
@@ -176,10 +176,15 @@ sub unescape_comments ( $ ) {
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
     ## These are necessary to work around cpp differences
-    # convert "new int[2 ]" to "new int[2]"
-    s/(\bnew [a-z]+\[\w+) *(\])/$1$2/g;
+    # convert "new int[2 ]" to "new int[2]"; likewise for "new Foo ("
+    s/(\bnew \w+\[\w+) *(\])/$1$2/g;
+    s/(\bnew \w+) (\()/$1$2/g;
     # convert "public PptSlice1 (" to "public PptSlice1("
-    s/(^ *public \w+) (\()/$1$2/g;
+    s/(^ *public \w+) (\()/$1$2/gm;
+    # convert "double [] val1_array =" to "double[] val1_array ="
+    s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
+    # convert "\" );" to "\");"
+    s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
 
     ## Remove extra vertical space
     # compress out duplicate blank lines

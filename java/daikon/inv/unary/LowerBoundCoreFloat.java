@@ -94,7 +94,7 @@ public class LowerBoundCoreFloat
   private double  calc_modulus() {
     // Need to reinstate this at some point.
     // {
-    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
+    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext();) {
     //     Invariant inv = (Invariant) itor.next();
     //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
@@ -113,13 +113,13 @@ public class LowerBoundCoreFloat
 
     double  v = value;
 
-    if (v >  max ) {
+    if (v >  max) {
       max  = v;
     }
 
-    if (v == min1 ) {
+    if (v == min1) {
       num_min1  += count;
-    } else if (v <  min1 ) {
+    } else if (v <  min1) {
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
@@ -130,16 +130,16 @@ public class LowerBoundCoreFloat
       num_min2  = num_min1 ;
       min1  = v;
       num_min1  = count;
-    } else if (v == min2 ) {
+    } else if (v == min2) {
       num_min2  += count;
-    } else if (v <  min2 ) {
+    } else if (v <  min2) {
       min3  = min2 ;
       num_min3  = num_min2 ;
       min2  = v;
       num_min2  = count;
-    } else if (v == min3 ) {
+    } else if (v == min3) {
       num_min3  += count;
-    } else if (v <  min3 ) {
+    } else if (v <  min3) {
       min3  = v;
       num_min3  = count;
     }

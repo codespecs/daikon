@@ -34,7 +34,7 @@ public class FunctionBinary
 
   protected FunctionBinary (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
-    core = new FunctionBinaryCore (this, methodname, methodNumber, var_order);
+    core = new FunctionBinaryCore(this, methodname, methodNumber, var_order);
   }
 
   public static FunctionBinary  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
@@ -70,7 +70,7 @@ public class FunctionBinary
     }
     */
 
-    return new FunctionBinary (ppt, methodname, methodNumber, var_order);
+    return new FunctionBinary(ppt, methodname, methodNumber, var_order);
   }
 
   protected Object clone() {
@@ -183,7 +183,7 @@ public class FunctionBinary
           if (suppressor.num_elts() <= 1) {
             List suppressors = new ArrayList();
             suppressors.add (suppressor);
-            SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
+            SuppressionLink sl = new SuppressionLink(this, inv, suppressors);
             if (debug.isDebugEnabled()) {
               debug.debug ("Success: " + template.results[0].repr());
             }

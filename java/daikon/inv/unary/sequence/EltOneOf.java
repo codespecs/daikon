@@ -75,7 +75,7 @@ public final class EltOneOf
 
   public static EltOneOf  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new EltOneOf (ppt);
+    return new EltOneOf(ppt);
   }
 
   protected Object clone() {
@@ -104,7 +104,7 @@ public final class EltOneOf
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts  );
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public long  min_elt() {
@@ -201,7 +201,7 @@ public final class EltOneOf
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -213,7 +213,7 @@ public final class EltOneOf
     //have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -284,7 +284,7 @@ public final class EltOneOf
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -312,7 +312,7 @@ public final class EltOneOf
         // Do nothing
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else {
       result = "";
@@ -329,7 +329,7 @@ public final class EltOneOf
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -365,7 +365,7 @@ public final class EltOneOf
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -385,7 +385,7 @@ public final class EltOneOf
       } else if (num_elts == 0) {
         return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else {
       result = "";
@@ -481,7 +481,7 @@ public final class EltOneOf
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext();) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
         continue;
@@ -539,7 +539,7 @@ public final class EltOneOf
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -592,7 +592,7 @@ public final class EltOneOf
   // Look up a previously instantiated invariant.
   public static EltOneOf  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOf)
         return (EltOneOf) inv;

@@ -25,12 +25,12 @@ public class PairwiseLinearBinaryFloat
 
   protected PairwiseLinearBinaryFloat (PptSlice ppt) {
     super(ppt);
-    core = new LinearBinaryCoreFloat (this);
+    core = new LinearBinaryCoreFloat(this);
   }
 
   public static PairwiseLinearBinaryFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new PairwiseLinearBinaryFloat (ppt);
+    return new PairwiseLinearBinaryFloat(ppt);
   }
 
   protected Object clone() {

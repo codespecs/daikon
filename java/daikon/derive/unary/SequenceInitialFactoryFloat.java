@@ -19,7 +19,7 @@ public final class SequenceInitialFactoryFloat  extends UnaryDerivationFactory {
       return null;
     }
 
-    if (vi.rep_type != ProglangType.DOUBLE_ARRAY )
+    if (vi.rep_type != ProglangType.DOUBLE_ARRAY)
       return null;
 
     // System.out.println("SequenceInitial.applicable(" + vi.name + ") = "
@@ -68,7 +68,7 @@ public final class SequenceInitialFactoryFloat  extends UnaryDerivationFactory {
     int j=0;
     for (int i=lowerbound; i<=upperbound; i++) {
       if (! ((i == 0) && suppress_zero)) {
-        result[j] = new SequenceInitialFloat (vi, i);
+        result[j] = new SequenceInitialFloat(vi, i);
         j++;
       }
     }

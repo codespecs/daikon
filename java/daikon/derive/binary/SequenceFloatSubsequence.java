@@ -28,7 +28,7 @@ public final class SequenceFloatSubsequence
    * @param off_by_one true means we should exclude the scalar from
    * the range; false means we should include it
    **/
-  public SequenceFloatSubsequence (VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
+  public SequenceFloatSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super (vi1, vi2, from_start, off_by_one);
   }
 
@@ -43,7 +43,7 @@ public final class SequenceFloatSubsequence
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    double [] val1_array = (double []) val1;
+    double[] val1_array = (double []) val1;
     int val2 = base2.getIndexValue(full_vt);
 
     // One could argue that if the range exceeds the array bounds, one
@@ -75,7 +75,7 @@ public final class SequenceFloatSubsequence
     if ((begin_inclusive == 0) && (end_exclusive == val1_array.length))
       return new ValueAndModified(val1, mod);
 
-    double [] subarr = ArraysMDE.subarray(val1_array, begin_inclusive, end_exclusive - begin_inclusive);
+    double[] subarr = ArraysMDE.subarray(val1_array, begin_inclusive, end_exclusive - begin_inclusive);
     subarr = (double []) Intern.intern(subarr);
     return new ValueAndModified(subarr, mod);
   }

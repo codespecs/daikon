@@ -384,7 +384,7 @@ public final class PptSlice2
       if (string1 && string2) {
         TwoString inv = (TwoString) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           String value1 = (String) vals[0];
@@ -405,7 +405,7 @@ public final class PptSlice2
       } else if ((!array1) && (!array2)) {
         TwoScalar inv = (TwoScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           long value1 = ((Long) vals[0]).longValue();
@@ -424,7 +424,7 @@ public final class PptSlice2
       } else if (doublearray1 && (!array2)) {
         SequenceFloat inv = (SequenceFloat) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           double[] seqval = (double[]) vals[0];
@@ -443,7 +443,7 @@ public final class PptSlice2
       } else if (array1 && (!array2)) {
         SequenceScalar inv = (SequenceScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           long[] seqval = (long[]) vals[0];
@@ -462,7 +462,7 @@ public final class PptSlice2
        } else if ((!array1) && doublearray2) {
         SequenceFloat inv = (SequenceFloat) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           double[] seqval = (double[]) vals[1];
@@ -482,7 +482,7 @@ public final class PptSlice2
        } else if ((!array1) && array2) {
         SequenceScalar inv = (SequenceScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           long[] seqval = (long[]) vals[1];
@@ -501,7 +501,7 @@ public final class PptSlice2
       } else if (doublearray1 && doublearray2) {
         TwoSequenceFloat inv = (TwoSequenceFloat) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           double[] val1 = (double[]) vals[0];
@@ -521,7 +521,7 @@ public final class PptSlice2
       } else if (array1 && array2) {
         TwoSequence inv = (TwoSequence) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           long[] val1 = (long[]) vals[0];

@@ -36,7 +36,7 @@ public class CommonSequence
 
   public static CommonSequence  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new CommonSequence (ppt);
+    return new CommonSequence(ppt);
   }
 
   // this.intersect is read-only, so don't clone it
@@ -85,7 +85,7 @@ public class CommonSequence
     if (intersect==null)
       intersect = a;
     else {
-      long [] tmp = new long [intersect.length];
+      long[] tmp = new long [intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&

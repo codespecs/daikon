@@ -34,8 +34,8 @@ public final class SeqIndexNonEqualFloat
 
     VarInfo var = var();
     Assert.assertTrue(var.rep_type == ProglangType. DOUBLE_ARRAY);
-    Assert.assertTrue(var.type. elementIsFloat() );
-    core = new NonEqualCoreFloat (this, 0);
+    Assert.assertTrue(var.type. elementIsFloat());
+    core = new NonEqualCoreFloat(this, 0);
 
     if (debugSeqIndexNonEqual) {
       System.out.println("Instantiated: " + format());
@@ -53,10 +53,10 @@ public final class SeqIndexNonEqualFloat
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsFloat() )
+    if (! elt_type. baseIsFloat())
       return null;
 
-    return new SeqIndexNonEqualFloat (ppt);
+    return new SeqIndexNonEqualFloat(ppt);
   }
 
   protected Object clone() {
@@ -162,7 +162,7 @@ public final class SeqIndexNonEqualFloat
   // Look up a previously instantiated invariant.
   public static SeqIndexNonEqualFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIndexNonEqualFloat)
         return (SeqIndexNonEqualFloat) inv;

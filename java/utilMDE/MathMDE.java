@@ -82,7 +82,7 @@ public final class MathMDE {
     return x >>> y;
   }
 
-  public static long rshiftUnsigned(long x, long y ) {
+  public static long rshiftUnsigned(long x, long y) {
     return x >>> y;
   }
 
@@ -642,7 +642,7 @@ public final class MathMDE {
     Arrays.sort(nums);
     int  min = nums[0];
     int  max = nums[nums.length-1];
-    int [] result = new int [ max - min + 1 - nums.length  ];
+    int[] result = new int [ max - min + 1 - nums.length  ];
     int result_index = 0;
     int  val = min;
     for (int i=0; i<nums.length; i++) {
@@ -660,7 +660,7 @@ public final class MathMDE {
     } else {
       // There were duplicates in the nums array, so we didn't fill up
       // the result array.
-      int [] new_result = new int [result_index];
+      int[] new_result = new int [result_index];
       System.arraycopy(result, 0, new_result, 0, result_index);
       return new_result;
     }
@@ -676,7 +676,7 @@ public final class MathMDE {
    * maximum of the original values.
    **/
   static final class MissingNumbersIteratorInt  implements Iterator {
-    int [] nums;
+    int[] nums;
     Iterator nums_itor;
     int  current_nonmissing;
     int  current_missing;
@@ -756,7 +756,7 @@ public final class MathMDE {
     public Object next() {
       if (!hasNext())
 	throw new NoSuchElementException();
-      Integer  result = new Integer (current_missing);
+      Integer  result = new Integer(current_missing);
       current_missing++;
       return result;
     }
@@ -779,7 +779,7 @@ public final class MathMDE {
     int  range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
-    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt (nums, true));
+    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt(nums, true));
   }
 
   private static int [] nonmodulus_strict_int_internal (Iterator missing) {
@@ -788,7 +788,7 @@ public final class MathMDE {
     // modulus_strict.
     UtilMDE.RemoveFirstAndLastIterator missing_nums
       = new UtilMDE.RemoveFirstAndLastIterator(missing);
-    int [] result = modulus_strict_int (missing_nums, false);
+    int[] result = modulus_strict_int (missing_nums, false);
     if (result == null)
       return result;
     if (! check_first_and_last_nonmodulus(result, missing_nums))
@@ -811,7 +811,7 @@ public final class MathMDE {
    * m) but all missing numbers in their range are.
    **/
   public static int [] nonmodulus_strict_int (Iterator nums) {
-    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt (nums, true));
+    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt(nums, true));
   }
 
   // Old, slightly less efficient implementation that uses the version of
@@ -885,7 +885,7 @@ public final class MathMDE {
     Arrays.sort(nums);
     long  min = nums[0];
     long  max = nums[nums.length-1];
-    long [] result = new long [new Long( max - min + 1 - nums.length ).intValue() ];
+    long[] result = new long [new Long( max - min + 1 - nums.length ).intValue() ];
     int result_index = 0;
     long  val = min;
     for (int i=0; i<nums.length; i++) {
@@ -903,7 +903,7 @@ public final class MathMDE {
     } else {
       // There were duplicates in the nums array, so we didn't fill up
       // the result array.
-      long [] new_result = new long [result_index];
+      long[] new_result = new long [result_index];
       System.arraycopy(result, 0, new_result, 0, result_index);
       return new_result;
     }
@@ -919,7 +919,7 @@ public final class MathMDE {
    * maximum of the original values.
    **/
   static final class MissingNumbersIteratorLong  implements Iterator {
-    long [] nums;
+    long[] nums;
     Iterator nums_itor;
     long  current_nonmissing;
     long  current_missing;
@@ -999,7 +999,7 @@ public final class MathMDE {
     public Object next() {
       if (!hasNext())
 	throw new NoSuchElementException();
-      Long  result = new Long (current_missing);
+      Long  result = new Long(current_missing);
       current_missing++;
       return result;
     }
@@ -1022,7 +1022,7 @@ public final class MathMDE {
     long  range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
-    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong (nums, true));
+    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong(nums, true));
   }
 
   private static long [] nonmodulus_strict_long_internal (Iterator missing) {
@@ -1031,7 +1031,7 @@ public final class MathMDE {
     // modulus_strict.
     UtilMDE.RemoveFirstAndLastIterator missing_nums
       = new UtilMDE.RemoveFirstAndLastIterator(missing);
-    long [] result = modulus_strict_long (missing_nums, false);
+    long[] result = modulus_strict_long (missing_nums, false);
     if (result == null)
       return result;
     if (! check_first_and_last_nonmodulus(result, missing_nums))
@@ -1054,7 +1054,7 @@ public final class MathMDE {
    * m) but all missing numbers in their range are.
    **/
   public static long [] nonmodulus_strict_long (Iterator nums) {
-    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong (nums, true));
+    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong(nums, true));
   }
 
   // Old, slightly less efficient implementation that uses the version of

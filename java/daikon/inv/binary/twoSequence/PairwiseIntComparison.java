@@ -23,7 +23,7 @@ public class PairwiseIntComparison
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseIntComparison" );
+    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseIntComparison");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -38,12 +38,12 @@ public class PairwiseIntComparison
 
   protected PairwiseIntComparison (PptSlice ppt) {
     super(ppt);
-    core = new IntComparisonCore (this);
+    core = new IntComparisonCore(this);
   }
 
   protected PairwiseIntComparison (PptSlice ppt, boolean only_eq) {
     super(ppt);
-    core = new IntComparisonCore (this, only_eq);
+    core = new IntComparisonCore(this, only_eq);
   }
 
   public static PairwiseIntComparison  instantiate(PptSlice ppt) {
@@ -59,10 +59,10 @@ public class PairwiseIntComparison
     }
 
     boolean only_eq = false;
-    if (! (var1.type. elementIsIntegral()  && var2.type. elementIsIntegral() )) {
+    if (! (var1.type. elementIsIntegral()  && var2.type. elementIsIntegral())) {
       only_eq = true;
     }
-     PairwiseIntComparison  result = new PairwiseIntComparison (ppt, only_eq);
+     PairwiseIntComparison  result = new PairwiseIntComparison(ppt, only_eq);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -188,7 +188,7 @@ public class PairwiseIntComparison
   // Look up a previously instantiated invariant.
   public static PairwiseIntComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof PairwiseIntComparison)
         return (PairwiseIntComparison) inv;

@@ -23,7 +23,7 @@ public class PairwiseFloatComparison
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseFloatComparison" );
+    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseFloatComparison");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -38,12 +38,12 @@ public class PairwiseFloatComparison
 
   protected PairwiseFloatComparison (PptSlice ppt) {
     super(ppt);
-    core = new FloatComparisonCore (this);
+    core = new FloatComparisonCore(this);
   }
 
   protected PairwiseFloatComparison (PptSlice ppt, boolean only_eq) {
     super(ppt);
-    core = new FloatComparisonCore (this, only_eq);
+    core = new FloatComparisonCore(this, only_eq);
   }
 
   public static PairwiseFloatComparison  instantiate(PptSlice ppt) {
@@ -59,10 +59,10 @@ public class PairwiseFloatComparison
     }
 
     boolean only_eq = false;
-    if (! (var1.type. elementIsFloat()  && var2.type. elementIsFloat() )) {
+    if (! (var1.type. elementIsFloat()  && var2.type. elementIsFloat())) {
       only_eq = true;
     }
-     PairwiseFloatComparison  result = new PairwiseFloatComparison (ppt, only_eq);
+     PairwiseFloatComparison  result = new PairwiseFloatComparison(ppt, only_eq);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -188,7 +188,7 @@ public class PairwiseFloatComparison
   // Look up a previously instantiated invariant.
   public static PairwiseFloatComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof PairwiseFloatComparison)
         return (PairwiseFloatComparison) inv;

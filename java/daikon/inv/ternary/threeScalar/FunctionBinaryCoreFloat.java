@@ -30,7 +30,7 @@ public final class FunctionBinaryCoreFloat
   int values_seen = 0;
   int equal_values = 0;
 
-  private FloatValueTracker  values_cache = new FloatValueTracker (8);
+  private FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   public Invariant wrapper;
 

@@ -44,13 +44,13 @@ public final class SequenceFloatIntersection
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    double [] val1_array = (double []) val1;
+    double[] val1_array = (double []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    double [] val2_array = (double []) val2;
+    double[] val2_array = (double []) val2;
 
-    double [] tmp = new double [val1_array.length + val2_array.length];
+    double[] tmp = new double [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       double  v = val1_array[i];
@@ -59,7 +59,7 @@ public final class SequenceFloatIntersection
         tmp[size++] = v;
     }
 
-    double [] intersect = ArraysMDE.subarray(tmp, 0, size);
+    double[] intersect = ArraysMDE.subarray(tmp, 0, size);
     intersect = (double  []) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)

@@ -35,7 +35,7 @@ public final class FloatComparisonCore
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
-  public FloatValueTracker  values_cache = new FloatValueTracker (8);
+  public FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   public Invariant wrapper;
 

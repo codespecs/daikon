@@ -324,7 +324,7 @@ public final class PptSlice3
           && (rep3 == ProglangType.INT)) {
         ThreeScalar inv = (ThreeScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           long val1 = ((Long) vals[0]).longValue();

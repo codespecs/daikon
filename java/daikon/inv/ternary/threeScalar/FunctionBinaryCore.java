@@ -30,7 +30,7 @@ public final class FunctionBinaryCore
   int values_seen = 0;
   int equal_values = 0;
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 

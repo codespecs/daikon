@@ -69,7 +69,7 @@ public class UpperBound
 
   public static UpperBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new UpperBound (ppt);
+    return new UpperBound(ppt);
   }
 
   public String repr() {
@@ -183,7 +183,7 @@ public class UpperBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBound) {
-      if (core.max1  <  ((LowerBound) other). core.min1 )
+      if (core.max1  <  ((LowerBound) other). core.min1)
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -195,7 +195,7 @@ public class UpperBound
   // Look up a previously instantiated invariant.
   public static UpperBound  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof UpperBound)
         return (UpperBound) inv;

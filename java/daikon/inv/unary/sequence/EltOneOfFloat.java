@@ -65,7 +65,7 @@ public final class EltOneOfFloat
 
   public static EltOneOfFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new EltOneOfFloat (ppt);
+    return new EltOneOfFloat(ppt);
   }
 
   protected Object clone() {
@@ -89,7 +89,7 @@ public final class EltOneOfFloat
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts  );
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public double  min_elt() {
@@ -126,7 +126,7 @@ public final class EltOneOfFloat
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(String.valueOf( elts[i] ) );
+      sb.append(String.valueOf( elts[i] ));
     }
     sb.append(" }");
     return sb.toString();
@@ -172,7 +172,7 @@ public final class EltOneOfFloat
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  String.valueOf( elts[i] )   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  String.valueOf( elts[i] )  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -184,7 +184,7 @@ public final class EltOneOfFloat
     //have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -229,7 +229,7 @@ public final class EltOneOfFloat
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -249,7 +249,7 @@ public final class EltOneOfFloat
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -270,7 +270,7 @@ public final class EltOneOfFloat
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -353,7 +353,7 @@ public final class EltOneOfFloat
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext();) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
         continue;
@@ -382,7 +382,7 @@ public final class EltOneOfFloat
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -435,7 +435,7 @@ public final class EltOneOfFloat
   // Look up a previously instantiated invariant.
   public static EltOneOfFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOfFloat)
         return (EltOneOfFloat) inv;

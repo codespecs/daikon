@@ -33,7 +33,7 @@ public final class IntLessThan
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntLessThan");
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   protected Object clone() {
     IntLessThan  result = (IntLessThan) super.clone();
@@ -53,7 +53,7 @@ public final class IntLessThan
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
+    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
       return null;
     }
 
@@ -80,7 +80,7 @@ public final class IntLessThan
       }
     }
 
-    return new IntLessThan (ppt);
+    return new IntLessThan(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -88,14 +88,14 @@ public final class IntLessThan
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new IntGreaterThan (ppt);
+    return new IntGreaterThan(ppt);
   }
 
   // Look up a previously instantiated IntLessThan  relationship.
   // Should this implementation be made more efficient?
   public static IntLessThan  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntLessThan)
         return (IntLessThan) inv;
@@ -207,7 +207,7 @@ public final class IntLessThan
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof IntEqual  ) || (other instanceof IntGreaterEqual  ) || (other instanceof IntGreaterThan  ))
+    if ((other instanceof IntEqual  ) || (other instanceof IntGreaterEqual  ) || (other instanceof IntGreaterThan ))
       return true;
 
     return false;

@@ -94,7 +94,7 @@ public class UpperBoundCoreFloat
   private double  calc_modulus() {
     // Need to reinstate this at some point.
     // {
-    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
+    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext();) {
     //     Invariant inv = (Invariant) itor.next();
     //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
@@ -113,13 +113,13 @@ public class UpperBoundCoreFloat
 
     double  v = value;
 
-    if (v <  min ) {
+    if (v <  min) {
       min  = v;
     }
 
-    if (v == max1 ) {
+    if (v == max1) {
       num_max1  += count;
-    } else if (v >  max1 ) {
+    } else if (v >  max1) {
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
@@ -130,16 +130,16 @@ public class UpperBoundCoreFloat
       num_max2  = num_max1 ;
       max1  = v;
       num_max1  = count;
-    } else if (v == max2 ) {
+    } else if (v == max2) {
       num_max2  += count;
-    } else if (v >  max2 ) {
+    } else if (v >  max2) {
       max3  = max2 ;
       num_max3  = num_max2 ;
       max2  = v;
       num_max2  = count;
-    } else if (v == max3 ) {
+    } else if (v == max3) {
       num_max3  += count;
-    } else if (v >  max3 ) {
+    } else if (v >  max3) {
       max3  = v;
       num_max3  = count;
     }

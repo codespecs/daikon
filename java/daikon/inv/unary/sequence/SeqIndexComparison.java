@@ -36,7 +36,7 @@ public final class SeqIndexComparison
   protected SeqIndexComparison (PptSlice ppt) {
     super(ppt);
     Assert.assertTrue(var().rep_type == ProglangType. INT_ARRAY);
-    core = new IntComparisonCore (this);
+    core = new IntComparisonCore(this);
     if (debugSeqIndexComparison) {
       System.out.println("Instantiated: " + format());
     }
@@ -62,7 +62,7 @@ public final class SeqIndexComparison
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsIntegral() ) {
+    if (! elt_type. baseIsIntegral()) {
       return null;
     }
 
@@ -81,7 +81,7 @@ public final class SeqIndexComparison
       return null;
     }
 
-    return new SeqIndexComparison (ppt);
+    return new SeqIndexComparison(ppt);
   }
 
   protected Object clone() {
@@ -198,7 +198,7 @@ public final class SeqIndexComparison
   // Look up a previously instantiated invariant.
   public static SeqIndexComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIndexComparison)
         return (SeqIndexComparison) inv;

@@ -25,12 +25,12 @@ public class PairwiseLinearBinary
 
   protected PairwiseLinearBinary (PptSlice ppt) {
     super(ppt);
-    core = new LinearBinaryCore (this);
+    core = new LinearBinaryCore(this);
   }
 
   public static PairwiseLinearBinary  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new PairwiseLinearBinary (ppt);
+    return new PairwiseLinearBinary(ppt);
   }
 
   protected Object clone() {

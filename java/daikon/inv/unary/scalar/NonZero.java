@@ -58,7 +58,7 @@ public class NonZero
       debug.debug("NonZero.instantiate(" + ppt.name + ")");
     }
 
-    NonZero  result = new NonZero (ppt);
+    NonZero  result = new NonZero(ppt);
 
     if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
       result.pointer_type = true;
@@ -181,7 +181,7 @@ public class NonZero
     // For every EltNonZero  at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZero) && inv.enoughSamples()) {
         VarInfo v1 = var();

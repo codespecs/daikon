@@ -36,13 +36,13 @@ public final class SequenceScalarUnion
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    long [] val1_array = (long []) val1;
+    long[] val1_array = (long []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    long [] val2_array = (long []) val2;
+    long[] val2_array = (long []) val2;
 
-    long [] tmp = new long [val1_array.length+val2_array.length];
+    long[] tmp = new long [val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       long  v = val1_array[i];
@@ -57,7 +57,7 @@ public final class SequenceScalarUnion
         tmp[size++] = v;
     }
 
-    long [] union = ArraysMDE.subarray(tmp, 0, size);
+    long[] union = ArraysMDE.subarray(tmp, 0, size);
     union = (long  []) Intern.intern(union);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)

@@ -24,7 +24,7 @@ public class SubSet
   static final long serialVersionUID = 20020122L;
 
   private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSet" );
+    Category.getInstance("daikon.inv.binary.twoSequence.SubSet");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -62,7 +62,7 @@ public class SubSet
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
     }
 
-    return new SubSet (ppt);
+    return new SubSet(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -201,7 +201,7 @@ public class SubSet
   // Look up a previously instantiated SubSet relationship.
   public static SubSet  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSet)
         return (SubSet) inv;

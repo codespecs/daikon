@@ -77,7 +77,7 @@ public final class OneOfSequence
 
   public static OneOfSequence  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new OneOfSequence (ppt);
+    return new OneOfSequence(ppt);
   }
 
   protected Object clone() {
@@ -110,7 +110,7 @@ public final class OneOfSequence
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts , comparator );
+    Arrays.sort(elts, 0, num_elts , comparator);
   }
 
   public long[]  min_elt() {
@@ -147,7 +147,7 @@ public final class OneOfSequence
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(ArraysMDE.toString( elts[i] ) );
+      sb.append(ArraysMDE.toString( elts[i] ));
     }
     sb.append(" }");
     return sb.toString();
@@ -226,7 +226,7 @@ public final class OneOfSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -255,10 +255,10 @@ public final class OneOfSequence
           length = var().name.applySize().java_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -333,10 +333,10 @@ public final class OneOfSequence
           length = var().name.applySize().esc_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -374,10 +374,10 @@ public final class OneOfSequence
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " == null" + form[2];
         }
       }
@@ -412,10 +412,10 @@ public final class OneOfSequence
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
@@ -528,7 +528,7 @@ public final class OneOfSequence
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -566,7 +566,7 @@ public final class OneOfSequence
   // Look up a previously instantiated invariant.
   public static OneOfSequence  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfSequence)
         return (OneOfSequence) inv;

@@ -30,7 +30,7 @@ public class LinearBinaryFloat
 
   protected LinearBinaryFloat (PptSlice ppt) {
     super(ppt);
-    core = new LinearBinaryCoreFloat (this);
+    core = new LinearBinaryCoreFloat(this);
   }
 
   public static LinearBinaryFloat  instantiate(PptSlice ppt) {
@@ -38,7 +38,7 @@ public class LinearBinaryFloat
     if (ppt.debugged) {
       ppt.debug.debug("LinearBinaryFloat.instantiate(" + ppt.name + ")");
     }
-    return new LinearBinaryFloat (ppt);
+    return new LinearBinaryFloat(ppt);
   }
 
   protected Object clone() {
@@ -127,7 +127,7 @@ public class LinearBinaryFloat
   // Look up a previously instantiated invariant.
   public static LinearBinaryFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LinearBinaryFloat)
         return (LinearBinaryFloat) inv;
@@ -139,7 +139,7 @@ public class LinearBinaryFloat
   // This ought to produce an iterator instead.
   public static Vector findAll(VarInfo vi) {
     Vector result = new Vector();
-    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ;) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2) && view.usesVar(vi)) {
         LinearBinaryFloat  lb = LinearBinaryFloat.find(view);

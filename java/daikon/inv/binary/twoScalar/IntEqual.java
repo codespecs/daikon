@@ -68,7 +68,7 @@ public final class IntEqual
       }
     }
 
-    return new IntEqual (ppt);
+    return new IntEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -81,7 +81,7 @@ public final class IntEqual
   // Should this implementation be made more efficient?
   public static IntEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntEqual)
         return (IntEqual) inv;
@@ -202,7 +202,7 @@ public final class IntEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof IntLessThan  ) || (other instanceof IntGreaterThan  ))
+    if ((other instanceof IntLessThan  ) || (other instanceof IntGreaterThan ))
       return true;
 
     return false;

@@ -30,7 +30,7 @@ public final class SingleFloatSequenceFactory  {
         result.add(EltNonZeroFloat.instantiate(ppt));
         result.add(NoDuplicatesFloat.instantiate(ppt));
         result.add(CommonFloatSequence.instantiate(ppt));
-        if (var.type. elementIsFloat() ) {
+        if (var.type. elementIsFloat()) {
           result.add(EltwiseFloatComparison.instantiate(ppt));
           result.add(EltLowerBoundFloat.instantiate(ppt));
           result.add(EltUpperBoundFloat.instantiate(ppt));

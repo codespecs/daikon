@@ -27,8 +27,8 @@ public final class TwoSequenceFactory  {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    Assert.assertTrue((var1.rep_type == ProglangType. INT_ARRAY )
-                      && (var2.rep_type == ProglangType. INT_ARRAY ));
+    Assert.assertTrue((var1.rep_type == ProglangType. INT_ARRAY)
+                      && (var2.rep_type == ProglangType. INT_ARRAY));
 
     if (! var1.compatible(var2))
       return null;

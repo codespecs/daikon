@@ -67,7 +67,7 @@ public final class OneOfStringSequence
 
   public static OneOfStringSequence  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new OneOfStringSequence (ppt);
+    return new OneOfStringSequence(ppt);
   }
 
   protected Object clone() {
@@ -97,7 +97,7 @@ public final class OneOfStringSequence
   static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts , comparator );
+    Arrays.sort(elts, 0, num_elts , comparator);
   }
 
   public String[]  min_elt() {
@@ -134,7 +134,7 @@ public final class OneOfStringSequence
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(ArraysMDE.toString( elts[i] ) );
+      sb.append(ArraysMDE.toString( elts[i] ));
     }
     sb.append(" }");
     return sb.toString();
@@ -180,7 +180,7 @@ public final class OneOfStringSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -357,7 +357,7 @@ public final class OneOfStringSequence
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -395,7 +395,7 @@ public final class OneOfStringSequence
   // Look up a previously instantiated invariant.
   public static OneOfStringSequence  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfStringSequence)
         return (OneOfStringSequence) inv;

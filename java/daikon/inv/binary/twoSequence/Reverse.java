@@ -19,7 +19,7 @@ public class Reverse
   static final long serialVersionUID = 20020122L;
 
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.Reverse" );
+    Category.getInstance("daikon.inv.binary.twoSequence.Reverse");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -34,7 +34,7 @@ public class Reverse
 
   public static Reverse  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    Reverse  result = new Reverse (ppt);
+    Reverse  result = new Reverse(ppt);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -76,9 +76,9 @@ public class Reverse
   }
 
   public String format_java() {
-    // ( (new StringBuffer (var1().name.name())).reverse().toString(
+    // ( (new StringBuffer(var1().name.name())).reverse().toString(
     //       ).equals (var2().name.name()))
-    return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
+    return "( (new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
 
   public String format_jml() {

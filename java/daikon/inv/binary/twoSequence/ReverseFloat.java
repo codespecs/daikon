@@ -19,7 +19,7 @@ public class ReverseFloat
   static final long serialVersionUID = 20020122L;
 
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.ReverseFloat" );
+    Category.getInstance("daikon.inv.binary.twoSequence.ReverseFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -34,7 +34,7 @@ public class ReverseFloat
 
   public static ReverseFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    ReverseFloat  result = new ReverseFloat (ppt);
+    ReverseFloat  result = new ReverseFloat(ppt);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -76,9 +76,9 @@ public class ReverseFloat
   }
 
   public String format_java() {
-    // ( (new StringBuffer (var1().name.name())).reverse().toString(
+    // ( (new StringBuffer(var1().name.name())).reverse().toString(
     //       ).equals (var2().name.name()))
-    return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
+    return "( (new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
 
   public String format_jml() {

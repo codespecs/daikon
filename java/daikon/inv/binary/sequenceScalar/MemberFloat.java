@@ -69,7 +69,7 @@ public final class MemberFloat
       debug.debug ("Member instantiated: "
                    + sclvar.name + " in " + seqvar.name);
     }
-    return new MemberFloat (ppt, seq_first);
+    return new MemberFloat(ppt, seq_first);
   }
 
   public boolean isObviousImplied() {

@@ -11,7 +11,7 @@ public final class SequenceScalarFactory  {
 
   /** Main debug tracer **/
   public static final Category debug =
-   Category.getInstance("daikon.inv.binary.sequenceScalar.SequenceScalarFactory" );
+   Category.getInstance("daikon.inv.binary.sequenceScalar.SequenceScalarFactory");
 
   // public final static boolean debugSequenceScalarFactory = false;
   // public final static boolean debugSequenceScalarFactory = true;
@@ -30,13 +30,13 @@ public final class SequenceScalarFactory  {
     {
       VarInfo vi0 = ppt.var_infos[0];
       VarInfo vi1 = ppt.var_infos[1];
-      if ((vi0.rep_type == ProglangType. INT_ARRAY )
-          && (vi1.rep_type == ProglangType. INT )) {
+      if ((vi0.rep_type == ProglangType. INT_ARRAY)
+          && (vi1.rep_type == ProglangType. INT)) {
         seq_first = true;
         seqvar = ppt.var_infos[0];
         sclvar = ppt.var_infos[1];
-      } else if ((vi0.rep_type == ProglangType. INT )
-                 && (vi1.rep_type == ProglangType. INT_ARRAY )) {
+      } else if ((vi0.rep_type == ProglangType. INT)
+                 && (vi1.rep_type == ProglangType. INT_ARRAY)) {
         seq_first = false;
         seqvar = ppt.var_infos[1];
         sclvar = ppt.var_infos[0];

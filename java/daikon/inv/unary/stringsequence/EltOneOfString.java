@@ -65,7 +65,7 @@ public final class EltOneOfString
 
   public static EltOneOfString  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new EltOneOfString (ppt);
+    return new EltOneOfString(ppt);
   }
 
   protected Object clone() {
@@ -91,7 +91,7 @@ public final class EltOneOfString
   static Comparator comparator = new UtilMDE.NullableStringComparator();
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts , comparator );
+    Arrays.sort(elts, 0, num_elts , comparator);
   }
 
   public String  min_elt() {
@@ -178,7 +178,7 @@ public final class EltOneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -190,7 +190,7 @@ public final class EltOneOfString
     //have to take a closer look at this!
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -291,7 +291,7 @@ public final class EltOneOfString
   public String format_esc() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -340,7 +340,7 @@ public final class EltOneOfString
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -377,7 +377,7 @@ public final class EltOneOfString
   public String format_simplify() {
     sort_rep();
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -484,7 +484,7 @@ public final class EltOneOfString
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -522,7 +522,7 @@ public final class EltOneOfString
   // Look up a previously instantiated invariant.
   public static EltOneOfString  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOfString)
         return (EltOneOfString) inv;

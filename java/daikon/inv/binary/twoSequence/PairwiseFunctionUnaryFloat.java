@@ -30,13 +30,13 @@ public class PairwiseFunctionUnaryFloat
 
   protected PairwiseFunctionUnaryFloat (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
-    core = new FunctionUnaryCoreFloat (this, methodname, function, inverse);
+    core = new FunctionUnaryCoreFloat(this, methodname, function, inverse);
   }
 
   public static PairwiseFunctionUnaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
      PairwiseFunctionUnaryFloat  result =
-      new PairwiseFunctionUnaryFloat (ppt, methodname, methodnumber, inverse);
+      new PairwiseFunctionUnaryFloat(ppt, methodname, methodnumber, inverse);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {

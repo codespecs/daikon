@@ -33,7 +33,7 @@ public final class FloatLessEqual
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.FloatLessEqual");
 
-  private FloatValueTracker  values_cache = new FloatValueTracker (8);
+  private FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   protected Object clone() {
     FloatLessEqual  result = (FloatLessEqual) super.clone();
@@ -53,7 +53,7 @@ public final class FloatLessEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat() )) {
+    if (! (var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat())) {
       return null;
     }
 
@@ -80,7 +80,7 @@ public final class FloatLessEqual
       }
     }
 
-    return new FloatLessEqual (ppt);
+    return new FloatLessEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -88,14 +88,14 @@ public final class FloatLessEqual
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new FloatGreaterEqual (ppt);
+    return new FloatGreaterEqual(ppt);
   }
 
   // Look up a previously instantiated FloatLessEqual  relationship.
   // Should this implementation be made more efficient?
   public static FloatLessEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof FloatLessEqual)
         return (FloatLessEqual) inv;
@@ -207,7 +207,7 @@ public final class FloatLessEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if (other instanceof FloatGreaterThan  )
+    if (other instanceof FloatGreaterThan )
       return true;
 
     return false;
@@ -219,14 +219,14 @@ public final class FloatLessEqual
 
     { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
       FloatEqual ie = FloatEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
+      if ((ie != null) /* && ie.enoughSamples() */) {
         return true;
       }
     }
 
     { // If we know x<y, then x<=y is uninteresting
       FloatLessThan ilt = FloatLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+      if ((ilt != null) /* && ilt.enoughSamples() */) {
         return true;
       }
     }

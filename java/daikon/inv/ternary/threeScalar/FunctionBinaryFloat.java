@@ -34,7 +34,7 @@ public class FunctionBinaryFloat
 
   protected FunctionBinaryFloat (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
-    core = new FunctionBinaryCoreFloat (this, methodname, methodNumber, var_order);
+    core = new FunctionBinaryCoreFloat(this, methodname, methodNumber, var_order);
   }
 
   public static FunctionBinaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
@@ -70,7 +70,7 @@ public class FunctionBinaryFloat
     }
     */
 
-    return new FunctionBinaryFloat (ppt, methodname, methodNumber, var_order);
+    return new FunctionBinaryFloat(ppt, methodname, methodNumber, var_order);
   }
 
   protected Object clone() {
@@ -183,7 +183,7 @@ public class FunctionBinaryFloat
           if (suppressor.num_elts() <= 1) {
             List suppressors = new ArrayList();
             suppressors.add (suppressor);
-            SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
+            SuppressionLink sl = new SuppressionLink(this, inv, suppressors);
             if (debug.isDebugEnabled()) {
               debug.debug ("Success: " + template.results[0].repr());
             }

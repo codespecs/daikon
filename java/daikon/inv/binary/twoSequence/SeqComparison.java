@@ -45,7 +45,7 @@ public class SeqComparison
   boolean orderMatters;
 
   int num_sc_samples = 0;
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   protected SeqComparison (PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
@@ -79,13 +79,13 @@ public class SeqComparison
     boolean only_eq = (! ((type1.dimensions() == 1)
                           && type1. baseIsIntegral()
                           && (type2.dimensions() == 1)
-                          && type2. baseIsIntegral() ));
+                          && type2. baseIsIntegral()));
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new SeqComparison (ppt, only_eq, true);
+      return new SeqComparison(ppt, only_eq, true);
     } else {
-      return new SeqComparison (ppt, true, false);
+      return new SeqComparison(ppt, true, false);
     }
   }
 

@@ -50,7 +50,7 @@ public final class SequenceStringSubscript
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    String [] val1_array = (String []) val1;
+    String[] val1_array = (String []) val1;
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length))
       return ValueAndModified.MISSING_NONSENSICAL;

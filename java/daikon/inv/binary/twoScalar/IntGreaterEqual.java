@@ -33,7 +33,7 @@ public final class IntGreaterEqual
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterEqual");
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   protected Object clone() {
     IntGreaterEqual  result = (IntGreaterEqual) super.clone();
@@ -53,7 +53,7 @@ public final class IntGreaterEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
+    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
       return null;
     }
 
@@ -80,7 +80,7 @@ public final class IntGreaterEqual
       }
     }
 
-    return new IntGreaterEqual (ppt);
+    return new IntGreaterEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -88,14 +88,14 @@ public final class IntGreaterEqual
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new IntLessEqual (ppt);
+    return new IntLessEqual(ppt);
   }
 
   // Look up a previously instantiated IntGreaterEqual  relationship.
   // Should this implementation be made more efficient?
   public static IntGreaterEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntGreaterEqual)
         return (IntGreaterEqual) inv;
@@ -207,7 +207,7 @@ public final class IntGreaterEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if (other instanceof IntLessThan  )
+    if (other instanceof IntLessThan )
       return true;
 
     return false;
@@ -219,14 +219,14 @@ public final class IntGreaterEqual
 
     { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
       IntEqual ie = IntEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
+      if ((ie != null) /* && ie.enoughSamples() */) {
         return true;
       }
     }
 
     { // If we know x>y, then x>=y is uninteresting
       IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
+      if ((igt != null) /* && igt.enoughSamples() */) {
         return true;
       }
     }

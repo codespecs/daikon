@@ -20,8 +20,8 @@ public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.INT_ARRAY )
-        || (seq2.rep_type != ProglangType.INT_ARRAY )) {
+    if ((seq1.rep_type != ProglangType.INT_ARRAY)
+        || (seq2.rep_type != ProglangType.INT_ARRAY)) {
       return null;
     }
 
@@ -37,6 +37,6 @@ public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-      new SequenceScalarUnion (seq1, seq2) };
+      new SequenceScalarUnion(seq1, seq2) };
   }
 }

@@ -69,7 +69,7 @@ public class LowerBound
 
   public static LowerBound  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new LowerBound (ppt);
+    return new LowerBound(ppt);
   }
 
   public String repr() {
@@ -186,7 +186,7 @@ public class LowerBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UpperBound) {
-      if (core.min1  >  ((UpperBound) other). core.max1 )
+      if (core.min1  >  ((UpperBound) other). core.max1)
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -198,7 +198,7 @@ public class LowerBound
   // Look up a previously instantiated invariant.
   public static LowerBound  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LowerBound)
         return (LowerBound) inv;

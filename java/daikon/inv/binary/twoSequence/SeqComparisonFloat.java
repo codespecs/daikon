@@ -45,7 +45,7 @@ public class SeqComparisonFloat
   boolean orderMatters;
 
   int num_sc_samples = 0;
-  private FloatValueTracker  values_cache = new FloatValueTracker (8);
+  private FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   protected SeqComparisonFloat (PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
@@ -79,13 +79,13 @@ public class SeqComparisonFloat
     boolean only_eq = (! ((type1.dimensions() == 1)
                           && type1. baseIsFloat()
                           && (type2.dimensions() == 1)
-                          && type2. baseIsFloat() ));
+                          && type2. baseIsFloat()));
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new SeqComparisonFloat (ppt, only_eq, true);
+      return new SeqComparisonFloat(ppt, only_eq, true);
     } else {
-      return new SeqComparisonFloat (ppt, true, false);
+      return new SeqComparisonFloat(ppt, true, false);
     }
   }
 

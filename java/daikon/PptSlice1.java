@@ -318,7 +318,7 @@ public final class PptSlice1
 
       if (rep == ProglangType.INT) {
         SingleScalar inv = (SingleScalar) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           long val = ((Long) entry.getKey()).longValue();
           int[] tm_array = (int[]) entry.getValue();
@@ -329,7 +329,7 @@ public final class PptSlice1
         }
       } else if (rep == ProglangType.DOUBLE) {
         SingleFloat inv = (SingleFloat) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           double val = ((Double) entry.getKey()).doubleValue();
           int[] tm_array = (int[]) entry.getValue();
@@ -340,7 +340,7 @@ public final class PptSlice1
         }
       } else if (rep == ProglangType.STRING) {
         SingleString inv = (SingleString) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           String val = (String) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
@@ -351,7 +351,7 @@ public final class PptSlice1
         }
       } else if (rep == ProglangType.INT_ARRAY) {
         SingleScalarSequence inv = (SingleScalarSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           long[] val = (long[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
@@ -362,7 +362,7 @@ public final class PptSlice1
         }
       } else if (rep == ProglangType.DOUBLE_ARRAY) {
         SingleFloatSequence inv = (SingleFloatSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           double[] val = (double[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
@@ -373,7 +373,7 @@ public final class PptSlice1
         }
       } else if (rep == ProglangType.STRING_ARRAY) {
         SingleStringSequence inv = (SingleStringSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ;) {
           Map.Entry entry = (Map.Entry) itor.next();
           String[] val = (String[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();

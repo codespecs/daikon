@@ -20,8 +20,8 @@ public final class SequenceStringUnionFactory  extends BinaryDerivationFactory {
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.STRING_ARRAY )
-        || (seq2.rep_type != ProglangType.STRING_ARRAY )) {
+    if ((seq1.rep_type != ProglangType.STRING_ARRAY)
+        || (seq2.rep_type != ProglangType.STRING_ARRAY)) {
       return null;
     }
 
@@ -37,6 +37,6 @@ public final class SequenceStringUnionFactory  extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-      new SequenceStringUnion (seq1, seq2) };
+      new SequenceStringUnion(seq1, seq2) };
   }
 }

@@ -34,8 +34,8 @@ public final class SeqIndexNonEqual
 
     VarInfo var = var();
     Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY);
-    Assert.assertTrue(var.type. elementIsIntegral() );
-    core = new NonEqualCore (this, 0);
+    Assert.assertTrue(var.type. elementIsIntegral());
+    core = new NonEqualCore(this, 0);
 
     if (debugSeqIndexNonEqual) {
       System.out.println("Instantiated: " + format());
@@ -53,10 +53,10 @@ public final class SeqIndexNonEqual
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsIntegral() )
+    if (! elt_type. baseIsIntegral())
       return null;
 
-    return new SeqIndexNonEqual (ppt);
+    return new SeqIndexNonEqual(ppt);
   }
 
   protected Object clone() {
@@ -162,7 +162,7 @@ public final class SeqIndexNonEqual
   // Look up a previously instantiated invariant.
   public static SeqIndexNonEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIndexNonEqual)
         return (SeqIndexNonEqual) inv;

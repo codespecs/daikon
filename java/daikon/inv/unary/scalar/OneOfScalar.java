@@ -70,7 +70,7 @@ public final class OneOfScalar
 
   public static OneOfScalar  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new OneOfScalar (ppt);
+    return new OneOfScalar(ppt);
   }
 
   protected Object clone() {
@@ -99,7 +99,7 @@ public final class OneOfScalar
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts  );
+    Arrays.sort(elts, 0, num_elts );
   }
 
   public long  min_elt() {
@@ -196,7 +196,7 @@ public final class OneOfScalar
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))   );
+    sb.append (" || (" + var().name.java_name()  + " == " +  ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  );
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -299,7 +299,7 @@ public final class OneOfScalar
         // Do nothing
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else {
       result = "";
@@ -366,7 +366,7 @@ public final class OneOfScalar
       } else if (num_elts == 0) {
         return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else {
       result = "";
@@ -458,7 +458,7 @@ public final class OneOfScalar
     // For every EltOneOf  at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltOneOf) && inv.enoughSamples()) {
         VarInfo v1 = var();
@@ -523,7 +523,7 @@ public final class OneOfScalar
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -576,7 +576,7 @@ public final class OneOfScalar
   // Look up a previously instantiated invariant.
   public static OneOfScalar  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfScalar)
         return (OneOfScalar) inv;

@@ -76,7 +76,7 @@ public final class SequencesPredicateFloat
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicateFloat (VarInfo vi1, VarInfo vi2, double  argChoose, String argName) {
+  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double  argChoose, String argName) {
     this (vi1, vi2, argChoose, argName, true);
   }
 
@@ -85,7 +85,7 @@ public final class SequencesPredicateFloat
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicateFloat (VarInfo vi1, VarInfo vi2, double  argChoose, String argName, boolean argKeep) {
+  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double  argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
     name = argName;
@@ -150,7 +150,7 @@ public final class SequencesPredicateFloat
      * Mis    Mis  Mis  Mis
      */
 
-    double [] predicate = (double []) val2;
+    double[] predicate = (double []) val2;
     int count = 0;
     // Find length of output first
     for (int i = 0; i < predicate.length; i++) {
@@ -158,8 +158,8 @@ public final class SequencesPredicateFloat
     }
 
     if (val1 instanceof double[]) {
-      double [] result = new double [count];
-      double [] values = (double []) val1;
+      double[] result = new double [count];
+      double[] values = (double []) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
         if ((predicate[i] == choose) ^ !keep) {
@@ -167,7 +167,7 @@ public final class SequencesPredicateFloat
           j++;
         }
       }
-      return new ValueAndModified (Intern.intern(result), mod);
+      return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
       Object[] result = new Object[count];
       Object[] values = (Object[]) val1;
@@ -178,9 +178,9 @@ public final class SequencesPredicateFloat
           j++;
         }
       }
-      return new ValueAndModified (Intern.intern(result), mod);
+      return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 == null) {
-      return new ValueAndModified (null, mod);
+      return new ValueAndModified(null, mod);
     } else {
       throw new RuntimeException("Invalid input arrays");
     }

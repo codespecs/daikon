@@ -41,7 +41,7 @@ public class NoDuplicatesFloat
 
   public static NoDuplicatesFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    NoDuplicatesFloat  result = new NoDuplicatesFloat (ppt);
+    NoDuplicatesFloat  result = new NoDuplicatesFloat(ppt);
     // Don't instantiate if the variable can't have dupliates
     if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       if (debug.isDebugEnabled()) {
@@ -107,7 +107,7 @@ public class NoDuplicatesFloat
       String predicateName = varPredicateFieldName.field;
 
       VarInfoName varOrigName = varFieldName.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type,
+      VarInfo fakeVarOrig = new VarInfo(varOrigName, varField.type,
                                          varField.file_rep_type,
                                          varField.comparability,
                                          VarInfoAux.getDefault());
@@ -138,7 +138,7 @@ public class NoDuplicatesFloat
       String fieldName2 = varFieldName2.field;
 
       VarInfoName varOrigName = varFieldName1.term;
-      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type,
+      VarInfo fakeVarOrig = new VarInfo(varOrigName, varField1.type,
                                          varField1.file_rep_type,
                                          varField1.comparability,
                                          VarInfoAux.getDefault());
@@ -202,7 +202,7 @@ public class NoDuplicatesFloat
     // subsequence relationship between that array and this one.
 
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof NoDuplicatesFloat) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();

@@ -37,7 +37,7 @@ public final class FunctionUnaryCoreFloat
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  private FloatValueTracker  values_cache = new FloatValueTracker (8);
+  private FloatValueTracker  values_cache = new FloatValueTracker(8);
 
   public Invariant wrapper;
 

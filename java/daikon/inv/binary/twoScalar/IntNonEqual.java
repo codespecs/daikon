@@ -38,7 +38,7 @@ public final class IntNonEqual
    **/
   public static boolean dkconfig_integral_only = true;
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   protected Object clone() {
     IntNonEqual  result = (IntNonEqual) super.clone();
@@ -59,7 +59,7 @@ public final class IntNonEqual
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (dkconfig_integral_only == true) {
-      if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
+      if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
         return null;
       }
     }
@@ -87,7 +87,7 @@ public final class IntNonEqual
       }
     }
 
-    return new IntNonEqual (ppt);
+    return new IntNonEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -100,7 +100,7 @@ public final class IntNonEqual
   // Should this implementation be made more efficient?
   public static IntNonEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntNonEqual)
         return (IntNonEqual) inv;
@@ -223,11 +223,11 @@ public final class IntNonEqual
 
     { // If we know x<y or x>y, then x!=y is uninteresting
       IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+      if ((ilt != null) /* && ilt.enoughSamples() */) {
         return true;
       }
       IntGreaterThan igt = IntGreaterThan.find(ppt);
-      if ((igt != null) /* && igt.enoughSamples() */ ) {
+      if ((igt != null) /* && igt.enoughSamples() */) {
         return true;
       }
     }

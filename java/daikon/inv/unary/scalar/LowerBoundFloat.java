@@ -69,7 +69,7 @@ public class LowerBoundFloat
 
   public static LowerBoundFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new LowerBoundFloat (ppt);
+    return new LowerBoundFloat(ppt);
   }
 
   public String repr() {
@@ -186,7 +186,7 @@ public class LowerBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UpperBoundFloat) {
-      if (core.min1  >  ((UpperBoundFloat) other). core.max1 )
+      if (core.min1  >  ((UpperBoundFloat) other). core.max1)
         return true;
     }
     if (other instanceof OneOfFloat) {
@@ -198,7 +198,7 @@ public class LowerBoundFloat
   // Look up a previously instantiated invariant.
   public static LowerBoundFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LowerBoundFloat)
         return (LowerBoundFloat) inv;

@@ -37,7 +37,7 @@ public final class FunctionUnaryCore
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 

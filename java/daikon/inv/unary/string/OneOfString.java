@@ -62,7 +62,7 @@ public final class OneOfString
 
   public static OneOfString  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new OneOfString (ppt);
+    return new OneOfString(ppt);
   }
 
   protected Object clone() {
@@ -88,7 +88,7 @@ public final class OneOfString
   static Comparator comparator = new UtilMDE.NullableStringComparator();
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts , comparator );
+    Arrays.sort(elts, 0, num_elts , comparator);
   }
 
   public String  min_elt() {
@@ -436,7 +436,7 @@ public final class OneOfString
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ) )
+      if (! ( elts[i]  ==  other.elts[i] ))
         return false;
     }
 
@@ -474,7 +474,7 @@ public final class OneOfString
   // Look up a previously instantiated invariant.
   public static OneOfString  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfString)
         return (OneOfString) inv;

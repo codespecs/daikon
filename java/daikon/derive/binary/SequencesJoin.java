@@ -51,7 +51,7 @@ public final class SequencesJoin
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesJoin (VarInfo vi1, VarInfo vi2) {
+  public SequencesJoin(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 
@@ -102,7 +102,7 @@ public final class SequencesJoin
        if (val2 != null) debug.debug ("val2 type: " + val2.getClass().getName());
     */
 
-    long [] result = new long [length1];
+    long[] result = new long [length1];
 
     for (int i = 0; i < length1; i++) {
       Object e1 = null;
@@ -119,8 +119,8 @@ public final class SequencesJoin
       if (val2 instanceof Object[]) {
         e2 = ((Object[]) val2) [i];
       }
-      if (e1 == null) e1 = new Long (0);
-      if (e2 == null) e2 = new Long (0);
+      if (e1 == null) e1 = new Long(0);
+      if (e2 == null) e2 = new Long(0);
       result[i] = (e1.hashCode() << 8) + e2.hashCode();
     }
 

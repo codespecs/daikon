@@ -326,7 +326,7 @@ Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLen
 daikon.inv.binary.twoSequence.Reverse
 int_array int_array
 Goal (daikon): a[] is the reverse of b[]
-Goal (java): ( (new StringBuffer (a[])).reverse().toString().equals (b[])
+Goal (java): ( (new StringBuffer(a[])).reverse().toString().equals (b[])
 Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputFormat:ESC/Java) needs to be implemented: a[] is the reverse of b[]
 Goal (ioa): Not valid for Sets or Arrays: a[] is the reverse of b[]
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == b[b.length-1-i])

@@ -35,7 +35,7 @@ public final class IntComparisonCore
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
-  public ValueTracker  values_cache = new ValueTracker (8);
+  public ValueTracker  values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 

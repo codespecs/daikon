@@ -20,7 +20,7 @@ public final class LinearBinaryCore
 
   /** Debug tracer **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore" );
+    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore");
 
   // y == ax + b; first argument is x, second is y
   public double a, b;
@@ -41,8 +41,8 @@ public final class LinearBinaryCore
   // the two that are furthest apart in order to compute a and b.
   final static int MINPAIRS = 4;
 
-  long [] x_cache = new long [MINPAIRS];
-  long [] y_cache = new long [MINPAIRS];
+  long[] x_cache = new long [MINPAIRS];
+  long[] y_cache = new long [MINPAIRS];
 
   public LinearBinaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
@@ -71,7 +71,7 @@ public final class LinearBinaryCore
       b = -b * a;  // b' = -b/a
     }
 
-    long [] tmp = x_cache;
+    long[] tmp = x_cache;
     x_cache = y_cache;
     y_cache = tmp;
   }

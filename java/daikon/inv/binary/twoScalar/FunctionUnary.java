@@ -25,12 +25,12 @@ public class FunctionUnary
 
   protected FunctionUnary (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
-    core = new FunctionUnaryCore (this, methodname, methodNumber, inverse);
+    core = new FunctionUnaryCore(this, methodname, methodNumber, inverse);
   }
 
   public static FunctionUnary  instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
-    return new FunctionUnary (ppt, methodname, methodNumber, inverse);
+    return new FunctionUnary(ppt, methodname, methodNumber, inverse);
   }
 
   protected Object clone() {

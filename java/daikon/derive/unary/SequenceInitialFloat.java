@@ -84,8 +84,8 @@ public final class SequenceInitialFloat
     Object val = base.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    if (base.rep_type == ProglangType.DOUBLE_ARRAY ) {
-      double [] val_array = (double [])val;
+    if (base.rep_type == ProglangType.DOUBLE_ARRAY) {
+      double[] val_array = (double [])val;
       if (val_array.length < minLength)
         return ValueAndModified.MISSING_NONSENSICAL;
       int real_index = (index<0 ? val_array.length + index : index);

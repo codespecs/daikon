@@ -25,7 +25,7 @@ public class SubSequenceFloat
   static final long serialVersionUID = 20020122L;
 
   private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSequenceFloat" );
+    Category.getInstance("daikon.inv.binary.twoSequence.SubSequenceFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -65,7 +65,7 @@ public class SubSequenceFloat
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
     }
 
-    return new SubSequenceFloat (ppt);
+    return new SubSequenceFloat(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -130,7 +130,7 @@ public class SubSequenceFloat
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
-    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
+    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name});
     Assert.assertTrue(qret.bound_vars.size() == 2);
     Assert.assertTrue(qret.root_primes.length == 2);
 
@@ -392,7 +392,7 @@ public class SubSequenceFloat
   // Look up a previously instantiated SubSequence relationship.
   public static SubSequenceFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSequenceFloat)
         return (SubSequenceFloat) inv;

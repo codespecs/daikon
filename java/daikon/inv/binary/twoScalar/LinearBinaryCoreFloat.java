@@ -20,7 +20,7 @@ public final class LinearBinaryCoreFloat
 
   /** Debug tracer **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCoreFloat" );
+    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCoreFloat");
 
   // y == ax + b; first argument is x, second is y
   public double a, b;
@@ -41,8 +41,8 @@ public final class LinearBinaryCoreFloat
   // the two that are furthest apart in order to compute a and b.
   final static int MINPAIRS = 4;
 
-  double [] x_cache = new double [MINPAIRS];
-  double [] y_cache = new double [MINPAIRS];
+  double[] x_cache = new double [MINPAIRS];
+  double[] y_cache = new double [MINPAIRS];
 
   public LinearBinaryCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;
@@ -71,7 +71,7 @@ public final class LinearBinaryCoreFloat
       b = -b * a;  // b' = -b/a
     }
 
-    double [] tmp = x_cache;
+    double[] tmp = x_cache;
     x_cache = y_cache;
     y_cache = tmp;
   }

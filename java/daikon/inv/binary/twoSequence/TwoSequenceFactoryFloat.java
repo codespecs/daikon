@@ -27,8 +27,8 @@ public final class TwoSequenceFactoryFloat  {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    Assert.assertTrue((var1.rep_type == ProglangType. DOUBLE_ARRAY )
-                      && (var2.rep_type == ProglangType. DOUBLE_ARRAY ));
+    Assert.assertTrue((var1.rep_type == ProglangType. DOUBLE_ARRAY)
+                      && (var2.rep_type == ProglangType. DOUBLE_ARRAY));
 
     if (! var1.compatible(var2))
       return null;

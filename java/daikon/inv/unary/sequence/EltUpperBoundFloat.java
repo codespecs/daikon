@@ -69,7 +69,7 @@ public class EltUpperBoundFloat
 
   public static EltUpperBoundFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new EltUpperBoundFloat (ppt);
+    return new EltUpperBoundFloat(ppt);
   }
 
   public String repr() {
@@ -185,7 +185,7 @@ public class EltUpperBoundFloat
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext();) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
         continue;
@@ -236,7 +236,7 @@ public class EltUpperBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof EltLowerBound) {
-      if (core.max1  <  ((EltLowerBound) other). core.min1 )
+      if (core.max1  <  ((EltLowerBound) other). core.min1)
         return true;
     }
     if (other instanceof OneOfFloat) {
@@ -248,7 +248,7 @@ public class EltUpperBoundFloat
   // Look up a previously instantiated invariant.
   public static EltUpperBoundFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltUpperBoundFloat)
         return (EltUpperBoundFloat) inv;

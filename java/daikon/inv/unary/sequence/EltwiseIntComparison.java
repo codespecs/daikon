@@ -32,7 +32,7 @@ public class EltwiseIntComparison
 
   protected EltwiseIntComparison (PptSlice ppt, boolean only_eq) {
     super(ppt);
-    core = new IntComparisonCore (this, only_eq);
+    core = new IntComparisonCore(this, only_eq);
   }
 
   public static EltwiseIntComparison  instantiate(PptSlice ppt) {
@@ -40,7 +40,7 @@ public class EltwiseIntComparison
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
     boolean only_eq = ! ppt.var_infos[0].type.baseIsIntegral();
-    return new EltwiseIntComparison (ppt, only_eq);
+    return new EltwiseIntComparison(ppt, only_eq);
   }
 
   protected Object clone() {
@@ -167,7 +167,7 @@ public class EltwiseIntComparison
   // Look up a previously instantiated invariant.
   public static EltwiseIntComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltwiseIntComparison)
         return (EltwiseIntComparison) inv;

@@ -20,8 +20,8 @@ public final class SequenceFloatUnionFactory  extends BinaryDerivationFactory {
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.DOUBLE_ARRAY )
-        || (seq2.rep_type != ProglangType.DOUBLE_ARRAY )) {
+    if ((seq1.rep_type != ProglangType.DOUBLE_ARRAY)
+        || (seq2.rep_type != ProglangType.DOUBLE_ARRAY)) {
       return null;
     }
 
@@ -37,6 +37,6 @@ public final class SequenceFloatUnionFactory  extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-      new SequenceFloatUnion (seq1, seq2) };
+      new SequenceFloatUnion(seq1, seq2) };
   }
 }

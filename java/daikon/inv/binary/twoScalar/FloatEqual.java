@@ -68,7 +68,7 @@ public final class FloatEqual
       }
     }
 
-    return new FloatEqual (ppt);
+    return new FloatEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -81,7 +81,7 @@ public final class FloatEqual
   // Should this implementation be made more efficient?
   public static FloatEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof FloatEqual)
         return (FloatEqual) inv;
@@ -202,7 +202,7 @@ public final class FloatEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof FloatLessThan  ) || (other instanceof FloatGreaterThan  ))
+    if ((other instanceof FloatLessThan  ) || (other instanceof FloatGreaterThan ))
       return true;
 
     return false;

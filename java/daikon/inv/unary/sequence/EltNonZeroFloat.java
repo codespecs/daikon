@@ -25,7 +25,7 @@ public final class EltNonZeroFloat
    * Debug tracer.
    **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.unary.sequence.EltNonZeroFloat" );
+    Category.getInstance("daikon.inv.unary.sequence.EltNonZeroFloat");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -54,8 +54,8 @@ public final class EltNonZeroFloat
 
   public static EltNonZeroFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    EltNonZeroFloat  result = new EltNonZeroFloat (ppt);
-    if (! ppt.var_infos[0].type. baseIsFloat() ) {
+    EltNonZeroFloat  result = new EltNonZeroFloat(ppt);
+    if (! ppt.var_infos[0].type. baseIsFloat()) {
       result.pointer_type = true;
       result.override_range = 3;
       if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
@@ -204,7 +204,7 @@ public final class EltNonZeroFloat
 
         // I need to come back and make this work.
         // {
-        //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+        //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
         //     Invariant inv = (Invariant) itor.next();
         //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
         //       modulus = ((Modulus) inv).modulus;
@@ -249,7 +249,7 @@ public final class EltNonZeroFloat
     // subsequence relationship between that array and this one.
 
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZeroFloat) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
@@ -288,7 +288,7 @@ public final class EltNonZeroFloat
   // Look up a previously instantiated invariant.
   public static EltNonZeroFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltNonZeroFloat)
         return (EltNonZeroFloat) inv;

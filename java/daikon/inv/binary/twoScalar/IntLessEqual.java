@@ -33,7 +33,7 @@ public final class IntLessEqual
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntLessEqual");
 
-  private ValueTracker  values_cache = new ValueTracker (8);
+  private ValueTracker  values_cache = new ValueTracker(8);
 
   protected Object clone() {
     IntLessEqual  result = (IntLessEqual) super.clone();
@@ -53,7 +53,7 @@ public final class IntLessEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() )) {
+    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
       return null;
     }
 
@@ -80,7 +80,7 @@ public final class IntLessEqual
       }
     }
 
-    return new IntLessEqual (ppt);
+    return new IntLessEqual(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -88,14 +88,14 @@ public final class IntLessEqual
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new IntGreaterEqual (ppt);
+    return new IntGreaterEqual(ppt);
   }
 
   // Look up a previously instantiated IntLessEqual  relationship.
   // Should this implementation be made more efficient?
   public static IntLessEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntLessEqual)
         return (IntLessEqual) inv;
@@ -207,7 +207,7 @@ public final class IntLessEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if (other instanceof IntGreaterThan  )
+    if (other instanceof IntGreaterThan )
       return true;
 
     return false;
@@ -219,14 +219,14 @@ public final class IntLessEqual
 
     { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
       IntEqual ie = IntEqual.find(ppt);
-      if ((ie != null) /* && ie.enoughSamples() */ ) {
+      if ((ie != null) /* && ie.enoughSamples() */) {
         return true;
       }
     }
 
     { // If we know x<y, then x<=y is uninteresting
       IntLessThan ilt = IntLessThan.find(ppt);
-      if ((ilt != null) /* && ilt.enoughSamples() */ ) {
+      if ((ilt != null) /* && ilt.enoughSamples() */) {
         return true;
       }
     }

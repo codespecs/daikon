@@ -36,7 +36,7 @@ public class CommonFloatSequence
 
   public static CommonFloatSequence  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    return new CommonFloatSequence (ppt);
+    return new CommonFloatSequence(ppt);
   }
 
   // this.intersect is read-only, so don't clone it
@@ -85,7 +85,7 @@ public class CommonFloatSequence
     if (intersect==null)
       intersect = a;
     else {
-      double [] tmp = new double [intersect.length];
+      double[] tmp = new double [intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&

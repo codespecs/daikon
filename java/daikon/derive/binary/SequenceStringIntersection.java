@@ -44,13 +44,13 @@ public final class SequenceStringIntersection
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    String [] val1_array = (String []) val1;
+    String[] val1_array = (String []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    String [] val2_array = (String []) val2;
+    String[] val2_array = (String []) val2;
 
-    String [] tmp = new String [val1_array.length + val2_array.length];
+    String[] tmp = new String [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       String  v = val1_array[i];
@@ -59,7 +59,7 @@ public final class SequenceStringIntersection
         tmp[size++] = v;
     }
 
-    String [] intersect = ArraysMDE.subarray(tmp, 0, size);
+    String[] intersect = ArraysMDE.subarray(tmp, 0, size);
     intersect = (String  []) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
