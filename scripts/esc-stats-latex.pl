@@ -14,7 +14,7 @@ use English;
 use Carp;
 use POSIX;
 
-my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume");
+my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume", "nowarn");
 
 my %types_map = (
 		 "invariant" => "Object",
@@ -29,6 +29,7 @@ my %types_map = (
 		 "also_exsures" => "Ensures",
 		 "axiom" => "Unsound",
 		 "assume" => "Unsound",
+		 "nowarn" => "Unsound",
 		 );
 my @printed_types = ("Object", "Requires", "Modifies", "Ensures", "Unsound");
 my %printed_types = ("Object" => 1, "Requires" => 1, "Modifies" => 1, "Ensures" => 1, "Unsound" => 1);
