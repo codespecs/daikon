@@ -11,6 +11,8 @@ import daikon.config.Configuration;
 import java.util.*;
 import java.io.*;
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
@@ -854,10 +856,14 @@ public final class Daikon {
      * which is deprecated.
      **/
     public boolean shouldStop = false;
+    private static NumberFormat pctFmt;
     public void run() {
       if (dkconfig_progress_delay == -1)
         return;
       DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
+      pctFmt = NumberFormat.getPercentInstance();
+      pctFmt.setMinimumFractionDigits(2);
+      pctFmt.setMaximumFractionDigits(2);
       while (true) {
         if (shouldStop) {
           return;
@@ -894,7 +900,16 @@ public final class Daikon {
         }
       }
       LineNumberReader lnr = FileIO.data_trace_reader;
-      String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
+      String line;
+      if (lnr == null) {
+        line = "?";
+      } else {
+        long lineNum = lnr.getLineNumber();
+        line = String.valueOf(lineNum);
+        double frac = lineNum / (double)FileIO.data_trace_total_lines;
+        String percent = pctFmt.format(frac);
+        line = line + ", " + percent;
+      }
       return "Reading " + file.getName() + " (line " + line + ") ...";
     }
   }
