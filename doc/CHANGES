@@ -13,6 +13,17 @@ versions as the user manual.
 
 3.1.5
 
+Fixed a bug in the LinearTernary invariant where the array holding the sample
+points is clobbered by the method that finds the three
+maximum separated points.  The method mutates the array so that sometimes
+conflicting points are overwritten before they can be used to check the
+coefficients calculated.
+
+Fixed a bug in the formatting of LinearTernary and LinearBinary invariants.  
+In order to enforce integer coefficients, the value (a double) was casted to
+to an int which checking whether the two values are equal (problem found
+because the value was too big to fit into an int).
+
 Use a better algorithm for choosing the canonical variable in an
 equality set for printing purposes: a var that is not
 isDerivedParamAndUninteresting is more canonical than one that is, a
