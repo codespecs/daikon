@@ -80,15 +80,21 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     static int[] arg2_bound = ARG2_BOUND;
   #endif
 
-  public CLASSNAME instantiate_dyn (PptSlice slice) {
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new CNAME(FUNCTION,PERM_NAME) (null));
+  }
+
+  public Invariant instantiate_dyn (PptSlice slice) {
     return instantiate (slice);
   }
 
   public static CLASSNAME instantiate (PptSlice slice) {
     if (!dkconfig_enabled)
       return (null);
-    if (slice != null)
-      Assert.assertTrue (slice.var_infos[0].file_rep_type.IS_INTEGRAL);
+    if ((slice != null) && !slice.var_infos[0].file_rep_type.IS_INTEGRAL)
+      return (null);
     return (new CNAME(FUNCTION,PERM_NAME) (slice));
   }
 
@@ -174,7 +180,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
    * Returns a list of non-instantiating suppressions for this invariant.
    */
   public NISuppressionSet get_ni_suppressions() {
-    if (NIS.dkconfig_enabled)
+    if (NIS.dkconfig_enabled && dkconfig_enabled)
       return (suppressions);
     else
       return (null);
