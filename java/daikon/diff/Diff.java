@@ -416,7 +416,7 @@ public final class Diff {
         MinusVisitor v = new MinusVisitor();
         root.accept(v);
         UtilMDE.writeObject(v.getResult(), outputFile);
-        System.out.println("Output written to: " + outputFile);
+        // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
       }
@@ -427,7 +427,7 @@ public final class Diff {
         XorVisitor v = new XorVisitor();
         root.accept(v);
         UtilMDE.writeObject(v.getResult(), outputFile);
-        System.out.println("Output written to: " + outputFile);
+        // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
       }
@@ -438,7 +438,7 @@ public final class Diff {
         UnionVisitor v = new UnionVisitor();
         root.accept(v);
         UtilMDE.writeObject(v.getResult(), outputFile);
-        System.out.println("Output written to: " + outputFile);
+        // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
       }

@@ -104,7 +104,7 @@ public final class FunctionUnaryCore
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      String result = resultname + eq + methodname + "(" + argname + ")";
+      String result = resultname + eq + methodname[0] + argname + methodname[1];
       if (format == OutputFormat.IOA) result += " ***";
       return result;
     }
@@ -114,7 +114,7 @@ public final class FunctionUnaryCore
 
   public String repr() {
     return "FunctionUnaryCore" + wrapper.varNames() + ": "
-      + "function=" + methodname[0]
+      + "function=" + methodname[0] + "." + methodname[1]
       + ",inverse=" + inverse;
   }
 

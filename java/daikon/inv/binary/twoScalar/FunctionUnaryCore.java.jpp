@@ -131,7 +131,7 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      String result = resultname + eq + methodname + "(" + argname + ")";
+      String result = resultname + eq + methodname[0] + argname + methodname[1];
       if (format == OutputFormat.IOA) result += " ***";
       return result;
     }
@@ -141,7 +141,7 @@ public final class CLASSNAME
 
   public String repr() {
     return CLASSSTRING + wrapper.varNames() + ": "
-      + "function=" + methodname[0]
+      + "function=" + methodname[0] + "." + methodname[1]
       + ",inverse=" + inverse;
   }
 
