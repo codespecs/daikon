@@ -62,7 +62,7 @@ Copyright @copyright{} 1998-2003
 @html
 <img src="images/daikon-logo.gif" alt="Daikon logo">
 @end html
-@c Why is this here? It duplicates the stuff further down.
+@c Why is this here?  It duplicates the stuff further down.
 @c @html
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
@@ -1097,7 +1097,7 @@ For more help interpreting invariants, see @ref{Interpreting output}.
 
 The StackAr example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
-implementation.  Now, look at the first section of Daikon output. In
+implementation.  Now, look at the first section of Daikon output.  In
 the Tree GUI, expand the node labeled @command{StackAr}, then select the
 node labeled @command{StackAr:Object}.
 
@@ -1378,7 +1378,7 @@ Perl.
 
 The Perl front end requires a few extra steps to run compared with the
 Java and C front ends, because Perl programs don't pre-specify the
-types of their variables. Using the Perl front end is a two-pass
+types of their variables.  Using the Perl front end is a two-pass
 process: first you must run the annotated program so that the runtime
 system can dynamically infer the kind of data stored in each variable,
 and then you must re-annotate and re-run the program with the added
@@ -1401,7 +1401,7 @@ dfepl Birthday.pm
 
 This command creates a directory @file{daikon-untyped}, and puts
 the instrumented version of @file{Birthday.pm} into
-@file{daikon-untyped/Birthday.pm}. As the directory name implies, this
+@file{daikon-untyped/Birthday.pm}.  As the directory name implies, this
 instrumented version doesn't contain type information.
 
 @item Run a test suite using the instrumented @file{Birthday.pm}
@@ -1414,7 +1414,7 @@ The @file{dtype-perl} is a script that runs Perl with the appropriate
 command line options to find the modules used by the Daikon Perl
 runtime tracing modules, and to use the instrumented versions of
 modules in @file{daikon-untyped} in preference to their original
-ones. The number 10 is an argument to the @file{test_bday.pl} script
+ones.  The number 10 is an argument to the @file{test_bday.pl} script
 telling it to run a relatively short test.
 
 This will also generate a file
@@ -1441,7 +1441,7 @@ dtrace-perl test_bday.pl 30
 
 Here we run another test suite, which happens to be the same
 @file{test_bday.pl}, but running for longer. (The example will also
-work with a smaller number). The script @command{dtrace-perl} is
+work with a smaller number).  The script @command{dtrace-perl} is
 similar to @command{dtype-perl} mentioned earlier, but looks for
 instrumented source files in @command{daikon-instrumented}.
 
@@ -1479,7 +1479,7 @@ tools as other Daikon invariants.
 In the example above, the script @file{test_bday.pl} was not itself
 instrumented; it was only used to test the instrumented code.  The
 Perl front-end can also be used to instrument stand-alone Perl
-programs. The following sequence of commands, similar to those above,
+programs.  The following sequence of commands, similar to those above,
 show how Daikon can be used with the stand-alone program
 @file{standalone.pl}, also in the @file{examples/perl-examples}
 directory.
@@ -1553,10 +1553,10 @@ the names of procedures and variables that appear in the data trace file.
 @end itemize
 
 Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
-@command{dfec} for C and C++, and @command{dfepl} for Perl. The
+@command{dfec} for C and C++, and @command{dfepl} for Perl.  The
 letters @command{dfe} in the names stand for ``Daikon front-end'', and
 @command{j}, @command{c}, and @command{pl} abbreviate ``Java'',
-``C'', and ``Perl''. The Java front end is robust; the C front end
+``C'', and ``Perl''.  The Java front end is robust; the C front end
 is moderately robust, and the C++ and Perl front ends are experimental.
 
 A front end for the IOA programming language is distributed separately
@@ -1676,7 +1676,7 @@ on its command-line options, see @ref{C front end dfec}.
 @node Instrumenting Perl programs,  , Instrumenting C programs, Instrumentation
 @subsection Instrumenting Perl programs
 
-Perl programs must be instrumented twice. First they must be
+Perl programs must be instrumented twice.  First they must be
 instrumented without type information.  Then, once the first
 instrumented version has been run to produce type information, they
 must be instrumented again taking the type information into account.
@@ -1690,7 +1690,7 @@ dfepl program.pl
 
 To instrument a Perl module or a collection of modules, invoke
 @command{dfepl} either with the name of each module, or with the name
-of a directory containing the modules. To instrument all the modules
+of a directory containing the modules.  To instrument all the modules
 in the current directory, give @command{dfepl} the argument @file{.}.
 For instance, if the current directory contains a module
 @code{Acme::Trampoline} in @file{Acme/Trampoline.pm} and another
@@ -1939,7 +1939,7 @@ conjunction with the @option{-o} option.
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this option. Beware that the process of
+order to take advantage of this option.  Beware that the process of
 detecting redundant invariants can sometimes be time-consuming; the
 amount of effort Simplify exerts for each invariant can be controlled
 using the @option{daikon.simplify.Session.simplify_max_iterations} and
@@ -2036,8 +2036,8 @@ ppt.  In contrast to the @option{--dbg} option, track logging follows
 a particular invariant through Daikon.  Multiple @option{--track} options
 can be specified.  Each item (class, variables, and ppt) is optional.  
 Multiple classes can be specified separted by vertical bars (|).  Matching
-is a simple substring (not a regular expression) comparison. Each item
-must match in order for a printout to occur. See the Daikon Developer
+is a simple substring (not a regular expression) comparison.  Each item
+must match in order for a printout to occur.  See the Daikon Developer
 Manual for more information.
 
 @item --noversion
@@ -2054,7 +2054,7 @@ detection process:  instrumentation, trace file generation, and
 invariant display.  However, it has several limitations: it only works
 with programs written in Java, it doesn't allow all of the optional
 features of Daikon to be controlled, and it depends on external
-programs that may not be present on non-Unix systems. It is not
+programs that may not be present on non-Unix systems.  It is not
 the preferred way to run Daikon, but some users may find it helpful
 for quick testing, or for use from automated scripts.
 
@@ -2578,7 +2578,7 @@ combined procedure exits are examined.  This option also causes
 conditional program points to be examined.
 
 @item -e
-Print empty program points. By default, program points are not printed
+Print empty program points.  By default, program points are not printed
 if they contain no differences.
 
 @item -v
@@ -2802,7 +2802,7 @@ This filter suppresses comparison invariants in which all of the
 variables being compared were observed to be constant.  In the current
 version of Daikon, most such invariants are not even created in the
 first place, because constants are detected on an early pass over the
-data. However, Daikon will note that all of the invariants that had
+data.  However, Daikon will note that all of the invariants that had
 any particular constant value were also equal to each other: such
 invariants will be suppressed by this filter.
 
@@ -2811,7 +2811,7 @@ invariants will be suppressed by this filter.
 @c This filter suppresses invariants containing literal numbers, such as
 @c ``x < 45'' and ``y[] one of { [42, 12, 23], [-4, 46] }'', based on a
 @c heuristic judgement that some numbers are more interesting than
-@c others. Such potential invariants are sometimes undesirable because
+@c others.  Such potential invariants are sometimes undesirable because
 @c they are likely to represent a limitation of the way in which a
 @c program was tested, rather than a true invariant thst would hold over
 @c all possible program executions.
@@ -2917,7 +2917,7 @@ instructions; @pxref{Installing the Context GUI}.)
 
 Currently, the Context GUI is integrated with the Emacs text editor.
 However, users can extend it to other Java or C editors.  The Context GUI can
-also be run stand-alone. This provides the user the ability to browse
+also be run stand-alone.  This provides the user the ability to browse
 the invariants without having to load up the text editor in case the
 user wants to do a quick lookup on invariants.
 
@@ -3089,7 +3089,7 @@ Do not produce data trace output for class invariants.
 @c Do not produce data trace output for loop invariants (default).
 
 @item -daikon_includeonly=@var{string}
-Only produce trace output for matching classes/procedures. Cannot be used
+Only produce trace output for matching classes/procedures.  Cannot be used
 in conjunction with @option{-daikon_omit}.  May only be supplied once.
 The argument provided must be a regex (and be surrounded by forward
 slashes on both sides).
@@ -3119,8 +3119,8 @@ instrumented program run faster, since it need not output those variables.
 
 The @option{-daikon_omit} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
-if its class, fully qualified procedure name, or complete program point
-name exactly matches one of the omitting criteria.
+if its fully qualified class, fully qualified procedure name, or
+complete program point name exactly matches one of the omitting criteria.
 
 For example, to avoid detecting invariants over an iterator class, you
 can call dfej like so:
@@ -3226,7 +3226,7 @@ directory @file{parent/}.  This will create a file
 
 (The reason for running @command{dfej} from a directory in your
 classpath is that it allows the directory structure to remain consistent
-with the package structure. If @file{Bar.java} specifies its package, it
+with the package structure.  If @file{Bar.java} specifies its package, it
 does so with a line like @samp{package foo;}.  If you run @command{dfej}
 from the @file{parent/foo} directory, the instrumented version of
 @file{Bar.java} will go in @file{parent/foo/daikon-instrumented/Bar.java}; this
@@ -3263,7 +3263,7 @@ for the appropriate package.  If this option is not supplied, the
 code that (for example) calls libraries that do not appear under the
 current directory.
 
-@item -ajaxap=@var{apdir}
+@item -ajaxcp=@var{cpdir}
 Classpath to give to Ajax in its "-cp" flag, similar to -ajaxap.
 
 @item -ajax_runnable=@var{class}
@@ -3333,7 +3333,7 @@ find . -name '*.class' -print
 @command{dfej} tracks all modifications of instrumented classes; if you
 do not instrument all users of a class, then modifications in
 uninstrumented classes may not be detected.  This can affect Daikon's
-statistical tests, but in practice usually has little impact. The program 
+statistical tests, but in practice usually has little impact.  The program 
 makes approximations to the missing modification information.
 
 @c (The @command{modbit-munge.pl} script makes approximations to the missing
@@ -4198,7 +4198,7 @@ appear in header files; a fallback would be to make the declarations
 
 @c Stephen McCamant says:
 @c When debugging linking problems, I usually find it helpful to compile
-@c everything to .o files. This will let the linker give you a sensible
+@c everything to .o files.  This will let the linker give you a sensible
 @c file name to tell where the unsatisfied usages are, and let you see
 @c for yourself which symbols are needed or provided, using nm.
 
@@ -4209,7 +4209,7 @@ with gcc, among other places; you can find documentation at
 @uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
 
 After running @command{protoize}, you may need to perform additional
-fixups by hand. A common problem is function declarations of the form
+fixups by hand.  A common problem is function declarations of the form
 @code{f()} that specify no parameters.  In K&R C, the corresponding
 definition was allowed to have any number of arguments, but such
 declarations are obsolescent under the ANSI/ISO C standard, and in C++
@@ -4459,7 +4459,7 @@ equivalent file.
 @cindex dfepl (Daikon front end for Perl)
 
 This section contains details about dfepl, the Daikon front end for
-Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
+Perl.  For a brief introduction to dfepl, see @ref{Perl examples} and
 @ref{Instrumenting Perl programs}.
 
 dfepl works with Perl versions 5.8 and later. (To be precise, Perl
@@ -4475,7 +4475,7 @@ The instrumentation engine recognizes parameters as those variables
 that are declared with @code{my(...)} or @code{local(...)} and, in the
 same expression, assigned to from a value related to the argument
 array @code{@@_}, but only among the first contiguous series of such
-assignments in the body of a subroutine. This will capture the most
+assignments in the body of a subroutine.  This will capture the most
 common assignment idioms, such as @code{my $self = shift;} (where
 @code{shift} is short for @code{shift @@_}), @code{my $x = $_[0];}, and
 @code{my($x, $y, @@a) = @@_;}, but the arguments to subroutines which
@@ -4484,7 +4484,7 @@ operations before reading their arguments, will not be recognized.
 
 If the uninstrumented code requested warnings via the @code{use
 warnings} pragma or by adding the @code{-w} flag on the @code{#!}
-line, the instrumented code will also request warnings. In this case,
+line, the instrumented code will also request warnings.  In this case,
 or if @code{-w} is specified on the command line when running it, the
 instrumented code may produce warnings that the original code did
 not.  There are several situations in which the instrumented code
@@ -4526,7 +4526,7 @@ run fairly slowly in the current version, you may be tempted to use a
 subset of the input data for type guessing.  Doing so is possible, but
 it will only work correctly if the smaller tests exercise all of the
 instrumented subroutines and exit points with all the types of data
-they will later be used with. If the trace runtime tries to output a
+they will later be used with.  If the trace runtime tries to output a
 data value that doesn't match the inferred type, the value may
 silently be converted according to Perl's usual conventions (for
 instance, a non-numeric string may be treated as the number zero), or
@@ -4572,14 +4572,14 @@ directory @file{daikon-output}.
 (by default named @file{daikon-untyped}, @file{daikon-instrumented} or
 @file{daikon-output}) in the instrumented programs, so that no matter
 where the instrumented program is run, the output will go to a fixed
-location. Even if these directories are given as relative paths (as is
+location.  Even if these directories are given as relative paths (as is
 the default), @option{--absolute} specifies that they should always be
 taken as relative to the directory that was the working directory when
 @command{dfepl} was run.
 
 @option{--noabsolute} specifies the opposite, causing the output paths
 to be interpreted relative to the current working directory each time
-the instrumented program is invoked. The default, when neither option
+the instrumented program is invoked.  The default, when neither option
 is specified, is for @file{.types} files to use an absolute path, but
 all others to use relative path, so that the @file{.types} files will
 always be in the same place as the instrumented source files that
@@ -4588,12 +4588,12 @@ in the current directory when the program runs.
 
 @item --accessor-depth=@var{num}
 Controls the number of nested invocations of object accessor methods
-to examine. For instance, suppose that the @code{Person} class has a
+to examine.  For instance, suppose that the @code{Person} class has a
 method @code{mother()} that returns another person (and has been
 specified to @command{dfepl} as an accessor), and that @code{$me} is
-an instrumented variable. If the accessor depth is 1, only
-@code{$me->mother()} will be examined. If the depth is 2,
-@code{$me->mother()->mother()} will also be examined. Specifying large
+an instrumented variable.  If the accessor depth is 1, only
+@code{$me->mother()} will be examined.  If the depth is 2,
+@code{$me->mother()->mother()} will also be examined.  Specifying large
 accessor depths is generally not advisable, especially with many
 accessor methods, as the number of variables examined can be too many
 for Daikon to process efficiently.
@@ -4604,12 +4604,12 @@ single level of accessors.
 @item -A
 @itemx --accessors-dir=@var{directory}
 Look for files containing accessor lists in @var{directory}, or the
-current directory if @var{directory} is omitted. For a class
+current directory if @var{directory} is omitted.  For a class
 @code{Acme::Foo}, accessors are methods that return information about
-an object but do not modify it. @command{dfepl} cannot determine on
+an object but do not modify it.  @command{dfepl} cannot determine on
 its own which methods are accessors, but when a list of them is
 provided, it can call an object's accessors when examining a variable
-of that class to obtain more information about the object. To tell
+of that class to obtain more information about the object.  To tell
 @code{dfepl} about the accessors for @code{Acme::Foo}, make a file
 listing the names of each accessor method, one per line with no other
 punctuation, named @file{Acme/Foo.accessors} in the same directory as
@@ -4617,19 +4617,19 @@ punctuation, named @file{Acme/Foo.accessors} in the same directory as
 
 @item --decls-basedir=@var{directory}
 Put generated declaration files in @var{directory} and its
-subdirectories. The default is @file{daikon-output}.
+subdirectories.  The default is @file{daikon-output}.
 
 @item --decls-style=@var{style}
 @var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}. A style of @option{combined} specifies that the
+@option{tree}.  A style of @option{combined} specifies that the
 declarations for all packages should be merged, in a file named
 @file{prog-combined.decls} where @file{prog} is the name of the
-program. A style of @option{flat} specifies that the declarations for
+program.  A style of @option{flat} specifies that the declarations for
 each package should be in a separate file named after the package, but
 that these files should go in a single directory; for instance, the
 declarations for @code{Acme::Trampoline} and
 @code{Acme::Skates::Rocket} would go in files named
-@file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}. A
+@file{Acme::Trampoline.decls} and @file{Acme::Skates::Rocket.decls}.  A
 style of @option{tree} specifies that each package should have its own
 declarations file, and that those files should be arranged in
 directories whose structure matches the structure of their package
@@ -4644,30 +4644,30 @@ one is specified, the other will use the same value.
 @itemx --nodtrace-append
 When @option{--dtrace-append} is specified, the instrumented program
 will append trace information to the appropriate
-@file{.dtrace} file each time it runs. When
+@file{.dtrace} file each time it runs.  When
 @option{--nodtrace-append} is specified, it will overwrite the file
 instead. 
 
-The default behavior is to overwrite. This choice can also be
+The default behavior is to overwrite.  This choice can also be
 overridden, when the program is run, to always append by setting the
 environment variable @code{DTRACEAPPEND} to 1.
 
 @item --dtrace-basedir=@var{directory}
 Put generated trace files in @var{directory} and its
-subdirectories. The default is @file{daikon-output}.
+subdirectories.  The default is @file{daikon-output}.
 
 @item --dtrace-style=@var{style}
 @var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}. A style of @option{combined} specifies that the traces
+@option{tree}.  A style of @option{combined} specifies that the traces
 for all packages should be merged, in a file named
 @file{prog-combined.dtrace}, where @file{prog} is the name of the
-program. A style of @option{flat} specifies that the
+program.  A style of @option{flat} specifies that the
 traces for each package should be in a separate file named after the
 package, but that these files should go in a single directory; for
 instance, the declarations for @code{Acme::Trampoline} and
 @code{Acme::Skates::Rocket} would go in files named
 @file{Acme::Trampoline.dtrace} and
-@file{Acme::Skates::Rocket.dtrace}. A style of @option{tree} specifies
+@file{Acme::Skates::Rocket.dtrace}.  A style of @option{tree} specifies
 that each package should have its own trace file, and that
 those files should be arranged in directories whose structure matches
 the structure of their package names; in the example above, the files
@@ -4679,18 +4679,18 @@ The default is @option{combined}.
 @item --instr-basedir=@var{directory}
 @itemx --instrsourcedir=@var{directory}
 Put instrumented source files in @var{directory} and its
-subdirectories. The default is @file{daikon-untyped}, or
+subdirectories.  The default is @file{daikon-untyped}, or
 @file{daikon-instrumented} if type information is available.
 
 @item --list-depth=@var{DEPTH}
 Consider as many as @var{DEPTH} of the first elements of a list to be
-distinct entities, for the purpose of guessing their types. When
+distinct entities, for the purpose of guessing their types.  When
 subroutines return a list of values, each value may have a distinct
-meaning, or the list may be homogeneous. When trying to assign types
+meaning, or the list may be homogeneous.  When trying to assign types
 to the elements of a list, the Daikon Perl trace runtime will try
 making separate guesses about the types of the elements of a short
 list, but it would be inefficient to make retain this distinction for
-many elements. This parameter controls how many elements of a list
+many elements.  This parameter controls how many elements of a list
 will be examined individually; all the others will be treated
 uniformly.
 
@@ -4699,7 +4699,7 @@ The default is 3.
 @item --output-dir=@var{directory}
 Put all of the files that are the output of the tracing process (and
 therefore input to the Daikon invariant detection engine) in
-@var{directory} and its subdirectories. This option is a shorthand
+@var{directory} and its subdirectories.  This option is a shorthand
 equivalent to setting both @option{--decls-basedir} and
 @option{--dtrace-basedir} to the same value.
 
@@ -4710,14 +4710,14 @@ been specified.
 Use @var{path} as the location of Perl when calling the annotation
 back end (a module named @code{B::DeparseDaikon}), rather than the
 version of Perl under which @command{dfepl} itself is running, which
-is probably the first @command{perl} that occurs on your path. For
+is probably the first @command{perl} that occurs on your path.  For
 instance, if the first version of @command{perl} on your path isn't
 version 5.8 or later, you should this option to specify another
 @command{perl} program that is.
 
 @item --reference-depth=@var{num}
 When examining nested data structures, traverse as many as @var{num}
-nested references. For instance, suppose that @code{@@a} is the array
+nested references.  For instance, suppose that @code{@@a} is the array
 
 @example
 @@a = (@{1 => [2, 3]@}, @{5 => [4, 2]@})
@@ -4725,10 +4725,10 @@ nested references. For instance, suppose that @code{@@a} is the array
 
 If the depth is 0, then when examining @code{@@a}, Daikon's Perl trace
 runtime will consider it to be an array whose elements are references,
-but it won't examine what those references point to. If the depth is
+but it won't examine what those references point to.  If the depth is
 1, it will consider it to be an array of references to hashes whose
 keys are integers and whose values are references, but it won't
-examine what @emph{those} references point to. Finally, if the depth
+examine what @emph{those} references point to.  Finally, if the depth
 is 2 or more, it will consider @code{@@a} to be an array of references
 to hashes whose keys are integers and whose values are references to
 arrays of integers.
@@ -4737,7 +4737,7 @@ The default reference depth is 3.
 
 When referenced objects have accessor methods, or when accessors
 return references, the @option{--accessor-depth} and
-@option{--reference-depth} options interact. Specifically, if these
+@option{--reference-depth} options interact.  Specifically, if these
 depths are A and R, the behavior is as if the runtime has a budget of
 1 unit, which it can use either on accessors which cost 1/A or
 references which cost 1/R@.  It may thus sometimes be useful to specify
@@ -4749,14 +4749,14 @@ fractional values for @option{--accessor-depth} and
 @itemx --notypes-append
 When @option{--types-append} is specified, the instrumented program
 will append type information to the appropriate
-@file{.types} file each time it runs. When
+@file{.types} file each time it runs.  When
 @option{--notypes-append} is specified, it will overwrite the file
 instead. 
 
-The default behavior is to append. If @option{--notypes-append} is
+The default behavior is to append.  If @option{--notypes-append} is
 specified, however, this choice can also be overridden, when the
 program is run, to append by setting the environment variable
-@code{TYPESAPPEND} to 1. There is no way to use environment variables
+@code{TYPESAPPEND} to 1.  There is no way to use environment variables
 to force the runtime to overwrite a types file, but an equivalent
 effect can be obtained by simply removing the previous types file
 before each run.
@@ -4764,38 +4764,38 @@ before each run.
 @item -T
 @itemx --types-dir=@var{directory}
 Look for @file{.types} files in @var{directory}, or
-@file{daikon-instrumented} if @var{directory} is omitted. When
+@file{daikon-instrumented} if @var{directory} is omitted.  When
 instrumenting a module @code{Acme::Trampoline}, used in a program
 @file{coyote.pl},  @command{dfepl} will look for
 files named @file{coyote-combined.types}, @file{Acme::Trampoline.types}, and
 @file{Acme/Trampoline.types}, corresponding to the possible choices of
-@option{--types-style}. Once discovered, the files are used in the
+@option{--types-style}.  Once discovered, the files are used in the
 same way as for @option{-t}.
 
 @item --types-file=@var{file}
 @itemx -t @var{file}
 Include type information from @var{file} when instrumenting programs
-or modules. Since Daikon needs to know the types of variables when
+or modules.  Since Daikon needs to know the types of variables when
 they are declared, useful @file{.decls} and @file{.dtrace} files can
 only be produced by source code instrumented with type
-information. Since Perl programs don't include this information to
+information.  Since Perl programs don't include this information to
 begin with, and it would be cumbersome to produce by hand, type
 information must usually be produced by running a version of the
 program that has itself been annotated, but without type
-information. The Daikon Perl trace runtime will automatically decide
+information.  The Daikon Perl trace runtime will automatically decide
 whether to output types, or declarations and traces, depending on
-whether the source was instrumented without or with types. This option
+whether the source was instrumented without or with types.  This option
 may occur multiple times, to read information from multiple types
 files (irrelevant type information will be ignored).
 
 @item --types-basedir=@var{directory}
 Put files containing type information in @var{directory} and its
-subdirectories. By default, this is whatever @option{--instr-basedir}
+subdirectories.  By default, this is whatever @option{--instr-basedir}
 is, usually @file{daikon-instrumented}.
 
 @item --types-style=@var{style}
 @var{style} should be one of @option{combined}, @option{flat}, or
-@option{tree}. A style of @option{combined} specifies that the types
+@option{tree}.  A style of @option{combined} specifies that the types
 for all packages should be merged, in a file named
 @file{prog-combined.types}, where @file{prog} is the name of the
 program.  A style of @option{flat} specifies that the
@@ -4804,14 +4804,14 @@ package, but that these files should go in a single directory; for
 instance, the declarations for @code{Acme::Trampoline} and
 @code{Acme::Skates::Rocket} would go in files named
 @file{Acme::Trampoline.types} and
-@file{Acme::Skates::Rocket.types}. A style of @option{tree} specifies
+@file{Acme::Skates::Rocket.types}.  A style of @option{tree} specifies
 that each package should have its own trace file, and that
 those files should be arranged in directories whose structure matches
 the structure of their package names; in the example above, the files
 would be @file{Acme/Trampoline.types} and
 @file{Acme/Skates/Rocket.types}.
 
-The default is @option{tree}. Note that @option{--types-style} and
+The default is @option{tree}.  Note that @option{--types-style} and
 @option{--decls-style} are currently constrained to be the same; if
 one is specified, the other will use the same value.
 
@@ -4931,10 +4931,10 @@ certain built-in predicates that it uses for finding conditional invariants;
 examples are which return statement was executed in a procedure and whether a
 boolean procedure returns true or false.  Additionally, Daikon can read
 predicates from a file called a splitter info (@file{.spinfo}) file and find
-implications based on those predicates. The splitter info file can be produced
+implications based on those predicates.  The splitter info file can be produced
 automatically, such as by static analysis of the program using the CreateSpinfo
 and CreateSpinfoC programs or by cluster analysis of the
-traced values in the data trace file. Details of these techniques and usage
+traced values in the data trace file.  Details of these techniques and usage
 guides can be found in @ref{Enhancing conditional invariant detection}.  Users
 can also create splitter info files by hand or manually augment
 automatically-created ones.
@@ -5057,7 +5057,7 @@ Each condition is a Java expression of boolean type.  All variables
 that appear in the condition must also appear in the declaration of
 the program point in the @file{.decls} file.  (In other words, all the
 variables must be in scope at the program point(s) where the Splitter
-is intended to operate.) The automatically generated Splitter source
+is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
@@ -5129,7 +5129,7 @@ daikon.split.SplitterList.all_splitters = false
 @subsection Example splitter info file
 
 Below is an implementation of a simple Queue for positive integers and
-a corresponding @file{.spinfo} file. The splitter info file is like
+a corresponding @file{.spinfo} file.  The splitter info file is like
 the one that @command{CreateSpinfo} would create for that class, but
 also demonstrates some other features.
 
@@ -5336,11 +5336,11 @@ process.  This is a debugging flag.
 @end table
 
 The @command{runcluster.pl} script currently supports three clustering
-programs. They are implementations of the kmeans algorithm,
+programs.  They are implementations of the kmeans algorithm,
 hierarchical clustering and the xmeans algorithm (kmeans algorithm
-with efficient discovery of the number of clusters). The kmeans and
+with efficient discovery of the number of clusters).  The kmeans and
 hierarchical clustering tools are provided in the daikon
-distribution. The xmeans code and executable are publicly available at
+distribution.  The xmeans code and executable are publicly available at
 @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
 
@@ -5427,7 +5427,7 @@ Given two sets of invariants describing the operation of a software
 module, or describing two implementations of a module with the same
 interface, we can define one set of invariants to be ``stronger'' than
 another roughly if in any situation where the ``stronger'' invariants
-hold, the ``weaker'' invariants also hold. The LogicalCompare tool
+hold, the ``weaker'' invariants also hold.  The LogicalCompare tool
 examines two sets of invariants, and checks using the Simplify
 automatic theorem prover whether they satisfy a precise version of
 this relationship.
@@ -5440,21 +5440,21 @@ The LogicalCompare program takes two mandatory arguments, which are
 @file{.inv} files containing invariants; the invariants will be
 checked to verify if the invariants in the first file are weaker
 (implied by) the invariants in the second file, and exceptions to this
-implication are printed. If no other regular arguments are supplied,
+implication are printed.  If no other regular arguments are supplied,
 all the method or function program points that exist in both files
 will be compared, with a exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
 Alternatively, one or two additional arguments may be supplied, which name an 
 ENTER program point and an EXIT program point to examine (if only an
 ENTER program point is supplied, the corresponding combined EXIT point
-is selected automatically). To be precise, for each
+is selected automatically).  To be precise, for each
 pair of program points representing a single method or function,
 LogicalCompare will check that each precondition (ENTER point
 invariant) in the ``stronger'' invariant set is implied by some
 combination of invariants in the ``weaker'' invariant set, and that
 each postcondition (EXIT point invariant) in the ``weaker'' invariant
 set is implied by some combination of postconditions in the
-``stronger'' set and preconditions in the ``weaker'' set. In summary,
+``stronger'' set and preconditions in the ``weaker'' set.  In summary,
 the syntax of an invocation of LogicalCompare will have the following
 form:
 
@@ -5468,24 +5468,24 @@ LogicalCompare accepts the following options:
 @table @code
 @item --assume @var{file}
 Read additional assumptions about the behavior of compared routines
-from the file @var{file}. The assumptions file should consist of lines
+from the file @var{file}.  The assumptions file should consist of lines
 starting with @code{PPT_NAME}, followed by the complete name of an
 ENTER program point, followed by lines each consisting of a Simplify
 formula, optionally followed by a @code{#} and a human-readable
-annotation. Blank lines and lines beginning with a @code{#} are
-ignored. The assumption properties will be used as if they were
+annotation.  Blank lines and lines beginning with a @code{#} are
+ignored.  The assumption properties will be used as if they were
 invariants true at the strong EXIT point when checking weak EXIT point
 invariants.
 
 @item --cfg @var{option}=@var{value}
-Specify a single configuration setting. The available settings are the
+Specify a single configuration setting.  The available settings are the
 same as can be passed to Daikon's @option{--config_option} option,
 though because the invariants have already been generated, some will
 have no effect.  For a list of
 available options, @xref{Configuration options}.
 
 @item --config-file=@var{file}
-Read configuration options from the file @var{file}. This file should
+Read configuration options from the file @var{file}.  This file should
 have the same format as one passed to Daikon's @option{--config}
 option, though because the invariants have already been generated,
 some will have no effect.
@@ -5498,12 +5498,12 @@ printed.
 
 @item --filters=[bBoOmjpi]
 Control which invariants are removed from consideration before
-implications are checked. Note that except as controlled by this
+implications are checked.  Note that except as controlled by this
 option, LogicalCompare does not perform any of the filters that
-normally control whether invariants are printed by Daikon. Also,
+normally control whether invariants are printed by Daikon.  Also,
 invariants that cannot be formatted for the Simplify automatic theorem
 prover will be discarded in any case, as there would be no other way
-to process them. Each letter controls a filter: an invariant is reject
+to process them.  Each letter controls a filter: an invariant is reject
 if it is reject by any filter (or, equivalently, kept only if it
 passes through every filter).
 
@@ -5557,10 +5557,10 @@ Print a brief summary of available command-line options.
 @item --no-post-after-pre-failure
 If implication is not verified between two invariant sets after
 examining the preconditions, do not continue to check the implication
-involving postconditions. Because the postconditions aren't formally
+involving postconditions.  Because the postconditions aren't formally
 meaningful outside the domain specified by the preconditions, this is
 the safest behavior, but in practice trivial precondition mismatches
-may prevent an otherwise meaningful postcondition comparison. See also
+may prevent an otherwise meaningful postcondition comparison.  See also
 @code{--post-after-pre-failure}.
 
 @item --proofs
@@ -5570,19 +5570,19 @@ The set is minimal, in the sense that if any condition were removed,
 the conclusion would no longer logically follow according to Simplify,
 but it is not the least such set: there may exist a smaller set of
 conditions that establish the conclusion, if that set is not a subset
-of the set printed. Beware that because this option uses a naive
+of the set printed.  Beware that because this option uses a naive
 search technique, it may significantly slow down output.
 
 @item --post-after-pre-failure
 Even if implication is not verified between two invariant sets after
 examining the preconditions, continue to check the implication
-involving postconditions. This is somewhat dangerous, in that if the
+involving postconditions.  This is somewhat dangerous, in that if the
 implication does not hold between the preconditions, the invariant
 sets may be inconsistent, in which case reasoning about the
 postconditions is formally nonsensical, but the tool will attempt to
-ignore the contradiction and carry on in this case. This is now the
+ignore the contradiction and carry on in this case.  This is now the
 default behavior, so the option has no effect, but it is retained for
-backward compatibility. See also @code{--no-post-after-pre-failure}.
+backward compatibility.  See also @code{--no-post-after-pre-failure}.
 
 @item --show-count
 Print a count of the number of invariants checked for implication.
@@ -5594,7 +5594,7 @@ passed to Simplify.
 @item --show-sets
 Rather than testing implications among invariants, simply print the
 sets of weak and strong ENTER and EXIT point invariants that would
-normally be compared. The invariants are selected and filtered as
+normally be compared.  The invariants are selected and filtered as
 implied by other options.
 
 @item --show-valid
@@ -5604,7 +5604,7 @@ invariants, which are always printed).
 
 @item --timing
 For each set of invariants checked, print the total time required for
-the check. This time includes both processing done by LogicalCompare
+the check.  This time includes both processing done by LogicalCompare
 directly, and time spent waiting for processing done by Simplify, but
 does not include time spent de-serializing the @file{.inv} input
 files.
@@ -6173,7 +6173,7 @@ program points and the number of variables at each program point.
 In addition to the solutions discussed in @ref{Reducing program points}, 
 you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
-JVM-specific; see your JVM documentation for details. For instance,
+JVM-specific; see your JVM documentation for details.  For instance,
 its correct name in JDK versions 1.3 and later is @option{-Xmx}.)  
 The default may be 64 megabytes or less; to permit use of up to 256
 megabytes, you would run Java like so:
@@ -6182,11 +6182,11 @@ megabytes, you would run Java like so:
 @end example
 
 When using the Java HotSpot JVM, an additional parameter may need to
-be increased. HotSpot uses a separately-limited memory region, called
+be increased.  HotSpot uses a separately-limited memory region, called
 the `permanent generation', for several special kinds of allocation,
 one of which (interned strings) Daikon sometimes uses heavily.  It may
 be necessary to increase this limit as well, with the
-@option{-XX:MaxPermSize=} option. For instance, to use 512 megabytes,
+@option{-XX:MaxPermSize=} option.  For instance, to use 512 megabytes,
 of which at most 256 can be used for the permanent generation, you
 would run Java like so:
 @example
@@ -6232,18 +6232,18 @@ supplied program executions, so they should be mutually consistent.
 Sometimes, however, because of a bug or a limitation in Daikon,
 contradictory invariants are produced.
 
-One known problem involves object invariants. Daikon infers object
+One known problem involves object invariants.  Daikon infers object
 invariants by observing the state of an object when its public methods
-are called. However, if an object has publicly accessible fields that
+are called.  However, if an object has publicly accessible fields that
 are changed by code outside the class, after which no public methods
 are called, invariants about the state of the object as seen by other
-code can contradict the class's object invariants. A workaround is to
+code can contradict the class's object invariants.  A workaround is to
 allow changes to an object's state from outside the class only by
 way of public methods.
 
 Besides confusing the user, contradictory invariants also cause
 trouble for the Simplify theorem prover that implements the
-@option{--suppress_redundant} option. When the invariants at a
+@option{--suppress_redundant} option.  When the invariants at a
 particular program point contradict each other or background
 information (such as the types of objects), Simplify becomes unable to
 distinguish redundant invariants from non-redundant ones.
@@ -6251,7 +6251,7 @@ distinguish redundant invariants from non-redundant ones.
 The best solution in such cases is to fix the underlying cause of the
 contradictory invariants, but since that is sometimes not possible,
 Daikon will try to work around the problem by avoiding the invariants
-that cause a contradiction. Daikon will attempt to find a small subset
+that cause a contradiction.  Daikon will attempt to find a small subset
 of the invariants that aren't mutually consistent, and remove one,
 repeating this process until the remaining invariants are consistent.
 (Note that the invariants are removed only for the purposes of
@@ -6260,7 +6260,7 @@ printed in the final output).  While this technique can allow
 redundant invariants to be found when they otherwise wouldn't be, it
 has some drawbacks: the choice of which invariant to remove is
 somewhat arbitrary, and the process of finding contradictory subsets
-can be time consuming. The removal process can be disabled with the
+can be time consuming.  The removal process can be disabled with the
 @option{daikon.simplify.LemmaStack.remove_contradictions}
 configuration option.
 
@@ -6356,7 +6356,7 @@ the one that Daikon would have computed, had Daikon been able to
 process your entire program over its full test suite.  First, use the
 techniques below (@pxref{Reducing program points}) to split your
 @file{.dtrace} file into parts.  Next, run Daikon on each resulting
-@file{.dtrace} file. Finally, use the union function of @ref{Invariant
+@file{.dtrace} file.  Finally, use the union function of @ref{Invariant
 Diff} to combine the resulting @file{.inv} files into one.
 @c A more correct way to merge the resulting .inv files would be with
 @c the MergeInvariants tool, but it is not yet documented,
@@ -6711,9 +6711,9 @@ not use or examine the software.  Other licensing terms are available;
 send mail to @email{mernst@@lcs.mit.edu}.
 
 Daikon uses the Java port of the GNU getopt library, which is
-copyright 1998 Aaron M. Renn. The getopt library is free software, and
+copyright 1998 Aaron M.@: Renn.  The getopt library is free software, and
 may be redistributed or modified under the terms of the GNU Library
-General Public License version 2. A copy of this license is included
+General Public License version 2.  A copy of this license is included
 with the Daikon distribution as the file
 @file{java/gnu/getopt/COPYING.LIB}.
 
@@ -6721,16 +6721,16 @@ with the Daikon distribution as the file
 @comment soon, at which point this paragraph should be removed.
 @c This product includes software developed by the Apache Software
 @c Foundation (http://www.apache.org/), Copyright (c) 2000 The Apache
-@c Software Foundation. All rights reserved. The license governing this
+@c Software Foundation.  All rights reserved.  The license governing this
 @c software is included with the Daikon distribution as the file
 @c @file{java/jakarta-oro-2.0.6/LICENSE}.
 
 Daikon's unit tests use the JUnit testing framework, which is governed
-by the Common Public License, version 1.0. JUnit is provided on an
+by the Common Public License, version 1.0.  JUnit is provided on an
 ``as is'' basis, without warranties or conditions of any kind, either
 express or implied including, without limitation, any warranties or
 conditions of title, non-infringement, merchantability or fitness for
-a particular purpose. Neither the Daikon developers nor the authors of
+a particular purpose.  Neither the Daikon developers nor the authors of
 the JUnit framework shall have any liability for any direct, indirect,
 incidental, special, exemplary, or consequential damages (including
 without limitation lost profits), however caused and on any theory of
@@ -6738,10 +6738,10 @@ liability, whether in contract, strict liability, or tort (including
 negligence or otherwise) arising in any way out of the use or
 distribution of JUnit or the exercise of any rights granted in
 the Common Public License, even if advised of the possibility of such
-damages. Those portions of JUnit that appear in the Daikon
+damages.  Those portions of JUnit that appear in the Daikon
 distribution may be redistributed under the same terms as Daikon
 itself; this offer is made by the Daikon developers exclusively and
-not by any other party. The Common Public License is included with the
+not by any other party.  The Common Public License is included with the
 Daikon distribution as the file @file{java/junit/cpl-v10.html}.
 
 Note that the front ends discussed in this manual are separate
@@ -6944,7 +6944,7 @@ hashcode), and "a[]" would stand for the array contents (appearing in
 the trace file as a sequence of values).  Otherwise, square brackets
 represent selecting an element of a sequence (as in the C or Java
 array access operator); the index should not itself contain square
-brackets. A period character represents field access, and any field
+brackets.  A period character represents field access, and any field
 name is allowed, except for the restrictions above and the special
 case that a field named "class" represents the type of a value.
 Finally, the name may begin with "orig(" and end with ")", though
@@ -7118,7 +7118,7 @@ This section describes the format of these program point names.  Someone
 writing an instrumenter for a new language must be sure to follow this
 format specification.
 
-A program point name is a string with no tabs or newlines in it. The basic
+A program point name is a string with no tabs or newlines in it.  The basic
 format is:
 
 @example
@@ -7129,21 +7129,21 @@ For the first example given above, the top level of the hierarchy would
 be @file{StackAr}, the bottom level would be @file{makeEmpty()V}, and the
 program point information would be @file{EXIT54}.
 
-@file{topLevel} and @file{bottomLevel} can represent anything. Currently
+@file{topLevel} and @file{bottomLevel} can represent anything.  Currently
 for Java, @file{topLevel} consists of the class name while
-@file{bottomLevel} consists of the method name and method signature. For
+@file{bottomLevel} consists of the method name and method signature.  For
 C, @file{topLevel} could consist of a filename and @file{bottomLevel}
-could consist of a method name and signature. For IOA, @file{topLevel}
+could consist of a method name and signature.  For IOA, @file{topLevel}
 could consist of an Automaton name and @file{bottomLevel} could consist of
 information for a transition state.
 
 @file{topLevel} may contain any number of periods ('.'). @file{bottomLevel}
-and @file{pptInfo} may not contain any periods. The string ":::" may only
+and @file{pptInfo} may not contain any periods.  The string ":::" may only
 appear once.
 
 @file{topLevel} and @file{pptInfo} are required (i.e., they must be non-empty),
 as are the period to the right of @file{topLevel} and the colons to the
-left of @file{pptInfo}. However, @file{bottomLevel} is optional. For
+left of @file{pptInfo}.  However, @file{bottomLevel} is optional.  For
 example, the Java instrumenter creates an artificial object program point
 which contains invariants that are true for all of an object's methods,
 rather than for just one method:
