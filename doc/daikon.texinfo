@@ -2919,9 +2919,9 @@ your system administrator.
 
 If you have any questions, can suggest ways to improve the documentation,
 find bugs in the system, or have suggestions for its improvement, please
-send email to @daikonemail{}.  While Daikon is a research prototype
-and not rock-solid, we will try to assist you and to correct any
-problems, so please don't hesitate to ask for help or report difficulties.
+send email to @daikonemail{}.  While Daikon is a research prototype,
+we will try to assist you and to correct any problems, so please don't
+hesitate to ask for help or report difficulties.
 
 Your bug report will be most helpful if you include:
 @itemize @bullet
