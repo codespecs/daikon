@@ -56,3 +56,4 @@ export VISUAL=${VISUAL:-emacsclient}
 
 # So that Eclipse is always started from the same directory.
 alias eclipse='eclipse -data $HOME/.eclipse'
+

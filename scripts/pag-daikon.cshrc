@@ -13,9 +13,9 @@ setenv DAIKONCLASS_SOURCES 1
 ## Set this directory to the directory containing the JDK.
 # Simplify to just the first branch after the AFS move is done.
 if (-e /afs/csail/group/pag/software) then
-    setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
+    if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
 else
-    setenv JDKDIR /g2/jdk
+    if (! $?JDKDIR) setenv JDKDIR /g2/jdk
 endif
 
 # Remove references to /g4 after AFS move is complete
@@ -54,3 +54,4 @@ if (! $?VISUAL) setenv VISUAL emacsclient
 
 # So that Eclipse is always started from the same directory.
 alias eclipse 'eclipse -data $HOME/.eclipse'
+
