@@ -169,11 +169,14 @@ public final class Global {
   // public final static boolean debugPptSliceGeneric = true;
   // public final static boolean debugPptSliceSpecific = true;
 
-  // used only if debugPptSliceSpecific is set
+  // Used only if debugPptSliceSpecific is set.
+  // Variables must appear in the correct order.
   public final static String[][] debuggedPptSliceSpecific
     = { { "arg", "orig(arg)" },
         { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" },
         { "list.class" },
+        { "this.theArray[orig(this.front)+1..]", "this.theArray[this.front..]" },
+        { "this.theArray[this.front..]", "this.theArray[orig(this.front)+1..]" },
     };
 
   // This may be expensive and so should only be called infrequently.
