@@ -206,7 +206,7 @@ Source-based Java front end dfej
 * Instrumenting Java programs::  
 * StackAr example with dfej::   
 * dfej options::                
-* Run Java::                    
+* Run dfej Java::               
 * Scope of instrumentation::    
 * Refined runtime types::       
 * Installing dfej::             
@@ -218,7 +218,7 @@ StackAr example with dfej
 * Automating the process::      
 * Second Java example::         
 
-Details on running instrumented Java programs
+Details on running dfej-instrumented Java programs
 
 * Java applets::                
 
@@ -3499,7 +3499,7 @@ the names of procedures and variables that appear in the data trace file.
 * Instrumenting Java programs::  
 * StackAr example with dfej::   
 * dfej options::                
-* Run Java::                    
+* Run dfej Java::               
 * Scope of instrumentation::    
 * Refined runtime types::       
 * Installing dfej::             
@@ -3754,7 +3754,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 
 @end itemize
 
-@node    dfej options, Run Java, StackAr example with dfej, Source-based Java front end dfej
+@node    dfej options, Run dfej Java, StackAr example with dfej, Source-based Java front end dfej
 @subsection dfej options
 
 The simplest way to invoke dfej is simply to supply it with a list of
@@ -3999,7 +3999,7 @@ be used).
 * Java applets::                
 @end menu
 
-@node    Java applets,  , Run Java, Run Java
+@node    Java applets,  , Run dfej Java, Run dfej Java
 @subsubsection Java applets
 
 In order to run an applet, you must take two additional steps.
@@ -4037,7 +4037,7 @@ Finally, run the applet:
 @end enumerate
 
 
-@node    Scope of instrumentation, Refined runtime types, Run Java, Source-based Java front end dfej
+@node    Scope of instrumentation, Refined runtime types, Run dfej Java, Source-based Java front end dfej
 @subsection Controlling what classes are instrumented
 
 Only the specified Java files are instrumented; other files are
