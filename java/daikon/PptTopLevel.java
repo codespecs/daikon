@@ -355,7 +355,7 @@ public class PptTopLevel
   }
 
 
-  final static int derivation_passes = 2;
+  // final static int derivation_passes = 2; // [INCR]
 
   // To verify that these are all the factories of interest, do
   // cd ~/research/invariants/daikon/derive; search -i -n 'extends.*derivationfactory'
@@ -625,7 +625,7 @@ public class PptTopLevel
    **/
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
-    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
+    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars, name);
 
     if (values_num_samples == 0) {
       generate_invariants();
@@ -648,6 +648,12 @@ public class PptTopLevel
       }
     }
 
+    // Add to all the conditional ppts
+    for (Iterator itor = views_cond.iterator() ; itor.hasNext() ; ) {
+      PptConditional pptcond = (PptConditional) itor.next();
+      pptcond.add(vt, count);
+      // TODO: Check for no more invariants on pptcond?
+    }
   }
 
   /**
@@ -1252,12 +1258,9 @@ public class PptTopLevel
 
   // This apparently can't appear in PptConditional, lest it never get called.
   // I guess PptConditional isn't instantiated unless it needs to be, but
-  // it doesn't need to be unless GriesLisp has been instantiated already.
+  // it doesn't need to be unless we run this static region!
 
   static {
-    // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
-    // This does work, though.
-
     if (! Daikon.disable_splitting) {
       // new MiscSplitters();
 
@@ -1273,11 +1276,11 @@ public class PptTopLevel
   }
 
 
-  public void addConditions(Splitter[] splits) {
-    // System.out.println("addConditions(" + splits.length + ") for " + name);
+  public void add_splitters(Splitter[] splits) {
+    // System.out.println("add_splitters(" + splits.length + ") for " + name);
 
     int len = splits.length;
-    if ((splits == null) || (len == 0)) {
+    if (len == 0) {
       if (Global.debugSplit.isDebugEnabled())
         Global.debugSplit.debug("No splits for " + name);
       return;
@@ -1287,131 +1290,21 @@ public class PptTopLevel
     //   Assert.assert(splits[i].instantiated() == false);
     // }
 
-    Vector pconds_vector = new Vector(2 * len);
+    Vector pconds = new Vector(2 * len);
     for (int i=0; i<len; i++) {
       PptConditional cond1 = new PptConditional(this, splits[i], false);
       if (! cond1.splitter_valid()) {
-	  if (Global.debugSplit.isDebugEnabled())
-	    Global.debugSplit.debug("Splitter not valid: " + cond1.name);
+	Global.debugSplit.debug("Splitter not valid: " + cond1.name);
         continue;
       }
-      pconds_vector.add(cond1);
+      pconds.add(cond1);
       PptConditional cond2 = new PptConditional(this, splits[i], true);
       Assert.assert(cond2.splitter_valid());
-      pconds_vector.add(cond2);
-    }
-    PptConditional[] pconds
-      = (PptConditional[]) pconds_vector.toArray(new PptConditional[0]);
-    int num_pconds = pconds.length;
-    Assert.assert(num_pconds % 2 == 0);
-    int num_splits = num_pconds/2;
-
-    for (int i=0; i<num_pconds; i+=2) {
-      Assert.assert(! pconds[i].splitter_inverse);
-      Assert.assert(pconds[i+1].splitter_inverse);
-      Assert.assert(pconds[i+1].splitter.condition().equals(pconds[i].splitter.condition()));
+      pconds.add(cond2);
     }
 
-    int trimlength = num_tracevars + num_orig_vars;
-
-    int[][] cumulative_modbits = new int[num_pconds][trimlength];
-    for (int i=0; i<num_pconds; i++) {
-      Arrays.fill(cumulative_modbits[i], 1);
-    }
-
-    // Fill the new PptConditionals with values.
-// [[INCR]] .... XXXXX
-//      for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
-//        VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
-//        ValueTuple vt = entry.value_tuple;
-//        int count = entry.count;
-//        // I do not want to use the same ValueTuple every time through the pconds
-//        // loop because the inserted ValueTuple will be modified in place.
-//        // It's OK to reuse its elements, though.
-//        ValueTuple vt_trimmed = vt.trim(trimlength);
-//        int[] trimmed_mods = vt_trimmed.mods;
-//        Object[] trimmed_vals = vt_trimmed.vals;
-//        for (int i=0; i<num_pconds; i+=2) {
-//          // I really only have to do one of these (depending on which way
-//          // the split goes), unless the splitter throws an error, in which
-//          // case I need to have done both.  Thus, do both, to be on the safe
-//          // side.
-//          ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
-//          ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
-//          boolean splitter_test;
-//          boolean split_exception = false;
-//          // System.out.println("Testing " + pconds[i].name);
-//          // This try block is tight so it doesn't accidentally catch
-//          // other errors.
-//          try {
-//            splitter_test = pconds[i].splitter.test(vt);
-//          } catch (Exception e) {
-//            // e.printStackTrace();
-//            // If an exception is thrown, don't put the data on either side
-//            // of the split.
-//            split_exception = true;
-//            splitter_test = false; // to pacify the Java compiler
-//          }
-//          if (! split_exception) {
-//            // System.out.println("Result = " + splitter_test);
-//            int index = (splitter_test ? i : i+1);
-//            // Do not reuse cum_mods!  It might itself be the
-//            // canonical version (returned by Intern.intern), and then
-//            // modifications would be bad.  Instead, create a new array.
-//            int[] cum_mods = cumulative_modbits[index];
-//            int[] new_mods = (int[]) trimmed_mods.clone();
-//            // This is somewhat like orModsInto, but not exactly.
-//            for (int mi=0; mi<trimlength; mi++) {
-//              if ((cum_mods[mi] == ValueTuple.MODIFIED)
-//                  && (new_mods[mi] != ValueTuple.MISSING)) {
-//                new_mods[mi] = ValueTuple.MODIFIED;
-//                cum_mods[mi] = ValueTuple.UNMODIFIED;
-//              }
-//            }
-//            // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
-//            pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
-//                                                                  Intern.intern(new_mods)),
-//                                      count);
-//            // I don't want to do "Arrays.fill(cum_mods, 0)" because where
-//            // the value was missing, we didn't use up the modification bit.
-//            // I've already fixed it up above, anyway.
-//          }
-//        }
-//      }
-
-
-//      // Install the new conditional ppts, if they are not trivial.
-//      int parent_num_samples = num_samples();
-//      for (int i=0; i<num_pconds; i++) {
-//        // Don't bother with this conditioned view if it contains all or no samples.
-//        int this_num_samples = pconds[i].num_samples();
-//        if ((this_num_samples > 0) && (this_num_samples < parent_num_samples)) {
-//          views_cond.add(pconds[i]);
-//        } else {
-//          if (Global.debugSplit.isDebugEnabled())
-//            Global.debugSplit.debug("Omitting " + pconds[i].name + ": "
-//                               + this_num_samples + "/" + parent_num_samples
-//                               + " samples");
-//          // // Unconditional output, because it's too confusing otherwise.
-//          // if (this_num_samples == parent_num_samples) {
-//          //   System.out.println("Condition always satisfied: "
-//          //                      + pconds[i].name + " == " + this.name);
-//          // }
-//        }
-//      }
-//      if (Global.debugSplit.isDebugEnabled()) {
-//        Global.debugSplit.debug("" + views_cond.size() + " views on " + this.name);
-//        for (int i=0; i<views_cond.size(); i++) {
-//          PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-//          System.out.println("    " + pcond.name);
-//        }
-//      }
-//      for (int i=0; i<views_cond.size(); i++) {
-//        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-//        pcond.initial_processing(); // [INCR] (now setup_invariants), etc?
-//      }
-// ... [INCR] XXXXX
-
+    // Install the new conditional ppts
+    views_cond.addAll(pconds);
   }
 
   public void addImplications() {
@@ -1514,7 +1407,7 @@ public class PptTopLevel
 
 
   // This method is correct only if the two conditional program points fully
-  // partition the input space (their conditionss are negations of one another).
+  // partition the input space (their conditions are negations of one another).
   private void addImplications_internal(PptTopLevel ppt1,
 					PptTopLevel ppt2,
 					boolean add_nonimplications)

@@ -197,7 +197,8 @@ public final class Daikon {
     // Load declarations and splitters
     PptMap all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
-    load_map_files(all_ppts, map_files); // xyxy??? TODO
+    load_map_files(all_ppts, map_files);
+    // setup_splitters(all_ppts); // XXX splitters are not implemented yet
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);
@@ -525,6 +526,33 @@ public final class Daikon {
     }
   }
 
+  // XXX untested code
+  private static void setup_splitters(PptMap all_ppts)
+  {
+    if (disable_splitting) {
+      return;
+    }
+
+    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+
+      Splitter[] pconds = null;
+      if (SplitterList.dkconfig_all_splitters) {
+	pconds = SplitterList.get_all();
+      } else {
+	pconds = SplitterList.get(ppt.name);
+      }
+      if (pconds != null) {
+	if (Global.debugSplit.isDebugEnabled()) {
+	  Global.debugSplit.debug("Got "
+				  + UtilMDE.nplural(pconds.length, "splitter")
+				  + " for " + ppt.name);
+	}
+	ppt.add_splitters(pconds);
+      }
+    }
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
 
@@ -579,6 +607,13 @@ public final class Daikon {
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
       fileio_progress.stop();
       System.out.println();
+      System.out.print("Creating implications "); // XXX untested code
+      for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+	PptTopLevel ppt = (PptTopLevel) itor.next();
+	System.out.print('.');
+	// ppt.addImplications();
+      }
+      System.out.println();
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
@@ -586,48 +621,6 @@ public final class Daikon {
     } finally {
       debugTrace.debug("Time spent on read_data_trace_files: " + elapsedTime());
     }
-
-    /* [INCR] ...
-    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      System.out.print('.');
-
-        if (! disable_splitting) {
-	  Splitter[] pconds = null;
-	  if (SplitterList.dkconfig_all_splitters) {
-	    pconds = SplitterList.get_all();
-	  } else {
-	    pconds = SplitterList.get(ppt.name);
-	  }
-	  if (pconds == null) {
-	    pconds = new Splitter[0];
-	  }
-          if (Global.debugSplit.isDebugEnabled()) {
-            Global.debugSplit.debug("Got "
-				    + UtilMDE.nplural(pconds.length, "splitter")
-				    + " for " + ppt.name);
-	  }
-	  ppt.addConditions(pconds);
-        }
-        ppt.addImplications();
-
-        {
-          // Clear memory
-          // ppt.set_values_null(); // [[INCR]]
-          ppt.clear_view_caches();
-          for (int i=0; i<ppt.views_cond.size(); i++) {
-            PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
-            // pcond.set_values_null(); // [[INCR]]
-            pcond.clear_view_caches();
-          }
-        }
-
-	if (monitor != null) {
-	  // monitor.end_of_iteration(ppt.name, ...); // [[INCR]]
-	}
-    }
-    System.out.println();
-    */ // ... [INCR]
 
     if (monitor != null) {
       monitor.stop();

@@ -636,15 +636,15 @@ public class Dataflow
   }
 
   /**
-   * Use slice.var_infos[].po_{higher,lower} to initialize slice.po_{higher.lower}.
+   * Use slice.var_infos[].po_lower to initialize slice.po_lower.
    * <li> H.arity == this.arity
-   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
+   * <li> exist i,j s.t. this.var_infos[i] :[ H.var_infos[j]  (lower in po)
    * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
    * <li> Nonces are respected
    **/
   public static void init_pptslice_po(PptSlice slice)
   {
-    // For all immediately higher (or lower) groups of variables
+    // For all immediately lower groups of variables
     PptTopLevel ppt = slice.parent;
     int size = ppt.invflow_ppts.length;
   for_all_paths:
@@ -661,6 +661,18 @@ public class Dataflow
 	  // slice doesn't flow here
 	  continue for_all_paths;
 	}
+	vis_adj[j] = adj_ppt.var_infos[adj_index];
+      }
+      slice.addToOnePO(adj_ppt, vis_adj);
+    }
+
+    // Handle the PptConditionals // XXX untested code
+    for (Iterator i = slice.parent.views_cond.iterator(); i.hasNext(); ) {
+      PptConditional adj_ppt = (PptConditional) i.next();
+      VarInfo[] vis_adj = new VarInfo[slice.arity];
+      for (int j = 0; j < slice.arity; j++) {
+	int slice_index = slice.var_infos[j].varinfo_index;
+	int adj_index = slice_index;
 	vis_adj[j] = adj_ppt.var_infos[adj_index];
       }
       slice.addToOnePO(adj_ppt, vis_adj);
