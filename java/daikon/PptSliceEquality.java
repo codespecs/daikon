@@ -355,6 +355,43 @@ public class PptSliceEquality
   }
 
   /**
+      * Create a List of Equality invariants based on the VarInfos in vis.
+      * Assumes that the VarInfos in vis are not missing.  The method is used
+      * exclusively for reversing optimizations in Daikon.  
+      * @param vis The VarInfos that were different from leader
+      * @param leader The original leader of VarInfos
+      * @return a List of Equality invariants bundling together same
+      * values from vis.
+      * pre vis.size() > 0
+      * post result.size() > 0
+      */
+     public List /*[Equality]*/
+     createEqualityInvs(List vis, Equality leader) {
+       Assert.assertTrue(vis.size() > 0);
+
+       // Why use an array?  Because we'll be sorting shortly
+       Equality[] resultArray = new Equality[vis.size()];
+       int resultCount = 0;
+       Iterator i = vis.iterator();
+       while (i.hasNext()) {
+         List list = new ArrayList();
+         list.add(i.next());
+         Equality eq = new Equality(list, this);
+         eq.setSamples(leader.numSamples());
+         resultArray[resultCount] = eq;
+         resultCount++;
+       }
+
+       // Sort for determinism
+       Arrays.sort(
+         resultArray,
+         PptSliceEquality.EqualityComparator.theInstance);
+       List result = Arrays.asList(resultArray);
+       Assert.assertTrue(result.size() > 0);
+       return result;
+     }
+    
+  /**
    * Map maps keys to non-empty lists of elements.
    * This method adds var to the list mapped by key,
    * creating a new list for key if one doesn't already exist.
@@ -376,6 +413,7 @@ public class PptSliceEquality
     elements.add (value);
   }
 
+ 
   /**
    * Instantiate invariants from each inv's leader.  This is like
    * instantiate_invariants at the start of reading the trace file,
@@ -389,7 +427,7 @@ public class PptSliceEquality
    * post: Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
-  private List /*Invariant*/ copyInvsFromLeader (VarInfo leader, List newVis) {
+  public List /*Invariant*/ copyInvsFromLeader (VarInfo leader, List newVis) {
 
 
     List falsified_invs = new ArrayList();
