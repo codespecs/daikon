@@ -1239,6 +1239,11 @@ postprocessed, compared, etc.
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.
 
+@item --files_from @var{filename}
+Read a list of @var{decl}, @var{dtrace}, or @var{spinfo} files from the
+given text file, as an alternative to providing them on the command
+line.
+
 @item --no_text_output
 Don't print invariants as text output.  This option may be used in
 conjunction with the @option{-o} option.
