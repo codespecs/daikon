@@ -198,10 +198,10 @@ public final class Global {
   // used only if debugPrintDtrace is true.  Users need not set this.
   public static PrintWriter dtraceWriter = null;
 
-
   //Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat ();
 
   /* map of statistics for each ppts */
   public static Map stats_map = new LinkedHashMap();
+
 }
