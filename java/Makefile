@@ -389,6 +389,7 @@ clean:
 	# want to remove everything reachable through symbolic links.
 	-rm -f `find daikon -follow -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
+	-rm -f ChicoryPremain.jar
 
 dist_clean: clean
 	-rm -f TAGS
