@@ -64,8 +64,17 @@ public final class SeqIndexComparison
     if (! elt_type.baseIsIntegral()) {
       return null;
     }
-    VarComparability elt_compar = seqvar.comparability.elementType();
-    VarComparability index_compar = seqvar.comparability.indexType(0);
+
+    VarComparability elt_compar,index_compar;
+
+    if (seqvar.comparability != null) {
+      elt_compar = seqvar.comparability.elementType();
+      index_compar = seqvar.comparability.indexType(0);
+    } else {
+      elt_compar = null;
+      index_compar = null;
+    }
+
     if (! VarComparability.comparable(VarInfoName.parse("seqvar.name.elementName"), elt_compar,
                                       VarInfoName.parse("seqvar.name.indexName0"), index_compar)) {
       return null;

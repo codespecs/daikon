@@ -66,7 +66,7 @@ public class NoDuplicates
 
     if (format == OutputFormat.JML) {
       VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var().name,var().name});
-      String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
+      String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,false);
 
       VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
       VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
