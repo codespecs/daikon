@@ -9,7 +9,7 @@ import utilMDE.*;
 public class LinearBinary extends TwoScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public LinearBinaryCore core;
@@ -40,7 +40,7 @@ public class LinearBinary extends TwoScalar {
   public String format_esc() {
     return core.format(var1().name.esc_name(), var2().name.esc_name());
   }
-  
+
   /* IOA */
   public String format_ioa(String classname) {
     return core.format_ioa(var1().name.ioa_name(classname), var2().name.ioa_name(classname));

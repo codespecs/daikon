@@ -14,7 +14,7 @@ import utilMDE.*;
 public final class NonEqual extends TwoScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
   public static boolean dkconfig_integral_only = false;
 
@@ -58,7 +58,7 @@ public final class NonEqual extends TwoScalar {
   public String format_esc() {
     return var1().name.esc_name() + " != " + var2().name.esc_name();
   }
- 
+
   /* IOA */
   public String format_ioa(String classname) {
     return var1().name.ioa_name(classname)+" ~= "+var2().name.ioa_name(classname);
