@@ -188,6 +188,10 @@ public final class StringComparison
     return core.add_modified(v1, v2, count);
   }
 
+  protected double computeConfidence() {
+    return core.computeConfidence();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

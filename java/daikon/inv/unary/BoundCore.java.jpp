@@ -269,48 +269,37 @@ public class LOWERBOUNDCORE
   }
 
 
+  public double computeConfidence() {
+    return 1 - computeProbability();
+  }
+
   public double computeProbability() {
     // The bound is justified if both of two conditions is satisfied:
-    //  a. there are at least required_samples_at_bound samples at the bound
-    //  b. one of the following holds:
-    //      c. the bound has five times the expected number of samples
-    //      d. the bound and the two next elements all have at least half
-    //         the expected number of samples
+    //  1. there are at least required_samples_at_bound samples at the bound
+    //  2. one of the following holds:
+    //      2a. the bound has five times the expected number of samples (the
+    //          number it would have if the values were uniformly distributed)
+    //      2b. the bound and the two next elements all have at least half
+    //          the expected number of samples.
     // The expected number of samples is the total number of samples
     // divided by the range of the samples; it is the average number
     // of samples at each point.
 
-    // Rather than making the probability transition suddenly from 0 to 1,
-    // we compute all the values (graded from 0 to 1), then combine them
-    // according to the following formula:
-    //  result = a + b - ab
-    //  b = min(c, d)
-
-    /// Compute value "a" from above.
-    // This value is 0 if enough samples have been seen, 1 if only 1 sample
-    // has been seen, otherwides grades between
+    // Value "1" from above.
     double bound_samples_prob = prob_is_ge(NUM_MIN1, required_samples_at_bound);
-    utilMDE.Assert.assertTrue(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
     PRIMITIVE modulus = calc_modulus();
-
-    // Accept a bound if:
-    //  * it contains more than twice as many elements as it ought to by
-    //    chance alone, and that number is at least 3.
-    //  * it and its predecessor/successor both contain more than half
-    //    as many elements as they ought to by chance alone, and at
-    //    least 3.
 
     double range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
-    // Value "c" from above
+    // Value "2a" from above
     double trunc_prob = prob_is_ge(NUM_MIN1, 5*avg_samples_per_val);
 
-    // Value "d" from above
+    // Value "2b" from above
+    double unif_prob;
     boolean unif_mod_OK = ((SIGNADJUST(MIN3 - MIN2) == modulus)
                            && (SIGNADJUST(MIN2 - MIN1) == modulus));
-    double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
       double unif_prob_1 = prob_is_ge(NUM_MIN1, half_avg_samp);
@@ -318,9 +307,11 @@ public class LOWERBOUNDCORE
       double unif_prob_3 = prob_is_ge(NUM_MIN3, half_avg_samp);
       unif_prob = Invariant.prob_and(unif_prob_1, unif_prob_2, unif_prob_3);
       // System.out.println("Unif_probs: " + unif_prob + " <-- " + unif_prob_1 + " " + unif_prob_2 + " " + unif_prob_3);
+    } else {
+      unif_prob = 1;
     }
 
-    // Value "b" from above
+    // Value "2" from above
     double bound_prob = prob_or(trunc_prob, unif_prob);
 
     // Final result

@@ -317,11 +317,12 @@ public final class CLASSNAME
     return (wrapper.ppt.num_values() >= MINPAIRS);
   }
 
+  public double computeConfidence() {
+    return Invariant.conf_is_ge(wrapper.ppt.num_values(), MINPAIRS);
+  }
+
   public double computeProbability() {
-    if (wrapper.falsified)
-      return Invariant.PROBABILITY_NEVER;
-    else
-      return Invariant.prob_is_ge(wrapper.ppt.num_values(), MINPAIRS);
+    return Invariant.prob_is_ge(wrapper.ppt.num_values(), MINPAIRS);
   }
 
   public String repr() {

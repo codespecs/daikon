@@ -86,8 +86,8 @@ public abstract class Invariant
   public static double dkconfig_confidence_limit = .99;
 
   /**
-   * If true, use confidence-style filtering.
-   * Otherwise, use probability-style filtering.
+   * If true, use confidence-style filtering (computed from ModBitTracker).
+   * Otherwise, use probability-style filtering (computed from ValueTracker).
    **/
   public static boolean dkconfig_use_confidence = false;
 
@@ -206,8 +206,28 @@ public abstract class Invariant
   public final static double PROBABILITY_NEVER = 3;
 
   /**
-   * Return 0 if x>=goal.
-   * This value is 0 if x>=goal, 1 if x<=1, and otherwise grades between.
+   * Return Invariant.CONFIDENCE_JUSTIFIED if x>=goal.
+   * Return Invariant.CONFIDENCE_UNJUSTIFIED if x<=1.
+   * For intermediate inputs, the result gives confidence that grades
+   * between the two extremes.
+   * See the discussion of gradual vs. sudden confidence transitions.
+   **/
+  public static final double conf_is_ge(double x, double goal) {
+    if (x>=goal)
+      return 1;
+    if (x<=1)
+      return 0;
+    double result = 1 - (goal - x)/(goal-1);
+    Assert.assertTrue(0 <= result && result <= 1, "conf_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    return result;
+  }
+
+  /**
+   * Return Invariant.PROBABILITY_JUSTIFIED if x>=goal.
+   * Return Invariant.PROBABILITY_UNJUSTIFIED if x<=1.
+   * For intermediate inputs, the result gives probability that grades
+   * between the two extremes.
+   * See the discussion of gradual vs. sudden probability transitions.
    **/
   public static final double prob_is_ge(double x, double goal) {
     if (x>=goal)
@@ -215,8 +235,39 @@ public abstract class Invariant
     if (x<=1)
       return 1;
     double result = (goal - x)/(goal-1);
-    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    Assert.assertTrue(0 <= result && result <= 1, "prob_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
     return result;
+  }
+
+
+  /** Return the probability that both conditions are satisfied. */
+  public static final double confidence_and(double c1, double c2) {
+    Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
+    Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c2);
+
+    double result = c1*c2;
+
+    Assert.assertTrue(0 <= result && result <= 1, "confidence_and: bad result = " + result);
+    return result;
+  }
+
+  /** Return the probability that all three conditions are satisfied. */
+  public static final double confidence_and(double c1, double c2, double c3) {
+    Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
+    Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c1);
+    Assert.assertTrue(0 <= c3 && c3 <= 1, "confidence_and: bad c3 = " + c1);
+
+    double result =  c1*c2*c3;
+
+    Assert.assertTrue(0 <= result && result <= 1, "confidence_and: bad result = " + result);
+    return result;
+  }
+
+  /** Return the probability that either condition is satisfied. */
+  public static final double confidence_or(double c1, double c2) {
+    // Not "1-(1-c1)*(1-c2)" because that can produce a value too large; we
+    // don't want the result to be larger than the larger argument.
+    return Math.max(c1, c2);
   }
 
   /** Return the probability that both conditions are satisfied. */
@@ -268,6 +319,7 @@ public abstract class Invariant
     return true;
   }
 
+
   // There are two ways to compute justification.
   //  * The probability routines (getProbability and internal helper
   //    computeProbability) use ValueTracker information.
@@ -283,7 +335,23 @@ public abstract class Invariant
   //    do so any longer.
   //  computeProbability() in an internal helper method that does the
   //    actual work, but it should not be called externally, only by
-  //    getProbability.  (Likewise for computeConfidence().)
+  //    getProbability.  (Likewise for computeConfidence().)  It ignores
+  //    whether the invariant is falsified.
+
+  // There are two general approaches to computing probability/confidence
+  // when there is a threshold (such as needing to see 10 samples):
+  //  * Make the probability typically either 0 or 1, transitioning
+  //    suddenly between the two as soon as the 10th sample is observed.
+  //  * Make the probability transition more gradually; for instance, each
+  //    sample chnages the probability by 10%.
+  // The gradual approach has advantages and disadvantages:
+  //  + Users can set the probability limit to see invariants earlier; this
+  //    is simpler than figuring out all the thresholds to set.
+  //  + Tools such as the operational difference for test suite generation
+  //    are assisted by knowing whether they are getting closer to
+  //    justification.
+  //  - The code is a bit more complicated.
+
 
   /** A wrapper around getConfidence() or getProbability(). **/
   public final boolean justified() {
@@ -333,10 +401,11 @@ public abstract class Invariant
    * @see #computeProbability()
    **/
   public final double getProbability() {
-    if (falsified)
-      return PROBABILITY_NEVER;
+    Assert.assertTrue(! falsified);
+    // if (falsified)
+    //   return PROBABILITY_NEVER;
     double result = computeProbability();
-    if (result > PROBABILITY_NEVER) {
+    if (result < PROBABILITY_JUSTIFIED || result > PROBABILITY_NEVER) {
       // Can't print this.repr_prob(), as it may compute the probability!
       System.out.println("Bad invariant probability " + result + ": ");
       System.out.println(this.getClass());
@@ -389,10 +458,11 @@ public abstract class Invariant
    * @see #computeConfidence()
    **/
   public final double getConfidence() {
-    if (falsified)
-      return CONFIDENCE_NEVER;
+    Assert.assertTrue(! falsified);
+    // if (falsified)
+    //   return CONFIDENCE_NEVER;
     double result = computeConfidence();
-    if (result > CONFIDENCE_NEVER) {
+    if (result < CONFIDENCE_NEVER || result > CONFIDENCE_JUSTIFIED) {
       // Can't print this.repr_prob(), as it may compute the confidence!
       System.out.println("Bad invariant confidence " + result + ": ");
       System.out.println(this.getClass());
@@ -415,11 +485,7 @@ public abstract class Invariant
    * Users should use getConfidence() instead.
    * @see     #getConfidence()
    **/
-  // protected abstract double computeConfidence();
-  // Temporary body, to permit compilation.
-  protected double computeConfidence() {
-    throw new Error("Not yet implemented");
-  }
+  protected abstract double computeConfidence();
 
   /**
    * Subclasses should override.  An exact invariant indicates that given

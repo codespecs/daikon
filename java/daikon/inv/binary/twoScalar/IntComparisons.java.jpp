@@ -456,14 +456,36 @@ invariants.
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    // Should perhaps check number of samples and be unjustified if too few
+    // samples.
+
+#if (defined(EQUAL) || defined(EQUALFLOAT))
+    // We MUST check if we have seen samples; otherwise we get
+    // undesired transitivity with missing values.
+    if (ppt.num_samples() == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
+
+    // It's an equality invariant.  I ought to use the actual ranges somehow.
+    // Actually, I can't even use this .5 test because it can make
+    // equality non-transitive.
+    // return Math.pow(.5, num_values());
+    return Invariant.CONFIDENCE_JUSTIFIED;
+#else
+    // The reason for this multiplication is that there might be only a
+    // very few possible values.  Example:  towers of hanoi has only 6
+    // possible (pegA, pegB) pairs.
+    return 1 - (Math.pow(.5, ppt.num_values())
+                * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+#endif
+  }
+
   // This is very tricky, because whether two variables are equal should
   // presumably be transitive, but it's not guaranteed to be so when using
   // this method and not dropping out all variables whose values are ever
   // missing.
   public double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    }
     // Should perhaps check number of samples and be unjustified if too few
     // samples.
 

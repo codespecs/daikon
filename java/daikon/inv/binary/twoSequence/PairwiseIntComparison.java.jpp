@@ -349,17 +349,28 @@ public class PAIRWISEINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-  protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    } else if (((PptSlice2) ppt).num_elt_values()==0)
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    else {
-#if !(defined(EQUAL) || defined(EQUALFLOAT))
-      return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
+  protected double computeConfidence() {
+    if (((PptSlice2) ppt).num_elt_values()==0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    } else {
+#if (defined(EQUAL) || defined(EQUALFLOAT))
+      // It's an equality invariant
+      return Invariant.CONFIDENCE_JUSTIFIED;
 #else
+      return 1 - Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
+#endif
+    }
+  }
+
+  protected double computeProbability() {
+    if (((PptSlice2) ppt).num_elt_values()==0) {
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    } else {
+#if (defined(EQUAL) || defined(EQUALFLOAT))
       // It's an equality invariant
       return Invariant.PROBABILITY_JUSTIFIED;
+#else
+      return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
 #endif
     }
   }

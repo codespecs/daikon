@@ -415,6 +415,10 @@ public class LOWERBOUND
     return core.enoughSamples();
   }
 
+  protected double computeConfidence() {
+    return core.computeConfidence();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

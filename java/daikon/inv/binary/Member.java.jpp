@@ -564,12 +564,12 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    return Invariant.CONFIDENCE_JUSTIFIED;
+  }
+
   protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    }
-    else
-      return Invariant.PROBABILITY_JUSTIFIED;
+    return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   public boolean isSameFormula(Invariant other)

@@ -73,6 +73,10 @@ public class DummyInvariant
     }
   }
 
+  public double computeConfidence() {
+    return 1-probability;
+  }
+
   public double computeProbability() {
     return probability;
   }

@@ -14,7 +14,7 @@ import daikon.Global;
  * variable was present or not.
  **/
 public class ModBitTracker
-  // implements Serializable, Cloneable
+  implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -62,7 +62,7 @@ public class ModBitTracker
   private int[] this_bits_exception_index;
 
   public ModBitTracker(int num_vars) {
-    Assert.assertTrue(num_vars > 0);
+    Assert.assertTrue(num_vars >= 0);
     this.num_vars = num_vars;
     modbits_arrays = new BitSet[num_vars];
     modbits_arrays[0] = new BitSet();

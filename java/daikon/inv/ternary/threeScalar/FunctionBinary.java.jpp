@@ -154,6 +154,10 @@ public class CLASSNAME
     return core.add_modified(x, y, z, count);
   }
 
+  protected double computeConfidence() {
+    return core.computeConfidence();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

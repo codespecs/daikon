@@ -181,13 +181,18 @@ public class NONZERO
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    return 1 - computeProbability();
+  }
+
   protected double computeProbability() {
     Assert.assertTrue(! falsified);
     // This method works by looking at all sample values and calculating
-    // the probability that they were all non-zero by chance.  If override_range==0,
-    // the range used is the observed range from sample data.  Otherwise, the
-    // override_range is used.  Further observed constraints are used to change the
-    // returned probability, such as all samples being congruent some modulus.
+    // the probability that they were all non-zero by chance (assuming a
+    // uniform distribution).  If override_range==0, the range used is the
+    // observed range from sample data.  Otherwise, the override_range is
+    // used.  Further observed constraints are used to change the returned
+    // probability, such as all samples being congruent some modulus.
     if ((override_range == 0) && ((min > 0) || (max < 0))) {
       //in this case we have something stronger: namely x<0 or x>0
 

@@ -265,12 +265,12 @@ public class CLASSNAME
     return false;
   }
 
+  protected double computeConfidence() {
+    return 1 - Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
+  }
+
   protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    } else {
-      return Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
-    }
+    return Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
   }
 
   public DiscardInfo isObviousStatically (VarInfo[] vis) {

@@ -42,6 +42,10 @@ public class GuardingImplication
     return right.enoughSamples();
   }
 
+  public double computeConfidence() {
+    return right.computeConfidence();
+  }
+
   public double computeProbability() {
     return right.computeProbability();
   }

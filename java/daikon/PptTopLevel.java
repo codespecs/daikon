@@ -146,6 +146,8 @@ public class PptTopLevel
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
 
+  private ModBitTracker mbtracker;
+
   // private transient VarValuesOrdered values; // [[INCR]]
   private int values_num_samples;
   // [INCR] private int values_num_mod_non_missing_samples;
@@ -321,6 +323,10 @@ public class PptTopLevel
     //                    + "num_static_constant_vars=" + num_static_constant_vars
     //                    + ",num_declvars=" + num_declvars
     //                    + ",num_tracevars=" + num_tracevars);
+
+    if (Invariant.dkconfig_use_confidence) {
+      mbtracker = new ModBitTracker(num_tracevars);
+    }
   }
 
 
@@ -1195,6 +1201,10 @@ public class PptTopLevel
 
     if (debugSuppress.isLoggable(Level.FINE)) {
       debugSuppress.fine (">>> End of add for " + name());
+    }
+
+    if (Invariant.dkconfig_use_confidence) {
+      mbtracker.add(vt);
     }
 
     return new ArrayList();

@@ -203,11 +203,12 @@ public class SUBSET
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    return Invariant.CONFIDENCE_JUSTIFIED;
+  }
+
   protected double computeProbability() {
-    if (falsified)
-      return Invariant.PROBABILITY_NEVER;
-    else
-      return Invariant.PROBABILITY_JUSTIFIED;
+    return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   // Convenience name to make this easier to find.

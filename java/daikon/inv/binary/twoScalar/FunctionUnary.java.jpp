@@ -94,6 +94,10 @@ public class CLASSNAME
   }
 
 
+  protected double computeConfidence() {
+    return core.computeConfidence();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

@@ -147,8 +147,12 @@ public class DummyInvariant
     return inv;
   }
 
+  protected double computeConfidence() {
+    return Invariant.CONFIDENCE_JUSTIFIED;
+  }
+
   protected double computeProbability() {
-    return 0;
+    return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   public void negate() {

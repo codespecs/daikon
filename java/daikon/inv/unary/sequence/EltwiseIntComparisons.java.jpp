@@ -277,18 +277,27 @@ public class CLASSNAME
 
   // Perhaps check whether all the arrays of interest have length 0 or 1.
 
-  protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    }
+  protected double computeConfidence() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
-    if (ppt.num_samples() != 0)
+    if (ppt.num_samples() != 0) {
+      return Invariant.CONFIDENCE_JUSTIFIED;
+    } else {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
+#else
+    return 1 - Math.pow(.5, ppt.num_samples());
+#endif
+  }
+
+  protected double computeProbability() {
+#if defined(EQUAL) || defined(EQUALFLOAT)
+    if (ppt.num_samples() != 0) {
       return Invariant.PROBABILITY_JUSTIFIED;
-    else {
+    } else {
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
 #else
-      return Math.pow(.5, ppt.num_samples());
+    return Math.pow(.5, ppt.num_samples());
 #endif
   }
 

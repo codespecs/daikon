@@ -72,6 +72,16 @@ public class Implication
     return result;
   }
 
+  protected double computeConfidence() {
+    double pred_conf = left.computeConfidence();
+    double cons_conf = right.computeConfidence();
+    if ((pred_conf == CONFIDENCE_NEVER)
+        || (cons_conf == CONFIDENCE_NEVER)) {
+      return CONFIDENCE_NEVER;
+    }
+    return confidence_and(pred_conf, cons_conf);
+  }
+
   protected double computeProbability() {
     double pred_prob = left.computeProbability();
     double cons_prob = right.computeProbability();

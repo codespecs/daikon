@@ -120,6 +120,14 @@ public class NonModulus
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    updateResults();
+    if (no_result_yet)
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
+    return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_non_missing_samples());
+  }
+
   protected double computeProbability() {
     updateResults();
     if (no_result_yet)

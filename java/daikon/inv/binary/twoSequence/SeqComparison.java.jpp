@@ -434,20 +434,30 @@ public class SEQSEQINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-  protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
+  protected double computeConfidence() {
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+    // It's an equality invariant
+    if (ppt.num_samples() == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
-      #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-      return Math.pow(.5, ppt.num_values());
-      #else
-      if (ppt.num_samples() == 0) {
-        return Invariant.PROBABILITY_UNJUSTIFIED;
-      } else {
-        return Invariant.PROBABILITY_JUSTIFIED;
-      }
-      #endif
+      return Invariant.CONFIDENCE_JUSTIFIED;
     }
+#else
+    return 1 - Math.pow(.5, ppt.num_values());
+#endif
+  }
+
+  protected double computeProbability() {
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+    // It's an equality invariant
+    if (ppt.num_samples() == 0) {
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    } else {
+      return Invariant.PROBABILITY_JUSTIFIED;
+    }
+#else
+    return Math.pow(.5, ppt.num_values());
+#endif
   }
 
   // For Comparison interface

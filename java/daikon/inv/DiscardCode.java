@@ -19,7 +19,7 @@ import daikon.inv.filter.*;
 
     bad_probability // has an unjustified probability
 
-    unused // was few_modified_samples
+    <unused> // was few_modified_samples
 
     not_enough_samples // not enough samples seen for the Invariant
 

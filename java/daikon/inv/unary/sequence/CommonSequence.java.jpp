@@ -148,12 +148,12 @@ public class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    return 1 - Math.pow(.9, elts);
+  }
+
   protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    } else {
-      return Math.pow(.9, elts);
-    }
+    return Math.pow(.9, elts);
   }
 
   public boolean isSameFormula(Invariant other) {

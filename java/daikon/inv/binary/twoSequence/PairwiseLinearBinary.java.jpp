@@ -188,6 +188,10 @@ public class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    return core.computeConfidence();
+  }
+
   protected double computeProbability() {
     return core.computeProbability();
   }

@@ -129,7 +129,7 @@ import java.util.logging.Level;
 /**
  * Represents PRIMITIVE scalars with an invariant to each element of
  * PRIMITIVE sequences.  Prints as 'x[] elements COMPARE y' where x is a
- * PRIMITIVE sequence and y is a PRIMITIVE scalar
+ * PRIMITIVE sequence and y is a PRIMITIVE scalar.
  **/
 public final class SEQINTEQUAL
   extends SUPERCLASS
@@ -298,20 +298,33 @@ public final class SEQINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    if (ppt.num_values() == 0) {
+      return CONFIDENCE_UNJUSTIFIED;
+    }
+    #if (defined(EQUAL) || defined(EQUALFLOAT))
+    // It's an equality invariant.  I ought to use the actual ranges somehow.
+    // Actually, I can't even use this .5 test because it can make
+    // equality non-transitive.
+    // return Math.pow(.5, ppt.num_samples());
+    return Invariant.CONFIDENCE_JUSTIFIED;
+    #else
+    return 1 - Math.pow(.5, ppt.num_values());
+    #endif
+  }
+
   protected double computeProbability() {
-    if (falsified) {
-      return PROBABILITY_NEVER;
-    } if (ppt.num_values() == 0) {
+    if (ppt.num_values() == 0) {
       return PROBABILITY_UNJUSTIFIED;
     }
-    #if (defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT) || defined(LESSEQUALFLOAT))
-    return Math.pow(.5, ppt.num_values());
-    #else
+    #if (defined(EQUAL) || defined(EQUALFLOAT))
     // It's an equality invariant.  I ought to use the actual ranges somehow.
     // Actually, I can't even use this .5 test because it can make
     // equality non-transitive.
     // return Math.pow(.5, ppt.num_samples());
     return Invariant.PROBABILITY_JUSTIFIED;
+    #else
+    return Math.pow(.5, ppt.num_values());
     #endif
   }
 

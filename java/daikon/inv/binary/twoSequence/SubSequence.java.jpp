@@ -338,14 +338,20 @@ public class CLASSNAME
     return InvariantStatus.WEAKENED;
   }
 
-  protected double computeProbability() {
-    if (falsified)
-      return Invariant.PROBABILITY_NEVER;
-    else if (var1_in_var2 && var2_in_var1) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
+  protected double computeConfidence() {
+    if (var1_in_var2 && var2_in_var1) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    } else {
+      return Invariant.CONFIDENCE_JUSTIFIED;
     }
-    else
+  }
+
+  protected double computeProbability() {
+    if (var1_in_var2 && var2_in_var1) {
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    } else {
       return Invariant.PROBABILITY_JUSTIFIED;
+    }
   }
 
   /**

@@ -274,46 +274,60 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  protected double computeProbability() {
-    Assert.assertTrue(! falsified);
+  protected double computeConfidence() {
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  (Perhaps only
     // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
     // the non-zeroness.)  In that case, do still check for no values yet
     // received.
-    if ((override_range == 0) && ((min > 0) || (max < 0)))
+    if ((override_range == 0) && ((min > 0) || (max < 0))) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-    else {
-      PRIMITIVE range;
-      if (override_range != 0) {
-        range = override_range;
-      } else {
-        int modulus = 1;
+    } else {
+      double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
+      return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
+    }
+  }
 
-        // I need to come back and make this work.
-        // {
-        //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-        //     Invariant inv = (Invariant) itor.next();
-        //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
-        //       modulus = ((Modulus) inv).modulus;
-        //       break;
-        //     }
-        //   }
-        // }
-
-        // Perhaps I ought to check that it's possible (given the modulus
-        // constraints) for the value to be zero; otherwise, the modulus
-        // constraint implies non-zero.
-        range = (max - min + 1) / modulus;
-      }
-      double probability_one_elt_nonzero = 1 - 1.0/range;
-      // This could underflow; so consider doing
-      //   double log_probability = self.samples*math.log(probability);
-      // then calling Math.exp (if the value is in the range that wouldn't
-      // cause underflow).
+  protected double computeProbability() {
+    // Maybe just use 0 as the min or max instead, and see what happens:
+    // see whether the "nonzero" invariant holds anyway.  (Perhaps only
+    // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
+    // the non-zeroness.)  In that case, do still check for no values yet
+    // received.
+    if ((override_range == 0) && ((min > 0) || (max < 0))) {
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    } else {
+      double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
       return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
     }
   }
+
+  private double confidence_one_elt_nonzero() {
+    PRIMITIVE range;
+    if (override_range != 0) {
+      range = override_range;
+    } else {
+      int modulus = 1;
+
+      // I need to come back and make this work.
+      // {
+      //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      //     Invariant inv = (Invariant) itor.next();
+      //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
+      //       modulus = ((Modulus) inv).modulus;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // Perhaps I ought to check that it's possible (given the modulus
+      // constraints) for the value to be zero; otherwise, the modulus
+      // constraint implies non-zero.
+      range = (max - min + 1) / modulus;
+    }
+    return 1.0/range;
+  }
+
 
   public boolean isSameFormula(Invariant other)
   {

@@ -129,6 +129,16 @@ public class Modulus
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    if (modulus == 1)
+      return Invariant.CONFIDENCE_NEVER;
+    if (modulus == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
+    double probability_one_elt_modulus = 1 - 1.0/modulus;
+    return 1 - Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
+  }
+
   protected double computeProbability() {
     if (modulus == 1)
       return Invariant.PROBABILITY_NEVER;

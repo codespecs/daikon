@@ -99,6 +99,10 @@ public class CommonStringSequence
     return InvariantStatus.NO_CHANGE;
   }
 
+  protected double computeConfidence() {
+    throw new Error("Not yet implemented");
+  }
+
   protected double computeProbability() {
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;

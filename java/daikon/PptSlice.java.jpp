@@ -13,19 +13,19 @@ The correct way to build the system is to run 'make'.
   #define PPTSLICE1STRING "PptSlice1"
   #define NUM_TM 2
   #define ARITY 1
-  #define VT_CLASS ValueTracker.ValueTracker1
+  #define VALUETRACKER1 ValueTracker.ValueTracker1
 #elif defined(ARITY2)
   #define PPTSLICE1 PptSlice2
   #define PPTSLICE1STRING "PptSlice2"
   #define NUM_TM 4
   #define ARITY 2
-  #define VT_CLASS ValueTracker.ValueTracker2
+  #define VALUETRACKER1 ValueTracker.ValueTracker2
 #elif defined(ARITY3)
   #define PPTSLICE1 PptSlice3
   #define PPTSLICE1STRING "PptSlice3"
   #define NUM_TM 8
   #define ARITY 3
-  #define VT_CLASS ValueTracker.ValueTracker3
+  #define VALUETRACKER1 ValueTracker.ValueTracker3
 #else
   #error "One of ARITY1, ARITY2, or ARITY3 must be defined"
 #endif
@@ -86,21 +86,25 @@ public final class PPTSLICE1
 
 #if defined(ARITY1)
   public VarInfo var_info;
+#endif
 
+#if 0
+  THESE ARE OLD COMMENTS, referring to a previous implementation.
+#if defined(ARITY1)
   // values_cache maps (interned) values to 2-element arrays of
   // [num_unmodified, num_modified].
-  ValueTracker.ValueTracker1 values_cache;
 #elif defined(ARITY2)
   // values_cache maps (interned) values to 4-element arrays of
   // [num_unmod_unmod, num_unmod_mod, num_mod_unmod, num_mod_mod].
-  ValueTracker.ValueTracker2 values_cache;
 #elif defined(ARITY3)
   // values_cache maps (interned) values to 8-element arrays of
   // [uuu, uum, umu, umm, muu, mum, mmu, mmm].
   // That is, the first element is (unmod,unmod,unmod);
   // the second element is (unmod,unmod,mod); etc.
-  ValueTracker.ValueTracker3 values_cache;
 #endif
+#endif
+
+  VALUETRACKER1 values_cache;
   int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
 
 
@@ -165,25 +169,37 @@ public final class PPTSLICE1
     ProglangType rep_type = var_info.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
-      values_cache = new ValueTracker.ValueTrackerScalar(44);
       new_invs = SingleScalarFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerScalar(44);
+      }
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      values_cache = new ValueTracker.ValueTrackerScalarArray(44);
       new_invs = SingleScalarSequenceFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerScalarArray(44);
+      }
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
-      values_cache = new ValueTracker.ValueTrackerFloat(44);
       new_invs = SingleFloatFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerFloat(44);
+      }
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE_ARRAY) {
-      values_cache = new ValueTracker.ValueTrackerFloatArray(44);
       new_invs = SingleFloatSequenceFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerFloatArray(44);
+      }
     } else if (rep_type == ProglangType.STRING) {
-      values_cache = new ValueTracker.ValueTrackerString(44);
       new_invs = SingleStringFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerString(44);
+      }
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      values_cache = new ValueTracker.ValueTrackerStringArray(44);
       new_invs = SingleStringSequenceFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerStringArray(44);
+      }
     } else {
       // Do nothing; do not even complain
     }
@@ -195,46 +211,64 @@ public final class PPTSLICE1
     boolean rep1_is_float  = rep1.isFloat();
     boolean rep2_is_float  = rep2.isFloat();
     if (rep1_is_scalar && rep2_is_scalar) {
-      values_cache = new ValueTracker.ValueTrackerTwoScalar(44);
       new_invs = TwoScalarFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerTwoScalar(44);
+      }
     } else if ((rep1 == ProglangType.STRING)
         && (rep2 == ProglangType.STRING)) {
-      values_cache = new ValueTracker.ValueTrackerTwoString(44);
       new_invs = TwoStringFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerTwoString(44);
+      }
     } else if ((rep1 == ProglangType.INT)
                && (rep2 == ProglangType.INT_ARRAY)) {
-      values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
       new_invs = SequenceScalarFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
+      }
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT)) {
-      values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
       new_invs = SequenceScalarFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
+      }
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT_ARRAY)) {
-      values_cache = new ValueTracker.ValueTrackerTwoScalarArray(44);
       new_invs = TwoSequenceFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerTwoScalarArray(44);
+      }
     } else if (rep1_is_float && rep2_is_float) {
       if (Daikon.dkconfig_enable_floats) {
-        values_cache = new ValueTracker.ValueTrackerTwoFloat(44);
         new_invs = TwoFloatFactory.instantiate(this);
+        if (! Invariant.dkconfig_use_confidence) {
+          values_cache = new ValueTracker.ValueTrackerTwoFloat(44);
+        }
       }
     } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
       if (Daikon.dkconfig_enable_floats) {
-        values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
         new_invs = SequenceFloatFactory.instantiate(this);
+        if (! Invariant.dkconfig_use_confidence) {
+          values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
+        }
       }
     } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE)) {
       if (Daikon.dkconfig_enable_floats) {
-        values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
         new_invs = SequenceFloatFactory.instantiate(this);
+        if (! Invariant.dkconfig_use_confidence) {
+          values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
+        }
       }
     } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
       if (Daikon.dkconfig_enable_floats) {
-        values_cache = new ValueTracker.ValueTrackerTwoFloatArray(44);
         new_invs = TwoSequenceFactoryFloat.instantiate(this);
+        if (! Invariant.dkconfig_use_confidence) {
+          values_cache = new ValueTracker.ValueTrackerTwoFloatArray(44);
+        }
       }
     } else {
       // Do nothing; do not even complain
@@ -246,14 +280,18 @@ public final class PPTSLICE1
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
-      values_cache = new ValueTracker.ValueTrackerThreeScalar(44);
       new_invs = ThreeScalarFactory.instantiate(this);
+      if (! Invariant.dkconfig_use_confidence) {
+        values_cache = new ValueTracker.ValueTrackerThreeScalar(44);
+      }
     } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE)
                && (rep3 == ProglangType.DOUBLE)) {
       if (Daikon.dkconfig_enable_floats) {
-        values_cache = new ValueTracker.ValueTrackerThreeFloat(44);
         new_invs = ThreeFloatFactory.instantiate(this);
+        if (! Invariant.dkconfig_use_confidence) {
+          values_cache = new ValueTracker.ValueTrackerThreeFloat(44);
+        }
       }
     } else {
       // Do nothing; do not even complain
@@ -316,12 +354,16 @@ public final class PPTSLICE1
   }
 
   // Returns the number of distinct values stored in the ValueTracker
-  // of this (up to a maximum of 8
+  // of this.
   public int num_values() {
-    if (values_cache != null) {
-      return this.values_cache.num_values();
+    if (Invariant.dkconfig_use_confidence) {
+      throw new Error("to be implemented");
     } else {
-      return 0;
+      if (values_cache != null) {
+        return this.values_cache.num_values();
+      } else {
+        return 0;
+      }
     }
   }
 
@@ -332,10 +374,14 @@ public final class PPTSLICE1
   // Returns the number of distinct array element values stored in
   // this value tracker (only if the arrays are of equal length)
   public int num_elt_values() {
-    if (values_cache == null) {
-      return 0;
+    if (Invariant.dkconfig_use_confidence) {
+      throw new Error("to be implemented");
     } else {
-      return this.values_cache.num_elt_values();
+      if (values_cache == null) {
+        return 0;
+      } else {
+        return this.values_cache.num_elt_values();
+      }
     }
   }
 #endif
@@ -347,10 +393,14 @@ public final class PPTSLICE1
 #if defined(ARITY1)
   // Returns the number of arrays seen whose length was > 1
   public int num_no_dup_values() {
-    if (values_cache == null) {
-      return 0;
+    if (Invariant.dkconfig_use_confidence) {
+      throw new Error("to be implemented");
     } else {
-      return this.values_cache.num_no_dup_values();
+      if (values_cache == null) {
+        return 0;
+      } else {
+        return this.values_cache.num_no_dup_values();
+      }
     }
   }
 
@@ -358,10 +408,14 @@ public final class PPTSLICE1
   // SeqIndexComparison.  That is, each distinct pair
   // (a[i], i) is considered a distinct value
   public int num_seq_index_values() {
-    if (values_cache == null) {
-      return 0;
+    if (Invariant.dkconfig_use_confidence) {
+      throw new Error("to be implemented");
     } else {
-      return this.values_cache.num_seq_index_values();
+      if (values_cache == null) {
+        return 0;
+      } else {
+        return this.values_cache.num_seq_index_values();
+      }
     }
   }
 #endif
@@ -589,8 +643,10 @@ public final class PPTSLICE1
 
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
-    if (values_cache != null) {
-      values_cache.add(val1);
+    if (! Invariant.dkconfig_use_confidence) {
+      if (values_cache != null) {
+        values_cache.add(val1);
+      }
     }
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
@@ -624,11 +680,13 @@ public final class PPTSLICE1
 
     boolean array1 = var_infos[0].rep_type.isArray();
     boolean array2 = var_infos[1].rep_type.isArray();
-    if (values_cache != null) {
-      if (array2 && ! array1) {
-        values_cache.add(val2, val1);
-      } else {
-        values_cache.add(val1, val2);
+    if (! Invariant.dkconfig_use_confidence) {
+      if (values_cache != null) {
+        if (array2 && ! array1) {
+          values_cache.add(val2, val1);
+        } else {
+          values_cache.add(val1, val2);
+        }
       }
     }
     if (array2 && ! array1) {
@@ -691,8 +749,10 @@ public final class PPTSLICE1
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
     tm_total[mod_index] += count;
 
-    if (values_cache != null) {
-      values_cache.add(val1, val2, val3);
+    if (! Invariant.dkconfig_use_confidence) {
+      if (values_cache != null) {
+        values_cache.add(val1, val2, val3);
+      }
     }
 
     // Debug print add info
@@ -948,24 +1008,17 @@ public final class PPTSLICE1
     for (int i = 0; i < tm_total.length; i++) {
       result.tm_total[i] = this.tm_total[i];
     }
-    // Set ValueTracker
 
-    if (values_cache == null) {
-      result.values_cache = null;
-    } else {
-      #if defined(ARITY1)
-        result.values_cache = (ValueTracker.ValueTracker1)
-                                                    this.values_cache.clone();
-      #elif defined(ARITY2)
-        result.values_cache = (ValueTracker.ValueTracker2)
-                                                    this.values_cache.clone();
+    // Set ValueTracker
+    if (! Invariant.dkconfig_use_confidence) {
+      if (values_cache == null) {
+        result.values_cache = null;
+      } else {
+        result.values_cache = (VALUETRACKER1) this.values_cache.clone();
         result.values_cache.permute (permutation);
-      #elif defined(ARITY3)
-        result.values_cache = (ValueTracker.ValueTracker3)
-                                                    this.values_cache.clone();
-        result.values_cache.permute (permutation);
-      #endif
+      }
     }
+
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -1094,10 +1147,12 @@ public final class PPTSLICE1
       }
 
       // Keep track of the values cache from each child
-      vtlist.add (cslice.values_cache);
-      if (Debug.logOn())
-        Debug.log (getClass(), this, "Adding value cache "
-                   + cslice.values_cache + "from ppt" + cslice.name());
+      if (! Invariant.dkconfig_use_confidence) {
+        vtlist.add (cslice.values_cache);
+        if (Debug.logOn())
+          Debug.log (getClass(), this, "Adding value cache "
+                     + cslice.values_cache + "from ppt" + cslice.name());
+      }
 
       // Build the permutation array from child to parent slice
       for (int j = 0; j < cvis_sorted.length; j++) {
@@ -1168,8 +1223,12 @@ public final class PPTSLICE1
     }
 
     // Create value tracker information for the parent.
-    if (vtlist.size() > 0)
-      values_cache = (VT_CLASS) ValueTracker.merge (vtlist);
+    if (! Invariant.dkconfig_use_confidence) {
+      if (vtlist.size() > 0)
+        values_cache = (VALUETRACKER1) ValueTracker.merge (vtlist);
+    } else {
+      Assert.assertTrue(vtlist.size() == 0);
+    }
 
     // Attempt to create a parent invariant for each invariant that
     // appeared at each valid child.  Note that some invariants will

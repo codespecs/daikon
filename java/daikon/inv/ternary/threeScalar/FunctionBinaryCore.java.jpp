@@ -197,11 +197,17 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  public double computeProbability() {
-    if (wrapper.falsified) {
-      return Invariant.PROBABILITY_NEVER;
+  public double computeConfidence() {
+    Assert.assertTrue(equal_values <= values_seen);
+    if (equal_values == values_seen) {
+      return Invariant.CONFIDENCE_NEVER;
     }
-    if (values_seen <= equal_values) { // how can equal_values ever be > values_seen ?
+    return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
+  }
+
+  public double computeProbability() {
+    Assert.assertTrue(equal_values <= values_seen);
+    if (equal_values == values_seen) {
       return Invariant.PROBABILITY_NEVER;
     }
     return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);

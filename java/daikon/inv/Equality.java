@@ -134,12 +134,22 @@ public final class Equality
 
   /**
    * Always return JUSTIFIED because we aggregate Comparison
+   * invariants that are all justified to the confidence_limit
+   * threshold.
+   **/
+  public double computeConfidence() {
+    return Invariant.CONFIDENCE_JUSTIFIED;
+  }
+
+  /**
+   * Always return JUSTIFIED because we aggregate Comparison
    * invariants that are all justified to the probability_limit
    * threshold.
    **/
   public double computeProbability() {
     return Invariant.PROBABILITY_JUSTIFIED;
   }
+
 
   ////////////////////////
   // Functions called during actual checking

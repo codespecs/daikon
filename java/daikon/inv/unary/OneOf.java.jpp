@@ -1567,6 +1567,20 @@ public final class ONEOFSCALAR
   }
 #endif
 
+  protected double computeConfidence() {
+    // This is not ideal.
+    if (num_elts == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+#if defined(SCALAR) || defined(ELT)
+    } else if (is_hashcode && (num_elts > 1)) {
+      // This should never happen
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+#endif
+    } else {
+      return Invariant.CONFIDENCE_JUSTIFIED;
+    }
+  }
+
   protected double computeProbability() {
     // This is not ideal.
     if (num_elts == 0) {
@@ -1576,9 +1590,9 @@ public final class ONEOFSCALAR
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #endif
-      } else {
-        return Invariant.PROBABILITY_JUSTIFIED;
-      }
+    } else {
+      return Invariant.PROBABILITY_JUSTIFIED;
+    }
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {

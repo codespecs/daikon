@@ -108,40 +108,60 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  public double computeProbability() {
-    if (wrapper.falsified)
-      return Invariant.PROBABILITY_NEVER;
-    else if ((min1 > max2) || (max1 < min2)) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    }
-    else {
-      double probability_one_nonequal;
-      if (override_range != 0) {
-        probability_one_nonequal = 1 - 1/(double)override_range;
-      } else {
-        PRIMITIVE overlap = Math.min(max1, max2) - Math.max(min1, min2);
-        // Looks like we're comparing pointers.  Fix this later.
-        if (overlap < 0)
-          return Invariant.PROBABILITY_JUSTIFIED;
-
-        Assert.assertTrue(overlap >= 0);
-        overlap++;
-        double range1 = (double)max1 - min1 + 1;
-        double range2 = (double)max2 - min2 + 1;
-
-        // probability of being equal by chance
-        //  = (overlap/range1) * (overlap/range2) * (1/overlap)
-        //  = overlap/(range1 * range2)
-
-        // Hack; but this seems too stringent otherwise
-        overlap *= 2;
-
-        probability_one_nonequal = 1-((double)overlap)/(range1 * range2);
-      }
-
-     return Math.pow(probability_one_nonequal, samples);
+  public double computeConfidence() {
+    if ((min1 > max2) || (max1 < min2)) {
+      // The two ranges do not overlap.
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    } else {
+      // The two ranges do overlap.  Determine the extent of each range and
+      // the extent of the overlap.  From this, compute the probability
+      // that the values are different each time through.
+      double probability_one_nonequal = 1 - confidence_one_nonequal();
+      return 1 - Math.pow(probability_one_nonequal, samples);
     }
   }
+
+  public double computeProbability() {
+    if ((min1 > max2) || (max1 < min2)) {
+      // The two ranges do not overlap.
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    } else {
+      // The two ranges do overlap.  Determine the extent of each range and
+      // the extent of the overlap.  From this, compute the probability
+      // that the values are different each time through.
+      double probability_one_nonequal = 1 - confidence_one_nonequal();
+      return Math.pow(probability_one_nonequal, samples);
+    }
+  }
+
+  // The two ranges do overlap.  Determine the extent of each range and
+  // the extent of the overlap.  From this, compute the probability
+  // that the values are different each time through.
+  private double confidence_one_nonequal() {
+    if (override_range != 0) {
+      return 1/(double)override_range;
+    }
+
+    PRIMITIVE overlap = Math.min(max1, max2) - Math.max(min1, min2);
+    // Looks like we're comparing pointers.  Fix this later.
+    if (overlap < 0)
+      return Invariant.PROBABILITY_JUSTIFIED;
+
+    Assert.assertTrue(overlap >= 0);
+    overlap++;
+    double range1 = (double)max1 - min1 + 1;
+    double range2 = (double)max2 - min2 + 1;
+
+    // probability of being equal by chance
+    //  = (overlap/range1) * (overlap/range2) * (1/overlap)
+    //  = overlap/(range1 * range2)
+
+    // Hack; but this seems too stringent otherwise
+    overlap *= 2;
+
+    return ((double)overlap)/(range1 * range2);
+  }
+
 
   public String repr() {
     return CLASSSTRING + ": "

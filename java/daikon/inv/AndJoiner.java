@@ -20,8 +20,12 @@ public class AndJoiner
     super(ppt, left, right);
   }
 
+  protected double computeConfidence() {
+    return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
+  }
+
   protected double computeProbability() {
-    return left.computeProbability() * right.computeProbability();
+    return Invariant.prob_and(left.computeProbability(), right.computeProbability());
   }
 
   public String repr() {

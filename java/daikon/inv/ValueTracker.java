@@ -88,7 +88,7 @@ public class ValueTracker
     return UtilMDE.hash(l);
   }
 
-  protected void add_prim (String v1, String v2) {
+  protected void add_prim(String v1, String v2) {
     if (values_cache == null) return;
     if ((v1 == null) || (v2 == null)) return;
     add_prim (v1.hashCode(), v2.hashCode());
@@ -100,7 +100,7 @@ public class ValueTracker
     add_prim (v1.hashCode());
   }
 
-  protected void add_prim (String[] v1) {
+  protected void add_prim(String[] v1) {
     if (values_cache == null) return;
     if (v1 == null) return;
     long av1 = 0;
@@ -401,8 +401,13 @@ public class ValueTracker
      * arguments as necessary.  Obviously unnecessary for this case, but
      * kept for consistency with the two and three variable cases
      */
-    public void add (Object v1) {
-      add_val (v1);
+    public void add(Object v1) {
+      add_val(v1);
+    }
+
+    public void permute(int[] permutation) {
+      Assert.assertTrue(permutation.length == 1);
+      Assert.assertTrue(permutation[0] == 0);
     }
   }
 
@@ -429,7 +434,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-    	add_prim ((long[]) v1);
+    	add_prim((long[]) v1);
     }
   }
 
@@ -478,7 +483,7 @@ public class ValueTracker
      * Track the specified object, permuting the order of the
      * arguments as necessary.
      */
-    public void add (Object v1, Object v2) {
+    public void add(Object v1, Object v2) {
       if ((this instanceof ValueTrackerFloatArrayFloat)
           || (this instanceof ValueTrackerScalarArrayScalar))
         add_val (v1, v2);
@@ -489,7 +494,8 @@ public class ValueTracker
           add_val (v1, v2);
       }
     }
-    public void permute (int[] permutation) {
+    public void permute(int[] permutation) {
+      Assert.assertTrue(permutation.length == 2);
       if (permutation[0] == 1)
         swap = !swap;
     }
@@ -611,7 +617,7 @@ public class ValueTracker
      * Track the specified object, permuting the order of the
      * arguments as necessary.
      */
-    public void add (Object v1, Object v2, Object v3) {
+    public void add(Object v1, Object v2, Object v3) {
 
       switch (order) {
         case order_123: add_val (v1, v2, v3); break;
@@ -624,8 +630,8 @@ public class ValueTracker
     }
 
     /** permutation is from the old position to the new position */
-    public void permute (int[] permutation) {
-
+    public void permute(int[] permutation) {
+      Assert.assertTrue(permutation.length == 3);
       int[] new_order = new int[3];
       int[] old_order = var_indices[order];
       new_order[0] = old_order[permutation[0]];
