@@ -1,2 +1,4 @@
 *.sparcf
 *.pyc
+gries-instrumented.lisp
+*.inv

@@ -304,13 +304,47 @@ class single_field_numeric_invariant(invariant):
     can_be_zero = None              # only interesting if range includes zero
     modulus = None
     nonmodulus = None
+    min_justified = None
+    max_justified = None
 
     def __init__(self, dict):
         """DICT maps from values to number of occurrences."""
         invariant.__init__(self, dict)
         nums = dict.keys()
-        self.min = min(nums)
-        self.max = max(nums)
+        nums.sort()
+        # For when we didn't sort nums
+        # self.min = min(nums)
+        # self.max = max(nums)
+        self.min = nums[0]
+        self.max = nums[-1]
+        self.min_justified = false
+        self.max_justified = false
+        if len(nums) < 3:
+            self.min_justified = true
+            self.max_justified = true
+        else:
+            # Accept a max/min if:
+            #  * it contains more than twice as many elements as it ought to by
+            #    chance alone, and that number is at least 3.
+            #  * it and its predecessor/successor both contain more than half
+            #    as many elements as they ought to by chance alone, and at
+            #    least 3.
+            num_min = dict[self.min]
+            num_max = dict[self.max]
+            range = self.max - self.min + 1
+            twice_avg_num = 2.0*self.values/range
+            half_avg_num = .5*self.values/range
+            if ((num_min >= 3)
+                and ((num_min > twice_avg_num)
+                     or ((num_min > half_avg_num) and (dict[nums[1]] > half_avg_num)))):
+                self.min_justified = true
+            if ((num_max >= 3)
+                and ((num_max > twice_avg_num)
+                     or ((num_max > half_avg_num) and (dict[nums[-2]] > half_avg_num)))):
+                self.max_justified = true
+            print "min (%d) %d justified? %d %d" % (self.min, self.min_justified, num_min, dict[nums[1]])
+            print "max (%d) %d justified? %d %d" % (self.max, self.max_justified, num_max, dict[nums[-2]])
+
         self.can_be_zero = (0 in nums)
         self.modulus = util.common_modulus(nums)
         ## Too many false positives
@@ -334,6 +368,7 @@ class single_field_numeric_invariant(invariant):
         base = self.nonmodulus[1]
         probability = 1 - 1.0/base
         return probability**self.samples * base < negative_invariant_confidence
+
 
     # This doesn't produce a readable expression as is the convention, but
     # neither is the default
@@ -416,17 +451,17 @@ class single_field_numeric_invariant(invariant):
 
         nonzero = (not self.can_be_zero) and self.nonzero_justified()
 
-        if self.min != None and self.max != None:
+        if self.min_justified and self.max_justified:
             result = " in [%s..%s]" % (self.min, self.max)
             if (self.min < 0 and self.max > 0 and nonzero):
                 result = " nonzero" + result
             return arg + result
-        if self.min != None:
+        if self.min_justified:
             result = "%s >= %s" % (arg, self.min)
             if min < 0 and nonzero:
                 result = result + " and nonzero"
             return result
-        if self.max != None:
+        if self.max_justified:
             result = "%s <= %s" % (arg, self.max)
             if max > 0 and nonzero:
                 result = result + " and nonzero"
@@ -729,9 +764,9 @@ non_symmetric_binary_functions = (cmp, pow, round, operator.div, operator.mod, o
 
 class three_field_numeric_invariant(invariant):
 
-    linear_z = None                     # can be pair (a,b,c) such that z=ax+by+c
-    linear_y = None                     # can be pair (a,b,c) such that y=ax+bz+c
-    linear_x = None                     # can be pair (a,b,c) such that x=ay+bz+c
+    linear_z = None                  # can be pair (a,b,c) such that z=ax+by+c
+    linear_y = None                  # can be pair (a,b,c) such that y=ax+bz+c
+    linear_x = None                  # can be pair (a,b,c) such that x=ay+bz+c
 
     # In these lists, when the function is symmetric, the first variable is
     # preferred.
