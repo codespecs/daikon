@@ -239,7 +239,7 @@ update-doc-dist-date-and-version:
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo
-	perl -wpi -e 's/(version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo
+	perl -wpi -e 's/(Daikon version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
