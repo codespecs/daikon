@@ -2925,4 +2925,16 @@ public abstract class VarInfoName
         }
       };
 
+
+  /**
+   * Compare VarInfoNames alphabetically.
+   **/
+  public static class LexicalComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      VarInfoName name1 = ((VarInfoName)o1);
+      VarInfoName name2 = ((VarInfoName)o2);
+      return name1.compareTo(name2);
+    }
+  }
+
 }
