@@ -2,6 +2,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import utilMDE.Assert;
 
 
 // Also see NonEqual
@@ -114,6 +115,8 @@ public final class IntComparisonCore implements java.io.Serializable {
     if (eq && (! lt) && (! gt)) {
       return "==";
     } else if (lt || eq || gt) {
+      // TODO: renable after making distribution.
+      // Assert.assert(lt || gt);
       String inequality = (lt ? "<" : gt ? ">" : "");
       String comparison = (eq ? "=" : "");
       // if (debugIntComparison) {

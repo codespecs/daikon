@@ -2,7 +2,7 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
-
+import utilMDE.Assert;
 
 // Also see NonEqual
 public final class StringComparisonCore implements java.io.Serializable {
@@ -110,6 +110,8 @@ public final class StringComparisonCore implements java.io.Serializable {
     if (can_be_eq && (! can_be_gt) && (! can_be_lt)) {
       return "==";
     } else if (can_be_eq || can_be_gt || can_be_lt) {
+      // TODO: reenable after making distribution.
+      // Assert.assert(can_be_lt || can_be_gt);
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
       // if (debugStringComparison) {
