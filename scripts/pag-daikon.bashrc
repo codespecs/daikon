@@ -1,7 +1,7 @@
 # pag-daikon.bashrc
 # This file should be kept in sync with pag-daikon.cshrc.
 
-export DAIKONPARENT=${HOME}/research
+export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
 export DAIKONDIR=${DAIKONPARENT}/invariants
 export INV=${DAIKONPARENT}/invariants
 export inv=${INV}

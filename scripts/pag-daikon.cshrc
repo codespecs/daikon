@@ -1,7 +1,7 @@
 # pag-daikon.cshrc
 # This file should be kept in sync with pag-daikon.bashrc.
 
-setenv DAIKONPARENT ${HOME}/research
+if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
 setenv DAIKONDIR ${DAIKONPARENT}/invariants
 setenv INV ${DAIKONPARENT}/invariants
 setenv inv ${INV}
