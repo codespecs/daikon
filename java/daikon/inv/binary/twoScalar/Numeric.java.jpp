@@ -46,7 +46,7 @@
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define EQUALITY PairwiseIntEqual
   #define NONZERO EltNonZero
-  #define BASE_IS_TYPE elementIsIntegral()
+  #define BASE_IS_TYPE baseIsIntegral()
 #elif defined(TYPEDOUBLESEQ)
   #define SEQ
   #define CLASSNAME PairwiseNumericFloat
@@ -61,7 +61,7 @@
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define EQUALITY PairwiseFloatEqual
   #define NONZERO EltNonZeroFloat
-  #define BASE_IS_TYPE elementIsFloat()
+  #define BASE_IS_TYPE baseIsFloat()
 #else
   #error "TYPELONG, TYPEDOUBLE, TYPELONGSEQ, or TYPEDOUBLESEQ  must be defined"
 #endif
@@ -549,6 +549,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Returns a list of all of the numeric invariants instantiated
    * for the specified slice.
    */
+  /* JHP: delete this
   public static List instantiate_all (PptSlice slice) {
 
     List result = new ArrayList();
@@ -572,6 +573,31 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
     return (result);
   }
+  */
+
+  public static List get_proto_all() {
+
+    List result = new ArrayList();
+    result.add (Divides.get_proto (false));
+    result.add (Divides.get_proto (true));
+    result.add (Square.get_proto (false));
+    result.add (Square.get_proto (true));
+    #if defined(TYPELONG) || defined(TYPELONGSEQ)
+      result.add (BitwiseComplement.get_proto());
+      result.add (BitwiseSubset.get_proto (false));
+      result.add (BitwiseSubset.get_proto (true));
+    #endif
+    #if defined (TYPELONG) || defined (TYPEDOUBLE)
+      result.add (ZeroTrack.get_proto (false));
+      result.add (ZeroTrack.get_proto (true));
+    #endif
+    #if defined (TYPELONG)
+      result.add (BitwiseAndZero.get_proto ());
+      result.add (ShiftZero.get_proto (false));
+      result.add (ShiftZero.get_proto (true));
+    #endif
+    return (result);
+  }
 
   //
   // Int and Float Numeric Invariants
@@ -589,6 +615,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     protected Divides (PptSlice ppt, boolean swap) {
       super(ppt, swap);
+    }
+
+    public static Invariant get_proto (boolean swap) {
+      if (!dkconfig_enabled)
+        return (null);
+      return new Divides (null, swap);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok(slice, swap)) return null;
+      return new Divides (slice, swap);
     }
 
     public static Divides instantiate(PptSlice ppt, boolean swap) {
@@ -666,6 +703,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    public static Invariant get_proto (boolean swap) {
+      if (!dkconfig_enabled)
+        return (null);
+      return new Square (null, swap);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok(slice, swap)) return null;
+      return new Square (slice, swap);
+    }
+
     public static Square instantiate(PptSlice ppt, boolean swap) {
       if (!instantiate_ok(ppt, swap)) return null;
       return new Square (ppt, swap);
@@ -703,6 +751,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     protected ZeroTrack (PptSlice ppt, boolean swap) {
       super(ppt, swap);
+    }
+
+    public static Invariant get_proto (boolean swap) {
+      if (!dkconfig_enabled)
+        return (null);
+      return new ZeroTrack (null, swap);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok(slice, swap)) return null;
+      return new ZeroTrack (slice, swap);
     }
 
     public static ZeroTrack instantiate(PptSlice ppt, boolean swap) {
@@ -750,6 +809,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new BitwiseComplement (null);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok (slice, false)) return null;
+      return new BitwiseComplement (slice);
+    }
+
     public static BitwiseComplement instantiate(PptSlice ppt) {
       if (!instantiate_ok (ppt, false)) return null;
       return new BitwiseComplement (ppt);
@@ -791,11 +861,22 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    public static Invariant get_proto (boolean swap) {
+      if (!dkconfig_enabled)
+        return (null);
+      return new BitwiseSubset (null, swap);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok (slice, swap)) return null;
+      return new BitwiseSubset (slice, swap);
+    }
+    /*
     public static BitwiseSubset instantiate(PptSlice ppt, boolean swap) {
       if (!instantiate_ok (ppt, swap)) return null;
       return new BitwiseSubset (ppt, swap);
     }
-
+    */
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
@@ -860,6 +941,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
+    public static Invariant get_proto () {
+      if (!dkconfig_enabled)
+        return (null);
+      return new BitwiseAndZero (null);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok(slice, false)) return null;
+      return new BitwiseAndZero (slice);
+    }
+
     public static BitwiseAndZero instantiate(PptSlice ppt) {
       if (!instantiate_ok(ppt, false)) return null;
       return new BitwiseAndZero (ppt);
@@ -906,6 +998,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     protected ShiftZero (PptSlice ppt, boolean swap) {
       super(ppt, swap);
+    }
+
+    public static Invariant get_proto (boolean swap) {
+      if (!dkconfig_enabled)
+        return (null);
+      return new ShiftZero (null, swap);
+    }
+
+    public Invariant instantiate_dyn (PptSlice slice) {
+      if (!instantiate_ok(slice, swap)) return null;
+      return new ShiftZero (slice, swap);
     }
 
     public static ShiftZero instantiate(PptSlice ppt, boolean swap) {
