@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2003-01-08 23:45:41 mernst>
+# Time-stamp: <2003-01-18 18:14:52 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -25,11 +25,20 @@ use English;
 use strict;
 $WARNING = 1;			# "-w" command-line switch
 
+my $debug = 0;
+# $debug = 1;
+
 my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
 my $tmpfile_in = "$system_temp_dir/java-cpp-$$-in";
 my $tmpfile_out = "$system_temp_dir/java-cpp-$$-out";
 my $tmpfile_err = "$system_temp_dir/java-cpp-$$-err";
+
+if ($debug) {
+  print STDERR "// tmpfile_in  = $tmpfile_in\n";
+  print STDERR "// tmpfile_out = $tmpfile_out\n";
+  print STDERR "// tmpfile_err = $tmpfile_err\n";
+}
 
 my $file_handle_nonce = 'fh00';
 
@@ -38,7 +47,9 @@ my $file_handle_nonce = 'fh00';
   if ((scalar(@ARGV) > 0) && (-r $ARGV[$#ARGV])) {
     $filename = pop @ARGV;	# remove last (filename) element
   } else {
-    # print STDERR "Last arg not a filename; reading from standard in."
+    if ($debug) {
+      print STDERR "// Last arg not a filename; reading from standard in.\n";
+    }
     $filename = "-";
   }
 
@@ -48,12 +59,18 @@ my $file_handle_nonce = 'fh00';
 
   my $argv = join(' ', @ARGV);
   # intentionally does not capture standard error; it goes straight through
-  my $system_result = system("cpp -traditional $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err");
+  my $cpp_command = "cpp -traditional $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err";
+  if ($debug) {
+    print STDERR "// running command: $cpp_command\n";
+  }
+  my $system_result = system($cpp_command);
   if ($system_result != 0) {
     rewrite_errors($tmpfile_err, $filename);
-    # unlink($tmpfile_in);
-    unlink($tmpfile_out);
-    # unlink($tmpfile_err);
+    if (! $debug) {
+      # unlink($tmpfile_in);
+      unlink($tmpfile_out);
+      # unlink($tmpfile_err);
+    }
     die "java-cpp.pl: cpp $argv $filename failed";
   }
 
@@ -82,15 +99,18 @@ sub escape_comments ( $ ) {
   # (escape_comments) re-entrant.
   my $inhandle = $file_handle_nonce++;   # this is a string increment
 
-  # print STDERR "Opening $filename\n";
+  if ($debug) {
+    print STDERR "// escape_comments: opening $filename\n";
+  }
 
   no strict 'refs';
-  open($inhandle, $filename) || die "Can't open $filename: $!\n";
+  open($inhandle, $filename)
+    || die "escape_comments:  cannot open $filename: $!\n";
 
   my $JAVACPP_WHITESPACE_SEPARATOR = "JAVACPP_WHITESPACE_SEPARATOR";
 
   while (<$inhandle>) {
-    # print STDERR "top of escape_comments loop: $_";
+    # print STDERR "// top of escape_comments loop: $_";
 
     if (/^\#include "(.*)"/) {
       escape_comments($1);
@@ -106,7 +126,7 @@ sub escape_comments ( $ ) {
       while (s/(^.*[^ \t].*[ \t])([ \t])/$1$JAVACPP_WHITESPACE_SEPARATOR$2/) { }
     }
     print TMPFILE;
-    # print STDERR "bottom of escape_comments loop: $_";
+    # print STDERR "// bottom of escape_comments loop: $_";
   }
   close($inhandle);
 
@@ -119,7 +139,8 @@ sub unescape_comments ( $ ) {
   # This causes strings to potentially have many trailing blanks.
   $INPUT_RECORD_SEPARATOR = "";
 
-  open(CPPFILE, $filename) || die "Cannot open $filename: $!\n";
+  open(CPPFILE, $filename)
+    || die "unescape_comments: cannot open $filename: $!\n";
 
   my $post_return_space = "";
   my $next_post_return_space = "";
@@ -127,7 +148,7 @@ sub unescape_comments ( $ ) {
   my $next_post_else_space = "";
 
   while (<CPPFILE>) {
-    # print STDERR "top of unescape_comments loop: $_";
+    # print STDERR "// top of unescape_comments loop: $_";
 
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
