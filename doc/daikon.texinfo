@@ -379,7 +379,7 @@ Examples
 @chapter Introduction
 
 The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
-reports likely program invariants.  An invariants is a property that
+reports likely program invariants.  An invariant is a property that
 holds a a certain point or points in a program; these are often seen
 in assert statements, documentation, and formal specifications.
 Examples include arithmetic equations such as "x > abs(y)", "x = 3*y +
@@ -1888,20 +1888,6 @@ them on the command line.
 Don't print invariants as text output.  This option may be used in
 conjunction with the @option{-o} option.
 
-@item --suppress_cont
-Suppress display of implied invariants (by controlling program
-point). This is now the default behavior, so this option has no
-effect, but exists for backward compatibility.
-
-@item --no_suppress_cont
-Do not suppress the display of implied invariants (based on
-controlling program points). This will reduce the time needed to print
-the invariants, possibly at the expense of printing additional
-redundant invariants.
-
-@item --suppress_post
-Suppress display of obvious postconditions on prestate.
-
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
@@ -1924,11 +1910,6 @@ Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
 @samp{Implication<x,y>}, and @samp{<x,y>@@foo():::EXIT}.
 To print all discarded invariants, use the argument "all".
 
-@item --prob_limit @var{val}
-Set the probability limit for justifying invariants.  @var{val} must be
-between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
-filtering.
-
 @item --conf_limit @var{val}
 Set the confidence limit for justifying invariants.  @var{val} must be
 between 0 and 1; the default is .99 (1%).  Larger values yield stronger
@@ -1941,8 +1922,7 @@ class's CLASS program point, so that any invariant that holds on the
 CLASS program point is considered to hold true on the ENTER program
 point.  With no hierarchy, each program point is treated
 independently.  This is for using Daikon on applications that do not
-have a concept of hierarchy.  Note that this switch applies only to V3
-of daikon.
+have a concept of hierarchy.  
 
 @item --esc_output
 Write output in ESC-like format.
@@ -1977,6 +1957,9 @@ eligible to be listed as modified or unmodified.  This is why the list
 of all variables is not the union of the modified and unmodified
 variables.
 
+@item --show_progress
+Prints timing information as major portions of Daikon are executed.
+
 @item --dbg @var{category}
 @item --debug
 @cindex debugging flags
@@ -1989,12 +1972,29 @@ The @option{--dbg @var{category}} option
 enables debugging output for a specific part of Daikon; it may be
 specified multiple times, permitting find-grained control over debugging
 output.  The @option{--debug} option turns on all debugging flags.
-(This produces a lot of output!)  Most @var{category}s are class or
+(This produces a lot of output!)  Most categories are class or
 package names in the Daikon implementation, such as @code{daikon.split}
 or @code{daikon.derive.binary.SequencesJoin}.  Only classes that check
 the appropriate categories are affected by the debug flags; you can
 determine this by looking for a call to @samp{Logger.getLogger} in
 the specific class.
+
+@item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
+@cindex debugging flags
+@cindex category, for debugging
+@cindex logging, for debugging Daikon
+@cindex Logger
+Turns on debugging information on the specified class, variables, and
+ppt.  In contrast to the @option{--dbg} option, track logging follows
+a particular invariant through Daikon.  Multiple @option{--track} options
+can be specified.  Each item (class, variables, and ppt) is optional.  
+Multiple classes can be specified separted by vertical bars (|).  Matching
+is a simple substring (not a regular expression) comparison. Each item
+must match in order for a printout to occur. See the Daikon Developer
+Manual for more information.
+
+@item --noversion
+Suppress the printing of version information
 
 @end table
 
@@ -2403,20 +2403,6 @@ PrintInvariants shares many flags with Daikon:
 @item --help
 Print usage message.
 
-@item --suppress_cont
-Suppress display of implied invariants (by controlling program point).
-This is now the default behavior, so this option has no effect, but
-exists for backward compatibility.
-
-@item --no_suppress_cont
-Do not suppress the display of implied invariants (based on
-controlling program points). This will reduce the time needed to print
-the invariants, possibly at the expense of printing additional
-redundant invariants.
-
-@item --suppress_post
-Suppress display of obvious postconditions on prestate.
-
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
@@ -2438,8 +2424,19 @@ Write output as Java expressions.
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
 for debugging.
-@end table
 
+@item --config_option @var{name}=@var{value}
+Specify a single configuration setting.
+@xref{Configuration options}, for details.
+
+@item --dbg @var{category}
+@item --debug
+Enable debug loggers
+
+@item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
+Track information on specified invariant class, variables and ppt
+
+@end table
 
 @node    Invariant Diff,  , Printing invariants, Daikon output
 @section Invariant Diff
@@ -6123,9 +6120,11 @@ If Daikon runs out of memory, generating a message like
                 <<no stack trace available>>
 @end example
 @noindent
-then the problem is likely to be an excessively large input
-file.  In addition to the solutions discussed in @ref{Large dtrace
-files}, you can try increasing the amount of memory available to Java
+then it is likely that it has created more invariants than will fit
+in memory.  The number of invariants created depends on the number of
+program points and the number of variables at each program point.
+In addition to the solutions discussed in @ref{Reducing program points}, 
+you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
 JVM-specific; see your JVM documentation for details. For instance,
 its correct name in JDK versions 1.3 and later is @option{-Xmx}.)  
@@ -6335,6 +6334,10 @@ flag (@pxref{Command line options}), only program points matching
 the regular expression are processed.  Likewise, the
 ``@option{--ppt_omit} @var{ppt_omit_regexp} option causes program points
 matching the regular expression to be ignored.
+
+Also, the configuration variable @var{ppt_perc} allows a percentage of
+the program points to be processed. 
+@xref{Configuration options}, for details.
 
 @item 
 @cindex trace-purge-fns.pl script
@@ -6593,7 +6596,7 @@ A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
 
-There have been two major implementations of Daikon, with different
+There have been three major implementations of Daikon, with different
 features and capabilities.  Readers of technical papers may be confused
 by the apparently different claims about Daikon's capabilities.  These
 apparent contradictions result from the papers referring to the current
@@ -6667,11 +6670,11 @@ with the Daikon distribution as the file
 
 @comment We plan to stop using the org.apache.oro.* regex package
 @comment soon, at which point this paragraph should be removed.
-This product includes software developed by the Apache Software
-Foundation (http://www.apache.org/), Copyright (c) 2000 The Apache
-Software Foundation. All rights reserved. The license governing this
-software is included with the Daikon distribution as the file
-@file{java/jakarta-oro-2.0.6/LICENSE}.
+@c This product includes software developed by the Apache Software
+@c Foundation (http://www.apache.org/), Copyright (c) 2000 The Apache
+@c Software Foundation. All rights reserved. The license governing this
+@c software is included with the Daikon distribution as the file
+@c @file{java/jakarta-oro-2.0.6/LICENSE}.
 
 Daikon's unit tests use the JUnit testing framework, which is governed
 by the Common Public License, version 1.0. JUnit is provided on an
