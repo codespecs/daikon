@@ -1,3 +1,5 @@
+(if (not (getenv "INV"))
+    (error "Environment variable $INV is not defined."))
 (setq load-path (cons (substitute-in-file-name "${INV}/emacs/")
                       load-path))
 
