@@ -15,9 +15,7 @@ public final class SingleScalarFactory {
     Assert.assert(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
     // Assert.assert(! var.rep_type.isArray());
-    Assert.assert((var.rep_type == ProglangType.INT)
-                  || (var.rep_type == ProglangType.HASHCODE)
-                  || (var.rep_type == ProglangType.BOOLEAN));
+    Assert.assert(var.rep_type == ProglangType.INT);
 
     Vector result = new Vector();
     if (pass == 1) {
