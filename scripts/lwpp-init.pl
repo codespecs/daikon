@@ -14,6 +14,10 @@ if (@ARGV < 1) {
 
 my ($lackwitdb, @files) = @ARGV;
 
+my $lhdefs =
+#    " -D__builtin_next_arg\\(arg\\)='{char*argc=(char*)arg;return argc+1;}' ";
+    " -D__builtin_next_arg\\(arg\\)='(((char*)arg)+1)' ";
+
 # Check args
 -d $lackwitdb or die "$lackwitdb is not a directory\n";
 
@@ -53,7 +57,7 @@ foreach my $file (@files) {
     }
     $lh_output = `lh -\$ -w $lhflags --gen_c_file_name $int_file $file`;
   } else {
-    $lh_output = `lh -w --gen_c_file_name $int_file $file`;
+    $lh_output = `lh -w $lhdefs --gen_c_file_name $int_file $file`;
   }
   die "lh failed processing file $file:\n$lh_output\n" if ($CHILD_ERROR != 0);
   my $gcc_output = `gcc -c $int_file -o /dev/null 2>&1`;
