@@ -74,10 +74,17 @@ public class PrintAllVisitor implements NodeVisitor {
   protected void printInvariant(Invariant inv, InvNode node) {
     if (verbose) {
       print(inv.repr_prob());
+      printVerbosePrintability(inv);
     } else {
       print(inv.format());
       printProbabilityAndPrintability(inv);
     }
+  }
+
+  private void printVerbosePrintability(Invariant inv) {
+    print(" {");
+    print(inv.isWorthPrinting_sansControlledCheck_debug());
+    print("}");
   }
 
   private void printProbabilityAndPrintability(Invariant inv) {
