@@ -332,11 +332,12 @@ public final class MathMDE {
 
   /**
    * The iterator produces Integer  values.
-   * This can be more efficient than modulus(int []) if the int [] doesn't already
-   * exist, because this does not necessarily examine every value produced by
-   * its iterator.
+   * This can be more efficient than modulus(int []) if the int [] doesn't
+   * already exist, because this does not necessarily examine every value
+   * produced by its iterator.
    *
-   * @see modulus_strict(int [])
+   * For documentation, see modulus_strict(int []).
+   * @see modulus_strict(int[])
    **/
   public static int [] modulus_strict_int (Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
@@ -493,11 +494,12 @@ public final class MathMDE {
 
   /**
    * The iterator produces Long  values.
-   * This can be more efficient than modulus(long []) if the long [] doesn't already
-   * exist, because this does not necessarily examine every value produced by
-   * its iterator.
+   * This can be more efficient than modulus(long []) if the long [] doesn't
+   * already exist, because this does not necessarily examine every value
+   * produced by its iterator.
    *
-   * @see modulus_strict(int [])
+   * For documentation, see modulus_strict(long []).
+   * @see modulus_strict(int[])
    **/
   public static long [] modulus_strict_long (Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
