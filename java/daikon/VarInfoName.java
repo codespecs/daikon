@@ -82,6 +82,7 @@ public abstract class VarInfoName
 	throw e;
       }
     }
+    // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
     return esc_name_cached;
   }
   private String esc_name_cached = null;
@@ -199,7 +200,11 @@ public abstract class VarInfoName
       return name;
     }
     protected String esc_name_impl() {
-      return "return".equals(name) ? "\\result" : name;
+      if ("return".equals(name))
+        return "\\result";
+      if (name.startsWith("return."))
+        return "\\result." + name.substring(7);
+      return name;
     }
     protected String simplify_name_impl() {
       // Field access with dots ("getters") are like lambda
@@ -286,7 +291,7 @@ public abstract class VarInfoName
       return function + "(" + argument.name() + ")";
     }
     protected String esc_name_impl() {
-      return name_impl();
+      return function + "(" + argument.esc_name() + ")";
     }
     protected String simplify_name_impl() {
       return "(format_simplify needs to be changed: " + function + ")";
@@ -320,7 +325,7 @@ public abstract class VarInfoName
       return term.name() + "." + field;
     }
     protected String esc_name_impl() {
-      return name_impl();
+      return term.esc_name() + "." + field;
     }
     protected String simplify_name_impl() {
       return "(select " + field + " " + term.simplify_name() + ")";
@@ -524,7 +529,7 @@ public abstract class VarInfoName
 					      " [name=" + name() + "]");
     }
     protected String esc_name_impl(String index) {
-      return term.name() + "[" + index + "]";
+      return term.esc_name() + "[" + index + "]";
     }
     protected String simplify_name_impl() {
       return "(select elems " + term.simplify_name() + ")";
