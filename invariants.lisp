@@ -161,14 +161,24 @@
   (close *inv-output-stream*)
   (setq *inv-output-stream* nil))
 
-(defmacro check-for-invariants (function-name &rest type-lists)
+(defmacro check-for-invariants (function-name function-parameters &rest type-lists)
   (assert (every #'listp type-lists))
   (assert (every #'(lambda (type-list) (accessors-for-type (car type-list))) type-lists))
   (if (and (listp function-name)
 	   (eq 'quote (car function-name)))
       (setq function-name (second function-name)))
   `(when *inv-output-stream*
-     (format *inv-output-stream* ,(format nil "~a~~%" function-name))
+     (format *inv-output-stream*
+	     ,(format nil "~a~a~~%" function-name
+		      (mapcar (lambda (var)
+				(if (some #'(lambda (type-list)
+					     (and (member var (cdr type-list))
+						  (listp (car type-list))
+						  (eq 'array (caar type-list))))
+					 type-lists)
+				    (format nil "~a[]" var)
+				  var))
+			      function-parameters)))
      ,@(loop for type-list in type-lists
 	     nconc (let ((type (car type-list)))
 		     (loop for var in (cdr type-list) ; actually expressions
@@ -194,10 +204,10 @@
      ;; (format *inv-output-stream* "~%")
      ))
 
-;; (macroexpand '(check-for-invariants split-argnum-sprop (integer argnum) (operator op)))
-;; (macroexpand '(check-for-invariants non-matching-var-sprops (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))
-;; (macroexpand '(CHECK-FOR-INVARIANTS '|P180-15.1.1:::END| ((ARRAY INTEGER 1) B) (INTEGER N I S)))
-;; ;; (macroexpand '(check-for-invariants find-plan-1 ((list integer 3) cnf-size) (list-elements nil integer integer integer integer integer integer)))
+;; (macroexpand '(check-for-invariants split-argnum-sprop (params) (integer argnum) (operator op)))
+;; (macroexpand '(check-for-invariants non-matching-var-sprops (params) (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))
+;; (macroexpand '(CHECK-FOR-INVARIANTS '|P180-15.1.1:::END| (b n) ((ARRAY INTEGER 1) B) (INTEGER N I S)))
+;; ;; (macroexpand '(check-for-invariants find-plan-1 (params) ((list integer 3) cnf-size) (list-elements nil integer integer integer integer integer integer)))
 
 
 ;; Perhaps omit MAX-STEPS.

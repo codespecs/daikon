@@ -75,11 +75,16 @@
 ;;; Instrumentation
 ;;;
 
+(defvar doing-orig-parameters nil
+  "Non-nil if original parameter values should be remembered and output at
+function exit time; nil if the instrumentation engine will regenerate that
+information from other data in the .inv file.")
+
 (defun instrument (form)
   "Insert calls to `check-for-invariants' in FORM, which is a Lisp expression."
-  (instrument-internal form nil nil nil))
+  (instrument-internal form nil nil nil nil))
 
-(defun instrument-internal (form fn-name bound-vars lastp)
+(defun instrument-internal (form fn-name params bound-vars lastp)
   "Instrument FORM, which appears in function FN-NAME.
 BOUND-VARS is a list of the bound variables in this scope.
 LASTP is non-nil if this is the last form in the function body
@@ -106,9 +111,10 @@ LASTP is non-nil if this is the last form in the function body
 		  ;; A list of the parameters that are modified in the
 		  ;; function body.  For these, we'll remember the original
 		  ;; value.
-		  (params-modified (reverse
-				    (intersection params
-						  (modified-variables form))))
+		  (params-modified (and doing-orig-parameters
+					(reverse
+					 (intersection params
+						       (modified-variables form)))))
 		  (params-orig (mapcar #'(lambda (p)
 					   (pcl::symbol-append 'orig- p))
 				       params-modified))
@@ -138,12 +144,14 @@ LASTP is non-nil if this is the last form in the function body
 		   ;; (I don't have invariants at every location...)
 		   (mapcar #'(lambda (stmt)
 			       (instrument-internal stmt
-				 fn-name (append vars+types vars+types-orig) nil))
+				 fn-name params
+				 (append vars+types vars+types-orig) nil))
 			   (if decl
 			       (cdr (butlast body))
 			     (butlast body))))
 		  (last-stmt (instrument-internal (car (last body))
-			       fn-name (append vars+types vars+types-orig) t))
+			       fn-name params
+			       (append vars+types vars+types-orig) t))
 		  ;; Avoid extraneous "progn" (aesthetic fix only)
 		  (result-body
 		   (append body-sans-last-stmt
@@ -164,8 +172,7 @@ LASTP is non-nil if this is the last form in the function body
 	     `(defun ,fn-name ,params
 		,@(if decl (list decl) '())
 		,(make-check-for-invariants
-		  (pcl::symbol-append fn-name ":::BEGIN")
-		  vars+types)
+		  (pcl::symbol-append fn-name ":::BEGIN") params vars+types)
 		,@wrapped-result-body)))
 
 	  ((eq head 'let)
@@ -184,12 +191,14 @@ LASTP is non-nil if this is the last form in the function body
 		      ,@(if decl (list decl) '())
 		      ,@(mapcar #'(lambda (stmt)
 				    (instrument-internal stmt
-				      fn-name (append bound-vars vars+types) nil))
+				      fn-name params
+				      (append bound-vars vars+types) nil))
 				(if decl
 				    (cdr (butlast body))
 				  (butlast body)))))
 		  (last-stmt (instrument-internal (car (last body))
-			       fn-name (append bound-vars vars+types) lastp)))
+			       fn-name params
+			       (append bound-vars vars+types) lastp)))
 	     ;; Could also assert that no more types are declared (because I
 	     ;; will check for invariants over everything declared...).
 	     (assert (every #'(lambda (v)
@@ -208,10 +217,10 @@ LASTP is non-nil if this is the last form in the function body
 		   `(progn
 		      ,@(mapcar #'(lambda (stmt)
 				    (instrument-internal stmt
-				      fn-name bound-vars nil))
+				      fn-name params bound-vars nil))
 				(butlast body))))
 		  (last-stmt (instrument-internal (car (last body))
-			       fn-name bound-vars t)))
+			       fn-name params bound-vars t)))
 	     (append result-sans-last-stmt
 		     (if (eq 'progn (car last-stmt))
 			 (cdr last-stmt)
@@ -229,55 +238,56 @@ LASTP is non-nil if this is the last form in the function body
 		      (progn
 			,(make-check-for-invariants
 			  (gensym (string-append (symbol-name fn-name) ":::LOOP-"))
-			  bound-vars)
+			  params bound-vars)
 			,(instrument-internal (fifth form)
-			   fn-name bound-vars lastp)))
+			   fn-name params bound-vars lastp)))
 	     (let ((do-position (position 'do form)))
 	       (if (eq do-position (- (length form) 2))
 		   `(,@(butlast form)
 		       ,(instrument-internal (car (last form))
-			  fn-name bound-vars lastp))
+			  fn-name params bound-vars lastp))
 		 (if lastp
 		     `(progn
 			,(instrument-internal form
 			   fn-name bound-vars nil)
 			,(make-check-for-invariants
 			  (pcl::symbol-append fn-name ":::END")
-			  bound-vars))
+			  params bound-vars))
 		   form)))))
 
 	  ((eq head 'do-od)
 	   (instrument-internal (macroexpand form)
-	     fn-name bound-vars lastp))
+	     fn-name params bound-vars lastp))
 
 	  ;; 	  ;; This is cheating:  it tells me where to insert invariants.
 	  ;; 	  ((eq head 'pre)
 	  ;; 	   (make-check-for-invariants
 	  ;; 	     (pcl::symbol-append fn-name ":::PRE")
-	  ;; 	     bound-vars))
+	  ;; 	     params bound-vars))
 	  ;; 	  ((eq head 'post)
 	  ;; 	   (make-check-for-invariants
 	  ;; 	     (pcl::symbol-append fn-name ":::POST")
-	  ;; 	     bound-vars))
+	  ;; 	     params bound-vars))
 	  ;; 	  ((eq head 'inv)
 	  ;; 	   (make-check-for-invariants
 	  ;; 	     (gensym (pcl::symbol-append fn-name ":::INV"))
-	  ;; 	     bound-vars))
+	  ;; 	     params bound-vars))
 
 	  (t
 	   (if lastp
 	       `(progn
 		  ,(instrument-internal form
-		     fn-name bound-vars nil)
+		     fn-name params bound-vars nil)
 		  ,(make-check-for-invariants
 		    (pcl::symbol-append fn-name ":::END")
-		    bound-vars))
+		    params bound-vars))
 	     form)))))
 
-(defun make-check-for-invariants (marker bound-vars)
+(defun make-check-for-invariants (marker parameters bound-vars)
   "BOUND-VARS is a list of (VAR . TYPE) conses."
   `(check-for-invariants
     ,marker				; no quote around this
+    ,parameters
     ,@(let ((result '())
 	    (prev-type nil)
 	    (prev-vars '()))
