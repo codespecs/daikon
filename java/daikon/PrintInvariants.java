@@ -835,15 +835,17 @@ public class PrintInvariants {
         else
           out.print("assignable ");
         for (int i=0; i<mods.size(); i++) {
-          if (i>0) {
-            out.print(", ");
-          }
           VarInfo vi = (VarInfo)mods.elementAt(i);
           String name = vi.name.name();
-          if (name.endsWith("[]")) {
-            name = name.substring(0, name.length()-1) + "*]";
+          if (!name.equals("this")) {
+            if (i>0) {
+              out.print(", ");
+            }
+            if (name.endsWith("[]")) {
+              name = name.substring(0, name.length()-1) + "*]";
+            }
+            out.print(name);
           }
-          out.print(name);
         }
         out.println();
       }
