@@ -381,7 +381,7 @@ avoid-jpp:
 
 
 # ":=" does not work here; the variables get expanded too soon.
-# "-e" means exit immediately if any error, rather than returning 
+# "-e" means exit immediately if any error, rather than returning
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
