@@ -319,9 +319,11 @@ public class DynamicConstants implements Serializable {
     for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
       Constant con = (Constant) i.next();
       if (!ppt.is_slice_ok (con.vi))
-        continue;
+         continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
       slice1.instantiate_invariants();
+      if (ppt.is_slice_global (con.vi))
+        slice1.remove_global_invs();
       if (con.count > 0)
         slice1.add_val (con.val, mod, con.count);
       new_views.add (slice1);
@@ -336,6 +338,8 @@ public class DynamicConstants implements Serializable {
         Constant con2 = (Constant) j.next();
         Constant c1 = con1;
         Constant c2 = con2;
+        Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi),
+                   "Considering slice");
         if (con2.vi.varinfo_index < con1.vi.varinfo_index) {
           if (leaders1.contains (con2))
             continue;
@@ -350,6 +354,10 @@ public class DynamicConstants implements Serializable {
         }
         PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
         slice2.instantiate_invariants();
+        Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi), "slice_global= "
+                   + ppt.is_slice_global (c1.vi, c2.vi));
+        if (ppt.is_slice_global (c1.vi, c2.vi))
+          slice2.remove_global_invs();
         if (c1.count > 0 && c2.count > 0)
           slice2.add_val (c1.val, c2.val, mod, mod, con1.count);
         new_views.add (slice2);
@@ -384,6 +392,8 @@ public class DynamicConstants implements Serializable {
           PptSlice3 slice3 = new PptSlice3 (ppt, con_arr[0].vi, con_arr[1].vi,
                                             con_arr[2].vi);
           slice3.instantiate_invariants();
+          if (ppt.is_slice_global (con_arr[0].vi, con_arr[1].vi,con_arr[2].vi))
+            slice3.remove_global_invs();
           if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
               && (con_arr[2].count > 0))
             slice3.add_val (con_arr[0].val, con_arr[1].val, con_arr[2].val,
@@ -396,12 +406,21 @@ public class DynamicConstants implements Serializable {
     // Debug print the created slies
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       int[] slice_cnt = {0, 0, 0, 0};
+      int[] non_gslice_cnt = {0, 0, 0, 0};
+      int[] non_ginv_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
+      int[] true_inv_cnt = {0, 0, 0, 0};
       for (int i = 0; i < new_views.size(); i++) {
         PptSlice slice = (PptSlice) new_views.get (i);
         for (int j = 0; j < slice.invs.size(); j++) {
           Invariant inv = (Invariant) slice.invs.get (j);
           inv.log ("created, falsified = " + inv.falsified);
+          if (!inv.falsified)
+            true_inv_cnt[slice.arity]++;
+        }
+        if (!ppt.is_slice_global (slice.var_infos) && slice.invs.size() > 0) {
+          non_gslice_cnt[slice.arity]++;
+          non_ginv_cnt[slice.arity] += slice.invs.size();
         }
         if (slice.invs.size() > 0)
           slice_cnt[slice.arity]++;
@@ -415,13 +434,39 @@ public class DynamicConstants implements Serializable {
           }
           Debug.log (debug, getClass(), ppt, slice.var_infos,
                       "Adding slice over " + sb + ": with " + slice.invs.size()
-                      + " invariants");
+                      + " invariants" );
         }
       }
       for (int i = 1; i <= 3; i++)
         debug.fine ("Added " + slice_cnt[i] + " slice" + i + "s with "
-                    + inv_cnt[i] + " invariants");
+                    + true_inv_cnt[i] + " invariants (" + inv_cnt[i]
+                    + " total): with " + non_gslice_cnt[i]
+                    + " non global slices, with " + non_ginv_cnt[i]
+                    + " invariants");
+
+      String leader1_str = "";
+      int leader1_cnt = 0;
+      for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
+        Constant con1 = (Constant) i.next();
+        if (con1.vi.file_rep_type == ProglangType.INT) {
+          leader1_str += con1.vi.name.name() + " ";
+          leader1_cnt++;
+        }
+      }
+
+      String leader2_str = "";
+      int leader2_cnt = 0;
+      for (Iterator i = leaders2.iterator(); i.hasNext(); ) {
+        Constant con1 = (Constant) i.next();
+        if (con1.vi.file_rep_type == ProglangType.INT) {
+          leader2_str += con1.vi.name.name() + " ";
+          leader2_cnt++;
+        }
+      }
+      debug.fine (leader1_cnt + " leader1 ints (" + leader1_str + "): "
+                  + leader2_cnt + " leader2 ints (" + leader2_str);
     }
+
 
     // Remove any false invariants
     for (int i = 0; i < new_views.size(); i++) {
