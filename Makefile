@@ -429,8 +429,8 @@ daikon-compiled.tar.gz: daikon-compiled.tar
 dist-dfec: dist-dfec-linux
 
 dist-dfec-linux:
-	cd $(DFEC_DIR) && $(MAKE) dfec-static
-	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
+	cd $(DFEC_DIR) && $(MAKE) dfec dfec-static
+	cp -pf $(DFEC_DIR)/src/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
