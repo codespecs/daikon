@@ -6,8 +6,8 @@ import java.util.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.*;
 import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -16,10 +16,11 @@ import javax.swing.tree.*;
 import daikon.*;
 import daikon.inv.*;
 
-public class InvariantsGUI extends JFrame {
+public class InvariantsGUI extends JFrame implements KeyListener {
+    InvariantTablesPanel invariantsTablesPanel;
 
     public static void main( String args[] ) {
-	String invFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
+	String invFileName = "/g1/users/mhao/daikon/inv_files/jnl.inv"; // use this by default, for now
 	if (args.length > 0)
 	    invFileName = args[0];
 	InvariantsGUI gui = new InvariantsGUI( invFileName );
@@ -30,9 +31,9 @@ public class InvariantsGUI extends JFrame {
 	JTree tree = new JTree( treeModel );
 	JScrollPane invariantTablesScrollPane = new JScrollPane();
 	setupGUI( tree, invariantTablesScrollPane );
-
+	
 	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
-	InvariantTablesPanel invariantsTablesPanel = new InvariantTablesPanel( invariantTablesScrollPane, treeSelectionModel );
+	invariantsTablesPanel = new InvariantTablesPanel( invariantTablesScrollPane, treeSelectionModel );
 	treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
     }
 
@@ -56,9 +57,9 @@ public class InvariantsGUI extends JFrame {
 
     public DefaultTreeModel constructTreeModel( String fileName ) {
 	PptMap pptMap = getPptMapFromFile( fileName );
-
+	
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
-
+	
 	//  Create the first level of the tree:  classes
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
@@ -71,7 +72,7 @@ public class InvariantsGUI extends JFrame {
 		root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
 	    }
 	}
-
+	
 	//  Create the second level of the tree: method names OR class-level ppt.
 	//  If the ppt is associated with a method, then create the method node which will
 	//  later contain entry and exit ppt's as children.  If the ppt is a class-level
@@ -100,7 +101,7 @@ public class InvariantsGUI extends JFrame {
 		    classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
 	    }
 	}
-
+	
 	//  Create the third level of the tree:  method entry and exit points
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
@@ -140,6 +141,8 @@ public class InvariantsGUI extends JFrame {
     }
 
     protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
+	addKeyListener( this );
+
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
@@ -159,15 +162,26 @@ public class InvariantsGUI extends JFrame {
 
 	splitPane.setDividerLocation( .4 );
     }
+
+    public void keyTyped( KeyEvent e ) {}
+    public void keyPressed( KeyEvent e ) {}
+    public void keyReleased( KeyEvent e ) {
+	if (e.isAltDown()  &&  e.getKeyCode() == 38) // up arrow
+	    invariantsTablesPanel.scrollToPreviousTable();
+	else if (e.isAltDown()  &&  e.getKeyCode() == 40) // down arrow
+	    invariantsTablesPanel.scrollToNextTable();
+    }
 }
 
 
 class InvariantTablesPanel implements TreeSelectionListener {
     JScrollPane scrollPane;	// the main scrollPane, which contains the main panel
     JPanel panel;		// the main panel
+    TreeSelectionModel treeSelectionModel;
     List tables = new ArrayList();
     List tableNames = new ArrayList();
-    TreeSelectionModel treeSelectionModel;
+    List tableHeights = new ArrayList();
+    int currentTableIndex;	// used by scrollToTable methods
     
     public InvariantTablesPanel( JScrollPane scrollPane, TreeSelectionModel treeSelectionModel ) {
 	this.scrollPane = scrollPane;
@@ -190,6 +204,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
 		    JComponent tableContainer = setupTable( (PptTopLevel) userObject );
 		    tables.add( tableContainer );
 		    tableNames.add( name );
+		    tableHeights.add( new Integer( (int) tableContainer.getPreferredSize().getHeight()));
 		}
 		else {		// paths[i] was deselected -- it should be in invariantTableNames.
 		    int index = tableNames.indexOf( name );
@@ -198,6 +213,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
 		    panel.remove( (JComponent) tables.get( index ));
 		    tables.remove( index );
 		    tableNames.remove( index );
+		    tableHeights.remove( index );
 		}
 
       	    //  A non-leaf node was selected or deselected.  Select or deselect its children.
@@ -228,21 +244,21 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	    DefaultMutableTreeNode child;
 	    for (Enumeration enum = leadNode.children(); enum.hasMoreElements(); ) {
 		child = (DefaultMutableTreeNode) enum.nextElement();
-		if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child ))) {
-		    lastTableName = ((PptTopLevel) child.getUserObject()).name;
-		    break;
-		}
+		if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child )))
+		    if (child.getUserObject().getClass().getName().equals( "daikon.PptTopLevel" )) {
+			lastTableName = ((PptTopLevel) child.getUserObject()).name;
+			break;
+		    }
 	    }
 	}
-	int index = tableNames.indexOf( lastTableName );
-	if (index != -1) {
-	    int height = 0;
-	    for (int i=0; i < index; i++)
-		height += ((JComponent) tables.get( i )).getPreferredSize().getHeight();
-	    scrollPane.getViewport().setViewPosition( new Point( 0, height ));
-	    //	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
+	if (tableNames.indexOf( lastTableName ) == -1)
+	    ;//	    System.out.println( "InvariantTablesPanel.valueChanged(): '" + lastTableName + "' not valid" );
+	else {
+	    currentTableIndex = tableNames.indexOf( lastTableName );
+	    scrollToCurrentTable();
 	}
 
+	    //	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
 	panel.repaint();
 	panel.revalidate();
     }
@@ -289,6 +305,25 @@ class InvariantTablesPanel implements TreeSelectionListener {
 								  BorderFactory.createEtchedBorder()));
 	panel.add( tablePanel );
 	return tablePanel;
+    }
+
+    void scrollToCurrentTable() {
+	int height = 0;
+	for (int i=0; i < currentTableIndex; i++)
+	    height += ((Integer) tableHeights.get( i )).intValue();
+	scrollPane.getViewport().setViewPosition( new Point( 0, height ));
+    }
+
+    public void scrollToPreviousTable() {
+	if (currentTableIndex > 0)
+ 	    currentTableIndex--;
+	scrollToCurrentTable();
+    }
+
+    public void scrollToNextTable() {
+	if (currentTableIndex  <  tables.size() - 1)
+	    currentTableIndex++;
+	scrollToCurrentTable();
     }
 }
     
