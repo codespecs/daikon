@@ -14,6 +14,7 @@ import daikon.simplify.LemmaStack;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.regex.*;
 import java.util.*;
 import java.io.Serializable;
 
@@ -703,6 +704,37 @@ public abstract class Invariant
     }
     return true;
   }
+
+  /** A "\type(...)" construct where the "..." contains a "$". **/
+  private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
+
+  /**
+   * @return true if this Invariant can be properly formatted for Java output.
+   **/
+  public boolean isValidExpression(OutputFormat format) {
+    if (format == OutputFormat.ESCJAVA) {
+      return isValidEscExpression();
+    }
+
+    String s = format_using(format);
+
+    // This list should get shorter as we improve the formatting.
+    if ((s.indexOf(" needs to be implemented: ") != -1)
+        || (s.indexOf("warning: ") != -1)
+        || (s.indexOf('~') != -1)
+        || (s.indexOf("\\new") != -1)
+        || (s.indexOf(".toString ") != -1)
+        || (s.endsWith(".toString"))
+        || (s.indexOf(".getClass") != -1)
+        || (s.indexOf("warning: method") != -1)
+        || (s.indexOf("inexpressible") != -1)
+        || (s.indexOf("unimplemented") != -1)
+        || anontype_pat.matcher(s).find()) {
+      return false;
+    }
+    return true;
+  }
+
 
   /**
    * @return standard "format needs to be implemented" for the given
