@@ -40,7 +40,7 @@ foreach $filename (@ARGV){
 		print CONDFILE "\nIn function $method:\n";
 		#if ($line =~ /(^|\s)boolean\s/) {
 		#see if it returns a boolean
-		    $replace_method = 1;
+		$replace_method = 1;
 		#} else {
 		#$replace_method = 0;
 		#}
@@ -250,7 +250,7 @@ foreach $filename (@ARGV){
 	@subs = @{$HashOfSubs{$class}};
 	foreach $cond (@conds){
 	    if($cond !~ /^\s*true\s*$/){
-		$cond =~ s/\s*(.*)\s*/$1/; 
+		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends 
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
 		$conditions = $conditions.", $cond";
 	    }else{ next; }
@@ -260,7 +260,7 @@ foreach $filename (@ARGV){
 		if($cond =~ /$sub/){
 		    $temp = @subs[$i+1];
 		    $temp =~ s/\s*return(.*)\s*;\s*$/$1/;
-		    $replace = $replace.",".$sub.",".$temp;
+		    $replace = $replace.",".$sub."( ),".$temp;
 		    $rep++;
 		}
 	    }
@@ -277,14 +277,3 @@ foreach $filename (@ARGV){
     close CONDFILE;
     close SPINFOFILE;
     }
-
-
-
-
-
-
-
-
-
-
-
