@@ -2,8 +2,6 @@ package daikon.tools.compare;
 
 import java.util.*;
 import java.io.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.*;
@@ -74,7 +72,7 @@ public class LogicalCompare {
       "      Don't check postcondition match if preconditions fail",
       "  --timing",
       "      Show time required to check invariants",
-      "  --filters [bBoOmjpi]",
+      "  --filters [bBoOmjpis]",
       "      Control which invariants are removed from consideration",
       "  --assume FILE",
       "      Read extra assumptions from FILE",
@@ -89,7 +87,8 @@ public class LogicalCompare {
   // j        discard statistically unjustified invariants
   // p        discard invariants over pass-by-value parameters
   // i        discard implication pre-conditions
-
+  // s        discard suppressed invariants
+  
   private static boolean[] filters = new boolean[128];
 
   private static Vector filterInvariants(Vector invs, boolean isPost) {
@@ -125,6 +124,8 @@ public class LogicalCompare {
       if (filters['p'] && isPost && shouldDiscardInvariant(inv))
         continue;
       if (filters['i'] && !isPost && inv instanceof Implication)
+        continue;
+      if (filters['s'] && inv.getSuppressor() != null)
         continue;
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
       if (simp.indexOf("format_simplify") != -1 ||
@@ -176,25 +177,25 @@ public class LogicalCompare {
   // Translate a vector of Invariants into a vector of Lemmas, without
   // changing the invariants.
   private static Vector translateStraight(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lemmas = new Vector();
+    Vector/*<Lemma>*/ lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
-      lemmas.add(new InvariantLemma(inv));
+      lems.add(new InvariantLemma(inv));
     }
-    return lemmas;
+    return lems;
   }
 
   // Translate a vector of Invariants into a vector of Lemmas,
   // discarding any invariants that represent only facts about a
   // routine's prestate.
   private static Vector translateRemovePre(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lemmas = new Vector();
+    Vector/*<Lemma>*/ lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
       if (!inv.isAllPrestate())
-        lemmas.add(new InvariantLemma(inv));
+        lems.add(new InvariantLemma(inv));
     }
-    return lemmas;
+    return lems;
   }
 
   // Translate a vector of Invariants into a vector of Lemmas, adding
@@ -202,12 +203,12 @@ public class LogicalCompare {
   // about the precondition of a routine when it is examined in the
   // poststate context.
   private static Vector translateAddOrig(Vector/*<Invariant>*/ invs) {
-    Vector/*<Lemma>*/ lemmas = new Vector();
+    Vector/*<Lemma>*/ lems = new Vector();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
-      lemmas.add(InvariantLemma.makeLemmaAddOrig(inv));
+      lems.add(InvariantLemma.makeLemmaAddOrig(inv));
     }
-    return lemmas;
+    return lems;
   }
 
 //   // Print a vector of invariants and their Simplify translations, for
@@ -278,7 +279,6 @@ public class LogicalCompare {
           if (identical) {
             System.out.println("Identical");
           } else {
-            Lemma[] ass_ary = (Lemma[])assumptions.toArray(new Lemma[1]);
             Vector/*<Lemma>*/ assume = lemmas.minimizeProof(inv);
             System.out.println();
             for (int j = 0; j < assume.size(); j++)
@@ -410,7 +410,7 @@ public class LogicalCompare {
                                   PptTopLevel test_enter_ppt,
                                   PptTopLevel app_exit_ppt,
                                   PptTopLevel test_exit_ppt) {
-    lemmas.clearInts();
+    LemmaStack.clearInts();
 
     app_enter_ppt.guardInvariants();
     test_enter_ppt.guardInvariants();
@@ -564,8 +564,7 @@ public class LogicalCompare {
   }
 
   public static void main(String[] args)
-    throws FileNotFoundException, IOException, ClassNotFoundException,
-           SimplifyError
+    throws FileNotFoundException, IOException, SimplifyError
   {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
