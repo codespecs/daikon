@@ -531,6 +531,8 @@ doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc $(JAVADOC_FLAGS) -private $(JDOC_FILES)
 
+javadoc-jdk-lookup: doc-jdk-lookup
+
 ## Fix up generated .html files for use by the Emacs `jdk-lookup' function.
 doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names `find doc -name '*.html'`
