@@ -426,8 +426,8 @@ public final class CLASSNAME
         str_b = Invariant.simplify_format_double(b);
       } else {
         // integer
-        str_a = ia + "";
-        str_b = ib + "";
+        str_a = Invariant.simplify_format_long(ia);
+        str_b = Invariant.simplify_format_long(ib);
       }
 
       // y == a x + b
