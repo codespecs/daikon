@@ -17,7 +17,9 @@ use File::Copy;
 use File::Path;
 use POSIX qw(tmpnam);
 
-my $escjava_executable = "/g2/users/mernst/bin/Linux-i686/escjava";
+$ENV{"JDKDIR"} = "/g2/jdk";
+
+my $escjava_executable = "/g4/projects/invariants/tools/escjava/current/bin/escjava";
 
 # Algorithm for this script:
 # 0 We are given a txt-esc file and some (possibly-annotated) source files
