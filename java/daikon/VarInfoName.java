@@ -272,6 +272,7 @@ public abstract class VarInfoName
   // Special producers, or other helpers
 
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
+    Assert.assert(! replacement.hasNode(node));
     if (node == replacement)
       return this;
     VarInfoName result = this;
@@ -1845,5 +1846,28 @@ public abstract class VarInfoName
     }
 
   } // QuantHelper
+
+
+  // ============================================================
+  // Transformation framework
+
+  /**
+   * Specifies a function that performs a transformation on VarInfoNames.
+   **/
+  public interface Transformer
+  {
+    /** Perform a transformation on the argument */
+    public VarInfoName transform(VarInfoName v);
+  }
+
+  /**
+   * A pass-through transformer.
+   **/
+  public static final Transformer IDENTITY_TRANSFORMER
+    = new Transformer() {
+	public VarInfoName transform(VarInfoName v) {
+	  return v;
+	}
+      };
 
 }
