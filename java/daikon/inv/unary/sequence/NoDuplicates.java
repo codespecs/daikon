@@ -4,6 +4,10 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 
+import daikon.derive.binary.SequencesPredicate;
+import daikon.derive.binary.SequencesConcat;
+import daikon.derive.binary.SequencesJoin;
+
 import utilMDE.*;
 
 import java.util.*;
@@ -53,28 +57,77 @@ public class NoDuplicates
     }
     if (var().isIOASet())
       return "IOA Set " + var().name.ioa_name() + " contains no duplicates by definition";
+
+    // We first see if we can special case for certain types of variables
+    if (var().isDerived() && var().derived instanceof SequencesPredicate) {
+      VarInfoName.FunctionOfN myName = (VarInfoName.FunctionOfN) var().name;
+      String predicateValue = myName.getArg(2).ioa_name();
+
+      SequencesPredicate derivation = (SequencesPredicate) var().derived;
+      VarInfo varField = derivation.var1();
+      VarInfoName.Field varFieldName = (VarInfoName.Field) varField.name;
+      String fieldName = varFieldName.field;
+
+      VarInfo varPredicateField = derivation.var2();
+      VarInfoName.Field varPredicateFieldName = (VarInfoName.Field) varPredicateField.name;
+      String predicateName = varPredicateFieldName.field;
+
+      VarInfoName varOrigName = varFieldName.term;
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type, varField.file_rep_type, varField.comparability);
+
+      VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
+
+      //     \A i : type, j : type(   i \in X 
+      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + 
+	//         /\ j \ in X
+	" /\\ " + quant.getMembershipRestriction(1) +
+	//           i.field = j.field
+	" /\\ " + quant.getVarName(0) + "." + fieldName + " = " + quant.getVarName(1) + "." + fieldName +
+	//           i.pred = value
+	" /\\ " + quant.getVarName(0) + "." + predicateName + " = " + predicateValue +
+	//           j.pred = value
+	" /\\ " + quant.getVarName(1) + "." + predicateName + " = " + predicateValue +
+	//  =>      i           =       j           )
+	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+
+    } else if (var().isDerived() && var().derived instanceof SequencesJoin) {
+      SequencesJoin derivation = (SequencesJoin) var().derived;
+      VarInfo varField1 = derivation.var1();
+      VarInfoName.Field varFieldName1 = (VarInfoName.Field) varField1.name;
+      String fieldName1 = varFieldName1.field;
+      VarInfo varField2 = derivation.var2();
+      VarInfoName.Field varFieldName2 = (VarInfoName.Field) varField2.name;
+      String fieldName2 = varFieldName2.field;
+
+      VarInfoName varOrigName = varFieldName1.term;
+      VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type, varField1.file_rep_type, varField1.comparability);
+
+      VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
+
+      //     \A i : type, j : type(   i \in X 
+      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + 
+	//         /\ j \ in X
+	" /\\ " + quant.getMembershipRestriction(1) +
+	//           i.field = j.field
+	" /\\ " + quant.getVarName(0) + "." + fieldName1 + " = " + quant.getVarName(1) + "." + fieldName1 +
+	//           i.field = j.field
+	" /\\ " + quant.getVarName(0) + "." + fieldName2 + " = " + quant.getVarName(1) + "." + fieldName2 +
+	//  =>      i           =       j           )
+	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+
+    } else {
+      VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var(), var());
     
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var(),var()});
-
-    //     \A i, j(                 i \in X /\ j \ in X
-    return form[0] + form[1] + " \\in " + var().name.ioa_name() + " /\\ " + form[3] + " \\in " + var().name.ioa_name() +
-    //
-      " /\\ " + form[2] + " = " + form[4] +
-    //            i           =       j           )
-      " => " + form[1] + " = " + form [3] + form[5];
-
-
-
-
-    /***
-    String s = "";
-    for (int i = 0; i < form.length; i++) {
-      s = s + form[i] + " | ";
+      //     \A i, j(                 i \in X /\ j \ in X
+      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
+	" /\\ " + quant.getMembershipRestriction(1) +
+	//           X[i] = X[j]
+	" /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
+	//  =>      i           =       j           )
+	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+      
     }
-    return s;
-    //    return form[0]+"("+form[1]+"="+form[2]+") => ("+form[4]+"="+form[5]+")"+form[3];
-    **/
+
   }
 
   public String format_esc() {

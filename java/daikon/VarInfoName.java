@@ -452,6 +452,7 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
+
   /**
    * The size of a contained sequence; form is like "size(sequence)"
    * or "sequence.length".
@@ -500,21 +501,22 @@ public abstract class VarInfoName
    * Returns a name for a function of two arguments;
    * form is like "sum(var1, var2))".
    * @param function the name of the function
-   * @param var1
-   * @param var2 The two names to apply the function to
+   * @param vars The arguments to the function, of type VarInfoName
+   *
    **/
-  public static VarInfoName applyFunctionOfTwo(String function, VarInfoName var1, VarInfoName var2) {
-    return (new FunctionOfTwo(function, var1, var2)).intern();
+  public static VarInfoName applyFunctionOfN(String function, List vars) {
+    return (new FunctionOfN(function, vars)).intern();
   }
 
   /**
-   * Returns a name for a function of two arguments over this object.
-   * Form is like sum(this, var2).
+   * Returns a name for a function of two arguments;
+   * form is like "sum(var1, var2))".
    * @param function the name of the function
-   * @param var2 The other argument to apply the function to
+   * @param vars The arguments to the function
+   *
    **/
-  public VarInfoName applyFunctionOfTwo(String function, VarInfoName var2) {
-    return (new FunctionOfTwo(function, this, var2)).intern();
+  public static VarInfoName applyFunctionOfN(String function, VarInfoName[] vars) {
+    return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
   /**
@@ -559,49 +561,85 @@ public abstract class VarInfoName
   /**
    * A function of two variables
    **/
-  public static class FunctionOfTwo extends VarInfoName {
+  public static class FunctionOfN extends VarInfoName {
     public final String function;
-    public final VarInfoName arg1, arg2;
+    public final List args;
 
     /**
      * Construct a new function of two
      * @param function the name of the function
-     * @param arg1 the name of the first argument
-     * @param arg2 the name of the second argument
+     * @param args the arguments to the function, of type VarInfoName
      **/
 
-    public FunctionOfTwo(String function, VarInfoName arg1, VarInfoName arg2) {
+    public FunctionOfN(String function, List args) {
       Assert.assert(function != null);
-      Assert.assert(arg1 != null);
-      Assert.assert(arg2 != null);
+      Assert.assert(args != null);
+      this.args = args;
       this.function = function;
-      this.arg1 = arg1;
-      this.arg2 = arg2;
     }
+
     protected String repr_impl() {
-      return "FunctionOfTwo{" + function + "}[" + arg1.repr() + ", " + arg2.repr() + "]";
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).repr());
+	if (i.hasNext()) sb.append (", ");
+      }
+      return "FunctionOfN{" + function + "}[" + sb.toString() + "]";
     }
     protected String name_impl() {
-      return function + "(" + arg1.name() + ", " + arg2.name() + ")";
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).name());
+	if (i.hasNext()) sb.append (", ");
+      }
+      return function + "(" + sb.toString() + ")";
     }
     protected String esc_name_impl() {
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).repr());
+	if (i.hasNext()) sb.append (", ");
+      }
       return "(warning: format_esc() needs to be implemented: " +
-	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+	function + " on " + sb.toString() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).repr());
+	if (i.hasNext()) sb.append (", ");
+      }
       return "(warning: format_simplify() needs to be implemented: " +
-	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+	function + " on " + sb.toString() + ")";
     }
     protected String ioa_name_impl() {
-      return function + "(" + arg1.ioa_name() + ", " + arg2.ioa_name() + ")";
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).ioa_name());
+	if (i.hasNext()) sb.append (", ");
+      }
+      return function + "(" + sb.toString() + ")";
     }
     protected String java_name_impl() {
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).repr());
+	if (i.hasNext()) sb.append (", ");
+      }
       return "(warning: format_java() needs to be implemented: " +
-	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+	function + " on " + sb.toString() + ")";
+    }
+
+    /**
+     * Shortcut getter to avoid repeated type casting
+     **/
+    public VarInfoName getArg (int n) {
+      return (VarInfoName) args.get(n);
     }
     public Object accept(Visitor v) {
-      return v.visitFunctionOfTwo(this);
+      return v.visitFunctionOfN(this);
     }
+
   }
 
   /**
@@ -627,13 +665,13 @@ public abstract class VarInfoName
    * Intersection of two sequences.  Extends FunctionOfTwo, and the
    * only change is that it does special formatting for IOA.
    **/
-  public static class Intersection extends FunctionOfTwo {
+  public static class Intersection extends FunctionOfN {
     public Intersection(VarInfoName seq1, VarInfoName seq2) {
-      super ("intersection", seq1, seq2);
+      super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
 
     protected String ioa_name_impl() {
-      return "(" + arg1.ioa_name() + " \\I " + arg2.ioa_name() + ")";
+      return "(" + getArg(0).ioa_name() + " \\I " + getArg(1).ioa_name() + ")";
     }
 
   }
@@ -642,13 +680,13 @@ public abstract class VarInfoName
    * Union of two sequences.  Extends FunctionOfTwo, and the
    * only change is that it does special formatting for IOA.
    **/
-  public static class Union extends FunctionOfTwo {
+  public static class Union extends FunctionOfN {
     public Union(VarInfoName seq1, VarInfoName seq2) {
-      super ("intersection", seq1, seq2);
+      super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
 
     protected String ioa_name_impl() {
-      return "(" + arg1.ioa_name() + " \\U " + arg2.ioa_name() + ")";
+      return "(" + getArg(0).ioa_name() + " \\U " + getArg(1).ioa_name() + ")";
     }
 
   }
@@ -1136,7 +1174,7 @@ public abstract class VarInfoName
     public Object visitSimple(Simple o);
     public Object visitSizeOf(SizeOf o);
     public Object visitFunctionOf(FunctionOf o);
-    public Object visitFunctionOfTwo(FunctionOfTwo o);
+    public Object visitFunctionOfN(FunctionOfN o);
     public Object visitField(Field o);
     public Object visitTypeOf(TypeOf o);
     public Object visitPrestate(Prestate o);
@@ -1167,8 +1205,17 @@ public abstract class VarInfoName
       return o.argument.accept(this);
     }
 
-    // leave abstract; traversal order and return values matter
-    public abstract Object visitFunctionOfTwo(FunctionOfTwo o);
+    /**
+     * By default, return effect on first argument, but traverse all, backwards
+     **/
+    public Object visitFunctionOfN(FunctionOfN o) {
+      Object retval = null;
+      for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious();) {
+	VarInfoName vin = (VarInfoName)i.previous();
+	retval = vin.accept(this);
+      }
+      return retval;
+    }
 
     public Object visitField(Field o) {
       return o.term.accept(this);
@@ -1230,11 +1277,14 @@ public abstract class VarInfoName
     public Object visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfTwo(FunctionOfTwo o) {
-      if (o == goal) return goal;
-      if (o.arg1.accept(this) != null) return goal;
-      if (o.arg2.accept(this) != null) return goal;
-      return null;
+    public Object visitFunctionOfN(FunctionOfN o) {
+      Object retval = null;
+      for (Iterator i = o.args.iterator(); i.hasNext();) {
+	VarInfoName vin = (VarInfoName)i.next();
+	retval = vin.accept(this);
+	if (retval != null) return retval;
+      }
+      return retval;
     }
     public Object visitField(Field o) {
       return (o == goal) ? goal : super.visitField(o);
@@ -1294,10 +1344,14 @@ public abstract class VarInfoName
     }
 
     // visitor methods which get the job done
-    public Object visitFunctionOfTwo(FunctionOfTwo o) {
-      Object tmp = o.arg1.accept(this);
-      if (tmp == null) tmp = o.arg2.accept(this);
-      return tmp;
+    public Object visitFunctionOfN(FunctionOfN o) {
+      Object retval = null;
+      for (Iterator i = o.args.iterator(); i.hasNext();) {
+	VarInfoName vin = (VarInfoName)i.next();
+	retval = vin.accept(this);
+	if (retval != null) return retval;
+      }
+      return retval;
     }
     public Object visitPrestate(Prestate o) {
       pre = true;
@@ -1354,13 +1408,17 @@ public abstract class VarInfoName
       return (o == old) ? _new :
 	((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
     }
-    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+    public Object visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
       // otherwise, create a new function and check if arguments get replaced
-      return (o == old) ? _new :
-	VarInfoName.applyFunctionOfTwo(o.function,
-				       (VarInfoName) (o.arg1.accept(this)),
-				       (VarInfoName) (o.arg2.accept(this)));
+      if (o == old) return _new;
+      ArrayList newArgs = new ArrayList();
+      for (Iterator i = o.args.iterator(); i.hasNext();) {
+	VarInfoName vin = (VarInfoName)i.next();
+	Object retval = vin.accept(this);
+	newArgs.add (retval);
+      }
+      return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
     public Object visitField(Field o) {
       return (o == old) ? _new :
@@ -1430,10 +1488,13 @@ public abstract class VarInfoName
       result.add(o);
       return super.visitFunctionOf(o);
     }
-    public Object visitFunctionOfTwo(FunctionOfTwo o) {
-      result.add(o);
-      o.arg1.accept(this);
-      return o.arg2.accept(this);  // Return value doesn't matter
+    public Object visitFunctionOfN(FunctionOfN o) {
+      result.add (o);
+      for (Iterator i = o.args.iterator(); i.hasNext();) {
+	VarInfoName vin = (VarInfoName)i.next();	
+	Object retval = vin.accept(this);
+      }
+      return null;
     }
     public Object visitField(Field o) {
       result.add(o);
@@ -1526,9 +1587,10 @@ public abstract class VarInfoName
       unquant.add(o);
       return super.visitElements(o);
     }
-    public Object visitFunctionOfTwo(FunctionOfTwo o) {
+    public Object visitFunctionOfN(FunctionOfN o) {
       //o.arg1.accept(this);
-      return o.arg2.accept(this); // Return value doesn't matter
+      return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // We only use one of them because we don't want double quantifiers
     }
     public Object visitSizeOf(SizeOf o) {
       // don't visit the sequence; we aren't using the elements of it,
@@ -1732,6 +1794,94 @@ public abstract class VarInfoName
     }
 
 
+    /**
+     * It's too complex (and error prone). to hold quantification
+     * results for IOA in a string array; so we create a helper object
+     * that has accessors.  Otherwise this works just like a
+     * format_ioa method here would work.
+     *
+     **/
+    public static class IOAQuantification {
+      private static final String quantifierExistential = "\\E ";
+      private static final String quantifierUniversal = "\\A ";
+
+      private VarInfo[] sets;
+      private VarInfoName[] setNames;
+      private String quantifierExp;
+      private QuantifyReturn qret;
+      private int numVars;
+
+      public IOAQuantification (VarInfo v1) {
+	this (new VarInfo[] { v1 });
+      }
+
+      public IOAQuantification (VarInfo v1, VarInfo v2) {
+	this (new VarInfo[] { v1, v2 });
+      }
+
+      public IOAQuantification (VarInfo[] sets) {
+	Assert.assert(sets != null);
+	
+	this.sets = sets;
+	numVars = sets.length;
+
+	setNames = new VarInfoName[sets.length];
+	for (int i=0; i<sets.length; i++)
+	  setNames[i] = sets[i].name;
+	
+	qret = quantify(setNames);
+	
+	
+	// Build the quantifier
+	StringBuffer quantifier = new StringBuffer();
+	for (int i=0; i < qret.bound_vars.size(); i++) {
+	  //Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	  VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+	  quantifier.append (quantifierUniversal);
+	  quantifier.append (var.ioa_name());
+	  quantifier.append (" : ");
+	  quantifier.append (sets[i].domainTypeIOA());
+	  quantifier.append (" ");
+	  
+	}
+	quantifierExp = quantifier.toString() + "(";	
+      }
+
+      public String getQuantifierExp() {
+	// \A i : DomainType
+	return quantifierExp;
+      }
+
+      public String getMembershipRestrictions() {
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < numVars; i++) {
+	  if (i != 0) sb.append(" /\\ ");
+	  sb.append (getMembershipRestriction(i));
+	}
+	return sb.toString();
+      }
+
+      public String getMembershipRestriction(int num) {
+	return getVarName(num) + " \\in " + setNames[num].ioa_name();
+      }
+
+      public String getClosingExp() {
+	// This isn't very smart right now, but maybe later we can 
+	// pretty print based on whether we need parens or not
+	return ")";
+      }
+
+      public String getVarName (int num) {
+	return ((VarInfoName[]) (qret.bound_vars.get(num))) [0].ioa_name();
+      }
+
+      public String getVarIndexed (int num) {
+	return qret.root_primes[num ].ioa_name();
+      }
+
+    }
+
+
     // <root*> -> <string*>
     /**
      * Helper method used by invariant that quantify and then want to
@@ -1749,6 +1899,9 @@ public abstract class VarInfoName
      * @param sets A list of array-type variables over which we will quantify. 
      *
      **/
+
+      /**
+
     public static String[] format_ioa(VarInfo[] sets) {
 
       
@@ -1788,7 +1941,6 @@ public abstract class VarInfoName
 
       return result;
 
-      /**
       QuantifyReturn qret = quantify(roots);
       String[] result = new String[2*roots.length+2];
       StringBuffer ptr_list = new StringBuffer();
@@ -1837,7 +1989,37 @@ public abstract class VarInfoName
 	}
       }
       return result;
+    }
       **/
+
+    /**
+     * Takes return values from QuantHelper.format_ioa and returns
+     * variable names from it.
+     *
+     **/
+
+    public static String forma_ioa_var (String[] quantExp, int varNum) {
+      return quantExp[1 + varNum * 2];
+    }
+
+    /**
+     * Takes return values from QuantHelper.format_ioa and returns
+     * the variable subscripted with respect to the expression's set.
+     *
+     **/
+
+    public static String forma_ioa_subscript (String[] quantExp, int varNum) {
+      return quantExp[varNum * 2 + 2];
+    }
+
+    /**
+     * Takes return values from QuantHelper.format_ioa and returns
+     * the variable subscripted with respect to the expression's set.
+     *
+     **/
+
+    public static String forma_ioa_in_exp (String[] quantExp, int varNum) {
+      return quantExp[varNum * 2 + 1] + " \\in " + "Ops";
     }
 
 

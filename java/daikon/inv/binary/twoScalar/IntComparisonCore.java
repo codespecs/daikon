@@ -175,6 +175,13 @@ public final class IntComparisonCore
     return format_comparator(can_be_lt, can_be_eq, can_be_gt);
   }
 
+  public String format_comparator_ioa() {
+    String comparator = format_comparator();
+    comparator = comparator.equals("==") ? "=" : comparator;
+    comparator = comparator.equals("!=") ? "~=" : comparator;
+    return comparator;
+  }
+
   public static String format_comparator(boolean lt, boolean eq, boolean gt) {
     if (eq && (! lt) && (! gt)) {
       return "==";

@@ -68,12 +68,13 @@ public final class EltNonZero
 
   /* IOA */
   public String format_ioa() {
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()});
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
+    String result = quant.getQuantifierExp() + quant.getVarName(0) + " \\in " +
+      var().name.ioa_name() + " => " + quant.getVarIndexed(0) + "~=";
     if (pointer_type) {
-      return form[0] + form[1] + " \\in " + var().name.ioa_name() + " => " + form[2] + " ~= " + "null" + form[3] + " ***";
+      return result + "null" + quant.getClosingExp();
     } else {
-      return form[0] + form[1] + " \\in " + var().name.ioa_name() + " => " + form[2] + " ~= " + "0" + form[3];
+      return result + "0" + quant.getClosingExp();
     }
   }
 

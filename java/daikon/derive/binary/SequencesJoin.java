@@ -157,10 +157,12 @@ public final class SequencesJoin
     VarComparability indexType = var1.comparability.indexType(0);
 
     // Generate a new comparability based on base comparabilities' indices
-    VarComparability comparability = VarComparability.makeComparabilitySameIndices (newTypeName,
-										    var1.comparability);
+    VarComparability comparability =
+      VarComparability.makeComparabilitySameIndices (newTypeName,
+						     var1.comparability);
 
-    return new VarInfo(var1.name.applyFunctionOfTwo("join", var2.name),
+    return new VarInfo(VarInfoName.applyFunctionOfN("join",
+						      new VarInfoName[] {var1.name, var2.name}),
 		       decltype,
 		       ProglangType.HASHCODE_ARRAY,
 		       comparability

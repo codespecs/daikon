@@ -112,10 +112,9 @@ public final class SeqIntComparison
   public String format_ioa() {
     String comparator = core.format_comparator().equals("==") ?
 	"=" : core.format_comparator();
-    String scl = sclvar().name.ioa_name();
-    String[] form =
-	VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar() });
-    return form[0] + form[1] + " " + comparator + " " + scl + form[2];
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(seqvar());
+    return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
+      " => " + quant.getVarIndexed(0) + comparator + sclvar().name.ioa_name() + quant.getClosingExp();
   }
 
   public String format_esc() {

@@ -82,8 +82,9 @@ public class EltUpperBound
   }
 
   public String format_ioa() {
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()});
-    String result = form[0]+form[1]+" "+ "<" +"= "+ core.max1 +form[2];
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
+    String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
+      " => " + quant.getVarIndexed(0) + " <" +"= " + core.max1  + quant.getClosingExp();
     return result;
   }
 

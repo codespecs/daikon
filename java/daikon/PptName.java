@@ -275,6 +275,14 @@ public class PptName
   }
 
   /**
+   * @return true iff this name refers to an abrupt completion point
+   **/
+  public boolean isThrowsPoint()
+  {
+    return (point != null) && point.startsWith(FileIO.throws_suffix);
+  }
+
+  /**
    * @return true iff this name refers to a combined (synthetic) procedure
    *         exit point
    **/
@@ -324,6 +332,7 @@ public class PptName
   public PptName makeEnter()
   {
     Assert.assert(isExitPoint(), fullname);
+    Assert.assert(isExitPoint() || isThrowsPoint());
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 

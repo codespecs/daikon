@@ -19,16 +19,17 @@ public final class Runtime {
   ////////////////////////////////////////////////////////////////////////
   /// Fresh (unique) classname used to disambiguate overloaded method
   /// calls during instrumentation; is not instantiated or used.
-  public class Unique {}
+  public static class Unique {}
   public static final Unique unique = null;
 
   ////////////////////////////////////////////////////////////////////////
   /// The context-sensitive instrumentation pass creates bodies for
   /// abstract methods that throw this very object; that way we don't 
-  /// have to inspect their return type since they never return. They
+  /// have to inspect their return type since they never return.
   /// Thanks to this global instance, they don't need to call "new" either.
-  public class AbstractException extends Error {}
-  public static AbstractException abstractException;
+  public static class AbstractException extends Error {}
+  public static final AbstractException abstractException = 
+    new AbstractException();
 
   ///////////////////////////////////////////////////////////////////////////
   /// Timestamps
@@ -108,7 +109,17 @@ public final class Runtime {
     java.lang.Runtime.getRuntime().addShutdownHook(new Thread() {
         public void run() {
           if (dtrace != null) {
-            dtrace.close();
+
+	    // When the program being instrumented exits, the buffers
+	    // of the "dtrace" (PrintStream) object are not flushed,
+	    // so we miss the tail of the file.
+
+	    synchronized (daikon.Runtime.dtrace)
+	    {
+	      dtrace.println();
+	      dtrace.println("// EOF"); // this lets us know we didn't lose any
+	      dtrace.close();
+	    }
           }
         }
       });

@@ -214,22 +214,21 @@ public final class OneOfSequence
       if (var().name.isApplySizeSafe()) {
 	length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
+      VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
       if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-	forall = form[0] + form[1] + " ~= null ***" + form[2];
+	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
       } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-	forall = form[0] + form[1] + " = null ***" + form[2];
+	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
       }
     }
-    if (length == "" && forall == "") { // interned
+    if (length == "" && forall == "") { // can't say anything about size or elements
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
-    } else if (length == "") { // interned
+    } else if (length == "") { // can't say anything about size
       result = forall;
-    } else if ((forall == "")||(elts[0].length==0)) { // interned
+    } else if ((forall == "")||(elts[0].length==0)) { // can't say anything about elements
       result = length;
-    } else {
+    } else { // Default, can say about both length and elements
       result = "(" + length + ") /\\ (" + forall + ")";
     }
 

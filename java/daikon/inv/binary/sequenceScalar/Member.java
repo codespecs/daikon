@@ -236,10 +236,7 @@ public final class Member
   }
 
   public String format_ioa() {
-    String scl = sclvar().name.ioa_name();
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar()});
-    return "~(" + form[0] + form[1] + " ~= " + scl + form[2] + ")";
+    return sclvar().name.ioa_name() + " \\in " + seqvar().name.ioa_name();
   }
 
   public String format_esc() {

@@ -192,17 +192,17 @@ public final class OneOfScalar
     } else if (is_hashcode) {
       Assert.assert(num_elts == 1);
       if (elts[0] == 0) {
-        result = varname + " = null ***";
+        result = varname + " = null";
       } else {
-        result = varname + " has only one value"
-	  + " (hashcode=" + elts[0] + ") ***";
+        result = varname + " = {one value}";
       }
     } else {
-      result = "(";
+      result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ ("; }
         result += varname + " = " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
       }
+      result += ")";
     }
 
     return result;

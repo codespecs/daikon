@@ -52,7 +52,7 @@ public class PptTopLevel
 
   /**
    * Logging Category for equalTo checks
-   **/  
+   **/
   public static final Category debugEqualTo =
     Category.getInstance (PptTopLevel.class.getName() + "equalTo");
 
@@ -342,9 +342,10 @@ public class PptTopLevel
 	new StringSequencesIntersectionFactory(),
 	new ScalarSequencesUnionFactory(),
 	new StringSequencesUnionFactory(),
-        new SequenceStringSubscriptFactory(), 
+        new SequenceStringSubscriptFactory(),
         new SequencesConcatFactory(),
 	new SequencesJoinFactory(),
+	new SequencesPredicateFactory(),
     };
 
 
@@ -1412,7 +1413,7 @@ public class PptTopLevel
 	  PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
 	  PptConditional cond2 = (PptConditional) views_cond.elementAt(j);
 	  addImplications_internal(cond1, cond2, false);
-	} 
+	}
       }
     }
 
@@ -1420,9 +1421,7 @@ public class PptTopLevel
     if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
       int num_exits = exits.size();
-      // Eventually I ought to make this applicable when the number of
-      // individual exits is not 2.
-      
+
       // System.out.println("num exits = " + exits.size());
       // for (int i=0; i<exits.size(); i++) {
       //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
@@ -1433,7 +1432,7 @@ public class PptTopLevel
 	  PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(i);
 	  PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(j);
 	  // No longer necessary to use add_implications, as we are now
-	  // adding combined prgram points early.
+	  // adding combined program points early.
 	  // addImplications_internal(ppt1, ppt2, true);
 	  addImplications_internal(ppt1, ppt2, false);
 	}

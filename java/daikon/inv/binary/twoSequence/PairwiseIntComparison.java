@@ -84,11 +84,12 @@ public class PairwiseIntComparison
   public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
-    String comparator = core.format_comparator();
-    comparator = comparator.equals("==") ? "=" : comparator;
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() });
-    return form[0]+"("+form[4]+"="+form[5]+") => ("+form[1]+" "+comparator+" "+form[2]+")"+form[3];
+    String comparator = core.format_comparator_ioa();
+    VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
+    VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
+
+    return quant1.getQuantifierExp() + quant1.getVarIndexed(0) + " " +
+      comparator + " " + quant2.getVarIndexed(0) + quant1.getClosingExp();
   }
 
   public String format_esc() {

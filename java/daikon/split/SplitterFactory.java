@@ -170,7 +170,6 @@ public class SplitterFactory {
 
     Vector splitternames = new Vector();
     PptTopLevel ppt = find_corresponding_ppt(ppt_name, all_ppts);
-
     if (ppt == null) {
       debugPrint("No program point corresponds to " + ppt_name);
       return splitternames;
@@ -385,18 +384,13 @@ public class SplitterFactory {
       String temp = var_infos[i].name.name().trim();
       if (temp.endsWith(".class") || temp.startsWith("orig"))
 	continue;
-      if (temp.equals("return")) {
-	return_found = true;
-	if (return_found)
-	  continue;
-      }
       if (temp.endsWith("[]")) {
 	temp = temp.substring(0, temp.length() - 2);
       }
       parameters.addElement(temp);
       if ((var_infos[i].type.format().trim()).equals("boolean")) {
 	types.addElement(new String("boolean"));
-      }else{
+      } else {
 	types.addElement(var_infos[i].rep_type.format().trim());
       }
     }
@@ -571,7 +565,7 @@ public class SplitterFactory {
 	//not always used in the test string. Eg. instrumented variable is
 	//"this.myArray", but the condition test is "myArray.length == 0". In
 	//such a situation, search the test_string for this.myArray or myArray
-	//and change the test string to this_myArray.length == 0
+	//and change the test string to this_myArray.length == 0. 
 	try {
 	  if (params[i].startsWith("this")) {
 	    String params_minus_this = params[i].substring(5);
@@ -579,9 +573,9 @@ public class SplitterFactory {
 	    //the condition for the regex "myArray|this.myArray" and replacing
 	    //it with this_myArray as declared in the Splitter.
 	    param_pattern = re_compiler.compile(params[i] + "|" + params_minus_this);
-	  }else if (params[i].startsWith(class_name)) {
+	  } else if (params[i].startsWith(class_name)) {
 	    param_pattern = re_compiler.compile(params[i] + "|" + params[i].substring(class_name.length()));
-	  }else{
+	  } else {
 	    param_pattern = re_compiler.compile(params[i]);
 	  }
 	  

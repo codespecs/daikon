@@ -88,10 +88,13 @@ public final class SeqIndexNonEqual
   /* IOA */
   public String format_ioa() {
     if (var().isIOASet())
-      return "Not valid for sets: " + format();
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-    return form[0] + form[1] + " ~= " + form[3] + form[2];
+      return "Not valid for Sets: " + format();
+
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
+
+    return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
+      " => " + quant.getVarName(0) + " ~= " +
+      quant.getVarIndexed(0) + quant.getClosingExp();
   }
   public String format_simplify() {
     String[] form =

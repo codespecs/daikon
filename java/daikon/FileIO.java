@@ -48,6 +48,8 @@ public final class FileIO
   // a number may follow it.
   public final static String exit_suffix = "EXIT";
   public final static String exit_tag = ppt_tag_separator + exit_suffix;
+  public final static String throws_suffix = "THROWS";
+  public final static String throws_tag = ppt_tag_separator + throws_suffix;
   public final static String object_suffix = "OBJECT";
   public final static String object_tag = ppt_tag_separator + object_suffix;
   public final static String class_static_suffix = "CLASS";
@@ -293,13 +295,17 @@ public final class FileIO
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
       throw new IOException("Unsupported (file) representation type " +
-			    file_rep_type.format() + " for variable " +
+			    file_rep_type.format() +
+			    " (parsed as " + rep_type + ")" + 
+			    " for variable " +
 			    varname + " at line " + file.getLineNumber() +
 			    " of file " + filename);
     }
     if (! VarInfo.legalRepType(rep_type)) {
       throw new IOException("Unsupported (converted) representation type " +
-			    file_rep_type.format() + " for variable " +
+			    file_rep_type.format() +
+			    " (parsed as " + rep_type + ")" +
+			    " for variable " +
 			    varname + " at line " + file.getLineNumber() +
 			    " of file " + filename);
     }
@@ -796,7 +802,8 @@ public final class FileIO
 
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
-    Assert.assert((blank_line == null) || (blank_line.equals("")), blank_line);
+    Assert.assert((blank_line == null) || (blank_line.equals("")), 
+		  "Line " + reader.getLineNumber() + ": " + blank_line);
   }
 
 

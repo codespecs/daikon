@@ -7,7 +7,10 @@ import utilMDE.*;
 import java.util.*;
 
 
-// This compares adjacent elements in the sequence.
+/**
+ * This compares adjacent elements in the sequence.
+ **/
+
 public class EltwiseIntComparison
   extends SingleSequence
 {
@@ -65,14 +68,21 @@ public class EltwiseIntComparison
 
   /* IOA */
   public String format_ioa() {
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var(), var() });
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(var(), var());
+
     String comparator = core.format_comparator();
+    String result = quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + " /\\ " + quant.getMembershipRestriction(1);
     if ("==".equals(comparator)) {
-      return form[0] + form[1] + " = " + form[2] + form[3];
+      // i \in X /\ j \in X => X[i] = X[j]
+      result = result + ") => " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
     } else {
-      return form[0] + "(i+1 = j) => ("+ form[1] + " " + comparator + " " + form[2] + ")" + form[3];
+      // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
+      result = result + 
+	quant.getVarName(0) + "+1 = " + quant.getVarName(1) +
+	") => " +
+	quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
     }
+    return result + quant.getClosingExp();
   }
 
   public String format_esc() {

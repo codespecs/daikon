@@ -185,8 +185,9 @@ public final class EltOneOf
   /* IOA */
   public String format_ioa() {
 
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-    String varname = form[1];
+    VarInfoName.QuantHelper.IOAQuantification quant =
+      new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
+    String varname = quant.getVarName(0);
 
     String result;
 
@@ -197,20 +198,20 @@ public final class EltOneOf
     } else if (is_hashcode) {
       Assert.assert(num_elts == 1);
       if (elts[0] == 0) {
-        result = varname + " = null ***";
+        result = varname + " = null";
       } else {
-        result = varname + " has only one value"
-	  + " (hashcode=" + elts[0] + ") ***";
+        result = varname + " = {one value}";
       }
     } else {
-      result = "(";
+      result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ ("; }
         result += varname + " = " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  + ")";
       }
+      result += ")";
     }
 
-    result = form[0] +  result + form[2];
+    result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) + " => " + result + quant.getClosingExp();
 
     return result;
   }

@@ -79,7 +79,8 @@ public final class SequencesConcat
 
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
-    return new VarInfo(var1.name.applyFunctionOfTwo("concat", var2().name),
+    return new VarInfo(VarInfoName.applyFunctionOfN("concat",
+						    new VarInfoName[] {var1.name, var2().name}),
 		       var1.type,
 		       var1.file_rep_type,
 		       var1.comparability);

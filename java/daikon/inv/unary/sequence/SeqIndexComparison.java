@@ -7,9 +7,12 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
-// This class represnts a comparison between elements of a sequence
-// and the indices of those elements; for instance,
-//   "for all i, a[i] > i".
+ /** 
+  * This class represnts a comparison between elements of a sequence
+  * and the indices of those elements; for instance, * "for all i,
+  * a[i] > i".
+  **/
+
 public final class SeqIndexComparison
   extends SingleSequence
 {
@@ -101,11 +104,13 @@ public final class SeqIndexComparison
   public String format_ioa() {
     if (var().isIOASet())
       return "Not valid for Sets: " + format();
-    String comparator = (core.format_comparator().equals("==")) ?
-	"=" : core.format_comparator();
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-    return form[0] + form[1] + " " + comparator + " " + form[3] + form[2];
+
+    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
+
+    String comparator = core.format_comparator_ioa();
+    return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
+      " => " + quant.getVarName(0) + " " + comparator + " " +
+      quant.getVarIndexed(0) + quant.getClosingExp();
   }
 
   public String format_esc() {

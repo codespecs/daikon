@@ -173,6 +173,7 @@ public class UpperBoundCore
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
     double bound_samples_prob = prob_is_ge(num_max1 , required_samples_at_bound);
+    utilMDE.Assert.assert(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
     long modulus = calc_modulus();
 

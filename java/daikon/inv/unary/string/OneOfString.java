@@ -166,6 +166,14 @@ public final class OneOfString
 
     String result;
 
+    result = "";
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " \\/ ("; }
+      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")  + ")";
+    }
+    result += ")";
+
+    /*
     result = "(";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
@@ -188,6 +196,7 @@ public final class OneOfString
       }
       result += ")";
     } // end for
+    */
 
     return result;
   }

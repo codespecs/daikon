@@ -162,11 +162,20 @@ public final class EltOneOfString
   /* IOA */
   public String format_ioa() {
 
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
-    String varname = form[1];
+    VarInfoName.QuantHelper.IOAQuantification quant =
+      new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
+    String varname = quant.getVarName(0);
 
     String result;
 
+    result = "";
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " \\/ ("; }
+      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")  + ")";
+    }
+    result += ")";
+
+    /*
     result = "(";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
@@ -189,8 +198,9 @@ public final class EltOneOfString
       }
       result += ")";
     } // end for
+    */
 
-    result = form[0] +  result + form[2];
+    result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) + " => " + result + quant.getClosingExp();
 
     return result;
   }

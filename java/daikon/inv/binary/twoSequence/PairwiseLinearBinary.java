@@ -54,9 +54,11 @@ public class PairwiseLinearBinary
   public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
-    String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() });
-    return form[0]+"("+form[4]+"="+form[5]+") => ("+core.format_ioa(form[1], form[2])+")"+form[3];
+    VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
+    VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
+
+    return quant1.getQuantifierExp() +
+      core.format_ioa(quant1.getVarIndexed(0), quant2.getVarIndexed(0)) + quant1.getClosingExp();
   }
 
   public String format_esc() {
