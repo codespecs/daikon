@@ -679,24 +679,88 @@ it twice) in order to generate formatted versions of the manual
 
 <h3><a name="distribution">Making a distribution</a></h3>
 
-To publish a Daikon distribution, do
-<pre>
-  cd $inv
-  make use-ver2
-  make dist
-</pre>
-Before doing so, ensure that the <tt>doc/CHANGES</tt> file is up-to-date.
-After doing so, check the contents of the new tar file against those of the
-old one, to ensure that you have not inadvertently added files to the
-distribution that you should not have.
-Finally, send mail to the daikon-announce mailing list.
-<p>
+To publish a Daikon distribution, do the following.  If you only want
+to create the <tt>daikon.tar</tt> or <tt>daikon.tar.gz</tt> file, then
+simply run <tt>make</tt> with the desired file as the target. <p> <ol>
 
-<tt>make dist</tt> not only creates a tar file, but also updates version
-numbers, publishes the tar file to the web, updates webpages, and the like.
-If you just want to create the <tt>daikon.tar</tt> or
-<tt>daikon.tar.gz</tt> file, then run <tt>make</tt> with the desired file as the target.
-<p>
+    <li> It is suggested that you use the daikongroupmember account to
+    publish a distribution.  This insures that everything has been committed
+    to CVS and that nothing extraneous in your account gets included in the
+    distribution.  Ask Michael Ernst for the password.  Note that all of
+    the following instructions should work from other accounts as 
+    well <p>
+
+    <code> su - daikongroupmember </code> <p>
+
+    <li> Update daikon in daikongroupmember to the most recent version
+    of V2. <p>
+
+    <code> 
+        cd $inv <br>
+        make use-ver2 <br>
+        cvs update -d  <br>
+    </code> <p>
+
+    <li> Rebuild everything. <p>
+
+    <code>
+        cd java <br>
+        make <br>
+        cd $inv/doc <br>
+        make <br>
+        cd $inv/dfej <br>
+        make
+    </code> <p>
+
+    <li> Run the regression tests using the version of dfej that you
+    just built. All of the diff files should be of zero size when this
+    is complete.<p>
+
+    <code>
+        cd $inv/tests <br>
+        make clean <br>
+        make diffs DFEJ_EXECUTABLE=$inv/dfej/src/dfej<br>
+    </code> <p>
+
+    <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
+    in this version.  A good way to determine what has changed is to diff 
+    the texinfo source files in the doc directory against the previous 
+    versions: <p>
+
+    <code>
+        cd $inv/doc <br>
+        diff -u -s --from-file /home/httpd/html/daikon/dist/doc *.texinfo <br>
+    </code> <p>
+
+    <li> Make the distribution and update the website. <p>
+
+    <code>
+        cd $inv <br>
+        make dist <br>
+    </code> <p>
+
+    Note that <code>make dist</code> will automatically update the
+    version numbers in the source code and documentation from the file
+    <tt>doc/VERSION</tt>.  After doing so, it will correctly update
+    the version number in <tt>doc/VERSION</tt>.  This should not
+    require any hand intervention unless there is a problem near the
+    end of building the distribution and the <code>make dist</code>
+    command has to be run again after the version number has been
+    incremented.  In this case, simply edit <tt>doc/VERSION</tt> by
+    hand back to the correct version number before rebuilding. <p>
+
+    <li> Commit any changes back to CVS <p>
+
+    <code>
+        cd $inv <br>
+        cvs commit -m "Change version to `cat doc/VERSION`" <br>
+    </code>
+
+    <li> Send mail to the daikon-announce mailing list.  There are sample
+    messages in ~mernst/research/invariants/mail/daikon-lists.mail.
+
+</ol> <p>
+
 
 
 <h2><a name="reporting">Reporting on your research</a></h2>
