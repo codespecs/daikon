@@ -45,7 +45,7 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long v1, long v2, int count) {
@@ -115,6 +115,7 @@ public final class NonEqual extends TwoScalar {
           if (other_slice != null) {
             SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
             if ((sine != null) && sine.justified()) {
+              // System.out.println("Didn't realize SeqIndexNonEqual would be justified before NonEqual existed.");
               return true;
             }
           }

@@ -141,7 +141,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
   public String format_simplify() {
     String comparator = core.format_comparator();
-    if ("==".equals(comparator)) { comparator = "EQ"; }
+    if ("==".equals(comparator)) { comparator = "EQ"; } // "interned"
     return "(" + comparator + " " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
   }
 
@@ -346,6 +346,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
     }
 
     {
+      // (Is this test ever true?  Aren't SeqIntComparison and
+      // IntComparison instantiated at the same time?  Apparently not:  see
+      // the printStackTrace below.
+
       // For each sequence variable, if this is an obvious member, and
       // it has the same invariant, then this one is obvious.
       PptTopLevel pptt = (PptTopLevel) ppt.parent;
@@ -360,6 +364,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
                 && sic.core.can_be_eq == this.core.can_be_eq
                 && sic.core.can_be_lt == this.core.can_be_lt
                 && sic.core.can_be_gt == this.core.can_be_gt) {
+              // This DOES happen; verify by running on replace.c
+              // System.out.println("Surprise:  this can happen (var1 in IntComparison).");
+              // new Error().printStackTrace();
               return true;
             }
           }
@@ -373,6 +380,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
                 && sic.core.can_be_eq == this.core.can_be_eq
                 && sic.core.can_be_lt == this.core.can_be_gt
                 && sic.core.can_be_gt == this.core.can_be_lt) {
+              // This DOES happen
+              // System.out.println("Surprise:  this can happen (var2 in IntComparison).");
+              // new Error().printStackTrace();
               return true;
             }
           }
