@@ -14,6 +14,8 @@ import daikon.inv.ternary.threeScalar.*;
 
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.*;
+
 
 public class DiffTester extends TestCase {
 
@@ -47,7 +49,7 @@ public class DiffTester extends TestCase {
     return result;
   }
 
-  public DiffTester(String name) {
+  public DiffTester(String name) throws Exception {
     super(name);
 
     diffSome = new Diff();
@@ -81,6 +83,11 @@ public class DiffTester extends TestCase {
     ppts4.add(ppt2);
 
 
+    // Invoke private method using reflection
+    Method mAddViews = PptTopLevel.class.getDeclaredMethod
+      ("addViews", new Class[] {Vector.class});
+    mAddViews.setAccessible(true);
+
     {
       invs1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
@@ -99,7 +106,7 @@ public class DiffTester extends TestCase {
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
-      // ppt.addViews(v); JWN: XXX FIXME
+      mAddViews.invoke(ppt, new Object[] {v});
       invs1.add(ppt);
     }
 
@@ -122,7 +129,7 @@ public class DiffTester extends TestCase {
       v.add(slicey);
       v.add(slicex);
       v.add(slicez);
-      // ppt.addViews(v); JWN: XXX FIXME
+      mAddViews.invoke(ppt, new Object[] {v});
       invs2.add(ppt);
     }
 
@@ -144,7 +151,7 @@ public class DiffTester extends TestCase {
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
-      // ppt.addViews(v); JWN: XXX FIXME
+      mAddViews.invoke(ppt, new Object[] {v});
       invs3.add(ppt);
     }
 
