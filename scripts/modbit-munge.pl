@@ -2,13 +2,21 @@
 
 # Fix up mod bits for the argument .dtrace files.
 # "Missing" (numeric value = 2) modbits are never modified.
-# Modes:
-#   -allmod	Set all modbits to 1.
-#   -changed	Set modbits to 1 iff the printed representation has changed.
-#   -addchanged	Set modbits to 1 if the printed representation has changed.
-#               Leave other modbits as is.  This is the default.
-#   -random r   Set modbits to 1 with probability r, or if
-#		the printed representation has changed, and to 0 otherwise.
+# Arguments:
+#  -allmod	  Set all modbits to 1.
+#  -changed	  Set modbits to 1 iff the printed representation has changed.
+#  -addchanged	  Set modbits to 1 if the printed representation has changed.
+#                 Leave other modbits as is.  This is the default.
+#  -random r	  Set modbits to 1 with probability r, or if
+#		  the printed representation has changed, and to 0 otherwise.
+#  -random-half	  Like "-random .5"; for convenience.
+#  -random-prop	  Set modbits to 1 with the same probability as in the input
+#		  file (accounting for setting to 1 if representation changed).
+#		  This replaces the command
+#		    modbit-munge.pl -random `prop-modified.pl $file` $file
+
+
+## Superseded by modbit-count.pl
 #   -count	Don't set mod bits; just count the number of 0, 1, and 2,
 #		printing to standard error.  (Unfortunately, this also
 #		rewrites the file, changing its timestamp.)
@@ -27,8 +35,8 @@ BEGIN {
   $addchange = 0;
   $random = 0;
   $random_frac = 0;
-  $count = 0;
-  @counts = (0, 0, 0);
+  # $count = 0;
+  # @counts = (0, 0, 0);
 
   if ($action eq "-allmod") {
     $allmod = 1;
@@ -36,20 +44,31 @@ BEGIN {
     $changed = 1;
   } elsif ($action eq "-addchanged") {
     $addchange = 1;
+  } elsif ($action eq "-random-prop") {
+    $random = 1;
+    $random_frac = `prop-modified.pl @ARGV`;
+    chomp($random_frac);
+    # print STDERR "prop-modified = $random_frac for @ARGV\n"
+  } elsif ($action eq "-random-half") {
+    $random = 1;
+    $random_frac = .5;
   } elsif ($action eq "-random") {
     $random = 1;
     $random_frac = shift(@ARGV);
-    if (($random_frac == 0) && ($random_frac ne "0") && ($random_frac ne "0.0")) {
+    srand;			# not necessary in Perl 5.004 and later
+  } elsif ($action eq "-count") {
+    die "Use modbit-count.pl instead";
+    # $count = 1;
+  } else {
+    $addchange = 1;
+    unshift(@ARGV, $action);
+  }
+  if ($random) {
+    if (($random_frac == 0) && (($random_frac ne "0") && ($random_frac ne "0.0"))) {
       die "Argument to -random should be between 0 and 1; you supplied a non-number $random_frac";
     } elsif (($random_frac < 0) || ($random_frac > 1)) {
       die "Argument to -random should be between 0 and 1; you supplied $random_frac";
     }
-    srand;			# not necessary in Perl 5.004 and later
-  } elsif ($action eq "-count") {
-    $count = 1;
-  } else {
-    $addchange = 1;
-    unshift(@ARGV, $action);
   }
 }
 
@@ -77,15 +96,18 @@ if (/^$/) {
   if (! (($mod eq "0") || ($mod eq "1") || ($mod eq "2"))) {
     die "Bad modbit $mod for variable $var with value $val in $ppt";
   }
-  $counts[$mod]++;
+  # $counts[$mod]++;
   if ($mod == 2) {
     # nothing to do
   } else {
     $lastval = $last{$ppt}{$var};
-    if ($allmod) {
+    if ($val eq "uninit") {
+      # Hack for C front end, which produces modbits that are always "0" or "1"
+      $mod = 2;
+    } elsif ($allmod) {
       $mod = "1";
-    } elsif ($count) {
-      # do nothing
+    # } elsif ($count) {
+    #   # do nothing
     } elsif ($changed) {
       if ((! defined($lastval)) || ($val ne $lastval)) {
 	# print STDERR "changed because last $lastval != current $val\n";
@@ -117,9 +139,9 @@ if (/^$/) {
 }
 
 END {
-  if ($count) {
-    print STDERR "Unmodified: $counts[0]\n";
-    print STDERR "Modified: $counts[1]\n";
-    print STDERR "Missing: $counts[2]\n";
-  }
+  # if ($count) {
+  #   print STDERR "Unmodified: $counts[0]\n";
+  #   print STDERR "Modified: $counts[1]\n";
+  #   print STDERR "Missing: $counts[2]\n";
+  # }
 }
