@@ -190,9 +190,11 @@ C/C++ front end dfec
 
 Extending Daikon
 
+* Compiling Daikon::            
 * New invariants::              
 * New derived variables::       
 * New formatting for invariants::  
+* New front ends::              
 
 Troubleshooting
 
@@ -225,6 +227,7 @@ Reporting bugs
 
 Details
 
+* History::                     
 * License::                     
 * Credits::                     
 
@@ -2395,13 +2398,14 @@ This document is available online at
 
 
 @menu
-* Compiling Daikon::
+* Compiling Daikon::            
 * New invariants::              
 * New derived variables::       
 * New formatting for invariants::  
+* New front ends::              
 @end menu
 
-@node    Compiling Daikon, New derived variables, Extending Daikon, Extending Daikon
+@node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
 @section Compiling Daikon
 @cindex compiling daikon
 
@@ -2426,7 +2430,7 @@ compiler:
 For more information about copmiling Daikon, see the comments in the Makefiles.
 
 
-@node    New invariants, New derived variables, Extending Daikon, Extending Daikon
+@node    New invariants, New derived variables, Compiling Daikon, Extending Daikon
 @section New invariants
 
 You can easily write your own invariants and have Daikon check them,
@@ -2544,7 +2548,7 @@ to @samp{SingleScalarFactory.instantiate}.
 (To be written)
 
 
-@node    New formatting for invariants,  , New derived variables, Extending Daikon
+@node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
 @section New formatting for invariants
 
 Daikon can print invariants in three formats:  its native format, ESC
@@ -2564,7 +2568,7 @@ method, near the calls to the other formatting methods.
 @end itemize
 
 
-@node    New front ends,  , New derived variables, Extending Daikon
+@node    New front ends,  , New formatting for invariants, Extending Daikon
 @section New front ends
 
 @cindex front end, writing
@@ -2577,14 +2581,14 @@ For more information about these files, @xref{File formats}.
 Conceptually, instrumentation is very simple.  For instance, suppose we
 wish to instrument file @file{Example.java}.
 @example
-class Example {
+class Example @{
   // Return either the square of x or the square of (x+1).
-  int squar(int x, boolean b) {
+  int squar(int x, boolean b) @{
     if (b)
       x++;
     return x*x;
-  }
-}
+  @}
+@}
 @end example
 
 The @file{.decls} file might look like the following.
@@ -2618,14 +2622,14 @@ int
 
 The instrumented @file{.java} file might look like the following.
 @example
-class Example {
-  static {
+class Example @{
+  static @{
     daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
-  }
+  @}
 
   // Return either the square of x or the square of (x+1).
-  int squar(int x, boolean b) {
-    synchronized (daikon.Runtime.dtrace) {
+  int squar(int x, boolean b) @{
+    synchronized (daikon.Runtime.dtrace) @{
       daikon.Runtime.dtrace.println();
       daikon.Runtime.dtrace.println("Example.squar:::ENTER");
       daikon.Runtime.dtrace.println("x");
@@ -2634,13 +2638,13 @@ class Example {
       daikon.Runtime.dtrace.println("b");
       daikon.Runtime.dtrace.println(b ? 1 : 0);
       daikon.Runtime.dtrace.println(1);  // modified bit
-    }
+    @}
 
     if (b)
       x++;
 
     int daikon_return_value = x*x;
-    synchronized (daikon.Runtime.dtrace) {
+    synchronized (daikon.Runtime.dtrace) @{
       daikon.Runtime.dtrace.println();
       daikon.Runtime.dtrace.println("Example.squar:::EXIT");
       daikon.Runtime.dtrace.println("x");
@@ -2652,11 +2656,11 @@ class Example {
       daikon.Runtime.dtrace.println("return");
       daikon.Runtime.dtrace.println(daikon_return_value);
       daikon.Runtime.dtrace.println(1);  // modified bit
-    }
+    @}
 
     return daikon_return_value;
-  }
-}
+  @}
+@}
 @end example
 
 
@@ -2998,11 +3002,12 @@ Dynamically
 
 
 @menu
+* History::                     
 * License::                     
 * Credits::                     
 @end menu
 
-@node    History, Credits, Details, Details
+@node    History, License, Details, Details
 @section History
 @cindex history of Daikon
 
@@ -3042,7 +3047,7 @@ procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the distribution.
 
 
-@node    License, Credits, Details, Details
+@node    License, Credits, History, Details
 @section License
 
 
