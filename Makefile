@@ -37,8 +37,8 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 DIST_DIR := /home/httpd/html/daikon/dist
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 # Files that appear in the top level of the distribution directory
-DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon-logo.gif daikon.jar
-DIST_DIR_PATHS := daikon-source.tar.gz daikon-jar.tar.gz doc/images/daikon-logo.gif daikon.jar
+DIST_DIR_FILES := daikon-source.tar.gz daikon-compiled.tar.gz daikon-logo.gif daikon.jar
+DIST_DIR_PATHS := daikon-source.tar.gz daikon-compiled.tar.gz doc/images/daikon-logo.gif daikon.jar
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
@@ -48,6 +48,7 @@ DIST_DIR_2 := $(DIST_DIR)
 
 CVS_REP := /g4/projects/invariants/.CVS/
 RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
+TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
 
 # for "chgrp"
 INV_GROUP := invariants
@@ -76,7 +77,7 @@ help:
 	@echo " junit test"
 	@echo " tags TAGS"
 	@echo "Creating the Daikon distribution:"
-	@echo " daikon-jar.tar daikon-source.tar daikon.jar"
+	@echo " daikon-compiled.tar daikon-source.tar daikon.jar"
 	@echo " dist dist-force"
 	@echo " dist-edg dist-edg-solaris"
 	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
@@ -124,7 +125,7 @@ test-the-dist: dist-ensure-directory-exists
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
-	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR) all_javac)
+	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR):$(TOOLSJAR) all_javac)
 	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
@@ -136,7 +137,7 @@ cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
 	cd $(TESTCVS) && cvs -Q -d $(CVS_REP) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/log4j.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR)
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/log4j.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
 
 
 ###########################################################################
@@ -175,12 +176,12 @@ doc/CHANGES: doc/daikon.texinfo
 
 # Is this the right way to do this?
 dist-force:
-	-rm -f daikon-source.tar.gz daikon-jar.tar.gz
+	-rm -f daikon-source.tar.gz daikon-compiled.tar.gz
 	$(MAKE) dist
 
 # 	echo CLASSPATH: $(CLASSPATH)
 # 	# echo DAIKON_JAVA_FILES: ${DAIKON_JAVA_FILES}
-# 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
+# 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR):$(TOOLSJAR)
 
 # Given up-to-date .tar files, copies them (and documentation) to
 # distribution directory (ie, webpage).
@@ -280,7 +281,7 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 	mv /tmp/ajax-jar/ajax.jar $@
 	rm -rf /tmp/ajax-jar
 
-# Use this ordering because daikon-jar is made before daikon-source
+# Use this ordering because daikon-compiled is made before daikon-source
 
 DAIKONBUILD=/tmp/daikon.build
 
@@ -291,7 +292,7 @@ DAIKONBUILD=/tmp/daikon.build
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
+daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
 	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -319,10 +320,10 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
-	# Now we are ready to make the daikon-jar distribution
+	# Now we are ready to make the daikon-compiled distribution
 	cp -p daikon.jar /tmp/daikon
-	(cd /tmp; tar cf daikon-jar.tar daikon)
-	cp -pf /tmp/daikon-jar.tar .
+	(cd /tmp; tar cf daikon-compiled.tar daikon)
+	cp -pf /tmp/daikon-compiled.tar .
 
 	## Now make the daikon-source distribution
 	# First add some more files to the distribution
@@ -414,7 +415,7 @@ daikon-source.tar.gz: daikon-source.tar
 	-rm -rf $@
 	gzip -c $< > $@
 
-daikon-jar.tar.gz: daikon-jar.tar
+daikon-compiled.tar.gz: daikon-compiled.tar
 	-rm -rf $@
 	gzip -c $< > $@
 

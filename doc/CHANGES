@@ -7,7 +7,13 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.4 (February 17):
+2.3.5 (1 March 2002):
+
+Add --files_from command-line argument to Daikon.
+
+Add -a and -l command-line arguments to Diff.
+
+2.3.4 (17 February 2002):
 
 Add four new programs to the distribution:
   createspinfo.pl trace-untruncate trace-purge-fns.pl trace-purge-vars.pl
@@ -18,7 +24,7 @@ Manual enhancements:
  * Add text about two new GUI filters.
  * Typo fixes.
 
-2.3.3 (February 11):
+2.3.3 (11 February 2002):
 
 Add new flags to Diff program.
 

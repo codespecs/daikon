@@ -15,6 +15,11 @@
 @c http://pag.lcs.mit.edu/daikon/
 @c @end macro
 
+@c Problem: with texinfo 4.0, the HTML formatting leaves the "{}" after
+@c uses of the macro.  (Formatting seems fine for info, for printing, etc.)
+@c So for now, I have inlined all instances of the macro.  Yuck.
+@c Another solution would be to use "makeinfo -E" (then process the
+@c resulting file with "makeinfo --html").
 @macro daikonemail{}
 @email{daikon@@pag.lcs.mit.edu}
 @end macro
@@ -36,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.4
+@center Daikon version 2.3.5
 
 @sp 1
-@c Daikon version 2.3.4 date
-@center February 17, 2002
+@c Daikon version 2.3.5 date
+@center March  1, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,7 +64,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.4, released February 17, 2002.
+It describes Daikon version 2.3.5, released March  1, 2002.
 
 @end html
 
@@ -291,15 +296,20 @@ Examples
 @chapter Introduction
 
 The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
-reports properties that are likely to hold at certain points in a
-program.  The reported properties are arithmetic equations such as you
-might write in an assert statement or a formal specification; for
-example, "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0 (mod 4)".  These
-invariants can be useful in program understanding and a host of other
+reports likely program invariants.  An invariants is a property that
+holds a a certain point or points in a program; these are often seen in
+assert statements, documentation, and formal specifications.  Examples
+include arithmetic equations such as "x > abs(y)", "x = 3*y + 4*z - 7",
+or "x = 0 (mod 4)", and properties over arrays and other collections,
+including those accessed via pointers.  Daikon also reports implications
+(invariants whose truth depends on some other property), such as "p !=
+null => p.content in elementcollection".
+
+Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining the
 values it computes, looking for patterns and relationships among those
-values.  Front ends (@pxref{Instrumentation}) exist for Java and for C
-and C++.
+values.  Front ends (@pxref{Instrumentation}) exist for the Java, C, and
+IOA languages; it is easy to extend Daikon to other applications.
 
 
 @node    Installing, Example use, Introduction, Top
@@ -322,7 +332,7 @@ from @uref{http://pag.lcs.mit.edu/daikon/download/}.
 
 There are two distributions to choose from.  The pre-compiled
 distribution,
-@uref{http://pag.lcs.mit.edu/daikon/download/daikon-jar.tar.gz,,@file{daikon-jar.tar.gz}},
+@uref{http://pag.lcs.mit.edu/daikon/download/daikon-compiled.tar.gz,,@file{daikon-compiled.tar.gz}},
 permits you to run Daikon and to detect invariants, but does not permit
 you to modify Daikon or to rebuild it.  The source distribution,
 @uref{http://pag.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
@@ -331,7 +341,7 @@ plus sources for Daikon and for dfej.
 
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS.  Send email to
-@daikonemail{} if you desire such access.
+@email{daikon@@pag.lcs.mit.edu} if you desire such access.
 
 @cindex @var{parent} directory
 @item
@@ -447,7 +457,7 @@ The easiest approach is to download a precompiled version of @file{dfej}
 from @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that
 executable somewhere on your path, and you are ready to run dfej.  (If
 no executable is available for your architecture, send mail to
-@daikonemail{} and we may be able to produce an executable for you.)
+@email{daikon@@pag.lcs.mit.edu} and we may be able to produce an executable for you.)
 
 @item
 Alternately, you can build dfej from the sources which are included in
@@ -521,7 +531,7 @@ Obtain a dfec executable.
 The easiest approach is to download a precompiled version of dfec from
 @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that executable
 somewhere on your path.  (If no executable is available for your
-architecture, send mail to @daikonemail{} and we may be able to produce
+architecture, send mail to @email{daikon@@pag.lcs.mit.edu} and we may be able to produce
 an executable for you.)
 
 @cindex EDG C/C++ front end
@@ -734,11 +744,20 @@ The invariants are printed to standard output, and a binary
 representation of the invariants is written to
 @file{StackAr.inv}.
 
-@item Examine the invariants.  There are three ways to do this.
+@item Examine the invariants.  There are four ways to do this.
 @itemize @bullet
 @item Examine the output from running Daikon.  (You may find it
 convenient to capture the output in a file; add @command{> StackAr.txt}
 to the end of the command that runs Daikon.)
+
+@item Use the PrintInvariants program to display the invariants.
+
+@example
+java daikon.PrintInvariants StackAr.inv
+@end example
+
+For more options to the PrintInvariants program, @xref{Printing
+invariants}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 contains a tree which hierarchically organizes program points according
@@ -1148,7 +1167,7 @@ includes the @file{daikon/java} directory itself.  For example, to
 create a link to the @file{daikon/java} directory, type (while in the
 @file{daikon-instrumented/} directory):
 @example
-ln -s @var{parent}/daikon/java .
+ln -s $DAIKONDIR/java/daikon .
 @end example
 
 @item
@@ -1179,6 +1198,8 @@ Run the Daikon invariant detector via the command
 @example
     java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...}
 @end example
+
+(For help in interpreting the output, @xref{Interpreting output}.)
 
 The @var{decl-files} are declaration (@file{.decl}) files created at
 instrumentation time.
@@ -1416,9 +1437,10 @@ Daikon does not display redundant invariants --- those that are implied
 by other invariants in the output --- because such results would merely
 clutter the output without adding any valuable information.  For
 instance, if Daikon reports ``x==y'', then it never also reports
-``x-1==y-1''.  You can print all invariants, even redundant ones by
+``x-1==y-1''.  (You can print all invariants, even redundant ones, by
 saving the invariants to a @file{.inv} file and then using the
-PrintInvariants or Diff programs to print the results.
+PrintInvariants (@pxref{Printing invariants}) or Diff (@pxref{Invariant
+Diff}) programs to print the results.)
 
 @menu
 * Program points::              
@@ -1475,13 +1497,6 @@ The Java instrumenter dfej selects names for program points that include
 an indication of the argument and return types for each method.  These
 signatures are presented in the JVML format:  one character for each
 primitive type (@samp{B} for byte, @samp{C} for character, @samp{Z} for
-boolean, etc.); @samp{L}@var{classname}@samp{;} for object types; and a
-@samp{[} prefix for each level of array nesting.
-
-The Java instrumenter dfej selects names for program points that include
-an indication of the argument and return types for each method.  These
-signatures are presented in the JVML format:  one character for each
-primitive type (@samp{B} for byte, @samp{C} for character, @samp{Z} for
 boolean (so as not to clash with byte), etc.);
 @samp{L}@var{classname}@samp{;} for object types; and a @samp{[} prefix
 for each level of array nesting.
@@ -1497,6 +1512,9 @@ for each level of array nesting.
 @cindex negative array index (counts from end of array)
 @cindex @code{a[]} variable (array contents)
 
+Here is an incomplete list of the conventions used by Daikon for
+variable names.
+
 @itemize @bullet
 @item
 @code{orig(x)} refers to the value of formal parameter @code{x} upon
@@ -1508,8 +1526,8 @@ points.
 comparison over hash codes
 @item
 @code{a.class} is the runtime type of @code{a}, which may
-differ from its declared type for arrays of non-primitive type;
-"a.class" is omitted for arrays of primitive type
+differ from its declared type
+@c "a.class" is omitted for arrays of primitive type
 @item
 @code{a[]} is the contents of array @code{a}, namely a sequence of
 elements; "a=b" implies "a[]=b[]" but the reverse is not true
@@ -1534,7 +1552,9 @@ option.
 @node    Invariant syntax,  , Variable names, Interpreting output
 @subsection Invariant syntax
 
-(Eventually, see the JML manual, when all output is done in JML form.)
+(We eventually hope to make Daikon produce output in JML format; when
+that is the case, this section of the manual will simply refer the
+reader to the @uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML Manual}.)
 
 @cindex has only one value, in invariant output
 
@@ -1873,8 +1893,8 @@ at other invariants.  Some examples are:
 
 @item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
 obvious and will not be displayed by default.
-@item If ``this.topOfStack<size(this.theArray[])-1'' is shown, then
-``this.topOfStack<size(this.theArray[])'' is obvious and will not be
+@item If ``this.topOfStack < size(this.theArray[])-1'' is shown, then
+``this.topOfStack < size(this.theArray[])'' is obvious and will not be
 displayed by default.
 @end itemize
 
@@ -3184,7 +3204,7 @@ This document is available online at
 @cindex compiling daikon
 
 To compile Daikon, type @command{make} in any directory under
-@file{@var{parent}/daikon/java/}.  The distribution includes compiled
+@file{daikon/java/}.  The distribution includes compiled
 @file{.class} files, so you do not need to compile them yourself unless
 you make changes.
 
@@ -3757,7 +3777,7 @@ your system administrator to do so.
 
 If you have any questions, can suggest ways to improve the documentation,
 find bugs in the system, or have suggestions for its improvement, please
-send email to @daikonemail{}.  While Daikon is a research prototype,
+send email to @email{daikon@@pag.lcs.mit.edu}.  While Daikon is a research prototype,
 we will try to assist you and to correct any problems, so please don't
 hesitate to ask for help or report difficulties.
 
@@ -3845,7 +3865,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.4, released February 17, 2002.
+This manual describes Daikon version 2.3.5, released March  1, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -3900,9 +3920,9 @@ of use, you agree to promptly communicate any changes, improvements, or
 enhancements to the authors for inclusion in a future release under
 these same conditions.  If you do not agree to this license, please do
 not use or examine the software.  For other licensing terms, send mail
-to @daikonemail{}.
+to @email{daikon@@pag.lcs.mit.edu}.
 
-If you use Daikon, please send mail to @daikonemail{}, so that you can
+If you use Daikon, please send mail to @email{daikon@@pag.lcs.mit.edu}, so that you can
 be informed of new versions, enhancements, and bug fixes.  We would also
 appreciate a brief description of how you are using Daikon, because we
 are curious about how users exploit it (and are eager for anecdotes about
