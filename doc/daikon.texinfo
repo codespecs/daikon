@@ -3293,6 +3293,24 @@ to the current directory.
 @end table
 
 
+@cindex trace file size, limiting
+@cindex limiting trace file size
+The following two environment variables can control the size of your
+trace file.  (There aren't currently dfej command-line arguments to
+default the set these, but there probably should be.)
+
+@cindex DTRACELIMIT environment variable
+@cindex environment variable DTRACELIMIT
+@cindex DTRACELIMITTERMINATE environment variable
+@cindex environment variable DTRACELIMITTERMINATE
+Environment variable DTRACELIMIT is a number of records, after which the
+instrumented program will continue to run but will close the
+@file{.dtrace} and produce no more output to it.  If environment
+variable DTRACELIMITTERMINATE is set to "true", then the instrumented
+program halts (with exit code 1) when the specified number of records is
+output.
+
+
 @node    Scope of instrumentation, Refined runtime types, dfej options, Java front end dfej
 @subsection Controlling what classes are instrumented
 
