@@ -39,8 +39,8 @@ public final class Daikon {
 		throw new Error("do not instantiate");
 	}
 
-	public final static String release_version = "3.1.2";
-	public final static String release_date = "August 3, 2004";
+	public final static String release_version = "3.1.3";
+	public final static String release_date = "September 1, 2004";
 	public static final String release_string =
 		"Daikon version "
 			+ release_version
@@ -94,11 +94,11 @@ public final class Daikon {
 	 * exit points from a method.
 	 **/
 	public static boolean dkconfig_disable_splitting = false;
-	
+
 	/**
 	 * Boolean.  Controls whether or not processing information is printed out.
-	 * Setting variable to true also automatically sets dkconfig_progress_delay to -1.
-	 * Default value is false.
+	 * Setting variable to true also automatically sets dkconfig_progress_delay
+     * to -1.
 	 **/
 	public static boolean dkconfig_quiet = false;
 
@@ -146,11 +146,11 @@ public final class Daikon {
 	public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
 	/**
-	 * Boolean.  Controls whether the Daikon optimizations (equality sets, 
-	 * suppressions) are undone at the end to create a more complete set of invariants.
-	 * Output does not include conditional program points, implications, reflexive and
+	 * Boolean.  Controls whether the Daikon optimizations (equality
+	 * sets, suppressions) are undone at the end to create a more
+	 * complete set of invariants.  Output does not include
+	 * conditional program points, implications, reflexive and
 	 * partially reflexive invariants.
-	 * Default is false.
 	 **/
 	public static boolean dkconfig_undo_opts = false;
 
@@ -389,9 +389,9 @@ public final class Daikon {
 			Daikon.dkconfig_disable_splitting = true;
 		}
 
-		if(Daikon.dkconfig_quiet) 
+		if(Daikon.dkconfig_quiet)
 			Daikon.dkconfig_progress_delay= -1;
-			
+
 		// Set up debug traces; note this comes after reading command line options.
 		LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
@@ -454,7 +454,7 @@ public final class Daikon {
 
 		// Only for assertion checks
 		isInferencing = true;
-		
+
 		// Infer invariants
 		process_data(all_ppts, dtrace_files);
 		isInferencing = false;
@@ -520,15 +520,15 @@ public final class Daikon {
 						if (!((x.ppt instanceof PptSlice2)
 							&& vars[0] == vars[1])) {
 
-							//  filter out the reflexive and partially reflexive invs in the 
+							//  filter out the reflexive and partially reflexive invs in the
 							//ternary slices
 							if (!((x.ppt instanceof PptSlice3)
 								&& (vars[0] == vars[1]
 									|| vars[1] == vars[2]
 									|| vars[0] == vars[2]))) {
-										
+
 										if(x.isActive()) {
-										
+
 								System.out.println(x.getClass());
 								System.out.println(x);
 										}
@@ -1783,9 +1783,9 @@ public final class Daikon {
 		throw new Error("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
 	}
 
-	/** Undoes the invariants suppressed for the dynamic constant, suppression and equality set 
+	/** Undoes the invariants suppressed for the dynamic constant, suppression and equality set
 	*  optimizations (should yield the same invariants as the simple incremental algorithm
-	* 
+	*
 	*/
 	private static void undoOpts(PptMap all_ppts) {
 
@@ -1799,7 +1799,7 @@ public final class Daikon {
 
 		}
 
-		//undo dynamic constants: nothing needs to be done because there is 
+		//undo dynamic constants: nothing needs to be done because there is
 		//already post processing for constants
 		//	Iterator dynamic_it = all_ppts.ppt_all_iterator();
 
@@ -1809,14 +1809,14 @@ public final class Daikon {
 
 			PptTopLevel ppt = (PptTopLevel) equality_it.next();
 			PptSliceEquality sliceEquality = ppt.equality_view;
-			
+
 			//some program points have no equality sets?
 		//	if(sliceEquality == null) {
 				//System.out.println(ppt.name);
 		//		continue;
-		//	}	
-				
-			
+		//	}
+
+
 			Iterator sets = sliceEquality.invs.iterator();
 			List /*[Equality]*/
 			allNewInvs = new ArrayList();

@@ -333,7 +333,7 @@ www-dist:
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/${USER}/daikon-jar
-	mkdir /tmp/${USER}/daikon-jar
+	install -d /tmp/${USER}/daikon-jar
 	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
