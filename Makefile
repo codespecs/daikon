@@ -141,6 +141,8 @@ cvs-test:
 
 # Main distribution
 
+# This not only creates .tar files, but also installs a new
+# distribution, updates webpages, tests the distributionn, etc.
 dist: dist-and-test
 
 # Both make and test the distribution.
@@ -170,7 +172,7 @@ dist-force:
 # 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
 
 # Given up-to-date .tar files, copies them (and documentation) to
-# distribution directory.
+# distribution directory (ie, webpage).
 update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) update-doc-dist-date
 	$(MAKE) update-doc-dist-version
@@ -179,6 +181,8 @@ update-dist-dir: dist-ensure-directory-exists
 	# a method or class with more than 0xFFFF bytecodes.
 	cd java/daikon && $(MAKE) all_via_javac 
 	cd java/daikon && $(MAKE) junit
+	# "make" in doc directory will fail the first time
+	-cd doc && $(MAKE) html html-chap
 	cd doc && $(MAKE) html html-chap
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
@@ -252,6 +256,13 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 
 DAIKONBUILD=/tmp/daikon.build
 
+# This rule creates the files that comprise the distribution, but does
+# not copy them anywhere.
+# This rule could be changed to check out a fresh version of the
+# repository, then tar from there.  Then there would be no need to be so
+# careful about not including extraneous files in the distribution, and one
+# could make a distribution even if there were diffs in the current
+# checkout.
 daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
 	# html-update-toc daikon.html
 
