@@ -409,17 +409,20 @@ If you wish to create a new section of the manual, insert two lines like
 the following:
 <blockquote>
 <pre>
-@node    Short title, Foo, Bar, Baz
-@chapter Long title
+@node    <em>Short title</em>, Foo, Bar, Baz
+@<em>chapter</em> <em>Long title</em>
 </pre>
 </blockquote>
-where "Foo", "Bar", and "Baz" are arbitrary, you select the short and the
-long titles (which may even be the same), and you may replace "@chapter" by
-"@section", "@subsection", or "@subsubsection".
+where you should insert "Foo, Bar, Baz" literally (they will be fixed up
+for you automatically), you select the short and the long titles (which may
+even be the same), and you may replace "@chapter" by "@section",
+"@subsection", or "@subsubsection".
 
 <p>
-Then, just run <tt>make</tt> to update the menus and other cross-references
-(including the "Foo" and "Bar" and "Baz").
+Once you have edited the manual, run <tt>make</tt> twice (yes, you must run
+it twice) in order to generate formatted versions of the manual
+(<tt>daikon.{html,info,ps,pdf}</tt>).
+<p>
 
 
 <h2><a name="code-conventions">Coding conventions</a></h2>
