@@ -1129,12 +1129,13 @@ public final class UtilMDE {
    * delimiter between them.
    * @see java.util.Vector#toString
    **/
-  public static String join(Vector v, String delim) {
+  public static String join(List v, String delim) {
     if (v.size() == 0) return "";
-    if (v.size() == 1) return v.elementAt(0).toString();
-    StringBuffer sb = new StringBuffer(v.elementAt(0).toString());
+    if (v.size() == 1) return v.get(0).toString();
+    // This should perhaps use an iterator rather than get().
+    StringBuffer sb = new StringBuffer(v.get(0).toString());
     for (int i=1; i<v.size(); i++)
-      sb.append(delim).append(v.elementAt(i));
+      sb.append(delim).append(v.get(i));
     return sb.toString();
   }
 
