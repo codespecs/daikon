@@ -15,6 +15,10 @@ public class ParentFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant inv ) {
 
+    // If there are no parents, can't discard
+    if (inv.ppt.parent.parents == null)
+      return (false);
+
     // Loop through each parent ppt
     outer: for (int i = 0; i < inv.ppt.parent.parents.size(); i++) {
 
