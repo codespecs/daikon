@@ -79,6 +79,7 @@ It describes Daikon version 2.3.5, released March  1, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
+It describes Daikon version 2.3.5, released March  1, 2002.
 @end ifnottex
 
 @menu
@@ -1566,7 +1567,8 @@ option.
 
 (We eventually hope to make Daikon produce output in JML format; when
 that is the case, this section of the manual will simply refer the
-reader to the @uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML Manual}.)
+reader to the @uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML
+Manual}.  Daikon's current ESC output format is a variant of JML format.)
 
 @cindex has only one value, in invariant output
 
@@ -3248,12 +3250,16 @@ distribution.
 @node    MergeESC,  , Tools, Tools
 @section MergeESC
 
+@cindex MergeESC tool
+@cindex ESC output format
+@cindex output format, ESC
+
 The MergeESC program inserts Daikon-generated invariants into Java
 source code as ESC/JML annotations.  These annotations are comments that
 can be automatically verified or otherwise manipulated by other tools.
 Invoke MergeESC like this:
 @example
-  java daikon.tools.jtb.MergeESC Myprog.inv Myprog.java Myproghelper.java ...
+  java daikon.tools.jtb.MergeESC Myprog.inv Myprog.java Myprog2.java ...
 @end example
 
 The first argument is a Daikon @file{.inv} file produced by running
@@ -3438,6 +3444,8 @@ to @samp{SingleScalarFactory.instantiate}.
 
 @node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
 @section New formatting for invariants
+
+@cindex output format, defining new
 
 Daikon can print invariants in three formats:  its native format, ESC
 format (which is a subset of the JML specification language), and
@@ -3659,6 +3667,28 @@ You may be able to work around this by running dfej on other files of
 your application, but not those with anonymous classes.
 
 
+@node    Ajax errors, Simplify errors, Out of memory, Daikon problems
+@subsubsection Ajax errors
+
+@cindex Ajax, problem with
+
+The warning ``Problem with Ajax; using original .decls files instead''
+indicates that the Ajax variable comparator could not run.  Ajax
+indicates which variables are comparable to which other variables.  This
+information can reduce the amount of spurious output from Daikon by
+preventing it from making spurious comparisons and reporting irrelevant
+output.  For example, two integer variables that never appear together
+in an expression (and that don't appear with variables that appear
+together, etc.)@ should not be compared to one another, because those
+variables are likely to be entirely unrelated and any properties over
+them are incidental and uninformative.
+
+As of December 2001, Ajax cannot deal with JDK 1.2 (or later) libraries,
+and it sometimes has other problems.  If Ajax cannot be run, then a more
+primitive method of determining comparability is used instead.  Even if
+Ajax cannot be run, Daikon proceeds without error.
+
+
 @c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
 @c @section Problems running instrumented code
 
@@ -3736,24 +3766,6 @@ you may wish to suppress their creation.  (This manual does not
 presently tell you how to do that.)
 
 Any output generated before the out-of-memory error is perfectly valid.
-
-
-@node    Ajax errors, Simplify errors, Out of memory, Daikon problems
-@subsection Ajax errors
-
-@cindex Ajax, problem with
-
-The warning ``Problem with Ajax; using original .decls files instead''
-indicates that the Ajax variable comparator could not run.  Ajax
-ordinarily indicates which variables are comparable to which other
-variables.  This information can reduce the amount of spurious output
-from Daikon by preventing it from making spurious comparisons and
-reporting irrelevant output.  As of December 2001, Ajax cannot deal with
-JDK 1.2 (or later) libraries, and it sometimes has other problems.  If
-Ajax cannot be run, then a more primitive method of determining
-comparability is used instead.  Even if Ajax cannot be run, Daikon
-proceeds without error.
-
 
 
 @node    Simplify errors,  , Ajax errors, Daikon problems
