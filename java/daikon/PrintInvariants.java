@@ -467,7 +467,8 @@ public class PrintInvariants {
             if (vi == null) {
               ppt.findVar_debugging(((VarInfoName.Field)vin).term);
               System.out.println("Failed findVar(" + ((VarInfoName.Field)vin).term.name() + ") from " + vin.name() + " at " + ppt.name);
-              System.out.println(vi.repr());
+              // Don't do this:  vi is null!
+              // System.out.println(vi.repr());
             }
             Assert.assertTrue(vi != null);
           } else if (derived instanceof SequenceScalarSubscript) {
