@@ -313,7 +313,7 @@ public final class CLASSNAME
     // one and it has the same invariant, then this one is obvious.
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
-      if (SUBSEQUENCE.isObviousSubSequenceDynamically(seqvar, vi)) {
+      if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, seqvar, vi)) {
         PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar);
         if (other_slice != null) {
           CLASSNAME other_sic = CLASSNAME.find(other_slice);
