@@ -94,15 +94,15 @@ list_java_files:
 # "-e" means exit immediately if any error, rather than returning 
 # the status of the last command.
 
-JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
+JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 ## Here are alternate ways of writing the same command:
 ## I could use "define", but that's specific to GNU Make
 ## I can't do this because the CPP defined variable changes.
 # JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@; chmod -w $@)
 ## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
-# JAVA_CPP_START = (mv -f $@ $@-bak; set -e; java-cpp $<
-# JAVA_CPP_END = > $@; chmod -w $@)
+# JAVA_CPP_START = (cp -pf $@ $@-bak; set -e; java-cpp $<
+# JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 
 inv/scalar/LowerBound.java: inv/scalar/Bound-cpp.java
@@ -140,5 +140,7 @@ PptSlice3.java: PptSlice-cpp.java
 # Existence of this rule means that a target is deleted if has just changed
 # and its rule commands exit with nonzero status.  It's needed for the
 # java-cpp rules above.
+# (Actually, it isn't anymore, for I arrange not to overwrite the file
+# unless success.  But leave it in for now anyway.)
 
 .DELETE_ON_ERROR:
