@@ -50,7 +50,6 @@ public class DaikonSimple {
 	public static void main(String[] args)
 		throws IOException, FileNotFoundException {
 
-
 		//set up logs
 		daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
@@ -87,22 +86,41 @@ public class DaikonSimple {
 		SimpleProcessor processor = new SimpleProcessor();
 		FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
 
-//		print out the invariants for each program point (sort first)
-				Iterator it = all_ppts.ppt_all_iterator();
-				while (it.hasNext()) {
-					PptTopLevel ppt = (PptTopLevel) it.next();
-					List invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
+
+		//		print out the invariants for each program point (sort first)
+		Iterator t = all_ppts.pptIterator();
+
+				while (t.hasNext()) {
+					PptTopLevel ppt = (PptTopLevel) t.next();
+					List invs =
+						PrintInvariants.sort_invariant_list(ppt.invariants_vector());
 					Iterator i = invs.iterator();
-					System.out.println("====================================================");
-					System.out.println(ppt.name());
+
+					System.out.println("===================================================+");	
+					System.out.println(ppt.name() + " +");
 					while (i.hasNext()) {
-						Invariant next = (Invariant) i.next();
-						System.out.println(next.getClass());
-						System.out.println(next);
-						
+						Invariant x = (Invariant) i.next();
+						VarInfo[] vars = x.ppt.var_infos;
+
+						//this is the most non-intrusive way to filter out the invs
+//						//filter out reflexive invariants in the binary invs
+						if (!((x.ppt instanceof PptSlice2) && vars[0] == vars[1])) {
+
+							//filter out the reflexive and partially reflexive invs in the 
+							//ternary slices
+							if (!((x.ppt instanceof PptSlice3)
+								&& (vars[0] == vars[1]
+									|| vars[1] == vars[2]
+									|| vars[0] == vars[2]))) {
+								System.out.println(x.getClass());
+								System.out.println(x);
+						}
 					}
 				}
-				
+				}
+				System.exit(0);
+						
+		//				
 		// Write serialized output
 		// Unresolved problem: the current implementation of PrintInvariants, taking 
 		//in an inv file will guard the invariants before printing them out but this problem
@@ -324,12 +342,12 @@ public class DaikonSimple {
 	   * the views (and thus candidate invariants), but does not check
 	   * those invariants.
 	   **/
-	  public static void instantiate_views_and_invariants(PptTopLevel ppt) {		
+	public static void instantiate_views_and_invariants(PptTopLevel ppt) {
 		// Now make all of the views (and thus candidate invariants)
 		instantiate_views(0, ppt.var_infos.length, ppt);
 
-	  }
-	  
+	}
+
 	/**
 	  * Install views and the invariants.  We create NO views over static
 	  * constant variables, but everything else is fair game.  We don't
@@ -341,330 +359,323 @@ public class DaikonSimple {
 	  * we also assume that vi_index_limit == var_infos.length.)
 	  **/
 
-	 // Note that some slightly inefficient code has been added to aid
-	 // in debugging.  When creating binary and ternary views and debugging
-	 // is on, the outer loops will not terminate prematurely on innapropriate
-	 // (ie, non-canonical) variables.  This allows explicit debug statements
-	 // for each possible combination, simplifying determining why certain
-	 // slices were not created.
+	// Note that some slightly inefficient code has been added to aid
+	// in debugging.  When creating binary and ternary views and debugging
+	// is on, the outer loops will not terminate prematurely on innapropriate
+	// (ie, non-canonical) variables.  This allows explicit debug statements
+	// for each possible combination, simplifying determining why certain
+	// slices were not created.
 
-	 private static void instantiate_views(int vi_index_min,
-									int vi_index_limit, PptTopLevel ppt) {
-	  
+	public static void instantiate_views(
+		int vi_index_min,
+		int vi_index_limit,
+		PptTopLevel ppt) {
 
-	   // This test prevents instantiate views for variables one at a time.
-	   Assert.assertTrue(ppt.var_infos.length == vi_index_limit);
+		// This test prevents instantiate views for variables one at a time.
+		Assert.assertTrue(ppt.var_infos.length == vi_index_limit);
 
-	   if (vi_index_min == vi_index_limit)
-		 return;
+		if (vi_index_min == vi_index_limit)
+			return;
 
-	   // used only for debugging
-	   int old_num_vars = ppt.var_infos.length;
-	   int old_num_views = ppt.numViews();
-	   boolean debug_on = debug.isLoggable(Level.FINE);
+		// used only for debugging
+		int old_num_vars = ppt.var_infos.length;
+		int old_num_views = ppt.numViews();
+		boolean debug_on = debug.isLoggable(Level.FINE);
 
-	   /// 1. all unary views
+		/// 1. all unary views
 
-	   // Unary slices/invariants.
-	   Vector unary_views = new Vector(vi_index_limit-vi_index_min);
-	   for (int i=vi_index_min; i<vi_index_limit; i++) {
-		 VarInfo vi = ppt.var_infos[i];
+		// Unary slices/invariants.
+		Vector unary_views = new Vector(vi_index_limit - vi_index_min);
+		for (int i = vi_index_min; i < vi_index_limit; i++) {
+			VarInfo vi = ppt.var_infos[i];
 
-		 if (!is_slice_ok (vi, ppt))
-		   continue;
+			if (!is_slice_ok(vi, ppt))
+				continue;
 
-		 // Eventually, add back in this test as "if constant and no
-		 // comparability info exists" then continue.
-		 // if (vi.isStaticConstant()) continue;
-		 PptSlice1 slice1 = new PptSlice1(ppt, vi);
-		 slice1.instantiate_invariants();
-		
-		 unary_views.add(slice1);
-	   }
-	   ppt.addViews(unary_views);
-	   unary_views = null;
+			// Eventually, add back in this test as "if constant and no
+			// comparability info exists" then continue.
+			// if (vi.isStaticConstant()) continue;
+			PptSlice1 slice1 = new PptSlice1(ppt, vi);
+			slice1.instantiate_invariants();
 
-	   /// 2. all binary views
+			unary_views.add(slice1);
+		}
+		ppt.addViews(unary_views);
+		unary_views = null;
 
-	   // Binary slices/invariants.
-	   Vector binary_views = new Vector();
-	   for (int i1=0; i1<vi_index_limit; i1++) {
-		 VarInfo var1 = ppt.var_infos[i1];
-		 if (!var1.isCanonical() && !(Debug.logOn() || debug_on)) {
-		   continue;
-		 }
+		/// 2. all binary views
 
-		 // Eventually, add back in this test as "if constant and no
-		 // comparability info exists" then continue.
-		 // if (var1.isStaticConstant()) continue;
-		 boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-		 int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
-		 for (int i2=i2_min; i2<vi_index_limit; i2++) {
-		   VarInfo var2 = ppt.var_infos[i2];
+		// Binary slices/invariants.
+		Vector binary_views = new Vector();
+		for (int i1 = 0; i1 < vi_index_limit; i1++) {
+			VarInfo var1 = ppt.var_infos[i1];
+			if (!var1.isCanonical() && !(Debug.logOn() || debug_on)) {
+				continue;
+			}
 
-		   if (!var1.isCanonical()) {
-			
-			 continue;
-		   }
-		   if (!var2.isCanonical()) {
-			 
-			 continue;
-		   }
+			// Eventually, add back in this test as "if constant and no
+			// comparability info exists" then continue.
+			// if (var1.isStaticConstant()) continue;
+			boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+			int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
+			for (int i2 = i2_min; i2 < vi_index_limit; i2++) {
+				VarInfo var2 = ppt.var_infos[i2];
 
-		   // This is commented out because if one var is an array and the
-		   // other is not, this will indicate that the two vars are not
-		   // compatible.  This causes us to miss seemingly valid elementwise
-		   // invariants
-		   // if (!var1.compatible(var2)) {
-		   //  if (Debug.logOn() || debug_on)
-		   //    Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
-		   //               "Binary slice not created, vars not compatible");
-		   //  continue;
-		   //}
+				if (!var1.isCanonical()) {
 
-		   // Eventually, add back in this test as "if constant and no
-		   // comparability info exists" then continue.
-		   // if (var2.isStaticConstant()) continue;
-		   if (!is_slice_ok (var1, var2, ppt)) {
-			
-			 continue;
-		   }
-		   PptSlice2 slice2 = new PptSlice2(ppt, var1, var2);
-		 
-		   slice2.instantiate_invariants();
-		  
-		   if(ppt.name().equals("DataStructures.StackAr.isEmpty():::EXIT")) {
-		   	if((var1.name.name().equals("this.theArray.class") && var2.name.name().equals("orig(this.theArray.class)"))
-		   	|| (var2.name.name().equals("this.theArray.class") && var1.name.name().equals("orig(this.theArray.class)"))) {
-		   	
-		   		
-		   		Iterator s = slice2.invs.iterator();
-		   		while(s.hasNext()) {
-		   			Invariant q = (Invariant) s.next();
-		   			System.out.println(q.getClass());
-		   			System.out.println(q);
-		   		}
-		   	}
-		   }
-		   binary_views.add(slice2);
-		 }
-	   }
-	   ppt.addViews(binary_views);
-	   binary_views = null;
+					continue;
+				}
+				if (!var2.isCanonical()) {
 
-	   // 3. all ternary views
-	 
+					continue;
+				}
 
-	   Vector ternary_views = new Vector();
-	   for (int i1=0; i1<vi_index_limit; i1++) {
-		 VarInfo var1 = ppt.var_infos[i1];
-//		 System.out.println("var1: " + var1);
-//		 if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
-//		   continue;
+				// This is commented out because if one var is an array and the
+				// other is not, this will indicate that the two vars are not
+				// compatible.  This causes us to miss seemingly valid elementwise
+				// invariants
+				// if (!var1.compatible(var2)) {
+				//  if (Debug.logOn() || debug_on)
+				//    Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
+				//               "Binary slice not created, vars not compatible");
+				//  continue;
+				//}
 
-		 // Eventually, add back in this test as "if constant and no
-		 // comparability info exists" then continue.
-		 // if (var1.isStaticConstant()) continue;
-		 // For now, only ternary invariants not involving any arrays
-//		 if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
-//		   continue;
+				// Eventually, add back in this test as "if constant and no
+				// comparability info exists" then continue.
+				// if (var2.isStaticConstant()) continue;
+				if (!is_slice_ok(var1, var2, ppt)) {
 
-		 boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-		 for (int i2=i1; i2<vi_index_limit; i2++) {
-		   VarInfo var2 = ppt.var_infos[i2];
-//		   System.out.println("var2:" + var2);
-//		   if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
-//			 continue;
+					continue;
+				}
+				PptSlice2 slice2 = new PptSlice2(ppt, var1, var2);
 
-		   // Eventually, add back in this test as "if constant and no
-		   // comparability info exists" then continue.
-		   // if (var2.isStaticConstant()) continue;
-		   // For now, only ternary invariants not involving any arrays
-//		   if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
-//			 continue;
+				slice2.instantiate_invariants();
+				binary_views.add(slice2);
+			}
+		}
+		ppt.addViews(binary_views);
+		binary_views = null;
 
-		   boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
-		   int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
-		   for (int i3=i3_min; i3<vi_index_limit; i3++) {
-			 Assert.assertTrue(((i1 >= vi_index_min) && (i1 < vi_index_limit))
-						   || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
-						   || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
-			 Assert.assertTrue((i1 <= i2) && (i2 <= i3));
-			 VarInfo var3 = ppt.var_infos[i3];
-//			System.out.println("var3: " + var3);	
-			
-			
-		//	System.out.println(ppt.name);
-		//	System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
-			
-			 if (!is_slice_ok (var1, var2, var3, ppt)) {
-				//System.out.println("slice not ok");
-			
-			   continue;
-			 }
-			 else {
-			 	//System.out.println("slice ok");
-			 }
-			 PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
-			 slice3.instantiate_invariants();
-		
-			 ternary_views.add(slice3);
-		   }
-		 }
-	   }
-	   ppt.addViews(ternary_views);
+		// 3. all ternary views
 
-	 
+		Vector ternary_views = new Vector();
+		for (int i1 = 0; i1 < vi_index_limit; i1++) {
+			VarInfo var1 = ppt.var_infos[i1];
+			//		 System.out.println("var1: " + var1);
+			//		 if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+			//		   continue;
 
-	   // This method didn't add any new variables.
-	   Assert.assertTrue(old_num_vars == ppt.var_infos.length);
-	   ppt.repCheck();
-	 }
+			// Eventually, add back in this test as "if constant and no
+			// comparability info exists" then continue.
+			// if (var1.isStaticConstant()) continue;
+			// For now, only ternary invariants not involving any arrays
+			//		 if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
+			//		   continue;
+
+			boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+			for (int i2 = i1; i2 < vi_index_limit; i2++) {
+				VarInfo var2 = ppt.var_infos[i2];
+				//		   System.out.println("var2:" + var2);
+				//		   if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
+				//			 continue;
+
+				// Eventually, add back in this test as "if constant and no
+				// comparability info exists" then continue.
+				// if (var2.isStaticConstant()) continue;
+				// For now, only ternary invariants not involving any arrays
+				//		   if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
+				//			 continue;
+
+				boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
+				int i3_min =
+					((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
+				for (int i3 = i3_min; i3 < vi_index_limit; i3++) {
+					Assert.assertTrue(
+						((i1 >= vi_index_min) && (i1 < vi_index_limit))
+							|| ((i2 >= vi_index_min) && (i2 < vi_index_limit))
+							|| ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
+					Assert.assertTrue((i1 <= i2) && (i2 <= i3));
+					VarInfo var3 = ppt.var_infos[i3];
+					//			System.out.println("var3: " + var3);	
+
+					//	System.out.println(ppt.name);
+					//	System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
+
+					if (!is_slice_ok(var1, var2, var3, ppt)) {
+						//System.out.println("slice not ok");
+
+						continue;
+					} else {
+						
+						//System.out.println("slice ok");
+					}
+					PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
+					slice3.instantiate_invariants();
+				
+					ternary_views.add(slice3);
+				}
+			}
+		}
+		ppt.addViews(ternary_views);
+
+		// This method didn't add any new variables.
+		Assert.assertTrue(old_num_vars == ppt.var_infos.length);
+		ppt.repCheck();
+	}
+
+	/**
+	 * Returns whether or not the specified unary slice should be
+	 * created.  The variable must be a leader, not a constant, and
+	 * not always missing.
+	 */
+	public static boolean is_slice_ok(VarInfo var1, PptTopLevel ppt) {
+
+		//	   if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+		//		 return (false);
+		//	   if (ppt.is_constant (var1))
+		//		 return (false);
+		//	   if (ppt.is_missing (var1))
+		//		 return (false);
+		//	   if (!var1.isCanonical())
+		//		 return (false);
+
+		return (true);
+	}
+
+	/**
+	 * Returns whether or not the specified binary slice should be created.
+	 * Checks to sinsure that var1 and var2 are not both constants and
+	 * if they are in the same equality set, that there are at least 2
+	 * variables in the equality set.  Also makes sure that neither var1
+	 * or var2 is always missing.
+	 */
+	public static boolean is_slice_ok(
+		VarInfo var1,
+		VarInfo var2,
+		PptTopLevel ppt) {
+
+		//	   // Both vars must be leaders
+		//	   if (!var1.isCanonical() || !var2.isCanonical())
+		//		 return (false);
+		//
+		//	   // Check to see if the new slice would be over all constants
+		//	   if (ppt.is_constant (var1) && ppt.is_constant (var2))
+		//		 return (false);
+		//
+		//	   // Each variable must not be always missing
+		//	   if (ppt.is_missing (var1) || ppt.is_missing (var2))
+		//		 return (false);
+		//
+		//	   // Don't create a slice with the same variables if the equality
+		//	   // set only contains 1 variable
+		//	   // This is not turned on for now since suppressions need invariants
+		//	   // of the form a == a even when a is the only item in the set.
+		//	   if (false) {
+//				   if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
+//					   return (false);
+		//	   }
+
+		return (true);
+	}
+
+	/**
+	 * Returns whether or not the specified ternary slice should be created.
+	 * The slice should not be created if any of the following are true
+	 *    - Any var is always missing
+	 *    - Any var is not canonical
+	 *    - Any var is an array
+	 *    - Any of the vars are not comparable with the others
+	 *    - All of the vars are constants
+	 *    - Any var is not (integral or float)
+	 *    - Each var is the same and its equality set has only two variables
+	 *    - Two of the vars are the same and its equality has only one variable
+	 *      (this last one is currently disabled as x = func(x,y) might still
+	 *      be interesting even if x is the same.
+	 */
+	public static boolean is_slice_ok(
+		VarInfo v1,
+		VarInfo v2,
+		VarInfo v3,
+		PptTopLevel ppt) {
+
+		Debug dlog = null;
+
+		// Each variable must not be always missing
+		//	   if (ppt.is_missing (v1) || ppt.is_missing (v2) || ppt.is_missing (v3))
+		//		 return (false);
+		//
+		//	   // At least one variable must not be a constant
+		//	   if (ppt.is_constant (v1) && ppt.is_constant(v2) && ppt.is_constant (v3))
+		//		 return false;
+		//
+		//	   // Each variable must be canonical (leader)
+		//	   if (!v1.isCanonical()) {
+		//		 
+		//		 return (false);
+		//	   }
+		//	   if (!v2.isCanonical()) {
+		//		 
+		//		 return (false);
+		//	   }
+		//	   if (!v3.isCanonical()) {
+		//		
+		//		 return (false);
+		//	   }
+
+		// For now, each variable must also not be an array (ternary only)
+		if (v1.rep_type.isArray()) {
+
+			return (false);
+		}
+		if (v2.rep_type.isArray()) {
+
+			return (false);
+		}
+		if (v3.rep_type.isArray()) {
+
+			return (false);
+		}
+
+		// Vars must be compatible
+		if (!v1.compatible(v2) || !v1.compatible(v3)) {
+
+			return (false);
+		}
+
+		// For now, each variable must be integral or float.  We only need
+		// to check the first variable since comparability will handle the
+		// others
+		if (!v1.file_rep_type.isIntegral() && !v1.file_rep_type.isFloat()) {
+			if (dlog != null)
+				dlog.log(
+					debug,
+					"Ternary slice not created, vars are neither "
+						+ "integral or float");
+			return (false);
+		}
+		Assert.assertTrue(
+			v2.file_rep_type.isIntegral() || v2.file_rep_type.isFloat());
+		Assert.assertTrue(
+			v3.file_rep_type.isIntegral() || v3.file_rep_type.isFloat());
+
+		// Don't create a reflexive slice (all vars the same) if there are
+		// only two vars in the equality set
+//			   if ((v1 == v2) && (v2 == v3))
+//				 return (false);
+
+		// Don't create a partially reflexive slice (two vars the same) if there
+		// is only one variable in its equality set
+		//	   if (false) {
+//				 if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
+//				   return (false);
+//				 if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
+//				   return (false);
+		//	   }
 
 
-	 /**
-	  * Returns whether or not the specified unary slice should be
-	  * created.  The variable must be a leader, not a constant, and
-	  * not always missing.
-	  */
-	 public static boolean is_slice_ok (VarInfo var1, PptTopLevel ppt) {
-
-//	   if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
-//		 return (false);
-//	   if (ppt.is_constant (var1))
-//		 return (false);
-//	   if (ppt.is_missing (var1))
-//		 return (false);
-//	   if (!var1.isCanonical())
-//		 return (false);
-
-	   return (true);
-	 }
-
-	 /**
-	  * Returns whether or not the specified binary slice should be created.
-	  * Checks to sinsure that var1 and var2 are not both constants and
-	  * if they are in the same equality set, that there are at least 2
-	  * variables in the equality set.  Also makes sure that neither var1
-	  * or var2 is always missing.
-	  */
-	 public static boolean is_slice_ok (VarInfo var1, VarInfo var2, PptTopLevel ppt) {
-
-//	   // Both vars must be leaders
-//	   if (!var1.isCanonical() || !var2.isCanonical())
-//		 return (false);
-//
-//	   // Check to see if the new slice would be over all constants
-//	   if (ppt.is_constant (var1) && ppt.is_constant (var2))
-//		 return (false);
-//
-//	   // Each variable must not be always missing
-//	   if (ppt.is_missing (var1) || ppt.is_missing (var2))
-//		 return (false);
-//
-//	   // Don't create a slice with the same variables if the equality
-//	   // set only contains 1 variable
-//	   // This is not turned on for now since suppressions need invariants
-//	   // of the form a == a even when a is the only item in the set.
-//	   if (false) {
-//		   if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
-//			   return (false);
-//	   }
-
-	   return (true);
-	 }
-
-	 /**
-	  * Returns whether or not the specified ternary slice should be created.
-	  * The slice should not be created if any of the following are true
-	  *    - Any var is always missing
-	  *    - Any var is not canonical
-	  *    - Any var is an array
-	  *    - Any of the vars are not comparable with the others
-	  *    - All of the vars are constants
-	  *    - Any var is not (integral or float)
-	  *    - Each var is the same and its equality set has only two variables
-	  *    - Two of the vars are the same and its equality has only one variable
-	  *      (this last one is currently disabled as x = func(x,y) might still
-	  *      be interesting even if x is the same.
-	  */
-	 public static boolean is_slice_ok (VarInfo v1, VarInfo v2, VarInfo v3, PptTopLevel ppt) {
-
-	   Debug dlog = null;
-	 
-
-	   // Each variable must not be always missing
-//	   if (ppt.is_missing (v1) || ppt.is_missing (v2) || ppt.is_missing (v3))
-//		 return (false);
-//
-//	   // At least one variable must not be a constant
-//	   if (ppt.is_constant (v1) && ppt.is_constant(v2) && ppt.is_constant (v3))
-//		 return false;
-//
-//	   // Each variable must be canonical (leader)
-//	   if (!v1.isCanonical()) {
-//		 
-//		 return (false);
-//	   }
-//	   if (!v2.isCanonical()) {
-//		 
-//		 return (false);
-//	   }
-//	   if (!v3.isCanonical()) {
-//		
-//		 return (false);
-//	   }
-
-	   // For now, each variable must also not be an array (ternary only)
-	   if (v1.rep_type.isArray()) {
-		 
-		 return (false);
-	   }
-	   if (v2.rep_type.isArray()) {
-		
-		 return (false);
-	   }
-	   if (v3.rep_type.isArray()) {
-		
-		 return (false);
-	   }
-
-	   // Vars must be compatible
-	   if (!v1.compatible(v2) || !v1.compatible(v3)) {
-		 
-		 return (false);
-	   }
-
-	   // For now, each variable must be integral or float.  We only need
-	   // to check the first variable since comparability will handle the
-	   // others
-	   if (!v1.file_rep_type.isIntegral() && !v1.file_rep_type.isFloat()) {
-		 if (dlog != null)
-		   dlog.log (debug, "Ternary slice not created, vars are neither "
-					 + "integral or float");
-		 return (false);
-	   }
-	   Assert.assertTrue
-		 (v2.file_rep_type.isIntegral() || v2.file_rep_type.isFloat());
-	   Assert.assertTrue
-		 (v3.file_rep_type.isIntegral() || v3.file_rep_type.isFloat());
-
-	   // Don't create a reflexive slice (all vars the same) if there are
-	   // only two vars in the equality set
-//	   if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2))
-//		 return (false);
-
-	   // Don't create a partially reflexive slice (two vars the same) if there
-	   // is only one variable in its equality set
-//	   if (false) {
-//		 if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
-//		   return (false);
-//		 if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
-//		   return (false);
-//	   }
-
-	   return (true);
-	 }
+		return (true);
+	}
 	private static class SimpleProcessor extends FileIO.Processor {
 		PptMap all_ppts = null;
 
@@ -760,62 +771,15 @@ public class DaikonSimple {
 				if (!missing) {
 					while (k.hasNext()) {
 						Invariant inv = (Invariant) k.next();
-						//	Invariant pre_inv = (Invariant) inv.clone();
+
 						InvariantStatus status = inv.add_sample(vt, 1);
-						
+
 						if (status == InvariantStatus.FALSIFIED) {
 							//to_remove.add(inv);
 							k.remove();
-//				
-//							if(inv.format().equals("warning- too few samples for daikon.inv.ternary.threeScalar.LinearTernary invariant- (this.topOfStack, orig(capacity), orig(capacity))")) {
-//								
-//							LinearTernary invariant = (LinearTernary) inv;
-//							LinearTernaryCore core = invariant.core;
-//							double a = 1.0;
-//							double b = 1.0;
-//							double c = 1.0;
-//							double d = 1.0;
-//							
-//							System.out.println(core.format_using(Invariant.OutputFormat.DAIKON, 
-//											inv.ppt.var_infos[0].name, 
-//											inv.ppt.var_infos[0], 
-//											inv.ppt.var_infos[1].name, 
-//											inv.ppt.var_infos[1], 
-//											inv.ppt.var_infos[2].name, 
-//											inv.ppt.var_infos[2], a, b, c, d));	
-//							System.out.println(a + " " + b + " " + c + " " + d);	
-//							String eq = " == ";
-//								
-//
-//							String answer =  
-//							LinearBinaryCore.formatTerm(Invariant.OutputFormat.DAIKON, a, inv.ppt.var_infos[0].name, inv.ppt.var_infos[0], true)
-//							+ LinearBinaryCore.formatTerm(Invariant.OutputFormat.DAIKON, b, inv.ppt.var_infos[1].name, inv.ppt.var_infos[1], (a == 0))
-//							+ LinearBinaryCore.formatTerm(Invariant.OutputFormat.DAIKON, c, inv.ppt.var_infos[2].name, inv.ppt.var_infos[2], (a == 0) && (b == 0))
-//							+ LinearBinaryCore.formatTerm(Invariant.OutputFormat.DAIKON, d, null, null, (a == 0) && (b == 0) && (c == 0))
-//							+ eq + "0";	
-//								
-//							System.out.println(answer);	
-//								
-						
-						
-//							LineNumberReader lnr = FileIO.data_trace_reader;
-//									   String line = (lnr == null) ? "?"
-//												   : String.valueOf(lnr.getLineNumber());
-//            
-//									   System.out.println ("At ppt " + ppt.name + ", Invariant '"
-//											+ inv.format() + "' invalidated by sample "
-//											+ Debug.toString (slice.var_infos, vt) + "at line = " + line);
 											
-							}
-					
+						}
 					}
-
-					//remove the falsified invariants from the slice
-					//must do this separate from the searching to avoid concurrentModification exception
-					//					Iterator y = to_remove.iterator();
-					//					while (y.hasNext()) {
-					//						slice.removeInvariant((Invariant) y.next());
-					//					}
 				}
 			}
 		}
