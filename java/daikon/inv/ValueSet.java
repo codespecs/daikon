@@ -82,8 +82,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public void add(Object v1) {
       Assert.assertTrue(v1 != null);
       long val = ((Long) v1).longValue();
-      min_val = Math.min (min_val, val);
-      max_val = Math.max (max_val, val);
+      if (val < min_val) { min_val = val; }
+      if (val > max_val) { max_val = val; }
       add(UtilMDE.hash(val));
     }
 
@@ -113,14 +113,16 @@ public abstract class ValueSet extends LimitedSizeIntSet
 
     double min_val = Double.MAX_VALUE;
     double max_val = -Double.MAX_VALUE;
+    boolean can_be_NaN = false;
 
     public ValueSetFloat(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
       double val = ((Double) v1).doubleValue();
-      min_val = Math.min (min_val, val);
-      max_val = Math.max (max_val, val);
+      if (val < min_val) { min_val = val; }
+      if (val > max_val) { max_val = val; }
+      if (Double.isNaN(val)) { can_be_NaN = true; }
       add(UtilMDE.hash(val));
     }
 
@@ -128,14 +130,17 @@ public abstract class ValueSet extends LimitedSizeIntSet
       ValueSetFloat vs = (ValueSetFloat) other;
       min_val = Math.min (min_val, vs.min_val);
       max_val = Math.max (max_val, vs.max_val);
+      can_be_NaN = can_be_NaN || vs.can_be_NaN;
     }
 
     public double min() { return (min_val); }
     public double max() { return (max_val); }
+    public boolean canBeNaN() { return (can_be_NaN); }
 
     public String repr_short() {
       if (size() > 0)
-        return (size() + " values " + min_val + ".." + max_val);
+        return (size() + " values " + min_val + ".." + max_val
+                + "; " + (can_be_NaN ? "can be " : "never ") + "NaN");
       else
         return ("0 values");
     }
@@ -161,8 +166,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
       long[] val = (long[]) v1;
       if (val != null) {
         for (int i = 0; i < val.length; i++) {
-          min_val = Math.min (min_val, val[i]);
-          max_val = Math.max (max_val, val[i]);
+          if (val[i] < min_val) { min_val = val[i]; }
+          if (val[i] > max_val) { max_val = val[i]; }
         }
         elem_cnt += val.length;
         if (val.length > 1)
@@ -205,6 +210,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
 
     double min_val = Long.MAX_VALUE;
     double max_val = Long.MIN_VALUE;
+    boolean can_be_NaN = false;
     int max_length = 0;
     int elem_cnt = 0;
     int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
@@ -216,8 +222,9 @@ public abstract class ValueSet extends LimitedSizeIntSet
       double[] val = (double[]) v1;
       if (val != null) {
         for (int i = 0; i < val.length; i++) {
-          min_val = Math.min (min_val, val[i]);
-          max_val = Math.max (max_val, val[i]);
+          if (val[i] < min_val) { min_val = val[i]; }
+          if (val[i] > max_val) { max_val = val[i]; }
+          if (Double.isNaN(val[i])) { can_be_NaN = true; }
         }
         elem_cnt += val.length;
         if (val.length > 1)
@@ -232,6 +239,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
       ValueSetFloatArray vs = (ValueSetFloatArray) other;
       min_val = Math.min (min_val, vs.min_val);
       max_val = Math.max (max_val, vs.max_val);
+      can_be_NaN = can_be_NaN || vs.can_be_NaN;
       elem_cnt += vs.elem_cnt;
       multi_arr_cnt += vs.multi_arr_cnt;
       max_length = Math.max (max_length, vs.max_length);
@@ -239,13 +247,15 @@ public abstract class ValueSet extends LimitedSizeIntSet
 
     public double min() { return (min_val); }
     public double max() { return (max_val); }
+    public boolean canBeNaN() { return (can_be_NaN); }
     public int elem_cnt() { return (elem_cnt); }
     public int multi_arr_cnt() { return (multi_arr_cnt); }
     public int max_length() { return (max_length); }
 
     public String repr_short() {
       if (size() > 0)
-        return (size() + " values " + min_val + ".." + max_val);
+        return (size() + " values " + min_val + ".." + max_val
+                + "; " + (can_be_NaN ? "can be " : "never ") + "NaN");
       else
         return ("0 values");
     }
