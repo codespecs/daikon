@@ -5,13 +5,13 @@ import java.io.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import utilMDE.Assert;
-import utilMDE.UtilMDE;
+import utilMDE.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
+import daikon.suppress.*;
 
 public class PrintInvariants {
 
@@ -1561,6 +1561,155 @@ public class PrintInvariants {
   //     }
   //   }
   // }
+
+  /**
+   * Prints all invariants for ternary slices (organized by slice) and
+   * all of the unary and binary invariants over the same variables.
+   * The purpose of this is to look for possible ni-suppressions.  Its
+   * not intended as a normal output mechanism
+   */
+  public static void print_all_ternary_invs (PptMap all_ppts) {
+
+    // loop through each ppt
+    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+
+      // if (ppt.num_samples() == 0)
+      //  continue;
+
+      // First figure out how many ternary invariants/slices there are
+      int lt_cnt = 0;
+      int slice_cnt = 0;
+      int inv_cnt = 0;
+      int total_slice_cnt = 0;
+      int total_inv_cnt = 0;
+      for (Iterator si = ppt.views_iterator(); si.hasNext(); ) {
+        PptSlice slice = (PptSlice) si.next();
+        total_slice_cnt++;
+        total_inv_cnt += slice.invs.size();
+        if (slice.arity() != 3)
+          continue;
+        slice_cnt++;
+        inv_cnt += slice.invs.size();
+        for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
+          Invariant inv = (Invariant) ii.next();
+          if (inv.getClass().getName().indexOf ("Ternary") > 0) {
+            lt_cnt++;
+          }
+        }
+      }
+
+      Fmt.pf ("");
+      Fmt.pf ("%s - %s samples, %s slices, %s invariants (%s linearternary)",
+              ppt.name(),"" + ppt.num_samples(), "" + slice_cnt, "" + inv_cnt,
+              "" + lt_cnt);
+      Fmt.pf ("    total slice count = " + total_slice_cnt +
+              ", total_inv_cnt = " + total_inv_cnt);
+
+      // Loop through each ternary slice
+      for (Iterator si = ppt.views_iterator(); si.hasNext(); ) {
+        PptSlice slice = (PptSlice) si.next();
+        if (slice.arity() != 3)
+          continue;
+        VarInfo[] vis = slice.var_infos;
+
+        String var_str = "";
+        for (int i = 0; i < vis.length; i++) {
+          var_str += vis[i].name.name() + " ";
+          if (ppt.is_constant (vis[i]))
+            var_str += "["
+                 + Debug.toString(ppt.constants.constant_value(vis[i]))+ "] ";
+        }
+        Fmt.pf ("  Slice %s - %s invariants", var_str, "" + slice.invs.size());
+
+        // Loop through each invariant (skipping ternary ones)
+        for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
+          Invariant inv = (Invariant) ii.next();
+          if (inv.getClass().getName().indexOf ("Ternary") > 0) {
+            continue;
+          }
+
+          // Check to see if the invariant should be suppressed
+          String suppress = "";
+          NISuppressionSet ss = inv.get_ni_suppressions();
+          if ((ss != null) && ss.suppressed (slice))
+            suppress = "ERROR: Should be suppressed by " + ss;
+
+          // Print the invariant
+          Fmt.pf ("    %s [%s] %s", inv.format(),
+                  UtilMDE.unqualified_name(inv.getClass()), suppress);
+
+          // Print all unary and binary invariants over the same variables
+          for (int i = 0; i < vis.length; i++) {
+            Fmt.pf ("      %s is %s", vis[i].name.name(),vis[i].file_rep_type);
+            print_all_invs (ppt, vis[i], "      ");
+          }
+          print_all_invs (ppt, vis[0], vis[1], "      ");
+          print_all_invs (ppt, vis[1], vis[2], "      ");
+          print_all_invs (ppt, vis[0], vis[2], "      ");
+        }
+      }
+    }
+  }
+
+  public static void print_all_invs (PptTopLevel ppt, VarInfo vi,
+                                     String indent) {
+    String name = Fmt.spf ("%s [%s]", vi.name.name(), vi.file_rep_type);
+    if (ppt.is_missing (vi))
+      Fmt.pf ("%s%s missing", indent, name);
+    else if (ppt.is_constant (vi))
+      Fmt.pf ("%s%s = %s", indent, name,
+              Debug.toString(ppt.constants.constant_value(vi)));
+    else {
+      PptSlice slice = ppt.findSlice (vi);
+      if (slice != null)
+        print_all_invs (slice, indent);
+
+      PptSlice gslice = PptSlice.find_global_slice (new VarInfo[] {vi});
+      if (gslice != null) {
+        print_all_invs (gslice, indent + "[Global] ");
+      } else {
+        if (false && (ppt.global != null)) {
+          for (Iterator si = ppt.global.views_iterator(); si.hasNext(); ) {
+            PptSlice s = (PptSlice) si.next();
+            if (s.arity() != 1)
+              continue;
+            Fmt.pf ("global slice %s has %s invariants",
+                    s.var_infos[0].name.name(), "" + s.invs.size());
+          }
+        }
+      }
+
+      if ((slice == null) && (gslice == null))
+        Fmt.pf ("%s%s has %s values", indent, name, "" + ppt.num_values (vi));
+    }
+  }
+
+  public static void print_all_invs (PptTopLevel ppt, VarInfo v1, VarInfo v2,
+                                     String indent) {
+    // Get any invariants in the local slice
+    PptSlice slice = ppt.findSlice (v1, v2);
+    print_all_invs (slice, indent);
+
+    // Get any invariants in the global slice (if any)
+    PptSlice gslice = PptSlice.find_global_slice (new VarInfo[] {v1, v2});
+    if (gslice != null) {
+      print_all_invs (gslice, indent + "[Global] ");
+    }
+  }
+
+  public static void print_all_invs (PptSlice slice, String indent) {
+
+    if (slice == null)
+      return;
+
+    for (Iterator ii = slice.invs.iterator(); ii.hasNext(); ) {
+      Invariant inv = (Invariant) ii.next();
+      Fmt.pf ("%s%s [%s]", indent, inv.format(),
+              UtilMDE.unqualified_name(inv.getClass()));
+    }
+
+  }
 
   public static void print_filter_stats (Logger debug, PptTopLevel ppt,
                                          PptMap ppt_map) {
