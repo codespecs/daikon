@@ -2,6 +2,10 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.Debug;
+import daikon.inv.unary.*;
+import daikon.inv.binary.*;
+import daikon.inv.ternary.*;
+import daikon.inv.ternary.threeScalar.*;
 import daikon.inv.DiscardInfo;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
@@ -582,11 +586,13 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn()) {
-      result.log ("Created " + result.format() + " via transfer from "
-                  + format() + " using permutation "
+      result.log ("Created " + result.getClass().getName() + ":"
+                  + result.format() + " via transfer from "
+                  + getClass().getName() + ":" + format()
+                  + " using permutation "
                   + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
-                  + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
+                  + " old_ppt = " + ppt
+                  + " new_ppt = " + new_ppt);
       // result.log (UtilMDE.backTrace());
     }
     //if (debug.isLoggable(Level.FINE))
@@ -1284,6 +1290,56 @@ public abstract class Invariant
     return null;
   }
 
+  /**
+   * Returns the set of non-instantiating suppressions for this invariant.
+   * Should be overridden by subclasses with non-instantiating suppressions.
+   */
+  public NISuppressionSet get_ni_suppressions() {
+    return (null);
+  }
+
+  /**
+   * Returns whether or not this invariant is ni-suppressed
+   */
+  public boolean is_ni_suppressed() {
+
+    NISuppressionSet ss = get_ni_suppressions();
+    if (ss == null)
+      return (false);
+
+    return (ss.suppressed (ppt));
+  }
+
+  /**
+   * Returns whether or not it is ok to copy/flow this invariant.
+   * Invariants which are NI suppressed (in some fashion) in the destination
+   * slice should not be copied.
+   */
+  public boolean copy_ok (PptSlice slice) {
+
+    if (Debug.logOn())
+      Debug.log (getClass(), slice, "checking " + getClass() + " = "
+                 + format());
+
+    NISuppressionSet ss = get_ni_suppressions();
+    if ((ss != null) && ss.suppressed (slice)) {
+      if (Debug.logOn())
+         Debug.log (getClass(), slice, "!copy_ok, ni-suppressed by " + ss);
+      return (false);
+    } else if (((getClass() == LinearTernary.class)
+                || (getClass() == LinearTernaryFloat.class))
+               &&  (slice.parent.is_constant (slice.var_infos[0])
+                    || slice.parent.is_constant (slice.var_infos[1])
+                    || slice.parent.is_constant (slice.var_infos[2]))) {
+      if (Debug.logOn())
+        Debug.log (getClass(), slice, "!copy_ok, linearternary constant");
+      return (false);
+    }
+
+    if (Debug.logOn())
+      Debug.log (getClass(), slice, "copy_ok, not suppressed by " + ss);
+    return (true);
+  }
 
 
   // Diff replaced by package daikon.diff
@@ -2136,6 +2192,36 @@ public abstract class Invariant
   }
 
   /**
+   * Adds the specified sample to the invariant and returns the result
+   */
+  public InvariantStatus add_sample (ValueTuple vt, int count) {
+
+    if (ppt instanceof PptSlice1) {
+
+      VarInfo v = ppt.var_infos[0];
+      UnaryInvariant unary_inv = (UnaryInvariant) this;
+      return (unary_inv.add (vt.getValue(v), vt.getModified(v), count));
+
+    } else if (ppt instanceof PptSlice2) {
+
+      VarInfo v1 = ppt.var_infos[0];
+      VarInfo v2 = ppt.var_infos[1];
+      BinaryInvariant bin_inv = (BinaryInvariant) this;
+      return (bin_inv.add_unordered (vt.getValue(v1), vt.getValue(v2),
+                                      vt.getModified(v1), count));
+
+    } else /* must be ternary */ {
+
+      VarInfo v1 = ppt.var_infos[0];
+      VarInfo v2 = ppt.var_infos[1];
+      VarInfo v3 = ppt.var_infos[2];
+      TernaryInvariant ternary_inv = (TernaryInvariant) this;
+      return (ternary_inv.add (vt.getValue(v1), vt.getValue(v2),
+                                vt.getValue(v3), vt.getModified(v1), count));
+    }
+  }
+
+  /**
    * Check the rep invariants of this.
    **/
   public void repCheck() {
@@ -2206,7 +2292,8 @@ public abstract class Invariant
 
   public void log (Logger debug, String msg) {
 
-    Debug.log (debug, getClass(), ppt, msg);
+    if (Debug.logOn())
+      Debug.log (debug, getClass(), ppt, msg);
   }
 
 
@@ -2219,7 +2306,10 @@ public abstract class Invariant
   */
 
   public boolean log (String msg) {
-    return (Debug.log (getClass(), ppt, msg));
+    if (ppt != null)
+      return (Debug.log (getClass(), ppt, msg));
+    else
+      return (false);
   }
 
   public String toString() {
