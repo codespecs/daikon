@@ -48,7 +48,7 @@ public final class ValueTuple implements Cloneable {
   public final static int UNMODIFIED = 0;
   /** Modified  **/
   public final static int MODIFIED = 1;
-  /** Missing value because the expression doesnt't make sense: x.a
+  /** Missing value because the expression doesn't make sense: x.a
    * when is null.  Data trace files can contain this modebit. **/
   public final static int MISSING_NONSENSICAL = 2;
   /** Missing value because of data flow: this.x.x isn't available
