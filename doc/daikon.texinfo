@@ -1413,40 +1413,47 @@ The Control Panel determines which invariants are displayed.
 
 @table @r
 @item Property filters
-Property filters narrow down the list of invariants that are displayed.  You can adjust
-which Property filters are being applied.  By default, all Property filters are enabled.
-Daikon supports the following property filters:
+Property filters narrow down the list of invariants that are displayed.
+You can adjust which Property filters are being applied.  By default,
+all Property filters are enabled.  Daikon supports the following
+property filters:
 
 @table @var
 
 @item Suppress controlled invariants
 
-A controlled invariant is an invariant that is "controlled" -- or implied -- by another
-program point.  For example, for Java instrumented code each class is associated with an
-object program point, which contain invariants that are found at the entry and exit of all
-public methods.  So in addition to the usual program points such as
-@code{StackAr.StackAr(int):::ENTER} and @code{StackAr.isEmpty():::EXIT48}, daikon outputs
-invariants for the artificial program point @code{StackAr:::OBJECT}.  The invariants for
-@code{StackAr:::OBJECT} control the invariants for @code{StackAr.StackAr(int):::ENTER} and
-@code{StackAr.isEmpty():::EXIT48}, because the former imply the latter.  Because of this
-redundancy, controlled invariants are not displayed by default.  Note that if for some
-reason, the controlling invariant is not displayed (for example, because it's
-unjustified), then the controlled invariant @emph{will} be displayed.
+A controlled invariant is an invariant that is "controlled" -- or
+implied -- by another program point.  For example, for Java instrumented
+code each class is associated with an object program point, which
+contain invariants that are found at the entry and exit of all public
+methods.  So in addition to the usual program points such as
+@code{StackAr.StackAr(int):::ENTER} and
+@code{StackAr.isEmpty():::EXIT48}, daikon outputs invariants for the
+artificial program point @code{StackAr:::OBJECT}.  The invariants for
+@code{StackAr:::OBJECT} control the invariants for
+@code{StackAr.StackAr(int):::ENTER} and
+@code{StackAr.isEmpty():::EXIT48}, because the former imply the latter.
+Because of this redundancy, controlled invariants are not displayed by
+default.  Note that if for some reason, the controlling invariant is not
+displayed (for example, because it's unjustified), then the controlled
+invariant @emph{will} be displayed.
 
 @item Suppress implied postcondition invariants
 
-Implied postcondition invariants are invariants involving @var{orig} variables that exist
-as precondition invariants.  For example, say that @code{StackAr.isEmpty():::ENTER} has
-the invariant @var{x==y}.  Then in @code{StackAr.isEmpty():::EXIT48}, the invariant
-@var{orig(x)==orig(y)} is an implied postcondition invariant and will not be displayed by
+Implied postcondition invariants are invariants involving @code{orig()}
+variables that exist as precondition invariants.  For example, say that
+@code{StackAr.isEmpty():::ENTER} has the invariant ``x==y''.  Then in
+@code{StackAr.isEmpty():::EXIT48}, the invariant ``orig(x)==orig(y)''
+is an implied postcondition invariant and will not be displayed by
 default.
 
 @item Suppress invariants containing non-canonical variables
 
-For many program points there are sets of variables that are equal to each other.  When
-this happens, one variable from the set is chosen to be the canonical variable.  This
-filter hides invariants involving the remaining non-canonical variables, because they are
-implied by invariants involving the canonical variable.
+For many program points there are sets of variables that are equal to
+each other.  When this happens, one variable from the set is chosen to
+be the canonical variable.  This filter hides invariants involving the
+remaining non-canonical variables, because they are implied by
+invariants involving the canonical variable.
 
 @item Suppress invariants containing only constants
 
@@ -1454,31 +1461,33 @@ This filter suppresses invariants containing only constants.
 
 @item Suppress invariants with few modified samples
 
-This filter suppresses invariants with a relatively few number of modified samples.  An
-example of such an invariant would be the following: @var{x >= 5}, where @var{x}
-is observed to be 5 three times and 10 five times.  The observed values of @var{x} --
-ie, the samples of @var{x} -- did not change enough for Daikon to be confident that
-this invariant is an actual invariant.
+This filter suppresses invariants with a relatively few number of
+modified samples.  An example of such an invariant would be the
+following: ``x >= 5'', where ``x'' is observed to be 5 three times
+and 10 five times.  The observed values of @code{x} -- ie, the samples of
+@code{x} -- did not change enough for Daikon to be confident that this
+invariant is an actual invariant.
 
 @item Suppress obvious invariants
 
-This filter suppresses invariants because they are obvious from looking at other
-invariants.  Some examples are:
+This filter suppresses invariants because they are obvious from looking
+at other invariants.  Some examples are:
 
 @itemize @bullet
 
-@item If @var{size(args[])==0} is shown, then @var{size(args[])-1==-1} is
+@item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
 obvious and will not be displayed by default.
-@item If @var{this.topOfStack<size(this.theArray[])-1} is shown, then
-@var{this.topOfStack<size(this.theArray[])} is obvious and will not be displayed by
-default.
+@item If ``this.topOfStack<size(this.theArray[])-1'' is shown, then
+``this.topOfStack<size(this.theArray[])'' is obvious and will not be
+displayed by default.
 @end itemize
 @item Suppress unjustified invariants
 
-For every invariant, Daikon estimates the probability of that invariant happening by
-chance.  If that probability is less than the limit, then the invariant is deemed to be an
-actual invariant, not just a chance occurence.  Currently the limit is .01%.  So by
-default, only invariants with probabilities of less than .01% are shown.
+For every invariant, Daikon estimates the probability of that invariant
+happening by chance.  If that probability is less than the limit, then
+the invariant is deemed to be an actual invariant, not just a chance
+occurence.  Currently the limit is .01%.  So by default, only invariants
+with probabilities of less than .01% are shown.
 
 @end table
 
@@ -1495,9 +1504,9 @@ textfield, and click the @command{Add variable} button (or just press
 @key{enter}).
 @item
 Each Invariant table in the Invariants Display has a @command{Show
-variables} button.  Click on that button to see a list of variables for that program
-point.  Select any set of variables and click the @command{Filter on selected
-variables} button.
+variables} button.  Click on that button to see a list of variables for
+that program point.  Select any set of variables and click the
+@command{Filter on selected variables} button.
 @end enumerate
 
 To remove variables from the variables list, select the variables in
@@ -1630,10 +1639,11 @@ Produce data trace output for loop invariants.
 Do not produce data trace output for loop invariants (default).
 
 @item -daikon_omit=@var{string}
-Do not produce data trace output for matching classes/functions.
-If a class, method, or program point name contains the @var{string}
-argument, then no trace output is produced for that entity.
-
+Do not produce data trace output for matching classes/functions.  This
+argument may be supplied multiple times, in order to specify multiple
+omitting criteria.  A program point is omitted if its class, fully
+qualified function name, or complete program point name exactly matches
+one of the omitting criteria.
 
 @item -tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
@@ -1992,8 +2002,8 @@ files.  There are several solutions to this problem.
       -daikon_omit=@var{STRING}
 @end example
 @noindent
-    argument to dfej.  (Run dfej without any arguments to see a list of its
-    options.)  Dfej will not produce data trace output for classes or
+    argument to dfej.  (For a list of dfej's options, see @ref{dfej
+    options}.)  Dfej will not produce data trace output for classes or
     procedures that match the STRING.  Running the instrumented program
     will result in a smaller @file{.dtrace} file that contains fewer
     records.
