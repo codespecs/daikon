@@ -7,7 +7,7 @@
 -include Makefile.user
 
 JAVAC ?= javac
-JAVAC_ARGS ?= -g -target 1.1
+JAVAC_ARGS ?= -g -J-Xmx512m
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 JAVA ?= java
 
