@@ -19,6 +19,11 @@ println().
 Removed most calls to System.exit in Daikon.  This makes it easier to call
 methods (including main) defined by Daikon programmatically.
 
+Changed the way that output formats are specified to the Daikon,
+PrintInvariants, and Annotate tools.  Previously, one supplied arguments
+such as --java_output, --jml_output, etc.  Now, one uses --format NAME,
+where name is the name of the output format.
+
 Improved the manual's description of the output formats that Daikon can use
 when printing invariants; the formats are Daikon, DBC, ESC, IOA, Java, JML,
 Simplify, and repair.
