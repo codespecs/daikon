@@ -42,22 +42,36 @@ public class SplitterFactory {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile);
     
     Vector conds = new Vector(); // a vector holding the conditions to be tested at that ppt.
-    Vector replace = new Vector(); //vector holding the REPLACE statements
+    
     Vector splitters_and_names = new Vector(); //the return vector
     
     String line = reader.readLine();
+    StringTokenizer tokenizer;
+    Vector replace = new Vector();
+    String arguments;
     while (line != null) {
-      if (line .equals("")) {
+      if (line.equals("")) {
 	line = reader.readLine(); 
 	continue;
       }
-      if (line.startsWith("PPT")) {
-	StringTokenizer tokenizer = new StringTokenizer(line, ",");
+      
+      if (line.startsWith("REPLACE")) {
+	tokenizer = new StringTokenizer(line, "#");
+	tokenizer.nextToken();
+	while(tokenizer.hasMoreTokens()){
+	    replace.addElement(tokenizer.nextToken().trim());
+	}
+	line = reader.readLine();
+	line.trim();
+      }
+      
+      if (line.startsWith("PPT_NAME")) {
+	tokenizer = new StringTokenizer(line, "#");
 	tokenizer.nextToken(); 
 	String function_name = tokenizer.nextToken().trim();
 	line = reader.readLine(); 
 	line.trim();
-	tokenizer = new StringTokenizer(line, ",");
+	tokenizer = new StringTokenizer(line, "#");
 	Assert.assert(line.startsWith("CONDITIONS"),
 		      "Incorrect format in .spinfo file\n");
 	tokenizer.nextToken(); 
@@ -65,16 +79,8 @@ public class SplitterFactory {
 	  conds.addElement(tokenizer.nextToken());
 	}
 	line = reader.readLine(); 
-	line.trim();
-	if (line.startsWith("REPLACE")) {
-	  tokenizer = new StringTokenizer(line, ",");
-	  tokenizer.nextToken(); 
-	  while (tokenizer.hasMoreTokens()) {
-	    replace.addElement(tokenizer.nextToken());
-	  }
-	  line = reader.readLine();
-	  line.trim();
-	}
+	//line.trim();
+	
 	
 	//compile and load the splitters for this Pptname here
 	splitters_and_names.addElement(function_name);
@@ -82,7 +88,6 @@ public class SplitterFactory {
 	splitters_and_names.addElement(tempsplitters);       
       }
       conds.clear();
-      replace.clear();
     }
     return splitters_and_names;
   }
@@ -175,7 +180,16 @@ public class SplitterFactory {
 	// declared variable names in the splitter class cannot have 
 	// a "." in them. Change, for example, "node.parent" to "node_parent"
 	param_names[i] = all_params[i].replace('.','_');
+	if (param_names[i].equals("return")) param_names[i] =  "return_daikon";
       }
+      
+      //get the function names and argument names of functions to be 
+      //replaced. For example, if the function "max(int a, int b)"
+      //is to be replaced by the expression "(a > b) ? a : b",
+      //then the return value of this function call is a vector containing
+      // the function name (max), an array of the argument names [ a b ], and 
+      //the replacement expression (a > b) ? a : b 
+      Vector replace_data = get_fnames_and_args(replace);
            
       //write a splitter class for each condition:
       // The splittername will be used as names for the classes. For example if the ppt_name is 
@@ -198,7 +212,7 @@ public class SplitterFactory {
 	//if the condition has a function call in it which needs to be replaced
 	//with the function body: eg. isEmpty -> myArray.length == 0,
 	//do the replacement now
-	test_string = replace_condition(test_string, replace);
+	test_string = replace_condition(test_string, replace_data);
 	
 	// ensure that the names of the declared variable names in the splitter
 	// match the variable names in the test string.
@@ -351,7 +365,9 @@ public class SplitterFactory {
     //given a regex corresponding to a program point, finds a corresponding program point.
     PptTopLevel return_ppt;
     Iterator ppt_itor = all_ppts.iterator();
-    
+    //we are looking for a matching exit ppt. This is because the exit ppt usually has
+    //more relevant variables in scope (eg. return) than the enter.
+    ppt_name = ppt_name + ".*EXIT";  
     try {
       Pattern ppt_pattern = re_compiler.compile(ppt_name);
       Pattern object_pattern = re_compiler.compile("OBJECT");
@@ -372,13 +388,21 @@ public class SplitterFactory {
   
   private Vector[] get_params_and_types(PptTopLevel ppt) {
     //gets the parameters and their corresponding types from the program point
+    System.err.println(ppt.name);
     Vector parameters = new Vector();
     Vector types = new Vector();
     VarInfo[] var_infos = ppt.var_infos;
+    int num_return = 0;
     for (int i = 0; i < var_infos.length; i++) {
       String temp = var_infos[i].name.name().trim();
-      if (temp.endsWith(".class") || temp.equals("return") || temp.startsWith("orig")) continue;
-      if (temp.endsWith("[]")) temp = temp.substring(0, temp.length() - 2);
+      if (temp.endsWith(".class") || temp.startsWith("orig")) continue;
+      if (temp.equals("return")){
+	num_return ++;
+	if (num_return > 1) continue;
+      }
+      if (temp.endsWith("[]")) { 
+	temp = temp.substring(0, temp.length() - 2);
+      }
       parameters.addElement(temp);
       if ((var_infos[i].type.format().trim()).equals("boolean")) {
 	types.addElement(new String("boolean"));
@@ -390,26 +414,92 @@ public class SplitterFactory {
     return return_vector;
   }
 
-  private String replace_condition (String condition, Vector replace) {
+  private Vector get_fnames_and_args(Vector replace) {
+    
+    Vector replace_data = new Vector();
+    try {
+      //try to find out the names of the arguments and the function name
+
+      //look for the pattern functionname(xxxx) and extract the argument list
+      Pattern arg_pattern = re_compiler.compile("\\s*(\\S*)\\s*\\((.*)\\)\\s*"); 
+      for (int i = 0; i < replace.size(); i+=2) {
+	String replace_expr = (String)replace.elementAt(i);
+	PatternMatcherInput replace_expr_pattern = new PatternMatcherInput(replace_expr);
+	if(re_matcher.contains(replace_expr_pattern, arg_pattern)){
+	  MatchResult result = re_matcher.getMatch();
+	  String function_name = result.group(1); 
+	  String arguments = result.group(2);
+	  //the arguments are in the form "arg1 name1, arg2 name2, arg3 name3, ..."
+	  StringTokenizer split_args = new StringTokenizer(arguments.trim(), ",");
+	  Vector tempargs = new Vector();
+	  while (split_args.hasMoreTokens()) {
+	    String arg = split_args.nextToken().trim(); 
+	    //each argument is now of the form "arg name" after splitting using ","
+	    StringTokenizer extract_argname = new StringTokenizer(arg);
+	    extract_argname.nextToken(); // the type of the argument
+	    tempargs.addElement(extract_argname.nextToken().trim()); //the argument name
+	  }
+	  replace_data.addElement(function_name);
+	  replace_data.addElement((String[])tempargs.toArray(new String[0]));
+	  replace_data.addElement(replace.elementAt(i+1));
+	}
+      }
+    }catch(Exception e){
+      System.out.println(e.toString());
+    }
+    
+    
+    for (int i = 0; i < replace_data.size(); i+=3) {
+      String fname = (String) replace_data.elementAt(i);
+      int num_args = ((String[])replace_data.elementAt(i+1)).length;
+      fname = fname + "\\s*\\(\\s*";
+      for (int j = 0; j < num_args; j++) {
+	fname = fname + "\\s*(\\S*)";
+	if (j+1 < num_args) {
+	  fname = fname+"\\s*,";
+	}
+      }
+      fname = fname + "\\s*\\)";
+      replace_data.setElementAt(fname, i);
+    }
+    
+    return replace_data;
+  }
+  
+  private String replace_condition(String condition, Vector replace_data){
     //perform a replacement of a function call with the body of the function
     //the argument Vector 'replace' stores alternately the function name and the function body.
-    String cond = condition;
-    Pattern replace_pattern;
-    for (int i = 0; i < replace.size(); i+=2) {
+
+    Pattern replace_expr_pattern;
+    for (int i = 0; i < replace_data.size(); i+=3) {
       try {
-	String temp = (String)replace.elementAt(i) + "\\s*\\(.*\\)" ;
-	replace_pattern = re_compiler.compile( temp );
-	if (re_matcher.contains(cond, replace_pattern)) {
+	String temp = (String)replace_data.elementAt(i);
+	replace_expr_pattern = re_compiler.compile( temp );
+	if (re_matcher.contains(new PatternMatcherInput(condition), replace_expr_pattern)) {
+	  MatchResult result = re_matcher.getMatch(); 
+	  //System.err.println(condition + " contains " + replace_expr_pattern.getPattern().toString());
+	  Perl5Substitution temp_subst = new Perl5Substitution("#", Perl5Substitution.INTERPOLATE_ALL);
+	  condition = Util.substitute(re_matcher, replace_expr_pattern, temp_subst, condition, Util.SUBSTITUTE_ALL);
+	  String[] arguments = (String[])replace_data.elementAt(i+1);
+	  for(int j = 1; j < result.groups(); j++){
+	    Perl5Substitution arg_subst = new Perl5Substitution(result.group(j)); 
+	    Pattern arg_pattern = re_compiler.compile(arguments[j-1]);
+	    String replacement = (String) replace_data.elementAt(i+2);
+	    replace_data.setElementAt( Util.substitute(re_matcher, arg_pattern, arg_subst, replacement, Util.SUBSTITUTE_ALL), i+2);
+	  }
+	  
 	  Perl5Substitution replace_subst = 
-	    new Perl5Substitution( (String)replace.elementAt(i+1), Perl5Substitution.INTERPOLATE_ALL);
-	  cond = Util.substitute(re_matcher, replace_pattern, replace_subst, condition, Util.SUBSTITUTE_ALL);
+	    new Perl5Substitution((String) replace_data.elementAt(i+2) , Perl5Substitution.INTERPOLATE_ALL);
+	  condition = Util.substitute(re_matcher, re_compiler.compile("#"), replace_subst, condition, Util.SUBSTITUTE_ALL);
+	}else{
+	  //System.err.println(condition + " does not contain " + replace_expr_pattern.getPattern().toString());
 	}
       }catch(Exception e) {
 	debugPrint( e.toString() +" while performing replacement on condition " + condition);
       }
     }
-    return cond;
-  }
+    return condition; 
+    }
 
   private String fix_array_variablename_in_teststring (String varname, String test_string){
     //fix the variable names in the condition to match the declared variable
@@ -455,8 +545,9 @@ public class SplitterFactory {
     Pattern param_pattern;
     Perl5Substitution param_subst;
     
-    for (int i = 0; i < params.length; i++) {
-      try {
+    try {
+      for (int i = 0; i < params.length; i++) {
+	
 	//some instrumented variables start with "this." whereas the "this" is not always used
 	//in the condition. Eg. the instrumented variable is "this.myArray", but the 
 	//condition test is "myArray.length == 0". In such a situation, make sure that the 
@@ -484,10 +575,19 @@ public class SplitterFactory {
 	}else{
 	  params[i] = "**remove**"; //this parameter is not needed in the test. ignore later
 	}
-      }catch(Exception e) {
-	debugPrint(e.toString());
       }
+      /*
+	Pattern return_pattern = re_compiler.compile("return");
+	Perl5Substitution return_subst = new Perl5Substitution("return_daikon");
+	PatternMatcherInput input = new PatternMatcherInput(test_string);
+	if(re_matcher.contains(input, return_pattern)){
+	test_string = Util.substitute(re_matcher, return_pattern, return_subst, test_string, Util.SUBSTITUTE_ALL);
+	}
+      */
+    }catch(Exception e) {
+      debugPrint(e.toString());
     }
+    
     return test_string;
   }
 
