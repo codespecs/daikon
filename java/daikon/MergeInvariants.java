@@ -239,7 +239,7 @@ public final class MergeInvariants {
 
     // Merge the invariants
     debugProgress.fine ("Merging invariants");
-    Dataflow.createUpperPpts (merge_ppts);
+    Daikon.createUpperPpts (merge_ppts);
 
     // Equality post processing
     debugProgress.fine ("Equality Post Processing");

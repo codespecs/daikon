@@ -1503,7 +1503,7 @@ public final class Daikon {
     private String message() {
       File file = FileIO.data_trace_filename;
       if (file == null) {
-        if (Dataflow.progress == null) {
+        if (Daikon.progress == null) {
           return "[no status]";
         } else {
           return Daikon.progress;
