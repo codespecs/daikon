@@ -2517,7 +2517,7 @@ public class PptTopLevel
       Assert.assertTrue(binary_view.arity == 2);
 
       if (binary_view.debugged) {
-        System.out.println("Binary view " + binary_view.name + " has "
+        System.out.println("Binary view " + binary_view.name() + " has "
                            + (views.contains(binary_view) ? "not " : "") + "been eliminated.");
       }
       // If binary_view has been installed (hasn't yet been eliminated)

@@ -675,7 +675,7 @@ public abstract class PptSlice
         + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
         + ", num_samples()=" + num_samples()
         + ", num_values()=" + num_values() + lineSep
-        + "for " + name + lineSep
+        + "for " + name() + lineSep
         + tuplemod_samples_summary() + lineSep
         + "Consider running modbit-munge.pl" + lineSep
         // + ((values_cache == null)

@@ -355,7 +355,7 @@ public class PrintInvariants {
   // @throws IllegalArgumentException if arg is not of the proper syntax
   public static void discReasonSetup(String arg) {
     print_discarded_invariants = true;
-    usage = "Usage: <class-name><<var1>,<var2>,,,,>@<ppt.name>\n"+
+    usage = "Usage: <class-name><<var1>,<var2>,,,,>@<ppt.name()>\n"+
             "or use --disc_reason \"all\" to show all discarded Invariants\n"+
             "e.g.: OneOf<x>@foo():::ENTER\n";
 
