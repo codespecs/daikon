@@ -237,6 +237,17 @@ public class DynamicConstants implements Serializable {
     return (false);
   }
 
+  /** returns the constant value of the  specified variable, or null **/
+  public Object constant_value (VarInfo vi) {
+
+    for (int i = 0; i < con_list.size(); i++) {
+      Constant con = (Constant) con_list.get(i);
+      if (con.vi == vi)
+        return (con.val);
+    }
+    return (null);
+  }
+
   /** returns whether the specified variable missing for all values so far **/
   public boolean is_missing (VarInfo vi) {
 
