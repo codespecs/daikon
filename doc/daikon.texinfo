@@ -6126,28 +6126,34 @@ understand Daikon's operation; @xref{Command line options}.
 
 Daikon sometimes issues a warning that a procedure in the target program
 was entered but never exited (that is, the target program abnormally
-terminated).  Thus, the @file{.dtrace} file contains more entry records
+terminated).  In other words, the @file{.dtrace} file contains more
+entry records
 than exit records for the given procedure.  Some procedures that were
 entered were never recorded to have exited: either they threw an
 exception, skipping the instrumentation code that would have recorded
 normal termination, or the target program's run was interrupted.
+When this happens, the entry sample is ignored; the rationale is that
+the particular values seen led to exception exit, were probably
+illegal, and so should not be factored into the method preconditions.
 
 @cindex nonce, invocation
 @cindex this_invocation_nonce
 
-In some cases, exceptional exit from a procedure can cause
-@code{orig(@var{x})} values to be incorrect.  This depends on the
-technique used to associate procedure exits with entries.  Daikon has
-two such techniques --- the nonce technique and the stack technique.  If
-a @file{.dtrace} file uses the nonce technique, @code{orig(@var{x})}
-values are guaranteed to be correct.  If a @file{.dtrace} file uses the
-stack technique, then incorrect @code{orig(@var{x})} values are likely
-to occur.  You can tell which technique Daikon will use by examining the
-@file{.dtrace} file.  If the second line of each entry in the
-@file{.dtrace} file is "this_invocation_nonce", then Daikon uses the
-nonce technique.  Otherwise, it uses the stack technique.  Which
-technique is used is determined by the front end, which creates the
-@file{.dtrace} file, and typically cannot be controlled by the user.
+In some cases, exceptional exit from a procedure can cause procedure
+entries and exits (in the trace file) to be incorrectly mached up; if
+they are incorrectly matched, then the @code{orig(@var{x})} values may
+be incorrect.  Daikon has two techniques for associate procedure exits
+with entries --- the nonce technique and the stack technique.  If a
+@file{.dtrace} file uses the nonce technique, @code{orig(@var{x})}
+values are guaranteed to be correct.  If a @file{.dtrace} file uses
+the stack technique, then incorrect @code{orig(@var{x})} values are
+likely to occur.  You can tell which technique Daikon will use by
+examining the @file{.dtrace} file.  If the second line of each entry
+in the @file{.dtrace} file is "this_invocation_nonce", then Daikon
+uses the nonce technique.  Otherwise, it uses the stack technique.
+Which technique is used is determined by the front end, which creates
+the @file{.dtrace} file, and typically cannot be controlled by the
+user.
 
 
 
