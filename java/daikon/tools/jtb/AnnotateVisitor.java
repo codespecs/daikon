@@ -851,9 +851,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
       if (vi == null) {
         // This means that we found a variable in the source code that is
         // not computed by Daikon.
-        if (! vi.name.name().endsWith(".class")) {
-          System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
-        }
+        System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
       } else {
         Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
