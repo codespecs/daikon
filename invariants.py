@@ -25,6 +25,19 @@ if not locals().has_key("var_names"):
     samples = {}            # from function name to number of samples
     file_vars = {}          # from filename to (names, values, samples) tuple
 
+    # From function name to invocation count.  Used to add invocation
+    # count variables for each program function
+    ftn_names_to_call_ct = {}
+
+    # From function name to (parameter names to list of param values)
+    # Used to store parameter list for functions.  Also used to store
+    # the original value of parameters at the beginning of a ftn call
+    # so we can use them in comparison at the end of a ftn call.
+    # We have a list for the param values to provide for recursive
+    # function calls.  As we pop recursive calls to the function off
+    # the stack, we pop orig parameter vals off the list.
+    ftn_to_orig_param_vals = {} 
+    
 integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 sequence_re = re.compile(r'^[^	]+\[\]$') # variable name for a sequence
@@ -149,10 +162,11 @@ The subset is chosen according to the input indices."""
 # Currently the values are integers; this will be extended soon.
 
 def read_file_ftns(filename):
-    """Read data from .inv file; return a dictionary mapping file
+    """Read data from .inv file; add to dictionary mapping file
     names to invocation counts.  The invocation counts are initialized
-    to zero."""
-    ftn_names_to_call_ct = {}
+    to zero. Also initialize dict mapping files to parameters to
+    original values."""
+
     file = open(filename, "r")
     line = file.readline()
     if "\t" in line:
@@ -161,12 +175,26 @@ def read_file_ftns(filename):
     while (line != ""):         # line == "" when we hit end of file
         (tag, leftover) = string.split(line, ":::", 1)
         ftn_names_to_call_ct[tag] = 0
+
+        # Get parameter list and initialize ftn to param vals dict
+        (label, param_list) = string.split(leftover, "(", 1)
+        param_list = param_list[:-2] # remove trailing newline and ')'
+        param_list = string.split(param_list, ",")
+        params_to_orig_val_list = {}
+        for param in param_list:
+            if param != '': # handle empty parameter list???
+                params_to_orig_val_list[param] = []
+        ftn_to_orig_param_vals[tag] = params_to_orig_val_list
+        
         line = file.readline()
         while "\t" in line:
             # skip over (variable,value) line
             line = file.readline()
 
-    return ftn_names_to_call_ct
+def init_ftn_call_ct():
+    """Initialize ftn call counts to 0."""
+    for ftn_tag in ftn_names_to_call_ct.keys():
+        ftn_names_to_call_ct[ftn_tag] = 0
 
 def read_file(filename):
     """Read data from .inv file; return a tuple of three dictionaries.
@@ -177,11 +205,8 @@ def read_file(filename):
     this_var_names = {}		# from function name to tuple of variable names
     this_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_samples = {}           # from function name to number of samples
-    this_ftn_names = {}         # from function name to current number
-                                # of invocations
 
-    this_ftn_names = read_file_ftns(filename)
-    
+    init_ftn_call_ct()          # initialize function call cts to 0
     line = file.readline()
     if "\t" in line:
         raise "First line should be tag line; saw: " + line
@@ -192,8 +217,14 @@ def read_file(filename):
 
         # Increment function invocation count if ':::BEGIN'
         (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
-        if suffix == "BEGIN":
-            util.mapping_increment(this_ftn_names, tag_sans_suffix, 1)
+        (label, paramList) = string.split(suffix, "(", 1)
+        if label == "BEGIN":
+            util.mapping_increment(ftn_names_to_call_ct, tag_sans_suffix, 1)
+
+        # Get param to val list for the function
+        # Accessing global here, crappy
+        params_to_orig_val_list = {}
+        params_to_orig_val_list = ftn_to_orig_param_vals[tag_sans_suffix]
         
         these_var_names = []
 	these_values = []
@@ -232,12 +263,33 @@ def read_file(filename):
 	    these_var_names.append(this_var_name)
 	    these_values.append(this_value)
             # print this_var_name, this_value
+
+            # If beginning of function, store the original param val
+            if label == "BEGIN":
+                if this_var_name in params_to_orig_val_list.keys():
+                    param_list = []
+                    param_list = params_to_orig_val_list[this_var_name]
+                    param_list.append(this_value)
+                                    
             line = file.readline()
         # Add invocation counts
-        for ftn_tag in this_ftn_names.keys():
+        # Accessing global here-crappy
+        for ftn_tag in ftn_names_to_call_ct.keys():
             these_var_names.append(ftn_tag)
-            these_values.append(this_ftn_names[ftn_tag])
-	these_var_names = tuple(these_var_names)
+            these_values.append(ftn_names_to_call_ct[ftn_tag])
+
+        # Add original parameter values if end of function call
+        # Then pop previous original param value off of param val list
+        if label == "END":
+            for (param, param_list) in params_to_orig_val_list.items():
+                if sequence_re.match(param):
+                    these_var_names.append(param + "_orig[]")
+                else:
+                    these_var_names.append(param + "_orig")
+                these_values.append(param_list[-1])
+                del param_list[-1]
+            
+        these_var_names = tuple(these_var_names)
 	these_values = tuple(these_values)
 	if not(this_var_names.has_key(tag)):
 	    this_var_names[tag] = these_var_names
@@ -339,7 +391,9 @@ def all_numeric_invariants():
     sorted_keys = var_names.keys()
     sorted_keys.sort()
     for fn_name in sorted_keys:
-        print fn_name, samples[fn_name], "samples"
+        print "=======================================================================================\n"
+        
+        print fn_name, samples[fn_name], "samples "
         fn_vars = var_names[fn_name]
         dicts = dict_of_tuples_to_tuple_of_dicts(var_values[fn_name])
         assert len(fn_vars) == len(dicts)
@@ -354,8 +408,6 @@ def all_numeric_invariants():
             formatted = this_inv.format((this_var,))
             if not this_inv.is_unconstrained():
                 print " ", formatted
-            # print " ", this_var, this_inv
-            # print "   ", `this_inv`
             if not this_inv.is_exact():
                 non_exact_single_invs.append(i)
         exact_pair_invs = []
@@ -1668,6 +1720,9 @@ def read_invs(files, clear=0):
         files = glob.glob(files)
     if files == []:
         raise "No files specified"
+    # Get all function names to add checks on ftn invocation counts
+    for file in files:
+        read_file_ftns(file)
     for file in files:
         read_merge_file(file)
 
