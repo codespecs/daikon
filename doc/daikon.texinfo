@@ -2755,6 +2755,19 @@ for details.
 
 @itemize @bullet
 
+@cindex DerivedParameterFilter
+@item DerivedParameterFilter:  suppress parameter-derived postcondition invariants
+
+This filter suppresses invariants at procedure exit points that are
+uninteresting because they refer to prestate variables derived from
+pass-by-value parameters.  E.g, suppose that @code{param} is a parameter to a
+Java method. If @code{param} itself is modified, that change won't be
+visible to a caller, so it's uninteresting to print. If @code{param} points
+to an object, and that object is changed, that is visible, but
+only if @code{param} hasn't changed; otherwise, the invariant would report a
+change in some object other than the one that was passed in.
+
+
 @cindex ObviousFilter
 @item ObviousFilter:  suppress obvious invariants
 
