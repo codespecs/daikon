@@ -3772,6 +3772,11 @@ comment immediately before the declared type (but after any modifiers like
 @node Binary C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
 @section Binary C front end Kvasir
 
+@cindex Kvasir (binary front end for C)
+@cindex front end for C
+@cindex C front end
+
+
 Daikon's older C front end, known as dfec (@pxref{Source-based C front
 end dfec}), works by rewriting the
 source code for your C program. To avoid some of the limitations of
@@ -4032,13 +4037,13 @@ optimization.
 @node    Source-based C front end dfec, Perl front end dfepl, Binary C front end Kvasir, Front ends
 @section Source-based C front end dfec
 
+@cindex dfec (Daikon front end for C)
 @cindex front end for C
 @cindex C front end
-@cindex dfec
-@cindex dfec (Daikon front end for C)
-
 
 This section contains details about dfec, the Daikon front end for C@.
+An alternate front end for C, named Kvasir, is also available
+(@pxref{Binary C front-end Kvasir}).
 For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
 
