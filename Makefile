@@ -219,9 +219,7 @@ doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.te
 	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-	@echo "     diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
-	@echo "     diff -u /home/httpd/html/daikon/dist/doc/config-options.texinfo doc/config-options.texinfo"
-	@echo "     diff -u /home/httpd/html/daikon/dist/doc/invariants-doc.texinfo doc/invariants-doc.texinfo"
+        @echo "     diff -u -s --from-file /home/httpd/html/daikon/dist/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@echo "***************************************************************************"
 	@exit 1
@@ -310,7 +308,7 @@ update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
 www-dist:
-	html-update-toc doc/www/index.html doc/www/mit/index.html
+	html-update-toc doc/www/mit/index.html
 	# "--parents" keeps the directory structure in place
 	cd doc/www && cp -pf --parents $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
@@ -358,7 +356,6 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # could make a distribution even if there were diffs in the current
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
-	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
