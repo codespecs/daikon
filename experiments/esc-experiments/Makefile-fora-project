@@ -58,6 +58,7 @@ help:
 	@echo "  make txt-esc        : 6 detects invariants, writes in esc style"
 	@echo "  make merge          : merges the esc-style output into the original source"
 	@echo "  make esc            : runs escjava on the merged files"
+	@echo "  make stats          : reports invariant counts"
 	@echo ""
 	@echo "  make clean          : "
 	@echo "  make all            : does 1-6, merge, esc"
@@ -78,6 +79,7 @@ data: ${SCRATCH_FOR_DAIKON}/.run-timestamp
 txt-daikon: ${PROJECT}.txt-daikon
 txt-esc: ${PROJECT}.txt-esc
 esc: ${PROJECT}.esc
+stats: stats-impl
 
 clean: reset-scratch
 	@echo
@@ -193,6 +195,14 @@ esc-clean:
 	-rm -f ${PROJECT}.esc
 
 esc-force: esc-clean ${PROJECT}.esc
+
+stats-impl:
+	@echo Stats for ${SOURCE_TO_DFEJ}:
+	@echo '  invariant ' `egrep '^/\*@ inv' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! inv' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
+	@echo '  set       ' `egrep '^/\*@ set' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! set' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
+	@echo '  requirse  ' `egrep '^/\*@ req' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! req' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
+	@echo '  modifies  ' `egrep '^/\*@ mod' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! mod' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
+	@echo '  ensures   ' `egrep '^/\*@ ens' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! ens' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
 
 
 # ###########################################################################
