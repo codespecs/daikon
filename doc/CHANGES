@@ -13,6 +13,20 @@ versions as the user manual.
 
 ===========================================================================
 
+2.5.3 (01 October 2003)
+
+The default VarComparability has been changed from none to implicit.  
+Decls file may need to be changed to specify the comparability as
+'none' at the top of the file if implicit is not the appropriate 
+default.
+
+Some minor changes were made to the user and developer manuals to
+enhance clarity.
+
+A number of bugs were fixed, particularly in Daikon version 3 (experimental).
+
+-----------------
+
 2.5.2 (03 September 2003)
 
 Fixed some Simplify formatting bugs.
