@@ -3,7 +3,7 @@ package daikon.split.griesLisp;
 import daikon.*;
 import daikon.split.*;
 
-public class j_ge_9 extends Splitter {
+public final class j_ge_9 extends Splitter {
   public String condition() { return "j >= 9"; }
   VarInfo j_varinfo;
   public j_ge_9() { }

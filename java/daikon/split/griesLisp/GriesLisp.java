@@ -8,7 +8,7 @@ import daikon.split.*;
 
 // Instantiate this class in order to install all the appropriate splitters
 // in SplitterList.
-public class GriesLisp {
+public final class GriesLisp {
 
   static {
 

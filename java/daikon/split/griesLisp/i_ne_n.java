@@ -3,7 +3,7 @@ package daikon.split.griesLisp;
 import daikon.*;
 import daikon.split.*;
 
-public class i_ne_n extends Splitter {
+public final class i_ne_n extends Splitter {
   public String condition() { return "i != n"; }
   VarInfo i_varinfo;
   VarInfo n_varinfo;

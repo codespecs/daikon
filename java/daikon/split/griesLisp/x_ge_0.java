@@ -3,7 +3,7 @@ package daikon.split.griesLisp;
 import daikon.*;
 import daikon.split.*;
 
-public class x_ge_0 extends Splitter {
+public final class x_ge_0 extends Splitter {
   public String condition() { return "x >= 0"; }
   VarInfo x_varinfo;
   public x_ge_0() { }

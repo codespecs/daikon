@@ -3,7 +3,7 @@ package daikon.split.griesLisp;
 import daikon.*;
 import daikon.split.*;
 
-public class x_le_b_sub_i extends Splitter {
+public final class x_le_b_sub_i extends Splitter {
   public String condition() { return "x <= b[i]"; }
   VarInfo x_varinfo;
   VarInfo b_varinfo;
