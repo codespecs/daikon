@@ -4,22 +4,24 @@ import daikon.*;
 
 import java.lang.reflect.*;
 
+import java.util.*;
+
 public class SequenceScalarFactory {
 
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static void instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt, int pass) {
     boolean seq_first;
 
     {
       VarInfo vi0 = ppt.var_infos[0];
       VarInfo vi1 = ppt.var_infos[1];
-      if (vi0.rep_type.equals(ProglangType.INT_ARRAY)
-          && (vi1.rep_type.equals(ProglangType.INT))) {
+      if ((vi0.rep_type == ProglangType.INT_ARRAY)
+          && (vi1.rep_type == ProglangType.INT)) {
         seq_first = true;
-      } else if (vi0.rep_type.equals(ProglangType.INT)
-                 && (vi1.rep_type.equals(ProglangType.INT_ARRAY))) {
+      } else if ((vi0.rep_type == ProglangType.INT)
+                 && (vi1.rep_type == ProglangType.INT_ARRAY)) {
         seq_first = false;
       } else {
         throw new Error("Bad types");
@@ -31,11 +33,13 @@ public class SequenceScalarFactory {
 
     if (Daikon.check_program_types
         && (! seqvar.type.elementType().equals(sclvar.type)))
-      return;
+      return null;
 
+    Vector result = new Vector();
     if (pass == 2) {
-      Member.instantiate(ppt, seq_first);
+      result.add(Member.instantiate(ppt, seq_first));
     }
+    return result;
   }
 
   private SequenceScalarFactory() {

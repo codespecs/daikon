@@ -70,9 +70,14 @@ public abstract class Invariant {
   protected Invariant(PptSlice ppt_) {
     ppt = ppt_;
     // probability_cache_accurate = false;
-    ppt.invs.add(this);
-    if (Global.debugInfer)
-      System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
+
+    // We don't want to add the invariant yet, as we are still in the
+    // constructor for subclasses.
+    //     if (Global.debugInfer)
+    //       System.out.println("Adding invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
+    //     ppt.addInvariant(this);
+    //     if (Global.debugInfer)
+    //       System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
   }
 
   // Has to be public because of wrappers.

@@ -22,9 +22,8 @@ public class Daikon {
   public static final boolean check_program_types = true;
   // public static final boolean check_program_types = false;
 
-  // Hack to deal with the fact that sometimes a PptConditional ends up
-  // with data that has no modification bits set.
-  public static final boolean cond_mod_hack = true;
+  public static final boolean disable_modbit_check_message = false;
+  public static final boolean disable_modbit_check_error = true;
 
   // The two arguments to daikon.Daikon are a comma-separated list of
   // declaration files, and a comma-separated list of data trace files.

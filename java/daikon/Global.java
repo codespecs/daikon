@@ -42,6 +42,7 @@ public class Global {
   public final static boolean debugPptTopLevel = false;
   public final static boolean debugDerive = false;
   public final static boolean debugInfer = false;
+  public final static boolean debugPptSlice = false;
   public final static boolean debugPptSliceGeneric = false;
   public final static boolean debugPptSplit = false;
   public final static boolean debugPrintInvariants = false;
@@ -50,6 +51,7 @@ public class Global {
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
   // public final static boolean debugInfer = true;
+  // public final static boolean debugPptSlice = true;
   // public final static boolean debugPptSliceGeneric = true;
   // public final static boolean debugPptSplit = true;
   // public final static boolean debugPrintInvariants = true;

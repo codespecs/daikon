@@ -47,9 +47,9 @@ public class ExplicitVarComparability extends VarComparability {
   }
 
   public static ExplicitVarComparability makeAlias(VarInfo vi) {
-    return makeAlias(vi.name, vi.comparability);
+    return vi.comparability.makeAlias(vi.name);
   }
-  public static ExplicitVarComparability makeAlias(String name) {
+  public ExplicitVarComparability makeAlias(String name) {
     return new ExplicitVarComparability(base, indices, dimensions, name);
   }
 
@@ -75,8 +75,6 @@ public class ExplicitVarComparability extends VarComparability {
   }
 
   static ExplicitVarComparability parse(String rep_, ProglangType vartype) {
-    // is this necessary?
-    Assert.assert(VarComparability.format == VarComparability.EXPLICIT);
     String rep = rep_;
 
     PatternMatcher re_matcher = Global.regexp_matcher;

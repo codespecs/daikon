@@ -80,18 +80,18 @@ public abstract class Ppt {
   //   Assert.assert(removed);
   // }
 
-  public PptSliceGeneric getView(VarInfo vi) {
+  public PptSlice getView(VarInfo vi) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+      PptSlice slice = (PptSlice) itor.next();
       if ((slice.arity == 1) && slice.usesVar(vi))
         return slice;
     }
     return null;
   }
 
-  public PptSliceGeneric getView(VarInfo vi1, VarInfo vi2) {
+  public PptSlice getView(VarInfo vi1, VarInfo vi2) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+      PptSlice slice = (PptSlice) itor.next();
       if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
         return slice;
     }
@@ -100,7 +100,7 @@ public abstract class Ppt {
 
   public void clear_view_caches() {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+      PptSlice slice = (PptSlice) itor.next();
       slice.clear_cache();
     }
   }
@@ -147,24 +147,24 @@ public abstract class Ppt {
   //  */
   // abstract void process();
 
-  /**
-   * Returns whether the ValueTuple appears in this map.
-   * This can be more efficient than @link{count} because, for
-   * views, it can stop after finding one occurrence.
-   */
-  abstract boolean contains(ValueTuple vt);
+  // /**
+  //  * Returns whether the ValueTuple appears in this map.
+  //  * This can be more efficient than @link{count} because, for
+  //  * views, it can stop after finding one occurrence.
+  //  */
+  // abstract boolean contains(ValueTuple vt);
 
-  /** Returns the number of occurrences of this ValueTuple in the map. */
-  abstract int count(ValueTuple vt);
+  // /** Returns the number of occurrences of this ValueTuple in the map. */
+  // abstract int count(ValueTuple vt);
 
-  /**
-   * This oughtn't return a Set because it might be expensive to produce
-   * such a thing (with no duplicates, that is).  And it might not even be
-   * possible to return this set if we have already discarded some info.
-   *
-   * Maybe have another method that does return a Set.
-   */
-  abstract Iterator entrySet();
+  // /**
+  //  * This oughtn't return a Set because it might be expensive to produce
+  //  * such a thing (with no duplicates, that is).  And it might not even be
+  //  * possible to return this set if we have already discarded some info.
+  //  *
+  //  * Maybe have another method that does return a Set.
+  //  */
+  // abstract Iterator entrySet();
 
   String fn_name() {
     return Ppt.fn_name(name);

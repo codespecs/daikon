@@ -2,17 +2,20 @@ package daikon;
 
 import daikon.derive.*;
 
+import java.util.*;
+
 import utilMDE.*;
 
 
 // This is the data structure that holds the tuples of values see so far
 // (and how many times each was seen).
 
+// While the arrays are interned, the ValueTuple elements themselves are not.
 public class ValueTuple implements Cloneable {
 
   // These arrays should be interned.
 
-  Object[] vals;		// the values themselves (as Objects, if necessary)
+  public Object[] vals;		// the values themselves (as Objects, if necessary)
 
   // consider putting this in the first slot of "vals", to avoid having to
   // make a pair of val and mods.  Do I need to worry about trickery such
@@ -24,7 +27,7 @@ public class ValueTuple implements Cloneable {
   // the packed representation if appropriate.  (That does seem cleaner,
   // although it might be less efficient.)
 
-  private int[] mods;		// modification bit per value, possibly packed
+  public int[] mods;		// modification bit per value, possibly packed
 				// into fewer ints than the vals above.
 				// Don't use a single int because that
 				// won't scale to (say) more than 16
@@ -129,12 +132,11 @@ public class ValueTuple implements Cloneable {
   }
 
 
-  int tupleMod() {
+  static int tupleMod(int[] mods) {
     boolean[] has_modbit_val = new boolean[MODBIT_VALUES];
     // Extraneous, as the array is initialized to all zeroes.
-    for (int i=0; i<MODBIT_VALUES; i++)
-      has_modbit_val[i] = false;
-    for (int i=0; i<vals.length; i++) {
+    Arrays.fill(has_modbit_val, false);
+    for (int i=0; i<mods.length; i++) {
       has_modbit_val[mods[i]] = true;
     }
     int result = 0;
@@ -145,6 +147,10 @@ public class ValueTuple implements Cloneable {
 	result++;
     }
     return result;
+  }
+
+  int tupleMod() {
+    return ValueTuple.tupleMod(mods);
   }
 
   static int parseModified(String raw) {
@@ -265,6 +271,20 @@ public class ValueTuple implements Cloneable {
         sb.append(vals[i]);
       sb.append(",");
       sb.append(mods[i]);
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
+  public static String valsToString(Object[] vals) {
+    StringBuffer sb = new StringBuffer("[");
+    for (int i=0; i<vals.length; i++) {
+      if (i>0)
+	sb.append(", ");
+      if (vals[i] instanceof int[])
+        sb.append(ArraysMDE.toString((int[])vals[i]));
+      else
+        sb.append(vals[i]);
     }
     sb.append("]");
     return sb.toString();

@@ -31,7 +31,7 @@ public class VarInfo implements Cloneable {
   public Ppt ppt;
 
   // Use the simpler canBeMissing instead
-  // PptSliceGeneric ppt_unary;    // For unary invariants over this variable
+  // PptSlice ppt_unary;    // For unary invariants over this variable
   boolean canBeMissing = false;
 
   // To find the invariant over a pair of variables, do a double-dispatch:
@@ -81,10 +81,10 @@ public class VarInfo implements Cloneable {
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object static_constant_value_) {
     // Watch out:  some Lisp .decls files have other (unsupported) types.
-    Assert.assert(rep_type_.equals(ProglangType.INT)
-                  || rep_type_.equals(ProglangType.STRING)
-                  || rep_type_.equals(ProglangType.INT_ARRAY)
-                  || rep_type_.equals(ProglangType.STRING_ARRAY));
+    Assert.assert((rep_type_ == ProglangType.INT)
+                  || (rep_type_ == ProglangType.STRING)
+                  || (rep_type_ == ProglangType.INT_ARRAY)
+                  || (rep_type_ == ProglangType.STRING_ARRAY));
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
@@ -102,6 +102,7 @@ public class VarInfo implements Cloneable {
     derivees = new Vector(3);
     // Don't set equal_to yet; leave it null until it's set.
     // equal_to = new Vector(3);
+
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_) {
@@ -421,7 +422,7 @@ public class VarInfo implements Cloneable {
 
   // Returns true if the type in the original program is integer
   public boolean isIndex() {
-    return (rep_type.equals(ProglangType.INT)
+    return ((rep_type == ProglangType.INT)
             && type.isIndex());
   }
 

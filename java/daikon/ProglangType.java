@@ -18,25 +18,24 @@ import utilMDE.*;
 // known_types = integral_types + ("pointer", "address")
 
 public final class ProglangType {
-  // Use .equals(), not ==, to compare to these types.
-  public static ProglangType INT = new ProglangType("int", 0);
-  public static ProglangType STRING = new ProglangType("String", 0);
-  public static ProglangType INT_ARRAY = new ProglangType("int", 1);
-  public static ProglangType STRING_ARRAY = new ProglangType("String", 1);
+  // Should I use a Set, possibly a HashSet, here?
+  // Or a WeakHashMapWithHasher?  It depends on how big this can get...
+  private static Vector all_known_types = new Vector();
 
-  public static ProglangType BOOLEAN = new ProglangType("boolean", 0);
-  public static ProglangType INTEGER = new ProglangType("Integer", 0);
+  // Use == to compare, because ProglangType objects are interned.
+  public final static ProglangType INT = ProglangType.intern("int", 0);
+  public final static ProglangType STRING = ProglangType.intern("String", 0);
+  public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
+  public final static ProglangType STRING_ARRAY = ProglangType.intern("String", 1);
 
+  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
+  public final static ProglangType INTEGER = ProglangType.intern("Integer", 0);
 
   private String base;		// interned name of base type
   public String base() { return base; }
   private int dimensions;	// number of dimensions
   public int dimensions() { return dimensions; }
   public boolean isArray() { return dimensions > 0; }
-
-  // Should I use a Set, possibly a HashSet, here?
-  // Or a WeakHashMapWithHasher?  It depends on how big this can get...
-  private static Vector all_known_types = new Vector();
 
   /**
    * No public constructor:  use parse() instead to get a canonical
@@ -45,9 +44,10 @@ public final class ProglangType {
    */
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
-    // Oooh, hack.  Yuck.
-    if (basetype == "boolean")  // interned
-      basetype = "int";
+    // Don't do this here; it messes up interning.
+    // // Oooh, hack.  Yuck.
+    // if (basetype == "boolean")  // interned
+    //   basetype = "int";
     base = basetype;
     dimensions = dims;
   }
@@ -80,39 +80,58 @@ public final class ProglangType {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof ProglangType))
-      return false;
-    ProglangType plt = (ProglangType)o;
+    return this == o;
+  }
 
-    // System.out.println("Calling equals: " + this + " " + o);
-    return ((base == plt.base)
-            && (dimensions == plt.dimensions));
+  private boolean internal_equals(ProglangType other) {
+    return ((base == other.base)
+            && (dimensions == other.dimensions));
   }
 
   // t_base should be interned
   private static ProglangType find(String t_base, int t_dims) {
     Assert.assert(t_base == t_base.intern());
-    int num_known_types = 0;
-    for (int i=0; i<num_known_types; i++) {
-      ProglangType candidate = (ProglangType)all_known_types.elementAt(i);
-      if ((t_dims == candidate.dimensions())
-	  && (t_base == candidate.base()))
-	return candidate;
+    if (t_base == "boolean") { // interned
+      t_base = "int";
     }
+    // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ")");
+    // System.out.println("All known types:");
+    // for (int i=0; i<all_known_types.size(); i++) {
+    //   ProglangType k = (ProglangType)all_known_types.elementAt(i);
+    //   System.out.println("  " + k.base() + ", " + k.dimensions());
+    // }
+    for (int i=0; i<all_known_types.size(); i++) {
+      ProglangType candidate = (ProglangType)all_known_types.elementAt(i);
+      Assert.assert(candidate.base() == candidate.base().intern());
+      // System.out.println("ProglangType.find checking #" + i + ": " + candidate.base() + "," + candidate.dimensions());
+      if ((t_dims == candidate.dimensions())
+	  && (t_base == candidate.base())) {
+        // System.out.println("ProglangType.find succeeded at index " + i);
+	return candidate;
+      }
+      // System.out.println("Candidate (" + t_base + ", " + t_dims + ") failed: "
+      //                    + ((t_dims == candidate.dimensions()) ? "same" : "different")
+      //                    + " dimensions, "
+      //                    + ((t_base == candidate.base()) ? "same" : "different")
+      //                    + " base");
+    }
+    // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ") failed: ");
     return null;
   }
 
-  private ProglangType intern() {
-    return ProglangType.intern(this);
-  }
+  // private ProglangType intern() {
+  //   return ProglangType.intern(this);
+  // }
 
-  private static ProglangType intern(ProglangType t) {
-    ProglangType candidate = find(t.base, t.dimensions);
-    if (candidate != null)
-      return candidate;
-    all_known_types.add(t);
-    return t;
-  }
+  // We shouldn't even get to the point of interning; we should not
+  // have created the ProglangType if it isn't canonical.
+  // private static ProglangType intern(ProglangType t) {
+  //   ProglangType candidate = find(t.base, t.dimensions);
+  //   if (candidate != null)
+  //     return candidate;
+  //   all_known_types.add(t);
+  //   return t;
+  // }
 
   private static ProglangType intern(String t_base, int t_dims) {
     ProglangType result = find(t_base, t_dims);
@@ -322,13 +341,13 @@ public final class ProglangType {
 
     // Old implementation
     // ProglangType type = var.type;
-    // if (type.isIntegral() && (! type.equals(ProglangType.BOOLEAN)))
+    // if (type.isIntegral() && (type != ProglangType.BOOLEAN))
     //   return true;
     // return false;
   }
 
   public boolean comparable(ProglangType other) {
-    if (this.equals(other))
+    if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
       return false;

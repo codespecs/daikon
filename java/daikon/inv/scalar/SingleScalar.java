@@ -18,16 +18,14 @@ public abstract class SingleScalar extends Invariant {
   // Should never be called with modified == ValueTuple.MISSING.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(int value, int modified, int count) {
+  public void add(int value, int mod_index, int count) {
     Assert.assert(! no_invariant);
-    Assert.assert((modified == ValueTuple.MODIFIED)
-		  || (modified == ValueTuple.UNMODIFIED));
-    if (finished)
-      return;
-    if (modified == ValueTuple.MODIFIED) {
-      add_modified(value, count);
-    } else {
+    Assert.assert((mod_index >= 0) && (mod_index < 2));
+    Assert.assert(!finished);
+    if (mod_index == 0) {
       add_unmodified(value, count);
+    } else {
+      add_modified(value, count);
     }
   }
 
@@ -43,11 +41,6 @@ public abstract class SingleScalar extends Invariant {
    */
   public void add_unmodified(int value, int count) {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
-    if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
-      add_modified(value, count);
-      return;
-    }
-
     return;
   }
 

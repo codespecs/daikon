@@ -23,24 +23,16 @@ public abstract class ThreeScalar extends Invariant {
     return ppt.var_infos[2];
   }
 
-  public void add(int v1, int mod1, int v2, int mod2, int v3, int mod3, int count) {
+  public void add(int v1, int v2, int v3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assert(! no_invariant);
-    Assert.assert((mod1 == ValueTuple.MODIFIED)
-                  || (mod1 == ValueTuple.UNMODIFIED));
-    Assert.assert((mod2 == ValueTuple.MODIFIED)
-                  || (mod2 == ValueTuple.UNMODIFIED));
-    Assert.assert((mod3 == ValueTuple.MODIFIED)
-                  || (mod3 == ValueTuple.UNMODIFIED));
-    if (finished)
-      return;
-    if ((mod1 == ValueTuple.MODIFIED)
-	|| (mod2 == ValueTuple.MODIFIED)
-	|| (mod3 == ValueTuple.MODIFIED)) {
-      add_modified(v1, v2, v3, count);
-    } else {
+    Assert.assert((mod_index >= 0) && (mod_index < 8));
+    Assert.assert(!finished);
+    if (mod_index == 0) {
       add_unmodified(v1, v2, v3, count);
+    } else {
+      add_modified(v1, v2, v3, count);
     }
   }
 
@@ -55,11 +47,6 @@ public abstract class ThreeScalar extends Invariant {
    * Subclasses can override this.
    */
   public void add_unmodified(int v1, int v2, int v3, int count) {
-    if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
-      add_modified(v1, v2, v3, count);
-      return;
-    }
-
     return;
   }
 

@@ -48,15 +48,15 @@ public class PptTopLevel extends Ppt {
   //   >= derivation_index[1] >= ...
   int[] derivation_indices = new int[derivation_passes+1];
 
-  VarValues values;
+  VarValuesOrdered values;
 
   // These accessors are for abstract methods declared in Ppt
-  public int num_samples() { return values.num_samples; }
+  public int num_samples() { return values.num_samples(); }
   public int num_mod_non_missing_samples() { return values.num_mod_non_missing_samples(); }
   // WARNING!  This is the number of distinct ValueTuple objects,
   // which can be as much as 2^arity times as many as the number of
   // distinct tuples of values.
-  public int num_values() { return values.num_values; }
+  public int num_values() { return values.num_values(); }
   // public int num_missing() { return values.num_missing; }
   public String tuplemod_samples_summary() { return values.tuplemod_samples_summary();
   }
@@ -74,7 +74,7 @@ public class PptTopLevel extends Ppt {
       var_infos[i].ppt = this;
     }
 
-    values = new VarValues();
+    values = new VarValuesOrdered();
     views = new HashSet();
     views_cond = new Vector();
 
@@ -90,7 +90,7 @@ public class PptTopLevel extends Ppt {
     var_infos = other.var_infos;
     derivation_indices = new int[other.derivation_indices.length];
     System.arraycopy(other.derivation_indices, 0, derivation_indices, 0, derivation_indices.length);
-    values = new VarValues();
+    values = new VarValuesOrdered();
     // views = new WeakHashMap();
     views = new HashSet();
   }
@@ -564,11 +564,7 @@ public class PptTopLevel extends Ppt {
 
     // Since I am only modifying members, not making new objects, and since
     // I am using an Eq hash table, I don't need to rehash.
-    for (Iterator itor = values.entrySet().iterator() ; itor.hasNext() ; ) {
-      Map.Entry entry = (Map.Entry) itor.next();
-      ValueTuple vt = (ValueTuple) entry.getKey();
-      vt.extend(derivs);
-    }
+    values.extend(derivs);
   }
 
 
@@ -582,12 +578,12 @@ public class PptTopLevel extends Ppt {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length);
 
-    values.increment(vt, count);
+    values.add(vt, count);
 
     // Add to all the views
     // for (Iterator itor = views.keySet().iterator() ; itor.hasNext() ; ) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSliceGeneric view = (PptSliceGeneric) itor.next();
+      PptSlice view = (PptSlice) itor.next();
       view.add(vt, count);
       if (view.invs.size() == 0)
         itor.remove();
@@ -599,17 +595,13 @@ public class PptTopLevel extends Ppt {
   //   throw new Error("To implement");
   // }
 
-  boolean contains(ValueTuple vt) {
-    return values.containsKey(vt);
-  }
+  // boolean contains(ValueTuple vt) {
+  //   return values.containsKey(vt);
+  // }
 
-  int count(ValueTuple vt) {
-    return values.get(vt);
-  }
-
-  Iterator entrySet() {
-    return values.entrySet().iterator();
-  }
+  // Iterator entrySet() {
+  //   return values.entrySet().iterator();
+  // }
 
 
 
@@ -766,26 +758,29 @@ public class PptTopLevel extends Ppt {
 
   // I can't decide which loop it's more efficient to make the inner loop.
 
-  // Vector of PptSliceGeneric.
+  // Vector of PptSlice.
   // Maybe this should return the rejected views.
   public void addViews(Vector slices_vector_) {
+    if (slices_vector_.isEmpty())
+      return;
+
     // Don't modify the argument
     Vector slices_vector = (Vector) slices_vector_.clone();
     // use an array because iterating over it will be more efficient, I suspect.
-    PptSliceGeneric[] slices;
+    PptSlice[] slices;
     int num_slices;
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
     for (Iterator itor = slices_vector.iterator(); itor.hasNext(); ) {
-      PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+      PptSlice slice = (PptSlice) itor.next();
       if (slice.invs.size() == 0)
         itor.remove();
     }
 
     // This is also duplicated below.
     views_to_remove_deferred = vtrd_cache;
-    slices = (PptSliceGeneric[]) slices_vector.toArray(new PptSliceGeneric[] { });
+    slices = (PptSlice[]) slices_vector.toArray(new PptSlice[] { });
     num_slices = slices.length;
 
     // System.out.println("Adding views for " + name);
@@ -794,12 +789,18 @@ public class PptTopLevel extends Ppt {
     // }
     // values.dump();
 
-    for (Iterator vt_itor = values.entrySet().iterator(); vt_itor.hasNext(); ) {
-      Map.Entry entry = (Map.Entry) vt_itor.next();
-      ValueTuple vt = (ValueTuple) entry.getKey();
-      int count = ((Integer) entry.getValue()).intValue();
-      for (int i=0; i<num_slices; i++)
+    // System.out.println("Number of samples for " + name + ": "
+    //                    + values.num_samples()
+    //                    + ", number of values: " + values.num_values());
+    // If I recorded mod bits in value.ValueSet(), I could use it here instead.
+    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
+      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
+      ValueTuple vt = entry.value_tuple;
+      int count = entry.count;
+      for (int i=0; i<num_slices; i++) {
+        // System.out.println("" + slices[i] + " .add(" + vt + ", " + count + ")");
         slices[i].add(vt, count);
+      }
       if (views_to_remove_deferred.size() > 0) {
         // Inefficient, but easy to code.
         Assert.assert(slices_vector.containsAll(views_to_remove_deferred));
@@ -807,12 +808,16 @@ public class PptTopLevel extends Ppt {
         views_to_remove_deferred.clear();
         if (slices_vector.size() == 0)
           break;
-        slices = (PptSliceGeneric[]) slices_vector.toArray(new PptSliceGeneric[] { });
+        slices = (PptSlice[]) slices_vector.toArray(new PptSlice[] { });
         num_slices = slices.length;
       }
     }
 
     views.addAll(slices_vector);
+    for (int i=0; i<num_slices; i++) {
+      slices[i].already_seen_all = true;
+      // System.out.println("Now " + slices[i].name + " has seen it all");
+    }
 
     views_to_remove_deferred = null;
   }
@@ -820,7 +825,7 @@ public class PptTopLevel extends Ppt {
   // Old version with the other loop outermost
   // private boolean adding_views;
   // private Ppt view_to_remove_deferred = null;
-  // // Vector of PptSliceGeneric.
+  // // Vector of PptSlice.
   // // Maybe this should return the rejected views.
   // void addViews(Vector slices) {
   //   adding_views = true;
@@ -861,18 +866,18 @@ public class PptTopLevel extends Ppt {
 
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
-  public PptSliceGeneric findSlice(VarInfo v) {
+  public PptSlice findSlice(VarInfo v) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSliceGeneric view = (PptSliceGeneric) itor.next();
+      PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 1) && (v == view.var_infos[0]))
         return view;
     }
     return null;
   }
 
-  public PptSliceGeneric findSlice(VarInfo v1, VarInfo v2) {
+  public PptSlice findSlice(VarInfo v1, VarInfo v2) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSliceGeneric view = (PptSliceGeneric) itor.next();
+      PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2)
           && (v1 == view.var_infos[0])
           && (v2 == view.var_infos[1]))
@@ -881,9 +886,9 @@ public class PptTopLevel extends Ppt {
     return null;
   }
 
-  public PptSliceGeneric findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
+  public PptSlice findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSliceGeneric view = (PptSliceGeneric) itor.next();
+      PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 3)
           && (v1 == view.var_infos[0])
           && (v2 == view.var_infos[1])
@@ -969,7 +974,7 @@ public class PptTopLevel extends Ppt {
       // whether it's canonical??
       // if (!var_infos[i].isCanonical())
       //   continue;
-      PptSliceGeneric slice1 = new PptSliceGeneric(this, var_infos[i]);
+      PptSlice1 slice1 = new PptSlice1(this, var_infos[i]);
       slice1.instantiate_invariants(1);
       unary_views.add(slice1);
     }
@@ -977,7 +982,7 @@ public class PptTopLevel extends Ppt {
     // Set the dynamic_constant slots of all the new variables.
     {
       for (int i=0; i<unary_views.size(); i++) {
-        PptSliceGeneric unary_view = (PptSliceGeneric) unary_views.elementAt(i);
+        PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
         Assert.assert(unary_view.arity == 1);
         if (views.contains(unary_view)) {
           // There is only one type of unary invariant in pass 1:
@@ -986,7 +991,7 @@ public class PptTopLevel extends Ppt {
           Assert.assert(unary_view.invs.size() == 1);
           Invariant inv = (Invariant) unary_view.invs.elementAt(0);
           inv.finished = true;
-          unary_view.already_seen_all = true;
+          // unary_view.already_seen_all = true;
           Assert.assert(inv instanceof OneOf);
           OneOf one_of = (OneOf) inv;
           if (one_of.num_elts() == 1) {
@@ -1061,7 +1066,7 @@ public class PptTopLevel extends Ppt {
         //   continue;
         // }
 
-        PptSliceGeneric slice2 = new PptSliceGeneric(this, var_infos[i1], var_infos[i2]);
+        PptSlice slice2 = new PptSlice2(this, var_infos[i1], var_infos[i2]);
         slice2.instantiate_invariants(1);
         binary_views.add(slice2);
       }
@@ -1070,7 +1075,7 @@ public class PptTopLevel extends Ppt {
     // Set the equal_to slots of all the new variables.
     {
       for (int i=0; i<binary_views.size(); i++) {
-        PptSliceGeneric binary_view = (PptSliceGeneric) binary_views.elementAt(i);
+        PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
         Assert.assert(binary_view.arity == 2);
         if (views.contains(binary_view)) {
           // There is only one type of binary invariant in pass 1:
@@ -1079,7 +1084,7 @@ public class PptTopLevel extends Ppt {
           Assert.assert(binary_view.invs.size() == 1);
           Invariant inv = (Invariant) binary_view.invs.elementAt(0);
           inv.finished = true;
-          binary_view.already_seen_all = true;
+          // binary_view.already_seen_all = true;
           Assert.assert(inv instanceof Comparison);
           // Not "inv.format" because that is null if not justified.
           // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
@@ -1132,7 +1137,7 @@ public class PptTopLevel extends Ppt {
       System.out.println(unary_views.size() + " unary views for pass 2 instantiate_invariants");
     Vector unary_views_pass2 = new Vector(unary_views.size());
     for (int i=0; i<unary_views.size(); i++) {
-      PptSliceGeneric unary_view = (PptSliceGeneric) unary_views.elementAt(i);
+      PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
       Assert.assert(unary_view.arity == 1);
       VarInfo var = unary_view.var_infos[0];
       if (!var.isCanonical()) {
@@ -1153,20 +1158,26 @@ public class PptTopLevel extends Ppt {
       } else {
         // The old one was a failure (and so saw only a subset of all the
         // values); recreate it.
-        unary_view = new PptSliceGeneric(this, var);
+        unary_view = new PptSlice1(this, var);
+        unary_views_pass2.add(unary_view);
       }
       unary_view.instantiate_invariants(2);
-      unary_views_pass2.add(unary_view);
     }
     addViews(unary_views_pass2);
-    for (int i=0; i<unary_views_pass2.size(); i++) {
-      ((PptSliceGeneric) unary_views_pass2.elementAt(i)).clear_cache();
+    // Save some space
+    for (int i=0; i<unary_views.size(); i++) {
+      ((PptSlice) unary_views.elementAt(i)).clear_cache();
     }
+    for (int i=0; i<unary_views_pass2.size(); i++) {
+      ((PptSlice) unary_views_pass2.elementAt(i)).clear_cache();
+    }
+    unary_views = null;
+    unary_views_pass2 = null;
 
     // 4. all other binary invariants
     Vector binary_views_pass2 = new Vector(binary_views.size());
     for (int i=0; i<binary_views.size(); i++) {
-      PptSliceGeneric binary_view = (PptSliceGeneric) binary_views.elementAt(i);
+      PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
       Assert.assert(binary_view.arity == 2);
       VarInfo var1 = binary_view.var_infos[0];
       VarInfo var2 = binary_view.var_infos[1];
@@ -1184,16 +1195,21 @@ public class PptTopLevel extends Ppt {
       } else {
         // The old one was a failure (and so saw only a subset of all the
         // values); recreate it.
-        binary_view = new PptSliceGeneric(this, var1, var2);
+        binary_view = new PptSlice2(this, var1, var2);
+        binary_views_pass2.add(binary_view);
       }
       binary_view.instantiate_invariants(2);
-      binary_views_pass2.add(binary_view);
     }
     addViews(binary_views_pass2);
-    for (int i=0; i<binary_views_pass2.size(); i++) {
-      ((PptSliceGeneric) binary_views_pass2.elementAt(i)).clear_cache();
+    // Save some space
+    for (int i=0; i<binary_views.size(); i++) {
+      ((PptSlice) binary_views.elementAt(i)).clear_cache();
     }
-
+    for (int i=0; i<binary_views_pass2.size(); i++) {
+      ((PptSlice) binary_views_pass2.elementAt(i)).clear_cache();
+    }
+    binary_views = null;
+    binary_views_pass2 = null;
 
     // 5. ternary invariants
     // (However, arity 3 is not yet implemented.)
@@ -1258,7 +1274,7 @@ public class PptTopLevel extends Ppt {
                 || var3.rep_type.isArray())
               continue;
 
-            PptSliceGeneric slice3 = new PptSliceGeneric(this, var1, var2, var3);
+            PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
             slice3.instantiate_invariants(1);
             slice3.instantiate_invariants(2);
             ternary_views.add(slice3);
@@ -1267,7 +1283,7 @@ public class PptTopLevel extends Ppt {
       }
       addViews(ternary_views);
       for (int i=0; i<ternary_views.size(); i++) {
-        ((PptSliceGeneric) ternary_views.elementAt(i)).clear_cache();
+        ((PptSlice) ternary_views.elementAt(i)).clear_cache();
       }
     }
 
@@ -1290,14 +1306,14 @@ public class PptTopLevel extends Ppt {
   //   // views = new WeakHashMap();
   //   views = new HashSet();
   //   for (int i=0; i<var_infos.length; i++) {
-  //     PptSliceGeneric slice1 = new PptSliceGeneric(this, var_infos[i]);
+  //     PptSlice slice1 = new PptSlice(this, var_infos[i]);
   //     addView(slice1);
   //     for (int j=i+1; j<var_infos.length; j++) {
-  //       PptSliceGeneric slice2 = new PptSliceGeneric(this, var_infos[i], var_infos[j]);
+  //       PptSlice slice2 = new PptSlice(this, var_infos[i], var_infos[j]);
   //       addView(slice2);
   //       /// Arity 3 is not yet implemented.
   //       // for (int k=j+1; j<var_infos.length; k++) {
-  //       //   PptSliceGeneric slice3 = new PptSliceGeneric(this, var_infos[i], var_infos[j], var_infos[k]);
+  //       //   PptSlice slice3 = new PptSlice(this, var_infos[i], var_infos[j], var_infos[k]);
   //       //   addView(slice3);
   //       // }
   //     }
@@ -1345,19 +1361,78 @@ public class PptTopLevel extends Ppt {
     PptConditional[] pconds
       = (PptConditional[]) pconds_vector.toArray(new PptConditional[] { });
     int num_pconds = pconds.length;
+    int num_splits = num_pconds/2;
 
-    for (Iterator vt_itor = values.entrySet().iterator() ; vt_itor.hasNext() ; ) {
-      Map.Entry entry = (Map.Entry) vt_itor.next();
-      ValueTuple vt = (ValueTuple) entry.getKey();
-      int count = ((Integer) entry.getValue()).intValue();
-      // I do not want to use the same ValueTuple every time through
-      // because the ValueTuple is modified in place.
-      // It's OK to reuse its elements, though; so use clone() (actually
-      // shallowcopy()).
-      ValueTuple vt_trimmed = vt.trim(num_tracevars + num_orig_vars);
-      for (int i=0; i<num_pconds; i++)
-        pconds[i].add(vt_trimmed.shallowcopy(), count);
+    for (int i=0; i<num_pconds; i+=2) {
+      Assert.assert(pconds[i].splitter_inverse == false);
+      Assert.assert(pconds[i+1].splitter_inverse == true);
+      Assert.assert(pconds[i+1].splitter.condition().equals(pconds[i].splitter.condition()));
     }
+
+    int trimlength = num_tracevars + num_orig_vars;
+
+    int[][] cumulative_modbits = new int[num_pconds][trimlength];
+    for (int i=0; i<num_pconds; i++) {
+      Arrays.fill(cumulative_modbits[i], 1);
+    }
+
+    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
+      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
+      ValueTuple vt = entry.value_tuple;
+      int count = entry.count;
+      // I do not want to use the same ValueTuple every time through this loop
+      // because the inserted ValueTuple will be modified in place.
+      // It's OK to reuse its elements, though.
+      ValueTuple vt_trimmed = vt.trim(trimlength);
+      int[] trimmed_mods = vt_trimmed.mods;
+      Object[] trimmed_vals = vt_trimmed.vals;
+      for (int i=0; i<num_pconds; i+=2) {
+        // I really only have to do one of these (depending on which way
+        // the split goes), unless the splitter throws an error, in which
+        // case I need to have done both.
+        ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
+        ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
+        boolean splitter_test;
+        boolean split_exception = false;
+        // System.out.println("Testing " + pconds[i].name);
+        // This try block is tight so it doesn't accidentally catch
+        // other errors.
+        try {
+          splitter_test = pconds[i].splitter.test(vt);
+        } catch (Exception e) {
+          // e.printStackTrace();
+          // If an exception is thrown, don't put the data on either side
+          // of the split.
+          split_exception = true;
+          splitter_test = false; // to pacify the Java compiler
+        }
+        if (! split_exception) {
+          // System.out.println("Result = " + splitter_test);
+          int index = (splitter_test ? i : i+1);
+          // Do not reuse cum_mods!  It might itself be the
+          // canonical version (returned by Intern.intern), and then
+          // modifications would be bad.  Instead, create a new array.
+          int[] cum_mods = cumulative_modbits[index];
+          int[] new_mods = (int[]) trimmed_mods.clone();
+          // This is somewhat like orModsInto, but not exactly.
+          for (int mi=0; mi<trimlength; mi++) {
+            if ((cum_mods[mi] == ValueTuple.MODIFIED)
+                && (new_mods[mi] != ValueTuple.MISSING)) {
+              new_mods[mi] = ValueTuple.MODIFIED;
+              cum_mods[mi] = ValueTuple.UNMODIFIED;
+            }
+          }
+          // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
+          pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
+                                                                Intern.intern(new_mods)),
+                                    count);
+          // I don't want to do "Arrays.fill(cum_mods, 0)" because where
+          // the value was missing, we didn't use up the modification bit.
+          // I've already fixed it up above, anyway.
+        }
+      }
+    }
+
 
     int parent_num_samples = num_samples();
     for (int i=0; i<num_pconds; i++) {
@@ -1393,7 +1468,7 @@ public class PptTopLevel extends Ppt {
   //       Iterator views_itor = views.iterator();
   //       public boolean hasNext() { return views_itor.hasNext(); }
   //       public Object next() {
-  //         PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
+  //         PptSlice slice = (PptSlice) views_itor.next();
   //         Invariants invs = slice.invs;
   //         return invs.iterator();
   //       }
@@ -1414,7 +1489,7 @@ public class PptTopLevel extends Ppt {
   public Vector invariants_vector() {
     Vector result = new Vector();
     for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
-      PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
+      PptSlice slice = (PptSlice) views_itor.next();
       result.addAll(slice.invs);
     }
     return result;
@@ -1448,7 +1523,7 @@ public class PptTopLevel extends Ppt {
   boolean check_modbits () {
     // This test is wrong for PptTopLevel because something is considered
     // unmodified only if none of its values are modified.  The test is
-    // appropriate for PptSliceGeneric because we don't put missing values
+    // appropriate for PptSlice because we don't put missing values
     // there.
 
     // // The value "0" can be had for missing samples.
@@ -1481,7 +1556,7 @@ public class PptTopLevel extends Ppt {
 
     // System.out.println("Views:");
     // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-    //   PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+    //   PptSlice slice = (PptSlice) itor.next();
     //   System.out.println("  " + slice.name);
     //   for (int i=0; i<slice.invs.size(); i++) {
     //     Invariant inv = (Invariant) slice.invs.elementAt(i);
@@ -1495,7 +1570,7 @@ public class PptTopLevel extends Ppt {
       for (int i=0; i<var_infos.length; i++) {
         VarInfo vi = var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
-        PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
+        PptSlice slice1 = ppt_tl.findSlice(vi);
         System.out.print("      " + vi.name
                          + " constant=" + vi.isConstant()
                          + " canonical=" + vi.isCanonical()
@@ -1532,7 +1607,7 @@ public class PptTopLevel extends Ppt {
             sb.append(other.name);
           }
           PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
-          PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
+          PptSlice slice1 = ppt_tl.findSlice(vi);
           if (slice1 != null) {
             int num_values = slice1.num_values();
             int num_samples = slice1.num_samples();
@@ -1565,9 +1640,9 @@ public class PptTopLevel extends Ppt {
         "\t\t(" + inv.ppt.num_values() + " values, "
         + inv.ppt.num_samples() + " samples)";
 
-      // I could imagine printing information about the PptSliceGeneric
+      // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.
-      PptSliceGeneric slice = (PptSliceGeneric) inv.ppt;
+      PptSlice slice = (PptSlice) inv.ppt;
       if (Global.debugPrintInvariants) {
         System.out.println("Slice: " + slice.varNames() + "  "
                            + slice.num_samples() + " samples");
@@ -1583,7 +1658,7 @@ public class PptTopLevel extends Ppt {
 
       // This "5" should be a symbolic constant, not an integer literal.
       // Note exception for OneOf invariants.
-      int num_mod_non_missing_samples = ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples();
+      int num_mod_non_missing_samples = ((PptSlice)inv.ppt).num_mod_non_missing_samples();
       if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
         System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() + ") than modified samples (" + num_mod_non_missing_samples + ")");
       }
@@ -1592,7 +1667,7 @@ public class PptTopLevel extends Ppt {
       if ((num_mod_non_missing_samples < 5)
           && (! (inv instanceof OneOf))) {
         if (Global.debugPrintInvariants) {
-          System.out.println("  [Only " + ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSliceGeneric)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
+          System.out.println("  [Only " + ((PptSlice)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSlice)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
         }
         continue;
       }
@@ -1658,7 +1733,7 @@ public class PptTopLevel extends Ppt {
   //                      + values.tuplemod_samples_summary());
   //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
   //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
-  //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+  //     PptSlice slice = (PptSlice) itor2.next();
   //     if (Global.debugPrintInvariants) {
   //       System.out.println("Slice: " + slice.varNames() + "  "
   //                          + slice.num_samples() + " samples");
@@ -1693,7 +1768,7 @@ public class PptTopLevel extends Ppt {
   //                      + values.tuplemod_samples_summary());
   //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
   //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
-  //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+  //     PptSlice slice = (PptSlice) itor2.next();
   //     if (Global.debugPrintInvariants) {
   //       System.out.println("Slice: " + slice.varNames() + "  "
   //                          + slice.num_samples() + " samples");

@@ -31,7 +31,7 @@ public class SequenceExtremum extends UnaryDerivation {
   }
 
   public static boolean applicable(VarInfo vi) {
-    if (! vi.rep_type.equals(ProglangType.INT_ARRAY))
+    if (vi.rep_type != ProglangType.INT_ARRAY)
       return false;
     if (vi.derived != null) {
       Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
@@ -50,7 +50,7 @@ public class SequenceExtremum extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    if (var_info.rep_type.equals(ProglangType.INT_ARRAY)) {
+    if (var_info.rep_type == ProglangType.INT_ARRAY) {
       int[] val_array = (int[])val;
       if (val_array.length < minLength)
         return ValueAndModified.MISSING;

@@ -66,4 +66,18 @@ public class PptConditional extends PptTopLevel {
     }
   }
 
+  // I'd like to add a version that optimizes based on the observation that
+  // PptConditional objects come in pairs, with splitters in inverted
+  // senses.  But that observation is not strictly true, because a
+  // splitter's internal computation could err, so it ought to return false
+  // on both sides.  I'm ignoring that in the name of efficiency for the
+  // nonce.
+
+
+  // Call this for tuples that are guaranteed to pass the test.
+  void add_nocheck(ValueTuple vt, int count) {
+    super.add(vt, count);
+  }
+
+
 }

@@ -32,19 +32,14 @@ public abstract class SequenceScalar extends Invariant {
     return ppt.var_infos[scl_index];
   }
 
-  public void add(int[] v1, int mod1, int v2, int mod2, int count) {
+  public void add(int[] v1, int v2, int mod_index, int count) {
     Assert.assert(! no_invariant);
-    Assert.assert((mod1 == ValueTuple.MODIFIED)
-		  || (mod1 == ValueTuple.UNMODIFIED));
-    Assert.assert((mod2 == ValueTuple.MODIFIED)
-		  || (mod2 == ValueTuple.UNMODIFIED));
-    if (finished)
-      return;
-    if ((mod1 == ValueTuple.MODIFIED)
-	|| (mod2 == ValueTuple.MODIFIED)) {
-      add_modified(v1, v2, count);
-    } else {
+    Assert.assert((mod_index >= 0) && (mod_index < 4));
+    Assert.assert(!finished);
+    if (mod_index == 0) {
       add_unmodified(v1, v2, count);
+    } else {
+      add_modified(v1, v2, count);
     }
   }
 
@@ -59,11 +54,6 @@ public abstract class SequenceScalar extends Invariant {
    * Subclasses can override this.
    */
   public void add_unmodified(int v1[], int v2, int count) {
-    if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
-      add_modified(v1, v2, count);
-      return;
-    }
-
     return;
   }
 

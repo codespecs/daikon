@@ -12,7 +12,7 @@ public class SequenceLength extends UnaryDerivation {
   }
 
   public static boolean applicable(VarInfo vi) {
-    if (! vi.rep_type.equals(ProglangType.INT_ARRAY))
+    if (vi.rep_type != ProglangType.INT_ARRAY)
       return false;
     if (vi.derived != null) {
       Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
@@ -37,7 +37,7 @@ public class SequenceLength extends UnaryDerivation {
       int len;
       ProglangType rep_type = var_info.rep_type;
 
-      if (rep_type.equals(ProglangType.INT_ARRAY)) {
+      if (rep_type == ProglangType.INT_ARRAY) {
         len = ((int[])val).length;
       } else {
         len = ((Object[])val).length;

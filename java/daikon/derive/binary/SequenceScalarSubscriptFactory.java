@@ -5,6 +5,8 @@ import daikon.inv.twoScalar.*;
 
 import utilMDE.*;
 
+import java.util.*;
+
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
@@ -21,12 +23,12 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     VarInfo seqvar;
     VarInfo sclvar;
 
-    if (vi1.rep_type.equals(ProglangType.INT_ARRAY)
-        && (vi2.rep_type.equals(ProglangType.INT))) {
+    if ((vi1.rep_type == ProglangType.INT_ARRAY)
+        && (vi2.rep_type == ProglangType.INT)) {
       seqvar = vi1;
       sclvar = vi2;
-    } else if (vi2.rep_type.equals(ProglangType.INT_ARRAY)
-               && (vi1.rep_type.equals(ProglangType.INT))) {
+    } else if ((vi2.rep_type == ProglangType.INT_ARRAY)
+               && (vi1.rep_type == ProglangType.INT)) {
       seqvar = vi2;
       sclvar = vi1;
     } else {
@@ -59,7 +61,7 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
 
     // Find an IntComparison relationship over the two variables, if possible.
     Assert.assert(sclvar.ppt == seqsize.ppt);
-    PptSliceGeneric compar_slice = sclvar.ppt.getView(sclvar, seqsize);
+    PptSlice compar_slice = sclvar.ppt.getView(sclvar, seqsize);
     if (compar_slice != null) {
       IntComparison compar = IntComparison.find(compar_slice);
       if (compar != null) {
