@@ -1,5 +1,5 @@
 Daikon todo list.
-Time-stamp: <2003-10-30 11:32:12 mernst>
+Time-stamp: <2003-11-14 14:12:55 jhp>
 
 Outstanding Issues
 
@@ -7,6 +7,18 @@ Outstanding Issues
 
     The code appears to create the old StringComparison invariant rather
     than StringEqual
+
+    11/14/03: note that this code has been moved to 
+    PptTopLevel.create_equality_inv().  It has a number of problems in
+    addition to that noted above.  It presumes that it will create
+    a new slice even though that is not necessarily the case.  It also
+    looks to see if an equality invariant is suppressed and removes it
+    if it is.  This does not seem correct.  Removing this creates diffs,
+    but they seem like correct diffs.
+
+    Also, it doesn't create stringarray comparisons (these are also not
+    created in other instantiate code).  This should be resolved as
+    well.
 
   jhp     11/10/03      Better solution for PptRelation and splitters
 
