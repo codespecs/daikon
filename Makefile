@@ -143,8 +143,8 @@ update-dist-dir: dist-ensure-directory
 daikon.jar: $(DAIKON_JAVA_FILES)
 	-rm -rf daikon.jar /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
-	cd daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
-	cd utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
 	tar xzf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
 	tar xzf java/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
 	mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
@@ -203,8 +203,8 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
-	(cd utilMDE; $(MAKE) utilMDE.tar.gz)
-	tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
+	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
+	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
 	tar zxf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
 	tar zxf java/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
 	(cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
@@ -250,6 +250,7 @@ dist-dfec-linux:
 	cd $(DFEC_DIR) && $(MAKE) dfec-static
 	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
+	update-link-dates $(DIST_DIR)/index.html
 	cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
 
 
@@ -291,10 +292,8 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	# Now copy it over
 	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
-	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
-
-$(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
+	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
 # To create build_mingw, I did:
