@@ -709,7 +709,7 @@ public class PptTopLevel
 
   /**
    * Add the sample to the invariants at this program point and any
-   * child conditional program points, but do no flow the sample to
+   * child conditional program points, but do not flow the sample to
    * other related ppts.
    *
    * @param vt the set of values for this to see
@@ -733,7 +733,8 @@ public class PptTopLevel
       }
     }
 
-    if (values_num_samples == Daikon.suppress_samples_min) {
+    if (!initiatedSuppression &&
+        values_num_samples >= Daikon.suppress_samples_min) {
       initiateSuppression();
     }
 
@@ -782,34 +783,37 @@ public class PptTopLevel
 
       for (Iterator itor = falsifiedInvs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
-        Set suppresses = new HashSet(inv.getSuppressees());
-        // Why copy?  Because we want to keep unlink() as an atomic operation that
-        // removes the SuppressionLink from the suppressor's list of suppressed
-        if (debugSuppress.isDebugEnabled() && suppresses.size() > 0) {
-          debugSuppress.debug (" Inv " + inv.repr() + " was falsified with suppresses");
+        // Why copy?  Because we want to keep unlink() as an atomic
+        // operation that removes the SuppressionLink from the
+        // suppressor's suppressed field.  Without copying, we get a
+        // ConcurrentModifiecationException.
+        Set suppressees = new HashSet(inv.getSuppressees());
+
+        if (debugSuppress.isDebugEnabled() && suppressees.size() > 0) {
+          debugSuppress.debug (" Inv " + inv.repr() + " was falsified with suppressees");
         }
-        for (Iterator iSuppresses = suppresses.iterator();
-             iSuppresses.hasNext(); ) {
-        SuppressionLink sl = (SuppressionLink) iSuppresses.next();
-        Invariant invSuppressed = sl.getSuppressee();
-        sl.unlink();
-        Assert.assertTrue (invSuppressed.getSuppressor() == null);
-        if (debugSuppress.isDebugEnabled()) {
-          debugSuppress.debug ("  Attempting re-suppression of: " + invSuppressed.repr());
-        }
-        PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
-        if (attemptSuppression (invSuppressed)) {
+        for (Iterator iSuppressees = suppressees.iterator();
+             iSuppressees.hasNext(); ) {
+          SuppressionLink sl = (SuppressionLink) iSuppressees.next();
+          Invariant invSuppressed = sl.getSuppressee();
+          sl.unlink();
+          Assert.assertTrue (invSuppressed.getSuppressor() == null);
           if (debugSuppress.isDebugEnabled()) {
-            debugSuppress.debug ("  Re-suppressed by " + invSuppressed.getSuppressor());
+            debugSuppress.debug ("  Attempting re-suppression of: " + invSuppressed.repr());
           }
-        } else if (suppressedPpt == this) {
-          // If invSuppressed didn't get resuppressed, we have to check values
-          debugSuppress.debug ("  Will re-check because in same ppt");
-          viewsToCheck.add (invSuppressed.ppt);
-        } else {
-          // Do nothing because suppressedParent is a child of this,
-          // and will be checked in good time.
-        }
+          PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
+          if (attemptSuppression (invSuppressed)) {
+            if (debugSuppress.isDebugEnabled()) {
+              debugSuppress.debug ("  Re-suppressed by " + invSuppressed.getSuppressor());
+            }
+          } else if (suppressedPpt == this) {
+            // If invSuppressed didn't get resuppressed, we have to check values
+            debugSuppress.debug ("  Will re-check because in same ppt");
+            viewsToCheck.add (invSuppressed.ppt);
+          } else {
+            // Do nothing because suppressedParent is a child of this,
+            // and will be checked in good time.
+          }
         }
       }
     }
@@ -1584,6 +1588,8 @@ public class PptTopLevel
   /// Manipulating invariants and suppression
   ///
 
+  private boolean initiatedSuppression = false;
+  
   /**
    * Starts suppression by 1) unsuppressing all invariants. 2) running
    * full suppression check.  Called at the start of inferencing.  Can
@@ -1595,7 +1601,8 @@ public class PptTopLevel
    * @pre Invariants already instantiated
    **/
   public void initiateSuppression() {
-    if (Daikon.suppress_invariants) {
+    if (Daikon.suppress_invariants && !initiatedSuppression) {
+      initiatedSuppression = true;
       if (debugSuppressInit.isDebugEnabled()) {
         debugSuppressInit.debug ("Initiating suppression for: " + name);
       }
@@ -1659,19 +1666,15 @@ public class PptTopLevel
   public boolean fillSuppressionTemplate (SuppressionTemplate template,
                                           boolean checkSelf) {
     // We do two loops for performance: attempt to fill locally, then
-    // attempt to fill using upper ppts.  If the local fill loop
-    // doesn't generate at least one item, then we can stop, because
-    // of the suppression ordering property.
+    // attempt to fill using upper ppts.  
 
-    Assert.assertTrue (template.invTypes.length == template.varInfos.length,
-                       "Template varInfos and invariant slots must be equal");
-    
     boolean firstLoopFilled = false;
     template.filled = false;
     template.results = new Invariant[template.invTypes.length];
     template.transforms = new VarInfo[template.invTypes.length][];
-    Assert.assertTrue (template.invTypes.length == template.varInfos.length);
-
+    Assert.assertTrue (template.invTypes.length == template.varInfos.length,
+                       "Template varInfos and invariant slots must be equal");
+    
     if (checkSelf) {
       firstLoop:
       for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
@@ -1694,6 +1697,15 @@ public class PptTopLevel
           }
         }      
       }
+      // Formerly, we used to return null if the first loop didn't get
+      // at least one invariant.  But there are some types of
+      // suppression where this optimization would lower suppression
+      // results.  For example, to show that
+      // OBJECT:::NoDuplicates(this.array) implies
+      // Method::NoDuplicates(this.array[0..i]), we need to search in
+      // the OBJECT ppt, because the Method ppt won't have the
+      // NoDuplicates(this.array) invariant, as it's in the OBJECT
+      // ppt.
       // if (!firstLoopFilled) return false;
     }
 

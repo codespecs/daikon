@@ -350,8 +350,8 @@ public abstract class PptSlice
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
     invsFlowed.clear();
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
+    for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
+      Invariant inv = (Invariant) iFalsified.next();
       if (inv.falsified) {
         to_remove.add(inv);
       }
@@ -362,12 +362,17 @@ public abstract class PptSlice
       debugFlow.debug ("To remove: " + to_remove);
     }
 
-    // Could also assert that classes of invariants killed are all
-    // represented in invs_to_flow, but a size check should be enough,
-    // since most invariants only generate one flowed copy when they
-    // die (and we call this method a lot, so let's not be wasteful).
+    // The following is simply for error checking
     if (to_remove.size() > invs_to_flow.size()) {
-      Set naughty = new HashSet();
+      // This block may no longer be necessary, as destroy() is only
+      // called via destroyAndFlow().
+
+      // Could also assert that classes of invariants killed are all
+      // represented in invs_to_flow, but a size check should be enough,
+      // since most invariants only generate one flowed copy when they
+      // die (and we call this method a lot, so let's not be wasteful).
+      Set naughty = new HashSet(); // Classes that did not call
+                                   // addToFlow after calling destroy.
       for (Iterator i = to_remove.iterator(); i.hasNext(); ) {
         Invariant inv = (Invariant) i.next();
         naughty.add(inv.repr());
@@ -407,12 +412,13 @@ public abstract class PptSlice
     // flow to a PptConditional that hangs from it.
 
     // For each lower PptTopLevel
-    for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
-      PptTopLevel lower = (PptTopLevel) j.next();
+    for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
+      PptTopLevel lower = (PptTopLevel) iPptLower.next();
       // For all of the slices
       List slices_vis = (List) private_po_lower_vis.get(lower);
-      for (Iterator k = slices_vis.iterator(); k.hasNext(); ) {
-        VarInfo[] slice_vis = (VarInfo[]) k.next();
+      for (Iterator iLowerSlices = slices_vis.iterator();
+           iLowerSlices.hasNext(); ) {
+        VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
         // Ensure the slice exists.
         PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
         // Compute the permutation
@@ -423,8 +429,9 @@ public abstract class PptSlice
         }
         // For each invariant
       for_each_invariant:
-        for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
-          Invariant inv = (Invariant) i.next();
+        for (Iterator iInvsToFlow = invs_to_flow.iterator();
+             iInvsToFlow.hasNext(); ) {
+          Invariant inv = (Invariant) iInvsToFlow.next();
           if (! inv.falsified) {
             // The invariant must be destroyed before it can be
             // resurrected.  The invariant objects that flow are
@@ -445,17 +452,18 @@ public abstract class PptSlice
                             parent.name + " to " + lower.name);
           }
           // If its class does not already exist in lower
-          for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
-            Object item = h.next();
+          // for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
+          //   Object item = h.next();
+
             // XXX Should this be some sort of same formula check
             // instead?  Probably not; one class of invariant should
             // be able to handle all data fed to it; we never need two
             // invariants of the same class in the same pptslice.
             // Maybe add that as rep invariant up above?
-            if (item.getClass() == inv.getClass()) {
-              if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
-              continue for_each_invariant;
-            }
+          //            if (item.getClass() == inv.getClass()) {
+          if (Invariant.find (inv.getClass(), slice) != null) {
+            if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
+            continue for_each_invariant;
           }
           // Let it be reborn
           Invariant reborn = inv.resurrect(slice, permutation);
