@@ -31,6 +31,7 @@ if (/^$/) {
   # Print the representation type
   $type =~ s/\baddress\b/int/g;
   $type =~ s/\bchar\b/int/g;
+  $type =~ s/\blong\b/int/g;
   print $type;
 
   undef($var);

@@ -31,10 +31,10 @@ if ($_ eq "") {
 }
 # This does not seem to work.  (Maybe because of redef of $/)
 # chomp($_);
+s/\n\Z//;
 # Don't split on "\n"; keep lines that start with tab with their parents.
 my @invs = split(/\n /, $_);
 my $ppt = shift(@invs);
-$invs[$#invs] =~ s/\n\Z//;
 @invs = sort(@invs);
 unshift(@invs, $ppt);
 print $parasep;
