@@ -76,13 +76,15 @@ my $INV = $ENV{"INV"};
 
 if ($success{"daikon_checkout"}) {
   $success{"daikon_update"} = daikon_update();
+  $success{"tests_update"} = tests_update();
 }
 if ($success{"daikon_update"}) {
   $success{"daikon_compile"} = daikon_compile();
 }
 
 if (! $skip_daikon) {
-  if ($success{"daikon_compile"}) {
+  if ($success{"daikon_compile"}
+      && $success{"tests_update"}) {
     $success{"daikon_unit_test"} = daikon_unit_test();
     $success{"daikon_system_test"} = daikon_system_test();
     $success{"diff_system_test"} = diff_system_test();
@@ -90,7 +92,8 @@ if (! $skip_daikon) {
 }
 
 if (! $skip_dfec) {
-  if ($success{"daikon_checkout"}) {
+  if ($success{"daikon_checkout"}
+      && $success{"tests_update"}) {
     $success{"dfec_system_test"} = dfec_system_test();
   }
 }
@@ -207,6 +210,23 @@ sub daikon_update {
   my $daikon_dir = "invariants/java/daikon";
   chdir($daikon_dir) or die "can't chdir to $daikon_dir: $!\n";
   `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon_update.out`;
+  chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
+  if ($CHILD_ERROR) {
+    print_log("FAILED\n");
+    return 0;
+  } else {
+    print_log("OK\n");
+    return 1;
+  }
+}
+
+
+# Update the tests directory to the ENGINE_V2_PATCHES tag
+sub tests_update {
+  print_log("Updating tests...");
+  my $tests_dir = "invariants/tests";
+  chdir($tests_dir) or die "can't chdir to $tests_dir: $!\n";
+  `cvs -d $CVS_REP up -r $CVS_TAG &> ../../tests_update.out`;
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
