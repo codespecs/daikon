@@ -269,7 +269,8 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_Object_class(java.io.PrintStream ps, Object[] a) {
+  // Print an array of the classes of the elements.
+  public static final void println_array_Object_eltclass(java.io.PrintStream ps, Object[] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -285,7 +286,8 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_Object_class(java.io.PrintStream ps, Vector v) {
+  // Print an array of the classes of the elements.
+  public static final void println_array_Object_eltclass(java.io.PrintStream ps, Vector v) {
     if (v == null) {
       ps.println("null");
       return;
