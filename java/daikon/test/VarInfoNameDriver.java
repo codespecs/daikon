@@ -291,4 +291,85 @@ public class VarInfoNameDriver {
   }
   static { handlers.put("slice", new Slice()); }
 
+  // String jml_name()
+  private static class JMLName implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 1);
+      VarInfoName var = (VarInfoName) vars.get(args[0]);
+      out.println(args[0] + ".jml_name() = " + var.jml_name());
+    }
+  }
+  static { handlers.put("jml_name", new JMLName()); }
+
+  // VarInfoName applyFunctionOfN(String function, List vars)
+  private static class FunctionOfN implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length >= 4);
+      String func = args[1];
+      List function_vars = new Vector();
+      for (int x=2;x<args.length;x++)
+	function_vars.add((VarInfoName)vars.get(args[x]));
+      VarInfoName result = VarInfoName.applyFunctionOfN(func,function_vars);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("function_of_N", new FunctionOfN()); }
+
+  // public VarInfoName applyField(String field)
+  private static class Field implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 3);
+      VarInfoName var = (VarInfoName)vars.get(args[1]);
+      String fieldname = args[2];
+      VarInfoName result = var.applyField(fieldname);
+      vars.put(args[0],result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("field", new Field()); }
+
+  // public String[] QuantHelper.format_jml(VarInfoName[] roots)
+  private static class QuantifyFormatJML implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length >= 1);
+      VarInfoName roots[] = new VarInfoName [args.length];
+      for (int x=0;x<args.length;x++)
+	roots[x] = (VarInfoName)vars.get(args[x]);
+      String result[] = VarInfoName.QuantHelper.format_jml(roots);
+      for (int x=0;x<result.length;x++)
+	out.println(result[x]);
+    }
+  }
+  static { handlers.put("quantify_format_jml", new QuantifyFormatJML()); }
+
+  // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise)
+  private static class QuantifyFormatJMLElementwise implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length >= 1);
+      VarInfoName roots[] = new VarInfoName [args.length];
+      for (int x=0;x<args.length;x++)
+	roots[x] = (VarInfoName)vars.get(args[x]);
+      String result[] = VarInfoName.QuantHelper.format_jml(roots,true);
+      for (int x=0;x<result.length;x++)
+	out.println(result[x]);
+    }
+  }
+  static { handlers.put("quantify_format_jml_elem", new QuantifyFormatJMLElementwise()); }
+
+  // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean forall)
+  private static class QuantifyFormatJMLExists implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length >= 1);
+      VarInfoName roots[] = new VarInfoName [args.length];
+      for (int x=0;x<args.length;x++)
+	roots[x] = (VarInfoName)vars.get(args[x]);
+      String result[] = VarInfoName.QuantHelper.format_jml(roots,false,false);
+      for (int x=0;x<result.length;x++)
+	out.println(result[x]);
+    }
+  }
+  static { handlers.put("quantify_format_jml_exists", new QuantifyFormatJMLExists()); }
 }
+
+

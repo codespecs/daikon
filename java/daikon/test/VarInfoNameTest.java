@@ -23,6 +23,7 @@ public class VarInfoNameTest
   public void testParse() { run("testParse"); }
   public void testEscForall() { run("testEscForall"); }
   public void testSubscript() { run("testSubscript"); }
+  public void testJML() { run("testJML"); }
 
   private void run(String name) {
     String file = "varInfoNameTest." + name;
