@@ -121,8 +121,8 @@ test-the-dist: dist-ensure-directory-exists
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
+	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR) all_javac)
+	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -259,9 +259,10 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd java; cp -fP --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
@@ -323,7 +324,7 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	# First add some more files to the distribution
 
 	# Daikon itself
-	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon
+	(cd java; tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
 	cp -p doc/README-daikon-java /tmp/daikon/java/README
 	cp -p java/Makefile /tmp/daikon/java/Makefile
@@ -347,13 +348,17 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
 	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
 	(cd /tmp/daikon/java; mv jakarta-oro-2.0.3/src/java/org/apache/oro org/apache/oro)
-	(cd /tmp/daikon/java/jakarta-oro-2.0.3/src/java/org/apache; ln -s ../../../../../org/apache/oro .)
+	# Making a link causes duplicate-class-def compilation problems,
+	# so just create a README file instead.
+	(cd /tmp/daikon/java/jakarta-oro-2.0.3/src/java/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
 	# ORO distribution lacks .class files; Daikon dist should have them.
 	(cd /tmp/daikon/java; javac `find org/apache/oro -name '*.java' -print`)
-	## Log4j is a loss; can't include source because its build 
-	## configuration is so weird that it cannot be easily integrated.
-	mkdir /tmp/daikon/java/lib
-	cp -p java/lib/log4j.jar /tmp/daikon/java/lib
+	## JTB
+	cp -pR java/jtb /tmp/daikon/java/
+	## Ajax
+	cp -pR java/ajax-ship /tmp/daikon/java
+	rm -rf /tmp/daikon/java/ajax-ship/ajax
+	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
 	## JUnit
 	# This is wrong:
 	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
@@ -363,10 +368,10 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	unzip java/lib/junit3.7.zip junit3.7/src.jar -d /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/tmp-junit; unzip junit3.7/src.jar; rm -f junit3.7/src.jar; rmdir junit3.7; chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
 	rm -rf /tmp/daikon/tmp-junit
-	## Ajax
-	cp -pR java/ajax-ship /tmp/daikon/java
-	rm -rf /tmp/daikon/java/ajax-ship/ajax
-	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
+	## Log4j is a loss; can't include source because its build 
+	## configuration is so weird that it cannot be easily integrated.
+	mkdir /tmp/daikon/java/lib
+	cp -p java/lib/log4j.jar /tmp/daikon/java/lib
 
 	## Front ends
 	mkdir /tmp/daikon/front-end

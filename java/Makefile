@@ -18,7 +18,7 @@ JAVAC ?= javac -g
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # In practice, this is good enough, however.
-JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples/awk' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
