@@ -19,11 +19,11 @@ package daikon;
  **/
 public abstract class VarComparability {
 
-  final static int NONE = 0;
-  final static int IMPLICIT = 1;
-  final static int EXPLICIT = 2;
+  public static final int NONE = 0;
+  public static final int IMPLICIT = 1;
+  public static final int EXPLICIT = 2;
 
-  static VarComparability parse(int format, String rep, ProglangType vartype) {
+  public static VarComparability parse(int format, String rep, ProglangType vartype) {
     if (format == NONE) {
       return VarComparabilityNone.parse(rep, vartype);
     } else if (format == IMPLICIT) {
@@ -46,6 +46,10 @@ public abstract class VarComparability {
 
   public static boolean compatible(VarInfo v1, VarInfo v2) {
     return compatible(v1.name, v1.comparability, v2.name, v2.comparability);
+  }
+
+  public static boolean compatible(VarComparability type1, VarComparability type2) {
+    return compatible(null, type1, null, type2);
   }
 
   public static boolean compatible(VarInfoName name1, VarComparability type1,

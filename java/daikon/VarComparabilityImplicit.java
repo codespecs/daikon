@@ -92,14 +92,30 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   static boolean compatible(VarInfoName name1, VarComparabilityImplicit type1,
 			    VarInfoName name2, VarComparabilityImplicit type2) {
-    if (type1.dimensions != type2.dimensions)
-      return false;
-    for (int i=0; i<type1.dimensions; i++) {
-      if (! compatible(null, type1.indexType(i), null, type2.indexType(i))) {
-        return false;
-      }
+    if ((type1.dimensions == 0) && (type1.base < 0))
+      return true;
+    if ((type2.dimensions == 0) && (type2.base < 0))
+      return true;
+    if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
+      return (compatible(type1.indexType(type1.dimensions-1),
+                         type2.indexType(type2.dimensions-1))
+              && compatible(type1.elementType(),
+                            type2.elementType()));
     }
-    return type1.base < 0 || type2.base < 0 || type1.base == type2.base;
+    if ((type1.dimensions == 0) && (type2.dimensions == 0))
+      return type1.base == type2.base;
+    // One array, one non-array, and the non-array isn't universally compatible.
+    Assert.assert(type1.dimensions == 0 || type2.dimensions == 0);
+    return false;
+  }
+
+  // for debugging
+  public String toString() {
+    String result = "" + base;
+    for (int i=0; i<dimensions; i++) {
+      result += "[" + indexType(i) + "]";
+    }
+    return result;
   }
 
 }
