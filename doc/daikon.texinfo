@@ -228,6 +228,7 @@ Enhancing Daikon output
 
 * Configuration options::       
 * Conditional invariants::      
+* Enhancing conditional invariant detection::  
 
 Configuration options
 
@@ -287,7 +288,6 @@ Problems running Daikon
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
-* Local class not compatible::  
 
 Other problems
 
@@ -3425,6 +3425,7 @@ equivalent file.
 @menu
 * Configuration options::       
 * Conditional invariants::      
+* Enhancing conditional invariant detection::  
 @end menu
 
 @node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
@@ -3475,7 +3476,7 @@ its source code.
 @end table
 
 
-@node    Conditional invariants,  , Configuration options, Enhancing Daikon output
+@node    Conditional invariants, Enhancing conditional invariant detection, Configuration options, Enhancing Daikon output
 @section Conditional invariants and implications
 @cindex splitting
 @cindex splitting condition
@@ -3483,6 +3484,8 @@ its source code.
 @cindex invariant, conditional
 @cindex implication invariant
 @cindex invariant, implication
+@cindex static analysis
+@cindex cluster analysis
 
 Conditional invariants are invariants that are true only part of the time.
 For instance, the postcondition for the absolute value procedure is
@@ -3503,9 +3506,12 @@ examples are which return statement was executed in a procedure and whether a
 boolean procedure returns true or false.  Additionally, Daikon can read
 predicates from a file called a splitter info (@file{.spinfo}) file and find
 implications based on those predicates. The splitter info file can be produced
-automatically, such as by the CreateSpinfo and
-@command{createspinfo.pl} programs.  Users can also create splitter
-info files by hand or manually augment automatically-created ones.
+automatically, such as by static analysis of the program using the CreateSpinfo
+program (or the @command{createspinfo.pl} program) or by cluster analysis of the
+traced values in the data trace file. Details of these techniques and usage
+guides can be found in @ref{Enhancing conditional invariant detection}.  Users
+can also create splitter info files by hand or manually augment
+automatically-created ones.
 
 To detect conditional invariants and implications:
 @enumerate
@@ -3522,29 +3528,6 @@ java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 
 @cindex createspinfo.pl program
 @cindex CreateSpinfo program
-
-The CreateSpinfo program takes Java source code as input and creates a
-splitter info file for each input file; for instance,
-@example
-java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
-@end example
-@noindent
-creates the splitter info files @file{Foo.spinfo} and
-@file{Bar.spinfo}.  The resulting splitter info file contains each
-boolean expression that appears in the source code.  The conditional
-statements that the programmer used in the source code are likely to
-have important semantic properties.  This simple heuristic of using
-these conditional statements as predicates for conditional invariant
-detection is often quite effective.  Users may optionally edit the
-splitter info file to enhance it, or may create a splitter info file
-by hand.
-
-The @command{createspinfo.pl} program (found in the @file{$DAIKONDIR/bin}
-directory) performs the same function, for C/C++ source code.  It can be used with the commandline
-@example
-createspinfo.pl foo.c
-@end example
-@noindent
 
 The term ``splitter'' comes from Daikon's technique for detecting
 implications and conditional invariants.  For each predicate, Daikon
@@ -3742,13 +3725,123 @@ PPT_NAME  simpleStack.push
 
 PPT_NAME  simpleStack.pop
 !isEmpty()
+@end smallexample
 
 PPT_NAME  simpleStack.isFull
 (currentSize == myArray.length - 1)
 
 PPT_NAME  simpleStack.isEmpty
 (currentSize == 0)
-@end smallexample
+
+@node    Enhancing conditional invariant detection,  , Conditional invariants, Enhancing Daikon output
+@section Enhancing conditional invariant detection
+
+@cindex splitting conditions, static analysis
+@cindex splitting conditions, cluster analysis
+@cindex splitting conditions
+
+The built-in mechanisms (see @ref{Conditional invariants}) are quite effective
+in inferring conditional invariants, but have limitations in the invariants they
+can find. To infer more conditional invariants relevant to the program, the user
+must supply splitting conditions to Daikon via a splitter info file.  However,
+it is difficult to predict which splitting conditions will be useful in
+inferring conditional invariants.  A few techniques can be used to automatically
+predict splitting conditions that might produce useful conditional
+invariants. These techniques include static analysis of the program source and
+cluster analysis of the data trace.
+
+@subsection Static analysis
+
+@cindex static analysis
+@cindex createspinfo.pl
+@cindex CreateSpinfo program
+
+In static analysis, all explicitly stated boolean statements in the program
+source are extracted and used as splitting conditions.  The assumption is that
+conditions that are explicitly tested in the program are likely to affect the
+program's behavior and could lead to useful conditional invariants.  
+
+The CreateSpinfo program takes Java source code as input and creates a
+splitter info file for each input file; for instance,
+@example
+java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
+@end example
+@noindent
+creates the splitter info files @file{Foo.spinfo} and
+@file{Bar.spinfo}.  The resulting splitter info file contains each
+boolean expression that appears in the source code.  The conditional
+statements that the programmer used in the source code are likely to
+have important semantic properties.  This simple heuristic of using
+these conditional statements as predicates for conditional invariant
+detection is often quite effective.  
+
+The @command{createspinfo.pl} program (found in the @file{$DAIKONDIR/bin}
+directory) performs the same function, for C/C++ source code.  It can be used
+with the commandline
+@example
+createspinfo.pl foo.c
+@end example
+@noindent
+
+@subsection Cluster analysis
+
+@cindex cluster analysis
+@cindex runcluster.pl program
+
+Cluster analysis is a statistical method that is used to find groups or clusters
+in data.  If the data at a program point is divided into clusters, it could be
+the result of conditional properties in the program. This is because a
+conditional property at a program point separates the data into those that
+satisfy it and those that do not.  Any invariant which is discovered over one
+cluster but not over another is a conditional invariant (the predicate for the
+conditional invariant being membership in the cluster in which the invariant was
+found), and is used as a splitting condition.  The cluster analysis mechanism
+finds clusters in the data trace file, infers invariants over any clusters that
+it finds, and writes these invariants into a splitter info file for conditional
+invariant detection.
+
+To find splitting conditions using cluster analysis, run the
+@command{runcluster.pl} program in the following way:
+@example
+runcluster.pl [OPTIONS] dtrace_file(s) decls_files(s)
+
+The options are:
+
+ -a, --algorithm ALG   
+           ALG specifies an implemtation of a clustering algorithm.
+           Current options are 'km' (for kmeans), 'hierarchical'
+           and 'xm' (for xmeans). Default is xmeans.
+-k
+           The number of clusters to use (for algorithms which require
+           this input.) The default is 4.
+--keep    
+           Don't delete the temporary files created by the clustering
+           process.
+@end example
+
+The @command{runcluster.pl} program performs the following steps: 
+@enumerate
+@item Extracts the variable values from the data trace file using
+@command{extract_vars.pl} (located in the  @file{$DAIKONDIR/bin} directory). 
+
+@item Performs clustering over these extract variables using a clustering
+tool. Three clustering programs are currently provided in the @file{$DAIKONDIR/bin} directory,
+with documentation on how to use them. They are implementations of the kmeans
+algorithm, hierarchical clustering and the xmeans algorithm (kmeans algorithm
+with efficient discovery of the number of clusters).
+
+@item Writes new data and decls files and, to each point in the data trace file,
+addsinformation about the cluster to which it belongs. (It uses the
+@command{write_dtrace.pl} and @command{decls_add_cluster.pl}, located in the
+@file{$DAIKONDIR/bin} directory)
+
+@item Runs Daikon on the augmented data trace and decls files, splitting the
+data by cluster number and performing invariant detection in each cluster. The
+consequents of the resulting conditional invariants (which are invariants found
+in certain clusters, but not in others) are then extracted and written into a
+splitter info file (It uses the @command{daikon.ExtractClusterInvariant}
+program)
+@end enumerate
 
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
@@ -4290,7 +4383,6 @@ understand Daikon's operation; @xref{Command line options}.
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
-* Local class not compatible::  
 @end menu
 
 @node    No return from procedure, Out of memory, Daikon problems, Daikon problems
@@ -4374,7 +4466,7 @@ invariants may appear in Daikon's output.  The output is otherwise
 correct.
 
 
-@node    Method needs to be implemented, Local class not compatible, Simplify errors, Daikon problems
+@node    Method needs to be implemented,  , Simplify errors, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -4399,33 +4491,6 @@ or else use an output formatting that can handle those invariants.
 MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 
-@node    Local class not compatible,  , Method needs to be implemented, Daikon problems
-@subsection Local class not compatible
-
-@cindex local class not compatible error
-@cindex InvalidClassException error
-@cindex reading .inv files, errors while
-
-A program such as PrintInvariants (@pxref{Printing invariants}) may
-issue the following error while reading an @file{.inv} file:
-@example
-java.io.InvalidClassException: daikon.VarInfo; Local class not compatible:
-  stream classdesc serialVersionUID=20020122
-  local class serialVersionUID=20020614
-@end example
-
-This error indicates that Daikon has changed since the @file{.inv}
-file was created.  Most likely, new fields have been added to some
-Daikon data structure (in the example above, @samp{daikon.VarInfo}).
-Thus, the data structures stored in the old @file{.inv} file cannot be
-read by the current version of the program.
-
-To work around this problem, re-create the @file{.inv} file using the
-current version of Daikon.  This is possible because although Daikon's
-internal implementation changed, its external interfaces
-(@file{.decls} and @file{.dtrace} file formats, etc.)@ have not.
-
-
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
 @section Other problems
 
@@ -4436,8 +4501,6 @@ internal implementation changed, its external interfaces
 
 @node    Large dtrace files, Tree GUI font errors, Other problems, Other problems
 @subsection Large data trace (.dtrace) files
-
-@cindex large .dtrace files
 
 Running instrumented code can create very large
 @file{.dtrace} files.  This can be a problem because writing the large

@@ -11,11 +11,6 @@
  printed representation has changed; leave other modbits as is.
   The default value is `true'.
 
-@item daikon.FileIO.verbose_unmatched_procedure_entries
-  Boolean.  If true, prints the unmatched procedure entries
- verbosely.
-  The default value is `false'.
-
 @item daikon.PptTopLevel.pairwise_implications
   Boolean.  If true, create implications for all pairwise
  combinations of conditions, and all pairwise combinations of exit
