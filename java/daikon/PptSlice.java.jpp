@@ -126,7 +126,7 @@ public final class PPTSLICE1
     // values_order  = new Vector();
     */ // [INCR]
     if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
-      debug.info("Created " + PPTSLICE1STRING + " " + this.name);
+      debug.info("Created " + PPTSLICE1STRING + " " + this.name());
     if (Debug.logOn())
       Debug.log (getClass(), this, "Created");
 
@@ -158,7 +158,7 @@ public final class PPTSLICE1
 
     // Instantiate invariants
     if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
-      debug.info("instantiate_invariants for " + name + ": originally " + invs.size() + " invariants in " + invs);
+      debug.info("instantiate_invariants for " + name() + ": originally " + invs.size() + " invariants in " + invs);
 
     Vector new_invs = null;
 #if defined(ARITY1)
@@ -270,7 +270,7 @@ public final class PPTSLICE1
     }
 
     if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
-      debug.info("after instantiate_invariants " + PPTSLICE1STRING + " " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+      debug.info("after instantiate_invariants " + PPTSLICE1STRING + " " + name() + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
     if ((this.debugged  || debugSpecific.isLoggable(Level.FINE)) && (invs.size() > 0)) {
       debug.info("the invariants are:");
@@ -458,7 +458,7 @@ public final class PPTSLICE1
     }
 
     // if (Global.debugInfer.isLoggable(Level.FINE)) {
-    //   Global.debugInfer.fine (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name);
+    //   Global.debugInfer.fine (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name());
     // }
 
     // Do not bother putting values into a slice if missing.
@@ -501,7 +501,7 @@ public final class PPTSLICE1
 
     int mod1 = full_vt.getModified(vi1);
     if (mod1 == ValueTuple.MISSING_FLOW || mod1 == ValueTuple.MISSING_NONSENSICAL) {
-      // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
+      // System.out.println("Bailing out of add(" + full_vt + ") for " + name());
       return emptyList;
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
@@ -512,7 +512,7 @@ public final class PPTSLICE1
 #if defined(ARITY2) || defined(ARITY3)
     int mod2 = full_vt.getModified(vi2);
     if (mod2 == ValueTuple.MISSING_FLOW || mod2 == ValueTuple.MISSING_NONSENSICAL) {
-      // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
+      // System.out.println("Bailing out of add(" + full_vt + ") for " + name());
       return emptyList;
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
@@ -524,7 +524,7 @@ public final class PPTSLICE1
 #if defined(ARITY3)
     int mod3 = full_vt.getModified(vi3);
     if (mod3 == ValueTuple.MISSING_FLOW || mod3 == ValueTuple.MISSING_NONSENSICAL) {
-      // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
+      // System.out.println("Bailing out of add(" + full_vt + ") for " + name());
       return emptyList;
     }
     if (mod3 == ValueTuple.STATIC_CONSTANT) {
@@ -562,8 +562,8 @@ public final class PPTSLICE1
       }
       */ // ... [INCR]
     }
-    // System.out.println(PPTSLICE1STRING + " " + name + ": add " + full_vt + " = " + vt);
-    // System.out.println(PPTSLICE1STRING + " " + name + " has " + invs.size() + " invariants.");
+    // System.out.println(PPTSLICE1STRING + " " + name() + ": add " + full_vt + " = " + vt);
+    // System.out.println(PPTSLICE1STRING + " " + name() + " has " + invs.size() + " invariants.");
     // defer_invariant_removal(); [INCR]
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
@@ -1015,7 +1015,7 @@ public final class PPTSLICE1
   public void merge_invariants() {
 
     if (debugMerge.isLoggable (Level.FINE)) {
-      debugMerge.fine ("merging invs for " + ppt_name);
+      debugMerge.fine ("merging invs for " + name());
     }
 
     // List of all invariants found over all of the children
@@ -1039,7 +1039,7 @@ public final class PPTSLICE1
       // Skip any children that have not seen any samples
       if (ppt.num_samples() == 0) {
         if (debugMerge.isLoggable (Level.FINE))
-          debugMerge.fine ("-- slice ignored (no samples) " + ppt.ppt_name);
+          debugMerge.fine ("-- slice ignored (no samples) " + ppt.name());
         continue;
       }
 
@@ -1068,7 +1068,7 @@ public final class PPTSLICE1
       // the slice (since the variable is deemed to be nonsensical)
       if (slice_missing (ppt, cvis)) {
         if (debugMerge.isLoggable (Level.FINE))
-          debugMerge.fine ("-- slice ignored (missing) " + ppt.ppt_name
+          debugMerge.fine ("-- slice ignored (missing) " + ppt.name()
                            + " vars " + Debug.toString (cvis_sorted));
         continue;
       }
@@ -1085,7 +1085,7 @@ public final class PPTSLICE1
       PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
       if ((cslice == null) || (cslice.invs.size() == 0)) {
         if (debugMerge.isLoggable (Level.FINE))
-          debugMerge.fine ("-- slice not found " + ppt.ppt_name
+          debugMerge.fine ("-- slice not found " + ppt.name()
                            + " vars " + Debug.toString (cvis_sorted));
         return;
       }
@@ -1099,7 +1099,7 @@ public final class PPTSLICE1
       vtlist.add (cslice.values_cache);
       if (Debug.logOn())
         Debug.log (getClass(), this, "Adding value cache "
-                   + cslice.values_cache + "from ppt" + cslice.ppt_name);
+                   + cslice.values_cache + "from ppt" + cslice.name());
 
       // Build the permutation array from child to parent slice
       for (int j = 0; j < cvis_sorted.length; j++) {
@@ -1114,7 +1114,7 @@ public final class PPTSLICE1
 
       // Debug print child vars and permute to parent
       if (debugMerge.isLoggable (Level.FINE)) {
-        debugMerge.fine ("-- Processing child " + ppt.ppt_name + " ("
+        debugMerge.fine ("-- Processing child " + ppt.name() + " ("
                          + rel.getRelationType() + ")");
         debugMerge.fine ("-- -- child vars = "
                          + VarInfo.toString (cvis_sorted));
@@ -1159,7 +1159,7 @@ public final class PPTSLICE1
       Invariant.Match imatch = new Invariant.Match (inv);
       ArrayList invs = (ArrayList) inv_map.get (imatch);
       if (inv.logOn()) {
-        inv.log ("Adding " + inv.format() + " to " + ppt_name
+        inv.log ("Adding " + inv.format() + " to " + name()
                  + " invs list " + invs);
       }
       if (invs == null) {
@@ -1182,7 +1182,7 @@ public final class PPTSLICE1
       if (child_invs.size() > valid_child_count) {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "
-                         + ppt_name + " (" + valid_child_count + " children)");
+                         + name() + " (" + valid_child_count + " children)");
         for (int k = 0; k < child_invs.size(); k++ )
           System.out.println ("-- Invariant = "
                             + ((Invariant) child_invs.get(k)).format());
@@ -1192,7 +1192,7 @@ public final class PPTSLICE1
         Invariant first = (Invariant) child_invs.get(0);
         if (Debug.logOn())
           first.log ("Attempting merge of " + child_invs.size()
-                     + " invariants into ppt " + ppt_name);
+                     + " invariants into ppt " + name());
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
           invs.add (parent_inv);

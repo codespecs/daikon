@@ -134,9 +134,9 @@ public final class CLASSNAME
     //  * for Collections: use collection.containsNull == false
     //    (the latter also requires that ghost field to get set)
 
-    VarInfoName name = var().name;
-    if (name instanceof VarInfoName.Elements) {
-      VarInfoName term = ((VarInfoName.Elements) name).term;
+    VarInfoName viname = var().name;
+    if (viname instanceof VarInfoName.Elements) {
+      VarInfoName term = ((VarInfoName.Elements) viname).term;
       if (var().type.isArray()) {
         return "\\nonnullelements(" + term.esc_name() + ")";
       } else {
@@ -161,9 +161,9 @@ public final class CLASSNAME
     //  * for Collections: use collection.containsNull == false
     //    (the latter also requires that ghost field to get set)
 
-    VarInfoName name = var().name;
-    if (name instanceof VarInfoName.Elements) {
-      VarInfoName term = ((VarInfoName.Elements) name).term;
+    VarInfoName viname = var().name;
+    if (viname instanceof VarInfoName.Elements) {
+      VarInfoName term = ((VarInfoName.Elements) viname).term;
       if (var().type.isArray()) {
         return "\\nonnullelements(" + term.jml_name() + ")";
       } else {
@@ -171,8 +171,8 @@ public final class CLASSNAME
       }
     }
 
-    // If this is just part of an array or Collection (name instanceof
-    // VarInfoName.Slice), then calling name.jml_name() will always throw
+    // If this is just part of an array or Collection (viname instanceof
+    // VarInfoName.Slice), then calling viname.jml_name() will always throw
     // an exception, since var() is certainly a sequence.  So use the
     // standard quantification.
 
@@ -184,9 +184,9 @@ public final class CLASSNAME
 
   public String format_dbc() {
     //@tx
-    VarInfoName name = var().name;
-    if (name instanceof VarInfoName.Elements) {
-      VarInfoName term = ((VarInfoName.Elements) name).term;
+    VarInfoName viname = var().name;
+    if (viname instanceof VarInfoName.Elements) {
+      VarInfoName term = ((VarInfoName.Elements) viname).term;
 
       if (var().type.isArray()) {
       return "{ for (int i = 0; "+ term.dbc_name(var()) + "!= null && i < "

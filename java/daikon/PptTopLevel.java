@@ -55,7 +55,7 @@ public class PptTopLevel
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030612L;
+  static final long serialVersionUID = 20030929L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -118,6 +118,15 @@ public class PptTopLevel
   /** Debug tracer for up-merging equality sets  **/
   public static final Logger debugMerge =
     Logger.getLogger ("daikon.PptTopLevel.merge");
+
+
+  // These used to appear in Ppt, were moved down to PptToplevel
+  public final String name;
+  public final PptName ppt_name;
+
+  public final String name() {
+    return name;
+  }
 
   /** Holds the falsified invariants under this PptTopLevel */
   public ArrayList falsified_invars = new ArrayList();
@@ -278,7 +287,8 @@ public class PptTopLevel
   public Set redundant_invs = new LinkedHashSet(0);
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
-    super(name);
+    this.name = name;
+    ppt_name = new PptName(name);
     this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
@@ -307,7 +317,7 @@ public class PptTopLevel
     num_tracevars = val_idx;
     num_orig_vars = 0;
     Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
-    // System.out.println("Created PptTopLevel " + name + ": "
+    // System.out.println("Created PptTopLevel " + name() + ": "
     //                    + "num_static_constant_vars=" + num_static_constant_vars
     //                    + ",num_declvars=" + num_declvars
     //                    + ",num_tracevars=" + num_tracevars);
@@ -460,7 +470,7 @@ public class PptTopLevel
         if (entry_ppt == null) {
           throw new Error("Found no entry point for exit point " + this.name);
         }
-        // System.out.println("Adding exit point " + this.name + " to " + entry_ppt.name);
+        // System.out.println("Adding exit point " + this.name + " to " + entry_ppt.name());
         entry_ppt.exit_ppts.add(this);
       }
     }
@@ -960,7 +970,7 @@ public class PptTopLevel
    **/
   public void add_and_flow(ValueTuple vt, int count) {
     //     if (debugFlow.isLoggable(Level.FINE)) {
-    //       debugFlow.fine ("add_and_flow for " + ppt_name);
+    //       debugFlow.fine ("add_and_flow for " + name());
     //     }
 
     // Doable, but commented out for efficiency
@@ -990,7 +1000,7 @@ public class PptTopLevel
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
       //       if (debugFlow.isLoggable(Level.FINE)) {
-      //        debugFlow.fine ("add_and_flow: A parent is " + ppt.ppt_name);
+      //        debugFlow.fine ("add_and_flow: A parent is " + ppt.name());
       //       }
 
       int[] transform = dataflow_transforms[i];
@@ -1204,7 +1214,7 @@ public class PptTopLevel
     // Doable, but commented out for efficiency
     // repCheck();
 
-    // System.out.println ("Processing samples at " + ppt_name);
+    // System.out.println ("Processing samples at " + name());
 
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars,
                       name);
@@ -1261,7 +1271,7 @@ public class PptTopLevel
         else if (slice instanceof PptSlice3)
           slice3_cnt++;
       }
-      System.out.println ("ppt " + ppt_name);
+      System.out.println ("ppt " + name());
       debugInstantiate.fine ("slice1 ("+ slice1_cnt + ") slices");
       for (Iterator j = views_iterator(); j.hasNext(); ) {
         PptSlice slice = (PptSlice) j.next();
@@ -1808,7 +1818,7 @@ public class PptTopLevel
   }
 
   public void removeView(Ppt slice) {
-    // System.out.println("removeView " + slice.name + " " + slice);
+    // System.out.println("removeView " + slice.name() + " " + slice);
     boolean removed = viewsAsCollection().remove(slice);
     Assert.assertTrue(removed);
   }
@@ -2039,7 +2049,7 @@ public class PptTopLevel
       if (Debug.logOn())
         Debug.log (getClass(), this, Debug.vis (vi), " Instantiate Slice, ok="
                    + is_slice_ok (vi));
-      //System.out.println (" Instantiate Slice " + ppt_name + " var = "
+      //System.out.println (" Instantiate Slice " + name() + " var = "
       //                    + vi.name.name() + "ok=" + is_slice_ok (vi));
       if (!is_slice_ok (vi))
         continue;
@@ -2053,7 +2063,7 @@ public class PptTopLevel
       //       if (slice1.isControlled()) {
       //         // let invariant flow from controlling slice
       //         if (Global.debugInfer.isLoggable(Level.FINE))
-      //           Global.debugInfer.fine ("Skipping " + slice1.name + "; is controlled(1).");
+      //           Global.debugInfer.fine ("Skipping " + slice1.name() + "; is controlled(1).");
       //         continue;
       //       }
       slice1.instantiate_invariants();
@@ -2122,7 +2132,7 @@ public class PptTopLevel
         //         if (slice2.isControlled()) {
         //           // let invariant flow from controlling slice
         //           if (Global.debugInfer.isLoggable(Level.FINE))
-        //             Global.debugInfer.fine ("Skipping " + slice2.name + "; is controlled(2).");
+        //             Global.debugInfer.fine ("Skipping " + slice2.name() + "; is controlled(2).");
         //           continue;
         //         }
         slice2.instantiate_invariants();
@@ -2135,7 +2145,7 @@ public class PptTopLevel
     // 3. all ternary views
     if (! Daikon.disable_ternary_invariants) {
       if (Global.debugInfer.isLoggable(Level.FINE)) {
-        Global.debugInfer.fine ("Trying ternary slices for " + this.ppt_name);
+        Global.debugInfer.fine ("Trying ternary slices for " + this.name());
       }
 
       Vector ternary_views = new Vector();
@@ -2180,7 +2190,7 @@ public class PptTopLevel
             //             if (slice3.isControlled()) {
             //               // let invariant flow from controlling slice
             //               if (Global.debugInfer.isLoggable(Level.FINE))
-            //                 Global.debugInfer.fine ("Skipping " + slice3.name + "; is controlled(3).");
+            //                 Global.debugInfer.fine ("Skipping " + slice3.name() + "; is controlled(3).");
             //               continue;
             //             }
             slice3.instantiate_invariants();
@@ -2475,7 +2485,7 @@ public class PptTopLevel
           if ((one_of.num_elts() == 1)
               && (! (inv instanceof EltOneOf))
               && (! (inv instanceof EltOneOfString))) {
-            // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
+            // System.out.println("Constant " + inv.ppt.name() + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
             // Should be Long, not Integer.
             Assert.assertTrue(! (one_of.elt() instanceof Integer));
             one_of.var().dynamic_constant = one_of.elt();
@@ -3265,7 +3275,7 @@ public class PptTopLevel
                                         PptTopLevel ppt2,
                                         boolean add_nonimplications)
   {
-    // System.out.println("addImplications_internal: " + ppt1.name + ", " + ppt2.name);
+    // System.out.println("addImplications_internal: " + ppt1.name() + ", " + ppt2.name());
 
     PptSlice[][] matched_views = match_views(ppt1, ppt2);
     if (debugAddImplications.isLoggable(Level.FINE)) {
@@ -3283,8 +3293,8 @@ public class PptTopLevel
       if ((slice1 == null) || (slice2 == null)) {
         if (debugAddImplications.isLoggable(Level.FINE)) {
           debugAddImplications.fine ("addImplications: matched views skipped "
-                                     + (slice1 == null ? "null" : slice1.name) + " "
-                                     + (slice2 == null ? "null" : slice2.name));
+                                     + (slice1 == null ? "null" : slice1.name()) + " "
+                                     + (slice2 == null ? "null" : slice2.name()));
         }
         continue;
       }
@@ -3317,7 +3327,7 @@ public class PptTopLevel
       if (debugAddImplications.isLoggable(Level.FINE)) {
         debugAddImplications.fine ("addImplications: "
                                    + this_excl.size() + " exclusive conditions for "
-                                   + slice1.name + " " + slice2.name);
+                                   + slice1.name() + " " + slice2.name());
       }
       exclusive_conditions_vec.addAll(this_excl);
 
@@ -3712,7 +3722,7 @@ public class PptTopLevel
    **/
   public void postProcessEquality () {
     if (debugEqualTo.isLoggable(Level.FINE)) {
-      debugEqualTo.fine ("PostProcessingEquality for: " + this.ppt_name);
+      debugEqualTo.fine ("PostProcessingEquality for: " + this.name());
     }
     if (num_samples() == 0)
       return;
@@ -4351,7 +4361,7 @@ public class PptTopLevel
       currentCondView.guardInvariants();
     }
 
-    // System.out.println("Ppt name: " + ppt_name);
+    // System.out.println("Ppt name: " + name());
     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
   }
 
@@ -4465,11 +4475,11 @@ public class PptTopLevel
       Set vars = e.getVars();
       String set_str = "";
       for (Iterator j = vars.iterator(); j.hasNext(); ) {
-        if (set_str != "")
+        if (set_str != "")      // interned
           set_str += ",";
         set_str += ((VarInfo)j.next()).name.name();
       }
-      if (out != "")
+      if (out != "")            // interned
         out += ", ";
       out += "[" + set_str + "]";
     }
@@ -4520,9 +4530,9 @@ public class PptTopLevel
     }
 
     // Debug print where we are
-    // System.out.println ("Processing ppt " + ppt_name);
+    // System.out.println ("Processing ppt " + name());
     if (debugMerge.isLoggable(Level.FINE))
-      debugMerge.fine ("Processing ppt " + ppt_name);
+      debugMerge.fine ("Processing ppt " + name());
 
     // Number of samples here is the sum of all of the child samples, presuming
     // there are some variable relationships with the child (note that
@@ -4574,7 +4584,7 @@ public class PptTopLevel
       PptRelation c1 = (PptRelation) children.get(first_child);
       if (c1.child.num_samples() > 0) {
         emap = c1.get_child_equalities_as_parent();
-        debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + emap);
+        debugMerge.fine ("child " + c1.child.name() + " equality = " + emap);
         break;
       }
     }
@@ -4821,7 +4831,7 @@ public class PptTopLevel
       if (set_cnt > 0)
         vars_per_eq = (double) var_cnt / set_cnt;
 
-      debug.fine (ppt.ppt_name + " : "
+      debug.fine (ppt.name() + " : "
                         + sample_cnt + " : "
                         + set_cnt + " (" + constant_leader_cnt + " con) : "
                         + var_cnt + " : "
@@ -4931,7 +4941,7 @@ public class PptTopLevel
       }
       if (avg_equality_cnt > 0)
         avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
-      debug.fine (ppt.ppt_name + " : " + sample_cnt + " : "
+      debug.fine (ppt.name() + " : " + sample_cnt + " : "
                   + dfmt.format (avg_equality_cnt) + " : "
                   + dfmt.format (avg_var_cnt) + " : "
                   + dfmt.format (avg_vars_per_equality) + " : "

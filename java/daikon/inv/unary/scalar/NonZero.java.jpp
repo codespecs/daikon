@@ -108,7 +108,7 @@ public class NONZERO
       return null;
 
     if (debug.isLoggable(Level.FINE) || ppt.debugged) {
-      debug.fine (NONZEROSTRING + ".instantiate(" + ppt.name + ")");
+      debug.fine (NONZEROSTRING + ".instantiate(" + ppt.name() + ")");
     }
 
     NONZERO result = new NONZERO(ppt);

@@ -49,7 +49,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   public SuppressionLink generateSuppressionLink (Invariant inv) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Attempting on: " + inv.repr());
-      debug.fine ("  in ppt     : " + inv.ppt.parent.ppt_name);
+      debug.fine ("  in ppt     : " + inv.ppt.parent.name());
     }
 
     // No self suppression in bottom up approach.  In the long run this
@@ -72,7 +72,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
       inv.log ("Searched for" + supTemplate.searchString());
       if (supTemplate.filled)
         inv.log ("Found " + supTemplate.results[0].format() + " in "
-                  + supTemplate.results[0].ppt.ppt_name.getFullNamePoint());
+                  + supTemplate.results[0].ppt.name());
     }
     // Yeah, the argument has to be false, because otherwise we'll
     // suppress ourselves in the same ppt

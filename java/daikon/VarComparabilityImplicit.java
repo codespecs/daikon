@@ -98,7 +98,7 @@ public final class VarComparabilityImplicit
     }
   }
 
-  public VarComparability makeAlias(VarInfoName name) {
+  public VarComparability makeAlias(VarInfoName viname) {
     return this;
   }
 

@@ -56,7 +56,7 @@ public final class CLASSNAME {
     VarInfo var2 = ppt.var_infos[1];
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Trying to instantiate for " + ppt.ppt_name + ": " + var1.name  + " and " + var2.name);
+      debug.fine ("Trying to instantiate for " + ppt.name() + ": " + var1.name  + " and " + var2.name);
     }
 
     // Assert.assertTrue((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));

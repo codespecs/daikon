@@ -53,7 +53,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
-	String tmpStr1 = inv1.ppt.name;
+	String tmpStr1 = inv1.ppt.name();
         // System.out.println ("NAME1: " + tmpStr1);
 	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
 	String thisPptName1 = tmpStr1.substring (0,
@@ -67,7 +67,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     }
 
     if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
-        String tmpStr2 = inv2.ppt.name;
+        String tmpStr2 = inv2.ppt.name();
         String thisPptName2 = tmpStr2.substring (0,
                                                  tmpStr2.lastIndexOf ('('));
         key2 = thisPptName2 + "$" + inv2.format_using(OutputFormat.JAVA);
@@ -82,7 +82,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
         //	System.out.println("K1: " + key1);
         //        System.out.println ("K2: " + key2);
 
-        String tmpStr1 = inv1.ppt.name;
+        String tmpStr1 = inv1.ppt.name();
         // System.out.println ("NAME1: " + tmpStr1);
 	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
 	String thisPptName1 = tmpStr1.substring (0,

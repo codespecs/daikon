@@ -24,7 +24,7 @@ public final class VarComparabilityNone
     return it;
   }
 
-  public VarComparability makeAlias(VarInfoName name) {
+  public VarComparability makeAlias(VarInfoName viname) {
     return it;
   }
 
@@ -45,8 +45,8 @@ public final class VarComparabilityNone
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
    **/
-  static boolean comparable(VarInfoName name1, VarComparabilityNone type1,
-                            VarInfoName name2, VarComparabilityNone type2) {
+  static boolean comparable(VarInfoName viname1, VarComparabilityNone vcomp1,
+                            VarInfoName viname2, VarComparabilityNone vcomp2) {
     return true;
   }
 

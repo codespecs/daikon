@@ -328,7 +328,7 @@ public class LOWERBOUNDCORE
 
     // System.out.println(LOWERBOUNDCORESTR + ".computeProbability(): ");
     // System.out.println("  " + repr());
-    // System.out.println("  ppt=" + wrapper.ppt.name
+    // System.out.println("  ppt=" + wrapper.ppt.name()
     //                    + ", wrapper.ppt.num_mod_non_missing_samples()="
     //                    + wrapper.ppt.num_mod_non_missing_samples()
     //                    // + ", values=" + values
@@ -339,7 +339,7 @@ public class LOWERBOUNDCORE
     //                    + ", trunc_prob=" + trunc_prob
     //                    + ", unif_prob=" + unif_prob);
     // PptSlice pptsg = (PptSlice) ppt;
-    // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
+    // System.out.println("  " + ppt.name() + " ppt.values_cache.tuplemod_samples_summary()="
     //                    + pptsg.tuplemod_samples_summary());
 
   }

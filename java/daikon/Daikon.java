@@ -780,13 +780,13 @@ public final class Daikon {
       if (SplitterList.dkconfig_all_splitters) {
         pconds = SplitterList.get_all();
       } else {
-        pconds = SplitterList.get(ppt.name);
+        pconds = SplitterList.get(ppt.name());
       }
       if (pconds != null) {
         if (Global.debugSplit.isLoggable(Level.FINE)) {
           Global.debugSplit.fine ("Got "
                                   + UtilMDE.nplural(pconds.length, "splitter")
-                                  + " for " + ppt.name);
+                                  + " for " + ppt.name());
         }
         ppt.addConditions(pconds);
       }
@@ -917,8 +917,8 @@ public final class Daikon {
 //       if (false) {
 //         for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
 //           PptTopLevel ppt = (PptTopLevel) i.next();
-//           if (ppt.ppt_name.toString().indexOf ("EXIT42") >= 0) {
-//             System.out.println (ppt.ppt_name + " After processing data");
+//           if (ppt.name().indexOf ("EXIT42") >= 0) {
+//             System.out.println (ppt.name() + " After processing data");
 //             ppt.print_suppressed_invs (debugStats);
 //           }
 //         }
@@ -960,7 +960,7 @@ public final class Daikon {
     if (debugEquality.isLoggable (Level.FINE)) {
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
-        debugEquality.fine (ppt.ppt_name +": " + ppt.equality_sets_txt());
+        debugEquality.fine (ppt.name() +": " + ppt.equality_sets_txt());
       }
     }
 
@@ -975,8 +975,8 @@ public final class Daikon {
     if (false && debugStats.isLoggable (Level.FINE)) {
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
-        if (ppt.ppt_name.toString().indexOf ("EXIT42") >= 0) {
-          System.out.println (ppt.ppt_name + " After final suppression");
+        if (ppt.name().indexOf ("EXIT42") >= 0) {
+          System.out.println (ppt.name() + " After final suppression");
           ppt.print_suppressed_invs (debugStats);
         }
       }
@@ -1049,7 +1049,7 @@ public final class Daikon {
         VarInfo[] comb_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
         PptTopLevel exit_ppt = new PptTopLevel(exit_name, comb_vars);
         // {
-        //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
+        //   System.out.println("Adding " + exit_ppt.name() + " because of multiple expt_ppts for " + enter_ppt.name() + ":");
         //   for (int i=0; i<exits.size(); i++) {
         //     Ppt exit = (Ppt) exits.elementAt(i);
         //     System.out.print(" " + exit.name);
@@ -1078,7 +1078,7 @@ public final class Daikon {
             // Assert.assertTrue(line_vars.length == comb_vars.length,
             //                   "\nIncorrect number of variables (line=" +
             //                   line_vars.length + ", comb=" + comb_vars.length +
-            //                   ") at exit points: " + enter_ppt.name );
+            //                   ") at exit points: " + enter_ppt.name() );
             for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
               if (line_vars[lv_index].isStaticConstant()) {
                 continue;
@@ -1092,7 +1092,7 @@ public final class Daikon {
             line_exit_ppt.combined_exit_var_indices = indices;
             Assert.assertTrue(new_index == new_len);
 
-            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name);
+            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name());
             // for (int i=0; i<indices.length; i++) {
             //   // System.out.print(" " + indices[i]);
             //   System.out.print(" " + indices[i] + " " + comb_vars[indices[i]].name);

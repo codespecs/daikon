@@ -77,7 +77,7 @@ public class Dataflow
       // Connect VarInfos and program points via dataflow ordering
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
-        progress = "Initializing partial order for: " + ppt.ppt_name.toString();
+        progress = "Initializing partial order for: " + ppt.name();
         init_partial_order(ppt, all_ppts);
       }
 
@@ -85,14 +85,14 @@ public class Dataflow
       // *must* recompute all of them, rather than just the new ones.
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel item = (PptTopLevel) i.next();
-        progress = "Initializing data flow order for: " + item.ppt_name.toString();
+        progress = "Initializing data flow order for: " + item.name();
         create_ppt_dataflow(item);
         create_ppt_invflow(item);
       }
     } else {
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
-        progress = "Initializing simple partial order for: " + ppt.ppt_name.toString();
+        progress = "Initializing simple partial order for: " + ppt.name();
         create_simple_pptflow(ppt);
       }
     }
@@ -137,7 +137,7 @@ public class Dataflow
   private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
   {
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("Initializing partial order for ppt " + ppt.ppt_name);
+      debugInit.fine ("Initializing partial order for ppt " + ppt.name());
     }
 
     // Set up OBJECT and CLASS relationships
@@ -201,8 +201,8 @@ public class Dataflow
           if (debugInit.isLoggable(Level.FINE)) {
             debugInit.fine ("Lower and higher: " + lower_vi_name.name()
                 + " " + higher_vi_name.name());
-            debugInit.fine ("Lower and higher ppt: " + lower_vi.ppt.name
-                + " " + higher_vi.ppt.name);
+            debugInit.fine ("Lower and higher ppt: " + lower_vi.ppt.name()
+                + " " + higher_vi.ppt.name());
 
           }
 
@@ -246,7 +246,7 @@ public class Dataflow
 
       if (debugInit.isLoggable(Level.FINE))
         debugInit.fine ("create_combined_exits: encounted exit "
-                        + exitnn_ppt.ppt_name);
+                        + exitnn_ppt.name());
 
       // Create the exit, if necessary
       if (exit_ppt == null) {
@@ -293,7 +293,7 @@ public class Dataflow
   private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
   {
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("Realting object and procedure ppts for " + ppt.ppt_name);
+      debugInit.fine ("Relating object and procedure ppts for " + ppt.name());
     }
     PptName ppt_name = ppt.ppt_name;
     // Find the ppt that controls this one.
@@ -320,7 +320,7 @@ public class Dataflow
 
     if (controlling_ppt != null) {
       if (debugInit.isLoggable(Level.FINE)) {
-        debugInit.fine ("Controlling ppt is " + controlling_ppt.ppt_name);
+        debugInit.fine ("Controlling ppt is " + controlling_ppt.name());
       }
       setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
     } else {
@@ -342,11 +342,11 @@ public class Dataflow
     }
 
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("Doing create and relate orig vars for: " + exit_ppt.ppt_name);
+      debugInit.fine ("Doing create and relate orig vars for: " + exit_ppt.name());
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    Assert.assertTrue(entry_ppt != null, exit_ppt.name);
+    Assert.assertTrue(entry_ppt != null, exit_ppt.name());
 
     // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
     PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
@@ -394,7 +394,7 @@ public class Dataflow
   private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts)
   {
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("Doing relate types to objects: " + ppt.ppt_name);
+      debugInit.fine ("Doing relate types to objects: " + ppt.name());
     }
 
 
@@ -504,18 +504,18 @@ public class Dataflow
   private static void create_derived_variables(PptTopLevel ppt, PptMap all_ppts) {
     int first_new = ppt.var_infos.length;
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("  Creating derived vars for " + ppt.ppt_name);
+      debugInit.fine ("  Creating derived vars for " + ppt.name());
     }
 
     ppt.create_derived_variables();
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("  Created derived vars for " + ppt.ppt_name);
+      debugInit.fine ("  Created derived vars for " + ppt.name());
     }
 
     relate_derived_variables(ppt, first_new, ppt.var_infos.length);
 
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("  Related derived vars for " + ppt.ppt_name);
+      debugInit.fine ("  Related derived vars for " + ppt.name());
     }
   }
 
@@ -528,7 +528,7 @@ public class Dataflow
                                               int lower,
                                               int upper)
   {
-    debug.fine ("relate_derived_variables on " + ppt.name);
+    debug.fine ("relate_derived_variables on " + ppt.name());
 
     // For all immediately higher groups of variables
     PptsAndInts flow = compute_ppt_flow(ppt,
@@ -770,7 +770,7 @@ public class Dataflow
                                               boolean higher)
   {
     if (debugInit.isLoggable(Level.FINE)) {
-      debugInit.fine ("compute_ppt_flow for " + ppt.name + " all_steps = "
+      debugInit.fine ("compute_ppt_flow for " + ppt.name() + " all_steps = "
                        + all_steps + " higher = " + higher);
       String vars = "";
       for (Iterator ii = start.iterator(); ii.hasNext(); ) {
@@ -828,7 +828,7 @@ public class Dataflow
 
         // Debug print flow_ppt, flow_ppt vars, transforms, and head list
         if (debugInit.isLoggable(Level.FINE)) {
-          debugInit.fine ("  Add flow ppt: " + flow_ppt.name);
+          debugInit.fine ("  Add flow ppt: " + flow_ppt.name());
           String vars = "";
           for (int ii = 0; ii < flow_ppt.var_infos.length; ii++)
             vars += flow_ppt.var_infos[ii].name.name() + " ";
@@ -972,7 +972,7 @@ public class Dataflow
     for (Iterator iter = ppts.pptIterator(); iter.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) iter.next();
 
-      out.println(ppt.name);
+      out.println(ppt.name());
       for (int i=0; i < ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
         out.println(vi.name.name());
@@ -985,7 +985,7 @@ public class Dataflow
         for (Iterator vs = vi.po_higher().iterator(); vs.hasNext(); ) {
           VarInfo v = (VarInfo) vs.next();
           int nonce = vi.po_higher_nonce()[count++];
-          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name);
+          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name());
         }
         { // stats
           Integer _count = new Integer(count);
@@ -1000,7 +1000,7 @@ public class Dataflow
         for (Iterator vs = vi.po_lower().iterator(); vs.hasNext(); ) {
           VarInfo v = (VarInfo) vs.next();
           int nonce = vi.po_lower_nonce()[count++];
-          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name);
+          out.println("    " + nonce + ": " + v.name.name() + " in " + v.ppt.name());
         }
         { // stats
           Integer _count = new Integer(count);
@@ -1050,11 +1050,11 @@ public class Dataflow
       PptTopLevel ppt = (PptTopLevel) iter.next();
 
       if (ppt.dataflow_ppts != null) {
-        out.println(ppt.name);
+        out.println(ppt.name());
         for (int j = 0; j < ppt.dataflow_ppts.length; j++) {
           PptTopLevel df_ppt = ppt.dataflow_ppts[j];
           int[] df_ints = ppt.dataflow_transforms[j];
-          out.println("    To " + df_ppt.name + ":");
+          out.println("    To " + df_ppt.name() + ":");
           for (int k = 0; k < ppt.var_infos.length; k++) {
             int map = df_ints[k];
             if (map != -1) {

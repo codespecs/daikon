@@ -147,10 +147,10 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
 
     PptName pptName = topLevel.ppt_name;
     String headingString;
-    if (pptName.getShortMethodName() == null)
+    if (pptName.getMethodName() == null)
       headingString = pptName.getFullClassName() + " : " + pptName.getPoint();
     else			// want SHORT method name so table headings doesn't get too wide
-      headingString = pptName.getFullClassName() + "." + pptName.getShortMethodName() + "() : " + pptName.getPoint();
+      headingString = pptName.getFullClassName() + "." + pptName.getMethodName() + "() : " + pptName.getPoint();
     //	JEditorPane heading = new JEditorPane( "text/plain", headingString );
     JLabel headingLabel = new JLabel( headingString );
     headingLabel.setForeground( new Color( 50, 30, 100 ));

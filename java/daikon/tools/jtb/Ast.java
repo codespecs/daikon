@@ -588,14 +588,14 @@ public class Ast {
     for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       PptName ppt_name = ppt.ppt_name;
-      if (debug_getMatches) System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getShortMethodName() + ")");
+      if (debug_getMatches) System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getMethodName() + ")");
       if (classname.equals(ppt_name.getFullClassName())
-          && methodname.equals(ppt_name.getShortMethodName())) {
+          && methodname.equals(ppt_name.getMethodName())) {
         if (debug_getMatches) System.out.println("getMatch: class name and method name match candidate; now check args");
         // Class name and method name match.  Now check whether args match.
         // This is complicated by the fact that JTB doesn't give us
         // fully-qualified names.
-        String pptFullMethodName = ppt_name.getFullMethodName();
+        String pptFullMethodName = ppt_name.getSignature();
         if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
         int lparen = pptFullMethodName.indexOf('(');
         int rparen = pptFullMethodName.indexOf(')');
@@ -632,7 +632,7 @@ public class Ast {
           if (debug_getMatches) System.out.println("Unmatched; continuing");
           continue;
         }
-        MergeESC.debug.fine ("Ast.getMatch succeeded: " + ppt.name
+        MergeESC.debug.fine ("Ast.getMatch succeeded: " + ppt.name()
                              + " to " + classname + "." + methodname
                              + "(" + UtilMDE.join(param_types, ",") + ")");
         result.add(ppt);
@@ -716,7 +716,7 @@ public class Ast {
       }
       Class[] params = meth.getParameterTypes();
       if (paramsMatch(params, ast_params)) {
-        // System.out.println("getMatch succeeded: " + ppt.name);
+        // System.out.println("getMatch succeeded: " + ppt.name());
         return meth;
       }
     }
@@ -741,7 +741,7 @@ public class Ast {
       }
       Class[] params = constr.getParameterTypes();
       if (paramsMatch(params, ast_params)) {
-        // System.out.println("getMatch succeeded: " + ppt.name);
+        // System.out.println("getMatch succeeded: " + ppt.name());
         return constr;
       }
     }
@@ -1058,8 +1058,8 @@ public class Ast {
     // }
 
     Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
-    // These might differ, because return values appear in ppt.name but not in invs[1].
-    // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);
+    // These might differ, because return values appear in ppt.name() but not in invs[1].
+    // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name()), "Different names: " + invs[1] + ", " + ppt.name());
     Assert.assertTrue(invs[2].startsWith("    Variables:"));
     return ArraysMDE.subarray(invs, 3, invs.length-1-3);
   }

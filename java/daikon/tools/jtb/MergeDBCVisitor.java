@@ -206,7 +206,7 @@ class MergeDBCVisitor extends DepthFirstVisitor {
 //         }
         ensures_invs = Ast.invariants_for(ppt, ppts);
       } else {
-        throw new Error("not enter or exit point: " + ppt.name);
+        throw new Error("not enter or exit point: " + ppt.name());
       }
     }
 

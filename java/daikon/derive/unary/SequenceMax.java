@@ -48,11 +48,11 @@ public final class SequenceMax
   }
 
   protected VarInfo makeVarInfo() {
-    VarInfoName name = base.name.applyFunction("max");
+    VarInfoName viname = base.name.applyFunction("max");
     ProglangType ptype = base.type.elementType();
     ProglangType frtype = base.file_rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, ptype, frtype, comp, base.aux);
+    return new VarInfo(viname, ptype, frtype, comp, base.aux);
   }
 
   public  boolean isSameFormula(Derivation other) {

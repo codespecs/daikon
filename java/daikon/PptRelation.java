@@ -181,16 +181,16 @@ public class PptRelation implements Serializable {
 
   public Map /*VarInfo.Pair*/ get_child_equalities_as_parent(){
 
-    debug.fine ("get_child_equalities for " + child.ppt_name
-                + " for parent " + parent.ppt_name + " " + relationship);
+    debug.fine ("get_child_equalities for " + child.name()
+                + " for parent " + parent.name() + " " + relationship);
     Map emap = new LinkedHashMap();
 
     if (child.equality_view == null)
       System.out.println ("equality_view.invs == null in child ppt: "
-                          + child.ppt_name + " samples = " + child.num_samples());
+                          + child.name() + " samples = " + child.num_samples());
     else if (child.equality_view.invs == null) {
       System.out.println ("equality_view.invs == null in child ppt: "
-                          + child.ppt_name + " samples = " + child.num_samples());
+                          + child.name() + " samples = " + child.num_samples());
       System.out.println ("children = " + child.children);
     }
 
@@ -237,11 +237,11 @@ public class PptRelation implements Serializable {
    * @return true if there was a matching variable, false otherwise.
    */
 
-  private boolean relate (VarInfo parent_var, VarInfoName name) {
+  private boolean relate (VarInfo parent_var, VarInfoName viname) {
 
     for (int j = 0; j < child.var_infos.length; j++) {
       VarInfo vc = child.var_infos[j];
-      if (name == vc.name) {
+      if (viname == vc.name) {
         child_to_parent_map.put (vc, parent_var);
         parent_to_child_map.put (parent_var, vc);
         return (true);
@@ -388,7 +388,7 @@ public class PptRelation implements Serializable {
       VarInfo vp = parent.var_infos[i];
       if (!rel.parent_to_child_map.containsKey (vp)) {
         System.out.println ("No match for " + vp.name.name() + " from parent "
-                            + parent.ppt_name + " in child " + child.ppt_name);
+                            + parent.name() + " in child " + child.name());
         for (int j = 0; j < child.var_infos.length; j++)
           System.out.println ("    " + child.var_infos[j].name.name());
         //Assert.assertTrue (false, "Missing orig variable in EXIT");
@@ -439,7 +439,7 @@ public class PptRelation implements Serializable {
 
     // assert that parent vars match child vars
     if (parent.var_infos.length != child.var_infos.length) {
-      System.out.println ("newMergeChildRel: in ppt " + parent.ppt_name
+      System.out.println ("newMergeChildRel: in ppt " + parent.name()
                           + " vars don't match");
       System.out.println ("parent vars= "+ VarInfo.toString (parent.var_infos));
       System.out.println ("child vars=  "+ VarInfo.toString (child.var_infos));
@@ -452,7 +452,7 @@ public class PptRelation implements Serializable {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
       if (!vc.name.name().equals (vp.name.name())) {
-        System.out.println ("newMergeChildRel: in ppt " + parent.ppt_name
+        System.out.println ("newMergeChildRel: in ppt " + parent.name()
                             + " var " + vc.name.name() + " doesn't match");
         System.out.println ("par vars  = "+VarInfo.toString (parent.var_infos));
         System.out.println ("child vars= "+VarInfo.toString (child.var_infos));
@@ -505,7 +505,7 @@ public class PptRelation implements Serializable {
 
       // If a relation was created, connect it into its ppts
       if (rel != null) {
-        debug.fine ("-- ppt parent is " + rel.parent.ppt_name +
+        debug.fine ("-- ppt parent is " + rel.parent.name() +
             " with connections [" + rel.parent_to_child_var_string() + "]");
       } else {
         debug.fine (" -- no ppt parent");
@@ -559,7 +559,7 @@ public class PptRelation implements Serializable {
             continue;
           }
           rel = PptRelation.newObjectUserRel (object_ppt, ppt, vc);
-          debug.fine (dstr + " Connected to Object ppt " + object_ppt.name
+          debug.fine (dstr + " Connected to Object ppt " + object_ppt.name()
              + " with connections [" + rel.parent_to_child_var_string() +"]");
         } else
           debug.fine (dstr + " No object ppt");
@@ -580,7 +580,7 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
-        debug.fine (ppt.name + " equality sets: "
+        debug.fine (ppt.name() + " equality sets: "
                         + ppt.equality_sets_txt());
       }
     }

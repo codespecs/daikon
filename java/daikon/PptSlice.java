@@ -137,7 +137,6 @@ public abstract class PptSlice
 
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
-    super(parent.name + varNames(var_infos));
     this.parent = parent;
     this.var_infos = var_infos;
     // Ensure that the VarInfo objects are in order (and not duplicated).
@@ -165,6 +164,10 @@ public abstract class PptSlice
   public void trimToSize() {
     super.trimToSize();
     invs.trimToSize();
+  }
+
+  public final String name() {
+    return parent.name + varNames(var_infos);
   }
 
   public boolean usesVar(VarInfo vi) {
@@ -244,7 +247,7 @@ public abstract class PptSlice
       if (Global.debugInfer.isLoggable(Level.FINE)) {
         Global.debugInfer.fine
           ("isControlled: "
-           + name + " controlled by " + higher.ppts[i].name + "? : "
+           + name() + " controlled by " + higher.ppts[i].name + "? : "
            + (all ? "yes" : "no"));
       }
       if (all) {
@@ -738,11 +741,10 @@ public abstract class PptSlice
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
-      if (slice1.arity == slice2.arity) {
-        return slice1.name.compareTo(slice2.name);
-      } else {
+      if (slice1.arity != slice2.arity) {
         return slice2.arity - slice1.arity;
       }
+      return slice1.name().compareTo(slice2.name());
     }
   }
 
@@ -758,7 +760,7 @@ public abstract class PptSlice
     List invariantsToGuard = new ArrayList();
 
     if (debugGuarding.isLoggable(Level.FINE)) {
-      debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.ppt_name);
+      debugGuarding.fine ("PptSlice.guardInvariants init: " + this.parent.name());
       debugGuarding.fine ("  I have " + invs.size() + " invariants");
       for (int i=0; i<var_infos.length; i++) {
         try {

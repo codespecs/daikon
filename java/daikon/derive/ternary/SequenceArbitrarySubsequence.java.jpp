@@ -163,9 +163,9 @@ public final class SEQUENCESCALARSUBSEQUENCE
     VarInfoName right_name = endvar.name;
     if (!right_closed)
       right_name = right_name.applyDecrement();
-    VarInfoName name = seqvar.name.applySlice(left_name, right_name);
+    VarInfoName viname = seqvar.name.applySlice(left_name, right_name);
 
-    return new VarInfo(name, seqvar.type, seqvar.file_rep_type,
+    return new VarInfo(viname, seqvar.type, seqvar.file_rep_type,
                        seqvar.comparability, seqvar.aux);
   }
 

@@ -338,7 +338,7 @@ public final class CLASSNAME
       c = (min_c + max_c) / 2;
       d = (min_d + max_d) / 2;
       if (wrapper.logOn() || debug.isLoggable(Level.FINE))
-        wrapper.log (debug, wrapper.ppt.name + ": Trying new a (" + a +
+        wrapper.log (debug, wrapper.ppt.name() + ": Trying new a (" + a +
                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
 
       // if the new coefficients are 'equal' to their min and max and
@@ -350,7 +350,7 @@ public final class CLASSNAME
           Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d) &&
           EQUAL (-c*z, a*x+b*y+d)) {
         if (debug.isLoggable(Level.FINE))
-          debug.fine (wrapper.ppt.name + ": New a (" + a + ") and b ("
+          debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
                        + b + ") and c (" + c + ")");
         return (true);
       } else {

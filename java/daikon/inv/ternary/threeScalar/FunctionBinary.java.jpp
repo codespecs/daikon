@@ -103,7 +103,7 @@ public class CLASSNAME
         Debug.log (CLASSNAME.class, ppt, "Instantiate vars "
                   + indices[0] + ", " + indices[1] + ", " + indices[2]);
       if (debug.isLoggable(Level.FINE))
-        debug.fine (CLASSSTRING + ".instantiate(" + ppt.name + ", "
+        debug.fine (CLASSSTRING + ".instantiate(" + ppt.name() + ", "
                     + methodname + " (#" + methodNumber + "), "
                     + argresult.name + "="
                     + "f(" + arg1.name + "," + arg2.name + ")");

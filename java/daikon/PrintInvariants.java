@@ -260,7 +260,7 @@ public class PrintInvariants {
           String matching = "";
           if (discVars!=null || discClass!=null)
             matching = " matching ";
-          System.out.println("No"+matching+"discarded Invariants found in "+ppt.name);
+          System.out.println("No"+matching+"discarded Invariants found in "+ppt.name());
         }
       }
       return;
@@ -325,10 +325,10 @@ public class PrintInvariants {
 
     if (!(ppt instanceof PptConditional)) {
       toPrint += ("===========================================================================\n");
-      toPrint += (ppt.name+"\n");
+      toPrint += (ppt.name()+"\n");
     }
 
-    Iterator matchesIter = DiscReasonMap.returnMatches_from_ppt(new InvariantInfo(ppt.name, discVars, discClass)).iterator();
+    Iterator matchesIter = DiscReasonMap.returnMatches_from_ppt(new InvariantInfo(ppt.name(), discVars, discClass)).iterator();
 
     StringBuffer sb = new StringBuffer();
     while (matchesIter.hasNext()) {
@@ -450,7 +450,7 @@ public class PrintInvariants {
       PptTopLevel ppt = (PptTopLevel) ppt_list.get(i);
 
       if (debug.isLoggable(Level.FINE))
-        debug.fine ("Looking at point " + ppt.ppt_name);
+        debug.fine ("Looking at point " + ppt.name());
 
       // If this point is not an exit point, print out any retained combined
       // exit point
@@ -501,29 +501,29 @@ public class PrintInvariants {
                                             PrintWriter out,
                                             PptMap all_ppts)
   {
-    debugPrint.fine  ("Considering printing ppt " + ppt.ppt_name);
+    debugPrint.fine  ("Considering printing ppt " + ppt.name());
 
     // Be silent if we never saw any samples.
     // (Maybe this test isn't even necessary, but will be subsumed by others,
     // as all the invariants will be unjustified.)
     if (ppt.num_samples() == 0) {
       if (debugPrint.isLoggable(Level.FINE)) {
-        debugPrint.fine ("[No samples for " + ppt.name + "]");
+        debugPrint.fine ("[No samples for " + ppt.name() + "]");
       }
       if (Daikon.output_num_samples) {
-        out.println("[No samples for " + ppt.name + "]");
+        out.println("[No samples for " + ppt.name() + "]");
       }
       return;
     }
     if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
       if (debugPrint.isLoggable(Level.FINE)) {
-        debugPrint.fine ("[No views for " + ppt.name + "]");
+        debugPrint.fine ("[No views for " + ppt.name() + "]");
       }
       if (! (ppt instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
         if (Daikon.output_num_samples) {
-          out.println("[No views for " + ppt.name + "]");
+          out.println("[No views for " + ppt.name() + "]");
         }
         return;
       }
@@ -532,7 +532,7 @@ public class PrintInvariants {
     /* [INCR]
     if ((ppt.combined_exit != null) && (Daikon.output_style != OutputFormat.DAIKON)) {
       if (Daikon.output_num_samples) {
-        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + ppt.name + "]");
+        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + ppt.name() + "]");
       }
       return;
     }
@@ -564,7 +564,7 @@ public class PrintInvariants {
   // of the front end, not Daikon proper.  (It should also take a String,
   // not a PptTopLevel, as an argument.)  -MDE 1/17/2003
   // public static String jvm_signature_to_java_signature(PptTopLevel ppt) {
-  //   String better_name = ppt.name;
+  //   String better_name = ppt.name();
   //   {
   //     // Replace <init> with name of class
   //     int init_pos = better_name.indexOf(".<init>");
@@ -600,13 +600,13 @@ public class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       // int num_samps = -111; // [[INCR]]
-      out.println(ppt.name + "  " + nplural(ppt.num_samples(), "sample"));
+      out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
       // out.println("    Samples breakdown: " + ppt.tuplemod_samples_summary()); // [[INCR]]
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
         out.print("% ");  // IOA comment style
       }
-      out.println(ppt.name);
+      out.println(ppt.name());
     }
     if (Daikon.output_num_samples
         || (Daikon.output_style == OutputFormat.ESCJAVA)
@@ -624,7 +624,7 @@ public class PrintInvariants {
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out)
   {
     if (debugPrintModified.isLoggable(Level.FINE)) {
-      debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.ppt_name);
+      debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.name());
     }
 
     Vector modified_vars = new Vector();
@@ -753,7 +753,7 @@ public class PrintInvariants {
             vi = ppt.findVar(((VarInfoName.Field)vin).term);
             if (vi == null) {
               ppt.findVar_debugging(((VarInfoName.Field)vin).term);
-              System.out.println("Failed findVar(" + ((VarInfoName.Field)vin).term.name() + ") from " + vin.name() + " at " + ppt.name);
+              System.out.println("Failed findVar(" + ((VarInfoName.Field)vin).term.name() + ") from " + vin.name() + " at " + ppt.name());
               // Don't do this:  vi is null!
               // System.out.println(vi.repr());
             }
@@ -920,7 +920,7 @@ public class PrintInvariants {
 
     if (debugPrintEquality.isLoggable(Level.FINE)) {
       StringBuffer sb = new StringBuffer();
-        debugPrintEquality.fine ("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
+        debugPrintEquality.fine ("Resultant obviously equality set for "  + vi.ppt.name() + " " + vi.name.name());
       for (Iterator j = equal_vars.iterator(); j.hasNext(); ) {
         sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
@@ -1134,7 +1134,7 @@ public class PrintInvariants {
       }
     }
 
-    if (inv.ppt.ppt_name.isExitPoint()) {
+    if (inv.ppt.parent.ppt_name.isExitPoint()) {
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];
         // ppt has to be a PptSlice, not a PptTopLevel
@@ -1257,8 +1257,8 @@ public class PrintInvariants {
 //      // don't derive from non-canonical variables.
 //      Iterator iter = Arrays.asList(inv.ppt.var_infos).iterator();
 //      while (iter.hasNext()) {
-//        VarInfoName name = ((VarInfo) iter.next()).name;
-//        Iterator nodes = (new VarInfoName.InorderFlattener(name)).nodes().iterator();
+//        VarInfoName viname = ((VarInfo) iter.next()).name;
+//        Iterator nodes = (new VarInfoName.InorderFlattener(viname)).nodes().iterator();
 //        nodes.next(); // skip the root
 //        while (nodes.hasNext()) {
 //          VarInfoName node = (VarInfoName) nodes.next();
@@ -1310,7 +1310,7 @@ public class PrintInvariants {
    * this ppt is worth printing.
    **/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
-    // System.out.println("print_invariants(" + ppt.name + ")");
+    // System.out.println("print_invariants(" + ppt.name() + ")");
 
     // make names easier to read before printing
     ppt.simplify_variable_names();
@@ -1320,7 +1320,7 @@ public class PrintInvariants {
 
     // Dump some debugging info, if enabled
     if (debugPrint.isLoggable(Level.FINE)) {
-      debugPrint.fine ("Variables for ppt "  + ppt.name);
+      debugPrint.fine ("Variables for ppt "  + ppt.name());
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
@@ -1336,7 +1336,7 @@ public class PrintInvariants {
     }
     if (debugFiltering.isLoggable(Level.FINE)) {
       debugFiltering.fine ("------------------------------------------------------------------------------------------------\n");
-      debugFiltering.fine (ppt.name + "\n\n");
+      debugFiltering.fine (ppt.name() + "\n\n");
     }
 
     // Count statistics (via Global) on variables (canonical, missing, etc.)
@@ -1469,25 +1469,25 @@ public class PrintInvariants {
    * of the invariants and the program point name.  We simply change
    * the ppt name's characters to be valid IOA syntax.
    **/
-  public static String get_ioa_invname (int numbering, Ppt ppt) {
+  public static String get_ioa_invname (int numbering, PptTopLevel ppt) {
     String replaced = "";
     if (PrintInvariants.test_output) {
-      if (ppt.ppt_name.getFullMethodName() != null) {
-        replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+      if (ppt.ppt_name.getSignature() != null) {
+        replaced = ppt.ppt_name.getSignature().replace('(', '_').replace(')', '_');
       }
       return "Inv" + replaced;
     } else {
-      if (ppt.ppt_name.getFullMethodName() != null) {
-        replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+      if (ppt.ppt_name.getSignature() != null) {
+        replaced = ppt.ppt_name.getSignature().replace('(', '_').replace(')', '_');
       }
       return "Inv" + replaced + numbering;
     }
   }
 
-  public static String get_ioa_precondition (int numbering, Ppt ppt) {
+  public static String get_ioa_precondition (int numbering, PptTopLevel ppt) {
     if (ppt.ppt_name.isClassStaticSynthetic()) return "";
     if (ppt.ppt_name.isObjectInstanceSynthetic()) return "";
-    return "enabled(" + ppt.ppt_name.getFullMethodName() + ") => ";
+    return "enabled(" + ppt.ppt_name.getSignature() + ") => ";
   }
 
 
@@ -1537,7 +1537,7 @@ public class PrintInvariants {
     Map filter_map = new LinkedHashMap();
 
     if (print_invs)
-      debug.fine (ppt.ppt_name.toString());
+      debug.fine (ppt.name());
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
@@ -1564,7 +1564,7 @@ public class PrintInvariants {
         debug.fine (" : " + filter_class + " : " + inv.format());
     }
 
-    debug.fine (ppt.ppt_name.toString() + ": " + invs_array.length);
+    debug.fine (ppt.name() + ": " + invs_array.length);
 
     for (Iterator i = filter_map.keySet().iterator(); i.hasNext(); ) {
       Class filter_class = (Class) i.next();

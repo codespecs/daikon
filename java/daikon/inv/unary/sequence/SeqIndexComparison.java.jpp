@@ -80,7 +80,7 @@ public final class CLASSNAME
   public static CLASSNAME instantiate(PptSlice ppt) {
 
     if (debug.isLoggable(Level.FINE))
-      debug.fine ("Attempting instantiate of " + ppt.name);
+      debug.fine ("Attempting instantiate of " + ppt.name());
 
     if (!dkconfig_enabled) {
       debug.fine ("No instantiate -- not configured");
@@ -160,11 +160,11 @@ public final class CLASSNAME
     String comparator = core.format_comparator();
     // this is wrong because "a[i:k..] < i" doesn't need the subscript
     // return var().name.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";
-    VarInfoName name = var().name;
-    if ((new VarInfoName.ElementsFinder(name)).elems() != null) {
-      return name.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";
+    VarInfoName viname = var().name;
+    if ((new VarInfoName.ElementsFinder(viname)).elems() != null) {
+      return viname.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";
     } else {
-      return name.name() + " " + comparator + " (index)";
+      return viname.name() + " " + comparator + " (index)";
     }
   }
 

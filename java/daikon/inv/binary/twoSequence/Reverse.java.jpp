@@ -114,13 +114,13 @@ public class CLASSNAME
     // The following line of code does not correctly indicate that one array is the reverse of the other
     // return "(new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals(" + var2().name.name() + ")";
 
-    VarInfoName name1,name2;
-    name1 = var1().name;
-    name2 = var2().name;
+    VarInfoName viname1, viname2;
+    viname1 = var1().name;
+    viname2 = var2().name;
 
     String upperExtent = ""; // Pacify javac with the initialization
 
-    VarInfoName seq = name2;
+    VarInfoName seq = viname2;
     String preTag = "", postTag = "";
 
     if (seq instanceof VarInfoName.Prestate) {
@@ -138,12 +138,12 @@ public class CLASSNAME
       throw new IllegalStateException();
     }
 
-    if (name2 instanceof VarInfoName.Slice && ((VarInfoName.Slice)name2).j != null)
-      upperExtent = ((VarInfoName.Slice)name2).j.jml_name();
+    if (viname2 instanceof VarInfoName.Slice && ((VarInfoName.Slice)viname2).j != null)
+      upperExtent = ((VarInfoName.Slice)viname2).j.jml_name();
     else
       upperExtent = seq.applySize().jml_name();
 
-    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {name1});
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {viname1});
     String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
 
     VarInfoName index = ((VarInfoName [])qret.bound_vars.get(0))[0];

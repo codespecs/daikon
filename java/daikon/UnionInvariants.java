@@ -152,10 +152,10 @@ public class UnionInvariants {
         continue;
 
       if (collector.get(ppt.ppt_name) != null) {
-        throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name);
+        throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name());
       }
 
-      System.out.println("Adding ppt " + ppt.name);
+      System.out.println("Adding ppt " + ppt.name());
       collector.add(ppt);
     }
   }

@@ -688,7 +688,7 @@ public abstract class VarInfoName
     }
 
     protected Class resolveType(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
+      // System.out.println("" + repr() + " resolveType(" + ppt.name() + ")");
       // Also see Ast.getClass(String s)
       if (name.equals("this")) {
         try {
@@ -703,7 +703,7 @@ public abstract class VarInfoName
       return null;
     }
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveField(" + ppt.name + ")");
+      // System.out.println("" + repr() + " resolveField(" + ppt.name() + ")");
       try {
         if (name.startsWith("this.")) {
           Class c = Class.forName(ppt.ppt_name.getFullClassName());
@@ -1157,7 +1157,7 @@ public abstract class VarInfoName
       return term.identifier_name() + "_dot_" + field;
     }
     protected Class resolveType(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
+      // System.out.println("" + repr() + " resolveType(" + ppt.name() + ")");
       java.lang.reflect.Field f = resolveField(ppt);
       if (f != null) {
         // System.out.println("resolveType => " + f.getType());
@@ -1166,7 +1166,7 @@ public abstract class VarInfoName
       return null;
     }
     protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
-      // System.out.println("" + repr() + " resolveField(" + ppt.name + ")");
+      // System.out.println("" + repr() + " resolveField(" + ppt.name() + ")");
       Class c = term.resolveType(ppt);
       if (c != null) {
         try {

@@ -59,7 +59,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     String key2 = "";
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
-	String thisPptName1 = inv1.ppt.name;
+	String thisPptName1 = inv1.ppt.name();
 
         key1 = thisPptName1 + "$" + inv1.format();
         //        cnt.add (key1);
@@ -67,7 +67,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
 
     if (inv2 != null /*&& inv2.justified()*/ && !filterOut (inv2)) {
-        String thisPptName2 = inv2.ppt.name;
+        String thisPptName2 = inv2.ppt.name();
         key2 = thisPptName2 + "$" + inv2.format();
 
 
@@ -90,7 +90,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
         //	System.out.println("K1: " + key1);
         //        System.out.println ("K2: " + key2);
 
-        String thisPptName1 = inv1.ppt.name;
+        String thisPptName1 = inv1.ppt.name();
         // System.out.println ("NAME1: " + tmpStr1);
 	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
         String bucketKey =  thisPptName1.indexOf (";condition") > -1 ?

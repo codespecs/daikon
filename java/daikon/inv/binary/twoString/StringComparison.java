@@ -58,7 +58,7 @@ public final class StringComparison
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (debugStringComparison || ppt.debugged) {
-      System.out.println("StringComparison.instantiate(" + ppt.name + ")"
+      System.out.println("StringComparison.instantiate(" + ppt.name() + ")"
                          + ", seqvar1=" + seqvar1
                          + ", seqvar2=" + seqvar2);
     }
@@ -205,7 +205,7 @@ public final class StringComparison
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debugStringComparison || ppt.debugged) {
-  //     System.out.println("StringComparison.destroy(" + ppt.name + ")");
+  //     System.out.println("StringComparison.destroy(" + ppt.name() + ")");
   //   }
   //   super.destroy();
   // }

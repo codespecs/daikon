@@ -73,8 +73,8 @@ public final class VarComparabilityExplicit
     indexTypes = new VarComparabilityExplicit[dimensions];
   }
 
-  public VarComparability makeAlias(VarInfoName name) {
-    return new VarComparabilityExplicit(base, indices, dimensions, name);
+  public VarComparability makeAlias(VarInfoName viname) {
+    return new VarComparabilityExplicit(base, indices, dimensions, viname);
   }
 
   public boolean alwaysComparable() {

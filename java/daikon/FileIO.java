@@ -267,7 +267,7 @@ public final class FileIO {
           || ((Daikon.ppt_regexp != null)
               && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
         // Discard this declaration
-        // System.out.println("Discarding non-matching program point declaration " + ppt_name);
+        // System.out.println("Discarding non-matching program point declaration " + name());
         String line = file.readLine();
         // This fails if some lines of a declaration (e.g., the comparability
         // field) are empty.
@@ -446,7 +446,7 @@ public final class FileIO {
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
 
-      pw.println("  " + ppt.fn_name());
+      pw.println("  " + ppt.ppt_name.getNameWithoutPoint());
       pw.print("    ");
 
       // [adonovan] is this sound? Let me know if not (sorry).
@@ -471,11 +471,6 @@ public final class FileIO {
       pw.println();
 
       return sw.toString();
-    }
-
-    // Could store rather than recomputing, but it doesn't seem worth it.
-    public String fn_name() {
-      return ppt.fn_name();
     }
 
     /** Change uses of hashcodes to canonical_hashcode. **/
@@ -714,7 +709,7 @@ public final class FileIO {
         // Add orig and derived variables; pass to inference (add_and_flow)
         process_sample(ppt, vt, nonce);
         //Debug.check (all_ppts, "counter = " + count + " ppt = "
-        //                  + ppt.name + " " + Debug.related_vars (ppt, vt));
+        //                  + ppt.name() + " " + Debug.related_vars (ppt, vt));
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -790,7 +785,7 @@ public final class FileIO {
         vt = new ValueTuple(vt.vals, vt.mods);
 
         if (debugRead.isLoggable(Level.FINE)) {
-          debugRead.fine ("Adding ValueTuple to " + ppt.name);
+          debugRead.fine ("Adding ValueTuple to " + ppt.name());
           debugRead.fine ("  length is " + vt.vals.length);
         }
 
@@ -836,7 +831,7 @@ public final class FileIO {
         PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
         if (exit_ppt != null) {
           VarInfo[] exit_vis = exit_ppt.var_infos;
-          // System.out.println("ppt = " + ppt.name);
+          // System.out.println("ppt = " + ppt.name());
           // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
           // System.out.println(" vt = " + vt.toString());
           ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
@@ -942,7 +937,7 @@ public final class FileIO {
     }
 
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter.println(ppt.name);
+      Global.dtraceWriter.println(ppt.name());
 
       if (to_write_nonce) {
         Global.dtraceWriter.println(nonce_string);
@@ -975,7 +970,7 @@ public final class FileIO {
       if (line == null) {
         throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
                         + "\n  Expected variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name);
+                        + " for program point " + ppt.name());
       }
 
       while ((Daikon.var_omit_regexp != null)
@@ -989,7 +984,7 @@ public final class FileIO {
       if (!VarInfoName.parse(line).equals(vi.name)) {
         throw new FileIOException("Expected variable " + vi.name.name()
                                   + ", got " + line
-                                  + " for program point " + ppt.name,
+                                  + " for program point " + ppt.name(),
                                   reader, data_trace_filename);
 
       }
@@ -997,14 +992,14 @@ public final class FileIO {
       if (line == null) {
         throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
                         + "\n  Expected value for variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name);
+                        + " for program point " + ppt.name());
       }
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
         throw new FileIOException("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
                         + "\n  Expected modbit for variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name);
+                        + " for program point " + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new FileIOException("Bad modbit"
@@ -1015,7 +1010,7 @@ public final class FileIO {
 
       // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()
       //                   + "\n  for variable " + vi.name.name()
-      //                   + " for program point " + ppt.name);
+      //                   + " for program point " + ppt.name());
 
       // MISSING_FLOW is only found during flow algorithm
       Assert.assertTrue (mod != ValueTuple.MISSING_FLOW, "Data trace value can't be missing due to flow");
@@ -1105,8 +1100,8 @@ public final class FileIO {
                                          Integer nonce)
   {
     VarInfo[] vis = ppt.var_infos;
-    String fn_name = ppt.fn_name();
-    String ppt_name = ppt.name;
+    String fn_name = ppt.ppt_name.getNameWithoutPoint();
+    String ppt_name = ppt.name();
     if (ppt_name.endsWith(enter_tag)) {
       Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
@@ -1121,10 +1116,10 @@ public final class FileIO {
       // body is "while (true) { }"; Jikes/dfej adds no synthetic "return"
       // statement in that case.
       // if (subhash == null) {
-      //   System.out.println("Entry " + ppt_name + " has no cumulative_modbits");
+      //   System.out.println("Entry " + name() + " has no cumulative_modbits");
       // }
       if (subhash != null) {
-        // System.out.println("Entry " + ppt_name + " has " + subhash.size() + " exits");
+        // System.out.println("Entry " + name() + " has " + subhash.size() + " exits");
         for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
           int[] exitmods = (int[]) itor.next();
           // System.out.println("lengths: " + exitmods.length + " " + mods.length);
@@ -1143,14 +1138,14 @@ public final class FileIO {
         if (nonce == null) {
           if (call_stack.empty()) {
             throw new Error("Function exit without corresponding entry: "
-                            + ppt.name);
+                            + ppt.name());
           }
           invoc = (Invocation) call_stack.pop();
-          while (invoc.fn_name() != fn_name) {
+          while (invoc.ppt.ppt_name.getNameWithoutPoint() != fn_name) {
             // Should also mark as a function that made an exceptional exit
             // at runtime.
             System.err.println("Exceptional exit from function " + fn_name
-                               + ", expected to first exit from " + invoc.fn_name()
+                               + ", expected to first exit from " + invoc.ppt.ppt_name.getNameWithoutPoint()
                                + ((data_trace_filename == null) ? "" :
                                   "; at " + data_trace_filename + " line "
                                   + data_trace_reader.getLineNumber())
@@ -1161,7 +1156,7 @@ public final class FileIO {
           // nonce != null
           invoc = (Invocation) call_hashmap.get(nonce);
           if (invoc == null) {
-            throw new Error("Didn't find call to " + ppt.name + " with nonce " + nonce);
+            throw new Error("Didn't find call to " + ppt.name() + " with nonce " + nonce);
           }
           invoc = (Invocation) call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
@@ -1171,7 +1166,7 @@ public final class FileIO {
       {
         /* [INCR] punt cumulative modbits
         Assert.assertTrue(ppt.num_orig_vars == entry_ppt.num_tracevars
-                          // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
+                          // , ppt.name() + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name() + " has " + entry_ppt.num_tracevars + " tracevars"
                           );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
         */ // ... INCR

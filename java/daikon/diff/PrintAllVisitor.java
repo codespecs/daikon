@@ -53,15 +53,15 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       if (ppt1 == null) {
         ps.print((String) null);
       } else {
-        ps.print(ppt1.name);
+        ps.print(ppt1.name());
       }
 
-      if (ppt1 == null || ppt2 == null || !ppt1.name.equals(ppt2.name)) {
+      if (ppt1 == null || ppt2 == null || !ppt1.name().equals(ppt2.name())) {
         ps.print(", ");
         if (ppt2 == null) {
           ps.print((String) null);
         } else {
-          ps.print(ppt2.name);
+          ps.print(ppt2.name());
         }
       }
       ps.println(">");

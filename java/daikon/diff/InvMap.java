@@ -33,7 +33,7 @@ public class InvMap implements Serializable {
 
   public void put(PptTopLevel ppt, List invs) {
     if (ppts.contains(ppt)) {
-      throw new Error("Tried to add duplicate PptTopLevel " + ppt.name);
+      throw new Error("Tried to add duplicate PptTopLevel " + ppt.name());
     }
     ppts.add(ppt);
     pptToInvs.put(ppt, invs);
@@ -41,7 +41,7 @@ public class InvMap implements Serializable {
 
   public void add(PptTopLevel ppt, Invariant inv) {
     if (! ppts.contains(ppt)) {
-      throw new Error("ppt has not yet been added: " + ppt.name);
+      throw new Error("ppt has not yet been added: " + ppt.name());
     }
     get(ppt).add(inv);
   }
@@ -86,7 +86,7 @@ public class InvMap implements Serializable {
     String result = new String();
     for (Iterator i = pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
-      result += ppt.name + Global.lineSep;
+      result += ppt.name() + Global.lineSep;
       List invs = get(ppt);
       for (Iterator i2 = invs.iterator(); i2.hasNext(); ) {
         Invariant inv = (Invariant) i2.next();

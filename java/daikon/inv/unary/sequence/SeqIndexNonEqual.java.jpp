@@ -126,11 +126,11 @@ public final class CLASSNAME
   public String format_daikon() {
     // this is wrong because "a[k..] != i" doesn't need the subscript
     // return var().name.applySubscript(VarInfoName.parse("i")).name() + " != i";
-    VarInfoName name = var().name;
-    if ((new VarInfoName.ElementsFinder(name)).elems() != null) {
-      return name.applySubscript(VarInfoName.parse("i")).name() + " != i";
+    VarInfoName viname = var().name;
+    if ((new VarInfoName.ElementsFinder(viname)).elems() != null) {
+      return viname.applySubscript(VarInfoName.parse("i")).name() + " != i";
     } else {
-      return name.name() + " != (index)";
+      return viname.name() + " != (index)";
     }
   }
 

@@ -408,7 +408,7 @@ public class Debug {
     String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
     line = " line=" + line;
 
-    debug.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
+    debug.fine (class_str + ": " + ppt.name()
                  + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
@@ -500,7 +500,7 @@ public class Debug {
     String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
     line = " line=" + line;
 
-    debugTrack.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
+    debugTrack.fine (class_str + ": " + ppt.name()
                      + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
@@ -529,7 +529,7 @@ public class Debug {
   private static boolean ppt_match (Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
-      return (strContainsElem (ppt.name, debugTrackPpt));
+      return (strContainsElem (ppt.name(), debugTrackPpt));
     }
     return (true);
   }
@@ -612,13 +612,7 @@ public class Debug {
    */
 
   private static boolean strContainsElem (String str, String[] arr) {
-
-    for (int i = 0; i < arr.length; i++) {
-      if (str.indexOf (arr[i]) >= 0)
-        return (true);
-
-    }
-    return (false);
+    return (ArraysMDE.indexOf(arr, str) != -1);
   }
 
   /**

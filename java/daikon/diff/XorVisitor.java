@@ -38,7 +38,7 @@ public class XorVisitor extends DepthFirstVisitor {
     Invariant inv2 = node.getInv2();
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("visit: "
-                    + ((inv1 != null) ? inv1.ppt.parent.ppt_name.toString() : "NULL") + " "
+                    + ((inv1 != null) ? inv1.ppt.parent.name() : "NULL") + " "
                     + ((inv1 != null) ? inv1.repr() : "NULL") + " - "
                     + ((inv2 != null) ? inv2.repr() : "NULL"));
     }

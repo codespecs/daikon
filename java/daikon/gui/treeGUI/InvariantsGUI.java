@@ -176,7 +176,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	  classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 	}
       } else {		// is a regular method ppt
-	String methodName = pptName.getFullMethodName();
+	String methodName = pptName.getSignature();
 	Assert.assertTrue( methodName != null );
 	DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
 	if (methodNode == null) {
@@ -189,7 +189,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
       String name = (String) iter.next();
       PptName pptName = new PptName( name );
-      String methodName = pptName.getFullMethodName();
+      String methodName = pptName.getSignature();
       if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
 	continue;
       String className = pptName.getFullClassName();
@@ -213,7 +213,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	int exitNumber = pptName.getPointSubscript();
 	int childIndex;
 	for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
-	  Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+	  PptTopLevel currentChild = (PptTopLevel) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
 	  int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
 	  if (currentChildExitNumber > exitNumber)
 	    break;

@@ -52,7 +52,7 @@ public abstract class SingleFloat
    * Subclasses can override this.
    **/
   public InvariantStatus add_unmodified(double value, int count) {
-    // System.out.println("SingleFloat.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
+    // System.out.println("SingleFloat.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
     return InvariantStatus.NO_CHANGE;
   }
 

@@ -54,7 +54,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
         // Use the histogram map
         if (inv1 != null && shouldPrint (inv1, inv2)) {
-            String tmpStr = inv1.ppt.name;
+            String tmpStr = inv1.ppt.name();
             // example:
             // tmpStr == FeedTheCat.measure(III)I:::ENTER(b, this.bCap
             String thisPptName = tmpStr.substring (0,
@@ -131,7 +131,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         System.out.println ("Histogram**************");
 
         // This gets all of the output in the format:
-        // inv.ppt.name + "$" + inv1.format_java() + " Count = " + freq
+        // inv.ppt.name() + "$" + inv1.format_java() + " Count = " + freq
         for (Iterator i = freqList.keySet().iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             int freq = ((Integer) freqList.get(str)).intValue();
@@ -194,7 +194,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
 
         // This gets all of the output in the format:
-        // inv.ppt.name + "$" + inv1.format_java()
+        // inv.ppt.name() + "$" + inv1.format_java()
         for (Iterator i = freqList.keySet().iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             int freq = ((Integer) freqList.get(str)).intValue();

@@ -131,9 +131,9 @@ public final class VarInfo
       if (po_lower instanceof VarInfo) {
         VarInfo lower = (VarInfo) po_lower;
         if (lower.missingOutOfBounds()) {
-          debugMissing.fine ("Var " + lower.ppt.ppt_name + " "
+          debugMissing.fine ("Var " + lower.ppt.name() + " "
                               + lower.name.name()
-                              + " out of bounds implies " + ppt.ppt_name + " "
+                              + " out of bounds implies " + ppt.name() + " "
                               + name.name() + " out of bounds. ");
           derived.missing_array_bounds = true; // don't force us to recalc this
           return (true);
@@ -143,9 +143,9 @@ public final class VarInfo
       VarInfo[] vis = (VarInfo[]) po_lower;
       for (int i = 0; i < vis.length; i++) {
         if (vis[i].missingOutOfBounds()) {
-          debugMissing.fine ("Var " + vis[i].ppt.ppt_name + " "
+          debugMissing.fine ("Var " + vis[i].ppt.name() + " "
                               + vis[i].name.name()
-                              + " out of bounds implies " + ppt.ppt_name + " "
+                              + " out of bounds implies " + ppt.name() + " "
                               + name.name() + " out of bounds. ");
           derived.missing_array_bounds = true; // don't force us to recalc this
           return (true);
@@ -497,7 +497,7 @@ public final class VarInfo
       System.err.println ("Error, lower != higher in:");
       System.err.println ("   lower: " + lower.name.name());
       System.err.println ("  higher: " + higher.name.name());
-      System.err.println ("     ppt: " + this.ppt.name);
+      System.err.println ("     ppt: " + this.ppt.name());
       Assert.assertTrue(lower != higher, "lower != higher");
 
     }
@@ -595,7 +595,7 @@ public final class VarInfo
       + ",static_constant_value=" + static_constant_value
       + ",derived=" + checkNull(derived)
       + ",derivees=" + derivees()
-      + ",ppt=" + ppt.name
+      + ",ppt=" + ppt.name()
       + ",canBeMissing=" + canBeMissing
       + (",equal_to=" + (equalitySet==null ? "null" : equalitySet.toString()))
       /* [INCR]
@@ -646,7 +646,7 @@ public final class VarInfo
     for (int i=0; i<exact_nonunary_invariants.size(); i++) {
       Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
       if (inv.ppt.var_infos[0] != this) {
-        System.out.println("Problem: " + inv.ppt.var_infos[0].name + ", " + this.name + " in " + this.ppt.name + ", " + inv.ppt.name);
+        System.out.println("Problem: " + inv.ppt.var_infos[0].name + ", " + this.name + " in " + this.ppt.name() + ", " + inv.ppt.name());
       }
       Assert.assertTrue(inv.ppt.var_infos[0] == this);
       Assert.assertTrue(inv.isExact());
@@ -836,7 +836,7 @@ public final class VarInfo
     if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
       Global.debugSuppressParam.fine ("Testing isDerivedParamAndUninteresting for: " + name.name());
       Global.debugSuppressParam.fine (aux.toString());
-      Global.debugSuppressParam.fine ("At ppt " + ppt.name);
+      Global.debugSuppressParam.fine ("At ppt " + ppt.name());
     }
     if (isDerivedParam()) {
       // I am uninteresting if I'm a derived param from X and X's
@@ -901,7 +901,7 @@ public final class VarInfo
       //         return true; // There can't be an equal invariant in a null slice
       //       }
       //       if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
-      //         Global.debugSuppressParam.fine ("Parent and orig slice for finding equality: " + slice.name);
+      //         Global.debugSuppressParam.fine ("Parent and orig slice for finding equality: " + slice.name());
       //       }
       //       boolean seenEqual = false;
       //       for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
@@ -2290,7 +2290,7 @@ public final class VarInfo
       return ("null");
     String vars = "";
     for (int i = 0; i < vis.length; i++) {
-      if (vars != "")
+      if (vars != "")           // interned
         vars += ", ";
       if (vis[i] == null)
         vars += "null";

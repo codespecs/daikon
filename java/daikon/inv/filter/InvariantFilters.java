@@ -377,7 +377,7 @@ public class InvariantFilters {
         if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
           PrintInvariants.debugFiltering.fine ("Found invariant which says " + invariant.format());
         }
-        // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name);
+        // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name());
         // System.out.println("    " + invariant.repr());
         VarInfo[] variables = invariant.ppt.var_infos;
         Assert.assertTrue( variables.length == 2 );

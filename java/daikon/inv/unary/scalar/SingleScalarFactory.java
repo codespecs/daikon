@@ -11,7 +11,7 @@ public final class SingleScalarFactory {
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt) {
-    // System.out.println("Ppt arity " + ppt.arity + " " + ppt.name + " " + ppt);
+    // System.out.println("Ppt arity " + ppt.arity + " " + ppt.name() + " " + ppt);
     Assert.assertTrue(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
     // Assert.assertTrue(! var.rep_type.isArray());

@@ -800,10 +800,10 @@ public final class MakeInvariantChecker {
     Iterator pptPoints = invariantInformation.keySet().iterator();
     while (pptPoints.hasNext()){
       PptTopLevel atoplevel = (PptTopLevel) pptPoints.next();
-      String pptPointName = makeValidJavaIdentifier(atoplevel.ppt_name.getFullNamePoint());
+      String pptPointName = makeValidJavaIdentifier(atoplevel.name());
       javaSourceWriter.print(UtilMDE.join (new String [] {
         "               if (daikon.tools.InvariantChecker.makeValidJavaIdentifier",
-        "                   (atoplevel.ppt_name.getFullNamePoint()).equals(\"" +
+        "                   (atoplevel.name()).equals(\"" +
         pptPointName  + "\")) ",
         "                    assertPpt"+ pptPointName +"(info);"}, Daikon.lineSep));
     }
@@ -815,7 +815,7 @@ public final class MakeInvariantChecker {
     while (pptPoints2.hasNext()){
       String initialization = Daikon.lineSep;
       PptTopLevel atoplevel = (PptTopLevel) pptPoints2.next();
-      String pptPointName = makeValidJavaIdentifier(atoplevel.ppt_name.getFullNamePoint());
+      String pptPointName = makeValidJavaIdentifier(atoplevel.name());
       String procedureName = "          private static void assertPpt" + pptPointName;
 
       javaSourceWriter.print(UtilMDE.join(new String [] {

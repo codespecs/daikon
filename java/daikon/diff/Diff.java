@@ -761,7 +761,7 @@ public final class Diff {
   private List findCondPpt (PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
-    String targetName = ppt.name;
+    String targetName = ppt.name();
 
     String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
@@ -782,7 +782,7 @@ public final class Diff {
   private List findNormalPpt (PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9
-    String targetName = ppt.name;
+    String targetName = ppt.name();
 
     //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 

@@ -194,7 +194,7 @@ public class InstrumentObserversVisitor
             System.err.println("Warning: skipping void observer " + name);
             return;
           }
-          // System.out.println("Found name: " + name);
+          // System.out.println("Found name: " + name());
           observer_methods.add(method);
         }
       }

@@ -39,7 +39,7 @@ public final class ThreeFloatFactory {
                   && (var3.rep_type == ProglangType.DOUBLE));
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Instantiating for " + ppt.name);
+      debug.fine ("Instantiating for " + ppt.name());
       debug.fine ("Vars: " + var1.name + " " + var2.name + " " + var3.name);
     }
 

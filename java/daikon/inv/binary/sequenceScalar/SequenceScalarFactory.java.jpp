@@ -46,7 +46,7 @@ public final class CLASSNAME {
   // collection.
   public static Vector instantiate(PptSlice ppt) {
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (CLASSSTRING + " instantiate " + ppt.name);
+      debug.fine (CLASSSTRING + " instantiate " + ppt.name());
     }
 
     boolean seq_first;

@@ -62,7 +62,7 @@ public class ControlledInvariantFilter extends InvariantFilter {
           PrintInvariants.debugFiltering.fine ("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
         }
         inv.discardCode = DiscardCode.control_check;
-        inv.discardString = "("+contr_inv.ppt.name+": "+contr_inv.format()+") is worth printing "+
+        inv.discardString = "("+contr_inv.ppt.name()+": "+contr_inv.format()+") is worth printing "+
           "and is a controlling Invariant of this";
         return false;
       }

@@ -88,7 +88,7 @@ public final class Equality
   public Equality(Collection variables, PptSlice ppt) {
     super(ppt);
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Creating at " + ppt.parent.ppt_name + " vars: ");
+      debug.fine ("Creating at " + ppt.parent.name() + " vars: ");
     }
 
     numSamples = 0;
@@ -409,7 +409,7 @@ public final class Equality
 
     List result = new LinkedList();
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Doing add at " + this.ppt.parent.ppt_name + " for " + this);
+      debug.fine ("Doing add at " + this.ppt.parent.name() + " for " + this);
     }
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
@@ -456,7 +456,7 @@ public final class Equality
     VarInfo[] vars = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine ("Doing postProcess: " + this.format_daikon());
-      debugPostProcess.fine ("  at: " + this.ppt.parent.ppt_name);
+      debugPostProcess.fine ("  at: " + this.ppt.parent.name());
     }
     VarInfo leader = leader();
     ProglangType rep = leader.rep_type;

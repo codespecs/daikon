@@ -66,7 +66,7 @@ public final class CallerContextSplitter
   public String toString() {
     String attach = "(unattached prototype)";
     if (caller_varinfo != null) {
-      attach = "attached to " + caller_varinfo.ppt.name;
+      attach = "attached to " + caller_varinfo.ppt.name();
     }
     return "CallerContextSplitter<" + condition
       + ", " + attach + ">";

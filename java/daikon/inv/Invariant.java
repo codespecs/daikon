@@ -464,7 +464,7 @@ public abstract class Invariant
                   + " old_ppt = " + VarInfo.toString (ppt.var_infos)
                   + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
     //if (debug.isLoggable(Level.FINE))
-    //    debug.fine ("Invariant.transfer to " + new_ppt.name + " "
+    //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
     //                 + result.repr());
 
     return result;
@@ -896,9 +896,9 @@ public abstract class Invariant
             // confused formatting.)
             // if (inv1.format().equals(inv2.format())) {
             //   System.out.println("ICFP says different, but same formatting:");
-            //   System.out.println("  " + inv1.format() + " " + inv1.repr() + " at " + inv1.ppt.name);
+            //   System.out.println("  " + inv1.format() + " " + inv1.repr() + " at " + inv1.ppt.name());
             //   System.out.println(" var #" + vis1[i].varinfo_index + " = " + vis1[i].name + " = " + vis1[i]);
-            //   System.out.println("  " + inv2.format() + " " + inv2.repr() + " at " + inv2.ppt.name);
+            //   System.out.println("  " + inv2.format() + " " + inv2.repr() + " at " + inv2.ppt.name());
             //   System.out.println(" var #" + vis2[i].varinfo_index + " = " + vis2[i].name + " = " + vis2[i]);
             // }
 
@@ -1051,19 +1051,19 @@ public abstract class Invariant
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
         VarInfo elt = (VarInfo) iter.next();
-        VarInfoName name = name_extractor.getFromFirst(elt);
-        all_vars_names1.add(name);
+        VarInfoName viname = name_extractor.getFromFirst(elt);
+        all_vars_names1.add(viname);
       }
       boolean intersection = false;
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
         VarInfo elt = (VarInfo) iter.next();
-        VarInfoName name = name_extractor.getFromSecond(elt);
+        VarInfoName viname = name_extractor.getFromSecond(elt);
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//       PrintInvariants.debugFiltering.fine ("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
+//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString() + "\n");
 //      }
 
-        intersection = all_vars_names1.contains(name);
+        intersection = all_vars_names1.contains(viname);
         if (intersection) {
           break;
         }
@@ -1170,7 +1170,7 @@ public abstract class Invariant
 
   final public String isWorthPrinting_sansControlledCheck_debug() {
     return
-      "iwpscc(" + format() + " @ " + ppt.name
+      "iwpscc(" + format() + " @ " + ppt.name()
       + ") <=== " + (! hasFewModifiedSamples())
       + " " + enoughSamples()
       // + " " + (! hasNonCanonicalVariable()) [INCR]

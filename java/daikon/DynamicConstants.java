@@ -260,7 +260,7 @@ public class DynamicConstants implements Serializable {
       List cons = new ArrayList();
       cons.addAll (con_list);
       cons.addAll (noncons);
-      debug.fine ("Instantiating non constants in ppt: " + ppt.ppt_name);
+      debug.fine ("Instantiating non constants in ppt: " + ppt.name());
       instantiate_views (noncons, cons);
     }
 
@@ -268,7 +268,7 @@ public class DynamicConstants implements Serializable {
     // vars were not included in any previous views, we must match them
     // against all variables.
     if (non_missing.size() > 0) {
-      debug.fine ("Instantiating non missing in ppt: " + ppt.ppt_name);
+      debug.fine ("Instantiating non missing in ppt: " + ppt.name());
       instantiate_views (non_missing, all_list);
     }
   }

@@ -54,30 +54,30 @@ public abstract class SequenceSubsequence
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
 
-    VarInfoName name;
+    VarInfoName viname;
     if (from_start) {
       if (index_shift == 0) {
         // q[0..c]
-        name = seqvar.name.applySlice(null, sclvar.name);
+        viname = seqvar.name.applySlice(null, sclvar.name);
       } else if (index_shift == -1) {
         // q[0..c-1]
-        name = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
+        viname = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
       } else {
         throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
       }
     } else {
       if (index_shift == 0) {
         // q[c..]
-        name = seqvar.name.applySlice(sclvar.name, null);
+        viname = seqvar.name.applySlice(sclvar.name, null);
       } else if (index_shift == 1) {
         // q[c+1..]
-        name = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
+        viname = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
       } else {
         throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
       }
     }
 
-    return new VarInfo(name, seqvar.type, seqvar.file_rep_type,
+    return new VarInfo(viname, seqvar.type, seqvar.file_rep_type,
                        seqvar.comparability, seqvar.aux);
   }
 

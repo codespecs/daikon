@@ -34,14 +34,13 @@ public abstract class Ppt
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030929L;
 
-  public final String name;
-  public final PptName ppt_name;
+  // The "name" and "ppt_name" fields were moved to PptTopLevel:  they take
+  // up too much space in PptSlice objects.
+  public abstract String name();
 
-  protected Ppt(String name) {
-    this.name = name;
-    ppt_name = new PptName(name);
+  protected Ppt() {
   }
 
   public VarInfo[] var_infos;
@@ -123,25 +122,6 @@ public abstract class Ppt
   //  */
   // abstract Iterator entrySet();
 
-  /**
-   * The name of the function represented by this program point;
-   * the program point name up to the ":::" separator.
-   **/
-  String fn_name() {
-    return Ppt.fn_name(name);
-  }
-
-  /**
-   * The name of the function represented by the specified program point name;
-   * the program point name up to the ":::" separator.
-   **/
-  static String fn_name(String ppt_name) {
-    int fn_name_end = ppt_name.indexOf(FileIO.ppt_tag_separator);
-    if (fn_name_end == -1)
-      return null;
-    return ppt_name.substring(0, fn_name_end).intern();
-  }
-
   public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
@@ -169,19 +149,19 @@ public abstract class Ppt
     return varNames;
   }
 
-  public VarInfo findVar(VarInfoName name) {
+  public VarInfo findVar(VarInfoName viname) {
     for (int i=0; i<var_infos.length; i++) {
-      if (name.equals(var_infos[i].name))
+      if (viname.equals(var_infos[i].name))
         return var_infos[i];
     }
     return null;
   }
 
-  public VarInfo findVar_debugging(VarInfoName name) {
+  public VarInfo findVar_debugging(VarInfoName viname) {
     for (int i=0; i<var_infos.length; i++) {
-      System.out.println("Checking " + name.name() + " against " + var_infos[i].name.name());
-      System.out.println("  Checking " + name + " against " + var_infos[i].name);
-      if (name.equals(var_infos[i].name))
+      System.out.println("Checking " + viname.name() + " against " + var_infos[i].name.name());
+      System.out.println("  Checking " + viname + " against " + var_infos[i].name);
+      if (viname.equals(var_infos[i].name))
         return var_infos[i];
     }
     return null;
@@ -274,8 +254,8 @@ public abstract class Ppt
         PptTopLevel p2 = (PptTopLevel) o2;
       }
 
-      String name1 = ((Ppt) o1).name;
-      String name2 = ((Ppt) o2).name;
+      String name1 = ((Ppt) o1).name();
+      String name2 = ((Ppt) o2).name();
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');

@@ -94,12 +94,12 @@ public final class SequenceLength
   }
 
   protected VarInfo makeVarInfo() {
-    VarInfoName name = base.name.applySize();
+    VarInfoName viname = base.name.applySize();
     switch (shift) {
     case 0:
       break;
     case -1:
-      name = name.applyDecrement();
+      viname = viname.applyDecrement();
       break;
     default:
       throw new UnsupportedOperationException("Unsupported shift: " + shift);
@@ -107,7 +107,7 @@ public final class SequenceLength
     ProglangType ptype = ProglangType.INT;
     ProglangType frtype = ProglangType.INT;
     VarComparability comp = base.comparability.indexType(0);
-    return new VarInfo(name, ptype, frtype, comp, VarInfoAux.getDefault());
+    return new VarInfo(viname, ptype, frtype, comp, VarInfoAux.getDefault());
   }
 
   public  boolean isSameFormula(Derivation other) {

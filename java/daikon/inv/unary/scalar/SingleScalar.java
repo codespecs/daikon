@@ -52,7 +52,7 @@ public abstract class SingleScalar
    * Subclasses can override this.
    **/
   public InvariantStatus add_unmodified(long value, int count) {
-    // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
+    // System.out.println("SingleScalar.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
     return InvariantStatus.NO_CHANGE;
   }
 

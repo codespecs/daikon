@@ -32,7 +32,7 @@ public class DerivedParameterFilter extends InvariantFilter {
    * "param == orig(param)" invariant. */
 
   boolean shouldDiscardInvariant( Invariant inv ) {
-    if (inv.ppt.ppt_name.isExitPoint()) {
+    if (inv.ppt.parent.ppt_name.isExitPoint()) {
       PrintInvariants.debugFiltering.fine ("\tconsidering DPF for vars " + inv.ppt.var_infos.toString() + "\n");
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];

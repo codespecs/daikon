@@ -56,15 +56,15 @@ public class PptCountVisitor extends PrintAllVisitor {
         boolean target = countTarget (node);
 
         if (report) {
-            cnt.add (ppt.name);
+            cnt.add (ppt.name());
         }
 
         if (target) {
-            targSet.add (ppt.name);
+            targSet.add (ppt.name());
         }
 
         if (report && target) {
-            correctSet.add (ppt.name);
+            correctSet.add (ppt.name());
         }
     }
 
@@ -122,14 +122,14 @@ public class PptCountVisitor extends PrintAllVisitor {
     String key2 = "";
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
-	String thisPptName1 = inv1.ppt.name;
+	String thisPptName1 = inv1.ppt.name();
 
 	key1 = thisPptName1 + "$" + inv1.format();
         cnt.add (key1);
     }
 
     if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
-        String thisPptName2 = inv2.ppt.name;
+        String thisPptName2 = inv2.ppt.name();
         key2 = thisPptName2 + "$" + inv2.format();
         targSet.add (key2);
     }
@@ -142,7 +142,7 @@ public class PptCountVisitor extends PrintAllVisitor {
         //	System.out.println("K1: " + key1);
         //        System.out.println ("K2: " + key2);
 
-        String thisPptName1 = inv1.ppt.name;
+        String thisPptName1 = inv1.ppt.name();
         // System.out.println ("NAME1: " + tmpStr1);
 	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
         String bucketKey = thisPptName1.substring (0,

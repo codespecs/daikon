@@ -42,7 +42,7 @@ public class ParentFilter extends InvariantFilter {
       if (pslice == null)
         continue;
       if (Debug.logDetail())
-        inv.log ("Found parent slice: " + pslice.ppt_name);
+        inv.log ("Found parent slice: " + pslice.name());
 
       // Look for a matching invariant in the parent slice
       for (int j = 0; j < pslice.invs.size(); j++) {
@@ -51,7 +51,7 @@ public class ParentFilter extends InvariantFilter {
           continue;
         if (pinv.isSameFormula (inv)) {
           inv.log ("Filtered by parent inv '" + pinv.format() + "' at ppt "
-                   + pslice.ppt_name);
+                   + pslice.name());
           return (true);
         }
       }

@@ -127,7 +127,7 @@ public final class CLASSNAME
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("min point: " + wrapper.ppt.name +": " + x + ", " + y);
+        debug.fine ("min point: " + wrapper.ppt.name() +": " + x + ", " + y);
       }
       // We delay computation of a and b until we have seen several pairs
       // so that we can compute a and b based on a far-separated pair.  If
@@ -170,7 +170,7 @@ public final class CLASSNAME
         min_b = b;
         max_b = b;
         if (debug.isLoggable(Level.FINE))
-            debug.fine (wrapper.ppt.name + ": Initial a (" + a +
+            debug.fine (wrapper.ppt.name() + ": Initial a (" + a +
                          ") and b (" + b + ")");
 
         // Check all values against a and b.
@@ -232,7 +232,7 @@ public final class CLASSNAME
         new_a = (min_a + max_a) / 2;
         new_b = (min_b + max_b) / 2;
         if (debug.isLoggable(Level.FINE))
-            debug.fine (wrapper.ppt.name + ": Trying new a (" + new_a +
+            debug.fine (wrapper.ppt.name() + ": Trying new a (" + new_a +
                          ") and b (" + new_b + ")");
 
         // if the new a and b are 'equal' to min/max a and b and
@@ -244,7 +244,7 @@ public final class CLASSNAME
           a = new_a;
           b = new_b;
           if (debug.isLoggable(Level.FINE))
-            debug.fine (wrapper.ppt.name + ": New a (" + a + ") and b ("
+            debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
                          + b + ")");
         } else {
           if (debug.isLoggable(Level.FINE)) {

@@ -20,24 +20,30 @@ public class PptName
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // Any of these except fullname can be null.  All but fullname are derived from fullname.
-  // These cannot be "final", because they must be re-interned upon deserialization.
+  // Any of these except fullname can be null.  All but fullname are
+  // derived from fullname.
+  // These cannot be "final": they must be re-interned upon deserialization.
   private String fullname;   // interned full program point name
-  private String fn_name;    // interned; derived from fullname
-  private String cls;        // interned fully-qualified class name; derived from fullname
-  private String method;     // interned method signature, including types; derived from fullname
-  private String point;      // interned post-separator (separator is ":::"); derived from fullname
+  // fn_name and point together comprise fullname
+  private String fn_name;    // interned; the part of fullname before ":::"
+  private String point;      // interned post-separator (separator is ":::")
+  // cls and method together comprise fn_name
+  private String cls;        // interned fully-qualified class name
+  private String method;     // interned method signature, including types
 
   // Representation invariant:
   //
-  // Fullname is always present.  If fullname does not contain :::,
-  // then all of the other fields are null.  Otherwise, fn_name is the
-  // part of fullname before the ::: and point is the part after.  If
-  // fn_name does not contain '(' then class is the same as fn_name
-  // and method is null.  If fn_name does contain a '(' and a '.' that
-  // comes before it, then class is the portion before the dot and
-  // method if the portion after; otherwise (fn_name contains '(' but
-  // no dot) class is null and method is the same as fn_name.
+  // Fullname is always present.
+  // If fullname does not contain :::, then all of the other fields are
+  // null.
+  // Otherwise, fn_name is the part of fullname before the ::: and point is
+  // the part after.
+  // If fn_name does not contain '(' then class is the same as fn_name and
+  // method is null.
+  // If fn_name does contain a '(' and a '.' that comes before it, then
+  // cls is the portion before the dot and method if the portion after;
+  // otherwise (fn_name contains '(' but no dot) cls is null and method
+  // is the same as fn_name.
 
   // ==================== CONSTRUCTORS ====================
 
@@ -166,24 +172,24 @@ public class PptName
    * May be null.
    * e.g. "pop()Ljava/lang/Object;"
    **/
-  public String getFullMethodName()
+  public String getSignature()
   {
     return method;
   }
 
-  /**
-   * @return same as getFullMethodName(), except without the return
-    * type information.
-    * May be null.
-    * e.g. "pop()"
-    **/
-  public String getFullMethodNameWithoutReturn()
-  {
-    if (method == null) return null;
-    int rparen = method.indexOf(')');
-    Assert.assertTrue(rparen >= 0);
-    return method.substring(0, rparen+1);
-  }
+//   /**
+//    * @return same as getSignature(), except without the return
+//    * type information.
+//    * May be null.
+//    * e.g. "pop()"
+//    **/
+//   public String getSignatureWithoutReturn()
+//   {
+//     if (method == null) return null;
+//     int rparen = method.indexOf(')');
+//     Assert.assertTrue(rparen >= 0);
+//     return method.substring(0, rparen+1);
+//   }
 
   /**
    * @return the name (identifier) of the method, not taking into
@@ -191,7 +197,7 @@ public class PptName
    * May be null.
    * e.g. "pop"
    **/
-  public String getShortMethodName()
+  public String getMethodName()
   {
     if (method == null) return null;
     int lparen = method.indexOf('(');
@@ -202,15 +208,15 @@ public class PptName
   /**
    * @return the fully-qualified class and method name (and signature).
    * Does not include any point information (such as ENTER or EXIT).
-   * Similar function lives in Ppt.fn_name(String)
    * May be null.
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;"
    **/
   public String getNameWithoutPoint() {
-    if (cls == null && method == null) return null;
-    if (cls == null) return method;
-    if (method == null) return cls;
-    return (cls + "." + method).intern();
+    return fn_name;
+    // if (cls == null && method == null) return null;
+    // if (cls == null) return method;
+    // if (method == null) return cls;
+    // return (cls + "." + method).intern();
   }
 
   /**
@@ -248,28 +254,6 @@ public class PptName
       }
     }
     return result;
-  }
-
-  /**
-   * Get fully qualified name for the program point without any variable
-   * information.
-   * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT85
-   */
-
-  public String getFullNamePoint() {
-
-    String ppt_str = "";
-    String my_method = getNameWithoutPoint();
-    if (my_method != null)
-      ppt_str += my_method;
-    if (point != null) {
-      int paren = point.indexOf ("(");
-      if (paren > 0)
-        ppt_str += ":::" + point.substring (0, paren);
-      else
-        ppt_str += ":::" + point;
-    }
-    return (ppt_str.intern());
   }
 
   /**

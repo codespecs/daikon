@@ -513,7 +513,7 @@ invariants.
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isLoggable(Level.FINE) || ppt.debugged) {
-  //     System.out.println(INTEQUALstring + ".destroy(" + ppt.name + ")");
+  //     System.out.println(INTEQUALstring + ".destroy(" + ppt.name() + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }

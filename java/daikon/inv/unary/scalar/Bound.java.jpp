@@ -640,7 +640,7 @@ public class LOWERBOUND
                                    + inv.NUM_MIN3 + " of " + inv.MIN3 + ", "
                                    + ((inv.NUM_MIN1 > 0) ?
                                       "1 of " + inv.core.MAX : "")
-                                   + " from ppt " + inv.ppt.ppt_name);
+                                   + " from ppt " + inv.ppt.parent.ppt_name);
     }
 
     result.log ("Merged '" + result.format() + "' from " + invs.size()

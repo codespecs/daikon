@@ -13,7 +13,7 @@ public final class SequenceStringFactory {
   // collection.
   public static Vector instantiate(PptSlice ppt) {
     if (debugSequenceStringFactory) {
-      System.out.println("SequenceStringFactory instantiate " + ppt.name);
+      System.out.println("SequenceStringFactory instantiate " + ppt.name());
     }
 
     boolean seq_first;

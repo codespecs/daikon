@@ -264,7 +264,7 @@ public class ExtractConsequent {
     // [INCR] Invariants invs = ppt.implication_view.invs;
     Invariants invs = new Invariants();
     if (invs.size() > 0) {
-      String pptname = cleanup_pptname(ppt.name);
+      String pptname = cleanup_pptname(ppt.name());
       Iterator itor = invs.iterator();
       while (itor.hasNext()) {
         Implication maybe = (Implication)itor.next();
@@ -285,7 +285,7 @@ public class ExtractConsequent {
           continue;
         }
 
-        if (maybe.ppt.ppt_name.isExitPoint()) {
+        if (maybe.ppt.parent.ppt_name.isExitPoint()) {
           for (int i = 0; i < maybe.ppt.var_infos.length; i++) {
             VarInfo vi = maybe.ppt.var_infos[i];
             if (vi.isDerivedParam()) {

@@ -87,7 +87,7 @@ public abstract class VarComparability {
   public static VarComparability makeAlias(VarInfo vi) {
     return vi.comparability.makeAlias(vi.name);
   }
-  public abstract VarComparability makeAlias(VarInfoName name);
+  public abstract VarComparability makeAlias(VarInfoName viname);
 
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);

@@ -18,7 +18,7 @@ public class PptMap
 
   public void add(PptTopLevel ppt)
   {
-    nameToPpt.put(ppt.name, ppt);
+    nameToPpt.put(ppt.name(), ppt);
   }
 
   public void addAll(List ppts)
