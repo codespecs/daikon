@@ -54,7 +54,7 @@ public final class CLASSNAME
   public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
   public double separation = 0;
 
-  //inner class to store points in for more convenient access
+  // Inner class to store points in for more convenient access.
   public static class Point implements Serializable, Cloneable {
     public PRIMITIVE x;
     public PRIMITIVE y;
