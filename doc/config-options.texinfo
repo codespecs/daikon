@@ -853,6 +853,17 @@ continue. For more information, see the section on
 troubleshooting contradictory invariants in the Daikon manual.
 The default value is `true'.
 
+@item daikon.simplify.LemmaStack.synchronous_errors
+Boolean. If true, ask Simplify to check a simple proposition
+after each assumption is pushed, providing an opportunity to wait
+for output from Simplify and potentially receive error messages
+about the assumption. When false, long sequences of assumptions
+may be pushed in a row, so that by the time an error message
+arrives, it's not clear which input caused the error. Of course,
+Daikon's input to Simplify isn't supposed to cause errors, so
+this option should only be needed for debugging.
+The default value is `false'.
+
 @item daikon.simplify.Session.simplify_max_iterations
 A non-negative integer, representing the largest number of
 iterations for which Simplify should be allowed to run on any
@@ -880,6 +891,15 @@ Beware that using this option might make Daikon's output depend
 on the speed of the machine it's run on.
 The default value is `0'.
 
+@item daikon.simplify.Session.trace_input
+Boolean. If true, the input to the Simplify theorem prover will
+also be directed to a file named simplifyN.in (where N is a
+number starting from 0) in the current directory. Simplify's
+operation can then be reproduced with a command like "Simplify
+-nosc <simplify0.in". This is intended primarily for debugging
+when Simplify fails.
+The default value is `false'.
+
 @item daikon.simplify.Session.verbose_progress
 Positive values mean to print extra indications as each candidate
 invariant is passed to Simplify during the --suppress_redundant
@@ -890,7 +910,7 @@ and "?" if Simplify gave up because of a time limit. If the value
 is 2 or higher, a "<" or ">" will also be printed for each
 invariant that is pushed onto or popped from from Simplify's
 assumption stack. This option is mainly intended for debugging
-purposes, by can also provide something to watch when Simplify
+purposes, but can also provide something to watch when Simplify
 takes a long time.
 The default value is `0'.
 
@@ -907,7 +927,7 @@ the commandline.
 The default value is `jikes'.
 
 @item daikon.split.SplitterFactory.delete_splitters_on_exit
-Boolean.  Specifies whether or not the temporary Splitter files
+Specifies whether or not the temporary Splitter files
 should be deleted on exit.
 The default value is `true'.
 
