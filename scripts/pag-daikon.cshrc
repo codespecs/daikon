@@ -33,3 +33,5 @@ alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existe
 alias jikes /g2/users/mernst/bin/Linux-i686/jikes -g +E +F
 
 setenv DFEJ_VERBOSE 1
+
+setenv BIBINPUTS .:/g2/users/mernst/bib:..:
