@@ -12,7 +12,7 @@ export DAIKONPARENT=/path/to/parent/of/daikon
 ## users will not need to do so).  The latter may be used only if you
 ## downloaded the source distribution.
 export CLASSPATH=$DAIKONPARENT/daikon/daikon.jar:${CLASSPATH}
-# setenv CLASSPATH $DAIKONPARENT/daikon/java:$DAIKONPARENT/daikon/lib/log4j.jar:${CLASSPATH}
+# setenv CLASSPATH $DAIKONPARENT/daikon/java:$DAIKONPARENT/daikon/java/lib/log4j.jar:${CLASSPATH}
 
 ## Add the Daikon binaries to your path
 export PATH=$DAIKONPARENT/daikon/bin:${PATH}:
