@@ -36,8 +36,8 @@ import utilMDE.*;
 public final class Daikon {
   private Daikon() { throw new Error("do not instantiate"); }
 
-  public static final String release_version = "3.1.0";
-  public static final String release_date = "June 1, 2004";
+  public final static String release_version = "3.1.2";
+  public final static String release_date = "August 3, 2004";
   public static final String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -223,7 +223,7 @@ public final class Daikon {
    * When true, perform detailed internal checking.
    * These are essentially additional, possibly costly assert statements.
    */
-  public static boolean dkconfig_internal_check = true;
+  public static boolean dkconfig_internal_check = false;
 
   /**
    * If set, only ppts less than ppt_max_name are included.  Used by the

@@ -207,7 +207,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
             // Fmt.pf ("attempting instantiation of " + fb.getClass());
             if ((ss == null) || !ss.suppressed (slice)) {
               Invariant inv = fb.instantiate_dyn (slice);
-              if (Debug.logOn())
+              if (Debug.logOn() && (inv != null))
                 inv.log ("instantiated non-suppressed invariant "+inv.format());
               result.add (inv);
             }

@@ -11,9 +11,49 @@ versions as the user manual.
 
 ===========================================================================
 
-3.1.2
+3.1.2 (03 Aug 2004)
 
-Added configuration option daikon.FileIO.continue_after_file_exception.
+The non-instantiating suppression mechanism has been significantly
+optimized.  Performance for programs with large number of variables
+should be significantly enhanced.  The daikon.suppress.NIS.antecedent_method
+configuration option now defaults to true.
+
+The PrintInvariants utility was upgraded to handle InvMap files (the
+output from the diff utility) as well PptMap files.  The command 
+line option --config was added so that PrintInvariants can read files
+of configuration options.
+
+The internal mechanism for adding invariants has been changed.  The
+variable specific factories have been replaced with a single list of
+invariants.  See the "New Invariants" section of the developer manual
+for more information.
+
+Added the configuration options daikon.FileIO.continue_after_file_exception,
+and daikon.PrintInvariants.print_all, See the "List of Configuration
+Options" section of the user manual for more information.
+
+The implementation of SubSequence and SubSequenceFloat invariants has
+been changed to create separate invariants for SubSequence and
+SuperSequence.  This should have no user visible ramifications except
+that the configuration options to enable SuperSequence invariants have
+names which are distinct from the SubSequence invariants (SuperSequence, 
+and SuperSequenceFloat). See the "List of Configuration Options"
+section of the user manual for more information.  These invariants are
+also documented in the "Invariant List" section of the user manual.
+
+Added MemberString invariant (looks for strings that appear in a 
+sequence of strings) and comparison invariants between two
+sequences of strings (SeqSeqStringEqual, SeqSeqStringGreaterThan, 
+SeqSeqStringGreaterEqual, SeqSeqStringLessThan, and SeqSeqStringLessEqual).
+
+Removed the StringComparison invariant.  This invariant was previously
+replaced by the individual invariants StringEqual, StringLessThan,
+StringLessEqual, StringGreaterThan, and String GreaterEqual but still
+remained in the documentation and code.
+
+The command line option --java_output was added to the Annotate
+utility.  See the "Annotate" section of the user manual for more
+information.
 
 ---------------------------------
 
