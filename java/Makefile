@@ -164,10 +164,11 @@ audit:
 test: tests
 
 tests: junit
-	cd ../../tests && $(MAKE) all
+	cd ../tests && $(MAKE) all
 
+.PHONY: junit
 junit:
-	java daikon.test.MasterTester
+	java -classpath ${CLASSPATH} daikon.test.MasterTester
 
 ## Documentation
 
@@ -204,6 +205,9 @@ list_java_files:
 ### Automatically generated files
 ###
 
+# Create the auto-generated files with jpp
+.PHONY: jpp
+jpp: ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do
