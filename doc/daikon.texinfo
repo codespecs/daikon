@@ -1666,6 +1666,24 @@ type of the invariant and the type of the difference.
 For internal use only.  Display the same statistics as '-s', but as a
 tab-separated list.
 
+@item -m
+Compute (file1 - file2).  This is all the invariants that appear in
+file1 but not file2.  Unjustified invariants are treated as if they
+don't exist.  Output is written as a serialized InvMap to the file
+specified with the -o option.  To view the contents of the serialized
+InvMap, run 'java daikon.diff.Diff <file>'.
+
+@item -x
+Compute (file1 XOR file2).  This is all the invariants that appear in
+one file but not the other.  Unjustified invariants are treated as if
+they don't exist.  Output is written as a serialized InvMap to the file
+specified with the -o option.  To view the contents of the serialized
+InvMap, run 'java daikon.diff.Diff <file>'.
+
+@item -o @var{inv_file}
+Used in combination with the -m or -x option.  Writes the output as a
+serialized InvMap to the specified file.
+
 @item -j
 For internal use only.  Treat justification as a continuous value when
 gathering statistics.  By default, justification is treated as
@@ -1692,6 +1710,15 @@ of the format() method.
 @item -l
 For debugging use only.  Prints logging information describing the state
 of the program as it runs.
+
+@item --invSortComparator1 @var{classname}
+@item --invSortComparator2 @var{classname}
+@item --invPairComparator @var{classname}
+Use the specified class as a custom comparator.  A custom comparator can
+be used for any of 3 operations: sorting the first set of invariants,
+sorting the second set of invariants, and combining the two sets into
+the pair tree.  The specified class must implement the Comparator
+interface, and accept objects of type Invariant.
 
 @end table
 
