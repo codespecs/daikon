@@ -80,18 +80,20 @@ public class NonModulus extends SingleScalar {
 
   public boolean isSameFormula(Invariant o)
   {
-    updateResults();
-    if (no_result_yet)
-      return false;
-
     NonModulus other = (NonModulus) o;
-    other.updateResults();
-    if (other.no_result_yet)
-      return false;
 
-    return
-      (modulus == other.modulus) &&
-      (remainder == other.remainder);
+    updateResults();
+    other.updateResults();
+
+    if (no_result_yet && other.no_result_yet) {
+      return true;
+    } else if (no_result_yet || other.no_result_yet) {
+      return false;
+    } else {
+      return
+        (modulus == other.modulus) &&
+        (remainder == other.remainder);
+    }
   }
 
   public boolean hasModulusRemainder(long modulus, long remainder) {
