@@ -2,7 +2,9 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 
@@ -208,10 +210,12 @@ public final class IntComparison extends TwoScalar implements Comparison {
         return true;
       return false;
     }
-    LinearBinary lb = LinearBinary.find(ppt);
-    if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
-      Assert.assert(lb.core.b != 0);
-      return true;
+    {
+      LinearBinary lb = LinearBinary.find(ppt);
+      if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
+        Assert.assert(lb.core.b != 0);
+        return true;
+      }
     }
     { // Sequence length tests
       SequenceLength sl1 = null;
@@ -249,6 +253,54 @@ public final class IntComparison extends TwoScalar implements Comparison {
           return true;
         } else if ((sl2 != null) && (sl2.shift == -1)) {
           // "x > size(a)-1"  ("x >= size(a)" would be more informative)
+          return true;
+        }
+      }
+    }
+    { // Sequence sum tests
+      SequenceSum ss1 = null;
+      if (var1.isDerived() && (var1.derived instanceof SequenceSum))
+        ss1 = (SequenceSum) var1.derived;
+      SequenceSum ss2 = null;
+      if (var2.isDerived() && (var2.derived instanceof SequenceSum))
+        ss2 = (SequenceSum) var2.derived;
+      if ((ss1 != null) && (ss2 != null)) {
+        EltLowerBound lb = null;
+        EltUpperBound ub = null;
+        boolean shorter1 = false;
+        boolean shorter2 = false;
+        PptTopLevel parent = (PptTopLevel)ppt.parent;
+        if (SubSequence.isObviousDerived(ss1.base, ss2.base)) {
+          lb = EltLowerBound.find(parent.findSlice(ss2.base));
+          ub = EltUpperBound.find(parent.findSlice(ss2.base));
+          shorter1 = true;
+        } else if (SubSequence.isObviousDerived(ss2.base, ss1.base)) {
+          lb = EltLowerBound.find(parent.findSlice(ss1.base));
+          ub = EltUpperBound.find(parent.findSlice(ss1.base));
+          shorter2 = true;
+        }
+        if ((lb != null) && (!lb.justified()))
+          lb = null;
+        if ((ub != null) && (!ub.justified()))
+          ub = null;
+        // We are comparing sum(a) to sum(b).
+        boolean shorter_can_be_lt;
+        boolean shorter_can_be_gt;
+        if (shorter1) {
+          shorter_can_be_lt = core.can_be_lt;
+          shorter_can_be_gt = core.can_be_gt;
+        } else {
+          shorter_can_be_lt = core.can_be_gt;
+          shorter_can_be_gt = core.can_be_lt;
+        }
+        if (shorter_can_be_lt
+            && (lb != null) && ((lb.core.min1 > 0)
+                                || (core.can_be_eq && lb.core.min1 == 0))) {
+          return true;
+        }
+        if (shorter_can_be_gt
+            && (ub != null) && ((ub.core.max1 < 0)
+                                || (core.can_be_eq && ub.core.max1 == 0))) {
           return true;
         }
       }
