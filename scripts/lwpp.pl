@@ -11,6 +11,7 @@
 # Perl port of a similar C++ program written by Adam Czeisler
 
 use strict;
+use vars qw(%cache);
 
 my $element_suffix = "_element";
 my $index_suffix = "_index";
@@ -131,6 +132,20 @@ sub is_array_element {
 }
 
 
+sub _get_comparable_variables {
+  my ($variable, $function, $interesting_variables) = @_;
+
+  my $key = "$variable $function " . (join ' ', %{$interesting_variables});
+  if (exists $cache{$key}) {
+    return split ' ', $cache{$key};
+  }
+
+  my %retval = _get_comparable_variables(@_);
+  $cache{$key} = join ' ', %retval;
+  return %retval;
+
+}
+
 sub get_comparable_variables {
   my ($variable, $function, $interesting_variables) = @_;
 
@@ -147,9 +162,8 @@ sub get_comparable_variables {
     $comparable_variables{$variable} = 1;
   }
 
-  my $lackwit_results = 
-    `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
-  
+  my $lackwit_results = lackwit($function, $variable);
+
   foreach (split /\n/, $lackwit_results) {
     chomp;
     
@@ -198,6 +212,23 @@ sub get_comparable_variables {
   return %comparable_variables;
 }
 
+sub lackwit {
+  my ($variable, $function) = @_;
+
+  my $key = "$variable $function";
+  if (exists $cache{$key}) {
+    return $cache{$key};
+  }
+
+  my $retval = _lackwit(@_);
+  $cache{$key} = $retval;
+  return $retval;
+}
+
+sub _lackwit {
+  my ($function, $variable) = @_;
+  return `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
+}
 
 sub add_array_variables_to_interesting_variables {
   my ($variable, $interesting_variables) = @_;
