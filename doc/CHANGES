@@ -13,6 +13,23 @@ versions as the user manual.
 
 ===========================================================================
 
+2.5.2 (03 September 2003)
+
+Fixed some Simplify formatting bugs.
+
+Fixed some dfej bugs.
+
+The implementation of SubSet and SuperSet invariants has been changed
+to create separate invariants for SubSet and SuperSet.  This should
+have no user visible ramifications except that the configuration
+options to enable SuperSet invariants have names which are distinct
+from the SubSet invariants (SuperSet, and SuperSetFloat). See the
+"List of Configuration Options" section of the user manual for more
+information.  These invariants are also documented in the "Invariant
+List" section of the user manual.
+
+-----------------
+
 2.5.1 (01 August 2003)
 
 Added the LogicalCompare program which compares two sets of invariants

@@ -10,6 +10,18 @@ Boolean.  Controls whether conditional program points (see Daikon
 manual) are displayed.
 The default value is `true'.
 
+@item daikon.Daikon.progress_delay
+The amount of time to wait between updates of the progress
+display, measured in milliseconds. A value of -1 means not to
+print the progress display at all.
+The default value is `1000'.
+
+@item daikon.Daikon.progress_display_width
+The number of columns of progress information to display. In many
+Unix shells, this can be set to an appropriate value by
+--config_option daikon.Daikon.progress_display_width=$COLUMNS
+The default value is `80'.
+
 @item daikon.Debug.logDetail
 Determines whether or not detailed info (such as from add_modified)
 is printed
