@@ -203,17 +203,17 @@ public final class PptSlice2
    * flowed.
    **/
   public List add(ValueTuple full_vt, int count) {
-//     if (debugFlow.isDebugEnabled()) {
-//       debugFlow.debug ("<< Doing add for " + this.toString());
-//       StringBuffer sb = new StringBuffer();
-//       for (int i = 0; i < var_infos.length; i++) {
-//         VarInfo vi = var_infos[i];
-//         Object val = vi.getValue(full_vt);
-//         sb.append (" ");
-//         sb.append (ValueTuple.valToString (val));
-//       }
-//       debugFlow.debug ("    with values:" + sb);
-//     }
+    //     if (debugFlow.isDebugEnabled()) {
+    //       debugFlow.debug ("<< Doing add for " + this.toString());
+    //       StringBuffer sb = new StringBuffer();
+    //       for (int i = 0; i < var_infos.length; i++) {
+    //         VarInfo vi = var_infos[i];
+    //         Object val = vi.getValue(full_vt);
+    //         sb.append (" ");
+    //         sb.append (ValueTuple.valToString (val));
+    //       }
+    //       debugFlow.debug ("    with values:" + sb);
+    //     }
 
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
