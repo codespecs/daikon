@@ -861,7 +861,13 @@ public final class ArraysMDE {
     return true;
   }
 
-    public static boolean isSubarray(double[] a, double[] sub, int a_offset) {
+  /**
+   * Determines whether the second array is a subarray of the first,
+   *    starting at the specified index of the first.
+   * @return the first index containing the specified element,
+   *    or -1 if the element is not found in the array.
+   **/
+  public static boolean isSubarray(double[] a, double[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
     if (a_len < sub_len)
@@ -988,7 +994,12 @@ public final class ArraysMDE {
     return sb.toString();
   }
 
-    public static String toString(double[] a) {
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   **/
+  public static String toString(double[] a) {
     if (a == null) {
       return "null";
     }
@@ -1348,7 +1359,12 @@ public final class ArraysMDE {
     }
   }
 
-   public static final class DoubleArrayComparatorLexical implements Comparator {
+  /**
+   * Note: this comparator imposes orderings that are inconsistent with equals.
+   * That is, it may return 0 if the arrays are not equal (but do contain
+   * identical numbers).
+   **/
+  public static final class DoubleArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
@@ -1365,7 +1381,12 @@ public final class ArraysMDE {
     }
   }
 
-   public static final class StringArrayComparatorLexical implements Comparator {
+  /**
+   * Note: this comparator imposes orderings that are inconsistent with equals.
+   * That is, it may return 0 if the arrays are not equal (but do contain
+   * identical Strings).
+   **/
+  public static final class StringArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
