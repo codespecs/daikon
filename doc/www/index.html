@@ -40,7 +40,15 @@ to hold for every possible execution; they depend on the quality of the
 test suite.  In practice, the results are sufficiently accurate to be
 useful despite their potential unsoundness; and the results are also
 valuable for validating test suites.  See the published <a
-href="#papers">papers</a> for more details.<p>
+href="http://pag.lcs.mit.edu/~mernst/research/#Invariant%20detection">papers</a>
+for more details.<p>
+
+Here is a simple example of Daikon's ouput:  <a
+href="StackAr.html">StackAr.html</a>.  The colored annotations starting
+with <FONT COLOR="red"><tt>@</tt></FONT> were automatically detected by
+Daikon and automatically inserted in the source code.  Other uses besides
+insertion as documentation are possible, of course.
+<p>
 
 Some example uses of invariants are:
 <ul>
@@ -73,6 +81,9 @@ see, at a procedure entry,
   y = w + x
   z = 0 (mod 4)
 </pre>
+(These examples are all numeric for simplicity, but Daikon detects
+relationships over general data structures, including arrays, collections,
+and pointers.)
 <ul>
 <li>
 Seeing the "w >= 0" invariant, the programmer might remark, "I already knew
@@ -110,8 +121,7 @@ The other option is for the programmer not to investigate this property
 </ol>
 </ul>
 
-
-Preliminary experiments have been very encouraging.  When provided with
+Dynamic invariant detection has proved accurate.  When provided with
 formally specified programs, the prototype invariant detector, Daikon,
 recovered the properties in the formal specifications (and even found some
 properties that had been inadvertently omitted from the specifications).
@@ -119,31 +129,11 @@ In another experiment, programmers performing a software modification task
 on a C program lacking explicit invariants were provided with the output of
 the invariant detector.  They found that it aided program understanding,
 revealed an existing bug, prevented them from introducing a bug, and helped
-validate the correctness of their changes.<p>
-
-<!-- (The list appears in the manual and changes too fast to update here.)
-This is joint work of 
-<a href="http://www.cs.washington.edu/homes/jake/">Jake Cockrell</a>,
-Adam Czeisler, 
-<a href="http://pag.lcs.mit.edu/~mernst/">Michael Ernst</a>,
-<a href="http://www.cs.ucsd.edu/~wgg/">Bill Griswold</a>,
-Josh Kataoka, and
-<a href="http://www.cs.washington.edu/homes/notkin/">David Notkin</a>.<p>
--->
-
-<a name="papers"></a>
-This work is reported in the following papers:
-<ul>
-  <li><a href="http://pag.lcs.mit.edu/~mernst/pubs/invariants-tse-abstract.html">Dynamically
-      Discovering Likely Program Invariants to Support Program
-      Evolution</a> (IEEE TSE, v27#2, Feb 2001, pp 1-25)
-  <li><a href="http://pag.lcs.mit.edu/~mernst/pubs/invariants-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)
-  <li><a href="http://pag.lcs.mit.edu/~mernst/pubs/invariants-pointers-abstract.html">Dynamically
-      Discovering Pointer-Based Program Invariants</a> (Technical Report, 2000)
-  <li><a href="http://pag.lcs.mit.edu/~mernst/pubs/invariants-refactor-abstract.html">Automated Support for Program Refactoring using Invariants</a> (2001)
-  <li><a href="http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html">Dynamically
-      Detecting Likely Program Invariants</a> (PhD dissertation, 2000)
-</ul>
+validate the correctness of their changes.  Dynamic invariant detection has
+also aided in refactoring, generating test suites, verifying absence of
+run-time errors, and automating theorem-proving.  See the published <a
+href="http://pag.lcs.mit.edu/~mernst/research/#Invariant%20detection">papers</a>
+for more details.<p>
 <p>
 
 <a href="download/">Download Daikon.</a>
@@ -152,11 +142,8 @@ This work is reported in the following papers:
 <hr>
 
 <address>
-  Daikon group leader: <a href="http://pag.lcs.mit.edu/~mernst/">Michael Ernst</a>
-</address>
-
-<address>
-  &lt;<a href="mailto:daikon@pag.lcs.mit.edu">daikon@pag.lcs.mit.edu</a>&gt;
+  <a href="http://pag.lcs.mit.edu/mailman/listinfo">Daikon mailing lists</a><br>
+  Daikon project leader: <a href="http://pag.lcs.mit.edu/~mernst/">Michael Ernst</a>
 </address>
 
 </body>

@@ -7,7 +7,7 @@
 
 <h1>Creating an account on pag</h1>
 
-To create an account on pag, perform the following two steps:
+To create an account on pag, perform the following steps:
 <p>
 
 <ol>
@@ -26,10 +26,10 @@ Create a new account on pag like so:
 <pre>
 su
 useradd -d /g6/users/<em>username</em> -u <em>UID</em> <em>username</em>
-<em>echo "## Add to 'invariants' and 'pag' groups</em>
+<em>echo "## Add to 'invariants' and 'pag' groups"</em>
 emacs /etc/group
 (cd /var/yp; make)
-<em>echo "## Add to 'daikon' mailing list</em>
+<em>echo "## Add to 'daikon' mailing list"</em>
 emacs /etc/aliases
 newaliases
 cd ~<em>username</em>
@@ -53,12 +53,21 @@ yppasswd <em>username</em>
 exit
 </pre>
 </blockquote>
+
+<li>
+Now point people at the following webpages:<br>
+Program Analysis Group logistics:
+<a href="http://pag.lcs.mit.edu/pag/logistics.html">http://pag.lcs.mit.edu/pag/logistics.html</a><br>
+Using Daikon at MIT LCS:
+<a href="http://pag.lcs.mit.edu/daikon/mit/">http://pag.lcs.mit.edu/daikon/mit/</a>
+
 </ol>
 
 To remove an account, perhaps make a tar file of the user's directory, then do
 <blockquote>
 <pre>
   userdel -r <em>USERNAME</em>
+  (cd /var/yp; make)
 </pre>
 </blockquote>
 
