@@ -119,6 +119,7 @@ public class ControlledInvariantFilter extends InvariantFilter {
       }
       */ // [INCR]
     }
-    return (InvariantFilters.isWorthPrintingFilter_sansControlledCheck().shouldKeep(inv));
+    return (InvariantFilters.isWorthPrintingFilter_sansControlledCheck()
+            .shouldKeep(inv) == null);
   }
 }

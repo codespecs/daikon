@@ -81,7 +81,7 @@ public class SimplifyFilter extends InvariantFilter {
       // an argument, but for now, this should be the same object.
       boolean simplifyFilterOn = filters.getFilterSetting( description );
       filters.changeFilterSetting( description, false );
-      boolean shouldKeep = filters.shouldKeep( invariant );
+      boolean shouldKeep = filters.shouldKeep (invariant) == null;
       filters.changeFilterSetting( description, simplifyFilterOn );
       return shouldKeep;
     }

@@ -341,7 +341,7 @@ public final class MakeInvariantChecker {
 
       while(invariants.hasNext()){
         Invariant anInvariant = (Invariant) invariants.next();
-        boolean fi_accepted = fi.shouldKeep(anInvariant);
+        boolean fi_accepted = fi.shouldKeep(anInvariant) == null;
         String stringInvariant = anInvariant.format_using(Daikon.output_style);
         if (fi_accepted && (isImplementedYet(stringInvariant)))
           ((List) currentLists[1]).add(anInvariant);
