@@ -776,10 +776,10 @@ public final class FileIO {
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
         // If we are only reading the sample, don't process them
-        if (dkconfig_read_samples_only) {
-          samples_processed++;
-          continue;
-        }
+        //        if (dkconfig_read_samples_only) {
+        //  samples_processed++;
+        //  continue;
+        // }
 
         // Add orig and derived variables; pass to inference (add_and_flow)
         try {
@@ -864,6 +864,12 @@ public final class FileIO {
         if (debugRead.isLoggable(Level.FINE)) {
           debugRead.fine ("Adding ValueTuple to " + ppt.name());
           debugRead.fine ("  length is " + vt.vals.length);
+        }
+
+        // If we are only reading the sample, don't process them
+        if (dkconfig_read_samples_only) {
+          samples_processed++;
+          return;
         }
 
         long start = 0;
