@@ -26,6 +26,9 @@
 @c Copyright 1990 Free Software Foundation, Inc.
 @c @end ifinfo
 
+@c avoid black boxes marking overfull hboxes in TeX output
+@finalout
+
 @titlepage
 @sp 10
 @center @titlefont{The Daikon Invariant Detector}
@@ -65,6 +68,7 @@ This is the manual for the Daikon invariant detector.
 @menu
 * Introduction::                
 * Installing::                  
+* Example use::                 
 * Detecting invariants::        
 * Daikon output::               
 * Troubleshooting::             
@@ -88,11 +92,20 @@ Installing the Daikon front end for C/C++
 
 * Requirements::                
 
+Example use of Daikon
+
+* Step-by-step instructions::   
+* Summary::                     
+* Automating the process::      
+* Understanding the invariants::  
+* Second example::              
+
 Using Daikon to detect invariants
 
 * Instrumentation::             
 * Run the instrumented program::  
 * Detect invariants::           
+* All-in-one script::           
 
 Instrumentation
 
@@ -115,10 +128,19 @@ Details on running instrumented Java programs
 
 * Java applets::                
 
+All-in-one script daikon.pl
+
+* daikon.pl arguments::         
+
 Daikon output
 
 * Interpreting output::         
 * GUI::                         
+
+Interpreting Daikon output
+
+* Program points::              
+* Invariant syntax::            
 
 Tree-structured invariant browser
 
@@ -194,11 +216,12 @@ values it computes, looking for patterns and relationships among those
 values.  Front ends (@pxref{Instrumentation}) exist for Java and for C
 and C++.
 
-@node    Installing, Detecting invariants, Introduction, Top
+
+@node    Installing, Example use, Introduction, Top
 @chapter Installing Daikon
 
 In order to install Daikon, perform the following steps.
-@xref{Requirements} for a few additional requirements running Daikon
+@xref{Requirements}, for a few additional requirements running Daikon
 (in short, you must be able to run Java programs, because Daikon is
 written in Java).
 
@@ -207,10 +230,13 @@ written in Java).
 Download Daikon from
 from @uref{http://sdg.lcs.mit.edu/daikon/download/}.
 
-There are two distributions to choose from.
-The pre-compiled distribution, @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, permits you to run Daikon and to detect
-invariants, but does not permit you to modify Daikon or to rebuild it.
-The source distribution, @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}}, plus sources for Daikon and for dfej.
+There are two distributions to choose from.  The pre-compiled
+distribution,
+@uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
+permits you to run Daikon and to detect invariants, but does not permit
+you to modify Daikon or to rebuild it.  The source distribution,
+@uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
+plus sources for Daikon and for dfej.
 
 Daikon is also available via anonymous CVS.  Send email to
 @daikonemail{} if you desire such access.
@@ -419,7 +445,268 @@ using a precompiled binary provided at
 detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
 
-@node    Detecting invariants, Daikon output, Installing, Top
+
+@node    Example use, Detecting invariants, Installing, Top
+@chapter Example use of Daikon
+
+This chapter gives step-by-step instructions for running Daikon on a
+sample Java program, @file{StackAr.java}.  @xref{Detecting invariants},
+for complete details about running Daikon.
+
+
+@menu
+* Step-by-step instructions::   
+* Summary::                     
+* Automating the process::      
+* Understanding the invariants::  
+* Second example::              
+@end menu
+
+@node    Step-by-step instructions, Summary, Example use, Example use
+@section Step-by-step instructions
+
+@c We recommend you run Daikon on Unix, but it can also be run on Windows.
+
+You need to perform three basic tasks:  instrument the target program
+(steps 1-4), run the instrumented program to create a data trace file
+(steps 5-7), and run Daikon over the data trace file to produce
+invariants (steps 8-9).
+
+You must first install Daikon if you haven't done so already; see
+@ref{Installing}.
+
+
+@enumerate
+@item Change to the directory containing the @file{StackAr.java} program.
+@example
+cd examples/StackAr
+@end example
+
+@item Compile the original version of the program.
+@example
+javac DataStructures/*.java
+@end example
+
+These instructions assume you have the current working directory (".")
+in your CLASSPATH.
+
+@item Instrument the @file{StackAr.java} file.
+@example
+dfej DataStructures/StackAr.java
+@end example
+
+We instrument only this one file because we are only interested in the
+invariants of the StackAr class, not the other classes in the program.
+
+This command creates two directories, @file{daikon-java} and
+@file{daikon-output}.  It creates an instrumented version of
+@file{StackAr.java} at @file{daikon-java/DataStructures/StackAr.java}.
+It creates a declaration file at
+@file{daikon-output/DataStructures/StackAr.decls}.
+
+@item Compile the instrumented version of StackAr.java.
+
+@example
+javac daikon-java/DataStructures/StackAr.java
+@end example
+
+@item Run the StackAr test suite, using the instrumented
+@file{StackAr.class} class file instead of the original (but the
+original version of all other files):
+
+@example
+java -classpath "daikon-java:$CLASSPATH" DataStructures.StackArTester
+@end example
+
+This will generate a trace file at
+@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
+a few seconds to a few minutes, depending on the speed of your
+computer.
+
+@item Change to the @file{daikon-output} directory to analyze
+the output.
+
+@example
+cd daikon-output
+@end example
+
+@item Due to a bug in the Java front end, there can be problems in the
+trace file.  Run the @command{modbit-munge} script to fix these problems:
+@table @r
+@item Unix
+@t{modbit-munge.pl StackAr.dtrace}
+@item Windows
+@t{modbit-munge.bat StackAr.dtrace}
+@end table
+
+@item Run Daikon on the trace file.
+
+@example
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+@end example
+
+The invariants are printed to standard output, and a binary
+representation of the invariants is written to
+@file{StackAr.inv}.
+
+@item Examine the invariants.  There are two ways to do this.
+@itemize @bullet
+@item Examine the output from running Daikon.  (You may find it
+convenient to capture the output in a file; add @command{> Stackar.txt}
+to the end of the command that runs Daikon.)
+
+@item Use the Daikon GUI to browse the invariants.  The GUI contains a
+tree which hierarchically organizes program points according to their
+class and method.  Using the GUI, you can look at invariants for only
+the methods and program points you care about.
+
+@example
+java daikon.gui.InvariantsGUI StackAr.inv
+@end example
+@end itemize
+
+@end enumerate
+
+@node    Summary, Automating the process, Step-by-step instructions, Example use
+@section Summary
+
+The steps above can be divided into three stages:
+
+@itemize
+@item Instrumentation (steps 1-4)
+@example
+cd examples/StackAr
+javac DataStructures/*.java
+dfej DataStructures/StackAr.java
+javac daikon-java/DataStructures/StackAr.java
+@end example
+
+@item Trace file generation (steps 5-7)
+@example
+java -classpath "daikon-java:$CLASSPATH" DataStructures.StackArTester
+cd daikon-output
+modbit-munge.pl StackAr.dtrace
+@end example
+
+@item Invariant detection (steps 8-9)
+@example
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.gui.InvariantsGUI StackAr.inv
+@end example
+
+@end itemize
+
+@node    Automating the process, Understanding the invariants, Summary, Example use
+@section Automating the process
+
+The script @command{daikon.pl} automates all steps of the invariant
+detection process.
+
+@example
+cd examples/StackAr
+daikon.pl DataStructures.StackArTester
+@end example
+
+This command instruments your program, generates a trace file, and
+displays the invariants in the GUI.  Currently, this script only works
+on Unix.
+
+
+@node    Understanding the invariants, Second example, Automating the process, Example use
+@section Understanding the invariants
+
+This section examines some of the invariants for the StackAr example.
+For more help interpreting invariants, see @ref{Interpreting output}.
+
+The StackAr example is an array-based stack implementation.  Take a
+look at @file{DataStructures/StackAr.java} to get a sense of the
+implementation.  Now, look at the first section of Daikon output. In
+the GUI, expand the node labeled @command{StackAr}, then select the
+node labeled @command{StackAr:Object}.
+
+@emph{(Note: The invariants displayed in the GUI may be different than the
+invariants written to standard out by Daikon.  This is because the
+invariants are being filtered differently.  We are currently working
+to resolve this issue.)}
+
+@example
+======================================================================
+StackAr:::OBJECT
+this.theArray != null
+this.theArray.class == "[Ljava.lang.Object;"
+this.topOfStack >= -1
+this.theArray[this.topOfStack+1..] elements == null
+this.theArray[0..this.topOfStack] elements != null
+this.topOfStack <= size(this.theArray[])-1
+======================================================================
+@end example
+
+These six annotations describe the representation invariant.  The
+array is never null, and its runtime type is @code{Object[]}.  The
+@code{topOfStack} index is at least -1 and is less than the length
+of the array.  Finally, the elements of the array are non-null if
+their index is no more than @code{topOfStack} and are null
+otherwise.
+
+Next, look at the invariants for the @code{top()} method.  In
+the GUI, expand the node labeled @command{top()Ljava/lang/Object;}.
+@code{top()} has two different exit points, at lines 78 and 79
+in the original source.  There is a set of invariants for each exit
+point, as well as a set of invariants that hold for all exit points.
+Look at the invariants when @code{top()} returns at line 79.  In
+the GUI, select the node labeled @command{EXIT79}.
+
+@example
+======================================================================
+StackAr.top():::EXIT79
+return == this.theArray[this.topOfStack]
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+return != null
+this.topOfStack >= 0
+this.theArray[this.topOfStack+1..] elements == this.theArray[-1]
+======================================================================
+@end example
+
+The return value is never null, and is equal to the array element at
+index @code{topOfStack}.  The top of the stack is at least 0.  The
+array, the elements of the array, and @code{topOfStack} are not
+modified by this method - this method is an "observer".  The
+last invariant is not particularly interesting.
+
+@node    Second example,  , Understanding the invariants, Example use
+@section A second example
+
+A second example is located in the @file{examples/QueueAr} subdirectory.
+Run this sample using the following steps:
+
+@itemize
+@item Instrumentation (steps 1-4)
+@example
+cd examples/QueueAr
+javac DataStructures/*.java
+dfej DataStructures/QueueAr.java
+javac daikon-java/DataStructures/QueueAr.java
+@end example
+
+@item Trace file generation (steps 5-7)
+@example
+java -classpath "daikon-java:$CLASSPATH" DataStructures.QueueArTester
+cd daikon-output
+modbit-munge.pl QueueAr.dtrace
+@end example
+
+@item Invariant detection (steps 8-9)
+@example
+java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
+java daikon.gui.InvariantsGUI QueueAr.inv
+@end example
+
+@end itemize
+
+
+@node    Detecting invariants, Daikon output, Example use, Top
 @chapter Using Daikon to detect invariants
 
 Detecting invariants involves three steps:
@@ -432,7 +719,7 @@ trace file.
 
 @item
 Run the instrumented program in the usual way (probably using a
-test suite).  This create data trace files.
+test suite).  This creates data trace files.
 
 @item
 Run the Daikon invariant detector over the data trace files.  This
@@ -446,6 +733,7 @@ textually or via a graphical user interface.
 * Instrumentation::             
 * Run the instrumented program::  
 * Detect invariants::           
+* All-in-one script::           
 @end menu
 
 @node    Instrumentation, Run the instrumented program, Detecting invariants, Detecting invariants
@@ -735,7 +1023,7 @@ Finally, run the applet:
 @end enumerate
 
 
-@node    Detect invariants,  , Run the instrumented program, Detecting invariants
+@node    Detect invariants, All-in-one script, Run the instrumented program, Detecting invariants
 @section Detect invariants in the data trace files
 
 Run the Daikon invariant detector via the command
@@ -752,6 +1040,87 @@ data trace file; the simplest way is to include every the declaration file
 created when instrumenting the program that is read.
 
 
+@node    All-in-one script,  , Detect invariants, Detecting invariants
+@section All-in-one script daikon.pl
+
+The @command{daikon.pl} script automates all steps of the invariant
+detection process:  instrumentation, trace file generation, invariant
+display.  Currently, this script only works on Unix.
+
+Running @command{daikon.pl} without without any arguments will display usage information:
+@example
+% <i>daikon</i>
+Usage: daikon [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
+Options:
+  -o, --output FILE   Save invariants in FILE.inv
+  ...
+@end example
+
+At minimum, you must supply the name of a "main" class which provides
+the method @code{public static void main(String[] args)}.
+@command{daikon.pl} will run this class to exercise your program.
+@xref{daikon.pl arguments}, for details on the available
+options for @command{daikon.pl}.
+
+@c <!--
+@c <h2><a xname="example">Example</a></h2>
+@c 
+@c You can try an example provided by the staff:
+@c <pre>
+@c   athena% cd ~/6.170
+@c   athena% mkdir daikon-testing; cd daikon-testing
+@c   athena% cp -rp /mit/6.170/handouts/daikon/example .
+@c   athena% daikon --verbose xxx
+@c </pre>
+@c This will run <tt>xxx</tt>, detect invariants for the program, and
+@c display the daikon GUI to browse the results.  See the <a
+@c href="#interpret-output">interpreting the output</a> section below for
+@c details on the meaning of the invariants.
+@c 
+@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file which
+@c contains the invariants in a special format, and a
+@c <tt>.src.tar.gz</tt> file which contains a snapshot of the program
+@c source.  You may specify names for these files using the <tt>--output
+@c <i>file</i></tt> parameter to daikon.  For example <tt>--output
+@c mytest</tt> will create <tt>mytest.inv</tt> and
+@c <tt>mytest.src.tar.gz</tt>.
+@c 
+@c <p>If your main class requires arguments, you may place them after the
+@c class name, just as if you were running <tt>java</tt> instead of
+@c <tt>daikon</tt>.
+@c -->
+
+@menu
+* daikon.pl arguments::         
+@end menu
+
+@node    daikon.pl arguments,  , All-in-one script, All-in-one script
+@subsection Command line options for daikon.pl
+
+@table @b
+@item @option{-o}, @option{--output} @var{FILE}
+Save invariants in @file{@var{FILE}.inv} and source in
+@file{@var{FILE}.src.tar.gz}.  If no name 
+is given, a name is automatically generated and used.
+
+@item @option{-t}, @option{--textfile}
+Save a textual listing of invariants to a @file{.txt} file.
+
+@item @option{-v}, @option{--verbose}
+Display progress messages while running.
+
+@item @option{-c}, @option{--cleanup}
+Remove files left over from an interrupted session before starting.
+Should be used only when @code{daikon.pl} detects left-over files and instructs
+you to use this option.
+
+@item @option{-n}, @option{--nogui}
+Create the invariants file (and @file{.txt} file,
+if @option{-t} is given), but do not start the GUI.
+@end table
+
+
+
 @node    Daikon output, Troubleshooting, Detecting invariants, Top
 @chapter Daikon output
 
@@ -764,18 +1133,48 @@ created when instrumenting the program that is read.
 @node    Interpreting output, GUI, Daikon output, Daikon output
 @section Interpreting Daikon output
 
-In the output, the "_orig" suffix refers to the original value of a formal
-parameter, for parameters possibly modified in the function body.
-Negative array indices count from the end of the array; for instance, index
-"-1" denotes the last element of the array.
 
-":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
-point the instrumentation was inserted; these invariants are
-program-point-specific.  ":::CLASS" and ":::CLASS-STATIC" indicate class
-invariants (sometimes called object invariants) which always hold for any
-object of the given class, from the point of view of a client or user.
-These properties hold at entry to and exit from every public method of the
-class.
+@menu
+* Program points::              
+* Invariant syntax::            
+@end menu
+
+@node    Program points, Invariant syntax, Interpreting output, Interpreting output
+@subsection Program points
+
+Daikon's output is organized by program points, both in the textual
+output and in the GUI.  A program point is usually associated with a
+specific place in the source code.  For example, @code{foo():::ENTER} is
+the point at the entry to procedure @code{foo()}; the invariants at that
+point are the preconditions upon entry to the <tt>foo()</tt> method.
+
+Likewise, invariants at @code{foo():::EXIT} are postconditions.  When
+there are multiple exit points from a procedure (for instance, because
+of multiple @code{return} statements), the different exits are
+differentiated by suffixing them with their line numbers; for instance,
+@code{StackAr.top():::EXIT79}.  The exit point lacking a line number (in
+this example, @code{StackAr.top():::EXIT}) collects the postconditions
+that are true at every numbered exit point.
+
+To other program point tags are @code{:::OBJECT} and @code{:::CLASS}.
+The former indicates object invariants (sometimes called representation
+invariants or class invariants) that always hold for any object of the
+given class, from the point of view of a client or user.  These
+properties hold at entry to and exit from every public method of the
+class.  The @code{:::CLASS} tag is just like @code{:::OBJECT}, but only
+for static variables, which have only one value for all objects.
+
+
+@node    Invariant syntax,  , Program points, Interpreting output
+@subsection Invariant syntax
+
+In the output, the application of @code{orig(x)} to a variable
+@code{x} refers to the original value of a formal parameter.
+@code{orig()} variables appear only at @code{:::EXIT} program points.
+
+Negative array indices count backwards from the length of the array.
+For instance, @code{a[-1]} denotes the last element of array @code{a};
+it is just syntactic sugar for @code{a[a.length-1]}.
 
 When "a" is an array, then
 @itemize @bullet
@@ -1142,7 +1541,7 @@ Any output generated before the out-of-memory error is perfectly valid.
 @end menu
 
 @node    Large dtrace files,  , Other problems, Other problems
-@subsection Large .dtrace files
+@subsection Large data trace (.dtrace) files
 
 Running code instrumented by dfej can result in very large
 @file{.dtrace} files.  This can be a problem because writing the large
@@ -1435,7 +1834,7 @@ Program point information includes:
       might be "Object" but the representation type might be "int"
       (because only the object's hashcode, not the object itself, is
       written to the data trace file).
-      The representation type is currently contrained to be integer,
+      The representation type is currently constrained to be integer,
       string, or array of integer or string.
       The representation type may optionally be followed by an equals
       sign and a value; in that case, the variable is known to have a
@@ -1470,7 +1869,7 @@ Program point information includes:
             %s-element and %s-index%d, where the indices are numbered
 	    starting with 1.
 @item
-            If no information is supplied (ie, this line is blank), then
+            If no information is supplied (i.e.,, this line is blank), then
 	    the variable is compared to all other variables of the same type.
 @end itemize
 @end itemize
@@ -1524,7 +1923,7 @@ Value information includes:
 @item value
 @itemize @bullet
 @item    integer: sequence of digits, optionally preceded by a minus sign
-@item    string: charcters surrounded by double-quotes; internal
+@item    string: characters surrounded by double-quotes; internal
 	 double-quotes and backslashes are escaped by a backslash
 @item    array: elements are listed on one line, separated by spaces.
          The elements may optionally be enclosed in [square brackets]; this
