@@ -3535,6 +3535,7 @@ Daikon homepage, @url{http://sdg.lcs.mit.edu/daikon/}.
 @node    Details, File formats, Troubleshooting, Top
 @chapter Details
 
+The Daikon invariant detector is named after an Asian radish.
 
 
 @menu
