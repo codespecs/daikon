@@ -1,5 +1,5 @@
-Finding Conditional Invariants using Splitting
-============================================== 
+         Finding Conditional Invariants using Splitting
+         ============================================== 
 Conditional invariants are invariants which are true only part of the
 time.  For instance, for a function which computes the absolute value
 of a number, the postcondition is 
@@ -7,51 +7,95 @@ of a number, the postcondition is
 if arg < 0, then return.value = -arg 
 else return.value = arg.  
 
+In this case, the invariant "return.value == -arg" is a conditional
+invariant because it depends on the condition "arg < 0" being true.
 To detect conditional invariants, Daikon splits the data trace into
 parts based on some predicate (in this case "arg < 0").  Invariant
 detection is then performed on the parts separately and any
 sub-invariants detected are reported.  A Splitter is a concrete
 instantiatiation of a predicate or splitting condition. Splitters
 operate at program points independently, and are created while Daikon
-is running. The information contained in each splitter are
-1) The program point on which it operates and 
-2) The condition upon which it splits the data trace.
-To use Splitting to detect conditional invariants, follow the steps 
-listed below:  
+is running. To use Splitting to detect conditional invariants, follow 
+the steps listed below:
 
+================================
 1) Create the Splitter Info file
---------------------------------
+================================
+Conditional invariants can be found by supplying a Splitter Info file
+as a commandline argument to daikon. This file contains information 
+about the splitting conditions which should be used create the splitters.
+The splitter info file, with suffix .spinfo, can be written by hand or
+generated from the java source by the perl script createspinfo.pl
+(located in the scripts directory). The perl script extracts 
+conditional statements from the java source to create the .spinfo file.
+
 Usage: createspinfo.pl foo.java 
 Output: foo.spinfo
 
-The perl script createspinfo.pl (located in the scripts directory) can
-be used create the splitting conditions necessary for splitting.
+The .spinfo file is divided into sections. Each section has a line
+with information about the program point at which the splitting 
+condition occured in the java source, and a line specifying the splitting 
+condition(s) that should be associated with that program point.
+
+PPT_NAME, <ppt name>
+CONDITIONS, cond1, cond2, cond3 ...
+
+===========
+REPLACEMENT
+===========
+Suppose a splitting condition involves a call to another function
+which is not native to Java but has been implemented by a user, then
+daikon cannot use this splitting condition to perform splitting unless
+it knows what to do when it encounters this function call. There is an
+optional line at the TOP of the .spinfo file, which contains
+information about such user-implemented functions and the statement(s)
+that must be evaluated in their place. The format is as follows:
+
+REPLACE, function1, replacement1, function2, replacement2, ...
+
+where replacement1 and replacement2 contain a (usually simple)
+statement representing the bodies of function1 and function2
+respectively. Everytime daikon finds such a function call in a
+splitting condition, it replaces the function call with its
+replacement. At the moment it does not work for functions which take
+arguments.
+
+========================
+INDISCRIMINATE SPLITTING
+========================
+There are two ways daikon tries to install splitters at program
+points.  In indiscriminate splitting, daikon tries to install all the
+splitters for the program at all the program points. In
+non-indiscriminate splitting, the splitters are installed only at the
+program points with which they are associated. Note that installation
+of a splitter at a program point fails if the program point does not
+have (in scope) all the variables that are used in the splitting
+condition. To use non-indiscriminate splitting, set the value of the
+variable 'allSplitters' to false in the file Global.java, located in
+the daikon directory.
+
+========
+EXAMPLES
+========
 For example, if the file 'foo.java' has a function 'bar' which tests
 for the conditions "x > 0", "myarray.length == x", The splitter info
 file will have a section as follows for this program point:
 
-FUNCTION_NAME, foo.bar
+PPT_NAME, foo.bar
 CONDITIONS, x > 0, myarray.length == x
 
 As another example, if the function 'baz' in 'foo.java' tests for the
-condition "isEmpty()" and the "isEmpty()" method simply checks for the
-condition "myarray.length == 0", then 'foo.spinfo' will have a
-section:
+condition "isEmpty()" and the "isEmpty()" method has the body "return
+(myarray.length == 0)", then 'foo.spinfo' will have a replace section:
 
-FUNCTION_NAME, foo.baz
-CONDITIONS, isEmpty()
-REPLACE, isEmpty, myarray.length == 0
+REPLACE, isEmpty(), myarray.length == 0
 
-Note that the REPLACE line is optional, but is sometimes necessary so
-that daikon can actually perform the splitting based on the values of the 
-instrumented variables. For example if the condition test for "isEmpty()" 
-and it is known that the body of the isEmpty method is "this.length == 0", 
-then the REPLACE line should have that information. At the moment it does
-not work for functions which take arguments. Note that the script only
-has information about splitting conditions explicitly stated in the 
-program text and splitting conditions based on booleans in the text.
-If you want to split based on other conditions, you need to add them to
-the file before you run daikon.
+Note that the script creates the .spinfo file using only the
+conditional statements and booleans explicitly stated in the program
+text as splitting conditions. If you want to split based on other
+conditions, you need to add them to the file before you run daikon.
+See the file QueueAr.spinfo in the scripts directory for another
+example.
 
 2)Running Daikon with the Splitter Info File
 ============================================
