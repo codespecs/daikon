@@ -17,13 +17,20 @@ import java.util.*;
 // the same-named on in V2.  In V2, this is just for printing.  In V3,
 // this does all the canonicalizing, etc.
 /**
- * This class is used for two things.  First, during checking, it
- * keeps track of VarInfos that are comparable and equal, so we only
- * need to instantiate invariants for one member of each Equal set.
- * For the first purpose, see equality notes in this directory.
- * Second, during printing, Equality is used for displaying several
- * equality Comparison invariants ("x == y", "x == z") as one Equality
- * invariant ("x == y == z").
+ * Keeps track of sets of variables that are equal.  First, during
+ * checking, it keeps track of VarInfos that are comparable and equal,
+ * so we only need to instantiate (other) invariants for one member of
+ * each Equal set.  For the first purpose, see equality notes in this
+ * directory.  Second, during printing, Equality is split into
+ * displaying several equality Comparison invariants ("x == y", "x ==
+ * z").  Equality invariants have leaders, which are the canonical
+ * forms of their variables.  In the previous example, x is the
+ * leader.  Equality invariants sort their variables by index ordering
+ * during checking.  During printing, however, equality invariants may
+ * "pivot" - that is, switch leaders if the current leader wouldn't be
+ * printed because it was not an interesting variable.  Notice that
+ * when pivoting, all the relevant other invariants also need to be
+ * pivoted.
  **/
 public final class Equality
   extends Invariant
@@ -55,7 +62,7 @@ public final class Equality
   
   /**
    * The Set of VarInfos that this represents equality for.  Can change
-   * over time as invariant weakens.
+   * over time as invariant weakens.  Sorted by index until pivoting.
    **/
   private Set/*VarInfo*/ vars;
 
@@ -382,7 +389,7 @@ public final class Equality
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
       Object viValue = vi.getValue(vt);
-      if (leaderValue == viValue) continue;
+      if (leaderValue == viValue) continue; // Including missing
 //       if (debug.isDebugEnabled()) {
 //         debug.debug("  vi name: " + vi.name.name());
 //         debug.debug("  vi value: " + viValue);
