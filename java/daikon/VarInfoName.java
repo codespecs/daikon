@@ -1,9 +1,9 @@
 package daikon;
 
 import daikon.inv.Invariant.OutputFormat;
-import daikon.derive.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
+import daikon.derive.*;         // see dbc_name_impl(VarInfo v)
+import daikon.derive.unary.*;   // see dbc_name_impl(VarInfo v)
+import daikon.derive.binary.*;  // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
 
 import utilMDE.*;
@@ -247,14 +247,15 @@ public abstract class VarInfoName
 
   /**
    * Return the String representation of this name in the java style
-   * output format
+   * output format.
+   *
    * @return the string representation (interned) of this name, in the
    * java style output format
    **/
-  public String java_name() {
+  public String java_name(VarInfo v) {
     if (java_name_cached == null) {
       try {
-        java_name_cached = java_name_impl().intern();
+        java_name_cached = java_name_impl(v).intern();
       } catch (RuntimeException e) {
         System.err.println("repr = " + repr());
         throw e;
@@ -263,15 +264,15 @@ public abstract class VarInfoName
     return java_name_cached;
   }
   private String java_name_cached = null; // interned
-  protected abstract String java_name_impl();
+  protected abstract String java_name_impl(VarInfo v);
 
    /**
    * Return the String representation of this name in the JML style output format
    */
-  public String jml_name() {
+  public String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
       try {
-        jml_name_cached = jml_name_impl().intern();
+        jml_name_cached = jml_name_impl(v).intern();
       } catch (RuntimeException e) {
         System.err.println("repr = " + repr());
         throw e;
@@ -281,38 +282,35 @@ public abstract class VarInfoName
     return jml_name_cached;
   }
   private String jml_name_cached = null; // interned
-  protected abstract String jml_name_impl();
+  protected abstract String jml_name_impl(VarInfo v);
+
+
+  // For DBC, Java and JML formats, the formatting methods take as
+  // argument the VarInfo related to the VarInfoName in question. This
+  // causes trouble with VarInfoNameDriver (a class for testing
+  // VarInfoName), because there are no VarInfo's to pass to the
+  // formatting methods. So in places where the VarInfo argument is
+  // used, we use this variable to check whether we're doing
+  // testing. If we are, then we know that the VarInfo is probably
+  // null, and we do something other than the normal thing.
+  public static boolean testCall = false;
 
   /**
    * Return the String representation of this name in the dbc style
-   * output format
-   * @return the string representation (interned) of this name, in the
-   * dbc style output format
+   * output format.
    *
-   **/
-
-  // CP: Commented out because we really should always pass dbc_name
-  //     a VarInfo. The reason is that the variable being called may
-  //     have a Prestate component, in which case the type t of
-  //     the component needs to be part of the DBC formatting
-  //     $pre(t, x), and in this case the type is determined from
-  //     the VarInfo. Note that when the variable has no prestate,
-  //     the VarInfo is not actually used. But to avoid mistakes,
-  //     we will always pass the VarInfo corresponding to the
-  //     variable being formatted.
-
-  //public String dbc_name() { return "dbc_name(null):" + repr(); }
-  //public String dbc_name() { return dbc_name(null); }
-
-  /**
-   * Return the String representation of this name in the dbc style
-   * output format
-   * @param var the VarInfo which goes along with this name.  This
-   *        is used to ascertain the type of the varaiable.  'var' may be null,
-   *        which may cause dbc_name_impl to return a warning string instead
-   *        of a correct name.
+   * @param var the VarInfo which goes along with this VarInfoName.
+   *            Used to determine the type of the variable.
+   *
+   *        If var is null, the only repercussion is that if `this' is an
+   *        "orig(x)" expression, it will be formatted in jml-style,
+   *        something like "\old(x)".
+   *
+   *        If var is not null and `this' is an "orig(x)" expressions, it
+   *        will be formatted in Jtest's DBC style, as "$pre(<type>, x)".
+   *
    * @return the string representation (interned) of this name, in the
-   * java style output format
+   * dbc style output format.
    **/
   public String dbc_name(VarInfo var) {
     if (dbc_name_cached == null) {
@@ -357,8 +355,8 @@ public abstract class VarInfoName
     if (format == OutputFormat.DAIKON) return name();
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
     if (format == OutputFormat.ESCJAVA) return esc_name();
-    if (format == OutputFormat.JAVA) return java_name();
-    if (format == OutputFormat.JML) return jml_name();
+    if (format == OutputFormat.JAVA) return java_name(vi);
+    if (format == OutputFormat.JML) return jml_name(vi);
     if (format == OutputFormat.DBCJAVA) return dbc_name(vi);
     if (format == OutputFormat.IOA) return ioa_name();
     if (format == OutputFormat.IDENTIFIER) return identifier_name();
@@ -654,10 +652,10 @@ public abstract class VarInfoName
       }
       return "|" + s + "|";
     }
-    protected String java_name_impl() {
-      return name;
+    protected String java_name_impl(VarInfo v) {
+      return "return".equals(name) ? "\\result" : name;
     }
-    protected String jml_name_impl() {
+    protected String jml_name_impl(VarInfo v) {
       return "return".equals(name) ? "\\result" : name;
     }
     protected String dbc_name_impl(VarInfo v) {
@@ -821,16 +819,25 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return "size(" + sequence.ioa_name() + ")";
     }
-    protected String java_name_impl() {
-      return sequence.term.java_name() + ".length";
+    protected String java_name_impl(VarInfo v) {
+      return java_family_impl(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      return sequence.term.jml_name() + ".length";
+    protected String jml_name_impl(VarInfo v) {
+      return java_family_impl(OutputFormat.JML, v);
     }
     protected String dbc_name_impl(VarInfo v) {
-      return sequence.term.dbc_name(v) + ".length";
+      return java_family_impl(OutputFormat.DBCJAVA, v);
     }
-
+    protected String java_family_impl(OutputFormat format, VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
+      if (v.type.pseudoDimensions() == 1) {
+        // It's a Collection
+        return sequence.term.name_using(format, v) + ".size()";
+      } else {
+        // It's an array
+        return sequence.term.name_using(format, v) + ".length";
+      }
+    }
     protected String identifier_name_impl() {
       return "size_of" + sequence.identifier_name() + "___";
     }
@@ -907,20 +914,23 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return function + "(" + argument.ioa_name() + ")**";
     }
-    protected String java_name_impl() {
-      return "(warning: format_java() needs to be implemented: " +
-        function + " on " + argument.repr() + ")";
+    protected String java_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      return function + "(" + argument.jml_name() + ")";
+    protected String jml_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.JML, v);
     }
-
     protected String dbc_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.DBCJAVA, v);
+    }
+    protected String java_family_name_impl(OutputFormat format, VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
+      Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
       Assert.assertTrue(derived instanceof UnaryDerivation);
-      return "daikon.Quant." + function + "("
-        + argument.dbc_name_impl(((UnaryDerivation)derived).base) + ")";
+      VarInfo argVarInfo = ((UnaryDerivation)derived).base;
+      return "daikon.Quant." + function + "(" + argument.name_using(format, argVarInfo) + ")";
     }
 
     protected String identifier_name_impl() {
@@ -1002,34 +1012,34 @@ public abstract class VarInfoName
       }
       return function + "(" + sb.toString() + ")";
     }
-    protected String java_name_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).repr());
-        if (i.hasNext()) sb.append (", ");
-      }
-      return "(warning: format_java() needs to be implemented: " +
-        function + " on " + sb.toString() + ")";
+
+    protected String java_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
-        sb.append (((VarInfoName) i.next()).jml_name());
-        if (i.hasNext()) sb.append (", ");
-      }
-      return function + "(" + sb.toString() + ")";
+
+    protected String jml_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.JML, v);
     }
+
     protected String dbc_name_impl(VarInfo v) {
+      return java_family_name_impl(OutputFormat.DBCJAVA, v);
+    }
+
+    // Only works for two-argument functions.  There are currently no
+    // ternary (or greater) function applications in Daikon.
+    protected String java_family_name_impl(OutputFormat format, VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
+      Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
       Assert.assertTrue(derived instanceof BinaryDerivation);
-                        //there are currently no ternary function applications
-                        //|| derived instanceof TernaryDerivation);
+      //|| derived instanceof TernaryDerivation);
       Assert.assertTrue(args.size() == 2);
-
+      VarInfo arg1VarInfo = ((BinaryDerivation)derived).base1;
+      VarInfo arg2VarInfo = ((BinaryDerivation)derived).base2;
       return "daikon.Quant." + function + "("
-        + ((VarInfoName)args.get(0)).dbc_name_impl(((BinaryDerivation)derived).base1)  + ", "
-        + ((VarInfoName)args.get(1)).dbc_name_impl(((BinaryDerivation)derived).base2)  + ")";
+        + ((VarInfoName)args.get(0)).name_using(format, arg1VarInfo)  + ", "
+        + ((VarInfoName)args.get(1)).name_using(format, arg2VarInfo)  + ")";
     }
 
     protected String identifier_name_impl() {
@@ -1160,11 +1170,14 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return term.ioa_name() + "." + field;
     }
-    protected String java_name_impl() {
-      return term.java_name() + "." + field;
+    protected String java_name_impl(VarInfo v) {
+      return collectExpr(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      return term.jml_name() + "." + field;
+    protected String jml_name_impl(VarInfo v) {
+      return collectExpr(OutputFormat.JML, v);
+    }
+    protected String dbc_name_impl(VarInfo v) {
+      return collectExpr(OutputFormat.DBCJAVA, v);
     }
 
     // performs: foo[] --> foo.  requires: if foo does have "[]", it's
@@ -1178,8 +1191,20 @@ public abstract class VarInfoName
       }
     }
 
-    protected String dbc_name_impl(VarInfo v) {
+    // For JAVA, JML and DBC formats.
+    protected String collectExpr(OutputFormat format, VarInfo v) {
+
+        String term_name = null;
+        if (format == OutputFormat.JML) {
+          term_name = term.jml_name(v);
+        } else if (format == OutputFormat.JAVA) {
+          term_name = term.java_name(v);
+        } else {
+          term_name = term.dbc_name(v);
+        }
+
       if (term.name().indexOf("[]") != -1) {
+
         // How to translate foo[].f, which is the array obtained from
         // collecting o.f for every element o in the array foo?  Just as
         // we did for slices, we'll translate this into a call of an
@@ -1187,56 +1212,19 @@ public abstract class VarInfoName
 
         // x.y.foo[].bar.f
         // ---translates-into--->
-        // daikon.Quant.fieldArray(<type instance>, x, "y.foo[].bar.f")
+        // daikon.Quant.collect(x, "y.foo[].bar.f")
 
-        // [explain clunky <type instance>]
-
-        // The method fieldArray should take care of the
-        // "y.foo[].bar.f" mess for object x.
-
-        // v is not the varinfo for term in the expression below! So
-        // we're passing on the incorrect VarInfo. But I think (verify
-        // with Mike) that we'll never ask for orig(term) alone, but
-        // always along with its field: orig(term.field). So it's ok
-        // to pass the wrong thing here, which we do because passing
-        // null is not allowed.
-
-        String preType = v.type.base();
-        String i/*nstance*/ = null;
-        if (preType.equals(ProglangType.BASE_BOOLEAN)) {
-          i = "false";
-        } else if (preType.equals(ProglangType.BASE_BYTE)) {
-          i = "(byte)0";
-        } else if (preType.equals(ProglangType.BASE_CHAR)) {
-          i = "'a'";
-        } else if (preType.equals(ProglangType.BASE_DOUBLE)) {
-          i = "(double)0";
-        } else if (preType.equals(ProglangType.BASE_FLOAT)) {
-          i = "(float)0";
-        } else if (preType.equals(ProglangType.BASE_INT)) {
-          i = "(int)0";
-        } else if (preType.equals(ProglangType.BASE_LONG)) {
-          i = "(long)0";
-        } else if (preType.equals(ProglangType.BASE_SHORT)) {
-          i = "(short)0";
-        } else if (preType.equals(ProglangType.BASE_OBJECT)) {
-          i = "new Object()";
-        } else if (preType.equals(ProglangType.BASE_STRING)) {
-          i = "new String()";
-        } else if (preType.equals(ProglangType.BASE_INTEGER)) {
-          i = "new Integer()";
-        } else if (preType.equals(ProglangType.BASE_HASHCODE)) {
-          i = "new Object()"; //CP: check the validity of this
-        } else {
-          i = "new Object()"; //CP: This will happen for Objects -- what else could it happen for?
-        }
+        // The method Quant.collect takes care of the "y.foo[].bar.f"
+        // mess for object x.
 
         String[] splits = term.name().split("\\.");
         if (splits[0].equals(term.name())) {
-          // Simple case: foo[]
-          return
-            "daikon.Quant.fieldArray(" + i + ", " + term.dbc_name(v) + ", "
-            + "\"" + field + "\"" + ")";
+          // Simple case: foo[].bar
+          // Assumption: the term isn't of the form orig(..).
+          // We need this assumption because we're passing
+          // null in term.dbc_name(null).
+          return  "daikon.Quant.collect(" + term_name + ", " + "\"" + field + "\"" + ")";
+
         } else {
           // complicated case: x.y.foo[].bar
           String object = removeBrackets(splits[0]);
@@ -1247,11 +1235,11 @@ public abstract class VarInfoName
             fields += removeBrackets(splits[j]);
           }
           return
-            "daikon.Quant.fieldArray(" + i + ", " + object + ", "
+            "daikon.Quant.collect(" + object + ", "
             + "\"" + fields + "." + field + "\"" + ")";
         }
       } else {
-        return term.dbc_name(v) + "." + field;
+        return term_name + "." + field;
       }
     }
 
@@ -1319,11 +1307,11 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return "(typeof " + term.ioa_name() + ")**";
     }
-    protected String java_name_impl() {
-      return term.name() + ".class";
+    protected String java_name_impl(VarInfo v) {
+      return term.java_name(v) + ".getClass().toString()";
     }
-    protected String jml_name_impl() {
-      return "\\typeof(" + term.jml_name() + ")";
+    protected String jml_name_impl(VarInfo v) {
+      return term.jml_name(v) + ".getClass().toString()";
     }
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v) + ".getClass().toString()";
@@ -1385,17 +1373,16 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return "preState(" + term.ioa_name() + ")";
     }
-    protected String java_name_impl() {
-      return "orig(" + term.name() + ")";
+    protected String java_name_impl(VarInfo v) {
+      return "\\old(" + term.java_name(v) + ")";
     }
-    protected String jml_name_impl() {
-      return "\\old(" + term.jml_name() + ")";
+    protected String jml_name_impl(VarInfo v) {
+      return "\\old(" + term.jml_name(v) + ")";
     }
     protected String dbc_name_impl(VarInfo v) {
-      if (v == null) {
-        throw new UnsupportedOperationException
-          ("VarInfo not provided: '" + term.repr_impl() + "'");
-      }
+      if (testCall) { return "no format when testCall."; }
+      String brackets = "";
+      Assert.assertTrue(v != null);
       String preType = v.type.base();
       if ((term instanceof Slice)
           // Slices are obtained by calling daikon.Quant.slice(...)
@@ -1404,11 +1391,8 @@ public abstract class VarInfoName
           && (v.type.base().equals("java.lang.Object"))) {
         preType = "java.lang.Object";
       }
-      String brackets = "";
       for (int i = 0 ; i < v.type.dimensions(); i++) { brackets += "[]"; }
       return "$pre(" + preType + brackets + ", " + term.dbc_name(v) + ")";
-      //+ "*******DERIVED CLASS=" + (v.isDerived()  ? v.derived.getClass().getName() : "v NOT DERIVED")
-      //+ "*******v.name.repl_impl()= " + v.name.repr_impl() + ")";
     }
     protected String identifier_name_impl() {
       return "orig_of_" + term.identifier_name() + "___";
@@ -1477,14 +1461,12 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return term.ioa_name() + "'";
     }
-    protected String java_name_impl() {
-      return "post(" + term.name() + ")";
+    protected String java_name_impl(VarInfo v) {
+      return "\\post(" + term.java_name(v) + ")";
     }
-    protected String jml_name_impl() {
-      // Figure out something to do with this
-      return "\\new(" + term.jml_name() + ")";
-      //        throw new UnsupportedOperationException("JML cannot format a Poststate" +
-      //                                                " [repr=" + repr() + "]");
+    protected String jml_name_impl(VarInfo v) {
+      return "(warning: JML format cannot express a Poststate"
+        + " [repr=" + repr() + "])";
     }
     protected String dbc_name_impl(VarInfo v) {
       return "(warning: DBC format cannot express a Poststate"
@@ -1550,11 +1532,11 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return term.ioa_name() + amount();
     }
-    protected String java_name_impl() {
-      return term.java_name() + amount();
+    protected String java_name_impl(VarInfo v) {
+      return term.java_name(v) + amount();
     }
-    protected String jml_name_impl() {
-      return term.jml_name() + amount();
+    protected String jml_name_impl(VarInfo v) {
+      return term.jml_name(v) + amount();
     }
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v) + amount();
@@ -1636,22 +1618,17 @@ public abstract class VarInfoName
     protected String ioa_name_impl(String index) {
       return term.ioa_name() + "[" + index + "]";
     }
-    protected String java_name_impl() {
-      /* throw new UnsupportedOperationException("Java cannot format an unquantified sequence of elements" +
-         " [repr=" + repr() + "]");
-      */
-      // For now, do return the default implementation.
-      return name_impl();
+    protected String java_name_impl(VarInfo v) {
+      return term.java_name(v);
     }
-    protected String java_name_impl(String index) {
-      return term.name() + "[" + index + "]";
+    protected String java_name_impl(String index, VarInfo v) {
+      return term.java_name(v) + "[" + index + "]";
     }
-    protected String jml_name_impl() {
-      throw new UnsupportedOperationException("JML cannot format an unquantified sequence of elements" +
-                                              " [repr=" + repr() + "]");
+    protected String jml_name_impl(VarInfo v) {
+      return term.jml_name(v);
     }
-    protected String jml_name_impl(String index) {
-      return term.jml_name() + "[" + index + "]";
+    protected String jml_name_impl(String index, VarInfo v) {
+      return term.jml_name(v) + "[" + index + "]";
     }
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v);
@@ -1778,20 +1755,32 @@ public abstract class VarInfoName
     protected String ioa_name_impl() {
       return sequence.ioa_name_impl(indexExplicit(sequence, index).ioa_name());
     }
-    protected String java_name_impl() {
-      return sequence.name_impl(index.name());
+    protected String java_name_impl(VarInfo v) {
+      return java_family_impl(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      return sequence.jml_name_impl(indexExplicit(sequence, index).jml_name());
+    protected String jml_name_impl(VarInfo v) {
+      return java_family_impl(OutputFormat.JML, v);
     }
     protected String dbc_name_impl(VarInfo v) {
+      return java_family_impl(OutputFormat.DBCJAVA, v);
+    }
+    protected String java_family_impl(OutputFormat format, VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
+      Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
       Assert.assertTrue(derived instanceof  SequenceScalarSubscript
                         || derived instanceof  SequenceStringSubscript
                         || derived instanceof  SequenceFloatSubscript);
-      return sequence.dbc_name_impl(index.dbc_name(((BinaryDerivation)derived).base2),
-                                    ((BinaryDerivation)derived).base1);
+      VarInfo indexVarInfo = ((BinaryDerivation)derived).base2;
+      VarInfo seqVarInfo = ((BinaryDerivation)derived).base1;
+      if (format == OutputFormat.JAVA) {
+        return sequence.java_name_impl(index.java_name_impl(indexVarInfo), seqVarInfo);
+      } else if (format == OutputFormat.JML) {
+        return sequence.jml_name_impl(index.jml_name_impl(indexVarInfo), seqVarInfo);
+      } else { // format == OutputFormat.DBCJAVA
+        return sequence.dbc_name_impl(index.dbc_name_impl(indexVarInfo), seqVarInfo);
+      }
     }
     protected String identifier_name_impl() {
       return sequence.identifier_name_impl(index.identifier_name());
@@ -1882,19 +1871,19 @@ public abstract class VarInfoName
       result += sequence.ioa_name_impl("e");
       return result;
     }
-    protected String java_name_impl() {
-      // throw new UnsupportedOperationException("Java cannot format an unquantified slice of elements");
-      // For now, return the default implementation.
-      return name_impl();
+    protected String java_name_impl(VarInfo v) {
+      return slice_helper(OutputFormat.JAVA, v);
     }
-    protected String jml_name_impl() {
-      throw new UnsupportedOperationException("JML cannot format an unquantified slice of elements");
+    protected String jml_name_impl(VarInfo v) {
+      return slice_helper(OutputFormat.JML, v);
+    }
+    protected String dbc_name_impl(VarInfo v) {
+      return slice_helper(OutputFormat.DBCJAVA, v);
     }
 
-    // In DBC formatting, a slice should always be used inside the
-    // call of a method, so its formatting consists of three arguments
-    // for the method.
-    protected String dbc_name_impl(VarInfo v) {
+    // Helper for JML, Java and DBC formats
+    protected String slice_helper(OutputFormat format, VarInfo v) {
+      if (testCall) { return "no format when testCall."; }
       Assert.assertTrue(v != null);
       Assert.assertTrue(v.isDerived());
       Derivation derived = v.derived;
@@ -1908,16 +1897,25 @@ public abstract class VarInfoName
           Assert.assertTrue(j != null);
           return
             "daikon.Quant.slice("
-            + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
+            + sequence.name_using(format, ((SequenceSubsequence)derived).seqvar())
             + ", 0,  "
-            + j.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
+            + j.name_using(format, ((SequenceSubsequence)derived).sclvar())
             + ")";
         } else {
+          VarInfo seqVarInfo = ((SequenceSubsequence)derived).seqvar();
+          String lastIdxString = null;
+          if (seqVarInfo.type.pseudoDimensions() == 1) {
+            // it's a collection
+            lastIdxString = sequence.name_using(format, seqVarInfo) + ".size()-1";
+          } else {
+            // it's an array
+            lastIdxString = sequence.name_using(format, seqVarInfo) + ".length-1";
+          }
           return
             "daikon.Quant.slice("
-            + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
-            + ", " + i.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
-            + ", daikon.Quant.lastIdx(" + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar()) + ")"
+            + sequence.name_using(format, ((SequenceSubsequence)derived).seqvar())
+            + ", " + i.name_using(format, ((SequenceSubsequence)derived).sclvar())
+            + lastIdxString
             + ")";
         }
       } else {
@@ -1926,30 +1924,30 @@ public abstract class VarInfoName
           SequenceScalarArbitrarySubsequence derived2 = (SequenceScalarArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
-            + sequence.dbc_name_impl(derived2.seqvar())
-            + i.dbc_name_impl(derived2.startvar())
-            + j.dbc_name_impl(derived2.endvar())
+            + sequence.name_using(format, derived2.seqvar())
+            + i.name_using(format, derived2.startvar())
+            + j.name_using(format, derived2.endvar())
             + ")";
         } else if(derived instanceof SequenceFloatArbitrarySubsequence) {
           SequenceFloatArbitrarySubsequence derived2 = (SequenceFloatArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
-            + sequence.dbc_name_impl(derived2.seqvar())
-            + i.dbc_name_impl(derived2.startvar())
-            + j.dbc_name_impl(derived2.endvar())
+            + sequence.name_using(format, derived2.seqvar())
+            + i.name_using(format, derived2.startvar())
+            + j.name_using(format, derived2.endvar())
             + ")";
         } else {
           SequenceStringArbitrarySubsequence derived2 = (SequenceStringArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
-            + sequence.dbc_name_impl(derived2.seqvar())
-            + i.dbc_name_impl(derived2.startvar())
-            + j.dbc_name_impl(derived2.endvar())
+            + sequence.name_using(format, derived2.seqvar())
+            + i.name_using(format, derived2.startvar())
+            + j.name_using(format, derived2.endvar())
             + ")";
         }
-
       }
     }
+
 
     protected String identifier_name_impl() {
       String start = (i == null) ? "0" : i.identifier_name();
@@ -2733,8 +2731,8 @@ public abstract class VarInfoName
       protected String repr_impl() {
         return "Free[" + super.repr_impl() + "]";
       }
-      protected String jml_name_impl() {
-        return super.jml_name_impl();
+      protected String jml_name_impl(VarInfo v) {
+        return super.jml_name_impl(v);
       }
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
@@ -3224,15 +3222,15 @@ public abstract class VarInfoName
      * elements are jml-named strings for the provided roots (with
      * sequenced subscripted by one of the new bound variables).
      **/
-    public static String[] format_jml(VarInfoName[] roots) {
-      return format_jml(roots, false);
-    }
-    public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
-      return format_jml(roots, elementwise, true);
-    }
-    public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
-      return format_java_style(roots, elementwise, forall, OutputFormat.JML);
-    }
+//     public static String[] format_jml(VarInfoName[] roots) {
+//       return format_jml(roots, false);
+//     }
+//     public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
+//       return format_jml(roots, elementwise, true);
+//     }
+//     public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
+//       return format_java_style(roots, elementwise, forall, OutputFormat.JML);
+//     }
 
     /* CP: Quantification for DBC: We would like quantified expression
      * to always return a boolean value, and in the previous
@@ -3537,24 +3535,24 @@ public abstract class VarInfoName
      * elements are java-named strings for the provided roots (with
      * sequences subscripted by one of the new bound variables).
      **/
-    public static String[] format_java(VarInfoName[] roots) {
-      return format_java(roots, false);
-    }
-    public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
-      return format_java_style(roots, false, true, OutputFormat.JAVA);
-    }
+//     public static String[] format_java(VarInfoName[] roots) {
+//       return format_java(roots, false);
+//     }
+//     public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
+//       return format_java_style(roots, false, true, OutputFormat.JAVA);
+//     }
 
     // This set of functions quantifies in the same manner to the ESC quantification, except that
     // JML names are used instead of ESC names, and minor formatting changes are incorporated
-    public static String[] format_jml(QuantifyReturn qret) {
-      return format_java_style(qret, false, true, OutputFormat.JML);
-    }
-    public static String[] format_jml(QuantifyReturn qret, boolean elementwise) {
-      return format_java_style(qret, elementwise, true, OutputFormat.JML);
-    }
-    public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean forall) {
-      return format_java_style(qret, elementwise, forall, OutputFormat.JML);
-    }
+//     public static String[] format_jml(QuantifyReturn qret) {
+//       return format_java_style(qret, false, true, OutputFormat.JML);
+//     }
+//     public static String[] format_jml(QuantifyReturn qret, boolean elementwise) {
+//       return format_java_style(qret, elementwise, true, OutputFormat.JML);
+//     }
+//     public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean forall) {
+//       return format_java_style(qret, elementwise, forall, OutputFormat.JML);
+//     }
 
     // This set of functions assists in quantification for all of the java style
     // output formats, that is, Java, ESC, and JML. It does the actual work behind
@@ -3651,9 +3649,9 @@ public abstract class VarInfoName
         return "";
       } else {
         if (i != 0) {
-          return (", " + idx.java_name() + "++");
+          return (", " + idx.esc_name() + "++");
         } else {
-          return (idx.java_name() + "++");
+          return (idx.esc_name() + "++");
         }
       }
     }
@@ -3666,7 +3664,7 @@ public abstract class VarInfoName
                                                     VarInfoName low,
                                                     OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-        return idx.java_name() + " == " + low.java_name();
+        return idx.esc_name() + " == " + low.esc_name();
       } else {
         return idx.name_using(format, null);
       }
@@ -3681,7 +3679,7 @@ public abstract class VarInfoName
                                                       VarInfoName high,
                                                       OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-        return idx.java_name() + " <= " + high.java_name();
+        return idx.esc_name() + " <= " + high.esc_name();
       } else {
         return low.name_using(format, null) + " <= " + idx.name_using(format, null) + " && " +
           idx.name_using(format, null) + " <= " + high.name_using(format, null);

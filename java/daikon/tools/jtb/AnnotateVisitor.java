@@ -556,6 +556,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         || (inv.indexOf("NaN") != -1) // ask mike about this
         || (inv.indexOf("Infinity") != -1) // ask mike about this
         || (dbc && (inv.indexOf("getClass()") != -1))  // Jtest doesn't allow
+        || (dbc && (inv.indexOf("SEQUENCE unimplemented") != -1))  // Jtest doesn't allow
+        || (dbc && (inv.indexOf("?comparatorDBC?") != -1))  // Jtest doesn't allow
         ) {
       return false;
     } else {

@@ -58,7 +58,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
   #define NONZERO NonZero
   #define ELTONEOF EltOneOf
   #define LOWERBOUND LowerBound
@@ -77,7 +77,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) String.valueOf(x)
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
   #define NONZERO NonZeroFloat
   #define ELTONEOF EltOneOfFloat
   #define LOWERBOUND LowerBoundFloat
@@ -94,7 +94,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
   #define INT long[]
@@ -106,7 +106,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
   #define INT double[]
@@ -118,7 +118,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
   #define INT String[]
@@ -130,7 +130,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
 #elif defined(ELT)
   #define SCALARPKG sequence
   #define INT long
@@ -141,7 +141,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
   #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : simplify_format_long(x))
   #define NAME var().name.name() + " elements"
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
   #define NONZERO EltNonZero
   #define LOWERBOUND LowerBound
   #define UPPERBOUND UpperBound
@@ -157,7 +157,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) String.valueOf(x)
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name.name() + " elements"
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
   #define NONZERO EltNonZeroFloat
   #define LOWERBOUND LowerBoundFloat
   #define UPPERBOUND UpperBoundFloat
@@ -170,7 +170,7 @@ The correct way to build the system is to run 'make'.
   #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name() + " elements"
-  #define JAVA_NAME var().name.java_name()
+  #define JAVA_NAME var().name.java_name(var())
 #else
   #error "One of SCALAR, STRING, FLOAT, SEQUENCE, STRINGSEQUENCE, FLOATSEQUENCE, ELT, ELTSTRING, or ELTFLOAT must be defined"
 #endif
@@ -468,25 +468,16 @@ public final class ONEOFSCALAR
   public String format_using(OutputFormat format) {
     sort_rep();
 
-    if (format.isJavaFamily()) return format_dbc();
-
-    // TODO: Eliminate the unnecessary format_xxx() below if the
-    // format_dbc() can handle all the Java family output.
+    if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
-    } else if (format == OutputFormat.JAVA) {
-      return format_java();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
-    } else if (format == OutputFormat.JML) {
-      return format_jml();
-    } else if (format == OutputFormat.DBCJAVA) {
-      return format_dbc();
     } else {
       return format_unimplemented(format);
     }
@@ -559,123 +550,123 @@ public final class ONEOFSCALAR
     }
   */
 
-  public String format_java() {
-    // have to take a closer look at this!
-    sort_rep();
-#if defined(IS_ELT)
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-    String varname = form[1];
-#if defined(ELTSTRING)
-    if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
-        && varname.endsWith("[]")) {
-      varname = varname.substring(0, varname.length()-2);
-    }
-#endif
-#elif defined(IS_SCALAR)
-    String varname = var().name.java_name();
-#if defined(STRING)
-    if ((var().rep_type == ProglangType.CHAR_ARRAY)
-        && varname.endsWith("[]")) {
-      varname = varname.substring(0, varname.length()-2);
-    }
-#endif
-#endif
-    String result;
+//   public String format_java() {
+//     // have to take a closer look at this!
+//     sort_rep();
+// #if defined(IS_ELT)
+//     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+//     String varname = form[1];
+// #if defined(ELTSTRING)
+//     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
+//         && varname.endsWith("[]")) {
+//       varname = varname.substring(0, varname.length()-2);
+//     }
+// #endif
+// #elif defined(IS_SCALAR)
+//     String varname = var().name.java_name(var());
+// #if defined(STRING)
+//     if ((var().rep_type == ProglangType.CHAR_ARRAY)
+//         && varname.endsWith("[]")) {
+//       varname = varname.substring(0, varname.length()-2);
+//     }
+// #endif
+// #endif
+//     String result;
 
-#if defined(STRING) || defined(ELTSTRING)
-    result = "";
-    boolean is_type = is_type();
-    for (int i=0; i<num_elts; i++) {
-      if (i != 0) { result += " || "; }
-      result += varname;
-      String str = elts[i];
-      if (!is_type) {
-        result += JAVA_EQUALS_STRING(TOSTRING(str));
-      } else {
-        result += " == ";
-        if ((str == null) || "null".equals(str)) {
-          result += "== null)";
-        } else if (str.startsWith("[")) {
-          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-        } else {
-          if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length()-1);
-          }
-          result += "(" + str + ")";
-        }
-      }
-    }
-#elif defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
-  #if defined(BASE_INT)
-    if (is_boolean) {
-      Assert.assertTrue(num_elts == 1);
-      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
-      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
-    } else if (is_hashcode) {
-      if (num_elts == 2) {
-        return "true";          // one elt is null, the other is non-null
-      } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
-      } else {
-        result = varname + " != null";
-          // varname + " has only one value"
-          // + " (hashcode=" + elts[0] + ")"
-          ;
-      }
-    } else
-  #endif
-    {
-      result = "";
-      for (int i=0; i<num_elts; i++) {
-        if (i != 0) { result += " || "; }
-        // Not quite right for the case of NaN, I think.
-        result += varname + " == " + TOSTRING(elts[i]);
-      }
-    }
-#elif defined(IS_SEQUENCE_NUMERIC)
-    String length = "";
-    String forall = "";
-  #if defined(SEQUENCE)
-    if (is_hashcode) {
-      if (num_elts == 0)  {
-        String classname = this.getClass().toString().substring(6); // remove leading "class"
-        result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-      } else {
-        Assert.assertTrue(num_elts == 1);
-        // we only have one value, because add_modified dies if more
-        INT value = elts[0];
-        if (var().name.isApplySizeSafe()) {
-          length = var().name.applySize().java_name() + " == " + value.length;
-        }
-        if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-          forall = form[0] + "(" + form[1] + " != null)" + form[2];
-        } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-          forall = form[0] + "(" + form[1] + " == null)" + form[2];
-        }
-      }
-    }
-  #endif
-    if (length == "" && forall == "") { // interned
-      String classname = this.getClass().toString().substring(6); // remove leading "class"
-      result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-    } else if (length == "") { // interned
-      result = forall;
-    } else if (forall == "") { // interned
-      result = length;
-    } else {
-      result = "(" + length + ") && (" + forall + ")";
-    }
-#else
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
-#endif
-#if defined(IS_ELT)
-    result = form[0] + "(" + result + ")" + form[2];
-#endif
-    return result;
-  }
+// #if defined(STRING) || defined(ELTSTRING)
+//     result = "";
+//     boolean is_type = is_type();
+//     for (int i=0; i<num_elts; i++) {
+//       if (i != 0) { result += " || "; }
+//       result += varname;
+//       String str = elts[i];
+//       if (!is_type) {
+//         result += JAVA_EQUALS_STRING(TOSTRING(str));
+//       } else {
+//         result += " == ";
+//         if ((str == null) || "null".equals(str)) {
+//           result += "== null)";
+//         } else if (str.startsWith("[")) {
+//           result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+//         } else {
+//           if (str.startsWith("\"") && str.endsWith("\"")) {
+//             str = str.substring(1, str.length()-1);
+//           }
+//           result += "(" + str + ")";
+//         }
+//       }
+//     }
+// #elif defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
+//   #if defined(BASE_INT)
+//     if (is_boolean) {
+//       Assert.assertTrue(num_elts == 1);
+//       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
+//       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+//     } else if (is_hashcode) {
+//       if (num_elts == 2) {
+//         return "true";          // one elt is null, the other is non-null
+//       } else if (elts[0] == 0) {
+//         result = varname + " == " + "null";
+//       } else {
+//         result = varname + " != null";
+//           // varname + " has only one value"
+//           // + " (hashcode=" + elts[0] + ")"
+//           ;
+//       }
+//     } else
+//   #endif
+//     {
+//       result = "";
+//       for (int i=0; i<num_elts; i++) {
+//         if (i != 0) { result += " || "; }
+//         // Not quite right for the case of NaN, I think.
+//         result += varname + " == " + TOSTRING(elts[i]);
+//       }
+//     }
+// #elif defined(IS_SEQUENCE_NUMERIC)
+//     String length = "";
+//     String forall = "";
+//   #if defined(SEQUENCE)
+//     if (is_hashcode) {
+//       if (num_elts == 0)  {
+//         String classname = this.getClass().toString().substring(6); // remove leading "class"
+//         result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+//       } else {
+//         Assert.assertTrue(num_elts == 1);
+//         // we only have one value, because add_modified dies if more
+//         INT value = elts[0];
+//         if (var().name.isApplySizeSafe()) {
+//           length = var().name.applySize().java_name(var()) + " == " + value.length;
+//         }
+//         if (no_nulls(0)) {
+//           String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+//           forall = form[0] + "(" + form[1] + " != null)" + form[2];
+//         } else if (all_nulls(0)) {
+//           String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+//           forall = form[0] + "(" + form[1] + " == null)" + form[2];
+//         }
+//       }
+//     }
+//   #endif
+//     if (length == "" && forall == "") { // interned
+//       String classname = this.getClass().toString().substring(6); // remove leading "class"
+//       result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+//     } else if (length == "") { // interned
+//       result = forall;
+//     } else if (forall == "") { // interned
+//       result = length;
+//     } else {
+//       result = "(" + length + ") && (" + forall + ")";
+//     }
+// #else
+//     String classname = this.getClass().toString().substring(6); // remove leading "class"
+//     result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+// #endif
+// #if defined(IS_ELT)
+//     result = form[0] + "(" + result + ")" + form[2];
+// #endif
+//     return result;
+//   }
 
   /* IOA */
   public String format_ioa() {
@@ -987,116 +978,12 @@ public final class ONEOFSCALAR
     return result;
   }
 
-  public String format_jml() {
-#if defined(IS_ELT)
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
-    String varname = form[1];
-#elif defined(IS_SCALAR)
-    String varname = var().name.JMLElementCorrector().jml_name();
-#endif
-    String result;
-#if defined(STRING) || defined(ELTSTRING)
-
-    result = "";
-    boolean is_type = is_type();
-    for (int i=0; i<num_elts; i++) {
-      if (i != 0) { result += " || "; }
-      result += varname;
-      String str = elts[i];
-      if (!is_type) {
-        result += JAVA_EQUALS_STRING(TOSTRING(str));
-      } else {
-        result += " == \\type";
-        if ((str == null) || "null".equals(str)) {
-          // "null" is not a type... Going to print as Object... should actually not print
-          result += "(java.lang.Object)";
-        } else if (str.startsWith("[")) {
-          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-        } else {
-          if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length()-1);
-          }
-          result += "(" + str + ")";
-        }
-      }
-    }
-#elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
-  #if defined(SCALAR) || defined(ELT)
-    if (is_boolean) {
-      Assert.assertTrue(num_elts == 1);
-      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
-      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
-    } else if (is_hashcode) {
-      if (num_elts == 2) {
-        return "true";          // one elt is null, the other is non-null
-      } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
-      } else {
-        result = varname + " != null";
-          // varname + " has only one value"
-          // + " (hashcode=" + elts[0] + ")"
-          ;
-      }
-    } else
-  #endif
-    {
-      result = "";
-      for (int i=0; i<num_elts; i++) {
-        if (i != 0) { result += " || "; }
-        result += varname + " == " + TOSTRING(elts[i]);
-      }
-    }
-#elif defined(SEQUENCE) || defined(FLOATSEQUENCE)
-    String length = "";
-    String forall = "";
-#if defined(SEQUENCE)
-    if (is_hashcode) {
-      if (num_elts == 0)  {
-        String classname = this.getClass().toString().substring(6); // remove leading "class"
-        result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
-      } else {
-        Assert.assertTrue(num_elts == 1);
-        // we only have one value, because add_modified dies if more
-        INT value = elts[0];
-        if (var().name.isApplySizeSafe()) {
-          length = var().name.applySize().jml_name() + " == " + value.length;
-        }
-        if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
-          forall = form[0] + form[1] + " != null" + form[2];
-        } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
-          forall = form[0] + form[1] + " == null" + form[2];
-        }
-      }
-    }
-#endif
-    if (length == "" && forall == "") { // interned
-      String classname = this.getClass().toString().substring(6); // remove leading "class"
-      result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
-    } else if (length == "") { // interned
-      result = forall;
-    } else if (forall == "") { // interned
-      result = length;
-    } else {
-      result = "(" + length + ") && (" + forall + ")";
-    }
-#else
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
-#endif
-#if defined(IS_ELT)
-    result = form[0] + result + form[2];
-#endif
-    return result;
-  }
-
-  public String format_dbc() {
+  public String format_java_family(OutputFormat format) {
 
     String result;
 
     // Setting up the name of the unary variable
-    String varname = var().name.dbc_name(var());
+    String varname = var().name.name_using(format, var());
     String type = var().type.base(); // CP: still wondering, see diary comment *1*
 #if defined(ELTSTRING)
     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)

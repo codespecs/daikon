@@ -237,7 +237,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String format_using(OutputFormat format) {
-    if (format.isJavaFamily()) return format_dbc();
+    if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
     // format_dbc() can handle all the Java family output.
@@ -246,8 +246,6 @@ public class CLASSNAME extends SUPERCLASS {
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.JML) return format_jml();
-    if (format == OutputFormat.DBCJAVA) return format_dbc();
 
     return format_unimplemented(format);
   }
@@ -286,21 +284,21 @@ public class CLASSNAME extends SUPERCLASS {
     return form[0] + "(" + form[1] + " " + comparator + " i)" + form[2];
   }
 
-  public String format_jml() {
-    String comparator = EQUALSstring;
+//   public String format_jml() {
+//     String comparator = EQUALSstring;
 
-    VarInfoName.QuantHelper.QuantifyReturn qret
-        = VarInfoName.QuantHelper.quantify(new VarInfoName[] { var().name });
+//     VarInfoName.QuantHelper.QuantifyReturn qret
+//         = VarInfoName.QuantHelper.quantify(new VarInfoName[] { var().name });
 
-    String[] form = VarInfoName.QuantHelper.format_jml(qret);
+//     String[] form = VarInfoName.QuantHelper.format_jml(qret);
 
-    VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
+//     VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
 
-    return form[0] + form[1] + " " + comparator + " " + index1.name()
-           + form[2];
-  }
+//     return form[0] + form[1] + " " + comparator + " " + index1.name()
+//            + form[2];
+//   }
 
-  public String format_dbc() {
+  public String format_java_family(OutputFormat format) {
     String comparator = EQUALSstring;
     String comparatorDBC = "";
     if (comparator.equals("==")) {
@@ -318,7 +316,7 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       comparatorDBC = "?comparatorDBC?";
     }
-    return "daikon.Quant.index" + comparatorDBC + "(" + var().name.dbc_name(var()) + ")";
+    return "daikon.Quant.index" + comparatorDBC + "(" + var().name.name_using(format, var()) + ")";
   }
 
   public String format_simplify() {

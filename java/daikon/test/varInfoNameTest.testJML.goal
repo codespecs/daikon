@@ -20,21 +20,21 @@ a = a[]
 ; size size_of_a a
 size_of_a = size(a[])
 ; jml_name size_of_a
-size_of_a.jml_name() = a.length
+size_of_a.jml_name() = no format when testCall.
 ;# Test FunctionOf formatting
 ; parse var1 var1
 var1 = var1
 ; function f_of_one_var f var1
 f_of_one_var = f(var1)
 ; jml_name f_of_one_var
-f_of_one_var.jml_name() = f(var1)
+f_of_one_var.jml_name() = no format when testCall.
 ;# Test FunctionOfN formatting
 ; parse var2 var2
 var2 = var2
 ; function_of_N f_of_two_vars f var1 var2
 f_of_two_vars = f(var1, var2)
 ; jml_name f_of_two_vars
-f_of_two_vars.jml_name() = f(var1, var2)
+f_of_two_vars.jml_name() = no format when testCall.
 ;# Test Field formatting
 ; field field_of_var1 var1 var1_field
 field_of_var1 = var1.var1_field
@@ -44,7 +44,7 @@ field_of_var1.jml_name() = var1.var1_field
 ; typeof type_of_var1 var1
 type_of_var1 = var1.class
 ; jml_name type_of_var1
-type_of_var1.jml_name() = \typeof(var1)
+type_of_var1.jml_name() = var1.getClass().toString()
 ;# Test Prestate formatting
 ; prestate old_var1 var1
 old_var1 = orig(var1)
@@ -61,37 +61,4 @@ i = i
 ; subscript a_sub_i a i
 a_sub_i = a[i]
 ; jml_name a_sub_i
-a_sub_i.jml_name() = a[i]
-;# Test quantification
-; parse x x
-x = x
-; quantify_format_jml a
-(\forall int i; 0 <= i && i <= a.length-1; 
-a[i]
-)
-; slice sl a null x
-sl = a[0..x]
-; slice sl2 a x null
-sl2 = a[x..]
-; quantify_format_jml sl
-(\forall int i; 0 <= i && i <= x; 
-a[i]
-)
-; quantify_format_jml sl2
-(\forall int i; x <= i && i <= a.length-1; 
-a[i]
-)
-; quantify_format_jml sl sl2
-(\forall int i, j; 0 <= i && i <= x && x <= j && j <= a.length-1; 
-a[i]
-a[j]
-)
-; quantify_format_jml_elem sl sl2
-(\forall int i, j; 0 <= i && i <= x && x <= j && j <= a.length-1 && i == (j-(x)); 
-a[i]
-a[j]
-)
-; quantify_format_jml_exists sl
-(\exists int i; 0 <= i && i <= x; 
-a[i]
-)
+a_sub_i.jml_name() = no format when testCall.

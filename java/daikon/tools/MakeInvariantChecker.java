@@ -324,7 +324,8 @@ public final class MakeInvariantChecker {
       VarInfo aVarInfo = (VarInfo)varInfos[i];
       VarInfoName aVarInfoName = aVarInfo.name;
 
-      varNameMap.put(aVarInfoName.java_name(), makeValidJavaIdentifier(aVarInfoName.java_name()));
+      varNameMap.put(aVarInfoName.java_name(aVarInfo),
+                     makeValidJavaIdentifier(aVarInfoName.java_name(aVarInfo)));
       ((List) currentLists[0]).add(aVarInfo);
       }
 
@@ -836,7 +837,7 @@ public final class MakeInvariantChecker {
         VarInfoName aVarInfoName = aVarInfo.name;
         ProglangType representationType = aVarInfo.file_rep_type;
 
-        String newVar = makeValidJavaIdentifier(aVarInfoName.java_name());
+        String newVar = makeValidJavaIdentifier(aVarInfoName.java_name(aVarInfo));
         String newType = representationType.toString();
         javaSourceWriter.print(formatVariableInitialization(newType, newVar,"objval["+count+"]"));
         count = count + 1;
@@ -875,7 +876,7 @@ public final class MakeInvariantChecker {
               VarInfoName aVarInfoName = aVarInfo.name;
               ProglangType representationType = aVarInfo.file_rep_type;
 
-              String newVar = makeValidJavaIdentifier(aVarInfoName.java_name());
+              String newVar = makeValidJavaIdentifier(aVarInfoName.java_name(aVarInfo));
               String newType = representationType.toString();
               javaSourceWriter.print(formatVariableInitialization(newType, newVar,"objval["+other_count+"]"));
               other_count = other_count + 1;
@@ -908,10 +909,10 @@ public final class MakeInvariantChecker {
         VarInfo aVarInfo = (VarInfo) varInfoIt.next();
         if (anInvariant.usesVar(aVarInfo)) {
           anInvariantStr = replaceAllString(anInvariantStr,
-                                            aVarInfo.name.java_name(),
-                                            makeValidJavaIdentifier(aVarInfo.name.java_name()));
-          variables = variables + "+\" with "+aVarInfo.name.java_name()
-            +" = \"+" + makeValidJavaIdentifier(aVarInfo.name.java_name());
+                                            aVarInfo.name.java_name(aVarInfo),
+                                            makeValidJavaIdentifier(aVarInfo.name.java_name(aVarInfo)));
+          variables = variables + "+\" with "+aVarInfo.name.java_name(aVarInfo)
+            +" = \"+" + makeValidJavaIdentifier(aVarInfo.name.java_name(aVarInfo));
         }
       }
       assertions.add(UtilMDE.join(new String[]{

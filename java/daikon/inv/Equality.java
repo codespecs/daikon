@@ -158,22 +158,16 @@ public final class Equality
   public String format_using(OutputFormat format) {
 
 
-    if (format.isJavaFamily()) return format_dbc();
-
-    // TODO: Eliminate the unnecessary format_xxx() below if the
-    // format_dbc() can handle all the Java family output.
-
+    if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
-    if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     // Commented out by MDE 7/27/2003.  I can't figure out whether
     // to just change JAVA_IDENTIFIER to IDENTIFIER, or whether other
     // changes are also necessary.
     // if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.DBCJAVA) return format_dbc();
     return format_unimplemented(format);
   }
 
@@ -365,20 +359,20 @@ public final class Equality
     return format_daikon();
   }
 
-  public String format_dbc() {
+  public String format_java_family(OutputFormat format) {
     StringBuffer result = new StringBuffer ();
     VarInfo leader = leader();
-    String leaderName = leader.name.dbc_name(leader);
+    String leaderName = leader.name.name_using(format, leader);
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo var = (VarInfo) i.next();
       if (leader == var) continue;
       if (leader.rep_type.isArray()) {
         result.append("(").append("daikon.Quant.pairwiseEqual(");
-        result.append(leaderName).append(", ").append(var.name.dbc_name(var));
+        result.append(leaderName).append(", ").append(var.name.name_using(format, var));
         result.append(")");
       } else {
         result.append("(").append(leaderName).append(" == "); // "interned"
-        result.append(var.name.dbc_name(var)).append(")");
+        result.append(var.name.name_using(format, var)).append(")");
       }
       if (i.hasNext()) result.append(" && ");
     }

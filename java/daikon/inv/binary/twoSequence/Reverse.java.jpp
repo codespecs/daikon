@@ -84,17 +84,10 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
-    if (format.isJavaFamily()) return format_dbc();
-
-    // TODO: Eliminate the unnecessary format_xxx() below if the
-    // format_dbc() can handle all the Java family output.
-
+    if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
-    if (format == OutputFormat.JAVA) return format_java();
-    if (format == OutputFormat.JML) return format_jml();
-    if (format == OutputFormat.DBCJAVA) return format_dbc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
@@ -109,58 +102,9 @@ public class CLASSNAME
     return "Not valid for Sets or Arrays: " + format();
   }
 
-  public String format_java() {
-    // ( (new StringBuffer (var1().name.name())).reverse().toString(
-    //       ).equals (var2().name.name()))
-    return "( (new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
-  }
-
-  public String format_jml() {
-    // The following line of code does not correctly indicate that one array is the reverse of the other
-    // return "(new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals(" + var2().name.name() + ")";
-
-    VarInfoName viname1, viname2;
-    viname1 = var1().name;
-    viname2 = var2().name;
-
-    String upperExtent = ""; // Pacify javac with the initialization
-
-    VarInfoName seq = viname2;
-    String preTag = "", postTag = "";
-
-    if (seq instanceof VarInfoName.Prestate) {
-      seq = ((VarInfoName.Prestate)seq).term;
-      preTag += "\\old(";
-      postTag += ")";
-    } else if (seq instanceof VarInfoName.Poststate) {
-      return "inexpressible, daikon rep = " + format_daikon();
-    }
-
-    if (seq instanceof VarInfoName.Elements) {
-    } else if (seq instanceof VarInfoName.Slice) {
-      seq = ((VarInfoName.Slice)seq).sequence;
-    } else { // Should never happen
-      throw new IllegalStateException();
-    }
-
-    if (viname2 instanceof VarInfoName.Slice && ((VarInfoName.Slice)viname2).j != null)
-      upperExtent = ((VarInfoName.Slice)viname2).j.jml_name();
-    else
-      upperExtent = seq.applySize().jml_name();
-
-    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {viname1});
-    String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
-
-    VarInfoName index = ((VarInfoName [])qret.bound_vars.get(0))[0];
-
-    // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
-    // parse appears to choke on that output... until it works, using this
-    return results[0] + results[1] + " == " + preTag + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + postTag + results[2];
-  }
-
-  public String format_dbc() {
-          return "daikon.Quant.isReverse(" + var1().name.dbc_name(var1())
-            + ", " + var2().name.dbc_name(var2()) + ")";
+  public String format_java_family(OutputFormat format) {
+          return "daikon.Quant.isReverse(" + var1().name.name_using(format, var1())
+            + ", " + var2().name.name_using(format, var2()) + ")";
   }
 
   public String format_simplify() {

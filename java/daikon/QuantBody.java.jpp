@@ -1168,7 +1168,7 @@ The correct way to build the system is to run 'make'.
 
 /**
  * indexGT
- */
+*/
 
 /*@ pure */ public static boolean indexGT(_TYPE[] seq) {
   for (int i = 0 ; i < seq.length ; i++) {
@@ -1199,6 +1199,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 
+#if defined(INT)
+
 /**
  *
  * ONLY works for field sequences with exactly one field representing
@@ -1218,14 +1220,14 @@ The correct way to build the system is to run 'make'.
  * is.
  */
 
-/*@ pure */  public static _TYPE[] collect(_TYPE inst, Object object,
-                                           String[] fields, int fieldsStartIdx) {
+/*@ pure */  public static Object[] collect(Object object,
+                                            String[] fields, int fieldsStartIdx) {
 
-  System.out.println("ENTERING COLLECT "
-                     + "inst=" + inst + ", object=" + object
-                     + "fields=" + utilMDE.ArraysMDE.toString(fields)
-                     + "fieldsStartIdx=" + fieldsStartIdx);
-
+// For debugging.
+//   System.out.println("ENTERING COLLECT "
+//                      + "inst=" + inst + ", object=" + object
+//                      + "fields=" + utilMDE.ArraysMDE.toString(fields)
+//                      + "fieldsStartIdx=" + fieldsStartIdx);
 
   Field field = null;
   Class cls = null;
@@ -1234,25 +1236,25 @@ The correct way to build the system is to run 'make'.
     field = object.getClass().getField(fields[fieldsStartIdx]);
     cls = field.getType();
     fieldObj = field.get(object);
-    System.out.println("***fieldObj="+fieldObj);
+    //System.out.println("***fieldObj="+fieldObj);
   } catch (NoSuchFieldException e) {
     throw new RuntimeException("daikon.Quant.fieldArray: NoSuchFieldException: "
-                               + "inst=" + inst + ", object=" + object
+                               + "object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (NullPointerException e) {
     throw new RuntimeException("daikon.Quant.fieldArray: NullPointerException: "
-                               + "inst=" + inst + ", object=" + object
+                               + "object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (SecurityException e) {
     throw new RuntimeException("daikon.Quant.fieldArray: SecurityException: "
-                               + "inst=" + inst + ", object=" + object
+                               + "object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   } catch (Exception e) {
     throw new RuntimeException("daikon.Quant.fieldArray: Exception: "
-                               + "inst=" + inst + ", object=" + object
+                               + "object=" + object
                                + "fields=" + utilMDE.ArraysMDE.toString(fields)
                                + "fieldsStartIdx=" + fieldsStartIdx);
   }
@@ -1260,33 +1262,23 @@ The correct way to build the system is to run 'make'.
   // base case: one field
   if (fields.length - 1 == fieldsStartIdx) {
 
-#if (defined(OBJECT) || defined(STRING))
-
     // Can't really check for this. Is there a way we could?
     //Assert.assertTrue(inst.getClass().equals(fieldObj.getClass()));
     //return new _TYPE[] { (_TYPE)fieldObj };
-    return new _TYPE[] { (_TYPE)fieldObj };
-
-#else
-
-    Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
-    return
-      new _TYPE[] { ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_WRAPPER_GETVAL_METHOD() };
-
-#endif
+    return new Object[] { fieldObj };
 
   // recursive case: more than one field
   } else {
 
     if (fieldObj.getClass().isArray()) {
 
-      System.out.println("ITS AN ARRAY");
+      //System.out.println("ITS AN ARRAY");
 
       // collect elements across array
-      _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
+      Object[] intermediate = new Object[Array.getLength(fieldObj)];
       for (int i = 0 ; i < intermediate.length ; i++) {
-        _TYPE[] oneEltArray = collect(inst, Array.get(fieldObj, i),
-                                      fields, fieldsStartIdx + 1);
+        Object[] oneEltArray = collect(Array.get(fieldObj, i),
+                                       fields, fieldsStartIdx + 1);
         Assert.assertTrue(oneEltArray.length == 1);
         intermediate[i] = oneEltArray[0];
       }
@@ -1294,7 +1286,7 @@ The correct way to build the system is to run 'make'.
 
     } else {
 
-      return collect(inst, fieldObj, fields, fieldsStartIdx + 1);
+      return collect(fieldObj, fields, fieldsStartIdx + 1);
     }
   }
 }
@@ -1306,12 +1298,14 @@ The correct way to build the system is to run 'make'.
  * at least one of the fields in fieldStr represents a collection [explain]
  */
 
-/*@ pure */ public static _TYPE[] fieldArray(_TYPE inst, Object object, String fieldStr) {
+/*@ pure */ public static Object[] collect(Object object, String fieldStr) {
 
   Assert.assertTrue(fieldStr != null && !"".equals(fieldStr));
   String[] splits = fieldStr.split("\\.");
 
-  _TYPE[] retval = collect(inst, object, splits, 0);
-  System.out.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
+  Object[] retval = collect(object, splits, 0);
+  //System.out.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
   return retval;
 }
+
+#endif

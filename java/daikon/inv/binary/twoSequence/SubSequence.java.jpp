@@ -120,23 +120,9 @@ public class CLASSNAME
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
-    if (format == OutputFormat.JML) return format_jml();
-    if (format == OutputFormat.JAVA) return format_java();
+    if (format.isJavaFamily()) { return format_unimplemented(format); }
 
     return format_unimplemented(format);
-  }
-
-  public String format_java() {
-    String v1 = var1().name.name();
-    String v2 = var2().name.name();
-    if (var1_in_var2 && var2_in_var1) {
-      return v1 + " is a {sub,super}sequence of " + v2;
-    } else {
-      String subvar = (var1_in_var2 ? v1 : v2);
-      String supervar = (var1_in_var2 ? v2 : v1);
-      return subvar + " is a subsequence of " + supervar;
-    }
-
   }
 
   public String format_daikon() {
@@ -268,58 +254,58 @@ public class CLASSNAME
     return result;
   }
 
-  public String format_jml() {
-    // This appears to be right, but returns the wrong results... swapping these vars
-    // VarInfo subvar = (var1_in_var2 ? var1() : var2());
-    // VarInfo supervar = (var2_in_var1 ? var1() : var2());
+//   public String format_jml() {
+//     // This appears to be right, but returns the wrong results... swapping these vars
+//     // VarInfo subvar = (var1_in_var2 ? var1() : var2());
+//     // VarInfo supervar = (var2_in_var1 ? var1() : var2());
 
-    VarInfo supervar = (var1_in_var2 ? var1() : var2());
-    VarInfo subvar = (var2_in_var1 ? var1() : var2());
+//     VarInfo supervar = (var1_in_var2 ? var1() : var2());
+//     VarInfo subvar = (var2_in_var1 ? var1() : var2());
 
-    // System.out.println("subvar: "+subvar.name.name());
-    // System.out.println("supervar: "+supervar.name.name());
+//     // System.out.println("subvar: "+subvar.name.name());
+//     // System.out.println("supervar: "+supervar.name.name());
 
-    // Bound the following quantification
-    QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
-    VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
-    String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
+//     // Bound the following quantification
+//     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
+//     VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
+//     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
-    QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-    VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
+//     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
+//     VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
 
-    VarInfoName subIndexName = subIndexGroup[0];
+//     VarInfoName subIndexName = subIndexGroup[0];
 
-    // If indicies have same name modify the quantify return before forming string
-    if (superIndexName.equals(subIndexName)) {
-      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
-    }
+//     // If indicies have same name modify the quantify return before forming string
+//     if (superIndexName.equals(subIndexName)) {
+//       subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
+//     }
 
-    String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
+//     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
 
-    VarInfoName superName = supervar.name;
-    String superTermName = "";
-    String postTag = "";
+//     VarInfoName superName = supervar.name;
+//     String superTermName = "";
+//     String postTag = "";
 
-    if (superName instanceof VarInfoName.Prestate) {
-      superName = ((VarInfoName.Prestate)superName).term;
-      superTermName += "\\old(";
-      postTag += ")";
-    } else if (superName instanceof VarInfoName.Poststate) {
-      return "inexpressible, daikon rep = " + format_daikon();
-    }
+//     if (superName instanceof VarInfoName.Prestate) {
+//       superName = ((VarInfoName.Prestate)superName).term;
+//       superTermName += "\\old(";
+//       postTag += ")";
+//     } else if (superName instanceof VarInfoName.Poststate) {
+//       return "inexpressible, daikon rep = " + format_daikon();
+//     }
 
-    if (superName instanceof VarInfoName.Elements) {
-      VarInfoName.Elements el = (VarInfoName.Elements)superName;
-      superTermName += el.term.jml_name();
-    } else if (superName instanceof VarInfoName.Slice) {
-      VarInfoName.Slice sl = (VarInfoName.Slice)superName;
-      superTermName += sl.sequence.term.jml_name();
-    }
+//     if (superName instanceof VarInfoName.Elements) {
+//       VarInfoName.Elements el = (VarInfoName.Elements)superName;
+//       superTermName += el.term.jml_name();
+//     } else if (superName instanceof VarInfoName.Slice) {
+//       VarInfoName.Slice sl = (VarInfoName.Slice)superName;
+//       superTermName += sl.sequence.term.jml_name();
+//     }
 
-    return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" +
-      superIndexName.jml_name() + "+" + subIndexName.jml_name() + "]" + postTag +
-      " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
-  }
+//     return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" +
+//       superIndexName.jml_name() + "+" + subIndexName.jml_name() + "]" + postTag +
+//       " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
+//   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     return checkOrAddModified(a1, a2, count, false);

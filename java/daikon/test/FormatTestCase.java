@@ -110,7 +110,12 @@ class FormatTestCase {
         throw new RuntimeException(e.toString());
       }
       catch (InvocationTargetException e) {
-        throw new RuntimeException(e.toString());
+        System.out.println("***" + inv.getClass() + "***" + utilMDE.ArraysMDE.toString(outputProducerArgs));
+        System.out.println("^^^" + e.toString());
+        System.out.println("^^^" + e.getMessage());
+        System.out.println("^^^" + e.getCause());
+        throw new RuntimeException(e.toString() + e.getMessage()
+                                   + e.getCause());
       }
     }
 

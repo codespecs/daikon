@@ -153,12 +153,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
         fmt_str = form[0] + "(" + fmt_str + ")" + form[3];
         v1 = form[1];
         v2 = form[2];
-      } else if (format == OutputFormat.JML) {
-        String form[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-                              { var1().name, var2().name }, true);
-        fmt_str = form[0] + " " + fmt_str + " " + form[3];
-        v1 = form[1];
-        v2 = form[2];
+//       } else if (format == OutputFormat.JML) {
+//         String form[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[]
+//                               { var1().name, var2().name }, true);
+//         fmt_str = form[0] + " " + fmt_str + " " + form[3];
+//         v1 = form[1];
+//         v2 = form[2];
       } else if (format == OutputFormat.SIMPLIFY) {
         String[] form =
           VarInfoName.QuantHelper.format_simplify(new VarInfoName[]

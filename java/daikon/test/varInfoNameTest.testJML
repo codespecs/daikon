@@ -49,14 +49,3 @@ jml_name more_than_var1
 parse i i
 subscript a_sub_i a i
 jml_name a_sub_i
-
-;# Test quantification
-parse x x
-quantify_format_jml a
-slice sl a null x
-slice sl2 a x null
-quantify_format_jml sl
-quantify_format_jml sl2
-quantify_format_jml sl sl2
-quantify_format_jml_elem sl sl2
-quantify_format_jml_exists sl

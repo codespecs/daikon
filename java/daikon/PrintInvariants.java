@@ -1054,25 +1054,7 @@ public class PrintInvariants {
 
       sb.append(rawOutput);
       out.println(sb.toString());
-    } else if (Daikon.output_style == OutputFormat.JAVA) {
-      VarInfo leader = (VarInfo) equal_vars.elementAt(0);
-      for (int j = 1; j < equal_vars.size(); j++) {
-        VarInfo other = (VarInfo) equal_vars.elementAt(j);
-        if (other.isDerivedSequenceMinMaxSum())
-          break;
-        if (leader.rep_type.isArray()) {
-          String[] form =
-            VarInfoName.QuantHelper.format_java(new VarInfoName[]
-              { leader.name, other.name }, true); // elementwise
-          out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-        } else {
-          out.println(leader.name.java_name() + " == " + other.name.java_name());
-        }
-        if (obviously_equal.contains(other)) {
-          out.println("    (obviously)");
-        }
-      }
-     } else if (Daikon.output_style == OutputFormat.DBCJAVA) {
+     } else if (Daikon.output_style.isJavaFamily()) {
        VarInfo leader = (VarInfo) equal_vars.elementAt(0);
        for (int j = 1; j < equal_vars.size(); j++) {
          VarInfo other = (VarInfo) equal_vars.elementAt(j);

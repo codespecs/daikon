@@ -70,7 +70,7 @@ public class Modulus
     }
 
     if (format.isJavaFamily()) {
-      name = var().name.dbc_name(var());
+      name = var().name.name_using(format, var());
       return name + " % " + modulus + " == " + remainder;
     }
 
