@@ -59,7 +59,8 @@ public abstract class VarInfoName
     // a quoted string
     if (name.startsWith("\"") && name.endsWith("\"")) {
       String content = name.substring(1, name.length()-1);
-      if (content.equals(UtilMDE.quote(UtilMDE.unquote(content)))) {
+      if (content.equals(UtilMDE.escapeNonJava
+                         (UtilMDE.unescapeNonJava(content)))) {
         return (new Simple(name)).intern();
       }
     }

@@ -341,7 +341,7 @@ public final class ProglangType
         // Assert.assertTrue(value.startsWith("\"") && value.endsWith("\""));
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring(1, value.length()-1);
-        value = UtilMDE.unquote(value);
+        value = UtilMDE.unescapeNonJava(value);
         return value.intern();
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer
@@ -350,7 +350,7 @@ public final class ProglangType
         if (value.length() == 1)
           c = value.charAt(0);
         else if ((value.length() == 2) && (value.charAt(0) == '\\'))
-          c = UtilMDE.unquote(value).charAt(0);
+          c = UtilMDE.unescapeNonJava(value).charAt(0);
         else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
           Byte b = Byte.decode("0" + value.substring(1));
           return Intern.internedLong(b.longValue());

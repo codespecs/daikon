@@ -464,7 +464,7 @@ public final class FileIO {
         else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
-          pw.print(val == null ? "null" : UtilMDE.quoteMore((String)val));
+          pw.print(val == null ? "null" : UtilMDE.escapeNonASCII((String)val));
         else
           pw.print(val);
       }
