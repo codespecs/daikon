@@ -204,6 +204,25 @@ public final class Daikon {
    */
   public static boolean suppressSplitterErrors = false;
 
+  /**
+   * When true, omit certain invariants from the output .inv
+   * file. Generally these are invariants that wouldn't be printed in
+   * any case; but by default, they're retained in the .inv file in
+   * case they would be useful for later processing. (For instance, we
+   * might at some point in the future support resuming processing
+   * with more data from an .inv file). These invariants can increase
+   * the size of the .inv file, though, so when only limited further
+   * processing is needed, it can save space to omit them.
+   **/
+  public static boolean omit_from_output = false;
+
+  /**
+   * An array of flags, indexed by characters, in which a true entry
+   * means that invariants of that sort should be omitted from the
+   * output .inv file.
+   **/
+  public static boolean[] omit_types = new boolean[256];
+
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
   public static final String ppt_regexp_SWITCH = "ppt";
@@ -240,6 +259,7 @@ public final class Daikon {
   public static final String bottom_up_SWITCH = "bottom_up";
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String suppress_splitter_errors_SWITCH = "suppress_splitter_errors";
+  public static final String omit_from_output_SWITCH = "omit_from_output";
 
   // A pptMap which contains all the Program Points
   // This isn't used anymore; instead, methods have parameters or
@@ -326,6 +346,11 @@ public final class Daikon {
 
     // Check that PptMap created was correct
     all_ppts.repCheck();
+
+    // Remove undesired invariants, if requested
+    if (omit_from_output) {
+      processOmissions(all_ppts);
+    }
 
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
@@ -416,7 +441,8 @@ public final class Daikon {
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
+      new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -582,6 +608,15 @@ public final class Daikon {
           noInvariantGuarding = true;
         } else if (suppress_splitter_errors_SWITCH.equals(option_name)) {
           suppressSplitterErrors = true;
+        } else if (omit_from_output_SWITCH.equals(option_name)) {
+          String f = g.getOptarg();
+          for (int i = 0; i < f.length(); i++) {
+            if ("0rs".indexOf(f.charAt(i)) == -1)
+              throw new RuntimeException("omit_from_output flag letter '"
+                                         + f.charAt(i) + "' is unknown");
+            omit_types[f.charAt(i)] = true;
+          }
+          omit_from_output = true;
         } else {
           throw new RuntimeException("Unknown long option received: " + option_name);
         }
@@ -746,14 +781,35 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
 
+  /**
+   * The amount of time to wait between updates of the progress
+   * display, measured in milliseconds. A value of -1 means not to
+   * print the progress display at all.
+   **/
+  public static int dkconfig_progress_delay = 1000;
+
+  /**
+   * The number of columns of progress information to display. In many
+   * Unix shells, this can be set to an appropriate value by
+   * --config_option daikon.Daikon.progress_display_width=$COLUMNS
+   **/
+  public static int dkconfig_progress_display_width = 80;
+
   /** A way to output FileIO progress information easily */
   private final static Thread fileio_progress = new FileIOProgress();
   static class FileIOProgress extends Thread {
     public FileIOProgress() { setDaemon(true); }
     public void run() {
+      if (dkconfig_progress_delay == -1)
+        return;
       DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
       while (true) {
-        System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
+        String status = "[" + (df.format(new Date())) + "]: " + message();
+        if (status.length() > dkconfig_progress_display_width - 1)
+          status = status.substring(0, dkconfig_progress_display_width - 1);
+        while (status.length() < dkconfig_progress_display_width - 1)
+          status += " ";
+        System.out.print("\r" + status);
         try {
           if (debugTrace.isLoggable(Level.FINE)) {
             debugTrace.fine ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
@@ -761,12 +817,8 @@ public final class Daikon {
                               (java.lang.Runtime.getRuntime().totalMemory()
                                - java.lang.Runtime.getRuntime().freeMemory()));
             debugTrace.fine ("Active slices: " + FileIO.data_num_slices);
-
-            // We sleep shorter so we can get more information.
-            sleep(500);
-          } else {
-            sleep(5000);
           }
+          sleep(dkconfig_progress_delay);
         } catch (InterruptedException e) {
           // hmm
         }
@@ -1056,6 +1108,15 @@ public final class Daikon {
       }
 
       ppt.guardInvariants();
+    }
+  }
+
+  private static void processOmissions(PptMap allPpts) {
+    if (omit_types['0'])
+      allPpts.removeUnsampled();
+    for (Iterator i = allPpts.asCollection().iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel)i.next();
+      ppt.processOmissions(omit_types);
     }
   }
 }
