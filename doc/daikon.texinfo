@@ -484,15 +484,16 @@ which contains everything you need to compile and run Unix programs
 under Windows.  You can install Cygwin by simply running the program
 found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
-You may also need to install
-@uref{http://www.activestate.com/ASPN,ActiveState Perl} in order to run
-the @command{modbit-munge.pl} script.  A user reports that Cygwin perl
-does not deal properly with files whose lines are separated by
-"@samp{\r\n}", which is the DOS default.  It deals fine with files whose
-lines are separated with "@samp{\n}", which is the Unix default.  By
-contrast, ActiveState Perl deals properly with both varieties.  You can
-download ActiveState Perl from
-@uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
+@c ** Commented out with the elimination of the need for modbit-munge
+@c You may also need to install
+@c @uref{http://www.activestate.com/ASPN,ActiveState Perl} in order to run
+@c the @command{modbit-munge.pl} script.  A user reports that Cygwin perl
+@c does not deal properly with files whose lines are separated by
+@c "@samp{\r\n}", which is the DOS default.  It deals fine with files whose
+@c lines are separated with "@samp{\n}", which is the Unix default.  By
+@c contrast, ActiveState Perl deals properly with both varieties.  You can
+@c download ActiveState Perl from
+@c @uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
 
 
 @node    Example use, Detecting invariants, Installing, Top
@@ -579,14 +580,14 @@ the output.
 cd daikon-output
 @end example
 
-@item Due to a bug in the Java front end, there can be problems in the
-trace file.  Run the @command{modbit-munge} script to fix these problems:
-@table @r
-@item Unix
-@t{modbit-munge.pl StackAr.dtrace}
-@item Windows
-@t{modbit-munge.bat StackAr.dtrace}
-@end table
+@c @item Due to a bug in the Java front end, there can be problems in the
+@c trace file.  Run the @command{modbit-munge} script to fix these problems:
+@c @table @r
+@c @item Unix
+@c @t{modbit-munge.pl StackAr.dtrace}
+@c @item Windows
+@c @t{modbit-munge.bat StackAr.dtrace}
+@c @end table
 
 @item Run Daikon on the trace file.
 
@@ -630,15 +631,19 @@ dfej DataStructures/StackAr.java
 javac daikon-instrumented/DataStructures/StackAr.java
 @end example
 
-@item Trace file generation (steps 5-7)
+@c @item Trace file generation (steps 5-7)
+
+@item Trace file generation (step 5)
 @example
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
-cd daikon-output
-modbit-munge.pl StackAr.dtrace
-@end example
 
-@item Invariant detection (steps 8-9)
+@c cd daikon-output
+@c modbit-munge.pl StackAr.dtrace
+@c @end example
+
+@item Invariant detection (steps 6-8)
 @example
+cd daikon-output
 java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
 java daikon.gui.InvariantsGUI StackAr.inv
 @end example
@@ -739,15 +744,17 @@ dfej DataStructures/QueueAr.java
 javac daikon-instrumented/DataStructures/QueueAr.java
 @end example
 
-@item Trace file generation (steps 5-7)
+@c @item Trace file generation (steps 5-7)
+@item Trace file generation (step 5)
 @example
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
-cd daikon-output
-modbit-munge.pl QueueAr.dtrace
+@c cd daikon-output
+@c modbit-munge.pl QueueAr.dtrace
 @end example
 
-@item Invariant detection (steps 8-9)
+@item Invariant detection (steps 6-8)
 @example
+cd daikon-output
 java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
 java daikon.gui.InvariantsGUI QueueAr.inv
 @end example
@@ -974,14 +981,14 @@ The instrumented C/C++ program creates its @file{.dtrace} file in the
 current directory.  If a @file{.dtrace} file already existed, it is appended
 to.
 
-After running your program, run @command{bin/modbit-munge.pl} on the
-resulting @file{.dtrace} files:
-@example
-modbit-munge.pl @var{myprog}.dtrace
-@end example
-@noindent
-This step fixes up some potential problems that may appear in the
-@file{.dtrace} file.
+@c After running your program, run @command{bin/modbit-munge.pl} on the
+@c resulting @file{.dtrace} files:
+@c @example
+@c modbit-munge.pl @var{myprog}.dtrace
+@c @end example
+@c @noindent
+@c This step fixes up some potential problems that may appear in the
+@c @file{.dtrace} file.
 
 
 @menu
@@ -1681,10 +1688,12 @@ find . -name '*.class' -print
 
 @command{dfej} tracks all modifications of instrumented classes; if you
 do not instrument all users of a class, then modifications in
-un8instrumented classes may not be detected.  This can affect Daikon's
-statistical tests, but in practice usually has little impact.  (The
-@command{modbit-munge.pl} script makes approximations to the missing
-modification information.
+uninstrumented classes may not be detected.  This can affect Daikon's
+statistical tests, but in practice usually has little impact. The program 
+makes approximations to the missing modification information.
+
+@c (The @command{modbit-munge.pl} script makes approximations to the missing
+@c modification information.
 
 
 
@@ -1990,9 +1999,9 @@ to encourage us to release the fix faster, if you like.)
 @item Inner classes:  Daikon inserts static members; this is not legal
       in inner classes.  The members should be non-static or should be
       inserted into the parent class.
-@item Invalid modbits:  The front end sometimes produces invalid
-      modbits.  This can be solved by postprocessing the data trace
-      files using the @command{modbit-munge.pl} program.
+@c @item Invalid modbits:  The front end sometimes produces invalid
+@c       modbits.  This can be solved by postprocessing the data trace
+@c       files using the @command{modbit-munge.pl} program.
 @item Floating-point values are often ignored; the infrastructure is
       there, but I haven't gotten around to writing code to test for
       specific invariants.
@@ -2350,9 +2359,12 @@ is encouraged for clarity.
 This value is 0 if the variable has not been assigned to since the
 last time this program point was executed, and 1 if the variable has
 been assigned to since then.  It is safe for an implementation to
-always set it to 1.  It is also safe to always set it to 0, if the
-modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
-the modbits.
+always set it to 1.  It is also safe to always set it to 0, as daikon
+fixes up the modbits.
+
+@c if the
+@c modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
+@c the modbits.
 @end itemize
 The variables should appear in the same order as they did in the
 declaration of the program point, without omissions or additions.
