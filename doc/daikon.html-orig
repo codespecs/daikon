@@ -457,6 +457,20 @@ object of the given class, from the point of view of a client or user.
 These properties hold at entry to and exit from every public method of the
 class.<p>
 
+When "a" is an array, then
+<ul>
+  <li>"a" is the identity of a -- think of it as a
+      comparison over hash codes
+  <li>"a.class" is the runtime type of a, which may
+      differ from its declared type for arrays of non-primitive type;
+      "a.class" is omitted for arrays of primitive type
+  <li>"a.[]" is the contents of a, namely an array; "a=b" implies "a.[] =
+      b.[]" but the reverse is not true
+  <li>"a.[].class" is an array of types, representing the run-time classes
+      of the contents of a; it is omitted for arrays of primitive type
+</ul>
+<p>
+
 
 <hr>
 <h1><a name="manifest">Manifest (list of files in the distribution)</a></h1>
