@@ -38,6 +38,12 @@ public final class Member
     Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY );
   }
 
+  // This only added so this invariant can be tested by the InvariantFormatTester automated
+  // tester.
+  public static Member instantiate(PptSlice ppt) {
+    return instantiate(ppt,true);
+  }
+
   public static Member instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 

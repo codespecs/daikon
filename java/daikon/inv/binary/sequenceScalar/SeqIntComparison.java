@@ -35,6 +35,12 @@ public final class SeqIntComparison
     core = new IntComparisonCore(this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
+  // This constructor was added so that automated testing can take place with the InvariantFormatTester
+  // automated tester.
+  public static SeqIntComparison instantiate(PptSlice ppt) {
+    return instantiate(ppt,true);
+  }
+
   public static SeqIntComparison instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 
