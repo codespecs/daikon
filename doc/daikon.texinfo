@@ -2377,23 +2377,23 @@ Specifies the directory in which to write instrumented source files
 same names and directory structure as the original input files.
 
 @c not yet implemented for dfej as of 6/13/2001
-If the value of this field is @samp{.} (i.e., a single period), then
-instrumented files replace the original versions in the original
-directories, but the original source files are backed up by appending
-@file{.uninst}.  More specifically,
-@enumerate
-@item each instrumented file is copied from @file{filename} to
-@file{filename.uninst}, unless filename @file{filename.uninst} already
-exists, in which case no copying occurs
-@item the system reads from @file{filename.uninst} and writes to
-@file{filename}.
-@end enumerate
-This behavior permits in-place instrumentation, which may be desirable
-to ease compiling the instrumented code.  (This feature is probably more
-important for C/C++ than for Java programs.)  Running the instrumenter a
-second time reads the original source code rather than inserting an
-additional set of instrumentation into the already-instrumented source
-code files.
+@c If the value of this field is @samp{.} (i.e., a single period), then
+@c instrumented files replace the original versions in the original
+@c directories, but the original source files are backed up by appending
+@c @file{.uninst}.  More specifically,
+@c @enumerate
+@c @item each instrumented file is copied from @file{filename} to
+@c @file{filename.uninst}, unless filename @file{filename.uninst} already
+@c exists, in which case no copying occurs
+@c @item the system reads from @file{filename.uninst} and writes to
+@c @file{filename}.
+@c @end enumerate
+@c This behavior permits in-place instrumentation, which may be desirable
+@c to ease compiling the instrumented code.  (This feature is probably more
+@c important for C/C++ than for Java programs.)  Running the instrumenter a
+@c second time reads the original source code rather than inserting an
+@c additional set of instrumentation into the already-instrumented source
+@c code files.
 
 @quotation
 Note for Java:
@@ -3015,6 +3015,12 @@ the disambiguation mechanism is more robust.
 
 @node    Limitations,  , Pointer type disambiguation example, C/C++ front end dfec
 @subsection Limitations
+
+@cindex gcc version for use with dfec
+
+@file{dfec} works with gcc 2.95.3.  It is not known to work with other
+compilers or other versions of gcc.  In particular, gcc 3 does not
+work, nor does ``gcc 2.96'' (which is not an official gcc release).
 
 @cindex K&R C
 
