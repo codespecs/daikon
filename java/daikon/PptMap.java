@@ -97,6 +97,44 @@ public class PptMap
       };
   }
 
+  /**
+   * @return an iterator over the PptTopLevels in this, sorted by
+   * Ppt.NameComparator on their names.  This differs from pptIterator()
+   * in that it includes all ppts (including conditional ppts).
+   **/
+  public Iterator ppt_all_iterator()
+  {
+    TreeSet sorted = new TreeSet(new Ppt.NameComparator());
+    sorted.addAll(nameToPpt.values());
+    // Use a (live) view iterator to get concurrent modification
+    // exceptions, and an iterator over sorted to get consistency.
+    final Iterator iter_view = nameToPpt.values().iterator();
+    final Iterator iter_sort = sorted.iterator();
+    return new Iterator() {
+        Iterator cond_iterator = null;
+        public boolean hasNext() {
+          if ((cond_iterator != null) && cond_iterator.hasNext())
+            return (true);
+          boolean result = iter_view.hasNext();
+          Assert.assertTrue(result == iter_sort.hasNext());
+          return result;
+        }
+        public Object next() {
+          if ((cond_iterator != null) && cond_iterator.hasNext())
+            return (cond_iterator.next());
+          iter_view.next(); // to check for concurrent modifications
+          PptTopLevel ppt = (PptTopLevel) iter_sort.next();
+          if ((ppt != null) && ppt.has_splitters())
+            cond_iterator = ppt.cond_iterator();
+          return (ppt);
+        }
+        public void remove() {
+          throw new UnsupportedOperationException();
+        }
+      };
+  }
+
+
   // // Is this of any interest?  Will I ever call it?
   // // This used to take a "String filename" initial argument.
   // void merge(PptMap other, int other_samples) {
