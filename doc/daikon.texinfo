@@ -198,8 +198,8 @@ C front end Kvasir
 * Kvasir options::              
 * Pointer type disambiguation::  
 * Online execution::            
-* Kvasir limitations::          
 * Installing Kvasir::           
+* Kvasir limitations::          
 
 Pointer type disambiguation
 
@@ -769,6 +769,7 @@ For example, if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
 @end example
+@noindent
 @noindent
 then instead you would run
 @example
@@ -1840,7 +1841,8 @@ for each level of array nesting.
 @subsection Variable names
 
 Here is an incomplete list of the conventions used by Daikon for
-variable names.
+variable names.  Some of these conventions are Java-specific; for
+information about conventions in C programs, see @ref{Using Kvasir}.
 
 @itemize @bullet
 @item
@@ -2687,30 +2689,30 @@ them are.
 For example, to avoid detecting invariants over an iterator class, you
 can call Chicory like so:
 
-@example
-java daikon.Chicory '--ppt-omit-pattern=HashSetLinear$HslIterator' ... \
-@end example
+@smallexample
+java daikon.Chicory '--ppt-omit-pattern=HashSetLinear$HslIterator' ...
+@end smallexample
 
 As another example, to avoid detecting invariants over a particular
 method, you could use:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
      ...
-@end example
+@end smallexample
 
 Finally, to avoid detecting invariants at a particular program point,
 try:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
-@end example
+@end smallexample
 
 The argument is treated as a regular expression.
 
 For example, to avoid detecting invariants over all classes in package
 daikon.util, you can call Chicory like so:
-@example
+@smallexample
   java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
-@end example
+@end smallexample
 
 
 @cindex DTRACEFILE environment variable
@@ -2757,50 +2759,40 @@ passing the specified arguments, if any, to Daikon.
 @cindex C front end
 
 Daikon's front end for C, named Kvasir, executes C programs and creates  
-data trace (.dtrace) files (and separate declaration .decls files if requested 
-by the user) by examining the operation of the binary at runtime.  
-(By contrast, Daikon's older C front end, known as dfec 
-(@pxref{dfec}), works by rewriting the source 
-code for your C program.)  
-Kvasir is named after the Norse god of knowledge and beet juice.
+data trace (.dtrace) files by examining the operation of the binary at
+runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 
-Kvasir is based on the Valgrind dynamic program supervision framework
-(which is best known for its memory error detection tool).  Using
-Valgrind allows Kvasir to interrupt your program's execution, read its
-variables, and examine its memory usage, all transparently to the
-program.  Also, rather than using your program's source code to find
-the names and types of functions and variables, Kvasir obtains them
-from debugging information included in the executable in a standard
-format.  These differences should make Kvasir both much easier to use and
-more robust than the source-rewriting-based dfec.
+To use Kvasir, first compile your program using the DWARF-2 debugging
+format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}).
+Then, prefix your command line by @command{kvasir-dtrace}.  For example, 
+if you normally run your program with the command 
+@example
+./program -option input.file
+@end example
+@noindent
+then instead use the command
+@example
+kvasir-dtrace ./program -option input.file
+@end example
+@noindent
+which creates a data trace file @file{daikon-output/program.dtrace}.
+You can also run Daikon without creating an intermediate data trace
+file; see @ref{Online execution}.
 
-However, Kvasir has some limitations of its own.  Because Kvasir uses
-Valgrind, it shares Valgrind's limitation of working only under the
-Linux operating system, and only on Intel 386-compatible processors
-(the so-called IA-32 architecture) such as the Intel Pentium and the
-AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
-information available in the DWARF-2 format, as produced by recent
-versions of GCC@.  Two other limitations are not fundamental, but apply
-to the current version: first, the programs used by Kvasir should be
-compiled without optimization; and second, the programs should be
-written in C@.  (In the future, Kvasir will support C++ and possibly other
-languages that follow C calling conventions.  If this functionality is
-important to you, send mail to 
-@email{daikon-developers@@lists.csail.mit.edu} so that we can increase
-its priority on our to-do list.)
+For information about installing Kvasir, see @ref{Installing Kvasir}.
+Kvasir only works under Linux running on an x86 processor; for full
+details, see @ref{Kvasir limitations}.
 For information about how to create an instrumenter for C that works on
 non-Linux or non-386 platforms, see @ref{Instrumenting C
 programs,,,./developer,Daikon Developer Manual}.
-
-For information about installing Kvasir, see @ref{Installing Kvasir}.
 
 @menu
 * Using Kvasir::                
 * Kvasir options::              
 * Pointer type disambiguation::  
 * Online execution::            
-* Kvasir limitations::          
 * Installing Kvasir::           
+* Kvasir limitations::          
 @end menu
 
 @node Using Kvasir, Kvasir options, Kvasir, Kvasir
@@ -2819,7 +2811,7 @@ able to compile and link your program normally.
 
 In the second step of using Kvasir, run your program as you normally
 would, but prepend the command @command{kvasir-dtrace} to the beginning.
-For instance, if you would normally run your program with the command 
+For instance, if you normally run your program with the command 
 @example
 ./program -option input.file
 @end example
@@ -2833,8 +2825,7 @@ also creates a directory @file{daikon-output} in the current
 directory containing a @file{program.dtrace} file suitable as input to Daikon.
 
 A number of options to Kvasir may be supplied between
-@command{kvasir-dtrace} and the name of your program; see below for a
-list.
+@command{kvasir-dtrace} and the name of your program (@pxref{Kvasir options}).
 
 Note that Kvasir uses a different scheme for naming variables than the Java
 front end and the old C front end dfec do (@pxref{Variable names}).
@@ -3027,7 +3018,7 @@ and would indicate that the length of array @code{result[]} is always 1.
 In order to improve the formatting of Daikon's output (and to speed it
 up), you can indicate to Daikon that certain pointers refer to single
 elements rather than to arrays.
-Also see the example below (@pxref{Pointer type disambiguation example}).
+For an example, see @ref{Pointer type disambiguation example}).
 
 Information about whether each pointer refers to an array or a single
 element can be specified in a ``disambig file'' that resides in the
@@ -3233,7 +3224,7 @@ size(bar.numbers[])-1 in bar.numbers[]
 @end example
 
 
-@node Online execution, Kvasir limitations, Pointer type disambiguation, Kvasir
+@node Online execution, Installing Kvasir, Pointer type disambiguation, Kvasir
 @subsection Online execution
 
 @cindex online execution of Daikon
@@ -3259,7 +3250,7 @@ Of course, you could also replace @option{--help} with @option{-vv1
 file.txt} to compress a text file (but start with a small one first).
 
 @noindent
-(This example assuems that you have compiled the bzip2 example (in
+(This example assumes that you have compiled the bzip2 example (in
 @file{$DAIKONDIR/examples/kvasir-examples/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
 @command{$DAIKON} stands for the command that invokes Daikon, for
@@ -3295,8 +3286,69 @@ The two commands (before and after the ampersand) could also be run in
 two different terminals.
 
 
-@node Kvasir limitations, Installing Kvasir, Online execution, Kvasir
-@subsection Kvasir limitations
+@node    Installing Kvasir, Kvasir limitations, Online execution, Kvasir
+@subsection Installing Kvasir
+
+@cindex installing Kvasir
+@cindex Kvasir installation
+
+@c Kvasir is the recommended C front end for use on Linux/x86.
+The source
+code for Kvasir is included in the main Daikon distribution, and is
+compiled by default on Linux/x86 based systems.
+
+To compile and install Kvasir, give the command @code{make kvasir}
+from the top-level Daikon directory:
+Other sections of the manual give installation instructions for several
+special-purpose components of Daikon:  the C front end Kvasir
+(@pxref{Installing Kvasir}), the source-based Java front end dfej
+(@pxref{Installing dfej}), and the source-based C front end dfec
+(@pxref{Installing dfec}).
+@c , and the Context GUI (@pxref{Installing the Context GUI}).
+Most users will not need to read those instructions,
+however.
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
+
+This will check that you have the appropriate prerequisites (such as
+GCC), configure Kvasir for your machine, compile it, and install
+it in the directory @file{kvasir/inst}.
+
+Once Kvasir has been installed, it can be used via the
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
+you have set up the Daikon environment according to the instructions
+above, it should already be in your @env{PATH}.  For instructions on using
+Kvasir, see @ref{Kvasir}.
+
+
+@node Kvasir limitations,  , Installing Kvasir, Kvasir
+@subsection Kvasir implementation and limitations
+
+Kvasir is based on the Valgrind dynamic program supervision framework
+(which is best known for its memory error detection tool).  Using
+Valgrind allows Kvasir to interrupt your program's execution, read its
+variables, and examine its memory usage, all transparently to the
+program.  Also, rather than using your program's source code to find
+the names and types of functions and variables, Kvasir obtains them
+from debugging information included in the executable in a standard
+format.  These differences should make Kvasir both much easier to use and
+more robust than the source-rewriting-based dfec front end (@pxref{dfec}).
+
+However, Kvasir has some limitations of its own.  Because Kvasir uses
+Valgrind, it shares Valgrind's limitation of working only under the
+Linux operating system, and only on Intel 386-compatible processors
+(the so-called IA-32 architecture) such as the Intel Pentium and the
+AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
+information available in the DWARF-2 format, as produced by recent
+versions of GCC@.  Two other limitations are not fundamental, but apply
+to the current version: first, the programs used by Kvasir should be
+compiled without optimization; and second, the programs should be
+written in C@.  (In the future, Kvasir will support C++ and possibly other
+languages that follow C calling conventions.)
+
 
 This subsection lists some of the known limitations of the
 current Kvasir release; if you encounter any problems other than listed
@@ -3313,10 +3365,9 @@ run faster, try the @code{--ignore-globals} or @code{--limit-static-vars}
 options in order to limit the amount of generated output.
 
 @item
-Kvasir does not support C++ (dfec had small but unreliable C++ support).
-We want to first gauge the demand for this feature.  
-Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
-feel that this addition will benefit your experience with Daikon.
+Kvasir does not support C++.  If support for C++ is important to you,
+please send @email{daikon-developers@@lists.csail.mit.edu}, so that we
+can increase its priority on our to-do list.
 
 @item
 Kvasir always prints the contents of structures according to their
@@ -3364,44 +3415,6 @@ well.  We recommend that you compile programs for Kvasir without
 optimization.
 
 @end itemize
-
-
-@node    Installing Kvasir,  , Kvasir limitations, Kvasir
-@subsection Installing Kvasir
-
-@cindex installing Kvasir
-@cindex Kvasir installation
-
-@c Kvasir is the recommended C front end for use on Linux/x86.
-The source
-code for Kvasir is included in the main Daikon distribution, and is
-compiled by default on Linux/x86 based systems.
-
-To compile and install Kvasir, give the command @code{make kvasir}
-from the top-level Daikon directory:
-Other sections of the manual give installation instructions for several
-special-purpose components of Daikon:  the C front end Kvasir
-(@pxref{Installing Kvasir}), the source-based Java front end dfej
-(@pxref{Installing dfej}), and the source-based C front end dfec
-(@pxref{Installing dfec}).
-@c , and the Context GUI (@pxref{Installing the Context GUI}).
-Most users will not need to read those instructions,
-however.
-
-@example
-cd $DAIKONDIR
-make kvasir
-@end example
-
-This will check that you have the appropriate prerequisites (such as
-GCC), configure Kvasir for your machine, compile it, and install
-it in the directory @file{kvasir/inst}.
-
-Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
-you have set up the Daikon environment according to the instructions
-above, it should already be in your @env{PATH}.  For instructions on using
-Kvasir, see @ref{Kvasir}.
 
 
 @node dfepl, convertcsv.pl, Kvasir, Front ends
@@ -6474,7 +6487,7 @@ and to record a list of invariant violations in a Java data structure.
 
 Note that the instrumented program does not do anything with the list of
 violations; it merely creates the list.  You will need to write your own
-code to process that list; see @xref{Accessing violations}.
+code to process that list; see @ref{Accessing violations}.
 
 
 Here is an example of use of the runtime-check instrumenter.
@@ -7123,7 +7136,7 @@ files, and in the future Daikon may be able to produce partial results
 as the target program is executing.
 @c The Chicory front end supports online execution via use of the
 @c @option{--daikon} flag.
-The Kvasir front end supports online exeuction via use of (normal or
+The Kvasir front end supports online execution via use of (normal or
 named) Unix pipes (@pxref{Online execution}).
 
 @menu
