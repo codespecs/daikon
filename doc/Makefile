@@ -3,17 +3,21 @@ all: info html html-chap ps pdf
 
 info: daikon.info
 
-daikon.info: daikon.texinfo
+daikon.info: daikon.texinfo .fix-menu
 	makeinfo $<
 
-# Can't do this automatically without first grepping the file to
-# see whether the change is needed.
-fix-menu:
-	perl -pi -e 's/\@detailmenu/\@ifhtml\n\@contents\n\@end ifhtml\n\@ifnothtml\n\@detailmenu/; s/\@end detailmenu/\@end detailmenu\n\@end ifnothtml/' daikon.texinfo
+# Don't want to make this a target of other rules because it updates the modification date.
+# Make forces me to double the dollar signs in the Perl code.
+# sh seems not to permit redirecting standard error to standard out
+.fix-menu: daikon.texinfo
+	@echo "Updating menus in daikon.texinfo..."
+	@emacs --batch daikon.texinfo --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for"
+	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo
+	touch .fix-menu
 
 html: daikon.html
 
-daikon.html: daikon.texinfo
+daikon.html: daikon.texinfo .fix-menu
 	makeinfo --html $<
 
 html-chap: daikon_manual_html/daikon.html
@@ -34,13 +38,13 @@ ps: daikon.ps
 daikon.ps: daikon.dvi
 	dvips -o $@ $<
 
-pdf: pdf-via-ps
+pdf: daikon.pdf
 
 # I can't get the images to convert to PDF, so this doesn't work
 pdf-direct: daikon.texinfo daikon.dvi
 	pdftex $<
 
-pdf-via-ps: daikon.ps
+daikon.pdf: daikon.ps
 	ps2pdf $<
 
 dist:
