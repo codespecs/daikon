@@ -4,8 +4,9 @@ Daikon version 2.4.8, released May 13, 2003.
 For documentation, including installation instructions, see the Daikon
 Invariant Detector User Manual.  It is available in a variety of formats:
   doc/daikon.html
-  doc/daikon.ps
+  doc/daikon_manual_html/daikon.html
   doc/daikon.pdf
-  doc/daikon
+  doc/daikon.ps
+  doc/daikon.info
 
 Javadoc for the Daikon implementation appears in directory java/doc/.
