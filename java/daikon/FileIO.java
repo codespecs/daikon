@@ -48,21 +48,30 @@ public final class FileIO {
   public final static String object_tag = ppt_tag_separator + object_suffix;
   public final static String class_static_suffix = "CLASS";
   public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
+  
 
-
-/// Variables
-
+  /// Variables
+  
   // I'm not going to make this static because then it doesn't get restored
   // when reading from a file; and it won't be *that* expensive to add yet
   // one more slot to the Ppt object.
   // static HashMap entry_ppts = new HashMap(); // maps from Ppt to Ppt
-
+  
+  // This hashmap maps every program point to an array, which contains the 
+  // old values of all variables in scope the last time the program point
+  // was executed. This enables us to determine whether the values have been 
+  // modified since this program point was last executed.
+    static HashMap ppt_to_value_reps = new HashMap();
+  
+  //for debugging purposes: printing out a modified trace file with changed modbits
+  static boolean to_write_nonce = false;
+  static String nonce_value, nonce_string;
 
 ///////////////////////////////////////////////////////////////////////////
 /// Declaration files
 ///
 
-
+  
   /** This is intended to be used only interactively, while debugging. */
   static void reset_declarations() {
     throw new Error("to implement");
@@ -108,6 +117,7 @@ public final class FileIO {
     int varcomp_format = VarComparability.NONE;
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    
     String line = reader.readLine();
 
     // line == null when we hit end of file
@@ -534,7 +544,12 @@ public final class FileIO {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
     data_trace_reader = reader;
     data_trace_filename = filename;
-
+    
+    //used for debugging: write new data trace file
+    FileWriter writer = null;
+    if(Global.debugPrintDtrace){
+      writer = new FileWriter(new File(filename + ".debug"));
+    }
     // init_ftn_call_ct();          // initialize function call counts to 0
     call_stack = new Stack();
     call_hashmap = new HashMap();
@@ -607,14 +622,21 @@ public final class FileIO {
           }
           reader.reset();
           if ("this_invocation_nonce".equals(nonce_name_maybe)) {
-            String nonce_name = reader.readLine();
-            Assert.assert(nonce_name.equals("this_invocation_nonce"));
-            nonce = new Integer(reader.readLine());
+	      
+	      String nonce_name = reader.readLine();
+	      Assert.assert(nonce_name.equals("this_invocation_nonce"));
+	      nonce = new Integer(reader.readLine());
+	      
+	      if(Global.debugPrintDtrace){
+		to_write_nonce = true;
+		nonce_value = nonce.toString();
+		nonce_string = nonce_name_maybe;
+	      }
           }
         }
-
+	
         // Fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods);
+        read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods, writer);
 
         // Now add some additional variable values that don't appear directly
         // in the data trace file but aren't traditional derived variables.
@@ -705,9 +727,28 @@ public final class FileIO {
 
 
   // This procedure fills up vals and mods by side effect.
-  static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods) throws IOException {
+  static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods, FileWriter writer) throws IOException {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
+    
+    
+    String[] oldvalue_reps;
+    boolean ppt_encountered = true;
+    if ( (oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt)) == null){
+	//we've not encountered this program point before
+	oldvalue_reps = new String [num_tracevars];
+	ppt_encountered = false;
+    }
+    
+    if(Global.debugPrintDtrace){
+      writer.write(ppt.name + "\n");
+      
+      if(to_write_nonce){
+	writer.write(nonce_string + "\n");
+	writer.write(nonce_value + "\n");
+	to_write_nonce = false;
+      }
+    }
 
     for (int vi_index=0, val_index=0; val_index<num_tracevars; vi_index++) {
       Assert.assert(vi_index < vis.length
@@ -762,7 +803,29 @@ public final class FileIO {
       }
       String mod_string = line;
       int mod = ValueTuple.parseModified(line);
-      mods[val_index] = mod;
+      
+      
+      // Set the modbit now, depending on whether the value of the variable 
+      // has been changed or not. Write to another file:
+      if(ppt_encountered){
+	if((value_rep).equals(oldvalue_reps[val_index])){
+	  if(!Global.addChanged){
+	    mod = 0;
+	  }
+	}else{
+	  mod = 1;
+	}
+      }
+      
+      mods[val_index] = mod;	
+      oldvalue_reps[val_index] = value_rep;
+      
+      if(Global.debugPrintDtrace){
+	writer.write(vi.name + "\n");
+	writer.write(value_rep + "\n");
+	writer.write(mod + "\n");
+      }
+      
       if (ValueTuple.modIsMissing(mod)) {
         Assert.assert(value_rep.equals("missing") || value_rep.equals("uninit"));
         vals[val_index] = null;
@@ -773,8 +836,15 @@ public final class FileIO {
         // Assert.assert(! vals[val_index].equals("null"));
       }
       val_index++;
+      
     }
-
+    
+    ppt_to_value_reps.put(ppt, oldvalue_reps);
+    
+    if(Global.debugPrintDtrace){
+      writer.write("\n");
+    }
+    
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
     Assert.assert((blank_line == null) || (blank_line.equals("")));
