@@ -150,6 +150,7 @@ public final class FileIO {
     // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext();) {
       File file = (File) i.next();
+      Daikon.progress = "Reading " + file;
       if (!Daikon.dkconfig_quiet) {
         System.out.print("."); // show progress
       }
@@ -306,6 +307,9 @@ public final class FileIO {
     return new PptTopLevel(ppt_name, vi_array);
   }
 
+  // So that warning message below is only printed once
+  private static boolean seen_string_rep_type = false;
+
   /**
    * Read a variable name, type, and comparability; construct a VarInfo.
    * Return null after reading the last variable in this program point
@@ -348,6 +352,20 @@ public final class FileIO {
     // XXX temporary, for compatibility with older .dtrace files.  12/20/2001
     if ("String".equals(file_rep_type_string)) {
       file_rep_type_string = "java.lang.String";
+      if (!seen_string_rep_type) {
+        seen_string_rep_type = true;
+        System.err.println("Representation type 'String' should be "+
+                           "'java.lang.String' instead on line " +
+                           (file.getLineNumber()-1) + " of " + filename);
+      }
+    }
+    // This is for people who were confused by the above temporary
+    // workaround when it didn't have a warning. But this has never
+    // worked, so it's fatal.
+    else if ("String[]".equals(file_rep_type_string)) {
+      throw new FileIOException("Representation type 'String[]' should be " +
+                                "'java.lang.String[]' instead for variable " +
+                                varname, file, filename);
     }
     /// XXX
 
@@ -594,13 +612,14 @@ public final class FileIO {
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
-    data_trace_reader = reader;
-    data_trace_filename = filename;
     if ((Daikon.dkconfig_progress_delay != -1) && dkconfig_count_lines) {
+      Daikon.progress = "Checking size of " + filename.getName();
       // avoid divide-by-zero for display while lines are being counted
       data_trace_total_lines = 1;
       data_trace_total_lines = count_lines(filename);
     }
+    data_trace_reader = reader;
+    data_trace_filename = filename;
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
