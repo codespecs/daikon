@@ -236,7 +236,6 @@ C/C++ front end dfec
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
-* function definitions::        
 
 Pointer type disambiguation
 
@@ -326,6 +325,7 @@ Problems running dfec
 
 Problems compiling and linking instrumented programs
 
+* Compiler problems::           
 * Linker problems::             
 
 Problems running Daikon
@@ -1898,7 +1898,7 @@ using the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
 
-@item --disc_reason @var{inv_class}<@var{var1,var2,...}>@@@var{ppt}
+@item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
 Prints all discarded invariants of class @var{inv_class} at the ppt
 specified that involve exactly the vars given, as well as a short reason
 and discard code explaining why they were not worthy of print.  Any of 
@@ -3376,7 +3376,7 @@ Run Daikon on the declaration files and data trace files.
 @end enumerate
 
 This section discusses the steps in more detail, with an emphasis on the
-first step.  If you have trouble, @xref{dfec requirements}
+first step.  If you have trouble, @xref{dfec requirements}.
 
 @c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
@@ -3450,7 +3450,6 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
-* function definitions::        
 @end menu
 
 @node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
@@ -4056,7 +4055,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements, function definitions, Instrumentation scope, C/C++ front end dfec
+@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
 @subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -5585,10 +5584,11 @@ invocation, but the two steps are still logically distinct.)
 
 
 @menu
+* Compiler problems::           
 * Linker problems::             
 @end menu
 
-@node    Compiler problems,  , dfec requirements, C/C++ front end dfec
+@node    Compiler problems, Linker problems, Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
 @subsubsection Compiler problems
 
 @cindex DaikonSmartPointer errors in compilation of instrumented code
@@ -5602,10 +5602,11 @@ pointer in a DaikonSmartPointer; however, if the calling code simply
 omits the parameters on the function call, the function signatures
 will not match and the compiler will complain about a missing
 function.  The solution is to remove the @samp{void *} from the function
-declaration in the uninstrumented code.
+declaration in the uninstrumented code, thus making the function
+declaration consistent with the use.
 
 
-@node    Linker problems,  , Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
+@node    Linker problems,  , Compiler problems, Compilation and linking of instrumented code problems
 @subsubsection Linker problems
 
 This section discusses problems that may occur when linking files that
