@@ -323,6 +323,7 @@ Problems running Daikon
 * Too much output::             
 * No samples::                  
 * No return from procedure::    
+* Unsupported class version::   
 * Out of memory::               
 * Simplify errors::             
 * Contradictory invariants::    
@@ -6870,6 +6871,7 @@ understand Daikon's operation; @xref{Command line options}.
 * Too much output::             
 * No samples::                  
 * No return from procedure::    
+* Unsupported class version::   
 * Out of memory::               
 * Simplify errors::             
 * Contradictory invariants::    
@@ -6923,7 +6925,7 @@ via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
 configuration option (@pxref{General configuration options}).
 
 
-@node    No return from procedure, Out of memory, No samples, Daikon problems
+@node    No return from procedure, Unsupported class version, No samples, Daikon problems
 @subsection No return from procedure
 
 @cindex no return from procedure, warning
@@ -6962,7 +6964,24 @@ the @file{.dtrace} file, and typically cannot be controlled by the
 user.
 
 
-@node    Out of memory, Simplify errors, No return from procedure, Daikon problems
+@node    Unsupported class version, Out of memory, No return from procedure, Daikon problems
+@subsection Unsupported class version
+
+@cindex UnsupportedClassVersionError
+@cindex java.lang.UnsupportedClassVersionError
+@cindex major.minor version error
+
+Daikon requires a Java 5 JVM (@pxref{Requirements}).
+An error such as 
+@smallexample
+  Exception in thread "main" java.lang.UnsupportedClassVersionError:
+  daikon/Daikon (Unsupported major.minor version 49.0)
+@end smallexample
+indicates that you are trying to run Daikon on an older JVM.  You need to
+install a newer version of Java in order to run Daikon.
+
+
+@node    Out of memory, Simplify errors, Unsupported class version, Daikon problems
 @subsection Out of memory
 
 @cindex out of memory error
