@@ -354,7 +354,7 @@ Goal (java): a.equals(b)
 Goal (esc): a == b
 Goal (ioa): a = b
 Goal (jml): a.equals(b)
-Goal (simplify): |a| == b
+Goal (simplify): |a| == |b|
 "aString"
 "aString"
 
