@@ -424,13 +424,20 @@ public final class Equality
       // The following is possible because values are interned.  The
       // test also takes into account missing values, since they are
       // null.
-       if ((leaderValue == viValue) && (leaderMod == viMod)
+      if ((leaderValue == viValue) && (leaderMod == viMod)
         && !leaderOutOfBounds && !vi.missingOutOfBounds()) continue;
       //       if (debug.isLoggable(Level.FINE)) {
       //         debug.fine ("  vi name: " + vi.name.name());
       //         debug.fine ("  vi value: " + viValue);
       //         debug.fine ("  le value: " + leaderValue);
       //       }
+      if (Debug.logOn())
+        Debug.log (getClass(), ppt.parent, Debug.vis (vi),
+                   "Var " + vi.name.name()
+                   + " [" + viValue + "," + viMod + "] split from leader "
+                   + leader.name.name() + " [" + leaderValue + ","
+                   + leaderMod + "]");
+
       result.add (vi);
       i.remove();
     }

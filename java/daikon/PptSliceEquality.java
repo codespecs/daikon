@@ -251,10 +251,10 @@ public class PptSliceEquality
         //Debug print the new leaders
         if (Debug.logOn()) {
           for (int j = 0; j < newInvsLeaders.size(); j++) {
-            Debug.log (getClass(), parent, new VarInfo[]
-              {(VarInfo) newInvsLeaders.get(j)},
+            Debug.log (getClass(), parent,
+                       Debug.vis ((VarInfo) newInvsLeaders.get(j)),
               "Split off from previous leader " + inv.leader().name.name()
-              + ": new set = " + (Equality) newInvs.get(j)
+              + ": new set = " + ((VarInfo) newInvsLeaders.get(j)).equalitySet
               + ": old set = " + inv);
           }
         }
