@@ -101,7 +101,7 @@ help:
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " dist dist-force          -- also makes it public, updates webpages, etc."
 	@echo " dist-edg dist-edg-solaris"
-	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
+	@echo " dist-dfej dist-dfej-solaris dist-dfej-cygwin dist-dfej-linux"
 	@echo " "
 	@echo "This Makefile is for manipulations of the entire invariants module."
 	@echo "Daikon proper can be found in the java/daikon subdirectory."
@@ -546,6 +546,15 @@ dist-dfej: dist-dfej-pag dist-dfej-linux-x86 dist-dfej-windows
 dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
 
 $(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
+	cp -pf $< $@
+	# strip $@
+	chmod +r $@
+	update-link-dates $(DIST_DIR)/index.html
+	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
+
+dist-dfej-cygwin: $(DIST_BIN_DIR)/dfej-cygwin.exe
+
+$(DIST_BIN_DIR)/dfej-cygwin.exe: $(DFEJ_DIR)/src/dfej-cygwin.exe
 	cp -pf $< $@
 	# strip $@
 	chmod +r $@
