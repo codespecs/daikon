@@ -451,7 +451,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // Special cases of variables to omit.
 
       // Variables such that both are one less than something else
-      // (or gernalized, the same shift from something else
+      // (or generalized, the same shift from something else
       if ((name instanceof VarInfoName.Add) && (vi.name instanceof VarInfoName.Add) &&
 	  ((((VarInfoName.Add) name).amount) == (((VarInfoName.Add) vi.name).amount))) {
         continue;
@@ -529,12 +529,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         }
 
 	if (seq_object_name == null) {
-          // throw new Error("Expected \"[]\" at end of sequence variable name "
-          //                 + seq_contents_name
-          //                 + (seq_contents.isPrestate() ? " : " + seq_contents.postState.name : ""));
+	  // This can happen with e.g. this.seq[].field
 	  // Used to be error; dfec actually does this though (?)
-          System.out.println("equalToNonobvious: cannot handle sequence variable " + seq_contents.name);
-          continue;
+          // System.out.println("equalToNonobvious: cannot handle sequence variable " + seq_contents.name);
+	  seq_object_name = seq_contents.name;
 	}
 
         VarInfo seq_object = ppt.findVar(seq_object_name);
@@ -662,7 +660,39 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         return sequenceSize;
       }
     }
-    throw new Error("Couldn't find size of " + name);
+    // It is possible that this VarInfo never had its size derived,
+    // since it looked something like this.ary[].field.  In this case,
+    // we should return size(this.ary[]), since it was derived and
+    // must be the same values.
+    {
+      VarInfoName search = this.name;
+      boolean pre = false;
+      if (search instanceof VarInfoName.Prestate) {
+	search = ((VarInfoName.Prestate) search).term;
+	pre = true;
+      }
+      while (search instanceof VarInfoName.Field) {
+	search = ((VarInfoName.Field) search).term;
+      }
+      if (pre) {
+	search = search.applyPrestate();
+      }
+      search = search.applySize();
+      VarInfo result = ppt.findVar(search);
+      if (result != null) {
+	return result;
+//        } else {
+//  	System.out.println("Warning: Size variable " + search + " not found.");
+//  	System.out.print("Variables: ");
+//  	for (int i=0; i<ppt.var_infos.length; i++) {
+//  	  VarInfo vi = ppt.var_infos[i];
+//  	  System.out.print(vi.name + " ");
+//  	}
+//  	System.out.println();
+      }
+    }
+//    throw new Error("Couldn't find size of " + name);
+    return null;
   }
 
   // Returns true if the type in the original program is integer.
