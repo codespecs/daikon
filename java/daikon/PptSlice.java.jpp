@@ -1078,6 +1078,11 @@ public final class PPTSLICE1
       // invariants must exist at each child to exist at the parent)
       PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
       if ((cslice == null) || (cslice.invs.size() == 0)) {
+        if (Debug.logOn())
+          this.log ("slice not found " + ppt.name() + " "
+                   + VarInfo.toString (cvis_sorted)
+                   + " num_samples= " + ppt.num_samples()
+                   + " ppt.constants = " + ppt.constants);
         if (debugMerge.isLoggable (Level.FINE))
           debugMerge.fine ("-- slice not found " + ppt.name()
                            + " vars " + Debug.toString (cvis_sorted));
@@ -1119,11 +1124,13 @@ public final class PPTSLICE1
           inv.log ("Created " + inv + " from " + orig_inv + " using permute "
                    + ArraysMDE.toString(permute) + " cvis_sorted = "
                    + VarInfo.toString (cvis_sorted) + " cvis = "
-                   + VarInfo.toString (child_vars));
+                   + VarInfo.toString (child_vars)
+                   + " for ppt " + parent.name());
         }
       }
     }
 
+    log ("Found " + all_invs.size() + " invariants to merge");
     if (debugMerge.isLoggable (Level.FINE) && (valid_child_count == 0))
       debugMerge.fine ("-- No valid children found");
 
@@ -1174,8 +1181,6 @@ public final class PPTSLICE1
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
           invs.add (parent_inv);
-          if (dkconfig_remove_merged_invs)
-            remove_matching_invs (parent_inv, child_invs);
           if (Debug.logOn())
             parent_inv.log ("Merge successful");
         }
@@ -1219,27 +1224,6 @@ public final class PPTSLICE1
       #endif
     }
     return (false);
-  }
-
-  private void remove_matching_invs (Invariant parent_inv,
-                                     List /*Invariant*/ child_invs) {
-
-    for (int i = 0; i < child_invs.size(); i++) {
-      Invariant child_inv = (Invariant) child_invs.get (i);
-      if (parent_inv.isSameFormula (child_inv)
-          && (child_inv.numSuppressees() == 0))
-//         if (child_inv.ppt.var_infos[0].name.name().equals ("capacity"))
-//           System.out.println ("removing inv " + child_inv + "in ppt "
-//                               + child_inv.ppt + " parent inv = " + parent_inv
-//                               + " in ppt " + parent_inv.ppt);
-//         if (!child_inv.ppt.invs.contains(child_inv))
-//           System.out.println ("inv " + child_inv + " not in its ppt "
-//                               + child_inv.ppt + " parent inv = " + parent_inv
-//                               + " in ppt " + parent_inv.ppt);
-
-        if (child_inv.ppt.invs.contains(child_inv))
-          child_inv.ppt.removeInvariant (child_inv);
-    }
   }
 
 }
