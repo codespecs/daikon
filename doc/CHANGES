@@ -35,7 +35,7 @@ These improvements include:
  * new Eclipse plug-in eases running many components of the Daikon system
  * new runtime checking tool can insert assertions into your programs
  * command-line options have been standardized across Daikon component
- * many bug fixes, documentation updates, and other mnior improvements
+ * many bug fixes, documentation updates, and other minor improvements
 
 License
 
@@ -74,6 +74,9 @@ Eclipse plug-in
   Java source code. The plug-in works with Eclipse version 3.0.1 and later.
   You can find documentation for the plug-in at
   http://pag.csail.mit.edu/daikon/doc/daikonHelp.html .
+  The 3.1.9 version of the plugin supports only versions of Daikon prior
+  to (and not including) Daikon 3.2.0 and only versions of Java prior to 
+  (and not including) 5.0.
 
 Daikon
 
