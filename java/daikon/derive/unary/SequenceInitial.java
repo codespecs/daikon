@@ -42,7 +42,7 @@ public final class SequenceInitial extends UnaryDerivation {
     }
 
     VarInfo lengthvar = vi.sequenceSize();
-    if (lengthvar.isConstant()) {
+    if (lengthvar != null && lengthvar.isConstant()) {
       long length_constant = ((Long) lengthvar.constantValue()).longValue();
       if (length_constant == 0) {
         return false;
