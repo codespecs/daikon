@@ -10,10 +10,13 @@
 To create an account on geyer, perform the following two steps:
 <p>
 
-Run inquir (on oregano, and using the .el rather than .elc file) to get a
-UID.  Set the name and mail forwarding, at least.
-<p>
+<ol>
+<li>
+Run inquir (for instance, on oregano, and using the .el rather than .elc file) to get a
+UID.  Set the name and mail forwarding, at least, and note the UID for use
+in the <tt>useradd</tt> command below.
 
+<li>
 Create a new account on geyer like so:
 <blockquote>
 <pre>
@@ -28,7 +31,7 @@ emacs /etc/aliases
 exit
 </pre>
 </blockquote>
-<p>
+</ol>
 
 <hr>
 <a href="./">Using Daikon at MIT</a><p>
