@@ -27,21 +27,12 @@ public final class ThreeScalarFactory {
                   && (var2.rep_type == ProglangType.INT)
                   && (var3.rep_type == ProglangType.INT));
 
-    if (Daikon.check_program_types
-        && (! (var1.type.castable(var2.type)
-               && var2.type.castable(var3.type))))
+    if (! var1.compatible(var2))
       return null;
-    // Check transitivity of "castable" relationship.
-    Assert.assert((!Daikon.check_program_types)
-                  || var1.type.castable(var3.type));
-    if (! Daikon.ignore_comparability) {
-      if (! (VarComparability.comparable(var1, var2)
-             && VarComparability.comparable(var2, var3))) {
-        return null;
-      }
-    }
-    // Check transitivity of "comparable" relationship.
-    Assert.assert(VarComparability.comparable(var1, var3));
+    if (! var2.compatible(var3))
+      return null;
+    // Check transitivity of "compatible" relationship.
+    Assert.assert(var1.compatible(var3));
 
     if (pass == 1) {
       // nothing to do
