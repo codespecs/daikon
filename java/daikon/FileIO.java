@@ -275,33 +275,37 @@ public final class FileIO {
     // The var_infos that will populate the new program point
     List var_infos = new ArrayList();
 
-    // Rename EXITnn to EXIT
-    {
-      PptName parsed_name = new PptName(ppt_name);
-      if (parsed_name.isExitPoint()) {
-        PptName new_name = parsed_name.makeExit();
-        // Punt if we already read a different EXITnn
-        if (all_ppts.get(new_name) != null) {
-          String line = file.readLine();
-          while ((line != null) && !line.equals("")) {
-            // This fails if some lines of a declaration (e.g., the
-            // comparability field) are empty.
-            line = file.readLine();
+    // Enable this code when Daikon supports handling of multiple exit
+    // points via a variable rather than via separate ppts
+    if (false) {
+    //     Rename EXITnn to EXIT
+      {
+        PptName parsed_name = new PptName(ppt_name);
+        if (parsed_name.isExitPoint()) {
+          PptName new_name = parsed_name.makeExit();
+          // Punt if we already read a different EXITnn
+          if (all_ppts.get(new_name) != null) {
+            String line = file.readLine();
+            while ((line != null) && !line.equals("")) {
+              // This fails if some lines of a declaration (e.g., the
+              // comparability field) are empty.
+              line = file.readLine();
+            }
+            return null;
           }
-          return null;
-        }
-        // Override what was read from file
-        ppt_name = new_name.name().intern();
-        // Add the pseudo-variable $return_line
-        if (false) {
-          // Skip this for now; we're not sure how to make it work
-          ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
-          ProglangType file_rep_type = ProglangType.INT;
-          VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
-          VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
-                                     prog_type, file_rep_type, comparability,
-                                     VarInfoAux.getDefault());
-          var_infos.add(line);
+          // Override what was read from file
+          ppt_name = new_name.name().intern();
+          // Add the pseudo-variable $return_line
+          if (false) {
+            // Skip this for now; we're not sure how to make it work
+            ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
+            ProglangType file_rep_type = ProglangType.INT;
+            VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
+            VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
+                                       prog_type, file_rep_type, comparability,
+                                       VarInfoAux.getDefault());
+            var_infos.add(line);
+          }
         }
       }
     }
@@ -551,6 +555,7 @@ public final class FileIO {
   // for debugging only, but now also used for Daikon progress output.
   public static LineNumberReader data_trace_reader;
   public static File data_trace_filename;
+  public static int data_num_slices = 0;
 
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(File filename, PptMap all_ppts,
@@ -626,11 +631,16 @@ public final class FileIO {
         }
 
         String ppt_name = line; // already interned
-        { // Rename EXITnn to EXIT
+        { 
           try {
             PptName parsed = new PptName(ppt_name);
-            if (parsed.isExitPoint()) {
-              ppt_name = parsed.makeExit().name().intern();
+            // Enable the code below when Daikon stops using different
+            // ppts for different exits
+            if (false) {
+              // Rename EXITnn to EXIT
+              if (parsed.isExitPoint()) {
+                ppt_name = parsed.makeExit().name().intern();
+              }
             }
           } catch (Error e) {
             throw new Error("Illegal program point name \"" + ppt_name + "\""
@@ -642,6 +652,10 @@ public final class FileIO {
         if (pptcount++ % 10000 == 0)
             System.out.print(":");
 
+        if (Daikon.debugTrace.isDebugEnabled()) {
+          data_num_slices = all_ppts.countSlices();
+        }
+        
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
         Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
 
