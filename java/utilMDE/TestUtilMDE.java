@@ -117,50 +117,6 @@ public final class TestUtilMDE extends TestCase {
 
   public static void testArraysMDE() {
 
-    // public static int no_dups(int[] a)
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -2, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new int[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new int[] {42}) == true);
-
-
-
-    // public static int no_dups(long[] a)
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -2, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new long[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new long[] {42}) == true);
-
-
-    // public static int no_dups(double[] a)
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,100}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {2, 2, 3, 5, 4,0}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,1}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {1., 1.001, -3, -5, 4,0}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {1., 2, -2.00, -2, 4,100}) == false);
-    assertTrue (ArraysMDE.no_dups(new double[] {}) == true);
-    assertTrue (ArraysMDE.no_dups(new double[] {42}) == true);
-
-    // public static int no_dups(String[] a)
-    assertTrue (ArraysMDE.no_dups(new String[] {"1", "2", "3", "5", "4","0"})
-                == true);
-    assertTrue (ArraysMDE.no_dups(new String[] {"A","a", "foo", "Foo",""})
-                == true);
-    assertTrue (ArraysMDE.no_dups(new String[] {" ", " "})
-                == false);
-    assertTrue (ArraysMDE.no_dups(new String[] {"  ", " "})
-                == true);
-
-
     // public static int min(int[] a)
     assertTrue(ArraysMDE.min(new int[] { 1,2,3 }) == 1);
     assertTrue(ArraysMDE.min(new int[] { 2,33,1 }) == 1);
@@ -359,9 +315,8 @@ public final class TestUtilMDE extends TestCase {
     // public static boolean isSubarrayEq(Object[] a, Object[] sub, int a_offset)
     // public static boolean isSubarray(int[] a, int[] sub, int a_offset)
     // public static boolean isSubarray(boolean[] a, boolean[] sub, int a_offset)
-    // [I'm punting on these for now, in the hopes that the array indexOf
-    // operations above test them sufficiently.
-
+    // (The subarray tests are missing; I hope that the array indexOf
+    // operations above test them sufficiently.)
 
     // static String toString(int[] a)
     assertTrue(ArraysMDE.toString(new int[] { }).equals("[]"));
@@ -377,11 +332,182 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(!ArraysMDE.sorted(new int[] { 1,0 }));
     assertTrue(!ArraysMDE.sorted(new int[] { 0,1,2,1,2,3 }));
 
+    // public static int no_dups(int[] a)
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new int[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new int[] {42}) == true);
+
+    // public static int no_dups(long[] a)
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {1, 2, -2, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new long[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new long[] {42}) == true);
+
+    // public static int no_dups(double[] a)
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,100}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {2, 2, 3, 5, 4,0}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {1, 2, 3, 5, 4,1}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {1., 1.001, -3, -5, 4,0}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {1., 2, -2.00, -2, 4,100}) == false);
+    assertTrue (ArraysMDE.no_dups(new double[] {}) == true);
+    assertTrue (ArraysMDE.no_dups(new double[] {42}) == true);
+
+    // public static int no_dups(String[] a)
+    assertTrue (ArraysMDE.no_dups(new String[] {"1", "2", "3", "5", "4","0"})
+                == true);
+    assertTrue (ArraysMDE.no_dups(new String[] {"A","a", "foo", "Foo",""})
+                == true);
+    assertTrue (ArraysMDE.no_dups(new String[] {" ", " "})
+                == false);
+    assertTrue (ArraysMDE.no_dups(new String[] {"  ", " "})
+                == true);
+
+    // public static boolean fn_is_permutation(int[] a)
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 0, 1, 2, 3 }) == true);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 1, 2, 3, 0 }) == true);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 3, 2, 1, 0 }) == true);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 0, 1, 2, 2 }) == false);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 0, -1, 2, 3 }) == false);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 0, 1, 2, 4 }) == false);
+    assertTrue(ArraysMDE.fn_is_permutation(new int[] { 0, 0, 0, 0 }) == false);
+
+    // public static boolean fn_is_total(int[] a)
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, 1, 2, 3 }) == true);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 1, 2, 3, 0 }) == true);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 3, 2, 1, 0 }) == true);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, 1, 2, 2 }) == true);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { -1, 0, 2, 3 }) == false);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, -1, 2, 3 }) == false);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, -2, 1, 3 }) == true); // weird
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, 2, 3, -1 }) == false);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, 1, 2, 4 }) == true);
+    assertTrue(ArraysMDE.fn_is_total(new int[] { 0, 0, 0, 0 }) == true);
+
+    // public static int[] fn_identity(int length)
+    assert_arrays_equals(ArraysMDE.fn_identity(0), new int[] { });
+    assert_arrays_equals(ArraysMDE.fn_identity(1), new int[] { 0 });
+    assert_arrays_equals(ArraysMDE.fn_identity(2), new int[] { 0, 1 });
+    assert_arrays_equals(ArraysMDE.fn_identity(3), new int[] { 0, 1, 2 });
+
+    // public static int[] fn_inverse_permutation(int[] a)
+    assert_arrays_equals(ArraysMDE.fn_inverse_permutation(
+                            new int[] { 0, 1, 2, 3 }),
+                            new int[] { 0, 1, 2, 3 });
+    assert_arrays_equals(ArraysMDE.fn_inverse_permutation(
+                            new int[] { 1, 2, 3, 0 }),
+                            new int[] { 3, 0, 1, 2 });
+    assert_arrays_equals(ArraysMDE.fn_inverse_permutation(
+                            new int[] { 3, 2, 1, 0 }),
+                            new int[] { 3, 2, 1, 0 });
+
+    // public static int[] fn_inverse(int[] a, int arange)
+    assert_arrays_equals(ArraysMDE.fn_inverse(
+                            new int[] { 0, 1, 2, 3 }, 4),
+                            new int[] { 0, 1, 2, 3 });
+    assert_arrays_equals(ArraysMDE.fn_inverse(
+                            new int[] { 1, 2, 3, 0 }, 4),
+                            new int[] { 3, 0, 1, 2 });
+    assert_arrays_equals(ArraysMDE.fn_inverse(
+                            new int[] { 3, 2, 1, 0 }, 4),
+                            new int[] { 3, 2, 1, 0 });
+    try {
+      ArraysMDE.fn_inverse(new int[] { 0, 0, 2, 3 }, 4);
+      throw new Error();
+    } catch (UnsupportedOperationException e) {
+      assertTrue(e.getMessage().equals("Not invertible"));
+    }
+    assert_arrays_equals(ArraysMDE.fn_inverse(
+                            new int[] { 5 }, 6),
+                            new int[] { -1, -1, -1, -1, -1, 0 });
+    assert_arrays_equals(ArraysMDE.fn_inverse(
+                            new int[] { 1, 2, 3, 5 }, 6),
+                            new int[] { -1, 0, 1, 2, -1, 3 });
+
+
+    // public static int[] fn_compose(int[] a, int[] b)
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 0, 1, 2, 3 },
+                            new int[] { 0, 1, 2, 3 }),
+                            new int[] { 0, 1, 2, 3 });
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 1, 2, 3, 0 },
+                            new int[] { 1, 2, 3, 0 }),
+                            new int[] { 2, 3, 0, 1 });
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 3, 2, 1, 0 },
+                            new int[] { 3, 2, 1, 0 }),
+                            new int[] { 0, 1, 2, 3 });
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 0, 1, 0, 3 },
+                            new int[] { 0, 5, 2, 1 }),
+                            new int[] { 0, 5, 0, 1 });
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 0 },
+                            new int[] { 5 }),
+                            new int[] { 5 });
+    assert_arrays_equals(ArraysMDE.fn_compose(
+                            new int[] { 1, 2, 3, 5 },
+                            new int[] { 1, 2, 3, 5, -1, -1 }),
+                            new int[] { 2, 3, 5, -1 });
+
+    // public static boolean isSubset(long[] smaller, long[] bigger)
+    // public static boolean isSubset(double[] smaller, double[] bigger)
+    // public static boolean isSubset(String[] smaller, String[] bigger)
+
+    {
+      double f1[] = new double[10];
+      double f2[] = new double[20];
+
+      for (int j = 0; j < f2.length; j++)
+        f2[j] = j;
+      for (int i = 0; i < f2.length - f1.length; i++) {
+
+        //fill up f1 with elements of f2
+        for (int j = 0; j < f1.length; j++)
+          f1[j] = f2[i+j];
+
+        f1[5] = f2[i];
+
+        double[] f1_copy = (double []) f1.clone();
+        double[] f2_copy = (double []) f2.clone();
+
+        assertTrue (ArraysMDE.isSubset (f1, f2));
+        assert_arrays_equals (f1, f1_copy);
+        assert_arrays_equals (f2, f2_copy);
+      }
+
+      double [] a1 = new double [] {1, 5, 10};
+      double [] a2 = new double [] {};
+      double [] a3 = new double [] {1};
+      double [] a4 = new double [] {10};
+      double [] a5 = new double [] {1, 10, 15, 20};
+      double [] a6 = new double [] {10, 10, 10, 10, 10, 1};
+
+      assertTrue (ArraysMDE.isSubset (a2, a1));
+      assertTrue (!ArraysMDE.isSubset (a1, a2));
+      assertTrue (!ArraysMDE.isSubset (a1, a5));
+      assertTrue (ArraysMDE.isSubset (a3, a1));
+      assertTrue (ArraysMDE.isSubset (a4, a1));
+      assertTrue (ArraysMDE.isSubset (a6, a1));
+      assertTrue (!ArraysMDE.isSubset (a1, a6));
+    }
+
     // public static class IntArrayComparatorLexical implements Comparator
     // public static class IntArrayComparatorLengthFirst implements Comparator
     {
       Comparator iacl = new ArraysMDE.IntArrayComparatorLexical();
       Comparator iaclf = new ArraysMDE.IntArrayComparatorLengthFirst();
+
       int[] a0 = new int[] { };
       int[] a1 = new int[] { };
       int[] a2 = new int[] { 0,1,2,3 };
@@ -512,6 +638,45 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(caclf.compare(a3, a8) > 0);
     }
 
+    // public static boolean any_null(Object[] a)
+    {
+      Object o = new Object();
+      assertTrue(ArraysMDE.any_null(new Object[] { }) == false);
+      assertTrue(ArraysMDE.any_null(new Object[] { null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[] { null, null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[] { o }) == false);
+      assertTrue(ArraysMDE.any_null(new Object[] { o, o }) == false);
+      assertTrue(ArraysMDE.any_null(new Object[] { o, null, null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[] { null, o, null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[] { o, null, o }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[] { null, o, o }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[][] { }) == false);
+      assertTrue(ArraysMDE.any_null(new Object[][] { null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[][] { new Object[] { null } }) == false);
+      assertTrue(ArraysMDE.any_null(new Object[][] { new Object[] { null }, null }) == true);
+      assertTrue(ArraysMDE.any_null(new Object[][] { new Object[] { null }, new Object[] { o } }) == false);
+    }
+
+    // public static boolean all_null(Object[] a)
+    {
+      Object o = new Object();
+      assertTrue(ArraysMDE.all_null(new Object[] { }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[] { null }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[] { null, null }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[] { o }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[] { o, o }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[] { o, null, null }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[] { null, o, null }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[] { o, null, o }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[] { null, o, o }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[][] { }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[][] { null }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[][] { null, null }) == true);
+      assertTrue(ArraysMDE.all_null(new Object[][] { new Object[] { null } }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[][] { new Object[] { null }, null }) == false);
+      assertTrue(ArraysMDE.all_null(new Object[][] { new Object[] { null }, new Object[] { o } }) == false);
+    }
+
   }
 
   // This cannot be static because it instantiates an inner class.
@@ -520,8 +685,8 @@ public final class TestUtilMDE extends TestCase {
     /// To check (maybe some of these are done already).
     /// All of these methods are in Intern; should the tests appear in
     /// testIntern() or here?
-    // public static void internStrings(String[] a) {
-    // public static boolean isInterned(Object value) {
+    // public static void internStrings(String[] a)
+    // public static boolean isInterned(Object value)
     // public static int numIntegers()
     // public static int numIntArrays()
     // public static int numDoubles()
@@ -1030,7 +1195,7 @@ public final class TestUtilMDE extends TestCase {
   // This cannot be static because it instantiates an inner class.
   public void testUtilMDE() {
 
-    // public static intersectionCardinalityAtLeast(BitSet a, BitSet b, int i) {
+    // public static intersectionCardinalityAtLeast(BitSet a, BitSet b, int i)
     {
       Random r = new Random(20031008);
       for (int i=0; i<100; i++) {
@@ -1103,9 +1268,9 @@ public final class TestUtilMDE extends TestCase {
     // public static final class WildcardFilter implements FilenameFilter
     //   public WildcardFilter(String filename)
     //   public boolean accept(File dir, String name)
-    // public static boolean canCreateAndWrite(File file) {
-    // public static void writeObject(Object o, File file) throws IOException {
-    // public static Object readObject(File file) throws
+    // public static boolean canCreateAndWrite(File file)
+    // public static void writeObject(Object o, File file) throws IOException
+    // public static Object readObject(File file)
     // public static File createTempDir(String prefix, String suffix)
 
     // public Object incrementHashMap(HashMap hm, Object key, int count)
@@ -1192,7 +1357,7 @@ public final class TestUtilMDE extends TestCase {
         }
       }
 
-      // public static final class FilteredIterator implements Iterator {
+      // public static final class FilteredIterator implements Iterator
 
       Vector iota10_odd = new Vector();
       for (int i=0; i<iota10.size(); i++)
@@ -1217,7 +1382,7 @@ public final class TestUtilMDE extends TestCase {
       Assert.assertTrue(rfali.getLast().equals(new Integer(4)));
     }
 
-    // public static ArrayList randomElements(Iterator itor, int num_elts) {
+    // public static ArrayList randomElements(Iterator itor, int num_elts)
     // public static ArrayList randomElements(Iterator itor, int num_elts, Random random)
 
     // Iterate through numbers from zero up to the argument (non-inclusive)
@@ -1268,7 +1433,7 @@ public final class TestUtilMDE extends TestCase {
     }
 
 
-    // public static Method methodForName(String methodname) throws ClassNotFoundException {
+    // public static Method methodForName(String methodname) throws ClassNotFoundException
 //
     // essentially I am just testing whether the return is erroneous
     try {
@@ -1293,6 +1458,8 @@ public final class TestUtilMDE extends TestCase {
     // public static String appendProperty(Properties p, String key, String value)
     // public static String setDefault(Properties p, String key, String value)
     // public static void streamCopy(java.io.InputStream from, java.io.OutputStream to)
+
+    // public static String replaceString(String target, String oldStr, String newStr)
 
     assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", " ", "  ").equals("hello  dolly  well  hello  dolly"));
     assertTrue(UtilMDE.replaceString("  hello  dolly well hello dolly  ", " ", "  ").equals("    hello    dolly  well  hello  dolly    "));
@@ -1422,6 +1589,22 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.removeWhitespaceAround("cd 123", "123").equals("cd123"));
 
     // public static String nplural(int n, String noun)
+
+    assertTrue(UtilMDE.nplural(0, "fuss").equals("0 fusses"));
+    assertTrue(UtilMDE.nplural(1, "fuss").equals("1 fuss"));
+    assertTrue(UtilMDE.nplural(2, "fuss").equals("2 fusses"));
+    assertTrue(UtilMDE.nplural(0, "fox").equals("0 foxes"));
+    assertTrue(UtilMDE.nplural(1, "fox").equals("1 fox"));
+    assertTrue(UtilMDE.nplural(2, "fox").equals("2 foxes"));
+    assertTrue(UtilMDE.nplural(0, "fish").equals("0 fishes"));
+    assertTrue(UtilMDE.nplural(1, "fish").equals("1 fish"));
+    assertTrue(UtilMDE.nplural(2, "fish").equals("2 fishes"));
+    assertTrue(UtilMDE.nplural(0, "fletch").equals("0 fletches"));
+    assertTrue(UtilMDE.nplural(1, "fletch").equals("1 fletch"));
+    assertTrue(UtilMDE.nplural(2, "fletch").equals("2 fletches"));
+    assertTrue(UtilMDE.nplural(0, "fund").equals("0 funds"));
+    assertTrue(UtilMDE.nplural(1, "fund").equals("1 fund"));
+    assertTrue(UtilMDE.nplural(2, "fund").equals("2 funds"));
 
     // public static String rpad(String s, int length)
     // public static String rpad(int num, int length)
@@ -1648,7 +1831,7 @@ public final class TestUtilMDE extends TestCase {
       assert_arrays_equals (h, h_copy);
     }
 
-    // public boolean isElemMatch (double[] a1, double[] a2) {
+    // public boolean isElemMatch (double[] a1, double[] a2)
     {
       double f1[] = new double[10];
       double f2[] = new double[20];
@@ -1772,7 +1955,7 @@ public final class TestUtilMDE extends TestCase {
       assert_arrays_equals (a7, a7_copy);
     }
 
-    // public boolean isSubset (double[] a1, double[] a2)
+    // public boolean FuzzyFloat.isSubset (double[] a1, double[] a2)
     {
       double f1[] = new double[10];
       double f2[] = new double[20];

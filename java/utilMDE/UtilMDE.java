@@ -1203,17 +1203,26 @@ public final class UtilMDE {
   /// StringTokenizer
   ///
 
-  /** Return a Vector of the Strings returned by @link{StringTokenizer(String,String,boolean)} with the given arguments. */
+  /**
+   * Return a Vector of the Strings returned by
+   * @link{java.util.StringTokenizer(String,String,boolean)} with the given arguments.
+   **/
   public static Vector tokens(String str, String delim, boolean returnTokens) {
     return makeVector(new StringTokenizer(str, delim, returnTokens));
   }
 
-  /** Return a Vector of the Strings returned by @link{StringTokenizer(String,String)} with the given arguments. */
+  /**
+   * Return a Vector of the Strings returned by
+   * @link{java.util.StringTokenizer(String,String)} with the given arguments.
+   **/
   public static Vector tokens(String str, String delim) {
     return makeVector(new StringTokenizer(str, delim));
   }
 
-  /** Return a Vector of the Strings returned by @link{StringTokenizer(String)} with the given arguments. */
+  /**
+   * Return a Vector of the Strings returned by
+   * @link{java.util.StringTokenizer(String)} with the given arguments.
+   **/
   public static Vector tokens(String str) {
     return makeVector(new StringTokenizer(str));
   }

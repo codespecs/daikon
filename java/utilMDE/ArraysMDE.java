@@ -1,3 +1,6 @@
+// If you edit this file, you must also edit its tests.
+// For tests of this and the entire utilMDE package, see class TestUtilMDE.
+
 package utilMDE;
 
 import java.lang.ref.WeakReference;
@@ -11,10 +14,10 @@ import java.util.*;
 public final class ArraysMDE {
 
   /**
-   * Returns a compare result integer based on v.  It tries to return
-   * an integer representation of v except when v is too large to fit
-   * in an integer or is between -1 and +1 (since 0 is a bad approximation
-   * in this case for a small number)
+   * Returns an integer approximation to v:  either v rounded to an
+   * integer, or the maximum/minimum integer if v is too large to fit, or
+   * -1 or +1 if v is nonzero and between -1 and 1.  Returns 0 only if the
+   * argument is 0.
    */
   static int compare_result (double v) {
     if (v < Integer.MIN_VALUE) {
@@ -44,6 +47,19 @@ public final class ArraysMDE {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(int[])");
     int result = a[0];
+    for (int i=1; i<a.length; i++)
+      result = Math.min(result, a[i]);
+    return result;
+  }
+
+  /**
+   * Return the smallest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static long min(long[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(long[])");
+    long result = a[0];
     for (int i=1; i<a.length; i++)
       result = Math.min(result, a[i]);
     return result;
@@ -84,6 +100,24 @@ public final class ArraysMDE {
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    **/
+  public static Long min(Long[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Long[])");
+    Long result = a[0]; // to return a value actually in the array
+    long result_long = result.longValue();      // for faster comparison
+    for (int i=1; i<a.length; i++) {
+      if (a[i].longValue() < result_long) {
+        result = a[i];
+        result_long = result.longValue();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Return the smallest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
   public static Double min(Double[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Double[])");
@@ -111,7 +145,20 @@ public final class ArraysMDE {
     return result;
   }
 
-    /**
+  /**
+   * Return the largest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static long max(long[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(long[])");
+    long result = a[0];
+    for (int i=1; i<a.length; i++)
+      result = Math.max(result, a[i]);
+    return result;
+  }
+
+  /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    **/
@@ -137,6 +184,24 @@ public final class ArraysMDE {
       if (a[i].intValue() > result_int) {
         result = a[i];
         result_int = result.intValue();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Return the largest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static Long max(Long[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
+    Long result = a[0]; // to return a value actually in the array
+    long result_long = result.longValue();      // for faster comparison
+    for (int i=1; i<a.length; i++) {
+      if (a[i].longValue() > result_long) {
+        result = a[i];
+        result_long = result.longValue();
       }
     }
     return result;
@@ -178,80 +243,6 @@ public final class ArraysMDE {
   }
 
   /**
-   * Return the difference between the smallest and largest array elements.
-   **/
-  public static int element_range(int[] a) {
-    if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
-    int[] min_max = min_max(a);
-    return min_max[1] - min_max[0];
-  }
-
-  // min, max for long (as opposed to int)
-
-  /**
-   * Return the smallest value in the array.
-   * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   **/
-  public static long min(long[] a) {
-    if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(long[])");
-    long result = a[0];
-    for (int i=1; i<a.length; i++)
-      result = Math.min(result, a[i]);
-    return result;
-  }
-
-  /**
-   * Return the smallest value in the array.
-   * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   **/
-  public static Long min(Long[] a) {
-    if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Long[])");
-    Long result = a[0]; // to return a value actually in the array
-    long result_long = result.longValue();      // for faster comparison
-    for (int i=1; i<a.length; i++) {
-      if (a[i].longValue() < result_long) {
-        result = a[i];
-        result_long = result.longValue();
-      }
-    }
-    return result;
-  }
-
-  /**
-   * Return the largest value in the array.
-   * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   **/
-  public static long max(long[] a) {
-    if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(long[])");
-    long result = a[0];
-    for (int i=1; i<a.length; i++)
-      result = Math.max(result, a[i]);
-    return result;
-  }
-
-  /**
-   * Return the largest value in the array.
-   * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   **/
-  public static Long max(Long[] a) {
-    if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
-    Long result = a[0]; // to return a value actually in the array
-    long result_long = result.longValue();      // for faster comparison
-    for (int i=1; i<a.length; i++) {
-      if (a[i].longValue() > result_long) {
-        result = a[i];
-        result_long = result.longValue();
-      }
-    }
-    return result;
-  }
-
-  /**
    * Return a two-element array containing the smallest and largest values in the array.
    * Return null if the array has length 0.
    **/
@@ -266,6 +257,16 @@ public final class ArraysMDE {
       result_max = Math.max(result_max, a[i]);
     }
     return new long[] { result_min, result_max };
+  }
+
+  /**
+   * Return the difference between the smallest and largest array elements.
+   **/
+  public static int element_range(int[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
+    int[] min_max = min_max(a);
+    return min_max[1] - min_max[0];
   }
 
   /**
@@ -1657,7 +1658,10 @@ public final class ArraysMDE {
    * @return true iff some element of a is null (false if a is zero-sized)
    **/
   public static boolean any_null(Object[] a) {
-    return indexOfEq(a, null) >= 0;
+    if (a.length == 0)
+      return false;
+    // The cast ensures that the right version of IndexOfEq gets called.
+    return indexOfEq(a, (Object) null) >= 0;
   }
 
   /**
