@@ -36,7 +36,7 @@ public class LinearTernary
     if (!dkconfig_enabled) return null;
 
     // temporarily
-    if (true) return null;
+    // if (true) return null;
 
     VarInfo x = ppt.var_infos[0];
     VarInfo y = ppt.var_infos[1];
