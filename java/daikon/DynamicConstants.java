@@ -1,6 +1,10 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
 
 import java.io.*;
 import java.util.*;
@@ -33,6 +37,21 @@ public class DynamicConstants implements Serializable {
    * over dynamic constants.  For experimental purposes only
    **/
   public static boolean dkconfig_no_post_process = false;
+
+  /**
+   * Boolean. If true only create OneOf invariants for variables that
+   * are constant for the entire run.  If false, all possible invariants
+   * are created between constants.  Note that setting this to true only
+   * fails to create invariants between constants.  Invariants between
+   * constants and non-constants are created regardless.
+   *
+   * A problem occurs with merging when this is turned on.  If a var_info
+   * is constant at one child slice, but not constant at the other child
+   * slice, interesting invariants may not be merged because they won't
+   * exist on the slice with the constant.  This is thus currently
+   * defaulted to false.
+   */
+  public static boolean dkconfig_OneOf_only = false;
 
   /** Debug Tracer **/
   public static final Logger debug
@@ -337,8 +356,12 @@ public class DynamicConstants implements Serializable {
       slice1.instantiate_invariants();
       if (ppt.is_slice_global (con.vi))
         slice1.remove_global_invs();
-      if (con.count > 0)
-        slice1.add_val (con.val, mod, con.count);
+      if (con.count > 0) {
+        if (Daikon.dkconfig_df_bottom_up)
+          slice1.add_val_bu (con.val, mod, con.count);
+        else
+          slice1.add_val(con.val, mod, con.count);
+      }
       new_views.add (slice1);
     }
 
@@ -371,8 +394,12 @@ public class DynamicConstants implements Serializable {
                    + ppt.is_slice_global (c1.vi, c2.vi));
         if (ppt.is_slice_global (c1.vi, c2.vi))
           slice2.remove_global_invs();
-        if (c1.count > 0 && c2.count > 0)
-          slice2.add_val (c1.val, c2.val, mod, mod, con1.count);
+        if (c1.count > 0 && c2.count > 0) {
+          if (Daikon.dkconfig_df_bottom_up)
+            slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
+          else
+            slice2.add_val (c1.val, c2.val, mod, mod, con1.count);
+        }
         new_views.add (slice2);
       }
     }
@@ -408,9 +435,14 @@ public class DynamicConstants implements Serializable {
           if (ppt.is_slice_global (con_arr[0].vi, con_arr[1].vi,con_arr[2].vi))
             slice3.remove_global_invs();
           if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
-              && (con_arr[2].count > 0))
-            slice3.add_val (con_arr[0].val, con_arr[1].val, con_arr[2].val,
-                            mod, mod, mod, con_arr[0].count);
+              && (con_arr[2].count > 0)) {
+            if (Daikon.dkconfig_df_bottom_up)
+              slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
+                              con_arr[2].val, mod, mod, mod, con_arr[0].count);
+            else
+              slice3.add_val (con_arr[0].val, con_arr[1].val,
+                              con_arr[2].val, mod, mod, mod, con_arr[0].count);
+          }
           new_views.add (slice3);
         }
       }
@@ -427,8 +459,8 @@ public class DynamicConstants implements Serializable {
         PptSlice slice = (PptSlice) new_views.get (i);
         for (int j = 0; j < slice.invs.size(); j++) {
           Invariant inv = (Invariant) slice.invs.get (j);
-          inv.log ("created, falsified = " + inv.falsified);
-          if (!inv.falsified)
+          inv.log ("created, falsified = " + inv.is_false());
+          if (!inv.is_false())
             true_inv_cnt[slice.arity()]++;
         }
         if (!ppt.is_slice_global (slice.var_infos) && slice.invs.size() > 0) {
@@ -486,7 +518,7 @@ public class DynamicConstants implements Serializable {
       PptSlice slice = (PptSlice) new_views.get (i);
       for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = (Invariant) j.next();
-        if (inv.falsified)
+        if (inv.is_false())
           j.remove();
       }
     }
@@ -513,10 +545,31 @@ public class DynamicConstants implements Serializable {
    */
   public void post_process () {
 
-    // don't create any post-processed invariants
+    // if requested, don't create any post-processed invariants
     if (dkconfig_no_post_process) {
-      System.out.println ("Not creating invariants over " + con_list.size()
-                          + " constants");
+      int con_count = 0;
+      for (int i = 0; i < con_list.size(); i++) {
+        Constant con = (Constant) con_list.get(i);
+        if (!con.vi.isCanonical())
+          continue;
+        System.out.println ("  Not creating invariants over leader "
+                            + con.vi.name.name() + " = " + con.val);
+        con_count++;
+      }
+      System.out.println (con_count + " constants at ppt " + ppt);
+      return;
+    }
+
+    // If specified, create only OneOf invariants.  Also create a reflexive
+    // equality invariant, since that is assumed to exist in many places
+    if (dkconfig_OneOf_only) {
+      for (int i = 0; i < con_list.size(); i++) {
+        Constant con = (Constant) con_list.get(i);
+        if (!con.vi.isCanonical())
+          continue;
+        instantiate_oneof (con);
+        ppt.create_equality_inv (con.vi, con.vi, con.count);
+      }
       return;
     }
 
@@ -585,6 +638,37 @@ public class DynamicConstants implements Serializable {
       if (missing)
         missing_list.add (new Constant (pvar));
     }
+  }
+
+  public void instantiate_oneof (Constant con) {
+
+    Invariant inv = null;
+    PptSlice1 slice1 = (PptSlice1) ppt.get_or_instantiate_slice (con.vi);
+
+    // Create the correct OneOf invariant
+    ProglangType rep_type = con.vi.rep_type;
+    boolean is_scalar = rep_type.isScalar();
+    if (is_scalar) {
+      inv = OneOfScalar.instantiate (slice1);
+    } else if (rep_type == ProglangType.INT_ARRAY) {
+      inv = OneOfSequence.instantiate (slice1);
+    } else if (Daikon.dkconfig_enable_floats
+               && rep_type == ProglangType.DOUBLE) {
+      inv = OneOfFloat.instantiate (slice1);
+    } else if (Daikon.dkconfig_enable_floats
+               && rep_type == ProglangType.DOUBLE_ARRAY) {
+      inv = OneOfFloatSequence.instantiate (slice1);
+    } else if (rep_type == ProglangType.STRING) {
+      inv = OneOfString.instantiate (slice1);
+    } else if (rep_type == ProglangType.STRING_ARRAY) {
+      inv = OneOfStringSequence.instantiate (slice1);
+    } else {
+      // Do nothing; do not even complain
+    }
+    slice1.addInvariant (inv);
+
+    // Add the value to it
+    slice1.add_val_bu (con.val, ValueTuple.MODIFIED, con.count);
   }
 
   /**
@@ -727,7 +811,7 @@ public class DynamicConstants implements Serializable {
       PptSlice slice = (PptSlice) new_views.get (i);
       for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = (Invariant) j.next();
-        if (inv.falsified)
+        if (inv.is_false())
           j.remove();
       }
     }
