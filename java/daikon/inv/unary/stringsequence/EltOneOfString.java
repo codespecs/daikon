@@ -221,7 +221,6 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject(); 
-    // Intern the strings
     for (int i=0; i < num_elts; i++)
       elts[i] = Intern.intern(elts[i]);
   }

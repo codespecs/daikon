@@ -262,7 +262,6 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject(); 
-    // Intern the strings
     for (int i=0; i < num_elts; i++)
       elts[i] = Intern.intern(elts[i]);
   }
