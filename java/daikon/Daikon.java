@@ -373,10 +373,9 @@ public final class Daikon {
       throw new Error(e.toString());
     }
     // Jikes complains when I put this all in one big string.
-    System.out.print("Read " + num_decl_files + " declaration file" +
-                       ((num_decl_files == 1) ? "" : "s"));
-    System.out.print(", " + num_dtrace_files + " dtrace file");
-    System.out.println(((num_dtrace_files == 1) ? "" : "s") + ".");
+    System.out.print("Read " + UtilMDE.nplural(num_decl_files, "declaration file"));
+    System.out.print(", " + UtilMDE.nplural(num_spinfo_files, "spinfo file"));
+    System.out.println(", " + UtilMDE.nplural(num_dtrace_files, "dtrace file"));
 
     // Old location; but we want to add these before reading trace files.
     // add_combined_exits(all_ppts);
