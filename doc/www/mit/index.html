@@ -518,7 +518,9 @@ target.
       make staging <br>
     </code>
 
-    <li> Test the distribution in the staging area <p>
+    <li> Test the distribution in the staging area [<b>Consider moving the
+    staging area to the website so that we can check things out via the
+    webserver before installing</b><p>
 
     <code>
       make test-staged-dist <br>
@@ -540,6 +542,17 @@ target.
     again after the version number has been incremented.  In this
     case, simply edit <tt>doc/VERSION</tt> by hand back to the correct
     version number before rebuilding. <p>
+
+    <b>We should consider just updating the version number by hand at the
+    beginning of the process.  That way we can run this multiple times without
+    confusion</b> <p>
+
+    <li> Check the website to see if it has any broken links <p>
+
+    <code>
+      checklink.pl -q -r `cat $inv/scripts/checklinks_args.txt` 
+      http://pag.csail.mit.edu/daikon
+    </code>
 
     <li> Commit any changes back to CVS <p>
 
