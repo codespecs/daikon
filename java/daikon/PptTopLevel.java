@@ -71,13 +71,10 @@ public class PptTopLevel
   public static boolean dkconfig_pairwise_implications = false;
 
   /**
-   * Integer. A value of zero indicates that dummy invariants should
-   * not be created. A value of one indicates that dummy invariants
-   * should be created only when no suitable condition was found in
-   * the regular output. A value of two indicates that dummy
-   * invariants should be created for each splitting condition.
-   **/
-  public static int dkconfig_dummy_invariant_level = 0;
+   * Remove invariants at lower program points when a matching invariant is
+   * created at a higher program point. For experimental purposes only.
+   */
+  public static boolean dkconfig_remove_merged_invs = false;
 
   /** number of invariants after equality set processing for the last sample */
   public int instantiated_inv_cnt = 0;
@@ -100,6 +97,10 @@ public class PptTopLevel
   /** Debug tracer for addImplications. **/
   public static final Logger debugAddImplications =
     Logger.getLogger("daikon.PptTopLevel.addImplications");
+
+  /** Debug tracer for adding and processing conditional ppts */
+  public static final Logger debugConditional =
+    Logger.getLogger("daikon.PptTopLevel.conditional");
 
   /** Debug tracer for data flow. **/
   public static final Logger debugFlow =
@@ -167,15 +168,54 @@ public class PptTopLevel
    **/
   private Map/*[Integer[]->PptSlice]*/ views;
 
-  // Temporarily have a separate collection for PptConditional views.
-  // In the long run, I'm not sure whether the two collections will be
-  // separate or not.
-  // [I'm not sure whether the following is still true in version 3. -MDE]
-  // Right now, these are created only after all the values have been seen,
-  // so I don't have to get too tense about installing them correctly and
-  // iterating over them.  That should be fixed later.  For now, maybe have
-  // two methods that add:  one that puts all the values in, one that doesn't.
-  public Vector views_cond;
+  /** List of all of the splitters for this ppt. */
+  public /*PptSplitter*/ ArrayList splitters = null;
+
+  /**
+   * Iterator for all of the conditional ppts.  Returns each PptConditional
+   * from each entry in splitters
+   */
+  public class CondIterator implements java.util.Iterator {
+
+    int splitter_index = 0;
+    int ppts_index = 0;
+
+    public boolean hasNext() {
+      if (splitters == null)
+        return (false);
+      if (splitter_index >= splitters.size())
+        return (false);
+      return (true);
+    }
+
+    public Object next() {
+
+      PptSplitter ppt_split = (PptSplitter) splitters.get(splitter_index);
+      PptTopLevel ppt = ppt_split.ppts[ppts_index];
+
+      if (ppts_index < (ppt_split.ppts.length - 1)) {
+        ppts_index++;
+      } else {
+        splitter_index++;
+        ppts_index = 0;
+      }
+      return (ppt);
+    }
+
+    public void remove() {
+      throw new UnsupportedOperationException
+                                ("Remove unsupported in CondIterator");
+    }
+  }
+
+  public CondIterator cond_iterator() {
+    return new CondIterator();
+  }
+
+  /** returns whether or not this ppt has any splitters */
+  public boolean has_splitters() {
+    return (splitters != null) && (splitters.size() > 0);
+  }
 
   /** all children relations in the hierarchy */
   public List /* PptRelation */ children = new ArrayList();
@@ -190,6 +230,12 @@ public class PptTopLevel
    *  merge multiple times
    */
   public boolean invariants_merged = false;
+
+  /**
+   * Flag that indicates whether or not invariants that are duplicated
+   * at the parent have been removed
+   */
+  public boolean invariants_removed = false;
 
   /**
    * VarInfo index transform from this point to the ppt containing
@@ -346,7 +392,6 @@ public class PptTopLevel
 
     // values = new VarValuesOrdered(); // [[INCR]]
     views = new LinkedHashMap();
-    views_cond = new Vector();
 
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
@@ -380,7 +425,7 @@ public class PptTopLevel
     // Init the set of ppts used to track the index into the weakened invs
     // list.  The initial order is irrelevant since each needs to start
     // at the beginning of the weakened_invs list.
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       if (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())
         weakened_offsets.add (ppt);
@@ -429,7 +474,7 @@ public class PptTopLevel
   /** Trim the collections used in this PptTopLevel, in hopes of saving space. **/
   public void trimToSize() {
     super.trimToSize();
-    if (views_cond != null) { views_cond.trimToSize(); }
+    if (splitters != null) { splitters.trimToSize(); }
   }
 
   /** The number of samples processed by this program point so far. **/
@@ -1343,11 +1388,13 @@ public class PptTopLevel
       }
     }
 
-    // Add to all the conditional ppts
-    for (Iterator itor = views_cond.iterator() ; itor.hasNext() ; ) {
-      PptConditional pptcond = (PptConditional) itor.next();
-      pptcond.add(vt, count);
-      // TODO: Check for no more invariants on pptcond?
+    // Add to all the conditional ppts (not implemented in top down)
+    if (false) {
+      for (Iterator itor = cond_iterator(); itor.hasNext() ; ) {
+        PptConditional pptcond = (PptConditional) itor.next();
+        pptcond.add(vt, count);
+        // TODO: Check for no more invariants on pptcond?
+      }
     }
 
     if (debugSuppress.isLoggable(Level.FINE)) {
@@ -1425,6 +1472,15 @@ public class PptTopLevel
     if (debugFlow.isLoggable(Level.FINE)) {
       debugFlow.fine ("<<< Doing add for " + name());
       debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
+    }
+
+    // If there are conditional program points, add the sample there instead
+    if (has_splitters()) {
+      for (Iterator ii = splitters.iterator(); ii.hasNext(); ) {
+        PptSplitter ppt_split = (PptSplitter) ii.next();
+        ppt_split.add_bottom_up (vt, count);
+      }
+      return (null);
     }
 
     // Instantiate slices and invariants if this is the first sample
@@ -1613,7 +1669,7 @@ public class PptTopLevel
 
     // Add sample to all conditional ppts.  This is probably not fully
     // implemented in V3
-    for (Iterator itor = views_cond.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = cond_iterator(); itor.hasNext() ; ) {
       PptConditional pptcond = (PptConditional) itor.next();
       pptcond.add(vt, count);
       // TODO: Check for no more invariants on pptcond?
@@ -3228,7 +3284,7 @@ public class PptTopLevel
   // it doesn't need to be unless we run this static region!
 
   static {
-    if (! Daikon.disable_splitting) {
+    if (! Daikon.dkconfig_disable_splitting) {
       // new MiscSplitters();
 
       SplitterList.put(".*", new Splitter[] {
@@ -3237,14 +3293,12 @@ public class PptTopLevel
     }
   }
 
-
   public void addConditions(Splitter[] splits) {
-    // System.out.println("addConditions(" + splits.length + ") for " + name());
 
-    int len = splits.length;
-    if ((splits == null) || (len == 0)) {
-      if (Global.debugSplit.isLoggable(Level.FINE))
-        Global.debugSplit.fine ("No splits for " + name());
+    debugConditional.fine ("Applying splits to " + name());
+
+    if ((splits == null) || (splits.length == 0)) {
+        debugConditional.fine ("No splits for " + name());
       return;
     }
 
@@ -3252,187 +3306,22 @@ public class PptTopLevel
     //   Assert.assertTrue(splits[i].instantiated() == false);
     // }
 
-    Vector pconds = new Vector(2 * len);
-    for (int i=0; i<len; i++) {
-      PptConditional cond1 = new PptConditional(this, splits[i], false);
-      if (! cond1.splitter_valid()) {
-        if (Global.debugSplit.isLoggable(Level.FINE))
-          Global.debugSplit.fine ("Splitter (" + cond1.splitter.getClass()
-                                  + ") not valid: " + cond1.name);
+    // Create a Conditional ppt for each side of each splitter
+    splitters = new ArrayList (splits.length);
+    for (int ii = 0; ii < splits.length; ii++) {
+      PptSplitter ppt_split = new PptSplitter (this, splits[ii]);
+      if (!ppt_split.splitter_valid()) {
+          debugConditional.fine ("Splitter (" + ppt_split.splitter.getClass()
+                                  + ") not valid: " + ppt_split.ppts[0].name);
         continue;
       }
-      pconds.add(cond1);
-      PptConditional cond2 = new PptConditional(this, splits[i], true);
-      Assert.assertTrue(cond2.splitter_valid());
-      // [INCR] pconds_vector.add(cond2);
-    }
-    /* [INCR] commented due to timidity; uncomment as soon as possible
-    PptConditional[] pconds
-      = (PptConditional[]) pconds_vector.toArray(new PptConditional[0]);
-    int num_pconds = pconds.length;
-    Assert.assertTrue(num_pconds % 2 == 0);
-    int num_splits = num_pconds/2;
-
-    for (int i=0; i<num_pconds; i+=2) {
-      Assert.assertTrue(! pconds[i].splitter_inverse);
-      Assert.assertTrue(pconds[i+1].splitter_inverse);
-      Assert.assertTrue(pconds[i+1].splitter.condition().equals(pconds[i].splitter.condition()));
+      splitters.add (ppt_split);
+      if (debugConditional.isLoggable (Level.FINE))
+        debugConditional.fine ("Added PptSplitter: " + ppt_split);
     }
 
-    int trimlength = num_tracevars + num_orig_vars;
-
-    int[][] cumulative_modbits = new int[num_pconds][trimlength];
-    for (int i=0; i<num_pconds; i++) {
-      Arrays.fill(cumulative_modbits[i], 1);
-    }
-
-    // Fill the new PptConditionals with values.
-    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
-      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
-      ValueTuple vt = entry.value_tuple;
-      int count = entry.count;
-      // I do not want to use the same ValueTuple every time through the pconds
-      // loop because the inserted ValueTuple will be modified in place.
-      // It's OK to reuse its elements, though.
-      ValueTuple vt_trimmed = vt.trim(trimlength);
-      int[] trimmed_mods = vt_trimmed.mods;
-      Object[] trimmed_vals = vt_trimmed.vals;
-      for (int i=0; i<num_pconds; i+=2) {
-        // I really only have to do one of these (depending on which way
-        // the split goes), unless the splitter throws an error, in which
-        // case I need to have done both.  Thus, do both, to be on the safe
-        // side.
-        ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
-        ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
-        boolean splitter_test;
-        boolean split_exception = false;
-        // System.out.println("Testing " + pconds[i].name);
-        // This try block is tight so it doesn't accidentally catch
-        // other errors.
-        try {
-          splitter_test = pconds[i].splitter.test(vt);
-        } catch (Exception e) {
-          split_exception = true;
-          splitter_test = false; // to pacify the Java compiler
-        } catch (Error e) {
-          split_exception = true;
-          splitter_test = false; // to pacify the Java compiler
-        }
-        if (split_exception) {
-          // Debugging only.
-
-          // System.out.println("----------------");
-          // System.out.println("splitter condition: " + pconds[i].splitter.condition() + " " + pconds[i].splitter.getClass().getName());
-          // System.out.println("ppt: " + name());
-          // System.out.print("vars:");
-          // for (int j=0; j<var_infos.length; j++) {
-          //   System.out.print(" " + var_infos[j].name.name());
-          // }
-          // System.out.println();
-          // System.out.println("valuetuple: " + vt.toString());
-          // Splitter splitter = pconds[i].splitter;
-          // Class sclass = splitter.getClass();
-          // String sclassname = sclass.getName();
-          // // if (sclassname.equals("std_amatch_0")
-          // //     || sclassname.equals("std_getccl_0")) {
-          // //   try {
-          // //     Method srepr = sclass.getMethod("repr", new Class[] {});
-          // //     Object result = srepr.invoke(splitter, new Object[] {});
-          // //     System.out.println("repr: " + result);
-          // //     // Field f = sclass.getDeclaredField("pat_varinfo");
-          // //     // Object pv = f.get(splitter);
-          // //     // System.out.println(pv);
-          // //   } catch (Exception e2) {
-          // //     throw new Error(e2.toString());
-          // //   }
-          // // }
-          // e.printStackTrace();
-        }
-        // If an exception is thrown, don't put the data on either side
-        // of the split.
-        if (! split_exception) {
-          // System.out.println("Result = " + splitter_test);
-          int index = (splitter_test ? i : i+1);
-          // Do not reuse cum_mods!  It might itself be the
-          // canonical version (returned by Intern.intern), and then
-          // modifications would be bad.  Instead, create a new array.
-          int[] cum_mods = cumulative_modbits[index];
-          int[] new_mods = (int[]) trimmed_mods.clone();
-          // This is somewhat like orModsInto, but not exactly.
-          for (int mi=0; mi<trimlength; mi++) {
-            if ((cum_mods[mi] == ValueTuple.MODIFIED)
-                && (new_mods[mi] != ValueTuple.MISSING_NONSENSICAL)) {
-              new_mods[mi] = ValueTuple.MODIFIED;
-              cum_mods[mi] = ValueTuple.UNMODIFIED;
-            }
-          }
-          // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
-          pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
-                                                                Intern.intern(new_mods)),
-                                    count);
-          // I don't want to do "Arrays.fill(cum_mods, 0)" because where
-          // the value was missing, we didn't use up the modification bit.
-          // I've already fixed it up above, anyway.
-        }
-      }
-    }
-
-
-    // Install the new conditional ppts, if they are not trivial.
-    int parent_num_samples = num_samples();
-    Assert.assertTrue(num_pconds % 2 == 0);
-    for (int i=0; i<num_pconds; i+=2) {
-      // Don't bother with this pair of conditioned views if one of
-      // them contains no samples.  This if different than one having
-      // all samples, since some samples may not be added if the
-      // splitter throws an exception.
-
-      int cond0_num_samples = pconds[i].num_samples();
-      int cond1_num_samples = pconds[i+1].num_samples();
-      boolean discard_pair = (cond0_num_samples == 0) || (cond1_num_samples == 0);
-      if (! discard_pair) {
-        views_cond.add(pconds[i]);
-        views_cond.add(pconds[i+1]);
-      } else {
-        if (Global.debugSplit.isLoggable(Level.FINE))
-          Global.debugSplit.fine
-            ("Omitting " + pconds[i].name + " (and its inverse): "
-             + cond0_num_samples + "(" + cond1_num_samples + ")/"
-             + parent_num_samples + " samples");
-        // // Unconditional output, because it's too confusing otherwise.
-        // if (this_num_samples == parent_num_samples) {
-        //   System.out.println("Condition always satisfied: "
-        //                      + pconds[i].name + " == " + this.name);
-        // }
-      }
-    }
-
-    // views_cond must have matching pairs
-    Assert.assertTrue(views_cond.size() % 2 == 0);
-    for (int i=0; i < views_cond.size(); i+=2) {
-      PptConditional cond0 = (PptConditional) views_cond.get(i);
-      PptConditional cond1 = (PptConditional) views_cond.get(i+1);
-      Assert.assertTrue(! cond0.splitter_inverse);
-      Assert.assertTrue(cond1.splitter_inverse);
-      Assert.assertTrue(cond0.splitter.condition().equals(cond1.splitter.condition()));
-    }
-
-    if (Global.debugSplit.isLoggable(Level.FINE)) {
-      Global.debugSplit.fine ("" + views_cond.size() + " views on " + this.name);
-      for (int i=0; i<views_cond.size(); i++) {
-        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-        debug.fine ("    " + pcond.name);
-      }
-    }
-    for (int i=0; i<views_cond.size(); i++) {
-      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-      pcond.initial_processing();
-    }
-    */ // [INCR]
-
-    // Install the new conditional ppts
-    views_cond.addAll(pconds);
   }
+
 
   /**
    * Given conditional program points (and invariants detected over them),
@@ -3441,512 +3330,35 @@ public class PptTopLevel
    * are considered.
    **/
   public void addImplications() {
-    int num_conds = views_cond.size();
-    if (num_conds > 0) {
-      // if dkconfig_pairwise_implications is not set, then only create
-      // implications from the first two conditional program points.
-      if (! dkconfig_pairwise_implications) {
-        num_conds = Math.min(num_conds, 2);
-      }
-      // Take each conditional program point and its opposite and make
-      // implications. We can't assume that the number of conditional
-      // program points is even, because conditional program points
-      // with no samples are discarded. Otherwise, a conditional
-      // program point is usually next to its opposite pair in the
-      // vector view_conds.
-      for (int i = 0; i < num_conds; i++) { // note increment is NOT "i+=2".
-        PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
-        if ( i+1 >= num_conds )
-          continue;
-        PptConditional cond2 = (PptConditional) views_cond.elementAt(i+1);
-        if (cond1.splitter_inverse == cond2.splitter_inverse)
-          continue;
-        if (!cond1.splitter.condition().equals(cond2.splitter.condition()))
-          continue;
-        addImplications_internal(cond1, cond2, false);
-        // skip cond2
-        i++;
-      }
-    }
 
-    /* [INCR] ...
-    if (this.ppt_name.isCombinedExitPoint()) {
-      Vector exits = this.entry_ppt.exit_ppts;
-      if (exits.size() == 2) {
-        // Eventually I ought to make this applicable when the number of
-        // individual exits is not 2.
-
-      // System.out.println("num exits = " + exits.size());
-      // for (int i=0; i<exits.size(); i++) {
-      //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
-      // }
-
-      // Assert.assertTrue(exits.size() == 2, "Bad number of exits: " + exits.size());
-      for (int i = 0; i < num_exits; i++) {
-        for (int j = i+1; j < num_exits; j++) {
-          PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(i);
-          PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(j);
-          // No longer necessary to use add_implications, as we are now
-          // adding combined program points early.
-          // addImplications_internal(ppt1, ppt2, true);
-          addImplications_internal(ppt1, ppt2, false);
-        }
-      }
-    }
-    */ // ... [INCR]
-  }
-
-
-  // Given a pair of conditional program points, form implications from the
-  // invariants true at each one.  The algorithm divides the invariants
-  // into three groups:  those that are true at both program points (the
-  // "same" invariants), those that are true at one program point and whose
-  // negation is true at the other program point (the "exclusive"
-  // invariants), and all others (the "different" invariants).  At the
-  // first program point, for each exclusive invariant and each different
-  // invariant, create a conditional of the form "exclusive => different".
-  // Do the same at the second program point.
-
-  // This method is correct only if the two conditional program points
-  // fully partition the input space (their conditions are negations of one
-  // another).  For instance, suppose there is a three-way split with the
-  // following invariants detected at each:
-  //   {A,B}  {!A,!B}  {A,!B}
-  // Examining just the first two would suggest that "A <=> B" is valid,
-  // but in fact that is a false inference.
-  private void addImplications_internal(PptTopLevel ppt1,
-                                        PptTopLevel ppt2,
-                                        boolean add_nonimplications)
-  {
-    // System.out.println("addImplications_internal: " + ppt1.name() + ", " + ppt2.name());
-
-    PptSlice[][] matched_views = match_views(ppt1, ppt2);
-    if (debugAddImplications.isLoggable(Level.FINE)) {
-      debugAddImplications.fine ("Matched views=" + matched_views.length + " from " +
-                                 ppt1.views.size() + ", " + ppt2.views.size());
-    }
-
-    Vector exclusive_conditions_vec = new Vector(); // elements are pairs of Invariants
-    Vector same_invariants_vec = new Vector(); // elements are Invariants
-
-    for (int i=0; i<matched_views.length; i++) {
-      PptSlice slice1 = matched_views[i][0];
-      PptSlice slice2 = matched_views[i][1];
-
-      if ((slice1 == null) || (slice2 == null)) {
-        if (debugAddImplications.isLoggable(Level.FINE)) {
-          debugAddImplications.fine ("addImplications: matched views skipped "
-                                     + (slice1 == null ? "null" : slice1.name()) + " "
-                                     + (slice2 == null ? "null" : slice2.name()));
-        }
-        continue;
-      }
-
-      // Do not eliminate invariants that are not worth printing at this
-      // stage!  Perhaps x=y is not worth printing because it is true at a
-      // controller, but x!=y is worth printing; now we can't determine
-      // that there is an exclusive condition.  We'll eliminate those
-      // not-worth-printing invariants later, when we actually make the
-      // implication invariants.
-
-      Invariants invs1 = new Invariants();
-      for (int j=0; j<slice1.invs.size(); j++) {
-        Invariant inv = (Invariant)slice1.invs.get(j);
-        invs1.add(inv);
-        if (debugAddImplications.isLoggable(Level.FINE)) {
-          debugAddImplications.fine ("invs1 " + inv.format());
-        }
-      }
-      Invariants invs2 = new Invariants();
-      for (int j=0; j<slice2.invs.size(); j++) {
-        Invariant inv = (Invariant)slice2.invs.get(j);
-        invs2.add(inv);
-        if (debugAddImplications.isLoggable(Level.FINE)) {
-          debugAddImplications.fine ("invs2 " + inv.format());
-        }
-      }
-
-      Vector this_excl = exclusive_conditions(invs1, invs2);
-      if (debugAddImplications.isLoggable(Level.FINE)) {
-        debugAddImplications.fine ("addImplications: "
-                                   + this_excl.size() + " exclusive conditions for "
-                                   + slice1.name() + " " + slice2.name());
-      }
-      exclusive_conditions_vec.addAll(this_excl);
-
-      Vector this_same = same_invariants(invs1, invs2);
-      same_invariants_vec.addAll(this_same);
-    }
-
-    if (add_nonimplications) {
-      for (int i=0; i<same_invariants_vec.size(); i++) {
-        Invariant same_inv = (Invariant)same_invariants_vec.elementAt(i);
-        joiner_view.addInvariant(same_inv);
-      }
-    }
-
-    Vector dummies = new Vector();
-
-    if (dkconfig_dummy_invariant_level > 0 && ppt1 instanceof PptConditional) {
-      if (exclusive_conditions_vec.size() == 0
-          || dkconfig_dummy_invariant_level >= 2) {
-        // As a last resort, try using the user's supplied DummyInvariant
-        debugAddImplications.fine ("addImplications: resorting to dummy");
-        PptConditional cond1 = (PptConditional)ppt1;
-        PptConditional cond2 = (PptConditional)ppt2;
-        cond1.splitter.instantiateDummy(ppt1);
-        cond2.splitter.instantiateDummy(ppt2);
-        DummyInvariant dummy1 = cond1.dummyInvariant();
-        DummyInvariant dummy2 = cond2.dummyInvariant();
-        if (dummy1 != null && dummy1.valid && dummy2 != null && dummy2.valid) {
-          Assert.assertTrue(!cond1.splitter_inverse);
-          Assert.assertTrue(cond2.splitter_inverse);
-          dummy2.negate();
-          exclusive_conditions_vec.add(new Invariant[] {dummy1, dummy2});
-          dummies.add(new Invariant[] {dummy1, dummy2});
-        }
-      }
-    }
-
-    if (exclusive_conditions_vec.size() == 0) {
-      if (debugAddImplications.isLoggable(Level.FINE)) {
-        debugAddImplications.fine ("addImplications: no exclusive conditions");
-      }
+    if (Daikon.dkconfig_disable_splitting)
       return;
-    }
 
-    // These two program points are mutually exclusive
-
-    Invariant[][] exclusive_conditions
-      = (Invariant[][])exclusive_conditions_vec.toArray(new Invariant[0][0]);
-    Vector differ_vec = different_invariants(matched_views);
-    differ_vec.addAll(dummies);
-
-    Invariant[][] different_invariants
-      = (Invariant[][])differ_vec.toArray(new Invariant[0][0]);
-
-    if (debugAddImplications.isLoggable(Level.FINE)) {
-      debugAddImplications.fine ("addImplications: "
-                                 + exclusive_conditions.length + " exclusive conditions, "
-                                 + different_invariants.length + " different invariants");
-    }
-
-
-    // Add an implication from each of a pair of mutually exclusive
-    // invariants to everything that differs (at all) about the two
-
-    // split into two in order to use indexOf
-    Invariant[] excls1 = new Invariant[exclusive_conditions.length];
-    Invariant[] excls2 = new Invariant[exclusive_conditions.length];
-    for (int i=0; i<exclusive_conditions.length; i++) {
-      excls1[i] = exclusive_conditions[i][0];
-      excls2[i] = exclusive_conditions[i][1];
-    }
-
-
-    for (int i=0; i<exclusive_conditions.length; i++) {
-      Assert.assertTrue(exclusive_conditions[i].length == 2);
-      Invariant excl1 = exclusive_conditions[i][0];
-      Invariant excl2 = exclusive_conditions[i][1];
-      Assert.assertTrue(excl1 != null);
-      Assert.assertTrue(excl2 != null);
-
-      if (debugAddImplications.isLoggable(Level.FINE)) {
-        debugAddImplications.fine ("Adding implications with conditions "
-                                   + excl1.format() + " and " + excl2.format());
-      }
-
-      for (int j=0; j<different_invariants.length; j++) {
-        Assert.assertTrue(different_invariants[j].length == 2);
-        Invariant diff1 = different_invariants[j][0];
-        Invariant diff2 = different_invariants[j][1];
-
-        Assert.assertTrue((diff1 == null) || (diff2 == null)
-                      || (ArraysMDE.indexOf(excls1, diff1)
-                          == ArraysMDE.indexOf(excls2, diff2)));
-
-        if (debugAddImplications.isLoggable(Level.FINE)) {
-          debugAddImplications.fine ("different_invariants "
-                                     + ((diff1 == null) ? "null" : diff1.format())
-                                     + ", " + ((diff2 == null) ? "null" : diff2.format()));
-        }
-
-        // This adds an implication to itself; bad.
-        // If one of the diffs implies the other, then should not add
-        // an implication for the weaker one.
-        if (diff1 != null) {
-          int index1 = ArraysMDE.indexOf(excls1, diff1);
-          if ((index1 == -1) || (index1 > i)) {
-            boolean iff = (index1 != -1);
-            Implication.makeImplication(this, excl1, diff1, iff);
-          }
-        }
-        if (diff2 != null) {
-          int index2 = ArraysMDE.indexOf(excls2, diff2);
-          if ((index2 == -1) || (index2 > i)) {
-            boolean iff = (index2 != -1);
-            Implication.makeImplication(this, excl2, diff2, iff);
-          }
-        }
+    // Add implications from each splitter
+    if (splitters != null) {
+      for (int i = 0; i < splitters.size(); i++) {
+        PptSplitter ppt_split = (PptSplitter) splitters.get (i);
+        ppt_split.add_implications();
       }
     }
 
-    HashMap canonical_inv = new LinkedHashMap(); // Invariant -> Invariant
-    {
-      HashMap inv_group = new LinkedHashMap(); // Invariant -> HashSet[Invariant]
-
-      // Problem: I am not iterating through the invariants in any particular
-      // order that will guarantee that I don't see A and B, then C and D,
-      // and then A and C (which both already have different canonical versions).
-      // System.out.println(name + " implication canonicalization");
-      for (Iterator itor = joiner_view.invs.iterator(); itor.hasNext(); ) {
-        Invariant inv = (Invariant) itor.next();
-        if ((inv instanceof Implication) && ((Implication) inv).iff) {
-          Implication impl = (Implication) inv;
-          // System.out.println("Bi-implication: " + impl.format());
-          Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate());
-          Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent());
-          if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
-            // Move all the invariants for canon2 over to canon1
-            HashSet hs1 = (HashSet) inv_group.get(canon1);
-            HashSet hs2 = (HashSet) inv_group.get(canon2);
-            inv_group.remove(canon2);
-            for (Iterator itor2=hs2.iterator(); itor2.hasNext(); ) {
-              Invariant inv2 = (Invariant) itor2.next();
-              hs1.add(inv2);
-              canonical_inv.put(inv2, canon1);
-            }
-            // System.out.print("Current set:");
-            // for (Iterator itor2=hs1.iterator(); itor2.hasNext(); ) {
-            //   Invariant inv2 = (Invariant) itor2.next();
-            //   System.out.print("    " + inv2.format());
-            // }
-            // System.out.println();
-          } else {
-            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate();
-            // System.out.println("Canonical: " + canon.format());
-            canonical_inv.put(impl.predicate(), canon);
-            canonical_inv.put(impl.consequent(), canon);
-            HashSet hs = (HashSet) inv_group.get(canon);
-            if (hs == null) {
-              hs = new LinkedHashSet();
-              inv_group.put(canon, hs);
-            }
-            hs.add(impl.predicate());
-            hs.add(impl.consequent());
-            // System.out.print("Current set (2):");
-            // for (Iterator itor2=hs.iterator(); itor2.hasNext(); ) {
-            //   Invariant inv2 = (Invariant) itor2.next();
-            //   System.out.print("    " + inv2.format());
-            // }
-            // System.out.println();
-          }
-        }
+    // If this is a combined exit point with two individual exits, create
+    // implications from the two exit points
+    if (ppt_name.isCombinedExitPoint()) {
+      List exit_points = new ArrayList();
+      for (Iterator ii = children.iterator(); ii.hasNext(); ) {
+        PptRelation rel = (PptRelation) ii.next();
+        if (rel.getRelationType() == PptRelation.EXIT_EXITNN)
+          exit_points.add (rel.child);
       }
-
-      // Now adjust which of the invariants are canonical.
-      // (That is why inv_group was computed above.)
-
-      for (Iterator itor=inv_group.keySet().iterator(); itor.hasNext(); ) {
-        Invariant canon_orig = (Invariant) itor.next();
-        // System.out.println("Outer loop: " + canon_orig.format());
-        HashSet hs = (HashSet) inv_group.get(canon_orig);
-        if (hs.size() == 1) {
-          continue;
-        }
-        Invariant canon_new = null;
-        String canon_new_formatted = null;
-        for (Iterator cand_itor=hs.iterator(); cand_itor.hasNext(); ) {
-          Invariant candidate = (Invariant) cand_itor.next();
-          String candidate_formatted = candidate.format();
-          // System.out.println("Comparing:" + lineSep + "    " + candidate_formatted + lineSep + "    " + canon_new_formatted);
-          // It is also desirable to be over the prestate;
-          // but that is only true for variables that are modified.
-          // A variable without "orig()" is fine if it's not modified.
-          boolean canon_new_undesirable
-            = ((canon_new == null) // avoid NullPointerException
-               || (canon_new_formatted.indexOf("\"null\"") != -1)
-               || (canon_new_formatted.indexOf("return") != -1));
-          boolean candidate_undesirable
-            = ((candidate_formatted.indexOf("\"null\"") != -1)
-               || (candidate_formatted.indexOf("return") != -1));
-          if ((canon_new == null)
-              || canon_new_undesirable
-              || ((! candidate_undesirable)
-                  && (candidate_formatted.length() < canon_new_formatted.length()))) {
-            canon_new = candidate;
-            canon_new_formatted = candidate_formatted;
-          }
-        }
-        if (canon_new != canon_orig) {
-          // Don't set inv_group, lest I get a ConcurrentModificationException
-          // inv_group.put(canon_new, hs);
-          // inv_group.remove(canon_orig);
-          for (Iterator inv_itor=hs.iterator(); inv_itor.hasNext(); ) {
-            Invariant inv = (Invariant) inv_itor.next();
-            Assert.assertTrue(canonical_inv.get(inv) == canon_orig);
-            canonical_inv.put(inv, canon_new);
-          }
-        }
-      }
-      // inv_group is no longer up-to-date now.
-      // I could have created an inv_group_2 during the above computation
-      // and set inv_group to it if I liked.
-    }
-
-    // Prune out implications over non-canonical invariants
-
-    Vector to_remove = new Vector();
-    for (Iterator itor = joiner_view.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
-      if (inv instanceof Implication) {
-        Implication impl = (Implication) inv;
-        Invariant cpred = (Invariant) canonical_inv.get(impl.predicate());
-        Invariant ccons = (Invariant) canonical_inv.get(impl.consequent());
-        boolean pred_non_canon = ((cpred != null) && (impl.predicate() != cpred));
-        boolean cons_non_canon = ((ccons != null) && (impl.consequent() != ccons));
-        if ((! impl.iff)
-            && (pred_non_canon || cons_non_canon)) {
-          to_remove.add(inv);
-        }
+      if (exit_points.size() == 2) {
+        PptTopLevel ppt1 = (PptTopLevel) exit_points.get(0);
+        PptTopLevel ppt2 = (PptTopLevel) exit_points.get(1);
+        PptSplitter ppt_split = new PptSplitter (this, ppt2, ppt1);
+        ppt_split.add_implications();
       }
     }
-
-    // This line seems to cause non-determinism for implications
-    // Run daikon on the dtrace files in:
-    // ~mharder/research/reports/thesis/example-specdiff/gcd/delta/nondeterminism
-    // Run on all, vs. all except 73.dtrace.  Nondeterministically, a
-    // difference will appear and disappear
-    joiner_view.invs.removeAll(to_remove);
-
-
-    // System.out.println("Done adding no more than "
-    //                    + (exclusive_conditions.length * different_invariants.length)
-    //                    + " implications.");
-
   }
-
-
-  // Match up the slices in the two program points.
-  // Each element is a PptSlice[2].  For instance, the result might be
-  // [[Xslice,Xslice],[Yslice,Yslice],[XYslice,XYslice]].
-  // (Perhaps I need to do something special in the case of differing canonical
-  // variables; deal with that later.)
-  public PptSlice[][] match_views(PptTopLevel ppt1, PptTopLevel ppt2) {
-    Vector result = new Vector();
-
-    // First, sort
-    SortedSet ss1 = new TreeSet(arityVarnameComparator);
-    ss1.addAll(ppt1.viewsAsCollection());
-    SortedSet ss2 = new TreeSet(arityVarnameComparator);
-    ss2.addAll(ppt2.viewsAsCollection());
-
-    // Then, pair up elements from the sorted collections.
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), arityVarnameComparator); opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
-      result.add(new PptSlice[] { (PptSlice) pair.a, (PptSlice) pair.b });
-    }
-    return (PptSlice[][])result.toArray(new PptSlice[0][0]);
-  }
-
-
-  // Determine which elements of invs1 are mutually exclusive with elements
-  // of invs2.
-  // Result elements are pairs of Invariants.
-  Vector exclusive_conditions(Invariants invs1, Invariants invs2) {
-    Vector result = new Vector();
-    for (int i1=0; i1<invs1.size(); i1++) {
-      for (int i2=0; i2<invs2.size(); i2++) {
-        Invariant inv1 = (Invariant) invs1.get(i1);
-        Invariant inv2 = (Invariant) invs2.get(i2);
-        // This is a debugging tool, to make sure that various versions
-        // of isExclusiveFormula remain coordinated.  (That's also one
-        // reason we don't break out of the loop early:  also, there will
-        // be few invariants in a slice, so breaking out is of minimal
-        // benefit.)
-        Assert.assertTrue(inv1.isExclusiveFormula(inv2)
-                      == inv2.isExclusiveFormula(inv1),
-                      "Bad exclusivity: " + inv1.isExclusiveFormula(inv2) + " " + inv2.isExclusiveFormula(inv1)
-                       + "    " + inv1.format() + "    " + inv2.format());
-        // System.out.println("isExclusiveFormula(" + inv1.format() + ", " + inv2.format() + ") = " + inv1.isExclusiveFormula(inv2));
-        if (inv1.isExclusiveFormula(inv2)) {
-          result.add(new Invariant[] { inv1, inv2 });
-        }
-      }
-    }
-    return result;
-  }
-
-
-  // Different_invariants and same_invariants should be merged.
-  // They are used by the code that adds implications.
-
-
-  // Determine which elements of invs1 differ from elements of invs2.
-  // Result elements are pairs of Invariants (with one or the other
-  // possibly null).
-  Vector different_invariants(Invariants invs1, Invariants invs2) {
-    SortedSet ss1 = new TreeSet(icfp);
-    // ss1.addAll(invs1);
-    for (int j=0; j<invs1.size(); j++) {
-      Invariant inv = (Invariant)invs1.get(j);
-      ss1.add(inv);
-    }
-
-    SortedSet ss2 = new TreeSet(icfp);
-    for (int j=0; j<invs2.size(); j++) {
-      Invariant inv = (Invariant)invs2.get(j);
-      ss2.add(inv);
-    }
-
-    Vector result = new Vector();
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
-      if ((pair.a == null) || (pair.b == null) || (icfp.compare(pair.a, pair.b) != 0)) {
-        result.add(new Invariant[] { (Invariant) pair.a, (Invariant) pair.b });
-      }
-    }
-    return result;
-  }
-
-
-  // Determine which invariants at the program points differ.
-  // Result elements are pairs of Invariants (with one or the other
-  // possibly null.)
-  Vector different_invariants(PptSlice[][] matched_views) {
-    Vector result = new Vector();
-    for (int i=0; i<matched_views.length; i++) {
-      PptSlice cond1 = matched_views[i][0];
-      PptSlice cond2 = matched_views[i][1];
-      Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
-      Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
-      result.addAll(different_invariants(invs1, invs2));
-    }
-    return result;
-  }
-
-
-  // Determine which elements of invs1 are the same as elements of invs2.
-  // Result elements are Invariants.
-  Vector same_invariants(Invariants invs1, Invariants invs2) {
-    SortedSet ss1 = new TreeSet(icfp);
-    ss1.addAll(invs1);
-    SortedSet ss2 = new TreeSet(icfp);
-    ss2.addAll(invs2);
-    Vector result = new Vector();
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
-      if (pair.a != null && pair.b != null) {
-        Invariant inv1 = (Invariant) pair.a;
-        Invariant inv2 = (Invariant) pair.b;
-        if (inv1.enoughSamples() && inv2.enoughSamples()) {
-          result.add(inv1);
-        }
-      }
-    }
-    return result;
-  }
-
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -3969,15 +3381,10 @@ public class PptTopLevel
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
-    // leaders would prevent printing.  Then postprocess them to
-    // create 2-way equality invariants.
+    // leaders would prevent printing.
     for (Iterator i = equalityInvs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
-      if (debugEqualTo.isLoggable(Level.FINE)) {
-        debugEqualTo.fine ("  for: " + inv);
-      }
       inv.pivot ();
-      inv.postProcess ();
     }
 
     // Now pivot the other invariants
@@ -3987,10 +3394,7 @@ public class PptTopLevel
     // PptSlice newSlice = slice.cloneAndInvs(leader, newLeader);
 
     // Pivot each pptSlice so that each of its VarInfos map back to
-    // their leaders.  Except for PptSlice2s, where the two VarInfos map
-    // to the same leader.  Leave those alone since they're only there
-    // for equality.
-
+    // their leaders.
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine ("  Doing cloneAllPivots: ");
     }
@@ -3998,14 +3402,10 @@ public class PptTopLevel
          iSlices.hasNext(); ) {
       PptSlice slice = (PptSlice) iSlices.next();
       VarInfo[] newVis = new VarInfo[slice.arity()];
-      if (slice.arity() == 2 &&
-          slice.var_infos[0].equalitySet == slice.var_infos[1].equalitySet) {
-        // Actually a postPorcessed equality
-        continue;
-      }
       boolean needPivoting = false;
       for (int i = 0; i < slice.arity(); i++) {
-        needPivoting = needPivoting || slice.var_infos[i].canonicalRep() != slice.var_infos[i];
+        if (slice.var_infos[i].canonicalRep() != slice.var_infos[i])
+          needPivoting = true;
       }
       if (!needPivoting) continue;
       for (int i = 0; i < slice.arity(); i++) {
@@ -4025,6 +3425,13 @@ public class PptTopLevel
       if (debugEqualTo.isLoggable(Level.FINE)) {
         debugEqualTo.fine ("  Readded: " + oPivoted);
       }
+    }
+
+    // Add specific equality invariants for each member of the
+    // equality set
+    for (Iterator i = equalityInvs.iterator(); i.hasNext(); ) {
+      Equality inv = (Equality) i.next();
+      inv.postProcess ();
     }
 
   }
@@ -4594,11 +4001,20 @@ public class PptTopLevel
       currentView.guardInvariants();
     }
 
-    Object viewCondArray[] = views_cond.toArray();
-    for (int i=0; i < viewCondArray.length; i++) {
-      PptSlice currentCondView = (PptSlice)viewCondArray[i];
-      currentCondView.guardInvariants();
-    }
+    // Commented this code out because conditional views are not slices.
+    // It is not clear what this is trying to accomplish
+//     Object viewCondArray[] = views_cond.toArray();
+//     for (int i=0; i < viewCondArray.length; i++) {
+//       PptSlice currentCondView = (PptSlice)viewCondArray[i];
+//       currentCondView.guardInvariants();
+//     }
+    // This is a version changed to use the new conditional ppt iterator.
+    // But the elements are still not slices!
+//     for (Iterator i = cond_iterator(); i.hasNext(); ) {
+//       PptSlice currentCondView = (PptSlice) i.next();
+//       currentCondView.guardInvariants();
+//     }
+
 
     // System.out.println("Ppt name: " + name());
     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
@@ -4611,9 +4027,8 @@ public class PptTopLevel
       PptSlice currentView = (PptSlice)viewArray[i];
       currentView.processOmissions(omitTypes);
     }
-    Object viewCondArray[] = views_cond.toArray();
-    for (int i=0; i < viewCondArray.length; i++) {
-      PptSlice currentCondView = (PptSlice)viewCondArray[i];
+    for (Iterator i = cond_iterator(); i.hasNext(); ) {
+      PptSlice currentCondView = (PptSlice) i.next();
       currentCondView.processOmissions(omitTypes);
     }
   }
@@ -4870,6 +4285,8 @@ public class PptTopLevel
     int first_child = 0;
     for (first_child = 0; first_child  < children.size(); first_child++) {
       PptRelation c1 = (PptRelation) children.get(first_child);
+      debugMerge.fine ("looking at " + c1.child.name() + " "
+                       + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
         emap = c1.get_child_equalities_as_parent();
         debugMerge.fine ("child " + c1.child.name() + " equality = " + emap);
@@ -4877,6 +4294,7 @@ public class PptTopLevel
       }
     }
     if (emap == null) {
+      equality_view.instantiate_invariants();
       invariants_merged = true;
       return;
     }
@@ -4976,8 +4394,126 @@ public class PptTopLevel
     if (debugMerge.isLoggable(Level.FINE))
       debug_print_slice_info (debugMerge, "ternary", ternary_slices);
 
+    // Merge the conditionals
+    merge_conditionals();
+
+    // Remove any child invariants that now exist here
+    if (dkconfig_remove_merged_invs) {
+      for (Iterator i = children.iterator(); i.hasNext(); ) {
+        PptRelation rel = (PptRelation) i.next();
+        rel.child.remove_child_invs (rel);
+      }
+    }
+
     // Mark this ppt as merged, so we don't process it multiple times
     invariants_merged = true;
+  }
+
+  // used by merge_conditionals below
+  private static class SplitChild {
+    public PptRelation rel;
+    public PptSplitter ppt_split;
+    public SplitChild (PptRelation rel, PptSplitter ppt_split) {
+      this.rel = rel;
+      this.ppt_split = ppt_split;
+    }
+  }
+
+  /**
+   * Merges the conditionals from the children of this ppt to this ppt.
+   * Only conditionals that exist at each child and whose splitting condition
+   * is valid here can be merged.
+   */
+  public void merge_conditionals() {
+
+    debugConditional.fine ("attempting merge conditional for " + name());
+
+    // If there are no children, there is nothing to do
+    if (children.size() == 0)
+      return;
+
+    // If the children are only ppt => ppt_cond, there is nothing to do
+    for (Iterator ii = children.iterator(); ii.hasNext(); ) {
+      PptRelation rel = (PptRelation) ii.next();
+      if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
+        return;
+    }
+
+    // If there are no splitters there is nothing to do
+    if (!has_splitters())
+      return;
+
+    if (debugConditional.isLoggable (Level.FINE)) {
+      debugConditional.fine ("Merge conditional for " + name());
+      for (int ii = 0; ii < children.size(); ii++ ) {
+        PptRelation rel = (PptRelation) children.get(ii);
+        debugConditional.fine ("child: " + rel);
+      }
+    }
+
+    // Build a splitters list at this point that contains all of the
+    // splitters that exist at each child.  This should also insure that
+    // the splitter is over the same variables both here and at each
+    // child (but it doesn't).  The shortcut is to accept the splitter if
+    // it is valid at this point.
+
+    // Loop over each splitter
+    splitter_loop:
+    for (Iterator ii = splitters.iterator(); ii.hasNext(); ) {
+      PptSplitter ppt_split = (PptSplitter) ii.next();
+
+      // list of children that match this splitter
+      List /*SplitChild*/ split_children = new ArrayList();
+
+      // Create a list of children for this splitter
+      child_loop: for (int jj = 0; jj < children.size(); jj++ ) {
+        PptRelation rel = (PptRelation) children.get(jj);
+        if (!rel.child.has_splitters())
+          break;
+        for (Iterator kk = rel.child.splitters.iterator(); kk.hasNext(); ) {
+          PptSplitter csplit = (PptSplitter) kk.next();
+          if (ppt_split.splitter == csplit.splitter) {
+            split_children.add (new SplitChild (rel, csplit));
+            continue child_loop;
+          }
+        }
+        break;
+      }
+
+
+      // If we didn't find a matching splitter at each child, can't merge
+      // this point.  Just remove it from the list of splitters
+      if (split_children.size() != children.size()) {
+        ii.remove();
+        continue;
+      }
+
+      // Build the PptRelations for each child.  The PptRelation from
+      // the conditional point is of the same type as the original
+      // relation from parent to child
+      for (Iterator jj = split_children.iterator(); jj.hasNext(); ) {
+        SplitChild sc = (SplitChild) jj.next();
+        ppt_split.add_relation (sc.rel, sc.ppt_split);
+      }
+    }
+
+    // Merge the conditional points
+    for (Iterator ii = cond_iterator(); ii.hasNext(); ) {
+      PptConditional ppt_cond = (PptConditional) ii.next();
+      if (debugConditional.isLoggable (Level.FINE)) {
+        debugConditional.fine ("Merge invariants for conditional "
+                                + ppt_cond.name());
+        for (int jj = 0; jj < ppt_cond.children.size(); jj++ ) {
+          PptRelation rel = (PptRelation) ppt_cond.children.get(jj);
+          debugConditional.fine ("child relation: " + rel);
+          debugConditional.fine ("child equality set = "
+                                  + rel.child.equality_sets_txt());
+        }
+      }
+      ppt_cond.mergeInvs();
+      debugConditional.fine ("After merge, equality set = "
+                              + ppt_cond.equality_sets_txt());
+    }
   }
 
   /**
@@ -4996,6 +4532,102 @@ public class PptTopLevel
     invariants_merged = false;
   }
 
+  /**
+   * Removes any invariant in this ppt which has a matching invariant in the
+   * parent (as specified in the relation).  Done to save space.  Only safe
+   * when all processing of this child is complete (ie, all of the parents
+   * of this child must have been merged)
+   *
+   * Another interesting problem arises with this code.  As currently
+   * setup, it won't process combined exit points (which often have two
+   * parents), but it will process enter points.  Once the enter point
+   * is removed, it can no longer parent filter the combined exit point.
+   *
+   * Also, the dynamic obvious code doesn't work anymore (because it is
+   * missing the appropriate invariants).  This could be fixed by changing
+   * dynamic obvious to search up the tree (blecho!).  Fix this by
+   * only doing this for ppts whose parent only has one child
+   */
+  public void remove_child_invs (PptRelation rel) {
+
+    // For now, only do this for ppts with only one parent
+    if (parents.size() != 1)
+      return;
+
+    // Only do this for ppts whose children have also been removed
+    for (Iterator i = children.iterator(); i.hasNext(); ) {
+      PptRelation crel = (PptRelation) i.next();
+      if (!crel.child.invariants_removed) {
+        // System.out.println ("Rel " + rel + "has not had its child invs rm");
+        return;
+      }
+    }
+
+    // Only do this for ppts whose parent only has one child
+    if (rel.parent.children.size() != 1)
+      return;
+
+    System.out.println ("Removing child invariants at " + name());
+
+    // Do suppressions first, so that we don't lose any suppressions
+    // when eliminating invariants
+    suppressAll (false);
+
+    List /*PptSlice*/ slices_to_remove = new ArrayList();
+
+    // Loop through each slice
+    slice_loop: for (Iterator i = views_iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+
+      // Build the varlist for the parent.  If any variables are not present in
+      // the parent, skip this slice
+      VarInfo pvis[] = new VarInfo[slice.var_infos.length];
+      VarInfo pvis_sorted[] = new VarInfo[slice.var_infos.length];
+      for (int j = 0; j < slice.var_infos.length; j++) {
+        VarInfo pv = rel.parentVar (slice.var_infos[j]);
+        if (pv == null)
+          continue slice_loop;
+        pvis[j] = pv.canonicalRep();
+        pvis_sorted[j] = pvis[j];
+      }
+      Arrays.sort (pvis_sorted, VarInfo.IndexComparator.getInstance());
+
+      // Find the parent slice.  If it doesn't exist, there is nothing to do
+      PptSlice pslice = rel.parent.findSlice (pvis_sorted);
+      if (pslice == null)
+        continue;
+
+      // Build the permute from child to parent
+      int[] permute = build_permute (pvis_sorted, pvis);
+
+      // Remove any invariant that is also present in the parent
+      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant orig_inv = (Invariant) j.next();
+        Invariant inv = orig_inv.clone_and_permute (permute);
+        Invariant pinv = pslice.find_inv_exact (inv);
+        if (pinv != null) {
+          j.remove();
+          //System.out.println ("Removed " + orig_inv + " @" + name()
+          //                    + " parent inv " + pinv + " @" + rel.parent);
+        }
+      }
+
+      // If all of the invariants in a slice were removed, note it for removal
+      if (slice.invs.size() == 0)
+        slices_to_remove.add (slice);
+    }
+
+    // Remove all of the slices with 0 invariants
+    System.out.println ("  Removed " + slices_to_remove.size() + " slices");
+    for (Iterator i = slices_to_remove.iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      // System.out.println ("Removing Slice " + slice);
+      removeSlice (slice);
+    }
+
+    invariants_removed = true;
+
+  }
   /**
    * Builds a permutation from vis1 to vis2. The result is
    * vis1[i] = vis2[permute[i]]
