@@ -412,9 +412,9 @@ public class RetTransform implements ClassFileTransformer {
     // call Runtime.enter()
     nl.append (call_enter_exit (c, "enter"));
 
-    // Add the new instruction at the start and move any LineNumbers and
-    // Local variables to point to them.  Other targeters (branches, exceptions)
-    // should still point to the old start
+    // Add the new instruction at the start and move any LineNumbers
+    // and Local variables to point to them.  Other targeters
+    // (branches, exceptions) should still point to the old start
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert (nl);
     for (InstructionTargeter it : old_start.getTargeters()) {
