@@ -28,6 +28,12 @@ public class Reverse extends TwoSequence {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  /* IOA */
+  public String format_ioa(String automaton) {
+    return "Not valid for Sets or Arrays: " + format();
+  }
+    
+
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }

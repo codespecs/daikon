@@ -56,9 +56,20 @@ public class PairwiseIntComparison extends TwoSequence {
       + " (elementwise)";
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var1().isIOASet() || var2().isIOASet()) 
+      return "Not valid for sets: " + format();
+    String comparator = core.format_comparator();
+    comparator = comparator.equals("==") ? "=" : comparator;
+    String[] form = 
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() }, classname);
+    return form[0]+"("+form[4]+"="+form[5]+") => ("+form[1]+" "+comparator+" "+form[2]+")"+form[3];
+  }
+
   public String format_esc() {
     String comparator = core.format_comparator();
-    String[] form =
+    String[] form = 
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];

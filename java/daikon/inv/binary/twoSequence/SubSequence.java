@@ -52,6 +52,26 @@ public class SubSequence extends TwoSequence {
     }
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String result;
+    String v1 = var1().name.ioa_name(classname);
+    String v2 = var2().name.ioa_name(classname);
+    if (var1_in_var2 && var2_in_var1) {
+      result = "("+v1+" \\subseteq "+v2+") /\\ ("+v2+" \\subseteq "+v1+")";
+    } else {
+      String subvar = (var1_in_var2 ? v1 : v2);
+      String supervar = (var1_in_var2 ? v2 : v1);
+      result = subvar + " \\subseteq " + supervar;
+    }
+
+    if (var1().isIOAArray() || var2().isIOAArray()) {
+      result += " *** (Invalid syntax for arrays)";
+    }
+    
+    return result;
+  }
+
   public String format_esc() {
     return "format_esc needs to be changed on SubSequence";
   }

@@ -69,6 +69,17 @@ public class SeqComparison extends TwoSequence implements Comparison {
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
+  
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var1().isIOASet() || var2().isIOASet())
+      return "Not valid for Sets: " + format();
+    String comparator = IntComparisonCore.format_comparator(can_be_lt, can_be_eq, can_be_gt);
+    comparator = (comparator.equals("==") ? "=" : comparator);
+    String v1 = var1().name.ioa_name(classname);
+    String v2 = var2().name.ioa_name(classname);
+    return v1 + " " + comparator + " " + v2 + " ***";
+  }
 
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();

@@ -27,6 +27,15 @@ public class PairwiseLinearBinary extends TwoSequence {
     return core.format(var1().name.name(), var2().name.name());
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    if (var1().isIOASet() || var2().isIOASet()) 
+      return "Not valid for sets: " + format();
+    String[] form = 
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() }, classname);
+    return form[0]+"("+form[4]+"="+form[5]+") => ("+core.format_ioa(form[1], form[2])+")"+form[3];
+  }
+    
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
