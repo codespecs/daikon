@@ -4,6 +4,7 @@
 #                  out in one of various input formats for different clustering
 #                  algoritm implementations.
 
+# todo: document the daikon_cluster thing for clustering tempfiles.
 my $usage = "extract_vars.pl  <dtracefile>.dtrace <decls1>.decls <decls2>.decls ...";
 
 use English;
@@ -26,6 +27,15 @@ my %pptname_to_vararrays = (); #stores the variable values at each program point
 my %pptname_to_objectvars = (); #stores the variable name of all Object variables at
 # each program point. This is because we want to throw away this data from
 # the clustering.
+my %pptname_to_nonces = (); #keep track of invocation nonces for ppts which don't have them.
+my %pptname_to_varnames = (); # keep track of the variable names to be clustered.
+
+#tie %pptname_to_varnames, "Tie::IxHash";
+
+#define the output format. Important: Only one of these should be set to 1. Others set to zero
+my $output_xmeans = 1;
+my $output_seq = 0;
+my $output_column = 0;
 
 while ( scalar(@ARGV) > 0) {
     if ($ARGV[0] eq '-algorithm') {
@@ -50,28 +60,34 @@ while ( scalar(@ARGV) > 0) {
 #for hierarchical clustering, it doesn't really number what the number of 
 #variables is, because the difference table is used to do the clustering.
 
-if ($algorithm eq 'km') {
-    #use this for kmeans
-    %nvars_to_maxsamples = (1, 6000, 2, 5000, 3, 4000 , 4, 4000, 5, 4000, 6, 4000);
-} else {
+if ($algorithm eq 'hierarchical') {
     #use this for hierarchical because hierarchical can handle fewer data points
     %nvars_to_maxsamples = (1, 1500, 2, 1500, 3, 1500 , 4, 1200, 5, 1000, 6, 800);
+} else  {
+    #use this for kmeans
+    %nvars_to_maxsamples = (1, 6000, 2, 5000, 3, 4000 , 4, 4000, 5, 4000, 6, 4000);
 }
 
 
 sub read_decls_file {
-    my ($decls_file, @variables, $pptname);
+    my ($decls_file, $pptname);
     $decls_file = $_[0];
     open(DECL, $decls_file) || die "decls file not found";
     while(<DECL>) {
 	my $line = $_;
 	if($line =~ /DECLARE/){
-	    @variables = &read_decl_ppt;
+	    $pptname = &read_decl_ppt();
 	    #extract the variables out of only the EXIT program points.
-	    my $pptname = $variables[0];
-	    if ($pptname !~ /ENTER/) { #take this out if you want all ppts
-		&open_file_for_output_seq(@variables);
-		#&open_file_for_output_column(@variables);
+	    if ($pptname !~ /ENTER/) { 
+		my $pptfilename = &cleanup_pptname($pptname);
+		$pptfilename = $pptfilename.".daikon_temp";
+		if ($output_seq) {
+		    &open_file_for_output_seq($pptname, $pptfilename);
+		} elsif ($output_xmeans) {
+		    &open_file_for_output_xmeans($pptname, $pptfilename);
+		} else {
+		    die "No output format defined. Set one of the \$output_xxx variables\n";
+		}
 	    }
 	}
     }
@@ -80,7 +96,7 @@ sub read_decls_file {
 open (DTRACE, $dtrace_file) || die "dtrace file not found \n";
 
 while (<DTRACE>) {
-    my ($pptname, @variables);
+    my ($pptname);
 
     my $line = $_;
     if ($line =~ /:::/) {
@@ -93,10 +109,13 @@ while (<DTRACE>) {
 	if( $pptname =~ /:::ENTER/ || !(exists $pptname_to_fhandles{$pptname})) {
 	    &skip_till_next(*DTRACE);
 	} else {	
-	    @variables = &read_dtrace($pptname);
-	    push @{ $pptname_to_vararrays{$pptname}}, @variables;
-	    &output_seq(@variables);
-	    #&output_column(@variables);
+	    my @variables = &read_execution($pptname);
+	    push @{$pptname_to_vararrays{$pptname}}, @variables;
+	    if ($output_seq) {
+		&output_seq(@variables);
+	    } elsif ($output_xmeans) {
+		&output_xmeans(@variables);
+	    }
 	}
     }
 }
@@ -114,129 +133,135 @@ sub sample_large_ppts {
     #memory, but rather reading the trace file again and printing
     #only the sampled invocations
     my ($fhandle, $nsamples, $maxsamples);
-    foreach my $samp_pptname (keys %pptname_to_vararrays) {
-
-	my $num = $pptname_to_nvars{$samp_pptname};
-	if($num > 6 && $num < 10) {
-	    $nvars_to_maxsamples{$num} = 1000;
-	} elsif ($num > 10) {
-	    $nvars_to_maxsamples{$num} = 800;
+    foreach my $pptname (keys %pptname_to_vararrays) {
+	
+	my $num = $pptname_to_nvars{$pptname};
+	if ($algorithm eq 'hierarchical') {
+	    if($num > 6 && $num < 10) {
+		$nvars_to_maxsamples{$num} = 600;
+	    } elsif ($num > 10) {
+		$nvars_to_maxsamples{$num} = 550;
+	    } 
+	} elsif ($algorithm eq 'km') {
+	    $nvars_to_maxsamples{$num} = 4000;
 	}
-
+    	
 	$maxsamples = $nvars_to_maxsamples{$num};
-
+	
 	#find the number of samples for this program point
-	my $temp = scalar( @{$pptname_to_vararrays{$samp_pptname}} );
+	my $temp = scalar( @{$pptname_to_vararrays{$pptname}} );
 	$nsamples = $temp/($num + 2);
-
+	
 	#if the number of samples is too large, sample.
 	if ($nsamples > $maxsamples) {
 	    my @samples = &get_random_numbers($maxsamples, $nsamples);
 	    #open a file and print, but first clobber the original one
-	    my $pptfilename = &cleanup_pptname($samp_pptname);
-	    #unlink $pptfilename;
-	    my $new_filename = $pptfilename.".samp";
-	    open (SAMP, ">$new_filename") 
-		|| die "couldn't open $new_filename to print sampled output\n";
-	    $pptname_to_fhandles{$samp_pptname} = *SAMP;
-
-	    #print out the selected invocations from the vararray
-	    #print SAMP "#number of variables is $nvars\n";
-	    print SAMP "$num\n";
-
+	    my $pptfilename = &cleanup_pptname($pptname);
+	    my $old = "$pptfilename.daikon_temp";
+	    unlink $old;
+	    my $new_filename = $pptfilename.".daikon_temp.samp";
+	    if ($output_seq) {
+		&open_file_for_output_seq($pptname, $new_filename);
+	    } elsif ($output_xmeans) {
+		&open_file_for_output_xmeans($pptname, $new_filename);
+	    } else {
+		die "no  output format chosen!!\n";
+	    }
+	    
 	    #vararray contains the pptname and the invoc, in addition to
 	    # the variable values
-
-	    my $block_size = $pptname_to_nvars{$samp_pptname} + 2;
-
+	    
+	    my $block_size = $pptname_to_nvars{$pptname} + 2;
+	    
 	    for (my $i = 0; $i < $maxsamples; $i++) {
 		my $start = $samples[$i] * $block_size;
 		my $end = $start + $block_size - 1;
-
+		
 		my @invocation_slice = ();
-
+		
 		for (my $j = $start; $j <= $end; $j++) {
-		    push @invocation_slice, $pptname_to_vararrays{$samp_pptname}[$j];
+		    push @invocation_slice, $pptname_to_vararrays{$pptname}[$j];
 		}
-		&output_seq(@invocation_slice);
-		#&output_column(@invocation_slice);
+		if ($output_seq) {
+		    &output_seq(@invocation_slice);
+		} elsif ($output_xmeans) {
+		    &output_xmeans(@invocation_slice);
+		} else {
+		    die " no output format chosen!!\n";
+		}
 	    }
+	    close SAMP;
 	}
-	close SAMP;
     }
 }
 
-BEGIN {
-    my $object_invoc = 0; #keep track of OBJECT invoc. nonces
-    my $class_invoc = 0; #keep track of CLASS invoc nonces
-    sub read_dtrace {
-	my ($varname, $value, $mod);
-	
-	my @vararray = ();
-	my $pptname = $_[0];
-	#the pptname is the first element in the array. The variables follow it
-	push @vararray, $pptname;
-	
-	#create an invocation nonce for the object program point invocation
-	if($pptname =~ /OBJECT/) {
-	    $object_invoc ++;
-	    push @vararray, $object_invoc;
-	} elsif ($pptname =~ /CLASS/) {
-	    $class_invoc ++;
-	    push @vararray, $class_invoc;
+sub read_execution {
+    my ($varname, $value, $mod);
+    
+    my @vararray = ();
+    my $pptname = $_[0];
+    #the pptname is the first element in the array. The variables follow it
+    push @vararray, $pptname;
+    
+    #find out what the Object variables are for this ppt
+    my @objarray = $pptname_to_objectvars{$pptname};
+    
+    $varname = <DTRACE>;
+    if ($varname !~ /this.invocation.nonce/) {
+	$pptname_to_nonces{$pptname}++;
+	push @vararray, $pptname_to_nonces{$pptname};
+    } else {
+	$value = <DTRACE>;
+	chomp($value);
+	push @vararray, $value;
+	$varname = <DTRACE>;
+    }
+    
+    # get the variables at this ppt that we want to cluster
+    
+    while ($varname !~ /^$/) {
+	chomp( $varname );
+	$value = <DTRACE>;
+	chomp ($value);
+	$value =~ s/false/-10/;
+	$value =~ s/true/10/;
+	$value =~ s/null/0/;
+	$value =~ s/missing/-11111/;
+	$mod = <DTRACE>;
+	chomp ($mod);
+	# see if the variable is an Object variable
+	my $object = 0;
+	# to fix: use an associative array
+	foreach my $variablename (@objarray){
+	    if($variablename eq $varname){
+		$object = 1;
+	    }
 	}
 	
-	#find out what the Object variables are for this ppt
-	my @objarray = $pptname_to_objectvars{$pptname};
+	# extract variables to be clustered.
+	# Omit Object variables, .class, array[] or a string
+	if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
+	    if ( exists $pptname_to_varnames{$pptname}{$varname}) {
+		push @vararray, $value;
+	    }
+	}
 	
 	$varname = <DTRACE>;
-	while ($varname !~ /^$/) {
-	    chomp( $varname );
-	    if ($varname =~ /this.invocation.nonce/) {
-		#the nonce should be stored as an extra variable
-		$value = <DTRACE>;
-		chomp ($value);
-		push @vararray, $value;
-	    } else {
-		$value = <DTRACE>;
-		chomp ($value);
-		$value =~ s/false/-10/;
-		$value =~ s/true/10/;
-		$value =~ s/null/0/;
-		$value =~ s/missing/-11111/;
-		$mod = <DTRACE>;
-		chomp ($mod);
-		# see if the variable is an Object variable
-		my $object = 0;
-		foreach my $variablename (@objarray){
-		    if($variablename eq $varname){
-			$object = 1;
-		    }
-		}
-		# extract variables to be clustered.
-		# Omit Object variables, .class, array[] or a string
-		if($varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/ && $object == 0) {
-		    push @vararray, $value;
-		}
-	    }
-	    $varname = <DTRACE>;
-	}
-	return @vararray;
     }
+    return @vararray;
 }
 
 sub read_decl_ppt {
     #read the decls file and open up a file for writing the variable values.
     #also count the number of variables we want to cluster at each prog. point
-    my (@vararray, $pptname, $line, $varname, $rep_type, $declared_type, $nvars);
-    
+    my (%vararray, $pptname, $line, $varname, $rep_type, $declared_type, $nvars);
+
+    #the pptname is the first element in the array. The variable names follow    
     $line = <DECL>;
     chomp ($line);
     $pptname = $line;
-    #the pptname is the first element in the array. The variable names follow
-    push @vararray, $pptname;
-    push @vararray, "this_invocation_nonce";
-    
+
+
     #now read the variable names and types
     $varname = <DECL>;
     while( $varname !~ /^$/ ) {
@@ -247,12 +272,13 @@ sub read_decl_ppt {
 	#If the variable is an Object, keep note of that. Will be ignored (not be clustered)
 	# later because its value is a hashcode
 	if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
-	    if($declared_type =~ /Object/ && $rep_type =~ /hashcode/){
+	    if($rep_type =~ /hashcode/){
 		push @{$pptname_to_objectvars{$pptname}}, $varname;
 	    } elsif ( $rep_type =~ /=/) {
 		#definition. do nothing
 	    } else {
-		push @vararray, $varname;
+		$nvars++;
+		$pptname_to_varnames{$pptname}{$varname} = 1;
 	    }
 	}
 	$line = <DECL>; #this is that 22 number thing
@@ -260,58 +286,71 @@ sub read_decl_ppt {
     }
     #store the number of variables at this program point. Remember that @vararray[1] 
     #stores the program point name. The invocation nonce is included in @vararray, 
-    #and is counted as a variable
-    $nvars = scalar(@vararray) - 2;
+    #but is not counted as a variable
     $pptname_to_nvars{$pptname} = $nvars;
-    return @vararray;
+    return $pptname;
 }
 
 sub open_file_for_output_seq {
     # prep the file for writing the variable values. Now it just prints the number of variables
     # at this program point
-    my ($pptname, $pptfilename, $m, @vararray, $fhandle);
-    @vararray = @_;
-    $pptname = $vararray[0];
-    $pptfilename = &cleanup_pptname($pptname);
+    my ($pptname, $pptfilename, @vararray, $fhandle);
+    $pptname = @_[0];
+    $pptfilename = @_[1];
     #create a filehandle for this program point
-    local *FNAME;
-    open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
-    $fhandle = *FNAME;
-    $pptname_to_fhandles{$pptname} = $fhandle;
+    
     my $nvars = $pptname_to_nvars{$pptname};
-    print $fhandle "$nvars\n";
+    if ($nvars > 0) {
+	local *FNAME;
+	open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
+	$fhandle = *FNAME;
+	$pptname_to_fhandles{$pptname} = $fhandle;
+	print $fhandle "$nvars\n";
+    }
 }
     
-sub open_file_for_output_column {
-    #prep the file for writing the variable values
-    my ($pptname, $pptfilename, $m, @vararray, $fhandle);
+sub open_file_for_output_xmeans {
+    # ** customized for output to the xmeans algorithm
     
-    @vararray = @_;
-    $pptname = $vararray[0];
-    $pptfilename = &cleanup_pptname($pptname);
+    #prep the file for writing the variable values
+    my ($pptname, $pptfilename, @vararray, $fhandle);
+    
+    $pptname = @_[0];
+    $pptfilename = @_[1];
     
     #create a filehandle for this program point
-    open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
-    $pptname = $vararray[0];
-    $pptname_to_fhandles{$pptname} = $fhandle;
+    my $nvars = $pptname_to_nvars{$pptname};
+    if ($nvars > 0) {
+	local *FNAME;
+	open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
+	$fhandle = *FNAME;
+	$pptname_to_fhandles{$pptname} = $fhandle;
+	
+	print $fhandle "#Generated by extract_vars.pl\n\n";
+	for (my $i = 0; $i < $nvars; $i++) {
+	    print $fhandle "x$i ";
+	}
+	print $fhandle "\n";
+    }
 }
 
-sub output_column {
+sub output_xmeans {
     #prints out the variable values in column format, one invocation per line
     # point1 var1 var2 ... varN
     # point2 var1 var2 ... varN
     
-    my ($nvars, $pptname, $k, $fhandle, @vararray);
-    @vararray = @_;
-    $pptname = $vararray[0];
-    $nvars = $pptname_to_nvars{$pptname};
-    $fhandle = $pptname_to_fhandles{$pptname};
+    my @output_vararray = @_;
+    my $output_pptname = $output_vararray[0];
+    my $output_nvars = $pptname_to_nvars{$output_pptname};
+    my $output_string;
+    local *FH = $pptname_to_fhandles{$output_pptname};
     
-    #print the invoc nonce in addition to the variables.
-    for (my $k = 0; $k < $nvars+1; $k++) {
-	print $fhandle "$vararray[$k+1]\t";
+    ### ignore the invocation nonce!! (xmeans)
+    for (my $k = 1; $k < $output_nvars+1; $k++) {
+	$output_string = $output_string.$output_vararray[$k+1]." ";
     }
-    print $fhandle "\n";
+    chop $output_string;
+    print FH "$output_string\n";
 }
 
 
@@ -336,7 +375,6 @@ sub output_seq {
     # .
     # .
     # .
-
 
     my @output_vararray = @_;
     my $output_pptname = $output_vararray[0];
@@ -391,10 +429,11 @@ sub skip_till_next {
 #read an opened file till you reach a blank line, then return    
     my ($line);
     local *FHANDLE = $_[0];
-    do {
-	$line = <FHANDLE>;
-    } until ($line =~ /^\s*$/);
-    return; 
+    while ($line = <FHANDLE>) {
+	if ($line =~ /^\s*$/) {
+	    return; 
+	}
+    }
 }
 
 sub get_random_numbers {
