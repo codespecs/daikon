@@ -12,11 +12,10 @@ public final class Diff {
   public static final String lineSep = Global.lineSep;
 
   private static String usage = 
-    "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" + lineSep + lineSep +
+    "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" + lineSep +
     "  -h  Display this usage message" + lineSep +
     "  -d  Display the tree of differing invariants (default)" + lineSep +
     "  -a  Display the tree of all invariants" + lineSep +
-    "  -c  Display the number of differing invariants" + lineSep +
     "  -s  Display the statistics between two sets of invariants" + lineSep +
     "  -v  Verbose output" + lineSep
     ;
@@ -25,7 +24,6 @@ public final class Diff {
   // The output mode selected by the user
   private static final int PRINT_DIFF_INV = 0;
   private static final int PRINT_ALL_INV = 1;
-  private static final int COUNT_DIFF_INV = 2;
   private static final int STATS_INV = 3;
   private static int mode = PRINT_DIFF_INV;
   private static boolean verbose = false;
@@ -35,7 +33,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hdacsv");
+    Getopt g = new Getopt("daikon.Diff", args, "hdasv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -48,9 +46,6 @@ public final class Diff {
         break;
       case 'a':
         mode = PRINT_ALL_INV;
-        break;
-      case 'c':
-        mode = COUNT_DIFF_INV;
         break;
       case 's':
         mode = STATS_INV;
@@ -100,16 +95,6 @@ public final class Diff {
         PrintAllVisitor v = new PrintAllVisitor(verbose);
         root.accept(v);
         System.out.println(v.getOutput());
-      }
-      break;
-    case COUNT_DIFF_INV:
-      {
-        CountDifferingInvariantsVisitor v =
-          new CountDifferingInvariantsVisitor();
-        root.accept(v);
-        int differingInvariants = v.getDifferingInvariantsCount();
-        System.out.println("There are " + differingInvariants +
-                           " differing invariants.");
       }
       break;
     case STATS_INV:
