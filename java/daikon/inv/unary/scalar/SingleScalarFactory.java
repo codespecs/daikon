@@ -21,7 +21,18 @@ public final class SingleScalarFactory {
     result.add(OneOfScalar.instantiate(ppt));
     { // previously only if (pass == 2)
       { // previously only if !dynamicConstant
-        result.add(NonZero.instantiate(ppt));
+
+        // WEIRD: Adding this if statement (which I believe is a proper
+        // change, only eliminating boolean NonZero results) causes output
+        // diffs:  new conditional program points show up (and others
+        // disappear).
+        // if (var.file_rep_type.isIntegral()
+        //  || var.file_rep_type == ProglangType.HASHCODE)
+        {
+          result.add(NonZero.instantiate(ppt));
+          // if (Debug.logOn() && Debug.ppt_match (ppt))
+          //   System.out.println("Instantiated NonZero (var.file_rep_type=" + var.file_rep_type + "): " + ppt.name());
+        }
         if (var.file_rep_type.isIntegral()) {
           result.add(LowerBound.instantiate(ppt));
           result.add(Modulus.instantiate(ppt));
@@ -31,9 +42,15 @@ public final class SingleScalarFactory {
           // "Positive" is a pedagogical example only and should not be
           // used in normal use.
           // result.add(Positive.instantiate(ppt));
+
+          // if (Debug.logOn() && Debug.ppt_match (ppt))
+          //   System.out.println("Instantiated LowerBound: " + ppt.name());
         } else {
           // This is suppressed because of types; not sure what global
           // variable to increment for statistics output.
+
+          // if (Debug.logOn() && Debug.ppt_match (ppt))
+          //   System.out.println("Suppressed LowerBound: " + ppt.name());
         }
       }
     }
