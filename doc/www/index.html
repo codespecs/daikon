@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>Dynamic invariant detection</TITLE>
+<link rev="made" href="mailto:mernst@lcs.mit.edu">
+</head>
+<body>
+
+<img src="daikon.gif" alt="Daikon logo">
+
+<h1>The Daikon invariant detector</h1>
+
+Daikon (named after the Asian radish) is a prototype implementation of
+dynamic invariant detection.  Front ends exist for Java and C/C++.
+<p>
+
+<a href="download/">Download Daikon.</a>
+<p>
+
+<hr>
+
+<h1>Dynamic invariant detection</h1>
+
+This research aims to dynamically detect invariants about a program's data
+structures -- the sort that might be written in an <tt>assert</tt>
+statement or a formal specification.  Examples include a&gt;0, c=2*d+3, a
+particular list or array is sorted, the child slots of treenode objects
+point to objects whose parent slots point back at the original treenode,
+and the like.  Such program properties are useful for a wide variety of
+software construction, understanding, reuse, and modification tasks, but
+they are usually absent from code.  Static techniques for determining
+invariants break down in the presence of real-world constructs such as
+pointers.  A complementary approach is to dynamically detect properties
+from execution traces.<p>
+
+The Daikon system examines the values computed during the target program's
+execution, looking for patterns and relationships among those values.
+These can be reported to the user or provided to another tool.  As with any
+other dynamic technique, such as testing, the properties are not guaranteed
+to hold for every possible execution; they depend on the quality of the
+test suite.  In practice, the results are sufficiently accurate to be
+useful despite their potential unsoundness; and the results are also
+valuable for validating test suites.  See the published <a
+href="#papers">papers</a> for more details.<p>
+
+Some example uses of invariants are:
+<ul>
+  <li>Document code, indicating the structure of its data and computation
+  <li>Check assumptions by converting the invariants to <tt>assert</tt>
+      statements.
+  <li>Maintain invariants to avoid introducing bugs; if a property is
+      established at one point in a program, it is likely to be depended on
+      elsewhere, but if the invariant is not documented, it is all to easy
+      to accidentally violate it, introducing a bug in a far-removed part
+      of the program.
+  <li>Locate unusual conditions that should be brought to a programmer's
+      attention and may be bugs.
+  <li>Validate test suites by indicating the level of value coverage which
+      indicates how many different values are computed; this complements
+      code coverage, which tells how many lines are executed.
+  <li>Provide hints for profile-directed compilation, but at the level of
+      the program abstractions, permitting entire function calls to
+      possibly be omitted after a check.
+  <li>Bootstrap proofs and aid static checkers by providing goals and
+      automating the time-consuming, tedious chore of annotating programs.
+</ul>
+<p>
+
+Preliminary experiments have been very encouraging.  When provided with
+formally specified programs, the prototype invariant detector, Daikon,
+recovered the properties in the formal specifications (and even found some
+properties that had been inadvertently omitted from the specifications).
+In another experiment, programmers performing a software modification task
+on a C program lacking explicit invariants were provided with the output of
+the invariant detector.  They found that it aided program understanding,
+revealed an existing bug, prevented them from introducing a bug, and helped
+validate the correctness of their changes.<p>
+
+<!-- (The list appears in the manual and changes too fast to update here.)
+This is joint work of 
+<a href="http://www.cs.washington.edu/homes/jake/">Jake Cockrell</a>,
+Adam Czeisler, 
+<a href="http://sdg.lcs.mit.edu/~mernst/">Michael Ernst</a>,
+<a href="http://www.cs.ucsd.edu/~wgg/">Bill Griswold</a>,
+Josh Kataoka, and
+<a href="http://www.cs.washington.edu/homes/notkin/">David Notkin</a>.<p>
+-->
+
+<a name="papers"></a>
+This work is reported in the following papers:
+<ul>
+  <li><a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-tse-abstract.html">Dynamically
+      Discovering Likely Program Invariants to Support Program
+      Evolution</a> (IEEE TSE, v27#2, Feb 2001, pp 1-25)
+  <li><a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)
+  <li><a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-pointers-abstract.html">Dynamically
+      Discovering Pointer-Based Program Invariants</a> (Technical Report, 2000)
+  <li><a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-refactor-abstract.html">Automated Support for Program Refactoring using Invariants</a> (2001)
+  <li><a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html">Dynamically
+      Detecting Likely Program Invariants</a> (PhD dissertation, 2000)
+</ul>
+<p>
+
+
+<hr>
+
+<address>
+  Daikon group leader: <a href="http://sdg.lcs.mit.edu/~mernst/">Michael Ernst</a>
+</address>
+
+<address>
+  &lt;<a href="mailto:daikon@sdg.lcs.mit.edu">daikon@sdg.lcs.mit.edu</a>&gt;
+</address>
+
+</body>
+</html>

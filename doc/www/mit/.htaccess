@@ -1,0 +1,4 @@
+order deny,allow
+deny from all
+allow from mit.edu
+allow from cs.washington.edu

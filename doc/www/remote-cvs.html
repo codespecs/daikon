@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>Remote CVS for the Daikon Project</title>
+</head>
+<body>
+
+<h1>Remote CVS for the Daikon Project</h1>
+
+By Michael Harder
+
+<p>
+
+These instructions show you how to use remote CVS over SSH, without
+entering your password every time.  It is assumed you already have CVS
+and SSH installed on your machine.
+
+<ol>
+
+<li>Test the SSH installation.  Run:
+
+<pre>ssh -l username sdg.lcs.mit.edu</pre>
+
+You should be prompted for your password, and then logged in.  If not,
+your SSH is setup incorrectly.
+
+<p><br>
+
+<li>Setup SSH for passwordless usage.  Make a directory called .ssh in
+your home directory.  Then run the following command:
+
+<pre>ssh-keygen -C comment -f ~/.ssh/identity</pre>
+
+comment is an identifier placed in the public key (use your email
+address).  Just press enter when it asks you for a passphrase.  You
+don't want a passphrase.
+
+<p>
+
+Now you need to set up the server to accept your keys.  Run the secure
+copy command to send the identity.pub key to the server:
+
+<pre>scp ~/.ssh/identity.pub username@sdg.lcs.mit.edu:identity.pub</pre>
+
+Then login to the server using the ssh command:
+
+<pre>ssh -l username sdg.lcs.mit.edu</pre>
+
+Now type the following commands into the SSH session (it's OK if the
+first command complains that .ssh exists):
+
+<pre>
+mkdir ~/.ssh
+cat identity.pub >> ~/.ssh/authorized_keys
+chmod -R go-rwx ~/.ssh
+rm identity.pub
+logout
+</pre>
+
+Go back and try logging in with ssh again; now it should log you in
+with no password. If it asks for a password, try adding '-v' before
+the '-l' and read the logs it prints.
+
+<p><br>
+
+<li>Tell CVS to use SSH.  Set the environment variable CVS_RSH (tcsh syntax):
+
+<pre>setenv CVS_RSH ssh</pre>
+
+You should add this to one of your dotfiles (like .cshrc) so it gets
+set every time you log in.
+
+<p><br>
+
+<li>To obtain the invariants module, use:
+
+<pre>
+cvs -d :ext:username@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co invariants
+</pre>
+
+To obtain the dfej module, use:
+
+<pre>
+cvs -d :ext:username@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co dfej
+</pre>
+
+After executing these commands, you should be able to issue CVS
+commands such as
+
+<pre>cvs update</pre>
+
+to have your copy of the repository updated from the master version.
+
+</ol>
+
+
+</body>
+</html>

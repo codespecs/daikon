@@ -1,0 +1,55 @@
+<html>
+<head>
+<TITLE>Anonymous CVS for the Daikon project</TITLE>
+<link rev="made" href="mailto:mernst@lcs.mit.edu">
+</head>
+<body>
+
+<h1>Anonymous CVS for the Daikon project</h1>
+
+There are two modules (directories) available via anonymous CVS from
+sdg.lcs.mit.edu:  <tt>invariants</tt> (the bulk of the Daikon invariant
+detection system, which is written in Java) and <tt>dfej</tt> (the Daikon
+front end for Java, which is written in C++).
+<p>
+
+To obtain the invariants module, execute the following command.  It creates
+an <tt>invariants</tt> subdirectory in the current directory.  Use the
+password <tt>research</tt>.
+
+<pre>
+    cvs -d :pserver:anonymous@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS login
+    cvs -d :pserver:anonymous@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co invariants
+</pre>
+<p>
+
+Optionally, to obtain the dfej module, execute the following commands.
+They will create a <tt>dfej</tt> subdirectory in the current directory.
+Use the password <tt>research</tt>.
+
+<pre>
+    cvs -d :pserver:anonymous@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS login
+    cvs -d :pserver:anonymous@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co dfej
+</pre>
+<p>
+
+After executing these commands, you should be able to issue CVS commands
+such as
+<pre>
+  cvs update
+</pre>
+to update your copy of the repository from the master version.
+<p>
+
+
+<hr>
+
+<a href="./">Daikon homepage</a><p>
+
+<address>
+<a href="http://sdg.lcs.mit.edu/~mernst/">Michael Ernst</a>
+<a href="mailto:mernst@cs.washington.edu">&lt;mernst@cs.washington.edu&gt;</a>
+</address>
+
+</body>
+</html>

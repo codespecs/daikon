@@ -1,0 +1,41 @@
+<html>
+<head>
+<TITLE>Creating an account on geyer</TITLE>
+<link rev="made" href="mailto:mernst@lcs.mit.edu">
+</head>
+<body>
+
+<h1>Creating an account on geyer</h1>
+
+To create an account on geyer, perform the following two steps:
+<p>
+
+Run inquir (on oregano, and using the .el rather than .elc file) to get a
+UID.  Set the name and mail forwarding, at least.
+<p>
+
+Create a new account on geyer like so:
+<blockquote>
+<pre>
+su
+useradd -d /g1/users/<em>username</em> -u <em>UID</em> <em>username</em>
+passwd <em>username</em>
+<em># Add to "invariants" group</em>
+emacs /etc/group
+(cd /var/yp; make)
+<em># Add to "daikon" mailing list</em>
+emacs /etc/aliases
+exit
+</pre>
+</blockquote>
+<p>
+
+<hr>
+<a href="./">Using Daikon at MIT</a><p>
+
+<address>
+  <a href="http://sdg.lcs.mit.edu/~mernst/">Michael Ernst</a>
+</address>
+
+</body>
+</html>
