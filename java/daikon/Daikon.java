@@ -919,11 +919,12 @@ public final class Daikon {
           // This puts the .inv file in the same directory as the .dtrace file.
           // basename = filename;
           int base_end = basename.indexOf(".dtrace");
-          String inv_filename = filename.substring(0, base_end) + ".inv.gz";
-          inv_file = new File(inv_filename);
-          if (!UtilMDE.canCreateAndWrite(inv_file)) {
-            throw new Error("Cannot write to file " + inv_file);
-          }
+          String inv_filename = basename.substring(0, base_end) + ".inv.gz";
+
+            inv_file = new File(inv_filename);
+             if (!UtilMDE.canCreateAndWrite(inv_file)) {
+           throw new Error("Cannot write to file " + inv_file);
+           }
         }
       } else if (filename.indexOf(".spinfo") != -1) {
         spinfo_files.add(file);
