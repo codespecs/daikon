@@ -42,7 +42,10 @@ for my $file (@ARGV) {
 		# remove invariants added by a heuristic
 		@matches = grep(!/\Q.owner = this/, @matches);
 	    }
+	    # remove "dumb" things
+	    @matches = grep(!m|// dumb|, @matches);
 	    my $count = scalar(@matches);
+	    print STDERR @matches if ($count);
 	    print $count;
 	    print "\t" unless ($category eq "A");
 	}

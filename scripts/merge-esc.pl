@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC annotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2002-01-23 15:49:12 mistere>
+# Time-stamp: <2002-01-23 20:40:38 mistere>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -61,7 +61,10 @@ if ((/^Inv filename = /)
     || (/^Variables not equal: /)
     || (/^Condition always satisfied: /)
     || (/^OneOf problem: /)
-    || (/^Exiting$/)) {
+    || (/^Exiting$/)
+    || (/\.toString /)
+    )
+{
   next;
 }
 
@@ -328,7 +331,7 @@ END {
     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
 
     while (defined($line = <IN>)) {
-      if (($line !~ /;$/)
+      if (($line !~ m|;\s*(//.*)?$|)
 	  && ($line =~ /\b(?:public|private|protected)\b/)
 	  && ($line =~ /\b(\w+)\s*(\([^\)]*\))/)) {
 	# This looks like a declaration of method $methodname.

@@ -18,7 +18,7 @@ my @types = ("invariant","set","requires","modifies","ensures","exsures","also_r
 
 my %types_map = (
 		 "invariant" => "Object",
-		 "set" => "Set",
+		 "set" => "Unsound",
 		 "requires" => "Requires",
 		 "modifies" => "Modifies",
 		 "ensures" => "Ensures",
@@ -30,8 +30,8 @@ my %types_map = (
 		 "axiom" => "Unsound",
 		 "assume" => "Unsound",
 		 );
-my @printed_types = ("Object", "Requires", "Modifies", "Ensures");
-my %printed_types = ("Object" => 1, "Requires" => 1, "Modifies" => 1, "Ensures" => 1);
+my @printed_types = ("Object", "Requires", "Modifies", "Ensures", "Unsound");
+my %printed_types = ("Object" => 1, "Requires" => 1, "Modifies" => 1, "Ensures" => 1, "Unsound" => 1);
 
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes =
