@@ -1,62 +1,75 @@
 #!/usr/bin/env perl
 
+# extract_vars.pl - extract variable values from a dtrace file. Writes them
+#                  out in one of various input formats for different clustering
+#                  algoritm implementations.
+
+# usage: extract_vars.pl  <dtracefile>.dtrace <decls1>.decls <decls2>.decls ...
+
 use English;
 # use strict;
 $WARNING = 1;			# "-w" flag
 
-$decls_file; #holds the name of the .decls file
-$dtrace_file; #holds the name of the .dtrace file
+my $decls_file; #holds the name of the .decls file
+my $dtrace_file; #holds the name of the .dtrace file
 
 # in extracting the variables, I want only scalar data. The variables I throw
 # away are
 # (1) Hashcode of Objects (2) Arrays (3) Strings
-%pptname_to_fhandles; #stores a filehandle for each program point.
-%pptname_to_nvars; #stores the number of variables at each program point
-%pptname_to_vararrays; #stores the variable values at each program point.
-#need to keep track of this in case we want to sample it later.
-%pptname_to_objectvars; #stores the variable name of all Object variables at
+my %pptname_to_fhandles; #stores a filehandle for each program point.
+my %pptname_to_nvars; #stores the number of variables at each program point
+my %pptname_to_vararrays; #stores the variable values at each program point.
+# need to keep track of this in case we want to sample it later.
+my %pptname_to_objectvars; #stores the variable name of all Object variables at
 # each program point. This is because we want to throw away this data from
 # the clustering.
 
 #for hierarchical clustering, it doesn't really number what the number of
 #variables is, because the difference table is used to do the clustering.
-%nvars_to_maxsamples = (2, 5000, 3, 4000 , 4, 4000, 5, 4000, 6, 4000);
 
-if(@ARGV[0] =~ /\.decls/){
-    $decls_file = @ARGV[0];
-    $dtrace_file = @ARGV[1];
-}elsif( @ARGV[0] =~/\.dtrace/ ){
-    $dtrace_file = @ARGV[0];
-    $decls_file = @ARGV[1];
+#use this for kmeans
+%nvars_to_maxsamples = (1, 6000, 2, 5000, 3, 4000 , 4, 4000, 5, 4000, 6, 4000);
+#use this for hierarchical
+#%nvars_to_maxsamples = (1, 1500, 2, 1500, 3, 1500 , 4, 1200, 5, 1000, 6, 800);
+
+foreach $arg (@ARGV) {
+    if ($arg  =~ /\.decls/){
+	&read_decls_file($arg);
+    } elsif ( $arg =~/\.dtrace/ ) {
+	if (defined($dtrace_file)) {
+  	    die("extract_vars.pl: multiple dtrace files supplied: $dtrace_file $arg");
+	}
+	$dtrace_file = $arg;
+    }
 }
+# $dtrace_file =~ /\/*(.*)\.dtrace/;
 
-$dtrace_file =~ /\/*(.*)\.dtrace/;
-
-open(DECL, $decls_file) || die "decls file not found";
-local $pptname;
-while(<DECL>) {
-    $line = $_;
-    if($line =~ /DECLARE/){
-	@variables = &read_decl_ppt;
-	#extract the variables out of only the EXIT program points.
-	#(take this out if you want everything)
-	$pptname = @variables[0];
-	if ($pptname !~ /ENTER/) {
-	    &open_file_for_output_seq(@variables);
-	    #&open_file_for_output_column(@variables);
+sub read_decls_file {
+    $decls_file = $_[0];
+    open(DECL, $decls_file) || die "decls file not found";
+    while(<DECL>) {
+	$line = $_;
+	if($line =~ /DECLARE/){
+	    @variables = &read_decl_ppt;
+	    #extract the variables out of only the EXIT program points.
+	    #(take this out if you want everything)
+	    $pptname = @variables[0];
+	    if ($pptname !~ /ENTER/) {
+		&open_file_for_output_seq(@variables);
+		#&open_file_for_output_column(@variables);
+	    }
 	}
     }
 }
 
 open (DTRACE, $dtrace_file) || die "dtrace file not found \n";
 while (<DTRACE>) {
-    local $pptname, @variables;
+    undef $pptname, @variables;
 
     $line = $_;
     if ($line =~ /:::/) {
 	$pptname = $line;
 	chomp ($pptname);
-
 	#extract the variables out of only the EXIT program points.
 	#(take this out if you want everything). Also if the filehandle
 	#doesn't exist, then we didn't come across this program point in
@@ -85,54 +98,47 @@ sub sample_large_ppts {
     #memory, but rather reading the trace file again and printing
     #only the sampled invocations
 
-    local $pptname, $i, $j, $pptfilename;
+    foreach $samp_pptname (keys %pptname_to_vararrays) {
 
-
-    foreach $pptname (keys %pptname_to_vararrays) {
-
-	local $nvars = $pptname_to_nvars{$pptname};
-	if($nvars > 6 && $nvars < 10) {
-	    $nvars_to_maxsamples{$nvars} = 1000;
-	} elsif ($nvars > 10) {
-	    $nvars_to_maxsample{$nvars} = 800;
+	$num = $pptname_to_nvars{$samp_pptname};
+	if($num > 6 && $num < 10) {
+	    $nvars_to_maxsamples{$num} = 1000;
+	} elsif ($num > 10) {
+	    $nvars_to_maxsample{$num} = 800;
 	}
 
-	$maxsamples = $nvars_to_maxsamples{$nvars};
+	$maxsamples = $nvars_to_maxsamples{$num};
 
 	#find the number of samples for this program point
-	$temp = scalar( @{$pptname_to_vararrays{$pptname}} );
-	$nsamples = $temp/($nvars + 2);
+	$temp = scalar( @{$pptname_to_vararrays{$samp_pptname}} );
+	$nsamples = $temp/($num + 2);
 
 	#if the number of samples is too large, sample.
 	if ($nsamples > $maxsamples) {
-	    print "sampling ... $pptname\n";
 	    $sampling = 1;
 	    @samples = &get_random_numbers($maxsamples, $nsamples);
-
 	    #open a file and print, but first clobber the original one
-	    $pptfilename = &cleanup_pptname($pptname);
-	    #unlink $pptfilename;
+	    $pptfilename = &cleanup_pptname($samp_pptname);
+	    unlink $pptfilename;
 	    $new_filename = $pptfilename.".samp";
 	    open (SAMP, ">$new_filename")
 		|| die "couldn't open $new_filename to print sampled output\n";
-	    $pptname_to_fhandles{$pptname} = *SAMP;
+	    $pptname_to_fhandles{$samp_pptname} = *SAMP;
 
 	    #print out the selected invocations from the vararray
 	    #print SAMP "#number of variables is $nvars\n";
-	    print SAMP "$nvars\n";
+	    print SAMP "$num\n";
 
 	    #vararray contains the pptname and the invoc, in addition to
 	    # the variable values
-	    $block_size = $pptname_to_nvars{$pptname} + 2;
+	    $block_size = $pptname_to_nvars{$samp_pptname} + 2;
 
 	    for ($i = 0; $i < $maxsamples; $i++) {
 		$start = $samples[$i] * $block_size;
 		$end = $start + $block_size - 1;
-		$invocation_slice = "";
-		$count = 0;
+		undef @invocation_slice;
 		for ($j = $start; $j <= $end; $j++) {
-		    $invocation_slice[$count] = $pptname_to_vararrays{$pptname}[$j];
-		    $count ++;
+		    push @invocation_slice, $pptname_to_vararrays{$samp_pptname}[$j];
 		}
 		&output_seq(@invocation_slice);
 		#&output_column(@invocation_slice);
@@ -146,7 +152,7 @@ sub sample_large_ppts {
 $object_invoc = 0; #keep track of OBJECT invoc. nonces
 $class_invoc = 0; #keep track of CLASS invoc nonces
 sub read_dtrace {
-    local @vararray;
+    undef @vararray;
     $pptname = $_[0];
     #the pptname is the first element in the array. The variables follow it
     push @vararray, $pptname;
@@ -242,18 +248,15 @@ sub read_decl_ppt {
 
 sub open_file_for_output_seq {
     #prep the file for writing the variable values
-    local $pptfilename, $m, @vararray;
 
     @vararray = @_;
-    $pptfilename = $vararray[0];
-    $pptfilename = &cleanup_pptname($pptfilename);
+    $pptname = $vararray[0];
+    $pptfilename = &cleanup_pptname($pptname);
 
     #create a filehandle for this program point
     local *FNAME;
     open(FNAME, ">$pptfilename") || die "couldn't open $pptfilename for writing\n";
     $fhandle = *FNAME;
-
-    $pptname = $vararray[0];
     $pptname_to_fhandles{$pptname} = $fhandle;
     $nvars = $pptname_to_nvars{$pptname};
 
@@ -325,19 +328,18 @@ sub output_seq {
     # .
 
 
-    local $pptname, $k, $fhandle, @vararray;
-    @vararray = @_;
-    $pptname = $vararray[0];
-    $nvars = $pptname_to_nvars{$pptname};
-    $fhandle = $pptname_to_fhandles{$pptname};
+    @output_vararray = @_;
+    $output_pptname = $output_vararray[0];
+    $output_nvars = $pptname_to_nvars{$output_pptname};
+    $output_fhandle = $pptname_to_fhandles{$output_pptname};
 
     #if ($sampling) {
-    #print "pptname $pptname, fhandle $fhandle, $vararray[1], $vararray[2], k = $k\n";
+    #print "$output_pptname, $fhandle, $output_vararray[1], $output_vararray[2], k = $k\n";
     #}
 
     #print the invoc nonce in addition to the variables.
-    for ($k = 0; $k < $nvars+1; $k++) {
-	print $fhandle "$vararray[$k+1]\n";
+    for ($k = 0; $k < $output_nvars+1; $k++) {
+	print $output_fhandle "$output_vararray[$k+1]\n";
     }
 }
 
@@ -392,8 +394,8 @@ sub get_random_numbers {
     # target and max are the zeroth and first arguments of this subroutine
     $target = $_[0];
     $max = $_[1];
-    @selected = ""; #keeps track of whether a number has been selected
-    @numbers = "";  #this array holds the random numbers to be returned.
+    undef @selected; #keeps track of whether a number has been selected
+    undef @numbers;  #this array holds the random numbers to be returned.
     $num_selected = 0;
     $num_clashes = 0;
     while($num_selected < $target){
