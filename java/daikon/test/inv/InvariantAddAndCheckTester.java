@@ -253,7 +253,6 @@ public class InvariantAddAndCheckTester extends TestCase {
    * input and output streams have been created.
    *
    * @param commands the input that decides which tests to perform
-   * @param output the place to where the test output is written
    * @return a String holding the error messages for any failed tests
    *  or null if no tests are failed.
    **/
@@ -830,7 +829,6 @@ public class InvariantAddAndCheckTester extends TestCase {
       VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
                                                       arrayModifier), type, type,
                                     /* comparability = */ null, VarInfoAux.getDefault());
-      // [INCR] result.equal_to = result;   // make it canonical
       return result;
     }
 
