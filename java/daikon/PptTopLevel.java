@@ -148,6 +148,20 @@ public class PptTopLevel
   // two methods that add:  one that puts all the values in, one that doesn't.
   public Vector views_cond;
 
+  /** all children relations in the hierarchy */
+  public List /* PptRelation */ children = new ArrayList();
+
+  /** all parent relations in the hierarchy */
+  public List /* PptRelation */ parents = new ArrayList();
+
+  /**
+   *  Flag that indicates whether or not invariants have been merged
+   *  from all of this ppts children to form the invariants here.  Necessary
+   *  because a ppt can have multiple parents and otherwise we'd needlessly
+   *  merge multiple times
+   */
+  public boolean invariants_merged = false;
+
   /**
    * Together, dataflow_ppts and dataflow_tranforms describe how
    * samples that are received at this program point flow to other
@@ -1077,7 +1091,9 @@ public class PptTopLevel
               debugSuppress.fine ("Suppressor re-suppressed");
             }
             if (inv.logOn()) {
-              inv.log ("Suppressor " + inv.repr() + " re-suppressed, sample count: " + inv.ppt.num_samples());
+              inv.log ("Suppressor " + inv.format()
+                       + " re-suppressed, sample count: "
+                       + inv.ppt.num_samples());
             }
           }
         }
@@ -1136,6 +1152,151 @@ public class PptTopLevel
     }
 
     return new ArrayList();
+  }
+
+  /**
+   * Add the sample to the equality sets and invariants at this
+   * program point.  This version is specific to the bottom up
+   * processing mechanism.  Any invariants that were suppressed by
+   * invariants that were weakened or falsified by this sample also
+   * are presented the sample.
+   *
+   * This routine also instantiates slices/invariants on the first
+   * call for the ppt and initiates suppression when enough samples
+   * have been seen to warrant it.
+   *
+   * @param vt the set of values for this to see
+   * @param count the number of samples that vt represents
+   **/
+  public void add_bottom_up (ValueTuple vt, int count) {
+    // Doable, but commented out for efficiency
+    // repCheck();
+
+    Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars,
+                      name);
+
+    if (debugSuppress.isLoggable(Level.FINE)) {
+      debugSuppress.fine ("<<< Doing add for " + name);
+      debugSuppress.fine ("    with vt " + vt);
+    }
+    if (debugFlow.isLoggable(Level.FINE)) {
+      debugFlow.fine ("<<< Doing add for " + name);
+      debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
+    }
+
+    // Instantiate slices and invariants if this is the first sample
+    if (values_num_samples == 0) {
+      debugFlow.fine ("  Instantiating views for the first time");
+      instantiate_views_and_invariants();
+    }
+
+    // Initiate suppression if we have seen enough samples to warrant it
+    if (!initiatedSuppression &&
+        values_num_samples >= Daikon.suppress_samples_min) {
+      initiateSuppression();
+    }
+
+    // Add the samples to all of the equality sets, breaking sets as required
+    if (Daikon.use_equality_optimization) {
+      equality_view.add (vt, count);
+    }
+
+    values_num_samples += count;
+
+    // Add the sample to each slice/invariant and keep track of the
+    // list of weakened/destroyed invariants.  If the weakened
+    // invariants suppressed any other invariants, each of the
+    // suppressees must be checked.  First try and resuppress it.  If
+    // that fails, add its ppt to the list of slices to recheck.
+    // Continue iteratively until there are no more slices to check.
+    //
+    // Note that by keeping track of slices to recheck (rather than
+    // invariants) that samples may get applied to the same invariant
+    // more than once (every invariant in the rechecked slice is
+    // handed the sample, not just the ones that were previously
+    // suppressed).  This should be fixed, but it was the current
+    // V3 behavior, so we don't want to spend time on it now.
+
+    // Initially, viewsToCheck are all of the slices
+    Set viewsToCheck = new HashSet(viewsAsCollection());
+
+    // While there are views to check
+    while (viewsToCheck.size() > 0) {
+
+      // Add the sample to each slice and keep track of any weakened or
+      // destroyed invariants
+      Set weakened_invs = new HashSet();
+      for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
+        PptSlice view = (PptSlice) itor.next();
+        if (view.invs.size() == 0)
+          continue;
+        weakened_invs.addAll (view.add(vt, count));
+      }
+
+      // Initialize an empty slice set, the program points that include
+      // invariants that are now unsuppressed are added below.
+      viewsToCheck = new HashSet();
+
+      // foreach weakened/destroyed invariant
+      for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
+
+        // Get current invariant and its list of suppression links
+        Invariant inv = (Invariant) itor.next();
+        Set suppressees = new HashSet(inv.getSuppressees());
+        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn())
+          && suppressees.size() > 0)
+          inv.log (debugSuppress, " Inv " + inv.repr() +
+                   " was falsified or weakened with suppressees");
+
+        // Try and suppress the weakened invariant (its new weakened
+        // state might allow suppression, where its previous state did not)
+        if (!inv.falsified && inv.getSuppressor() == null) {
+          if (attemptSuppression (inv, true)) {
+            if (inv.logOn() || debugSuppress.isLoggable(Level.FINE))
+              inv.log ("Weakened invariant suppressed");
+          }
+        }
+
+        // Loop through each invariant suppressed by this one and attempt
+        // to resuppress it clearing out the existing suppressions at the
+        // same time.  If not resuppressed, add its ppt to the
+        // list of ppts to apply samples to.
+        for (Iterator isup = suppressees.iterator(); isup.hasNext(); ) {
+          SuppressionLink sl = (SuppressionLink) isup.next();
+          Invariant sup_inv = sl.getSuppressee();
+          sl.unlink();
+          if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
+            sup_inv.log (debugSuppress, "Attempting resuppression");
+          if (attemptSuppression (sup_inv, true)) {
+            if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
+              sup_inv.log (debugSuppress, "Re-suppressed by "
+                            + sup_inv.getSuppressor());
+          } else {
+            viewsToCheck.add (sup_inv.ppt);
+          }
+        }
+      }
+    }
+
+    // Remove slices from the list if all of their invariants have died
+    for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
+      PptSlice view = (PptSlice) itor.next();
+      if (view.invs.size() == 0) {
+        itor.remove();
+        if (Global.debugInfer.isLoggable(Level.FINE))
+          Global.debugInfer.fine ("add(ValueTulple,int): slice died: "
+                                  + name + view.varNames());
+      }
+    }
+
+    // Add sample to all conditional ppts.  This is probably not fully
+    // implemented in V3
+    for (Iterator itor = views_cond.iterator() ; itor.hasNext() ; ) {
+      PptConditional pptcond = (PptConditional) itor.next();
+      pptcond.add(vt, count);
+      // TODO: Check for no more invariants on pptcond?
+    }
+
   }
 
   /**
@@ -2256,7 +2417,7 @@ public class PptTopLevel
       //       if (debugSuppressFill.isLoggable(Level.FINE)) {
       //         debugSuppressFill.fine ("  InvType: " + clazz);
       //       }
-      if (dataflow_ppts == null) {
+      if (Daikon.df_bottom_up || dataflow_ppts == null) {
         // debugSuppressFill.fine ("  No dataflow_ppts");
         break;
       }
@@ -3748,4 +3909,120 @@ public class PptTopLevel
     }
     return result.toString();
   }
+
+  /**
+   * Debug method to print children recursively
+   */
+  public void debug_print_tree (Logger l, int indent, PptRelation parent_rel) {
+
+    // Calculate the indentation
+    String indent_str = "";
+    for (int i = 0; i < indent; i++)
+      indent_str += "--  ";
+
+    // Get the class of the parent relation
+    String cls = "";
+    if (parent_rel != null)
+      cls = UtilMDE.replaceString (parent_rel.getClass().getName(),
+                      parent_rel.getClass().getPackage().getName() + ".", "");
+
+    // Calculate the variable relationships
+    String var_rel = "[]";
+    if (parent_rel != null)
+      var_rel = "[" + parent_rel.parent_to_child_var_string() +"]";
+
+    // Put out this item
+    l.fine (indent_str + ppt_name + ": " + cls + ": " + var_rel);
+
+    // Put out children if this is the primary relationship.  I consider
+    // (somewhat arbitrarily) the ObjectUser and EnterExit realtionships not
+    // to be primary.  This simplifies the tree for viewing.
+    if (!(parent_rel instanceof Dataflow.ObjectUserRel) &&
+        !(parent_rel instanceof Dataflow.EnterExitRel)) {
+      for (Iterator i = children.iterator(); i.hasNext(); )
+        ((PptRelation)(i.next())).debug_print_tree (l, indent+1);
+    }
+  }
+
+  /**
+   * Returns a string version of all of the equality sets for this ppt.
+   * The string is of the form [a,b], [c,d] where a,b and c,d are
+   * each in an equality set.  Should be used only for debugging.
+   */
+  public String equality_sets_txt () {
+
+    String out = "";
+    for (int i = 0; i < equality_view.invs.size(); i++) {
+      Equality e = (Equality) equality_view.invs.get (i);
+      Set vars = e.getVars();
+      String set_str = "";
+      for (Iterator j = vars.iterator(); j.hasNext(); ) {
+        if (set_str != "")
+          set_str += ",";
+        set_str += ((VarInfo)j.next()).name.name();
+      }
+      if (out != "")
+        out += ", ";
+      out += "[" + set_str + "]";
+    }
+
+    return (out);
+  }
+
+  /**
+   * Returns whether or not the specified variable in this ppt has any
+   * parents.
+   */
+  public boolean has_parent (VarInfo v) {
+
+    for (Iterator i = parents.iterator(); i.hasNext(); ) {
+      PptRelation rel = (PptRelation) i.next();
+      if (rel.parentVar (v) != null)
+        return (true);
+    }
+
+    return (false);
+  }
+
+  /**
+   * Recursively merge invariants from children to create invariant
+   * list at this ppt.
+   *
+   * First, equality sets are created for this ppt.  These are the
+   * interesection of the equality sets from each child.
+   */
+
+  public void mergeInvs() {
+
+    // If we don't have any children, there is nothing to do
+    if (children.size() == 0)
+      return;
+
+    // If this has already been done via an other pass, nothing to do
+    if (invariants_merged)
+      return;
+
+    // First do this for any children
+    for (Iterator i = children.iterator(); i.hasNext(); ) {
+      PptRelation rel = (PptRelation) i.next();
+        rel.child.mergeInvs();
+    }
+
+    // Get all of the binary relationships from the first child's
+    // equality sets.
+    PptRelation c1 = (PptRelation) children.get(0);
+    List elist = c1.get_child_equalities_as_parent();
+
+    // Loop through the remaining children, intersecting the equal
+    // variables as we go
+    for (int i = 1; i < children.size(); i++) {
+      PptRelation rel = (PptRelation) children.get(i);
+      List elist_new = rel.get_child_equalities_as_parent();
+      List elist_merge = new ArrayList();
+      for (int j = 0; j < elist.size(); j++) {
+      }
+    }
+
+  }
+
 }
