@@ -214,19 +214,19 @@ public final class Member extends SequenceString  {
   }
 
   public String format_esc() {
+    // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
-    String result = form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
-    return UtilMDE.replaceString(result, "forall", "exists");
+    return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
   public String format_simplify() {
+    // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
-    String result = form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
-    return UtilMDE.replaceString(result, "FORALL", "EXISTS");
+    return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 
   public void add_modified(String [] a, String  i, int count) {
