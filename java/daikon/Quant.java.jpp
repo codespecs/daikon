@@ -6,6 +6,21 @@ import utilMDE.Assert;
 import java.util.*;
 import java.lang.reflect.*;
 
+/** A library of auxiliary routines used by the Java family of output
+ * formats. This allows invariants to be output as snippets of
+ * executable (Java) code. For example, an invariant like
+ *
+ *  a[] elements >= 1
+ *
+ * is output (in the Java, JML and DBC formats) as something like
+ *
+ *  daikon.Quant.eltsGTE(a, 1)
+ *
+ * Note: Whenever a method involves comparing two elements for
+ * equality, this is always "==" equality (even for Objects and
+ * Strings).
+ *
+ */
 public class Quant {
 
 #define BOOLEAN
@@ -51,70 +66,125 @@ public class Quant {
   // These methods handle calls to quant methods that instead of passing
   // an array, pass a java.util.List. They do so by converting the list
   // to an array.
+  // @see #noDups(Object[])
 
+  /** @see #noDups(Object[])
+   */
   /*@ pure */ public static boolean noDups(java.util.List seq) {
     return noDups((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
   }
+
+  /** @see #eltwiseEqual(Object[])
+   */
   /*@ pure */ public static boolean eltwiseEqual(java.util.List seq) {
     return eltwiseEqual((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
   }
+
+  /** @see #eltwiseNotEqual(Object[])
+   */
   /*@ pure */ public static boolean eltwiseNotEqual(java.util.List seq) {
     return eltwiseNotEqual((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
   }
+
+  /** @see #concat(Object[], Object[])
+   */
   /*@ pure */ public static java.lang.Object[] concat(java.util.List seq1, java.util.List seq2) {
     return concat((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                   (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #union(Object[], Object[])
+   */}
   /*@ pure */ public static java.lang.Object[] union(java.util.List seq1, java.util.List seq2) {
     return union((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                  (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #intersection(Object[], Object[])
+   */}
   /*@ pure */ public static java.lang.Object[] intersection(java.util.List seq1, java.util.List seq2) {
     return intersection((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                         (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #setDiff(Object[], Object[])
+   */}
   /*@ pure */ public static java.lang.Object[] setDiff(java.util.List seq1, java.util.List seq2) {
     return setDiff((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                    (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #setEqual(Object[], Object[])
+   */}
   /*@ pure */ public static boolean setEqual(java.util.List seq1, java.util.List seq2) {
     return setEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                     (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #isReverse(Object[], Object[], Object[])
+   */}
   /*@ pure */ public static boolean isReverse(java.util.List seq1, java.util.List seq2) {
     return isReverse((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                      (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #eltsOneOf(Object[], Object[])
+   */}
   /*@ pure */ public static boolean eltsOneOf(java.util.List seq1, java.util.List seq2) {
     return eltsOneOf((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                      (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #pairwiseEqual(Object[], Object[])
+   */}
   /*@ pure */ public static boolean pairwiseEqual(java.util.List seq1, java.util.List seq2) {
     return pairwiseEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                          (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #pairwiseNotEqual(Object[], Object[])
+   */}
   /*@ pure */ public static boolean pairwiseNotEqual(java.util.List seq1, java.util.List seq2) {
     return pairwiseNotEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                             (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #lexEqual(Object[], Object[])
+   */}
   /*@ pure */ public static boolean lexEqual(java.util.List seq1, java.util.List seq2) {
     return lexEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                     (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #lexNotEqual(Object[], Object[])
+   */}
   /*@ pure */ public static boolean lexNotEqual(java.util.List seq1, java.util.List seq2) {
     return lexNotEqual((java.lang.Object[])seq1.toArray(new java.lang.Object[]{}),
                        (java.lang.Object[])seq2.toArray(new java.lang.Object[]{}));
-  }
+
+
+  /** @see #memberOf(Object, Object[])
+   */}
   /*@ pure */ public static boolean memberOf(java.lang.Object elt, java.util.List arr) {
     return memberOf(elt, (java.lang.Object[])arr.toArray(new java.lang.Object[]{}));
   }
+
+  /** @see #slice(Object[], int, int)
+   */
   /*@ pure */ public static java.lang.Object[] slice(java.util.List seq, int start , int end) {
     return slice((java.lang.Object[])seq.toArray(new java.lang.Object[]{}), start, end);
   }
+
+  /** @see #eltsEqual(Object[], Object)
+   */
   /*@ pure */ public static boolean eltsEqual(java.util.List arr, java.lang.Object elt) {
     return eltsEqual((java.lang.Object[])arr.toArray(new java.lang.Object[]{}), elt);
   }
+
+  /** @see #eltsNotEqual(Object[], Object)
+   */
   /*@ pure */ public static boolean eltsNotEqual(java.util.List arr, java.lang.Object elt) {
     return eltsNotEqual((java.lang.Object[])arr.toArray(new java.lang.Object[]{}), elt);
   }
+
 }
