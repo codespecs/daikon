@@ -1048,13 +1048,13 @@ alias fix="sed -f $DFECDIR/fix.sed"
 executable @file{print_tokens} in the current directory.
 
 @example
-g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 @quotation
 Note for Windows users:  Name the executable print_tokens.exe, not
 print_tokens:
 @example
-g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 @end quotation
 
@@ -1116,7 +1116,7 @@ Instrumentation (Steps 1-3)
 @example
 cd $DAIKONDIR/examples/c-examples/print_tokens
 dfec print_tokens.c stream.h tokens.h
-g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
+g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 
 Trace File Generation (Step 4)
@@ -1276,7 +1276,7 @@ it with the object file for the Daikon runtime library and the stdc++
 library.  By default, dfec places instrumented source in the
 @file{daikon-instrumented/} directory.
 @example
-      g++ -o @var{myprog} daikon-instrumented/@var{myprog}.cc $DFECDIR/daikon_runtime.o
+      g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc $DFECDIR/daikon_runtime.o
 @end example
 @noindent
 In addition, you may want to specify the @option{-w} flag to g++, to
@@ -2861,12 +2861,12 @@ step should include @file{daikon_runtime.o}, and the compiler should be
 @command{g++}, since the instrumented files are C++ files.
 For instance,
 @example
-  gcc -o @var{exefile} myprog.c
+  gcc -g -o @var{exefile} myprog.c
 @end example
 @noindent
 would become
 @example
-  g++ -o @var{exefile} daikon-instrumented/myprog.cc $DFECDIR/daikon_runtime.o
+  g++ -g -o @var{exefile} daikon-instrumented/myprog.cc $DFECDIR/daikon_runtime.o
 @end example
 
 @cindex DTRACEFILE environment variable
@@ -3221,7 +3221,7 @@ orig(*bar) == 6
 @subsection dfec limitations
 
 Before running @command{dfec}, you should ensure that your code compiles
-cleanly; we recommend that you use @command{gcc -Wall}, as
+cleanly; we recommend that you use @command{gcc -g -Wall}, as
 @command{dfec} issues warnings about a number of erroneous C constructs
 that @command{gcc} and other compilers accept.
 
@@ -3234,7 +3234,10 @@ compilers or other versions of gcc.  In particular, gcc 3 does not
 work, nor does ``gcc 2.96'' (which is not an official gcc release but
 appears in some Linux distributions).
 
+@cindex ANSI C
 @cindex K&R C
+@cindex C prototypes
+@cindex prototypes, C
 
 @command{dfec} technically only instruments C++ programs.  However, most
 ANSI C programs are also legal C++ programs.  Programs that define
@@ -3245,7 +3248,7 @@ dfec does not support K&R C or
 other non-ANSI/ISO C dialects; convert such programs to ISO C before
 running dfec.  The @command{protoize} program (distributed with many
 versions of Unix and also widely available online) helps to perform this
-task.
+task by converting K&R prototypes to ANSI prototypes.
 
 @c 7/02/2001
 The C/C++ front end keeps track of the maximum read or written element
