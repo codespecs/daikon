@@ -731,7 +731,7 @@ public class Ast {
     for (Iterator itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType((FormalParameter) itor.next());
       String param = params[j].getName();
-      System.out.println("Comparing " + param + " to " + ast_param + ":");
+      // System.out.println("Comparing " + param + " to " + ast_param + ":");
       if (! typeMatch(param, ast_param)) {
         return false;
       }
