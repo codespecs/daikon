@@ -217,6 +217,12 @@ public class PptTopLevel extends Ppt {
    */
   public boolean invariants_merged = false;
 
+  // True while we're inside an invocation of mergeInvs() on this PPT.
+  // Used to prevent calling mergeInvs() recursively on a child in such
+  // a way as to cause an infinite loop, even if there is a loop in the
+  // PPT hierarchy.
+  private boolean in_merge = false;
+
   /**
    * Flag that indicates whether or not invariants that are duplicated
    * at the parent have been removed..
@@ -3282,10 +3288,13 @@ public class PptTopLevel extends Ppt {
     if (invariants_merged)
       return;
 
+    in_merge = true;
+
     // First do this for any children.
     for (Iterator i = children.iterator(); i.hasNext();) {
       PptRelation rel = (PptRelation) i.next();
-      rel.child.mergeInvs();
+      if (!rel.child.in_merge)
+        rel.child.mergeInvs();
     }
 
     //Fmt.pf ("Merging ppt " + name + " with " + children.size() + " children");
@@ -3472,6 +3481,7 @@ public class PptTopLevel extends Ppt {
 
     // Mark this ppt as merged, so we don't process it multiple times
     invariants_merged = true;
+    in_merge = false;
 
     // Remove any child invariants that now exist here
     if (dkconfig_remove_merged_invs) {
