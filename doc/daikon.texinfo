@@ -4251,7 +4251,8 @@ set these, but there probably should be.)
 @cindex environment variable DTRACELIMIT
 @cindex DTRACELIMITTERMINATE environment variable
 @cindex environment variable DTRACELIMITTERMINATE
-Environment variable DTRACELIMIT is a number of records, after which the
+Environment variable DTRACELIMIT is a number of records (that is,
+program point executions), after which the
 instrumented program will continue to run but will close the
 @file{.dtrace} and produce no more output to it.  If environment
 variable DTRACELIMITTERMINATE is set to "true", then the instrumented
