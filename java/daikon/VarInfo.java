@@ -352,6 +352,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   /**
    * Returns all other variables that are equal to this variable.
+   * Returns a fresh Vector.
    * The result Vector does not include this.
    * Also see @link{equalToNonobvious}.
    **/
@@ -375,7 +376,6 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   // Like equalTo, but drops out things which can be inferred to be equal
   // to the first.
-
   public Vector equalToNonobvious() {
     // should only call this for canonical variables
     Assert.assert(isCanonical());
@@ -392,6 +392,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         continue;
 
       // System.out.println("Considering " + vi.name);
+
       // Special cases of variables to omit.
       {
         // An element b.class is omitted if:
@@ -426,7 +427,40 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
           }
         }
       }
+      // If derived from non-canonical, omit.
+      // (This can happen for "size(...)" varables, which are always
+      // introduced so that sequenceSize() will not fail.)
+      if ((vi.derived != null)
+          && vi.derived.isDerivedFromNonCanonical()) {
+        continue;
+      }
+      // If size of a non-canonical array, omit.
+      if ((vi.derived != null)
+          && (vi.derived instanceof SequenceLength)) {
+        VarInfo seq_contents = ((SequenceLength) vi.derived).base;
+        String seq_contents_name = seq_contents.name;
+        String seq_object_name = null;
+        if (seq_contents_name.endsWith("[]")) {
+          seq_object_name = seq_contents_name.substring(0, seq_contents_name.length()-2);
+        } else if (seq_contents_name.startsWith("orig(")
+                   && seq_contents_name.endsWith("[])")) {
+          seq_object_name = seq_contents_name.substring(0, seq_contents_name.length()-3)
+                             + ")";
+        } else {
+          throw new Error("What object name? " + seq_contents_name);
+        }
+        VarInfo seq_object = ppt.findVar(seq_object_name);
+        if (! seq_object.isCanonical())
+          continue;
+      }
+      // For esc_output, omit noting that varibles are unmodified.
       // Add any additional special cases here.
+      if (Daikon.esc_output) {
+        if (vi.name.equals("orig(" + this.name + ")")) {
+          continue;
+        }
+      }
+
 
       result.add(vi);
     }
@@ -738,6 +772,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 //   }
 
   /**
+   * This is intended (only) for variable names read from files or other external sources.
    * @return ESC-formatted name for this variable, or null if variable is not describable
    **/
   public static String esc_name(String name)
@@ -833,8 +868,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
     }
     if (minindex.equals("")) minindex = "0";
-    if (maxindex.equals("")) maxindex = arrayname + ".length";
+    if (maxindex.equals("")) maxindex = arrayname + ".length-1";
     String arrayelt = pre_wrapper + arrayname + "[i]" + post_wrapper;
+    // System.out.println("index_range: " + name + " ( = " + esc_name + " ) ");
+    // System.out.println("    => " + minindex + ", " + maxindex + ", " + arrayelt);
+
     return new String[] { minindex, maxindex, arrayelt };
   }
 

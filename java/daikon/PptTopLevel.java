@@ -1846,7 +1846,7 @@ public class PptTopLevel extends Ppt {
    * Print invariants for a single program point.
    * Does no output if no samples or no views.
    **/
-  public void print_invariants_maybe(PrintStream out) {
+  public void print_invariants_maybe(PrintStream out, PptMap all_ppts) {
     // Maybe this test isn't even necessary, but will be subsumed by others
     // (as all the invariants will be unjustified).
     if (! has_samples()) {
@@ -1863,12 +1863,20 @@ public class PptTopLevel extends Ppt {
       }
       return;
     }
+    // Do not print if this is :::EXIT22 and :::EXIT exists
+    if (Daikon.esc_output &&
+        ppt_name.isExitPoint() &&
+        (!ppt_name.exitLine().equals(""))
+        && (all_ppts.get(ppt_name.makeExit().getName()) != null)) {
+      return;
+    }
+
     out.println("===========================================================================");
     print_invariants(out);
 
     for (int i=0; i<views_cond.size(); i++) {
       PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-      pcond.print_invariants_maybe(out);
+      pcond.print_invariants_maybe(out, all_ppts);
     }
 
   }
@@ -1925,12 +1933,46 @@ public class PptTopLevel extends Ppt {
       int num_samps = num_samples();
       out.println(better_name + "  " + nplural(num_samps, "sample"));
       out.println("    Samples breakdown: " + tuplemod_samples_summary());
+    } else {
+      out.println(better_name);
+    }
+    if (Daikon.output_num_samples || Daikon.esc_output) {
       out.print("    Variables:");
       for (int i=0; i<var_infos.length; i++)
         out.print(" " + var_infos[i].name);
       out.println();
-    } else {
-      out.println(better_name);
+    }
+    Vector modified_vars = new Vector();
+    Vector unmodified_vars = new Vector();
+    Vector unmodified_orig_vars = new Vector();
+    for (int i=0; i<var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      // This test is purely an optimization.
+      if (! vi.name.startsWith("orig(")) {
+        VarInfo vi_orig = findVar("orig(" + vi.name + ")");
+        if (vi_orig != null) {
+          if (vi.equal_to == vi_orig.equal_to) {
+            unmodified_vars.add(vi);
+            unmodified_orig_vars.add(vi_orig);
+          } else {
+            modified_vars.add(vi);
+          }
+        }
+      }
+    }
+    if (Daikon.output_num_samples || Daikon.esc_output) {
+      if (modified_vars.size() > 0) {
+        out.print("      Modified variables:");
+        for (int i=0; i<modified_vars.size(); i++)
+          out.print(" " + ((VarInfo)modified_vars.elementAt(i)).name);
+        out.println();
+      }
+      if (unmodified_vars.size() > 0) {
+        out.print("      Unmodified variables:");
+        for (int i=0; i<unmodified_vars.size(); i++)
+          out.print(" " + ((VarInfo)unmodified_vars.elementAt(i)).name);
+        out.println();
+      }
     }
 
     Assert.assert(check_modbits());
@@ -2007,7 +2049,7 @@ public class PptTopLevel extends Ppt {
             StringBuffer sb = new StringBuffer(vi.name);
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-              sb.append(" == ");
+              sb.append(" == "); // "interned"
               sb.append(other.name);
             }
             PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;

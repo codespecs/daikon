@@ -5,8 +5,15 @@ import daikon.*;
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
-    if (vi.rep_type != ProglangType.INT_ARRAY)
+    // if (vi.rep_type != ProglangType.INT_ARRAY)
+    //   return null;
+    if (! vi.rep_type.isArray())
       return null;
+    if (vi.name.endsWith(".class")
+        || (vi.name.startsWith("orig(")
+            && vi.name.endsWith(".class)"))) {
+      return null;
+    }
 
     if (! SequenceLength.applicable(vi)) {
       Global.tautological_suppressed_derived_variables++;

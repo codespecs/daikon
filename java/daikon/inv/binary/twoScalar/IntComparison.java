@@ -221,9 +221,18 @@ public final class IntComparison extends TwoScalar implements Comparison {
         return true;
       }
 
+      // This might never get invoked, as equality is printed out specially.
+      VarInfo s1 = (sl1 == null) ? null : sl1.base;
+      VarInfo s2 = (sl2 == null) ? null : sl2.base;
+      if ((s1 != null) && (s2 != null)
+          && (s1.equal_to == s2.equal_to)) {
+        // lengths of equal arrays being compared
+        return true;
+      }
+
       if (core.can_be_lt && (!core.can_be_eq)) {
         if ((sl2 != null) && (sl2.shift == 0)) {
-          // "x < size(a)"  ("x <= size(a)" would be more informative)
+          // "x < size(a)"  ("x <= size(a)-1" or "x < size(a)-1" would be more informative)
           return true;
         } else if ((sl1 != null) && (sl1.shift == -1)) {
           // "size(a)-1 < x"  ("size(a) <= x" would be more informative)

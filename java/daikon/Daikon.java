@@ -252,7 +252,7 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
-        ppt.print_invariants_maybe(System.out);
+        ppt.print_invariants_maybe(System.out, all_ppts);
         {
           // Clear memory
           ppt.set_values_null();

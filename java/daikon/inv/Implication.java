@@ -55,23 +55,28 @@ public class Implication extends Invariant {
     return "(" + predicate.format() + ")" + arrow + consequent.format();
   }
 
-  private String make_impl(String pred, String cons) {
-    return "(" + pred + ")  ==>  (" + cons + ")";
+  public String format_esc() {
+    String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
+    return "(" + predicate.format_esc() + ")" + arrow + "(" + consequent.format_esc() + ")";
   }
 
-  public String format_esc() {
-    // Slightly gross to have this on one line instead of two separate ones
-    String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
-    String pred = predicate.format_esc();
-    String cons = consequent.format_esc();
-    if (iff) {
-      return "((" + make_impl(pred, cons) + ")   &&   ("
-        + make_impl(cons, pred)
-        + "))";
-    } else {
-      return make_impl(pred, cons);
-    }
-  }
+  /// Completely confused ESC implementation; use better, briefer one.
+  // private String make_impl(String pred, String cons) {
+  //   return "(" + pred + ")  ==>  (" + cons + ")";
+  // }
+  // public String format_esc() {
+  //   // Slightly gross to have this on one line instead of two separate ones
+  //   String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
+  //   String pred = predicate.format_esc();
+  //   String cons = consequent.format_esc();
+  //   if (iff) {
+  //     return "((" + make_impl(pred, cons) + ")   &&   ("
+  //       + make_impl(cons, pred)
+  //       + "))";
+  //   } else {
+  //     return make_impl(pred, cons);
+  //   }
+  // }
 
   public boolean isSameFormula(Invariant other) {
     return (predicate.isSameFormula(((Implication)other).predicate)

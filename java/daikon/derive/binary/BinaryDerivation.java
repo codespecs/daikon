@@ -56,11 +56,24 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
     String suffix = "";
     if (base.endsWith("[]")) {
       base = base.substring(0, base.length()-2);
-    } else if (base.endsWith("[])")
-               && (base.startsWith("orig(") || base.startsWith("\\old("))) {
+    } else if (base.startsWith("orig(") && base.endsWith("[])")) {
       // This is heuristic; I think it's probably OK.
       base = base.substring(0, base.length()-3);
       suffix = ")";
+    } else if (base.startsWith("\\old(") && base.endsWith(")")) {
+      // This is even more heuristic; I think it's probably also OK.
+      base = base.substring(0, base.length()-1);
+      suffix = ")";
+      // Even more heuristic; starting to get scary.
+      int subold = subscript.indexOf("\\old(");
+      while (subold != -1) {
+        int oldcloseparen = subscript.indexOf(")", subold);
+        Assert.assert(oldcloseparen != -1);
+        subscript = (subscript.substring(0, subold)
+                     + subscript.substring(subold+5, oldcloseparen)
+                     + subscript.substring(oldcloseparen+1));
+        subold = subscript.indexOf("\\old(");
+      }
     }
     return base + "[" + subscript + "]" + suffix;
   }
