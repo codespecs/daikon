@@ -7,7 +7,7 @@
 
 sub usage() {
     print
-	"Usage: daikon [OPTION] <MAIN CLASS> [MAIN ARGUMENTS]\n",
+	"Usage: daikon [OPTION] MAIN_CLASS [MAIN_ARGUMENTS]\n",
 	"\n",
 	"Options:\n",
 	"  -o, --output FILE   Save invariants in FILE.inv\n",
