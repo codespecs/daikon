@@ -175,6 +175,10 @@ Interpreting Daikon output
 * Variable names::              
 * Invariant syntax::            
 
+Variable names
+
+* orig variable example::       
+
 GUIs for displaying invariants
 
 * Tree GUI::                    
@@ -299,6 +303,7 @@ Problems running Daikon
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* Daikon runs slowly::          
 
 Other problems
 
@@ -1793,8 +1798,8 @@ differ from its declared type
 @item
 @cindex @code{a[]} variable (array contents)
 @code{a[]} is the contents of array @code{a}, namely a sequence of
-elements.  "a=b" implies "a[]=b[]" but the reverse is not true.
-However, "a=orig(a)" does not imply "a[]=orig(a[])".
+elements.  "a=b" implies "a[]=b[]", but "a[]=b[]" does not imply "a=b".
+Also, "a=orig(a)" does not imply "a[]=orig(a[])".
 @item
 @code{a[].class} is an array of types, representing the run-time classes
 of the contents of @code{a}; it is omitted for arrays of primitive type
@@ -1819,6 +1824,66 @@ visible from outside a procedure.  Thus, its output forms a
 specification (mostly) from the view of a client of a procedure.  A
 future version of Daikon will permit output of local variables as a user
 option.
+
+@menu
+* orig variable example::       
+@end menu
+
+@node    orig variable example,  , Variable names, Variable names
+@subsubsection orig variable example
+
+@cindex @code{orig()} variable (pre-state value)
+
+This section gives an example of use of @code{orig()} variables and arrays.
+
+Suppose you have initially that
+@example
+  int i = 0;
+  int[] a = new int[] @{ 22, 23 @};
+  int[] b = new int[] @{ 46, 47 @};
+@end example
+
+and then you run the following:
+@example
+  // pre-state values at this point
+  a[0] = 24;
+  a[1] = 25
+  a = b;
+  a[0] = 48;
+  a[1] = 49;
+  i = 1;
+  // post-state values at this point
+@end example
+
+The values of various variables are as follows:
+
+@table @code
+@item orig(a[i]) = 22
+The value of @code{a[i]} in the pre-state: @{22, 23@}[0]
+
+@item orig(a[])[orig(i)] = 22
+This is the same as orig(a[i]):   @{22, 23@}[0].
+
+@item orig(a[])[i] = 23
+The value of @code{a[]} (that is, the array object, not the reference
+@code{a}) in the pre-state, indexed by the post-state value of i:
+@{22, 23@}[1]
+
+@item orig(a)[orig[i]) = 24
+orig(a) is the original value of the reference @code{a}, not
+@code{a}'s original elements: @{24, 25@}[0]
+
+@item orig(a)[i] = 25
+The original pointer value of a, indexed by the post-state value
+of i:  @{24, 25@}[1]
+
+@item a[orig(i)] = 48
+In the post-state, @code{a} indexed by the original value of
+@code{i}: @{48, 49@}[0]
+
+@item a[i] = 49
+The value of @code{a[i]} in the post-state.
+@end table
 
 
 @node    Invariant syntax,  , Variable names, Interpreting output
@@ -4585,6 +4650,7 @@ understand Daikon's operation; @xref{Command line options}.
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* Daikon runs slowly::          
 @end menu
 
 @node    No return from procedure, Out of memory, Daikon problems, Daikon problems
@@ -4668,7 +4734,7 @@ invariants may appear in Daikon's output.  The output is otherwise
 correct.
 
 
-@node    Method needs to be implemented,  , Simplify errors, Daikon problems
+@node    Method needs to be implemented, Daikon runs slowly, Simplify errors, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -4693,6 +4759,39 @@ or else use an output formatting that can handle those invariants.
 MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 
+@node    Daikon runs slowly,  , Method needs to be implemented, Daikon problems
+@subsection Daikon runs slowly
+
+@cindex slow operation, of Daikon
+@cindex runtime, of Daikon
+
+Daikon's runtime and space depend on the particular data that it analyzes.
+Informally, invariant detection time can be characterized as O((vars^3 *
+falsetime + trueinvs * testsuite) * procedures), where vars is the number
+of variables @emph{at a program point}, falsetime is the (small constant)
+time to falsify a potential invariant, trueinvs is the (small) number of
+true invariants at a program point, testsuite is the size of the test
+suite, and program is the number of instrumented program points.  The first
+two products multiply a number of invariants by the time to test each
+invariant.
+
+If there are many true invariants over an input, then Daikon continues
+to check them all over the entire input.  By contrast, if not many
+invariants are true, then Daikon need no longer check them once they
+are falsified (which in practice happens quickly).  Daikon processes
+each procedure independently.
+
+Another important factor affecting Daikon's runtime is the number of
+variables.  Because invariants involve up to three variables each, the
+number of invariants to check is cubic in the number of variables at a
+single program point.  Derived variables (such as @samp{a[i]},
+introduced whenever there is both an array @samp{a} and an integer
+@samp{i}) can increase the number of variables substantially.
+
+For details on improving Daikon's performance, see @ref{Out of
+memory}, and @ref{Large dtrace files}.
+
+
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
 @section Other problems
 
@@ -4703,6 +4802,9 @@ MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 @node    Large dtrace files, Tree GUI font errors, Other problems, Other problems
 @subsection Large data trace (.dtrace) files
+
+@cindex data trace files, too large
+@cindex large data trace files
 
 Running instrumented code can create very large
 @file{.dtrace} files.  This can be a problem because writing the large
