@@ -13,6 +13,9 @@ if (@ARGV < 1) {
 
 my ($lackwitdb, @files) = @ARGV;
 
+# Check args
+-d $lackwitdb or die "$lackwitdb is not a directory\n";
+
 # Check that LACKWIT_HOME is set correctly, and that the required
 # files are present and readable
 my $lackwit_home = $ENV{LACKWIT_HOME};
