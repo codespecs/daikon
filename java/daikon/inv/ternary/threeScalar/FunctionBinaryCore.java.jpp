@@ -53,7 +53,7 @@ public final class CLASSNAME
   public final String[] methodname;
   // see "Variable order"
   public int var_order;
-  private int methodNumber;
+  public int methodNumber;
   // Not currently being maintained
   int values_seen = 0;
   int equal_values = 0;
@@ -101,6 +101,26 @@ public final class CLASSNAME
     new_order[0] = permutation[old_order[0]];
     new_order[1] = permutation[old_order[1]];
     new_order[2] = permutation[old_order[2]];
+
+    // Force symmetric functions into a canonical form so that
+    // we can match them when necessary and they always print the same.
+    // For example, order of 0, 1, 2 and 0, 2, 1 represent the same
+    // invariant for a symmetric function.  This forces them to always
+    // be represented as 0, 1, 2
+    if (FUNCTIONS.is_symmetric (methodNumber)) {
+      if (methodname[1].equals (" / ")) {
+        System.out.println ("methodNumber = " + methodNumber + " methodname = "
+                            + methodname[0] + methodname[1] + methodname[2]);
+        Assert.assertTrue(false);
+      }
+      if (new_order[2] < new_order[1]) {
+        int tmp = new_order[2];
+        new_order[2] = new_order[1];
+        new_order[1] = tmp;
+      }
+    }
+
+    // Look for the new order in the list of possible orders
     for (int i=0; i < var_indices.length; i++) {
       if (Arrays.equals(new_order, var_indices[i])) {
         var_order = i;
@@ -252,7 +272,7 @@ public final class CLASSNAME
     if (format == OutputFormat.DAIKON
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {  // RRN: verify the validity of this.
-      return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2];
+      return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2] /* + " [vo=" + var_order + "]" */;
     }
 
     if (format == OutputFormat.IOA) {
@@ -295,6 +315,7 @@ public final class CLASSNAME
         methodname[1] + "-" + methodname[2];
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
+
 
   public boolean isSameFormula(CLASSNAME other) {
     return ((methodNumber == other.methodNumber)
