@@ -22,6 +22,9 @@ public class PptSliceEquality
   public static final Logger debug =
     Logger.getLogger ("daikon.PptSliceEquality");
 
+  public static final Logger debugGlobal
+    = Logger.getLogger ("daikon.PptSliceEquality.Global");
+
   PptSliceEquality(PptTopLevel parent) {
      super(parent, parent.var_infos);
   }
@@ -69,9 +72,9 @@ public class PptSliceEquality
      * inheritance, we require that the comptability go both ways.
      **/
     public boolean equals (VarInfoAndComparability o) {
-      return
-        vi.comparableNWay (o.vi) &&
-        VarComparability.comparable (vi.comparability, o.vi.comparability);
+
+      return (vi.comparableNWay (o.vi)
+              && (vi.comparability.equality_set_ok (o.vi.comparability)));
     }
 
     public VarInfoAndComparability (VarInfo vi) {
@@ -112,6 +115,8 @@ public class PptSliceEquality
       if (debug.isLoggable(Level.FINE)) {
         debug.fine (" Created: " + eq);
       }
+      if (Debug.logOn())
+        Debug.log (getClass(), parent, Debug.vis (eq.leader()), "Created");
       invCount ++;
     }
     // Ensure determinism
@@ -225,7 +230,7 @@ public class PptSliceEquality
         }
 
         // Create new slices and invariants for each new leader
-        copyInvsFromLeader (inv.leader(), newInvsLeaders, count);
+        copyInvsFromLeader (inv.leader(), newInvsLeaders);
 
         // Keep track of all of the new invariants created.
         allNewInvs.addAll (newInvs);
@@ -343,38 +348,48 @@ public class PptSliceEquality
    * where we create new PptSliceNs.  This is called when newVis have
    * just split off from leader, and we want the leaders of newVis to
    * have the same invariants as leader.
-   * @param leaderEq the Equality whose leader holds the
-   * invariants to be instantiated(copied).
+   * @param leader the old leader
    * @param newVis a List of new VarInfos that used to be equal to
    * leader.  Actually, it's the list of canonical that were equal to
    * leader, representing their own newly-created equality sets.
    * @post Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
-  private void copyInvsFromLeader (VarInfo leader, List newVis, int count) {
+  private void copyInvsFromLeader (VarInfo leader, List newVis) {
     List newSlices = new LinkedList();
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("copyInvsFromLeader  leader:" + leader.name.name());
+      debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
+                  + leader.name.name()
+                  + ": new leaders = " + VarInfo.toString (newVis));
       debug.fine ("  orig slices count:" + parent.views_size());
     }
-    int newSamples = leader.equalitySet.numSamples() - count;
 
-    // Copy all possible combinations (with repetition) of replacing
-    // leader with different members of newVis.
+    // Copy all possible combinations from the current ppt (with repetition)
+    // of replacing leader with different members of newVis.
+
+    // Loop through each slice
     for (Iterator i = parent.views_iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
-      // For each slice that contains leader
+
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  Slice is: " + slice.toString());
         debug.fine ("  With invs: " + slice.invs);
       }
 
+      // If this slice contains the old leader
       if (slice.containsVar(leader)) {
+
+        // Substitute new leader for old leader and create new slices/invs
         VarInfo[] toFill = new VarInfo[slice.var_infos.length];
         copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
                                   0, -1, toFill);
-        for (Iterator iSliceInvs = slice.invs.iterator(); iSliceInvs.hasNext(); ) {
-          Invariant inv = (Invariant) iSliceInvs.next();
+
+        // Remove any statically obvious invariants in the old slice.
+        // This is called here because breaking up the equality set may
+        // cause some invariants to become statically obvious (because
+        // they will now be the only item in their set)
+        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+          Invariant inv = (Invariant) j.next();
           if (inv.isObviousStatically_AllInEquality()) {
             inv.destroyAndFlow();
           }
@@ -383,6 +398,7 @@ public class PptSliceEquality
       }
     }
 
+    // Add each new slice with invariants
     for (Iterator itor = newSlices.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
       if (slice.invs.size() == 0) {
@@ -392,6 +408,10 @@ public class PptSliceEquality
       slice.repCheck();
       parent.addSlice (slice);
     }
+
+    // Copy any invariants from the global ppt to here
+    copy_invs_from_global_leader (leader, newVis);
+
     parent.repCheck();
 
     if (debug.isLoggable(Level.FINE)) {
@@ -491,6 +511,137 @@ public class PptSliceEquality
                                     position + 1, loop, soFar);
       }
     }
+  }
+
+  /**
+   * Copy invariants from global ppt slices over old_leader to each of
+   * the new leaders at the local ppt.  The basic approach is as follows:
+   *
+   *    1)  Loop over each global slice that contains old_leader
+   *
+   *    2)  Copy each invariant that doesn't already exist to local
+   *        slices for each combination of new_leaders replacing old_leader.
+   *
+   *        If the local slice doesn't already exist, it is created and
+   *        added to the list of slices.
+   */
+  public void copy_invs_from_global_leader (VarInfo old_leader,
+                                            List /*VarInfo*/ new_leaders) {
+
+    if (Debug.logDetail())
+      debugGlobal.fine ("old_leader = " + old_leader.name.name() +
+                        " orig new leaders = " + new_leaders);
+
+    // If the old leader is not a global, there is nothing to copy
+    if (!old_leader.is_global())
+      return;
+
+    // The below was removed because we always need to copy from
+    // an old_global_leader.  This is necessary because equality sets
+    // can be different from local ppt to global ppt and thus the
+    // invariants from one global to another should be different
+
+    // We need  to copy global invariants only if the new leader is a
+    // local or it is a global with a different (post/orig) transformation
+    // the the old leader.  We build a new list of new_leaders containing
+    // only these variables
+//     List orig_new_leaders = new_leaders;
+//     new_leaders = new ArrayList ();
+//     for (Iterator i = orig_new_leaders.iterator(); i.hasNext(); ) {
+//       VarInfo new_leader = (VarInfo) i.next();
+//       if (!new_leader.is_global()
+//           || (old_leader.is_post_global() != new_leader.is_post_global()))
+//         new_leaders.add (new_leader);
+//     }
+
+    // If there are no new leaders, there is nothing to do
+    if (new_leaders.size() == 0)
+      return;
+
+    // Get the leader var at the global ppt
+    VarInfo old_leader_global = old_leader.global_var();
+    boolean post_xform = old_leader.is_post_global();
+
+    debugGlobal.fine ("old_leader = " + old_leader.name.name() +
+                      " new leaders = " + new_leaders);
+
+    // Loop through each slice at the global ppt that includes old_leader
+    for (Iterator j = PptTopLevel.global.views_iterator(); j.hasNext(); ) {
+      PptSlice gslice = (PptSlice) j.next();
+      if (!gslice.containsVar (old_leader_global))
+        continue;
+
+      // Create a local version of this slices variables
+      VarInfo[] local_vars = new VarInfo[gslice.var_infos.length];
+      for (int i = 0; i < gslice.var_infos.length; i++) {
+        if (post_xform)
+          local_vars[i] = parent.local_postvar (gslice.var_infos[i]);
+        else
+          local_vars[i] = parent.local_origvar (gslice.var_infos[i]);
+      }
+
+      // Create all of the combinations of new_leaders over this slice
+      List combos = sub_leaders (old_leader, new_leaders, local_vars);
+
+      // Loop over each combination
+      for (Iterator i = combos.iterator(); i.hasNext(); ) {
+        VarInfo[] vis = (VarInfo[]) i.next();
+
+        // Copy each invariant at gslice to the slice defined by vis
+        gslice.copy_new_invs (parent, vis);
+
+      }
+    }
+  }
+
+  /**
+   * Substitute each combination of new_leaders in vis for old_leader with
+   * repetition but not permutation.  The new vis arrays are NOT sorted
+   * but left as they are after substitution (which may or may not be in
+   * varinfo_index order)
+   */
+  public List /* VarInfo[] */ sub_leaders (VarInfo old_leader,
+                                           List /* VarInfo */ new_leaders,
+                                           VarInfo[] vis) {
+
+    List result = new ArrayList();
+
+    // Determine the number of instances of old_leader in vis
+    int cnt = 0;
+    for (int i = 0; i < vis.length; i++)
+      if (vis[i] == old_leader)
+        cnt++;
+
+    // The full list of variables whose combination is needed includes
+    // old_leader.  For example, if new_leaders = {b, c} and old_leader = a
+    // we need to create combinations like {a, b} and {a, c}.
+    List /* VarInfo */ leaders = new ArrayList();
+    leaders.add (old_leader);
+    leaders.addAll (new_leaders);
+
+    // Build all of the combinations of leaders over the number of times
+    // that old_leader appeared in the slice.  This will also include
+    // {a, a} (from the above example), but we will skip that one below.
+    List combos = UtilMDE.create_combinations (cnt, 0, leaders);
+
+    // Loop through each combination and build a corresponding vis array
+    // Skip the first combination which will always include just old_leader.
+    for (int i = 1; i < combos.size(); i++) {
+      List combo = (List) combos.get(i);
+      VarInfo[] newvis = new VarInfo[vis.length];
+      int offset = 0;
+      for (int j = 0; j < newvis.length; j++) {
+        if (vis[j] == old_leader) {
+          newvis[j] = (VarInfo) combo.get(offset);
+          offset++;
+        } else {
+          newvis[j] = vis[j];
+        }
+      }
+      result.add (newvis);
+    }
+
+  return (result);
   }
 
 
