@@ -55,7 +55,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 DIST_DIR := /home/httpd/html/daikon/dist
 MIT_DIR  := /home/httpd/html/daikon/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
-DIST_PAG_BIN_DIR := /g4/projects/invariants/binaries
+DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
