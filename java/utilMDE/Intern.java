@@ -289,7 +289,7 @@ public final class Intern {
   // Not sure whether this convenience method is really worth it.
   /** Returns an interned Integer with value parsed from the string. */
   public static Integer internedInteger(String s) {
-    return internedInteger(Integer.parseInt(s));
+    return intern(Integer.decode(s));
   }
 
 
@@ -317,7 +317,7 @@ public final class Intern {
   // Not sure whether this convenience method is really worth it.
   /** Returns an interned Long with value parsed from the string. */
   public static Long internedLong(String s) {
-    return internedLong(Long.parseLong(s));
+    return intern(Long.decode(s));
   }
 
 
