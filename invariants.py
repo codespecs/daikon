@@ -2412,7 +2412,7 @@ class invariant:
                     for vi in self.var_infos:
                     	some_nonderived = some_nonderived or not vi.is_derived
                     if some_nonderived:
-                return "%s = uninit" % (args,)
+                        return "%s = uninit" % (args,)
             elif len(self.one_of) == 1:
                 return "%s = %s" % (args, self.one_of[0])
             ## Perhaps I should unconditionally return this value;
