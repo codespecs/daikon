@@ -26,7 +26,7 @@ import java.io.*;
 public final class EltOneOfString  extends SingleStringSequence  implements OneOf {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
   public static int dkconfig_size = 3;
 

@@ -8,7 +8,7 @@ import utilMDE.*;
 public class CommonStringSequence extends SingleStringSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugCommonStringSequence = false;
@@ -19,7 +19,7 @@ public class CommonStringSequence extends SingleStringSequence {
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
   }
-  
+
   public static CommonStringSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new CommonStringSequence(ppt);
@@ -43,7 +43,7 @@ public class CommonStringSequence extends SingleStringSequence {
     result += "}";
     return result;
   }
-    
+
 
   public String format() {
     if (debugCommonStringSequence) {
@@ -72,12 +72,12 @@ public class CommonStringSequence extends SingleStringSequence {
     else {
       String[] tmp = new String[intersect.length];
       int    size = 0;
-      for (int i=1; i<a.length; i++) 
+      for (int i=1; i<a.length; i++)
 	if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
-	    ((size==0) || 
+	    ((size==0) ||
 	     (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
 	  tmp[size++] = a[i];
-      
+
       if (size==0) {
 	destroy();
 	return;
