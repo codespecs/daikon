@@ -176,7 +176,7 @@ merge:
 
 # run escjava on the annontated files
 
-${PROJECT}.esc:
+${PROJECT}.esc: ${PROJECT}.txt-esc
 	escjava ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
 
 # ###########################################################################
