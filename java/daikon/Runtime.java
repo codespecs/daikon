@@ -96,88 +96,53 @@ public final class Runtime {
   /// Printing
   ///
 
+  // Note the global variables:  dangerous.
+
   // This flag is used to suppress output during reentrant
   // instrumentation; for example, when outputting the elements of an
   // instrumented List-derived object, we don't want to start
   // outputting the program points in the size()/get() methods of the
   // List object.
+  // The instrumentation code sets and checks this; it's more efficient
+  // to do that once, rather than on every call to print.
   public static int ps_count = 0;
+  public static int dtraceLimit = Integer.MAX_VALUE; // a number of records
+  public static int printedRecords = 0;
+  public static boolean dtraceLimitTerminate = false;
 
-  public static final class PrintStreamWithThrottle extends PrintStream
-  {
-    // Use "count <= 1" for compatibility with older dfej
-    public void print(boolean b)   { if (count <= 1) super.print(b); }
-    public void print(char c)      { if (count <= 1) super.print(c); }
-    public void print(char[] s)    { if (count <= 1) super.print(s); }
-    public void print(double d)    { if (count <= 1) super.print(d); }
-    public void print(float f)     { if (count <= 1) super.print(f); }
-    public void print(int i)       { if (count <= 1) super.print(i); }
-    public void print(long l)      { if (count <= 1) super.print(l); }
-    public void print(Object obj)  { if (count <= 1) super.print(obj); }
-    public void print(String s)    { if (count <= 1) super.print(s); }
-    public void println()          { if (count <= 1) { super.println();
-                                                       printedLines++;
-        // Only do the check when printing a blank line, which happens
-        // (only?) between records.  (I could only count blank lines, instead...)
-        if (printedLines > lineLimit) {
-          System.err.println("Printed " + printedLines + " lines; "
-                             + "limit was " + lineLimit + ".  Exiting.");
-          // The shutdown hook is synchronized on this, so close it up
-          // ourselves, lest the call to System.exit cause deadlock.
-          super.println();
-          super.println("# EOF (added by PrintStreamWithThrottle)");
-          super.close();
-          dtrace = null;
-          System.exit(1);
-        }
-      }
+
+  // Inline this?  Probably not worth it.
+  // Increment the number of records that have been printed.
+  public static void incrementRecords() {
+    printedRecords++;
+    if (printedRecords > dtraceLimit) {
+      noMoreOutput();
     }
-    public void println(boolean x) { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(char x)    { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(char[] x)  { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(double x)  { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(float x)   { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(int x)     { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(long x)    { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(Object x)  { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
-    public void println(String x)  { if (count <= 1) { super.println(x);
-                                                       printedLines++; } }
+  }
 
-    // useful for emitting comments during debugging:
-    public void printlnAlways(String s) { super.println(s); }
+  // Ensures that no more dtrace output will occur.  May terminate Java.
+  public static void noMoreOutput() {
+    // The shutdown hook is synchronized on this, so close it up
+    // ourselves, lest the call to System.exit cause deadlock.
+    dtrace.println();
+    dtrace.println("# EOF (added by no_more_output)");
+    dtrace.close();
+    dtrace = null;
 
-    // This flags is used to suppress output during reentrant
-    // instrumentation; for example, when outputting the elements of an
-    // instrumented List-derived object, we don't want to start
-    // outputting the program points in the size()/get() methods of the
-    // List object.
-    public int count = 0;
-
-    private int lineLimit = Integer.MAX_VALUE;
-    public int printedLines = 0;
-
-    public PrintStreamWithThrottle(OutputStream out)
-    { super(out); }
-
-    // Print no more (or not much more, anyway) than lineLimit lines.
-    public PrintStreamWithThrottle(OutputStream out, int lineLimit)
-    { super(out);
-      this.lineLimit = lineLimit; }
+    if (dtraceLimitTerminate) {
+      System.err.println("Printed " + printedRecords + " records.  Exiting.");
+      System.exit(1);
+    } else {
+      System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
+      ps_count++;               // prevent any future output
+    }
   }
 
   // It's convenient to have an entire run in one data trace file, so
   // probably don't bother to generalize this to put output from a single
   // run in different files depending on the class the information is
   // about.
-  public static PrintStreamWithThrottle dtrace;
+  public static PrintStream dtrace;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
   // happens, due to reflective loading of the target program that gets the
   // instrumented target program.  The instrumented program has a static
@@ -204,10 +169,10 @@ public final class Runtime {
                           + "\nCannot append to gzipped dtrace file " + filename);
         os = new GZIPOutputStream(os);
       }
-      Integer dtracelimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE);
+      dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
+      dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
       // 8192 is the buffer size in BufferedReader
-      dtrace = new PrintStreamWithThrottle(new BufferedOutputStream(os, 8192),
-                                           dtracelimit.intValue());
+      dtrace = new PrintStream(new BufferedOutputStream(os, 8192));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error("" + e);
@@ -262,7 +227,7 @@ public final class Runtime {
             synchronized (daikon.Runtime.dtrace)
             {
               dtrace.println();
-              // this lets us know we didn't lose any
+              // This lets us know we didn't lose any data.
               dtrace.println("# EOF (added by daikon.Runtime.addShutdownHook)");
               dtrace.close();
             }
