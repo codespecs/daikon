@@ -429,10 +429,17 @@ public class PptSplitter implements Serializable {
     }
 
 
+    // Given bi-implications "A<=>B", "B<=>C", "C<=>D", etc., mark one of
+    // the equivalent implications as the canonical one, to avoid
+    // repeatedly printing the same fact (as both "A=>Z" and "B=>Z", for
+    // example).
+    // (Question:
+
     // Invariant -> Invariant
     HashMap canonical_inv = new LinkedHashMap();
     {
       // Invariant -> HashSet[Invariant]
+      // The key is he canonical invariant for each element in the set.
       HashMap inv_group = new LinkedHashMap();
 
       // Problem: I am not iterating through the invariants in any
