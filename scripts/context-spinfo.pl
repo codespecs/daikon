@@ -4,7 +4,7 @@
 # produce a spinfo file from them to stdout.
 
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-11 16:21:22 mistere>
+# Time-stamp: <2002-03-11 16:49:42 mistere>
 
 use Carp;
 use File::Find;
@@ -51,6 +51,7 @@ sub slurpfile {
 # ********** For each map entry **********
 
 my @records = ();
+my %instrumented_classes = ();
 for my $filename (@ARGV) {
   debugln("Reading $filename ...");
   my @lines = slurpfile($filename);
@@ -66,6 +67,7 @@ for my $filename (@ARGV) {
       # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass, tometh
       $rec[1] =~ s/.*\.//; # remove package from fromclass
       $rec[8] =~ s/.*\.//; # remove package from toclass
+      $instrumented_classes{$rec[1]} = 1;
       push @records, \@rec;
     } else {
       die("Unknown line format: $line");
@@ -82,6 +84,14 @@ for my $filename (@ARGV) {
 	     "unknownCallingExpression", "(??)", "UnknownClass", "unknownMethod");
   push @records, \@rec;
 }
+
+# Optimization: remove entries for calls to uninstrumented code
+@records = grep {
+  my @rec = @{$_};
+  my $toclass = $rec[8];
+  $instrumented_classes{$toclass};
+} @records;
+
 
 # ********** Post-processing **********
 
