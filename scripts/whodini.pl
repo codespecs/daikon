@@ -24,7 +24,7 @@ use POSIX qw(tmpnam);
 # 6 Remove the two temporary files
 # 7 Grep the results for "/*@ ...; // gensym */"
 # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
-# 9 Otherwise, dump the slurped output to stdout and exit
+# 9 Otherwise, dump the slurped output to stdout (with a little tweaking first) and exit
 
 my $debug = 0;
 
@@ -119,12 +119,14 @@ grep {
     my $nonce = "/*nonce-" . gensym() . "*/ ";
     # Skip over things we shouldn't touch; add a gensym to the rest
     unless (m/===========================================================================/
-	    || m/\:\:\:(:ENTER|EXIT|OBJECT|CLASS)/
+	    || m/\:\:\:(ENTER|EXIT|OBJECT|CLASS)/
 	    || m/[V|v]ariables\:/)
     {
 	s|^|$nonce|;
     }
 } @txtesc;
+
+print "Processing...";
 
 # Iterative ("Houdini") looping
 while (1) {
@@ -140,8 +142,9 @@ while (1) {
     rename("$sourcetmp-escannotated", $sourcetmp);
 
     # 5 Run ESC on the temp source file and slurp the results
-    debug("Running ESC");
+    print ".";
     my $notdir_sourcetmp = notdir($sourcetmp);
+    my @checked_source = slurpfile($sourcetmp);
     my @escoutput = `cd $tmpdir && escjava $notdir_sourcetmp`;
 
     # 6 Remove the two temporary files
@@ -166,8 +169,26 @@ while (1) {
 	} 
     }
 
-    # 9 Otherwise, dump the slurped output to stdout and exit
+    # 9 Otherwise, dump the slurped output to stdout (with a little tweaking first) and exit
     unless ($txtesc_changed) {
+	print "\n";
+	# Create a mapping from line number of the checked source to
+	# the pre-houdini line number.
+	my @map = ("MAPPING ERROR");
+	my ($line_no, $orig_no);
+	for my $line (@checked_source) {
+	    $line_no++;
+	    $orig_no++ unless ($line =~ m|/\*nonce-\d{4}\*/|);
+	    $map[$line_no] = $orig_no;
+	}
+	# Replace line numbers in ESC output with the correct version
+	grep {
+	    s|(\.java\:)(\d+)(\:)|$1$map[$2]$3|;
+	    s|(Suggestion \[)(\d+)(,\d+\]\:)|$1$map[$2]$3|;
+	    s|(at )(\d+)(,\d+ in)|$1$map[$2]$3|;
+	    s|( line )(\d+)(, )|$1$map[$2]$3|;
+	} @escoutput;
+	# Show ESC's output
 	print @escoutput;
 	exit;
     }
