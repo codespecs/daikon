@@ -6,7 +6,7 @@
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c
-if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/daikon
+if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
 
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /g2/jdk

@@ -6,7 +6,7 @@
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
-export DAIKONBIN=${DAIKONBIN:-${DAIKONPARENT}/bin}
+export DAIKONBIN=${DAIKONBIN:-${DAIKONDIR}/bin}
 
 ## Set this directory to the directory containing the JDK.
 export JDKDIR=${JDKDIR:-/g2/jdk}

@@ -16,10 +16,10 @@ BEGIN {
     }
 }
 
-unless (exists $ENV{"INV"}) {
-    my $str = "The INV environment variable was not found.\n";
+unless (exists $ENV{"DAIKONDIR"}) {
+    my $str = "The DAIKONDIR environment variable was not found.\n";
     $str .= "Please make sure it is set to the location of the ";
-    $str .= "Daikon invariants/ directory.\n";
+    $str .= "daikon/ directory.\n";
     $str .= "Usually, you would do this by running the daikon.bashrc or ";
     $str .= "daikon.cshrc script\nin your shell startup file.\n";
     die $str;
@@ -29,7 +29,7 @@ my @locs = ('daikon-instrumented', 'lib/daikon-instrumented',
             'blib/lib/daikon-instrumented', '../blib/lib/daikon-instrumented');
 
 my $perl = $^X;
-my $perl_lib = "-I$ENV{INV}/front-end/perl/lib";
+my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
 
 my @args = ($perl_lib, @ARGV);
 
