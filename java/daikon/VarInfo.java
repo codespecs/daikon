@@ -1023,8 +1023,13 @@ public final class VarInfo
     return (String) getValue(vt);
   }
 
+  // Retrieve a non-null array.
   public String[] getStringArrayValue(ValueTuple vt) {
-    return (String[]) getValue(vt);
+    Object raw = getValue(vt);
+    if (raw == null) {
+      throw new Error("getDoubleArrayValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
+    }
+    return (String[]) raw;
   }
 
   static final class usesVarFilter implements Filter {
