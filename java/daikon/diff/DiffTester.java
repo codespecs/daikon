@@ -32,6 +32,13 @@ public class DiffTester extends TestCase {
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 
+  public VarInfo newIntVarInfo(String name) {
+    return new VarInfo(VarInfoName.parse(name),
+		       ProglangType.INT,
+		       ProglangType.INT,
+		       null); // null Comparability
+  }
+
   public DiffTester(String name) {
     super(name);
     
@@ -54,10 +61,7 @@ public class DiffTester extends TestCase {
     
     {
       invs1 = new PptMap();
-      VarInfo[] vars = {
-        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.instantiate(slicex);
@@ -79,10 +83,7 @@ public class DiffTester extends TestCase {
     {
       // Permutation of invs1
       invs2 = new PptMap();
-      VarInfo[] vars = {
-        new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
       PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
       Invariant invy = LowerBound.instantiate(slicey);
@@ -103,10 +104,7 @@ public class DiffTester extends TestCase {
 
     {
       invs3 = new PptMap();
-      VarInfo[] vars = {
-        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-        new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.instantiate(slicex);
@@ -127,8 +125,7 @@ public class DiffTester extends TestCase {
 
     {
       imps1 = new PptMap();
-      VarInfo[] vars = {
-        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null)};
+      VarInfo[] vars = { newIntVarInfo("x") };
       PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant inv1 = LowerBound.instantiate(slicex);
@@ -147,8 +144,7 @@ public class DiffTester extends TestCase {
     // Permutation of the nullary invariants in invs1
     {
       imps2 = new PptMap();
-      VarInfo[] vars = {
-        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null)};
+      VarInfo[] vars = { newIntVarInfo("x") };
       PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant inv1 = LowerBound.instantiate(slicex);
@@ -291,10 +287,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
@@ -326,10 +319,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
@@ -361,10 +351,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
@@ -396,10 +383,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
+    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
@@ -433,8 +417,7 @@ public class DiffTester extends TestCase {
 
   public void testNonModulus() {
     PptMap map = new PptMap();
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null)};
+    VarInfo[] vars = { newIntVarInfo("x") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.instantiate(slice);
@@ -450,11 +433,7 @@ public class DiffTester extends TestCase {
   public void testStatisticsVisitor() {
     RootNode root = new RootNode();
 
-    VarInfo[] vars = {
-      new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("y", "y", ProglangType.INT, ProglangType.INT, null),
-      new VarInfo("z", "z", ProglangType.INT, ProglangType.INT, null)};
-
+    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
 
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
