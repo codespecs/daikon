@@ -250,7 +250,8 @@ public class LOWERBOUND
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA)
         || (format == OutputFormat.JAVA)
-        || (format == OutputFormat.JML))
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.DBCJAVA))
     {
       return name + " " + GTESTR + " " + MIN1;
     }
@@ -280,6 +281,8 @@ public class LOWERBOUND
       return format_esc();
     } else if (format == OutputFormat.JML) {
       return format_jml();
+    } else if (format == OutputFormat.DBCJAVA) {
+      return format_dbc();
     }
 
     return format_unimplemented(format);
@@ -306,6 +309,15 @@ public class LOWERBOUND
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var().name });
     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
+  }
+
+  public String format_dbc() {
+#ifdef IS_ELT
+    return "warning: OutputFormat.DBCJAVA variable quantification must be implemented.";
+#else
+    String varname = var().name.dbc_name();
+    return varname + " " + GTESTR + " " + MIN1;
+#endif
   }
 
   public String format_ioa() {

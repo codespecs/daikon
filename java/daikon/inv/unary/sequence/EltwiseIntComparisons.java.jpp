@@ -185,6 +185,7 @@ public class CLASSNAME
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.JML) return format_jml();
+    if (format == OutputFormat.DBCJAVA) return format_dbc();
 
     return format_unimplemented(format);
   }
@@ -241,6 +242,17 @@ public class CLASSNAME
       return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
     } else {
       return form[0] + "((i+1 == j) ==> (" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
+    }
+  }
+
+  public String format_dbc() {
+    String[] form =
+      VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name, var().name });
+    String comparator = COMPARATORSTRING;
+    if ("==".equals(comparator)) {
+      return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
+    } else {
+      return form[0] + "((i+1 == j) $implies (" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
     }
   }
 

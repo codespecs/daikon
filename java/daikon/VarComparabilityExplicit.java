@@ -115,6 +115,7 @@ public final class VarComparabilityExplicit
     protected String ioa_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_identifier_name_impl() { throw new UnsupportedOperationException(); }
+    protected String dbc_name_impl(VarInfo v) { throw new UnsupportedOperationException(); }  //@TX
     protected String identifier_name_impl() { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl(boolean prestate) { throw new UnsupportedOperationException(); }
     protected Class resolveType(PptTopLevel ppt) { throw new UnsupportedOperationException(); }

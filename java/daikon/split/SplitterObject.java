@@ -30,6 +30,8 @@ public class SplitterObject implements Comparable {
   public String escFormat      = null;
   public String simplifyFormat = null;
   public String ioaFormat      = null;
+  public String jmlFormat      = null;
+  public String dbcFormat      = null;
 
   /**
    * @param condition The splitting condition of this splitter
@@ -60,7 +62,7 @@ public class SplitterObject implements Comparable {
       }
       DummyInvariant dummy = new DummyInvariant(null);
       dummy.setFormats(daikonFormat, javaFormat, escFormat, simplifyFormat,
-                       ioaFormat);
+                       ioaFormat, jmlFormat, dbcFormat);
       splitter.makeDummyInvariant(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;

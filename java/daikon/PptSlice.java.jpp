@@ -550,15 +550,11 @@ public final class PPTSLICE1
       // tm_arr[mod_index] += count; // [INCR]
       tm_total[mod_index] += count;
     }
-
     // System.out.println(PPTSLICE1STRING + " " + name + ": add " + full_vt + " = " + vt);
     // System.out.println(PPTSLICE1STRING + " " + name + " has " + invs.size() + " invariants.");
-
     // defer_invariant_removal(); [INCR]
-
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
-
     Assert.assertTrue((mod1 == vi1.getModified(full_vt))
                   || ((vi1.getModified(full_vt) == ValueTuple.STATIC_CONSTANT)
                       && ((mod1 == ValueTuple.UNMODIFIED)
@@ -644,135 +640,18 @@ public final class PPTSLICE1
       // because all the values might have been missing.  We used to ignore
       // variables that could have some missing values, but no longer.)
 #if defined(ARITY1)
-      ProglangType rep = var_info.rep_type;
-
-      if (rep == ProglangType.INT) {
-        SingleScalar inv = (SingleScalar) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          long val = ((Long) entry.getKey()).longValue();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else if (rep == ProglangType.DOUBLE) {
-        SingleFloat inv = (SingleFloat) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          double val = ((Double) entry.getKey()).doubleValue();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else if (rep == ProglangType.STRING) {
-        SingleString inv = (SingleString) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          String val = (String) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else if (rep == ProglangType.INT_ARRAY) {
-        SingleScalarSequence inv = (SingleScalarSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          long[] val = (long[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else if (rep == ProglangType.DOUBLE_ARRAY) {
-        SingleFloatSequence inv = (SingleFloatSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          double[] val = (double[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else if (rep == ProglangType.STRING_ARRAY) {
-        SingleStringSequence inv = (SingleStringSequence) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          String[] val = (String[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          inv.add(val, 0, tm_array[0]);
-          inv.add(val, 1, tm_array[1]);
-          if (inv.falsified)
-            break;
-        }
-      } else {
-        throw new Error("unrecognized representation " + rep.format());
       }
 #elif defined(ARITY2)
       VarInfo vi1 = var_infos[0];
       VarInfo vi2 = var_infos[1];
-      boolean string1 = vi1.rep_type == ProglangType.STRING;
-      boolean string2 = vi2.rep_type == ProglangType.STRING;
       boolean array1 = vi1.rep_type.isArray();
       boolean array2 = vi2.rep_type.isArray();
       boolean doublearray1 = vi1.rep_type == ProglangType.DOUBLE_ARRAY;
       boolean doublearray2 = vi2.rep_type == ProglangType.DOUBLE_ARRAY;
-
-      if (string1 && string2) {
-        TwoString inv = (TwoString) invariant;
         // Make this invariant up to date by supplying it with all the values.
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          String value1 = (String) vals[0];
-          String value2 = (String) vals[1];
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(value1, value2, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
-      } else if (string1 || string2) {
-        throw new Error("impossible");
-      } else if ((!array1) && (!array2)) {
-        TwoScalar inv = (TwoScalar) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          long value1 = ((Long) vals[0]).longValue();
-          long value2 = ((Long) vals[1]).longValue();
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(value1, value2, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
-      } else if (doublearray1 && (!array2)) {
-        SequenceFloat inv = (SequenceFloat) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          double[] seqval = (double[]) vals[0];
-          double sclval = ((Double) vals[1]).doubleValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -784,73 +663,11 @@ public final class PPTSLICE1
           if (inv.falsified)
             break;
         }
-      } else if (array1 && (!array2)) {
-        SequenceScalar inv = (SequenceScalar) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          long[] seqval = (long[]) vals[0];
-          long sclval = ((Long) vals[1]).longValue();
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
-       } else if ((!array1) && doublearray2) {
-        SequenceFloat inv = (SequenceFloat) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          double[] seqval = (double[]) vals[1];
-          double sclval = ((Double) vals[0]).doubleValue();
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
-
-       } else if ((!array1) && array2) {
-        SequenceScalar inv = (SequenceScalar) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          long[] seqval = (long[]) vals[1];
-          long sclval = ((Long) vals[0]).longValue();
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
-      } else if (doublearray1 && doublearray2) {
-        TwoSequenceFloat inv = (TwoSequenceFloat) invariant;
 #if defined (ORDER_VALUES)
         // Make this invariant up to date by supplying it with all the values.
         Assert.assertTrue (values_order.size() == values_cache.size());
         for (Iterator itor = values_order.iterator() ; itor.hasNext() ; ) {
           Object[] vals = (Object[]) itor.next();
-          double[] val1 = (double[]) vals[0];
-          double[] val2 = (double[]) vals[1];
           int[] tm_array = (int[]) values_cache.get (vals);
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -862,34 +679,11 @@ public final class PPTSLICE1
           if (inv.falsified)
             break;
         }
-#else
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          double[] val1 = (double[]) vals[0];
-          double[] val2 = (double[]) vals[1];
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(val1, val2, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-          if (inv.falsified)
-            break;
-        }
 #endif
-
-      } else if (array1 && array2) {
-        TwoSequence inv = (TwoSequence) invariant;
         // Make this invariant up to date by supplying it with all the values.
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          long[] val1 = (long[]) vals[0];
-          long[] val2 = (long[]) vals[1];
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -901,8 +695,6 @@ public final class PPTSLICE1
           if (inv.falsified)
             break;
         }
-      } else {
-        System.out.println ("Skipped invariant " + invariant.name());
       }
 #elif defined(ARITY3)
       VarInfo vi1 = var_infos[0];
@@ -911,36 +703,9 @@ public final class PPTSLICE1
       ProglangType rep1 = vi1.rep_type;
       ProglangType rep2 = vi2.rep_type;
       ProglangType rep3 = vi3.rep_type;
-      if ((rep1 == ProglangType.INT)
-          && (rep2 == ProglangType.INT)
-          && (rep3 == ProglangType.INT)) {
-        ThreeScalar inv = (ThreeScalar) invariant;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          long val1 = ((Long) vals[0]).longValue();
-          long val2 = ((Long) vals[1]).longValue();
-          long val3 = ((Long) vals[2]).longValue();
-          int[] tm_array = (int[]) entry.getValue();
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (inv.falsified)
-                break;
-            }
-          }
-        }
-      } else if (rep1 == ProglangType.DOUBLE
-                 && rep2 == ProglangType.DOUBLE
-                 && rep3 == ProglangType.DOUBLE) {
 #if defined (ORDER_VALUES)
-        ThreeFloat inv = (ThreeFloat) invariant;
         for (Iterator itor = values_order.iterator(); itor.hasNext(); ) {
           Object[] vals = (Object[]) itor.next();
-          double val1 = ((Double) vals[0]).doubleValue();
-          double val2 = ((Double) vals[1]).doubleValue();
-          double val3 = ((Double) vals[2]).doubleValue();
           int[] tm_array = (int[]) values_cache.get (vals);
           for (int mi = 0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -953,14 +718,10 @@ public final class PPTSLICE1
           if (inv.falsified)
             break;
         }
-#else
-        ThreeFloat inv = (ThreeFloat) invariant;
+#endif
         for (Iterator itor = values_cache.entrySet().iterator(); itor.hasNext(); ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          double val1 = ((Double) vals[0]).doubleValue();
-          double val2 = ((Double) vals[1]).doubleValue();
-          double val3 = ((Double) vals[2]).doubleValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi = 0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -973,7 +734,6 @@ public final class PPTSLICE1
           if (inv.falsified)
             break;
         }
-#endif
       }
 #endif
     }

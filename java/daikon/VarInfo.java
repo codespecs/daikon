@@ -1212,8 +1212,10 @@ public final class VarInfo
         }
       }
 
-      // For esc_output and java_output, omit noting that varibles are unmodified.
-      if (Daikon.output_style == OutputFormat.ESCJAVA || Daikon.output_style == OutputFormat.JAVA) {
+      // For esc_output, dbc output, and java_output, omit noting that varibles are unmodified.
+      if (Daikon.output_style == OutputFormat.ESCJAVA 
+	  || Daikon.output_style == OutputFormat.ESCJAVA 
+	  || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }

@@ -152,7 +152,10 @@ public final class StringComparison
     String name2;
     String comparator = core.format_comparator(format);
 
-    if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
+    // RRN: check that this is correct:
+    if (format == OutputFormat.JAVA 
+        || format == OutputFormat.JML
+        || format == OutputFormat.DBCJAVA) {
       name1 = var1().name.JMLElementCorrector().name_using(format);
       name2 = var2().name.JMLElementCorrector().name_using(format);
       if (comparator.equals("==")) {

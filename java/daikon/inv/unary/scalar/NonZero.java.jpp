@@ -147,7 +147,8 @@ public class NONZERO
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.JML))
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.DBCJAVA))
     {
       return name + " != " + zero(format);
     }

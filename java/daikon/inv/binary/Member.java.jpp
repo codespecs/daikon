@@ -491,7 +491,9 @@ public final class CLASSNAME
     } else if (format == OutputFormat.JAVA) {
       return format_java();
     } else if (format == OutputFormat.IOA) {
-      return format_ioa();
+      return format_ioa();    
+    } else if (format == OutputFormat.DBCJAVA) {
+      return format_dbc();
 #ifdef SCALAR
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
@@ -517,6 +519,14 @@ public final class CLASSNAME
 
   public String format_ioa() {
     return sclvar().name.ioa_name() + " \\in " + seqvar().name.ioa_name();
+  }
+
+  public String format_dbc() {
+        // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
+        String[] form =
+          VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
+                { seqvar().name, sclvar().name });
+        return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
   // XXX this "#ifdef SCALAR" test seems unlikely to have its original

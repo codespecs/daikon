@@ -337,7 +337,8 @@ public class SEQSEQINTEQUAL
     }
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA))
+        || (format == OutputFormat.JAVA)) 
+//        || (format == OutputFormat.DBCJAVA)) //RRN: This must be verified.
     {
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);

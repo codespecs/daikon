@@ -161,6 +161,7 @@ public final class Equality
     // changes are also necessary.
     // if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DBCJAVA) return format_dbc();
     return format_unimplemented(format);
   }
 
@@ -342,6 +343,30 @@ public final class Equality
       }
     }
     result.append(")");
+    return result.toString();
+  }
+
+  //@tx
+  // daikon.inv.Equality
+  public String format_dbc() {
+    StringBuffer result = new StringBuffer ();
+    String first = null; // = vars[0].name.name();
+    Iterator i = vars.iterator();
+    if (i.hasNext()) {
+      first = ((VarInfo) i.next()).name.name();
+    } else {
+      return "";
+    }
+    boolean firstLoop = true;
+    while (i.hasNext()) {
+
+      // for (int i = 1; i < vars.length; i++) {
+      // // appends " && ( v[0] == v[i] )" to the stringbuffer
+      if (! firstLoop) result.append(" && ");
+      result.append("( ").append(first).append(" == "); // "interned"
+      result.append(((VarInfo) i.next()).name.name()).append(" ) ");
+      firstLoop = false;
+    }
     return result.toString();
   }
 

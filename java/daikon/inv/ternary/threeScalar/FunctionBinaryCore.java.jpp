@@ -270,7 +270,9 @@ public final class CLASSNAME
     String arg1_name = arg1.name_using(format);
     String arg2_name = arg2.name_using(format);
 
-    if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
+    if (format == OutputFormat.DAIKON
+        || format == OutputFormat.JML
+        || format == OutputFormat.DBCJAVA) {  // RRN: verify the validity of this.
       return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2];
     }
 

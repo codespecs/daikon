@@ -399,7 +399,8 @@ public final class CLASSNAME
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.JML)
-        || (format == OutputFormat.IOA))
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.DBCJAVA))       
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

@@ -597,6 +597,8 @@ public abstract class Invariant
     public static final OutputFormat JAVA = new OutputFormat("Java");
     /* Java Modeling Language */
     public static final OutputFormat JML = new OutputFormat("JML");
+    /* Design-By-Contract for Java (used by Parasoft JContract) */
+    public static final OutputFormat DBCJAVA = new OutputFormat("DBC/Java");
     /* Whole names as single C/Java style indentifiers (currently just
      * for single VarInfoNames) */
     public static final OutputFormat IDENTIFIER
@@ -680,7 +682,8 @@ public abstract class Invariant
     } else if (request == OutputFormat.IOA ||
                request == OutputFormat.JAVA ||
                request == OutputFormat.ESCJAVA ||
-               request == OutputFormat.JML) {
+               request == OutputFormat.JML ||
+               request == OutputFormat.DBCJAVA ) {
       return "true";
     }
     String classname = this.getClass().getName();

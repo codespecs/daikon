@@ -115,7 +115,14 @@ public class Implication
       return "(" + consq_fmt + ")" + mid + "(" + pred_fmt + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       String cmp = (iff ? "IFF" : "IMPLIES");
-      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
+      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";          
+    } else if (format == OutputFormat.DBCJAVA) {
+      if ( iff )
+        // RRN: I'm not sure if this actually works for DBC; 
+        //      there seems to be no dedicated biconditional, however.
+        return "((" + pred_fmt + ") == (" + consq_fmt + "))";
+      else 
+        return "(" + pred_fmt + " $implies " + consq_fmt + ")";      
     } else {
       return format_unimplemented(format);
     }

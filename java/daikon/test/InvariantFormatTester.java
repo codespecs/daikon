@@ -121,6 +121,7 @@ public class InvariantFormatTester extends TestCase
     result.add("esc");
     result.add("ioa");
     result.add("jml");
+    result.add("dbc");
     result.add("simplify");
 
     return result;

@@ -30,6 +30,8 @@ public class DummyInvariant
   public String escFormat;
   public String simplifyFormat;
   public String ioaFormat;
+  public String jmlFormat;
+  public String dbcFormat;
 
   private boolean negated = false;
   public boolean valid = false;
@@ -42,10 +44,12 @@ public class DummyInvariant
     escFormat = "format_esc not implemented for dummy invariant";
     simplifyFormat = "format_simplify not implemented for dummy invariant";
     ioaFormat = "format_ioa not implemented for dummy invariant";
+    jmlFormat = "format_jml not implemented for dummy invariant";
+    dbcFormat = "format_dbc not implemented for dummy invariant";
   }
 
   public void setFormats(String daikon, String java, String esc,
-                         String simplify, String ioa) {
+                         String simplify, String ioa, String jml, String dbc) {
     if (daikon != null)
       daikonFormat = daikon;
     if (java != null)
@@ -56,6 +60,11 @@ public class DummyInvariant
       simplifyFormat = simplify;
     if (ioa != null)
       ioaFormat = ioa;
+    if (jml != null)
+      jmlFormat = jml;
+    if (dbc != null)
+      dbcFormat = jml;
+
     // Note that java is missing from this disjuction on purpose
     if (daikon != null || esc != null || simplify != null || ioa != null)
       valid = true;
@@ -156,6 +165,8 @@ public class DummyInvariant
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
+    if (format == OutputFormat.DBCJAVA) return format_dbc();
 
     return format_unimplemented(format);
   }
@@ -199,5 +210,18 @@ public class DummyInvariant
     throw new Error("Not implemented");
   }
 
+  public String format_jml() {
+    if (negated)
+      return "!(" + jmlFormat + ")";
+    else
+      return ioaFormat;
+  }
+
+  public String format_dbc() {
+    if (negated)
+      return "!(" + dbcFormat + ")";
+    else
+      return ioaFormat;
+  }
 
 }

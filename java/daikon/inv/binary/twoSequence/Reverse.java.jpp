@@ -89,7 +89,8 @@ public class CLASSNAME
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.JML) return format_jml();
-    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.DBCJAVA) return format_dbc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();   
 
     return format_unimplemented(format);
   }
@@ -150,6 +151,12 @@ public class CLASSNAME
     // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
     // parse appears to choke on that output... until it works, using this
     return results[0] + results[1] + " == " + preTag + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + postTag + results[2];
+  }
+
+  public String format_dbc() {
+          // ( (new StringBuffer (var1().name.name())).reverse().toString(
+          //       ).equals (var2().name.name()))
+          return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
 
   public String format_simplify() {

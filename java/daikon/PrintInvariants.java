@@ -31,8 +31,9 @@ public class PrintInvariants {
    **/
   public static final Logger debugPrint = Logger.getLogger("daikon.print");
 
+  //RRN:  Is this really used at all for DBC?
   /**
-   * Debug tracer for printing modified variables in ESC/JML output.
+   * Debug tracer for printing modified variables in ESC/JML/DBC output.
    **/
   public static final Logger debugPrintModified = Logger.getLogger("daikon.print.modified");
 
@@ -91,6 +92,8 @@ public class PrintInvariants {
       "      Write output as java expressions.",
       "  --" + Daikon.jml_output_SWITCH,
       "      Write output in JML format.",
+      "  --" + Daikon.dbc_output_SWITCH, //@tx
+      "      Write output as Design-By-Contract format.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
       "program points; for debugging.",
@@ -114,6 +117,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0), //@tx
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -158,6 +162,8 @@ public class PrintInvariants {
           test_output = true;
         } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
+	} else if (Daikon.dbc_output_SWITCH.equals(option_name)) { //@tx
+	    Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -603,7 +609,8 @@ public class PrintInvariants {
     }
     if (Daikon.output_num_samples
         || (Daikon.output_style == OutputFormat.ESCJAVA)
-        || (Daikon.output_style == OutputFormat.JML)) {
+        || (Daikon.output_style == OutputFormat.JML)
+	|| (Daikon.output_style == OutputFormat.DBCJAVA )) { //@tx
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
         out.print(" " + ppt.var_infos[i].name.name());
@@ -692,7 +699,9 @@ public class PrintInvariants {
         }
       }
     }
-    if (Daikon.output_num_samples || (Daikon.output_style == OutputFormat.ESCJAVA)) {
+    if (Daikon.output_num_samples
+	|| (Daikon.output_style == OutputFormat.ESCJAVA)
+	|| (Daikon.output_style == OutputFormat.DBCJAVA)) { //@tx
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
@@ -718,8 +727,11 @@ public class PrintInvariants {
     }
     // It would be nice to collect the list of indices that are modified,
     // and create a \forall to specify that the rest aren't.
-    if (Daikon.output_style == OutputFormat.ESCJAVA ||
-        Daikon.output_style == OutputFormat.JML) {
+    if (Daikon.output_style == OutputFormat.ESCJAVA
+	|| Daikon.output_style == OutputFormat.JML
+	// RRN, not sure about this right now.
+	//	|| Daikon.output_style == OutputFormat.DBCJAVA //@tx
+	) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
@@ -778,6 +790,7 @@ public class PrintInvariants {
         }
       }
       if (mods.size() > 0) {
+	  // RRN possible need for DBC-related modification here:
         if (Daikon.output_style == OutputFormat.ESCJAVA)
           out.print("modifies ");
         else
@@ -1045,9 +1058,27 @@ public class PrintInvariants {
           out.println("    (obviously)");
         }
       }
-    } else {
-      throw new IllegalStateException("Unknown output mode");
-    }
+     } else if (Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
+       VarInfo leader = (VarInfo) equal_vars.elementAt(0);
+       for (int j = 1; j < equal_vars.size(); j++) {
+	 VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	 if (other.isDerivedSequenceMinMaxSum())
+	   break;
+	 if (leader.rep_type.isArray()) {
+	   String[] form =
+	     VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
+	       { leader.name, other.name }, true); // elementwise
+	   out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+	 } else {
+	   out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
+	 }
+	 if (obviously_equal.contains(other)) {
+	   out.println("    (obviously)");
+	 }
+       }
+     } else {
+       throw new IllegalStateException("Unknown output mode");
+     }
   }
 
   // This is just a temporary thing to provide more info about the
@@ -1142,11 +1173,6 @@ public class PrintInvariants {
           inv_rep = "warning: method " + inv.getClass().getName() + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
         }
       }
-    } else if (Daikon.output_style == OutputFormat.JML) {
-      // System.out.println("className: " + inv.getClass().getName());
-      // System.out.println("daikon rep: " + inv.format_using(OutputFormat.DAIKON));
-      inv_rep = inv.format_using(Daikon.output_style);
-      // System.out.println("Representation: " + inv_rep);
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.IOA) {
@@ -1173,9 +1199,11 @@ public class PrintInvariants {
       }
       inv_rep += rawOutput;
       if (PptTopLevel.debug.isLoggable(Level.FINE)) {
-        PptTopLevel.debug.fine (inv.repr());
+	PptTopLevel.debug.fine (inv.repr());
       }
-    } else if (Daikon.output_style == OutputFormat.JAVA) {
+    } else if (Daikon.output_style == OutputFormat.JAVA
+	       || Daikon.output_style == OutputFormat.JML
+	       || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
       inv_rep = inv.format_using(Daikon.output_style);
     } else {
       throw new IllegalStateException("Unknown output mode");

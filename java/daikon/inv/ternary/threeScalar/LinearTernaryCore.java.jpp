@@ -358,7 +358,7 @@ public final class CLASSNAME
       d = (min_d + max_d) / 2;
       if (debug.isLoggable(Level.FINE))
         debug.fine (wrapper.ppt.name + ": Trying new a (" + a +
-                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
+                    "), b (" + b + "), c (" + c + "), and d (" + d + ")");
 
       // if the new coefficients are 'equal' to their min and max and
       // this point fits, then this new equation is good enough both
@@ -615,7 +615,8 @@ public final class CLASSNAME
                              double a, double b, double c, double d)
   {
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
-      return wrapper.format_too_few_samples(format, "0 * "+ x + " + 0 * " + y + " + 0 * " + z + " + 0 == 0");
+      return wrapper.format_too_few_samples(format, "0 * " + z +
+                                            " == 0 * "+ x + " + 0 * " + y + " + 0");
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -625,7 +626,8 @@ public final class CLASSNAME
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.JML))
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.DBCJAVA)) //RRN: Check the validity of this.
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

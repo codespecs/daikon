@@ -8,6 +8,7 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.UnaryInvariant;
 import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
+import daikon.tools.jtb.cparser.syntaxtree.TypeName;
 
 import java.io.*;
 
@@ -367,9 +368,9 @@ class FormatTestCase {
     // appear
     String typeString = getNextRealLine((BufferedReader)commands);
 
-    ProglangType types[] = getTypes(typeString);
-    VarInfo vars[] =
-      getVarInfos(classToTest, types);
+	ProglangType types[] = getTypes(typeString);
+	VarInfo vars[] =
+		getVarInfos(classToTest, types);
     PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
 
     // Create an actual instance of the class
@@ -385,6 +386,7 @@ class FormatTestCase {
     String format = null;
 
     Iterator formatStrings = null;
+	
 
     // If not generating goals get the goal lines from the file
     // If generating goals get the formats from the list of formats
@@ -624,6 +626,8 @@ class FormatTestCase {
       return OutputFormat.SIMPLIFY;
     else if (format.equalsIgnoreCase("jml"))
       return OutputFormat.JML;
+    else if (format.equalsIgnoreCase("dbc"))
+      return OutputFormat.DBCJAVA;
     throw new RuntimeException("Invalid output format passed to getOutputFormat(String)");
   }
 

@@ -64,7 +64,8 @@ public class InvariantFilters {
       addPropertyFilter( new JMLCompilerWorkaroundFilter());
     }
 
-    if (Daikon.output_style == OutputFormat.ESCJAVA) {
+    if (Daikon.output_style == OutputFormat.ESCJAVA
+        || Daikon.output_style == OutputFormat.DBCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
 

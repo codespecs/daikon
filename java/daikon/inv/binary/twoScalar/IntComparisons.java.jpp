@@ -408,7 +408,8 @@ invariants.
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.JML)
         || (format == OutputFormat.JAVA)
-        || (format == OutputFormat.IOA))
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.DBCJAVA))        
     {
       String comparator = EQUALSstring;
 #if defined(EQUAL) || defined(EQUALFLOAT)
