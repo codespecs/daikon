@@ -88,9 +88,9 @@ public final class StringComparisonCore implements java.io.Serializable {
 	// return Math.pow(.5, wrapper.ppt.num_values());
 	return Invariant.PROBABILITY_JUSTIFIED;
       } else {
-	// None of the can_be_X's are true
-	// We haven't seen any values yet
-	return Invariant.PROBABILITY_UNKNOWN;
+	// None of the can_be_X's are true.
+	// (We haven't seen any values yet.)
+	return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
   }
