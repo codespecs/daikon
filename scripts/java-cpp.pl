@@ -3,7 +3,7 @@
   if 0;
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2000-12-05 19:45:20 mernst>
+# Time-stamp: <2001-03-03 12:20:05 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -12,17 +12,21 @@
 # If last argument is a file, it is used as input.  Otherwise, input comes
 # from standard in.  Output goes to standard out.
 
-# Problem:  this errs if there is an unmatched ' in comments.
+# Problem:  single quote marks (') in comment can cause "unterminated
+# character constant" warnings.
+# The workaround is not to use single quotes in comments; for instance,
+# avoid contractions and possessives such as "can't", "won't", "Mike's",
+# "Josh's".
+# (Implementation note:  I do want substitution to occur in comments.
+# Therefore, I do not use the -C (leave comments in) flag to cpp, or make
+# DOUBLESLASHCOMMENT put the rest of the line in a string, both of which
+# would also avoid the problem.)
 
 # I'm not calling this jpp because someone else has probably already taken
 # that name.
-# This is not a shell alias so it's sure to work in Makefiles, scripts, etc.
+# This is a script rather than a shell alias so it's sure to work in
+# Makefiles, scripts, etc.
 
-# Problem:  quote marks in comments can cause "unterminated character
-# constant" warnings.  I don't use the -C (leave comments in) flag to cpp,
-# or make DOUBLESLASHCOMMENT put the rest of the line in a string, because
-# I do want substitution to occur in comments.
-# Workaround:  don't have single quotes in comments.
 
 
 
