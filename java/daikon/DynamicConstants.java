@@ -26,6 +26,14 @@ public class DynamicConstants implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030913L;
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  /**
+   * Boolean.  If true, don't create post processed invariants
+   * over dynamic constants.  For experimental purposes only
+   **/
+  public static boolean dkconfig_no_post_process = false;
+
   /** Debug Tracer **/
   public static final Logger debug
                           = Logger.getLogger ("daikon.DynamicConstants");
@@ -161,8 +169,13 @@ public class DynamicConstants implements Serializable {
     }
 
     // Move any non-missing variables to the constant list and init their val
+    // If a variable is missing out of bounds, leave it on this list
+    // forever (guranteeing that invariants will never be instantiated over
+    // it)
     for (Iterator i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = (Constant) i.next();
+      if (con.vi.missingOutOfBounds())
+        continue;
       Object val = con.vi.getValue (vt);
       if (!missing (con.vi, vt)) {
         i.remove();
@@ -499,6 +512,13 @@ public class DynamicConstants implements Serializable {
    * is what we will do for now.
    */
   public void post_process () {
+
+    // don't create any post-processed invariants
+    if (dkconfig_no_post_process) {
+      System.out.println ("Not creating invariants over " + con_list.size()
+                          + " constants");
+      return;
+    }
 
     // Get a list of all remaining constants and clear the existing list
     // (if the existing list is not cleared, constant slices will not
