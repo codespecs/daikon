@@ -583,12 +583,14 @@ public final class CLASSNAME
   }
 
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
-  static String formatTerm(OutputFormat format, double coeff, VarInfoName var, boolean first) {
-    return LinearBinaryCore.formatTerm(format, coeff, var, first);
+  static String formatTerm(OutputFormat format, double coeff, VarInfoName var, VarInfo vi, boolean first) {
+    return LinearBinaryCore.formatTerm(format, coeff, var, vi, first);
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfoName y, VarInfoName z,
+                             VarInfoName x, VarInfo xvi,
+                             VarInfoName y, VarInfo yvi,
+                             VarInfoName z, VarInfo zvi,
                              double a, double b, double c, double d)
   {
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
@@ -608,10 +610,10 @@ public final class CLASSNAME
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
 
-      return formatTerm(format, a, x, true)
-        + formatTerm(format, b, y, (a == 0))
-        + formatTerm(format, c, z, (a == 0) && (b == 0))
-        + formatTerm(format, d, null, (a == 0) && (b == 0) && (c == 0))
+      return formatTerm(format, a, x, xvi, true)
+        + formatTerm(format, b, y, yvi, (a == 0))
+        + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
+        + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
         + eq + "0";
     }
 
@@ -654,9 +656,11 @@ public final class CLASSNAME
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfoName y, VarInfoName z)
+                             VarInfoName x, VarInfo xvi,
+                             VarInfoName y, VarInfo yvi,
+                             VarInfoName z, VarInfo zvi)
   {
-    String result = format_using(format, x, y, z, a, b, c, d);
+    String result = format_using(format, x, xvi, y, yvi, z, zvi, a, b, c, d);
     if (result != null) {
       return result;
     }
