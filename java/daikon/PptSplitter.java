@@ -100,20 +100,10 @@ public class PptSplitter implements Serializable {
   /** Adds the sample to each conditional ppt in the split */
   public void add_bottom_up (ValueTuple vt, int count) {
 
-    boolean splitter_test;
-    try {
-      splitter_test = ((PptConditional)ppts[0]).splitter.test(vt);
-    } catch (Throwable e) {
-      // If an exception is thrown, don't put the data on either side
-      // of the split.
-      if (false) {              // need to add a debugging switch
-        System.out.println ("Exception thrown in PptSplitter.add_bottom_up() for " + ppts[0].name());
-        System.out.println ("Vars = " + Debug.related_vars (ppts[0], vt));
-      }
-      return;
-    }
     // Choose the appropriate conditional point based on the condition result
-    PptConditional ppt_cond = (PptConditional) ppts[splitter_test ? 0 : 1];
+    PptConditional ppt_cond = choose_conditional (vt, count);
+    if (ppt_cond == null)
+      return;
 
     // If any parent variables were missing out of bounds on this
     // sample, apply that to this conditional as well.  A more
@@ -128,6 +118,29 @@ public class PptSplitter implements Serializable {
                           + Debug.related_vars (ppt_cond, vt));
     }
 
+  }
+
+  /**
+   * Chooses the correct conditional point based on the values in this sample
+   */
+  public PptConditional choose_conditional (ValueTuple vt, int count) {
+
+    boolean splitter_test;
+    try {
+      splitter_test = ((PptConditional)ppts[0]).splitter.test(vt);
+    } catch (Throwable e) {
+      // If an exception is thrown, don't put the data on either side
+      // of the split.
+      if (false) {              // need to add a debugging switch
+        System.out.println ("Exception thrown in "
+          + "PptSplitter.choose_conditional() for " + ppts[0].name());
+        System.out.println ("Vars = " + Debug.related_vars (ppts[0], vt));
+      }
+      return (null);
+    }
+
+    // Choose the appropriate conditional point based on the condition result
+    return ((PptConditional) ppts[splitter_test ? 0 : 1]);
   }
 
   public void add_implications() {
