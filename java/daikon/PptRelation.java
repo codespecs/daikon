@@ -266,8 +266,9 @@ public class PptRelation implements Serializable {
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
           emap.put(parent_pair, parent_pair);
-          debug.fine(
-            "-- -- "
+          if (debug.isLoggable(Level.FINE))
+            debug.fine(
+              "-- -- "
               + varr[j].name.name()
               + ", "
               + varr[k].name.name()

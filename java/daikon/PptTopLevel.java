@@ -3424,7 +3424,8 @@ public class PptTopLevel extends Ppt {
         "looking at " + c1.child.name() + " " + c1.child.num_samples());
       if (c1.child.num_samples() > 0) {
         emap = c1.get_child_equalities_as_parent();
-        debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        if (debugMerge.isLoggable(Level.FINE))// check before stringifying emap
+          debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
         break;
       }
     }

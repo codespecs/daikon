@@ -1757,7 +1757,10 @@ public abstract class Invariant
       return (null);
     Invariant inv = instantiate_dyn (slice);
     Assert.assertTrue (inv != null);
-    Assert.assertTrue (inv.ppt != null, "invariant class " + inv.getClass());
+    if (inv.ppt == null) {
+      // Save creating the message if the check succeeds
+      Assert.assertTrue (inv.ppt != null, "invariant class " + inv.getClass());
+    }
     return (inv);
   }
 

@@ -253,10 +253,16 @@ public class NISuppressor {
       return (state = NIS.INVALID);
 
     } else /* must be binary */ {
-      Assert.assertTrue ((v1_index < vis.length), "v1/len= "
-                         + v1_index + "/" + vis.length + " suppressor " + this);
-      Assert.assertTrue ((v2_index < vis.length), "v2/len= "
-                         + v2_index + "/" + vis.length + " suppressor " + this);
+      if (v1_index >= vis.length || v2_index >= vis.length) {
+        // Stringifying "this" is expensive, so only do it if one of the
+        // assertions will fail
+        Assert.assertTrue ((v1_index < vis.length), "v1/len= "
+                           + v1_index + "/" + vis.length +
+                           " suppressor " + this);
+        Assert.assertTrue ((v2_index < vis.length), "v2/len= "
+                           + v2_index + "/" + vis.length +
+                           " suppressor " + this);
+      }
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
 
