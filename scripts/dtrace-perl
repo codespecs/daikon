@@ -10,7 +10,7 @@ use warnings;
 BEGIN {
     require English;
     if ($^V ge 5.8.0) {
-        English->import("-no_match_vars"); # avoid speed penaly
+        English->import("-no_match_vars"); # avoid speed penalty
     } else {
         English->import();
     }
