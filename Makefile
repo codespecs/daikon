@@ -188,10 +188,14 @@ update-dist-dir: dist-ensure-directory-exists
 	# a method or class with more than 0xFFFF bytecodes.
 	cd java/daikon && $(MAKE) all_via_javac 
 	cd java/daikon && $(MAKE) junit
+	$(MAKE) update-dist-doc
+	$(MAKE) www
+	$(MAKE) update-dist-version-file
+
+update-dist-doc:
 	# "make" in doc directory will fail the first time
 	-cd doc && $(MAKE) all > /dev/null
 	cd doc && $(MAKE) all
-	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
 	# This isn't quite right:  $(DIST_DIR) should hold the
@@ -202,8 +206,7 @@ update-dist-dir: dist-ensure-directory-exists
 	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
-	$(MAKE) www
-	$(MAKE) update-dist-version-file
+	update-link-dates $(DIST_DIR)/index.html
 
 TODAY := $(shell date "+%B %e, %Y")
 
