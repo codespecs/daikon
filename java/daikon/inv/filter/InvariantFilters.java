@@ -69,8 +69,8 @@ public class InvariantFilters {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
 
-    addPropertyFilter( new SuppressionFilter());
     addPropertyFilter( new ParentFilter());
+    addPropertyFilter( new SuppressionFilter());
     addPropertyFilter( new NonCanonicalVariablesFilter());
     addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());
@@ -200,7 +200,7 @@ public class InvariantFilters {
      return null;
   }
 
-  public boolean shouldKeep( Invariant invariant ) {
+  public InvariantFilter shouldKeep( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
 
     if (invariant.logOn() || df.isLoggable(Level.FINE)) {
@@ -212,20 +212,15 @@ public class InvariantFilters {
     }
 
     // Do variable filters first since they eliminate more invariants.
-    if (shouldKeepVarFilters(invariant) != null) {
-      return false;
+    InvariantFilter result = shouldKeepVarFilters(invariant);
+    if (result != null) {
+      return result;
     }
 
     //  Property filters.
     invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
-    if (shouldKeepPropFilters(invariant) != null) {
-      return false;
-    } else {
-      if (df.isLoggable(Level.FINE)) {
-        invariant.log (df, "accepted by InvariantFilters");
-      }
-      return true;
-    }
+    return (shouldKeepPropFilters(invariant));
+
   }
 
   public Iterator getPropertyFiltersIterator() {
