@@ -209,10 +209,10 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
     for (int type = 0; type < NUM_TYPES; type++) {
       pw.print(UtilMDE.rpad(TYPE_LABELS[type], LABEL_WIDTH));
       for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
-        double f = freq[type][rel];
+        int f = (int) freq[type][rel];
         pw.print(UtilMDE.rpad(f, FIELD_WIDTH));
       }
-      double s = ArraysMDE.sum(freq[type]); 
+      int s = (int) ArraysMDE.sum(freq[type]);
       pw.print(UtilMDE.rpad(s, FIELD_WIDTH));
       pw.println();
     }
@@ -225,7 +225,7 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
       }
       pw.print(UtilMDE.rpad(sum, FIELD_WIDTH));
     }
-    pw.print(UtilMDE.rpad(ArraysMDE.sum(freq), FIELD_WIDTH));
+    pw.print(UtilMDE.rpad((int) ArraysMDE.sum(freq), FIELD_WIDTH));
 
     pw.println();
 
