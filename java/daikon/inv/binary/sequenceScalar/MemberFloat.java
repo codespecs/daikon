@@ -88,7 +88,7 @@ public final class MemberFloat
           return true;
       }
     }
-    */
+    */ // [INCR]
     return false;
   }
 

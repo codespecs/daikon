@@ -121,6 +121,7 @@ public final class LinearTernaryCoreFloat
           // but a random varying third variable can create enough samples.)
           /* [INCR] this makes stuff to weird
           if ((a == 0) || (b == 0)) {
+            wrapper.flowThis();
             wrapper.destroy();
             return;
           }
@@ -135,6 +136,7 @@ public final class LinearTernaryCoreFloat
                             + a + "*" + x_cache[i]
                             + "+" + b + "*" + y_cache[i] + "+" + c);
               }
+              wrapper.flowThis();
               wrapper.destroy();
               return;
             }
@@ -148,6 +150,7 @@ public final class LinearTernaryCoreFloat
           debug.debug("Suppressing LinearTernaryCoreFloat at new value: "
                       + z + " != " + a + "*" + x + "+" + b + "*" + y + "+" + c + " = " + (a*x+b*y+c));
         }
+        wrapper.flowThis();
         wrapper.destroy();
         return;
       }
@@ -250,6 +253,7 @@ public final class LinearTernaryCoreFloat
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCoreFloat due to zero denominator.");
       }
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }
@@ -261,6 +265,7 @@ public final class LinearTernaryCoreFloat
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCoreFloat due to exception.");
       }
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }

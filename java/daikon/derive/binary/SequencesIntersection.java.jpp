@@ -68,7 +68,7 @@ public final class SCALARSEQUENCESINTERSECTION
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
-    debug.debug ("Computing value and modified");
+    debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING)
@@ -106,7 +106,6 @@ public final class SCALARSEQUENCESINTERSECTION
 
   protected VarInfo makeVarInfo() {
     debug.debug ("Computing varInfo");
-
 
     VarInfoName name = base1.name.applyIntersection(base2.name);
     ProglangType type = base1.type;

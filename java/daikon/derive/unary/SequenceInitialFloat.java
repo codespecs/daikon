@@ -74,9 +74,6 @@ public final class SequenceInitialFloat
     // If order doesn't matter
     if (!vi.aux.getFlag (VarInfoAux.HAS_ORDER)) return false;
 
-    // If order doesn't matter
-    if (!vi.aux.getFlag (VarInfoAux.HAS_ORDER)) return false;
-
     return true;
   }
 

@@ -136,7 +136,7 @@ public final class PptSlice2
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
 
-    int result =  tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3];
+    int result = tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3];
 
     Assert.assertTrue(result >= 0);
     return result;
@@ -144,7 +144,7 @@ public final class PptSlice2
 
   public int num_mod_non_missing_samples() {
 
-    int result =  tm_total[1] + tm_total[2] + tm_total[3];
+    int result = tm_total[1] + tm_total[2] + tm_total[3];
 
     Assert.assertTrue(result >= 0);
     return result;
@@ -192,9 +192,9 @@ public final class PptSlice2
       Assert.assertTrue(invs.get(i) != null);
     }
 
-    //     if (Global.debugInfer.isDebugEnabled()) {
-    //       Global.debugInfer.debug ("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
-    //     }
+    // if (Global.debugInfer.isDebugEnabled()) {
+    //   Global.debugInfer.debug ("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
+    // }
 
     // Do not bother putting values into a slice if missing.
 

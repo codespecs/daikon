@@ -55,7 +55,7 @@ public final class SequenceStringIntersectionFactory  extends BinaryDerivationFa
     }
 
     if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiatiating " + seq1.name + " and " + seq2.name);
+      debug.debug("Instantiatiating " + seq1.name + " and " + seq2.name);
     }
 
     return new BinaryDerivation[] {

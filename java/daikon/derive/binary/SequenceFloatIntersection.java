@@ -33,7 +33,7 @@ public final class SequenceFloatIntersection
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
-    debug.debug ("Computing value and modified");
+    debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING)

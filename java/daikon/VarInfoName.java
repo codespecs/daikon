@@ -2618,11 +2618,12 @@ public abstract class VarInfoName
       return result;
     }
 
-    // Important Note: The Java quantification style actually makes no sense as is.
-    // The resultant quantifications are statements as opposed to expressions, and
-    // thus no value can be derived from them. This must be fixed before the java
-    // statements are of any value. However, the ESC and JML quantifications are fine
-    // because they actually produce expressions with values.
+    // Important Note: The Java quantification style actually makes no
+    // sense as is.  The resultant quantifications are statements as
+    // opposed to expressions, and thus no value can be derived from
+    // them. This must be fixed before the java statements are of any
+    // value. However, the ESC and JML quantifications are fine because
+    // they actually produce expressions with values.
 
     // <root*> -> <string string* string>
     /**
