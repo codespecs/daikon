@@ -47,83 +47,120 @@ DAIKON_JAVA = $(INV)/daikon/Daikon.java
 default: help
 
 help:
-	@echo "choose a target"
+	@echo "make options...."
+	@echo "  make reset-scratch  : removes the /tmp folder (clean slate)"
+	@echo ""
+	@echo "  make create-scratch : 1 sets up the /tmp folder"
+	@echo "  make instrument     : 2 instuments the source under test"
+	@echo "  make compile        : 3 compiles the source under test"
+	@echo "  make data           : 4 runs the source under test"
+	@echo "  make txt-daikon     : 5 detects invariants, writes in daikon style"
+	@echo "  make txt-esc        : 6 detects invariants, writes in esc style"
+	@echo "  make merge          : merges the esc-style output into the original source"
+	@echo "  make esc            : runs escjava on the merged files"
+	@echo ""
+	@echo "  make clean          : "
+	@echo "  make all            : does 1-6, merge, esc"
+	@echo ""
+	@echo "Note that 1->6 are a chain, and invoking any of them will invoke"
+	@echo "  previous steps if there is a dirty dependency in the chain"
 
-all: reset-scratch copy-unchanged instrument compile data txt-esc merge
+all: reset-scratch txt-esc merge esc
 
-#reset-stackar-java:
-#	cd DataStructures; rm StackAr.java; ln -s StackAr.java-unannotated StackAr.java
+SCRATCH_FOR_DAIKON?=/tmp/esc-experiments/${PROJECT}
+
+reset-scratch: reset-scratch-impl
+create-scratch: ${SCRATCH_FOR_DAIKON}/.exists
+copy-uninst: ${SCRATCH_FOR_DAIKON}/.copy-timestamp ${PROJECT}/.copy-timestamp
+instrument: ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
+compile: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
+data: ${SCRATCH_FOR_DAIKON}/.run-timestamp
+txt-daikon: ${PROJECT}.txt-daikon
+txt-esc: ${PROJECT}.txt-esc
+esc: ${PROJECT}.esc
+
+clean: reset-scratch
+	@echo
+	@echo \#\#\# clean
+	@echo
+	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-esc ${PROJECT}.esc
 
 #esc: StackAr.esc
-
-#data: daikon-output/StackAr.dtrace
 
 #daikon: StackAr.txt-esc
 
 ###########################################################################
 
-SCRATCH_FOR_DAIKON?=/tmp/esc-experiments/${PROJECT}
-
-reset-scratch:
+reset-scratch-impl:
 	@echo
 	@echo \#\#\# reset-scratch
 	@echo
 	rm -rf daikon-java
 	rm -rf daikon-output
 	rm -rf ${SCRATCH_FOR_DAIKON}
+
+# setup the /tmp directory for this project
+
+${SCRATCH_FOR_DAIKON}/.exists:
+	@echo
+	@echo \#\#\# create-scratch
+	@echo
 	mkdir -p ${SCRATCH_FOR_DAIKON}/daikon
 	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-java
 	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-output
+	touch ${SCRATCH_FOR_DAIKON}/.exists
 
-# copy files which are needed but not instrumented
-# put them in /tmp and in .
-copy-unchanged: reset-scratch
+# copy files which are used but not instrumented to /tmp and .
+
+DOT_DOT_SOURCE_UNCHANGED:=${patsubst %,../%,${SOURCE_UNCHANGED}}
+${SCRATCH_FOR_DAIKON}/.copy-timestamp: ${SCRATCH_FOR_DAIKON}/.exists ${DOT_DOT_SOURCE_UNCHANGED}
 	@echo
-	@echo \#\#\# copy-unchanged
+	@echo \#\#\# copy-uninstrumented to /tmp and [project]
 	@echo
 	cd .. && cp -pP --target-directory=${SCRATCH_FOR_DAIKON}/ ${SOURCE_UNCHANGED} 
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_UNCHANGED} 
+	touch ${SCRATCH_FOR_DAIKON}/.source-unchanged-timestamp
 
-# instument files under detection
-# also copy them to . for later merging
-instrument: copy-unchanged reset-scratch
+# instument files under detection, and copy the uninstrumented versions to . for later merging
+
+DOT_DOT_SOURCE_TO_DFEJ:=$(patsubst %,../%,${SOURCE_TO_DFEJ})
+${SCRATCH_FOR_DAIKON}/.instrument-timestamp: ${SCRATCH_FOR_DAIKON}/.copy-timestamp ${DOT_DOT_SOURCE_TO_DFEJ}
 	@echo
 	@echo \#\#\# instrument
 	@echo
-	dfej -classpath ../:${CLASSPATH} $(patsubst %,../%,${SOURCE_TO_DFEJ})
+	dfej -classpath ../:${CLASSPATH} ${DOT_DOT_SOURCE_TO_DFEJ}
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_TO_DFEJ}
+	touch ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 
 # compile the files in /tmp
-compile: instrument
+
+${SCRATCH_FOR_DAIKON}/.compile-timestamp: ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 	@echo
 	@echo \#\#\# compile
 	@echo
 	cd ${SCRATCH_FOR_DAIKON} && jikes `find . -name '*.java'`
+	touch ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 
-# run the program under inspection
-# StackAr/StackAr.dtrace: daikon-java/DataStructures/StackArTester.java daikon-java/DataStructures/StackAr.java
-data: compile
+# run the program under inspection from /tmp
+
+${SCRATCH_FOR_DAIKON}/.run-timestamp: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 	@echo
 	@echo \#\#\# data
 	@echo
 	java -classpath ${SCRATCH_FOR_DAIKON}:${CLASSPATH} ${MAIN_RUN}
 
-# StackAr.txt-daikon: StackAr/StackAr.dtrace $(DAIKON_JAVA)$
-txt-daikon: ${PROJECT}.txt-daikon
-${PROJECT}.txt-daikon: $(DAIKON_JAVA)
+${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_JAVA)
 	@echo
 	@echo \#\#\# txt-daikon
 	@echo
-	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@
+	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || rm $@
 	../remove-conditional-ppts.pl $@
 
-# StackAr.txt-esc: daikon-output/StackAr.dtrace $(DAIKON_JAVA)
-txt-esc: ${PROJECT}.txt-esc
-${PROJECT}.txt-esc: $(DAIKON_JAVA)
+${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_JAVA)
 	@echo
 	@echo \#\#\# txt-esc
 	@echo
-	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@
+	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || rm $@
 	../remove-conditional-ppts.pl $@
 
 #../DataStructures/StackAr.java-escannotated: txt-esc
@@ -137,8 +174,8 @@ merge:
 	cd ${PACKAGE} && ls *.java-escannotated | perl -p -e 's/^(.*)-escannotated$$/mv \1-escannotated \1/' | sh
 
 # run escjava on the annontated files
-# StackAr.esc: DataStructures/StackAr.java-escannotated
-esc:
+
+${PROJECT}.esc:
 	escjava ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
 
 # ###########################################################################
