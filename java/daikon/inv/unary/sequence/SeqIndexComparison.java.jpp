@@ -388,12 +388,17 @@ public class CLASSNAME extends SUPERCLASS {
         overlap *= 2;
 
         double confidence_one_nonequal = ((double)overlap)/(range1 * range2);
+        Assert.assertTrue(! Double.isNaN(confidence_one_nonequal),
+                          // "overlap=" + overlap
+                          // + ", range1=" + range1
+                          // + ", range2=" + range2
+                          );
         return 1 - Math.pow (1 - confidence_one_nonequal, vs.elem_cnt());
       }
     #else
       return 1 - Math.pow (.5, num_values);
     #endif
-    }
+  }
 
 
   public boolean isSameFormula(Invariant other)
