@@ -55,14 +55,14 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
   (when (not daikon-context-gui-started)
     (setq startup-path (expand-file-name (or daikon-context-gui-project-root-directory
 					     default-directory)))
-    (bsh-eval (concat "daikon_gui.InvariantInteraction.startGui(\"" startup-path
+    (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
 		      "\");"))
     (setq daikon-context-gui-started t)))
 
 (defun daikon-context-gui-end-gui ()
   "Terminate the Daikon Context GUI."
   (when daikon-context-gui-started
-    (bsh-eval "daikon_gui.InvariantInteraction.endGui();"))
+    (bsh-eval "daikon.gui.contextGUI.InvariantInteraction.endGui();"))
   (setq daikon-context-gui-started nil))
 
 ;;; Borrowed in part from jde-which-method-update.
@@ -81,15 +81,16 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 (defun daikon-context-gui-update-with-class (class)
   "Update the Daikon Context GUI using only class information."
   (bsh-eval
-   (concat "daikon_gui.InvariantInteraction.input(\"" class "\",null, null, null);")))
+   (concat "daikon.gui.contextGUI.InvariantInteraction.input(\"" class "\",null, null, null);")))
 
 ;; Sends the method information to the Context GUI for display.
 (defun daikon-context-gui-update-with-method (class-method-args)
   (let ((class   (car class-method-args))
 	(method (cadr class-method-args))
 	(args  (caddr class-method-args)))
-    (bsh-eval (concat "daikon_gui.InvariantInteraction.input(\"" class
+    (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.input(\"" class
 		      "\",\"" method " " args "\", null, null);"))))
+
 ;; This code was taken from JDK's get method at point function from
 ;; version jde-2.2.7beta11 jde-which-method.el but edited such that i can
 ;; get the arguments of the functions to send to the GUI. This is needed for

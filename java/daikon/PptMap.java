@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import utilMDE.*;
-import daikon.gui.InvariantsGUI; // for InvariantsGUI.PLEASE_REPORT_ERROR_STRING, in getPptMapFromFile()
+import daikon.gui.treeGUI.InvariantsGUI; // for InvariantsGUI.PLEASE_REPORT_ERROR_STRING, in getPptMapFromFile()
 
 /** Maps from a name (a String) to a PptTopLevel. */
 public class PptMap
