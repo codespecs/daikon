@@ -5,14 +5,14 @@ if (! $?LC_ALL) setenv LC_ALL en_US
 
 if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
 setenv DAIKONDIR ${DAIKONPARENT}/invariants
-setenv INV ${DAIKONPARENT}/invariants
+setenv DAIKONBIN ${DAIKONDIR}/scripts
+setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
 
-source ${INV}/scripts/daikon.cshrc
+setenv PATH /usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
 
-# Should also remove "invariants/bin" from PATH.
-setenv PATH $DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
+source ${INV}/scripts/daikon.cshrc
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 

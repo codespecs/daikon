@@ -5,14 +5,14 @@ export LC_ALL=${LC_ALL:-en_US}
 
 export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
 export DAIKONDIR=${DAIKONPARENT}/invariants
-export INV=${DAIKONPARENT}/invariants
+export DAIKONBIN=${DAIKONDIR}/scripts
+export INV=${DAIKONDIR}
 export inv=${INV}
 export DAIKONCLASS_SOURCES=1
 
-source ${INV}/scripts/daikon.bashrc
+export PATH=/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
 
-# Should also remove "daikon/bin" from PATH.
-export PATH=$DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
+source ${INV}/scripts/daikon.bashrc
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 

@@ -6,6 +6,7 @@
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
+export DAIKONBIN=${DAIKONBIN:-${DAIKONPARENT}/bin}
 
 ## Set this directory to the directory containing the JDK.
 export JDKDIR=${JDKDIR:-/g2/jdk}
@@ -18,9 +19,9 @@ export JDKDIR=${JDKDIR:-/g2/jdk}
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then
-  CPADD=$DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar
+  CPADD=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/log4j.jar
 else
-  CPADD=$DAIKONDIR/daikon.jar
+  CPADD=${DAIKONDIR}/daikon.jar
 fi
 if [ ! -z "$CLASSPATH" ]; then
   export CLASSPATH=${CPADD}:${CLASSPATH}
@@ -44,19 +45,19 @@ if [ -e ${DAIKONDIR}/java/ajax-ship/ajax.jar ]; then
 fi
 
 ## Add the Daikon binaries to your path
-export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
+export PATH=${DAIKONBIN}:${DAIKONDIR}/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERLLIB ]; then
-  export PERLLIB=${INV}/scripts:${PERLLIB}
+  export PERLLIB=${DAIKONBIN}:${PERLLIB}
 else
-  export PERLLIB=${INV}/scripts
+  export PERLLIB=${DAIKONBIN}
 fi
 
 ## Indicates where Ajax should find its helper files such as
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
 ## determines which variables can be sensibly compared to one another.
-export AJAX_DIR=$DAIKONDIR/java/ajax-ship
+export AJAX_DIR=${DAIKONDIR}/java/ajax-ship
 
 
 ## Indicates where Lackwit can find its libraries (and binaries).

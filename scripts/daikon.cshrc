@@ -4,8 +4,9 @@
 
 ## Set DAIKONPARENT to the directory containing "daikon/".
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
-if (! $?DAIKONDIR) setenv DAIKONDIR $DAIKONPARENT/daikon
-if (! $?DFECDIR) setenv DFECDIR $DAIKONDIR/front-end/c
+if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
+if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c
+if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/daikon
 
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /g2/jdk
@@ -17,11 +18,11 @@ if (! $?JDKDIR) setenv JDKDIR /g2/jdk
 ## run Daikon from the precompiled bytecode files in daikon.jar.
 # setenv DAIKONCLASS_SOURCES 1
 
-setenv CPADD $DAIKONDIR/daikon.jar
+setenv CPADD ${DAIKONDIR}/daikon.jar
 # In csh, can't use "&&" here to protect the use of the variable; use two "if"s
 if ($?DAIKONCLASS_SOURCES) then
   if ($DAIKONCLASS_SOURCES) then
-    setenv CPADD $DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar
+    setenv CPADD ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/log4j.jar
   endif
 endif
 endif
@@ -47,19 +48,19 @@ if (-e ${DAIKONDIR}/java/ajax-ship/ajax.jar) then
 endif
 
 ## Add the Daikon binaries to your path
-set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $DFECDIR $JDKDIR/bin $path)
+set path = (${DAIKONBIN} ${DAIKONDIR}/front-end/java/src $DFECDIR $JDKDIR/bin $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then
-  setenv PERLLIB ${INV}/scripts:${PERLLIB}
+  setenv PERLLIB ${DAIKONBIN}:${PERLLIB}
 else
-  setenv PERLLIB ${INV}/scripts
+  setenv PERLLIB ${DAIKONBIN}
 endif
 
 ## Indicates where Ajax should find its helper files such as
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
 ## determines which variables can be sensibly compared to one another.
-setenv AJAX_DIR $DAIKONDIR/java/ajax-ship
+setenv AJAX_DIR ${DAIKONDIR}/java/ajax-ship
 
 
 ## Indicates where Lackwit can find its libraries (and binaries).
