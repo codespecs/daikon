@@ -1,5 +1,20 @@
 package B::DeparseDaikon;
 
+# After Perl has parsed and byte-compiled some code, translate the OPs
+# back into Perl source, adding tracing functions for Daikon along the
+# way.
+
+# This file is part of the Daikon distribution. It may be used and
+# redistributed under the same terms as the rest of Daikon or, at your
+# option, under the same terms as Perl itself, following either the
+# GNU General Public License or the Perl Artistic License.  The Daikon
+# Perl front end, of which this file is a part, and the Daikon dynamic
+# invariant detection tool are separate programs, neither derived from
+# the other, which are merely aggregated for convenience of
+# distribution. As such, licensing the Perl front end under the terms
+# of the GPL neither requires nor entitles you to license other parts
+# of the Daikon distribution under the same terms.
+
 use B::Deparse;
 
 use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LOCKED
@@ -125,19 +140,45 @@ sub compile {
     }
 }
 
-# This sub is a bunch of code that was factored out of the B::Deparse
-# compile routine. To work with the 5.8.0 B::Deparse, we have to keep
-# it here, but eventually it should go back to B::Deparse since
-# there's nothing Daikon-specific about it.
+# Used to be unchanged, but now slightly modified to turn off "void
+# context" warnings.
 sub deparse_program {
     my $self = shift;
     # First deparse command-line args
     if (defined $^I) { # deparse -i
         print q(BEGIN { $^I = ).perlstring($^I).qq(; }\n);
     }
-    if ($^W) { # deparse -w
-        print qq(BEGIN { \$^W = $^W; }\n);
+    ###
+    if ($^W) {
+        # deparse -w, or more likely for us the file said
+        # "#!/bin/perl -w"
+
+        # The following code turns off the "useless use of foo in void
+        # context" warning, which we produce a lot for the scalar
+        # context return of lists. Unlike the simpler "no warnings
+        # 'void'", we turn all the other warnings back on, this time
+        # in the lexically scoped way, so that we don't lose other
+        # warnings, if the user requested them. Also, we still set $^W
+        # to duplicate the effect of the -w switch for other modules,
+        # if any, that don't use lexical warnings.
+        print 'BEGIN { require warnings; ',
+          'warnings->import(); warnings->unimport("void"); ',
+            '$^W = 1; }', "\n";
+    } else {
+        # Even if the author of this file didn't ask for warnings, to
+        # match the behavior of the uninstrumented program we still
+        # want to emit warnings if we're being used from another file
+        # that had -w set. The following code only works if $^W was
+        # set before this file was loaded, but that's the most common
+        # case, covering both a -w flag on the main program and a
+        # BEGIN { $^W = 1 } added by DeparseDaikon operating on
+        # another file from the above branch.
+        print 'BEGIN { if ($^W) { require warnings; ',
+          'warnings->import(); warnings->unimport("void"); ',
+            '} }', "\n";
     }
+    ###
+
     if ($/ ne "\n" or defined $O::savebackslash) { # deparse -l and -0
         my $fs = perlstring($/) || 'undef';
         my $bs = perlstring($O::savebackslash) || 'undef';
