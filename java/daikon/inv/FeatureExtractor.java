@@ -184,85 +184,6 @@ public final class FeatureExtractor {
 
   }
 
-  /* Removed because functions not used
-
-  // permutes the feature vectors repeats times
-  // returns a ArrayList array of size 4 such that
-  // return[0] is usefulFeatures
-  // return[1] is nonusefulFeatures,
-  // return[2] is usefulStrings,
-  // return[3] is nonusefulStrings
-  //
-  private static ArrayList[] createPermutations(ArrayList usefulFeatures,
-                                       ArrayList nonusefulFeatures,
-                                       ArrayList usefulStrings,
-                                       ArrayList nonusefulStrings) {
-    ArrayList[] answer = new ArrayList[4];
-    for (int i = 0; i < 4; i++)
-      answer[i] = new ArrayList();
-
-    ArrayList[] placeholder;
-    // first useful-useful
-    placeholder = permute(usefulFeatures, usefulFeatures,
-                          usefulStrings, usefulStrings);
-    answer[0].addAll(placeholder[0]);
-    answer[2].addAll(placeholder[1]);
-    // second useful-nonuseful
-    placeholder = permute(usefulFeatures, nonusefulFeatures,
-                          usefulStrings, nonusefulStrings);
-    answer[0].addAll(placeholder[0]);
-    answer[2].addAll(placeholder[1]);
-    // third nonuseful-useful
-    placeholder = permute(nonusefulFeatures, usefulFeatures,
-                          nonusefulStrings, usefulStrings);
-    answer[0].addAll(placeholder[0]);
-    answer[2].addAll(placeholder[1]);
-    // last nonuseful-nonuseful
-    placeholder = permute(nonusefulFeatures, nonusefulFeatures,
-                          nonusefulStrings, nonusefulStrings);
-    answer[1].addAll(placeholder[0]);
-    answer[3].addAll(placeholder[1]);
-
-    return answer;
-  }
-
-  // returns two ArrayLists.  return[0] contain items from oneInput
-  // permuted with each item from twoInput.
-  // return[1] contains the permuted strings.
-  private static ArrayList[] permute(ArrayList oneInput, ArrayList twoInput,
-                         ArrayList oneString, ArrayList twoString) {
-    ArrayList[] answer = new ArrayList[2];
-    answer[0] = new ArrayList();
-    answer[1] = new ArrayList();
-
-    for (int i = 0; i < oneInput.size(); i++)
-      for (int j = 0; j < twoInput.size(); j++) {
-        // Create a new TreeSet that is the union of oneInput.get(i)
-        // and twoInput.get(j) shifted by OneMoreOrderThanLargestFeature.
-        TreeSet current = new TreeSet();
-        current.addAll((TreeSet) oneInput.get(i));
-        current.addAll(shift(((TreeSet) twoInput.get(j)).iterator(),
-                             OneMoreOrderThanLargestFeature));
-        answer[0].add(current);
-
-        // And now strings:
-        answer[1].add(oneString.get(i) + "\t" + twoString.get(j));
-
-      }
-    return answer;
-  }
-
-  // Adds shift to the int term of every IntDoublePair in the Iterator input
-  private static TreeSet shift(Iterator input, int shift) {
-    TreeSet answer = new TreeSet();
-    for (; input.hasNext(); ) {
-      IntDoublePair current = (IntDoublePair) (input.next());
-      answer.add(new IntDoublePair(current.number + shift, current.value));
-    }
-    return answer;
-  }
-  */// End of not used functions
-
   // Takes a vector of invariants and returns a vector of
   // the string representations of those invariants in the same order
   private static ArrayList getStrings(ArrayList invs) {
@@ -381,6 +302,8 @@ public final class FeatureExtractor {
       numbersToNames.put(pair, name);
     }
 
+    //    System.out.println(numbersToNames.get(new IntDoublePair(2784, 0.0)));
+
     // Now make the .names part
     names.write("|Beginning of .names file\n");
     // names.write("GoodBad.\n\nGoodBad: 1, -1.\n");
@@ -430,6 +353,16 @@ public final class FeatureExtractor {
     for (int i = 0; i < features.size(); i++) {
       TreeSet allFets = ((TreeSet) features.get(i));
 
+      //Debugging code to detect duplicates within allFets
+      /*
+        HashSet temp = new HashSet();
+        for (Iterator iter = allFets.iterator(); iter.hasNext();) {
+        IntDoublePair meh = (IntDoublePair) iter.next();
+        if (temp.contains(new Integer(meh.number)))
+        throw new RuntimeException("\nFound duplicate feature: "+meh.number);
+        temp.add(new Integer(meh.number));
+        } */// End Debugging Code
+
       // check which features are missing and add IntDoublePairs
       // with those features set to 0
       for (Iterator h = allFeatures.iterator(); h.hasNext();) {
@@ -446,18 +379,23 @@ public final class FeatureExtractor {
 
       // Debug Code that prints out features that
       // have been forgotten in AllFeatures
-      /*      for (Iterator h = allFets.iterator(); h.hasNext();) {
-              IntDoublePair current = (IntDoublePair) h.next();
-              boolean contains = false;
-              for (Iterator j = allFeatures.iterator(); j.hasNext();) {
-              IntDoublePair jguy = (IntDoublePair) j.next();
-              if (jguy.number == current.number)
-              contains = true;
-              }
-              if (!contains)
-              System.out.println(current.number);
-              }
-      */
+      /*
+      for (Iterator h = allFets.iterator(); h.hasNext();) {
+      IntDoublePair current = (IntDoublePair) h.next();
+      boolean contains = false;
+
+      for (Iterator j = allFeatures.iterator(); j.hasNext();) {
+      IntDoublePair jguy = (IntDoublePair) j.next();
+      if (jguy.number == current.number)
+      contains = true;
+      }
+      if (!contains)
+      System.out.println(current.number);
+      } */// end debug code
+
+      Assert.assertTrue(allFeatures.size() == allFets.size(),
+                        "\nExpected number of features: "+allFeatures.size() +
+                        "\nActual number of features: "+allFets.size());
 
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
@@ -610,7 +548,7 @@ public final class FeatureExtractor {
     Integer counter = new Integer(0);
 
     //get a set of all Invariant classes
-    File top = new File("/PAG/g5/users/brun/research/invariants/daikon.ver3");
+    File top = new File(CLASSES);
     ArrayList classes = getInvariantClasses(top);
 
     for (int i = 0; i < classes.size(); i++) {
@@ -620,6 +558,14 @@ public final class FeatureExtractor {
       //handle the class
       counter = new Integer(counter.intValue() + 1);
       answer.put(currentClass, counter);
+
+      if (VarInfo.class.isAssignableFrom(currentClass)) {
+        for (int iC = 0; iC < NUM_VARS; iC++) {
+          counter = new Integer(counter.intValue() + 1);
+          answer.put("Var#"+iC+"_"+currentClass.getName()+"Bool", counter);
+        } //reserve space for all the variables
+      }
+
       //handle all the fields
       for (int j = 0; j < fields.length; j++) {
         if (answer.get(fields[j]) == null) {
@@ -631,8 +577,14 @@ public final class FeatureExtractor {
               name += "Bool";
             else
               name += "Float";
+
             counter = new Integer(counter.intValue() + 1);
             answer.put(name, counter);
+            if (VarInfo.class.isAssignableFrom(currentClass))
+              for (int iC = 0; iC < NUM_VARS; iC++) {
+                counter = new Integer(counter.intValue() + 1);
+                answer.put(iC + "_" + name, counter);
+              }
           }
         }
       }
@@ -651,6 +603,11 @@ public final class FeatureExtractor {
               name += "Float";
             counter = new Integer(counter.intValue() + 1);
             answer.put(name, counter);
+            if (VarInfo.class.isAssignableFrom(currentClass))
+              for (int iC = 0; iC < NUM_VARS; iC++) {
+                counter = new Integer(counter.intValue() + 1);
+                answer.put(iC + "_" + name, counter);
+              }
           }
         }
       }
@@ -671,7 +628,7 @@ public final class FeatureExtractor {
       name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
       name = name.replace('/', '.');
 
-      // have to remove the .ver2 or ver3 tags
+      // have to remove the .ver2 or .ver3 tags
       if (name.indexOf("ver2") > -1)
         name = name.substring(0, name.indexOf(".ver2")) +
           name.substring(name.indexOf(".ver2") + 5);
@@ -711,12 +668,10 @@ public final class FeatureExtractor {
 
   // Extract the features of inv using reflection,
   // return a Collection of these features in IntDoublePairs
-  private static Collection getReflectFeatures(Object inv, HashMap lookup)
+  private static TreeSet getReflectFeatures(Object inv, HashMap lookup)
     throws IllegalAccessException, InvocationTargetException {
-    ArrayList answer = new ArrayList();
+    TreeSet answer = new TreeSet();
     if (inv instanceof Invariant) {
-
-
       if (lookup.get(inv.getClass()) == null)
         throw new NullPointerException("Missing " + inv.getClass().getName() +
                                        " class in the lookup Map");
@@ -724,6 +679,16 @@ public final class FeatureExtractor {
                                     lookup.get(inv.getClass())).intValue(),1));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt, lookup));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt.var_infos,lookup));
+      VarInfo[] varInfos = ((Invariant) inv).ppt.var_infos;
+      for (int i = 0; i < varInfos.length; i++) {
+
+        for (Iterator it = getReflectFeatures(varInfos[i],lookup).iterator();
+             it.hasNext();) {
+          IntDoublePair current = (IntDoublePair) it.next();
+          answer.add(new IntDoublePair(current.number + i + 1, current.value));
+          answer.add(current);
+        }
+      }
     }
 
     Field[] fields = inv.getClass().getFields();
@@ -749,9 +714,19 @@ public final class FeatureExtractor {
                                           ).doubleValue()));
       }
     }
-    return answer;
-  }
 
+    //cleanup answer
+    TreeSet final_answer = new TreeSet();
+    HashSet index = new HashSet();
+    for (Iterator iter = answer.iterator(); iter.hasNext();) {
+      IntDoublePair current = (IntDoublePair) iter.next();
+      if (!(index.contains(new Integer(current.number))))
+        final_answer.add(current);
+      index.add(new Integer(current.number));
+    }
+
+    return final_answer;
+  }
 
   /*********************************************
    * This IntDoublePair represents a connected int and double.
@@ -780,6 +755,11 @@ public final class FeatureExtractor {
         return ((number == other.number) && (value == other.value));
       }
       else return false;
+    }
+
+    //returns a valid hashCode
+    public int hashCode() {
+      return number;
     }
 
     // Compares an Object to this
@@ -1094,6 +1074,10 @@ public final class FeatureExtractor {
 
   public static HashSet TYPES = new HashSet();
   public static HashSet BANNED_METHODS = new HashSet();
+  public static String CLASSES =
+    "/PAG/g5/users/brun/research/invariants/daikon.ver3";
+  public static int NUM_VARS = 8;
+
   static {
     TYPES.add(Boolean.TYPE);
     TYPES.add(Integer.TYPE);
