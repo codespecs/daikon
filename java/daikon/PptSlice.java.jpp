@@ -109,6 +109,10 @@ public final class PPTSLICE1
 #endif
     Dataflow.init_pptslice_po(this);
 
+    // 44 is used here because that's the most amount of values needed to be seen by some
+    // of the Invariants before they become justified
+    values_cache = new ValueTracker(44);
+
     /* [INCR]
     // values_cache = new HashMap();
     // values_order  = new Vector();
@@ -272,6 +276,51 @@ public final class PPTSLICE1
     Assert.assertTrue(result >= 0);
     return result;
   }
+
+  // Returns the number of distinct values stored in the ValueTracker
+  // of this (up to a maximum of 8
+  public int num_values() {
+    return this.values_cache.num_values();
+  }
+
+#if 0
+  This method is only used by LinearTernary
+#endif
+#if defined(ARITY3)
+  // Returns the number of distinct points seen
+  public int num_point_values() {
+    return this.values_cache.num_point_values();
+  }
+#endif
+
+#if 0
+  This method is only used by some twoSequence Invariants, like PairwiseIntComparison
+#endif
+#if defined(ARITY2)
+  // Returns the number of distinct array element values stored in
+  // this value tracker (only if the arrays are of equal length)
+  public int num_elt_values() {
+    return this.values_cache.num_elt_values();
+  }
+#endif
+
+#if 0
+  num_no_dup_values() is only used by NoDuplicates
+  num_seq_index_values() is only used by SeqIndexComparison
+#endif
+#if defined(ARITY1)
+  // Returns the number of arrays seen whose length was > 1
+  public int num_no_dup_values() {
+    return this.values_cache.num_no_dup_values();
+  }
+
+  // Returns the number of values seen as defined by
+  // SeqIndexComparison.  That is, each distinct pair
+  // (a[i], i) is considered a distinct value
+  public int num_seq_index_values() {
+    return this.values_cache.num_seq_index_values();
+  }
+#endif
 
   public int num_mod_non_missing_samples() {
 #if defined(ARITY1)
@@ -492,6 +541,7 @@ public final class PPTSLICE1
     if (rep_is_scalar) {
       // long value = vi1.getIntValue(full_vt);
       long value = ((Long) val1).longValue();
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.get(i);
         if (inv.falsified) continue;
@@ -502,6 +552,7 @@ public final class PPTSLICE1
     } else if (rep == ProglangType.DOUBLE) {
       // double value = vi1.getDoubleValue(full_vt);
       double value = ((Double) val1).doubleValue();
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);
         if (inv.falsified) continue;
@@ -511,6 +562,7 @@ public final class PPTSLICE1
     } else if (rep == ProglangType.STRING) {
       // String value = vi1.getStringValue(full_vt);
       String value = (String) val1;
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.get(i));
         SingleString inv = (SingleString) invs.get(i);
@@ -521,6 +573,7 @@ public final class PPTSLICE1
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
       // double[] value = vi1.getDoubleArrayValue(full_vt);
       double[] value = (double[]) val1;
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
         if (inv.falsified) continue;
@@ -530,6 +583,7 @@ public final class PPTSLICE1
     } else if (rep == ProglangType.INT_ARRAY) {
       // long[] value = vi1.getIntArrayValue(full_vt);
       long[] value = (long[]) val1;
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         SingleScalarSequence inv = (SingleScalarSequence)invs.get(i);
         if (inv.falsified) continue;
@@ -538,6 +592,7 @@ public final class PPTSLICE1
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
+      values_cache.add(value);
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.get(i);
         if (inv.falsified) continue;
@@ -560,6 +615,7 @@ public final class PPTSLICE1
     if (string1 && string2) {
       String value1 = (String) val1;
       String value2 = (String) val2;
+      values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.get(i);
         if (inv.falsified) continue;
@@ -573,6 +629,7 @@ public final class PPTSLICE1
       // long value2 = vi2.getIntValue(full_vt);
       long value1 = ((Long) val1).longValue();
       long value2 = ((Long) val2).longValue();
+      values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.get(i);
         if (inv.falsified) continue;
@@ -582,6 +639,7 @@ public final class PPTSLICE1
     } else if (vi1.rep_type==ProglangType.DOUBLE && vi2.rep_type==ProglangType.DOUBLE) {
       double value1 = ((Double) val1).doubleValue();
       double value2 = ((Double) val2).doubleValue();
+      values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         TwoFloat inv = (TwoFloat)invs.get(i);
         inv.add(value1, value2, mod_index, count);
@@ -589,6 +647,7 @@ public final class PPTSLICE1
     } else if (vi1.rep_type==ProglangType.DOUBLE_ARRAY && vi2.rep_type==ProglangType.DOUBLE_ARRAY) {
       double[] value1 = (double[]) val1;
       double[] value2 = (double[]) val2;
+      values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         TwoSequenceFloat inv = (TwoSequenceFloat)invs.get(i);
         inv.add(value1, value2, mod_index, count);
@@ -596,6 +655,7 @@ public final class PPTSLICE1
     } else if (vi1.rep_type==ProglangType.DOUBLE && vi2.rep_type==ProglangType.DOUBLE_ARRAY) {
       double value1 = ((Double) val1).doubleValue();
       double[] value2 = (double[]) val2;
+      values_cache.add(value2, value1);
       for (int i=0; i<num_invs; i++) {
         SequenceFloat inv = (SequenceFloat)invs.get(i);
         inv.add(value2, value1, mod_index, count);
@@ -603,6 +663,7 @@ public final class PPTSLICE1
    }   else if (vi1.rep_type==ProglangType.DOUBLE_ARRAY && vi2.rep_type==ProglangType.DOUBLE) {
         double[] value1 = (double[]) val1;
         double value2 = ((Double) val2).doubleValue();
+        values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         SequenceFloat inv = (SequenceFloat)invs.get(i);
         inv.add(value1, value2, mod_index, count);
@@ -611,6 +672,7 @@ public final class PPTSLICE1
     } else if (array1 && (!array2)) {
       long[] seqval = (long[]) val1;
       long sclval = ((Long) val2).longValue();
+      values_cache.add(seqval, sclval);
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
         if (inv.falsified) continue;
@@ -620,6 +682,7 @@ public final class PPTSLICE1
     } else if ((!array1) && (array2)) {
       long[] seqval = (long[]) val2;
       long sclval = ((Long) val1).longValue();
+      values_cache.add(seqval, sclval);
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
         if (inv.falsified) continue;
@@ -629,11 +692,15 @@ public final class PPTSLICE1
     } else if (array1 && array2 && !stringArray1 && !stringArray2) {
       long[] value1 = (long[]) val1;
       long[] value2 = (long[]) val2;
+      values_cache.add(value1, value2);
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
         inv.add(value1, value2, mod_index, count);
+        if (Debug.logDetail())
+          inv.log ("Seeing values " + ArraysMDE.toString(value1) + "," + ArraysMDE.toString(value2) +
+                   " num_values()==" + num_values() + ", num_elt_values()==" + num_elt_values());
       }
     } else {
       throw new Error("impossible");
@@ -652,6 +719,7 @@ public final class PPTSLICE1
       long value1 = ((Long) val1).longValue();
       long value2 = ((Long) val2).longValue();
       long value3 = ((Long) val3).longValue();
+      values_cache.add(value1, value2, value3);
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.get(i);
         if (inv.falsified) continue;
@@ -664,6 +732,7 @@ public final class PPTSLICE1
       double value1 = ((Double) val1).doubleValue();
       double value2 = ((Double) val2).doubleValue();
       double value3 = ((Double) val3).doubleValue();
+      values_cache.add(value1, value2, value3);
       for (int i = 0; i < invs.size(); i++) {
         ThreeFloat inv = (ThreeFloat) invs.get(i);
         inv.add(value1, value2, value3, mod_index, count);
@@ -1066,6 +1135,7 @@ public final class PPTSLICE1
         }
       }
     }
+
     // Assert sorted
     for (int i = 0; i < arity - 1; i++) {
       Assert.assertTrue (newVarInfos[i].varinfo_index <= newVarInfos[i+1].varinfo_index);
@@ -1086,11 +1156,12 @@ public final class PPTSLICE1
     // preserved
     PPTSLICE1 result = new PPTSLICE1 (this.parent, newVarInfos);
 
-
     // Set sample counts
     for (int i = 0; i < tm_total.length; i++) {
       result.tm_total[i] = this.tm_total[i];
     }
+    // Set ValueTracker
+    result.values_cache = (ValueTracker) this.values_cache.clone();
 
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();

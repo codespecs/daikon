@@ -44,7 +44,7 @@ public class Debug {
       // "PptSliceEquality",
       // "PairwiseIntLessEqual", "PairwiseIntGreaterEqual",
       // "SeqSeqIntEqual",
-      "NoDuplicates",
+      "SeqIndexComparison"
     };
 
   /**
@@ -58,8 +58,18 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
-      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
-      "kataoka.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER"
+      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
+      // "misc.Dataflow.B.m2():::EXIT24"
+      // "unionCareful(int, int):::EXIT"
+      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
+      // "MapQuick1.StreetNumberSet:::OBJECT",
+      // "MapQuick1.StreetNumberSet.max():::EXIT",
+      // "DataStructures.DisjSets.DisjSets(int):::EXIT"
+      // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
+      // "misc.StaticInteresting:::OBJECT"
+      "MapQuick1.StreetNumberSet.min():::EXIT"
+      // "DataStructures.StackAr.pop():::EXIT"
+      // "DataStructures.DisjSets.find(int):::EXIT70"
     };
 
   /**
@@ -74,9 +84,27 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      //{ "size(p.terms.wrapped[])", "size(this.terms.wrapped[])-1" },
-      //{ "size(this.terms.wrapped[])-1" , "size(p.terms.wrapped[])"},
-      {"list[]" },
+      // { "this.topOfStack" },
+      // { "this.x"}
+      // { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
+      // { "this.s[orig(set1)..]", "orig(this.s[post(set1)..])" },
+      // { "orig(this.s[post(set1)..])" },
+      // { "this.s[orig(set1)..]" },
+      // { "other.begins[]", "other.ends[]" },
+      // { "other.ends[]", "other.begins[]" },
+      // { "this.begins[]", "this.ends[]" },
+      // { "this.ends[]", "this.begins[]" },
+      // { "this.begins[return..]", "this.ends[return..]" },
+      // { "this.ends[return..]" , "this.begins[return..]"}
+      // { "orig(this.s[post(x)])", "this.s[return]" },
+      // { "this.s[return]", "orig(this.s[post(x)])" }
+      // { "orig(pegB)", "return", "orig(pegA)" },
+      // { "orig(pegB)", "orig(pegA)", "return" },
+      // { "return", "orig(pegB)", "orig(pegA)" },
+      // { "return", "orig(pegA)", "orig(pegB)" },
+      // { "orig(pegA)", "return", "orig(pegB)" },
+      // { "orig(pegA)", "orig(pegB)", "return" }
+      { "this.ends[0..return-1]" }
     };
 
   // cached standard parts of the debug print so that multiple calls from

@@ -2001,7 +2001,6 @@ public class PptTopLevel
     return result;
   }
 
-
   /* [INCR] ... We can't know this anymore
   // Set the dynamic_constant slots of all the new variables.
   void set_dynamic_constant_slots(Vector unary_views) {

@@ -111,7 +111,7 @@ public abstract class PptSlice
 
   // This holds keys (interned) and elements of different types, depending on
   // the concrete child of PptSlice.
-  // HashMap values_cache; // [INCR]
+  ValueTracker values_cache; // [INCR]
   // Vector  values_order; // [INCR]
 
   /* [INCR]
@@ -128,7 +128,7 @@ public abstract class PptSlice
   // already in the values_cache; so add() should not add its arguments to
   // values_cache.
   public boolean already_seen_all = false;
-  */ // ... [INCR]
+  //... [INCR] */
 
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
@@ -648,7 +648,7 @@ public abstract class PptSlice
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
   public abstract int num_mod_non_missing_samples();
-  // [INCR] public abstract int num_values();
+  public abstract int num_values();
   public abstract String tuplemod_samples_summary();
 
   boolean check_modbits () {

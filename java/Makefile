@@ -157,6 +157,8 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/SubSequenceFloat.java \
 	daikon/inv/binary/twoSequence/SubSet.java \
 	daikon/inv/binary/twoSequence/SubSetFloat.java \
+	daikon/inv/binary/twoSequence/SuperSet.java \
+	daikon/inv/binary/twoSequence/SuperSetFloat.java \
 	daikon/inv/binary/twoSequence/PairwiseIntEqual.java \
 	daikon/inv/binary/twoSequence/PairwiseIntLessThan.java \
 	daikon/inv/binary/twoSequence/PairwiseIntGreaterThan.java \
@@ -884,10 +886,16 @@ daikon/inv/binary/twoSequence/SubSequenceFloat.java: daikon/inv/binary/twoSequen
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoSequence/SubSet.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
+	$(JAVA_CPP:DEFINEDVAR=SUB)
 
 daikon/inv/binary/twoSequence/SubSetFloat.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+	$(JAVA_CPP:DEFINEDVAR=SUBFLOAT)
+
+daikon/inv/binary/twoSequence/SuperSet.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SUP)
+
+daikon/inv/binary/twoSequence/SuperSetFloat.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SUPFLOAT)
 
 daikon/inv/binary/twoSequence/PairwiseIntEqual.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=EQUAL)

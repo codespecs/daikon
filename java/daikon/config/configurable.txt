@@ -50,6 +50,7 @@ daikon.inv.binary.twoSequence.SeqSeqIntLessEqual.enabled
 daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual.enabled
 daikon.inv.binary.twoSequence.SubSequence.enabled
 daikon.inv.binary.twoSequence.SubSet.enabled
+daikon.inv.binary.twoSequence.SuperSet.enabled
 daikon.inv.binary.twoString.StringComparison.enabled
 daikon.inv.ternary.threeScalar.FunctionBinary.enabled
 daikon.inv.ternary.threeScalar.LinearTernary.enabled
