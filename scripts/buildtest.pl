@@ -12,7 +12,7 @@ use Cwd;
 
 # Process the command-line args
 my $usage = "Usage: buildtest.pl [--quiet]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n;
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These three flags permit only part of the tests to be run; good for debugging.
