@@ -249,7 +249,7 @@ public abstract class Invariant
    * Essentially the same as flow(this).  Useful way to flow oneself
    * without much hassle (as long as internal state is still OK).
    * Nice point of control in case we later have to tweak things when
-   * flowing outselves.
+   * flowing ourselves.
    **/
   public void flowThis() {
     flow(this);
