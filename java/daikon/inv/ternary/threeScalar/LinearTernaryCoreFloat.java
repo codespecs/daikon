@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import org.apache.log4j.Category;
 
-public final class LinearTernaryCoreFloat
+public final class LinearTernaryCoreFloat 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -20,7 +20,7 @@ public final class LinearTernaryCoreFloat
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat");
+  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar." + "LinearTernaryCoreFloat" );
 
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a, b, c;
@@ -131,7 +131,7 @@ public final class LinearTernaryCoreFloat
             // I should permit a fudge factor here.
             if (z_cache[i] != a*x_cache[i]+b*y_cache[i]+c) {
               if (debug.isDebugEnabled()) {
-                debug.debug("Suppressing LinearTernaryCoreFloat at index " + i + ": "
+                debug.debug("Suppressing " + "LinearTernaryCoreFloat"  + " at index " + i + ": "
                             + z_cache[i] + " != "
                             + a + "*" + x_cache[i]
                             + "+" + b + "*" + y_cache[i] + "+" + c);
@@ -147,7 +147,7 @@ public final class LinearTernaryCoreFloat
       // Check the new value against a, b, and c.
       if (z != a*x+b*y+c) {
         if (debug.isDebugEnabled()) {
-          debug.debug("Suppressing LinearTernaryCoreFloat at new value: "
+          debug.debug("Suppressing " + "LinearTernaryCoreFloat"  + " at new value: "
                       + z + " != " + a + "*" + x + "+" + b + "*" + y + "+" + c + " = " + (a*x+b*y+c));
         }
         wrapper.flowThis();
@@ -251,7 +251,7 @@ public final class LinearTernaryCoreFloat
                                 + z2 * (x0 * y1 - x1 * y0));
     if (denominator == 0) {
       if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing LinearTernaryCoreFloat due to zero denominator.");
+        debug.debug("Suppressing " + "LinearTernaryCoreFloat"  + " due to zero denominator.");
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -263,7 +263,7 @@ public final class LinearTernaryCoreFloat
       c = c_numerator / denominator;
     } catch (Exception e) {
       if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing LinearTernaryCoreFloat due to exception.");
+        debug.debug("Suppressing " + "LinearTernaryCoreFloat"  + " due to exception.");
       }
       wrapper.flowThis();
       wrapper.destroy();

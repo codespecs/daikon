@@ -7,8 +7,8 @@ import daikon.inv.Invariant;
 import java.lang.reflect.*;
 import org.apache.log4j.Category;
 
-public class FunctionBinary
-  extends ThreeScalar
+public class FunctionBinary 
+  extends ThreeScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -22,7 +22,7 @@ public class FunctionBinary
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinary");
+  public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar." + "FunctionBinary" );
 
   public FunctionBinaryCore  core;
 
@@ -40,7 +40,7 @@ public class FunctionBinary
       VarInfo arg1 = ppt.var_infos[indices[1]];
       VarInfo arg2 = ppt.var_infos[indices[2]];
       if (debug.isDebugEnabled())
-        debug.debug("FunctionBinary.instantiate(" + ppt.name + ", "
+        debug.debug("FunctionBinary"  + ".instantiate(" + ppt.name + ", "
                     + methodname + " (#" + methodNumber + "), "
                     + argresult.name + "="
                     + "f(" + arg1.name + "," + arg2.name + ")");
@@ -57,7 +57,7 @@ public class FunctionBinary
     VarInfo arg1 = ppt.var_infos[indices[1]];
     VarInfo arg2 = ppt.var_infos[indices[2]];
     if (resultvar.isConstant() || (arg1.isConstant() && arg2.isConstant())) {
-      debug.debug("FunctionBinary.instantiate: both args are constant");
+      debug.debug("FunctionBinary"  + ".instantiate: both args are constant");
       Global.subexact_noninstantiated_invariants++;
       return null;
     }

@@ -7,7 +7,7 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
-public abstract class ThreeFloat
+public abstract class ThreeFloat 
   extends Invariant
 {
   // We are Serializable, so we specify a version to allow changes to

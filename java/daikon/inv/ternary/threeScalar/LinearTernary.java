@@ -9,8 +9,8 @@ import daikon.derive.binary.*;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearTernary
-  extends ThreeScalar
+public class LinearTernary 
+  extends ThreeScalar 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -55,9 +55,9 @@ public class LinearTernary
     VarInfo x_summand = null;
     VarInfo y_summand = null;
     VarInfo z_summand = null;
-    if (x.derived instanceof SequenceSum) x_summand = ((SequenceSum) x.derived).base;
-    if (y.derived instanceof SequenceSum) y_summand = ((SequenceSum) y.derived).base;
-    if (z.derived instanceof SequenceSum) z_summand = ((SequenceSum) z.derived).base;
+    if (x.derived instanceof SequenceSum ) x_summand = ((SequenceSum) x.derived).base;
+    if (y.derived instanceof SequenceSum ) y_summand = ((SequenceSum) y.derived).base;
+    if (z.derived instanceof SequenceSum ) z_summand = ((SequenceSum) z.derived).base;
 
     if ((x_summand != null) && (y_summand != null) && (z_summand != null)) {
       // all 3 of x, y, and z are "sum(...)"
@@ -94,7 +94,7 @@ public class LinearTernary
           if (debugLinearTernary) {
             System.out.println("considering: " + summand.name + " " + vi.name);
           }
-          if (summand.derived instanceof SequenceScalarSubsequence) {
+          if (summand.derived instanceof SequenceScalarSubsequence ) {
             SequenceScalarSubsequence  sss = (SequenceScalarSubsequence) summand.derived;
             if (sss.from_start) {
               part1 = sss;
@@ -156,7 +156,7 @@ public class LinearTernary
       partb = ((SequenceSum) partb.derived).base;
       VarInfo seq = null;
       VarInfo eltindex = null;
-      if (notpart.derived instanceof SequenceScalarSubscript) {
+      if (notpart.derived instanceof SequenceScalarSubscript ) {
         SequenceScalarSubscript  sss = (SequenceScalarSubscript) notpart.derived;
         seq = sss.seqvar();
         eltindex = sss.sclvar();
@@ -189,7 +189,7 @@ public class LinearTernary
 
     LinearTernary  result = new LinearTernary (ppt);
     if (debugLinearTernary) {
-      System.out.println("LinearTernary.instantiate: " + result.repr());
+      System.out.println("LinearTernary"  + ".instantiate: " + result.repr());
     }
     return result;
   }
@@ -252,7 +252,7 @@ public class LinearTernary
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof LinearTernary) {
+    if (other instanceof LinearTernary ) {
       return core.isExclusiveFormula(((LinearTernary) other).core);
     }
     return false;
@@ -263,7 +263,7 @@ public class LinearTernary
     Assert.assertTrue(ppt.arity == 3);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LinearTernary)
+      if (inv instanceof LinearTernary )
         return (LinearTernary) inv;
     }
     return null;
