@@ -1,6 +1,5 @@
 Version:      $Id$
-Owner:        scruffy@lcs.mit.edu
-Cc:           mharder <mharder@lcs.mit.edu>
+Owner:        scruffy@lcs.mit.edu, mharder <mharder@lcs.mit.edu>
 Tool:         lh
 Summary:      lh has bug with "_element" and "_index" for struct pointers
 Severity:     Vexing
@@ -23,8 +22,14 @@ To reproduce, run lh on the lackwit-structs.c test.  Look at
 lackwit-structs.int.c, and compare struct_ptr_field_assign and
 call_struct_ptr_field_assign to int_ptr and call_int_ptr.
 
+[mharder]
+This seems to be fixed.  Closing.
+
 --
 $Log$
-Revision 1.1  2002-04-20 21:03:40  mharder
+Revision 1.2  2002-05-02 15:22:57  mharder
+changed bug0044
+
+Revision 1.1  2002/04/20 21:03:40  mharder
 new bug0044
 
