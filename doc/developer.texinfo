@@ -727,7 +727,7 @@ situations.  The following instructions only apply to MIT, but the tool
 is shipped in the scripts directory and can easily be setup elsewhere
 as well.
 
-Use the URL @uref{http://pag/daikon/mit/log2html.php} to access log2html.
+Use the URL @uref{http://pag.csail.mit.edu/daikon/mit/log2html.php} to access log2html.
 It will ask you for a file of daikon output.  One good way to create this
 file is to use the tee command.  For example:
 
@@ -849,15 +849,10 @@ may choose not to print invariants such as ``a[i..] < b[j..]'' even
 though ``a[] == b[]'' does not imply anything about the truth of
 ``a[i..] < b[j..]''.
 
-More detail can be found in two theses.  See Chapter 7,
-``Scalability'', of @cite{Automatic Generation and Checking of Program
-Specifications} (Technical report MIT-LCS-TR-852, at
-@uref{http://pag.csail.mit.edu/~mistere/pubs/thesis-abstract.html}),
-Jeremy W. Nimmer's Master's thesis.  Also see Chapter 5, ``Enabling
-Incremental Dynamic Invariant Detection'', of @cite{Theorem-proving
-distributed algorithms with dynamic analysis}
-(@uref{http://pag.csail.mit.edu/pubs/thmprove-newin-mengthesis-abstract.html}),
-Toh Ne Win's Master's thesis.
+More detail can be found in the paper ``Efficient incremental algorithms
+for dynamic detection of likely invariants'' by Jeff H. Perkins and
+Michael D. Ernst, published in FSE 2004; the paper is available from
+@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-fse2004-abstract.html}.
 
 
 @menu
