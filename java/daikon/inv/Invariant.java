@@ -551,6 +551,14 @@ public abstract class Invariant
     result.ppt = ppt;
     result.log ("Merged '" + result.format() + "' from " + invs.size()
                 + " child invariants");
+
+    // Make sure that each invariant was really of the same type
+    if (Assert.enabled) {
+      Match m = new Match (result);
+      for (int i = 1; i < invs.size(); i++ )
+        Assert.assertTrue (m.equals (new Match ((Invariant) invs.get(i))));
+    }
+
     return (result);
 
   }
@@ -1771,6 +1779,42 @@ public abstract class Invariant
       return result;
     }
   }
+
+  /**
+   * Class used as a key to store invariants in a MAP where their
+   * equality depends on the invariant representing the same invariant
+   * (ie, their class is the same) and the same internal state (when
+   * multiple invariants with the same class are possible)
+   *
+   * Note that this is based on the Invariant type (ie, class) and the
+   * internal state and not on what ppt the invariant is in or what
+   * variables it is over.  Thus, invariants from different ppts are
+   * the same if they represent the same type of invariant.
+   */
+  public static class Match {
+
+    public Invariant inv;
+
+    public Match (Invariant inv) {
+      this.inv = inv;
+    }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof Match))
+        return (false);
+
+      Match ic = (Match) obj;
+      if (ic.inv.getClass() ==  inv.getClass())
+        return (inv.mergeFormulasOk() || inv.isSameFormula (ic.inv));
+      else
+        return (false);
+    }
+
+    public int hashCode() {
+      return (inv.getClass().hashCode());
+    }
+  }
+
 
   // This function creates a guarding predicate for a given invariant
   public Invariant createGuardingPredicate() {
