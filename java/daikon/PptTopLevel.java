@@ -191,9 +191,9 @@ public class PptTopLevel extends Ppt {
   public String toString() {
     PptName pptName = new PptName( name );
     if (pptName.isObjectInstanceSynthetic())   // display "Sort : OBJECT"
-	return pptName.getFullClassName() + " : " + FileIO.class_static_suffix;
-    else if (pptName.isClassStaticSynthetic()) // display "Sort : CLASS"
 	return pptName.getFullClassName() + " : " + FileIO.object_suffix;
+    else if (pptName.isClassStaticSynthetic()) // display "Sort : CLASS"
+	return pptName.getFullClassName() + " : " + FileIO.class_static_suffix;
     else			               // only display "EXIT184"
 	return pptName.getPoint();
   }
