@@ -145,7 +145,6 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
       }
       return true;
     }
-    // Many more checks can be added here:  against nonzero, modulus, etc.
 
     return false;
   }

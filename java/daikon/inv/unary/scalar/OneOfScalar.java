@@ -178,7 +178,11 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       }
       return true;
     }
+
     // Many more checks can be added here:  against nonzero, modulus, etc.
+    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
+      return true;
+    }
 
     return false;
   }

@@ -144,7 +144,6 @@ public final class OneOfString  extends SingleString  implements OneOf {
       }
       return true;
     }
-    // Many more checks can be added here:  against nonzero, modulus, etc.
 
     return false;
   }

@@ -147,7 +147,6 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       }
       return true;
     }
-    // Many more checks can be added here:  against nonzero, modulus, etc.
 
     return false;
   }
