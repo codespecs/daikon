@@ -2674,8 +2674,8 @@ public class PptTopLevel
     // This is not turned on for now since suppressions need invariants
     // of the form a == a even when a is the only item in the set.
     if (false) {
-      if ((var1 == var2) && (var1.equalitySet.size() == 1))
-        return (false);
+		if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
+       		return (false);
     }
 
     return (true);
@@ -2766,15 +2766,15 @@ public class PptTopLevel
 
     // Don't create a reflexive slice (all vars the same) if there are
     // only two vars in the equality set
-    if ((v1 == v2) && (v2 == v3) && (v1.equalitySet.size() <= 2))
+    if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2))
       return (false);
 
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
     if (false) {
-      if ((v1 == v2) || (v1 == v3) && (v1.equalitySet.size() == 1))
+      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
         return (false);
-      if ((v2 == v3) && (v2.equalitySet.size() == 1))
+      if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
         return (false);
     }
 
@@ -5338,6 +5338,14 @@ public class PptTopLevel
         }
       }
     }
+  }
+  
+  /**
+	* Increments the number of samples processed by the program point by 1
+	*/
+  //added by Chen 6/14/04 for use with the simple incremental algorithm
+  public void incSampleNumber() {
+	values_num_samples++;
   }
 
 }
