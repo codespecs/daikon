@@ -3,7 +3,31 @@
 ;; file or load it from your .emacs file.
 
 (add-hook 'c-mode-hook 'c-set-basic-offset)
+(add-hook 'java-mode-hook 'c-set-basic-offset)
 
+; from util-mde.el
+;; I haven't tested this one, but it is probably faster than Potter's version.
+;; From: huttar@hp750.itg.ti.com (Lars Huttar)
+(defun looking-back-at (regexp)
+  "t when text before point matches regular expression REGEXP."
+  (save-excursion
+    (let ((old-point (point))
+          (found (re-search-backward regexp (point-min) t)))
+      (and found (= (match-end 0) old-point)))))
+
+; from prog-modes-mde.el
+(defun set-tab-stop-list-width (n)
+  "Set tab width in current buffer to N.
+Interactively, it's probably better to just set variable `tab-width'."
+  (interactive "P")
+  (if (not (numberp n))
+      (error "Supply explicit numeric prefix argument to `set-tab-stop-list-width'"))
+  (setq tab-stop-list '())
+  ;; was 120, not big enough
+  (let ((i (* (/ 500 n) n)))
+    (while (> i 0)
+      (setq tab-stop-list (cons i tab-stop-list)
+	    i (- i n)))))
 
 (defvar c-basic-offset-default 2
   "Default value used by `c-set-basic-offset'.
