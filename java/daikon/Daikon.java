@@ -22,17 +22,6 @@ import utilMDE.*;
 
 public final class Daikon {
 
-  private static void show_banner() {
-    System.err.
-      print("**************************************************\n" +
-            "*                     WARNING                    *\n" +
-            "**************************************************\n" +
-            "* You are using the REDESIGN version (V3) of the *\n" +
-            "* Daikon engine. Make sure this is what you want.*\n" +
-            "**************************************************\n");
-    System.err.flush();
-  }
-
   public final static String release_version = "3.0.0";
   public final static String release_date = "January 1, 1970";
   public final static String release_string
@@ -310,8 +299,6 @@ public final class Daikon {
    **/
   public static void main(String[] args)
   {
-    show_banner();
-
     // Read command line options
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
