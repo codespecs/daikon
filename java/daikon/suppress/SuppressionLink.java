@@ -20,7 +20,11 @@ import utilMDE.MathMDE;
  * this becomes destroyed and the suppressed invariant is rechecked.
  * If the suppressee is actually still suppressed by the suppressor,
  * then a new SuppressionLink must be made.  For full documentation,
- * see this package's doc.
+ * see this package's doc.  The multiplicity of SuppressionLinks: each
+ * Invariant has one or zero suppressors (which are SuppressionLinks)
+ * active, and any number of suppresses (also SuppressionLinks).  Each
+ * SuppressionLink is connected to exactly ONE invariant on each side.
+ * That is, SuppressionLinks are not shared between invariants.
  **/
 
 public class SuppressionLink implements Serializable {
