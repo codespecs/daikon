@@ -1493,8 +1493,10 @@ public final class ONEOFSCALAR
 #endif
 #if defined(IS_ELT)
   }
+#else
+  }
+#endif
   */
-
 
 #if defined(IS_ELT)
 
