@@ -152,7 +152,7 @@ The following commands create and populate the
     cd ~/research
     fs sa -d . .. -a pag-admin rl
     fs sa -d . .. -a pag rl
-    cvs -d /afs/csail/group/pag/projects/invariants/.CVS co invariants
+    cvs -d $pag/projects/invariants/.CVS co invariants
     cd invariants
     cp -p doc/www/mit/Makefile.user java/
     cd ~/research/invariants
@@ -173,6 +173,8 @@ use this command:
 <pre>
     cd ~/research/invariants
     cvs -d $pag/projects/invariants/.CVS co dfej
+    cd dfej
+    ./configure
 </pre>
 
 You may also want the <tt>papers</tt> directory:
@@ -433,21 +435,21 @@ target.
 
 <ol>
 
-    <li> It is suggested that you use the daikongroupmember account to
+    <li> It is suggested that you use the daikonuser account to
     publish a distribution.  This ensures that everything has been committed
     to CVS and that nothing extraneous in your account gets included in the
     distribution.  Ask Michael Ernst for the password.  Note that all of
     the following instructions should work from other accounts as 
     well <p>
 
-    <code> su - daikongroupmember </code> <p>
+    <code> su - daikonuser </code> <p>
 
-    <li> Update daikon in daikongroupmember to the most recent version
+    <li> Update daikon in daikonuser to the most recent version
     of V3. <p>
 
     <code> 
         cd $inv <br>
-        make use-ver3 <br>
+        <!-- make use-ver3 <br> -->
         cvs -q update -d  <br>
     </code> <p>
 
