@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-07-14 17:35:30 mernst>
+# Time-stamp: <2002-11-23 15:10:12 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -152,13 +152,16 @@ sub unescape_comments ( $ ) {
     # Convert string concatenation ("a" + "b") single string ("ab").
     while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
     # Remove "# 22" lines.
-    s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/;
+    s/^\# [0-9]+ ".*"($|\n)//g;	# don't leave blank line at start of file
+    s/(\n)\# [0-9]+ ".*"($|\n)/$1$2/g;
 
     ## Remove extra horizontal space
+    ## (Some of these are cosmetic; others are necessary to get identical
+    ## output under all versions of cpp.)
     # Remove all trailing space
     s/[ \t]+\n/\n/g;
     # Remove space after package name
-    s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
+    s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/g;
     # Remove all extra spaces in import list
     while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
     # convert " );" to ");"; requires "=" somewhere earlier in line
@@ -172,6 +175,11 @@ sub unescape_comments ( $ ) {
     s/(\b[A-Za-z]\w*)\. ([a-z]\w*) \(/$1.$2\(/g;
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
+    ## These are necessary to work around cpp differences
+    # convert "new int[2 ]" to "new int[2]"
+    s/(\bnew [a-z]+\[\w+) *(\])/$1$2/g;
+    # convert "public PptSlice1 (" to "public PptSlice1("
+    s/(^ *public \w+) (\()/$1$2/g;
 
     ## Remove extra vertical space
     # compress out duplicate blank lines
