@@ -15,7 +15,7 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl dtype-perl \
-	kvasir-dfec \
+	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
@@ -307,6 +307,8 @@ update-doc-dist-date:
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/developer.texinfo
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/dfec-v2/memcheck/mc_main.c
+	cvs ci -m "Update version number for new Daikon distribution" kvasir/dfec-v2/memcheck/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
