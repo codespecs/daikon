@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of likely invariants
- * using the simple incremental algorithm.  
+ * using the simple incremental algorithm.
  */
 public class DaikonSimple {
 
@@ -27,7 +27,7 @@ public class DaikonSimple {
 
 	//inv file for storing the invariants in serialized form
 	public static File inv_file = null;
-	
+
 	private static String usage =
 		UtilMDE.join(
 			new String[] {
@@ -56,7 +56,6 @@ public class DaikonSimple {
 		//no optimizations used in the simple incremental algorithm
 		Daikon.use_equality_optimization = false;
 		Daikon.dkconfig_use_dynamic_constant_optimization = false;
-		Daikon.dkconfig_use_suppression_optimization = false;
 		Daikon.suppress_implied_controlled_invariants = false;
 		NIS.dkconfig_enabled = false;
 
@@ -79,12 +78,12 @@ public class DaikonSimple {
 
 		PptMap all_ppts = FileIO.read_declaration_files(decls_files);
 
-		//	adding orig and derived variables                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+		//	adding orig and derived variables
 		init_partial_order(all_ppts);
 		if (debug.isLoggable(Level.FINE)) {
 			debug.fine("Partial order initialized");
 		}
-		
+
 		// Read and process the data trace files
 		SimpleProcessor processor = new SimpleProcessor();
 		FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
@@ -97,20 +96,20 @@ public class DaikonSimple {
 
 		while (t.hasNext()) {
 			PptTopLevel ppt = (PptTopLevel) t.next();
-			
+
 			if (ppt.num_samples() != 0) {
 				List invs =	PrintInvariants.sort_invariant_list(ppt.invariants_vector());
 				Iterator i = invs.iterator();
-			
+
 
 				if(Daikon.dkconfig_quiet) {
 				System.out.println("====================================================");
 				System.out.println(ppt.name());
 				} else {
-				System.out.println("===================================================+");					
+				System.out.println("===================================================+");
 				System.out.println(ppt.name() + " +");
 				}
-				System.out.println(ppt.num_samples());				
+				System.out.println(ppt.num_samples());
 				while (i.hasNext()) {
 					Invariant x = (Invariant) i.next();
 					VarInfo[] vars = x.ppt.var_infos;
@@ -120,7 +119,7 @@ public class DaikonSimple {
 					if (!((x.ppt instanceof PptSlice2)
 						&& vars[0] == vars[1])) {
 
-						//filter out the reflexive and partially reflexive invs in the 
+						//filter out the reflexive and partially reflexive invs in the
 						//ternary slices
 						if (!((x.ppt instanceof PptSlice3)
 							&& (vars[0] == vars[1]
@@ -128,7 +127,7 @@ public class DaikonSimple {
 								|| vars[0] == vars[2]))) {
 							if (x.ppt.num_values() != 0) {
 								if(x.isActive()) {
-								
+
 								System.out.println(x.getClass());
 								System.out.println(x);
 								}
@@ -139,10 +138,10 @@ public class DaikonSimple {
 			}
 		}
 
-	
-		//				
+
+		//
 		// Write serialized output
-		// Unresolved problem: the current implementation of PrintInvariants, taking 
+		// Unresolved problem: the current implementation of PrintInvariants, taking
 		//in an inv file will guard the invariants before printing them out but this problem
 		//can be resolved by turning the configuration on (Daikon.dkconfig_noInvariantGuarding)
 		//however, this does not solve the problem that PrintInvariants uses invariant filtering
@@ -517,7 +516,7 @@ public class DaikonSimple {
 							|| ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
 					Assert.assertTrue((i1 <= i2) && (i2 <= i3));
 					VarInfo var3 = ppt.var_infos[i3];
-					//			System.out.println("var3: " + var3);	
+					//			System.out.println("var3: " + var3);
 
 					//	System.out.println(ppt.name);
 					//	System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
@@ -632,15 +631,15 @@ public class DaikonSimple {
 		//
 		//	   // Each variable must be canonical (leader)
 		//	   if (!v1.isCanonical()) {
-		//		 
+		//
 		//		 return (false);
 		//	   }
 		//	   if (!v2.isCanonical()) {
-		//		 
+		//
 		//		 return (false);
 		//	   }
 		//	   if (!v3.isCanonical()) {
-		//		
+		//
 		//		 return (false);
 		//	   }
 
@@ -696,7 +695,7 @@ public class DaikonSimple {
 
 		return (true);
 	}
-	
+
 	/** Class to track matching ppt and its values. */
 	 static final class EnterCall {
 
@@ -709,13 +708,13 @@ public class DaikonSimple {
 		 this.vt = vt;
 	   }
 	 }
-	 
+
 	private static class SimpleProcessor extends FileIO.Processor {
 		PptMap all_ppts = null;
-		
+
 		/** nonce -> EnterCall **/
 		  Map call_map = new LinkedHashMap();
-		
+
 		/**
 		 * process the sample by checking it against each existing invariant
 		 * and removing the invariant from the list of possibles if any invariant is falsified.
@@ -733,7 +732,7 @@ public class DaikonSimple {
 
 			// Intern the sample
 			vt = new ValueTuple(vt.vals, vt.mods);
-			
+
 			// If this is an enter point, just remember it for later
 				 if (ppt.ppt_name.isEnterPoint()) {
 				   Assert.assertTrue (nonce != null);
@@ -769,7 +768,7 @@ public class DaikonSimple {
 			if (ppt.var_infos.length == 0)
 				return;
 
-			//Instantiate slices and invariants if this is the first sample 
+			//Instantiate slices and invariants if this is the first sample
 			if (ppt.num_samples() == 0) {
 				instantiate_views_and_invariants(ppt);
 				//ppt.instantiate_views_and_invariants();
