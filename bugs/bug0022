@@ -3,7 +3,7 @@ Owner:        mharder <mharder@lcs.mit.edu>, adonovan@lcs.mit.edu
 Tool:         daikon-bug
 Summary:      can't find invariants tree even though INV is set
 Severity:     Lethal
-Status:       FIxed
+Status:       Closed
 Reproducible: Yes
 Description:
 
@@ -22,9 +22,14 @@ However, INV is set:
   realised that I had already fixed it a while ago and not checked it
   in.  Sorry dude. [adonovan]
 
+- Closed. [mharder]
+
 --
 $Log$
-Revision 1.3  2002-03-13 03:29:55  adonovan
+Revision 1.4  2002-03-14 17:10:05  mharder
+changed bug0022
+
+Revision 1.3  2002/03/13 03:29:55  adonovan
 changed bug0022
 
 Revision 1.2  2002/03/13 02:36:34  mharder
