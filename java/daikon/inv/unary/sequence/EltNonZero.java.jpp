@@ -149,9 +149,12 @@ public final class CLASSNAME
   public String format_repair() {
     if (var().type.isArray()) {
       return "sizeof("+var().name.repair_name(var())+")>0";
-    } else
-      return "$noprint("+var().name.name() + " elements " + "!=" + " "
-        + (is_pointer() ? "null" : "0")+")";
+    } else {
+      if (is_pointer())
+        return "sizeof("+ var().name.repair_name(var()) + ")>=0";
+      else
+        return  var().name.repair_name(var()) + "!=0";
+    }
   }
 
   // We are a special case where a ghost field can actually talk about

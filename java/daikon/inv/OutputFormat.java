@@ -464,6 +464,8 @@ public final class OutputFormat
 
     static public String getType(Ppt ppt, String var) {
       VarInfo vi=null;
+      if (var.indexOf("size(")==0)
+        return "int";
       try {
         vi=ppt.findVar(var);
       } catch (Exception e) {
@@ -549,7 +551,12 @@ public final class OutputFormat
     }
 
     public static String escapeString(String s) {
-      return s.replace('.','_');
+      s=s.replace('.','_');
+      s=s.replace('(','_');
+      s=s.replace(')','_');
+      s=s.replace('[','_');
+      s=s.replace(']','_');
+      return s;
     }
 
     /** Generic tuple class.  Implements hashcode and equals.  */

@@ -314,7 +314,7 @@ public class LOWERBOUND
 
     if (format == OutputFormat.REPAIR) {
 #ifdef BASE_FLOAT
-      return "$noprint(" + name + " " + GTESTR + " " + MIN1 + ")";
+      return "$noprintfloat(" + name + " " + GTESTR + " " + MIN1 + ")";
 #else
       return "(" + name + " " + GTESTR + " " + MIN1 + ")";
 #endif
@@ -349,7 +349,7 @@ public class LOWERBOUND
 
   // ELTLOWEr || ELTUPPEr
   public String format_repair() {
-    return "$noprint("+var().name.name() + " elements " + GTESTR + " " + MIN1+")";
+    return var().name.repair_name(var()) + GTESTR + " " + MIN1;
   }
 
   public String format_esc() {

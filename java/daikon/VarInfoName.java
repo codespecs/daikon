@@ -844,7 +844,8 @@ public abstract class VarInfoName
       return "size(" + sequence.name() + ")";
     }
     protected String repair_name_impl(VarInfo v) {
-      return "size(" + sequence.repair_name(v) + ")";
+      Repair.getRepair().addSpecial();
+      return "s_quant."+Repair.getRepair().getRelation("size("+sequence.name()+")",v.ppt);
     }
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";

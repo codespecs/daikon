@@ -582,7 +582,7 @@ public final class ONEOFSCALAR
         if (value.length == 0) {
           return "$noprint("+varname + " = [])";
         } else if ((value.length == 1) && (value[0] == 0)) {
-          return "$noprint("+varname + "[0] = null)";
+          return "("+varname+ " = null)";
         } else if (no_nulls(0)) {
           return "$noprint("+varname + " contains no nulls and has only one value, of length " + value.length+")";
         } else if (all_nulls(0)) {
@@ -591,7 +591,7 @@ public final class ONEOFSCALAR
           return "$noprint("+varname + " has only one value, of length " + value.length+")";
         }
       } else {
-        return "$noprint("+varname + " = " + TOSTRING(elts[0])+")";
+        return varname + " = " + TOSTRING(elts[0]);
       }
 #else
       String varname = REPAIR_NAME;
