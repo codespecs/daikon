@@ -22,7 +22,7 @@ public class ChicoryPremain {
     chicory.parse_args (args, true);
 
     // Open the dtrace file
-    if(chicory.daikon_cmd_online != null)
+    if(chicory.getDaikonPort() != -1)
     {       
         Runtime.setDtraceOnlineMode(chicory.getDaikonPort());
     }

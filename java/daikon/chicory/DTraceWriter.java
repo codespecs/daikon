@@ -112,6 +112,18 @@ public class DTraceWriter extends DaikonWriter
             return;
         
         Member member = mi.member;
+        
+        //make sure the line number is valid
+        //i.e., it is one of the exit locations in the MethodInfo for this method
+        //System.out.printf("reached line num " + lineNum + " at method " + mi.method_name + "\n");
+        if (mi.exit_locations == null || !mi.exit_locations.contains(lineNum))
+        {
+            if (mi.exit_locations == null || mi.exit_locations.isEmpty())
+                throw new RuntimeException("The line number " + lineNum + " is not found in the MethodInfo for method " + mi.method_name + "\nNo exit locations found in exit_locations set!");
+
+            //System.out.println("WARNING: Could not find a matching exit location, using arbitrary exit location.");
+            lineNum = mi.exit_locations.iterator().next();
+        }
 
         // these can be removed, this is done in transform now
         /*

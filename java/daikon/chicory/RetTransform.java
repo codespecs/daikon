@@ -85,7 +85,7 @@ public class RetTransform implements ClassFileTransformer {
       Matcher m = pattern.matcher (className);
       if (m.find()) {
         log ("not instrumenting %s, it matches regex %s\n", className, regex);
-        return (null);
+        return (null); //TODO does include take precedence? if so, shouldn't return
       }
     }
     
@@ -339,6 +339,7 @@ public class RetTransform implements ClassFileTransformer {
       il.append (c.ifact.createDup (type.getSize()));
       il.append (c.ifact.createStore (type, return_loc.getIndex()));
     }
+    //TODO: check ppt against select/omit
     il.append (call_enter_exit (c, "exit"));
     il.append (inst);
     return (il);
@@ -431,6 +432,7 @@ public class RetTransform implements ClassFileTransformer {
     nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
 
     // call Runtime.enter()
+    //TODO: check ppt against select/omit
     nl.append (call_enter_exit (c, "enter"));
 
     // Add the new instruction at the start and move any LineNumbers
@@ -637,12 +639,12 @@ public class RetTransform implements ClassFileTransformer {
     int last_line_number = 0;
     for (Iterator ii = il.iterator(); ii.hasNext(); ) {
       InstructionHandle ih = (InstructionHandle) ii.next();
-
       if (ih.hasTargeters()) {
         for (InstructionTargeter it : ih.getTargeters()) {
           if (it instanceof LineNumberGen) {
             LineNumberGen lng = (LineNumberGen) it;
             // log ("  line number at %s: %d\n", ih, lng.getSourceLine());
+            //System.out.printf("  line number at %s: %d\n", ih, lng.getSourceLine());
             line_number = lng.getSourceLine();
           }
         }
@@ -666,6 +668,7 @@ public class RetTransform implements ClassFileTransformer {
         break;
       }
     }
+   
     return new MethodInfo (class_info, mgen.getName(), arg_names,
                            arg_type_strings, exit_locs);
   }

@@ -485,7 +485,9 @@ private static StreamRedirectThread out_thread;
         Socket daikonSocket = null;
         try
         {
-            daikonSocket = new Socket(InetAddress.getLocalHost(), port);
+            daikonSocket = new Socket();
+            daikonSocket.bind(null);
+            daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
         }
         catch (UnknownHostException e)
         {
@@ -617,7 +619,6 @@ private static StreamRedirectThread out_thread;
                         dtrace.println();
                         // This lets us know we didn't lose any data.
                         dtrace.println("# EOF (added by Runtime.addShutdownHook)");
-                        //System.out.println("FLUSHING!!!!"); //TODO remove
                         dtrace.close();
                     }
 
