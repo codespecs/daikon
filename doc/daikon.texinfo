@@ -7345,6 +7345,7 @@ ignore any variable matching the following regular expression.
 You can reduce the number of variables that are output by instrumented
 code.  Do this by reducing the class/structure instrumentation depth.
 @itemize
+@item With Chidory, use the @option{--nesting-depth=@var{N}} option.
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
 @option{--total-depth=@var{N}} option.
