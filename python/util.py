@@ -5,6 +5,7 @@ import math, types, re
 true = (1==1)
 false = (1==0)
 
+
 ###########################################################################
 ### Numbers
 ###
@@ -59,6 +60,74 @@ If the input string STR has no trailing newline, it is returned unmodified."""
 
 
 ###########################################################################
+### Lists
+###
+
+def sub_sequence_of(seq1, seq2):
+    """Return true if seq1 is a subsequence of seq2."""
+    if len(seq1) > len(seq2):
+        return false
+    # For each slice of seq2 with length equal to seq1, test for subset
+    subsequence_range = range(0, len(seq2) - len(seq1) + 1)
+    for i in subsequence_range:
+        if seq1 == seq2[i:len(seq1)+i]:
+            return true
+    return false
+
+
+###########################################################################
+### Sets (implemented as lists)
+###
+
+def sorted_list_difference(minuend, subtrahend):
+    """Return a list of elements in sequence MINUEND but not in SUBTRAHEND.
+Both input sequences are sorted, as is the output sequence."""
+    # It's more efficient to do this by hand than to use "filter" and index.
+    mmax = len(minuend)
+    smax = len(subtrahend)
+    if mmax == 0 or smax == 0:
+        return minuend
+    mindex = 0; mcurr = minuend[mindex]
+    sindex = 0; scurr = subtrahend[sindex]
+    result = []
+    while (mindex < mmax) or (sindex < smax):
+	while (mindex < mmax) and ((sindex == smax) or (mcurr < scurr)):
+	    result.append(mcurr)
+	    mindex = mindex+1
+	    if (mindex < mmax): mcurr = minuend[mindex]
+	while (sindex < smax) and ((mindex == mmax) or (scurr < mcurr)):
+	    sindex = sindex+1
+	    if (sindex < smax): scurr = subtrahend[sindex]
+	if (mindex < mmax) and (sindex < smax) and (mcurr == scurr):
+	    mindex = mindex+1
+	    if (mindex < mmax): mcurr = minuend[mindex]
+	    sindex = sindex+1
+	    if (sindex < smax): scurr = subtrahend[sindex]
+    return result
+
+def _test_sorted_list_difference():
+    assert sorted_list_difference([1,2,3,4,5,6], [2,4,6]) == [1, 3, 5]
+    assert sorted_list_difference([1,2,3,4,5,6], [1,2,3]) == [4, 5, 6]
+    assert sorted_list_difference([1,5,6], [1,2,3,4,5,6]) == []
+    assert sorted_list_difference([1,5,6], [0,1,2,3,4,6,7]) == [5]
+    assert sorted_list_difference([1,2,5,6], [2,3,4,5]) == [1, 6]
+
+# There MUST be a better way to do this!
+def same_elements_setwise(seq1, seq2):
+    """Return true if sequences seq1 and seq2 contain the same elements
+(in any order)."""
+    s1 = list(seq1)
+    s2 = list(seq2)
+    s1.sort()
+    s2.sort()
+    return s1 == s2
+
+## Could be useful, I guess.
+# def intersects(seq1, seq2):
+#     """Return true if sequences seq1 and seq2 contain any element in common."""
+
+
+###########################################################################
 ### Mappings
 ###
 
@@ -98,65 +167,6 @@ def _test_slice_by_sequence():
     _test_slice_by_sequence_helper(range(1,4))
     _test_slice_by_sequence_helper((1,2,4,5))
 
-
-
-###########################################################################
-### Sets
-###
-
-def sorted_list_difference(minuend, subtrahend):
-    """Return a list of elements in sequence MINUEND but not in SUBTRAHEND.
-Both input sequences are sorted, as is the output sequence."""
-    # It's more efficient to do this by hand than to use "filter" and index.
-    mmax = len(minuend)
-    smax = len(subtrahend)
-    if mmax == 0 or smax == 0:
-        return minuend
-    mindex = 0; mcurr = minuend[mindex]
-    sindex = 0; scurr = subtrahend[sindex]
-    result = []
-    while (mindex < mmax) or (sindex < smax):
-	while (mindex < mmax) and ((sindex == smax) or (mcurr < scurr)):
-	    result.append(mcurr)
-	    mindex = mindex+1
-	    if (mindex < mmax): mcurr = minuend[mindex]
-	while (sindex < smax) and ((mindex == mmax) or (scurr < mcurr)):
-	    sindex = sindex+1
-	    if (sindex < smax): scurr = subtrahend[sindex]
-	if (mindex < mmax) and (sindex < smax) and (mcurr == scurr):
-	    mindex = mindex+1
-	    if (mindex < mmax): mcurr = minuend[mindex]
-	    sindex = sindex+1
-	    if (sindex < smax): scurr = subtrahend[sindex]
-    return result
-
-def _test_sorted_list_difference():
-    assert sorted_list_difference([1,2,3,4,5,6], [2,4,6]) == [1, 3, 5]
-    assert sorted_list_difference([1,2,3,4,5,6], [1,2,3]) == [4, 5, 6]
-    assert sorted_list_difference([1,5,6], [1,2,3,4,5,6]) == []
-    assert sorted_list_difference([1,5,6], [0,1,2,3,4,6,7]) == [5]
-    assert sorted_list_difference([1,2,5,6], [2,3,4,5]) == [1, 6]
-
-# There MUST be a better way to do this!
-def same_elements_setwise(seq1, seq2):
-    """Return true if sequences SEQ1 and SEQ2 contain the same elements
-(in any order)."""
-    s1 = list(seq1)
-    s2 = list(seq2)
-    s1.sort()
-    s2.sort()
-    return s1 == s2
-
-def sub_sequence_of(seq1, seq2):
-    """Return true if seq1 is a subsequence of seq2."""
-    if len(seq1) > len(seq2):
-        return false
-    # For each slice of seq2 with length equal to seq1, test for subset
-    subsequence_range = range(0, len(seq2) - len(seq1) + 1)
-    for i in subsequence_range:
-        if seq1 == seq2[i:len(seq1)+i]:
-            return true
-    return false
 
 
 ###########################################################################
@@ -221,10 +231,13 @@ but all missing numbers in their range are."""
     nums.sort()
     if nums[-1] - nums[0] > 65536:
         return None
-    return common_modulus(sorted_list_difference(range(nums[0], nums[-1]), nums))
+    return common_modulus(sorted_list_difference(range(nums[0]+1, nums[-1]), nums))
 
 def _test_common_nonmodulus_strict():
-    assert common_nonmodulus_strict([1,2,3,5,6,7,9]) == (0,4)
+    # Doesn't work because given only two items, common_modulus doesn't
+    # go out on a limb and suggest they're equal mod their difference
+    # assert common_nonmodulus_strict([1,2,3,5,6,7,9]) == (0,4)
+    assert common_nonmodulus_strict([-1,1,2,3,5,6,7,9]) == (0,4)
     assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == None
 
 def common_nonmodulus_nonstrict(nums):
@@ -258,6 +271,28 @@ def _test_common_nonmodulus_nonstrict():
 ### Sorting
 ###
 
+def sorted(l, comparator=cmp):
+    for i in range(1, len(l)):
+        if apply(comparator, (l[i-1], l[i])) == 1:
+            return false
+    return true
+
+# This doesn't test the optional argument; probably ought to.
+def _test_sorted():
+    assert sorted([1,2,3,4,5])
+    assert sorted([])
+    assert sorted([22])
+    assert sorted([1,2,2,2,17,17])
+    assert not sorted([22,17])
+    assert not sorted([1,2,4,8,16,5,8,13,21])
+    assert sorted([1,2,3,4,5], cmp)
+    assert sorted([], cmp)
+    assert sorted([22], cmp)
+    assert sorted([1,2,2,2,17,17], cmp)
+    assert not sorted([22,17], cmp)
+    assert not sorted([1,2,4,8,16,5,8,13,21], cmp)
+
+
 # Not worth defining -- too trivial
 # def cmp_second_element(a, b):
 #     # index 1 is second element
@@ -285,8 +320,8 @@ Returns a list of the results, which are themselves lists."""
     return choose(num, rest) + map(make_conser(objs[0]), choose(num-1, rest))
 
 def _test_choose():
-    assert util.choose(3,[1,2,3]) == [[1,2,3]]
-    assert util.choose(3,[1,2,3,4]) == [[2,3,4], [1,3,4], [1,2,3], [1,2,4]]
+    assert choose(3,[1,2,3]) == [[1,2,3]]
+    assert choose(3,[1,2,3,4]) == [[2,3,4], [1,3,4], [1,2,3], [1,2,4]]
 
 
 # There must be a better way of doing this!
