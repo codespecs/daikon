@@ -371,8 +371,15 @@ public final class Equality
         result.append(leaderName).append(", ").append(var.name.name_using(format, var));
         result.append(")");
       } else {
-        result.append("(").append(leaderName).append(" == "); // "interned"
-        result.append(var.name.name_using(format, var)).append(")");
+        if (leader.type.isFloat()) {
+          result
+            .append("(")
+            .append(Invariant.formatFuzzy("eq", leader, var, format))
+            .append(")");
+        } else {
+          result.append("(").append(leaderName).append(" == "); // "interned"
+          result.append(var.name.name_using(format, var)).append(")");
+        }
       }
       if (i.hasNext()) result.append(" && ");
     }

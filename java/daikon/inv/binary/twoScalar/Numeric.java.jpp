@@ -600,6 +600,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ 0 (MOD %var1% %var2%))");
       else
+
+        #if defined(TYPEDOUBLE)
+        if (format.isJavaFamily()) {
+          return "daikon.Quant.fuzzy.eq(%var1% % %var2%, 0)";
+        }
+        #endif
         return ("%var1% % %var2% == 0");
     }
 
@@ -669,7 +675,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (* %var2% %var2))");
       else if (format.isJavaFamily()) {
+        #if defined(TYPEDOUBLE)
+        return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
+        #else
         return ("%var1% == %var2%*%var2%");
+        #endif
       } else {
         return ("%var1% == %var2%**2");
       }
@@ -753,6 +763,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (~ %var2%))");
       else
+        #if defined(TYPEDOUBLE)
+        if (format.isJavaFamily()) {
+          return "daikon.Quant.fuzzy.eq(%var1%, ~%var2%)";
+        }
+        #endif
         return ("%var1% == ~%var2%");
     }
 
@@ -787,6 +802,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
       else
+        #if defined(TYPEDOUBLE)
+        if (format.isJavaFamily()) {
+          return "daikon.Quant.fuzzy.eq(%var1%, %var2% | %var1%)";
+        }
+        #endif
         return ("%var1% == (%var2% | %var1%)");
     }
 
@@ -849,6 +869,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("Simplify not implemented");
       else
+        #if defined(TYPEDOUBLE)
+        if (format.isJavaFamily()) {
+          return "daikon.Quant.fuzzy.eq(%var1% & %var2%, 0)";
+        }
+        #endif
+
         return ("(%var1% & %var2%) == 0");
     }
 
@@ -891,6 +917,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("Simplify not implemented");
       else
+        #if defined(TYPEDOUBLE)
+        if (format.isJavaFamily()) {
+          return "daikon.Quant.fuzzy.eq(%var1% >> %var2%, 0)";
+        }
+        #endif
         return ("(%var1% >> %var2% == 0)");
     }
 

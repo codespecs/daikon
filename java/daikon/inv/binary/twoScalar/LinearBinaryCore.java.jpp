@@ -594,8 +594,24 @@ public final class CLASSNAME
     String xname = x.name_using(format, vix);
     String yname = y.name_using(format, viy);
 
+    if (format.isJavaFamily()) {
+
+      if (viy.type.isFloat() || vix.type.isFloat()) {
+        return
+          "daikon.Quant.fuzzy.eq("
+          + yname
+          + ", "
+          + formatTerm(format, a, x, vix, true)
+          + formatTerm(format, b, null, null, false)
+          + ")";
+      } else {
+        return yname + " == "
+          + formatTerm(format, a, x, vix, true)
+          + formatTerm(format, b, null, null, false);
+      }
+    }
+
     if ((format == OutputFormat.DAIKON)
-        || (format.isJavaFamily())
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA))
     {

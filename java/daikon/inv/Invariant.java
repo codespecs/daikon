@@ -2054,6 +2054,39 @@ public abstract class Invariant
     return UtilMDE.join(strings, ", ");
   }
 
+
+  /**
+   *  Used throught Java family formatting of invariants.
+   *
+   *  Returns
+   *
+   *     "utilMDE.FuzzyFloat.method(v1_name, v2_name)"
+   *
+   *  Where v1_name and v2_name are the properly formatted
+   *  varinfos v1 and v2, under the given format.
+   *
+   *  Author: Carlos Pacheco
+   */
+  // [[ This method doesn't belong here. But where? ]]
+  public static String formatFuzzy(String method,
+                                    VarInfo v1,
+                                    VarInfo v2,
+                                    OutputFormat format) {
+
+    StringBuffer results = new StringBuffer();
+    return
+      results
+      .append("daikon.Quant.fuzzy.")
+      .append(method)
+      .append("(")
+      .append(v1.name.name_using(format, v1))
+      .append(", ")
+      .append(v2.name.name_using(format, v2))
+      .append(")")
+      .toString();
+  }
+
+
 }
 
 

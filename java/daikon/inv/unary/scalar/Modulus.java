@@ -71,7 +71,11 @@ public class Modulus
 
     if (format.isJavaFamily()) {
       name = var().name.name_using(format, var());
-      return name + " % " + modulus + " == " + remainder;
+      if (var().type.isFloat()) {
+        return "daikon.Quant.fuzzy.eq(" + name + " % " + modulus + ", " + remainder + ")";
+      } else {
+        return name + " % " + modulus + " == " + remainder;
+      }
     }
 
     //   if (format == OutputFormat.JAVA

@@ -67,6 +67,71 @@ The correct way to build the system is to run 'make'.
   #define CAST_TYPE double
 #endif
 
+
+#if defined(INT)
+   public static utilMDE.FuzzyFloat fuzzy = new utilMDE.FuzzyFloat();
+#endif
+
+#if (defined(FLOAT) || defined(DOUBLE))
+
+  private static boolean eq(_TYPE x, _TYPE y) {
+    return fuzzy.eq(x,y);
+  }
+
+  private static boolean ne(_TYPE x, _TYPE y) {
+    return fuzzy.ne(x,y);
+  }
+
+  #if !(defined(BOOLEAN) || defined(OBJECT) || defined(STRING))
+  private static boolean lt(_TYPE x, _TYPE y) {
+    return fuzzy.lt(x,y);
+  }
+
+  private static boolean lte(_TYPE x, _TYPE y) {
+    return fuzzy.lte(x,y);
+  }
+
+  private static boolean gt(_TYPE x, _TYPE y) {
+    return fuzzy.gt(x,y);
+  }
+
+  private static boolean gte(_TYPE x, _TYPE y) {
+    return fuzzy.gte(x,y);
+  }
+  #endif
+
+#else
+
+  private static boolean eq(_TYPE x, _TYPE y) {
+    return (x == y);
+  }
+
+  private static boolean ne(_TYPE x, _TYPE y) {
+     return x != y;
+  }
+
+  #if !(defined(BOOLEAN) || defined(OBJECT) || defined(STRING))
+  private static boolean lt(_TYPE x, _TYPE y) {
+     return x < y;
+  }
+
+  private static boolean lte(_TYPE x, _TYPE y) {
+     return x <= y;
+  }
+
+  private static boolean gt(_TYPE x, _TYPE y) {
+     return x > y;
+  }
+
+  private static boolean gte(_TYPE x, _TYPE y) {
+     return x >= y;
+  }
+  #endif
+
+#endif
+
+
+
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 
   /** True iff both sequences have the same length, and all seq2[i] divide seq1[i].
@@ -81,10 +146,10 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean pairwiseDivides(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1.length != seq2.length) {
-      return false;
+       return false;
     }
     for (int i = 0 ; i < seq1.length ; i++) {
-      if (! (seq1[i] % seq2[i] == 0)) {
+      if (! (eq(seq1[i] % seq2[i], 0))) {
         return false;
       }
     }
@@ -95,7 +160,7 @@ The correct way to build the system is to run 'make'.
       return false;
     }
     for (int i = 0 ; i < seq1.length ; i++) {
-      if (! (seq1[i] % seq2[i] == 0)) {
+      if (! (eq(seq1[i] % seq2[i], 0))) {
         return false;
       }
     }
@@ -117,7 +182,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (! (seq1[i] == seq2[i] * seq2[i])) {
+    if (! (eq(seq1[i], seq2[i] * seq2[i]))) {
       return false;
     }
   }
@@ -128,7 +193,7 @@ The correct way to build the system is to run 'make'.
       return false;
     }
     for (int i = 0 ; i < seq1.length ; i++) {
-      if (! (seq1[i] == seq2[i] * seq2[i])) {
+      if (! (eq(seq1[i], seq2[i] * seq2[i]))) {
         return false;
       }
     }
@@ -201,7 +266,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (! (seq1[i] == (seq2[i] | seq1[i]))) {
+    if (! (eq(seq1[i], (seq2[i] | seq1[i])))) {
       return false;
     }
   }
@@ -212,7 +277,7 @@ The correct way to build the system is to run 'make'.
       return false;
     }
     for (int i = 0 ; i < seq1.length ; i++) {
-      if (! (seq1[i] == (seq2[i] | seq1[i]))) {
+      if (! (eq(seq1[i], (seq2[i] | seq1[i])))) {
         return false;
       }
     }
@@ -246,7 +311,7 @@ The correct way to build the system is to run 'make'.
      //Assert.assertTrue(seq.length > 0);
     _TYPE retval = seq[0];
     for (int i = 1 ; i < seq.length ; i++) {
-      if (seq[i] < retval) {
+      if (lt(seq[i], retval)) {
         retval = seq[i];
       }
     }
@@ -261,7 +326,7 @@ The correct way to build the system is to run 'make'.
      //Assert.assertTrue(seq.length > 0);
     _TYPE retval = seq[0];
     for (int i = 1 ; i < seq.length ; i++) {
-      if (seq[i] > retval) {
+      if (gt(seq[i], retval)) {
         retval = seq[i];
       }
     }
@@ -445,7 +510,7 @@ The correct way to build the system is to run 'make'.
   }
   int length = seq1.length;
   for (int i = 0 ; i < length ; i++) {
-    if (seq1[i] != seq2[length - i - 1]) {
+    if (ne(seq1[i], seq2[length - i - 1])) {
       return false;
     }
   }
@@ -465,7 +530,7 @@ The correct way to build the system is to run 'make'.
   }
   int length = seq1.length;
   for (int i = 0 ; i < length ; i++) {
-    if (seq1[i] != seq2[length - i - 1]) {
+    if (ne(seq1[i], seq2[length - i - 1])) {
       return false;
     }
   }
@@ -486,7 +551,7 @@ The correct way to build the system is to run 'make'.
 
 /*@ pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] == elt) { return true; }
+    if (eq(arr[i], elt)) { return true; }
   }
   return false;
 }
@@ -494,7 +559,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean memberOf(_TYPE elt, COMPATIBLE[] arr) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] == elt) { return true; }
+    if (eq(arr[i], elt)) { return true; }
   }
   return false;
 }
@@ -561,7 +626,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsEqual(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] != elt) { return false; }
+    if (ne(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -569,7 +634,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsEqual(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] != elt) { return false; }
+    if (ne(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -584,7 +649,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] == elt) { return false; }
+    if (eq(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -592,7 +657,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] == elt) { return false; }
+    if (eq(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -609,7 +674,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsGT(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] <= elt) { return false; }
+    if (lte(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -617,7 +682,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsGT(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] <= elt) { return false; }
+    if (lte(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -632,7 +697,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsGTE(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] < elt) { return false; }
+    if (lt(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -640,7 +705,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsGTE(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] < elt) { return false; }
+    if (lt(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -656,7 +721,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsLT(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] >= elt) { return false; }
+    if (gte(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -664,7 +729,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsLT(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] >= elt) { return false; }
+    if (gte(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -679,7 +744,7 @@ The correct way to build the system is to run 'make'.
  */
 /*@ pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] > elt) { return false; }
+    if (gt(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -687,7 +752,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
   for (int i = 0 ; i < arr.length ; i++) {
-    if (arr[i] > elt) { return false; }
+    if (gt(arr[i], elt)) { return false; }
   }
   return true;
 }
@@ -704,17 +769,34 @@ The correct way to build the system is to run 'make'.
  * /\ forall i in { 0..seq1.length-1 } : seq1[i] == seq2[i]
  *
  */
+#if (defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
   if (seq1.length != seq2.length) {
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] != seq2[i]) {
+    if (_TYPE_WRAPPER_NAME.isNaN(seq1[i]) && _TYPE_WRAPPER_NAME.isNaN(seq2[i])) {
+      continue;
+    }
+    if (ne(seq1[i], seq2[i])) {
       return false;
     }
   }
   return true;
 }
+#else
+/*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (ne(seq1[i], seq2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
@@ -722,7 +804,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] != seq2[i]) {
+    if (ne(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -743,7 +825,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] == seq2[i]) {
+    if (eq(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -756,7 +838,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] == seq2[i]) {
+    if (eq(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -779,7 +861,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] >= seq2[i]) {
+    if (gte(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -792,7 +874,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] >= seq2[i]) {
+    if (gte(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -812,7 +894,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] > seq2[i]) {
+    if (gt(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -825,7 +907,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] > seq2[i]) {
+    if (gt(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -846,7 +928,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] <= seq2[i]) {
+    if (lte(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -859,7 +941,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] <= seq2[i]) {
+    if (lte(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -879,7 +961,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] < seq2[i]) {
+    if (lt(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -892,7 +974,7 @@ The correct way to build the system is to run 'make'.
     return false;
   }
   for (int i = 0 ; i < seq1.length ; i++) {
-    if (seq1[i] < seq2[i]) {
+    if (lt(seq1[i], seq2[i])) {
       return false;
     }
   }
@@ -938,9 +1020,9 @@ The correct way to build the system is to run 'make'.
 /*@ pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
   for (int i = 0 ; i < minlength ; i++) {
-    if (seq1[i] > seq2[i]) {
+    if (gt(seq1[i], seq2[i])) {
       return false;
-    } else if (seq1[i] < seq2[i]) {
+    } else if (lt(seq1[i], seq2[i])) {
        return true;
     }
   }
@@ -955,9 +1037,9 @@ The correct way to build the system is to run 'make'.
 /*@ pure */ public static boolean lexLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
   for (int i = 0 ; i < minlength ; i++) {
-    if (seq1[i] > seq2[i]) {
+    if (gt(seq1[i], seq2[i])) {
       return false;
-      } else if (seq1[i] < seq2[i]) {
+      } else if (lt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -974,9 +1056,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] > seq2[i]) {
+      if (gt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] < seq2[i]) {
+      } else if (lt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -991,9 +1073,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] > seq2[i]) {
+      if (gt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] < seq2[i]) {
+      } else if (lt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -1010,9 +1092,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] < seq2[i]) {
+      if (lt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] > seq2[i]) {
+      } else if (gt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -1027,9 +1109,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] < seq2[i]) {
+      if (lt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] > seq2[i]) {
+      } else if (gt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -1046,9 +1128,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] < seq2[i]) {
+      if (lt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] > seq2[i]) {
+      } else if (gt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -1062,9 +1144,9 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
     int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
     for (int i = 0 ; i < minlength ; i++) {
-      if (seq1[i] < seq2[i]) {
+      if (lt(seq1[i], seq2[i])) {
         return false;
-      } else if (seq1[i] > seq2[i]) {
+      } else if (gt(seq1[i], seq2[i])) {
          return true;
       }
     }
@@ -1088,7 +1170,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseEqual(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] != seq[i+1]) {
+        if (ne(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1106,7 +1188,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseNotEqual(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] == seq[i+1]) {
+        if (eq(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1126,7 +1208,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseLT(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] >= seq[i+1]) {
+        if (gte(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1144,7 +1226,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseLTE(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] > seq[i+1]) {
+        if (gt(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1162,7 +1244,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseGT(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] <= seq[i+1]) {
+        if (lte(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1180,7 +1262,7 @@ The correct way to build the system is to run 'make'.
   /*@ pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
       if (i < seq.length-1) {
-        if (seq[i] < seq[i+1]) {
+        if (lt(seq[i], seq[i+1])) {
           return false;
         }
       }
@@ -1201,7 +1283,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean equalIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] != i) {
+      if (ne(seq[i], i)) {
         return false;
       }
     }
@@ -1217,7 +1299,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean notEqualIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] == i) {
+      if (eq(seq[i], i)) {
         return false;
       }
     }
@@ -1233,7 +1315,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean ltIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] >= i) {
+      if (gte(seq[i], i)) {
         return false;
       }
     }
@@ -1249,7 +1331,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean lteIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] > i) {
+      if (gt(seq[i], i)) {
         return false;
       }
     }
@@ -1265,7 +1347,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean  gtIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] <= i) {
+      if (lte(seq[i], i)) {
         return false;
       }
     }
@@ -1281,7 +1363,7 @@ The correct way to build the system is to run 'make'.
    */
   /*@ pure */ public static boolean gteIndex(_TYPE[] seq) {
     for (int i = 0 ; i < seq.length ; i++) {
-      if (seq[i] < i) {
+      if (lt(seq[i], i)) {
         return false;
       }
     }

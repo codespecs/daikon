@@ -560,9 +560,9 @@ invariants.
     String var1name = var1().name.name_using(format, var1());
     String var2name = var2().name.name_using(format, var2());
 
+
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format.isJavaFamily())
         || (format == OutputFormat.IOA))
 
     {
@@ -573,6 +573,26 @@ invariants.
         if (format == OutputFormat.IOA) comparator = "~=";
       #endif
       return var1name + " " + comparator + " " + var2name;
+    }
+
+
+    if (format.isJavaFamily()) {
+      #if defined(EQUALFLOAT)
+        return Invariant.formatFuzzy("eq", var1(), var2(), format);
+      #elif defined(NONEQUALFLOAT)
+        return Invariant.formatFuzzy("ne", var1(), var2(), format);
+      #elif defined(LESSTHANFLOAT)
+        return Invariant.formatFuzzy("lt", var1(), var2(), format);
+      #elif defined(LESSEQUALFLOAT)
+        return Invariant.formatFuzzy("lte", var1(), var2(), format);
+      #elif defined(GREATERTHANFLOAT)
+        return Invariant.formatFuzzy("gt", var1(), var2(), format);
+      #elif defined(GREATEREQUALFLOAT)
+        return Invariant.formatFuzzy("gte", var1(), var2(), format);
+      #else
+        return var1name + " " + EQUALSstring + " " + var2name;
+      #endif
+
     }
 
     if (format == OutputFormat.SIMPLIFY) {

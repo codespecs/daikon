@@ -82,7 +82,12 @@ public class NonModulus
     }
 
     if (format.isJavaFamily()) {
-      return name + " % " + modulus + " != " + remainder;
+
+      if (var().type.isFloat()) {
+        return "daikon.Quant.fuzzy.ne(" + name + " % " + modulus + ", " + remainder + ")";
+      } else {
+        return name + " % " + modulus + " != " + remainder;
+      }
     }
 
     if (format == OutputFormat.SIMPLIFY) {

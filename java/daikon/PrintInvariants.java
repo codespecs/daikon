@@ -995,6 +995,11 @@ public final class PrintInvariants {
       sb.append(rawOutput);
       out.println(sb.toString());
      } else if (Daikon.output_style.isJavaFamily()) {
+
+       // [[ I think this is dead code, yet I've been keeping it
+       // "updated". If it is indeed no longer used, it should
+       // be removed because it's confusing for someone implementing
+       // a format. -Carlos ]]
        VarInfo leader = (VarInfo) equal_vars.elementAt(0);
        for (int j = 1; j < equal_vars.size(); j++) {
          VarInfo other = (VarInfo) equal_vars.elementAt(j);
@@ -1006,10 +1011,20 @@ public final class PrintInvariants {
                        + other.name.dbc_name(leader)
                        + ")");
          } else {
-           out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
-         }
-         if (obviously_equal.contains(other)) {
-           out.println("    (obviously)");
+           String leader_dbc_name = leader.name.dbc_name(leader);
+           String other_dbc_name = other.name.dbc_name(other);
+           if (leader.type == ProglangType.DOUBLE) {
+             out.println("(Double.isNan("
+                         + leader_dbc_name
+                         + ") ? Double.isNan("
+                         + other_dbc_name
+                         + ") : "
+                         + leader_dbc_name
+                        + " == "
+                         + other_dbc_name
+                         + ")");
+           } else
+             out.println(leader_dbc_name + " == " + other_dbc_name);
          }
        }
      } else {

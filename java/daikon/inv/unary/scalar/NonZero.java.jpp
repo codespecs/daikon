@@ -122,9 +122,16 @@ public class NONZERO
   public String format_using(OutputFormat format) {
     String name = var().name.name_using(format, var());
 
+    if (format.isJavaFamily()) {
+      #if defined(FLOAT)
+        return "daikon.Quant.fuzzy.ne(" + name + ", " + zero(format) + ")";
+      #else
+        return name + " != " + zero(format);
+      #endif
+    }
+
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.ESCJAVA)
-        || (format.isJavaFamily()))
+        || (format == OutputFormat.ESCJAVA))
     {
       return name + " != " + zero(format);
     }
