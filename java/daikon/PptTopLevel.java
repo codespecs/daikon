@@ -62,8 +62,11 @@ public class PptTopLevel extends Ppt {
   // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
   // This is necessary because we search the graph in isWorthPrinting.
 
-  public PptTopLevel entry_ppt;        // null if this isn't an exit point
-  public Vector exit_ppts = new Vector(1); // elts are PptTopLevel objects
+  public PptTopLevel entry_ppt;        	// null if this isn't an exit point
+  public Vector exit_ppts = new Vector(1); // elts are PptTopLevel objects;
+                                // this is set for entry program points
+  public PptTopLevel combined_exit;	// null if this isn't a line-numbered exit point
+  public int[] combined_exit_var_indices; // null if combined_exit == null
 
   // PptTopLevel has any number of 'controlling' ppts.  Any invariants
   // which exist in the controlling ppts are necessarily true in the
@@ -1890,29 +1893,35 @@ public class PptTopLevel extends Ppt {
       }
       return;
     }
-    // This suppression test does not work, because even if :::EXIT exists,
-    // it doesn't yet have any implication invariants, and we won't know
-    // about those until we process it in this loop.
-    // Do not print if this is :::EXIT22 and :::EXIT exists
-    if (Daikon.esc_output
-        && ppt_name.isExitPoint()
-        && (!ppt_name.exitLine().equals(""))) {
-      String exitname = ppt_name.makeExit().getName();
-      PptTopLevel exit = (PptTopLevel) all_ppts.get(exitname);
-      // Don't suppress if the :::EXIT point has no invariants.
-      // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
-      if (exit != null) {
-        if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
-          System.out.println("Suppressing " + name + " in favor of " + exitname);
-          return;
-        }
-        // System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + views_cond.size() + " conditional views and " + exit.implication_view.invs.size() + " implication invs" + " for a total of " + exit.invariants_vector().size() + " invariants");
-      } else {
-        // System.out.println("Didn't find unified " + exitname + " for " + name + ", so doing output for " + name);
-      }
-    } else {
-      // System.out.println("Not an exit, or exitline is \"\": " + name + "; " + ppt_name.isExitPoint() + " <<<" + ppt_name.exitLine() + ">>>");
+    if (Daikon.esc_output && (combined_exit != null)) {
+      return;
     }
+    /// Old, more broken version.
+    // // This suppression test does not work, because even if :::EXIT exists,
+    // // it doesn't yet have any implication invariants, and we won't know
+    // // about those until we process it in this loop.
+    // // Do not print if this is :::EXIT22 and :::EXIT exists
+    // if (Daikon.esc_output
+    //     && ppt_name.isExitPoint()
+    //     && (!ppt_name.exitLine().equals(""))) {
+    //   String exitname = ppt_name.makeExit().getName();
+    //   PptTopLevel exit = (PptTopLevel) all_ppts.get(exitname);
+    //   // Don't suppress if the :::EXIT point has no invariants.
+    //   // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
+    //   // Or, it could happen if it shouldn't have any invariants!
+    //   if (exit != null) {
+    //     if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
+    //       System.out.println("Suppressing " + name + " in favor of " + exitname);
+    //       return;
+    //     }
+    //     System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + views_cond.size() + " conditional views and " + exit.implication_view.invs.size() + " implication invs" + " for a total of " + exit.invariants_vector().size() + " invariants");
+    //   } else {
+    //     // System.out.println("Didn't find unified " + exitname + " for " + name + ", so doing output for " + name);
+    //   }
+    // } else {
+    //   // System.out.println("Not an exit, or exitline is \"\": " + name + "; " + ppt_name.isExitPoint() + " <<<" + ppt_name.exitLine() + ">>>");
+    // }
+
 
     // System.out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
@@ -1999,7 +2008,7 @@ public class PptTopLevel extends Ppt {
       if (! vi.isOrigVar()) {
         VarInfo vi_orig = findVar(VarInfo.makeOrigName(vi.name));
         if (vi_orig != null) {
-          // Assert.assert(vi_orig.postState.name.equals(vi.name), "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
+          // Assert.assert(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           // Assert.assert(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           if (vi.equal_to == vi_orig.equal_to) {
             unmodified_vars.add(vi);

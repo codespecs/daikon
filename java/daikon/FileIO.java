@@ -644,6 +644,14 @@ public final class FileIO {
           System.out.println("Adding ValueTuple to " + ppt.name);
         }
         ppt.add(vt, 1);
+
+        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
+        if (exit_ppt != null) {
+          VarInfo[] exit_vis = exit_ppt.var_infos;
+          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
+          exit_ppt.add(exit_vt, 1);
+        }
+
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives

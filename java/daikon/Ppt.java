@@ -211,8 +211,13 @@ public abstract class Ppt implements java.io.Serializable {
   }
 
   public VarInfo findVar(String name) {
+    return findVar_interned(name.intern());
+  }
+
+  public VarInfo findVar_interned(String name) {
+    Assert.assert(Intern.isInterned(name));
     for (int i=0; i<var_infos.length; i++) {
-      if (var_infos[i].name.equals(name))
+      if (var_infos[i].name == name)
         return var_infos[i];
     }
     return null;
@@ -229,6 +234,41 @@ public abstract class Ppt implements java.io.Serializable {
       Assert.assert(ppt1.parent == ppt2.parent);
       return ppt1.name.compareTo(ppt2.name);
     }
+  }
+
+  // Argument is a vector of PptTopLevel objects
+  public static final VarInfo[] common_vars(Vector ppts) {
+    Vector result = new Vector();
+    Assert.assert(ppts.size() > 1);
+    {
+      PptTopLevel ppt = (PptTopLevel) ppts.elementAt(0);
+      VarInfo[] vars = ppt.var_infos;
+      for (int i=0; i<vars.length; i++) {
+        result.add(vars[i]);
+      }
+    }
+    for (int i=1; i<ppts.size(); i++) {
+      PptTopLevel ppt = (PptTopLevel) ppts.elementAt(i);
+      VarInfo[] vars = ppt.var_infos;
+      // Remove from result any variables that do not occur in vars
+      for (int rindex=result.size()-1; rindex>=0; rindex--) {
+        VarInfo rvar = (VarInfo) result.elementAt(rindex);
+        String rname = rvar.name;
+        boolean found = false;
+        for (int vindex=0; vindex<vars.length; vindex++) {
+          VarInfo vvar = vars[vindex];
+          if (rvar.compatible(vvar)) {
+            // do not remove
+            found = true;
+            break;
+          }
+        }
+        if (! found) {
+          result.remove(rindex);
+        }
+      }
+    }
+    return (VarInfo[]) result.toArray(new VarInfo[] { });
   }
 
 }

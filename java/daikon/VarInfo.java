@@ -77,6 +77,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     Assert.assert(rep_type != null);
     Assert.assert(legalRepType(rep_type),
                   "Unsupported representation type " + rep_type.format() + " for variable " + name);
+    Assert.assert(esc_name.indexOf("return.") == -1, "\"return.\" in " + esc_name);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
@@ -130,7 +131,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    * new ones (so that the new set is self-consistent).  The originals
    * should not be modified by this operation.
    **/
-  public static VarInfo[] arrayclone_clever(VarInfo[] a_old) {
+  public static VarInfo[] arrayclone_clever_not_currently_used(VarInfo[] a_old) {
     VarInfo[] a_new = new VarInfo[a_old.length];
     for (int i=0; i<a_new.length; i++) {
       try {
@@ -154,9 +155,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     HashMap deriv_map = new HashMap();
     for (int i=0; i<a_new.length; i++) {
       Derivation deriv_old = a_old[i].derived;
-      Derivation deriv_new = deriv_old.switchVars(a_old, a_new);
-      deriv_map.put(deriv_old, deriv_new);
-      a_new[i].derived = deriv_new;
+      if (deriv_old != null) {
+        Derivation deriv_new = deriv_old.switchVars(a_old, a_new);
+        deriv_map.put(deriv_old, deriv_new);
+        a_new[i].derived = deriv_new;
+      }
     }
     for (int i=0; i<a_new.length; i++) {
       Vector derivees_old = a_old[i].derivees;
@@ -267,6 +270,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     Assert.assert(this.varinfo_index < other.varinfo_index);
     for (int i=0; i<exact_nonunary_invariants.size(); i++) {
       Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
+      if (inv.ppt.var_infos[0] != this) {
+        System.out.println("Problem: " + inv.ppt.var_infos[0].name + ", " + this.name + " in " + this.ppt.name + ", " + inv.ppt.name);
+      }
       Assert.assert(inv.ppt.var_infos[0] == this);
       Assert.assert(inv.isExact());
       if ((inv.ppt.arity == 2) && (inv.ppt.var_infos[1] == other)) {
@@ -505,7 +511,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // For esc_output, omit noting that varibles are unmodified.
       // Add any additional special cases here.
       if (Daikon.esc_output) {
-        if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
+        if ((vi.postState != null) && vi.postState.name == this.name) {
           continue;
         }
       }
@@ -844,8 +850,21 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
 
     // "return" -> "\result"
-    if ("return".equals(result)) {
-      result = "\\result";
+    int return_pos = result.indexOf("return");
+    if (return_pos != -1) {
+      int return_end = return_pos + 6;
+      if (((return_pos == 0)
+           || (result.charAt(return_pos-1) == '(')
+           || (result.charAt(return_pos-1) == '['))
+          && ((return_end == result.length())
+              || (result.charAt(return_end) == ')')
+              || (result.charAt(return_end) == ']')
+              || (result.charAt(return_end) == '[')
+              || (result.charAt(return_end) == '.'))) {
+        // "return" is a whole variable name, not just part of one
+        result = (result.substring(0, return_pos)
+                  + "\\result" + result.substring(return_end));
+      }
     }
 
     if (result.endsWith("[]")) {

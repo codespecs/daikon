@@ -205,6 +205,7 @@ public final class Daikon {
         FileIO.read_declaration_file(file, all_ppts, ppt_regexp);
       }
       System.out.println();
+      add_combined_exits(all_ppts);
 
       System.out.print("Reading data trace files ");
       for (Iterator i = dtrace_files.iterator(); i.hasNext(); ) {
@@ -224,7 +225,8 @@ public final class Daikon {
     System.out.print(", " + num_dtrace_files + " dtrace file");
     System.out.println(((num_dtrace_files == 1) ? "" : "s") + ".");
 
-    add_combined_exits(all_ppts);
+    // Old location; but we want to add these before reading trace files.
+    // add_combined_exits(all_ppts);
 
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
@@ -348,7 +350,8 @@ public final class Daikon {
         Assert.assert(enter_ppt.ppt_name.isEnterPoint());
         String exit_name = enter_ppt.ppt_name.makeExit().getName();
         Assert.assert(ppts.get(exit_name) == null);
-        PptTopLevel exit_ppt = new PptTopLevel(exit_name, new VarInfo[0]);
+        VarInfo[] comb_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
+        PptTopLevel exit_ppt = new PptTopLevel(exit_name, comb_vars);
         // {
         //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
         //   for (int i=0; i<exits.size(); i++) {
@@ -359,6 +362,25 @@ public final class Daikon {
         // }
         new_ppts.add(exit_ppt);
         exit_ppt.entry_ppt = enter_ppt;
+        for (Iterator exit_itor=exits.iterator() ; exit_itor.hasNext() ; ) {
+          PptTopLevel line_exit_ppt = (PptTopLevel) exit_itor.next();
+          VarInfo[] line_vars = line_exit_ppt.var_infos;
+          line_exit_ppt.combined_exit = exit_ppt;
+          {
+            int[] indices = new int[comb_vars.length];
+            int new_len = indices.length;
+            int new_index = 0;
+            for (int old_index=0; old_index<line_vars.length; old_index++) {
+              if (line_vars[old_index].name == comb_vars[old_index].name) {
+                indices[new_index] = old_index;
+                new_index++;
+              }
+            }
+            line_exit_ppt.combined_exit_var_indices = indices;
+            Assert.assert(new_index == new_len);
+          }
+        }
+
         // exit_ppt.num_samples = enter_ppt.num_samples;
         // exit_ppt.num_values = enter_ppt.num_values;
       }

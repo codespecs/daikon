@@ -316,6 +316,20 @@ public final class ValueTuple implements Cloneable {
         dest[i] = MODIFIED;
   }
 
-
+  /**
+   * Return a new ValueTuple consisting of the elements of this one with
+   * indices listed in indices.
+   **/
+  public ValueTuple slice(int[] indices) {
+    int new_len = indices.length;
+    Object[] new_vals = new Object[new_len];
+    int[] new_mods = new int[new_len];
+    for (int i=0; i<new_len; i++) {
+      new_vals[i] = vals[indices[i]];
+      new_mods[i] = mods[indices[i]];
+    }
+    return new ValueTuple(new_vals, new_mods);
+  }
 
 }
+
