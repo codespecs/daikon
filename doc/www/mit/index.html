@@ -261,10 +261,7 @@ Checking out Daikon from the CVS repository has several advantages:
 There are two modules (directories) available via anonymous CVS from
 pag.lcs.mit.edu:  <tt>invariants</tt> (the bulk of the Daikon invariant
 detection system, which is written in Java) and <tt>dfej</tt> (the Daikon
-front end for Java, which is written in C++).  If you obtain Daikon from
-the CVS repository, you will also need to obtain some <a
-href="#packages-used-by-daikon">additional packages</a> which are used by
-Daikon but do not appear in the repository.
+front end for Java, which is written in C++).
 <p>
 
 You can learn how to use CVS from
@@ -287,8 +284,9 @@ The following commands create and populate the
     chmod g+x `find invariants -type d -print`
     cd invariants/java/daikon
     cvs update -r ENGINE_V2_PATCHES
+    make
 </pre>
-(The last two lines make sure that you use Daikon version 2, rather than
+(This ensures that you use Daikon version 2, rather than
 the experimental version 3.)
 <p>
 
@@ -349,21 +347,6 @@ advantage of your changes.  But never commit changes without having tested
 them first, and use a descriptive CVS comment when you commit.
 <p>
 
-
-<!-- <h4><a name="packages-used-by-daikon"></a>Packages used by Daikon</h4>
-
-Daikon relies on several other packages that appear in the <tt>java/lib</tt>
-directory.  You will need to add those <tt>.jar</tt> files to your
-classpath; for instance,
-<pre>
-  setenv CLASSPATH $HOME/research/invariants/java:$HOME/research/invariants/java/lib/jakarta-oro.jar:$HOME/research/invariants/java/lib/java-getopt.jar:$HOME/research/invariants/java/lib/junit.jar:$CLASSPATH
-</pre>
-
-<p>(An easier way to have include these packages as part of your
-CLASSPATH is given above in the <a href="#classpath">classpath</a>
-section.  If you use that approach, you do not have to add the
-packages by hand.)
--->
 
 <h3><a name="environment-2"></a>Notes on your environment</h3>
 

@@ -37,16 +37,16 @@ cd ~<em>username</em>
 echo "Adjust directory permissions"
 chmod og+rx .
 echo "Set up dotfiles, including email forwarding to Athena"
-cp /g2/users/mernst/research/invariants/doc/www/mit/.cshrc .
 echo "" >> .bashrc
 cat /g2/users/mernst/research/invariants/doc/www/mit/.bashrc >> .bashrc
-cp /g2/users/mernst/research/invariants/doc/www/mit/.cvsrc .
+cp -pf /g2/users/mernst/research/invariants/doc/www/mit/.cshrc .
+cp -pf /g2/users/mernst/research/invariants/doc/www/mit/.cvsrc .
 echo "" >> .emacs
 echo "" >> .emacs
 cat /g2/users/mernst/research/invariants/doc/www/mit/.emacs >> .emacs
 echo <em>username</em>@mit.edu > .forward
-chown <em>username</em> .cvsrc .emacs .forward
-chgrp <em>username</em> .cvsrc .emacs .forward
+chown <em>username</em> .cshrc .cvsrc .emacs .forward
+chgrp <em>username</em> .cshrc .cvsrc .emacs .forward
 exit
 </pre>
 </blockquote>
