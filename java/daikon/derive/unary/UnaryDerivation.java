@@ -28,7 +28,20 @@ public abstract class UnaryDerivation
     }
   }
 
-  public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
+  public ValueAndModified computeValueAndModified(ValueTuple vt) {
+    int source_mod = base.getModified(vt);
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_FLOW)
+      return ValueAndModified.MISSING_FLOW;
+
+    return computeValueAndModifiedImpl(vt);
+  }
+
+  /**
+   * Actual implementation once mods are handled.
+   **/
+  protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
   public VarInfo base() {
     return base;

@@ -32,17 +32,13 @@ public final class SequenceScalarSubsequence
     super (vi1, vi2, from_start, off_by_one);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
-    if (mod1 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     int mod2 = base2.getModified(full_vt);
-    if (mod2 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
 
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     long [] val1_array = (long []) val1;
     int val2 = base2.getIndexValue(full_vt);
 
@@ -55,12 +51,12 @@ public final class SequenceScalarSubsequence
       begin_inclusive = 0;
       end_exclusive = val2+index_shift+1; // +1: endpoint is exclusive
       if ((end_exclusive < 0) || (end_exclusive > val1_array.length))
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
     } else {
       begin_inclusive = val2+index_shift;
       end_exclusive = val1_array.length;
       if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length))
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
     }
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)

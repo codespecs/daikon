@@ -22,13 +22,11 @@ public final class SequenceSum
     super(vi);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     Object val = base.getValue(vt);
     if (val == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     if (val instanceof long[]) {
       long[] val_array = (long[])val;
       long result = 0;
@@ -45,7 +43,7 @@ public final class SequenceSum
                                   source_mod);
 
     } else {
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     }
   }
 

@@ -99,7 +99,10 @@ public final class SequencesPredicateFloat
    * @param full_vt the value tuple of a program point to compute the
    * derived value from.
    **/
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
+    int mod1 = base1.getModified(full_vt);
+    int mod2 = base2.getModified(full_vt);
+
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
 
@@ -130,16 +133,14 @@ public final class SequencesPredicateFloat
 
     if (length1 != length2) {
       // This derived variable is no longer interesting
-      return new ValueAndModified(null, ValueTuple.MISSING);
+      return new ValueAndModified(null, ValueTuple.MISSING_NONSENSICAL);
     }
 
     Assert.assertTrue(length1 == length2);
 
     int mod = ValueTuple.UNMODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
-    if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
+    if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     /*
      * v1\v2  Unm  Mod  Mis
      *

@@ -67,13 +67,11 @@ public final class SequenceLength
     return true;
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple vt) {
-    int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
+  public ValueAndModified computeValueAndModifiedImpl (ValueTuple vt) {
     Object val = base.getValue(vt);
+    int source_mod = base.getModified(vt);
     if (val == null) {
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     }
 
     int len;

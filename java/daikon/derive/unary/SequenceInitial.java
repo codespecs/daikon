@@ -77,23 +77,21 @@ public final class SequenceInitial
     return true;
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     Object val = base.getValue(vt);
     if (val == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     if (base.rep_type == ProglangType.INT_ARRAY ) {
       long [] val_array = (long [])val;
       if (val_array.length < minLength)
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
       int real_index = (index<0 ? val_array.length + index : index);
       return new ValueAndModified(Intern.internedLong(val_array[real_index]), source_mod);
     } else {
       Object[] val_array = (Object[])val;
       if (val_array.length < minLength)
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
       int real_index = (index<0 ? val_array.length + index : index);
       return new ValueAndModified(val_array[real_index], source_mod);
     }

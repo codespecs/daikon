@@ -62,9 +62,12 @@ public final class SequencesJoin
    * @param full_vt the value tuple of a program point to compute the
    * derived value from.
    **/
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
+
+    int mod1 = base1.getModified(full_vt);
+    int mod2 = base2.getModified(full_vt);
 
     int length1 = -1;
     int length2 = -2; // They must equal in the end
@@ -144,10 +147,8 @@ public final class SequencesJoin
     */
 
     int mod = ValueTuple.UNMODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
-    if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
+    if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     /*
      * v1\v2  Unm  Mod  Mis
      *

@@ -51,15 +51,16 @@ public final class SequencesConcat
     super(vi1, vi2);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
 
     int mod = ValueTuple.UNMODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
-    if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
+    int mod1 = base1.getModified(full_vt);
+    int mod2 = base2.getModified(full_vt);
+
+    if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
 
     if (val1 == null && val2 == null) {
       return new ValueAndModified (null, mod);

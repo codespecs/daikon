@@ -40,20 +40,16 @@ public final class SequenceScalarSubscript
       index_shift = 0;
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
-    if (mod1 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     int mod2 = base2.getModified(full_vt);
-    if (mod2 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     long [] val1_array = (long []) val1;
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length))
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     long  val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

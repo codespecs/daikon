@@ -32,23 +32,20 @@ public final class SequenceScalarIntersection
     super(vi1, vi2);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
-    if (mod1 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     int mod2 = base2.getModified(full_vt);
-    if (mod2 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
+
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     long [] val1_array = (long []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
-      return ValueAndModified.MISSING;
-    long [] val2_array = (long []) val2;
+      return ValueAndModified.MISSING_NONSENSICAL;
+     long [] val2_array = (long []) val2;
 
     long [] tmp = new long [val1_array.length + val2_array.length];
     int size = 0;

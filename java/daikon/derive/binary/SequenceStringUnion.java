@@ -26,20 +26,17 @@ public final class SequenceStringUnion
     super(vi1, vi2);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
-    if (mod1 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     int mod2 = base2.getModified(full_vt);
-    if (mod2 == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
+
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     String [] val1_array = (String []) val1;
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     String [] val2_array = (String []) val2;
 
     String [] tmp = new String [val1_array.length+val2_array.length];

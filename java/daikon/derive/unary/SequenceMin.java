@@ -23,28 +23,26 @@ public final class SequenceMin
     super(vi);
   }
 
-  public ValueAndModified computeValueAndModified(ValueTuple vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING)
-      return ValueAndModified.MISSING;
     Object val = base.getValue(vt);
     if (val == null)
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     if (val instanceof long[]) {
       long[] val_array = (long[])val;
       if (val_array.length == 0)
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
       return new ValueAndModified(Intern.internedLong(ArraysMDE.min(val_array)),
                                   source_mod);
     } else if (val instanceof double[]) {
       double[] val_array = (double[])val;
       if (val_array.length == 0)
-        return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING_NONSENSICAL;
       return new ValueAndModified(Intern.internedDouble(ArraysMDE.min(val_array)),
                                   source_mod);
 
     } else {
-      return ValueAndModified.MISSING;
+      return ValueAndModified.MISSING_NONSENSICAL;
     }
   }
 
