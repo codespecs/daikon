@@ -33,7 +33,15 @@ public class LinearTernaryCoreTest
       assertTrue(triples[i].length == 3);
       set_cache (ltc, i, triples[i][0], triples[i][1], triples[i][2]);
     }
-    double coef[] = ltc.calc_tri_linear (ltc.def_points);
+    double[] coef;
+    try {
+      coef = ltc.calc_tri_linear (ltc.def_points);
+    } catch (ArithmeticException e) {
+      // In the future, we should perhaps test triples that that don't
+      // determine a plane; but none of the current ones do.
+      assertTrue(false);
+      coef = null; // not reached
+    }
     // System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c);
     // System.out.println("actual: " + ltc.a + " " + ltc.b + " " + ltc.c);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
