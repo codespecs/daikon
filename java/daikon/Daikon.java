@@ -630,7 +630,13 @@ public final class Daikon {
       while (true) {
         System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
         try {
-          sleep(5000);
+          if (debugTrace.isDebugEnabled()) {
+            debugTrace.debug ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
+            // We sleep shorter so we can get more information.
+            sleep(500);
+          } else {
+            sleep(5000);
+          }
         } catch (InterruptedException e) {
           // hmm
         }
