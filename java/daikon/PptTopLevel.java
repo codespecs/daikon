@@ -1979,7 +1979,14 @@ public class PptTopLevel extends Ppt {
           if (Daikon.esc_output) {
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-              System.out.println(vi.name + " = " + other.name);
+	      String lname = vi.esc_name();
+	      String rname = other.esc_name();
+	      if (lname != null && rname != null) {
+		System.out.println(lname + " == " + rname);
+	      } else {
+		System.out.println("format_esc not possible for equality: " +
+				   vi.name + " = " + other.name);
+	      }
             }
           } else {
             StringBuffer sb = new StringBuffer(vi.name);
