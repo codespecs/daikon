@@ -27,22 +27,18 @@ instrumentation instructions.
 
 C front end:
 
-  The instrumenter is named "edgcpfe" and is currently found in 
-  /projects/se/people/mernst/vortex-edg-bp_invariants/vortex/C++/front-end/release/bin/edgcpfe.
-  [[This should change; and I'm not even sure that version works.]]
-
-  a. Make a copy of your source tree.
-  b. Instrument each file in your source tree;
-       edgcpfe --c -D__ANSIC__ -D__sparc <filename>
-     creates file foo.int.c (in directory /release/dump_trace_src, maybe?).
-  c. Do one of the following:
-      * rename that file to the original name, or
-      * change the Makefile to reference the new name.
-  d. Edit the makefile so that you link against the object file which
-     implements the instrumentation file.  [[What is its name?  Where can
-     it be found?]]
-  e. Build your program in the usual way, perhaps by running "make"; this
-     creates an instrumented executable.
+ a. Run the instrumentor on your source files by issuing:
+   instrumentor <filename1>.c <filename2>.c ...
+ b. The results of this run are that:
+   i) The instrumented source files are now labelled <filename1>.c
+<filename2>.c ...
+   ii) There is a declaration file associated with each source file labelled
+<filename>.c.decls.
+   iii) The original, uninstrumented files are renamed as <filename1>.c.uninst.
+ c. Add your instrumented source files to the Makefile.  Alternatively, use your own
+makefile and edit it to include "dump_trace.c".
+ d. Build your program in the usual way, perhaps by running "make"; this
+    creates an instrumented executable.
 
   [[
     To use the latest and (possibly) greatest, get the (Solaris) binary from
@@ -149,3 +145,7 @@ parameter, for parameters possibly modified in the function body.
 the instrumentation was inserted; invariants are program-point-specific.
 There is some redundancy in the output (e.g., both "Z = max(Y, X)" and
 "Z = max(X, Y)" are reported, as are both "Y > X" and "X < Y").
+
+
+
+
