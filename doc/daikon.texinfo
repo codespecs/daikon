@@ -206,6 +206,7 @@ Variable names
 
 GUIs for displaying invariants
 
+* Eclipse plug-in::             
 * Tree GUI::                    
 * Context GUI::                 
 
@@ -3020,11 +3021,12 @@ invariants for the browsed code.
 
 
 @menu
+* Eclipse plug-in::             
 * Tree GUI::                    
 * Context GUI::                 
 @end menu
 
-@node    Eclipse plug-in, Context GUI, GUIs, GUIs
+@node    Eclipse plug-in, Tree GUI, GUIs, GUIs
 @section Eclipse plug-in
 @cindex Eclipse plug-in
 @cindex GUI, Eclipse
@@ -3036,7 +3038,7 @@ details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
 documentation}.
 
 
-@node    Tree GUI, Context GUI, GUIs, GUIs
+@node    Tree GUI, Context GUI, Eclipse plug-in, GUIs
 @section Tree-structured invariant browser
 @cindex Tree GUI
 @cindex GUI, tree
