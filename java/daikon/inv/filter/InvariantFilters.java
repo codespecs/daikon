@@ -3,6 +3,7 @@ package daikon.inv.filter;
 import utilMDE.Assert;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Appender;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
@@ -143,8 +144,9 @@ public class InvariantFilters {
     PatternLayout pattern = null;
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      pattern = (PatternLayout)PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).getLayout();
-      PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(new PatternLayout("\t" + pattern.getConversionPattern()));
+      Appender appender = PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename);
+      pattern = (PatternLayout)appender.getLayout();
+      appender.setLayout(new PatternLayout("\t" + pattern.getConversionPattern()));
     }
 
     if (invariant instanceof GuardingImplication) {
@@ -173,18 +175,18 @@ public class InvariantFilters {
     //  Property filters.
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
         PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
       }
       if (filter.shouldDiscard( invariant )) {
-        if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
           PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
           PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
         }
         return false;
       }
     }
-    if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)\n");
       PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
     }
@@ -199,7 +201,7 @@ public class InvariantFilters {
     InvariantFilter answer = null;
     for(Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if(filter.getDescription().equals(description)) {
+      if (filter.getDescription().equals(description)) {
         answer = filter;
       }
     }

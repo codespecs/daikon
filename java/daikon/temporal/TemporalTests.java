@@ -156,6 +156,10 @@ public class TemporalTests extends TestCase
 	assertTrue(beforeA.seenEvent(B));
 	assertTrue(!afterA.seenEvent(B));
 
+	assertTrue(global.seenEvent(B));
+	assertTrue(beforeA.seenEvent(B));
+	assertTrue(!afterA.seenEvent(B));
+
 	global.processEvent(A);
 
 	assertTrue(global.isActive());
@@ -458,6 +462,8 @@ public class TemporalTests extends TestCase
 
 	assertTrue(!auAB.isActive());
 
+	assertTrue(!auAB.isActive());
+
 	assertTrue(!eventuallyC.happenedOnceInScope);
 
 	global.processEvent(A);
@@ -469,6 +475,8 @@ public class TemporalTests extends TestCase
 	global.processEvent(B);
 
 	assertTrue(!auAB.isActive());
+
+	assertTrue(eventuallyC.isFalsified);
 
 	assertTrue(eventuallyC.isFalsified);
 
@@ -494,7 +502,8 @@ public class TemporalTests extends TestCase
     }
 
     //FIXME: Build a querying system for the invariant tree, and make
-    //some approximate correctness tests, etc.
+    //some approximate correctness tests, etc. Idea: Possibly make them
+    //random.
     //FIXME: These should be fully automated! no really!
     public void testBasicDynamicInstantiation()
     {
@@ -542,7 +551,7 @@ public class TemporalTests extends TestCase
 	*/
 
 	global.processEvent(C);
-	//	global.printState();
+	global.printState();
 
 	global.exit();
     }

@@ -61,6 +61,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+23-Nov-2002 21:10:50 by MDE
 Sun Nov 17 13:37:54 EST 2002 by MDE
 Fri Nov  8 09:42:51 EST 2002 by MDE
 Mon Jul 29 13:22:02 EDT 2002 by MDE

@@ -18,15 +18,18 @@ public class TemporalInvariantManager
     public Event generateSampleEvent(Ppt ppt, ValueTuple vt)
     {
 	//Fill this in to produce a sample event from a program point and value tuple
-
-	return null;
+        return new ErdosSampleEvent(ppt, vt);
     }
-
-    public Vector generateBasicEventsFromSample(Event e)
-    {
-	//Fill this in to produce basic events from a sample
-
-	return null;
+    
+    public static Vector generateBasicEventsFromSample(Event e)
+    {   
+        //Fill this in to produce basic events from a sample
+   	if (e instanceof ErdosSampleEvent)
+	{ 
+        	return ((ErdosSampleEvent)e).generateBasicEvents();
+	} else {
+		return new Vector();
+	}
     }
 
     public void beginExecution()
@@ -44,9 +47,17 @@ public class TemporalInvariantManager
 	if (!active)
 	    return;
 
+	System.out.println("Starting ppt processing.");
+
 	Vector newEvents = generateBasicEventsFromSample(e);
 
+	System.out.println("Processing program point. " + String.valueOf(newEvents.size()) + " basic events seen.");
+
 	global_scope.processEvent(e, newEvents);
+
+	System.out.println("We have: " + global_scope.getAllChildInvariants().size() + " invariants.");
+
+	//reportTemporalInvariants();
     }
 
     public void reportTemporalInvariants()
@@ -54,7 +65,12 @@ public class TemporalInvariantManager
 	if (!active)
 	    return;
 
-	//FIXME: Improve!
-	global_scope.printState();
+	for(Iterator i = global_scope.getAllChildInvariants().iterator();
+	    i.hasNext(); )
+	{
+		String out = ((TemporalInvariant)i.next()).outputString();
+
+		System.out.println(out);
+	}
     }
 }

@@ -38,6 +38,32 @@ abstract class TemporalInvariant extends EventReceptor
 	isFalsified = true;
     }
 
+    public String outputString()
+    {
+	Scope parent = mParent;
+	Vector strings = new Vector();
+
+	while(parent != null)
+	{
+		strings.add(parent.getNameString());
+		parent = parent.mParent;
+	}
+
+	Collections.reverse(strings);
+
+	StringBuffer out = new StringBuffer();
+
+	for(Iterator i = strings.iterator(); i.hasNext(); )
+	{
+		out.append((String)i.next());
+	}
+
+	out.append(toString());
+
+	return out.toString();
+    }
+
+	
     public String toString()
     {
 	StringBuffer res = new StringBuffer();

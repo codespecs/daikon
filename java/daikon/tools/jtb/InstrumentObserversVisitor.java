@@ -20,8 +20,8 @@ public class InstrumentObserversVisitor
   extends DepthFirstVisitor
 {
 
-  public InstrumentObserversVisitor(Collection observers // [MethodDeclaration]
-                                    )
+  /** @param observers a collection of MethodDeclarations **/
+  public InstrumentObserversVisitor(Collection observers)
   {
     observer_methods = new ArrayList(observers);
   }

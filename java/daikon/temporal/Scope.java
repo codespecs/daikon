@@ -25,6 +25,8 @@ public abstract class Scope extends EventReceptor
     protected boolean enteredBefore;
     protected boolean exitedBefore;
 
+    public static int MAX_DEPTH = 2;
+
     Scope()
     {
 	super();
@@ -148,8 +150,15 @@ public abstract class Scope extends EventReceptor
 
     void sendEventToKids(Event e)
     {
+	//FIXME: Restructure so that the basic events aren't recomputed
+	//(and so that this backwards dependency is removed). Not too hard;
+	//just need to always pass around both the sample event and the
+	//basic events..
 	mEventsSeen.add(e);
 
+	mEventsSeen.addAll(TemporalInvariantManager.generateBasicEventsFromSample(e));
+
+	
 	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).processEvent(e);
@@ -207,6 +216,14 @@ public abstract class Scope extends EventReceptor
 
     Vector duplicateChildren()
     {
+	//FIXME: Pass level around so that redundant getDepth() computations
+	//can be spared.
+
+	if (getDepth() >= MAX_DEPTH)
+	{
+		return new Vector();
+	} 
+	
 	Vector out = new Vector();
 
 	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
@@ -222,16 +239,23 @@ public abstract class Scope extends EventReceptor
 	return out;
     }
 
+    Hashtable generateNewCandidates(Event e)
+    {
+	return generateNewCandidates(e, 0);
+    }
+
     //FIXME: Use a different collection here?
     //This routine returns a Hashtable mapping nodes in the
     //EventReceptor tree to Vectors of new nodes which should be added
     //off of them. This is done so that all the new nodes can be added
     //at once, without separate computations interfering with one another.
-    Hashtable generateNewCandidates(Event e)
+    Hashtable generateNewCandidates(Event e, int level)
     {
+	//	System.out.println("Generating new candidate invariants at level " + String.valueOf(level) + " given event " + e.toString());
+
 	Hashtable out = new Hashtable();
 
-	if (!isActive())
+	if (!isActive() || level >= MAX_DEPTH)
 	    return out;
 
 	//Recurse first, damn you
@@ -239,7 +263,7 @@ public abstract class Scope extends EventReceptor
 	//depending on things which begin or close this scope)
 	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
-		out.putAll(((Scope)i.next()).generateNewCandidates(e));
+		out.putAll(((Scope)i.next()).generateNewCandidates(e, level + 1));
 	    }
 
 	if (seenEvent(e))
@@ -373,6 +397,21 @@ public abstract class Scope extends EventReceptor
 
 	return s;
     }
+
+    Vector getAllChildInvariants()
+    {
+	Vector out = new Vector();
+
+	out.addAll(mChildInvariants);
+
+	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	{
+		out.addAll(((Scope)i.next()).getAllChildInvariants());
+	}
+
+	return out;
+    }
+
 }
 
 class ScopeGlobal extends Scope
@@ -424,7 +463,14 @@ class ScopeGlobal extends Scope
 
 		for(Iterator i = basicEvents.iterator(); i.hasNext(); )
 		    {
-			newStuffHashes.add(generateNewCandidates((Event)i.next()));
+			Event e = (Event)i.next();
+
+			if (!mEventsSeen.hasEventMatching(e))
+			{
+				System.out.println("Looking at new event: " + e.toString());
+			}
+
+			newStuffHashes.add(generateNewCandidates(e));
 		    }
 	    }
 

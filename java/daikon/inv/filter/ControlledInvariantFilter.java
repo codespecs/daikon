@@ -25,11 +25,11 @@ class ControlledInvariantFilter extends InvariantFilter {
 
   private boolean isWorthPrinting(Invariant inv)
   {
-    // if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-    //   PrintInvariants.debugFiltering.debug("\tCalling IWP on " + inv.format() + " for reference\n");
-    //   inv.isWorthPrinting();
-    //   PrintInvariants.debugFiltering.debug("\tdone\n");
-    // }
+    //if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+    //  PrintInvariants.debugFiltering.debug("\tCalling IWP on " + inv.format() + " for reference\n");
+    //  inv.isWorthPrinting();
+    //  PrintInvariants.debugFiltering.debug("\tdone\n");
+    //}
 
 
     if (! isWorthPrinting_sansControlledCheck(inv)) {
@@ -44,7 +44,7 @@ class ControlledInvariantFilter extends InvariantFilter {
     /* [INCR]
     Vector contr_invs = inv.find_controlling_invariants_sorted();
 
-    if((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isDebugEnabled())) {
+    if ((contr_invs.size() == 0) && (PrintInvariants.debugFiltering.isDebugEnabled())) {
       PrintInvariants.debugFiltering.debug("\t" + inv.format() + " has no controlling invariants.\n");
     }
 
@@ -59,7 +59,7 @@ class ControlledInvariantFilter extends InvariantFilter {
       if (isWorthPrinting_sansControlledCheck(contr_inv)) {
         // we have a printable controller, so we shouldn't print
 
-        if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
           PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
         }
         return false;
@@ -104,7 +104,7 @@ class ControlledInvariantFilter extends InvariantFilter {
       if (inv.hasOnlyConstantVariables()) {
         PrintInvariants.debugFiltering.debug("\t\thas only constant vars " + inv.format() + "\n");
       }
-      */
+      */ // [INCR]
       if (inv.isObvious()) {
         PrintInvariants.debugFiltering.debug("\t\tis obvious " + inv.format() + "\n");
       }

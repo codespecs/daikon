@@ -83,7 +83,7 @@ public class Ast {
   public static String printCurrentLine(Node n) {
     Node current = n;
     while (current.getParent() != null &&
-	   print(current.getParent()).indexOf(lineSep) < 0) {
+           print(current.getParent()).indexOf(lineSep) < 0) {
       current = current.getParent();
     }
     return print(current);
@@ -571,10 +571,10 @@ public class Ast {
         Assert.assertTrue(lparen > 0);
         Assert.assertTrue(rparen > lparen);
         String ppt_args_string = UtilMDE.
-	  arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
-	Assert.assertTrue(ppt_args_string.startsWith("("), ppt_args_string);
-	Assert.assertTrue(ppt_args_string.endsWith(")"), ppt_args_string);
-	ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
+          arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
+        Assert.assertTrue(ppt_args_string.startsWith("("), ppt_args_string);
+        Assert.assertTrue(ppt_args_string.endsWith(")"), ppt_args_string);
+        ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
         String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
         if ((ppt_args.length == 1)
             && (ppt_args[0].equals(""))) {
@@ -593,7 +593,7 @@ public class Ast {
             // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }
-	  // Is the below test necessary since we do arglistFromJvm above?
+          // Is the below test necessary since we do arglistFromJvm above?
           String ppt_arg_nonjvm = utilMDE.UtilMDE.classnameFromJvm(ppt_arg);
           if ((ppt_arg_nonjvm != null) && typeMatch(ppt_arg_nonjvm, paramtype)) {
             // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
@@ -607,9 +607,9 @@ public class Ast {
           continue;
         }
         MergeESC.debug.debug("Ast.getMatch succeeded: " + ppt.name
-			     + " to " + classname + "." + methodname
-			     + "(" + UtilMDE.join(param_types, ",") + ")");
-	result.add(ppt);
+                             + " to " + classname + "." + methodname
+                             + "(" + UtilMDE.join(param_types, ",") + ")");
+        result.add(ppt);
       }
     }
     return result;

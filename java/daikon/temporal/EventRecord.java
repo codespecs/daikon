@@ -18,6 +18,14 @@ class EventRecord
 	mEvents.put(e, new Boolean(true));
     }
 
+    void addAll(Collection c)
+    {
+	for(Iterator i = c.iterator(); i.hasNext(); )
+	{
+		add((Event)i.next());
+	}
+    }
+
     boolean hasEventMatching(Event e)
     {
 	return mEvents.containsKey(e);

@@ -40,6 +40,20 @@ abstract class EventReceptor
 	return mParent.isChildOf(s);
     }
 
+    int getDepth()
+    {
+	if (mParent == null)
+	{
+		return -1;
+	} else if (mParent instanceof ScopeGlobal)
+	{
+		return 0;
+	} else {
+		return mParent.getDepth() + 1;
+	}
+    }
+
+
     abstract Object generateStateSnapshot();
     abstract void restoreState(Object snapshot);
 

@@ -200,7 +200,7 @@ public final class ValueTuple implements Cloneable {
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
    **/
-  Object getValue(VarInfo vi) { return vi.getValue(this); }
+  public Object getValue(VarInfo vi) { return vi.getValue(this); }
 
   /**
    * Get the value at the val_index.

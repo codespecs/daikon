@@ -56,7 +56,7 @@ public class PrintInvariants {
         fa.setName(daikonFilteringOutputFilename);
       }
       catch (IOException ioe) {
-        System.err.println("Warning; unable to open file filtering_transcript");
+        System.err.println("Warning; unable to open file " + daikonFilteringOutputFilename);
       }
       if (fa != null) {
         debugFiltering.addAppender(fa);
@@ -550,14 +550,14 @@ public class PrintInvariants {
 
     // // Filter for parameters here
     // if (vi.ppt.ppt_name.isExitPoint()) {
-    //   for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-    //  VarInfo var = (VarInfo) i.next();
-    //  if (debugPrintEquality.isDebugEnabled()) {
-    //    debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
-    //  }
-    //  if (var.isDerivedParamAndUninteresting()) {
-    //    i.remove();
-    //  }
+    //  for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
+    //   VarInfo var = (VarInfo) i.next();
+    //   if (debugPrintEquality.isDebugEnabled()) {
+    //     debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+    //   }
+    //   if (var.isDerivedParamAndUninteresting()) {
+    //     i.remove();
+    //   }
     //  }
     // }
     return(equal_vars);
