@@ -1811,6 +1811,16 @@ public final class ONEOFSCALAR
       }
 #endif
 
+#ifdef BASE_INT
+      // Be even more aggressive about rejecting these for use in
+      // implications in this case, since, we'd be printing them as
+      // "true"
+      if (dkconfig_omit_hashcode_values_Simplify &&
+          (is_hashcode || other.is_hashcode)) {
+        return false;
+      }
+#endif
+
       return true;
     }
 #if defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
