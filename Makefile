@@ -99,11 +99,16 @@ dist-test-no-update-dist: dist-ensure-directory-exists
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
 	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; rm `find . -name '*.class'`; make)
 
+# I would rather define this inside the cvs-test rule, but I'm having
+# trouble with that (I don't know how to make it work).
+TESTCVS=/scratch/$(USER)/daikon.cvs
+TESTCVSJAVA=$(TESTCVS)/invariants/java
+
 cvs-test:
-	-rm -rf $(HOME)/tmp/daikon.cvs
-	mkdir $(HOME)/tmp/daikon.cvs
-	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(CVS_REP) co invariants)
-	(cd $(HOME)/tmp/daikon.cvs/invariants/daikon; CLASSPATH=/g2/users/mernst/tmp/daikon.cvs:/g2/users/mernst/tmp/daikon.cvs/invariants:/g2/users/mernst/java/OROMatcher-1.1:/g2/users/mernst/java/getopt-1.0.8:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
+	-rm -rf $(TESTCVS)
+	mkdir -p $(TESTCVS)
+	cd $(TESTCVS) && cvs -Q -d $(CVS_REP) co invariants
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar
 
 
 ###########################################################################
@@ -145,6 +150,7 @@ update-dist-dir: dist-ensure-directory-exists
 
 www:
 	cd doc/www && cp -Ppf $(WWW_FILES) $(WWW_DIR)
+	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 
 .PHONY: www
 
@@ -153,13 +159,21 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 	mkdir /tmp/daikon-jar
 	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
-	tar xzf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
-	tar xzf java/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
-	mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
-	rm -rf /tmp/daikon-jar/OROMatcher-1.1.0a
+	## Old untarring code:
+	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
+	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
+	#  mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
+	#  rm -rf /tmp/daikon-jar/OROMatcher-1.1.0a
+	# jar does not seem to accept the -C argument.  MDE 6/14/2001
+	# jar xf java/lib/jakarta-oro.jar -C /tmp/daikon-jar
+	# jar xf java/lib/java-getopt.jar -C /tmp/daikon-jar
+	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
+	(cd /tmp/daikon-jar; jar xf java/lib/jakarta-oro.jar)
+	(cd /tmp/daikon-jar; jar xf java/lib/java-getopt.jar)
+	(cd /tmp/daikon-jar; jar xf java/lib/junit.jar)
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
-	# rm -rf /tmp/daikon-jar
+	rm -rf /tmp/daikon-jar
 
 # Use this ordering because daikon-jar is made before daikon-source
 
@@ -213,9 +227,13 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	# Java support files
 	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
 	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
-	tar zxf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
-	tar zxf java/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
-	(cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
+	tar zxf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
+	# tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
+	# (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
+	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
+	(cd /tmp/daikon/java; ln -s jakarta-oro-2.0.3/src/java/org .)
+	unzip java/lib/junit3.7.zip -d /tmp/daikon/java
+	(cd /tmp/daikon/java; ln -s junit3.7/junit .)
 
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
