@@ -3081,6 +3081,20 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 @file{.decls} file.  For more information, see
 @ref{Pointer type disambiguation}.
 
+@item --flatten-mdas
+Ensures that each multi-dimensional array in the instrumented program will be
+allocated as a single contiguous block of memory.  This is necessary if the
+program under analysis assumes that its multi-dimensional array variables
+are contiguous blocks of memory (e.g., clearing them with memset(),
+manually calculating addresses of elements in the array using memory offsets
+from the first element, etc.).  However, this will remove padding at the
+beginnings and ends of subarrays and diminish the ability of the runtime
+library to report array overflow errors, so this option should only be
+specified if necessary.
+
+@item --help
+Displays a usage message.
+
 @item -l
 Indicates that the next file (only) should not produce @file{.dtrace}
 file output (@pxref{Instrumentation scope}).
@@ -3092,9 +3106,6 @@ functions defined in @file{file2.c}, you would instrument as follows:
 @end example
 This is the only command-line switch that can be used in the midst of the
 list of filenames; it may be specified multiple times.
-
-@item --help
-Displays a usage message.
 
 @item --no-lackwit
 @cindex LACKWIT_HOME environment variable
