@@ -142,7 +142,7 @@ public class Debug {
    * is printed
    *
    * @see #log(Logger, Class, Ppt, String)
-   * @see #logDetailed()
+   * @see #logDetail()
    */
   public static boolean dkconfig_logDetail = false;
 
