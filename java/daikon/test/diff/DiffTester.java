@@ -2,6 +2,7 @@ package daikon.test.diff;
 
 import junit.framework.*;
 import daikon.*;
+import daikon.config.*;
 import daikon.diff.*;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
@@ -143,6 +144,12 @@ public class DiffTester extends TestCase {
     }
 
     {
+      // Ensure that Modulus is enabled
+      Configuration.getInstance().
+	apply(daikon.inv.unary.scalar.Modulus.class,
+	      "enabled",
+	      "true");
+
       imps1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x") };
       PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
@@ -484,6 +491,12 @@ public class DiffTester extends TestCase {
   }
 
   public void testNonModulus() {
+    // Ensure that NonModulus is enabled
+    Configuration.getInstance().
+      apply(daikon.inv.unary.scalar.NonModulus.class,
+	    "enabled",
+	    "true");
+
     PptMap map = new PptMap();
     VarInfo[] vars = { newIntVarInfo("x") };
     PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
