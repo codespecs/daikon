@@ -775,12 +775,16 @@ There are two ways to get your changes into both versions of Daikon.
 
 <h3><a name="distribution">Making a distribution</a></h3>
 
-To publish a Daikon distribution, do the following.  If you only want
-to create the <tt>daikon.tar</tt> or <tt>daikon.tar.gz</tt> file, then
-simply run <tt>make</tt> with the desired file as the target. <p> <ol>
+To publish a Daikon distribution, do the following.  If you only want to
+create the <tt>daikon.tar</tt> or <tt>daikon.tar.gz</tt> file in your own
+directory, then simply run <tt>make</tt> with the desired file as the
+target.
+<p>
+
+<ol>
 
     <li> It is suggested that you use the daikongroupmember account to
-    publish a distribution.  This insures that everything has been committed
+    publish a distribution.  This ensures that everything has been committed
     to CVS and that nothing extraneous in your account gets included in the
     distribution.  Ask Michael Ernst for the password.  Note that all of
     the following instructions should work from other accounts as 
@@ -852,6 +856,8 @@ simply run <tt>make</tt> with the desired file as the target. <p> <ol>
         make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
     </code> <P>
 
+<!--
+We no longer maintain or update V2.
     <li> Build, checkout, create a tarfile/jdoc for V2, and 
     update the website.  If the update doesn't change anything, you
     can skip this step. <P>
@@ -869,6 +875,7 @@ simply run <tt>make</tt> with the desired file as the target. <p> <ol>
         cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v2.tar.gz <br>
         update-link-dates /home/httpd/html/daikon/download/index.html <br>
     </code> <p>
+-->
 
     <li> Commit any changes back to CVS <p>
 
