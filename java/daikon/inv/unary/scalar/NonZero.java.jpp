@@ -326,4 +326,42 @@ public class NONZERO
     return false;
   }
 
+  /**
+   * Merge the invariants in invs to form a new invariant.  Each must be
+   * a NONZERO invariant.  This code takes the min/max values
+   * in each invariant, applies them to a new parent invariant and
+   * returns the merged invariant.
+   *
+   * @param invs    List of invariants to merge.  The invariants must all be
+   *                of the same type and should come from the children of
+   *                ppt.  They should also all be permuted to match the variable
+   *                order in ppt.
+   * @param ppt     program point that will contain the new invariant
+   */
+  public Invariant merge (List invs, PptSlice ppt) {
+
+    // Create the initial parent invariant
+    NONZERO result = instantiate (ppt);
+    Assert.assertTrue (result != null);
+
+    // Loop through the child invariants
+    for (int i = 0; i < invs.size(); i++ ) {
+
+      // Get this invariant
+      NONZERO inv = (NONZERO) invs.get (i);
+
+      // If this invariant received any samples, pass its min/max to
+      // add_modified
+      if (inv.min != WRAPPER.MAX_VALUE)
+        result.add_modified (inv.min, 1);
+      if (inv.max != WRAPPER.MIN_VALUE)
+      result.add_modified (inv.max, 1);
+    }
+
+    result.log ("Merged '" + result.format() + "' from " + invs.size()
+                + " child invariants");
+    return (result);
+  }
+
+
 }
