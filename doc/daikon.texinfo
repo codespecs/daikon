@@ -265,6 +265,7 @@ Troubleshooting
 
 * Installation problems::       
 * dfej problems::               
+* dfec problems::               
 * Daikon problems::             
 * Other problems::              
 * Reporting bugs::              
@@ -4102,6 +4103,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 @menu
 * Installation problems::       
 * dfej problems::               
+* dfec problems::               
 * Daikon problems::             
 * Other problems::              
 * Reporting bugs::              
@@ -4125,7 +4127,7 @@ possible that some filenames (including the one contained in
 @c daikon/java/jakarta-oro-2.0.3/docs/classes/org/apache/oro/text/perl/MalformedPerl5PatternException.class
 
 
-@node    dfej problems, Daikon problems, Installation problems, Troubleshooting
+@node    dfej problems, dfec problems, Installation problems, Troubleshooting
 @section Problems with dfej
 
 @menu
@@ -4229,7 +4231,7 @@ further warnings or errors.  The message results from Ajax's inability
 to handle JDK 1.2 libraries.
 
 
-@node    dfec problems, Daikon problems, Installation problems, Troubleshooting
+@node    dfec problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems with dfec
 
 @cindex daikon_runtime error
@@ -4271,7 +4273,7 @@ special flags to enable this behavior.)
 @c @section Problems running instrumented code
 
 
-@node    Daikon problems, Other problems, dfej problems, Troubleshooting
+@node    Daikon problems, Other problems, dfec problems, Troubleshooting
 @section Problems running Daikon
 
 You may find the debugging flags @option{--debug} and @option{--dbg
