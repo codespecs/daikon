@@ -32,20 +32,19 @@ import utilMDE.*;
 public final class FeatureExtractor {
   // See end of file for static variable declaration
 
-  /* Main reads the input files, extracts features and then
-     outputs the labeling in SVM-Light, SVMfu, or C5.0 format.
-     Arguments:
-     -u FileName:   an invMap inv file with useful invariants
-     -n FileName:   an invMap inv file with nonuseful invariants
-     -o FileName:   output file name *Required
-     -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
-     -s FileName:   name of output file for invariant descriptions
-     -r repeats:    number of combinations of feature vectors
-     -p             do not output if no positive feature vectors are present
-  */
+  // Main reads the input files, extracts features and then
+  //   outputs the labeling in SVM-Light, SVMfu, or C5.0 format.
+  //   Arguments:
+  //   -u FileName:   an invMap inv file with useful invariants
+  //   -n FileName:   an invMap inv file with nonuseful invariants
+  //   -o FileName:   output file name *Required
+  //   -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
+  //   -s FileName:   name of output file for invariant descriptions
+  //  -r repeats:    number of combinations of feature vectors
+  //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =
-"\tArguments:\n\t-u FileName:\tan invMap inv file with useful invariants\n" +
+  "\tArguments:\n\t-u FileName:\tan invMap inv file with useful invariants\n" +
     "\t-n FileName:\tan invMap inv file with nonuseful invariants\n" +
     "\t-o FileName:\toutput file name *Required\n" +
     "\t-t Type:\tType is one of {SVMlight, SVMfu, C5}\n" +
@@ -136,21 +135,6 @@ public final class FeatureExtractor {
     ArrayList usefulFeatures = getReflectFeatures(useful, lookup);
     ArrayList nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
 
-    /* DISABLED FEATURE
-    // and create the proper number of repeats;
-       while (repeats >= 2) {
-         ArrayList[] placeholder = createPermutations(usefulFeatures,
-         nonusefulFeatures,
-         usefulStrings,
-         nonusefulStrings);
-         usefulFeatures = placeholder[0];
-         nonusefulFeatures = placeholder[1];
-         usefulStrings = placeholder[2];
-         nonusefulStrings = placeholder[3];
-         repeats /= 2;
-    }
-    END DISABLED FEATURE */
-
     // Step 3
     // Output the labeling in desired format.
     // Also, if output_words is non-null, output the invariant
@@ -195,11 +179,11 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  /* Takes two vectors of file names and loads the invariants
-     in those files into two vectors.
-     Returns the useful invariants in return[0],
-     returns the nonuseful invariants in return[1];
-  */
+  // Takes two vectors of file names and loads the invariants
+  //   in those files into two vectors.
+  //   Returns the useful invariants in return[0],
+  //   returns the nonuseful invariants in return[1];
+
   private static ArrayList[] getSimpleUsefulAndNonuseful(ArrayList usefuls,
                                                       ArrayList nonusefuls)
     throws IOException, ClassNotFoundException {
@@ -223,10 +207,10 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  /* Old version of loading invariants from a list of filenames.
-     Compares invariants within the files to determine if they
-     are useful or non-useful.
-  */
+  // Old version of loading invariants from a list of filenames.
+  //   Compares invariants within the files to determine if they
+  //   are useful or non-useful.
+
   private static ArrayList[] getUsefulAndNonuseful(String[] args)
     throws IOException{
     // ignore args[0] and args[length-1]
@@ -272,8 +256,8 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  /* Prints the labeling using C5 format
-   */
+  // Prints the labeling using C5 format
+
   private static void printC5Output(ArrayList usefulFeatures,
                                     ArrayList nonusefulFeatures,
                                     File outputFile, File namesFile,
@@ -340,9 +324,9 @@ public final class FeatureExtractor {
     output.close();
   }
 
-  /* Prints the partial labeling using C5 format for all feature vectors
-     in features.
-  */
+  // Prints the partial labeling using C5 format for all feature vectors
+  //   in features.
+
   private static void printC5DataOutput (ArrayList features,
                                          TreeSet allFeatures,
                                          String label,
@@ -353,15 +337,16 @@ public final class FeatureExtractor {
     for (int i = 0; i < features.size(); i++) {
       TreeSet allFets = ((TreeSet) features.get(i));
 
-      //Debugging code to detect duplicates within allFets
-      /*
-        HashSet temp = new HashSet();
-        for (Iterator iter = allFets.iterator(); iter.hasNext();) {
-        IntDoublePair meh = (IntDoublePair) iter.next();
-        if (temp.contains(new Integer(meh.number)))
-        throw new RuntimeException("\nFound duplicate feature: "+meh.number);
-        temp.add(new Integer(meh.number));
-        } */// End Debugging Code
+      // Debugging code to detect duplicates within allFets
+      //
+      //  HashSet temp = new HashSet();
+      //  for (Iterator iter = allFets.iterator(); iter.hasNext();) {
+      //  IntDoublePair meh = (IntDoublePair) iter.next();
+      //  if (temp.contains(new Integer(meh.number)))
+      //  throw new RuntimeException("\nFound duplicate feature: "+meh.number);
+      //  temp.add(new Integer(meh.number));
+      //  }
+      // End Debugging Code
 
       // check which features are missing and add IntDoublePairs
       // with those features set to 0
@@ -379,19 +364,19 @@ public final class FeatureExtractor {
 
       // Debug Code that prints out features that
       // have been forgotten in AllFeatures
-      /*
-      for (Iterator h = allFets.iterator(); h.hasNext();) {
-      IntDoublePair current = (IntDoublePair) h.next();
-      boolean contains = false;
 
-      for (Iterator j = allFeatures.iterator(); j.hasNext();) {
-      IntDoublePair jguy = (IntDoublePair) j.next();
-      if (jguy.number == current.number)
-      contains = true;
-      }
-      if (!contains)
-      System.out.println(current.number);
-      } */// end debug code
+//       for (Iterator h = allFets.iterator(); h.hasNext();) {
+//         IntDoublePair current = (IntDoublePair) h.next();
+//         boolean contains = false;
+
+//         for (Iterator j = allFeatures.iterator(); j.hasNext();) {
+//           IntDoublePair jguy = (IntDoublePair) j.next();
+//           if (jguy.number == current.number)
+//             contains = true;
+//         }
+//         if (!contains)
+//           System.out.println(current.number);
+//       } */// end debug code
 
       Assert.assertTrue(allFeatures.size() == allFets.size(),
                         "\nExpected number of features: "+allFeatures.size() +
@@ -405,8 +390,8 @@ public final class FeatureExtractor {
     }
   }
 
-  /* Prints the labeling using SVMlight format
-   */
+  // Prints the labeling using SVMlight format
+
   private static void printSVMOutput(ArrayList usefulFeatures,
                                      ArrayList nonusefulFeatures,
                                      ArrayList usefulStrings,
@@ -421,9 +406,9 @@ public final class FeatureExtractor {
     output.close();
   }
 
-  /* Prints a partial labeling using SVMlight format for all the
-     feature vectors in features.
-   */
+  // Prints a partial labeling using SVMlight format for all the
+  //   feature vectors in features.
+
   private static void printSVMDataOutput(ArrayList features, ArrayList strings,
                                          String label,
                                          FileWriter output) throws IOException{
@@ -441,8 +426,8 @@ public final class FeatureExtractor {
     }
   }
 
-  /* Prints the labeling using SVMfu format.
-   */
+  // Prints the labeling using SVMfu format.
+
   private static void printSVMfuOutput(ArrayList usefulFeatures,
                                        ArrayList nonusefulFeatures,
                                        File outputFile) throws IOException {
@@ -457,9 +442,9 @@ public final class FeatureExtractor {
     output.close();
   }
 
-  /* Prints a partial labeling using SVMfu format for all the
-     feature vectors in features.
-   */
+  // Prints a partial labeling using SVMfu format for all the
+  // feature vectors in features.
+
   private static void printSVMfuDataOutput(ArrayList features, String label,
                                            FileWriter output) throws IOException{
     DecimalFormat df = new DecimalFormat("0.0####");
@@ -475,8 +460,8 @@ public final class FeatureExtractor {
     }
   }
 
-  /* Prints the invariant descriptions to a file.
-   */
+  // Prints the invariant descriptions to a file.
+
   private static void writeInvariantDescriptions(ArrayList usefulStrings,
                                        ArrayList nonusefulStrings,
                                        File outputFile) throws IOException {
@@ -488,8 +473,8 @@ public final class FeatureExtractor {
     output.close();
   }
 
-  /* compacts an SVMlight file to remove repeats.
-   */
+  // compacts an SVMlight file to remove repeats.
+
   private static void compactSVMFeatureFile(File input, File output)
     throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(input));
@@ -513,8 +498,7 @@ public final class FeatureExtractor {
     fw.close();
   }
 
-  /* compacts an SVMfu file to remove repeats.
-   */
+  // compacts an SVMfu file to remove repeats.
   private static void compactSVMfuFeatureFile(File input, File output)
     throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(input));
@@ -531,8 +515,7 @@ public final class FeatureExtractor {
     fw.close();
   }
 
-  /* Reads an InvMap from a file that contains a serialized InvMap.
-   */
+  // Reads an InvMap from a file that contains a serialized InvMap.
   private static InvMap readInvMap(File file) throws
   IOException, ClassNotFoundException {
     Object o = UtilMDE.readObject(file);
@@ -1010,28 +993,27 @@ public final class FeatureExtractor {
       }
     }
 
-      /*
-        for (Iterator i = pos.iterator(); i.hasNext(); )
-        if (type.equals("C5"))
-          posvectors.add(((String) i.next()) + "good");
-        else if (type.equals("SVMfu"))
-          posvectors.add(((String) i.next()) + "1");
 
-      // Print the output to the output file.
-      FileWriter fw = new FileWriter(output);
-      for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (Iterator i = negvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
-      for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (Iterator i = posvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
-      fw.close();
+  //   for (Iterator i = pos.iterator(); i.hasNext(); )
+//       if (type.equals("C5"))
+//         posvectors.add(((String) i.next()) + "good");
+//     else if (type.equals("SVMfu"))
+//       posvectors.add(((String) i.next()) + "1");
 
-      // Print a summary of positives and negatives to stdout.
-      System.out.println(posvectors.size() + "*" + posrepeat + " " +
-                         negvectors.size() + "*" + negrepeat);
-      }
-      */
+//     // Print the output to the output file.
+//     FileWriter fw = new FileWriter(output);
+//     for (int repeat = 0; repeat < negrepeat; repeat++)
+//       for (Iterator i = negvectors.iterator(); i.hasNext(); )
+//         fw.write((String) i.next() + " \n");
+//     for (int repeat = 0; repeat < posrepeat; repeat++)
+//       for (Iterator i = posvectors.iterator(); i.hasNext(); )
+//         fw.write((String) i.next() + " \n");
+//     fw.close();
+
+//     // Print a summary of positives and negatives to stdout.
+//     System.out.println(posvectors.size() + "*" + posrepeat + " " +
+//                        negvectors.size() + "*" + negrepeat);
+
   }
 
   private static void writeArrayLists(ArrayList one, ArrayList two,
