@@ -54,6 +54,7 @@ public class PairwiseLinearBinary
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -78,14 +79,49 @@ public class PairwiseLinearBinary
 
   public String format_jml() {
     VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var1().name,var2().name});
-    VarInfoName var1indexed = ((VarInfoName [])(qret.bound_vars.get(0)))[0];
-    VarInfoName var2indexed = ((VarInfoName [])(qret.bound_vars.get(1)))[0];
+    VarInfoName var1index = ((VarInfoName [])(qret.bound_vars.get(0)))[0];
+    VarInfoName var2index = ((VarInfoName [])(qret.bound_vars.get(1)))[0];
 
     String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
 
+    VarInfoName seq1 = var1().name.JMLElementCorrector();
+    VarInfoName seq2 = var2().name.JMLElementCorrector();
+
+    //      int seq1state = 0, seq2state = 0;
+
+    //      if (seq1 instanceof VarInfoName.Prestate) {
+    //        seq1 = ((VarInfoName.Prestate)seq1).term;
+    //        seq1state = 1;
+    //      } else if (seq1 instanceof VarInfoName.Poststate) {
+    //        seq1 = ((VarInfoName.Poststate)seq1).term;
+    //        seq1state = 2;
+    //      }
+    //      if (seq2 instanceof VarInfoName.Prestate) {
+    //        seq2 = ((VarInfoName.Prestate)seq2).term;
+    //        seq2state = 1;
+    //      } else if (seq2 instanceof VarInfoName.Poststate) {
+    //        seq2 = ((VarInfoName.Poststate)seq2).term;
+    //        seq2state = 2;
+    //      }
+
+    //      if (seq1 instanceof VarInfoName.Slice) {
+    //        seq1 = ((VarInfoName.Slice)seq1).sequence;
+    //      }
+    //      if (seq2 instanceof VarInfoName.Slice) {
+    //        seq2 = ((VarInfoName.Slice)seq2).sequence;
+    //      }
+
+    //      seq1 = seq1.applySubscript(var1index);
+    //      seq2 = seq2.applySubscript(var2index);
+
+    //      seq1 = (seq1state == 1 ? seq1.applyPrestate() : seq1);
+    //      seq1 = (seq1state == 2 ? seq1.applyPoststate() : seq1);
+    //      seq2 = (seq2state == 1 ? seq2.applyPrestate() : seq2);
+    //      seq2 = (seq2state == 2 ? seq2.applyPoststate() : seq2);
+
     return quantResult[0] + core.format_using(OutputFormat.JML,
-                                              var1indexed,
-                                              var2indexed) + quantResult[3];
+                                              seq1,
+                                              seq2) + quantResult[3];
   }
 
   public void add_modified(long [] x_arr, long [] y_arr, int count) {
@@ -125,4 +161,9 @@ public class PairwiseLinearBinary
     return false;
   }
 
+  public boolean isObviousImplied() {
+    if (core.a == 1 && core.b == 0)
+      return true;
+    return false;
+  }
 }

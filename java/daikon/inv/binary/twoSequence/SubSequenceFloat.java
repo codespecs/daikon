@@ -130,7 +130,7 @@ public class SubSequenceFloat
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
-    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name});
+    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
     Assert.assertTrue(qret.bound_vars.size() == 2);
     Assert.assertTrue(qret.root_primes.length == 2);
 
@@ -223,17 +223,27 @@ public class SubSequenceFloat
 
     VarInfoName superName = supervar.name;
     String superTermName = "";
+    String postTag = "";
+
+    if (superName instanceof VarInfoName.Prestate) {
+      superName = ((VarInfoName.Prestate)superName).term;
+      superTermName += "\\old(";
+      postTag += ")";
+    } else if (superName instanceof VarInfoName.Poststate) {
+      return "inexpressible, daikon rep = " + format_daikon();
+    }
 
     if (superName instanceof VarInfoName.Elements) {
       VarInfoName.Elements el = (VarInfoName.Elements)superName;
-      superTermName = el.term.jml_name();
+      superTermName += el.term.jml_name();
     } else if (superName instanceof VarInfoName.Slice) {
       VarInfoName.Slice sl = (VarInfoName.Slice)superName;
-      superTermName = sl.sequence.term.jml_name();
+      superTermName += sl.sequence.term.jml_name();
     }
 
-    return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" + superIndexName.jml_name() + "+" + subIndexName.jml_name() + "] == " +
-      subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
+    return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" +
+      superIndexName.jml_name() + "+" + subIndexName.jml_name() + "]" + postTag +
+      " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
   public void add_modified(double [] a1, double [] a2, int count) {

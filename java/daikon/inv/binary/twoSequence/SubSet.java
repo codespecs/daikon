@@ -85,6 +85,7 @@ public class SubSet
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -131,7 +132,12 @@ public class SubSet
 
   public String format_simplify() {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+  }
+
+  public String format_jml() {
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    return "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
   }
 
   public void add_modified(long [] a1, long [] a2, int count) {
@@ -274,7 +280,6 @@ public class SubSet
         }
       }
       return null;
-
     }
 
   }

@@ -113,12 +113,20 @@ public class CLASSNAME
 
     String upperExtent = ""; // Pacify javac with the initialization
 
-    VarInfoName seq;
+    VarInfoName seq = name2;
+    String preTag = "", postTag = "";
 
-    if (name2 instanceof VarInfoName.Elements) {
-      seq = name2;
-    } else if (name2 instanceof VarInfoName.Slice) {
-      seq = ((VarInfoName.Slice)name2).sequence;
+    if (seq instanceof VarInfoName.Prestate) {
+      seq = ((VarInfoName.Prestate)seq).term;
+      preTag += "\\old(";
+      postTag += ")";
+    } else if (seq instanceof VarInfoName.Poststate) {
+      return "inexpressible, daikon rep = " + format_daikon();
+    }
+
+    if (seq instanceof VarInfoName.Elements) {
+    } else if (seq instanceof VarInfoName.Slice) {
+      seq = ((VarInfoName.Slice)seq).sequence;
     } else { // Should never happen
       throw new IllegalStateException();
     }
@@ -135,7 +143,7 @@ public class CLASSNAME
 
     // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
     // parse appears to choke on that output... until it works, using this
-    return results[0] + results[1] + " == " + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + results[2];
+    return results[0] + results[1] + " == " + preTag + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + postTag + results[2];
   }
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
