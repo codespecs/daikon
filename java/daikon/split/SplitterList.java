@@ -12,16 +12,25 @@ import utilMDE.*;
 
 public abstract class SplitterList {
 
+  // maps from string to Splitter[]
   static HashMap ppt_splitters = new HashMap();
 
   public static void put(String pptname, Splitter[] splits) {
     // System.out.println("SplitterList.put(" + pptname + ")");
-    Assert.assert(! ppt_splitters.containsKey(pptname));
-    // Assert.assert(! ppt_splitters.containsKey(pptname),
-    //               "SplitterList already contains " + pptname
-    //               + " which maps to\n " + ArraysMDE.toString(get_raw(pptname))
-    //               + "\n which is " + formatSplitters(get_raw(pptname)));
-    ppt_splitters.put(pptname, splits);
+    if (pptname.equals("") && ppt_splitters.containsKey(pptname)) {
+      Splitter[] old = (Splitter[]) ppt_splitters.get(pptname);
+      Splitter[] new = new Splitter[old.length + splits.length];
+      System.arraycopy(old, 0, new, 0, old.length);
+      System.arraycopy(splits, 0, new, old.length, splits.length);
+      ppt_splitters.put(pptname, new);
+    } else {
+      Assert.assert(! ppt_splitters.containsKey(pptname));
+      // Assert.assert(! ppt_splitters.containsKey(pptname),
+      //               "SplitterList already contains " + pptname
+      //               + " which maps to\n " + ArraysMDE.toString(get_raw(pptname))
+      //               + "\n which is " + formatSplitters(get_raw(pptname)));
+      ppt_splitters.put(pptname, splits);
+    }
   }
 
   // This is only used by the debugging output in SplitterList.put().
@@ -46,12 +55,13 @@ public abstract class SplitterList {
   }
 
   // This routine tries the name first, then the base of the name, then the
-  // class.  For instance, if the program point name is
+  // class, then the empty string.  For instance, if the program point name is
   // "Foo.bar(IZ)V:::EXIT2", then it tries, in order:
   //   "Foo.bar(IZ)V:::EXIT2"
   //   "Foo.bar(IZ)V"
   //   "Foo.bar"
   //   "Foo"
+  //   ""
 
   public static Splitter[] get(String name) {
     String name_ = name;        // debugging
@@ -95,7 +105,7 @@ public abstract class SplitterList {
       int dot_index = name.lastIndexOf('.', dot_limit - 1);
       if (dot_index != -1) {
         name = name.substring(0, dot_index);
-        result  = get_raw(name);
+        result = get_raw(name);
         if (Global.debugPptSplit)
           System.out.println("SplitterList.get found "
                              + ((result == null) ? "no" : "" + result.length)
@@ -104,6 +114,16 @@ public abstract class SplitterList {
           return result;
       }
     }
+
+    // Empty string means always applicable.
+    result = get_raw("");
+    if (Global.debugPptSplit)
+      System.out.println("SplitterList.get found "
+                         + ((result == null) ? "no" : "" + result.length)
+                         + " splitters for " + name);
+    if (result != null)
+      return result;
+
 
     return null;
   }
