@@ -3,6 +3,17 @@ package daikon_runtime;
 # This is the package of routines that Daikon-annotated Perl code
 # uses.
 
+# This file is part of the Daikon distribution. It may be used and
+# redistributed under the same terms as the rest of Daikon or, at your
+# option, under the same terms as Perl itself, following either the
+# GNU General Public License or the Perl Artistic License.  The Daikon
+# Perl front end, of which this file is a part, and the Daikon dynamic
+# invariant detection tool are separate programs, neither derived from
+# the other, which are merely aggregated for convenience of
+# distribution. As such, licensing the Perl front end under the terms
+# of the GPL neither requires nor entitles you to license other parts
+# of the Daikon distribution under the same terms.
+
 # Among the 5.6 features we use is three-argument open. Note that for
 # backwards compatilibity it would be silly to say "use 5.6.0", since
 # that version syntax wasn't introduced until 5.6.
@@ -88,7 +99,7 @@ sub program_name {
         # the future...
         $name = "minus_e";
     } else {
-        $name = basename($name, ".plx", ".pl");
+        $name = basename($name, ".plx", ".pl", ".t");
     }
     return $name;
 }
