@@ -11,7 +11,7 @@ import java.io.*;
 
 public final class Runtime {
 
-  // Contructor
+  // Constructor
   private Runtime() {
     throw new Error("Do not create instances of Runtime");
   }
