@@ -6321,7 +6321,7 @@ java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 
 The first argument is a Daikon @file{.inv} or @file{.inv.gz} file produced by running
 Daikon with the @option{-o} command-line argument.  All subsequent
-arguments are @file{.java? files.  The original @file{.java} files are left
+arguments are @file{.java} files.  The original @file{.java} files are left
 unmodified, but Annotate produces new versions of the @file{.java} files
 (suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
 @file{-dbcannotated}) that include the Daikon invariants as comments.
