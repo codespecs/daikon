@@ -30,30 +30,17 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 
 
 
-public class AnnotateVisitor extends DepthFirstVisitor {
+class AnnotateVisitor extends DepthFirstVisitor {
 
   public final static String lineSep = System.getProperty("line.separator");
 
   public final static String JML_START_COMMENT = "/*@" + lineSep;
   public final static String JML_END_COMMENT = "@*/" + lineSep;
-  public final static String DBC_START_COMMENT = "/**" + lineSep;
-  public final static String DBC_END_COMMENT = "*/" + lineSep;
-
-
 
   public PptMap ppts;
   public boolean slashslash;       // whether to use // or /* style comments
   public boolean insert_inexpressible; // whether to insert annotations not supported by ESC
-  public boolean esc;      // whether to use full JML specs or esc ESC specs instead
-
-  public boolean dbc; // cp: use OutputFormat for this instead
-  public boolean noclassify;
-  public boolean negateIS;
-  public boolean negateOS;
-  public boolean negateIO;
-  public boolean omitIS;
-  public boolean omitOS;
-  public boolean omitIO;
+  public boolean lightweight;      // whether to use full JML specs or lightweight ESC specs instead
 
   public Vector addedComments = new Vector(); // elements are NodeTokens
 
@@ -65,36 +52,18 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
     super();
-    initialize(ppts, slashslash, insert_inexpressible, false/*esc*/, false/*dbc*/,
-               false/*noclassify*/, false/*negateIS*/, false/*negateOS*/, false/*negateIO*/,
-               false/*omitIS*/, false/*omitOS*/, false/*omitIO*/);
+    initialize(ppts, slashslash, insert_inexpressible, false);
   }
 
-  public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean esc, boolean dbc,
-                         boolean noclassify, boolean negateIS, boolean negateOS, boolean negateIO,
-                         boolean omitIS, boolean omitOS, boolean omitIO) {
-    initialize(ppts, slashslash, insert_inexpressible, esc, dbc,
-               noclassify, negateIS, negateOS, negateIO,
-               omitIS, omitOS, omitIO);
+  public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
+    initialize(ppts, slashslash, insert_inexpressible, lightweight);
   }
 
-  private void initialize(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean esc, boolean dbc,
-                          boolean noclassify, boolean negateIS, boolean negateOS, boolean negateIO,
-                         boolean omitIS, boolean omitOS, boolean omitIO) {
+  private void initialize(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
-    // only one of the next two should be true; should do something
-    // other than one flag. Change to use OutputFormat
-    this.esc = esc;
-    this.dbc = dbc;
-    this.noclassify = noclassify;
-    this.negateIS = negateIS;
-    this.negateOS = negateOS;
-    this.negateIO = negateIO;
-    this.omitIS = omitIS;
-    this.omitOS = omitOS;
-    this.omitIO = omitIO;
+    this.lightweight = lightweight;
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -193,20 +162,17 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n);             // call "accept(this)" on each field
 
-    if (esc) // not needed for dbc
+    if (lightweight && (Daikon.output_style != Invariant.OutputFormat.DBCJAVA)) {
       for (int i=ownedFieldNames.length-1; i>=0; i--) {
         addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this;"), true);
+      }
     }
     if (object_ppt == null) {
       // System.out.println("No object program point found for " + classname);
     } else {
-//       Invariant.OutputFormat origFormat = Daikon.output_style;
-//       Daikon.output_style = OutputFormat.ESCJAVA;
-//       String[] obj_invs_daikon = Ast.invariants_for(object_ppt, ppts);
-//       Daikon.output_style = origFormat;
       String[] obj_invs = Ast.invariants_for(object_ppt, ppts);
-      //      String[][] invs = { obj_invs_daikon, obj_invs };
-      insertInvariants(n.f4.f1, "invariant", obj_invs);
+      String inv_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@invariant" : "invariant");
+      insertInvariants(n.f4.f1, inv_tag, obj_invs);
     }
 
     ownedFieldNames = old_owned;
@@ -225,27 +191,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public void visit(FieldDeclaration n) {
     super.visit(n);             // call "accept(this)" on each field
 
-    if (! Ast.contains(n.f0, "public")) {
-      //	if(!dbc) {
-	    addComment(n, "/*@ spec_public @*/ ");
-            //	}
-    }
-  }
+    // Nothing to do for Jtest DBCJAVA format
+    if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) { return; }
 
-  // CP: is there a better way?
-  String signature(PptMap ppts, Node n) {
-    try { // sometimes Ast.getMatches() fails, or
-          // matching_ppts.isEmpty()==true. In such cases (for now),
-          // just return a dummy signature.
-      Vector matching_ppts = Ast.getMatches(ppts, n);
-      //Assert.assertTrue(!matching_ppts.isEmpty(), "Node: " + n + ", PptMap: " + ppts);
-      if(!matching_ppts.isEmpty()) {
-        return ((PptTopLevel)matching_ppts.firstElement()).ppt_name.getSignature();
-      } else {
-        return "(no program points found)";
-      }
-    } catch (Throwable e) {
-      return "(signature computation error)";
+    if (! Ast.contains(n.f0, "public")) {
+      addComment(n, "/*@ spec_public */ ");
     }
   }
 
@@ -283,9 +233,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     if (!Ast.isMain(md)) {
       return requires_invs;
     }
-     if(dbc) {  // cp: is doing this ok? (what on earth does rest of code do?)
- 	return requires_invs;
-     }
     FormalParameter fp = (FormalParameter) Ast.getParameters(md).get(0);
     String param = Ast.getName(fp);
     String nonnull_inv = param + " != null";
@@ -320,12 +267,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     if (nonnull_inv != null) {
       num_invs--;
       requires_invs[old_size + num_invs] = nonnull_inv;
-      // System.out.println("Filled in " + (old_size + num_invs));
+      System.out.println("Filled in " + (old_size + num_invs));
     }
     if (nonnullelements_inv != null) {
       num_invs--;
       requires_invs[old_size + num_invs] = nonnullelements_inv;
-      // System.out.println("Filled in " + (old_size + num_invs));
+      System.out.println("Filled in " + (old_size + num_invs));
     }
     Assert.assertTrue(num_invs == 0);
     for (int i=0; i<requires_invs.length; i++) {
@@ -452,15 +399,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     HashMap exceptions = get_exceptions(ppts, n);
 
-    String ensures_tag = "ensures";
-    String requires_tag = "requires";
-    if (dbc) { ensures_tag = "post"; }         //cp: bad form?
-    if (dbc) { requires_tag = "pre"; }         //cp: bad form?
-
+    String ensures_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@post" : "ensures");
+    String requires_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@pre" : "requires");
     boolean isOverride = Ast.isOverride(n); // of a superclass
     boolean isImplementation = Ast.isImplementation(n); // of an interface
 
-    if (esc) {
+    if (lightweight) {
       if (isImplementation) {
 	requires_tag = "also_" + requires_tag;
 	ensures_tag = "also_" + ensures_tag;
@@ -471,17 +415,17 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
 
-    if (!esc && !dbc)
+    if (!lightweight)
       addComment(n, JML_END_COMMENT, true);
 
     boolean invariantInserted =
-	insertInvariants(n, ensures_tag, ensures_invs, esc || dbc);
+      insertInvariants(n, ensures_tag, ensures_invs, lightweight);
 
     invariantInserted =
-	insertInvariants(n, requires_tag, requires_invs, esc || dbc) ||
+      insertInvariants(n, requires_tag, requires_invs, lightweight) ||
       invariantInserted;
 
-    if (!esc && !dbc) {
+    if (!lightweight) {
       if (!invariantInserted)
         insertJMLWorkaround(n);
       insertBehavior(n,
@@ -516,26 +460,22 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String[] requires_invs = requires_and_ensures[0];
     String[] ensures_invs = requires_and_ensures[1];
 
+    String ensures_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@post" : "ensures");
+    String requires_tag = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "@pre" : "requires");
+
     HashMap exceptions = get_exceptions(ppts, n);
 
-    if (!esc && !dbc)
+    if (!lightweight)
       addComment(n, JML_END_COMMENT, true);
 
-    String ensures_tag = "ensures";
-    if (dbc) { ensures_tag = "post"; }
-
-    String requires_tag = "requires";
-    if (dbc) { requires_tag = "pre"; }
-
-
     boolean invariantInserted =
-	insertInvariants(n, ensures_tag, ensures_invs, esc || dbc);
+      insertInvariants(n, ensures_tag, ensures_invs, lightweight);
 
     invariantInserted =
-	insertInvariants(n, requires_tag, requires_invs, esc || dbc) ||
+      insertInvariants(n, requires_tag, requires_invs, lightweight) ||
       invariantInserted;
 
-    if (!esc && !dbc) {
+    if (!lightweight) {
       if (!invariantInserted)
         insertJMLWorkaround(n);
       insertBehavior(n, exceptions.isEmpty(), ensures_invs == null || ensures_invs.length == 0);
@@ -552,491 +492,44 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return insertInvariants(n, prefix, invs, true);
   }
 
-
-  public boolean expressible(String inv) {
-
-    if ((inv.indexOf("needs to be implemented: ") != -1)
-        || (inv.indexOf("warning:") != -1)
-        || (inv.indexOf('~') != -1)
-        || (inv.indexOf("\\new") != -1)
-        || (inv.indexOf(".toString ") != -1)
-        || (inv.endsWith(".toString"))
-        || (inv.indexOf("warning: method") != -1)
-        || (inv.indexOf("inexpressible") != -1)
-        || (inv.indexOf("NaN") != -1) // ask mike about this
-        || (inv.indexOf("Infinity") != -1) // ask mike about this
-        || (dbc && (inv.indexOf("getClass()") != -1))  // Jtest doesn't allow
-        || (dbc && (inv.indexOf("SEQUENCE unimplemented") != -1))  // Jtest doesn't allow
-        || (dbc && (inv.indexOf("?comparatorDBC?") != -1))  // Jtest doesn't allow
-        ) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-
-
-  public HashMap nodeToInvs = new HashMap();
-
-  /**
-   * Stores the different types of invariants for a given node of the
-   * AST.  the whole scheme currently only works for ASTs that contain
-   * only one class declaration. I am not sure if this is always the
-   * case for the types of ASTs that AnnotateVisitor works on, but
-   * that is what I assume presently.
-   *
-   * Invariants are classified into the following categories:
-   *   input space
-   *   input space inexpressible
-   *   output space
-   *   output space inexpressible
-   *   io space
-   *   io space inexpressible
-   *   invariants (both input and output space)
-   *   invariants inexpressible
-   */
-
-  public Vector classInvs = new Vector()/*<String>*/;
-  public Vector classInvsNe = new Vector()/*<String>*/;
-
-  public class Invs {
-
-    public Vector is, isne, os, osne, io, ione, inv, invne;
-
-    public Invs() {
-      this.is = new Vector();
-      this.isne = new Vector();
-      this.os = new Vector();
-      this.osne = new Vector();
-      this.io = new Vector();
-      this.ione = new Vector();
-      this.inv = new Vector();
-      this.invne = new Vector();
-    }
-  }
-
-  /* Maybe this should actually replace insertInvariants in the rest of
-   * the code, and maybe it should be passed the node so that it can
-   * detect, e.g. if this is a top-level "class" or "object" ppt and
-   * thus contains invariants for the whole class. that way i also may
-   * not have to rely on string matching to determine if something
-   * is a pre or postcondition.
-   */
-  public void addToNodeInvMap(Node n, String inv, String type) {
-
-    Invs invs = (Invs)nodeToInvs.get(n);
-    if (invs == null) {
-      invs = new Invs();
-      nodeToInvs.put(n, invs);
-    }
-
-    // add the invariant to its proper Vector
-
-    // CASE: IS
-    if ((type.indexOf("pre") != -1) || (type.indexOf("requires") != -1)) {
-      if ( expressible(inv) ) { invs.is.add(inv); }
-      else { invs.isne.add(inv); }
-
-    // CASE: IS or IO
-    } else if ((type.indexOf("post") != -1) || (type.indexOf("ensures") != -1)) {
-
-      // CASE: IO Inexpressible
-      if ((inv.indexOf("Modified") != -1) || (inv.indexOf("Unmodified") != -1)) {
-        invs.ione.add(inv);
-
-      // CASE: IO or IO Inexpressible
-      } else {
-        if ((inv.indexOf("$pre") != -1) || (inv.indexOf("\\old") != -1)) {
-          if ( expressible(inv) ) { invs.io.add(inv); }
-          else { invs.ione.add(inv); }
-
-        // CASE: OS or OS Inexpressible
-        } else {
-          if ( expressible(inv) ) { invs.os.add(inv);
-          } else { invs.osne.add(inv); }
-        }
-      }
-
-    // CASE: Invariant
-    } else {
-      Assert.assertTrue(type.indexOf("invariant") != -1, inv + " " + type );
-      if ( expressible(inv) ) { invs.inv.add(inv); classInvs.add(inv); //CP not entirely satisfactory
-      } else { invs.invne.add(inv); classInvsNe.add(inv); }
-    }
-  }
-
-  public class InvInfo {
-    public String dbc = "";
-    public String daikonStr = "";
-    public String samples = "";
-    public String invclass = "";
-    public String method = "";
-  }
-
-  public InvInfo getInfo(String inv) {
-    InvInfo ii = new InvInfo();
-    ii.dbc = inv.replaceFirst(".*<DBC>(.*)</DBC>.*", "$1");
-    ii.daikonStr = inv.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1");
-    ii.samples = inv.replaceFirst(".*<SAMPLES>(.*)</SAMPLES>.*", "$1");
-    ii.invclass = inv.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1");
-    ii.method = inv.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1");
-    return ii;
-  }
-
-  public String annotationDBC(InvInfo ii) {
-    return
-      " <DBC> " + ii.dbc + " </DBC> "
-      + " <DAIKON> " + ii.daikonStr + " </DAIKON> "
-      + " <SAMPLES> " + ii.samples + " </SAMPLES> "
-      + " <DAIKONCLASS> " + ii.invclass  + " </DAIKONCLASS> "
-      + " <METHOD> " + ii.method  + " </METHOD> ";
-  }
-
-  public void addInvariantsToNodes() {
-
-    // CP: Maybe I should do it this way for all formats, then I
-    // wouldn't have to include the following not-so-intuitive check.
-
-    if(dbc && (!noclassify || (negateIS || negateOS || negateIO))) {
-
-      for(Iterator keys = nodeToInvs.keySet().iterator() ; keys.hasNext() ; ) {
-        Node node = (Node)keys.next();
-        Invs invs = (Invs)nodeToInvs.get(node);
-
-        // --------------------------------------------------------
-        // Insert annotated invariants into node (in reverse order of
-        // how they'll appear)
-
-
-        // If negateIS or negateOS, invariants are no longer included
-        // because we are negating them at entry or exit.
-
-        // ------------------ Class Invariant ----------------------------
-        // These are printed for reference, but notice they're not
-        // actual annotations.
-
-        boolean atLeastOne = false;
-        int invnum = 0;
-
-        for(Iterator it = invs.invne.iterator() ; it.hasNext() ; ) {
-          String inv = (String)it.next();
-          addComment(node, javaLineComment("! (inexpressible) " + inv), true);
-        }
-        for(Iterator it = invs.inv.iterator() ; it.hasNext() ; ) {
-          String inv = (String)it.next();
-          addComment(node, javaLineComment("!" + inv), true);
-        }
-
-        if(atLeastOne) {
-          addComment(node, javaLineComment(" ---------------- "), true);
-          addComment(node, javaLineComment(" Class invariants "), true);
-        }
-
-        // ------------------ Inexpressible D,F,R ------------------------
-        // Printed for reference.
-
-        atLeastOne = false;
-        addComment(node, lineSep, true);
-
-        if(!omitIO) {
-          for(Iterator it = invs.ione.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, ("/*! post " + inv + " */\n"), true);
-            atLeastOne = true;
-          }
-        }
-        if(!omitOS) {
-          for(Iterator it = invs.osne.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, ("/*! post " + inv + " */\n"), true);
-            atLeastOne = true;
-          }
-        }
-        if(!omitIS) {
-          for(Iterator it = invs.isne.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, ("/*! pre " + inv + " */\n"), true);
-            atLeastOne = true;
-          }
-        }
-        if(atLeastOne) {
-          addComment(node, javaLineComment(" ------------- "), true);
-          addComment(node, javaLineComment(" Inexpressible "), true);
-          addComment(node, lineSep, true);
-        }
-
-        // ------------------ IO Space ----------------------------
-
-        atLeastOne = false;
-        if(!omitIO) {
-          if(negateIO) {
-            // WARNING!!! CP: need to fix (make it look like IS below)
-            //             String negated = "";
-            //             for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
-            //               String inv = (String)it.next();
-            //               negated += "!( " + inv + " )";
-            //               if (it.hasNext()) { negated += " || "; }
-            //             }
-            //             if (! "".equals(negated)) {
-            //               addComment(node, javaLineComment("* @post " + negated), true);
-            //               atLeastOne = true;
-            //             }
-
-          } else {
-            for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              addComment(node, javaLineComment("*" + inv + "<FUNCTIONAL></FUNCTIONAL>"), true);
-              atLeastOne = true;
-            }
-          }
-          if(atLeastOne) {
-            addComment(node, javaLineComment("* ---------------- "), true);
-            addComment(node, javaLineComment("* Functional Space "), true);
-            addComment(node, lineSep, true);
-          }
-        }
-
-        // -------------- Output Space ----------------------------
-
-        atLeastOne = false;
-
-        // invs.inv will be empty if this node is not one containing
-        // invariant nodes (which is the case for method declaration
-        // nodes). Thus the following "if" clause has the effect of
-        // inserting invariants as postconditions on method calls, but
-        // not on class declarations.
-        if(invs.inv.isEmpty()) {
-
-          boolean isStatic = false;
-          if (node instanceof jtb.syntaxtree.MethodDeclaration) {
-            NodeListOptional nodeList = ((jtb.syntaxtree.MethodDeclaration)node).f0;
-            for (Enumeration i = nodeList.elements() ; i.hasMoreElements() ; ) {
-              String modifier = ((NodeChoice)i.nextElement()).choice.toString();
-              if (modifier.equals("static")) {
-                isStatic = true;
-              }
-            }
-          }
-
-          if (!isStatic) {
-            // Include class invariants
-            invnum = 0; // CP: have a more robust way of naming
-            // invariants (this one is sensitive to their
-            // order in classInvs container)
-            for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              Assert.assertTrue(inv.matches(".*<METHOD>\\s*null\\s*</METHOD>.*"));
-              inv = inv.replaceFirst("(.*<METHOD>\\s*)(null)(\\s*</METHOD>.*)", "$1" + signature(ppts,node) + "$3");
-              if (node instanceof jtb.syntaxtree.ConstructorDeclaration) {
-                addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><RANGE></RANGE><CONSTRUCTOR></CONSTRUCTOR>"), true);
-              } else {
-                addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><RANGE></RANGE>"), true);
-              }
-              atLeastOne = true;
-            }
-          }
-
-        }
-
-        if(!omitOS) {
-          // CASE 1: We want the output space negated
-          if(negateOS) {
-            // WARNING!!! CP: need to fix (make it look like IS below)
-            //             String negated = "";
-            //             for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
-            //               String inv = (String)it.next();
-            //               negated += "!( " + inv + " )";
-            //               if (it.hasNext()) { negated += " || "; }
-            //             }
-            //             if(!classInvs.isEmpty()) {
-
-            //               // we also need to add negations of the invariants
-            //               if(!invs.os.isEmpty()) { negated += " || "; }
-            //               for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-            //                 String inv = (String)it.next();
-            //                 negated += "!( " + inv + " )";
-            //                 if (it.hasNext()) { negated += " || "; }
-            //               }
-            //             }
-
-            //             if (! "".equals(negated)) {
-            //               addComment(node, javaLineComment("* @post " + negated), true);
-            //               atLeastOne = true;
-            //             }
-
-            // CASE 2: We do NOT want the output space negated
-          } else {
-            for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              addComment(node, javaLineComment("*" + inv + "<RANGE></RANGE>"), true);
-              atLeastOne = true;
-            }
-          }
-          if(atLeastOne) {
-            addComment(node, javaLineComment("* ------------  "), true);
-            addComment(node, javaLineComment("* Output Space  "), true);
-            addComment(node, lineSep, true);
-          }
-        }
-
-        // -------------- Input Space -----------------------------
-
-        atLeastOne = false;
-        if(!omitIS) {
-
-          // invs.inv will be empty if this node is not one containing
-          // invariant nodes (which is the case for method declaration
-          // nodes). Thus the following "if" clause has the effect of
-          // inserting invariants as preconditions on method calls, but
-          // not on class declarations.
-          if(invs.inv.isEmpty()) {
-
-            //  Invariants as preconditions makes no sense for a constructor. The only
-            // reason they might be added here is because class
-            // invariants are also inserted as preconditions.
-            if(!(node instanceof jtb.syntaxtree.ConstructorDeclaration)) {
-
-              // Include class invariants
-
-              boolean isStatic = false;
-              if (node instanceof jtb.syntaxtree.MethodDeclaration) {
-                NodeListOptional nodeList = ((jtb.syntaxtree.MethodDeclaration)node).f0;
-                for (Enumeration i = nodeList.elements() ; i.hasMoreElements() ; ) {
-                  String modifier = ((NodeChoice)i.nextElement()).choice.toString();
-                  if (modifier.equals("static")) {
-                    isStatic = true;
-                  }
-                }
-              }
-
-              if (!isStatic) {
-                invnum = 0;
-                for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-                  String inv = (String)it.next();
-                  Assert.assertTrue(inv.matches(".*<METHOD>\\s*null\\s*</METHOD>.*"));
-                  inv = inv.replaceFirst("(.*<METHOD>\\s*)(null)(\\s*</METHOD>.*)", "$1" + signature(ppts,node) + "$3");
-                  addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><DOMAIN></DOMAIN>"), true);
-                  atLeastOne = true;
-                }
-              }
-            }
-          }
-          // CASE 1: We want the input space negated
-          if(negateIS) {
-            InvInfo negatedii = new InvInfo();
-            negatedii.dbc = " ( ";
-            boolean first = true;
-            for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              // Invariant now has other stuff appended to it. Maybe this stuff
-              // should be included as a different comment, not as part of the
-              // invariant comment.
-              InvInfo ii = getInfo(inv);
-              if (first) { negatedii.method = ii.method; first = false; }
-              Assert.assertTrue(ii.method.equals(negatedii.method));
-              negatedii.samples +=  " " + ii.samples;
-              negatedii.daikonStr += " " +  ii.daikonStr;
-              negatedii.invclass += " " + ii.invclass;
-              negatedii.dbc +=  "!( " + ii.dbc + " )";
-              if (it.hasNext()) { negatedii.dbc += " || "; }
-            }
-            negatedii.dbc += " )";
-
-            // CP: current thought is NOT to add negation of invariants
-            //             if(!classInvs.isEmpty()) {
-            //               // we also need to add negations of the invariants
-            //               if(!invs.is.isEmpty()) { negated += " || "; }
-            //               for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-            //                 String inv = (String)it.next();
-            //                 negated += "!( " + inv + " )";
-            //                 if (it.hasNext()) { negated += " || "; }
-            //               }
-            //             }
-
-            // Currently the samples value of a <NEGATED_PRE> is the min of its pres.
-            if (! " (  )".equals(negatedii.dbc)) { // CP: need the " " before "(" -- fragile, fix
-              System.out.println("SAMPLES=" + negatedii.samples);
-              String sa[] = negatedii.samples.trim().split("\\s+");
-              long minSamples = 1;
-              for(int i = 0 ; i < sa.length ; i++) {
-                long l = (new Long(sa[i])).longValue();
-                if (l < minSamples) { minSamples = l; }
-              }
-              negatedii.samples = Long.toString(minSamples);
-              addComment(node, javaLineComment("*" + annotationDBC(negatedii) + "<NEGATED_PRE></NEGATED_PRE><DOMAIN></DOMAIN>"), true);
-              atLeastOne = true;
-            }
-
-            // CASE 2: We do NOT want the input space negated
-          } else {
-            for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              addComment(node, javaLineComment("*" + inv + "<DOMAIN></DOMAIN>"), true);
-              atLeastOne = true;
-            }
-          }
-          if(atLeastOne) {
-            addComment(node, javaLineComment("* -----------   "), true);
-            addComment(node, javaLineComment("* Input Space   "), true);
-            addComment(node, lineSep, true);
-
-          }
-        }
-      }
-    }
-  }
-
-
-
-
-  /**
-   * The "invs" argument may be null, in which case no work is done.
-   */
+  // The "invs" argument may be null, in which case no work is done.
   public boolean insertInvariants(Node n, String prefix, String[] invs, boolean useJavaComment) {
-
-    // This ensures that we'll put nodes with no invariants into the
-    // nodeToInvs map.
-    Invs invsForNode = (Invs)nodeToInvs.get(n);
-    if (invsForNode == null) {
-      invsForNode = new Invs();
-      nodeToInvs.put(n, invsForNode);
+    if (invs == null) {
+      return false;
     }
 
     boolean invariantInserted = false;
 
-    if(dbc && (!noclassify || (negateIS || negateOS || negateIO))) {
-      if (invs == null) {
-        return false;
-      }
-
-      for(int i = 0 ; i < invs.length ; i++) {
-        addToNodeInvMap(n, invs[i], prefix);
-      }
-
-      return true;
-
-    } else { // do it the old way
-
-      if (invs == null) {
-        return false;
-      }
-
-      for (int i=invs.length-1; i>=0; i--) {
-        String inv = invs[i];
-
-        if (inv.startsWith("      Unmodified variables: ")
-            || inv.startsWith("      Modified variables: ")
-            || inv.startsWith("      Modified primitive arguments: ")) {
-          // not an invariant
+    for (int i=invs.length-1; i>=0; i--) {
+      String inv = invs[i];
+      if (inv.startsWith("      Unmodified variables: ")
+          || inv.startsWith("      Modified variables: ")
+          || inv.startsWith("      Modified primitive arguments: ")) {
+        // not an invariant
+        continue;
+      } else if ((inv.indexOf(".format_esc() needs to be implemented: ") != -1)
+                 || (inv.indexOf("warning: ") != -1)
+                 || (inv.indexOf('~') != -1)
+                 || (inv.indexOf("\\new") != -1)
+		 || (inv.indexOf(".toString ") != -1)
+		 || (inv.endsWith(".toString"))
+                 || (inv.indexOf("warning: method") != -1)
+		 || (inv.indexOf("inexpressible") != -1)
+		 || (inv.indexOf("unimplemented") != -1)) {
+        // inexpressible invariant
+        if (insert_inexpressible) {
+          addComment(n, javaLineComment("! " + inv + ";"), true);
+        }
+        continue;
+      } else if (inv.startsWith("modifies ") || inv.startsWith("assignable ")) {
+        // Currently, assignable clauses produce illegal JML, like a[*].
+        if (Daikon.output_style == Invariant.OutputFormat.JML) {
+          inv = "assignable \\everything";
+        } else if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) {
+          // Modifies/assignable has no translation in Jtest DBC
           continue;
-        } else if (!expressible(inv)) {
-          if (insert_inexpressible) {
-            addComment(n, javaLineComment("! " + inv + ";"), true);
-          }
-          continue;
-        } else if (inv.startsWith("modifies ") || inv.startsWith("assignable ")) {
-          if (esc && prefix.startsWith("also_")) {
+        } else {
+          if (lightweight && prefix.startsWith("also_")) {
             inv = "also_" + inv;
           }
           String commentContents = "@ " + inv + ";";
@@ -1046,25 +539,22 @@ public class AnnotateVisitor extends DepthFirstVisitor {
             commentContents += lineSep;
           addComment(n, commentContents, true);
           invariantInserted = true;
-        } else {
-          String commentContents = "@ " + prefix + " " + inv + ";";
-          if (dbc) { commentContents = "* @" + prefix + " " + inv; }
-          if (useJavaComment) {
-            commentContents = javaLineComment(commentContents);
-          }
-          else {
-            commentContents += lineSep;
-          }
-          addComment(n, commentContents, true);
-          invariantInserted = true;
         }
+      } else {
+	String commentContents = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "  " : "@ ")
+          + prefix + " " + inv
+          + (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "  " : ";");
+	if (useJavaComment)
+	  commentContents = javaLineComment(commentContents);
+        else
+          commentContents += lineSep;
+
+        addComment(n, commentContents, true);
+        invariantInserted = true;
       }
-      return invariantInserted;
-
     }
+    return invariantInserted;
   }
-
-
 
   // Set .owner and/or .containsnull for ++, --, etc expressions within a
   // statement.
@@ -1077,6 +567,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     super.visit(n);             // call "accept(this)" on each field
 
     // System.out.println("Found a statement expression: " + n.f0.choice);
+
+    // Nothing to do for Jtest DBC format
+    if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) { return; }
 
     if (n.f0.choice instanceof NodeSequence) {
       NodeSequence ns = (NodeSequence) n.f0.choice;
@@ -1123,10 +616,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
                 // is sole element in then or else clause), then this is wrong.
                 // It's safe, however.  But does it cause syntax errors if an
                 // else clause follows a then clause without braces?
-
-		//cp: the 3 ifs below deleted in dbc code. find out why.
                 if (isOwned(fieldname)) {
-                  if (esc)
+                  if (lightweight)
                     addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
                 }
                 if (isNotContainsNull(fieldname)) {
@@ -1159,7 +650,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       // System.out.println("In expression, fieldname = " + fieldname);
       Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
-        if (esc || dbc)
+        if (lightweight)
           addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
       }
 
@@ -1344,8 +835,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       varname += "[].class";
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // We found a variable in the source code that is not computed by Daikon.
-        // System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
+        // This means that we found a variable in the source code that is
+        // not computed by Daikon.
+        System.out.println("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
       } else {
         Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
@@ -1383,10 +875,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public String format(Invariant inv) {
     String inv_string;
-    if (esc) {
+    if (lightweight) {
       inv_string = inv.format_using(Invariant.OutputFormat.ESCJAVA);
-    } else if (dbc) {
-      inv_string = inv.format_using(Invariant.OutputFormat.DBCJAVA);
     } else {
       inv_string = inv.format_using(Invariant.OutputFormat.JML);
     }

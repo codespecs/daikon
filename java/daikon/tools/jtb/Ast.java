@@ -57,14 +57,6 @@ public class Ast {
       System.exit(1);
     }
     root.accept(visitor);
-
-    // CP: once the AST is visited, we still possibly need to add the
-    // comments to the nodes (see insertInvariants() in
-    // AnnotateVisitor.java). This actually happens only for DBC
-    // format. (Also see first comment in the implementation of this
-    // method.)
-    visitor.addInvariantsToNodes();
-
     root.accept(new InsertCommentFormatter(visitor.addedComments));
     root.accept(new TreeDumper(output));
   }
