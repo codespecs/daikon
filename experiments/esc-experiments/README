@@ -1,0 +1,33 @@
+This directory is a copy of ~mistere/research/packages/dsaa-to-present/
+
+Manifest:
+
+  DataStructures/
+    Original dsaa code, someimtes annotated with ESC statments as
+    translated from daikon output
+
+    StackAr.java is intended to be a symbolic link either to
+    StackAr.java-escannotated (when running ESC) or to
+    StackAr.java-unannotated (when running dfej)
+
+  daikon-java/
+    Instrumented versions of the code; probably un-interesting.
+
+  daikon-output/
+    decls and dtrace; probably uninteresting
+
+  dsaa.inv.gz
+    Invariants over StackAr when StackArTester is run
+
+  dsaa.txt
+    Invariants over StackAr when StackArTester is run
+
+  dsaa-filtered.txt
+    Jeremy's by-hand filtering applied to dsaa.txt.
+    Jeremy removed implied and obvious invariantes which we hope will
+      eventually not be producted by daikon.
+    This was the source of the ESC annotations in the
+      DataStructures/StackAr.java file.
+
+===========================================================================
+
