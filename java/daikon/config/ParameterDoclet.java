@@ -2,6 +2,7 @@ package daikon.config;
 
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.*;
 import com.sun.javadoc.*;
 import utilMDE.*;
 
@@ -40,6 +41,12 @@ public class ParameterDoclet
 	PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
 	pd.writeText(outf);
 	outf.close();
+      } else if ("--list".equals(opt)) {
+	String fname = optset[1];
+	System.out.println("Opening " + fname + " for output...");
+	PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+	pd.writeList(outf);
+	outf.close();
       }
     }
 
@@ -57,10 +64,13 @@ public class ParameterDoclet
     if ("--text".equals(opt))
       return 2; // == 1 tag + 1 argument
 
+    if ("--list".equals(opt))
+      return 2; // == 1 tag + 1 argument
+
     return 0;   // unknown option
   }
 
-  // ============================== INSTANCE METHODS ==============================
+  // ============================== NON-STATIC METHODS ==============================
 
   protected RootDoc root; // root document
   protected Map fields;   // field -> description
@@ -103,6 +113,7 @@ public class ParameterDoclet
 
 
   public static String NO_DESCRIPTION = "(no description provided)";
+  public static String UNKNOWN_DEFAULT = "The default value is not known.";
 
   /**
    * Add <name, desc> pair to the map field 'fields'.
@@ -112,6 +123,21 @@ public class ParameterDoclet
       desc = NO_DESCRIPTION;
 
     fields.put(name, desc);
+  }
+
+  private String getDefaultString(String field) {
+    try {
+      int i = field.lastIndexOf('.');
+      String classname = field.substring(0, i);
+      String fieldname = field.substring(i+1);
+      Class c = Class.forName(classname);
+      Field f = c.getField(Configuration.PREFIX + fieldname);
+      Object value = f.get(null);
+      return "The default value is `" + value + "'.";
+    } catch (Exception e) {
+      System.err.println(e);
+      return UNKNOWN_DEFAULT;
+    }
   }
 
   public void writeTexInfo(PrintWriter out)
@@ -124,18 +150,19 @@ public class ParameterDoclet
     for (Iterator i = keys.iterator(); i.hasNext(); ) {
       String field = (String) i.next();
       String desc = (String) fields.get(field);
+      String defstr = getDefaultString(field);
 
       // @item [field]
       //  [desc]
       out.println("@item " + field);
       out.println("  " + desc);
+      out.println("  " + defstr);
       out.println();
     }
 
     out.println("@c END AUTO-GENERATED CONFIG OPTIONS LISTING");
     out.println();
   }
-
 
   public void writeText(PrintWriter out)
   {
@@ -144,12 +171,24 @@ public class ParameterDoclet
     for (Iterator i = keys.iterator(); i.hasNext(); ) {
       String field = (String) i.next();
       String desc = (String) fields.get(field);
+      String defstr = getDefaultString(field);
 
       // [field]
       //   [desc]
       out.println(field);
       out.println("  " + desc);
+      out.println("  " + defstr);
       out.println();
+    }
+  }
+
+  public void writeList(PrintWriter out)
+  {
+    List keys = new ArrayList(fields.keySet());
+    Collections.sort(keys);
+    for (Iterator i = keys.iterator(); i.hasNext(); ) {
+      String field = (String) i.next();
+      out.println(field);
     }
   }
 

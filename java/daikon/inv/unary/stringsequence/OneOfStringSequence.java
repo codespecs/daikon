@@ -39,11 +39,13 @@ public final class OneOfStringSequence
    * Boolean.  True iff OneOf invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
+
   /**
    * Positive integer.  Specifies the maximum set size for this type
    * of invariant (x is one of 'n' items).
    **/
-  public static int dkconfig_size = 3;
+
+  public static int dkconfig_size = 2;
 
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.

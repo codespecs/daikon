@@ -18,7 +18,7 @@ public class NonModulus
   /**
    * Boolean.  True iff NonModulus invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
   SortedSet elements = new TreeSet();

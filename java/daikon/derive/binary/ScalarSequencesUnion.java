@@ -23,7 +23,7 @@ public final class ScalarSequencesUnion
   /**
    * Boolean.  True iff ScalarSequencesUnion  derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public ScalarSequencesUnion (VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);

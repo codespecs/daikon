@@ -17,7 +17,7 @@ public final class SequenceMin
   /**
    * Boolean.  True iff SequenceMin derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public SequenceMin(VarInfo vi) {
     super(vi);

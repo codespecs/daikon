@@ -16,7 +16,7 @@ public final class SequenceSum
   /**
    * Boolean.  True iff SequenceSum derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public SequenceSum(VarInfo vi) {
     super(vi);

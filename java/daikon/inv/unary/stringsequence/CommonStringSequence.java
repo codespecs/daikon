@@ -18,7 +18,7 @@ public class CommonStringSequence
   /**
    * Boolean.  True iff CommonStringSequence invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   private int elts;
   private String[] intersect = null;

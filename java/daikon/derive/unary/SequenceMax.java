@@ -17,7 +17,7 @@ public final class SequenceMax
   /**
    * Boolean.  True iff SequencesMax derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public SequenceMax(VarInfo vi) {
     super(vi);

@@ -19,7 +19,7 @@ public class Modulus
   /**
    * Boolean.  True iff Modulus invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   long modulus = 0;
   long remainder = 0;

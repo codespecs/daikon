@@ -23,7 +23,7 @@ public final class StringSequencesUnion
   /**
    * Boolean.  True iff StringSequencesUnion  derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public StringSequencesUnion (VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);

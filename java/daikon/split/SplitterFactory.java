@@ -28,10 +28,11 @@ public class SplitterFactory {
   private static String tempdir;
   private static boolean javac = false; //indicates whether javac is being used as the  compiler.
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
   /**
-   * String.  Specifies whether the temporary Splitter files should be
-   * deleted on exit or not. dkconfig_ variables should only be
-   * modified in the config file or on the commandline
+   * Boolean.  Specifies whether or not the temporary Splitter files
+   * should be deleted on exit.
    **/
   public static boolean dkconfig_delete_splitters_on_exit = true;
 

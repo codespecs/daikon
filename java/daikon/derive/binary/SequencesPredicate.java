@@ -40,7 +40,7 @@ public final class SequencesPredicate
   /**
    * Boolean.  True iff SequencesPredicate derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public VarInfo var1() { return base1; }
   public VarInfo var2() { return base2; }
@@ -60,7 +60,7 @@ public final class SequencesPredicate
 
   /**
    * Create a new SequencesJoin derivation.
-   * @param vi1 
+   * @param vi1
    * @param vi2 The two variables this is based on
    **/
   public SequencesPredicate (VarInfo vi1, VarInfo vi2, long argChoose, String argName) {
@@ -157,7 +157,7 @@ public final class SequencesPredicate
 
 
   }
-  
+
 
 
   protected VarInfo makeVarInfo() {

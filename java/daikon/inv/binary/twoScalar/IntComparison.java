@@ -171,7 +171,6 @@ public final class IntComparison
   }
 
 
-
   public String repr() {
     return "IntComparison" + varNames() + ": "
       + core.repr();
@@ -194,7 +193,7 @@ public final class IntComparison
   public String format_java() {
     // Should be the same as format unless there is a case
     // I can't think of right now -LL
-    return format();  
+    return format();
   }
 
   public String format_esc() {
@@ -287,6 +286,7 @@ public final class IntComparison
     /* [INCR]
     { // Check for comparisons against constants
       if (var1.isConstant() || (var2.isConstant())) {
+        // One of the variables is constant, and the other is not.
         VarInfo varconst;
         VarInfo varnonconst;
         boolean var1const = var1.isConstant();
@@ -309,11 +309,13 @@ public final class IntComparison
           if (can_be_lt) {
             UpperBound ub = UpperBound.find(nonconstslice);
             if ((ub != null) && ub.enoughSamples() && ub.core.max1 < valconst) {
+              // isObviousImplied: i<j where i=const1 and j<const2 and const1<const2
               return true;
             }
           } else if (can_be_gt) {
             LowerBound lb = LowerBound.find(nonconstslice);
             if ((lb != null) && lb.enoughSamples() && lb.core.min1 > valconst) {
+              // isObviousImplied: i>j where i=const1 and j>const2 and const1>const2
               return true;
             }
           }
@@ -325,6 +327,7 @@ public final class IntComparison
       LinearBinary lb = LinearBinary.find(ppt);
       if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
         Assert.assert(lb.core.b != 0);
+        // isObviousImplied: i cmp j where i=j+b
         return true;
       }
     }
@@ -346,6 +349,7 @@ public final class IntComparison
       /* [INCR]
       if ((s1 != null) && (s2 != null)
           && (s1.equal_to == s2.equal_to)) {
+        // isObviousImplied: a1.length = a2.length where a1=a2
         // lengths of equal arrays being compared
         return true;
       }

@@ -22,7 +22,7 @@ public class CommonSequence
   /**
    * Boolean.  True iff CommonSequence invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   private int elts;
   private long[] intersect = null;

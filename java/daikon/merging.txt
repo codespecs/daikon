@@ -6,20 +6,20 @@ branch of the $inv/java/daikon part of the repository into the trunk
 (1) Ensure that your V3 checkout is up to date, and builds:
 
   cd $inv/java
-  make use-redesign
+  make use-ver3
   cvs up
   make
   
 (2) Make a backup of your current version of the trunk
 
   cd $inv
-  tar cvfz daikon.redesign.tar.gz daikon.redesign/
+  tar cvfz daikon.ver3.tar.gz daikon.ver3/
 
 (3) Update V3 using cvs.  Construct the date token for the first -j
     switch using the topmost (most recent) entry from the merge
     history at the end of this document.
 
-  cd $inv/daikon.redesign
+  cd $inv/daikon.ver3
   cvs up -j "ENGINE_V2_PATCHES:10-Mar-2002 16:33" -j ENGINE_V2_PATCHES
 
 (4) Add a line to the top of the merge history (at the bottom of this
@@ -33,7 +33,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 
 (7) Examine any modified files you think are deserving before you commit.
 
-(8) Commit the files under $inv/daikon.redesign to CVS, using a log
+(8) Commit the files under $inv/daikon.ver3 to CVS, using a log
     message that communicates the time you ran step 3 (which is the
     same as the time at the top of the merge history).  Be sure to
     commit your changes to this file, as well.
@@ -43,6 +43,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+Tue Jun  4 11:12:51 EDT 2002 by MDE
 Mon May 20 18:15:44 EDT 2002 by JWN
 Tue Apr 30 19:02:54 EDT 2002 by JWN
 Thu Apr  4 17:02:37 EST 2002 by JWN

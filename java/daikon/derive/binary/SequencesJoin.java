@@ -42,7 +42,7 @@ public final class SequencesJoin
   /**
    * Boolean.  True iff SequencesJoin derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public VarInfo var1() { return base1; }
   public VarInfo var2() { return base2; }
@@ -50,7 +50,7 @@ public final class SequencesJoin
 
   /**
    * Create a new SequencesJoin derivation.
-   * @param vi1 
+   * @param vi1
    * @param vi2 The two variables this is based on
    **/
   public SequencesJoin (VarInfo vi1, VarInfo vi2) {
@@ -162,14 +162,14 @@ public final class SequencesJoin
 
     return new ValueAndModified(Intern.intern(result), mod);
   }
-  
+
 
 
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
     VarInfo var2 = var2();
     String newTypeName = "Join(" + var1.type.toString() + "," + var2.type.toString() + ")";
-    ProglangType decltype = 
+    ProglangType decltype =
       ProglangType.parse (newTypeName + "[]");
 
     if (debug.isDebugEnabled()) {

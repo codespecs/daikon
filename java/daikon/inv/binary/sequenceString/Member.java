@@ -153,6 +153,9 @@ public final class Member
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
+        // This test returns true if scl+scl_shift<=seq+seq_shift
+        // isObviousImplied: when i<=j, b[i] in b[0..j]
+        // isObviousImplied: when i>=j, b[i] in b[j..]
         if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
                                  seq_from_start)) {
           return true;
@@ -160,7 +163,7 @@ public final class Member
       } else if (sclvar.derived instanceof SequenceInitial) {
         // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
-        // B[0] in B[0..J]; also B[-1] in B[J..]
+        // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
         SequenceInitial sclse = (SequenceInitial) sclvar.derived;
         int scl_index = sclse.index;
         if (((scl_index == 0) && seq_from_start)
@@ -183,6 +186,7 @@ public final class Member
             boolean comparison = VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
                                                       seq_from_start);
             // System.out.println("comparison="+comparison+" for obvious membership: " + sclvar.name + " " + seqvar.name);
+            // isObviousImplied: when i<=j, min(B[0..I]) in B[0..J]; also for max and B[j..0]
             if (comparison) {
               return true;
             }
@@ -210,6 +214,7 @@ public final class Member
                  && (llpos == sclname.length()))
                 || (seqname.regionMatches(llpos+4, sclname, llpos, midsize)
                     && seqname.regionMatches(tildepos+1, sclname, tildepos-4, lastsize))))
+          // isObviousImplied: to do
           return true;
       }
     }

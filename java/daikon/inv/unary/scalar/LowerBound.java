@@ -49,7 +49,7 @@ public class LowerBound
    * maximal_interesting to 2 would only permit output of LowerBound 
    * invariants whose cutoff was one of (-1,0,1,2).
    **/
-  public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
+  public static long dkconfig_minimal_interesting = -1;
   /**
    * Long integer.  Together with minimal_interesting, specifies the
    * range of the computed constant that is "intersting" --- the range
@@ -57,7 +57,7 @@ public class LowerBound
    * minimal_interesting to -1 and this to 2 would only permit output
    * of LowerBound  invariants whose cutoff was one of (-1,0,1,2).
    **/
-  public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
+  public static long dkconfig_maximal_interesting = 2;
 
   public LowerBoundCore  core;
 

@@ -33,7 +33,7 @@ public final class Configuration
 
   // ============================== STATIC COMPONENT ==============================
 
-  private static final String DEFAULTS = "defaults.txt";
+  private static final String CONFIGURABLE_LIST = "configurable.txt";
   protected static final String PREFIX = "dkconfig_";
 
   /**
@@ -55,9 +55,37 @@ public final class Configuration
    * Load the defaults
    **/
   private Configuration() {
-    InputStream stream = Configuration.class.getResourceAsStream(DEFAULTS);
-    Assert.assert(stream != null, "Cannot load defaults from '" + DEFAULTS + "'");
-    apply(stream);
+    InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
+    Assert.assert(stream != null, "Cannot load list of configurable "
+		  + "fields from '" + CONFIGURABLE_LIST + "'");
+    try {
+
+      BufferedReader lines = new BufferedReader(new InputStreamReader(stream));
+      String line;
+      while ((line = lines.readLine()) != null) {
+	line = line.trim();
+	if (line.length() == 0) continue;    // skip blank lines
+
+	int n = line.lastIndexOf('.');
+	String classname = line.substring(0, n);
+	String fieldname = line.substring(n+1);
+	String unparsed;
+	try {
+	  Class c = Class.forName(classname);
+	  Field f = c.getField(Configuration.PREFIX + fieldname);
+	  Object value = f.get(null);
+	  Assert.assert(value != null);
+	  unparsed = String.valueOf(value);
+	} catch (Exception e) {
+	  throw new Error("List of configurable fields in '"
+			  + CONFIGURABLE_LIST + "' is out of date: " + e);
+	}
+	addRecord(classname, fieldname, unparsed);
+      }
+
+    } catch (IOException e) {
+      throw new ConfigException("Cannot read from stream.\n" + e);
+    }
   }
 
   public static class ConfigException extends RuntimeException {
@@ -227,7 +255,7 @@ public final class Configuration
       }
     } else if (type.getName().equals("java.lang.String")) {
       value = unparsed;
-    }else {
+    } else {
       throw new ConfigException("Unsupported type " + type.getName());
     }
 
@@ -242,6 +270,12 @@ public final class Configuration
     String fieldname = field.getName();
     Assert.assert(fieldname.startsWith(PREFIX)); // remove the prefix
     fieldname = fieldname.substring(PREFIX.length());
+    addRecord(classname, fieldname, unparsed);
+  }
+
+  private void addRecord(String classname, String fieldname, String unparsed)
+  {
+    Assert.assert(! fieldname.startsWith(PREFIX)); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }

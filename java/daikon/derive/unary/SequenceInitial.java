@@ -23,7 +23,7 @@ public final class SequenceInitial
   /**
    * Boolean.  True iff SequenceInitial derived variables should be generated.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = false;
 
   public final int index;       // negative if counting from end
                                 // typically 0,1,-1, or -2
