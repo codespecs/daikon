@@ -5,6 +5,7 @@
 (load "remove-trailing-whitespace")
 
 (add-to-list 'auto-mode-alist '("\\.jpp\\'" . java-mode))
+(add-to-list 'auto-mode-alist '("\\.java\\.goal\\'" . java-mode))
 
 (if (not (fboundp 'cvs-update))
     (if (= 20 emacs-major-version)
