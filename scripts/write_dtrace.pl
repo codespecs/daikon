@@ -11,8 +11,9 @@ use strict;
 $WARNING = 0;			# "-w" flag
 
 my %pptname_to_cluster = ();
-my $object_invoc = 0; #assigns invocation number of the OBJECT program point
 my ($dtrace_file, $ppt_stem);
+my %pptname_to_nonces = (); #used to keep track of an invocation nonce for ppts 
+                      #which don't have them.
 
 #substitute this with your own read_cluster_info procedure.
 my $pptname_to_cluster = &read_cluster_info_seq;
@@ -26,7 +27,7 @@ if( $ARGV[0] =~/(.*)\.dtrace/ ){
 }
 
 open (DTRACE_IN, $dtrace_file) || die "dtrace file not found \n";
-my $newfile = $ppt_stem."_new.dtrace";
+my $newfile = $ppt_stem."_daikon_temp.dtrace";
 # print "writing $newfile\n";
 open (DTRACE_OUT, ">$newfile")
     || die "couldn't open $newfile for output\n";
@@ -37,28 +38,26 @@ while (<DTRACE_IN>) {
 	my $pptname = $line;
 	chomp ($pptname);
 	&insert_cluster_info($pptname);
-    }
+    } 
 }
 
 sub insert_cluster_info {
-#assumes that the invocation nonce is always the first "variable" at the
-#program point (apart from the OBJECT program point, for which the invocation
-#nonce is just the number of times the program point has appeard in this dtrace
-#file. Uses the invocation nonce to match the program points and insert the
-#cluster information
+#assumes that the invocation nonce is always the first "variable" at
+#the program point. It it's not there, then this program point does
+#not have an invocation nonce, create a nonce for it. Uses the
+#invocation nonce to match the program points and insert the cluster
+#information
     my ($pptname, $invoc, $line, $pptstem, $cluster_number);
     $pptname = $_[0];
-    if ($pptname =~ /OBJECT/) {
-	$object_invoc ++;
-	$invoc = $object_invoc;
+    
+    $line = <DTRACE_IN>;
+    if ($line !~ /this.invocation.nonce/) {
+	$pptname_to_nonces{$pptname}++;
+	$invoc = $pptname_to_nonces{$pptname};
     } else {
-	$line = <DTRACE_IN>;
 	$invoc = <DTRACE_IN>;
 	chomp($invoc);
-	if ($line !~ /this.invocation.nonce/) {
-	    &skip_till_next(*DTRACE_IN);
-	    return;
-	}
+	$line = <DTRACE_IN>;
     }
     # find out if this program point was clustered. If it was, retrieve the
     # cluster information. Otherwise skip it.
@@ -71,14 +70,20 @@ sub insert_cluster_info {
     $pptstem = &cleanup_pptname($pptstem);
     $pptstem =~ s/ENTER.*//;
     $pptstem =~ s/EXIT.*//;
-
+    
     $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
+    
     if($cluster_number == 0){
 	&skip_till_next(*DTRACE_IN);
     } else {
 	my $output = "$pptname\nthis_invocation_nonce\n$invoc\n";
 	$output = $output."cluster\n$cluster_number\n1\n";
 	print DTRACE_OUT $output;
+	print DTRACE_OUT $line;
+	if ($line =~ /^\s*$/) {
+	    # this ppt has no variables.
+	    return;
+	}
 	&copy_till_next(*DTRACE_IN, *DTRACE_OUT);
     }
     return;
@@ -99,11 +104,13 @@ sub copy_till_next {
     my ($line);
     local *INHANDLE = $_[0];
     local *OUTHANDLE = $_[1];
-    do {
-	$line = <INHANDLE>;
+
+    while ($line = <INHANDLE>) {
 	print OUTHANDLE $line;
-    } until ($line =~ /^\s*$/);
-    return;
+	if ($line =~ /^\s*$/) {
+	    return;
+	}
+    }
 }
 
 ########################## read_cluster_info_xxx ##########
@@ -125,7 +132,7 @@ sub read_cluster_info_seq {
     my $numfiles = scalar(@ARGV) - 1;
     for (my $i = 1; $i < $numfiles+1; $i++) {
 	$filename = $ARGV[$i];
-	print $filename."\n";
+	
 	open (FILE, $filename) || die "can't open $filename to read cluster info\n";
 	$cluster = 1;
 	#read the file with the cluster information
@@ -143,7 +150,8 @@ sub read_cluster_info_seq {
 	$filename =~ s/EXIT.*//;
 	$filename =~ s/.cluster//;
 	$filename =~ s/.samp//;
-
+	$filename =~ s/.daikon_temp.*//;
+	
 	$pptname_to_cluster{$filename} = [@temparray];
     }
     return $pptname_to_cluster;
