@@ -115,15 +115,15 @@ public final class SequencesPredicateFloat
     }
 
     if (val1 instanceof double[]) {
-      length1 = ((double []) val1).length;
+      length1 = ((double[]) val1).length;
     }
 
     if (val2 instanceof double[]) {
-      length2 = ((double []) val2).length;
+      length2 = ((double[]) val2).length;
     }
 
     if (val1 instanceof Object[]) {
-      length1 = ((double []) val1).length;
+      length1 = ((double[]) val1).length;
     }
 
     Assert.assertTrue(val2 == null || val2 instanceof double[]);
@@ -150,7 +150,7 @@ public final class SequencesPredicateFloat
      * Mis    Mis  Mis  Mis
      */
 
-    double[] predicate = (double []) val2;
+    double[] predicate = (double[]) val2;
     int count = 0;
     // Find length of output first
     for (int i = 0; i < predicate.length; i++) {
@@ -159,7 +159,7 @@ public final class SequencesPredicateFloat
 
     if (val1 instanceof double[]) {
       double[] result = new double [count];
-      double[] values = (double []) val1;
+      double[] values = (double[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
         if ((predicate[i] == choose) ^ !keep) {

@@ -105,7 +105,7 @@ public final class SeqIndexNonEqualFloat
 
     String[] form = VarInfoName.QuantHelper.format_jml(qret);
 
-    VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
+    VarInfoName index1 = ((VarInfoName[])qret.bound_vars.get(0))[0];
 
     return form[0] + form[1] + " != " + index1.name() + form[2];
   }
@@ -162,7 +162,7 @@ public final class SeqIndexNonEqualFloat
   // Look up a previously instantiated invariant.
   public static SeqIndexNonEqualFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIndexNonEqualFloat)
         return (SeqIndexNonEqualFloat) inv;

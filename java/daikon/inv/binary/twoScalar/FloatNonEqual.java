@@ -93,7 +93,7 @@ public final class FloatNonEqual
   // Should this implementation be made more efficient?
   public static FloatNonEqual  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof FloatNonEqual)
         return (FloatNonEqual) inv;

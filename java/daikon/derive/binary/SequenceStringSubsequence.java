@@ -43,7 +43,7 @@ public final class SequenceStringSubsequence
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-    String[] val1_array = (String []) val1;
+    String[] val1_array = (String[]) val1;
     int val2 = base2.getIndexValue(full_vt);
 
     // One could argue that if the range exceeds the array bounds, one
@@ -76,7 +76,7 @@ public final class SequenceStringSubsequence
       return new ValueAndModified(val1, mod);
 
     String[] subarr = ArraysMDE.subarray(val1_array, begin_inclusive, end_exclusive - begin_inclusive);
-    subarr = (String []) Intern.intern(subarr);
+    subarr = (String[]) Intern.intern(subarr);
     return new ValueAndModified(subarr, mod);
   }
 

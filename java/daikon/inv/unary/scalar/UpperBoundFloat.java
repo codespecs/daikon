@@ -195,7 +195,7 @@ public class UpperBoundFloat
   // Look up a previously instantiated invariant.
   public static UpperBoundFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof UpperBoundFloat)
         return (UpperBoundFloat) inv;

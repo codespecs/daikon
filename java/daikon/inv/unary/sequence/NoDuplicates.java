@@ -75,8 +75,8 @@ public class NoDuplicates
       VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var().name,var().name});
       String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,false);
 
-      VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
-      VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
+      VarInfoName index1 = ((VarInfoName[])qret.bound_vars.get(0))[0];
+      VarInfoName index2 = ((VarInfoName[])qret.bound_vars.get(1))[0];
 
       return quantResult[0] + "(" + index1.jml_name() + " != " + index2.jml_name() + ") ==> (" + quantResult[1] + " != " +
         quantResult[2] + ")" + quantResult[3];
@@ -202,7 +202,7 @@ public class NoDuplicates
     // subsequence relationship between that array and this one.
 
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof NoDuplicates) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();

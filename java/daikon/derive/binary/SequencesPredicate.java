@@ -115,15 +115,15 @@ public final class SequencesPredicate
     }
 
     if (val1 instanceof long[]) {
-      length1 = ((long []) val1).length;
+      length1 = ((long[]) val1).length;
     }
 
     if (val2 instanceof long[]) {
-      length2 = ((long []) val2).length;
+      length2 = ((long[]) val2).length;
     }
 
     if (val1 instanceof Object[]) {
-      length1 = ((long []) val1).length;
+      length1 = ((long[]) val1).length;
     }
 
     Assert.assertTrue(val2 == null || val2 instanceof long[]);
@@ -150,7 +150,7 @@ public final class SequencesPredicate
      * Mis    Mis  Mis  Mis
      */
 
-    long[] predicate = (long []) val2;
+    long[] predicate = (long[]) val2;
     int count = 0;
     // Find length of output first
     for (int i = 0; i < predicate.length; i++) {
@@ -159,7 +159,7 @@ public final class SequencesPredicate
 
     if (val1 instanceof long[]) {
       long[] result = new long [count];
-      long[] values = (long []) val1;
+      long[] values = (long[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
         if ((predicate[i] == choose) ^ !keep) {

@@ -52,9 +52,9 @@ public final class LinearBinaryCoreFloat
     try {
       LinearBinaryCoreFloat  result = (LinearBinaryCoreFloat) super.clone();
       if (x_cache != null)
-        result.x_cache = (double []) x_cache.clone();
+        result.x_cache = (double[]) x_cache.clone();
       if (y_cache != null)
-        result.y_cache = (double []) y_cache.clone();
+        result.y_cache = (double[]) y_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen

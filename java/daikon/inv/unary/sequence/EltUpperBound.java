@@ -185,7 +185,7 @@ public class EltUpperBound
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext();) {
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
         continue;
@@ -248,7 +248,7 @@ public class EltUpperBound
   // Look up a previously instantiated invariant.
   public static EltUpperBound  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltUpperBound)
         return (EltUpperBound) inv;

@@ -43,9 +43,9 @@ public final class LinearTernaryCore
   public Object clone() {
     try {
       LinearTernaryCore  result = (LinearTernaryCore) super.clone();
-      result.x_cache = (long []) x_cache.clone();
-      result.y_cache = (long []) y_cache.clone();
-      result.z_cache = (long []) z_cache.clone();
+      result.x_cache = (long[]) x_cache.clone();
+      result.y_cache = (long[]) y_cache.clone();
+      result.z_cache = (long[]) z_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen

@@ -194,7 +194,7 @@ public final class SeqIntComparison
   // Look up a previously instantiated invariant.
   public static SeqIntComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIntComparison)
         return (SeqIntComparison) inv;
@@ -220,7 +220,7 @@ public final class SeqIntComparison
 
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
-    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext();) {
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
         continue;

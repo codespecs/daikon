@@ -78,19 +78,19 @@ public final class SequencesJoinFloat
     }
 
     if (val1 instanceof double[]) {
-      length1 = ((double []) val1).length;
+      length1 = ((double[]) val1).length;
     }
 
     if (val2 instanceof double[]) {
-      length2 = ((double []) val2).length;
+      length2 = ((double[]) val2).length;
     }
 
     if (val1 instanceof double[]) {
-      length1 = ((double []) val1).length;
+      length1 = ((double[]) val1).length;
     }
 
     if (val2 instanceof double[]) {
-      length2 = ((double []) val2).length;
+      length2 = ((double[]) val2).length;
     }
 
     Assert.assertTrue(length1 == length2);
@@ -108,10 +108,10 @@ public final class SequencesJoinFloat
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof double[]) {
-        e1 = new Double  (((double []) val1) [i]);
+        e1 = new Double  (((double[]) val1) [i]);
       }
       if (val2 instanceof double[]) {
-        e2 = new Double  (((double []) val2) [i]);
+        e2 = new Double  (((double[]) val2) [i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1) [i];
@@ -129,12 +129,12 @@ public final class SequencesJoinFloat
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
       if (val1 instanceof double[]) {
-        debug.debug (ArraysMDE.toString((double []) val1));
+        debug.debug (ArraysMDE.toString((double[]) val1));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val1));
       }
       if (val2 instanceof double[]) {
-        debug.debug (ArraysMDE.toString((double []) val2));
+        debug.debug (ArraysMDE.toString((double[]) val2));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val2));
       }

@@ -167,7 +167,7 @@ public class EltwiseIntComparison
   // Look up a previously instantiated invariant.
   public static EltwiseIntComparison  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltwiseIntComparison)
         return (EltwiseIntComparison) inv;

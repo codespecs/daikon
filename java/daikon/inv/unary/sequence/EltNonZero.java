@@ -249,7 +249,7 @@ public final class EltNonZero
     // subsequence relationship between that array and this one.
 
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZero) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
@@ -288,7 +288,7 @@ public final class EltNonZero
   // Look up a previously instantiated invariant.
   public static EltNonZero  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltNonZero)
         return (EltNonZero) inv;

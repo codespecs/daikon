@@ -117,7 +117,7 @@ public class Reverse
     VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {name1});
     String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
 
-    VarInfoName index = ((VarInfoName [])qret.bound_vars.get(0))[0];
+    VarInfoName index = ((VarInfoName[])qret.bound_vars.get(0))[0];
 
     // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
     // parse appears to choke on that output... until it works, using this

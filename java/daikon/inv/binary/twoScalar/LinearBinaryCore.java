@@ -52,9 +52,9 @@ public final class LinearBinaryCore
     try {
       LinearBinaryCore  result = (LinearBinaryCore) super.clone();
       if (x_cache != null)
-        result.x_cache = (long []) x_cache.clone();
+        result.x_cache = (long[]) x_cache.clone();
       if (y_cache != null)
-        result.y_cache = (long []) y_cache.clone();
+        result.y_cache = (long[]) y_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen

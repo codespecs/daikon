@@ -79,8 +79,8 @@ public class PairwiseLinearBinaryFloat
 
   public String format_jml() {
     VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var1().name,var2().name});
-    VarInfoName var1index = ((VarInfoName [])(qret.bound_vars.get(0)))[0];
-    VarInfoName var2index = ((VarInfoName [])(qret.bound_vars.get(1)))[0];
+    VarInfoName var1index = ((VarInfoName[])(qret.bound_vars.get(0)))[0];
+    VarInfoName var2index = ((VarInfoName[])(qret.bound_vars.get(1)))[0];
 
     String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
 

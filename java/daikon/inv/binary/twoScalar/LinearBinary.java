@@ -127,7 +127,7 @@ public class LinearBinary
   // Look up a previously instantiated invariant.
   public static LinearBinary  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LinearBinary)
         return (LinearBinary) inv;
@@ -139,7 +139,7 @@ public class LinearBinary
   // This ought to produce an iterator instead.
   public static Vector findAll(VarInfo vi) {
     Vector result = new Vector();
-    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ;) {
+    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2) && view.usesVar(vi)) {
         LinearBinary  lb = LinearBinary.find(view);

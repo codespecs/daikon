@@ -70,7 +70,7 @@ public final class EltOneOfString
 
   protected Object clone() {
     EltOneOfString  result = (EltOneOfString) super.clone();
-    result.elts = (String []) elts.clone();
+    result.elts = (String[]) elts.clone();
 
     result.num_elts = this.num_elts;
 
@@ -522,7 +522,7 @@ public final class EltOneOfString
   // Look up a previously instantiated invariant.
   public static EltOneOfString  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOfString)
         return (EltOneOfString) inv;

@@ -43,9 +43,9 @@ public final class LinearTernaryCoreFloat
   public Object clone() {
     try {
       LinearTernaryCoreFloat  result = (LinearTernaryCoreFloat) super.clone();
-      result.x_cache = (double []) x_cache.clone();
-      result.y_cache = (double []) y_cache.clone();
-      result.z_cache = (double []) z_cache.clone();
+      result.x_cache = (double[]) x_cache.clone();
+      result.y_cache = (double[]) y_cache.clone();
+      result.z_cache = (double[]) z_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen

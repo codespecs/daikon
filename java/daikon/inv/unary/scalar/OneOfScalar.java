@@ -75,7 +75,7 @@ public final class OneOfScalar
 
   protected Object clone() {
     OneOfScalar  result = (OneOfScalar) super.clone();
-    result.elts = (long []) elts.clone();
+    result.elts = (long[]) elts.clone();
 
     result.num_elts = this.num_elts;
 
@@ -458,7 +458,7 @@ public final class OneOfScalar
     // For every EltOneOf  at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
-    for (Iterator itor = parent.invariants_iterator(); itor.hasNext();) {
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltOneOf) && inv.enoughSamples()) {
         VarInfo v1 = var();
@@ -576,7 +576,7 @@ public final class OneOfScalar
   // Look up a previously instantiated invariant.
   public static OneOfScalar  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfScalar)
         return (OneOfScalar) inv;

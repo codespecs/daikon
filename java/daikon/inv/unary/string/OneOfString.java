@@ -67,7 +67,7 @@ public final class OneOfString
 
   protected Object clone() {
     OneOfString  result = (OneOfString) super.clone();
-    result.elts = (String []) elts.clone();
+    result.elts = (String[]) elts.clone();
 
     result.num_elts = this.num_elts;
 
@@ -474,7 +474,7 @@ public final class OneOfString
   // Look up a previously instantiated invariant.
   public static OneOfString  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfString)
         return (OneOfString) inv;

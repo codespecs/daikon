@@ -267,7 +267,7 @@ public class LinearTernaryFloat
   // Look up a previously instantiated invariant.
   public static LinearTernaryFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 3);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LinearTernaryFloat)
         return (LinearTernaryFloat) inv;
@@ -279,7 +279,7 @@ public class LinearTernaryFloat
   // This ought to produce an iterator instead.
   public static Vector findAll(VarInfo vi) {
     Vector result = new Vector();
-    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ;) {
+    for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 3) && view.usesVar(vi)) {
         LinearTernaryFloat  lt = LinearTernaryFloat.find(view);

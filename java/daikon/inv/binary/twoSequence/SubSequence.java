@@ -206,11 +206,11 @@ public class SubSequence
 
     // Bound the following quantification
     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
-    VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
+    VarInfoName superIndexName = ((VarInfoName[])superQuantifyReturn.bound_vars.get(0))[0];
     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-    VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
+    VarInfoName subIndexGroup[] = (VarInfoName[])subQuantifyReturn.bound_vars.get(0);
 
     VarInfoName subIndexName = subIndexGroup[0];
 
@@ -392,7 +392,7 @@ public class SubSequence
   // Look up a previously instantiated SubSequence relationship.
   public static SubSequence  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSequence)
         return (SubSequence) inv;

@@ -195,7 +195,7 @@ public class UpperBound
   // Look up a previously instantiated invariant.
   public static UpperBound  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext();) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof UpperBound)
         return (UpperBound) inv;

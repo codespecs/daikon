@@ -336,7 +336,7 @@ public final class MathMDE {
 
   /**
    * The iterator produces Integer  values.
-   * This can be more efficient than modulus(int []) if the int [] doesn't already
+   * This can be more efficient than modulus(int[]) if the int [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
@@ -416,7 +416,7 @@ public final class MathMDE {
 
   /**
    * The iterator produces Integer  values.
-   * This can be more efficient than modulus(int []) if the int [] doesn't
+   * This can be more efficient than modulus(int[]) if the int [] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
@@ -498,7 +498,7 @@ public final class MathMDE {
 
   /**
    * The iterator produces Long  values.
-   * This can be more efficient than modulus(long []) if the long [] doesn't already
+   * This can be more efficient than modulus(long[]) if the long [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
@@ -578,7 +578,7 @@ public final class MathMDE {
 
   /**
    * The iterator produces Long  values.
-   * This can be more efficient than modulus(long []) if the long [] doesn't
+   * This can be more efficient than modulus(long[]) if the long [] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *

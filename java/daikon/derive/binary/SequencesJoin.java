@@ -78,19 +78,19 @@ public final class SequencesJoin
     }
 
     if (val1 instanceof long[]) {
-      length1 = ((long []) val1).length;
+      length1 = ((long[]) val1).length;
     }
 
     if (val2 instanceof long[]) {
-      length2 = ((long []) val2).length;
+      length2 = ((long[]) val2).length;
     }
 
     if (val1 instanceof long[]) {
-      length1 = ((long []) val1).length;
+      length1 = ((long[]) val1).length;
     }
 
     if (val2 instanceof long[]) {
-      length2 = ((long []) val2).length;
+      length2 = ((long[]) val2).length;
     }
 
     Assert.assertTrue(length1 == length2);
@@ -108,10 +108,10 @@ public final class SequencesJoin
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof long[]) {
-        e1 = new Long  (((long []) val1) [i]);
+        e1 = new Long  (((long[]) val1) [i]);
       }
       if (val2 instanceof long[]) {
-        e2 = new Long  (((long []) val2) [i]);
+        e2 = new Long  (((long[]) val2) [i]);
       }
       if (val1 instanceof Object[]) {
         e1 = ((Object[]) val1) [i];
@@ -129,12 +129,12 @@ public final class SequencesJoin
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
       if (val1 instanceof long[]) {
-        debug.debug (ArraysMDE.toString((long []) val1));
+        debug.debug (ArraysMDE.toString((long[]) val1));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val1));
       }
       if (val2 instanceof long[]) {
-        debug.debug (ArraysMDE.toString((long []) val2));
+        debug.debug (ArraysMDE.toString((long[]) val2));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val2));
       }
