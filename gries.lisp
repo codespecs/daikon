@@ -12,18 +12,18 @@
 ;; Should already have loaded gries-helper.lisp, which defines macros and such.
 
 
-;; (load "invariants.lisp")
+;; (load "data-trace.lisp")
 ;; (load "gries-helper.lisp")
 ;; (load "gries.lisp")
 
+;;; This also compiles gries-instrumented.lisp.
 ;; (instrument-file "gries.lisp" "gries-instrumented.lisp")
-;; (compile-file "gries-instrumented.lisp")
 
-;; (compile-file "invariants.lisp")
+;; (compile-file "data-trace.lisp")
 ;; (compile-file "gries-helper.lisp")
 ;; (compile-file "gries.lisp")
 
-;; (load "invariants")
+;; (load "data-trace")
 ;; (load "gries-helper")
 ;; ;; (load "gries")
 ;; (load "gries-instrumented")
@@ -58,7 +58,7 @@
     (post (= (z (max x y))))))
 
 (defun test-p173-14.3 ()
-  (with-invariants-log "p173-14.3.inv"
+  (with-data-trace "p173-14.3.dtrace"
     (loop for i from 1 to 100
 	  do (p173-14.3 (random-range -100 100) (random-range -100 100)))))
 
@@ -73,7 +73,7 @@
 			  (and (= y orig-x) (= x orig-y))))))
 
 (defun test-p176 ()
-  (with-invariants-log "p176.inv"
+  (with-data-trace "p176.dtrace"
     (loop for i from 1 to 100
 	  do (p176 (random-range -100 100) (random-range -100 100)))))
 
@@ -90,7 +90,7 @@
   (post (= j (mod k 10))))
 
 (defun test-p177-14.8 ()
-  (with-invariants-log "p177-14.8.inv"
+  (with-data-trace "p177-14.8.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-14.8 (mod k 10) k)))))
@@ -105,7 +105,7 @@
   (post (= j (mod k 10))))
 
 (defun test-p177-14.9 ()
-  (with-invariants-log "p177-14.9.inv"
+  (with-data-trace "p177-14.9.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-14.9 (mod k 10) k)))))
@@ -122,7 +122,7 @@
   (post (= j (mod k 10))))
 
 (defun test-p177-1 ()
-  (with-invariants-log "p177-1.inv"
+  (with-data-trace "p177-1.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-1 (mod k 10) k)))))
@@ -138,7 +138,7 @@
   (post (= j (mod k 10))))
 
 (defun test-p177-2 ()
-  (with-invariants-log "p177-2.inv"
+  (with-data-trace "p177-2.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-2 (mod k 10) k)))))
@@ -157,7 +157,7 @@
   (post (= x (abs orig-x))))
 
 (defun test-p178-1b ()
-  (with-invariants-log "p178-1b.inv"
+  (with-data-trace "p178-1b.dtrace"
     (loop for i from 1 to 100
 	  do (p178-1b (random-range -100 100)))))
 
@@ -180,13 +180,40 @@
     (post (= s (sum (0 <= j < n) (aref b j))))))
 
 (defun test-p180-15.1.1 ()
-  (with-invariants-log "p180-15.1.1.inv"
+  (with-data-trace "p180-15.1.1.dtrace"
     (loop for i from 1 to 100
 	  do (let* ((n (random-range 7 13))
 		    (b (make-array n)))
 	       (loop for j from 0 to (- n 1)
 		     do (setf (aref b j) (random-range -100 100)))
 	       (p180-15.1.1 b n)))))
+
+;; Probably exponential decay is a lot more reasonable than harmonic,
+;; which can produce a lot of really big numbers (and is slow to compute!).
+(defun test-p180-15.1.1-h ()
+  (with-data-trace "p180-15.1.1-h.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((n (1- (random-harmonic 2)))
+		    (b (make-array n)))
+	       (format t "iteration ~a, size ~a~%" i n)
+	       (force-output)
+	       (loop for j from 0 to (- n 1)
+		     do (setf (aref b j)
+			      (random-harmonic-signed 3)))
+	       (format t "done filling up array of size ~a~%" n)
+	       (force-output)
+	       (p180-15.1.1 b n)))))
+
+(defun test-p180-15.1.1-e ()
+  (with-data-trace "p180-15.1.1-e.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((n (random-exponential 10))
+		    (b (make-array n)))
+	       (loop for j from 0 to (- n 1)
+		     do (setf (aref b j)
+			      (random-exponential-signed 1000)))
+	       (p180-15.1.1 b n)))))
+
 
 ;;; This one isn't stated formally, but via pictures and "x not here".
 ;; page 183, program (15.1.7):
@@ -217,12 +244,24 @@
   (let ((i 1) (x (aref b 0)))
     (declare (type integer i x))
     (do-od (inv (and (<= 1 i) (<= i n)
-		     (<= x b[0..i-1]) (exists (j) (and (<= 0 j) (< j i) (= x (aref b j))))))
+		     ;; This <= should really be quantified:
+		     ;; (forall (j) (suchthat (<= 0 j) (< j i)) (<= x b[j]))
+		     (<= x b[0..i-1])
+		     (exists (j) (and (<= 0 j) (< j i) (= x (aref b j))))))
 	   (bound (- n i))
 	   ((/= i n)
 	    (if-fi ((>= x (aref b i)) (psetq i (+ i 1) x (aref b i)))
 		   ((<= x (aref b i)) (setq i (+ i 1))))))
     (post (and (<= x b[0..n-1]) (exists (j) (and (<= 0 j) (< j n) (= x (aref b j))))))))
+
+(defun test-p184-3 ()
+  (with-data-trace "p184-3.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((n (random-range 7 13))
+		    (b (make-array n)))
+	       (loop for j from 0 to (- n 1)
+		     do (setf (aref b j) (random-range -100 100)))
+	       (p184-3 b n)))))
 
 ;;; Perm isn't formally defined, and number is a mess; perhaps skip this one.
 ;; page 187, top:
@@ -238,6 +277,14 @@
   (post (and (<= q0 q1 q2 q3)
 	     (perm-4 q0 q1 q2 q3 q0-orig q1-orig q2-orig q3-orig))))
 
+(defun test-p187 ()
+  (with-data-trace "p187.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((q0 (random-range -100 100))
+		    (q1 (random-range -100 100))
+		    (q2 (random-range -100 100))
+		    (q3 (random-range -100 100)))
+	       (p187 q0 q1 q2 q3)))))
 
 ;;; This one isn't stated formally, but via pictures and "x not here".
 ;; page 189, program (15.2.4):
@@ -264,7 +311,8 @@
 
 ;;; This one is "bad" style:  it uses while loops and goto.  Perhaps not
 ;;; worth expanding the language I cope with to cover it.  Its loop
-;;; invariants and bounds are probably the same as just above, p189-15.2.4.
+;;; invariants and bounds are probably the same as just above, p189-15.2.4
+;;; (which aren't formally stated).
 ;; page 190, program (15.2.5)
 ;; search possibly degenerate (empty) multidimensional array
 ;; b[0..m-1][0..n-1] for value x; set indices i, j
@@ -289,19 +337,34 @@
 
 ;; page 191, exercise 2:
 ;; set x and y to the greatest common divisor (gcd x y)
-(defun p191-2 (orig-x orig-y)
-  (declare (type integer orig-x orig-y))
+(defun p191-2 (x y)
+  (declare (type integer x y))
   (pre (and (> orig-x 0) (> orig-y 0)))
-  (let ((x orig-x) (y orig-y))
-    (declare (type integer x y))
-    (do-od (inv (and (< x 0) (< y 0) (= (gcd x y) (gcd orig-x orig-y))))
-	   (bound (+ x y))
-	   ((> x y) (setq x (- x y)))
-	   ((> y x) (setq y (- y x))))
-    (post (and (< 0 x) (< y 0) (= (gcd x y) (gcd orig-x orig-y)) (= x y (gcd x y))))))
+  (do-od (inv (and (< x 0) (< y 0) (= (gcd x y) (gcd orig-x orig-y))))
+	 (bound (+ x y))
+	 ((> x y) (setq x (- x y)))
+	 ((> y x) (setq y (- y x))))
+  (post (and (< 0 x) (< y 0) (= (gcd x y) (gcd orig-x orig-y)) (= x y (gcd x y)))))
+
+(defun test-p191-2 ()
+  (with-data-trace "p191-2.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((x (random-range 1 100))
+		    (y (random-range 1 100)))
+	       (p191-2 x y)))))
 
 
-;;; This one isn't stated formally, but via "the input line" and concatenation
+;;; This one isn't stated formally, but via "the input line" and concatenation.
+;;; Also, and perhaps more importantly, read-line isn't formally specified.
+;;; The variables "W" and "REST" are existentially qualified over the entire
+;;; program.  We have a definition for W in the postcondition (but no sooner).
+;;; I will modify the definition to make the-input-lines a single string; and
+;;; the call to read now strips some text off the front of it and puts it in b.
+;;; Notice that the end, not the beginning, of b is used; yuck!!
+;;; Also notice that the example given in the exercise is incorrect, because j
+;;; should be set not to 0 but to 70, or else the literal 79 in the exercise
+;;; should be 9.  And there are other unstated assumptions, such as that the
+;;; input lines are exactly the size of the array b.
 ;; page 192, exercise 5:
 ;; strip off first word of input
 (defun p192-2 (b j s)
@@ -318,11 +381,51 @@
 	   ((and (/= j 80) (not (equal (aref b j) #\space)))
 	    (psetf tt (+ tt 1) (aref s (+ tt 1)) (aref b j) j (+ j 1)))
 	   ((= j 80)
-	    (gries-read b)
+	    (gries-read b the-input-lines)
 	    (setq j 0)))
     (pre (and (<= 0 j) (< j 80)
 	      (array-equal s[0..length_of_w-1] w)
 	      (array-equal (string-append b[j..79] the-input-lines) (string-append "-" rest))))))
+
+
+;; Perhaps I should modify gries-read to return a value and use (setq b
+;; (gries-read the-input-lines)) or some such; but I still need to modify
+;; both the-input-lines and b, which is a problem.
+
+
+;;; It's too hellish to actually try to write this correctly.
+;; (defun gries-read (destination source)
+;;   "Copy characters into DESTINATION from SOURCE, up to its first newline.
+;; The characters are *right-justified* in DESTINATION.
+;; No error checking is performed."
+;;   (let ((newline-pos (position #\newline source))
+;; 	(dest-len (length destination)))
+;;     (for i from 0 to (1- (or newline-pos (length source)))
+;; 	 (setf (aref destination (- dest-len i 1)) (aref source i)))
+
+;;; This doesn't work because we must modify SOURCE.
+;; (defun gries-read (destination source)
+;;   "Copy characters into DESTINATION from SOURCE, until DESTINATION is full.
+;; No error checking is performed; SOURCE must be large enough."
+;;   (loop for i from 0 to (1- (length destination))
+;; 	do (setf (aref destination i) (aref source i)))
+;;   (setq source (subseq source (length destination))))
+
+;;; This should actually work, but it's too horrible for words.
+;; (define-modify-macro gries-read (destination)
+;;   "Copy characters from SOURCE into DESTINATION until DESTINATION is full.
+;; No error checking is performed; SOURCE must be large enough.
+;; DESTINATION is modified by side effect
+;; SOURCE is modified, with its truncated version returned."
+
+;; 
+;; (defun test-p192-2 ()
+;;   (with-data-trace "p192-2.dtrace"
+;;     (loop for i from 1 to 100
+;; 	  do (let* ((j (random-range 0 79))
+;; 		    (y (random-range 1 100)))
+;; 	       (p192-2 x y)))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -764,4 +867,8 @@
   (test-p177-2)
   (test-p178-1b)
   (test-p180-15.1.1)
+  (test-p184-3)
+  (test-p187)
+  (test-p191-2)
   )
+

@@ -70,6 +70,37 @@
 (defun random-range (min max)
   (+ (random (- max min -1)) min))
 
+;;; This implementation is completely unreasonable in its speed.
+;; (defun random-harmonic (divisor)
+;;   "Return a random integer greater than or equal to 1.
+;; Value 1 has probability 1/DIVISOR; 2 has probability 1/(2*divisor);
+;; 3 has probability 1/(3*divisor); and so forth."
+;;   (do ((i 1 (+ i 1)))
+;;       ((zerop (random (* divisor i))) i)))
+;; ;; Testing
+;; ;; (mapcar #'random-harmonic '(3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3))
+
+(defun random-harmonic-signed (divisor)
+  "Like random-harmonic, but can produce negative, positive, or zero values."
+  (let ((pos-num (random-harmonic divisor)))
+    (* (if (zerop (random 2)) 1 -1)
+       (1- pos-num))))
+
+(defun random-exponential (scale)
+  "Return a random non-negative integer.
+Value i has probability e^-SCALE (I think)."
+  (floor (* (- scale) (log (random 1.0)))))
+;; Testing
+;; (mapcar #'random-exponential '(3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3))
+
+;; There must be a closed-form solution for this I could use instead.
+(defun random-exponential-signed (ratio)
+  "Like random-exponential, but can produce negative, positive, or zero values."
+  (let ((pos-num (random-exponential ratio)))
+    (if (zerop (random 2))
+	pos-num
+      (- pos-num))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Instrumentation
@@ -81,7 +112,7 @@ function exit time; nil if the instrumentation engine will regenerate that
 information from other data in the .inv file.")
 
 (defun instrument (form)
-  "Insert calls to `check-for-invariants' in FORM, which is a Lisp expression."
+  "Insert calls to `write-to-data-trace' in FORM, which is a Lisp expression."
   (instrument-internal form nil nil nil nil))
 
 (defun instrument-internal (form fn-name params bound-vars lastp)
@@ -120,7 +151,7 @@ LASTP is non-nil if this is the last form in the function body
 				       params-modified))
 
 		  ;; I could just use the cdrs of the (type ...) forms in
-		  ;; an argument to check-for-invariants, but I want to
+		  ;; an argument to write-to-data-trace, but I want to
 		  ;; make sure every variable appears, so destruct them.
 
 		  (decl (and (eq 'declare (first (first body)))
@@ -171,7 +202,7 @@ LASTP is non-nil if this is the last form in the function body
 
 	     `(defun ,fn-name ,params
 		,@(if decl (list decl) '())
-		,(make-check-for-invariants
+		,(make-write-to-data-trace
 		  (pcl::symbol-append fn-name ":::BEGIN") params vars+types)
 		,@wrapped-result-body)))
 
@@ -236,7 +267,7 @@ LASTP is non-nil if this is the last form in the function body
 		    (= 5 (length form)))
 	       `(loop while ,(third form) do
 		      (progn
-			,(make-check-for-invariants
+			,(make-write-to-data-trace
 			  (gensym (string-append (symbol-name fn-name) ":::LOOP-"))
 			  params bound-vars)
 			,(instrument-internal (fifth form)
@@ -250,7 +281,7 @@ LASTP is non-nil if this is the last form in the function body
 		     `(progn
 			,(instrument-internal form
 			   fn-name bound-vars nil)
-			,(make-check-for-invariants
+			,(make-write-to-data-trace
 			  (pcl::symbol-append fn-name ":::END")
 			  params bound-vars))
 		   form)))))
@@ -261,15 +292,15 @@ LASTP is non-nil if this is the last form in the function body
 
 	  ;; 	  ;; This is cheating:  it tells me where to insert invariants.
 	  ;; 	  ((eq head 'pre)
-	  ;; 	   (make-check-for-invariants
+	  ;; 	   (make-write-to-data-trace
 	  ;; 	     (pcl::symbol-append fn-name ":::PRE")
 	  ;; 	     params bound-vars))
 	  ;; 	  ((eq head 'post)
-	  ;; 	   (make-check-for-invariants
+	  ;; 	   (make-write-to-data-trace
 	  ;; 	     (pcl::symbol-append fn-name ":::POST")
 	  ;; 	     params bound-vars))
 	  ;; 	  ((eq head 'inv)
-	  ;; 	   (make-check-for-invariants
+	  ;; 	   (make-write-to-data-trace
 	  ;; 	     (gensym (pcl::symbol-append fn-name ":::INV"))
 	  ;; 	     params bound-vars))
 
@@ -278,14 +309,14 @@ LASTP is non-nil if this is the last form in the function body
 	       `(progn
 		  ,(instrument-internal form
 		     fn-name params bound-vars nil)
-		  ,(make-check-for-invariants
+		  ,(make-write-to-data-trace
 		    (pcl::symbol-append fn-name ":::END")
 		    params bound-vars))
 	     form)))))
 
-(defun make-check-for-invariants (marker parameters bound-vars)
+(defun make-write-to-data-trace (marker parameters bound-vars)
   "BOUND-VARS is a list of (VAR . TYPE) conses."
-  `(check-for-invariants
+  `(write-to-data-trace
     ,marker				; no quote around this
     ,parameters
     ,@(let ((result '())
@@ -306,10 +337,10 @@ LASTP is non-nil if this is the last form in the function body
 	    (setq result (cons (cons prev-type (reverse prev-vars))
 			       result)))
 	(reverse result))))
-;; (make-check-for-invariants 'foo '((x . integer)))
-;; (make-check-for-invariants 'foo '((x . integer) (y . integer) (z . integer)))
-;; (make-check-for-invariants 'foo '((x . integer) (y . array)))
-;; (make-check-for-invariants 'foo '((x . integer) (y . array) (z . integer)))
+;; (make-write-to-data-trace 'foo '((x . integer)))
+;; (make-write-to-data-trace 'foo '((x . integer) (y . integer) (z . integer)))
+;; (make-write-to-data-trace 'foo '((x . integer) (y . array)))
+;; (make-write-to-data-trace 'foo '((x . integer) (y . array) (z . integer)))
 
 
 (defun declare->vars+types (form)

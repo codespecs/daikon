@@ -3,7 +3,7 @@
 ###
 
 # Should gries-instrumented be in this list?
-LISP_FILES := gries-helper.lisp gries.lisp gries-instrumented.lisp invariants.lisp
+LISP_FILES := gries-helper.lisp gries.lisp gries-instrumented.lisp data-trace.lisp
 PYTHON_FILES := invariants.py util.py
 
 ## Examples of better ways to get the lists:

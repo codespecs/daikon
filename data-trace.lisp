@@ -1,25 +1,25 @@
 ;; (in-package medic)
 
-;; Utilities for finding invariants
+;; Utilities for writing data traces
 
 ;; To instrument the Medic package, do something like this:
 ;;   From $inv/medic/data, start Lisp (via  M-x run-lisp, or, better, outside Emacs via just  lisp )
 ;;   (load "../code/main") (in-package medic) (load-all) (load-domains)
 ;;   ;; Either one of these:
-;;     (regress-invariants)
+;;     (regress-dtrace)
 ;;     ;; these are useful when running a few problems on many machines:
-;;     (regress-invariants 0 5)
-;;     (regress-invariants 5 10)
-;;     (regress-invariants 10 15)
-;;     (regress-invariants 15 20)
-;;     (regress-invariants 20 25)
-;;     (regress-invariants 25 30)
-;;     (regress-invariants 30)
+;;     (regress-dtrace 0 5)
+;;     (regress-dtrace 5 10)
+;;     (regress-dtrace 10 15)
+;;     (regress-dtrace 15 20)
+;;     (regress-dtrace 20 25)
+;;     (regress-dtrace 25 30)
+;;     (regress-dtrace 30)
 ;;   ;; or follow these directions:
 ;;   ;; One of these:
-;;     (invariants-file-per-problem)
-;;     ;; or, wrap this around a computation to put invariants in one big file:
-;;     (init-check-for-invariants) ... (finish-check-for-invariants)
+;;     (dtrace-file-per-problem)
+;;     ;; or, wrap this around a computation to put data trace in one big file:
+;;     (init-data-trace) ... (finish-data-trace)
 ;;   ;; Maybe one or more of these:
 ;;     (setq *run-program-timeout* 3600) ; one hour
 ;;     (setq *cnf-solver* 'walksat)
@@ -36,10 +36,10 @@
 ;;     (multi-flags-regress (subseq *regression-problems* 25 30))
 ;;     (multi-flags-regress (subseq *regression-problems* 30))
 ;;   (ext:quit)
-;;   Copy invariants.raw to elsewhere
+;;   Copy file dtrace to elsewhere
 
-(defun regress-invariants (&optional (start 0) (end (length *regression-problems*)))
-  (invariants-file-per-problem)
+(defun regress-dtrace (&optional (start 0) (end (length *regression-problems*)))
+  (dtrace-file-per-problem)
   (setq *run-program-timeout* 3600)
   (multi-flags-regress (subseq *regression-problems* start end)))
 
@@ -92,15 +92,13 @@
     ((or null integer) null-or-int->int)
     (alist length)
     (hash-table hash-table-count)
-    ;; I should be able to do much better than this.
-    ;; ((array integer 1) array_dim_1 (identity . "[]"))
+    ;; These used to include array_dim_1, array_dim_2, etc.
     ((array integer 1) (identity . "[]"))
-    ((array integer 2) array_dim_1 array_dim_2)
-    ((array integer 3) array_dim_1 array_dim_2 array_dim_3)
-    ;; ((array character 1) array_dim_1 (identity . "[]"))
+    ((array integer 2) (identity . "[][]"))
+    ((array integer 3) (identity . "[][][]"))
     ((array character 1) (identity . "[]"))
-    ((array character 2) array_dim_1 array_dim_2)
-    ((array character 3) array_dim_1 array_dim_2 array_dim_3)
+    ((array character 2) (identity . "[][]"))
+    ((array character 3) (identity . "[][][]"))
     ))
 
 ;; Returns either a symbol or a (funcallable-function . print-repr) pair,
@@ -146,78 +144,81 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Check for invariants (actually just output to a file)
+;;; Write data values to a file
 ;;;
 
 
-(defvar *inv-output-stream* nil)
+(defvar *dtrace-output-stream* nil)
 
-(defun init-check-for-invariants (&optional filename)
+(defun init-data-trace (&optional filename)
   ;; output-stream-p returns false if the argument is a closed stream.
-  (assert (or (null *inv-output-stream*) (not (output-stream-p *inv-output-stream*))))
-  (setq *inv-output-stream* (open (or filename "invariants.raw")
+  (assert (or (null *dtrace-output-stream*) (not (output-stream-p *dtrace-output-stream*))))
+  (setq *dtrace-output-stream* (open (or filename "dtrace")
 				  :direction :output
 				  :if-exists :rename)))
 
-(defun finish-check-for-invariants ()
-  (close *inv-output-stream*)
-  (setq *inv-output-stream* nil))
+(defun finish-data-trace ()
+  (close *dtrace-output-stream*)
+  (setq *dtrace-output-stream* nil))
 
-(defmacro check-for-invariants (function-name function-parameters &rest type-lists)
+;; Used to be called check-for-invariants; but that is not what it does.
+;; Maybe someday we'll use a version that actually does an online check.
+(defmacro write-to-data-trace (function-name function-parameters &rest type-lists)
   (assert (every #'listp type-lists))
   (assert (every #'(lambda (type-list) (accessors-for-type (car type-list))) type-lists))
   (if (and (listp function-name)
 	   (eq 'quote (car function-name)))
       (setq function-name (second function-name)))
-  `(when *inv-output-stream*
-     (format *inv-output-stream*
-	     ,(format nil "~a~a~~%" function-name
-		      (mapcar (lambda (var)
-				(if (some #'(lambda (type-list)
-					     (and (member var (cdr type-list))
-						  (listp (car type-list))
-						  (eq 'array (caar type-list))))
-					 type-lists)
-				    (format nil "~a[]" var)
-				  var))
-			      function-parameters)))
-     ,@(loop for type-list in type-lists
-	     nconc (let ((type (car type-list)))
-		     (loop for var in (cdr type-list) ; actually expressions
-			   nconc (let ((var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
-				   (loop for function in (accessors-for-type type)
-					 collect (cond
-						  ((eq function 'identity)
-						   `(format *inv-output-stream*
-							    ,(format nil "~a~c~~s~~%" var-sans-spaces #\tab)
-							    ,var))
-						  ((and (consp function)
-							(atom (cdr function)))
-						   `(format *inv-output-stream*
-							    ,(format nil "~a~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
-							    ,(if (eq (car function) 'identity)
-								 var
-							       `(funcall ,(car function) ,var))))
-						  (t
-						   `(format *inv-output-stream*
-							    ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)
-							    (,function ,var)))))))))
-     ;; used when all the above was on one line
-     ;; (format *inv-output-stream* "~%")
-     ))
+  `(when *dtrace-output-stream*
+     (let ((*print-pretty* nil))
+       (format *dtrace-output-stream*
+	       ,(format nil "~a~a~~%" function-name
+			(mapcar (lambda (var)
+				  (if (some #'(lambda (type-list)
+					       (and (member var (cdr type-list))
+						    (listp (car type-list))
+						    (eq 'array (caar type-list))))
+					   type-lists)
+				      (format nil "~a[]" var)
+				    var))
+				function-parameters)))
+       ,@(loop for type-list in type-lists
+	       nconc (let ((type (car type-list)))
+		       (loop for var in (cdr type-list) ; actually expressions
+			     nconc (let ((var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
+				     (loop for function in (accessors-for-type type)
+					   collect (cond
+						    ((eq function 'identity)
+						     `(format *dtrace-output-stream*
+							      ,(format nil "~a~c~~s~~%" var-sans-spaces #\tab)
+							      ,var))
+						    ((and (consp function)
+							  (atom (cdr function)))
+						     `(format *dtrace-output-stream*
+							      ,(format nil "~a~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
+							      ,(if (eq (car function) 'identity)
+								   var
+								 `(funcall ,(car function) ,var))))
+						    (t
+						     `(format *dtrace-output-stream*
+							      ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)
+							      (,function ,var)))))))))
+       ;; used when all the above was on one line
+       ;; (format *dtrace-output-stream* "~%")
+       )))
 
-;; (macroexpand '(check-for-invariants split-argnum-sprop (params) (integer argnum) (operator op)))
-;; (macroexpand '(check-for-invariants non-matching-var-sprops (params) (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))
-;; (macroexpand '(CHECK-FOR-INVARIANTS '|P180-15.1.1:::END| (b n) ((ARRAY INTEGER 1) B) (INTEGER N I S)))
-;; ;; (macroexpand '(check-for-invariants find-plan-1 (params) ((list integer 3) cnf-size) (list-elements nil integer integer integer integer integer integer)))
+;; (macroexpand '(write-to-data-trace split-argnum-sprop (params) (integer argnum) (operator op)))
+;; (macroexpand '(write-to-data-trace non-matching-var-sprops (params) (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))
+;; (macroexpand '(WRITE-TO-DATA-TRACE '|P180-15.1.1:::END| (b n) ((ARRAY INTEGER 1) B) (INTEGER N I S)))
+;; ;; (macroexpand '(write-to-data-trace find-plan-1 (params) ((list integer 3) cnf-size) (list-elements nil integer integer integer integer integer integer)))
 
 
 ;; Perhaps omit MAX-STEPS.
-(defun invariants-file-name (experimentnum problemname &optional max-steps)
+(defun dtrace-file-name (experimentnum problemname &optional max-steps)
   (declare (ignore experimentnum))
-  (format nil "~a.inv" (file-name-header problemname max-steps)))
+  (format nil "~a.dtrace" (file-name-header problemname max-steps)))
 
-(defun invariants-solve-problem-start-function (prob max-steps start-steps experimentnum)
+(defun dtrace-solve-problem-start-function (prob max-steps start-steps experimentnum)
   (declare (ignore start-steps))
   (let ((probname (cond ((symbolp prob)
 			 prob)
@@ -225,23 +226,23 @@
 			 (problem-name prob))
 			(t
 			 (error "Expected symbol or problem structure" prob)))))
-    (init-check-for-invariants
-     (invariants-file-name experimentnum probname max-steps))))
+    (init-data-trace
+     (dtrace-file-name experimentnum probname max-steps))))
 
 
-(defun invariants-solve-problem-end-function (prob max-steps start-steps experimentnum)
+(defun dtrace-solve-problem-end-function (prob max-steps start-steps experimentnum)
   (declare (ignore prob max-steps start-steps experimentnum))
-  (finish-check-for-invariants))
+  (finish-data-trace))
 
 
-(defun invariants-file-per-problem ()
-  (setq solve-problem-start-function 'invariants-solve-problem-start-function)
-  (setq solve-problem-end-function 'invariants-solve-problem-end-function))
+(defun dtrace-file-per-problem ()
+  (setq solve-problem-start-function 'dtrace-solve-problem-start-function)
+  (setq solve-problem-end-function 'dtrace-solve-problem-end-function))
 
 
-(defmacro with-invariants-log (filename &rest body)
+(defmacro with-data-trace (filename &rest body)
   `(progn
-     (init-check-for-invariants ,filename)
+     (init-data-trace ,filename)
      (unwind-protect
 	 ,@body
-       (finish-check-for-invariants))))
+       (finish-data-trace))))

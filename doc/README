@@ -5,9 +5,10 @@ In this directory (~mernst/research/notkin/invariants/):
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
  * invariants.py, util.py: the invariant detector, implemented in Python
- * gries*.lisp:  the programs from David Gries' book (in Lisp syntax)
- * p*.inv: files created by running instrumented Gries programs
-
+ * gries.lisp:  the programs from David Gries' book (in Lisp syntax)
+ * gries-helper.lisp, data-trace.lisp:  Gries Lisp syntax; output data to file
+ * p*.dtrace: files created by running instrumented Gries programs
+ * *.discovered: output from running invariant engine over .dtrace files
 
 Example programs:
  * medic/: files related to the Medic planner (my instrumented Lisp program)
