@@ -1,6 +1,7 @@
 package daikon.inv;
 
 import java.io.Serializable;
+import java.util.*;
 
 import utilMDE.*;
 
@@ -363,6 +364,61 @@ public class ValueTracker
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
+  }
+
+
+  /**
+   * Merges a list of ValueTracker objects into a single object that
+   * represents the values seen by the entire list.  Returns the new
+   * object.
+   */
+
+  public static ValueTracker merge (List /*ValueTracker*/ vtlist) {
+
+    // Start with the first valuetracker in the list
+    ValueTracker first = (ValueTracker) ((ValueTracker) vtlist.get (0)).clone();
+
+    // Loop through the remaining value trackers
+    for (int i = 1; i < vtlist.size(); i++) {
+
+      // Get the next value tracker
+      ValueTracker vt = (ValueTracker) vtlist.get (i);
+
+      // Merge these values into the values_cache
+      if (vt.values_cache == null) {
+        first.values_cache = null;
+        first.values_end = vt.values_end;
+      } else {
+        for (int j = 0; j < vt.num_values(); j++)
+          first.add (vt.values_cache[j]);
+      }
+
+      // Merge these values into the sequence index cache
+      if (vt.seq_index_cache == null) {
+        first.seq_index_cache = null;
+        first.seq_index_values_end = vt.seq_index_values_end;
+      } else {
+        for (int j = 0; j < vt.num_seq_index_values(); j++)
+          first.seq_index_add (vt.seq_index_cache[j]);
+      }
+
+      // Merge these values in to the elt_values_cache
+      if (vt.elt_values_cache == null) {
+        first.elt_values_cache = null;
+        first.elt_values_end = vt.elt_values_end;
+      } else {
+        for (int j = 0; j < vt.num_elt_values(); j++)
+          first.elt_add (vt.elt_values_cache[j]);
+      }
+
+    }
+    return (first);
+  }
+
+  public String toString() {
+    return ("[num_values=" + num_values() + ", num_seq_index_values=" +
+            num_seq_index_values() + ", num_elt_values=" + num_elt_values()
+            + "]");
   }
 
   public static abstract class ValueTracker1 extends ValueTracker {
