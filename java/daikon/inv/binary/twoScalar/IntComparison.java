@@ -174,7 +174,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
       return false;
     }
     LinearBinary lb = LinearBinary.find(ppt);
-    if ((lb != null) && lb.justified()) {
+    if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
       Assert.assert(lb.core.b != 0);
       return true;
     }
