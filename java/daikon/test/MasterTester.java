@@ -1,8 +1,6 @@
 package daikon.test;
 
 import junit.framework.*;
-import daikon.test.diff.*;
-import daikon.test.inv.*;
 import utilMDE.*;
 
 public class MasterTester extends TestCase {
@@ -24,13 +22,14 @@ public class MasterTester extends TestCase {
     // To determine what should be in this list:
     //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
 
-    result.addTest(new TestSuite(DiffTester.class));
-    result.addTest(new TestSuite(DetailedStatisticsVisitorTester.class));
-    result.addTest(new TestSuite(InvariantTester.class));
-    result.addTest(new TestSuite(LinearTernaryCoreTest.class));
-    result.addTest(new TestSuite(ProglangTypeTest.class));
-    result.addTest(new TestSuite(VarComparabilityTest.class));
-    result.addTest(new TestSuite(VarInfoNameTest.class));
+    result.addTest(new TestSuite(daikon.test.diff.DiffTester.class));
+    result.addTest(new TestSuite(daikon.test.diff.DetailedStatisticsVisitorTester.class));
+    result.addTest(new TestSuite(daikon.test.inv.InvariantTester.class));
+    result.addTest(new TestSuite(daikon.test.LinearTernaryCoreTest.class));
+    result.addTest(new TestSuite(daikon.test.ProglangTypeTest.class));
+    result.addTest(new TestSuite(daikon.test.VarComparabilityTest.class));
+    result.addTest(new TestSuite(daikon.test.VarInfoNameTest.class));
+    result.addTest(new TestSuite(daikon.test.config.ConfigurationTest.class));
     return result;
   }
 
