@@ -73,7 +73,7 @@ sub gzopen ( $$ ) {
 
 sub load_decls ( $ ) {
 # Loads the decls file given by $1 into a hash, returns a ref.
-# The hash maps from ppt name to list of lines.
+# The hash maps from ppt name to (map from varname to triple).
     my ($mydeclsname) = @_;
 #    open DECLS, $mydeclsname or die "couldn't open decls \"$decls\"\n";
     my $decls = gzopen(\*DECLS, $mydeclsname);
@@ -84,6 +84,7 @@ sub load_decls ( $ ) {
 	if ($l eq "DECLARE") {
 	    my $currppt = getline($decls);
 	    my $lhashref = {};
+            my @varorder = ();
 	    while (my $varname = getline($decls)) {
 		(defined (my $dtype = getline($decls)))
 		    or die "malformed decls file";
@@ -91,8 +92,11 @@ sub load_decls ( $ ) {
 		    or die "malformed decls file";
 		(defined (my $ltype = getline($decls)))
 		    or die "malformed decls file";
+                # print STDERR "decls defining $varname for $currppt\n";
 		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
+                push @varorder, $varname;
 	    }
+            $$lhashref{"variable order"} = [ @varorder ];
 	    $$declshash{$currppt} = $lhashref;
 	    $ppt_seen = 1;
 	} elsif (($l eq "VarComparability") && !$ppt_seen) {
@@ -128,6 +132,8 @@ sub load_ppt ( $$ ) {
 
     my $ppthash = {};
 
+    my @varorder = ();
+
     while (my $varname = getline($dtfh)) {
         my ($modbit, $varval);
 	(defined ($varval = getline($dtfh)))
@@ -141,7 +147,9 @@ sub load_ppt ( $$ ) {
 	die "duplicate entry in dtracefile for var $varname at $pptname in $dtfhname\n"
 	    if (defined $$ppthash{$varname});
 	$$ppthash{$varname} = [$varval, $modbit];
+        push @varorder, $varname;
     }
+    $$ppthash{"variable order"} = [ @varorder ];
 
     return [$pptname, $pptline, $ppthash];
 }
@@ -166,7 +174,7 @@ sub cmp_ppts ( $$$ ) {
 # Arguments 2 and 3 are "ppt_trace_info" objects (see load_ppt for definition).
     my ($declshash, $ppta, $pptb) = @_;
     if ($$ppta[0] ne $$pptb[0]) {
-	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] . " [line " . $$ppta[1] 
+	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] . " [line " . $$ppta[1]
         . "] ". "\", ${dtbname}=\"" . $$pptb[0] . "\" [line ". $$pptb[1] ."]\n";
         $differences_found++;
 	return;
@@ -179,7 +187,25 @@ sub cmp_ppts ( $$$ ) {
 	return;
     }
     my $ha = $$ppta[2];  my $hb = $$pptb[2];
-    foreach my $varname (keys %$ppt) {
+    my @decls_varnames = @{$$ppt{"variable order"}};
+    my @ppt1_varnames = @{$$ha{"variable order"}};
+    my @ppt2_varnames = @{$$hb{"variable order"}};
+
+    if ((scalar(@ppt1_varnames) > 0) && ($ppt1_varnames[0] eq "this_invocation_nonce")) {
+      shift @ppt1_varnames;
+    }
+    if ((scalar(@ppt2_varnames) > 0) && ($ppt2_varnames[0] eq "this_invocation_nonce")) {
+      shift @ppt2_varnames;
+    }
+    if (("@decls_varnames" ne "@ppt1_varnames")
+        || ("@decls_varnames" ne "@ppt2_varnames")) {
+      print "Mismatched variables for ppt $pptname.\n";
+      print "  decls:   @decls_varnames\n";
+      print "  trace1:  @ppt1_varnames\n";
+      print "  trace2:  @ppt2_varnames\n";
+    }
+
+    foreach my $varname (@decls_varnames) {
 	my $varl = $$ppt{$varname};
 	my $la = $$ha{$varname};
 	my $lb = $$hb{$varname};
