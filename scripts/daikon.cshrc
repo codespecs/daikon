@@ -34,13 +34,16 @@ endif
 set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $JDKDIR/bin $path)
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
-## Daikon front end for Java), you need to have rt.jar on your classpath.
-## (ajax.jar is temporary, will be removed soon, we hope.)
-setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
-## Macintosh MacOSX users should use the following line instead.  This list
-## is what is produced by the system property "sun.boot.class.path".
-# setenv CLASSPATH ${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+## Daikon front end for Java), rt.jar must be on your classpath.
+if ("$OSTYPE" != "darwin") then
+  setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+else
+  ## For Macintosh MacOSX users.  (This list
+  ## is the system property "sun.boot.class.path".)
+  setenv CLASSPATH ${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+endif
 
+## (ajax.jar is temporary, will be removed soon, we hope.)
 if (-e ${DAIKONDIR}/java/ajax-ship/ajax.jar) then
   setenv CLASSPATH ${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
 endif

@@ -33,12 +33,15 @@ export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${JDKDIR}/bin:${PATH}
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), you need to have rt.jar on your classpath.
-## (ajax.jar is temporary, will be removed soon, we hope.)
-export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
-## Macintosh MacOSX users should use the following line instead.  This list
-## is what is produced by the system property "sun.boot.class.path".
-# export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+if [ "$OSTYPE" != "darwin" ]; then
+  export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+else
+  ## For Macintosh MacOSX users.  (This list
+  ## is the system property "sun.boot.class.path".)
+  export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+fi
 
+## (ajax.jar is temporary, will be removed soon, we hope.)
 if [ -e ${DAIKONDIR}/java/ajax-ship/ajax.jar ]; then
   export CLASSPATH=${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
 fi
