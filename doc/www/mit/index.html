@@ -209,11 +209,24 @@ For example, you will want to copy over your dotfiles or at least copy the
 contents of the dotfiles in <tt>$inv/doc/www/mit/</tt> (at a minimum,
 <tt>.bashrc</tt> or <tt>.cshrc</tt>) to your remote machine, and you may
 need to adjust some of their settings (such as the ones that refer to the
-PAG filesystem).
+PAG filesystem).  Also ensure that you set the CVS_RSH environment variable
+to "ssh" (without the quotes).
 <p>
 
-You will also need to install various extra packages, such as Simplify.
+The command to check out the repository using regular remote CVS is:
+<pre>
+cvs -d :ext:<i>username</i>@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co invariants
+</pre>
+Other modules (such as dfej) can be obtained by replacing the final
+<tt>invariants</tt> with another module name.
+<p>
+
+You may also need to install various extra packages, such as Simplify.
 See the manual for details.
+<p>
+
+If you use Kerberos authentication on the remote machine, then you do not
+have to type your password every time that you perform a CVS operation.
 <p>
 
 
@@ -628,7 +641,7 @@ will try to avoid meetings longer than that.
  -->
 <!--  LocalWords:  daikongroupmember tarfile jdoc whiteboard texinfo pp fs sa
  -->
-<!--  LocalWords:  pag admin rl co java kvasir ssh daikon diff IDE DIR Foo
+<!--  LocalWords:  pag admin rl co java kvasir ssh daikon diff IDE DIR Foo dist
  -->
-<!--  LocalWords:  subsubsection
+<!--  LocalWords:  subsubsection daikonuser webserver
  -->
