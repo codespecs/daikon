@@ -7,8 +7,9 @@ works:
 
 An invariant is suppressed if it is implied by another invariant.  A
 suppressed invariant is not checked as long as its suppressor is true.
-This saves time for checking long data trace files, and reduces output
-spam for obvious invariants.  Suppression is NOT:
+This saves time for checking long data trace files.  Not outputting
+suppressed invariants reduces output spam for obvious invariants.
+Suppression is NOT:
 
 <p>
 
@@ -27,9 +28,9 @@ mechanism based on left hand sides that aren't known to be true yet.
 
 <p>
 
-Invariants are suppressed by SuppressionLink's, each of which store a
-suppressed invariant and a list of suppressors (since one may need
-more than one invariant to suppress another).  The class that
+Invariants are suppressed by SuppressionLink's, each of which stores a
+suppressed invariant and a list of suppressors (since a conjunction of
+invariants may together suppress one other invariant).  The class that
 generates SuppressionLink objects is a SuppressionFactory.  There are
 many different kinds of SuppressionFactory's, one for each suppression
 rule we have.  Most SuppressionFactory's are attached to the
@@ -55,19 +56,21 @@ through PptTopLevel.add():
 
 <ul>
 
-<li> Make a set of PptSlice's called toCheck that have to be given the
-sample.  Initially, the set is all the PptSlice's.
+<li> Make a set of PptSlice's called "viewsToCheck" that have to be
+given the sample.  Initially, the set is all the PptSlice's.
 
-<li> Check invariants in the toCheck by calling their add() method.
+<li> Check invariants in viewsToCheck by calling their add() method.
 Attempt suppression on any invariants that fall/flow down and are
-resurrected.
+resurrected.  Also attempt suppression on any invariants in this ppt
+that weaken.
 
 <li> For any falsified or flowed invariants, take the invariants they
 were suppressing.  Attempt to re-suppress them.  If an invariant is in
-the same PptTopLevel as its former suppressor, add their PptSlice to
-the set of slices to check.  It is not necessary to check other slices
-because a) The slice can't be higher than this and b) If the slice is
-lower, it will be checked later in the data flow.
+the same PptTopLevel as its former suppressor, add its PptSlice to the
+set of slices to check.  A suppressed invariant could have been in a
+different slice from its suppressor, but it is not necessary to check
+such invariants because a) The slice can't be higher than this and b) If
+the slice is lower, it will be checked later in the data flow.
 
 <li> Repeat while there are slices to check.
 
@@ -83,13 +86,10 @@ PptTopLevel.fillSuppressionTemplate().  SuppressionFactory's should
 not attempt to find invariants on their own, because
 fillSuppressionTemplate respects the global option of whether a
 suppressed invariant may suppress another invariant (and later,
-invariant cycle detection).
-
-<p>
-
-How do we suppress derived variables?  We simply suppress any
-invariant that contains a derived variable that merits suppression.
-We use VarSuppressionFactory for this.
+invariant cycle detection).  However, SuppressionLinks may be
+generated from different template searches (i.e. you don't have to
+only generate SuppressionLinks from one template, just make sure all
+the suppressors were found using fillSuppressionTemplate()).
 
 <p>
 
@@ -109,19 +109,23 @@ suppressor in the same ppt (and the rest in a higher or same ppt).
 <p>
 
 Suppression also relies on the invariant uniqueness property.  That
-is, at each ppt, for a given set of VarInfos, there exists exactly one
-instance of a type of invariant.  So if A and B are subsets of each
-other, one invariant covers this.  With this property, when we search
-for an invariant in suppression, we can be sure that the returned
-invariant either has the property we are looking for, or no invariant
-does.
+is, for a given PptSlice, there exists exactly one instance of an
+invariant subtype.  For example, if the SubSet invariant (which is
+non-commutative) applies to (A, B) and to (B, A) then there is one
+instance of SubSet of the PptSlice for A and B.  Note: different
+invariant subtypes can still overlap: if A < B, then there will be an
+IntLessThan for (A, B) and an IntGreaterThan for (B, A) - however the
+PptSlice may contain exactly one instance of IntLessThan.
 
 <p>
 
 Additionally, suppression relies on the fact that invariants at lower
-ppts will be stronger than invariants in their parents.  If this isn't
+ppts are stronger than invariants in their parents.  If this isn't
 true, then the search in the ppt partial order for a potential
-suppressor becomes intractable.
+suppressor becomes intractable.  This and the "uniqueness" property
+above are also necessary for the flow algorithm to be correct, since
+an Invariant does not flow to a lower PptSlice if an instance of its
+class already exists in the lower slice.
 
 <p>
 
@@ -133,8 +137,8 @@ clone of itself, and we only have the clone to recheck suppression on.
 
 <p>
 
-Suppression has two options, set by Daikon.suppress_with_suppressed.
-When the flag is on, it means that suppressed invariants can suppress
+Suppression has two modes, set by Daikon.suppress_with_suppressed.
+When the flag is on, suppressed invariants can suppress
 others.  When off, only unsuppressed invariants can suppress.  The
 latter is safer, but yields a lower suppression rate.  The former is
 unsafe, because if there is a cyclic suppression pattern between
@@ -143,7 +147,9 @@ information to the user!  The ideal thing to do in the future is to
 use proper cycle detection between invariant dependencies: the
 invariants that remain from suppression must be able to logically get
 the invariants that are suppressed, in some order.  Maybe this is a
-way of saying "suppressors must have path cover".
+way of saying "suppressors must have path cover".  Then again, if 
+all our SuppressionFactory's are statically proved to be acyclic,
+then we don't need to worry.
 
 <p>
 

@@ -12,13 +12,13 @@ import utilMDE.Assert;
 import utilMDE.MathMDE;
 
 /**
- * ADT for SuppressionFactory's to specify how they generate
- * suppression.  Results of search for suppressors also put here,
- * along with VarInfos that are the transformed versions of the
- * desired VarInfos.  Mutable.  A SuppressionFactory generates a
- * SuppressionTemplate and gives it to the potential suppressee's
- * PptTopLevel to fill.
- *
+ * ADT for a SuppressionFactory to specify what invariants
+ * (suppressors) it searches for when it calls
+ * PptTopLevel.fillSuppressionTemplate.  Results of search are stored
+ * in this by fillSuppressionTemplate(), including VarInfos that are
+ * the transformed versions of the desired VarInfos.  Mutable.  A
+ * SuppressionFactory generates a SuppressionTemplate and gives it to
+ * the potential suppressee's PptTopLevel to fill.
  **/
 
 public class SuppressionTemplate {
@@ -74,15 +74,14 @@ public class SuppressionTemplate {
    * Debug output only.
    **/
   public String toString() {
-    return invTypes + " " + varInfos + " " + results;
+    return "SuppressionTemplate: " + invTypes + " " + varInfos + " " + results;
   }
 
   ////////////////
   // Constructors
 
   /**
-   * Create a new SuppressionTemplate.  Requires that there be at least
-   * one suppressor, and that the invariant doesn't suppress itself.
+   * Create a new SuppressionTemplate.  Generates a blank template.
    **/
   public SuppressionTemplate () {
     invTypes = new Class[0];
