@@ -154,9 +154,8 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-          // ( (new StringBuffer (var1().name.name())).reverse().toString(
-          //       ).equals (var2().name.name()))
-          return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
+          return "quant.Quant.isReverse(" + var1().name.dbc_name(var1())
+            + ", " + var2().name.dbc_name(var2()) + ")";
   }
 
   public String format_simplify() {
