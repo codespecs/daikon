@@ -713,7 +713,8 @@ public final class FileIO {
       String line = reader.readLine();
       if ((line == null) || !line.equals(vi.name)) {
         throw new Error("Expected variable " + vi.name + " " + vi.repr() + ", got " + line
-                        + " at program point " + ppt.name
+                        // not " at program point " as that confuses Emacs goto-error
+                        + " for program point " + ppt.name
                         + " at " + data_trace_filename + " line " + reader.getLineNumber());
       }
       line = reader.readLine();

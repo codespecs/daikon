@@ -995,9 +995,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
           lb_format_esc = lb.format_esc();
         } else if (this.equals(lb.var1())
                    && (post != lb.var2().isOrigVar())) {
-          Assert.assert((lb.core.a == 1) || (lb.core.a == -1));
-          lb_format = lb.format_reversed();
-          lb_format_esc = lb.format_esc_reversed();
+          if ((lb.core.a == 1) || (lb.core.a == -1)) {
+            lb_format = lb.format_reversed();
+            lb_format_esc = lb.format_esc_reversed();
+          }
         }
         if (lb_format != null) {
           int eq_pos;

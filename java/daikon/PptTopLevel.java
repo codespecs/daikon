@@ -2014,7 +2014,7 @@ public class PptTopLevel extends Ppt {
         for (int i=0; i<modified_vars.size(); i++) {
           VarInfo vi = (VarInfo)modified_vars.elementAt(i);
           PptSlice1 view = getView(vi);
-          if (view.num_values() > 0) {
+          if ((view != null) && (view.num_values() > 0)) {
             if (! printed_header) {
               out.print("      Modified variables:");
               printed_header = true;
