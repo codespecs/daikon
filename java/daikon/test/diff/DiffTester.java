@@ -14,7 +14,6 @@ import utilMDE.Pair;
 
 import java.util.*;
 import java.io.*;
-import javax.swing.tree.*;
 
 public class DiffTester extends TestCase {
 
