@@ -28,6 +28,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a == b)
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(EQUALFLOAT)
@@ -36,6 +37,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(LESSTHAN)
@@ -45,6 +47,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "pairwiseLT"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSTHANFLOAT)
@@ -54,6 +57,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "pairwiseLT"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSEQUAL)
@@ -65,6 +69,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "pairwiseLTE"
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(LESSEQUALFLOAT)
@@ -76,6 +81,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "pairwiseLTE"
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(GREATERTHAN)
@@ -85,6 +91,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "pairwiseGT"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATERTHANFLOAT)
@@ -94,6 +101,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "pairwiseGT"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATEREQUAL)
@@ -105,6 +113,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "pairwiseGTE"
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #elif defined(GREATEREQUALFLOAT)
@@ -116,6 +125,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "pairwiseGTE"
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #else
@@ -326,7 +336,8 @@ public class PAIRWISEINTEQUAL
   }
 
   public String format_dbc() {
-    return format_unimplemented(OutputFormat.DBCJAVA);
+    return "quant.Quant." + EQUALSstringDBC + "(" + var1().name.dbc_name(var1())
+      + ", " + var2().name.dbc_name(var2()) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {

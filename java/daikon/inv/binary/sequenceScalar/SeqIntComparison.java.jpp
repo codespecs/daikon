@@ -30,6 +30,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a == b)
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "eltsEqual"
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(EQUALFLOAT)
@@ -38,6 +39,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "eltsEqual"
   #define EQUALSIOAstring "="
   #define EQUALSSIMPLIFYstring "EQ"
 #elif defined(LESSTHAN)
@@ -46,6 +48,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "eltsLT"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSTHANFLOAT)
@@ -54,6 +57,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "eltsLT"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
 #elif defined(LESSEQUAL)
@@ -62,6 +66,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "eltsLEQ"
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(LESSEQUALFLOAT)
@@ -70,6 +75,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "eltsLEQ"
   #define EQUALSIOAstring "<="
   #define EQUALSSIMPLIFYstring "<="
 #elif defined(GREATERTHAN)
@@ -78,6 +84,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "eltsGT"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATERTHANFLOAT)
@@ -86,6 +93,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "eltsGT"
   #define EQUALSIOAstring ">"
   #define EQUALSSIMPLIFYstring ">"
 #elif defined(GREATEREQUAL)
@@ -94,6 +102,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "eltsGTE"
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #elif defined(GREATEREQUALFLOAT)
@@ -102,6 +111,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "eltsGTE"
   #define EQUALSIOAstring ">="
   #define EQUALSSIMPLIFYstring ">="
 #else
@@ -246,6 +256,7 @@ public final class SEQINTEQUAL
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.JML) return format_jml();
+    if (format == OutputFormat.DBCJAVA) return format_dbc();
 
     return format_unimplemented(format);
   }
@@ -281,6 +292,11 @@ public final class SEQINTEQUAL
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { seqvar().name, sclvar().name });
     return form[0] + form[1] + " " + EQUALSstring + " " + form[2] + form[3];
+  }
+
+  public String format_dbc() {
+    return "quant.Quant." + EQUALSstringDBC + "(" + seqvar().name.dbc_name(seqvar())
+      + ", " + sclvar().name.dbc_name(sclvar()) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {

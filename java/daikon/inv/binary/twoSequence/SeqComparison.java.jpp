@@ -72,6 +72,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseIntEqual
 #elif defined(EQUALFLOAT)
@@ -80,6 +81,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
 #elif defined(EQUALSTRING)
@@ -88,6 +90,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define COMPARE ==
   #define EQUALSstring "=="
+  #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
   #define PAIRWISEINTEQUAL PairwiseStringEqual
 #elif defined(LESSTHAN)
@@ -97,6 +100,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "lexLT"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseIntLessThan
 #elif defined(LESSTHANFLOAT)
@@ -106,6 +110,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "lexLT"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
 #elif defined(LESSTHANSTRING)
@@ -115,6 +120,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define COMPARE <
   #define EQUALSstring "<"
+  #define EQUALSstringDBC "lexLT"
   #define EQUALSIOAstring "<"
   #define PAIRWISEINTEQUAL PairwiseStringLessThan
 #elif defined(GREATERTHAN)
@@ -124,6 +130,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "lexGT"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
 #elif defined(GREATERTHANFLOAT)
@@ -133,6 +140,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "lexGT"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
 #elif defined(GREATERTHANSTRING)
@@ -142,6 +150,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define COMPARE >
   #define EQUALSstring ">"
+  #define EQUALSstringDBC "lexGT"
   #define EQUALSIOAstring ">"
   #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
 #elif defined(LESSEQUAL)
@@ -151,6 +160,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "lexLEQ"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseIntLessEqual
 #elif defined(LESSEQUALFLOAT)
@@ -160,6 +170,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "lexLEQ"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
 #elif defined(LESSEQUALSTRING)
@@ -169,6 +180,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define COMPARE <=
   #define EQUALSstring "<="
+  #define EQUALSstringDBC "lexLEQ"
   #define EQUALSIOAstring "<="
   #define PAIRWISEINTEQUAL PairwiseStringLessEqual
 #elif defined(GREATEREQUAL)
@@ -178,6 +190,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "lexGEQ"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
 #elif defined(GREATEREQUALFLOAT)
@@ -187,6 +200,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "lexGEQ"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
 #elif defined(GREATEREQUALSTRING)
@@ -196,6 +210,7 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define COMPARE >=
   #define EQUALSstring ">="
+  #define EQUALSstringDBC "lexGEQ"
   #define EQUALSIOAstring ">="
   #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
 #endif
@@ -343,7 +358,7 @@ public class SEQSEQINTEQUAL
     }
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA)) // CP this is incorrect for JAVA
+        || (format == OutputFormat.JAVA)) // CP: this is incorrect for JAVA
     {
       String name1 = var1().name.name_using(format, var1());
       String name2 = var2().name.name_using(format, var2());
@@ -351,14 +366,17 @@ public class SEQSEQINTEQUAL
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
                           : "");
-      if (format == OutputFormat.DBCJAVA) { // CP: does JAVA format want this? (no?)
-        return name1 + " " + EQUALSstring + " " + name2;
-      } else {
-        return name1 + " " + EQUALSstring + " " + name2 + lexically;
-      }
+      return name1 + " " + EQUALSstring + " " + name2 + lexically;
       #else
       return name1 + " " + EQUALSstring + " " + name2;
       #endif
+    }
+
+
+    if (format == OutputFormat.DBCJAVA) {
+      String name1 = var1().name.name_using(format, var1());
+      String name2 = var2().name.name_using(format, var2());
+      return "quant.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
     }
 
     if (format == OutputFormat.IOA) {
