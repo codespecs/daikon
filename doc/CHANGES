@@ -11,6 +11,36 @@ versions as the user manual.
 
 ===========================================================================
 
+3.0.4 (01 May 2004)
+
+Added Annotate as a replacement for MergeEsc.  Annotate inserts
+Daikon-generated invariants into Java source files as ESC/JML/DBC
+annotations. See the "Annotate" section of the user manual for more
+information.
+
+Added InvariantChecker as a replacement for MakeInvariantChecker.  
+InvariantChecker checks invariants against data trace files.  
+InvariantChecker resolves a number of limitations in MakeInvariantChecker.
+See the "InvariantChecker" section of the user manual for more information.
+
+The java output format has been significantly enhanced. See the
+--java_output entry in the Daikon "Command line options" section 
+of the user manual for more information.
+
+Some of the dfej command line options have changed.  See the "dfej options"
+section of the user manual for more information.
+
+Added the configuration option daikon.FileIO.unmatched_procedure_entries_quiet
+See the "List of Configuration Options" section of the user manual for
+more information.
+
+Some bugs were fixed based on user feedback.  Daikon will no longer
+terminate with an error if the trace file ends in the middle of the
+record.  The last record will simply be ignored. The dtype-perl script
+is now included in the distribution.
+
+---------------------------------
+
 3.0.3 (01 April 2004)
 
 A new optimization was added to Daikon to suppress invariants that
