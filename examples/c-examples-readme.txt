@@ -10,7 +10,7 @@ distrobution.
 In addition to the Daikon engine, you also need a front end.  Dfec is
 the front end for C.  Obtain dfec.zip and set it up as follows.
 
-(We will refer to the directory DFEC is installed in as $DFECDIR.
+(We will refer to the directory DFEC is unzipped in as $DFECDIR.
 This path, and all other paths discussed in these instructions, should
 be in terms of the cywgin file namespace;
 e.g. /cygdrive/c/mydir/file.txt not c:\mydir\file.txt).
@@ -26,7 +26,7 @@ here.
 
 $ export DTRACEAPPEND=1
 
-Next, we determine paths and options for your system by running g++.
+Next, determine paths and options for your system by running g++.
 At a cygwin prompt:
 
 $ touch empty.cc
@@ -60,16 +60,20 @@ $ export INC_SEARCH="-I/usr/include/g++-3 -I/usr/lib/gcc-lib/i686-pc-cygwin/2.95
 There are a lot of defines that need to get sent to dfec to get it to
 process the system headers correctly.
 
-$ export DFEC_OPTS="-w -D__SIZE_TYPE__=\"unsigned int\" -D__attribute__\(x\)=\"\" -D__extension__=\"\" -D__null=0 -D__GNUG__=1 -D_WIN32"
+$ export DFEC_OPTS="-w \"-D__SIZE_TYPE__=unsigned int\" -D__attribute__\(x\)=\"\" \"-D__extension__=\" -D__null=0 -D__GNUG__=1 -D_WIN32"
+
+XXX I can't get the quoting right on the above line.  Should be the
+XXX same in bash on linux, so maybe someone there can debug it?  The
+XXX quotes are the thing.
 
 Now set DFEC to be the correct dfec, plus include paths (note the
 order!); recall that all paths are cygwin paths.
 
-$ export DFEC="/c/something/dfec/dfec.exe ${INC_PATH} ${INC_SEARCH} ${INC_AFTER} ${DFEC_OPTS}"
+$ export DFEC="$DFECDIR/dfec.exe ${INC_PATH} ${INC_SEARCH} ${INC_AFTER} ${DFEC_OPTS}"
 
 Then, to invoke dfec from the cygwin bash shell, you can call ${DFEC}.
 
-$ ${DFEC} programname.c a.h another.h
+$ ${DFEC} program.c ... (more later)
 
 Now dfec is set up.  Let's move on to some examples
 
@@ -100,7 +104,6 @@ $ cp $DFECDIR/daikon_runtime.h .
 
 Then run the front-end:
 
-$ $DFECDIR/dfec -w -I$DFECDIR print_tokens.c stream.h tokens.h
 $ ${DFEC} print_tokens.c stream.h tokens.h
 
 We instrument the source file and all the user-created header files it
@@ -124,21 +127,23 @@ This fixes the above problem.
 $ g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc \
      $DFECDIR/daikon_runtime.o
 
-   This creates the executable print_tokens.exe in the current directory.
+This creates the executable print_tokens.exe in the current directory.
 
 4. Run the print_tokens test suite.
 
-   sh tests.sh
+$ sh tests.sh
 
-   This creates a data trace file at daikon-output/print_tokens.dtrace.
+This creates a data trace file at daikon-output/print_tokens.dtrace.
+
+==== BEFORE HERE IS "OK" ACCORDING TO JEREMY
 
 5. Run Daikon on the trace file.
 
-   java -Xmx256m daikon.Daikon -o print_tokens.inv \
+$ java -Xmx256m daikon.Daikon -o print_tokens.inv \
      daikon-output/print_tokens.decls daikon-output/print_tokens.dtrace
 
-   The invariants are printed to standard out, and a binary representation
-   of the invariants is written to print_tokens.inv.
+The invariants are printed to standard out, and a binary representation
+of the invariants is written to print_tokens.inv.
 
 6. Examine the invariants. There are three ways to do this.
 
@@ -169,8 +174,12 @@ The above steps can be divided into three stages:
 
 Instrumentation (Steps 1-3)
    cd $EXAMPLES/print_tokens
-   $DFECDIR/dfec -w -I$DFECDIR print_tokens.c stream.h tokens.h
-   g++ -w -o print_tokens.exe daikon-instrumented/print_tokens.cc \
+   cp $DFECDIR/daikon_runtime.h .
+   ${DFEC} print_tokens.c stream.h tokens.h
+   cd daikon-instrumented
+   sed -f $DFECDIR/fix.sed print_tokens.cc > print_tokens_fixed.cc
+   cd ..
+   g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc \
      $DFECDIR/daikon_runtime.o
 
 Trace File Generation (Step 4)
