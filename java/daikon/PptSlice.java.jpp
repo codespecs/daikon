@@ -140,131 +140,81 @@ public final class PPTSLICE1
     return ARITY;
   }
 
-  void instantiate_invariants() {
-    // Instantiate invariants
-    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
-      debug.info("instantiate_invariants for " + name() + ": originally " + invs.size() + " invariants in " + invs);
+  /**
+   * Creates all of the the invariants that are appropriate for this
+   * slice.  No invariants are created unless the variables in the
+   * slice are compatible.  If the variables are compatible, invariants
+   * that match the type of the slices variables are created.
+   **/
+  public void instantiate_invariants() {
+
     if (Debug.logOn())
       log ("instantiate invariants");
 
-    Vector new_invs = null;
-#if defined(ARITY1)
-    ProglangType rep_type = var_info.rep_type;
-    boolean is_scalar = rep_type.isScalar();
-    if (is_scalar) {
-      new_invs = SingleScalarFactory.instantiate(this);
-    } else if (rep_type == ProglangType.INT_ARRAY) {
-      new_invs = SingleScalarSequenceFactory.instantiate(this);
-    } else if (Daikon.dkconfig_enable_floats
-               && rep_type == ProglangType.DOUBLE) {
-      new_invs = SingleFloatFactory.instantiate(this);
-    } else if (Daikon.dkconfig_enable_floats
-               && rep_type == ProglangType.DOUBLE_ARRAY) {
-      new_invs = SingleFloatSequenceFactory.instantiate(this);
-    } else if (rep_type == ProglangType.STRING) {
-      new_invs = SingleStringFactory.instantiate(this);
-    } else if (rep_type == ProglangType.STRING_ARRAY) {
-      new_invs = SingleStringSequenceFactory.instantiate(this);
-    } else {
-      // Do nothing; do not even complain
-    }
-#elif defined(ARITY2)
-    ProglangType rep1 = var_infos[0].rep_type;
-    ProglangType rep2 = var_infos[1].rep_type;
-    boolean rep1_is_scalar = rep1.isScalar();
-    boolean rep2_is_scalar = rep2.isScalar();
-    boolean rep1_is_float  = rep1.isFloat();
-    boolean rep2_is_float  = rep2.isFloat();
-    if (rep1_is_scalar && rep2_is_scalar) {
-      new_invs = TwoScalarFactory.instantiate(this);
-    } else if ((rep1 == ProglangType.STRING)
-        && (rep2 == ProglangType.STRING)) {
-      new_invs = TwoStringFactory.instantiate(this);
-    } else if ((rep1 == ProglangType.INT)
-               && (rep2 == ProglangType.INT_ARRAY)) {
-      new_invs = SequenceScalarFactory.instantiate(this);
-    } else if ((rep1 == ProglangType.INT_ARRAY)
-               && (rep2 == ProglangType.INT)) {
-      new_invs = SequenceScalarFactory.instantiate(this);
-    } else if ((rep1 == ProglangType.INT_ARRAY)
-               && (rep2 == ProglangType.INT_ARRAY)) {
-      new_invs = TwoSequenceFactory.instantiate(this);
-    } else if (rep1_is_float && rep2_is_float) {
-      if (Daikon.dkconfig_enable_floats) {
-        new_invs = TwoFloatFactory.instantiate(this);
+    // Do nothing if the variables aren't compatible
+    #if defined (ARITY1)
+    #elif defined (ARITY2)
+      boolean compatible = true;
+      VarInfo v1 = var_infos[0];
+      VarInfo v2 = var_infos[1];
+      if (v1.rep_type.isArray() == v2.rep_type.isArray()) {
+        compatible = v1.compatible (v2);
+      } else if (v1.rep_type.isArray()) {
+        compatible = v1.eltsCompatible (v2);
+      } else {
+        compatible = v2.eltsCompatible (v1);
       }
-    } else if ((rep1 == ProglangType.DOUBLE)
-               && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-      if (Daikon.dkconfig_enable_floats) {
-        new_invs = SequenceFloatFactory.instantiate(this);
-      }
-    } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
-               && (rep2 == ProglangType.DOUBLE)) {
-      if (Daikon.dkconfig_enable_floats) {
-        new_invs = SequenceFloatFactory.instantiate(this);
-      }
-    } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
-               && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-      if (Daikon.dkconfig_enable_floats) {
-        new_invs = TwoSequenceFactoryFloat.instantiate(this);
-      }
-    } else {
-      // Do nothing; do not even complain
-    }
-#elif defined(ARITY3)
-    ProglangType rep1 = var_infos[0].file_rep_type;
-    ProglangType rep2 = var_infos[1].file_rep_type;
-    ProglangType rep3 = var_infos[2].file_rep_type;
-    if ((rep1 == ProglangType.INT)
-        && (rep2 == ProglangType.INT)
-        && (rep3 == ProglangType.INT)) {
-      new_invs = ThreeScalarFactory.instantiate(this);
-    } else if ((rep1 == ProglangType.DOUBLE)
-               && (rep2 == ProglangType.DOUBLE)
-               && (rep3 == ProglangType.DOUBLE)) {
-      if (Daikon.dkconfig_enable_floats) {
-        new_invs = ThreeFloatFactory.instantiate(this);
-      }
-    } else {
-      // Do nothing; do not even complain
-    }
-#endif
+      if (!compatible)
+        return;
+    #elif defined (ARITY3)
+      VarInfo v1 = var_infos[0];
+      VarInfo v2 = var_infos[1];
+      VarInfo v3 = var_infos[2];
+      if (!v1.compatible(v2))
+        return;
+      if (!v2.compatible(v3))
+        return;
+      Assert.assertTrue(v1.compatible(v3));
+    #else
+      #error "Bad Arity"
+    #endif
 
-    if (new_invs != null) {
-      for (int i=0; i<new_invs.size(); i++) {
-        Invariant inv = (Invariant) new_invs.get(i);
-        if (inv == null)
-          continue;
+    // Get the types of the arguments
+    ProglangType[] rep_types = new ProglangType[var_infos.length];
+    for (int i = 0; i < rep_types.length; i++)
+      rep_types[i] = var_infos[i].file_rep_type;
+
+    // Instantiate each invariant that is valid over those types
+    for (Iterator i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
+      Invariant proto = (Invariant) i.next();
+
+      // Skip invariant if the types are not appropriate
+      if (!proto.valid_types (rep_types)) {
+        // Debug.log (proto.getClass(), this, "not created-types not valid");
+        continue;
+      }
+
+      // Skip invariant if it is suppressed
+      NISuppressionSet ss = proto.get_ni_suppressions();
+      if ((ss != null) && !ss.is_instantiate_ok (this)) {
+        Debug.log (proto.getClass(), this, "not created - suppressed");
+        continue;
+      }
+
+      // Instantiate the invariant and add it to the list. Null returns
+      // are possible because there are additional checks in instantiate
+      // for particular variables and types beyond what is in valid_types
+      Invariant inv = proto.instantiate_dyn (this);
+      if (inv != null) {
         addInvariant(inv);
+        inv.log ("Created invariant " + inv.format() + " over types " +
+                 ProglangType.toString (rep_types));
+      } else {
+        Debug.log (proto.getClass(), this, "not created - no instantation");
       }
     }
-
-    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
-      debug.info("after instantiate_invariants " + PPTSLICE1STRING + " " + name() + " = " + this + " has " + invs.size() + " invariants in " + invs);
-    }
-    if ((debugSpecific.isLoggable(Level.FINE)) && (invs.size() > 0)) {
-      debug.info("the invariants are:");
-      for (int i=0; i<invs.size(); i++) {
-        Invariant inv = (Invariant) invs.get(i);
-        debug.info("  " + inv.format());
-        debug.info("    " + inv.repr());
-      }
-    }
-
   }
 
-  // /**
-  //  * Set the number of samples for this slice to be at least count.
-  //  **/
-  // public void set_samples (int count) {
-  //   // Don't call num_samples(), because slices_see_all_samples is false.
-  //   int old_num_samples = mod_samples + unmod_samples;
-  //   if (old_num_samples >= count) return;
-  //   // Distribute the new samples equally among the buckets.
-  //   double ratio = ((double)count)/old_num_samples;
-  //   mod_samples *= ratio;
-  //   unmod_samples = count - mod_samples;
-  // }
 
   // I could introduce another accessor that uses
   // UtilMDE.intersectionCardinalityAtLeast(), which might be more
@@ -274,22 +224,14 @@ public final class PPTSLICE1
   /** Returns the number of (non-missing) samples observed at this slice. **/
   public int num_samples() {
     // return an approximation
-#if defined(ARITY1)
-    int num_slice_samples = parent.num_samples(var_info);
-#elif defined(ARITY2)
-    int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
-#elif defined(ARITY3)
-    int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
-                                               var_infos[2]);
-#endif
-//       if (mod_samples + unmod_samples != num_slice_samples) {
-//         System.out.println("num_samples(" + name() + "): "
-//           + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
-// #if defined(ARITY1)
-//         System.out.println ("mbtracker.num_samples() = "
-//                             + parent.mbtracker.num_samples());
-// #endif
-//       }
+    #if defined(ARITY1)
+      int num_slice_samples = parent.num_samples(var_info);
+    #elif defined(ARITY2)
+      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
+    #elif defined(ARITY3)
+      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
+                                                 var_infos[2]);
+    #endif
     return num_slice_samples;
   }
 
@@ -299,13 +241,14 @@ public final class PPTSLICE1
    **/
   public int num_values() {
     // return an approximation
-#if defined(ARITY1)
-    int num_values = parent.num_values(var_info);
-#elif defined(ARITY2)
-    int num_values = parent.num_values(var_infos[0], var_infos[1]);
-#elif defined(ARITY3)
-    int num_values = parent.num_values(var_infos[0], var_infos[1], var_infos[2]);
-#endif
+    #if defined(ARITY1)
+      int num_values = parent.num_values(var_info);
+    #elif defined(ARITY2)
+      int num_values = parent.num_values(var_infos[0], var_infos[1]);
+    #elif defined(ARITY3)
+      int num_values = parent.num_values(var_infos[0], var_infos[1],
+                                         var_infos[2]);
+    #endif
     return num_values;
   }
 
