@@ -69,7 +69,12 @@ public abstract class VarInfoName
    **/
   public String name() {
     if (name_cached == null) {
-      name_cached = name_impl().intern();
+      try {
+	name_cached = name_impl().intern();
+      } catch (RuntimeException e) {
+	System.err.println("repr = " + repr());
+	throw e;
+      }
     }
     return name_cached;
   }
@@ -85,7 +90,7 @@ public abstract class VarInfoName
       try {
 	esc_name_cached = esc_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("name = " + name());
+	System.err.println("repr = " + repr());
 	throw e;
       }
     }
@@ -104,7 +109,7 @@ public abstract class VarInfoName
       try {
 	simplify_name_cached = simplify_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("name = " + name());
+	System.err.println("repr = " + repr());
 	throw e;
       }
     }
@@ -112,6 +117,19 @@ public abstract class VarInfoName
   }
   private String simplify_name_cached = null;
   protected abstract String simplify_name_impl();
+
+  /**
+   * @return the string reprenentation (interned) of this name, in a
+   * debugging format
+   **/
+  public String repr() {
+    if (repr_cached == null) {
+      repr_cached = repr_impl().intern();
+    }
+    return repr_cached;
+  }
+  private String repr_cached = null;
+  protected abstract String repr_impl();
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
@@ -168,19 +186,26 @@ public abstract class VarInfoName
   }
 
   public boolean equals(VarInfoName other) {
-    return (other == this) || ((other != null) && (this.name().equals(other.name())));
+    return (other == this) || ((other != null) && (this.repr().equals(other.repr())));
   }
 
   public int hashCode() {
-    return name().hashCode();
+    return repr().hashCode();
   }
 
   public int compareTo(Object o) {
-    return name().compareTo(((VarInfoName) o).name());
+    int nameCmp = name().compareTo(((VarInfoName) o).name());
+    if (nameCmp != 0) return nameCmp;
+    int reprCmp = repr().compareTo(((VarInfoName) o).repr());
+    return reprCmp;
   }
 
   public String toString() {
+    // Too much code uses the implicit toString when it really wants
+    // name().  Eventually change this to repr() and hunt down diffs
+    // in the regression tests and fix the other code.
     return name();
+    // return repr();
   }
 
   // ============================================================
@@ -202,6 +227,9 @@ public abstract class VarInfoName
       } catch (NumberFormatException e) {
 	return false;
       }
+    }
+    protected String repr_impl() {
+      return name;
     }
     protected String name_impl() {
       return name;
@@ -261,6 +289,9 @@ public abstract class VarInfoName
       Assert.assert(sequence != null);
       this.sequence = sequence;
     }
+    protected String repr_impl() {
+      return "SizeOf[" + sequence.repr() + "]";
+    }
     protected String name_impl() {
       return "size(" + sequence.name() + ")";
     }
@@ -295,14 +326,19 @@ public abstract class VarInfoName
       this.function = function;
       this.argument = argument;
     }
+    protected String repr_impl() {
+      return "FunctionOf{" + function + "}[" + argument.repr() + "]";
+    }
     protected String name_impl() {
       return function + "(" + argument.name() + ")";
     }
     protected String esc_name_impl() {
-      return "(format_esc needs to be changed: " + function + ")";
+      return "(format_esc needs to be changed: " +
+	function + " on " + argument.repr() + ")";
     }
     protected String simplify_name_impl() {
-      return "(format_simplify needs to be changed: " + function + ")";
+      return "(format_simplify needs to be changed: " +
+	function + " on " + argument.repr() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitFunctionOf(this);
@@ -328,6 +364,9 @@ public abstract class VarInfoName
       Assert.assert(field != null);
       this.term = term;
       this.field = field;
+    }
+    protected String repr_impl() {
+      return "Field{" + field + "}[" + term.repr() + "]";
     }
     protected String name_impl() {
       return term.name() + "." + field;
@@ -360,6 +399,9 @@ public abstract class VarInfoName
       Assert.assert(term != null);
       this.term = term;
     }
+    protected String repr_impl() {
+      return "TypeOf[" + term.repr() + "]";
+    }
     protected String name_impl() {
       return term.name() + ".class";
     }
@@ -390,6 +432,9 @@ public abstract class VarInfoName
     public Prestate(VarInfoName term) {
       Assert.assert(term != null);
       this.term = term;
+    }
+    protected String repr_impl() {
+      return "Prestate[" + term.repr() + "]";
     }
     protected String name_impl() {
       return "orig(" + term.name() + ")";
@@ -438,6 +483,9 @@ public abstract class VarInfoName
       Assert.assert(term != null);
       this.term = term;
     }
+    protected String repr_impl() {
+      return "Poststate[" + term.repr() + "]";
+    }
     protected String name_impl() {
       return "post(" + term.name() + ")";
     }
@@ -473,6 +521,9 @@ public abstract class VarInfoName
     }
     private String amount() {
       return (amount < 0) ? String.valueOf(amount) : "+" + amount;
+    }
+    protected String repr_impl() {
+      return "Add{" + amount() + "}[" + term.repr() + "]";
     }
     protected String name_impl() {
       return term.name() + amount();
@@ -526,6 +577,9 @@ public abstract class VarInfoName
       Assert.assert(term != null);
       this.term = term;
     }
+    protected String repr_impl() {
+      return "Elements[" + term.repr() + "]";
+    }
     protected String name_impl() {
       return name_impl("");
     }
@@ -534,7 +588,7 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements" +
-					      " [name=" + name() + "]");
+					      " [repr=" + repr() + "]");
     }
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
@@ -614,6 +668,9 @@ public abstract class VarInfoName
       this.sequence = sequence;
       this.index = index;
     }
+    protected String repr_impl() {
+      return "Subscript{" + index.repr() + "}[" + sequence.repr() + "]";
+    }
     protected String name_impl() {
       return sequence.name_impl(index.name());
     }
@@ -664,6 +721,12 @@ public abstract class VarInfoName
       this.sequence = sequence;
       this.i = i;
       this.j = j;
+    }
+    protected String repr_impl() {
+      return "Slice{" +
+	((i == null) ? "" : i.repr()) + "," +
+	((j == null) ? "" : j.repr()) + "}[" +
+	sequence.repr() + "]";
     }
     protected String name_impl() {
       return sequence.name_impl("" +
