@@ -102,7 +102,7 @@ public class SplitterFactory {
 	    for (int k = 0; k < numsplitters; k++) {
 	      if (splitterObjects[i][k].splitterExists()) {
 		sp.addElement(splitterObjects[i][k].getSplitter());
-	      } else {
+	      } else if (! Daikon.dkconfig_suppressSplitterErrors) {
 		System.out.println(splitterObjects[i][k].getError());
 	      }
 	    }
