@@ -27,7 +27,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
-import daikon.inv.Invariant;
+import daikon.inv.*;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.Invariant.OutputFormat;
@@ -170,10 +170,10 @@ public class CLASSNAME
       + form[3];
   }
 
-  public void add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
     int len = x_arr.length;
     // int len = Math.min(x_arr.length, y_arr.length);
@@ -185,9 +185,10 @@ public class CLASSNAME
       core.add_modified(x, y, count);
       if (falsified) {
         // destroy() must have already been called
-        return;
+        return InvariantStatus.FALSIFIED;
       }
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

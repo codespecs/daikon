@@ -376,25 +376,28 @@ public class LOWERBOUND
   }
 #endif
 
-  public void add_modified(LONG value, int count) {
+  public InvariantStatus add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //              + "add(" + value + ", " + modified + ", " + count + ")");
     #ifndef IS_ELT
       if (core.wouldChange (value)) {
         cloneAndFlow();
       }
-      core.add_modified(value, count);
+      return core.add_modified(value, count);
     #else
       boolean changed = false;
+      InvariantStatus status = InvariantStatus.NO_CHANGE;
       for (int i=0; i<value.length; i++) {
         if (!changed && core.wouldChange (value[i])) {
           cloneAndFlow();
           changed = true;
+          status = InvariantStatus.WEAKENED;
         }
         core.add_modified(value[i], count);
         if (falsified)
-          return;
+          return InvariantStatus.FALSIFIED;
       }
+      return status;
     #endif
 
   }

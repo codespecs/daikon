@@ -215,7 +215,7 @@ public class LOWERBOUNDCORE
     return (value LT MIN1);
   }
 
-  public void add_modified(PRIMITIVE value, int count) {
+  public InvariantStatus add_modified(PRIMITIVE value, int count) {
     samples += count;
 
     // System.out.println(LOWERBOUNDCORESTR + varNames() + ": "
@@ -249,6 +249,7 @@ public class LOWERBOUNDCORE
       MIN3 = v;
       NUM_MIN3 = count;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   public boolean enoughSamples() {

@@ -53,7 +53,7 @@ public abstract class CLASSNAME
     return ppt.var_infos[1];
   }
 
-  public void add(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
@@ -62,9 +62,9 @@ public abstract class CLASSNAME
     PRIMITIVE v1 = ((LONG) val1).LONGVALUE();
     PRIMITIVE v2 = ((LONG) val2).LONGVALUE();
     if (mod_index == 0) {
-      add_unmodified(v1, v2, count);
+      return add_unmodified(v1, v2, count);
     } else {
-      add_modified(v1, v2, count);
+      return add_modified(v1, v2, count);
     }
   }
 
@@ -72,14 +72,14 @@ public abstract class CLASSNAME
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count);
+  public abstract InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    return;
+  public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
 }

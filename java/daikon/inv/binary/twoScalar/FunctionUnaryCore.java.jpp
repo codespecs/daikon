@@ -92,7 +92,7 @@ public final class CLASSNAME
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
   }
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     boolean ok = false;
     ok = (inverse
           ? (x == (FUNCTIONS.invokeUnary(methodNumber, y)))
@@ -100,9 +100,9 @@ public final class CLASSNAME
 
     if (! ok) {
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
-
+    return InvariantStatus.NO_CHANGE;
   }
 
   public double computeProbability() {

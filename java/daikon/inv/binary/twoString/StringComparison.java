@@ -178,12 +178,12 @@ public final class StringComparison
     // return format_unimplemented(format);
   }
 
-  public void add_modified(String v1, String v2, int count) {
+  public InvariantStatus add_modified(String v1, String v2, int count) {
     if (ppt.debugged) {
       System.out.println("StringComparison" + ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
-    core.add_modified(v1, v2, count);
+    return core.add_modified(v1, v2, count);
   }
 
   protected double computeProbability() {

@@ -29,7 +29,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoScalar;
 
 import daikon.*;
-import daikon.inv.Invariant;
+import daikon.inv.*;
 import java.lang.reflect.*;
 
 
@@ -89,8 +89,8 @@ public class CLASSNAME
     return core.format_using(format, var1().name, var2().name);
   }
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
-    core.add_modified(x, y, count);
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+    return core.add_modified(x, y, count);
   }
 
 

@@ -116,7 +116,7 @@ public final class CLASSNAME
     obvious_can_be_ge = tmp;
   }
 
-  public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
 
     boolean new_can_be_eq = can_be_eq;
     boolean new_can_be_lt = can_be_lt;
@@ -141,7 +141,7 @@ public final class CLASSNAME
     }
 
     if (! changed) {
-      return;
+      return InvariantStatus.NO_CHANGE;
     }
 
     if ((new_can_be_lt && new_can_be_gt)
@@ -151,14 +151,14 @@ public final class CLASSNAME
         || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
         || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
 
     wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
-
+    return InvariantStatus.WEAKENED;
   }
 
   // This is very tricky, because whether two variables are equal should

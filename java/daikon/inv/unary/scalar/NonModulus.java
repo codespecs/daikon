@@ -79,7 +79,7 @@ public class NonModulus
       return "mod(" + name + ", " + modulus + ") ~= " + remainder;
     }
 
-    if (format == OutputFormat.JAVA 
+    if (format == OutputFormat.JAVA
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {
       return name + " % " + modulus + " != " + remainder;
@@ -110,12 +110,13 @@ public class NonModulus
   }
 
   // XXX have to deal with flowing this; maybe it should live at all ppts?
-  public void add_modified(long value, int count) {
+  public InvariantStatus add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
         && (! no_result_yet)
         && (MathMDE.mod_positive(value, modulus) == remainder))
       results_accurate = false;
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -436,7 +436,7 @@ invariants.
     return format_unimplemented(format);
   }
 
-  public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (logDetail() || debug.isLoggable(Level.FINE))
       log (debug, "add_modified (" + v1 + ", " + v2 + ",  " + "ppt.num_values = " + ppt.num_values() + ")");
     if (!(EQUALS(v1, v2))) {
@@ -444,8 +444,9 @@ invariants.
         log (debug, "destroy in add_modified (" + v1 + ", " + v2 + ",  "
             + count + ")");
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -512,14 +513,14 @@ invariants.
   //   super.destroy();
   // }
 
-  public void add(Object v1, Object v2, int mod_index, int count) {
+  public InvariantStatus add(Object v1, Object v2, int mod_index, int count) {
     if (ppt.debugged) {
       System.out.println(INTEQUALstring + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
     }
-    super.add(v1, v2, mod_index, count);
+    return super.add(v1, v2, mod_index, count);
   }
 
   public boolean isSameFormula(Invariant other)

@@ -1,5 +1,6 @@
 package daikon.inv.unary;
 
+import daikon.inv.*;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import utilMDE.Assert;
@@ -27,6 +28,6 @@ public abstract class UnaryInvariant
     return this;
   }
 
-  public abstract void add(Object val, int mod_index, int count);
+  public abstract InvariantStatus add(Object val, int mod_index, int count);
 
 }

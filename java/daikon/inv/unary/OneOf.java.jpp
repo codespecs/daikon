@@ -1492,21 +1492,25 @@ public final class ONEOFSCALAR
 
 #if defined(IS_ELT)
 
-  public void add_modified(INT[] a, int count) {
+  public InvariantStatus add_modified(INT[] a, int count) {
 
     for (int ai=0; ai <a.length; ai++) {
       if (!add_mod_elem (a[ai], count)) {
         destroyAndFlow();
+        return InvariantStatus.FALSIFIED;
       }
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
 #else
 
-  public void add_modified(INT v, int count) {
+  public InvariantStatus add_modified(INT v, int count) {
     if (!add_mod_elem (v, count)) {
       destroyAndFlow();
+      return InvariantStatus.FALSIFIED;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
 #endif

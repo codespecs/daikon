@@ -239,7 +239,7 @@ public final class CLASSNAME
     return form[0] + "(NEQ " + form[1] + " " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
 
-  public void add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
       PRIMITIVE v = a[ai];
 
@@ -247,13 +247,14 @@ public final class CLASSNAME
       // the first value).
       if (EQUAL (v, 0)) {
         destroyAndFlow();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
       // XXX; uh oh -- flowing these is bad stuff; maybe search for
       // upper / lower bound instead when computing probability
       if (v < min) min = v;
       if (v > max) max = v;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

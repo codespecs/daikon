@@ -199,7 +199,7 @@ public final class CLASSNAME
    * @see FuzzyFloat
    */
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     // XXX TODO FIXME: This method does not correctly deal with
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
@@ -216,7 +216,7 @@ public final class CLASSNAME
       // skip points we've already seen
       for (int i = 0; i < values_seen; i++)
         if (def_points[i].equals (x, y, z))
-          return;
+          return InvariantStatus.NO_CHANGE;
 
       def_points[values_seen] = new Point (x, y, z);
       values_seen++;
@@ -228,7 +228,7 @@ public final class CLASSNAME
         maxsep_triples (def_points);
         if (def_points[0] == null) {
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
 
         // calculate the coefficients of the equation (a, b, c, d)
@@ -237,7 +237,7 @@ public final class CLASSNAME
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
         a = coef[0];
         b = coef[1];
@@ -253,7 +253,7 @@ public final class CLASSNAME
             (Math.abs(b) >= Double.MAX_VALUE) ||
             (Math.abs(c) >= Double.MAX_VALUE)) {
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
 
         // Check all values against a, b, and c.
@@ -272,8 +272,9 @@ public final class CLASSNAME
               }
               wrapper.destroyAndFlow();
 
-              return;
+              return InvariantStatus.FALSIFIED;
             }
+
         }
 
           // Discard the points not used to define the coefficients.
@@ -294,10 +295,11 @@ public final class CLASSNAME
                          + " values_seen=" + values_seen);
           }
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
       }
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**

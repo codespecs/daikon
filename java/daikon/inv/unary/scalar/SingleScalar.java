@@ -29,15 +29,15 @@ public abstract class SingleScalar
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(Object val, int mod_index, int count) {
+  public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     // [INCR] Assert.assertTrue(!finished);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
-      add_unmodified(value, count);
+      return add_unmodified(value, count);
     } else {
-      add_modified(value, count);
+      return add_modified(value, count);
     }
   }
 
@@ -45,15 +45,15 @@ public abstract class SingleScalar
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(long value, int count);
+  public abstract InvariantStatus add_modified(long value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(long value, int count) {
+  public InvariantStatus add_unmodified(long value, int count) {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
-    return;
+    return InvariantStatus.NO_CHANGE;
   }
 
   // This has no additional suppression factories beyond those of Invariant.

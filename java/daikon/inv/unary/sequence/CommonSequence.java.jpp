@@ -113,7 +113,7 @@ public class CLASSNAME
       return "(" + printIntersect() + " \\in " + vname + ") ***";
   }
 
-  public void add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     // System.out.println ("common: " + ArraysMDE.toString (a));
     if (intersect==null)
       intersect = a;
@@ -137,7 +137,7 @@ public class CLASSNAME
       if (size==0) {
         destroyAndFlow();
         VarInfo var = var();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
 
       intersect = ArraysMDE.subarray(tmp, 0, size);
@@ -145,6 +145,7 @@ public class CLASSNAME
 
     intersect = (PRIMITIVE[]) Intern.intern(intersect);
     elts++;
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -110,7 +110,7 @@ public final class CLASSNAME
     Assert.assertTrue(false, "Could not find new ordering");
   }
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     values_seen++;
     if (x == y && y == z) {
       equal_values++;
@@ -168,14 +168,14 @@ public final class CLASSNAME
           // System.out.println(CLASSSTRING +  " failed: "
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
-          wrapper.destroyAndFlow();
-          return;
+        wrapper.destroyAndFlow();
+          return InvariantStatus.FALSIFIED;
         }
     } catch (Exception e) {
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
-
+    return InvariantStatus.NO_CHANGE;
   }
 
   public double computeProbability() {

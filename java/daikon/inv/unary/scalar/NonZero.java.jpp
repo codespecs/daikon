@@ -164,13 +164,13 @@ public class NONZERO
     return format_unimplemented(format);
   }
 
-  public void add_modified(PRIMITIVE v, int count) {
+  public InvariantStatus add_modified(PRIMITIVE v, int count) {
     if (v == 0) {
       if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
         log (debug, "destroy (value = " + v + ")");
       }
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
     // The min and max tests will simultaneously succeed exactly once (for
     // the first value).
@@ -179,6 +179,7 @@ public class NONZERO
 
     if (logDetail())
       log ("add_modified (" + v + ")");
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -556,15 +556,16 @@ public final class CLASSNAME
   }
 #endif
 
-  public void add_modified(SCALAR[] a, SCALAR i, int count) {
+  public InvariantStatus add_modified(SCALAR[] a, SCALAR i, int count) {
     if (INDEXOF(a, i) == -1) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("Member destroyed:  " + format() + " because " + i +
                      " not in " + ArraysMDE.toString(a));
       }
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -1,6 +1,7 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
+import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.DiscardCode;
 
@@ -39,11 +40,12 @@ public class Positive
   }
 
   // This is called when a new sample is encountered
-  public void add_modified(long v, int count) {
+  public InvariantStatus add_modified(long v, int count) {
     if (v <= 0) {
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

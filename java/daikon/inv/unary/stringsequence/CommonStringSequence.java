@@ -75,7 +75,7 @@ public class CommonStringSequence
     return (printIntersect() + " \\in " + vname);
   }
 
-  public void add_modified(String[] a, int count) {
+  public InvariantStatus add_modified(String[] a, int count) {
     if (intersect==null)
       intersect = a;
     else {
@@ -90,12 +90,13 @@ public class CommonStringSequence
       if (size==0) {
         destroyAndFlow();
         VarInfo var = var();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
     intersect = (String[]) Intern.intern(intersect);
     elts++;
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -269,7 +269,7 @@ public class CLASSNAME
       + form[3];
   }
 
-  public void add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     if (a.length >= 2)
       seenNonTrivialSample = true;
     for (int i=1; i<a.length; i++) {
@@ -277,9 +277,10 @@ public class CLASSNAME
         // System.out.println ("destroy " + i + COMPARATORSTRING
         //                    + ArraysMDE.toString (a));
         destroyAndFlow();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   // Perhaps check whether all the arrays of interest have length 0 or 1.

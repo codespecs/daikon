@@ -29,7 +29,7 @@ public abstract class SingleScalarSequence
   // Should never be called with modified == ValueTuple.MISSING.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(Object val, int mod_index, int count) {
+  public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     Assert.assertTrue(Intern.isInterned(val));
@@ -38,10 +38,11 @@ public abstract class SingleScalarSequence
     long[] value = (long[]) val;
     if (value == null) {
       // ppt.var_infos[0].canBeNull = true; // [[INCR]]
+      return InvariantStatus.NO_CHANGE;
     } else if (mod_index == 0) {
-      add_unmodified(value, count);
+      return add_unmodified(value, count);
     } else {
-      add_modified(value, count);
+      return add_modified(value, count);
     }
   }
 
@@ -49,14 +50,14 @@ public abstract class SingleScalarSequence
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(long[] value, int count);
+  public abstract InvariantStatus add_modified(long[] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(long[] value, int count) {
-    return;
+  public InvariantStatus add_unmodified(long[] value, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
 }

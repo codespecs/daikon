@@ -31,7 +31,7 @@ public abstract class TwoString
     return ppt.var_infos[1];
   }
 
-  public void add(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
@@ -40,9 +40,9 @@ public abstract class TwoString
     String v1 = (String) val1;
     String v2 = (String) val2;
     if (mod_index == 0) {
-      add_unmodified(v1, v2, count);
+      return add_unmodified(v1, v2, count);
     } else {
-      add_modified(v1, v2, count);
+      return add_modified(v1, v2, count);
     }
   }
 
@@ -50,14 +50,14 @@ public abstract class TwoString
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(String v1, String v2, int count);
+  public abstract InvariantStatus add_modified(String v1, String v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(String v1, String v2, int count) {
-    return;
+  public InvariantStatus add_unmodified(String v1, String v2, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
 }

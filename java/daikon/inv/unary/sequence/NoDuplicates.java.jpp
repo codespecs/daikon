@@ -237,7 +237,7 @@ public class CLASSNAME
     return "warning: dbc can't handle NoDuplicates invariant.";
   }
 
-  public void add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     // if (logDetail())
     //   log ("sample " + ArraysMDE.toString (a));
     for (int i=1; i<a.length; i++) {
@@ -248,13 +248,14 @@ public class CLASSNAME
             debug.fine (ArraysMDE.toString(a));
           }
           destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
       }
     }
 
     if (a.length > 1)
       elts += 1;
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**

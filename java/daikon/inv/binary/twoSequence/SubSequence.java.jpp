@@ -309,7 +309,7 @@ public class CLASSNAME
       " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
-  public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     Assert.assertTrue(var1_in_var2 || var2_in_var1);
 
     boolean new_var1_in_var2 = var1_in_var2;
@@ -325,17 +325,18 @@ public class CLASSNAME
     }
 
     if (! changed)
-      return;
+      return InvariantStatus.NO_CHANGE;
 
     if (! (new_var1_in_var2 || new_var2_in_var1)) {
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
 
     // changed == true but not dead yet
     cloneAndFlow();
     var1_in_var2 = new_var1_in_var2;
     var2_in_var1 = new_var2_in_var1;
+    return InvariantStatus.WEAKENED;
   }
 
   protected double computeProbability() {

@@ -79,7 +79,7 @@ public class Modulus
     return format_unimplemented(format);
   }
 
-  public void add_modified(long value, int count) {
+  public InvariantStatus add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
@@ -90,16 +90,16 @@ public class Modulus
     } else if (no_values_seen) {
       value1 = value;
       no_values_seen = false;
-      return;
+      return InvariantStatus.NO_CHANGE;
     } else if (value == value1) {
       // no new information, so nothing to do
-      return;
+      return InvariantStatus.NO_CHANGE;
     } else if (modulus == 0) {
       // only one value seen so far
       long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
         destroyAndFlow();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
       modulus = new_modulus;
       remainder = MathMDE.mod_positive(value, modulus);
@@ -116,7 +116,7 @@ public class Modulus
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
           destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         } else {
           remainder = remainder % new_modulus;
           modulus = new_modulus;
@@ -124,6 +124,7 @@ public class Modulus
       }
     }
     Assert.assertTrue(modulus != 1);
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

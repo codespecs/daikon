@@ -39,7 +39,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
-import daikon.inv.Invariant;
+import daikon.inv.*        ;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.derive.unary.*;
@@ -267,8 +267,8 @@ public class CLASSNAME
     return core.isActive();
   }
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
-    core.add_modified(x, y, z, count);
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+    return core.add_modified(x, y, z, count);
   }
 
   public boolean enoughSamples() {

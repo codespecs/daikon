@@ -89,7 +89,7 @@ public final class CLASSNAME
     max2 = tmp;
   }
 
-  public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (wrapper.ppt.debugged) {
       System.out.println(CLASSSTRING + wrapper.ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
@@ -99,13 +99,14 @@ public final class CLASSNAME
         System.out.println(CLASSSTRING + ".destroy()");
       }
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
     if (v1 < min1) min1 = v1;
     if (v1 > max1) max1 = v1;
     if (v2 < min2) min2 = v2;
     if (v2 > max2) max2 = v2;
     samples += count;
+    return InvariantStatus.NO_CHANGE;
   }
 
   public double computeProbability() {

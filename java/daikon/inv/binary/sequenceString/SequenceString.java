@@ -49,7 +49,7 @@ public abstract class SequenceString
     return ppt.var_infos[scl_index];
   }
 
-  public void add(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // [INCR] Assert.assertTrue(!finished);
@@ -58,24 +58,25 @@ public abstract class SequenceString
     if (v1 == null) {
       // ppt.var_infos[seq_index].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {
-      add_unmodified(v1, v2, count);
+      return add_unmodified(v1, v2, count);
     } else {
-      add_modified(v1, v2, count);
+      return add_modified(v1, v2, count);
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(String[] v1, String v2, int count);
+  public abstract InvariantStatus add_modified(String[] v1, String v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(String[] v1, String v2, int count) {
-    return;
+  public InvariantStatus add_unmodified(String[] v1, String v2, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
 }

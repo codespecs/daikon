@@ -178,7 +178,7 @@ public class SUBSET
     return "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
   }
 
-  public void add_modified(LONG[] a1, LONG[] a2, int count) {
+  public InvariantStatus add_modified(LONG[] a1, LONG[] a2, int count) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (ArraysMDE.toString(a1));
       debug.fine (ArraysMDE.toString(a2));
@@ -192,8 +192,9 @@ public class SUBSET
     {
       debug.fine ("Falsified 1");
       destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

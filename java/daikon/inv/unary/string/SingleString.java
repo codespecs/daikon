@@ -29,15 +29,15 @@ public abstract class SingleString
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
-  public void add(Object val, int mod_index, int count) {
+  public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     // [INCR] Assert.assertTrue(!finished);
     String value = (String) val;
     if (mod_index == 0) {
-      add_unmodified(value, count);
+      return add_unmodified(value, count);
     } else {
-      add_modified(value, count);
+      return add_modified(value, count);
     }
   }
 
@@ -45,14 +45,14 @@ public abstract class SingleString
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(String value, int count);
+  public abstract InvariantStatus add_modified(String value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(String value, int count) {
-    return;
+  public InvariantStatus add_unmodified(String value, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
 }

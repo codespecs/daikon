@@ -124,7 +124,7 @@ public final class CLASSNAME
   // it can calculate different a/b and change whether or not it even
   // finds a line with a different order.  Current code always guarantees
   // that the points arrive in the same order (I think).
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
 
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {
@@ -137,7 +137,7 @@ public final class CLASSNAME
 
       for (int i=0; i<values_seen; i++)
         if ((x_cache[i] == x) && (y_cache[i] == y))
-          return;
+          return InvariantStatus.NO_CHANGE;
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;
@@ -151,7 +151,7 @@ public final class CLASSNAME
         if (max_i == -1) {
           values_seen--;
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
         // remember the min and max pairs
         if (x_cache[max_i] < x_cache[max_j]) {
@@ -180,7 +180,7 @@ public final class CLASSNAME
           debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") because a == 0");
           values_seen--;
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
         for (int i=0; i<MINPAIRS; i++) {
           // if the point is close enough in either x or y it is close enough
@@ -199,7 +199,7 @@ public final class CLASSNAME
             }
             values_seen--;
             wrapper.destroyAndFlow();
-            return;
+            return InvariantStatus.FALSIFIED;
           }
         }
       }
@@ -220,7 +220,7 @@ public final class CLASSNAME
         // should be fixed in the future to permit vertical lines
         if (delta_x == 0) {
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
 
         // calculate a new a and b possibly using a new end point
@@ -258,12 +258,13 @@ public final class CLASSNAME
                         + y + " != " + a + "*" + x + "+" + b);
           }
           wrapper.destroyAndFlow();
-          return;
+          return InvariantStatus.FALSIFIED;
         }
         //??? wrapper.destroyAndFlow();
         //??? return;
       }
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**

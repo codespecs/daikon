@@ -271,7 +271,7 @@ public final class SEQINTEQUAL
     return form[0] + form[1] + " " + EQUALSstring + " " + form[2] + form[3];
   }
 
-  public void add_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
+  public InvariantStatus add_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
       + " " + x);*/
@@ -279,15 +279,16 @@ public final class SEQINTEQUAL
       #if (defined(EQUAL) || defined(EQUALFLOAT))
       if (! EQUALS(a[i], x) ) {
         destroyAndFlow();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
       #else
       if (! EQUALS(a[i], x) || !seqvar().type.elementIsIntegral()) {
         destroyAndFlow();
-        return;
+        return InvariantStatus.FALSIFIED;
       }
       #endif
     }
+    return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeProbability() {

@@ -81,10 +81,10 @@ public final class StringComparisonCore
     obvious_can_be_ge = tmp;
   }
 
-  public void add_modified(String v1, String v2, int count) {
+  public InvariantStatus add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
 
     boolean new_can_be_eq = can_be_eq;
@@ -110,7 +110,7 @@ public final class StringComparisonCore
     }
 
     if (! changed) {
-      return;
+      return InvariantStatus.NO_CHANGE;
     }
 
     if ((new_can_be_lt && new_can_be_gt)
@@ -120,13 +120,14 @@ public final class StringComparisonCore
         || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
         || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
       wrapper.destroyAndFlow();
-      return;
+      return InvariantStatus.FALSIFIED;
     }
 
     wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
+    return InvariantStatus.WEAKENED;
   }
 
   // This is very tricky, because whether two variables are equal should
