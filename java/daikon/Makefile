@@ -117,7 +117,7 @@ audit:
 test: tests
 
 tests:
-	cd ../tests && $(MAKE) all
+	cd ../../tests && $(MAKE) all
 
 showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
