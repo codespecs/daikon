@@ -290,6 +290,7 @@ Enhancing conditional invariant detection
 
 Tools
 
+* Annotate::                    
 * MergeESC::                    
 * MakeInvariantChecker::        
 * LogicalCompare::              
@@ -1007,17 +1008,17 @@ java daikon.PrintInvariants StackAr.inv
 For more options to the PrintInvariants program, @xref{Printing
 invariants}.
 
-@item Use the MergeESC program to insert the invariants as comments
+@item Use the Annotate program to insert the invariants as comments
 into the Java source program.
 
 @example
 cd ..
-java daikon.tools.jtb.MergeESC daikon-output/StackAr.inv \
+java daikon.tools.jtb.Annotate daikon-output/StackAr.inv \
      DataStructures/StackAr.java
 @end example
 
 Now examine file @file{DataStructures/StackAr.java-escannotated}.
-For more information about the MergeESC program, @xref{MergeESC}.
+For more information about the Annotate program, @xref{Annotate}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 contains a tree that hierarchically organizes program points according
@@ -1982,7 +1983,30 @@ Write output in Simplify format.
 Write output in IOA format.
 
 @item --java_output
-Write output as Java expressions.
+
+Write output as Java expressions. This means that each invariant would
+(with some exceptions; see next paragraph) be a valid Java expression,
+if inserted at the correct program point: right after method entry
+(for method entry invariants), or right before method exit (for
+method exit invariants), or anywhere in the code (for object
+invariants).
+
+There are two exceptions. Method exit invariants that refer to
+prestate, such as @code{x == old(x) + 1}, are output with the tag
+@code{\old} surrounding the prestate expression (e.g. @code{x ==
+\old(x) + 1}. Method exit invariants that refer to the return value of
+the method, such as @code{return == x + y}, are output with the tag
+@code{\result} in place of the return value (e.g. @code{\result == x + y}).
+These expression are obviously not valid Java code.
+
+The Java output format makes extensive use of helper methods defined
+in class @code{daikon.Quant}, which provides methods for
+quantification and set comprehension over Java collections. For
+example, @code{daikon.Quant.eltsEqual(int[] seq1, int elt)} checks
+whether all elements in @code{seq1} are equal to @code{elt}. For
+detailed meanings of all methods in the @code{Quant} class, see the
+Javadoc documentation for the class (or look inside
+@file{daikon/QuantBody.java}).
 
 @item --output_num_samples
 @cindex samples breakdown output
@@ -5471,32 +5495,108 @@ This chapter gives information about tools that are part of the Daikon
 distribution and are not described elsewhere in the manual.
 
 @menu
+* Annotate::                    
 * MergeESC::                    
 * MakeInvariantChecker::        
 * LogicalCompare::              
 @end menu
 
-@node    MergeESC, MakeInvariantChecker, Tools, Tools
+@node    Annotate, MergeESC, Tools, Tools
+@section Annotate
+
+@cindex Annotate tool
+@cindex ESC output format
+@cindex JML output format
+@cindex Jtest DBC output format
+@cindex output format, ESC
+@cindex output format, JML
+@cindex output format, Jtest DBC
+
+The Annotate program inserts Daikon-generated invariants into Java
+source code as ESC/JML/DBC annotations.  These annotations are comments that
+can be automatically verified or otherwise manipulated by other tools.
+Invoke Annotate like this:
+@example
+java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
+@end example
+
+The first argument is a Daikon @file{.inv} file produced by running
+Daikon with the @option{-o} command-line argument.  All subsequent
+arguments are .java files.  The original .java files are left
+unmodified, but Annotate produces new versions of the .java files
+(suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
+@file{-dbcannotated}) that include the Daikon invariants as comments.
+
+The options are:
+@table @option
+
+@item --jml_output
+Produces output in JML (Java Modeling Language,
+@uref{http://www.jmlspecs.org}). This lets you
+use the various JML tools on Daikon invariants, including runtime
+assertion checking.
+
+This output format makes extensive use of helper methods defined in
+class @code{daikon.Quant}.
+For more information on this class, see flag 
+@code{--java_output} in @ref{Command line options}.
+
+@item --dbc_output
+Produces output in Jtest's Design-by-contract format
+(@uref{http://www.parasoft.com}).
+
+This output format makes extensive use of helper methods defined in
+class @code{daikon.Quant}.
+For more information on this class, see flag 
+@code{--java_output} in @ref{Command line options}.
+
+@item --wrap_xml
+Each invariant is printed using the given format (ESC, JML or DBC),
+but the invariant expression is wrapped inside xml tags, along with other
+information about the invariant.
+
+For example, if this switch is set, the output format is ESC,
+and an invariant for method @code{foo(int x)} prints as
+
+@example
+/*@ requires x != 0; */
+@end example
+
+Then the results of print_invariant will look something like this (all in one line;
+we break it up here for clarity):
+
+@example
+/*@ requires <INVINFO>
+<INV> x != 0 </INV>
+<SAMPLES> 100 </SAMPLES> 
+<DAIKON> x != 0 </DAIKON>
+<DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
+<METHOD> foo() </METHOD>
+</INVINFO> ; */
+@end example
+
+Note that the comment will no longer be a legal ESC/JML/DBC
+comment. To make it legal again, you must replace the XML tags with
+the string between the <INV> tag.
+
+Also note the extra information printed with the invariant: the number
+of samples from which the invariant was devied, the daikon
+representation (i.e. the daikon output format), the Java class that
+the invariant corresponds to, and the method that the invariant
+belongs to (@code{null} for object invariants).
+
+@end table
+
+@node    MergeESC, MakeInvariantChecker, Annotate, Tools
 @section MergeESC
 
 @cindex MergeESC tool
 @cindex ESC output format
 @cindex output format, ESC
 
-The MergeESC program inserts Daikon-generated invariants into Java
-source code as ESC/JML annotations.  These annotations are comments that
-can be automatically verified or otherwise manipulated by other tools.
-Invoke MergeESC like this:
-@example
-java daikon.tools.jtb.MergeESC Myprog.inv Myprog.java Myprog2.java ...
-@end example
-
-The first argument is a Daikon @file{.inv} file produced by running
-Daikon with the @option{-o} command-line argument.  All subsequent
-arguments are .java files.  The original .java files are left
-unmodified, but MergeESC produces new @file{-escannotated} versions that
-include the Daikon invariants as comments.
-
+The MergeESC program is no longer supported: it has been replaced
+with the Annotate program, which augments MergeESC's functionality to
+handle Jtest's DBC annotations. @xref{Annotate}.
 
 @node    MakeInvariantChecker, LogicalCompare, MergeESC, Tools
 @section MakeInvariantChecker
