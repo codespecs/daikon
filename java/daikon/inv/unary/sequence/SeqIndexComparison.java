@@ -7,7 +7,7 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
- /** 
+ /**
   * This class represnts a comparison between elements of a sequence
   * and the indices of those elements; for instance, * "for all i,
   * a[i] > i".
@@ -92,10 +92,10 @@ public final class SeqIndexComparison
   }
 
   public String format_using(OutputFormat format) {
-    if (format == OutputFormat.DAIKON) format_daikon();
-    if (format == OutputFormat.IOA) format_ioa();
-    if (format == OutputFormat.ESCJAVA) format_esc();
-    if (format == OutputFormat.SIMPLIFY) format_simplify();
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
   }
