@@ -1,7 +1,28 @@
 Daikon todo list.
-Time-stamp: <2003-12-18 10:48:38 jhp>
+Time-stamp: <2004-01-26 15:58:33 jhp>
 
 Outstanding Issues
+
+  jhp     01/26/04      fix OneOf.isObviousDynamically == 0 check
+
+    The 'x == 0' invariant is found to be obvious if x is a size(seq)
+    derived variable.  This invariant would be implied by the
+    'seq[] = []' invariant.  This code needs to check for the 
+    size(seq)-1 derived variable since that does not have the same
+    implication as size(seq) alone.
+
+  jhp     01/13/04      Fixing missing out of bounds
+
+    Missing out of bounds is implemented as a flag in the variable that
+    indicates whether or not that derived variable has ever been out
+    of bounds.  This creates many difficulties because the out of bounds
+    information is tied up with the variable and not with the sample.
+    This means that we can't easily apply the same sample to different
+    program points (conditionals, globals, etc) with the same variables.
+    Most of this has been hacked to work, but it is all ugly.  It would
+    be much better if a more specific missing  flag were added to address
+    this.  Then the out of bounds info would track with the sample which
+    is correct.
 
   jhp     12/18/03      Fix/remove EltwiseIntComparison.hasSeenNonTrivialSample
 
