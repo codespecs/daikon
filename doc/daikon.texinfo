@@ -1433,7 +1433,7 @@ Details of the options are as follows:
 @item @option{-daikon_debug}
 Produce debugging information.
 
-@item @option{-daikon_depth=}@var{n}
+@item @option{-daikon_depth=@var{n}}
 Depth to which to examine structure components (default 2).
 This parameter determines which variables dfej causes to be output at
 runtime.  For instance, suppose that a program contained the following
