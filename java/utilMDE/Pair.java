@@ -16,5 +16,18 @@ public class Pair {
   public String toString() {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
+
+  public boolean equals(Object obj) {
+    if (obj instanceof Pair) {
+      Pair other = (Pair) obj;
+      boolean aEquals = ((this.a == null && other.a == null) ||
+                         (this.a.equals(other.a)));
+      boolean bEquals = ((this.b == null && other.b == null) ||
+                         (this.b.equals(other.b)));
+      return aEquals && bEquals;
+    } else {
+      return false;
+    }
+  }
 }
 
