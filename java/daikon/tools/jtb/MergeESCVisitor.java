@@ -8,6 +8,7 @@ import junit.framework.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
+import utilMDE.Assert;
 import utilMDE.ArraysMDE;
 import utilMDE.UtilMDE;
 import daikon.inv.Invariant;
@@ -54,10 +55,18 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
   public MergeESCVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
     super();
+    initialize(ppts, slashslash, insert_inexpressible, false);
+  }
+
+  public MergeESCVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
+    initialize(ppts, slashslash, insert_inexpressible, lightweight);
+  }
+
+  private void initialize(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean lightweight) {
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
-    lightweight = false;
+    this.lightweight = lightweight;
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -258,8 +267,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
       }
 
       public void visit(NodeChoice nc) {
-	// System.out.println("InsertBehavior visitor visiting a NodeChoice");
-	String modifier = nc.choice.toString();
+        // System.out.println("InsertBehavior visitor visiting a NodeChoice");
+	String modifier = (nc != null && nc.choice != null ? nc.choice.toString() : "");
 	// System.out.println("A node choice here: " + modifier);
 	if (Ast.isAccessModifier(modifier)) {
 	  addComment(n, "@ " + modifier + " " + getBehaviorString() + lineSep, true);
@@ -413,7 +422,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     if (!lightweight) {
       if (!invariantInserted)
         insertJMLWorkaround(n);
-      insertBehavior(n, exceptions.isEmpty(), ensures_invs.length == 0);
+      insertBehavior(n, exceptions.isEmpty(), ensures_invs == null || ensures_invs.length == 0);
       addComment(n, JML_START_COMMENT, true);
     }
 
@@ -447,6 +456,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)
 		 || (inv.endsWith(".toString"))
+                 || (inv.indexOf("warning: method") != -1)
 		 || (inv.indexOf("inexpressible") != -1)) {
         // inexpressible invariant
         if (insert_inexpressible) {
@@ -457,15 +467,19 @@ class MergeESCVisitor extends DepthFirstVisitor {
         if (lightweight && prefix.startsWith("also_")) {
           inv = "also_" + inv;
         }
-	String commentContents = "@ " + inv + ";" + lineSep;
+	String commentContents = "@ " + inv + ";";
 	if (useJavaComment)
 	  commentContents = javaLineComment(commentContents);
+        else
+          commentContents += lineSep;
         addComment(n, commentContents, true);
         invariantInserted = true;
       } else {
-	String commentContents = "@ " + prefix + " " + inv + ";" + lineSep;
+	String commentContents = "@ " + prefix + " " + inv + ";";
 	if (useJavaComment)
 	  commentContents = javaLineComment(commentContents);
+        else
+          commentContents += lineSep;
 
         addComment(n, commentContents, true);
         invariantInserted = true;

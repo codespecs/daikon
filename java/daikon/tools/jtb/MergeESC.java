@@ -4,6 +4,7 @@ import java.io.*;
 import gnu.getopt.*;
 import org.apache.log4j.Category;
 import daikon.*;
+import daikon.inv.filter.JMLCompilerWorkaroundFilter;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import jtb.syntaxtree.*;
@@ -61,6 +62,8 @@ class MergeESC {
 
   public static final Category debug = Category.getInstance("daikon.tools.jtb.MergeESC");
 
+  public static final String useJML_SWITCH = "jml_output";
+
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage:  java daikon.tools.MergeESC FILE.inv FILE.java ...",
@@ -69,17 +72,22 @@ class MergeESC {
       "       by default these \"inexpressible\" invariants are simply omitted",
       "  -r   Use all .java files under the current directory as arguments",
       "  -s   Use // comments rather than /* comments",
+      "",
+      "  --jml_output Insert JML specifications instead of ESC specifcations"
     },
                  lineSep);
 
   public static void main(String[] args) throws Exception {
     boolean slashslash = false;
     boolean insert_inexpressible = false;
+    boolean setLightweight = true;
 
+    Daikon.output_style = OutputFormat.ESCJAVA;
     daikon.Logger.setupLogs (daikon.Logger.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(useJML_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.tools.jtb.MergeESC", args, "hs", longopts);
     int c;
@@ -92,7 +100,11 @@ class MergeESC {
 	  Global.debugAll = true;
 	} else if (Daikon.debug_SWITCH.equals(option_name)) {
 	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
-	} else {
+	} else if (useJML_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.JML;
+          setLightweight = false;
+          JMLCompilerWorkaroundFilter.createNextFilterOn = true;
+        } else {
 	  throw new RuntimeException("Unknown long option received: " +
 				     option_name);
 	}
@@ -139,9 +151,6 @@ class MergeESC {
                                                 true // use saved config
                                                 );
 
-    // Change to an option
-    // Daikon.output_style = OutputFormat.ESCJAVA;
-    Daikon.output_style = OutputFormat.JML;
     Daikon.suppress_implied_controlled_invariants = true;
     Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;
@@ -153,7 +162,11 @@ class MergeESC {
         System.exit(1);
       }
       Reader input = new FileReader(javafile);
-      File outputFile = new File(javafile + "-escannotated");
+      File outputFile;
+      if (Daikon.output_style == OutputFormat.ESCJAVA)
+        outputFile = new File(javafile + "-escannotated");
+      else
+        outputFile = new File(javafile + "-jmlannotated");
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
 
@@ -161,7 +174,7 @@ class MergeESC {
 
       // Annotate the file
       Ast.applyVisitorInsertComments(input, output,
-                   new MergeESCVisitor(ppts, slashslash, insert_inexpressible));
+                   new MergeESCVisitor(ppts, slashslash, insert_inexpressible, setLightweight));
     }
   }
 
