@@ -238,10 +238,10 @@ daikon/Runtime.class: daikon/Runtime.java
 # rules to unnecessarily re-run, if the code hasn't actually changed.
 clean:
 	-rm -f `find . -name "*.class" -print`
-	# Daikon might be a symbolic link; the alternative is to pass
+	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
-	-rm -f `find daikon -name "*.class" -print`
+	-rm -f `find daikon -follow -name "*.class" -print`
 
 dist_clean: clean
 	-rm -f TAGS
