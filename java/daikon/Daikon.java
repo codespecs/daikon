@@ -152,6 +152,14 @@ public final class Daikon {
   // Whether Daikon should print its version number and date
   public static boolean noversion_output = false;
 
+  // If true no invariants will be guarded, guarding meaning
+  // that if a variable "can be missing" in a dtrace file
+  // that predicates are attached to invariants ensuring their
+  // values can be gather (for instance, if a.b "can be missing",
+  // and a.b == 5 is an invariant, then it is more properly declared
+  // as (a != null) ==> (a.b == 5))
+  public static boolean noInvariantGuarding = false;
+
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
   public static final String ppt_regexp_SWITCH = "ppt";
@@ -180,7 +188,7 @@ public final class Daikon {
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
   public static final String noversion_SWITCH = "noversion";
-
+  public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
@@ -235,6 +243,25 @@ public final class Daikon {
     // Infer invariants
     process_data(all_ppts, dtrace_files);
 
+    // Check that PptMap created was correct
+    all_ppts.repCheck();
+
+    // Write serialized output - must be done before guarding invariants
+    if (inv_file != null) {
+      try {
+        FileIO.write_serialized_pptmap(all_ppts, inv_file);
+      } catch (IOException e) {
+        throw new RuntimeException("Error while writing .inv file "
+                                   + "'" + inv_file + "': " + e.toString());
+      }
+    }
+
+    // Guard invariants
+    if ((Daikon.output_style == OutputFormat.JML ||
+         Daikon.output_style == OutputFormat.ESCJAVA) &&
+        !noInvariantGuarding)
+      guardInvariants(all_ppts);
+
     // Display invariants
     if (output_num_samples) {
       System.out.println("The --output_num_samples debugging flag is on.");
@@ -243,19 +270,6 @@ public final class Daikon {
     PrintInvariants.print_invariants(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();
-    }
-
-    // Check that PptMap created was correct
-    all_ppts.repCheck();
-    
-    // Write serialized output
-    if (inv_file != null) {
-      try {
-        FileIO.write_serialized_pptmap(all_ppts, inv_file);
-      } catch (IOException e) {
-        throw new RuntimeException("Error while writing .inv file "
-                                   + "'" + inv_file + "': " + e.toString());
-      }
     }
 
     // Done
@@ -307,6 +321,7 @@ public final class Daikon {
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -450,6 +465,8 @@ public final class Daikon {
           break;
         } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
+        } else if (noinvariantguarding_SWITCH.equals(option_name)) {
+          noInvariantGuarding = true;
         } else {
           throw new RuntimeException("Unknown long option received: " + option_name);
         }
@@ -686,7 +703,6 @@ public final class Daikon {
       }
       System.out.println(elapsedTime());
     }
-
   }
 
   private static long elapsedTime_timer = System.currentTimeMillis();
@@ -732,4 +748,14 @@ public final class Daikon {
     }
   }
 
+  // Guard the invariants at all PptTopLevels. Note that this changes
+  // the contents of the PptTopLevels, and the changes made should
+  // probably not be written out to an inv file (save the file before
+  // this is called)
+  public static void guardInvariants(PptMap allPpts) {
+    for (Iterator i=allPpts.asCollection().iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel)i.next();
+      ppt.guardInvariants();
+    }
+  }
 }

@@ -1,10 +1,14 @@
 package daikon;
 
+
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.VarInfoName.*;
 import daikon.inv.*;
+import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
@@ -101,10 +105,11 @@ public final class VarInfo
   public Vector derivees;
   */
 
+  // Reinstating this in the way Mike and I discussed
   // We don't know about canBeMissing or canBeNull anymore, since we
   // see data incrementally, instead of slurping it all first.
   // [[INCR]] ....
-  // boolean canBeMissing = false;
+  public boolean canBeMissing = false;
   // public boolean canBeNull = false;    // relevant only for arrays, really
   // .... [[INCR]]
 
@@ -217,6 +222,8 @@ public final class VarInfo
     // derivees = new Vector(3); // [INCR]
 
     // exact_nonunary_invariants = new Vector(2); // [INCR]
+
+    canBeMissing = false;
   }
 
   public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
@@ -227,6 +234,7 @@ public final class VarInfo
   public VarInfo(VarInfo vi) {
     this(vi.name, vi.type, vi.file_rep_type, vi.comparability,
          vi.is_static_constant, vi.static_constant_value, vi.aux);
+    canBeMissing = vi.canBeMissing;
     postState = vi.postState;
   }
 
@@ -235,6 +243,7 @@ public final class VarInfo
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.file_rep_type,
                                  vi.comparability.makeAlias(vi.name), vi.aux);
+    result.canBeMissing = vi.canBeMissing;
     result.postState = vi;
     return result;
   }
@@ -503,6 +512,7 @@ public final class VarInfo
       + ",derived=" + checkNull(derived)
       + ",derivees=" + derivees()
       + ",ppt=" + ppt.name
+      + ",canBeMissing=" + canBeMissing
       /* [INCR]
       + ",equal_to=" + (equal_to==null ? "null" : equal_to.name.name())
       + ",isCanonical()=" + isCanonical()
@@ -786,6 +796,7 @@ public final class VarInfo
       if (Global.debugSuppressParam.isDebugEnabled()) {
         Global.debugSuppressParam.debug ("  Parent and orig slice for finding equality: " + slice.name);
       }
+
 //       Invariant equalInv = Invariant.find (daikon.inv.binary.twoScalar.IntEqual.class, slice);
 //       if (equalInv == null) {
 //         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
@@ -794,7 +805,7 @@ public final class VarInfo
 //       } else {
 //         Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
 //         return false;
-//       } 
+//       }
 
       boolean seenEqual = false;
       for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
@@ -1723,4 +1734,184 @@ public final class VarInfo
     name = name.intern();
   }
 
+  // Create a guarding predicate for this VarInfo, that is, an invariant
+  // that ensures that this object is available for access to variables
+  // that reference it, such as fields
+  public Invariant createGuardingPredicate(PptTopLevel ppt) {
+    // Later for the array, make sure index in bounds
+    if (type.isArray() || type.isObject()) {
+      // For now associating with the variable's PptSlice
+      PptSlice associateWith = ppt.get_or_instantiate_slice(new VarInfo [] {this});
+
+      Invariant prevInstantiation;
+      try {
+        prevInstantiation = Invariant.find(Class.forName("daikon.inv.unary.scalar.NonZero"),
+                                                     associateWith);
+      } catch (ClassNotFoundException e) {
+        throw new Error("Could not locate class object for daikon.inv.unary.scalar.NonZero");
+      }
+
+      Invariant retval;
+
+      // Check whether the predicate already exists
+      if (prevInstantiation == null) {
+        retval = NonZero.instantiate(associateWith);
+        retval.isGuardingPredicate = true;
+        associateWith.addInvariant(retval);
+      } else {
+        retval = prevInstantiation;
+      }
+
+      return retval;
+    }
+    return null;
+  }
+
+  // Finds a list of variables that must be guarded for a VarInfo to
+  // be guaranteed to not be missing. The variables are returned in
+  // the order in which their guarding preficies are supposed to print
+  public List getGuardingList() {
+    class GuardingVisitor
+      implements Visitor
+    {
+      public Object visitSimple(Simple o) {
+        return takeActionOnDerived(ppt.findVar(o));
+      }
+      public Object visitSizeOf(SizeOf o) {
+        List result = (List)o.sequence.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.sequence));
+
+        return result;
+      }
+      public Object visitFunctionOf(FunctionOf o) {
+        List result = (List)o.argument.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.argument));
+
+        return result;
+      }
+      public Object visitFunctionOfN(FunctionOfN o) {
+        List args = o.args;
+
+        List result = (List)((VarInfoName)args.get(0)).accept(this);
+
+        for (int i=1; i<args.size(); i++) {
+          result.addAll((List)((VarInfoName)args.get(i)).accept(this));
+        }
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing) {
+          for (int i=0; i<args.size(); i++) {
+            result.add(ppt.findVar((VarInfoName)args.get(i)));
+          }
+        }
+
+        return result;
+      }
+      public Object visitField(Field o) {
+        List result = (List)o.term.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitTypeOf(TypeOf o) {
+        List result = (List)o.term.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitPrestate(Prestate o) {
+        List result = (List)o.term.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitPoststate(Poststate o) {
+        List result = (List)o.term.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitAdd(Add o) {
+        List result = (List)o.term.accept(this);
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitElements(Elements o) {
+        VarInfo vi = ppt.findVar(o);
+        List result = (List)o.term.accept(this);
+        result.addAll(takeActionOnDerived(vi));
+
+        if (vi != null && vi.canBeMissing)
+          result.add(ppt.findVar(o.term));
+
+        return result;
+      }
+      public Object visitSubscript(Subscript o) {
+        List result = (List)o.sequence.accept(this);
+        result.addAll((List)o.index.accept(this));
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && ppt.findVar(o).canBeMissing) {
+          result.add(ppt.findVar(o.sequence));
+          result.add(ppt.findVar(o.index));
+        }
+
+        return result;
+      }
+      public Object visitSlice(Slice o) {
+        List result = (List)o.sequence.accept(this);
+        if (o.i != null)
+          result.addAll((List)o.i.accept(this));
+        if (o.j != null)
+          result.addAll((List)o.j.accept(this));
+
+        VarInfo vi = ppt.findVar(o);
+        if (vi != null && vi.canBeMissing) {
+          result.add(ppt.findVar(o.sequence));
+          if (o.i != null)
+            result.add(ppt.findVar(o.i));
+          if (o.j != null)
+            result.add(ppt.findVar(o.j));
+        }
+
+        return result;
+      }
+      public List takeActionOnDerived(VarInfo vi) {
+        List result = new GuardingVariableList();
+
+        if (vi != null && vi.isDerived()) {
+          VarInfo bases[] = vi.derived.getBases();
+
+          for (int i=0; i<bases.length; i++) {
+            result.addAll((List)(bases[i].name.accept(this)));
+          }
+        }
+        return result;
+      }
+    }
+
+    return (List)name.accept(new GuardingVisitor());
+  }
 }

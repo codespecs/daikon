@@ -90,7 +90,10 @@ public class PrintInvariants {
       "      Write output in JML format.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
-      "program points; for debugging."}, lineSep);
+      "program points; for debugging.",
+      "  --" + Daikon.noinvariantguarding_SWITCH,
+      "      Disable invariant guarding, which is normally on for JML and ESC output formats."},
+      lineSep);
 
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
@@ -111,6 +114,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -151,6 +155,8 @@ public class PrintInvariants {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
           Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+        } else if (Daikon.noinvariantguarding_SWITCH.equals(option_name)) {
+          Daikon.noInvariantGuarding = true;
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
@@ -177,9 +183,16 @@ public class PrintInvariants {
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
                                                true // use saved config
                                                );
+
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
     ppt_map = ppts;
+
+    if ((Daikon.output_style == OutputFormat.ESCJAVA ||
+         Daikon.output_style == OutputFormat.JML) &&
+        !Daikon.noInvariantGuarding)
+      Daikon.guardInvariants(ppts);
+
     print_invariants(ppts);
   }
 
@@ -190,6 +203,7 @@ public class PrintInvariants {
 
   ///////////////////////////////////////////////////////////////////////////
   //
+
   public static void print_invariants(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
     PrintWriter pw = new PrintWriter(System.out, true);
@@ -220,7 +234,7 @@ public class PrintInvariants {
       }
       return;
     }
-    if ((ppt.views.size() == 0) && (ppt.implication_view.invs.size() == 0)) {
+    if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
       if (! (ppt instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
@@ -354,7 +368,14 @@ public class PrintInvariants {
             // The test "((view != null) && (view.num_values() > 0))" is
             // fallacious becuase the view might have been removed (is now
             // null) because all invariants at it were false.
-            if ((view == null)) { // [INCR] || (view.num_values() > 0)) {
+            if ((view == null) ||
+                view.containsOnlyGuardingPredicates()) {
+              // Further modified because a view might have otherwise been
+              // destroyed if it were not for the guarding invariants put
+              // into the PptSlice. This if view != null, and it only contains
+              // guarding predicates, it would have been null had invariant
+              // guarding been off, thus the variable belongs in modified_vars.
+              // [INCR] || (view.num_values() > 0)) {
               // Using only the isPrimitive test is wrong.  We should suppress
               // for only parameters, not all primitive values.  That's why we
               // look for the period in the name.
@@ -830,9 +851,9 @@ public class PrintInvariants {
         }
       }
     } else if (Daikon.output_style == OutputFormat.JML) {
-      //System.out.println("PrintInvariants.print_invariants under format_jml, formatting inv " + inv.getClass().getName());
+      // System.out.println("className: " + inv.getClass().getName());
+      // System.out.println("daikon rep: " + inv.format_using(OutputFormat.DAIKON));
       inv_rep = inv.format_using(Daikon.output_style);
-      //inv_rep += " className: " + inv.getClass().getName();
       // System.out.println("Representation: " + inv_rep);
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
@@ -874,8 +895,31 @@ public class PrintInvariants {
       debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
     }
 
-    // debug line
+    // debug
     // out.println(inv.getClass().getName());
+    //      out.println("---------------------------");
+    //      VarInfo invVarInfos[];
+    //      if (inv instanceof Implication) {
+    //        VarInfo leftVarInfos[] = ((Implication)inv).left.ppt.var_infos;
+    //        VarInfo rightVarInfos[] = ((Implication)inv).right.ppt.var_infos;
+    //        int leftVarInfosLength = (leftVarInfos == null ? 0 : leftVarInfos.length);
+    //        int rightVarInfosLength = (rightVarInfos == null ? 0 : rightVarInfos.length);
+
+    //        invVarInfos = new VarInfo [leftVarInfosLength + rightVarInfosLength];
+    //        for (int i=0; i<leftVarInfosLength; i++) {
+    //          invVarInfos[i] = leftVarInfos[i];
+    //        }
+    //        for (int i=0; i<rightVarInfosLength; i++) {
+    //          invVarInfos[i+leftVarInfosLength] = rightVarInfos[i];
+    //        }
+    //      } else {
+    //        invVarInfos = inv.ppt.var_infos;
+    //      }
+
+    //      for (int i=0; i<invVarInfos.length; i++) {
+    //        out.println(invVarInfos[i].toString());
+    //      }
+
     out.println(inv_rep);
 
     // this is not guaranteed to work or even compile if uncommented.
@@ -959,6 +1003,7 @@ public class PrintInvariants {
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
     List invs_vector = ppt.getInvariants();
+    // System.out.println("Total invs for this ppt: " + invs_vector.size());
 
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
@@ -975,7 +1020,9 @@ public class PrintInvariants {
       boolean pi_accepted = accept_invariant(inv);
       boolean fi_accepted = fi.shouldKeep(inv);
 
-      if (fi_accepted) {
+      // Never print the guarding predicates themselves, they should only
+      // print as part of GuardingImplications
+      if (fi_accepted && !inv.isGuardingPredicate) {
 	invCounter++;
 	Global.reported_invariants++;
 	accepted_invariants.add(inv);
@@ -1074,5 +1121,4 @@ public class PrintInvariants {
     if (ppt.ppt_name.isClassStaticSynthetic()) return "";
     return "enabled(" + ppt.ppt_name.getFullMethodName() + ") => ";
   }
-
 }

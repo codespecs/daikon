@@ -148,7 +148,7 @@ public class UnionInvariants {
       if (! ppt.has_samples())
         continue;
       */ // ... [INCR]
-      if ((ppt.views.size() == 0) && (ppt.implication_view.invs.size() == 0))
+      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0))
         continue;
 
       if (collector.get(ppt.ppt_name) != null) {

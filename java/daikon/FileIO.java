@@ -1,5 +1,6 @@
 package daikon;
 
+import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
 
@@ -933,6 +934,10 @@ public final class FileIO {
         if (!(value_rep.equals("missing") || value_rep.equals("uninit"))) {
           System.out.println("\nModbit indicates missing value for variable " + vi.name + " with value \"" + value_rep + "\";\n  text of value should be \"missing\" or \"uninit\" at " + data_trace_filename + " line " + reader.getLineNumber());
           System.exit(1);
+        }
+        else if (value_rep.equals("missing")) {
+          // Keep track of variables that can be missing
+          vi.canBeMissing = true;
         }
         vals[val_index] = null;
       } else {

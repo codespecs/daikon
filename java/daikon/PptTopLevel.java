@@ -53,7 +53,7 @@ public class PptTopLevel
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020731L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -109,12 +109,13 @@ public class PptTopLevel
   // [INCR] private String values_tuplemod_samples_summary;
 
   /**
-   * All the Views (that is, slices) on this.
+   * All the Views (that is, slices) on this are stored as values in
+   * the HashMap
    * Provided so that this Ppt can notify them when significant events
    * occur, such as receiving a new value, deriving variables, or
    * discarding data.
    **/
-  HashSet views;
+  private HashMap views;
 
   // Temporarily have a separate collection for PptConditional views.
   // In the long run, I'm not sure whether the two collections will be
@@ -203,7 +204,10 @@ public class PptTopLevel
 //    public Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
   // ... [INCR]
 
-  public PptSlice0 implication_view = new PptSlice0(this);
+  // This was renamed to the joiner_view because it no longer just for
+  // implications, but instead for any Invariants that represents a
+  // "joining" of two others (such as and, or, etc)
+  public PptSlice0 joiner_view = new PptSlice0(this);
 
   // The set of redundant_invs is filled in by the below method
   // mark_implied_via_simplify.  Contents are either Invariant
@@ -234,7 +238,7 @@ public class PptTopLevel
     }
 
     // values = new VarValuesOrdered(); // [[INCR]]
-    views = new HashSet();
+    views = new HashMap();
     views_cond = new Vector();
 
     num_declvars = var_infos.length;
@@ -286,6 +290,16 @@ public class PptTopLevel
   /** The number of samples processed by this program point so far. **/
   public int num_samples() {
     return values_num_samples;
+  }
+
+  // Get the actual views from the HashMap
+  Collection viewsAsCollection() {
+    return views.values();
+  }
+
+  // Quick access to the number of views, since the views variable is private
+  public int numViews() {
+    return views.size();
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -726,7 +740,7 @@ public class PptTopLevel
     values_num_samples += count;
 
 
-    Set viewsToCheck = new HashSet(views);
+    Set viewsToCheck = new HashSet(viewsAsCollection());
 
     if (debugSuppress.isDebugEnabled()) {
       debugSuppress.debug ("<<< Doing add() for " + name);
@@ -800,7 +814,7 @@ public class PptTopLevel
       }
     }
 
-    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if (view.invs.size() == 0) {
         itor.remove();
@@ -907,7 +921,19 @@ public class PptTopLevel
       }
     }
 
-    views.addAll(slices_vector);
+    addSlices(slices_vector);
+  }
+
+  // A method of adding a collection of slices to the views of a PptTopLevel
+  private void addSlices(Collection slices) {
+    for (Iterator i=slices.iterator(); i.hasNext(); ) {
+      addSlice((PptSlice)i.next());
+    }
+  }
+
+  // Adds a single slice to the views variable
+  private void addSlice(PptSlice slice) {
+    views.put(Arrays.asList(slice.var_infos),slice);
   }
 
   /**
@@ -955,10 +981,12 @@ public class PptTopLevel
 
   public void removeView(Ppt slice) {
     // System.out.println("removeView " + slice.name + " " + slice);
-    boolean removed = views.remove(slice);
+    boolean removed = viewsAsCollection().remove(slice);
     Assert.assertTrue(removed);
   }
 
+  // I've decided that views will contain only slices, which allows for
+  // dramatic speedups in finding functions
 
   // The nouns "view" and "slice" are putatively different.  Slices
   // limit the variables but examine all data.  Views may ignore data,
@@ -970,12 +998,16 @@ public class PptTopLevel
    * which cache the invariants of most interest, instead of this function.
    **/
   public PptSlice1 getView(VarInfo vi) {
-    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
-      if ((slice.arity == 1) && slice.usesVar(vi))
-        return (PptSlice1) slice;
-    }
-    return null;
+    // This seems to do the same thing as findSlice(vi)
+
+    return findSlice(vi);
+
+    //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
+    //        PptSlice slice = (PptSlice) itor.next();
+    //        if ((slice.arity == 1) && slice.usesVar(vi))
+    //          return (PptSlice1) slice;
+    //      }
+    //      return null;
   }
 
   /**
@@ -983,12 +1015,16 @@ public class PptTopLevel
    * invariants of most interest, instead of this function.
    **/
   public PptSlice2 getView(VarInfo vi1, VarInfo vi2) {
-    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) itor.next();
-      if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
-        return (PptSlice2) slice;
-    }
-    return null;
+    // This seems to do the same thing as findSlice(vi1, vi2)...
+
+    return findSlice(vi1, vi2);
+
+    //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
+    //        PptSlice slice = (PptSlice) itor.next();
+    //        if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
+    //          return (PptSlice2) slice;
+    //      }
+    //      return null;
   }
 
   // A slice is a specific kind of view, but we don't call this
@@ -1000,12 +1036,13 @@ public class PptTopLevel
    * slice and then looking for the invariant in the slice.
    **/
   public PptSlice1 findSlice(VarInfo v) {
-    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if ((view.arity == 1) && (v == view.var_infos[0]))
-        return (PptSlice1) view;
-    }
-    return null;
+    return (PptSlice1)findSlice(new VarInfo [] {v});
+    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
+    //        PptSlice view = (PptSlice) itor.next();
+    //        if ((view.arity == 1) && (v == view.var_infos[0]))
+    //          return (PptSlice1) view;
+    //      }
+    //      return null;
   }
 
   /**
@@ -1016,14 +1053,15 @@ public class PptTopLevel
    **/
   public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
     Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
-    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if ((view.arity == 2)
-          && (v1 == view.var_infos[0])
-          && (v2 == view.var_infos[1]))
-        return (PptSlice2) view;
-    }
-    return null;
+    return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
+    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
+    //        PptSlice view = (PptSlice) itor.next();
+    //        if ((view.arity == 2)
+    //            && (v1 == view.var_infos[0])
+    //            && (v2 == view.var_infos[1]))
+    //          return (PptSlice2) view;
+    //      }
+    //      return null;
   }
 
   /**
@@ -1048,15 +1086,16 @@ public class PptTopLevel
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
     Assert.assertTrue(v2.varinfo_index < v3.varinfo_index);
-    for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if ((view.arity == 3)
-          && (v1 == view.var_infos[0])
-          && (v2 == view.var_infos[1])
-          && (v3 == view.var_infos[2]))
-        return (PptSlice3) view;
-    }
-    return null;
+    return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
+    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
+    //        PptSlice view = (PptSlice) itor.next();
+    //        if ((view.arity == 3)
+    //            && (v1 == view.var_infos[0])
+    //            && (v2 == view.var_infos[1])
+    //            && (v3 == view.var_infos[2]))
+    //          return (PptSlice3) view;
+    //      }
+    //      return null;
   }
 
   /**
@@ -1069,7 +1108,7 @@ public class PptTopLevel
     if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
     if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
     if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
-    return findSlice(v1, v2, v3);
+    return (PptSlice3)findSlice(v1, v2, v3);
   }
 
   /**
@@ -1089,13 +1128,10 @@ public class PptTopLevel
    * Find a pptSlice with an assumed ordering.
    **/
   public PptSlice findSlice(VarInfo[] vis) {
-    switch (vis.length) {
-    case 1: return findSlice(vis[0]);
-    case 2: return findSlice(vis[0], vis[1]);
-    case 3: return findSlice(vis[0], vis[1], vis[2]);
-    default:
+    if (vis.length > 3) {
       throw new RuntimeException("Bad length " + vis.length);
     }
+    return (PptSlice)views.get(Arrays.asList(vis));
   }
 
   public int indexOf(String varname) {
@@ -1316,7 +1352,7 @@ public class PptTopLevel
       throw new IllegalArgumentException("bad length = " + vis.length);
     }
 
-    views.add(result);
+    addSlice(result);
     return result;
   }
 
@@ -1900,7 +1936,7 @@ public class PptTopLevel
         // from the time that all not-worth-printing invariants were
         // already eliminated.)
         // if (! same_inv.isControlled()) // [INCR]
-        implication_view.addInvariant(same_inv);
+        joiner_view.addInvariant(same_inv);
       }
     }
 
@@ -1992,13 +2028,13 @@ public class PptTopLevel
       // order that will guarantee that I don't see A and B, then C and D,
       // and then A and C (which both already have different canonical versions).
       // System.out.println(name + " implication canonicalization");
-      for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
+      for (Iterator itor = joiner_view.invs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
         if ((inv instanceof Implication) && ((Implication) inv).iff) {
           Implication impl = (Implication) inv;
           // System.out.println("Bi-implication: " + impl.format());
-          Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate);
-          Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent);
+          Invariant canon1 = (Invariant) canonical_inv.get(impl.left);
+          Invariant canon2 = (Invariant) canonical_inv.get(impl.right);
           if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
             // Move all the invariants for canon2 over to canon1
             HashSet hs1 = (HashSet) inv_group.get(canon1);
@@ -2016,17 +2052,17 @@ public class PptTopLevel
             // }
             // System.out.println();
           } else {
-            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
+            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.left;
             // System.out.println("Canonical: " + canon.format());
-            canonical_inv.put(impl.predicate, canon);
-            canonical_inv.put(impl.consequent, canon);
+            canonical_inv.put(impl.left, canon);
+            canonical_inv.put(impl.right, canon);
             HashSet hs = (HashSet) inv_group.get(canon);
             if (hs == null) {
               hs = new HashSet();
               inv_group.put(canon, hs);
             }
-            hs.add(impl.predicate);
-            hs.add(impl.consequent);
+            hs.add(impl.left);
+            hs.add(impl.right);
             // System.out.print("Current set (2):");
             // for (Iterator itor2=hs.iterator(); itor2.hasNext(); ) {
             //   Invariant inv2 = (Invariant) itor2.next();
@@ -2090,14 +2126,14 @@ public class PptTopLevel
     // Prune out implications over non-canonical invariants
 
     Vector to_remove = new Vector();
-    for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
+    for (Iterator itor = joiner_view.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof Implication) {
         Implication impl = (Implication) inv;
-        Invariant cpred = (Invariant) canonical_inv.get(impl.predicate);
-        Invariant ccons = (Invariant) canonical_inv.get(impl.consequent);
-        boolean pred_non_canon = ((cpred != null) && (impl.predicate != cpred));
-        boolean cons_non_canon = ((ccons != null) && (impl.consequent != ccons));
+        Invariant cpred = (Invariant) canonical_inv.get(impl.left);
+        Invariant ccons = (Invariant) canonical_inv.get(impl.right);
+        boolean pred_non_canon = ((cpred != null) && (impl.left != cpred));
+        boolean cons_non_canon = ((ccons != null) && (impl.right != ccons));
         if ((! impl.iff)
             && (pred_non_canon || cons_non_canon)) {
           to_remove.add(inv);
@@ -2110,7 +2146,7 @@ public class PptTopLevel
     // ~mharder/research/reports/thesis/example-specdiff/gcd/delta/nondeterminism
     // Run on all, vs. all except 73.dtrace.  Nondeterministically, a
     // difference will appear and disappear
-    implication_view.invs.removeAll(to_remove);
+    joiner_view.invs.removeAll(to_remove);
 
 
     // System.out.println("Done adding no more than "
@@ -2129,9 +2165,9 @@ public class PptTopLevel
 
     // First, sort
     SortedSet ss1 = new TreeSet(arityVarnameComparator);
-    ss1.addAll(ppt1.views);
+    ss1.addAll(ppt1.viewsAsCollection());
     SortedSet ss2 = new TreeSet(arityVarnameComparator);
-    ss2.addAll(ppt2.views);
+    ss2.addAll(ppt2.viewsAsCollection());
 
     // Then, pair up elements from the sorted collections.
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), arityVarnameComparator); opi.hasNext(); ) {
@@ -2701,7 +2737,9 @@ public class PptTopLevel
    * For some clients, this method may be more efficient than getInvariants.
    **/
   public Iterator views_iterator() {
-    return views.iterator();
+    // assertion only true when guarding invariants
+    // Assert.assertTrue(views.contains(joiner_view));
+    return viewsAsCollection().iterator();
   }
 
   public Iterator invariants_iterator() {
@@ -2718,7 +2756,7 @@ public class PptTopLevel
     Iterator implication_iterator;
     public ViewsIteratorIterator(PptTopLevel ppt) {
       vitor = ppt.views_iterator();
-      implication_iterator = ppt.implication_view.invs.iterator();
+      implication_iterator = ppt.joiner_view.invs.iterator();
     }
     public boolean hasNext() {
       return (vitor.hasNext() || (implication_iterator != null));
@@ -2758,13 +2796,36 @@ public class PptTopLevel
 
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
+  //////////////////////////////////////////////////////////////////////////////
+  ///// Invariant guarding
+
+
+  // This function guards all of the invariants in a PptTopLevel
+  public void guardInvariants() {
+    // To avoid concurrent modification exceptions using arrays
+    Object viewArray[] = viewsAsCollection().toArray();
+    for (int i=0; i < viewArray.length; i++) {
+      PptSlice currentView = (PptSlice)viewArray[i];
+      currentView.guardInvariants();
+    }
+
+    Object viewCondArray[] = views_cond.toArray();
+    for (int i=0; i < viewCondArray.length; i++) {
+      PptSlice currentCondView = (PptSlice)viewCondArray[i];
+      currentCondView.guardInvariants();
+    }
+
+    // System.out.println("Ppt name: " + ppt_name);
+    // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
+  }
+
   /**
    * Check the rep invariants of this.  Throw an Error if not okay.
    **/
   public void repCheck() {
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
-    for (Iterator i = views.iterator(); i.hasNext(); ) {
+    for (Iterator i = viewsAsCollection().iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
       slice.repCheck();
     }

@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.suppress.*;
 
 import org.apache.log4j.Category;
@@ -380,7 +381,7 @@ public abstract class PptSlice
     }
     if (invs_changed.size() != invs_to_flow.size()) {
       throw new RuntimeException
-        ("Changed Invariants count must equal flowed invariants count");      
+        ("Changed Invariants count must equal flowed invariants count");
     }
 
     removeInvariants(to_remove);
@@ -588,6 +589,66 @@ public abstract class PptSlice
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  //// Invariant guarding
+
+  // This function guards all of the invariants in a given PptSlice by
+  // iterating over the contained invariants and replace the invariants
+  // that require guarding with their guarded counterparts. The guarded
+  // invariants are put into the joiner view of the PptTopLevel that
+  // contains the PptSlice where the invariant was originally located
+  public void guardInvariants() {
+    List invariantsToGuard = new ArrayList();
+
+    //      System.out.println("-----------------------");
+
+    //      for (int i=0; i<var_infos.length; i++) {
+    //        try {
+    //          System.out.println("var_info[" + i + "] name in JML = " + var_infos[i].name.name_using(OutputFormat.JML));
+    //        } catch (UnsupportedOperationException e) {
+    //          System.out.println("Part of PptSlice cannot be JML formatted.");
+    //        }
+    //      }
+
+    //      System.out.println("-----------------------");
+
+    // System.out.println("In guardInvariants, the VarInfos for the PptSlice: ");
+    // System.out.println(Arrays.asList(var_infos).toString());
+
+    // If this slice is to be deleted, then don't guard it
+    if (no_invariants) return;
+
+    for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
+      Invariant inv = (Invariant)overInvs.next();
+
+      Invariant guardingPredicate = inv.createGuardingPredicate();
+      Invariant guardingImplication;
+      // System.out.println("Trying to add implication:");
+      // System.out.println("Predicate: " + guardingPredicate.format_using(OutputFormat.JML));
+      // System.out.println("Consequent: " + inv.format_using(OutputFormat.JML));
+      if (guardingPredicate != null) {
+        guardingImplication =
+          GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
+
+        parent.joiner_view.addInvariant(guardingImplication);
+        invariantsToGuard.add(inv);
+
+        // Debug info
+        // System.out.println("Adding " + guardingImplication.format_using(OutputFormat.JML));
+        // System.out.println("Removing " + inv.format_using(OutputFormat.JML));
+      }
+    }
+
+    removeInvariants(invariantsToGuard);
+  }
+
+  public boolean containsOnlyGuardingPredicates() {
+    for (int i=0; i<invs.size(); i++) {
+      if (!((Invariant)invs.get(i)).isGuardingPredicate)
+        return false;
+    }
+    return true;
+  }
 
   /////////////////////////////////////////////////////////////////
   /// Miscellaneous
@@ -598,6 +659,4 @@ public abstract class PptSlice
       inv.repCheck();
     }
   }
-
-
 }

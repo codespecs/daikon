@@ -2880,6 +2880,22 @@ public abstract class VarInfoName
 
   } // QuantHelper
 
+  // Special JML capability, since JML cannot format a sequence of elements,
+  // often what is wanted is the name of the reference (we have a[], we want
+  // a. This function provides the appropriate name for these circumstances.
+  public VarInfoName JMLElementCorrector() {
+    if (this instanceof Elements) {
+      return ((Elements)this).term;
+    } else if (this instanceof Slice) {
+      return ((Slice)this).sequence.term;
+    } else if (this instanceof Prestate) {
+      return ((Prestate)this).term.JMLElementCorrector().applyPrestate();
+    } else if (this instanceof Poststate) {
+      return ((Poststate)this).term.JMLElementCorrector().applyPoststate();
+    }
+    return this;
+  }
+
 
   // ============================================================
   // Transformation framework
