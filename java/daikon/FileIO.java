@@ -67,7 +67,7 @@ public final class FileIO {
   /**
    * Calls @link{read_declaration_file(String, fn_regexp)} for each element
    * of files.  See the definition of that function.
-   */
+   **/
   static void read_declaration_files(String[] files, PptMap all_ppts, Pattern fn_regexp) {
     for (int i=0; i<files.length; i++)
       try {
@@ -83,7 +83,7 @@ public final class FileIO {
   /**
    * Calls @link{read_declaration_file(String, fn_regexp)} for each element
    * of files.  See the definition of that function.
-   */
+   **/
   static void read_declaration_files(Vector files, PptMap all_ppts, Pattern fn_regexp) {
     read_declaration_files((String[])files.toArray(new String[0]), all_ppts, fn_regexp);
   }
@@ -93,7 +93,7 @@ public final class FileIO {
    * @param filename
    * @param fn_regexp Only program points matching fn_regexp are considered.
    * @return a vector of PptTopLevel objects
-   */
+   **/
   static Vector read_declaration_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
 
     if (Global.debugRead)
@@ -483,7 +483,7 @@ public final class FileIO {
    * Read data from .dtrace files.
    * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
    * element of filenames.
-   */
+   **/
   static void read_data_trace_files(String[] filenames, PptMap all_ppts, Pattern fn_regexp) {
     for (int i=0; i<filenames.length; i++)
       try {
@@ -500,7 +500,7 @@ public final class FileIO {
    * Read data from .dtrace files.
    * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
    * element of filenames.
-   */
+   **/
   static void read_data_trace_files(Vector filenames, PptMap all_ppts, Pattern fn_regexp) {
     read_data_trace_files((String[])filenames.toArray(new String[]{}), all_ppts, fn_regexp);
   }
@@ -511,7 +511,7 @@ public final class FileIO {
 
   /**
    * Read data from .dtrace file.
-   */
+   **/
   static void read_data_trace_file(String filename, PptMap all_ppts, Pattern fn_regexp) throws IOException {
 
     if (Global.debugRead) {

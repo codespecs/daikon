@@ -141,7 +141,7 @@ public final class Runtime {
   // this class self-contained.
   /**
    * Quote \, ", \n, and \r characters in the target; return a new string.
-   */
+   **/
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape (or escaped) character was seen right before

@@ -59,7 +59,7 @@ public final class Daikon {
   /**
    * The arguments to daikon.Daikon are file names; declaration file names end
    * in ".decls" and data trace file names end in ".dtrace".
-   */
+   **/
   public static void main(String[] args) {
     Vector decl_files = new Vector();
     Vector dtrace_files = new Vector();

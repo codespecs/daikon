@@ -60,7 +60,7 @@ public final class ProglangType implements java.io.Serializable {
    * No public constructor:  use parse() instead to get a canonical
    * representation.
    * basetype should be interned
-   */
+   **/
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
     // Don't do this here; it messes up interning.

@@ -47,7 +47,7 @@ public abstract class Ppt implements java.io.Serializable {
    * Provided so that this Ppt can notify them when significant events
    * occur, such as receiving a new value, deriving variables, or
    * discarding data.
-   */
+   **/
   HashSet views;
 
   // Temporarily have a separate collection for PptConditional views.

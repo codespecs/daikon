@@ -113,7 +113,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    * references to the originals have been modified into references to the
    * new ones (so that the new set is self-consistent).  The originals
    * should not be modified by this operation.
-   */
+   **/
   public static VarInfo[] arrayclone_clever(VarInfo[] a_old) {
     VarInfo[] a_new = new VarInfo[a_old.length];
     for (int i=0; i<a_new.length; i++) {
@@ -160,7 +160,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    * references to the originals have been modified into references to the
    * new ones (so that the new set is self-consistent).  The originals
    * should not be modified by this operation.
-   */
+   **/
   public static VarInfo[] arrayclone_simple(VarInfo[] a_old) {
     int len = a_old.length;
     VarInfo[] a_new = new VarInfo[len];

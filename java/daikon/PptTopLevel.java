@@ -823,7 +823,7 @@ public class PptTopLevel extends Ppt {
    * The installed views and invariants will all have at least one element with
    * index i such that vi_index_min <= i < vi_index_limit.
    * (However, we also assume that vi_index_limit == var_infos.length.)
-   */
+   **/
   void instantiate_views(int vi_index_min, int vi_index_limit) {
     if (Global.debugInfer)
       System.out.println("instantiate_views: " + this.name
@@ -1439,7 +1439,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Print invariants for a single program point.
    * Does no output if no samples or no views.
-   */
+   **/
   public void print_invariants_maybe() {
     if (num_samples() == 0)
       return;

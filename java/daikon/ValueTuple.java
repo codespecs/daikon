@@ -135,7 +135,7 @@ public final class ValueTuple implements Cloneable {
    * In output, M=modified, U=unmodified, X=missing.
    * Capital letters indicate the specified modbit does occur,
    * lowercase letters indicate it does not occur.
-   */
+   **/
   static String tuplemodToStringBrief(int tuplemod) {
     return ((tuplemodHasModified(tuplemod) ? "M" : "m")
 	    + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
