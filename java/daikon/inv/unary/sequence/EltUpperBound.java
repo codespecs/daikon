@@ -137,6 +137,10 @@ public class EltUpperBound
   public void add_modified(long[] value, int count) {
     // System.out.println("EltUpperBound" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
+
+    // I must always clone myself because the cores keep track of many
+    // statistics, not just the bounds.
+    cloneAndFlow();
     core.changed = false;
 
     for (int i=0; i<value.length; i++) {
@@ -145,9 +149,6 @@ public class EltUpperBound
         return;
     }
 
-    if (core.changed) {
-      cloneAndFlow();
-    }
   }
 
   public boolean enoughSamples() {

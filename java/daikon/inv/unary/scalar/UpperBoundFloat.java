@@ -100,13 +100,14 @@ public class UpperBoundFloat
   public void add_modified(double value, int count) {
     // System.out.println("UpperBoundFloat" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
+
+    // I must always clone myself because the cores keep track of many
+    // statistics, not just the bounds.
+    cloneAndFlow();
     core.changed = false;
 
     core.add_modified(value, count);
 
-    if (core.changed) {
-      cloneAndFlow();
-    }
   }
 
   public boolean enoughSamples() {
