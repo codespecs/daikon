@@ -44,9 +44,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     if (args.length > 1) {
       showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file.\nPlease try running the gui again." );
       System.exit( 0 );
-    }
-
-    if (args.length == 1)
+    } else if (args.length == 1)
       gui = new InvariantsGUI( args[0] );
     else
       gui = new InvariantsGUI();
@@ -400,14 +398,6 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     checkBox.addActionListener( this );
     checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
     filterCheckBoxes.add( checkBox );
-
-    // Turn off Simplify filter by default since it's slow.
-    String simplifyFilterId = daikon.inv.filter.SimplifyFilter.description;
-    if (invariantFilter.getDescription().equals( simplifyFilterId )) {
-      invariantFilters.changeFilterSetting( simplifyFilterId, false );
-      checkBox.setSelected( false );
-    }
-
     return checkBox;
   }
 
