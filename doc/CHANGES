@@ -11,6 +11,8 @@ versions as the user manual.
 
 ===========================================================================
 
+3.1.0 (01 June 2004)
+
 Daikon now includes a new front-end for C programs, named "Kvasir".
 Unlike previous C front-ends, which worked by rewriting source code,
 Kvasir uses the Valgrind framework and debugging information in the
@@ -18,7 +20,13 @@ DWARF-2 format to trace a program's execution given only a binary.
 Kvasir is generally easier to use, faster and more robust than the old
 C front-end, but it does not yet support all of the features of the
 old C front-end, and it can be used only on x86 platforms running
-Linux.
+Linux. More information on Kvasir is in the "Binary C front end
+Kvasir" section of the user manual
+
+Several bugs in Daikon's JML output were fixed.  The JML output is now
+parsed correctly by both the JML tools and ESC/Java2.  (However, the
+"assignable" clause is given a default value; it will be made more accurate
+in a future release.)
 
 ---------------------------------
 
