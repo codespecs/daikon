@@ -1,12 +1,29 @@
-This directory is a copy of ~mistere/research/packages/dsaa-to-present/
+This directory started out as a copy of
+~mistere/research/packages/dsaa-to-present/ but has grown into a
+central store for all daikon-to-esc auto-translation experiments.
 
-Manifest:
+Collections of source for experiements:
 
   DataStructures/
-    Original dsaa code, someimtes annotated with ESC statments as
-    translated from daikon output.
-    Does NOT contain ESC-annotated code; that goes in separate
-    subdirectories, such as StackAr/
+    Original dsaa code, un-annotated with ESC statments (except for a
+    few "by-hand" examples done for reference).  The ESC-annotated
+    code goes in separate subdirectories, such as StackAr/
+
+  PolyCalc/
+    Original PolyCalc staff solution from 6.170 ST01 ps1
+
+  MapQuick/
+    Original MapQuick staff solution from 6.170 ST01 ps2-4
+
+Specific experiments:
+
+  StackAr/
+    Trials on StackAr from dsaa
+
+  ... more to come
+
+===========================================================================
+** DEPRECATED BELOW **
 
   daikon-java/
     Instrumented versions of the code; probably un-interesting.
@@ -26,6 +43,4 @@ Manifest:
       eventually not be producted by daikon.
     This was the source of the ESC annotations in the
       DataStructures/StackAr.java file.
-
-===========================================================================
 
