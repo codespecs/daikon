@@ -4,6 +4,7 @@
 package daikon;
 
 import daikon.split.*;
+import daikon.suppress.*;
 import daikon.inv.Invariant;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.config.Configuration;
@@ -207,6 +208,12 @@ public final class Daikon {
   public static Pattern var_omit_regexp;
 
   /**
+   * When true perform detailed internal checking (essentially additional,
+   * possibly costly assert statements
+   */
+  public static boolean dkconfig_internal_check = false;
+
+  /**
    * If set, only ppts less than ppt_max_name are included.  Used by the
    * configuration option dkconfig_ppt_percent to only work on a specified
    * percent of the ppts.
@@ -363,19 +370,25 @@ public final class Daikon {
     all_ppts.trimToSize();
 
 
-    // If requested, just calculate the total number of invariants
-    // possible
+    // If requested, just calculate the total number of invariants possible
     if (dkconfig_calc_possible_invs) {
       fileio_progress.shouldStop = true;
       setupEquality (all_ppts);
       int total_invs = 0;
       for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
-        ppt.instantiate_views_and_invariants();
-        int inv_cnt = ppt.invariant_cnt();
-        ppt.clean_for_merge();
-        System.out.println (inv_cnt + " invariants in " + ppt.name());
-        total_invs += inv_cnt;
+        System.out.println ("Processing " + ppt.name() + " with "
+                            + ppt.var_infos.length + " variables");
+        int inv_cnt = 0;
+        if (ppt.var_infos.length > 1600)
+          System.out.println ("Skipping, too many variables!");
+        else {
+          ppt.instantiate_views_and_invariants();
+          inv_cnt = ppt.invariant_cnt();
+          ppt.clean_for_merge();
+          System.out.println (inv_cnt + " invariants in " + ppt.name());
+          total_invs += inv_cnt;
+        }
       }
       System.out.println (total_invs + "invariants total");
       System.exit(0);
@@ -942,9 +955,11 @@ public final class Daikon {
       } else {
         long lineNum = lnr.getLineNumber();
         line = String.valueOf(lineNum);
-        double frac = lineNum / (double)FileIO.data_trace_total_lines;
-        String percent = pctFmt.format(frac);
-        line = line + ", " + percent;
+        if (FileIO.data_trace_total_lines > 0) {
+          double frac = lineNum / (double)FileIO.data_trace_total_lines;
+          String percent = pctFmt.format(frac);
+          line = line + ", " + percent;
+        }
       }
       return "Reading " + file.getName() + " (line " + line + ") ...";
     }
@@ -970,6 +985,7 @@ public final class Daikon {
 
     // Preprocessing
     setupEquality (all_ppts);
+    setup_NISuppression();
 
     // Processing (actually using dtrace files)
     try {
@@ -1001,7 +1017,10 @@ public final class Daikon {
       monitor.stop();
     }
 
-
+    if (FileIO.dkconfig_read_samples_only) {
+      Fmt.pf ("Finished reading %s samples", "" + FileIO.samples_processed);
+      System.exit (0);
+    }
 
     if (debugStats.isLoggable (Level.FINE)) {
 //       PptSliceEquality.print_equality_stats (debugStats, all_ppts);
@@ -1015,6 +1034,10 @@ public final class Daikon {
 //         }
 //       }
     }
+
+    // Fmt.pf ("printing ternary invariants");
+    // PrintInvariants.print_all_ternary_invs (all_ppts);
+    // System.exit(0);
 
     // Postprocessing
 
@@ -1107,6 +1130,11 @@ public final class Daikon {
       System.out.flush();
     }
     System.out.println(stopwatch.format());
+  }
+
+  public static void setup_NISuppression() {
+
+    NIS.init_ni_suppression();
   }
 
   public static void setupEquality (PptMap allPpts) {
