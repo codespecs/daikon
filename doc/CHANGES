@@ -9,6 +9,13 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.5.0
+
+Daikon now requires JDK 1.4.  If you are still using JDK 1.3, you will
+need to upgrade in order to run Daikon.
+
+----------------
+
 2.4.9 (02 June 2003)
 
 Changed the default for Simplify iterations from 1000000 to 1000.
