@@ -45,11 +45,10 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     Assert.assert(var().type.isPseudoArray(),
 		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
-    is_boolean = (var().rep_type.elementType() == ProglangType.BOOLEAN);
-    is_hashcode = (var().rep_type.elementType() == ProglangType.HASHCODE);
-    // Temporary; for backward compatibility
-    is_boolean = is_boolean || (var().type.elementType() == ProglangType.BOOLEAN);
-    is_hashcode = is_hashcode || var().type.elementType().isObject() || var().type.elementType().isArray();
+    is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
+    // System.out.println("is_hashcode=" + is_hashcode + " for " + format()
+    //                    + "; file_rep_type=" + var().file_rep_type.format());
 
   }
 
@@ -128,7 +127,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     if (num_elts == 1) {
 
       if (is_hashcode) {
-	// we only have one value, b/c add_modified dies if more
+	// we only have one value, because add_modified dies if more
 	long[]  value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
@@ -158,7 +157,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     String length = "";
     String forall = "";
     if (is_hashcode) {
-      // we only have one value, b/c add_modified dies if more
+      // we only have one value, because add_modified dies if more
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "size("+var().name.ioa_name(classname) + ") = " + value.length;
@@ -191,7 +190,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     String length = "";
     String forall = "";
     if (is_hashcode) {
-      // we only have one value, b/c add_modified dies if more
+      // we only have one value, because add_modified dies if more
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = var().name.applySize().esc_name() + " == " + value.length;
@@ -224,7 +223,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     String length = "";
     String forall = "";
     if (is_hashcode) {
-      // we only have one value, b/c add_modified dies if more
+      // we only have one value, because add_modified dies if more
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
