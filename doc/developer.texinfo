@@ -789,7 +789,7 @@ frame.  Note that the current state of what tracebacks are expanded is
 kept in a file named the same as your Daikon output file with
 @file{.state} appended.  For example, the state file for
 @file{~/daikon.out} is @file{~/daikon.out.state}.  This file must be
-writable for log2html.php to work correctly.
+world writable for log2html.php to work correctly.
 
 
 @node    Daikon internals, Index, Debugging Daikon, Top
