@@ -46,10 +46,7 @@ public final class Runtime {
 	throw new Error("Cannot guarantee closing a GZIPOutputStream");
 	// dtrace = new PrintStream(new GZIPOutputStream(fos));
       } else {
-        // Mike Harder reports that using a BufferedOutputStream improves
-        // performance by 2 (Linux) to 9 (Windows) times.  A buffer size of
-        // 8192 is 15% faster than the default of 512, on Windows.  4/2/2001
-	dtrace = new PrintStream(new BufferedOutputStream(fos, 8192));
+	dtrace = new PrintStream(fos);
       }
     } catch (Exception e) {
       e.printStackTrace();
