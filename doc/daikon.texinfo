@@ -424,13 +424,8 @@ This creates the dfec executable,  @file{release_2.44/bin/dfec}.
 @c 		  <tt>set path = (<em>parent</em>/daikon/java-front-end/src $path)</tt><br>
 
 
-@menu
-* Requirements::                
-@end menu
-
 @node    Requirements,  , Installing dfec, Installing
 @section Requirements for running Daikon
-
 
 In order to run Daikon, you must have a Java 1.3 (or later) JVM, or
 @uref{http://java.sun.com,, Java virtual machine}.
@@ -451,7 +446,13 @@ using a precompiled binary provided at
 detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
 
-@node    Windows requirements,  , Installing dfec, Installing
+
+@menu
+* Windows requirements::                
+@end menu
+
+
+@node    Windows requirements,  , Requirements, Requirements
 @subsection Windows requirements for running Daikon
 
 If you are running Daikon under Windows, we strongly recommend that you
