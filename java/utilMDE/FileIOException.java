@@ -6,7 +6,7 @@ import java.io.*;
  * This class extends IOException by also reporting a file name and line
  * number at which the exception occurred.
  **/
-class FileIOException extends IOException {
+public class FileIOException extends IOException {
 
   public final LineNumberReader reader;
   public final String fileName;
