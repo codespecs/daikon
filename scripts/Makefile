@@ -6,7 +6,7 @@ all: difftbl cluster clgroup kmeans trace-untruncate-fast
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
 	$(MAKE) -C $(HIERDIR) clean
-	$(MAKE) -C ($KMDIR) clean
+	$(MAKE) -C $(KMDIR) clean
 
 TAGS: tags
 
