@@ -118,7 +118,7 @@ public final class FunctionUnaryCore
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      String result = resultname + eq + function + "(" + argname + ")";
+      String result = resultname + eq + methodname + "(" + argname + ")";
       if (format == OutputFormat.IOA) result += " ***";
       return result;
     }
