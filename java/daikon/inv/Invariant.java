@@ -12,6 +12,53 @@ import utilMDE.*;
 
 public abstract class Invariant implements java.io.Serializable {
 
+  // Orders invariants by class, then by variable names.
+  public static final Comparator CLASS_VARNAME_COMPARATOR = new Comparator() {
+      public int compare(Object o1, Object o2) {
+        Invariant inv1 = (Invariant) o1;
+        Invariant inv2 = (Invariant) o2;
+
+        int compareClass = compareClass(inv1, inv2);
+        if (compareClass != 0)
+          return compareClass;
+
+        return compareVariables(inv1, inv2);
+      }
+
+      // Returns 0 if the invariants are of the same class.  Else,
+      // returns the comparison of the class names.
+      private int compareClass(Invariant inv1, Invariant inv2) {
+        if (inv1.getClass().equals(inv2.getClass())) {
+          return 0;
+        } else {
+          String classname1 = inv1.getClass().getName();
+          String classname2 = inv2.getClass().getName();
+          return classname1.compareTo(classname2);
+        }
+      }
+
+      // Returns 0 if the invariants have the same variable names.
+      // Else, returns the comparison of the first variable names that
+      // differ.  Requires that the invariants be of the same class.
+      private int compareVariables(Invariant inv1, Invariant inv2) {
+        VarInfo[] vars1 = inv1.ppt.var_infos;
+        VarInfo[] vars2 = inv2.ppt.var_infos;
+        
+        // due to inv type match already
+        Assert.assert(vars1.length == vars2.length);
+        
+        for (int i=0; i < vars1.length; i++) {
+          VarInfo var1 = vars1[i];
+          VarInfo var2 = vars2[i];
+          int compare = var1.name.compareTo(var2.name);
+          if (compare != 0) return compare;
+        }
+        
+        // All the variable names matched
+        return 0;
+      }
+    };
+
   public PptSlice ppt;      // includes values, number of samples, VarInfos, etc.
 
   // Has to be public so wrappers can read it.
