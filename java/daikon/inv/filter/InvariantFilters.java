@@ -124,8 +124,8 @@ public class InvariantFilters {
 	iter.remove();			       // We don't need this invariant, since it will be included
 					       // in the equality invariant.
 	boolean inEquivalentSets = false;      // Are either of the variables in an existing set?
-	String variable1 = ((Comparison) invariant).var1().name;
-	String variable2 = ((Comparison) invariant).var2().name;
+	String variable1 = ((Comparison) invariant).var1().name.name();
+	String variable2 = ((Comparison) invariant).var2().name.name();
 
 	for (Iterator iter2 = equivalentSets.iterator(); iter2.hasNext(); ) {
 	  Set equivalentSet = (Set) iter2.next();
