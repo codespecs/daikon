@@ -3613,6 +3613,7 @@ def read_state(filename):
 ###########################################################################
 ### Differences between invariants
 ###
+
 def diff_files(filename1, filename2):
     diff_to_ct[inv_one_cons] = diff_to_ct[inv_one_cons] + 1
     (samples1, fn_var_infos1) = read_state(filename1)
@@ -3665,34 +3666,62 @@ def diff_var_infos(var_infos1, var_infos2):
     #   invariants.diff_files('/projects/se/people/mernst/replace_outputs/replace.main.4000.19981220.pkl','/projects/se/people/mernst/replace_outputs/replace.main.4500.19990103.pkl')
     # In that case, we must eliminate the extra var_infos.
 
-    if ((len(var_infos1) != len(var_infos2))
-        or not var_infos_compatible(var_infos1, var_infos2)):
-        if len(var_infos1) > len(var_infos2):
-            # Guess that var_infos1 only contains extra var_infos
-            var_infos1 = list(var_infos1)
-            for i in range(0, len(var_infos2)):
-                while var_info_name_compare(var_infos1[i], var_infos2[i]):
-                    del var_infos1[i:i+1]
-            if ((len(var_infos1) != len(var_infos2))
-                or not var_infos_compatible(var_infos1, var_infos2)):
-                raise "var_infos still incompatible"
-        else:
-            # Should duplicate the above code block for the case of
-            # len(var_infos2) > len(var_infos2) or just generalize it.
-            raise "var_infos incompatible"
+    indices1 = range(0, len(var_infos1))
+    indices2 = range(0, len(var_infos2))
+    if not var_infos_compatible(var_infos1, var_infos2):
+        print "RATIONALIZING INCOMPATIBLE VAR_INFOS"
+        ii = 0
+        while ii < len(indices1) and ii < len(indices2):
+            vi1 = var_infos1[indices1[ii]]
+            vi2 = var_infos2[indices2[ii]]
+            if not var_info_name_compare(vi1, vi2):
+                # same name
+                ii = ii + 1
+                continue
+            # different name
+            if ii+1 < len(indices2) and not var_info_name_compare(vi1, var_infos2[indices2[ii+1]]):
+                del indices2[ii]
+                continue
+            if ii+1 < len(indices1) and not var_info_name_compare(vi2, var_infos1[indices1[ii+1]]):
+                del indices1[ii]
+                continue
+            raise "What is going on here?"
 
-    assert len(var_infos1) == len(var_infos2)
-    assert var_infos_compatible(var_infos1, var_infos2)
+#         if len(var_infos1) > len(var_infos2):
+#             # Guess that var_infos1 only contains extra var_infos
+#             var_infos1 = list(var_infos1)
+#             for i in range(0, len(var_infos2)):
+#                 while var_info_name_compare(var_infos1[i], var_infos2[i]):
+#                     del var_infos1[i:i+1]
+#             if ((len(var_infos1) != len(var_infos2))
+#                 or not var_infos_compatible(var_infos1, var_infos2)):
+#                 raise "var_infos still incompatible"
+#         elif len(var_infos2) > len(var_infos2):
+#             # Guess that var_infos1 only contains extra var_infos
+#             var_infos2 = list(var_infos2)
+#             for i in range(0, len(var_infos1)):
+#                 while var_info_name_compare(var_infos2[i], var_infos1[i]):
+#                     del var_infos2[i:i+1]
+#             if ((len(var_infos2) != len(var_infos1))
+#                 or not var_infos_compatible(var_infos2, var_infos1)):
+#                 raise "var_infos still incompatible"
+#         else:
+#             # Should really generalize the above
+#             raise "var_infos incompatible"
 
+    assert len(indices1) == len(indices2)
+    assert (map(lambda i, vis=var_infos1: vis[i].name, indices1)
+            == map(lambda i, vis=var_infos2: vis[i].name, indices2))
 
-    print len(var_infos1), "var_infos:"
+    num_indices = len(indices1)
+    print num_indices, "var_infos:"
 
     unary_same = 0
     unary_different = 0
     clear_diff_to_ct()
-    for i in range(0, len(var_infos1)):
-        vi1 = var_infos1[i]
-        vi2 = var_infos2[i]
+    for ii in range(0, num_indices):
+        vi1 = var_infos1[indices1[ii]]
+        vi2 = var_infos2[indices2[ii]]
         assert vi1.name == vi2.name
         inv1 = vi1.invariant
         inv2 = vi2.invariant
@@ -3703,7 +3732,7 @@ def diff_var_infos(var_infos1, var_infos2):
             continue
         if (can1 and not can2) or (can2 and not can1):
             # This is a pretty significant difference, actually...
-            print "Equality difference for", vi1.name
+            print "unary:", "Equality difference for", vi1.name
             print " ", vi1.invariant
             print " ", vi2.invariant
             continue
@@ -3711,7 +3740,7 @@ def diff_var_infos(var_infos1, var_infos2):
         # Both variables are canonical
         difference = inv1.diff(inv2)
         if difference:
-            print difference
+            print "unary:", difference
             print " ", inv1.format((vi1.name,))
             print " ", inv2.format((vi2.name,))
             unary_different = unary_different + 1
@@ -3723,42 +3752,46 @@ def diff_var_infos(var_infos1, var_infos2):
     pair_same = 0
     pair_different = 0
 
-    for i in range(0, len(var_infos1)):
-        vi1 = var_infos1[i]
-        vi2 = var_infos2[i]
+    for ii in range(0, num_indices):
+        vi1 = var_infos1[indices1[ii]]
+        vi2 = var_infos2[indices2[ii]]
         assert vi1.name == vi2.name
+        name1 = vi1.name
         invs1 = vi1.invariants
         invs2 = vi2.invariants
         # keys1 = invs1.keys()
         # keys1.sort()
         # keys2 = invs2.keys()
         # keys2.sort()
-        for j in range(i+1, len(var_infos1)):
-            in1 = invs1.has_key(j)
-            in2 = invs2.has_key(j)
+        for ij in range(ii+1, num_indices):
+            j1 = indices1[ij]
+            j2 = indices2[ij]
+            assert var_infos1[j1].name == var_infos2[j2].name
+            name2 = var_infos1[j1].name
+            in1 = invs1.has_key(j1) and not invs1[j1].is_unconstrained()
+            in2 = invs2.has_key(j2) and not invs2[j2].is_unconstrained()
             if (not in1) and (not in2):
                 continue
             if in1 and not in2:
-                if invs1[j].is_unconstrained():
-                    continue
-                print "First group contains invariant:", invs1[j].format((vi1.name, var_infos1[j].name))
+                print "binary:", "First group contains invariant:", invs1[j1].format((name1, name2))
                 pair_different = pair_different + 1
                 continue
             if in2 and not in1:
-                if invs2[j].is_unconstrained():
-                    continue
-                print "Second group contains invariant:", invs2[j].format((vi2.name, var_infos2[j].name))
+                print "binary:", "Second group contains invariant:", invs2[j2].format((name1, name2))
                 pair_different = pair_different + 1
                 continue
             assert in1 and in2
+            inv1 = invs1[j1]
+            inv2 = invs2[j2]
+
             # Should I check for whether the variables are canonical?
             # I'm leaving them all in for now, lest it be too hard to
             # compare numbers of identical/different invariants.
-            difference = invs1[j].diff(invs2[j])
+            difference = inv1.diff(inv2)
             if difference:
-                print difference
-                print " ", invs1[j].format((vi1.name, var_infos1[j].name))
-                print " ", invs2[j].format((vi2.name, var_infos2[j].name))
+                print "binary:", difference
+                print " ", inv1.format((name1, name2))
+                print " ", inv2.format((name1, name2))
                 pair_different = pair_different + 1
             else:
                 pair_same = pair_same + 1
@@ -3849,6 +3882,27 @@ def diffs_same_format(inv1, inv2):
     if match2: formatted2 = formatted2[0:match2.start(0)]
     return formatted1 == formatted2
 
+
+# Example calls:
+#   invariants.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')
+#   invariants.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')
+
+# Or:
+#   python -c "import invariants; invariants.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')" > all_2500_3000.diff
+#   python -c "import invariants; invariants.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')" > all_plclose_1000.diff
+
+
+def all_fns_diff(dir1, size1, dir2, size2):
+    fns = ('addstr', 'amatch', 'change', 'dodash', 'esc', 'getccl',
+           'getline', 'getpat', 'getsub', 'in_pat_set', 'in_set_2',
+           'locate', 'main', 'makepat', 'makesub', 'omatch', 'patsize',
+           'putsub', 'stclose', 'subline')
+
+    init_diff_globals()
+    for fn in fns:
+        diff_files(dir1 + "replace." + fn + "." + size1 + ".pkl",
+                   dir2 + "replace." + fn + "." + size2 + ".pkl")
+    print_inv_diff_tracking()
 
 
 ###########################################################################
