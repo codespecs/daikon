@@ -34,7 +34,7 @@ public class AndJoiner
     String rightFormat = right.format_using(format);
     if (format == OutputFormat.DAIKON) {
       return leftFormat + " and " + rightFormat;
-    } else if (format == OutputFormat.JML || format == OutputFormat.ESCJAVA) {
+    } else if (format == OutputFormat.JML || format == OutputFormat.ESCJAVA || format == OutputFormat.DBCJAVA) {
       return "(" + leftFormat + ") && (" + rightFormat + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       return "(AND " + leftFormat + " " + rightFormat + ")";
