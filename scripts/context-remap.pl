@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-15 18:42:51 mistere>
+# Time-stamp: <2001-11-15 19:07:47 mistere>
 
 # The input is ... TODO
 
@@ -74,7 +74,8 @@ for my $filename (@ARGV) {
 
 # ********** Post-processing **********
 
-my %remap = ();
+my %spinfo = ();  # in creating spinfo file, just dump this out (key -> header, values -> list of splits)
+my %remap = ();   # in processing daikon output, remap these keys to the values
 
 if ("line" eq $grain) {
   foreach (@records) {
@@ -86,9 +87,9 @@ if ("line" eq $grain) {
     if ("spinfo" eq $mode) {
       # PPT_NAME Class.method
       # daikon_callsite_id == 222222
-      print "PPT_NAME ", $toclass, ".", $tometh, "\n";
-      print "daikon_callsite_id == ", $id, "\n";
-      print "\n";
+      my $header = "PPT_NAME " . $toclass . "." . $tometh . "\n";
+      my $splitter = "daikon_callsite_id == " . $id . "\n";
+      $spinfos{$header} .= $splitter;
     } elsif ("remap" eq $mode) {
       # "daikon_callsite_id == 222222" ==> "<Called from Class.method:#:#>"
       my $from = "daikon_callsite_id == " . $id;
@@ -96,6 +97,7 @@ if ("line" eq $grain) {
       $remap{$from} = $to;
     }
   }
+
 } elsif("method" eq $grain) {
   my %method2num = ();
   foreach (@records) {
@@ -118,9 +120,9 @@ if ("line" eq $grain) {
     if ("spinfo" eq $mode) {
       # PPT_NAME Class.method
       # daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || ..
-      print "PPT_NAME ", $callee, "\n";
-      print $num, "\n";
-      print "\n";
+      my $header = "PPT_NAME " . $callee . "\n";
+      my $splitter = $num . "\n";
+      $spinfos{$header} .= $splitter;
     } elsif ("remap" eq $mode) {
       # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class.method>"
       my $from = $method;
@@ -151,19 +153,26 @@ if ("line" eq $grain) {
     if ("spinfo" eq $mode) {
       # PPT_NAME Class.method
       # daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || ..
-      print "PPT_NAME ", $callee, "\n";
-      print $num, "\n";
-      print "\n";
+      my $header = "PPT_NAME " . $callee . "\n";
+      my $splitter = $num . "\n";
+      $spinfos{$header} .= $splitter;
     } elsif ("remap" eq $mode) {
       # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class>"
-      my $from = $method;
+      my $from = $class;
       my $to = "<Called from " . $caller . ">";
       $remap{$from} = $to;
     }
   }
 }
 
-if ("remap" eq $mode) {
+if ("spinfo" eq $mode) {
+  for my $header (keys %spinfos) {
+    my $lines = $spinfos{$header};
+    print $header;
+    print $lines;
+    print "\n";
+  }
+} elsif ("remap" eq $mode) {
   my @lines = slurpfile($remap_file);
   for my $line (@lines) {
     for my $from (keys %remap) {
