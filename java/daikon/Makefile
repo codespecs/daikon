@@ -43,6 +43,7 @@ AUTO_GENERATED_FILES = \
 	derive/binary/SequenceScalarSubscriptFactory.java \
 	derive/binary/SequenceStringSubscriptFactory.java \
 
+default: all
 
 all:	all_directly
 
