@@ -610,7 +610,7 @@ public final class FeatureExtractor {
     Integer counter = new Integer(0);
 
     //get a set of all Invariant classes
-    File top = new File("/PAG/g5/users/brun/research/invariants/daikon.ver2");
+    File top = new File("/PAG/g5/users/brun/research/invariants/daikon.ver3");
     ArrayList classes = getInvariantClasses(top);
 
     for (int i = 0; i < classes.size(); i++) {
@@ -684,7 +684,7 @@ public final class FeatureExtractor {
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||
             (VarInfo.class.isAssignableFrom(current))) {
-          // System.out.print("Class " + name + " loaded\n");
+          //          System.out.print("Class " + name + " loaded\n");
           answer.add(current);
         }
       }
@@ -714,9 +714,14 @@ public final class FeatureExtractor {
   private static Collection getReflectFeatures(Object inv, HashMap lookup)
     throws IllegalAccessException, InvocationTargetException {
     ArrayList answer = new ArrayList();
-    if (inv instanceof Invariants) {
+    if (inv instanceof Invariant) {
+
+
+      if (lookup.get(inv.getClass()) == null)
+        throw new NullPointerException("Missing " + inv.getClass().getName() +
+                                       " class in the lookup Map");
       answer.add(new IntDoublePair(((Integer)
-                                    lookup.get(inv)).intValue(), 1));
+                                    lookup.get(inv.getClass())).intValue(),1));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt, lookup));
       answer.addAll(getReflectFeatures(((Invariant)inv).ppt.var_infos,lookup));
     }
@@ -733,13 +738,14 @@ public final class FeatureExtractor {
     Method[] methods = inv.getClass().getMethods();
     for (int i = 0; i < methods.length; i++) {
       if (methods[i].getParameterTypes().length == 0) {
-        if (methods[i].getReturnType().equals(Boolean.TYPE))
-          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Bool")).intValue(), 1));
-        else if (TYPES.contains(methods[i].getReturnType()))
-          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Float")).intValue(),
-                                       ((Number)
-                                        methods[i].invoke(inv, new Object[0])
-                                        ).doubleValue()));
+        if (!BANNED_METHODS.contains(methods[i].getName()))
+          if (methods[i].getReturnType().equals(Boolean.TYPE))
+            answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Bool")).intValue(), 1));
+          else if (TYPES.contains(methods[i].getReturnType()))
+            answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Float")).intValue(),
+                                         ((Number)
+                                          methods[i].invoke(inv, new Object[0])
+                                          ).doubleValue()));
       }
     }
     return answer;
@@ -1081,6 +1087,7 @@ public final class FeatureExtractor {
   public static int OneMoreOrderThanLargestFeature = 100000;
 
   public static HashSet TYPES = new HashSet();
+  public static HashSet BANNED_METHODS = new HashSet();
   static {
     TYPES.add(Boolean.TYPE);
     TYPES.add(Integer.TYPE);
@@ -1088,6 +1095,8 @@ public final class FeatureExtractor {
     TYPES.add(Long.TYPE);
     TYPES.add(Short.TYPE);
     TYPES.add(Float.TYPE);
+
+    BANNED_METHODS.add("hashCode");
   }
 
 }
