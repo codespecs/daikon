@@ -12,12 +12,6 @@ import java.util.*;
  */
 public class OrderedPairIterator implements java.util.Iterator {
 
-  public static class Pair {
-    public Pair(Object a, Object b) { this.a = a; this.b = b; }
-    public Object a;
-    public Object b;
-  }
-
   Iterator itor1, itor2;
   Object next1, next2;
   Comparator comparator;

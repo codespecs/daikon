@@ -702,7 +702,7 @@ public final class TestUtilMDE {
   public static void compareOrderedPairIterator(OrderedPairIterator opi, int[][] ints) {
     int pairno = 0;
     while (opi.hasNext()) {
-      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      Pair pair = (Pair) opi.next();
       // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0] + "," + ints[pairno][1] + ">");
       assert((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
       assert((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));
