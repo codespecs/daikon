@@ -679,6 +679,8 @@ public final class PPTSLICE1
 
   public void addInvariant(Invariant invariant) {
     Assert.assertTrue(invariant != null);
+    if (invariant.logOn())
+      invariant.log ("instantiated");
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (Global.debugStatistics.isDebugEnabled() || this.debugged || debugSpecific.isDebugEnabled())

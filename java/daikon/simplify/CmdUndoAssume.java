@@ -17,6 +17,10 @@ public class CmdUndoAssume
     synchronized(s) {
       // send out the (BG_POP)
       s.input.println("(BG_POP)");
+      if (Session.dkconfig_verbose_progress > 1) {
+        System.out.print(">");
+        System.out.flush();
+      }
       s.input.flush();
 
       // there is no output from Simplify

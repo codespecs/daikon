@@ -160,6 +160,11 @@ public final class StringComparison
       } else {
         return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
+    } else if (format == OutputFormat.SIMPLIFY) {
+      comparator = (comparator.equals("==") ? "EQ" : comparator);
+      name1 = var1().name.name_using(format);
+      name2 = var2().name.name_using(format);
+      return "(" + comparator + " " +  name1 + " " + name2 + ")";
     } else {
       name1 = var1().name.name_using(format);
       name2 = var2().name.name_using(format);

@@ -111,7 +111,7 @@ public class LemmaStack {
       // to Simplify after each lemma, and is useful to figure out
       // which lemma an error message refers to. It's a significant
       // slowdown, though.
-      if (true) {
+      if (false) {
         try {
           checkForContradiction();
         } catch (SimplifyError err) {

@@ -70,7 +70,17 @@ public final class SEQUENCESCALARSUBSCRIPT
       index_shift = 0;
   }
 
-  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
+  public String toString() {
+    String shift = "";
+    if (index_shift < 0)
+      shift = "" + index_shift;
+    else if (index_shift > 0)
+      shift = "+" + index_shift;
+    return (UtilMDE.replaceString (seqvar().name.name(), "[]", "")
+             + "[" + sclvar().name.name() + shift + "]");
+  }
+
+  public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING_NONSENSICAL)
       return ValueAndModified.MISSING_NONSENSICAL;

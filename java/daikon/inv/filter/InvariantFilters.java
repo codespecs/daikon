@@ -1,6 +1,9 @@
 package daikon.inv.filter;
 
 import utilMDE.Assert;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 import java.util.*;
 import daikon.inv.*;
@@ -165,8 +168,9 @@ public class InvariantFilters {
         boolean hasAnyVariable = false;
         for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
           InvariantFilter filter = (InvariantFilter) iter.next();
-          if (! filter.shouldDiscard( invariant ))
+          if (! filter.shouldDiscard( invariant )) {
             hasAnyVariable = true;
+          }
         }
         if (! hasAnyVariable) {
           if (invariant.logOn())
@@ -186,9 +190,10 @@ public class InvariantFilters {
       }
     }
     //  Property filters.
+    invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (df.isDebugEnabled()) {
+      if (invariant.logDetail() || df.isDebugEnabled()) {
         invariant.log (df, "applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {

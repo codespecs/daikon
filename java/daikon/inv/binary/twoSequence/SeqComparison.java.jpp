@@ -232,7 +232,7 @@ public class CLASSNAME
 
   private String format_simplify_defined() {
     String comparator =
-        IntComparisonCore.format_comparator(OutputFormat.SIMPLIFY,
+      IntComparisonCore.format_comparator(OutputFormat.SIMPLIFY,
                                           can_be_lt, can_be_eq, can_be_gt);
     String[] var1_name =
       VarInfoName.QuantHelper.simplifyNameAndBounds(var1().name);

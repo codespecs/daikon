@@ -709,6 +709,8 @@ public class PptTopLevel
       if (!worthDerivingFrom(vi1)) {
         if (Global.debugDerive.isDebugEnabled()) {
           Global.debugDerive.debug("Binary first VarInfo: not worth deriving from " + vi1.name.name());
+          // [INCR] Global.debugDerive.debug("Canonicality is: " + vi1.isCanonical());
+          // [INCR] Global.debugDerive.debug("Equal_to: " + vi1.equal_to.name.name());
         }
         continue;
       }
@@ -3121,7 +3123,10 @@ public class PptTopLevel
     Invariant[] invs;
     {
       // Replace parwise equality with an equivalence set
-      Collection all = InvariantFilters.addEqualityInvariants(getInvariants());
+      Vector all_noeq = invariants_vector();
+      Collections.sort(all_noeq, icfp);
+      List all = InvariantFilters.addEqualityInvariants(all_noeq);
+      Collections.sort(all, icfp);
       Vector printing = new Vector(); // [Invariant]
       for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
         Invariant inv = (Invariant) _invs.next();
@@ -3189,7 +3194,10 @@ public class PptTopLevel
     // unconditional version of the invariant at the conditional ppt.
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) ppts.next();
-      Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.getInvariants()).iterator();
+      Vector invs_vec = ppt.invariants_vector();
+      Collections.sort(invs_vec, icfp);
+      Iterator _invs
+        = InvariantFilters.addEqualityInvariants(invs_vec).iterator();
       while (_invs.hasNext()) {
         Invariant inv = (Invariant) _invs.next();
         if (inv instanceof Implication) {
@@ -3263,7 +3271,10 @@ public class PptTopLevel
            + vi.name + " (" + obj_name + ")");
 
       // State the object invariant on the incoming argument
-      Iterator _invs = InvariantFilters.addEqualityInvariants(obj_ppt.invariants_vector()).iterator();
+      Vector invs2 = obj_ppt.invariants_vector();
+      Collections.sort(invs2, icfp);
+      Iterator _invs
+        = InvariantFilters.addEqualityInvariants(invs2).iterator();
       while (_invs.hasNext()) {
         Invariant inv = (Invariant) _invs.next();
         if (!test.include(inv)) { // think: !inv.isWorthPrinting()
@@ -3520,6 +3531,12 @@ public class PptTopLevel
     // // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
     // result.addAll(implication_view.invs);
     return Collections.unmodifiableList(result);
+  }
+
+  // restored to ease merge between V2 and V3.  Its unclear why the above
+  // was changed in any event...
+  public Vector invariants_vector() {
+    return new Vector (getInvariants());
   }
 
   /**

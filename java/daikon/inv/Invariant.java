@@ -1,6 +1,7 @@
 package daikon.inv;
 
 import daikon.*;
+import daikon.Debug;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.filter.*;
@@ -316,6 +317,8 @@ public abstract class Invariant
    * @see #flow(Invariant)
    **/
   public void destroy() {
+    if (logOn())
+      log ("destroy");
     falsified = true;
     if (logOn() || PptSlice.debugFlow.isDebugEnabled())
       log (PptSlice.debugFlow, "Destroyed " + format());
@@ -1425,8 +1428,8 @@ public abstract class Invariant
     // suppress this invariant).
     Vector results = new Vector();
 
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      debugIsWorthPrinting.debug("find_controlling_invariants: " + format());
+    if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+      log (debugIsWorthPrinting, "find_controlling_invariants: " + format());
     }
     PptTopLevel pptt = ppt.parent;
 
@@ -1434,20 +1437,23 @@ public abstract class Invariant
     Iterator controllers = pptt.controlling_ppts.pptIterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      if (debugIsWorthPrinting.isDebugEnabled()) {
-        debugIsWorthPrinting.debug("Looking for controller of " + format() + " in " + controller.name);
+      if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+        log (debugIsWorthPrinting, "Looking for controller of " + format()
+             + " in " + controller.name);
       }
       Iterator candidates = controller.invariants_iterator(); // unstable
       while (candidates.hasNext()) {
         Invariant cand_inv = (Invariant) candidates.next();
         if (isSameInvariant(cand_inv)) {
-          if (debugIsWorthPrinting.isDebugEnabled()) {
-            debugIsWorthPrinting.debug("Controller found: " + cand_inv.format() + " [worth printing: " + cand_inv.isWorthPrinting() + "]]");
+          if (logOn() || debugIsWorthPrinting.isDebugEnabled()) {
+            log (debugIsWorthPrinting, "Controller found: "
+                 + cand_inv.format() + " [worth printing: "
+                 + cand_inv.isWorthPrinting() + "]]");
           }
           results.add(cand_inv);
         }
-        if (debugIsWorthPrinting.isDebugEnabled()) {
-          debugIsWorthPrinting.debug("Failed candidate: " + cand_inv.format());
+        if (logDetail() || debugIsWorthPrinting.isDebugEnabled()) {
+          log (debugIsWorthPrinting, "Failed candidate: " + cand_inv.format());
         }
       }
     }

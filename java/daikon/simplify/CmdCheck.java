@@ -34,6 +34,10 @@ public class CmdCheck
       synchronized(s) {
         // send out the proposition
         s.input.println(proposition);
+        if (Session.dkconfig_verbose_progress > 0) {
+          System.out.print("-");
+          System.out.flush();
+        }
         s.input.flush();
 
         // read the answer
@@ -87,12 +91,24 @@ public class CmdCheck
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
         valid = true;
+        if (Session.dkconfig_verbose_progress > 0) {
+          System.out.print("\bT");
+          System.out.flush();
+        }
       } else if (result.equals("Unknown.")) {
         valid = false;
         unknown = true;
+        if (Session.dkconfig_verbose_progress > 0) {
+          System.out.print("\b?");
+          System.out.flush();
+        }
       } else {
         Assert.assertTrue("Invalid.".equals(result),
                           "unexpected reply " + result);
+        if (Session.dkconfig_verbose_progress > 0) {
+          System.out.print("\bF");
+          System.out.flush();
+        }
         valid = false;
       }
 

@@ -20,9 +20,41 @@ public class Session
    * of invariants that can be recognized as redundant. The default
    * value is small enough to keep Simplify from running for more than
    * a few seconds on any one conjecture, allowing it to verify most
-   * simple theorems without getting bogged down in long searches.
+   * simple facts without getting bogged down in long searches. A
+   * value of 0 means not to bound the number of iterations at all,
+   * though see also simplify_timeout.
    **/
-  public static int dkconfig_simplify_max_iterations = 1000000;
+  public static int dkconfig_simplify_max_iterations = 1000;
+
+  /**
+   * A non-negative integer, representing the longest time period (in
+   * seconds) Simplify should be allowed to run on any single
+   * conjecture before giving up. Larger values may cause
+   * --simplify_redundant to run longer, but will increase the number
+   * of invariants that can be recognized as redundant. Roughly
+   * speaking, the time spent in --simplify_redundant will be bounded
+   * by this value, times the number of invariants generated, though
+   * it can be much less. A value of 0 means to not bound Simplify at
+   * all by time, though also see the option simplify_max_iterations.
+   * Beware that using this option might make Daikon's output depend
+   * on the speed of the machine it's run on.
+   **/
+  public static int dkconfig_simplify_timeout = 0;
+
+  /**
+   * Positive values mean to print extra indications as each candidate
+   * invariant is passed to Simplify during the --suppress_redundant
+   * check. If the value is 1 or higher, a hyphen will be printed when
+   * each invariant is passed to Simplify, and then replaced by a "T"
+   * if the invariant was redundant, "F" if it was not found to be,
+   * and "?" if Simplify gave up because of a time limit. If the value
+   * is 2 or higher, a "<" or ">" will also be printed for each
+   * invariant that is pushed onto or popped from from Simplify's
+   * assumption stack. This option is mainly intended for debugging
+   * purposes, by can also provide something to watch when Simplify
+   * takes a long time.
+   **/
+  public static int dkconfig_verbose_progress = 0;
 
   /* package */ final Process process;
   /* package */ final PrintStream input;
@@ -36,11 +68,18 @@ public class Session
    **/
   public Session() {
     try {
-      String killIter = dkconfig_simplify_max_iterations + "";
-      String[] newEnv = new String[] { "PROVER_KILL_ITER=" + killIter};
+      Vector newEnv = new Vector();
+      if (dkconfig_simplify_max_iterations != 0) {
+        newEnv.add("PROVER_KILL_ITER=" + dkconfig_simplify_max_iterations);
+      }
+      if (dkconfig_simplify_timeout != 0) {
+        newEnv.add("PROVER_KILL_TIME=" + dkconfig_simplify_timeout );
+      }
+      String[] envArray = (String[])newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
-      process = java.lang.Runtime.getRuntime().exec("Simplify -nosc", newEnv);
+      process =
+        java.lang.Runtime.getRuntime().exec("Simplify -nosc", envArray);
       SessionManager.debugln("Session: exec ok");
 
       SessionManager.debugln("Session: prompt off");

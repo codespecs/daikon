@@ -1062,6 +1062,8 @@ public class PrintInvariants {
       fi.setPptMap(ppt_map);
 
       boolean fi_accepted = fi.shouldKeep(inv);
+      if (inv.logOn())
+        inv.log ("Filtering, accepted = " + fi_accepted);
 
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
