@@ -12,7 +12,7 @@ import java.util.*;
 public class CommonSequence extends SingleSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugCommonSequence = false;
@@ -23,7 +23,7 @@ public class CommonSequence extends SingleSequence {
   protected CommonSequence(PptSlice ppt) {
     super(ppt);
   }
-  
+
   public static CommonSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new CommonSequence(ppt);
@@ -47,7 +47,7 @@ public class CommonSequence extends SingleSequence {
     result += "}";
     return result;
   }
-    
+
 
   public String format() {
     if (debugCommonSequence) {
@@ -61,7 +61,7 @@ public class CommonSequence extends SingleSequence {
     String vname = var().name.ioa_name(classname);
     if (var().isIOASet())
       return printIntersect() + " \\in " + vname;
-    else 
+    else
       return "(" + printIntersect() + " \\in " + vname + ") ***";
   }
 
@@ -79,12 +79,12 @@ public class CommonSequence extends SingleSequence {
     else {
       long[] tmp = new long[intersect.length];
       int    size = 0;
-      for (int i=1; i<a.length; i++) 
+      for (int i=1; i<a.length; i++)
 	if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
-	    ((size==0) || 
+	    ((size==0) ||
 	     (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
 	  tmp[size++] = a[i];
-      
+
       if (size==0) {
 	destroy();
 	return;

@@ -31,7 +31,7 @@ import java.util.*;
 public class LowerBound  extends SingleScalar  {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
   public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
   public static long dkconfig_maximal_interesting = Long.MAX_VALUE;

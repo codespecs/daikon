@@ -7,7 +7,7 @@ import utilMDE.Assert;
 public class Reverse extends TwoSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   protected Reverse(PptSlice ppt) {
@@ -37,7 +37,7 @@ public class Reverse extends TwoSequence {
   public String format_ioa(String automaton) {
     return "Not valid for Sets or Arrays: " + format();
   }
-    
+
 
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();

@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 public class FunctionBinary extends ThreeScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugFunctionBinary = false;

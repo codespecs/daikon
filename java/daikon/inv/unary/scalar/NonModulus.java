@@ -8,7 +8,7 @@ import java.util.*;
 public class NonModulus extends SingleScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   // Set elements = new HashSet();

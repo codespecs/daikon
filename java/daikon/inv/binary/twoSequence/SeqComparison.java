@@ -12,7 +12,7 @@ import java.util.*;
 public class SeqComparison extends TwoSequence implements Comparison {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();

@@ -14,7 +14,7 @@ import java.util.*;
 public final class StringComparison extends TwoString implements Comparison {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugStringComparison = false;
@@ -137,7 +137,7 @@ public final class StringComparison extends TwoString implements Comparison {
 
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(String v1, String v2, int count) {

@@ -107,7 +107,7 @@ import java.util.*;
 public class LOWERBOUND extends SINGLESCALAR {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
   public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
   public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
@@ -167,7 +167,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     String result = form[0]+form[1]+" "+GTSTR+"= "+MIN1+form[2];
     return result;
   }
-					     
+
 
   public String format_simplify() {
     String[] form =
