@@ -216,6 +216,8 @@ public final class ProglangType implements java.io.Serializable {
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
   final Object parse_value(String value) {
+    System.out.println(format() + ".parse(\"" + value + "\")");
+
     String value_ = value;      // for debugging, I suppose
     // This only needs to deal with representation types, not with all
     // types in the underlying programming language.
@@ -344,6 +346,21 @@ public final class ProglangType implements java.io.Serializable {
     } else {
       throw new Error("Can't parse a value of type " + format());
     }
+  }
+
+  public boolean baseIsPrimitive() {
+    return ((base == BASE_BOOLEAN)
+            || (base == BASE_BYTE)
+            || (base == BASE_CHAR)
+            || (base == BASE_DOUBLE)
+            || (base == BASE_FLOAT)
+            || (base == BASE_INT)
+            || (base == BASE_LONG)
+            || (base == BASE_SHORT));
+  }
+
+  public boolean isPrimitive() {
+    return ((dimensions == 0) && baseIsPrimitive());
   }
 
   public boolean baseIsIntegral() {

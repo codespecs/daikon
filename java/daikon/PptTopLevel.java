@@ -2025,13 +2025,33 @@ public class PptTopLevel extends Ppt {
         boolean printed_header = false;
         for (int i=0; i<modified_vars.size(); i++) {
           VarInfo vi = (VarInfo)modified_vars.elementAt(i);
-          PptSlice1 view = getView(vi);
-          if ((view != null) && (view.num_values() > 0)) {
-            if (! printed_header) {
-              out.print("      Modified variables:");
-              printed_header = true;
+          if (! vi.type.isPrimitive()) {
+            PptSlice1 view = getView(vi);
+            if ((view != null) && (view.num_values() > 0)) {
+              if (! printed_header) {
+                out.print("      Modified variables:");
+                printed_header = true;
+              }
+              out.print(" " + vi.name);
             }
-            out.print(" " + vi.name);
+          }
+        }
+        if (printed_header)
+          out.println();
+      }
+      if (modified_vars.size() > 0) {
+        boolean printed_header = false;
+        for (int i=0; i<modified_vars.size(); i++) {
+          VarInfo vi = (VarInfo)modified_vars.elementAt(i);
+          if (vi.type.isPrimitive()) {
+            PptSlice1 view = getView(vi);
+            if ((view != null) && (view.num_values() > 0)) {
+              if (! printed_header) {
+                out.print("      Modified primitive variables:");
+                printed_header = true;
+              }
+              out.print(" " + vi.name);
+            }
           }
         }
         if (printed_header)

@@ -238,6 +238,8 @@ public final class PptSlice1  extends PptSlice {
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
+      // System.out.println(name);
+      // System.out.println(((Object[]) val1).length);
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.elementAt(i);
