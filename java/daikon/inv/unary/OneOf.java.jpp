@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
     #define IS_NUMERIC
   #endif
 #elif defined(SEQUENCE) || defined(STRINGSEQUENCE) || defined(FLOATSEQUENCE)
-  #define IS_SEQUENCE 
+  #define IS_SEQUENCE
   #if defined(SEQUENCE) || defined(FLOATSEQUENCE)
     #define IS_SEQUENCE_NUMERIC
   #endif
@@ -1048,12 +1048,12 @@ public final class ONEOFSCALAR
 #endif
     return result;
   }
-  
+
   //@tx
   // TODO: RRN, take a look at this.
-  public String format_dbc() {   
-    // This is incomplete.      
-#if defined(FLOAT)   
+  public String format_dbc() {
+    // This is incomplete.
+#if defined(FLOAT)
     sort_rep();
 
     String varname = var().name.dbc_name();
@@ -1068,7 +1068,7 @@ public final class ONEOFSCALAR
       }
     }
 
-    return result;   
+    return result;
 #elif defined(SCALAR)
     sort_rep();
 
@@ -1100,7 +1100,7 @@ public final class ONEOFSCALAR
     }
 
     return result;
- 
+
  /*   String result;
     VarInfo v = var();
     String varname = v.name.dbc_name(v);
@@ -1115,14 +1115,14 @@ public final class ONEOFSCALAR
       }
     }
     return result;*/
-    
-#elif defined(STRING) || defined(ELTSTRING) 
+
+#elif defined(STRING) || defined(ELTSTRING)
     sort_rep();
 
- #if defined(ELTSTRING) 
+ #if defined(ELTSTRING)
     String[] form = VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name } );
  #endif
- 
+
     VarInfo v = var();
     String varname = v.name.dbc_name(v);
 
@@ -1157,11 +1157,11 @@ public final class ONEOFSCALAR
         }
       }
     }
- #if defined(ELTSTRING) 
+ #if defined(ELTSTRING)
     result = form[0] + "(" + result + ")" + form[2];
  #endif
     return result;
-    
+
 #elif defined(SEQUENCE) || defined(FLOATSEQUENCE)
     // have to take a closer look at this!
     sort_rep();
@@ -1170,7 +1170,7 @@ public final class ONEOFSCALAR
 
     String length = "";
     String forall = "";
-#if defined(SEQUENCE) 
+#if defined(SEQUENCE)
     if (is_hashcode) {
       if (num_elts == 0) {
         String classname = this.getClass().toString().substring(6); // remove leading "class"
@@ -1206,13 +1206,13 @@ public final class ONEOFSCALAR
       result = "(" + length + ") && (" + forall + ")";
     }
     return result;
-           
+
 #else
 
     return format_unimplemented(OutputFormat.DBCJAVA);
-#endif 
+#endif
   }
-  
+
 
   public String format_simplify() {
     sort_rep();
@@ -1950,6 +1950,10 @@ public final class ONEOFSCALAR
     ONEOFSCALAR  first = (ONEOFSCALAR ) invs.get(0);
     ONEOFSCALAR result = (ONEOFSCALAR) first.clone();
     result.ppt = ppt;
+    #if defined (IS_SEQUENCE)
+      for (int i = 0; i < result.num_elts; i++)
+        result.elts[i] = Intern.intern (result.elts[i]);
+    #endif
 
     // Loop through the rest of the child invariants
     for (int i = 1; i < invs.size(); i++ ) {
@@ -1961,8 +1965,12 @@ public final class ONEOFSCALAR
       // it to the parent.  If the invariant is falsified, there is no parent
       // invariant
       for (int j = 0; j < inv.num_elts; j++) {
-        if (!result.add_mod_elem (inv.elts[j], 1)) {
-          result.log ("child value '" + inv.elts[j] + "' destroyed oneof");
+        INT val = inv.elts[j];
+        #if defined (IS_SEQUENCE)
+          val = Intern.intern (val);
+        #endif
+        if (!result.add_mod_elem (val, 1)) {
+          result.log ("child value '" + val + "' destroyed oneof");
           return (null);
         }
       }
