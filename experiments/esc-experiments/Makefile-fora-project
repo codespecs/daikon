@@ -83,7 +83,7 @@ clean: reset-scratch
 	@echo
 	@echo \#\#\# clean
 	@echo
-	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-esc ${PROJECT}.esc
+	rm -f ${PROJECT}.txt-daikon* ${PROJECT}.txt-esc* ${PROJECT}.esc* *.bak
 
 #esc: StackAr.esc
 
@@ -119,7 +119,8 @@ ${SCRATCH_FOR_DAIKON}/.copy-timestamp: ${SCRATCH_FOR_DAIKON}/.exists ${DOT_DOT_S
 	@echo
 	cd .. && cp -pP --target-directory=${SCRATCH_FOR_DAIKON}/ ${SOURCE_UNCHANGED} 
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_UNCHANGED} 
-	touch ${SCRATCH_FOR_DAIKON}/.source-unchanged-timestamp
+	cd ${PACKAGE} && rm -f *.java-unannotated
+	touch ${SCRATCH_FOR_DAIKON}/.copy-timestamp
 
 # instument files under detection, and copy the uninstrumented versions to . for later merging
 
@@ -148,6 +149,7 @@ ${SCRATCH_FOR_DAIKON}/.run-timestamp: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 	@echo \#\#\# data
 	@echo
 	java -classpath ${SCRATCH_FOR_DAIKON}:${CLASSPATH} ${MAIN_RUN}
+	touch ${SCRATCH_FOR_DAIKON}/.run-timestamp
 
 ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
