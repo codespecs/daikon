@@ -42,6 +42,14 @@ AUTO_GENERATED_FILES = \
 	derive/binary/SequenceStringSubsequence.java \
 	derive/binary/SequenceScalarSubscriptFactory.java \
 	derive/binary/SequenceStringSubscriptFactory.java \
+	derive/binary/ScalarSequencesIntersection.java \
+	derive/binary/StringSequencesIntersection.java \
+	derive/binary/ScalarSequencesIntersectionFactory.java \
+	derive/binary/StringSequencesIntersectionFactory.java \
+	derive/binary/ScalarSequencesUnion.java \
+	derive/binary/StringSequencesUnion.java \
+	derive/binary/ScalarSequencesUnionFactory.java \
+	derive/binary/StringSequencesUnionFactory.java \
 
 default: all
 
@@ -145,7 +153,7 @@ junit:
 # "-e" means exit immediately if any error, rather than returning 
 # the status of the last command.
 
-JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< >| $@; chmod -w $@)
+JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 # Like the above, but also makes a backup file
 # JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
@@ -227,6 +235,31 @@ derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscri
 
 derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+derive/binary/ScalarSequencesIntersection.java: derive/binary/SequencesIntersection.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/StringSequencesIntersection.java: derive/binary/SequencesIntersection.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+derive/binary/ScalarSequencesIntersectionFactory.java: derive/binary/SequencesIntersectionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/StringSequencesIntersectionFactory.java: derive/binary/SequencesIntersectionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+derive/binary/ScalarSequencesUnion.java: derive/binary/SequencesUnion.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/StringSequencesUnion.java: derive/binary/SequencesUnion.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+derive/binary/ScalarSequencesUnionFactory.java: derive/binary/SequencesUnionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/StringSequencesUnionFactory.java: derive/binary/SequencesUnionFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
 
 ## I decided against this.  It gave little enough help, and it cluttered
 ## the directories enough (and could be slightly confusing about what those
