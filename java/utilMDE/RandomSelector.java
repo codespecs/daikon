@@ -53,8 +53,8 @@ public class RandomSelector {
         seed = r;
     }
 
-    /** @param num_elts The number of elements intended to be selected
-     * from the oncoming Iteration. Same as 'number_to_take'
+    /** @param keep_probability The probability that each element is
+     * selected from the oncoming Iteration.
      * @param r The seed to give for random number generation.
      **/
     public RandomSelector (double keep_probability, Random r) {

@@ -221,7 +221,7 @@ public class CountingPrintWriter extends PrintWriter {
    * according to the platform's default character encoding, and these
    * bytes are written in exactly the manner of the write(int) method.
    *
-   * @param a double to be printed
+   * @param d the double to be printed
    */
   public void print(double d) {
     String s = String.valueOf(d);

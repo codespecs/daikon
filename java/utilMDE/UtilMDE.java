@@ -322,9 +322,9 @@ public final class UtilMDE {
 
 
   /**
-   * Returns true if:
-   * 1. the file exists and is writable, or
-   * 2. the file can be created
+   * Returns true
+   *  if the file exists and is writable, or
+   *  if the file can be created.
    **/
   public static boolean canCreateAndWrite(File file) {
     if (file.exists()) {
@@ -402,7 +402,7 @@ public final class UtilMDE {
    * @throws SecurityException If a security manager exists and its
    *  SecurityManager.checkWrite(java.lang.String) method does not allow a
    *  file to be created
-   * @see java.io.File#getTempFile(String, String, File)
+   * @see java.io.File#createTempFile(String, String, File)
    **/
   public static File createTempDir(String prefix, String suffix)
     throws IOException {
@@ -855,7 +855,7 @@ public final class UtilMDE {
   /**
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
-   * @see{ArraysMDE.toString(int[])}
+   * @see ArraysMDE#toString(int[])
    **/
   public static String join(Object[] a, String delim) {
     if (a.length == 0) return "";
@@ -1205,7 +1205,7 @@ public final class UtilMDE {
 
   /**
    * Return a Vector of the Strings returned by
-   * @link{java.util.StringTokenizer(String,String,boolean)} with the given arguments.
+   * {@link java.util.StringTokenizer#StringTokenizer(String,String,boolean)} with the given arguments.
    **/
   public static Vector tokens(String str, String delim, boolean returnTokens) {
     return makeVector(new StringTokenizer(str, delim, returnTokens));
@@ -1213,7 +1213,7 @@ public final class UtilMDE {
 
   /**
    * Return a Vector of the Strings returned by
-   * @link{java.util.StringTokenizer(String,String)} with the given arguments.
+   * {@link java.util.StringTokenizer#StringTokenizer(String,String)} with the given arguments.
    **/
   public static Vector tokens(String str, String delim) {
     return makeVector(new StringTokenizer(str, delim));
@@ -1221,7 +1221,7 @@ public final class UtilMDE {
 
   /**
    * Return a Vector of the Strings returned by
-   * @link{java.util.StringTokenizer(String)} with the given arguments.
+   * {@link java.util.StringTokenizer#StringTokenizer(String)} with the given arguments.
    **/
   public static Vector tokens(String str) {
     return makeVector(new StringTokenizer(str));

@@ -523,7 +523,8 @@ public final class Intern {
    * shortcut saves quite a bit of computation.  It saves even more
    * when there may be many derived variables that are non canonical,
    * since they are guaranteed to be ==.
-   * @pre seq is already interned
+   * <p>
+   * Requires that seq is already interned
    * @return a subsequence of seq from start to end that is interned.
    **/
   public static int[] internSubsequence (int[] seq, int start, int end) {
@@ -542,7 +543,7 @@ public final class Intern {
   }
 
   /**
-   * @see internSubSequence(int[], int, int)
+   * @see #internSubsequence(int[], int, int)
    **/
   public static long[] internSubsequence (long[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
@@ -560,7 +561,7 @@ public final class Intern {
   }
 
   /**
-   * @see internSubSequence(int[], int, int)
+   * @see #internSubsequence(int[], int, int)
    **/
   public static double[] internSubsequence (double[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
@@ -578,7 +579,7 @@ public final class Intern {
   }
 
   /**
-   * @see internSubSequence(int[], int, int)
+   * @see #internSubsequence(int[], int, int)
    **/
   public static Object[] internSubsequence (Object[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));
@@ -596,7 +597,7 @@ public final class Intern {
   }
 
   /**
-   * @see internSubSequence(int[], int, int)
+   * @see #internSubsequence(int[], int, int)
    **/
   public static String[] internSubsequence (String[] seq, int start, int end) {
     Assert.assertTrue (Intern.isInterned(seq));

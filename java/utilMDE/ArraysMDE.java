@@ -1043,8 +1043,7 @@ public final class ArraysMDE {
    * Casts obj down to the proper array type then calls the appropriate
    * toString() method.  Only call this method if obj is a boolean, double,
    * int, long, or Object array.
-   * @requires obj != null
-   * @throws IllegalArgumentException if obj is not one of the types mentioned above.
+   * @throws IllegalArgumentException if obj is null or is not one of the types mentioned above.
    */
   public static String toString(Object obj) throws IllegalArgumentException {
     if (obj instanceof boolean[]) {
@@ -1066,8 +1065,7 @@ public final class ArraysMDE {
   /**
    * Casts obj down to the proper array type then calls .length.
    * Only call this method if obj is a boolean, double, int, long, or Object array.
-   * @requires obj != null
-   * @throws IllegalArgumentException if obj is not one of the types mentioned above.
+   * @throws IllegalArgumentException if obj is null or is not one of the types mentioned above.
    */
   public static int length(Object obj) throws IllegalArgumentException {
     if (obj instanceof boolean[]) {
@@ -1232,7 +1230,7 @@ public final class ArraysMDE {
   }
 
   /**
-   * @requires fn_is_permutation(a)
+   * Requires that fn_is_permutation(a) holds.
    * @param a the input permutation
    * @return fresh array which is the inverse of the given perutation.
    * @see #fn_is_permutation(int[])
