@@ -8,25 +8,39 @@
 #            (cluster == <num>) == <consequent>
 # are extracted and written into the splitter info file.
 
-# usage: extract_implications.pl <input_file> <derive_conditions>
-#        if you want extra conditions to be derived from the conditions in the
-#        input file, set <derived_conditions> to 1 (or any number > 1)
+my $usage = "extract_implications.pl [--derive-conditions] [-o <output-file>] <input_file>";
+# if you want extra conditions to be derived from the conditions in the
+# input file, call with the flag --derived_conditions. The default output file is 
+# cluster.spinfo
 
-$DERIVE_CONDITIONS = 0;
+use English;
+use strict;
 $WARNING = 0;
 
-$inv_file = $ARGV[0];
-shift @ARGV;
-if ($ARGV[0] == 1) {
-    $DERIVE_CONDITIONS = 1;
+my $DERIVE_CONDITIONS = 0; # by default, don't derive conditions
+my $out = "cluster.spinfo"; 
+
+while (scalar(@ARGV) > 0) {
+    if ($ARGV[0] eq "--derive-conditions") {
+	$DERIVE_CONDITIONS = 1;
+	shift @ARGV;
+    } elsif ($ARGV[0] eq "-o") {
+	$out = $ARGV[1];
+	shift @ARGV;
+	shift @ARGV;
+    } else {
+	my $inv_file = $ARGV[0];
+	@ARGV = ();
+    }
 }
 
-$out = "cluster.spinfo";
+
 
 open (IN, $inv_file) || die "couldn't open $inv_file\n";
 open (OUT, ">$out") || die "couldn't open $out for output\n";
 
-%pptname_to_conds;
+my %pptname_to_conds = ();
+my ($line, $pptname);
 
 while (<IN>) {
     $line = $_;
@@ -76,12 +90,12 @@ while (<IN>) {
 	next;
     }
     
-    @temparray = @{$pptname_to_conds{$pptname}};
+    my @temparray = $pptname_to_conds{$pptname};
     #remove all duplicates at a program point. However we want
     #to preserve duplicates across program points (or do we?)
     # use hashing!! more efficient
-    $duplicate = 0;
-    for($i = 0; $i < scalar(@temparray); $i++) {
+    my $duplicate = 0;
+    for(my $i = 0; $i < scalar(@temparray); $i++) {
 	if( $line eq $temparray[$i] ) {
 	    $duplicate = 1;
 	    next;
@@ -92,15 +106,15 @@ while (<IN>) {
     }  
 }
 
-undef @allconds;
+my @allconds = ();
 
-foreach $pptname (keys %pptname_to_conds) {
+foreach my $p (keys %pptname_to_conds) {
     
-    @conds = @{$pptname_to_conds{$pptname}};
-    undef @pptconds_toprint;
+    my @conds = @{$pptname_to_conds{$p}};
+    my @pptconds_toprint = ();
     
-    foreach $cond (@conds) {
-	undef @derived;
+    foreach my $cond (@conds) {
+	my @derived = ();
 	
 	if ($DERIVE_CONDITIONS) {
 	    @derived = &derive_conditions($cond);
@@ -115,11 +129,11 @@ foreach $pptname (keys %pptname_to_conds) {
 	#we have to remove this block altogether.
 	#======================================
       allconds:       #look through all the conditions we have, to see if we have a duplicate
-	foreach $possible (@derived) {
-	    $duplicate = 0;
-	    $tmp = $possible;
+	foreach my $possible (@derived) {
+	    my $duplicate = 0;
+	    my $tmp = $possible;
 	    $tmp =~ s/\s//g;
-	    foreach $exists (@allconds) {
+	    foreach my $exists (@allconds) {
 		if($exists eq $tmp) {
 		    $duplicate = 1;
 		    next allconds;
@@ -136,7 +150,7 @@ foreach $pptname (keys %pptname_to_conds) {
     
     if (scalar(@pptconds_toprint) > 0) {
 	print OUT "PPT_NAME $pptname\n";
-	foreach $cond (@pptconds_toprint) {
+	foreach my $cond (@pptconds_toprint) {
 	    
 	    # remove conditions of the form "int i ....", which 
 	    # are extracted from range implications
@@ -177,6 +191,7 @@ sub cleanup_pptname {
     #clean out the pptname and leave only the stem. Therefore
     #DataStructures.StackAr.<init>(I)V:::ENTER would be cleaned
     #up to DataStructures.StackAr
+    my ($pptname);
     $pptname = $_[0];
     $pptname =~ s/<.*>//;
     $pptname =~ s/\(.*\)//;
@@ -192,8 +207,9 @@ sub cleanup_pptname {
 # for example, if you have "x > 5", we might be interested in "x < 5" and
 # "x == 5" also.
 sub derive_conditions {
+    my ($kraw, @result, $left, $right, $operator);
     $kraw = $_[0];
-    undef @result;
+    @result = ();
     
     #substitute "orig(x) with "orig_x_"
     while($kraw =~ /orig\s*\(.*?\)/) {
