@@ -3982,7 +3982,7 @@ Add, to every subclass of @samp{Invariant}, a
 already has three such methods --- @samp{format()}, @samp{format_esc()},
 and @samp{format_simplify()} --- for you to crib from.
 @item
-Edit @samp{PptTopLevel.print_invariants()} to add a call to your new
+Edit @samp{PrintInvariants.print_invariants()} to add a call to your new
 method, near the calls to the other formatting methods.
 @end itemize
 

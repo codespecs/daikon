@@ -9,8 +9,7 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 2.3.10 (10 June 2002):
 
-Bugfix: include configurable.txt in daikon.jar.  (It already appeared in
-the distribution proper.)
+Bugfix release.
 
 2.3.9 (4 June 2002):
 
