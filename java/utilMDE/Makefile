@@ -1,10 +1,23 @@
+### User customizations
+
+# Put user-specific changes in your own Makefile.user
+#  (such as changes to UTILMDE_DIR or JAVAC).
+# Make will silently continue if file does not exist.
+-include Makefile.user
+
+JAVAC ?= jikes -g +E +F
+
+
 ALL_JAVA_FILES := $(shell find . -name '*.java' -print)
 JAVA_FILES := $(shell find . -name '*-cpp.java' -prune -o -name '*.java' -print)
 AUTO_GENERATED_FILES = \
 	MathMDE.java
 
 all: ${AUTO_GENERATED_FILES}
-	jikes -g +E +F ${JAVA_FILES}
+	${JAVAC} ${JAVA_FILES}
+
+all_javac: ${AUTO_GENERATED_FILES}
+	javac -g ${JAVAC_EXTRA_ARGS} ${JAVA_FILES}
 
 clean:
 	rm -f *.class

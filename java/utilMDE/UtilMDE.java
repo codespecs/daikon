@@ -594,6 +594,17 @@ public final class UtilMDE {
   // // assert(UtilMDE.trimWhitespace("   ").equals(""));
 
 
+  // @return either "n noun" or "n nouns" depending on n
+  public static String nplural(int n, String noun)
+  {
+    if (n == 1)
+      return n + " " + noun;
+    else if (noun.endsWith("s") || noun.endsWith("x") ||
+             noun.endsWith("ch") || noun.endsWith("sh"))
+      return n + " " + noun + "es";
+    else
+      return n + " " + noun + "s";
+  }
 
 
   ///

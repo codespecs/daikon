@@ -3,6 +3,12 @@ package utilMDE;
 // From
 //   Frequently Asked Questions (with answers) for Java programmers
 
+// A problem with this is that even if Assert.enabled is false, the
+// condition may be evaluated anyway (because it might have side effects).
+// How good a job do Java compilers do of eliminating those calls?  I
+// should do an experiment.
+
+
 /** Assertions:  test boolean expressions at runtime. */
 public final class Assert {
   /** If false, the Assert class is disabled. */
