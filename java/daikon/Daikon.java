@@ -832,7 +832,7 @@ public final class Daikon {
 
       // Initialize the partial order hierarchy
       debugProgress.fine ("Init Hierarchy");
-      Dataflow.init_hierarchy (all_ppts);
+      PptRelation.init_hierarchy (all_ppts);
 
       // Calculate invariants at all non-leaf ppts
       debugProgress.fine ("createUpperPpts");
