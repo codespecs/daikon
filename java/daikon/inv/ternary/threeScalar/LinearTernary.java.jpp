@@ -261,6 +261,10 @@ public class CLASSNAME
   //   return core.format_reversed(var1().name.name(), var2().name.name(), var3().name.name());
   // }
 
+  public boolean isActive() {
+    return core.isActive();
+  }
+
   public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     core.add_modified(x, y, z, count);
   }

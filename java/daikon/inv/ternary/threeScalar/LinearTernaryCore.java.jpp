@@ -158,7 +158,16 @@ public final class CLASSNAME
   }
 
   /**
-   * Looks for points that define a plane (a = ax + by + c).  Collects
+   * Returns whether or not the invariant is currently active.  We become
+   * active after MINTRIPLES values have been seen and a plane calculated.
+   * Before that, a, b, and c are uninitialized
+   */
+  public boolean isActive() {
+    return (values_seen >= MINTRIPLES);
+  }
+
+  /**
+   * Looks for points that define a plane (y = ax + by + c).  Collects
    * MINTRIPLE points before attempting to define the plane (to
    * hopefully get at least some spread between the points, so that
    * small errors don't get magnified).  Once the equation for the
@@ -172,6 +181,7 @@ public final class CLASSNAME
    *
    * @see FuzzyFloat
    */
+
   public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     // XXX TODO FIXME: This method does not correctly deal with
     // calling addToFlow.  A proper clone, etc. should be created and

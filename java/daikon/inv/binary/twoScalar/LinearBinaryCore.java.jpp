@@ -107,6 +107,15 @@ public final class CLASSNAME
     y_cache = tmp;
   }
 
+  /**
+   * Returns whether or not the invariant is currently active.  We become
+   * active after MINPAIRS values have been seen and a line calculated.
+   * Before that, a and b are uninitialized
+   */
+  public boolean isActive() {
+    return (values_seen >= MINPAIRS);
+  }
+
   // Note that this method is relatively inconsistent with respect to
   // differing ordering of the points.  It will always give exactly the
   // same answer with points that are delivered in the same order, but

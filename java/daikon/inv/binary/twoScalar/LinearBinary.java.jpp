@@ -88,6 +88,10 @@ public class CLASSNAME
     return core.format_using(format, var1().name, var2().name);
   }
 
+  public boolean isActive() {
+    return core.isActive();
+  }
+
   // XXX core needs to change to do flow
   public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     core.add_modified(x, y, count);
