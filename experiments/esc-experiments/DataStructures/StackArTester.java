@@ -127,6 +127,7 @@ public class StackArTester
         observe();
       } catch (Overflow e) { }
     }
+    topAndPop();
     // popAll();
   }
 
