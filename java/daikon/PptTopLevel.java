@@ -795,7 +795,7 @@ public class PptTopLevel
   }
 
 
-  // The nouns "view" and "slice": are putatively different.  Slices
+  // The nouns "view" and "slice" are putatively different.  Slices
   // limit the variables but examine all data.  Views may ignore data,
   // etc.  In practive, getView always returns a slice anyway (see
   // comments on class daikon.Ppt).
@@ -1703,7 +1703,7 @@ public class PptTopLevel
         // This is a debugging tool, to make sure that various versions
         // of isExclusiveFormula remain coordinated.  (That's also one
         // reason we don't break out of the loop early:  also, there will
-        // be few invariants in a slice, to breaking out is of minimal
+        // be few invariants in a slice, so breaking out is of minimal
         // benefit.)
         Assert.assert(inv1.isExclusiveFormula(inv2)
                       == inv2.isExclusiveFormula(inv1),
