@@ -166,9 +166,7 @@ public final class CLASSNAME
       + ",inverse=" + inverse;
   }
 
-  public boolean isSameFormula(CLASSNAME other)
-  {
-    return methodname[0].equals(other.methodname[0]) &&
-      methodname[1].equals(other.methodname[1]);
+  public boolean isSameFormula(CLASSNAME other) {
+    return ((methodNumber == other.methodNumber) && (inverse == other.inverse));
   }
 }
