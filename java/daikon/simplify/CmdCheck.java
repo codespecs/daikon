@@ -56,4 +56,8 @@ public class CmdCheck
     }
   }
 
+  public String toString() {
+    return "CmdCheck: " + proposition;
+  }
+
 }
