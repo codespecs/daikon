@@ -1,154 +1,354 @@
 #!/usr/bin/env perl
 
-# Automatically builds and tests the software in the Daikon Distribution
+# Automatically builds and tests the software in the Daikon
+# Distribution.  If the --quiet option is selected, only generates
+# output if a task fails (useful for cron job).
 
 use strict;
 use English;
 $WARNING = 1;
 use Cwd;
 
+# Process the command-line args
+my $usage = "Usage: buildtest.pl [--quiet]\n";
+my $quiet = 0;
+if (@ARGV == 0) {
+  $quiet = 0;
+} elsif (@ARGV == 1) {
+  if ($ARGV[0] eq "--quiet") {
+    $quiet = 1;
+  } else {
+    fail("$usage\n");
+  }
+} else {
+  fail("$usage\n");
+}
+
+# Set the DAIKONPARENT variable
 #my $date = `date +%Y%m%d-%H%M%S`;
-my $date = '20020215-173521';
+my $date = 'dummy-date';
 chomp $date;
-my $base_dir = cwd() . "/$date";
+my $DAIKONPARENT = cwd() . "/$date";
+$ENV{"DAIKONPARENT"} = $DAIKONPARENT;
 
-$ENV{"PATH"} = "/g2/jdk/bin:" . $ENV{"PATH"};
+#my $INV = $DAIKONPARENT . "/invariants";
+#$ENV{"INV"} = $INV;
+#$ENV{"CLASSPATH"} = "$INV/java:" . $ENV{"CLASSPATH"};
 
-#make_directory();
-
-chdir $base_dir or fail("Can't chdir to $base_dir: $!\n");
-
-my $CVS_REP = "/g4/projects/invariants/.CVS/foo";
+# Set other initial variables
+my $CVS_REP = "/g4/projects/invariants/.CVS/";
 my $CVS_TAG = "ENGINE_V2_PATCHES";
+$ENV{"JAVAC"} = "javac -g";
 
-#daikon_checkout();
-#daikon_update();
+my %success = ();
 
-my $INV = cwd() . "/invariants";
-my $DAIKON_LIBS = join(":",glob("$INV/java/lib/*.jar"));
-my $CLASSPATH = "$INV/java:$INV/java/ajax-ship:$DAIKON_LIBS";
-my $JAVAC = "javac -g";
+# If the --quiet option is specified, output is appended to this
+# string, then printed at the end if anything failed.
+my $message = "";
 
-#daikon_compile();
-#daikon_unit_test();
-#daikon_system_test();
-#diff_system_test();
+mkdir $DAIKONPARENT or fail("can't make directory $DAIKONPARENT: $!\n");
+chdir $DAIKONPARENT or fail("can't chdir to $DAIKONPARENT: $!\n");
 
-#dfec_system_test();
+$success{"daikon_checkout"} = daikon_checkout();
 
-#dfej_checkout();
-#dfej_configure();
-#dfej_compile();
+print `env`;
 
+# Inherit the environment of the group-wide init file
+if ($success{"daikon_checkout"}) {
+  %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
+}
+
+print `env`;
+die;
+
+my $INV = $ENV{"INV"};
+
+if ($success{"daikon_checkout"}) {
+  $success{"daikon_update"} = daikon_update();
+}
+if ($success{"daikon_update"}) {
+  $success{"daikon_compile"} = daikon_compile();
+}
+if ($success{"daikon_compile"}) {
+  $success{"daikon_unit_test"} = daikon_unit_test();
+  $success{"daikon_system_test"} = daikon_system_test();
+  $success{"diff_system_test"} = diff_system_test();
+}
+
+if ($success{"daikon_checkout"}) {
+  $success{"dfec_system_test"} = dfec_system_test();
+}
+
+#  $success{"dfej_checkout"} = dfej_checkout();
+#  if ($success{"dfej_checkout"}) {
+#    $success{"dfej_configure"} = dfej_configure();
+#  }
+#  if ($success{"dfej_configure"}) {
+#    $success{"dfej_complie"} = dfej_compile();
+#  }
+
+# print the output files for any steps that failed
+my @failed_steps = ();
+foreach my $step (sort keys %success) {
+  if (!$success{$step}) {
+    push @failed_steps, $step;
+  }
+}
+if (@failed_steps != 0) {
+  foreach my $step (@failed_steps) {
+    if (-e "${step}_summary.out") {
+      print_maybe("*** ${step}_summary.out ***\n");
+      print_maybe(`cat ${step}_summary.out`);
+      print_maybe("\n\n");
+    } elsif (-e "$step.out") {
+      print_maybe("*** $step.out ***\n");
+      print_maybe(`cat $step.out`);
+      print_maybe("\n\n");
+    } else {
+      print_maybe("*** $step ***\n");
+      print_maybe("<no output file>");
+      print_maybe("\n\n");
+    }
+  }
+  if ($quiet) {
+    print $message;
+  }
+}
+
+# Remove the source checkouts
+if (@failed_steps == 0) {
+  `rm -rf dfej invariants`;
+}
 
 
 
 # SUBROUTINES
-sub make_directory {
-  print "Making directory $date...";
-  mkdir $date or fail("Can't mkdir $date: $!\n");
-  print "OK\n";
+sub daikon_checkout {
+  print_maybe("Checking out Daikon...");
+  `cvs -d $CVS_REP co invariants &> daikon_checkout.out`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
 
-sub daikon_checkout {
-  print "Checking out Daikon...";
-  `cvs -d $CVS_REP co invariants &> daikon-checkout.out`;
-  check_error();
-}
 
 sub dfej_checkout {
-  print "Checking out dfej...";
-  `cvs -d $CVS_REP co dfej &> dfej-checkout.out`;
-  check_error();
+  print_maybe("Checking out dfej...");
+  `cvs -d $CVS_REP co dfej &> dfej_checkout.out`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub daikon_update {
-  print "Updating Daikon...";
-  chdir "invariants/java/daikon"
-    or fail("Can't chdir to invariants/java/daikon: $!\n");
-  `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon-update.out`;
-  chdir "../../../" or fail("Can't chdir to ../../..: $!\n");
-  check_error();
+  print_maybe("Updating Daikon...");
+  my $daikon_dir = "invariants/java/daikon";
+  chdir $daikon_dir or fail("can't chdir to $daikon_dir: $!\n");
+  `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon_update.out`;
+  chdir $DAIKONPARENT or fail("can't chdir to $DAIKONPARENT: $!\n");
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub dfej_configure {
-  print "Configuring dfej...";
+  print_maybe("Configuring dfej...");
   chdir "dfej" or fail("Can't chdir to dfej: $!\n");
-  `./configure &> ../dfej-configure.out`;
-  chdir ".." or fail("Can't chdir to ..: $!\n");
-  check_error();
+  `./configure &> ../dfej_configure.out`;
+  chdir $DAIKONPARENT or fail("Can't chdir to $DAIKONPARENT: $!\n");
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub daikon_compile {
-  print "Compiling Daikon...";
-  `make CLASSPATH=$CLASSPATH JAVAC="$JAVAC" -C $INV/java/daikon all_directly &> daikon-compile.out`;
-  check_error();
+  print_maybe("Compiling Daikon...");
+  `make -C $INV/java all_directly &> daikon_compile.out`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub dfej_compile {
-  print "Compiling dfej...";
-  `make -j2 -C dfej/src &> dfej-compile.out`;
-  check_error();
+  print_maybe("Compiling dfej...");
+  `make -j2 -C dfej/src &> dfej_compile.out`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub daikon_unit_test {
-  print "Daikon Unit Tests...";
-  `make CLASSPATH=$CLASSPATH -C $INV/java/daikon junit &> daikon-unit-test.out`;
-  check_error();
+  print_maybe("Daikon unit tests...");
+  my $command = "make -C $INV/java/daikon junit " .
+    "&> daikon_unit_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  } else {
+    print_maybe("OK\n");
+    return 1;
+  }
 }
+
 
 sub daikon_system_test {
-  my $TEST_SUITE = "do-print_tokens-text-diff";
-  print "Daikon System Tests...";
-  `make -j2 INV=$INV CLASSPATH=$CLASSPATH -C $INV/tests/daikon-tests $TEST_SUITE &> daikon-system-test.out`;
-  fail("FAILED") if $CHILD_ERROR;
-  my $result = `make -C $INV/tests/daikon-tests summary 2>&1 | tee daikon-system-test-summary.out`;
-  fail("FAILED") if $CHILD_ERROR;
+#  my $TEST_SUITE = "do-print_tokens-text-diff";
+  my $TEST_SUITE = "text-diff";
+#  my $TEST_SUITE = "do-StackAr-text-diff";
+  print_maybe("Daikon system tests...");
+
+  my $command = "make -j2 -C $INV/tests/daikon-tests $TEST_SUITE " .
+    "&> daikon_system_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+  
+  $command = "make -C $INV/tests/daikon-tests summary " .
+    "2>&1 | tee daikon_system_test_summary.out";
+  my $result = `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+
   foreach my $line (split /\n/,$result) {
     next if ($line =~ /^make/);
-    fail("FAILED") if (!($line =~ /^0\s/));
+    if (!($line =~ /^0\s/)) {
+      print_maybe("FAILED\n");
+      return 0;
+    }
   }
-  print "OK\n";
+
+  print_maybe("OK\n");
+  return 1;
 }
 
+
 sub diff_system_test {
-  print "Diff System Tests...";
-  chdir "$INV/tests/diff-tests"
-    or fail("Can't chdir to $INV/tests/diff-tests: $!\n");
-  `make -j2 CLASSPATH=$CLASSPATH &> diff-system-test.out`;
-  fail("FAILED") if $CHILD_ERROR;
-  my $result = `make summary 2>&1 | tee diff-system-test-summary.out`;
-  fail("FAILED") if $CHILD_ERROR;
+  print_maybe("Diff system tests...");
+
+  my $command = "make -j2 -C $INV/tests/diff-tests " .
+    "&> diff_system_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+
+  $command = "make -C $INV/tests/diff-tests summary " .
+    "2>&1 | tee diff_system_test_summary.out";
+  my $result = `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+
   foreach my $line (split /\n/,$result) {
     next if ($line =~ /^make/);
-    fail("FAILED") if (!($line =~ /^OK\s/));
+    if (!($line =~ /^OK\s/)) {
+      print_maybe("FAILED\n");
+      return 0;
+    }
   }
-  chdir "../../.." or fail("Can't chdir to ../../..: $!\n");
-  print "OK\n";
+
+  print_maybe("OK\n");
+  return 1;
 }
+
 
 # Use the version of dfec in invariants/front-end/c.  Could build dfec
 # from source instead.
 sub dfec_system_test {
-  my $TEST_SUITE = "print_tokens";
-  print "dfec System Tests...";
-  `make -j2 INV=$INV -C $INV/tests/dfec-tests $TEST_SUITE &> dfec-system-test.out`;
-  fail("FAILED") if $CHILD_ERROR;
-  my $result = `make INV=$INV -C $INV/tests/dfec-tests summary-only 2>&1 | tee dfec-system-test-summary.out`;
-  fail("FAILED") if $CHILD_ERROR;
+  my $TEST_SUITE = "summary-no-space";
+  print_maybe("Dfec System Tests...");
+
+  my $command = "make -j2 -C $INV/tests/dfec-tests $TEST_SUITE " .
+    "&> dfec_system_test.out";
+  `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+
+  $command = "make -C $INV/tests/dfec-tests summary-only " .
+    "2>&1 | tee dfec_system_test_summary.out";
+  my $result = `$command`;
+  if ($CHILD_ERROR) {
+    print_maybe("FAILED\n");
+    return 0;
+  }
+
   foreach my $line (split /\n/,$result) {
     next if ($line =~ /^make/);
-    fail("FAILED") if (!($line =~ /^OK\s/));
+    if (!($line =~ /^OK\s/)) {
+      print_maybe("FAILED\n");
+      return 0;
+    }
   }
-  print "OK\n";
+
+  print_maybe("OK\n");
+  return 1;
 }
 
-sub check_error {
-  fail("FAILED") if $CHILD_ERROR;
-  print "OK\n";
-}
 
+# Unrecoverable failure
 sub fail {
-  my ($msg) = @_;
-  die "$msg\n";
+  die "@_\n";
+}
+
+
+# If the quiet option was specified, appends its arguments to the
+# string $message.  Else, prints its arguments immediately.
+sub print_maybe {
+  if ($quiet) {
+    $message .= @_;
+  } else {
+    print @_;    
+  }
+}
+
+
+# Source the file specified as an argument, and return the resulting
+# environment in a hash
+sub get_env {
+  my ($file) = @_;
+  my %newenv = ();
+  my $newenv = `source $file; env`;
+  foreach my $line (split '\n', $newenv) {
+    my ($var, $val) = split '=', $line;
+    $newenv{$var} = $val;
+  }
+  return %newenv;
 }
