@@ -13,6 +13,47 @@ versions as the user manual.
 
 ===========================================================================
 
+3.0.0 (19 December 2003)
+
+Daikon version 3 is now the standard distribution.
+
+Daikon version 2 reads an entire data trace file into memory and then
+processes it in multiple passes.  By contrast, Daikon version 3
+processes samples incrementally in a single pass, without needing to
+store the entire trace file in memory.  This allows version 3 to
+handle data trace files of essentially unlimited size.  There are a
+number of other differences between version 2 and version 3.  The most
+important are summarized below.
+
+  - A number of command line options have changed.  The options
+    noInvariantGuarding and suppressSplitterErrors are now
+    configuration variable.  The options suppress_cont,
+    no_suppress_cont, and suppress_post have been removed.  The option
+    prob_limit has been replaced by the similar option conf_limit.
+    The track option was added for debugging specific invariants.
+
+  - There are many new configuration variables.  For details, see the
+    "Configuration options" section of the manual.
+
+  - You may get slightly different output from that of version 2.  The
+    two versions test the same invariants, but the two versions use
+    different optimizations, and the mechanism for calculating the
+    statistical confidence level of each invariant has changed.  As a
+    result, which invariants are printed can differ between the two
+    versions.  For example, version 3 prints some redundant invariants
+    that are not printed in version 2.  These changes are mainly
+    minor; they do not affect output correctness, only verbosity; and
+    they will become less as more optimizations are added to version
+    3.
+
+New command-line options have been added to the LogicalCompare
+program.  See the manual for details.
+
+The developers manual has been significantly rewritten for clarity and
+some sections have been added.
+
+-----------------
+
 2.5.3 (01 October 2003)
 
 The default VarComparability has been changed from none to implicit.  
