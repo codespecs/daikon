@@ -3,9 +3,15 @@ Owner:        Toh <tohn>, Jeremy <mistere>
 Tool:         Daikon V3
 Summary:      Equality check not working in IOA example.  Problem with PptSlice2.isControlled?
 Severity:     Vexing
-Status:       Fixed
+Status:       Closed
 Reproducible: Yes
 Description:
+
+[tohn]
+
+Fixed in terms of isControlled().  I'll report later on some stuff not
+getting printed.
+
 
 [mistere]
 Thanks for digging into this, Toh.  The bug was in isControlled, and
@@ -118,7 +124,10 @@ IntEqual should get instantiated for pc[turn] and pc[p])
 
 --
 $Log$
-Revision 1.2  2002-03-28 18:14:24  mistere
+Revision 1.3  2002-03-28 18:42:25  tohn
+changed bug0033
+
+Revision 1.2  2002/03/28 18:14:24  mistere
 changed bug0033
 
 Revision 1.1  2002/03/28 07:07:24  tohn
