@@ -91,7 +91,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quoteMore(x) + "\"")
+  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name()
   #define JAVA_NAME var().name.java_name()
@@ -164,7 +164,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quoteMore(x) + "\"")
+  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name() + " elements"
   #define JAVA_NAME var().name.java_name()
@@ -250,6 +250,21 @@ public final class ONEOFSCALAR
   public static int dkconfig_size = 2;
 #else
   public static int dkconfig_size = 3;
+#endif
+
+#ifdef BASE_INT
+  /**
+   * Boolean. If true, invariants describing hashcode-typed variables
+   * as having any particular value will be completely omitted from
+   * Simplify-format output. If false, hashcodes will be formatted as
+   * the application of a "hashcode" uninterpreted function to an
+   * integer representing the bit pattern of the hashcode. One might
+   * wish to omit such invariants because the exact values of the
+   * hashcodes are usually uninteresting; this is the same reason they
+   * print in the native Daikon format, for instance, as "var has only
+   * one value" rather than "var == 150924732".
+   **/
+  public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
 
   // Probably needs to keep its own list of the values, and number of each seen.
@@ -1142,7 +1157,7 @@ public final class ONEOFSCALAR
       String str = elts[i];
       if (!is_type) {
         //RRN:  Tao used == here, it was probably a bug.
-        result += ".equals(" + ((str == null) ? "null" : "\"" + UtilMDE.quote(str) + "\"") + ")";
+        result += ".equals(" + ((str == null) ? "null" : "\"" + UtilMDE.escapeNonJava(str) + "\"") + ")";
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -1215,6 +1230,10 @@ public final class ONEOFSCALAR
 
 
   public String format_simplify() {
+#ifdef BASE_INT
+    if (is_hashcode && dkconfig_omit_hashcode_values_Simplify)
+      return "(AND)";
+#endif
     sort_rep();
 #if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
