@@ -91,7 +91,7 @@ public class SessionManager
     private void session_done() {
       Session tmp = session;
       session = null;
-      session.process.destroy();
+      tmp.process.destroy();
     }
   }
 
