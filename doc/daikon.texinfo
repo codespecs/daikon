@@ -361,7 +361,8 @@ source @var{parent}/daikon/bin/daikon.bashrc
 @end example
 Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
 to indicate the @var{parent} directory and to perform any desired
-customizations.
+customizations.  (Alternately, you may place such customizations in your
+own @file{.cshrc} or @file{.bash_profile} file.)
 
 @c @item
 @c Add the Daikon Java files to your Java class path.  There are two
@@ -455,7 +456,7 @@ To build dfej, see file @file{INSTALL} in the dfej sources.  In
 summary, you should be able to build dfej by running the following
 commands:
 @example
-cd front-end/java
+cd daikon/front-end/java
 ./configure
 make
 @end example
