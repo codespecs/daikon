@@ -212,8 +212,17 @@ C/C++ front end dfec
 
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
+* Uninitialized array elements::  
+* dfec requirements::           
+
+Pointer type disambiguation
+
 * Pointer type disambiguation example::  
-* dfec limitations::            
+
+dfec requirements
+
+* Requirements for instrumented programs::  
+* gcc version::                 
 
 Enhancing Daikon output
 
@@ -2348,6 +2357,7 @@ Edit the field Daikon Gui Project Root Directory to the
 @node    .dci files,  , Context GUI project root directory, Context GUI
 @subsection .dci files
 @cindex .dci files, for Context GUI
+@cindex dci files, for Context GUI
 
 The Context GUI creates @file{.dci} files as a preprocessing system for
 the program when it reads in the @file{.inv} files. This is done so that
@@ -2887,8 +2897,8 @@ you can run Daikon:
 @menu
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
-* Pointer type disambiguation example::  
-* dfec limitations::            
+* Uninitialized array elements::  
+* dfec requirements::           
 @end menu
 
 @node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
@@ -3041,7 +3051,7 @@ When conflicting options are specified (for instance, both
 @option{--declsfiledir} and @option{--declsfiledirflat}), the last one
 takes precedence.
 
-@node    Pointer type disambiguation, Pointer type disambiguation example, dfec command-line arguments, C/C++ front end dfec
+@node    Pointer type disambiguation, Uninitialized array elements, dfec command-line arguments, C/C++ front end dfec
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -3114,8 +3124,12 @@ the disambiguation mechanism is more robust.
 @c single elements.
 
 
-@node    Pointer type disambiguation example, dfec limitations, Pointer type disambiguation, C/C++ front end dfec
-@subsection Pointer type disambiguation example
+@menu
+* Pointer type disambiguation example::  
+@end menu
+
+@node    Pointer type disambiguation example,  , Pointer type disambiguation, Pointer type disambiguation
+@subsubsection Pointer type disambiguation example
 
 Consider this file:
 
@@ -3217,56 +3231,41 @@ orig(*bar) == 6
 @end example
 
 
-@node    dfec limitations,  , Pointer type disambiguation example, C/C++ front end dfec
-@subsection dfec limitations
+@node    Uninitialized array elements, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
+@subsection Uninitialized array elements
 
-Before running @command{dfec}, you should ensure that your code compiles
-cleanly; we recommend that you use @command{gcc -g -Wall}, as
-@command{dfec} issues warnings about a number of erroneous C constructs
-that @command{gcc} and other compilers accept.
-
-@cindex gcc version for use with dfec
-@cindex gcc 3
-@cindex gcc 2.96
-
-@command{dfec} works with gcc 2.95.3.  It is not known to work with other
-compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does ``gcc 2.96'' (which is not an official gcc release but
-appears in some Linux distributions).
-
-@cindex ANSI C
-@cindex K&R C
-@cindex C prototypes
-@cindex prototypes, C
-
-@command{dfec} technically only instruments C++ programs.  However, most
-ANSI C programs are also legal C++ programs.  Programs that define
-symbols that are C++ keywords, such as @samp{bool}, require that these
-symbols be changed to another name that does not conflict with the C++
-namespace (for example, 'bool' can be changed to 'boolean').
-dfec does not support K&R C or
-other non-ANSI/ISO C dialects; convert such programs to ISO C before
-running dfec.  The @command{protoize} program (distributed with many
-versions of Unix and also widely available online) helps to perform this
-task by converting K&R prototypes to ANSI prototypes.
-
-@c 7/02/2001
 The C/C++ front end keeps track of the maximum read or written element
 of each array.  This enables it to avoid outputting (meaningless)
-uninitialized elements.  Array accesses in files not supplied to dfec
-(for instance, in library functions) might not be recorded, causing
-too little of the array to be output.  This is not a problem for the
-stdc library functions found in @file{string.h}, because they have
-been specially modified to maintain the array extent information.
+uninitialized elements.  For example, consider the following code:
+@example
+char * mystring = malloc(100);
+strcpy(mystring, "hello");
+@end example
+@noindent
+Even though mystring has 100 elements, only the first six of them are
+valid.  dfec will only communicate those first six elements to
+Daikon.  After a subsequent operation:
+@example
+strcat(mystring, ", world");
+@end example
+@noindent
+dfec would communicate 13 elements to Daikon.
 
-Other functions can be added to dfec's list of special-case functions.
-For example, if there was a function with signature
+dfec tracks all array accesses in the instrumented program, and dfec
+also contains special-case handling for certain library routines,
+including all the stdc library functions found in @file{string.h}.
+However, array accesses in files not supplied to dfec (for instance,
+in other library functions) might not be recorded, causing too little
+of the array to be output to Daikon.
+
+The rest of this section describes how to add 
+other functions can be added to dfec's list of special-case functions.
+Suppose system header file @file{<bar.h>} contains a function with signature
 @example
   int foo(char *arg1, char *arg2)
 @end example
 @noindent
-that was in the system header file @file{<bar.h>}, you would need to do
-these things:
+Then you would need to do these things:
 
 @enumerate
 @item
@@ -3314,6 +3313,44 @@ compile.
 @end enumerate
 
 
+@node    dfec requirements,  , Uninitialized array elements, C/C++ front end dfec
+@subsection dfec requirements
+
+@menu
+* Requirements for instrumented programs::  
+* gcc version::                 
+@end menu
+
+@node    Requirements for instrumented programs, gcc version, dfec requirements, dfec requirements
+@subsubsection Requirements for instrumented programs
+
+
+Before running @command{dfec}, you should ensure that your code compiles
+cleanly.  We recommend that you use @command{gcc -g -Wall}, as
+@command{dfec} issues warnings about a number of erroneous C constructs
+that @command{gcc} and other compilers accept.
+
+@cindex ANSI C
+@cindex K&R C
+@cindex C prototypes
+@cindex prototypes, C
+
+@command{dfec} only instruments ANSI C programs.  dfec does not
+support K&R C or other non-ANSI/ISO C dialects; convert such programs
+to ISO C before running dfec.  The @command{protoize} program
+(distributed with gcc, among other places) helps to perform this task
+by converting K&R prototypes to ANSI prototypes.  Compiling with
+@command{gcc -g -Wall} will report many problems with non-ANSI code.
+You
+
+@command{dfec} technically only instruments C++ programs.  However,
+most ANSI C programs are also legal C++ programs.  Programs that
+define symbols that are C++ keywords, such as @samp{bool}, require
+that these symbols be changed to another name that does not conflict
+with the C++ namespace (for example, @samp{bool} can be changed to
+@samp{boolean}).
+
+
 @c [the following limitation is deprecated as of 7/02/2001.]
 @c [global/local/class vars are now scoped with '::', '', and 'this->'.]
 @c @c 4/10/2001
@@ -3322,6 +3359,62 @@ compile.
 @c instrumented C program will run fine, but the local variable will be
 @c output twice, and Daikon will issue an error when it is given files
 @c containing two variables of the same name.
+
+
+
+
+@node    gcc version,  , Requirements for instrumented programs, dfec requirements
+@subsubsection gcc version
+
+
+@cindex gcc version for use with dfec
+@cindex gcc 3
+@cindex gcc 2.96
+
+@command{dfec} works with gcc 2.95.3.  It is not known to work with other
+compilers or other versions of gcc.  In particular, gcc 3 does not
+work, nor does ``gcc 2.96'' (which is not an official gcc release but
+appears in some Linux distributions).
+You can download gcc 2.95.3 from @url{http://gcc.gnu.org/releases.html}.
+
+gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
+GCC installations instructions}.  If you do not wish to read them,
+then the following commands may work for you.  They do not require
+that you have superuser priviliges on your machine.  They create
+directory @file{/tmp/build-gcc-2.95.3}, then build gcc and install
+gcc under directory @file{/tmp/build-gcc-2.95.3/gcc-installation}.
+You may wish to adjust those directory names.
+
+@example
+  cd /tmp
+  mkdir build-gcc-2.95.3
+  cd build-gcc-2.95.3
+  wget ftp://prep.ai.mit.edu/pub/gnu/gcc/gcc-2.95.3.tar.gz
+  gunzip gcc-2.95.3.tar.gz
+  tar xf gcc-2.95.3.tar
+  mkdir gcc-2.95.3-build
+  cd gcc-2.95.3-build
+  ../gcc-2.95.3/configure --prefix=/tmp/build-gcc-2.95.3/gcc-installation
+  make bootstrap
+  make install
+@end example
+
+To test the installation, do the following:
+@example
+  which gcc
+  gcc -v
+  set path = (/tmp/build-gcc-2.95.3/gcc-installation $path)
+  which gcc
+  gcc -v
+@end example
+
+Now you can just use it; "gcc" refers to the new version.  You should
+also add the "set path" command to your .cshrc file.  If you use sh or
+bash rather than csh, then add the following to your @file{.bashrc} or
+equivalent file.
+@example
+  export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
+@end example
 
 
 @node    Enhancing Daikon output, Tools, Front ends, Top
@@ -3470,6 +3563,7 @@ conditional invariants (as implications).
 @subsection Splitter info file
 @cindex splitter info file
 @cindex .spinfo file
+@cindex spinfo file
 
 A splitter info file contains the conditions that Daikon should use to
 create conditional invariants.  Each section in the @file{.spinfo}
@@ -3688,6 +3782,7 @@ include the Daikon invariants as comments.
 
 @node    Extending Daikon, Troubleshooting, Tools, Top
 @chapter Extending Daikon
+
 @cindex extending Daikon
 @cindex changing Daikon
 @cindex customizing Daikon
@@ -3721,12 +3816,18 @@ To compile Daikon, type @command{make} in any directory under
 @file{.class} files, so you do not need to compile them yourself unless
 you make changes.
 
+@cindex .jpp files
+@cindex jpp files
+
 In order to compile Daikon, you need the C preprocessor
 @command{cpp}, which is used to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
 If you do not have @command{cpp}, you may run @command{make avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
-@file{.java} files or the compiled @file{.class} files.
+@file{.java} files or the compiled @file{.class} files.  (The purpose
+of the @file{.jpp} files is to avoid code duplication by placing
+common code in a single file, then generating other files that need to
+include that common code.)
 
 @cindex Jikes compiler
 @cindex javac compiler, overriding
@@ -4126,6 +4227,44 @@ you will notice this if environment variable DFEJ_VERBOSE is set.
 You may safely ignore this message if Ajax does not produce any
 further warnings or errors.  The message results from Ajax's inability
 to handle JDK 1.2 libraries.
+
+
+@node    dfec problems, Daikon problems, Installation problems, Troubleshooting
+@section Problems with dfec
+
+@cindex daikon_runtime error
+@cindex error, daikon_runtime
+@cindex attempted to access index error
+@cindex error, attempted to access index
+
+A program instrumented by dfec may produce a message such as
+@example
+daikon_runtime: attempted to access index 5 of a 4-length array!
+@end example
+Such a message indicates that there is an error in your program.  Your
+program attempts to read or write memory beyond the end of an array.
+You should fix this error before proceeding to try to detect
+invariants.  If you do not do so, then the program's results cannot be
+relied on, because the erroneous array access might corrupt (or access
+meaningless values from) other variables, the Daikon runtime data
+structures, or your program's stack.  When this occurs, the Daikon
+runtime immediately halts your program to let you know where the error
+occurred and to prevent memory corruption.  The Daikon runtime's
+discovery of these errors, while not directly related to invariant
+detection, is a pleasant side effect of using Daikon.
+
+To learn exactly where the error occurred in your program, you can
+either run a debugger (such as @uref{http://sources.redhat.com/gdb/, ,
+GDB}) on the @file{core} file left behind when the Daikon runtime
+halts the instrumented program, or you can run the instrumented
+program under the debugger.  Correct the error, then re-instrument it
+and run it again.
+
+@c 5/15/2002
+(In a future release, we plan to permit programs to continue running
+even if they commit memory errors, in certain cases and when users set
+special flags to enable this behavior.)
+
 
 
 @c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
