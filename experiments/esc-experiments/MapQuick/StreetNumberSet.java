@@ -86,7 +86,7 @@ public class StreetNumberSet
 	int e2 = ends[j];
 
 	// if ranges are same parity, must not overlap
-	if (parityOf(b2) == parityOf(e2)) {
+	if (parityOf(b) == parityOf(b2)) {
 	  Assert.assert(!((b <= b2) && (b2 <= e)));
 	  Assert.assert(!((b <= e2) && (e2 <= e)));
 	}
