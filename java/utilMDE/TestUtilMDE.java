@@ -714,7 +714,50 @@ public final class TestUtilMDE {
   public static void testUtilMDE() {
 
     // public static BufferedReader BufferedFileReader(String filename)
+    // public static LineNumberReader LineNumberFileReader(String filename)
+    // public static Class classForName(String className)
+
+    // public static String classnameToJvm(String classname)
+    Assert.assert(UtilMDE.classnameToJvm("boolean").equals("Z"));
+    Assert.assert(UtilMDE.classnameToJvm("byte").equals("B"));
+    Assert.assert(UtilMDE.classnameToJvm("char").equals("C"));
+    Assert.assert(UtilMDE.classnameToJvm("double").equals("D"));
+    Assert.assert(UtilMDE.classnameToJvm("float").equals("F"));
+    Assert.assert(UtilMDE.classnameToJvm("int").equals("I"));
+    Assert.assert(UtilMDE.classnameToJvm("long").equals("J"));
+    Assert.assert(UtilMDE.classnameToJvm("short").equals("S"));
+    Assert.assert(UtilMDE.classnameToJvm("Integer").equals("LInteger;"));
+    Assert.assert(UtilMDE.classnameToJvm("Java.lang.Integer").equals("LJava/lang/Integer;"));
+    Assert.assert(UtilMDE.classnameToJvm("Java.lang.Integer[][][]").equals("[[[LJava/lang/Integer;"));
+
+    // public static String arglistToJvm(String arglist)
+
+    // public static String classnameFromJvm(String classname)
+    Assert.assert(UtilMDE.classnameFromJvm("Z").equals("boolean"));
+    Assert.assert(UtilMDE.classnameFromJvm("B").equals("byte"));
+    Assert.assert(UtilMDE.classnameFromJvm("C").equals("char"));
+    Assert.assert(UtilMDE.classnameFromJvm("D").equals("double"));
+    Assert.assert(UtilMDE.classnameFromJvm("F").equals("float"));
+    Assert.assert(UtilMDE.classnameFromJvm("I").equals("int"));
+    Assert.assert(UtilMDE.classnameFromJvm("J").equals("long"));
+    Assert.assert(UtilMDE.classnameFromJvm("S").equals("short"));
+    Assert.assert(UtilMDE.classnameFromJvm("LInteger;").equals("Integer"));
+    Assert.assert(UtilMDE.classnameFromJvm("LJava/lang/Integer;").equals("Java.lang.Integer"));
+    Assert.assert(UtilMDE.classnameFromJvm("[[LJava/lang/Integer;").equals("Java.lang.Integer[][]"));
+
+    // public static String arglistFromJvm(String arglist)
+    Assert.assert(UtilMDE.arglistFromJvm("()").equals("()"));
+    Assert.assert(UtilMDE.arglistFromJvm("(I)").equals("(int)"));
+    Assert.assert(UtilMDE.arglistFromJvm("(II)").equals("(int, int)"));
+    Assert.assert(UtilMDE.arglistFromJvm("(IJS)").equals("(int, long, short)"));
+    Assert.assert(UtilMDE.arglistFromJvm("(Ljava/lang/Integer;ILjava/lang/Integer;)").equals("(java.lang.Integer, int, java.lang.Integer)"));
+
+
     // public static void addToClasspath(String dir)
+    // public static final class WildcardFilter implements FilenameFilter
+    //   public WildcardFilter(String filename)
+    //   public boolean accept(File dir, String name)
+    // public Object incrementHashMap(HashMap hm, Object key, int count)
 
     {
       // These names are taken from APL notation, where iota creates an

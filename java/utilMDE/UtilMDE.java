@@ -87,11 +87,11 @@ public final class UtilMDE {
     primitiveClassesJvm.put("double", "D");
     primitiveClassesJvm.put("float", "F");
     primitiveClassesJvm.put("int", "I");
-    primitiveClassesJvm.put("long", "L");
+    primitiveClassesJvm.put("long", "J");
     primitiveClassesJvm.put("short", "S");
   }
 
-  /** Convert a string of the form "java.lang.Object[]" to "[Ljava.lang.Object;" **/
+  /** Convert a string of the form "java.lang.Object[]" to "[Ljava/lang/Object;" **/
   public static String classnameToJvm(String classname) {
     int dims = 0;
     while (classname.endsWith("[]")) {
@@ -105,7 +105,11 @@ public final class UtilMDE {
     for (int i=0; i<dims; i++) {
       result = "[" + result;
     }
-    return result;
+    return result.replace('.', '/');
+  }
+
+  public static String arglistToJvm(String arglist) {
+    throw new Error("Not yet implemented");
   }
 
   private static HashMap primitiveClassesFromJvm = new HashMap(8);
@@ -116,11 +120,11 @@ public final class UtilMDE {
     primitiveClassesFromJvm.put("D", "double");
     primitiveClassesFromJvm.put("F", "float");
     primitiveClassesFromJvm.put("I", "int");
-    primitiveClassesFromJvm.put("L", "long");
+    primitiveClassesFromJvm.put("J", "long");
     primitiveClassesFromJvm.put("S", "short");
   }
 
-  /** Convert a string of the form "[Ljava.lang.Object;" to "java.lang.Object[]" **/
+  /** Convert a string of the form "[Ljava/lang/Object;" to "java.lang.Object[]" **/
   public static String classnameFromJvm(String classname) {
     int dims = 0;
     while (classname.startsWith("[")) {
@@ -139,7 +143,29 @@ public final class UtilMDE {
     for (int i=0; i<dims; i++) {
       result += "[]";
     }
-    return result;
+    return result.replace('/', '.');
+  }
+
+  public static String arglistFromJvm(String arglist) {
+    String result = "(";
+    if (! (arglist.startsWith("(") && arglist.endsWith(")"))) {
+      throw new Error("Malformed arglist");
+    }
+    int pos = 1;
+    while (pos < arglist.length()-1) {
+      if (pos > 1)
+        result += ", ";
+      char c = arglist.charAt(pos);
+      if (c == 'L') {
+        int semi_pos = arglist.indexOf(";", pos);
+        result += classnameFromJvm(arglist.substring(pos, semi_pos+1));
+        pos = semi_pos + 1;
+      } else {
+        result += classnameFromJvm(arglist.substring(pos, pos+1));
+        pos = pos+1;
+      }
+    }
+    return result + ")";
   }
 
 
