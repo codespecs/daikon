@@ -6,7 +6,8 @@ import java.util.regex.*;
 
 /**
  * This class has a method compile_source which can be used to compile Java
- * source.  It invokes the external command javac/jikes.
+ * source.  It invokes a user-specified external command, such as
+ * <tt>javac</tt> or <tt>jikes</tt>.
  **/
 public final class FileCompiler {
 

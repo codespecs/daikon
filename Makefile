@@ -185,8 +185,6 @@ test-staged-dist: $(STAGING_DIST)
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
-	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
-	# method or class.
 	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
 	# Test the main target of the makefile

@@ -38,7 +38,6 @@ very_clean: clean
 tags:
 	etags ${ALL_JAVA_FILES}
 
-# Run Jikes unconditionally.
 # This "set" form doesn't seem to work for me (maybe needs to be export?).
 # Used to depend on targets "clean all", but I want to run this in "all".
 test:

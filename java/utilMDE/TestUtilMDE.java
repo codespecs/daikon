@@ -853,8 +853,8 @@ public final class TestUtilMDE extends TestCase {
           }
           arrays[i] = a;
           // System.out.println(ArraysMDE.toString(a));
-          // Sadly, this is required to get the last array to be garbage-collected
-          // with Jikes 1.03 and JDK 1.2.2.
+          // Sadly, this is required to get the last array to be
+          // garbage-collected with Jikes 1.03 and JDK 1.2.2.
           a = null;
         }
         System.gc();
