@@ -1,0 +1,44 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_fuzzy_main_10 extends Splitter { 
+
+  public String condition () { return "daikon.Runtime.ps_count++ == 0"; } 
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_fuzzy_main_10() { } 
+  public misc_fuzzy_main_10(Ppt ppt) {
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new misc_fuzzy_main_10(ppt);
+  } 
+
+  public boolean valid() { 
+    return ( true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    return ( daikon.Runtime.ps_count++ == 0 ); 
+  }
+
+  public String repr() { 
+    return "misc_fuzzy_main_10: "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

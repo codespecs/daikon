@@ -1,0 +1,60 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class PolyCalc_RatNum_sub_5 extends Splitter { 
+
+  public String condition () { return "this.add(arg.negate())"; } 
+
+  VarInfo this_numer_varinfo;	// this.numer
+  VarInfo this_denom_varinfo;	// this.denom
+  VarInfo this_Daikon_varinfo;	// this
+  VarInfo arg_varinfo;	// arg
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public PolyCalc_RatNum_sub_5() { } 
+  public PolyCalc_RatNum_sub_5(Ppt ppt) {
+    this_numer_varinfo = ppt.findVarByRepr("Field{numer}[this]");
+    this_denom_varinfo = ppt.findVarByRepr("Field{denom}[this]");
+    this_Daikon_varinfo = ppt.findVarByRepr("this");
+    arg_varinfo = ppt.findVarByRepr("arg");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new PolyCalc_RatNum_sub_5(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((this_numer_varinfo != null) && (this_denom_varinfo != null) && (this_Daikon_varinfo != null) && (arg_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long this_numer = this_numer_varinfo.getIntValue(vt);
+    long this_denom = this_denom_varinfo.getIntValue(vt);
+    long this_Daikon = this_Daikon_varinfo.getIntValue(vt);
+    long arg = arg_varinfo.getIntValue(vt);
+    return ( this_Daikon.(new RatNum(this_numer*arg.(new RatNum(- this_numer , this_denom)).this_denom + arg.(new RatNum(- this_numer , this_denom)).this_numer*this_denom,                            this_denom*arg.(new RatNum(- this_numer , this_denom)).this_denom)) ); 
+  }
+
+  public String repr() { 
+    return "PolyCalc_RatNum_sub_5: "
+      + "this_numer_varinfo=" + this_numer_varinfo.repr() + " "
+      + "this_denom_varinfo=" + this_denom_varinfo.repr() + " "
+      + "this_Daikon_varinfo=" + this_Daikon_varinfo.repr() + " "
+      + "arg_varinfo=" + arg_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

@@ -1,0 +1,44 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class MapQuick__StreetNumberSet_StreetNumberSet_48 extends Splitter { 
+
+  public String condition () { return "!(range_count >= 1)"; } 
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public MapQuick__StreetNumberSet_StreetNumberSet_48() { } 
+  public MapQuick__StreetNumberSet_StreetNumberSet_48(Ppt ppt) {
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick__StreetNumberSet_StreetNumberSet_48(ppt);
+  } 
+
+  public boolean valid() { 
+    return ( true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    return ( !(range_count >= 1) ); 
+  }
+
+  public String repr() { 
+    return "MapQuick__StreetNumberSet_StreetNumberSet_48: "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

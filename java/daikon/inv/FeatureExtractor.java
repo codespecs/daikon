@@ -212,7 +212,7 @@ public final class FeatureExtractor {
   //   are useful or non-useful.
 
   private static ArrayList[] getUsefulAndNonuseful(String[] args)
-    throws IOException{
+    throws IOException {
     // ignore args[0] and args[length-1]
     // the rest of the args are pairs of files such each pair
     // consists of a Non-Buggy.inv and Buggy.inv
@@ -330,7 +330,7 @@ public final class FeatureExtractor {
   private static void printC5DataOutput (ArrayList features,
                                          TreeSet allFeatures,
                                          String label,
-                                         FileWriter output) throws IOException{
+                                         FileWriter output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     // Create a TreeSet allFets which has all the features of
     // the current (ith) vector and the other features filled in with 0s
@@ -411,7 +411,7 @@ public final class FeatureExtractor {
 
   private static void printSVMDataOutput(ArrayList features, ArrayList strings,
                                          String label,
-                                         FileWriter output) throws IOException{
+                                         FileWriter output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.write(label);
@@ -446,7 +446,7 @@ public final class FeatureExtractor {
   // feature vectors in features.
 
   private static void printSVMfuDataOutput(ArrayList features, String label,
-                                           FileWriter output) throws IOException{
+                                           FileWriter output) throws IOException {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       output.write(((TreeSet) features.get(i)).size() * 2 + " ");
@@ -599,7 +599,7 @@ public final class FeatureExtractor {
   }
 
   private static ArrayList getInvariantClasses(File top)
-    throws ClassNotFoundException{
+    throws ClassNotFoundException {
     ArrayList answer = new ArrayList();
     if (top.isDirectory()) {
       File[] all = top.listFiles();

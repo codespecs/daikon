@@ -3,6 +3,7 @@ package daikon.split;
 import daikon.*;
 import java.util.Arrays;
 
+// Shouldn't this be an inner class of ContextSplitterFactory?
 /**
  * Simple record type to store a PptName and Splitter array.
  **/

@@ -1,0 +1,52 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class DataStructures_QueueAr_isEmpty_3 extends Splitter { 
+
+  public String condition () { return "orig(currentSize) == 0"; } 
+
+  VarInfo this_currentSize_varinfo;	// this.currentSize
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public DataStructures_QueueAr_isEmpty_3() { } 
+  public DataStructures_QueueAr_isEmpty_3(Ppt ppt) {
+    this_currentSize_varinfo = ppt.findVarByRepr("Field{currentSize}[this]");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new DataStructures_QueueAr_isEmpty_3(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((this_currentSize_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long this_currentSize = this_currentSize_varinfo.getIntValue(vt);
+    return ( orig_this_currentSize == 0 ); 
+  }
+
+  public String repr() { 
+    return "DataStructures_QueueAr_isEmpty_3: "
+      + "this_currentSize_varinfo=" + this_currentSize_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_currentSize_vi = ppt.findVarByRepr("Field{currentSize}[this]");
+    if (this_currentSize_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_currentSize_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

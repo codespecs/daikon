@@ -7,12 +7,12 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
 
-// CreateSpinfo extracts the following statements from the Java source:
+// CreateSpinfo extracts the following expressions from the Java source:
 // For each method:
-//  * extracts all expressions in conditional statements
+//  * extracts all expressions in conditional statements,
 //    ie. if, for, which, etc.
 //  * if the method body is a one-line return statement, it
-//    extracts it for later substitution into expressions which
+//    extracts the expression for later substitution into expressions which
 //    call this function. These statements are referred to as
 //    replace statements
 // For each field declaration
@@ -31,7 +31,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   boolean enterMethod;   // true if the current Node is a Method
                          // declaration ie. we just entered a method.
 
-  // key = methodname; value = conditional expressions
+  // key = methodname (as String); value = conditional expressions (as Strings)
   HashMap conditions = new HashMap();
   // key = method declaration; value = method bodies
   HashMap replaceStatements = new HashMap();

@@ -1028,7 +1028,7 @@ public class Ast {
     if (invs.length == 1) {
       return new String[0];
     }
-    if ((invs.length == 2) && (invs[0].startsWith("No samples for "))) {
+    if ((invs.length == 2) && (invs[0].startsWith("[No samples for "))) {
       return new String[0];
     }
     // Ignore first three lines.  Also ignore last line, which is empty.

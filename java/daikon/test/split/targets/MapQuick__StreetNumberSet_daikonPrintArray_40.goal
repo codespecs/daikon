@@ -1,0 +1,52 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class MapQuick__StreetNumberSet_daikonPrintArray_40 extends Splitter { 
+
+  public String condition () { return "((MapQuick1.StreetNumberSet)a.get(i)).begins == null"; } 
+
+  VarInfo this_begins_identity_varinfo;	// this.begins
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public MapQuick__StreetNumberSet_daikonPrintArray_40() { } 
+  public MapQuick__StreetNumberSet_daikonPrintArray_40(Ppt ppt) {
+    this_begins_identity_varinfo = ppt.findVarByRepr("Field{begins}[this]");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick__StreetNumberSet_daikonPrintArray_40(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((this_begins_identity_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long this_begins_identity = this_begins_identity_varinfo.getIntValue(vt);
+    return ( ((MapQuick1.StreetNumberSet)a.get(i)).begins_identity == 0 ); 
+  }
+
+  public String repr() { 
+    return "MapQuick__StreetNumberSet_daikonPrintArray_40: "
+      + "this_begins_identity_varinfo=" + this_begins_identity_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_begins_identity_vi = ppt.findVarByRepr("Field{begins}[this]");
+    if (this_begins_identity_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_begins_identity_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

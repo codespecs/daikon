@@ -1,0 +1,28 @@
+REPLACE
+isFull()
+currentSize == theArray.length
+isEmpty()
+currentSize == 0
+
+PPT_NAME DataStructures.QueueAr.isFull
+currentSize == theArray.length
+
+PPT_NAME DataStructures.QueueAr.increment
+++x == theArray.length
+
+PPT_NAME DataStructures.QueueAr.isEmpty
+orig(currentSize) == 0
+
+PPT_NAME DataStructures.QueueAr.main
+i < 10
+!q.isEmpty()
+
+PPT_NAME DataStructures.QueueAr.dequeue
+isEmpty()
+
+PPT_NAME DataStructures.QueueAr.enqueue
+isFull()
+
+PPT_NAME DataStructures.QueueAr.getFront
+isEmpty()
+

@@ -1,0 +1,52 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class MapQuick__StreetNumberSet_contains_43 extends Splitter { 
+
+  public String condition () { return "(b <= n)&&(n <= e)"; } 
+
+  VarInfo n_varinfo;	// n
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public MapQuick__StreetNumberSet_contains_43() { } 
+  public MapQuick__StreetNumberSet_contains_43(Ppt ppt) {
+    n_varinfo = ppt.findVarByRepr("n");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick__StreetNumberSet_contains_43(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((n_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long n = n_varinfo.getIntValue(vt);
+    return ( (b <= n)&&(n <= e) ); 
+  }
+
+  public String repr() { 
+    return "MapQuick__StreetNumberSet_contains_43: "
+      + "n_varinfo=" + n_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo n_vi = ppt.findVarByRepr("n");
+    if (n_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {n_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

@@ -12,7 +12,7 @@ import java.util.*;
  * the condition is read from the .spinfo file, and later contains a
  * reference to the compiled "Splitter" object.
  **/
-public class SplitterObject implements Comparable{
+public class SplitterObject implements Comparable {
 
   private Splitter splitter;
   private String condition; // the condition
@@ -23,7 +23,7 @@ public class SplitterObject implements Comparable{
   private String testString = "Unassigned";
   private String errorMessage;
   private int guid = -999;      // -999 indicates not yet set
-  private File classFile; // The class file containing the compiled code for this splitter
+  private File classFile; // class file containing compiled code for this splitter
 
   public String daikonFormat   = null;
   public String javaFormat     = null;

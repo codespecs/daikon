@@ -1,0 +1,52 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class MapQuick__StreetNumberSet_max_18 extends Splitter { 
+
+  public String condition () { return "ends[i] > high"; } 
+
+  VarInfo this_ends_array_varinfo;	// this.ends[]
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public MapQuick__StreetNumberSet_max_18() { } 
+  public MapQuick__StreetNumberSet_max_18(Ppt ppt) {
+    this_ends_array_varinfo = ppt.findVarByRepr("Elements[Field{ends}[this]]");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick__StreetNumberSet_max_18(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((this_ends_array_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long[] this_ends_array = this_ends_array_varinfo.getIntArrayValue(vt);
+    return ( ends_array[i] > high ); 
+  }
+
+  public String repr() { 
+    return "MapQuick__StreetNumberSet_max_18: "
+      + "this_ends_array_varinfo=" + this_ends_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_ends_array_vi = ppt.findVarByRepr("Elements[Field{ends}[this]]");
+    if (this_ends_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_ends_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

@@ -1,6 +1,7 @@
 *.class
 SeqComparison.java
 SeqComparisonFloat.java
+SeqComparisonString.java
 Reverse.java
 ReverseFloat.java
 SubSequence.java
@@ -15,6 +16,7 @@ PairwiseFunctionUnary.java
 PairwiseFunctionUnaryFloat.java
 TwoSequence.java
 TwoSequenceFloat.java
+TwoSequenceString.java
 TwoSequenceFactory.java
 TwoSequenceFactoryFloat.java
 SeqComparisonString.java

@@ -21,7 +21,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         printer = new Printer(fileName);
     }
 
-    public void close() throws IOException{
+    public void close() throws IOException {
         printer.close();
     }
 

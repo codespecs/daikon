@@ -1,0 +1,214 @@
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintArrayNonsensical
+depth == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.max
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+ends[i] > high
+i < ends.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrint
+x == null
+depth == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintNonsensical
+depth == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintFieldsNonsensical
+(prefix == null)||(prefix.equals(""))
+
+PPT_NAME MapQuick1.StreetNumberSet.checkRep
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+parityOf(b)== parityOf(b2)
+j < begins.length
+i < begins.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.size
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+i < begins.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.min
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+begins[i] < low
+i < begins.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.equals
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+other == null
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+other == this
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+begins.length == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+min != other.min()
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+max != other.max()
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+this.contains(n)!= other.contains(n)
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+n <= max
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.hashCode
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.isEmpty
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintNull
+depth == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintFields
+(prefix == null)||(prefix.equals(""))
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintArray
+a == null
+depth == 0
+a[i] == null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+a[i] == null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+a[i] == null
+a[i].begins == null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+a[i] == null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+a[i] == null
+a[i].ends == null
+i < a.length
+a == null
+depth == 0
+((MapQuick1.StreetNumberSet)a[i])== null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a[i])== null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a[i])== null
+((MapQuick1.StreetNumberSet)a[i]).begins == null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a[i])== null
+i < a.length
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a[i])== null
+((MapQuick1.StreetNumberSet)a[i]).ends == null
+i < a.length
+a == null
+depth == 0
+((MapQuick1.StreetNumberSet)a.get(i))== null
+i < a.size()
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a.get(i))== null
+i < a.size()
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a.get(i))== null
+((MapQuick1.StreetNumberSet)a.get(i)).begins == null
+i < a.size()
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a.get(i))== null
+i < a.size()
+elt_field_is_nonsensical
+i != 0
+((MapQuick1.StreetNumberSet)a.get(i))== null
+((MapQuick1.StreetNumberSet)a.get(i)).ends == null
+i < a.size()
+
+PPT_NAME MapQuick1.StreetNumberSet.parityOf
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.daikonPrintFieldsNull
+(prefix == null)||(prefix.equals(""))
+
+PPT_NAME MapQuick1.StreetNumberSet.contains
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+parity == parityOf(b)
+(b <= n)&&(n <= e)
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+i < begins.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.intersects
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+isEmpty()
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+other.isEmpty()
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+min2 > min
+max2 < max
+this.contains(n)&& other.contains(n)
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+n <= max
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.StreetNumberSet
+daikon.Runtime.ps_count++ == 0
+!(range_count >= 1)
+whereDash >= 0
+i < range_count
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+
+PPT_NAME MapQuick1.StreetNumberSet.orderStatistic
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+parity == parityOf(b)
+n2 > b
+n2 > e
+i < begins.length
+daikon.Runtime.ps_count++ == 0
+daikon.Runtime.ps_count++ == 0
+

@@ -89,6 +89,14 @@ public class SplitterFactory {
     }
   }
 
+  //Observers
+
+  /**
+   * @return the directory that temporary files are stored at
+   */
+  public static String getTempDir() {
+    return tempdir;
+  }
 
   /// Methods
 

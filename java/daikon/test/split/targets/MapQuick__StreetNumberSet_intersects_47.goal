@@ -1,0 +1,57 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class MapQuick__StreetNumberSet_intersects_47 extends Splitter { 
+
+  public String condition () { return "this.contains(n)&& other.contains(n)"; } 
+
+  VarInfo other_varinfo;	// other
+  VarInfo this_Daikon_varinfo;	// this
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public MapQuick__StreetNumberSet_intersects_47() { } 
+  public MapQuick__StreetNumberSet_intersects_47(Ppt ppt) {
+    other_varinfo = ppt.findVarByRepr("other");
+    this_Daikon_varinfo = ppt.findVarByRepr("this");
+  }
+
+  public Splitter instantiate(Ppt ppt) {
+    return new MapQuick__StreetNumberSet_intersects_47(ppt);
+  } 
+
+  public boolean valid() { 
+    return ((other_varinfo != null) && (this_Daikon_varinfo != null) &&  true );
+  }
+
+  public boolean test(ValueTuple vt) {
+    long other = other_varinfo.getIntValue(vt);
+    long this_Daikon = this_Daikon_varinfo.getIntValue(vt);
+    return ( this_Daikon.contains(n)&& other.contains(n) ); 
+  }
+
+  public String repr() { 
+    return "MapQuick__StreetNumberSet_intersects_47: "
+      + "other_varinfo=" + other_varinfo.repr() + " "
+      + "this_Daikon_varinfo=" + this_Daikon_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo other_vi = ppt.findVarByRepr("other");
+    VarInfo this_Daikon_vi = ppt.findVarByRepr("this");
+    if (other_vi != null && this_Daikon_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {other_vi, this_Daikon_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+}

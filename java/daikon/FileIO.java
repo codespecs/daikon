@@ -631,7 +631,7 @@ public final class FileIO {
         }
 
         String ppt_name = line; // already interned
-        { 
+        {
           try {
             PptName parsed = new PptName(ppt_name);
             // Enable the code below when Daikon stops using different
@@ -655,7 +655,7 @@ public final class FileIO {
         if (Daikon.debugTrace.isDebugEnabled()) {
           data_num_slices = all_ppts.countSlices();
         }
-        
+
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
         Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
 
