@@ -363,13 +363,17 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 	# Old version:
 	#   tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
 	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
-	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
-	(cd /tmp/daikon/java; mv jakarta-oro-2.0.3/src/java/org/apache/oro org/apache/oro)
+	tar zxf java/lib/jakarta-oro-2.0.6.tar.gz -C /tmp/daikon/java
+	(cd /tmp/daikon/java; mv jakarta-oro-2.0.6/src/java/org/apache/oro org/apache/oro)
 	# Making a link causes duplicate-class-def compilation problems,
 	# so just create a README file instead.
-	(cd /tmp/daikon/java/jakarta-oro-2.0.3/src/java/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
-	# ORO distribution lacks .class files; Daikon dist should have them.
-	(cd /tmp/daikon/java; javac `find org/apache/oro -name '*.java' -print`)
+	(cd /tmp/daikon/java/jakarta-oro-2.0.6/src/java/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
+	# ORO distribution .class files are in docs/classes; this is an obscure
+	# location, and (more importantly) it also makes too-long file names in
+	# the tar file, which causes trouble for some tar programs.
+	(cd /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache; cp -p --parents `find oro -name '*.class' -print` /tmp/daikon/java/org/apache/)
+	rm -rf /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache/oro
+	(cd /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
 	## JTB
 	cp -pR java/jtb /tmp/daikon/java/
 	## Ajax
