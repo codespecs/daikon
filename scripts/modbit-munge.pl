@@ -1,4 +1,6 @@
-#! /uns/bin/perl -wpi.bak
+: # Use -*- Perl -*- without knowing its path
+  eval 'exec perl -S -wpi.bak $0 "$@"'
+  if 0;
 # Fix up mod bits for the argument .dtrace files (in place).
 # Usage:  modbit-munge.pl myprog.dtrace ...
 
