@@ -1507,12 +1507,18 @@ public final class VarInfo
   // Where do these really belong?
 
 
-  // Given two variables I and J, indicate whether it is necessarily the
-  // case that i<=j or i>=j.  The variables also each have a shift, so the
-  // test can really be something like (i+1)<=(j-1).
-  // The test is either:  i + i_shift <= j + j_shift (if test_lessequal)
-  //                      i + i_shift >= j + j_shift (if !test_lessequal)
+  /**
+   *  Given two variables I and J, indicate whether it is necessarily the
+   *  case that i<=j or i>=j.  The variables also each have a shift, so the
+   *  test can really be something like (i+1)<=(j-1).
+   *  The test is either:  i + i_shift <= j + j_shift (if test_lessequal)
+   *                   i + i_shift >= j + j_shift (if !test_lessequal)
+   *  This is a dynamic check, and so must not be called while Daikon is
+   *  inferencing.
+   **/
+
   public static boolean compare_vars(VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
+    Assert.assertTrue (!Daikon.isInferencing);
     // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
     if (vari == varj) {
       // same variable
@@ -1621,7 +1627,8 @@ public final class VarInfo
     }
   }
 
-
+ 
+  /* // [INCR] Use isObviousSubSequence or find SubSequence invariants
   public static boolean seqs_overlap(VarInfo seq1, VarInfo seq2) {
     // Very limited implementation as of now.
     VarInfo super1 = seq1.isDerivedSubSequenceOf();
@@ -1648,6 +1655,7 @@ public final class VarInfo
       return compare_vars(index1, shift1, index2, shift2, start2);
     }
   }
+  */ // [INCR]
 
   // takes an "orig()" var and gives a VarInfoName for a variable or
   // expression in the post-state which is equal to this one.
