@@ -461,8 +461,7 @@ public final class Equality
 
   /**
    * Convert Equality invariants into normal IntEqual type for
-   * filtering, printing, etc.  Add these to parent.  Doesn't add equality
-   * if the same equality is present at the global ppt.
+   * filtering, printing, etc.  Add these to parent.
    *
    * If the leader was changed to not be the first member of the group
    * adds leader == leader invariant as well since that invariant is
@@ -487,40 +486,9 @@ public final class Equality
         debugPostProcess.fine ("  var2: " + varArray[i].name.name());
       }
 
-      // If the same equality exists at the global ppt, don't make it here
-      if (is_global_equality (leader, varArray[i]))
-        continue;
-
       parent.create_equality_inv (leader, varArray[i], numSamples());
     }
   }
-
-  /**
-   * Returns whether or not the specified local variables are equal
-   * at the global ppt.  To be equal, they must have the same transform
-   * to the global ppt and be equal
-   */
-  public boolean is_global_equality (VarInfo loc1, VarInfo loc2) {
-
-    Debug.log (getClass(), ppt.parent, Debug.vis (loc1, loc2),
-               "Looking for global equality");
-
-    // both local variables must have the same global transform
-    if (!loc1.is_global() || !loc2.is_global())
-      return (false);
-    if (loc1.is_post_global() != loc2.is_post_global())
-      return (false);
-
-    VarInfo glob1 = loc1.global_var();
-    VarInfo glob2 = loc2.global_var();
-
-    if (glob1.equalitySet == glob2.equalitySet)
-      return (true);
-
-    return (false);
-  }
-
-
 
   /**
    * Switch the leader of this invariant, if possible, to a VarInfo
