@@ -15,20 +15,6 @@
           (found (re-search-backward regexp (point-min) t)))
       (and found (= (match-end 0) old-point)))))
 
-; from prog-modes-mde.el
-(defun set-tab-stop-list-width (n)
-  "Set tab width in current buffer to N.
-Interactively, it's probably better to just set variable `tab-width'."
-  (interactive "P")
-  (if (not (numberp n))
-      (error "Supply explicit numeric prefix argument to `set-tab-stop-list-width'"))
-  (setq tab-stop-list '())
-  ;; was 120, not big enough
-  (let ((i (* (/ 500 n) n)))
-    (while (> i 0)
-      (setq tab-stop-list (cons i tab-stop-list)
-	    i (- i n)))))
-
 (defvar c-basic-offset-default 2
   "Default value used by `c-set-basic-offset'.
 If nil, use the current value of `c-basic-offset' as the default.")
@@ -64,10 +50,7 @@ To use, put in your .emacs file:  \(add-hook 'c-mode-hook 'c-set-basic-offset\)"
 	      (progn
 		(goto-char (match-end 1))
 		(if (looking-back-at "^\t+")
-		    (progn
-		      (setq tab-width 4)
-		      (make-local-variable 'tab-stop-list)
-		      (set-tab-stop-list-width 4)))
+		    (setq c-basic-offset 8))
 		;; sanity check
 		(if (<= (current-column) 8)
 		    (setq c-basic-offset (current-column))))))))
