@@ -83,8 +83,8 @@ public class DtracePartitioner
       throw new RuntimeException ("Input to this method should be a String");
     }
     String s = (String) invocation;
-    if (s.indexOf ('\n') == -1) return null;
-    return s.substring (0, s.indexOf ('\n'));
+    if (s.indexOf (lineSep) == -1) return null;
+    return s.substring (0, s.indexOf (lineSep));
   }
 
   // TODO: this should be a Javadoc link

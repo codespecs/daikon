@@ -25,7 +25,9 @@ import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener, VariableListChangeListener {
 
-  public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon-developers@lists.csail.mit.edu.";
+  private static final String lineSep = System.getProperty("line.separator");
+
+  public static final String PLEASE_REPORT_ERROR_STRING = "Please report this error to daikon-developers@lists.csail.mit.edu.";
 
   InvariantTablesPanel invariantsTablesPanel;
   InvariantFilters invariantFilters = new InvariantFilters();
@@ -39,7 +41,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   public static void main( String[] args ) {
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     if (args.length > 1) {
-      showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file.\nPlease try running the gui again." );
+      showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file." + lineSep + "Please try running the gui again." );
       System.exit( 0 );
     } else if (args.length == 1)
       gui = new InvariantsGUI( args[0] );
@@ -100,7 +102,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 						);
 	invariantFilters.setPptMap(pptMap); // haha this sucks
       } catch (IOException e) {
-	InvariantsGUI.showErrorMessage( e.getMessage() + "\nPlease select another .inv or .inv.gz file." );
+	InvariantsGUI.showErrorMessage( e.getMessage() + lineSep + "Please select another .inv or .inv.gz file." );
 	invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));
       }
     }
@@ -116,7 +118,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       setupGUI( tree, invariantsTablesPanel.getScrollPane());
     }
     catch (Exception e) {	// catch AssertionException's
-      InvariantsGUI.showErrorMessage( "Error: Unable to display invariants." + PLEASE_REPORT_ERROR_STRING );
+      InvariantsGUI.showErrorMessage( "Error: Unable to display invariants." + lineSep + PLEASE_REPORT_ERROR_STRING );
     }
   }
 
@@ -509,7 +511,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     try {
       fileName = fileChooser.getSelectedFile().getCanonicalPath();
     } catch (IOException e) {
-      InvariantsGUI.showErrorMessage( "Unable to choose file." + PLEASE_REPORT_ERROR_STRING );
+      InvariantsGUI.showErrorMessage( "Unable to choose file." + lineSep + PLEASE_REPORT_ERROR_STRING );
     }
     return fileName;
   }

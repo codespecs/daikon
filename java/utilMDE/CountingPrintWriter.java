@@ -298,11 +298,12 @@ public class CountingPrintWriter extends PrintWriter {
 
   /**
    * Terminate the current line by writing the line separator
-   * string. The line separator string is defined by the system
+   * string.  The line separator string is defined by the system
    * property line.separator, and is not necessarily a single newline
-   * character ('\n').  <br><p> When incrementing the byte count of
-   * PrintWriter, also accounts for the bytes needed to represent the
-   * line separator string.
+   * character ('\n').
+   * <p>
+   * When incrementing the byte count of PrintWriter, also accounts for the
+   * bytes needed to represent the line separator string.
    */
   public void println() {
     String s = System.getProperty("line.separator");

@@ -1165,7 +1165,7 @@ public final class UtilMDE {
         sb.append('\\');
         post_esc = i;
         break;
-      case '\n':
+      case '\n':                // not lineSep
         if (post_esc < i) {
           sb.append(orig.substring(post_esc, i));
         }
@@ -1197,8 +1197,8 @@ public final class UtilMDE {
       return "\\\"";
     case '\\':
       return "\\\\";
-    case '\n':
-      return "\\n";
+    case '\n':                  // not lineSep
+      return "\\n";             // not lineSep
     case '\r':
       return "\\r";
     default:
@@ -1230,8 +1230,8 @@ public final class UtilMDE {
       return "\\\"";
     } else if (c == '\\') {
       return "\\\\";
-    } else if (c == '\n') {
-      return "\\n";
+    } else if (c == '\n') {     // not lineSep
+      return "\\n";             // not lineSep
     } else if (c == '\r') {
       return "\\r";
     } else if (c == '\t') {
@@ -1272,7 +1272,7 @@ public final class UtilMDE {
       switch (orig.charAt(this_esc+1)) {
       case 'n':
         sb.append(orig.substring(post_esc, this_esc));
-        sb.append('\n');
+        sb.append('\n');        // not lineSep
         post_esc = this_esc+2;
         break;
       case 'r':

@@ -202,9 +202,6 @@ public class InvariantDoclet
 
       // setup the comment for info
       String comment = dc.commentText();
-      // Do not indent the blocks; the extra spacing throws off Info.
-      // comment = "    " + comment;
-      // comment = UtilMDE.replaceString (comment, "\n", "\n   ");
       // Remove leading spaces, which throw off Info.
       UtilMDE.replaceString (comment, lineSep + " ", lineSep);
       comment = UtilMDE.replaceString (comment, "{", "@{");
