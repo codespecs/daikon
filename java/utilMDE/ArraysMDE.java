@@ -831,6 +831,46 @@ public final class ArraysMDE {
 
 
   ///////////////////////////////////////////////////////////////////////////
+  /// Permutations
+  ///
+
+
+  /**
+   * @return true iff all elements of a are in [0..a.length) and a
+   * contains no duplicates.
+   **/
+  public static boolean is_permutation(int[] a) {
+    // we expect to succeed so use as few loops as possible
+    boolean[] see = new boolean[a.length];
+    for (int i=0; i<a.length; i++) {
+      int n = a[i];
+      if (!(0 <= n && n < a.length))
+	return false;
+      see[n] = true;
+    }
+    for (int i=0; i<a.length; i++) {
+      if (!see[i])
+	return false;
+    }
+    return true;
+  }
+
+  /**
+   * @requires is_permutation(a)
+   * @param a the input permutation
+   * @return a fresh array which is the inverse of the given perutation.
+   * @see is_permutation(int[])
+   **/
+  public static int[] inverse(int[] a) {
+    int[] result = new int[a.length];
+    for (int i=0; i<a.length; i++) {
+      result[a[i]] = i;
+    }
+    return result;
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
   /// Array comparators
   ///
 
