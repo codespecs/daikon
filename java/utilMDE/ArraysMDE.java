@@ -557,6 +557,32 @@ public final class ArraysMDE {
     return result;
   }
 
+  public static long[] concat(long[] a, long[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    long[] result = new long[a.length + b.length];
+
+
+    System.arraycopy(a, 0, result, 0, a.length);	  
+    System.arraycopy(b, 0, result, a.length, b.length);
+
+
+    return result;
+  }
+
+  public static String[] concat(String[] a, String[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    String[] result = new String[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);	  
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// subarray testing
