@@ -55,7 +55,7 @@ public class PptTopLevel extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20040803L;
+  static final long serialVersionUID = 20040921L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -73,13 +73,6 @@ public class PptTopLevel extends Ppt {
    * created at a higher program point. For experimental purposes only.
    */
   public static boolean dkconfig_remove_merged_invs = false;
-
-  /**
-   * Boolean.  If true, flow global invariants that are falsified
-   * immediately to all children as opposed to waiting for the next sample
-   * to arrive at that child.
-   */
-  public static boolean dkconfig_flow_globals_immed = false;
 
   /** Number of invariants after equality set processing for the last sample. */
   public int instantiated_inv_cnt = 0;
@@ -117,10 +110,6 @@ public class PptTopLevel extends Ppt {
   public static final Logger debugMerge =
     Logger.getLogger("daikon.PptTopLevel.merge");
 
-  /** Debug tracer for global ppt. **/
-  public static final Logger debugGlobal =
-    Logger.getLogger("daikon.PptTopLevel.global");
-
   /** Debug tracer for NIS suppression statistics **/
   public static final Logger debugNISStats =
     Logger.getLogger("daikon.PptTopLevel.NISStats");
@@ -136,18 +125,9 @@ public class PptTopLevel extends Ppt {
   /** Permutation to swap the order of variables in a binary invariant **/
   private static int[] permute_swap = new int[] { 1, 0 };
 
-  /** Holds the falsified invariants under this PptTopLevel. */
-  public ArrayList falsified_invars = new ArrayList();
-
   /** List of constant variables. */
   public DynamicConstants constants = null;
 
-  // Do we need both a num_tracevars for the number of variables in the
-  // tracefile and a num_non_derived_vars for the number of variables
-  // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
-  // but it would make sense to store it here anyway.
-
-  // These values are -1 if not yet set (can that happen?). // No they're not
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
   int num_declvars; // number of variables in the decl file
   int num_tracevars; // number of variables in the trace file
@@ -156,18 +136,16 @@ public class PptTopLevel extends Ppt {
 
   private int values_num_samples;
 
+  /** Keep track of which variables are valid (not missing) on each sample **/
   ModBitTracker mbtracker;
 
+  /** Keep track of values we have seen for each variable **/
   ValueSet[] value_sets;
 
   /**
    * All the Views (that is, slices) on this are stored as values in
-   * the HashMap
-   * Provided so that this Ppt can notify them when significant events
-   * occur, such as receiving a new value, deriving variables, or
-   * discarding data.
-   * Indexed by a Arrays.asList array list of Integers holding
-   * varinfo_index values
+   * the HashMap.  Indexed by a Arrays.asList array list of Integers
+   * holding varinfo_index values
    **/
   private Map /*[Integer[]->PptSlice]*/
   views;
@@ -216,6 +194,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
+  /** returns an iterator over all of the splitters at this ppt **/
   public CondIterator cond_iterator() {
     return new CondIterator();
   }
@@ -225,13 +204,11 @@ public class PptTopLevel extends Ppt {
     return (splitters != null) && (splitters.size() > 0);
   }
 
-  /** All children relations in the hierarchy. */
-  public List /* PptRelation */
-  children = new ArrayList();
+  /** All children relations in the variable/ppt hierarchy. */
+  public List /* PptRelation */ children = new ArrayList();
 
-  /** All parent relations in the hierarchy. */
-  public List /* PptRelation */
-  parents = new ArrayList();
+  /** All parent relations in the variable/ppt hierarchy. */
+  public List /* PptRelation */ parents = new ArrayList();
 
   /**
    *  Flag that indicates whether or not invariants have been merged
@@ -246,100 +223,6 @@ public class PptTopLevel extends Ppt {
    * at the parent have been removed..
    */
   public boolean invariants_removed = false;
-
-  /**
-   * VarInfo index transform from this point to the ppt containing
-   * all of the global variables.  The index into global transform is
-   * the value_index in global ppt.  The result (global_transform[index])
-   * is the value_index of the corresponding variable in this ppt
-   *
-   * Ther are two transforms for each exit point. Orig variables are
-   * handled by global_transform_orig and post variables are handled
-   * by global_transform_post.  This is necessary because bottom up
-   * only processes numbered exit points, so both the orig and the post
-   * value must be separately applied to the global ppt.
-   */
-  public int[] global_transform_orig = null;
-  /** @see #global_transform_orig */
-  public int[] global_transform_post = null;
-
-  /** Global ppt (if any.) **/
-  public static PptTopLevel global = null;
-
-  /** List of weakened invariants at the global ppt. */
-  public static List global_weakened_invs = new ArrayList();
-
-  public static int global_weakened_start_index = 0;
-
-  /**
-   * Set of all PptTopLevels where the ordering provided by the
-   * links is sorted from the smallest offset to the largest offset
-   * This takes advantage of LinkedHashSet predictable ordering over
-   * elements (insertion-order).
-   */
-  public static Set /* PptTopLevel */
-  global_weakened_offsets = new LinkedHashSet();
-
-  /** offset of this ppt into the list of weakened invariants **/
-  private int global_weakened_offset = 0;
-
-  /**
-   * Together, dataflow_ppts and dataflow_tranforms describe how
-   * samples that are received at this program point flow to other
-   * points.  If samples are not received at this point, both are
-   * null.  If samples are received at this point, then both have
-   * the same length and:
-   *
-   * <li>dataflow_ppts includes this (as its last element);
-   *
-   * <li>dataflow_ppts is ordered by the way samples will flow.  It is
-   * a topological sort of the ancestors of this ppt, not just immediate
-   * parents.
-   *
-   * <li>dataflow_transforms contains functions from this to
-   * dataflow_ppts; each function is an int[] whose domain is
-   * indices of var_infos in this, and whose range is indices of
-   * var_infos in the corresponding element of dataflow_ppts;
-   *
-   * <li>dataflow_transforms describes the function from the var_infos
-   * of this ppt to the same variable in dataflow_ppts, so its inner
-   * length equals this.var_infos.length;
-   *
-   * <li>program points in dataflow_ppts may be repeated if a sample
-   * at this point induces more than one sample at another point.
-   * (For example, if a method has two arguments of type Foo, then a
-   * sample for the method induces two different samples at
-   * Foo:::OBJECT.)
-   **/
-  public PptTopLevel[] dataflow_ppts;
-  /** @see #dataflow_ppts */
-  public int[][] dataflow_transforms;
-
-  /**
-   * Together, invflow_ppts and invflow_tranforms describe how
-   * invariants that are changed or falsified at this program point
-   * flow to other points.  They are never null, but may be
-   * zero-length if there are no lower ppts.  They obey the following
-   * invariants:
-   *
-   * <li>invflow_transforms contains functions from this to
-   * invflow_ppts; each function is an int[] whose domain is
-   * indices of var_infos in this, and whose range is indices of
-   * var_infos in the corresponding element of invflow_ppts;
-   *
-   * <li>invflow_transforms describes the function from the var_infos
-   * of this ppt to the same variable in invflow_ppts, so its inner
-   * length equals this.var_infos.length;
-   *
-   * <li>program points in invflow_ppts may be repeated if a sample
-   * at this point induces more than one sample another point.
-   * (For example, if a method has two arguments of type Foo, then a
-   * sample for the method induces two different samples at
-   * Foo:::OBJECT.)
-   **/
-  public PptTopLevel[] invflow_ppts;
-  /** @see #invflow_ppts */
-  public int[][] invflow_transforms;
 
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
@@ -387,13 +270,8 @@ public class PptTopLevel extends Ppt {
     num_tracevars = val_idx;
     num_orig_vars = 0;
     Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
-    // System.out.println("Created PptTopLevel " + name() + ": "
-    //                    + "num_static_constant_vars=" + num_static_constant_vars
-    //                    + ",num_declvars=" + num_declvars
-    //                    + ",num_tracevars=" + num_tracevars);
-
-    Assert.assertTrue(
-      num_tracevars == var_infos.length - num_static_constant_vars);
+    Assert.assertTrue(num_tracevars ==
+                      var_infos.length - num_static_constant_vars);
     mbtracker = new ModBitTracker(num_tracevars);
     value_sets = new ValueSet[num_tracevars];
     for (int i = 0; i < var_infos.length; i++) {
@@ -410,36 +288,14 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  public static void init(PptMap all_ppts) {
 
-    // setup all of the static structures.  This needs to be done
-    // here, because in testing we sometimes run multiple tests (each
-    // of which needs to appear to have started from scratch)
-    global_weakened_invs = new ArrayList();
-    global_weakened_start_index = 0;
-    global_weakened_offsets = new LinkedHashSet();
-
-    // Init the set of ppts used to track the index into the weakened invs
-    // list.  The initial order is irrelevant since each needs to start
-    // at the beginning of the weakened_invs list.
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      if (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())
-        global_weakened_offsets.add(ppt);
-    }
-  }
-
-  ///////////////////////////////////////////////////////////////////////////
-  /// Accessing data
-  ///
-
-  public int num_vars() {
-    return var_infos.length;
-  }
-
-  // Returns true iff this is the only exit point or the combined exit point
-  public boolean isMainExit() {
-    return ppt_name.isExitPoint();
+  /**
+   * Initializes the ppt.  Allows the ppt to be set back to its initial
+   * state which is used during testing
+   */
+  public static void init (PptMap all_ppts) {
+    // Though nothing needs to be done now, we may need to do something here
+    // in the future.
   }
 
   // Appears to be used only in the memory monitor.
@@ -451,6 +307,7 @@ public class PptTopLevel extends Ppt {
     return num_arrays;
   }
 
+  /** Iterate through each variable at this ppt **/
   public Iterator var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
   }
@@ -468,7 +325,7 @@ public class PptTopLevel extends Ppt {
       return ppt_name.getPoint();
   }
 
-  /** Trim the collections used in this PptTopLevel, in hopes of saving space. **/
+  /** Trim the collections used here, in hopes of saving space. **/
   public void trimToSize() {
     super.trimToSize();
     if (splitters != null) {
@@ -481,6 +338,7 @@ public class PptTopLevel extends Ppt {
     return values_num_samples;
   }
 
+  /** Return the number of samples where vi1 is present (not missing) **/
   public int num_samples(VarInfo vi1) {
     if (vi1.is_static_constant) {
       return mbtracker.num_samples();
@@ -490,6 +348,10 @@ public class PptTopLevel extends Ppt {
     return num_slice_samples;
   }
 
+  /**
+   * Return the number of samples where vi1 and vi2 are both present
+   * (not missing)
+   **/
   public int num_samples(VarInfo vi1, VarInfo vi2) {
     if (vi1.is_static_constant) {
       return num_samples(vi2);
@@ -503,6 +365,10 @@ public class PptTopLevel extends Ppt {
     return num_slice_samples;
   }
 
+  /**
+   * Return the number of samples where vi1, vi2, and vi3 are all present
+   * (not missing)
+   **/
   public int num_samples(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     if (vi1.is_static_constant) {
       return num_samples(vi2, vi3);
@@ -523,24 +389,24 @@ public class PptTopLevel extends Ppt {
   /** The number of distinct values that have been seen. **/
   public int num_values(VarInfo vi1) {
     if (vi1.is_static_constant) {
-      // This test is deeply wrong; I should always return 1.  But see what
-      // effect this has.
-      if (Daikon.dkconfig_df_bottom_up) {
-        return 1;
-      } else {
-        return 0;
-      }
+      return 1;
     }
     ValueSet vs1 = value_sets[vi1.value_index];
     return vs1.size();
   }
 
-  /** An upper bound on the number of distinct values that have been seen. **/
+  /**
+   * An upper bound on the number of distinct pairs of values
+   * that have been seen.
+   **/
   public int num_values(VarInfo vi1, VarInfo vi2) {
     return num_values(vi1) * num_values(vi2);
   }
 
-  /** An upper bound on the number of distinct values that have been seen. **/
+  /**
+   * An upper bound on the number of distinct values over vi1, vi2, and vi3
+   * that have been seen.
+   **/
   public int num_values(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     return num_values(vi1) * num_values(vi2) * num_values(vi3);
   }
@@ -559,24 +425,10 @@ public class PptTopLevel extends Ppt {
   /// Adding variables
   ///
 
-  // Some of this should perhaps be moved up into Ppt.
-
   /**
-   * Appends vi to the var_infos array of this ppt.  Also sets vi's
-   * varinfo_index, value_index, and ppt fields.  Method is
-   * non-private so that FileIO can access it; it should not be called
-   * by other classes.
-   * @param vi must not be a static constant VarInfo
-   **/
-  void addVarInfo(VarInfo vi) {
-    VarInfo[] vis = new VarInfo[] { vi };
-    addVarInfos(vis);
-  }
-
-  /**
-   * Has the effect of performing addVarInfo(VarInfo) over all
-   * elements in vis.  Method is not private so that FileIO can access
-   * it; should not be called by other classes.
+   * Appends the elements of vis to the var_infos array of this ppt.
+   * Method is not private so that FileIO can access it; should not be
+   * called by other classes.
    * @param vis must not contain static constant VarInfos
    * @see #addVarInfo(VarInfo)
    **/
@@ -608,17 +460,6 @@ public class PptTopLevel extends Ppt {
   ///////////////////////////////////////////////////////////////////////////
   /// Derived variables
   ///
-
-  // Convenience function for PptConditional initializer (which can't
-  // contain statements but can call a function).
-  public VarInfo[] trace_and_orig_and_const_vars() {
-    // Not ArraysMDE.subarray(var_infos, 0, num_tracevars + num_orig_vars)
-    // because its result Object[] cannot be cast to VarInfo[].
-    int total_vars = num_tracevars + num_orig_vars + num_static_constant_vars;
-    VarInfo[] result = new VarInfo[total_vars];
-    System.arraycopy(var_infos, 0, result, 0, total_vars);
-    return result;
-  }
 
   // This is here because I think it doesn't make sense to derive except
   // from a PptTopLevel (and possibly a PptConditional?).  Perhaps move it
@@ -953,254 +794,6 @@ public class PptTopLevel extends Ppt {
     return result_array;
   }
 
-  ///
-  /// Adding derived variables
-  ///
-
-  // This doesn't compute what the derived variables should be, just adds
-  // them after being computed.
-
-  // derivs is a Vector of Derivation objects
-  void __addDerivedVariables(Vector derivs) {
-    Derivation[] derivs_array =
-      (Derivation[]) derivs.toArray(new Derivation[0]);
-    __addDerivedVariables(derivs_array);
-  }
-
-  void __addDerivedVariables(Derivation[] derivs) {
-
-    VarInfo[] vis = new VarInfo[derivs.length];
-    for (int i = 0; i < derivs.length; i++) {
-      vis[i] = derivs[i].getVarInfo();
-    }
-    addVarInfos(vis);
-
-  }
-
-  ///////////////////////////////////////////////////////////////////////////
-  /// Manipulating values
-  ///
-
-  /**
-   * Given a sample that was observed at this ppt, flow it up to
-   * any higher ppts and lastly to this ppt.  Hit conditional
-   * ppts along the way (via the add method).
-   * @param vt the set of values for this and higher ppts to see
-   * @param count the number of samples that vt represents
-   *
-   * Contract: since we hit higher ppts first and check this last,
-   * invariants that have flown down from the higher ppt are also
-   * checked by this vt.  If we hit this before parents, then the
-   * flow wouldn't work.
-   **/
-  public void add_and_flow(ValueTuple vt, int count) {
-    //     if (debugFlow.isLoggable(Level.FINE)) {
-    //       debugFlow.fine ("add_and_flow for " + name());
-    //     }
-
-    // Doable, but commented out for efficiency
-    // repCheck();
-
-    // System.out.println("PptTopLevel " + name() + ": add " + vt);
-    Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars);
-
-    // The way adding samples works: We have precomputed program
-    // points that have any VarInfos that are higher than this point's
-    // VarInfos, and a transformation vector that maps the variable
-    // index at this point to the variable index in the higher point.
-    // Simply walk down that list, transforming value tuples according
-    // to transormation vectors.  Then call add of the right program points.
-
-    Assert.assertTrue(dataflow_ppts != null, name);
-    Assert.assertTrue(dataflow_transforms != null, name);
-    Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
-
-    if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine("<<<< Doing add_and_flow() for " + name());
-    }
-
-    for (int i = 0; i < dataflow_ppts.length; i++) {
-      PptTopLevel ppt = dataflow_ppts[i];
-      //       if (debugFlow.isLoggable(Level.FINE)) {
-      //        debugFlow.fine ("add_and_flow: A parent is " + ppt.name());
-      //       }
-
-      int[] transform = dataflow_transforms[i];
-      Assert.assertTrue(transform.length == var_infos.length);
-
-      // Map vt into the transformed tuple
-      int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
-      Assert.assertTrue(ppt_num_vals == ppt.mbtracker.num_vars());
-      Object[] vals = new Object[ppt_num_vals];
-      int[] mods = new int[ppt_num_vals];
-      Arrays.fill(mods, ValueTuple.MISSING_FLOW);
-      for (int j = 0; j < transform.length; j++) {
-        int tj = transform[j];
-        if (tj == -1)
-          continue;
-        int this_value_index = var_infos[j].value_index;
-        if (this_value_index == -1)
-          continue; // is_static_constant
-        int ppt_value_index = ppt.var_infos[tj].value_index;
-        vals[ppt_value_index] = vt.vals[this_value_index];
-        mods[ppt_value_index] = vt.mods[this_value_index];
-      }
-      ValueTuple ppt_vt = new ValueTuple(vals, mods);
-
-      ppt.add(ppt_vt, count);
-    }
-
-  }
-
-  /**
-   * Add the sample to the invariants at this program point and any
-   * child conditional program points, but do not flow the sample to
-   * other related ppts.
-   *
-   * @param vt the set of values for this to see
-   * @param count the number of samples that vt represents
-   **/
-  public List add(ValueTuple vt, int count) {
-    // Doable, but commented out for efficiency
-    // repCheck();
-
-    // System.out.println("PptTopLevel " + name() + ": add " + vt);
-    Assert.assertTrue(
-      vt.size() == var_infos.length - num_static_constant_vars,
-      name);
-
-    //     if (debugFlow.isLoggable(Level.FINE)) {
-    //       debugFlow.fine ("Add for " + this.name);
-    //     }
-
-    if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine("<<< Doing add for " + name());
-      debugFlow.fine("    with vt " + vt.toString(this.var_infos));
-    }
-
-    if (values_num_samples == 0) {
-      debugFlow.fine("  Instantiating views for the first time");
-      instantiate_views_and_invariants();
-
-      if (Global.debugInfer.isLoggable(Level.FINE)) {
-        Global.debugInfer.fine("Instantiated views first time for " + this);
-      }
-    }
-
-    if (Daikon.use_equality_optimization) {
-      equality_view.add(vt, count);
-    }
-    instantiated_inv_cnt = invariant_cnt();
-    instantiated_slice_cnt = views.size();
-
-    values_num_samples += count;
-
-    // For reasons I do not understand, in the "suppress" version of the
-    // tests, calling mbtracker.add here causes (bad) diffs, but calling it
-    // at the end of this routine is fine.  So for now, just call it at the
-    // end of the routine.
-    // // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
-    // // mbtracker.add(vt, count);
-
-    // System.out.println("About to call ValueSet.add for " + name() + " <= " + vt.toString());
-    for (int i = 0; i < vt.vals.length; i++) {
-      if (!vt.isMissing(i)) {
-        ValueSet vs = value_sets[i];
-        vs.add(vt.vals[i]);
-        // System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
-      } else {
-        ValueSet vs = value_sets[i];
-        // System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
-      }
-    }
-
-    for (Iterator itor = views_iterator(); itor.hasNext();) {
-      PptSlice view = (PptSlice) itor.next();
-      view.add(vt, count);
-      if (view.invs.size() == 0) {
-        itor.remove();
-        if (Global.debugInfer.isLoggable(Level.FINE)) {
-          Global.debugInfer.fine(
-            "add(ValueTulple,int): slice died: " + name() + view.varNames());
-        }
-      }
-    }
-
-    // Add to all the conditional ppts (not implemented in top down)
-    if (false) {
-      for (Iterator itor = cond_iterator(); itor.hasNext();) {
-        PptConditional pptcond = (PptConditional) itor.next();
-        pptcond.add(vt, count);
-        // TODO: Check for no more invariants on pptcond?
-      }
-    }
-
-    mbtracker.add(vt, count);
-
-    return new ArrayList();
-  }
-
-  /**
-   * Add the sample both to this point and to the global ppt (if
-   * any).  Any invariants weakened at the global ppt are added to
-   * the list of all weakened invariants.
-   * @see #add_bottom_up
-   **/
-  public void add_global_bottom_up(ValueTuple vt, int count) {
-
-    // If there is a global ppt
-    if (global != null) {
-
-      // Create an orig version of the sample and apply it to the global ppt
-      ValueTuple orig_vt = transform_sample(global_transform_orig, vt);
-      Set wset = global.add_bottom_up(orig_vt, count);
-
-      // Create a post version of the sample and apply it to the global ppt
-      ValueTuple post_vt = transform_sample(global_transform_post, vt);
-      wset.addAll(global.add_bottom_up(post_vt, count));
-
-      // Add all weakened invs that haven't already flowed to the list
-      for (Iterator i = wset.iterator(); i.hasNext();) {
-        Invariant inv = (Invariant) i.next();
-        Assert.assertTrue(inv != null);
-        if (!inv.flowed) {
-          global_weakened_invs.add(inv);
-          inv.flowed = true;
-          if (Debug.logOn())
-            inv.log("Added to list of invariants to flow");
-        }
-      }
-
-      // If flowing immediately
-      if (dkconfig_flow_globals_immed) {
-
-        // Add all of the weakened invariants to each leaf
-        for (Iterator i = Daikon.all_ppts.ppt_all_iterator(); i.hasNext();) {
-          PptTopLevel ppt = (PptTopLevel) i.next();
-          if (!ppt.ppt_name.isNumberedExitPoint())
-            continue;
-          for (Iterator j = global_weakened_invs.iterator(); j.hasNext();) {
-            Invariant inv = (Invariant) j.next();
-            add_weakened_global_inv(inv, global_transform_orig);
-            add_weakened_global_inv(inv, global_transform_post);
-          }
-        }
-        global_weakened_invs.clear();
-
-      } else {
-
-        // Add any invariants that have weakened since the last time this ppt
-        // was processed to this ppt.
-        add_weakened_global_invs();
-      }
-    }
-
-    // Add the sample to this ppt
-    add_bottom_up(vt, count);
-
-    // check_vs_global();
-  }
-
   /**
    * Add the sample to the equality sets, dynamic constants and
    * invariants at this program point.  This version is specific to
@@ -1214,8 +807,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
-  public Set /* Invariant */
-  add_bottom_up(ValueTuple vt, int count) {
+  public Set /* Invariant */ add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
 
@@ -1340,14 +932,14 @@ public class PptTopLevel extends Ppt {
 
     values_num_samples += count;
 
+    // Keep track of what variables are present on this sample
     mbtracker.add(vt, count);
 
-    for (int i = 0; i < vt.vals.length; i++) {
-      if (!vt.isMissing(i)) {
+    // Keep track of the distinct values seen
+    for (int i=0; i<vt.vals.length; i++) {
+      if (! vt.isMissing(i)) {
         ValueSet vs = value_sets[i];
         vs.add(vt.vals[i]);
-      } else {
-        ValueSet vs = value_sets[i];
       }
     }
 
@@ -1387,15 +979,8 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // Add sample to all conditional ppts.  This is probably not fully
-    // implemented in V3
-    for (Iterator itor = cond_iterator(); itor.hasNext();) {
-      PptConditional pptcond = (PptConditional) itor.next();
-      pptcond.add(vt, count);
-    }
-
-    if (debugNISStats.isLoggable(Level.FINE))
-      NIS.dump_stats(debugNISStats, this);
+    if (debugNISStats.isLoggable (Level.FINE))
+      NIS.dump_stats (debugNISStats, this);
 
     return (weakened_invs);
   }
@@ -1508,191 +1093,6 @@ public class PptTopLevel extends Ppt {
    **/
   public boolean is_prev_missing(VarInfo v) {
     return ((constants != null) && constants.is_prev_missing(v));
-  }
-
-  /**
-   * Adds all global invariants that have been weakened since the last
-   * time it was called to this ppt.  Resets the weakened index so
-   * that we won't process the same invariants more than once
-   */
-
-  private void add_weakened_global_invs() {
-
-    // invariants added
-    Set flowed_invs = new LinkedHashSet();
-
-    // Loop through each weakened invariant since the last time we were called
-    for (int i = global_weakened_offset;
-      i < global_weakened_invs.size();
-      i++) {
-      Invariant global_inv = (Invariant) global_weakened_invs.get(i);
-      Assert.assertTrue(global_inv != null);
-
-      // add via the orig transform
-      Invariant f = add_weakened_global_inv(global_inv, global_transform_orig);
-      if (f != null)
-        flowed_invs.add(f);
-
-      // add via the post transform
-      f = add_weakened_global_inv(global_inv, global_transform_post);
-      if (f != null)
-        flowed_invs.add(f);
-    }
-
-    // Loop through each flowed invariant and remove it if it is NI suppressed
-    // This must be done here, rather than when flowing them above, because
-    // all invariants have to be flowed before correct checking can take
-    // place (if a suppressee flows before a suppressor, the suppressor won't
-    // be seen).
-    for (Iterator i = flowed_invs.iterator(); i.hasNext();) {
-      Invariant f = (Invariant) i.next();
-      if (!f.copy_ok(f.ppt)) {
-        if (Debug.logOn())
-          f.log("removing " + f.format() + " - suppressed");
-        f.ppt.invs.remove(f);
-      }
-    }
-
-    global_weakened_offset = global_weakened_invs.size();
-
-    // Put this ppt at the end of the list of offsets
-    global_weakened_offsets.remove(this);
-    global_weakened_offsets.add(this);
-
-    // If all of the ppts have processed the invariants at the beginning
-    // of the weakened list, remove those invariants
-    Iterator it = global_weakened_offsets.iterator();
-    PptTopLevel first = (PptTopLevel) it.next();
-    if (first.global_weakened_offset > global_weakened_start_index) {
-      debugGlobal.fine(
-        "Removing flowed invs "
-          + global_weakened_start_index
-          + " to "
-          + first.global_weakened_offset);
-      debugGlobal.fine("First ppt = " + first.name());
-      int cnt = first.global_weakened_offset - global_weakened_start_index;
-      for (int i = global_weakened_start_index;
-        i < first.global_weakened_offset;
-        i++)
-        global_weakened_invs.set(i, null);
-      global_weakened_start_index = first.global_weakened_offset;
-    }
-  }
-
-  /**
-   * Adds the specified global invariant to this ppt using the specified
-   * transform for its variables.  If the slice for the invariant does not
-   * currently exist, it is added.
-   * @return the invariant that was added (if any)
-   */
-  private Invariant add_weakened_global_inv(
-    Invariant global_inv,
-    int[] transform) {
-
-    // Note that it is not necessary to check flowable here.  The invariant
-    // will already exist at the lower ppt if it is unflowable.  The
-    // only exception to that is LinearBinary and LinearTernary will
-    // remove themselves from the lower point if their equations
-    // match the global ppt when their equation becomes defined.  In that
-    // case we SHOULD flow the invariant since it is still true at
-    // the lower point.  In all other cases, there will be a local
-    // version of the the invariant which will correctly stop the
-    // flow.
-
-    // Transform the invariants global variables to local ones.  If any
-    PptSlice global_slice = global_inv.ppt;
-    VarInfo[] vis = new VarInfo[global_slice.var_infos.length];
-    for (int j = 0; j < vis.length; j++) {
-      VarInfo v = global_slice.var_infos[j];
-      vis[j] = var_infos[transform[v.varinfo_index]];
-    }
-
-    if (Debug.logOn())
-      Debug.log(
-        global_inv.getClass(),
-        this,
-        vis,
-        "considering flowing " + global_inv.format() + " to " + name);
-
-    // If any vars are not canonical, don't copy the invariant.  This
-    // occurs if the equality sets at the global ppt are different
-    // from the local one.  If the local equality set splits, we'll
-    // get those invariants when copying.
-    for (int j = 0; j < vis.length; j++) {
-      if (!vis[j].isCanonical()) {
-        if (Debug.logOn())
-          Debug.log(
-            global_inv.getClass(),
-            this,
-            vis,
-            "not flowed, var " + vis[j].name.name() + "not leader");
-        return (null);
-      }
-    }
-
-    // We only need to flow invariants if this is a slice with all globals.
-    // If there are any locals involved, we've already (or will) created
-    // all of the invariants.  Locals can be involved because of equality
-    // sets (the global is in an equality set with a local)
-    if (!is_slice_global(vis)) {
-      if (Debug.logOn())
-        Debug.log(
-          global_inv.getClass(),
-          this,
-          vis,
-          "not flowed, slice not global");
-      return (null);
-    }
-
-    // Order the variables for this ppt
-    VarInfo[] vis_sorted = (VarInfo[]) vis.clone();
-    Arrays.sort(vis_sorted, VarInfo.IndexComparator.getInstance());
-
-    // Look up the local slice.  If the slice doesn't already exist,
-    // don't create it.  It must be over dynamic constants.  When the slice
-    // is created, dynamic constants will create exactly those invariants
-    // that  don't exist at the  global level (ie, exactly those that
-    // have flowed -- JHP 3/11/04: I think there are other reasons we can
-    // have an empty slice.  This ought to check constants directly.
-    PptSlice local_slice = findSlice(vis_sorted);
-    if (local_slice == null) {
-      if (Debug.logOn())
-        Debug.log(
-          global_inv.getClass(),
-          this,
-          vis,
-          "not flowed, no local slice");
-      return (null);
-    }
-
-    // build the global to local permute and use it to copy the invariant
-    int[] permute = build_permute(vis, vis_sorted);
-    Invariant local_inv = global_inv.clone_and_permute(permute);
-    local_inv.clear_falsified();
-    local_inv.ppt = local_slice;
-
-    // We don't check for ni-suppression here, it is checked in the caller
-    // after all invariants are flowed.
-
-    // Add the invariant to the local slice unless it is already there
-    if (!local_slice.contains_inv(local_inv)) {
-      local_slice.addInvariant(local_inv);
-      if (Debug.logOn()) {
-        local_inv.log(
-          "Added inv '"
-            + local_inv
-            + "' from global inv"
-            + global_inv
-            + " gfalse = "
-            + global_inv.is_false());
-      }
-      return (local_inv);
-    } else {
-      if (Debug.logOn())
-        global_inv.log("not flowed, already there");
-      Assert.assertTrue(local_slice.invs.size() > 0);
-      return (null);
-    }
   }
 
   /** Returns the number of true invariants at this ppt. **/
@@ -1900,8 +1300,7 @@ public class PptTopLevel extends Ppt {
   // I can't decide which loop it's more efficient to make the inner loop:
   // the loop over samples or the loop over slices.
 
-  // slices_vector is a Vector of PptSlice; this routine does not modify it.
-  // Maybe this should return the rejected views.
+  /** Add the specified slices to this ppt **/
   public void addViews(Vector slices_vector) {
     if (slices_vector.isEmpty())
       return;
@@ -1916,10 +1315,6 @@ public class PptTopLevel extends Ppt {
       if (slice.invs.size() == 0) {
         // removes the element from slices_vector
         itor.remove();
-        if (Global.debugInfer.isLoggable(Level.FINE)) {
-          Global.debugInfer.fine(
-            "addViews: not adding " + slice + " due to no invariants");
-        }
       }
     }
 
@@ -1935,8 +1330,10 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  // Given an array of VarInfos, return a List representing that array,
-  // to be used as an index in the views hashtable.
+  /**
+   * Given an array of VarInfos, return a List representing that array,
+   * to be used as an index in the views hashtable.
+   */
   private List sliceIndex(VarInfo[] vis) {
     Integer[] a = new Integer[vis.length];
     for (int i = 0; i < vis.length; i++) {
@@ -1950,18 +1347,11 @@ public class PptTopLevel extends Ppt {
    **/
   public void addSlice(PptSlice slice) {
 
-    // System.out.println ("Adding slice " + slice);
-    // Throwable stack = new Throwable("debug traceback");
-    // stack.fillInStackTrace();
-    // stack.printStackTrace();
-
     // Make sure the slice doesn't already exist (should never happen)
-    // Note that this can happen in top down due to flowing.  This is
-    // probabably not correct, but not worth fixing
-    PptSlice cslice = findSlice(slice.var_infos);
-    if (Daikon.dkconfig_df_bottom_up && cslice != null) {
-      System.out.println("Trying to add slice " + slice);
-      System.out.println("but, slice " + cslice + " already exists");
+    PptSlice cslice = findSlice (slice.var_infos);
+    if (cslice != null) {
+      System.out.println ("Trying to add slice " + slice);
+      System.out.println ("but, slice " + cslice + " already exists");
       for (int i = 0; i < cslice.invs.size(); i++)
         System.out.println(" -- inv " + (Invariant) cslice.invs.get(i));
       Assert.assertTrue(cslice != null);
@@ -1991,139 +1381,23 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Used to be a part of addViews, but for right now (Daikon V3) we
-   * just want to set up all of the invariants, not actually feed them
-   * data.
-   **/
-  private void __addViewsData(Vector slices_vector) {
-    // use an array because iterating over it will be more efficient, I suspect.
-    PptSlice[] slices =
-      (PptSlice[]) slices_vector.toArray(new PptSlice[slices_vector.size()]);
-    int num_slices = slices.length;
-
-    // System.out.println("Adding views for " + name());
-    // for (int i=0; i<slices.length; i++) {
-    //   System.out.println("  View: " + slices[i].name);
-    // }
-    // values.dump();
-
-    // System.out.println("Number of samples for " + name() + ": "
-    //                    + values.num_samples()
-    //                    + ", number of values: " + values.num_values());
-    // If I recorded mod bits in value.ValueSet(), I could use it here instead.
-    //      for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
-    //        VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
-    //        ValueTuple vt = entry.value_tuple;
-    //        int count = entry.count;
-    //        for (int i=0; i<num_slices; i++) {
-    //          // System.out.println("" + slices[i] + " .add(" + vt + ", " + count + ")");
-    //          slices[i].add(vt, count);
-    //        }
-    //        if (views_to_remove_deferred.size() > 0) {
-    //          // Inefficient, but easy to code.
-    //          Assert.assertTrue(slices_vector.containsAll(views_to_remove_deferred));
-    //          slices_vector.removeAll(views_to_remove_deferred);
-    //          views_to_remove_deferred.clear();
-    //          if (slices_vector.size() == 0)
-    //            break;
-    //          slices = (PptSlice[]) slices_vector.toArray(new PptSlice[0]);
-    //          num_slices = slices.length;
-    //        }
-    //      }
-  }
-
-  public void removeView(Ppt slice) {
-    // System.out.println("removeView " + slice.name() + " " + slice);
-    boolean removed = viewsAsCollection().remove(slice);
-    Assert.assertTrue(removed);
-  }
-
-  // I've decided that views will contain only slices, which allows for
-  // dramatic speedups in finding functions
-
-  // The nouns "view" and "slice" are putatively different.  Slices
-  // limit the variables but examine all data.  Views may ignore data,
-  // etc.  In practive, getView always returns a slice anyway (see
-  // comments on class daikon.Ppt).
 
   /**
-   * Typically one should use the dynamic_constant or canBeMissing slots,
-   * which cache the invariants of most interest, instead of this function.
-   **/
-  public PptSlice1 getView(VarInfo vi) {
-    // This seems to do the same thing as findSlice(vi)
-
-    return findSlice(vi);
-
-    //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
-    //        PptSlice slice = (PptSlice) itor.next();
-    //        if ((slice.arity() == 1) && slice.usesVar(vi))
-    //          return (PptSlice1) slice;
-    //      }
-    //      return null;
-  }
-
-  /**
-   * Typically one should use the equal_to slot, which caches the
-   * invariants of most interest, instead of this function.
-   **/
-  public PptSlice2 getView(VarInfo vi1, VarInfo vi2) {
-    // This seems to do the same thing as findSlice(vi1, vi2)...
-
-    return findSlice(vi1, vi2);
-
-    //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
-    //        PptSlice slice = (PptSlice) itor.next();
-    //        if ((slice.arity() == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
-    //          return (PptSlice2) slice;
-    //      }
-    //      return null;
-  }
-
-  // A slice is a specific kind of view, but we don't call this
-  // findView because it doesn't find an arbitrary view.
-  /**
-   * findSlice can return null if the slice doesn't exist.  That can happen
-   * if there are no true invariants over the set of variables -- when the
-   * last invariant is removed, so is the slice.
-   *
-   * When one is looking for a particular invariant, typically one should
-   * use the dynamic_constant or canBeMissing slots, which cache the
-   * invariants of most interest, instead of calling function to get the
-   * slice and then looking for the invariant in the slice.
+   * Returns the unary slice over v.  Returns null if the slice doesn't
+   * exist (which can occur if all of its invariants were falsified)
    **/
   public PptSlice1 findSlice(VarInfo v) {
-    return (PptSlice1) findSlice(new VarInfo[] { v });
-    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
-    //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity() == 1) && (v == view.var_infos[0]))
-    //          return (PptSlice1) view;
-    //      }
-    //      return null;
+    return (PptSlice1)findSlice(new VarInfo [] {v});
   }
 
   /**
-   * findSlice can return null if the slice doesn't exist.  That can happen
-   * if there are no true invariants over the set of variables -- when the
-   * last invariant is removed, so is the slice.
-   *
-   * When one is looking for a particular invariant, typically one should
-   * use the dynamic_constant or canBeMissing slots, which cache the
-   * invariants of most interest, instead of calling function to get the
-   * slice and then looking for the invariant in the slice.
+   * Returns the binary slice over v1 and v2.  Returns null if the
+   * slice doesn't exist (which can occur if all of its invariants
+   * were falsified)
    **/
   public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
     Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
-    return (PptSlice2) findSlice(new VarInfo[] { v1, v2 });
-    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
-    //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity() == 2)
-    //            && (v1 == view.var_infos[0])
-    //            && (v2 == view.var_infos[1]))
-    //          return (PptSlice2) view;
-    //      }
-    //      return null;
+    return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
   }
 
   /**
@@ -2140,28 +1414,14 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * findSlice can return null if the slice doesn't exist.  That can happen
-   * if there are no true invariants over the set of variables -- when the
-   * last invariant is removed, so is the slice.
-   *
-   * When one is looking for a particular invariant, typically one should
-   * use the dynamic_constant or canBeMissing slots, which cache the
-   * invariants of most interest, instead of calling function to get the
-   * slice and then looking for the invariant in the slice.
+   * Returns the ternary slice over v1, v2, and v3.  Returns null if
+   * the slice doesn't exist (which can occur if all of its invariants
+   * were falsified)
    **/
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
     Assert.assertTrue(v2.varinfo_index <= v3.varinfo_index);
-    return (PptSlice3) findSlice(new VarInfo[] { v1, v2, v3 });
-    //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
-    //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity() == 3)
-    //            && (v1 == view.var_infos[0])
-    //            && (v2 == view.var_infos[1])
-    //            && (v3 == view.var_infos[2]))
-    //          return (PptSlice3) view;
-    //      }
-    //      return null;
+    return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
   }
 
   /**
@@ -2215,6 +1475,10 @@ public class PptTopLevel extends Ppt {
     return (PptSlice) views.get(sliceIndex(vis));
   }
 
+  /**
+   * Returns the varinfo_index of the variable whose name is varname.
+   * Returns -1 if there is no such variable
+   */
   public int indexOf(String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name.name().equals(varname)) {
@@ -2649,12 +1913,6 @@ public class PptTopLevel extends Ppt {
     return (slice.is_inv_true(inv));
   }
 
-  // At present, this needs to occur after deriving variables, because
-  // I haven't integrated derivation and inference yet.
-  // (This function doesn't exactly belong in this part of the file.)
-
-  // Should return a list of the views created, perhaps.
-
   /**
    * Install views and the invariants.  We create NO views over static
    * constant variables, but everything else is fair game.  We don't
@@ -2673,17 +1931,8 @@ public class PptTopLevel extends Ppt {
   // for each possible combination, simplifying determining why certain
   // slices were not created.
 
-  private void instantiate_views(int vi_index_min, int vi_index_limit) {
-    if (Global.debugInfer.isLoggable(Level.FINE))
-      Global.debugInfer.fine(
-        "instantiate_views: "
-          + this.name
-          + ", vi_index_min="
-          + vi_index_min
-          + ", vi_index_limit="
-          + vi_index_limit
-          + ", var_infos.length="
-          + var_infos.length);
+  private void instantiate_views(int vi_index_min,
+                                 int vi_index_limit) {
 
     // This test prevents instantiate views for variables one at a time.
     Assert.assertTrue(var_infos.length == vi_index_limit);
@@ -2765,17 +2014,6 @@ public class PptTopLevel extends Ppt {
           continue;
         }
 
-        // This is commented out because if one var is an array and the
-        // other is not, this will indicate that the two vars are not
-        // compatible.  This causes us to miss seemingly valid elementwise
-        // invariants
-        // if (!var1.compatible(var2)) {
-        //  if (Debug.logOn() || debug_on)
-        //    Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
-        //               "Binary slice not created, vars not compatible");
-        //  continue;
-        //}
-
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
@@ -2856,11 +2094,6 @@ public class PptTopLevel extends Ppt {
 
     if (debug.isLoggable(Level.FINE))
       debug.fine(views.size() - old_num_views + " new views for " + name());
-
-    // Remove any invariants that are suppressed.  This needs to occur
-    // here rather than during instantiate because we need to have created
-    // all possible suppressors.
-    NIS.remove_suppressed_invs(this);
 
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
@@ -3052,60 +2285,6 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified slice is made up of only
-   * variables linked to those in the global ppt (ie, whether they are
-   * globals).
-   */
-  public boolean is_slice_global(VarInfo[] vis) {
-    if (vis.length == 1)
-      return (is_slice_global(vis[0]));
-    else if (vis.length == 2)
-      return (is_slice_global(vis[0], vis[1]));
-    else
-      return (is_slice_global(vis[0], vis[1], vis[2]));
-  }
-
-  /**
-   * Returns whether or not this slice is made up of only variables linked
-   * to those in the global ppt (ie, whether they are globals).
-   */
-  public boolean is_slice_global(VarInfo vi) {
-
-    return (vi.is_global());
-  }
-
-  /**
-   * Returns whether or not this slice is made up of only variables linked
-   * to those in the global ppt (ie, whether they are globals).  They must
-   * also follow the same transform (global or orig)
-   */
-  public boolean is_slice_global(VarInfo vi1, VarInfo vi2) {
-
-    if (vi1.is_orig_global() && vi2.is_orig_global())
-      return (true);
-
-    if (vi1.is_post_global() && vi2.is_post_global())
-      return (true);
-
-    return (false);
-  }
-  /**
-   * Returns whether or not this slice is made up of only variables linked
-   * to those in the global ppt (ie, whether they are globals).  They must
-   * also follow the same transform (global or orig)
-   */
-  public boolean is_slice_global(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
-
-    if (vi1.is_orig_global() && vi2.is_orig_global() && vi3.is_orig_global())
-      return (true);
-
-    if (vi1.is_post_global() && vi2.is_post_global() && vi3.is_post_global())
-      return (true);
-
-    return (false);
-  }
-
-  /**
    * Return a slice that contains the given VarInfos (creating if
    * needed).  It is incumbent on the caller that the slice be either
    * filled with one or more invariants, or else removed from the
@@ -3227,10 +2406,10 @@ public class PptTopLevel extends Ppt {
   // it doesn't need to be unless we run this static region!
 
   static {
-    if (!Daikon.dkconfig_disable_splitting) {
-      // new MiscSplitters();
-
-      SplitterList.put(".*", new Splitter[] { new ReturnTrueSplitter(), });
+    if (! Daikon.dkconfig_disable_splitting) {
+      SplitterList.put(".*", new Splitter[] {
+        new ReturnTrueSplitter(),
+      });
     }
   }
 
@@ -3242,10 +2421,6 @@ public class PptTopLevel extends Ppt {
       debugConditional.fine("No splits for " + name());
       return;
     }
-
-    // for (int i=0; i<splits.length; i++) {
-    //   Assert.assertTrue(splits[i].instantiated() == false);
-    // }
 
     // Create a Conditional ppt for each side of each splitter
     splitters = new ArrayList(splits.length);
@@ -3552,26 +2727,26 @@ public class PptTopLevel extends Ppt {
         String clsname = ppt_name.getFullClassName();
       }
     }
-    
+
     // Use type information to restate any OBJECT invariants over
     // variable expressions such as arguments or fields whose types
     // are instrumeted.
     for (int i=0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       ProglangType progtype = vi.type;
-    
+
       // Always skip "this" and "orig(this)" as necessary special cases.
       if (VarInfoName.THIS.equals(vi.name) ||
           VarInfoName.ORIG_THIS.equals(vi.name)) {
         continue;
       }
-    
+
       // For now, we don't handle sequences.  We could use a GLB type
       // and state a forall, but it doesn't seem worth the work yet.
       if (progtype.isPseudoArray()) {
         continue;
       }
-    
+
       // Locate the OBJECT ppt
       PptName obj_name = new PptName(vi.type.base(), null,
                                      FileIO.object_suffix);
@@ -3582,11 +2757,11 @@ public class PptTopLevel extends Ppt {
            + vi.name + " (" + obj_name + ")");
         continue;
       }
-    
+
       Global.debugSimplify.fine
           (ppt_name + ": using type-based invariants for "
            + vi.name + " (" + obj_name + ")");
-    
+
       // State the object invariant on the incoming argument
       Vector invs2 = obj_ppt.invariants_vector();
       Collections.sort(invs2, icfp);
@@ -3832,15 +3007,11 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
-  // This is a fairly inefficient method, as it does a lot of copying.
-  // As of 1/9/2000, this is only used in print_invariants.
   /**
    * Return a List of all the invariants for the program point.
    * Also consider using views_iterator() instead.  You can't
    * modify the result of this.
    **/
-  // Used to be known as invariants_vector, but changed to return a
-  // List.
   public List getInvariants() {
     List result = new ArrayList();
     for (Iterator itor = new ViewsIteratorIterator(this); itor.hasNext();) {
@@ -3848,28 +3019,14 @@ public class PptTopLevel extends Ppt {
         result.add(itor2.next());
       }
     }
-    // Old implementation:  was slightly more efficient, but separate code
-    // permitted drift between it an ViewsIteratorIterator.
-    // for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
-    //   PptSlice slice = (PptSlice) views_itor.next();
-    //   result.addAll(slice.invs);
-    // }
-    // // System.out.println(implication_view.invs.size() + " implication invs for " + name() + " at " + implication_view.name);
-    // result.addAll(implication_view.invs);
     return Collections.unmodifiableList(result);
   }
 
-  // restored to ease merge between V2 and V3.  Its unclear why the above
-  // was changed in any event...
+  /**
+   * Vector version of getInvariants()
+   */
   public Vector invariants_vector() {
     return new Vector(getInvariants());
-  }
-
-  /**
-   * @return the number of views
-   **/
-  public int views_size() {
-    return viewsAsCollection().size();
   }
 
   /**
@@ -3881,15 +3038,23 @@ public class PptTopLevel extends Ppt {
     return viewsAsCollection().iterator();
   }
 
+  /** Iterate over all of the invariants at this ppt **/
   public Iterator invariants_iterator() {
     return new UtilMDE.MergedIterator(views_iterator_iterator());
   }
 
+  /**
+   * An iterator whose elements are themselves iterators that return
+   * invariants.
+   **/
   private Iterator views_iterator_iterator() {
     return new ViewsIteratorIterator(this);
   }
 
-  /** An iterator whose elements are themselves iterators that return invariants. **/
+  /**
+   * An iterator whose elements are themselves iterators that return
+   * invariants.
+   **/
   public static final class ViewsIteratorIterator implements Iterator {
     Iterator vitor;
     Iterator implication_iterator;
@@ -3933,13 +3098,13 @@ public class PptTopLevel extends Ppt {
   public static final Comparator icfp =
     new Invariant.InvariantComparatorForPrinting();
 
-  static Comparator arityVarnameComparator =
-    new PptSlice.ArityVarnameComparator();
+  static Comparator arityVarnameComparator
+    = new PptSlice.ArityVarnameComparator();
 
-  //////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
   ///// Invariant guarding
 
-  // This function guards all of the invariants in a PptTopLevel
+  /** This function guards all of the invariants in a PptTopLevel **/
   public void guardInvariants() {
     // To avoid concurrent modification exceptions using arrays
     Object[] viewArray = viewsAsCollection().toArray();
@@ -3966,6 +3131,9 @@ public class PptTopLevel extends Ppt {
     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
   }
 
+  /**
+   * remove invariants that are marked for ommission in omitTypes
+   */
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
     Object[] viewArray = viewsAsCollection().toArray();
@@ -4007,11 +3175,7 @@ public class PptTopLevel extends Ppt {
       PptSlice slice = (PptSlice) i.next();
       slice.repCheck();
     }
-    if (equality_view != null)
-      equality_view.repCheck();
-    if (dataflow_ppts != null) {
-      Assert.assertTrue(dataflow_ppts[dataflow_ppts.length - 1] == this);
-    }
+    if (equality_view != null) equality_view.repCheck();
   }
 
   /**
@@ -4116,7 +3280,6 @@ public class PptTopLevel extends Ppt {
    * unary, binary, and ternary slices for each combination of equality
    * sets and build the invariants for each slice.
    */
-
   public void mergeInvs() {
 
     // If we don't have any children, there is nothing to do.
@@ -4425,19 +3588,6 @@ public class PptTopLevel extends Ppt {
 
           slice3.merge_invariants();
 
-          // Merge any invariants that are NI-suppressed
-          if (false) {
-            PptSlice3 ni_slice3 =
-              new PptSlice3(this, leaders[i], leaders[j], leaders[k]);
-            ni_slice3.ni_merge_invariants();
-            for (Iterator l = ni_slice3.invs.iterator(); l.hasNext();) {
-              Invariant inv = (Invariant) l.next();
-              if (inv.is_ni_suppressed())
-                continue;
-              inv.ppt = slice3;
-              slice3.invs.add(inv);
-            }
-          }
           if (slice3.invs.size() > 0)
             ternary_slices.add(slice3);
         }
@@ -4581,13 +3731,6 @@ public class PptTopLevel extends Ppt {
     if (children.size() == 0)
       return;
 
-    // If the children are only ppt => ppt_cond, there is nothing to do
-    //     for (Iterator ii = children.iterator(); ii.hasNext(); ) {
-    //       PptRelation rel = (PptRelation) ii.next();
-    //       if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
-    //         return;
-    //     }
-
     // If there are no splitters there is nothing to do
     if (!has_splitters())
       return;
@@ -4713,9 +3856,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // Remove all of the slices with 0 invariants
-    System.out.println(
-      "  Removed " + slices_to_remove.size() + " slices of " + views_size());
-    for (Iterator i = slices_to_remove.iterator(); i.hasNext();) {
+    System.out.println ("  Removed " + slices_to_remove.size() + " slices of "
+                        + numViews());
+    for (Iterator i = slices_to_remove.iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
       // System.out.println ("Removing Slice " + slice);
       removeSlice(slice);
@@ -4751,197 +3894,15 @@ public class PptTopLevel extends Ppt {
     return (permute);
   }
 
-  public void debug_print_slice_info(
-    Logger log,
-    String descr,
-    List /*PptSlice*/
-  slices) {
+  /** Debug print slice/inv count information to the specified logger **/
+  public void debug_print_slice_info (Logger log, String descr,
+                                      List /*PptSlice*/ slices) {
 
     int inv_cnt = 0;
     for (int i = 0; i < slices.size(); i++)
       inv_cnt += ((PptSlice) slices.get(i)).invs.size();
     log.fine(slices.size() + descr + " slices with " + inv_cnt + " invariants");
 
-  }
-
-  /**
-   * Returns true if all non-derived variables at this program point
-   * are parameters.  Can be used to infer that a method is a constructor
-   * ENTER point (since the objects fields are not included in that
-   * case).  There is no guarantee, however, that that inference is
-   * always correct
-   */
-  public boolean only_param_vars() {
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo var = var_infos[i];
-      if (!var.aux.getFlag(VarInfoAux.IS_PARAM) || var.isPrestate())
-        return (false);
-    }
-    return (true);
-  }
-
-  /**
-   * Insures that there are no invariants at this level that are duplicated
-   * at the global level.
-   */
-  public boolean check_vs_global() {
-
-    if (global == null)
-      return (true);
-
-    boolean ok = true;
-    for (Iterator j = views_iterator(); j.hasNext();) {
-      PptSlice slice = (PptSlice) j.next();
-      PptSlice gslice = slice.find_global_slice(slice.var_infos);
-      if (gslice == null)
-        continue;
-      for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = (Invariant) slice.invs.get(k);
-        Invariant ginv = gslice.find_inv_exact(inv);
-        if ((ginv != null) && inv.isActive() && ginv.isActive()) {
-          String cname = inv.getClass().getName();
-          if ((cname.indexOf("Bound") == -1)
-            && (cname.indexOf("OneOf") == -1)) {
-            System.out.println(
-              "inv "
-                + inv
-                + " in slice "
-                + name()
-                + " also appears at the global slice as "
-                + ginv);
-            ok = false;
-          }
-        }
-      }
-    }
-    return (ok);
-  }
-
-  /**
-   * Create the transforms between this point and the global ppt.
-   * These transforms allow samples to be quickly created for the
-   * global point and also allow invariants to be easily permuted
-   * between the two points
-   */
-
-  public void init_global_transforms() {
-
-    // We use this during post processing at all points, so the
-    // following check is commented out.
-    // Make sure this is a numbered exit point.
-    //Assert.assertTrue (ppt_name.isExitPoint()
-    //                   && !ppt_name.isCombinedExitPoint());
-
-    // Look for matching names for each global variable in the child
-    global_transform_post = new int[global.var_infos.length];
-    Arrays.fill(global_transform_post, -1);
-    for (int i = 0; i < global.var_infos.length; i++) {
-      VarInfo vp = global.var_infos[i];
-      for (int j = 0; j < var_infos.length; j++) {
-        VarInfo vc = var_infos[j];
-        if (vp.name == vc.name) {
-          Assert.assertTrue(vp.varinfo_index == vp.value_index);
-          Assert.assertTrue(vc.varinfo_index == vc.value_index);
-          global_transform_post[vp.varinfo_index] = vc.varinfo_index;
-          vc.global_index = (short) vp.varinfo_index;
-          break;
-        }
-      }
-    }
-
-    // Look for orig versions of each non-derived global variable in the child
-    global_transform_orig = new int[global.var_infos.length];
-    Arrays.fill(global_transform_orig, -1);
-    for (int i = 0; i < global.var_infos.length; i++) {
-      VarInfo vp = global.var_infos[i];
-      if (vp.derived != null)
-        continue;
-      VarInfoName orig_name = vp.name.applyPrestate().intern();
-      for (int j = 0; j < var_infos.length; j++) {
-        VarInfo vc = var_infos[j];
-        if (orig_name == vc.name) {
-          Assert.assertTrue(vp.varinfo_index == vp.value_index);
-          Assert.assertTrue(vc.varinfo_index == vc.value_index);
-          global_transform_orig[vp.varinfo_index] = vc.varinfo_index;
-          vc.global_index = (short) vp.varinfo_index;
-          break;
-        }
-      }
-    }
-
-    // Look for orig versions of derived variables in the child.  This is
-    // done by finding the base of each derived variable and looking for
-    // a child variable with the same bases and the same equation.  This
-    // is necessary because derivations are done AFTER orig variables so
-    // applying the prestate name (as done above) won't work (the resulting
-    // variable is really the same but the name is constructed differently)
-
-    // TODO
-
-    // Debug print the transforms
-    if (debugGlobal.isLoggable(Level.FINE)) {
-      debugGlobal.fine("orig transform at " + name());
-      for (int i = 0; i < global_transform_orig.length; i++) {
-        if (global_transform_orig[i] == -1)
-          debugGlobal.fine(
-            "-- " + global.var_infos[i].name.name() + " : NO MATCH");
-        else
-          debugGlobal.fine(
-            "-- "
-              + global.var_infos[i].name.name()
-              + " : "
-              + var_infos[global_transform_orig[i]].name.name());
-      }
-      debugGlobal.fine("post transform at " + name());
-      for (int i = 0; i < global_transform_post.length; i++) {
-        if (global_transform_post[i] == -1)
-          debugGlobal.fine(
-            "-- " + global.var_infos[i].name.name() + " : NO MATCH");
-        else
-          debugGlobal.fine(
-            "-- "
-              + global.var_infos[i].name.name()
-              + " : "
-              + var_infos[global_transform_post[i]].name.name());
-      }
-    }
-  }
-
-  /**
-   * Transform a sample to the global ppt using the specified transform.
-   * transform[i] returns the value_index in this ppt that corresponds to
-   * index i in the global ppt
-   **/
-  public ValueTuple transform_sample(int[] transform, ValueTuple vt) {
-
-    Object[] vals = new Object[global.var_infos.length];
-    int[] mods = new int[global.var_infos.length];
-    Arrays.fill(mods, ValueTuple.MISSING_FLOW);
-    for (int i = 0; i < transform.length; i++) {
-      if (transform[i] != -1) {
-        vals[i] = vt.vals[transform[i]];
-        mods[i] = vt.mods[transform[i]];
-      }
-    }
-    return (new ValueTuple(vals, mods));
-  }
-
-  /**
-   * Returns the local variable that corresponds to the specified global
-   * variable via the post transform.
-   */
-  public VarInfo local_postvar(VarInfo global_var) {
-
-    return var_infos[global_transform_post[global_var.varinfo_index]];
-  }
-
-  /**
-   * Returns the local variable that corresponds to the specified global
-   * variable via the orig transform.
-   */
-  public VarInfo local_origvar(VarInfo global_var) {
-
-    return var_infos[global_transform_orig[global_var.varinfo_index]];
   }
 
   /**
@@ -4957,11 +3918,6 @@ public class PptTopLevel extends Ppt {
 
     Assert.assertTrue(findSlice_unordered(v1, v2) == null);
     PptSlice newSlice = get_or_instantiate_slice(v1, v2);
-
-    // Copy over the number of samples from this to the new slice,
-    // so that all invariants on the slice report the right number
-    // of samples.
-    newSlice.set_samples(samples);
 
     Invariant invEquals = null;
 
@@ -4999,258 +3955,6 @@ public class PptTopLevel extends Ppt {
     return (newSlice);
   }
 
-  public static void count_unique_slices(Logger log, PptMap all_ppts) {
-
-    Map slices = new LinkedHashMap(10000);
-
-    int slice_cnt = 0;
-    int ppt_cnt = 0;
-
-    // Loop through each ppt
-    for (Iterator ii = all_ppts.pptIterator(); ii.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) ii.next();
-      if (ppt == all_ppts.getGlobal())
-        continue;
-      if (!ppt.ppt_name.isExitPoint())
-        continue;
-      if (ppt.ppt_name.isCombinedExitPoint())
-        continue;
-      ppt_cnt++;
-
-      // Loop through each ternary slice
-      slice_loop : for (Iterator jj = ppt.views_iterator(); jj.hasNext();) {
-        PptSlice slice = (PptSlice) jj.next();
-        if (slice.arity() != 3)
-          continue;
-        for (int kk = 0; kk < slice.var_infos.length; kk++) {
-          if (!slice.var_infos[kk].is_global()) {
-            continue slice_loop;
-          }
-        }
-
-        slice_cnt++;
-        SliceMatch sm_new = new SliceMatch(slice);
-        SliceMatch sm_old = (SliceMatch) slices.get(sm_new);
-        if (sm_old != null)
-          sm_old.all_slices.add(slice);
-        else
-          slices.put(sm_new, sm_new);
-      }
-    }
-
-    int max_out = 1000;
-    System.out.println(
-      slice_cnt
-        + " slices considered over "
-        + ppt_cnt
-        + " ppts, "
-        + slices.size()
-        + " unique slices in map");
-    for (Iterator ii = slices.values().iterator(); ii.hasNext();) {
-      SliceMatch sm = (SliceMatch) ii.next();
-      log.fine("Slice occurs " + sm.all_slices.size() + " times");
-      for (int jj = 0; jj < sm.all_slices.size(); jj++) {
-        PptSlice slice = (PptSlice) sm.all_slices.get(jj);
-        log.fine(": " + slice);
-        for (int kk = 0; kk < slice.invs.size(); kk++) {
-          Invariant inv = (Invariant) slice.invs.get(kk);
-          log.fine(": : " + inv.format());
-        }
-      }
-      if (--max_out <= 0)
-        break;
-    }
-  }
-
-  public static void count_unique_inv_lists(Logger log, PptMap all_ppts) {
-
-    Map slices = new LinkedHashMap(10000);
-
-    int inv_list_cnt = 0;
-    int ppt_cnt = 0;
-
-    // Loop through each ppt
-    for (Iterator ii = all_ppts.pptIterator(); ii.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) ii.next();
-      if (ppt == all_ppts.getGlobal())
-        continue;
-      if (!ppt.ppt_name.isExitPoint())
-        continue;
-      if (ppt.ppt_name.isCombinedExitPoint())
-        continue;
-      ppt_cnt++;
-
-      // Loop through each ternary slice
-      for (Iterator jj = ppt.views_iterator(); jj.hasNext();) {
-        PptSlice slice = (PptSlice) jj.next();
-        if (slice.arity() != 3)
-          continue;
-
-        inv_list_cnt++;
-        InvListMatch invs_new = new InvListMatch(slice.invs);
-        InvListMatch invs_old = (InvListMatch) slices.get(invs_new);
-        if (invs_old != null)
-          invs_old.all_invs.add(slice.invs);
-        else
-          slices.put(invs_new, invs_new);
-      }
-    }
-
-    int max_out = 100;
-    System.out.println(
-      inv_list_cnt
-        + " slices considered over "
-        + ppt_cnt
-        + " ppts, "
-        + slices.size()
-        + " unique slices in map");
-    if (true)
-      return;
-    for (Iterator ii = slices.values().iterator(); ii.hasNext();) {
-      InvListMatch ilm = (InvListMatch) ii.next();
-      if (ilm.all_invs.size() > 1)
-        continue;
-      log.fine("Slice occurs " + ilm.all_invs.size() + " times");
-      for (int jj = 0; jj < ilm.all_invs.size(); jj++) {
-        Invariants invs = (Invariants) ilm.all_invs.get(jj);
-        PptSlice slice = ((Invariant) invs.get(0)).ppt;
-        log.fine(": " + slice);
-        for (int kk = 0; kk < invs.size(); kk++) {
-          Invariant inv = (Invariant) invs.get(kk);
-          log.fine(": : " + inv.format());
-        }
-      }
-      if (--max_out <= 0)
-        break;
-    }
-  }
-
-  /**
-   * Provides hashcode/equal functions for slices over global variables
-   * regardless of what ppt they are in.
-   */
-  public static class SliceMatch {
-
-    PptSlice slice = null;
-    public List all_slices = new ArrayList();
-
-    public SliceMatch(PptSlice slice) {
-      this.slice = slice;
-      all_slices.add(slice);
-    }
-
-    public boolean equals(Object obj) {
-      if (!(obj instanceof SliceMatch))
-        return (false);
-
-      SliceMatch sm = (SliceMatch) obj;
-      PptSlice s1 = slice;
-      PptSlice s2 = sm.slice;
-
-      // Make sure they both refer to the same gobal variables via the same
-      // transform
-      if (s1.var_infos.length != s2.var_infos.length)
-        return (false);
-      for (int ii = 0; ii < s1.var_infos.length; ii++) {
-        VarInfo v1 = s1.var_infos[ii];
-        VarInfo v2 = s2.var_infos[ii];
-        if (!v1.is_global() || !v2.is_global())
-          return (false);
-        if (v1.global_var() != v2.global_var())
-          return (false);
-        if (v1.is_post_global() != v2.is_post_global())
-          return (false);
-      }
-
-      // Make sure that each invariant matches exactly
-      if (s1.invs.size() != s2.invs.size())
-        return (false);
-      for (int ii = 0; ii < s1.invs.size(); ii++) {
-        Invariant inv1 = (Invariant) s1.invs.get(ii);
-        Invariant inv2 = (Invariant) s2.invs.get(ii);
-        if (inv1.getClass() != inv2.getClass())
-          return (false);
-        if (!inv1.isSameFormula(inv2))
-          return (false);
-      }
-
-      return (true);
-    }
-
-    public int hashCode() {
-
-      int code = 0;
-
-      // include a hash over the equivalent global vars
-      for (int ii = 0; ii < slice.var_infos.length; ii++) {
-        VarInfo gvar = slice.var_infos[ii].global_var();
-        if (gvar == null)
-          code += slice.var_infos[ii].hashCode();
-        else
-          code += gvar.hashCode();
-      }
-
-      // hash over the invariants.  This should be better for function
-      // binary invariants
-      for (int ii = 0; ii < slice.invs.size(); ii++) {
-        code += slice.invs.get(ii).getClass().hashCode();
-      }
-
-      return (code);
-    }
-  }
-
-  /**
-   * Provides hashcode/equal functions for invariant lists regardless
-   * of their ppt.
-   */
-  public static class InvListMatch {
-
-    Invariants invs = null;
-    public List all_invs = new ArrayList();
-
-    public InvListMatch(Invariants invs) {
-      this.invs = invs;
-      all_invs.add(invs);
-    }
-
-    public boolean equals(Object obj) {
-      if (!(obj instanceof InvListMatch))
-        return (false);
-
-      InvListMatch ilm = (InvListMatch) obj;
-      Invariants invs1 = invs;
-      Invariants invs2 = ilm.invs;
-
-      // Make sure that each invariant matches exactly
-      if (invs1.size() != invs2.size())
-        return (false);
-      for (int ii = 0; ii < invs1.size(); ii++) {
-        Invariant inv1 = (Invariant) invs1.get(ii);
-        Invariant inv2 = (Invariant) invs2.get(ii);
-        if (inv1.getClass() != inv2.getClass())
-          return (false);
-        if (!inv1.isSameFormula(inv2))
-          return (false);
-      }
-
-      return (true);
-    }
-
-    public int hashCode() {
-
-      int code = 0;
-
-      // hash over the invariants.  This should be better for function
-      // binary invariants
-      for (int ii = 0; ii < invs.size(); ii++) {
-        code += invs.get(ii).getClass().hashCode();
-      }
-
-      return (code);
-    }
-  }
-
   /**
    * Stores various statistics about a ppt.
    */
@@ -5282,12 +3986,6 @@ public class PptTopLevel extends Ppt {
 
     /** number of instantiated slices **/
     public int instantiated_slice_cnt = 0;
-
-    /** total number of global invariants that have flowed **/
-    public int tot_invs_flowed = 0;
-
-    /** global invariants still in the list to flow **/
-    public int invs_to_flow = 0;
 
     /** program point of the stat **/
     public PptTopLevel ppt;
@@ -5323,8 +4021,6 @@ public class PptTopLevel extends Ppt {
       inv_cnt = ppt.invariant_cnt();
       instantiated_slice_cnt = ppt.instantiated_slice_cnt;
       instantiated_inv_cnt = ppt.instantiated_inv_cnt;
-      tot_invs_flowed = global_weakened_invs.size();
-      invs_to_flow = global_weakened_invs.size() - global_weakened_start_index;
       if (ppt.constants != null)
         constant_leader_cnt = ppt.constants.constant_leader_cnt();
       this.time = time;
@@ -5354,38 +4050,18 @@ public class PptTopLevel extends Ppt {
       if (set_cnt > 0)
         vars_per_eq = (double) var_cnt / set_cnt;
 
-      log.fine(
-        ppt.name()
-          + " : "
-          + sample_cnt
-          + " : "
-          + set_cnt
-          + " ("
-          + constant_leader_cnt
-          + " con) : "
-          + var_cnt
-          + " : "
-          + dfmt.format(vars_per_eq)
-          + " : "
-          + const_slice_cnt
-          + "/"
-          + const_inv_cnt
-          + " : "
-          + slice_cnt
-          + "/"
-          + inv_cnt
-          + " : "
-          + instantiated_slice_cnt
-          + "/"
-          + instantiated_inv_cnt
-          + " : "
-          + tot_invs_flowed
-          + "/"
-          + invs_to_flow
-          + ": "
-          + memory
-          + ": "
-          + time);
+      log.fine (ppt.name() + " : "
+                        + sample_cnt + " : "
+                        + set_cnt + " (" + constant_leader_cnt + " con) : "
+                        + var_cnt + " : "
+                        + dfmt.format (vars_per_eq) + " : "
+                        + const_slice_cnt + "/" + const_inv_cnt + " : "
+                        + slice_cnt + "/"
+                        + inv_cnt + " : "
+                        + instantiated_slice_cnt + "/"
+                        + instantiated_inv_cnt + " : "
+                        + memory + ": "
+                        + time);
       if (cnt_inv_classes) {
         for (Iterator i = inv_map.keySet().iterator(); i.hasNext();) {
           Class inv_class = (Class) i.next();
@@ -5544,9 +4220,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-  * Increments the number of samples processed by the program point by 1
-  */
-  //added by Chen 6/14/04 for use with the simple incremental algorithm
+	* Increments the number of samples processed by the program point by 1
+	*/
   public void incSampleNumber() {
     values_num_samples++;
   }

@@ -30,7 +30,7 @@ public abstract class PptSlice
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20040921L;
 
   public static final String lineSep = Global.lineSep;
 
@@ -56,40 +56,6 @@ public abstract class PptSlice
    **/
   public Invariants invs;
 
-
-  /**
-   * Invariants that have been falsified, and need to be flowed down
-   * to lower ppts.  May not actually be a subset of invs, if certain
-   * invariants fracture in two, for instance, or if an untainted
-   * clone is flowed instead of the falsified invariant itself.
-   **/
-  private Invariants invs_to_flow;
-
-
-  /**
-   * Union of falsified and weakened invariants.  Cleared after every
-   * call to flow_and_remove_falsified.
-   **/
-  private Invariants invs_changed;
-
-  // Keep private, modifiable copies and public read-only views
-  private final Collection private_po_lower;
-  // Map[PptTopLevel -> List[VarInfo[arity]]]; store as the value an array
-  // where this.var_infos corresponds to the VarInfos in value.
-  private final Map private_po_lower_vis;
-
-  /**
-   * Slices immediately lower in the partial order (compared to this).
-   * If A is higher than B then every value seen at B is seen at A.
-   * Elements are PptTopLevels, since PptSlices are transient.
-   * Contains no duplicates.
-   * PptSlice partial ordering is a direct function of VarInfo partial
-   * ordering, and is the minimal nearest set of slices which are
-   * higher for all VarInfos.
-   **/
-  public final Collection po_lower;
-  public final Map po_lower_vis;
-
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
     this.parent = parent;
     this.var_infos = var_infos;
@@ -99,21 +65,6 @@ public abstract class PptSlice
     }
     Assert.assertTrue(this instanceof PptSliceEquality || arity() == var_infos.length);
     invs = new Invariants();
-    // These seem to be used by both top-down and bottom-up (with global point).
-
-    if (! Daikon.dkconfig_df_bottom_up) {
-      invs_to_flow = new Invariants(1);
-      invs_changed = new Invariants(1);
-      private_po_lower = new ArrayList(2);
-      private_po_lower_vis = new HashMap();
-      po_lower = Collections.unmodifiableCollection(private_po_lower);
-      po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
-    } else {
-      private_po_lower = null;
-      private_po_lower_vis = null;
-      po_lower = null;
-      po_lower_vis = null;
-    }
 
     if (debugGeneral.isLoggable(Level.FINE)) {
       debugGeneral.fine (ArraysMDE.toString(var_infos));
@@ -159,38 +110,6 @@ public abstract class PptSlice
     return false;
   }
 
-  /**
-   * Falsifies the Invariant inv and then adds inv
-   * to the list of Invariants that are to be flowed
-   * and the list of changed Invariants.
-   */
-  public void destroyAndFlowInv(Invariant inv) {
-    inv.falsify();
-    addToFlow(inv);
-    if (inv.logOn() || debugFlow.isLoggable(Level.FINE)) {
-      inv.log (debugFlow, "Destroyed " + inv.format());
-    }
-    if (PrintInvariants.print_discarded_invariants) {
-      parent.falsified_invars.add(inv);
-    }
-    addToChanged(inv);
-  }
-
-  /**
-   * Places the Invariant inv to the list of
-   * changed Invariants and adds the Invariant
-   * clone to the list of Invariants that are to
-   * be flowed.
-   */
-  public void flowClone(Invariant inv, Invariant clone) {
-    addToChanged(inv);
-    if (! inv.flowed) {
-      addToFlow(clone);
-      clone.flowed = true;
-    }
-  }
-
-
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (int i = 0; i < var_infos.length; i++) {
@@ -198,43 +117,6 @@ public abstract class PptSlice
         return false;
     }
     return true;
-  }
-
-
-  /**
-   * Adds the given "slice" as one that is immediately lower in the
-   * partial ordering, thus modifying po_lower and po_lower_vis.  The
-   * argument is not a PptSlice because slices come and go over time.
-   * Instead, it is specified as a PptTopLevel a subset of its
-   * variables.
-   *
-   * @see #po_lower
-   * @see #po_lower_vis
-   **/
-  protected void addToOnePO(PptTopLevel adj,
-                            VarInfo[] slice_vis) {
-    Assert.assertTrue(slice_vis.length == arity());
-    for (int i = 0; i < arity(); i++) {
-      Assert.assertTrue (slice_vis[i].type == this.var_infos[i].type);
-    }
-
-
-    // Collection private_po = lower ? private_po_lower : private_po_higher;
-    // Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
-    Collection private_po = private_po_lower;
-    Map private_po_vis = private_po_lower_vis;
-
-    List slices;
-    if (! private_po.contains(adj)) {
-      private_po.add(adj);
-      Assert.assertTrue(! private_po_vis.containsKey(adj));
-      slices = new ArrayList(1);
-      private_po_vis.put(adj, slices);
-    } else {
-      slices = (List) private_po_vis.get(adj);
-      Assert.assertTrue(slices != null);
-    }
-    slices.add(slice_vis);
   }
 
   public abstract void addInvariant(Invariant inv);
@@ -251,7 +133,6 @@ public abstract class PptSlice
     boolean removed = invs.remove(inv);
     if (Assert.enabled && !removed)
       Assert.assertTrue (removed, "inv " + inv + " not in ppt " + name());
-    // This increment could also have been in Invariant.destroy().
     Global.falsified_invariants++;
     if (invs.size() == 0) {
       if (Debug.logDetail())
@@ -281,24 +162,6 @@ public abstract class PptSlice
   }
 
   /**
-   * Place argument on worklist of invariants to flow when
-   * flow_and_remove_falsified is called.  Should only be called from
-   * Invariant objects as they are falsified.
-   **/
-  public void addToFlow(Invariant inv) {
-    invs_to_flow.add(inv);
-  }
-
-  /**
-   * Place argument on worklist of invariants to flow when
-   * flow_and_remove_falsified is called.  Should only be called from
-   * Invariant objects as they are falsified.
-   **/
-  public void addToChanged(Invariant inv) {
-    invs_changed.add(inv);
-  }
-
-  /**
    * This procedure accepts a sample (a ValueTuple), extracts the values
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
@@ -306,204 +169,6 @@ public abstract class PptSlice
    * @return a List of Invariants that weakened due to the processing.
    **/
   abstract List add (ValueTuple full_vt, int count);
-
-  /**
-   * Flow falsified invariants to lower ppts, and remove them from
-   * this ppt.
-   * @return the List of weakened invariants.
-   **/
-  protected List flow_and_remove_falsified() {
-    // repCheck();  // Can do, but commented out for performance
-
-    Assert.assertTrue (!Daikon.dkconfig_df_bottom_up);
-
-    // Remove the dead invariants
-    ArrayList to_remove = new ArrayList();
-    for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
-      Invariant inv = (Invariant) iFalsified.next();
-      if (inv.is_false()) {
-        to_remove.add(inv);
-      }
-    }
-
-    // The following is simply for error checking
-    if (to_remove.size() > invs_to_flow.size()) {
-      // This block may no longer be necessary, as destroy() is only
-      // called via destroyAndFlow().
-
-      // Could also assert that classes of invariants killed are all
-      // represented in invs_to_flow, but a size check should be enough,
-      // since most invariants only generate one flowed copy when they
-      // die (and we call this method a lot, so let's not be wasteful).
-      Set naughty = new HashSet(); // Classes that did not call
-                                   // addToFlow after calling destroy.
-      for (Iterator i = to_remove.iterator(); i.hasNext(); ) {
-        Invariant inv = (Invariant) i.next();
-        naughty.add(inv.repr());
-      }
-      for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
-        Invariant inv = (Invariant) i.next();
-        naughty.remove(inv.repr());
-      }
-      throw new RuntimeException
-        ("Class(es) did not call addToFlow after calling destroy: " + naughty);
-    }
-    if (invs_changed.size() < invs_to_flow.size()) {
-      throw new RuntimeException
-        ("Changed Invariants count must equal to or greater than flowed invariants count");
-    }
-
-    removeInvariants(to_remove);
-
-    // Flow newly-generated stuff
-    if (invs_to_flow.size() == 0) {
-      if (debugFlow.isLoggable(Level.FINE)) {
-        debugFlow.fine ("No invariants to flow for " + this);
-      }
-      List result = new ArrayList (invs_changed);
-      return result;
-    } else {
-      if (debugFlow.isLoggable(Level.FINE)) {
-        debugFlow.fine (">> Flowing and removing falsified for: " + this);
-        debugFlow.fine ("  To remove: " + to_remove);
-        debugFlow.fine ("  To flow: " + invs_to_flow);
-      }
-    }
-
-
-    // XXXX Currently, we flow invariants to all immediately-lower
-    // PptSlices.  If the same sample happens to follow them there,
-    // then they are again falsified and flowed.  This is slightly
-    // inefficient.  Worse, it leads to redundant invariants when an
-    // invariant class can flow even when not falsified (like OneOf or
-    // Bound invariants); find these by searching for calls to
-    // flowClone().  The correct thing to do is to flow to all nearest
-    // lower slices that are not covered by the sample being
-    // processed.  Its actually even harder that that, because even
-    // though the sample might flow to a PptTopLevel, it might not
-    // flow to a PptConditional that hangs from it.
-
-    // For each lower PptTopLevel
-    for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
-      PptTopLevel lower = (PptTopLevel) iPptLower.next();
-      // For all of the slices
-      List slices_vis = (List) private_po_lower_vis.get(lower);
-      for_each_slice:
-      for (Iterator iLowerSlices = slices_vis.iterator();
-           iLowerSlices.hasNext(); ) {
-        VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
-
-        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          Assert.assertTrue(slice_vis[iSliceVis].type ==
-                            this.var_infos[iSliceVis].type);
-        }
-
-
-        Assert.assertTrue (slice_vis.length == this.var_infos.length);
-
-        if (Daikon.use_equality_optimization) {
-          // Why clone?  Because we'll be doing clobbers to transform these
-          // into leaders.
-          VarInfo[] old_slice_vis = slice_vis;
-          slice_vis = new VarInfo[slice_vis.length];
-          System.arraycopy(old_slice_vis, 0, slice_vis, 0, slice_vis.length);
-          // Convert the lower VarInfos into their leaders
-          for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-            slice_vis[iSliceVis] = (slice_vis[iSliceVis].equalitySet).leader();
-            if (!slice_vis[iSliceVis].isCanonical()) {
-              System.err.println ("Error, the variable " +
-                                  slice_vis[iSliceVis].name.name() +
-                                  " is not canonical");
-              System.err.println ("in ppt " + this);
-              throw new Error();
-            }
-          }
-        }
-
-        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          Assert.assertTrue(slice_vis[iSliceVis].
-                            comparableNWay (this.var_infos[iSliceVis]));
-        }
-
-        // Ensure the slice exists.
-        PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
-        // slice.repCheck();  // Can do, but commented out for performance
-
-        // Compute the permutation
-        int[] permutation = new int[slice.arity()];
-        // Do the permutation to map variables from this to lower slice
-        for (int i=0; i < arity(); i++) {
-          // slice.var_infos is small, so this call is relatively inexpensive
-          permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
-        }
-        fixPermutation (permutation);
-        // For each invariant
-      for_each_invariant:
-        for (Iterator iInvsToFlow = invs_to_flow.iterator();
-             iInvsToFlow.hasNext(); ) {
-          Invariant inv = (Invariant) iInvsToFlow.next();
-          if (! inv.is_false()) {
-            // The invariant must be destroyed before it can be
-            // resurrected.  The invariant objects that flow are
-            // provided by the invariants that are falsified or change
-            // formula.  Depending on the characteristics of the
-            // invariant, the item to flow may or may not have been
-            // destroyed.  Invariants that do not compute any
-            // constants will often just flow themselves directly,
-            // which means that inv will be falsified.  On the other
-            // hand, invariants with weaken-able computed constants
-            // will flow a clone of themselves before they weaken.  In
-            // that case, inv will not yet have been falsified.
-            inv.falsify();
-          }
-          // debug
-          if (debugFlow.isLoggable(Level.FINE)) {
-            debugFlow.fine (" " + inv.format() + " flowing from " +
-                            parent.name + " to " + lower.name);
-          }
-
-          // Let it be reborn
-          Invariant reborn = inv.resurrect(slice, permutation);
-          if (debugFlow.isLoggable(Level.FINE)) {
-            debugFlow.fine ("  rebirthing invariant");
-          }
-
-          // If its class does not already exist in lower
-          // for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
-          //   Object item = h.next();
-
-          // Note that this must use reborn rather than the original
-          // invariant.  That is because certain invariants will create
-          // a new class when resurrecting (eg, switch from < to > because
-          // their variable order switched).  We must check the reborn
-          // invariant and not the previous one so we get the correct
-          // match.
-
-          // XXX Should this be some sort of same formula check
-          // instead?  Probably not; one class of invariant should
-          // be able to handle all data fed to it; we never need two
-          // invariants of the same class in the same pptslice.
-          // Maybe add that as rep invariant up above?
-          //            if (item.getClass() == inv.getClass()) {
-          Invariant alreadyThere = Invariant.find (reborn.getClass(), slice);
-          if (alreadyThere != null) {
-            if (debugFlow.isLoggable(Level.FINE))
-              debugFlow.fine ("  except it was already there: " + alreadyThere.format());
-            continue for_each_invariant;
-          }
-
-          slice.addInvariant(reborn);
-          // Attempt to suppress the new invariant in lower levels
-          // slice.parent.attemptSuppression(reborn, true);
-        }
-      }
-    }
-    List result = new ArrayList (invs_changed);
-
-    invs_to_flow.clear();
-    invs_changed.clear();
-    return result;
-  }
 
   /**
    * Removes any falsified invariants from our list.
@@ -540,34 +205,15 @@ public abstract class PptSlice
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
   }
 
-  void addSlice(Ppt slice) {
-    throw new Error("Don't add views on a slice.");
-  }
 
-  void addSlices(Vector slices) {
-    throw new Error("Don't add views on a slice.");
-  }
-
-  void removeSlice(Ppt slice) {
-    throw new Error("Don't remove view from a slice.");
-  }
+  /** Return an approximation of the number of samples seen on this slice **/
+  public abstract int num_samples();
 
   /**
-   * Set the number of samples of this ppt to be at least count.
+   * Return an approximation of the number of distinct values seen on
+   * this slice
    **/
-  public void set_samples (int count) {
-
-  }
-
-  // These accessors are for abstract methods declared in Ppt
-  public abstract int num_samples();
-  // public abstract int num_mod_samples();
   public abstract int num_values();
-
-  boolean check_modbits () {
-    Assert.assertTrue(invs.size() > 0);
-    return true;
-  }
 
   /**
    * Instantiate invariants on the VarInfos this slice contains.
@@ -621,11 +267,13 @@ public abstract class PptSlice
   //////////////////////////////////////////////////////////////////////////////
   //// Invariant guarding
 
-  // This function guards all of the invariants in a given PptSlice by
-  // iterating over the contained invariants and replace the invariants
-  // that require guarding with their guarded counterparts. The guarded
-  // invariants are put into the joiner view of the PptTopLevel that
-  // contains the PptSlice where the invariant was originally located.
+  /**
+   * This function guards all of the invariants in a given PptSlice by
+   * iterating over the contained invariants and replace the invariants
+   * that require guarding with their guarded counterparts. The guarded
+   * invariants are put into the joiner view of the PptTopLevel that
+   * contains the PptSlice where the invariant was originally located.
+   */
   public void guardInvariants() {
     List invariantsToGuard = new ArrayList();
 
@@ -702,6 +350,9 @@ public abstract class PptSlice
   /////////////////////////////////////////////////////////////////
   /// Miscellaneous
 
+  /**
+   * Remove the invariants noted in omitTypes
+   */
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
     List toRemove = new ArrayList();
@@ -713,40 +364,12 @@ public abstract class PptSlice
     removeInvariants(toRemove);
   }
 
+  /**
+   * Check the internals of this slice.  Each invariant in the slice
+   * is checked for consistency and each inv.ppt must equal this
+   */
   public void repCheck() {
 
-    if (! Daikon.dkconfig_df_bottom_up) {
-      for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
-        PptTopLevel lower = (PptTopLevel) iPptLower.next();
-        // For all of the slices
-        List slices_vis = (List) private_po_lower_vis.get(lower);
-        for_each_slice:
-
-        for (Iterator iLowerSlices = slices_vis.iterator();
-             iLowerSlices.hasNext(); ) {
-          VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
-
-          for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-            if (slice_vis[iSliceVis].type !=
-                this.var_infos[iSliceVis].type) {
-              System.err.println ("RepCheck failure: " +
-                                  var_infos[iSliceVis].name.name() +
-                                  " and " +
-                                  slice_vis[iSliceVis].name.name() +
-                                  " have different types");
-              System.err.println ("in ppt " + this);
-              throw new Error();
-            }
-          }
-        }
-      }
-    }
-
-    for (int i = 0; i < var_infos.length; i++) {
-      for (int j = i+1; j < var_infos.length; j++) {
-        // Assert.assertTrue (var_infos[i] != var_infos[j]);
-      }
-    }
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       inv.repCheck();
@@ -780,7 +403,8 @@ public abstract class PptSlice
     for (int i = 0; i < var_infos.length; i++) {
       sb.append (" " + var_infos[i].name.name());
     }
-    return this.getClass().getName() + ": " + parent.ppt_name + " " + sb + " samples: " + num_samples();
+    return this.getClass().getName() + ": " + parent.ppt_name + " "
+           + sb + " samples: " + num_samples();
   }
   /**
    * Returns whether or not this slice already contains the specified
@@ -866,56 +490,13 @@ public abstract class PptSlice
     return (suppressed);
   }
 
+  /**
+   * Output specified log information if the PtpSlice class, and this ppt
+   * and variables are enabled for logging
+   */
   public void log (String msg) {
     Debug.log (getClass(), this, msg);
   }
 
-  /**
-   * Finds the global slice that corresponds the the slice identified
-   * by local_vis.  Returns null if there is no corresponding slice.
-   * Note that each local variable must have the same transform to the
-   * global ppt for there to be a matching global slice.
-   **/
-  public static PptSlice find_global_slice (VarInfo[] local_vis) {
-
-    // Each var must have the same global transform in order for there
-    // to be a matching global slice
-    boolean post_xform = local_vis[0].is_post_global();
-    if (!local_vis[0].is_global())
-      return (null);
-    for (int i = 1; i < local_vis.length; i++) {
-      if (!local_vis[i].is_global()
-          || (post_xform != local_vis[i].is_post_global()))
-        return (null);
-    }
-
-    // Transform each local to the global ppt.  The global must be
-    // a leader if the local one is.
-    VarInfo[] global_vis = new VarInfo[local_vis.length];
-    for (int i = 0; i < local_vis.length; i++) {
-      global_vis[i] = local_vis[i].global_var();
-      Assert.assertTrue (global_vis[i].isCanonical());
-    }
-
-    // As long as the variables are in the same order at the Global ppt,
-    // there should be no permutation necessary between the global
-    // and local slice (and thus global_vis should already be sorted)
-    for (int i = 0; i < local_vis.length - 1; i++) {
-      if (global_vis[i].varinfo_index > global_vis[i+1].varinfo_index) {
-        System.out.println ("localvars = " + VarInfo.toString(local_vis));
-        System.out.println ("Globalvars = " + VarInfo.toString(global_vis));
-        for (int j = 0; j < local_vis.length; j++)
-          System.out.print (local_vis[j].varinfo_index + "/"
-                            + global_vis[j].varinfo_index + " ");
-        System.out.println ();
-        Assert.assertTrue (global_vis[i].varinfo_index
-                           <= global_vis[i+1].varinfo_index);
-      }
-    }
-
-    // Look for this slice at the global ppt and return it
-    PptSlice slice = PptTopLevel.global.findSlice (global_vis);
-    return (slice);
-  }
 
 }
