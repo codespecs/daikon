@@ -57,10 +57,16 @@ public final class Runtime {
     // System.out.println("...done calling setDtrace(" + filename + ")");
   }
 
-  public static void setDtraceMaybe(String filename) {
+  /**
+   * If the current data trace file is not yet set, then set it.
+   * The value of the DTRACEFILE environment variable is used;
+   * if that environment variable is not set, then the argument
+   * to this method is used instead.
+   **/
+  public static void setDtraceMaybe(String default_filename) {
     if (dtrace == null) {
-      String prop = System.getProperty("daikon.dtrace.filename");
-      setDtrace((prop != null) ? prop : filename);
+      // Jeremy used "daikon.dtrace.filename".
+      setDtrace(System.getProperty("DTRACEFILE", default_filename));
     }
   }
 
