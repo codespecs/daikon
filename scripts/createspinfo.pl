@@ -1,8 +1,7 @@
 #!/usr/local/bin/perl
 
-#creates the splitter info file in two stages. First creates the .conds file
-#(see extractconds.pl) and then creates the splitter info file from the .conds
-#file
+# Creates the splitter info file in two stages.  First creates the .conds file
+# and then creates the splitter info file from the .conds file.
 
 #creation of .conds file
 foreach $filename (@ARGV){
@@ -10,7 +9,7 @@ foreach $filename (@ARGV){
     open(CONDFILE, ">$filename.conds") || die "Cannot open output file\n";
     $brace = 0;
     $in_if = 0;
-    
+
     #skip commented lines
     while (<INPUTFILE>) {
 	$line = $_;
@@ -35,9 +34,9 @@ foreach $filename (@ARGV){
 	}
 	if ($brace == 1) {
 	    if ($line =~ /\s+(\S+)\s*(\(.*\))/) {
-		#we've matched a function name. 
+		#we've matched a function name.
 		$method = $1;
-		$args = $2; 
+		$args = $2;
 		print CONDFILE "\nIn function $method:\n";
 		$replace_method = 1;
 	    }
@@ -73,7 +72,7 @@ foreach $filename (@ARGV){
 		    $arguments{$method} = $args;
 		}
 	    }
-	} 
+	}
 	#//// trying to find declaration of boolean variables
 	if($line =~ /\s+boolean\s+([^\(\)\{\}]*)$/){
 	    #found boolean variable(s). Check for declaration of multiple booleans
@@ -132,7 +131,7 @@ foreach $filename (@ARGV){
 		print CONDFILE $cond."\n";
 		#Do the replacements only on simple one-line methods which return booleans.
 		#If it's a complicated function ie. more then one line, discard.
-		$replace_method = 0; 
+		$replace_method = 0;
 		$in_if = 0;
 	    }elsif($paren == 0 && $in_if == 1){
 		$in_if = 0;
@@ -175,22 +174,22 @@ foreach $filename (@ARGV){
 	    }
 	}
     }
-    
+
     print CONDFILE "\nreplace:\n";
     foreach $method (keys %replace) {
 	print CONDFILE "$method$arguments{$method} : $replace{$method}\n";
     }
-    
+
     close(CONDFILE);
 #.conds file created
-    
+
     open(CONDFILE, "$filename.conds") || die "could not open conditions file";
     $filename =~ s/\.java//;
     open(SPINFOFILE, ">$filename.spinfo") || die "could not write to file $filename.spinfo";
 #structure: (Hash of Arrays) of the form:
-# %HashOfConds = [ 
+# %HashOfConds = [
 #                 Class1.Function1 => (cond, cond, ...)
-#                 ... 
+#                 ...
 #                ]
 
     @conditions = ();
@@ -198,9 +197,9 @@ foreach $filename (@ARGV){
     $numsubs = 0;
     %HashOfConds = ();
     %HashOfSubs = ();
-    
+
     $function = "OBJECT";
-    
+
     while ($line = <CONDFILE>){
 	if($line =~ /In class\s+(\S*):/){
 	    #matches the class name
@@ -220,21 +219,21 @@ foreach $filename (@ARGV){
 		}
 	    }
 	}
-	if ($line !~ /In |replace:|^[ \t]*$|import/){ 
+	if ($line !~ /In |replace:|^[ \t]*$|import/){
 	    #not a blank line, and doesn't contain "replace:" or "In "
 	    # or "import" so it must be a condition
 	    $key = $class.".".$function;
 	    chomp($line);
-	    
+
 	    push @{ $HashOfConds{$key}}, $line;
 	}
     }
-    
+
 # have to deal with inner classes in here, and also in extractconds.pl
-    
+
     @functions = (keys %HashOfConds);
     $numfuncs = scalar(@functions);
-    
+
     $replace = "REPLACE";
     for($i = 0; $i < scalar(@subs); $i = $i + 2){
 	$sub = @subs[$i];
@@ -247,7 +246,7 @@ foreach $filename (@ARGV){
     if(scalar(@subs)> 0){
 	print SPINFOFILE $replace."\n\n";
     }
-    
+
     foreach $function (keys %HashOfConds){
 	$conditions = "";
 	print SPINFOFILE "PPT_NAME  $function";
@@ -257,17 +256,17 @@ foreach $filename (@ARGV){
 	$class = $1;
 	foreach $cond (@conds){
 	    if($cond !~ /^\s*true\s*$/){
-		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends 
+		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
 		$conditions = $conditions."\n".$cond;
 	    }else{ next; }
 	}
-	
+
 	print SPINFOFILE $conditions."\n";
 	print SPINFOFILE "\n";
 	#unlink <$filename.conds>;
-    }    
-    
+    }
+
     print "output written to $filename.spinfo \n";
     close CONDFILE;
     close SPINFOFILE;
