@@ -7,8 +7,6 @@ import utilMDE.ArraysMDE;
 
 public class ProglangTypeTest extends TestCase {
 
-  private static ProglangType CHAR = ProglangType.parse("char");
-
   public static void main(String[] args) {
     junit.textui.TestRunner.run(new TestSuite(ProglangTypeTest.class));
   }
