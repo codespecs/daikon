@@ -2000,6 +2000,7 @@ public class PptTopLevel extends Ppt {
       out.println();
     }
     Vector modified_vars = new Vector();
+    Vector modified_primitive_vars = new Vector();
     Vector unmodified_vars = new Vector();
     Vector unmodified_orig_vars = new Vector();
     for (int i=0; i<var_infos.length; i++) {
@@ -2015,47 +2016,36 @@ public class PptTopLevel extends Ppt {
             unmodified_orig_vars.add(vi_orig);
           } else {
             // System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
-            modified_vars.add(vi);
+            PptSlice1 view = getView(vi);
+            if ((view != null) && (view.num_values() > 0)) {
+              // The isPrimitive test is wrong.  We should suppress for only
+              // parameters, not all primitive values.
+              if (vi.type.isPrimitive() && (vi.name.indexOf(".") == -1)) {
+                modified_primitive_vars.add(vi);
+              } else {
+                modified_vars.add(vi);
+              }
+            }
           }
         }
       }
     }
     if (Daikon.output_num_samples || Daikon.esc_output) {
       if (modified_vars.size() > 0) {
-        boolean printed_header = false;
+        out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
           VarInfo vi = (VarInfo)modified_vars.elementAt(i);
-          if (! vi.type.isPrimitive()) {
-            PptSlice1 view = getView(vi);
-            if ((view != null) && (view.num_values() > 0)) {
-              if (! printed_header) {
-                out.print("      Modified variables:");
-                printed_header = true;
-              }
-              out.print(" " + vi.name);
-            }
-          }
+          out.print(" " + vi.name);
         }
-        if (printed_header)
-          out.println();
+        out.println();
       }
-      if (modified_vars.size() > 0) {
-        boolean printed_header = false;
-        for (int i=0; i<modified_vars.size(); i++) {
-          VarInfo vi = (VarInfo)modified_vars.elementAt(i);
-          if (vi.type.isPrimitive()) {
-            PptSlice1 view = getView(vi);
-            if ((view != null) && (view.num_values() > 0)) {
-              if (! printed_header) {
-                out.print("      Modified primitive variables:");
-                printed_header = true;
-              }
-              out.print(" " + vi.name);
-            }
-          }
+      if (modified_primitive_vars.size() > 0) {
+        out.print("      Modified primitive variables:");
+        for (int i=0; i<modified_primitive_vars.size(); i++) {
+          VarInfo vi = (VarInfo)modified_primitive_vars.elementAt(i);
+          out.print(" " + vi.name);
         }
-        if (printed_header)
-          out.println();
+        out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
