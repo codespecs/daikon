@@ -285,10 +285,12 @@ public abstract class Invariant
   public boolean justified() {
     boolean just = !falsified && enoughSamples() &&
                     (getProbability() <= dkconfig_probability_limit);
-    if (!just  && logOn())
-      log ("Not justified, enoughSamples = " + enoughSamples()
+    if (logOn())
+      log ("justified = " + just + ", enoughSamples = " + enoughSamples()
            + ", probability = " + getProbability() + ", repr = " + repr() +
-           ", ppt.num_values() = " + ppt.num_values());
+           ", ppt.num_values() = " + ppt.num_values()
+           +", num_mod_non_missing_samples = "
+           + ppt.num_mod_non_missing_samples());
     return (just);
   }
 
@@ -457,8 +459,10 @@ public abstract class Invariant
 
     if (logOn())
       result.log ("Created " + result.format() + " via transfer from "
-                  + format() + "using permuation "
-                  + ArraysMDE.toString (permutation));
+                  + format() + "using permutation "
+                  + ArraysMDE.toString (permutation)
+                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
+                  + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
     //if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name + " "
     //                 + result.repr());
@@ -1153,14 +1157,15 @@ public abstract class Invariant
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
   public boolean isWorthPrinting() {
-    return InvariantFilters.isWorthPrintingFilter().shouldKeep(this);
+    return InvariantFilters.isWorthPrintingFilter().shouldKeep(this) == null;
   }
 
   /**
    * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
    **/
   final public boolean isWorthPrinting_sansControlledCheck() {
-    return InvariantFilters.isWorthPrintingFilter_sansControlledCheck().shouldKeep(this);
+    return InvariantFilters.isWorthPrintingFilter_sansControlledCheck()
+             .shouldKeep(this) == null;
   }
 
   final public String isWorthPrinting_sansControlledCheck_debug() {
