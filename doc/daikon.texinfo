@@ -1640,10 +1640,19 @@ Do not produce data trace output for loop invariants (default).
 
 @item -daikon_omit=@var{string}
 Do not produce data trace output for matching classes/functions.  This
-argument may be supplied multiple times, in order to specify multiple
-omitting criteria.  A program point is omitted if its class, fully
-qualified function name, or complete program point name exactly matches
-one of the omitting criteria.
+reduces the size of the data trace file and also may make the
+instrumented program run faster, since it need not output those variables.
+
+The @option{-daikon_omit} argument may be supplied multiple times, in
+order to specify multiple omitting criteria.  A program point is omitted
+if its class, fully qualified function name, or complete program point
+name exactly matches one of the omitting criteria.
+
+For example, to avoid detecting invariants over an iterator, you can
+call dfej like so:
+@example
+  dfej '-daikon_omit=HashSetLinear$HslIterator' HashSetLinear.java
+@end example
 
 @item -tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
