@@ -533,8 +533,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
           //                 + seq_contents_name
           //                 + (seq_contents.isPrestate() ? " : " + seq_contents.postState.name : ""));
 	  // Used to be error; dfec actually does this though (?)
-          System.out.println("Warning: sequence variable " + seq_contents.name
-                             + " does not seem to be a sequence I can handle");
+          System.out.println("equalToNonobvious: cannot handle sequence variable " + seq_contents.name);
           continue;
 	}
 
