@@ -228,11 +228,15 @@ public class PAIRWISEINTEQUAL
   #if (defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   // Suppress <= by < or ==, and >= by > or ==
   public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
 
     PptSlice ppt = this.ppt.parent.findSlice(vis);
 
     if (ppt == null)
-      return new DiscardInfo();
+      return null;
 
     PAIRWISEEQ_SUPP picEQ = PAIRWISEEQ_SUPP.find(ppt);
     if (picEQ!=null) {
@@ -252,7 +256,7 @@ public class PAIRWISEINTEQUAL
       return new DiscardInfo(this, DiscardCode.obvious, "<= (resp. >=) implied by < (resp. >)");
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
 
     }
   #endif

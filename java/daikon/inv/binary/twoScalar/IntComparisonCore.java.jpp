@@ -160,8 +160,7 @@ public final class CLASSNAME
 
   public double computeConfidence() {
     if (can_be_lt || can_be_gt) {
-      // num_values() would be more appropriate
-      return 1 - Math.pow(.5, wrapper.ppt.num_samples());
+      return 1 - Math.pow(.5, wrapper.ppt.num_values());
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.

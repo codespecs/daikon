@@ -6,6 +6,8 @@ import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
+import daikon.derive.binary.*;
+
 
 import utilMDE.*;
 
@@ -112,8 +114,12 @@ public abstract class SuppressionFactory implements Serializable {
   /// Suppression utilities
   ///
 
+  // All of these need to be generalized to floating-point numbers as well.
+
   private static transient SuppressionTemplate supTemplate_findLessEqualInt = new SuppressionTemplate(1);
   private static transient SuppressionTemplate supTemplate_findEqualInt = new SuppressionTemplate(1);
+  private static transient SuppressionTemplate supTemplate_findConstantInt = new SuppressionTemplate(1);
+  private static transient SuppressionTemplate supTemplate_findInRange = new SuppressionTemplate(2);
   private static transient SuppressionTemplate supTemplate_findUpperBound = new SuppressionTemplate(1);
   private static transient SuppressionTemplate supTemplate_findLowerBound = new SuppressionTemplate(1);
   private static transient SuppressionTemplate supTemplate_findEmptyArray = new SuppressionTemplate(1);
@@ -215,6 +221,50 @@ public abstract class SuppressionFactory implements Serializable {
   }
 
 
+  // Return a SuppressionLink suppressing the invariant by "var == constant".
+  public static SuppressionLink findConstantInt (Invariant inv, VarInfo var, long constant) {
+    SuppressionTemplate supTemplate = supTemplate_findConstantInt;
+    supTemplate.set(0, OneOfScalar.class, var);
+    SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl == null) {
+      return null;
+    }
+
+    // Check the constant
+    OneOfScalar oos = (OneOfScalar) supTemplate.results[0];
+    if (oos.num_elts() != 1) {
+      return null;
+    }
+    if (((Long) oos.elt()).longValue() == constant) {
+      return sl;
+    }
+    return null;
+  }
+
+  public static SuppressionLink findInRange (Invariant inv, VarInfo var, int lowerbound, int upperbound) {
+    SuppressionTemplate supTemplate = supTemplate_findInRange;
+    supTemplate.set(0, LowerBound.class, var);
+    supTemplate.set(1, UpperBound.class, var);
+
+    // Find a match
+    SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl == null) {
+      return null;
+    }
+
+    // Check the bounds
+    LowerBound lb = (LowerBound) supTemplate.results[0];
+    long lbound = lb.min();
+    UpperBound ub = (UpperBound) supTemplate.results[1];
+    long ubound = ub.max();
+    if ((ubound <= upperbound) && (lbound <= lowerbound)) {
+      return (sl);
+    }
+
+    return null;
+  }
+
+
   // Return a SuppressionLink suppressing the invariant by "var <= limit".
   public static SuppressionLink findUpperBound (Invariant inv, VarInfo var, int limit) {
 
@@ -232,7 +282,7 @@ public abstract class SuppressionFactory implements Serializable {
 
     // Check the bound
     UpperBound ub = (UpperBound) supTemplate.results[0];
-    long bound = ub.core.max1;
+    long bound = ub.max();
     if (bound <= limit) {
       return (sl);
     }
@@ -257,7 +307,7 @@ public abstract class SuppressionFactory implements Serializable {
 
     // Check the bound
     LowerBound ub = (LowerBound) supTemplate.results[0];
-    long bound = ub.core.min1;
+    long bound = ub.min();
     if (bound <= limit) {
       return (sl);
     }
@@ -265,8 +315,32 @@ public abstract class SuppressionFactory implements Serializable {
   }
 
 
+  public static SuppressionLink findEmptyArray (Invariant inv, VarInfo array_vi) {
+
+    if (inv.logOn())
+      inv.log ("Considering suppression of " + inv.format() + " by findEmptyArray_arraylength");
+
+    SuppressionLink sl;
+
+    sl = findEmptyArray_via_OneOfSequence(inv, array_vi);
+    if (sl != null) {
+      return sl;
+    }
+
+    sl = findEmptyArray_arraylength(inv, array_vi);
+    if (sl != null) {
+      return sl;
+    }
+
+    return null;
+  }
+
+
   // TODO:  Factor this out by types and turn it into a #included file.
-  public static SuppressionLink findEmptyArray (Invariant inv, VarInfo var) {
+
+  // This does not successfully determine that A[0..zero-1] is empty, where
+  // zero=0, because A[0..zero-1] is a no good derived variable (?).
+  public static SuppressionLink findEmptyArray_via_OneOfSequence (Invariant inv, VarInfo var) {
 
     if (inv.logOn())
       inv.log ("findEmptyArray");
@@ -276,28 +350,58 @@ public abstract class SuppressionFactory implements Serializable {
     SuppressionTemplate supTemplate = supTemplate_findEmptyArray;
 
     supTemplate.set(0, OneOfSequence.class, var);
-
-    // Find a match
     SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl != null) {
+      OneOfSequence oos = (OneOfSequence) supTemplate.results[0];
+      if (oos.num_elts() == 1) {
+        long[] oneValue = (long[]) oos.elt();
+        if (oneValue.length == 0)
+          return sl;
+      }
+    }
 
-    if (sl == null)
       return null;
-    OneOfSequence oos = (OneOfSequence) supTemplate.results[0];
-    if (oos.num_elts() != 1)
+  }
+
+
+  // Determine that A[0..zero-1] is empty, where zero=0.
+  public static SuppressionLink findEmptyArray_arraylength (Invariant inv, VarInfo array_vi) {
+
+    if (inv.logOn())
+      inv.log ("Considering suppression of " + inv.format() + " by findEmptyArray_arraylength");
+
+    // This implementation doesn't need to be special-cased for each type.
+
+    // array_vi is either a subsequence (such as a[i..j]) or a complete array (a[]).
+    if (array_vi.derived == null) {
+      // array_vi is a complete array
+      VarInfo array_size_vi = array_vi.sequenceSize();
+      return findUpperBound(inv, array_size_vi, 0);
+    }
+    Assert.assertTrue(array_vi.derived != null);
+    if (array_vi.derived instanceof SequenceSubsequence) {
+      // array_vi is a subsequence of the form a[i..] or a[..j]
+      if (inv.logOn())
+        inv.log ("Derived var " + array_vi.name.name());
+      SequenceSubsequence ss = (SequenceSubsequence) array_vi.derived;
+      if (ss.from_start) {
+        // variable of the form a[0..n] (if ss.index_shift == 0)
+        // or a[0..n-1] (if ss.index_shift == -1)
+        return findUpperBound(inv, ss.sclvar(), -1-ss.index_shift);
+      } else {
+        // variable of the form a[m..] (if ss.index_shift == 0)
+        // or a[m+1..] (if ss.index_shift == -1); use a different factory
       return null;
-    long[] oneValue = (long[]) oos.elt();
-    if (oneValue.length != 0)
+      }
+    }
+    // array_vi is not of the form handled by this routine.
       return null;
 
-    return sl;
   }
 
 
 
 /// This is a *far* too complicated way to check whether an array is empty.
-/// (But it doesn't need to be special-cased for each type, and I'll need
-/// to do something quite similar for testing whether an array is short.)
-/// Instead, just look for the OneOf invariant!
 //   /**
 //    * Suppress invariants of the form 'A elements != 0' where A is
 //    * always of size 0 and A has form "a[]" or "a[..n]".

@@ -86,10 +86,11 @@ public abstract class Invariant
   public static double dkconfig_confidence_limit = .99;
 
   /**
-   * If true, use confidence-style filtering (computed from ModBitTracker).
+   * If true, use confidence-style filtering (computed from ModBitTracker
+   * and ValueSet).
    * Otherwise, use probability-style filtering (computed from ValueTracker).
    **/
-  public static boolean dkconfig_use_confidence = false;
+  public static boolean dkconfig_use_confidence = true;
 
   /**
    * A boolean value. If true, Daikon's Simplify output (printed when
@@ -477,6 +478,20 @@ public abstract class Invariant
                   // This can be expensive, so comment out.
                   // , getClass().getName() + ": " + repr()
                   );
+    if (0) {
+      // getProbability fails unless dkconfig_use_confidence is false
+      boolean old_use_conf = Invariant.dkconfig_use_confidence;
+      Invariant.dkconfig_use_confidence = false;
+      double prob = getProbability();
+      if (result != 1 - prob) {
+        if (result >= .99 && result <= 1 && prob >=0 && prob <= .01) {
+          System.out.println("Justification mismatch ("
+                             + "conf=" + result + ", prob=" + prob
+                             + ") for " + format());
+        }
+      }
+      Invariant.dkconfig_use_confidence = old_use_conf;
+    }
     return result;
   }
 
@@ -652,7 +667,7 @@ public abstract class Invariant
 
     if (logOn())
       result.log ("Created " + result.format() + " via transfer from "
-                  + format() + "using permutation "
+                  + format() + " using permutation "
                   + ArraysMDE.toString (permutation)
                   + " old_ppt = " + VarInfo.toString (ppt.var_infos)
                   + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
@@ -860,15 +875,14 @@ public abstract class Invariant
    * format gives a high-level representation for user output.
    **/
   public String format() {
+    String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
       int index = classname.lastIndexOf('.');
       classname = classname.substring(index+1);
-      return format_using(OutputFormat.DAIKON)
-                + " [" + classname + "]";
-    } else {
-      return format_using(OutputFormat.DAIKON);
+      result = result + " [" + classname + "]";
     }
+    return result;
   }
 
   public abstract String format_using(OutputFormat format);
@@ -1379,7 +1393,7 @@ public abstract class Invariant
       + enoughSamples()
       // + " " + (! hasNonCanonicalVariable()) [INCR]
       // + " " + (! hasOnlyConstantVariables()) [INCR]
-      + " " + (! isObvious().shouldDiscard())
+      + " " + (isObvious() != null)
       + " " + justified()
       // + " " + isWorthPrinting_PostconditionPrestate() [INCR]
       ;
@@ -1461,7 +1475,7 @@ public abstract class Invariant
    * @pre vis.length == this.ppt.var_infos.length
    **/
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
-    return new DiscardInfo();
+    return null;
   }
 
   /**
@@ -1481,7 +1495,9 @@ public abstract class Invariant
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
   public boolean isObviousStatically_AllInEquality() {
-    if (!isObviousStatically().shouldDiscard()) return false;
+    // If the leaders aren't statically obvious, then clearly not all
+    // combinations are.
+    if (isObviousStatically() == null) return false;
 
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (ppt.var_infos[i].equalitySet.getVars().size() > 1) return false;
@@ -1491,8 +1507,8 @@ public abstract class Invariant
 
   /**
    * Return true if this invariant and some equality combinations of
-   * its member variables are statically obvious.  For example, a ==
-   * b, and f(a) is obvious, so is f(b).  We use the someInEquality
+   * its member variables are statically obvious.  For example, if a ==
+   * b, and f(a) is obvious, then so is f(b).  We use the someInEquality
    * (or least interesting) method during printing so we only print an
    * invariant if all its variables are interesting, since a single,
    * static, non interesting occurance means all the equality
@@ -1504,7 +1520,7 @@ public abstract class Invariant
    **/
   public DiscardInfo isObviousStatically_SomeInEquality() {
     DiscardInfo result = isObviousStatically();
-    if (result.shouldDiscard()) return result;
+    if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
                                                      new VarInfo[this.ppt.var_infos.length],
                                                      0);
@@ -1534,19 +1550,18 @@ public abstract class Invariant
         assigned[position] = vi;
         DiscardInfo temp =
           isObviousStatically_SomeInEqualityHelper (vis, assigned, position + 1);
-        if (temp.shouldDiscard()) return temp;
+        if (temp != null) return temp;
       }
-      return new DiscardInfo();
+      return null;
     }
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact
-   * that can be determined statically (i.e., the decls files) or
-   * dynamically (after checking data).  Intended not to be overriden,
-   * because sub classes should override isObviousStatically or
-   * isObviousDynamically.  Should only do static checking, because
-   * suppression should do the dynamic checking.
+   * Return true if this invariant is necessarily true from a fact that can
+   * be determined statically (i.e., the decls files) or dynamically (after
+   * checking data).  Intended not to be overriden, because sub-classes
+   * should override isObviousStatically or isObviousDynamically.  Wherever
+   * possible, suppression, rather than this, should do the dynamic checking.
    **/
   public final DiscardInfo isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
@@ -1558,58 +1573,40 @@ public abstract class Invariant
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
     DiscardInfo staticResult = isObviousStatically_SomeInEquality();
-    if (staticResult.shouldDiscard()) {
+    if (staticResult != null) {
       if (debugPrint.isLoggable(Level.FINE))
         debugPrint.fine ("  [obvious:  " + repr_prob() + " ]");
       return staticResult;
     } else {
       DiscardInfo dynamicResult = isObviousDynamically_SomeInEquality();
-      if (dynamicResult.shouldDiscard()) {
+      if (dynamicResult != null) {
         if (debugPrint.isLoggable(Level.FINE))
           debugPrint.fine ("  [obvious:  " + repr_prob() + " ]");
         return dynamicResult;
       } else {
-        return new DiscardInfo();
+        return null;
       }
     }
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact
-   * that can be determined dynamically (after checking data) -- for
-   * the given varInfos rather than the varInfos of this.
-   * Conceptually, this means "is this invariant dynamically obvious
-   * if its VarInfos were switched with vis?"  .  Intended to be
-   * overriden by subclasses so they can filter invariants after
-   * checking.  Since this method is dynamic, it should only be called
-   * after all processing.
+   * Return non-null if this invariant is necessarily true from a fact that
+   * can be determined dynamically (after checking data) -- for the given
+   * varInfos rather than the varInfos of this.  Conceptually, this means,
+   * "Is this invariant dynamically obvious if its VarInfos were switched
+   * with vis?"  Intended to be overriden by subclasses so they can filter
+   * invariants after checking; the overriding method should first call
+   * "super.isObviousDynamically(vis)".  Since this method is
+   * dynamic, it should only be called after all processing.
    **/
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
-    if (isReflexive(vis))
+    Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
+    if (! ArraysMDE.noDuplicates(vis))
       return new DiscardInfo(this, DiscardCode.obvious,
                              "Two or more variables are equal");
-    return new DiscardInfo();
-  }
-
-  private boolean isReflexive(VarInfo[] vis) {
-    if (vis.length < 2)
-      return false;
-    else if (vis.length == 2)
-      return vis[0] == vis[1];
-    else if (vis.length == 3)
-      return vis[0] == vis[1] || vis[1] == vis[2] || vis[0] == vis[2];
-    else {
-      Assert.assertTrue(false, "Unexpected more-than-ternary invariant");
-      for (int i = 1; i < vis.length; i++) {
-        for (int j = 0; j < i; j++) {
-          if (vis[i] == vis[j]) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
+    // System.out.println("Passed Invariant.isObviousDynamically(): " + format());
+    return null;
   }
 
   /**
@@ -1625,7 +1622,7 @@ public abstract class Invariant
    * a[]", for instance.
    **/
   public boolean isReflexive() {
-    return isReflexive(ppt.var_infos);
+    return ! ArraysMDE.noDuplicates(ppt.var_infos);
   }
 
   /**
@@ -1657,7 +1654,8 @@ public abstract class Invariant
    **/
   public DiscardInfo isObviousDynamically_SomeInEquality() {
     DiscardInfo result = isObviousDynamically();
-    if (result.shouldDiscard()) return result;
+    if (result != null)
+      return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
                                                      new VarInfo[this.ppt.var_infos.length],
                                                      0);
@@ -1693,9 +1691,9 @@ public abstract class Invariant
         assigned[position] = vi;
         DiscardInfo temp =
           isObviousDynamically_SomeInEqualityHelper (vis, assigned, position + 1);
-        if (temp.shouldDiscard()) return temp;
+        if (temp != null) return temp;
       }
-      return new DiscardInfo();
+      return null;
     }
   }
 

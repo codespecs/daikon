@@ -43,19 +43,18 @@ public class Debug {
     = {
       // "Bound",
       // "DynamicConstants",
-      "EltNonZero",
+      // "EltNonZero",
+      // "EltNonZeroFloat",
       // "EltOneOf",
       // "Equality",
-      // "FunctionBinary"
+      // "FunctionBinary",
       // "IntEqual",
       // "IntGreaterEqual",
-      // "IntGreaterThan",
+      "IntGreaterThan",
       // "IntLessEqual",
-      // "IntLessThan",
+      "IntLessThan",
       // "IntNonEqual",
       // "LinearBinary",
-      // "LinearBinary",
-      // "LowerBound",
       // "LowerBound",
       // "Member",
       // "NonZero",
@@ -66,6 +65,7 @@ public class Debug {
       // "PptTopLevel",
       // "SeqIndexComparison",
       // "SeqIndexNonEqual",
+      // "SeqIntEqual",
       // "SeqSeqIntEqual",
       // "SeqSeqIntGreaterThan",
       // "SeqSeqIntLessThan",
@@ -82,7 +82,12 @@ public class Debug {
    * for a list of function names
    */
   public static String function_binary_method =
-    "java.lang.Math.max(";
+    // null
+    // "java.lang.Math.max("
+    // "java.lang.Math.min("
+    // "utilMDE.MathMDE.logicalXor("
+    "utilMDE.MathMDE.gcd("
+    ;
 
   /**
    * List of Ppts for logging. Each name listed is compared to
@@ -107,11 +112,20 @@ public class Debug {
       // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT354",
       // "PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT",
       // "misc.Suppress02.f",
-      "six170.Hanoi.moveDisk(int, int):::EXIT",
+      // "six170.Hanoi.moveDisk(int, int):::EXIT",
       // "six170.Hanoi.moveTower(int, int, int):::EXIT",
       // "six170.Hanoi:::OBJECT",
       // "std.flex_alloc(unsigned;)void *:::EXIT1",
       // "std.new_job(int;)int:::EXIT",
+      // "DataStructures.DisjSets.DisjSets(int):::EXIT",
+      // "std.ampval(charac *;charac **;double *;int *;)int:::EXIT",
+      // "misc.Param:::OBJECT",
+      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT350",
+      // "misc.Suppress02.Suppress02():::EXIT",
+      // "misc.Compar1.bar(int, int, int, int):::ENTER",
+      // "std.intmax(int;int;)int:::EXIT",
+      // "PolyCalc.RatNum.gcd(int, int):::EXIT",
+      "misc.Fib.increment():::EXIT",
     };
 
   /**
@@ -152,7 +166,18 @@ public class Debug {
       // {"this.begins[]", "this.ends[]"},
       // {"this.diskLocation[this.height..]"},
       // {"::performance_report", "ds"},
-      {"::next_pid", "orig(::next_pid)"},
+      // {"this.diskLocation[this.height..]"},
+      // {"::next_pid", "orig(::next_pid)"},
+      // {"this.s[]"},
+      // {"amp_ptr[]"},
+      // {"this.gi1", "this.gi2", "this.gs1.a"},
+      // {"size(p.terms.wrapped[])", "size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
+      // {"this.theArray[0..this.i-1]", "this.theArray[this.j]"},
+      // {"this.theArray[0..this.i-1]"},
+      // {"return", "a", "b"},
+      // {"return", "orig(_a)", "orig(_b)"},
+      {"misc.Fib.STEPS", "orig(misc.Fib.a)"},
+      {"misc.Fib.a", "misc.Fib.STEPS"},
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -648,7 +673,7 @@ public class Debug {
         PptSlice slice = (PptSlice) j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = (Invariant) slice.invs.get(k);
-          if (inv.log (msg + ": found (" + k + ") " + inv.format() +
+          if (inv.log (msg + ": found #" + k + "= " + inv.format() +
                        " in slice " + slice))
             found = true;
         }

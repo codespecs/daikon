@@ -36,14 +36,26 @@
 #if FACTORY_CNT >= 2 && !defined(FACTORY2)
   #error "FACTORY2 not defined"
 #endif
+#if FACTORY_CNT < 2 && defined(FACTORY2)
+  #error "FACTORY2 defined"
+#endif
 #if FACTORY_CNT >= 3 && !defined(FACTORY3)
   #error "FACTORY3 not defined"
+#endif
+#if FACTORY_CNT < 3 && defined(FACTORY3)
+  #error "FACTORY3 defined"
 #endif
 #if FACTORY_CNT >= 4 && !defined(FACTORY4)
   #error "FACTORY4 not defined"
 #endif
+#if FACTORY_CNT < 4 && defined(FACTORY4)
+  #error "FACTORY4 defined"
+#endif
 #if FACTORY_CNT >= 5 && !defined(FACTORY5)
   #error "FACTORY5 not defined"
+#endif
+#if FACTORY_CNT < 5 && defined(FACTORY5)
+  #error "FACTORY5 defined"
 #endif
 
 

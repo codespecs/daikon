@@ -9,8 +9,9 @@ public final class DiscardInfo {
    */
 
   /**
-   * The DiscardCode describing this DiscardInfo.  It should be set to DiscardCode.not_discarded
-   * if the Invariant that created this was not being discarded
+   * The DiscardCode describing this DiscardInfo.  It should never be
+   * non-null, nor should it be DiscardCode.not_discarded; if an invariant
+   * isn't being discarded; use null as its DiscardInfo.
    */
   private DiscardCode discardCode;
 
@@ -28,14 +29,8 @@ public final class DiscardInfo {
    */
   private String className;
 
-  public DiscardInfo() {
-    discardCode = DiscardCode.not_discarded;
-    discardString = "";
-    discardFormat = "";
-    className = "";
-  }
-
   public DiscardInfo(String className, String discardFormat, DiscardCode discardCode, String discardString) {
+    // Assert.assert(discardcode != DiscardCode.not_discarded);
     this.discardCode = discardCode;
     this.discardString = discardString;
     this.discardFormat = discardFormat;
@@ -44,10 +39,6 @@ public final class DiscardInfo {
 
   public DiscardInfo(Invariant inv, DiscardCode discardCode, String discardString) {
     this(inv.getClass().getName(), inv.format(), discardCode, discardString);
-  }
-
-  public boolean shouldDiscard() {
-    return (this.discardCode != DiscardCode.not_discarded);
   }
 
   public String discardFormat() {

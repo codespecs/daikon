@@ -54,9 +54,6 @@ public final class CLASSNAME
   // see "Variable order"
   public int var_order;
   public int methodNumber;
-  // Not currently being maintained
-  int samples_seen = 0;
-  int equal_samples = 0;
 
   public Invariant wrapper;
 
@@ -131,11 +128,6 @@ public final class CLASSNAME
   }
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
-    samples_seen++;
-    if (x == y && y == z) {
-      equal_samples++;
-    }
-
     PRIMITIVE result;
     PRIMITIVE arg1;
     PRIMITIVE arg2;
@@ -198,19 +190,20 @@ public final class CLASSNAME
   }
 
   public double computeConfidence() {
-    Assert.assertTrue(equal_samples <= samples_seen);
-    if (equal_samples == samples_seen) {
-      return Invariant.CONFIDENCE_NEVER;
+    if (wrapper.logOn()) {
+      VarInfo v1 = wrapper.ppt.var_infos[0];
+      VarInfo v2 = wrapper.ppt.var_infos[1];
+      VarInfo v3 = wrapper.ppt.var_infos[2];
+      wrapper.log("computeConfidence(" + wrapper.format()
+                  + ": num_values = " + wrapper.ppt.num_values()
+                  + ", num_values(" + v1.name.name() + ")=" + wrapper.ppt.parent.num_values(v1)
+                  + ", num_values(" + v2.name.name() + ")=" + wrapper.ppt.parent.num_values(v2)
+                  + ", num_values(" + v3.name.name() + ")=" + wrapper.ppt.parent.num_values(v3));
     }
-    // values_seen would be more appropriate than samples_seen
-    return Invariant.conf_is_ge(samples_seen, 5);
+    return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
   }
 
   public double computeProbability() {
-    Assert.assertTrue(equal_samples <= samples_seen);
-    if (equal_samples == samples_seen) {
-      return Invariant.PROBABILITY_NEVER;
-    }
     return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
   }
 
@@ -259,6 +252,16 @@ public final class CLASSNAME
     return CLASSSTRING + wrapper.varNames() + ": "
       + "methodname=(" + methodname[0] + "," + methodname[1] + "," + methodname[2] + ")"
       + ";var_order=" + var_order;
+  }
+
+  public VarInfo resultVar() {
+    return wrapper.ppt.var_infos[var_indices[var_order][0]];
+  }
+  public VarInfo argVar1() {
+    return wrapper.ppt.var_infos[var_indices[var_order][1]];
+  }
+  public VarInfo argVar2() {
+    return wrapper.ppt.var_infos[var_indices[var_order][2]];
   }
 
   // Perhaps this should take arguments rather than looking into the wrapper.

@@ -145,7 +145,7 @@ public final class CLASSNAME
     PRIMITIVE overlap = Math.min(max1, max2) - Math.max(min1, min2);
     // Looks like we're comparing pointers.  Fix this later.
     if (overlap < 0)
-      return Invariant.PROBABILITY_JUSTIFIED;
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
 
     Assert.assertTrue(overlap >= 0);
     overlap++;

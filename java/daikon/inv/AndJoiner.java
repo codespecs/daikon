@@ -48,28 +48,28 @@ public class AndJoiner
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    // Don't call super.isObviousDynamically(vis);
+
     DiscardInfo leftObvious = left.isObviousDynamically(vis);
     DiscardInfo rightObvious = right.isObviousDynamically(vis);
-    if (leftObvious.shouldDiscard() && rightObvious.shouldDiscard()) {
-      DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
+    if (leftObvious != null && rightObvious != null) {
+      return new DiscardInfo(this, DiscardCode.obvious,
                                            "Left obvious: " + leftObvious.discardString() + "\n"
                                            + "Right obvious: " + rightObvious.discardString());
-      return result;
-    } else {
-      return new DiscardInfo();
     }
+    return null;
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
-    if (leftObvious.shouldDiscard() && rightObvious.shouldDiscard()) {
+    if (leftObvious != null && rightObvious != null) {
       DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
                                            "Left obvious: " + leftObvious.discardString() + "\n"
                                            + "Right obvious: " + rightObvious.discardString());
       return result;
     } else {
-      return new DiscardInfo();
+      return null;
     }
   }
 

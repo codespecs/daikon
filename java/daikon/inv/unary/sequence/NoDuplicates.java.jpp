@@ -37,20 +37,16 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
-import daikon.inv.unary.scalar.UpperBound;
-
+import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
-
 import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.derive.binary.SequencesConcat;
 import daikon.derive.binary.SEQUENCESJOIN;
 
 import utilMDE.*;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import java.util.*;
+import java.util.logging.*;
 
 
 /**
@@ -267,6 +263,11 @@ public class CLASSNAME
 
   // Lifted from EltNonZero; should abstract some of this out.
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     // For every other NoDuplicates at this program point, see if there is a
     // subsequence relationship between that array and this one.
     VarInfo v1 = vis[0];
@@ -327,7 +328,7 @@ public class CLASSNAME
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   public boolean isSameFormula(Invariant other) {
@@ -382,18 +383,38 @@ public class CLASSNAME
       return null;
     }
 
-    // Build a template for NoDuplicates
-    supTemplate.set(0, NoDuplicates.class, array_size_vi);
+    SuppressionLink sl;
 
-    // Find a match suppresses
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-
-    // Check the bound
+    if (inv.logOn())
+      inv.log ("seeking " + array_size_vi.name.name() + " <= 1");
+    supTemplate.set(0, UpperBound.class, array_size_vi);
+    sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     if (sl != null) {
       UpperBound ub = (UpperBound) supTemplate.results[0];
-      long bound = ub.core.max1;
-      if (bound >= 2) {
-        return null;
+      long bound = ub.max();
+      if (bound <= 1) {
+        return sl;
+      }
+    }
+
+    if (inv.logOn())
+      inv.log ("seeking " + array_size_vi.name.name() + " == 1");
+    supTemplate.set(0, OneOfScalar.class, array_size_vi);
+    sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl != null) {
+      OneOfScalar oos = (OneOfScalar) supTemplate.results[0];
+      int num_elts = oos.num_elts();
+      if (num_elts != 0) {
+        boolean failed = false;
+        for (int i=0; i<num_elts & !failed; i++) {
+          long elt = ((Long) oos.elt(i)).longValue();
+          if (elt >= 2) {
+            failed = true;
+          }
+        }
+        if (! failed) {
+          return sl;
+        }
       }
     }
 

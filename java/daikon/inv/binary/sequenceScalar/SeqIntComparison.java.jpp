@@ -302,8 +302,8 @@ public final class SEQINTEQUAL
   }
 
   protected double computeConfidence() {
-    // num_values is more appropriate, because there may be samples but no
-    // values if the arrays are of length 0.
+    // num_values may be more appropriate, because there may be samples
+    // but no values if the arrays are of length 0.
     // if (ppt.num_values() == 0) {
     //   return CONFIDENCE_UNJUSTIFIED;
     // }
@@ -382,6 +382,11 @@ public final class SEQINTEQUAL
 
   // Initially copied from IntComparison.
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
     VarInfo seqvar = seqvar(vis);
     VarInfo sclvar = sclvar(vis);
@@ -407,7 +412,7 @@ public final class SEQINTEQUAL
     }
 
     if (isExact()) {
-      return new DiscardInfo();
+      return null;
     }
 
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
@@ -539,11 +544,11 @@ public final class SEQINTEQUAL
     //     // lengths of equal arrays being compared
     //     return true;
     //   }
-    return super.isObviousDynamically (vis);
+    return null;
   }
 
   // Create separate suppression factories for considering an array size (a
-  // single array index limit) and two
+  // single array index limit)
   #define FACTORY_INVCLASS  SEQINTEQUAL
   #define FACTORY_CNT       1
   #define FACTORY1          empty_array_suppress

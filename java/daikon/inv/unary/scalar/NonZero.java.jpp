@@ -253,6 +253,11 @@ public class NONZERO
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     VarInfo var = vis[0];
 
     Debug dlog = new Debug (getClass(), ppt, vis);
@@ -311,7 +316,7 @@ public class NONZERO
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
 

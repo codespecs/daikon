@@ -112,7 +112,7 @@ public class CommonStringSequence
   }
 
   public DiscardInfo isObviousImplied() {
-    return new DiscardInfo();
+    return null;
   }
 
   public boolean isSameFormula(Invariant other) {

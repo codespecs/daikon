@@ -104,7 +104,7 @@ public class ControlledInvariantFilter extends InvariantFilter {
         PrintInvariants.debugFiltering.fine ("\t\thas only constant vars " + inv.format() + "\n");
       }
       */ // [INCR]
-      if (inv.isObvious().shouldDiscard()) {
+      if (inv.isObvious() != null) {
         PrintInvariants.debugFiltering.fine ("\t\tis obvious " + inv.format() + "\n");
       }
       if (!inv.justified()) {

@@ -53,7 +53,7 @@ public abstract class Joiner
   }
 
   public DiscardInfo isObviousImplied() {
-    return new DiscardInfo();
+    return null;
   }
 
   public boolean isSameInvariant(Invariant other) {

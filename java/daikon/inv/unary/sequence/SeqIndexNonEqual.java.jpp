@@ -230,6 +230,11 @@ public final class CLASSNAME
 
   // Copied from IntComparison.
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     VarInfo seqvar = vis[0];
 
     // For each other sequence variable, if it is a supersequence of this
@@ -250,7 +255,7 @@ public final class CLASSNAME
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   public boolean inProcessSuppressOk() {

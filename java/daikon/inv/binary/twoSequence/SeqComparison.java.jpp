@@ -442,8 +442,7 @@ public class SEQSEQINTEQUAL
       return Invariant.CONFIDENCE_JUSTIFIED;
     }
 #else
-    // num_values() would be more appropriate
-    return 1 - Math.pow(.5, ppt.num_samples());
+    return 1 - Math.pow(.5, ppt.num_values());
 #endif
   }
 
@@ -532,6 +531,11 @@ public class SEQSEQINTEQUAL
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
 
       Debug debug = new Debug (getClass(), ppt, vis);
@@ -626,7 +630,7 @@ public class SEQSEQINTEQUAL
       }
 
     #endif
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   public void repCheck() {

@@ -14,7 +14,7 @@ public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // if ((invariant.ppt.arity == 1) || IsEqualityComparison.it.accept(invariant)) {
-      return invariant.isObvious().shouldDiscard();
+      return invariant.isObvious() != null;
       /* }
     else {
       // if y cmp f(x_0,x_1, ..., x_n) and x_n is a constant, then we can

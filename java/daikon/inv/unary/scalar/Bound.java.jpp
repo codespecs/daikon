@@ -14,7 +14,8 @@ The correct way to build the system is to run 'make'.
   #define MEMBER MemberFloat
   #define SUBSEQUENCE SubSequenceFloat
   #define INT(x) x ## Float
-  #define PRIMITIVE Double
+  #define PRIMITIVE double
+  #define NUMWRAPPER Double
   #define LONGVALUE doubleValue()
 #else
   #define BASE_INT
@@ -22,7 +23,8 @@ The correct way to build the system is to run 'make'.
   #define MEMBER Member
   #define SUBSEQUENCE SubSequence
   #define INT(x) x
-  #define PRIMITIVE Long
+  #define PRIMITIVE long
+  #define NUMWRAPPER Long
   #define LONGVALUE longValue()
 #endif
 
@@ -32,6 +34,7 @@ The correct way to build the system is to run 'make'.
   #define GREATER greater
   #define GT >
   #define GTE >=
+  #define MIN min
   #define MIN1 core.min1
   #define NUM_MIN1 core.num_min1
   #define MIN2 core.min2
@@ -85,6 +88,7 @@ The correct way to build the system is to run 'make'.
   #define GREATER less
   #define GT <
   #define GTE <=
+  #define MIN max
   #define MIN1 core.max1
   #define NUM_MIN1 core.num_max1
   #define MIN2 core.max2
@@ -232,7 +236,7 @@ public class LOWERBOUND
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public LOWERBOUNDCORE core;
+  private LOWERBOUNDCORE core;
 
   private LOWERBOUND(PptSlice ppt) {
     super(ppt);
@@ -249,6 +253,10 @@ public class LOWERBOUND
   public static LOWERBOUND instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new LOWERBOUND(ppt);
+  }
+
+  public PRIMITIVE MIN() {
+    return core.MIN();          // i.e., MIN1
   }
 
   public String repr() {
@@ -465,6 +473,11 @@ public class LOWERBOUND
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     PptTopLevel pptt = ppt.parent;
 
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
@@ -555,7 +568,7 @@ public class LOWERBOUND
           ELTLOWERBOUND eb = ELTLOWERBOUND.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb.MIN1 == MIN1) {
+              && eb.MIN() == MIN()) {
             String otherName = other_slice.var_infos[0].name.name();
             String varName = v.name.name();
             String discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
@@ -566,13 +579,13 @@ public class LOWERBOUND
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UPPERBOUND) {
-      if (MIN1 GT ((UPPERBOUND) other).MAX1)
+      if (MIN() GT ((UPPERBOUND) other).MAX())
         return true;
     }
     if (other instanceof ONEOFSCALAR) {
@@ -628,29 +641,8 @@ public class LOWERBOUND
 
     // Loop through the rest of the child invariants
     for (int i = 1; i < invs.size(); i++ ) {
-
-      // Get this invariant
-      LOWERBOUND inv = (LOWERBOUND) invs.get (i);
-
-      // Pass each value and its count to this invariant's add_modified.  Since
-      // bound is never destroyed, we don't need to check the results.
-      if (inv.NUM_MIN1 > 0)
-        result.core.add_modified (inv.MIN1, inv.NUM_MIN1);
-      if (inv.NUM_MIN2 > 0)
-        result.core.add_modified (inv.MIN2, inv.NUM_MIN2);
-      if (inv.NUM_MIN3 > 0)
-        result.core.add_modified (inv.MIN3, inv.NUM_MIN3);
-      // NUM_MIN1 will be positive if and only if we've ever seen any
-      // real samples. Only then does MAX represent a real sample.
-      if (inv.NUM_MIN1 > 0)
-        result.core.add_modified (inv.core.MAX, 1);
-      if (Debug.logDetail())
-        result.log ("Adding vals " + inv.NUM_MIN1 + " of " + inv.MIN1 + ","
-                                   + inv.NUM_MIN2 + " of " + inv.MIN2 + ","
-                                   + inv.NUM_MIN3 + " of " + inv.MIN3 + ", "
-                                   + ((inv.NUM_MIN1 > 0) ?
-                                      "1 of " + inv.core.MAX : "")
-                                   + " from ppt " + inv.ppt.parent.ppt_name);
+      LOWERBOUND lb = (LOWERBOUND) invs.get (i);
+      result.core.add(lb.core);
     }
 
     result.log ("Merged '" + result.format() + "' from " + invs.size()

@@ -11,25 +11,29 @@ The correct way to build the system is to run 'make'.
 #if defined(TYPELONG)
   #define EQUAL(a,b) ((a) == (b))
   #define CLASSNAME EltNonZero
+  #define CLASSSTRING "EltNonZero"
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
   #define NUMWRAPPER Long
   #define BASEISTYPE baseIsIntegral()
   #define PRIMITIVEVALUE longValue()
   #define ELTONEOF EltOneOf
-  #define CLASSSTRING "EltNonZero"
+  #define ELTLOWERBOUND EltLowerBound
+  #define ELTUPPERBOUND EltUpperBound
   #define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
 #elif defined(TYPEDOUBLE)
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
   #define CLASSNAME EltNonZeroFloat
+  #define CLASSSTRING "EltNonZeroFloat"
   #define SUPERCLASS SingleFloatSequence
   #define PRIMITIVE double
   #define NUMWRAPPER Double
   #define BASEISTYPE baseIsFloat()
   #define PRIMITIVEVALUE doubleValue()
   #define ELTONEOF EltOneOfFloat
-  #define CLASSSTRING "EltNonZeroFloat"
+  #define ELTLOWERBOUND EltLowerBoundFloat
+  #define ELTUPPERBOUND EltUpperBoundFloat
   #define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
 #endif
@@ -290,7 +294,7 @@ public final class CLASSNAME
     // the non-zeroness.)  In that case, do still check for no values yet
     // received.
     if ((override_range == 0) && ((min > 0) || (max < 0))) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
       // return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
@@ -367,14 +371,19 @@ public final class CLASSNAME
 
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
-    VarInfo v1 = vis[0];
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Testing isObviousDynamically for " + v1.name.name());
+      debug.fine ("Testing isObviousDynamically for " + vis[0].name.name());
     }
 
+    VarInfo v1 = vis[0];
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -417,7 +426,7 @@ public final class CLASSNAME
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   // Look up a previously instantiated invariant.
@@ -470,16 +479,96 @@ public final class CLASSNAME
   // Create separate suppression factories for considering an array size (a
   // single array index limit) and two
   #define FACTORY_INVCLASS  CLASSNAME
-  #define FACTORY_CNT       1
+  #define FACTORY_CNT       3
   #define FACTORY1          empty_array_suppress
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[1]}
+  #define FACTORY2          eltoneof_suppress
+  #define FACTORY2_INV_CNT  1
+  #define FACTORY2_VAR_INFO {new VarInfo[1]}
+  #define FACTORY3          bound_suppress
+  #define FACTORY3_INV_CNT  1
+  #define FACTORY3_VAR_INFO {new VarInfo[1]}
   #include "daikon/inv/suppressionFactory.java.jpp"
 
   public static SuppressionLink empty_array_suppress (CLASSNAME inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
     VarInfo array_vi = inv.var();
     return sfact.findEmptyArray(inv, array_vi);
+  }
+
+  private static transient SuppressionTemplate supTemplate_eltoneof = new SuppressionTemplate(1);
+  private static transient SuppressionTemplate supTemplate_eltbound = new SuppressionTemplate(1);
+
+  public static SuppressionLink eltoneof_suppress  (CLASSNAME inv,
+                  SuppressionTemplate _supTemplate, SuppressionFactory sfact) {
+    VarInfo var = inv.var();
+
+    if (inv.logOn())
+      inv.log ("eltoneof_suppress");
+    if (inv.logOn())
+      inv.log ("seeking ELTONEOF:" + var.name.name() + " elements == ??");
+
+    SuppressionTemplate supTemplate = supTemplate_eltoneof;
+
+    supTemplate.set(0, ELTONEOF.class, var);
+
+    // Find a match
+    SuppressionLink sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
+
+    if (inv.logOn())
+      inv.log ("found candidate " + sl);
+
+    if (sl == null)
+      return null;
+    ELTONEOF oos = (ELTONEOF) supTemplate.results[0];
+    if (oos.num_elts() == 0)
+      return null;
+    for (int i=0; i<oos.num_elts(); i++) {
+      if (((NUMWRAPPER) oos.elt(i)).PRIMITIVEVALUE == 0)
+        return null;
+    }
+
+    return sl;
+  }
+
+  public static SuppressionLink bound_suppress  (CLASSNAME inv,
+                  SuppressionTemplate _supTemplate, SuppressionFactory sfact) {
+    VarInfo var = inv.var();
+
+    if (inv.logOn())
+      inv.log ("bound_suppress");
+
+    SuppressionTemplate supTemplate = supTemplate_eltbound;
+    SuppressionLink sl;
+
+    if (inv.logOn())
+      inv.log ("seeking " + var.name.name() + " elements <= -1");
+    supTemplate.set(0, ELTLOWERBOUND.class, var);
+    sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl != null) {
+      if (inv.logOn())
+        inv.log ("found candidate " + sl);
+      ELTLOWERBOUND elb = (ELTLOWERBOUND) supTemplate.results[0];
+      if (elb.min() > 0) {
+        return sl;
+      }
+    }
+
+    if (inv.logOn())
+      inv.log ("seeking " + var.name.name() + " elements >= 1");
+    supTemplate.set(0, ELTUPPERBOUND.class, var);
+    sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
+    if (sl != null) {
+      if (inv.logOn())
+        inv.log ("found candidate " + sl);
+      ELTUPPERBOUND eub = (ELTUPPERBOUND) supTemplate.results[0];
+      if (eub.max() < 0) {
+        return sl;
+      }
+    }
+
+    return null;
   }
 
 }

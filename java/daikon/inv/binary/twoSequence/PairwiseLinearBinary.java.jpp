@@ -210,9 +210,18 @@ public class CLASSNAME
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
-    if (core.a == 0) return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
-    if (core.a == 1 && core.b == 0) return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
-    return super.isObviousDynamically(vis);
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
+    if (core.a == 0) {
+      return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
+    }
+    if (core.a == 1 && core.b == 0) {
+      return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
+    }
+    return null;
   }
 
   public boolean isActive() {

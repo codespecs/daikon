@@ -281,7 +281,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     if (unary_slice != null) {
       LowerBound lb_inv = LowerBound.find(unary_slice);
       if (lb_inv != null) {
-        long lower_bound = lb_inv.core.min1;
+        long lower_bound = lb_inv.min();
         if (lower_bound < -1) {
           Global.nonsensical_suppressed_derived_variables += 6;
           return null;

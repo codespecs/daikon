@@ -181,6 +181,23 @@ public class SuppressionLink implements Serializable {
     Assert.assertTrue (utilMDE.ArraysMDE.indexOf(suppressors, suppressee) == -1); // Expensive
   }
 
+  /**
+   * Return a new suppressionlink that depends on all the parts of the
+   * given Suppressionlinks.
+   **/
+  public static SuppressionLink combine(SuppressionLink l1, SuppressionLink l2) {
+    Assert.assertTrue(l1.state == CREATED);
+    Assert.assertTrue(l2.state == CREATED);
+    Assert.assertTrue(l1.suppressee == l2.suppressee);
+    int len1 = l1.suppressors.length;
+    int len2 = l2.suppressors.length;
+    Invariant[] suppressors = new Invariant[len1 + len2];
+    System.arraycopy(l1.suppressors, 0, suppressors, 0, len1);
+    System.arraycopy(l2.suppressors, 0, suppressors, len1, len2);
+    return new SuppressionLink(l1.suppressee, suppressors);
+  }
+
+
   ///////////////
   // Activators
 

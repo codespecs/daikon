@@ -385,6 +385,11 @@ public class CLASSNAME
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     if (!hasSeenNonTrivialSample()) {
       return new DiscardInfo(this, DiscardCode.obvious,
                              "No samples sequences of size >=2 were seen. Vacuously true.");
@@ -476,6 +481,6 @@ public class CLASSNAME
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 }

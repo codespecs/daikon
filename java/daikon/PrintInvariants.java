@@ -20,7 +20,13 @@ public class PrintInvariants {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
 
-  /** Print invariant classsname with invariants in daikon output format */
+  /**
+   * Print invariant classsname with invariants in output of format()
+   * method.  Note that this only works with the Invariant.format() method;
+   * it doesn't have any effect on calls to format_using().  format() is
+   * used in debugging statements, and format_using() is used in typical
+   * output.
+   **/
   public static boolean dkconfig_print_inv_class = false;
 
   /**
@@ -134,6 +140,9 @@ public class PrintInvariants {
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -186,6 +195,12 @@ public class PrintInvariants {
           LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
         } else if (Daikon.noinvariantguarding_SWITCH.equals(option_name)) {
           Daikon.noInvariantGuarding = true;
+        } else if (Daikon.show_progress_SWITCH.equals(option_name)) {
+          // nothing to do
+        } else if (Daikon.no_show_progress_SWITCH.equals(option_name)) {
+          // nothing to do
+        } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
+          // nothing to do
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

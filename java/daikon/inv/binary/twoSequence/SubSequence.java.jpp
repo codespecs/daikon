@@ -604,7 +604,12 @@ public class CLASSNAME
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("isObviousStatically: " + vis[0].name.name() + " in " + vis[1].name.name());
+      debug.fine ("isObviousDynamically: checking " + vis[0].name.name() + " in " + vis[1].name.name());
+    }
+
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
     }
 
     if (var1_in_var2 && var2_in_var1) {
@@ -623,7 +628,7 @@ public class CLASSNAME
       return new DiscardInfo(this, DiscardCode.obvious, vis[1].name.name()
                              + " is an obvious subsequence of " + vis[0].name.name());
     }
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   /**

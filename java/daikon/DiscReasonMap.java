@@ -31,7 +31,7 @@ public final class DiscReasonMap {
   public static void put(Invariant inv, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
       return;
-    Assert.assertTrue(disc_info.shouldDiscard());
+    Assert.assertTrue(disc_info != null);
 
     // Let's not keep track of DiscardInfo's from Invariants who have
     // any repeated variables since we don't expect them to print anyway
@@ -50,14 +50,13 @@ public final class DiscReasonMap {
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {
     if (! PrintInvariants.print_discarded_invariants)
       return;
-    Assert.assertTrue(discardCode != DiscardCode.not_discarded);
     put(inv, new DiscardInfo(inv, discardCode, discardString));
   }
 
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
       return;
-    Assert.assertTrue(disc_info.shouldDiscard());
+    Assert.assertTrue(disc_info != null);
 
     // Get the vars out of inv in our proper format
     // I should move this var_sorting stuff to a central
@@ -106,13 +105,13 @@ public final class DiscReasonMap {
   }
 
   /**
-   *@requires vars is given in the form "var1,var2,var3" in ascending alphabetical
-   * order with no spaces && invInfo.ppt() != null
-   *@return a List of all DiscardInfos di such that di.discardCode != DiscardCode.not_discarded<br>
-   * && the di is for an Invariant from discPpt whose class and vars match the params passed into the<br>
-   * method call. If the user wishes for any of the 3 params to be a wildcard, they can pass that/those<br>
-   * param(s) in as null.
-   */
+   * @requires vars is given in the form "var1,var2,var3" in ascending
+   * alphabetical order with no spaces && invInfo.ppt() != null
+   * @return a List of all DiscardInfos di such that && the di is for an
+   * Invariant from discPpt whose class and vars match the params passed
+   * into the method call. If the user wishes for any of the 3 params to be
+   * a wildcard, they can pass that/those param(s) in as null.
+   **/
   public static List returnMatches_from_ppt(InvariantInfo invInfo) {
     ArrayList result = new ArrayList();
     HashMap vars_map_from_ppt = (HashMap) the_map.get(invInfo.ppt());
@@ -138,7 +137,7 @@ public final class DiscReasonMap {
 
     for (int i = 0; i < di_list.size(); i++) {
       DiscardInfo di = (DiscardInfo) di_list.get(i);
-      Assert.assertTrue(di.discardCode() != DiscardCode.not_discarded);
+      // Assert.assertTrue(di.discardCode() != DiscardCode.not_discarded);
       String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
       if ((invInfo.className() == null) || invInfo.className().equals(di.className())
           || invInfo.className().equals(shortName)) {

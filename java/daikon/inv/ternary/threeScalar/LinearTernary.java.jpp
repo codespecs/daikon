@@ -299,12 +299,17 @@ public class CLASSNAME
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     if (core.a == 0 || core.b == 0 || core.c == 0) {
       return new DiscardInfo(this, DiscardCode.obvious, "If a coefficient is 0, a LinearBinary should" +
                              " exist over the other two variables");
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
   public boolean isSameFormula(Invariant other)

@@ -348,16 +348,20 @@ public final class ONEOFSCALAR
 #endif
 
   public Object elt() {
-    if (num_elts != 1)
-      throw new Error("Represents " + num_elts + " elements");
+    return elt(0);
+  }
+
+  public Object elt(int index) {
+    if (num_elts <= index)
+      throw new Error("Represents " + num_elts + " elements, index " + index + " not valid");
 #if defined(SCALAR) || defined(ELT)
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
-    return Intern.internedLong(elts[0]);
+    return Intern.internedLong(elts[index]);
 #elif defined(FLOAT) || defined(ELTFLOAT)
-    return Intern.internedDouble(elts[0]);
+    return Intern.internedDouble(elts[index]);
 #else
-    return elts[0];
+    return elts[index];
 #endif
   }
 
@@ -1615,6 +1619,11 @@ public final class ONEOFSCALAR
 
 #if defined(IS_NUMERIC)
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     VarInfo v = vis[0];
 
     Debug dlog = new Debug (getClass(), ppt, vis);
@@ -1671,10 +1680,15 @@ public final class ONEOFSCALAR
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 #elif defined(IS_ELT_NUMERIC)
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
     VarInfo v = vis[0];
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
@@ -1693,7 +1707,7 @@ public final class ONEOFSCALAR
       }
     }
 
-    return super.isObviousDynamically(vis);
+    return null;
   }
 
 #endif
@@ -1821,9 +1835,9 @@ public final class ONEOFSCALAR
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
     }
-    if ((o instanceof LOWERBOUND) && (elts_max < ((LOWERBOUND)o).core.min1))
+    if ((o instanceof LOWERBOUND) && (elts_max < ((LOWERBOUND)o).min()))
       return true;
-    if ((o instanceof UPPERBOUND) && (elts_min > ((UPPERBOUND)o).core.max1))
+    if ((o instanceof UPPERBOUND) && (elts_min > ((UPPERBOUND)o).max()))
       return true;
 #endif
 

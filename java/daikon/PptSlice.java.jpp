@@ -339,11 +339,13 @@ public final class PPTSLICE1
 #elif defined(ARITY3)
       int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1], var_infos[2]);
 #endif
+      if (false) {
       if (mod_samples + unmod_samples != num_slice_samples) {
         System.out.println("num_samples(" + name() + "): " + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
 #if defined(ARITY1)
         System.out.println("  mbtracker.num_samples() = " + parent.mbtracker.num_samples());
 #endif
+      }
       }
       return num_slice_samples;
     }
@@ -355,7 +357,15 @@ public final class PPTSLICE1
    **/
   public int num_values() {
     if (Invariant.dkconfig_use_confidence) {
-      throw new Error("to be implemented");
+      // return an approximation
+#if defined(ARITY1)
+      int num_values = parent.num_values(var_info);
+#elif defined(ARITY2)
+      int num_values = parent.num_values(var_infos[0], var_infos[1]);
+#elif defined(ARITY3)
+      int num_values = parent.num_values(var_infos[0], var_infos[1], var_infos[2]);
+#endif
+      return num_values;
     } else {
       if (values_cache != null) {
         return this.values_cache.num_values();
@@ -1251,7 +1261,7 @@ public final class PPTSLICE1
         debugMerge.fine ("-- -- permute = " + ArraysMDE.toString (permute));
       }
 
-      // Add each invariant (permutted to match the parent varinfos)
+      // Add each invariant (permuted to match the parent varinfos)
       // to our list of invariants
       for (int j = 0; j < cslice.invs.size(); j++) {
         Invariant orig_inv = (Invariant) cslice.invs.get (j);

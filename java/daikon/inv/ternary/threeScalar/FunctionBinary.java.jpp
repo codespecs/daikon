@@ -21,6 +21,7 @@ The correct way to build the system is to run 'make'.
   #define OP_LIST * / % << >> >>> & && ^ | ||
   #define FUNCTION_LIST min max gcd pow
   #define EQ_FUNC_NUMS 1, 5, 7, 8, 9
+  #define LOGICAL_FUNC_NUMS 2, 4, 6
   #define EQUALITY IntEqual
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME FunctionBinaryFloat
@@ -48,6 +49,8 @@ import daikon.inv.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.inv.unary.scalar.OneOfFloat;
 import daikon.inv.binary.twoScalar.*;
+import daikon.derive.*;
+import daikon.derive.unary.*;
 import daikon.suppress.*;
 import utilMDE.*;
 import java.lang.reflect.*;
@@ -130,6 +133,10 @@ public class CLASSNAME
     return new CLASSNAME(ppt, methodname, methodNumber, var_order);
   }
 
+  public VarInfo resultVar() { return core.resultVar(); }
+  public VarInfo argVar1() { return core.argVar1(); }
+  public VarInfo argVar2() { return core.argVar2(); }
+
   public Object clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = (CORECLASSNAME) core.clone();
@@ -183,10 +190,60 @@ public class CLASSNAME
   //   super.destroy();
   // }
 
-// SuppressionFactory for FunctionBinary invariants.  Right now, we
-// suppress all FunctionBinary such that one of the members is a
+
+  /**
+   * If the arg is a sequence size, return the sequence; otherwise return null.
+   **/
+  private VarInfo sized_sequence(VarInfo size) {
+    if (size.derived instanceof SequenceLength) {
+      return ((SequenceLength)size.derived).base;
+    }
+    return null;
+  }
+
+
+
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
+    // Discard if any two of the three invariants are the sizes of the
+    // same arrays.
+    VarInfo arr1 = sized_sequence(vis[0]);
+    VarInfo arr2 = sized_sequence(vis[1]);
+    VarInfo arr3 = sized_sequence(vis[2]);
+    if (((arr1 != null) && (arr1 == arr2))
+        || ((arr1 != null) && (arr1 == arr3))
+        || ((arr2 != null) && (arr2 == arr3))) {
+      return new DiscardInfo(this, DiscardCode.obvious, "two are sizes of same array:  " + vis[0].name.name() + " " + vis[1].name.name() + " " + vis[2].name.name());
+    }
+
+#if defined(TYPELONG)
+    // Discard if a logical Boolean operation, but the arguments are not 0
+    // or 1.
+    if (ArraysMDE.indexOf (logical_func_nums, core.methodNumber) != -1) {
+      // System.out.println("considering non-logical-function suppression: " + format());
+      VarInfo arg1 = argVar1();
+      VarInfo arg2 = argVar2();
+      SuppressionLink sl1 = SuppressionFactory.findInRange(this, arg1, 0, 1);
+      SuppressionLink sl2 = SuppressionFactory.findInRange(this, arg1, 0, 1);
+      if ((sl1 == null) || (sl2 == null)) {
+        // System.out.println("one or both args aren't boolean: " + arg1.name.name() + " " + arg2.name.name());
+        return new DiscardInfo(this, DiscardCode.obvious, "one or both args aren't boolean: " + arg1.name.name() + " " + arg2.name.name());
+      }
+    }
+#endif
+
+    return null;
+  }
+
+
+// This (incorrect) SuppressionFactory for FunctionBinary invariants
+// suppresses all FunctionBinary such that one of the members is a
 // constant.  This isn't correct for suppression, since constants
-// don't imply FunctionBinary.  However, a FunctionBinary invariant
+// don't logiclaly imply FunctionBinary.  However, a FunctionBinary invariant
 // that results from constant components is uninteresting, so this
 // should later be used in filtering for printing.
 /*
@@ -249,30 +306,41 @@ public class CLASSNAME
 
   // Create a suppression factory for functionBinary
   #define FACTORY_INVCLASS  CLASSNAME
-  #define FACTORY_CNT       2
-  #define FACTORY1          equality_suppress1
+  #define FACTORY_CNT       4
+  #define FACTORY1          equality_suppress_repeated_arg
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[2]}
-  #define FACTORY2          equality_suppress2
+  #define FACTORY2          equality_suppress_distinct_args
   #define FACTORY2_INV_CNT  2
   #define FACTORY2_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+  #define FACTORY3          equality_suppress_min_max
+  #define FACTORY3_INV_CNT  2
+  #define FACTORY3_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+  #define FACTORY4          suppress_zero_result
+  #define FACTORY4_INV_CNT  2
+  #define FACTORY4_VAR_INFO {new VarInfo[1], new VarInfo[2]}
   #include "daikon/inv/suppressionFactory.java.jpp"
 
 
+  static int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
+#if defined(TYPELONG)
+  static int[] logical_func_nums = new int[] {LOGICAL_FUNC_NUMS};
+#endif
+
   /**
    * Suppress 'z = func(x, y)' by 'z == x == y' where func is bitwiseAnd,
-   * bitwiseOr, min, max, or gcd.  This versions is used only when x and
-   * y are the same variable.  The following version works when x and y
-   * are distinct.  This is necessary because there are assertions elsewhere
-   * that don't allow us to include the same invariant twice as a suppressor.
-   * And that is what happens if x, y, and z actually refer to the same variable
-   * (we get var == var and var == var as our two suppressors
+   * bitwiseOr, min, max, or gcd.  equality_suppress_args_samevar is used
+   * when x and y are the same variable; equality_suppress_distinct_args
+   * works when x and y are distinct.  This is necessary because there are
+   * assertions elsewhere that don't allow us to include the same invariant
+   * twice as a suppressor.  And that is what happens if x, y, and z
+   * actually refer to the same variable:  we get var == var and var == var
+   * as our two suppressors.
    **/
-  public static SuppressionLink equality_suppress1 (CLASSNAME inv,
+  public static SuppressionLink equality_suppress_repeated_arg (CLASSNAME inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
     // Check the method type for those implied by equality
-    int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
     if (ArraysMDE.indexOf (eq_func_nums, inv.core.methodNumber) == -1)
       return (null);
 
@@ -288,23 +356,18 @@ public class CLASSNAME
   }
 
   /**
-   * Suppress 'z = func(x, y)' by 'z == x == y' where func is bitwiseAnd,
-   * bitwiseOr, min, max, or gcd.  This versions is used only when x and
-   * y are not the same variable.  The previous version works when x and y
-   * are the same.  This is necessary because there are assertions elsewhere
-   * that don't allow us to include the same invariant twice as a suppressor.
-   * And that is what happens if x, y, and z actually refer to the same variable
-   * (we get var == var and var == var as our two suppressors
+   * See comment for equality_suppress_repeated_arg.
    **/
-  public static SuppressionLink equality_suppress2 (CLASSNAME inv,
+  public static SuppressionLink equality_suppress_distinct_args (CLASSNAME inv,
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
     // Check the method type for those implied by equality
-    int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
     if (ArraysMDE.indexOf (eq_func_nums, inv.core.methodNumber) == -1)
       return (null);
 
-    // If all the variables are the same, let the first factory handle this.
+    // If all the variables are the same, let
+    // equality_suppress_repeated_arg handle it.  (Actually, this should
+    // never get called in that case, right?)
     if ((inv.var1() == inv.var2()) && (inv.var2() == inv.var3()))
       return (null);
 
@@ -318,12 +381,86 @@ public class CLASSNAME
       v3 = tmp;
     }
 
-    // Build the tempmlate and look for matches
+    // Build the template and look for matches
     supTemplate.set (0, EQUALITY.class, v1, v2);
     supTemplate.set (1, EQUALITY.class, v2, v3);
     SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
     return (sl);
   }
+
+  // Only for getting the equality part, not other parts of the full suppression.
+  private static SuppressionTemplate equality_min_max_template = new SuppressionTemplate(1);
+
+  // Suppress "a = min(a, b)" or "a = max(a, b)".
+  public static SuppressionLink equality_suppress_min_max (CLASSNAME inv,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // Yuck, hard-coded constants for min and max.
+    if (! ((inv.core.methodNumber == 7) // min
+           || (inv.core.methodNumber == 8) // max
+           )) {
+      return null;
+    }
+
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    VarInfo v3 = inv.var3();
+
+    SuppressionTemplate st = equality_min_max_template;
+    SuppressionLink eq_sl;
+
+    // Suppress "v1 = min(v2, v3) by "v1 == v2 && v1 <= v3".
+    // Suppress "v1 = max(v2, v3) by "v1 == v2 && v3 <= v1".
+    st.set(0, EQUALITY.class, v1, v2);
+    eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
+    if (eq_sl != null) {
+      SuppressionLink le_sl;
+      if (inv.core.methodNumber == 7) // min
+        le_sl = SuppressionFactory.findLessEqualInt(inv, v1, v3, 0);
+      else
+        le_sl = SuppressionFactory.findLessEqualInt(inv, v3, v1, 0);
+      if (le_sl != null) {
+        return SuppressionLink.combine(eq_sl, le_sl);
+      }
+    }
+
+    // Suppress "v1 = min(v2, v3) by "v1 == v3 && v1 <= v2".
+    // Suppress "v1 = max(v2, v3) by "v1 == v3 && v2 <= v1".
+    st.set(0, EQUALITY.class, v1, v3);
+    eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
+    if (eq_sl != null) {
+      SuppressionLink le_sl;
+      if (inv.core.methodNumber == 7) // min
+        le_sl = SuppressionFactory.findLessEqualInt(inv, v1, v2, 0);
+      else
+        le_sl = SuppressionFactory.findLessEqualInt(inv, v2, v1, 0);
+      if (le_sl != null) {
+        return SuppressionLink.combine(eq_sl, le_sl);
+      }
+    }
+
+    return null;
+  }
+
+  private static SuppressionTemplate suppress_zero_result_zero_template = new SuppressionTemplate(1);
+
+  // Suppress 0 == fn(a, b).
+  public static SuppressionLink suppress_zero_result (CLASSNAME inv,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+    SuppressionLink sl_result_zero
+      = SuppressionFactory.findConstantInt(inv, inv.resultVar(), 0);
+    if (sl_result_zero == null) {
+      return null;
+    }
+
+    // Examples:
+    // 0 == a / b	a < b
+
+    return null;
+  }
+
+
+  /// Debugging code
 
   private static boolean is_debug_method (String[] methodname) {
     if (Debug.function_binary_method != null) {
@@ -346,7 +483,6 @@ public class CLASSNAME
   *
   * @return whether or not it logged anything
   */
-
   public boolean log (String msg) {
 
     if (is_debug_method (core.methodname))
@@ -364,7 +500,6 @@ public class CLASSNAME
    * This version is specific to FunctionBinary and allows us to restrict
    * logging to a particular function
    */
-
   public void log (Logger debug, String msg) {
 
     if (is_debug_method (core.methodname))

@@ -147,12 +147,14 @@ public class PptTopLevel
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
 
-  ModBitTracker mbtracker;
-
   // private transient VarValuesOrdered values; // [[INCR]]
   private int values_num_samples;
   // [INCR] private int values_num_mod_samples;
   // [INCR] private int values_num_values;
+
+  ModBitTracker mbtracker;
+
+  ValueSet[] value_sets;
 
   /**
    * All the Views (that is, slices) on this are stored as values in
@@ -357,6 +359,19 @@ public class PptTopLevel
 
     Assert.assertTrue(num_tracevars == var_infos.length - num_static_constant_vars);
     mbtracker = new ModBitTracker(num_tracevars);
+    value_sets = new ValueSet[num_tracevars];
+    for (int i=0; i<var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      int value_index = vi.value_index;
+      if (value_index == -1) {
+        continue;
+      }
+      Assert.assertTrue(value_sets[value_index] == null);
+      value_sets[value_index] = ValueSet.factory(vi);
+    }
+    for (int i=0; i<num_tracevars; i++) {
+      Assert.assertTrue(value_sets[i] != null);
+    }
   }
 
 
@@ -461,6 +476,31 @@ public class PptTopLevel
     return num_slice_samples;
   }
 
+  /** The number of distinct values that have been seen. **/
+  public int num_values(VarInfo vi1) {
+    if (vi1.is_static_constant) {
+      // This test is deeply wrong; I should always return 1.  But see what
+      // effect this has.
+      if (Daikon.dkconfig_df_bottom_up) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+    ValueSet vs1 = value_sets[vi1.value_index];
+    return vs1.size();
+  }
+
+  /** An upper bound on the number of distinct values that have been seen. **/
+  public int num_values(VarInfo vi1, VarInfo vi2) {
+    return num_values(vi1) * num_values(vi2);
+  }
+
+  /** An upper bound on the number of distinct values that have been seen. **/
+  public int num_values(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
+    return num_values(vi1) * num_values(vi2) * num_values(vi3);
+  }
+
   // Get the actual views from the HashMap
   Collection viewsAsCollection() {
     return views.values();
@@ -512,6 +552,13 @@ public class PptTopLevel
       vi.ppt = this;
     }
     var_infos = new_var_infos;
+    int old_vs_length = value_sets.length;
+    ValueSet[] new_value_sets = new ValueSet[old_vs_length + vis.length];
+    System.arraycopy(value_sets, 0, new_value_sets, 0, old_vs_length);
+    for (int i=0; i<vis.length; i++) {
+      new_value_sets[old_vs_length+i] = ValueSet.factory(vis[i]);
+    }
+    value_sets = new_value_sets;
   }
 
 
@@ -1169,6 +1216,25 @@ public class PptTopLevel
 
     values_num_samples += count;
 
+    // For reasons I do not understand, in the "suppress" version of the
+    // tests. calling mbtracker.add here causes (bad) diffs, but calling it
+    // at the end of this routine is fine.  So for now, just call it at the
+    // end of the routine.
+    // // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
+    // // mbtracker.add(vt, count);
+
+    // System.out.println("About to call ValueSet.add for " + name() + " <= " + vt.toString());
+    for (int i=0; i<vt.vals.length; i++) {
+      if (! vt.isMissing(i)) {
+        ValueSet vs = value_sets[i];
+        vs.add(vt.vals[i]);
+        // System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
+      } else {
+        ValueSet vs = value_sets[i];
+        // System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
+      }
+    }
+
     Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
 
     int checkCount = 0;
@@ -1437,6 +1503,21 @@ public class PptTopLevel
     }
 
     values_num_samples += count;
+
+    // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
+    mbtracker.add(vt, count);
+
+    // System.out.println("About to call ValueSet.add for " + name() + " <= " + vt.toString());
+    for (int i=0; i<vt.vals.length; i++) {
+      if (! vt.isMissing(i)) {
+        ValueSet vs = value_sets[i];
+        vs.add(vt.vals[i]);
+        // System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
+      } else {
+        ValueSet vs = value_sets[i];
+        // System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
+      }
+    }
 
     // Add the sample to each slice/invariant and keep track of the
     // list of weakened/destroyed invariants.  If the weakened
@@ -1888,11 +1969,11 @@ public class PptTopLevel
           ubf = (UpperBoundFloat) inv;
       }
       if (lb != null)
-        debug.fine (lb.core.min1 + " <= " + slice.var_infos[0].name.name()
-                    + " <= " + ub.core.max1);
+        debug.fine (lb.min() + " <= " + slice.var_infos[0].name.name()
+                    + " <= " + ub.max());
       else if (lbf != null)
-        debug.fine (lbf.core.min1 + " <= " + slice.var_infos[0].name.name()
-                    + " <= " + ubf.core.max1);
+        debug.fine (lbf.min() + " <= " + slice.var_infos[0].name.name()
+                    + " <= " + ubf.max());
     }
   }
 
@@ -4695,23 +4776,21 @@ public class PptTopLevel
 
   public void mergeInvs() {
 
-    // If we don't have any children, there is nothing to do
+    // If we don't have any children, there is nothing to do.
     if (children.size() == 0)
       return;
 
     // If this has already been done (because this ppt has multiple parents)
-    // there is nothing to do
+    // there is nothing to do.
     if (invariants_merged)
       return;
 
-    // First do this for any children
+    // First do this for any children.
     for (Iterator i = children.iterator(); i.hasNext(); ) {
       PptRelation rel = (PptRelation) i.next();
         rel.child.mergeInvs();
     }
 
-    // Debug print where we are
-    // System.out.println ("Processing ppt " + name());
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine ("Processing ppt " + name());
 
@@ -4732,7 +4811,51 @@ public class PptTopLevel
       constants.merge();
     }
 
-    // Merge information stored in the VarInfo objects themselves
+    // Merge the ModBitTracker.
+    // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
+    // array.
+    int num_tracevars = mbtracker.num_vars();
+    Object[] vals = new Object[num_tracevars];
+    int[] mods = new int[num_tracevars];
+    ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
+    for (int childno = 0; childno < children.size(); childno++) {
+      PptRelation rel = (PptRelation) children.get(childno);
+      int mbsize = mbtracker.num_samples();
+      for (int sampno=0; sampno<mbsize; sampno++) {
+        Arrays.fill(mods, ValueTuple.MISSING_FLOW);
+        for (int j = 0; j < var_infos.length; j++) {
+          VarInfo parent_vi = var_infos[j];
+          VarInfo child_vi = rel.childVar(parent_vi);
+          if (child_vi != null) {
+            if (rel.child.mbtracker.get(child_vi.value_index, sampno)) {
+              mods[parent_vi.value_index] = ValueTuple.MODIFIED;
+            }
+          }
+        }
+        mbtracker.add(vt, 1);
+      }
+    }
+
+    // Merge the ValueSets.
+    for (int childno = 0; childno < children.size(); childno++) {
+      PptRelation rel = (PptRelation) children.get(childno);
+
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo parent_vi = var_infos[j];
+        VarInfo child_vi = rel.childVar(parent_vi);
+        if (child_vi != null) {
+          Assert.assertTrue(parent_vi.ppt == this);
+          if (parent_vi.value_index == -1) {
+            continue;
+          }
+          ValueSet parent_vs = value_sets[parent_vi.value_index];
+          ValueSet child_vs = rel.child.value_sets[child_vi.value_index];
+          parent_vs.add(child_vs);
+        }
+      }
+    }
+
+    // Merge information stored in the VarInfo objects themselves.
     // Currently just the "canBeMissing" field, which is needed by
     // guarding.
     for (int i = 0; i < children.size(); i++) {
@@ -4742,7 +4865,7 @@ public class PptTopLevel
       // when obj is null, but shouldn't be missing in the OBJECT PPT,
       // since "this" is always present for object invariants.
       // For the moment, just punt on this case, to match the previous
-      // behavior
+      // behavior.
       if (rel.getRelationType() == PptRelation.OBJECT_USER)
         continue;
       for (int j = 0; j < var_infos.length; j++) {
@@ -4977,7 +5100,7 @@ public class PptTopLevel
   /**
    * Create the transforms between this point and the global ppt.
    * These transforms allow samples to be quickly created for the
-   * global point and also allow invariants to be easily permutted
+   * global point and also allow invariants to be easily permuted
    * between the two points
    */
 

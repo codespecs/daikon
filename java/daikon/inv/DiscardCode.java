@@ -11,8 +11,6 @@ import daikon.inv.filter.*;
 
     The different elements of the enumeration are:
 
-    not_discarded // has not been discarded
-
     obvious // is implied by other already known invariants
 
     bad_sample // is falsified by a seen example
@@ -49,8 +47,8 @@ public class DiscardCode implements Comparable,Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031016L;
 
-  /** used when an invariant has not been discarded */
-  public static final DiscardCode not_discarded = new DiscardCode(-1);
+  // /** used when an invariant has not been discarded */
+  // public static final DiscardCode not_discarded = new DiscardCode(-1);
 
   /** used when an invariant is implied by other known invariants */
   public static final DiscardCode obvious = new DiscardCode(0);
@@ -107,7 +105,8 @@ public class DiscardCode implements Comparable,Serializable {
   }
 
   /** The enumeration members in assorted order: <br>
-      not_discarded, obvious, bad_sample, bad_probability, [unused], not_enough_samples, non_canonical_var,<br>
+      // not_discarded,
+      obvious, bad_sample, bad_probability, [unused], not_enough_samples, non_canonical_var,<br>
       implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
@@ -194,9 +193,10 @@ public class DiscardCode implements Comparable,Serializable {
    *@throws ObjectStreamException
    **/
   public Object readResolve() throws ObjectStreamException {
-    if (enumValue==-1)
-      return not_discarded;
-    else if (enumValue==0)
+    // if (enumValue==-1)
+    //   return not_discarded;
+    // else
+    if (enumValue==0)
       return obvious;
     else if (enumValue==1)
       return bad_sample;
