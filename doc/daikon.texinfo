@@ -45,7 +45,7 @@
 
 @sp 1
 @c Daikon version 2.3.8 date
-@center May  7, 2002
+@center May 11, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.8, released May  7, 2002.
+It describes Daikon version 2.3.8, released May 11, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.8, released May  7, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.8, released May  7, 2002.
+It describes Daikon version 2.3.8, released May 11, 2002.
 @end ifnottex
 
 @menu
@@ -403,9 +403,9 @@ placed in your shell initialization file, or else log out and log back
 in to achieve the same effect.
 
 @item
-If you set the environment DAIKONCLASS_SOURCES in @file{daikon.cshrc} or
-@file{daikon.bashrc}, indicating that you wish to compile the Daikon
-sources yourself, then you must now compile them.
+If you set the environment variable DAIKONCLASS_SOURCES in
+@file{daikon.cshrc} or @file{daikon.bashrc}, indicating that you wish to
+compile the Daikon sources yourself, then you must now compile them.
 @example
 cd $DAIKONDIR/java
 make
@@ -573,8 +573,8 @@ cd $DAIKONDIR/front-end/c
 make
 @end example
 @noindent
-This creates the file @file{daikon_runtime.o}; you will use it and
-@file{daikon_runtime.h}, which also appears in @file{front-end/c},
+This creates the file @file{daikon_runtime.o}; you will use it (and
+@file{daikon_runtime.h}, which also appears in @file{front-end/c})
 when compiling C and C++ programs in which you wish to detect invariants.
 @end enumerate
 
@@ -619,8 +619,10 @@ the following two steps:
 
 @enumerate
 @item
-Download and install JDE, the Java Development Environment for Emacs,
+If you wish to use the Context GUI with Java code, then
+download and install JDE, the Java Development Environment for Emacs,
 from @url{http://jde.sunsite.dk}.
+If you wish to use the Context GUI with C code, no extra packages are needed.
 @item
 Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
 path.  Add the following to your @file{.emacs} or @file{prj.el} file:
@@ -1019,12 +1021,9 @@ cd $DAIKONDIR/examples/c-examples/print_tokens
 @end example
 
 @item Instrument the program using dfec, the C front end.
-Copy @file{$DFECDIR/daikon_runtime.h} and
-@file{$DFECDIR/daikon_runtime.o} into the directory that your source
-file resides in, then run the front end over all the C source files and
+Run the front end over all the C source files and
 the user-created header files they depend on.
 @example
-cp $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
 dfec print_tokens.c stream.h tokens.h
 @end example
 @noindent
@@ -1049,13 +1048,13 @@ alias fix="sed -f $DFECDIR/fix.sed"
 executable @file{print_tokens} in the current directory.
 
 @example
-g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 @quotation
 Note for Windows users:  Name the executable print_tokens.exe, not
 print_tokens:
 @example
-g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 @end quotation
 
@@ -1116,9 +1115,8 @@ The above steps can be divided into three stages:
 Instrumentation (Steps 1-3)
 @example
 cd $DAIKONDIR/examples/c-examples/print_tokens
-cp $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
 dfec print_tokens.c stream.h tokens.h
-g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 
 Trace File Generation (Step 4)
@@ -1262,11 +1260,8 @@ For more information about dfej, see @ref{Java front end dfej}.
 @subsection Instrumenting C/C++ programs
 
 To instrument C/C++ source, invoke @command{dfec} on all the source and
-header files at once.  @command{dfec} must be run from
-a directory that contains the file @file{daikon_runtime.h}, the header
-file for the Daikon runtime library:
+header files at once:
 @example
-     ln -s $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
      dfec @var{...options...} @var{myprog}.cc
 @end example
 
@@ -1281,7 +1276,7 @@ it with the object file for the Daikon runtime library and the stdc++
 library.  By default, dfec places instrumented source in the
 @file{daikon-instrumented/} directory.
 @example
-      g++ -o @var{myprog} daikon-instrumented/@var{myprog}.cc daikon_runtime.o
+      g++ -o @var{myprog} daikon-instrumented/@var{myprog}.cc $DFECDIR/daikon_runtime.o
 @end example
 @noindent
 In addition, you may want to specify the @option{-w} flag to g++, to
@@ -2246,7 +2241,7 @@ of the variables in the variables list.
 @cindex Context GUI
 @cindex GUI, context
 
-The Daikon Context GUI displays invariants for the Java code displayed
+The Daikon Context GUI displays invariants for the Java or C code displayed
 in a text editor or code browser; as the cursor moves, the invariant
 display is updated.
 
@@ -2264,7 +2259,7 @@ display is updated.
 @end ifnotinfo
 
 Currently, the Context GUI is integrated with the Emacs text editor.
-However, users can extend it to other Java editors.  The Context GUI can
+However, users can extend it to other Java or C editors.  The Context GUI can
 also be run stand-alone. This provides the user the ability to browse
 the invariants without having to load up the text editor in case the
 user wants to do a quick lookup on invariants.
@@ -2308,7 +2303,7 @@ Add the file by hand using the menu option on the Context GUI.
 
 @item
 Start the Context GUI by typing @kbd{M-x daikon-context-gui}
-while visiting a java file in Emacs. To start the GUI standalone enter
+while visiting a Java or C file in Emacs. To start the GUI standalone enter
 on the command prompt
 @example
   java daikon.gui.contextGUI.ContextGUI
@@ -2853,13 +2848,13 @@ appears in the @file{daikon-output/} directory by default.  To change
 these defaults, see @ref{dfec command-line arguments}.
 
 
-Before compiling the instrumented program, either copy or link
-@file{daikon_runtime.h} and @file{daikon_runtime.o} from
-@file{daikon/front-end/c/} to the current directory.  (See
-@ref{Installing dfec}, for details on creating @file{daikon_runtime.o}.)
-@example
-  cp -p $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
-@end example
+@c Before compiling the instrumented program, either copy or link
+@c @file{daikon_runtime.h} and @file{daikon_runtime.o} from
+@c @file{daikon/front-end/c/} to the current directory.  (See
+@c @ref{Installing dfec}, for details on creating @file{daikon_runtime.o}.)
+@c @example
+@c   cp -p $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
+@c @end example
 
 Compile the instrumented program in the usual way, except that the link
 step should include @file{daikon_runtime.o}, and the compiler should be
@@ -2871,7 +2866,7 @@ For instance,
 @noindent
 would become
 @example
-  g++ -o @var{exefile} daikon-instrumented/myprog.cc daikon_runtime.o
+  g++ -o @var{exefile} daikon-instrumented/myprog.cc $DFECDIR/daikon_runtime.o
 @end example
 
 @cindex DTRACEFILE environment variable
@@ -4018,7 +4013,7 @@ The tar file may appear to contain a file named @file{././@@LongLink}.
 This is inserted in a tar file when a filename is longer than a specific
 maximum length (often 100 characters).  If you see this file, then your
 version of the tar program does not recognize this indication.  It is
-possible that some filenames (including the one contained
+possible that some filenames (including the one contained in
 @file{././@@LongLink}) have been truncated.
 
 @c As of Daikon 2.3.5 (March 1, 2002), the two affected files were:
@@ -4466,7 +4461,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.8, released May  7, 2002.
+This manual describes Daikon version 2.3.8, released May 11, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
