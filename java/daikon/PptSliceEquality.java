@@ -398,7 +398,7 @@ public class PptSliceEquality
       debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
                   + leader.name.name()
                   + ": new leaders = " + VarInfo.toString (newVis));
-      debug.fine ("  orig slices count:" + parent.views_size());
+      debug.fine ("  orig slices count:" + parent.numViews());
     }
 
     // Copy all possible combinations from the current ppt (with repetition)
@@ -428,16 +428,11 @@ public class PptSliceEquality
         for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
           Invariant inv = (Invariant) j.next();
           if(!Daikon.dkconfig_undo_opts) {
-          if (inv.isObviousStatically_AllInEquality()) {
-            //            inv.destroyAndFlow();
-            inv.falsify();
-            falsified_invs.add (inv);
-            if (!Daikon.dkconfig_df_bottom_up) {
-              inv.ppt.addToChanged(inv);
-              inv.ppt.addToFlow(inv);
+            if (inv.isObviousStatically_AllInEquality()) {
+              inv.falsify();
+              falsified_invs.add (inv);
             }
           }
-        }
         }
         if (slice.invs.size() == 0) i.remove();
       }
@@ -454,31 +449,10 @@ public class PptSliceEquality
       parent.addSlice (slice);
     }
 
-    // Copy any invariants from the global ppt to here
-    List mod_slices = copy_invs_from_global_leader (leader, newVis);
-
     parent.repCheck();
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("  new slices count:" + parent.views_size());
-    }
-
-    // Go through each new invariant and remove any that are ni-suppressed.
-    // This must be done here, rather than when creating the invariant to
-    // guarantee that any possible suppressors have been copied before
-    // doing the suppression check.  It may be that we need to do ALL of
-    // equality set copying before doing this check (in case suppressors
-    // from different equality sets are required).  I think that we only
-    // need to do with invariants copied from global slices since any
-    // local ones should only exist if they are not suppressed.
-    for (Iterator i = mod_slices.iterator(); i.hasNext(); ) {
-      PptSlice slice = (PptSlice) i.next();
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
-        if (!inv.copy_ok (slice)) {
-          j.remove();
-        }
-      }
+      debug.fine ("  new slices count:" + parent.numViews());
     }
     return (falsified_invs);
   }
@@ -578,147 +552,6 @@ public class PptSliceEquality
       }
     }
   }
-
-  /**
-   * Copy invariants from global ppt slices over old_leader to each of
-   * the new leaders at the local ppt.  The basic approach is as follows:
-   *
-   *    1)  Loop over each global slice that contains old_leader
-   *
-   *    2)  Copy each invariant that doesn't already exist to local
-   *        slices for each combination of new_leaders replacing old_leader.
-   *
-   *        If the local slice doesn't already exist, it is created and
-   *        added to the list of slices.
-   *
-   * @return a list of all the slices to which new invariants have been
-   * added.
-   */
-  public List /*PptSlice*/ copy_invs_from_global_leader (VarInfo old_leader,
-                                            List /*VarInfo*/ new_leaders) {
-
-    if (Debug.logDetail())
-      debugGlobal.fine ("old_leader = " + old_leader.name.name() +
-                        " orig new leaders = " + new_leaders);
-
-    // list of modified slices (new or already present)
-    List mod_slices = new ArrayList();
-
-    // If the old leader is not a global, there is nothing to copy
-    if (!old_leader.is_global())
-      return (mod_slices);
-
-    // The below was removed because we always need to copy from
-    // an old_global_leader.  This is necessary because equality sets
-    // can be different from local ppt to global ppt and thus the
-    // invariants from one global to another should be different
-
-    // We need  to copy global invariants only if the new leader is a
-    // local or it is a global with a different (post/orig) transformation
-    // the the old leader.  We build a new list of new_leaders containing
-    // only these variables
-//     List orig_new_leaders = new_leaders;
-//     new_leaders = new ArrayList ();
-//     for (Iterator i = orig_new_leaders.iterator(); i.hasNext(); ) {
-//       VarInfo new_leader = (VarInfo) i.next();
-//       if (!new_leader.is_global()
-//           || (old_leader.is_post_global() != new_leader.is_post_global()))
-//         new_leaders.add (new_leader);
-//     }
-
-    // If there are no new leaders, there is nothing to do
-    if (new_leaders.size() == 0)
-      return (mod_slices);
-
-    // Get the leader var at the global ppt
-    VarInfo old_leader_global = old_leader.global_var();
-    boolean post_xform = old_leader.is_post_global();
-
-    debugGlobal.fine ("old_leader = " + old_leader.name.name() +
-                      " new leaders = " + new_leaders);
-
-    // Loop through each slice at the global ppt that includes old_leader
-    for (Iterator j = PptTopLevel.global.views_iterator(); j.hasNext(); ) {
-      PptSlice gslice = (PptSlice) j.next();
-      if (!gslice.containsVar (old_leader_global))
-        continue;
-
-      // Create a local version of this slices variables
-      VarInfo[] local_vars = new VarInfo[gslice.var_infos.length];
-      for (int i = 0; i < gslice.var_infos.length; i++) {
-        if (post_xform)
-          local_vars[i] = parent.local_postvar (gslice.var_infos[i]);
-        else
-          local_vars[i] = parent.local_origvar (gslice.var_infos[i]);
-      }
-
-      // Create all of the combinations of new_leaders over this slice
-      List combos = sub_leaders (old_leader, new_leaders, local_vars);
-
-      // Loop over each combination
-      for (Iterator i = combos.iterator(); i.hasNext(); ) {
-        VarInfo[] vis = (VarInfo[]) i.next();
-
-        // Copy each invariant at gslice to the slice defined by vis
-        PptSlice mod_slice = gslice.copy_new_invs (parent, vis);
-        if (mod_slice != null)
-          mod_slices.add (mod_slice);
-      }
-    }
-
-    return (mod_slices);
-  }
-
-  /**
-   * Substitute each combination of new_leaders in vis for old_leader with
-   * repetition but not permutation.  The new vis arrays are NOT sorted
-   * but left as they are after substitution (which may or may not be in
-   * varinfo_index order)
-   */
-  public List /* VarInfo[] */ sub_leaders (VarInfo old_leader,
-                                           List /* VarInfo */ new_leaders,
-                                           VarInfo[] vis) {
-
-    List result = new ArrayList();
-
-    // Determine the number of instances of old_leader in vis
-    int cnt = 0;
-    for (int i = 0; i < vis.length; i++)
-      if (vis[i] == old_leader)
-        cnt++;
-
-    // The full list of variables whose combination is needed includes
-    // old_leader.  For example, if new_leaders = {b, c} and old_leader = a
-    // we need to create combinations like {a, b} and {a, c}.
-    List /* VarInfo */ leaders = new ArrayList();
-    leaders.add (old_leader);
-    leaders.addAll (new_leaders);
-
-    // Build all of the combinations of leaders over the number of times
-    // that old_leader appeared in the slice.  This will also include
-    // {a, a} (from the above example), but we will skip that one below.
-    List combos = UtilMDE.create_combinations (cnt, 0, leaders);
-
-    // Loop through each combination and build a corresponding vis array
-    // Skip the first combination which will always include just old_leader.
-    for (int i = 1; i < combos.size(); i++) {
-      List combo = (List) combos.get(i);
-      VarInfo[] newvis = new VarInfo[vis.length];
-      int offset = 0;
-      for (int j = 0; j < newvis.length; j++) {
-        if (vis[j] == old_leader) {
-          newvis[j] = (VarInfo) combo.get(offset);
-          offset++;
-        } else {
-          newvis[j] = vis[j];
-        }
-      }
-      result.add (newvis);
-    }
-
-  return (result);
-  }
-
 
   public void repCheck() {
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
