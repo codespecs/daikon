@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-07-18 18:22:20 mernst>
+# Time-stamp: <2001-08-11 17:58:48 mernst>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -14,22 +14,27 @@ use Carp;
 use File::Find;
 
 
-my $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|strictfp|synchronized|transient)\b';
-# my $java_modifers_re = '\s*(?:' . $java_modifier_re . '\s*)*';
-# at least one modifier
-my $java_modifers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
-# matches a full line; groups = ($spaces, $mods, $body, $fieldname);
+my $java_modifier_re;		# one modifier
+my $java_modifers_plus_re;	# at least one modifier
+my $field_decl_re;		# matches a full line;
+				#  groups = ($spaces, $mods, $body, $fieldname).
 
-my $__dollar = "\$";  # to mollify emacs perl-mode source parsing
-my $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)' . $__dollar;
 
 my $warn_on_no_invariants;	# whether to warn if no invariants for a ppt.
 my $merge_unexpressable;	# whether to merge unexpressible invariants;
 				#   if false, they are simply discarded.
 my $recursive;			# whether to look recursively for files.
-my $slashslash;                 # whether to use // or /* comments
+my $slashslash;                 # whether to use // or /* comments.
+
 
 BEGIN {
+  $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|strictfp|synchronized|transient)\b';
+  # $java_modifers_re = '\s*(?:' . $java_modifier_re . '\s*)*';
+  $java_modifers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
+
+  my $__dollar = "\$";  # to mollify emacs perl-mode source parsing
+  $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)' . $__dollar;
+
   $warn_on_no_invariants = 0;
   $merge_unexpressable = 1;
   $recursive = 0;
@@ -84,6 +89,11 @@ if (defined($methodname)) {
   $raw{$methodname} .= $_;
 }
 
+
+###########################################################################
+### Subroutines
+###
+
 sub esc_comment( $ ) {
   my ($annot) = @_;
   if ($slashslash) {
@@ -93,14 +103,27 @@ sub esc_comment( $ ) {
   }
 }
 
-sub simplify_args( $ ) {
+
+# Given an arglist string, return a list of arg strings; basically just
+# splits on commas.
+sub args_to_list( $ ) {
   my ($args) = @_;
+  if (!defined($args)) {
+    confess "undefined args";
+  }
   $args =~ s/^\s*\(\s*//;
   $args =~ s/\s*\)\s*$//;
-  $args =~ s/\s+([\[\]])/$1/g;
+  $args =~ s/\s+([\[\]])/$1/g;	# remove space before array brackets
   # remove "final" and such
   @args = split(/\s*,\s*/, $args);
-  @newargs = ();
+  return @args;
+}
+
+# Given an arglist string, return a string with a list of types.
+sub simplify_args( $ ) {
+  my ($args) = @_;
+  my @args = args_to_list($args);
+  my @newargs = ();
   for my $arg (@args) {
     # print "before: $arg\n";
     $arg =~ s/(^|\s)(\w+[\[\]]*)\s+\w+([\[\]]*)$/$1$2/;
@@ -111,16 +134,15 @@ sub simplify_args( $ ) {
   return $newargs;
 }
 
+## I'm not sure of the point of the approximate matching.
+## Maybe string equal would be good enough, if I also used simplify_args.
 # Return true if the argumentes are the same modulo whitespace;
 # also, names are permitted to match only up to a prefix.
 sub approx_argsmatch($$) {
   my ($args1, $args2) = @_;
-  # Remove parens
-  $args1 =~ s/^\((.*)\)$/$1/;
-  $args2 =~ s/^\((.*)\)$/$1/;
-  # Split on commas
-  @args1 = split(/\s*,\s*/, $args1);
-  @args2 = split(/\s*,\s*/, $args2);
+  my @args1 = args_to_list($args1);
+  my @args2 = args_to_list($args2);
+
   # Compare
   if (scalar(@args1) != scalar(@args2)) {
     return 0;
@@ -144,6 +166,7 @@ sub approx_argmatch($$) {
     return 0;
   }
 
+  # Ensure $x is not longer than $y.
   if (length($x) > length($y)) {
     ($x, $y) = ($y, $x);
   }
@@ -169,21 +192,86 @@ sub is_non_supported_invariant( $ ) {
 	  || ($inv =~ /\\typeof\([^ ]*\.length/));
 }
 
+# Given a program point name, return the canoncial method name
+sub ppt_to_meth( $ ) {
+  my ($ppt) = @_;
+
+  my $methodname = $ppt;
+  # Change "Foo.<init>" to "Foo.Foo".
+  $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
+
+  # Replace arglist by canonicalized version
+  if (($methodname !~ /:::(OBJECT|CLASS)/)
+      && ($methodname !~ s/\(([^\(\)]*)\).*$/&simplify_args($1)/)) {
+    die "Can't parse methodname: $methodname";
+  }
+
+  return $methodname;
+}
+
+
+# Look for the curly brace "{" that begins the method body.
+# Returns a list of ($prebrace, $postbrace, $need_newline).
+sub parse_method_header( $ ) {
+  my ($line) = @_;
+  my ($prebrace, $postbrace, $need_newline);
+
+  # This is because "$)" in regexp screws up Emacs parser.
+  my $eolre = "\\n?\$";
+
+  if ($line =~ /^\s*\{.*$eolre/o) {
+    # I'm not sure how this can happen; after all, this line matched a
+    # method declaration.
+    die("How can this happen? line = `$line'");
+
+    $prebrace = "";
+    $postbrace = $line;
+    $need_newline = 0;
+  } elsif ($line =~ /\babstract\b/i) {
+    $prebrace = "";
+    $postbrace = $line;
+    $need_newline = 0;
+  } elsif ($line =~ /^(.*)(\{.*$eolre)/o) {
+    $prebrace = $1;
+    $postbrace = $2;
+    $need_newline = 1;
+  } elsif ($line !~ /\)/) {
+    die "Put all args on same line as declaration:  $line";
+  } else {
+    my $nextline;
+    while (defined($nextline = <IN>)) {
+      if ($nextline =~ m:^\s*/[/*]:) {
+	$line .= $nextline;
+      } elsif ($nextline =~ /^\s*\{.*$eolre/o) {
+	$prebrace = $line;
+	$postbrace = $nextline;
+	$need_newline = 0;
+	last;
+      } elsif ($nextline =~ /^(.*)(\{.*$eolre)/o) {
+	$prebrace = $line . $1;
+	$postbrace = $2;
+	$need_newline = 1;
+	last;
+      } else {
+	die "Didn't find open curly brace in method definition:\n$line\n$nextline";
+      }
+    }
+  }
+  return ($prebrace, $postbrace, $need_newline);
+}
+
+
+###########################################################################
+### Main processing
+###
 
 END {
 
+  # maps from method name to canonical program point name
   my %meth_ppt = ();
   for my $ppt (keys %raw) {
-    my $methodname = $ppt;
-    # Change "Foo.<init>" to "Foo.Foo".
-    $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
-
-    $methodname =~ s/\(([^\(\)]*)\).*$//;
-    $newargs = simplify_args($1);
-    $methodname .= $newargs;
-
+    my $methodname = ppt_to_meth($ppt);
     $meth_ppt{$methodname} = $ppt;
-
     # print "method: $methodname\n";
     # print "ppt: $ppt\n";
     # print $raw{$ppt};
@@ -197,12 +285,16 @@ END {
   }, ".");
 
   for my $javafile (@javafiles) {
-    @fields = ();		# only non-primitive fields
-    @owned_fields = ();
-    @final_fields = ();		# only non-primitive final fields
+    my @fields = ();		# only non-primitive fields
+    my @owned_fields = ();
+    my @final_fields = ();	# only non-primitive final fields
+
+    # Set @fields, @owned_fields, and @final_fields.
+    # A more sophisticated algorithm would count braces to avoid getting
+    # fields of inner classes.
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
     while (defined($line = <GETFIELDS>)) {
-      if ($line =~ /$field_decl_re/) {
+      if ($line =~ /$field_decl_re/o) {
 	my $fieldname = $4;
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
@@ -239,37 +331,13 @@ END {
 	# print "Found $fullmethname in $line";
 	my $simple_args = simplify_args($args);
 	my $fullmeth = $fullmethname . $simple_args;
-	my $prebrace;
-	my $postbrace;
-	# This is because "$)" in regexp screws up Emacs parser.
-	my $eolre = "\\n?\$";
-	my $need_newline = 1;
-	if ($line =~ /^\s*\{.*$eolre/) {
-	  $prebrace = "";
-	  $postbrace = $line;
-	  $need_newline = 0;
-	} elsif ($line =~ /\babstract\b/i) {
-	  $prebrace = "";
-	  $postbrace = $line;
-	  $need_newline = 0;
-	} elsif ($line =~ /^(.*)(\{.*$eolre)/) {
-	  $prebrace = $1;
-	  $postbrace = $2;
-	} elsif ($line !~ /\)/) {
-	  die "Put all args on same line as declaration of $fullmeth";
-	} else {
-	  my $nextline = <IN>;
-	  if ($nextline =~ /^\s*\{.*$eolre/) {
-	    $prebrace = $line;
-	    $postbrace = $nextline;
-	    $need_newline = 0;
-	  } elsif ($nextline =~ /^(.*)(\{.*$eolre)/) {
-	    $prebrace = $line . $1;
-	    $postbrace = $2;
-	  } else {
-	    die "Didn't find open curly brace in first two lines of method definition:\n  $line  $nextline";
-	  }
-	}
+
+	my $prebrace;		# Text up to "{"
+	my $postbrace;		# Text following "{"
+	my $need_newline = 1;	# Whether to insert a newline
+	# Set $prebrace, $postbrace, and $need_newline.
+	($prebrace, $postbrace, $need_newline) = parse_method_header($line);
+
 	print OUT $prebrace;
 	my $found = "";
 	for my $ppt (keys %raw) {
@@ -384,6 +452,8 @@ END {
 	    # structure or a block end or some such.  This attempts to set
 	    # the owner annotation after as many lines as possible, and in
 	    # particular to set it after the variable is set.
+	    # (Even better would be to look for places the variable is set
+	    # (in any method) and set its owner there.)
 	    my $nextline;
 	    while ((defined($nextline = <IN>))
 		   && (! (
@@ -392,9 +462,10 @@ END {
 			  ($nextline =~ /\b(if|while|for)\b|\}/)
 			  # in a comment
 			  || (($nextline =~ /\/\*(.*)/) && (! $1 =~ /\*\//))
-			  # method call, but not an assignment
+			  # method call, but not an assignment,
+			  # nor a this() or super() call.
 			  || (($nextline =~ /^[^=]*\(/)
-			      && ($nextline !~ /\bthis\s*\(/))))) {
+			      && ($nextline !~ /\b(this|super)\s*\(/))))) {
 	      print OUT $nextline;
 	    }
 	    for my $field (@owned_fields) {
@@ -410,17 +481,23 @@ END {
       }
 
       # This puts object invariants at the beginning.
-      # Alternately, put them at the end.
+      # (Alternately, one could put them at the end instead.)
       if ($line =~ /^[^\/]*\bclass\s+$classname\b/) {
 	# Looks like the declaration of class $classname
-	print OUT $line;
 	if ($line !~ /\{/) {
-	  my $nextline = <IN>;
-	  if ($nextline !~ /\{/) {
-	    die "Didn't find open curly brace in first two lines of class definition:\n  $line  $nextline";
+	  my $nextline;
+	  while (defined($nextline = <IN>)) {
+	    if ($nextline =~ m:^\s*/[/*]:) {
+	      $line .= $nextline;
+	    } elsif ($nextline =~ /\{/) {
+	      $line .= $nextline;
+	      last;
+	    } else {
+	      die "Didn't find open curly brace in class definition:\n$line\n$nextline";
+	    }
 	  }
-	  print OUT $nextline;
 	}
+	print OUT $line;
 	for my $fullmeth ("$classname" . ":::OBJECT", "$classname" . ":::CLASS") {
 	  if (defined($raw{$fullmeth})) {
 	    for my $inv (split("\n", $raw{$fullmeth})) {
