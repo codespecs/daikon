@@ -370,7 +370,7 @@ public abstract class PptSlice
 	    // constants will often just flow themselves directly,
 	    // which means that inv will be falsified.  On the other
 	    // hand, invariants with weaken-able computed constants
-	    // will flow a close of themselves before they weaken.  In
+	    // will flow a clone of themselves before they weaken.  In
 	    // that case, inv will not yet have been falsified.
 	    inv.destroy();
 	  }
