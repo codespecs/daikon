@@ -322,12 +322,7 @@ public class PAIRWISEINTEQUAL
   }
 
   public String format_dbc() {
-    String[] form =
-      VarInfoName.QuantHelper.format_dbc(
-        new VarInfoName[] { var1().name, var2().name },
-        true);
-    // elementwise
-    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
+    return format_unimplemented(OutputFormat.DBCJAVA);
   }
 
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
