@@ -47,9 +47,6 @@ class ConditionExtractor extends DepthFirstVisitor {
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
 
-
-
-
   /**
    * f0 -> "package"
    * f1 -> Name()
@@ -318,27 +315,21 @@ class ConditionExtractor extends DepthFirstVisitor {
    * methods.
    */
   private void addMethod(String methodDeclaration, String methodname) {
-    if (!conditions.containsKey(methodname)) {
-      conditions.put(methodname, new Vector());
-    }
     curMethodName = methodname;
     curMethodDeclaration = methodDeclaration;
   }
 
   // add the condition to the current method's list of conditions
   private void addCondition(String cond) {
-    Vector conds;
-    if (conditions.isEmpty()) {
-      conds = new Vector();
-      conds.add(cond);
-      conditions.put("OBJECT", conds);
-    } else if (curMethodName == null) {
-      conds = (Vector) conditions.get("OBJECT");
-      conds.addElement(cond);
-    } else {
-      conds = (Vector)conditions.get(curMethodName);
-      conds.addElement(cond);
+    String meth = curMethodName;
+    if (meth == null) {
+      meth = className + ":::OBJECT";
     }
+    if (! conditions.containsKey(meth)) {
+      conditions.put(meth, new Vector());
+    }
+    Vector conds = (Vector) conditions.get(meth);
+    conds.addElement(cond);
   }
 
   // store the replace statement (expression) in the hashmap
