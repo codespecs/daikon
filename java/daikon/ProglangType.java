@@ -203,6 +203,7 @@ public final class ProglangType implements java.io.Serializable {
   final static Long LongZero = Intern.internedLong(0);
   final static Long LongOne = Intern.internedLong(1);
   final static Double DoubleZero = Intern.internedDouble(0);
+  final static Double DoubleNaN = new Double(Double.NaN);
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
@@ -249,6 +250,8 @@ public final class ProglangType implements java.io.Serializable {
         // Hack for Java objects, fix later I guess.
         if (value.equals("null"))
           return DoubleZero;
+        if (value.equals("NaN"))
+          return DoubleNaN;
 	return Intern.internedDouble(value);
       // } else if (base == BASE_BOOLEAN) {
       //   return new Boolean(value);

@@ -5,8 +5,9 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.split.*;
 import daikon.split.dsaa.*;
@@ -978,8 +979,9 @@ public class PptTopLevel extends Ppt {
         Assert.assert(unary_view.invs.size() == 1);
         Invariant inv = (Invariant) unary_view.invs.elementAt(0);
         Assert.assert((inv instanceof OneOfScalar)
+                      || (inv instanceof OneOfString)
                       || (inv instanceof OneOfSequence)
-                      || (inv instanceof OneOfString));
+                      || (inv instanceof OneOfStringSequence));
       } else {
         // The old one was a failure (and so saw only a subset of all the
         // values); recreate it.

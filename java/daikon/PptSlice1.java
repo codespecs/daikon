@@ -336,6 +336,17 @@ public final class PptSlice1  extends PptSlice {
           if (inv.no_invariant)
             break;
         }
+      } else if (rep == ProglangType.STRING_ARRAY) {
+        SingleStringSequence inv = (SingleStringSequence) invariant;
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+          Map.Entry entry = (Map.Entry) itor.next();
+          String[] val = (String[]) entry.getKey();
+          int[] tm_array = (int[]) entry.getValue();
+          inv.add(val, 0, tm_array[0]);
+          inv.add(val, 1, tm_array[1]);
+          if (inv.no_invariant)
+            break;
+        }
       } else {
         throw new Error("unrecognized representation " + rep.format());
       }
