@@ -21,6 +21,15 @@ Further documentation can be found in:
 
 [Place changes here.]
 
+Kvasir
+
+  Bug Fixes
+
+    Re-factored the source code so that it will be more compatible with 
+    older versions of gcc.  Kvasir development occurs on gcc version 3.3.5 
+    (Debian 1:3.3.5-8).
+
+
 ---------------------------------
 
 4.0.2 (Feb 19 2005)
