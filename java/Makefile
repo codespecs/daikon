@@ -5,8 +5,8 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-JAVAC ?= jikes -g +E +F
-# JAVAC ?= javac -g
+# JAVAC ?= jikes -g +E +F
+JAVAC ?= javac -g
 
 ### end of user customizations
 
