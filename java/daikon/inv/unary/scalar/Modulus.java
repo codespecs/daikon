@@ -61,7 +61,7 @@ public class Modulus
     }
 
     if (format == OutputFormat.IOA) {
-      return "mod("+var().name.ioa_name()+", "+modulus+") = "+remainder;
+      return "mod(" + var().name.ioa_name() + ", " + modulus + ") = " + remainder;
     }
 
     if (format == OutputFormat.JAVA || format == OutputFormat.JML) {

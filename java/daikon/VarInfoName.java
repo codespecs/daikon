@@ -1478,7 +1478,7 @@ public abstract class VarInfoName
       // Need to be in form: \A e (i <= e <= j) => seq[e]"
       String result = "\\A e:Int (";
       result += ((i == null) ? "0" : i.ioa_name()) + " <= e <= ";
-      result += ((j == null) ? "size("+sequence.ioa_name_impl()+")" :
+      result += ((j == null) ? "size(" + sequence.ioa_name_impl() + ")" :
                  j.ioa_name()) + ") => ";
       result += sequence.ioa_name_impl("e");
       return result;

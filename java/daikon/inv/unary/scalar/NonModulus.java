@@ -67,7 +67,7 @@ public class NonModulus
     }
 
     if (format == OutputFormat.IOA) {
-      return "mod("+name+", "+modulus+") ~= "+remainder;
+      return "mod(" + name + ", " + modulus + ") ~= " + remainder;
     }
 
     if (format == OutputFormat.JAVA || format == OutputFormat.JML) {

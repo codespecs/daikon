@@ -357,7 +357,7 @@ class FormatTestCase {
 
     try {
       classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
-      InvariantFormatTester.config.apply(className+".enabled", "true");
+      InvariantFormatTester.config.apply(className + ".enabled", "true");
     }
     catch (NoSuchFieldException e) { // Otherwise do nothing
     }

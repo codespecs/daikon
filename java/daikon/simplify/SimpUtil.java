@@ -14,9 +14,9 @@ public class SimpUtil
     }
 
     Assert.assertTrue(s != null);
-    Assert.assertTrue(s.indexOf("((") == -1, "'((' may not appear, '"+s+"'");
-    Assert.assertTrue(s.charAt(0) == '(', "starts with lparen, '"+s+"'");
-    Assert.assertTrue(s.charAt(s.length()-1) == ')', "ends with rparen, '"+s+"'");
+    Assert.assertTrue(s.indexOf("((") == -1, "'((' may not appear, '" + s + "'");
+    Assert.assertTrue(s.charAt(0) == '(', "starts with lparen, '" + s + "'");
+    Assert.assertTrue(s.charAt(s.length()-1) == ')', "ends with rparen, '" + s + "'");
 
     int paren = 0;
     char[] cs = s.toCharArray();
