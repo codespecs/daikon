@@ -218,7 +218,7 @@ cvs-test:
 # Note that this process does NOT include: dfej-cygwin.exe, dfej-solaris,
 # dfej-macosx, dfec-linux-x86.tar.gz and dfec-solaris.tar.gz.  These
 # must be built separately.
-staging: doc/CHANGES update-doc-dist-date-and-version
+staging: doc/CHANGES
 	/bin/rm -rf $(STAGING_DIST)
 	install -d $(STAGING_DIST)/download
 	# Build the main tarfile for daikon
