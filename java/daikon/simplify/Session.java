@@ -41,6 +41,8 @@ public class Session
   }
 
   public boolean check(String proposition) {
+    proposition = proposition.trim();
+    assert_well_formed(proposition);
     try {
       // send out the proposition
       input.println(proposition);
@@ -74,14 +76,63 @@ public class Session
     }
   }
 
+  public void assume(String proposition) {
+    proposition = proposition.trim();
+    assert_well_formed(proposition);
+
+    // send out the (BG_PUSH proposition)
+    input.println("(BG_PUSH " + proposition + ")");
+    input.flush();
+
+    // there is no output from Simplify
+  }
+
+  public void undo_last_assume() {
+    // send out the (BG_POP)
+    input.println("(BG_POP)");
+    input.flush();
+    
+    // there is no output from Simplify
+  }
+
+  private static void assert_well_formed(String s) {
+    if (!Assert.enabled) {
+      return;
+    }
+
+    Assert.assert(s != null);
+    Assert.assert(s.indexOf("((") == -1, "'((' may not appear");
+    Assert.assert(s.charAt(0) == '(', "starts with lparen");
+    Assert.assert(s.charAt(s.length()-1) == ')', "ends with rparen");
+
+    int paren = 0;
+    char[] cs = s.toCharArray();
+    for (int i=0; i < cs.length; i++) {
+      char c = cs[i];
+      if (c == '(') {
+	paren++;
+      } else if (c == ')') {
+	Assert.assert(paren > 0, "too deep at char " + i + " in '" + s + "'");
+	paren--;
+      }
+    }
+    Assert.assert(paren == 0, "unbalanced parens in '" + s + "'");
+  }
+
   // for testing and playing around, not for real use
   public static void main(String[] args)
     throws IOException
   {
     Session s = new Session();
-    System.out.println("" + s.check("(EQ 1 1)"));
-    System.out.println("" + s.check("(EQ 1 2)"));
-    System.out.flush();
+
+    Assert.assert(true == s.check("(EQ 1 1)"));
+    Assert.assert(false == s.check("(EQ 1 2)"));
+
+    Assert.assert(false == s.check("(EQ x z)"));
+    s.assume("(AND (EQ x y) (EQ y z))");
+    Assert.assert(true == s.check("(EQ x z)"));
+    s.undo_last_assume();
+    Assert.assert(false == s.check("(EQ x z)"));
   }
 
 }
