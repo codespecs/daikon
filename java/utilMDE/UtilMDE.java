@@ -1482,6 +1482,21 @@ public final class UtilMDE {
 
 
   ///
+  /// Throwable
+  ///
+
+  public static String backTrace() {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    new Throwable().printStackTrace(pw);
+    pw.close();
+    String result = sw.toString();
+    // TODO: should remove "at utilMDE.UtilMDE.backTrace(UtilMDE.java:1491)"
+    return result;
+  }
+
+
+  ///
   /// Collections
   ///
 
