@@ -9,6 +9,8 @@ When the task is complete, move it to the bottom of the file.
     match.  I think this change should be largely back compatible with 
     their current usage.
     [etf]
+    
+   - Add --exception switch to allow instrumentation of exceptions
 
   - Add new option to Chicory to only output a given percentage of all
     observed records.  This will permit faster execution on large
