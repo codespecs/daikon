@@ -939,6 +939,9 @@ public class PrintInvariants {
     //      }
 
     out.println(inv_rep);
+    if (debug.isDebugEnabled()) {
+      debug.debug (inv.repr());
+    }
 
     // this is not guaranteed to work or even compile if uncommented.
 //    {
@@ -1007,6 +1010,8 @@ public class PrintInvariants {
                          // + " equal_to=" + vi.equal_to.name.name() // [INCR]
                          );
       }
+      debugPrint.debug ("Equality set: ");
+      debugPrint.debug (ppt.equality_view.toString());
     }
     if (debugFiltering.isDebugEnabled()) {
       debugFiltering.debug("------------------------------------------------------------------------------------------------\n");
@@ -1021,10 +1026,16 @@ public class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    List invs_vector = ppt.getInvariants();
+    List invs_vector = new LinkedList(ppt.getInvariants());
     // System.out.println("Total invs for this ppt: " + invs_vector.size());
 
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
+    //     if (Daikon.use_equality_set) {
+    //       invs_vector.addAll (ppt.equality_view.invs);
+    //     }
+    // No longer necessary because we convert them into normal IntEqual, etc.
+
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
+      new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;
@@ -1033,11 +1044,10 @@ public class PrintInvariants {
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
+      Assert.assertTrue (!(inv instanceof Equality));
       InvariantFilters fi = new InvariantFilters();
       fi.ppt_map = ppt_map;
 
-      // Deprecated, so I'm commenting this out.  Use new filters system instead
-      // boolean pi_accepted = accept_invariant(inv);
       boolean fi_accepted = fi.shouldKeep(inv);
 
       // Never print the guarding predicates themselves, they should only
@@ -1046,6 +1056,10 @@ public class PrintInvariants {
         invCounter++;
         Global.reported_invariants++;
         accepted_invariants.add(inv);
+      } else {
+        if (debugPrint.isDebugEnabled()) {
+          debugPrint.debug ("  not printing: " + inv.repr());
+        }
       }
     }
 
@@ -1140,6 +1154,7 @@ public class PrintInvariants {
 
   public static String get_ioa_precondition (int numbering, Ppt ppt) {
     if (ppt.ppt_name.isClassStaticSynthetic()) return "";
+    if (ppt.ppt_name.isObjectInstanceSynthetic()) return "";
     return "enabled(" + ppt.ppt_name.getFullMethodName() + ") => ";
   }
 }
