@@ -12,6 +12,9 @@ import daikon.inv.filter.*;
 import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.binary.twoSequence.*;
 import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.misc.*;
@@ -1324,7 +1327,7 @@ public class PptTopLevel
         // Why is this useful?  There may be isSameFormula comparisons
         // among suppressors such that the weakened form of the inv
         // qualifies (e.g. LowerBound)
-        if (!inv.falsified && inv.getSuppressor() == null) {
+        if (!inv.is_false() && inv.getSuppressor() == null) {
           if (attemptSuppression (inv, true)) {
             if (debugSuppress.isLoggable(Level.FINE)) {
               debugSuppress.fine ("Suppressor re-suppressed");
@@ -1483,6 +1486,9 @@ public class PptTopLevel
       return (null);
     }
 
+    // Set of invariants weakened by this sample
+    Set weakened_invs = new LinkedHashSet();
+
     // Instantiate slices and invariants if this is the first sample
     if (values_num_samples == 0) {
       debugFlow.fine ("  Instantiating views for the first time");
@@ -1498,7 +1504,9 @@ public class PptTopLevel
 
     // Add the samples to all of the equality sets, breaking sets as required
     if (Daikon.use_equality_optimization) {
-      equality_view.add (vt, count);
+      weakened_invs.addAll (equality_view.add (vt, count));
+      for (Iterator i = weakened_invs.iterator(); i.hasNext(); )
+        Assert.assertTrue (i.next() instanceof Invariant);
     }
 
     // Add samples to constants, adding new invariants as required
@@ -1586,7 +1594,6 @@ public class PptTopLevel
 
     // Add the sample to each slice and keep track of any weakened or
     // destroyed invariants
-    Set weakened_invs = new LinkedHashSet();
     Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
     for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
@@ -1619,7 +1626,7 @@ public class PptTopLevel
 
         // Try and suppress the weakened invariant (its new weakened
         // state might allow suppression, where its previous state did not)
-        if (!inv.falsified && inv.getSuppressor() == null) {
+        if (!inv.is_false() && inv.getSuppressor() == null) {
           if (attemptSuppression (inv, true)) {
             if (inv.logOn() || debugSuppress.isLoggable(Level.FINE))
               inv.log ("Weakened invariant suppressed");
@@ -1754,6 +1761,9 @@ public class PptTopLevel
     // Slices containing these invariants
     Set slices = new LinkedHashSet();
 
+    // List of invariants weakened by this sample
+    List weakened_invs = new ArrayList();
+
     // Loop through each invariant
     inv_loop:
     for (int i = 0; i < inv_list.size(); i++) {
@@ -1762,7 +1772,7 @@ public class PptTopLevel
         inv.log ("Processing in inv_add");
 
       // Skip falsified invariants (shouldn't happen)
-      if (inv.falsified)
+      if (inv.is_false())
         continue;
 
       // Skip any invariants with a missing variable
@@ -1778,7 +1788,6 @@ public class PptTopLevel
       InvariantStatus result = null;
 
       // Get the values and add them to the invariant.
-      Invariant clone = (Invariant) inv.clone();
       if (inv.ppt instanceof PptSlice1) {
         VarInfo v = inv.ppt.var_infos[0];
         UnaryInvariant unary_inv = (UnaryInvariant) inv;
@@ -1805,20 +1814,20 @@ public class PptTopLevel
                                   vt.getValue(v3), vt.getModified(v1), count);
       }
       if (result == InvariantStatus.FALSIFIED) {
-        inv.ppt.destroyAndFlowInv(inv);
+        inv.falsify();
+        weakened_invs.add (inv);
       } else if (result == InvariantStatus.WEAKENED) {
-        inv.ppt.flowClone(inv, clone);
+        weakened_invs.add (inv);
       }
     }
 
-    // Get the list of weakened invariants and remove any falsified ones.
-    List result = new ArrayList();
+    // Remove any falsified invariants
     for (Iterator i = slices.iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
-      result.addAll (slice.flow_and_remove_falsified());
+      slice.remove_falsified();
     }
 
-    return (result);
+    return (weakened_invs);
   }
 
   /**
@@ -1920,14 +1929,14 @@ public class PptTopLevel
     // build the global to local permute and use it to copy the invariant
     int[] permute = build_permute (vis, vis_sorted);
     Invariant local_inv = global_inv.clone_and_permute (permute);
-    local_inv.falsified = false;
+    local_inv.clear_falsified();
 
     // Add the invariant to the local slice unless it is already there
     if (!local_slice.contains_inv (local_inv)) {
       local_inv.ppt = local_slice;
       local_slice.addInvariant (local_inv);
       local_inv.log ("Added inv '" + local_inv + "' from global inv"
-                     + global_inv + " gfalse = " + global_inv.falsified);
+                     + global_inv + " gfalse = " + global_inv.is_false());
     } else {
       Assert.assertTrue (local_slice.invs.size() > 0);
     }
@@ -4129,9 +4138,12 @@ public class PptTopLevel
       Set vars = e.getVars();
       String set_str = "";
       for (Iterator j = vars.iterator(); j.hasNext(); ) {
+        VarInfo v = (VarInfo) j.next();
         if (set_str != "")      // interned
           set_str += ",";
-        set_str += ((VarInfo)j.next()).name.name();
+        set_str += v.name.name();
+        if (v.missingOutOfBounds())
+          set_str += "{MOB}";
       }
       if (out != "")            // interned
         out += ", ";
@@ -4835,6 +4847,70 @@ public class PptTopLevel
     return var_infos[global_transform_orig[global.varinfo_index]];
   }
 
+  public PptSlice create_equality_inv (VarInfo v1, VarInfo v2, int samples) {
+
+    ProglangType rep = v1.rep_type;
+    boolean rep_is_scalar = rep.isScalar();
+    boolean rep_is_float = rep.isFloat();
+
+    // Assert.assertTrue (findSlice_unordered (v1, v2) == null);
+    PptSlice newSlice = get_or_instantiate_slice (v1, v2);
+
+    // Copy over the number of samples from this to the new slice,
+    // so that all invariants on the slice report the right number
+    // of samples.
+    newSlice.set_samples (samples);
+
+    Invariant invEquals = null;
+
+    // This is almost directly copied from PptSlice2's instantiation
+    // of factories
+    if (rep_is_scalar) {
+      invEquals = IntEqual.instantiate (newSlice);
+    } else if ((rep == ProglangType.STRING)) {
+      // invEquals = StringEqual.instantiate (newSlice);
+       invEquals = StringComparison.instantiate (newSlice, true);
+       ((StringComparison) invEquals).core.can_be_eq = true;
+    } else if ((rep == ProglangType.INT_ARRAY)) {
+      invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
+    } else if ((rep == ProglangType.STRING_ARRAY)) {
+      // JHP commented out to see what diffs are coming from here (5/3/3)
+//         invEquals = SeqComparisonString.instantiate (newSlice, true);
+//         if (invEquals != null) {
+//           ((SeqComparisonString) invEquals).can_be_eq = true;
+//         }
+//         debugPostProcess.fine ("  seqStringEqual");
+    } else if (Daikon.dkconfig_enable_floats) {
+      if (rep_is_float) {
+        invEquals = FloatEqual.instantiate (newSlice);
+      } else if (rep == ProglangType.DOUBLE_ARRAY) {
+        invEquals = SeqSeqFloatEqual.instantiate (newSlice, true);
+      }
+    } else {
+      throw new Error ("No known Comparison invariant to convert equality into");
+    }
+
+
+    if (invEquals != null) {
+      SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
+      if (sl != null) {
+        // System.out.println (invEquals + "suppressed by " + sl);
+        ;
+      } else {
+        newSlice.addInvariant (invEquals);
+        // System.out.println ("created equality " + invEquals.format());
+      }
+    } else {
+    // System.out.println ("Can't create equality for " + v1.name.name() + ", "
+    //                      + v2.name.name());
+      if (newSlice.invs.size() == 0)
+        newSlice.parent.removeSlice (newSlice);
+    }
+    return (newSlice);
+  }
+
+
+
   public static void count_unique_slices (Logger debug, PptMap all_ppts) {
 
     Map slices = new LinkedHashMap (10000);
@@ -5216,7 +5292,7 @@ public class PptTopLevel
             if (inv.getSuppressor() != null)
               suppress = "(suppressed) ";
             String falsify = "";
-            if (inv.falsified)
+            if (inv.is_false())
               falsify = "(falsified) ";
             debug.fine (" : " + suppress + falsify + inv.format());
           }
