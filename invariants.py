@@ -260,7 +260,11 @@ def run_cubist():
 # only happens not to be true (and isn't a true invariant) is at least this low.
 negative_invariant_confidence = .01     # .05 might also be reasonable
 
-## An invariant may be exact or approximate.
+## An invariant may be exact or approximate.  If an invariant is exact,
+## then supersets of the variables in it are not supplied to higher-arity
+## invariants.  For instance, if the variables are w,x,y,z, and an exact
+## invariant is found over x, then only the three pairs (w,y), (w,z), and
+## (y,z) are checked for two_field_numeric_invariant.
 
 def all_numeric_invariants():
     sorted_keys = var_names.keys()
