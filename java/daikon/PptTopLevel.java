@@ -2208,10 +2208,21 @@ public class PptTopLevel extends Ppt {
 	}
       }
       bg.append(")");
-      String ask = "(IMPLIES " + bg + " " + inv.format_simplify() + ")";
-      CmdCheck cc = new CmdCheck(ask); // result is initialized to false
       try {
+	// If the background is necessarily false, we are in big trouble
+	CmdCheck bad = new CmdCheck("(NOT " + bg + ")");
 	ensure_prover_started();
+	prover.request(bad);
+	if (bad.valid) {
+	  // BAD!!
+	  System.err.println("Warning: " + ppt_name + "invariants are contradictory; punting!");
+	  return;
+	}
+
+	// The background wasn't necessarily false; see if it implies
+	// the invariant under test.
+	String ask = "(IMPLIES " + bg + " " + inv.format_simplify() + ")";
+	CmdCheck cc = new CmdCheck(ask); // result is initialized to false
 	prover.request(cc);
 	if (cc.valid) {
 	  // ick ick ick
