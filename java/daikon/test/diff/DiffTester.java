@@ -20,13 +20,13 @@ public class DiffTester extends TestCase {
   private PptMap ppts1;
   private PptMap ppts2;
   private PptMap ppts3;
+  private PptMap ppts4;
   private PptMap invs1;
   private PptMap invs2;
   private PptMap invs3;
   private PptMap imps1;
   private PptMap imps2;
-  
-  
+
   public static void main(String[] args) {
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
@@ -57,6 +57,17 @@ public class DiffTester extends TestCase {
     ppts3.add(new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ppts3.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ppts3.add(new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+
+    ppts4 = new PptMap();
+    ppts4.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    PptTopLevel ppt1 =
+      new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
+    PptTopLevel ppt2 =
+      new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
+    ppt1.combined_exit = ppt2;
+    ppts4.add(ppt1);
+    ppts4.add(ppt2);
+    
     
     {
       invs1 = new PptMap();
@@ -213,6 +224,23 @@ public class DiffTester extends TestCase {
     Assert.assertEquals(printTree(ref), printTree(diff));
   }
 
+  public void testPpts4Empty() {
+    RootNode diff = Diff.diffPptMap(ppts4, empty);
+
+    RootNode ref = new RootNode();
+    PptNode node;
+    node = new PptNode
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       null);
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       null);
+    ref.add(node);
+
+    Assert.assertEquals(printTree(ref), printTree(diff));
+  }
+
 
   public void testPpts1Ppts1() {
     RootNode diff = Diff.diffPptMap(ppts1, ppts1);
@@ -226,6 +254,23 @@ public class DiffTester extends TestCase {
     node = new PptNode
       (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
        new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    ref.add(node);
+
+    Assert.assertEquals(printTree(ref), printTree(diff));
+  }
+
+  public void testPpts4Ppts4() {
+    RootNode diff = Diff.diffPptMap(ppts4, ppts4);
+
+    RootNode ref = new RootNode();
+    PptNode node;
+    node = new PptNode
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
       (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
