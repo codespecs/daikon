@@ -11,6 +11,7 @@ import java.lang.*;
 // Files to test:
 // ArraysMDE.java
 // Assert.java
+// CountingPrintWriter
 // Digest.java
 // EqHashMap.java
 // FuzzyFloat.java
@@ -1399,6 +1400,29 @@ public final class TestUtilMDE extends TestCase {
 
   public static void testWeakHasherMap() {
   }
+
+  /**
+   * Tests whether CountingPrintWriter
+   * counts the bytes printed, written for
+   * different types (boolean, int, float etc.)
+   **/
+  public static void testCountingPrintWriter() {
+    CountingPrintWriter c1 = new CountingPrintWriter(new CharArrayWriter());
+    c1.print("a");
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 1);
+    c1.print(1);
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 2);
+    c1.print(true);
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 6);
+    c1.print(1.00);
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 9);
+    c1.write("a");
+    c1.write("a");
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 9);
+    Assert.assertTrue(c1.getNumberOfWrittenBytes()== 22);
+    Assert.assertTrue(c1.getNumberOfPrintedChars() == 9);
+  }
+
 
   /**
    * Test the intering of subsequences as triples of the original
