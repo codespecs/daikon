@@ -2,7 +2,7 @@ package daikon.split.dsaa;
 
 import daikon.split.*;
 
-public class SplitterList4Dsaa {
+public final class SplitterList4Dsaa {
 
     static {
 
@@ -154,7 +154,7 @@ public class SplitterList4Dsaa {
 
 	SplitterList.put("StackLi.isEmpty", new Splitter[] {
 	    new StackLiSplitter_isEmpty()});
-	
+
 	SplitterList.put("Sample82.generateArray", new Splitter[] {
 	    new Sample82Splitter_generateArray()});
 
