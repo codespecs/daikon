@@ -3316,7 +3316,7 @@ That's all there is to it!  Chicory does not require you to perform
 separate instrumentation or compilation steps, as @command{dfej} does.
 However, you should compile your program with debugging information
 enabled (the @option{-g} command-line switch to @command{javac});
-otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @ldots{} as
+otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
 Chicory supports all versions of Java, including Java 5.0.  Chicory's
