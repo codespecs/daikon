@@ -32,6 +32,7 @@ my $escjava_executable = "/g2/users/mernst/bin/Linux-i686/escjava";
 # 9 Otherwise, dump the slurped output to stdout (with a little tweaking first) and exit
 
 my $debug = 0;
+my $output_file = 0;
 
 my $tmpdir;
 BEGIN {
@@ -119,6 +120,16 @@ if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
     $debug = 1;
     shift @ARGV;
 }
+
+if (($#ARGV >= 0) && ($ARGV[0] eq "--lastfile")) {
+    debug("Will display final file, not escjava output.");
+    # When set, output is the final merged version of the first source
+    # file placed on the command line.  This lets users see the final
+    # file to find out what was written in by whodini.
+    $output_file = 1;
+    shift @ARGV;
+}
+
 my $txtescfile = shift @ARGV;
 my @sourcefiles = @ARGV;
 
@@ -169,6 +180,7 @@ while (1) {
 	unlink($sourcetmp);
 	rename("$sourcetmp-escannotated", $sourcetmp);
     }
+    my @merge_slurped = slurpfile($sourcetmps[0]);
 
     # 5 Run ESC on the temp source files and slurp the results
     print ".";
@@ -206,6 +218,10 @@ while (1) {
 
     # 9 Otherwise, dump the slurped output to stdout (with a little tweaking first) and exit
     unless ($txtesc_changed) {
+      if ($output_file) {
+	# Output is the last whodini file, not the escjava result
+	print @merge_slurped;
+      } else {
 	print "\n";
 	# Create a mapping from line number of the checked source to
 	# the pre-whodini line number.
@@ -237,7 +253,8 @@ while (1) {
 	} @escoutput;
 	# Show ESC's output
 	print @escoutput;
-	exit;
+      }
+      exit;
     }
 }
 
