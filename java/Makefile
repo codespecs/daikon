@@ -18,7 +18,7 @@ JAVAC ?= javac -g
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # In practice, this is good enough, however.
-JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples/awk' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples/awk' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
@@ -186,7 +186,7 @@ junit:
 
 JAVADOC_FLAGS = -d doc \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
-JAVADOC_PACKAGES = `find -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax-ship | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
+JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
 
 doc: $(JAVA_FILES)
 	mkdir -p doc
