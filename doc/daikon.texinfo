@@ -1925,8 +1925,13 @@ Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
 To print all discarded invariants, use the argument "all".
 
 @item --prob_limit @var{val}
-Set the probability limit for justifying invariants.  @var{pct} must be
+Set the probability limit for justifying invariants.  @var{val} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
+filtering.
+
+@item --conf_limit @var{val}
+Set the confidence limit for justifying invariants.  @var{val} must be
+between 0 and 1; the default is .99 (1%).  Larger values yield stronger
 filtering.
 
 @item --nohierarchy
@@ -1976,8 +1981,11 @@ variables.
 @item --debug
 @cindex debugging flags
 @cindex category, for debugging
+@cindex logging, for debugging Daikon
+@cindex Logger
 These debugging options cause output to be written to a log file (by
-default, to the terminal).  The @option{--dbg @var{category}} option
+default, to the terminal); in other words, they enable a Logger.
+The @option{--dbg @var{category}} option
 enables debugging output for a specific part of Daikon; it may be
 specified multiple times, permitting find-grained control over debugging
 output.  The @option{--debug} option turns on all debugging flags.

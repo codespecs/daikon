@@ -620,8 +620,8 @@ information would be setup as follows:
 @end example
 
 Track logging must be enabled.  This is done by enabling the underlying
-logger (@code{daikon.Debug}) via Daikon's @code{-debug} switch (i.e.,
-@code{-debug daikon.Debug}).  There are also two configuration options
+logger (@code{daikon.Debug}) via Daikon's @code{--dbg} switch (i.e.,
+@code{--dbg daikon.Debug}).  There are also two configuration options
 that can customize the output.  The option @code{daikon.Debug.showTraceback}
 will output a stack trace on each log statement.  The option 
 @code{daikon.Debug.logDetail} will cause more detailed (and often
