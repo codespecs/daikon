@@ -16,6 +16,12 @@ import utilMDE.Assert;
  * variable names and values (see "defaults.txt" in this directory for an
  * example).  Multiple configuration files can be read, and the results can
  * be re-written to a new configuration file.
+ *
+ * <p> Important note: classes that have fields set via this
+ * Configuration (dkconfig) interface may not reference daikon.Global
+ * in their static initializers, since Global loads the default
+ * configuration, which classloads that class, and we have a
+ * classloading circularity.
  **/
 public final class Configuration
   implements Serializable
@@ -154,6 +160,8 @@ public final class Configuration
       clazz = Class.forName(classname);
     } catch (ClassNotFoundException e) {
       throw new ConfigException("No class " + classname);
+    } catch (LinkageError e) {
+      throw new ConfigException("No class (" + e + ") " + classname);
     }
 
     apply(clazz, fieldname, value);

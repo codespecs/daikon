@@ -32,7 +32,12 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public static final String lineSep = Global.lineSep;
+  public final static String release_version = "2.3.8";
+  public final static String release_date = "May 11, 2002";
+  public final static String release_string
+    = "Daikon version " + release_version
+    + ", released " + release_date
+    + "; http://pag.lcs.mit.edu/daikon.";
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -43,6 +48,8 @@ public final class Daikon {
   public static boolean dkconfig_output_conditionals = true;
 
   // All these variables really need to be organized better.
+
+  public final static String lineSep = Global.lineSep;
 
   public final static boolean disable_splitting = false;
 
@@ -115,6 +122,9 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
+  // Whether Daikon should print its version number and date
+  public static boolean noversion_output = false;
+
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
   public static final String ppt_regexp_SWITCH = "ppt";
@@ -139,6 +149,7 @@ public final class Daikon {
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
+  public static final String noversion_SWITCH = "noversion";
 
 
   // A pptMap which contains all the Program Points
@@ -151,8 +162,9 @@ public final class Daikon {
 
   static String usage =
     UtilMDE.join(new String[] {
+      release_string,
       "Daikon invariant detector.",
-      "Copyright 1998-2002 by Michael Ernst <mernst@lcs.mit.edu>",
+      "Copyright 1998-2002",  // " by Michael Ernst <mernst@lcs.mit.edu>",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
       "  Each file is a declaration file or a data trace file; the file type",
@@ -177,6 +189,10 @@ public final class Daikon {
 
     // Set up debug traces
     Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
+
+    if (! noversion_output) {
+      System.out.println(release_string);
+    }
 
     // Load declarations and splitters
     PptMap all_ppts = load_decls_files(decls_files);
@@ -251,6 +267,7 @@ public final class Daikon {
       new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -383,7 +400,9 @@ public final class Daikon {
 	    throw new RuntimeException("Error reading --files_from file");
 	  }
 	  break;
-	} else {
+	} else if (noversion_SWITCH.equals(option_name)) {
+          noversion_output = true;
+        } else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
 	break;
@@ -396,7 +415,6 @@ public final class Daikon {
 	  throw new Error("multiple serialization output files supplied on command line");
 
         String inv_filename = g.getOptarg();
-        System.out.println("Inv filename = " + inv_filename);
         inv_file = new File(inv_filename);
 
         if (! UtilMDE.canCreateAndWrite(inv_file)) {

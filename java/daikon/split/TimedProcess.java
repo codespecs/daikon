@@ -10,7 +10,7 @@ import java.util.*;
  * process and the commandline used to create the process. The
  * waitFor(long waitTime) method re-executes the command-line for a
  * fixed length of time, after which it terminates the process if it's
- * still running.  
+ * still running.
  */
 
 public class TimedProcess {
@@ -28,10 +28,9 @@ public class TimedProcess {
   //options
 
   /**
-   * int. Used to control the timeout Splitter compilation timeout,
-   * after which the compilation process is retried and
-   * terminated. This is necessary to prevent compilation of Splitters
-   * from taking a long time or hanging.
+   * Positive integer.  Specifies the Splitter compilation timeout, in
+   * seconds, after which the compilation process is terminated and
+   * retried, on the assumption that it has hung.
    **/
   public static int dkconfig_compile_timeout = 6;
 
@@ -44,7 +43,7 @@ public class TimedProcess {
     error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
     errorMessage = new StringBuffer();
   }
-  
+
   /**
    * @return the error message from execution of this process
    */
@@ -60,7 +59,7 @@ public class TimedProcess {
     }
     return errorMessage.toString();
   }
-  
+
   /**
    * @return true if the process if finished, false otherwise
    */
@@ -101,7 +100,7 @@ public class TimedProcess {
       System.out.println("TimedProcess: " + ie.toString() + " while re-executing command " + command);
     }
   }
-  
+
   /**
    * At the scheduled time, this TimerTask destroys the process
    * represented by this TimedProcess

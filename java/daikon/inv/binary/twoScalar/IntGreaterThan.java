@@ -452,5 +452,6 @@ public final class IntGreaterThan
     return false;
 
   } // isObviousImplied
+
 }
 

@@ -77,6 +77,13 @@ public class ContextServer
 		CFILE = new_CFILE;
 	}
 
+	// This function gets whether if we are reading in c files or
+	// Java. True for C Files and false for Java files.
+	public boolean getCFile()
+	{
+		return CFILE;
+	}
+
 	// Returns an iterator of the hashmap of classes.
 	public Iterator getClasses()
 	{
@@ -93,18 +100,19 @@ public class ContextServer
 		return null;
 	}
 
-	// Extracts out the context data from our data structure using the method name and
-	// a hash map for the class. Then it is stored in another datastructure and we find
-	// the certain data from that structure defined by the ContextualFieldRetriever.
-	// When we find that data we add to another structure and return that data.
+	// Extracts out the context data from our data structure using the method 
+	// name and a hash map for the class. Then it is stored in another 
+	// datastructure and we find the certain data from that structure defined 
+	// by the ContextualFieldRetriever. When we find that data we add to another 
+	// structure and return that data.
 	private Iterator getInformationIterator(String class_name, String method_name, ContextualFieldRetriever cfr)
 	{
 		HashMap temp_map = (HashMap)db.get(class_name);
 
 		LinkedList list_temp;
 
-		// Get a list containing all the invariant objects we want for all the methods
-		// specified, where null means all.
+		// Get a list containing all the invariant objects we want for all the 
+		// methods specified, where null means all.
 		if (method_name != null)
 			list_temp = ((ContextMethodData)temp_map.get(method_name)).getList();
 		else
@@ -146,13 +154,16 @@ public class ContextServer
 		return getInformationIterator(class_name, method_name, new VariableNameRetriever());
 	}
 
-	// We are trying to get a set of all the unique program points we have invariants for
-	// based on a given class, method, and/or variable name. Then we return an iterator for
-	// the set which the class above will iterate through. By using a tree set, the program
-	// points will be in alphabetical order.
-	public Iterator getPlaces(String class_name, String method_name, String variable_name)
+	// We are trying to get a set of all the unique program points we have 
+	// invariants for based on a given class, method, and/or variable name. 
+	// Then we return an iterator for the set which the class above will iterate 
+	// through. By using a tree set, the program points will be in alphabetical 
+	// order.
+	public Iterator getPlaces(String class_name, String method_name, 
+		String variable_name)
 	{
-		return getInformationIterator(class_name, method_name, new PPTNameRetriever(variable_name));
+		return getInformationIterator(class_name, method_name, 
+			new PPTNameRetriever(variable_name));
 	}
 
 	// Checking if the program point is global or has been specified.
@@ -181,16 +192,20 @@ public class ContextServer
 
 	// method defined that the user only has to specify the class, method
 	// and variable, and it uses the default values for the rest.
-	public Iterator getIterator(String iter_class, String iter_meth, String iter_var)
+	public Iterator getIterator(String iter_class, String iter_meth, 
+		String iter_var)
 	{
 		return (getIterator(iter_class, iter_meth, iter_var, null));
 	}
 
 	// Returns an iterator to a list of the invariants, specified by
 	// the arguments below.
-	public Iterator getIterator(String iter_class, String iter_meth, String iter_var, String iter_place)
+	public Iterator getIterator(String iter_class, String iter_meth, 
+		String iter_var, String iter_place)
 	{
-		Iterator temp = new ContextIterator(iter_class, iter_meth, iter_var, iter_place);
+		Iterator temp = 
+			new ContextIterator(iter_class, iter_meth, iter_var, iter_place);
+
 		return (temp);
 	}
 
@@ -216,9 +231,9 @@ public class ContextServer
 		filelist = new TreeSet();
 	}
 
-	// This adds a invariants from a file to the database. There could be more invariants
-	// for a class already in the database added to it. We may at one point just want only
-	// one set of invariants for a class.
+	// This adds a invariants from a file to the database. There could be more 
+	// invariants for a class already in the database added to it. We may at 
+	// one point just want only one set of invariants for a class.
 	public String addNewFile(String pathname)
 	{
 		String new_filename = null;
@@ -234,7 +249,7 @@ public class ContextServer
 
 			String [] pass_array;
 
-			// Needs to pass parameter to conversion function to identify
+			// Needs to pass parameter to conversion function to identify 
 			// this file as a c program or not.
 			if (CFILE)
 			{
@@ -251,7 +266,10 @@ public class ContextServer
 
 			cache_file = new File(new_filename);
 			if (!cache_file.exists())
-				ConvertInvToDci.converting(pass_array);
+			{
+				if (ConvertInvToDci.converting(pass_array) == null)
+					return ConvertInvToDci.error_msg;
+			}
 			else
 			{
 				if (fo_inv.lastModified() != cache_file.lastModified())
@@ -328,6 +346,11 @@ public class ContextServer
 			}
 			else
 			{
+				if (CFILE)
+				{
+					StringTokenizer tokens = new StringTokenizer(inv_method, " \n");
+					inv_method = tokens.nextToken();
+				}
 				inv_ppt = in.readLine();
 			}
 
@@ -337,9 +360,9 @@ public class ContextServer
 			if (db.containsKey(inv_class))
 			{
 				class_hash = (HashMap)db.get(inv_class);
-                		if (class_hash == null)
-                    			System.err.println("Class Null Problem when trying to add new file!");
-            		}
+				if (class_hash == null)
+					System.err.println("Class Null Problem when trying to add new file!");
+			}
 			else
 			{
 				class_hash = new HashMap();
@@ -384,8 +407,8 @@ public class ContextServer
 
 					// We do - 2 because we want to chop off the trailing
 					// parenthesis and a string is like an array of chars.
-					if (var.endsWith(")"))
-						var = var.substring(0, var.length() - 2);
+					if (var.endsWith(")") && var.indexOf('(') == -1)
+						var = var.substring(0, var.length() - 1);
 				}
 
 				meth_class.add(new ContextInvData(var, line, inv_ppt));
@@ -395,7 +418,7 @@ public class ContextServer
 			class_hash = null;
 		}
 
-		} catch (IOException ioe) {
+		} catch (IOException ioe){
 			return("Error reading in file: " + ioe.toString());
 		}
 		catch (NullPointerException npe)
@@ -669,7 +692,8 @@ public class ContextServer
 		return "File Added Successfully";
 	}
 
-	// This is a class that will contain information for the method, which is the list of
+	// This is a class that will contain information for the method, which is 
+	// the list of
 	// invariants for the method and information such as the return type. The return type is
 	// included because that field may be used at a later time. For the arguments to the method,
 	// I just put them as Strings with the method in this format: method arg1 arg2 ..., which

@@ -20,11 +20,20 @@ import org.apache.log4j.Category;
 public class SplitterFactory {
 
   public static final Category debug = Category.getInstance("daikon.split.SplitterFactory");
-  private static Perl5Matcher re_matcher = Global.regexp_matcher;
-  private static Perl5Compiler re_compiler = Global.regexp_compiler;
-
+  // These are not Global.regexp_matcher and Global.regexp_compiler
+  // because you can't reference fields of Global in your static
+  // initializer if you have fields that are set via dkconfig.
+  private static Perl5Matcher re_matcher = new Perl5Matcher();
+  private static Perl5Compiler re_compiler = new Perl5Compiler();
   private static String tempdir;
   private static boolean javac = false; //indicates whether javac is being used as the  compiler.
+
+  /**
+   * String.  Specifies whether the temporary Splitter files should be
+   * deleted on exit or not. dkconfig_ variables should only be
+   * modified in the config file or on the commandline
+   **/
+  public static boolean dkconfig_delete_splitters_on_exit = true;
 
   /**
    * Reads the Splitter info.
@@ -111,6 +120,9 @@ public class SplitterFactory {
       if (!line.startsWith("#")) {
         String condition = (line.trim());
 	splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
+	if (re_matcher.contains(condition, null_pattern)) {
+	  splitterObjects.addElement(new SplitterObject(pptname, perform_null_substitution(condition), tempdir));
+	}
       }
       line = reader.readLine();
     }
@@ -186,7 +198,8 @@ public class SplitterFactory {
     }
 
     if (splitterObjectArrays.length > 0) {
-      System.out.println("Splitters for this run created in " + tempdir);
+      System.out.println("Splitters for this run created in " + tempdir + ".... Will " +
+			 ((dkconfig_delete_splitters_on_exit == true) ? "": "Not ") + "be deleted on exit");
     }
   }
 
@@ -474,6 +487,10 @@ public class SplitterFactory {
 	// write to the file. Assuming that the tempdir has already been set
 	try {
 	  BufferedWriter writer = UtilMDE.BufferedFileWriter(tempdir+splitter_fname+".java");
+	  if (dkconfig_delete_splitters_on_exit) {
+	    (new File (tempdir+splitter_fname+".java")).deleteOnExit();
+	    (new File (tempdir+splitter_fname+".class")).deleteOnExit();
+	  }
 	  writer.write(file_string.toString());
 	  writer.flush();
 	} catch (IOException ioe) {
@@ -549,6 +566,8 @@ public class SplitterFactory {
     for (int i = 0; i < var_infos.length; i++) {
       //we don't want hashcodes. We just want the variable values
       if (var_infos[i].file_rep_type == ProglangType.HASHCODE) {
+	parameters.addElement(var_infos[i].name.name().trim());
+	types.addElement("int");
 	continue;
       }
       String temp = var_infos[i].name.name().trim();
@@ -778,6 +797,8 @@ public class SplitterFactory {
   static String find_applicable_variables(String[] params, String[] param_names,
 					  String test_string, String class_name )
   {
+
+    String orig_test_string = test_string;
     for (int i = 0; i < params.length; i++) {
 
 	Pattern param_pattern;
@@ -819,7 +840,7 @@ public class SplitterFactory {
 	  }
 
 	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
-	  PatternMatcherInput input = new PatternMatcherInput(test_string);
+	  PatternMatcherInput input = new PatternMatcherInput(orig_test_string);
 	  // remove any parameters which are not used in the condition
 	  if (re_matcher.contains(input, param_pattern)) {
 	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
@@ -842,7 +863,6 @@ public class SplitterFactory {
           this_loc = test_string.indexOf("this_Daikon.this_");
         }
       }
-      //System.out.println("returning " + test_string);
       return test_string;
   }
 
@@ -907,23 +927,26 @@ public class SplitterFactory {
 	}
     }
 
+  static Pattern null_pattern;
+  static {
+    try {
+      null_pattern = re_compiler.compile("(!|=)=\\s*null");
+    } catch (MalformedPatternException e) {
+      debugPrint("Error compiling regex (!|=)=\\s*null");
+    }
+  }
+
   // Replace "== null" by "== 0".
   /**
-   * Daikon represents the value of null as zero. Replace all occurences of
-   * equality tests against null with tests against 0 in the condition.
+   * Daikon represents the value of null as zero (for some classes of objects).
+   * Replace all occurences of equality tests against null with tests against 0
+   * in the condition.
    **/
   static String perform_null_substitution(String test_string) {
-
-    try {
-      Pattern null_pattern = re_compiler.compile("(!|=)=\\s*null");
-      Perl5Substitution null_subst = new Perl5Substitution(" $1= 0", Perl5Substitution.INTERPOLATE_ALL);
-
-      if (re_matcher.contains(test_string, null_pattern)) {
-	test_string =
-	  Util.substitute(re_matcher, null_pattern, null_subst, test_string, Util.SUBSTITUTE_ALL);
-      }
-    } catch (MalformedPatternException e) {
-      debugPrint("Error performing subtitution of '== null' in " + test_string );
+    Perl5Substitution null_subst = new Perl5Substitution(" $1= 0", Perl5Substitution.INTERPOLATE_ALL);
+    if (re_matcher.contains(test_string, null_pattern)) {
+      test_string =
+	Util.substitute(re_matcher, null_pattern, null_subst, test_string, Util.SUBSTITUTE_ALL);
     }
     return test_string;
   }
@@ -935,11 +958,17 @@ public class SplitterFactory {
   static String getTempdirName() {
 
     try {
-      File tmpfile = File.createTempFile("daikon_", "_");
+      String fs = File.separator;
+      String path = System.getProperty("java.io.tmpdir") + fs + System.getProperty("user.name") + fs;
+      File pathFile =  new File(path);
+      pathFile.mkdirs();
+      File tmpfile = File.createTempFile("daikon_", "_", pathFile);
       File splitdir = new File(tmpfile.getPath() + "Split");
       tmpfile.delete();
-      splitdir.deleteOnExit();
       splitdir.mkdirs();
+      if (dkconfig_delete_splitters_on_exit) {
+	splitdir.deleteOnExit();
+      }
       if (splitdir.exists() && splitdir.isDirectory()) {
 	tempdir = splitdir.getPath() + File.separator;
       } else {
@@ -989,12 +1018,6 @@ public class SplitterFactory {
   static String print_test_method(StringBuffer splitter_source, String[] param_names,
 					String[] params, String[] all_types, String test_string ) {
 
-    //This indicates whether we should substitute "== null" with "== 0" in the test string.
-    //Daikon usually substitutes null values of numeric variables with 0. In that case perform
-    //the substitution. In the case where we are comparing a String or other type with null
-    //though, we can't substitute == 0
-    boolean substitute_null = true;
-
     splitter_source.append("  public boolean test(ValueTuple vt) { \n");
     for (int i = 0; i < params.length; i++) {
       if (params[i] == null) continue;
@@ -1014,24 +1037,15 @@ public class SplitterFactory {
 	splitter_source.append("  long[] " + parameter + "_array = " + parameter
 			       + "_array_varinfo.getIntArrayValue(vt); \n");
       } else if (type.equals("String") || type.equals("java.lang.String") || type.equals("char[]")) {
-	//we probably don't want to substitute "== null" with "== 0" because
-	//the test string contains a String.
-	substitute_null = false;
 	splitter_source.append("    String " + parameter + " = "
 			       + parameter + "_varinfo.getStringValue(vt); \n");
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
-	substitute_null = false;
 	splitter_source.append("    String[] " + parameter + "_array = "
 			       + parameter + "_array_varinfo.getStringArrayValue(vt); \n");
       } else {
 	debugPrint("Can't deal with this type " + type + " declared in Splitter File");
       }
     }
-
-    //If we are comparing a String to null, we don't want to substitute null for 0, otherwise
-    //won't compile
-    if (substitute_null)
-      test_string = perform_null_substitution(test_string);
 
     splitter_source.append("    return( " + test_string + " ); \n  }\n");
     return test_string;

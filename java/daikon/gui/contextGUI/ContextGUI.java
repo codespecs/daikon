@@ -77,6 +77,9 @@ public final class ContextGUI extends JApplet implements ActionListener
 	private JTable jtinvars;
 	private JScrollPane scrollPane;
 
+	private JMenuItem g_JavaOption;
+	private JMenuItem g_COption;
+
 	// This is the model for how to display invariants in the table
 	private MyTableModel mtm;
 
@@ -162,6 +165,22 @@ public final class ContextGUI extends JApplet implements ActionListener
 				go_invars();
 				action_pro = false;
 			}
+		}
+		// This is to change whether the invariant files contain invariants
+		// for c or java on the fly instead of having to determine it at start
+		// time. So technically, you can mix the java the c file invariants
+		// by just switching them during run time.
+		else if(e.getSource() == g_JavaOption)
+		{
+			setCFile(false);
+			g_JavaOption.setEnabled(false);
+			g_COption.setEnabled(true);
+		}
+		else if(e.getSource() == g_COption)
+		{
+			setCFile(true);
+			g_JavaOption.setEnabled(true);
+			g_COption.setEnabled(false);
 		}
 		// This is when the Add File command is choosen from the menu.
 		// This will pop up a file chooser box and add the file to the
@@ -446,7 +465,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		daikon.Logger.setupLogs (daikon.Logger.INFO);
 		ContextGUI dgui = new ContextGUI();
 
-		for (int i = 0; i < args.length; i++)
+		for(int i = 0; i < args.length; i++)
 		{
 			if (args[i].equals("-c"))
 				dgui.setCFile(true);
@@ -456,7 +475,8 @@ public final class ContextGUI extends JApplet implements ActionListener
 					+ " [options]");
 				System.out.println("Options:");
 				System.out.println("  -h, --help - Displays this information");
-				System.out.println("  -c         - Input files are c invariant files");
+				System.out.println("  -c         - Input files are c invariant files"
+					+ " (default is java)");
 				System.exit(0);
 			}
 		}
@@ -500,10 +520,27 @@ public final class ContextGUI extends JApplet implements ActionListener
 		JMenuBar jmb = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenuItem item = new JMenuItem("Add File");
+		g_JavaOption = new JMenuItem("Switch to Java Invariants");
+		g_COption = new JMenuItem("Switch to C Invariants");
+
+		if (getCFile())
+		{
+			g_JavaOption.setEnabled(true);
+			g_COption.setEnabled(false);
+		}
+		else
+		{
+			g_JavaOption.setEnabled(false);
+			g_COption.setEnabled(true);
+		}
+
 		JMenuItem item3 = new JMenuItem("Clear File Database");
 		JMenuItem item4 = new JMenuItem("Refresh File Database");
 		JMenuItem item5 = new JMenuItem("Quit");
 		file.add(item);
+		file.addSeparator();
+		file.add(g_JavaOption);
+		file.add(g_COption);
 		file.addSeparator();
 		file.add(item3);
 		file.add(item4);
@@ -513,6 +550,8 @@ public final class ContextGUI extends JApplet implements ActionListener
 		jmb.add(file);
 		app.setJMenuBar(jmb);
 		item.addActionListener(this);
+		g_JavaOption.addActionListener(this);
+		g_COption.addActionListener(this);
 		item3.addActionListener(this);
 		item4.addActionListener(this);
 		item5.addActionListener(this);
@@ -583,6 +622,8 @@ public final class ContextGUI extends JApplet implements ActionListener
 		jmb.setBackground(mycolorscheme);
 		file.setBackground(mycolorscheme);
 		item.setBackground(mycolorscheme);
+		g_JavaOption.setBackground(mycolorscheme);
+		g_COption.setBackground(mycolorscheme);
 		item3.setBackground(mycolorscheme);
 		item4.setBackground(mycolorscheme);
 		item5.setBackground(mycolorscheme);
@@ -901,6 +942,14 @@ public final class ContextGUI extends JApplet implements ActionListener
 	public void setCFile(boolean new_CFILE)
 	{
 		dfc.setCFile(new_CFILE);
+	}
+
+	// Thie function gets whether the server part of the context gui is
+	// taking in c invariants or java invariants. True for c invariants,
+	// false for java invariants.
+	public boolean getCFile()
+	{
+		return dfc.getCFile();
 	}
 }
 

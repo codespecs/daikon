@@ -21,8 +21,8 @@ import java.util.*;
 // *****
 
 // Also see NonEqual
-public final class IntEqual 
-  extends TwoScalar implements Comparison 
+public final class IntEqual
+  extends TwoScalar implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -290,5 +290,13 @@ public final class IntEqual
 	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 
   } // isObviousImplied
+
+  /* [INCR]
+  public boolean hasNonCanonicalVariable() {
+    VarInfo[] vis = ppt.var_infos;
+    return ! (vis[0].isCanonical() || vis[1].isCanonical());
+  }
+  */
+
 }
 

@@ -42,10 +42,10 @@ public class PptTopLevel
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  If true, implications are created for all pairwise
+   * Boolean.  If true, create implications for all pairwise
    * combinations of conditions, and all pairwise combinations of exit
-   * points.  If false, implications are created for only the first
-   * two conditions, and implications are created only if there are
+   * points.  If false, create implications for only the first
+   * two conditions, and create implications only if there are
    * exactly two exit points.
    **/
   public static boolean dkconfig_pairwise_implications = false;
@@ -1019,6 +1019,11 @@ public class PptTopLevel
             // For now, only ternary invariants not involving any arrays
             if (var3.rep_type.isArray())
               continue;
+
+            if ((! var1.compatible(var2)
+                 || (! var1.compatible(var3)))) {
+              continue;
+            }
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
 	    if (slice3.isControlled()) {

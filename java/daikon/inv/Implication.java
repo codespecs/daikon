@@ -80,7 +80,8 @@ public class Implication
       return null;
     }
 
-    return new Implication(ppt.implication_view, predicate, consequent, iff);
+    Implication result = new Implication(ppt.implication_view, predicate, consequent, iff);
+    return result;
   }
 
   protected double computeProbability() {

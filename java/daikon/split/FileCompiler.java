@@ -18,9 +18,9 @@ public final class FileCompiler {
   public static Runtime commander = Runtime.getRuntime();
 
   /**
-   * String. Used to control which compiler is used to compile
-   * Splitters. This can be the full path name or whatever is used on
-   * the commandline
+   * String.  Specifies which Java compiler is used to compile
+   * Splitters.  This can be the full path name or whatever is used on
+   * the commandline.
    **/
   public static String dkconfig_compiler = "jikes";
 

@@ -450,8 +450,16 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   // fileChooser is field so that it remembers where it was between loads
-  private final JFileChooser fileChooser = new JFileChooser();
+  private JFileChooser fileChooser;
   String pickFileFromFileChooser() {
+    if (fileChooser == null) {
+      String currentDir = System.getProperty("user.dir");
+      if (currentDir != null) {
+        fileChooser = new JFileChooser(currentDir);
+      } else {
+        fileChooser = new JFileChooser();
+      }
+    }
     fileChooser.addChoosableFileFilter( new InvFileFilter());
     int returnValue = JFileChooser.CANCEL_OPTION;
     while (returnValue != JFileChooser.APPROVE_OPTION)

@@ -452,5 +452,6 @@ public final class IntNonEqual
     return false;
 
   } // isObviousImplied
+
 }
 

@@ -625,6 +625,12 @@ public class PrintInvariants {
 	continue;
       }
 
+      // Equality invariants were printed earlier.
+      if ((inv instanceof Comparison) && inv.isExact()) {
+	// out.println("Not worth printing exact comparison: " + inv.format() + ", " + inv.repr());
+        continue;
+      }
+
       // Redundancy is separate from worth printing for now, but it
       // probably should not be, in general.
       if (Daikon.suppress_redundant_invariants_with_simplify &&

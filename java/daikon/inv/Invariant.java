@@ -792,7 +792,7 @@ public abstract class Invariant
   final public String isWorthPrinting_sansControlledCheck_debug() {
     return
       "iwpscc(" + format() + " @ " + ppt.name
-      + ") <= " + (! hasFewModifiedSamples())
+      + ") <=== " + (! hasFewModifiedSamples())
       + " " + enoughSamples()
       // + " " + (! hasNonCanonicalVariable()) [INCR]
       // + " " + (! hasOnlyConstantVariables()) [INCR]
@@ -827,7 +827,8 @@ public abstract class Invariant
     }
   }
 
-  // This used to be final, but I want to override in EqualityInvariant
+  // This used to be final, but I want to override in EqualityInvariant.
+  // (Also in IntEqual, etc. -MDE 5/6/2002)
   /** @return true if this invariant involves a non-canonical variable **/
   /* [INCR] ...
   public boolean hasNonCanonicalVariable() {

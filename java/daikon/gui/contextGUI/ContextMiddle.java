@@ -248,4 +248,11 @@ public class ContextMiddle implements ContextLinker
 	{
 		ds.setCFile(new_CFILE);
 	}
+
+	// This function returns the type of file we are reading in. True for
+	// C Files and false for Java files.
+	public boolean getCFile()
+	{
+		return ds.getCFile();
+	}
 }

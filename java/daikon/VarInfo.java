@@ -794,7 +794,7 @@ public final class VarInfo
         if (sansclassname != null) {
           // System.out.println("Considering .class: " + vi.name + "sansclass=" + sansclassname);
 
-          // "parent" is "b" in the above comment; "vi" is "b.class".
+          // "sansclass" is "b" in the above comment; "vi" is "b.class".
           // don't bother to intern, as findVar doesn't need it.
           VarInfo sansclass = ppt.findVar(sansclassname);
           Assert.assert(sansclass != null);

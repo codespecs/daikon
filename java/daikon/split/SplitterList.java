@@ -23,9 +23,12 @@ public abstract class SplitterList
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  // "@ref{}" produces a cross-reference in the printed manual.  It must
+  // *not* come at the beginning of a line, or Javadoc will get confused.
   /**
-   * Boolean.  Enables indiscriminate splitting (see Daikon manual for
-   * an explanation of this technique).
+   * Boolean.  Enables indiscriminate splitting
+   * (see Daikon manual, @ref{Indiscriminate splitting},
+   * for an explanation of this technique).
    **/
   public static boolean dkconfig_all_splitters = false;
 
