@@ -75,7 +75,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
-  #define EQUALSSIMPLIFYstring "EQ"
   #define PAIRWISEINTEQUAL PairwiseIntEqual
 #elif defined(EQUALFLOAT)
   #define SEQSEQINTEQUAL SeqSeqFloatEqual
@@ -83,7 +82,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
-  #define EQUALSSIMPLIFYstring "EQ"
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
 #elif defined(EQUALSTRING)
   #define SEQSEQINTEQUAL SeqSeqStringEqual
@@ -91,7 +89,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a == b)
   #define EQUALSstring "=="
   #define EQUALSIOAstring "="
-  #define EQUALSSIMPLIFYstring "EQ"
   #define PAIRWISEINTEQUAL PairwiseStringEqual
 #elif defined(LESSTHAN)
   #define SEQSEQINTEQUAL SeqSeqIntLessThan
@@ -100,7 +97,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
-  #define EQUALSSIMPLIFYstring "<"
   #define PAIRWISEINTEQUAL PairwiseIntLessThan
 #elif defined(LESSTHANFLOAT)
   #define SEQSEQINTEQUAL SeqSeqFloatLessThan
@@ -109,7 +105,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
-  #define EQUALSSIMPLIFYstring "<"
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
 #elif defined(LESSTHANSTRING)
   #define SEQSEQINTEQUAL SeqSeqStringLessThan
@@ -118,7 +113,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a < b)
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
-  #define EQUALSSIMPLIFYstring "<"
   #define PAIRWISEINTEQUAL PairwiseStringLessThan
 #elif defined(GREATERTHAN)
   #define SEQSEQINTEQUAL SeqSeqIntGreaterThan
@@ -127,7 +121,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
-  #define EQUALSSIMPLIFYstring ">"
   #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
 #elif defined(GREATERTHANFLOAT)
   #define SEQSEQINTEQUAL SeqSeqFloatGreaterThan
@@ -136,7 +129,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
-  #define EQUALSSIMPLIFYstring ">"
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
 #elif defined(GREATERTHANSTRING)
   #define SEQSEQINTEQUAL SeqSeqStringGreaterThan
@@ -145,7 +137,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a > b)
   #define EQUALSstring ">"
   #define EQUALSIOAstring ">"
-  #define EQUALSSIMPLIFYstring ">"
   #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
 #elif defined(LESSEQUAL)
   #define SEQSEQINTEQUAL SeqSeqIntLessEqual
@@ -154,7 +145,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
-  #define EQUALSSIMPLIFYstring "<="
   #define PAIRWISEINTEQUAL PairwiseIntLessEqual
 #elif defined(LESSEQUALFLOAT)
   #define SEQSEQINTEQUAL SeqSeqFloatLessEqual
@@ -163,7 +153,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
-  #define EQUALSSIMPLIFYstring "<="
   #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
 #elif defined(LESSEQUALSTRING)
   #define SEQSEQINTEQUAL SeqSeqStringLessEqual
@@ -172,7 +161,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a <= b)
   #define EQUALSstring "<="
   #define EQUALSIOAstring "<="
-  #define EQUALSSIMPLIFYstring "<="
   #define PAIRWISEINTEQUAL PairwiseStringLessEqual
 #elif defined(GREATEREQUAL)
   #define SEQSEQINTEQUAL SeqSeqIntGreaterEqual
@@ -181,7 +169,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
-  #define EQUALSSIMPLIFYstring ">="
   #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
 #elif defined(GREATEREQUALFLOAT)
   #define SEQSEQINTEQUAL SeqSeqFloatGreaterEqual
@@ -190,7 +177,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
-  #define EQUALSSIMPLIFYstring ">="
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
 #elif defined(GREATEREQUALSTRING)
   #define SEQSEQINTEQUAL SeqSeqStringGreaterEqual
@@ -199,7 +185,6 @@ The correct way to build the system is to run 'make'.
   #define COMPAREQUALS(a,b) (a >= b)
   #define EQUALSstring ">="
   #define EQUALSIOAstring ">="
-  #define EQUALSSIMPLIFYstring ">="
   #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
 #endif
 
@@ -401,7 +386,7 @@ public class SEQSEQINTEQUAL
       return "format_simplify can't handle one of these sequences: "
         + format();
     }
-    return "(|lexical-" + EQUALSSIMPLIFYstring + "| " +
+    return "(|lexical-" + EQUALSstring + "| " +
       var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " " +
       var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
