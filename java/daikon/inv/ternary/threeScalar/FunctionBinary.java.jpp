@@ -14,16 +14,42 @@
   #define PRIMITIVE long
   #define PRIMITIVE_CNAME Long
   #define EQUAL(a,b) ((a) == (b))
+  #define IS_INTEGRAL isIntegral()
   #define POW MathMDE.pow
   #define EQUALITY IntEqual
+  #define LESS_EQUAL IntLessEqual
+  #define LESS_THAN  IntLessThan
+  #define EQUAL_ZERO RangeInt.EqualZero
+  #define EQUAL_ONE  RangeInt.EqualOne
+  #define BOUND0_63 RangeInt.Bound0_63
+  #define BOOLEAN  RangeInt.BooleanVal
+  #define GTE_0 RangeInt.GreaterEqualZero
+  #define EVEN RangeInt.Even
+  #define POWER2 RangeInt.PowerOfTwo
+  #define TRACK_0 NumericInt.ZeroTrack
+  #define BW_AND_0 NumericInt.BitwiseAndZero
+  #define NONZERO NonZero
+  #define GTE_64 RangeInt.GreaterEqual64
+  #define SHIFT_0 NumericInt.ShiftZero
+  #define DIVIDES NumericInt.Divides
+  #define BW_SUBSET NumericInt.BitwiseSubset
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME FunctionBinaryFloat
   #define SUPERCLASS ThreeFloat
   #define PRIMITIVE double
   #define PRIMITIVE_CNAME Double
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define IS_INTEGRAL isFloat()
   #define POW Math.pow
   #define EQUALITY FloatEqual
+  #define LESS_EQUAL FloatLessEqual
+  #define LESS_THAN FloatLessThan
+  #define EQUAL_ZERO RangeFloat.EqualZero
+  #define EQUAL_ONE  RangeFloat.EqualOne
+  #define GTE_0 RangeFloat.GreaterEqualZero
+  #define TRACK_0 NumericInt.ZeroTrack
+  #define NONZERO NonZeroFloat
+  #define GTE_64 RangeInt.GreaterEqual64
 #else
   #error "bad def"
 #endif
@@ -48,6 +74,7 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
 import daikon.derive.unary.*;
 import daikon.suppress.*;
 import utilMDE.*;
@@ -95,7 +122,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   abstract boolean is_symmetric();
   abstract String[] get_method_name();
   abstract int get_var_order();
-  abstract CLASSNAME instantiate (PptSlice slice);
+  abstract CLASSNAME instantiate_dyn (PptSlice slice);
   abstract void set_function_id (int function_id);
   abstract int get_function_id ();
 
@@ -115,6 +142,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   private static List func_list = new ArrayList();
 
   private static void build_func_list() {
+
     // Build the map of functions to array of instances for that function
     debug.fine ("Processing " + #CLASSNAME);
     functions = new LinkedHashMap();
@@ -143,7 +171,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
         // Field func_id_field = subc.getDeclaredField ("function_id");
         // func_id_field.setInt (null, func_list.size() - 1);
       }  catch (Exception e) {
-        throw new Error (" can't create instance for " + subc.getName());
+        throw new Error (" can't create instance for " + subc.getName()
+                        + ": '" + e + "' ii = " + ii);
       }
       Assert.assertTrue (fb_arr[fb.get_var_order()] == null);
       fb_arr[fb.get_var_order()] = fb;
@@ -155,7 +184,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Returns a list of all of the FunctionBinary invariants setup for the
-   * specified slice.
+   * specified slice.  Any invariants that have non-instantantiating
+   * suppressions are not included.  These are instantiated when their
+   * suppressors are falsified.
    */
   public static List instantiate_all (PptSlice slice) {
 
@@ -169,8 +200,50 @@ public abstract class CLASSNAME extends SUPERCLASS {
     for (int ii = 0; ii < func_list.size(); ii++) {
       CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
       for (int jj = 1; jj < fb_arr.length; jj++) {
+        CLASSNAME fb = fb_arr[jj];
+        if (fb != null) {
+          if (NIS.dkconfig_enabled) {
+            NISuppressionSet ss = fb.get_ni_suppressions();
+            // Fmt.pf ("attempting instantiation of " + fb.getClass());
+            if ((ss == null) || !ss.suppressed (slice)) {
+              Invariant inv = fb.instantiate_dyn (slice);
+              if (Debug.logOn())
+                inv.log ("instantiated non-suppressed invariant "+inv.format());
+              result.add (inv);
+            }
+          } else /* NIS not enabled */ {
+            result.add (fb.instantiate_dyn (slice));
+          }
+        }
+      }
+    }
+
+    return (result);
+  }
+
+  /**
+   * Returns all FunctionBinary non-instantiating suppression sets
+   * as a list of NISuppressionSet.
+   */
+  public static /*NISuppressionSet */ List get_all_ni_suppressions() {
+
+    // If this is the first call
+    if (functions == null) {
+      build_func_list();
+    }
+
+    List result = new ArrayList();
+    if (!dkconfig_enabled)
+      return (result);
+
+    // Find each class and get its suppressions
+    for (int ii = 0; ii < func_list.size(); ii++) {
+      CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
+      for (int jj = 1; jj < fb_arr.length; jj++) {
         if (fb_arr[jj] != null) {
-          result.add (fb_arr[jj].instantiate (slice));
+          NISuppressionSet ss = fb_arr[jj].get_ni_suppressions();
+          if (ss != null)
+            result.add (ss);
         }
       }
     }
@@ -282,7 +355,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     Assert.assertTrue (fb_arr != null);
     for (int ii = 0; ii < fb_arr.length; ii++)
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order))
-        return (fb_arr[ii].instantiate (ppt));
+        return (fb_arr[ii].instantiate_dyn (ppt));
 
     throw new Error ("Could not find new ordering");
   }
@@ -629,28 +702,33 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
 #define FUNCTION Multiply
+#assert FTYPE (Multiply)
 #define FUNC(arg1,arg2) arg1 * arg2
 #define METHOD_NAME {"", " * ", ""}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Minimum
-#define EQUALITY_MIN_MAX_SUPPRESS
+#assert FTYPE (Minimum)
+  // #define EQUALITY_MIN_MAX_SUPPRESS
 #define FUNC(arg1, arg2) Math.min (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.min(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Maximum
-#define EQUALITY_MIN_MAX_SUPPRESS
+#assert FTYPE (Maximum)
+  // #define EQUALITY_MIN_MAX_SUPPRESS
 #define FUNC(arg1, arg2) Math.max (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.max(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Division
+#assert FTYPE (Division)
 #define FUNC(arg1, arg2) (arg1 / arg2)
 #define METHOD_NAME {"", " / ", ""}
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
 #define FUNCTION Power
+#assert FTYPE (Power)
 #define FUNC(arg1, arg2) POW (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.pow(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
@@ -658,23 +736,27 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if defined(TYPELONG)
 
   #define FUNCTION BitwiseAnd
-  #define EQUALITY_SUPPRESS 1
+  #assert FTYPE (BitwiseAnd)
+  // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) (arg1 & arg2)
   #define METHOD_NAME {"", " & ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalAnd
+  #assert FTYPE (LogicalAnd)
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) && (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " && ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION BitwiseXor
+  #assert FTYPE (BitwiseXor)
   #define FUNC(arg1,arg2) (arg1 ^ arg2)
   #define METHOD_NAME {"", " ^ ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalXor
+  #assert FTYPE (LogicalXor)
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
@@ -682,41 +764,48 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION BitwiseOr
-  #define EQUALITY_SUPPRESS 1
+  #assert FTYPE (BitwiseOr)
+  // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) (arg1 | arg2)
   #define METHOD_NAME {"", " | ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalOr
+  #assert FTYPE (LogicalOr)
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) || (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " || ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Gcd
-  #define EQUALITY_SUPPRESS 1
+  #assert FTYPE (Gcd)
+  // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) MathMDE.gcd (arg1, arg2)
   #define METHOD_NAME {"utilMDE.MathMDE.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Mod
+  #assert FTYPE (Mod)
   #define FUNC(arg1,arg2) (arg1 % arg2)
   #define METHOD_NAME {"", " % ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION Lshift
+  #assert FTYPE (Lshift)
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 << arg2)
   #define METHOD_NAME {"", " << ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION RshiftSigned
+  #assert FTYPE (RshiftSigned)
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 >> arg2)
   #define METHOD_NAME {"", " >> ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION RshiftUnsigned
+  #assert FTYPE   (RshiftUnsigned)
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 >>> arg2)
   #define METHOD_NAME {"", " >>> ", ""}
