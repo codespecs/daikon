@@ -431,3 +431,27 @@ Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.fo
 10
 44
 
+; c = a - b
+daikon.inv.ternary.threeScalar.LinearTernary
+int int int
+Goal (daikon): c == a - b
+Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == a - b
+Goal (esc): c == a - b
+Goal (ioa): c == a - b
+Goal (jml): c == a - b
+Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Simplify) needs to be implemented: c == a - b
+0
+0
+0
+1
+1
+0
+2
+2
+0
+2
+1
+1
+2
+0
+2
