@@ -24,6 +24,7 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.ternary.TernaryInvariant;
 
 import utilMDE.*;
 
@@ -32,7 +33,7 @@ import utilMDE.*;
  * Abstract base class used for comparing three PRIMITIVE scalars
  **/
 public abstract class CLASSNAME
-  extends Invariant
+  extends TernaryInvariant
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
