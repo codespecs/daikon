@@ -170,8 +170,7 @@ public final class Daikon {
     TreeSet all_ppts_sorted = new TreeSet(new PptOrderComparator());
     all_ppts_sorted.addAll(all_ppts.values());
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
-      String ppt_name = (String) itor.next();
-      PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+      PptTopLevel ppt = (PptTopLevel) itor.next();
       if (ppt.num_samples() > 0) {
         // System.out.println(ppt.name + ": " + ppt.num_samples() + " samples, "
         //                    + ppt.num_values() + " values, "
@@ -258,7 +257,7 @@ public final class Daikon {
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');
-      return swapped2.compareTo(swapped2);
+      return swapped1.compareTo(swapped2);
     }
 
     public boolean equals(Object o)
