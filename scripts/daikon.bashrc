@@ -7,7 +7,7 @@ export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 
 ## Set this directory to the directory containing the JDK.
-export JDKDIR=${JDKDIR:-/g2/jdk1.3.1}
+export JDKDIR=${JDKDIR:-/g2/jdk}
 
 ## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
 ## you compile yourself.  Otherwise, you will run Daikon from the
