@@ -88,7 +88,11 @@ public class PptTopLevel
 
   /** Debug tracer for suppression. **/
   public static final Category debugSuppress =
-    Category.getInstance ("daikon.suppress");
+    Category.getInstance ("daikon.suppress.suppress");
+
+  /** Debug tracer for fillSuppressionTemplate. **/
+  public static final Category debugSuppressFill =
+    Category.getInstance ("daikon.suppress.fill");
 
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables
@@ -677,6 +681,10 @@ public class PptTopLevel
     Assert.assertTrue(dataflow_transforms != null, name);
     Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
 
+    if (debugSuppress.isDebugEnabled()) {
+      debugSuppress.debug ("<<< Doing add_and_flow() for " + name);
+    }
+
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
       //       if (debugFlow.isDebugEnabled()) {
@@ -745,7 +753,7 @@ public class PptTopLevel
 
     if (debugSuppress.isDebugEnabled()) {
       debugSuppress.debug ("<<< Doing add() for " + name);
-      debugSuppress.debug ("    with vt " + vt);
+      // debugSuppress.debug ("    with vt " + vt);
     }
 
     int checkCount = 0;
@@ -758,7 +766,7 @@ public class PptTopLevel
         debugSuppress.debug ("  Checkcount: "+ checkCount);
       }
 
-      Set falsifiedInvs = new HashSet();
+      Set weakenedInvs = new HashSet();
       // Add to all the views
       for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
         PptSlice view = (PptSlice) itor.next();
@@ -768,7 +776,7 @@ public class PptTopLevel
         }
         if (!view.no_invariants) {
           view.add(vt, count, invsFlowed);
-          falsifiedInvs.addAll (invsFlowed);
+          weakenedInvs.addAll (invsFlowed);
         }
       }
 
@@ -781,7 +789,7 @@ public class PptTopLevel
       // suppress invariants in lower ppts, so we only do (2) for
       // unsuppressed invariants in this.invariants.
 
-      for (Iterator itor = falsifiedInvs.iterator(); itor.hasNext(); ) {
+      for (Iterator itor = weakenedInvs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
         // Why copy?  Because we want to keep unlink() as an atomic
         // operation that removes the SuppressionLink from the
@@ -790,8 +798,21 @@ public class PptTopLevel
         Set suppressees = new HashSet(inv.getSuppressees());
 
         if (debugSuppress.isDebugEnabled() && suppressees.size() > 0) {
-          debugSuppress.debug (" Inv " + inv.repr() + " was falsified with suppressees");
+          debugSuppress.debug (" Inv " + inv.repr() +
+                               " was falsified or weakened with suppressees");
         }
+        // Try to resuppress the weakened inv
+        // Why is this useful?  There may be isSameFormula comparisons
+        // among suppressors such that the weakened form of the inv
+        // qualifies (e.g. LowerBound)
+        if (!inv.falsified && inv.getSuppressor() == null) {
+          if (attemptSuppression (inv)) {
+            if (debugSuppress.isDebugEnabled()) {
+              debugSuppress.debug ("Suppressor res-suppressed");
+            }
+          }
+        }
+
         for (Iterator iSuppressees = suppressees.iterator();
              iSuppressees.hasNext(); ) {
           SuppressionLink sl = (SuppressionLink) iSuppressees.next();
@@ -1613,6 +1634,19 @@ public class PptTopLevel
           attemptSuppression (inv);
         }
       }
+      if (debugSuppressInit.isDebugEnabled()) {
+        debugSuppressInit.debug ("  Suppressed invariants:");
+        for (Iterator i = invs.iterator(); i.hasNext(); ) {
+          Invariant inv = (Invariant) i.next();
+          if (inv.getSuppressor() != null) {
+            debugSuppressInit.debug (" +" + inv.repr());
+          } else {
+            debugSuppressInit.debug (" -" + inv.repr());
+          }
+        }
+        debugSuppressInit.debug ("  end of suppressed invariants:");
+      }
+
     }
   }
 
@@ -1628,7 +1662,11 @@ public class PptTopLevel
    **/
   public boolean attemptSuppression (Invariant inv) {
     if (Daikon.suppress_invariants) {
-      Assert.assertTrue (inv.getSuppressor() == null);
+      if (inv.getSuppressor() != null) {
+        System.err.println ("Error: the invariant " + inv.format() +
+                            " already has a suppressor");
+        Assert.assertTrue (inv.getSuppressor() == null);
+      }
       SuppressionFactory[] factories = inv.getSuppressionFactories();
       for (int i = 0; i < factories.length; i++) {
         SuppressionLink sl = factories[i].generateSuppressionLink (inv);
@@ -1674,9 +1712,11 @@ public class PptTopLevel
     template.transforms = new VarInfo[template.invTypes.length][];
     Assert.assertTrue (template.invTypes.length == template.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
-    
+    debugSuppressFill.debug ("Starting fill");
+
     if (checkSelf) {
       firstLoop:
+      // debugSuppressFill.debug ("  Entering first loop");
       for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
         template.results[iInvs] = null;
         Class clazz = template.invTypes[iInvs];
@@ -1709,22 +1749,33 @@ public class PptTopLevel
       // if (!firstLoopFilled) return false;
     }
 
+    // debugSuppressFill.debug ("  Entering second loop: ");
     secondLoop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-      if (dataflow_ppts == null) break;
-      if (template.results[iInvs] != null) continue secondLoop;
-      
       Class clazz = template.invTypes[iInvs];
+      //       if (debugSuppressFill.isDebugEnabled()) {
+      //         debugSuppressFill.debug ("  InvType: " + clazz);
+      //       }
+      if (dataflow_ppts == null) {
+        // debugSuppressFill.debug ("  No dataflow_ppts");
+        break;
+      }
+      if (template.results[iInvs] != null) {
+        // debugSuppressFill.debug ("  Already filled");
+        continue secondLoop;
+      }
+      
       VarInfo[] varInfos = template.varInfos[iInvs];
 
-      
-
+      forEachTransform:
       // Transform the VarInfos for each upper ppt
       // We go backwards so that we get the strongest invariants first.
-      forEachTransform:
       for (int iPpts = dataflow_ppts.length - (checkSelf ? 1 : 2);
            iPpts >= 0; iPpts--) {
         PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
+        //         if (debugSuppressFill.isDebugEnabled()) {
+        //           debugSuppressFill.debug ("  Flow ppt: " + dataflowPpt.name);
+        //         }
         int[] dataflowTransform = dataflow_transforms[iPpts];
         VarInfo[] newVarInfos = new VarInfo[varInfos.length];
         forEachVarInfo:
@@ -1754,7 +1805,10 @@ public class PptTopLevel
     // Only for checking if template got filled
     thirdLoop: 
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-      if (template.results[iInvs] == null) return false;
+      if (template.results[iInvs] == null) {
+        debugSuppressFill.debug ("  Unsuccessful fill");
+        return false;
+      }
     }
 
     template.filled = true;
