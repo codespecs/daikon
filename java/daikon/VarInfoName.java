@@ -193,8 +193,26 @@ public abstract class VarInfoName
     return false;
   }
 
+  /**
+   * @return the nodes of this, as given by an inorder traversal.
+   **/
+  public Collection inOrderTraversal() {
+    return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
+  }
+
+  /**
+   * @return true iff the given node can be found in this.  If the
+   * node has children, the whole subtree must match.
+   **/
+  public boolean hasNode(VarInfoName node) {
+    return inOrderTraversal().contains(node);
+  }
+
+  /**
+   * @return true iff a node of the given type exists in this
+   **/
   public boolean hasNodeOfType(Class type) {
-    Iterator nodes = (new InorderFlattener(this)).nodes().iterator();
+    Iterator nodes = inOrderTraversal().iterator();
     while (nodes.hasNext()) {
       if (type.equals(nodes.next().getClass())) {
 	return true;
@@ -209,6 +227,18 @@ public abstract class VarInfoName
    **/
   public boolean inPrestateContext(VarInfoName node) {
     return (new NodeFinder(this, node)).inPre();
+  }
+
+  // ============================================================
+  // Special producers, or other helpers
+
+  public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
+    VarInfoName result = this;
+    Replacer r = new Replacer(node, replacement);
+    while (result.hasNode(node)) {
+      result = r.replace(result).intern();
+    }
+    return result;
   }
 
   // ============================================================
