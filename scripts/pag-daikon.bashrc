@@ -5,13 +5,18 @@ export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
 export DAIKONDIR=${DAIKONPARENT}/invariants
 export INV=${DAIKONPARENT}/invariants
 export inv=${INV}
-export PERLLIB=${INV}/scripts:${PERLLIB}
 export DAIKONCLASS_SOURCES=1
 
 source ${INV}/scripts/daikon.bashrc
 
 # Should also remove "daikon/bin" from PATH.
 export PATH=$DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
+
+if [ $PERLLIB ]; then
+  export PERLLIB=${INV}/scripts:${PERLLIB}
+else
+  export PERLLIB=${INV}/scripts
+fi
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
@@ -26,3 +31,5 @@ export LACKWIT_HOME=${INV}/front-end/c/lackwit
 ## alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
 alias jikes='/g2/users/mernst/bin/Linux-i686/jikes -g +E +F'
+
+export DFEJ_VERBOSE=1

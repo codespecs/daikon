@@ -5,17 +5,18 @@ if (! $?DAIKONPARENT) setenv DAIKONPARENT ${HOME}/research
 setenv DAIKONDIR ${DAIKONPARENT}/invariants
 setenv INV ${DAIKONPARENT}/invariants
 setenv inv ${INV}
-if ($?PERLLIB) then
-  setenv PERLLIB ${INV}/scripts:${PERLLIB}
-else
-  setenv PERLLIB ${INV}/scripts
-endif
 setenv DAIKONCLASS_SOURCES 1
 
 source ${INV}/scripts/daikon.cshrc
 
 # Should also remove "invariants/bin" from PATH.
 setenv PATH $DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
+
+if ($?PERLLIB) then
+  setenv PERLLIB ${INV}/scripts:${PERLLIB}
+else
+  setenv PERLLIB ${INV}/scripts
+endif
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
@@ -28,3 +29,5 @@ setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
 alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
 alias jikes /g2/users/mernst/bin/Linux-i686/jikes -g +E +F
+
+setenv DFEJ_VERBOSE 1
