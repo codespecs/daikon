@@ -4,6 +4,8 @@ import daikon.*;
 
 import java.util.*;
 
+import org.apache.log4j.Category;
+
 import utilMDE.*;
 
 // Base implementation for Invariant objects.
@@ -12,9 +14,27 @@ import utilMDE.*;
 
 public abstract class Invariant implements java.io.Serializable {
 
-  static boolean debug_isWorthPrinting = false;
+  /**
+   * General logging Category.
+   **/ 
+  public static final Category debug = Category.getInstance (Invariant.class.getName());
 
-  public PptSlice ppt;      // includes values, number of samples, VarInfos, etc.
+  /**
+   * Logging Category for printing invariants
+   **/ 
+  public static final Category debugPrint = Category.getInstance (Invariant.class.getName() + ".print");
+
+  /**
+   * Logging Category for debugging isWorthPrinting() checks.
+   **/ 
+  public static final Category debugIsWorthPrinting = Category.getInstance (Invariant.class.getName() + ".isWorthPrinting");
+
+  /**
+   * The program point for this invariant, includes values, number of
+   * samples, VarInfos, etc.
+   **/
+
+  public PptSlice ppt; 
 
   // Has to be public so wrappers can read it.
   /**
@@ -24,19 +44,29 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public boolean no_invariant = false;
 
-  // True if we've seen all values and should ignore further add() methods.
-  // This is rather a hack and should be removed later.
-  // Actually, it's not used any longer, except to be checked in assertions.
+  /**
+   * True if we've seen all values and should ignore further add() methods.
+   * This is rather a hack and should be removed later.
+   * Actually, it's not used any longer, except to be checked in assertions.
+   **/
   public boolean finished = false;
 
-  // The probability that this could have happened by chance alone.
-  //   0 = could never have happened by chance; that is, we are fully confident
-  //       that this invariant is a real invariant
+  /**
+   * The probability that this could have happened by chance alone. <br>
+   *   0 = could never have happened by chance; that is, we are fully confident
+   *       that this invariant is a real invariant
+   **/
   public final static double PROBABILITY_JUSTIFIED = 0;
-  //   (0..1) = greater to lesser likelihood of coincidence
-  //   1 = must have happened by chance
+
+  /**
+   * (0..1) = greater to lesser likelihood of coincidence <br>
+   *      1 = must have happened by chance
+   **/
   public final static double PROBABILITY_UNJUSTIFIED = 1;
-  //   3 = delete this invariant; we know it's not true
+
+  /**
+   * 3 = delete this invariant; we know it's not true
+   **/
   public final static double PROBABILITY_NEVER = 3;
 
   /**
@@ -523,8 +553,8 @@ public abstract class Invariant implements java.io.Serializable {
 
   public final boolean isWorthPrinting()
   {
-    if (debug_isWorthPrinting) {
-      System.out.println("isWorthPrinting: " + format() + " at " + ppt.name);
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      debugIsWorthPrinting.debug("isWorthPrinting: " + format() + " at " + ppt.name);
     }
 
     // It's hard to know in exactly what order to do these checks that
@@ -532,8 +562,8 @@ public abstract class Invariant implements java.io.Serializable {
     // Which is most often successful?  Which assume others have already
     // been performed?
     if (! isWorthPrinting_sansControlledCheck()) {
-      if (debug_isWorthPrinting) {
-        System.out.println("  not worth printing, sans controlled check: " + format() + " at " + ppt.name);
+      if (debugIsWorthPrinting.isDebugEnabled()) {
+        debugIsWorthPrinting.debug("  not worth printing, sans controlled check: " + format() + " at " + ppt.name);
       }
       return false;
     }
@@ -546,15 +576,17 @@ public abstract class Invariant implements java.io.Serializable {
     Vector processed = new Vector();
     while (contr_invs.size() > 0) {
       Invariant contr_inv = (Invariant) contr_invs.remove(0);
-      if (debug_isWorthPrinting) {
-        System.out.println("Controller " + contr_inv.format() + " at " + contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
+      if (debugIsWorthPrinting.isDebugEnabled()) {
+        debugIsWorthPrinting.debug("Controller " + contr_inv.format() + " at " +
+				   contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
       }
 
       processed.add(contr_inv);
       if (contr_inv.isWorthPrinting_sansControlledCheck()) {
 	// we have a printable controller, so we shouldn't print
-        if (debug_isWorthPrinting) {
-          System.out.println("  not worth printing, sans controlled check, due to controller " + contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
+        if (debugIsWorthPrinting.isDebugEnabled()) {
+          debugIsWorthPrinting.debug("  not worth printing, sans controlled check, due to controller " +
+				     contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
         }
         return false;
       }
@@ -571,8 +603,8 @@ public abstract class Invariant implements java.io.Serializable {
     }
 
     // No controller was worth printing
-    if (debug_isWorthPrinting) {
-      System.out.println("isWorthPrinting => true for: " + format() + " at " + ppt.name);
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      debugIsWorthPrinting.debug("isWorthPrinting => true for: " + format() + " at " + ppt.name);
     }
     return true;
   }
@@ -584,14 +616,15 @@ public abstract class Invariant implements java.io.Serializable {
   final public boolean isWorthPrinting_sansControlledCheck() {
     if (this instanceof Implication) {
       Implication impl = (Implication) this;
-      if (debug_isWorthPrinting) {
-        System.out.println("iwpscc(" + format() + ") dispatching");
+      if (debugIsWorthPrinting.isDebugEnabled()) {
+        debugIsWorthPrinting.debug("iwpscc(" + format() + ") dispatching");
       }
       return impl.predicate.isWorthPrinting() && impl.consequent.isWorthPrinting();
     }
 
-    if (debug_isWorthPrinting) {
-      System.out.println(isWorthPrinting_sansControlledCheck_debug());
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      //System.out.println(isWorthPrinting_sansControlledCheck_debug());
+      // FIXME: calling the above method causes an assertion failure
     }
     boolean result
       = ((! hasFewModifiedSamples())
@@ -672,8 +705,8 @@ public abstract class Invariant implements java.io.Serializable {
 		  );
     if (this instanceof Comparison) {
       //      Assert.assert(! IsEqualityComparison.it.accept(this));
-      if (Global.debugPrintInvariants)
-	System.out.println("  [over constants:  " + this.repr_prob() + " ]");
+      if (debugPrint.isDebugEnabled())
+	debugPrint.debug("  [over constants:  " + this.repr_prob() + " ]");
       return true;
     }
     return false;
@@ -694,8 +727,8 @@ public abstract class Invariant implements java.io.Serializable {
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
     if (isObviousDerived() || isObviousImplied()) {
-      if (Global.debugPrintInvariants)
-	System.out.println("  [obvious:  " + repr_prob() + " ]");
+      if (debugPrint.isDebugEnabled())
+	debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
       return true;
     }
     return false;
@@ -760,8 +793,8 @@ public abstract class Invariant implements java.io.Serializable {
 	  // If entry_inv with orig() applied to everything matches this
 	  if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
 	    if (entry_inv.isWorthPrinting_sansControlledCheck()) {
-              if (debug_isWorthPrinting) {
-                System.out.println("isWorthPrinting_PostconditionPrestate => false for " + format());
+              if (debugIsWorthPrinting.isDebugEnabled()) {
+                debugIsWorthPrinting.debug("isWorthPrinting_PostconditionPrestate => false for " + format());
               }
 	      return false;
 	    }
