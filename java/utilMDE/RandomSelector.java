@@ -13,8 +13,6 @@ import java.util.*;
  * <P>current_values --> The values chosen based on the Objects observed
  * <BR>number_observed --> The number of Objects observed
  * <BR>number_to_take --> The number of elements to choose ('k' above)
- *
- * @author Lee Lin 4/3/2002
  */
 
 public class RandomSelector {

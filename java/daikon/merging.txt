@@ -16,6 +16,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
     any non-zero-size diffs, and start over.
 
   cd $inv/tests
+  cvs -q update
   make diffs
 
 (3) Ensure that your V3 checkout is up to date, and builds.
@@ -31,6 +32,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
     any non-zero-size diffs, and start over.
 
   cd $inv/tests
+  cvs -q update
   make diffs
 
 (5) Make a backup of your current version of the trunk.

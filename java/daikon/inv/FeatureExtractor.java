@@ -7,9 +7,6 @@ package daikon.inv;
  * the invariant came from.
  * The output goes to standard out and is in the format
  * SVM-Light, SVMfu, or C5 uses.
- *
- * Created by Yuriy Brun, 5/12/2002
- * Last Edited 9/17/2002
  *********************************************/
 
 import java.io.*;
@@ -1762,9 +1759,6 @@ public final class FeatureExtractor {
    * based on their integer only.  The smaller the interger -- the smaller
    * the IntDoublePair.  Two IntDoublePairs that have the same integer are
    * considered equal.
-   *
-   * Created by Yuriy Brun, 6/1/2002
-   * Last edited 7/29/2002
    *********************************************/
   private static final class IntDoublePair implements Comparable{
     // public fields
@@ -1804,9 +1798,6 @@ public final class FeatureExtractor {
 
   /*********************************************
    * A tool for combining multiple TrainFu files.
-   *
-   * Created by Yuriy Brun, 7/04/2002
-   * Last Edited 9/26/2002
    *********************************************/
 
   public static final class CombineFuFiles {
@@ -1912,9 +1903,6 @@ public final class FeatureExtractor {
 
   /*********************************************
    * A tool for permuting TrainFu files.
-   *
-   * Created by Yuriy Brun, 7/04/2002
-   * Last Edited 9/26/2002
    *********************************************/
 
   public static final class PermuteFuFiles {

@@ -16,8 +16,6 @@ import utilMDE.*;
  *  and extract it for later use.  The implementation completely replaces
  *  the previous inv tree with the a new inv tree.  The new inv tree
  *  contains only the extracted consequents of the original inv tree.
- *
- * @author Lee Lin 11/29/2002
  **/
 public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
 

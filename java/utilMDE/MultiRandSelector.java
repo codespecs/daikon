@@ -6,7 +6,6 @@ import java.util.*;
  * <b>MultiRandSelector</b> delegates to a set of RandomSelector Objects,
  * one for each of several unique equivalence classes.  The constructor
  * takes in an Object implementing an interface EquivalenceChecker
- * @author Lee Lin 4/3/2002
  **/
 
 public class MultiRandSelector {

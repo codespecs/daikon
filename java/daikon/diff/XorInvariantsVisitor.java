@@ -16,8 +16,6 @@ import utilMDE.*;
  * the first of the two PptMaps.  This might be an undesirable
  * design call, but creating a PptMap from scratch is difficult
  * given the constraining creational pattern in place.
- *
- * @author Lee Lin 2/21/2002
  **/
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 

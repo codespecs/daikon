@@ -216,7 +216,7 @@ public final class Daikon {
   static String usage =
     UtilMDE.join(new String[] {
       release_string,
-      "Daikon invariant detector, copyright 1998-2002",
+      "Daikon invariant detector, copyright 1998-2003",
       // " by Michael Ernst <mernst@lcs.mit.edu>",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
@@ -702,7 +702,7 @@ public final class Daikon {
     }
 
     elapsedTime(); // reset timer
-    
+
     // Preprocessing
     setupEquality (all_ppts);
 

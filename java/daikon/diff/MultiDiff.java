@@ -12,8 +12,6 @@ import java.util.*;
  *  functionality as Diff with a few key change.  First, it always outputs
  *  the histogram even when two files are called.  Second, it allows the
  *  option of creating *.spinfo based on the invariants found
- *
- *  @author Lee Lin 1/20/2002
  */
 
 public class MultiDiff {
