@@ -2540,7 +2540,8 @@ public class PptTopLevel extends Ppt {
 
       // Redundancy is separate from worth printing for now, but it
       // probably should not be, in general.
-      if (((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
+      if (Daikon.suppress_redundant_invariants_with_simplify &&
+	  ((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
 	// out.println("Redundant: " + inv.format());
 	continue;
       }
