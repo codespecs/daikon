@@ -2281,6 +2281,16 @@ try:
   dfej '-daikon_omit=StackAr.<init>(I)V:::EXIT33' StackAr.java
 @end example
 
+The argument is treated as a literal string by default.  However, if
+surrounded by a forward slash (/) on either side, it is interpreted as a
+regular expression.
+
+For example, to avoid detecting invariants over all classes in package
+daikon.util, you can call dfej like so:
+@example
+  dfej '-daikon_omit=/^daikon\.util\..*/' *.java
+@end example
+
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
