@@ -71,24 +71,10 @@ public class PptMap
   // }
 
 
-  // This is used by the GUI, to get the user-specified .inv or .inv.gz file.
   public static PptMap getPptMapFromFile ( String fileName ) throws IOException {
-    try {
-      InputStream istream = new FileInputStream( fileName );
-      if (fileName.endsWith( ".gz" ))
-	istream = new GZIPInputStream( istream );
-      ObjectInputStream o = new ObjectInputStream( istream );
-      PptMap pptMap = (PptMap) o.readObject();
-      istream.close();
-      return pptMap;
-    } catch (FileNotFoundException e) {
-      throw new IOException("Error: Invariants object file not found: " + fileName);
-    } catch (StreamCorruptedException e) {
-      throw new IOException("Error: Invariants object file is corrupted: " + fileName);
-    } catch (InvalidClassException e) {
-      throw new IOException("Error: Invalid invariants object file: " + fileName + "\nMake sure the file was made with your current version of Daikon.");
-    } catch (Exception e) {
-      throw new IOException("Unknown error while reading invariants object file " + fileName + ": " + e.getClass());
-    }
+    return FileIO.read_serialized_pptmap(new File(filename),
+					 false // use saved config
+					 );
   }
+
 }
