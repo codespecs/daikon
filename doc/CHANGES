@@ -11,7 +11,93 @@ versions as the user manual.
 
 ===========================================================================
 
-Put changes for 3.1.6 here
+3.1.6 (Dec 1 2004)
+
+Daikon
+
+  User Changes
+
+    Daikon now has improved support for reading trace data from the
+    standard input or a named pipe.  Together with the enhancement to
+    the Kvasir C front end allowing writing to a pipe, this removes the
+    need for an intermediate trace file, allowing Daikon to operate on
+    larger or longer-running programs. For more details, see  
+    the "Reading trace data on the fly" section of the manual.
+
+    The printing filters were simplified and configuration
+    options were added to enable/disable each filter.  See the
+    "Invariant Filters" and "List of Configuration Options" sections
+    of the manual for more information.  Filter configuration
+    options are named 'daikon.inv.filter.<filter>.enabled'. 
+
+    The user manual was enhanced with a section ('Loop invariants') 
+    that describes how to find specific loop invariants if desired.
+
+    The configuration option 'daikon.FileIO.dtrace_line_count' was
+    added.  This option allows the number of lines in the dtrace
+    file to be specified and avoids the overhead of having Daikon 
+    counting them. 
+
+    The mechanism for compiling splitter files was improved.  
+    The process is more reliable, error messages are more 
+    meaningful and the names of related configuration options 
+    were changed.  The option that selects the compiler to use is 
+    'daikon.split.SplitterFactory.compiler' and the option that sets
+    the compiler timeout is 'daikon.split.SplitterFactory.compile_timeout'.
+
+  Developer Changes
+
+    Sections were added to the developer manual explaining regression
+    testing and how to analyze historical versions of Daikon.
+
+Dfej
+
+  Bug Fixes
+
+    A bug that could cause errors in programs that used variables
+    named "ps", "depth", or "prefix" was fixed.
+
+Kvasir
+
+  User Changes
+
+    Kvasir now supports writing to a pipe. Used with Daikon's new
+    support for reading from a pipe, this removes the need for an
+    intermediate trace file, allowing Daikon to operate on larger or
+    longer-running programs.  For more details, see the "Reading trace
+    data on the fly" section of the manual.
+
+    The Kvasir C front end now supports a number of command line options
+    for controlling what output is produced and where it is written. See
+    the "Kvasir options" section of the user manual for a list.
+
+  Bug Fixes
+
+    A number of bugs in Kvasir have been fixed, including one that
+    accidentally reduced the number of program points it output, and
+    another that caused arrays to have too many elements.  On the
+    whole, Kvasir produces significantly more output than before.
+
+-------------------------
+
+(Fixed a bug in dfej that could cause errors in programs that used
+variables named "ps", "depth", or "prefix".)
+
+Sections added to developer manual on testing and CVS 'Analyzing
+historical versions of Daikon'
+
+Added daikon.FileIO.dtrace_line_count, 
+    daikon.inv.filter.DerivedParameterFilter.enabled
+    daikon.inv.filter.OnlyConstantVariablesFilter.enabled
+    daikon.inv.filter.ParentFilter.enabled
+    daikon.inv.filter.SimplifyFilter.enabled
+    daikon.inv.filter.UnmodifiedVariableEqualityFilter.enabled
+Removed:
+    daikon.split.FileCompiler.compiler
+    
+Removed Log4j and org.apache.oro.text.regex
+
+Improved error messages when errors occur when compiling splitter files
 
 The invariant filtering code has been cleaned up and simplified so
 that the same set of filters is used both for checking
