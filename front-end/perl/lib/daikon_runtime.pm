@@ -25,7 +25,7 @@ use vars '@ISA';
 @EXPORT_OK = qw(trace trace_enter trace_return);
 
 use Daikon::PerlType qw(LIST_LIMIT type_lub unparse_type
-			guess_type_ref guess_type_list);
+			guess_type_ref guess_type_list set_limits);
 
 use Daikon::Output qw(declare_var output_var);
 
@@ -41,6 +41,8 @@ my %types;
 # indexed by {types|decls|dtrace}{basedir|style|append|combined_fh}
 my %output_style;
 
+my $tracing = 0;
+
 sub set_output_style {
     my (@styles) = @_;
     my $i = 0;
@@ -55,6 +57,11 @@ sub set_output_style {
 	    $i++;
 	}
     }
+}
+
+sub set_depths {
+    my @depths = @_;
+    Daikon::PerlType::set_limits(@depths);
 }
 
 # Open (if it isn't alreay open) the file we'll use to output KIND
@@ -276,8 +283,12 @@ sub trace_name {
 		$t = type_lub($t, $this_type);
 	    }
 	    $types{$package}{$ppt_name}{$v->[0]} = $t;
+            if ($tracing) {
+                cluck("Found an unknown type while tracing!");
+            }
 	} else {
 	    # Output a real value
+            $tracing = 1;
 	    output_var($fh, @$v);
 	}
     }
