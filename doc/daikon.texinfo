@@ -449,11 +449,19 @@ in the file @file{doc/CHANGES} in the distribution.
 
 @enumerate
 @item
-Download Daikon from
+Download Daikon.  It is available as a tar file from
 @uref{http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz}.
-One way to do this is
+or as a zip file from
+@uref{http://pag.lcs.mit.edu/daikon/download/daikon.zip}.
+The two files contain the same information; you only need one of them.
+One way to obtain Daikon is to use one of the following command lines:
 @example
 wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
+@end example
+@noindent
+or
+@example
+wget http://pag.lcs.mit.edu/daikon/download/daikon.zip
 @end example
 
 @cindex anonymous CVS access to Daikon sources
@@ -468,9 +476,14 @@ with other Daikon users and developers.
 @cindex @var{daikonparent} directory
 @item
 In the directory where you want to install Daikon (we'll call this
-the @var{daikonparent} directory), unpack the tarfile; for example:
+the @var{daikonparent} directory), unpack the distribution; for example:
 @example
 tar zxvf daikon-source.tar.gz
+@end example
+@noindent
+or
+@example
+unzip daikon-source.zip
 @end example
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.

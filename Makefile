@@ -57,7 +57,7 @@ DIST_BIN_DIR := $(DIST_DIR)/binaries
 DIST_PAG_BIN_DIR := /g4/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
-DIST_DIR_PATHS := daikon.tar.gz doc/images/daikon-logo.gif daikon.jar
+DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
@@ -347,7 +347,7 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
+daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -480,6 +480,8 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
 	cp -pf /tmp/daikon.tar .
+	(cd /tmp; zip -r daikon daikon)
+	cp -pf /tmp/daikon.zip .
 
 # Rule for daikon.tar.gz
 %.gz : %
