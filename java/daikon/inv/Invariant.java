@@ -12,6 +12,8 @@ import utilMDE.*;
 
 public abstract class Invariant implements java.io.Serializable {
 
+  static boolean debug_isWorthPrinting = false;
+
   public PptSlice ppt;      // includes values, number of samples, VarInfos, etc.
 
   // Has to be public so wrappers can read it.
@@ -188,13 +190,8 @@ public abstract class Invariant implements java.io.Serializable {
   public abstract String format_simplify();
 
   // This should perhaps be merged with some kind of PptSlice comparator.
-  // I used to say the follwoing, bu tit might not be true any more.
-  // * Note: this comparator imposes orderings that are inconsistent with
-  // * equals.  That is, it may return 0 if the objects are not equal (but do
-  // * format identically).  That can happen if neither invariant is
-  // * justified; then both output as null.
   /**
-   * Compare based on arity, then variable index, then printed representation.
+   * Compare based on arity, then printed representation.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator {
     public int compare(Object o1, Object o2) {
@@ -208,22 +205,48 @@ public abstract class Invariant implements java.io.Serializable {
       int arity_cmp = vis1.length - vis2.length;
       if (arity_cmp != 0)
 	return arity_cmp;
-      for (int i=0; i<vis1.length; i++) {
-	int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
-	if (tmp != 0)
-	  return tmp;
+      // Comparing on variable index is wrong in general:  variables of the
+      // same name may have different indices at different program points.
+      // However, it's safe if the invariants are from the same program
+      // point.  Also, it is nice to avoid changing the order of variables
+      // from that of the data trace file.
+
+      if (inv1.ppt.parent == inv2.ppt.parent) {
+        for (int i=0; i<vis1.length; i++) {
+          int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
+          if (tmp != 0) {
+            // This can happen when variable names have been changed by
+            // VarInfo.simplify_expression().  For now, hope for the best.
+            // (That is, hope it doesn't produce multiple invariants or
+            // confused formatting.)
+            // if (inv1.format().equals(inv2.format())) {
+            //   System.out.println("ICFP says different, but same formatting:");
+            //   System.out.println("  " + inv1.format() + " " + inv1.repr() + " at " + inv1.ppt.name);
+            //   System.out.println(" var #" + vis1[i].varinfo_index + " = " + vis1[i].name + " = " + vis1[i]);
+            //   System.out.println("  " + inv2.format() + " " + inv2.repr() + " at " + inv2.ppt.name);
+            //   System.out.println(" var #" + vis2[i].varinfo_index + " = " + vis2[i].name + " = " + vis2[i]);
+            // }
+            return tmp;
+          }
+        }
+      } else {
+        for (int i=0; i<vis1.length; i++) {
+          String name1 = vis1[i].name.name();
+          String name2 = vis2[i].name.name();
+          if (name1.equals(name2)) {
+            continue;
+          }
+          int name1in2 = ((PptTopLevel)inv2.ppt.parent).indexOf(name1);
+          int name2in1 = ((PptTopLevel)inv1.ppt.parent).indexOf(name2);
+          int cmp1 = (name1in2 == -1) ? 0 : vis1[i].varinfo_index - name1in2;
+          int cmp2 = (name2in1 == -1) ? 0 : vis2[i].varinfo_index - name2in1;
+          int cmp = MathMDE.sign(cmp1) + MathMDE.sign(cmp2);
+          if (cmp != 0)
+            return cmp;
+        }
       }
-      String format1 = inv1.format();
-      String format2 = inv2.format();
-      // Put nulls at the end of the list (or at the beginning; it doesn't
-      // matter).
-      if ((format1 == null) && (format2 == null))
-	return 0;
-      if ((format1 == null) && (format2 != null))
-	return 1;
-      if ((format1 != null) && (format2 == null))
-	return -1;
-      return format1.compareTo(format2);
+
+      return inv1.format().compareTo(inv2.format());
     }
   }
 
@@ -392,24 +415,39 @@ public abstract class Invariant implements java.io.Serializable {
 
   public final boolean isWorthPrinting()
   {
+    if (debug_isWorthPrinting) {
+      System.out.println("isWorthPrinting: " + format() + " at " + ppt.name);
+    }
+
     // It's hard to know in exactly what order to do these checks that
     // eliminate some invariants from consideration.  Which is cheapest?
     // Which is most often successful?  Which assume others have already
     // been performed?
     if (! isWorthPrinting_sansControlledCheck()) {
+      if (debug_isWorthPrinting) {
+        System.out.println("  not worth printing, sans controlled check: " + format() + " at " + ppt.name);
+      }
       return false;
     }
 
     // The invariant is worth printing on its own merits, but it may be
     // controlled.  If any (transitive) controller is worth printing, don't
     // print this one.
-    Vector contr_invs = find_controlling_invariants();
+    // Use _sorted version for reproducibility.  (There's a bug, but I can't find it.)
+    Vector contr_invs = find_controlling_invariants_sorted();
     Vector processed = new Vector();
     while (contr_invs.size() > 0) {
       Invariant contr_inv = (Invariant) contr_invs.remove(0);
+      if (debug_isWorthPrinting) {
+        System.out.println("Controller " + contr_inv.format() + " at " + contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
+      }
+
       processed.add(contr_inv);
       if (contr_inv.isWorthPrinting_sansControlledCheck()) {
 	// we have a printable controller, so we shouldn't print
+        if (debug_isWorthPrinting) {
+          System.out.println("  not worth printing, sans controlled check, due to controller " + contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
+        }
         return false;
       }
       // find the controlling invs of contr_inv and add them to the
@@ -425,6 +463,9 @@ public abstract class Invariant implements java.io.Serializable {
     }
 
     // No controller was worth printing
+    if (debug_isWorthPrinting) {
+      System.out.println("isWorthPrinting => true for: " + format() + " at " + ppt.name);
+    }
     return true;
   }
 
@@ -433,19 +474,32 @@ public abstract class Invariant implements java.io.Serializable {
    * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
    **/
   final public boolean isWorthPrinting_sansControlledCheck() {
-    return
-      ((! hasFewModifiedSamples())
-       && enoughSamples()       // perhaps replaces hasFewModifiedSamples
-       && (! hasNonCanonicalVariable())
-       && (! hasOnlyConstantVariables())
-       && (! isObvious())
-       && justified()
-       && isWorthPrinting_PostconditionPrestate());
+    if (this instanceof Implication) {
+      Implication impl = (Implication) this;
+      if (debug_isWorthPrinting) {
+        System.out.println("iwpscc(" + format() + ") dispatching");
+      }
+      return impl.predicate.isWorthPrinting() && impl.consequent.isWorthPrinting();
+    }
+
+    if (debug_isWorthPrinting) {
+      System.out.println(isWorthPrinting_sansControlledCheck_debug());
+    }
+    boolean result
+      = ((! hasFewModifiedSamples())
+         && enoughSamples()       // perhaps replaces hasFewModifiedSamples
+         && (! hasNonCanonicalVariable())
+         && (! hasOnlyConstantVariables())
+         && (! isObvious())
+         && justified()
+         && isWorthPrinting_PostconditionPrestate());
+    return result;
   }
 
   final public String isWorthPrinting_sansControlledCheck_debug() {
     return
-      "" + (! hasFewModifiedSamples())
+      "iwpscc(" + format() + " @ " + ppt.name
+      + ") <= " + (! hasFewModifiedSamples())
       + " " + enoughSamples()
       + " " + (! hasNonCanonicalVariable())
       + " " + (! hasOnlyConstantVariables())
@@ -469,7 +523,11 @@ public abstract class Invariant implements java.io.Serializable {
       }
       return false;
     } else {
-      return (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
+      boolean result = (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
+      // if (! result) {
+      //   System.out.println("hasFewModifiedSamples: " + format());
+      // }
+      return result;
     }
   }
 
@@ -591,6 +649,9 @@ public abstract class Invariant implements java.io.Serializable {
 	  // If entry_inv with orig() applied to everything matches this
 	  if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
 	    if (entry_inv.isWorthPrinting_sansControlledCheck()) {
+              if (debug_isWorthPrinting) {
+                System.out.println("isWorthPrinting_PostconditionPrestate => false for " + format());
+              }
 	      return false;
 	    }
 	  }
@@ -646,6 +707,19 @@ public abstract class Invariant implements java.io.Serializable {
 
     return results;
   }
+
+  // For reproducible results when debugging
+  static Comparator invComparator = new Invariant.ClassVarnameComparator();
+  public Vector find_controlling_invariants_sorted() {
+    Vector unsorted = find_controlling_invariants();
+    Invariant[] invs = (Invariant[]) unsorted.toArray(new Invariant[0]);
+    Arrays.sort(invs, invComparator);
+    Vector result = new Vector(invs.length);
+    for (int i=0; i<invs.length; i++)
+      result.add(invs[i]);
+    return result;
+  }
+
 
   // Orders invariants by class, then by variable names.  If the
   // invariants are both of class Implication, they are ordered by

@@ -162,6 +162,10 @@ public final class LinearBinaryCore implements java.io.Serializable {
   }
 
   public static String format(String x, String y, double a, double b) {
+    if ((a == 0) && (b == 0)) {
+      return y + " == 0 * " + x + " + 0";
+    }
+
     return y + " == " + formatTerm(a, x, true) + formatTerm(b, null, false);
   }
 

@@ -207,6 +207,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       } else {
         return varname + " == " + TOSTRING(elts[0]);
       }
+#elif defined(SEQUENCE)
+      if (is_hashcode) {
+        if (elts[0].length == 0) {
+          return varname + " == []";
+        } else if ((elts[0].length == 1) && (elts[0][0] == 0)) {
+          return varname + " == [null]";
+        } else {
+          return varname + " has only one value, of length " + elts[0].length;
+        }
+      } else {
+        return varname + " == " + TOSTRING(elts[0]);
+      }
 #else
       return varname + " == " + TOSTRING(elts[0]);
 #endif

@@ -250,7 +250,11 @@ public final class LinearTernaryCore implements java.io.Serializable {
   }
 
   public static String format(String x, String y, String z, double a, double b, double c) {
-    // It shouldn't be the case that a or b is 0.  Add an assert soon.  MDE 6/20/2001
+    // It shouldn't be the case that a or b is 0 for printed invariants;
+    // but that can be true earlier on in processing.
+    if ((a == 0) && (b == 0) && (c == 0)) {
+      return z + " == 0 * " + x + " + 0 * " + y + " + 0";
+    }
     return z + " == " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
   }
 

@@ -42,9 +42,12 @@ public class Implication extends Invariant {
   protected double computeProbability() {
     double pred_prob = predicate.computeProbability();
     double cons_prob = consequent.computeProbability();
-    if ((pred_prob > PROBABILITY_UNJUSTIFIED)
-        || (cons_prob > PROBABILITY_UNJUSTIFIED))
-      return Math.max(pred_prob, cons_prob);
+    if ((pred_prob == PROBABILITY_NEVER)
+        || (cons_prob == PROBABILITY_NEVER))
+      return PROBABILITY_NEVER;
+    if ((pred_prob == PROBABILITY_UNKNOWN)
+        || (cons_prob == PROBABILITY_UNKNOWN))
+      return PROBABILITY_UNKNOWN;
     return 1-(1-pred_prob)*(1-cons_prob);
   }
 
@@ -89,6 +92,14 @@ public class Implication extends Invariant {
   //     return make_impl(pred, cons);
   //   }
   // }
+
+  public boolean isObviousDerived() {
+    return consequent.isObviousDerived();
+  }
+
+  public boolean isObviousImplied() {
+    return consequent.isObviousImplied();
+  }
 
   public boolean isSameFormula(Invariant other) {
     return (predicate.isSameFormula(((Implication)other).predicate)

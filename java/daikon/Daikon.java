@@ -397,6 +397,7 @@ public final class Daikon {
         exit_ppt.set_controlling_ppts(ppts);
         for (Iterator exit_itor=exits.iterator() ; exit_itor.hasNext() ; ) {
           PptTopLevel line_exit_ppt = (PptTopLevel) exit_itor.next();
+          line_exit_ppt.controlling_ppts.add(exit_ppt);
           VarInfo[] line_vars = line_exit_ppt.var_infos;
           line_exit_ppt.combined_exit = exit_ppt;
           {

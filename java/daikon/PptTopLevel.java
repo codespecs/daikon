@@ -871,6 +871,16 @@ public class PptTopLevel extends Ppt {
     return null;
   }
 
+  public int indexOf(String varname) {
+    for (int i=0; i<var_infos.length; i++) {
+      if (var_infos[i].name.name().equals(varname)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+
   // At present, this needs to occur after deriving variables, because
   // I haven't integrated derivation and inference yet.
   // (This function doesn't exactly belong in this part of the file.)
@@ -1497,8 +1507,13 @@ public class PptTopLevel extends Ppt {
         // }
       }
     }
-    if (Global.debugPptSplit)
+    if (Global.debugPptSplit) {
       System.out.println("" + views_cond.size() + " views on " + this.name);
+      for (int i=0; i<views_cond.size(); i++) {
+        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+        System.out.println("    " + pcond.name);
+      }
+    }
     for (int i=0; i<views_cond.size(); i++) {
       PptConditional pcond = (PptConditional) views_cond.elementAt(i);
       pcond.initial_processing();
@@ -1545,7 +1560,6 @@ public class PptTopLevel extends Ppt {
 
 
   static final boolean debug_addImplications = false;
-  // static final boolean debug_addImplications = true;
 
   private void addImplications_internal(Ppt ppt1, Ppt ppt2, boolean add_nonimplications) {
     // System.out.println("addImplications_internal: " + ppt1.name + ", " + ppt2.name);
@@ -1685,29 +1699,15 @@ public class PptTopLevel extends Ppt {
         if (diff1 != null) {
           int index1 = ArraysMDE.indexOf(excls1, diff1);
           if ((index1 == -1) || (index1 > i)) {
-            if (diff1.isWorthPrinting_sansControlledCheck()) {
-              boolean iff = (index1 != -1);
-              Implication.makeImplication(this, excl1, diff1, iff);
-            } else {
-              if (debug_addImplications) {
-                System.out.println("consequent not worth printing:  (" + excl1.format() + ")  ==> " + diff1.format());
-                System.out.println("  isWorthPrinting_debug: " + diff1.isWorthPrinting_sansControlledCheck_debug());
-              }
-            }
+            boolean iff = (index1 != -1);
+            Implication.makeImplication(this, excl1, diff1, iff);
           }
         }
         if (diff2 != null) {
           int index2 = ArraysMDE.indexOf(excls2, diff2);
           if ((index2 == -1) || (index2 > i)) {
-            if (diff2.isWorthPrinting_sansControlledCheck()) {
-              boolean iff = (index2 != -1);
-              Implication.makeImplication(this, excl2, diff2, iff);
-            } else {
-              if (debug_addImplications) {
-                System.out.println("consequent not worth printing:  (" + excl2.format() + ")  ==> " + diff2.format());
-                System.out.println("  isWorthPrinting_debug: " + diff2.isWorthPrinting_sansControlledCheck_debug());
-              }
-            }
+            boolean iff = (index2 != -1);
+            Implication.makeImplication(this, excl2, diff2, iff);
           }
         }
       }
@@ -1902,17 +1902,13 @@ public class PptTopLevel extends Ppt {
     // ss1.addAll(invs1);
     for (int j=0; j<invs1.size(); j++) {
       Invariant inv = (Invariant)invs1.elementAt(j);
-      if (inv.isWorthPrinting()) {
-        ss1.add(inv);
-      }
+      ss1.add(inv);
     }
 
     SortedSet ss2 = new TreeSet(icfp);
     for (int j=0; j<invs2.size(); j++) {
       Invariant inv = (Invariant)invs2.elementAt(j);
-      if (inv.isWorthPrinting()) {
-        ss2.add(inv);
-      }
+      ss2.add(inv);
     }
 
     Vector result = new Vector();
@@ -2001,7 +1997,7 @@ public class PptTopLevel extends Ppt {
 	}
       }
     }
-    
+
     // Create the conjunction of the closures' invariants to form a
     // background environment for the prover
     StringBuffer all_cont = new StringBuffer();
@@ -2023,7 +2019,7 @@ public class PptTopLevel extends Ppt {
 	all_cont.append("\n");
       }
       all_cont.append(")");
-    }    
+    }
     all_cont.append(")");
     CmdAssume background = new CmdAssume(all_cont.toString());
 
@@ -2035,7 +2031,7 @@ public class PptTopLevel extends Ppt {
       prover = null;
       return;
     }
-    
+
     // Create the list of invariants from this ppt which are
     // expressible in Simplify
     Invariant[] invs;
@@ -2052,7 +2048,7 @@ public class PptTopLevel extends Ppt {
       }
       invs = (Invariant[]) printing.toArray(new Invariant[printing.size()]);
     }
-    
+
     // Come up with a "desirability" ordering of the printing and
     // expressible invariants, so that we can remove the least
     // desirable first.  For now just use the ICFP.
@@ -2100,6 +2096,7 @@ public class PptTopLevel extends Ppt {
       prover = null;
     }
   }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants
@@ -2520,14 +2517,14 @@ public class PptTopLevel extends Ppt {
       if (! inv.isWorthPrinting()) {
 	// out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
 	continue;
-      }      
+      }
 
       // Redundancy is separate from worth printing for now, but it
       // probably should not be, in general.
       if (((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
 	// out.println("Redundant: " + inv.format());
 	continue;
-      }      
+      }
 
       if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL) {
 	// don't print out invariants with min(), max(), or sum() variables

@@ -183,8 +183,8 @@ public final class FileIO {
          && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
         || ((Daikon.ppt_regexp != null)
             && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
-      // System.out.println("Discarding non-matching program point " + ppt_name);
       // Discard this declaration
+      // System.out.println("Discarding non-matching program point declaration " + ppt_name);
       String line = file.readLine();
       // This fails if some lines of a declaration (e.g., the comparability
       // field) are empty.
@@ -611,6 +611,7 @@ public final class FileIO {
             || ((Daikon.ppt_regexp != null)
                 && ! Global.regexp_matcher.contains(line, Daikon.ppt_regexp))) {
           // Discard this entire program point information
+          // System.out.println("Discarding non-matching dtrace program point " + line);
           while ((line != null) && !line.equals(""))
             line = reader.readLine();
           continue;
