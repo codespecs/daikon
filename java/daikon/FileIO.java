@@ -746,7 +746,8 @@ public final class FileIO {
           read_vals_and_mods_from_trace_file (reader, filename.toString(),
                                               ppt, vals, mods);
         } catch (IOException e) {
-          if ((e instanceof EOFException) || (reader.readLine() == null)) {
+          String nextLine = reader.readLine();
+          if ((e instanceof EOFException) || (nextLine == null)) {
             System.out.println ();
             System.out.println ("WARNING: Unexpected EOF while processing "
                           + "trace file - last record of trace file ignored");
@@ -756,6 +757,10 @@ public final class FileIO {
             System.out.println ("WARNING: IOException while processing "
                           + "trace file - record ignored");
             e.printStackTrace(System.out);
+            while (nextLine != null && ! nextLine.equals("")) {
+              // System.out.println("Discarded line " + reader.getLineNumber() + ": " + nextLine);
+              nextLine = reader.readLine();
+            }
             continue;
           } else {
             throw e;
@@ -1209,7 +1214,10 @@ public final class FileIO {
           // nonce != null
           invoc = (Invocation) call_hashmap.get(nonce);
           if (invoc == null) {
-            throw new Error("Didn't find call to " + ppt.name() + " with nonce " + nonce);
+            throw new Error("Didn't find call with nonce " + nonce
+                            + " to match " + ppt.name()
+                            + " ending at " + data_trace_filename
+                            + " line " + data_trace_reader.getLineNumber());
           }
           invoc = (Invocation) call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
