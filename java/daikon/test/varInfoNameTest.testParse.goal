@@ -6,7 +6,7 @@ p = x
 ; esc_name p
 x
 ; simplify_name p
-x
+|x|
 ;# x[]
 ; parse p x[]
 p = x[]
@@ -15,8 +15,8 @@ p = x[]
 	x[i]
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
-	(select (select elems x) i)
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+	(select (select elems |x|) |i|)
 ))
 ;# x.class
 ; parse p x.class
@@ -24,7 +24,7 @@ p = x.class
 ; esc_name p
 \typeof(x)
 ; simplify_name p
-(typeof x)
+(typeof |x|)
 ;# x[].class
 ; parse p x[].class
 p = x[].class
@@ -33,8 +33,8 @@ p = x[].class
 	\typeof(x[i])
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
-	(typeof (select (select elems x) i))
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+	(typeof (select (select elems |x|) |i|))
 ))
 ;# this.field
 ; parse p this.field
@@ -42,7 +42,7 @@ p = this.field
 ; esc_name p
 this.field
 ; simplify_name p
-(select field this)
+(select |field| |this|)
 ;# this.field[]
 ; parse p this.field[]
 p = this.field[]
@@ -51,8 +51,8 @@ p = this.field[]
 	this.field[i]
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength (select field this)) 1))) 
-	(select (select elems (select field this)) i)
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
+	(select (select elems (select |field| |this|)) |i|)
 ))
 ;# this.field.again
 ; parse p this.field.again
@@ -60,7 +60,7 @@ p = this.field.again
 ; esc_name p
 this.field.again
 ; simplify_name p
-(select again (select field this))
+(select |again| (select |field| |this|))
 ;# this.field.again[]
 ; parse p this.field.again[]
 p = this.field.again[]
@@ -69,8 +69,8 @@ p = this.field.again[]
 	this.field.again[i]
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength (select again (select field this))) 1))) 
-	(select (select elems (select again (select field this))) i)
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |again| (select |field| |this|))) 1))) 
+	(select (select elems (select |again| (select |field| |this|))) |i|)
 ))
 ;# this.field.class
 ; parse p this.field.class
@@ -78,7 +78,7 @@ p = this.field.class
 ; esc_name p
 \typeof(this.field)
 ; simplify_name p
-(typeof (select field this))
+(typeof (select |field| |this|))
 ;# this.field[].class
 ; parse p this.field[].class
 p = this.field[].class
@@ -87,8 +87,8 @@ p = this.field[].class
 	\typeof(this.field[i])
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength (select field this)) 1))) 
-	(typeof (select (select elems (select field this)) i))
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
+	(typeof (select (select elems (select |field| |this|)) |i|))
 ))
 ;# x[].field
 ; parse p x[].field
@@ -98,8 +98,8 @@ p = x[].field
 	x[i].field
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
-	(select field (select (select elems x) i))
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+	(select |field| (select (select elems |x|) |i|))
 ))
 ;# x[].field.foo
 ; parse p x[].field.foo
@@ -109,8 +109,8 @@ p = x[].field.foo
 	x[i].field.foo
 )
 ; quantify_simplify_name p
-(FORALL (i) (IMPLIES (AND (<= 0 i) (<= i (- (arrayLength x) 1))) 
-	(select foo (select field (select (select elems x) i)))
+(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+	(select |foo| (select |field| (select (select elems |x|) |i|)))
 ))
 ;# return
 ; parse p return
@@ -118,11 +118,11 @@ p = return
 ; esc_name p
 \result
 ; simplify_name p
-return
+|return|
 ;# return.field
 ; parse p return.field
 p = return.field
 ; esc_name p
 \result.field
 ; simplify_name p
-(select field return)
+(select |field| |return|)
