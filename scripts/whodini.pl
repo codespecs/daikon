@@ -149,7 +149,7 @@ grep {
     }
 } @txtesc;
 
-print "Houdini is inferring likely invariants; please wait..";
+print "Houdini is generating likely invariants; please wait..";
 
 # Iterative ("Houdini") looping
 while (1) {
