@@ -16,7 +16,7 @@ public class ParameterDoclet
 {
 
   /**
-   * Entry point for this doclet (invoked by javadoc)
+   * Entry point for this doclet (invoked by javadoc).
    **/
   public static boolean start(RootDoc doc)
     throws IOException
@@ -83,8 +83,7 @@ public class ParameterDoclet
   /**
    * Process a javadoc tree and call processField for each field found.
    **/
-  public void process()
-  {
+  public void process() {
     ClassDoc[] clazzes = root.classes();
     for (int i = 0; i < clazzes.length; i++) {
       ClassDoc clazz = clazzes[i];
@@ -140,8 +139,7 @@ public class ParameterDoclet
     }
   }
 
-  public void writeTexInfo(PrintWriter out)
-  {
+  public void writeTexInfo(PrintWriter out) {
     out.println("@c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING");
     out.println();
 
@@ -166,8 +164,7 @@ public class ParameterDoclet
     out.println();
   }
 
-  public void writeText(PrintWriter out)
-  {
+  public void writeText(PrintWriter out) {
     List keys = new ArrayList(fields.keySet());
     Collections.sort(keys);
     for (Iterator i = keys.iterator(); i.hasNext(); ) {
@@ -184,8 +181,7 @@ public class ParameterDoclet
     }
   }
 
-  public void writeList(PrintWriter out)
-  {
+  public void writeList(PrintWriter out) {
     List keys = new ArrayList(fields.keySet());
     Collections.sort(keys);
     for (Iterator i = keys.iterator(); i.hasNext(); ) {

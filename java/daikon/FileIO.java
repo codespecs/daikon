@@ -36,26 +36,26 @@ public final class FileIO {
 
 /// Constants
 
-  final static String declaration_header = "DECLARE";
+  static final String declaration_header = "DECLARE";
 
 
   // Program point name tags
-  public final static String ppt_tag_separator = ":::";
-  public final static String enter_suffix = "ENTER";
-  public final static String enter_tag = ppt_tag_separator + enter_suffix;
+  public static final String ppt_tag_separator = ":::";
+  public static final String enter_suffix = "ENTER";
+  public static final String enter_tag = ppt_tag_separator + enter_suffix;
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
-  public final static String exit_suffix = "EXIT";
-  public final static String exit_tag = ppt_tag_separator + exit_suffix;
-  public final static String throws_suffix = "THROWS";
-  public final static String throws_tag = ppt_tag_separator + throws_suffix;
-  public final static String object_suffix = "OBJECT";
-  public final static String object_tag = ppt_tag_separator + object_suffix;
-  public final static String class_static_suffix = "CLASS";
-  public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
-  public final static String global_suffix = "GLOBAL";
+  public static final String exit_suffix = "EXIT";
+  public static final String exit_tag = ppt_tag_separator + exit_suffix;
+  public static final String throws_suffix = "THROWS";
+  public static final String throws_tag = ppt_tag_separator + throws_suffix;
+  public static final String object_suffix = "OBJECT";
+  public static final String object_tag = ppt_tag_separator + object_suffix;
+  public static final String class_static_suffix = "CLASS";
+  public static final String class_static_tag = ppt_tag_separator + class_static_suffix;
+  public static final String global_suffix = "GLOBAL";
 
-  /** total number of samples read in */
+  /** Total number of samples read in. */
   public static int samples_considered = 0;
   /**
    * Total number of samples passed to process_sample().  This should
@@ -139,7 +139,7 @@ public final class FileIO {
   // Utilities
   // The Daikon manual states that "#" is the comment starter, but
   // some code assumes "//", so permit both (at least temporarily).
-  // final static String comment_prefix = "//";
+  // static final String comment_prefix = "//";
   public static final boolean isComment(String s) {
     return s.startsWith("//") || s.startsWith("#");
   }
@@ -539,7 +539,7 @@ public final class FileIO {
   //  *     RANDOM_SEED is a triple of numbers, each in range(0,256), used to
   //  *       initialize the random number generator.
 
-  /** reads data trace files using the default sample processor **/
+  /** Reads data trace files using the default sample processor. **/
   public static void read_data_trace_files (Collection /*File*/ files,
                                             PptMap all_ppts)
     throws IOException {
@@ -604,7 +604,7 @@ public final class FileIO {
     }
   }
 
-  /** read data from .dtrace file using standard data processor **/
+  /** Read data from .dtrace file using standard data processor. **/
   static void read_data_trace_file (File filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
@@ -1193,8 +1193,7 @@ public final class FileIO {
                                          // HashMap cumulative_modbits,
                                          Object[] vals,
                                          int[] mods,
-                                         Integer nonce)
-  {
+                                         Integer nonce) {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
@@ -1297,8 +1296,7 @@ public final class FileIO {
   // Add derived variables
   public static void add_derived_variables(PptTopLevel ppt,
                                             Object[] vals,
-                                            int[] mods)
-  {
+                                            int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
     ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
@@ -1333,15 +1331,14 @@ public final class FileIO {
    * later overriding of SerialFormat.readObject if the save format
    * changes (ick).
    **/
-  private final static class SerialFormat implements Serializable
+  private static final class SerialFormat implements Serializable
   {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20020122L;
 
-    public SerialFormat(PptMap map, Configuration config)
-    {
+    public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
     }

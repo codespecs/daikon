@@ -12,7 +12,7 @@ package utilMDE;
 /** Assertions:  test boolean expressions at runtime. */
 public final class Assert {
   /** If false, the Assert class is disabled. */
-  public final static boolean enabled = true;
+  public static final boolean enabled = true;
   /**
    * Throw AssertionException with the argument string
    * if the condition does not hold.  Named "assertTrue" instead of
@@ -96,7 +96,7 @@ public final class Assert {
 //               }
 //           }
 //
-//           final public class Assert {
+//           public final class Assert {
 //               public static final boolean enabled = true;
 //               public static final void assert(boolean b, String s) {
 //                   if (enabled && !b)

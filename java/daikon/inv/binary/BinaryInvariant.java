@@ -9,7 +9,7 @@ import java.util.*;
 
 /**
  * Provides a class that defines the functions that must exist
- * for each two variable invariant
+ * for each two variable invariant.
  **/
 public abstract class BinaryInvariant extends Invariant {
 
@@ -43,8 +43,8 @@ public abstract class BinaryInvariant extends Invariant {
 
 
   /**
-   * Returns true if the binary function is symmetric (x,y ==> y,x)
-   * Subclasses that are symmetric should override
+   * Returns true if the binary function is symmetric (x,y ==> y,x).
+   * Subclasses that are symmetric should override.
    */
   public boolean is_symmetric() {
     return (false);

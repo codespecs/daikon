@@ -34,7 +34,7 @@ public class DummyInvariant
   private String dbcFormat;
 
   private boolean negated = false;
-  
+
   // Pre-instatiate(), set to true if we have reason to believe the user
   // explicitly wanted this invariant to appear in the output.
   // After instantiation, also requires that we've found an appropriate
@@ -165,7 +165,7 @@ public class DummyInvariant
 
   public String format_daikon() {
     String df;
-    if (daikonFormat == null) 
+    if (daikonFormat == null)
       df = "<dummy>";
     else
       df = daikonFormat;
@@ -176,7 +176,7 @@ public class DummyInvariant
   }
 
   public String format_java() {
-    if (javaFormat == null) 
+    if (javaFormat == null)
       return "format_java not implemented for dummy invariant";
     if (negated)
       return "!(" + javaFormat + ")";
@@ -185,7 +185,7 @@ public class DummyInvariant
   }
 
   public String format_esc() {
-    if (escFormat == null) 
+    if (escFormat == null)
       return "format_esc not implemented for dummy invariant";
     if (negated)
       return "!(" + escFormat + ")";
@@ -194,7 +194,7 @@ public class DummyInvariant
   }
 
   public String format_simplify() {
-    if (simplifyFormat == null) 
+    if (simplifyFormat == null)
       return "format_simplify not implemented for dummy invariant";
     if (negated)
       return "(NOT " + simplifyFormat + ")";
@@ -203,7 +203,7 @@ public class DummyInvariant
   }
 
   public String format_ioa() {
-    if (ioaFormat == null) 
+    if (ioaFormat == null)
       return "format_ioa not implemented for dummy invariant";
     if (negated)
       return "~(" + ioaFormat + ")";
@@ -212,7 +212,7 @@ public class DummyInvariant
   }
 
   public String format_jml() {
-    if (jmlFormat == null) 
+    if (jmlFormat == null)
       return "format_jml not implemented for dummy invariant";
     if (negated)
       return "!(" + jmlFormat + ")";
@@ -221,7 +221,7 @@ public class DummyInvariant
   }
 
   public String format_dbc() {
-    if (dbcFormat == null) 
+    if (dbcFormat == null)
       return "format_dbc not implemented for dummy invariant";
     if (negated)
       return "!(" + dbcFormat + ")";

@@ -32,7 +32,7 @@ public final class VarInfo
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020629L;
 
-  /** Debug missing vals **/
+  /** Debug missing vals. **/
   public static final Logger debugMissing
                                 = Logger.getLogger("daikon.VarInfo.missing");
 
@@ -68,10 +68,10 @@ public final class VarInfo
    **/
   public ProglangType rep_type;      // interned
 
-  /** Comparability info **/
+  /** Comparability info. **/
   public VarComparability comparability;
 
-  /** Auxiliary info **/
+  /** Auxiliary info. **/
   public VarInfoAux aux;
 
   // Obtaining values
@@ -89,11 +89,11 @@ public final class VarInfo
 
   /**
    * is_static_constant iff (value_index == -1);
-   * is_static_constant == (static_constant_value != null)
+   * is_static_constant == (static_constant_value != null).
    **/
   public boolean is_static_constant;
 
-  /** null if not statically constant **/
+  /** Null if not statically constant. **/
   Object static_constant_value;
 
   // Partial ordering relationships between variables.
@@ -106,7 +106,7 @@ public final class VarInfo
 
   /**
    * Index of this variable in the global ppt, -1 if there is no transform
-   * to the global ppt for this variable
+   * to the global ppt for this variable.
    */
   public short global_index = -1;
 
@@ -419,7 +419,7 @@ public final class VarInfo
     return true;
   }
 
-  /** Trims the collections used by this VarInfo */
+  /** Trims the collections used by this VarInfo. */
   public void trimToSize() {
     // ((ArrayList) private_po_higher).trimToSize();
     // ((ArrayList) private_po_lower).trimToSize();
@@ -502,8 +502,7 @@ public final class VarInfo
    * an error if the link already exists.
    **/
   public void addHigherPO(VarInfo higher,
-                          int nonce)
-  {
+                          int nonce) {
     VarInfo lower = this;
 
     if (lower == higher) {
@@ -702,7 +701,7 @@ public final class VarInfo
       return derived.derivedDepth();
   }
 
-  /** Return all derived variables that build off this one **/
+  /** Return all derived variables that build off this one. **/
   public List derivees() {
     ArrayList result = new ArrayList();
     VarInfo[] vis = ppt.var_infos;
@@ -726,12 +725,12 @@ public final class VarInfo
 
 
   /**
-   * Cached value for getDerivedParam()
+   * Cached value for getDerivedParam().
    **/
   public VarInfo derivedParamCached = null;
 
   /**
-   * Cached value for isDerivedParam()
+   * Cached value for isDerivedParam().
    **/
   // Boolean rather than boolean so we can use "null" to indicate "not yet set".
   public Boolean isDerivedParamCached = null;
@@ -778,7 +777,7 @@ public final class VarInfo
   /**
    * Return a VarInfo that has two properties: this is a derivation of
    * it, and it is a parameter variable.  If this is a parameter, then
-   * this is returned.  For examplpe, "this" is always a parameter.
+   * this is returned.  For example, "this" is always a parameter.
    * The return value of getDerivedParam for "this.a" (which is not a
    * parameter) is "this".
    * Effects: Sets isDerivedParamCached and derivedParamCached to
@@ -787,8 +786,7 @@ public final class VarInfo
    * @return null if the above condition doesn't hold.
    **/
   public VarInfo getDerivedParam() {
-    if (isDerivedParamCached != null) {
-    } else {
+    if (isDerivedParamCached == null) {
       isDerivedParam();
     }
     return derivedParamCached;
@@ -971,7 +969,7 @@ public final class VarInfo
     return isMissingNonsensical(vt) || isMissingFlow(vt);
   }
   /**
-   * Get the value of this variable from a particular sample (ValueTuple)
+   * Get the value of this variable from a particular sample (ValueTuple).
    * @param vt the ValueTuple from which to extract the value
    **/
   public Object getValue(ValueTuple vt) {
@@ -1053,7 +1051,7 @@ public final class VarInfo
 //   }
 
   /**
-   * Whether this VarInfo is the leader of its equality set
+   * Whether this VarInfo is the leader of its equality set.
    **/
   public boolean isCanonical() {
     if (!Daikon.use_equality_optimization) return true;
@@ -1467,8 +1465,7 @@ public final class VarInfo
    * syntax, except for any necessary quantifications (subscripting).
    * We err on the side of returning true, for now.
    **/
-  public boolean isValidEscExpression()
-  {
+  public boolean isValidEscExpression() {
     // "myVector.length" is invalid
     boolean is_length = (derived instanceof SequenceLength);
     boolean is_array_length = is_length && ((SequenceLength) derived).base.type.isArray();
@@ -1542,17 +1539,17 @@ public final class VarInfo
   /// IOA functions
   ///
 
-  /** return true if declared type is Set (IOA syntax) **/
+  /** Return true if declared type is Set (IOA syntax). **/
   public boolean isIOASet() {
     return type.base().startsWith("Set");// && type.base().indexOf('(') >= 0;
   }
 
-  /** return true if declared type is Set (IOA syntax) **/
+  /** Return true if declared type is Set (IOA syntax). **/
   public boolean isIOAArray() {
     return type.base().startsWith("Array");//  && type.base().indexOf('(') >= 0;
   }
 
-  /** return declared element type (in string) of IOA Set or Array **/
+  /** Return declared element type (in string) of IOA Set or Array. **/
   public String elementTypeIOA() {
     String result;
     int begin;
@@ -1567,7 +1564,7 @@ public final class VarInfo
     return type.base().substring(begin, end);
   }
 
-  /** return declared domain type (in string) of an IOA Array **/
+  /** Return declared domain type (in string) of an IOA Array. **/
   public String domainTypeIOA() {
     String result;
     if (this.isIOAArray()) {
@@ -1820,11 +1817,11 @@ public final class VarInfo
   }
 
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   private static final Logger debug = Logger.getLogger("daikon.VarInfo");
 
 
-  /** Debug tracer for simplifying expressions **/
+  /** Debug tracer for simplifying expressions. **/
   private static final Logger debugSimplifyExpression = Logger.getLogger("daikon.VarInfo.simplifyExpression");
 
   /**
@@ -2195,7 +2192,7 @@ public final class VarInfo
         List result = new GuardingVariableList();
 
         if (vi != null && vi.isDerived()) {
-          VarInfo bases[] = vi.derived.getBases();
+          VarInfo[] bases = vi.derived.getBases();
 
           for (int i=0; i<bases.length; i++) {
             result.addAll((List)(bases[i].name.accept(this)));
@@ -2283,7 +2280,7 @@ public final class VarInfo
    * that the content of the VarInfos are not compared, only their
    * pointer values.
    */
-  static public class Pair {
+  public static class Pair {
 
     public VarInfo v1;
     public VarInfo v2;
@@ -2317,8 +2314,8 @@ public final class VarInfo
     }
   }
 
-  /** returns a string containing the names of the vars in the array **/
-  public static String toString (VarInfo vis[]) {
+  /** Returns a string containing the names of the vars in the array. **/
+  public static String toString (VarInfo[] vis) {
 
     if (vis == null)
       return ("null");
@@ -2332,7 +2329,7 @@ public final class VarInfo
     return UtilMDE.join(vars, ", ");
   }
 
-  /** returns a string containing the names of the vars in the list **/
+  /** Returns a string containing the names of the vars in the list. **/
   public static String toString (List /* VarInfo */ vlist) {
 
     if (vlist == null)
@@ -2350,7 +2347,7 @@ public final class VarInfo
 
   /**
    * Returns true if this variable is linked to the global ppt via the
-   * orig transform
+   * orig transform.
    */
   public boolean is_orig_global() {
 
@@ -2364,7 +2361,7 @@ public final class VarInfo
   }
   /**
    * Returns true if this variable is linked to the global ppt via the
-   * post transform
+   * post transform.
    */
   public boolean is_post_global() {
 
@@ -2379,7 +2376,7 @@ public final class VarInfo
 
   /**
    * Returns true if this variable is linked to the global ppt via either
-   * the orig or post transforms
+   * the orig or post transforms.
    */
   public boolean is_global() {
     return (global_index != -1);

@@ -13,9 +13,7 @@ import java.util.logging.Logger;
  **/
 public class ContextSplitterFactory
 {
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 
   /** Callsite granularity at the line level */
@@ -43,8 +41,7 @@ public class ContextSplitterFactory
    **/
   public static void load_mapfiles_into_splitterlist(Collection files, // [File]
                                                      int grain
-                                                     )
-  {
+                                                     ) {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File)i.next();
       String filename = file.getName();
@@ -70,7 +67,7 @@ public class ContextSplitterFactory
   /**
    * Simple record type to store a map file entry.
    **/
-  public final static class MapfileEntry
+  public static final class MapfileEntry
   {
     public final long id;
     public final String fromclass;
@@ -201,8 +198,7 @@ public class ContextSplitterFactory
    * granularity.
    **/
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries,
-                                                             int grain)
-  {
+                                                             int grain) {
     // Use a 2-deep map structure.  First key is an identifier
     // (~pptname) for the callee.  Second key is an idenfier for the
     // caller (based on granularity).  The value is a set of Integers
@@ -292,7 +288,7 @@ public class ContextSplitterFactory
   /**
    * Simple record type to store a PptName and Splitter array.
    **/
-  public final static class PptNameAndSplitters
+  public static final class PptNameAndSplitters
   {
     public final String ppt_name; // really more like a regexp
     public final Splitter[] splitters;

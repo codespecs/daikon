@@ -82,7 +82,7 @@ public class NONZERO
    **/
   public static boolean dkconfig_enabled = true;
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar." + NONZEROSTRING);
 
   /** Maximum value ever used for max-min in confidence calculation. **/
@@ -310,14 +310,12 @@ public class NONZERO
   }
 
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof NONZERO);
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof OneOfScalar) {
       OneOfScalar oos = (OneOfScalar) other;
       if ((oos.num_elts() == 1) && (((WRAPPER)oos.elt()).WRAP_VALUE() == 0)) {

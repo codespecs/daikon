@@ -33,7 +33,7 @@ public final class StringComparison
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugStringComparison = false;
+  static final boolean debugStringComparison = false;
 
   public StringComparisonCore core;
 
@@ -226,13 +226,11 @@ public final class StringComparison
     super.add(v1, v2, mod_index, count);
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((StringComparison) other).core);
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof StringComparison) {
       return core.isExclusiveFormula(((StringComparison) other).core);
     }

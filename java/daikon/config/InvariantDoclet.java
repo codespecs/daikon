@@ -16,7 +16,7 @@ public class InvariantDoclet
 {
 
   /**
-   * Entry point for this doclet (invoked by javadoc)
+   * Entry point for this doclet (invoked by javadoc).
    **/
   public static boolean start(RootDoc doc)
     throws IOException
@@ -220,7 +220,7 @@ public class InvariantDoclet
           permutes += ", " + fb_permute;
           permute_cnt++;
         } else /* new type of function binary */ {
-          if (last_fb != "") {
+          if (last_fb != "") {  // interned
             out.println ();
             out.println ("@item " + fb_type + "." + last_fb + "_@{" + permutes
                        + "@}");
@@ -360,7 +360,7 @@ public class InvariantDoclet
 
     Vector list = new Vector();
 
-    FieldDoc fields[] = cd.fields();
+    FieldDoc[] fields = cd.fields();
     for (int i = 0; i < fields.length; i++) {
       FieldDoc f = fields[i];
       if (f.name().startsWith (Configuration.PREFIX))
@@ -415,8 +415,7 @@ public class InvariantDoclet
     }
   }
 
-  public void writeTexInfo(PrintWriter out)
-  {
+  public void writeTexInfo(PrintWriter out) {
     out.println("@c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING");
     out.println();
 
@@ -439,8 +438,7 @@ public class InvariantDoclet
     out.println();
   }
 
-  public void writeText(PrintWriter out)
-  {
+  public void writeText(PrintWriter out) {
     List keys = new ArrayList(fields.keySet());
     Collections.sort(keys);
     for (Iterator i = keys.iterator(); i.hasNext(); ) {
@@ -457,8 +455,7 @@ public class InvariantDoclet
     }
   }
 
-  public void writeList(PrintWriter out)
-  {
+  public void writeList(PrintWriter out) {
     List keys = new ArrayList(fields.keySet());
     Collections.sort(keys);
     for (Iterator i = keys.iterator(); i.hasNext(); ) {

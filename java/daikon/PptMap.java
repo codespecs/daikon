@@ -16,8 +16,7 @@ public class PptMap
   private final Map nameToPpt = new HashMap();
   private PptTopLevel global = null;
 
-  public void add(PptTopLevel ppt)
-  {
+  public void add(PptTopLevel ppt) {
     nameToPpt.put(ppt.name(), ppt);
 
     // Keep track of the global ppt.  There should only be one
@@ -27,21 +26,18 @@ public class PptMap
     }
   }
 
-  public void addAll(List ppts)
-  {
+  public void addAll(List ppts) {
     for (Iterator iPpt = ppts.iterator(); iPpt.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) iPpt.next();
       add (ppt);
     }
   }
 
-  public PptTopLevel get(String name)
-  {
+  public PptTopLevel get(String name) {
     return (PptTopLevel) nameToPpt.get(name);
   }
 
-  public PptTopLevel get(PptName name)
-  {
+  public PptTopLevel get(PptName name) {
     return get(name.toString());
   }
 
@@ -49,8 +45,7 @@ public class PptMap
     return global;
   }
 
-  public boolean containsName(String name)
-  {
+  public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }
 
@@ -58,13 +53,11 @@ public class PptMap
    * @return unstably-ordered collection of PptTopLevels
    * @see #pptIterator()
    **/
-  public Collection asCollection()
-  {
+  public Collection asCollection() {
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
-  public Collection nameStringSet()
-  {
+  public Collection nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
@@ -72,8 +65,7 @@ public class PptMap
    * @return an iterator over the PptTopLevels in this, sorted by
    * Ppt.NameComparator on their names.  This is good for consistency.
    **/
-  public Iterator pptIterator()
-  {
+  public Iterator pptIterator() {
     TreeSet sorted = new TreeSet(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
@@ -101,8 +93,7 @@ public class PptMap
    * Ppt.NameComparator on their names.  This differs from pptIterator()
    * in that it includes all ppts (including conditional ppts).
    **/
-  public Iterator ppt_all_iterator()
-  {
+  public Iterator ppt_all_iterator() {
     TreeSet sorted = new TreeSet(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
     // Use a (live) view iterator to get concurrent modification
@@ -159,7 +150,7 @@ public class PptMap
   // }
 
 
-  /** Iterate over the PptTopLevels and trim them */
+  /** Iterate over the PptTopLevels and trim them. */
   public void trimToSize() {
     for (Iterator i = nameToPpt.values().iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
@@ -178,7 +169,7 @@ public class PptMap
   }
 
   /**
-   * Return the number of active PptSlices
+   * Return the number of active PptSlices.
    **/
   public int countSlices() {
     int result = 0;
@@ -198,7 +189,7 @@ public class PptMap
   }
 
   /**
-   * Blow away any PptTopLevels that never saw any samples (to reclaim space)
+   * Blow away any PptTopLevels that never saw any samples (to reclaim space).
    **/
   public void removeUnsampled() {
     Iterator iter = nameToPpt.values().iterator();

@@ -69,7 +69,7 @@ public class DynamicConstants implements Serializable {
   List /*Constant*/ missing_list = new ArrayList();
 
   /** list of all variables **/
-  Constant all_vars[];
+  Constant[] all_vars;
   List /*Constant*/ all_list = new ArrayList();
 
   /** program point of these constants **/
@@ -162,7 +162,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** compares two constants based on the vi_index of their variable **/
+  /** Compares two constants based on the vi_index of their variable. **/
   public static final class ConIndexComparator
     implements Comparator, Serializable {
 
@@ -285,7 +285,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** returns whether the specified variable is missing in this ValueTuple **/
+  /** Returns whether the specified variable is missing in this ValueTuple. **/
   private boolean missing (VarInfo vi, ValueTuple vt) {
 
     int mod = vt.getModified (vi);
@@ -293,7 +293,7 @@ public class DynamicConstants implements Serializable {
             || (mod == ValueTuple.MISSING_NONSENSICAL));
   }
 
-  /** returns whether the specified variable is currently a constant **/
+  /** Returns whether the specified variable is currently a constant. **/
   public boolean is_constant (VarInfo vi) {
 
     return (all_vars[vi.varinfo_index].constant);
@@ -310,8 +310,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * returns the constant value of the specified variable, or null if
-   * he variable is not constant or prev_constant
+   * Returns the constant value of the specified variable, or null if
+   * the variable is not constant or prev_constant.
    **/
   public Object constant_value (VarInfo vi) {
 
@@ -322,7 +322,7 @@ public class DynamicConstants implements Serializable {
       return (null);
   }
 
-  /** returns whether the specified variable missing for all values so far **/
+  /** Returns whether the specified variable missing for all values so far. **/
   public boolean is_missing (VarInfo vi) {
 
     return (all_vars[vi.varinfo_index].always_missing);
@@ -338,7 +338,7 @@ public class DynamicConstants implements Serializable {
             || all_vars[vi.varinfo_index].previous_missing);
   }
 
-  /** returns the number of constants that are leaders **/
+  /** Returns the number of constants that are leaders. **/
   public int constant_leader_cnt() {
 
     int con_cnt = 0;
@@ -353,7 +353,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * Creates all new views required for the newly non constants (noncons)
-   * and the newly non-missing (non_missing)
+   * and the newly non-missing (non_missing).
    */
   public void instantiate_new_views (List /*Constant*/ noncons,
                                      List /*Constant*/ non_missing) {
@@ -518,7 +518,7 @@ public class DynamicConstants implements Serializable {
               ((con3.vi.varinfo_index < con1.vi.varinfo_index)
                && leaders1.contains (con3)))
             continue;
-          Constant con_arr[] = {con1, con2, con3};
+          Constant[] con_arr = {con1, con2, con3};
           Arrays.sort (con_arr, ConIndexComparator.getInstance());
           Assert.assertTrue ((con_arr[0].vi.varinfo_index
                               <= con_arr[1].vi.varinfo_index) &&
@@ -1109,7 +1109,7 @@ public class DynamicConstants implements Serializable {
         Constant con2 = (Constant) cons.get(j);
         for (int k = 0; k < cons.size(); k++) {
           Constant con3 = (Constant) cons.get (k);
-          Constant con_arr[] = {con1, con2, con3};
+          Constant[] con_arr = {con1, con2, con3};
           Arrays.sort (con_arr, ConIndexComparator.getInstance());
           Assert.assertTrue ((con_arr[0].vi.varinfo_index
                               <= con_arr[1].vi.varinfo_index) &&

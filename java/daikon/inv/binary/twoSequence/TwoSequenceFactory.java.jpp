@@ -60,9 +60,7 @@ import java.util.*;
 
 public final class CLASSNAME {
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.inv.binary.twoSequence.TwoSequenceFactory");
 
   // Add the appropriate new Invariant objects to the specified Invariants

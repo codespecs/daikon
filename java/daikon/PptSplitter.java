@@ -35,10 +35,10 @@ public class PptSplitter implements Serializable {
   /** General debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.PptSplitter");
 
-  /** PptTopLevel that contains this split */
+  /** PptTopLevel that contains this split. */
   private PptTopLevel parent;
 
-  /** splitter that choses to which PptConditional a sample is applied */
+  /** Splitter that choses to which PptConditional a sample is applied. */
   public transient Splitter splitter;
 
   /**
@@ -48,9 +48,9 @@ public class PptSplitter implements Serializable {
    * PptTopLevel if the PptSplitter represents two exit points (for which
    * no splitter is required).
    **/
-  public PptTopLevel ppts[] = new PptTopLevel[2];
+  public PptTopLevel[] ppts = new PptTopLevel[2];
 
-  final private static Comparator icfp
+  private static final Comparator icfp
                             = new Invariant.InvariantComparatorForPrinting();
 
   /**
@@ -87,7 +87,7 @@ public class PptSplitter implements Serializable {
 
 
   /**
-   * Returns true if the splitter is valid at this point, false otherwise
+   * Returns true if the splitter is valid at this point, false otherwise.
    */
   public boolean splitter_valid() {
 
@@ -97,7 +97,7 @@ public class PptSplitter implements Serializable {
     return (true);
   }
 
-  /** Adds the sample to each conditional ppt in the split */
+  /** Adds the sample to each conditional ppt in the split. */
   public void add_bottom_up (ValueTuple vt, int count) {
 
     // Choose the appropriate conditional point based on the condition result
@@ -121,7 +121,7 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Chooses the correct conditional point based on the values in this sample
+   * Chooses the correct conditional point based on the values in this sample.
    */
   public PptConditional choose_conditional (ValueTuple vt, int count) {
 

@@ -13,7 +13,7 @@ import utilMDE.*;
 public final class IsEqualityComparison implements Filter {
 
   // Don't create new instances, just use this existing one
-  public final static IsEqualityComparison it = new IsEqualityComparison();
+  public static final IsEqualityComparison it = new IsEqualityComparison();
 
   private IsEqualityComparison() { }
 

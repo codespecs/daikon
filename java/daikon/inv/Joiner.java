@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import daikon.inv.DiscardInfo;
 
 import utilMDE.Assert;
 

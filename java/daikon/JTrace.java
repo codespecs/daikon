@@ -14,7 +14,6 @@ package daikon;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
-import daikon.JTraceInference;
 import utilMDE.ArraysMDE;
 
 /**
@@ -26,10 +25,10 @@ import utilMDE.ArraysMDE;
  * ".inv" file that contains the detected invariants.  The file may be
  * viewed with the PrintInvariants tool, or one of the GUIs.
  **/
-public class JTrace
+public final class JTrace
 {
     // This class is never instantiated. All methods are static.
-    private JTrace() { }
+    private JTrace() { throw new Error("do not instantiate"); }
 
     public static void main(String[] args)
     {
@@ -207,15 +206,15 @@ public class JTrace
     // startTracing() enables tracing for this thread and causes all
     // subsequently-forked threads to be traced as well (if the "all
     // threads" option is specified).
-    private native static void          startTracing(Thread threadID);
+    private static native void          startTracing(Thread threadID);
 
     // stopTracing() causes the STOP marker to be introduced into the
     // control stream, which the inference thread will take as a cue
     // to shutdown.
-    private native static void          stopTracing(Thread threadID);
+    private static native void          stopTracing(Thread threadID);
 
     // get the verbosity level from the underlying C system
-    private native static int           getVerbosity();
+    private static native int           getVerbosity();
 
     // We subclass Error because it is much less likely that the target
     // program catches this anywhere, compared to other unchecked

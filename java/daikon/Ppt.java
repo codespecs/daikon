@@ -49,7 +49,7 @@ public abstract class Ppt
   // don't make sense in PptSlice, so PptTopLevel is a better place
   // anyway.)
 
-  /** Trim the collections used in this Ppt */
+  /** Trim the collections used in this Ppt. */
   public void trimToSize() {
     for (int i=0; i < var_infos.length; i++) {
       var_infos[i].trimToSize();

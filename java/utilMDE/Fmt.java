@@ -18,7 +18,7 @@ public class Fmt {
    * object in args and writes the result to System.out.  Each
    * argument is converted to a string with toString()
    */
-  static public void pf (String format, Object[] args) {
+  public static void pf (String format, Object[] args) {
     System.out.println (spf (format, args));
   }
 
@@ -27,7 +27,7 @@ public class Fmt {
    * object in args and returns the result.  Each argument is
    * converted to a string with toString()
    */
-  static public String spf (String format, Object[] args) {
+  public static String spf (String format, Object[] args) {
 
     StringBuffer result = new StringBuffer(format.length() + args.length*20);
 
@@ -60,60 +60,60 @@ public class Fmt {
   }
 
   /** convenience routine for new Integer(val) **/
-  static public Integer i (int val) {
+  public static Integer i (int val) {
     return new Integer (val);
   }
 
-  static public String spf (String format, Object arg1) {
+  public static String spf (String format, Object arg1) {
     return (spf (format, new Object[] {arg1}));
   }
 
-  static public String spf (String format, Object arg1, Object arg2) {
+  public static String spf (String format, Object arg1, Object arg2) {
     return (spf (format, new Object[] {arg1, arg2}));
   }
 
-  static public String spf (String format, Object arg1, Object arg2,
+  public static String spf (String format, Object arg1, Object arg2,
                             Object arg3) {
     return (spf (format, new Object[] {arg1, arg2, arg3}));
   }
 
-  static public String spf (String format, Object arg1, Object arg2,
+  public static String spf (String format, Object arg1, Object arg2,
                            Object arg3, Object arg4) {
     return (spf (format, new Object[] {arg1, arg2, arg3, arg4}));
   }
 
-  static public String spf (String format, Object arg1, Object arg2,
+  public static String spf (String format, Object arg1, Object arg2,
                            Object arg3, Object arg4, Object arg5) {
     return (spf (format, new Object[] {arg1, arg2, arg3, arg4, arg5}));
   }
 
-  static public void pf (String format) {
+  public static void pf (String format) {
     pf (format, new Object[0]);
   }
 
-  static public void pf (String format, Object arg1) {
+  public static void pf (String format, Object arg1) {
     pf (format, new Object[] {arg1});
     return;
   }
 
-  static public void pf (String format, Object arg1, Object arg2) {
+  public static void pf (String format, Object arg1, Object arg2) {
     pf (format, new Object[] {arg1, arg2});
     return;
   }
 
-  static public void pf (String format, Object arg1, Object arg2,
+  public static void pf (String format, Object arg1, Object arg2,
                             Object arg3) {
     pf (format, new Object[] {arg1, arg2, arg3});
     return;
   }
 
-  static public void pf (String format, Object arg1, Object arg2,
+  public static void pf (String format, Object arg1, Object arg2,
                            Object arg3, Object arg4) {
     pf (format, new Object[] {arg1, arg2, arg3, arg4});
     return;
   }
 
-  static public void pf (String format, Object arg1, Object arg2,
+  public static void pf (String format, Object arg1, Object arg2,
                            Object arg3, Object arg4, Object arg5) {
     pf (format, new Object[] {arg1, arg2, arg3, arg4, arg5});
     return;

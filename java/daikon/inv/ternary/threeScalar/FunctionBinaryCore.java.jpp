@@ -125,7 +125,7 @@ public final class CLASSNAME
     Assert.assertTrue(false, "Could not find new ordering");
   }
 
- public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     PRIMITIVE result;
     PRIMITIVE arg1;
     PRIMITIVE arg2;
@@ -237,16 +237,16 @@ public final class CLASSNAME
 
   // These constants indicate which are the arguments.
   // For instance, "order_xyz" indicates the relationship is x=f(y,z).
-  final static int order_xyz = 0; // x = f(y,z)
-  final static int order_yxz = 1; // y = f(x,z)
-  final static int order_zxy = 2; // z = f(x,y)
-  final static int order_xzy = 3; // x = f(z,y)
-  final static int order_yzx = 4; // y = f(z,x)
-  final static int order_zyx = 5; // z = f(y,x)
-  final static int order_symmetric_start = order_xyz;
-  final static int order_symmetric_max = order_zxy;
-  final static int order_nonsymmetric_start = order_xyz;
-  final static int order_nonsymmetric_max = order_zyx;
+  static final int order_xyz = 0; // x = f(y,z)
+  static final int order_yxz = 1; // y = f(x,z)
+  static final int order_zxy = 2; // z = f(x,y)
+  static final int order_xzy = 3; // x = f(z,y)
+  static final int order_yzx = 4; // y = f(z,x)
+  static final int order_zyx = 5; // z = f(y,x)
+  static final int order_symmetric_start = order_xyz;
+  static final int order_symmetric_max = order_zxy;
+  static final int order_nonsymmetric_start = order_xyz;
+  static final int order_nonsymmetric_max = order_zyx;
 
   // Be careful keeping track of the sense of the permutation the
   // var_indices values represent. As a function on the set {0,1,2},
@@ -254,7 +254,7 @@ public final class CLASSNAME
   // formatted invariant, to a position in the var_info array. If you
   // want to get from a position in the var_info array to position in
   // the formatted invariant, you need the inverse permutation.
-  final static int[][] var_indices;
+  static final int[][] var_indices;
   static {
     var_indices = new int[order_nonsymmetric_max+1][];
     var_indices[order_xyz] = new int[] { 0, 1, 2 };
@@ -265,7 +265,7 @@ public final class CLASSNAME
     var_indices[order_zyx] = new int[] { 2, 1, 0 };
   }
 
-  final static String[] var_order_string = { "x=f(y,z)",
+  static final String[] var_order_string = { "x=f(y,z)",
                                              "y=f(x,z)",
                                              "z=f(x,y)",
                                              "x=f(z,y)",

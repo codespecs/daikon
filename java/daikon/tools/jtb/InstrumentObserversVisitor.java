@@ -21,8 +21,7 @@ public class InstrumentObserversVisitor
 {
 
   /** @param observers a collection of MethodDeclarations **/
-  public InstrumentObserversVisitor(Collection observers)
-  {
+  public InstrumentObserversVisitor(Collection observers) {
     observer_methods = new ArrayList(observers);
   }
 

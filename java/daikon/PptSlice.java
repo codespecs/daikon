@@ -34,7 +34,7 @@ public abstract class PptSlice
 
   public static final String lineSep = Global.lineSep;
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.PptSlice");
 
   /** Debug tracer for debugging both this and PptSlices **/
@@ -228,8 +228,7 @@ public abstract class PptSlice
    * @see #po_lower_vis
    **/
   protected void addToOnePO(PptTopLevel adj,
-                            VarInfo[] slice_vis)
-  {
+                            VarInfo[] slice_vis) {
     Assert.assertTrue(slice_vis.length == arity());
     for (int i = 0; i < arity(); i++) {
       Assert.assertTrue (slice_vis[i].type == this.var_infos[i].type);
@@ -548,7 +547,7 @@ public abstract class PptSlice
   }
 
   /**
-   * Removes any falsified invariants from our list
+   * Removes any falsified invariants from our list.
    */
   protected void remove_falsified () {
 

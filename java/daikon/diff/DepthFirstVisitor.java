@@ -17,7 +17,7 @@ public class DepthFirstVisitor implements Visitor {
   public void visit(PptNode node) {
     for (Iterator i = node.children(); i.hasNext(); ) {
       ((Node) i.next()).accept(this);
-    }    
+    }
   }
 
   public void visit(InvNode node) { }

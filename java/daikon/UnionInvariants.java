@@ -20,7 +20,8 @@ import utilMDE.UtilMDE;
  * invariants.  (This tool is also a nice way to run Simplify on a
  * single inv file.)
  **/
-public class UnionInvariants {
+public final class UnionInvariants {
+  private UnionInvariants() { throw new Error("do not instantiate"); }
 
   public static final String lineSep = Global.lineSep;
 
@@ -133,8 +134,7 @@ public class UnionInvariants {
    **/
   public static void union(PptMap collector,  // mutated
                            PptMap source      // unmodified (but aliased into)
-                           )
-  {
+                           ) {
     for (Iterator i = source.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
 

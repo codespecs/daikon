@@ -88,7 +88,7 @@ public class LogicalCompare {
   // p        discard invariants over pass-by-value parameters
   // i        discard implication pre-conditions
   // s        discard suppressed invariants
-  
+
   private static boolean[] filters = new boolean[128];
 
   private static Vector filterInvariants(Vector invs, boolean isPost) {
@@ -227,8 +227,7 @@ public class LogicalCompare {
     return name.substring(name.lastIndexOf('.') + 1);
   }
 
-  private static int checkConsequences(Vector assumptions, Vector consequences)
-  {
+  private static int checkConsequences(Vector assumptions, Vector consequences) {
     Set assumption_formulas = new HashSet();
     for (int i = 0; i < assumptions.size(); i++) {
       Lemma lem = (Lemma)assumptions.elementAt(i);

@@ -158,7 +158,7 @@ public class Debug {
   public Ppt cache_ppt;
 
   /** cached variables */
-  public VarInfo cache_vis[];
+  public VarInfo[] cache_vis;
 
   /**
    * Sets the cache for class, ppt, and vis so that future calls to log
@@ -192,12 +192,13 @@ public class Debug {
   public Debug (Class c, Ppt ppt, List vis) {
 
     VarInfo v = visTracked (vis);
-    if (v != null)
+    if (v != null) {
       set (c, ppt, new VarInfo[] {v});
-    else if (vis.size() > 0)
+    } else if (vis.size() > 0) {
       set (c ,ppt, new VarInfo[] {(VarInfo) vis.get(0)});
-    else
+    } else {
       set (c, ppt, null);
+    }
   }
 
   /**
@@ -226,7 +227,7 @@ public class Debug {
     return null;
   }
 
-  private static String ourvars[] = new String[3];
+  private static String[] ourvars = new String[3];
 
   private static final VarInfo[] vis1 = new VarInfo[1];
   private static final VarInfo[] vis2 = new VarInfo[2];
@@ -266,9 +267,10 @@ public class Debug {
     if (vis == null)
       System.out.println ("vis = null");
     else {
-      for (int i = 0; i < vis.length; i++)
+      for (int i = 0; i < vis.length; i++) {
         if (vis[i] == null)
           System.out.println ("vis[" + i + "] == null");
+      }
     }
     cache_match = class_match (c) && ppt_match (ppt) && var_match (vis);
   }
@@ -317,7 +319,7 @@ public class Debug {
   /**
    * Logs the cached class, cached ppt, cached variables and the
    * specified msg via the log4j logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}
+   * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
   public void log (Logger debug, String msg) {
@@ -328,7 +330,7 @@ public class Debug {
   /**
    * Logs a description of the class, ppt, ppt variables and the
    * specified msg via the log4j logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}
+   * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
   public static void log (Logger debug, Class inv_class, Ppt ppt, String msg) {
@@ -399,8 +401,9 @@ public class Debug {
       VarInfo v = vis[i];
       vars += v.name.name() + ": ";
     }
-    for (int i = vis.length; i < 3; i++)
+    for (int i = vis.length; i < 3; i++) {
       vars += ": ";
+    }
 
     // Figure out the sample count if possible
     String samp_str = "";
@@ -440,7 +443,7 @@ public class Debug {
   /**
    * Logs a description of the class, ppt, ppt variables and the
    * specified msg via the log4j logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}
+   * #log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @return whether or not it logged anything
    */
@@ -457,7 +460,7 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class inv_class, Ppt ppt, VarInfo vis[],
+  public static boolean log (Class inv_class, Ppt ppt, VarInfo[] vis,
                              String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE))
@@ -546,7 +549,7 @@ public class Debug {
    * are not the leader of their equality sets
    */
 
-  public static boolean var_match (VarInfo vis[]) {
+  public static boolean var_match (VarInfo[] vis) {
 
     if (debugTrackVars.length == 0)
       return (true);

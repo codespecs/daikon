@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import daikon.inv.DiscardInfo;
 import daikon.suppress.SuppressionLink;
 
 import java.util.logging.Logger;
@@ -25,9 +24,9 @@ public class Implication
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** the original predicate invariant from its original conditional ppt*/
+  /** The original predicate invariant from its original conditional ppt. */
   private Invariant orig_left;
-  /** the original consequent invariant from its original conditional ppt*/
+  /** The original consequent invariant from its original conditional ppt. */
   private Invariant orig_right;
 
   public Invariant predicate() { return left; }
@@ -54,8 +53,7 @@ public class Implication
                                              Invariant consequent,
                                              boolean iff,
                                              Invariant orig_predicate,
-                                             Invariant orig_consequent)
-  {
+                                             Invariant orig_consequent) {
     if (predicate.isSameInvariant(consequent)) {
       PptSplitter.debug.fine ("Not creating implication " + predicate +
                               " ==> " + consequent + " pred == conseq ");

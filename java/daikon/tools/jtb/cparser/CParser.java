@@ -81,7 +81,7 @@ public class CParser implements CParserConstants {
          }
    }
 
-  static final public TranslationUnit TranslationUnit() throws ParseException {
+  static public final TranslationUnit TranslationUnit() throws ParseException {
    NodeList n0 = new NodeList();
    ExternalDeclaration n1;
 
@@ -102,7 +102,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ExternalDeclaration ExternalDeclaration() throws ParseException {
+  static public final ExternalDeclaration ExternalDeclaration() throws ParseException {
    NodeChoice n0;
    FunctionDefinition n1;
    Declaration n2;
@@ -123,7 +123,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public FunctionDefinition FunctionDefinition() throws ParseException {
+  static public final FunctionDefinition FunctionDefinition() throws ParseException {
    NodeOptional n0 = new NodeOptional();
    DeclarationSpecifiers n1;
    Declarator n2;
@@ -151,7 +151,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Declaration Declaration() throws ParseException {
+  static public final Declaration Declaration() throws ParseException {
    DeclarationSpecifiers n0;
    NodeOptional n1 = new NodeOptional();
    InitDeclaratorList n2;
@@ -178,7 +178,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public DeclarationList DeclarationList() throws ParseException {
+  static public final DeclarationList DeclarationList() throws ParseException {
    NodeList n0 = new NodeList();
    Declaration n1;
 
@@ -199,7 +199,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public DeclarationSpecifiers DeclarationSpecifiers() throws ParseException {
+  static public final DeclarationSpecifiers DeclarationSpecifiers() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    StorageClassSpecifier n2;
@@ -275,7 +275,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StorageClassSpecifier StorageClassSpecifier() throws ParseException {
+  static public final StorageClassSpecifier StorageClassSpecifier() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -326,7 +326,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public TypeSpecifier TypeSpecifier() throws ParseException {
+  static public final TypeSpecifier TypeSpecifier() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -421,7 +421,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public TypeQualifier TypeQualifier() throws ParseException {
+  static public final TypeQualifier TypeQualifier() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -450,7 +450,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructOrUnionSpecifier StructOrUnionSpecifier() throws ParseException {
+  static public final StructOrUnionSpecifier StructOrUnionSpecifier() throws ParseException {
    StructOrUnion n0;
    NodeChoice n1;
    NodeSequence n2;
@@ -509,7 +509,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructOrUnion StructOrUnion() throws ParseException {
+  static public final StructOrUnion StructOrUnion() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -538,7 +538,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructDeclarationList StructDeclarationList() throws ParseException {
+  static public final StructDeclarationList StructDeclarationList() throws ParseException {
    NodeList n0 = new NodeList();
    StructDeclaration n1;
 
@@ -559,7 +559,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public InitDeclaratorList InitDeclaratorList() throws ParseException {
+  static public final InitDeclaratorList InitDeclaratorList() throws ParseException {
    InitDeclarator n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -597,7 +597,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public InitDeclarator InitDeclarator() throws ParseException {
+  static public final InitDeclarator InitDeclarator() throws ParseException {
    Declarator n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -626,7 +626,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructDeclaration StructDeclaration() throws ParseException {
+  static public final StructDeclaration StructDeclaration() throws ParseException {
    SpecifierQualifierList n0;
    StructDeclaratorList n1;
    NodeToken n2;
@@ -642,7 +642,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public SpecifierQualifierList SpecifierQualifierList() throws ParseException {
+  static public final SpecifierQualifierList SpecifierQualifierList() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    TypeSpecifier n2;
@@ -693,7 +693,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructDeclaratorList StructDeclaratorList() throws ParseException {
+  static public final StructDeclaratorList StructDeclaratorList() throws ParseException {
    StructDeclarator n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -727,7 +727,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StructDeclarator StructDeclarator() throws ParseException {
+  static public final StructDeclarator StructDeclarator() throws ParseException {
    NodeChoice n0;
    Declarator n1;
    NodeSequence n2;
@@ -778,7 +778,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public EnumSpecifier EnumSpecifier() throws ParseException {
+  static public final EnumSpecifier EnumSpecifier() throws ParseException {
    NodeToken n0;
    Token n1;
    NodeChoice n2;
@@ -837,7 +837,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public EnumeratorList EnumeratorList() throws ParseException {
+  static public final EnumeratorList EnumeratorList() throws ParseException {
    Enumerator n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -871,7 +871,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Enumerator Enumerator() throws ParseException {
+  static public final Enumerator Enumerator() throws ParseException {
    NodeToken n0;
    Token n1;
    NodeOptional n2 = new NodeOptional();
@@ -902,7 +902,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Declarator Declarator() throws ParseException {
+  static public final Declarator Declarator() throws ParseException {
    NodeOptional n0 = new NodeOptional();
    Pointer n1;
    DirectDeclarator n2;
@@ -923,7 +923,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public DirectDeclarator DirectDeclarator() throws ParseException {
+  static public final DirectDeclarator DirectDeclarator() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -1084,7 +1084,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Pointer Pointer() throws ParseException {
+  static public final Pointer Pointer() throws ParseException {
    NodeToken n0;
    Token n1;
    NodeOptional n2 = new NodeOptional();
@@ -1119,7 +1119,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public TypeQualifierList TypeQualifierList() throws ParseException {
+  static public final TypeQualifierList TypeQualifierList() throws ParseException {
    NodeList n0 = new NodeList();
    TypeQualifier n1;
 
@@ -1144,7 +1144,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ParameterTypeList ParameterTypeList() throws ParseException {
+  static public final ParameterTypeList ParameterTypeList() throws ParseException {
    ParameterList n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -1175,7 +1175,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ParameterList ParameterList() throws ParseException {
+  static public final ParameterList ParameterList() throws ParseException {
    ParameterDeclaration n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -1206,7 +1206,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ParameterDeclaration ParameterDeclaration() throws ParseException {
+  static public final ParameterDeclaration ParameterDeclaration() throws ParseException {
    DeclarationSpecifiers n0;
    NodeChoice n1;
    Declarator n2;
@@ -1237,7 +1237,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public IdentifierList IdentifierList() throws ParseException {
+  static public final IdentifierList IdentifierList() throws ParseException {
    NodeToken n0;
    Token n1;
    NodeListOptional n2 = new NodeListOptional();
@@ -1275,7 +1275,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Initializer Initializer() throws ParseException {
+  static public final Initializer Initializer() throws ParseException {
    NodeChoice n0;
    AssignmentExpression n1;
    NodeSequence n2;
@@ -1341,7 +1341,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public InitializerList InitializerList() throws ParseException {
+  static public final InitializerList InitializerList() throws ParseException {
    Initializer n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -1372,7 +1372,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public TypeName TypeName() throws ParseException {
+  static public final TypeName TypeName() throws ParseException {
    SpecifierQualifierList n0;
    NodeOptional n1 = new NodeOptional();
    AbstractDeclarator n2;
@@ -1395,7 +1395,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public AbstractDeclarator AbstractDeclarator() throws ParseException {
+  static public final AbstractDeclarator AbstractDeclarator() throws ParseException {
    NodeChoice n0;
    Pointer n1;
    NodeSequence n2;
@@ -1438,7 +1438,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public DirectAbstractDeclarator DirectAbstractDeclarator() throws ParseException {
+  static public final DirectAbstractDeclarator DirectAbstractDeclarator() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -1626,7 +1626,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public TypedefName TypedefName() throws ParseException {
+  static public final TypedefName TypedefName() throws ParseException {
    NodeToken n0;
    Token n1;
 
@@ -1638,7 +1638,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Statement Statement() throws ParseException {
+  static public final Statement Statement() throws ParseException {
    NodeChoice n0;
    LabeledStatement n1;
    ExpressionStatement n2;
@@ -1705,7 +1705,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public LabeledStatement LabeledStatement() throws ParseException {
+  static public final LabeledStatement LabeledStatement() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -1777,7 +1777,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ExpressionStatement ExpressionStatement() throws ParseException {
+  static public final ExpressionStatement ExpressionStatement() throws ParseException {
    NodeOptional n0 = new NodeOptional();
    Expression n1;
    NodeToken n2;
@@ -1814,7 +1814,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public CompoundStatement CompoundStatement() throws ParseException {
+  static public final CompoundStatement CompoundStatement() throws ParseException {
    NodeToken n0;
    Token n1;
    NodeOptional n2 = new NodeOptional();
@@ -1876,7 +1876,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public StatementList StatementList() throws ParseException {
+  static public final StatementList StatementList() throws ParseException {
    NodeList n0 = new NodeList();
    Statement n1;
 
@@ -1927,7 +1927,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public SelectionStatement SelectionStatement() throws ParseException {
+  static public final SelectionStatement SelectionStatement() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -2011,7 +2011,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public IterationStatement IterationStatement() throws ParseException {
+  static public final IterationStatement IterationStatement() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -2199,7 +2199,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public JumpStatement JumpStatement() throws ParseException {
+  static public final JumpStatement JumpStatement() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -2305,7 +2305,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Expression Expression() throws ParseException {
+  static public final Expression Expression() throws ParseException {
    AssignmentExpression n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -2339,7 +2339,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public AssignmentExpression AssignmentExpression() throws ParseException {
+  static public final AssignmentExpression AssignmentExpression() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    UnaryExpression n2;
@@ -2369,7 +2369,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public AssignmentOperator AssignmentOperator() throws ParseException {
+  static public final AssignmentOperator AssignmentOperator() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -2461,7 +2461,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ConditionalExpression ConditionalExpression() throws ParseException {
+  static public final ConditionalExpression ConditionalExpression() throws ParseException {
    LogicalORExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2498,7 +2498,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ConstantExpression ConstantExpression() throws ParseException {
+  static public final ConstantExpression ConstantExpression() throws ParseException {
    ConditionalExpression n0;
 
    {
@@ -2508,7 +2508,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public LogicalORExpression LogicalORExpression() throws ParseException {
+  static public final LogicalORExpression LogicalORExpression() throws ParseException {
    LogicalANDExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2537,7 +2537,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public LogicalANDExpression LogicalANDExpression() throws ParseException {
+  static public final LogicalANDExpression LogicalANDExpression() throws ParseException {
    InclusiveORExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2566,7 +2566,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public InclusiveORExpression InclusiveORExpression() throws ParseException {
+  static public final InclusiveORExpression InclusiveORExpression() throws ParseException {
    ExclusiveORExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2595,7 +2595,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ExclusiveORExpression ExclusiveORExpression() throws ParseException {
+  static public final ExclusiveORExpression ExclusiveORExpression() throws ParseException {
    ANDExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2624,7 +2624,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ANDExpression ANDExpression() throws ParseException {
+  static public final ANDExpression ANDExpression() throws ParseException {
    EqualityExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2653,7 +2653,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public EqualityExpression EqualityExpression() throws ParseException {
+  static public final EqualityExpression EqualityExpression() throws ParseException {
    RelationalExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2700,7 +2700,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public RelationalExpression RelationalExpression() throws ParseException {
+  static public final RelationalExpression RelationalExpression() throws ParseException {
    ShiftExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2763,7 +2763,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ShiftExpression ShiftExpression() throws ParseException {
+  static public final ShiftExpression ShiftExpression() throws ParseException {
    AdditiveExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2810,7 +2810,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public AdditiveExpression AdditiveExpression() throws ParseException {
+  static public final AdditiveExpression AdditiveExpression() throws ParseException {
    MultiplicativeExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2857,7 +2857,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public MultiplicativeExpression MultiplicativeExpression() throws ParseException {
+  static public final MultiplicativeExpression MultiplicativeExpression() throws ParseException {
    CastExpression n0;
    NodeOptional n1 = new NodeOptional();
    NodeSequence n2;
@@ -2912,7 +2912,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public CastExpression CastExpression() throws ParseException {
+  static public final CastExpression CastExpression() throws ParseException {
    NodeChoice n0;
    NodeSequence n1;
    NodeToken n2;
@@ -2968,7 +2968,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public UnaryExpression UnaryExpression() throws ParseException {
+  static public final UnaryExpression UnaryExpression() throws ParseException {
    NodeChoice n0;
    PostfixExpression n1;
    NodeSequence n2;
@@ -3073,7 +3073,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public UnaryOperator UnaryOperator() throws ParseException {
+  static public final UnaryOperator UnaryOperator() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -3130,7 +3130,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public PostfixExpression PostfixExpression() throws ParseException {
+  static public final PostfixExpression PostfixExpression() throws ParseException {
    PrimaryExpression n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeChoice n2;
@@ -3253,7 +3253,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public PrimaryExpression PrimaryExpression() throws ParseException {
+  static public final PrimaryExpression PrimaryExpression() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -3301,7 +3301,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ArgumentExpressionList ArgumentExpressionList() throws ParseException {
+  static public final ArgumentExpressionList ArgumentExpressionList() throws ParseException {
    AssignmentExpression n0;
    NodeListOptional n1 = new NodeListOptional();
    NodeSequence n2;
@@ -3335,7 +3335,7 @@ public class CParser implements CParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Constant Constant() throws ParseException {
+  static public final Constant Constant() throws ParseException {
    NodeChoice n0;
    NodeToken n1;
    Token n2;
@@ -6154,7 +6154,7 @@ public class CParser implements CParserConstants {
     return (jj_scanpos.kind != kind);
   }
 
-  static final public Token getNextToken() {
+  static public final Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -6162,7 +6162,7 @@ public class CParser implements CParserConstants {
     return token;
   }
 
-  static final public Token getToken(int index) {
+  static public final Token getToken(int index) {
     Token t = lookingAhead ? jj_scanpos : token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -6212,7 +6212,7 @@ public class CParser implements CParserConstants {
     }
   }
 
-  static final public ParseException generateParseException() {
+  static public final ParseException generateParseException() {
     jj_expentries.removeAllElements();
     boolean[] la1tokens = new boolean[96];
     for (int i = 0; i < 96; i++) {
@@ -6254,10 +6254,10 @@ public class CParser implements CParserConstants {
     return new ParseException(token, exptokseq, tokenImage);
   }
 
-  static final public void enable_tracing() {
+  static public final void enable_tracing() {
   }
 
-  static final public void disable_tracing() {
+  static public final void disable_tracing() {
   }
 
   static final private void jj_rescan_token() {

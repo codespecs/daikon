@@ -19,17 +19,17 @@ public abstract class TernaryDerivation
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Original variable 1
+   * Original variable 1.
    **/
   VarInfo base1;
 
   /**
-   * Original variable 2
+   * Original variable 2.
    **/
   VarInfo base2;
 
   /**
-   * Original variable 2
+   * Original variable 3.
    **/
   VarInfo base3;
 

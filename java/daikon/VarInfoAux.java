@@ -163,7 +163,7 @@ public final class VarInfoAux
 
 
   /**
-   * Special handler for deserialization
+   * Special handler for deserialization.
    **/
   private Object readResolve() throws ObjectStreamException {
     return this.intern();
@@ -177,7 +177,7 @@ public final class VarInfoAux
 
 
   /**
-   * Whether this is interned
+   * Whether this is interned.
    **/
   private boolean isInterned = false;
 
@@ -253,11 +253,7 @@ public final class VarInfoAux
 
   public boolean getFlag(String key) {
     Object value = map.get(key);
-    if (value.equals(TRUE)) {
-      return true;
-    } else {
-      return false;
-    }
+    return value.equals(TRUE);
   }
 
 

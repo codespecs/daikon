@@ -135,9 +135,9 @@ public final class Invariants
     addAll(copy);
     return numRemoved;
   }
-  
+
   // Works for non-negative
-  private final static boolean isPowerOfTwo(int x) {
+  private static final boolean isPowerOfTwo(int x) {
     if (x == 0)
       return true;
     // If x is a power of two, then x - 1 has no bits in common with x
@@ -147,7 +147,7 @@ public final class Invariants
   }
 
   /// For testing
-  // private final static boolean isPowerOfTwoSlow(int x) {
+  // private static final boolean isPowerOfTwoSlow(int x) {
   //   for (int i=0; true; i++) {
   //     int pow = utilMDE.MathMDE.pow(2, i);
   //     if (pow == x)

@@ -6,7 +6,6 @@ import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.DiscardInfo;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.simplify.SimpUtil;
@@ -42,7 +41,7 @@ public abstract class Invariant
   public static final Logger debug = Logger.getLogger("daikon.inv.Invariant");
 
   /**
-   * Debug tracer for printing invariants
+   * Debug tracer for printing invariants.
    **/
   public static final Logger debugPrint = Logger.getLogger ("daikon.print");
 
@@ -52,7 +51,7 @@ public abstract class Invariant
   public static final Logger debugFlow = Logger.getLogger ("daikon.flow.flow");
 
   /**
-   * Debug tracer for printing equality invariants
+   * Debug tracer for printing equality invariants.
    **/
   public static final Logger debugPrintEquality = Logger.getLogger ("daikon.print.equality");
 
@@ -161,18 +160,18 @@ public abstract class Invariant
    *   1 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
    **/
-  public final static double CONFIDENCE_JUSTIFIED = 1;
+  public static final double CONFIDENCE_JUSTIFIED = 1;
 
   /**
    * (0..1) = greater to lesser likelihood of coincidence <br>
    *      0 = must have happened by chance
    **/
-  public final static double CONFIDENCE_UNJUSTIFIED = 0;
+  public static final double CONFIDENCE_UNJUSTIFIED = 0;
 
   /**
    * -1 = delete this invariant; we know it's not true
    **/
-  public final static double CONFIDENCE_NEVER = -1;
+  public static final double CONFIDENCE_NEVER = -1;
 
 
   /**
@@ -180,18 +179,18 @@ public abstract class Invariant
    *   0 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
    **/
-  public final static double PROBABILITY_JUSTIFIED = 0;
+  public static final double PROBABILITY_JUSTIFIED = 0;
 
   /**
    * (0..1) = lesser to greater likelihood of coincidence <br>
    *      1 = must have happened by chance
    **/
-  public final static double PROBABILITY_UNJUSTIFIED = 1;
+  public static final double PROBABILITY_UNJUSTIFIED = 1;
 
   /**
    * 3 = delete this invariant; we know it's not true
    **/
-  public final static double PROBABILITY_NEVER = 3;
+  public static final double PROBABILITY_NEVER = 3;
 
   /**
    * Return Invariant.CONFIDENCE_JUSTIFIED if x>=goal.
@@ -297,7 +296,7 @@ public abstract class Invariant
    * At least this many samples are required, or else we don't report any
    * invariant at all.  (Except that OneOf invariants are treated differently.)
    **/
-  public final static int min_mod_non_missing_samples = 5;
+  public static final int min_mod_non_missing_samples = 5;
 
   /**
    * @return true if the invariant has enough samples to have its
@@ -435,12 +434,12 @@ public abstract class Invariant
       log ("Destroyed " + format());
   }
 
-  /** clear the falsified flag */
+  /** Clear the falsified flag. */
   public void clear_falsified() {
     falsified = false;
   }
 
-  /** returns whether or not his invariant has been destroyed */
+  /** Returns whether or not his invariant has been destroyed. */
   public boolean is_false() {
     return (falsified);
   }
@@ -561,8 +560,7 @@ public abstract class Invariant
    **/
   public Invariant transfer(PptSlice new_ppt,
                             int[] permutation
-                            )
-  {
+                            ) {
     // Check some sanity conditions
     Assert.assertTrue(new_ppt.arity() == ppt.arity());
     Assert.assertTrue(permutation.length == ppt.arity());
@@ -630,8 +628,7 @@ public abstract class Invariant
    **/
   public Invariant resurrect(PptSlice new_ppt,
                              int[] permutation
-                             )
-  {
+                             ) {
     // Check some sanity conditions
     Assert.assertTrue(falsified);
     Assert.assertTrue(new_ppt.arity() == ppt.arity());
@@ -735,11 +732,11 @@ public abstract class Invariant
   // }
 
   /** Return a string representation of the variable names. */
-  final public String varNames() {
+  public final String varNames() {
     return ppt.varNames();
   }
 
-  final public String name() {
+  public final String name() {
     return this.getClass().getName() + varNames();
   }
 
@@ -774,7 +771,7 @@ public abstract class Invariant
    * Enumeration type for output style.
    * (Should this be somewhere else?)
    **/
-  public final static class OutputFormat
+  public static final class OutputFormat
   {
     /* The standard, concise Daikon output format */
     public static final OutputFormat DAIKON = new OutputFormat("Daikon");
@@ -1163,8 +1160,7 @@ public abstract class Invariant
    * Same, in this case, means a matching type, formula, and variable
    * names.
    **/
-  public boolean isSameInvariant(Invariant inv2)
-  {
+  public boolean isSameInvariant(Invariant inv2) {
     return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
   }
 
@@ -1175,8 +1171,7 @@ public abstract class Invariant
    * names.
    **/
   public boolean isSameInvariant(Invariant inv2,
-                                 IsSameInvariantNameExtractor name_extractor)
-  {
+                                 IsSameInvariantNameExtractor name_extractor) {
     Invariant inv1 = this;
 
     // Can't be the same if they aren't the same type
@@ -1299,7 +1294,7 @@ public abstract class Invariant
   }
 
   /**
-   * Returns whether or not this invariant is ni-suppressed
+   * Returns whether or not this invariant is ni-suppressed.
    */
   public boolean is_ni_suppressed() {
 
@@ -1381,12 +1376,12 @@ public abstract class Invariant
   /**
    * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
    **/
-  final public boolean isWorthPrinting_sansControlledCheck() {
+  public final boolean isWorthPrinting_sansControlledCheck() {
     return InvariantFilters.isWorthPrintingFilter_sansControlledCheck()
              .shouldKeep(this) == null;
   }
 
-  final public String isWorthPrinting_sansControlledCheck_debug() {
+  public final String isWorthPrinting_sansControlledCheck_debug() {
     return
       "iwpscc(" + format() + " @ " + ppt.name()
       + ") <=== "
@@ -1526,8 +1521,9 @@ public abstract class Invariant
                                                      0);
   }
 
+  // TODO: finish this comment.
   /**
-   * Recurse through vis and generate the cartesian product of
+   * Recurse through vis and generate the cartesian product of ...
    **/
   protected DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
@@ -1743,8 +1739,7 @@ public abstract class Invariant
     return null;
   }
 
-  public boolean isWorthPrinting_PostconditionPrestate()
-  {
+  public boolean isWorthPrinting_PostconditionPrestate() {
     PptTopLevel pptt = ppt.parent;
 
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
@@ -1772,7 +1767,7 @@ public abstract class Invariant
    * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().
    **/
   /*  [INCR]
-  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+  private static final IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
     new DefaultIsSameInvariantNameExtractor() {
         public VarInfoName getFromFirst(VarInfo var)
         { return super.getFromFirst(var).applyPrestate(); }
@@ -1784,8 +1779,7 @@ public abstract class Invariant
    * drawn from the invariants of this.ppt.parent.controllers.
    **/
   /*  [INCR]
-  public Vector find_controlling_invariants()
-  {
+  public Vector find_controlling_invariants() {
     // We used to assume there was at most one of these, but that
     // turned out to be wrong.  If this ppt has more equality
     // invariants than the controller, two different invariants can
@@ -2051,7 +2045,7 @@ public abstract class Invariant
 
   // This function creates a guarding predicate for a given invariant
   public Invariant createGuardingPredicate() {
-    VarInfo varInfos[] = ppt.var_infos;
+    VarInfo[] varInfos = ppt.var_infos;
 
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
@@ -2103,7 +2097,7 @@ public abstract class Invariant
 
   // Gets a list of all the variables that must be guarded for this
   // invariant
-  public static List getGuardingList(VarInfo varInfos[]) {
+  public static List getGuardingList(VarInfo[] varInfos) {
     List guardingList = new GuardingVariableList();
 
     for (int i=0; i<varInfos.length; i++) {
@@ -2192,7 +2186,7 @@ public abstract class Invariant
   }
 
   /**
-   * Adds the specified sample to the invariant and returns the result
+   * Adds the specified sample to the invariant and returns the result.
    */
   public InvariantStatus add_sample (ValueTuple vt, int count) {
 
@@ -2287,7 +2281,7 @@ public abstract class Invariant
   /**
    * Logs a description of the invariant and the specified msg via the
    * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}
+   * VarInfo[], String)}.
    */
 
   public void log (Logger debug, String msg) {
@@ -2300,7 +2294,7 @@ public abstract class Invariant
  /**
   * Logs a description of the invariant and the specified msg via the
   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-  * VarInfo[], String)}
+  * VarInfo[], String)}.
   *
   * @return whether or not it logged anything
   */

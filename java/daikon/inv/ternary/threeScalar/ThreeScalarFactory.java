@@ -14,13 +14,11 @@ import java.util.logging.Level;
 
 public final class ThreeScalarFactory {
 
-  /**
-   * Debug tracer
-   **/
-  final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
+  /** Debug tracer. **/
+  static final Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
 
 
-  public final static int max_instantiate
+  public static final int max_instantiate
     =  ((Functions.binarySymmetricFunctionNames.length
          * FunctionBinaryCore.order_symmetric_max)
         + (Functions.binaryNonSymmetricFunctionNames.length

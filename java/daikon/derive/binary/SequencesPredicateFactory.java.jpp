@@ -34,10 +34,8 @@ import java.util.logging.Level;
  **/
 public final class CLASSNAME extends BinaryDerivationFactory {
 
-  /**
-   * Debug tracer
-   **/
- public static final Logger debug =
+  /** Debug tracer. **/
+  public static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
 

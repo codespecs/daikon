@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class NISuppressor {
 
-  /** Debug Tracer **/
+  /** Debug tracer. **/
   public static final Logger debug
                           = Logger.getLogger ("daikon.inv.NISuppressor");
 

@@ -54,7 +54,7 @@ public class NIS {
    * List of invariants that are newly created.  This list is cleared
    * by apply_samples()
    */
-  static public List new_invs = new ArrayList();
+  public static List new_invs = new ArrayList();
 
   /**
    * Sets up non-instantiation suppression.  Primarily this includes setting

@@ -230,7 +230,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Calls the function specific equal check and returns the correct
-   * status
+   * status.
    */
 #if (defined(SEQ))
   public InvariantStatus check_modified(PRIMITIVE[] x, PRIMITIVE[] y,
@@ -319,8 +319,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
 #if !defined(SEQ)
   /**
-   * Checks to see if 'x[a] op y[b]' where 'x[] op y[]' and 'a == b'
-   * Doesn't catch the case where a = b+1
+   * Checks to see if 'x[a] op y[b]' where 'x[] op y[]' and 'a == b'.
+   * Doesn't catch the case where a = b+1.
    */
   public DiscardInfo is_subscript (VarInfo[] vis) {
 

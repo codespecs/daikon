@@ -133,9 +133,9 @@ public final class Intern {
     }
   }
 
-  private final static int FACTOR = 23;
+  private static final int FACTOR = 23;
   // private static final double DOUBLE_FACTOR = 65537;
-  private final static double DOUBLE_FACTOR = 263;
+  private static final double DOUBLE_FACTOR = 263;
 
   /**
    * Hasher object which hashes and compares Doubles.

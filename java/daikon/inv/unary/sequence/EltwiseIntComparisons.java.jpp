@@ -149,7 +149,7 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugEltwiseIntComparison = false;
+  static final boolean debugEltwiseIntComparison = false;
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);
@@ -300,8 +300,7 @@ public class CLASSNAME
 #endif
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
 
@@ -309,8 +308,7 @@ public class CLASSNAME
   // Also, reasonably complicated, need to ensure exact correctness, not sure if the
   // regression tests test this functionality
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
     // it. -SMcC

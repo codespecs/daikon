@@ -133,7 +133,7 @@ public final class VarComparabilityExplicit
     return indexTypes[dim];
   }
 
-  final static PatternMatcher re_matcher = Global.regexp_matcher;
+  static final PatternMatcher re_matcher = Global.regexp_matcher;
 
   static VarComparabilityExplicit parse(String rep, ProglangType vartype) {
     String rep_ = rep;          // for debugging
@@ -203,8 +203,6 @@ public final class VarComparabilityExplicit
 
   /** Split on whitespace and return an array of the resulting words, interned. **/
   static final String[] ws_split_to_interned_array(String s) {
-    PatternMatcher re_matcher = Global.regexp_matcher;
-
     Vector vec = new Vector();
     Util.split(vec, re_matcher, Global.ws_regexp, s);
     String[] result = (String[]) vec.toArray(new String[0]);

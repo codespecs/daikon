@@ -31,7 +31,7 @@ class JTraceInference extends Thread
     // Public so that others can read out the invariants!
     public PptMap all_ppts = new PptMap();
 
-    /** Non-null when error has occurred */
+    /** Non-null when error has occurred. */
     public String failure_message = null;
 
     // XXX use this for now
@@ -186,7 +186,7 @@ class JTraceInference extends Thread
                 Assert.assertTrue(vi_index < vis.length
                                   // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
                                   );
-                // XXX handling of final statics (compile-time constants)
+                // XXX handling of static finals (compile-time constants)
                 VarInfo vi = vis[vi_index];
                 Assert.assertTrue((! vi.is_static_constant)
                               || (vi.value_index == -1)
@@ -366,7 +366,7 @@ class JTraceInference extends Thread
     private static final int CT_NoData          = 16;
     private static final int CT_EOF             = 17;
 
-    private static final String types[] = new String[] {
+    private static final String[] types = new String[] {
         "void",
         "boolean",
         "byte",

@@ -43,7 +43,7 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
@@ -65,7 +65,7 @@ public final class CLASSNAME
   // that we can compute a and b based on a far-separated pair.  We reduce
   // the likelihood of roundoff error by getting 4 points, then choosing
   // the two that are furthest apart in order to compute a and b.
-  final static int MINPAIRS = 4;
+  static final int MINPAIRS = 4;
 
   public PRIMITIVE[] x_cache = new PRIMITIVE[MINPAIRS];
   public PRIMITIVE[] y_cache = new PRIMITIVE[MINPAIRS];
@@ -558,8 +558,7 @@ public final class CLASSNAME
                                   double coeff,
                                   VarInfoName var,
                                   VarInfo vi,
-                                  boolean first)
-  {
+                                  boolean first) {
     if (coeff == 0)
       return "";
     String sign;
@@ -586,8 +585,7 @@ public final class CLASSNAME
 
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfo vix, VarInfoName y, VarInfo viy,
-                             double a, double b)
-  {
+                             double a, double b) {
     if (a == 0 && b == 0) {
       return wrapper.format_too_few_samples(format, "0 * " + y
                                             + " == 0 * " + x + " + 0");
@@ -615,8 +613,7 @@ public final class CLASSNAME
   }
 
   public static String format_simplify(String str_x, String str_y,
-                                       double a, double b)
-  {
+                                       double a, double b) {
       int ia = (int) a;
       int ib = (int) b;
 
@@ -648,8 +645,7 @@ public final class CLASSNAME
   }
 
   public String format_using(OutputFormat format,
-                             VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi)
-  {
+                             VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
     String result = format_using(format, x, xvi, y, yvi, a, b);
     if (result != null) {
       return result;
@@ -660,8 +656,7 @@ public final class CLASSNAME
 
   // Format as "x = cy+d" instead of as "y = ax+b".
   public String format_reversed_using(OutputFormat format,
-                                      VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi)
-  {
+                                      VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
     Assert.assertTrue(a == 1 || a == -1);
     return format_using(format, y, yvi, x, xvi, a, -b/a);
   }
@@ -728,8 +723,7 @@ public final class CLASSNAME
     return (result);
   }
 
-  public boolean isSameFormula(CLASSNAME other)
-  {
+  public boolean isSameFormula(CLASSNAME other) {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
 
@@ -744,8 +738,7 @@ public final class CLASSNAME
     }
   }
 
-  public boolean isExclusiveFormula(CLASSNAME other)
-  {
+  public boolean isExclusiveFormula(CLASSNAME other) {
     if ((values_seen < MINPAIRS) ||
         (other.values_seen < MINPAIRS)) {
       return false;

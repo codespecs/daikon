@@ -432,8 +432,7 @@ public class LOWERBOUND
     return core.isExact();
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 

@@ -50,7 +50,7 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
   public JScrollPane getScrollPane() { return scrollPane; }
 
   public void valueChanged( TreeSelectionEvent e ) {
-    TreePath paths[] = e.getPaths();
+    TreePath[] paths = e.getPaths();
     for (int i=0; i < paths.length; i++) {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
       Object userObject = node.getUserObject();

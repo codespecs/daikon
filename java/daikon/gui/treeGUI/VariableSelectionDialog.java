@@ -18,7 +18,7 @@ class VariableSelectionDialog extends JDialog {
 
   final Vector selectedVarNames = new Vector();
 
-  public VariableSelectionDialog( VarInfo vInfos[], InvariantFilters iFilters, InvariantsUpdateListener iTablesPanel, JList vList, VariableListChangeListener listChangeListenerIn ) {
+  public VariableSelectionDialog( VarInfo[] vInfos, InvariantFilters iFilters, InvariantsUpdateListener iTablesPanel, JList vList, VariableListChangeListener listChangeListenerIn ) {
     super();
     final VariableListChangeListener listChangeListener = listChangeListenerIn;
     VarInfo[] varInfos = vInfos;

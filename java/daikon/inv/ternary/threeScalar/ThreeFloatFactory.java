@@ -14,13 +14,11 @@ import java.util.logging.Level;
 
 public final class ThreeFloatFactory {
 
-  /**
-   * Debug tracer
-   **/
-  final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.ThreeFloatFactory");
+  /** Debug tracer. **/
+  static final Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar.ThreeFloatFactory");
 
 
-  public final static int max_instantiate
+  public static final int max_instantiate
     =  ((FunctionsFloat.binarySymmetricFunctionNames.length
          * FunctionBinaryCoreFloat.order_symmetric_max)
         + (FunctionsFloat.binaryNonSymmetricFunctionNames.length

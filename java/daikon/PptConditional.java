@@ -29,7 +29,7 @@ public final class PptConditional
   // more efficient to do that for two PptConditional objects at once.
 
   public PptConditional(PptTopLevel parent, Splitter splitter,
-                       boolean splitter_inverse) {
+                        boolean splitter_inverse) {
 
     super(ctor_name_helper(parent, splitter, splitter_inverse),
           ctor_vis_helper(parent, splitter, splitter_inverse));
@@ -45,8 +45,7 @@ public final class PptConditional
 
   private static String ctor_name_helper(PptTopLevel parent,
                                          Splitter splitter,
-                                         boolean splitter_inverse)
-  {
+                                         boolean splitter_inverse) {
     if (splitter_inverse) {
       return parent.name + ";condition=\"not(" + splitter.condition() + ")\"";
     } else {
@@ -57,8 +56,7 @@ public final class PptConditional
 
   private static VarInfo[] ctor_vis_helper(PptTopLevel parent,
                                            Splitter splitter,
-                                           boolean splitter_inverse)
-  {
+                                           boolean splitter_inverse) {
     // return VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars());
     return (VarInfo.arrayclone_simple(parent.var_infos));
   }

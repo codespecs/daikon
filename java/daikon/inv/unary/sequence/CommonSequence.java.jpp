@@ -54,7 +54,7 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = false;
 
-  final static boolean debugCommonSequence = false;
+  static final boolean debugCommonSequence = false;
 
   private int elts;
   private PRIMITIVE[] intersect = null;

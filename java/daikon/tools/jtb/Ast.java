@@ -17,7 +17,7 @@ import daikon.*;
 
 public class Ast {
 
-  public final static String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
   /// Visitors

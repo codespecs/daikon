@@ -16,7 +16,7 @@ public abstract class Node {
   public Node(Object userObject) {
     this.userObject = userObject;
   }
-  
+
   public void add(Node newChild) {
     children.add(newChild);
   }

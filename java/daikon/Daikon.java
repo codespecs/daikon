@@ -13,8 +13,6 @@ import java.util.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.DecimalFormat;
-import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
 import java.util.logging.Logger;
@@ -22,11 +20,15 @@ import java.util.logging.Level;
 import gnu.getopt.*;
 import utilMDE.*;
 
+/**
+ * The "main" method is the main entry point for the Daikon invariant detector.
+ **/
 public final class Daikon {
+  private Daikon() { throw new Error("do not instantiate"); }
 
-  public final static String release_version = "3.1.0";
-  public final static String release_date = "June 1, 2004";
-  public final static String release_string
+  public static final String release_version = "3.1.0";
+  public static final String release_date = "June 1, 2004";
+  public static final String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
     + "; http://pag.csail.mit.edu/daikon.";
@@ -68,7 +70,7 @@ public final class Daikon {
 
   // All these variables really need to be organized better.
 
-  public final static String lineSep = Global.lineSep;
+  public static final String lineSep = Global.lineSep;
 
   /**
    * Boolean.  Controls whether or not splitting based on the built-in
@@ -80,23 +82,23 @@ public final class Daikon {
 
   // Change this at your peril; high costs in time and space for "false",
   // because so many more invariants get instantiated.
-  public final static boolean check_program_types = true;
+  public static final boolean check_program_types = true;
 
   // Problem with setting this to true:
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
   //  due to differrent number of samples, IsEqualityComparison is
   //  non-transitive (that is specially handled in the code)
-  public final static boolean invariants_check_canBeMissing = false;
+  public static final boolean invariants_check_canBeMissing = false;
 
   // Specialized version for array elements; only examined if
   // invariants_check_canBeMissing is false
-  public final static boolean invariants_check_canBeMissing_arrayelt = true;
+  public static final boolean invariants_check_canBeMissing_arrayelt = true;
 
-  public final static boolean disable_modbit_check_message = false;
+  public static final boolean disable_modbit_check_message = false;
   // Not a good idea to set this to true, as it is too easy to ignore the
   // warnings and the modbit problem can cause an error later.
-  public final static boolean disable_modbit_check_error = false;
+  public static final boolean disable_modbit_check_error = false;
 
   // When true, don't print textual output.
   public static boolean no_text_output = false;
@@ -122,12 +124,12 @@ public final class Daikon {
   public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
-   * If true no invariants will be guarded, guarding meaning that
-   * if a variable "can be missing" in a dtrace file that predicates
-   * are attached to invariants ensuring their values can be gather
-   * (for instance, if a.b "can be missing", and a.b == 5 is an
+   * If true, no invariants will be guarded.  Guarding means that
+   * if a variable "can be missing" in a dtrace file, predicates
+   * are attached to invariants ensuring their values can be dereferenced.
+   * For instance, if a.b "can be missing", and a.b == 5 is an
    * invariant, then it is more properly declared as (a != null) ==>
-   * (a.b == 5))
+   * (a.b == 5).
    **/
   public static boolean dkconfig_noInvariantGuarding = false;
 
@@ -208,8 +210,8 @@ public final class Daikon {
   public static Pattern var_omit_regexp;
 
   /**
-   * When true perform detailed internal checking (essentially additional,
-   * possibly costly assert statements
+   * When true, perform detailed internal checking.
+   * These are essentially additional, possibly costly assert statements.
    */
   public static boolean dkconfig_internal_check = false;
 
@@ -228,7 +230,7 @@ public final class Daikon {
   private static boolean use_mem_monitor = false;
 
   /**
-   * Whether Daikon should print its version number and date
+   * Whether Daikon should print its version number and date.
    **/
   public static boolean noversion_output = false;
 
@@ -295,15 +297,15 @@ public final class Daikon {
   // JHP 11/20/03, it is used now to avoid passing it in a few spots.
   public static PptMap all_ppts;
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
   public static final Logger debugProgress = Logger.getLogger("daikon.Progress");
 
   public static final Logger debugEquality = Logger.getLogger("daikon.Equality");
 
-  /** prints out statistics concerning equality sets, suppressions, etc **/
-  public static final Logger debugStats = Logger.getLogger ("daikon.stats");
+  /** Prints out statistics concerning equality sets, suppressions, etc. **/
+  public static final Logger debugStats = Logger.getLogger("daikon.stats");
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -327,11 +329,10 @@ public final class Daikon {
                  lineSep);
 
   /**
-   * The arguments to daikon.Daikon are file names; declaration file names end
-   * in ".decls" and data trace file names end in ".dtrace".
+   * The arguments to daikon.Daikon are file names.  Declaration file names
+   * end in ".decls", and data trace file names end in ".dtrace".
    **/
-  public static void main(String[] args)
-  {
+  public static void main(final String[] args) {
     // Read command line options
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
@@ -380,9 +381,9 @@ public final class Daikon {
         System.out.println ("Processing " + ppt.name() + " with "
                             + ppt.var_infos.length + " variables");
         int inv_cnt = 0;
-        if (ppt.var_infos.length > 1600)
+        if (ppt.var_infos.length > 1600) {
           System.out.println ("Skipping, too many variables!");
-        else {
+        } else {
           ppt.instantiate_views_and_invariants();
           inv_cnt = ppt.invariant_cnt();
           ppt.clean_for_merge();
@@ -426,9 +427,9 @@ public final class Daikon {
     }
 
     // Guard invariants
-    if ((Daikon.output_style == OutputFormat.JML ||
-         Daikon.output_style == OutputFormat.ESCJAVA) &&
-        !dkconfig_noInvariantGuarding)
+    if ((Daikon.output_style == OutputFormat.JML
+         || Daikon.output_style == OutputFormat.ESCJAVA)
+        && !dkconfig_noInvariantGuarding)
       guardInvariants(all_ppts);
 
     // Display invariants
@@ -449,8 +450,8 @@ public final class Daikon {
       Global.output_statistics();
     }
     if (dkconfig_print_sample_totals)
-      System.out.println (FileIO.samples_processed + " samples processed of " +
-                          FileIO.samples_considered + " total samples");
+      System.out.println (FileIO.samples_processed + " samples processed of "
+                          + FileIO.samples_considered + " total samples");
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable (Level.FINE)) {
@@ -468,8 +469,7 @@ public final class Daikon {
   // Read in the command line options
   // Return an array of {decls, dtrace, spinfo, map} files; each array
   // element is a set.
-  private static Set[] read_options(String args[])
-  {
+  private static Set[] read_options(String[] args) {
     if (args.length == 0) {
       System.out.println("Daikon error: no files supplied on command line.");
       System.out.println(usage);
@@ -601,8 +601,8 @@ public final class Daikon {
           if ((limit < 0.0) || (limit > 1.0)) {
             throw new Error(conf_limit_SWITCH + " must be between [0..1]");
           }
-          Configuration.getInstance().apply
-            ("daikon.inv.Invariant.confidence_limit", String.valueOf(limit));
+          Configuration.getInstance().apply(
+            "daikon.inv.Invariant.confidence_limit", String.valueOf(limit));
         } else if (esc_output_SWITCH.equals(option_name)) {
           output_style = OutputFormat.ESCJAVA;
         } else if (simplify_output_SWITCH.equals(option_name)) {
@@ -757,8 +757,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  private static PptMap load_decls_files(Set decl_files)
-  {
+  private static PptMap load_decls_files(Set decl_files) {
     stopwatch.reset();
     try {
       System.out.print("Reading declaration files ");
@@ -782,8 +781,7 @@ public final class Daikon {
 
   private static void load_spinfo_files(PptMap all_ppts,
                                         Set spinfo_files // [File]
-                                        )
-  {
+                                        ) {
     stopwatch.reset();
     if (!dkconfig_disable_splitting && spinfo_files.size() > 0) {
       try {
@@ -804,13 +802,12 @@ public final class Daikon {
 
   private static void load_map_files(PptMap all_ppts,
                                      Set map_files // [File]
-                                     )
-  {
+                                     ) {
     stopwatch.reset();
     if (!dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
-      ContextSplitterFactory.load_mapfiles_into_splitterlist
-        (map_files, ContextSplitterFactory.dkconfig_granularity);
+      ContextSplitterFactory.load_mapfiles_into_splitterlist(
+        map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
@@ -818,8 +815,7 @@ public final class Daikon {
     }
   }
 
-  public static void setup_splitters(PptMap all_ppts)
-  {
+  public static void setup_splitters(PptMap all_ppts) {
     if (dkconfig_disable_splitting) {
       return;
     }
@@ -862,8 +858,8 @@ public final class Daikon {
    **/
   public static int dkconfig_progress_display_width = 80;
 
-  /** A way to output FileIO progress information easily */
-  private final static FileIOProgress fileio_progress = new FileIOProgress();
+  /** A way to output FileIO progress information easily. */
+  private static final FileIOProgress fileio_progress = new FileIOProgress();
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
@@ -902,10 +898,8 @@ public final class Daikon {
         return;
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
-      String status = "";
-      while (status.length() < dkconfig_progress_display_width - 1)
-        status += " ";
-      System.out.print("\r" + status);
+      String status = UtilMDE.rpad("", dkconfig_progress_display_width - 1);
+      System.out.print("\r" + status.toString());
       System.out.print("\r");   // return to beginning of line
       System.out.flush();
     }
@@ -922,11 +916,9 @@ public final class Daikon {
     public void display(String message) {
       if (dkconfig_progress_delay == -1)
         return;
-      String status = "[" + (df.format(new Date())) + "]: " + message;
-      if (status.length() > dkconfig_progress_display_width - 1)
-        status = status.substring(0, dkconfig_progress_display_width - 1);
-      while (status.length() < dkconfig_progress_display_width - 1)
-        status += " ";
+      String status
+        = UtilMDE.rpad("[" + df.format(new Date()) + "]: " + message,
+                       dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
       // System.out.println (status);
@@ -973,8 +965,7 @@ public final class Daikon {
    * candidate invariants.
    **/
   private static void process_data(PptMap all_ppts,
-                                   Set dtrace_files)
-  {
+                                   Set dtrace_files) {
     MemMonitor monitor = null;
     if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");
@@ -1274,9 +1265,8 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   //
 
-  static public void create_splitters(PptMap all_ppts, Set spinfo_files)
-    throws IOException
-  {
+  public static void create_splitters(PptMap all_ppts, Set spinfo_files)
+    throws IOException {
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
       SplitterObject[][] splitterObjectArrays
@@ -1336,9 +1326,9 @@ public final class Daikon {
   }
 
   /**
-   * Returns the max ppt that corresponds the specified percentage
+   * Returns the max ppt that corresponds to the specified percentage
    * of ppts (presuming that only those ppts <= max_ppt will be
-   * processed)
+   * processed).
    */
   private static String setup_ppt_perc (Collection decl_files, int ppt_perc) {
 

@@ -276,7 +276,7 @@ public class PptSliceEquality
 
   /**
    * Dummy value that's incomparable to everything else to indicate
-   * missings in createEqualityInvs
+   * missings in createEqualityInvs.
    **/
   private static final Object dummyMissing = new StringBuffer("Dummy missing");
 
@@ -366,8 +366,7 @@ public class PptSliceEquality
    * @pre Each value in map is a list of size 1 or greater
    * @post Each value in map is a list of size 1 or greater
    **/
-  private void addToBindingList (Map map, Object key, VarInfo value)
-  {
+  private void addToBindingList (Map map, Object key, VarInfo value) {
     Assert.assertTrue (key != null);
     List elements = (List) map.get(key);
     if (elements == null) {
@@ -739,7 +738,7 @@ public class PptSliceEquality
   /**
    * Order Equality invariants by the indices of leaders.
    **/
-  public static class EqualityComparator implements Comparator {
+  public static final class EqualityComparator implements Comparator {
     public static final EqualityComparator theInstance = new EqualityComparator();
     private EqualityComparator() {
 
@@ -755,7 +754,7 @@ public class PptSliceEquality
 
   /**
    * Returns an array of all of the leaders sorted by varinfo_index
-   * for this equality view
+   * for this equality view.
    */
   public VarInfo[] get_leaders_sorted() {
     VarInfo[] leaders = new VarInfo[invs.size()];

@@ -198,16 +198,14 @@ public final class StringComparisonCore
     return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
 
-  public boolean isSameFormula(StringComparisonCore other)
-  {
+  public boolean isSameFormula(StringComparisonCore other) {
     return
       (can_be_eq == other.can_be_eq) &&
       (can_be_lt == other.can_be_lt) &&
       (can_be_gt == other.can_be_gt);
   }
 
-  public boolean isExclusiveFormula(StringComparisonCore other)
-  {
+  public boolean isExclusiveFormula(StringComparisonCore other) {
     return (! ((can_be_eq && other.can_be_eq)
                || (can_be_lt && other.can_be_lt)
                || (can_be_gt && other.can_be_gt)));

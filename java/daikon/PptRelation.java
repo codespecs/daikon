@@ -44,16 +44,16 @@ public class PptRelation implements Serializable {
    **/
   String relationship;
 
-  /** parent of relation **/
+  /** Parent of relation. **/
   public PptTopLevel parent;
 
-  /** child of relation **/
+  /** Child of relation. **/
   public PptTopLevel child;
 
-  /** map from parent vars to matching child vars */
+  /** Map from parent vars to matching child vars. */
   Map parent_to_child_map;
 
-  /** map from child vars to matching parent vars */
+  /** Map from child vars to matching parent vars. */
   Map child_to_parent_map;
 
   /**
@@ -75,7 +75,7 @@ public class PptRelation implements Serializable {
 
   /**
    * Adds this relation to its child's parent list and its parent's
-   * children list
+   * children list.
    */
   private void connect() {
     Assert.assertTrue (!child.parents.contains (this));
@@ -85,7 +85,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns the number of parent to child variable relations
+   * Returns the number of parent to child variable relations.
    */
   public int size() {
     return (parent_to_child_map.size());
@@ -96,7 +96,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Return a string containing all of the parent->child var relations
+   * Return a string containing all of the parent->child var relations.
    */
   public String parent_to_child_var_string() {
 
@@ -146,7 +146,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Prints a ppt hierarchy of all of the ppts of this child and below
+   * Prints a ppt hierarchy of all of the ppts of this child and below.
    */
   public void debug_print_tree (Logger l, int indent) {
 
@@ -169,7 +169,7 @@ public class PptRelation implements Serializable {
             && (relationship != ENTER_EXIT));
   }
 
-  /** Returns a string describing the parent-child relationship **/
+  /** Returns a string describing the parent-child relationship. **/
   public String getRelationType() {
     return (relationship);
   }
@@ -185,7 +185,7 @@ public class PptRelation implements Serializable {
 
   /**
    * Returns the child variable that corresponds to parentVar.  Returns
-   * null if there is no corresponding variable
+   * null if there is no corresponding variable.
    */
 
   public VarInfo childVar (VarInfo parentVar) {
@@ -193,7 +193,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns whether or not this relation's child has children of its own
+   * Returns whether or not this relation's child has children of its own.
    */
   public boolean hasChildren() {
     return (child.children.size() > 0);
@@ -281,7 +281,7 @@ public class PptRelation implements Serializable {
 
   /**
    * Returns a relation in the ppt hierarchy from an object (parent) to a
-   * method (child) on that object
+   * method (child) on that object.
    */
   public static PptRelation newObjectMethodRel (PptTopLevel parent,
                                                 PptTopLevel child) {
@@ -340,7 +340,7 @@ public class PptRelation implements Serializable {
    * @param child Ppt of a user of parent's object
    * @param arg Variable of type object found in child
    */
-  static public PptRelation newObjectUserRel (PptTopLevel parent,
+  public static PptRelation newObjectUserRel (PptTopLevel parent,
                                               PptTopLevel child,
                                               VarInfo arg) {
 
@@ -366,7 +366,7 @@ public class PptRelation implements Serializable {
    * Returns a relation in the ppt hierarchy from enter points to exit
    * points over orig variables.
    */
-  static public PptRelation newEnterExitRel (PptTopLevel parent,
+  public static PptRelation newEnterExitRel (PptTopLevel parent,
                                              PptTopLevel child) {
 
     Assert.assertTrue ((parent != null) && (child != null));
@@ -451,7 +451,7 @@ public class PptRelation implements Serializable {
    * exit points are often referred to as exitNN where NN is the line
    * number of the exit point).
    */
-  static public PptRelation newCombinedExitExitNNRel (PptTopLevel parent,
+  public static PptRelation newCombinedExitExitNNRel (PptTopLevel parent,
                                                       PptTopLevel child) {
 
     Assert.assertTrue ((parent != null) && (child != null));
@@ -475,7 +475,7 @@ public class PptRelation implements Serializable {
    * Returns a relation in the ppt hierarchy from a ppt to a
    * PptConditional for that point.
    */
-  static public PptRelation newPptPptConditional (PptTopLevel parent,
+  public static PptRelation newPptPptConditional (PptTopLevel parent,
                                                   PptTopLevel child) {
 
     Assert.assertTrue ((parent != null) && (child != null));
@@ -538,7 +538,7 @@ public class PptRelation implements Serializable {
   /**
    * Copies the relation from its current ppts to the specified
    * ppts.  The new ppts must have the same variables in the same
-   * order as do the original ones
+   * order as do the original ones.
    */
   public PptRelation copy (PptTopLevel parent, PptTopLevel child) {
 

@@ -259,14 +259,12 @@ public final class CLASSNAME
   }
 
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof CLASSNAME);
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof ELTONEOF) {
       ELTONEOF eoo = (ELTONEOF) other;
       if ((eoo.num_elts() == 1) && (((NUMWRAPPER)eoo.elt()).PRIMITIVEVALUE == 0)) {

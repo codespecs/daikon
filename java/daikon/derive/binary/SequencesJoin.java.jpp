@@ -49,9 +49,7 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
   // Variables starting with dkconfig_ should only be set via the

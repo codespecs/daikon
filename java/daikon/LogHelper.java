@@ -9,7 +9,8 @@ import java.util.logging.*;
  * at setup, after which Logger calls should be used
  * for logging.
  **/
-public class LogHelper {
+public final class LogHelper {
+  private LogHelper() { throw new Error("do not instantiate"); }
 
   // Class variables so user doesn't have to use log4j.Level
   public static final Level FINE = Level.FINE;
@@ -51,7 +52,7 @@ public class LogHelper {
   }
 
   // Statically initialized to save runtime
-  private static String padding_arrays[] = new String[] {
+  private static String[] padding_arrays = new String[] {
     "",
     " ",
     "  ",
@@ -117,7 +118,7 @@ public class LogHelper {
   }
 
   /**
-   * Changes the logging priority of a sub category
+   * Changes the logging priority of a sub category.
    **/
   public static void setLevel(String s, Level l) {
     Logger.getLogger(s).setLevel(l);

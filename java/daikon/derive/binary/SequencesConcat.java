@@ -21,7 +21,7 @@ public final class SequencesConcat
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Debug tracer
+   * Debug tracer.
    **/
   public static final Logger debug = Logger.getLogger("daikon.derive.binary.SequencesConcat");
 

@@ -120,7 +120,7 @@ public class PptSlice0
 
   // This can be called with very long lists by the conditionals code.
   // At least until that's fixed, it's important for it not to be
-  // quadratic. 
+  // quadratic.
   public void removeInvariants(List to_remove) {
     if (to_remove.size() < 10) {
       for (int i=0; i<to_remove.size(); i++) {
@@ -141,7 +141,7 @@ public class PptSlice0
       }
     }
   }
-  
+
   public boolean hasImplication(Implication imp) {
     initInvariantsSeen();
     return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));

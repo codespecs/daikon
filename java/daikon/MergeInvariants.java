@@ -7,7 +7,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import utilMDE.*;
 
-public class MergeInvariants {
+public final class MergeInvariants {
+  private MergeInvariants() { throw new Error("do not instantiate"); }
 
   public static final String lineSep = Global.lineSep;
 
@@ -37,9 +38,9 @@ public class MergeInvariants {
              + "are printed"},
       lineSep);
 
-  public static void main(String[] args) throws FileNotFoundException,
-  StreamCorruptedException, OptionalDataException, IOException,
-  ClassNotFoundException {
+  public static void main(String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                   null, 0),

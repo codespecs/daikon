@@ -35,12 +35,12 @@ import java.util.logging.Level;
 
 public final class CLASSNAME {
 
-  /** Main debug tracer **/
+  /** Main debug tracer. **/
   public static final Logger debug =
    Logger.getLogger("daikon.inv.binary.sequenceScalar." + CLASSSTRING);
 
-  // public final static boolean debugSequenceScalarFactory = false;
-  // public final static boolean debugSequenceScalarFactory = true;
+  // public static final boolean debugSequenceScalarFactory = false;
+  // public static final boolean debugSequenceScalarFactory = true;
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.

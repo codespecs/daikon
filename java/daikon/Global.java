@@ -25,12 +25,12 @@ public final class Global {
   /// Constants
   ///
 
-  public final static String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.getProperty("line.separator");
 
   // Regular expressions
-  public final static Perl5Compiler regexp_compiler;
-  public final static Perl5Matcher regexp_matcher;
-  public final static Pattern ws_regexp;
+  public static final Perl5Compiler regexp_compiler;
+  public static final Perl5Matcher regexp_matcher;
+  public static final Pattern ws_regexp;
 
   static {
     regexp_compiler = new Perl5Compiler();
@@ -42,7 +42,7 @@ public final class Global {
     }
   }
 
-  public final static Random random = new Random();
+  public static final Random random = new Random();
 
   ///////////////////////////////////////////////////////////////////////////
   /// Variables
@@ -60,7 +60,7 @@ public final class Global {
   // Maybe turn it into a structure or an array of integers (which is
   // easier to output and to initialize, both by looping).
 
-  public final static boolean output_statistics = true;
+  public static final boolean output_statistics = true;
 
   /// Invariant inference or variable derivation
   // These I will compute from a final postpass over each Ppt.
@@ -193,7 +193,7 @@ public final class Global {
 
 
   // Can't change to log4j; uses special outputter
-  public final static boolean debugPrintDtrace = false;
+  public static final boolean debugPrintDtrace = false;
 
   // used only if debugPrintDtrace is true.  Users need not set this.
   public static PrintWriter dtraceWriter = null;

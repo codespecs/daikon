@@ -102,7 +102,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public static Logger debug
     = Logger.getLogger("daikon.inv.ternary.threeScalar.#CLASSNAME");
 
-  final static int[][] var_indices;
+  static final int[][] var_indices;
   static {
     var_indices = new int[7][];
     var_indices[PERM_XYZ] = new int[] { 0, 1, 2 };

@@ -4,7 +4,7 @@ package daikon.inv;
  * This class is an enumerated type representing the possible results of
  * adding an sample to an invariant.
  */
-public class InvariantStatus {
+public final class InvariantStatus {
 
   private final String status;
 

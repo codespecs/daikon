@@ -131,8 +131,7 @@ public class SessionManager
 
   // Start up simplify, and send the universal backgound.
   // Is successful exactly when return != null.
-  public static SessionManager attemptProverStartup()
-  {
+  public static SessionManager attemptProverStartup() {
     SessionManager prover;
 
     // Limit ourselves to a few tries

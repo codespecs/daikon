@@ -163,9 +163,7 @@ public class PAIRWISEINTEQUAL
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer. **/
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoSequence." + PAIRWISEINTEQUALstring);
 
@@ -176,7 +174,7 @@ public class PAIRWISEINTEQUAL
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugPairwiseIntComparison = false;
+  static final boolean debugPairwiseIntComparison = false;
 
   protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
@@ -400,13 +398,11 @@ public class PAIRWISEINTEQUAL
     }
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

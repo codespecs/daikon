@@ -71,8 +71,8 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  public final static boolean debugLinearTernary = false;
-  // public final static boolean debugLinearTernary = true;
+  public static final boolean debugLinearTernary = false;
+  // public static final boolean debugLinearTernary = true;
 
   public CORECLASS core;
 
@@ -326,13 +326,11 @@ public class CLASSNAME
     return null;
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }

@@ -278,7 +278,7 @@ public class SEQSEQINTEQUAL
   /**
    * Debugging logger.
    **/
-  final static Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence."
+  static final Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence."
                                                 + SEQSEQINTEQUALstring);
 
   static Comparator comparator = ARRAYCOMPARATOR;
@@ -501,13 +501,11 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  public boolean isSameFormula(Invariant o)
-  {
+  public boolean isSameFormula(Invariant o) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant o)
-  {
+  public boolean isExclusiveFormula(Invariant o) {
     return false;
   }
 

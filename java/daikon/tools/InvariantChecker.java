@@ -24,7 +24,7 @@ public class InvariantChecker {
   public static final Logger debug_detail
     = Logger.getLogger ("daikon.tools.InvariantCheckerDetail");
 
-  private final static Daikon.FileIOProgress progress
+  private static final Daikon.FileIOProgress progress
     = new Daikon.FileIOProgress();
 
 

@@ -633,8 +633,7 @@ public class PptTopLevel
   /// Finding an object or class ppt for a given ppt
   ///
 
-  void set_controlling_ppts(PptMap all_ppts)
-  {
+  void set_controlling_ppts(PptMap all_ppts) {
     // TODO: also require that this is a public method
     if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
       PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeObject());
@@ -791,7 +790,7 @@ public class PptTopLevel
   }
 
 
-  // final static int derivation_passes = 2; // [INCR]
+  // static final int derivation_passes = 2; // [INCR]
 
   // To verify that these are all the factories of interest, do
   // cd ~/research/invariants/daikon/derive; search -i -n 'extends.*derivationfactory'
@@ -901,8 +900,7 @@ public class PptTopLevel
   // Formerly known as "deriveVariablesOnePass", but now there's only
   // ever one pass.
   private Derivation[] derive(int vi_index_min,
-                              int vi_index_limit)
-  {
+                              int vi_index_limit) {
     boolean debug_bin_possible = false;
 
     UnaryDerivationFactory[] unary = unaryDerivations;
@@ -2382,8 +2380,7 @@ public class PptTopLevel
    * just want to set up all of the invariants, not actually feed them
    * data.
    **/
-  private void __addViewsData(Vector slices_vector)
-  {
+  private void __addViewsData(Vector slices_vector) {
     // use an array because iterating over it will be more efficient, I suspect.
     PptSlice[] slices = (PptSlice[])
       slices_vector.toArray(new PptSlice[slices_vector.size()]);
@@ -2643,8 +2640,7 @@ public class PptTopLevel
   // slices were not created.
 
   private void instantiate_views(int vi_index_min,
-                                 int vi_index_limit)
-  {
+                                 int vi_index_limit) {
     if (Global.debugInfer.isLoggable(Level.FINE))
       Global.debugInfer.fine ("instantiate_views: " + this.name
                            + ", vi_index_min=" + vi_index_min
@@ -4179,7 +4175,7 @@ public class PptTopLevel
   }
 
 
-  final public static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+  public final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 

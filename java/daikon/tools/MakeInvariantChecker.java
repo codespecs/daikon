@@ -193,8 +193,7 @@ public final class MakeInvariantChecker {
    *           <li> --assertion_behavior [none]
    *     </ul>
    */
-  protected static Set[] readOptions(String args[])
-  {
+  protected static Set[] readOptions(String args[]) {
     if (args.length == 0) {
       System.out.println("MakeInvariantChecker error: "
                           + "no files supplied on command line.");
@@ -328,7 +327,7 @@ public final class MakeInvariantChecker {
    *  @throws IOException if invariantFile cannot be read.
    *  @throws ClassNotFoundException if
    */
-  private static HashMap processInvariants(File invariantFile) throws IOException, ClassNotFoundException{
+  private static HashMap processInvariants(File invariantFile) throws IOException, ClassNotFoundException {
     // See varNameMap declaration above for info.
     Daikon.output_style = OutputFormat.JAVA;
 
@@ -737,7 +736,7 @@ public final class MakeInvariantChecker {
       "      *",
       "      *",
       "      */",
-      "     private static Set readOptions (String[] args) throws IOException{",
+      "     private static Set readOptions (String[] args) throws IOException {",
       "          if (args.length == 0) {",
       "               System.out.println(\"No dtrace file specified.\");",
       "               System.out.println(usage);",

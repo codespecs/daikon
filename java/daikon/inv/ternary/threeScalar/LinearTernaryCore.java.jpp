@@ -54,8 +54,8 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** Debug tracer **/
-  final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar." + CLASSSTRING);
+  /** Debug tracer. **/
+  static final Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar." + CLASSSTRING);
 
   // ax + by + cz + d = 0; first argument is x, second is y, third is z
   public double a = 0, b = 0, c = 0, d = 0;
@@ -95,7 +95,7 @@ public final class CLASSNAME
   // The number of distinct values (not samples) seen.
   public int values_seen = 0;
 
-  final static int MINTRIPLES = 5;
+  static final int MINTRIPLES = 5;
 
   public CLASSNAME(Invariant wrapper) {
     this.wrapper = wrapper;
@@ -729,8 +729,7 @@ public final class CLASSNAME
                              VarInfoName x, VarInfo xvi,
                              VarInfoName y, VarInfo yvi,
                              VarInfoName z, VarInfo zvi,
-                             double a, double b, double c, double d)
-  {
+                             double a, double b, double c, double d) {
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
       return wrapper.format_too_few_samples(format, null);
     }
@@ -803,8 +802,7 @@ public final class CLASSNAME
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfo xvi,
                              VarInfoName y, VarInfo yvi,
-                             VarInfoName z, VarInfo zvi)
-  {
+                             VarInfoName z, VarInfo zvi) {
     String result = format_using(format, x, xvi, y, yvi, z, zvi, a, b, c, d);
     if (result != null) {
       return result;
@@ -820,8 +818,7 @@ public final class CLASSNAME
   //   return format(y, x, a, -b/a);
   // }
 
-  public boolean isSameFormula(CLASSNAME other)
-  {
+  public boolean isSameFormula(CLASSNAME other) {
     boolean inactive_can_match = true;
 
     // If we are matching up those that have not seen enough values yet
@@ -879,8 +876,7 @@ public final class CLASSNAME
     }
   }
 
-  public boolean isExclusiveFormula(CLASSNAME other)
-  {
+  public boolean isExclusiveFormula(CLASSNAME other) {
     if ((values_seen < MINTRIPLES) ||
         (other.values_seen < MINTRIPLES)) {
       return false;

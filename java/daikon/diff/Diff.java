@@ -54,7 +54,7 @@ public final class Diff {
   private static PptMap manip1 = null;
   private static PptMap manip2 = null;
 
-  /** The long command line options **/
+  /** The long command line options. **/
   private static final String INV_SORT_COMPARATOR1_SWITCH =
     "invSortComparator1";
   private static final String INV_SORT_COMPARATOR2_SWITCH =
@@ -516,7 +516,7 @@ public final class Diff {
 
   /**
    * Reads an InvMap from a file that contains a serialized InvMap or
-   * PptMap
+   * PptMap.
    **/
   private InvMap readInvMap(File file) throws
   IOException, ClassNotFoundException {

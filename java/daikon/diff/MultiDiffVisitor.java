@@ -112,7 +112,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         */
     }
 
-    /** Prints everything in the goodList */
+    /** Prints everything in the goodList. */
     public void printAll () {
 
         if (spinfoMode) {
@@ -183,7 +183,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         System.out.println ("\n");
     }
 
-     /** Prints everything in the goodList, outputs as spinfo */
+     /** Prints everything in the goodList, outputs as spinfo. */
     public void printAllSpinfo() {
 
         // keeps track of supressed invariants due to appearing in

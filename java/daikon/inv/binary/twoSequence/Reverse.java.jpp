@@ -195,8 +195,7 @@ public class CLASSNAME
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof CLASSNAME);
     return true;
   }

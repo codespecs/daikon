@@ -1092,7 +1092,7 @@ public final class ONEOFSCALAR
 
   #if defined(SEQUENCE)
 
-    result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)";
+    result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)"; // "interned"
 
   #else
 
@@ -1672,8 +1672,7 @@ public final class ONEOFSCALAR
     return (true);
   }
 
-  public boolean isSameFormula(Invariant o)
-  {
+  public boolean isSameFormula(Invariant o) {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
     if (num_elts != other.num_elts)
       return false;
@@ -1752,8 +1751,7 @@ public final class ONEOFSCALAR
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant o)
-  {
+  public boolean isExclusiveFormula(Invariant o) {
     if (o instanceof ONEOFSCALAR) {
       ONEOFSCALAR other = (ONEOFSCALAR) o;
 

@@ -232,8 +232,7 @@ public final class Runtime {
             // of the "dtrace" (PrintStream) object are not flushed,
             // so we miss the tail of the file.
 
-            synchronized (daikon.Runtime.dtrace)
-            {
+            synchronized (daikon.Runtime.dtrace) {
               dtrace.println();
               // This lets us know we didn't lose any data.
               dtrace.println("# EOF (added by daikon.Runtime.addShutdownHook)");
@@ -359,6 +358,8 @@ public final class Runtime {
         sb.append("\\r");
         post_esc = i+1;
         break;
+      default:
+        // Do nothing; i gets incremented.
       }
     }
     if (sb.length() == 0)

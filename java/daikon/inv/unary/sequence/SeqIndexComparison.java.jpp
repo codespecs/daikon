@@ -155,9 +155,7 @@ public class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040203L;
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer. **/
   public static final Logger debug
     = Logger.getLogger ("daikon.inv.unary.sequence." + STRING(CLASSNAME));
 
@@ -401,13 +399,11 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

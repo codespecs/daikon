@@ -18,12 +18,12 @@ public abstract class BinaryDerivation
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Original variable 1
+   * Original variable 1.
    **/
   public VarInfo base1;
 
   /**
-   * Original variable 2
+   * Original variable 2.
    **/
   public VarInfo base2;
 

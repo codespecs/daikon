@@ -50,7 +50,7 @@ class StatementReplacer extends DepthFirstVisitor {
     statementMap = new ReplaceStatementMap(replaceStatements);
   }
 
- static final int MAXREPLACEMENTS = 10;
+  static final int MAXREPLACEMENTS = 10;
 
   /**
    * Makes the replacements in statement that are designated by this.
@@ -88,18 +88,18 @@ class StatementReplacer extends DepthFirstVisitor {
     }
   }
 
- /**
-  * This method should not be used directly by users of this class;
-  * however, it must be public to full-fill the visitor interface.
-  * If n is a method call with a replacement, then the variables
-  * of the replacement statement are replaced by the arguments
-  * to the method call and then the replacement statement is
-  * substituted for the method call.  The first token of n is set
-  * to the replace statement.  All the other tokens are set to the
-  * empty string by visit(NodeToken n).
-  * @param n the possible method call in which replacement may be
-  *  made.
-  */
+  /**
+   * This method should not be used directly by users of this class;
+   * however, it must be public to full-fill the visitor interface.
+   * If n is a method call with a replacement, then the variables
+   * of the replacement statement are replaced by the arguments
+   * to the method call and then the replacement statement is
+   * substituted for the method call.  The first token of n is set
+   * to the replace statement.  All the other tokens are set to the
+   * empty string by visit(NodeToken n).
+   * @param n the possible method call in which replacement may be
+   *  made.
+   */
   public void visit(PrimaryExpression n) {
     if (! matchFound) {
       ReplaceStatement replaceStatement = null;
@@ -150,13 +150,13 @@ class StatementReplacer extends DepthFirstVisitor {
     return args;
   }
 
- /**
-  * This method should not be used directly by users of this class;
-  * however, it must be public to full-fill the visitor interface.
-  * Sets all tokens except the first in a Primary expression to the
-  * empty string. All begin columns and endColumns are set to -1, to
-  * ensure that Ast printing exceptions are not thrown.
-  */
+  /**
+   * This method should not be used directly by users of this class;
+   * however, it must be public to full-fill the visitor interface.
+   * Sets all tokens except the first in a Primary expression to the
+   * empty string. All begin columns and endColumns are set to -1, to
+   * ensure that Ast printing exceptions are not thrown.
+   */
   public void visit(NodeToken n) {
     if (matchFound) {
       n.tokenImage = "";
@@ -261,18 +261,18 @@ class StatementReplacer extends DepthFirstVisitor {
     return args;
   }
 
- /**
-  * Returns the argument with parens placed around it unless there
-  * are already parens the argument.  For example, "x" would yield
-  * "(x)", "x + 1" would yeild "(x + 1)", and "(x+1)" would yield
-  * no change.
-  */
- public static String addParens(String arg) {
-  arg = arg.trim();
-  if (arg.charAt(0) == '(' && arg.charAt(arg.length() -1) == ')') {
-   return arg;
+  /**
+   * Returns the argument with parens placed around it unless there
+   * are already parens the argument.  For example, "x" would yield
+   * "(x)", "x + 1" would yeild "(x + 1)", and "(x+1)" would yield
+   * no change.
+   */
+  public static String addParens(String arg) {
+    arg = arg.trim();
+    if (arg.charAt(0) == '(' && arg.charAt(arg.length() -1) == ')') {
+      return arg;
+    }
+    return "(" + arg + ")";
   }
-  return "(" + arg + ")";
- }
 
 }

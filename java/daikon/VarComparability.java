@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  **/
 public abstract class VarComparability {
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static final Logger debug =
     Logger.getLogger("daikon.VarComparability");
 
@@ -90,17 +90,17 @@ public abstract class VarComparability {
   public abstract VarComparability indexType(int dim);
 
 
-  /** Returns whether two variables are comparable **/
+  /** Returns whether two variables are comparable. **/
   public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.name, v1.comparability, v2.name, v2.comparability);
   }
 
-  /** Returns whether two comparabilities are comparable **/
+  /** Returns whether two comparabilities are comparable. **/
   public static boolean comparable(VarComparability type1, VarComparability type2) {
     return comparable(null, type1, null, type2);
   }
 
-  /** Returns whether two variables are comparable **/
+  /** Returns whether two variables are comparable. **/
   public static boolean comparable(VarInfoName viname1, VarComparability type1,
                                    VarInfoName viname2, VarComparability type2) {
 

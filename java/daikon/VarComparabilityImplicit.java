@@ -144,9 +144,9 @@ public final class VarComparabilityImplicit
   }
 
   /**
-   * Same as comparable except that variables that are comparable to
+   * Same as comparable, except that variables that are comparable to
    * everything (negative comparability value) can't be included in the
-   * same equality set as those with positive values
+   * same equality set as those with positive values.
    */
   public boolean equality_set_ok (VarComparability other) {
 

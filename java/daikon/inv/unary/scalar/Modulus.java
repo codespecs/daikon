@@ -189,8 +189,7 @@ public class Modulus
     return 1 - Math.pow(probability_one_elt_modulus, ppt.num_samples());
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
 
     boolean thisMeaningless = (modulus == 0 || modulus == 1);
@@ -208,8 +207,7 @@ public class Modulus
     }
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1))
       return false;
 

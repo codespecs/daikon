@@ -11,6 +11,7 @@ import java.io.*;
  **/
 
 public class MultiDiff {
+    private MultiDiff() { throw new Error("do not instantiate"); }
 
     public static void main (String[] args)
         throws IOException, ClassNotFoundException,

@@ -335,8 +335,7 @@ public class SUBSET
     return null;
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
+  public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof SUBSET);
     return true;
   }

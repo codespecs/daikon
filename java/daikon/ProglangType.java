@@ -85,10 +85,11 @@ public final class ProglangType
    * representation.
    * basetype should be interned.
    **/
-  private ProglangType(String basetype, int dims) {
+  private ProglangType(String basetype, int dimensions) {
     Assert.assertTrue(basetype == basetype.intern());
-    base = basetype;
-    pseudoDimensions = dimensions = dims;
+    this.base = basetype;
+    this.dimensions = dimensions;
+    pseudoDimensions = dimensions;
 
     /*
      * We support the rendering of objects as lists for a range of
@@ -157,9 +158,10 @@ public final class ProglangType
     return intern(base.intern(), dimensions);
   }
 
-  public boolean equals(Object o) {
-    return this == o;
-  }
+  // Is this necessary?  It will be inhereited from Object.
+  // public boolean equals(Object o) {
+  //   return this == o;
+  // }
 
   private boolean internal_equals(ProglangType other) {
     return ((base == other.base)
@@ -179,8 +181,7 @@ public final class ProglangType
       return null;
 
     // now search for the right dimension
-    for (int ii=0; ii<v.size(); ++ii)
-    {
+    for (int ii=0; ii<v.size(); ++ii) {
       ProglangType candidate = (ProglangType)v.elementAt(ii);
       if (candidate.dimensions() == t_dims)
         return candidate;
@@ -213,8 +214,7 @@ public final class ProglangType
     result = new ProglangType(t_base, t_dims);
 
     Vector v = (Vector)all_known_types.get(t_base);
-    if (v == null)
-    {
+    if (v == null) {
       v = new Vector();
       all_known_types.put(t_base, v);
     }
@@ -249,35 +249,35 @@ public final class ProglangType
   // array is type.base() == ProglangType.BASE_CHAR.
 
   // Primitive types
-  final static String BASE_BOOLEAN = "boolean";
-  final static String BASE_BYTE = "byte";
-  final static String BASE_CHAR = "char";
-  final static String BASE_DOUBLE = "double";
-  final static String BASE_FLOAT = "float";
-  final static String BASE_INT = "int";
-  final static String BASE_LONG = "long";
-  final static String BASE_SHORT = "short";
+  static final String BASE_BOOLEAN = "boolean";
+  static final String BASE_BYTE = "byte";
+  static final String BASE_CHAR = "char";
+  static final String BASE_DOUBLE = "double";
+  static final String BASE_FLOAT = "float";
+  static final String BASE_INT = "int";
+  static final String BASE_LONG = "long";
+  static final String BASE_SHORT = "short";
 
   // Nonprimitive types
-  final static String BASE_OBJECT = "java.lang.Object";
-  final static String BASE_STRING = "java.lang.String";
-  final static String BASE_INTEGER = "java.lang.Integer";
+  static final String BASE_OBJECT = "java.lang.Object";
+  static final String BASE_STRING = "java.lang.String";
+  static final String BASE_INTEGER = "java.lang.Integer";
   // "hashcode", "address", and "pointer" are identical;
   // "hashcode" is preferred.
-  final static String BASE_HASHCODE = "hashcode";
-  // final static String BASE_ADDRESS = "address";
-  // final static String BASE_POINTER = "pointer";
+  static final String BASE_HASHCODE = "hashcode";
+  // static final String BASE_ADDRESS = "address";
+  // static final String BASE_POINTER = "pointer";
 
   // avoid duplicate allocations
   // No need for the Integer versions; use Long instead.
-  // final static Integer IntegerZero = Intern.internedInteger(0);
-  // final static Integer IntegerOne = Intern.internedInteger(1);
-  final static Long LongZero = Intern.internedLong(0);
-  final static Long LongOne = Intern.internedLong(1);
-  final static Double DoubleZero = Intern.internedDouble(0);
-  final static Double DoubleNaN = Intern.internedDouble(Double.NaN);
-  final static Double DoublePositiveInfinity = Intern.internedDouble(Double.POSITIVE_INFINITY);
-  final static Double DoubleNegativeInfinity = Intern.internedDouble(Double.NEGATIVE_INFINITY);
+  // static final Integer IntegerZero = Intern.internedInteger(0);
+  // static final Integer IntegerOne = Intern.internedInteger(1);
+  static final Long LongZero = Intern.internedLong(0);
+  static final Long LongOne = Intern.internedLong(1);
+  static final Double DoubleZero = Intern.internedDouble(0);
+  static final Double DoubleNaN = Intern.internedDouble(Double.NaN);
+  static final Double DoublePositiveInfinity = Intern.internedDouble(Double.POSITIVE_INFINITY);
+  static final Double DoubleNegativeInfinity = Intern.internedDouble(Double.NEGATIVE_INFINITY);
 
   /*
    *  Now that all other static initialisers are done, it is safe to
@@ -286,27 +286,27 @@ public final class ProglangType
    *  created (e.g.) the list_implementors object, etc.  */
 
   // Use == to compare, because ProglangType objects are interned.
-  public final static ProglangType INT = ProglangType.intern("int", 0);
-  public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
-  public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
-  public final static ProglangType CHAR = ProglangType.intern("char", 0);
-  public final static ProglangType STRING = ProglangType.intern("java.lang.String", 0);
-  public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
-  public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
-  public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
-  public final static ProglangType CHAR_ARRAY = ProglangType.intern("char", 1);
-  public final static ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
-  public final static ProglangType CHAR_ARRAY_ARRAY = ProglangType.intern("char", 2);
+  public static final ProglangType INT = ProglangType.intern("int", 0);
+  public static final ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
+  public static final ProglangType DOUBLE = ProglangType.intern("double", 0);
+  public static final ProglangType CHAR = ProglangType.intern("char", 0);
+  public static final ProglangType STRING = ProglangType.intern("java.lang.String", 0);
+  public static final ProglangType INT_ARRAY = ProglangType.intern("int", 1);
+  public static final ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
+  public static final ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
+  public static final ProglangType CHAR_ARRAY = ProglangType.intern("char", 1);
+  public static final ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
+  public static final ProglangType CHAR_ARRAY_ARRAY = ProglangType.intern("char", 2);
 
-  public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
-  public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
+  public static final ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
+  public static final ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
 
-  public final static ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
+  public static final ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
 
-  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
-  public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
-  public final static ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
-  public final static ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
+  public static final ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
+  public static final ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
+  public static final ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
+  public static final ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
 
   // Like Long.parseLong(), but transform large unsigned longs (as
   // from C's unsigned long long) into the corresponding negative Java

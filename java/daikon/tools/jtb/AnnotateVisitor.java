@@ -32,10 +32,10 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 
 class AnnotateVisitor extends DepthFirstVisitor {
 
-  public final static String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.getProperty("line.separator");
 
-  public final static String JML_START_COMMENT = "/*@" + lineSep;
-  public final static String JML_END_COMMENT = "@*/" + lineSep;
+  public static final String JML_START_COMMENT = "/*@" + lineSep;
+  public static final String JML_END_COMMENT = "@*/" + lineSep;
 
   public PptMap ppts;
   public boolean slashslash;       // whether to use // or /* style comments
@@ -838,7 +838,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
         throw new Error("Bad ppt: " + ppt);
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // This happens, for example, for final static vars (see
+        // This happens, for example, for static final vars (see
         // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
         System.out.println("Warning: Annotate: skipping Variable " + varname + " at " + ppt);
       } else {

@@ -106,8 +106,7 @@ public final class Configuration
 
   private List statements = new ArrayList();
 
-  public void apply(InputStream input)
-  {
+  public void apply(InputStream input) {
     Assert.assertTrue(input != null);
     try {
 
@@ -126,8 +125,7 @@ public final class Configuration
     }
   }
 
-  public void apply(String line)
-  {
+  public void apply(String line) {
     Assert.assertTrue(line != null);
 
     int eq = line.indexOf('=');
@@ -141,8 +139,7 @@ public final class Configuration
     apply(name, value);
   }
 
-  public void apply(String name, String value)
-  {
+  public void apply(String name, String value) {
     Assert.assertTrue(name != null);
     Assert.assertTrue(value != null);
 
@@ -155,8 +152,7 @@ public final class Configuration
     apply(classname, fieldname, value);
   }
 
-  public void apply(String classname, String fieldname, String value)
-  {
+  public void apply(String classname, String fieldname, String value) {
     Assert.assertTrue(classname != null);
     Assert.assertTrue(fieldname != null);
     Assert.assertTrue(value != null);
@@ -173,8 +169,7 @@ public final class Configuration
     apply(clazz, fieldname, value);
   }
 
-  public void apply(Class clazz, String fieldname, String value)
-  {
+  public void apply(Class clazz, String fieldname, String value) {
     Assert.assertTrue(clazz != null);
     Assert.assertTrue(fieldname != null);
     Assert.assertTrue(value != null);
@@ -191,8 +186,7 @@ public final class Configuration
     apply(field, value);
   }
 
-  private void apply(Field field, String unparsed)
-  {
+  private void apply(Field field, String unparsed) {
     Assert.assertTrue(field != null);
     Assert.assertTrue(unparsed != null);
 
@@ -251,8 +245,7 @@ public final class Configuration
     addRecord(classname, fieldname, unparsed);
   }
 
-  private void addRecord(String classname, String fieldname, String unparsed)
-  {
+  private void addRecord(String classname, String fieldname, String unparsed) {
     Assert.assertTrue(! fieldname.startsWith(PREFIX)); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);

@@ -26,8 +26,7 @@ public class GuardingImplication
   public static GuardingImplication makeGuardingImplication(PptTopLevel ppt,
                                                             Invariant predicate,
                                                             Invariant consequent,
-                                                            boolean iff)
-  {
+                                                            boolean iff) {
     // No duplicate check because the way it is set up no duplicates should occur:
     // No invariants are duplicates, and since each guarding implication is based
     // off of an existing invariant in a PptSlice, we are guarenteed no duplicate

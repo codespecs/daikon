@@ -18,6 +18,8 @@ import daikon.diff.*;
 import utilMDE.*;
 
 public final class FeatureExtractor {
+  private FeatureExtractor() { throw new Error("do not instantiate"); }
+
   // See end of file for static variable declaration
 
   // Main reads the input files, extracts features and then
@@ -40,7 +42,7 @@ public final class FeatureExtractor {
     "\t[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)\n" +
     "\t[-p] \t\tdo not output if no positive feature vectors are present\n";
 
-  static public void main(String[] args)
+  public static void main(String[] args)
     throws IOException, ClassNotFoundException, IllegalAccessException,
            InvocationTargetException {
     // Main performs 3 steps:
@@ -735,7 +737,7 @@ public final class FeatureExtractor {
 
     // Compares an Object to this
     // Throws ClassCastException if o is not an IntDoublePair
-    public int compareTo(Object o) throws ClassCastException{
+    public int compareTo(Object o) throws ClassCastException {
       IntDoublePair p;
       try {
         p = (IntDoublePair) o;
@@ -763,7 +765,7 @@ public final class FeatureExtractor {
       "\t[-n] repeat:\tif present then the number of positive and negative\n" +
       "\t\tvectors will be roughtly normalized (by repeats).\n";
 
-    static public void main(String[] args)
+    public static void main(String[] args)
       throws IOException, ClassNotFoundException {
 
       // First parse the arguments
@@ -895,7 +897,7 @@ public final class FeatureExtractor {
       "\t-s FileName:\tSVMfu or C5 test data (with .data)\n" +
       "\t-t Type:\tFormat, one of C5 or SVMfu\n";
 
-    static public void main(String[] args)
+    public static void main(String[] args)
       throws IOException, ClassNotFoundException {
 
       // First parse the arguments

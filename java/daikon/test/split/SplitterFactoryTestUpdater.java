@@ -199,7 +199,7 @@ public class SplitterFactoryTestUpdater {
     code.append(lineSep);
     code.append("  private static boolean saveFiles = false;" + lineSep);
     code.append(lineSep);
-    code.append("    private final static String lineSep = System.getProperty(\"line.separator\");" + lineSep);
+    code.append("    private static final String lineSep = System.getProperty(\"line.separator\");" + lineSep);
     code.append(lineSep);
     code.append("    private static String usage =" + lineSep);
     code.append("      UtilMDE.join(new String[] {" + lineSep);

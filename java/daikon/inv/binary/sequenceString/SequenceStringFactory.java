@@ -6,8 +6,8 @@ import java.util.*;
 
 public final class SequenceStringFactory {
 
-  public final static boolean debugSequenceStringFactory = false;
-  // public final static boolean debugSequenceStringFactory = true;
+  public static final boolean debugSequenceStringFactory = false;
+  // public static final boolean debugSequenceStringFactory = true;
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.

@@ -883,8 +883,7 @@ public class CLASSNAME
     return false;
   }
 
-  public boolean isSameFormula(Invariant inv)
-  {
+  public boolean isSameFormula(Invariant inv) {
     Assert.assertTrue(inv instanceof CLASSNAME);
     CLASSNAME other = (CLASSNAME) inv;
     return (this.var1_in_var2 == other.var1_in_var2 &&

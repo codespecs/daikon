@@ -169,13 +169,11 @@ public final class CLASSNAME
   }
 
 
-  public boolean isSameFormula(CLASSNAME other)
-  {
+  public boolean isSameFormula(CLASSNAME other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other)
-  {
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

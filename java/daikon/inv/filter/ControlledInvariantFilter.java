@@ -19,8 +19,7 @@ public class ControlledInvariantFilter extends InvariantFilter {
       return false;
   }
 
-  private boolean isWorthPrinting(Invariant inv)
-  {
+  private boolean isWorthPrinting(Invariant inv) {
     // if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
     //  PrintInvariants.debugFiltering.fine ("\tCalling IWP on " + inv.format() + " for reference\n");
     //  inv.isWorthPrinting();

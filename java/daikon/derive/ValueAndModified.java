@@ -14,10 +14,10 @@ public final class ValueAndModified {
   public Object value;          // not necessarily an interned value
   public int modified;
 
-  public final static ValueAndModified MISSING_NONSENSICAL
+  public static final ValueAndModified MISSING_NONSENSICAL
     = new ValueAndModified(null, ValueTuple.MISSING_NONSENSICAL);
 
-  public final static ValueAndModified MISSING_FLOW
+  public static final ValueAndModified MISSING_FLOW
     = new ValueAndModified(null, ValueTuple.MISSING_FLOW);
 
   public ValueAndModified(Object val, int mod) {

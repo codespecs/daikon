@@ -13,7 +13,7 @@ import java.util.logging.Level;
 public final class SequencesConcatFactory extends BinaryDerivationFactory {
 
   /**
-   * Debug tracer
+   * Debug tracer.
    **/
   public static final Logger debug =
     Logger.getLogger("daikon.derive.binary.SequencesConcatFactory");

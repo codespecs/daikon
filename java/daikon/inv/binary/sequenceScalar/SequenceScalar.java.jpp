@@ -74,7 +74,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
    /**
    * Subclasses can override in the rare cases they need to fix things
-   * even when not swapped
+   * even when not swapped.
    **/
   protected Invariant resurrect_done_unswapped() {
     // do nothing

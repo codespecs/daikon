@@ -5,7 +5,6 @@ import java.util.*;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import daikon.PptTopLevel;
 
 /**
  * A collection of code that configures and assists the dataflow
@@ -17,10 +16,9 @@ import daikon.PptTopLevel;
  * The only exception is init_pptslice_po(), which selects a portion
  * of some pre-computed data to store in the PptSlice.
  **/
-public class Dataflow
-{
+public final class Dataflow {
   // Nobody should be instantiating a Dataflow.
-  private Dataflow() { }
+  private Dataflow() { throw new Error("do not instantiate"); }
 
   public static final Logger debug = Logger.getLogger("daikon.flow");
 
@@ -28,7 +26,7 @@ public class Dataflow
   /** Debug tracer for ppt initialization.   **/
   public static final Logger debugInit = Logger.getLogger("daikon.flow.init");
 
-  /** Debug tracer for ppt invariant merging **/
+  /** Debug tracer for ppt invariant merging. **/
   public static final Logger debugMerge = Logger.getLogger
                                                 ("daikon.flow.merge");
 
@@ -150,8 +148,7 @@ public class Dataflow
    * init_partial_order(PptTopLevel, PptMap) for each ppt in turn.)
    * @param ppts a Collection of PptTopLevels to init
    **/
-  public static void init_partial_order(Collection ppts, PptMap all_ppts)
-  {
+  public static void init_partial_order(Collection ppts, PptMap all_ppts) {
     for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       init_partial_order(ppt, all_ppts);
@@ -178,8 +175,7 @@ public class Dataflow
    * relate EXITnn to EXIT, because the transitive closure handles the
    * rest.
    **/
-  private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
-  {
+  private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts) {
     if (debugInit.isLoggable(Level.FINE)) {
       debugInit.fine ("Initializing partial order for ppt " + ppt.name());
     }
@@ -216,8 +212,7 @@ public class Dataflow
    * @see VarInfo.po_lower
    **/
   private static void setup_po_same_name(VarInfo[] lower,
-                                         VarInfo[] higher)
-  {
+                                         VarInfo[] higher) {
     setup_po_same_name(lower, VarInfoName.IDENTITY_TRANSFORMER,
                        higher, VarInfoName.IDENTITY_TRANSFORMER);
   }
@@ -232,8 +227,7 @@ public class Dataflow
   private static void setup_po_same_name(VarInfo[] lower,
                                          VarInfoName.Transformer lower_xform,
                                          VarInfo[] higher,
-                                         VarInfoName.Transformer higher_xform)
-  {
+                                         VarInfoName.Transformer higher_xform) {
     debugInit.fine ("Setup_po_same_name");
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
@@ -308,12 +302,11 @@ public class Dataflow
 
 
   /**
-   * Connect EXITnn program points to EXIT program points
+   * Connect EXITnn program points to EXIT program points.
    * @param ppt The Exitnn program point to relate to its EXIT program point
    * @param ppts The standard program point map
    **/
-  public static void relate_combined_exits(PptTopLevel ppt, PptMap ppts)
-  {
+  public static void relate_combined_exits(PptTopLevel ppt, PptMap ppts) {
     // return unless its an EXITnn
     if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint()))
       return;
@@ -334,8 +327,7 @@ public class Dataflow
    * VarInfos using the OBJECT, CLASS, ENTER-EXIT program point
    * naming.
    **/
-  private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
-  {
+  private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts) {
     if (debugInit.isLoggable(Level.FINE)) {
       debugInit.fine ("Relating object and procedure ppts for " + ppt.name());
     }
@@ -379,8 +371,7 @@ public class Dataflow
    * them to the corresponding ENTER point.  Does nothing if exit_ppt
    * is not an EXIT/EXITnn.  Does not relate if point is EXITnn.
    **/
-  private static void create_and_relate_orig_vars(PptTopLevel exit_ppt, PptMap ppts)
-  {
+  private static void create_and_relate_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
     if (! exit_ppt.ppt_name.isExitPoint()) {
       return;
     }
@@ -436,8 +427,7 @@ public class Dataflow
    * Because of the "have no parent" constraint, this step must be the
    * last one performed on a program point being related.
    **/
-  private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts)
-  {
+  private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts) {
     if (debugInit.isLoggable(Level.FINE)) {
       debugInit.fine ("Doing relate types to objects: " + ppt.name());
     }
@@ -571,8 +561,7 @@ public class Dataflow
    **/
   public static void relate_derived_variables(PptTopLevel ppt,
                                               int lower,
-                                              int upper)
-  {
+                                              int upper) {
     debug.fine ("relate_derived_variables on " + ppt.name());
 
     // For all immediately higher groups of variables
@@ -632,7 +621,8 @@ public class Dataflow
         VarInfo vi_higher = null;
         for (int k = 0; k < flow_ppt.var_infos.length; k++) {
           VarInfo maybe = flow_ppt.var_infos[k];
-          if (maybe.derived == null) continue;
+          if (maybe.derived == null)
+            continue;
           if (vi.derived.isSameFormula(maybe.derived)) {
             VarInfo[] maybe_bases = maybe.derived.getBases();
             if (Arrays.equals(basemap, maybe_bases)) {
@@ -652,7 +642,7 @@ public class Dataflow
     }
   }
 
-  /** Our own record type for programming ease */
+  /** Our own record type for programming ease. */
   static final class VarAndSource {
     public final VarInfo var; // variable at the head of a search path
     public final int source;  // var's source index in var_infos from the ppt
@@ -667,7 +657,7 @@ public class Dataflow
   }
 
   /**
-   * Record type for parallel arrays of PptTopLevel and int[]
+   * Record type for parallel arrays of PptTopLevel and int[].
    **/
   public static final class PptsAndInts {
     public final PptTopLevel[] ppts;
@@ -698,8 +688,7 @@ public class Dataflow
    * Must be done after VarInfo partial ordering relations have been
    * set up.
    **/
-  private static void create_ppt_dataflow(PptTopLevel ppt)
-  {
+  private static void create_ppt_dataflow(PptTopLevel ppt) {
     // Points that receive samples (currently just EXIT/EXITnn)
     boolean receives_samples =
       ppt.ppt_name.isExitPoint() || ppt.ppt_name.isEnterPoint();
@@ -723,8 +712,7 @@ public class Dataflow
    * point's variables.  Must be done after VarInfo partial ordering
    * relations have been set up.
    **/
-  private static void create_ppt_invflow(PptTopLevel ppt)
-  {
+  private static void create_ppt_invflow(PptTopLevel ppt) {
     {
       PptsAndInts rec = compute_ppt_flow(ppt,
                                          false, // one-step paths
@@ -764,8 +752,7 @@ public class Dataflow
    **/
   public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
                                              boolean all_steps,
-                                             boolean higher)
-  {
+                                             boolean higher) {
     // Create the worklist 'first' to contain all variables in ppt.
     // That way, the result will be the flow from the whole program
     // point.
@@ -789,8 +776,7 @@ public class Dataflow
   public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
                                              VarInfo[] start,
                                              boolean all_steps,
-                                             boolean higher)
-  {
+                                             boolean higher) {
     // We could assert that start's VarInfos are from ppt.
 
     // Construct the worklist 'first' from the argument 'start'.
@@ -812,8 +798,7 @@ public class Dataflow
   private static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
                                               List start, // [VarAndSource]
                                               boolean all_steps,
-                                              boolean higher)
-  {
+                                              boolean higher) {
     if (debugInit.isLoggable(Level.FINE)) {
       debugInit.fine ("compute_ppt_flow for " + ppt.name() + " all_steps = "
                        + all_steps + " higher = " + higher);
@@ -957,8 +942,7 @@ public class Dataflow
    * selects a portion of the pre-computed PptTopLevel.invflow_ppts
    * field to store in the PptSlice.
    **/
-  public static void init_pptslice_po(PptSlice slice)
-  {
+  public static void init_pptslice_po(PptSlice slice) {
     // Don't setup top-down data structures if we are doing bottom up
     if (Daikon.dkconfig_df_bottom_up)
       return;
@@ -1011,8 +995,7 @@ public class Dataflow
    * and relationships to the given stream.
    **/
   public static void dump_ppts(OutputStream outstream,
-                               PptMap ppts)
-  {
+                               PptMap ppts) {
     Map po_lower_stats = new HashMap();
     Map po_higher_stats = new HashMap();
 
@@ -1041,8 +1024,11 @@ public class Dataflow
           Integer _count = new Integer(count);
           Integer _n = (Integer) po_higher_stats.get(_count);
           int n;
-          if (_n == null) { n = 0; }
-          else { n = _n.intValue(); }
+          if (_n == null) {
+            n = 0;
+          } else {
+            n = _n.intValue();
+          }
           po_higher_stats.put(_count, new Integer(n+1));
         }
         out.println("  PO lower:");
@@ -1056,8 +1042,11 @@ public class Dataflow
           Integer _count = new Integer(count);
           Integer _n = (Integer) po_lower_stats.get(_count);
           int n;
-          if (_n == null) { n = 0; }
-          else { n = _n.intValue(); }
+          if (_n == null) {
+            n = 0;
+          } else {
+            n = _n.intValue();
+          }
           po_lower_stats.put(_count, new Integer(n+1));
         }
       }
@@ -1092,8 +1081,7 @@ public class Dataflow
    * Writes a textual (debugging) form of the dataflow
    **/
   public static void dump_flow(OutputStream outstream,
-                               PptMap ppts)
-  {
+                               PptMap ppts) {
     PrintStream out = new PrintStream(outstream);
 
     for (Iterator iter = ppts.pptIterator(); iter.hasNext(); ) {
@@ -1121,9 +1109,8 @@ public class Dataflow
 
   /**
    * Creates upper program points by merging together the invariants
-   * from all of the lower points
+   * from all of the lower points.
    */
-
   public static void createUpperPpts (PptMap all_ppts) {
 
     // Process each ppt that doesn't have a parent

@@ -1392,8 +1392,7 @@ public final class UtilMDE {
 
 
   // @return either "n noun" or "n nouns" depending on n
-  public static String nplural(int n, String noun)
-  {
+  public static String nplural(int n, String noun) {
     if (n == 1)
       return n + " " + noun;
     else if (noun.endsWith("s") || noun.endsWith("x") ||
@@ -1423,7 +1422,7 @@ public final class UtilMDE {
     return rpad(String.valueOf(num), length);
   }
 
-  // Converts the doubleto a String, then formats it using rpad
+  // Converts the double to a String, then formats it using rpad
   public static String rpad(double num, int length) {
     return rpad(String.valueOf(num), length);
   }

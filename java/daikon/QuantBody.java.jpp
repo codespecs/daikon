@@ -102,7 +102,7 @@ The correct way to build the system is to run 'make'.
   return true;
 }
 
-  /** True iff both sequences have the same length, and all seq1[i] ==  seq2[i] * seq2[i]
+  /** True iff both sequences have the same length, and all seq1[i] ==  seq2[i] * seq2[i].
    *
    * Meaning (in pseudo-FOL):
    *
@@ -139,7 +139,7 @@ The correct way to build the system is to run 'make'.
 
 #if (defined(INT) || defined(LONG))
 
-  /** True iff both sequences have the same length, and all seq1[i] == ~ seq2[i]
+  /** True iff both sequences have the same length, and all seq1[i] == ~ seq2[i].
    *
    * Meaning (in pseudo-FOL):
    *
@@ -186,7 +186,7 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-  /** True iff both sequences have the same length, and all seq1[i] == (seq2[i] | seq1[i])
+  /** True iff both sequences have the same length, and all seq1[i] == (seq2[i] | seq1[i]).
    *
    * Meaning (in pseudo-FOL):
    *
@@ -624,7 +624,8 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-/** True iff every element in arr is greater than or equal to elt
+/** True iff every element in arr is greater than or equal to elt.
+ *
  * Meaning (in pseudo-FOL):
  *
  * forall i in { 0..arr.length-1 } : arr[i] >= elt
@@ -647,7 +648,7 @@ The correct way to build the system is to run 'make'.
 
 #endif
 
-/** True iff every element in arr is less than elt
+/** True iff every element in arr is less than elt.
  *
  * Meaning (in pseudo-FOL):
  *
@@ -670,7 +671,7 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-/** True iff every element in arr is less than or equal to elt
+/** True iff every element in arr is less than or equal to elt.
  *
  * Meaning (in pseudo-FOL):
  *
@@ -696,7 +697,7 @@ The correct way to build the system is to run 'make'.
 
 #endif
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] == seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] == seq2[i].
  *
  * Meaning (in pseudo-FOL):
  *
@@ -730,7 +731,7 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] != seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] != seq2[i].
  *
  * Meaning (in pseudo-FOL):
  *
@@ -766,7 +767,7 @@ The correct way to build the system is to run 'make'.
 
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] < seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] < seq2[i].
  *
  * Meaning (in pseudo-FOL):
  *
@@ -800,7 +801,7 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] <= seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] <= seq2[i].
  * Meaning (in pseudo-FOL):
  *
  * /\ seq1.length == se2.length
@@ -834,7 +835,7 @@ The correct way to build the system is to run 'make'.
 
 #endif
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] > seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] > seq2[i].
  * Meaning (in pseudo-FOL):
  *
  * /\ seq1.length == se2.length
@@ -867,7 +868,7 @@ The correct way to build the system is to run 'make'.
 }
 #endif
 
-/** True iff seq1 and seq2 have the same length, and every seq1[i] >= seq2[i]
+/** True iff seq1 and seq2 have the same length, and every seq1[i] >= seq2[i].
  * Meaning (in pseudo-FOL):
  *
  * /\ seq1.length == se2.length
@@ -904,7 +905,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * Returns true iff seq1 is lexically equal to seq2
+ * Returns true iff seq1 is lexically equal to seq2.
  */
 /*@ pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
   return pairwiseEqual(seq1, seq2);
@@ -918,7 +919,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * Returns true iff seq1 is lexically not equal to seq2
+ * Returns true iff seq1 is lexically not equal to seq2.
  */
 /*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
   return !lexEqual(seq1, seq2);
@@ -933,7 +934,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
 
 /**
- * Returns true iff seq1 is lexically <  seq2
+ * Returns true iff seq1 is lexically <  seq2.
  */
 /*@ pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -969,7 +970,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * Returns true iff seq1 is lexically <= to seq2
+ * Returns true iff seq1 is lexically <= to seq2.
  */
 /*@ pure */ public static boolean lexLTE(_TYPE[] seq1, _TYPE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1005,7 +1006,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * Returns true iff seq1 is lexically > to seq2
+ * Returns true iff seq1 is lexically > to seq2.
  */
 /*@ pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1041,7 +1042,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 /**
- * Returns true iff seq1 is lexically >= to seq2
+ * Returns true iff seq1 is lexically >= to seq2.
  */
 /*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
   int minlength = (seq1.length < seq2.length) ? seq1.length : seq2.length;
@@ -1367,7 +1368,7 @@ The correct way to build the system is to run 'make'.
 }
 
 /**
- * Daikon creates invariants over "variables" such as
+ * Daikon creates invariants over "variables" such as the following.
  *
  * x.arr[].z   The result of collecting all elements y.z for all y's
  *             in array x.arr.

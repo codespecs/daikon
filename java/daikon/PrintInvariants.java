@@ -13,7 +13,9 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 
-public class PrintInvariants {
+public final class PrintInvariants {
+
+  private PrintInvariants() { throw new Error("do not instantiate"); }
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -69,8 +71,8 @@ public class PrintInvariants {
   public static boolean test_output = false;
 
   /**
-   * Switch for whether to print discarded Invariants or not, default is false
-   * Activated by --disc_reason switch
+   * Switch for whether to print discarded Invariants or not, default is false.
+   * Activated by --disc_reason switch.
    **/
   public static boolean print_discarded_invariants = false;
 
@@ -140,9 +142,9 @@ public class PrintInvariants {
       "      Print debug info on the specified invariant class, vars, and ppt",
     }, lineSep);
 
-  public static void main(String[] args) throws FileNotFoundException,
-  StreamCorruptedException, OptionalDataException, IOException,
-  ClassNotFoundException {
+  public static void main(String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
@@ -268,7 +270,7 @@ public class PrintInvariants {
 
   /**
    * Prints out all the discardCodes and discardStrings of the Invariants
-   * that will not be printed if the --disc_reason switch is used
+   * that will not be printed if the --disc_reason switch is used.
    **/
   public static void print_reasons(PptMap ppts) {
     if (!print_discarded_invariants || Daikon.no_text_output) {
@@ -541,8 +543,7 @@ public class PrintInvariants {
    **/
   public static void print_invariants_maybe(PptTopLevel ppt,
                                             PrintWriter out,
-                                            PptMap all_ppts)
-  {
+                                            PptMap all_ppts) {
     debugPrint.fine  ("Considering printing ppt " + ppt.name());
 
     // Be silent if we never saw any samples.
@@ -636,8 +637,7 @@ public class PrintInvariants {
   //   return better_name;
   // }
 
-  public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
-  {
+  public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
     // System.out.println("entering print_sample_data");
 
     if (Daikon.output_num_samples) {
@@ -662,8 +662,7 @@ public class PrintInvariants {
     // System.out.println("entering print_sample_data\n");
   }
 
-  public static void print_modified_vars(PptTopLevel ppt, PrintWriter out)
-  {
+  public static void print_modified_vars(PptTopLevel ppt, PrintWriter out) {
     if (debugPrintModified.isLoggable(Level.FINE)) {
       debugPrintModified.fine ("Doing print_modified_vars for: " + ppt.name());
     }
@@ -858,8 +857,7 @@ public class PrintInvariants {
   }
 
   // Count statistics (via Global) on variables (canonical, missing, etc.)
-  public static void count_global_stats(PptTopLevel ppt)
-  {
+  public static void count_global_stats(PptTopLevel ppt) {
     for (int i=0; i<ppt.var_infos.length; i++) {
       /* [INCR]
       if (! ppt.var_infos[i].isCanonical()) {
@@ -893,8 +891,7 @@ public class PrintInvariants {
    * equal vars are included based on the value of
    * the parameter includeObviouslyEqual.
    ** /
-  public static Vector get_equal_vars(VarInfo vi, boolean includeObviouslyEqual)
-  {
+  public static Vector get_equal_vars(VarInfo vi, boolean includeObviouslyEqual) {
     Vector equal_vars = new Vector();
     equal_vars.add(vi);
 
@@ -925,8 +922,7 @@ public class PrintInvariants {
   }
   */ // ... [INCR]
 
-  public static Vector get_obviously_equal(VarInfo vi)
-  {
+  public static Vector get_obviously_equal(VarInfo vi) {
     Vector obviously_equal = null;
 
     /* [INCR]
@@ -952,8 +948,7 @@ public class PrintInvariants {
 
   // ppt should only be used for obtaining the number of values and
   // samples, but not for any other purpose.
-  public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt)
-  {
+  public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt) {
     if (debugPrintEquality.isLoggable(Level.FINE)) {
       debugPrintEquality.fine ("Attempting to print equality for: " + vi.name.name());
     }
@@ -1117,8 +1112,7 @@ public class PrintInvariants {
    * Determines whether an invariant should be printed.
    * @return true if the invariant should be printed.
    **/
-  public static boolean accept_invariant(Invariant inv)
-  {
+  public static boolean accept_invariant(Invariant inv) {
     throw new Error ("This method has been deprecated.  Use filters");
 
     /*
@@ -1178,8 +1172,7 @@ public class PrintInvariants {
 
   // ppt should only be used for obtaining the number of values and
   // samples, but not for any other purpose.
-  public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt)
-  {
+  public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
     // [INCR] int num_vals = inv.ppt.num_values();
     int inv_num_samps = inv.ppt.num_samples();
     String num_values_samples = "\t\t(" +
@@ -1342,8 +1335,7 @@ public class PrintInvariants {
   public static boolean includeObviouslyEqual = false;
 
   /* [INCR]
-  private static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi)
-  {
+  private static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi) {
     // This needs to be a separate if statement because if vi is not
     // canonical, it will fail assert statements in some of the things
     // that are invoked in the return clause.
@@ -1505,8 +1497,7 @@ public class PrintInvariants {
   /**
    * Does the actual printing of the invariants.
    **/
-  private static void finally_print_the_invariants(List invariants, PrintWriter out, PptTopLevel ppt)
-  {
+  private static void finally_print_the_invariants(List invariants, PrintWriter out, PptTopLevel ppt) {
     int index = 0;
     Iterator inv_iter = invariants.iterator();
     // System.out.println("finally_print_the_invariants processing " + invariants.size() + " invariants.");

@@ -1,9 +1,9 @@
-/* This file is temporary. 
+/* This file is temporary.
  * The functionality in here will be incorporated in MergeESC.java.
  * However, my current attempt at an integrated Merge class is horrible spaghetti.
- * So for the moment I'm leaving MergeESC.java and MergeESCVisitor alone, and 
+ * So for the moment I'm leaving MergeESC.java and MergeESCVisitor alone, and
  * keeping the mess here. -RRN
- */  
+ */
 
 package daikon.tools.jtb;
 
@@ -60,10 +60,10 @@ class MergeDBC {
   //    simply omitted.
   //  * With -s flag, use // comments; by default, use /* comments.
 
-  public final static String lineSep = System.getProperty("line.separator");
+  public static final String lineSep = System.getProperty("line.separator");
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.MergeDBC");
- 
+
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage:  java daikon.tools.MergeDBC FILE.inv FILE.java ...",
@@ -79,7 +79,7 @@ class MergeDBC {
     boolean slashslash = false;
     boolean insert_inexpressible = false;
 
-    Daikon.output_style = OutputFormat.DBCJAVA;   
+    Daikon.output_style = OutputFormat.DBCJAVA;
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -95,7 +95,7 @@ class MergeDBC {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);                
+          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

@@ -50,8 +50,7 @@ public class PptName
   /**
    * @param name non-null ppt name as given in the decls file
    **/
-  public PptName( String name )
-  {
+  public PptName( String name ) {
     // If the name is well-formed, like "mvspc.setupGUI()V:::EXIT75",
     // then this constructor will extract the class and method names.
     // If not (eg for lisp code), it's okay because only the GUI uses
@@ -90,8 +89,7 @@ public class PptName
   /**
    * @param className fully-qualified class name
    **/
-  public PptName(String className, String methodName, String pointName)
-  {
+  public PptName(String className, String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException
         ("One of class or method must be given");
@@ -144,8 +142,7 @@ public class PptName
    * May be null.
    * e.g. "DataStructures.StackAr"
    **/
-  public String getFullClassName()
-  {
+  public String getFullClassName() {
     return cls;
   }
 
@@ -155,8 +152,7 @@ public class PptName
    * May be null.
    * e.g. "StackAr"
    **/
-  public String getShortClassName()
-  {
+  public String getShortClassName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
     if (pt == -1)
@@ -172,8 +168,7 @@ public class PptName
    * May be null.
    * e.g. "pop()Ljava/lang/Object;"
    **/
-  public String getSignature()
-  {
+  public String getSignature() {
     return method;
   }
 
@@ -183,8 +178,7 @@ public class PptName
    * May be null.
    * e.g. "pop"
    **/
-  public String getMethodName()
-  {
+  public String getMethodName() {
     if (method == null) return null;
     int lparen = method.indexOf('(');
     Assert.assertTrue(lparen >= 0);
@@ -223,8 +217,7 @@ public class PptName
    * e.g. "84"
    * @see #exitLine()
    **/
-  public int getPointSubscript()
-  {
+  public int getPointSubscript() {
     int result = Integer.MIN_VALUE;
     if (point != null) {
       // returns the largest substring [i..] which parses to an integer
@@ -246,8 +239,7 @@ public class PptName
    * @return true iff this name refers to a synthetic object instance
    * program point
    **/
-  public boolean isObjectInstanceSynthetic()
-  {
+  public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
@@ -255,8 +247,7 @@ public class PptName
    * @return true iff this name refers to a synthetic class instance
    * program point
    **/
-  public boolean isClassStaticSynthetic()
-  {
+  public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
@@ -270,16 +261,14 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
-  public boolean isExitPoint()
-  {
+  public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
   /**
    * @return true iff this name refers to an abrupt completion point
    **/
-  public boolean isThrowsPoint()
-  {
+  public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
@@ -287,8 +276,7 @@ public class PptName
    * @return true iff this name refers to a combined (synthetic) procedure
    *         exit point
    **/
-  public boolean isCombinedExitPoint()
-  {
+  public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
 
@@ -303,8 +291,7 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
-  public boolean isEnterPoint()
-  {
+  public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
 
@@ -369,8 +356,7 @@ public class PptName
    * Requires: this.isExitPoint()
    * @return a name for the corresponding enter point
    **/
-  public PptName makeEnter()
-  {
+  public PptName makeEnter() {
     // This associates throw points with the main entry point.
     // We may wish to have a different exceptional than non-exceptional
     // entry point; in particular, if there was an exception, then perhaps
@@ -385,8 +371,7 @@ public class PptName
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the combined exit point
    **/
-  public PptName makeExit()
-  {
+  public PptName makeExit() {
     Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, method, FileIO.exit_suffix);
   }
@@ -395,8 +380,7 @@ public class PptName
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the corresponding object invariant
    **/
-  public PptName makeObject()
-  {
+  public PptName makeObject() {
     Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, null, FileIO.object_suffix);
   }
@@ -405,8 +389,7 @@ public class PptName
    * Requires: this.isExitPoint() || this.isEnterPoint() || this.isObjectInstanceSynthetic()
    * @return a name for the corresponding class-static invariant
    **/
-  public PptName makeClassStatic()
-  {
+  public PptName makeClassStatic() {
     Assert.assertTrue(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic(), fullname);
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
@@ -414,23 +397,19 @@ public class PptName
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  public String toString()
-  {
+  public String toString() {
     return fullname;
   }
 
-  public boolean equals(Object o)
-  {
+  public boolean equals(Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
-  public boolean equals(PptName o)
-  {
+  public boolean equals(PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  public int hashCode()
-  {
+  public int hashCode() {
     return fullname.hashCode();
   }
 

@@ -19,7 +19,7 @@ import utilMDE.*;
  **/
 public final class ValueTuple implements Cloneable {
 
-  /** Debug tracer **/
+  /** Debug tracer. **/
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
@@ -44,24 +44,24 @@ public final class ValueTuple implements Cloneable {
 
 
   // Right now there are only three meaningful values for a mod:
-  /** Not modified  **/
-  public final static int UNMODIFIED = 0;
-  /** Modified  **/
-  public final static int MODIFIED = 1;
+  /** Not modified.  **/
+  public static final int UNMODIFIED = 0;
+  /** Modified.  **/
+  public static final int MODIFIED = 1;
   /** Missing value because the expression doesn't make sense: x.a
    * when x is null.  Data trace files can contain this modbit. **/
-  public final static int MISSING_NONSENSICAL = 2;
+  public static final int MISSING_NONSENSICAL = 2;
   /** Missing value because of data flow: this.x.x isn't available
    * from a ppt.  Data trace files must not contain this modbit. **/
-  public final static int MISSING_FLOW = 3;
+  public static final int MISSING_FLOW = 3;
   /** Maximum mod bit value.  Always set to 1+ last modbit value.  **/
-  public final static int MODBIT_VALUES = 4;
+  public static final int MODBIT_VALUES = 4;
   // Out of the range of MODBIT_VALUES because this won't appear in the
   // tables; it gets converted to UNMODIFIED or MODIFIED, depending on
   // whether this is the first sample.  (Not sure whether that is the right
   // strategy in the long term; it does let me avoid changing code in the
   // short term.)
-  public final static int STATIC_CONSTANT = 22;
+  public static final int STATIC_CONSTANT = 22;
 
   // implementation for unpacked representation
 
@@ -110,17 +110,17 @@ public final class ValueTuple implements Cloneable {
   //  * no modified, no unmodified, no missing
   //    impossible
 
-  public final static int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
-  public final static int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
-  public final static int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
-  public final static int MISSING_NONSENSICAL_BITVAL = MathMDE.pow(2, MISSING_NONSENSICAL);
-  public final static int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
+  public static final int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
+  public static final int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
+  public static final int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
+  public static final int MISSING_NONSENSICAL_BITVAL = MathMDE.pow(2, MISSING_NONSENSICAL);
+  public static final int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
   // num_mod_samples(), and tuplemod_not_missing is not used.)
-  public final static int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES/2];
-  public final static int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES/4];
+  public static final int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES/2];
+  public static final int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES/4];
 
   static {
     int i1 = 0, i2 = 0;
