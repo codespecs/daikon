@@ -5846,6 +5846,9 @@ class @code{daikon.Quant}.
 For more information on this class, see flag 
 @code{--java_output} in @ref{Command line options}.
 
+@item --java_output
+Produces output in Java.
+
 @item --dbc_output
 Produces output in Jtest's Design-by-contract format
 (@uref{http://www.parasoft.com}).
