@@ -137,7 +137,9 @@ public final class UtilMDE {
     } else {
       result = (String) primitiveClassesFromJvm.get(classname);
       if (result == null) {
-        throw new Error("Malformed base class: " + classname);
+        // For now, hope for the best.
+        result = classname;
+        // throw new Error("Malformed base class: " + classname);
       }
     }
     for (int i=0; i<dims; i++) {
@@ -155,14 +157,18 @@ public final class UtilMDE {
     while (pos < arglist.length()-1) {
       if (pos > 1)
         result += ", ";
-      char c = arglist.charAt(pos);
+      int nonarray_pos = pos;
+      while (arglist.charAt(nonarray_pos) == '[') {
+        nonarray_pos++;
+      }
+      char c = arglist.charAt(nonarray_pos);
       if (c == 'L') {
-        int semi_pos = arglist.indexOf(";", pos);
+        int semi_pos = arglist.indexOf(";", nonarray_pos);
         result += classnameFromJvm(arglist.substring(pos, semi_pos+1));
         pos = semi_pos + 1;
       } else {
-        result += classnameFromJvm(arglist.substring(pos, pos+1));
-        pos = pos+1;
+        result += classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
+        pos = nonarray_pos+1;
       }
     }
     return result + ")";

@@ -751,6 +751,10 @@ public final class TestUtilMDE {
     Assert.assert(UtilMDE.arglistFromJvm("(II)").equals("(int, int)"));
     Assert.assert(UtilMDE.arglistFromJvm("(IJS)").equals("(int, long, short)"));
     Assert.assert(UtilMDE.arglistFromJvm("(Ljava/lang/Integer;ILjava/lang/Integer;)").equals("(java.lang.Integer, int, java.lang.Integer)"));
+    Assert.assert(UtilMDE.arglistFromJvm("([I)").equals("(int[])"));
+    Assert.assert(UtilMDE.arglistFromJvm("([III)").equals("(int[], int, int)"));
+    Assert.assert(UtilMDE.arglistFromJvm("(I[[II)").equals("(int, int[][], int)"));
+    Assert.assert(UtilMDE.arglistFromJvm("([Ljava/lang/Integer;I[[Ljava/lang/Integer;)").equals("(java.lang.Integer[], int, java.lang.Integer[][])"));
 
 
     // public static void addToClasspath(String dir)

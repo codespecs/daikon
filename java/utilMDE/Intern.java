@@ -170,6 +170,26 @@ public final class Intern {
   }
 
   /**
+   * Hasher object which hashes and compares String[] objects according
+   * to their contents.
+   * @see Hasher, java.util.Arrays.equals
+   **/
+  private static final class StringArrayHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return java.util.Arrays.equals((String[])a1, (String[])a2);
+    }
+    public int hashCode(Object o) {
+      String[] a = (String[])o;
+      int result = 0;
+      for (int i=0; i<a.length; i++) {
+        int a_hashcode = (a[i] == null) ? 0 : a[i].hashCode();
+        result = result * FACTOR + a_hashcode;
+      }
+      return result;
+    }
+  }
+
+  /**
    * Hasher object which hashes and compares Object[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
@@ -198,6 +218,7 @@ public final class Intern {
   private static WeakHasherMap internedLongArrays;
   private static WeakHasherMap internedDoubles;
   private static WeakHasherMap internedDoubleArrays;
+  private static WeakHasherMap internedStringArrays;
   private static WeakHasherMap internedObjectArrays;
 
   static {
@@ -207,6 +228,7 @@ public final class Intern {
     internedLongArrays = new WeakHasherMap(new LongArrayHasher());
     internedDoubles = new WeakHasherMap(new DoubleHasher());
     internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
+    internedStringArrays = new WeakHasherMap(new StringArrayHasher());
     internedObjectArrays = new WeakHasherMap(new ObjectArrayHasher());
   }
 
@@ -217,6 +239,7 @@ public final class Intern {
   public static int numLongArrays() { return internedLongArrays.size(); }
   public static int numDoubles() { return internedDoubles.size(); }
   public static int numDoubleArrays() { return internedDoubleArrays.size(); }
+  public static int numStringArrays() { return internedStringArrays.size(); }
   public static int numObjectArrays() { return internedObjectArrays.size(); }
   public static Iterator integers() { return internedIntegers.keySet().iterator(); }
   public static Iterator longs() { return internedLongs.keySet().iterator(); }
@@ -224,6 +247,7 @@ public final class Intern {
   public static Iterator longArrays() { return internedLongArrays.keySet().iterator(); }
   public static Iterator doubles() { return internedDoubles.keySet().iterator(); }
   public static Iterator doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
+  public static Iterator stringArrays() { return internedStringArrays.keySet().iterator(); }
   public static Iterator objectArrays() { return internedObjectArrays.keySet().iterator(); }
 
   /**
@@ -364,6 +388,24 @@ public final class Intern {
       return (double[])ref.get();
     } else {
       internedDoubleArrays.put(a, new WeakReference(a));
+      return a;
+    }
+  }
+
+  /**
+   * Intern (canonicalize) an String[].
+   * Returns a canonical representation for the String[] array.
+   * Arrays are compared according to their elements.
+   * The elements should themselves already be interned;
+   * they are compared using their equals() methods.
+   **/
+  public static String[] intern(String[] a) {
+    Object lookup = internedStringArrays.get(a);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (String[])ref.get();
+    } else {
+      internedStringArrays.put(a, new WeakReference(a));
       return a;
     }
   }
