@@ -75,6 +75,7 @@ This is the manual for the Daikon invariant detector.
 * Detecting invariants::        
 * Daikon output::               
 * Front ends::                  
+* Extending Daikon::            
 * Troubleshooting::             
 * Details::                     
 * File formats::
@@ -116,10 +117,6 @@ Instrumentation
 
 * Instrumenting Java programs::  
 * Instrumenting C/C++ programs::  
-
-Instrumenting C/C++ programs
-
-* Limitations::                 
 
 Run the instrumented program
 
@@ -177,6 +174,13 @@ C/C++ front end dfec
 
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
+* Pointer type disambiguation example::  
+* Limitations::                 
+
+Extending Daikon
+
+* New invariants::              
+* New derived variables::       
 
 Troubleshooting
 
@@ -869,7 +873,7 @@ file for the Daikon runtime library:
      dfec @var{...options...} @var{myprog}.cc
 @end example
 
-You'll most likely need to specify one or more commandline options, in
+You'll most likely need to specify one or more command-line options, in
 particular @option{-I}; see @ref{dfec command-line arguments}.
 
 After dfec is run, you must compile the instrumented source, linking
@@ -881,7 +885,7 @@ library.  By default, dfec places instrumented source in the
 @end example
 
 In addition, you may want to specify the @option{-w} flag to gcc, to
-surpress warnings.  dfec's output, while valid C++, may not be as
+suppress warnings.  dfec's output, while valid C++, may not be as
 intuitive to gcc as the input was.
 
 The Daikon front end for C/C++ has three effects:
@@ -1061,7 +1065,7 @@ The Daikon invariant detector is invoked as follows:
 This section describes the optional flags.
 
 
-@c Unfortuntely, @option{} adds quotes in the Info and printed output
+@c Unfortunately, @option{} adds quotes in the Info and printed output
 @c which is not necessary in a table.  However, @t and @code compress
 @c the two hyphens to 1 in Info and HTML output, which is even worse.
 @table @option
@@ -1452,7 +1456,7 @@ This filter suppresses invariants containing only constants.
 This filter suppresses invariants with a relatively few number of
 modified samples.  An example of such an invariant would be the
 following: ``x >= 5'', where ``x'' is observed to be 5 three times
-and 10 five times.  The observed values of @code{x} --- ie, the samples of
+and 10 five times.  The observed values of @code{x} --- i.e., the samples of
 @code{x} --- did not change enough for Daikon to be confident that this
 invariant is an actual invariant.
 
@@ -1474,7 +1478,7 @@ displayed by default.
 For every invariant, Daikon estimates the probability of that invariant
 happening by chance.  If that probability is less than the limit, then
 the invariant is deemed to be an actual invariant, not just a chance
-occurence.  Currently the limit is .01%.  So by default, only invariants
+occurrence.  Currently the limit is .01%.  So by default, only invariants
 with probabilities of less than .01% are shown.
 
 @end table
@@ -1512,7 +1516,7 @@ of the variables in the variables list.
 @end table
 
 
-@node    Front ends, Troubleshooting, Daikon output, Top
+@node    Front ends, Extending Daikon, Daikon output, Top
 @chapter Front ends
 
 
@@ -1674,7 +1678,7 @@ same names and directory structure as the original input files.
 @c not yet implemented for dfej as of 6/13/2001
 If the value of this field is @samp{.} (i.e., a single period), then
 instrumented files replace the original versions in the original
-directories, but the orginal source files are backed up by appending
+directories, but the original source files are backed up by appending
 @file{.uninst}.  More specifically,
 @enumerate
 @item each instrumented file is copied from @file{filename} to
@@ -1687,7 +1691,7 @@ This behavior permits in-place instrumentation, which may be desirable
 to ease compiling the instrumented code.  (This feature is probably more
 important for C/C++ than for Java programs.)  Running the instrumenter a
 second time reads the original source code rather than inserting an
-additional set of instrumentation into the alrady-instrumented source
+additional set of instrumentation into the already-instrumented source
 code files.
 
 @quotation
@@ -1783,6 +1787,7 @@ You can indicate the runtime type of a variable to dfej by inserting a
 @example
   /*refined_type: Integer*/ 
 @end example
+@noindent
 comment immediately before the declared type (but after any modifiers like
 "public" or "static").  For example, a list element that only contains
 @code{Integer}s might be annotated as follows:
@@ -1860,7 +1865,7 @@ declaration file
 run the instrumented program, creating data trace files
 @item
 run Daikon on the declaration files and data trace files
-@end itemize
+@end enumerate
 
 This section discusses the steps in more detail, with an emphasis on the
 first step.
@@ -1916,12 +1921,14 @@ you can run Daikon:
 @menu
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
+* Pointer type disambiguation example::  
+* Limitations::                 
 @end menu
 
 @node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
 @subsection dfec command-line arguments
 
-This section describes the commandline options dfec accepts.
+This section describes the command-line options dfec accepts.
 @table @option
 
 @item -I@var{path}
@@ -1936,6 +1943,7 @@ To determine your system include path, run
 @example
 touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
 @end example
+@noindent
 and look for what follows "@samp{#include <...> search starts here:}".
 
 
@@ -2018,18 +2026,18 @@ When conflicting options are specified (for instance, both
 @option{--declsfiledir} and @option{--declsfiledirflat}), the last one
 takes precedence.
 
-@node    Pointer type disambiguation,  , dfec command-line arguments, C/C++ front end dfec
+@node    Pointer type disambiguation, Pointer type disambiguation example, dfec command-line arguments, C/C++ front end dfec
 @subsection Pointer type disambiguation
 
 dfec permits users (or external analyses) to specify whether pointers
 refer to arrays or to single values.  For example, in
 @example
-void sum(int * array, int * result) { ... }  // definition
+void sum(int * array, int * result) @{ ... @}  // definition
 ...
 sum(a[], &total);  // use
 @end example
 @noindent
-the first pointer parameter refers to an aray while the second refers to
+the first pointer parameter refers to an array while the second refers to
 a single value.  dfec (and Daikon) should treat these values
 differently.  For instance, "*array" is better printed as "array[0]",
 and "result[]" isn't a sensible array at all.  By default, dfec treats
@@ -2067,7 +2075,7 @@ character.
 @c single elements.
 
 
-@node    Pointer type disambiguation example,  , dfec command-line arguments, C/C++ front end dfec
+@node    Pointer type disambiguation example, Limitations, Pointer type disambiguation, C/C++ front end dfec
 @subsection Pointer type disambiguation example
 
 
@@ -2170,7 +2178,7 @@ orig(*bar) == 6
 @end example
 
 
-@node    Limitations,  , Instrumenting C/C++ programs, Instrumenting C/C++ programs
+@node    Limitations,  , Pointer type disambiguation example, C/C++ front end dfec
 @subsection Limitations
 
 @file{dfec} technically only instruments C++ programs.  However, most
@@ -2204,7 +2212,137 @@ be recorded and hence may yield sparse output.
 
 
 
-@node    Troubleshooting, Details, Front ends, Top
+@node    Extending Daikon, Troubleshooting, Front ends, Top
+@chapter Extending Daikon
+
+This chapter describes how to customize Daikon to your specific needs.
+
+Readers are also referred to Chapter 7, "Implementation", of
+@cite{Dynamically Discovering Likely Program Invariants} by Michael
+D. Ernst, PhD dissertation, University of Washington Department of
+Computer Science and Engineering, Seattle, Washington, USA, August 2000.
+This document is available online at
+@url{http://sdg.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
+
+
+
+@menu
+* New invariants::              
+* New derived variables::       
+@end menu
+
+@node    New invariants, New derived variables, Extending Daikon, Extending Daikon
+@section New invariants
+
+You can easily write your own invariants and have Daikon check them,
+along with all the other invariants that are built in to Daikon already.
+Adding a new invariant to Daikon requires writing one Java class, adding
+a line to another file to inform Daikon of the new class, and
+recompiling Daikon.
+
+The new Java class will be a concrete subclass of one of the following
+abstract classes:
+@itemize @bullet
+@item
+@samp{SingleScalar}, for invariants over a single numeric (scalar) variable,
+such as "x != 0".
+@item
+@samp{TwoScalar}, for invariants over two numeric variables, such as "y
+= abs(x)".
+@item
+@samp{ThreeScalar}, for invariants over three numeric variables, such as
+"z = ax + by + c".
+@item
+@samp{SingleSequence}, for invariants over one sequence (array)
+variable, such as "a[] contains no duplicates".
+@item
+@samp{TwoSequence}, for invariants over two sequences, such as "a[] is a
+subsequence of b[]".
+@item
+@samp{SequenceScalar}, for invariants over a scalar and a sequence, such
+as "x is a member of a[]".
+@end itemize
+@noindent
+For a complete list of the types appears in classes @samp{PptSlice1},
+@samp{PptSlice2}, and @samp{PptSlice3}, in their respective
+@samp{instantiate_invariants} methods.
+
+Daikon's invariants are first instantiated, then are presented samples
+(tuples of values for all the variables of interest to the invariant;
+this might be a 1-tuple, a 2-tuple, or a 3-tuple) in turn.  If any
+sample falsifies the invariant, it destroys itself.  All remaining
+invariants at the end of the program run can be reported as likely to be
+true.
+
+The key methods of the new invariant are
+@table @samp
+@item @r{constructor}
+Creates a new invariant object.  Its typical implementation is
+@example
+  super(ppt);
+@end example
+@item instantiate
+returns either a new invariant object or null.  For instance,
+@samp{instantiate} might check whether particular conditions that are
+required for the invariant to be sensible hold.  Its typical
+implementation is
+@example
+  return new @var{InvName}(ppt);
+@end example
+@item add_modified
+presents a tuple of values to the invariant.  The @samp{count} variable
+indicates copy may samples have this value.  For example, three calls to
+@samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
+one call to @samp{add_modified} with a @samp{count} parameter of 3.
+@item computeProbability
+returns the probability that the observed data could have happened by
+chance alone.  The result usually falls between 0 and 1, where 1 means
+the values seen so far certainly happened by chance and 0 means they
+could never have happened by chance.  The method may also return one of
+the following constants in the @samp{Invariant} class (which see for
+documentation): @samp{PROBABILITY_JUSTIFIED},
+@samp{PROBABILITY_UNJUSTIFIED}, @samp{PROBABILITY_UNKNOWN},
+@samp{PROBABILITY_NEVER}.
+
+For example, suppose your new invariant has a 50% chance of being true
+by chance for each sample.  ("x is even" is an example of such an
+invariant.)  Then a reasonable body for @samp{computeProbability} would
+be
+@example
+  return Math.pow(.5, ppt.num_values());
+@end example
+@noindent
+If 5 values had been seen, then this implementation would return 1/32,
+which is the likelihood that all 5 values seen so far were even purely
+by chance.  Invariants are only printed if their probabilities are small
+enough (by default, less than .01).
+@item format
+returns a high-level printed representation of the
+invariant, for user output.  The @samp{repr} formatting routines
+produces low-level, detailed output for debugging.  When first writing
+an invariant, you can make @samp{repr}, @samp{format_esc}, and
+@samp{format_simplify} all simply call @samp{format}, then fix up the
+implementations later as needed.
+@end table
+
+After the invariant is written, add a call to its @samp{instantiate}
+method in pass 2 of the @samp{instantiate} method of the appropriate
+factory; for instance, add a line like
+@example
+  result.add(MyInvariant.instantiate(ppt));
+@end example
+@noindent
+to @samp{SingleScalarFactory.instantiate}.
+
+
+@node    New derived variables,  , New invariants, Extending Daikon
+@section New derived variables
+
+(To be written)
+
+
+
+@node    Troubleshooting, Details, Extending Daikon, Top
 @chapter Troubleshooting
 
 This chapter gives solutions for certain problems you might have with
@@ -2803,7 +2941,7 @@ program point information would be @file{EXIT54}.
 for Java, @file{topLevel} consists of the class name while
 @file{bottomLevel} consists of the method name and method signature. For
 C, @file{topLevel} could consist of a filename and @file{bottomLevel}
-could consist of a method name and signature. For IAO, @file{topLevel}
+could consist of a method name and signature. For IOA, @file{topLevel}
 could consist of an Automaton name and @file{bottomLevel} could consist of
 information for a transition state.
 
@@ -2811,10 +2949,10 @@ information for a transition state.
 and @file{pptInfo} may not contain any periods. The string ":::" may only
 appear once.
 
-@file{topLevel} and @file{pptInfo} are required (ie, they must be non-empty),
+@file{topLevel} and @file{pptInfo} are required (i.e., they must be non-empty),
 as are the period to the right of @file{topLevel} and the colons to the
 left of @file{pptInfo}. However, @file{bottomLevel} is optional. For
-example, the Java instrumenter creates an artifical object program point
+example, the Java instrumenter creates an artificial object program point
 which contains invariants that are true for all of an object's methods,
 rather than for just one method:
 
