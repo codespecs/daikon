@@ -851,7 +851,7 @@ public final class PrintInvariants {
   // reason invariants are rejected.
   private static String reason = "";
 
-  /** Prints the specified invariant to out **/
+  /** Prints the specified invariant to out. **/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
     int inv_num_samps = inv.ppt.num_samples();
@@ -917,10 +917,11 @@ public final class PrintInvariants {
       }
 
     } else if (Daikon.output_format==OutputFormat.REPAIR) {
-      Repair oldstate=Repair.getRepair().createCopy(ppt);//Store copy of current repair state;
+      // Store copy of current repair state.
+      Repair oldstate = Repair.getRepair().createCopy(ppt);
       inv_rep = inv.format_using(Daikon.output_format);
       if (inv_rep.indexOf ("$noprint") != -1) {
-        Repair.changeRepairObject(oldstate); //revert state
+        Repair.changeRepairObject(oldstate); // revert state
         return;
       }
     } else {

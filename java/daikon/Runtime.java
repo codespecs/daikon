@@ -82,7 +82,8 @@ public final class Runtime {
     } else {
       result = (String) primitiveClassesFromJvm.get(classname);
       if (result == null) {
-        // As a failsafe, use the input; perhaps it in Java, not JVML, format.
+        // As a failsafe, use the input; perhaps it is in Java, not JVML,
+        // format.
         result = classname;
         // throw new Error("Malformed base class: " + classname);
       }
