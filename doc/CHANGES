@@ -72,6 +72,12 @@ types of the arguments.  A new method (instantiate_ok()) does more refined
 checking for specific types (such as avoiding hashcodes and booleans on
 numeric invariants, special comparability checks, and the like).
 
+The Kvasir dynamic C front-end has undergone a number of internal
+improvements, in preparation for adding support for global variables
+and arrays.  The only user-visible changes so far are minor
+improvements in finding the names of structure members and the correct
+locations of function parameters in some circumstances.
+
 ---------------------------------
 
 3.1.3 (01 Sep 2004)
