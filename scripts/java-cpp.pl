@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-07-10 23:17:08 mernst>
+# Time-stamp: <2002-07-13 21:42:49 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -55,7 +55,8 @@ $WARNING = 1;			# "-w" command-line switch
 
 my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
-my $tmpfile = "$system_temp_dir/java-cpp-$$";
+my $tmpfile_in = "$system_temp_dir/java-cpp-$$-in";
+my $tmpfile_out = "$system_temp_dir/java-cpp-$$-out";
 
 my $file_handle_nonce = 'fh00';
 
@@ -64,15 +65,23 @@ my $file_handle_nonce = 'fh00';
   if ((scalar(@ARGV) > 0) && (-r $ARGV[$#ARGV])) {
     $filename = pop @ARGV;	# remove last (filename) element
   } else {
+    # print STDERR "Last arg not a filename; reading from standard in."
     $filename = "-";
   }
 
-  open(TMPFILE, ">$tmpfile") || die "Cannot open $tmpfile: $!\n";
+  open(TMPFILE, ">$tmpfile_in") || die "Cannot open $tmpfile_in: $!\n";
   escape_comments($filename);
   close(TMPFILE);
 
-  run_cpp();
-  unlink($tmpfile);
+  my $argv = join(' ', @ARGV);
+  # intentionally does not capture standard error; it goes straight through
+  system("cpp $argv $tmpfile_in > $tmpfile_out") == 0
+    or die "java-cpp.pl: cpp $argv $filename failed";
+
+  unescape_comments($tmpfile_out);
+
+  unlink($tmpfile_in);
+  unlink($tmpfile_out);
 }
 
 exit();
@@ -115,15 +124,19 @@ sub escape_comments ( $ ) {
 }
 
 
-sub run_cpp {
+sub unescape_comments ( $ ) {
+  my ($filename) = @_;
+
   # This causes strings to potentially have many trailing blanks.
   $INPUT_RECORD_SEPARATOR = "";
 
-  my $argv = join(' ', @ARGV);
-  open(CPPFILE, "cpp $argv $tmpfile |") || die "Cannot open $tmpfile: $!\n";
+  open(CPPFILE, $filename) || die "Cannot open $filename: $!\n";
 
   my $post_return_space = "";
   my $next_post_return_space = "";
+  my $post_else_space = "";
+  my $next_post_else_space = "";
+
   while (<CPPFILE>) {
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
@@ -165,6 +178,7 @@ sub run_cpp {
       # not "chomp":  it removes all of the trailing newlines rather than one
       s/\n\z//;
     }
+
     # Remove newline after "return" statement if followed by 2 nelines and
     # open curly brace.  But I have no way of knowing that open curly follows.
     # Thus, the post_return_space hack.
@@ -172,8 +186,14 @@ sub run_cpp {
       s/\n\z//;
       $next_post_return_space = "\n";
     }
+    # Same for closing up space in "} else\n\n{"
+    if (/\} else\n\n\z/) {
+      s/\n\n\z//;
+      $next_post_else_space = "\n\n";
+      $next_post_else_space = "POST_ELSE_SPACE for <<<$_>>>\n";
+    }
 
-    # Skip if nothing to print (eg, if this paragraph was just a "# 22" line)
+    # Skip if nothing to print (e.g., this paragraph was just a "# 22" line)
     if (! /[^\n]/) { next; }
 
     if (/^[ \t]*\}/) {
@@ -182,6 +202,14 @@ sub run_cpp {
     print $post_return_space;
     $post_return_space = $next_post_return_space;
     $next_post_return_space = "";
+
+    if (($post_else_space ne "") && /^[ \t]*\{/) {
+      s/^[ \t]*\{/ \{/;
+      $post_else_space = "";
+    }
+    print $post_else_space;
+    $post_else_space = $next_post_else_space;
+    $next_post_else_space = "";
 
     print;
   }
