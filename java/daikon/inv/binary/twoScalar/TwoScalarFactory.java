@@ -43,7 +43,12 @@ public final class TwoScalarFactory {
 	  // Perhaps do not instantiate unless the variables have the
 	  // same type; in particular, nonequal for Object variables
 	  // is not so likely to be of interest.
-	  result.add(NonEqual.instantiate(ppt));
+	  if (Global.EXPERIMENTS && !integral) {
+	    // When generating specifications, we very often don't
+	    // care that pointers are not the same.
+	  } else {
+	    result.add(NonEqual.instantiate(ppt));
+	  }
 	}
 	// Skip LineayBinary and FunctionUnary unless vars are integral
 	if (!integral) {
