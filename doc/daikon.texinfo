@@ -368,6 +368,7 @@ Details
 
 * History::                     
 * License::                     
+* Mailing lists reminder::      
 * Credits::                     
 
 File formats
@@ -671,7 +672,7 @@ GCC), configure Kvasir for your machine, compile it, and install
 it in the directory @file{kvasir/inst}.
 
 Once Kvasir has been installed, it can be used via the
-@file{kvasir-dfec} script in the @file{$DAIKONDIR/bin} directory; if
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
 you have set up the Daikon environment according to the instructions
 above, it should already be in your @code{PATH}. For instructions on using
 Kvasir, see @ref{Binary C front end Kvasir}.
@@ -1279,13 +1280,13 @@ code you wish invariants about. For simplicity in this example, we
 have combined all the files from the original bzip2 application into a
 single file.
 
-@item Run the program using the kvasir-dfec script.
+@item Run the program using the kvasir-dtrace script.
 @example
-kvasir-dfec ./bzip2 -vvc bzip2.c > bzip2.c.bz2
+kvasir-dtrace ./bzip2 -vvc bzip2.c > bzip2.c.bz2
 @end example
 
 Run the program just as you normally would, but prepend
-@code{kvasir-dfec} to the front of the command line. Any options to
+@code{kvasir-dtrace} to the front of the command line. Any options to
 the program can be specified as usual; here, for instance, we give
 commands to compress the file @file{bzip2.c} to a file
 @file{bzip2.c.bz2}, and give extra progress information.  Note that we
@@ -1749,7 +1750,7 @@ usually easier to use and more reliable.
 To use Kvasir with your program, first make sure that your program has
 been compiled with DWARF-2 format debugging information, such as by
 giving the @code{-gdwarf-2} flag to GCC when compiling. Then, run your
-program as usual, but prepend @code{kvasir-dfec} to the command line.
+program as usual, but prepend @code{kvasir-dtrace} to the command line.
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{Binary C
 front end Kvasir}.
@@ -3697,14 +3698,14 @@ and any flags that affect calling conventions, such as
 able to compile and link your program normally.
 
 In the second step of using Kvasir, run your program as you normally
-would, but prepend the command @code{kvasir-dfec} to the beginning.
+would, but prepend the command @code{kvasir-dtrace} to the beginning.
 For instance, if you would normally run your program with the command 
 @example
 ./program -option input.file
 @end example
 just say
 @example
-kvasir-dfec ./program -option input.file
+kvasir-dtrace ./program -option input.file
 @end example
 As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
@@ -7199,6 +7200,7 @@ and about debugging flags.
 @menu
 * History::                     
 * License::                     
+* Mailing lists reminder::      
 * Credits::                     
 @end menu
 
@@ -7259,7 +7261,7 @@ in size.  Daikon 3 also introduces the idea of a @emph{dataflow
 hierarchy}, a way to relate and connect program points based on their
 variables.
 
-@node    License, Credits, History, Details
+@node    License, Mailing lists reminder, History, Details
 @section License
 
 
@@ -7343,7 +7345,7 @@ Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
 
 
-@node    Mailing lists reminder, Credits, History, Details
+@node    Mailing lists reminder, Credits, License, Details
 @section Mailing lists reminder
 
 If you use Daikon, please subscribe to the daikon-announce and
@@ -7358,7 +7360,7 @@ successes and failures, so that we can make Daikon more effective for
 its users.
 
 
-@node    Credits,  , License, Details
+@node    Credits,  , Mailing lists reminder, Details
 @section Credits
 
 @cindex contributors to Daikon
