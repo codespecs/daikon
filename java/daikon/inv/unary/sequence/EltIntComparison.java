@@ -41,7 +41,7 @@ class EltIntComparison extends SingleSequence {
   }
 
   public String format() {
-    Assert.assert(!justified() || can_be_eq || can_be_gt || can_be_lt);
+    Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
     String comparison = (can_be_eq ? "=" : "");
     if (debugEltIntComparison) {
@@ -49,8 +49,11 @@ class EltIntComparison extends SingleSequence {
 			 + "; inequality=\"" + inequality + "\""
 			 + ",comparison=\"" + comparison + "\"");
     }
-    return (var().name + " sorted by "
-	    + inequality + comparison);
+    if (can_be_eq && !(can_be_lt || can_be_gt)) {
+      return var().name + " elements are equal";
+    } else {
+      return (var().name + " sorted by " + inequality + comparison);
+    }
   }
 
 
@@ -95,5 +98,13 @@ class EltIntComparison extends SingleSequence {
       (can_be_gt == other.can_be_gt) &&
       (can_be_lt == other.can_be_lt);
   }
-  
+
+  public boolean isObviousImplied() {
+    EltOneOf eoo = EltOneOf.find(ppt);
+    if ((eoo != null) && eoo.justified() && (eoo.num_elts() == 1)) {
+      return true;
+    }
+    return false;
+  }
+
 }

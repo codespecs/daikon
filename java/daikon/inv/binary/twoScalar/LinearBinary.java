@@ -47,8 +47,7 @@ class LinearBinary extends TwoScalar {
     return core.isSameFormula(((LinearBinary) other).core);
   }
 
-  // Look up a previously instantiated LinearBinary relationship.
-  // Should this implementation be made more efficient?
+  // Look up a previously instantiated invariant.
   public static LinearBinary find(PptSlice ppt) {
     Assert.assert(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {

@@ -259,6 +259,19 @@ public abstract class Invariant implements java.io.Serializable {
   public abstract boolean isSameFormula(Invariant other);
 
 
+  // This is a little grody; stick with code cut-and-paste for now.
+  // // Look up a previously instantiated Invariant.
+  // // Should this implementation be made more efficient?
+  // public static Invariant find(Class invclass, PptSlice ppt) {
+  //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+  //     Invariant inv = (Invariant) itor.next();
+  //     if (inv instanceof invclass)
+  //       return inv;
+  //   }
+  //   return null;
+  // }
+
+
 
   String diff(Invariant other) {
     throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());

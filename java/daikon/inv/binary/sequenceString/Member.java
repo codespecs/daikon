@@ -80,7 +80,7 @@ public final class Member extends SequenceString  {
 
     if (sclvar_seq == null)
       return false;
-    // The scalar is a member of some array.
+    // The scalar is a member of the same array.
     if (sclvar_seq == seqvar)
       return true;
     // The scalar is a member of a different array than the sequence.
@@ -109,9 +109,8 @@ public final class Member extends SequenceString  {
     // [Do I need to treat sclvar_seq.derived in {SequenceMin, SequenceMax}
     // specially?]
 
-    // B[I] in B[0..J]
-    // I need to compare I to J.  This is a stop-gap that does only
-    // a bit of that.
+    // B[0] in B[0..J]; also B[-1] in B[J..]
+
     // Need to completely cover the cases of
     // SequenceInitial and SequenceStringSubscript .
 
@@ -119,6 +118,9 @@ public final class Member extends SequenceString  {
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
 
+    // B[I] in B[0..J]
+    // I need to compare I to J.  This is a stop-gap that does only
+    // a bit of that.
     if (sclvar.derived instanceof SequenceStringSubscript ) {
       SequenceStringSubscript  sclsss = (SequenceStringSubscript ) sclvar.derived;
       VarInfo scl_index = sclsss.sclvar();
