@@ -246,7 +246,7 @@ public final class FileIO {
       throw new Error("Unsupported representation type " + rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
     }
 
-    return new VarInfo(varname, VarInfo.esc_name(varname), prog_type, rep_type, comparability, is_static_constant, static_constant_value);
+    return new VarInfo(VarInfoName.parse(varname), prog_type, rep_type, comparability, is_static_constant, static_constant_value);
   }
 
   static final class Invocation {
@@ -735,7 +735,7 @@ public final class FileIO {
                         + "\n  Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name);
       }
-      if (!line.equals(vi.name)) {
+      if (!line.equals(vi.name.name())) {
         throw new Error("Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name
                         + " at " + data_trace_filename + " line " + reader.getLineNumber()
