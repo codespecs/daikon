@@ -621,13 +621,7 @@ public final class OutputFormat
       }
 
       public Object clone() {
-        Definition newd;
-        try {
-          newd=(Definition)super.clone();
-        } catch (CloneNotSupportedException e) {
-          // Can't happen because Definition directly extends Object
-          throw new Error("This can't happen: " + e.toString());
-        }
+        Definition newd=new Definition();
         newd.setrelation=setrelation;
         newd.modelrule=modelrule;
         newd.globaldecls=globaldecls;
