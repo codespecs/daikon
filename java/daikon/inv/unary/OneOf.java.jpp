@@ -1430,7 +1430,7 @@ public final class ONEOFSCALAR
     InvariantStatus status = InvariantStatus.NO_CHANGE;
   #if !(defined(SCALAR) || defined(FLOAT))
     Assert.assertTrue(Intern.isInterned(v));
-  #endif
+#endif
 #endif
     for (int i=0; i<num_elts; i++) {
       //if (logDetail())
@@ -1488,6 +1488,10 @@ public final class ONEOFSCALAR
    }
 #endif
   return status;
+#if 0
+  This duplication is just to make all the close braces in the file line up.
+#endif
+#if defined(IS_ELT)
   }
   */
 
@@ -1516,7 +1520,6 @@ public final class ONEOFSCALAR
     }
     return InvariantStatus.NO_CHANGE;
   }
-
 #endif
 
   /**
