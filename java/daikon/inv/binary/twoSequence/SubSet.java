@@ -198,6 +198,16 @@ public class SubSet
     return SubSequence.isObviousDerived (subvar, supervar);
   }
 
+  public boolean isObviousStatically() {
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+    if ((SubSet.isObviousDerived(var1, var2))
+        || (SubSet.isObviousDerived(var2, var1))) {
+      return true;
+    }
+    return super.isObviousStatically();
+  }
+
   // Look up a previously instantiated SubSet relationship.
   public static SubSet find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
@@ -216,7 +226,7 @@ public class SubSet
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
 
     // System.out.println("checking isObviousImplied for: " + format());
 
@@ -224,9 +234,8 @@ public class SubSet
       // Suppress this invariant; we should get an equality invariant from
       // elsewhere.
       return true;
-    } else {
-      return false;
     }
+    return super.isObviousDynamically();
   }
 
   public boolean isSameFormula(Invariant other)

@@ -72,7 +72,7 @@ public final class Member
     return new Member(ppt, seq_first);
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousStatically() {
     return isEqualToObviousMember(sclvar(), seqvar());
   }
 

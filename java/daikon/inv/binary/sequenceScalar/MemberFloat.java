@@ -72,7 +72,7 @@ public final class MemberFloat
     return new MemberFloat(ppt, seq_first);
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousStatically() {
     return isEqualToObviousMember(sclvar(), seqvar());
   }
 

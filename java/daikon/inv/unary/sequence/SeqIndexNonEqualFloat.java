@@ -182,12 +182,8 @@ public final class SeqIndexNonEqualFloat
   //   return false;
   // }
 
-  // public boolean isObviousImplied() {
-  //   return isEqualToObviousSeqIndexNonEqual(sclvar(), seqvar());
-  // }
-
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     VarInfo seqvar = var();
 
     // For each other sequence variable, if it is a supersequence of this
@@ -207,7 +203,7 @@ public final class SeqIndexNonEqualFloat
       }
     }
 
-    return false;
+    return super.isObviousDynamically();
   }
 
 }

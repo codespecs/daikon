@@ -248,7 +248,7 @@ public class SeqComparison
   }
 
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     PairwiseIntComparison pic = PairwiseIntComparison.find(ppt);
     if ((pic != null)
         && (pic.core.can_be_eq == can_be_eq)

@@ -104,10 +104,6 @@ public final class SeqFloatComparison
     return result;
   }
 
-  // public boolean isObviousImplied() {
-  //   return isEqualToObviousSeqIntComparison(sclvar(), seqvar());
-  // }
-
   public String repr() {
     return "SeqFloatComparison" + varNames() + ": "
       + core.repr()
@@ -215,7 +211,7 @@ public final class SeqFloatComparison
   // }
 
   // Initially copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
 
     // Look for the same property over a supersequence of this one.

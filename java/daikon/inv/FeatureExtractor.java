@@ -823,8 +823,8 @@ public final class FeatureExtractor {
       if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
       */ // [INCR]
       if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObvious, 1));
-      if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerived, 1));
-      if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImplied, 1));
+      if (inv.isObviousStatically()) answer.add(new IntDoublePair(FetIsObviousStatically, 1));
+      if (inv.isObviousDynamically()) answer.add(new IntDoublePair(FetIsObviousDynamically, 1));
       /* [INCR]
       if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
       if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
@@ -2029,8 +2029,8 @@ public final class FeatureExtractor {
   public static int FetHasNonCanonicalVariable = 7;
   public static int FetHasOnlyConstantVariables = 8;
   public static int FetIsObvious = 9;
-  public static int FetIsObviousDerived = 10;
-  public static int FetIsObviousImplied = 11;
+  public static int FetIsObviousStatically = 10;
+  public static int FetIsObviousDynamically = 11;
   public static int FetIsControlled = 12;
   public static int FetIsImpliedPostcondition = 13;
   public static int FetIsInteresting = 14;

@@ -80,7 +80,11 @@ public class LinearBinary
     return true;
   }
 
-  public boolean isObviousDerived() {
+  public boolean isObviousStatically() {
+    if (core.a == 0) return true;                // Constant
+    if (core.a == 1 && core.b == 0) return true; // Equality
+
+    // Obvious derived
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     // avoid comparing "size(a)" to "size(a)-1"; yields "size(a)-1 = size(a) - 1"
@@ -102,13 +106,7 @@ public class LinearBinary
       return true;
     }
 
-    return false;
-  }
-
-  public boolean isObviousImplied() {
-    if (core.a == 0) return true;                // Constant
-    if (core.a == 1 && core.b == 0) return true; // Equality
-    return false;
+    return super.isObviousStatically();
   }
 
   public boolean isSameFormula(Invariant other)

@@ -295,7 +295,7 @@ public class CLASSNAME
   }
 
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     PAIRWISECOMP pic = PAIRWISECOMP.find(ppt);
     if ((pic != null)
         && (pic.core.can_be_eq == can_be_eq)

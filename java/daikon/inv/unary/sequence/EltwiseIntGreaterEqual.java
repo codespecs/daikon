@@ -249,7 +249,7 @@ public class EltwiseIntGreaterEqual
 
   // Note to self: Be sure to port this back to version 2l
 
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     if (!hasSeenNonTrivialSample())
       return true;
 

@@ -980,11 +980,47 @@ public abstract class Invariant
   }
   */ // ... [INCR]
 
+
   /**
-   * Return true if this invariant is necessarily true, due to derived
-   * variables, other invariants, etc.  Intended to be overridden by
+   * Return true if this invariant is necessarily true from a fact
+   * that can be determined statically (i.e., the decls files) (e.g.,
+   * by being from a certain derivation).  Intended to be overridden
+   * by subclasses.  Should only do static checking, because
+   * suppression should do the dynamic checking.
+   **/
+  public boolean isObviousStatically() {
+    return false;
+  }
+
+  /**
+   * Return true if this invariant and all equality combinations of
+   * its member variables are necessarily true from a fact that can be
+   * determined statically (i.e., the decls files).  For example, a ==
+   * b, and f(a) is obvious, but f(b) is not.  In that case, this
+   * method on f(a) would return false.  If f(b) is also obvious, then
+   * this method would return true.  Intended to be overridden by
    * subclasses.  Should only do static checking, because suppression
    * should do the dynamic checking.
+   **/
+  // This is used because we cannot decide to non-instantiate some
+  // invariants just because isObviousStatically is true, since some
+  // of the member variables may be equal to non-obvious varInfos.  If
+  // we were to non-instantiate, we could not copy an invariant to the
+  // non-obvious VarInfos should they split off from the obvious one.
+  // Of course, it's expensive to examine every possible permutation
+  // of VarInfos and their equality set, so a possible conservative
+  // approximation is to simply return false.
+  public boolean isObviousStaticallyInEquals() {
+    return false;
+  }
+
+  /**
+   * Return true if this invariant is necessarily true from a fact
+   * that can be determined statically (i.e., the decls files) or
+   * dynamically (after checking data).  Intended not to be overriden,
+   * because sub classes should override isObviousStatically or
+   * isObviousDynamically.  Should only do static checking, because
+   * suppression should do the dynamic checking.
    **/
   public final boolean isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
@@ -995,7 +1031,7 @@ public abstract class Invariant
     // // turns out until after testing it.
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
-    if (isObviousDerived() || isObviousImplied()) {
+    if (isObviousStatically() || isObviousDynamically()) {
       if (debugPrint.isDebugEnabled())
         debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
       return true;
@@ -1003,21 +1039,14 @@ public abstract class Invariant
     return false;
   }
 
-  /**
-   * Return true if this invariant is necessarily true, due to being implied
-   * by the fact that it was derived from a given set of variables.
-   * Intended to be overridden by subclasses.
-   **/
-  public boolean isObviousDerived() {
-    return false;
-  }
 
   /**
-   * Return true if this invariant is necessarily true, due to being implied
-   * by other (more basic or preferable to report) invariants.
-   * Intended to be overridden by subclasses.
+   * Return true if this invariant is necessarily true from a fact
+   * that can be determined dynamically (after checking data).
+   * Intended to be overriden by subclasses so they can filter
+   * invariants after checking.  
    **/
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     return false;
   }
 

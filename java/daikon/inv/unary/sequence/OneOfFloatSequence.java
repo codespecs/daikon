@@ -339,8 +339,7 @@ public final class OneOfFloatSequence
     }
   }
 
-  // Use isObviousDerived since some isObviousImplied methods already exist.
-  public boolean isObviousDerived() {
+  public boolean isObviousStatically() {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
@@ -348,7 +347,7 @@ public final class OneOfFloatSequence
       Assert.assertTrue(num_elts <= 1);
       return true;
     }
-    return super.isObviousDerived();
+    return super.isObviousStatically();
   }
 
   public boolean isSameFormula(Invariant o)

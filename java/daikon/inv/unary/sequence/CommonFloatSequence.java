@@ -113,10 +113,6 @@ public class CommonFloatSequence
     }
   }
 
-  public boolean isObviousImplied() {
-    return false;
-  }
-
   public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof CommonFloatSequence);
     return true;

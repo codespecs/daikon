@@ -292,8 +292,7 @@ public final class OneOfFloat
     }
   }
 
-  // Use isObviousDerived since some isObviousImplied methods already exist.
-  public boolean isObviousDerived() {
+  public boolean isObviousStatically() {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
@@ -301,10 +300,10 @@ public final class OneOfFloat
       Assert.assertTrue(num_elts <= 1);
       return true;
     }
-    return super.isObviousDerived();
+    return super.isObviousStatically();
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       SequenceLength sl = (SequenceLength) v.derived;
@@ -337,7 +336,7 @@ public final class OneOfFloat
       }
     }
 
-    return false;
+    return super.isObviousDynamically();
   }
 
   public boolean isSameFormula(Invariant o)

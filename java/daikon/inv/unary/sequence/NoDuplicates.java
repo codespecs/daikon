@@ -208,7 +208,7 @@ public class NoDuplicates
   }
 
   // Lifted from EltNonZero; should abstract some of this out.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     // For every other NoDuplicates at this program point, see if there is a
     // subsequence relationship between that array and this one.
 

@@ -120,10 +120,6 @@ public final class CLASSNAME
     return result;
   }
 
-  // public boolean isObviousImplied() {
-  //   return isEqualToObviousSeqIndexComparison(sclvar(), seqvar());
-  // }
-
   public String repr() {
     return CLASSSTRING + varNames() + ": "
       + core.repr()
@@ -250,7 +246,7 @@ public final class CLASSNAME
 
 
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     if (isExact()) {
       return false;
     }

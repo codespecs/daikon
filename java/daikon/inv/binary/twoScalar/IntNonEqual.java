@@ -217,7 +217,7 @@ public final class IntNonEqual
     return false;
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 

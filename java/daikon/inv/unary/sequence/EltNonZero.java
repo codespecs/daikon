@@ -244,7 +244,7 @@ public final class EltNonZero
     return false;
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 

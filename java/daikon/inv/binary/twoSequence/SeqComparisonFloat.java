@@ -260,7 +260,7 @@ public class SeqComparisonFloat
   }
 
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     PairwiseFloatComparison pic = PairwiseFloatComparison.find(ppt);
     if ((pic != null)
         && (pic.core.can_be_eq == can_be_eq)

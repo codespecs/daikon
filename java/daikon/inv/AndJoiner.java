@@ -41,8 +41,8 @@ public class AndJoiner
     }
   }
 
-  public boolean isObviousImplied() {
-    return left.isObvious() && right.isObvious();
+  public boolean isObviousDynamically() {
+    return left.isObviousDynamically() && right.isObviousDynamically();
   }
 
   public boolean isSameInvariant(Invariant other) {

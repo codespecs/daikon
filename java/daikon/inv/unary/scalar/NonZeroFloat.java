@@ -148,9 +148,8 @@ public class NonZeroFloat
     }
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousStatically() {
     VarInfo var = var();
-
     // In Java, "this" can never be non-null, so "this != null" is vacuous.
     if (var.name.name() == "this") { // interned
       return true;
@@ -159,6 +158,11 @@ public class NonZeroFloat
         ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
       return true;
     }
+    return super.isObviousStatically();
+  }
+
+  public boolean isObviousDynamically() {
+    VarInfo var = var();
 
     // System.out.println("isObviousImplied: " + format());
 
@@ -204,7 +208,7 @@ public class NonZeroFloat
       }
     }
 
-    return false;
+    return super.isObviousDynamically();
   }
 
   public boolean isSameFormula(Invariant other)

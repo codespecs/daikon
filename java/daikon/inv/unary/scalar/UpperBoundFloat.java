@@ -141,7 +141,10 @@ public class UpperBoundFloat
     return (-1 < core.max1 && core.max1 < 2);
   }
 
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
+    PptTopLevel pptt = ppt.parent;
+    VarInfo v = var();
+    
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.max1 < dkconfig_minimal_interesting) ||
         (core.max1 > dkconfig_maximal_interesting)) {
@@ -157,15 +160,8 @@ public class UpperBoundFloat
       }
     }
 
-    return super.isObviousImplied();
-  }
-
-  public boolean isObviousDerived() {
-    VarInfo v = var();
-
     // For each sequence variable, if this is an obvious member/subsequence, and
     // it has the same invariant, then this one is obvious.
-    PptTopLevel pptt = ppt.parent;
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
 
@@ -183,7 +179,7 @@ public class UpperBoundFloat
       }
     }
 
-    return false;
+    return super.isObviousDynamically();
   }
 
   public boolean isExclusiveFormula(Invariant other) {

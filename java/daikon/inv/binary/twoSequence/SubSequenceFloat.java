@@ -400,6 +400,19 @@ public class SubSequenceFloat
     return null;
   }
 
+  public boolean isObviousStatically() {
+    // Why both ways?  Because even if x[0..i+1] is a subsequence of
+    // x[0..i] it's not interesting, since the only case this can
+    // happen is when i is above x.length.
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+    if ((SubSequenceFloat.isObviousDerived(var1, var2))
+        || (SubSequenceFloat.isObviousDerived(var2, var1))) {
+      return true;
+    }
+    return super.isObviousStatically();
+  }
+
   // Two ways to go about this:
   //   * look at all subseq relationships, see if one is over a variable of
   //     interest
@@ -407,7 +420,7 @@ public class SubSequenceFloat
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
 
     // System.out.println("checking isObviousImplied for: " + format());
 
@@ -492,8 +505,8 @@ public class SubSequenceFloat
           }
         }
       }
-      return false;
     }
+    return super.isObviousDynamically();
   }
 
   public boolean isSameFormula(Invariant other)

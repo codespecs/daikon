@@ -218,12 +218,8 @@ public final class CLASSNAME
   //   return false;
   // }
 
-  // public boolean isObviousImplied() {
-  //   return isEqualToObviousSeqIndexNonEqual(sclvar(), seqvar());
-  // }
-
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     VarInfo seqvar = var();
 
     // For each other sequence variable, if it is a supersequence of this
@@ -243,7 +239,7 @@ public final class CLASSNAME
       }
     }
 
-    return false;
+    return super.isObviousDynamically();
   }
 
 }

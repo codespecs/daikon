@@ -116,15 +116,18 @@ public class Implication
     }
   }
 
-  public boolean isObviousDerived() {
-    return right.isObviousDerived();
+  public boolean isObviousStatically() {
+    return right.isObviousStatically();
   }
 
+  public boolean isObviousDynamically() {
+    return right.isObviousDynamically();    
+  }
+  /* [INCR]
   public boolean isObviousImplied() {
     return right.isObviousImplied();
   }
 
-  /* [INCR]
   public boolean hasOnlyConstantVariables() {
     return predicate.hasOnlyConstantVariables();
   }

@@ -113,10 +113,6 @@ public class CommonSequence
     }
   }
 
-  public boolean isObviousImplied() {
-    return false;
-  }
-
   public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof CommonSequence);
     return true;

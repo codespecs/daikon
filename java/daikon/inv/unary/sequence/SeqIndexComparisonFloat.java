@@ -91,10 +91,6 @@ public final class SeqIndexComparisonFloat
     return result;
   }
 
-  // public boolean isObviousImplied() {
-  //   return isEqualToObviousSeqIndexComparison(sclvar(), seqvar());
-  // }
-
   public String repr() {
     return "SeqIndexComparisonFloat" + varNames() + ": "
       + core.repr()
@@ -219,7 +215,7 @@ public final class SeqIndexComparisonFloat
   // }
 
   // Copied from IntComparison.
-  public boolean isObviousImplied() {
+  public boolean isObviousDynamically() {
     if (isExact()) {
       return false;
     }
