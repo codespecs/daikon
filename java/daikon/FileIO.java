@@ -946,8 +946,14 @@ public final class FileIO {
       }
 
       if (ValueTuple.modIsMissingNonSensical(mod)) {
-        if (!(value_rep.equals("missing") || value_rep.equals("uninit"))) {
-          System.out.println("\nModbit indicates missing value for variable " + vi.name + " with value \"" + value_rep + "\";\n  text of value should be \"missing\" or \"uninit\" at " + data_trace_filename + " line " + reader.getLineNumber());
+        if (!(value_rep.equals("missing")
+              || value_rep.equals("uninit")
+              || value_rep.equals("nonsensical"))) {
+          System.out.println("\nModbit indicates missing value for variable " +
+                             vi.name + " with value \"" + value_rep + 
+                             "\";\n  text of value should be \"missing\"" +
+                             ", \"uninit\" or \"nonsensical\" at " + 
+                             data_trace_filename + " line " + reader.getLineNumber());
           System.exit(1);
         }
         else if (value_rep.equals("missing")) {
