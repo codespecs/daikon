@@ -4,6 +4,8 @@ import java.util.Vector;
 import java.util.Stack;
 import java.util.Random;
 import java.util.TreeSet;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.Iterator;
 import daikon.simplify.SimpUtil;
@@ -254,6 +256,85 @@ public class LemmaStack {
         new_invs.add(invs[i]);
     }
     return new_invs;
+  }
+
+  private static Vector filterByClass(Vector lems, Set blacklist) {
+    Vector new_lems = new Vector();
+    for (int i = 0; i < lems.size(); i++) {
+      if (!blacklist.contains(((Lemma)lems.elementAt(i)).invClass())) {
+        new_lems.add((Lemma)lems.elementAt(i));
+      }
+    }
+    return new_lems;
+  }
+
+  private void minimizeClasses_rec(String result, Vector lems,
+                                   Set exclude, Set black, Set gray,
+                                   Set found) throws TimeoutException {
+    Iterator found_it = found.iterator();
+    while (found_it.hasNext()) {
+      Set known = (Set)found_it.next();
+      // If known and exclude are disjoint, return
+      Set exclude2 = new HashSet(exclude);
+      exclude2.retainAll(known);
+      if (exclude2.isEmpty())
+        return;
+    }
+    int mark = markLevel();
+    Vector filtered = filterByClass(lems, exclude);
+    pushLemmas(filtered);
+    boolean holds = checkString(result) == 'T';
+    popToMark(mark);
+    if (holds) {
+      Vector mini
+        = minimizeAssumptions((Lemma[])filtered.toArray(new Lemma[0]), result);
+      Set used = new HashSet();
+      for (int i = 0; i < mini.size(); i++) {
+        Class c = ((Lemma)mini.elementAt(i)).invClass();
+        if (c != null)
+          used.add(c);
+      }
+      for (int i = 0; i < mini.size(); i++) {
+        System.err.println(((Lemma)mini.elementAt(i)).summarize());
+        System.err.println(((Lemma)mini.elementAt(i)).formula);
+      }
+      System.err.println("-----------------------------------");
+      System.err.println(result);
+      System.err.println();
+
+      found.add(used);
+      Iterator steps_it = used.iterator();
+      while (steps_it.hasNext()) {
+        Set step = new HashSet(exclude);
+        step.add(steps_it.next());
+        if (!black.contains(step) && !gray.contains(step)) {
+          gray.add(step);
+          minimizeClasses_rec(result, lems, step, black, gray, found);
+        }
+      }
+    }
+    black.add(exclude);
+  }
+
+  public Vector minimizeClasses(String result) {
+    Vector assumptions = new Vector(lemmas);
+    Vector found = new Vector();
+    try {
+      unAssumeAll(lemmas);
+      if (checkString(result) == 'F') {
+        Set exclude = new HashSet();
+        Set black = new HashSet();
+        Set gray = new HashSet();
+        Set found_set = new HashSet();
+        minimizeClasses_rec(result, assumptions, exclude, black, gray,
+                            found_set);
+        found.addAll(found_set);
+      }
+      assumeAll(lemmas);
+    } catch (TimeoutException e) {
+      Assert.assertTrue(false);
+    }
+    return found;
   }
 
   private static void shuffle(Object[] ary, Random rand) {

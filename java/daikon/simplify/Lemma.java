@@ -24,6 +24,11 @@ public class Lemma implements Comparable {
     return summary;
   }
 
+  /** If this lemma came from an invariant, get its class */
+  public Class invClass() {
+    return null;
+  }
+
   public int compareTo(Object o) {
     Lemma other = (Lemma)o;
     return summarize().compareTo(other.summarize());
@@ -136,10 +141,10 @@ public class Lemma implements Comparable {
     new Lemma("A sum is even iff the terms have the same parity",
               "(FORALL (x y) (IFF (EQ (MOD (+ x y) 2) 0) (IFF (EQ (MOD x 2) 0) (EQ (MOD y 2) 0))))"),
     new Lemma("-1 is odd", "(EQ (MOD -1 2) 1)"),
-    new Lemma("x | (x + 1) == x + 1 if x is even",
-              "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ (+ x 1) (|java-bitwise-or| x (+ x 1)))))"),
-    new Lemma("x & (x + 1) == x if x is even",
-              "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ x (|java-&| x (+ x 1)))))"),
+//     new Lemma("x | (x + 1) == x + 1 if x is even",
+//               "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ (+ x 1) (|java-bitwise-or| x (+ x 1)))))"),
+//     new Lemma("x & (x + 1) == x if x is even",
+//               "(FORALL (x) (IMPLIES (EQ (MOD x 2) 0) (EQ x (|java-&| x (+ x 1)))))"),
     // Facts about max and min, also from the Simplify source
     new Lemma("max(a,b) >= a",
               "(FORALL (a b) (PATS (max a b)) (>= (max a b) a))"),

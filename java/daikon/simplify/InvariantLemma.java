@@ -23,6 +23,20 @@ public class InvariantLemma extends Lemma {
     return summary + " from " + from;
   }
 
+  /** If this lemma came from an invariant, get its class */
+  public Class invClass() {
+    Class c;
+    if (invariant instanceof GuardingImplication) {
+      c = ((Implication)invariant).consequent().getClass();
+    } else {
+      c = invariant.getClass();
+    }
+    Class outer = c.getDeclaringClass();
+    if (outer != null)
+      c = outer;
+    return c;
+  }
+
   /**
    * Make a lemma corresponding to the given invariant, except
    * referring to the prestate versions of all the variables that inv
