@@ -163,16 +163,26 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
-  // Whether Daikon should print its version number and date
+  /**
+   * Whether Daikon should print its version number and date
+   **/
   public static boolean noversion_output = false;
 
-  // If true no invariants will be guarded, guarding meaning
-  // that if a variable "can be missing" in a dtrace file
-  // that predicates are attached to invariants ensuring their
-  // values can be gather (for instance, if a.b "can be missing",
-  // and a.b == 5 is an invariant, then it is more properly declared
-  // as (a != null) ==> (a.b == 5))
+  /**
+   * If true no invariants will be guarded, guarding meaning that
+   * if a variable "can be missing" in a dtrace file that predicates
+   * are attached to invariants ensuring their values can be gather
+   * (for instance, if a.b "can be missing", and a.b == 5 is an
+   * invariant, then it is more properly declared as (a != null) ==>
+   * (a.b == 5))
+   **/
   public static boolean noInvariantGuarding = false;
+
+  /**
+   * Whether Daikon is in its inferncing loop.  Used only for
+   * assertion checks.
+   **/
+  public static boolean isInferencing = false;
 
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
@@ -263,8 +273,12 @@ public final class Daikon {
     load_map_files(all_ppts, map_files);
     // setup_splitters(all_ppts); // XXX splitters are not implemented yet
 
+    // Only for assertion checks
+    isInferencing = true;
+
     // Infer invariants
     process_data(all_ppts, dtrace_files);
+    isInferencing = false;
 
     // Check that PptMap created was correct
     all_ppts.repCheck();
