@@ -619,7 +619,7 @@ memory errors in C, and they need to perform exactly the same memory
 tracking as a Daikon front end must perform.  Therefore, a Daikon front
 end can use the same well-known techniques, and possibly can even be
 built on top of such a tool.  For instance, one C front end, named Kvasir, is
-built on top of the Valgrind tool (@uref{http://valgrind.kde.org/}),
+built on top of the Valgrind tool (@uref{http://valgrind.org/}),
 greatly reducing the implementation effort.  Valgrind only works under
 Linux, but a C front end for another platform could build on a similar
 tool; many other such tools exist.
