@@ -75,6 +75,7 @@ It describes Daikon version 3.0.1, released February 2, 2004.
 * Extending Daikon::            
 * Debugging Daikon::            
 * Daikon internals::            
+* Unit Testing::                
 * Index::
 
 @ifhtml
@@ -112,6 +113,16 @@ Daikon internals
 Avoiding work for redundant invariants
 
 * Suppression optimization::    
+
+Unit Testing
+
+* Invariant Format Testing::    
+* Sample Testing::              
+
+Sample Testing
+
+* Assertions::                  
+* Example File::                
 
 @end detailmenu
 @end ifnothtml
@@ -791,7 +802,7 @@ kept in a file named the same as your Daikon output file with
 world writable for log2html.php to work correctly.
 
 
-@node    Daikon internals, Index, Debugging Daikon, Top
+@node    Daikon internals, Unit Testing, Debugging Daikon, Top
 @chapter Daikon internals
 
 @menu
@@ -952,7 +963,231 @@ imply ``odd(b)''.  Equality can be turned off at the command line with
 the @option{--noequality} flag.
 
 
-@node     Index,  , Daikon internals, Top
+@node    Unit Testing, Index, Daikon internals, Top
+@chapter Unit Testing
+
+@menu
+* Invariant Format Testing::    
+* Sample Testing::              
+@end menu
+
+@node    Invariant Format Testing, Sample Testing, Unit Testing, Unit Testing
+@section Invariant Format Testing
+
+This tests the formatting of invariants with specified input.  The
+tests are configured in the file InvariantFormatTest.commands under
+daikon/test.  Make sure the InvariantFormatTest.commands file is
+in the classpath when this tester is run or the tester will not work.
+(It will just tell you that the file is not in the classpath)
+
+The file is formatted as follows:
+@example
+<fully qualified class name> [<instantiate args>]
+<type string>
+<goal string>+ <- 1 or more goal strings
+<sample>* <- 0 or more samples
+@end example
+
+The file format should be the same regardless of blank or commented
+lines except in the samples area. No blank lines or comments should
+appear after the goal string before the first sample or between parts
+of samples (these lines are used currently to determine where samples
+lists end). This will be remedied in a future version of the tester.
+
+@table @samp
+@item Instantiate args: 
+these are optional additional arguments to the static
+instantiate method of the class.  Each arg consists of the type (boolean
+or int) followed by the value.  For example:
+@example
+    boolean true
+    int 37 boolean false
+@end example
+
+@item Type string: 
+A type string must consist of one or more of the following:
+"int", "double", "string", "int_array", "double_array", "string_array",
+separated by spaces (without the quotes) This string represents the
+types that an invariant is supposed to compare For instance, a binary
+integer comparison would have type string "int int".  A pairwise
+sequence comparison would have type string "int_array int_array"
+
+@item Goal string: 
+The goal string must start with the prefix "Goal " (don't
+actually type the quotes), and then continue with "(<format type>): ",
+where format type is the format in which the invariant will
+print. After this the representation of the invariant must occur. It
+must represent the invariant result exactly as printed, even white
+space is significant (as proper formatting should be correct down to
+the whitespace). The first variable (the one corresponding to the
+first type in the type string) corresponds with "a", the second with
+"b" and so on. Format the type string accordingly. (In samples, the
+value of "a" is read first, possibly followed by "b", and then
+possibly "c", depending on the arity of the invariant.)
+
+@example
+Example:
+Type string, Goals
+ |             |
+\|/            |
+int           \|/
+Goal (daikon): a >= -6
+Goal (java): a >= -6
+Goal (esc): a >= -6
+Goal (ioa): a >= -6
+Goal (jml): a >= -6
+Goal (simplify): (>= |a| -6)
+@end example
+
+Note that the spacing on the goal lines is exact, that is, no extra
+spaces are allowed and no spaces are allowed to be missing. So the
+exact format is again:
+@example
+Goal<1 space>(<format name>):<1 space><goal text>
+@end example
+
+@item Samples: 
+Values formatted according to the type string, one value per
+line Make sure that the samples provided are actually instances of that
+particular invariant (That is, if the desired invariant is "a < b", then
+the first number of each sample better be less than the second) 
+
+@c The below is not necessary since we don't check this before formatting
+@c 
+@c Also be
+@c sure to have enough samples to ensure the invariant is apparent (and
+@c probable) to Daikon (6-8 will do for most binary integer comparisons,
+@c 1-3 for array-based comparisons) Example: Formatting for
+@c samples of a binary integer comparison
+
+Arrays and strings must be formatted according to the Daikon dtrace file
+convention (see the Daikon user manual for full description). This
+states that arrays must be surrounded in brackets (start with "[", end
+with "]"), and entries must be seperated by a space. String must be
+enclosed in quotes ("). Quotes within a string can be represented by the
+following sequence: \"
+
+For examples
+@example
+[1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
+"aString" - a string
+"a string" - also legal as a string
+"\"" - the string with the value "
+["a" "b" "c"] - an array of strings
+
+int int        <- type string
+Goal: a < b    <- goal string, no comment/blank lines after this
+1              <- or before this
+2
+2              <-|__ Pair of values (a = 2 , b = 3)
+3              <-|
+@end example
+
+Other examples are inthe existing test file (InvariantFormatTest.commands).
+@end table
+The output of a test run can be converted into goals by using the
+--generate_goals switch to the tester as follows:
+@example
+java daikon.test.InvariantFormatTester --generate_goals
+@end example
+Note that this test is included in the set of tests performed by the
+master tester, and so it is not necessary to seperately run this test
+except to generate goal files.
+
+Furthermore, this framework cannot parse complex types from files
+unless they contain a "public (Object) valueOf(String s)"
+function. Otherwise the program has no was of knowing how to create
+such an object from a string. All primitives and the String type are
+already recognized.
+
+@node    Sample Testing,  , Invariant Format Testing, Unit Testing
+@section Sample Testing
+
+Sample testing tests various components of Daikon as samples are being
+processed.  A file (normally @file{daikon/test/SampleTester.commands}) 
+specifies a decls file to use, the samples for each ppt/var, and assertions
+about Daikon's state (such as whether or not a particular invariant exists).
+
+Each line of the file specifies exactly one command.  Blank lines and
+leading blanks are ignored.  Comments begin with the number sign (#) and
+extend to the end of the line.  The type of command is specified as the
+first token on the line followed by a colon.  The supported commands
+are:
+
+@deffn {SampleTester Command} decl: decl-file
+  This command specifies the declaration file to use.  This is a normal
+  decls file that should follow the format defined in the user manual.
+@end deffn
+
+@deffn {SampleTester Command} ppt: ppt
+  This command specifies the program point that will be used with following
+  vars, data, and assert commands.  The program point should be specified 
+  exactly as it appears in the decls file.
+@end deffn
+
+@deffn {SampleTester Command} vars: var1 var2...
+  Specifies the variables that will be used on following data lines.
+  Each variable must match exactly a variable in the ppt.  Other
+  variables will be treated as missing.  
+@end deffn
+
+@deffn {SampleTester Command} data: val1 val2...
+  Specifies the values for each of the previously specified variables.  The
+  values must match the type of the variables.  A single dash (-) indicates
+  that a variable is missing.
+@end deffn
+
+@deffn {SampleTester Command} assert: assertion
+  Specifies an assertion that should be true at this point.  @xref{Assertions}.
+  The negation of an assertion can be specified by adding an exclamation
+  point before the assertion (for example: @code{!inv("x > y", x, y})).
+@end deffn
+
+@menu
+* Assertions::                  
+* Example File::                
+@end menu
+
+@node       Assertions, Example File, Sample Testing, Sample Testing
+@subsection Assertions
+
+Assertions are formatted like function calls: <name>(arg1, arg2, ...).
+The valid assertions for the assert: command are:
+
+@deffn Assertion inv format var1 ...
+
+  The inv assertion asserts that the specified invariant exists in the
+  current ppt.  The format argument is the result of calling format() on
+  the invariant.  This is how the invariant is recognized.  The remaining
+  arguments are the variables that make up the invariants slice.  These
+  must match exactly variables in the ppt.  The inv assertion returns true
+  iff the slice exists and an invariant is found within that slice that
+  matches format.
+
+  Optionally, format can be replaced by the fully qualified class name of
+  the invariant.  In this case, it is only necessary for the class to match.
+@end deffn
+
+More assertions can easily be added to @file{SampleTester.java} as required.
+
+@node       Example File,  , Assertions, Sample Testing
+@subsection Example File
+
+The following is an simple example of sample testing.
+@example
+decl: daikon/test/SampleTesters.decls
+
+ppt: foo.f():::EXIT35
+  vars: x y z
+  data: 1 1 0
+  data: 2 1 0
+  assert: inv("x >= y", x, y)
+  assert: inv(daikon.inv.binary.twoScalar.IntGreaterEqual,x,y)
+  assert: !inv("x <= y", x, y)
+@end example
+
+
+@node     Index,  , Unit Testing, Top
 @unnumbered Index
 
 @printindex cp
