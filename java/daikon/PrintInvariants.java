@@ -12,7 +12,7 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
-import daikon.diff.InvMap;
+import daikon.config.Configuration;
 
 public final class PrintInvariants {
 
@@ -161,6 +161,7 @@ public final class PrintInvariants {
       new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -202,6 +203,16 @@ public final class PrintInvariants {
           Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
+        } else if (Daikon.config_SWITCH.equals(option_name)) {
+          String config_file = g.getOptarg();
+          try {
+            InputStream stream = new FileInputStream(config_file);
+            Configuration.getInstance().apply(stream);
+          } catch (IOException e) {
+            throw new RuntimeException("Could not open config file "
+                                        + config_file);
+          }
+          break;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
           String item = g.getOptarg();
           daikon.config.Configuration.getInstance().apply(item);
@@ -240,46 +251,13 @@ public final class PrintInvariants {
         System.out.println(usage);
         System.exit(1);
     }
+
+
+    // Read in the invariants
     String filename = args[fileIndex];
-
-    Object obj = UtilMDE.readObject (new File (filename));
-    PptMap ppts = null;
-    InvMap invs = null;
-    if (obj instanceof FileIO.SerialFormat)
-      ppts = ((FileIO.SerialFormat) obj).map;
-    else if (obj instanceof InvMap)
-      invs = (InvMap) obj;
-    else {
-      System.out.println ("Unexpected serialized file type: " +obj.getClass());
-      System.exit(1);
-    }
-
-    // Create a PptMap from the InvMap
-    if (invs != null) {
-      ppts = new PptMap();
-      for (Iterator i = invs.pptIterator(); i.hasNext(); ) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
-        debug.fine ("processing ppt " + ppt.name + " (" + ppt.num_samples()
-                    + " samples)");
-        // debug.fine ("    Variables: " + VarInfo.toString (ppt.var_infos));
-        PptTopLevel nppt = new PptTopLevel (ppt.name, ppt.var_infos);
-        nppt.set_sample_number (ppt.num_samples());
-        ppts.add (nppt);
-        List /*Invariants*/ inv_list = invs.get (ppt);
-        for (Iterator j = inv_list.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
-          debug.fine ("--processing invariant " + inv.format());
-          PptSlice slice = nppt.get_or_instantiate_slice (inv.ppt.var_infos);
-          inv.ppt = slice;
-          slice.addInvariant (inv);
-        }
-      }
-    }
-
-    //PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-    //                                           true // use saved config
-    //                                           );
-
+    PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
+                                               true // use saved config
+                                               );
 
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
