@@ -35,6 +35,11 @@ public final class Daikon {
   // warnings and the modbit problem can cause an error later.
   public final static boolean disable_modbit_check_error = false;
 
+  // when true, doesn't print invariants on public methods which are already
+  // given as part of the object invariant for that class
+  public static boolean suppress_object_invariants_in_public_methods = false;
+  // public final static boolean suppress_object_invariants_in_public_methods = true;
+
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
   public static FileOutputStream inv_ostream;
@@ -49,12 +54,13 @@ public final class Daikon {
     + "  Each file is a declaration file or a data trace file; the file type\n"
     + "  is determined by the file name (containing \".decls\" or \".dtrace\").\n"
     + "  Flags:\n"
-    + "    -h		    Print this usage message\n"
-    + "    -r ppt_regexp    Only process program points matching the regexp\n"
-    + "    -o inv_file      Serialize invariants to the specified file;\n"
-    + "                       they can later be postprocessed, compared, etc.\n"
+    + "    -h		     Print this usage message\n"
+    + "    -r ppt_regexp     Only process program points matching the regexp\n"
+    + "    -o inv_file       Serialize invariants to the specified file;\n"
+    + "                        they can later be postprocessed, compared, etc.\n"
+    + "    --suppress_object Suppress display of object invariants at program points"
+    + "                        where they are implied (public method entry / exit).\n"
     ;
-
 
   /**
    * The arguments to daikon.Daikon are file names; declaration file names end
@@ -70,10 +76,22 @@ public final class Daikon {
       System.exit(1);
     }
 
-    Getopt g = new Getopt("daikon.Daikon", args, "ho:r:");
+    LongOpt[] longopts = new LongOpt[] {
+      new LongOpt("suppress_object", LongOpt.NO_ARGUMENT, null, 0)
+    };
+    Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {
+      case 0:
+	// got a long option
+	String option_name = longopts[g.getLongind()].getName();
+	if ("suppress_object".equals(option_name)) {
+	  suppress_object_invariants_in_public_methods = true;
+	} else {
+	  throw new RuntimeException("Unknown long option received: " + option_name);
+	}
+	break;
       case 'h':
         System.out.println(usage);
         System.exit(1);
