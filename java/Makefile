@@ -9,6 +9,7 @@
 JAVAC ?= javac
 JAVAC_ARGS ?= -g -J-Xmx512m
 JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
+JAR ?= jar
 JAVA ?= java
 
 ### end of user customizations
@@ -17,6 +18,10 @@ JAVA ?= java
 ###########################################################################
 ### Variables
 ###
+
+# Add BCEL to the classpath.  A better solution to this should be found
+BCEL := /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java
+CLASSPATH := $(CLASSPATH):/$(BCEL)
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -302,6 +307,22 @@ compile_daikon : $(AUTO_GENERATED_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
 	# $(MAKE) all_pass2
 
+#
+# Chicory java front end for Daikon
+#
+CHICORY_JAVA_FILES := daikon/Chicory.java \
+					  $(shell find  daikon/chicory -name '*.java')
+CHICORY_CLASS_FILES := $(patsubst %.java,%.class,$(CHICORY_JAVA_FILES))
+
+chicory : ChicoryPremain.jar
+ChicoryPremain.jar : $(CHICORY_JAVA_FILES)
+	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
+	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
+	  daikon/chicory/ChicoryPremain.class
+
+chicory-test : ChicoryPremain.jar
+	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
+	  daikon.chicory.Test
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
