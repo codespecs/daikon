@@ -626,6 +626,9 @@ public final class CLASSNAME
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       Assert.assertTrue (arg instanceof CLASSNAME);
       CLASSNAME inv = (CLASSNAME) arg;
+      if (Debug.logOn())
+        arg.log ("Considering suppression: A subset B => A[i] member B");
+
       VarInfo sclSequence = inv.sclvar().isDerivedSequenceMember();
       if (sclSequence == null) return null;
       VarInfo seqvar = inv.seqvar();
@@ -701,6 +704,13 @@ public final class CLASSNAME
           SubSequence subSeq = (SubSequence) supTemplate.results[0];
           if ((subSeq.var1_in_var2 && subSeq.var1() == transSclSequence) ||
               (subSeq.var2_in_var1 && subSeq.var2() == transSclSequence)) {
+            if (Debug.logOn())
+              arg.log ("Suppressed with subSeq = " + subSeq.format()
+                       + " var1_in_var2=" + subSeq.var1_in_var2
+                       + " var2_in_var1=" + subSeq.var2_in_var1
+                       + " TransSclSequence=" + transSclSequence.name()
+                       + " var1=" + subSeq.var1().name()
+                       + " var2=" + subSeq.var2().name());
             return sl;
           }
         }
@@ -727,6 +737,8 @@ public final class CLASSNAME
     private Object readResolve() {
       return theInstance;
     }
+
+    private transient SuppressionTemplate supTemplate;
 
     /**
      * Check if leftIndex < rightIndex.
@@ -778,6 +790,22 @@ public final class CLASSNAME
         return null;
       }
 
+
+      // jhp - The code below seems a bit unclear.  I would restate
+      // the explanation as follows:
+
+      // sc_shift is the scalar shift
+      // seq_shift is the sequence shift
+      //
+      // We want A[i+sc_shift] in A[0..j+seq_shift]
+      //   i+sc_shift <= j+seq_shift
+      //   i <= j + seq_shift - sc_shift
+      //
+      // We want A[i+sc_shift] in A[j+seq_shift..]
+      //  j+seq_shift <= i+sc_shift
+      //  j <= i + sc_shift - seq_shift
+
+      // The original explanation...
       // Here's the math, explained:
 
       // We want A[i] in A[0..j+shift]
@@ -792,13 +820,16 @@ public final class CLASSNAME
       // j <= i + interval
       // interval = shift
 
+      // jhp- Its not clear to me why the calculation of interval is
+      // reversed from what I show above.  Perhaps interval as used
+      // in findLessEqualInt has an inverted meaning
 
       int interval = 0;
       if (ssss.from_start) {
         interval = sssc.index_shift - ssss.index_shift ;
         return findLessEqualInt (inv, leftIndex, rightIndex, interval);
       } else {
-        interval = ssss.index_shift + sssc.index_shift;
+        interval = ssss.index_shift - sssc.index_shift;
         return findLessEqualInt (inv, rightIndex, leftIndex, interval);
       }
     }
