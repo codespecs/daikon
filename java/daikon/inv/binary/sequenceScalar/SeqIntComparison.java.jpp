@@ -11,6 +11,7 @@
 #if (defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
   #define SUPERCLASS SequenceScalar
   #define PRIMITIVE long
+  #define IS_INT 1
   #define PROGLANGTYPESCALAR INT
   #define PROGLANGTYPEARRAY INT_ARRAY
   #define ELTONEOF EltOneOf
@@ -22,6 +23,7 @@
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS SequenceFloat
   #define PRIMITIVE double
+  #define IS_FLOAT 1
   #define PROGLANGTYPESCALAR DOUBLE
   #define PROGLANGTYPEARRAY DOUBLE_ARRAY
   #define ELTONEOF EltOneOfFloat
@@ -205,7 +207,7 @@ public final class SEQINTEQUAL
     Assert.assertTrue(sclvar.rep_type == ProglangType.PROGLANGTYPESCALAR);
     Assert.assertTrue(seqvar.rep_type == ProglangType.PROGLANGTYPEARRAY);
 
-    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+    #if !defined(EQUAL) && defined(IS_INT)
       if (!seqvar.type.elementIsIntegral())
         return false;
     #endif
