@@ -287,7 +287,7 @@ all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
-all_directly: ${AUTO_GENERATED_FILES}
+all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
