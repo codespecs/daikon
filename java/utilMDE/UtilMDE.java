@@ -842,6 +842,29 @@ public final class UtilMDE {
     }
   }
 
+  /** Return the number of times the character appears in the string. **/
+  public static int count(String s, int ch) {
+    int result = 0;
+    int pos = s.indexOf(ch);
+    while (pos > -1) {
+      result++;
+      pos = s.indexOf(ch, pos+1);
+    }
+    return result;
+  }
+
+  /** Return the number of times the second string appears in the first. **/
+  public static int count(String s, String sub) {
+    int result = 0;
+    int pos = s.indexOf(sub);
+    while (pos > -1) {
+      result++;
+      pos = s.indexOf(sub, pos+1);
+    }
+    return result;
+  }
+
+
   ///
   /// StringTokenizer
   ///

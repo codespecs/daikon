@@ -1082,6 +1082,14 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.rpad(10, 5).equals("10   "));
     assertTrue(UtilMDE.rpad(3.14, 5).equals("3.14 "));
 
+    assertTrue(UtilMDE.count("abcde", 'a') == 1);
+    assertTrue(UtilMDE.count("abcde", 'c') == 1);
+    assertTrue(UtilMDE.count("abcde", 'e') == 1);
+    assertTrue(UtilMDE.count("abcde", 'z') == 0);
+    assertTrue(UtilMDE.count("abacadaea", 'a') == 5);
+    assertTrue(UtilMDE.count("aaadaea", 'a') == 5);
+    assertTrue(UtilMDE.count("daeaaa", 'a') == 4);
+
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)
     // public static Vector tokens(String str, String delim)
