@@ -170,9 +170,18 @@ junit:
 
 .PHONY : doc
 
+JAVADOC_FLAGS = -d doc \
+                -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
+JAVADOC_PACKAGES = `find -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax-ship | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
+
 doc: $(JAVA_FILES)
 	mkdir -p doc
-	javadoc -d doc `find -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax-ship | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
+	javadoc $(JAVADOC_FLAGS) $(JAVADOC_PACKAGES)
+
+## Make doc with private fields for people working on source code
+doc-all: $(JAVA_FILES)
+	mkdir -p doc
+	javadoc $(JAVADOC_FLAGS) -private $(JAVADOC_PACKAGES)
 
 doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names-no-bak `find doc -name '*.html'`
