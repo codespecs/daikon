@@ -12,6 +12,11 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (invariantsDiffer(inv1, inv2)) {
+      if (StatisticsVisitor.interestingDifference(inv1, inv2)) {
+        pw.print("*");
+      } else {
+        pw.print(" ");
+      }
       super.visitInvNode(node);
     }
   }

@@ -5,7 +5,7 @@ import java.io.*;
 public class PrintAllVisitor implements NodeVisitor {
   
   private StringWriter sw;
-  private PrintWriter pw;
+  protected PrintWriter pw;
   private boolean verbose;
 
   public PrintAllVisitor(boolean verbose) {

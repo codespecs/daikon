@@ -226,8 +226,8 @@ public class StatisticsVisitor implements NodeVisitor {
   // Returns true if the difference between the two invariants is
   // considered "interesting".  All differences are interesting,
   // except: LowerBound, UpperBound, OneOf
-  private static boolean interestingDifference(Invariant inv1,
-                                               Invariant inv2) {
+  static boolean interestingDifference(Invariant inv1,
+                                       Invariant inv2) {
     // Use the non-null invariant
     Invariant inv = (inv1 != null) ? inv1 : inv2;
     if (inv instanceof LowerBound ||
