@@ -17,7 +17,7 @@ import daikon.split.misc.*;
 
 import java.util.*;
 import java.io.PrintStream;
-import com.oroinc.text.regex.*;
+import org.apache.oro.text.regex.*;
 
 import utilMDE.*;
 

@@ -3,7 +3,7 @@ package daikon;
 import daikon.derive.*;
 
 import utilMDE.*;
-import com.oroinc.text.regex.*;
+import org.apache.oro.text.regex.*;
 
 import java.io.*;
 import java.util.*;

@@ -8,7 +8,7 @@ import daikon.inv.Invariant;
 import java.util.*;
 import java.io.*;
 
-import com.oroinc.text.regex.*;
+import org.apache.oro.text.regex.*;
 import gnu.getopt.*;
 import utilMDE.*;
 

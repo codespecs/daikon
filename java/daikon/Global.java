@@ -3,7 +3,7 @@
 package daikon;
 
 import java.util.*;
-import com.oroinc.text.regex.*;
+import org.apache.oro.text.regex.*;
 
 public final class Global {
 
