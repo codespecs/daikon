@@ -103,8 +103,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   //  many Exceptions.  These Exceptions have arcane error messages that the user will not
   //  understand.  This is okay, because in displayInvariantsFromFile(), the only actual
   //  error message shown is "Error: Unable to display invariants."  I'm leaving the more
-  //  descriptive, arcane error messages in the code for convenience, for when I need
-  //  them.
+  //  descriptive, arcane error messages in the code for convenience, for when I might
+  //  need them.
   public DefaultTreeModel constructTreeModel( PptMap pptMap ) throws Exception {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
 
@@ -747,7 +747,7 @@ class InvariantTableModel extends AbstractTableModel {
     else if (column == 1)	    return new Integer( invariant.ppt.num_values());
     else if (column == 2)	    return new Integer( invariant.ppt.num_samples());
     else if (column == 3)	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
-    else if (column == 4)	    return new Boolean( invariant.justified());
+    else /* (column == 4) */	    return new Boolean( invariant.justified());
   }
 
   //  Must override this method so TableSorter will sort numerical columns properly.
