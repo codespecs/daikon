@@ -1882,7 +1882,7 @@ public class PptTopLevel
       // Method::NoDuplicates(this.array[0..i]), we need to search in
       // the OBJECT ppt, because the Method ppt won't have the
       // NoDuplicates(this.array) invariant, as it's in the OBJECT
-      // ppt.
+      // ppt.  This is where i is a parameter.
       // if (!firstLoopFilled) return false;
     }
 
