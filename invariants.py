@@ -553,17 +553,8 @@ class var_info:
                                         #   the variable itself is not on this list
 
     def __setstate__(self, state):
-        assert len(state.keys()) == 9
-        self.name = state['name']
-        self.type = state['type']
-        self.lackwit_type = state['lackwit_type']
-        self.index = state['index']
-        self.derived = state['derived']
-        self.derived_len = state['derived_len']
-        self.is_derived = state['is_derived']
-        self.invariant = state['invariant']
-        self.invariants = state['invariants']
-        self.equal_to = state['equal_to']
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def __repr__(self):
         return "<var %s %s>" % (self.name, self.type)
@@ -2369,13 +2360,8 @@ class invariant:
         self.unconstrained_internal = None
 
     def __setstate__(self, state):
-        assert len(state.keys()) == 6
-        self.one_of = state['one_of']
-        self.values = state['values']
-        self.samples = state['samples']
-        self.can_be_None = state['can_be_None']
-        self.unconstrained_internal = state['unconstrained_internal']
-        self.var_infos = state['var_infos']
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def is_exact(self):
         return self.values == 1
@@ -2526,24 +2512,8 @@ class single_scalar_numeric_invariant(invariant):
 
 
     def __setstate__(self, state):
-        self.min = state['min']
-        self.max = state['max']
-        self.can_be_zero = state['can_be_zero']
-        self.modulus = state['modulus']
-        self.nonmodulus = state['nonmodulus']
-        self.min_justified = state['min_justified']
-        self.max_justified = state['max_justified']
-        self.nonnegative_obvious = state['nonnegative_obvious']
-        if __debug__:                   # we're checking for extra elements
-            del state['min']
-            del state['max']
-            del state['can_be_zero']
-            del state['modulus']
-            del state['nonmodulus']
-            del state['min_justified']
-            del state['max_justified']
-            del state['nonnegative_obvious']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
 
     ## Can do no more than the parent can
@@ -2875,24 +2845,8 @@ class two_scalar_numeric_invariant(invariant):
             self.inv_functions = None
 
     def __setstate__(self, state):
-        self.linear = state['linear']
-        self.comparison = state['comparison']
-        self.comparison_obvious = state['comparison_obvious']
-        self.can_be_equal = state['can_be_equal']
-        self.difference_invariant = state['difference_invariant']
-        self.sum_invariant = state['sum_invariant']
-        self.functions = state['functions']
-        self.inv_functions = state['inv_functions']
-        if __debug__:                   # we're checking for extra elements
-            del state['linear']
-            del state['comparison']
-            del state['comparison_obvious']
-            del state['can_be_equal']
-            del state['difference_invariant']
-            del state['sum_invariant']
-            del state['functions']
-            del state['inv_functions']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def is_exact(self):
         return invariant.is_exact(self) or self.linear
@@ -3215,26 +3169,8 @@ class three_scalar_numeric_invariant(invariant):
 
 
     def __setstate__(self, state):
-        self.linear_z = state['linear_z']
-        self.linear_y = state['linear_y']
-        self.linear_x = state['linear_x']
-        self.functions_xyz = state['functions_xyz']
-        self.functions_yxz = state['functions_yxz']
-        self.functions_xzy = state['functions_xzy']
-        self.functions_zxy = state['functions_zxy']
-        self.functions_yzx = state['functions_yzx']
-        self.functions_zyx = state['functions_zyx']
-        if __debug__:                   # we're checking for extra elements
-            del state['linear_z']
-            del state['linear_y']
-            del state['linear_x']
-            del state['functions_xyz']
-            del state['functions_yxz']
-            del state['functions_xzy']
-            del state['functions_zxy']
-            del state['functions_yzx']
-            del state['functions_zyx']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def is_exact(self):
         return invariant.is_exact(self) or self.linear_z or self.linear_y or self.linear_x
@@ -3657,28 +3593,8 @@ class single_sequence_numeric_invariant(invariant):
         # self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
 
     def __setstate__(self, state):
-        self.min = state['min']
-        self.max = state['max']
-        self.min_justified = state['min_justified']
-        self.max_justified = state['max_justified']
-        self.elts_equal = state['elts_equal']
-        self.non_decreasing = state['non_decreasing']
-        self.non_increasing = state['non_increasing']
-        self.all_index_sni = state['all_index_sni']
-        # self.per_index_sni = state['per_index_sni']
-        # self.reversed_per_index_sni = state['reversed_per_index_sni']
-        if __debug__:                   # we're checking for extra elements
-            del state['min']
-            del state['max']
-            del state['min_justified']
-            del state['max_justified']
-            del state['elts_equal']
-            del state['non_decreasing']
-            del state['non_increasing']
-            del state['all_index_sni']
-            # del state['per_index_sni']
-            # del state['reversed_per_index_sni']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def __repr__(self):
         result = "<invariant-1 []>"
@@ -3872,18 +3788,8 @@ class scalar_sequence_numeric_invariant(invariant):
         #        pass
 
     def __setstate__(self, state):
-        self.seq_first = state['seq_first']
-        self.member = state['member']
-        self.member_obvious = state['member_obvious']
-        # self.size = state['size']
-        # self.per_index_linear = state['per_index_linear']
-        if __debug__:                   # we're checking for extra elements
-            del state['seq_first']
-            del state['member']
-            del state['member_obvious']
-            # del state['size']
-            # del state['per_index_linear']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def __repr__(self):
         result = "<invariant-2 (x,[])>"
@@ -4027,24 +3933,8 @@ class two_sequence_numeric_invariant(invariant):
                     break
 
     def __setstate__(self, state):
-        self.linear = state['linear']
-        self.comparison = state['comparison']
-        self.can_be_equal = state['can_be_equal']
-        self.sub_sequence = state['sub_sequence']
-        self.super_sequence = state['super_sequence']
-        self.reverse = state['reverse']
-        self.subseq_obvious = state['subseq_obvious']
-        self.superseq_obvious = state['superseq_obvious']
-        if __debug__:                   # we're checking for extra elements
-            del state['linear']
-            del state['comparison']
-            del state['can_be_equal']
-            del state['sub_sequence']
-            del state['super_sequence']
-            del state['reverse']
-            del state['subseq_obvious']
-            del state['superseq_obvious']
-        invariant.__setstate__(self, state)
+        for key in state.keys():
+            setattr(self, key, state[key])
 
 
     def __repr__(self):
@@ -4196,7 +4086,7 @@ def read_state(filename):
 ###
 
 def diff_files(filename1, filename2):
-    diff_to_ct[inv_one_cons] = diff_to_ct[inv_one_cons] + 1
+    diff_to_ct[inv_one_cons] = diff_to_ct.get(inv_one_cons, 0) + 1
     (samples1, fn_var_infos1) = read_state(filename1)
     (samples2, fn_var_infos2) = read_state(filename2)
     diff_fn_var_infos(fn_var_infos1, fn_var_infos2)
@@ -4749,22 +4639,8 @@ class stats:
         #self.read_files_end_time = 0
 
     def __setstate__(self, state):
-        assert len(state.keys()) == 14
-        self.orig_num_scl_params = state['orig_num_scl_params']
-        self.orig_num_scl_locals = state['orig_num_scl_locals']
-        self.orig_num_scl_globals = state['orig_num_scl_globals']
-        self.orig_num_seq_params = state['orig_num_seq_params']
-        self.orig_num_seq_locals = state['orig_num_seq_locals']
-        self.orig_num_seq_globals = state['orig_num_seq_globals']
-        self.total_num_scl = state['total_num_scl']
-        self.total_num_seq = state['total_num_seq']
-        self.samples = state['samples']
-        self.total_num_values_ind = state['total_num_values_ind']
-        self.total_num_invs_pair = state['total_num_invs_pair']
-        self.total_num_values_pair = state['total_num_values_pair']
-        self.fn_begin_time = state['fn_begin_time']
-        self.fn_end_time = state['fn_end_time']
-
+        for key in state.keys():
+            setattr(self, key, state[key])
 
     def format(self):
         total_secs_unrounded = self.fn_end_time - self.fn_begin_time
