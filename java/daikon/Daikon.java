@@ -862,7 +862,7 @@ public final class Daikon {
       System.out.println("Processing trace data; reading "
                          + UtilMDE.nplural(dtrace_files.size(), "file")
                          + ":");
-      FileIO.read_data_trace_files(dtrace_files, all_ppts, null);
+      FileIO.read_data_trace_files(dtrace_files, all_ppts);
       fileio_progress.stop();
       System.out.println();
       System.out.print("Creating implications "); // XXX untested code
