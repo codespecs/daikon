@@ -20,10 +20,14 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     }
     if (invariant instanceof Implication) {
       Implication impl = (Implication) invariant;
-      if (impl.predicate().isGuardingPredicate) {
+      // jhp 11/04/03, comment out if below.  It seems to never make sense
+      // to look at constant variables for the implication itself since
+      // the implication is in a PptSlice0 (which will always fail the test
+      // below
+      // if (impl.predicate().isGuardingPredicate)
         // only consider the consequent
         invariant = impl.consequent();
-      }
+
     }
 
     VarInfo[] vis = invariant.ppt.var_infos;
