@@ -540,10 +540,6 @@ def _test_common_modulus():
 
 
 
-# This is perhaps too strict; even a single missing number means we don't
-# make the inference.  Maybe it should be enough that there's at least one
-# number in the set with each modulus.
-
 ## This implementation is particularly inefficient; find a better way to
 ## compute this.
 def common_nonmodulus_strict(nums):
@@ -556,7 +552,7 @@ but all missing numbers in their range are."""
             return None
     except OverflowError:
         return None
-    return common_modulus(sorted_list_difference(range(nums[0]+1, nums[-1]), nums))
+    return common_modulus(sorted_list_difference(range(nums[0]+1, nums[-1]-1), nums))
 
 def _test_common_nonmodulus_strict():
     # Doesn't work because given only two items, common_modulus doesn't
@@ -566,6 +562,7 @@ def _test_common_nonmodulus_strict():
     assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == (0,2)
     assert common_nonmodulus_strict([1,2,3,5,6,7,11]) == None
 
+# This seems to give too many false positives.
 def common_nonmodulus_nonstrict(nums):
     """Return a tuple of (r,m) where no number in NUMS is equal to r (mod m)
 but for every number in NUMS, at least one is equal to every non-r remainder.

@@ -17,6 +17,10 @@ File format for data trace files
      * specify that a variable is a constant, either at compile time
        (static final) or at run time (blank final).  I have to be able to
        do this at run time, so maybe only do it at run time?
+  * record a "function invocation id" per function.  It's a unique ID that
+    lets us map from entries to exits, to permit handline of orig values.
+    The downside is the addition of an additional int variable in every
+    procedure.
  Add to trace file format:
   * never permit mixing declarations and traces
   * specify relevant decls files, with message digests for them.  Possibly

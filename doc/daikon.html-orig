@@ -259,7 +259,9 @@ collection of data trace files.
 You can run the instrumented program in just the same way you did before;
 the only behavioral change will be writing a <tt>.dtrace</tt> file to the
 <tt>daikon-output/</tt> subdirectory (which is created if it does not
-already exist).<p>
+already exist).  Only one <tt>.dtrace</tt> file is created, even though
+multiple <tt>.decls</tt> files might have been created (one for each source
+file).<p>
 
 
 <ul>
@@ -295,12 +297,17 @@ have to set the <tt>PYTHONPATH</tt> environment variable.<p>
 In Python, issue the following commands:
 <pre>
   import daikon 			  # load the daikon.py file
-  daikon.read_declarations('<i>filename.decls</i>',1)   # read the function declarations
+  daikon.read_declarations('<i>filename.decls</i>',1)  # read function declarations
+  daikon.read_declarations('<i>filename2.decls</i>')   # read more function declarations
   daikon.read_data_traces('<i>filename.dtrace</i>')    # read the trace files
   daikon.all_numeric_invariants()	  # compute and print invariants
 </pre>
 The <tt><i>filename</i></tt> arguments may also be shell wildcards, such as
-"<tt>p*.dtrace</tt>", in order to read multiple files.  The three functions
+"<tt>p*.dtrace</tt>", in order to read multiple files.  The optional
+argument to <tt>read_declarations</tt> indicates whether to clear out all
+previously-read declarations; if the argument is 0 or is absent, the new
+declarations are added to any existing ones rather than replacing them.
+The three functions
 above each take an optional regular expression for program point, so that
 only certain program points are processed.  (This can make the invariant
 detection engine run faster.)  For details, see the documentation strings
