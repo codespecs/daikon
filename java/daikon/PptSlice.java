@@ -281,6 +281,17 @@ public abstract class PptSlice extends Ppt {
 
     // Flow newly-generated stuff
     if (invs_to_flow.size() == 0) return;
+
+    // XXXX Currently, we flow invariants to all immediately-lower
+    // PptSlices.  If the same sample happens to follow them there,
+    // then they are again falsified and flowed.  This is slightly
+    // inefficient.  Worse, it leads to redundant invariants when an
+    // invariant class can flow even when not falsified (like OneOf or
+    // Bound invariants); find these by searching for calls to
+    // flowClone().  The correct thing to do is to flow to all nearest
+    // lower slices that are not covered by the sample being
+    // processed.  We should implement this change.
+
     // For each lower PptTopLevel
     for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
       PptTopLevel lower = (PptTopLevel) j.next();
