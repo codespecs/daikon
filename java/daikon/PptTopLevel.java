@@ -56,7 +56,7 @@ public class PptTopLevel
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030929L;
+  static final long serialVersionUID = 20040803L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -145,7 +145,7 @@ public class PptTopLevel
   }
 
   /** Permutation to swap the order of variables in a binary invariant **/
-  private int[] permute_swap = new int[] {1, 0};
+  private static int[] permute_swap = new int[] {1, 0};
 
   /** Holds the falsified invariants under this PptTopLevel. */
   public ArrayList falsified_invars = new ArrayList();
