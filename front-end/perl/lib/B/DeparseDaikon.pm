@@ -81,6 +81,11 @@ sub compile {
 		my $fname = $args[$i+1];
 		read_types($fname);
 		$args[$i] = $args[$i+1] = undef;
+	    } elsif ($args[$i] eq "-o") {
+		# -o: write output to a given file, rather than STDOUT
+		my $fname = $args[$i+1];
+		open(STDOUT, ">", "$fname") or die "Can't open $_: $!\n";
+		$args[$i] = $args[$i+1] = undef;
 	    }
 	}
 	@args = grep(defined($_), @args);
