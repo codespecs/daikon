@@ -198,6 +198,7 @@
     (post (= s (sum (0 <= j < n) (aref b j))))))
 
 (defun test-p180-15.1.1 ()
+  "Test p180-15.1.1 using a uniform distribution."
   (with-data-trace "p180-15.1.1.dtrace"
     (loop for i from 1 to 100
 	  do (let* ((n (random-range 7 13))
@@ -208,6 +209,7 @@
 	       (p180-15.1.1 b n)))))
 
 (defun test-p180-15.1.1-e ()
+  "Test p180-15.1.1 using an exponential distribution."
   (with-data-trace "p180-15.1.1-e.dtrace"
     (loop for i from 1 to 100
 	  do (let* ((n (random-exponential 10))
@@ -222,6 +224,7 @@
 ;; Probably exponential decay is a lot more reasonable than harmonic,
 ;; which can produce a lot of really big numbers (and is slow to compute!).
 (defun test-p180-15.1.1-h ()
+  "Test p180-15.1.1 using a harmonic distribution."
   (with-data-trace "p180-15.1.1-h.dtrace"
     (loop for i from 1 to 100
 	  do (let* ((n (1- (random-harmonic 2)))
