@@ -188,7 +188,7 @@ JAVADOC_FLAGS = -d doc \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
 JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
 
-doc: $(JAVA_FILES)
+doc: $(JAVA_FILES) doc-dkconfig
 	mkdir -p doc
 	# This requires that jdk/lib/tools.jar be on your classpath
 	javadoc $(JAVADOC_FLAGS) $(JAVADOC_PACKAGES)
@@ -202,10 +202,12 @@ doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names-no-bak `find doc -name '*.html'`
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
-doc-dkconfig:
+../doc/config-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo ../doc/config-options.texinfo \
 		$(JAVADOC_PACKAGES)
+
+doc-dkconfig: ../doc/config-options.texinfo
 
 ## For debugging the Makefile.
 showvars:

@@ -203,6 +203,10 @@ Enhancing Daikon output
 * Configuration options::       
 * Conditional invariants::      
 
+Configuration options
+
+* List of configuration options::  
+
 Conditional invariants and implications
 
 * Splitter info file::          
@@ -2865,17 +2869,27 @@ wish to use the supplied default configuration file as an example when
 creating your own configuration files (which only need include the
 specific configuration options you wish to change).
 
-At present, the configuration options are documented in the source files
-in which they are defined.  The configuration option name contains the
-Java classes in which it is defined.  (In the Daikon source code, the
-configuration value is stored in a variable which contains a
-@code{dkconfig_} prefix, but that should not be of concern to users.)
-Eventually, this section of the manual will contain a full list of all
-available options.
-
 The debugging flags @option{--debug} and @option{--dbg @var{category}}
 (@pxref{Command line options}) permit Daikon to produce debugging
 output, but do not affect the invariants that it computes.
+
+@menu
+* List of configuration options::  
+@end menu
+
+This is a list of all Daikon configuration options; you may want to see
+the source code for the specific invariants and derived variables to
+learn more.  The configuration option name contains the
+Java classes in which it is defined.  (In the Daikon source code, the
+configuration value is stored in a variable which contains a
+@code{dkconfig_} prefix, but that should not be of concern to users.)
+
+@node    List of configuration options,  , Configuration options, Configuration options
+@subsection List of configuration options
+
+@table @asis
+@include config-options.texinfo
+@end table
 
 
 @node    Conditional invariants,  , Configuration options, Enhancing Daikon output

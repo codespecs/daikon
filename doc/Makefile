@@ -3,7 +3,8 @@ all: info html html-chap ps pdf
 
 info: daikon.info
 
-daikon.info: daikon.texinfo .fix-menu
+daikon.info: daikon.texinfo config-options.texinfo .fix-menu
+	cd ../java && $(MAKE) ../doc/config-options.texinfo
 	makeinfo $<
 
 # Don't want to make this a target of other rules because it updates the modification date.
