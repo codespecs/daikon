@@ -1,4 +1,3 @@
-*.class
 StringEqual.java
 StringGreaterEqual.java
 StringGreaterThan.java

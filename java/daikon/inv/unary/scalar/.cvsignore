@@ -1,5 +1,3 @@
-*.class
-*.java-bak
 LowerBound.java
 UpperBound.java
 LowerBoundFloat.java

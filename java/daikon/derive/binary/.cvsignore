@@ -1,4 +1,3 @@
-*.class
 SequenceScalarSubscript.java
 SequenceFloatSubscript.java
 SequenceStringSubscript.java

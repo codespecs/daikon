@@ -1,4 +1,3 @@
-*.class
 SequenceScalarArbitrarySubsequence.java
 SequenceFloatArbitrarySubsequence.java
 SequenceStringArbitrarySubsequence.java

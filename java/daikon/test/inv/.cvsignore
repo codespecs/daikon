@@ -1,4 +1,3 @@
-*.class
 InvariantTest.commands
 InvariantTest.input
 InvariantTest.diffs

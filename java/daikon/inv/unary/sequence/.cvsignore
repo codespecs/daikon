@@ -1,5 +1,3 @@
-*.class
-*.java-bak
 OneOfSequence.java
 OneOfFloatSequence.java
 EltOneOf.java

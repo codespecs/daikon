@@ -1,5 +1,3 @@
-*.class
-*-try
 IntComparisonCore.java
 FloatComparisonCore.java
 IntEqual.java
