@@ -48,6 +48,7 @@ class Modulus extends SingleScalar {
       // return;
     } else if (no_values_seen) {
       value1 = value;
+      no_values_seen = false;
       return;
     } else if (value == value1) {
       // no new information, so nothing to do
