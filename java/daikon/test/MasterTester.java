@@ -3,7 +3,7 @@ package daikon.test;
 import junit.framework.*;
 import daikon.test.diff.*;
 import daikon.test.inv.*;
-
+import utilMDE.*;
 
 public class MasterTester extends TestCase {
 
@@ -17,6 +17,8 @@ public class MasterTester extends TestCase {
 
   public static Test suite() {
     TestSuite result = new TestSuite();
+    // This is possibly not right; the JIT needs to be disabled in order
+    // for these tests to succeed.
     result.addTest(new TestSuite(TestUtilMDE.class));
 
     // To determine what should be in this list:
