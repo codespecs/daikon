@@ -3,7 +3,7 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.Invariant;
 import java.lang.reflect.*;
-
+import org.apache.log4j.Category;
 
 public class FunctionBinary
   extends ThreeScalar
@@ -20,7 +20,7 @@ public class FunctionBinary
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugFunctionBinary = false;
+  public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinary");
 
   FunctionBinaryCore core;
 
@@ -37,8 +37,10 @@ public class FunctionBinary
       VarInfo argresult = ppt.var_infos[indices[0]];
       VarInfo arg1 = ppt.var_infos[indices[1]];
       VarInfo arg2 = ppt.var_infos[indices[2]];
-      if (debugFunctionBinary)
-        System.out.println("FunctionBinary.instantiate(" + ppt.name + ", " + function.getName() + ", " + argresult.name + "=" + "f(" + arg1.name + "," + arg2.name + ")" + " )");
+      if (debug.isDebugEnabled())
+        debug.debug("FunctionBinary.instantiate(" + ppt.name + ", " +
+		    function.getName() + ", " + argresult.name + "=" + "f(" +
+		    arg1.name + "," + arg2.name + ")" + " )");
     }
 
     // SUPPRESS INVARIANT: if any var is constant, suppress FunctionBinary.

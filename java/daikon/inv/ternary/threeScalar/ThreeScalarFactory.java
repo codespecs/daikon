@@ -16,7 +16,7 @@ public final class ThreeScalarFactory {
   /**
    * Debug tracer
    **/
-  final static Category debug = Category.getInstance ("daikon.inv.trinary.threeScalar.ThreeScalarFactory");
+  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
   
 
   public final static int max_instantiate
@@ -79,7 +79,9 @@ public final class ThreeScalarFactory {
         }
       }
       result.add(LinearTernary.instantiate(ppt));
-      debug.debug ("Instantiated");
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Instantiated invs " + result);
+      }
       return result;
     }
   }
