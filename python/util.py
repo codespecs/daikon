@@ -774,7 +774,8 @@ def expand_file_name(filename):
     def env_repl(matchobj):
         return posix.environ[matchobj.group(0)[1:]]
     filename = re.sub(r'^~/', '$HOME/', filename)
-    filename = re.sub(r'^~', '/homes/fish/', filename)
+    # not '/homes/fish/'
+    filename = re.sub(r'^~', '/homes/rivers/', filename)
     filename = re.sub(r'\$[a-zA-Z_]+', env_repl, filename)
     return filename
 

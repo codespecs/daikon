@@ -360,6 +360,9 @@ class proglang_type:
                     jtmatch = java_type_re.match(base)
                     if (jtmatch != None) or (base == "Object"):
                         base = "java_object"
+                    # Terrible hack, just use java_object anyway!
+                    else:
+                        base = "java_object"
         else:
             assert type(dimensionality) == types.IntType
 
@@ -1868,8 +1871,10 @@ def read_data_trace_file(filename, fn_regexp=None):
             assert line[-1] == "\n"
             this_value = line[:-1]
             line = file.readline()
-            assert (line == "1\n") or (line == "0\n")
+            assert (line == "1\n") or (line == "0\n") or (line == "2\n")
             this_var_modified = (line == "1\n")
+            if (line == "2\n"):
+                this_value = None
 
             this_var_type = this_var_info.type
             this_base_type = this_var_type.base
@@ -1969,9 +1974,12 @@ def read_data_trace_file(filename, fn_regexp=None):
                     # Convert the number to signed.  This is gross, will be fixed.
                     this_value = eval(hex(long(this_value))[:-1])
                 elif this_base_type == "java_object":
-                    jomatch = java_object_re.match(this_value);
-                    assert jomatch != None;
-                    this_value = eval("0x" + jomatch.group(1));
+                    if this_value == None:
+                        this_value = 0
+                    else:
+                        jomatch = java_object_re.match(this_value);
+                        assert jomatch != None;
+                        this_value = eval("0x" + jomatch.group(1));
                 elif this_base_type == "char":
                     # Convert character or string rep of number to integer
                     if type(this_value) == types.IntType:
