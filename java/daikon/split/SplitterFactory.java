@@ -329,10 +329,11 @@ public class SplitterFactory {
         temp = temp.replace(']','_');
         temp = temp.replace(':','_');
         temp = temp.replace('$','_');
+        temp = temp.replace('+','P');
+        temp = temp.replace('-','M');
         if (temp.equals("return")) temp = "return_Daikon";
         if (temp.equals("this")) temp = "this_Daikon";
-        // This is wrong, because a variable might be named "original".
-        if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
+        temp = replace_orig(temp);
         if (p_names.contains(temp))
           p_names.add(temp + "_2");
         else
@@ -567,9 +568,12 @@ public class SplitterFactory {
   static {
     try {
       // this regex pattern is used to search for "orig" variable names.
-      // it replaces orig(varname) with orig_varname
-      find_orig_pattern = re_compiler.compile("\\orig\\s*\\(\\s*(\\S*?)\\s*\\)");
-      orig_subst = new Perl5Substitution("orig_$1", Perl5Substitution.INTERPOLATE_ALL);
+      // it replaces orig(varname) with orig_varname, and similarly for
+      // post(varname) and size(varname)
+      find_orig_pattern =
+        re_compiler.compile("(orig|post|size)\\s*\\(\\s*(\\S*?)\\s*\\)");
+      orig_subst =
+        new Perl5Substitution("$1_$2", Perl5Substitution.INTERPOLATE_ALL);
       arg_pattern = re_compiler.compile("(\\S+)\\s*\\((.*)\\)");
     } catch (MalformedPatternException me) {
       System.err.println("Error while compiling regular expresssion in SplitterFactory");
@@ -577,8 +581,17 @@ public class SplitterFactory {
   }
 
   static String replace_orig(String orig_string) {
-    String result;
-    result = Util.substitute(re_matcher, find_orig_pattern, orig_subst, orig_string, Util.SUBSTITUTE_ALL);
+    String result = orig_string;
+    String str;
+    // Keep replacing until the result is unchanged. Even with the
+    // SUBSTITUTE_ALL, we need to make multiple passes because orig(),
+    // post() and size() can nest.
+    do {
+      str = result;
+      result = Util.substitute(re_matcher, find_orig_pattern, orig_subst,
+                               str, Util.SUBSTITUTE_ALL);
+    } while (!result.equals(str));
+    // System.out.println("Rewriting " + orig_string + " into " + result);
     return result;
   }
 
