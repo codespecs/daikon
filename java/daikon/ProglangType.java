@@ -443,4 +443,8 @@ public final class ProglangType implements java.io.Serializable {
     return sb.toString();
   }
 
+  public String toString() {
+    return format();
+  }
+
 }
