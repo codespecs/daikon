@@ -7,7 +7,13 @@ import daikon.derive.binary.*;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearTernary extends ThreeScalar {
+public class LinearTernary
+  extends ThreeScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -209,8 +215,8 @@ public class LinearTernary extends ThreeScalar {
   }
 
   /* IOA */
-  public String format_ioa(String cname) {
-    return core.format_ioa(var1().name.ioa_name(cname), var2().name.ioa_name(cname), var3().name.ioa_name(cname));
+  public String format_ioa() {
+    return core.format_ioa(var1().name.ioa_name(), var2().name.ioa_name(), var3().name.ioa_name());
   }
 
 

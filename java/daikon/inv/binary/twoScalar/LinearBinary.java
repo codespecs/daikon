@@ -6,7 +6,13 @@ import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearBinary extends TwoScalar {
+public class LinearBinary
+  extends TwoScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -22,7 +28,7 @@ public class LinearBinary extends TwoScalar {
   public static LinearBinary instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
-      System.out.println("LinearBinary.instantiate(" + ppt.name + ")");
+      ppt.debug.debug("LinearBinary.instantiate(" + ppt.name + ")");
     }
     return new LinearBinary(ppt);
   }
@@ -57,8 +63,8 @@ public class LinearBinary extends TwoScalar {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
-    return core.format_ioa(var1().name.ioa_name(classname), var2().name.ioa_name(classname));
+  public String format_ioa() {
+    return core.format_ioa(var1().name.ioa_name(), var2().name.ioa_name());
   }
 
   public String format_reversed() {

@@ -5,7 +5,13 @@ import daikon.derive.binary.*;
 import utilMDE.*;
 
 // originally from pass1.
-public final class SequenceLength extends UnaryDerivation {
+public final class SequenceLength
+  extends UnaryDerivation
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

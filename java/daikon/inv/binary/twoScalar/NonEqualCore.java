@@ -8,6 +8,11 @@ import java.io.Serializable;
 public final class NonEqualCore
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
+
   long min1 = Long.MAX_VALUE;
   long min2 = Long.MAX_VALUE;
   long max1 = Long.MIN_VALUE;

@@ -9,7 +9,13 @@ import utilMDE.*;
 import java.util.*;
 
 
-public class NoDuplicates extends SingleSequence {
+public class NoDuplicates
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -41,12 +47,34 @@ public class NoDuplicates extends SingleSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
+    if (debugPrint.isDebugEnabled()) {
+      debugPrint.debug ("Format_ioa: " + this.toString());
+    }
     if (var().isIOASet())
-      return "IOA Set " + var().name.ioa_name(classname) + " contains no duplicates by definition";
+      return "IOA Set " + var().name.ioa_name() + " contains no duplicates by definition";
+    
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var(),var()}, classname);
-    return form[0]+"("+form[1]+"="+form[2]+") => ("+form[4]+"="+form[5]+")"+form[3];
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var(),var()});
+
+    //     \A i, j(                 i \in X /\ j \ in X
+    return form[0] + form[1] + " \\in " + var().name.ioa_name() + " /\\ " + form[3] + " \\in " + var().name.ioa_name() +
+    //
+      " /\\ " + form[2] + " = " + form[4] +
+    //            i           =       j           )
+      " => " + form[1] + " = " + form [3] + form[5];
+
+
+
+
+    /***
+    String s = "";
+    for (int i = 0; i < form.length; i++) {
+      s = s + form[i] + " | ";
+    }
+    return s;
+    //    return form[0]+"("+form[1]+"="+form[2]+") => ("+form[4]+"="+form[5]+")"+form[3];
+    **/
   }
 
   public String format_esc() {

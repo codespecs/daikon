@@ -5,7 +5,13 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import utilMDE.*;
 
-public abstract class SingleSequence extends UnaryInvariant {
+public abstract class SingleSequence
+  extends UnaryInvariant
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   protected SingleSequence(PptSlice ppt) {
     super(ppt);

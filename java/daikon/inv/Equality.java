@@ -13,7 +13,13 @@ import java.util.*;
  * implement many of the methods that most invariant classes do.
  * Furthermore, calling arbitrary methods on this class may not work.
  **/
-public final class Equality extends Invariant {
+public final class Equality
+  extends Invariant
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   private VarInfo[] vars;
 
@@ -66,31 +72,36 @@ public final class Equality extends Invariant {
     return result.toString();
   }
 
-    /* java */
-    // daikon.inv.Equality
-    public String format_java() {
-	StringBuffer result = new StringBuffer ();
-	String first = vars[0].name.name();
-	for (int i = 1; i < vars.length; i++) {
-	    // appends " && ( v[0] == v[i] )" to the stringbuffer
-	    result.append (" && ( ").append (first).append (" == " );
-	    result.append (vars[i].name.name()).append ( " ) ");
-	}
-	return result.toString().substring(4); // trims the " && "
-    }
 
-
-  /* IOA */
-  public String format_ioa(String classname) {
-    String result;
-    String v0 = vars[0].name.ioa_name(classname);
-    result = v0 + " = " + vars[1].name.ioa_name(classname);
-    for (int i=2; i<vars.length; i++) {
-      result += "\ninvariant of " + classname + ": ";
-      result += v0 + " = " + vars[i].name.ioa_name(classname);
+  /* java */
+  // daikon.inv.Equality
+  public String format_java() {
+    StringBuffer result = new StringBuffer ();
+    String first = vars[0].name.name();
+    for (int i = 1; i < vars.length; i++) {
+      // appends " && ( v[0] == v[i] )" to the stringbuffer
+      result.append (" && ( ").append (first).append (" == " );
+      result.append (vars[i].name.name()).append ( " ) ");
     }
-    return result;
+    return result.toString().substring(4); // trims the " && "
   }
+  
+  /* IOA */
+  public String format_ioa() {
+    StringBuffer result = new StringBuffer();
+    // There are always at least two vars
+    for (int i = 0; i < vars.length - 1; i++) {
+      result.append (vars[i].name.ioa_name());
+      result.append (" = ");
+      result.append (vars[i+1].name.ioa_name());
+      if (i < vars.length - 1) {
+	result.append (" /\\ ");
+      }
+    }
+    
+    return result.toString();
+  }
+
 
   public String format_esc() {
     StringBuffer result = new StringBuffer();

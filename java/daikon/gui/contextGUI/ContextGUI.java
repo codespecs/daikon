@@ -172,7 +172,8 @@ public final class ContextGUI extends JApplet implements ActionListener
 			JFileChooser chooser = new JFileChooser(new File("."));
 			ExampleFileFilter filter = new ExampleFileFilter();
 			//filter.addExtension("dci");
-			filter.addExtension("inv");
+			filter.addExtension(".inv");
+			filter.addExtension(".inv.gz");
 
 			filter.setDescription("Invariant Files");
 	    		chooser.setFileFilter(filter);
@@ -1278,3 +1279,11 @@ class TableMap extends AbstractTableModel implements TableModelListener
 	}
 }
 
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	8
+ * End:
+ */

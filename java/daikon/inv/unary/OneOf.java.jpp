@@ -19,8 +19,9 @@ The correct way to build the system is to run 'make'.
 #if 0
 No cleverness needed for hashcode TOSTRING: never print actual values.
 #endif
-#define TOSTRING(x) x
+#define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
 #define NAME var().name.name()
+#define JAVA_NAME var().name.java_name()
 #define NONZERO NonZero
 #elif defined(STRING)
 #define JAVA_EQUALS(x) ".equals(" + x + ")"
@@ -31,6 +32,7 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleString
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name()
+#define JAVA_NAME var().name.java_name()
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
 #define INT long[]
@@ -39,6 +41,7 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
+#define JAVA_NAME var().name.java_name()
 #elif defined(STRINGSEQUENCE)
 #define SCALARPKG stringsequence
 #define INT String[]
@@ -47,14 +50,16 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
+#define JAVA_NAME var().name.java_name()
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
 #define ONEOFSCALAR EltOneOf
 #define ONEOFSCALARSTR "EltOneOf"
 #define SINGLESCALAR SingleSequence
-#define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : (Long.toString(x)))
+#define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
 #define NAME var().name.name() + " elements"
+#define JAVA_NAME var().name.java_name()
 #define NONZERO EltNonZero
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
@@ -64,6 +69,7 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name() + " elements"
+#define JAVA_NAME var().name.java_name()
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
@@ -93,7 +99,14 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
+public final class ONEOFSCALAR
+  extends SINGLESCALAR
+  implements OneOf
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -313,23 +326,22 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
 
     public String format_java() {
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < num_elts; i++) {
-	    sb.append (" || (" + NAME + JAVA_EQUALS(TOSTRING(elts[i])));
-	    sb.append (")");
-	}
-	// trim off the && at the beginning for the first case
-	return sb.toString().substring (4);
-	
+       StringBuffer sb = new StringBuffer();
+       for (int i = 0; i < num_elts; i++) {
+	 sb.append (" || (" + JAVA_NAME + JAVA_EQUALS(TOSTRING(elts[i])));
+	 sb.append (")");
+       }
+       // trim off the && at the beginning for the first case
+       return sb.toString().substring (4);
     }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
 #if defined(ELT) || defined(ELTSTRING)
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
     String varname = form[1];
 #elif defined(SCALAR) || defined(STRING)
-    String varname = var().name.ioa_name(classname);
+    String varname = var().name.ioa_name();
 #endif
     String result;
 
@@ -383,18 +395,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       // we only have one value, because add_modified dies if more
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+	length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
       if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
 	forall = form[0] + form[1] + " ~= null ***" + form[2];
       } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname );
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
 	forall = form[0] + form[1] + " = null ***" + form[2];
       }
     }
     if (length == "" && forall == "") { // interned
-      String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+      String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
@@ -406,9 +418,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #elif defined(STRINGSEQUENCE)
     INT value = elts[0];
     if (var().name.isApplySizeSafe())
-      result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+      result = "size("+var().name.ioa_name() + ") = " + value.length;
     else {
-      String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+      String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa() needs to be implemented: " + format();
     }
 #endif
@@ -464,7 +476,8 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       if (elts[0] == 0) {
         result = varname + " == " + "null";
       } else {
-        result = varname + " has only one value"
+        result = varname + " != null";
+	  // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -726,6 +739,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
     if (num_elts != other.num_elts)
       return false;
+
+#if defined(SCALAR) || defined(ELT)
+    // Add case for SEQUENCE eventually
+
+    // If the invariants are both hashcodes and non-null, consider
+    // them to have the same formula
+    if (num_elts == 1 && other.num_elts == 1) {
+      if (is_hashcode && elts[0] != 0 && other.elts[0] != 0) {
+        return true;
+      }
+    }
+#endif
 
     sort_rep();
     other.sort_rep();

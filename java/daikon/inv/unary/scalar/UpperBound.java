@@ -28,7 +28,13 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class UpperBound  extends SingleScalar  {
+public class UpperBound 
+  extends SingleScalar 
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -72,8 +78,8 @@ public class UpperBound  extends SingleScalar  {
     return varname + " <= " + core.max1 ;
   }
 
-  public String format_ioa(String classname) {
-    String varname = var().name.ioa_name(classname);
+  public String format_ioa() {
+    String varname = var().name.ioa_name();
     return varname + " <= " + core.max1 ;
   }
 

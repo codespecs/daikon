@@ -19,7 +19,13 @@ import java.util.*;
 // *****
 
 // Also see NonEqual
-public final class IntEqual  extends TwoScalar implements Comparison  {
+public final class IntEqual 
+  extends TwoScalar implements Comparison 
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -161,11 +167,11 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
 
     String comparator = "=";
 
-    return var1().name.ioa_name(classname)+" "+comparator+" "+var2().name.ioa_name(classname);
+    return var1().name.ioa_name()+" "+comparator+" "+var2().name.ioa_name();
   }
 
   public String format_simplify() {
@@ -173,6 +179,14 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
     String comparator = "EQ";
 
     return "(" + comparator + " " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
+  }
+
+  /* java output */
+  public String format_java() {
+
+    String comparator = "=";
+
+    return var1().name.java_name()+" "+comparator+" "+var2().name.java_name();
   }
 
   public void add_modified(long v1, long v2, int count) {

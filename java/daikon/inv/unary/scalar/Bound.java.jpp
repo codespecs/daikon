@@ -116,7 +116,13 @@ import java.util.*;
 // Which of these dominates?  Is the behavior what I want?
 
 
-public class LOWERBOUND extends SINGLESCALAR {
+public class LOWERBOUND
+  extends SINGLESCALAR
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -161,8 +167,8 @@ public class LOWERBOUND extends SINGLESCALAR {
     return varname + " " + GTSTR + "= " + MIN1;
   }
 
-  public String format_ioa(String classname) {
-    String varname = var().name.ioa_name(classname);
+  public String format_ioa() {
+    String varname = var().name.ioa_name();
     return varname + " " + GTSTR + "= " + MIN1;
   }
 
@@ -183,9 +189,8 @@ public class LOWERBOUND extends SINGLESCALAR {
     return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
   }
 
-  public String format_ioa(String classname) {
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()},
-						       classname);
+  public String format_ioa() {
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()});
     String result = form[0]+form[1]+" "+GTSTR+"= "+MIN1+form[2];
     return result;
   }

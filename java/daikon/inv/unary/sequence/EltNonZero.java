@@ -14,7 +14,13 @@ import java.util.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class EltNonZero extends SingleSequence {
+public final class EltNonZero
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -61,10 +67,14 @@ public final class EltNonZero extends SingleSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()}, classname);
-    return form[0] + form[1] + " ~= " + (pointer_type ? "null ***" : "0") + form[2];
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()});
+    if (pointer_type) {
+      return form[0] + form[1] + " \\in " + var().name.ioa_name() + " => " + form[2] + " ~= " + "null" + form[3] + " ***";
+    } else {
+      return form[0] + form[1] + " \\in " + var().name.ioa_name() + " => " + form[2] + " ~= " + "0" + form[3];
+    }
   }
 
   public String format_simplify() {

@@ -8,7 +8,13 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
-public final class SeqIndexNonEqual extends SingleSequence {
+public final class SeqIndexNonEqual
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -80,11 +86,11 @@ public final class SeqIndexNonEqual extends SingleSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     if (var().isIOASet())
       return "Not valid for sets: " + format();
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
     return form[0] + form[1] + " ~= " + form[3] + form[2];
   }
   public String format_simplify() {

@@ -23,7 +23,14 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfSequence  extends SingleSequence  implements OneOf {
+public final class OneOfSequence 
+  extends SingleSequence 
+  implements OneOf
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -185,18 +192,17 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
     public String format_java() {
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < num_elts; i++) {
-	    sb.append (" || (" + var().name.name()  + " == " +  ArraysMDE.toString( elts[i] )   );
-	    sb.append (")");
-	}
-	// trim off the && at the beginning for the first case
-	return sb.toString().substring (4);
-	
+       StringBuffer sb = new StringBuffer();
+       for (int i = 0; i < num_elts; i++) {
+	 sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+	 sb.append (")");
+       }
+       // trim off the && at the beginning for the first case
+       return sb.toString().substring (4);
     }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
 
     String result;
 
@@ -206,18 +212,18 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       // we only have one value, because add_modified dies if more
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "size("+var().name.ioa_name(classname) + ") = " + value.length;
+	length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
       if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
 	forall = form[0] + form[1] + " ~= null ***" + form[2];
       } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname );
+	String[] form = VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
 	forall = form[0] + form[1] + " = null ***" + form[2];
       }
     }
     if (length == "" && forall == "") { // interned
-      String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+      String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;

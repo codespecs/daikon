@@ -16,6 +16,10 @@ import daikon.*;
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * General logging Category.
@@ -386,8 +390,11 @@ public abstract class Invariant
   /**
    * IOA Representation
    **/
-  public String format_ioa(String classname) {
-    String thisclassname = this.getClass().toString().substring(6); // remove leading "class"
+  public String format_ioa() {
+    if (debugPrint.isDebugEnabled()) {
+      debugPrint.debug ("Format_ioa: " + this.toString());
+    }
+    String thisclassname = this.getClass().getName();
     return "warning: method " + thisclassname + ".format_ioa() needs to be implemented: " + format();
   }
 

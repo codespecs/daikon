@@ -14,6 +14,10 @@ import java.io.Serializable;
 public final class FunctionBinaryCore
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   transient public Method function;
   public final String methodname;
@@ -176,11 +180,11 @@ public final class FunctionBinaryCore
   }
 
   /* IOA */
-  public String format_ioa(String cname) {
+  public String format_ioa() {
     PptSlice ppt = wrapper.ppt;
-    String result = ppt.var_infos[var_indices[var_order][0]].name.ioa_name(cname);
-    String arg1 = ppt.var_infos[var_indices[var_order][1]].name.ioa_name(cname);
-    String arg2 = ppt.var_infos[var_indices[var_order][2]].name.ioa_name(cname);
+    String result = ppt.var_infos[var_indices[var_order][0]].name.ioa_name();
+    String arg1 = ppt.var_infos[var_indices[var_order][1]].name.ioa_name();
+    String arg2 = ppt.var_infos[var_indices[var_order][2]].name.ioa_name();
 
     return result + " = " + methodname + "(" + arg1 + ", " + arg2 + ") ***";
   }

@@ -36,7 +36,14 @@ import utilMDE.*;
 // integral_types = ("int", "char", "float", "double", "integral", "boolean")
 // known_types = integral_types + ("pointer", "address")
 
-public final class ProglangType implements java.io.Serializable {
+public final class ProglangType
+  implements Serializable
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
+
   // Should I use a Set, possibly a HashSet, here?
   // Or a WeakHashMapWithHasher?  It depends on how big this can get...
   private static Vector all_known_types = new Vector();

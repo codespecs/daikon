@@ -11,7 +11,13 @@ import java.util.Iterator;
 
 
 // Also see NonEqual
-public class PairwiseIntComparison extends TwoSequence {
+public class PairwiseIntComparison
+  extends TwoSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -75,13 +81,13 @@ public class PairwiseIntComparison extends TwoSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
     String comparator = core.format_comparator();
     comparator = comparator.equals("==") ? "=" : comparator;
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() }, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() });
     return form[0]+"("+form[4]+"="+form[5]+") => ("+form[1]+" "+comparator+" "+form[2]+")"+form[3];
   }
 

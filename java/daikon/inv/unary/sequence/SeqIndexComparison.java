@@ -10,7 +10,13 @@ import utilMDE.*;
 // This class represnts a comparison between elements of a sequence
 // and the indices of those elements; for instance,
 //   "for all i, a[i] > i".
-public final class SeqIndexComparison extends SingleSequence {
+public final class SeqIndexComparison
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -92,13 +98,13 @@ public final class SeqIndexComparison extends SingleSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     if (var().isIOASet())
       return "Not valid for Sets: " + format();
     String comparator = (core.format_comparator().equals("==")) ?
 	"=" : core.format_comparator();
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() });
     return form[0] + form[1] + " " + comparator + " " + form[3] + form[2];
   }
 

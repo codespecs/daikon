@@ -9,7 +9,13 @@ import utilMDE.*;
 import java.util.*;
 
 
-public class CommonSequence extends SingleSequence {
+public class CommonSequence
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -60,8 +66,8 @@ public class CommonSequence extends SingleSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
-    String vname = var().name.ioa_name(classname);
+  public String format_ioa() {
+    String vname = var().name.ioa_name();
     if (var().isIOASet())
       return printIntersect() + " \\in " + vname;
     else

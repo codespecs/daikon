@@ -4,13 +4,18 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
+import org.apache.log4j.Category;
 
 public final class LinearBinaryCore
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
-  final static boolean debugLinearBinaryCore = false;
-  // final static boolean debugLinearBinaryCore = true;
+  public static final Category debug = 
+    Category.getInstance(LinearBinaryCore.class.getName());
 
   // y == ax + b; first argument is x, second is y
   public double a, b;
@@ -107,10 +112,10 @@ public final class LinearBinaryCore
 	for (int i=0; ok && i<MINPAIRS; i++) {
 	  // I should permit a fudge factor here.
 	  if (y_cache[i] != a*x_cache[i]+b) {
-	    if (debugLinearBinaryCore) {
-	      System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
-				 + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
-	      System.out.println("    ");
+	    if (debug.isDebugEnabled()) {
+	      debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
+			  + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
+	      debug.debug("    ");
 	    }
 	    ok = false;
           }
@@ -128,8 +133,8 @@ public final class LinearBinaryCore
     } else {
       // Check the new value against a and b.
       if (y != a*x+b) {
-        if (debugLinearBinaryCore) {
-          System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at new value: "
+        if (debug.isDebugEnabled()) {
+          debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
 	wrapper.flowThis();
@@ -145,8 +150,8 @@ public final class LinearBinaryCore
     if (x0 == x1) {
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
-      if (debugLinearBinaryCore) {
-        System.out.println("Suppressing " + "LinearBinaryCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+      if (debug.isDebugEnabled()) {
+        debug.debug("Suppressing " + "LinearBinaryCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       return false;
     }

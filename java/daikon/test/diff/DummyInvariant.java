@@ -5,7 +5,13 @@ package daikon.test.diff;
 import daikon.*;
 import daikon.inv.*;
 
-public class DummyInvariant extends Invariant {
+public class DummyInvariant
+  extends Invariant
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   public String formula;
   public boolean justified;

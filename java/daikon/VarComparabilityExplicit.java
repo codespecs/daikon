@@ -38,8 +38,14 @@ import utilMDE.*;
  *     I represent this by base == null
  * </ul>
  **/
-public final class VarComparabilityExplicit extends VarComparability implements java.io.Serializable {
-
+public final class VarComparabilityExplicit
+  extends VarComparability
+  implements Serializable
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // All strings that appear in VarComparabilityExplicit objects are interned.
 
@@ -88,6 +94,11 @@ public final class VarComparabilityExplicit extends VarComparability implements 
    * This is a bit of a hack, but isn't really so bad in retrospect.
    **/
   public static class IndexVar extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020122L;
+
     public final VarInfoName base;
     public final int dim;
     public IndexVar(VarInfoName base, int dim) {
@@ -100,7 +111,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     }
     protected String name_impl() { throw new UnsupportedOperationException(); }
     protected String esc_name_impl() { throw new UnsupportedOperationException(); }
-    protected String ioa_name_impl(String classname) { throw new UnsupportedOperationException(); }
+    protected String ioa_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl(String classname) { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl(boolean prestate) { throw new UnsupportedOperationException(); }

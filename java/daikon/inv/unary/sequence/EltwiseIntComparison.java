@@ -8,7 +8,13 @@ import java.util.*;
 
 
 // This compares adjacent elements in the sequence.
-public class EltwiseIntComparison extends SingleSequence {
+public class EltwiseIntComparison
+  extends SingleSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -58,9 +64,9 @@ public class EltwiseIntComparison extends SingleSequence {
 
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var(), var() }, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var(), var() });
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
       return form[0] + form[1] + " = " + form[2] + form[3];

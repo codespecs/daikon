@@ -2,6 +2,7 @@ package daikon;
 
 import java.util.Vector;
 import utilMDE.Assert;
+import java.io.Serializable;
 
 /**
  * A VarComparabilityImplicit is an arbitrary integer, and comparisons
@@ -24,7 +25,14 @@ import utilMDE.Assert;
  * be arbitrary strings (not containing square brackets) instead of
  * arbitrary integers.
  **/
-public final class VarComparabilityImplicit extends VarComparability implements java.io.Serializable {
+public final class VarComparabilityImplicit
+  extends VarComparability
+  implements Serializable
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   int base;
   VarComparabilityImplicit[] indexTypes; // indexTypes[0] is comparability of

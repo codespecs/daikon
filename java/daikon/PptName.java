@@ -16,6 +16,10 @@ import java.io.IOException;
 public class PptName
   implements Serializable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // cannot be "final", because they must be re-interned upon deserialization
   private String fullname;   // interned

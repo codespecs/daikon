@@ -6,7 +6,13 @@ import utilMDE.*;
 
 // This is a fake PptSlice for use with Implication invariants.
 
-public class PptSlice0 extends PptSlice {
+public class PptSlice0
+  extends PptSlice
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   PptSlice0(PptTopLevel parent) {
      super(parent, new VarInfo[0]);

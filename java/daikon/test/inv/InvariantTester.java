@@ -31,13 +31,11 @@ public class InvariantTester extends TestCase {
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice2(ppt, vars);
 
-    Invariant inv1, inv2, inv2_2, inv2_3, inv2_4, inv2_5, inv2_6, inv3, inv4, inv5;
-
+    Invariant inv1, inv2, inv2_2, inv2_3, inv2_4, inv2_5, inv2_6, inv3, inv4, inv5, inv6;
+ 
     inv1 = FunctionUnary.instantiate(slice, null, null, false);
     Assert.assertTrue(c.compare(inv1, inv1) == 0);
 
-    // inv2 = IntComparison.instantiate(slice);
-    // Assert.assertTrue(c.compare(inv1, inv2) < 0);
     inv2 = IntEqual.instantiate(slice);
     inv2_2 = IntNonEqual.instantiate(slice);
     inv2_3 = IntLessThan.instantiate(slice);
@@ -53,27 +51,30 @@ public class InvariantTester extends TestCase {
 
     inv3 = LinearBinary.instantiate(slice);
     Assert.assertTrue(c.compare(inv3, inv1) > 0);
-
-    inv4 = Implication.makeImplication(ppt, inv1, inv2, false);
+    
+    inv4 = NonEqual.instantiate(slice);
+    Assert.assertTrue(c.compare(inv1, inv4) < 0);
+         
     inv5 = Implication.makeImplication(ppt, inv1, inv2, false);
-    Assert.assertTrue(c.compare(inv4, inv5) == 0);
+    inv6 = Implication.makeImplication(ppt, inv1, inv3, false);
+    Assert.assertTrue(c.compare(inv5, inv6) < 0);
 
-    inv4 = Implication.makeImplication(ppt, inv2, inv1, false);
-    inv5 = Implication.makeImplication(ppt, inv2, inv3, false);
-    Assert.assertTrue(c.compare(inv4, inv5) < 0);
+    inv5 = Implication.makeImplication(ppt, inv2, inv1, false);
+    inv6 = Implication.makeImplication(ppt, inv2, inv3, false);
+    Assert.assertTrue(c.compare(inv5, inv6) < 0);
 
-    inv4 = Implication.makeImplication(ppt, inv3, inv2, false);
-    inv5 = Implication.makeImplication(ppt, inv3, inv1, false);
-    Assert.assertTrue(c.compare(inv4, inv5) > 0);
-
-    inv4 = Implication.makeImplication(ppt, inv1, inv2, false);
     inv5 = Implication.makeImplication(ppt, inv3, inv2, false);
-    Assert.assertTrue(c.compare(inv4, inv5) < 0);
+    inv6 = Implication.makeImplication(ppt, inv3, inv1, false);
+    Assert.assertTrue(c.compare(inv5, inv6) > 0);
 
-    inv4 = Implication.makeImplication(ppt, inv2, inv3, false);
-    inv5 = Implication.makeImplication(ppt, inv1, inv3, false);
-    Assert.assertTrue(c.compare(inv4, inv5) > 0);
+    inv5 = Implication.makeImplication(ppt, inv1, inv4, false);
+    inv6 = Implication.makeImplication(ppt, inv3, inv4, false);
+    Assert.assertTrue(c.compare(inv5, inv6) < 0);
 
+    inv5 = Implication.makeImplication(ppt, inv2, inv4, false);
+    inv6 = Implication.makeImplication(ppt, inv4, inv1, false);
+    Assert.assertTrue(c.compare(inv5, inv6) < 0);
+    
 
     VarInfo[] vars2 = { newIntVarInfo("x"), newIntVarInfo("z") };
     PptTopLevel ppt2 = new PptTopLevel("Foo:::OBJECT", vars2);

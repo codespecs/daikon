@@ -12,7 +12,13 @@ import utilMDE.*;
 
 // This also serves as NonNull.
 
-public class NonZero extends SingleScalar {
+public class NonZero
+  extends SingleScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -66,8 +72,8 @@ public class NonZero extends SingleScalar {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
-    String result = var().name.ioa_name(classname)+" ~= ";
+  public String format_ioa() {
+    String result = var().name.ioa_name()+" ~= ";
     result += (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0");
     return result;
   }

@@ -241,3 +241,11 @@ public class ContextMiddle implements ContextLinker
 		ds.clear();
 	}
 }
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	8
+ * End:
+ */

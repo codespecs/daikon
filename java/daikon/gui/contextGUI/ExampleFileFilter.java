@@ -144,10 +144,12 @@ public class ExampleFileFilter extends FileFilter {
 	    if(f.isDirectory()) {
 		return true;
 	    }
-	    String extension = getExtension(f);
-	    if(extension != null && filters.get(getExtension(f)) != null) {
-		return true;
-	    };
+	    Enumeration extensions = filters.keys();
+	    while (extensions.hasMoreElements()) {
+	        String ext = (String) extensions.nextElement();
+		if (f.getName().toLowerCase().endsWith(ext))
+		    return true;
+	    }
 	}
 	return false;
     }
@@ -206,7 +208,7 @@ public class ExampleFileFilter extends FileFilter {
 		// build the description from the extension list
 		Enumeration extensions = filters.keys();
 		if(extensions != null) {
-		    fullDescription += "." + (String) extensions.nextElement();
+		    fullDescription += (String) extensions.nextElement();
 		    while (extensions.hasMoreElements()) {
 			fullDescription += ", " + (String) extensions.nextElement();
 		    }
@@ -263,3 +265,10 @@ public class ExampleFileFilter extends FileFilter {
 	return useExtensionsInDescription;
     }
 }
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	4
+ * End:
+ */

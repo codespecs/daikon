@@ -23,7 +23,14 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfScalar  extends SingleScalar  implements OneOf {
+public final class OneOfScalar 
+  extends SingleScalar 
+  implements OneOf
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -124,7 +131,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append( elts[i]  );
+      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) );
     }
     sb.append(" }");
     return sb.toString();
@@ -153,7 +160,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
             ;
         }
       } else {
-        return varname + " == " +  elts[0]  ;
+        return varname + " == " + ((Integer.MIN_VALUE <=  elts[0]  &&  elts[0]  <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")) ;
       }
 
     } else {
@@ -162,20 +169,19 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
     public String format_java() {
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < num_elts; i++) {
-	    sb.append (" || (" + var().name.name()  + " == " +   elts[i]    );
-	    sb.append (")");
-	}
-	// trim off the && at the beginning for the first case
-	return sb.toString().substring (4);
-	
+       StringBuffer sb = new StringBuffer();
+       for (int i = 0; i < num_elts; i++) {
+	 sb.append (" || (" + var().name.java_name()  + " == " +  ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))   );
+	 sb.append (")");
+       }
+       // trim off the && at the beginning for the first case
+       return sb.toString().substring (4);
     }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
 
-    String varname = var().name.ioa_name(classname);
+    String varname = var().name.ioa_name();
 
     String result;
 
@@ -195,7 +201,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       result = "(";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ ("; }
-        result += varname + " = " +  elts[i]   + ")";
+        result += varname + " = " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
       }
     }
 
@@ -217,7 +223,8 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       if (elts[0] == 0) {
         result = varname + " == null";
       } else {
-        result = varname + " has only one value"
+        result = varname + " != null";
+	  // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -225,7 +232,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " +  elts[i]  ;
+        result += varname + " == " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
       }
     }
 
@@ -248,7 +255,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " +  elts[i]   + ")";
+        result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
       }
       if (num_elts > 1) {
 	result = "(OR" + result + ")";
@@ -356,6 +363,16 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     OneOfScalar  other = (OneOfScalar ) o;
     if (num_elts != other.num_elts)
       return false;
+
+    // Add case for SEQUENCE eventually
+
+    // If the invariants are both hashcodes and non-null, consider
+    // them to have the same formula
+    if (num_elts == 1 && other.num_elts == 1) {
+      if (is_hashcode && elts[0] != 0 && other.elts[0] != 0) {
+        return true;
+      }
+    }
 
     sort_rep();
     other.sort_rep();

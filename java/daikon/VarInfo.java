@@ -23,6 +23,10 @@ import java.io.IOException;
 public final class VarInfo
   implements Cloneable, Serializable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * The program point this variable is in.
@@ -1051,6 +1055,20 @@ public final class VarInfo
     else
       return null;
     return type.base().substring(begin, end);
+  }
+
+  /**
+   * return declared domain type (in string) of an IOA Array
+   **/
+  public String domainTypeIOA() {
+    String result;
+    if (this.isIOAArray()) {
+      int begin = type.base().indexOf('(');
+      int end = type.base().indexOf(',');
+      return type.base().substring(begin, end);
+    } else {
+      return "int";
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////

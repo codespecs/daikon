@@ -6,7 +6,13 @@ import daikon.inv.binary.twoScalar.*;
 import java.lang.reflect.*;
 
 
-public class PairwiseFunctionUnary extends TwoSequence {
+public class PairwiseFunctionUnary
+  extends TwoSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -50,11 +56,11 @@ public class PairwiseFunctionUnary extends TwoSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() }, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() });
     return form[0]+"("+form[4]+"="+form[5]+") => ("+core.format_ioa(form[1],form[2])+")"+form[3];
   }
 

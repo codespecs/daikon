@@ -9,7 +9,13 @@ import daikon.inv.binary.twoSequence.*;
 import java.util.*;
 import utilMDE.*;
 
-public final class SeqIntComparison extends SequenceScalar {
+public final class SeqIntComparison
+  extends SequenceScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -103,12 +109,12 @@ public final class SeqIntComparison extends SequenceScalar {
     
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String comparator = core.format_comparator().equals("==") ?
 	"=" : core.format_comparator();
-    String scl = sclvar().name.ioa_name(classname);
+    String scl = sclvar().name.ioa_name();
     String[] form =
-	VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar() }, classname);
+	VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar() });
     return form[0] + form[1] + " " + comparator + " " + scl + form[2];
   }
 

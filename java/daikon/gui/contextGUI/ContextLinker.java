@@ -50,3 +50,11 @@ public interface ContextLinker
 	public void clear();
 	public void destroyDatabase();
 }
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	8
+ * End:
+ */

@@ -61,6 +61,7 @@ public final class Runtime {
                           + "\nCannot append to gzipped dtrace file " + filename);
         os = new GZIPOutputStream(os);
       }
+      // 8192 is the buffer size in BufferedReader
       dtrace = new PrintStream(new BufferedOutputStream(os, 8192));
     } catch (Exception e) {
       e.printStackTrace();

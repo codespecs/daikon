@@ -23,7 +23,14 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfString  extends SingleString  implements OneOf {
+public final class OneOfString 
+  extends SingleString 
+  implements OneOf
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -143,20 +150,19 @@ public final class OneOfString  extends SingleString  implements OneOf {
   }
 
     public String format_java() {
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < num_elts; i++) {
-	    sb.append (" || (" + var().name.name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
-	    sb.append (")");
-	}
-	// trim off the && at the beginning for the first case
-	return sb.toString().substring (4);
-	
+       StringBuffer sb = new StringBuffer();
+       for (int i = 0; i < num_elts; i++) {
+	 sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
+	 sb.append (")");
+       }
+       // trim off the && at the beginning for the first case
+       return sb.toString().substring (4);
     }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
 
-    String varname = var().name.ioa_name(classname);
+    String varname = var().name.ioa_name();
 
     String result;
 

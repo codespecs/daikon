@@ -2,6 +2,8 @@ package daikon;
 
 import utilMDE.*;
 
+import org.apache.log4j.Category;
+
 import java.lang.ref.WeakReference;
 import java.io.Serializable;
 import java.util.*;
@@ -20,6 +22,17 @@ import java.util.*;
 public abstract class VarInfoName
   implements Serializable, Comparable
 {
+
+  /**
+   * Debugging Category
+   **/
+
+  public static Category debug = Category.getInstance(VarInfoName.class.getName());
+
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * Given the standard String representation of a variable name (from
@@ -126,6 +139,7 @@ public abstract class VarInfoName
   public String simplify_name() {
     return simplify_name(false);
   }
+
   /**
    * @return the string representation (interned) of this name, in the
    * Simplify tool output format, in the given pre/post-state context.
@@ -153,10 +167,14 @@ public abstract class VarInfoName
    * @param classname Name of the class of this variable so we can
    * remove it for IOA output.
    **/
-  public String ioa_name(String classname) {
+  public String ioa_name() {
+    if (debug.isDebugEnabled()) {
+      debug.debug ("ioa_name: " + this.toString());
+    }
+
     if (ioa_name_cached == null) {
       try {
-	ioa_name_cached = ioa_name_impl(classname).intern();
+	ioa_name_cached = ioa_name_impl().intern();
       } catch (RuntimeException e) {
 	System.err.println("name = " + name());
 	throw e;
@@ -173,7 +191,7 @@ public abstract class VarInfoName
    * remove it for IOA output.
    *
    **/
-  protected abstract String ioa_name_impl(String classname);
+  protected abstract String ioa_name_impl();
 
   /**
    * Return the String representation of this name in the java style
@@ -328,8 +346,8 @@ public abstract class VarInfoName
    * @param classname the String to remove
    * 
    **/
-  public String ioaFormatVar(String varname, String classname) {
-    int this_index = varname.indexOf("this.");
+  public String ioaFormatVar(String varname) {
+    /*    int this_index = varname.indexOf("this.");
     int class_index = varname.indexOf(classname+".");
     String ioa_name = varname;
 
@@ -345,8 +363,9 @@ public abstract class VarInfoName
       }
       this_index = ioa_name.indexOf("this.");
       class_index = ioa_name.indexOf(classname+".");
-    }
-    return ioa_name;
+      }
+      return ioa_name;*/
+    return varname;
   }
 
 
@@ -379,6 +398,11 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
+
+    protected String ioa_name_impl() {
+      return ioaFormatVar(name);
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
 	return name;
@@ -394,9 +418,6 @@ public abstract class VarInfoName
 	s = "__orig__" + s;
       }
       return "|" + s + "|";
-    }
-    protected String ioa_name_impl(String classname) {
-      return ioaFormatVar(name, classname);
     }
     protected String java_name_impl() {
       return "return".equals(name) ? "daikon_return" : name;
@@ -450,11 +471,13 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
+
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return "size(" + sequence.ioa_name(classname) + ")";
+
+    protected String ioa_name_impl() {
+      return "size(" + sequence.ioa_name() + ")";
     }
     protected String java_name_impl() {
       return sequence.term.java_name() + ".length";
@@ -520,8 +543,8 @@ public abstract class VarInfoName
       return "(warning: format_simplify() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return function + "(" + argument.ioa_name(classname) + ")**";
+    protected String ioa_name_impl() {
+      return function + "(" + argument.ioa_name() + ")**";
     }
     protected String java_name_impl() {
       return "(warning: format_java() needs to be implemented: " +
@@ -569,8 +592,8 @@ public abstract class VarInfoName
       return "(warning: format_simplify() needs to be implemented: " +
 	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return function + "(" + arg1.ioa_name(classname) + ", " + arg2.ioa_name(classname) + ")";
+    protected String ioa_name_impl() {
+      return function + "(" + arg1.ioa_name() + ", " + arg2.ioa_name() + ")";
     }
     protected String java_name_impl() {
       return "(warning: format_java() needs to be implemented: " +
@@ -609,8 +632,8 @@ public abstract class VarInfoName
       super ("intersection", seq1, seq2);
     }
 
-    protected String ioa_name_impl(String classname) {
-      return "(" + arg1.ioa_name(classname) + " \\I " + arg2.ioa_name(classname) + ")";
+    protected String ioa_name_impl() {
+      return "(" + arg1.ioa_name() + " \\I " + arg2.ioa_name() + ")";
     }
 
   }
@@ -624,8 +647,8 @@ public abstract class VarInfoName
       super ("intersection", seq1, seq2);
     }
 
-    protected String ioa_name_impl(String classname) {
-      return "(" + arg1.ioa_name(classname) + " \\U " + arg2.ioa_name(classname) + ")";
+    protected String ioa_name_impl() {
+      return "(" + arg1.ioa_name() + " \\U " + arg2.ioa_name() + ")";
     }
 
   }
@@ -664,8 +687,8 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname) + "." + field;
+    protected String ioa_name_impl() {
+      return term.ioa_name() + "." + field;
     }
     protected String java_name_impl() {
       return term.java_name() + "." + field;
@@ -704,8 +727,8 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return "(typeof " + term.ioa_name(classname) + ")**";
+    protected String ioa_name_impl() {
+      return "(typeof " + term.ioa_name() + ")**";
     }
     protected String java_name_impl() {
       return term.name() + ".class";
@@ -744,8 +767,8 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(true);
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname);
+    protected String ioa_name_impl() {
+      return "preState(" + term.ioa_name() + ")";
     }
     protected String java_name_impl() {
       return "orig(" + term.name() + ")";
@@ -800,8 +823,8 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(false);
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname) + "'";
+    protected String ioa_name_impl() {
+      return term.ioa_name() + "'";
     }
     protected String java_name_impl() {
       return "post(" + term.name() + ")";
@@ -847,8 +870,8 @@ public abstract class VarInfoName
 	"(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
 	"(+ " + term.simplify_name(prestate) + " " + amount + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname) + amount();
+    protected String ioa_name_impl() {
+      return term.ioa_name() + amount();
     }
     protected String java_name_impl() {
       return term.java_name() + amount();
@@ -913,15 +936,18 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       return "(select elems " + term.simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname);
+    protected String ioa_name_impl() {
+      return term.ioa_name();
     }
-    protected String ioa_name_impl(String classname, String index) {
-      return term.ioa_name(classname) + "[" + index + "]";
+    protected String ioa_name_impl(String index) {
+      return term.ioa_name() + "[" + index + "]";
     }
     protected String java_name_impl() {
-      throw new UnsupportedOperationException("JAVA cannot format an unquantified sequence of elements" +
-					      " [repr=" + repr() + "]");
+      /* throw new UnsupportedOperationException("JAVA cannot format an unquantified sequence of elements" +
+	 " [repr=" + repr() + "]");
+      */
+      //for now, do return the default implementation
+      return name_impl();
     }
     protected String java_name_impl(String index) {
       return term.name() + "[" + index + "]";
@@ -1011,8 +1037,8 @@ public abstract class VarInfoName
       return "(select " + sequence.simplify_name(prestate) + " " +
 	indexExplicit(sequence, index).simplify_name(prestate) + ")";
     }
-    protected String ioa_name_impl(String classname) {
-      return sequence.ioa_name_impl(classname, indexExplicit(sequence, index).ioa_name(classname));
+    protected String ioa_name_impl() {
+      return sequence.ioa_name_impl(indexExplicit(sequence, index).ioa_name());
     }
     protected String java_name_impl() {
       return sequence.name_impl(index.name());
@@ -1078,17 +1104,19 @@ public abstract class VarInfoName
     protected String simplify_name_impl(boolean prestate) {
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
     }
-    protected String ioa_name_impl(String classname) {
+    protected String ioa_name_impl() {
       // Need to be in form: \A e (i <= e <= j) => seq[e]"
       String result = "\\A e:Int (";
-      result += ((i == null) ? "0" : i.ioa_name(classname)) + " <= e <= ";
-      result += ((j == null) ? "size("+sequence.ioa_name_impl(classname)+")" :
-		 j.ioa_name(classname)) + ") => ";
-      result += sequence.ioa_name_impl(classname, "e");
+      result += ((i == null) ? "0" : i.ioa_name()) + " <= e <= ";
+      result += ((j == null) ? "size("+sequence.ioa_name_impl()+")" :
+		 j.ioa_name()) + ") => ";
+      result += sequence.ioa_name_impl("e");
       return result;
     }
     protected String java_name_impl() {
-      throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
+      //throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
+      //for now, return the default implementation
+      return name_impl();
     }    
     public Object accept(Visitor v) {
       return v.visitSlice(this);
@@ -1331,8 +1359,8 @@ public abstract class VarInfoName
       // otherwise, create a new function and check if arguments get replaced
       return (o == old) ? _new :
 	VarInfoName.applyFunctionOfTwo(o.function,
-				       (FunctionOfTwo) (o.arg1.accept(this)),
-				       (FunctionOfTwo) (o.arg2.accept(this)));
+				       (VarInfoName) (o.arg1.accept(this)),
+				       (VarInfoName) (o.arg2.accept(this)));
     }
     public Object visitField(Field o) {
       return (o == old) ? _new :
@@ -1449,8 +1477,6 @@ public abstract class VarInfoName
   // ============================================================
   // Quantification for formatting in ESC or Simplify
 
-  private static final boolean debug_quantify = false;
-
   /**
    * A quantifier visitor can be used to search a tree and return all
    * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
@@ -1485,8 +1511,8 @@ public abstract class VarInfoName
      * Slice).
      **/
     public Set unquants() {
-      if (debug_quantify) {
-	System.out.println("unquants: " + unquant);
+      if (QuantHelper.debug.isDebugEnabled()) {
+	QuantHelper.debug.debug("unquants: " + unquant);
       }
       return Collections.unmodifiableSet(unquant);
     }
@@ -1501,7 +1527,7 @@ public abstract class VarInfoName
       return super.visitElements(o);
     }
     public Object visitFunctionOfTwo(FunctionOfTwo o) {
-      o.arg1.accept(this);
+      //o.arg1.accept(this);
       return o.arg2.accept(this); // Return value doesn't matter
     }
     public Object visitSizeOf(SizeOf o) {
@@ -1525,7 +1551,21 @@ public abstract class VarInfoName
     }
   }
 
+
+  /**
+   * Helper for writing parts of quantification expressions.
+   * Formatting methods in invariants call the formatting methods in
+   * this class to get commonly-used parts, like how universal
+   * quanitifiers look like in the different formatting schemes.
+   **/
+
   public static class QuantHelper {
+
+    /**
+     * Debugging category
+     **/
+
+    public static final Category debug = Category.getInstance ("daikon.inv.Invariant.print.QuantHelper");
 
     /**
      * A FreeVar is very much like a Simple, except that it doesn't
@@ -1630,8 +1670,8 @@ public abstract class VarInfoName
     public static QuantifyReturn quantify(VarInfoName[] roots) {
       Assert.assert(roots != null);
 
-      if (debug_quantify) {
-	System.out.println("roots: " + Arrays.asList(roots));
+      if (QuantHelper.debug.isDebugEnabled()) {
+	QuantHelper.debug.debug("roots: " + Arrays.asList(roots));
       }
 
       // create empty result
@@ -1645,6 +1685,10 @@ public abstract class VarInfoName
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i=0; i < roots.length; i++) {
+	if (QuantHelper.debug.isDebugEnabled()) {
+	  QuantHelper.debug.debug ("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
+	}
+
 	helper[i] = new QuantifierVisitor(roots[i]);
 	simples.addAll(helper[i].simples());
       }
@@ -1658,16 +1702,19 @@ public abstract class VarInfoName
 	  // nothing needs quantification
 	  result.root_primes[i] = roots[i];
 	} else {
+	  if (QuantHelper.debug.isDebugEnabled()) {
+	    QuantHelper.debug.debug("root: " + roots[i]);
+	    QuantHelper.debug.debug("uq_elts: " + uq.toString());
+	  }
+
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
 	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
 	  VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
 	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
 
-	  if (debug_quantify) {
-	    System.out.println("root: " + roots[i]);
-	    System.out.println("uq_elt: " + uq_elt);
-	    System.out.println("idx: " + idx);
+	  if (QuantHelper.debug.isDebugEnabled()) {
+	    QuantHelper.debug.debug("idx: " + idx);
 	  }
 
 	  // call replace and unpack results
@@ -1687,21 +1734,61 @@ public abstract class VarInfoName
 
     // <root*> -> <string*>
     /**
-     * Given a list of roots, return a String array where the first
-     * element is a IOA-style quantification over newly-introduced
-     * bound variables, the last element is a closer, and the other
-     * elements are ioa-named strings for the provided roots.  It
-     * distinguishes Sets from Arrays, and quantifies each accordingly.
-     * --> it returns the indexes assigned at the end of the array
-     * @param classname String of class name so we can remove it for IOA output
+     * Helper method used by invariant that quantify and then want to
+     * print in IOA format.  This method is given a list of array-type
+     * variables, and then outputs a set of strings that mean "a
+     * quantification over the array variables".  For example, given
+     * an array Arr of type [D->R], this method would return:
+     * {"\A i : D (", "i", "Arr[i]", ")"}
+     *
+     * @return The return array is 2 + 2 * size(v_roots) because it
+     * consists of: a quantifier plus variables (1); pair of two
+     * varinfos representing a quantified variable and the list
+     * that it is in indexed by the variable(2 * size); a closer
+     * (1).
+     * @param sets A list of array-type variables over which we will quantify. 
+     *
      **/
-    public static String[] format_ioa(VarInfo[] v_roots, String classname) {
-      Assert.assert(v_roots != null);
+    public static String[] format_ioa(VarInfo[] sets) {
 
-      VarInfoName[] roots = new VarInfoName[v_roots.length];
-      for (int i=0; i<v_roots.length; i++)
-	roots[i] = v_roots[i].name;
+      
+      Assert.assert(sets != null);
 
+
+      VarInfoName[] setnames = new VarInfoName[sets.length];
+      for (int i=0; i<sets.length; i++)
+	setnames[i] = sets[i].name;
+
+      QuantifyReturn qret = quantify(setnames);
+      
+      String[] result = new String[2*sets.length+2];
+      
+      // Build the quantifier
+      StringBuffer quantifier = new StringBuffer();
+      for (int i=0; i < qret.bound_vars.size(); i++) {
+	//Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+
+	quantifier.append ("\\A ");
+	quantifier.append (var.ioa_name());
+	quantifier.append (" : ");
+	quantifier.append (sets[i].domainTypeIOA());
+	quantifier.append (" ");
+
+	// Build the variables
+	result[i * 2 + 1] = var.ioa_name();
+	result[i * 2 + 2] = qret.root_primes[i].ioa_name();
+      }
+      result[0] = result[0] + "(";
+      result[sets.length * 2 + 1] = ")";
+
+      quantifier.append ("(");
+      result[0] = quantifier.toString();
+
+
+      return result;
+
+      /**
       QuantifyReturn qret = quantify(roots);
       String[] result = new String[2*roots.length+2];
       StringBuffer ptr_list = new StringBuffer();
@@ -1709,7 +1796,7 @@ public abstract class VarInfoName
       int numConditions = 0;
 
       for (int i=0; i < qret.bound_vars.size(); i++) {
-	Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	//Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
 	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	if (i != 0)
 	  ptr_list.append(", ");
@@ -1718,16 +1805,15 @@ public abstract class VarInfoName
 	//    - 'ptr' is an IOA Set element, of type elementTypeIOA()
 	//    - the following condition must be added: (ptr /in set)
 	// otherwise, if type is IOA Array, ptr is an integer index
-
 	if (v_roots[i].isIOASet()) {
 	  ptr_list.append(ptr + ":" + v_roots[i].elementTypeIOA());
 	  if (conditions.length()>0)
 	    conditions.append(" /\\ ");
-	  conditions.append("("+ptr.ioa_name(classname) +" \\in ");
-	  conditions.append(roots[i].ioa_name(classname)+")");
+	  conditions.append("("+ptr.ioa_name() +" \\in ");
+	  conditions.append(roots[i].ioa_name()+")");
 	  numConditions++;
 	} else
-	  ptr_list.append(ptr.ioa_name(classname) + ":Int");
+	  ptr_list.append(ptr.ioa_name() + ":Int");
       }
 
       result[0] = "\\A " + ptr_list + " (";
@@ -1743,14 +1829,15 @@ public abstract class VarInfoName
       for (int i=0; i < roots.length; i++) {
 	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	if (v_roots[i].isIOASet()) {
-	  result[i+1] = ptr.ioa_name(classname);
+	  result[i+1] = ptr.ioa_name();
 	  result[roots.length+i+2] = result[i+1];
 	} else {
-	  result[i+1] = qret.root_primes[i].ioa_name(classname);
-	  result[roots.length+i+2] = ptr.ioa_name(classname);
+	  result[i+1] = qret.root_primes[i].ioa_name();
+	  result[roots.length+i+2] = ptr.ioa_name();
 	}
       }
       return result;
+      **/
     }
 
 

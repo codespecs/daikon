@@ -21,7 +21,13 @@ import utilMDE.*;
 // This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
 // is similar and mostly subsumed by VarValues.)
 
-public final class PptSlice1  extends PptSlice {
+public final class PptSlice1 
+  extends PptSlice
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * Logging Category

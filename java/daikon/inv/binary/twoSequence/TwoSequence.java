@@ -9,6 +9,10 @@ import utilMDE.*;
 public abstract class TwoSequence
   extends BinaryInvariant
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   protected TwoSequence(PptSlice ppt) {
     super(ppt);

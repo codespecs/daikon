@@ -16,7 +16,14 @@ import utilMDE.*;
  * such instance, but we need to find them all to give a good result).
  **/
 
-public abstract class PptSlice extends Ppt {
+public abstract class PptSlice
+  extends Ppt
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
+
   public static final String lineSep = Global.lineSep;
 
   /**

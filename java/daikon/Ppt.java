@@ -2,8 +2,8 @@
 
 package daikon;
 
-import java.io.Serializable;
 import java.util.*;
+import java.io.Serializable;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
@@ -30,6 +30,10 @@ import org.apache.log4j.Category;
 public abstract class Ppt
   implements Serializable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   public final String name;
   public final PptName ppt_name;

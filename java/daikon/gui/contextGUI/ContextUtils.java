@@ -47,3 +47,12 @@ class ContextUtils
 		return fix_txt;
 	}
 }
+
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	8
+ * End:
+ */

@@ -200,13 +200,22 @@ public class InvariantInteraction
 
 // This class will filter out files with only the .dci extension so as
 // to only load these up into the gui automatically.
+// ^^ This comment is on crack.
 class FileInvarFilter implements FilenameFilter
 {
 	public boolean accept(File dir, String name)
 	{
-		if (name.endsWith(".inv"))
+		if (name.endsWith(".inv") || name.endsWith(".inv.gz"))
 			return true;
 
 		return false;
 	}
 }
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	4
+ * End:
+ */

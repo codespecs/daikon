@@ -6,7 +6,13 @@ import java.util.*;
 
 import utilMDE.*;
 
-public class Implication extends Invariant {
+public class Implication
+  extends Invariant
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   public Invariant predicate;
   public Invariant consequent;
@@ -31,11 +37,38 @@ public class Implication extends Invariant {
     // System.out.println("  " + this.format());
   }
 
-  static public Implication makeImplication(PptTopLevel ppt, Invariant predicate, Invariant consequent, boolean iff) {
+  /**
+   * Creates a new Implication Invariant from the predicate,
+   * consequent and the boolean iff and adds it to the PptTopLevel.
+   *
+   * @return null if predicate and the consequent are the same, or if
+   * the PptTopLevel already contains this Implication.
+   **/
+   public static Implication makeImplication(PptTopLevel ppt,
+					     Invariant predicate,
+					     Invariant consequent,
+					     boolean iff)
+  {
     if ((predicate.getClass() == consequent.getClass())
         && predicate.isSameFormula(consequent)) {
       return null;
+    } 
+    
+    // Don't add this Implication to the program point if the program
+    // point already has this implication.  This is slow and dumb; we
+    // should use hashing for O(1) check instead.
+    for (Iterator i = ppt.implication_view.invs.iterator(); i.hasNext(); ) {
+      Implication existing = (Implication) i.next();
+      if (existing.iff != iff) continue;
+      if (existing.consequent.getClass() != consequent.getClass()) continue;
+      if (existing.predicate.getClass() != predicate.getClass()) continue;
+      // Why not instead check var_info indices plus isSameFormula?
+      // Should use PptSlice identity check instead?
+      if (! existing.consequent.format().equals(consequent.format())) continue;
+      if (! existing.predicate.format().equals(predicate.format())) continue;
+      return null;
     }
+    
     return new Implication(ppt.implication_view, predicate, consequent, iff);
   }
 
@@ -69,10 +102,10 @@ public class Implication extends Invariant {
     }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String arrow = (iff ? "  <=>  " : "  =>  ");
-    String pred_fmt = predicate.format_ioa(classname);
-    String consq_fmt = consequent.format_ioa(classname);
+    String pred_fmt = predicate.format_ioa();
+    String consq_fmt = consequent.format_ioa();
     return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
   }
 

@@ -22,6 +22,10 @@ import utilMDE.*;
 public final class FunctionUnaryCore
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   transient public Method function;  // transient:  Method not serializable
   public final String methodname;   // provided to permit serialization

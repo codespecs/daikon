@@ -23,7 +23,13 @@ import org.apache.log4j.Category;
  *
  **/
 
-public final class SequencesJoin  extends BinaryDerivation {
+public final class SequencesJoin
+  extends BinaryDerivation
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * Debugging logger
@@ -123,6 +129,14 @@ public final class SequencesJoin  extends BinaryDerivation {
     if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
     if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
+    /**
+     * v1\v2  Unm  Mod  Mis
+     *
+     * Unm    Unm  Mod  Mis
+     * Mod    Mod  Mod  Mis
+     * Mis    Mis  Mis  Mis
+     *
+     **/
 
     return new ValueAndModified(Intern.intern(result), mod);
   }

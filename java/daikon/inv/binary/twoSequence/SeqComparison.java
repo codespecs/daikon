@@ -9,7 +9,14 @@ import utilMDE.*;
 import java.util.*;
 
 // Lexically compares the two sequences.
-public class SeqComparison extends TwoSequence implements Comparison {
+public class SeqComparison
+  extends TwoSequence
+  implements Comparison
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -96,13 +103,13 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for Sets: " + format();
     String comparator = IntComparisonCore.format_comparator(can_be_lt, can_be_eq, can_be_gt);
     comparator = (comparator.equals("==") ? "=" : comparator); // "interned"
-    String v1 = var1().name.ioa_name(classname);
-    String v2 = var2().name.ioa_name(classname);
+    String v1 = var1().name.ioa_name();
+    String v2 = var2().name.ioa_name();
     return v1 + " " + comparator + " " + v2 + " ***";
   }
 

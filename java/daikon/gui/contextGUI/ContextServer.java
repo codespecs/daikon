@@ -210,14 +210,14 @@ public class ContextServer
 	// one set of invariants for a class.
 	public String addNewFile(String pathname)
 	{
-		String new_filename;
+		String new_filename = null;
 		File cache_file = null;
 		File fo_inv = new File(pathname);
 
 		if (!fo_inv.exists())
 			return "File " + fo_inv.getName() + " does not exist!";
 
-		if (pathname.endsWith(".inv"))
+		if (pathname.endsWith(".inv") || pathname.endsWith(".inv.gz"))
 		{
 			new_filename = ConvertInvToDci.getOutputFilename(pathname);
 
@@ -239,7 +239,7 @@ public class ContextServer
 				}
 			}
 		}
-		else
+		else if (pathname.endsWith(".dci"))
 		{
 			new_filename = pathname;
 		}
@@ -944,3 +944,12 @@ public class ContextServer
 		}
 	}
 }
+
+
+
+
+/*
+ * Local Variables:
+ * c-basic-offset:	8
+ * End:
+ */

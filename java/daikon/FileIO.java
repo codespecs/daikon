@@ -937,6 +937,11 @@ public final class FileIO
    **/
   private final static class SerialFormat implements Serializable
   {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020122L;
+
     public SerialFormat(PptMap map, Configuration config)
     {
       this.map = map;
@@ -950,7 +955,9 @@ public final class FileIO
     throws IOException
   {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    OutputStream bytes = new FileOutputStream(file);
+    // 8192 is the buffer size in BufferedReader
+    OutputStream bytes =
+      new BufferedOutputStream(new FileOutputStream(file), 8192);
     if (file.getName().endsWith(".gz")) {
       bytes = new GZIPOutputStream(bytes);
     }
@@ -963,7 +970,9 @@ public final class FileIO
     throws IOException
   {
     try {
-      InputStream istream = new FileInputStream(file);
+      // 8192 is the buffer size in BufferedReader
+      InputStream istream =
+        new BufferedInputStream(new FileInputStream(file), 8192);
       if (file.getName().endsWith(".gz")) {
 	istream = new GZIPInputStream(istream);
       }

@@ -5,7 +5,13 @@ import daikon.*;
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only -- in reality,
 
-public class Positive extends SingleScalar {
+public class Positive
+  extends SingleScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   ///
   /// Required methods

@@ -6,7 +6,13 @@ import utilMDE.*;
 import daikon.derive.unary.SequenceLength;
 
 
-public class Modulus extends SingleScalar {
+public class Modulus
+  extends SingleScalar
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -55,8 +61,8 @@ public class Modulus extends SingleScalar {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
-    return "mod("+var().name.ioa_name(classname)+", "+modulus+") = "+remainder;
+  public String format_ioa() {
+    return "mod("+var().name.ioa_name()+", "+modulus+") = "+remainder;
   }
 
   public String format_simplify() {

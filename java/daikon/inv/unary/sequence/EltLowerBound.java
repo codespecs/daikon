@@ -28,7 +28,13 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class EltLowerBound  extends SingleSequence  {
+public class EltLowerBound 
+  extends SingleSequence 
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -75,9 +81,8 @@ public class EltLowerBound  extends SingleSequence  {
     return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
-  public String format_ioa(String classname) {
-    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()},
-						       classname);
+  public String format_ioa() {
+    String form[] = VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var()});
     String result = form[0]+form[1]+" "+ ">" +"= "+ core.min1 +form[2];
     return result;
   }

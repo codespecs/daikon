@@ -9,6 +9,10 @@ import utilMDE.*;
 public abstract class SequenceString
   extends BinaryInvariant
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // By convention, the sequence is always passed in first
   public boolean seq_first;  // true if seq_index == 0 and scl_index == 1

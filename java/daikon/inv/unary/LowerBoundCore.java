@@ -27,6 +27,10 @@ import java.io.Serializable;
 public class LowerBoundCore 
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification

@@ -17,7 +17,13 @@ import java.util.Random;
  * variable works for both sequences of numbers and strings.
  **/
 
-public final class SequencesConcat  extends BinaryDerivation {
+public final class SequencesConcat
+  extends BinaryDerivation
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   /**
    * Debugging logger

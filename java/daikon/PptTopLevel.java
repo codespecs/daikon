@@ -32,6 +32,17 @@ import utilMDE.*;
 public class PptTopLevel
   extends Ppt
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
+
+  // If true, implications are created for all pairwise combinations
+  // of conditions, and all pairwise combinations of exit points.  If
+  // false, implications are created for only the first two
+  // conditions, and implications are created only if there are
+  // exactly two exit points.
+  public static boolean dkconfig_pairwise_implications = false;
 
   /**
    * Logging Category for this class.
@@ -1337,9 +1348,17 @@ public class PptTopLevel
 
   }
 
+  public void addImplications() {
+    if (dkconfig_pairwise_implications) {
+      addImplicationsPairwise();
+    } else {
+      addImplicationsOnlyTwo();
+    }
+  }
+
   // (Where did I intend this to be called?  Near add-ppt-conditional,
   // presumably.)
-  public void addImplications() {
+  public void addImplicationsOnlyTwo() {
     int num_conds = views_cond.size();
     if (num_conds > 0) {
       // System.out.println("num_conds = " + num_conds);
@@ -1378,6 +1397,52 @@ public class PptTopLevel
   }
 
 
+  // (Where did I intend this to be called?  Near add-ppt-conditional,
+  // presumably.)
+  public void addImplicationsPairwise() {
+    int num_conds = views_cond.size();
+    if (num_conds > 0) {
+      // System.out.println("num_conds = " + num_conds);
+      // for (int i=0; i<num_conds; i++) {
+      //   System.out.println(((PptConditional)views_cond.elementAt(i)).name);
+      // }
+      // Assert.assert(num_conds == 2);
+      for (int i = 0; i < num_conds; i++) {
+	for (int j = i+1; j < num_conds; j++) {
+	  PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
+	  PptConditional cond2 = (PptConditional) views_cond.elementAt(j);
+	  addImplications_internal(cond1, cond2, false);
+	} 
+      }
+    }
+
+    /* [INCR] ...
+    if (this.ppt_name.isCombinedExitPoint()) {
+      Vector exits = this.entry_ppt.exit_ppts;
+      int num_exits = exits.size();
+      // Eventually I ought to make this applicable when the number of
+      // individual exits is not 2.
+      
+      // System.out.println("num exits = " + exits.size());
+      // for (int i=0; i<exits.size(); i++) {
+      //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
+      // }
+      //Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
+      for (int i = 0; i < num_exits; i++) {
+	for (int j = i+1; j < num_exits; j++) {
+	  PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(i);
+	  PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(j);
+	  // No longer necessary to use add_implications, as we are now
+	  // adding combined prgram points early.
+	  // addImplications_internal(ppt1, ppt2, true);
+	  addImplications_internal(ppt1, ppt2, false);
+	}
+      }
+    }
+    */ // ... [INCR]
+  }
+  
+  
   private void addImplications_internal(PptTopLevel ppt1,
 					PptTopLevel ppt2,
 					boolean add_nonimplications)
@@ -2137,6 +2202,9 @@ public class PptTopLevel
 	  present[checking] = false;
 	}
 	SessionManager.debugln((present[checking] ? "UNIQUE" : "REDUNDANT") + " " + invs[checking].format());
+      } catch (SimplifyError e) {
+	prover = null;
+	return;
       } catch (TimeoutException e) {
 	// Reset the prover with the controlling invariant background
 	prover = null;
@@ -2537,13 +2605,15 @@ public class PptTopLevel
             }
 	    break;
 	  case Daikon.OUTPUT_STYLE_IOA:
-            sb = new StringBuffer();
-            for (int j=0; j<equal_vars.size(); j++) {
-              VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (j>0) sb.append("\n");
-	      sb.append("invariant of " + classname + ": ");
-	      sb.append(vi.name.ioa_name(classname) + " = ");
-	      sb.append(other.name.ioa_name(classname));
+	    sb = new StringBuffer();
+	    sb.append("invariant of " + classname + ": ");
+	    sb.append ("(" + vi.name.ioa_name() + " = " +
+		       ((VarInfo) equal_vars.get(0)).name.ioa_name() + ")");
+            for (int j = 1; j < equal_vars.size(); j++) {
+              VarInfo one = (VarInfo) equal_vars.get(j-1);
+              VarInfo two = (VarInfo) equal_vars.get(j);
+	      sb.append (" /\\ ");
+	      sb.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
 	    }
 	    out.println(sb.toString());
 	    break;
@@ -2638,8 +2708,10 @@ public class PptTopLevel
 	break;
       case Daikon.OUTPUT_STYLE_IOA:
 	inv_rep = "invariant of " + classname + ": ";
-	inv_rep += inv.format_ioa(classname);
-	inv_rep += "\n" + inv.repr();
+	inv_rep += inv.format_ioa();
+	if (debug.isDebugEnabled()) {
+	  debug.debug (inv.repr());
+	}
 	break;
       case Daikon.OUTPUT_STYLE_JAVA:
 	inv_rep = inv.format_java();

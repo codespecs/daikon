@@ -1,10 +1,8 @@
 package daikon.derive;
 
 import daikon.*;
-
-import org.apache.log4j.Category;
-
 import java.io.Serializable;
+import org.apache.log4j.Category;
 
 /**
  * Structure that represents a derivation; can generate values and
@@ -20,8 +18,12 @@ import java.io.Serializable;
 public abstract class Derivation
   implements Serializable, Cloneable
 {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
-  public static final Category debug = Category.getInstance (Derivation.class.getName());
+  public static final Category debug = Category.getInstance("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.
   // It's in DerivationFactory, though. // really?

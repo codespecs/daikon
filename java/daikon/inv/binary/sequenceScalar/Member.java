@@ -14,7 +14,13 @@ import utilMDE.*;
 // it is automatically generated from Member.java.jpp
 // *****
 
-public final class Member extends SequenceScalar  {
+public final class Member
+  extends SequenceScalar 
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -223,16 +229,16 @@ public final class Member extends SequenceScalar  {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
-    public String format_java() {
-	return "( (daikon.inv.FormatJavaHelper.memberOf(" 
-	    + sclvar().name.name() 
-	    + " , " + seqvar().name.name() + " ) == true ) ";
-    }
+  public String format_java() {
+    return "( (daikon.inv.FormatJavaHelper.memberOf(" 
+      + sclvar().name.name() 
+      + " , " + seqvar().name.name() + " ) == true ) ";
+  }
 
-  public String format_ioa(String classname) {
-    String scl = sclvar().name.ioa_name(classname);
+  public String format_ioa() {
+    String scl = sclvar().name.ioa_name();
     String[] form =
-      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar()}, classname);
+      VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar()});
     return "~(" + form[0] + form[1] + " ~= " + scl + form[2] + ")";
   }
 

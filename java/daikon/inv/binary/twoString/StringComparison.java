@@ -11,7 +11,14 @@ import utilMDE.*;
 import java.util.*;
 
 // Also see NonEqual
-public final class StringComparison extends TwoString implements Comparison {
+public final class StringComparison
+  extends TwoString
+  implements Comparison
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -141,10 +148,10 @@ public final class StringComparison extends TwoString implements Comparison {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String comparator = core.format_comparator();
     comparator = (comparator.equals("==") ? "=" : comparator);
-    return var1().name.ioa_name(classname)+" "+comparator+" "+var2().name.ioa_name(classname);
+    return var1().name.ioa_name()+" "+comparator+" "+var2().name.ioa_name();
   }
 
 

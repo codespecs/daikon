@@ -12,7 +12,13 @@ import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 import java.util.*;
 import utilMDE.*;
 
-public class SubSequence extends TwoSequence {
+public class SubSequence
+  extends TwoSequence
+{
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20020122L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -68,10 +74,10 @@ public class SubSequence extends TwoSequence {
   }
 
   /* IOA */
-  public String format_ioa(String classname) {
+  public String format_ioa() {
     String result;
-    String v1 = var1().name.ioa_name(classname);
-    String v2 = var2().name.ioa_name(classname);
+    String v1 = var1().name.ioa_name();
+    String v2 = var2().name.ioa_name();
     if (var1_in_var2 && var2_in_var1) {
       result = "("+v1+" \\subseteq "+v2+") /\\ ("+v2+" \\subseteq "+v1+")";
     } else {
