@@ -1277,12 +1277,3 @@ class TableMap extends AbstractTableModel implements TableModelListener
 		fireTableChanged(e);
 	}
 }
-
-
-
-
-/*
- * Local Variables:
- * c-basic-offset:	8
- * End:
- */

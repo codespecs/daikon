@@ -14,8 +14,13 @@ import java.util.*;
  **/
 
 public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
-  public static final Category debug =
-    Category.getInstance (SequencesPredicateFactory.class.getName());
+
+  /**
+   * Debug tracer
+   **/
+
+ public static final Category debug =
+    Category.getInstance ("daikon.derive.binary.SequencesPredicateFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SequencesPredicate.dkconfig_enabled;

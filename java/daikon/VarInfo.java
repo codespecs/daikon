@@ -6,6 +6,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 import java.util.*;
 import java.io.Serializable;
@@ -1289,7 +1290,20 @@ public final class VarInfo
     return null;
   }
 
-  private final static boolean debug_simplify_expression = false;
+
+  /**
+   * Debug tracer
+   **/
+
+  private static final Category debug = Category.getInstance ("daikon.VarInfo");
+
+
+  /**
+   * Debug tracer for simplifying expressions
+   **/
+
+  private static final Category debugSimplifyExpression = Category.getInstance ("daikon.VarInfo.simplifyExpression");
+
   /**
    * Change the name of this VarInfo into a more simplified form,
    * which is easier to read on display.  Don't call this during
@@ -1297,12 +1311,12 @@ public final class VarInfo
    * over time (?).
    **/
   public void simplify_expression() {
-    if (debug_simplify_expression)
-      System.out.println("** Simplify: " + name);
+    if (debugSimplifyExpression.isDebugEnabled())
+      debugSimplifyExpression.debug("** Simplify: " + name);
 
     if (!isDerived()) {
-      if (debug_simplify_expression)
-	System.out.println("** Punt because not derived variable");
+      if (debugSimplifyExpression.isDebugEnabled())
+	debugSimplifyExpression.debug("** Punt because not derived variable");
       return;
     }
 
@@ -1317,7 +1331,7 @@ public final class VarInfo
       }
     }
     if (postexpr == null) {
-      if (debug_simplify_expression) System.out.println("** Punt because no post()");
+      if (debugSimplifyExpression.isDebugEnabled()) debugSimplifyExpression.debug("** Punt because no post()");
       return;
     }
 
@@ -1341,8 +1355,8 @@ public final class VarInfo
     // expression.
     VarInfo postvar = post_context.findVar(postexpr.term);
     if (postvar == null) {
-      if (debug_simplify_expression)
-	System.out.println("** Punt because no VarInfo for postvar " + postexpr.term);
+      if (debugSimplifyExpression.isDebugEnabled())
+	debugSimplifyExpression.debug("** Punt because no VarInfo for postvar " + postexpr.term);
       return;
     }
     VarInfoName pre_expr = postvar.preStateEquivalent();
@@ -1357,12 +1371,12 @@ public final class VarInfo
 	}
       }
       name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(name);
-      if (debug_simplify_expression)
-	System.out.println("** Replaced with: " + name);
+      if (debugSimplifyExpression.isDebugEnabled())
+	debugSimplifyExpression.debug("** Replaced with: " + name);
     }
 
-    if (debug_simplify_expression)
-      System.out.println("** Nothing to do (no state equlivalent)");
+    if (debugSimplifyExpression.isDebugEnabled())
+      debugSimplifyExpression.debug("** Nothing to do (no state equlivalent)");
   }
 
   /**

@@ -23,6 +23,10 @@ public abstract class Derivation
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /**
+   * Debug tracer
+   **/
+
   public static final Category debug = Category.getInstance("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.

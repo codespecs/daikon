@@ -56,6 +56,10 @@ public final class IntLessThan
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
+    if (! (var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral())) {
+      return null;
+    }
+
     if (debugIntLessThan  || ppt.debugged) {
       System.out.println("IntLessThan.instantiate(" + ppt.name + ")"
                          + ", seqvar1=" + seqvar1
@@ -84,10 +88,6 @@ public final class IntLessThan
     boolean obvious_gt = false;
     boolean obvious_le = false;
     boolean obvious_ge = false;
-
-    if (! (var1.type.isIntegral() && var2.type.isIntegral())) {
-      return null;
-    }
 
     // Commented out temporarily.
     if (false && (seqvar1 != null) && (seqvar2 != null)) {

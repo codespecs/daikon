@@ -7,7 +7,17 @@ import utilMDE.*;
 
 import java.util.*;
 
+
+import org.apache.log4j.Category;
+
+
 public final class ThreeScalarFactory {
+
+  /**
+   * Debug tracer
+   **/
+  final static Category debug = Category.getInstance ("daikon.inv.trinary.threeScalar.ThreeScalarFactory");
+  
 
   public final static int max_instantiate
     =  ((Functions.binarySymmetricFunctions.length
@@ -21,22 +31,25 @@ public final class ThreeScalarFactory {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    VarInfo var3 = ppt.var_infos[1];
+    VarInfo var3 = ppt.var_infos[2];
 
     Assert.assert((var1.rep_type == ProglangType.INT)
                   && (var2.rep_type == ProglangType.INT)
                   && (var3.rep_type == ProglangType.INT));
 
-    // Save ourselves some trouble and never compute threeScalar
-    // invariants over pointer types.
-    if (!(var1.type.isIntegral() && var2.type.isIntegral() && var3.type.isIntegral())) {
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Instantiating for " + ppt.name);
+      debug.debug ("Vars: " + var1.name + " " + var2.name + " " + var3.name);
+    }
+
+    if (! var1.compatible(var2)) {
+      debug.debug ("Not comparable 1 to 2.  Returning");
       return null;
     }
-	
-    if (! var1.compatible(var2))
+    if (! var2.compatible(var3)) {
+      debug.debug ("Not comparable 2 to 3.  Returning");
       return null;
-    if (! var2.compatible(var3))
-      return null;
+    }
     // Check transitivity of "compatible" relationship.
     Assert.assert(var1.compatible(var3));
 
@@ -66,6 +79,7 @@ public final class ThreeScalarFactory {
         }
       }
       result.add(LinearTernary.instantiate(ppt));
+      debug.debug ("Instantiated");
       return result;
     }
   }

@@ -27,10 +27,10 @@ public final class PptSlice3
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Logging Category
+   * Debug tracer
    **/
 
-  public static final Category debugSpecific = Category.getInstance(PptSlice3 .class.getName());
+  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice3" );
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
@@ -72,12 +72,12 @@ public final class PptSlice3
 
     Vector new_invs = null;
 
-    ProglangType rep1 = var_infos[0].rep_type;
-    ProglangType rep2 = var_infos[1].rep_type;
-    ProglangType rep3 = var_infos[2].rep_type;
-    if ((rep1 == ProglangType.INT)
-        && (rep2 == ProglangType.INT)
-        && (rep3 == ProglangType.INT)) {
+    ProglangType rep1 = var_infos[0].file_rep_type;
+    ProglangType rep2 = var_infos[1].file_rep_type;
+    ProglangType rep3 = var_infos[2].file_rep_type;
+    if ((rep1.isIntegral())
+        && (rep2.isIntegral())
+        && (rep3.isIntegral())) {
       new_invs = ThreeScalarFactory.instantiate(this);
     } else {
       // Do nothing; do not even complain
@@ -248,12 +248,12 @@ public final class PptSlice3
                   && (mod2 != ValueTuple.MISSING)
                   && (mod3 != ValueTuple.MISSING));
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
-    ProglangType rep1 = vi1.rep_type;
-    ProglangType rep2 = vi2.rep_type;
-    ProglangType rep3 = vi3.rep_type;
-    if ((rep1 == ProglangType.INT)
-        && (rep2 == ProglangType.INT)
-        && (rep3 == ProglangType.INT)) {
+    ProglangType rep1 = vi1.file_rep_type;
+    ProglangType rep2 = vi2.file_rep_type;
+    ProglangType rep3 = vi3.file_rep_type;
+    if ((rep1.isIntegral())
+        && (rep2.isIntegral())
+        && (rep3.isIntegral())) {
       long value1 = ((Long) val1).longValue();
       long value2 = ((Long) val2).longValue();
       long value3 = ((Long) val3).longValue();
@@ -306,9 +306,9 @@ public final class PptSlice3
       ProglangType rep1 = vi1.rep_type;
       ProglangType rep2 = vi2.rep_type;
       ProglangType rep3 = vi3.rep_type;
-      if ((rep1 == ProglangType.INT)
-          && (rep2 == ProglangType.INT)
-          && (rep3 == ProglangType.INT)) {
+    if ((rep1 == ProglangType.INT)
+        && (rep2 == ProglangType.INT)
+        && (rep3 == ProglangType.INT)) {
         ThreeScalar inv = (ThreeScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {

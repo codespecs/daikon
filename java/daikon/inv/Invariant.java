@@ -22,19 +22,19 @@ public abstract class Invariant
   static final long serialVersionUID = 20020122L;
 
   /**
-   * General logging Category.
+   * General debug tracer.
    **/
-  public static final Category debug = Category.getInstance (Invariant.class.getName());
+  public static final Category debug = Category.getInstance ("daikon.inv.Invariant");
 
   /**
-   * Logging Category for printing invariants
+   * Debug tracer for printing invariants
    **/
-  public static final Category debugPrint = Category.getInstance (Invariant.class.getName() + ".print");
+  public static final Category debugPrint = Category.getInstance ("daikon.inv.Invariant.print");
 
   /**
-   * Logging Category for debugging isWorthPrinting() checks.
+   * Debug tracer for isWorthPrinting() checks.
    **/
-  public static final Category debugIsWorthPrinting = Category.getInstance (Invariant.class.getName() + ".isWorthPrinting");
+  public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.inv.Invariant.isWorthPrinting");
 
   /**
    * The program point for this invariant, includes values, number of
@@ -133,6 +133,11 @@ public abstract class Invariant
    **/
   public final static int min_mod_non_missing_samples = 5;
 
+  /**
+   * @return true if the invariant has enough samples to have its
+   * computed constants well-formed.  Is overridden in classes like
+   * LinearBinary/Ternary and Upper/LowerBound.
+   **/
   public boolean enoughSamples() {
     return true;
   }

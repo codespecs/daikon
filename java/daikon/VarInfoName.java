@@ -30,7 +30,7 @@ public abstract class VarInfoName
    * Debugging Category
    **/
 
-  public static Category debug = Category.getInstance(VarInfoName.class.getName());
+  public static Category debug = Category.getInstance("daikon.VarInfoName");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -1849,7 +1849,7 @@ public abstract class VarInfoName
   public static class QuantHelper {
 
     /**
-     * Debugging category
+     * Debug tracer
      **/
 
     public static final Category debug = Category.getInstance ("daikon.inv.Invariant.print.QuantHelper");

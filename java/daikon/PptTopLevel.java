@@ -50,22 +50,22 @@ public class PptTopLevel
   public static boolean dkconfig_pairwise_implications = false;
 
   /**
-   * Logging Category for this class.
+   * Main debug tracer
    **/
   public static final Category debug =
-    Category.getInstance (PptTopLevel.class.getName());
+    Category.getInstance ("daikon.PptTopLevel");
 
   /**
-   * Logging Category for equalTo checks
+   * Debug tracer for equalTo checks
    **/
   public static final Category debugEqualTo =
-    Category.getInstance (PptTopLevel.class.getName() + "equalTo");
+    Category.getInstance ("daikon.PptTopLevel.equalTo");
 
   /**
-   * Logging Category for addImplications.
+   * Debug tracer for addImplications.
    **/
   public static final Category debugAddImplications =
-    Category.getInstance (PptTopLevel.class.getName() + "addImplications");
+    Category.getInstance ("daikon.PptTopLevel.addImplications");
 
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables

@@ -27,10 +27,10 @@ import org.apache.log4j.Category;
 public abstract class VarComparability {
 
   /**
-   * Debugging logger
+   * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance (VarComparability.class.getName());
+    Category.getInstance ("daikon.VarComparability");
 
 
   public static final int NONE = 0;

@@ -15,8 +15,12 @@ import java.util.*;
  **/
 
 public final class SequencesConcatFactory  extends BinaryDerivationFactory {
+
+  /**
+   * Debug tracer
+   **/
   public static final Category debug =
-    Category.getInstance (SequencesConcatFactory.class.getName());
+    Category.getInstance ("daikon.derive.binary.SequencesConcatFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 

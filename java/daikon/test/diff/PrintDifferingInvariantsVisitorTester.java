@@ -16,6 +16,7 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   PptSlice slice0 = ppt.implication_view;
   Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
   Invariant null_noprint = new DummyInvariant(slice0, "0", true, true, false);
+  Invariant null_uninteresting = new DummyInvariant(slice0, "0", true, false, true);
 
   public static void main(String[] args) {
     daikon.Logger.setupLogs (daikon.Logger.INFO);
@@ -32,20 +33,33 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
       ("shouldPrint", new Class[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
+    PrintDifferingInvariantsVisitor v =
+      new PrintDifferingInvariantsVisitor(null, false, false, false);
+
     Boolean b = (Boolean) m.invoke
-      (null, new Object[] {null_noprint, null_noprint});
+      (v, new Object[] {null_noprint, null_noprint});
     Assert.assertTrue(!b.booleanValue());
 
+    // Test printing of uninteresting invariants
     b = (Boolean) m.invoke
-      (null, new Object[] {null_int_1_just, null_noprint});
+      (v, new Object[] {null_uninteresting, null_uninteresting});
+    Assert.assertTrue(!b.booleanValue());
+    PrintDifferingInvariantsVisitor vu =
+      new PrintDifferingInvariantsVisitor(null, false, false, true);
+    b = (Boolean) m.invoke
+      (vu, new Object[] {null_uninteresting, null_uninteresting});
     Assert.assertTrue(b.booleanValue());
 
     b = (Boolean) m.invoke
-      (null, new Object[] {null, null_noprint});
+      (v, new Object[] {null_int_1_just, null_noprint});
+    Assert.assertTrue(b.booleanValue());
+
+    b = (Boolean) m.invoke
+      (v, new Object[] {null, null_noprint});
     Assert.assertTrue(!b.booleanValue());
 
     b = (Boolean) m.invoke
-      (null, new Object[] {null, null_int_1_just});
+      (v, new Object[] {null, null_int_1_just});
     Assert.assertTrue(b.booleanValue());
   }
 

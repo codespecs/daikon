@@ -228,11 +228,3 @@ public class ConvertInvToDci
 	}
 
 }
-
-
-
-/*
- * Local Variables:
- * c-basic-offset:	8
- * End:
- */

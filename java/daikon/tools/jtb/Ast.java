@@ -7,8 +7,6 @@ import jtb.visitor.*;
 import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
-// import util.*;
-// import org.apache.regexp.*;
 import jtb.JavaParser;
 import jtb.ParseException;
 import utilMDE.Assert;
@@ -25,10 +23,30 @@ public class Ast {
   /// Visitors
   ///
 
-  // Reads an AST from the input stream, applies the visitor to the
-  // AST, and writes the resulting AST to the output stream
-  public static void applyVisitor(Reader input, Writer output,
-                                  Visitor visitor) {
+  // Reads an AST from the input stream, applies the visitor to the AST,
+  // reformats only to insert comments, and writes the resulting AST to the
+  // output stream.
+  public static void applyVisitorInsertComments(Reader input, Writer output,
+                                                MergeESCVisitor visitor) {
+    JavaParser parser = new JavaParser(input);
+    Node root = null;
+    try {
+      root = parser.CompilationUnit();
+    }
+    catch (ParseException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    root.accept(visitor);
+    root.accept(new InsertCommentFormatter(visitor.addedComments));
+    root.accept(new TreeDumper(output));
+  }
+
+  // Reads an AST from the input stream, applies the visitor to the AST,
+  // completely reformats the Ast (losing previous formating), and writes
+  // the resulting AST to the output stream.
+  public static void applyVisitorReformat(Reader input, Writer output,
+                                          Visitor visitor) {
     JavaParser parser = new JavaParser(input);
     Node root = null;
     try {
@@ -40,7 +58,8 @@ public class Ast {
     }
     root.accept(visitor);
     // This is unfortunately necessary because TreeDumper dies if line or
-    // column numbers are out of sync.  Also see InsertCommentFormatter.
+    // column numbers are out of sync.  Also see InsertCommentFormatter and
+    // applyVisitorInsertComments.
     root.accept(new TreeFormatter(2, 80));
     root.accept(new TreeDumper(output));
   }
@@ -49,8 +68,11 @@ public class Ast {
   /// Printing and parsing
   ///
 
-  // Prints an AST to a String
-  // This version does not blow away formatting information in the tree.
+  // Prints an AST to a String.
+  // This version does not reformat the tree (which blows away formatting
+  // information).  The call to "removeWhitespace" may do the wrong thing
+  // for embedded strings, however.  In any event, the result is not
+  // intended for direct human consumption.
   public static String print(Node n) {
     StringWriter w = new StringWriter();
     n.accept(new SimpleTreeDumper(w));
@@ -61,10 +83,10 @@ public class Ast {
   public static String printCurrentLine(Node n) {
     Node current = n;
     while (current.getParent() != null &&
-	   Ast.print(current.getParent()).indexOf(lineSep) < 0) {
+	   print(current.getParent()).indexOf(lineSep) < 0) {
       current = current.getParent();
     }
-    return Ast.print(current);
+    return print(current);
   }
 
 
@@ -101,6 +123,7 @@ public class Ast {
     String type = print(p.f1);
     String name = print(p.f2);
 
+    // print() removes whitespace around brackets, so this test is safe.
     while (name.endsWith("[]")) {
       type += "[]";
       name = name.substring(0, name.length()-2);
@@ -117,13 +140,13 @@ public class Ast {
     return m.f1.tokenImage;
   }
 
-  // Returns the name of the package for this compilation unit.  If no
-  // package was specified, null is returned.
+  // Returns the name of the package for this compilation unit, or null if
+  // no package was specified.
   public static String getPackage(CompilationUnit u) {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
-      return Ast.print(p.f1);
+      return print(p.f1);
     } else {
       return null;
     }
@@ -136,7 +159,7 @@ public class Ast {
   public static String getFullName(MethodDeclaration method) {
     String className = getClassName(method);
     String methodName = getName(method);
-    return className + methodName;
+    return className + "." + methodName;
   }
 
 
@@ -148,17 +171,17 @@ public class Ast {
   public static String getFullSignature(MethodDeclaration method) {
     String className = getClassName(method);
     String methodDeclarator = getMethodDeclarator(method);
-    return className + methodDeclarator;
+    return className + "." + methodDeclarator;
   }
 
-  // Return the fully qualified name of the class containing the node,
-  // including the trailing period!
+  // Return the fully qualified name of the class containing the node.
+  // (The result does not include the trailing period, though it did once.)
   // <package>.<class>*.<method>
   public static String getClassName(Node n) {
     String packageName;
     CompilationUnit unit
       = (CompilationUnit) ((n instanceof CompilationUnit) ? n
-                           : Ast.getParent(CompilationUnit.class, n));
+                           : getParent(CompilationUnit.class, n));
     String getPackage = getPackage(unit);
     if (getPackage != null) {
       packageName = getPackage + ".";
@@ -201,7 +224,13 @@ public class Ast {
         currentNode = b;
       }
     }
-    return packageName + className;
+
+    String result = packageName + className;
+    if (result.endsWith(".")) {
+      result = result.substring(0, result.length() - 1);
+    }
+    return result;
+
   }
 
   public static void setName(MethodDeclaration m, String name) {
@@ -209,39 +238,142 @@ public class Ast {
   }
 
 
+  // Return the primary expression on the left-hand side of an assignment
+  public static PrimaryExpression assignment2primaryexpression(Expression n) {
+    Assert.assert(n.f1.present());
+    ConditionalExpression ce = n.f0;
+    Assert.assert(! ce.f1.present());
+    ConditionalOrExpression coe = ce.f0;
+    Assert.assert(! coe.f1.present());
+    ConditionalAndExpression cae = coe.f0;
+    Assert.assert(! cae.f1.present());
+    InclusiveOrExpression ioe = cae.f0;
+    Assert.assert(! ioe.f1.present());
+    ExclusiveOrExpression eoe = ioe.f0;
+    Assert.assert(! eoe.f1.present());
+    AndExpression ande = eoe.f0;
+    Assert.assert(! ande.f1.present());
+    EqualityExpression ee = ande.f0;
+    Assert.assert(! ee.f1.present());
+    InstanceOfExpression iofe = ee.f0;
+    Assert.assert(! iofe.f1.present());
+    RelationalExpression re = iofe.f0;
+    Assert.assert(! re.f1.present());
+    ShiftExpression se = re.f0;
+    Assert.assert(! se.f1.present());
+    AdditiveExpression adde = se.f0;
+    Assert.assert(! adde.f1.present());
+    MultiplicativeExpression me = adde.f0;
+    Assert.assert(! me.f1.present());
+    UnaryExpression ue = me.f0;
+    UnaryExpressionNotPlusMinus uenpm
+      = (UnaryExpressionNotPlusMinus) ue.f0.choice;
+    PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
+    Assert.assert(! pfe.f1.present());
+    PrimaryExpression pe = pfe.f0;
+    return pe;
+  }
+
+
+  public static String fieldName(PrimaryExpression pe) {
+
+    // System.out.println("fieldName(" + pe + ")");
+
+    // First, try to get a name from the PrimarySuffix.
+
+    NodeListOptional pslist = pe.f1;
+    if (pslist.size() > 0) {
+      PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size()-1);
+      NodeChoice psnc = ps.f0;
+      // PrimarySuffix:
+      /**
+       * f0 -> "." "this"
+       *       | "." AllocationExpression()
+       *       | "[" Expression() "]"
+       *       | "." <IDENTIFIER>
+       *       | Arguments()
+       */
+      switch (psnc.which) {
+      case 4:
+        NodeSequence sn = (NodeSequence) psnc.choice;
+        Assert.assert(sn.size() == 2);
+        return ((NodeToken) sn.elementAt(1)).tokenImage;
+      }
+    }
+
+    // If it was impossible to get a name from the PrimarySuffix,
+    // try the PrimaryPrefix.
+
+    // PrimaryPrefix:
+    /**
+     * f0 -> Literal()
+     *       | "this"
+     *       | "super" "." <IDENTIFIER>
+     *       | "(" Expression() ")"
+     *       | AllocationExpression()
+     *       | ResultType() "." "class"
+     *       | Name()
+     */
+    PrimaryPrefix pp = pe.f0;
+    NodeChoice ppnc = pp.f0;
+    switch (ppnc.which) {
+    case 2:
+      NodeSequence sn = (NodeSequence) ppnc.choice;
+      Assert.assert(sn.size() == 3);
+      return ((NodeToken) sn.elementAt(2)).tokenImage;
+    case 6:
+      return fieldName((Name) ppnc.choice);
+    }
+
+    return null;
+  }
+
+  public static String fieldName(Name n) {
+    NodeListOptional nlo = n.f1;
+    if (nlo.present()) {
+      NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
+      Assert.assert(ns.size() == 2);
+      NodeToken nt = (NodeToken) ns.elementAt(1);
+      return nt.tokenImage;
+    } else {
+      return n.f0.tokenImage;
+    }
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Comments
   ///
 
-  // Add the comment to the first regular token in the tree
+  // Add the comment to the first regular token in the tree, after all
+  // other special tokens (comments) associated with that token.
   public static NodeToken addComment(Node n, String comment) {
     return addComment(n, comment, false);
   }
 
   // Add the comment to the first regular token in the tree.
-  // If first is set, then it is inserted before all other special tokens.
+  // If first is true, then it is inserted before all other special tokens;
+  // otherwise, it is inserted after them.
   public static NodeToken addComment(Node n, String comment, boolean first) {
     NodeToken nt = new NodeToken(comment);
     addComment(n, nt, first);
     return nt;
   }
 
-  // Add the comment to the first regular token in the tree
+  // Add the comment to the first regular token in the tree, after all
+  // other special tokens (comments) associated with that token.
   public static void addComment(Node n, NodeToken comment) {
     addComment(n, comment, false);
   }
 
   // Add the comment to the first regular token in the tree
-  // If first is set, then the comment is inserted before all other special tokens.
+  // If first is true, then it is inserted before all other special tokens;
+  // otherwise, it is inserted after them.
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
       private NodeToken comment;
       private boolean first;
-      public AddCommentVisitor(String comment, boolean first) {
-        this.comment = new NodeToken(comment);
-        this.first = first;
-      }
       public AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
@@ -288,6 +420,9 @@ public class Ast {
         lastNodeToken = node;
       }
     }
+    // After hte traversal, teh "nextNodeToken" slot contains the token
+    // visited immediately after "predecessor".  ("predecessor" should be a
+    // descendant of the token from whcih traversal starts.)
     class NextNodeTokenVisitor extends DepthFirstVisitor {
       private boolean seenPredecessor = false;
       public NodeToken nextNodeToken;
@@ -315,8 +450,8 @@ public class Ast {
     }
 
     // We don't know how high in the tree we need to go in order to find a
-    // successor.  This has bad worst-case performance, but should be OK in
-    // practice.
+    // successor, so iteratively go higher until success.  This has bad
+    // worst-case performance, but should be acceptable in practice.
     NodeToken result = null;
     Node parent = n.getParent();
     while ((result == null) && (parent != null)) {
@@ -353,49 +488,13 @@ public class Ast {
   /// Whitespace
   ///
 
- public static String removeWhitespace(String arg) {
-    arg = removeWhitespaceAfter(arg, ".");
-    arg = removeWhitespaceAfter(arg, "(");
-    arg = removeWhitespaceBefore(arg, ")");
-    return arg;
-  }
-
-  public static String removeWhitespaceAfter(String arg, String delimiter) {
-    // String orig = arg;
+  public static String removeWhitespace(String arg) {
     arg = arg.trim();
-    int delim_index = arg.indexOf(delimiter);
-    while (delim_index > -1) {
-      int non_ws_index = delim_index+1;
-      while ((non_ws_index < arg.length())
-             && (Character.isWhitespace(arg.charAt(non_ws_index)))) {
-        non_ws_index++;
-      }
-      // System.out.println("'" + arg.charAt(non_ws_index) + "' not a space character at " + non_ws_index + " in: " + arg);
-      if (non_ws_index != delim_index+1) {
-        arg = arg.substring(0, delim_index + 1) + arg.substring(non_ws_index);
-      }
-      delim_index = arg.indexOf(delimiter, delim_index+1);
-    }
-    return arg;
-  }
-
-  public static String removeWhitespaceBefore(String arg, String delimiter) {
-    // System.out.println("removeWhitespaceBefore(\"" + arg + "\", \"" + delimiter + "\")");
-    // String orig = arg;
-    arg = arg.trim();
-    int delim_index = arg.indexOf(delimiter);
-    while (delim_index > -1) {
-      int non_ws_index = delim_index-1;
-      while ((non_ws_index >= 0)
-             && (Character.isWhitespace(arg.charAt(non_ws_index)))) {
-        non_ws_index--;
-      }
-      // System.out.println("'" + arg.charAt(non_ws_index) + "' not a space character at " + non_ws_index + " in: " + arg);
-      if (non_ws_index != delim_index-1) {
-        arg = arg.substring(0, non_ws_index + 1) + arg.substring(delim_index);
-      }
-      delim_index = arg.indexOf(delimiter, non_ws_index+2);
-    }
+    arg = UtilMDE.removeWhitespaceAround(arg, ".");
+    arg = UtilMDE.removeWhitespaceAround(arg, "(");
+    arg = UtilMDE.removeWhitespaceAround(arg, ")");
+    arg = UtilMDE.removeWhitespaceAround(arg, "[");
+    arg = UtilMDE.removeWhitespaceBefore(arg, "]");
     return arg;
   }
 
@@ -406,24 +505,28 @@ public class Ast {
 
   // Result is a Vector of PptTopLevel elements
   public static Vector getMatches(PptMap ppts, MethodDeclaration methdecl) {
-    String classname = Ast.getClassName(methdecl);
-    if (classname.endsWith(".")) {
-      classname = classname.substring(0, classname.length() - 1);
-    }
-    String methodname = Ast.getName(methdecl);
+    String classname = getClassName(methdecl);
+    String methodname = getName(methdecl);
     List method_params = getParameters(methdecl);
     return getMatches(ppts, classname, methodname, method_params);
   }
 
   // Result is a Vector of PptTopLevel elements
   public static Vector getMatches(PptMap ppts, ConstructorDeclaration constrdecl) {
-    String classname = Ast.getClassName(constrdecl);
-    if (classname.endsWith(".")) {
-      classname = classname.substring(0, classname.length() - 1);
-    }
-    // String constrname = Ast.getName(constrdecl);
+    String classname = getClassName(constrdecl);
+    // String constrname = getName(constrdecl);
     List constr_params = getParameters(constrdecl);
     return getMatches(ppts, classname, "<init>", constr_params);
+  }
+
+  public static Vector getMatches(PptMap ppts, Node n) {
+    if (n instanceof MethodDeclaration) {
+      return getMatches(ppts, (MethodDeclaration) n);
+    } else if (n instanceof ConstructorDeclaration) {
+      return getMatches(ppts, (ConstructorDeclaration) n);
+    } else {
+      throw new Error("Bad type in Ast.getMatches: " + n);
+    }
   }
 
   // Result is a Vector of PptTopLevel elements
@@ -502,6 +605,8 @@ public class Ast {
     return result;
   }
 
+  // Return true if the strings are equal, or if abbreviated is a suffix
+  // of goal.  This wouldn't be necessary if we did full type resolution.
   static boolean typeMatch(String goal, String abbreviated) {
     // System.out.println("Comparing " + goal + " to " + abbreviated);
     if (abbreviated.equals(goal)) {
@@ -520,12 +625,9 @@ public class Ast {
   ///
 
   static Class getClass(Node n) {
-    String ast_classname = Ast.getClassName(n);
+    String ast_classname = getClassName(n);
     if (ast_classname.indexOf("$inner") != -1) {
       return null;
-    }
-    if (ast_classname.endsWith(".")) {
-      ast_classname = ast_classname.substring(0, ast_classname.length() - 1);
     }
     return getClass(ast_classname);
   }
@@ -539,6 +641,7 @@ public class Ast {
       String orig_s = s;
       // System.out.println("Lookup failed: " + s);
       // We should have found it.  Maybe there is a name mangling problem.
+      // Systematically change each "." to "$" in an attempt to fix it.
       while (true) {
         int dot_pos = s.lastIndexOf('.');
         if (dot_pos == -1) {
@@ -563,7 +666,7 @@ public class Ast {
   }
 
   static Method getMethod(Class c, MethodDeclaration methoddecl) {
-    String ast_methodname = Ast.getName(methoddecl);
+    String ast_methodname = getName(methoddecl);
     List ast_params = getParameters(methoddecl);
 
     Method[] meths = c.getMethods();
@@ -589,7 +692,7 @@ public class Ast {
   }
 
   static Constructor getConstructor(Class c, ConstructorDeclaration constructordecl) {
-    String ast_constructorname = Ast.getName(constructordecl);
+    String ast_constructorname = getName(constructordecl);
     List ast_params = getParameters(constructordecl);
 
     Constructor[] constrs = c.getConstructors();
@@ -722,6 +825,7 @@ public class Ast {
 
 
 
+  // The "access" argument should be one of "public", "protected", or "private".
   public static void setAccess(MethodDeclaration m, String access) {
     NodeListOptional options = m.f0;
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) {
@@ -774,20 +878,20 @@ public class Ast {
     m.f4.choice = (Block) Ast.create("Block", body);
   }
 
-  // Returns the body of a method, including the leading "{"
+  // Returns the body of a method, including the leading "{" and trailing "}"
   public static String getBody(MethodDeclaration m) {
-    return Ast.print(m.f4.choice);
+    return print(m.f4.choice);
   }
 
 
   public static String getReturnType(MethodDeclaration m) {
     Node n = (Node) m.f1.f0.choice;
-    return Ast.print(n);
+    return print(n);
   }
 
   public static String getMethodDeclarator(MethodDeclaration m) {
     MethodDeclarator d = m.f2;
-    return Ast.print(d);
+    return print(d);
   }
 
 
@@ -829,8 +933,9 @@ public class Ast {
   }
 
 
-  // Returns a list of Strings, the names of all the variables in the
-  // expression/conditional expression/primary expression
+  // Returns a list of Strings, the names of all the variables in the node.
+  // The node is an expression, conditional expression, or primary
+  // expression.
   public static Set getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
@@ -847,7 +952,7 @@ public class Ast {
               return;
             }
           }
-          symbolNames.add(Ast.print(n));
+          symbolNames.add(print(n));
         }
       }
     }
@@ -862,6 +967,22 @@ public class Ast {
     return p.f1.elements();
   }
 
+  /** Return true if this is the main method for this class. **/
+  public static boolean isMain(MethodDeclaration md) {
+    if (Ast.getName(md).equals("main")) {
+      List params = Ast.getParameters(md);
+      if (params.size() == 1) {
+        FormalParameter fp = (FormalParameter)params.get(0);
+        String paramtype = Ast.getType(fp);
+        if (Ast.typeMatch("java.lang.String[]", paramtype)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+
   public static String[] invariants_for(PptTopLevel ppt, PptMap ppts) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -874,7 +995,7 @@ public class Ast {
     if ((invs.length == 2) && (invs[0].startsWith("No samples for "))) {
       return new String[0];
     }
-    // Ignore first three, and last, lines
+    // Ignore first three lines.  Also ignore last line, which is empty.
     Assert.assert(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name but not in invs[1].
     // utilMDE.Assert.assert(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);

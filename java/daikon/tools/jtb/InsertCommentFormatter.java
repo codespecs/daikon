@@ -1,10 +1,3 @@
-// This visitor takes a collection of comments and adjusts the
-// {begin,end}{Line,Column} fields of all the tokens in the tree to
-// accomodate the inserted comments, while modifying the formatting as
-// little as possible.  Each inserted comment either affects only the rest
-// of its line -- by shifting all subsequent characters rightward -- or
-// only subsequent lines -- by shifting lines downward.
-
 package daikon.tools.jtb;
 
 import java.util.*;
@@ -12,7 +5,25 @@ import utilMDE.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
-public class InsertCommentFormatter extends DepthFirstVisitor {
+/**
+ * InsertCommentFormatter is a visitor that does not actually insert
+ * comments, but instead corrects positioning fields of all the tokens
+ * in the tree to accomodate already-inserted comments, while
+ * modifying the formatting as little as possible.  (It edits the
+ * {begin,end}{Line,Column} fields).
+ * <p>
+ *
+ * Each inserted comment either affects only the rest of its line
+ * -- by shifting all subsequent characters rightward -- or only
+ * subsequent lines -- by shifting lines downward.
+ * <p>
+ *
+ * The caller must supply the collection of inserted comments for
+ * recognition by this visitor.
+ **/
+public class InsertCommentFormatter
+  extends DepthFirstVisitor
+{
 
   private Vector comments;
   private int columnshift = 0;
@@ -35,12 +46,12 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
     this.comments = comments;
   }
 
-  private int numLines(NodeToken n) {
+  private static int numLines(NodeToken n) {
     String image = n.tokenImage;
     return UtilMDE.count(image, lineSep);
   }
 
-  private int numColumns(NodeToken n) {
+  private static int numColumns(NodeToken n) {
     if (numLines(n) > 0) {
       return 0;
     } else {

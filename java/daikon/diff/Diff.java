@@ -71,6 +71,7 @@ public final class Diff {
   ClassNotFoundException {
 
     boolean printDiff = false;
+    boolean printUninteresting = false;
     boolean printAll = false;
     boolean stats = false;
     boolean tabSeparatedStats = false;
@@ -86,7 +87,7 @@ public final class Diff {
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpevlz");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hduastjpevlz");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -97,6 +98,9 @@ public final class Diff {
       case 'd':
         optionSelected = true;
         printDiff = true;
+        break;
+      case 'u':
+        printUninteresting = true;
         break;
       case 'a':
         optionSelected = true;
@@ -206,7 +210,8 @@ public final class Diff {
 	  RootNode manipRoot = diff.diffPptMap (manip1, manip2);
 	  XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
 							      false,
-							      false);
+							      false,
+                                                              false);
 	  manipRoot.accept (xiv);
 
 	  // stores the new xor set into manip1.  This might
@@ -295,7 +300,7 @@ public final class Diff {
 
     if (printDiff) {
       PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
-        (System.out, verbose, printEmptyPpts);
+        (System.out, verbose, printEmptyPpts, printUninteresting);
       root.accept(v);
     }
 

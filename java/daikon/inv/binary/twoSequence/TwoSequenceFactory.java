@@ -13,9 +13,9 @@ import java.util.*;
 public final class TwoSequenceFactory {
 
   /**
-   * Debugging logger
+   * Debug tracer
    **/
-  public static final Category debug = Category.getInstance (TwoSequenceFactory.class.getName());
+  public static final Category debug = Category.getInstance ("daikon.inv.binary.twoSequence.TwoSequenceFactory");
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.

@@ -4,8 +4,10 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import utilMDE.*;
 
-// This represents a sequence element at a particular offset (such as
-// first, second, penultimate, last).
+/**
+ * This represents a sequence element at a particular offset (such as
+ * first, second, penultimate, last).
+ **/
 
 // originally from pass1.
 public final class SequenceInitial

@@ -32,10 +32,10 @@ public final class SequencesJoin
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Debugging logger
+   * Debug tracer
    *
    **/
-  public static final Category debug = Category.getInstance(SequencesJoin.class.getName());
+  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesJoin");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

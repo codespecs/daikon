@@ -36,7 +36,7 @@ public final class NonEqual
   protected NonEqual(PptSlice ppt) {
     super(ppt);
     int override_range = 0;
-    if (! ppt.var_infos[0].type.isIntegral()) {
+    if (! ppt.var_infos[0].file_rep_type.isIntegral()) {
       override_range = 10;
     }
     core = new NonEqualCore(this, override_range);
@@ -48,7 +48,8 @@ public final class NonEqual
     // Perhaps do not instantiate unless the variables have the same
     // type; in particular, nonequal for Object variables is not so
     // likely to be of interest.
-    boolean integral = ppt.var_infos[0].type.isIntegral() && ppt.var_infos[1].type.isIntegral();
+    boolean integral =
+      ppt.var_infos[0].file_rep_type.isIntegral() && ppt.var_infos[1].file_rep_type.isIntegral();
     if (dkconfig_integral_only && !integral) {
       return null;
     }

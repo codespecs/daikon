@@ -22,7 +22,7 @@ public final class SingleScalarFactory {
     { // previously only if (pass == 2)
       { // previously only if !dynamicConstant
         result.add(NonZero.instantiate(ppt));
-        if (var.type.isIntegral()) {
+        if (var.file_rep_type.isIntegral()) {
           result.add(LowerBound.instantiate(ppt));
           result.add(Modulus.instantiate(ppt));
           result.add(NonModulus.instantiate(ppt));

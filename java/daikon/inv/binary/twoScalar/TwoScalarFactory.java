@@ -23,7 +23,7 @@ public final class TwoScalarFactory {
     if (! var1.compatible(var2))
       return null;
 
-    boolean integral = var1.type.isIntegral() && var2.type.isIntegral();
+    boolean integral = var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral();
 
     Vector result = new Vector();
     if (var1.isStaticConstant() || var2.isStaticConstant()) {

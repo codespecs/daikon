@@ -7,6 +7,8 @@ import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
 import java.io.Serializable;
 
+import org.apache.log4j.Category;
+
 public final class LinearTernaryCore
   implements Serializable, Cloneable
 {
@@ -15,8 +17,11 @@ public final class LinearTernaryCore
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  final static boolean debugLinearTernaryCore = false;
-  // final static boolean debugLinearTernaryCore = true;
+  /**
+   * Debug tracer
+   **/
+
+  final static Category debug = Category.getInstance ("daikon.inv.trinary.threeScalar.LinearTernaryCore");
 
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a, b, c;
@@ -121,8 +126,8 @@ public final class LinearTernaryCore
           for (int i=0; i<MINTRIPLES; i++) {
             // I should permit a fudge factor here.
             if (z_cache[i] != a*x_cache[i]+b*y_cache[i]+c) {
-              if (debugLinearTernaryCore) {
-                System.out.println("Suppressing " + "LinearTernaryCore" + " at index " + i + ": "
+              if (debug.isDebugEnabled()) {
+                debug.debug("Suppressing " + "LinearTernaryCore" + " at index " + i + ": "
                                    + z_cache[i] + " != "
                                    + a + "*" + x_cache[i]
                                    + "+" + b + "*" + y_cache[i] + "+" + c);
@@ -136,8 +141,8 @@ public final class LinearTernaryCore
     } else {
       // Check the new value against a, b, and c.
       if (z != a*x+b*y+c) {
-        if (debugLinearTernaryCore) {
-          System.out.println("Suppressing " + "LinearTernaryCore" + " at new value: "
+        if (debug.isDebugEnabled()) {
+          debug.debug("Suppressing " + "LinearTernaryCore" + " at new value: "
                              + z + " != " + a + "*" + x + "+" + b + "*" + y + "+" + c + " = " + (a*x+b*y+c));
         }
         wrapper.destroy();
@@ -241,8 +246,8 @@ public final class LinearTernaryCore
                                 - z1 * (x0 * y2 - x2 * y0)
                                 + z2 * (x0 * y1 - x1 * y0));
     if (denominator == 0) {
-      if (debugLinearTernaryCore) {
-        System.out.println("Suppressing " + "LinearTernaryCore" + " due to zero denominator.");
+      if (debug.isDebugEnabled()) {
+        debug.debug("Suppressing " + "LinearTernaryCore" + " due to zero denominator.");
       }
       wrapper.destroy();
       return;
@@ -252,8 +257,8 @@ public final class LinearTernaryCore
       b = b_numerator / denominator;
       c = c_numerator / denominator;
     } catch (Exception e) {
-      if (debugLinearTernaryCore) {
-        System.out.println("Suppressing " + "LinearTernaryCore" + " due to exception.");
+      if (debug.isDebugEnabled()) {
+        debug.debug("Suppressing " + "LinearTernaryCore" + " due to exception.");
       }
       wrapper.destroy();
       return;

@@ -11,17 +11,15 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.visitor.*;
 
-// To do:  permit multiple .inv files as arguments.
-// In the meanwhile, the workaround is to use the UnionInvariants tool.
-
 /**
  * Merge Daikon-generated invariants into Java source code as ESC annotations.
  * <p>
  *
  * The first argument is a Daikon .inv file -- a serialized file of
  * Invariant objects.  All subsequent arguments are .java files that are
- * rewritten into -escannotated versions.  (The original .java files are
- * left unmodified.)
+ * rewritten into -escannotated versions; alternately, use the -r flag to
+ * process every .java file under the current directory.  (All original
+ * .java files are left unmodified.)
  * <p>
  **/
 class MergeESC {
@@ -39,8 +37,7 @@ class MergeESC {
   //    Modifies clauses should not contain "size()", ".class", or "~".
   //    Modifies clauses should not contain final fields.
   //  * use "also_requires", "also_ensures", "also_modifies" if this method
-  //    overrides another method.  Examples include
-  //    equals(java.lang.Object), toString().
+  //    overrides another method/interface.
 
   // spec_public:
   // for each non-public field, add "/*@ spec_public */" to its declaration
@@ -55,13 +52,14 @@ class MergeESC {
   // Handle "The invariant on the following line means:".
 
   // Optional behavior:
-  //  * Invariants not supported by ESC are inserted with "!" instead of "@";
-  //    by default these "inexpressible" invariants are simply omitted.
-  //  * Whether to use // or /* comments.
+  //  * With -i flag, invariants not supported by ESC are inserted with "!"
+  //    instead of "@"; by default these "inexpressible" invariants are
+  //    simply omitted.
+  //  * With -s flag, use // comments; by default, use /* comments.
 
   public final static String lineSep = System.getProperty("line.separator");
 
-  public static final Category debug = Category.getInstance(MergeESC.class.getName());
+  public static final Category debug = Category.getInstance("daikon.tools.jtb.MergeESC");
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -108,7 +106,7 @@ class MergeESC {
         break;
       // case 'r':
       //   // Should do this witout calling out to the system.  (There must be
-      //   // an easy way to do this in Java.
+      //   // an easy way to do this in Java.)
       //   Process p = System.exec("find . -type f -name '*.java' -print");
       //   p.waitFor();
       //   StringBufferInputStream sbis
@@ -160,28 +158,11 @@ class MergeESC {
       debug.debug("Processing file " + javafile);
 
       // Annotate the file
-      applyVisitor(input, output,
+      Ast.applyVisitorInsertComments(input, output,
                    new MergeESCVisitor(ppts, slashslash, insert_inexpressible));
     }
   }
 
-  // Reads an AST from the input stream, applies the visitor to the
-  // AST, and writes the resulting AST to the output stream
-  public static void applyVisitor(Reader input, Writer output,
-                                  MergeESCVisitor visitor) {
-    JavaParser parser = new JavaParser(input);
-    Node root = null;
-    try {
-      root = parser.CompilationUnit();
-    }
-    catch (ParseException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-    root.accept(visitor);
-    root.accept(new InsertCommentFormatter(visitor.addedComments));
-    root.accept(new TreeDumper(output));
-  }
 
 }
 

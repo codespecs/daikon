@@ -26,9 +26,9 @@ public final class SequencesConcat
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Debugging logger
+   * Debug tracer
    **/
-  public static final Category debug = Category.getInstance (SequencesConcat.class.getName());
+  public static final Category debug = Category.getInstance ("daikon.derive.binary.SequencesConcat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

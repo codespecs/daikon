@@ -265,10 +265,3 @@ public class ExampleFileFilter extends FileFilter {
 	return useExtensionsInDescription;
     }
 }
-
-
-/*
- * Local Variables:
- * c-basic-offset:	4
- * End:
- */

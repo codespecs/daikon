@@ -211,11 +211,3 @@ class FileInvarFilter implements FilenameFilter
 		return false;
 	}
 }
-
-
-
-/*
- * Local Variables:
- * c-basic-offset:	4
- * End:
- */

@@ -212,12 +212,22 @@ public final class IntEqual
     // Should perhaps check number of samples and be unjustified if too few
     // samples.
 
+    // We MUST check if we have seen samples; otherwise we get
+    // undesired transitivity with missing values.
+    if (ppt.num_samples() == 0) {
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    }
+
     // It's an equality invariant.  I ought to use the actual ranges somehow.
     // Actually, I can't even use this .5 test because it can make
     // equality non-transitive.
     // return Math.pow(.5, num_values());
     return Invariant.PROBABILITY_JUSTIFIED;
 
+  }
+
+  public boolean enoughSamples() {
+    return (ppt.num_samples() > 0);
   }
 
   // For Comparison interface

@@ -23,8 +23,9 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
     PptTopLevel lastPpt = null;
 
     public XorInvariantsVisitor (PrintStream ps, boolean verbose,
-                                         boolean printEmptyPpts) {
-	super(ps, verbose, printEmptyPpts);
+                                 boolean printEmptyPpts,
+                                 boolean printUninteresting) {
+	super(ps, verbose, printEmptyPpts, printUninteresting);
     }
 
     public void visit (PptNode node) {

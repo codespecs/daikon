@@ -33,11 +33,11 @@ public abstract class PptSlice
   public boolean debugged;
 
   /**
-   * Logging Category.
+   * Debug tracer
    **/
-  public static final Category debug = Category.getInstance(PptSlice.class.getName());
-  public static final Category debugGeneral = Category.getInstance(PptSlice.class.getName() + ".general");
-  public static final Category debugFlow = Category.getInstance(PptSlice.class.getName() + ".flow");
+  public static final Category debug = Category.getInstance("daikon.PptSlice");
+  public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
+  public static final Category debugFlow = Category.getInstance("daikon.PptSlice..flow");
 
   /** This is a slice of the 'parent' ppt */
   public PptTopLevel parent;

@@ -270,7 +270,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
     }
 
-    protected static boolean shouldPrint (Invariant inv1, Invariant inv2) {
+    protected boolean shouldPrint (Invariant inv1, Invariant inv2) {
 	return // super.shouldPrint (inv1, inv2) &&
 	    inv1.format().toString().indexOf(">") == -1 &&
 	    inv1.format().toString().indexOf("orig") == -1;

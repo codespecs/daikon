@@ -30,10 +30,10 @@ public final class PptSlice1
   static final long serialVersionUID = 20020122L;
 
   /**
-   * Logging Category
+   * Debug tracer
    **/
 
-  public static final Category debugSpecific = Category.getInstance(PptSlice1 .class.getName());
+  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice1" );
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;

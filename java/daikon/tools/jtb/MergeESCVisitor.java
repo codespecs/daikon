@@ -52,16 +52,19 @@ class MergeESCVisitor extends DepthFirstVisitor {
     this.insert_inexpressible = insert_inexpressible;
   }
 
+  // Like Ast.addComment, but also keeps a list of what comments were added.
   void addComment(Node n, String comment, boolean first) {
     NodeToken nt = new NodeToken(comment);
     Ast.addComment(n, nt, first);
     addedComments.add(nt);
   }
 
+  // Like Ast.addComment, but also keeps a list of what comments were added.
   void addComment(Node n, String comment) {
     addComment(n, comment, false);
   }
 
+  // Like Ast.addComment, but also keeps a list of what comments were added.
   void addCommentAfter(Node n, String comment) {
     addComment(Ast.nodeTokenAfter(n), comment, true);
   }
@@ -110,9 +113,6 @@ class MergeESCVisitor extends DepthFirstVisitor {
    */
   public void visit(UnmodifiedClassDeclaration n) {
     String classname = Ast.getClassName(n);
-    if (classname.endsWith(".")) {
-      classname = classname.substring(0, classname.length()-1);
-    }
     String pptname = classname + ":::OBJECT";
     PptTopLevel object_ppt = ppts.get(pptname);
 
@@ -169,6 +169,29 @@ class MergeESCVisitor extends DepthFirstVisitor {
     }
   }
 
+  // Node n is a MethodDeclaration or a ConstructorDeclaration
+  String[][] get_requires_and_ensures(PptMap ppts, Node n) {
+    String[] requires_invs = null;
+    String[] ensures_invs = null;
+
+    Vector matching_ppts = Ast.getMatches(ppts, n);
+    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      String prefix;
+      if (ppt.ppt_name.isEnterPoint()) {
+        requires_invs = Ast.invariants_for(ppt, ppts);
+      } else if (ppt.ppt_name.isExitPoint()) {
+        if (! ppt.ppt_name.isCombinedExitPoint()) {
+          continue;
+        }
+        ensures_invs = Ast.invariants_for(ppt, ppts);
+      } else {
+        throw new Error("not enter or exit point: " + ppt.name);
+      }
+    }
+
+    return new String[][] { requires_invs, ensures_invs };
+  }
 
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
@@ -186,49 +209,41 @@ class MergeESCVisitor extends DepthFirstVisitor {
     n.f3.accept(this);
     n.f4.accept(this);
 
+    String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    String[] requires_invs = requires_and_ensures[0];
+    String[] ensures_invs = requires_and_ensures[1];
+
     Vector matching_ppts = Ast.getMatches(ppts, n);
-
-    String[] requires_invs = null;
-    String[] ensures_invs = null;
-
     for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = Ast.invariants_for(ppt, ppts);
       } else if (ppt.ppt_name.isExitPoint()) {
-	// XXX Change test to whether is unconditional exit, not just any
-	/* [INCR]
-        if (ppt.combined_exit != null) {
+        if (! ppt.ppt_name.isCombinedExitPoint()) {
           continue;
         }
-	*/
         ensures_invs = Ast.invariants_for(ppt, ppts);
       } else {
         throw new Error("not enter or exit point: " + ppt.name);
       }
     }
 
-    // Special case for main method
-    if (Ast.getName(n).equals("main")) {
-      List params = Ast.getParameters(n);
-      if (params.size() == 1) {
-        FormalParameter fp = (FormalParameter)params.get(0);
-        String paramtype = Ast.getType(fp);
-        if (Ast.typeMatch("java.lang.String[]", paramtype)) {
-          if (requires_invs == null) {
-            requires_invs = new String[0];
-          }
-          int old_size = requires_invs.length;
-          String[] new_requires_invs = new String[old_size+2];
-          System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
-          requires_invs = new_requires_invs;
-          // should really only add these if they aren't already present
-          String param = Ast.getName(fp);
-          requires_invs[old_size] = param + " != null";
-          requires_invs[old_size+1] = "\\nonnullelements(" + param + ")";
-        }
+    // Special case for main method:  add "arg != null" and
+    // "nonNullElements(arg)".
+    if (Ast.isMain(n)) {
+      if (requires_invs == null) {
+        requires_invs = new String[0];
       }
+      int old_size = requires_invs.length;
+      String[] new_requires_invs = new String[old_size+2];
+      System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
+      requires_invs = new_requires_invs;
+      // should really only add these if they aren't already present
+      FormalParameter fp = (FormalParameter) Ast.getParameters(n).get(0);
+      String param = Ast.getName(fp);
+      requires_invs[old_size] = param + " != null";
+      requires_invs[old_size+1] = "\\nonnullelements(" + param + ")";
     }
 
     String ensures_tag = "ensures";
@@ -242,7 +257,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       ensures_tag = "also_" + ensures_tag;
     }
     if (isOverride) {
-      requires_invs = new String[0]; // no requires permitted on overridden methods
+      requires_invs = null; // no requires permitted on overridden methods
       ensures_tag = "also_" + ensures_tag;
     }
 
@@ -273,35 +288,16 @@ class MergeESCVisitor extends DepthFirstVisitor {
     n.f6.accept(this);
     n.f7.accept(this);
 
-    Vector matching_ppts = Ast.getMatches(ppts, n);
-    // System.out.println("Number of matches (constructor) = " + matching_ppts.size());
+    String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    String[] requires_invs = requires_and_ensures[0];
+    String[] ensures_invs = requires_and_ensures[1];
 
-    String[] requires = null;
-    String[] ensures = null;
-
-    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      String prefix;
-      if (ppt.ppt_name.isEnterPoint()) {
-        requires = Ast.invariants_for(ppt, ppts);
-      } else if (ppt.ppt_name.isExitPoint()) {
-	// XXX Change test to whether is unconditional exit, not just any
-	/* [INCR]
-        if (ppt.combined_exit != null) {
-          continue;
-        }
-	*/
-        ensures = Ast.invariants_for(ppt, ppts);
-      } else {
-        throw new Error("not enter or exit point: " + ppt.name);
-      }
-    }
-
-    insertInvariants(n, "ensures", ensures);
-    insertInvariants(n, "requires", requires);
+    insertInvariants(n, "ensures", ensures_invs);
+    insertInvariants(n, "requires", requires_invs);
 
   }
 
+  // The "invs" argument may be null, in which case no work is done.
   public void insertInvariants(Node n, String prefix, String[] invs) {
     if (invs == null) {
       return;
@@ -331,6 +327,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
     }
   }
 
+  // Set .owner and/or .containsnull for ++, --, etc expressions within a
+  // statement.
   /**
    * f0 -> PreIncrementExpression()
    *       | PreDecrementExpression()
@@ -352,7 +350,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         NodeChoice nc = (NodeChoice) no.node;
         if ((nc != null) && (nc.choice instanceof NodeSequence)) {
           // it's an assignment
-          String fieldname = fieldName(pe);
+          String fieldname = Ast.fieldName(pe);
           // System.out.println("In statement, fieldname = " + fieldname);
           if ((fieldname != null)
               && (isOwned(fieldname) || isNonNullElements(fieldname))) {
@@ -363,8 +361,10 @@ class MergeESCVisitor extends DepthFirstVisitor {
             if ((cd != null)
                 || ((md != null) && (! Ast.contains(md.f0, "static")))) {
               Node parent = Ast.getParent(Statement.class, n);
-              // This may be wrong if parent isn't in a block (eg, if parent
-              // is sole element in then or else clause).
+              // If parent isn't in a block (eg, if parent
+              // is sole element in then or else clause), then this is wrong.
+              // It's safe, however.  But does it cause syntax errors if an
+              // else clause follows a then clause without braces?
               if (isOwned(fieldname)) {
                 addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
               }
@@ -390,124 +390,17 @@ class MergeESCVisitor extends DepthFirstVisitor {
     if (n.f1.present()) {
       // it's an assignment
       // System.out.println("found an assignment expression: " + n);
-      PrimaryExpression pe = assignment2primaryexpression(n);
-      String fieldname = fieldName(pe);
+      PrimaryExpression pe = Ast.assignment2primaryexpression(n);
+      String fieldname = Ast.fieldName(pe);
       // System.out.println("In expression, fieldname = " + fieldname);
       Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
-        addComment(stmt, javaLineComment("@ set " + fieldname + ".owner = this"));
+        addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this"));
       }
 
     }
 
   }
-
-  // Return the primary expression on the left-hand side of an assignment
-  private PrimaryExpression assignment2primaryexpression(Expression n) {
-    Assert.assert(n.f1.present());
-    ConditionalExpression ce = n.f0;
-    Assert.assert(! ce.f1.present());
-    ConditionalOrExpression coe = ce.f0;
-    Assert.assert(! coe.f1.present());
-    ConditionalAndExpression cae = coe.f0;
-    Assert.assert(! cae.f1.present());
-    InclusiveOrExpression ioe = cae.f0;
-    Assert.assert(! ioe.f1.present());
-    ExclusiveOrExpression eoe = ioe.f0;
-    Assert.assert(! eoe.f1.present());
-    AndExpression ande = eoe.f0;
-    Assert.assert(! ande.f1.present());
-    EqualityExpression ee = ande.f0;
-    Assert.assert(! ee.f1.present());
-    InstanceOfExpression iofe = ee.f0;
-    Assert.assert(! iofe.f1.present());
-    RelationalExpression re = iofe.f0;
-    Assert.assert(! re.f1.present());
-    ShiftExpression se = re.f0;
-    Assert.assert(! se.f1.present());
-    AdditiveExpression adde = se.f0;
-    Assert.assert(! adde.f1.present());
-    MultiplicativeExpression me = adde.f0;
-    Assert.assert(! me.f1.present());
-    UnaryExpression ue = me.f0;
-    UnaryExpressionNotPlusMinus uenpm
-      = (UnaryExpressionNotPlusMinus) ue.f0.choice;
-    PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
-    Assert.assert(! pfe.f1.present());
-    PrimaryExpression pe = pfe.f0;
-    return pe;
-  }
-
-
-  private String fieldName(PrimaryExpression pe) {
-    // System.out.println("fieldName(" + pe + ")");
-
-    // Get a name from the PrimaryPrefix, if possible.
-    String result = null;
-    PrimaryPrefix pp = pe.f0;
-    NodeChoice ppnc = pp.f0;
-    // PrimaryPrefix:
-    /**
-     * f0 -> Literal()
-     *       | "this"
-     *       | "super" "." <IDENTIFIER>
-     *       | "(" Expression() ")"
-     *       | AllocationExpression()
-     *       | ResultType() "." "class"
-     *       | Name()
-     */
-    switch (ppnc.which) {
-    case 2:
-      NodeSequence sn = (NodeSequence) ppnc.choice;
-      Assert.assert(sn.size() == 3);
-      result = ((NodeToken) sn.elementAt(2)).tokenImage;
-      break;
-    case 6:
-      result = fieldName((Name) ppnc.choice);
-      break;
-    }
-
-    // Get a name from the PrimarySuffix, if possible.
-    NodeListOptional pslist = pe.f1;
-    for (int i=0; i<pslist.size(); i++) {
-      PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(i);
-      NodeChoice psnc = ps.f0;
-      // PrimarySuffix:
-      /**
-       * f0 -> "." "this"
-       *       | "." AllocationExpression()
-       *       | "[" Expression() "]"
-       *       | "." <IDENTIFIER>
-       *       | Arguments()
-       */
-      switch (psnc.which) {
-      case 4:
-        NodeSequence sn = (NodeSequence) ppnc.choice;
-        Assert.assert(sn.size() == 2);
-        result = ((NodeToken) sn.elementAt(1)).tokenImage;
-        break;
-      default:
-        // in all other cases, reset to null
-        result = null;
-        break;
-      }
-    }
-
-    return result;
-  }
-
-  private String fieldName(Name n) {
-    NodeListOptional nlo = n.f1;
-    if (nlo.present()) {
-      NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
-      Assert.assert(ns.size() == 2);
-      NodeToken nt = (NodeToken) ns.elementAt(1);
-      return nt.tokenImage;
-    } else {
-      return n.f0.tokenImage;
-    }
-  }
-
 
 
 
@@ -609,9 +502,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
 // }
 
 
-// ###########################################################################
-// ### Subroutines
-// ###
+  ///////////////////////////////////////////////////////////////////////////
+  /// Subroutines
+  ///
 
   /** The argument should already contain "@" or any other leading characters. */
   String javaLineComment(String comment) {

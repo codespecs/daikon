@@ -15,8 +15,12 @@ public final class LinearBinaryCore
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /**
+   * Debug tracer
+   **/
+
   public static final Category debug = 
-    Category.getInstance(LinearBinaryCore.class.getName());
+    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore");
 
   // y == ax + b; first argument is x, second is y
   public double a, b;

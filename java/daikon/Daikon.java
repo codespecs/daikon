@@ -142,7 +142,10 @@ public final class Daikon {
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
 
-  public static final Category debugTrace = Category.getInstance (Daikon.class.getName());
+  /**
+   * Debug tracer
+   **/
+  public static final Category debugTrace = Category.getInstance ("daikon.Daikon");
 
   static String usage =
     UtilMDE.join(new String[] {

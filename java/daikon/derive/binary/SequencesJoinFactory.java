@@ -14,8 +14,13 @@ import java.util.*;
  **/
 
 public final class SequencesJoinFactory  extends BinaryDerivationFactory {
+
+  /**
+   * Debug tracer
+   **/
+
   public static final Category debug =
-    Category.getInstance (SequencesJoinFactory.class.getName());
+    Category.getInstance ("daikon.derive.binary.SequencesJoinFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 

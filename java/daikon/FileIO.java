@@ -86,13 +86,19 @@ public final class FileIO
   private static boolean to_write_nonce = false;
   private static String nonce_value, nonce_string;
 
-// Logging Categories
+  // Logging Categories
 
+  /**
+   * Debug tracer for reading
+   **/
   public static final Category debugRead =
-    Category.getInstance (FileIO.class.getName() + ".read");
-  public static final Category debugPrint =
-    Category.getInstance (FileIO.class.getName() + ".printDtrace");
+    Category.getInstance ("daikon.FileIO.read");
 
+  /**
+   * Debug tracer for printing
+   **/
+  public static final Category debugPrint =
+    Category.getInstance ("daikon.FileIO.printDtrace");
 
   
 ///////////////////////////////////////////////////////////////////////////

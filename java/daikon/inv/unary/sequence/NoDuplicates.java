@@ -30,7 +30,11 @@ public class NoDuplicates
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debug = Category.getInstance(NoDuplicates.class.getName());
+  /**
+   * Debug tracer
+   **/
+
+  public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicates");
   int elts = 0;
 
   protected NoDuplicates(PptSlice ppt) {
