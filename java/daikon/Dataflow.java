@@ -769,6 +769,7 @@ public class Dataflow
           continue for_all_paths;
         }
         vis_adj[j] = adj_ppt.var_infos[adj_index];
+        Assert.assertTrue (vis_adj[j].compatible(adj_ppt.var_infos[adj_index]));
       }
       slice.addToOnePO(adj_ppt, vis_adj);
     }
