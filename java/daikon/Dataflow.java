@@ -60,6 +60,8 @@ public class Dataflow
     create_derived_variables(all_ppts);
     // Set up the data flow vectors
     create_ppt_dataflow(all_ppts);
+    // Set up the invariant flow vectors
+    create_ppt_invflow(all_ppts);
   }
 
   /**
@@ -334,10 +336,10 @@ public class Dataflow
     debug.debug("relate_derived_variables on " + ppt.name);
 
     // For all immediately higher (or lower) groups of variables
-    PptsAndInts flow = compute_ppt_dataflow(ppt,
-					    false, // one step only
-					    true   // higher
-					    );
+    PptsAndInts flow = compute_ppt_flow(ppt,
+					false, // one step only
+					true   // higher
+					);
     int size = flow.ppts.length - 1; // -1 because don't want self
     debug.debug("size = " + size);
     for (int i = 0; i < size; i++) {
@@ -431,62 +433,128 @@ public class Dataflow
       ppts = _ppts;
       ints = _ints;
     }
+    /**
+     * @return new records containing the first length pairs in this
+     * (with aliasing!)
+     **/
+    public PptsAndInts makeSubArray(int length) {
+      PptTopLevel[] _ppts = new PptTopLevel[length];
+      int[][] _ints = new int[length][];
+      System.arraycopy(ppts, 0, _ppts, 0, length);
+      System.arraycopy(ints, 0, _ints, 0, length);
+      return new PptsAndInts(_ppts, _ints);
+    }
   }
 
   /**
-   * Create the dataflow injection vectors in all of the PptTopLevels.
-   * Must be done after VarInfo partial ordering relations have been
-   * fully set up.
+   * Create the dataflow injection vectors in all of the PptTopLevels
+   * that receive samples.  Must be done after VarInfo partial
+   * ordering relations have been fully set up.
    **/
   private static void create_ppt_dataflow(PptMap all_ppts)
   {
     // For all points that receive samples (currently just EXITnn)
     for (Iterator h = all_ppts.iterator(); h.hasNext(); ) {
-      PptTopLevel receiving_ppt = (PptTopLevel) h.next();
-      boolean receives_samples = receiving_ppt.ppt_name.isExitPoint()
-	&& !receiving_ppt.ppt_name.isCombinedExitPoint();
+      PptTopLevel ppt = (PptTopLevel) h.next();
+      boolean receives_samples = ppt.ppt_name.isExitPoint()
+	&& !ppt.ppt_name.isCombinedExitPoint();
       if (!receives_samples) {
 	continue;
       }
 
-      PptsAndInts dataflow_rec = compute_ppt_dataflow(receiving_ppt,
-						      true, // full paths
-						      true  // higher
-						      );
+      PptsAndInts rec = compute_ppt_flow(ppt,
+					 true, // full paths
+					 true  // higher
+					 );
       // Store result into receiving_ppt
-      Assert.assert(receiving_ppt.dataflow_ppts == null);
-      Assert.assert(receiving_ppt.dataflow_transforms == null);
-      receiving_ppt.dataflow_ppts = dataflow_rec.ppts;
-      receiving_ppt.dataflow_transforms = dataflow_rec.ints;
+      Assert.assert(ppt.dataflow_ppts == null);
+      Assert.assert(ppt.dataflow_transforms == null);
+      ppt.dataflow_ppts = rec.ppts;
+      ppt.dataflow_transforms = rec.ints;
+    }
+  }
+
+
+  /**
+   * Create the invariant flow injection vectors in all of the
+   * PptTopLevels.  Must be done after VarInfo partial ordering
+   * relations have been fully set up.
+   **/
+  private static void create_ppt_invflow(PptMap all_ppts)
+  {
+    for (Iterator h = all_ppts.iterator(); h.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) h.next();
+
+      PptsAndInts rec = compute_ppt_flow(ppt,
+					 false, // one-step paths
+					 false  // lower
+					 );
+      // Remove last element (don't flow invariant to same ppt)
+      rec = rec.makeSubArray(rec.ppts.length - 1);
+      // Store result into ppt
+      Assert.assert(ppt.invflow_ppts == null);
+      Assert.assert(ppt.invflow_transforms == null);
+      ppt.invflow_ppts = rec.ppts;
+      ppt.invflow_transforms = rec.ints;
     }
   }
 
   /**
-   * Compute the dataflow for one ppt.  Can go either for just one
-   * step up, or follow paths to completion.
+   * Compute a flow path for one ppt.  Can go higher or lower, and
+   * either just one step up or all paths to completion.
    **/
-  public static PptsAndInts compute_ppt_dataflow(PptTopLevel receiving_ppt,
-						 boolean all_steps,
-						 boolean higher)
+  public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
+					     boolean all_steps,
+					     boolean higher)
   {
+    // First element in worklist is the full receiving_ppt
+    int nvis = ppt.var_infos.length;
+    List first = new ArrayList(nvis);
+    for (int i = 0; i < nvis; i++) {
+      first.add(new VarAndSource(ppt.var_infos[i], i));
+    }
+
+    return compute_ppt_flow(ppt, first, all_steps, higher);
+  }
+
+
+  /**
+   * Compute a flow path for one ppt.  Can go higher or lower, and
+   * either just one step up or all paths to completion.
+   **/
+  public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
+					     VarInfo[] start,
+					     boolean all_steps,
+					     boolean higher)
+  {
+    // First element in worklist is the full receiving_ppt
+    List first = new ArrayList(start.length);
+    for (int i = 0; i < start.length; i++) {
+      first.add(new VarAndSource(start[i], start[i].varinfo_index));
+    }
+
+    return compute_ppt_flow(ppt, first, all_steps, higher);
+  }
+
+  private static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
+					      List start, // [VarAndSource]
+					      boolean all_steps,
+					      boolean higher)
+  {
+    // We could assert that start's VarInfos are from ppt, and that
+    // the VarAndSources have right the varinfo_index for them.
+
     // These two lists collect the result that will be returned
     List dataflow_ppts = new ArrayList(); // of type PptTopLevel
     List dataflow_transforms = new ArrayList(); // of type int[nvis]
-    int nvis = receiving_ppt.var_infos.length;
+    int nvis = ppt.var_infos.length;
 
-    if (nvis > 0) {
+    {
       // Our worklist is the heads of paths flowing up from "ppt".
       // We store the vars which specify the head and the original
       // indices in receiving_ppt that flow up to the head.
       LinkedList worklist = new LinkedList(); // element type is List[VarAndSource]
-      {
-	// First element in worklist is receiving_ppt
-	List first = new ArrayList(nvis);
-	for (int i = 0; i < nvis; i++) {
-	  first.add(new VarAndSource(receiving_ppt.var_infos[i], i));
-	}
-	worklist.add(first);
-      }
+      worklist.add(start);
 
       // While worklist is non-empty, process the first element
       while (! worklist.isEmpty()) {
@@ -565,20 +633,15 @@ public class Dataflow
    * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
    * <li> Nonces are respected
    **/
-  public static void init_pptslice_po(PptSlice slice,
-				      boolean lower)
+  public static void init_pptslice_po(PptSlice slice)
   {
     // For all immediately higher (or lower) groups of variables
-    PptsAndInts flow =
-      compute_ppt_dataflow(slice.parent,
-			   false, // just one step
-			   !lower // higher
-			   );
-    int size = flow.ppts.length - 1; // -1 because don't want slice
+    PptTopLevel ppt = slice.parent;
+    int size = ppt.invflow_ppts.length;
   for_all_paths:
     for (int i = 0; i < size; i++) {
-      PptTopLevel adj_ppt = flow.ppts[i];
-      int[] flow_ints = flow.ints[i];
+      PptTopLevel adj_ppt = ppt.invflow_ppts[i];
+      int[] flow_ints = ppt.invflow_transforms[i];
 
       // Add to slice's partial order
       VarInfo[] vis_adj = new VarInfo[slice.arity];
@@ -591,7 +654,7 @@ public class Dataflow
 	}
 	vis_adj[j] = adj_ppt.var_infos[adj_index];
       }
-      slice.addToOnePO(lower, adj_ppt, vis_adj);
+      slice.addToOnePO(adj_ppt, vis_adj);
     }
   }
 

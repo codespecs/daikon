@@ -70,25 +70,10 @@ public abstract class PptSlice
   private Invariants invs_to_flow;
 
   // Keep private, modifiable copies and public read-only views
-  private final Collection private_po_higher = new ArrayList(2); // [PptTopLevel]
   private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
   // Map[PptTopLevel -> List[VarInfo[arity]]]; store as the value an array
   // where this.var_infos corresponds to the VarInfos in value.
-  private final Map private_po_higher_vis = new HashMap();
   private final Map private_po_lower_vis = new HashMap();
-
-  /**
-   * Slices immediately higher in the partial order (compared to this).
-   * If A is higher than B then every value seen at B is seen at A.
-   * Elements are PptTopLevels, since PptSlices are transient.
-   * Contains no duplicates.
-   * PptSlice partial ordering is a direct function of VarInfo partial
-   * ordering, and is the minimal nearest set of slices which are
-   * higher for all VarInfos.
-   * @see po_lower
-   **/
-  public final Collection po_higher = Collections.unmodifiableCollection(private_po_higher);
-  public final Map po_higher_vis = Collections.unmodifiableMap(private_po_higher_vis);
 
   /**
    * Slices immediately lower in the partial order (compared to this).
@@ -170,16 +155,36 @@ public abstract class PptSlice
   }
 
   /**
+   * @return true iff there is a slice higher in the PO relative to
+   * this.  This call is relatively expensive.
+   **/
+  public boolean isControlled()
+  {
+    Dataflow.PptsAndInts higher =
+      Dataflow.compute_ppt_flow(parent,
+				var_infos,
+				false, // just one step
+				true   // higher
+				);
+
+    // We will always have at least one path, since the dataflow
+    // result includes 'here'.  We need a result of size 2 to know
+    // that there is another place higher than here.
+    return (higher.ppts.length >= 2);
+  }
+
+  /**
    * ...
    **/
-  protected void addToOnePO(boolean lower,
-			    PptTopLevel adj,
+  protected void addToOnePO(PptTopLevel adj,
 			    VarInfo[] slice_vis)
   {
     Assert.assert(slice_vis.length == arity);
 
-    Collection private_po = lower ? private_po_lower : private_po_higher;
-    Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
+    // Collection private_po = lower ? private_po_lower : private_po_higher;
+    // Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
+    Collection private_po = private_po_lower;
+    Map private_po_vis = private_po_lower_vis;
 
     List slices;
     if (! private_po.contains(adj)) {

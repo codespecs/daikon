@@ -136,6 +136,29 @@ public class PptTopLevel
   /** @see dataflow_ppts */
   public int[][] dataflow_transforms;
 
+  /**
+   * Together, invflow_ppts and invflow_tranforms describe how
+   * invariants that are changed or falsified at this program point
+   * flow to other points.  They are never null, but may be
+   * zero-length if there are no lower ppts.  They obey the following
+   * invariants:
+   * 
+   * <li>invflow_transforms contains functions from this to
+   * invflow_ppts; elements are int[]-style functions whose domain is
+   * the number of var_infos in this, and whose range is number of
+   * var_infos in the corresponding element of invflow_ppts;
+   *
+   * <li>invflow_transforms describes the function from the var_infos
+   * of this ppt to same in invflow_ppts, so its inner length equals
+   * this.var_infos.length);
+   *
+   * <li>program points in invflow_ppts may be repeated if a sample
+   * at this point induces more than one sample another point.
+   **/
+  public PptTopLevel[] invflow_ppts;
+  /** @see invflow_ppts */
+  public int[][] invflow_transforms;
+
   // [INCR] ...
   // Assumption: The "depends on" graph is acyclic
   // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
@@ -911,7 +934,7 @@ public class PptTopLevel
       if (vi.isStaticConstant())
         continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
-      if (slice1.po_higher.size() > 0) {
+      if (slice1.isControlled()) {
 	// let invariant flow from controlling slice
 	if (Global.debugInfer.isDebugEnabled())
 	  Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled.");
@@ -937,8 +960,8 @@ public class PptTopLevel
 	VarInfo var2 = var_infos[i2];
 	if (var2.isStaticConstant())
 	  continue;
-        PptSlice slice2 = new PptSlice2(this, var1, var2);
-	if (slice2.po_higher.size() > 0) {
+        PptSlice2 slice2 = new PptSlice2(this, var1, var2);
+	if (slice2.isControlled()) {
 	  // let invariant flow from controlling slice
 	  if (Global.debugInfer.isDebugEnabled())
 	    Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled.");
@@ -986,7 +1009,7 @@ public class PptTopLevel
               continue;
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
-	    if (slice3.po_higher.size() > 0) {
+	    if (slice3.isControlled()) {
 	      // let invariant flow from controlling slice
 	      if (Global.debugInfer.isDebugEnabled())
 		Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled.");

@@ -44,8 +44,7 @@ public final class PptSlice3
     super(parent, var_infos);
     Assert.assert(var_infos.length == 3 );
 
-    Dataflow.init_pptslice_po(this, true);
-    Dataflow.init_pptslice_po(this, false);
+    Dataflow.init_pptslice_po(this);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
@@ -64,11 +63,8 @@ public final class PptSlice3
   void instantiate_invariants() {
     Assert.assert(!no_invariants);
 
-    if (po_higher.size() > 0) {
-      if (this.debugged || debug.isDebugEnabled())
-	debug.info("instantiate_invariants for " + name + " skipped because controlled");
-      return;
-    }
+    // This test should be done by caller (PptTopLevel):
+    // if (isControlled()) return;
 
     // Instantiate invariants
     if (this.debugged || debug.isDebugEnabled())
