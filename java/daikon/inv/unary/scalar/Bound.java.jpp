@@ -202,7 +202,7 @@ would not happen in the string "x LT c"!
   /**
    * Represents the invariant that each element of a LONG sequence is
    * GREATER than or equal to a constant. Prints as 'x[] elements GTE
-   * c'
+   * c'.
    */
 #endif
 // One reason not to combine LowerBound and UpperBound into a single range

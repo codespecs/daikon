@@ -486,14 +486,14 @@ public class DeclWriter extends DaikonWriter
         checkForString(type, name, offset);
     }
 
-    //determines if type has exactly 1 non-static field of same type
-    // (implicit list) and prints asociated decls
+    // Determines if type has exactly 1 non-static field of same type
+    // (implicit list) and prints asociated decls.
     private void checkForImplicitList(Class type, String name, String offset, int depth)
     {
         //disable this method until dtracewriter finishes analogous method
         if(1 == 1)
             return;
-        
+
         if (type.isPrimitive() || type.isArray())
             return;
 
@@ -523,8 +523,8 @@ public class DeclWriter extends DaikonWriter
         }
     }
 
-    //determines if type implements list
-    //and prints associated decls, if necessary
+    // Determines if type implements list
+    // and prints associated decls, if necessary
     private void checkForListDecl(Class type, String name, String offset,
                                   boolean inArray)
     {

@@ -225,10 +225,10 @@ public class InvariantDoclet
             Assert.assertTrue ((permute_cnt == 3) || (permute_cnt == 6));
             if (permute_cnt == 3)
               out.println ("Since the function is symmetric, only the "
-                           + "permutations xyz, yxz, and zxy are checked. ");
+                           + "permutations xyz, yxz, and zxy are checked.");
             else
               out.println ("Since the function is non-symmetric, all six "
-                           + "permutations of the variables are checked");
+                           + "permutations of the variables are checked.");
           }
           last_fb = fb_function;
           permutes = fb_permute;

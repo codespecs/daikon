@@ -94,7 +94,7 @@ import java.util.*;
 
 /**
  * Represents two PRIMITIVE sequences where one sequence is a subsequence
- * of the other.  Prints as "x[] is a subsequence of y[]"
+ * of the other.  Prints as "x[] is a subsequence of y[]".
  **/
 
 public class CLASSNAME

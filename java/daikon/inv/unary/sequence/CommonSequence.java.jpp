@@ -36,7 +36,7 @@ import utilMDE.*;
 
 /**
  * Represents PRIMITIVE sequences that contain a common subset.  Prints as
- * "{e1, e2, e3, ...} subset of x[]"
+ * "{e1, e2, e3, ...} subset of x[]".
  **/
 
 public class CLASSNAME

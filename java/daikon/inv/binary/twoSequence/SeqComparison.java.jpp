@@ -252,12 +252,12 @@ import java.util.*;
 /**
  * Represents invariants between two PRIMITIVE sequences.  If order
  * matters for each variable (which it does by default), then the
- * sequences are compared lexically.  Prints as 'x[] COMPARE y[] lexically'
+ * sequences are compared lexically.  Prints as 'x[] COMPARE y[] lexically'.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
  * If order doesn't matter for each variable, then the sequences
  * are compared to see if they are set equivalent.  Prints as
- * "x[] == y[]"
+ * "x[] == y[]".
 #endif
  *
  * If the auxillary information (eg, order matters) doesn't match then
