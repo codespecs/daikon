@@ -25,7 +25,7 @@ $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
 $ENV{LACKWIT_ARGS} = "-ignore __restrict";
 
-my $emitheaders_output = `~mernst/research/invariants/front-end/c/lackwit/bin/EmitHeaders $lackwit_home/lib/Default.sigs`;
+my $emitheaders_output = `EmitHeaders $lackwit_home/lib/Default.sigs`;
 die "EmitHeaders failed:\n$emitheaders_output\n" if ($CHILD_ERROR != 0);
 
 unshift @files, "$lackwit_home/lib/libc.c";
