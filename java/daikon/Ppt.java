@@ -32,6 +32,33 @@ public abstract class Ppt implements java.io.Serializable {
   public final String name;
   public final PptName ppt_name;
 
+  // It might make more sense to put the sorting into
+  // PptMap.sortedIterator(), for example, but it's in here for now
+
+  // Orders ppts by the name, except . and : are swapped
+  //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
+  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
+  public static final Comparator NAME_COMPARATOR = new Comparator() {
+      public int compare(Object o1, Object o2) {
+	String name1 = ((Ppt) o1).name;
+	String name2 = ((Ppt) o2).name;
+	if (name1.endsWith(FileIO.exit_suffix))
+	  name1 += "~";
+	if (name2.endsWith(FileIO.exit_suffix))
+	  name2 += "~";
+	
+	String swapped1 = swap(name1, '.', ':');
+	String swapped2 = swap(name2, '.', ':');
+	
+	return swapped1.compareTo(swapped2);
+      }
+      
+      static String swap(String s, char a, char b) {
+	final char magic = '\255';
+	return s.replace(a, magic).replace(b, a).replace(magic, b);
+      }
+    };
+
   protected Ppt(String name) {
     this.name = name;
     ppt_name = new PptName(name);
@@ -223,18 +250,6 @@ public abstract class Ppt implements java.io.Serializable {
     return null;
   }
 
-  public static final class NameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
-        return 0;
-      PptSlice ppt1 = (PptSlice) o1;
-      PptSlice ppt2 = (PptSlice) o2;
-      // This class is used for comparing PptSlice objects.
-      // (Should it be in PptSlice?)
-      Assert.assert(ppt1.parent == ppt2.parent);
-      return ppt1.name.compareTo(ppt2.name);
-    }
-  }
 
   // Argument is a vector of PptTopLevel objects.
   // Result does NOT include static constants, as it will be used to
@@ -275,5 +290,22 @@ public abstract class Ppt implements java.io.Serializable {
     }
     return (VarInfo[]) result.toArray(new VarInfo[] { });
   }
+
+
+  /* It does not appear this is being used anywhere - mjh
+  public static final class NameComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      PptSlice ppt1 = (PptSlice) o1;
+      PptSlice ppt2 = (PptSlice) o2;
+      // This class is used for comparing PptSlice objects.
+      // (Should it be in PptSlice?)
+      Assert.assert(ppt1.parent == ppt2.parent);
+      return ppt1.name.compareTo(ppt2.name);
+    }
+  }
+  */
+
 
 }

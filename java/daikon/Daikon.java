@@ -237,7 +237,7 @@ public final class Daikon {
 
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
-    TreeSet all_ppts_sorted = new TreeSet(new PptOrderComparator());
+    TreeSet all_ppts_sorted = new TreeSet(Ppt.NAME_COMPARATOR);
     all_ppts_sorted.addAll(all_ppts.asCollection());
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
@@ -307,42 +307,6 @@ public final class Daikon {
 
     System.out.println("Exiting");
 
-  }
-
-  // It might make more sense to put the sorting into
-  // PptMap.sortedIterator(), for example, but it's in here for now
-
-  // Orders ppts by the name, except . and : are swapped
-  //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
-  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
-  private static class PptOrderComparator
-    implements Comparator
-  {
-    static String swap(String s, char a, char b)
-    {
-      final char magic = '\255';
-      return s.replace(a, magic).replace(b, a).replace(magic, b);
-    }
-
-    public int compare(Object o1, Object o2)
-    {
-      String name1 = ((Ppt) o1).name;
-      String name2 = ((Ppt) o2).name;
-      if (name1.endsWith(FileIO.exit_suffix))
-        name1 += "~";
-      if (name2.endsWith(FileIO.exit_suffix))
-        name2 += "~";
-
-      String swapped1 = swap(name1, '.', ':');
-      String swapped2 = swap(name2, '.', ':');
-
-      return swapped1.compareTo(swapped2);
-    }
-
-    public boolean equals(Object o)
-    {
-      return (o instanceof PptOrderComparator);
-    }
   }
 
   public static void add_combined_exits(PptMap ppts) {
