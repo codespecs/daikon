@@ -35,16 +35,18 @@ public class LogicalCompare {
   private static boolean opt_show_count     = false;
   private static boolean opt_show_formulas  = false;
   private static boolean opt_show_valid     = false;
-  private static boolean opt_post_after_pre = false;
+  private static boolean opt_post_after_pre = true;
   private static boolean opt_timing         = false;
   private static boolean opt_show_sets      = false;
+
+  private static Map extra_assumptions;
 
   private static LemmaStack lemmas;
 
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
-      "           WEAK-INVS STRONG-INVS [ENTER-PPT EXIT-PPT]",
+      "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
       "  -h, --help",
       "      Display this usage message",
       "  --config-file FILE",
@@ -64,13 +66,17 @@ public class LogicalCompare {
       "  --show-valid",
       "      Show invariants that are verified as well as those that fail",
       "  --show-sets",
-      "      Show all the invariants asssumed and considered",
+      "      Show, not test, all the invariants that would be considered",
       "  --post-after-pre-failure",
       "      Check postcondition match even if preconditions fail",
+      "  --no-post-after-pre-failure",
+      "      Don't check postcondition match if preconditions fail",
       "  --timing",
       "      Show time required to check invariants",
       "  --filters [bBoOmjpi]",
       "      Control which invariants are removed from consideration",
+      "  --assume FILE",
+      "      Read extra assumptions from FILE",
     }, Global.lineSep);
 
   // Filter options
@@ -214,44 +220,47 @@ public class LogicalCompare {
 //     }
 //   }
 
-  // Check that each of the invariants in CONSEQUENCES follows from
-  // zero or more of the invariants in ASSUMPTIONS. Returns the number
-  // of invariants that can't be proven to follow.
-  private static int evaluateImplications(Vector assumptions,
-                                          Vector consequences)
-  throws SimplifyError {
-    int invalidCount = 0;
-    int mark = lemmas.markLevel();
-    lemmas.pushOrdering();
-    lemmas.pushLemmas(assumptions);
-    if (lemmas.checkForContradiction() == 'T') {
-      System.out.println("Contradictory assumptions:");
-      Vector min = lemmas.minimizeContradiction();
-      LemmaStack.printLemmas(System.out, min);
-      Assert.assertTrue(false, "Aborting");
+  private static int checkConsequences(Vector assumptions, Vector consequences)
+  {
+    Set assumption_formulas = new HashSet();
+    for (int i = 0; i < assumptions.size(); i++) {
+      Lemma lem = (Lemma)assumptions.elementAt(i);
+      assumption_formulas.add(lem.formula);
     }
 
+    int invalidCount = 0;
     for (int i = 0; i < consequences.size(); i++) {
       Lemma inv = (Lemma)consequences.elementAt(i);
-      char result = lemmas.checkLemma(inv);
+      char result;
+      boolean identical = false;
+      if (assumption_formulas.contains(inv.formula)) {
+        result = 'T';
+        identical = true;
+      } else {
+        result = lemmas.checkLemma(inv);
+      }
 
       if (result == 'T') {
         if (opt_proofs) {
-          Lemma[] ass_ary = (Lemma[])assumptions.toArray(new Lemma[1]);
-          Vector/*<Lemma>*/ assume = lemmas.minimizeProof(inv);
-          System.out.println();
-          for (int j = 0; j < assume.size(); j++)
-            System.out.println(((Lemma)assume.elementAt(j)).summarize());
-          System.out.println("----------------------------------");
-          System.out.println(inv.summarize());
-          if (opt_show_formulas) {
+          if (identical) {
+            System.out.println("Identical");
+          } else {
+            Lemma[] ass_ary = (Lemma[])assumptions.toArray(new Lemma[1]);
+            Vector/*<Lemma>*/ assume = lemmas.minimizeProof(inv);
             System.out.println();
             for (int j = 0; j < assume.size(); j++)
-              System.out.println("    "  + ((Lemma)assume.elementAt(j))
-                                 .formula);
-            System.out.println("    ----------------------"
-                               + "--------------------");
-            System.out.println("    " + inv.formula);
+              System.out.println(((Lemma)assume.elementAt(j)).summarize());
+            System.out.println("----------------------------------");
+            System.out.println(inv.summarize());
+            if (opt_show_formulas) {
+              System.out.println();
+              for (int j = 0; j < assume.size(); j++)
+                System.out.println("    "  + ((Lemma)assume.elementAt(j))
+                                   .formula);
+              System.out.println("    ----------------------"
+                                 + "--------------------");
+              System.out.println("    " + inv.formula);
+            }
           }
         } else if (opt_show_valid) {
           System.out.print("Valid: ");
@@ -277,9 +286,83 @@ public class LogicalCompare {
           System.out.println("    " + inv.formula);
       }
     }
+    return invalidCount;
+  }
+
+
+  // Check that each of the invariants in CONSEQUENCES follows from
+  // zero or more of the invariants in ASSUMPTIONS. Returns the number
+  // of invariants that can't be proven to follow.
+  private static int evaluateImplications(Vector assumptions,
+                                          Vector consequences)
+  throws SimplifyError {
+    int mark = lemmas.markLevel();
+    lemmas.pushOrdering();
+    lemmas.pushLemmas(assumptions);
+    if (lemmas.checkForContradiction() == 'T') {
+      if (opt_post_after_pre) {
+        // Shouldn't be reached anymore
+        lemmas.removeContradiction();
+        System.out.println("Warning: had to remove contradiction(s)");
+      } else {
+        System.out.println("Contradictory assumptions:");
+        Vector min = lemmas.minimizeContradiction();
+        LemmaStack.printLemmas(System.out, min);
+        Assert.assertTrue(false, "Aborting");
+      }
+    }
+
+    int invalidCount = checkConsequences(assumptions, consequences);
+
     lemmas.popToMark(mark);
     return invalidCount;
   }
+
+  private static int evaluateImplicationsCarefully(Vector safeAssumptions,
+                                                   Vector unsafeAssumptions,
+                                                   Vector consequences)
+    throws SimplifyError {
+    int mark = lemmas.markLevel();
+    Vector assumptions = new Vector();
+    lemmas.pushOrdering();
+    lemmas.pushLemmas(safeAssumptions);
+    if (lemmas.checkForContradiction() == 'T') {
+      System.out.println("Contradictory assumptions:");
+      Vector min = lemmas.minimizeContradiction();
+      LemmaStack.printLemmas(System.out, min);
+      Assert.assertTrue(false, "Aborting");
+    }
+    assumptions.addAll(safeAssumptions);
+
+    int j = unsafeAssumptions.size();
+    for (int i = 0; i < unsafeAssumptions.size(); i++) {
+      List unsafe = unsafeAssumptions.subList(i, j);
+      boolean safe = false;
+      while (!safe && unsafe.size() > 0) {
+        int innerMark = lemmas.markLevel();
+        lemmas.pushLemmas(new Vector(unsafe));
+        if (lemmas.checkForContradiction() == 'T') {
+          lemmas.popToMark(innerMark);
+          j = i + unsafe.size();
+          unsafe = unsafe.subList(0, unsafe.size() / 2);
+        } else {
+          safe = true;
+          i += unsafe.size() - 1;
+          assumptions.addAll(unsafe);
+        }
+      }
+      if (!safe) {
+        Assert.assertTrue(unsafe.size() == 0);
+        j = unsafeAssumptions.size();
+      }
+    }
+
+    int invalidCount = checkConsequences(assumptions, consequences);
+
+    lemmas.popToMark(mark);
+    return invalidCount;
+  }
+
 
   // Initialize the theorem prover. Whichever mode we're in, we should
   // only do this once per program run.
@@ -333,15 +416,16 @@ public class LogicalCompare {
       System.out.println("");
 
       v = new Vector();
-      v.addAll(translateStraight(t_post));
+      v.addAll(translateRemovePre(t_post));
       System.out.println("Strong postconditions (Tpost):");
       LemmaStack.printLemmas(System.out, v);
       System.out.println("");
 
       v = new Vector();
-      v.addAll(translateStraight(a_post));
+      v.addAll(translateRemovePre(a_post));
       System.out.println("Weak postconditions (Apost):");
       LemmaStack.printLemmas(System.out, v);
+      return;
     }
 
     if (opt_show_count)
@@ -363,12 +447,18 @@ public class LogicalCompare {
     System.out.println("================================================="
                        + "=============================");
 
-    Vector/*<Lemma>*/ post_assumptions = new Vector();
+
+    Vector/*<Lemma>*/ post_assumptions_safe = new Vector();
+    Vector/*<Lemma>*/ post_assumptions_unsafe = new Vector();
     Vector/*<Lemma>*/ post_conclusions = new Vector();
 
-    //    post_assumptions.addAll(Lemma.lemmasVector());
-    post_assumptions.addAll(translateAddOrig(a_pre));
-    post_assumptions.addAll(translateStraight(t_post));
+    post_assumptions_unsafe.addAll(translateAddOrig(a_pre));
+    post_assumptions_safe.addAll(translateStraight(t_post));
+    String ppt_name = test_enter_ppt.ppt_name.name();
+    if (extra_assumptions.containsKey(ppt_name)) {
+      Vector assumptions = (Vector)extra_assumptions.get(ppt_name);
+      post_assumptions_unsafe.addAll(assumptions);
+    }
 
     post_conclusions.addAll(translateRemovePre(a_post));
     Collections.sort(post_conclusions);
@@ -377,7 +467,8 @@ public class LogicalCompare {
       System.out.println("Weak postconditions consist of "
                          + post_conclusions.size() + " invariants.");
 
-    evaluateImplications(post_assumptions, post_conclusions);
+    evaluateImplicationsCarefully(post_assumptions_safe,
+                                  post_assumptions_unsafe, post_conclusions);
     long time_elapsed = System.currentTimeMillis() - processing_time_start;
     num_checked += post_conclusions.size();
     if (opt_show_count)
@@ -386,30 +477,87 @@ public class LogicalCompare {
       System.out.println("Total time " + time_elapsed + "ms");
   }
 
+  private static void readExtraAssumptions(String filename) {
+    File file = new File(filename);
+    try {
+      LineNumberReader reader = UtilMDE.LineNumberFileReader(file);
+      String line;
+      String ppt_name = null;
+      while ((line = reader.readLine()) != null) {
+        line = line.trim();
+        if (line.equals("") || line.startsWith("#")) {
+          continue;
+        } else if (line.startsWith("PPT_NAME")) {
+          ppt_name = line.substring("PPT_NAME".length()).trim();
+          if (!extra_assumptions.containsKey(ppt_name)) {
+            extra_assumptions.put(ppt_name, new Vector());
+          }
+        } else if (line.startsWith("(")) {
+          if (ppt_name == null) {
+            System.err.println("Must specify PPT_NAME before " +
+                               "giving a formula");
+            Assert.assertTrue(false);
+          }
+          String formula, comment;
+          // XXX This should really read a balanced Simplify
+          // expression, then look for a comment after that. But that
+          // would involve counting parens and vertical bars and
+          // backslashes, which I'm too lazy to do right now.
+          if (line.indexOf("#") != -1) {
+            formula = line.substring(0, line.indexOf("#"));
+            comment = line.substring(line.indexOf("#") + 1);
+          } else {
+            formula = line;
+            comment = "User-supplied assumption";
+          }
+          formula = formula.trim();
+          comment = comment.trim();
+          Vector assumption_vec = (Vector)extra_assumptions.get(ppt_name);
+          assumption_vec.add(new Lemma(comment, formula));
+        } else {
+          System.err.println("Can't parse " + line + " in assumptions file");
+          System.err.println("Should be `PPT_NAME <ppt_name>' or a Simplify " +
+                             "formula (starting with `(')");
+          Assert.assertTrue(false);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      System.err.println("File not found: " + filename);
+      Assert.assertTrue(false);
+    } catch (IOException e) {
+      System.err.println("IO error reading " + filename);
+      Assert.assertTrue(false);
+    }
+  }
+
   public static void main(String[] args)
     throws FileNotFoundException, IOException, ClassNotFoundException,
            SimplifyError
   {
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt("help",                   LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("config-file",      LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("cfg",              LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("debug-all",              LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("dbg",              LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("proofs",                 LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-count",             LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-formulas",          LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-valid",             LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-sets",              LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("timing",                 LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("filters",          LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("cfg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("config-file",         LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("dbg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("debug-all",                 LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("filters",             LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("help",                      LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("post-after-pre-failure",    LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("no-post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("proofs",                    LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("show-count",                LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("show-formulas",             LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("show-sets",                 LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("show-valid",                LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("timing",                    LongOpt.NO_ARGUMENT, null, 0),
     };
 
     Configuration.getInstance().apply("daikon.inv.Invariant." +
                                       "simplify_define_predicates=true");
     Configuration.getInstance().apply("daikon.simplify.Session." +
                                       "simplify_max_iterations=2147483647");
+
+    extra_assumptions = new LinkedHashMap();
 
     Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h",
                           longopts);
@@ -451,6 +599,8 @@ public class LogicalCompare {
           opt_show_sets = true;
         } else if (option_name.equals("post-after-pre-failure")) {
           opt_post_after_pre = true;
+        } else if (option_name.equals("no-post-after-pre-failure")) {
+          opt_post_after_pre = false;
         } else if (option_name.equals("timing")) {
           opt_timing = true;
         } else if (option_name.equals("filters")) {
@@ -459,6 +609,8 @@ public class LogicalCompare {
             filters[f.charAt(i)] = true;
           }
           user_filters = true;
+        } else if (option_name.equals("assume")) {
+          readExtraAssumptions(g.getOptarg());
         } else {
           Assert.assertTrue(false);
         }
@@ -480,6 +632,14 @@ public class LogicalCompare {
 
     LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
+    int num_args = args.length - g.getOptind();
+
+    if (num_args < 2) {
+      System.err.println("Must have at least two non-option arguments");
+      System.out.println(usage);
+      System.exit(1);
+    }
+
     String app_filename = args[g.getOptind() + 0];
     String test_filename = args[g.getOptind() + 1];
 
@@ -489,9 +649,13 @@ public class LogicalCompare {
     PptMap test_ppts = FileIO.read_serialized_pptmap(new File(test_filename),
                                                      true // use saved config
                                                      );
-    if (args.length == g.getOptind() + 4) {
+    if (num_args == 4 || num_args == 3) {
       String enter_ppt_name = args[g.getOptind() + 2];
-      String exit_ppt_name = args[g.getOptind() + 3];
+      String exit_ppt_name;
+      if (num_args == 4)
+        exit_ppt_name = args[g.getOptind() + 3];
+      else
+        exit_ppt_name = ""; // s/b nonexistent
       startProver();
 
       System.out.println("Comparing " + enter_ppt_name + " and "
@@ -509,11 +673,12 @@ public class LogicalCompare {
         app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
       if (test_exit_ppt == null)
         test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
+
       Assert.assertTrue(app_exit_ppt != null);
       Assert.assertTrue(test_exit_ppt != null);
       comparePpts(app_enter_ppt, test_enter_ppt,
                   app_exit_ppt, test_exit_ppt);
-    } else if (args.length == g.getOptind() + 2) {
+    } else if (num_args == 2) {
       startProver();
 
       Collection app_ppt_names = app_ppts.nameStringSet();
@@ -556,6 +721,10 @@ public class LogicalCompare {
                     app_exit_ppt, test_exit_ppt);
 
       }
+    } else {
+      System.err.println("Too many arguments");
+      System.out.println(usage);
+      System.exit(1);
     }
   }
 }
