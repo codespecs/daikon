@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.16
+@center Daikon version 2.3.18
 
 @sp 1
-@c Daikon version 2.3.16 date
-@center October  1, 2002
+@c Daikon version 2.3.18 date
+@center October 9, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.16, released October  1, 2002.
+It describes Daikon version 2.3.18, released October 9, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.16, released October  1, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.16, released October  1, 2002.
+It describes Daikon version 2.3.18, released October 9, 2002.
 @end ifnottex
 
 @menu
@@ -594,17 +594,34 @@ when compiling C and C++ programs in which you wish to detect invariants.
 License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C/C++ front end.  If you hold such a license, send mail to
-@email{daikon@@pag.lcs.mit.edu} to obtain a patch to the EDG front end
-(version 2.45).  The patch file is named @file{dfec-src.tgz}.  To build
-dfec for yourself, perform the following steps:
+@email{daikon@@pag.lcs.mit.edu} to obtain a patch to the EDG front end.
+To build dfec for yourself, perform the following steps:
 @enumerate
-@item Unpack the EDG 2.45 source tree somewhere.
-@item Unpack @file{dfec-src.tgz} in the @file{release_2.45/src/}
-subdirectory.  This installs new Makefiles and adds the dfec source
-modifications.
-@item Run @command{make} from the @file{release_2.45/} subdirectory.
-This creates the dfec executable,  @file{release_2.45/bin/dfec}.
+@item Unpack your EDG source code (which you obtained from EDG).
+@example
+    tar zxf edgcpfe_3.0.tar.gz
+@end example
+@item cd into the EDG source directory
+@example
+    cd release_3.0
+@end example
+@item Apply the patch (which you received from the Daikon group) with
+@option{-p1}; this adds the dfec source modifications.
+@example
+    patch -p1 < edg-3.0_to_dfec.patch
+@end example
+@item Compile the software, creating the dfec executable
+@file{release_3.0/bin/dfec}.
+@example
+    make
+@end example
 @end enumerate
+
+(A different patch is available for EDG version 2.45; substitute
+@file{2.45} for @file{3.0} in the above instructions.  However, we
+recommend the use of EDG version 3.0, because the version of dfec built
+using EDG 2.45 contains some known bugs that are corrected in the
+version of dfec that is built using EDG 3.0.)
 
 @c how to put something on your path:
 @c 	      <li>copy or link the @command{dfej} program to a directory on
@@ -829,10 +846,11 @@ invariants}.
 into the Java source program.
 
 @example
-java daikon.tools.jtb.MergeESC StackAr.inv ../DataStructures/StackAr.java
+cd ..
+java daikon.tools.jtb.MergeESC daikon-output/StackAr.inv DataStructures/StackAr.java
 @end example
 
-Now examine file @file{../DataStructures/StackAr.java-escannotated}.
+Now examine file @file{DataStructures/StackAr.java-escannotated}.
 For more information about the MergeESC program, @xref{MergeESC}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
@@ -5225,7 +5243,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.16, released October  1, 2002.
+This manual describes Daikon version 2.3.18, released October 9, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -5267,6 +5285,14 @@ last (experimental as of May 2002) one is a binary rewriter.)
 Its C/C++ front end is rewritten from scratch; it instruments only
 procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the Daikon distribution.
+
+Daikon 3 is a redesign of the invariant detection engine to work
+incrementally -- that is, to examine each sample (execution of a
+program point) once, then discard it.  By contrast, Daikon 1 and
+Daikon 2 made multiple passes over the data.  This simplified their
+algorithms but required storing all the data in memory at once, which
+was prohibitive, particularly since data trace files may be gigabytes
+in size.
 
 
 @node    License, Credits, History, Details

@@ -9,6 +9,17 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.17 (9 October 2002):
+
+Version numbers were wrong in last release; re-release to fix the problem.
+
+Manual improvements:  note that local variables are not examined; that
+Daikon can work over data that comes from sources other than program
+executions; that all exit points must have the same number of variables;
+that "nonsensical" is permitted as a value in a .dtrace file.
+
+----------------
+
 2.3.16 (1 October 2002):
 
 Bugfix release.
