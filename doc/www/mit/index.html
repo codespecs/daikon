@@ -172,13 +172,13 @@ already be on your path.  If you do check out the <tt>dfej</tt> directory,
 use this command:
 <pre>
     cd ~/research/invariants
-    cvs -d /g4/projects/invariants/.CVS co dfej
+    cvs -d $pag/projects/invariants/.CVS co dfej
 </pre>
 
 You may also want the <tt>papers</tt> directory:
 <pre>
     cd ~/research/invariants
-    cvs -d /g4/projects/invariants/.CVS co papers
+    cvs -d $pag/projects/invariants/.CVS co papers
 </pre>
 
 If you want to instrument C programs, get kvasir:
@@ -205,9 +205,8 @@ anonymous CVS.
 
 If you use regular remote CVS, you will need to set up your environment
 properly on the remote machine.
-(This was done for you when your PAG account was <a
-href="pag-account.html">created</a>, so you don't have
-to worry about it when using a local CVS checkout.)
+(You don't have to worry about this step when using a local CVS checkout on
+the CSAIL machines.)
 For example, you will want to copy over your dotfiles or at least copy the
 contents of the dotfiles in <tt>$inv/doc/www/mit/</tt> (at a minimum,
 <tt>.bashrc</tt> or <tt>.cshrc</tt>) to your remote machine, and you may
@@ -264,6 +263,12 @@ href="eclipse-pag.html">instructions for using Eclipse at PAG</a>.
 <p>
 
 In order to permit other members of the Daikon project to read your files,
+please make them readable by the <tt>pag</tt> group, as described on the <a
+href="http://pag.csail.mit.edu/pag/logistics.html#pag-computers">PAG
+computers</a>.
+
+<!--
+In order to permit other members of the Daikon project to read your files,
 you should either make them world-readable, or place them in the
 <tt>invariants</tt> group and make them group-readable.  You may or may not
 need to re-run the following commands periodically to ensure that new files
@@ -279,6 +284,7 @@ chgrp -R invariants <em>DIR</em>
 </pre>
 </blockquote>
 <p>
+-->
 
 A few other environment details:
 <ul>
@@ -287,39 +293,23 @@ A few other environment details:
 <pre>
 	chmod a+x invariants/scripts/*
 </pre>
-      (They should be executable already when you check them out from the
-      CVS repository, so this step shouldn't be necessary.)
+      (If everything is set up properly, they should be executable already
+      when you check them out from the CVS repository.)
   <li>You can receive an email notification whenever files (in particular
       directories of your choosing) are checked in.  To receive such
       notifications, edit
-      <tt>/g4/projects/invariants/.CVS/CVSROOT/loginfo</tt>.  This file is
+      <tt>$pag/projects/invariants/.CVS/CVSROOT/loginfo</tt>.  This file is
       under RCS control; in Emacs, do <tt>C-x C-q</tt> before editing it
       and again after editing it.  Note that some of the lists of email
-      addresses are space-separated and others are comma-separated.
-  <li>Do <b>not</b> run a compute-intensive screen-saver, which can use up
-      to 99% of machine time, preventing others from effectively using the
-      CPU when you are absent.  (For shared machines, you should log out at
-      night, and certainly over the weekend.)  If you use Gnome, set your
-      preferences to "no screensaver":
-      <ol>
-        <li>Click on the little foot in the lower left
-	<li>Open the following menus: Programs->Settings->Desktop->Screensaver
-	<li>Select "No Screensaver" in the list in the upper left
-	<li>Click 'OK'
-      </ol>
-  <li>To print at CSAIL, set your PRINTER environment variable in either
-      <tt>.cshrc</tt> or </tt>.bashrc</tt>.  (The printers on the various
-      floors are labeled with their names.)
+      addresses are space-separated and others are comma-separated; be
+      careful to use the proper separator.
 </ul>
 <p>
 
-Michael Ernst's work related to invariant inference is in
-<tt>~mernst/research/invariants/</tt>.  Many, but not all, of the files
-under that directory are under CVS version control.  Feel free to look
-around, and also see my dotfiles, such as <tt>~mernst/.cshrc</tt>, for
-potential customizations (but don't go overboard by copying everything
-there).<p>
-
+Feel free to look at other people's dotfiles, such as
+<tt>~<em>USER</em>/.cshrc</tt> and <tt>~<em>USER</em>/.emacs</tt>, for
+potential customizations (but don't go overboard by copying everything you
+find without understanding it).<p>
 
 
 <h2><a name="running-daikon"></a>Running Daikon</h2>

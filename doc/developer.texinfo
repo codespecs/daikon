@@ -1303,7 +1303,7 @@ branch) in December 2003.
 A regular "cvs checkout" gets the trunk.  The "-r" flag specifies a
 branch.  For example, to get the branch as of June 9, 2002, one could do
 @smallexample
-cvs -d /g4/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
+cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
 @end smallexample
 
 Some warnings about analyzing historical versions of Daikon:

@@ -2,11 +2,11 @@
 
 ###########################################################################
 
-BIBDIR ?= /g2/users/mernst/bib
+BIBDIR ?= /afs/csail.mit.edu/u/m/mernst/bib
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/pag.bib ${BIBDIR}/invariants.bib ${BIBDIR}/testing.bib
-BPHOME ?= /g2/users/mernst/bin/src/perl/bibtex2web/lib
+BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
-MDEWWW ?= /g2/users/mernst/www
+MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
 
 ###########################################################################
 
