@@ -20,8 +20,11 @@ config-options.texinfo:
 
 html: daikon.html
 
+# The perl moves </ul> from after the table of contents to before it,
+# preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
 daikon.html: daikon.texinfo .fix-menu
 	makeinfo --html --no-split $<
+	perl -pi -e '$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$1|;' daikon.html
 
 html-chap: daikon_manual_html/daikon.html
 

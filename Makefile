@@ -8,7 +8,7 @@ DOC_FILES_NO_IMAGES := Makefile daikon.texinfo daikon.ps daikon.pdf daikon.html 
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 EMACS_PATHS := emacs/daikon-context-gui.el
-README_FILES := README-daikon-java README-dist
+README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc \
@@ -238,7 +238,7 @@ update-doc-dist-date-and-version:
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo
-	perl -wpi -e 's/(version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
+	perl -wpi -e 's/(version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
@@ -248,7 +248,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	touch doc/CHANGES
 
@@ -319,6 +319,7 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 
 	mkdir /tmp/daikon/doc
 	cp -p doc/README-dist /tmp/daikon/README
+	cp -p doc/README-dist-doc /tmp/daikon/doc/README
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) /tmp/daikon/doc
 	mkdir /tmp/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
