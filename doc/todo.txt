@@ -3,7 +3,36 @@ Time-stamp: <2003-10-30 11:32:12 mernst>
 
 Outstanding Issues
 
-  jhp     10/30/03      Fix invariant documentation
+  jhp     11/11/03      Equality.postProcess creates wrong string equality
+
+    The code appears to create the old StringComparison invariant rather
+    than StringEqual
+
+  jhp     11/10/03      Better solution for PptRelation and splitters
+
+    Currently, PptRelations are created for each parent that has conditional
+    children (both at the leaves and higher up the tree).  The conditional
+    ppts always need these relations as parents so that parent filtering
+    will work.  But non-leaf parents don't want these relations (since they
+    are build from their normal children, not their conditional children).
+    Right now, they are removed from the child list of the parent (but left
+    in the parent list of the child).  This is ugly and a better fix should
+    be added.  One possiblity is to change the parentfilter to autmatically
+    do the filtering for conditionals even if there is no ppt relation.
+
+  jhp     11/05/03      Add some test cases for Debug.java
+
+    We should add some simple automatic tests for Debug.java to insure
+    that its basic functionality is not broken (since it is very confusing
+    when it doesn't work correctly)
+
+  jhp     10/30/03      Fix slice creation in PptTopLevel.mergeInvs()
+
+    Currently all possible slices are created and merged.  I think
+    we could apply is_slice_ok here to not bother with uninteresting
+    slices.  Note this works ok without it, because nothing is found
+    in the unintersting slices in the children.  But it could help
+    efficiency to fix this.     10/30/03      Fix invariant documentation
 
     The invariant documentation now includes versions for each permutation
     of each FunctionBinary function.   This needs to be changed to not
