@@ -254,6 +254,8 @@ public abstract class VarInfoName
   // Special producers, or other helpers
 
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
+    if (node == replacement)
+      return this;
     VarInfoName result = this;
     Replacer r = new Replacer(node, replacement);
     while (result.hasNode(node)) {
@@ -1144,8 +1146,8 @@ public abstract class VarInfoName
   }
 
   /**
-   * A Replacer is a Visitor which makes a copy of a tree, but
-   * replaces some node (and it's children) with another.
+   * A Replacer is a Visitor that makes a copy of a tree, but
+   * replaces some node (and its children) with another.
    **/
   public static class Replacer
     extends AbstractVisitor
