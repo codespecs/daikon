@@ -41,29 +41,39 @@ public abstract class Invariant implements java.io.Serializable {
 
   /**
    * Return 0 if x>=goal.
-   * This value is 0 if x>=goal, 1 if x=1, and otherwise grades between.
+   * This value is 0 if x>=goal, 1 if x<=1, and otherwise grades between.
    **/
-  public static final double prob_is_gt(double x, double goal) {
+  public static final double prob_is_ge(double x, double goal) {
     if (x>=goal)
       return 0;
-    return (goal - x)/(goal-1);
+    if (x<=1)
+      return 1;
+    double result = (goal - x)/(goal-1);
+    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    return result;
   }
 
   /** Return the probability that both conditions are satisfied. */
   public static final double prob_and(double p1, double p2) {
-    Assert.assert(0 <= p1 && p1 <= 1);
-    Assert.assert(0 <= p2 && p2 <= 1);
+    Assert.assert(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
+    Assert.assert(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p2);
 
     // 1 - (1-p1)*(1-p2)
     double result = p1 + p2 - p1*p2;
-    Assert.assert(0 <= result && result <= 1);
+
+    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result);
     return result;
   }
 
   /** Return the probability that all three conditions are satisfied. */
   public static final double prob_and(double p1, double p2, double p3) {
+    Assert.assert(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
+    Assert.assert(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p1);
+    Assert.assert(0 <= p3 && p3 <= 1, "prob_and: bad p3 = " + p1);
+
     double result =  1 - (1 - p1) * (1 - p2) * (1 - p3);
-    Assert.assert(0 <= result && result <= 1);
+
+    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result);
     return result;
   }
 
