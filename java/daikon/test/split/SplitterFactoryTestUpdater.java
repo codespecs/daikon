@@ -129,6 +129,12 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
+  // This method should have a cleaner interface:  it would be better to
+  // have a method that just moves a file, rather than combining it with a
+  // method that also has knowledge about the destination directory and
+  // adding ".goal".  Furthermore, that cleaner interface seems to already
+  // exist in the form of File.renameTo(); the code should either use
+  // File.renameTo, or document why it doesn't.
   /**
    * moves the file named fileName from the tempDir to the target dir and adds
    * ".goal" to the end of its name.
