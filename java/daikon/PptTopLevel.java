@@ -73,7 +73,7 @@ public class PptTopLevel
 
   /** Debug tracer for equalTo checks **/
   public static final Category debugEqualTo =
-    Category.getInstance("daikon.PptTopLevel.equalTo");
+    Category.getInstance("daikon.PptTopLevel.equal");
 
   /** Debug tracer for addImplications. **/
   public static final Category debugAddImplications =
@@ -113,6 +113,10 @@ public class PptTopLevel
   // [INCR] private int values_num_values;
   // [INCR] private String values_tuplemod_samples_summary;
 
+  public int getSamplesSeen() {
+    return values_num_samples;
+  }
+
   /**
    * All the Views (that is, slices) on this are stored as values in
    * the HashMap
@@ -120,7 +124,7 @@ public class PptTopLevel
    * occur, such as receiving a new value, deriving variables, or
    * discarding data.
    **/
-  private HashMap views;
+  private HashMap/*[VarInfo[]->PptSlice]*/ views;
 
   // Temporarily have a separate collection for PptConditional views.
   // In the long run, I'm not sure whether the two collections will be
@@ -213,6 +217,13 @@ public class PptTopLevel
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
   public PptSlice0 joiner_view = new PptSlice0(this);
+
+
+  /**
+   * Holds Equality invariants.  Never null after invariants are
+   * instantiated.
+   **/
+  public PptSliceEquality equality_view;
 
   // The set of redundant_invs is filled in by the below method
   // mark_implied_via_simplify.  Contents are either Invariant
@@ -682,6 +693,9 @@ public class PptTopLevel
     //       debugFlow.debug ("add_and_flow for " + ppt_name);
     //     }
 
+    // Doable, but commented out for efficiency
+    // repCheck(); 
+
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars);
 
@@ -739,6 +753,9 @@ public class PptTopLevel
    * @param count the number of samples that vt represents
    **/
   public List add(ValueTuple vt, int count) {
+    // Doable, but commented out for efficiency
+    // repCheck(); 
+
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars, name);
 
@@ -747,10 +764,14 @@ public class PptTopLevel
     //     }
 
     if (debugSuppress.isDebugEnabled()) {
-      debugSuppress.debug ("<<< Doing add() for " + name);
+      debugSuppress.debug ("<<< Doing add for " + name);
       // debugSuppress.debug ("    with vt " + vt);
     }
 
+    if (debugFlow.isDebugEnabled()) {
+      debugFlow.debug ("<<< Doing add for " + name);
+      debugFlow.debug ("    with vt " + vt);
+    }
 
     if (values_num_samples == 0) {
       debugFlow.debug ("  Instantiating views for the first time");
@@ -766,8 +787,11 @@ public class PptTopLevel
       initiateSuppression();
     }
 
-    values_num_samples += count;
+    if (Daikon.use_equality_set) {
+      equality_view.add (vt, count);
+    }
 
+    values_num_samples += count;
 
     Set viewsToCheck = new HashSet(viewsAsCollection());
 
@@ -921,7 +945,7 @@ public class PptTopLevel
    * those invariants.
    **/
   public void instantiate_views_and_invariants() {
-    if (debug.isDebugEnabled())
+    if (debug.isDebugEnabled()) 
       debug.debug("instantiate_views_and_invariants for " + name);
 
     // Now make all of the views (and thus candidate invariants)
@@ -964,16 +988,28 @@ public class PptTopLevel
     addSlices(slices_vector);
   }
 
-  // A method of adding a collection of slices to the views of a PptTopLevel
+  /**
+   * Add a collection of slices to the views of a PptTopLevel
+   **/
   private void addSlices(Collection slices) {
     for (Iterator i=slices.iterator(); i.hasNext(); ) {
       addSlice((PptSlice)i.next());
     }
   }
 
-  // Adds a single slice to the views variable
-  private void addSlice(PptSlice slice) {
+  /**
+   * Add a single slice to the views variable
+   **/
+  void addSlice(PptSlice slice) {
     views.put(Arrays.asList(slice.var_infos),slice);
+  }
+
+  /**
+   * Remove a slice from this PptTopLevel.
+   **/
+  private void removeSlice (PptSlice slice) {
+    Object o = views.remove(Arrays.asList(slice.var_infos));
+    Assert.assertTrue (o != null);    
   }
 
   /**
@@ -1236,19 +1272,25 @@ public class PptTopLevel
 
     // Unary slices/invariants.
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
-    for (int i=vi_index_min; i<vi_index_limit; i++) {
+    for (int i=vi_index_min; i<vi_index_limit; i++) {      
       VarInfo vi = var_infos[i];
+
+      // Debug
+      if (!vi.isCanonical()) continue;
+
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (vi.isStaticConstant()) continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
-      if (slice1.isControlled()) {
-        // let invariant flow from controlling slice
-        if (Global.debugInfer.isDebugEnabled())
-          Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled(1).");
-        continue;
-      }
-      slice1.instantiate_invariants();
+      // Can't do this anymore, because we're using equality.  Use
+      // SelfSuppressionFactories instead
+      //       if (slice1.isControlled()) {
+      //         // let invariant flow from controlling slice
+      //         if (Global.debugInfer.isDebugEnabled())
+      //           Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled(1).");
+      //         continue;
+      //       }
+      slice1.instantiate_invariants(false);
       unary_views.add(slice1);
     }
     addViews(unary_views);
@@ -1260,6 +1302,8 @@ public class PptTopLevel
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
       VarInfo var1 = var_infos[i1];
+      if (!var1.isCanonical()) continue;
+
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (var1.isStaticConstant()) continue;
@@ -1267,17 +1311,19 @@ public class PptTopLevel
       int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
         VarInfo var2 = var_infos[i2];
+        if (!var2.isCanonical()) continue;
+
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
         PptSlice2 slice2 = new PptSlice2(this, var1, var2);
-        if (slice2.isControlled()) {
-          // let invariant flow from controlling slice
-          if (Global.debugInfer.isDebugEnabled())
-            Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled(2).");
-          continue;
-        }
-        slice2.instantiate_invariants();
+        //         if (slice2.isControlled()) {
+        //           // let invariant flow from controlling slice
+        //           if (Global.debugInfer.isDebugEnabled())
+        //             Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled(2).");
+        //           continue;
+        //         }
+        slice2.instantiate_invariants(false);
         binary_views.add(slice2);
       }
     }
@@ -1293,6 +1339,8 @@ public class PptTopLevel
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
+        if (!var1.isCanonical()) continue;
+      
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var1.isStaticConstant()) continue;
@@ -1303,6 +1351,8 @@ public class PptTopLevel
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
+          if (!var2.isCanonical()) continue;
+
           // Eventually, add back in this test as "if constant and no
           // comparability info exists" then continue.
           // if (var2.isStaticConstant()) continue;
@@ -1318,6 +1368,8 @@ public class PptTopLevel
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assertTrue((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
+            if (!var3.isCanonical()) continue;
+
             // Eventually, add back in this test as "if constant and no
             // comparability info exists" then continue.
             // if (var3.isStaticConstant()) continue;
@@ -1331,13 +1383,13 @@ public class PptTopLevel
             }
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
-            if (slice3.isControlled()) {
-              // let invariant flow from controlling slice
-              if (Global.debugInfer.isDebugEnabled())
-                Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled(3).");
-              continue;
-            }
-            slice3.instantiate_invariants();
+            //             if (slice3.isControlled()) {
+            //               // let invariant flow from controlling slice
+            //               if (Global.debugInfer.isDebugEnabled())
+            //                 Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled(3).");
+            //               continue;
+            //             }
+            slice3.instantiate_invariants(false);
             if (Global.debugInfer.isDebugEnabled()) {
               Global.debugInfer.debug("Instantiated for PptSlice3");
             }
@@ -1354,6 +1406,7 @@ public class PptTopLevel
 
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
+    repCheck();
   }
 
   /**
@@ -2559,6 +2612,73 @@ public class PptTopLevel
   }
 
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Post processing after data trace files are read (but before printing)
+  ///
+
+  /**
+   * Two things: a) convert Equality invariants into normal IntEqual
+   * type for filtering, printing, etc. b) Pivot uninteresting
+   * parameter VarInfos so that each equality set contains only the
+   * interesting one.  a and b have to be done in the above order.
+   **/
+  public void postProcessEquality () {
+    if (debugEqualTo.isDebugEnabled()) {
+      debugEqualTo.debug ("PostProcessingEquality for: " + this.ppt_name);
+    }
+    Assert.assertTrue (equality_view != null);
+    Invariants equalityInvs = equality_view.invs;
+
+    // Pivot invariants to new equality leaders if needed, if old
+    // leaders would prevent printing.  Then postprocess them to
+    // create 2-way equality invariants.
+    for (Iterator i = equalityInvs.iterator(); i.hasNext(); ) {
+      Equality inv = (Equality) i.next();
+      if (debugEqualTo.isDebugEnabled()) {
+        debugEqualTo.debug ("  for: " + inv);
+      }
+      inv.pivot ();
+      inv.postProcess ();
+    }
+
+    // Now pivot the other invariants
+    Collection slices = viewsAsCollection();
+    List pivoted = new LinkedList();
+
+    // PptSlice newSlice = slice.cloneAndInvs(leader, newLeader);
+
+    // Pivot each pptSlice so that each of its VarInfos map back to
+    // their leaders.  Except for PptSlice2s, where the two VarInfos map
+    // to the same leader.  Leave those alone since they're only there
+    // for equality.
+
+    if (debugEqualTo.isDebugEnabled()) {
+      debugEqualTo.debug ("  Doing cloneAllPivots: ");
+    }
+    for (Iterator iSlices = slices.iterator();
+         iSlices.hasNext(); ) {
+      PptSlice slice = (PptSlice) iSlices.next();
+      PptSlice newSlice = slice.cloneAllPivots();
+      if (slice != newSlice) {
+        pivoted.add (newSlice);
+        iSlices.remove(); // Cuz the key is now wrong
+      }
+    }
+
+    // Add in the removed slices
+    for (Iterator iPivoted = pivoted.iterator(); iPivoted.hasNext(); ) {
+      PptSlice oPivoted = (PptSlice) iPivoted.next();
+      addSlice (oPivoted); // Make the key right again
+      if (debugEqualTo.isDebugEnabled()) {
+        debugEqualTo.debug ("  Readded: " + oPivoted);
+      }
+    }
+
+
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Locating implied (same) invariants via the simplify theorem-prover
   ///
@@ -2994,7 +3114,8 @@ public class PptTopLevel
   // As of 1/9/2000, this is only used in print_invariants.
   /**
    * Return a List of all the invariants for the program point.
-   * Also consider using views_iterator() instead.
+   * Also consider using views_iterator() instead.  You can't
+   * modify the result of this.
    **/
   // Used to be known as invariants_vector, but changed to return a
   // List.
@@ -3013,7 +3134,14 @@ public class PptTopLevel
     // }
     // // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
     // result.addAll(implication_view.invs);
-    return result;
+    return Collections.unmodifiableList(result);
+  }
+
+  /**
+   * @return the number of views
+   **/
+  public int views_size() {
+    return viewsAsCollection().size();
   }
 
   /**
@@ -3113,8 +3241,22 @@ public class PptTopLevel
       PptSlice slice = (PptSlice) i.next();
       slice.repCheck();
     }
+    if (equality_view != null) equality_view.repCheck();
     if (dataflow_ppts != null) {
       Assert.assertTrue (dataflow_ppts[dataflow_ppts.length - 1] == this);
     }
+  }
+
+  /**
+   * Debug method to display all slices
+   **/
+  public String debugSlices() {
+    StringBuffer result = new StringBuffer();
+    result.append ("Slices for: " + this.ppt_name);
+    for (Iterator i = viewsAsCollection().iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      result.append ("\n" + slice.toString());
+    }
+    return result.toString();
   }
 }
