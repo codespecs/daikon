@@ -94,11 +94,21 @@ public class Modulus extends SingleScalar {
 
   public boolean isSameFormula(Invariant other)
   {
-    return
-      (modulus != 1) &&
-      (modulus != 0) &&
-      (modulus == ((Modulus) other).modulus) &&
-      (remainder == ((Modulus) other).remainder);
+    Modulus otherModulus = (Modulus) other;
+
+    boolean thisMeaningless = (modulus == 0 || modulus == 1);
+    boolean otherMeaningless = (otherModulus.modulus == 0 ||
+                                otherModulus.modulus == 1);
+    
+    if (thisMeaningless && otherMeaningless) {
+      return true;
+    } else {
+      return
+        (modulus != 1) &&
+        (modulus != 0) &&
+        (modulus == otherModulus.modulus) &&
+        (remainder == otherModulus.remainder);
+    }
   }
 
   public boolean isExclusiveFormula(Invariant other)
