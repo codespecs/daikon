@@ -454,13 +454,12 @@ The following mailing lists (and their archives) are available:
 @item daikon-announce@@lists.csail.mit.edu
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
-To subscribe, visit @uref{http://pag.csail.mit.edu/daikon/download/} or
+To subscribe, visit
 @uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
 @item daikon-discuss@@lists.csail.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://pag.csail.mit.edu/daikon/download/} or
 @uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
 @item daikon-developers@@lists.csail.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
@@ -2029,34 +2028,34 @@ They can be divided into the following categories:
 
 @table @asis
 @item Control output of the Daikon tool
---help
--o
---no_text_output
---format
---show_progress
---no_show_progress
---noversion
---output_num_samples
---files_from
---omit_from_output
+@option{--help}
+@option{-o}
+@option{--no_text_output}
+@option{--format}
+@option{--show_progress}
+@option{--no_show_progress}
+@option{--noversion}
+@option{--output_num_samples}
+@option{--files_from}
+@option{--omit_from_output}
 @item Control invariant detection
---conf_limit
---list_type
---nohierarchy
---suppress_redundant
+@option{--conf_limit}
+@option{--list_type}
+@option{--nohierarchy}
+@option{--suppress_redundant}
 @item Process only part of the trace file
---ppt-select-pattern
---ppt-omit-pattern
---var-omit-pattern
+@option{--ppt-select-pattern}
+@option{--ppt-omit-pattern}
+@option{--var-omit-pattern}
 @item Configuration options
---config
---config_option
+@option{--config}
+@option{--config_option}
 @item Debugging
---debug
---dbg
---track
---disc_reason
---mem_stat
+@option{--debug}
+@option{--dbg}
+@option{--track}
+@option{--disc_reason}
+@option{--mem_stat}
 @end table
 
 
