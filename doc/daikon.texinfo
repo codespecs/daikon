@@ -4747,12 +4747,19 @@ including external commands invoked.
 @section Comma-separated-value front end convertcsv.pl
 
 @cindex csv files
+@cindex comma-delimited files
 @cindex comma-separated-value files
+@cindex tab-separated files
+@cindex Excel files
+@cindex spreadsheet files
 
-To convert a csv file (that is, a file in which values are separated by
-commas) into a @file{.dtrace} file (and a @file{.decls} file) to be used
-by Daikon, run the @command{convertcsv.pl} program found in the
-@file{$DAIKONDIR/bin} directory.  For example,
+Daikon can process data from spreadsheets such as Excel.  In order to
+use such files, first save them in comma-separated-value, also known
+as csv or comma-delimited, format.
+Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
+@file{.decls} file) to be used by Daikon by running the
+@command{convertcsv.pl} program found in the @file{$DAIKONDIR/bin}
+directory.  For example,
 @example
   convertcsv.pl myfile.csv
 @end example
@@ -6969,7 +6976,7 @@ which might look like the following:
 @end example
 @noindent
 This controls how the comparability field in the declarations is interpreted.
-
+The default VarComparability is "implicit".
 
 @menu
 * pptname format::              
