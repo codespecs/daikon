@@ -7,7 +7,7 @@ TRACE_NAME=RatNum.dtrace
 
 PACKAGE=PolyCalc
 
-SOURCE_UNCHANGED:=${PACKAGE}/RatPolyTest.java ${PACKAGE}/RatPoly.java ${PACKAGE}/RatTermVec.java ${PACKAGE}/RatTerm.java
+SOURCE_UNCHANGED:=${PACKAGE}/RatNumTest.java
 SOURCE_TO_DFEJ:=${PACKAGE}/RatNum.java
 
 MAIN_RUN:=junit.textui.TestRunner ${PACKAGE}.RatNumTest
