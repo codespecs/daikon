@@ -25,6 +25,14 @@
 
 ;;; Daikon tags table and manual
 
+(if (not (fboundp 'float-time))
+    (defun float-time ()
+      (let ((time (current-time)))
+	(+ (* 65536.0 (car time))
+	   (cadr time)
+	   (* .000001 (caddr time))))))
+;; Testing: (list (float-time) (float-time-2))
+
 (defun daikon-tags-table ()
   "Use the Daikon TAGS table."
   (interactive)
@@ -48,18 +56,37 @@
 (defun daikon-info ()
   "Browse the Daikon manual, using Info."
   (interactive)
-  (if (and (file-newer-than-file-p
-	    (substitute-in-file-name "$inv/doc/daikon.texinfo")
-	    (substitute-in-file-name "$inv/doc/daikon.info"))
-	   (y-or-n-p "daikon.info is out of date; re-make it? "))
-      (daikon-remake-manual t))
-  (let ((info-buffer (get-buffer "*info*")))
-    (if (and (buffer-live-p info-buffer)
-	     (with-current-buffer info-buffer
-	       (save-match-data
-		 (string-match "/daikon.info$" Info-current-file))))
-	(pop-to-buffer info-buffer)
-      (info (substitute-in-file-name "$inv/doc/daikon.info")))))
+  (let ((remake (and (file-newer-than-file-p
+		      (substitute-in-file-name "$inv/doc/daikon.texinfo")
+		      (substitute-in-file-name "$inv/doc/daikon.info"))
+		     (y-or-n-p "daikon.info is out of date; re-make it? "))))
+    (if remake
+	(let ((default-directory (substitute-in-file-name "$inv/doc/")))
+	  (call-process "make" nil nil nil "info")
+	  (sit-for 0 500)		; let the filesystem find the new file
+	  ;; The above was synchronous and minimal;
+	  ;; the below is asynchronous and maximal.
+	  (daikon-remake-manual t)))
+    (let* ((info-buffer (get-buffer "*info*"))
+	   (info-visiting-daikon
+	    (and (buffer-live-p info-buffer)
+		 (with-current-buffer info-buffer
+		   (save-match-data
+		     (string-match "/daikon.info$" Info-current-file))))))
+      (if info-visiting-daikon
+	  (if (not remake)
+	      (pop-to-buffer info-buffer)
+	    ;; Guarantee that we get the new contents by moving away (to
+	    ;; a different file) then back to this one.
+	    ;; "(Info-directory) (Info-last)" seems not to work (leaves me
+	    ;; at Info-directory), so do the work myself.
+	    (let (file node)
+	      (with-current-buffer info-buffer
+		(setq file Info-current-file
+		      node Info-current-node))
+	      (Info-directory)
+	      (Info-find-node file node)))
+	(info (substitute-in-file-name "$inv/doc/daikon.info"))))))
 
 (defun daikon-remake-manual (&optional force)
   "Remake the Daikon manual.
