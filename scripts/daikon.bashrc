@@ -22,7 +22,7 @@ if [ $DAIKONCLASS_SOURCES ]; then
 else
   CPADD=$DAIKONDIR/daikon.jar
 fi
-if [ ! -z "$CLASSPATH ]; then
+if [ ! -z "$CLASSPATH" ]; then
   export CLASSPATH=${CPADD}:${CLASSPATH}
 else
   export CLASSPATH=${CPADD}
