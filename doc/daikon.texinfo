@@ -323,6 +323,7 @@ distribution,
 permits you to run Daikon and to detect invariants, but does not permit
 you to modify Daikon or to rebuild it.  The source distribution,
 @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
+includes everything from the pre-compiled distrobution
 plus sources for Daikon and for dfej.
 
 @cindex anonymous CVS access to Daikon sources
@@ -1086,6 +1087,7 @@ and it overwrites any previously existing @file{.dtrace} file.
 By default, the instrumented C/C++ program creates its @file{.dtrace}
 file in the current directory, and if a @file{.dtrace} file already
 existed, it is appended to.
+@c XXX Is this true by default?  What about the DTRACEAPPEND environment?
 
 Environment variables DTRACEFILE and DTRACEAPPEND can override the default
 behaviors; see the documentation for the respective instrumenters.
@@ -3055,7 +3057,7 @@ implementation is
 @end example
 @item add_modified
 presents a tuple of values to the invariant.  The @samp{count} variable
-indicates copy may samples have this value.  For example, three calls to
+indicates how many samples have this value.  For example, three calls to
 @samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
 one call to @samp{add_modified} with a @samp{count} parameter of 3.
 @item computeProbability
