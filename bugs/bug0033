@@ -1,13 +1,19 @@
 Version:      $Id$
-Owner:        tohn <tohn>, Jeremy <mistere>
+Owner:        Toh <tohn>, Jeremy <mistere>
 Tool:         Daikon V3
 Summary:      Equality check not working in IOA example.  Problem with PptSlice2.isControlled?
 Severity:     Vexing
-Status:       New
+Status:       Fixed
 Reproducible: Yes
 Description:
 
+[mistere]
+Thanks for digging into this, Toh.  The bug was in isControlled, and
+is fixed now: "pc[turn] == pc[p]" shows up in the output.  We still
+don't do inference over static constants, but I'll look into that
+next.  Please confirm fix and close.
 
+[tohn]
 V3 seems to be skipping the printing of equality invariants, at least
 in IOA output.  I don't know if this is true of Java, since I haven't
 created a similar example there.  
@@ -112,6 +118,9 @@ IntEqual should get instantiated for pc[turn] and pc[p])
 
 --
 $Log$
-Revision 1.1  2002-03-28 07:07:24  tohn
+Revision 1.2  2002-03-28 18:14:24  mistere
+changed bug0033
+
+Revision 1.1  2002/03/28 07:07:24  tohn
 new bug0033
 
