@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-26 16:51:56 mistere>
+# Time-stamp: <2001-11-26 17:28:53 mistere>
 
 # The input is ... TODO
 
@@ -70,6 +70,15 @@ for my $filename (@ARGV) {
     }
   }
 
+}
+
+# ID 0 is special -- we don't know what call graph edge we took (it was an uninstrumented edge)
+{
+  # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
+  my @rec = (0,
+	     "UnknownClass", "unknownMethod", "UnknownClass.java", -1, -1,
+	     "unknownCallingExpression", "(??)", "UnknownClass");
+  push @records, \@rec;
 }
 
 # ********** Post-processing **********
