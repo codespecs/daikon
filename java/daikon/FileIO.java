@@ -304,7 +304,7 @@ public final class FileIO {
 
     for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.add_controlling_ppts(all_ppts);
+      ppt.set_controlling_ppts(all_ppts);
       ppt.compute_entry_ppt(all_ppts);
       if (ppt.entry_ppt != null) {
         ppt.add_orig_vars(ppt.entry_ppt);

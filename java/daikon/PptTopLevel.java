@@ -69,7 +69,8 @@ public class PptTopLevel extends Ppt {
   // controlled ppts, and therefore may be suppressed in the output.
   // For example, public methods are controlled by object invariants,
   // and conditional points are controlled by the unconditional
-  // parent point.
+  // parent point.  This set contains only the immediate controllers,
+  // not the transitive closure of all controllers.
   Set controlling_ppts = new HashSet(); // [PptTopLevel]
 
 
@@ -258,7 +259,7 @@ public class PptTopLevel extends Ppt {
   /// Finding an object or class ppt for a given ppt
   ///
 
-  void add_controlling_ppts(PptMap all_ppts)
+  void set_controlling_ppts(PptMap all_ppts)
   {
     // TODO: also require that this is a public method
     if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
@@ -1453,7 +1454,7 @@ public class PptTopLevel extends Ppt {
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
       // System.out.println("Looking for controller of " + inv.format() + " in " + controller.name);
-      Iterator candidates = controller.invariants_vector().iterator();
+      Iterator candidates = controller.invariants_iterator();
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
 	if (cand_inv.isSameInvariant(inv)) {
@@ -1491,6 +1492,23 @@ public class PptTopLevel extends Ppt {
    **/
   public Iterator views_iterator() {
     return views.iterator();
+  }
+
+  public Iterator invariants_iterator() {
+    return new UtilMDE.MergedIterator(views_iterator_iterator());
+  }
+
+  private Iterator views_iterator_iterator() {
+    return new ViewsIteratorIterator(this);
+  }
+
+  /** An iterator whose elements are themselves iterators that return invariants. **/
+  public static final class ViewsIteratorIterator implements Iterator {
+    Iterator vitor;
+    public ViewsIteratorIterator(PptTopLevel ppt) { vitor = ppt.views_iterator(); }
+    public boolean hasNext() { return vitor.hasNext(); }
+    public Object next() { return ((PptSlice)vitor.next()).invs.iterator(); }
+    public void remove() { throw new UnsupportedOperationException(); }
   }
 
 
@@ -1639,6 +1657,7 @@ public class PptTopLevel extends Ppt {
         }
       }
     }
+
 
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
@@ -1900,7 +1919,7 @@ public class PptTopLevel extends Ppt {
 
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
       if (entry_ppt != null) {
-	Iterator entry_invs = entry_ppt.invariants_vector().iterator();
+	Iterator entry_invs = entry_ppt.invariants_iterator();
 	while (entry_invs.hasNext()) {
 	  Invariant entry_inv = (Invariant) entry_invs.next();
 	  // If entry_inv with orig() applied to everything matches inv
