@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-16 01:41:19 mernst>
+# Time-stamp: <2001-07-18 18:22:20 mernst>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -13,12 +13,21 @@
 use Carp;
 use File::Find;
 
-my $warn_on_no_invariants;
-my $merge_unexpressable;
-my $recursive;
+
+my $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|strictfp|synchronized|transient)\b';
+# my $java_modifers_re = '\s*(?:' . $java_modifier_re . '\s*)*';
+# at least one modifier
+my $java_modifers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
+# matches a full line; groups = ($spaces, $mods, $body, $fieldname);
+
+my $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)$';
+
+my $warn_on_no_invariants;	# whether to warn if no invariants for a ppt.
+my $merge_unexpressable;	# whether to merge unexpressible invariants;
+				#   if false, they are simply discarded.
+my $recursive;			# whether to look recursively for files.
 
 BEGIN {
-  # Nothing to do
   $warn_on_no_invariants = 0;
   $merge_unexpressable = 1;
   $recursive = 0;
@@ -87,12 +96,17 @@ sub simplify_args( $ ) {
   return $newargs;
 }
 
+# Return true if the argumentes are the same modulo whitespace;
+# also, names are permitted to match only up to a prefix.
 sub approx_argsmatch($$) {
   my ($args1, $args2) = @_;
+  # Remove parens
   $args1 =~ s/^\((.*)\)$/$1/;
   $args2 =~ s/^\((.*)\)$/$1/;
+  # Split on commas
   @args1 = split(/\s*,\s*/, $args1);
   @args2 = split(/\s*,\s*/, $args2);
+  # Compare
   if (scalar(@args1) != scalar(@args2)) {
     return 0;
   }
@@ -105,6 +119,7 @@ sub approx_argsmatch($$) {
 }
 
 
+# Return true if the arguments are the same or one is a prefix of the other.
 sub approx_argmatch($$) {
   my ($x, $y) = @_;
   if ($x eq $y) {
@@ -145,6 +160,7 @@ END {
   my %meth_ppt = ();
   for my $ppt (keys %raw) {
     my $methodname = $ppt;
+    # Change "Foo.<init>" to "Foo.Foo".
     $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
 
     $methodname =~ s/\(([^\(\)]*)\).*$//;
@@ -166,17 +182,16 @@ END {
   }, ".");
 
   for my $javafile (@javafiles) {
-    @fields = ();
+    @fields = ();		# only non-primitive fields
     @owned_fields = ();
-    @final_fields = ();
+    @final_fields = ();		# only non-primitive final fields
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
     while (defined($line = <GETFIELDS>)) {
-      # This regexp is repeated near the end below.  Make sure to
-      # change it in both locations.
-      if ($line =~ /^(\s+)(final\s+)?((static|private)[^=]*\b(\w+)\s*[;=].*)$/) {
-	my $fieldname = $5;
+      if ($line =~ /$field_decl_re/) {
+	my $fieldname = $4;
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
+	  # This is not a primitive field
 	  push(@fields,$fieldname);
 	  if ($line =~ /\[\s*\]/) {
 	    push(@owned_fields, $fieldname);
@@ -198,7 +213,9 @@ END {
     $classname =~ s|^.+/([^/]+)$|$1|; # Strip directories
 
     while (defined($line = <IN>)) {
-      if ($line =~ /\b(?:public|private|protected)\b[^=()\n]*\b(\w+)\s*(\([^\)]*\))/) {
+      if (($line !~ /;$/)
+	  && ($line =~ /\b(?:public|private|protected)\b/)
+	  && ($line =~ /\b(\w+)\s*(\([^\)]*\))/)) {
 	# This looks like a declaration of method $methodname.
 	# (Requires public or private or protected to avoid false alarms.)
 	my $methodname = $1;
@@ -304,7 +321,7 @@ END {
 		    # \forall to specify that the rest aren't
 
 		    # change ary[*].field to ary[*]
-		    grep(s/\[\*\]\..*/[*]/g, @mods);		    
+		    grep(s/\[\*\]\..*/[*]/g, @mods);
 
 		    for my $field (@final_fields) {
 		      @mods = grep(!/^this.$field$/, @mods);
@@ -346,7 +363,9 @@ END {
 	  print OUT $postbrace;
 	  if (scalar(@owned_fields) > 0) {
 	    # Skip over as many lines as possible, until I see a control
-	    # structure or a block end or some such.
+	    # structure or a block end or some such.  This attempts to set
+	    # the owner annotation after as many lines as possible, and in
+	    # particular to set it after the variable is set.
 	    my $nextline;
 	    while ((defined($nextline = <IN>))
 		   && (! (
@@ -400,15 +419,15 @@ END {
 	next;
       }
 
-      # This regexp is repeated in the GETFIELDS loop above.  Make
-      # sure to change it in both locations.
-      if ($line =~ /^(\s+)(final\s+)?((static|private)[^=]*\b(\w+)\s*[;=].*)$/) {
-	my ($spaces, $mods, $body, $access, $fieldname) = ($1, $2, $3, $4, $5);
+      if ($line =~ /$field_decl_re/) {
+	my ($spaces, $mods, $body, $fieldname) = ($1, $2, $3, $4);
 	$mods = "" unless defined($mods); # to prevent warnings
 	my $is_owned = grep(/^$fieldname$/, @owned_fields);
 	print OUT "$spaces/*@ spec_public */ $mods$body\n";
 	if ($is_owned) {
 	  print OUT "/*@ invariant $fieldname.owner == this */\n";
+	} else {
+	  # print "not owned: $fieldname @owned_fields\n";
 	}
 	next;
       }
