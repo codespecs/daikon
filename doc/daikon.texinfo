@@ -483,11 +483,6 @@ or
 wget http://pag.csail.mit.edu/daikon/download/daikon.zip
 @end example
 
-@cindex anonymous CVS access to Daikon sources
-Daikon is also available via anonymous CVS@.  If you desire such
-access, send email to the
-@email{daikon-developers@@lists.csail.mit.edu} mailing list.
-
 You may wish to subscribe to one of the mailing lists (@pxref{Mailing
 lists}), in order to be notified of new releases or join discussions
 with other Daikon users and developers.
@@ -7690,6 +7685,7 @@ Craig Kaplan carved the Daikon logo.
 
 The feedback of Daikon users has been very valuable.  We are
 particularly grateful to
+B. Thomas Adler,
 Rich Angros,
 Tadashi Araragi,
 Seung Mo Cho,
@@ -7700,6 +7696,7 @@ Engelbert Hubbers,
 Scott McMaster,
 Alex Orso,
 Manos Renieris,
+Rosie Wacha,
 Tao Xie.
 Many others have also been generous with their feedback, for which we
 are also grateful.
