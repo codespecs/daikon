@@ -12,5 +12,9 @@ public class Pair {
     this.a = a;
     this.b = b;
   }
+
+  public String toString() {
+    return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
+  }
 }
 
