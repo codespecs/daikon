@@ -105,7 +105,6 @@ public class NonZero extends SingleScalar {
 
     // For every EltNonZero at this program point, see if this variable is
     // an obvious member of that sequence.
-
     PptTopLevel parent = (PptTopLevel)ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -113,8 +112,9 @@ public class NonZero extends SingleScalar {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println("NonZero.isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
-
-        if (Member.isEqualToObviousMember(v1, v2)) {
+        // Don't use isEqualToObviousMember:  that is too subtle
+        // and eliminates desirable invariants such as "return != null".
+        if (Member.isObviousMember(v1, v2)) {
           // System.out.println("NonZero.isObviousImplied: Member.isObviousMember(" + v1.name + ", " + v2.name + ") = true");
           return true;
         }
