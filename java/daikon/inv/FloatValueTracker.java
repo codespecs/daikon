@@ -42,17 +42,17 @@ public final class FloatValueTracker
 
   public void add(double[] v1, double[] v2) {
     if (values_cache == null) return;
-    add(UtilMDE.hashToDouble(UtilMDE.hashToDouble(v1), UtilMDE.hashToDouble(v2)));
+    add(UtilMDE.hash(v1, v2));
   }
 
   public void add(double v1, double v2, double v3) {
     if (values_cache == null) return;
-    add(UtilMDE.hashToDouble(v1, v2, v3));
+    add(UtilMDE.hash(v1, v2, v3));
   }
 
   public void add(double v1, double v2) {
     if (values_cache == null) return;
-    add(UtilMDE.hashToDouble(v1, v2));
+    add(UtilMDE.hash(v1, v2));
   }
 
   public void add(double v1) {

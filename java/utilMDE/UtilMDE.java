@@ -500,22 +500,27 @@ public final class UtilMDE {
   // first issue, transforming a data structure into a single number.  This
   // is also known as fingerprinting.
 
-  public static final double hashToDouble(double a, double b) {
+  // Note that this differs from the result of Double.hashCode (which see).
+  public static final int hash(double x) {
+    return hash(Double.doubleToLongBits(x));
+  }
+
+  public static final int hash(double a, double b) {
     double result = 17;
     result = result * 37 + a;
     result = result * 37 + b;
-    return result;
+    return hash(result);
   }
 
-  public static final double hashToDouble(double a, double b, double c) {
+  public static final int hash(double a, double b, double c) {
     double result = 17;
     result = result * 37 + a;
     result = result * 37 + b;
     result = result * 37 + c;
-    return result;
+    return hash(result);
   }
 
-  public static final double hashToDouble(double[] a) {
+  public static final int hash(double[] a) {
     double result = 17;
     if (a != null) {
       result = result * 37 + a.length;
@@ -523,13 +528,13 @@ public final class UtilMDE {
         result = result * 37 + a[i];
       }
     }
-    return result;
+    return hash(result);
   }
 
-  // Note that this differs from the result of Double.hashCode (which see).
-  public static final int hash(double x) {
-    return hash(Double.doubleToLongBits(x));
+  public static final int hash(double[] a, double[] b) {
+    return hash(hash(a), hash(b));
   }
+
 
   // Don't define hash with int args; use the long versions instead.
 
@@ -568,6 +573,10 @@ public final class UtilMDE {
       }
     }
     return hash(result);
+  }
+
+  public static final int hash(long[] a, long[] b) {
+    return hash(hash(a), hash(b));
   }
 
   public static final int hash(String a) {

@@ -10,10 +10,10 @@ import daikon.Global;
 // There are three different varieties of add method:
 //   add takes one, two, or three Objects; is defined in ValueTracker[123],
 //     and calls add_val
-//   add_val takes Objects, casts them to their actual types, and calls
-//     add_prim on them; is defined abstract in ValueTracker[123] and is
-//     defined in subtypes.
-//   add_prim converts (numeric) values into ints, and inserts the ints
+//   add_val takes Objects, casts them to their actual types, hashes them
+//     to an integer, and calls add_prim on them; is defined abstract in
+//     ValueTracker[123] and is defined in subtypes.
+//   add_int inserts an int
 
 
 // ValueTracker really ought to be reimplemented in terms of
@@ -61,7 +61,7 @@ public class ValueTracker
   private int seq_index_values_end = 0;
 
   // number of arrays with length > 1, for the NoDuplicates invariant
-  private int no_dup_elt_count;
+  protected int no_dup_elt_count;
 
   public ValueTracker(int max_values) {
     Assert.assertTrue(max_values > 0);
@@ -92,95 +92,9 @@ public class ValueTracker
     return UtilMDE.hash(l);
   }
 
-  protected void add_prim(String v1, String v2) {
-    if (values_cache == null) return;
-    // add_prim(UtilMDE.hash(v1, v2));
-    if ((v1 == null) || (v2 == null)) return;
-    add_prim (v1.hashCode(), v2.hashCode());
-  }
 
-  protected void add_prim(String v1) {
-    if (values_cache == null) return;
-    // add_prim(UtilMDE.hash(v1);
-    if (v1 == null) return;
-    add_prim (v1.hashCode());
-  }
-
-  protected void add_prim(String[] v1) {
-    if (values_cache == null) return;
-    // add_prim(UtilMDE.hash(v1);
-    if (v1 == null) return;
-    long av1 = 0;
-    for (int i = 0; i < v1.length; i++) {
-      if (v1[i] == null) continue;
-      av1 ^= v1[i].hashCode();
-    }
-    add_prim (av1);
-  }
-
-  protected void add_prim(long[] v1, long[] v2) {
-    // The values_cache will always reach its capacity before
-    // the elt_values_cache (or at the same time), by definition
-    if (values_cache != null) {
-      add_prim(UtilMDE.hash(v1), UtilMDE.hash(v2));
-    }
-
-    if (elt_values_cache == null) return;
-    if (v1.length != v2.length) return;
-    for (int i=0; i < v1.length; i++) {
-      long temp = (v1[i] ^ v2[i]) + 10;
-      elt_add((int)(temp ^ (temp >> 32)));
-    }
-  }
-
-  protected void add_prim(long[] v1) {
-    if (v1.length > 1)
-      no_dup_elt_count++;
-    if (values_cache != null) {
-      for (int i = 0; i < v1.length; i++) {
-        // Only SeqIndexComparison uses this, so let's use its notion
-        // of value (each distinct pair (a[i], i))
-        add_prim(UtilMDE.hash(v1[i], i));
-      }
-    }
-
-    if (seq_index_cache == null) return;
-    for (int i = 0; i < v1.length; i++) {
-      seq_index_add(UtilMDE.hash(v1[i], i));
-    }
-  }
-
-  // SeqIntComparison Invariants are the only ones so far that use this,
-  // so I matched this method up with SeqIntComparison's old notions of "values"
-  // (if a sample is a[] and b, then each pair {a[i],b} is a value)
-  protected void add_prim(long[] v1, long v2) {
-    if (values_cache == null) return;
-    for (int i = 0; i < v1.length; i++) {
-      add_prim(v1[i], v2);
-    }
-  }
-
-  protected void add_prim(long v1, long v2, long v3) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hash(v1, v2, v3));
-  }
-
-  protected void add_prim(long v1, long v2) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hash(v1, v2));
-  }
-
-  protected void add_prim(long v1) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hash(v1));
-  }
-
-  protected void add_prim(int v1, int v2) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hash(v1, v2));
-  }
-
-  protected void add_prim(int v1) {
+  // Here are the versions that do the real work
+  protected void add_int(int v1) {
     if (values_cache == null) return;
 
     for (int i = 0; i < values_end; i++) {
@@ -226,96 +140,6 @@ public class ValueTracker
       seq_index_cache = null;
   }
 
-  protected void add_prim(double[] v1, double[] v2) {
-    if (values_cache != null) {
-      add_prim(UtilMDE.hashToDouble(v1), UtilMDE.hashToDouble(v2));
-    }
-
-    if (elt_values_cache == null) return;
-    if (v1.length != v2.length) return;
-    for (int i=0; i < v1.length; i++) {
-      elt_add(UtilMDE.hashToDouble(v1[i], v2[i]));
-    }
-  }
-
-  protected void add_prim(double[] v1) {
-    if (v1.length > 1)
-      no_dup_elt_count++;
-    if (values_cache != null) {
-      for (int i = 0; i < v1.length; i++) {
-        add_prim(UtilMDE.hashToDouble(v1[i], i));
-      }
-    }
-
-    if (seq_index_cache == null) return;
-    for (int i = 0; i < v1.length; i++) {
-      seq_index_add(UtilMDE.hashToDouble(v1[i], i));
-    }
-  }
-
-  // See the comment above add_prim(long[], long)
-  protected void add_prim(double[] v1, double v2) {
-    if (values_cache == null) return;
-    for (int i = 0; i < v1.length; i++) {
-      add_prim(v1[i], v2);
-    }
-  }
-
-  protected void add_prim(double v1, double v2, double v3) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hashToDouble(v1, v2, v3));
-  }
-
-  protected void add_prim(double v1, double v2) {
-    if (values_cache == null) return;
-    add_prim(UtilMDE.hashToDouble(v1, v2));
-  }
-
-  protected void add_prim(double v1) {
-    if (values_cache == null) return;
-
-    for (int i = 0; i < values_end; i++) {
-      double elt = values_cache[i];
-      if (elt == v1) {
-        return;
-      }
-    }
-
-    values_cache[values_end++] = UtilMDE.hash(v1);
-
-    if (values_end == max_values)
-      values_cache = null;
-  }
-
-  public void elt_add(double v1) {
-    if (elt_values_cache == null) return;
-
-    for (int i = 0; i < max_elt_values; i++) {
-      double elt = elt_values_cache[i];
-      if (elt == v1) {
-        return;
-      }
-    }
-    elt_values_cache[elt_values_end++] = UtilMDE.hash(v1);
-
-    if (elt_values_end == max_elt_values)
-      elt_values_cache = null;
-  }
-
-  public void seq_index_add(double v1) {
-    if (seq_index_cache == null) return;
-
-    for (int i = 0; i < max_seq_index_values; i++) {
-      double elt = seq_index_cache[i];
-      if (elt == v1) {
-        return;
-      }
-    }
-    seq_index_cache[seq_index_values_end++] = UtilMDE.hash(v1);
-
-    if (seq_index_values_end == max_seq_index_values)
-      seq_index_cache = null;
-  }
 
   public Object clone() {
     try {
@@ -359,7 +183,7 @@ public class ValueTracker
         result.values_end = vt.values_end;
       } else {
         for (int j = 0; j < vt.num_values(); j++)
-          result.add_prim (vt.values_cache[j]);
+          result.add_int (vt.values_cache[j]);
       }
 
       // Merge these values into the sequence index cache
@@ -433,7 +257,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-      add_prim(((Long) v1).longValue());
+      add_int(UtilMDE.hash(((Long) v1).longValue()));
     }
   }
 
@@ -447,7 +271,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-      add_prim(((Double) v1).doubleValue());
+      add_int(UtilMDE.hash(((Double) v1).doubleValue()));
     }
   }
 
@@ -461,7 +285,15 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-    	add_prim((long[]) v1);
+      long[] a = (long[]) v1;
+      if (a.length > 1)
+        this.no_dup_elt_count++;
+      add_int(UtilMDE.hash(a));
+      // For SeqIndexComparison
+      if (seq_index_cache == null) return;
+      for (int i = 0; i < a.length; i++) {
+        seq_index_add(UtilMDE.hash(a[i], i));
+      }
     }
   }
 
@@ -475,7 +307,15 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-      add_prim((double[]) v1);
+      double[] a = (double[]) v1;
+      if (a.length > 1)
+        this.no_dup_elt_count++;
+      add_int(UtilMDE.hash(a));
+      // For SeqIndexComparison
+      if (seq_index_cache == null) return;
+      for (int i = 0; i < a.length; i++) {
+        seq_index_add(UtilMDE.hash(a[i], i));
+      }
     }
   }
 
@@ -489,7 +329,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-      add_prim((String) v1);
+      add_int(UtilMDE.hash((String) v1));
     }
   }
 
@@ -503,7 +343,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1) {
-      add_prim((String[]) v1);
+      add_int(UtilMDE.hash(((String[]) v1)));
     }
   }
 
@@ -559,7 +399,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim((String) v1, (String) v2);
+      add_int(UtilMDE.hash((String) v1, (String) v2));
     }
   }
 
@@ -573,7 +413,7 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim(((Long) v1).longValue(), ((Long) v2).longValue());
+      add_int(UtilMDE.hash(((Long) v1).longValue(), ((Long) v2).longValue()));
     }
   }
 
@@ -589,13 +429,13 @@ public class ValueTracker
     protected void add_val(Object v1, Object v2) {
       long l1 = ((Long) v1).longValue();
       long l2 = ((Long) v2).longValue();
-      System.err.println("ValueTrackerTwoScalar: " + l1 + ", " + l2
-                         + " <= " + toString() + "\n  "
-                         + ArraysMDE.toString(this.values_cache));
+      // System.err.println("ValueTrackerTwoScalar: " + l1 + ", " + l2
+      //                    + " <= " + toString() + "\n  "
+      //                    + ArraysMDE.toString(this.values_cache));
       super.add_val(v1, v2);
-      System.err.println("ValueTrackerTwoScalar: " + l1 + ", " + l2
-                         + " => " + toString() + "\n  "
-                         + ArraysMDE.toString(this.values_cache));
+      // System.err.println("ValueTrackerTwoScalar: " + l1 + ", " + l2
+      //                    + " => " + toString() + "\n  "
+      //                    + ArraysMDE.toString(this.values_cache));
     }
   }
 
@@ -609,7 +449,8 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim(((Double) v1).doubleValue(), ((Double) v2).doubleValue());
+      add_int(UtilMDE.hash(((Double) v1).doubleValue(),
+                            ((Double) v2).doubleValue()));
     }
   }
 
@@ -623,10 +464,18 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim((double[]) v1, ((Double) v2).doubleValue());
+      double[] a = (double[]) v1;
+      double d = ((Double) v2).doubleValue();
+      for (int i = 0; i < a.length; i++) {
+        add_int(UtilMDE.hash(a[i], d));
+      }
     }
   }
 
+  // SeqIntComparison Invariants are the only ones so far that use this, so
+  // I matched this method up with SeqIntComparison's old notions of
+  // "values" (if a sample is a[] and b, then each pair {a[i],b} is a
+  // value).
   public static class ValueTrackerScalarArrayScalar extends ValueTracker2 {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -637,7 +486,11 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim((long[]) v1, ((Long) v2).longValue());
+      long[] a = (long[]) v1;
+      long d = ((Long) v2).longValue();
+      for (int i = 0; i < a.length; i++) {
+        add_int(UtilMDE.hash(a[i], d));
+      }
     }
   }
 
@@ -651,7 +504,15 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim((double[]) v1, ((double[]) v2));
+      double[] a1 = (double[]) v1;
+      double[] a2 = (double[]) v2;
+      add_int(UtilMDE.hash(a1, a2));
+
+      if (elt_values_cache == null) return;
+      if (a1.length != a2.length) return;
+      for (int i=0; i < a1.length; i++) {
+        elt_add(UtilMDE.hash(a1[i], a2[i]));
+      }
     }
   }
 
@@ -665,7 +526,15 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2) {
-      add_prim((long[]) v1, ((long[]) v2));
+      long[] a1 = (long[]) v1;
+      long[] a2 = (long[]) v2;
+      add_int(UtilMDE.hash(a1, a2));
+
+      if (elt_values_cache == null) return;
+      if (a1.length != a2.length) return;
+      for (int i=0; i < a1.length; i++) {
+        elt_add(UtilMDE.hash(a1[i], a2[i]));
+      }
     }
   }
 
@@ -749,7 +618,9 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2, Object v3) {
-      add_prim(((Long) v1).longValue(), ((Long) v2).longValue(), ((Long) v3).longValue());
+      add_int(UtilMDE.hash(((Long) v1).longValue(),
+                           ((Long) v2).longValue(),
+                           ((Long) v3).longValue()));
     }
   }
 
@@ -763,7 +634,9 @@ public class ValueTracker
       super(max_values);
     }
     protected void add_val(Object v1, Object v2, Object v3) {
-      add_prim(((Double) v1).longValue(), ((Double) v2).longValue(), ((Double) v3).longValue());
+      add_int(UtilMDE.hash(((Double) v1).longValue(),
+                           ((Double) v2).longValue(),
+                           ((Double) v3).longValue()));
     }
   }
 
