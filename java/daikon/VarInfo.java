@@ -989,8 +989,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public boolean indexCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
-      if ((seqvar.type.dimensions() == 0)
-          || (! sclvar.isIndex())) {
+      if (! (seqvar.type.isPseudoArray()
+             && sclvar.isIndex())) {
         return false;
       }
     }
