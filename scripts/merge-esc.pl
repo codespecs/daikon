@@ -3,24 +3,27 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-04 11:42:43 mernst>
+# Time-stamp: <2001-03-11 02:20:51 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
 
-# 
 
 use Carp;
 
+my $warn_on_no_invariants;
+
 BEGIN {
   # Nothing to do
+  $warn_on_no_invariants = 0;
 }
 
 if ((/^Inv filename = /)
     || (/^Reading (declaration|data trace) files /)
     || (/^Read [0-9]+ declaration file/)
     || (/^    Samples breakdown: /)
-    || (/^    Variables: /)
+    || (/^    Variables:/)
+    || (/^      Unmodified variables: /)
     || (/^\[No views for /)
     || (/^esc_name =/)
     || (/^Exiting$/)) {
@@ -51,7 +54,7 @@ if (defined($methodname)) {
 }
 
 
-sub simplify_args($) {
+sub simplify_args( $ ) {
   my ($args) = @_;
   $args =~ s/^\s*\(\s*//;
   $args =~ s/\s*\)\s*$//;
@@ -106,11 +109,12 @@ sub approx_argmatch($$) {
 }
 
 
-sub is_bogus_invariant($) {
+sub is_bogus_invariant( $ ) {
   my ($inv) = @_;
   return (($inv =~ /format_esc class .* needs to be changed/)
 	  || ($inv =~ /"null"/)
-	  || ($inv =~ /\[\] ==/));
+	  || ($inv =~ /\[\] ==/)
+	  || ($inv =~ /\\typeof\([^ ]*\.length/));
 }
 
 
@@ -166,18 +170,30 @@ END {
 	my $fullmeth = $fullmethname . $simple_args;
 	my $prebrace;
 	my $postbrace;
-	if ($line =~ /^(.*)(\{.*)$/) {
-	  $prebrace = $1 . "\n";
+	# This is because "$)" in regexp screws up Emacs parser.
+	my $eolre = "\\n?\$";
+	my $need_newline = 1;
+	if ($line =~ /^\s*\{.*$eolre/) {
+	  $prebrace = "";
+	  $postbrace = $line;
+	  $need_newline = 0;
+	} elsif ($line =~ /^(.*)(\{.*$eolre)/) {
+	  $prebrace = $1;
 	  $postbrace = $2;
 	} elsif ($line !~ /\)/) {
 	  die "Put all args on same line as declaration of $fullmeth";
 	} else {
 	  my $nextline = <IN>;
-	  if ($nextline !~ /^(.*)\{(.*)$/) {
+	  if ($nextline =~ /^\s*\{.*$eolre/) {
+	    $prebrace = $line;
+	    $postbrace = $nextline;
+	    $need_newline = 0;
+	  } elsif ($nextline =~ /^(.*)(\{.*$eolre)/) {
+	    $prebrace = $line . $1;
+	    $postbrace = $2;
+	  } else {
 	    die "Didn't find open curly brace in first two lines of method definition:\n  $line  $nextline";
 	  }
-	  $prebrace = $line;
-	  $postbrace = $nextline;
 	}
 	print OUT $prebrace;
 	my $found = 0;
@@ -193,6 +209,9 @@ END {
 	      || (($fullmethname eq $ppt_methname)
 		  && approx_argsmatch($simple_args, $ppt_args))) {
 	    $found = 1;
+	    if ($need_newline) {
+	      print OUT "\n";
+	    }
 	    if ($ppt =~ /:::ENTER/) {
 	      for my $inv (split("\n", $raw{$ppt})) {
 		if (is_bogus_invariant($inv)) {
@@ -203,7 +222,15 @@ END {
 	      }
 	    } elsif ($ppt =~ /:::EXIT/) {
 	      for my $inv (split("\n", $raw{$ppt})) {
-		if (is_bogus_invariant($inv)) {
+		if ($inv =~ s/^      Modified variables: //) {
+		  $inv =~ s/\[\]/[*]/g;
+		  my @mods = split(/ /, $inv);
+		  @mods = grep(!/\.class$/, @mods);
+		  @mods = grep(!/\[[^*]+\]/, @mods);
+		  if (scalar(@mods) > 0) {
+		    print OUT "/*@ modifies " . join(', ', @mods) . " */\n";
+		  }
+		} elsif (is_bogus_invariant($inv)) {
 		  print OUT "/*! ensures " . $inv . " */\n";
 		} else {
 		  print OUT "/*@ ensures " . $inv . " */\n";
@@ -215,17 +242,20 @@ END {
 	  }
 	}
 
-	if (! $found) {
+	if ((! $found) & ($warn_on_no_invariants)) {
 	  print "Warning:  no invariants for method $fullmeth on line $line";
 	}
 
 	print OUT $postbrace;
 	if ($methodname eq $classname) {
 	  if (scalar(@fields) > 0) {
-	    my $nextline = <IN>;
-	    if ($nextline =~ /\bthis\s*\(/) {
+	    # Skip over as many lines as possible, until I see a control
+	    # structure or a block end or some such.
+	    my $nextline;
+	    while ((defined($nextline = <IN>))
+		   && (! (($nextline =~ /\b(if|while|for)\b|\}/)
+			  || (($nextline =~ /\/\*(.*)/) && (! $1 =~ /\*\//))))) {
 	      print OUT $nextline;
-	      $nextline = "";
 	    }
 	    for my $field (@fields) {
 	      print OUT "/*@ set $field.owner = this */\n";
@@ -250,11 +280,13 @@ END {
 	  print OUT $nextline;
 	}
 	my $fullmeth = "$classname" . ":::OBJECT";
-	for my $inv (split("\n", $raw{$fullmeth})) {
-	  if (is_bogus_invariant($inv)) {
-	    print OUT "/*! invariant " . $inv . " */\n";
-	  } else {
-	    print OUT "/*@ invariant " . $inv . " */\n";
+	if (defined($raw{$fullmeth})) {
+	  for my $inv (split("\n", $raw{$fullmeth})) {
+	    if (is_bogus_invariant($inv)) {
+	      print OUT "/*! invariant " . $inv . " */\n";
+	    } else {
+	      print OUT "/*@ invariant " . $inv . " */\n";
+	    }
 	  }
 	}
 	next;
@@ -277,5 +309,7 @@ END {
     close IN;
     close OUT;
   }
+
+  exit 0;			# success
 
 }
