@@ -116,7 +116,7 @@ public class PptName
 
   /**
    * @return getName() [convenience accessor]
-   * @see getName()
+   * @see #getName()
    **/
   public String name() {
     return getName();
@@ -224,10 +224,10 @@ public class PptName
   }
 
   /**
-   * @return a numberical subscript of the given point, or
+   * @return a numerical subscript of the given point, or
    * Integer.MIN_VALUE if none exists.
    * e.g. "84"
-   * @see exitLine
+   * @see #exitLine()
    **/
   public int getPointSubscript()
   {
@@ -302,7 +302,7 @@ public class PptName
   /**
    * @return a string containing the line number, if this is an exit point;
    *         otherwise, return null
-   * @see getPointSubscript
+   * @see #getPointSubscript()
    **/
   public String exitLine() {
     if (!isExitPoint())

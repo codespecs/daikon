@@ -18,7 +18,6 @@ public final class LinearBinaryCore
   /**
    * Debug tracer
    **/
-
   public static final Category debug =
     Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore");
 

@@ -29,7 +29,6 @@ public final class PptSlice3
   /**
    * Debug tracer
    **/
-
   public static final Category debugSpecific = Category.getInstance("daikon.PptSlice3" );
 
   // This is in PptSlice; do not repeat it here!

@@ -11,6 +11,7 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.filter.*;
 
 public class PrintInvariants {
 
@@ -129,6 +130,7 @@ public class PrintInvariants {
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
 					       true // use saved config
 					       );
+    ppt_map = ppts;
     print_invariants(ppts);
   }
 
@@ -402,7 +404,8 @@ public class PrintInvariants {
   }
 
   /* [INCR]
-  private static Vector get_equal_vars(VarInfo vi) {
+  private static Vector get_equal_vars(VarInfo vi)
+  {
     Vector equal_vars = null;
 
     if (includeObviouslyEqual) {
@@ -410,6 +413,18 @@ public class PrintInvariants {
     } else {
       equal_vars = vi.equalToNonobvious();
     }
+
+    // Filter for parameters here
+    if (vi.ppt.ppt_name.isExitPoint()) {
+      for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
+	VarInfo var = (VarInfo) i.next();
+	if (vi.isDerivedParam()) {
+	  i.remove();
+	}
+
+      }
+    }
+
     return(equal_vars);
   }
   */ // ... [INCR]
@@ -439,6 +454,8 @@ public class PrintInvariants {
     return(obviously_equal);
   }
 
+  // ppt should only be used for obtaining the number of values and
+  // samples, but not for any other purpose.
   public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt)
   {
     // switch commented lines to include obviously equal in output
@@ -583,13 +600,25 @@ public class PrintInvariants {
   /* [INCR]
   public static boolean accept_equality_invariant(PptTopLevel ppt, VarInfo vi)
   {
-    return ((get_equal_vars(vi).size() > 0) &&
-	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
-		ppt.redundant_invs.contains(vi))));
+    //this needs to be a seperate if statement because if vi is not
+    //canonical, it will fail assert statements in some of the things
+    //which are invoked in the return clause.
+    if (vi.isCanonical()) {
+      return ((get_equal_vars(vi).size() > 0)  &&
+	      (! (Daikon.suppress_redundant_invariants_with_simplify &&
+		  ppt.redundant_invs.contains(vi))));
+    } else {
+      return false;
+    }
   }
   */ // ... [INCR]
 
   //note - this rejects equality invariants out of hand
+
+  /**
+   * Determines whether an invariant should be printed.
+   * @return true if the invariant should be printed.
+   **/
   public static boolean accept_invariant(Invariant inv)
   {
     if ((inv instanceof Comparison) && inv.isExact())
@@ -597,7 +626,7 @@ public class PrintInvariants {
 	return(false);
       }
 
-    if(!inv.isWorthPrinting())
+    if (!inv.isWorthPrinting())
       {
 	return(false);
       }
@@ -619,9 +648,21 @@ public class PrintInvariants {
       }
       if (mms) { return(false); }
     }
+
+    if (inv.ppt.ppt_name.isExitPoint()) {
+      for (int i = 0; i < inv.ppt.var_infos.length; i++) {
+	VarInfo vi = inv.ppt.var_infos[i];
+	if (vi.isDerivedParam()) {
+	  return false;
+	}
+      }
+    }
+
     return(true);
   }
 
+  // ppt should only be used for obtaining the number of values and
+  // samples, but not for any other purpose.
   public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt)
   {
     // [INCR] int num_vals = inv.ppt.num_values();
@@ -704,6 +745,8 @@ public class PrintInvariants {
 //    }
   }
 
+  private static PptMap ppt_map = null;
+
   public static boolean includeObviouslyEqual = false;
 
   /***********************************************************/
@@ -746,15 +789,13 @@ public class PrintInvariants {
     for (int i=0; i<ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
 
-      // if (vi.isCanonical()) // [INCR] XXX
-        {
-          // if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
-          {
-	  invCounter++;
-	  print_equality_invariants(vi, out, invCounter, ppt);
-        }
+      // if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
+      {
+	invCounter++;
+	print_equality_invariants(vi, out, invCounter, ppt);
       }
     }
+
 
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
@@ -779,6 +820,26 @@ public class PrintInvariants {
       }
       Assert.assert(slice.check_modbits());
 
+//        InvariantFilters fi = new InvariantFilters();
+//        fi.ppt_map = ppt_map;
+
+//        boolean fi_accepted = fi.shouldKeep(inv);
+//        boolean pi_accepted = accept_invariant(inv);
+
+//        if(fi_accepted != pi_accepted)
+//  	{
+//  	  FileWriter outputFile = null;
+//  	  try
+//  	    {
+//  	      outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
+//  	      outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\n");
+//  	      outputFile.close();
+//  	    }
+//  	  catch(IOException e)
+//  	    {
+//  	      System.out.println(e);
+//  	    }
+//  	}
       if(accept_invariant(inv))
 	{
 	  invCounter++;
@@ -794,10 +855,7 @@ public class PrintInvariants {
    * to be given unique names.  The name can be derived from a count
    * of the invariants and the program point name.  We simply change
    * the ppt name's characters to be valid IOA syntax.
-   *
-   *
    **/
-
   public static String get_ioa_invname (int numbering, Ppt ppt) {
     if (Daikon.test_output) {
       if (ppt.ppt_name.isClassStaticSynthetic()) return "Inv";

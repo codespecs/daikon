@@ -45,9 +45,7 @@ public abstract class VarComparability {
    * of the element, b is the type of the first index, c the type of
    * the second, etc.  Index variables only apply if this is an array.
    * @param vartype the declared type of the variable
-   *
    **/
-
   public static VarComparability parse(int format, String rep, ProglangType vartype) {
     if (format == NONE) {
       return VarComparabilityNone.parse(rep, vartype);
@@ -70,7 +68,6 @@ public abstract class VarComparability {
    * @param old the varcomparability that this is derived from; has
    * the same indices as this.
    **/
-
   public static VarComparability makeComparabilitySameIndices (String elemTypeName,
 							       VarComparability old) {
     if (old instanceof VarComparabilityExplicit) {

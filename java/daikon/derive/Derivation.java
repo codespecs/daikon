@@ -26,7 +26,6 @@ public abstract class Derivation
   /**
    * Debug tracer
    **/
-
   public static final Category debug = Category.getInstance("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.
@@ -47,17 +46,11 @@ public abstract class Derivation
    * counts as modified.
    * @param vt The set of values in a program point that will be
    * used to derive the value.
-   *
    **/
-  public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
-
-  // I think the separate computeModified and computeValue functions aren't
-  // so useful, particularly since the same computation must usually be done
+  // I don't provide separate computeModified and computeValue functions:
+  // they aren't so useful, and the same computation must usually be done
   // in both functions.
-  // public abstract int computeModified(ValueTuple vt);
-  // public abstract int computeModified(int[] mods);
-  // public abstract Object computeValue(ValueTuple vt);
-  // public abstract Object computeValue(Object[] vals);
+  public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
 
   /**
    * Get the VarInfo that this would represent.  However,
@@ -78,22 +71,20 @@ public abstract class Derivation
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
-  /** 
+  /* *
    * For debugging only; returns true if the variables from which this
    * one was derived are all non-canonical (which makes this derived
    * variable uninteresting).  We might not have been able to know
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.  [So
-   * don't do that!]  
+   * don't do that!]
    **/
-
   // public abstract boolean isDerivedFromNonCanonical(); // [INCR]
 
   /**
    * Returns how many levels of derivation this Derivation is based
    * on.  The depth counts this as well as the depths of its bases.
    **/
-
   public abstract int derivedDepth();
 
   /**

@@ -70,7 +70,6 @@ public final class PPTSLICE1
   /**
    * Debug tracer
    **/
-
   public static final Category debugSpecific = Category.getInstance("daikon." + PPTSLICE1STRING);
 
   // This is in PptSlice; do not repeat it here!

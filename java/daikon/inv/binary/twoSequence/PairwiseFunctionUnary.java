@@ -9,8 +9,6 @@ import java.lang.reflect.*;
 /**
  * That each element from one sequence relates to each corresponding
  * element in another sequence by a function.
- *
- *
  **/
 
 public class PairwiseFunctionUnary

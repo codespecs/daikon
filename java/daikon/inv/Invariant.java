@@ -419,7 +419,7 @@ public abstract class Invariant
    * they are able to handle generally-inexpressible properties in
    * special-case ways.
    *
-   * @see VarInfo.isValidEscExpression
+   * @see VarInfo#isValidEscExpression
    **/
   public boolean isValidEscExpression() {
     for (int i=0; i < ppt.var_infos.length; i++) {

@@ -1071,8 +1071,9 @@ public final class FileIO
       return record.map;
     } catch (ClassNotFoundException e) {
       throw new IOException("Error while loading inv file: " + e);
+    } catch (InvalidClassException e) {
+      throw new IOException("It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file.\n" + e.toString());
     }
-    // } catch (InvalidClassException e) {    // already extends IOException
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException
   }

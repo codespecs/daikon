@@ -8,8 +8,6 @@ import org.apache.log4j.Category;
 
 /**
  * Where one sequence is the reverse of another.
- *
- *
  **/
 
 public class Reverse

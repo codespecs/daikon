@@ -5,7 +5,6 @@ import daikon.derive.*;
 
 /**
  * Factory to produce BinaryDerivation.
- *
  **/
 
 public abstract class BinaryDerivationFactory implements DerivationFactory {
@@ -20,7 +19,6 @@ public abstract class BinaryDerivationFactory implements DerivationFactory {
    * derived variables, per type of derivation.  Can also be null if the
    * two variables have nothing to derive from.
    **/
-
   public abstract BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2);
 
 }

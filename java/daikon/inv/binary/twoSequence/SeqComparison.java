@@ -15,8 +15,6 @@ import java.util.*;
  * doesn't matter, then we do a double subset comparison to test
  * equality.  If the two Aux fields of the VarInfos are not identical,
  * then we don't compare at all.
- *
- *
  **/
 
 public class SeqComparison

@@ -11,8 +11,6 @@ import utilMDE.*;
 
 /**
  * We compare each element in a sequence to a particular variable.
- *
- *
  **/
 
 public final class SeqIntComparison

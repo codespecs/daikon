@@ -166,20 +166,23 @@ public final class Global {
     Logger.setupLogs(debugAll ? Logger.DEBUG : Logger.INFO);
   }
 
-  /** Category for debugging statistics output **/
+  /** Debug tracer for debugging statistics output **/
   public static final Category debugStatistics = Category.getInstance("daikon.statistics");
 
-  /** Category for debugging Simplify output **/
+  /** Debug tracer for debugging Simplify output **/
   public static final Category debugSimplify = Category.getInstance("daikon.simplify");
 
-  /** Category for debugging derived vars **/
+  /** Debug tracer for debugging derived vars **/
   public static Category debugDerive = Category.getInstance("daikon.derive");
 
-  /** Category for debugging splitting **/
+  /** Debug tracer for debugging splitting **/
   public static Category debugSplit = Category.getInstance("daikon.split");
 
-  /** Category for debugging inferences **/
+  /** Debug tracer for debugging inferences **/
   public static Category debugInfer = Category.getInstance("daikon.infer");
+
+  /** Debug tracer for debugging invariant suppression **/
+  public static Category debugSuppress = Category.getInstance("daikon.suppress");
 
 
   //public final static boolean debugStatistics = false;             Use Global.debugStatistics

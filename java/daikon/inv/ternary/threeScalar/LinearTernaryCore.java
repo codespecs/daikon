@@ -20,8 +20,7 @@ public final class LinearTernaryCore
   /**
    * Debug tracer
    **/
-
-  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.LinearTernaryCore");
+  final static Category debug = Category.getInstance ("daikon.inv.trinary.threeScalar.LinearTernaryCore");
 
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a, b, c;

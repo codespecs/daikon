@@ -20,7 +20,6 @@ import org.apache.log4j.Category;
  * us to detect uniqueness and equality style invariants across the
  * data structure rather than just one slice of it.  Works for number
  * and string arrays.
- *
  **/
 
 public final class SequencesJoin
@@ -33,7 +32,6 @@ public final class SequencesJoin
 
   /**
    * Debug tracer
-   *
    **/
   public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesJoin");
 
@@ -97,12 +95,12 @@ public final class SequencesJoin
 
     Assert.assert(length1 == length2);
 
-    /**
+    /*
        debug.debug ("var1 name: " + var1().name);
        if (val1 != null) debug.debug ("val1 type: " + val1.getClass().getName());
        debug.debug ("var2 name: " + var2().name);
        if (val2 != null) debug.debug ("val2 type: " + val2.getClass().getName());
-    **/
+    */
 
     long[] result = new long[length1];
 
@@ -127,7 +125,7 @@ public final class SequencesJoin
       result[i] = (e1.hashCode() << 8) + e2.hashCode();
     }
 
-    /**
+    /*
        Use this if you don't see no duplicates where you should
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
@@ -144,21 +142,20 @@ public final class SequencesJoin
       debug.debug (ArraysMDE.toString(result));
 
       }
-    **/
+    */
 
     int mod = ValueTuple.UNMODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
     if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
-    /**
+    /*
      * v1\v2  Unm  Mod  Mis
      *
      * Unm    Unm  Mod  Mis
      * Mod    Mod  Mod  Mis
      * Mis    Mis  Mis  Mis
-     *
-     **/
+     */
 
     return new ValueAndModified(Intern.intern(result), mod);
   }

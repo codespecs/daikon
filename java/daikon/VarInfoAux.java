@@ -10,8 +10,7 @@ import org.apache.log4j.Category;
 /**
  * Represents additional information about a VarInfo that frontends
  * tell Daikon.  For example, whether order matters in a collection.
- *
- *
+ * This is immutable and interned.
  **/
 
 public final class VarInfoAux
@@ -35,7 +34,12 @@ public final class VarInfoAux
   public static final String NULL_TERMINATING = "nullTerminating";
 
   /**
-   * Whether this variable is a parameter to a method.
+   * Whether this variable is a parameter to a method, or derived from
+   * a parameter to a method.  By default, if p is a parameter, then
+   * some EXIT invariants related to p aren't printed.  Frontends are
+   * responsible for setting if p is a parameter and if p.a is a
+   * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
+   * is.
    **/
   public static final String IS_PARAM = "isParam";
 
@@ -61,30 +65,6 @@ public final class VarInfoAux
 
   public static final String TRUE = "true".intern();
 
-
-  /**
-   * Interned default options.
-   **/
-  private static VarInfoAux theDefault = null;
-
-  /**
-   * Interned hashMaps.  Maps HashMaps to VarInfoAux.
-   **/
-  private static Map/*[HashMap->VarInfoAux]*/ theMap = null;
-
-  /**
-   * Contains the actual hashMap for this.
-   **/
-  private Map map;
-
-  static {
-    if (theMap == null) {
-      theMap = (new HashMap());
-      theDefault = new VarInfoAux();
-      theMap.put (theDefault.map, theDefault);
-    }
-  }
-
   /**
    * Return an interned VarInfoAux that represents a given string.
    * Elements are separated by commas, in the form:
@@ -92,7 +72,6 @@ public final class VarInfoAux
    * Parse rules do not allow for quoted elements.  White space
    * to the left and right of keys and values do not matter, but
    * within
-   *
    **/
   public static VarInfoAux parse (String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
@@ -151,14 +130,8 @@ public final class VarInfoAux
     }
 
     // Interning
-    VarInfoAux result;
-    if (theMap.containsKey(map)) {
-      result = (VarInfoAux) theMap.get(map);
-    } else {
-      VarInfoAux newAux = new VarInfoAux(map);
-      theMap.put (map, newAux);
-      result = newAux;
-    }
+    VarInfoAux result = new VarInfoAux(map);
+    result = result.intern();
     if (debug.isDebugEnabled()) {
       debug.debug("New parse " + result);
       debug.debug ("Intern table size: " + new Integer(theMap.size()));
@@ -168,11 +141,44 @@ public final class VarInfoAux
 
 
   /**
+   * Interned default options.
+   **/
+  private static VarInfoAux theDefault = new VarInfoAux().intern();
+
+  /**
    * Create a new VarInfoAux with default optiosn.
    **/
   public static VarInfoAux getDefault () {
     return theDefault;
   }
+
+
+
+  /**
+   * Map for interning.
+   **/
+  private static Map/*[VarInfoAux->VarInfoAux]*/ theMap = null;
+
+
+
+  /**
+   * Special handler for deserialization
+   **/
+  private Object readResolve() throws ObjectStreamException {
+    return this.intern();
+  }
+
+
+  /**
+   * Contains the actual hashMap for this.
+   **/
+  private Map map;
+
+
+  /**
+   * Whether this is interned
+   **/
+  private boolean isInterned = false;
 
   /**
    * Make the default map here.
@@ -185,7 +191,9 @@ public final class VarInfoAux
     defaultMap.put (HAS_SIZE, "true");
     defaultMap.put (HAS_NULL, "true");
     defaultMap.put (NULL_TERMINATING, "true");
+    defaultMap.put (IS_PARAM, "false");
     this.map = defaultMap;
+    this.isInterned = false;
   }
 
   /**
@@ -193,11 +201,51 @@ public final class VarInfoAux
    **/
   private VarInfoAux (Map map) {
     this.map = map;
+    this.isInterned = false;
   }
 
 
   public String toString() {
     return map.toString();
+  }
+
+  public int hashCode() {
+    return map.hashCode();
+  }
+
+
+  public boolean equals(Object o) {
+    if (o instanceof VarInfoAux) {
+      return equals((VarInfoAux) o);
+    } else {
+      return false;
+    }
+  }
+
+  public boolean equals(VarInfoAux o) {
+    return this.map.equals(o.map);
+  }
+
+  /**
+   * Returns canonical representation of this.  Doesn't need to be
+   * called by outside classes because these are always interned.
+   **/
+  public VarInfoAux intern() {
+    if (this.isInterned) return this;
+
+    if (theMap == null) {
+      theMap = (new HashMap());
+    }
+
+    VarInfoAux result;
+    if (theMap.containsKey(this)) {
+      result = (VarInfoAux) theMap.get(this);
+    } else {
+      theMap.put (this, this);
+      result = this;
+      this.isInterned = true;
+    }
+    return result;
   }
 
 
@@ -208,6 +256,17 @@ public final class VarInfoAux
     } else {
       return false;
     }
+  }
+
+
+  /**
+   * Return a new VarInfoAux with the desired value set.
+   * Does not modify this.
+   **/
+  public VarInfoAux setValue (String key, String value) {
+    HashMap newMap = new HashMap (this.map);
+    newMap.put (key.intern(), value.intern());
+    return new VarInfoAux(map).intern();
   }
 
 }

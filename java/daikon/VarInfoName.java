@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.util.*;
 import java.lang.reflect.*;
 
+// If you change this file, also change class daikon.test.VarInfoNameTest.
+
 /**
- * VarInfoName is an type that represents the "name" of a variable.
+ * VarInfoName represents the "name" of a variable.
  * Calling it a "name", however, is somewhat misleading.  It can be
  * some expression that includes more than one variable, term, etc.
  * We separate this from the VarInfo itself because clients wish to
@@ -68,6 +70,8 @@ public abstract class VarInfoName
 
     // foo[bar] -- IOA input only (pre-derived)
     if (name.endsWith("]")) {
+      // This isn't quite right:  we really want the matching open bracket,
+      // not the last open bracket.
       int lbracket = name.lastIndexOf("[");
       if (lbracket >= 0) {
 	String seqname = name.substring(0, lbracket) + "[]";
@@ -181,8 +185,6 @@ public abstract class VarInfoName
    * Return the string representation of this name in IOA format
    * @return the string representation (interned) of this name, in the
    * IOA style output format
-   * @param classname Name of the class of this variable so we can
-   * remove it for IOA output.
    **/
   public String ioa_name() {
     if (debug.isDebugEnabled()) {
@@ -204,9 +206,6 @@ public abstract class VarInfoName
   /**
    * Called in subclasses to return the internal implementation of
    * ioa_name.
-   * @param classname Name of the class of this variable so we can
-   * remove it for IOA output.
-   *
    **/
   protected abstract String ioa_name_impl();
 
@@ -410,7 +409,6 @@ public abstract class VarInfoName
    * Format this in IOA format, and remove all "this." and
    * "classname".
    * @param classname the String to remove
-   *
    **/
   public String ioaFormatVar(String varname) {
     /*    int this_index = varname.indexOf("this.");
@@ -641,7 +639,6 @@ public abstract class VarInfoName
    * form is like "sum(var1, var2))".
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
-   *
    **/
   public static VarInfoName applyFunctionOfN(String function, List vars) {
     return (new FunctionOfN(function, vars)).intern();
@@ -652,7 +649,6 @@ public abstract class VarInfoName
    * form is like "sum(var1, var2))".
    * @param function the name of the function
    * @param vars The arguments to the function
-   *
    **/
   public static VarInfoName applyFunctionOfN(String function, VarInfoName[] vars) {
     return applyFunctionOfN(function, Arrays.asList(vars));
@@ -1582,7 +1578,6 @@ public abstract class VarInfoName
      * @param root The root of the tree to search
      * @param goal The goal to find
      **/
-
     public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
       Object o = root.accept(this);
@@ -1642,8 +1637,92 @@ public abstract class VarInfoName
     public Object visitSlice(Slice o) {
       if (o == goal) return goal;
       if (o.sequence.accept(this) != null) return goal;
-      if ((o.i != null) & (o.i.accept(this) != null)) return goal;
-      if ((o.j != null) & (o.j.accept(this) != null)) return goal;
+      if ((o.i != null) && (o.i.accept(this) != null)) return goal;
+      if ((o.j != null) && (o.j.accept(this) != null)) return goal;
+      return null;
+    }
+  }
+
+  /**
+   * Finds if a given VarInfoName is contained in a set of nodes
+   * in the VarInfoName tree using == comparison.  Recurse through
+   * everything except fields, so in x.a, we don't look at a.
+   **/
+  public static class Finder
+    extends AbstractVisitor
+  {
+    // state and accessors
+    private final Set/*VarInfoName*/ goals;
+
+
+    /**
+     * Creates a new Finder.  Uses equals() to find.
+     * @param goals The goals to find
+     **/
+    public Finder(Set argGoals) {
+      goals = new HashSet();
+      for (Iterator i = argGoals.iterator(); i.hasNext(); ) {
+	this.goals.add (((VarInfoName) i.next()).intern());
+      }
+    }
+
+
+    public boolean contains (VarInfoName root) {
+      Object o = root.intern().accept(this);
+      return (o != null);
+    }
+
+    // visitor methods that get the job done
+    public Object visitSimple(Simple o) {
+      return (goals.contains(o)) ? o : null;
+    }
+    public Object visitSizeOf(SizeOf o) {
+      return (goals.contains(o)) ? o : o.sequence.intern().accept(this);
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      return (goals.contains(o)) ? o : super.visitFunctionOf(o);
+    }
+    public Object visitFunctionOfN(FunctionOfN o) {
+      Object retval = null;
+      if (goals.contains(o)) return o;
+      for (Iterator i = o.args.iterator(); i.hasNext();) {
+	VarInfoName vin = (VarInfoName)i.next();
+	retval = vin.accept(this);
+	if (retval != null) return retval;
+      }
+      return retval;
+    }
+    public Object visitField(Field o) {
+      return (goals.contains(o)) ? o : super.visitField(o);
+    }
+    public Object visitTypeOf(TypeOf o) {
+      return (goals.contains(o)) ? o : super.visitTypeOf(o);
+    }
+    public Object visitPrestate(Prestate o) {
+      if (goals.contains(o)) return o;
+      return super.visitPrestate(o);
+    }
+    public Object visitPoststate(Poststate o) {
+      if (goals.contains(o)) return o;
+      return super.visitPoststate(o);
+    }
+    public Object visitAdd(Add o) {
+      return (goals.contains(o)) ? o : super.visitAdd(o);
+    }
+    public Object visitElements(Elements o) {
+      return (goals.contains(o)) ? o : super.visitElements(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      if (goals.contains(o)) return o;
+      if (o.sequence.accept(this) != null) return o;
+      if (o.index.accept(this) != null) return o;
+      return null;
+    }
+    public Object visitSlice(Slice o) {
+      if (goals.contains(o)) return o;
+      if (o.sequence.accept(this) != null) return o;
+      if ((o.i != null) && (o.i.accept(this) != null)) return o;
+      if ((o.j != null) && (o.j.accept(this) != null)) return o;
       return null;
     }
   }
@@ -1947,9 +2026,7 @@ public abstract class VarInfoName
      * quantification.  (also, otherwise, there may be two or more
      * arrays that are returned, making the quantification engine
      * think it's working with 2-d arrays)
-     *
      **/
-
     public Object visitFunctionOfN(FunctionOfN o) {
       simples.add(o);
       return null;
@@ -1984,13 +2061,11 @@ public abstract class VarInfoName
    * this class to get commonly-used parts, like how universal
    * quanitifiers look like in the different formatting schemes.
    **/
-
   public static class QuantHelper {
 
     /**
      * Debug tracer
      **/
-
     public static final Category debug = Category.getInstance ("daikon.inv.Invariant.print.QuantHelper");
 
     /**
@@ -2167,7 +2242,6 @@ public abstract class VarInfoName
      * results for IOA in a string array; so we create a helper object
      * that has accessors.  Otherwise this works just like a
      * format_ioa method here would work.
-     *
      **/
     public static class IOAQuantification {
       private static final String quantifierExistential = "\\E ";
@@ -2250,8 +2324,9 @@ public abstract class VarInfoName
     }
 
 
+    /// NOTE: this method is commented out
     // <root*> -> <string*>
-    /**
+    /* *
      * Helper method used by invariant that quantify and then want to
      * print in IOA format.  This method is given a list of array-type
      * variables, and then outputs a set of strings that mean "a
@@ -2265,11 +2340,8 @@ public abstract class VarInfoName
      * that it is in indexed by the variable(2 * size); a closer
      * (1).
      * @param sets A list of array-type variables over which we will quantify.
-     *
      **/
-
-      /**
-
+    /*
     public static String[] format_ioa(VarInfo[] sets) {
 
 
@@ -2358,14 +2430,12 @@ public abstract class VarInfoName
       }
       return result;
     }
-      **/
+    */ // ... format_ioa
 
     /**
      * Takes return values from QuantHelper.format_ioa and returns
      * variable names from it.
-     *
      **/
-
     public static String forma_ioa_var (String[] quantExp, int varNum) {
       return quantExp[1 + varNum * 2];
     }
@@ -2373,9 +2443,7 @@ public abstract class VarInfoName
     /**
      * Takes return values from QuantHelper.format_ioa and returns
      * the variable subscripted with respect to the expression's set.
-     *
      **/
-
     public static String forma_ioa_subscript (String[] quantExp, int varNum) {
       return quantExp[varNum * 2 + 2];
     }
@@ -2383,9 +2451,7 @@ public abstract class VarInfoName
     /**
      * Takes return values from QuantHelper.format_ioa and returns
      * the variable subscripted with respect to the expression's set.
-     *
      **/
-
     public static String forma_ioa_in_exp (String[] quantExp, int varNum) {
       return quantExp[varNum * 2 + 1] + " \\in " + "Ops";
     }

@@ -138,14 +138,13 @@ public final class SequencesPredicate
     if (var2().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
     if (var2().getModified(full_vt) == ValueTuple.MISSING) mod = ValueTuple.MISSING;
-    /**
+    /*
      * v1\v2  Unm  Mod  Mis
      *
      * Unm    Unm  Mod  Mis
      * Mod    Mod  Mod  Mis
      * Mis    Mis  Mis  Mis
-     *
-     **/
+     */
 
     long[] predicate = (long[]) val2;
     int count = 0;

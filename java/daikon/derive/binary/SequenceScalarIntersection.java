@@ -8,8 +8,6 @@ import org.apache.log4j.Category;
 
 /** 
  * Intersection between two comparable sequences.
- *
- *
  **/
 
 // *****

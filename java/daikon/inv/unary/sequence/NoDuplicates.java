@@ -33,7 +33,6 @@ public class NoDuplicates
   /**
    * Debug tracer
    **/
-
   public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicates");
   int elts = 0;
 

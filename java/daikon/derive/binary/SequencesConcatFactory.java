@@ -11,7 +11,6 @@ import java.util.*;
 
 /**
  * Factory for SequencesConcat derived variables.
- *
  **/
 
 public final class SequencesConcatFactory  extends BinaryDerivationFactory {

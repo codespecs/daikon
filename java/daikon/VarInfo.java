@@ -27,7 +27,7 @@ public final class VarInfo
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020614L;
+  static final long serialVersionUID = 20020626L;
 
   /**
    * The program point this variable is in.
@@ -53,7 +53,7 @@ public final class VarInfo
   /**
    * Type as internally stored.  This is an interface detail and is never
    * visible to clients.
-   * @see ProglangType.fileTypeToRepType()
+   * @see ProglangType#fileTypeToRepType()
    **/
   public ProglangType rep_type;      // interned
 
@@ -596,6 +596,51 @@ public final class VarInfo
     // when I rename those variables to "closure(...)".
     return name.name().indexOf("~") != -1; // XXX
   }
+
+
+
+
+
+  /**
+   * Cached value for isDerivedParam()
+   **/
+  public Boolean isDerivedParamCached = null;
+
+  /**
+   * Returns true if this is a param according to aux info, or this is
+   * a front end derivation such that one of its bases is a param.  To
+   * figure this out, what we do is get all the param variables at
+   * this's program point.  Then we search in this's name to see if
+   * the name contains any of the variables.  We have to do this
+   * because we only have name info, and we assume that x and x.a are
+   * related from the names alone.
+   **/
+  public boolean isDerivedParam() {
+    if (isDerivedParamCached != null) return isDerivedParamCached.booleanValue();
+
+
+    boolean result = false;
+    if (aux.getFlag(VarInfoAux.IS_PARAM)) result = true;
+
+    Set paramedVars/*VarInfoName*/ = ppt.getParamVars();
+
+    VarInfoName.Finder finder = new VarInfoName.Finder(paramedVars);
+    if (finder.contains(name)) {
+      if (Global.debugSuppress.isDebugEnabled()) {
+	Global.debugSuppress.debug (name);
+	Global.debugSuppress.debug (paramedVars);
+	Global.debugSuppress.debug ("VarInfo.isDerivedParam: " +
+				    "Returning true because I am " +
+				    "derived from a param");
+
+      }
+      result = true;
+    }
+
+    isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
+    return result;
+  }
+
 
   // [[INCR]] ....
   // We don't know this anymore, since we see data incrementally,

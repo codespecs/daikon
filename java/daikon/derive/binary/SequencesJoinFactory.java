@@ -10,7 +10,6 @@ import java.util.*;
 
 /**
  * Factory for SequencesJoin derived variables.
- *
  **/
 
 public final class SequencesJoinFactory  extends BinaryDerivationFactory {
@@ -18,7 +17,6 @@ public final class SequencesJoinFactory  extends BinaryDerivationFactory {
   /**
    * Debug tracer
    **/
-
   public static final Category debug =
     Category.getInstance ("daikon.derive.binary.SequencesJoinFactory");
 
@@ -47,7 +45,7 @@ public final class SequencesJoinFactory  extends BinaryDerivationFactory {
 
     if (!(var1.name instanceof VarInfoName.Field) ||
 	!(var2.name instanceof VarInfoName.Field))   return null;
-    
+
     VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
     VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
 
