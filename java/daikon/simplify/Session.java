@@ -25,14 +25,18 @@ public class Session
    **/
   public Session() {
     try {
+      SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
       process = Runtime.getRuntime().exec("Simplify -nosc");
+      SessionManager.debugln("Session: exec ok");
 
+      SessionManager.debugln("Session: prompt off");
       // set up command stream and turn off prompting
       input = new PrintStream(process.getOutputStream());
       input.println("(PROMPT_OFF)");
       input.flush();
 
+      SessionManager.debugln("Session: eat prompt");
       // eat first prompt
       InputStream is = process.getInputStream();
       String expect = ">\t";

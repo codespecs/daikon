@@ -34,7 +34,7 @@ public class SessionManager
       System.err.println("DEBUG_SIMPLIFY is on");
     }
   }
-  private static void debugln(String s) {
+  /* package */ static void debugln(String s) {
     if (!debug_mgr) return;
     System.err.println(s);
     System.err.flush();
@@ -44,7 +44,7 @@ public class SessionManager
     debugln("Creating SessionManager");
     worker = new Worker();
     worker.setDaemon(true);
-    debugln("Starting worker thread");
+    debugln("Manager: starting worker");
     worker.start();
     // We need to pause until the worked thread is blocked on the wait
     // call.  The next line does this, but is a really bad approach.
@@ -106,6 +106,7 @@ public class SessionManager
     private Session session = new Session();
 
     public void run() {
+      debugln("Worker: run");
       synchronized (mgr) {
 	while (session != null) {
 	  try { mgr.wait(); } catch (InterruptedException e) { }
