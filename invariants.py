@@ -28,6 +28,7 @@ if not locals().has_key("var_names"):
 integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 sequence_re = re.compile(r'^.*\[\]$')
+unconstrained_re = re.compile('unconstrained$')
 
 def clear_variables():
     """Reset the values of some global variables."""
@@ -199,7 +200,7 @@ def read_file(filename):
                     raise "What value?"
 	    these_var_names.append(this_var_name)
 	    these_values.append(this_value)
-            print this_var_name, this_value
+            # print this_var_name, this_value
             line = file.readline()
 	these_var_names = tuple(these_var_names)
 	these_values = tuple(these_values)
@@ -315,7 +316,9 @@ def all_numeric_invariants():
                 this_inv = single_sequence_numeric_invariant(this_dict)
             else:
                 this_inv = single_field_numeric_invariant(this_dict)
-            print " ", this_inv.format((this_var,))
+            formatted = this_inv.format((this_var,))
+            if not unconstrained_re.search(formatted):
+                print " ", formatted
             # print " ", this_var, this_inv
             # print "   ", `this_inv`
             if not this_inv.is_exact():
@@ -336,7 +339,9 @@ def all_numeric_invariants():
                 if this_inv != None:
                     if (this_inv.is_exact()):
                         exact_pair_invs.append(indices)
-                    print "   ", this_inv.format(these_vars)
+                    formatted = this_inv.format(these_vars)
+                    if not unconstrained_re.search(formatted):
+                        print "   ", formatted
                 # print "   ", these_vars, this_inv
                 # print "     ", `this_inv`
         if len(non_exact_single_invs) > 2:
@@ -348,10 +353,10 @@ def all_numeric_invariants():
                 # print "didn't find two of", indices, "in", exact_pair_invs, ";", util.slice_by_sequence(fn_vars, indices), fn_vars
                 this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
                 these_vars = util.slice_by_sequence(fn_vars, indices)
-                if sequence_re.match(these_vars[0]) \
-                   or sequence_re.match(these_vars[1]) \
-                   or sequence_re.match(these_vars[2]):
-                    print "got sequence in a triple"
+                if (sequence_re.match(these_vars[0])
+                    or sequence_re.match(these_vars[1])
+                    or sequence_re.match(these_vars[2])):
+                    # print "got sequence in a triple"
                     this_inv = None
                 else:
                     this_inv = three_field_numeric_invariant(this_dict)
@@ -360,7 +365,9 @@ def all_numeric_invariants():
                     #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
                     # print "     ", these_vars, this_inv
                     # print "       ", `this_inv`
-                    print "     ", this_inv.format(these_vars)
+                    formatted = this_inv.format(these_vars)
+                    if not unconstrained_re.search(formatted):
+                        print "     ", formatted
 ## Testing:
 # all_numeric_invariants()
 
@@ -554,7 +561,7 @@ class single_sequence_numeric_invariant(invariant):
     all_index_sfi = None    # sfi for all elements of the sequence
     per_index_sfi = None    # tuple of element sfi's for each index
                             #   across sequence instances
-    
+
     def __init__(self, dict):
         """dict maps from tuples of values to number of occurrences"""
         invariant.__init__(self,dict)
@@ -604,14 +611,14 @@ class single_sequence_numeric_invariant(invariant):
         for i in indices:
             self.per_index_sfi.append(\
                 single_field_numeric_invariant(per_index_elems_to_count[i]))
-            
+
     def __repr__(self):
         result = "<invariant-1 []: "
-        # finish once get properties set 
+        # finish once get properties set
 
     def __str__(self):
         self.format(("x[]",))
-    
+
     def format(self, arg_tuple):
         (arg,) = arg_tuple
 
@@ -637,15 +644,14 @@ class single_sequence_numeric_invariant(invariant):
             result = result + "\n" + "\tPer sequence elements non-decreasing"
         elif self.non_increasing:
             result = result + "\n" + "\tPer sequence elements non-increasing"
-            
-        result = result + "\n" + "\tAll sequence elements: " \
-                 + self.all_index_sfi.format(("",))
 
+        result = result + "\n" + "\tAll sequence elements: " \
+                 + self.all_index_sfi.format(("*every*element*",))
         result = result + "\n" + "\tFirst sequence element: " \
-                 + self.per_index_sfi[0].format(("",))
+                 + self.per_index_sfi[0].format(("*first*element*",))
         result = result + "\n" + "\tLast sequence element: " \
-                 + self.per_index_sfi[-1].format(("",))
-        
+                 + self.per_index_sfi[-1].format(("*last*element*",))
+
         # How to note that unconstrained???
         return result
 
@@ -803,7 +809,10 @@ class two_field_numeric_invariant(invariant):
             return false
         overlap = float(overlap + 1)
 
-        probability = 1 - overlap/((self.a_max - self.a_min + 1) * (self.b_max - self.b_min + 1))
+        try:
+            probability = 1 - overlap/((self.a_max - self.a_min + 1) * (self.b_max - self.b_min + 1))
+        except OverflowError:
+            probability = 1
         # Equivalent and slower, albeit clearer
         # probability = 1 - (overlap/(self.a_max - self.a_min + 1)) * (overlap/(self.b_max - self.b_min + 1)) * (1/overlap)
 
@@ -909,15 +918,15 @@ class two_field_numeric_invariant(invariant):
         else:
             return "(%s, %s) unconstrained" % (x,y)
 
-            
-class field_sequence_numeric_invariant(invariant): 
+
+class field_sequence_numeric_invariant(invariant):
     # I'm not entirely sure what to do with this one
     member = None
     size = None
     per_index_linear = None   # Array whose elements describe the linear
                               # relationship between the number field and
                               # the sequence element at that index.
-    
+
     def __init__(self, dict_of_pairs):
 
         # Does it make sense to call super class __init__ here?
@@ -1006,14 +1015,14 @@ class two_sequence_numeric_invariant(invariant):
                            # in the two sequences.  If not None, it is the same
                            # for each index.
     # per_index_linear = None # Array whose elements describe the linear
-                              # relationship between the pair of sequence 
+                              # relationship between the pair of sequence
                               # elements at that index.
     comparison = None      # can be "=", "<", "<=", ">", ">="
     can_be_equal = None
     sub_sequence = None
     super_sequence = None
     reverse = None
-    
+
     def __init__(self, dict_of_pairs):
         invariant.__init__(self, dict_of_pairs)
 
@@ -1043,7 +1052,7 @@ class two_sequence_numeric_invariant(invariant):
                         self.linear = (a,b)
             except OverflowError:
                 pass
-    
+
         ## Less-than or greater-than (or less-or-equal, greater-or-equal)
         maybe_eq = true
         maybe_lt = true
@@ -1078,7 +1087,7 @@ class two_sequence_numeric_invariant(invariant):
         # values are in the range -100..100), we oughtn't conclude without
         # basis that the values are nonequal.
         self.can_be_equal = not(maybe_noneq)
-        
+
         self.reverse = true
         for (x, y) in pairs:
             # Make shallow copy because reverse works in place.
@@ -1097,7 +1106,7 @@ class two_sequence_numeric_invariant(invariant):
         for (x, y) in pairs:
             if not(util.sub_sequence_of(y, x)):
                 self.super_sequence = false
-                
+
     def __str__(self):
         self.format(("x[]","y[]"))
 
@@ -1141,7 +1150,7 @@ class two_sequence_numeric_invariant(invariant):
             raise "Can't get here"
 
         return "(%s,%s) unconstrained" % (x,y)
-    
+
 def all_two_field_numeric_invariants():
     sorted_keys = var_names.keys()
     sorted_keys.sort()
@@ -1398,7 +1407,10 @@ def checked_tri_linear_relationship(triples, permutation):
     # needn't check first three, but it's a waste to create a new sequence
     for triple in triples:
         (x,y,z) = util.slice_by_sequence(triple, permutation)
-        if z != a*x+b*y+c:
+        try:
+            if z != a*x+b*y+c:
+                return None
+        except OverflowError:
             return None
     else:
         return(a, b, c)
@@ -1450,21 +1462,24 @@ If no such (a,b,c) exists, then return (0,0,0)."""
         pass
 
     # Check the results
-    if (z1 != a*x1+b*y1+c) or (z2 != a*x2+b*y2+c) or (z3 != a*x3+b*y3+c):
-        # print "rationalizing", (a,b,c)
-        old = (a,b,c)
-        ra = util.rationalize(a)
-        if ra != None:
-            a = ra
-        rb = util.rationalize(b)
-        if rb != None:
-            b = rb
-        rc = util.rationalize(c)
-        if rc != None:
-            c = rc
-        # print "rationalized", (a,b,c)
-        if (ra != None and ra != a) or (rb != None and rb != b) or (rc != None and rc != c) and ((z1 != a*x1+b*y1+c) or (z2 != a*x2+b*y2+c) or (z3 != a*x3+b*y3+c)):
-            print "RATIONALIZATION DIDN'T HELP", old, (a,b,c)
+    try:
+        if (z1 != a*x1+b*y1+c) or (z2 != a*x2+b*y2+c) or (z3 != a*x3+b*y3+c):
+            # print "rationalizing", (a,b,c)
+            old = (a,b,c)
+            ra = util.rationalize(a)
+            if ra != None:
+                a = ra
+            rb = util.rationalize(b)
+            if rb != None:
+                b = rb
+            rc = util.rationalize(c)
+            if rc != None:
+                c = rc
+            # print "rationalized", (a,b,c)
+            if (ra != None and ra != a) or (rb != None and rb != b) or (rc != None and rc != c) and ((z1 != a*x1+b*y1+c) or (z2 != a*x2+b*y2+c) or (z3 != a*x3+b*y3+c)):
+                print "RATIONALIZATION DIDN'T HELP", old, (a,b,c)
+    except OverflowError:
+        return (0,0,0)
 
     return (a, b, c)
 

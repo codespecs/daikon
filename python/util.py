@@ -38,7 +38,7 @@ Instead, explicitly test the result against None."""
         if result != None:
             return result/denominator
         result = rationalize_simple(denominator/num)
-        if result != None:
+        if (result != None) and (result != 0):
             return denominator/result
     return None
 
@@ -206,6 +206,8 @@ def common_nonmodulus_strict(nums):
 but all missing numbers in their range are."""
     nums = list(nums)
     nums.sort()
+    if nums[-1] - nums[0] > 65536:
+        return None
     return common_modulus(sorted_list_difference(range(nums[0], nums[-1]), nums))
 
 def _test_common_nonmodulus_strict():
