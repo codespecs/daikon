@@ -86,9 +86,10 @@ public class LogicalCompare {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
+      Invariant guarded_inv = inv;
+//       System.err.println("Examining " + inv.format());
       if (inv instanceof GuardingImplication)
         inv = ((Implication)inv).consequent();
-//       System.err.println("Examining " + inv.format());
       if (inv instanceof LowerBound || inv instanceof UpperBound ||
           inv instanceof EltLowerBound || inv instanceof EltUpperBound ||
           inv instanceof LowerBoundFloat || inv instanceof UpperBoundFloat ||
@@ -127,7 +128,7 @@ public class LogicalCompare {
       if (inv.isGuardingPredicate)
         continue;
 //       System.err.println("Keeping   " + inv.format());
-      new_invs.add(inv);
+      new_invs.add(guarded_inv);
     }
     return new_invs;
   }
