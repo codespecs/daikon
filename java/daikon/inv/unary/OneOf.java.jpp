@@ -1248,6 +1248,8 @@ public final class ONEOFSCALAR
     } else if (num_elts == 1) {
       // chop leading space
       result = result.substring(1);
+    } else if (num_elts == 0) {
+      return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     }
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
@@ -1267,7 +1269,7 @@ public final class ONEOFSCALAR
         result = "(OR (EQ " + varname + " null) (EQ " + varname
           + "(hashcode " + simplify_format_long(elts[1]) + ")))";
       } else if (num_elts == 0) {
-        return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
+        return format_too_few_samples(OutputFormat.SIMPLIFY, null);
       } else {
         throw new Error ("Contains more than 2 elements");
       }
@@ -1285,7 +1287,7 @@ public final class ONEOFSCALAR
         result = result.substring(1);
       } else {
         // Haven't actually seen any data, so we're vacuously true
-        result = "(AND)";
+        return format_too_few_samples(OutputFormat.SIMPLIFY, null);
       }
     }
 #elif defined(IS_SEQUENCE)
@@ -1392,9 +1394,14 @@ public final class ONEOFSCALAR
     }
     if (num_elts > 1) {
       result = "(OR" + resultBuf.toString() + ")";
-    } else {
+    } else if (num_elts == 1) {
       // chop leading space
       result = resultBuf.toString().substring(1);
+    } else if (num_elts == 0) {
+      return format_too_few_samples(OutputFormat.SIMPLIFY, null);
+    } else {
+      Assert.assertTrue(false);
+      result = null;
     }
     if (result.trim().equals(""))
       result = "format_simplify() failed on a weird OneOf";
