@@ -138,17 +138,17 @@ for my $file (@ARGV) {
     # print "line: $line";
     # See esc-stats.pl for definitions of the abbreviations.
     my ($type, $evu, $evr, $enu, $enr, $iu, $ir, $a) = split(/[ \t]+/, $line);
+    $type = $types_map{$type};
     if ($single) {
       # Columns:  Verified, Unverified, Inexpressible, Redundant, Missing
       # Rows: Object, Requires, Modifies, Ensures
-      $type = $types_map{$type};
       $ver{$type} += $evu;
       $unver{$type} += $enu;
       $inexp{$type} += $iu;
       $redun{$type} += $evr + $enr + $ir;
       $miss{$type} += $a;
     } else {
-      if (defined($printed_types{$type})) {
+      if (exists($printed_types{$type})) {
 	$verified += $evu;
 	$unverified += $enu;
 	$inexpressible += $iu;
@@ -172,6 +172,8 @@ for my $file (@ARGV) {
   $maxredundant = max($maxredundant, $redundant);
   $maxreported = max($maxreported, $reported);
   $maxmissing = max($maxmissing, $missing);
+
+  # print "$class := [$loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing]\n";
 
   $classdata{$class} = [$loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing];
 }
@@ -227,11 +229,10 @@ if ($single) {
   for my $class (sort {$ {$classdata{$a}}[1] <=> $ {$classdata{$b}}[1]} keys %classdata) {
     ## This doesn't work; not sure why.
     # my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
-    # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
     ## This is a craven admission of defeat:
     my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) =
       ($ {$classdata{$class}}[0], $ {$classdata{$class}}[1], $ {$classdata{$class}}[2], $ {$classdata{$class}}[3], $ {$classdata{$class}}[4], $ {$classdata{$class}}[5], $ {$classdata{$class}}[6], $ {$classdata{$class}}[7]);
-    # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
+    # print "$class: ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
 
     my $precision = (1.0 * $verified) / ($verified + $unverified);
     my $recall = (1.0 * $verified) / ($verified + $missing);
