@@ -90,7 +90,7 @@ public final class Daikon {
   public static FileOutputStream inv_ostream;
   public static ObjectOutputStream inv_oostream;
   static Set spinfo_files = new HashSet();
-  
+
   // The invariants detected will be serialized and written to this
   // file
   public static File inv_file;
@@ -111,10 +111,10 @@ public final class Daikon {
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
 
-  
+
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
-  
+
 
   public static final String noternary_SWITCH = "noternary";
 
@@ -138,7 +138,7 @@ public final class Daikon {
   public static void main(String[] args) {
     Set decl_files = new HashSet();
     Set dtrace_files = new HashSet();
-    
+
     if (args.length == 0) {
       System.out.println("Daikon error: no files supplied on command line.");
       System.out.println(usage);
@@ -274,9 +274,9 @@ public final class Daikon {
         decl_files.add(arg);
       } else if (arg.indexOf(".dtrace") != -1) {
         dtrace_files.add(arg);
-      } else if(arg.indexOf(".spinfo") != -1) {
+      } else if (arg.indexOf(".spinfo") != -1) {
 	spinfo_files.add(arg);
-      }else{
+      } else {
         throw new Error("Unrecognized argument: " + arg);
       }
     }
@@ -286,18 +286,18 @@ public final class Daikon {
     int num_decl_files = decl_files.size();
     int num_dtrace_files = dtrace_files.size();
     int num_spinfo_files = spinfo_files.size();
-    
+
     try {
       System.out.print("Reading declaration files ");
       FileIO.read_declaration_files(decl_files, all_ppts);
       System.out.println();
       add_combined_exits(all_ppts);
-      
-      if(!disable_splitting && num_spinfo_files > 0){
+
+      if (!disable_splitting && num_spinfo_files > 0) {
 	System.out.println("Reading Splitter Info files ");
 	create_splitters(all_ppts);
       }
-      
+
       System.out.print("Reading data trace files ");
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
       System.out.println();
@@ -352,17 +352,17 @@ public final class Daikon {
 
 	int num_derived_array_vars = ppt.num_array_vars() - num_array_vars;
 	int num_derived_scalar_vars = ppt.num_vars() - ppt.num_array_vars() - num_scalar_vars;
-	
-	
+
+
 	if (no_text_output) {
 	  System.out.print("...");
 	  System.out.flush();
 	}
         if (! disable_splitting) {
 	  Splitter[] pconds = null;
-	  if(!Global.allSplitters){
+	  if (!Global.allSplitters) {
 	    pconds = SplitterList.get(ppt.name);
-	  }else{
+	  } else {
 	    pconds = SplitterList.get_all();
 	  }
           if (Global.debugPptSplit)
@@ -374,7 +374,7 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
-	
+
         {
           // Clear memory
           ppt.set_values_null();
@@ -547,21 +547,20 @@ public final class Daikon {
     }
 
   }
-  
-  static public Collection get_splitterinfo_files(){
+
+  static public Collection get_splitterinfo_files() {
     return spinfo_files;
   }
 
   static public void create_splitters(PptMap all_ppts)throws IOException{
-    
     SplitterFactory factory = new SplitterFactory(all_ppts);
     Vector sps = new Vector();
-    for(Iterator i = spinfo_files.iterator(); i.hasNext(); ){
+    for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       sps = factory.read_spinfofile((String)i.next());
     }
     int siz = sps.size();
     Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
-    for(int j = 0; j < siz; j+=2){
+    for (int j = 0; j < siz; j+=2) {
       SplitterList.put( (String )sps.elementAt(j), (Splitter[]) sps.elementAt(j+1));
     }
   }

@@ -343,8 +343,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public String getStringValue(ValueTuple vt) {
     return (String) getValue(vt);
   }
-  
-  public String[] getStringArrayValue(ValueTuple vt){
+
+  public String[] getStringArrayValue(ValueTuple vt) {
     return(String[]) getValue(vt);
   }
 
@@ -731,16 +731,16 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return type.base().startsWith("Array");
   }
 
-  /** 
+  /**
    * return declared element type (in string) of IOA Set or Array
    **/
   public String elementTypeIOA() {
     String result;
     int begin;
     int end = type.base().indexOf(')');
-    if (this.isIOASet()) 
+    if (this.isIOASet())
       begin = type.base().indexOf('(') + 1;
-    else if (this.isIOAArray()) 
+    else if (this.isIOAArray())
       begin = type.base().indexOf(',') + 1;
     else
       return null;

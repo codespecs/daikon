@@ -178,8 +178,8 @@ public final class FileIO {
                       + " found at file " + filename
                       + " line " + file.getLineNumber());
     }
-    
-    if(!Global.allSplitters){
+
+    if (!Global.allSplitters) {
       //if all the splitters are to be tried at all program points,
       //then we need to create all the program points because the
       //creation of splitters requires information from the program
@@ -199,7 +199,7 @@ public final class FileIO {
 	return null;
       }
     }
-    
+
 
     // if (ppt_name.endsWith(":::ENTER"))
     //   functions.add(ppt_name.substring(0, ppt_name.length() - 8));
@@ -878,7 +878,7 @@ public final class FileIO {
       }
       String mod_string = line;
       int mod = ValueTuple.parseModified(line);
-      
+
       // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()
       //                   + "\n  for variable " + vi.name
       //                   + " for program point " + ppt.name);

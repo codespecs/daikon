@@ -45,7 +45,7 @@ public class Digest {
    **/
   public static String hexEncode(byte[] bytes) {
     StringBuffer s = new StringBuffer(bytes.length * 2);
-    for(int i = 0; i < bytes.length; i++) {
+    for (int i = 0; i < bytes.length; i++) {
       byte b = bytes[i];
       s.append(digits[(b & 0xf0) >> 4]);
       s.append(digits[b & 0x0f]);
@@ -61,7 +61,7 @@ public class Digest {
     try {
       int len = s.length();
       byte[] r = new byte[len/2];
-      for(int i = 0; i < r.length; i++) {
+      for (int i = 0; i < r.length; i++) {
         int digit1 = s.charAt(i*2), digit2 = s.charAt(i*2 + 1);
         if ((digit1 >= '0') && (digit1 <= '9')) digit1 -= '0';
         else if ((digit1 >= 'a') && (digit1 <= 'f')) digit1 -= 'a' - 10;
