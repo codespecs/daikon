@@ -2485,7 +2485,7 @@ public class PptTopLevel extends Ppt {
     return UtilMDE.nplural(n, noun);
   }
 
-  final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+  final public static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
