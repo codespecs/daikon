@@ -248,7 +248,7 @@ public final class UtilMDE {
     }
   }
 
-  
+
   // Returns true if:
   // 1. The file exists and is writable
   // OR
@@ -395,6 +395,59 @@ public final class UtilMDE {
       } else {
         throw new NoSuchElementException();
       }
+    }
+
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
+
+  /**
+   * Returns an iterator just like its argument, except that the first and
+   * last elements are removed.  They can be accessed via the getFirst and
+   * getLast methods.
+   **/
+  public static final class RemoveFirstAndLastIterator implements Iterator {
+    Iterator itor;
+    Object nothing = new Object();
+    Object first = nothing;
+    Object current = nothing;
+
+    public RemoveFirstAndLastIterator(Iterator itor) {
+      this.itor = itor;
+      if (itor.hasNext()) {
+        first = itor.next();
+      }
+      if (itor.hasNext()) {
+        current = itor.next();
+      }
+    }
+
+    public boolean hasNext() {
+      return itor.hasNext();
+    }
+
+    public Object next() {
+      if (! itor.hasNext()) {
+        throw new NoSuchElementException();
+      }
+      Object tmp = current;
+      current = itor.next();
+      return tmp;
+    }
+
+    public Object getFirst() {
+      if (first == nothing) {
+        throw new NoSuchElementException();
+      }
+      return first;
+    }
+
+    public Object getLast() {
+      if (itor.hasNext()) {
+        throw new Error();
+      }
+      return current;
     }
 
     public void remove() {
