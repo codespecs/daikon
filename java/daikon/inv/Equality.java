@@ -66,6 +66,7 @@ public final class Equality
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
   }
@@ -138,6 +139,9 @@ public final class Equality
     return result.toString();
   }
 
+
+
+
   // This probably belongs in ProglangType proper (?)
   public boolean is_reference() {
     VarInfo foo = vars[0];
@@ -194,6 +198,7 @@ public final class Equality
     result.append(")");
     return result.toString();
   }
+
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
   protected Invariant resurrect_done(int[] permutation) {
