@@ -153,8 +153,8 @@ public class StreetNumberSetTest extends TestCase {
 
   public void testEquals3() {
     StreetNumberSet s1 = new StreetNumberSet("1-7");
-    assertEquals("'1-7'is equal to null", s1, null);
-    assertEquals("'1-7'is equal to a String", s1, "Foo");
+    assert("'1-7'is equal to null", !s1.equals(null));
+    assert("'1-7'is equal to a String", !s1.equals("Foo"));
   }
 
   public void testEquals4() {
