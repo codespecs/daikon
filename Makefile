@@ -28,9 +28,12 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
 WWW_DIR := /home/httpd/html/daikon/
 
-MERNST_DIR := /g2/users/mernst
+# This needs not to be hardcoded to a particular users directory if
+# anyone else is going to use it.
+# MERNST_DIR := /g2/users/mernst
 # This is the current directory!  Maybe I don't need a variable for it.
-INV_DIR := $(MERNST_DIR)/research/invariants
+#INV_DIR := $(MERNST_DIR)/research/invariants
+INV_DIR := $(shell pwd)
 
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
@@ -51,8 +54,13 @@ DIST_DIR_PATHS := daikon.tar.gz doc/images/daikon-logo.gif daikon.jar
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
 CVS_REPOSITORY := /g4/projects/invariants/.CVS/
-RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
-TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
+
+# It seems like these should come from their standard locations (jhp)
+#RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
+#TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
+RTJAR := /g2/jdk/jre/lib/rt.jar
+TOOLSJAR := /g2/jdk/lib/tools.jar
+
 JUNIT_VERSION := junit3.8.1
 
 # for "chgrp"
