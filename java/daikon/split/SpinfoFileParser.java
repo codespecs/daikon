@@ -14,7 +14,7 @@ import jtb.ParseException;
  * Manual, respectively.  A "ppt statement" is a single line from a
  * "ppt section."
  */
-class SpinfoFileParser {
+public class SpinfoFileParser {
 
   /** The path of the file being parsed.
    * This is used only for debugging output.

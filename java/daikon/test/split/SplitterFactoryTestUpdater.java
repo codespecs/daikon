@@ -83,13 +83,13 @@ public class SplitterFactoryTestUpdater {
   private static void generateSplitters(List /*String*/ spinfos,
                                         List /*String*/ decls) {
     Set /*File*/ declsFileSet = new HashSet();
-    List /*String*/ spinfoFiles = new ArrayList();
+    Set /*File*/ spinfoFiles = new HashSet();
     for (int i = 0; i < spinfos.size(); i++) {
       String spinfoFile = (String) spinfos.get(i);
       spinfoFile = targetDir + spinfoFile;
-      spinfoFiles.add(spinfoFile);
+      spinfoFiles.add(new File(spinfoFile));
     }
-    spinfoFileLists.add(spinfoFiles);
+    spinfoFileLists.add(new ArrayList(spinfoFiles));
     for (int i = 0; i < decls.size(); i++) {
       String declsFile = (String) decls.get(i);
       declsFile = targetDir + declsFile;
@@ -97,15 +97,10 @@ public class SplitterFactoryTestUpdater {
     }
     declsFileLists.add(new ArrayList(declsFileSet));
     try {
+      Daikon.dkconfig_suppressSplitterErrors = true;
+      Daikon.create_splitters(spinfoFiles);
       PptMap allPpts = FileIO.read_declaration_files(declsFileSet);
       Daikon.init_ppts (allPpts);
-      Daikon.dkconfig_suppressSplitterErrors = true;
-      for (int i = 0; i < spinfoFiles.size(); i++) {
-        //create the java files
-        String spinfoFile = (String) spinfoFiles.get(i);
-        SplitterObject[][] splitters =
-          SplitterFactory.read_spinfofile( new File(spinfoFile), allPpts);
-      }
     } catch(IOException e) {
       throw new RuntimeException(e);
     }
@@ -178,7 +173,7 @@ public class SplitterFactoryTestUpdater {
     code.append(" *" + lineSep);
     code.append(" * This class contains regression tests for the SplitterFactory class." + lineSep);
     code.append(" * The tests directly test the java files produced by the" + lineSep);
-    code.append(" * read_spinfofile method by comparing them against goal files." + lineSep);
+    code.append(" * load_splitters method by comparing them against goal files." + lineSep);
     code.append(" * Note that it is normal for some classes not to compile during this test." + lineSep);
     code.append(" *" + lineSep);
     code.append(" * These tests assume that the goal files are contained in the directory:" + lineSep);
@@ -249,20 +244,19 @@ public class SplitterFactoryTestUpdater {
     code.append("    for (int i = 0; i < decls.size(); i++) {" + lineSep);
     code.append("      declsFiles.add(new File((String) decls.get(i)));" + lineSep);
     code.append("    }" + lineSep);
+    code.append("    Set spFiles = new HashSet();" + lineSep);
+    code.append("    for (int i = 0; i < spinfos.size(); i++) {" + lineSep);
+    code.append("      spFiles.add(new File((String) spinfos.get(i)));" + lineSep);
+    code.append("    }" + lineSep);
     code.append("    try {" + lineSep);
-    code.append("      PptMap allPpts = FileIO.read_declaration_files(declsFiles);" + lineSep);
-    code.append("      Daikon.init_ppts (allPpts);" + lineSep);
     code.append("      if (saveFiles) {" + lineSep);
     code.append("        SplitterFactory.dkconfig_delete_splitters_on_exit = false;" + lineSep);
     code.append("      }" + lineSep);
-    code.append("     Daikon.dkconfig_suppressSplitterErrors = true;" + lineSep);
-    code.append("      for (int i = 0; i < spinfos.size(); i++) {" + lineSep);
-    code.append("        //create the java files" + lineSep);
-    code.append("        String spinfoFile = (String) spinfos.get(i);" + lineSep);
-    code.append("        SplitterObject[][] splitters =" + lineSep);
-    code.append("          SplitterFactory.read_spinfofile(new File(spinfoFile), allPpts);" + lineSep);
-    code.append("        tempDir = SplitterFactory.getTempDir();" + lineSep);
-    code.append("      }" + lineSep);
+    code.append("      Daikon.dkconfig_suppressSplitterErrors = true;" + lineSep);
+    code.append("      Daikon.create_splitters(spFiles);" + lineSep);
+    code.append("      PptMap allPpts = FileIO.read_declaration_files(declsFiles);" + lineSep);
+    code.append("      Daikon.init_ppts (allPpts);" + lineSep);
+    code.append("      tempDir = SplitterFactory.getTempDir();" + lineSep);
     code.append("    } catch(IOException e) {" + lineSep);
     code.append("        throw new RuntimeException(e);" + lineSep);
     code.append("    }" + lineSep);

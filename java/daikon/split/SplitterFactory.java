@@ -11,8 +11,9 @@ import java.util.logging.Logger;
 import java.util.regex.*;
 
 /**
- * This class contains static method read_spinfofile( spinfofilename ),
- * which creates Splitters from a .spinfo file.
+ * This class contains static methods parse_spinfofile(spinfofile) and
+ * load_splitters() which respectively creates Splitters from a .spinfo file
+ * and load the splitters for a given Ppt.
  **/
 public class SplitterFactory {
   private SplitterFactory() { throw new Error("do not instantiate"); }
@@ -62,39 +63,64 @@ public class SplitterFactory {
   /// Methods
 
   /**
-   * Reads the Splitter info.
+   * Parses the Splitter info.
    * @param infofile filename.spinfo
-   * @param all_ppts a PptMap for the Ppts of this run of Daikon.
-   * @return an array of arrays of SplitterObjects for each Ppt.
-   **/
-  public static SplitterObject[][] read_spinfofile(File infofile, PptMap all_ppts)
+   * @return a SpinfoFileParser encapsulating the parsed splitter info file.
+   */
+
+  public static SpinfoFileParser parse_spinfofile (File infofile)
     throws IOException, FileNotFoundException {
     if (tempdir == null) {
       tempdir = createTempDir();
     }
-    SpinfoFileParser fileParser = new SpinfoFileParser(infofile, tempdir);
-    SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
-    StatementReplacer statementReplacer = fileParser.getReplacer();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      if (splitterObjects[i].length != 0) {
-        String ppt_name = splitterObjects[i][0].getPptName();
-        PptTopLevel ppt = findPpt(ppt_name, all_ppts);
-        if (ppt == null) {
-          System.out.println("Could not find ppt "
-                             + ppt_name
-                             + " in decls file; used in splitter file "
-                             + infofile.getName());
-        } else {
-          loadSplitters(splitterObjects[i], ppt, statementReplacer);
-        }
-      }
-    }
     if (! dkconfig_delete_splitters_on_exit) {
       System.out.println("Splitters for this run created in " + tempdir);
     }
-    return splitterObjects;
+    return new SpinfoFileParser(infofile, tempdir);
   }
 
+  /**
+   * Finds the splitters that apply to a given Ppt and loads them.
+   * @param ppt the Ppt
+   * @param splitters a list of SpinfoFileParsers
+   */
+
+  public static void load_splitters (PptTopLevel ppt,
+				     List /* SpinfoFileParser */ splitters) 
+  {
+    for (Iterator spi = splitters.iterator(); spi.hasNext(); ) {
+      SpinfoFileParser fileParser = (SpinfoFileParser)spi.next();
+      SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
+      StatementReplacer statementReplacer = fileParser.getReplacer();
+      for (int i = 0; i < splitterObjects.length; i++) {
+	int numsplitters = splitterObjects[i].length;
+	if (numsplitters != 0) {
+	  String ppt_name = splitterObjects[i][0].getPptName();
+	  if (matchPpt(ppt_name, ppt)) {
+	    loadSplitters(splitterObjects[i], ppt, statementReplacer);
+	    Vector sp = new Vector();
+	    for (int k = 0; k < numsplitters; k++) {
+	      if (splitterObjects[i][k].splitterExists()) {
+		sp.addElement(splitterObjects[i][k].getSplitter());
+	      } else {
+		System.out.println(splitterObjects[i][k].getError());
+	      }
+	    }
+	    if (sp.size() >= 1) {
+	      SplitterList.put (ppt_name,
+				(Splitter[]) sp.toArray(new Splitter[0]));
+	    }
+	    // delete this entry in the splitter array to prevent it from
+	    // matching any other Ppts, since the documented behavior is that
+	    // it only matches one.
+	    splitterObjects[i] = new SplitterObject[0];
+	  }
+	}
+      }
+    }
+  }
+
+  
   // Accessible for the purpose of testing.
   public static String getTempDir() {
     if (tempdir == null) {
@@ -124,8 +150,7 @@ public class SplitterFactory {
   private static void loadSplitters(SplitterObject[] splitterObjects,
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)
-    throws IOException {
-
+  {
     // System.out.println("loadSplitters for " + ppt.name);
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
@@ -183,27 +208,20 @@ public class SplitterFactory {
     fileCompiler.compileFiles(fileNames);
   }
 
-  /**
-   * Finds the PptTopLevel for ppt_name.
-   * ppt_name is usually of the form "MethodName.functionName."
-   * @return The PptTopLevel for the Ppt given in ppt_name or if none
-   *   can be found, it returns a random PptTopLevel.
-   */
-  private static PptTopLevel findPpt(String ppt_name, PptMap all_ppts) {
 
-    Object exact_result = all_ppts.get(ppt_name);
-    if (exact_result != null) {
-      // System.out.println("findPptHelper exact match: " + ppt_name + ((PptTopLevel)exact_result).name);
-      return (PptTopLevel) exact_result;
-    }
+  /**
+   * Determine whether a Ppt's name matches the given pattern.
+   */
+
+  private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (ppt.name.equals(ppt_name))
+      return true;
     if (ppt_name.endsWith(":::EXIT")) {
       String regex = UtilMDE.patternQuote(ppt_name) + "[0-9]+";
-      PptTopLevel numbered_exit = findPptRegex(regex, all_ppts);
-      if (numbered_exit != null) {
-        return numbered_exit;
-      }
+      if (matchPptRegex(regex, ppt))
+	return true;
     }
-
+    
     // look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
     String regex;
@@ -219,36 +237,18 @@ public class SplitterFactory {
         regex = UtilMDE.patternQuote(ppt_name);
       }
     }
-
-    PptTopLevel result = findPptRegex(regex, all_ppts);
-
-    return result;
+    return matchPptRegex(regex, ppt);
   }
 
-  private static PptTopLevel findPptRegex(String ppt_regex, PptMap all_ppts) {
-    // System.out.println("findPptRegex: " + ppt_regex);
+  private static boolean matchPptRegex(String ppt_regex, PptTopLevel ppt) {
+    // System.out.println("matchPptRegex: " + ppt_regex);
     Pattern pattern = Pattern.compile(ppt_regex);
-    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel)itor.next();
-      String name = ppt.name;
-      Matcher matcher = pattern.matcher(name);
-      // System.out.println("  considering " + name);
-      if (matcher.find()) {
-        // return more than one? do more than one match??
-        // XXX In particular, we get in trouble here if the method
-        // name we want is a prefix of other method names. For
-        // instance, if there's both a frob and a frobAll method, both
-        // Pkg.frob(int):::EXIT8 and Pkg.frobAll(int[])::EXIT12 could
-        // match /Pkg.frob.*EXIT/, and it's luck of the draw as to
-        // which one we get. A workaround is to put "Pkg.frob(",
-        // rather than just "Pkg.frob", in your .spinfo file. -smcc
-        // System.out.println("findPptRegex regex match: " + name);
-        return all_ppts.get(name);
-      }
-    }
-    // System.out.println("findPptRegex ==> null");
-    return null;
+    String name = ppt.name;
+    Matcher matcher = pattern.matcher(name);
+    // System.out.println("  considering " + name);
+    return matcher.find();
   }
+
 
   /**
    * Returns a file name for a splitter file to be used with a Ppt

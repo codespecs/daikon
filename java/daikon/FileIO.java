@@ -145,6 +145,15 @@ public final class FileIO {
   ///////////////////////////////////////////////////////////////////////////
   /// Declaration files
   ///
+  
+  // *** It would be nice to get rid of all this stuff and merge it with
+  // *** the current implementation of read_data_trace_files, which will
+  // *** also parse and incrementally initialize Ppt declarations appearing
+  // *** in the input streams.  However, the incremental Ppt initialization
+  // *** (as opposed to calling init_ppts after all Ppt declarations are read
+  // *** in) assumes that declarations for :::ENTER Ppts appear before their
+  // *** corresponding :::EXIT Ppts, and this is not currently true of decls
+  // *** files produced by dfej.
 
   /**
    * @param files files to be read (java.io.File)
@@ -205,32 +214,11 @@ public final class FileIO {
         continue;
       }
       if (line.equals("VarComparability")) {
-        line = reader.readLine();
-        if (line.equals("none")) {
-          varcomp_format = VarComparability.NONE;
-        } else if (line.equals("implicit")) {
-          varcomp_format = VarComparability.IMPLICIT;
-        } else if (line.equals("explicit")) {
-          varcomp_format = VarComparability.EXPLICIT;
-        } else {
-          throw new FileIOException(
-            "Unrecognized VarComparability",
-            reader,
-            filename);
-        }
+	varcomp_format = read_var_comparability (reader, filename);
         continue;
       }
       if (line.equals("ListImplementors")) {
-        // Each line following is the name (in JVM form) of a class
-        // that implemnts java.util.List.
-        for (;;) {
-          line = reader.readLine();
-          if (line == null || line.equals(""))
-            break;
-          if (isComment(line))
-            continue;
-          ProglangType.list_implementors.add(line.intern());
-        }
+	read_list_implementors (reader, filename);
         continue;
       }
 
@@ -445,6 +433,45 @@ public final class FileIO {
       aux);
   }
 
+  private static int read_var_comparability (LineNumberReader reader,
+					     File filename)
+    throws IOException {
+    int varcomp_format;
+    String line = reader.readLine();
+    if (line.equals("none")) {
+      varcomp_format = VarComparability.NONE;
+    } else if (line.equals("implicit")) {
+      varcomp_format = VarComparability.IMPLICIT;
+    } else if (line.equals("explicit")) {
+      varcomp_format = VarComparability.EXPLICIT;
+    } else {
+      throw new FileIOException("Unrecognized VarComparability",
+				reader,
+				filename);
+    }
+    return varcomp_format;
+  }
+
+  private static void read_list_implementors (LineNumberReader reader,
+					      File filename)
+    throws IOException {
+    // Each line following is the name (in JVM form) of a class
+    // that implements java.util.List.
+    for (;;) {
+      String line = reader.readLine();
+      if (line == null || line.equals(""))
+	break;
+      if (isComment(line))
+	continue;
+      ProglangType.list_implementors.add(line.intern());
+    }
+  }
+    
+    
+    
+
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// invocation tracking for dtrace files entry/exit grouping
   ///
@@ -641,12 +668,12 @@ public final class FileIO {
     }
 
     String nice_filename; /* For use in messages to user */
+    File file = new File(filename);
     if (filename.equals("-")) {
       nice_filename = "standard input";
     } else {
       // Remove directory parts, to make it shorter
-      File f = new File(filename);
-      nice_filename = f.getName();
+      nice_filename = file.getName();
     }
 
     if (count_lines) {
@@ -662,6 +689,9 @@ public final class FileIO {
              = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
+    // Default VarComparability
+    int varcomp_format = VarComparability.IMPLICIT;
+
     // "line_" is uninterned, "line" is interned
     for (String line_ = reader.readLine(); line_ != null;
                                               line_ = reader.readLine()) {
@@ -674,16 +704,36 @@ public final class FileIO {
           && (reader.getLineNumber() > dkconfig_max_line_number))
         break;
 
-      // Keep track of the total number of samples we have seen.
-      samples_considered++;
-
       String line = line_.intern();
 
-      if ((line == declaration_header) || !ppt_included (line)) {
+      // First look for declarations in the dtrace stream
+      if (line == declaration_header) {
+        PptTopLevel ppt =
+          read_declaration(reader, all_ppts, varcomp_format, file);
+        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
+        if (ppt != null) {
+          all_ppts.add(ppt);
+	  Daikon.init_ppt(ppt, all_ppts);
+        }
+        continue;
+      }
+      if (line.equals("VarComparability")) {
+	varcomp_format = read_var_comparability (reader, file);
+        continue;
+      }
+      if (line.equals("ListImplementors")) {
+	read_list_implementors (reader, file);
+        continue;
+      }
+      if (!ppt_included (line)) {
         while ((line != null) && !line.equals(""))
           line = reader.readLine();
         continue;
       }
+
+      // If we got here, we're looking at a sample and not a declaration.
+      // Keep track of the total number of samples we have seen.
+      samples_considered++;
 
       // Parse the ppt name
       String ppt_name = line; // already interned

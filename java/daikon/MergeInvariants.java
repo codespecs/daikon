@@ -195,10 +195,10 @@ public final class MergeInvariants {
 
       // Build the result ppmap from the specific decls file
       debugProgress.fine ("Building result ppt map from decls file");
+      Daikon.create_splitters(splitter_files);
       List  decl_files = new ArrayList();
       decl_files.add (decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
-      Daikon.create_splitters(merge_ppts, splitter_files);
       Daikon.init_ppts (merge_ppts);
       merge_ppts.trimToSize();
       PptRelation.init_hierarchy (merge_ppts);

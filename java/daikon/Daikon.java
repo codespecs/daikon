@@ -443,8 +443,8 @@ public final class Daikon {
     fileio_progress.start();
 
     // Load declarations and splitters
+    load_spinfo_files(spinfo_files);
     all_ppts = load_decls_files(decls_files);
-    load_spinfo_files(all_ppts, spinfo_files);
     load_map_files(all_ppts, map_files);
 
     init_ppts (all_ppts);
@@ -1330,14 +1330,13 @@ public final class Daikon {
   }
 
   private static void load_spinfo_files(
-    PptMap all_ppts,
     Set spinfo_files // [File]
   ) {
     stopwatch.reset();
     if (!dkconfig_disable_splitting && spinfo_files.size() > 0) {
       try {
         System.out.print("Reading splitter info files ");
-        create_splitters(all_ppts, spinfo_files);
+        create_splitters(spinfo_files);
         System.out.print(" (read ");
         System.out.print(
           UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
@@ -1379,6 +1378,8 @@ public final class Daikon {
     if (dkconfig_disable_splitting) {
       return;
     }
+
+    SplitterFactory.load_splitters(ppt, parsedSplitters);
 
     Splitter[] pconds = null;
     if (SplitterList.dkconfig_all_splitters) {
@@ -1785,44 +1786,18 @@ public final class Daikon {
   /**
    * Create user defined splitters
    */
-  public static void create_splitters(PptMap all_ppts, Set spinfo_files)
+
+  private static List /* SpinfoFileParser */ parsedSplitters = new ArrayList();
+
+  public static void create_splitters(Set spinfo_files)
     throws IOException {
     for (Iterator i = spinfo_files.iterator(); i.hasNext();) {
       File filename = (File) i.next();
-      SplitterObject[][] splitterObjectArrays =
-        SplitterFactory.read_spinfofile(filename, all_ppts);
-      for (int j = 0; j < splitterObjectArrays.length; j++) {
-        int numsplitters = splitterObjectArrays[j].length;
-        if (numsplitters == 0)
-          continue;
-        // Why do we have this entry in the array, anyway? -smcc
-        String pptname = splitterObjectArrays[j][0].getPptName();
-        Vector splitters = new Vector();
-        for (int k = 0; k < numsplitters; k++) {
-          if (splitterObjectArrays[j][k].splitterExists()) {
-            splitters.addElement(
-              splitterObjectArrays[j][k].getSplitter());
-          } else {
-            System.out.println(
-              splitterObjectArrays[j][k].getError());
-          }
-        }
-
-        if (splitters.size() >= 1) {
-          // If the pptname is ALL, associate it with all program points.
-          if (pptname.equals("ALL")) {
-            SplitterList.put(
-              ".*",
-              (Splitter[]) splitters.toArray(new Splitter[0]));
-          } else {
-            SplitterList.put(
-              pptname,
-              (Splitter[]) splitters.toArray(new Splitter[0]));
-          }
-        }
+      SpinfoFileParser p = SplitterFactory.parse_spinfofile (filename);
+      parsedSplitters.add(p);
       }
-    }
   }
+
 
   /**
    * Guard the invariants at all PptTopLevels. Note that this changes
