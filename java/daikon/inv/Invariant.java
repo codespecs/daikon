@@ -64,13 +64,13 @@ public abstract class Invariant implements java.io.Serializable {
     if (result > PROBABILITY_NEVER) {
       // Can't print this.repr(), as it may compute the probability!
       System.out.println("Bad invariant probability " + result + ": \n" + this.getClass() + "\n" +
-                         this.format() + "\n");
+			 this.format() + "\n");
     }
     Assert.assert((result == PROBABILITY_JUSTIFIED)
-                  || (result == PROBABILITY_UNJUSTIFIED)
-                  || (result == PROBABILITY_UNKNOWN)
-                  || (result == PROBABILITY_NEVER)
-                  || ((0 <= result) && (result <= 1)));
+		  || (result == PROBABILITY_UNJUSTIFIED)
+		  || (result == PROBABILITY_UNKNOWN)
+		  || (result == PROBABILITY_NEVER)
+		  || ((0 <= result) && (result <= 1)));
     return result;
     // if (!probability_cache_accurate) {
     //   probability_cache = computeProbability();
@@ -155,16 +155,16 @@ public abstract class Invariant implements java.io.Serializable {
       // TODO: JWN says "Shouldn't this be an assertion or something?"
       // MDE: The
       System.out.println("Modbit problem:  more values (" + ((OneOf) this).num_elts() +
-                         ") than modified samples (" + num_mod_non_missing_samples + ")");
+			 ") than modified samples (" + num_mod_non_missing_samples + ")");
     }
 
     // We print a OneOf invariant even if there are few modified samples.  If the variable
     // takes on only one value, maybe it is only set once (or a few times).
     if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)  &&  (! (this instanceof OneOf))) {
       if (Global.debugPrintInvariants)
-        System.out.println("  [Only " + ppt.num_mod_non_missing_samples() +
-                           " modified non-missing samples (" + ppt.num_samples() +
-                           " total samples): " + repr() + " ]");
+	System.out.println("  [Only " + ppt.num_mod_non_missing_samples() +
+			   " modified non-missing samples (" + ppt.num_samples() +
+			   " total samples): " + repr() + " ]");
       return true;
     }
     return false;
@@ -177,21 +177,21 @@ public abstract class Invariant implements java.io.Serializable {
     VarInfo varInfos[] = ppt.var_infos;
     for (int i=0; i < varInfos.length; i++) {
       if (! varInfos[i].isCanonical()) {
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [Suppressing " + repr() + " because " + varInfos[i].name + " is non-canonical]");
-        }
-        if (Global.debugPptTopLevel) {
-          System.out.println("  [not all vars canonical:  " + repr() + " ]");
-          System.out.print("    [Canonicalness:");
-          for (int j=0; j < varInfos.length; j++)
-            System.out.print(" " + varInfos[j].isCanonical());
-          System.out.println("]");
-          // Eventually this may be able to happen again, because we will
-          // instantiate all invariants simultaneously, so we don't yet know
-          // which of the new variables is canonical.
-          throw new Error("this shouldn't happen");
-        }
-        return true;
+	if (Global.debugPrintInvariants) {
+	  System.out.println("  [Suppressing " + repr() + " because " + varInfos[i].name + " is non-canonical]");
+	}
+	if (Global.debugPptTopLevel) {
+	  System.out.println("  [not all vars canonical:  " + repr() + " ]");
+	  System.out.print("    [Canonicalness:");
+	  for (int j=0; j < varInfos.length; j++)
+	    System.out.print(" " + varInfos[j].isCanonical());
+	  System.out.println("]");
+	  // Eventually this may be able to happen again, because we will
+	  // instantiate all invariants simultaneously, so we don't yet know
+	  // which of the new variables is canonical.
+	  throw new Error("this shouldn't happen");
+	}
+	return true;
       }
     }
     return false;
@@ -204,21 +204,21 @@ public abstract class Invariant implements java.io.Serializable {
     VarInfo[] varInfos = ppt.var_infos;
     for (int i=0; i < varInfos.length; i++) {
       if (! varInfos[i].isConstant())
-        return false;
+	return false;
     }
     
     // At this point, we know all variables are constant.
     Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
-                  // , "Unexpected invariant with all vars constant: "
-                  // + inv + "  " + inv.repr() + "  " + inv.format()
-                  );
+		  // , "Unexpected invariant with all vars constant: "
+		  // + inv + "  " + inv.repr() + "  " + inv.format()
+		  );
     if (this instanceof Comparison) {
-				//      Assert.assert(! IsEquality.it.accept(this));
+      //      Assert.assert(! IsEquality.it.accept(this));
       if (Global.debugPrintInvariants)
-        System.out.println("  [over constants:  " + this.repr() + " ]");
+	System.out.println("  [over constants:  " + this.repr() + " ]");
       return true;
-    } else
-      return false;
+    } 
+    return false;
   }
 
   /**
@@ -237,7 +237,7 @@ public abstract class Invariant implements java.io.Serializable {
     // // // obvious-derived invariants to lists in the first place.
     if (isObviousDerived() || isObviousImplied()) {
       if (Global.debugPrintInvariants)
-        System.out.println("  [obvious:  " + repr() + " ]");
+	System.out.println("  [obvious:  " + repr() + " ]");
       return true;
     }
     return false;
@@ -267,7 +267,7 @@ public abstract class Invariant implements java.io.Serializable {
   public boolean isUnjustified() {
     if (! justified()) {
       if (Global.debugPrintInvariants)
-        System.out.println("  [not justified:  " + repr() + " ]");
+	System.out.println("  [not justified:  " + repr() + " ]");
       return true;
     }
     return false;
@@ -276,47 +276,45 @@ public abstract class Invariant implements java.io.Serializable {
   /**
    * @return true if this invariant is controlled by another invariant
    **/
-//    public boolean isControlled() {
-//      Invariant controller = ppt.find_controlling_invariant( this );
-//      if (controller != null) {
-//        if (Global.debugPrintInvariants) {
-//          System.out.println("  [is controlled:  " + repr() + " ]");
-//        }
-//        return true;
-//      }
-//      return false;
-//    }
+  public boolean isControlled() {
+    Invariant controller = ((PptTopLevel) ppt.parent).find_controlling_invariant( this );
+    if (controller != null) {
+      if (Global.debugPrintInvariants) {
+	System.out.println("  [is controlled:  " + repr() + " ]");
+      }
+      return true;
+    }
+    return false;
+  }
 
-//    private final static Invariant.IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
-//      new Invariant.DefaultIsSameInvariantNameExtractor() {
-//          public String getFromFirst(VarInfo var)
-//          { return "orig(" + super.getFromFirst(var) + ")"; }
-//        };
+  /**
+   * @return true if this invariant is a postcondition that is implied by prestate
+   * invariants.  For example, if an entry point has the invariant orig(x)+3=orig(y), and
+   * this invariant is the corresponding exit point invariant x+3=y, then this methods
+   * returns true.
+   **/
+  public boolean isImpliedPostcondition() {
+    PptTopLevel topLevel = (PptTopLevel) ppt.parent;
+    if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
+      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator();
+      while (entryInvariants.hasNext()) {
+	Invariant entryInvariant = (Invariant) entryInvariants.next();
+	// If entryInvariant with orig() applied to everything matches this invariant
+	if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
+	  return true;
+      }
+    }
+    return false;
+  }
 
-//    /**
-//     * @return true if this invariant
-//     **/
-//    private boolean isWorthPrinting_PostconditionPrestate(Invariant inv, boolean add_to_stats)
-//    {
-//      if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
-//        if (entry_ppt != null) {
-//          Iterator entry_invs = entry_ppt.invariants_vector().iterator();
-//          while (entry_invs.hasNext()) {
-//            Invariant entry_inv = (Invariant) entry_invs.next();
-//            // If entry_inv with orig() applied to everything matches inv
-//            if (entry_inv.isSameInvariant(inv, preToPostIsSameInvariantNameExtractor)) {
-//              if (entry_ppt.isWorthPrinting(entry_inv)) {
-//                if (add_to_stats) {
-//                  // TODO: Fix global statistics for this?
-//                }
-//                return false;
-//              }
-//            }
-//          }
-//        }
-//      }
-//      return true;
-//    }
+  /**
+   * Used in isImpliedPostcondition().
+   **/
+  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+    new DefaultIsSameInvariantNameExtractor() {
+	public String getFromFirst(VarInfo var)
+	{ return "orig(" + super.getFromFirst(var) + ")"; }
+      };
 
 
   // Not used as of 1/31/2000.
@@ -355,7 +353,7 @@ public abstract class Invariant implements java.io.Serializable {
   public static final class InvariantComparatorForPrinting implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
-        return 0;
+	return 0;
       Invariant inv1 = (Invariant)o1;
       Invariant inv2 = (Invariant)o2;
       Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
@@ -363,22 +361,22 @@ public abstract class Invariant implements java.io.Serializable {
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
       if (arity_cmp != 0)
-        return arity_cmp;
+	return arity_cmp;
       for (int i=0; i<vis1.length; i++) {
-        int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
-        if (tmp != 0)
-          return tmp;
+	int tmp = vis1[i].varinfo_index - vis2[i].varinfo_index;
+	if (tmp != 0)
+	  return tmp;
       }
       String format1 = inv1.format();
       String format2 = inv2.format();
       // Put nulls at the end of the list (or at the beginning; it doesn't
       // matter).
       if ((format1 == null) && (format2 == null))
-        return 0;
+	return 0;
       if ((format1 == null) && (format2 != null))
-        return 1;
+	return 1;
       if ((format1 != null) && (format2 == null))
-        return -1;
+	return -1;
       return format1.compareTo(format2);
     }
   }
@@ -426,7 +424,7 @@ public abstract class Invariant implements java.io.Serializable {
    * names.
    **/
   public boolean isSameInvariant(Invariant inv2,
-                                 IsSameInvariantNameExtractor name_extractor)
+				 IsSameInvariantNameExtractor name_extractor)
   {
     Invariant inv1 = this;
 
@@ -452,7 +450,7 @@ public abstract class Invariant implements java.io.Serializable {
       
       // Do the easy check first
       if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
-        continue;
+	continue;
       }
 
       // The names "match" iff there is an intersection of the names
@@ -463,21 +461,21 @@ public abstract class Invariant implements java.io.Serializable {
       all_vars2.add(var2.canonicalRep());
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
-        VarInfo elt = (VarInfo) iter.next();
-        String name = name_extractor.getFromFirst(elt);
-        all_vars_names1.add(name);
+	VarInfo elt = (VarInfo) iter.next();
+	String name = name_extractor.getFromFirst(elt);
+	all_vars_names1.add(name);
       }
       boolean intersection = false;
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
-        VarInfo elt = (VarInfo) iter.next();
-        String name = name_extractor.getFromSecond(elt);
-        intersection = all_vars_names1.contains(name);
-        if (intersection) {
-          break;
-        }
+	VarInfo elt = (VarInfo) iter.next();
+	String name = name_extractor.getFromSecond(elt);
+	intersection = all_vars_names1.contains(name);
+	if (intersection) {
+	  break;
+	}
       }
       if (!intersection) {
-        return false;
+	return false;
       }
     }
 
