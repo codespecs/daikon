@@ -7,12 +7,12 @@
 
 <h1>Using Daikon at MIT LCS</h1>
 
-This document tells you how to get started using Daikon on
-geyer.lcs.mit.edu at the MIT Lab for Computer Science.  (These steps are
-primarily for students and other colleagues working with Michael Ernst; if
-you do not need access to the central repository of code and data, you can
-simply <a href="../download">download</a> the Daikon distribution to your
-own computer.)
+This document tells you how to get started using Daikon on the PAG machines
+(all named after root vegetables) at the MIT Lab for Computer Science.
+These steps are primarily for students and other colleagues working with
+Michael Ernst; if you do not need access to the central repository of code
+and data, you can simply <a href="../download">download</a> the Daikon
+distribution to your own computer.
 
 <p>
 The steps are simple, but there are many of them.  You
@@ -78,20 +78,22 @@ and some details of the Daikon implementation, see the following papers:
 
 <h3><a name="getting-account"></a>Getting a computer account</h3>
 
-geyer.lcs.mit.edu, also known as pag.lcs.mit.edu, has plenty of disk space
-and direct access to the main CVS repository and precompiled binaries.  You
-are also welcome to work from elsewhere if you prefer.  Other machines you
-may use include: scallion, yam, cassava, shallot, potato, otto.  Several of
-these machines are in room 413, to which you should obtain a key (get the
-required form from Neena Lyall in room 523); or, you can use them remotely.
+You should perform your work on one of these client machines:  scallion,
+yam, cassava, shallot, potato, otto.  All of these use the
+geyer.lcs.mit.edu (also known as pag.lcs.mit.edu) filesystem, which has
+plenty of disk space and direct access to the main CVS repository and
+precompiled binaries.  You are also welcome to work from elsewhere if you
+prefer.  Several of the client machines are in room 413, to which you
+should obtain a key (get the required form from Neena Lyall in room 523);
+or, you can use them remotely.
 <p>
 
-Do not use standard telnet or rlogin to log into geyer (or other machines)
-remotely; always use ssh.  Similarly, for file transfer, use anonymous
-means or use scp.  The ssh and scp programs protect your password from
-eavesdroppers; we don't want geyer to get broken into due to negligence.
-To change your password, use the <tt>yppasswd</tt> command; do not use
-plain <tt>passwd</tt>.
+Do not use standard telnet or rlogin to log into the machines remotely;
+always use ssh.  Similarly, for file transfer, use anonymous means or use
+scp.  The ssh and scp programs protect your password from eavesdroppers; we
+don't want our machines to get broken into due to negligence.  To change
+your password, use the <tt>yppasswd</tt> command; do not use plain
+<tt>passwd</tt>.
 <p>
 
 Ask <a href="mailto:mernst@lcs.mit.edu">Michael Ernst</a> or someone else
@@ -134,9 +136,9 @@ update -d -P
 or just <a href=".cvsrc">download this one</a> to your home directory.
 <p>
 
-If you wish to run <tt>dfej</tt> on geyer, then you will need to adjust
-your LD_LIBRARY_PATH environment variable.  A reasonable setting (csh
-syntax; this would go in your <tt>.cshrc</tt> file) is
+If you wish to run <tt>dfej</tt> on a PAG machine, then you will need to
+adjust your LD_LIBRARY_PATH environment variable.  A reasonable setting
+(csh syntax; this would go in your <tt>.cshrc</tt> file) is
 <blockquote>
 <pre>
 setenv LD_LIBRARY_PATH   /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
