@@ -164,15 +164,6 @@ public final class VarInfo
       Assert.assert(po_higher_nonce != null);
       Assert.assert(po_higher_nonce.length == ary.length);
     }
-    if (po_lower == null) {
-      Assert.assert(po_lower_nonce == null);
-    } else if (po_lower instanceof VarInfo) {
-      // nothing to do
-    } else {
-      Assert.assert(po_lower instanceof VarInfo[]);
-      VarInfo[] ary = (VarInfo[]) po_lower;
-      Assert.assert(! ArraysMDE.any_null(ary));
-    }
     // check lower/higher rep types matching, too ??
     // Derivation derived; ??
     // VarInfo sequenceSize; ??
