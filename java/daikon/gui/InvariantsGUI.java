@@ -7,27 +7,39 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.*;
 import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 import daikon.*;
 import daikon.inv.*;
 
-public class InvariantsGUI extends JFrame implements KeyListener {
+public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
     InvariantTablesPanel invariantsTablesPanel;
 
     public static void main( String args[] ) {
-	String invFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
+	InvariantsGUI gui;
 	if (args.length > 0)
-	    invFileName = args[0];
-	InvariantsGUI gui = new InvariantsGUI( invFileName );
+	    gui = new InvariantsGUI( args[0] );
+	else
+	    gui = new InvariantsGUI();
     }
 
     public InvariantsGUI( String invFileName ) {
+	loadInvariantsFromFile( invFileName );
+    }
+
+    public InvariantsGUI() {
+	String invFileName = pickFileFromFileChooser();
+	loadInvariantsFromFile( invFileName );
+    }
+
+    public void loadInvariantsFromFile( String invFileName ) {
 	DefaultTreeModel treeModel = constructTreeModel( invFileName );
 	JTree tree = new JTree( treeModel );
 	JScrollPane invariantTablesScrollPane = new JScrollPane();
@@ -137,7 +149,7 @@ public class InvariantsGUI extends JFrame implements KeyListener {
     //  Used by constructTreeModel().
     protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
 	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode)enum.nextElement());
+	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
 	    if (child.toString().equals( name ))
 		return child;
 	}
@@ -145,7 +157,21 @@ public class InvariantsGUI extends JFrame implements KeyListener {
     }
 
     protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
-	addKeyListener( this );
+	JMenuBar menuBar = new JMenuBar();
+	setJMenuBar( menuBar );
+	JMenu menu = new JMenu( "File" );
+	menu.setMnemonic( KeyEvent.VK_F );
+	menuBar.add( menu );
+	JMenuItem menuItem = new JMenuItem( "Load", KeyEvent.VK_L );
+	menuItem.addActionListener( this );
+	menu.add( menuItem );
+	menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
+	menuItem.addActionListener( this );
+	menu.add( menuItem );
+
+	removeKeyListener( this ); // setupGUI() might be called more than once, but we only
+                                   // want to add it as KeyListener once.
+	addKeyListener( this );	   // for scrolling through tables
 
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
@@ -153,9 +179,15 @@ public class InvariantsGUI extends JFrame implements KeyListener {
  
 	JCheckBox showUnjustifiedCheckBox = new JCheckBox( "Show unjustified invariants" );
 	showUnjustifiedCheckBox.addItemListener( invariantsTablesPanel );
+	showUnjustifiedCheckBox.setName( "showUnjustifiedCheckBox" );
+	showUnjustifiedCheckBox.setFont( showUnjustifiedCheckBox.getFont().deriveFont( Font.PLAIN ));
+	JCheckBox showObviousCheckBox = new JCheckBox( "Show obvious invariants" );
+	showObviousCheckBox.addItemListener( invariantsTablesPanel );
+	showObviousCheckBox.setName( "showObviousCheckBox" );
 
 	JPanel controlPanel = new JPanel();
 	controlPanel.add( showUnjustifiedCheckBox );
+	//	controlPanel.add( showObviousCheckBox );
 
 	JPanel topPanel = new JPanel();	// includes control panel and tree
 	topPanel.setLayout( new BorderLayout());
@@ -168,13 +200,41 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 	splitPane.setOneTouchExpandable( true );
 	splitPane.setDividerSize( 2 );
 
+	getContentPane().removeAll();
 	setTitle( "Daikon GUI" );
 	getContentPane().add( splitPane );
  	pack();
 	setSize( 600, 700 );
 	setVisible( true );
+	setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 	splitPane.setDividerLocation( .4 );
+    }
+
+    public void actionPerformed( ActionEvent e ) {
+	String menuName = ((JMenuItem) (e.getSource())).getText();
+	if (menuName.equals( "Load" )) {
+	    String invFileName = pickFileFromFileChooser();
+	    loadInvariantsFromFile( invFileName );
+	}
+	else if (menuName.equals( "Quit" ))
+	    System.exit( 0 );
+    }
+
+    String pickFileFromFileChooser() {
+	final JFileChooser fileChooser = new JFileChooser();
+	fileChooser.addChoosableFileFilter( new InvFileFilter());
+	int returnValue = JFileChooser.CANCEL_OPTION;
+	while (returnValue != JFileChooser.APPROVE_OPTION)
+	    returnValue = fileChooser.showOpenDialog( this );
+	String fileName = "";
+	try {
+	    fileName = fileChooser.getSelectedFile().getCanonicalPath();
+	} catch (IOException e) {
+	    System.out.println( "InvariantsGUI.pickFileFromFileChooser():  error selecting file '" + fileName + "'" );
+	    throw new Error( e.getMessage());
+	}
+	return fileName;
     }
 
     public void keyTyped( KeyEvent e ) {}
@@ -184,6 +244,25 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 	    invariantsTablesPanel.scrollToPreviousTable();
 	else if (e.isAltDown()  &&  e.getKeyCode() == 40) // down arrow
 	    invariantsTablesPanel.scrollToNextTable();
+    }
+}
+
+
+
+class InvFileFilter extends FileFilter {
+    public boolean accept( File file ) {
+	if (file.isDirectory())
+	    return true;
+
+	String fileName = file.getName();
+	if (fileName.endsWith( ".inv" )  ||  fileName.endsWith( ".inv.gz" ))
+	    return true;
+	else
+	    return false;
+    }
+    
+    public String getDescription() {
+        return ".inv files";
     }
 }
 
@@ -233,7 +312,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 		    tableHeights.remove( index );
 		}
 
-      	    //  A non-leaf node was selected or deselected.  Select or deselect its children.
+		//  A non-leaf node was selected or deselected.  Select or deselect its children.
  	    } else {
 		if (e.isAddedPath( paths[i] )) // Add children.
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
@@ -275,7 +354,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	    scrollToCurrentTable();
 	}
 
-	    //	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
+	//	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
 	panel.repaint();
 	panel.revalidate();
     }
@@ -327,13 +406,23 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
     }
 
     public void itemStateChanged( ItemEvent e ) {
-	if (e.getStateChange() == ItemEvent.SELECTED)
-	    for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		((InvariantTableModel) iter.next()).showUnjustifiedInvariants( true );
-	else
-	    for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		((InvariantTableModel) iter.next()).showUnjustifiedInvariants( false );
-	panel.repaint();
+	if (((JCheckBox) e.getItem()).getName().equals( "showUnjustifiedCheckBox" )) {
+	    if (e.getStateChange() == ItemEvent.SELECTED)
+		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		    ((InvariantTableModel) iter.next()).showUnjustifiedInvariants( true );
+	    else
+		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		    ((InvariantTableModel) iter.next()).showUnjustifiedInvariants( false );
+	}
+	else if (((JCheckBox) e.getItem()).getName().equals( "showObviousCheckBox" )) {
+	    if (e.getStateChange() == ItemEvent.SELECTED)
+		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		    ((InvariantTableModel) iter.next()).showObviousInvariants( true );
+	    else
+		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		    ((InvariantTableModel) iter.next()).showObviousInvariants( false );
+	}
+	    panel.repaint();
 	panel.revalidate();
     }
 
@@ -407,6 +496,9 @@ class InvariantTableModel extends AbstractTableModel {
 	}
 	this.isShowingUnjustifiedInvariants = showUnjustifiedInvariants;
 	fireTableDataChanged();
+    }
+
+    public void showObviousInvariants( boolean showObviousInvariants ) {
     }
 }
 
