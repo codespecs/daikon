@@ -15,6 +15,11 @@
 @c http://pag.csail.mit.edu/daikon/
 @c @end macro
 
+@c Note about ``@table @option''.
+@c Unfortunately, @option{} adds quotes in the Info and printed output
+@c which is not necessary in a table.  However, @t and @code compress any
+@c two adjacent hyphens to one in Info and HTML output, which is even worse.
+
 @c Problem: with texinfo 4.0, the HTML formatting leaves the "{}" after
 @c uses of the macro.  (Formatting seems fine for info, for printing, etc.)
 @c So for now, I have inlined all instances of the macro.  Yuck.
@@ -1276,7 +1281,7 @@ gcc -gdwarf-2 wordplay.c -o wordplay
 
 Kvasir can also be used for programs constructed by compiling a number
 of @file{.c} files separately, and then linking them together; in such
-a program, specify @code{-gdwarf-2} for each source file containing
+a program, specify @option{-gdwarf-2} for each source file containing
 code you wish invariants about.
 
 @item Run the program using the kvasir-dtrace script.
@@ -1285,10 +1290,10 @@ kvasir-dtrace ./wordplay -f words.txt daikondynamicinvariantdetector
 @end example
 
 Run the program just as you normally would, but prepend
-@code{kvasir-dtrace} to the front of the command line.  Any options to
+@command{kvasir-dtrace} to the front of the command line.  Any options to
 the program can be specified as usual; here, for instance, we give
 commands to look for anagrams of the phrase ``Daikon Dynamic Invariant
-Detector'' using words from the file @code{words.txt}.
+Detector'' using words from the file @file{words.txt}.
 Note that we
 specified the program as @file{./wordplay}, rather than simply
 @file{wordplay}, to unambiguously specify that the program in the current
@@ -1752,8 +1757,8 @@ usually easier to use and more reliable.
 
 To use Kvasir with your program, first make sure that your program has
 been compiled with DWARF-2 format debugging information, such as by
-giving the @code{-gdwarf-2} flag to GCC when compiling.  Then, run your
-program as usual, but prepend @code{kvasir-dtrace} to the command line.
+giving the @option{-gdwarf-2} flag to GCC when compiling.  Then, run your
+program as usual, but prepend @command{kvasir-dtrace} to the command line.
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{C
 front end Kvasir}.
@@ -1988,7 +1993,7 @@ automatically or by hand.
 The files may appear in any order;
 the file type is determined by whether the file name contains
 @file{.decls}, @file{.dtrace}, or @file{.spinfo}.
-As a special case, a file name of @code{-} means to read data trace
+As a special case, a file name of @file{-} means to read data trace
 information from the standard input.
 
 Be sure to include all declaration files that are needed for the
@@ -2103,7 +2108,7 @@ them on the command line.
 
 @item --omit_from_output [0rs]
 Omit some potentially redundant information from the serialized output
-file produced with @code{-o}.
+file produced with @option{-o}.
 By default, the serialized output contains all of the data structures
 produced by Daikon while inferring invariants.
 Depending on the use to which the serialized output will later be put,
@@ -2113,7 +2118,7 @@ The flag should be followed by one or more characters each representing
 a kind of structures the can be omitted.
 The following characters are recognized:
 
-@table @code
+@table @option
 @item 0 (zero)
 Omit information about program points that appeared in the
 @file{.decls} file, but not in any @file{.dtrace} file.  (In Daikon's
@@ -2139,7 +2144,7 @@ hold.
 @end table
 
 For most uses of serialized output in the current version, it is safe
-to use the @code{0} and @code{r} omissions, but the @code{s} omission
+to use the @option{0} and @option{r} omissions, but the @option{s} omission
 will cause subtle output changes.
 In many cases, the amount of space saved is modest (typically around
 10%), but the savings can be more substantial for programs with many
@@ -2342,7 +2347,7 @@ Display progress messages while running.
 @item -c
 @itemx --cleanup
 Remove files left over from an interrupted session before starting.
-Should be used only when @code{daikon.pl} detects left-over files and instructs
+Should be used only when @command{daikon.pl} detects left-over files and instructs
 you to use this option.
 
 @item --nocleanup
@@ -2825,7 +2830,7 @@ Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this filter.
 
-If you don't also specify the @code{--suppress_redundant} command-line 
+If you don't also specify the @option{--suppress_redundant} command-line 
 option to enable Simplify processing, this filter doesn't do anything.
 
 @cindex UnjustifiedFilter
@@ -3356,9 +3361,6 @@ When conflicting options are specified, the last one
 takes precedence.
 
 
-@c Unfortunately, @option{} adds quotes in the Info and printed output
-@c which is not necessary in a table.  However, @t and @code compress
-@c the two hyphens to one in Info and HTML output, which is even worse.
 @table @option
 @item --debug
 Produce debugging information.
@@ -3848,15 +3850,15 @@ The first step in using Kvasir is to compile your program using the
 DWARF-2 format of debugging information, and without optimization.
 In most recent versions of GCC (at least 2.95 and higher), DWARF-2
 debugging information can be produced by supplying the
-@code{-gdwarf-2} command line option.  In more recent versions of GCC 3,
+@option{-gdwarf-2} command line option.  In more recent versions of GCC 3,
 DWARF-2 is in fact the default format for debugging information.
-Also, remove any optimization flags, such as @code{-O} or @code{-O2},
+Also, remove any optimization flags, such as @option{-O} or @option{-O2},
 and any flags that affect calling conventions, such as
-@code{-fomit-frame-pointer}.  Except for these changes, you should be
+@option{-fomit-frame-pointer}.  Except for these changes, you should be
 able to compile and link your program normally.
 
 In the second step of using Kvasir, run your program as you normally
-would, but prepend the command @code{kvasir-dtrace} to the beginning.
+would, but prepend the command @command{kvasir-dtrace} to the beginning.
 For instance, if you would normally run your program with the command 
 @example
 ./program -option input.file
@@ -3871,7 +3873,7 @@ directory containing @file{program.decls} and @file{program.dtrace}
 files suitable as input to Daikon.
 
 A number of options to Kvasir may be supplied between
-@code{kvasir-dtrace} and the name of your program; see below for a
+@command{kvasir-dtrace} and the name of your program; see below for a
 list.
 
 Note that Kvasir uses a different scheme for naming variables than dfec
@@ -3888,7 +3890,7 @@ filename (with periods converted into underscores) and then a slash.
 @node Kvasir options, Kvasir limitations, Using Kvasir, C front end Kvasir
 @subsection Kvasir options
 
-@table @code
+@table @option
 
 @item --asserts-aborts
 @itemx --no-asserts-aborts
@@ -3905,22 +3907,22 @@ mainly for Kvasir's developers.
 
 @item --decls-file=@var{filename.decls}
 
-Write the @code{.decls} file listing the names of functions and
+Write the @file{.decls} file listing the names of functions and
 variables to the specified file name.  The default is
-@code{daikon-output/@var{programname}.decls}, where @var{programname}
+@file{daikon-output/@var{programname}.decls}, where @var{programname}
 is the name of the program.
 
 @item --decls-only
 
-Exit after writing the @code{.decls} file; don't run the program or
-generate trace information.  Since the @code{.decls} file is the same for
+Exit after writing the @file{.decls} file; don't run the program or
+generate trace information.  Since the @file{.decls} file is the same for
 any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
 
 @item --limit-static-vars
 
-Limits the output of static variables in the @code{.decls} and @code{.dtrace} 
+Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
 files. File-static variables are only observed at program points for functions 
 which belong to the same file as the variable.  Static variables 
 declared within a particular function are only observed at program points 
@@ -3929,24 +3931,24 @@ output without greatly reducing the amount of useful output.
 
 @item --dtrace-append
 
-Append new trace information to the end of an existing @code{.dtrace}
-file.  The default is to overwrite a pre-existing @code{.dtrace} file.
+Append new trace information to the end of an existing @file{.dtrace}
+file.  The default is to overwrite a pre-existing @file{.dtrace} file.
 
 @item --dtrace-file=@var{filename.dtrace}
 
-Write the @code{.dtrace} trace file giving the values of variables to
+Write the @file{.dtrace} trace file giving the values of variables to
 the specified file name.  The default is
-@code{daikon-output/@var{programname}.dtrace}, where @var{programname}
-is the name of the program.  A filename of @code{-} may be used to
+@file{daikon-output/@var{programname}.dtrace}, where @var{programname}
+is the name of the program.  A filename of @file{-} may be used to
 specify the standard output; in this case, the regular standard output
 of the program will be redirected back to the terminal, to avoid
 intermixing it with the trace output. If the given filename ends in '.gz', 
-then @code{--dtrace-gzip} is enabled and the @code{.dtrace} file will be compressed.
+then @option{--dtrace-gzip} is enabled and the @file{.dtrace} file will be compressed.
 
 @item --dtrace-gzip
 
-Compress trace information with the @code{gzip} program before writing
-it to the @code{.dtrace} file.  You must have the @code{gzip} program
+Compress trace information with the @command{gzip} program before writing
+it to the @file{.dtrace} file.  You must have the @command{gzip} program
 available.
 
 @item --dump-ppt-file=@var{filename}
@@ -3954,21 +3956,21 @@ available.
 
 Print a list of all the program points (respectively all the variables)
 in the program to the specified file.  An edited version of this file can
-then be used with the @code{--ppt-list-file} (respectively
-@code{--var-list-file}) option.
+then be used with the @option{--ppt-list-file} (respectively
+@option{--var-list-file}) option.
 
 @item --ignore-globals
 
-Omit any global or static variables from the @code{.decls} and
-@code{.dtrace} files.  Leaving these out can significantly improve Kvasir
+Omit any global or static variables from the @file{.decls} and
+@file{.dtrace} files.  Leaving these out can significantly improve Kvasir
 and Daikon's performance, at the expense of missing properties involving
 them.  The default is to keep global and static variables.
 
 @item --output-fifo
 
-Create the output @code{.decls} and @code{.dtrace} files as FIFOs (also
-known as `named pipes').  Kvasir will then open first the @code{.decls}
-FIFO and then the @code{.dtrace} FIFO, blocking until another program
+Create the output @file{.decls} and @file{.dtrace} files as FIFOs (also
+known as `named pipes').  Kvasir will then open first the @file{.decls}
+FIFO and then the @file{.dtrace} FIFO, blocking until another program
 (such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
 avoids the need for large trace files, but FIFOs are not supported by
 some file systems, including AFS@.
@@ -3978,9 +3980,9 @@ some file systems, including AFS@.
 
 Trace only the program points (respectively variables) listed in the
 given file.  Other program points (respectively variables) will be
-omitted from the @code{.decls} and @code{.dtrace} files.  A convenient
+omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
-@code{--dump-ppt-file} (respectively @code{--dump-var-file}) option
+@option{--dump-ppt-file} (respectively @option{--dump-var-file}) option
 described above.
 
 @item --program-stdout=@var{filename}
@@ -3989,9 +3991,9 @@ described above.
 Redirect the standard output (respectively standard error) stream of the
 program being traced to the specified path.  By default, the standard
 output and standard error streams will be left pointing to the same
-locations specified by the shell, except that if @code{--dtrace-file=-}
+locations specified by the shell, except that if @option{--dtrace-file=-}
 is specified, then the default behavior is as if
-@code{--program-stdout=/dev/tty} were specified, since mixing the
+@option{--program-stdout=/dev/tty} were specified, since mixing the
 program's output and Kvasir's trace output is not advisable.
 If the same filename is given for both options, the streams will be
 interleaved in the same way as if by the Bourne shell construction
@@ -4000,7 +4002,7 @@ interleaved in the same way as if by the Bourne shell construction
 Also as in the shell, @var{filename} can be an ampersand followed by an
 integer, to redirect to a numbered file descriptor.  For instance, to
 redirect the program's standard output and error, and Kvasir's standard
-error, to a single file, you can say @code{--program-stdout='&2'
+error, to a single file, you can say @option{--program-stdout='&2'
 --program-stderr='&2' 2>@var{filename}}.
 
 @item --disambig-file=@var{filename}
@@ -4076,16 +4078,16 @@ versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
 
 @item
-On some platforms (including, as of this writing, recent versions of
+On some platforms (including, as of December 2004, recent versions of
 Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
-this problem, do not use the @code{-static} flag when linking programs
+this problem, do not use the @option{-static} flag when linking programs
 for use Kvasir.  If you want to link statically with a particular
-library, supply the path to its static version (@code{libfoo.a})
-directly to @code{gcc} instead.
+library, supply the path to its static version (@file{libfoo.a})
+directly to @command{gcc} instead.
 
 @item
 Kvasir is incompatible with some compiler optimizations.  It is
-definitely incompatible with the @code{-fomit-frame-pointer}
+definitely incompatible with the @option{-fomit-frame-pointer}
 optimization, and it may have trouble with other optimizations as
 well.  We recommend that you compile programs for Kvasir without
 optimization.
@@ -5186,9 +5188,9 @@ access them only directly through @code{@@_}, or that perform other
 operations before reading their arguments, will not be recognized.
 
 If the uninstrumented code requested warnings via the @code{use
-warnings} pragma or by adding the @code{-w} flag on the @code{#!}
+warnings} pragma or by adding the @option{-w} flag on the @code{#!}
 line, the instrumented code will also request warnings.  In this case,
-or if @code{-w} is specified on the command line when running it, the
+or if @option{-w} is specified on the command line when running it, the
 instrumented code may produce warnings that the original code did
 not.  There are several situations in which the instrumented code
 produced by dfepl, while functionally equivalent to the original,
@@ -5268,7 +5270,7 @@ directory @file{daikon-output}.
 @node dfepl options,  , Perl front end dfepl, Perl front end dfepl
 @subsection dfepl options
 
-@table @code
+@table @option
 @item --absolute
 @itemx --no-absolute
 @option{--absolute} stores the absolute path to the output directories
@@ -6228,16 +6230,22 @@ belongs to (@code{null} for object invariants).
 @node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
 @section Runtime-check instrumenter (runtimechecker)
 
+@cindex runtime-check instrumenter
+
 The runtimechecker instrumenter inserts, into a Java file,
 instrumentation code that checks invariants as the program executes.
-To instrument file
-@code{ubs/BoundedStack.java} with the invariants in the invariant file
-@code{BoundedStack.inv.gz}, then run the instrumented program, do:
+Suppose that you have the .
+You can instrument the program, then run it with no arguments
+created invariants in 
+To create a version of file
+@file{ubs/BoundedStack.java} that checks the invariants in 
+invariant file @file{BoundedStack.inv.gz}
 
+with the invariants in the , then run the instrumented program, do:
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
 @end example
-
+@noindent
 (For a list of options, type @code{java daikon.tools.runtimechecker.Main help}.)
 
 The @code{instrument} command creates a new directory
@@ -6402,7 +6410,7 @@ java daikon.tools.compare.LogicalCompare [options...]
 
 LogicalCompare accepts the following options:
 
-@table @code
+@table @option
 @item --assume @var{file}
 Read additional assumptions about the behavior of compared routines
 from the file @var{file}.  The assumptions file should consist of lines
@@ -6444,9 +6452,10 @@ to process them.  Each letter controls a filter: an invariant is reject
 if it is reject by any filter (or, equivalently, kept only if it
 passes through every filter).
 
-@table @code
+@table @option
 @item b
-Discard bound invariants (such as ``x <= c'' and ``x >= c'' for a
+Discard upper-bound and lower-bound invariants
+(such as ``x <= c'' and ``x >= c'' for a
 constant c), when Daikon considers the constant to be uninteresting.
 Currently, Daikon has a configurable range of interesting constant: by
 default, -1, 0, 1, and 2 are interesting, and no other numbers are.
@@ -6497,7 +6506,7 @@ involving postconditions.  Because the postconditions aren't formally
 meaningful outside the domain specified by the preconditions, this is
 the safest behavior, but in practice trivial precondition mismatches
 may prevent an otherwise meaningful postcondition comparison.  See also
-@code{--post-after-pre-failure}.
+@option{--post-after-pre-failure}.
 
 @item --proofs
 For each implication among invariants that is verified, print a
@@ -6518,7 +6527,7 @@ sets may be inconsistent, in which case reasoning about the
 postconditions is formally nonsensical, but the tool will attempt to
 ignore the contradiction and carry on in this case.  This is now the
 default behavior, so the option has no effect, but it is retained for
-backward compatibility.  See also @code{--no-post-after-pre-failure}.
+backward compatibility.  See also @option{--no-post-after-pre-failure}.
 
 @item --show-count
 Print a count of the number of invariants checked for implication.
@@ -7501,8 +7510,8 @@ that's a named pipe is written to and read from in the same order by
 both the front end and Daikon in the same order (if this is not the
 case, deadlock will occur).
 
-The @code{--output-fifo} option to Kvasir causes it to create its output
-@code{.dtrace} and @code{.decls} files as named pipes.  When Kvasir is
+The @option{--output-fifo} option to Kvasir causes it to create its output
+@file{.dtrace} and @file{.decls} files as named pipes.  When Kvasir is
 run with this option, Daikon needs to be run at the same time to read
 from the FIFOs, such as from another terminal or using the shell's
 @code{&} operator.
@@ -7514,12 +7523,12 @@ $DAIKONDIR/examples/kvasir-examples/bzip2 of the distribution) by saying
 gcc -gdwarf-2 bzip2.c -o bzip2
 @end example
 
-Then the following two commands will run @code{bzip2 --help} and examine
+Then the following two commands will run @command{bzip2 --help} and examine
 that execution with Daikon:
 
-(In this and the following example, @code{$DAIKON} stands for the
+(In this and the following example, @command{$DAIKON} stands for the
 command that invokes Daikon with whatever options are necessary, for
-instance @code{java -Xmx512m daikon.Daikon
+instance @command{java -Xmx512m daikon.Daikon
  --config_option daikon.Daikon.disable_derived_variables=true}).
 
 @example
@@ -7530,13 +7539,13 @@ $DAIKON daikon-output/bzip2.decls daikon-output/bzip2.dtrace
 The two commands (before and after the ampersand) could also be run in
 two different terminals.  A similar command could also be used to run a
 longer execution of bzip2, without using any additional disk space; for
-instance, replace @code{--help} with @code{-vv1 file.txt} to compress a
+instance, replace @option{--help} with @option{-vv1 file.txt} to compress a
 text file (but start with a small one first).
 
 @subsubheading Regular pipes
 
 Kvasir can also write trace data to a standard Unix pipe.  In this case,
-it is easiest to generate the @code{.decls} file on a separate
+it is easiest to generate the @file{.decls} file on a separate
 execution.  Here's a sequence of commands with the same effect as the
 example above:
 
@@ -7546,10 +7555,10 @@ kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./bzip2 --help \
    | $DAIKON daikon-output/bzip2.decls -
 @end example
 
-The first command generates a @code{.decls} file, but does not execute
+The first command generates a @file{.decls} file, but does not execute
 the program or produce trace data.  The second Kvasir command writes
 trace data to the standard output (being careful not to overwrite the
-@code{.decls} file), which is then piped to Daikon which reads it from
+@file{.decls} file), which is then piped to Daikon which reads it from
 the standard input.
 
 @node    Other problems, Reporting bugs, Large dtrace files, Troubleshooting
