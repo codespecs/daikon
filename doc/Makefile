@@ -69,13 +69,14 @@ clean: texi-clean
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg daikon.toc daikon.tp daikon.vr
 
+# Remakes entire distribution; use with caution.
 dist:
 	cd .. && $(MAKE) dist
 
-# "www" target doesn't work, because "www" is an (existing) directory; but
-# go to the subdirectory and run the rule from there.
+# "www" target wouldn't work from here, because "www" is an (existing)
+# directory; but go to the parent directory and run the rule from there.
 # www:
 # 	cd .. && $(MAKE) www
 
 www-dist:
-	cd .. && $(MAKE) www
+	cd .. && $(MAKE) www-dist

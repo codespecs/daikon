@@ -766,11 +766,13 @@ registry key to the program you want to run:
 @example
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
 @end example
+@noindent
 You may also wish to set two registry entries to enable automatic completion:
 @example
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
 @end example
+@noindent
 The values for these registry entries are ASCII key codes.  Tab is 9.
 
 
