@@ -27,7 +27,7 @@ public final class UtilMDE {
    * that the file is compressed.
    * <p>
    * Warning: The "gzip" program writes and reads files containing
-   * concatenated gzip files.  As of Java 1.3, Java reads
+   * concatenated gzip files.  As of Java 1.4, Java reads
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
@@ -47,7 +47,7 @@ public final class UtilMDE {
    * that the file is compressed.
    * <p>
    * Warning: The "gzip" program writes and reads files containing
-   * concatenated gzip files.  As of Java 1.3, Java reads
+   * concatenated gzip files.  As of Java 1.4, Java reads
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
@@ -66,7 +66,7 @@ public final class UtilMDE {
    * that the file is compressed.
    * <p>
    * Warning: The "gzip" program writes and reads files containing
-   * concatenated gzip files.  As of Java 1.3, Java reads
+   * concatenated gzip files.  As of Java 1.4, Java reads
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
