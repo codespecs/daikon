@@ -37,11 +37,13 @@ public class Debug {
    * @see #log(Logger, Class, Ppt, String)
    */
 
-  public static String[] debugTrackInvariant
+  public static String[] debugTrackClass
     = {
       // "IntEqual",
-      "IntGreaterEqual",
-      "SequenceScalarSubscriptFactory",
+      //"IntGreaterEqual",
+      //"SequenceScalarSubscriptFactory",
+      "LowerBound",
+      "UpperBound",
     };
 
   /**
@@ -56,7 +58,9 @@ public class Debug {
   public static String[] debugTrackPpt
     = {
       // "misc.Compar1.main(java.lang.String[]):::ENTER"
-      "DataStructures.DisjSets.find(int):::EXIT"
+      // "DataStructures.DisjSets.find(int):::EXIT"
+      // "DataStructures.StackAr.topAndPop():::EXIT",
+      "DataStructures.StackAr.makeEmpty()V:::ENTER"
     };
 
   /**
@@ -72,12 +76,14 @@ public class Debug {
   public static String[][] debugTrackVars
     = {
       // { "this.topOfStack", "size(this.theArray[])-1" },
-      { "size(this.s[])-1",  "orig(this.s[post(x-1)])" },
-      { "size(this.s[])-1",  "orig(this.s[post(x)-1])" },
-      { "orig(this.s[post(x-1)])", "size(this.s[])-1"  },
+      // { "size(this.s[])-1",  "orig(this.s[post(x-1)])" },
+      // { "size(this.s[])-1",  "orig(this.s[post(x)-1])" },
+      // { "orig(this.s[post(x-1)])", "size(this.s[])-1"  },
       // { "size(this.s[])-1",  "orig(this.s[post(x)])" },
-      { "orig(this.s[])",    "x" },
-      { "x",                 "orig(this.s[])" },
+      // { "orig(this.s[])",    "x" },
+      // { "x",                 "orig(this.s[])" },
+      // {"return", "orig(this.theArray[this.topOfStack])"},
+      { "this.topOfStack" },
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -187,7 +193,7 @@ public class Debug {
   /**
    * Logs a description of the class, ppt, variables and the specified
    * msg via the log4j logger.  The class, ppt, and variables are
-   * checked against those described in {@link #debugTrackInvariant},
+   * checked against those described in {@link #debugTrackClass},
    * {@link #debugTrackPpt}, and {@link #debugTrackVars}.  Only
    * those that match are printed.  Variables will match if they are
    * in the same equality set.  The information is written as: <p>
@@ -298,8 +304,8 @@ public class Debug {
       return (false);
 
     // Make sure the class matches
-    if ((debugTrackInvariant.length > 0) && (inv_class != null)) {
-      if (!strContainsElem (inv_class.getName(), debugTrackInvariant))
+    if ((debugTrackClass.length > 0) && (inv_class != null)) {
+      if (!strContainsElem (inv_class.getName(), debugTrackClass))
         return (false);
     }
 
