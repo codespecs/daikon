@@ -291,8 +291,7 @@ public final class OneOfScalar
 	Assert.assert(num_elts == 2);
 	Assert.assert(elts[0] == 0);
 	Assert.assert(elts[1] != 0);
-	String classname = this.getClass().toString().substring(6); // remove leading "class"
-	result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
       result = "";

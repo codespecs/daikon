@@ -266,6 +266,24 @@ public final class EltOneOfString
     return result;
   }
 
+  private static String format_esc_string2type(String str) {
+    if ((str == null) || "null".equals(str)) {
+      return "\\typeof(null)";
+    } else if (str.startsWith("[")) {
+      return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+    } else {
+      if (str.startsWith("\"") && str.endsWith("\"")) {
+	str = str.substring(1, str.length()-1);
+      }
+      return "\\type(" + str + ")";
+    }
+  }
+
+  public boolean isValidEscExpression() {
+    // format_esc will look at the particulars and decide
+    return true;
+  }
+
   public String format_esc() {
 
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
@@ -273,35 +291,42 @@ public final class EltOneOfString
 
     String result;
 
-    // Format   \typeof(theArray) = "[Ljava.lang.Object;"
-    //   as     \typeof(theArray) == \type(java.lang.Object[])
-    // ... but still ...
-    // format   \typeof(other) = "package.SomeClass;"
-    //   as     \typeof(other) == \type(package.SomeClass)
-
-    result = "";
-    boolean is_type = is_type();
-    for (int i=0; i<num_elts; i++) {
-      if (i != 0) { result += " || "; }
-      result += varname + " == ";
-      String str = elts[i];
-      if (!is_type) {
-	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
-      } else {
-	if ((str == null) || "null".equals(str)) {
-	  result += "\\typeof(null)";
-	} else if (str.startsWith("[")) {
-	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
+    // We cannot say anything about Strings in ESC, just types (which
+    // Daikon stores as Strings).
+    boolean valid = false;
+    result = null;
+    if (is_type() && num_elts == 1) {
+      VarInfoName hunt = var().name;
+      if (hunt instanceof VarInfoName.Prestate) {
+	hunt = ((VarInfoName.Prestate) hunt).term;
+      }
+      if (hunt instanceof VarInfoName.TypeOf) {
+	hunt = ((VarInfoName.TypeOf) hunt).term;
+	if (hunt instanceof VarInfoName.Elements) {
+	  VarInfoName contents = ((VarInfoName.Elements) hunt).term;
+	  VarInfo elems_var = ppt.parent.findVar(hunt);
+	  if (elems_var != null) {
+	    if (! elems_var.type.isArray()) {
+	      varname = contents.esc_name();
+	      String type = format_esc_string2type(elts[0]);
+	      result = varname + ".elementType == " + type;
+	      // Do not use the \forall, return this directly
+	      return result;
+	    } else {
+	      valid = true;
+	      result = "";
+	      for (int i=0; i<num_elts; i++) {
+		if (i != 0) { result += " || "; }
+		result += varname + " == " + format_esc_string2type(elts[i]);
+	      }
+	    }
 	  }
-	  result += "\\type(" + str + ")";
 	}
       }
     }
-    // Inner classes
-    result = result.replace('$', '.');
+    if (! valid) {
+      result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    }
 
     result = form[0] + "(" + result + ")" + form[2];
 
@@ -316,7 +341,7 @@ public final class EltOneOfString
     String result;
 
     result = "";
-    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    boolean is_type = is_type();
     if (!is_type) {
       return "format_simplify " + this.getClass() + " cannot express Strings";
     }

@@ -638,19 +638,27 @@ public final class Daikon {
   {
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
-      Vector spnames_and_splitters =
+      SplitterObject[][] splitterObjectArrays =
 	SplitterFactory.read_spinfofile(filename, all_ppts);
-      int siz = spnames_and_splitters.size();
-      Assert.assert(siz % 2 == 0);
-      for (int j = 0; j < siz; j+=2) {
-	String pptname = (String) spnames_and_splitters.elementAt(j);
-	pptname.trim();
-	// If the pptname is ALL, associate it with all program points.
-	if (pptname.equals("ALL")) {
-	  SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
-	} else {
-	  SplitterList.put( pptname,
-			    (Splitter[]) spnames_and_splitters.elementAt(j+1));
+      for (int j = 0; j < splitterObjectArrays.length; j++) {
+	int numsplitters = splitterObjectArrays[j].length;
+	String pptname = splitterObjectArrays[j][0].getPptName();
+	Vector splitters = new Vector();
+	for (int k = 0; k < numsplitters; k++) {
+	  if (splitterObjectArrays[j][k].splitterExists()) {
+	    splitters.addElement(splitterObjectArrays[j][k].getSplitter());
+	  } else {
+	    System.out.println(splitterObjectArrays[j][k].getError());
+	  }
+	}
+
+	if (splitters.size() >= 1) {
+	  // If the pptname is ALL, associate it with all program points.
+	  if (pptname.equals("ALL")) {
+	    SplitterList.put(".*", (Splitter[]) splitters.toArray(new Splitter[0]));
+	  } else {
+	    SplitterList.put( pptname, (Splitter[])splitters.toArray(new Splitter[0]));
+	  }
 	}
       }
     }

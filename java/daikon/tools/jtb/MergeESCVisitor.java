@@ -11,7 +11,8 @@ import daikon.*;
 import utilMDE.ArraysMDE;
 import utilMDE.UtilMDE;
 import daikon.inv.unary.sequence.EltNonZero;
-
+import daikon.inv.unary.stringsequence.EltOneOfString;
+import daikon.inv.unary.stringsequence.OneOfStringSequence;
 
 
 // For each class:  (UnmodifiedClassDeclaration)
@@ -43,6 +44,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
   private String[] ownedFieldNames;  // list of fields in this and related classes
   private String[] finalFieldNames;  // list of fields in this and related classes
   private String[] notContainsNullFieldNames;  // list of fields in this and related classes
+  private HashMap elementTypeFieldNames; // list of fields in this and related classes
 
 
   public MergeESCVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
@@ -79,6 +81,14 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
   private boolean isNotContainsNull(String fieldname) {
     return (ArraysMDE.indexOf(notContainsNullFieldNames, fieldname) != -1);
+  }
+
+  private boolean isElementType(String fieldname) {
+    return elementTypeFieldNames.containsKey(fieldname);
+  }
+
+  private String elementType(String fieldname) {
+    return (String)elementTypeFieldNames.get(fieldname);
   }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
@@ -125,6 +135,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String[] old_owned = ownedFieldNames;
     String[] old_final = finalFieldNames;
     String[] old_notContainsNull = notContainsNullFieldNames;
+    HashMap old_elementType = elementTypeFieldNames;
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor();
       n.accept(cfv);
@@ -132,8 +143,10 @@ class MergeESCVisitor extends DepthFirstVisitor {
       finalFieldNames = cfv.finalFieldNames();
       if (object_ppt == null) {
         notContainsNullFieldNames = new String[0];
+        elementTypeFieldNames = new HashMap();
       } else {
         notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv);
+        elementTypeFieldNames = element_type_fields(object_ppt, cfv);
       }
     }
 
@@ -156,6 +169,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     ownedFieldNames = old_owned;
     finalFieldNames = old_final;
     notContainsNullFieldNames = old_notContainsNull;
+    elementTypeFieldNames = old_elementType;
   }
 
   /**
@@ -378,7 +392,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
           if (fieldname != null) {
             // System.out.println("In statement, fieldname = " + fieldname);
             if ((fieldname != null)
-                && (isOwned(fieldname) || isNotContainsNull(fieldname))) {
+                && (isOwned(fieldname)
+                    || isNotContainsNull(fieldname)
+                    || isElementType(fieldname))) {
               ConstructorDeclaration cd
                 = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
               MethodDeclaration md
@@ -395,6 +411,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
                 }
                 if (isNotContainsNull(fieldname)) {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
+                }
+                if (isElementType(fieldname)) {
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname)));
                 }
               }
             }
@@ -547,7 +566,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
   }
 
 
-  // ppt is an :::OBJECT or :::CLASS program point
+  // Returns a list of fields with ".containsNull == false" invariants.
+  // ppt is an :::OBJECT or :::CLASS program point.
   String[] not_contains_null_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
     // System.out.println("not_contains_null_fields(" + ppt + ")");
     Vector result = new Vector();
@@ -582,6 +602,64 @@ class MergeESCVisitor extends DepthFirstVisitor {
       }
     }
     return (String[]) result.toArray(new String[0]);
+  }
+
+  // Returns a HashMap fields with ".elementType == \type(...)" invariants,
+  // mapping the field to the type.
+  // ppt is an :::OBJECT or :::CLASS program point.
+  HashMap element_type_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+    // System.out.println("not_contains_null_fields(" + ppt + ")");
+    HashMap result = new HashMap();
+    String[] fields = cfv.allFieldNames();
+    for (int i=0; i<fields.length; i++) {
+      String field = fields[i];
+      System.out.println("field: " + field);
+      String varname;
+      if (ppt.ppt_name.isObjectInstanceSynthetic()) // ":::OBJECT"
+        varname = "this." + field;
+      else if (ppt.ppt_name.isClassStaticSynthetic()) // ":::CLASS"
+        varname = ppt.ppt_name.getFullClassName() + "." + field;
+      else
+        throw new Error("Bad ppt: " + ppt);
+      varname += "[].class";
+      VarInfo vi = ppt.findVar(varname);
+      if (vi == null) {
+        // This happens, for example, for final static vars (see
+        // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
+        System.out.println("Variable not found: " + varname + " at " + ppt);
+      } else {
+        Assert.assert(vi != null);
+        PptSlice1 slice = ppt.getView(vi);
+        if (slice != null) {
+          System.out.println("Slice for " + vi.name.name());
+          {
+            EltOneOfString eoos = EltOneOfString.find(slice);
+            System.out.println("eoos: " + (eoos == null ? "null" : eoos.format_esc()));
+            if (eoos != null) {
+              String eoos_format = eoos.format_esc();
+              int et_pos = eoos_format.indexOf(".elementType == \\type(");
+              if (et_pos != -1) {
+                String type = eoos_format.substring(et_pos + ".elementType == ".length());
+                result.put(field, type);
+              }
+            }
+          }
+          {
+            OneOfStringSequence eooss = OneOfStringSequence.find(slice);
+            System.out.println("eooss: " + (eooss == null ? "null" : eooss.format_esc()));
+            if (eooss != null) {
+              String eooss_format = eooss.format_esc();
+              int et_pos = eooss_format.indexOf(".elementType == \\type(");
+              if (et_pos != -1) {
+                String type = eooss_format.substring(et_pos + ".elementType == ".length());
+                result.put(field, type);
+              }
+            }
+          }
+        }
+      }
+    }
+    return result;
   }
 
 }

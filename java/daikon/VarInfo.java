@@ -1027,6 +1027,35 @@ public final class VarInfo
             && type.isIndex());
   }
 
+  /**
+   * @return false if this variable expression is not legal ESC
+   * syntax, except for any necessary quantifications (subscripting).
+   * We err on the side of returning true, for now.
+   **/
+  public boolean isValidEscExpression()
+  {
+    // "myVector.length" is invalid
+    boolean is_length = (derived instanceof SequenceLength);
+    boolean is_array_length = is_length && ((SequenceLength) derived).base.type.isArray();
+    if (is_length && (! is_array_length)) {
+      return false;
+    }
+
+    // "myVector[]" is invalid, as is myVector[foo]
+    for (Iterator i = name.inOrderTraversal().iterator(); i.hasNext(); ) {
+      Object next = i.next();
+      if (next instanceof VarInfoName.Elements) {
+	VarInfoName.Elements elems = (VarInfoName.Elements) next;
+	VarInfo seq = ppt.findVar(elems.term);
+	if (! seq.type.isArray()) {
+	  return false;
+	}
+      }
+    }
+
+    return true;
+  }
+
   /* [INCR]
   // Debugging
   public boolean isDerivedFromNonCanonical() {

@@ -177,14 +177,19 @@ public abstract class SplitterList
   public static Splitter[] get(String pptName) {
     Iterator itor = ppt_splitters.keySet().iterator();
     Vector splitterArrays = new Vector();
-    Vector splitters = new Vector();
+
+    Pattern opat;
+    try {
+      opat = re_compiler.compile("OBJECT");
+    } catch (Exception e) {
+      throw new Error("This can't happen: " + e.toString());
+    }
 
     while (itor.hasNext()) {
       // a PptName, assumed to begin with "ClassName.functionName"
       String name = (String)itor.next();
-      try{
+      try {
 	Pattern pat = re_compiler.compile(name);
-	Pattern opat = re_compiler.compile("OBJECT");
 	if (re_matcher.contains(pptName, pat)) {
 	  Splitter[] result = get_raw(name);
 	  if (result != null) {
@@ -207,22 +212,21 @@ public abstract class SplitterList
     if (splitterArrays.size() == 0) {
       if (Global.debugSplit.isDebugEnabled()) {
 	Global.debugSplit.debug("SplitterList.get found no splitters for " + pptName);
-	return null;
       }
+      return null;
     } else {
-      Splitter[] tempsplitters;
-      int counter = 0;
+      Vector splitters = new Vector();
       for (int i = 0; i < splitterArrays.size(); i++) {
-	tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+	Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
 	for (int j = 0; j < tempsplitters.length; j++) {
 	  splitters.addElement(tempsplitters[j]);
-	  counter++;
 	}
       }
-      if (Global.debugSplit.isDebugEnabled())
-	Global.debugSplit.debug("SplitterList.get found " + counter + " splitters for " + pptName);
+      if (Global.debugSplit.isDebugEnabled()) {
+	Global.debugSplit.debug("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
+      }
+      return (Splitter[])splitters.toArray(new Splitter[0]);
     }
-    return (Splitter[])splitters.toArray(new Splitter[0]);
   }
 
   /*

@@ -567,6 +567,28 @@ public final class ONEOFSCALAR
     return result;
   }
 
+#if defined(STRING) || defined(ELTSTRING) || defined(STRINGSEQUENCE)
+  private static String format_esc_string2type(String str) {
+    if ((str == null) || "null".equals(str)) {
+      return "\\typeof(null)";
+    } else if (str.startsWith("[")) {
+      return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+    } else {
+      if (str.startsWith("\"") && str.endsWith("\"")) {
+	str = str.substring(1, str.length()-1);
+      }
+      return "\\type(" + str + ")";
+    }
+  }
+#endif
+
+#if defined(ELTSTRING) || defined(STRINGSEQUENCE)
+  public boolean isValidEscExpression() {
+    // format_esc will look at the particulars and decide
+    return true;
+  }
+#endif
+
   public String format_esc() {
 #if defined(ELT) || defined(ELTSTRING)
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
@@ -575,7 +597,50 @@ public final class ONEOFSCALAR
     String varname = var().name.esc_name();
 #endif
     String result;
-#if defined(STRING) || defined(ELTSTRING)
+#if defined(ELTSTRING)
+    // We cannot say anything about Strings in ESC, just types (which
+    // Daikon stores as Strings).
+    boolean valid = false;
+    result = null;
+    if (is_type() && num_elts == 1) {
+      VarInfoName hunt = var().name;
+      if (hunt instanceof VarInfoName.Prestate) {
+	hunt = ((VarInfoName.Prestate) hunt).term;
+      }
+      if (hunt instanceof VarInfoName.TypeOf) {
+	hunt = ((VarInfoName.TypeOf) hunt).term;
+	if (hunt instanceof VarInfoName.Elements) {
+	  VarInfoName contents = ((VarInfoName.Elements) hunt).term;
+	  VarInfo elems_var = ppt.parent.findVar(hunt);
+	  if (elems_var != null) {
+	    if (! elems_var.type.isArray()) {
+	      varname = contents.esc_name();
+	      String type = format_esc_string2type(elts[0]);
+	      result = varname + ".elementType == " + type;
+	      // Do not use the \forall, return this directly
+	      return result;
+	    } else {
+	      valid = true;
+	      result = "";
+	      for (int i=0; i<num_elts; i++) {
+		if (i != 0) { result += " || "; }
+		result += varname + " == " + format_esc_string2type(elts[i]);
+	      }
+	    }
+	  }
+	}
+      }
+    }
+    if (! valid) {
+      result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    }
+#elif defined(STRING)
+    // We cannot say anything about Strings in ESC, just types (which
+    // Daikon stores as Strings).
+    if (! is_type()) {
+      result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    }
+
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
     // ... but still ...
@@ -583,26 +648,11 @@ public final class ONEOFSCALAR
     //   as     \typeof(other) == \type(package.SomeClass)
 
     result = "";
-    boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
-      result += varname + " == ";
-      String str = elts[i];
-      if (!is_type) {
-	result += TOSTRING(str);
-      } else {
-	if ((str == null) || "null".equals(str)) {
-	  result += "\\typeof(null)";
-	} else if (str.startsWith("[")) {
-	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "\\type(" + str + ")";
-	}
-      }
+      result += varname + " == " + format_esc_string2type(elts[i]);
     }
+
     // Inner classes
     result = result.replace('$', '.');
 #elif defined(SCALAR) || defined(ELT)
@@ -625,8 +675,7 @@ public final class ONEOFSCALAR
 	Assert.assert(num_elts == 2);
 	Assert.assert(elts[0] == 0);
 	Assert.assert(elts[1] != 0);
-	String classname = this.getClass().toString().substring(6); // remove leading "class"
-	result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
       result = "";
@@ -642,20 +691,21 @@ public final class ONEOFSCALAR
       // we only have one value, because add_modified dies if more
       Assert.assert(num_elts == 1);
       INT value = elts[0];
-      if (var().name.isApplySizeSafe()) {
-	length = var().name.applySize().esc_name() + " == " + value.length;
-      }
-      if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " != null)" + form[2];
-      } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " == null)" + form[2];
+      if (var().type.isArray()) {
+	if (var().name.isApplySizeSafe()) {
+	  length = var().name.applySize().esc_name() + " == " + value.length;
+	}
+	if (no_nulls(0)) {
+	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	  forall = form[0] + "(" + form[1] + " != null)" + form[2];
+	} else if (all_nulls(0)) {
+	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	  forall = form[0] + "(" + form[1] + " == null)" + form[2];
+	}
       }
     }
     if (length == "" && forall == "") { // interned
-      String classname = this.getClass().toString().substring(6); // remove leading "class"
-      result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+      return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned
@@ -663,9 +713,39 @@ public final class ONEOFSCALAR
     } else {
       result = "(" + length + ") && (" + forall + ")";
     }
-#else
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+#elif defined(STRINGSEQUENCE)
+    // If the variable expression is a raw sequence, examine its
+    // element type(s).
+    if (var().name instanceof VarInfoName.TypeOf) {
+      VarInfoName term = ((VarInfoName.TypeOf) var().name).term;
+      if (term instanceof VarInfoName.Elements) {
+	String varname = ((VarInfoName.Elements) term).term.esc_name();
+	String type = null;
+	boolean consistent = true;
+	for (int i=0; consistent && i<num_elts; i++) {
+	  String[] elt = elts[i];
+	  for (int j=0; consistent && j<elt.length; j++) {
+	    String maybe = format_esc_string2type(elt[j]);
+	    if (type == null) {
+	      type = maybe;
+	    } else {
+	      consistent &= type.equals(maybe);
+	    }
+	  }
+	}
+	if (consistent && (type != null)) {
+	  VarInfo term_var = ppt.parent.findVar(term);
+	  if (term_var != null) {
+	    if (term_var.type.isArray()) {
+	      return "\\elemtype(" + varname + ") == " + type;
+	    } else {
+	      return varname + ".elementType == " + type;
+	    }
+	  }
+	}
+      }
+    }
+    result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
 #endif
 #if defined(ELT) || defined(ELTSTRING)
     result = form[0] + "(" + result + ")" + form[2];
@@ -683,7 +763,7 @@ public final class ONEOFSCALAR
     String result;
 #if defined(STRING) || defined(ELTSTRING)
     result = "";
-    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    boolean is_type = is_type();
     if (!is_type) {
       return "format_simplify " + this.getClass() + " cannot express Strings";
     }

@@ -71,6 +71,12 @@ public final class EltNonZero
     return var().name + " elements != " + (pointer_type ? "null" : "0");
   }
 
+  // We are a special case where a ghost field can actually talk about
+  // array contents.
+  public boolean isValidEscExpression() {
+    return true;
+  }
+
   public String format_esc() {
     // If this is an entire array or Collection (not VarInfoName.Slice), then
     //  * for arrays: use \nonnullelements(A)

@@ -409,6 +409,23 @@ public abstract class Invariant
   public abstract String format_using(OutputFormat format);
 
   /**
+   * @return conjuction of mapping the same function of our
+   * expresssions's VarInfos, in general.  Subclasses may override if
+   * they are able to handle generally-inexpressible properties in
+   * special-case ways.
+   *
+   * @see VarInfo.isValidEscExpression
+   **/
+  public boolean isValidEscExpression() {
+    for (int i=0; i < ppt.var_infos.length; i++) {
+      if (! ppt.var_infos[i].isValidEscExpression()) {
+	return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * @return standard "format needs to be implemented" for the given
    * requested format.  Made public so cores can call it.
    **/

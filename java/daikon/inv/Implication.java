@@ -125,6 +125,11 @@ public class Implication
     }
   }
 
+  public boolean isValidEscExpression() {
+    return predicate.isValidEscExpression()
+      && consequent.isValidEscExpression();
+  }
+
   public boolean isObviousDerived() {
     return consequent.isObviousDerived();
   }

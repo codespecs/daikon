@@ -520,7 +520,7 @@ public final class FileIO
 
         String ppt_name = line; // already interned
 
-	if(pptcount++ % 10000 == 0)
+	if (pptcount++ % 10000 == 0)
 	    System.out.print(":");
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);

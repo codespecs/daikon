@@ -14,11 +14,15 @@ import java.lang.reflect.*;
  * read_spinfofile( spinfofilename ) which returns a vector containing program
  * point names and their corresponding arrays of Splitters
  **/
+
+//todo: add logging and debugging
+//      enable javac compiling of multiple files
 public class SplitterFactory {
 
   private static Perl5Matcher re_matcher = Global.regexp_matcher;
   private static Perl5Compiler re_compiler = Global.regexp_compiler;
   private static String tempdir = getTempdirName();
+  private static boolean javac = false;
 
   static Pattern blank_line;
   static {
@@ -34,15 +38,13 @@ public class SplitterFactory {
    * @param <filename>.spinfo
    * @return Vector with the data: (Pptname, Splitter[], Pptname, Splitter[] ...)
    **/
-  public static Vector read_spinfofile(File infofile, PptMap all_ppts)
-    throws IOException, FileNotFoundException{
-
+  public static SplitterObject[][] read_spinfofile(File infofile, PptMap all_ppts)
+    throws IOException, FileNotFoundException
+  {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile.toString());
-    Vector ppts_and_splitters = new Vector(); // the return vector
+    Vector splitterObjectArrays = new Vector(); //Vector of SplitterObject[]
     Vector replace = new Vector(); // [String] but paired
-    Vector conds = new Vector(); // heterogenous container
-                                 // even indicies hold Strings (ppt names)
-                                 // odd indices hold Vector[String] (conditions)
+    Vector returnSplitters = new Vector();
 
     try {
       String line = reader.readLine();
@@ -55,8 +57,10 @@ public class SplitterFactory {
 	} else if (line.startsWith("PPT_NAME")) {
 	  StringTokenizer tokenizer = new StringTokenizer(line);
 	  tokenizer.nextToken(); // throw away the first token "PPT_NAME"
-	  conds.addElement(tokenizer.nextToken().trim());
-	  conds.addElement(read_ppt_conditions(reader));
+	  String pptName = tokenizer.nextToken().trim();
+	  SplitterObject[] spobjects = read_ppt_conditions(reader, pptName);
+	  if (spobjects != null)
+	    splitterObjectArrays.addElement(spobjects);
 	} else {
 	  System.err.println("Incorrect format in .spinfo " + infofile
 			     + " at line number " + reader.getLineNumber());
@@ -66,7 +70,10 @@ public class SplitterFactory {
       System.err.println(ioe + " \n at line number " + reader.getLineNumber()
 			 + " of .spinfo file \n");
     }
-    return write_compile_load(conds, replace, all_ppts);
+    SplitterObject[][] sArrays = (SplitterObject[][])splitterObjectArrays.toArray(new SplitterObject[0][0]);
+    write_compile_load(sArrays, replace, all_ppts);
+
+    return sArrays;
   }
 
   /**
@@ -93,21 +100,27 @@ public class SplitterFactory {
 
   /**
    * Reads the splitting conditions associated with a program point.
-   * @return a Vector[String] containing the conditions at a program point
+   * @return an array of SplitterObjects representing the conditions
+   * at a program point, or null if there is no condition under this
+   * program point.
    **/
-  static Vector read_ppt_conditions(LineNumberReader reader)
+  static SplitterObject[] read_ppt_conditions(LineNumberReader reader, String pptname)
     throws IOException, FileNotFoundException
   {
-    Vector conditions = new Vector(); // [String == splitting condition]
+    Vector splitterObjects = new Vector(); // [String == splitting condition]
     String line = reader.readLine();
     while ((line != null) && !re_matcher.matches(line, blank_line)) {
       // skip comments
       if (!line.startsWith("#")) {
-        conditions.addElement(line.trim());
+        String condition = (line.trim());
+	splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
       }
       line = reader.readLine();
     }
-    return conditions;
+    if ( splitterObjects.size() > 0)
+      return (SplitterObject[]) splitterObjects.toArray(new SplitterObject[0]);
+    else
+      return null;
   }
 
   /**
@@ -115,109 +128,89 @@ public class SplitterFactory {
    * for each condition.  The Vector ppts_and_conds contains the
    * pptnames and their associated splitting conditions.
    *
-   * @param ppts_and_conds heterogenous collection, with Strings (ppt
-   * names) in even indices and Vector[String] (conditions) in odd
-   * indices.
+   * @param splitterObjectArrays an Array containing Arrays of
+   * SplitterObjects. Each slice of the 2-Dimensional array
+   * corresponds to the SplitterObjects at a program point. The Java
+   * source for each splitter condition is  yet to be written
    *
-   * @return a hetergenously-typed Vector[] containing pptnames and
-   * their associated Splitters (Pptname, Splitter[], Pptname,
-   * Splitter[] ...).
+   * @return another Array containing Arrays of SplitterObjects. The
+   * source code for the splitterObjects have been written, compiled and loaded
    **/
-  static Vector write_compile_load(Vector ppts_and_conds, // see javadoc for type
-				   Vector replace,        // [String]
-				   PptMap all_ppts)
+  static void write_compile_load(SplitterObject[][] splitterObjectArrays,
+				 Vector replace,        // [String]
+				 PptMap all_ppts)
   {
     SplitterLoader loader = new SplitterLoader();
-    Vector pptnames_and_splitterObjects = new Vector();
-
     Vector processes = new Vector(); // the processes
+    SplitterObject[] splitters;
 
-    for (int i = 0; i < ppts_and_conds.size(); i=i+2) {
-      String ppt_name = (String)ppts_and_conds.elementAt(i);
-      Vector conditions = (Vector)ppts_and_conds.elementAt(i+1);
-
-      // write the Splitter classes
+    for (int i = 0; i < splitterObjectArrays.length; i++) {
+      //write the Splitter classes
       try {
-	Vector splitternames = write_function_splitters(ppt_name, conditions, replace, all_ppts);
-	if (!splitternames.isEmpty()) {
-	  pptnames_and_splitterObjects.addElement(ppt_name);
-	  pptnames_and_splitterObjects.addElement(splitternames);
-	  Vector compile_list = new Vector();
-	  for (int j = 0; j < splitternames.size(); j++) {
-	    String className = (String)splitternames.elementAt(j);
-	    compile_list.addElement(tempdir + className + ".java");
-	  }
-	  processes.addElement(FileCompiler.compile_source(compile_list));
+	write_function_splitters(splitterObjectArrays[i], replace, all_ppts);
+
+	Vector compile_list = new Vector();
+	for (int j = 0; j < splitterObjectArrays[i].length; j++) {
+	  compile_list.addElement(splitterObjectArrays[i][j].getFullSourcePath());
 	}
-      } catch (IOException ioe) {
-	System.err.println(ioe.toString() + " while writing Splitter source for " + ppt_name );
+
+	//compile all the splitters under this program point
+	processes.addElement(FileCompiler.compile_source(compile_list));
+      } catch(IOException ioe) {
+	System.err.println("SplitterFactory: " + ioe.toString()
+			   + "\n while writing Splitter source");
       }
     }
-
     // wait for all the compilation processes to terminate
-    for (int j = 0; j < processes.size(); j++) {
-      TimedProcess tp = (TimedProcess) processes.elementAt(j);
+    for (int i = 0; i < processes.size(); i++) {
+      TimedProcess tp = (TimedProcess) processes.elementAt(i);
       if (!tp.finished()) {
 	//todo: put in a option for wait time
-	tp.waitFor(6);
+       	tp.waitFor(6);
       }
     }
 
     // Load the Splitters
-    for (int i = 0; i < pptnames_and_splitterObjects.size(); i+=2) {
-      Vector splitters = new Vector();
-
-      try {
-	Vector splitternames = (Vector) pptnames_and_splitterObjects.elementAt(i+1);
-	for (int j = 0; j < splitternames.size(); j++) {
-	  String className = (String)splitternames.elementAt(j);
-	  Class tempClass = loader.load_Class(className, tempdir + className + ".class");
-	  if (tempClass != null) {
-	    Splitter tempsplitter = (Splitter) tempClass.newInstance();
-	    if (tempsplitter != null) splitters.addElement(tempsplitter);
-	  }
-	}
-      } catch (ClassFormatError ce) {
-	debugPrint(ce.toString());
-      } catch (InstantiationException ie) {
-	debugPrint(ie.toString());
-      } catch (IllegalAccessException iae) {
-	debugPrint(iae.toString());
+    for (int i = 0; i < splitterObjectArrays.length; i++) {
+      for (int j = 0; j < splitterObjectArrays[i].length; j++) {
+	splitterObjectArrays[i][j].load(loader);
       }
-
-      pptnames_and_splitterObjects.setElementAt( (Splitter[]) splitters.toArray(new Splitter[0]), i+1 );
     }
-    return pptnames_and_splitterObjects;
   }
 
   private static int guid = 0; // To give classes unique names
+
   /**
-   * Write the Java source code for the Splitters for this program point.
-   * @return Vector[String == filename]
+   * @param splitterObjects Must have at least one SplitterObject in it.
+   * Writes the Java source code for the Splitters for this program point.
    **/
-  static Vector write_function_splitters (String ppt_name,
-					  Vector conditions, // [String]
-					  Vector replace,
-					  PptMap all_ppts)
+  static void write_function_splitters (SplitterObject[] splitterObjects,
+					Vector replace,
+					PptMap all_ppts)
     throws IOException
   {
-    Vector splitternames = new Vector();
+    String ppt_name;
+    SplitterObject curSplitterObject;
+
+    ppt_name = splitterObjects[0].getPptName();
     PptTopLevel ppt = find_corresponding_ppt(ppt_name, all_ppts);
     if (ppt == null) {
       //try with the OBJECT program point
       ppt = find_corresponding_ppt("OBJECT", all_ppts);
     }
     if (ppt == null) {
-      //We just get a random iterator (the first) from the pptmap.
-      //Hopefully we can find the variable names that we need
+      //We just get a random program point (the first) from the pptmap.
+      //Hopefully we can find the variables that we need at this ppt
       Iterator pptIter = all_ppts.iterator();
       if (pptIter.hasNext()) {
 	ppt = (PptTopLevel)pptIter.next();
       }
     }
     if (ppt == null) {
-      debugPrint("No program point corresponds to " + ppt_name);
-      return splitternames;
+      for (int i = 0; i < splitterObjects.length; i++) {
+	splitterObjects[i].setError( "No corresponding program point found for " + ppt_name);
+	return;
+      }
     }
 
     Vector[] params_and_types = get_params_and_types(ppt);
@@ -225,8 +218,8 @@ public class SplitterFactory {
     Vector types = params_and_types[1];
 
     if (parameters.size() > 0 && types.size() > 0) {
-     String[] all_params = (String[])parameters.toArray(new String[0]);
-     String[] all_types = (String[])types.toArray(new String[0]);
+      String[] all_params = (String[])parameters.toArray(new String[0]);
+      String[] all_types = (String[])types.toArray(new String[0]);
       int num_params = all_params.length;
 
       // The Splitter variable names corresponding to the variables
@@ -272,22 +265,22 @@ public class SplitterFactory {
       }
 
       // write a Splitter class for each condition:
-      for (int numconds = 0; numconds < conditions.size(); numconds++) {
+      for (int numsplitters = 0; numsplitters < splitterObjects.length; numsplitters++) {
+	curSplitterObject = splitterObjects[numsplitters];
 
 	// the String 'condition' is returned in this Splitter's public method
 	// 'condition()' the String 'test_string' is used to do the splitting in
 	// the 'test()' method
-	String condition = (String)conditions.elementAt(numconds);
+	String condition = curSplitterObject.condition();
 	String test_string = condition;
 
 	String splitter_fname = splittername + "_" + (guid++);
-	splitternames.addElement(splitter_fname);
 	String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1);
+	curSplitterObject.setClassName(splitter_fname);
 
 	// Each Splitter will use a different set of parameters depending on the
 	// parameters used in its condition
 	String[] params = (String[])all_params.clone();
-
 	// substitute the occurence of "== null" or "!= null" with "== 0" in the
 	// test string
 
@@ -303,7 +296,7 @@ public class SplitterFactory {
 	// in the Splitter is declared as "this_mylength". Therefore change the
 	// condition to "this_mylength == 0"
 
-	test_string = match_Splitter_varnames_with_teststring(params, param_names, test_string, class_name);
+	test_string = find_applicable_variables(params, param_names, test_string, class_name);
 
 	//replace all occurences of "orig(varname)" with "orig_varname" in the condition.
 
@@ -330,11 +323,9 @@ public class SplitterFactory {
 
 	// print the parameters
 	for (int i = 0; i < num_params; i++) {
-	  // the param has been changed to **remove** if it doesn't appear in the
+	  // the param has been replaced with null if it doesn't appear in the
 	  // test string. Therefore skip it since the splitter doesn't need any
 	  // information about it
-	  if (params[i].equals("**remove**"))
-	    continue;
 	  String par = param_names[i].trim();
 	  String typ = all_types[i].trim();
 	  print_parameter_declarations(file_string, par, typ);
@@ -346,8 +337,7 @@ public class SplitterFactory {
 	file_string.append("  public " + splitter_fname + "(Ppt ppt) {  \n");
 	for (int i = 0; i < num_params; i++) {
 	  String param =  params[i];
-	  if (param.equals("**remove**"))
-	    continue;
+	  if (param == null) continue;
 	  String param_name = param_names[i];
 	  String typ = all_types[i];
 	  if (typ.equals("char[]")) {
@@ -376,9 +366,7 @@ public class SplitterFactory {
 	// print the valid() method
 	file_string.append("  public boolean valid() { \n    return(");
 	for (int i = 0; i < param_names.length; i++) {
-	  if (params[i].equals("**remove**"))
-	    continue;
-
+	  if (params[i] == null) continue;
 	  if (all_types[i].endsWith("[]") && !all_types[i].equals("char[]")) {
 	    file_string.append( "(" + param_names[i] + "_array_varinfo != null) && ");
 	  } else {
@@ -390,15 +378,19 @@ public class SplitterFactory {
 
 
 	// print the test() method
-	print_test_method(file_string, param_names, params, all_types, test_string);
+	test_string = print_test_method(file_string, param_names, params, all_types, test_string);
+	curSplitterObject.setTestString(test_string);
 
         // print the repr() method
         file_string.append("  public String repr() { \n    return \"" + splitter_fname + ": \"");
 	for (int i = 0; i < num_params; i++) {
-	  if (params[i].equals("**remove**"))
-	    continue;
+	  if (params[i] == null) continue;
 	  String par = param_names[i].trim();
-          file_string.append("        + \"" + par + "_varinfo=\" + " + par + "_varinfo.repr() + \" \"\n");
+	  if (all_types[i].endsWith("[]") && !all_types[i].equals("char[]")) {
+	    file_string.append(" + \"" + par + "_varinfo=\" + " + par + "_array_varinfo.repr() + \" \"\n");
+	  } else {
+	    file_string.append(" + \"" + par + "_varinfo=\" + " + par + "_varinfo.repr() + \" \"\n");
+	  }
 	}
         file_string.append("        ;\n  }\n\n");
 
@@ -416,8 +408,6 @@ public class SplitterFactory {
 	}
       }
     }
-
-    return splitternames;
   }
 
   /**
@@ -428,19 +418,21 @@ public class SplitterFactory {
     // look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
     Vector corresponding_ppts = new Vector();
-    ppt_name = qm(ppt_name) + ".*EXIT";
+    int index = -1;
+    if ((index = ppt_name.indexOf("OBJECT")) == -1) {
+      ppt_name = qm(ppt_name) + ".*EXIT";
+    } else {
+      if (ppt_name.length() > 6)
+	ppt_name = ppt_name.substring(0, index-1) + ":::OBJECT";
+    }
     try {
       Pattern ppt_pattern = re_compiler.compile(ppt_name);
-      Pattern object_pattern = re_compiler.compile("OBJECT");
       Iterator ppt_itor = all_ppts.iterator();
 
       while (ppt_itor.hasNext()) {
 	String name = ((PptTopLevel)ppt_itor.next()).name;
 	if (re_matcher.contains( name, ppt_pattern)) {
 	  //return more than one? do more than one match??
-	  return all_ppts.get(name);
-	} else if (re_matcher.contains( ppt_name, object_pattern) && re_matcher.contains(name, object_pattern)) {
-	  // At the OBJECT program point, try all the splitters
 	  return all_ppts.get(name);
 	}
       }
@@ -497,6 +489,8 @@ public class SplitterFactory {
       if (var_infos[i].type.format().trim().equals("char[]")) {
 	//if char[], we need to treat as a String in Daikon
 	types.addElement ("char[]");
+      } else if (var_infos[i].type.format().trim().equals("boolean")) {
+	types.addElement("boolean");
       } else {
 	types.addElement(var_infos[i].rep_type.format().trim());
       }
@@ -703,16 +697,14 @@ public class SplitterFactory {
   }
 
   /**
-   * match up the names of variables declared in the Splitter and variable names
-   * in the condition (especially those starting with "this").
+   * Find the variables at the program point which apply to this splitter and
+   * substitute their correct form in the test string. For example, change
+   * this.<varname> in the test_string to this_<varname>
    **/
-  static String match_Splitter_varnames_with_teststring(String[] params, String[] param_names,
-							String test_string, String class_name)
+  static String find_applicable_variables(String[] params, String[] param_names,
+					  String test_string, String class_name )
   {
-      // System.out.println("msvwt: " + test_string);
-
-
-      for (int i = 0; i < params.length; i++) {
+    for (int i = 0; i < params.length; i++) {
 
 	Pattern param_pattern;
 	// some instrumented variables start with "this." whereas the "this" is
@@ -721,7 +713,6 @@ public class SplitterFactory {
 	// such a situation, search the test_string for this.myArray or myArray
 	// and change the test string to this_myArray.length == 0.
 	try {
-          System.out.println("trying: " + params[i]);
 	  if (params[i].charAt(0) == '*') {
 	    param_names[i] = "star_" + params[i].substring(1);
 	    param_pattern = re_compiler.compile(delimit(qm(params[i])));
@@ -758,11 +749,11 @@ public class SplitterFactory {
 	  // remove any parameters which are not used in the condition
 	  if (re_matcher.contains(input, param_pattern)) {
 	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-	    while (re_matcher.contains(input, param_pattern)) {
-	      test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-	    }
+	    //while (re_matcher.contains(input, param_pattern)) {
+	    //test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+	    //}
 	  } else {
-	    params[i] = "**remove**"; // this parameter is not needed in the test. ignore later
+	    params[i] = null;
 	  }
 	} catch (MalformedPatternException e) {
 	  debugPrint(e.toString());
@@ -777,7 +768,7 @@ public class SplitterFactory {
           this_loc = test_string.indexOf("this_Daikon.this_");
         }
       }
-      System.out.println("returning: " + test_string);
+      //System.out.println("returning " + test_string);
       return test_string;
   }
 
@@ -817,18 +808,19 @@ public class SplitterFactory {
 		}
 	    }
 	} catch (MalformedPatternException e) {
-	    debugPrint(e.toString());
+	  debugPrint(e.toString());
 	}
 
 	for (int i = 0; i < arrayIndexVariables.size(); i++) {
-	    for (int j = 0; j < params.length; j++) {
-	      String variable = (String) arrayIndexVariables.elementAt(i);
-		if (variable.equals(params[j])) {
-		  types[j] = "int_index";
-		} else if (params[j].startsWith("this.") && (params[j].substring(5)).equals(variable)) {
-		  types[j] = "int_index";
-		}
+	  for (int j = 0; j < params.length; j++) {
+	    String variable = (String) arrayIndexVariables.elementAt(i);
+	    if (params[j] == null) continue;
+	    if (variable.equals(params[j])) {
+	      types[j] = "int_index";
+	    } else if (params[j].startsWith("this.") && (params[j].substring(5)).equals(variable)) {
+	      types[j] = "int_index";
 	    }
+	  }
 	}
     }
 
@@ -841,7 +833,7 @@ public class SplitterFactory {
 
     try {
       Pattern null_pattern = re_compiler.compile("(!|=)=\\s*null");
-      Perl5Substitution null_subst = new Perl5Substitution(" == 0", Perl5Substitution.INTERPOLATE_ALL);
+      Perl5Substitution null_subst = new Perl5Substitution(" $1= 0", Perl5Substitution.INTERPOLATE_ALL);
 
       if (re_matcher.contains(test_string, null_pattern)) {
 	test_string =
@@ -912,7 +904,7 @@ public class SplitterFactory {
   /**
    * Print the test() method of the splitter
    **/
-  static void print_test_method(StringBuffer splitter_source, String[] param_names,
+  static String print_test_method(StringBuffer splitter_source, String[] param_names,
 					String[] params, String[] all_types, String test_string ) {
 
     //This indicates whether we should substitute "== null" with "== 0" in the test string.
@@ -923,8 +915,7 @@ public class SplitterFactory {
 
     splitter_source.append("  public boolean test(ValueTuple vt) { \n");
     for (int i = 0; i < params.length; i++) {
-      if (params[i].equals("**remove**"))
-	continue;
+      if (params[i] == null) continue;
       String type = all_types[i];
       String parameter = param_names[i];
       if (type.equals("int_index")) {
@@ -961,5 +952,6 @@ public class SplitterFactory {
       test_string = perform_null_substitution(test_string);
 
     splitter_source.append("    return( " + test_string + " ); \n  }\n");
+    return test_string;
   }
 }

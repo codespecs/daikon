@@ -343,6 +343,16 @@ public class PrintInvariants {
             break;
           }
         }
+	// Change this.myvector[*] to this.myvector (or would it be
+	// best to just remove it?)
+	if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
+	  VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
+	  VarInfo base = ppt.findVar(elems.term);
+	  Assert.assert(base != null);
+	  if (! base.type.isArray()) {
+	    vi = base;
+	  }
+	}
         // System.out.println("really modified var: " + ((vi == null) ? "null" : vi.name.name()));
         if ((vi != null) && (! mods.contains(vi))) {
           mods.add(vi);
@@ -482,17 +492,46 @@ public class PrintInvariants {
             }
             out.println(sb.toString());
 	  } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
+	    equal_vars.add(0, vi);
+	    // Separate out those variables which are valid in ESC.
+	    List valid_equiv = new ArrayList(); // [VarInfo]
+	    List invalid_equiv = new ArrayList(); // [VarInfo]
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (other.isDerivedSequenceMinMaxSum())
+	      if (other.isDerivedSequenceMinMaxSum()) {
 		break;
-	      if (vi.rep_type.isArray()) {
+	      }
+	      if (other.isValidEscExpression()) {
+		valid_equiv.add(other);
+	      } else {
+		invalid_equiv.add(other);
+	      }
+	    }
+	    // Choose a leader, preferring the valid variables.
+	    VarInfo leader;
+	    if (valid_equiv.size() > 0) {
+	      leader = (VarInfo) valid_equiv.get(0);
+	    } else {
+	      Assert.assert(invalid_equiv.size() > 0);
+	      leader = (VarInfo) invalid_equiv.get(0);
+	    }
+	    // Print the equality statements, stating expressible ones first.
+	    equal_vars.clear();
+	    equal_vars.addAll(valid_equiv);
+	    equal_vars.addAll(invalid_equiv);
+            for (int j=0; j<equal_vars.size(); j++) {
+	      VarInfo other = (VarInfo) equal_vars.get(j);
+	      if (other == leader) continue;
+	      if (j >= valid_equiv.size()) {
+		out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
+	      }
+	      if (leader.rep_type.isArray()) {
 		String[] form =
 		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-		    { vi.name, other.name }, true); // elementwise
+		    { leader.name, other.name }, true); // elementwise
                 out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
               } else {
-		out.println(vi.name.esc_name() + " == " + other.name.esc_name());
+		out.println(leader.name.esc_name() + " == " + other.name.esc_name());
 	      }
 	      if (obviously_equal.contains(other)) {
 		out.println("    (obviously)");
@@ -613,6 +652,12 @@ public class PrintInvariants {
 	  || (Daikon.output_style == OutputFormat.SIMPLIFY))
       {
 	inv_rep = inv.format_using(Daikon.output_style);
+      } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
+	if (inv.isValidEscExpression()) {
+	  inv_rep = inv.format_using(OutputFormat.ESCJAVA);
+	} else {
+	  inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+	}
       } else if (Daikon.output_style == OutputFormat.IOA) {
 	String invName = get_ioa_invname (invCounter, ppt);
 	if (debug.isDebugEnabled()) {

@@ -213,12 +213,60 @@ public final class OneOfStringSequence
     return result;
   }
 
+  private static String format_esc_string2type(String str) {
+    if ((str == null) || "null".equals(str)) {
+      return "\\typeof(null)";
+    } else if (str.startsWith("[")) {
+      return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+    } else {
+      if (str.startsWith("\"") && str.endsWith("\"")) {
+	str = str.substring(1, str.length()-1);
+      }
+      return "\\type(" + str + ")";
+    }
+  }
+
+  public boolean isValidEscExpression() {
+    // format_esc will look at the particulars and decide
+    return true;
+  }
+
   public String format_esc() {
 
     String result;
 
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+    // If the variable expression is a raw sequence, examine its
+    // element type(s).
+    if (var().name instanceof VarInfoName.TypeOf) {
+      VarInfoName term = ((VarInfoName.TypeOf) var().name).term;
+      if (term instanceof VarInfoName.Elements) {
+	String varname = ((VarInfoName.Elements) term).term.esc_name();
+	String type = null;
+	boolean consistent = true;
+	for (int i=0; consistent && i<num_elts; i++) {
+	  String[] elt = elts[i];
+	  for (int j=0; consistent && j<elt.length; j++) {
+	    String maybe = format_esc_string2type(elt[j]);
+	    if (type == null) {
+	      type = maybe;
+	    } else {
+	      consistent &= type.equals(maybe);
+	    }
+	  }
+	}
+	if (consistent && (type != null)) {
+	  VarInfo term_var = ppt.parent.findVar(term);
+	  if (term_var != null) {
+	    if (term_var.type.isArray()) {
+	      return "\\elemtype(" + varname + ") == " + type;
+	    } else {
+	      return varname + ".elementType == " + type;
+	    }
+	  }
+	}
+      }
+    }
+    result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
 
     return result;
   }

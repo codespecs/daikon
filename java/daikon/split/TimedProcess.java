@@ -56,7 +56,7 @@ public class TimedProcess {
     try {
       timer.schedule(new timerTask(), seconds*1000);
       p = commander.exec(command);
-      System.out.println("Waiting " + waitTime + "s for process " + command  + " to complete ....");
+      //System.out.println("Waiting " + waitTime + "s for process " + command  + " to complete ....");
       p.waitFor();
     } catch (IOException ie) {
       System.out.println("TimedProcess: " + ie.toString() + " while re-executing command " + command);
@@ -72,7 +72,7 @@ public class TimedProcess {
     public void run() {
       try {
 	if ( p.exitValue() != 0 ) {
-	  System.out.println("Execution of command \n" + command + "\n taking > "
+	  System.out.println("Execution of command " + command + "\n taking > "
 			     + waitTime + " seconds.... Process terminated\n");
 	}
       } catch (IllegalThreadStateException ie) {

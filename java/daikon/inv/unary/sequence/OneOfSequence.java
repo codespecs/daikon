@@ -314,20 +314,21 @@ public final class OneOfSequence
       // we only have one value, because add_modified dies if more
       Assert.assert(num_elts == 1);
       long[]  value = elts[0];
-      if (var().name.isApplySizeSafe()) {
-	length = var().name.applySize().esc_name() + " == " + value.length;
-      }
-      if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " != null)" + form[2];
-      } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " == null)" + form[2];
+      if (var().type.isArray()) {
+	if (var().name.isApplySizeSafe()) {
+	  length = var().name.applySize().esc_name() + " == " + value.length;
+	}
+	if (no_nulls(0)) {
+	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	  forall = form[0] + "(" + form[1] + " != null)" + form[2];
+	} else if (all_nulls(0)) {
+	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	  forall = form[0] + "(" + form[1] + " == null)" + form[2];
+	}
       }
     }
     if (length == "" && forall == "") { // interned
-      String classname = this.getClass().toString().substring(6); // remove leading "class"
-      result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+      return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned

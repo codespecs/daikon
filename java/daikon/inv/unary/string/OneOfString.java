@@ -259,11 +259,30 @@ public final class OneOfString
     return result;
   }
 
+  private static String format_esc_string2type(String str) {
+    if ((str == null) || "null".equals(str)) {
+      return "\\typeof(null)";
+    } else if (str.startsWith("[")) {
+      return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+    } else {
+      if (str.startsWith("\"") && str.endsWith("\"")) {
+	str = str.substring(1, str.length()-1);
+      }
+      return "\\type(" + str + ")";
+    }
+  }
+
   public String format_esc() {
 
     String varname = var().name.esc_name();
 
     String result;
+
+    // We cannot say anything about Strings in ESC, just types (which
+    // Daikon stores as Strings).
+    if (! is_type()) {
+      result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    }
 
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
@@ -272,26 +291,11 @@ public final class OneOfString
     //   as     \typeof(other) == \type(package.SomeClass)
 
     result = "";
-    boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
-      result += varname + " == ";
-      String str = elts[i];
-      if (!is_type) {
-	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
-      } else {
-	if ((str == null) || "null".equals(str)) {
-	  result += "\\typeof(null)";
-	} else if (str.startsWith("[")) {
-	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "\\type(" + str + ")";
-	}
-      }
+      result += varname + " == " + format_esc_string2type(elts[i]);
     }
+
     // Inner classes
     result = result.replace('$', '.');
 
@@ -305,7 +309,7 @@ public final class OneOfString
     String result;
 
     result = "";
-    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    boolean is_type = is_type();
     if (!is_type) {
       return "format_simplify " + this.getClass() + " cannot express Strings";
     }
