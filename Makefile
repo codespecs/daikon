@@ -31,7 +31,9 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw -o name . -o name .. \) -prune -o -print)
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
-WWW_DIR := /home/httpd/html/daikon/
+#WWW_DIR := /home/httpd/html/daikon/
+WWW_ROOT := /var/autofs/net/pag/home/httpd/html/daikon/
+WWW_DIR := $(WWW_ROOT)
 # This needs not to be hardcoded to a particular users directory if
 # anyone else is going to use it.
 # MERNST_DIR := /g2/users/mernst
@@ -43,6 +45,9 @@ JDKDIR ?= /g2/jdk
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
 
+# The crosscompile is stored here
+MINGW_TOOLS := /var/autofs/net/pag/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1
+
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
 C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
@@ -52,8 +57,8 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
-DIST_DIR := /home/httpd/html/daikon/dist
-MIT_DIR  := /home/httpd/html/daikon/mit
+DIST_DIR := $(WWW_ROOT)/dist
+MIT_DIR  := $(WWW_ROOT)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
@@ -62,7 +67,8 @@ DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
-CVS_REPOSITORY := /g4/projects/invariants/.CVS/
+# CVS_REPOSITORY := /g4/projects/invariants/.CVS/
+CVS_REPOSITORY := :ext:$(USER)@pag.csail.mit.edu:/g4/projects/invariants/.CVS
 
 # It seems like these should come from their standard locations (jhp)
 #RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
@@ -72,8 +78,8 @@ TOOLSJAR := $(JDKDIR)/lib/tools.jar
 
 JUNIT_VERSION := junit3.8.1
 
-# for "chgrp"
-INV_GROUP := invariants
+# for "chgrp, we need to use the number on debian, 14127 is invariants"
+INV_GROUP := 14127
 
 RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name 'dfej-solaris*' -o -name 'dfej-dynamic' -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
@@ -233,7 +239,7 @@ doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.te
 	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-	@echo "     diff -u -s --from-file /home/httpd/html/daikon/dist/doc doc/*.texinfo"
+	@echo "     diff -u -s --from-file   $(WWW_ROOT)/dist/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@echo "***************************************************************************"
 	@exit 1
@@ -264,7 +270,7 @@ update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) update-dist-version-file
 
 dist-java-doc:
-	make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc
+	cd java; make 'JAVADOC_DEST=$(WWW_ROOT)/download/jdoc_v3' doc
 
 doc-all:
 	# "make" in doc directory may fail the first time, but do show output.
@@ -284,7 +290,7 @@ update-dist-doc: doc-all
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
-	cd $(DIST_DIR) && chgrp -R invariants $(DIST_DIR_FILES) doc
+	cd $(DIST_DIR) && chgrp -R $(INV_GROUP) $(DIST_DIR_FILES) doc
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
@@ -630,7 +636,7 @@ $(MINGW_DFEJ_LOC)/build_mingw_dfej:
 	#cp /g6/users/jhp/mingw32/crt2.o $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
 	#cp /usr/i386-glibc21-linux/include/regex.h $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
 	# Configure mingw version
-	(PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$$PATH; cd $(MINGW_DFEJ_LOC)/build_mingw_dfej &&  ~/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
+	(PATH=$(MINGW_TOOLS)/cross-tools/bin:$$PATH; echo $$PATH; cd $(MINGW_DFEJ_LOC)/build_mingw_dfej &&  ~/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
 	cd dfej && ./configure
 
 # dfej-src/build_mingw_dfej/src/dfej.exe:
@@ -647,7 +653,7 @@ mingw_exe: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej
 
 $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe: dfej/src/*.cpp dfej/src/*.h
 	# -rename .o .mingw-saved.o dfej/src/*.o
-	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH} && $(MAKE))
+	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=$(MINGW_TOOLS)/cross-tools/bin:${PATH} && $(MAKE))
 	# -rename .mingw-saved.o .o dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe mingw_exe
