@@ -12,6 +12,9 @@ java.util.List
 
 
 DECLARE
+DataStructures.StackAr.StackAr():::ENTER
+
+DECLARE
 DataStructures.StackAr.StackAr():::EXIT30
 this
 DataStructures.StackAr # isParam=true
@@ -39,7 +42,11 @@ int
 -2
 
 DECLARE
-DataStructures.StackAr.StackAr():::ENTER
+DataStructures.StackAr.StackAr(int):::ENTER
+capacity
+int # isParam=true
+int
+0
 
 DECLARE
 DataStructures.StackAr.StackAr(int):::EXIT40
@@ -63,44 +70,6 @@ this.theArray[]
 java.lang.Object[]
 hashcode[]
 1[0]
-this.theArray[].class
-java.lang.Class[]
-java.lang.String[]
--1
-this.topOfStack
-int
-int
-0
-
-DECLARE
-DataStructures.StackAr.StackAr(int):::ENTER
-capacity
-int # isParam=true
-int
-0
-
-DECLARE
-DataStructures.StackAr.isEmpty():::EXIT48
-return
-boolean
-boolean
-1
-this
-DataStructures.StackAr # isParam=true
-hashcode
-3
-this.theArray
-java.lang.Object[]
-hashcode
--2
-this.theArray.class
-java.lang.Class
-java.lang.String
--1
-this.theArray[]
-java.lang.Object[]
-hashcode[]
-2[0]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -138,7 +107,7 @@ int
 0
 
 DECLARE
-DataStructures.StackAr.isFull():::EXIT57
+DataStructures.StackAr.isEmpty():::EXIT48
 return
 boolean
 boolean
@@ -196,11 +165,15 @@ int
 0
 
 DECLARE
-DataStructures.StackAr.makeEmpty():::EXIT68
+DataStructures.StackAr.isFull():::EXIT57
+return
+boolean
+boolean
+1
 this
 DataStructures.StackAr # isParam=true
 hashcode
--2
+3
 this.theArray
 java.lang.Object[]
 hashcode
@@ -212,7 +185,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
--2[-2]
+2[0]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -220,7 +193,7 @@ java.lang.String[]
 this.topOfStack
 int
 int
--2
+0
 
 DECLARE
 DataStructures.StackAr.makeEmpty():::ENTER
@@ -248,6 +221,60 @@ this.topOfStack
 int
 int
 -2
+
+DECLARE
+DataStructures.StackAr.makeEmpty():::EXIT68
+this
+DataStructures.StackAr # isParam=true
+hashcode
+-2
+this.theArray
+java.lang.Object[]
+hashcode
+-2
+this.theArray.class
+java.lang.Class
+java.lang.String
+-1
+this.theArray[]
+java.lang.Object[]
+hashcode[]
+-2[-2]
+this.theArray[].class
+java.lang.Class[]
+java.lang.String[]
+-1
+this.topOfStack
+int
+int
+-2
+
+DECLARE
+DataStructures.StackAr.top():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[]
+hashcode
+-2
+this.theArray.class
+java.lang.Class
+java.lang.String
+-1
+this.theArray[]
+java.lang.Object[]
+hashcode[]
+1[0]
+this.theArray[].class
+java.lang.Class[]
+java.lang.String[]
+-1
+this.topOfStack
+int
+int
+0
 
 DECLARE
 DataStructures.StackAr.top():::EXIT78
@@ -320,11 +347,11 @@ int
 0
 
 DECLARE
-DataStructures.StackAr.top():::ENTER
+DataStructures.StackAr.pop():::ENTER
 this
 DataStructures.StackAr # isParam=true
 hashcode
-2
+-2
 this.theArray
 java.lang.Object[]
 hashcode
@@ -336,7 +363,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
-1[0]
+-2[-2]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -344,7 +371,7 @@ java.lang.String[]
 this.topOfStack
 int
 int
-0
+-2
 
 DECLARE
 DataStructures.StackAr.pop():::EXIT91
@@ -374,11 +401,19 @@ int
 -2
 
 DECLARE
-DataStructures.StackAr.pop():::ENTER
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+x
+java.lang.Object # isParam=true
+hashcode
+1
+x.class
+java.lang.Class
+java.lang.String
+-1
 this
 DataStructures.StackAr # isParam=true
 hashcode
--2
+2
 this.theArray
 java.lang.Object[]
 hashcode
@@ -390,7 +425,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
--2[-2]
+1[0]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -398,7 +433,7 @@ java.lang.String[]
 this.topOfStack
 int
 int
--2
+0
 
 DECLARE
 DataStructures.StackAr.push(java.lang.Object):::EXIT103
@@ -436,15 +471,7 @@ int
 0
 
 DECLARE
-DataStructures.StackAr.push(java.lang.Object):::ENTER
-x
-java.lang.Object # isParam=true
-hashcode
-1
-x.class
-java.lang.Class
-java.lang.String
--1
+DataStructures.StackAr.topAndPop():::ENTER
 this
 DataStructures.StackAr # isParam=true
 hashcode
@@ -541,34 +568,7 @@ int
 0
 
 DECLARE
-DataStructures.StackAr.topAndPop():::ENTER
-this
-DataStructures.StackAr # isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[]
-hashcode
--2
-this.theArray.class
-java.lang.Class
-java.lang.String
--1
-this.theArray[]
-java.lang.Object[]
-hashcode[]
-1[0]
-this.theArray[].class
-java.lang.Class[]
-java.lang.String[]
--1
-this.topOfStack
-int
-int
-0
-
-DECLARE
-DataStructures.StackAr.main(java.lang.String[]):::EXIT136
+DataStructures.StackAr.main(java.lang.String[]):::ENTER
 args
 java.lang.String[] # isParam=true
 hashcode
@@ -587,7 +587,7 @@ java.lang.String[]
 -1
 
 DECLARE
-DataStructures.StackAr.main(java.lang.String[]):::ENTER
+DataStructures.StackAr.main(java.lang.String[]):::EXIT136
 args
 java.lang.String[] # isParam=true
 hashcode

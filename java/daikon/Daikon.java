@@ -447,8 +447,6 @@ public final class Daikon {
     all_ppts = load_decls_files(decls_files);
     load_map_files(all_ppts, map_files);
 
-    init_ppts (all_ppts);
-    PptTopLevel.init(all_ppts);
     all_ppts.trimToSize();
 
     // If requested, just calculate the total number of invariants possible
@@ -1161,13 +1159,6 @@ public final class Daikon {
    * Create combined exit points, setup splitters, and add orig and
    * derived variables,
    */
-  public static void init_ppts (PptMap all_ppts) {
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      init_ppt (ppt, all_ppts);
-    }
-  }
-
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
     // Setup splitters.  This must be done before adding derived variables.

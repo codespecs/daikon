@@ -12,49 +12,10 @@ java.util.List
 
 
 DECLARE
-DataStructures.QueueAr.QueueAr():::EXIT30
-this
-DataStructures.QueueAr # isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[]
-hashcode
--2
-this.theArray.class
-java.lang.Class
-java.lang.String
--1
-this.theArray[]
-java.lang.Object[]
-hashcode[]
-1[0]
-this.theArray[].class
-java.lang.Class[]
-java.lang.String[]
--1
-this.currentSize
-int
-int
-0
-this.front
-int
-int
-0
-this.back
-int
-int
-0
-
-DECLARE
 DataStructures.QueueAr.QueueAr():::ENTER
 
 DECLARE
-DataStructures.QueueAr.QueueAr(int):::EXIT39
-capacity
-int # isParam=true
-int
-0
+DataStructures.QueueAr.QueueAr():::EXIT30
 this
 DataStructures.QueueAr # isParam=true
 hashcode
@@ -96,15 +57,15 @@ int
 0
 
 DECLARE
-DataStructures.QueueAr.isEmpty():::EXIT47
-return
-boolean
-boolean
+DataStructures.QueueAr.QueueAr(int):::EXIT39
+capacity
+int # isParam=true
+int
 0
 this
 DataStructures.QueueAr # isParam=true
 hashcode
-3
+2
 this.theArray
 java.lang.Object[]
 hashcode
@@ -116,7 +77,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
-2[1]
+1[0]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -124,15 +85,15 @@ java.lang.String[]
 this.currentSize
 int
 int
-1
+0
 this.front
 int
 int
-1
+0
 this.back
 int
 int
-1
+0
 
 DECLARE
 DataStructures.QueueAr.isEmpty():::ENTER
@@ -170,7 +131,7 @@ int
 0
 
 DECLARE
-DataStructures.QueueAr.isFull():::EXIT56
+DataStructures.QueueAr.isEmpty():::EXIT47
 return
 boolean
 boolean
@@ -244,11 +205,15 @@ int
 0
 
 DECLARE
-DataStructures.QueueAr.makeEmpty():::EXIT67
+DataStructures.QueueAr.isFull():::EXIT56
+return
+boolean
+boolean
+0
 this
 DataStructures.QueueAr # isParam=true
 hashcode
-2
+3
 this.theArray
 java.lang.Object[]
 hashcode
@@ -260,7 +225,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
-1[0]
+2[1]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -268,15 +233,15 @@ java.lang.String[]
 this.currentSize
 int
 int
-0
+1
 this.front
 int
 int
-0
+1
 this.back
 int
 int
-0
+1
 
 DECLARE
 DataStructures.QueueAr.makeEmpty():::ENTER
@@ -312,6 +277,76 @@ this.back
 int
 int
 0
+
+DECLARE
+DataStructures.QueueAr.makeEmpty():::EXIT67
+this
+DataStructures.QueueAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[]
+hashcode
+-2
+this.theArray.class
+java.lang.Class
+java.lang.String
+-1
+this.theArray[]
+java.lang.Object[]
+hashcode[]
+1[0]
+this.theArray[].class
+java.lang.Class[]
+java.lang.String[]
+-1
+this.currentSize
+int
+int
+0
+this.front
+int
+int
+0
+this.back
+int
+int
+0
+
+DECLARE
+DataStructures.QueueAr.getFront():::ENTER
+this
+DataStructures.QueueAr # isParam=true
+hashcode
+-2
+this.theArray
+java.lang.Object[]
+hashcode
+-2
+this.theArray.class
+java.lang.Class
+java.lang.String
+-1
+this.theArray[]
+java.lang.Object[]
+hashcode[]
+-2[-2]
+this.theArray[].class
+java.lang.Class[]
+java.lang.String[]
+-1
+this.currentSize
+int
+int
+-2
+this.front
+int
+int
+-2
+this.back
+int
+int
+-2
 
 DECLARE
 DataStructures.QueueAr.getFront():::EXIT77
@@ -400,11 +435,11 @@ int
 -2
 
 DECLARE
-DataStructures.QueueAr.getFront():::ENTER
+DataStructures.QueueAr.dequeue():::ENTER
 this
 DataStructures.QueueAr # isParam=true
 hashcode
--2
+2
 this.theArray
 java.lang.Object[]
 hashcode
@@ -416,7 +451,7 @@ java.lang.String
 this.theArray[]
 java.lang.Object[]
 hashcode[]
--2[-2]
+1[0]
 this.theArray[].class
 java.lang.Class[]
 java.lang.String[]
@@ -424,15 +459,15 @@ java.lang.String[]
 this.currentSize
 int
 int
--2
+0
 this.front
 int
 int
--2
+0
 this.back
 int
 int
--2
+0
 
 DECLARE
 DataStructures.QueueAr.dequeue():::EXIT88
@@ -521,7 +556,15 @@ int
 1
 
 DECLARE
-DataStructures.QueueAr.dequeue():::ENTER
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
+x
+java.lang.Object # isParam=true
+hashcode
+1
+x.class
+java.lang.Class
+java.lang.String
+-1
 this
 DataStructures.QueueAr # isParam=true
 hashcode
@@ -599,15 +642,11 @@ int
 0
 
 DECLARE
-DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
+DataStructures.QueueAr.increment(int):::ENTER
 x
-java.lang.Object # isParam=true
-hashcode
-1
-x.class
-java.lang.Class
-java.lang.String
--1
+int # isParam=true
+int
+0
 this
 DataStructures.QueueAr # isParam=true
 hashcode
@@ -685,46 +724,7 @@ int
 1
 
 DECLARE
-DataStructures.QueueAr.increment(int):::ENTER
-x
-int # isParam=true
-int
-0
-this
-DataStructures.QueueAr # isParam=true
-hashcode
-2
-this.theArray
-java.lang.Object[]
-hashcode
--2
-this.theArray.class
-java.lang.Class
-java.lang.String
--1
-this.theArray[]
-java.lang.Object[]
-hashcode[]
-1[0]
-this.theArray[].class
-java.lang.Class[]
-java.lang.String[]
--1
-this.currentSize
-int
-int
-0
-this.front
-int
-int
-0
-this.back
-int
-int
-0
-
-DECLARE
-DataStructures.QueueAr.main(java.lang.String[]):::EXIT201
+DataStructures.QueueAr.main(java.lang.String[]):::ENTER
 args
 java.lang.String[] # isParam=true
 hashcode
@@ -743,7 +743,7 @@ java.lang.String[]
 -1
 
 DECLARE
-DataStructures.QueueAr.main(java.lang.String[]):::ENTER
+DataStructures.QueueAr.main(java.lang.String[]):::EXIT201
 args
 java.lang.String[] # isParam=true
 hashcode

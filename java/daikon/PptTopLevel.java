@@ -288,14 +288,6 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  /**
-   * Initializes the ppt.  Allows the ppt to be set back to its initial
-   * state which is used during testing
-   */
-  public static void init (PptMap all_ppts) {
-    // Though nothing needs to be done now, we may need to do something here
-    // in the future.
-  }
 
   // Appears to be used only in the memory monitor.
   public int num_array_vars() {

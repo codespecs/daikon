@@ -215,8 +215,6 @@ public class SampleTester extends TestCase {
     all_ppts = FileIO.read_declaration_files (decl_files);
 
     // Setup everything to run
-    Daikon.init_ppts (all_ppts);
-    PptTopLevel.init (all_ppts);
     if (first_decl) {
       Daikon.setup_proto_invs();
       Daikon.setup_NISuppression();

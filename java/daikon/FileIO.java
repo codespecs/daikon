@@ -146,15 +146,6 @@ public final class FileIO {
   /// Declaration files
   ///
   
-  // *** It would be nice to get rid of all this stuff and merge it with
-  // *** the current implementation of read_data_trace_files, which will
-  // *** also parse and incrementally initialize Ppt declarations appearing
-  // *** in the input streams.  However, the incremental Ppt initialization
-  // *** (as opposed to calling init_ppts after all Ppt declarations are read
-  // *** in) assumes that declarations for :::ENTER Ppts appear before their
-  // *** corresponding :::EXIT Ppts, and this is not currently true of decls
-  // *** files produced by dfej.
-
   /**
    * @param files files to be read (java.io.File)
    * @return a new PptMap containing declarations read from the files
@@ -179,76 +170,10 @@ public final class FileIO {
   /** Read one decls file; add it to all_ppts. **/
   private static void read_declaration_file(File filename, PptMap all_ppts)
     throws IOException {
-    if (debugRead.isLoggable(Level.FINE)) {
-      debugRead.fine(
-        "read_declaration_file "
-          + filename
-          + ((Daikon.ppt_regexp != null)
-            ? " " + Daikon.ppt_regexp.pattern()
-            : "")
-          + ((Daikon.ppt_omit_regexp != null)
-            ? " " + Daikon.ppt_omit_regexp.pattern()
-            : ""));
-    }
-
-    // Default VarComparability
-    int varcomp_format = VarComparability.IMPLICIT;
-
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
-
-    String line = reader.readLine();
-
-    // line == null when we hit end of file
-    for (; line != null; line = reader.readLine()) {
-      if (debugRead.isLoggable(Level.FINE))
-        debugRead.fine("read_declaration_file line: " + line);
-      if (line.equals("") || isComment(line))
-        continue;
-      if (line.equals(declaration_header)) {
-        PptTopLevel ppt =
-          read_declaration(reader, all_ppts, varcomp_format, filename);
-        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
-        if (ppt != null) {
-          all_ppts.add(ppt);
-        }
-        continue;
-      }
-      if (line.equals("VarComparability")) {
-	varcomp_format = read_var_comparability (reader, filename);
-        continue;
-      }
-      if (line.equals("ListImplementors")) {
-	read_list_implementors (reader, filename);
-        continue;
-      }
-
-      // Not a declaration.
-      // Read the rest of this entry (until we find a blank line).
-      if (debugRead.isLoggable(Level.FINE))
-        debugRead.fine(
-          "Skipping paragraph starting at line "
-            + reader.getLineNumber()
-            + " of file "
-            + filename
-            + ": "
-            + line);
-      while ((line != null) && (!line.equals("")) && (!isComment(line))) {
-        System.out.println(
-          "Unrecognized paragraph contains line = `" + line + "'");
-        System.out.println(
-          ""
-            + (line != null)
-            + " "
-            + (line.equals(""))
-            + " "
-            + (isComment(line)));
-        if (line == null)
-          throw new IllegalStateException();
-        line = reader.readLine();
-      }
-      continue;
-    }
+    Processor processor = new Processor();
+    read_data_trace_file(filename.toString(), all_ppts, processor, true);
   }
+    
 
   // The "DECLARE" line has alredy been read.
   private static PptTopLevel read_declaration(LineNumberReader file,
@@ -570,7 +495,7 @@ public final class FileIO {
 
   /**
    * Read data from .dtrace files.
-   * Calls @link{read_data_trace_file(File,PptMap,Pattern)} for each
+   * Calls @link{read_data_trace_file(File,PptMap,Pattern,false)} for each
    * element of filenames.
    **/
   public static void read_data_trace_files(Collection /*String*/ files,
@@ -578,7 +503,7 @@ public final class FileIO {
     for (Iterator i = files.iterator(); i.hasNext();) {
       String filename = (String) i.next();
       try {
-        read_data_trace_file(filename, all_ppts, processor);
+        read_data_trace_file(filename, all_ppts, processor, false);
       } catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.println(
@@ -628,12 +553,13 @@ public final class FileIO {
   static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
-    read_data_trace_file(filename, all_ppts, processor);
+    read_data_trace_file(filename, all_ppts, processor, false);
   }
 
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
-                                   Processor processor) throws IOException {
+                                   Processor processor, boolean is_decl_file)
+    throws IOException {
 
     int pptcount = 1;
 
@@ -655,7 +581,9 @@ public final class FileIO {
     }
 
     boolean count_lines = dkconfig_count_lines;
-    if (dkconfig_dtrace_line_count != 0) {
+    if (is_decl_file) {
+      count_lines = false;
+    } else if (dkconfig_dtrace_line_count != 0) {
       data_trace_total_lines = dkconfig_dtrace_line_count;
       count_lines = false;
     } else if (filename.equals("-")) {
@@ -732,6 +660,33 @@ public final class FileIO {
       }
 
       // If we got here, we're looking at a sample and not a declaration.
+      // For compatibility with previous implementation, if this is a 
+      // declaration file, skip over samples.
+      if (is_decl_file) {
+	if (debugRead.isLoggable(Level.FINE))
+	  debugRead.fine("Skipping paragraph starting at line "
+			 + reader.getLineNumber()
+			 + " of file "
+			 + filename
+			 + ": "
+			 + line);
+	while ((line != null) && (!line.equals("")) && (!isComment(line))) {
+	  System.out.println("Unrecognized paragraph contains line = `"
+			     + line
+			     + "'");
+	  System.out.println(""
+			     + (line != null)
+			     + " "
+			     + (line.equals(""))
+			     + " "
+			     + (isComment(line)));
+	  if (line == null)
+	    throw new IllegalStateException();
+	  line = reader.readLine();
+	}
+	continue;
+      }
+
       // Keep track of the total number of samples we have seen.
       samples_considered++;
 

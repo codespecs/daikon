@@ -9,6 +9,17 @@ java.util.List
 
 
 DECLARE
+MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
+numbers
+java.lang.String # isParam=true
+hashcode
+22
+numbers.toString
+java.lang.String
+java.lang.String
+22
+
+DECLARE
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT68
 numbers
 java.lang.String # isParam=true
@@ -40,14 +51,10 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
-numbers
-java.lang.String # isParam=true
-hashcode
-22
-numbers.toString
-java.lang.String
-java.lang.String
+MapQuick1.StreetNumberSet.parityOf(int):::ENTER
+i
+int # isParam=true
+int
 22
 
 DECLARE
@@ -62,10 +69,26 @@ int
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.parityOf(int):::ENTER
-i
-int # isParam=true
-int
+MapQuick1.StreetNumberSet.checkRep():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+22
+this.begins
+int[]
+hashcode
+22
+this.begins[]
+int[]
+int[]
+22
+this.ends
+int[]
+hashcode
+22
+this.ends[]
+int[]
+int[]
 22
 
 DECLARE
@@ -92,7 +115,11 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.checkRep():::ENTER
+MapQuick1.StreetNumberSet.contains(int):::ENTER
+n
+int # isParam=true
+int
+22
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -177,7 +204,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.contains(int):::ENTER
+MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
 n
 int # isParam=true
 int
@@ -235,11 +262,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
-n
-int # isParam=true
-int
-22
+MapQuick1.StreetNumberSet.size():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -289,7 +312,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.size():::ENTER
+MapQuick1.StreetNumberSet.isEmpty():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -339,7 +362,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.isEmpty():::ENTER
+MapQuick1.StreetNumberSet.min():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -389,7 +412,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.min():::ENTER
+MapQuick1.StreetNumberSet.max():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -439,7 +462,27 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.max():::ENTER
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+22
+other.begins
+int[]
+hashcode
+22
+other.begins[]
+int[]
+int[]
+22
+other.ends
+int[]
+hashcode
+22
+other.ends[]
+int[]
+int[]
+22
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -650,26 +693,14 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
-other
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
+o
+java.lang.Object # isParam=true
 hashcode
 22
-other.begins
-int[]
-hashcode
-22
-other.begins[]
-int[]
-int[]
-22
-other.ends
-int[]
-hashcode
-22
-other.ends[]
-int[]
-int[]
+o.class
+java.lang.Class
+java.lang.String
 22
 this
 MapQuick1.StreetNumberSet # isParam=true
@@ -728,14 +759,26 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
-o
-java.lang.Object # isParam=true
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
+other
+MapQuick1.StreetNumberSet # isParam=true
 hashcode
 22
-o.class
-java.lang.Class
-java.lang.String
+other.begins
+int[]
+hashcode
+22
+other.begins[]
+int[]
+int[]
+22
+other.ends
+int[]
+hashcode
+22
+other.ends[]
+int[]
+int[]
 22
 this
 MapQuick1.StreetNumberSet # isParam=true
@@ -1088,27 +1131,7 @@ int[]
 22
 
 DECLARE
-MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
-other
-MapQuick1.StreetNumberSet # isParam=true
-hashcode
-22
-other.begins
-int[]
-hashcode
-22
-other.begins[]
-int[]
-int[]
-22
-other.ends
-int[]
-hashcode
-22
-other.ends[]
-int[]
-int[]
-22
+MapQuick1.StreetNumberSet.hashCode():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode
@@ -1136,29 +1159,6 @@ return
 int
 int
 22
-this
-MapQuick1.StreetNumberSet # isParam=true
-hashcode
-22
-this.begins
-int[]
-hashcode
-22
-this.begins[]
-int[]
-int[]
-22
-this.ends
-int[]
-hashcode
-22
-this.ends[]
-int[]
-int[]
-22
-
-DECLARE
-MapQuick1.StreetNumberSet.hashCode():::ENTER
 this
 MapQuick1.StreetNumberSet # isParam=true
 hashcode

@@ -32,8 +32,6 @@ public class InvMatch {
 
     // Setup everything to run
     PptSliceEquality.dkconfig_set_per_var = true;
-    Daikon.init_ppts (all_ppts);
-    PptTopLevel.init (all_ppts);
     Daikon.setup_NISuppression();
 
     // Get the exit ppts
