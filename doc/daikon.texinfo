@@ -1092,6 +1092,10 @@ Only process program points matching the regexp.
 Serialize invariants to the specified file; they can later be
 postprocessed, compared, etc.
 
+@item --no_text_output
+Don't print invariants as text output.  This option should be used in
+conjunction with the @var{-o} option.
+
 @item --suppress_cont
 Suppress display of implied invariants (by controlling ppt).
 

@@ -44,6 +44,9 @@ public final class Daikon {
   // warnings and the modbit problem can cause an error later.
   public final static boolean disable_modbit_check_error = false;
 
+  // When true, don't print textual output.  
+  public static boolean no_text_output = false;
+
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
@@ -102,6 +105,7 @@ public final class Daikon {
       System.exit(1);
     }
 
+    final String no_text_output_SWITCH = "no_text_output";
     final String suppress_cont_SWITCH = "suppress_cont";
     final String suppress_post_SWITCH = "suppress_post";
     final String prob_limit_SWITCH = "prob_limit";
@@ -109,6 +113,7 @@ public final class Daikon {
     final String simplify_output_SWITCH = "simplify_output";
     final String output_num_samples_SWITCH = "output_num_samples";
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -123,7 +128,9 @@ public final class Daikon {
       case 0:
 	// got a long option
 	String option_name = longopts[g.getLongind()].getName();
-	if (suppress_cont_SWITCH.equals(option_name)) {
+	if (no_text_output_SWITCH.equals( option_name )) {
+	  no_text_output = true;
+	} else if (suppress_cont_SWITCH.equals(option_name)) {
 	  suppress_implied_controlled_invariants = true;
 	} else if (suppress_post_SWITCH.equals(option_name)) {
 	  suppress_implied_postcondition_over_prestate_invariants = true;
@@ -261,7 +268,8 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
-        ppt.print_invariants_maybe(System.out, all_ppts);
+	if (! no_text_output)
+	  ppt.print_invariants_maybe(System.out, all_ppts);
         {
           // Clear memory
           ppt.set_values_null();
