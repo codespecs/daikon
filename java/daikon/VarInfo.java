@@ -587,7 +587,7 @@ public final class VarInfo implements Cloneable, Serializable {
 	}
 
 	public String toString() {
-		return repr();
+		return name.name();
 	}
 
 	/** Helper function for repr(). **/
@@ -1845,7 +1845,7 @@ public final class VarInfo implements Cloneable, Serializable {
 				// retval.falsified to true?  We know it's true because
 				// retval's children were missing.  However, some forms of
 				// filtering might remove it from associateWith.
-				retval = NonZero.instantiate(associateWith);
+				retval = NonZero.get_proto().instantiate(associateWith);
 				retval.isGuardingPredicate = true;
 				associateWith.addInvariant(retval);
 			} else {
