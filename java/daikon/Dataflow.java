@@ -77,15 +77,19 @@ public class Dataflow
       progress = "Creating combined exit points";
       create_combined_exits (all_ppts);
 
+      // Setup splitters.  This must be done after creating the
+      // combined exit points and before adding derived variables
+      Daikon.setup_splitters(all_ppts);
+
       // Setup orig variables
-      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         progress = "Creating orig variables for: " +ppt.ppt_name.toString();
         create_and_relate_orig_vars (ppt, all_ppts);
       }
 
       // Set up derived variables
-      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         progress = "Creating derived variables for: " +ppt.ppt_name.toString();
         ppt.create_derived_variables();
@@ -983,15 +987,16 @@ public class Dataflow
     }
 
     // Handle the PptConditionals // XXX untested code
-    for (Iterator i = slice.parent.views_cond.iterator(); i.hasNext(); ) {
-      PptConditional adj_ppt = (PptConditional) i.next();
-      VarInfo[] vis_adj = new VarInfo[slice.arity()];
-      for (int j = 0; j < slice.arity(); j++) {
-        int slice_index = slice.var_infos[j].varinfo_index;
-        int adj_index = slice_index;
-        vis_adj[j] = adj_ppt.var_infos[adj_index];
+    if (false) {
+      for (Iterator i = slice.parent.cond_iterator(); i.hasNext(); ) {
+        PptConditional adj_ppt = (PptConditional) i.next();
+        VarInfo[] vis_adj = new VarInfo[slice.arity()];
+        for (int j = 0; j < slice.arity(); j++) {
+          int slice_index = slice.var_infos[j].varinfo_index;
+          int adj_index = slice_index;
+          vis_adj[j] = adj_ppt.var_infos[adj_index];
+        }
       }
-      slice.addToOnePO(adj_ppt, vis_adj);
     }
   }
 
