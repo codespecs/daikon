@@ -26,6 +26,11 @@ export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*
 export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
+# Remove duplicates so path and classpath don't get too long
+export CLASSPATH=`echo $CLASSPATH | path-remove.pl`
+export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
+
+
 ## Someone needs to rewrite this as a shell function, since bash aliases
 ## can't handle arguments.
 ## # Like "cvs update", but filters out output that is unlikely to be of interest.
