@@ -18,24 +18,50 @@
 
 <h1>The Daikon invariant detector</h1>
 
-Daikon is an implementation of dynamic detection of likely
-invariants.  Dynamic invariant detection runs a program, observes the
-values that the program computed, and then reports properties that were
-true over the observed executions.  Daikon's output, which is called an
-"operational abstraction" looks like a formal specification, or the
-contents of <tt>assert</tt> statements.  Examples include "a&gt;0";
-"c=2*d+3"; "array a is sorted"; "for all list objects <em>lst</em>,
-<em>lst</em>.next.prev = <em>lst</em>"; and the like.  Daikon can detect
-properties in Java, Perl, C, and IOA programs; in spreadsheet files; and in
-other data sources.  You can extend Daikon to add new properties or new
-languages.
-<p>
+<!-- -----------------------------------------------------------------
+ DO NOT EDIT this text directly.  It is lifted (by hand) from
+ $inv/doc/daikon.html, which is in turn generated from
+ $inv/doc/daikon.texinfo.
 
-Daikon is <a href="download/">available for download</a>, with both source code
-and <a href="download/doc/">documentation</a>.  Many researchers and
-practitioners have <a href="pubs/">used Daikon</a>, and Daikon itself is
-described in various <a href="pubs/">publications</a>.
-<p>
+ When re-inserting this text, prefix "#License" by
+ "http://pag.csail.mit.edu/daikon/download/doc/daikon.html#"
+ ----------------------------------------------------------------- -->
+
+
+<!-- If you edit the introduction, also edit $inv/doc/www/index.html -->
+<p><a href="http://pag.csail.mit.edu/daikon/">Daikon</a> is an implementation of
+dynamic detection of likely invariants; that is, the Daikon invariant
+detector reports likely program invariants.  An invariant is a property
+that holds at a certain point or points in a program; these are often
+seen in assert statements, documentation, and formal specifications.
+Invariants can be useful in program understanding and a host of other
+applications.  Examples include "x.field &gt; abs(y)"; "y = 2*x+3"; "array
+a is sorted"; "for all list objects lst, lst.next.prev = lst"; "for all
+treenode objects n, n.left.value &lt; n.right.value"; "p != null =&gt;
+p.content in myArray"; and many more.  You can extend Daikon to add new
+properties.
+
+   <p>Dynamic invariant detection runs a program, observes the values that the
+program computes, and then reports properties that were true over the
+observed executions.
+<!-- Daikon's output, which is sometimes called an "operational abstraction", -->
+<!-- looks like a formal specification, or the contents of assert statements. -->
+Daikon can detect properties in Java,
+Perl, C, and <a href="http://theory.csail.mit.edu/tds/ioa/">IOA</a> programs;
+in spreadsheet files; and in other data sources:  dynamic invariant
+detection is a machine learning technique that can be applied to
+arbitrary data.  It is easy to extend Daikon to other applications; as
+one example, an interface exists to the
+<a href="http://ase.arc.nasa.gov/visser/jpf/">Java PathFinder model checker</a>.
+
+   <p>Daikon is freely available for download from
+<a href="http://pag.csail.mit.edu/daikon/download/">http://pag.csail.mit.edu/daikon/download/</a>.  The distribution
+includes both source code and
+<a href="http://pag.csail.mit.edu/daikon/download/doc/">documentation</a>,
+and Daikon's license permits unrestricted use (see <a href="http://pag.csail.mit.edu/daikon/download/doc/daikon.html#License">License</a>).  Many
+researchers and practitioners have used Daikon; those uses, and Daikon
+itself, are described in various
+<a href="http://pag.csail.mit.edu/daikon/pubs/">publications</a>.
 
 
 <hr>
