@@ -5,6 +5,10 @@ import daikon.inv.filter.*;
 import daikon.VarInfo;
 import daikon.PrintInvariants;
 
+/**
+ * Suppress invariants that merely indicate that a variable was
+ * unmodified.  Used only for ESC output.
+ **/
 class UnmodifiedVariableEqualityFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants that merely indicate that a variable was unmodified";
