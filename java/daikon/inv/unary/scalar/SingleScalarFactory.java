@@ -22,6 +22,7 @@ public final class SingleScalarFactory {
       result.add(OneOfScalar.instantiate(ppt));
     } else if (pass == 2) {
       if (var.isConstant()) {
+        // SUPPRESS INVARIANT: if var is constant, suppress NonZero, LowerBound, Modulus, NonModulus, UpperBound
         Global.subexact_noninstantiated_invariants += 5;
       } else {
         result.add(NonZero.instantiate(ppt));

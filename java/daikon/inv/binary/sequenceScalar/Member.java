@@ -29,6 +29,7 @@ public final class Member extends SequenceScalar  {
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
+    // SUPPRESSED INVARIANT: Member, if isEqualToObviousMember (complicated)
     if (isEqualToObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
       if (debugMember) {
@@ -77,11 +78,14 @@ public final class Member extends SequenceScalar  {
     // System.out.println("  sclvar.derived=" + sclvar.derived
     //                    + ", sclvar_seq=" + ((sclvar_seq == null) ? "null" : sclvar_seq.name));
 
-    if (sclvar_seq == null)
+    if (sclvar_seq == null) {
+      // The scalar is not obviously (lexically) a member of any array.
       return false;
-    // The scalar is a member of the same array.
-    if (sclvar_seq == seqvar)
+    }
+    if (sclvar_seq == seqvar) {
+      // The scalar is a member of the same array.
       return true;
+    }
     // The scalar is a member of a different array than the sequence.
     // But maybe the relationship is still obvious, so keep checking.
 
@@ -214,7 +218,7 @@ public final class Member extends SequenceScalar  {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long [] a, long  i, int count) {

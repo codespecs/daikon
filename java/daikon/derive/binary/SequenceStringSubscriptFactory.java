@@ -2,6 +2,7 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
+import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
 import java.util.*;
@@ -57,6 +58,13 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
     //                    + ", sclvar_rep=" + sclvar.canonicalRep().name
     //                    + ", seqsize=" + seqsize.name
     //                    + ", seqsize_rep=" + seqsize.canonicalRep().name);
+
+    // SUPPRESS DERIVED VARIABLE: a[i] where i == a.length
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where i == a.length
+    // SUPPRESS DERIVED VARIABLE: a[..i] where i == a.length
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where i == a.length
+    // SUPPRESS DERIVED VARIABLE: a[i..] where i == a.length
+    // SUPPRESS DERIVED VARIABLE: a[i+1..] where i == a.length
     // Since both are canonical, this is equivalent to
     // "if (sclvar.canonicalRep() == seqsize.canonicalRep()) ..."
     if (sclvar == seqsize) {
@@ -65,9 +73,14 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       return null;
     }
 
+    // SUPPRESS DERIVED VARIABLE: a[i] where (i >= a.length) can be true
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where (i > a.length) can be true
+    // SUPPRESS DERIVED VARIABLE: a[..i] where (i >= a.length) can be true
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where (i > a.length) can be true
+    // SUPPRESS DERIVED VARIABLE: a[i..] where (i > a.length) can be true
+    // SUPPRESS DERIVED VARIABLE: a[i+1..] where (i >= a.length) can be true
     // ***** This eliminates the derivation if it can *ever* be
     // nonsensical/missing.  Is that what I want?
-
     // Find an IntComparison relationship over the scalar and the sequence
     // size, if possible.
     Assert.assert(sclvar.ppt == seqsize.ppt);
@@ -81,14 +94,29 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
             ) {
           Global.nonsensical_suppressed_derived_variables += 6;
           return null;
+        } else if (compar.core.can_be_eq) {
+          Global.nonsensical_suppressed_derived_variables += 3;
+          return new BinaryDerivation[] {
+            new SequenceStringSubscript (seqvar, sclvar, true), // a[i-1]
+            new SequenceStringSubsequence (seqvar, sclvar, true, true), // a[..i-1]
+            new SequenceStringSubsequence (seqvar, sclvar, false, false), // a[i..]
+          };
         }
       }
     }
 
     // Abstract out these next two.
 
+    // If the scalar is a constant, then do all the following checks:
+    //
     // If the scalar is a constant < 0:
     //   all derived variables are nonsensical
+    // SUPPRESS DERIVED VARIABLE: a[i] where i<0 and i is constant
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where i<0 and i is constant
+    // SUPPRESS DERIVED VARIABLE: a[..i] where i<0 and i is constant
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where i<0 and i is constant
+    // SUPPRESS DERIVED VARIABLE: a[i..] where i<0 and i is constant
+    // SUPPRESS DERIVED VARIABLE: a[i+1..] where i<0 and i is constant
     // If the scalar is the constant 0:
     //   array[0] is already extracted
     //   array[-1] is nonsensical
@@ -96,6 +124,11 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
     //   array[0..-1] is nonsensical
     //   array[0..] is the same as array[]
     //   array[1..] should be extracted
+    // SUPPRESS DERIVED VARIABLE: a[i] where i==0
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where i==0
+    // SUPPRESS DERIVED VARIABLE: a[..i] where i==0
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where i==0
+    // SUPPRESS DERIVED VARIABLE: a[i..] where i==0
     // If the scalar is the constant 1:
     //   array[1] is already extracted
     //   array[0] is already extracted
@@ -103,6 +136,10 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
     //   array[0..0] is already extracted
     //   array[1..] should be extracted
     //   array[2..] should be extracted
+    // SUPPRESS DERIVED VARIABLE: a[i] where i==1
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where i==1
+    // SUPPRESS DERIVED VARIABLE: a[..i] where i==1
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where i==1
     if (sclvar.isConstant()) {
       long scl_constant = ((Long) sclvar.constantValue()).longValue();
       // System.out.println("It is constant (" + scl_constant + "): " + sclvar.name);
@@ -127,8 +164,44 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       }
     }
 
-    // Get the lower and upper bounds for the variable, if any.
-    // [This nedds to be written.]
+    // Commented out:  seems to be eliminating desired invariants.
+    if (false) {
+    // If the lower bound for the variable is less than 0 (that is, if the
+    // putative index can ever be negative), then suppress most of the
+    // derived variables.
+    // SUPPRESS DERIVED VARIABLE: a[i] where i<0 can be true
+    // SUPPRESS DERIVED VARIABLE: a[i-1] where i<1 can be true
+    // SUPPRESS DERIVED VARIABLE: a[..i] where i<-1 can be true
+    // SUPPRESS DERIVED VARIABLE: a[..i-1] where i<0 can be true
+    // SUPPRESS DERIVED VARIABLE: a[i..] where i<0 can be true
+    // SUPPRESS DERIVED VARIABLE: a[i+1..] where i<-1 can be true
+    PptSlice unary_slice = sclvar.ppt.getView(sclvar);
+    if (unary_slice != null) {
+      LowerBound lb_inv = LowerBound.find(unary_slice);
+      if (lb_inv != null) {
+        long lower_bound = lb_inv.core.min1;
+        if (lower_bound < -1) {
+          Global.nonsensical_suppressed_derived_variables += 6;
+          return null;
+        } else if (lower_bound == -1) {
+          Global.nonsensical_suppressed_derived_variables += 5;
+          return new BinaryDerivation[] {
+            new SequenceStringSubsequence (seqvar, sclvar, true, false), // a[..i]
+            new SequenceStringSubsequence (seqvar, sclvar, false, true), // a[i+1..]
+          };
+        } else if (lower_bound == 0) {
+          Global.nonsensical_suppressed_derived_variables += 1;
+          return new BinaryDerivation[] {
+            new SequenceStringSubscript (seqvar, sclvar, false), // a[i]
+            new SequenceStringSubsequence (seqvar, sclvar, false, false), // a[i..]
+            new SequenceStringSubsequence (seqvar, sclvar, false, true), // a[i+1..]
+            new SequenceStringSubsequence (seqvar, sclvar, true, false), // a[..i]
+            new SequenceStringSubsequence (seqvar, sclvar, true, true), // a[..i-1]
+          };
+        }
+      }
+    }
+    }
 
     // If, for some canonical j, j=index+1, don't create array[index+1..].
     // If j=index-1, then don't create array[index-1] or array[0..index-1].

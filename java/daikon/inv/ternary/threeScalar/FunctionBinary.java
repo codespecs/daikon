@@ -26,6 +26,7 @@ public class FunctionBinary extends ThreeScalar {
         System.out.println("FunctionBinary.instantiate(" + ppt.name + ", " + function.getName() + ", " + argresult.name + "=" + "f(" + arg1.name + "," + arg2.name + ")" + " )");
     }
 
+    // SUPPRESS INVARIANT: if any var is constant, suppress FunctionBinary.
     // Skip if the arguments are constant (but not if the result is
     // constant, as we might get something like y=abs(x)).  (Actually, for
     // now I'm skipping if the result is constant, too: that's a
@@ -57,7 +58,7 @@ public class FunctionBinary extends ThreeScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long x_int, long y_int, long z_int, int count) {
