@@ -95,6 +95,7 @@ Extending Daikon
 * New formatting for invariants::  
 * New front ends::              
 * New suppressors::             
+* System.exit::                 
 
 Debugging Daikon
 
@@ -127,7 +128,7 @@ Unit Testing
 Sample Testing
 
 * Assertions::                  
-* Example File::                
+* Example file::                
 
 Analyzing historical versions of Daikon
 
@@ -168,6 +169,7 @@ This chapter describes how to customize or modify Daikon.
 * New formatting for invariants::  
 * New front ends::              
 * New suppressors::             
+* System.exit::                 
 @end menu
 
 @node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
@@ -495,7 +497,7 @@ class Example @{
 
 
 
-@node New suppressors,  , New front ends, Extending Daikon
+@node New suppressors, System.exit, New front ends, Extending Daikon
 @section New suppressors
 
 As mentioned in @ref{Daikon internals}, one way to make Daikon more
@@ -542,6 +544,24 @@ public NISuppressionSet get_ni_suppressions() @{
   return (suppressions);
 @}
 @end example
+
+@node    System.exit,  , New suppressors, Extending Daikon
+@section System.exit
+
+The Daikon codebase does not call @samp{System.exit()}, except in a
+dummy main method that catches @samp{TerminationMessage}, which is the
+standard way that a component of Daikon requests the JVM to shut down.
+
+The reason for this is that calling @samp{System.exit()} is usually a
+bad idea.  It makes the class un-usable as a subroutine, because it
+might kill the calling program.  It can cause deadlock.  And it can
+leave data in an inconsistent state (for example, if the program was in
+the middle of writing a file, still held non-Java locks, etc.), because
+the program has no good way of completing any actions that it was in the
+middle of.  Therefore, it is better to throw an exception and let the
+program handle it appropriately.  (This is true of instrumentation code
+as well.)
+
 
 @node    Debugging Daikon, Daikon internals, Extending Daikon, Top
 @chapter Debugging Daikon
@@ -940,18 +960,11 @@ the @option{--noequality} flag.
 @node    Testing, Historical, Daikon internals, Top
 @chapter Testing
 
-Daikon has two sets of tests: regression tests and unit tests. If there
+Daikon has two sets of tests: unit tests (@pxref{Unit testing}) and
+regression tests.  If there
 are any differences between the expected results and the ones you get,
 don't check in your changes until you understand which is the desired
 behavior and possibly update the goals.
-
-The unit tests are found in @file{invariants/java/daikon/test/}; they use
-the JUnit unit testing framework.  They take a few seconds to run.  They
-are automatically run each time you compile Daikon (by running
-@samp{make} in
- @file{$inv/java} or any of its subdirectories).  You can
-also run them explicitly via @samp{make unit}.  When you write new code
-or modify old code, please try to add unit tests.
 
 The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take an hour or longer to run.
@@ -982,16 +995,23 @@ correct output, then run "@samp{make update-inv-goals}" to update the Daikon
 * Unit Testing::                
 @end menu
 
-@node    Unit Testing,  , Testing, Testing
-@section Unit Testing
+@node    Unit testing,  , Testing, Testing
+@section Unit testing
+
+The unit tests are found in @file{invariants/java/daikon/test/}; they use
+the JUnit unit testing framework.  They take a few seconds to run.  They
+are automatically run each time you compile Daikon (by running
+@samp{make} in @file{$inv/java} or any of its subdirectories).  You can
+also run them explicitly via @samp{make unit}.  When you write new code
+or modify old code, please try to add unit tests.
 
 @menu
 * Invariant Format Testing::    
 * Sample Testing::              
 @end menu
 
-@node    Invariant Format Testing, Sample Testing, Unit Testing, Unit Testing
-@subsection Invariant Format Testing
+@node    Invariant format testing, Sample Testing, Unit Testing, Unit Testing
+@subsection Invariant format testing
 
 This tests the formatting of invariants with specified input.  The
 tests are configured in the file @file{InvariantFormatTest.commands} under
@@ -1164,10 +1184,10 @@ are:
 
 @menu
 * Assertions::                  
-* Example File::                
+* Example file::                
 @end menu
 
-@node       Assertions, Example File, Sample Testing, Sample Testing
+@node       Assertions, Example file, Sample Testing, Sample Testing
 @subsubsection Assertions
 
 Assertions are formatted like function calls: <name>(arg1, arg2, ...).
@@ -1189,8 +1209,8 @@ The valid assertions for the assert: command are:
 
 More assertions can easily be added to @file{SampleTester.java} as required.
 
-@node       Example File,  , Assertions, Sample Testing
-@subsubsection Example File
+@node       Example file,  , Assertions, Sample Testing
+@subsubsection Example file
 
 The following is an simple example of sample testing.
 @example

@@ -51,7 +51,6 @@ Contents:
             </ul>
           <li><a href="#environment">Notes on your environment</a>
         </ul>
-      <li><a href="#running-daikon">Running Daikon</a>
       <li><a href="#scratch-directories">Large files and scratch directories</a>
       <li><a href="#editing-daikon">Editing Daikon source code</a>
         <ul>
@@ -137,7 +136,7 @@ Checking out Daikon from the CVS repository has several advantages:
   <li>It is very easy to update to the latest version of the software,
       retaining any personal customizations you have made.
   <li>You can make changes and incorporate them in the master version of
-      Daikon. 
+      Daikon.
 </ul></p>
 
 <p>
@@ -370,11 +369,11 @@ directories are quite large (dozens of gigabytes) and are not backed up.
 The pag machines allow cross-mounting of /scratch and /scratch2 from other
 machines:
 <pre>
-  cd /net/<em>pag-client</em>/scratch  
-  cd /net/<em>pag-client</em>/scratch2
+  cd /var/autofs/net/<em>pag-client</em>/scratch
+  cd /var/autofs/net/<em>pag-client</em>/scratch2
 </pre>
 Typically each group member creates a subdirectory called
-/scratch/$USER/.
+<tt>/scratch/$USER/</tt> on some machine.
 </p>
 
 <p>
@@ -390,8 +389,7 @@ order, in an easily reproducible way.
 <p>
 You should almost specify a trace file name that includes <tt>.gz</tt> at the end;
 see the <tt>--dtrace-file=FILENAME</tt> argument to dfej, or the DTRACEFILE
-environment variable.  (Since compressing dtrace files is always a good
-thing, perhaps this should be the default.)
+environment variable.  (This is the default if you don't specify a filename.)
 </p>
 
 
@@ -414,9 +412,11 @@ of Emacs.)
 
 <p>
 The commands <tt>M-x daikon-info</tt> and <tt>M-x
-daikon-developer-info</tt> views the Daikon manual and the Daikon Developer
+daikon-developer-info</tt> view the Daikon manual and the Daikon Developer
 manual using the Info
-viewer within Emacs.  You may also choose to use the stand-alone viewer, to
+viewer within Emacs.  These commands also update all other versions of the
+manuals (HTML, PDF, etc.).
+You may also choose to use the stand-alone Info viewer, to
 use a Web browser to read the manual in HTML form, or to read the
 PostScript or PDF version either electronically or on paper.
 </p>
@@ -485,49 +485,52 @@ target.
 
 <ol>
 
-<p>
     <li> It is suggested that you use the <tt>daikonuser</tt> account to
     publish a distribution.  This ensures that everything has been committed
     to CVS and that nothing extraneous in your account gets included in the
     distribution.  Ask a senior group member for the password.  Note that all of
-    the following instructions should work from other accounts as 
+    the following instructions should work from other accounts as
     well. </p>
 
-<p>
-    <code> su - daikonuser </code> </p>
+    <pre>
+        su - daikonuser
+    </pre>
 
     <li> Update daikon in daikonuser to the most recent version
     of V3. </p>
 
-    <pre> 
+    <pre>
         cd $inv
         cvs -q update -d
+        cvs -q diff
     </pre>
+
+    The <tt>cvs -q diff</tt> command should produce no output.
 
     <li> Rebuild everything. </p>
 
     <pre>
-        cd java 
-        make clean 
-        make 
-        cd $inv/doc 
-        make 
-        cd $inv/dfej 
-        make 
-        cd $inv/kvasir 
-        make 
+        cd $inv/java
+        make clean
+        make
+        cd $inv/doc
+        make
+        cd $inv/dfej
+        make
+        cd $inv/kvasir
+        make
         make install
     </pre> </p>
 
     <li> Run the kvasir regression tests <p>
     <pre>
       cd $inv/tests/kvasir-tests
-      make 
+      make
     </pre>
 
     <li> Run the regression tests.  These will use Chicory as the
     front end.  To run the tests using dfej, define DFEJ_EXECUTABLE to
-    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1 All of
+    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.  All of
     the diff files should be of zero size when this is complete.</p>
 
     <pre>
@@ -537,14 +540,14 @@ target.
     </pre> </p>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
-    in this version.  A good way to determine what has changed is to diff 
-    the texinfo source files in the doc directory against the previous 
+    in this version.  A good way to determine what has changed is to diff
+    the texinfo source files in the doc directory against the previous
     versions: </p>
 
     <pre>
         cd $inv/doc
-        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo 
-    </pre> <p> 
+        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
+    </pre> <p>
 
     Another good source of information is to examine the cvs logs over the
     last month: </p>
@@ -561,11 +564,11 @@ target.
 
     <pre>
       cd $inv
-      make update-doc-dist-date-and-version 
+      make update-doc-dist-date-and-version
     </pre>
 
     <li> Build everything to be distributed and copy it to the
-    staging area ($inv/dist).  The final output will be a list 
+    staging area ($inv/dist).  The final output will be a list
     of files that were added/removed since the last release.</p>
 
     <pre>
@@ -625,7 +628,7 @@ target.
     </pre> </p>
 
     <li> Send mail to the daikon-announce mailing list.  There are sample
-    messages in the archive of daikon-announce 
+    messages in the archive of daikon-announce
     (<a href=http://lists.csail.mit.edu/mailman/listinfo/daikon-announce>http://lists.csail.mit.edu/mailman/listinfo/daikon-announce</a>)
 
 </ol> </p>
