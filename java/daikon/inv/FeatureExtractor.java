@@ -430,9 +430,9 @@ public final class FeatureExtractor {
       output.write(label);
       for (Iterator fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
-	IntDoublePair fet = (IntDoublePair) fets.next();
-	if (fet.value > THRESHOLD)
-	  output.write(fet.number + ":" + df.format(fet.value) + " ");
+        IntDoublePair fet = (IntDoublePair) fets.next();
+        if (fet.value > THRESHOLD)
+          output.write(fet.number + ":" + df.format(fet.value) + " ");
       }
       output.write("\n");
       output.write("#  " + ((String) strings.get(i)) + "\n");
@@ -465,7 +465,7 @@ public final class FeatureExtractor {
       output.write(((TreeSet) features.get(i)).size() * 2 + " ");
       for (Iterator fets = ((TreeSet) features.get(i)).iterator();
            fets.hasNext();) {
-	IntDoublePair fet = (IntDoublePair) fets.next();
+        IntDoublePair fet = (IntDoublePair) fets.next();
         output.write(fet.number + " " + df.format(fet.value) + " ");
       }
       output.write(label);
@@ -556,193 +556,193 @@ public final class FeatureExtractor {
       invariant.addAll(getCommonFeatures(current));
       invariant.addAll(getVarFeatures(current.ppt.var_infos));
       if (current instanceof Modulus)
-	invariant.addAll(getModulusFeatures((Modulus) current));
+        invariant.addAll(getModulusFeatures((Modulus) current));
       if (current instanceof LowerBound)
-	invariant.addAll(getLowerBoundFeatures((LowerBound) current));
+        invariant.addAll(getLowerBoundFeatures((LowerBound) current));
       if (current instanceof NonZero)
-	invariant.addAll(getNonZeroFeatures((NonZero) current));
+        invariant.addAll(getNonZeroFeatures((NonZero) current));
       if (current instanceof NonModulus)
-	invariant.addAll(getNonModulusFeatures((NonModulus) current));
+        invariant.addAll(getNonModulusFeatures((NonModulus) current));
       if (current instanceof OneOfScalar)
-	invariant.addAll(getOneOfScalarFeatures((OneOfScalar) current));
+        invariant.addAll(getOneOfScalarFeatures((OneOfScalar) current));
       if (current instanceof Positive)
-	invariant.addAll(getPositiveFeatures((Positive) current));
+        invariant.addAll(getPositiveFeatures((Positive) current));
       if (current instanceof SingleFloat)
-	invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
+        invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
       if (current instanceof SingleScalar)
-	invariant.addAll(getSingleScalarFeatures((SingleScalar) current));
+        invariant.addAll(getSingleScalarFeatures((SingleScalar) current));
       if (current instanceof UpperBound)
-	invariant.addAll(getUpperBoundFeatures((UpperBound) current));
+        invariant.addAll(getUpperBoundFeatures((UpperBound) current));
 
       if (current instanceof EltLowerBound)
-	invariant.addAll(getEltLowerBoundFeatures((EltLowerBound) current));
+        invariant.addAll(getEltLowerBoundFeatures((EltLowerBound) current));
       if (current instanceof EltNonZero)
-	invariant.addAll(getEltNonZeroFeatures((EltNonZero) current));
+        invariant.addAll(getEltNonZeroFeatures((EltNonZero) current));
       if (current instanceof EltOneOf)
-	invariant.addAll(getEltOneOfFeatures((EltOneOf) current));
+        invariant.addAll(getEltOneOfFeatures((EltOneOf) current));
       if (current instanceof EltUpperBound)
-	invariant.addAll(getEltUpperBoundFeatures((EltUpperBound) current));
+        invariant.addAll(getEltUpperBoundFeatures((EltUpperBound) current));
       if (current instanceof EltwiseIntComparison)
-	invariant.addAll(getEltwiseIntComparisonFeatures((EltwiseIntComparison) current));
+        invariant.addAll(getEltwiseIntComparisonFeatures((EltwiseIntComparison) current));
       if (current instanceof NoDuplicates)
-	invariant.addAll(getNoDuplicatesFeatures((NoDuplicates) current));
+        invariant.addAll(getNoDuplicatesFeatures((NoDuplicates) current));
       if (current instanceof OneOfSequence)
-	invariant.addAll(getOneOfSequenceFeatures((OneOfSequence) current));
+        invariant.addAll(getOneOfSequenceFeatures((OneOfSequence) current));
       if (current instanceof SeqIndexComparison)
-	invariant.addAll(getSeqIndexComparisonFeatures((SeqIndexComparison) current));
+        invariant.addAll(getSeqIndexComparisonFeatures((SeqIndexComparison) current));
       if (current instanceof SeqIndexNonEqual)
-	invariant.addAll(getSeqIndexNonEqualFeatures((SeqIndexNonEqual) current));
+        invariant.addAll(getSeqIndexNonEqualFeatures((SeqIndexNonEqual) current));
       if (current instanceof SingleFloatSequence)
-	invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
+        invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
 
       if (current instanceof OneOfString)
-	invariant.addAll(getOneOfStringFeatures((OneOfString) current));
+        invariant.addAll(getOneOfStringFeatures((OneOfString) current));
       if (current instanceof SingleString)
-	invariant.addAll(getSingleStringFeatures((SingleString) current));
+        invariant.addAll(getSingleStringFeatures((SingleString) current));
 
       if (current instanceof EltOneOfString)
-	invariant.addAll(getEltOneOfStringFeatures((EltOneOfString) current));
+        invariant.addAll(getEltOneOfStringFeatures((EltOneOfString) current));
       if (current instanceof OneOfStringSequence)
-	invariant.addAll(getOneOfStringSequenceFeatures((OneOfStringSequence) current));
+        invariant.addAll(getOneOfStringSequenceFeatures((OneOfStringSequence) current));
       if (current instanceof SingleStringSequence)
-	invariant.addAll(getSingleStringSequenceFeatures((SingleStringSequence) current));
+        invariant.addAll(getSingleStringSequenceFeatures((SingleStringSequence) current));
       if (current instanceof OneOf)
-	invariant.addAll(getOneOfFeatures((OneOf) current));
+        invariant.addAll(getOneOfFeatures((OneOf) current));
       if (current instanceof Comparison)
-	invariant.addAll(getComparisonFeatures((Comparison) current));
+        invariant.addAll(getComparisonFeatures((Comparison) current));
       if (current instanceof Implication)
-	invariant.addAll(getImplicationFeatures((Implication) current));
+        invariant.addAll(getImplicationFeatures((Implication) current));
 
       if (current instanceof SeqIntComparison)
-	invariant.addAll(getSeqIntComparisonFeatures((SeqIntComparison) current));
+        invariant.addAll(getSeqIntComparisonFeatures((SeqIntComparison) current));
       if (current instanceof SequenceScalar)
-	invariant.addAll(getSequenceScalarFeatures((SequenceScalar) current));
+        invariant.addAll(getSequenceScalarFeatures((SequenceScalar) current));
 
       if (current instanceof SequenceString)
-	invariant.addAll(getSequenceStringFeatures((SequenceString) current));
+        invariant.addAll(getSequenceStringFeatures((SequenceString) current));
       if (current instanceof IntNonEqual)
-      	invariant.addAll(getIntNonEqualFeatures((IntNonEqual) current));
+        invariant.addAll(getIntNonEqualFeatures((IntNonEqual) current));
       if (current instanceof IntEqual)
-	invariant.addAll(getIntEqualFeatures((IntEqual) current));
+        invariant.addAll(getIntEqualFeatures((IntEqual) current));
       if (current instanceof FunctionUnary)
-	invariant.addAll(getFunctionUnaryFeatures((FunctionUnary) current));
+        invariant.addAll(getFunctionUnaryFeatures((FunctionUnary) current));
       if (current instanceof IntGreaterEqual)
-	invariant.addAll(getIntGreaterEqualFeatures((IntGreaterEqual) current));
+        invariant.addAll(getIntGreaterEqualFeatures((IntGreaterEqual) current));
       if (current instanceof IntGreaterThan)
-	invariant.addAll(getIntGreaterThanFeatures((IntGreaterThan) current));
+        invariant.addAll(getIntGreaterThanFeatures((IntGreaterThan) current));
       if (current instanceof LinearBinary)
-	invariant.addAll(getLinearBinaryFeatures((LinearBinary) current));
+        invariant.addAll(getLinearBinaryFeatures((LinearBinary) current));
       if (current instanceof TwoScalar)
-	invariant.addAll(getTwoScalarFeatures((TwoScalar) current));
+        invariant.addAll(getTwoScalarFeatures((TwoScalar) current));
       if (current instanceof IntLessEqual)
-	invariant.addAll(getIntLessEqualFeatures((IntLessEqual) current));
+        invariant.addAll(getIntLessEqualFeatures((IntLessEqual) current));
       if (current instanceof IntLessThan)
-	invariant.addAll(getIntLessThanFeatures((IntLessThan) current));
+        invariant.addAll(getIntLessThanFeatures((IntLessThan) current));
 
       if (current instanceof PairwiseIntComparison)
-	invariant.addAll(getPairwiseIntComparisonFeatures((PairwiseIntComparison) current));
+        invariant.addAll(getPairwiseIntComparisonFeatures((PairwiseIntComparison) current));
       if (current instanceof SeqComparison)
-	invariant.addAll(getSeqComparisonFeatures((SeqComparison) current));
+        invariant.addAll(getSeqComparisonFeatures((SeqComparison) current));
       if (current instanceof TwoSequence)
-	invariant.addAll(getTwoSequenceFeatures((TwoSequence) current));
+        invariant.addAll(getTwoSequenceFeatures((TwoSequence) current));
       if (current instanceof PairwiseLinearBinary)
-	invariant.addAll(getPairwiseLinearBinaryFeatures((PairwiseLinearBinary) current));
+        invariant.addAll(getPairwiseLinearBinaryFeatures((PairwiseLinearBinary) current));
       if (current instanceof SubSequence)
-	invariant.addAll(getSubSequenceFeatures((SubSequence) current));
+        invariant.addAll(getSubSequenceFeatures((SubSequence) current));
       if (current instanceof PairwiseFunctionUnary)
-	invariant.addAll(getPairwiseFunctionUnaryFeatures((PairwiseFunctionUnary) current));
+        invariant.addAll(getPairwiseFunctionUnaryFeatures((PairwiseFunctionUnary) current));
       if (current instanceof Reverse)
-	invariant.addAll(getReverseFeatures((Reverse) current));
+        invariant.addAll(getReverseFeatures((Reverse) current));
 
       if (current instanceof StringComparison)
-	invariant.addAll(getStringComparisonFeatures((StringComparison) current));
+        invariant.addAll(getStringComparisonFeatures((StringComparison) current));
       if (current instanceof TwoString)
-	invariant.addAll(getTwoStringFeatures((TwoString) current));
+        invariant.addAll(getTwoStringFeatures((TwoString) current));
 
       if (current instanceof ThreeScalar)
-	invariant.addAll(getThreeScalarFeatures((ThreeScalar) current));
+        invariant.addAll(getThreeScalarFeatures((ThreeScalar) current));
       if (current instanceof LinearTernary)
-	invariant.addAll(getLinearTernaryFeatures((LinearTernary) current));
+        invariant.addAll(getLinearTernaryFeatures((LinearTernary) current));
       if (current instanceof FunctionBinary)
-	invariant.addAll(getFunctionBinaryFeatures((FunctionBinary) current));
+        invariant.addAll(getFunctionBinaryFeatures((FunctionBinary) current));
 
       // Float Invariants
       if (current instanceof MemberFloat)
-	invariant.addAll(getMemberFloatFeatures((MemberFloat) current));
+        invariant.addAll(getMemberFloatFeatures((MemberFloat) current));
       if (current instanceof SeqFloatComparison)
-	invariant.addAll(getSeqFloatComparisonFeatures((SeqFloatComparison) current));
+        invariant.addAll(getSeqFloatComparisonFeatures((SeqFloatComparison) current));
       if (current instanceof SequenceFloat)
-	invariant.addAll(getSequenceFloatFeatures((SequenceFloat) current));
+        invariant.addAll(getSequenceFloatFeatures((SequenceFloat) current));
       if (current instanceof FloatEqual)
-	invariant.addAll(getFloatEqualFeatures((FloatEqual) current));
+        invariant.addAll(getFloatEqualFeatures((FloatEqual) current));
       if (current instanceof FloatNonEqual)
-	invariant.addAll(getFloatNonEqualFeatures((FloatNonEqual) current));
+        invariant.addAll(getFloatNonEqualFeatures((FloatNonEqual) current));
       if (current instanceof FloatLessThan)
-	invariant.addAll(getFloatLessThanFeatures((FloatLessThan) current));
+        invariant.addAll(getFloatLessThanFeatures((FloatLessThan) current));
       if (current instanceof FloatLessEqual)
-	invariant.addAll(getFloatLessEqualFeatures((FloatLessEqual) current));
+        invariant.addAll(getFloatLessEqualFeatures((FloatLessEqual) current));
       if (current instanceof FloatGreaterThan)
-	invariant.addAll(getFloatGreaterThanFeatures((FloatGreaterThan) current));
+        invariant.addAll(getFloatGreaterThanFeatures((FloatGreaterThan) current));
       if (current instanceof FloatGreaterEqual)
-	invariant.addAll(getFloatGreaterEqualFeatures((FloatGreaterEqual) current));
+        invariant.addAll(getFloatGreaterEqualFeatures((FloatGreaterEqual) current));
       if (current instanceof FunctionUnaryFloat)
-	invariant.addAll(getFunctionUnaryFloatFeatures((FunctionUnaryFloat) current));
+        invariant.addAll(getFunctionUnaryFloatFeatures((FunctionUnaryFloat) current));
       if (current instanceof LinearBinaryFloat)
-	invariant.addAll(getLinearBinaryFloatFeatures((LinearBinaryFloat) current));
+        invariant.addAll(getLinearBinaryFloatFeatures((LinearBinaryFloat) current));
       if (current instanceof TwoFloat)
-	invariant.addAll(getTwoFloatFeatures((TwoFloat) current));
+        invariant.addAll(getTwoFloatFeatures((TwoFloat) current));
       if (current instanceof SeqComparisonFloat)
-	invariant.addAll(getSeqComparisonFloatFeatures((SeqComparisonFloat) current));
+        invariant.addAll(getSeqComparisonFloatFeatures((SeqComparisonFloat) current));
       if (current instanceof ReverseFloat)
-	invariant.addAll(getReverseFloatFeatures((ReverseFloat) current));
+        invariant.addAll(getReverseFloatFeatures((ReverseFloat) current));
       if (current instanceof SubSequenceFloat)
-	invariant.addAll(getSubSequenceFloatFeatures((SubSequenceFloat) current));
+        invariant.addAll(getSubSequenceFloatFeatures((SubSequenceFloat) current));
       if (current instanceof PairwiseFloatComparison)
-	invariant.addAll(getPairwiseFloatComparisonFeatures((PairwiseFloatComparison) current));
+        invariant.addAll(getPairwiseFloatComparisonFeatures((PairwiseFloatComparison) current));
       if (current instanceof TwoSequenceFloat)
-	invariant.addAll(getTwoSequenceFloatFeatures((TwoSequenceFloat) current));
+        invariant.addAll(getTwoSequenceFloatFeatures((TwoSequenceFloat) current));
       if (current instanceof PairwiseLinearBinaryFloat)
-	invariant.addAll(getPairwiseLinearBinaryFloatFeatures((PairwiseLinearBinaryFloat) current));
+        invariant.addAll(getPairwiseLinearBinaryFloatFeatures((PairwiseLinearBinaryFloat) current));
       if (current instanceof PairwiseFunctionUnaryFloat)
-	invariant.addAll(getPairwiseFunctionUnaryFloatFeatures((PairwiseFunctionUnaryFloat) current));
+        invariant.addAll(getPairwiseFunctionUnaryFloatFeatures((PairwiseFunctionUnaryFloat) current));
       if (current instanceof FunctionBinaryFloat)
-	invariant.addAll(getFunctionBinaryFloatFeatures((FunctionBinaryFloat) current));
+        invariant.addAll(getFunctionBinaryFloatFeatures((FunctionBinaryFloat) current));
       if (current instanceof ThreeFloat)
-	invariant.addAll(getThreeFloatFeatures((ThreeFloat) current));
+        invariant.addAll(getThreeFloatFeatures((ThreeFloat) current));
       if (current instanceof LinearTernaryFloat)
-	invariant.addAll(getLinearTernaryFloatFeatures((LinearTernaryFloat) current));
+        invariant.addAll(getLinearTernaryFloatFeatures((LinearTernaryFloat) current));
       if (current instanceof OneOfFloat)
-	invariant.addAll(getOneOfFloatFeatures((OneOfFloat) current));
+        invariant.addAll(getOneOfFloatFeatures((OneOfFloat) current));
       if (current instanceof SingleFloat)
-	invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
+        invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
       if (current instanceof LowerBoundFloat)
-	invariant.addAll(getLowerBoundFloatFeatures((LowerBoundFloat) current));
+        invariant.addAll(getLowerBoundFloatFeatures((LowerBoundFloat) current));
       if (current instanceof UpperBoundFloat)
-	invariant.addAll(getUpperBoundFloatFeatures((UpperBoundFloat) current));
+        invariant.addAll(getUpperBoundFloatFeatures((UpperBoundFloat) current));
       if (current instanceof NonZeroFloat)
-	invariant.addAll(getNonZeroFloatFeatures((NonZeroFloat) current));
+        invariant.addAll(getNonZeroFloatFeatures((NonZeroFloat) current));
       if (current instanceof OneOfFloatSequence)
-	invariant.addAll(getOneOfFloatSequenceFeatures((OneOfFloatSequence) current));
+        invariant.addAll(getOneOfFloatSequenceFeatures((OneOfFloatSequence) current));
       if (current instanceof EltOneOfFloat)
-	invariant.addAll(getEltOneOfFloatFeatures((EltOneOfFloat) current));
+        invariant.addAll(getEltOneOfFloatFeatures((EltOneOfFloat) current));
       if (current instanceof EltLowerBoundFloat)
-	invariant.addAll(getEltLowerBoundFloatFeatures((EltLowerBoundFloat) current));
+        invariant.addAll(getEltLowerBoundFloatFeatures((EltLowerBoundFloat) current));
       if (current instanceof EltUpperBoundFloat)
-	invariant.addAll(getEltUpperBoundFloatFeatures((EltUpperBoundFloat) current));
+        invariant.addAll(getEltUpperBoundFloatFeatures((EltUpperBoundFloat) current));
       if (current instanceof NoDuplicatesFloat)
-	invariant.addAll(getNoDuplicatesFloatFeatures((NoDuplicatesFloat) current));
+        invariant.addAll(getNoDuplicatesFloatFeatures((NoDuplicatesFloat) current));
       if (current instanceof SeqIndexComparisonFloat)
-	invariant.addAll(getSeqIndexComparisonFloatFeatures((SeqIndexComparisonFloat) current));
+        invariant.addAll(getSeqIndexComparisonFloatFeatures((SeqIndexComparisonFloat) current));
       if (current instanceof SeqIndexNonEqualFloat)
-	invariant.addAll(getSeqIndexNonEqualFloatFeatures((SeqIndexNonEqualFloat) current));
+        invariant.addAll(getSeqIndexNonEqualFloatFeatures((SeqIndexNonEqualFloat) current));
       if (current instanceof CommonFloatSequence)
-	invariant.addAll(getCommonFloatSequenceFeatures((CommonFloatSequence) current));
+        invariant.addAll(getCommonFloatSequenceFeatures((CommonFloatSequence) current));
       if (current instanceof EltNonZeroFloat)
-	invariant.addAll(getEltNonZeroFloatFeatures((EltNonZeroFloat) current));
+        invariant.addAll(getEltNonZeroFloatFeatures((EltNonZeroFloat) current));
       if (current instanceof SingleFloatSequence)
-	invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
+        invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
       if (current instanceof EltwiseFloatComparison)
-	invariant.addAll(getEltwiseFloatComparisonFeatures((EltwiseFloatComparison) current));
+        invariant.addAll(getEltwiseFloatComparisonFeatures((EltwiseFloatComparison) current));
 
       answer.add(invariant);
     }
@@ -803,82 +803,82 @@ public final class FeatureExtractor {
       // delete feature because hash code is not a continuous function
       //      answer.add(new IntDoublePair(i*10000 + FetVarInfoName, var.name.name().hashCode()));
       if (var.is_static_constant) {
-	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Static_Constant, 1));
-	answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Static_Constant, 1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
       /* [INCR]
       if (var.canBeNull) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNull, 1));
-	answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNull, 1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
       if (var.is_dynamic_constant) {
-	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_Constant,1));
-	answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_Constant,1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_Constant, 1)); }
       */ // [INCR]
       if (var.isPrestate()) {
-	answer.add(new IntDoublePair(i*10000 + FetVarIsPrestate, 1));
-	answer.add(new IntDoublePair(FetVarIsPrestate, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarIsPrestate, 1));
+        answer.add(new IntDoublePair(FetVarIsPrestate, 1)); }
       answer.add(new IntDoublePair(i * 10000 + FetVarDerivedDepth, var.derivedDepth()));
 
       VarInfoAux aux = var.aux;
       if (aux.getFlag(VarInfoAux.IS_PARAM)) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxIsParam, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxIsParam, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxIsParam, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxIsParam, 1)); }
       if (aux.getFlag(VarInfoAux.NULL_TERMINATING)) {
-	answer.add(new IntDoublePair(i*10000+FetVarInfoAuxNullTerminating, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxNullTerminating, 1)); }
+        answer.add(new IntDoublePair(i*10000+FetVarInfoAuxNullTerminating, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxNullTerminating, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_NULL)) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasNull, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxHasNull, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasNull, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasNull, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_SIZE)) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasSize, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxHasSize, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasSize, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasSize, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_ORDER)) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasOrder, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxHasOrder, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasOrder, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasOrder, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
-	answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasDuplicates, 1));
-	answer.add(new IntDoublePair(FetVarInfoAuxHasDuplicates, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasDuplicates, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasDuplicates, 1)); }
 
       ProglangType type = var.type;
       answer.add(new IntDoublePair(i*10000 + FetTypeDimensions, type.dimensions()));
       // delete feature because hash code is not a continuous function
       // answer.add(new IntDoublePair(i*10000 + FetTypeBase, type.base().hashCode()));
       if (type.isArray()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsArray, 1));
-	answer.add(new IntDoublePair(FetTypeIsArray, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsArray, 1));
+        answer.add(new IntDoublePair(FetTypeIsArray, 1)); }
       answer.add(new IntDoublePair(i*10000 + FetTypePseudoDimensions, type.pseudoDimensions()));
       if (type.isPseudoArray()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsPseudoArray, 1));
-	answer.add(new IntDoublePair(FetTypeIsPseudoArray, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsPseudoArray, 1));
+        answer.add(new IntDoublePair(FetTypeIsPseudoArray, 1)); }
       if (type.isPrimitive()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsPrimitive, 1));
-	answer.add(new IntDoublePair(FetTypeIsPrimitive, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsPrimitive, 1));
+        answer.add(new IntDoublePair(FetTypeIsPrimitive, 1)); }
       if (type.baseIsPrimitive()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsArray, 1));
-	answer.add(new IntDoublePair(FetTypeBaseIsArray, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsArray, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsArray, 1)); }
       if (type.isIntegral()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsIntegral, 1));
-	answer.add(new IntDoublePair(FetTypeIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsIntegral, 1));
+        answer.add(new IntDoublePair(FetTypeIsIntegral, 1)); }
       if (type.baseIsIntegral()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsIntegral, 1));
-	answer.add(new IntDoublePair(FetTypeBaseIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsIntegral, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsIntegral, 1)); }
       if (type.elementIsIntegral()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeElementIsIntegral, 1));
-	answer.add(new IntDoublePair(FetTypeElementIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeElementIsIntegral, 1));
+        answer.add(new IntDoublePair(FetTypeElementIsIntegral, 1)); }
       if (type.isScalar()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsScalar, 1));
-	answer.add(new IntDoublePair(FetTypeIsScalar, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsScalar, 1));
+        answer.add(new IntDoublePair(FetTypeIsScalar, 1)); }
       if (type.isFloat()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsFloat, 1));
-	answer.add(new IntDoublePair(FetTypeIsFloat, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsFloat, 1));
+        answer.add(new IntDoublePair(FetTypeIsFloat, 1)); }
       if (type.baseIsFloat()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsFloat, 1));
-	answer.add(new IntDoublePair(FetTypeBaseIsFloat, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsFloat, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsFloat, 1)); }
       if (type.isObject()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeIsObject, 1));
-	answer.add(new IntDoublePair(FetTypeIsObject, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsObject, 1));
+        answer.add(new IntDoublePair(FetTypeIsObject, 1)); }
       if (type.baseIsObject()) {
-	answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsObject, 1));
-	answer.add(new IntDoublePair(FetTypeBaseIsObject, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsObject, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsObject, 1)); }
     }
 
  return answer;

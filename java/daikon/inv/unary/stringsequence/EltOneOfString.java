@@ -48,10 +48,10 @@ public final class EltOneOfString
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private String [] elts;
+  private String[] elts;
   private int num_elts;
 
-  EltOneOfString (PptSlice ppt) {
+  public EltOneOfString(PptSlice ppt) {
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
@@ -109,7 +109,7 @@ public final class EltOneOfString
   }
 
   // Assumes the other array is already sorted
-  public boolean compare_rep(int num_other_elts, String [] other_elts) {
+  public boolean compare_rep(int num_other_elts, String[] other_elts) {
     if (num_elts != num_other_elts)
       return false;
     sort_rep();
@@ -354,18 +354,18 @@ public final class EltOneOfString
       if (!is_type) {
         result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
       } else {
-	result += " == \\type";
-	if ((str == null) || "null".equals(str)) {
-	  // "null" is not a type... Going to print as Object... should actually not print
-	  result += "(java.lang.Object)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == \\type";
+        if ((str == null) || "null".equals(str)) {
+          // "null" is not a type... Going to print as Object... should actually not print
+          result += "(java.lang.Object)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 

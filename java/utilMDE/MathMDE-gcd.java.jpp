@@ -29,7 +29,7 @@ The correct way to build the system is to run 'make'.
     for (int i=1; i<a.length; i++) {
       result = gcd(a[i], result);
       if ((result == 1) || (result == 0))
-	return result;
+        return result;
     }
     return result;
   }
@@ -47,7 +47,7 @@ The correct way to build the system is to run 'make'.
     for (int i=2; i<a.length; i++) {
       result = gcd(a[i] - a[i-1], result);
       if ((result == 1) || (result == 0))
-	return result;
+        return result;
     }
     return result;
   }

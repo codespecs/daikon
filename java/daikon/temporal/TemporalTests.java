@@ -103,7 +103,7 @@ public class TemporalTests extends TestCase
 	afterA.addChild(beforeD);
 	afterA.addChild(afterD);
     }
-	
+
 
     public void testBasicEnterAndExit()
     {
@@ -111,21 +111,21 @@ public class TemporalTests extends TestCase
 	//(or at least without drooling on ourselves)?
 	generateSimpleNestedScopes();
 
-	assert(!global.isActive());
-	assert(!beforeA.isActive());
-	assert(!afterA.isActive());
+	assertTrue(!global.isActive());
+	assertTrue(!beforeA.isActive());
+	assertTrue(!afterA.isActive());
 
 	global.enter();
 
-	assert(global.isActive());
-	assert(beforeA.isActive());
-	assert(!afterA.isActive());
+	assertTrue(global.isActive());
+	assertTrue(beforeA.isActive());
+	assertTrue(!afterA.isActive());
 
 	global.exit();
 
-	assert(!global.isActive());
-	assert(!beforeA.isActive());
-	assert(!afterA.isActive());
+	assertTrue(!global.isActive());
+	assertTrue(!beforeA.isActive());
+	assertTrue(!afterA.isActive());
     }
 
     public void testBasicScopeEventProcessing()
@@ -134,47 +134,47 @@ public class TemporalTests extends TestCase
 
 	global.enter();
 
-	assert(!global.seenEvent(A));
-	assert(!global.seenEvent(B));
-	assert(!global.seenEvent(C));
+	assertTrue(!global.seenEvent(A));
+	assertTrue(!global.seenEvent(B));
+	assertTrue(!global.seenEvent(C));
 
-	assert(!beforeA.seenEvent(A));
-	assert(!beforeA.seenEvent(B));
-	assert(!beforeA.seenEvent(C));
+	assertTrue(!beforeA.seenEvent(A));
+	assertTrue(!beforeA.seenEvent(B));
+	assertTrue(!beforeA.seenEvent(C));
 
-	assert(!afterA.seenEvent(A));
-	assert(!afterA.seenEvent(B));
-	assert(!afterA.seenEvent(C));
+	assertTrue(!afterA.seenEvent(A));
+	assertTrue(!afterA.seenEvent(B));
+	assertTrue(!afterA.seenEvent(C));
 
 	global.processEvent(B);
 
-	assert(global.isActive());
-	assert(beforeA.isActive());
-	assert(!afterA.isActive());
+	assertTrue(global.isActive());
+	assertTrue(beforeA.isActive());
+	assertTrue(!afterA.isActive());
 
-	assert(global.seenEvent(B));
-	assert(beforeA.seenEvent(B));
-	assert(!afterA.seenEvent(B));
-	
+	assertTrue(global.seenEvent(B));
+	assertTrue(beforeA.seenEvent(B));
+	assertTrue(!afterA.seenEvent(B));
+
 	global.processEvent(A);
 
-	assert(global.isActive());
-	assert(!beforeA.isActive());
-	assert(afterA.isActive());
+	assertTrue(global.isActive());
+	assertTrue(!beforeA.isActive());
+	assertTrue(afterA.isActive());
 
-	assert(global.seenEvent(A));
-	assert(!beforeA.seenEvent(A));
-	assert(!afterA.seenEvent(A));
+	assertTrue(global.seenEvent(A));
+	assertTrue(!beforeA.seenEvent(A));
+	assertTrue(!afterA.seenEvent(A));
 
 	global.processEvent(C);
 
-	assert(global.isActive());
-	assert(!beforeA.isActive());
-	assert(afterA.isActive());
+	assertTrue(global.isActive());
+	assertTrue(!beforeA.isActive());
+	assertTrue(afterA.isActive());
 
-	assert(global.seenEvent(C));
-	assert(!beforeA.seenEvent(C));
-	assert(afterA.seenEvent(C));
+	assertTrue(global.seenEvent(C));
+	assertTrue(!beforeA.seenEvent(C));
+	assertTrue(afterA.seenEvent(C));
 
 	global.exit();
     }
@@ -185,50 +185,50 @@ public class TemporalTests extends TestCase
 
 	global.enter();
 
-	assert(beforeA.isActive());
-	assert(beforeB.isActive());
+	assertTrue(beforeA.isActive());
+	assertTrue(beforeB.isActive());
 
 	global.processEvent(D);
 
-	assert(!beforeD.seenEvent(D));
-	assert(!afterD.seenEvent(D));
-	assert(!afterA.seenEvent(D));
-	
-	assert(beforeA.seenEvent(D));
-	assert(beforeB.seenEvent(D));
-	assert(!afterC.seenEvent(D));
+	assertTrue(!beforeD.seenEvent(D));
+	assertTrue(!afterD.seenEvent(D));
+	assertTrue(!afterA.seenEvent(D));
+
+	assertTrue(beforeA.seenEvent(D));
+	assertTrue(beforeB.seenEvent(D));
+	assertTrue(!afterC.seenEvent(D));
 
 	global.processEvent(C);
 
-	assert(afterC.isActive());
+	assertTrue(afterC.isActive());
 
 	global.processEvent(D);
 
-	assert(afterC.seenEvent(D));
+	assertTrue(afterC.seenEvent(D));
 
 	global.processEvent(B);
 
-	assert(afterC.isActive());
-	assert(!beforeB.isActive());
+	assertTrue(afterC.isActive());
+	assertTrue(!beforeB.isActive());
 
-	assert(!afterA.seenEvent(C));
+	assertTrue(!afterA.seenEvent(C));
 
 	global.processEvent(A);
 
-	assert(beforeD.isActive());
-	assert(!afterD.isActive());
+	assertTrue(beforeD.isActive());
+	assertTrue(!afterD.isActive());
 
 	global.processEvent(C);
 
-	assert(afterA.seenEvent(C));
-	assert(beforeD.seenEvent(C));
-	assert(!afterD.seenEvent(C));
+	assertTrue(afterA.seenEvent(C));
+	assertTrue(beforeD.seenEvent(C));
+	assertTrue(!afterD.seenEvent(C));
 
 	global.processEvent(D);
 
-	assert(!beforeD.isActive());
-	assert(afterD.isActive());
-	
+	assertTrue(!beforeD.isActive());
+	assertTrue(afterD.isActive());
+
 	global.exit();
     }
 
@@ -245,52 +245,52 @@ public class TemporalTests extends TestCase
 	aA_alwaysB = new AlwaysInvariant(afterA, B);
 	aA_eventuallyB = new EventuallyInvariant(afterA, B);
 
-	assert(!g_alwaysB.isFalsified);
-	assert(g_alwaysB.numConfirmingSequences == 0);
+	assertTrue(!g_alwaysB.isFalsified);
+	assertTrue(g_alwaysB.numConfirmingSequences == 0);
 
 	//Sequence 1: CABB
 
 	global.enter();
 
-	assert(!g_alwaysB.isFalsified);
-	assert(g_alwaysB.numConfirmingSequences == 0);
+	assertTrue(!g_alwaysB.isFalsified);
+	assertTrue(g_alwaysB.numConfirmingSequences == 0);
 
 	global.processEvent(C);
 
-	assert(g_alwaysB.isFalsified);
-	assert(bA_alwaysB.isFalsified);
-	assert(!g_eventuallyB.isFalsified);
+	assertTrue(g_alwaysB.isFalsified);
+	assertTrue(bA_alwaysB.isFalsified);
+	assertTrue(!g_eventuallyB.isFalsified);
 
 	global.processEvent(A);
 
-	assert(bA_eventuallyB.isFalsified);
-	
-	global.processEvent(B);
-
-	assert(!aA_alwaysB.isFalsified);
-	assert(!aA_eventuallyB.isFalsified);
-	assert(!g_eventuallyB.isFalsified);
-	assert(g_alwaysB.isFalsified);
-
-	assert(aA_alwaysB.numConfirmingSequences == 0);
-	assert(g_alwaysB.numConfirmingSequences == 0);
+	assertTrue(bA_eventuallyB.isFalsified);
 
 	global.processEvent(B);
 
-	assert(!aA_alwaysB.isFalsified);
-	assert(!aA_eventuallyB.isFalsified);
-	assert(g_alwaysB.isFalsified);
+	assertTrue(!aA_alwaysB.isFalsified);
+	assertTrue(!aA_eventuallyB.isFalsified);
+	assertTrue(!g_eventuallyB.isFalsified);
+	assertTrue(g_alwaysB.isFalsified);
+
+	assertTrue(aA_alwaysB.numConfirmingSequences == 0);
+	assertTrue(g_alwaysB.numConfirmingSequences == 0);
+
+	global.processEvent(B);
+
+	assertTrue(!aA_alwaysB.isFalsified);
+	assertTrue(!aA_eventuallyB.isFalsified);
+	assertTrue(g_alwaysB.isFalsified);
 
 	global.exit();
 
-	assert(g_eventuallyB.numConfirmingSequences == 1);
-	assert(aA_alwaysB.numConfirmingSequences == 1);
-	assert(aA_eventuallyB.numConfirmingSequences == 1);
+	assertTrue(g_eventuallyB.numConfirmingSequences == 1);
+	assertTrue(aA_alwaysB.numConfirmingSequences == 1);
+	assertTrue(aA_eventuallyB.numConfirmingSequences == 1);
 
 	global.enter();
 	global.exit();
 
-	assert(g_eventuallyB.isFalsified);
+	assertTrue(g_eventuallyB.isFalsified);
 
 	//Could probably do more here
     }
@@ -309,41 +309,41 @@ public class TemporalTests extends TestCase
 
 	global.enter();
 
-	assert(!betAB.isActive());
+	assertTrue(!betAB.isActive());
 
 	global.processEvent(C);
 
-	assert(!betAB.isActive());
+	assertTrue(!betAB.isActive());
 
 	global.processEvent(A);
 
-	assert(betAB.isActive()); //thinks its active now
+	assertTrue(betAB.isActive()); //thinks its active now
 
 	global.processEvent(C);
 
 	global.processEvent(B);
 
-	assert(!betAB.isActive());
+	assertTrue(!betAB.isActive());
 
-	assert(betAB.seenEvent(C)); //did see the C
+	assertTrue(betAB.seenEvent(C)); //did see the C
 
 	global.processEvent(A);
 
-	assert(betAB.isActive());
+	assertTrue(betAB.isActive());
 
 	global.processEvent(D);
 
 	global.exit();
 
-	assert(!betAB.isActive());
-	assert(!betAB.seenEvent(D)); //scope didn't ever enter
+	assertTrue(!betAB.isActive());
+	assertTrue(!betAB.seenEvent(D)); //scope didn't ever enter
 
 	//Test 2 - now with an invariant
 
 	global = new ScopeGlobal();
 	global.doDynamicInstantiation = false;
 	betAB = new ScopeBetween(A, B);
-	
+
 	AlwaysInvariant alwaysC = new AlwaysInvariant(betAB, C);
 
 	//to be added later
@@ -359,8 +359,8 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(B);
 
-	assert(!alwaysC.isFalsified);
-	assert(alwaysC.numConfirmingSequences == 1);
+	assertTrue(!alwaysC.isFalsified);
+	assertTrue(alwaysC.numConfirmingSequences == 1);
 
 	betAB.addChild(eventuallyD);
 
@@ -368,18 +368,18 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(D);
 
-	assert(alwaysC.isFalsified); //thinks its falsified
+	assertTrue(alwaysC.isFalsified); //thinks its falsified
 
-	assert(!eventuallyD.isFalsified);
-	assert(eventuallyD.happenedOnceInScope);
+	assertTrue(!eventuallyD.isFalsified);
+	assertTrue(eventuallyD.happenedOnceInScope);
 
 	global.exit();
 
-	assert(!alwaysC.isFalsified); //should still be kosher
-	assert(!betAB.seenEvent(D));
-	assert(!eventuallyD.isFalsified);
+	assertTrue(!alwaysC.isFalsified); //should still be kosher
+	assertTrue(!betAB.seenEvent(D));
+	assertTrue(!eventuallyD.isFalsified);
 
-	assert(eventuallyD.numConfirmingSequences == 0);
+	assertTrue(eventuallyD.numConfirmingSequences == 0);
     }
 
     public void testCoreAfterUntilScope()
@@ -394,31 +394,31 @@ public class TemporalTests extends TestCase
 
 	global.enter();
 
-	assert(!auAB.isActive());
+	assertTrue(!auAB.isActive());
 
 	global.processEvent(B);
 
-	assert(!auAB.isActive());
+	assertTrue(!auAB.isActive());
 
 	global.processEvent(A);
 
-	assert(auAB.isActive());
+	assertTrue(auAB.isActive());
 
 	global.processEvent(C);
 
-	assert(auAB.isActive());
+	assertTrue(auAB.isActive());
 
 	global.processEvent(B);
 
-	assert(!auAB.isActive());
+	assertTrue(!auAB.isActive());
 
 	global.processEvent(A);
 
-	assert(auAB.isActive());
+	assertTrue(auAB.isActive());
 
 	global.exit();
 
-	assert(!auAB.isActive());
+	assertTrue(!auAB.isActive());
 
 	EventuallyInvariant eventuallyC = new EventuallyInvariant(auAB, C);
 	EventuallyInvariant eventuallyB = new EventuallyInvariant(auAB, B);
@@ -428,69 +428,69 @@ public class TemporalTests extends TestCase
 	global.enter();
 	global.processEvent(A);
 
-	assert(auAB.isActive());
+	assertTrue(auAB.isActive());
 
 	global.processEvent(C);
 
-	assert(eventuallyC.happenedOnceInScope);
-	assert(!eventuallyC.isFalsified);
+	assertTrue(eventuallyC.happenedOnceInScope);
+	assertTrue(!eventuallyC.isFalsified);
 
 	global.processEvent(B);
 
-	assert(!auAB.isActive());
-	assert(!eventuallyC.isFalsified);
-	assert(eventuallyC.numConfirmingSequences == 1);
+	assertTrue(!auAB.isActive());
+	assertTrue(!eventuallyC.isFalsified);
+	assertTrue(eventuallyC.numConfirmingSequences == 1);
 
 	global.exit();
 
-	assert(!eventuallyC.isFalsified);
+	assertTrue(!eventuallyC.isFalsified);
 
-	assert(eventuallyC.numConfirmingSequences == 1);
-	assert(!eventuallyB.isFalsified);
-	assert(eventuallyB.numConfirmingSequences == 1);
+	assertTrue(eventuallyC.numConfirmingSequences == 1);
+	assertTrue(!eventuallyB.isFalsified);
+	assertTrue(eventuallyB.numConfirmingSequences == 1);
 
 	//Sequence ABCACB falsifies first, satisfies second, with count 3
 
 	//FIXME: A little uncertain about these happenedOnceInScope tests... hmm..
-	assert(!eventuallyC.happenedOnceInScope);
+	assertTrue(!eventuallyC.happenedOnceInScope);
 
 	global.enter();
-	
-	assert(!auAB.isActive());
 
-	assert(!eventuallyC.happenedOnceInScope);
+	assertTrue(!auAB.isActive());
+
+	assertTrue(!eventuallyC.happenedOnceInScope);
 
 	global.processEvent(A);
 
-	assert(auAB.isActive());
+	assertTrue(auAB.isActive());
 
-	assert(!eventuallyC.happenedOnceInScope);
+	assertTrue(!eventuallyC.happenedOnceInScope);
 
 	global.processEvent(B);
 
-	assert(!auAB.isActive());
+	assertTrue(!auAB.isActive());
 
-	assert(eventuallyC.isFalsified);
-	
+	assertTrue(eventuallyC.isFalsified);
+
 	global.processEvent(C);
 	global.processEvent(A);
 	global.processEvent(C);
 	global.processEvent(B);
 	global.exit();
 
-	assert(eventuallyC.isFalsified);
-	assert(!eventuallyB.isFalsified);
-	assert(eventuallyB.numConfirmingSequences == 3);
-	
+	assertTrue(eventuallyC.isFalsified);
+	assertTrue(!eventuallyB.isFalsified);
+	assertTrue(eventuallyB.numConfirmingSequences == 3);
+
 	//Sequence ABA falsifies second
-	
+
 	global.enter();
 	global.processEvent(A);
 	global.processEvent(B);
 	global.processEvent(A);
 	global.exit();
 
-	assert(eventuallyB.isFalsified);
+	assertTrue(eventuallyB.isFalsified);
     }
 
     //FIXME: Build a querying system for the invariant tree, and make
@@ -548,11 +548,3 @@ public class TemporalTests extends TestCase
     }
 
 }
-	
-	
-
-
-
-
-    
-	

@@ -237,7 +237,7 @@ public final class EltNonZero
   {
     if (other instanceof EltOneOf) {
       EltOneOf eoo = (EltOneOf) other;
-      if ((eoo.num_elts() == 1) && (((Long)eoo.elt()). longValue() == 0)) {
+      if ((eoo.num_elts() == 1) && (((Long)eoo.elt()).longValue() == 0)) {
         return true;
       }
     }

@@ -51,7 +51,7 @@ public class DiffTester extends TestCase {
                                  ProglangType.INT,
                                  ProglangType.INT,
                                  (VarComparability)null, // null Comparability
-				 VarInfoAux.getDefault());
+                                 VarInfoAux.getDefault());
     // INCR: equal_to no longer exists!
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;
@@ -87,7 +87,7 @@ public class DiffTester extends TestCase {
       PptTopLevel ppt1 =
         newPptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
       PptTopLevel ppt2 =
-	newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
+        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
       // ppt1.combined_exit = ppt2; // [INCR]
       ppts4.add(ppt1);
       ppts4.add(ppt2);

@@ -96,18 +96,18 @@ class MergeESC {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-	if (Daikon.debugAll_SWITCH.equals(option_name)) {
-	  Global.debugAll = true;
-	} else if (Daikon.debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
-	} else if (useJML_SWITCH.equals(option_name)) {
+        if (Daikon.debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
+          Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+        } else if (useJML_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
           setLightweight = false;
           JMLCompilerWorkaroundFilter.createNextFilterOn = true;
         } else {
-	  throw new RuntimeException("Unknown long option received: " +
-				     option_name);
-	}
+          throw new RuntimeException("Unknown long option received: " +
+                                     option_name);
+        }
         break;
       case 'h':
         System.out.println(usage);

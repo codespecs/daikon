@@ -36,17 +36,19 @@ The correct way to build the system is to run 'make'.
 #  if defined(BASE_INT)
 #    define LONGMAX Long.MAX_VALUE
 #    define LONGMIN Long.MIN_VALUE
+#    define LOWERBOUNDCORE LowerBoundCore
+#    define ELTLOWERBOUND EltLowerBound
 #  else
 #    define LONGMAX Double.MAX_VALUE
 #    define LONGMIN Double.MIN_VALUE
+#    define LOWERBOUNDCORE LowerBoundCoreFloat
+#    define ELTLOWERBOUND EltLowerBoundFloat
 #  endif
 #  define SIGNADJUST
 #  define MINSTR "min"
 #  define MAXSTR "max"
 #  define GTSTR ">"
 #  define MAX1 core.max1
-#  define LOWERBOUNDCORE INT(LowerBoundCore)
-#  define ELTLOWERBOUND INT(EltLowerBound)
 #  define MINELT min_elt
 #  define MAXELT max_elt
 #  if defined(LOWER)
@@ -80,17 +82,19 @@ The correct way to build the system is to run 'make'.
 #  if defined(UPPER) || defined(ELTUPPER)
 #    define LONGMAX Long.MIN_VALUE
 #    define LONGMIN Long.MAX_VALUE
+#    define LOWERBOUNDCORE UpperBoundCore
+#    define ELTLOWERBOUND EltUpperBound
 #  elif defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
 #    define LONGMAX Double.MIN_VALUE
 #    define LONGMIN Double.MAX_VALUE
+#    define LOWERBOUNDCORE UpperBoundCoreFloat
+#    define ELTLOWERBOUND EltUpperBoundFloat
 #  endif
 #  define SIGNADJUST -
 #  define MINSTR "max"
 #  define MAXSTR "min"
 #  define GTSTR "<"
 #  define MAX1 core.min1
-#  define LOWERBOUNDCORE INT(UpperBoundCore)
-#  define ELTLOWERBOUND INT(EltUpperBound)
 #  define MINELT max_elt
 #  define MAXELT min_elt
 #  if defined(UPPER)
@@ -281,7 +285,7 @@ public class LOWERBOUND
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " " + GTSTR+"= " + MIN1 + quant.getClosingExp();
+      " => " + quant.getVarIndexed(0) + " " + GTSTR + "= " + MIN1 + quant.getClosingExp();
     return result;
   }
 

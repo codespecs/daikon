@@ -56,7 +56,7 @@ public final class TestUtilMDE extends TestCase {
                           + ", " + ArraysMDE.toString(a2));
      assertTrue(result);
 //      assert(Arrays.equals(a1, a2),
-//  	   "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
+//         "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
    }
 
 
@@ -122,13 +122,13 @@ public final class TestUtilMDE extends TestCase {
 
     // public static int[] min_max(int[] a)
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 1,2,3 }),
-			 new int[] { 1,3 });
+                         new int[] { 1,3 });
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 2,33,1 }),
-			 new int[] { 1,33 });
+                         new int[] { 1,33 });
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 3,-2,1 }),
-			 new int[] { -2,3 });
+                         new int[] { -2,3 });
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 3 }),
-			 new int[] { 3,3 });
+                         new int[] { 3,3 });
 
     // public static int sum(int[] a)
     assertTrue(0 == ArraysMDE.sum(new int[0]));
@@ -162,7 +162,7 @@ public final class TestUtilMDE extends TestCase {
     {
       Integer[] a = new Integer[10];
       for (int i=0; i<a.length; i++)
-	a[i] = new Integer(i);
+        a[i] = new Integer(i);
       assertTrue(ArraysMDE.indexOf(a, new Integer(-1)) == -1);
       assertTrue(ArraysMDE.indexOf(a, new Integer(0)) == 0);
       assertTrue(ArraysMDE.indexOf(a, new Integer(7)) == 7);
@@ -185,7 +185,7 @@ public final class TestUtilMDE extends TestCase {
     {
       int[] a = new int[10];
       for (int i=0; i<a.length; i++)
-	a[i] = i;
+        a[i] = i;
       assertTrue(ArraysMDE.indexOf(a, -1) == -1);
       assertTrue(ArraysMDE.indexOf(a, 0) == 0);
       assertTrue(ArraysMDE.indexOf(a, 7) == 7);
@@ -198,7 +198,7 @@ public final class TestUtilMDE extends TestCase {
     {
       boolean[] a = new boolean[10];
       for (int i=0; i<a.length; i++)
-	a[i] = false;
+        a[i] = false;
       assertTrue(ArraysMDE.indexOf(a, true) == -1);
       assertTrue(ArraysMDE.indexOf(a, false) == 0);
       a[9] = true;
@@ -211,7 +211,7 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(ArraysMDE.indexOf(a, true) == 0);
       assertTrue(ArraysMDE.indexOf(a, false) == 1);
       for (int i=0; i<a.length; i++)
-	a[i] = true;
+        a[i] = true;
       assertTrue(ArraysMDE.indexOf(a, true) == 0);
       assertTrue(ArraysMDE.indexOf(a, false) == -1);
     }
@@ -221,7 +221,7 @@ public final class TestUtilMDE extends TestCase {
     {
       Integer[] a = new Integer[10];
       for (int i=0; i<a.length; i++)
-	a[i] = new Integer(i);
+        a[i] = new Integer(i);
       Integer[] b = new Integer[] { };
       Integer[] c = new Integer[] { a[0], a[1], a[2] };
       Integer[] d = new Integer[] { a[1], a[2] };
@@ -263,7 +263,7 @@ public final class TestUtilMDE extends TestCase {
     {
       int[] a = new int[10];
       for (int i=0; i<a.length; i++)
-	a[i] = i;
+        a[i] = i;
       int[] b = new int[] { };
       int[] c = new int[] { a[0], a[1], a[2] };
       int[] d = new int[] { a[1], a[2] };
@@ -494,57 +494,57 @@ public final class TestUtilMDE extends TestCase {
     class InternTest {
       // javadoc won't let this be static.
       void test(boolean random) {
-	int size1 = (random ? 100 : 1);
-	int size2 = (random ? 10 : 1);
+        int size1 = (random ? 100 : 1);
+        int size2 = (random ? 10 : 1);
 
-	Random random_gen = new Random();
+        Random random_gen = new Random();
 
-	int[][] arrays = new int[100][];
-	for (int i=0; i<arrays.length; i++) {
-	  int[] a = new int[10];
-	  for (int j=0; j<a.length; j++) {
-	    if (random)
-	      a[j] = random_gen.nextInt(1000);
-	    else
-	      a[j] = j;
-	  }
-	  arrays[i] = a;
-	  // System.out.println(ArraysMDE.toString(a));
-	  // Sadly, this is required to get the last array to be garbage-collected
-	  // with Jikes 1.03 and JDK 1.2.2.
-	  a = null;
-	}
-	System.gc();
-	if (Intern.numIntArrays() != 0)
-	  throw new Error();
-	for (int i=0; i<arrays.length; i++)
-	  Intern.intern(arrays[i]);
-	if (Intern.numIntArrays() != size1)
-	  throw new Error();
-	System.gc();
-	if (Intern.numIntArrays() != size1)
-	  throw new Error();
-	for (int i=10; i<arrays.length; i++)
-	  arrays[i] = null;
-	System.gc();
-	if (Intern.numIntArrays() != size2) {
-	  if (Intern.numIntArrays() < size2 + 10) {
-	    System.out.println("Is JIT disabled?  Size should have been " + size2 + ", actually was "
-			       + Intern.numIntArrays());
-	  } else {
-	    System.out.println("================");
-	    for (int i=0; i<arrays.length; i++)
-	      System.out.println(ArraysMDE.toString(arrays[i]));
-	    System.out.println("================");
-	    for (Iterator itor = Intern.intArrays(); itor.hasNext(); ) {
-	      System.out.println(ArraysMDE.toString((int[])itor.next()));
-	    }
-	    String message = ("Size should have been " + size2 + ", actually was "
-			      + Intern.numIntArrays());
-	    System.out.println(message);
-	    throw new Error(message);
-	  }
-	}
+        int[][] arrays = new int[100][];
+        for (int i=0; i<arrays.length; i++) {
+          int[] a = new int[10];
+          for (int j=0; j<a.length; j++) {
+            if (random)
+              a[j] = random_gen.nextInt(1000);
+            else
+              a[j] = j;
+          }
+          arrays[i] = a;
+          // System.out.println(ArraysMDE.toString(a));
+          // Sadly, this is required to get the last array to be garbage-collected
+          // with Jikes 1.03 and JDK 1.2.2.
+          a = null;
+        }
+        System.gc();
+        if (Intern.numIntArrays() != 0)
+          throw new Error();
+        for (int i=0; i<arrays.length; i++)
+          Intern.intern(arrays[i]);
+        if (Intern.numIntArrays() != size1)
+          throw new Error();
+        System.gc();
+        if (Intern.numIntArrays() != size1)
+          throw new Error();
+        for (int i=10; i<arrays.length; i++)
+          arrays[i] = null;
+        System.gc();
+        if (Intern.numIntArrays() != size2) {
+          if (Intern.numIntArrays() < size2 + 10) {
+            System.out.println("Is JIT disabled?  Size should have been " + size2 + ", actually was "
+                               + Intern.numIntArrays());
+          } else {
+            System.out.println("================");
+            for (int i=0; i<arrays.length; i++)
+              System.out.println(ArraysMDE.toString(arrays[i]));
+            System.out.println("================");
+            for (Iterator itor = Intern.intArrays(); itor.hasNext(); ) {
+              System.out.println(ArraysMDE.toString((int[])itor.next()));
+            }
+            String message = ("Size should have been " + size2 + ", actually was "
+                              + Intern.numIntArrays());
+            System.out.println(message);
+            throw new Error(message);
+          }
+        }
       }
     }
 
@@ -719,9 +719,9 @@ public final class TestUtilMDE extends TestCase {
     {
       boolean exception = false;
       try {
-	MathMDE.pow(3, -3);
+        MathMDE.pow(3, -3);
       } catch (Exception e) {
-	exception = true;
+        exception = true;
       }
       assertTrue(exception);
     }
@@ -768,25 +768,25 @@ public final class TestUtilMDE extends TestCase {
 
     // int[] missing_numbers(int[] nums)
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,4,5,6,7,8 }),
-			 new int[] {});
+                         new int[] {});
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,4,6,7,8 }),
-			 new int[] { 5 });
+                         new int[] { 5 });
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,4,8 }),
-			 new int[] { 5,6,7 });
+                         new int[] { 5,6,7 });
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,5,6,8 }),
-			 new int[] { 4,7 });
+                         new int[] { 4,7 });
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,6,8 }),
-			 new int[] { 4,5,7 });
+                         new int[] { 4,5,7 });
 
 
     // class MissingNumbersIteratorInt
     class TestMissingNumbersIteratorInt {
       // javadoc won't let this be static
       void test(int[] orig, boolean add_ends, int[] goal_missing) {
-	Iterator orig_iterator = int_array_iterator(orig);
-	Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator, add_ends);
-	int[] missing = TestUtilMDE.int_iterator_array(missing_iterator);
-	assert_arrays_equals(missing, goal_missing);
+        Iterator orig_iterator = int_array_iterator(orig);
+        Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator, add_ends);
+        int[] missing = TestUtilMDE.int_iterator_array(missing_iterator);
+        assert_arrays_equals(missing, goal_missing);
       }
     }
 
@@ -814,34 +814,34 @@ public final class TestUtilMDE extends TestCase {
     class TestModulus {
       // javadoc won't let this be static
       void check(int[] nums, int[] goal_rm) {
-	int[] rm = MathMDE.modulus(nums);
-	if (!Arrays.equals(rm, goal_rm))
-	  throw new Error("Expected (r,m)=" + ArraysMDE.toString(goal_rm)
-			  + ", saw (r,m)=" + ArraysMDE.toString(rm));
-	if (rm == null)
-	  return;
-	int goal_r = rm[0];
-	int m = rm[1];
-	for (int i=0; i<nums.length; i++) {
-	  int r = nums[i] % m;
-	  if (r < 0) r += m;
-	  if (r != goal_r)
-	    throw new Error("Expected " + nums[i] + " % " + m + " = " + goal_r
-			    + ", got " + r);
-	}
+        int[] rm = MathMDE.modulus(nums);
+        if (!Arrays.equals(rm, goal_rm))
+          throw new Error("Expected (r,m)=" + ArraysMDE.toString(goal_rm)
+                          + ", saw (r,m)=" + ArraysMDE.toString(rm));
+        if (rm == null)
+          return;
+        int goal_r = rm[0];
+        int m = rm[1];
+        for (int i=0; i<nums.length; i++) {
+          int r = nums[i] % m;
+          if (r < 0) r += m;
+          if (r != goal_r)
+            throw new Error("Expected " + nums[i] + " % " + m + " = " + goal_r
+                            + ", got " + r);
+        }
       }
 
       // javadoc won't let this be static
       void check(Iterator itor, int[] goal_rm) {
-	// There would be no point to this:  it's testing
-	// int_iterator_array, not the iterator version!
-	// return check(int_iterator_array(itor), goal_rm);
-	assert_arrays_equals(MathMDE.modulus_int(itor), goal_rm);
+        // There would be no point to this:  it's testing
+        // int_iterator_array, not the iterator version!
+        // return check(int_iterator_array(itor), goal_rm);
+        assert_arrays_equals(MathMDE.modulus_int(itor), goal_rm);
       }
 
       // javadoc won't let this be static
       void check_iterator(int[] nums, int[] goal_rm) {
-	check(int_array_iterator(nums), goal_rm);
+        check(int_array_iterator(nums), goal_rm);
       }
     }
 
@@ -865,36 +865,36 @@ public final class TestUtilMDE extends TestCase {
     class TestNonModulus {
       // javadoc won't let this be static
       void check_strict(int[] nums, int[] goal_rm) {
-	check(nums, goal_rm, true);
-	Iterator itor = int_array_iterator(nums);
-	assert_arrays_equals(MathMDE.nonmodulus_strict_int(itor), goal_rm);
+        check(nums, goal_rm, true);
+        Iterator itor = int_array_iterator(nums);
+        assert_arrays_equals(MathMDE.nonmodulus_strict_int(itor), goal_rm);
       }
 
       // javadoc won't let this be static
       void check_nonstrict(int[] nums, int[] goal_rm) {
-	check(nums, goal_rm, false);
+        check(nums, goal_rm, false);
       }
 
       // javadoc won't let this be static
       void check(int[] nums, int[] goal_rm, boolean strict) {
-	int[] rm;
-	if (strict)
-	  rm = MathMDE.nonmodulus_strict(nums);
-	else
-	  rm = MathMDE.nonmodulus_nonstrict(nums);
-	if (!Arrays.equals(rm, goal_rm))
-	  throw new Error("Expected (r,m)=" + ArraysMDE.toString(goal_rm)
-			  + ", saw (r,m)=" + ArraysMDE.toString(rm));
-	if (rm == null)
-	  return;
-	int goal_r = rm[0];
-	int m = rm[1];
-	for (int i=0; i<nums.length; i++) {
-	  int r = nums[i] % m;
-	  if (r < 0) r += m;
-	  if (r == goal_r)
-	    throw new Error("Expected inequality, saw " + nums[i] + " % " + m + " = " + r);
-	}
+        int[] rm;
+        if (strict)
+          rm = MathMDE.nonmodulus_strict(nums);
+        else
+          rm = MathMDE.nonmodulus_nonstrict(nums);
+        if (!Arrays.equals(rm, goal_rm))
+          throw new Error("Expected (r,m)=" + ArraysMDE.toString(goal_rm)
+                          + ", saw (r,m)=" + ArraysMDE.toString(rm));
+        if (rm == null)
+          return;
+        int goal_r = rm[0];
+        int m = rm[1];
+        for (int i=0; i<nums.length; i++) {
+          int r = nums[i] % m;
+          if (r < 0) r += m;
+          if (r == goal_r)
+            throw new Error("Expected inequality, saw " + nums[i] + " % " + m + " = " + r);
+        }
       }
     }
 

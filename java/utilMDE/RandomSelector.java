@@ -38,17 +38,17 @@ public class RandomSelector {
      * @param r The seed to give for random number generation.
      **/
     public RandomSelector (int num_elts, Random r) {
-	values = new ArrayList();
-	this.num_elts = num_elts;
-	observed = 0;
-	seed = r;
+        values = new ArrayList();
+        this.num_elts = num_elts;
+        observed = 0;
+        seed = r;
     }
 
     /** @param num_elts The number of elements intended to be selected
      * from the oncoming Iteration
      **/
     public RandomSelector (int num_elts) {
-	this (num_elts, new Random());
+        this (num_elts, new Random());
     }
 
     /** Increments the number of observed_elements, then
@@ -58,25 +58,23 @@ public class RandomSelector {
      * be removed at random.
      **/
     public void accept (Object next) {
-	if (seed.nextDouble() < ((double) num_elts / (++observed))) {
-	    if (values.size() < num_elts) {
-		values.add (next);
-	    }
-	    else {
-		int rem = (int) (values.size() * seed.nextDouble());
-		values.set (rem, next);
-	    }
-	}
-	// do nothing if the probability condition is not met
+        if (seed.nextDouble() < ((double) num_elts / (++observed))) {
+            if (values.size() < num_elts) {
+                values.add (next);
+            } else {
+                int rem = (int) (values.size() * seed.nextDouble());
+                values.set (rem, next);
+            }
+        }
+        // do nothing if the probability condition is not met
     }
 
     /** Returns current_values, modifies none  **/
     public ArrayList getValues() {
-	// avoid concurrent mod errors
-	ArrayList ret = new ArrayList();
-	ret.addAll (values);
-	return ret;
+        // avoid concurrent mod errors
+        ArrayList ret = new ArrayList();
+        ret.addAll (values);
+        return ret;
     }
 
 }
-

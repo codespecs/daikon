@@ -51,7 +51,7 @@ public final class OneOfStringSequence
   private String[] [] elts;
   private int num_elts;
 
-  OneOfStringSequence (PptSlice ppt) {
+  public OneOfStringSequence(PptSlice ppt) {
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),

@@ -53,8 +53,8 @@ public class FunctionBinaryFloat
                     + "f(" + arg1.name + "," + arg2.name + ")");
     }
 
-    // SUPPRESS INVARIANT: if any var is constant, suppress FunctionBinaryFloat .
-    // Skip if the arguments are constant (but not if the result is
+    // SUPPRESS INVARIANT: if any var is constant, suppress FunctionBinaryFloat;
+    // skip if the arguments are constant (but not if the result is
     // constant, as we might get something like y=abs(x)).  (Actually, for
     // now I'm skipping if the result is constant, too: that's a
     // relationship over the two arguments, not a ternary relationship.)

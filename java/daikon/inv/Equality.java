@@ -125,12 +125,12 @@ public final class Equality
     for (int j=0; j<this.vars.length; j++) {
       VarInfo other = this.vars[j];
       if (other.isDerivedSequenceMinMaxSum()) {
-	break;
+        break;
       }
       if (other.isValidEscExpression()) {
-	valid_equiv.add(other);
+        valid_equiv.add(other);
       } else {
-	invalid_equiv.add(other);
+        invalid_equiv.add(other);
       }
     }
     // Choose a leader, preferring the valid variables.
@@ -151,22 +151,22 @@ public final class Equality
       if (leader.name.applyPrestate().equals(other.name)) continue;
       if (other.name.applyPrestate().equals(leader.name)) continue;
       if (j >= valid_equiv.size()) {
-	result = result + "warning: method 'equality'.format_esc() needs to be implemented: " + format();
+        result = result + "warning: method 'equality'.format_esc() needs to be implemented: " + format();
       }
       if (leader.rep_type.isArray()) {
-	String[] form =
-	  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	    { leader.name, other.name }, true); // elementwise
-	result = result + form[0].toString() + "( " + form[1].toString() + " == " + form[2].toString() + " )" + form[3].toString();
+        String[] form =
+          VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+            { leader.name, other.name }, true); // elementwise
+        result = result + form[0].toString() + "( " + form[1].toString() + " == " + form[2].toString() + " )" + form[3].toString();
       } else {
-	if (j > 1) {
-	  result += Global.lineSep;
-	}
-	result = result + leader.name.esc_name() + " == " + other.name.esc_name();
+        if (j > 1) {
+          result += Global.lineSep;
+        }
+        result = result + leader.name.esc_name() + " == " + other.name.esc_name();
       }
 
       if (obviously_equal.contains(other)) {
-	result += "    (obviously)";
+        result += "    (obviously)";
       }
     }
     return(result);
@@ -174,24 +174,24 @@ public final class Equality
 //      StringBuffer result = new StringBuffer();
 //      if (vars[0].rep_type.isArray()) {
 //        for (int i=1; i < vars.length; i++) {
-//  	if (i > 1) {
-//  	  result.append(Global.lineSep);
-//  	}
-//  	String[] form =
-//  	  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-//  	    { vars[0].name, vars[i].name }, true); // elementwise
-//  	result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+//      if (i > 1) {
+//        result.append(Global.lineSep);
+//      }
+//      String[] form =
+//        VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+//          { vars[0].name, vars[i].name }, true); // elementwise
+//      result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
 //        }
 //      } else {
 //        for (int i=1; i < vars.length; i++) {
-//  	if (i > 1) {
-//  	  result.append(" && ");
-//  	}
-//  	result.append("");   // formerly "("
-//  	result.append(vars[0].name.esc_name());
-//  	result.append(" == ");
-//  	result.append(vars[i].name.esc_name());
-//  	result.append("");  //formerly ")"
+//      if (i > 1) {
+//        result.append(" && ");
+//      }
+//      result.append("");   // formerly "("
+//      result.append(vars[0].name.esc_name());
+//      result.append(" == ");
+//      result.append(vars[i].name.esc_name());
+//      result.append("");  //formerly ")"
 //        }
 //      }
 //      return result.toString();

@@ -62,7 +62,7 @@ public class UpperBound
 
   protected Object clone() {
     UpperBound result = (UpperBound) super.clone();
-    result.core = ( UpperBoundCore ) core.clone();
+    result.core = (UpperBoundCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -168,10 +168,10 @@ public class UpperBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltUpperBound eb = EltUpperBound.find(other_slice);
+          EltUpperBound eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.max1 == core.max1 ) {
+              && eb.core.max1 == core.max1 ) {
             return true;
           }
         }

@@ -63,9 +63,10 @@ public final class TwoScalarFactory {
       Global.subexact_noninstantiated_invariants += Functions.unaryFunctionNames.length;
     } else {
       result.add(LinearBinary.instantiate(ppt));
+      int numFunctions = Functions.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);
-        for (int j=0; j< Functions.unaryFunctionNames.length; j++) {
+        for (int j=0; j<numFunctions; j++) {
           result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], j, invert));
         }
       }

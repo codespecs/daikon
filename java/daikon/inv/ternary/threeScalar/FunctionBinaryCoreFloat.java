@@ -42,10 +42,6 @@ public final class FunctionBinaryCoreFloat
     Assert.assertTrue(methodname.length == 3);
   }
 
-  // public FunctionBinaryCoreFloat (Invariant wrapper, String[] methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
-  //   this(wrapper, methodname, FunctionsFloat.lookup(methodname), var_order);
-  // }
-
   public Object clone() {
     try {
       FunctionBinaryCoreFloat result = (FunctionBinaryCoreFloat) super.clone();

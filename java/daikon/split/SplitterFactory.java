@@ -57,22 +57,22 @@ public class SplitterFactory {
       String line = reader.readLine();
       for ( ; line != null; line = reader.readLine()) {
         // skip blank lines and comments
-	line.trim();
-	if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
-	  continue;
-	} else if (line.startsWith("REPLACE")) {
-	  replace = read_replace_statements(replace, reader);
-	} else if (line.startsWith("PPT_NAME")) {
-	  StringTokenizer tokenizer = new StringTokenizer(line);
-	  tokenizer.nextToken(); // throw away the first token "PPT_NAME"
-	  String pptName = tokenizer.nextToken().trim();
-	  SplitterObject[] spobjects = read_ppt_conditions(reader, pptName);
-	  if (spobjects != null)
-	    splitterObjectArrays.addElement(spobjects);
-	} else {
-	  System.err.println("Incorrect format in .spinfo " + infofile
-			     + " at line number " + reader.getLineNumber());
-	}
+        line.trim();
+        if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
+          continue;
+        } else if (line.startsWith("REPLACE")) {
+          replace = read_replace_statements(replace, reader);
+        } else if (line.startsWith("PPT_NAME")) {
+          StringTokenizer tokenizer = new StringTokenizer(line);
+          tokenizer.nextToken(); // throw away the first token "PPT_NAME"
+          String pptName = tokenizer.nextToken().trim();
+          SplitterObject[] spobjects = read_ppt_conditions(reader, pptName);
+          if (spobjects != null)
+            splitterObjectArrays.addElement(spobjects);
+        } else {
+          System.err.println("Incorrect format in .spinfo " + infofile
+                             + " at line number " + reader.getLineNumber());
+        }
       }
     } catch (IOException ioe ) {
       System.err.println(ioe + " \n at line number " + reader.getLineNumber()
@@ -121,14 +121,14 @@ public class SplitterFactory {
       // skip comments
       if (!line.startsWith("#")) {
         String condition = (line.trim());
-	if (duplicate_condition(condition, pptname)) {
-	  line = reader.readLine();
-	  continue;
-	}
-	splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
-	if (re_matcher.contains(condition, null_pattern)) {
-	  splitterObjects.addElement(new SplitterObject(pptname, perform_null_substitution(condition), tempdir));
-	}
+        if (duplicate_condition(condition, pptname)) {
+          line = reader.readLine();
+          continue;
+        }
+        splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
+        if (re_matcher.contains(condition, null_pattern)) {
+          splitterObjects.addElement(new SplitterObject(pptname, perform_null_substitution(condition), tempdir));
+        }
       }
       line = reader.readLine();
     }
@@ -319,21 +319,21 @@ public class SplitterFactory {
       // at the program point.
       ArrayList p_names = new ArrayList();
       for (int i = 0; i < num_params; i++) {
-	//declared variable names in the Splitter class cannot have characters
-	//like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
-	//and orig(x) to orig_x
-	String temp = all_params[i];
-	temp = temp.replace('.','_');
-	temp = temp.replace('[','_');
-	temp = temp.replace(']','_');
-	temp = temp.replace(':','_');
-	if (temp.equals("return")) temp = "return_Daikon";
-	if (temp.equals("this")) temp = "this_Daikon";
-	if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
-	if (p_names.contains(temp))
-	  p_names.add(temp + "_2");
-	else
-	  p_names.add(temp);
+        //declared variable names in the Splitter class cannot have characters
+        //like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
+        //and orig(x) to orig_x
+        String temp = all_params[i];
+        temp = temp.replace('.','_');
+        temp = temp.replace('[','_');
+        temp = temp.replace(']','_');
+        temp = temp.replace(':','_');
+        if (temp.equals("return")) temp = "return_Daikon";
+        if (temp.equals("this")) temp = "this_Daikon";
+        if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
+        if (p_names.contains(temp))
+          p_names.add(temp + "_2");
+        else
+          p_names.add(temp);
       }
 
       String[] param_names = (String[]) p_names.toArray(new String[0]);
@@ -597,11 +597,11 @@ public class SplitterFactory {
         //if char[], we need to treat as a String in Daikon
         types.addElement ("char[]");
       } else if (var_infos[i].type.format().trim().equals("boolean")) {
-	types.addElement("boolean");
+        types.addElement("boolean");
       } else if (var_infos[i].type.format().trim().equals("double")) {
-	types.addElement("int");
+        types.addElement("int");
       } else if (var_infos[i].type.format().trim().equals("double[]")) {
-	types.addElement("int[]");
+        types.addElement("int[]");
       } else {
         types.addElement(var_infos[i].rep_type.format().trim());
       }
@@ -819,55 +819,55 @@ public class SplitterFactory {
     for (int i = 0; i < params.length; i++) {
 
        Pattern param_pattern;
-	// some instrumented variables start with "this." whereas the "this" is
-	// not always used in the test string. Eg. instrumented variable is
-	// "this.myArray", but the condition test is "myArray.length == 0". In
-	// such a situation, search the test_string for this.myArray or myArray
-	// and change the test string to this_myArray.length == 0.
-	try {
-	  if (params[i].charAt(0) == '*') {
-	    param_names[i] = "star_" + params[i].substring(1);
-	    param_pattern = re_compiler.compile(delimit(qm(params[i])));
-	  } else if (params[i].startsWith("orig(*")) {
-	    param_names[i] = "orig_star_" + params[i].substring(6, params[i].length() - 1) + "_";
-	    param_pattern = re_compiler.compile(delimit_end("orig\\(\\*" + qm(params[i].substring(6))));
-	  } else if (params[i].startsWith("this.")) {
-	    String params_minus_this = params[i].substring(5);
-	    // for example for the variable 'this.myArray', we will be searching
-	    // the condition for the regex "myArray|this.myArray" and replacing
-	    // it with this_myArray as declared in the Splitter.
-	    param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
-	  } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
-	    //static variable
-	    param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
-	  } else if (params[i].startsWith("orig")) {
-	    //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
-	    //so search for "orig(this_theArray)" in the test_string
-	    String temp = param_names[i].replace('.','_');
-	    String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
-	    if (temp.length() > 10) {
-	      search_string = search_string + "|" + "orig\\s*\\(\\s*" + qm(temp.substring(10)) + "\\s*\\)";
-	    }
-	    param_pattern = re_compiler.compile(search_string);
-	  } else if (params[i].charAt(0) == '$') {
-	    //remove unwanted characters from the param name. These confuse the regexp.
-	    //(find a better solution for arbitrary characters at arbitrary locations)
-	    param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
-	  } else {
-	    //to take care of pointer variables too, we search for "(varname|*varname)"
-	    param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm("*" + params[i])) + ")");
-	  }
-	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
-	  PatternMatcherInput input = new PatternMatcherInput(orig_test_string);
-	  // remove any parameters which are not used in the condition
-	  if (re_matcher.contains(input, param_pattern)) {
-	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-	  } else {
-	    params[i] = null;
-	  }
-	} catch (MalformedPatternException e) {
-	  debugPrint(e.toString());
-	}
+        // some instrumented variables start with "this." whereas the "this" is
+        // not always used in the test string. Eg. instrumented variable is
+        // "this.myArray", but the condition test is "myArray.length == 0". In
+        // such a situation, search the test_string for this.myArray or myArray
+        // and change the test string to this_myArray.length == 0.
+        try {
+          if (params[i].charAt(0) == '*') {
+            param_names[i] = "star_" + params[i].substring(1);
+            param_pattern = re_compiler.compile(delimit(qm(params[i])));
+          } else if (params[i].startsWith("orig(*")) {
+            param_names[i] = "orig_star_" + params[i].substring(6, params[i].length() - 1) + "_";
+            param_pattern = re_compiler.compile(delimit_end("orig\\(\\*" + qm(params[i].substring(6))));
+          } else if (params[i].startsWith("this.")) {
+            String params_minus_this = params[i].substring(5);
+            // for example for the variable 'this.myArray', we will be searching
+            // the condition for the regex "myArray|this.myArray" and replacing
+            // it with this_myArray as declared in the Splitter.
+            param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
+          } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
+            //static variable
+            param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
+          } else if (params[i].startsWith("orig")) {
+            //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
+            //so search for "orig(this_theArray)" in the test_string
+            String temp = param_names[i].replace('.','_');
+            String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
+            if (temp.length() > 10) {
+              search_string = search_string + "|" + "orig\\s*\\(\\s*" + qm(temp.substring(10)) + "\\s*\\)";
+            }
+            param_pattern = re_compiler.compile(search_string);
+          } else if (params[i].charAt(0) == '$') {
+            //remove unwanted characters from the param name. These confuse the regexp.
+            //(find a better solution for arbitrary characters at arbitrary locations)
+            param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
+          } else {
+            //to take care of pointer variables too, we search for "(varname|*varname)"
+            param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm("*" + params[i])) + ")");
+          }
+          Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
+          PatternMatcherInput input = new PatternMatcherInput(orig_test_string);
+          // remove any parameters which are not used in the condition
+          if (re_matcher.contains(input, param_pattern)) {
+            test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+          } else {
+            params[i] = null;
+          }
+        } catch (MalformedPatternException e) {
+          debugPrint(e.toString());
+        }
     }
       {
         // Change "this_Daikon.this_" to "this_"
@@ -1083,15 +1083,15 @@ public class SplitterFactory {
     //condition must be printed under every ppt that it appears.
     if (daikon.split.SplitterList.dkconfig_all_splitters) {
       if (all_conditions.contains(inv))
-	return true;
+        return true;
       else
-	all_conditions.add(inv);
+        all_conditions.add(inv);
     } else {
       Set conditions = (Set)pptname_to_conditions.get(pptname);
       if (conditions.contains(inv))
-	return true;
+        return true;
       else
-	conditions.add(inv);
+        conditions.add(inv);
     }
 
     return false;

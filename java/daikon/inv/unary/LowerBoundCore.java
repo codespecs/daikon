@@ -242,7 +242,7 @@ public class LowerBoundCore
 
   public boolean isSameFormula(LowerBoundCore other)
   {
-    return min1 == other. min1;
+    return min1 == other.min1;
   }
 
   public boolean isExact() {

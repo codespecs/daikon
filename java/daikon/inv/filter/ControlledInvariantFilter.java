@@ -54,14 +54,14 @@ class ControlledInvariantFilter extends InvariantFilter {
 
       processed.add(contr_inv);
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\tconsidering controlling inv " + contr_inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\tconsidering controlling inv " + contr_inv.format() + "\n");
       }
       if (isWorthPrinting_sansControlledCheck(contr_inv)) {
         // we have a printable controller, so we shouldn't print
 
-	if(PrintInvariants.debugFiltering.isDebugEnabled()) {
-	  PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
-	}
+        if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+          PrintInvariants.debugFiltering.debug("\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
+        }
         return false;
       }
       // find the controlling invs of contr_inv and add them to the
@@ -92,28 +92,28 @@ class ControlledInvariantFilter extends InvariantFilter {
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       if (inv.hasFewModifiedSamples()) {
-	PrintInvariants.debugFiltering.debug("\t\thas few modified samples " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\thas few modified samples " + inv.format() + "\n");
       }
       if (!inv.enoughSamples()) {
-	PrintInvariants.debugFiltering.debug("\t\tnot enough samples " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\tnot enough samples " + inv.format() + "\n");
       }
       /* [INCR]
       if (inv.hasNonCanonicalVariable()) {
-	PrintInvariants.debugFiltering.debug("\t\thas non canonical var " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\thas non canonical var " + inv.format() + "\n");
       }
       if (inv.hasOnlyConstantVariables()) {
-	PrintInvariants.debugFiltering.debug("\t\thas only constant vars " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\thas only constant vars " + inv.format() + "\n");
       }
       */
       if (inv.isObvious()) {
-	PrintInvariants.debugFiltering.debug("\t\tis obvious " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\tis obvious " + inv.format() + "\n");
       }
       if (!inv.justified()) {
-	PrintInvariants.debugFiltering.debug("\t\tnot justified " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\tnot justified " + inv.format() + "\n");
       }
       /* [INCR]
       if (!inv.isWorthPrinting_PostconditionPrestate()) {
-	PrintInvariants.debugFiltering.debug("\t\tisn't worth printing postcond/prestate " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.debug("\t\tisn't worth printing postcond/prestate " + inv.format() + "\n");
       }
       */ // [INCR]
     }

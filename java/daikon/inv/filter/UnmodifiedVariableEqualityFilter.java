@@ -21,7 +21,7 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
 
     if (!IsEqualityComparison.it.accept(invariant)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\tUnmodVarEqF thinks this isn't an equality comparison\n");
+        PrintInvariants.debugFiltering.debug("\tUnmodVarEqF thinks this isn't an equality comparison\n");
       }
       return false;
     }
@@ -36,7 +36,7 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
 
     if (var1.name.applyPrestate().equals(var2.name)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t(yes...)\n");
+        PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
       return(true);
     }
@@ -47,7 +47,7 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
 
     if (var2.name.applyPrestate().equals(var1.name)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t(yes...)\n");
+        PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
       return(true);
     }

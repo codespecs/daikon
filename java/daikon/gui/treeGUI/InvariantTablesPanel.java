@@ -161,10 +161,10 @@ class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeL
     final InvariantTablesPanel invariantTablesPanel = this;
 
     showVariablesButton.addActionListener( new ActionListener() {
-	//  Make this an inner class so it can see topLevel
-	public void actionPerformed( ActionEvent e ) {
-	  new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList, invariantTablesPanel);
-	}});
+        //  Make this an inner class so it can see topLevel
+        public void actionPerformed( ActionEvent e ) {
+          new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList, invariantTablesPanel);
+        }});
     showVariablesButton.setAlignmentX( Component.RIGHT_ALIGNMENT );
     JPanel headingPanel = new JPanel();
     headingPanel.setLayout( new BoxLayout( headingPanel, BoxLayout.X_AXIS ));

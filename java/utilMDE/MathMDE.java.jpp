@@ -185,7 +185,7 @@ public final class MathMDE {
     int result = 1;
     while (expt>0) {
       if ((expt & 1) != 0)
-	result *= this_square_pow;
+        result *= this_square_pow;
       expt >>= 1;
       this_square_pow *= this_square_pow;
     }
@@ -200,7 +200,7 @@ public final class MathMDE {
     long result = 1;
     while (expt>0) {
       if ((expt & 1) != 0)
-	result *= this_square_pow;
+        result *= this_square_pow;
       expt >>= 1;
       this_square_pow *= this_square_pow;
     }

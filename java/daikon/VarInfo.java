@@ -245,7 +245,7 @@ public final class VarInfo
     // So don't call orig(param) a parameter.
     VarInfoAux aux_nonparam = vi.aux.setValue(VarInfoAux.IS_PARAM,
                                               VarInfoAux.FALSE);
-    
+
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.file_rep_type,
                                  vi.comparability.makeAlias(vi.name),
@@ -766,7 +766,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.debug ("  TypeOf returning true");
-	  PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, first dpf case\n");
+          PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, first dpf case\n");
           return true;
         }
       }
@@ -775,7 +775,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.debug ("  SizeOf returning true");
-	  PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, second dpf case\n");
+          PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, second dpf case\n");
           return true;
         }
       }
@@ -800,13 +800,13 @@ public final class VarInfo
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
         Global.debugSuppressParam.debug ("  No orig variable for base, returning true ");
-	PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
+        PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       if (slice == null) {
         Global.debugSuppressParam.debug ("  No slice for equality in base, so uninteresting");
-	PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
+        PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
         return true; // There can't be an equal invariant in a null slice
       }
       if (Global.debugSuppressParam.isDebugEnabled()) {
@@ -816,7 +816,7 @@ public final class VarInfo
 //       Invariant equalInv = Invariant.find (daikon.inv.binary.twoScalar.IntEqual.class, slice);
 //       if (equalInv == null) {
 //         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-// 	PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
+//      PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
 //         return true;
 //       } else {
 //         Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");

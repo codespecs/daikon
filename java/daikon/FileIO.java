@@ -445,7 +445,7 @@ public final class FileIO {
         if (j != 0)
           pw.print(", ");
 
-	pw.print(ppt.var_infos[j].name + "=");
+        pw.print(ppt.var_infos[j].name + "=");
 
         Object val = vals[j];
         if (val == canonical_hashcode)
@@ -747,7 +747,7 @@ public final class FileIO {
         }
         ppt.add_and_flow(vt, 1);
 
-	// [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
+        // [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
 
         // Feeding values to EXITnn points will automatically have
         // them flow up to the corresponding EXIT point.

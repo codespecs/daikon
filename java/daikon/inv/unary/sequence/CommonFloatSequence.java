@@ -28,7 +28,7 @@ public class CommonFloatSequence
   final static boolean debugCommonSequence = false;
 
   private int elts;
-  private double [] intersect = null;
+  private double[] intersect = null;
 
   protected CommonFloatSequence(PptSlice ppt) {
     super(ppt);

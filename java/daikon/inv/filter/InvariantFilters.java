@@ -174,14 +174,14 @@ public class InvariantFilters {
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if(PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
+        PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
       }
       if (filter.shouldDiscard( invariant )) {
-	if(PrintInvariants.debugFiltering.isDebugEnabled()) {
-	  PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
-	  PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
-	}
-	return false;
+        if(PrintInvariants.debugFiltering.isDebugEnabled()) {
+          PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
+          PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
+        }
+        return false;
       }
     }
     if(PrintInvariants.debugFiltering.isDebugEnabled()) {
@@ -200,7 +200,7 @@ public class InvariantFilters {
     for(Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if(filter.getDescription().equals(description)) {
-	answer = filter;
+        answer = filter;
       }
     }
     return answer;
@@ -240,7 +240,7 @@ public class InvariantFilters {
     for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
       VariableFilter vf = (VariableFilter) iter.next();
       if (vf.getVariable().equals( variable )) {
-	return true;
+        return true;
       }
     }
     return false;
@@ -252,7 +252,7 @@ public class InvariantFilters {
       VariableFilter vf = (VariableFilter) iter.next();
       if (vf.getVariable().equals( variable )) {
         iter.remove();
-	foundOnce = true;
+        foundOnce = true;
       }
     }
     if (foundOnce) return;
@@ -342,9 +342,9 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	  PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format() + "\n");
-	}
+        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+          PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format() + "\n");
+        }
         // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name);
         // System.out.println("    " + invariant.repr());
         VarInfo[] variables = invariant.ppt.var_infos;
@@ -417,10 +417,10 @@ public class InvariantFilters {
       Vector ordered_output = new Vector(); // Vector[VarInfo]
       // [INCR] Vector ordered_reference = PrintInvariants.get_equal_vars(canonicalVar, true);
       for ( Iterator varIter = ordered_reference.iterator(); varIter.hasNext(); ) {
-	VarInfo vi = (VarInfo) varIter.next();
-	if (equivalentGroup.contains(vi)) {
-	  ordered_output.add(vi);
-	}
+        VarInfo vi = (VarInfo) varIter.next();
+        if (equivalentGroup.contains(vi)) {
+          ordered_output.add(vi);
+        }
       }
 
       // System.out.println("\n");
@@ -428,8 +428,8 @@ public class InvariantFilters {
       // System.out.println("ordered_output    is " + reprVarInfoList(ordered_output));
       // System.out.println("ordered_reference is " + reprVarInfoList(ordered_reference));
       for ( Iterator allVarsIter = equivalentGroup.iterator(); allVarsIter.hasNext(); ) {
-	VarInfo vi = (VarInfo) allVarsIter.next();
-	Assert.assertTrue(ordered_output.contains(vi));
+        VarInfo vi = (VarInfo) allVarsIter.next();
+        Assert.assertTrue(ordered_output.contains(vi));
       }
       equality_invariants.add(new Equality(ordered_output, ppt));
     }

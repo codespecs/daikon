@@ -120,9 +120,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       //            System.out.println( "name is " + name + ", className is " + className );
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       if (classNode == null) {
-	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-	Assert.assertTrue(className != null);
-	root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
+        PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+        Assert.assertTrue(className != null);
+        root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
       }
     }
 
@@ -138,22 +138,22 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       Assert.assertTrue( classNode != null );
-      //	    System.out.println(name);
+      //            System.out.println(name);
       if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
-	String programPointName = pptName.getPoint();
-	DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
-	if (programPointNode == null) {
-	  PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-	  Assert.assertTrue(topLevel != null);
-	  classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
-	}
-      } else {		// is a regular method ppt
-	String methodName = pptName.getFullMethodName();
-	Assert.assertTrue( methodName != null );
-	DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-	if (methodNode == null) {
-	  classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
-	}
+        String programPointName = pptName.getPoint();
+        DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
+        if (programPointNode == null) {
+          PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+          Assert.assertTrue(topLevel != null);
+          classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
+        }
+      } else {          // is a regular method ppt
+        String methodName = pptName.getFullMethodName();
+        Assert.assertTrue( methodName != null );
+        DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+        if (methodNode == null) {
+          classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+        }
       }
     }
 
@@ -179,19 +179,19 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       //  EXIT97.
       PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
       if (methodNode.getChildCount() == 0) {
-	Assert.assertTrue(topLevel != null);
-	methodNode.add( new DefaultMutableTreeNode( topLevel ));
+        Assert.assertTrue(topLevel != null);
+        methodNode.add( new DefaultMutableTreeNode( topLevel ));
       } else {
-	int exitNumber = pptName.getPointSubscript();
-	int childIndex;
-	for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
-	  Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
-	  int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
-	  if (currentChildExitNumber > exitNumber)
-	    break;
-	}
-	Assert.assertTrue(topLevel != null);
-	methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
+        int exitNumber = pptName.getPointSubscript();
+        int childIndex;
+        for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
+          Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+          int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
+          if (currentChildExitNumber > exitNumber)
+            break;
+        }
+        Assert.assertTrue(topLevel != null);
+        methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
       }
     }
 
@@ -353,18 +353,18 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     variablesControlPanel.add( filterChoicePanel );
 
     ActionListener addVariableActionListener = new ActionListener() {
-	public void actionPerformed( ActionEvent e ) {
-	  if (! addVariableTextField.getText().equals( "" )) {
-	    if (!invariantFilters.containsVariableFilter( addVariableTextField.getText() )) {
-	      invariantFilters.addVariableFilter( addVariableTextField.getText());
-	      invariantsTablesPanel.updateInvariantsDisplay();
-	      DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-	      listModel.addElement( addVariableTextField.getText());
-	      variablesList.setModel( listModel );
-	    }
-	    addVariableTextField.setText( "" );
-	  }
-	}};
+        public void actionPerformed( ActionEvent e ) {
+          if (! addVariableTextField.getText().equals( "" )) {
+            if (!invariantFilters.containsVariableFilter( addVariableTextField.getText() )) {
+              invariantFilters.addVariableFilter( addVariableTextField.getText());
+              invariantsTablesPanel.updateInvariantsDisplay();
+              DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+              listModel.addElement( addVariableTextField.getText());
+              variablesList.setModel( listModel );
+            }
+            addVariableTextField.setText( "" );
+          }
+        }};
 
     addVariableButton.addActionListener( addVariableActionListener );
     addVariableTextField.addActionListener( addVariableActionListener );

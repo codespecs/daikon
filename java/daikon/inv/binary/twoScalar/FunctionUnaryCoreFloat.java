@@ -30,7 +30,7 @@ public final class FunctionUnaryCoreFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
- // transient public Method function;  // transient:  Method not serializable
+  // transient public Method function;  // transient:  Method not serializable
   public final String[] methodname;   // provided to permit serialization
 
   private int methodNumber;
@@ -47,10 +47,6 @@ public final class FunctionUnaryCoreFloat
     this.inverse = inverse;
     this.methodNumber = methodNumber;
   }
-
-  // public FunctionUnaryCoreFloat (Invariant wrapper, String methodname[], boolean inverse) throws ClassNotFoundException, NoSuchMethodException {
-  //   this(wrapper, methodname, FunctionsFloat.lookup(methodname), inverse);
-  // }
 
   public Object clone() {
     try {

@@ -61,14 +61,14 @@ class ObviousEqualityFilter extends InvariantFilter {
 
     if (!canonical.equalToNonobvious().contains(v1) && !canonical.equals(v1)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
+        PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
       }
       return true;
     }
 
     if (!canonical.equalToNonobvious().contains(v2) && !canonical.equals(v2)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
+        PrintInvariants.debugFiltering.debug("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
       }
       return true;
     }

@@ -540,7 +540,7 @@ public final class Intern {
   //     for (int i=0; i<a1.length; i++) {
   //       tmp = a1[i] - a2[i];
   //       if (tmp != 0)
-  // 	return tmp;
+  //         return tmp;
   //     }
   //     return 0;
   //   }
@@ -562,7 +562,7 @@ public final class Intern {
   //     for (int i=0; i<a1.length; i++) {
   //       tmp = a1[i].hashCode() - a2[i].hashCode();
   //       if (tmp != 0)
-  // 	return tmp;
+  //         return tmp;
   //       // I'm counting on the fact that hashCode returns a different
   //       // number for each Object in the system.  This checks that assumption.
   //       Assert.assertTrue(a1[i].equals(a2[i]));

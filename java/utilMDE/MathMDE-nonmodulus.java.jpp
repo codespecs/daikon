@@ -22,12 +22,12 @@ The correct way to build the system is to run 'make'.
     INT val = min;
     for (int i=0; i<nums.length; i++) {
       while (val < nums[i]) {
-	result[result_index] = val;
-	result_index++;
-	val++;
+        result[result_index] = val;
+        result_index++;
+        val++;
       }
       if (val == nums[i]) {
-	val++;
+        val++;
       }
     }
     if (result_index == result.length) {
@@ -76,7 +76,7 @@ The correct way to build the system is to run 'make'.
     MissingNumbersIteratorINT(Iterator nums_itor, boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
-	throw new Error("No elements in nums_itor");
+        throw new Error("No elements in nums_itor");
       current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
       if (add_ends) {
         current_missing = current_nonmissing - 1;
@@ -88,12 +88,12 @@ The correct way to build the system is to run 'make'.
 
     public boolean hasNext() {
       if (current_missing < current_nonmissing)
-	return true;
+        return true;
       // This loop ("while" instead of "if") permits duplicates in nums.
       while (current_missing == current_nonmissing) {
-	if (nums != null) {
-	  current_index++;
-	  if (current_index >= nums.length) {
+        if (nums != null) {
+          current_index++;
+          if (current_index >= nums.length) {
             if (add_ends) {
               current_missing++;
               return true;
@@ -101,9 +101,9 @@ The correct way to build the system is to run 'make'.
               return false;
             }
           }
-	  current_nonmissing = nums[current_index];
-	} else if (nums_itor != null) {
-	  if (!nums_itor.hasNext()) {
+          current_nonmissing = nums[current_index];
+        } else if (nums_itor != null) {
+          if (!nums_itor.hasNext()) {
             if (add_ends) {
               current_missing++;
               return true;
@@ -111,16 +111,16 @@ The correct way to build the system is to run 'make'.
               return false;
             }
           }
-	  // prev_nonmissing is for testing only
-	  INT prev_nonmissing = current_nonmissing;
-	  current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
-	  if (! (prev_nonmissing < current_nonmissing))
-	    throw new Error("Non-sorted Iterator supplied to " + stringify(MissingNumbersIteratorINT) + ": prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
-	} else {
-	  throw new Error("Can't happen");
-	}
-	current_missing++;
-	return hasNext();
+          // prev_nonmissing is for testing only
+          INT prev_nonmissing = current_nonmissing;
+          current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
+          if (! (prev_nonmissing < current_nonmissing))
+            throw new Error("Non-sorted Iterator supplied to " + stringify(MissingNumbersIteratorINT) + ": prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
+        } else {
+          throw new Error("Can't happen");
+        }
+        current_missing++;
+        return hasNext();
       }
       if (add_ends) {
         return (current_missing == current_nonmissing + 1);
@@ -131,7 +131,7 @@ The correct way to build the system is to run 'make'.
 
     public Object next() {
       if (!hasNext())
-	throw new NoSuchElementException();
+        throw new NoSuchElementException();
       INTEGER result = new INTEGER(current_missing);
       current_missing++;
       return result;
@@ -232,20 +232,20 @@ The correct way to build the system is to run 'make'.
       boolean[] has_modulus = new boolean[m]; // initialized to false?
       int num_nonmodulus = m;
       for (int i=0; i<nums.length; i++) {
-	int rem = CastToInt(mod_positive(nums[i], m));
-	if (!has_modulus[rem]) {
-	  has_modulus[rem] = true;
-	  num_nonmodulus--;
-	  // System.out.println("rem=" + rem + " for " + nums[i] + "; num_nonmodulus=" + num_nonmodulus);
-	  if (num_nonmodulus == 0)
-	    // Quit as soon as we see every remainder instead of processing
-	    // each element of the input list.
-	    break;
-	}
+        int rem = CastToInt(mod_positive(nums[i], m));
+        if (!has_modulus[rem]) {
+          has_modulus[rem] = true;
+          num_nonmodulus--;
+          // System.out.println("rem=" + rem + " for " + nums[i] + "; num_nonmodulus=" + num_nonmodulus);
+          if (num_nonmodulus == 0)
+            // Quit as soon as we see every remainder instead of processing
+            // each element of the input list.
+            break;
+        }
       }
       // System.out.println("For m=" + m + ", num_nonmodulus=" + num_nonmodulus);
       if (num_nonmodulus == 1) {
-	return new INT[] {ArraysMDE.indexOf(has_modulus, false), m};
+        return new INT[] {ArraysMDE.indexOf(has_modulus, false), m};
       }
     }
     return null;

@@ -54,11 +54,11 @@ The correct way to build the system is to run 'make'.
     while (itor.hasNext()) {
       INT i = ((INTEGER)itor.next()).INTValue();
       if (i == avalue)
-	continue;
+        continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
       count++;
       if (modulus == 1)
-	return null;
+        return null;
       }
     if (count < 3)
       return null;
@@ -104,7 +104,7 @@ The correct way to build the system is to run 'make'.
       return null;
     for (int i=first_index+2; i<=last_index; i++)
       if (nums[i] - nums[i-1] != modulus)
-	return null;
+        return null;
 
     INT r = mod_positive(nums[first_index], modulus);
     if (nonstrict_ends) {
@@ -152,7 +152,7 @@ The correct way to build the system is to run 'make'.
       }
 
       if (next - prev != modulus)
-	return null;
+        return null;
       count++;
     }
     if (count < 3)

@@ -477,7 +477,7 @@ public final class Daikon {
         } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
         } else if (enable_temporal_SWITCH.equals(option_name)) {
-	    TemporalInvariantManager.active = true;
+            TemporalInvariantManager.active = true;
         } else if (noinvariantguarding_SWITCH.equals(option_name)) {
           noInvariantGuarding = true;
         } else {

@@ -56,7 +56,7 @@ public final class OneOfSequence
   /** Whether the variable's declared type is hashcode. **/
   private boolean is_hashcode;
 
-  OneOfSequence (PptSlice ppt) {
+  public OneOfSequence(PptSlice ppt) {
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),

@@ -70,10 +70,6 @@ public final class CLASSNAME
     Assert.assertTrue(methodname.length == 3);
   }
 
-  // public CLASSNAME(Invariant wrapper, String[] methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
-  //   this(wrapper, methodname, FUNCTIONS.lookup(methodname), var_order);
-  // }
-
   public Object clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();

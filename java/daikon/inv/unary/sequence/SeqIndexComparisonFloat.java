@@ -11,8 +11,8 @@ import utilMDE.*;
 
 /**
  * This class represents a comparison between elements of a sequence
- * and the indices of those elements; for instance, * "for all i,
- * a[i] > i".
+ * and the indices of those elements; for instance,
+ * "for all i, a[i] > i".
  **/
 public final class SeqIndexComparisonFloat
   extends SingleFloatSequence

@@ -731,9 +731,9 @@ public abstract class Invariant
         VarInfo elt = (VarInfo) iter.next();
         VarInfoName name = name_extractor.getFromSecond(elt);
 
-//  	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-//  	 PrintInvariants.debugFiltering.debug("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
-//  	}
+//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+//       PrintInvariants.debugFiltering.debug("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
+//      }
 
         intersection = all_vars_names1.contains(name);
         if (intersection) {
@@ -991,11 +991,11 @@ public abstract class Invariant
         Invariant entryInvariant = (Invariant) entryInvariants.next();
         // If entryInvariant with orig() applied to everything matches this invariant
         if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
-	  if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	    PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.get_better_name(entryInvariant.ppt.parent) + ")\n");
-	  }
-	  return true;
-	}
+          if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.get_better_name(entryInvariant.ppt.parent) + ")\n");
+          }
+          return true;
+        }
       }
     }
     return false;

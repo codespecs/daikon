@@ -42,10 +42,6 @@ public final class FunctionBinaryCore
     Assert.assertTrue(methodname.length == 3);
   }
 
-  // public FunctionBinaryCore (Invariant wrapper, String[] methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
-  //   this(wrapper, methodname, Functions.lookup(methodname), var_order);
-  // }
-
   public Object clone() {
     try {
       FunctionBinaryCore result = (FunctionBinaryCore) super.clone();

@@ -36,7 +36,7 @@ public class FileIOException extends IOException {
       return super.toString();
     } else {
       return "\nError: " + super.toString() + " on line " + reader.getLineNumber() +
-	" of file " + fileName;
+        " of file " + fileName;
     }
   }
 

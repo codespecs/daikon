@@ -16,16 +16,16 @@ import java.io.*;
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
 
     public PrintNullDiffVisitor (PrintStream ps, boolean verbose) {
-	super (ps, verbose, false, false);
+        super (ps, verbose, false, false);
     }
 
     public void visit (InvNode node) {
-	Invariant inv1 = node.getInv1();
-	Invariant inv2 = node.getInv2();
-	// If (inv1 XOR inv2) is null
-	if (inv1 != null && inv2 == null || inv2 != null && inv1 == null) {
-	    super.visit (node);
+        Invariant inv1 = node.getInv1();
+        Invariant inv2 = node.getInv2();
+        // If (inv1 XOR inv2) is null
+        if (inv1 != null && inv2 == null || inv2 != null && inv1 == null) {
+            super.visit (node);
 
-	}
+        }
     }
 }

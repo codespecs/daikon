@@ -51,7 +51,7 @@ public final class OneOfFloatSequence
   private double[] [] elts;
   private int num_elts;
 
-  OneOfFloatSequence (PptSlice ppt) {
+  public OneOfFloatSequence(PptSlice ppt) {
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),

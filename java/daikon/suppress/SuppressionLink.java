@@ -45,14 +45,14 @@ public class SuppressionLink implements Serializable {
    * Suppressed invariant.  Never null.
    **/
   private final Invariant suppressee;
-  
+
 
   /**
    * Original factory that generated this.  Never null.
    **/
   private final SuppressionFactory factory;
 
-  
+
   /**
    * State constant: this was just created and suppressor and
    * suppressees do not know about this.
@@ -139,7 +139,7 @@ public class SuppressionLink implements Serializable {
   //       factory.hashCode();
   //   }
 
-  
+
   /**
    * Debug output only.
    **/
@@ -165,8 +165,8 @@ public class SuppressionLink implements Serializable {
    * @post state == CREATED;
    **/
   public SuppressionLink (SuppressionFactory argFactory,
-			  Invariant argSuppressee,
-			  List argSuppressors) {
+                          Invariant argSuppressee,
+                          List argSuppressors) {
     this.factory = argFactory;
     this.suppressee = argSuppressee;
     this.suppressors = argSuppressors;
@@ -233,7 +233,7 @@ public class SuppressionLink implements Serializable {
   //     Assert.assertTrue (suppressors != null);
   //     // Assert.assertTrue (suppressee.getSuppressor() == this);
   //   }
- 
+
 
   /**
    * Check the rep invariants of this.
@@ -250,7 +250,7 @@ public class SuppressionLink implements Serializable {
     }
     if (this.suppressee == null) {
       throw new Error("Must have non-null suppressees");
-    } 
+    }
     // This must be linked when part of PptMap's hierarchy
     Assert.assertTrue (state == LINKED);
   }

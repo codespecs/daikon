@@ -48,7 +48,7 @@ public final class EltOneOf
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private long [] elts;
+  private long[] elts;
   private int num_elts;
 
   /** Whether the variable's declared type is boolean. **/
@@ -56,7 +56,7 @@ public final class EltOneOf
   /** Whether the variable's declared type is hashcode. **/
   private boolean is_hashcode;
 
-  EltOneOf (PptSlice ppt) {
+  public EltOneOf(PptSlice ppt) {
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
@@ -122,7 +122,7 @@ public final class EltOneOf
   }
 
   // Assumes the other array is already sorted
-  public boolean compare_rep(int num_other_elts, long [] other_elts) {
+  public boolean compare_rep(int num_other_elts, long[] other_elts) {
     if (num_elts != num_other_elts)
       return false;
     sort_rep();

@@ -52,15 +52,15 @@ public class PrintInvariants {
       debugFiltering.removeAllAppenders();
       FileAppender fa = null;
       try {
-	fa = new FileAppender( new PatternLayout("%m"), daikonFilteringOutputFilename, true);
-	fa.setName(daikonFilteringOutputFilename);
+        fa = new FileAppender( new PatternLayout("%m"), daikonFilteringOutputFilename, true);
+        fa.setName(daikonFilteringOutputFilename);
       }
       catch (IOException ioe) {
-	System.err.println("Warning; unable to open file filtering_transcript");
+        System.err.println("Warning; unable to open file filtering_transcript");
       }
       if (fa != null) {
-	debugFiltering.addAppender(fa);
-	fa.activateOptions();
+        debugFiltering.addAppender(fa);
+        fa.activateOptions();
       }
     }
   }
@@ -328,8 +328,8 @@ public class PrintInvariants {
       out.println(better_name);
     }
     if (Daikon.output_num_samples
-	|| (Daikon.output_style == OutputFormat.ESCJAVA)
-	|| (Daikon.output_style == OutputFormat.JML)) {
+        || (Daikon.output_style == OutputFormat.ESCJAVA)
+        || (Daikon.output_style == OutputFormat.JML)) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
         out.print(" " + ppt.var_infos[i].name.name());
@@ -423,7 +423,7 @@ public class PrintInvariants {
     // It would be nice to collect the list of indices which are modified,
     // and create a \forall to specify that the rest aren't.
     if (Daikon.output_style == OutputFormat.ESCJAVA ||
-	Daikon.output_style == OutputFormat.JML) {
+        Daikon.output_style == OutputFormat.JML) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
@@ -475,10 +475,10 @@ public class PrintInvariants {
         }
       }
       if (mods.size() > 0) {
-	if (Daikon.output_style == OutputFormat.ESCJAVA)
-	  out.print("modifies ");
-	else
-	  out.print("assignable ");
+        if (Daikon.output_style == OutputFormat.ESCJAVA)
+          out.print("modifies ");
+        else
+          out.print("assignable ");
         for (int i=0; i<mods.size(); i++) {
           if (i>0) {
             out.print(", ");
@@ -551,13 +551,13 @@ public class PrintInvariants {
     // // Filter for parameters here
     // if (vi.ppt.ppt_name.isExitPoint()) {
     //   for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-    // 	VarInfo var = (VarInfo) i.next();
-    // 	if (debugPrintEquality.isDebugEnabled()) {
-    // 	  debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
-    // 	}
-    // 	if (var.isDerivedParamAndUninteresting()) {
-    // 	  i.remove();
-    // 	}
+    //  VarInfo var = (VarInfo) i.next();
+    //  if (debugPrintEquality.isDebugEnabled()) {
+    //    debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+    //  }
+    //  if (var.isDerivedParamAndUninteresting()) {
+    //    i.remove();
+    //  }
     //  }
     // }
     return(equal_vars);
@@ -853,9 +853,9 @@ public class PrintInvariants {
       if (inv.isValidEscExpression()) {
         inv_rep = inv.format_using(Daikon.output_style);
       } else {
-	if (inv instanceof Equality) {
-	  inv_rep = "warning: method 'equality'.format_esc() needs to be implemented: " + inv.format();
-	} else {
+        if (inv instanceof Equality) {
+          inv_rep = "warning: method 'equality'.format_esc() needs to be implemented: " + inv.format();
+        } else {
           inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
         }
       }
@@ -1036,9 +1036,9 @@ public class PrintInvariants {
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
       if (fi_accepted && !inv.isGuardingPredicate) {
-	invCounter++;
-	Global.reported_invariants++;
-	accepted_invariants.add(inv);
+        invCounter++;
+        Global.reported_invariants++;
+        accepted_invariants.add(inv);
       }
     }
 
@@ -1047,10 +1047,10 @@ public class PrintInvariants {
     if (debugFiltering.isDebugEnabled()) {
       Iterator inv_iter = accepted_invariants.iterator();
       while (inv_iter.hasNext()) {
-    	Invariant current_inv = (Invariant)inv_iter.next();
-	if (current_inv instanceof Equality) {
-	  debugFiltering.debug("Found Equality that says " + current_inv.format() + "\n");
-	}
+        Invariant current_inv = (Invariant)inv_iter.next();
+        if (current_inv instanceof Equality) {
+          debugFiltering.debug("Found Equality that says " + current_inv.format() + "\n");
+        }
       }
     }
 
@@ -1058,18 +1058,18 @@ public class PrintInvariants {
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
 
-	// if (accept_varinfo(ppt, vi)) { // [INCR] XXX
+        // if (accept_varinfo(ppt, vi)) { // [INCR] XXX
           /* [INCR]
-	  StringBuffer sb = new StringBuffer();
-	  for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
-	    sb.append (" ==  " + ((VarInfo) j.next()).name.name());
-	  }
+          StringBuffer sb = new StringBuffer();
+          for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+            sb.append (" ==  " + ((VarInfo) j.next()).name.name());
+          }
           StringWriter eq_invs = new StringWriter();
           PrintWriter pw = new PrintWriter(eq_invs);
           print_equality_invariants(vi, pw, invCounter, ppt);
-	  debugFiltering.debug("Found VarInfo that says " + eq_invs.toString());
+          debugFiltering.debug("Found VarInfo that says " + eq_invs.toString());
           */ // [INCR]
-	// } [INCR]
+        // } [INCR]
       }
     }
 

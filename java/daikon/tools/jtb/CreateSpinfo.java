@@ -44,7 +44,7 @@ class CreateSpinfo {
       "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
       "  -h   Display this usage message",
     },
-		 lineSep);
+                 lineSep);
 
 
   public static void main (String[] args) throws Exception {
@@ -62,14 +62,14 @@ class CreateSpinfo {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-	if (Daikon.debugAll_SWITCH.equals(option_name)) {
-	  Global.debugAll = true;
-	} else if (Daikon.debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
-	} else {
-	  throw new RuntimeException("Unknown long option received: " +
-				     option_name);
-	}
+        if (Daikon.debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
+          Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+        } else {
+          throw new RuntimeException("Unknown long option received: " +
+                                     option_name);
+        }
         break;
       case 'h':
         System.out.println(usage);
@@ -96,7 +96,7 @@ class CreateSpinfo {
       Reader input = new FileReader(javafile);
 
       if (javafile.endsWith(".java")) {
-	javafile = javafile.substring(0, javafile.length()-5) + ".spinfo";
+        javafile = javafile.substring(0, javafile.length()-5) + ".spinfo";
       }
 
 
@@ -124,10 +124,10 @@ class CreateSpinfo {
       Node root = null;
 
       try {
-	root = parser.CompilationUnit();
+        root = parser.CompilationUnit();
       } catch (ParseException e) {
-	e.printStackTrace();
-	System.exit(1);
+        e.printStackTrace();
+        System.exit(1);
       }
       debug.debug("CreateSpinfo: processing file " + javafile);
       ConditionExtractor extractor = new ConditionExtractor();

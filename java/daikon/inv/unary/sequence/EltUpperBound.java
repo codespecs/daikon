@@ -62,7 +62,7 @@ public class EltUpperBound
 
   protected Object clone() {
     EltUpperBound result = (EltUpperBound) super.clone();
-    result.core = ( UpperBoundCore ) core.clone();
+    result.core = (UpperBoundCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -116,7 +116,7 @@ public class EltUpperBound
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " <" +"= " + core.max1 + quant.getClosingExp();
+      " => " + quant.getVarIndexed(0) + " <= " + core.max1 + quant.getClosingExp();
     return result;
   }
 
@@ -221,10 +221,10 @@ public class EltUpperBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltUpperBound eb = EltUpperBound.find(other_slice);
+          EltUpperBound eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.max1 == core.max1 ) {
+              && eb.core.max1 == core.max1 ) {
             return true;
           }
         }

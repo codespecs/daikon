@@ -172,8 +172,8 @@ public final class UtilMDE {
         // // throw new Error("Malformed base class: " + classname);
         // // For now, hope for the best.
         // result = classname;
-	// Never hope for the best, because you're probably wrong
-	return null;
+        // Never hope for the best, because you're probably wrong
+        return null;
       }
     }
     for (int i=0; i<dims; i++) {
@@ -206,10 +206,10 @@ public final class UtilMDE {
         result += classnameFromJvm(arglist.substring(pos, semi_pos+1));
         pos = semi_pos + 1;
       } else {
-	String maybe = classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
-	if (maybe == null) {
-	  return null;
-	}
+        String maybe = classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
+        if (maybe == null) {
+          return null;
+        }
         result += maybe;
         pos = nonarray_pos+1;
       }
@@ -670,11 +670,11 @@ public final class UtilMDE {
     int bytes;
     try {
       while (true) {
-	bytes = from.read(buffer);
-	if (bytes == -1) {
-	  return;
-	}
-	to.write(buffer, 0, bytes);
+        bytes = from.read(buffer);
+        if (bytes == -1) {
+          return;
+        }
+        to.write(buffer, 0, bytes);
       }
     } catch (java.io.IOException e) {
       e.printStackTrace();

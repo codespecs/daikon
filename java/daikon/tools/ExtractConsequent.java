@@ -64,23 +64,23 @@ public class ExtractConsequent {
           System.out.println(usage);
           System.exit(1);
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_controlled_invariants = true;
-	} else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
-	} else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
-	  Daikon.suppress_redundant_invariants_with_simplify = true;
-	} else if (Daikon.config_option_SWITCH.equals(option_name)) {
-	  String item = g.getOptarg();
-	  daikon.config.Configuration.getInstance().apply(item);
-	  break;
-	} else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-	  Global.debugAll = true;
-	} else if (Daikon.debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority(g.getOptarg(), Logger.DEBUG);
-	} else {
-	  throw new RuntimeException("Unknown long option received: " +
+          Daikon.suppress_implied_controlled_invariants = true;
+        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
+          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
+        } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          Daikon.suppress_redundant_invariants_with_simplify = true;
+        } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+          String item = g.getOptarg();
+          daikon.config.Configuration.getInstance().apply(item);
+          break;
+        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
+          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+        } else {
+          throw new RuntimeException("Unknown long option received: " +
                                      option_name);
-	}
+        }
         break;
       case 'h':
         System.out.println(usage);
@@ -101,8 +101,8 @@ public class ExtractConsequent {
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-						true //use saved config
-						);
+                                                true //use saved config
+                                                );
     ppt_map = ppts;
     extract_consequent(ppts);
   }
@@ -131,15 +131,15 @@ public class ExtractConsequent {
       HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
       for ( Iterator predIter = (cluster_to_conditions.keySet()).iterator() ;
             predIter.hasNext() ; ) {
-	String predicate = (String) predIter.next();
-	Set conditions = (Set) cluster_to_conditions.get(predicate);
+        String predicate = (String) predIter.next();
+        Set conditions = (Set) cluster_to_conditions.get(predicate);
         StringBuffer conjunction = new StringBuffer();
         for (Iterator condsIter = conditions.iterator(); condsIter.hasNext(); ) {
-	  String cond = (String)condsIter.next();
-	  allConds.add(cond);
-	  conjunction.append(" && ");
+          String cond = (String)condsIter.next();
+          allConds.add(cond);
+          conjunction.append(" && ");
           conjunction.append(cond);
-	}
+        }
         conjunction.delete(0, 4); // remove leading " && "
 
         String conj = conjunction.toString();
@@ -155,10 +155,10 @@ public class ExtractConsequent {
       }
 
       if (allConds.size() > 0) {
-	pw.println("\nPPT_NAME " + pptname);
-	Iterator condsIter = allConds.iterator();
-	while (condsIter.hasNext())
-	  pw.println(condsIter.next());
+        pw.println("\nPPT_NAME " + pptname);
+        Iterator condsIter = allConds.iterator();
+        while (condsIter.hasNext())
+          pw.println(condsIter.next());
       }
       allConds.clear();
     }
@@ -172,8 +172,8 @@ public class ExtractConsequent {
    * Implications are produced only at those points.
    **/
   public static void extract_consequent_maybe(PptTopLevel ppt,
-					      PrintWriter out,
-					      PptMap all_ppts) {
+                                              PrintWriter out,
+                                              PptMap all_ppts) {
     /* [INCR]
     if (! ppt.has_samples()) {
       return;
@@ -196,89 +196,89 @@ public class ExtractConsequent {
       String pptname = cleanup_pptname(ppt.name);
       Iterator itor = invs.iterator();
       while (itor.hasNext()) {
-	Implication maybe = (Implication)itor.next();
+        Implication maybe = (Implication)itor.next();
 
-	//don't print redundant invariants.
-	if (Daikon.suppress_redundant_invariants_with_simplify &&
-	    maybe.ppt.parent.redundant_invs.contains(maybe)) {
-	  continue;
-	}
+        //don't print redundant invariants.
+        if (Daikon.suppress_redundant_invariants_with_simplify &&
+            maybe.ppt.parent.redundant_invs.contains(maybe)) {
+          continue;
+        }
 
-	// don't print out invariants with min(), max(), or sum() variables
-	boolean mms = false;
-	VarInfo[] varbls = maybe.ppt.var_infos;
-	for (int v=0; !mms && v<varbls.length; v++) {
-	  mms |= varbls[v].isDerivedSequenceMinMaxSum();
-	}
-	if (mms) {
-	  continue;
-	}
+        // don't print out invariants with min(), max(), or sum() variables
+        boolean mms = false;
+        VarInfo[] varbls = maybe.ppt.var_infos;
+        for (int v=0; !mms && v<varbls.length; v++) {
+          mms |= varbls[v].isDerivedSequenceMinMaxSum();
+        }
+        if (mms) {
+          continue;
+        }
 
-	if (maybe.ppt.ppt_name.isExitPoint()) {
-	  for (int i = 0; i < maybe.ppt.var_infos.length; i++) {
-	    VarInfo vi = maybe.ppt.var_infos[i];
-	    if (vi.isDerivedParam()) {
-	      continue;
-	    }
-	  }
-	}
+        if (maybe.ppt.ppt_name.isExitPoint()) {
+          for (int i = 0; i < maybe.ppt.var_infos.length; i++) {
+            VarInfo vi = maybe.ppt.var_infos[i];
+            if (vi.isDerivedParam()) {
+              continue;
+            }
+          }
+        }
 
-	Invariant consequent = maybe.consequent();
-	Invariant predicate = maybe.predicate();
-	Invariant inv, cluster_inv;
-	boolean cons_uses_cluster = false, pred_uses_cluster = false;
-	// extract the consequent (predicate) if the predicate
-	// (consequent) uses the variable "cluster".  Ignore if they
-	// both depend on "cluster"
-	if (consequent.usesVar("cluster"))
-	  cons_uses_cluster = true;
-	if (predicate.usesVar("cluster"))
-	  pred_uses_cluster = true;
+        Invariant consequent = maybe.consequent();
+        Invariant predicate = maybe.predicate();
+        Invariant inv, cluster_inv;
+        boolean cons_uses_cluster = false, pred_uses_cluster = false;
+        // extract the consequent (predicate) if the predicate
+        // (consequent) uses the variable "cluster".  Ignore if they
+        // both depend on "cluster"
+        if (consequent.usesVar("cluster"))
+          cons_uses_cluster = true;
+        if (predicate.usesVar("cluster"))
+          pred_uses_cluster = true;
 
-	if (!(pred_uses_cluster ^ cons_uses_cluster))
-	  continue;
-	else if (pred_uses_cluster) {
-	  inv = consequent;
-	  cluster_inv = predicate;
-	} else {
-	  inv = predicate;
-	  cluster_inv = consequent;
-	}
+        if (!(pred_uses_cluster ^ cons_uses_cluster))
+          continue;
+        else if (pred_uses_cluster) {
+          inv = consequent;
+          cluster_inv = predicate;
+        } else {
+          inv = predicate;
+          cluster_inv = consequent;
+        }
 
-	if (!inv.isInteresting()) {
-	  continue;
-	}
+        if (!inv.isInteresting()) {
+          continue;
+        }
 
-	if (!inv.isWorthPrinting()) {
-	  continue;
-	}
+        if (!inv.isWorthPrinting()) {
+          continue;
+        }
 
-	if (contains_constant_non_012(inv)) {
-	  continue;
-	}
+        if (contains_constant_non_012(inv)) {
+          continue;
+        }
 
-	//filter out unwanted invariants
+        //filter out unwanted invariants
 
-	// 1) Invariants involving sequences
-	if (inv instanceof daikon.inv.binary.twoSequence.TwoSequence ||
-	    inv instanceof daikon.inv.binary.sequenceScalar.SequenceScalar ||
-	    inv instanceof daikon.inv.binary.sequenceString.SequenceString ||
-	    inv instanceof daikon.inv.unary.sequence.SingleSequence ||
-	    inv instanceof daikon.inv.unary.stringsequence.SingleStringSequence ) {
-	  continue;
-	}
+        // 1) Invariants involving sequences
+        if (inv instanceof daikon.inv.binary.twoSequence.TwoSequence ||
+            inv instanceof daikon.inv.binary.sequenceScalar.SequenceScalar ||
+            inv instanceof daikon.inv.binary.sequenceString.SequenceString ||
+            inv instanceof daikon.inv.unary.sequence.SingleSequence ||
+            inv instanceof daikon.inv.unary.stringsequence.SingleStringSequence ) {
+          continue;
+        }
 
-	if (inv instanceof daikon.inv.ternary.threeScalar.LinearTernary ||
-	    inv instanceof daikon.inv.binary.twoScalar.LinearBinary) {
-	  continue;
-	}
+        if (inv instanceof daikon.inv.ternary.threeScalar.LinearTernary ||
+            inv instanceof daikon.inv.binary.twoScalar.LinearBinary) {
+          continue;
+        }
 
-	String inv_string = inv.format_using(OutputFormat.DAIKON);
-	if (re_matcher.contains(inv_string, orig_pattern) || re_matcher.contains(inv_string, dot_class_pattern)) {
-	  continue;
-	}
-	inv_string = simplify_inequalities(inv_string);
-	store_invariant(cluster_inv.format_using(OutputFormat.DAIKON), inv_string, pptname);
+        String inv_string = inv.format_using(OutputFormat.DAIKON);
+        if (re_matcher.contains(inv_string, orig_pattern) || re_matcher.contains(inv_string, dot_class_pattern)) {
+          continue;
+        }
+        inv_string = simplify_inequalities(inv_string);
+        store_invariant(cluster_inv.format_using(OutputFormat.DAIKON), inv_string, pptname);
       }
     }
   }
@@ -310,7 +310,7 @@ public class ExtractConsequent {
       //eliminated by the isInteresting check
       long num = ((Long) oneof.elt()).longValue();
       if (num > 2 || num < -1)
-	return true;
+        return true;
     }
 
     return false;
@@ -341,11 +341,11 @@ public class ExtractConsequent {
   private static String simplify_inequalities (String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
       if (re_matcher.contains(condition, gteq_pattern))
-	condition = Util.substitute(re_matcher, gteq_pattern, lt_subst, condition, 1);
+        condition = Util.substitute(re_matcher, gteq_pattern, lt_subst, condition, 1);
       else if (re_matcher.contains(condition, lteq_pattern))
-	condition = Util.substitute(re_matcher, lteq_pattern, gt_subst, condition, 1);
+        condition = Util.substitute(re_matcher, lteq_pattern, gt_subst, condition, 1);
       else if (re_matcher.contains(condition, neq_pattern))
-	condition = Util.substitute(re_matcher, neq_pattern, eq_subst, condition, 1);
+        condition = Util.substitute(re_matcher, neq_pattern, eq_subst, condition, 1);
     }
     return condition;
   }

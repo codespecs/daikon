@@ -128,8 +128,8 @@ public final class Diff {
     while ((c = g.getopt()) !=-1) {
       switch (c) {
       case 0:
-	// got a long option
-	String optionName = longOpts[g.getLongind()].getName();
+        // got a long option
+        String optionName = longOpts[g.getLongind()].getName();
         if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
           if (invSortComparator1Classname != null) {
             throw new Error("multiple --" + INV_SORT_COMPARATOR1_SWITCH +
@@ -148,10 +148,10 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           invPairComparatorClassname = g.getOptarg();
-	} else {
+        } else {
           throw new RuntimeException("Unknown long option received: " +
                                      optionName);
-	}
+        }
         break;
       case 'h':
         System.out.println(usage);
@@ -207,9 +207,9 @@ public final class Diff {
         continuousJustification = true;
         break;
       case 'z':
-	treeManip = true;
-	// no break on purpose, only makes sense
-	// if -p is also on -LL
+        treeManip = true;
+        // no break on purpose, only makes sense
+        // if -p is also on -LL
       case 'p':
         examineAllPpts = true;
         break;

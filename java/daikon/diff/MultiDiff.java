@@ -21,20 +21,20 @@ public class MultiDiff {
     public static void main (String[] args)
         throws IOException, ClassNotFoundException,
                InstantiationException, IllegalAccessException {
-	PrintStream out = new PrintStream
+        PrintStream out = new PrintStream
             (new FileOutputStream ("rand_sel.spinfo"));
-	/*
-	  try {
-	    if (args.length != 0) {
-		FileOutputStream file = new FileOutputStream (args[0]);
-		out = new PrintStream (file);
-	    }
-	}
+        /*
+          try {
+            if (args.length != 0) {
+                FileOutputStream file = new FileOutputStream (args[0]);
+                out = new PrintStream (file);
+            }
+        }
 
-	catch (IOException e) {e.printStackTrace(); }
-	*/
-	MultiDiffVisitor.setForSpinfoOut (out);
-	Diff.main (args);
+        catch (IOException e) {e.printStackTrace(); }
+        */
+        MultiDiffVisitor.setForSpinfoOut (out);
+        Diff.main (args);
     }
 
 }

@@ -21,7 +21,7 @@ public class InstrumentObserversVisitor
 {
 
   public InstrumentObserversVisitor(Collection observers // [MethodDeclaration]
-				    )
+                                    )
   {
     observer_methods = new ArrayList(observers);
   }
@@ -41,7 +41,7 @@ public class InstrumentObserversVisitor
       String fldname = getFieldNameFor(method);
       String code = "private " + fldtype + " " + fldname + ";" + Global.lineSep;
       ClassBodyDeclaration decl =
-	(ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code);
+        (ClassBodyDeclaration) Ast.create("ClassBodyDeclaration", code);
       Ast.addDeclaration(clazz, decl);
     }
 
@@ -124,16 +124,16 @@ public class InstrumentObserversVisitor
     for (int i=0; i < new_methods.length; i++) {
       String new_method = new_methods[i];
       MethodDeclaration wrapper = (MethodDeclaration)
-	Ast.copy("MethodDeclaration", method);
+        Ast.copy("MethodDeclaration", method);
       Ast.setBody(wrapper, new_method);
       wrapper.accept(new TreeFormatter(2, 0));
       ClassBody c = (ClassBody) Ast.getParent(ClassBody.class, method);
       ClassBodyDeclaration d = (ClassBodyDeclaration)
-	Ast.create("ClassBodyDeclaration", Ast.print(wrapper));
+        Ast.create("ClassBodyDeclaration", Ast.print(wrapper));
       Ast.addDeclaration(c, d);
       MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
       if (i == 1) {
-	Ast.setName(generated_method, "$" + name);
+        Ast.setName(generated_method, "$" + name);
       }
       generated_methods.add(generated_method);
     }
@@ -183,20 +183,20 @@ public class InstrumentObserversVisitor
 
       if (n.numSpecials() == 0) { return; }
       for (Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); ) {
-	String comment = ((NodeToken) e.nextElement()).tokenImage;
-	if (comment.indexOf("@ observer") >= 0) {
-	  MethodDeclaration method =
-	    (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-	  Assert.assertTrue(method != null);
-	  String name = Ast.getName(method);
-	  String returnType = Ast.getReturnType(method);
-	  if (returnType.equals("void")) {
-	    System.err.println("Warning: skipping void observer " + name);
-	    return;
-	  }
-	  // System.out.println("Found name: " + name);
-	  observer_methods.add(method);
-	}
+        String comment = ((NodeToken) e.nextElement()).tokenImage;
+        if (comment.indexOf("@ observer") >= 0) {
+          MethodDeclaration method =
+            (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
+          Assert.assertTrue(method != null);
+          String name = Ast.getName(method);
+          String returnType = Ast.getReturnType(method);
+          if (returnType.equals("void")) {
+            System.err.println("Warning: skipping void observer " + name);
+            return;
+          }
+          // System.out.println("Found name: " + name);
+          observer_methods.add(method);
+        }
       }
     }
   }
@@ -214,13 +214,13 @@ public class InstrumentObserversVisitor
 
       Node root = null;
       try {
-	Reader input = new FileReader(javafile);
-	JavaParser parser = new JavaParser(input);
-	root = parser.CompilationUnit();
-	input.close();
+        Reader input = new FileReader(javafile);
+        JavaParser parser = new JavaParser(input);
+        root = parser.CompilationUnit();
+        input.close();
       } catch (ParseException e) {
-	e.printStackTrace();
-	System.exit(1);
+        e.printStackTrace();
+        System.exit(1);
       }
 
       GrepObserversVisitor grep = new GrepObserversVisitor();
@@ -228,7 +228,7 @@ public class InstrumentObserversVisitor
       root.accept(new TreeFormatter(2, 80));
 
       InstrumentObserversVisitor instrument =
-	new InstrumentObserversVisitor(grep.observer_methods);
+        new InstrumentObserversVisitor(grep.observer_methods);
       root.accept(instrument);
       root.accept(new TreeFormatter(2, 80));
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
-# Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-11-23 17:57:11 mernst>
+# Michael Ernst
+# Time-stamp: <2002-11-23 19:25:16 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -10,11 +10,6 @@
 # If last argument is a file, it is used as input.  Otherwise, input comes
 # from standard in.  Output goes to standard out.
 
-# Problem:  single quote marks (') in comment can cause "unterminated
-# character constant" warnings.
-# The workaround is not to use single quotes in comments; for instance,
-# avoid contractions and possessives such as "can't", "won't", "Mike's",
-# "Josh's".
 # (Implementation note:  I do want substitution to occur in comments.
 # Therefore, I do not use the -C (leave comments in) flag to cpp, or make
 # JAVACPP_DOUBLESLASHCOMMENT put the rest of the line in a string, both
@@ -22,31 +17,8 @@
 
 # I'm not calling this jpp because someone else has probably already taken
 # that name.
-# This is a script rather than a shell alias so it's sure to work in
-# Makefiles, scripts, etc.
 
-
-
-
-# Original csh script:
-#
-# if (-e $1) then
-#   # Last argument is a file
-#   set filearg = $1
-#   shift
-# else
-#   set filearg =
-# endif
-#
-# # echo filearg $filearg
-# # echo argv $argv
-#
-# perl -p -w -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' $filearg > /tmp/java-cpp-$$-input
-# cpp $argv java-cpp-$$-input > java-cpp-$$-output
-# cat /tmp/java-cpp-$$-output | perl -p -w -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/$1$2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -w -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
-# # Problem:  doesn't propagate error codes correctly
-# rm java-cpp-$$-input java-cpp-$$-output
-
+# This script started out as a 16-line csh script by Josh Kataoka.
 
 
 use English;
@@ -129,7 +101,7 @@ sub escape_comments ( $ ) {
     s/\'/JAVACPP_SINGLEQUOTE/g;
     # cpp 2.96 (Red Hat) compresses all multiple internal whitespace into one
     # space, which loses space both preceding and within comments.  Don't do
-    # this inside cpp directives, however, and don't chnage leading space.
+    # this inside cpp directives, however, and don't change leading space.
     if (! /^[ \t]*\#/) {
       while (s/(^.*[^ \t].*[ \t])([ \t])/$1$JAVACPP_WHITESPACE_SEPARATOR$2/) { }
     }
@@ -193,18 +165,18 @@ sub unescape_comments ( $ ) {
     # convert "a. foo (" to "a.foo("
     # (Note single spaces, lowercase first letter.)
     # also: "a. FOO)" becomes "a.FOO)"
-    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) ?\(/$1.$2\(/g;
-    s/(\b[A-Za-z]\w*)\. (\w+) ?\)/$1.$2\)/g;
+    s/(\b[A-Za-z]\w*|\))\. ([a-z]\w*) ?\(/$1.$2\(/g;
+    s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
-    # convert "(long []" to "(long[]" (for cast or prototype)
-    s/(\(\w+) ((\[\])+)/$1$2/g;
+    # convert "long []" to "long[]" (for cast, prototype, or declaration)
+    s/((?:\(|(?:(?:,|public|private|protected)(?: static)? ))\w+) ((\[\])+)/$1$2/g;
     # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
     s/(\bnew \w+) (\()/$1$2/g;
     s/(\bnew \w+) (\[)/$1$2/g;
     s/(\bnew \w+\[\w+) *(\])/$1$2/g;
     # convert "public PptSlice1 (" to "public PptSlice1("
-    s/(^ *(?:public|private|protected) \w+) (\()/$1$2/gm;
+    s/(^ *(?:public|private|protected)(?: static)? \w+) (\()/$1$2/gm;
     # convert "double [] val1_array =" to "double[] val1_array ="
     s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
     # remove space before close paren, if there is an open w/o a space after it

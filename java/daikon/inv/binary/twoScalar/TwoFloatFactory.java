@@ -63,9 +63,10 @@ public final class TwoFloatFactory {
       Global.subexact_noninstantiated_invariants += FunctionsFloat.unaryFunctionNames.length;
     } else {
       result.add(LinearBinaryFloat.instantiate(ppt));
+      int numFunctions = FunctionsFloat.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);
-        for (int j=0; j< FunctionsFloat.unaryFunctionNames.length; j++) {
+        for (int j=0; j<numFunctions; j++) {
           result.add(FunctionUnaryFloat.instantiate(ppt, FunctionsFloat.unaryFunctionNames[j], j, invert));
         }
       }

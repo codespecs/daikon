@@ -220,7 +220,7 @@ public final class ONEOFSCALAR
   private boolean is_hashcode;
 #endif
 
-  ONEOFSCALAR(PptSlice ppt) {
+  public ONEOFSCALAR(PptSlice ppt) {
     super(ppt);
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
     Assert.assertTrue(var().type.isPseudoArray(),
@@ -893,18 +893,18 @@ public final class ONEOFSCALAR
       if (!is_type) {
         result += JAVA_EQUALS_STRING(TOSTRING(str));
       } else {
-	result += " == \\type";
-	if ((str == null) || "null".equals(str)) {
-	  // "null" is not a type... Going to print as Object... should actually not print
-	  result += "(java.lang.Object)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == \\type";
+        if ((str == null) || "null".equals(str)) {
+          // "null" is not a type... Going to print as Object... should actually not print
+          result += "(java.lang.Object)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
