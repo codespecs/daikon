@@ -25,7 +25,7 @@ public class ConsequentPairComparator implements Comparator {
 
     if (o2 instanceof Implication) {
       Implication imp2 = (Implication) o2;
-      inv2 = imp2.consequent;
+      inv2 = imp2.right;
     } else {
       inv2 = (Invariant) o2;
     }

@@ -17,7 +17,7 @@ import daikon.inv.*;
  * this.compare(A->C, B->C) == c.compare(A, B)
  **/
 public class ConsequentSortComparator implements Comparator {
-  
+
   private Comparator c;
 
   public ConsequentSortComparator(Comparator c) {
@@ -28,13 +28,13 @@ public class ConsequentSortComparator implements Comparator {
     Invariant inv1, inv2;
     if (o1 instanceof Implication) {
       Implication imp1 = (Implication) o1;
-      inv1 = imp1.consequent;
+      inv1 = imp1.right;
     } else {
       inv1 = (Invariant) o1;
     }
     if (o2 instanceof Implication) {
       Implication imp2 = (Implication) o2;
-      inv2 = imp2.consequent;
+      inv2 = imp2.right;
     } else {
       inv2 = (Invariant) o2;
     }
@@ -45,7 +45,7 @@ public class ConsequentSortComparator implements Comparator {
         o1 instanceof Implication && o2 instanceof Implication) {
       Implication imp1 = (Implication) o1;
       Implication imp2 = (Implication) o2;
-      return c.compare(imp1.predicate, imp2.predicate);
+      return c.compare(imp1.left, imp2.left);
     } else {
       return result;
     }
