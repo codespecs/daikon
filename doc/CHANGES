@@ -11,6 +11,9 @@ versions as the user manual.
 
 ===========================================================================
 
+Changed the way that Linear* invariants are printed.
+[Perhaps change their names as well?]
+
 Removed old V2 code and support for top-down and the global ppt
 
 Changed the way that invariants are instantiated.  The get_proto()
