@@ -17,7 +17,7 @@ public class PptName
   private final String point;
 
   // ==================== CONSTRUCTORS ====================
-  
+
   /**
    * @param name non-null ppt name as given in the decls file
    **/
@@ -97,7 +97,7 @@ public class PptName
      Assert.assert(rparen >= 0);
      return method.substring(0, rparen+1);
   }
-  
+
   /**
    * @return the name (identifier) of the method, not taking into
    * account any arguments, return values, etc.
@@ -168,7 +168,7 @@ public class PptName
   {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
-  
+
   /**
    * @return true iff this name refers to a procedure exit point
    **/
@@ -176,7 +176,23 @@ public class PptName
   {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
-  
+
+  /**
+   * @return a string containing the line number, if this is an exit point;
+   *         otherwise, return null
+   **/
+  public String exitLine() {
+    if (!isExitPoint())
+      return "";
+    int non_digit;
+    for (non_digit=FileIO.exit_suffix.length(); non_digit<point.length(); non_digit++) {
+      if (! point.charAt(non_digit).isDigit())
+        break;
+    }
+    return point.substring(FileIO.exit_suffix.length(), non_digit);
+  }
+
+
   // ==================== PRODUCERS ====================
 
   /**
@@ -210,7 +226,7 @@ public class PptName
   }
 
   // ==================== OBJECT METHODS ====================
-  
+
   /* @return interned string such that this.equals(new PptName(this.toString())) */
   public String toString()
   {
@@ -245,5 +261,5 @@ public class PptName
       ((point == null) ? 0 : point.hashCode()) +
       0;
   }
-  
+
 }
