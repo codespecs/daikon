@@ -120,28 +120,37 @@ Remake it first if it is more than a week old."
     (visit-tags-table tags-file)))
 (fset 'tags-table-daikon 'daikon-tags-table)
 
-(defun daikon-info ()
-  "Browse the Daikon manual, using Info."
+(defun daikon-developer-info ()
+  "Browse the Daikon developer manual, using Info."
   (interactive)
-  (let ((remake (or (not (file-exists-p (substitute-in-file-name "$inv/doc/daikon.info")))
-		    (and (file-newer-than-file-p
-			  (substitute-in-file-name "$inv/doc/daikon.texinfo")
-			  (substitute-in-file-name "$inv/doc/daikon.info"))
-			 (y-or-n-p "daikon.info is out of date; re-make it? ")))))
+  (daikon-info "developer"))
+
+(defun daikon-info (&optional basename)
+  "Browse the Daikon manual (or developer manual), using Info."
+  (interactive)
+  (if (not basename)
+      (setq basename "daikon"))
+  (let* ((dir (substitute-in-file-name "$inv/doc/"))
+	 (infofile (concat dir basename ".info"))
+	 (texinfofile (concat dir basename ".texinfo"))
+	 (remake (or (not (file-exists-p infofile))
+		     (and (file-newer-than-file-p texinfofile infofile)
+			  (y-or-n-p (concat basename ".info is out of date; re-make it? "))))))
     (if remake
-        (let ((default-directory (substitute-in-file-name "$inv/doc/")))
+        (let ((default-directory dir))
           (call-process "make" nil nil nil "info")
           (sit-for 0 500)               ; let the filesystem find the new file
           ;; The above was synchronous and minimal;
           ;; the below is asynchronous and maximal.
           (daikon-remake-manual t)))
     (let* ((info-buffer (get-buffer "*info*"))
-           (info-visiting-daikon
+           (info-already-visiting
             (and (buffer-live-p info-buffer)
                  (with-current-buffer info-buffer
                    (save-match-data
-                     (string-match "/daikon.info$" Info-current-file))))))
-      (if info-visiting-daikon
+                     (string-match (concat "/" basename ".info$")
+				   Info-current-file))))))
+      (if info-already-visiting
           (if (not remake)
               (pop-to-buffer info-buffer)
             ;; Guarantee that we get the new contents by moving away (to
@@ -154,7 +163,7 @@ Remake it first if it is more than a week old."
                       node Info-current-node))
               (Info-directory)
               (Info-find-node file node)))
-        (info (substitute-in-file-name "$inv/doc/daikon.info"))))))
+        (info infofile)))))
 
 (defun daikon-remake-manual (&optional force)
   "Remake the Daikon manual.
