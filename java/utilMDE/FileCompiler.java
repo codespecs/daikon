@@ -54,29 +54,32 @@ public final class FileCompiler {
    * @param fileNames pathes to the files to be compiled as Strings.
    */
   public void compileFiles(List fileNames) {
-    List /*TimeLimitProcess*/ processes = new ArrayList();
-    processes.add(compile_source(fileNames));
-    StringBuffer errorString = new StringBuffer(); // stores the error messages
 
-    // Wait for all the compilation processes to terminate.
-    for (int i = 0; i < processes.size(); i++) {
-      TimeLimitProcess tp = (TimeLimitProcess) processes.get(i);
-      String theseErrors = "";
-      try {
-        theseErrors = UtilMDE.streamString(tp.getErrorStream());
-        tp.waitFor();
-      } catch (InterruptedException e) {
-        // nothing to do
-      }
-      errorString.append(lineSep);
-      errorString.append(theseErrors);
+    // Start a process to compile all of the files (in one command)
+    TimeLimitProcess p = compile_source (fileNames);
+
+    String compile_errors = "";
+    String compile_output = "";
+
+    // Read stderr and stdout (if any) while waiting for the process to
+    // complete.  Print both if there is an unexpected exception (timeout)
+    try {
+      compile_errors = UtilMDE.streamString (p.getErrorStream());
+      compile_output = UtilMDE.streamString (p.getInputStream());
+      int result = p.waitFor();
+    } catch (Throwable e) {
+      System.out.println ("Unexpected exception while compiling " + e);
+      System.out.println ("Compile errors: " + compile_errors);
+      System.out.println ("Compile output: " + compile_output);
+      e.printStackTrace();
+      runtime.exit (1);
     }
 
     // javac tends to stop without completing the compilation if there
     // is an error in one of the files.  Remove all the erring files
     // and recompile only the good ones.
     if (compiler.equals("javac")) {
-      recompile_without_errors (fileNames, errorString.toString());
+      recompile_without_errors (fileNames, compile_errors);
     }
 
   }
@@ -87,6 +90,8 @@ public final class FileCompiler {
    **/
   private TimeLimitProcess compile_source(String filename) {
     String command = compiler + " " + filename;
+    // System.out.println ("\nexecuting compile command: " + command);
+
     try {
       return new TimeLimitProcess(runtime.exec(command), timeLimit);
     } catch (IOException e) {
@@ -110,6 +115,7 @@ public final class FileCompiler {
       }
 
       String command = compiler + " " + to_compile;
+      // System.out.println ("\nexecuting compile command: " + command);
       try {
         return new TimeLimitProcess(runtime.exec(command), timeLimit);
       } catch (IOException e) {
@@ -135,24 +141,29 @@ public final class FileCompiler {
       while (m.find()) {
         errors.add(m.group(1));
       }
+      // Collect all the files that were not compiled into retry
       List /*String*/ retry = new ArrayList();
-      // Collect all the files that were not compiled
-        for (int i = 0; i < fileNames.size(); i++) {
-          String sourceFileName = ((String) fileNames.get(i)).trim();
-          String classFilePath = getClassFilePath(sourceFileName);
-          if (! fileExists(classFilePath)) {
-            if (! errors.contains(getClassName(sourceFileName))) {
-              retry.add(sourceFileName);
-            }
+      String filenames = "";
+      for (int i = 0; i < fileNames.size(); i++) {
+        String sourceFileName = ((String) fileNames.get(i)).trim();
+        String classFilePath = getClassFilePath(sourceFileName);
+        if (! fileExists(classFilePath)) {
+          if (! errors.contains(getClassName(sourceFileName))) {
+            retry.add(sourceFileName);
+            filenames += " " + sourceFileName;
           }
         }
+      }
 
-      TimeLimitProcess tp = compile_source(retry);
+      if (retry.size() > 0) {
+        TimeLimitProcess tp = compile_source(retry);
 
-      try {
-        tp.waitFor();
-      } catch (InterruptedException e) {
-        // nothing to do (?)
+        try {
+          tp.waitFor();
+        } catch (InterruptedException e) {
+          System.out.println ("Compile of " + filenames + " interrupted: "
+                              + e);
+        }
       }
     }
   }
