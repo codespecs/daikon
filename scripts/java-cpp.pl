@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2002-11-23 20:51:10 mernst>
+# Time-stamp: <2002-12-02 09:03:49 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -183,7 +183,7 @@ sub unescape_comments ( $ ) {
     # remove space before close paren, if there is an open w/o a space after it
     # and this is not a "for" loop.
     # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
-    s/(^ *(?!for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
 
     # print STDERR "post-horizontal: $_";
 
