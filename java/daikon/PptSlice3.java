@@ -82,11 +82,12 @@ public final class PptSlice3
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
       new_invs = ThreeScalarFactory.instantiate(this, excludeEquality);
-    } else if (Daikon.dkconfig_enable_floats
-               && (rep1 == ProglangType.DOUBLE)
+    } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE)
                && (rep3 == ProglangType.DOUBLE)) {
-      new_invs = ThreeFloatFactory.instantiate(this, excludeEquality);
+      if (Daikon.dkconfig_enable_floats) {
+        new_invs = ThreeFloatFactory.instantiate(this, excludeEquality);
+      }
     } else {
       // Do nothing; do not even complain
     }

@@ -2409,8 +2409,8 @@ public class PptTopLevel
         if ((inv instanceof Implication) && ((Implication) inv).iff) {
           Implication impl = (Implication) inv;
           // System.out.println("Bi-implication: " + impl.format());
-          Invariant canon1 = (Invariant) canonical_inv.get(impl.left);
-          Invariant canon2 = (Invariant) canonical_inv.get(impl.right);
+          Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate());
+          Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent());
           if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
             // Move all the invariants for canon2 over to canon1
             HashSet hs1 = (HashSet) inv_group.get(canon1);
@@ -2428,17 +2428,17 @@ public class PptTopLevel
             // }
             // System.out.println();
           } else {
-            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.left;
+            Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate();
             // System.out.println("Canonical: " + canon.format());
-            canonical_inv.put(impl.left, canon);
-            canonical_inv.put(impl.right, canon);
+            canonical_inv.put(impl.predicate(), canon);
+            canonical_inv.put(impl.consequent(), canon);
             HashSet hs = (HashSet) inv_group.get(canon);
             if (hs == null) {
               hs = new HashSet();
               inv_group.put(canon, hs);
             }
-            hs.add(impl.left);
-            hs.add(impl.right);
+            hs.add(impl.predicate());
+            hs.add(impl.consequent());
             // System.out.print("Current set (2):");
             // for (Iterator itor2=hs.iterator(); itor2.hasNext(); ) {
             //   Invariant inv2 = (Invariant) itor2.next();
@@ -2506,10 +2506,10 @@ public class PptTopLevel
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof Implication) {
         Implication impl = (Implication) inv;
-        Invariant cpred = (Invariant) canonical_inv.get(impl.left);
-        Invariant ccons = (Invariant) canonical_inv.get(impl.right);
-        boolean pred_non_canon = ((cpred != null) && (impl.left != cpred));
-        boolean cons_non_canon = ((ccons != null) && (impl.right != ccons));
+        Invariant cpred = (Invariant) canonical_inv.get(impl.predicate());
+        Invariant ccons = (Invariant) canonical_inv.get(impl.consequent());
+        boolean pred_non_canon = ((cpred != null) && (impl.predicate() != cpred));
+        boolean cons_non_canon = ((ccons != null) && (impl.consequent() != ccons));
         if ((! impl.iff)
             && (pred_non_canon || cons_non_canon)) {
           to_remove.add(inv);

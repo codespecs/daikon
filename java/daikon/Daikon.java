@@ -34,8 +34,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.4.0";
-  public final static String release_date = "December 1, 2002";
+  public final static String release_version = "2.4.1";
+  public final static String release_date = "January 1, 2003";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -260,7 +260,7 @@ public final class Daikon {
     // setup_splitters(all_ppts); // XXX splitters are not implemented yet
 
     setupEquality (all_ppts);
-    
+
     // Infer invariants
     process_data(all_ppts, dtrace_files);
 
@@ -306,7 +306,7 @@ public final class Daikon {
         ppt.equality_view.instantiate_invariants(true);
       }
     }
-    
+
   }
 
   ///////////////////////////////////////////////////////////////////////////

@@ -1214,11 +1214,11 @@ public abstract class Invariant
     }
 
     private int compareImplications(Implication inv1, Implication inv2) {
-      int comparePredicate = compare(inv1.left, inv2.left);
+      int comparePredicate = compare(inv1.predicate(), inv2.predicate());
       if (comparePredicate != 0)
         return comparePredicate;
 
-      return compare(inv1.right, inv2.right);
+      return compare(inv1.consequent(), inv2.consequent());
     }
   }
 

@@ -96,21 +96,25 @@ public final class PptSlice2
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT_ARRAY)) {
       new_invs = TwoSequenceFactory.instantiate(this, excludeEquality);
-    } else if (Daikon.dkconfig_enable_floats
-               && rep1_is_float && rep2_is_float) {
-      new_invs = TwoFloatFactory.instantiate(this, excludeEquality);
-    } else if (Daikon.dkconfig_enable_floats
-               && (rep1 == ProglangType.DOUBLE)
+    } else if (rep1_is_float && rep2_is_float) {
+      if (Daikon.dkconfig_enable_floats) {
+        new_invs = TwoFloatFactory.instantiate(this, excludeEquality);
+      }
+    } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-      new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
-    } else if (Daikon.dkconfig_enable_floats
-               && (rep1 == ProglangType.DOUBLE_ARRAY)
+      if (Daikon.dkconfig_enable_floats) {
+        new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
+      }
+    } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE)) {
-    new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
-    } else if (Daikon.dkconfig_enable_floats
-               && (rep1 == ProglangType.DOUBLE_ARRAY)
+      if (Daikon.dkconfig_enable_floats) {
+        new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
+      }
+    } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-    new_invs = TwoSequenceFactoryFloat.instantiate(this, excludeEquality);
+      if (Daikon.dkconfig_enable_floats) {
+        new_invs = TwoSequenceFactoryFloat.instantiate(this, excludeEquality);
+      }
     } else {
       // Do nothing; do not even complain
     }

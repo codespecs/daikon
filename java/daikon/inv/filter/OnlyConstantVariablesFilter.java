@@ -18,7 +18,7 @@ class OnlyConstantVariablesFilter extends InvariantFilter {
     /* [INCR]
     if (invariant instanceof Implication) {
       Implication impl = (Implication) invariant;
-      return impl.consequent.hasOnlyConstantVariables() || impl.predicate.hasOnlyConstantVariables();
+      return impl.consequent().hasOnlyConstantVariables() || impl.predicate().hasOnlyConstantVariables();
     }
 
     return invariant.hasOnlyConstantVariables();
