@@ -42,11 +42,8 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
     num_elts = 0;
 
-    is_boolean = (var().rep_type == ProglangType.BOOLEAN);
-    is_hashcode = (var().rep_type == ProglangType.HASHCODE);
-    // Temporary; for backward compatibility
-    is_boolean = is_boolean || (var().type == ProglangType.BOOLEAN);
-    is_hashcode = is_hashcode || var().type.isObject() || var().type.isArray();
+    is_boolean = (var().file_rep_type == ProglangType.BOOLEAN);
+    is_hashcode = (var().file_rep_type == ProglangType.HASHCODE);
 
   }
 

@@ -242,21 +242,22 @@ public final class FileIO {
       return null;
     String varname = line;
     String proglang_type_string = file.readLine();
-    String rep_type_string = file.readLine();
+    String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ((varname == null) || (proglang_type_string == null) || (rep_type_string == null) || (comparability_string == null))
+    if ((varname == null) || (proglang_type_string == null) || (file_rep_type_string == null) || (comparability_string == null))
       throw new Error("End of file " + filename + " while reading variable " + varname + " in declaration of program point " + ppt_name);
-    int equals_index = rep_type_string.indexOf(" = ");
+    int equals_index = file_rep_type_string.indexOf(" = ");
     String static_constant_value_string = null;
     Object static_constant_value = null;
     boolean is_static_constant = false;
     if (equals_index != -1) {
       is_static_constant = true;
-      static_constant_value_string = rep_type_string.substring(equals_index+3);
-      rep_type_string = rep_type_string.substring(0, equals_index);
+      static_constant_value_string = file_rep_type_string.substring(equals_index+3);
+      file_rep_type_string = file_rep_type_string.substring(0, equals_index);
     }
     ProglangType prog_type = ProglangType.parse(proglang_type_string);
-    ProglangType rep_type = ProglangType.rep_parse(rep_type_string);
+    ProglangType file_rep_type = ProglangType.rep_parse(file_rep_type_string);
+    ProglangType rep_type = file_rep_type.fileTypeToRepType();
     if (static_constant_value_string != null) {
       static_constant_value = rep_type.parse_value(static_constant_value_string);
       // Why can't the value be null?
@@ -266,11 +267,11 @@ public final class FileIO {
       = VarComparability.parse(varcomp_format, comparability_string, prog_type);
     // Not a call to assert.assert in order to avoid doing the (expensive)
     // string concatenations.
-    if (! VarInfo.legalRepType(rep_type)) {
-      throw new Error("Unsupported representation type " + rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+    if (! VarInfo.legalFileRepType(file_rep_type)) {
+      throw new Error("Unsupported representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
     }
 
-    return new VarInfo(VarInfoName.parse(varname), prog_type, rep_type, comparability, is_static_constant, static_constant_value);
+    return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value);
   }
 
   static final class Invocation {

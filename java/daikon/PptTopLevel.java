@@ -2214,7 +2214,7 @@ public class PptTopLevel extends Ppt {
 		VarInfo svi = saved.var_infos[x];
 		rewritten.var_infos[x] =
 		  new VarInfo(svi.name.replaceAll(VarInfoName.parse("this"), vi.name),
-			      svi.type, svi.rep_type,
+			      svi.type, svi.file_rep_type,
 			      svi.comparability.makeAlias(svi.name));
 	      }
 	      inv.ppt = rewritten;
@@ -2256,6 +2256,15 @@ public class PptTopLevel extends Ppt {
 	}
       }
       bg.append(")");
+
+      // // Debugging
+      // System.out.println("Background:");
+      // for (int i=0; i < present.length; i++) {
+      //   if (present[i] && (i != checking)) {
+      //     System.out.println("    " + invs[i].format());
+      //   }
+      // }
+
       try {
 	// If the background is necessarily false, we are in big trouble
 	CmdCheck bad = new CmdCheck("(NOT " + bg + ")");

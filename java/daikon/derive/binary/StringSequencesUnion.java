@@ -31,18 +31,18 @@ public final class StringSequencesUnion  extends BinaryDerivation {
     if (val2 == null)
       return ValueAndModified.MISSING;
     String [] val2_array = (String []) val2;
-    
+
     String [] tmp = new String [val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       String  v = val1_array[i];
-      if ((size==0) || 
+      if ((size==0) ||
 	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
 	tmp[size++] = v;
     }
     for (int i=0; i<val2_array.length; i++) {
       String  v = val2_array[i];
-      if ((size==0) || 
+      if ((size==0) ||
 	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
 	tmp[size++] = v;
     }
@@ -60,9 +60,9 @@ public final class StringSequencesUnion  extends BinaryDerivation {
   protected VarInfo makeVarInfo() {
     VarInfoName name = base1.name.applyUnion(base2.name);
     ProglangType type = base1.type;
-    ProglangType rep_type = base1.rep_type;
+    ProglangType file_rep_type = base1.file_rep_type;
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(name, type, rep_type, compar);
+    return new VarInfo(name, type, file_rep_type, compar);
   }
 }
 

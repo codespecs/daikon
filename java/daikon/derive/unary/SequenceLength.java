@@ -67,9 +67,9 @@ public final class SequenceLength extends UnaryDerivation {
       throw new UnsupportedOperationException("Unsupported shift: " + shift);
     }
     ProglangType ptype = ProglangType.INT;
-    ProglangType rtype = ProglangType.INT;
+    ProglangType frtype = ProglangType.INT;
     VarComparability comp = base.comparability.indexType(0);
-    return new VarInfo(name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, frtype, comp);
   }
 
 }

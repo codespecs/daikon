@@ -15,7 +15,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // Name and type
   public VarInfoName name;      // interned
   public ProglangType type;	// as declared in the program
-  public ProglangType rep_type;	// as written to the data trace file
+  public ProglangType file_rep_type;	// as written to the data trace file;
+                                	//   this is an interface detail.
+  public ProglangType rep_type;	// as internally stored;
+                                //   this in an implementation detail.
   public VarComparability comparability;
 
   // Obtaining values
@@ -66,8 +69,6 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
-            || (rep_type == ProglangType.BOOLEAN)
-            || (rep_type == ProglangType.HASHCODE)
             || (rep_type == ProglangType.DOUBLE)
             || (rep_type == ProglangType.STRING)
             || (rep_type == ProglangType.INT_ARRAY)
@@ -75,22 +76,32 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
             || (rep_type == ProglangType.STRING_ARRAY));
   }
 
-  public VarInfo(VarInfoName name, ProglangType type, ProglangType rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
-    // Watch out:  some Lisp and C .decls files have other (unsupported) types.
-    Assert.assert(rep_type != null);
-    Assert.assert(legalRepType(rep_type),
-                  "Unsupported representation type " + rep_type.format() + " for variable " + name);
+  static boolean legalFileRepType(ProglangType file_rep_type) {
+    return (legalRepType(file_rep_type)
+            || (file_rep_type == ProglangType.HASHCODE)
+            || (file_rep_type == ProglangType.HASHCODE_ARRAY)
+            || ((file_rep_type.dimensions() <= 1)
+                && file_rep_type.baseIsPrimitive())
+            );
+  }
+
+  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
+    Assert.assert(file_rep_type != null);
+    Assert.assert(legalFileRepType(file_rep_type),
+                  "Unsupported representation type " + file_rep_type.format()
+                  + " for variable " + name);
 
     // Ensure that the type and rep type are somewhat consistent
-    Assert.assert(type.pseudoDimensions() >= rep_type.dimensions(),
-		  "Types dimensions incompatibility: " + type + " vs. " + rep_type);
+    Assert.assert(type.pseudoDimensions() >= file_rep_type.dimensions(),
+		  "Types dimensions incompatibility: " + type + " vs. " + file_rep_type);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.
     this.name = name.intern();
     this.type = type;
-    this.rep_type = rep_type;
+    this.file_rep_type = file_rep_type;
+    this.rep_type = file_rep_type.fileTypeToRepType();
     this.comparability = comparability;
     this.is_static_constant = is_static_constant;
     this.static_constant_value = static_constant_value;
@@ -104,19 +115,19 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     exact_nonunary_invariants = new Vector(2);
   }
 
-  public VarInfo(VarInfoName name, ProglangType type, ProglangType rep_type, VarComparability comparability) {
-    this(name, type, rep_type, comparability, false, null);
+  public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type, VarComparability comparability) {
+    this(name, type, file_rep_type, comparability, false, null);
   }
 
   public VarInfo(VarInfo vi) {
-    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
+    this(vi.name, vi.type, vi.file_rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
     postState = vi.postState;
   }
 
   // Create the prestate, or "orig()", version of the variable.
   public static VarInfo origVarInfo(VarInfo vi) {
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
-                                 vi.type, vi.rep_type,
+                                 vi.type, vi.file_rep_type,
                                  vi.comparability.makeAlias(vi.name));
     result.postState = vi;
     return result;
@@ -209,6 +220,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   String repr() {
     return "<VarInfo " + name + ": "
       + "type=" + type
+      + ",file_rep_type=" + file_rep_type
       + ",rep_type=" + rep_type
       + ",comparability=" + comparability
       + ",value_index=" + value_index
@@ -596,10 +608,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     if (this.name != other.name)
       return false;
     Assert.assert(type.equals(other.type), "type matches");
-    Assert.assert(rep_type.equals(other.rep_type),
-		  "rep_type matches (" +
-		  name + ":" + rep_type + "," +
-		  other.name + ":" + other.rep_type +
+    Assert.assert(file_rep_type.equals(other.file_rep_type),
+		  "file_rep_type matches (" +
+		  name + ":" + file_rep_type + "," +
+		  other.name + ":" + other.file_rep_type +
 		  ")");
     // One of the VarInfos might be at a program point with more variables,
     // so the list of variables to which it is comparable could be larger.
@@ -705,7 +717,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // Should perhaps check Daikon.check_program_types and behave differently
   // depending on that.
   public boolean isIndex() {
-    return ((rep_type == ProglangType.INT)
+    return ((file_rep_type == ProglangType.INT)
             && type.isIndex());
   }
 

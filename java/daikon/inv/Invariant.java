@@ -299,6 +299,12 @@ public abstract class Invariant implements java.io.Serializable {
         }
       }
 
+      // Sort OneOf invariants earlier than others
+      if ((inv1 instanceof OneOf) && (! (inv2 instanceof OneOf)))
+        return -1;
+      if ((! (inv1 instanceof OneOf)) && (inv2 instanceof OneOf))
+        return 1;
+
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
       //                    + " for " + inv1.format() + ", " + inv2.format());

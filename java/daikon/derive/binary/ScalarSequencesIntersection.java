@@ -31,7 +31,7 @@ public final class ScalarSequencesIntersection  extends BinaryDerivation {
     if (val2 == null)
       return ValueAndModified.MISSING;
     long [] val2_array = (long []) val2;
-    
+
     long [] tmp = new long [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
@@ -54,9 +54,9 @@ public final class ScalarSequencesIntersection  extends BinaryDerivation {
   protected VarInfo makeVarInfo() {
     VarInfoName name = base1.name.applyIntersection(base2.name);
     ProglangType type = base1.type;
-    ProglangType rep_type = base1.rep_type;
+    ProglangType file_rep_type = base1.file_rep_type;
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(name, type, rep_type, compar);
+    return new VarInfo(name, type, file_rep_type, compar);
   }
 
 }

@@ -44,14 +44,18 @@ public final class ProglangType implements java.io.Serializable {
   public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
   public final static ProglangType STRING_ARRAY = ProglangType.intern("String", 1);
 
-  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
   public final static ProglangType INTEGER = ProglangType.intern("Integer", 0);
   public final static ProglangType LONG_OBJECT = ProglangType.intern("Long", 0);
 
   public final static ProglangType VECTOR = ProglangType.intern("Vector", 0);
   public final static ProglangType OBJECT = ProglangType.intern("Object", 0);
 
+  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
   public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
+  public final static ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
+  public final static ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
+
+
 
   private String base;		// interned name of base type
   public String base() { return base; }
@@ -114,6 +118,15 @@ public final class ProglangType implements java.io.Serializable {
     } else {
       return candidate;
     }
+  }
+
+  /**
+   * Convert a file representation type to an internal representation type.
+   **/
+  public ProglangType fileTypeToRepType() {
+    if ((base == BASE_HASHCODE) || (base == BASE_BOOLEAN))
+      return intern("int", dimensions);
+    return this;
   }
 
   /**
@@ -224,7 +237,8 @@ public final class ProglangType implements java.io.Serializable {
   // Nonprimitive types
   final static String BASE_STRING = "String";
   final static String BASE_INTEGER = "Integer";
-  // "hashcode", "address", and "pointer" are identical; "address" is preferred
+  // "hashcode", "address", and "pointer" are identical;
+  // "hashcode" is preferred.
   final static String BASE_HASHCODE = "hashcode";
   // final static String BASE_ADDRESS = "address";
   // final static String BASE_POINTER = "pointer";
@@ -259,12 +273,6 @@ public final class ProglangType implements java.io.Serializable {
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
-      } else if (base == BASE_HASHCODE) {
-	return Intern.intern(Long.valueOf(value, 16));
-      // } else if (base == BASE_HASHCODE) {
-      //   if (value.equals("null"))
-      //     return LongZero;
-      //   return Intern.internedLong(value);
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer
         // (as I believe the C front end does).
@@ -282,23 +290,16 @@ public final class ProglangType implements java.io.Serializable {
           throw new Error("Bad character: " + value);
         return Intern.internedLong(Character.getNumericValue(c));
       } else if (base == BASE_INT) {
-        {
-          // Temporary hack, to be removed when instrumenters use
-          // "boolean" and "hashcode" rep_types properly.
-          if (value.equals("null"))
-            return LongZero;
-          if (value.equals("false") || value.equals("0"))
-            return LongZero;
-          if (value.equals("true") || value.equals("1"))
-            return LongOne;
-        }
-	return Intern.internedLong(value);
-      } else if (base == BASE_BOOLEAN) {
+        // File rep type might be int, boolean, or hashcode.
+        // If we had the actual type, we could do error-checking here.
+        // (Example:  no hashcode should be negative, nor any boolean > 1.)
         if (value.equals("false") || value.equals("0"))
           return LongZero;
         if (value.equals("true") || value.equals("1"))
           return LongOne;
-        throw new Error("Bad value for boolean: " + value);
+        if (value.equals("null"))
+          return LongZero;
+	return Intern.internedLong(value);
       } else if (base == BASE_DOUBLE) {
         if (value.equals("NaN"))
           return DoubleNaN;

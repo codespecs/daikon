@@ -68,9 +68,9 @@ public final class SequenceStringSubscript  extends BinaryDerivation {
 
     VarInfoName name = seqvar.name.applySubscript(index);
     ProglangType type = seqvar.type.elementType();
-    ProglangType rep_type = seqvar.rep_type.elementType();
+    ProglangType file_rep_type = seqvar.file_rep_type.elementType();
     VarComparability compar = base1.comparability.elementType();
-    return new VarInfo(name, type, rep_type, compar);
+    return new VarInfo(name, type, file_rep_type, compar);
   }
 
 }

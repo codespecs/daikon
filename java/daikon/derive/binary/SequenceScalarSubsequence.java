@@ -111,8 +111,8 @@ public final class SequenceScalarSubsequence  extends BinaryDerivation {
 	throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
       }
     }
-	
-    return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);
+
+    return new VarInfo(name, seqvar.type, seqvar.file_rep_type, seqvar.comparability);
   }
 
 }

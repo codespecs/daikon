@@ -27,9 +27,9 @@ public final class SequenceMax extends UnaryDerivation {
   protected VarInfo makeVarInfo() {
     VarInfoName name = base.name.applyFunction("max");
     ProglangType ptype = base.type.elementType();
-    ProglangType rtype = base.rep_type.elementType();
+    ProglangType frtype = base.file_rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, frtype, comp);
   }
 
 }

@@ -35,10 +35,7 @@ public class NonZero extends SingleScalar {
     }
 
     NonZero result = new NonZero(ppt);
-    if ((ppt.var_infos[0].rep_type == ProglangType.HASHCODE)
-        // temporary, for backward compatibility
-        || ((! ppt.var_infos[0].type.isIntegral())
-            && (! (ppt.var_infos[0].type == ProglangType.BOOLEAN)))) {
+    if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
       result.pointer_type = true;
       result.override_range = 3;
     }

@@ -86,9 +86,9 @@ public final class SequenceInitial extends UnaryDerivation {
 //      String esc_name = BinaryDerivation.addSubscript_esc(base.esc_name, esc_index);
 
     ProglangType ptype = base.type.elementType();
-    ProglangType rtype = base.rep_type.elementType();
+    ProglangType frtype = base.file_rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, ptype, rtype, comp);
+    return new VarInfo(name, ptype, frtype, comp);
   }
 
 }
