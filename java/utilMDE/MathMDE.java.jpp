@@ -95,7 +95,7 @@ public final class MathMDE {
    * Returns of value of the first argument raised to the
    * power of the second argument.
    * @see{Math.pow(double, double)}
-   */
+   **/
   public static int pow(int base, int expt) throws ArithmeticException {
     return pow_fast(base, expt);
   }

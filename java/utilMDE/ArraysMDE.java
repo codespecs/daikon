@@ -19,7 +19,7 @@ public final class ArraysMDE {
   /**
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static int min(int[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(int[])");
@@ -32,7 +32,7 @@ public final class ArraysMDE {
   /**
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static Integer min(Integer[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
@@ -50,7 +50,7 @@ public final class ArraysMDE {
   /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static int max(int[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(int[])");
@@ -63,7 +63,7 @@ public final class ArraysMDE {
   /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static Integer max(Integer[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
@@ -81,7 +81,7 @@ public final class ArraysMDE {
   /**
    * Return a two-element array containing the smallest and largest values in the array.
    * Return null if the array has length 0.
-   */
+   **/
   public static int[] min_max(int[] a) {
     if (a.length == 0)
       // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(int[])");
@@ -97,7 +97,7 @@ public final class ArraysMDE {
 
   /**
    * Return the difference between the smallest and largest array elements.
-   */
+   **/
   public static int element_range(int[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
@@ -110,7 +110,7 @@ public final class ArraysMDE {
   /**
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static long min(long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(long[])");
@@ -123,7 +123,7 @@ public final class ArraysMDE {
   /**
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static Long min(Long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
@@ -141,7 +141,7 @@ public final class ArraysMDE {
   /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static long max(long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(long[])");
@@ -154,7 +154,7 @@ public final class ArraysMDE {
   /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
-   */
+   **/
   public static Long max(Long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
@@ -172,7 +172,7 @@ public final class ArraysMDE {
   /**
    * Return a two-element array containing the smallest and largest values in the array.
    * Return null if the array has length 0.
-   */
+   **/
   public static long[] min_max(long[] a) {
     if (a.length == 0)
       // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
@@ -188,7 +188,7 @@ public final class ArraysMDE {
 
   /**
    * Return the difference between the smallest and largest array elements.
-   */
+   **/
   public static long element_range(long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(long[])");
@@ -207,7 +207,7 @@ public final class ArraysMDE {
    * @return the first index whose element is equal to the specified element,
    *    or -1 if no such element is found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(Object[] a, Object elt) {
     for (int i=0; i<a.length; i++)
       if (elt.equals(a[i]))
@@ -222,7 +222,7 @@ public final class ArraysMDE {
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(Object[] a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt.equals(a[i]))
@@ -236,7 +236,7 @@ public final class ArraysMDE {
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOfEq(Object[] a, Object elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
@@ -251,7 +251,7 @@ public final class ArraysMDE {
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOfEq(Object[] a, Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
@@ -264,7 +264,7 @@ public final class ArraysMDE {
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(int[] a, int elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
@@ -277,7 +277,7 @@ public final class ArraysMDE {
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(long[] a, long elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
@@ -291,7 +291,7 @@ public final class ArraysMDE {
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(int[] a, int elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
@@ -305,7 +305,7 @@ public final class ArraysMDE {
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(long[] a, long elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
@@ -318,7 +318,7 @@ public final class ArraysMDE {
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(boolean[] a, boolean elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
@@ -332,7 +332,7 @@ public final class ArraysMDE {
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
-   */
+   **/
   public static int indexOf(boolean[] a, boolean elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
@@ -358,7 +358,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
-   */
+   **/
   public static int indexOf(Object[] a, Object[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
@@ -374,7 +374,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
-   */
+   **/
   public static int indexOfEq(Object[] a, Object[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
@@ -389,7 +389,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
-   */
+   **/
   public static int indexOf(int[] a, int[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
@@ -404,7 +404,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
-   */
+   **/
   public static int indexOf(long[] a, long[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
@@ -419,7 +419,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
-   */
+   **/
   public static int indexOf(boolean[] a, boolean[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
@@ -520,7 +520,7 @@ public final class ArraysMDE {
    *    testing for equality using the equals method.
    * @return the first index whose element is equal to the specified element,
    *    or -1 if no such element is found in the array.
-   */
+   **/
   public static boolean isSubarray(Object[] a, Object[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
@@ -538,7 +538,7 @@ public final class ArraysMDE {
    *    testing for equality using == (not the equals method).
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
-   */
+   **/
   public static boolean isSubarrayEq(Object[] a, Object[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
@@ -555,7 +555,7 @@ public final class ArraysMDE {
    *    starting at the specified index of the first.
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
-   */
+   **/
   public static boolean isSubarray(int[] a, int[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
@@ -572,7 +572,7 @@ public final class ArraysMDE {
    *    starting at the specified index of the first.
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
-   */
+   **/
   public static boolean isSubarray(long[] a, long[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
@@ -589,7 +589,7 @@ public final class ArraysMDE {
    *    starting at the specified index of the first.
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
-   */
+   **/
   public static boolean isSubarray(boolean[] a, boolean[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
@@ -614,7 +614,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toString(Object[] a) {
     return toString(a, false);
   }
@@ -623,7 +623,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toStringQuoted(Object[] a) {
     return toString(a, true);
   }
@@ -632,7 +632,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toString(Object[] a, boolean quoted) {
     if (a == null) {
       return "null";
@@ -660,7 +660,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toString(int[] a) {
     if (a == null) {
       return "null";
@@ -682,7 +682,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toString(long[] a) {
     if (a == null) {
       return "null";
@@ -704,7 +704,7 @@ public final class ArraysMDE {
    * Return a string representation of the array.
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String toString(boolean[] a) {
     if (a == null) {
       return "null";
@@ -764,7 +764,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
-   */
+   **/
   public static final class IntArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -785,7 +785,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
-   */
+   **/
   public static final class LongArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -813,7 +813,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
-   */
+   **/
   public static final class ComparableArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -836,7 +836,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
-   */
+   **/
   public static final class ObjectArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -860,7 +860,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
-   */
+   **/
   public static final class IntArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -884,7 +884,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
-   */
+   **/
   public static final class LongArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -915,7 +915,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
-   */
+   **/
   public static final class ComparableArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -941,7 +941,7 @@ public final class ArraysMDE {
    * Note: this comparator imposes orderings that are inconsistent with equals.
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
-   */
+   **/
   public static final class ObjectArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)

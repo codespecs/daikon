@@ -29,7 +29,7 @@
   /**
    * Return the gcd (greatest common divisor) of the differences
    * between the elements of INT array a.
-   */
+   **/
   public static INT gcd_differences(INT[] a) {
     if (a.length < 2) {
       return 0;

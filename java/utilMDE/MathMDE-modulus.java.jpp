@@ -13,7 +13,7 @@
    * Return an array of two integers (r,m) such that each number in NUMS is equal to r (mod m).
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
-   */
+   **/
   public static INT[] modulus(INT[] nums) {
     if (nums.length < 3)
     return null;
@@ -34,7 +34,7 @@
    * This can be more efficient than modulus(INT[]) if the INT[] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
-   */
+   **/
   public static INT[] modulus_INT(Iterator itor) {
     if (!itor.hasNext())
       return null;
@@ -67,7 +67,7 @@
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static INT[] modulus_strict(INT[] nums) {
     if (nums.length < 3)
     return null;
@@ -90,7 +90,7 @@
    *
    * This "_strict" version requires its input to be sorted, and no element
    * may be missing.
-   */
+   **/
   public static INT[] modulus_strict_INT(Iterator itor) {
     if (!itor.hasNext())
       return null;

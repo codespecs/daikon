@@ -25,7 +25,7 @@ public final class UtilMDE {
   /**
    * Returns an appropriate BufferedReader, accounting for the possibility
    * that the specified file is compressed.
-   */
+   **/
   public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
@@ -40,7 +40,7 @@ public final class UtilMDE {
   /**
    * Returns an appropriate LineNumberReader, accounting for the possibility
    * that the specified file is compressed.
-   */
+   **/
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
@@ -70,7 +70,7 @@ public final class UtilMDE {
   /**
    * Like @link{Class.forName(String)}, but works when the string
    * represents a primitive type, too.
-   */
+   **/
   public static Class classForName(String className) throws ClassNotFoundException {
     Object result = primitiveClasses.get(className);
     if (result != null)
@@ -135,7 +135,7 @@ public final class UtilMDE {
    * Increment the Integer which is indexed by key in the HashMap.
    * If the key isn't in the HashMap, it is added.
    * Throws an error if the key is in the HashMap but maps to a non-Integer.
-   */
+   **/
   public Object incrementHashMap(HashMap hm, Object key, int count) {
     Object old = hm.get(key);
     int new_total;
@@ -176,7 +176,7 @@ public final class UtilMDE {
   /**
    * An Iterator that returns first the elements returned by its first
    * argument, then the elements returned by its second argument.
-   */
+   **/
   public static final class MergedIterator2 implements Iterator {
     Iterator itor1, itor2;
     public MergedIterator2(Iterator itor1_, Iterator itor2_) {
@@ -202,7 +202,7 @@ public final class UtilMDE {
   /**
    * An Iterator that returns the elements in each of its argument
    * Iterators, in turn.  The argument is an Iterator of Iterators.
-   */
+   **/
   public static final class MergedIterator implements Iterator {
     Iterator itorOfItors;
     public MergedIterator(Iterator itorOfItors) { this.itorOfItors = itorOfItors; }
@@ -334,7 +334,7 @@ public final class UtilMDE {
   /**
    * Determines whether a property has value "true", "yes", or "1".
    * @see Properties#getProperty
-   */
+   **/
   public static boolean propertyIsTrue(Properties p, String key) {
     String pvalue = p.getProperty(key);
     if (pvalue == null) {
@@ -348,7 +348,7 @@ public final class UtilMDE {
    * Set the property to its previous value concatenated to the given value.
    * @see Properties#getProperty
    * @see Properties#setProperty
-   */
+   **/
   public static String appendProperty(Properties p, String key, String value) {
     return (String)p.setProperty(key, p.getProperty(key, "") + value);
   }
@@ -357,7 +357,7 @@ public final class UtilMDE {
    * Set the property only if it was not previously set.
    * @see Properties#getProperty
    * @see Properties#setProperty
-   */
+   **/
   public static String setDefault(Properties p, String key, String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
@@ -397,7 +397,7 @@ public final class UtilMDE {
   /**
    * Return a new string which is the text of target with all instances of
    * oldStr replaced by newStr.
-   */
+   **/
   public static String replaceString(String target, String oldStr, String newStr) {
     StringBuffer result = new StringBuffer();
     int lastend = 0;
@@ -417,7 +417,7 @@ public final class UtilMDE {
   /**
    * Return an array of Strings representing the characters between
    * successive instances of the delimiter character.
-   */
+   **/
   public static String[] split(String s, char delim) {
     Vector result = new Vector();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
@@ -434,7 +434,7 @@ public final class UtilMDE {
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
    * @see{ArraysMDE.toString(int[])}
-   */
+   **/
   public static String join(Object[] a, String delim) {
     if (a.length == 0) return "";
     if (a.length == 1) return a[0].toString();
@@ -448,7 +448,7 @@ public final class UtilMDE {
    * Concatenate the string representations of the objects, placing the
    * delimiter between them.
    * @see java.util.Vector#toString
-   */
+   **/
   public static String join(Vector v, String delim) {
     if (v.size() == 0) return "";
     if (v.size() == 1) return v.elementAt(0).toString();
@@ -461,7 +461,7 @@ public final class UtilMDE {
   // Inspired by the function of the same name in Ajax (but independent code).
   /**
    * Quote \, ", \n, and \r characters in the target; return a new string.
-   */
+   **/
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape character was seen right before this position.
@@ -520,7 +520,7 @@ public final class UtilMDE {
   /**
    * Replace "\\", "\"", "\n", and "\r" sequences by their one-character
    * equivalents.  All other backslashes are removed.
-   */
+   **/
   public static String unquote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape character was seen just before this position.

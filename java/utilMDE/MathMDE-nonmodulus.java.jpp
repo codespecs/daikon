@@ -6,7 +6,7 @@
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   public static INT[] missing_numbers(INT[] nums) {
     Arrays.sort(nums);
     INT min = nums[0];
@@ -41,7 +41,7 @@
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
-   */
+   **/
   static final class MissingNumbersIteratorINT implements Iterator {
     INT[] nums;
     Iterator nums_itor;
@@ -110,7 +110,7 @@
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static INT[] nonmodulus_strict(INT[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
@@ -128,7 +128,7 @@
   /**
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
-   */
+   **/
   public static INT[] nonmodulus_strict_INT(Iterator nums) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.
@@ -159,7 +159,7 @@
    * but for every number in NUMS, at least one is equal to every non-r remainder.
    * The modulus is chosen as small as possible, but no greater than half the
    * range of the input numbers (else null is returned).
-   */
+   **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
   public static INT[] nonmodulus_nonstrict(INT[] nums) {

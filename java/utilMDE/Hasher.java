@@ -24,7 +24,7 @@ public interface Hasher {
   /**
    * Equality testing over Hashers.  Has nothing to do with testing
    * the objects being hashed for equality.
-   */
+   **/
   boolean equals(Object other_hasher);
 }
 

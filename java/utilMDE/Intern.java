@@ -15,7 +15,7 @@ public final class Intern {
   /**
    * Replace each element of the array by its interned version.
    * @see String#intern
-   */
+   **/
   public static void internStrings(String[] a) {
     for (int i=0; i<a.length; i++)
       a[i] = a[i].intern();
@@ -64,7 +64,7 @@ public final class Intern {
    * Hasher object which hashes and compares Integers.
    * This is the obvious implementation that uses intValue() for the hashCode.
    * @see Hasher
-   */
+   **/
   private static final class IntegerHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return a1.equals(a2);
@@ -79,7 +79,7 @@ public final class Intern {
    * Hasher object which hashes and compares Longs.
    * This is the obvious implementation that uses intValue() for the hashCode.
    * @see Hasher
-   */
+   **/
   private static final class LongHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return a1.equals(a2);
@@ -94,7 +94,7 @@ public final class Intern {
    * Hasher object which hashes and compares int[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
-   */
+   **/
   private static final class IntArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((int[])a1, (int[])a2);
@@ -113,7 +113,7 @@ public final class Intern {
    * Hasher object which hashes and compares long[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
-   */
+   **/
   private static final class LongArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((long[])a1, (long[])a2);
@@ -135,7 +135,7 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares Doubles.
    * @see Hasher
-   */
+   **/
   private static final class DoubleHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return a1.equals(a2);
@@ -152,7 +152,7 @@ public final class Intern {
    * Hasher object which hashes and compares double[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
-   */
+   **/
   private static final class DoubleArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((double[])a1, (double[])a2);
@@ -173,7 +173,7 @@ public final class Intern {
    * Hasher object which hashes and compares Object[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
-   */
+   **/
   private static final class ObjectArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((Object[])a1, (Object[])a2);
@@ -229,7 +229,7 @@ public final class Intern {
   /**
    * Intern (canonicalize) an Integer.
    * Returns a canonical representation for the Integer.
-   */
+   **/
   public static Integer intern(Integer a) {
     Object lookup = internedIntegers.get(a);
     if (lookup != null) {
@@ -257,7 +257,7 @@ public final class Intern {
   /**
    * Intern (canonicalize) a Long.
    * Returns a canonical representation for the Long.
-   */
+   **/
   public static Long intern(Long a) {
     Object lookup = internedLongs.get(a);
     if (lookup != null) {
@@ -291,7 +291,7 @@ public final class Intern {
    * Intern (canonicalize) an int[].
    * Returns a canonical representation for the int[] array.
    * Arrays are compared according to their elements.
-   */
+   **/
   public static int[] intern(int[] a) {
     Object lookup = internedIntArrays.get(a);
     if (lookup != null) {
@@ -307,7 +307,7 @@ public final class Intern {
    * Intern (canonicalize) an long[].
    * Returns a canonical representation for the long[] array.
    * Arrays are compared according to their elements.
-   */
+   **/
   public static long[] intern(long[] a) {
     Object lookup = internedLongArrays.get(a);
     if (lookup != null) {
@@ -322,7 +322,7 @@ public final class Intern {
   /**
    * Intern (canonicalize) a Double.
    * Returns a canonical representation for the Double.
-   */
+   **/
   public static Double intern(Double a) {
     Object lookup = internedDoubles.get(a);
     if (lookup != null) {
@@ -356,7 +356,7 @@ public final class Intern {
    * Intern (canonicalize) an double[].
    * Returns a canonical representation for the double[] array.
    * Arrays are compared according to their elements.
-   */
+   **/
   public static double[] intern(double[] a) {
     Object lookup = internedDoubleArrays.get(a);
     if (lookup != null) {
@@ -374,7 +374,7 @@ public final class Intern {
    * Arrays are compared according to their elements.
    * The elements should themselves already be interned;
    * they are compared using their equals() methods.
-   */
+   **/
   public static Object[] intern(Object[] a) {
     Object lookup = internedObjectArrays.get(a);
     if (lookup != null) {
