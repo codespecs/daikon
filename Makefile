@@ -10,7 +10,7 @@ PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := daikon.py.doc Makefile daikon.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
-SCRIPT_FILES := scripts/modbit-munge.pl
+SCRIPT_FILES := scripts/modbit-munge.pl scripts/java-cpp
 
 # EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
 EDG_DIR := /homes/gws/mernst/research/invariants/c-front-end

@@ -75,6 +75,9 @@ Installing Daikon:
 <pre>
       setenv CLASSPATH <em>parent</em>/daikon/java:${CLASSPATH}
 </pre>
+      The distribution includes compiled <tt>.class</tt> files, but in
+      order to recompile them, simply type <tt>make</tt> in any directory
+      under <tt><em>parent</em>/daikon/java/daikon/</tt>.
   <li>Add the <tt><em>parent</em>/daikon/bin/</tt> directory to your path.  (Your
       path is a list of directories in which the shell searches for
       commands; this permits you to type just the program name rather than
@@ -560,8 +563,9 @@ report them again, to encourage me to release the fix faster, if you like.)
       <li>Invalid modbits:  The front end sometimes produces invalid
           modbits.  This can be solved by postprocessing the data trace
           files using the <tt>modbit-munge.pl</tt> program.
-      <li>Floating-point values are often ignored; I haven't gotten
-          around to writing code to test for those invariants.
+      <li>Floating-point values are often ignored; the infrastructure is
+          there, but I haven't gotten around to writing code to test for
+          specific invariants.
     </ul>
   <li>C front end:  The C front end is not very robust, and is not being
       currently maintained.  See the <a href="#c-front-end">warning</a>
