@@ -289,7 +289,10 @@ public final class FileIO {
     // Not a call to assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
-      throw new Error("Unsupported representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+      throw new Error("Unsupported (file) representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
+    }
+    if (! VarInfo.legalRepType(rep_type)) {
+      throw new Error("Unsupported (converted) representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
     }
 
     return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value);

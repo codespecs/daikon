@@ -124,7 +124,8 @@ public final class ProglangType implements java.io.Serializable {
    * Convert a file representation type to an internal representation type.
    **/
   public ProglangType fileTypeToRepType() {
-    if ((base == BASE_HASHCODE) || (base == BASE_BOOLEAN))
+    if ((base == BASE_HASHCODE) || (base == BASE_BOOLEAN)
+        || (base == BASE_LONG) || (base == BASE_SHORT))
       return intern("int", dimensions);
     return this;
   }
@@ -358,7 +359,9 @@ public final class ProglangType implements java.io.Serializable {
 
       // This big if ... else should deal with all the primitive types --
       // or at least all the ones that can be rep_types.
-      if (base == BASE_INT || base == BASE_LONG || base == BASE_SHORT) {
+      // ("long" and "short" cannot be rep_types; for simplicity, variables
+      // declared as long or short have the "int" rep_type.
+      if (base == BASE_INT) {
         long[] result = new long[len];
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
@@ -387,7 +390,7 @@ public final class ProglangType implements java.io.Serializable {
         Intern.internStrings(value_strings);
         // ... then, intern the entire array, and return it
         return Intern.intern(value_strings);
-      } else {	  
+      } else {
         throw new Error("Can't yet deal with array of base type " + base);
       }
 
