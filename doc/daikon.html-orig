@@ -186,7 +186,7 @@ its original task, it also writes variable values to a data trace file.
          your executable).
    </ul>
  <li>Create an instrumented executable by building your program in the
-     usual way (perhaps by running <tt>make</tt>).
+     usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
 </ol>
 
 

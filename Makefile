@@ -59,6 +59,11 @@ TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 
 dist: $(DIST_DIR)/daikon.tar.gz
 
+# Is this the right way to do this?
+dist-force:
+	rm daikon.tar.gz
+	make dist
+
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	# This isn't quite right:  I want the copy of daikon.html in daikon.tar.gz.
 	rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
