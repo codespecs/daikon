@@ -2,7 +2,7 @@
 ;;; Emacs minor mode for the Daikon Tree GUI for Java.
 ;;;
 ;;; Requires JDE (http://jde.sunsite.dk) and of course
-;;; Daikon (http://geyer.lcs.mit.edu/daikon).
+;;; Daikon (http://pag.lcs.mit.edu/daikon).
 ;;;
 ;;; Contact gjay@ucsd.edu for bug reports, questions, etc.
 ;;;
@@ -78,7 +78,7 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
   (daikon-context-gui -1)
 )
 
-  
+
 
 ;;; Borrowed in part from jde-which-method-update.
 (defun daikon-context-gui-update ()
@@ -105,9 +105,9 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 (defun daikon-context-gui-update-with-class (class)
   "Update the Daikon Context GUI using only class information."
   (when daikon-context-gui-started
-    
+
     (bsh-eval
-     (message (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\"" 
+     (message (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\""
 		      (jde-parse-get-package-name) "."
 		      class "\");")))))
 
@@ -118,7 +118,7 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 	  (method (cadr class-method-args))
 	  (args  (caddr class-method-args)))
       (bsh-eval (message
-		 (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\"" 
+		 (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\""
 			 (jde-parse-get-package-name) "."
 			 class
 			 "\", \""  method "\", \"" args "\");"))))))
