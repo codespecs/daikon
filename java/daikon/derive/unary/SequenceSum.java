@@ -36,4 +36,9 @@ public final class SequenceSum extends UnaryDerivation {
     return new VarInfo(name, ptype, frtype, comp);
   }
 
+
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceSum);
+  }
+
 }

@@ -79,4 +79,9 @@ public final class SequenceLength extends UnaryDerivation {
     return new VarInfo(name, ptype, frtype, comp);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceLength)
+      && (((SequenceLength) other).shift == this.shift);
+  }
+
 }

@@ -158,4 +158,8 @@ public final class SequencesJoin  extends BinaryDerivation {
 
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequencesJoin);
+  }
+
 }

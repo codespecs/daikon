@@ -36,4 +36,8 @@ public final class SequenceMin extends UnaryDerivation {
     return new VarInfo(name, ptype, frtype, comp);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceMin);
+  }
+
 }

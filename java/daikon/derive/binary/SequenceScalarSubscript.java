@@ -77,5 +77,10 @@ public final class SequenceScalarSubscript  extends BinaryDerivation {
     return new VarInfo(name, type, file_rep_type, compar);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceScalarSubscript )
+      && (((SequenceScalarSubscript ) other).index_shift == this.index_shift);
+  }
+
 }
 

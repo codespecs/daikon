@@ -36,4 +36,8 @@ public final class SequenceMax extends UnaryDerivation {
     return new VarInfo(name, ptype, frtype, comp);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceMax);
+  }
+
 }

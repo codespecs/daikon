@@ -119,5 +119,11 @@ public final class SequenceStringSubsequence  extends BinaryDerivation {
     return new VarInfo(name, seqvar.type, seqvar.file_rep_type, seqvar.comparability);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceStringSubsequence )
+      && (((SequenceStringSubsequence ) other).index_shift == this.index_shift)
+      && (((SequenceStringSubsequence ) other).from_start == this.from_start);
+  }
+
 }
 

@@ -140,6 +140,12 @@ public final class SEQUENCESCALARSUBSEQUENCE extends BinaryDerivation {
     return new VarInfo(name, seqvar.type, seqvar.file_rep_type, seqvar.comparability);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SEQUENCESCALARSUBSEQUENCE)
+      && (((SEQUENCESCALARSUBSEQUENCE) other).index_shift == this.index_shift)
+      && (((SEQUENCESCALARSUBSEQUENCE) other).from_start == this.from_start);
+  }
+
 }
 
 

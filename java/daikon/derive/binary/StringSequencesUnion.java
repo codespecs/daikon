@@ -68,5 +68,10 @@ public final class StringSequencesUnion  extends BinaryDerivation {
     VarComparability compar = base1.comparability.elementType();
     return new VarInfo(name, type, file_rep_type, compar);
   }
+
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof StringSequencesUnion );
+  }
+
 }
 

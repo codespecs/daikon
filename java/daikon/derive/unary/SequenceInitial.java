@@ -99,4 +99,9 @@ public final class SequenceInitial extends UnaryDerivation {
     return new VarInfo(name, ptype, frtype, comp);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceInitial)
+      && (((SequenceInitial) other).index == this.index);
+  }
+
 }

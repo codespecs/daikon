@@ -11,7 +11,6 @@ import utilMDE.*;
  **/
 public abstract class BinaryDerivation
   extends Derivation
-  implements Cloneable
 {
 
   /**
@@ -36,15 +35,6 @@ public abstract class BinaryDerivation
 
   public VarInfo[] getBases() {
     return new VarInfo[] { base1, base2 };
-  }
-
-  // This is in each class, but I can't have a private abstract method.
-  protected abstract VarInfo makeVarInfo();
-
-  protected VarInfo makeVarInfoWithPO() {
-    VarInfo result = makeVarInfo();
-    // po..?
-    return result;
   }
 
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {

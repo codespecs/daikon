@@ -83,6 +83,11 @@ public final class SequencesConcat  extends BinaryDerivation {
     return "[SequencesConcat of " + var1().toString() + " " + var2().toString() + "]";
 
   }
+
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequencesConcat);
+  }
+
 }
 
 

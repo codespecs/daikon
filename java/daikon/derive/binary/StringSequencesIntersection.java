@@ -63,5 +63,9 @@ public final class StringSequencesIntersection  extends BinaryDerivation {
     return new VarInfo(name, type, file_rep_type, compar);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof StringSequencesIntersection );
+  }
+
 }
 

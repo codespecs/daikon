@@ -18,7 +18,7 @@ import java.io.Serializable;
  * DerivationFactory.
  **/
 public abstract class Derivation
-  implements Serializable
+  implements Serializable, Cloneable
 {
 
   public static final Category debug = Category.getInstance (Derivation.class.getName());
@@ -61,7 +61,7 @@ public abstract class Derivation
    **/
   public VarInfo getVarInfo() {
     if (this_var_info == null) {
-      this_var_info = makeVarInfoWithPO();
+      this_var_info = makeVarInfo();
       this_var_info.derived = this;
       getBases();
     }
@@ -70,7 +70,7 @@ public abstract class Derivation
   private VarInfo this_var_info;
 
   // This is in each class, but I can't have a private abstract method.
-  protected abstract VarInfo makeVarInfoWithPO();
+  protected abstract VarInfo makeVarInfo();
 
   /** 
    * For debugging only; returns true if the variables from which this
@@ -90,7 +90,12 @@ public abstract class Derivation
 
   public abstract int derivedDepth();
 
+  /**
+   * @return true iff other and this represent the same derivation
+   * (modulo the variable they are applied to).  Default implentation
+   * will just checks runtime type, but subclasses with state
+   * (e.g. SequenceInitial index) should match that, too.
+   **/
+  public abstract boolean isSameFormula(Derivation other);
+
 }
-
-
-

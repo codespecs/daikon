@@ -77,5 +77,10 @@ public final class SequenceStringSubscript  extends BinaryDerivation {
     return new VarInfo(name, type, file_rep_type, compar);
   }
 
+  public  boolean isSameFormula(Derivation other) {
+    return (other instanceof SequenceStringSubscript )
+      && (((SequenceStringSubscript ) other).index_shift == this.index_shift);
+  }
+
 }
 
