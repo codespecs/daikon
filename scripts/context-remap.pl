@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-09 18:50:05 mistere>
+# Time-stamp: <2001-12-09 19:36:26 mistere>
 
 # The input is ... TODO
 
@@ -49,9 +49,10 @@ sub slurpfile {
   return @result;
 }
 
-# ********** For each map entry **********
+# ********** Read map files into a lookup table **********
 
-my @records = ();
+my %records = ();   # map from callsite_id as integer to corresponding record
+
 for my $filename (@ARGV) {
   debugln("Reading $filename ...");
   my @lines = slurpfile($filename);
@@ -67,7 +68,10 @@ for my $filename (@ARGV) {
       # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass, tometh
       $rec[1] =~ s/.*\.//; # remove package from fromclass
       $rec[8] =~ s/.*\.//; # remove package from toclass
-      push @records, \@rec;
+
+      my $idint = hex($rec[0]);
+      $records{$idint} = \@rec;
+
     } else {
       die("Unknown line format: $line");
     }
@@ -81,94 +85,70 @@ for my $filename (@ARGV) {
   my @rec = (0,
 	     "UnknownClass", "unknownMethod", "UnknownClass.java", -1, -1,
 	     "unknownCallingExpression", "(??)", "UnknownClass", "unknownMethod");
-  push @records, \@rec;
+  $records{0} = \@rec;
 }
 
-# ********** Post-processing **********
+debugln("Loaded " . scalar(keys %records) . " call sites.");
 
-debugln("Building maps (" . scalar(@records) . " records) ...");
+# ********** Table building **********
 
-my %remap = ();   # in processing daikon output, remap these keys to the values
+my %interp = ();   # map from callsite_id as integer to our interpretation of it
 
-if ("line" eq $grain) {
-  foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
-    $id = hex($id);
+for my $idint (sort keys %records) {
+  my $recref = $records{$idint};
+  my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$recref};
 
+  if ("line" eq $grain) {
     # "daikon_callsite_id == 222222" ==> "<Called from Class.method:#:#>"
-    my $from = "daikon_callsite_id == " . $id;
-    my $to = "<Called from " . $fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ">";
-    $remap{$from} = $to;
-
-    # Now do the cross product
-    foreach (@records) {
-      my ($id2, $fromclass2, $frommeth2, $fromfile2, $fromline2, $fromcol2, $toexpr2, $toargs2, $toclass2, $tometh2) = @{$_};
-      $id2 = hex($id2);
-
-      # "daikon_callsite_id one of { 222222, 333333 }" ==> "Called from one of { Class.method:#:#, Class.method:#:# }"
-      my $from2 = "daikon_callsite_id one of { " . (join ", ", sort($id, $id2)) . " }";
-      my $to2 = "<Called from one of { " .
-	$fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ", " .
-	  $fromclass2 . "." . $frommeth2 . ":" . $fromline2 . ":" . $fromcol2 . " }>";
-      $remap{$from2} = $to2;
-    }
-  }
-
-} elsif("method" eq $grain) {
-  my %method2num = ();
-  foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
-    $id = hex($id);
-
-    my $method = $fromclass . "." . $frommeth . "*" . $toclass . "." . $tometh;
-    if ($method2num{$method}) {
-      $method2num{$method} .= " || "
-    }
-    $method2num{$method} .= "daikon_callsite_id == " . $id;
-  }
-
-  for my $method (sort keys %method2num) {
-    my $num = $method2num{$method};
-    ($method =~ /(.*)\*(.*)/);
-    my ($caller, $callee) = ($1, $2);
-    # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class.method>"
-    my $from = $num;
-    my $to = "<Called from " . $caller . ">";
-    $remap{$from} = $to;
-  }
-
-} elsif("class" eq $grain) {
-  my %class2num = ();
-  foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
-    $id = hex($id);
-
-    my $class = $fromclass . "*" . $toclass . "." . $tometh;
-    if ($class2num{$class}) {
-      $class2num{$class} .= " || "
-    }
-    $class2num{$class} .= "daikon_callsite_id == " . $id;
-  }
-
-  for my $class (sort keys %class2num) {
-    my $num = $class2num{$class};
-    ($class =~ /(.*)\*(.*)/);
-    my ($caller, $callee) = ($1, $2);
-    # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class>"
-    my $from = $num;
-    my $to = "<Called from " . $caller . ">";
-    $remap{$from} = $to;
+    $interp{$idint} = "<Called from " . $fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ">";
+  } elsif("method" eq $grain) {
+    # "daikon_callsite_id == 222222" ==> "<Called from Class.method>"
+    $interp{$idint} = "<Called from " . $fromclass . "." . $frommeth . ">";
+  } elsif("class" eq $grain) {
+    # "daikon_callsite_id == 222222" ==> "<Called from Class.method>"
+    $interp{$idint} = "<Called from " . $fromclass . ">";
+  } else {
+    die;
   }
 }
 
-debugln("Final pass ...");
+# ********** Core processing **********
+
+debugln("Rewriting $remap_file to stdout ...");
+
+# Given some daikon output, say what it means (given grain, etc.)
+sub describe ( $ ) {
+  (my $text) = @_;
+
+  # parse $text into @ids
+  my $ids = $text;
+  $ids =~ s/[^ 0-9]//g;               # only digits
+  $ids =~ s/^\s+//; $ids =~ s/\s+$//; # trim
+  my @ids = split(/\s+/, $ids);
+
+  # map @ids into @sites
+  my %sites = ();
+  for my $id (@ids) {
+    $sites{$interp{$id}} = 1;
+  }
+  my @sites = sort keys %sites;
+
+  # return @sites as text
+  return join(" or ", @sites);
+}
 
 my @lines = slurpfile($remap_file);
 for my $line (@lines) {
-  next if ("daikon_callsite_id == orig(daikon_callsite_id)\n" eq $line);
-  for my $from (keys %remap) {
-    my $to = $remap{$from};
-    $line =~ s/\Q$from/$to/g;
+  # remove "daikon_callsite_id == orig(daikon_callsite_id"
+  if ("daikon_callsite_id == orig(daikon_callsite_id)\n" eq $line) {
+    next;
+  }
+  if ($line =~ /(daikon_callsite_id == \d+( || daikon_callsite_id == \d+)*)/ or
+      $line =~ /(daikon_callsite_id one of { \d+(, \d+)* })/) {
+    my $match = $1;
+    my $replace = describe($match);
+    debugln("Writing '$match' as '$replace'");
+    $line =~ s/\Q$match/$replace/;
   }
   print $line;
 }

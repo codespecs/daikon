@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-09 18:48:25 mistere>
+# Time-stamp: <2001-12-09 18:58:12 mistere>
 
 # The input is ... TODO
 
@@ -97,6 +97,7 @@ if ("line" eq $grain) {
     my $header = "PPT_NAME " . $toclass . "." . $tometh . "\n";
     my $splitter = "daikon_callsite_id == " . $id . "\n";
     $spinfos{$header} .= $splitter;
+  }
 
 } elsif("method" eq $grain) {
   my %method2num = ();
