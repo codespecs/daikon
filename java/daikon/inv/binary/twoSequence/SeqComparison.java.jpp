@@ -337,17 +337,19 @@ public class SEQSEQINTEQUAL
     }
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA))
-//        || (format == OutputFormat.DBCJAVA)) //RRN: This must be verified.
+        || (format == OutputFormat.JAVA)) // CP this is incorrect for JAVA
     {
-      String name1 = var1().name.name_using(format);
-      String name2 = var2().name.name_using(format);
+      String name1 = var1().name.name_using(format, var1());
+      String name2 = var2().name.name_using(format, var2());
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
                           : "");
-
-      return name1 + " " + EQUALSstring + " " + name2 + lexically;
+      if (format == OutputFormat.DBCJAVA) { // CP: does JAVA format want this? (no?)
+        return name1 + " " + EQUALSstring + " " + name2;
+      } else {
+        return name1 + " " + EQUALSstring + " " + name2 + lexically;
+      }
       #else
       return name1 + " " + EQUALSstring + " " + name2;
       #endif
@@ -357,8 +359,8 @@ public class SEQSEQINTEQUAL
       if (var1().isIOASet() || var2().isIOASet()) {
         return "Not valid for Sets: " + format();
       }
-      String name1 = var1().name.name_using(format);
-      String name2 = var2().name.name_using(format);
+      String name1 = var1().name.name_using(format, var1());
+      String name2 = var2().name.name_using(format, var2());
       return name1 + " " + EQUALSIOAstring + " " + name2 + " ***";
     }
 
