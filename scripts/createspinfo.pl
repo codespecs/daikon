@@ -1,5 +1,8 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 # createspinfo.pl
+
+# This needs to be uncommented.
+# use strict;
 
 # Usage:
 #   createspinfo.pl file.java
@@ -12,24 +15,24 @@
 # the .conds file.
 
 #creation of .conds file
-foreach $filename (@ARGV){
+foreach my $filename (@ARGV) {
     open(INPUTFILE, $filename) || die "Could not open input file $filename";
     open(CONDFILE, ">$filename.conds") || die "Cannot open output file\n";
-    $brace = 0;
-    $in_if = 0;
+    my $brace = 0;
+    my $in_if = 0;
 
     #skip commented lines
     while (<INPUTFILE>) {
 	$line = $_;
 	chop $line;
-	if($line =~ /^\s*\/\//){
+	if ($line =~ /^\s*\/\//) {
 	    next;
 	}
-	if($line =~ /^\s*\/\*/){
-	    if($line =~ /\*\//){
+	if ($line =~ /^\s*\/\*/) {
+	    if ($line =~ /\*\//) {
 		next;
-	    }else{
-		while(($line = <INPUTFILE>) !~ /\*\//){
+	    } else {
+		while(($line = <INPUTFILE>) !~ /\*\//) {
 		    next;
 		}
 	    }
@@ -62,7 +65,7 @@ foreach $filename (@ARGV){
 		$cond = $1;
 		print CONDFILE $cond."\n";
 		if ($replace_method) {
-		    if($cond =~/^\(([^\(\)]*)\)$/ ){
+		    if ($cond =~/^\(([^\(\)]*)\)$/ ) {
 			#strip off any extra brackets around the expression
 			$cond = $1;
 		    }
@@ -72,7 +75,7 @@ foreach $filename (@ARGV){
 	    }elsif ($cond =~ /(==|\!=|\<=|=\>|=\<|\>=|\<|\>|&)/) {
 		print CONDFILE $cond."\n";
 		if ($replace_method) {
-		    if($cond =~/^\(([^\(\)]*)\)$/ ){
+		    if ($cond =~/^\(([^\(\)]*)\)$/ ) {
 			#strip off any extra brackets around the expression
 			$cond = $1;
 		    }
@@ -82,26 +85,26 @@ foreach $filename (@ARGV){
 	    }
 	}
 	#//// trying to find declaration of boolean variables
-	if($line =~ /\s+boolean\s+([^\(\)\{\}]*)$/){
+	if ($line =~ /\s+boolean\s+([^\(\)\{\}]*)$/) {
 	    #found boolean variable(s). Check for declaration of multiple booleans
 	    @boolean_declarations = split /;/,$1;
-	    foreach $declaration(@boolean_declarations){
+	    foreach my $declaration (@boolean_declarations) {
 		@booleans = split /,/,$declaration;
-		foreach $boo (@booleans){
-		    if($boo =~ /\s*(.*)\s*=\s*(.*)/){
+		foreach my $boo (@booleans) {
+		    if ($boo =~ /\s*(.*)\s*=\s*(.*)/) {
 			$boo = $1;
 		    }
-		    if($boo !~ /^\s*$/){
+		    if ($boo !~ /^\s*$/) {
 			print CONDFILE $boo." == true \n";
 			$replace_method = 0;
 		    }
 		}
 	    }
-	}elsif($line =~ /\((.*)boolean\s*([^,\)]*)/){
+	}elsif ($line =~ /\((.*)boolean\s*([^,\)]*)/) {
 	    #looking for a boolean argument to a function
 	    $remainder = $1;
 	    print CONDFILE $2." == true \n";
-	    while($remainder =~ /(.*)boolean\s*([^,\)]*)/){
+	    while($remainder =~ /(.*)boolean\s*([^,\)]*)/) {
 		print CONDFILE $2." == true \n";
 		$remainder = $1;
 	    }
@@ -120,36 +123,36 @@ foreach $filename (@ARGV){
 	    $in_for = 0;
 	} elsif (($line =~ /(if|while)\s*\((.*)$/) || $in_if) {
 	    #multiline expression in the if condition => $in_if = 1
-	    if( $in_if == 0){
+	    if ( $in_if == 0) {
 		$paren = 0;
 		$cond = $2;
 	    }
-	    for ($arg = $line;
+	    for (my $arg = $line;
 		 $arg =~ /\(/;
 		 $paren++) {
 		$arg =~ s/\(//;
 	    }
-	    for ($arg = $line;
+	    for (my $arg = $line;
 		 $arg =~ /\)/;
 		 $paren--) {
 		$arg =~ s/\)//;
 	    }
-	    if ($paren == 0 &&  $in_if == 0){
+	    if ($paren == 0 &&  $in_if == 0) {
 		$cond =~ s/^(.*)\)[^\)]*$/$1/;
 		print CONDFILE $cond."\n";
 		#Do the replacements only on simple one-line methods which return booleans.
 		#If it's a complicated function ie. more then one line, discard.
 		$replace_method = 0;
 		$in_if = 0;
-	    }elsif($paren == 0 && $in_if == 1){
+	    }elsif ($paren == 0 && $in_if == 1) {
 		$in_if = 0;
 		$line =~ s/\s*(.*)\s*\{/$1/;
 		$cond = $cond.$line;
 		print CONDFILE $cond."\n";
 		$replace_method = 0;
-	    }else{
+	    } else {
 		$in_if = 1;
-		if($line !~ /(if|while)/){
+		if ($line !~ /(if|while)/) {
 		    $line =~ s/\s*(.*)\s*/$1/;
 		    $cond = $cond.$line;
 		}
@@ -160,7 +163,7 @@ foreach $filename (@ARGV){
 		$replace_method = 0;
 		$hoge = $1;
 		$hage = $2;
-		for ($i = 0;
+		for (my $i = 0;
 		     $i < $paren - 1;
 		     $i++) {
 		    $hoge = "\($hoge";
@@ -184,7 +187,7 @@ foreach $filename (@ARGV){
     }
 
     print CONDFILE "\nreplace:\n";
-    foreach $method (keys %replace) {
+    foreach my $method (keys %replace) {
 	print CONDFILE "$method$arguments{$method} : $replace{$method}\n";
     }
 
@@ -201,33 +204,33 @@ foreach $filename (@ARGV){
 #                ]
 
     @conditions = ();
-    @substitute = ();
-    $numsubs = 0;
+    # @substitute = ();
+    # $numsubs = 0;
     %HashOfConds = ();
-    %HashOfSubs = ();
+    # %HashOfSubs = ();
 
     $function = "OBJECT";
 
-    while ($line = <CONDFILE>){
-	if($line =~ /In class\s+(\S*):/){
+    while ($line = <CONDFILE>) {
+	if ($line =~ /In class\s+(\S*):/) {
 	    #matches the class name
 	    $class = $1;
 	}
-	if($line =~ /In function\s+(\S*):/){
+	if ($line =~ /In function\s+(\S*):/) {
 	    #matches the function name
 	    $function = $1;
 	}
-	if($line =~ /replace:/){
+	if ($line =~ /replace:/) {
 	    # A "replace:" line. Since these occur at the end
 	    # of the file, read till the end.
-	    while($line = <CONDFILE>){
-		if($line =~ /(\S.*) : (\S*.*)/){
+	    while($line = <CONDFILE>) {
+		if ($line =~ /(\S.*) : (\S*.*)/) {
 		    push (@subs, $1);
 		    push (@subs, $2);
 		}
 	    }
 	}
-	if ($line !~ /In |replace:|^[ \t]*$|import/){
+	if ($line !~ /In |replace:|^[ \t]*$|import/) {
 	    #not a blank line, and doesn't contain "replace:" or "In "
 	    # or "import" so it must be a condition
 	    $key = $class.".".$function;
@@ -237,37 +240,37 @@ foreach $filename (@ARGV){
 	}
     }
 
-# have to deal with inner classes in here, and also in extractconds.pl
+# have to deal with inner classes in here
 
-    @functions = (keys %HashOfConds);
-    $numfuncs = scalar(@functions);
+    # @functions = (keys %HashOfConds);
+    # $numfuncs = scalar(@functions);
 
     $replace = "REPLACE";
-    for($i = 0; $i < scalar(@subs); $i = $i + 2){
-	$sub = @subs[$i];
+    for (my $i = 0; $i < scalar(@subs); $i = $i + 2) {
+	$sub = $subs[$i];
 	$sub =~ s/(\(|\?|\))/$1/;
-	$replace_expr = @subs[$i+1];
+	$replace_expr = $subs[$i+1];
 	$replace_expr =~ s/\s*return(.*)\s*;\s*$/$1/;
 	$replace = $replace."\n".$sub."\n".$replace_expr;
     }
 
-    if(scalar(@subs)> 0){
+    if (scalar(@subs)> 0) {
 	print SPINFOFILE $replace."\n\n";
     }
 
-    foreach $function (keys %HashOfConds){
+    foreach my $function (keys %HashOfConds) {
 	$conditions = "";
 	print SPINFOFILE "PPT_NAME  $function";
 	$replace = "REPLACE";
 	@conds = @{$HashOfConds{$function}};
 	$function =~ /^(\S*)\./;
 	$class = $1;
-	foreach $cond (@conds){
-	    if($cond !~ /^\s*true\s*$/){
+	foreach my $cond (@conds) {
+	    if ($cond !~ /^\s*true\s*$/) {
 		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
 		$conditions = $conditions."\n".$cond;
-	    }else{ next; }
+	    } else { next; }
 	}
 
 	print SPINFOFILE $conditions."\n";
@@ -278,4 +281,5 @@ foreach $filename (@ARGV){
     print "output written to $filename.spinfo \n";
     close CONDFILE;
     close SPINFOFILE;
+    unlink("$filename.conds");
     }
