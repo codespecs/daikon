@@ -3877,6 +3877,14 @@ variables to the specified file name. The default is
 @code{daikon-output/@var{programname}.decls}, where @var{programname}
 is the name of the program.
 
+@item --decls-only
+
+Exit after writing the @code{.decls} file; don't run the program or
+generate trace information. Since the @code{.decls} file is the same for
+any run of a program, it can be generated once and then reused on later
+runs, as long as no new program points are added and each program point
+has the same set of variables.
+
 @item --dtrace-append
 
 Append new trace information to the end of an existing @code{.dtrace}
@@ -3932,6 +3940,26 @@ way to produce such files is by editing the output produced by the
 @code{--dump-ppt-file} (respectively @code{--dump-var-file}) option
 described above.
 
+@item --program-stdout=@var{filename}
+@itemx --program-stderr=@var{filename}
+
+Redirect the standard output (respectively standard error) stream of the
+program being traced to the specified path. By default, the standard
+output and standard error streams will be left pointing to the same
+locations specified by the shell, except that if @code{--dtrace-file=-}
+is specified, then the default behavior is as if
+@code{--program-stdout=/dev/tty} were specified, since mixing the
+program's output and Kvasir's trace output is not advisable.
+If the same filename is given for both options, the streams will be
+interleaved in the same way as if by the Bourne shell construction
+@code{2>&1}.
+
+Also as in the shell, @var{filename} can be an ampersand followed by an
+integer, to redirect to a numbered file descriptor. For instance, to
+redirect the program's standard output and error, and Kvasir's standard
+error, to a single file, you can say @code{--program-stdout='&2'
+--program-stderr='&2' 2>@var{filename}}.
+
 @end table
 
 @node Kvasir limitations,  , Kvasir options, Binary C front end Kvasir
@@ -3983,6 +4011,14 @@ Kvasir with such a relatively recent version of GCC. Incompatibilities
 between Kvasir and the debugging information produced by older GCC
 versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
+
+@item
+On some platforms (including, as of this writing, recent versions of
+Debian), Kvasir crashes if run on statically-linked binaries. To avoid
+this problem, do not use the @code{-static} flag when linking programs
+for use Kvasir. If you want to link statically with a particular
+library, supply the path to its static version (@code{libfoo.a})
+directly to @code{gcc} instead.
 
 @item
 Kvasir is incompatible with some compiler optimizations. It is
