@@ -396,7 +396,7 @@ public class DynamicConstants implements Serializable {
 
     // Create any ternary invariants that are suppressed when one
     // of the variables is a constant.  Currently, only LinearTernary
-    // falls into this list (It is suppressed by (x = C) && (Ay * Bz = D))
+    // falls into this list (It is suppressed by (x = C) && (Ay + Bz = D))
     instantiate_constant_suppressions (noncons, all_list);
   }
 
