@@ -12,7 +12,8 @@ README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := java-cpp.pl daikon.pl lines-from daikon.cshrc daikon.bashrc
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
-DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
+AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -type f -print)
 WWW_DIR := /home/httpd/html/daikon/
 
@@ -142,8 +143,9 @@ cvs-test:
 
 # Main distribution
 
-# This not only creates .tar files, but also installs a new
-# distribution, updates webpages, tests the distributionn, etc.
+# The "dist" target not only creates .tar files, but also installs a new
+# distribution, updates webpages, tests the distributionn, etc.  If you
+# only want ot make a new .tar file, do "make daikon-source.tar".
 dist: dist-and-test
 
 # Both make and test the distribution.
@@ -232,8 +234,8 @@ www:
 
 .PHONY: www
 
-daikon.jar: $(DAIKON_JAVA_FILES)
-	-rm -rf daikon.jar /tmp/daikon-jar
+daikon.jar: $(DAIKON_JAVA_FILES) java/lib/ajax.jar
+	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
 	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
@@ -249,9 +251,18 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
 	rm -rf /tmp/daikon-jar
+
+java/lib/ajax.jar: $(AJAX_JAVA_FILES)
+	-rm -rf $@ /tmp/ajax-jar
+	mkdir /tmp/ajax-jar
+	javac -g -d /tmp/ajax-jar $(AJAX_JAVA_FILES)
+	cd /tmp/ajax-jar && jar cf ajax.jar *
+	mv /tmp/ajax-jar/ajax.jar $@
+	rm -rf /tmp/ajax-jar
 
 # Use this ordering because daikon-jar is made before daikon-source
 
@@ -285,13 +296,6 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	mkdir /tmp/daikon/bin
 	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
 
-	## Front ends
-	mkdir /tmp/daikon/front-end
-
-	# # C/C++ instrumenter
-	# mkdir /tmp/daikon/front-end/c
-	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
-
 	# Example files
 	cp -pR examples /tmp/daikon
 	# Keep .java files, delete everything else
@@ -320,6 +324,7 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	## utilMDE
 	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
 	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
+	rm -rf /tmp/daikon/java/utilMDE/doc
 	## getopt
 	tar zxf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
 	## OROMatcher
@@ -339,6 +344,17 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	unzip java/lib/junit3.7.zip junit3.7/src.jar -d /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/tmp-junit; unzip junit3.7/src.jar; rm -f junit3.7/src.jar; rmdir junit3.7; chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
 	rm -rf /tmp/daikon/tmp-junit
+	## Ajax
+	cp -pR java/ajax-ship /tmp/daikon/java
+	rm -rf /tmp/daikon/java/ajax-ship/ajax
+	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
+
+	## Front ends
+	mkdir /tmp/daikon/front-end
+
+	# # C/C++ instrumenter
+	# mkdir /tmp/daikon/front-end/c
+	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
@@ -432,10 +448,10 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-# To create build_mingw_dfej, I did:
+# To create directory build_mingw_dfej, I did:
 # 	cd dfej && $(MAKE) distclean
-# 	mkdir build_mingw_dfej
-# 	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
+# 	mkdir dfej-src/build_mingw_dfej
+# 	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd dfej-src/build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
 #	cd dfej && ./configure
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
 
@@ -497,3 +513,4 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
+	@echo "AJAX_JAVA_FILES = " $(AJAX_JAVA_FILES)
