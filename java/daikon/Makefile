@@ -124,7 +124,9 @@ list_java_files:
 # "-e" means exit immediately if any error, rather than returning 
 # the status of the last command.
 
-JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
+JAVA_CPP = (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< >| $@; chmod -w $@)
+# Like the above, but also makes a backup file
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
 # JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 ## Here are alternate ways of writing the same command:
