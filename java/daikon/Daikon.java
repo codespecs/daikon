@@ -250,6 +250,8 @@ public final class Daikon {
   /** Debug tracer **/
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
+  public static final Logger debugProgress =Logger.getLogger("daikon.Progress");
+
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
   static { daikon.Runtime.no_dtrace = true; }
@@ -342,10 +344,6 @@ public final class Daikon {
       System.out.println("The --output_num_samples debugging flag is on.");
       System.out.println("Some of the debugging output may only make sense to Daikon programmers.");
     }
-
-    // initialize the partial order hierarchy
-    if (df_bottom_up)
-      Dataflow.init_hierarchy (all_ppts);
 
     PrintInvariants.print_invariants(all_ppts);
     PrintInvariants.print_reasons(all_ppts);
@@ -829,8 +827,28 @@ public final class Daikon {
 
     // Postprocessing
 
-    // Equality data for each PptTopLevel
+    // If we are processing dataflow bottom up
+    if (df_bottom_up) {
+
+      // Initialize the partial order hierarchy
+      debugProgress.fine ("Init Hierarchy");
+      Dataflow.init_hierarchy (all_ppts);
+
+      // Calculate invariants at all non-leaf ppts
+      debugProgress.fine ("createUpperPpts");
+      Dataflow.createUpperPpts (all_ppts);
+    }
+
+    // Turn off bottom up while doing equality optimization and the
+    // last suppression.  This allows self suppressions and
+    // suppressions between levels.  It is not clear this is correct
+    // but it should help things match between top down and bottom up.
+    boolean tmp_bu = Daikon.df_bottom_up;
+    Daikon.df_bottom_up = false;
+
+    // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization) {
+      debugProgress.fine ("Equality Post Process");
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
@@ -838,10 +856,14 @@ public final class Daikon {
     }
 
     // One more round of suppression for printing
+    debugProgress.fine ("Suppress for printing");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.suppressAll (false);
     }
+
+    // Restore bottom up state
+    Daikon.df_bottom_up = tmp_bu;
   }
 
   private static void suppressWithSimplify(PptMap all_ppts) {
@@ -858,10 +880,23 @@ public final class Daikon {
   }
 
   public static void setupEquality (PptMap allPpts) {
+
     // PptSliceEquality does all the necessary instantiations
     if (Daikon.use_equality_optimization) {
+
+      // Foreach program point
       for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
+
+        // Skip points that are not leaves (anything not a numbered exit point)
+        if (df_bottom_up) {
+          if (!ppt.ppt_name.isExitPoint())
+            continue;
+          if (ppt.ppt_name.isCombinedExitPoint())
+            continue;
+        }
+
+        // Create the initial equality sets
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
       }
