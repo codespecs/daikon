@@ -189,7 +189,7 @@ TODAY := $(shell date "+%B %d, %Y")
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*\n/$$1${TODAY}\n/;' doc/daikon.texinfo
-	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html
+	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
 
 # Update the version number, and update the documentation accordingly.
 # This is done immediately after releasing a new version.
@@ -276,9 +276,10 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	# First add some more files to the distribution
 
 	# Daikon itself
-	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output daikon
+	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
 	cp -p doc/README-daikon-java /tmp/daikon/java/README
+	cp -p java/Makefile /tmp/daikon/java/Makefile
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
@@ -295,6 +296,8 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
 	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
 	(cd /tmp/daikon/java; ln -s jakarta-oro-2.0.3/src/java/org .)
+	# ORO distribution lacks .class files; Daikon dist should have them.
+	(cd /tmp/daikon/java; javac `find org/apache/oro -name '*.java' -print`)
 	## JUnit
 	# This is wrong:
 	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
