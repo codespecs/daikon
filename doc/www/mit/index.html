@@ -478,7 +478,15 @@ The regression tests run every night.  They should never fail, because it
 is each developer's responsibility to run them before checking in code.  If
 they do fail, then it is the responsibility of everyone who checked in code
 in the previous day to collectively determine responsibility (this is often
-obvious).  It is the responsibility of the person who caused the failure to
+obvious).  You can find out who has checked in since a given date with the
+<tt>cvs history</tt> command:
+<pre>
+  cvs history -a -c -D "2005/03/08"
+</pre>
+</p>
+
+<p>
+It is the responsibility of the person who caused the failure to
 fix it immediately; the regression tests should almost never fail two
 nights in a row.  This is important to avoid masking subsequent errors
 &mdash; the regression tests do no good while they are failing.  (And, you
