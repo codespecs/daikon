@@ -11,6 +11,15 @@ versions as the user manual.
 
 ===========================================================================
 
+Added the "--no_reflection" option to Annotate. If given, Daikon does
+not use reflection to find information about the classes being
+instrumented. The downside is that no "also" tags are output under the
+JML or ESC formats (David Cok requested this behavior).
+
+Added the "--max_invariants_pp N" option to Annotate. If given, then
+Annotate will output at most N invariants per program point (which
+ones are output is not specified).
+
 Improved portability to Windows systems by changing instances of the
 literal "\n" in code to System.getProperty("line.separator"), or using
 println().
