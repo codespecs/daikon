@@ -190,6 +190,7 @@ JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CV
 
 doc: $(JAVA_FILES)
 	mkdir -p doc
+	# This requires that jdk/lib/tools.jar be on your classpath
 	javadoc $(JAVADOC_FLAGS) $(JAVADOC_PACKAGES)
 
 ## Make doc with private fields for people working on source code
