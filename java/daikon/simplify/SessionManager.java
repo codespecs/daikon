@@ -120,6 +120,7 @@ public class SessionManager
           result.append(line);
           result.append(daikon.Global.lineSep);
         }
+        lines.close();
         prover_background = result.toString();
       } catch (IOException e) {
         throw new RuntimeException("Could not load prover background");

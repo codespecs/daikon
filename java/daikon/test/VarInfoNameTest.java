@@ -68,6 +68,7 @@ public class VarInfoNameTest
         String line = buf.readLine();
         _goal.add(line);
       }
+      buf.close();
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
     }
