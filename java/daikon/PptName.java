@@ -261,6 +261,13 @@ public class PptName
   }
 
   /**
+   * @return true iff this name refers to program globals
+   **/
+  public boolean isGlobalPoint() {
+    return FileIO.global_suffix.equals (point);
+  }
+
+  /**
    * @return true iff this name refers to a procedure exit point
    **/
   public boolean isExitPoint()
