@@ -279,7 +279,6 @@ public final class FloatEqual
     VarInfo var2 = ppt.var_infos[1];
 
     // a+c=b+c is implied, because a=b must have also been reported.
-
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
               ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 
