@@ -35,8 +35,11 @@ public class Session
 
       // eat first prompt
       InputStream is = process.getInputStream();
-      int size = ">       ".length();
-      is.read(new byte[size], 0, size);
+      String expect = ">\t";
+      byte[] buf = new byte[expect.length()];
+      int pos = is.read(buf);
+      String actual = new String(buf, 0, pos);
+      Assert.assert(expect.equals(actual), "Prompt expected, got '" + actual + "'");
 
       // set up result stream
       output = new BufferedReader(new InputStreamReader(is));
