@@ -84,8 +84,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SeqIndexFloatGreaterEqual.java \
 	daikon/inv/unary/sequence/SeqIndexFloatLessThan.java \
 	daikon/inv/unary/sequence/SeqIndexFloatLessEqual.java \
-	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
-	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
 	daikon/inv/unary/sequence/CommonSequence.java \
 	daikon/inv/unary/sequence/CommonFloatSequence.java \
 	daikon/inv/unary/sequence/EltNonZero.java \
@@ -105,7 +103,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/stringsequence/EltOneOfString.java \
 	daikon/inv/unary/stringsequence/OneOfStringSequence.java \
 	daikon/inv/binary/sequenceScalar/Member.java \
-	daikon/inv/binary/sequenceString/Member.java \
+	daikon/inv/binary/sequenceString/MemberString.java \
 	daikon/inv/binary/sequenceString/SequenceString.java \
 	daikon/inv/binary/sequenceScalar/MemberFloat.java \
 	daikon/inv/binary/sequenceScalar/SeqIntLessThan.java \
@@ -120,8 +118,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/sequenceScalar/SeqFloatEqual.java \
 	daikon/inv/binary/sequenceScalar/SequenceScalar.java \
 	daikon/inv/binary/sequenceScalar/SequenceFloat.java \
-	daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java \
-	daikon/inv/binary/sequenceScalar/SequenceFloatFactory.java \
 	daikon/inv/binary/twoScalar/IntEqual.java \
 	daikon/inv/binary/twoScalar/FloatEqual.java \
 	daikon/inv/binary/twoScalar/IntNonEqual.java \
@@ -140,8 +136,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoScalar/LinearBinaryCoreFloat.java \
 	daikon/inv/binary/twoScalar/LinearBinary.java \
 	daikon/inv/binary/twoScalar/LinearBinaryFloat.java \
-	daikon/inv/binary/twoScalar/TwoScalarFactory.java \
-	daikon/inv/binary/twoScalar/TwoFloatFactory.java \
 	daikon/inv/binary/twoScalar/TwoScalar.java \
 	daikon/inv/binary/twoScalar/TwoFloat.java \
 	daikon/inv/binary/twoString/TwoString.java \
@@ -170,6 +164,8 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/ReverseFloat.java \
 	daikon/inv/binary/twoSequence/SubSequence.java \
 	daikon/inv/binary/twoSequence/SubSequenceFloat.java \
+	daikon/inv/binary/twoSequence/SuperSequence.java \
+	daikon/inv/binary/twoSequence/SuperSequenceFloat.java \
 	daikon/inv/binary/twoSequence/SubSet.java \
 	daikon/inv/binary/twoSequence/SubSetFloat.java \
 	daikon/inv/binary/twoSequence/SuperSet.java \
@@ -191,8 +187,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/TwoSequence.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
-	daikon/inv/binary/twoSequence/TwoSequenceFactory.java \
-	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
 	daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java \
 	daikon/derive/ternary/SequenceFloatArbitrarySubsequence.java \
@@ -758,12 +752,6 @@ daikon/inv/unary/sequence/SeqIndexIntGreaterEqual.java: daikon/inv/unary/sequenc
 daikon/inv/unary/sequence/SeqIndexFloatGreaterEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALFLOAT)
 
-daikon/inv/unary/sequence/SingleScalarSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/unary/sequence/SingleFloatSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
 daikon/inv/unary/sequence/CommonSequence.java: daikon/inv/unary/sequence/CommonSequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
@@ -824,7 +812,7 @@ daikon/inv/binary/sequenceScalar/Member.java: daikon/inv/binary/Member.java.jpp
 daikon/inv/binary/sequenceScalar/MemberFloat.java: daikon/inv/binary/Member.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=FLOAT)
 
-daikon/inv/binary/sequenceString/Member.java: daikon/inv/binary/Member.java.jpp
+daikon/inv/binary/sequenceString/MemberString.java: daikon/inv/binary/Member.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 daikon/inv/binary/sequenceString/SequenceString.java: daikon/inv/binary/sequenceScalar/SequenceScalar.java.jpp
@@ -864,12 +852,6 @@ daikon/inv/binary/sequenceScalar/SequenceScalar.java: daikon/inv/binary/sequence
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
 daikon/inv/binary/sequenceScalar/SequenceFloat.java: daikon/inv/binary/sequenceScalar/SequenceScalar.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java: daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/binary/sequenceScalar/SequenceFloatFactory.java: daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoScalar/TwoScalar.java: daikon/inv/binary/BinaryInvariant.java.jpp
@@ -953,12 +935,6 @@ daikon/inv/binary/twoScalar/LinearBinary.java: daikon/inv/binary/twoScalar/Linea
 daikon/inv/binary/twoScalar/LinearBinaryFloat.java: daikon/inv/binary/twoScalar/LinearBinary.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
-daikon/inv/binary/twoScalar/TwoScalarFactory.java: daikon/inv/binary/twoScalar/TwoScalarFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/binary/twoScalar/TwoFloatFactory.java: daikon/inv/binary/twoScalar/TwoScalarFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
 daikon/inv/binary/twoSequence/TwoSequence.java: daikon/inv/binary/BinaryInvariant.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONGSEQ)
 
@@ -1020,10 +996,16 @@ daikon/inv/binary/twoSequence/ReverseFloat.java: daikon/inv/binary/twoSequence/R
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoSequence/SubSequence.java: daikon/inv/binary/twoSequence/SubSequence.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
+	$(JAVA_CPP:DEFINEDVAR=SUBLONG)
+
+daikon/inv/binary/twoSequence/SuperSequence.java: daikon/inv/binary/twoSequence/SubSequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SUPERLONG)
 
 daikon/inv/binary/twoSequence/SubSequenceFloat.java: daikon/inv/binary/twoSequence/SubSequence.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+	$(JAVA_CPP:DEFINEDVAR=SUBDOUBLE)
+
+daikon/inv/binary/twoSequence/SuperSequenceFloat.java: daikon/inv/binary/twoSequence/SubSequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SUPERDOUBLE)
 
 daikon/inv/binary/twoSequence/SubSet.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SUB)
@@ -1078,12 +1060,6 @@ daikon/inv/binary/twoSequence/PairwiseNumericInt.java: daikon/inv/binary/twoScal
 
 daikon/inv/binary/twoSequence/PairwiseNumericFloat.java: daikon/inv/binary/twoScalar/Numeric.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLESEQ)
-
-daikon/inv/binary/twoSequence/TwoSequenceFactory.java: daikon/inv/binary/twoSequence/TwoSequenceFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java: daikon/inv/binary/twoSequence/TwoSequenceFactory.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java: daikon/derive/ternary/SequenceArbitrarySubsequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
