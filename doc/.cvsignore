@@ -5,11 +5,14 @@ daikon.dvi
 daikon.fn
 daikon.html
 daikon.info
+daikon.info-[0-9]
 daikon.ky
 daikon.log
+daikon.pdf
 daikon.pg
 daikon.ps
 daikon.tmp
 daikon.toc
 daikon.tp
 daikon.vr
+daikon_manual_html
