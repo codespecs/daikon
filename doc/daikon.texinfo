@@ -2510,6 +2510,86 @@ all Property filters are enabled.  Daikon supports the following
 property filters:
 
 @table @var
+ 
+@item Suppress invariants containing non-canonical variables
+
+For many program points there are sets of variables that are equal to
+each other.  When this happens, one variable from the set is chosen to
+be the canonical variable.  This filter hides invariants involving the
+remaining non-canonical variables, because they are implied by
+invariants involving the canonical variable.
+
+@item Suppress parameter-derived postcondition invariants
+
+Generally speaking, Daikon formulates invariants in terms of the
+parameters to methods and their return values, in order to produce
+invariants that describe a method's visible behavior, rather than
+details of its implementation.  This policy has some subtleties,
+though, when a method modifies one of its parameters.  When a
+parameter is passed by value, the method can modify its copy of it
+without the changes being visible to a caller, but if an argument
+refers to another object, changes to that object may be visible.  This
+filter hides invariants that are postconditions (i.e., occur in EXIT
+program points) and that involve the final values of parameters, or
+of derived properties of parameters that may have been modified, since
+such invariants usually describe hidden implementation details.
+
+@item Suppress unjustified invariants
+
+For every invariant, Daikon estimates the probability of that invariant
+happening by chance.  If that probability is less than the limit, then
+the invariant is deemed to be an actual invariant, not just a chance
+occurrence.  Currently the limit is .01%.  So by default, only invariants
+with probabilities of less than .01% are shown.
+
+@item Suppress obvious invariants
+
+This filter suppresses invariants because they are obvious from looking
+at other invariants.  Some examples are:
+
+@itemize @bullet
+
+@item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
+obvious and will not be displayed by default.
+@item If ``this.topOfStack < size(this.theArray[])-1'' is shown, then
+``this.topOfStack < size(this.theArray[])'' is obvious and will not be
+displayed by default.
+@end itemize
+
+@item Suppress invariants with few modified samples
+
+This filter suppresses invariants with a relatively few number of
+modified samples.  An example of such an invariant would be the
+following: ``x >= 5'', where ``x'' is observed to be 5 three times
+and 10 five times.  The observed values of @code{x} --- i.e., the samples of
+@code{x} --- did not change enough for Daikon to be confident that this
+invariant is an actual invariant.
+
+@item Suppress invariants containing only constants
+
+This filter suppresses invariants containing only constants.
+
+@item Suppress implied postcondition invariants
+
+Implied postcondition invariants are invariants involving @code{orig()}
+variables that exist as precondition invariants.  For example, say that
+@code{StackAr.isEmpty():::ENTER} has the invariant ``x==y''.  Then in
+@code{StackAr.isEmpty():::EXIT48}, the invariant ``orig(x)==orig(y)''
+is an implied postcondition invariant and will not be displayed by
+default.
+
+@item Eliminate invariants based on Simplify
+
+Daikon can use the Simplify theorem-prover to eliminate even more
+implied invariants than Daikon's built-in tests are able to eliminate.
+Simplify must be separately obtained (from
+@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this filter.
+
+@item Suppress obvious equality invariants
+
+Like ``Suppress obvious invariants'', but applies only to equality
+invariants of the form ``x==y''.
 
 @item Suppress controlled invariants
 
@@ -2528,71 +2608,6 @@ Because of this redundancy, controlled invariants are not displayed by
 default.  Note that if for some reason, the controlling invariant is not
 displayed (for example, because it's unjustified), then the controlled
 invariant @emph{will} be displayed.
-
-@item Suppress implied postcondition invariants
-
-Implied postcondition invariants are invariants involving @code{orig()}
-variables that exist as precondition invariants.  For example, say that
-@code{StackAr.isEmpty():::ENTER} has the invariant ``x==y''.  Then in
-@code{StackAr.isEmpty():::EXIT48}, the invariant ``orig(x)==orig(y)''
-is an implied postcondition invariant and will not be displayed by
-default.
-
-@item Suppress invariants containing non-canonical variables
-
-For many program points there are sets of variables that are equal to
-each other.  When this happens, one variable from the set is chosen to
-be the canonical variable.  This filter hides invariants involving the
-remaining non-canonical variables, because they are implied by
-invariants involving the canonical variable.
-
-@item Suppress invariants containing only constants
-
-This filter suppresses invariants containing only constants.
-
-@item Suppress invariants with few modified samples
-
-This filter suppresses invariants with a relatively few number of
-modified samples.  An example of such an invariant would be the
-following: ``x >= 5'', where ``x'' is observed to be 5 three times
-and 10 five times.  The observed values of @code{x} --- i.e., the samples of
-@code{x} --- did not change enough for Daikon to be confident that this
-invariant is an actual invariant.
-
-@item Suppress obvious invariants
-
-This filter suppresses invariants because they are obvious from looking
-at other invariants.  Some examples are:
-
-@itemize @bullet
-
-@item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
-obvious and will not be displayed by default.
-@item If ``this.topOfStack < size(this.theArray[])-1'' is shown, then
-``this.topOfStack < size(this.theArray[])'' is obvious and will not be
-displayed by default.
-@end itemize
-
-@item Suppress obvious equality invariants
-
-Like ``Suppress obvious invariants'', but applies only to equality
-invariants of the form ``x==y''.
-
-@item Eliminate invariants based on Simplify
-
-Daikon can use the Simplify theorem-prover to eliminate even more
-implied invariants than Daikon's built-in tests are able to eliminate.
-Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this filter.
-
-@item Suppress unjustified invariants
-
-For every invariant, Daikon estimates the probability of that invariant
-happening by chance.  If that probability is less than the limit, then
-the invariant is deemed to be an actual invariant, not just a chance
-occurrence.  Currently the limit is .01%.  So by default, only invariants
-with probabilities of less than .01% are shown.
 
 @end table
 
