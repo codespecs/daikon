@@ -42,10 +42,20 @@ public class Debug {
   public static String[] debugTrackClass
     = {
       // "PptSliceEquality",
-      // "PairwiseIntLessEqual", "PairwiseIntGreaterEqual",
+      // "PptTopLevel",
+      // "PptSlice2",
+      // "LowerBound",
+      // "UpperBound",
+      // "LinearBinary",
+      // "SeqIndexComparison",
+      // "SeqIndexNonEqual",
+      // "IntEqual",
       // "SeqSeqIntEqual",
-      "PairwiseIntEqual", "PairwiseFloatEqual"
-    };
+      // "OneOfSequence",
+      // "IntGreaterEqual",
+      // "IntLessEqual",
+      // "LinearTernary",
+      };
 
   /**
    * List of Ppts for logging. Each name listed is compared to
@@ -58,20 +68,9 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
-      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
-      // "misc.Dataflow.B.m2():::EXIT24"
-      // "unionCareful(int, int):::EXIT"
-      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
-      // "MapQuick1.StreetNumberSet:::OBJECT",
-      // "MapQuick1.StreetNumberSet.max():::EXIT",
-      // "DataStructures.DisjSets.DisjSets(int):::EXIT"
-      // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
-      // "misc.StaticInteresting:::OBJECT"
-      "PolyCalc.RatPoly.RatPoly(int, int):::EXIT"
-      // "DataStructures.StackAr.pop():::EXIT"
       // "DataStructures.DisjSets.find(int):::EXIT70"
+      // "misc.Fib",
     };
-
   /**
    * List of variable names for logging. Each name listed is compared
    * to each variable in turn.  If each matches exactly it will be
@@ -84,29 +83,9 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.topOfStack" },
-      // { "this.x"}
-      // { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
-      // { "this.s[orig(set1)..]", "orig(this.s[post(set1)..])" },
-      // { "orig(this.s[post(set1)..])" },
-      // { "this.s[orig(set1)..]" },
-      // { "other.begins[]", "other.ends[]" },
-      // { "other.ends[]", "other.begins[]" },
-      // { "this.begins[]", "this.ends[]" },
-      // { "this.ends[]", "this.begins[]" },
-      // { "this.begins[return..]", "this.ends[return..]" },
-      // { "this.ends[return..]" , "this.begins[return..]"}
-      // { "orig(this.s[post(x)])", "this.s[return]" },
-      // { "this.s[return]", "orig(this.s[post(x)])" }
-      // { "orig(pegB)", "return", "orig(pegA)" },
-      // { "orig(pegB)", "orig(pegA)", "return" },
-      // { "return", "orig(pegB)", "orig(pegA)" },
-      // { "return", "orig(pegA)", "orig(pegB)" },
-      // { "orig(pegA)", "return", "orig(pegB)" },
-      // { "orig(pegA)", "orig(pegB)", "return" }
-      // { "this.ends[0..return-1]" }
-      { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
-      { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
+      // { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
+      // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
+      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -390,33 +369,58 @@ public class Debug {
     String ourvars[] = new String[3];
     if (debugTrackVars.length > 0) {
       boolean match = false;
+
+      // Loop through each set of specified debug variables.
       outer: for (int i = 0; i < debugTrackVars.length; i++) {
         String[] cv = debugTrackVars[i];
         if (cv.length != vis.length)
           continue;
+        for (int j = 0; j < ourvars.length; j++)
+          ourvars[j] = null;
+
+        // Flags to insure that we don't match a variable more than once
+        boolean[] used = {false, false, false};
+
+        // Loop through each variable in this set of debug variables
         for (int j = 0; j < cv.length; j++) {
           boolean this_match = false;
           Set evars = null;
-          if (vis[j].equalitySet != null)
-            evars = vis[j].equalitySet.getVars();
-          if (evars != null) {
-            for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
-              VarInfo v = (VarInfo) iter.next();
-              if (cv[j].equals ("*") || cv[j].equals (v.name.name())) {
-                this_match = true;
-                if (!v.isCanonical())
-                  ourvars[j] = cv[j];
-                break;
+
+          // Loop through each variable at this point
+          eachvis: for (int k = 0; k < vis.length; k++) {
+
+            // Get the matching equality set
+            evars = null;
+            if (vis[k].equalitySet != null)
+              evars = vis[k].equalitySet.getVars();
+
+            // If there is an equality set
+            if (evars != null) {
+
+              // Loop through each variable in the equality set
+              for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
+                VarInfo v = (VarInfo) iter.next();
+                if (!used[k] &&
+                    (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
+                  used[k] = true;
+                  this_match = true;
+                  if (!cv[j].equals (vis[j].name.name())) {
+                    ourvars[j] = v.name.name();
+                    if (j != k)
+                      ourvars[j] += " (" + j +"/" + k + ")";
+                    if (v.isCanonical())
+                      ourvars[j] += " (Leader)";
+                  }
+                  break eachvis;
+                }
               }
+            } else { // sometimes, no equality set
+              if (cv[j].equals ("*") || cv[j].equals (vis[k].name.name()))
+                this_match = true;
             }
-          } else { // sometimes, no equality set
-            if (cv[j].equals ("*") || cv[j].equals (vis[j].name.name()))
-              this_match = true;
           }
           if (!this_match)
             continue outer;
-          // if (!cv[j].equals ("*") && !cv[j].equals (vis[j].name.name()))
-          //  continue outer;
         }
         match = true;
         break outer;
@@ -490,7 +494,8 @@ public class Debug {
         PptSlice slice = (PptSlice) j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = (Invariant) slice.invs.get(k);
-          if (inv.log (msg + ": found (" + k + ") " + inv.format()))
+          if (inv.log (msg + ": found (" + k + ") " + inv.format() +
+                       " in slice " + slice))
             found = true;
         }
       }
