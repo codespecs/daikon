@@ -182,7 +182,6 @@ public class PrintInvariants {
 
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
-    // [INCR] ppt_map = ppts;
 
     if ((Daikon.output_style == OutputFormat.ESCJAVA ||
          Daikon.output_style == OutputFormat.JML) &&
@@ -537,7 +536,7 @@ public class PrintInvariants {
       } else {
         Global.canonical_variables++;
       }
-      */
+      */ // [INCR]
       if (ppt.var_infos[i].isDerived()) {
         Global.derived_variables++;
       }
@@ -603,15 +602,15 @@ public class PrintInvariants {
         obviously_equal = new Vector(vi.equalTo());
         obviously_equal.removeAll(vi.equalToNonobvious());
 
-       // System.out.println("equal_vars.size() = " + equal_vars.size());
-       // System.out.println("Redundant due to simplify = "
-       //                    + (Daikon.suppress_redundant_invariants_with_simplify
-       //                       && redundant_invs.contains(vi)));
-       }
-       else
-       {
-       obviously_equal = new Vector();
-       }
+        // System.out.println("equal_vars.size() = " + equal_vars.size());
+        // System.out.println("Redundant due to simplify = "
+        //                    + (Daikon.suppress_redundant_invariants_with_simplify
+        //                       && redundant_invs.contains(vi)));
+      }
+    else
+      {
+        obviously_equal = new Vector();
+      }
     */ // ... [INCR]
     obviously_equal = new Vector(); // [INCR]
 
