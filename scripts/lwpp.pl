@@ -1,16 +1,19 @@
-: # Use -*- Perl -*- without knowing its path
-  eval 'exec perl -S -w $0 "$@"'
-  if 0;
+#!/usr/bin/env perl
 
-# Annotate a declaration file with implicit lackwit comparability information.
-# Prints the new declaration file to STDOUT.  Assumes:
+# Annotate a declaration file with implicit lackwit comparability
+# information.  Overwrites the file with Lackwit comparability
+# information, saving a copy of the original as
+# filename.decls.nonlackwit.
+
+# Assumes:
 #   - $LACKWIT_HOME is set to the directory where lackwit is installed
 #   - The lackwit database has already been created
-#   - The BackEnd executable is in your path
 
 # Perl port of a similar C++ program written by Adam Czeisler
 
+use English;
 use strict;
+$WARNING = 1;
 use vars qw(%cache);
 
 my $element_suffix = "_element";
@@ -34,8 +37,17 @@ my $backupdecls = $outfn . ".nonlackwit";
 system("mv -f $outfn $backupdecls")
     and die "Couldn't back up $outfn!\n";
 open DECLS, $backupdecls or die "Can't open $backupdecls: $!\n";
-open OUT, ">$outfn" or die "Can't open $outfn for write: $!\n";
 
+my $first_line = <DECLS>;
+if ($first_line =~ /VarComparability/) {
+  die "Invalid declaration file.  " .
+    "Perhaps it has already been processed.\n";
+}
+
+# reset the filehandle position
+seek(DECLS, 0, 0);
+
+open OUT, ">$outfn" or die "Can't open $outfn for write: $!\n";
 print OUT "VarComparability\n";
 print OUT "implicit\n";
 print OUT "\n";
@@ -94,8 +106,8 @@ while (<DECLS>) {
     while(my $variable = shift @ppt_declaration) {
       my $declared_type = shift @ppt_declaration;
       my $representation_type = shift @ppt_declaration;
-
-      # throw away the old comparability information
+      
+      # throw away old comparability information
       shift @ppt_declaration;
 
       print OUT "$variable\n";
@@ -212,6 +224,7 @@ sub get_comparable_variables {
   return %comparable_variables;
 }
 
+# memoizes calls to BackEnd to improve performance
 sub lackwit {
   my ($variable, $function) = @_;
 
@@ -227,7 +240,10 @@ sub lackwit {
 
 sub _lackwit {
   my ($function, $variable) = @_;
-  return `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
+  my $result =
+    `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
+  die "BackEnd failed on $function:$variable\n" if ($CHILD_ERROR != 0);
+  return $result;
 }
 
 sub add_array_variables_to_interesting_variables {
