@@ -5,6 +5,20 @@ changes are not noted here.)  For documentation of Daikon, see the Daikon
 manual.  Its source is file daikon.texinfo; formatted, it appears as
 daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
+===========================================================================
+
+2.3.2 (December 2001):
+
+Support for splitter files that specify conditions to use when detecting
+implications (conditional invariants).
+
+--config option to Daikon permits reading and saving sets of configuration
+options.
+
+The Daikon Java runtime respects the DTRACEAPPEND environment variable.
+
+----------------
+
 2.3.1 (8 October 2001):
 
 Added Context GUI, which shows relevant invariants in a separate window as
@@ -12,6 +26,10 @@ you browse code in a text editor.
 
 Added many index entries to manual.
 
+----------------
+
 2.3.0 (11 September 2001):
 
 Added linear ternary invariants, of the form z = ax + by + c.
+
+===========================================================================

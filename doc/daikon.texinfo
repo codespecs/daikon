@@ -2168,6 +2168,11 @@ first instrumented class with such a @samp{main} method is used instead.
 @c Just like @option{-ajax_runnables}, except that no @samp{main} methods
 @c in the instrumented classes are used as entry points.
 
+@item -ajaxdumpdir=@var{dumpdir}
+This is the directory in which the Ajax comparability module writes its
+log file, named @file{ajax.log}.  By default, @file{ajax.log} is written
+to the current directory.
+
 @end table
 
 When conflicting options are specified (for instance, both
@@ -3652,13 +3657,12 @@ The following individuals have contributed to Daikon:
 Daikon logo.
 
 The feedback of Daikon users has been very valuable.  We are
-particularly grateful to Rich Angros, Tadashi Araragi, and Manos Renieris.
+particularly grateful to Rich Angros, Tadashi Araragi, Engelbert
+Hubbers, and Manos Renieris.  Many others have also been generous with
+their feedback, for which we are grateful.
 
-Many of our other colleagues have also been generous with their feedback
-and advice, for which we are grateful.
-
-This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
-an IBM Cooperative Fellowship, and a gift from Edison Design Group.
+@c This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
+@c an IBM Cooperative Fellowship, and a gift from Edison Design Group.
 
 
 @node     File formats, Index, Details, Top
