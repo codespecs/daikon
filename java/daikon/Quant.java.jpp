@@ -187,4 +187,22 @@ public final class Quant {
     return eltsNotEqual((java.lang.Object[])arr.toArray(new java.lang.Object[]{}), elt);
   }
 
+  /*@ pure */ public static boolean isIntegralType(Class c) {
+    return
+      (c.equals(Byte.TYPE) ||
+       c.equals(Short.TYPE) ||
+       c.equals(Integer.TYPE) ||
+       c.equals(Long.TYPE));
+  }
+
+  /*@ pure */ public static boolean isRealType(Class c) {
+    return
+      (c.equals(Float.TYPE) ||
+       c.equals(Double.TYPE));
+  }
+
+  /*@ pure */ public static boolean isNumericType(Class c) {
+    return isIntegralType(c) || isRealType(c);
+  }
+
 }
