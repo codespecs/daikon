@@ -43,6 +43,12 @@ public final class Daikon {
   public static boolean suppress_implied_controlled_invariants = false; 
   // public static boolean suppress_implied_controlled_invariants = true; 
 
+  // When true, don't print EXIT invariants over strictly orig()
+  // variables when the corresponding entry ppt already has the
+  // invariant.
+  public static boolean suppress_implied_postcondition_over_prestate_invariants = false; 
+  // public static boolean suppress_implied_postcondition_over_prestate_invariants = false; 
+
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
   public static FileOutputStream inv_ostream;
@@ -62,6 +68,7 @@ public final class Daikon {
     + "    -o inv_file       Serialize invariants to the specified file;\n"
     + "                        they can later be postprocessed, compared, etc.\n"
     + "    --suppress_cont   Suppress display of implied invariants (by controlling ppt).\n"
+    + "    --suppress_post   Suppress display of obvious postconditions on prestate.\n"
     + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
     + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
     ;
@@ -82,6 +89,7 @@ public final class Daikon {
 
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt("suppress_cont", LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("suppress_post", LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("prob_limit", LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
@@ -93,6 +101,8 @@ public final class Daikon {
 	String option_name = longopts[g.getLongind()].getName();
 	if ("suppress_cont".equals(option_name)) {
 	  suppress_implied_controlled_invariants = true;
+	} else if ("suppress_pre".equals(option_name)) {
+	  suppress_implied_postcondition_over_prestate_invariants = true;
 	} else if ("prob_limit".equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else {
