@@ -72,7 +72,7 @@ public abstract class Derivation
   }
   private VarInfo this_var_info;
 
-  protected boolean missing_array_bounds = false;
+  public boolean missing_array_bounds = false;
   /**
    * True if we have encountered to date any missing values in this
    * derivation due to array indices being out of bounds.  This can
