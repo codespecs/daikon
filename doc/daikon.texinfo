@@ -3873,6 +3873,15 @@ any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
 
+@item --limit-static-vars
+
+Limits the output of static variables in the @code{.decls} and @code{.dtrace} 
+files. File-static variables are only observed at program points for functions 
+which belong to the same file as the variable.  Static variables 
+declared within a particular function are only observed at program points 
+for that function.  This is a heuristic to reduce the amount of Kvasir
+output without greatly reducing the amount of useful output.
+
 @item --dtrace-append
 
 Append new trace information to the end of an existing @code{.dtrace}
@@ -3886,7 +3895,8 @@ the specified file name.  The default is
 is the name of the program.  A filename of @code{-} may be used to
 specify the standard output; in this case, the regular standard output
 of the program will be redirected back to the terminal, to avoid
-intermixing it with the trace output.
+intermixing it with the trace output. If the given filename ends in '.gz', 
+then @code{--dtrace-gzip} is enabled and the @code{.dtrace} file will be compressed.
 
 @item --dtrace-gzip
 
@@ -3948,6 +3958,20 @@ redirect the program's standard output and error, and Kvasir's standard
 error, to a single file, you can say @code{--program-stdout='&2'
 --program-stderr='&2' 2>@var{filename}}.
 
+@item --disambig-file=@var{filename}
+Specifies the filename for the pointer type disambiguation file.
+If this file exists, Kvasir uses it to make decisions about how 
+to output the referents of pointer variables.  If the file does not exist, 
+then Kvasir creates it, specifying default instrumentation behavior for all
+pointer types.  It may then be edited and used on subsequent runs.
+(NOTE: Pointer type disambiguation functionality is not yet completed.)
+
+@item --disambig
+Tells Kvasir to create or read pointer type disambiguation with the
+default filename, which is @file{@var{myprog}.disambig} in the same
+directory as the target program.
+(NOTE: Pointer type disambiguation functionality is not yet completed.)
+
 @end table
 
 @node Kvasir limitations,  , Kvasir options, Binary C front end Kvasir
@@ -3964,13 +3988,6 @@ here, please report them as bugs (@pxref{Reporting bugs}).  The
 limitations are listed roughly in decreasing order of severity.
 
 @itemize @bullet
-@item
-Kvasir's support for outputting arrays is not yet complete.  Kvasir
-attempts to determine the length of arrays either statically from
-debugging information or dynamically by examining which memory locations
-have been used.  However, this process is known to not yet work correctly
-in all situations.  Also, multidimensional arrays do not yet print with
-all of their elements.
 
 @item
 Kvasir-traced programs take longer (often a good fraction of a second)
@@ -3982,6 +3999,12 @@ Kvasir always prints the contents of structures according to their
 compile-time type.  Programs that use generic pointers and structural
 equivalence to simulate object-orientation will have derived-`class'
 fields missing when a structure is passed via a base-`class' pointer.
+
+@item
+Kvasir's support for outputting arrays is not yet complete. 
+It still does not have the functionality to print out multidimensional 
+arrays with all of their elements or the option to flatten 
+multidimensional arrays into multiple single-dimensional arrays.
 
 @item
 Not all of the options of the source-based dfec are supported.
