@@ -130,4 +130,14 @@ public abstract class VarComparability {
     }
   }
 
+  /**
+   * In general, if two items are comparable, they can be placed in the
+   * same equality set.  This is not always true for some comparabilities
+   * (because they are not always transitive).  They can override this
+   * method to provide the correct results
+   */
+  public boolean equality_set_ok (VarComparability other) {
+    return comparable (this, other);
+  }
+
 }
