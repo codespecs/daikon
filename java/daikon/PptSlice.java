@@ -363,7 +363,7 @@ public abstract class PptSlice
    * @return the List of weakened invariants.
    **/
   protected List flow_and_remove_falsified() {
-    repCheck();  // Can do, but commented out for performance
+    // repCheck();  // Can do, but commented out for performance
 
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
@@ -490,7 +490,7 @@ public abstract class PptSlice
 
         // Ensure the slice exists.
         PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
-        slice.repCheck();  // Can do, but commented out for performance
+        // slice.repCheck();  // Can do, but commented out for performance
     
         // Compute the permutation
         int[] permutation = new int[slice.arity];
