@@ -973,7 +973,15 @@ that is created all have zero size.  You do not generally need to do
 @samp{make clean}, which forces re-instrumentation (a slow process) the
 next time you run the tests.
 
-
+Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the 
+@file{$inv/tests/kvasir-tests} directory. These tests run Daikon to ensure 
+that the Kvasir output is valid Daikon input. To run them, go to 
+@file{$inv/tests/kvasir-tests} or any test sub-directory within here and run 
+"@samp{make summary-w-daikon}". If any tests return @samp{FAILED}, then
+you should look at the appropriate @file{.diff} file. If you feel that the 
+failure was actually a result of your Daikon changes and should be in fact 
+correct output, then run "@samp{make update-inv-goals}" to update the Daikon
+@samp{invs.goal} file.
 
 @menu
 * Unit Testing::                
