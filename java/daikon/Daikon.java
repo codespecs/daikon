@@ -98,6 +98,14 @@ public final class Daikon {
    **/
   public static boolean use_equality_optimization = true;
 
+  /**
+   * Whether to use the dynamic constants optimization.  This
+   * optimization doesn't instantiate invariants over constant
+   * variables (ie, that that have only seen one value).  When the
+   * variable receives a second value, invariants are instantiated and
+   * are given the sample representing the previous constant value.
+   **/
+  public static boolean use_dynamic_constant_optimization = true;
 
   /**
    * Whether to use general suppression mechanism.
@@ -116,7 +124,7 @@ public final class Daikon {
    * initiated.  When zero, initiate suppression immediately before
    * seeing samples.
    **/
-  public static int suppress_samples_min = 0;
+  public static int suppress_samples_min = 10;
 
   /**
    * Whether to associate the program points in a dataflow hierarchy,
@@ -269,6 +277,8 @@ public final class Daikon {
 
   public static final Logger debugProgress =Logger.getLogger("daikon.Progress");
 
+  public static final Logger debugEquality = Logger.getLogger("daikon.Equality");
+
   /** prints out statistics concerning equality sets, suppressions, etc **/
   public static final Logger debugStats = Logger.getLogger ("daikon.stats");
 
@@ -384,6 +394,14 @@ public final class Daikon {
 
     if (output_num_samples) {
       Global.output_statistics();
+    }
+
+    // print statistics concerning what invariants are printed
+    if (debugStats.isLoggable (Level.FINE)) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        PrintInvariants.print_filter_stats (debugStats, ppt, all_ppts);
+      }
     }
 
     // Done
@@ -671,6 +689,10 @@ public final class Daikon {
     // any configuration options (which may set the ratio) are processed.
     Global.fuzzy.set_rel_diff (Invariant.dkconfig_fuzzy_ratio);
 
+    // Enable dynamic constants for bottom up only
+    if (!df_bottom_up)
+      use_dynamic_constant_optimization = false;
+
     return new Set[] {
       decl_files,
       dtrace_files,
@@ -892,10 +914,31 @@ public final class Daikon {
       monitor.stop();
     }
 
-    if (debugStats.isLoggable (Level.FINE))
-      PptSliceEquality.print_equality_stats (debugStats, all_ppts);
+
+
+    if (debugStats.isLoggable (Level.FINE)) {
+//       PptSliceEquality.print_equality_stats (debugStats, all_ppts);
+//       if (false) {
+//         for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+//           PptTopLevel ppt = (PptTopLevel) i.next();
+//           if (ppt.ppt_name.toString().indexOf ("EXIT42") >= 0) {
+//             System.out.println (ppt.ppt_name + " After processing data");
+//             ppt.print_suppressed_invs (debugStats);
+//           }
+//         }
+//       }
+    }
 
     // Postprocessing
+
+    // Post process dynamic constants
+    if (use_dynamic_constant_optimization) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        if (ppt.constants != null)
+          ppt.constants.post_process();
+      }
+    }
 
     // If we are processing dataflow bottom up
     if (df_bottom_up) {
@@ -909,19 +952,19 @@ public final class Daikon {
       Dataflow.createUpperPpts (all_ppts);
     }
 
-    // Turn off bottom up while doing equality optimization and the
-    // last suppression.  This allows self suppressions and
-    // suppressions between levels.  It is not clear this is correct
-    // but it should help things match between top down and bottom up.
-    boolean tmp_bu = Daikon.df_bottom_up;
-    Daikon.df_bottom_up = false;
-
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization) {
       debugProgress.fine ("Equality Post Process");
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
+      }
+    }
+
+    if (debugEquality.isLoggable (Level.FINE)) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        debugEquality.fine (ppt.ppt_name +": " + ppt.equality_sets_txt());
       }
     }
 
@@ -932,8 +975,16 @@ public final class Daikon {
       ppt.suppressAll (false);
     }
 
-    // Restore bottom up state
-    Daikon.df_bottom_up = tmp_bu;
+    // debug print suppressed invariants
+    if (false && debugStats.isLoggable (Level.FINE)) {
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        if (ppt.ppt_name.toString().indexOf ("EXIT42") >= 0) {
+          System.out.println (ppt.ppt_name + " After final suppression");
+          ppt.print_suppressed_invs (debugStats);
+        }
+      }
+    }
   }
 
   private static void suppressWithSimplify(PptMap all_ppts) {
