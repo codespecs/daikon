@@ -171,7 +171,8 @@ public final class VarComparabilityExplicit extends VarComparability implements 
   static final String[] ws_split_to_interned_array(String s) {
     PatternMatcher re_matcher = Global.regexp_matcher;
 
-    Vector vec = Util.split(re_matcher, Global.ws_regexp, s);
+    Vector vec = new Vector();
+    Util.split(vec, re_matcher, Global.ws_regexp, s);
     String[] result = (String[]) vec.toArray(new String[0]);
     Intern.internStrings(result);
     return result;
@@ -212,7 +213,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
     return true;
   }
-  
+
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
   private void readObject(ObjectInputStream in) throws

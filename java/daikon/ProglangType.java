@@ -295,10 +295,14 @@ public final class ProglangType implements java.io.Serializable {
 
       // This isn't right if a string contains embedded spaces.
       // I could instead use StreamTokenizer.
-      String[] value_strings
-        = ((value.length() == 0)
-           ? (new String[0])  // parens for Emacs indentation
-           : (String[]) (Util.split(Global.regexp_matcher, Global.ws_regexp, value)).toArray(new String[0]));
+      String[] value_strings;
+      if (value.length() == 0) {
+        value_strings = new String[0];
+      } else {
+        Vector v = new Vector();
+        Util.split(v, Global.regexp_matcher, Global.ws_regexp, value);
+        value_strings = (String[]) v.toArray(new String[0]);
+      }
       int len = value_strings.length;
 
       // This big if ... else should deal with all the primitive types --
