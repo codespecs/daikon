@@ -350,7 +350,7 @@ public final class CLASSNAME
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
 
-    if (Debug.logDetail())
+   // if (Debug.logDetail())
       wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z + " to invariant");
 
     if (values_seen < MINTRIPLES) {
@@ -456,21 +456,28 @@ public final class CLASSNAME
    */
   private InvariantStatus planarIntervention(Point[] def_point) {
 
+  // make a copy of the array so that the points don't get clobbered because
+  //we need to check all the points in def_points against the coefficients calculated
+
+    Point[] dummy = new Point[def_point.length];
+    for (int i = 0; i < def_point.length; i++)
+      dummy[i] = def_point[i];
+      
   // Find the three points with the maximum separation
-        maxsep_triples (def_point);
-        if (def_point[0] == null) {
+        maxsep_triples (dummy);
+        if (dummy[0] == null) {
           // this should never be the problem since we check for a line
           // first
           return InvariantStatus.FALSIFIED;
         } else {
 
-    wrapper.log("Definitive point1: " + def_point[0]);
-    wrapper.log("Definitive point2: " + def_point[1]);
-    wrapper.log("Definitive point3: " + def_point[2]);
+    wrapper.log("Definitive point1: " + dummy[0]);
+    wrapper.log("Definitive point2: " + dummy[1]);
+    wrapper.log("Definitive point3: " + dummy[2]);
     }
 
         // calculate the coefficients of the equation (a, b, c, d)
-        double[] coef = calc_tri_linear (def_point);
+        double[] coef = calc_tri_linear (dummy);
 
         a = coef[0];
         b = coef[1];
@@ -496,8 +503,12 @@ public final class CLASSNAME
         // Check all values against a, b, and c.
         if (!wrapper.is_false()) {
           for (int i=0; i<values_seen; i++) {
+          wrapper.log("values seen: " + values_seen);
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
+            wrapper.log("point: " + def_point[i].x + " " + def_point[i].y + " " + def_point[i].z);
+            wrapper.log("compare: " + -c * def_point[i].z);
+            wrapper.log( "to: " + (a*def_point[i].x + b*def_point[i].y + d));
             if (!EQUAL (-c * def_point[i].z,
                         a*def_point[i].x + b*def_point[i].y + d)) {
               if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
@@ -1038,7 +1049,8 @@ public final class CLASSNAME
     double[] coef = new double[] {standard_i_var,
                                   standard_j_var,
                                   standard_k_var, standard_Stand_const };
-
+                               
+                              
     return coef;
 
   }
@@ -1170,6 +1182,7 @@ public final class CLASSNAME
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
   static String formatTerm(OutputFormat format, double coeff, VarInfoName var, VarInfo vi, boolean first) {
     return LinearBinaryCore.formatTerm(format, coeff, var, vi, first);
+    
   }
 
   public String format_using(OutputFormat format,
@@ -1177,6 +1190,7 @@ public final class CLASSNAME
                              VarInfoName y, VarInfo yvi,
                              VarInfoName z, VarInfo zvi,
                              double a, double b, double c, double d) {
+
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
       return wrapper.format_too_few_samples(format, null);
     }
@@ -1203,7 +1217,7 @@ public final class CLASSNAME
         + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
         + " + 1, 1)";
       #else
-      return formatTerm(format, a, x, xvi, true)
+         return formatTerm(format, a, x, xvi, true)
         + formatTerm(format, b, y, yvi, (a == 0))
         + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
         + formatTerm(format, d, null, null, (a == 0) && (b == 0) && (c == 0))
@@ -1218,7 +1232,6 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-
       return formatTerm(format, a, x, xvi, true)
         + formatTerm(format, b, y, yvi, (a == 0))
         + formatTerm(format, c, z, zvi, (a == 0) && (b == 0))
