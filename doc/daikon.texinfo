@@ -1616,7 +1616,7 @@ tools as other Daikon invariants.
 
 In the example above, the script @file{test_bday.pl} was not itself
 instrumented; it was only used to test the instrumented code.  The
-Perl front-end can also be used to instrument stand-alone Perl
+Perl front end can also be used to instrument stand-alone Perl
 programs.  The following sequence of commands, similar to those above,
 show how Daikon can be used with the stand-alone program
 @file{standalone.pl}, also in the @file{examples/perl-examples}
@@ -1692,7 +1692,7 @@ the names of procedures and variables that appear in the data trace file.
 
 Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
 @command{dfec} for C and C++, and @command{dfepl} for Perl.  The
-letters @command{dfe} in the names stand for ``Daikon front-end'', and
+letters @command{dfe} in the names stand for ``Daikon front end'', and
 @command{j}, @command{c}, and @command{pl} abbreviate ``Java'',
 ``C'', and ``Perl''.  The Java front end is robust; the C front end
 is moderately robust, and the C++ and Perl front ends are experimental.
@@ -4043,7 +4043,7 @@ optimization.
 
 This section contains details about dfec, the Daikon front end for C@.
 An alternate front end for C, named Kvasir, is also available
-(@pxref{Binary C front-end Kvasir}).
+(@pxref{Binary C front end Kvasir}).
 For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
 
@@ -5142,7 +5142,7 @@ safely ignored when they occur.
 
 Because Perl programs do not contain static type information to
 distinguish, for instance, between strings and numbers, the Perl
-front-end incorporates an additional dynamic analysis to infer these
+front end incorporates an additional dynamic analysis to infer these
 types.  This type guessing, which occurs as a first pass before the
 program can be instrumented to produce output for Daikon, operates in
 a manner somewhat analogous to Daikon itself: watching the execution
@@ -7316,7 +7316,7 @@ faster on very large files.  In order to use
 @node Reading trace data on the fly,  , Reducing executions, Large dtrace files
 @subsection Reading trace data on the fly
 
-Some Daikon front-ends support writing trace data to a pipe, so that it
+Some Daikon front ends support writing trace data to a pipe, so that it
 can be read by Daikon on the fly without ever being written to disk.
 This section describes two techniques for achieving this, and gives
 examples using the C front end Kvasir.
@@ -7328,9 +7328,9 @@ by most Unix-compatible systems. When one process tries to open a FIFO
 for reading, it blocks, waiting for another process to open it for
 writing (or vice-versa). When both a reader and a writer are ready, the
 FIFO connects the reader to the writer like a regular Unix pipe. Daikon
-and a front-end can communicate via named pipes as long as each file
+and a front end can communicate via named pipes as long as each file
 that's a named pipe is written to and read from in the same order by
-both the front-end and Daikon in the same order (if this is not the
+both the front end and Daikon in the same order (if this is not the
 case, deadlock will occur).
 
 The @code{--output-fifo} option to Kvasir causes it to create its output
