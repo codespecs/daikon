@@ -534,7 +534,7 @@ public class SEQSEQINTEQUAL
         Invariant pic = PAIRWISEINTEQUAL.find(ppt);
         if (pic != null) {
           if (logOn())
-            debug.log ("Obvious Dynamic from " + pic.format());
+            debug.log ("Obvious Dynamic from " + pic.format() + " (pairwise)");
             return true;
         }
       }
@@ -574,10 +574,13 @@ public class SEQSEQINTEQUAL
           return (true);
         }
         VarInfo[] avis = {arr1, arr2};
-        //debug.log ("looking for " + avis[0].name.name()
-        //     + " " + avis[1].name.name());
+        debug.log ("looking for " + avis[0].name.name()
+             + " " + avis[1].name.name());
         ppt = this.ppt.parent.findSlice_unordered (avis);
+        debug.log ("Found ppt " + ppt);
         if (ppt != null) {
+          for (Iterator i = ppt.invs.iterator(); i.hasNext(); )
+            debug.log ("-- invariant " + ((Invariant) i.next()).format());
           List found = new ArrayList();
           found.add (SEQSEQ_EQ.find(ppt));
           found.add (SEQSEQ_LT.find(ppt));
@@ -588,7 +591,8 @@ public class SEQSEQINTEQUAL
             Invariant inv = (Invariant) found.get (i);
             if (inv != null) {
               if (logOn())
-                debug.log ("Obvious Dynamic from " + inv.format());
+                debug.log ("Obvious Dynamic from " + inv.format() +
+                           "(" + inv.getClass() + ")");
               return (true);
             }
           }
