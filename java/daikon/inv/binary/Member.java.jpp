@@ -130,6 +130,8 @@ public final class CLASSNAME
     VarInfo seqvar = vis[seq_first ? 0 : 1];
     VarInfo sclvar = vis[seq_first ? 1 : 0];
     if (isObviousMember(sclvar, seqvar)) {
+      discardCode = DiscardInvariant.obvious;
+      discardString = sclvar().name.name()+" is an obvious member of "+seqvar().name.name();
       return true;
     }
     return super.isObviousStatically (vis);
@@ -274,7 +276,8 @@ public final class CLASSNAME
           return true;
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        return SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        Object[] obv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        return (obv[1] != null);
       }
     }
 
@@ -436,7 +439,8 @@ public final class CLASSNAME
           return true;
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        return SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        Object[] obvDeriv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        return (obvDeriv[1]!=null);
       }
     }
 
@@ -550,13 +554,18 @@ public final class CLASSNAME
                      " not in " + ArraysMDE.toString(a));
       }
       destroyAndFlow();
+      discardCode = DiscardInvariant.bad_sample;
+      discardString = "Falsified since " + i + " not in " + ArraysMDE.toString(a);
       return;
     }
   }
 
   protected double computeProbability() {
-    if (falsified)
+    if (falsified) {
+      discardCode = DiscardInvariant.bad_sample;
+      discardString = "This shouldn't help";
       return Invariant.PROBABILITY_NEVER;
+    }
     else
       return Invariant.PROBABILITY_JUSTIFIED;
   }

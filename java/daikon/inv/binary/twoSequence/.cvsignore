@@ -14,8 +14,6 @@ TwoSequenceFloat.java
 TwoSequenceString.java
 TwoSequenceFactory.java
 TwoSequenceFactoryFloat.java
-SeqComparisonString.java
-TwoSequenceString.java
 SeqSeqIntEqual.java
 SeqSeqIntLessThan.java
 SeqSeqIntGreaterThan.java

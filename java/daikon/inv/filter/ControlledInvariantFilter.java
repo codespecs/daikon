@@ -16,12 +16,10 @@ class ControlledInvariantFilter extends InvariantFilter {
   // of them are worth printing.  If any are, then this invariant does not need
   // to be printed.
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    if (!isWorthPrinting(invariant) && !IsEqualityComparison.it.accept(invariant)) {
+    if (!isWorthPrinting(invariant) && !IsEqualityComparison.it.accept(invariant))
       return true;
-    }
-    else {
+    else
       return false;
-    }
   }
 
   private boolean isWorthPrinting(Invariant inv)
@@ -34,6 +32,8 @@ class ControlledInvariantFilter extends InvariantFilter {
 
 
     if (! isWorthPrinting_sansControlledCheck(inv)) {
+      inv.discardCode = DiscardInvariant.control_check;
+      inv.discardString = "Invariant fails InvariantFilters.isWorthPrintingFilter";
       return false;
     }
 
@@ -63,6 +63,9 @@ class ControlledInvariantFilter extends InvariantFilter {
         if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
           PrintInvariants.debugFiltering.fine ("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
         }
+        inv.discardCode = DiscardInvariant.control_check;
+        inv.discardString = "("+contr_inv.ppt.name+": "+contr_inv.format()+") is worth printing "+
+          "and is a controlling Invariant of this";
         return false;
       }
       // find the controlling invs of contr_inv and add them to the

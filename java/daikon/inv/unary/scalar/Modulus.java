@@ -97,6 +97,8 @@ public class Modulus
       long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
         destroyAndFlow();
+        discardCode = DiscardInvariant.bad_sample;
+        discardString = "Modulus calculated to be 1: " + value1 + " seen then " + value + " introduced";
         return;
       }
       modulus = new_modulus;
@@ -106,9 +108,19 @@ public class Modulus
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE
           || (new_modulus_long < Integer.MIN_VALUE)) {
+        discardCode = DiscardInvariant.bad_sample;
+        if (new_modulus_long > Integer.MAX_VALUE)
+          discardString = "New modulus calculated is too large to be interesting: "+new_modulus_long;
+        else
+          discardString = "New modulus calculated is too small to be interesting: "+new_modulus_long;
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
+        if (new_modulus==1) {
+          discardCode = DiscardInvariant.bad_sample;
+          discardString = "New modulus calculated to be 1: old_value==" + value1 +
+            " new_value==" + value + " old_modulus==" + modulus;
+        }
         Assert.assertTrue(new_modulus > 0);
       }
       if (new_modulus != modulus) {
@@ -127,10 +139,19 @@ public class Modulus
   protected double computeProbability() {
     if (modulus == 1)
       return Invariant.PROBABILITY_NEVER;
-    if (modulus == 0)
+    if (modulus == 0) {
+      discardCode = DiscardInvariant.obvious;
+      discardString = "Modulus is 0";
       return Invariant.PROBABILITY_UNJUSTIFIED;
+    }
     double probability_one_elt_modulus = 1 - 1.0/modulus;
-    return Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
+    double answer = Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
+    if (answer > dkconfig_probability_limit) {
+      discardCode = DiscardInvariant.bad_probability;
+      discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
+        dkconfig_probability_limit;
+    }
+    return answer;
   }
 
   public boolean isSameFormula(Invariant other)

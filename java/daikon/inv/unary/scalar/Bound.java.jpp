@@ -45,6 +45,7 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "min"
   #define MAXSTR "max"
   #define GTESTR ">="
+  #define LTESTR "<="
   #define MAX1 core.max1
   #define LOWERBOUNDCORE INT(LowerBoundCore)
   #define ELTLOWERBOUND INT(EltLowerBound)
@@ -94,6 +95,7 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "max"
   #define MAXSTR "min"
   #define GTESTR "<="
+  #define LTESTR ">="
   #define MAX1 core.min1
   #define LOWERBOUNDCORE INT(UpperBoundCore)
   #define ELTLOWERBOUND INT(EltUpperBound)
@@ -257,7 +259,7 @@ public class LOWERBOUND
 #ifdef BASE_FLOAT
       return "(" + GTESTR + " " + name + " " + simplify_format_double(MIN1) + ")";
 #else
-      return "(" + GTESTR + " " + name + " " + MIN1 + ")";
+      return "(" + GTESTR + " " + name + " " + simplify_format_long(MIN1) + ")";
 #endif
     }
 
@@ -437,6 +439,16 @@ public class LOWERBOUND
       // suitable to be turned on everywhere by default. -SMcC
       // if the value is not in some range (like -1,0,1,2) then say that
       // it is obvious
+      if (MIN1 < dkconfig_minimal_interesting) {
+        discardCode = DiscardInvariant.obvious;
+        discardString = "MIN1="+MIN1+" is less than dkconfig_minimal_interesting=="+
+          dkconfig_minimal_interesting;
+      }
+      else {
+        discardCode = DiscardInvariant.obvious;
+        discardString = "MIN1="+MIN1+" is greater than dkconfig_maximal_interesting=="+
+          dkconfig_maximal_interesting;
+      }
       return true;
     }
     ONEOF oo = ONEOF.find(ppt);
@@ -445,6 +457,9 @@ public class LOWERBOUND
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
+        discardCode = DiscardInvariant.obvious;
+        String varName = var().name.name();
+        discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
         return true;
       }
     }
@@ -466,6 +481,10 @@ public class LOWERBOUND
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
             && SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, other.var())) {
+          discardCode = DiscardInvariant.obvious;
+          String varName = var().name.name();
+          String otherName = other.var().name.name();
+          discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
           return true;
         }
       }
@@ -482,6 +501,8 @@ public class LOWERBOUND
       // Assert.assertTrue(vshift == 0);
       if (vshift == 0 && MIN1 == 0) {
         // "size(a[]) >= 0" is obvious.
+        discardCode = DiscardInvariant.obvious;
+        discardString = var().name.name()+" >=0 is obvious";
         return true;
       }
     }
@@ -503,6 +524,11 @@ public class LOWERBOUND
           if ((eb != null)
               && eb.enoughSamples()
               && eb.MIN1 == MIN1) {
+            discardCode = DiscardInvariant.obvious;
+
+            String otherName = other_slice.var_infos[0].name.name();
+            String varName = var().name.name();
+            discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
             return true;
           }
         }

@@ -56,7 +56,7 @@ The correct way to build the system is to run 'make'.
      TOSTRING is never called for hashcodes: we never print actual values.
   #endif
   #define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
-  #define TOSTRING_SIMPLIFY(x) String.valueOf(x)
+  #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define NAME var().name.name()
   #define JAVA_NAME var().name.java_name()
   #define NONZERO NonZero
@@ -91,7 +91,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
+  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quoteMore(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name()
   #define JAVA_NAME var().name.java_name()
@@ -102,7 +102,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfSequence"
   #define SINGLESCALAR SingleScalarSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
-  #define TOSTRING_SIMPLIFY(x) String.valueOf(x)
+  #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
   #define JAVA_NAME var().name.java_name()
@@ -136,7 +136,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "EltOneOf"
   #define SINGLESCALAR SingleScalarSequence
   #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
-  #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : String.valueOf(x))
+  #define TOSTRING_SIMPLIFY(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : simplify_format_long(x))
   #define NAME var().name.name() + " elements"
   #define JAVA_NAME var().name.java_name()
   #define NONZERO EltNonZero
@@ -164,7 +164,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
+  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quoteMore(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name.name() + " elements"
   #define JAVA_NAME var().name.java_name()
@@ -1081,12 +1081,15 @@ public final class ONEOFSCALAR
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
-        result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
+        result = "(EQ " + varname + " " +
+          ((elts[0] == 0) ? "null" :
+           ("(hashcode " + simplify_format_long(elts[0]) + ")")) + ")";
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
         Assert.assertTrue(elts[0] == 0);
         Assert.assertTrue(elts[1] != 0);
-        result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
+        result = "(OR (EQ " + varname + " null) (EQ " + varname
+          + "(hashcode " + simplify_format_long(elts[1]) + ")))";
       } else if (num_elts == 0) {
         return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
       } else {
@@ -1119,11 +1122,11 @@ public final class ONEOFSCALAR
       VarInfoName offset = null;
       if (var().name.isApplySizeSafe()) {
         length = "(EQ " + var().name.applySize().simplify_name() + " "
-          + seq.length + ")";
+          + simplify_format_long(seq.length) + ")";
       } else if ((bounds = var().name.getSliceBounds()) != null) {
         String size = "(+ 1 (- " + bounds[1].simplify_name() + " " +
           bounds[0].simplify_name() + "))";
-        length = "(EQ " + size + " " + seq.length + ")";
+        length = "(EQ " + size + " " + simplify_format_long(seq.length) + ")";
         offset = bounds[0];
       }
 #ifdef SEQUENCE
@@ -1256,29 +1259,49 @@ public final class ONEOFSCALAR
     if (num_elts == dkconfig_size) {
       if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy of '" + format() + "' add_modified (" + v + ")");
+      discardCode = DiscardInvariant.bad_sample;
+      discardString = "number of values taken on has reached dkconfig_size=="+dkconfig_size;
       destroyAndFlow();
       return;
     }
 #if defined(STRING) || defined(ELTSTRING)
     if (is_type() && (num_elts == 1)) {
       destroyAndFlow();
+      discardCode = DiscardInvariant.bad_sample;
+      discardString = var().name.name()+" is a String representing a class type and took on more one value: ";
+      discardString += elts[0]+" seen then "+v+" introduced.";
       return;
     }
 #elif defined(SEQUENCE)
     if (is_hashcode && (num_elts == 1)) {
       destroyAndFlow();
+      discardCode = DiscardInvariant.bad_sample;
+      discardString = var().name.name()+" is a sequence hashcode and took on more than one value: ";
+      discardString += elts[0]+" seen then "+v+" introduced.";
       return;
     }
 #elif defined(SCALAR) || defined(ELT)
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
       destroyAndFlow();
+      discardCode = DiscardInvariant.bad_sample;
+
+      if (is_boolean)
+        discardString = var().name.name()+" is a boolean and took on both true and false.";
+      else {
+        discardString = var().name.name()+" is a SCALAR or ELT hashcode and took on more than one non-null value: ";
+        discardString += ArraysMDE.toString(elts)+" seen then "+v+" introduced.";
+      }
+
       return;
     }
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
         destroyAndFlow();
+        discardCode = DiscardInvariant.bad_sample;
+        discardString = var().name.name()+" is a SCALAR or ELT hashcode and took on more than one non-null value: ";
+        discardString += elts[0]+" seen then "+v+" introduced.";
         return;
       }
     }
@@ -1303,6 +1326,10 @@ public final class ONEOFSCALAR
   // It is possible to have seen many (array) samples, but no (INT)
   // array element values.
   public boolean enoughSamples() {
+    if (num_elts<=0) {
+      discardCode = DiscardInvariant.not_enough_samples;
+      discardString = "Not enough samples: had "+num_elts+" but needed 1";
+    }
     return num_elts > 0;
   }
 #endif
@@ -1310,10 +1337,15 @@ public final class ONEOFSCALAR
   protected double computeProbability() {
     // This is not ideal.
     if (num_elts == 0) {
+      discardCode = DiscardInvariant.bad_probability;
+      discardString = var().name.name()+" never was initialized.";
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #if defined(SCALAR) || defined(ELT)
     } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
+      discardCode = DiscardInvariant.bad_probability;
+      discardString = var().name.name()+" was a hashcode and took on more than one value: ";
+      discardString += ArraysMDE.toString(elts);
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #endif
     } else {
@@ -1327,6 +1359,8 @@ public final class ONEOFSCALAR
     // desirable if the user doesn't know their actual value.
     if (vis[0].isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
+      discardCode = DiscardInvariant.obvious;
+      discardString = var().name.name()+" is a static constant.";
       return true;
     }
     return super.isObviousStatically(vis);
@@ -1360,6 +1394,8 @@ public final class ONEOFSCALAR
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
+        discardCode = DiscardInvariant.obvious;
+        discardString = v.name.name()+" is derived with shift!-0 (shift=="+sl.shift+")";
         return true;
       }
     }
@@ -1381,6 +1417,8 @@ public final class ONEOFSCALAR
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
               // System.out.println("isObviousImplied true");
+              discardCode = DiscardInvariant.obvious;
+              discardString = v1.name.name()+" is a member of "+v2.name.name()+" for which this Invariant also holds";
               return true;
             }
           }
@@ -1412,6 +1450,7 @@ public final class ONEOFSCALAR
 
     return super.isObviousDynamically(vis);
   }
+
 #endif
 
   /**

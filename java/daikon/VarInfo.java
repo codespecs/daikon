@@ -1442,23 +1442,13 @@ public final class VarInfo
    * "location(obj) == location(orig(obj))".
    */
   public boolean isPointer() {
-    // Fot the moment, I've copied this logic from some existing code
-    // without thinking carefully through its correctness: in
-    // particular, it may a bit Java-specific. --smcc
+    // This used to check whether the program type had a higher
+    // dimension than the rep type, or if the rep type was integral
+    // but the program type wasn't primitive. These rules worked
+    // pretty well for Java, but not so well for C, where for instance
+    // you might have rep_type = int and type = size_t.
 
-    // If the program type has a higher dimension than the rep type,
-    // we are taking a hash or something.
-    if (type.pseudoDimensions() > rep_type.pseudoDimensions()) {
-      return true;
-    }
-
-    // The dimensions are the same.  If the rep type is integral but
-    // the program type isn't primitive, we have a hash, too.
-    if (rep_type.baseIsIntegral() && !type.baseIsPrimitive()) {
-      return true;
-    }
-
-    return false;
+    return file_rep_type.isPointerFileRep();
   }
 
   /**

@@ -66,7 +66,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020522L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -204,10 +204,12 @@ public final class CLASSNAME
     for (int ai=0; ai<a.length; ai++) {
       PRIMITIVE v = a[ai];
 
-      // The min and max tests will simultaneoulsy succeed exactly once (for
+      // The min and max tests will simultaneously succeed exactly once (for
       // the first value).
       if (EQUAL (v, 0)) {
         destroyAndFlow();
+        discardCode = DiscardInvariant.bad_sample;
+        discardString = var().name.name()+"["+ai+"]==0";
         return;
       }
       // XXX; uh oh -- flowing these is bad stuff; maybe search for
@@ -304,6 +306,8 @@ public final class CLASSNAME
 
         // First see if the subsequence relationship can be determined from the VarInfos
         if (SubSequence.isObviousSubSequenceDynamically(this, v1, v2)) {
+          discardCode = DiscardInvariant.obvious;
+          discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
           return true;
         }
         //     Otherwise, look for the actual SubSequence invariant
@@ -322,6 +326,11 @@ public final class CLASSNAME
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
               debug.fine ("  True from subsequence search");
+              discardCode = DiscardInvariant.obvious;
+              if (this_var_first)
+                discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
+              else
+                discardString = v2.name.name()+" is a subsequence of "+v1.name.name()+" for which the result is known";
               return true;
             }
           }

@@ -51,14 +51,28 @@ public class Session
    * is 2 or higher, a "<" or ">" will also be printed for each
    * invariant that is pushed onto or popped from from Simplify's
    * assumption stack. This option is mainly intended for debugging
-   * purposes, by can also provide something to watch when Simplify
+   * purposes, but can also provide something to watch when Simplify
    * takes a long time.
    **/
   public static int dkconfig_verbose_progress = 0;
 
+  /**
+   * Boolean. If true, the input to the Simplify theorem prover will
+   * also be directed to a file named simplifyN.in (where N is a
+   * number starting from 0) in the current directory. Simplify's
+   * operation can then be reproduced with a command like "Simplify
+   * -nosc <simplify0.in". This is intended primarily for debugging
+   * when Simplify fails.
+   **/
+
+  public static boolean dkconfig_trace_input = false;
+
+  private PrintStream trace_file;
+  private static int trace_count = 0;
+
   /* package */ final Process process;
-  /* package */ final PrintStream input;
-  /* package */ final BufferedReader output;
+  private final PrintStream input;
+  private final BufferedReader output;
 
   /**
    * Starts a new Simplify process, which runs concurrently; I/O with
@@ -82,11 +96,17 @@ public class Session
         java.lang.Runtime.getRuntime().exec("Simplify -nosc", envArray);
       SessionManager.debugln("Session: exec ok");
 
-      SessionManager.debugln("Session: prompt off");
+      if (dkconfig_trace_input) {
+        File f;
+        while ((f = new File("simplify" + trace_count + ".in")).exists())
+          trace_count++;
+        trace_file = new PrintStream(new FileOutputStream(f));
+      }
+
       // set up command stream and turn off prompting
+      SessionManager.debugln("Session: prompt off");
       input = new PrintStream(process.getOutputStream());
-      input.println("(PROMPT_OFF)");
-      input.flush();
+      sendLine("(PROMPT_OFF)");
 
       SessionManager.debugln("Session: eat prompt");
       // eat first (and only, because we turn it off) prompt
@@ -106,8 +126,25 @@ public class Session
     }
   }
 
+  /* package access */ void sendLine(String s) {
+    if (dkconfig_trace_input) {
+      trace_file.println(s);
+    }
+    input.println(s);
+    input.flush();
+  }
+
+  /* package access */ String readLine()
+    throws IOException
+  {
+    return output.readLine();
+  }
+
   public void kill() {
     process.destroy();
+    if (dkconfig_trace_input) {
+      trace_file.close();
+    }
   }
 
   // for testing and playing around, not for real use

@@ -44,7 +44,7 @@ public class Debug {
       // "PptSliceEquality",
       // "PairwiseIntLessEqual", "PairwiseIntGreaterEqual",
       // "SeqSeqIntEqual",
-      "IntEqual",
+      "NoDuplicates",
     };
 
   /**
@@ -58,16 +58,8 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
-      // "misc.Compar1.main(java.lang.String[]):::ENTER"
-      // "DataStructures.DisjSets.find(int):::EXIT"
-      // "DataStructures.StackAr.topAndPop():::EXIT",
-      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
-      // "misc.Dataflow.B.m2():::EXIT24"
-      // "unionCareful(int, int):::EXIT"
-      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
-      // "MapQuick1.StreetNumberSet:::OBJECT",
-      // "MapQuick1.StreetNumberSet.max():::EXIT",
-      "PolyCalc.RatPoly.sub(PolyCalc.RatPoly):::EXIT379",
+      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
+      "kataoka.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER"
     };
 
   /**
@@ -82,21 +74,9 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // {"return", "orig(this.theArray[this.topOfStack])"},
-      // { "this.topOfStack" },
-      // { "this.x"}
-      // { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
-      // { "this.s[orig(set1)..]", "orig(this.s[post(set1)..])" },
-      // { "orig(this.s[post(set1)..])" },
-      // { "this.s[orig(set1)..]" },
-      // { "other.begins[]", "other.ends[]" },
-      // { "other.ends[]", "other.begins[]" },
-      // { "this.begins[]", "this.ends[]" },
-      // { "this.ends[]", "this.begins[]" },
-      // { "this.begins[return..]", "this.ends[return..]" },
-      // { "this.ends[return..]" , "this.begins[return..]"}
-      { "size(p.terms.wrapped[])", "size(this.terms.wrapped[])-1" },
-      { "size(this.terms.wrapped[])-1" , "size(p.terms.wrapped[])"},
+      //{ "size(p.terms.wrapped[])", "size(this.terms.wrapped[])-1" },
+      //{ "size(this.terms.wrapped[])-1" , "size(p.terms.wrapped[])"},
+      {"list[]" },
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -229,7 +209,6 @@ public class Debug {
    */
 
   public void log (Logger debug, String msg) {
-
     log (debug, cache_class, cache_ppt, cache_vis, msg);
   }
 
@@ -240,7 +219,6 @@ public class Debug {
    */
 
   public static void log (Logger debug, Class inv_class, Ppt ppt, String msg) {
-
     log (debug, inv_class, ppt, ppt.var_infos, msg);
   }
 

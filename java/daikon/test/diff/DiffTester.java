@@ -412,7 +412,6 @@ public class DiffTester extends TestCase {
     PptSlice slicez = new PptSlice1(ppt, new VarInfo[] {vars[2]});
     Invariant invz = LowerBound.instantiate(slicez);
     slicez.addInvariant(invz);
-
     PptNode pptNode;
     pptNode = new PptNode(ppt, null);
     InvNode invNode;
@@ -423,7 +422,6 @@ public class DiffTester extends TestCase {
     invNode = new InvNode(invz, null);
     pptNode.add(invNode);
     ref.add(pptNode);
-
     Assert.assertEquals(printTree(ref), printTree(diff));
   }
 

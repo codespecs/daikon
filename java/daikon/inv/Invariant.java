@@ -29,7 +29,7 @@ public abstract class Invariant
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020806L;
+  static final long serialVersionUID = 20030610L;
 
   /**
    * General debug tracer.
@@ -223,6 +223,18 @@ public abstract class Invariant
   public final static int min_mod_non_missing_samples = 5;
 
   /**
+   * Stores the enumeration instance representing why this Invariant has
+   * been discarded.  Initialized to DiscardInvariant.not_discarded.
+   */
+  public DiscardInvariant discardCode = DiscardInvariant.not_discarded;
+
+  /**
+   * Stores a string that describes why this Invariant has been discarded.  If
+   * this has not been discarded then discardString.equals("")
+   */
+  public String discardString = "";
+
+  /**
    * @return true if the invariant has enough samples to have its
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
@@ -323,6 +335,11 @@ public abstract class Invariant
     falsified = true;
     if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
       log (PptSlice.debugFlow, "Destroyed " + format());
+
+    // Add invariant to discard list.  Note this may not be correct
+    // given the comment below.
+    if (PrintInvariants.print_discarded_invariants)
+      ppt.parent.falsified_invars.add(this);
 
     // [INCR] Commented out because removeInvariant removes this from
     // the pptslice.  In V3, this happens after invariants are
@@ -518,7 +535,7 @@ public abstract class Invariant
     return ppt.usesVarDerived(name);
   }
 
-  // Not used as of 1/31/2000.
+  // Not used as of 1/31/2000
   // // For use by subclasses.
   // /** Put a string representation of the variable names in the StringBuffer. */
   // public void varNames(StringBuffer sb) {
@@ -636,6 +653,44 @@ public abstract class Invariant
   }
 
   /**
+   * @return standard "format is not expressible" (indicating that the
+   * formalism is not powerful enough to express the logical formula) for
+   * the given requested format.  Made public so cores can call it.
+   **/
+  public String format_inexpressible(OutputFormat request) {
+    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
+      debugPrint.fine ("Format_ioa: " + this.toString());
+    }
+    String classname = this.getClass().getName();
+    return "warning: method " + classname + ".format(" + request + ")"
+      + "cannot be expressed in this format: " + format();
+  }
+
+  /**
+   * @return standard "too few samples for to have interesting
+   * invariant" for the requested format. For machine-readable
+   * formats, this is just "true". An optional string argument, if
+   * supplied, is a human-readable description of the invariant in its
+   * uninformative state, which will be added to the message.
+   **/
+  public String format_too_few_samples(OutputFormat request, String attempt) {
+    if (request == OutputFormat.SIMPLIFY) {
+      return "(AND)";
+    } else if (request == OutputFormat.IOA ||
+               request == OutputFormat.JAVA ||
+               request == OutputFormat.ESCJAVA ||
+               request == OutputFormat.JML) {
+      return "true";
+    }
+    String classname = this.getClass().getName();
+    if (attempt == null) {
+      attempt = varNames();
+    }
+    return "warning: too few samples for " + classname
+      + " invariant: " + attempt;
+  }
+
+  /**
    * Convert a floating point value into the weird Modula-3-like
    * floating point format that the Simplify tool requires.
    */
@@ -644,15 +699,38 @@ public abstract class Invariant
     if (s.indexOf('E') != -1) {
       // 1E6 -> 1d6
       // 1.43E6 -> 1.43d6
-      s.replace('E', 'd');
+      s = s.replace('E', 'd');
     } else if (s.indexOf('.') != -1) {
       // 3.14 -> 3.14d0
       s = s + "d0";
     }
     // 5 -> 5
-    // NaN -> Nan
+    // NaN -> NaN
     // Infinity -> Infinity
     return s;
+  }
+
+  /**
+   * Conver a long integer value into a format that Simplify can
+   * use. If the value is too big to fit in a signed 32-bit int, we
+   * have to turn it into floating point, or else Simplify will
+   * be unable to parse it. Unfortunately, this can lose precision.
+   **/
+  public static String simplify_format_long(long l) {
+    if (l >= -500000000 && l <= 500000000) {
+      // Note that the above range is actually smaller than the
+      // real range of [-2147483648..2147483647], since Simplify can
+      // get in trouble close to the boundary (try
+      // > (BG_PUSH (< 2147483647 n))
+      // to get an internal assertion failure)
+      // For that matter, try
+      // > (BG_PUSH (>= x -1073741825))
+      // > (BG_PUSH (<= x 1073741825))
+      // > (OR)
+      return "" + l;
+    } else {
+      return simplify_format_double((double)l);
+    }
   }
 
   /**
@@ -665,6 +743,27 @@ public abstract class Invariant
     if (s == null)
       return "null";
     StringBuffer buf = new StringBuffer("|_string_");
+    if (s.length() > 150) {
+      // Simplify can't handle long strings (its input routines have a
+      // 4000-character limit for |...| identifiers, but it gets an
+      // internal array overflow for ones more than about 195
+      // characters), so replace all but the beginning and end of a
+      // long string with a hashed summary.
+      int summ_length = s.length() - 100;
+      int p1 = 50 + summ_length / 4;
+      int p2 = 50 + summ_length / 2;
+      int p3 = 50 + 3 * summ_length / 4;
+      int p4 = 50 + summ_length;
+      StringBuffer summ_buf = new StringBuffer(s.substring(0, 50));
+      summ_buf.append("...");
+      summ_buf.append(Integer.toHexString(s.substring(50, p1).hashCode()));
+      summ_buf.append(Integer.toHexString(s.substring(p1, p2).hashCode()));
+      summ_buf.append(Integer.toHexString(s.substring(p2, p3).hashCode()));
+      summ_buf.append(Integer.toHexString(s.substring(p3, p4).hashCode()));
+      summ_buf.append("...");
+      summ_buf.append(s.substring(p4));
+      s = summ_buf.toString();
+    }
     for (int i = 0; i < s.length(); i++) {
       char c = s.charAt(i);
       if (c == '\n')
@@ -684,26 +783,16 @@ public abstract class Invariant
       else {
         buf.append("\\");
         // AFAIK, Simplify doesn't glork Unicode, so lop off all but
-        // the low 8 bits.
-        buf.append(Integer.toOctalString(c & 0xff));
+        // the low 8 bits
+        String octal = Integer.toOctalString(c & 0xff);
+        // Also, Simplify only accepts octal escapes with exactly 3 digits
+        while (octal.length() < 3)
+          octal = "0" + octal;
+        buf.append(octal);
       }
     }
     buf.append("|");
     return buf.toString();
-  }
-
-  /**
-   * @return standard "format is not expressible" (indicating that the
-   * formalism is not powerful enough to express the logical formula) for
-   * the given requested format.  Made public so cores can call it.
-   **/
-  public String format_inexpressible(OutputFormat request) {
-    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
-      debugPrint.fine ("Format_ioa: " + this.toString());
-    }
-    String classname = this.getClass().getName();
-    return "warning: method " + classname + ".format(" + request + ")"
-      + "cannot be expressed in this format: " + format();
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.
@@ -1032,24 +1121,14 @@ public abstract class Invariant
   // "OneOf". That seems silly, so it's now overriden there.
   public boolean hasFewModifiedSamples() {
     int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
-
-    if (this instanceof OneOf) {
-      // A OneOf should have at least as many samples as it has values.
-      // That isn't true for "elements", though:  a single sample "[1 2]"
-      // contains two values for the elements.
-      // Was an assert...
-      /* [INCR]
-      if (((OneOf) this).num_elts() > num_mod_non_missing_samples
-          && !(this instanceof EltOneOf)
-          && !(this instanceof EltOneOfString)) {
-        System.out.println("OneOf problem: num_elts " + ((OneOf) this).num_elts() + ", num_mod " + num_mod_non_missing_samples + ": " + format());
-      }
-      */
-      return false;
-    } else {
-      boolean result = (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
-      return result;
+    boolean result = (num_mod_non_missing_samples
+                      < Invariant.min_mod_non_missing_samples);
+    if (result) {
+      discardCode = DiscardInvariant.few_modified_samples;
+      discardString = "Had " + num_mod_non_missing_samples + " modified samples < min_mod_non_missing_samples==" +
+        min_mod_non_missing_samples;
     }
+    return result;
   }
 
   // This used to be final, but I want to override in EqualityInvariant.
@@ -1361,14 +1440,14 @@ public abstract class Invariant
   }
 
   /**
-   * @return true if this invariant is a postcondition that is implied
-   * by prestate invariants.  For example, if an entry point has the
-   * invariant x+3=y, and this invariant is the corresponding exit
-   * point invariant orig(x)+3=orig(y), then this methods returns
-   * true.
+   * @return a prestate invariant that implies this as a postcondition
+   * or null if no such prestate invariant exists.
+   * For example, if an entry point has the invariant x+3=y, and this
+   * invariant is the corresponding exit point invariant orig(x)+3=orig(y),
+   * then this method would return the Invariant corresponding to x+3=y.
    **/
-  /*  [INCR]
-  public boolean isImpliedPostcondition() {
+  /* [INCR]
+  public Invariant isImpliedPostcondition() {
     PptTopLevel topLevel = ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
       Iterator entryInvariants = topLevel.entry_ppt().getInvariants().iterator(); // unstable
@@ -1379,11 +1458,11 @@ public abstract class Invariant
           if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
             PrintInvariants.debugFiltering.fine ("\tImplied by precond: " + entryInvariant.format() + " (from " + entryInvariant.ppt.parent.name + ")\n");
           }
-          return true;
+          return entryInvariant;
         }
       }
     }
-    return false;
+    return null;
   }
 
   public boolean isWorthPrinting_PostconditionPrestate()
@@ -1409,7 +1488,7 @@ public abstract class Invariant
     }
     return true;
   }
-  */ // ... [INCR]
+  // ... [INCR]
 
   /**
    * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().

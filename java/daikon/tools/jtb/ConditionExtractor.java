@@ -31,6 +31,13 @@ class ConditionExtractor extends DepthFirstVisitor {
   boolean enterMethod;   // true if the current Node is a Method
                          // declaration ie. we just entered a method.
 
+  // Contains the resultType of the current method.  If the current method is a
+  // constructor then the string "constructor" is stored. These is later used
+  // to decide whether the return statement should be included as a conditional.
+  // Return statements are included as conditionals iff the return type is "boolean"
+  // Must be a stack rather than a single variable for the case of helper classes.
+  private Stack resultTypes = new Stack();
+
   // key = methodname (as String); value = conditional expressions (as Strings)
   HashMap conditions = new HashMap();
   // key = method declaration; value = method bodies
@@ -39,6 +46,9 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
+
+
+
 
   /**
    * f0 -> "package"
@@ -75,7 +85,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(FieldDeclaration n) {
     String resultType = Ast.print(n.f1);
     if (resultType.equals("boolean")) {
-      addCondition(Ast.print(n.f2.f0) + " ==  true");
+      addCondition(Ast.print(n.f2.f0) + " ==  true");  // <--
     }
     super.visit(n);
   }
@@ -98,13 +108,16 @@ class ConditionExtractor extends DepthFirstVisitor {
     // after the next non-empty statement, the variable
     // enterMethod is set to false
     enterMethod = true;
+    resultTypes.push(n.f1);
     super.visit(n);
+    resultTypes.pop();
   }
 
   /**
    * f0 -> <IDENTIFIER>
    * f1 -> FormalParameters()
-   * f2 -> ( "[" "]" )* */
+   * f2 -> ( "[" "]" )*
+   */
   public void visit(MethodDeclarator n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
@@ -128,7 +141,9 @@ class ConditionExtractor extends DepthFirstVisitor {
     // eg. QueueAr.isEmpty
     curMethodName = className + "." + Ast.print(n.f1);
     addMethod(className + Ast.print(n), curMethodName);
+    resultTypes.push("constructor");
     super.visit(n);
+    resultTypes.pop();
   }
 
   /**
@@ -194,7 +209,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(IfStatement n) {
     addCondition(Ast.print(n.f2));
     super.visit(n);
-  }
+}
 
   /**
    * f0 -> "while"
@@ -264,16 +279,32 @@ class ConditionExtractor extends DepthFirstVisitor {
    * If this statement is a one-liner (the sole statement in a
    * function), then it is saved and used as a 'replace' statement in
    * the splitter info file.
+   *
+   * If this statement is a return statement of boolean type, then
+   * it is included as a condition.
    */
   public void visit(Statement n) {
     // if we just entered the function and this is a return statement,
     // then it's a one-liner. Save the statement
-    if (enterMethod && (n.f0.choice instanceof ReturnStatement)) {
+    if (n.f0.choice instanceof ReturnStatement) {
       ReturnStatement rs = ((ReturnStatement) n.f0.choice);
       String returnExpression = Ast.print(rs.f1);
-      addReplaceStatement( returnExpression );
-      addCondition(returnExpression);
-      enterMethod = false;
+      if (enterMethod) {
+        addReplaceStatement( returnExpression );
+        enterMethod = false;
+      }
+      if (resultTypes.peek() instanceof ResultType) {
+        ResultType resultType = (ResultType) resultTypes.peek();
+        if (resultType.f0.choice instanceof Type) {
+          Type type = (Type) resultType.f0.choice;
+          if ((type.f1.size() == 0) && (type.f0.choice instanceof PrimitiveType)) {
+            PrimitiveType primType = (PrimitiveType) type.f0.choice;
+            if (((NodeToken) primType.f0.choice).toString().equals("boolean")) {
+              addCondition(returnExpression);
+            }
+          }
+        }
+      }
     } else if (!(n.f0.choice instanceof EmptyStatement)) {
       enterMethod = false;
     }
@@ -317,42 +348,16 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
   }
 
-  private String replaceNewlines(String target) {
-    return utilMDE.UtilMDE.replaceString(target, "\n", " ");
+   public Map getConditionMap() {
+     return conditions;
+   }
+
+  public Map getReplaceStatements() {
+    return replaceStatements;
   }
 
-  // prints out the extracted conditions in spinfo file format
-  public void printSpinfoFile( Writer output ) throws IOException {
-
-    if (!replaceStatements.values().isEmpty()) {
-      output.write("REPLACE\n");
-
-      Iterator bools = replaceStatements.keySet().iterator();
-      while (bools.hasNext()) {
-	String declaration = (String)bools.next();
-	output.write(declaration + "\n");
-	output.write(replaceNewlines((String) replaceStatements.get(declaration)) + "\n");
-      }
-
-      output.write("\n");
-    }
-
-    Vector method_conds;
-    Iterator methods = conditions.keySet().iterator();
-    while (methods.hasNext()) {
-      String method = (String) methods.next();
-      method_conds = (Vector)conditions.get(method);
-      if (method_conds.size() > 0) {
-	if (packageName != null)
-	  method = packageName + "." + method;
-	output.write("PPT_NAME " + method + "\n");
-
-	for (int i = 0; i < method_conds.size(); i++) {
-	  output.write(replaceNewlines((String) method_conds.elementAt(i)) + "\n");
-	}
-
-	output.write("\n");
-      }
-    }
+  public String getPackageName() {
+    return packageName;
   }
+
 }

@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public final class FileIO {
@@ -136,6 +135,7 @@ public final class FileIO {
                                               )
     throws IOException
   {
+
     // XXX for now, hard-code these list-implementing types. We should
     // make the front-end dump the language-specific ones into .decls.
     ProglangType.list_implementors.add("java.util.List");
@@ -458,7 +458,7 @@ public final class FileIO {
         else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
-          pw.print((String)val);
+          pw.print(val == null ? "null" : UtilMDE.quoteMore((String)val));
         else
           pw.print(val);
       }

@@ -40,11 +40,15 @@ public abstract class VarInfoName
   static final long serialVersionUID = 20020614L;
 
   /**
-   * Given the standard String representation of a variable name (from
-   * a decls file), return the corresponding VarInfoName.  This cannot
-   * parse all VarInfoNames (as one example, derived variables) that
-   * it can output:  name.equals(parse(e.name())) is not certain to
-   * be true, because parse might throw an error.
+   * Given the standard String representation of a variable name (like
+   * what appears in the normal output format), return the
+   * corresponding VarInfoName. This method can't parse all the
+   * strings that the VarInfoName name() method might produce, but it
+   * should be able to handle anything that appears in a decls
+   * file. Specifically, it can only handle a subset of the grammar of
+   * derived variables. For some values of "name",
+   * "name.equals(parse(e.name()))" might throw an exception, but if
+   * it completes normally, the result should be true.
    **/
   public static VarInfoName parse(String name) {
     // x.class
@@ -95,6 +99,8 @@ public abstract class VarInfoName
       }
     }
 
+    // This branch should really go away; orig() variables shouldn't
+    // appear in .decls files
     if (name.startsWith("orig(")) {
       Assert.assertTrue(name.endsWith(")"));
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
@@ -323,7 +329,7 @@ public abstract class VarInfoName
 
   public static final VarInfoName ZERO = parse("0");
   public static final VarInfoName THIS = parse("this");
-  public static final VarInfoName ORIG_THIS = parse("orig(this)");
+  public static final VarInfoName ORIG_THIS = parse("this").applyPrestate();
 
   // ============================================================
   // Interesting observers

@@ -182,6 +182,8 @@ public final class CLASSNAME
       } else {
         // None of the can_be_X's are set.
         // (We haven't seen any samples.)
+        wrapper.discardCode = DiscardInvariant.not_enough_samples;
+        wrapper.discardString = "No samples seen for this Invariant";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
@@ -242,7 +244,12 @@ public final class CLASSNAME
   }
 
   public boolean isExact() {
-    return (can_be_eq && (!can_be_lt) && (!can_be_gt));
+    boolean answer = (can_be_eq && (!can_be_lt) && (!can_be_gt));
+    if (answer) {
+      wrapper.discardCode = DiscardInvariant.exact;
+      wrapper.discardString = "Invariant is equals but neither less than nor greater than";
+    }
+    return answer;
   }
 
   public boolean isSameFormula(CLASSNAME other)

@@ -80,17 +80,17 @@ public final class CLASSNAME {
     // I could check that the length of the sequence isn't always 0.
     result.add(MEMBER.instantiate(ppt, seq_first));
     #if (defined TYPELONG)
-    result.add(SeqIntLessThan.instantiate(ppt, seq_first));
-    result.add(SeqIntGreaterThan.instantiate(ppt, seq_first));
-    result.add(SeqIntLessEqual.instantiate(ppt, seq_first));
-    result.add(SeqIntGreaterEqual.instantiate(ppt, seq_first));
-    result.add(SeqIntEqual.instantiate(ppt, seq_first));
+      result.add(SeqIntLessThan.instantiate(ppt, seq_first));
+      result.add(SeqIntGreaterThan.instantiate(ppt, seq_first));
+      result.add(SeqIntLessEqual.instantiate(ppt, seq_first));
+      result.add(SeqIntGreaterEqual.instantiate(ppt, seq_first));
+      result.add(SeqIntEqual.instantiate(ppt, seq_first));
     #else
-    result.add(SeqFloatLessThan.instantiate(ppt, seq_first));
-    result.add(SeqFloatGreaterThan.instantiate(ppt, seq_first));
-    result.add(SeqFloatLessEqual.instantiate(ppt, seq_first));
-    result.add(SeqFloatGreaterEqual.instantiate(ppt, seq_first));
-    result.add(SeqFloatEqual.instantiate(ppt, seq_first));
+      result.add(SeqFloatLessThan.instantiate(ppt, seq_first));
+      result.add(SeqFloatGreaterThan.instantiate(ppt, seq_first));
+      result.add(SeqFloatLessEqual.instantiate(ppt, seq_first));
+      result.add(SeqFloatGreaterEqual.instantiate(ppt, seq_first));
+      result.add(SeqFloatEqual.instantiate(ppt, seq_first));
     #endif
     return result;
   }

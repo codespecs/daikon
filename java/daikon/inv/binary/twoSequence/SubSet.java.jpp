@@ -80,8 +80,12 @@ public class SUBSET
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    if ((SUBSET.isObviousSubSet(var1, var2))
-        || (SUBSET.isObviousSubSet(var2, var1))) {
+    // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
+    //                    + ((SubSet.isObviousDerived(var1(), var2()))
+    //                       || (SubSet.isObviousDerived(var2(), var1()))));
+    Object[] obvDeriv1 = SUBSET.isObviousSubSet(var1, var2);
+    Object[] obvDeriv2 = SUBSET.isObviousSubSet(var2, var1);
+    if (obvDeriv1[1]!=null || obvDeriv2[1]!=null) {
       Global.implied_noninstantiated_invariants++;
       if (debug.isLoggable(Level.FINE)) {
         debug.fine (var1 + ", " + var2);
@@ -187,6 +191,11 @@ public class SUBSET
       debug.fine ("Falsified 1");
       if (!new_var2_in_var1) {
         destroyAndFlow();
+        discardCode = DiscardInvariant.bad_sample;
+        String name1 = var1().name.name();
+        String name2 = var2().name.name();
+        discardString = name1+"="+ArraysMDE.toString(a1)+","+name2+"="+ArraysMDE.toString(a2)+";"+
+          " neither are subsets of one another";
         return;
       } else {
         // We are weakening me
@@ -198,6 +207,11 @@ public class SUBSET
       debug.fine ("Falsified 2");
       if (!new_var1_in_var2) {
         destroyAndFlow();
+        discardCode = DiscardInvariant.bad_sample;
+        String name1 = var1().name.name();
+        String name2 = var2().name.name();
+        discardString = name1+"="+ArraysMDE.toString(a1)+","+name2+"="+ArraysMDE.toString(a2)+";"+
+          " neither are subsets of one another";
         return;
       } else {
         // We are weakening me
@@ -215,22 +229,29 @@ public class SUBSET
   protected double computeProbability() {
     if (falsified)
       return Invariant.PROBABILITY_NEVER;
-    else if (var1_in_var2 && var2_in_var1)
+    else if (var1_in_var2 && var2_in_var1) {
+      discardCode = DiscardInvariant.obvious;
+      String name1 = var1().name.name();
+      String name2 = var2().name.name();
+      discardString = "All seen samples for "+name1+","+name2+" have represented equal sequences";
       return Invariant.PROBABILITY_UNJUSTIFIED;
+    }
     else
       return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   // Convenience name to make this easier to find.
-  public static boolean isObviousSubSet(VarInfo subvar, VarInfo supervar) {
+  public static Object[] isObviousSubSet(VarInfo subvar, VarInfo supervar) {
     return SUBSEQUENCE.isObviousSubSequence(subvar, supervar);
   }
 
   public boolean isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
-    if ((SUBSET.isObviousSubSet(var1, var2))
-        || (SUBSET.isObviousSubSet(var2, var1))) {
+
+    Object[] obvDeriv1 = SUBSET.isObviousSubSet(var1, var2);
+    Object[] obvDeriv2 = SUBSET.isObviousSubSet(var2, var1);
+    if (obvDeriv1[1]!=null || obvDeriv2[1]!=null) {
       return true;
     }
 
@@ -257,8 +278,9 @@ public class SUBSET
       return true;
     }
 
-    if ((SubSequence.isObviousSubSequence(var1, var2))
-        || (SubSequence.isObviousSubSequence(var2, var1))) {
+    Object[] obv1 = SubSequence.isObviousSubSequence(var1, var2);
+    Object[] obv2 = SubSequence.isObviousSubSequence(var2, var1);
+    if ((obv1[1] != null) || (obv2[1] != null)) {
       return true;
     }
     return super.isObviousStatically(vis);
@@ -290,6 +312,10 @@ public class SUBSET
     if (var1_in_var2 && var2_in_var1) {
       // Suppress this invariant; we should get an equality invariant from
       // elsewhere.
+      discardCode = DiscardInvariant.obvious;
+      String name1 = var1().name.name();
+      String name2 = var2().name.name();
+      discardString = "All seen samples for "+name1+","+name2+" have represented equal sequences";
       return true;
     }
     return super.isObviousDynamically(vis);

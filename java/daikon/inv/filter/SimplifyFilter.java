@@ -25,6 +25,8 @@ class SimplifyFilter extends InvariantFilter {
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (Daikon.suppress_redundant_invariants_with_simplify &&
         invariant.ppt.parent.redundant_invs.contains(invariant)) {
+      invariant.discardCode = DiscardInvariant.obvious;
+      invariant.discardString = "This Invariant was filtered due to Simplify.";
       return (true);
     }
 

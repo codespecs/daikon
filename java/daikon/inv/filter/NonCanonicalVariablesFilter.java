@@ -1,6 +1,7 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
+import daikon.VarInfo;
 import daikon.inv.filter.*;
 
 class NonCanonicalVariablesFilter extends InvariantFilter {
@@ -15,7 +16,11 @@ class NonCanonicalVariablesFilter extends InvariantFilter {
     return false;
     /* [INCR]
     if (invariant instanceof Implication) {
-      return ((Implication)invariant).consequent().hasNonCanonicalVariable();
+      answer = ((Implication)invariant).consequent().hasNonCanonicalVariable();
+      vis = ((Implication)invariant).consequent().ppt.var_infos;
+    } else {
+      answer = (invariant.hasNonCanonicalVariable() && !IsEqualityComparison.it.accept(invariant));
+      vis = invariant.ppt.var_infos;
     }
     return (invariant.hasNonCanonicalVariable() && ! IsEqualityComparison.it.accept(invariant));
     */ // [INCR]

@@ -9,6 +9,12 @@ class UnjustifiedFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    return ! invariant.justified();
+    boolean answer =  !invariant.justified();
+    if (answer && invariant.discardCode==DiscardInvariant.not_discarded) {
+      invariant.discardCode = DiscardInvariant.bad_probability;
+      invariant.discardString = "Computed probability " + invariant.getProbability() +
+        " > dkconfig_probability_limit==" + Invariant.dkconfig_probability_limit;
+    }
+    return answer;
   }
 }

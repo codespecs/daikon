@@ -296,6 +296,31 @@ public final class ProglangType
   public final static ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
   public final static ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
 
+  // Like Long.parseLong(), but transform large unsigned longs (as
+  // from C's unsigned long long) into the corresponding negative Java
+  // longs.
+  private static long myParseLong(String value) {
+    if (value.length() == 20 && value.charAt(0) == '1' ||
+        value.length() == 19 && value.charAt(0) == '9' &&
+        value.compareTo("9223372036854775808") >= 0) {
+      // Oops, we got a large unsigned long, which Java, having
+      // only signed longs, will refuse to parse. We'll have to
+      // turn it into the corresponding negative long value.
+      String rest; // A substring that will be a valid positive long
+      long subtracted; // The amount we effectively subtracted to make it
+      if (value.length() == 20) {
+        rest = value.substring(1);
+        subtracted = 100000L*100000*100000*10000; // 10^19
+      } else {
+        rest = value.substring(1);
+        subtracted = 9L*100000*100000*100000*1000; // 9*10^18
+      }
+      return Long.parseLong(rest) + subtracted;
+    } else {
+      return Long.parseLong(value);
+    }
+  }
+
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
@@ -344,7 +369,7 @@ public final class ProglangType
           return LongOne;
         if (value.equals("null"))
           return LongZero;
-        return Intern.internedLong(value);
+        return Intern.internedLong(myParseLong(value));
       } else if (base == BASE_DOUBLE) {
         // Must ignore case, because dfej outputs "NaN", while dfec
         // outputs "nan".  dfec outputs "nan", because this string
@@ -423,7 +448,7 @@ public final class ProglangType
           else if (value_strings[i].equals("true"))
             result[i] = 1;
           else
-            result[i] = Long.parseLong(value_strings[i]);
+            result[i] = myParseLong(value_strings[i]);
         }
         return Intern.intern(result);
       } else if (base == BASE_DOUBLE) {
@@ -545,6 +570,14 @@ public final class ProglangType
 
   public boolean baseIsString() {
     return (base == BASE_STRING);
+  }
+
+  /**
+   * Does this type represent a pointer? Should only be applied to
+   * file_rep types.
+   **/
+  public boolean isPointerFileRep() {
+    return (base == BASE_HASHCODE);
   }
 
   /**

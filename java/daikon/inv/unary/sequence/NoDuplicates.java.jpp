@@ -241,6 +241,8 @@ public class CLASSNAME
             debug.fine (ArraysMDE.toString(a));
           }
           destroyAndFlow();
+          discardCode = DiscardInvariant.bad_sample;
+          discardString = "Duplicates at indices "+i+" and "+j+", both have value: "+a[i];
           return;
         }
       }
@@ -262,7 +264,12 @@ public class CLASSNAME
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
-      return Math.pow(.9, elts);
+      double answer = Math.pow(.9, elts);
+      if (answer > Invariant.dkconfig_probability_limit) {
+        discardCode = DiscardInvariant.bad_probability;
+        discardString = "Computed probability "+answer+" > dkconfig_probabiliy_limit="+Invariant.dkconfig_probability_limit;
+      }
+      return answer;
     }
   }
 
@@ -287,6 +294,7 @@ public class CLASSNAME
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, v1, v2)) {
           // System.out.println("obvious: " + format() + "   because of " + inv.format());
+          log ("Obvious- Obvious sub sequence with " + inv.format());
           return true;
         }
 
@@ -307,6 +315,9 @@ public class CLASSNAME
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
+              discardCode = DiscardInvariant.obvious;
+              discardString = "This sequence is a subsequence of "+inv.ppt.var_infos[0].name.name()+" for which"+
+                               "the invariant holds.";
               return true;
             }
           }
@@ -322,9 +333,15 @@ public class CLASSNAME
       Iterator invs = slice.invs.iterator();
       while (invs.hasNext()) {
         Invariant inv = (Invariant)invs.next();
-        if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseFloatLessThan) ||
-            (inv instanceof EltwiseIntGreaterThan) || (inv instanceof EltwiseFloatGreaterThan))
+        if ((inv instanceof EltwiseIntLessThan)
+            || (inv instanceof EltwiseFloatLessThan)
+            || (inv instanceof EltwiseIntGreaterThan)
+            || (inv instanceof EltwiseFloatGreaterThan)) {
+          discardCode = DiscardInvariant.obvious;
+          discardString = "Sequence is sorted (" + inv.format() + ")";
+          log ("obvious- " + discardString);
           return true;
+      }
       }
     }
 

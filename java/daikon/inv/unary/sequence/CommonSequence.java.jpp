@@ -136,6 +136,10 @@ public class CLASSNAME
       }
       if (size==0) {
         destroyAndFlow();
+        VarInfo var = var();
+
+        discardCode = DiscardInvariant.bad_sample;
+        discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }
 
@@ -150,7 +154,13 @@ public class CLASSNAME
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
-      return Math.pow(.9, elts);
+      double answer = Math.pow(.9, elts);
+      if (answer > dkconfig_probability_limit) {
+        discardCode = DiscardInvariant.bad_probability;
+        discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
+          dkconfig_probability_limit;
+      }
+      return answer;
     }
   }
 

@@ -204,8 +204,9 @@ public class PAIRWISEINTEQUAL
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
-    if ((SUBSEQUENCE.isObviousSubSequence(var1, var2))
-        || (SUBSEQUENCE.isObviousSubSequence(var2, var1))) {
+    Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
+    Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
+    if ((obv1[1] != null) || (obv2[1] != null)) {
       Global.implied_noninstantiated_invariants++;
       return true;
     }

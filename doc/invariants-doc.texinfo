@@ -424,7 +424,35 @@ See also the following configuration option:
     @item daikon.inv.unary.stringsequence.OneOfStringSequence.size
     @end itemize
 
-@item PairwiseFloatComparison
+@item PairwiseFloatEqual
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseFloatGreaterEqual
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseFloatGreaterThan
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseFloatLessEqual
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseFloatLessThan
 Represents an invariant between corresponding elements of two
  double sequences.  The length of the sequences must match for
  the invariant to hold.  A comparison is made over each x[i], y[i]
@@ -451,7 +479,35 @@ Represents an invariant between corresponding elements of two
 
  Current double Functions are: none
 
-@item PairwiseIntComparison
+@item PairwiseIntEqual
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseIntGreaterEqual
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseIntGreaterThan
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseIntLessEqual
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
+@item PairwiseIntLessThan
 Represents an invariant between corresponding elements of two
  long sequences.  The length of the sequences must match for
  the invariant to hold.  A comparison is made over each x[i], y[i]
@@ -483,46 +539,31 @@ Represents two long sequences where one is in the reverse order
 Represents two double sequences where one is in the reverse order
  of the other.  Prints as "x[] is the reverse of y[]"
 
-@item SeqComparison
-Represents invariants between two long sequences.  If order
- matters for each variable (which it does by default), then the
- sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
- where [cmp] can be == < <= > >=.
+@item SeqFloatEqual
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as "x[] elements [cmp] y" where x is a
+ double sequence, y is a double scalar, and [cmp] is one of
+ the comparators == < <= > >=
 
- If order doesn't matter for each variable, then the sequences
- are compared to see if they are set equivalent.  Prints as
- "x[] == y[]"
+@item SeqFloatGreaterEqual
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as "x[] elements [cmp] y" where x is a
+ double sequence, y is a double scalar, and [cmp] is one of
+ the comparators == < <= > >=
 
- If the auxillary information (eg, order matters) doesn't match then
- no comparison is made at all.
+@item SeqFloatGreaterThan
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as "x[] elements [cmp] y" where x is a
+ double sequence, y is a double scalar, and [cmp] is one of
+ the comparators == < <= > >=
 
-@item SeqComparisonFloat
-Represents invariants between two double sequences.  If order
- matters for each variable (which it does by default), then the
- sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
- where [cmp] can be == < <= > >=.
+@item SeqFloatLessEqual
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as "x[] elements [cmp] y" where x is a
+ double sequence, y is a double scalar, and [cmp] is one of
+ the comparators == < <= > >=
 
- If order doesn't matter for each variable, then the sequences
- are compared to see if they are set equivalent.  Prints as
- "x[] == y[]"
-
- If the auxillary information (eg, order matters) doesn't match then
- no comparison is made at all.
-
-@item SeqComparisonString
-Represents invariants between two String sequences.  If order
- matters for each variable (which it does by default), then the
- sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
- where [cmp] can be == < <= > >=.
-
- If order doesn't matter for each variable, then the sequences
- are compared to see if they are set equivalent.  Prints as
- "x[] == y[]"
-
- If the auxillary information (eg, order matters) doesn't match then
- no comparison is made at all.
-
-@item SeqFloatComparison
+@item SeqFloatLessThan
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as "x[] elements [cmp] y" where x is a
  double sequence, y is a double scalar, and [cmp] is one of
@@ -546,11 +587,230 @@ Represents long sequences where the element stored at index i is
 Represents double sequences where the element stored at index i is
  not equal to i.  Prints as "x[i] != i"
 
-@item SeqIntComparison
+@item SeqIntEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as "x[] elements [cmp] y" where x is a
  long sequence, y is a long scalar, and [cmp] is one of
  the comparators == < <= > >=
+
+@item SeqIntGreaterEqual
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as "x[] elements [cmp] y" where x is a
+ long sequence, y is a long scalar, and [cmp] is one of
+ the comparators == < <= > >=
+
+@item SeqIntGreaterThan
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as "x[] elements [cmp] y" where x is a
+ long sequence, y is a long scalar, and [cmp] is one of
+ the comparators == < <= > >=
+
+@item SeqIntLessEqual
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as "x[] elements [cmp] y" where x is a
+ long sequence, y is a long scalar, and [cmp] is one of
+ the comparators == < <= > >=
+
+@item SeqIntLessThan
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as "x[] elements [cmp] y" where x is a
+ long sequence, y is a long scalar, and [cmp] is one of
+ the comparators == < <= > >=
+
+@item SeqSeqFloatEqual
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqFloatGreaterEqual
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqFloatGreaterThan
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqFloatLessEqual
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqFloatLessThan
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqIntEqual
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqIntGreaterEqual
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqIntGreaterThan
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqIntLessEqual
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqIntLessThan
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqStringEqual
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqStringGreaterEqual
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqStringGreaterThan
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqStringLessEqual
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
+@item SeqSeqStringLessThan
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
+ where [cmp] can be == < <= > >=.
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
 
 @item StringComparison
 Represents lexical invariants between two strings.  Prints as

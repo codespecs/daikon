@@ -503,6 +503,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         // not an invariant
         continue;
       } else if ((inv.indexOf(".format_esc() needs to be implemented: ") != -1)
+                 || (inv.indexOf("warning: ") != -1)
                  || (inv.indexOf('~') != -1)
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)

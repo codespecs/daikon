@@ -75,9 +75,22 @@ public class Implication
     double pred_prob = left.computeProbability();
     double cons_prob = right.computeProbability();
     if ((pred_prob == PROBABILITY_NEVER)
-        || (cons_prob == PROBABILITY_NEVER))
+        || (cons_prob == PROBABILITY_NEVER)) {
+      discardCode = DiscardInvariant.bad_probability;
+      if (pred_prob == PROBABILITY_NEVER)
+        discardString = "Predicate returned PROBABILITY_NEVER in computeProbability().";
+      else
+        discardString = "Consequent returned PROBABILITY_NEVER in computeProbability().";
       return PROBABILITY_NEVER;
-    return prob_and(pred_prob, cons_prob);
+    }
+    double answer = prob_and(pred_prob, cons_prob);
+    if (answer > Invariant.dkconfig_probability_limit) {
+      discardCode = DiscardInvariant.bad_probability;
+      discardString = "Probability{predicate AND consequent} > dkconfig_probability_limit=="+
+        Invariant.dkconfig_probability_limit+". Pr{predicate}=="+pred_prob+",Pr{consequent}=="+
+        cons_prob;
+    }
+    return answer;
   }
 
   public String repr() {
@@ -109,7 +122,12 @@ public class Implication
   }
 
   public boolean isObviousStatically(VarInfo[] vis) {
-    return right.isObviousStatically(vis);
+    boolean answer = right.isObviousStatically(vis);
+    if (answer && discardCode==DiscardInvariant.not_discarded) {
+      discardCode = DiscardInvariant.obvious;
+      discardString = "Right is obviously derived: "+right.discardString;
+    }
+    return answer;
   }
 
   public boolean isSameFormula(Invariant other) {

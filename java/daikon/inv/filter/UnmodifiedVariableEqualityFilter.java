@@ -39,6 +39,8 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
       }
+      invariant.discardCode = DiscardInvariant.unmodified_var;
+      invariant.discardString = "var1 prestate and var2 have .equal() name fields, name.name()=="+var2.name.name();
       return true ;
     }
 
@@ -50,6 +52,8 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
       }
+      invariant.discardCode = DiscardInvariant.unmodified_var;
+      invariant.discardString = "var2 prestate and var1 have .equal() name fields, name.name()=="+var1.name.name();
       return true;
     }
 

@@ -57,7 +57,7 @@ public class PptTopLevel
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020731L;
+  static final long serialVersionUID = 20030612L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -106,6 +106,9 @@ public class PptTopLevel
   /** Debug tracer for fillSuppressionTemplate. **/
   public static final Logger debugSuppressFill =
     Logger.getLogger ("daikon.suppress.fill");
+
+  /** Holds the falsified invariants under this PptTopLevel */
+  public ArrayList falsified_invars = new ArrayList();
 
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables
@@ -815,6 +818,10 @@ public class PptTopLevel
             Global.debugDerive.fine ("Ternary 2nd: not worth deriving from ("
                                      + vi1.name.name() + ","
                                      + vi2.name.name() + ")");
+            /* [INCR]
+            Global.debugDerive.fine ("Canonicality is: " + vi2.isCanonical());
+            Global.debugDerive.fine ("Equal_to: " + vi2.equal_to.name.name());
+            */ // [INCR]
           }
           continue;
         }
@@ -835,6 +842,10 @@ public class PptTopLevel
                                        + vi1.name.name() + ","
                                        + vi2.name.name() + ")"
                                        + vi3.name.name() + ")");
+              /* [INCR]
+              Global.debugDerive.fine ("Canonicality is: "+ vi3.isCanonical());
+              Global.debugDerive.fine ("Equal_to: "+ vi3.equal_to.name.name());
+              */ // [INCR]
             }
             continue;
           }
@@ -1832,9 +1843,9 @@ public class PptTopLevel
       addViews(ternary_views);
     }
 
-    if (Global.debugInfer.isLoggable(Level.FINE)) {
-      Global.debugInfer.fine (views.size() - old_num_views + " new views for " + name);
-    }
+
+    if (debug.isLoggable(Level.FINE))
+      debug.fine (views.size() - old_num_views + " new views for " + name);
 
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
@@ -2049,12 +2060,12 @@ public class PptTopLevel
         // There is only one type of binary invariant in pass 1:
         // {Int,Seq,String}Comparison.  It must have been successful, or
         // this view wouldn't have been installed.
-        Assert.assertTrue(binary_view.invs.size() == 1);
+        // Assert.assertTrue(binary_view.invs.size() == 1, "binary_view.invs.size()=="+binary_view.invs.size());
 
         Invariant inv = (Invariant) binary_view.invs.elementAt(0);
         inv.finished = true;
         // binary_view.already_seen_all = true;
-        Assert.assertTrue(inv instanceof Comparison);
+        Assert.assertTrue(inv instanceof Comparison, inv.getClass().getName());
         // System.out.println("Is " + (IsEqualityComparison.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.format());
         if (! (IsEqualityComparison.it.accept(inv)
@@ -2518,7 +2529,7 @@ public class PptTopLevel
     // System.out.println("addConditions(" + splits.length + ") for " + name);
 
     int len = splits.length;
-    if (len == 0) {
+    if ((splits == null) || (len == 0)) {
       if (Global.debugSplit.isLoggable(Level.FINE))
         Global.debugSplit.fine ("No splits for " + name);
       return;

@@ -159,6 +159,12 @@ public class InvariantFilters {
       invariant = ((Implication) invariant).right;
     }
 
+    // Keep track of old codes so that if it passes this test
+    // we can set it back to prevent undesirable side effects
+    // from the filters
+    DiscardInvariant oldCode = invariant.discardCode;
+    String oldString = invariant.discardString;
+
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
@@ -172,7 +178,7 @@ public class InvariantFilters {
         if (! hasAnyVariable) {
           if (invariant.logOn())
             invariant.log ("Failed ANY_VARIABLE filter");
-          return false;
+            return false;
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
@@ -181,11 +187,16 @@ public class InvariantFilters {
             if (invariant.logOn())
               invariant.log ("Failed ALL_VARIABLES filter"
                              + filter.getClass().getName());
-            return false;
+              return false;
           }
         }
       }
     }
+    // If it made it this far, get rid of the side effects from testing it against
+    // variable filters
+    invariant.discardCode = oldCode;
+    invariant.discardString = oldString;
+
     //  Property filters.
     invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
@@ -202,6 +213,9 @@ public class InvariantFilters {
     if (df.isLoggable(Level.FINE)) {
       invariant.log (df, "accepted by InvariantFilters");
     }
+    // Doing this since the filters can side effect desirable Invariants
+    invariant.discardCode = DiscardInvariant.not_discarded;
+    invariant.discardString = "";
     return true;
   }
 

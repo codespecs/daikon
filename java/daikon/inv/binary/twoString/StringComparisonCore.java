@@ -87,6 +87,11 @@ public final class StringComparisonCore
   public void add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
       wrapper.destroyAndFlow();
+      wrapper.discardCode = DiscardInvariant.bad_sample;
+      if (v1==null)
+        wrapper.discardString = wrapper.ppt.var_infos[0].name.name() + " took on null value";
+      else
+        wrapper.discardString = wrapper.ppt.var_infos[1].name.name() + "took on null value";
       return;
     }
 
@@ -142,7 +147,13 @@ public final class StringComparisonCore
     if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, values_cache.num_values());
+      double answer = Math.pow(.5, values_cache.num_values());
+      if (answer > Invariant.dkconfig_probability_limit) {
+        wrapper.discardCode = DiscardInvariant.bad_probability;
+        wrapper.discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
+          Invariant.dkconfig_probability_limit;
+      }
+      return answer;
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.
@@ -153,6 +164,8 @@ public final class StringComparisonCore
       } else {
         // None of the can_be_X's are true.
         // (We haven't seen any values yet.)
+        wrapper.discardCode = DiscardInvariant.not_enough_samples;
+        wrapper.discardString = "0 samples seen";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }

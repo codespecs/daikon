@@ -252,7 +252,12 @@ public class LOWERBOUNDCORE
   }
 
   public boolean enoughSamples() {
-    return samples > required_samples;
+    boolean answer = samples > required_samples;
+    if (!answer) {
+      wrapper.discardCode = DiscardInvariant.not_enough_samples;
+      wrapper.discardString = "Not enough samples: had "+samples+" but needed "+required_samples;
+    }
+    return answer;
   }
 
   // Convenience methods; avoid need for "Invariant." prefix.
@@ -340,6 +345,11 @@ public class LOWERBOUNDCORE
     // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
     //                    + pptsg.tuplemod_samples_summary());
 
+    if (result > Invariant.dkconfig_probability_limit) {
+      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardString = "Computed probability "+result+" > dkconfig_probability_limit=="+
+        Invariant.dkconfig_probability_limit;
+    }
     return result;
   }
 

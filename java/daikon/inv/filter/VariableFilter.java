@@ -23,7 +23,10 @@ class VariableFilter extends InvariantFilter {
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (invariant.usesVar( variable ))
       return false;
-    else
+    else {
+      invariant.discardCode = DiscardInvariant.var_filtered;
+      invariant.discardString = "Discard because Invariant does not have variable " + variable;
       return true;
+    }
   }
 }

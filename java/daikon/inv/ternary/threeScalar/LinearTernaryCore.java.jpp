@@ -168,7 +168,7 @@ public final class CLASSNAME
   }
 
   /**
-   * Looks for points that define a plane (y = ax + by + c).  Collects
+   * Looks for points that define a plane (z = ax + by + c).  Collects
    * MINTRIPLE points before attempting to define the plane (to
    * hopefully get at least some spread between the points, so that
    * small errors don't get magnified).  Once the equation for the
@@ -209,6 +209,8 @@ public final class CLASSNAME
         maxsep_triples (def_points);
         if (def_points[0] == null) {
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardString = "No triplet found with non-zero separation";
           return;
         }
 
@@ -218,6 +220,8 @@ public final class CLASSNAME
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardString = "Exception thrown while calculating coefficients: "+e;
           return;
         }
         a = coef[0];
@@ -232,6 +236,11 @@ public final class CLASSNAME
             (Math.abs(a) >= Double.MAX_VALUE) ||
             (Math.abs(b) >= Double.MAX_VALUE)) {
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          if (a==0)
+            wrapper.discardString = "For "+wrapper.format()+" 'a' was calculated to be 0";
+          if (b==0)
+            wrapper.discardString = "For "+wrapper.format()+" 'b' was calculated to be 0";
           return;
         }
 
@@ -247,6 +256,19 @@ public final class CLASSNAME
                             + "+" + b + "*" + def_points[i].y + "+" + c);
               }
               wrapper.destroyAndFlow();
+              wrapper.discardCode = DiscardInvariant.bad_sample;
+              #if defined(TYPELONG)
+                LinearTernary ltInv = (LinearTernary) wrapper;
+              #elif defined(TYPEDOUBLE)
+                LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
+              #endif
+              String name1 = ltInv.var1().name.name();
+              String name2 = ltInv.var2().name.name();
+              String name3 = ltInv.var3().name.name();
+
+              wrapper.discardString = "(a,b,c) calculated to be ("+a+","+b+","+c+") failed"+
+                "for sample ("+name1+","+name2+","+name3+") = ("+def_points[i].x+","+def_points[i].y+
+                ","+def_points[i].z+")";
               return;
             }
           }
@@ -268,6 +290,19 @@ public final class CLASSNAME
                         + y + " != " + a + "*" + x + "+" + b);
           }
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          #if defined(TYPELONG)
+            LinearTernary ltInv = (LinearTernary) wrapper;
+          #elif defined(TYPEDOUBLE)
+            LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
+          #endif
+          String name1 = ltInv.var1().name.name();
+          String name2 = ltInv.var2().name.name();
+          String name3 = ltInv.var3().name.name();
+
+          wrapper.discardString = "(a,b,c) calculated to be ("+a+","+b+","+c+") failed"+
+            "for sample ("+name1+","+name2+","+name3+") = ("+x+","+y+
+            ","+z+")";
           return;
         }
       }
@@ -522,7 +557,13 @@ public final class CLASSNAME
   public double computeProbability() {
     if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
-    return Invariant.prob_is_ge(values_seen, MINTRIPLES);
+    double answer = Invariant.prob_is_ge(values_seen, MINTRIPLES);
+    if (answer > Invariant.dkconfig_probability_limit) {
+      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardString = "Number of samples seen not close to goal: "+values_seen+" samples"+
+        "seen,goal was "+MINTRIPLES;
+    }
+    return answer;
   }
 
   public String repr() {
@@ -554,18 +595,17 @@ public final class CLASSNAME
     return LinearBinaryCore.formatTerm(format, coeff, var, first);
   }
 
-  public static String format_using(OutputFormat format,
-                                    VarInfoName x, VarInfoName y, VarInfoName z,
-                                    double a, double b, double c)
+  public String format_using(OutputFormat format,
+                             VarInfoName x, VarInfoName y, VarInfoName z,
+                             double a, double b, double c)
   {
-    if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(x, y, z, a, b, c);
+    if ((a == 0) && (b == 0) && (c == 0)) {
+      return wrapper.format_too_few_samples(format, "0 * " + z
+                                            + " == 0 * "+ x + " + 0 * " + y + " + 0");
     }
 
-    if ((a == 0) && (b == 0) && (c == 0)) {
-      // We have no information, so print something vacuously true
-      return "Too few samples for linear relation: 0 * " + z
-        + " == 0 * "+ x + " + 0 * " + y + " + 0";
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify(x, y, z, a, b, c);
     }
 
     if ((format == OutputFormat.DAIKON)
@@ -575,15 +615,6 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-
-      // It shouldn't be the case that a or b is 0 for printed invariants;
-      // but that can be true earlier on in processing.
-      if ((a == 0) && (b == 0) && (c == 0)) {
-        String xname = x.name_using(format);
-        String yname = y.name_using(format);
-        String zname = z.name_using(format);
-        return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
-      }
 
       return z.name_using(format) + eq
         + formatTerm(format, a, x, true)
@@ -601,10 +632,7 @@ public final class CLASSNAME
     int ic = (int) dc;
 
     String str_a, str_b, str_c;
-    if (da == 0 && db == 0 && dc == 0) {
-      // no data
-      return "(AND)"; // always true
-    } else if (ia != da || ib != db || ic != dc) {
+    if (ia != da || ib != db || ic != dc) {
       // floating point
       str_a = Invariant.simplify_format_double(da);
       str_b = Invariant.simplify_format_double(db);

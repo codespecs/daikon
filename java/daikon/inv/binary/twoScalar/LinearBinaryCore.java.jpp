@@ -150,6 +150,12 @@ public final class CLASSNAME
         if (max_i == -1) {
           values_seen--;
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          String name1 = wrapper.ppt.var_infos[0].name.name();
+          String name2 = wrapper.ppt.var_infos[1].name.name();
+          wrapper.discardString = "All pairs of seen points have been close. The arrays in order:\n";
+          wrapper.discardString += name1+":"+utilMDE.ArraysMDE.toString(x_cache)+" "+name2+":"+
+            utilMDE.ArraysMDE.toString(y_cache);
           return;
         }
         // remember the min and max pairs
@@ -198,6 +204,9 @@ public final class CLASSNAME
             }
             values_seen--;
             wrapper.destroyAndFlow();
+            wrapper.discardCode = DiscardInvariant.obvious;
+            String yName = wrapper.ppt.var_infos[1].name.name();
+            wrapper.discardString = "Point does not match existing line";
             return;
           }
         }
@@ -257,6 +266,8 @@ public final class CLASSNAME
                         + y + " != " + a + "*" + x + "+" + b);
           }
           wrapper.destroyAndFlow();
+          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardString = "No linear relation found after seeing values: "+x+","+y;
           return;
         }
         //??? wrapper.destroyAndFlow();
@@ -318,7 +329,12 @@ public final class CLASSNAME
   }
 
   public boolean enoughSamples() {
-    return values_seen >= MINPAIRS;
+    boolean answer = values_seen >= MINPAIRS;
+    if (!answer) {
+      wrapper.discardCode = DiscardInvariant.not_enough_samples;
+      wrapper.discardString = "Not enough samples seen: had "+values_seen+" needed "+MINPAIRS;
+    }
+    return answer;
   }
 
   public double computeProbability() {
@@ -366,17 +382,17 @@ public final class CLASSNAME
       return sign + coeff_string + " * " + var.name_using(format);
   }
 
-  public static String format_using(OutputFormat format,
-                                    VarInfoName x, VarInfoName y,
-                                    double a, double b)
+  public String format_using(OutputFormat format,
+                             VarInfoName x, VarInfoName y,
+                             double a, double b)
   {
+    if (a == 0 && b == 0) {
+      return wrapper.format_too_few_samples(format, "0 * " + y
+                                            + " == 0 * " + x + " + 0");
+    }
+
     String xname = x.name_using(format);
     String yname = y.name_using(format);
-
-    if ((a == 0) && (b == 0)) {
-      return "Too few samples for linear relation: 0 * " + y
-        + " == 0 * " + x + " + 0";
-    }
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.JAVA)
@@ -392,15 +408,19 @@ public final class CLASSNAME
     }
 
     if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify(x.simplify_name(), y.simplify_name(), a, b);
+    }
+    throw new Error("Unknown OutputFormat: " + format);
+  }
 
+  public static String format_simplify(String str_x, String str_y,
+                                       double a, double b)
+  {
       int ia = (int) a;
       int ib = (int) b;
 
       String str_a, str_b;
-      if (a == 0 && b == 0) {
-        // no data
-        return "(AND)"; // always true
-      } else if (ia != a || ib != b) {
+      if (ia != a || ib != b) {
         // floating point
         str_a = Invariant.simplify_format_double(a);
         str_b = Invariant.simplify_format_double(b);
@@ -411,14 +431,10 @@ public final class CLASSNAME
       }
 
       // y == a x + b
-      String str_y = y.simplify_name();
-      String str_x = x.simplify_name();
       String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
       String str_axpb = (b == 0.0) ? str_ax :
         "(+ " + str_ax + " " + str_b + ")";
       return "(EQ " + str_y + " " + str_axpb + ")";
-    }
-    throw new Error("Unknown OutputFormat: " + format);
   }
 
   public String format_using(OutputFormat format,

@@ -34,29 +34,33 @@ public class CmdCheck
       String result;
       synchronized(s) {
         // send out the proposition
-        s.input.println(proposition);
+        s.sendLine(proposition);
         if (Session.dkconfig_verbose_progress > 0) {
           System.out.print("-");
           System.out.flush();
         }
-        s.input.flush();
 
         // read the answer
         // first, the real result
-        result = s.output.readLine();
-        if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("First line: " + result);
-        }
+        result = s.readLine();
         if (result == null) {
           throw new SimplifyError("Probable core dump");
         }
         // The "Bad input:"  message generally comes from a syntax error in
         // a previous formula given to Simplify; see the debugging code in
         // simplify.LemmaStack.pushLemmas().
-        Assert.assertTrue(!result.startsWith("Bad input:"),
-                          result + "\n" + proposition);
-        Assert.assertTrue(!result.startsWith("Sx.ReadError in file."),
-                          result + "\n" + proposition);
+        if (result.startsWith("Bad input:") ||
+            result.startsWith("Sx.ReadError in file.")) {
+          if (proposition.equals("(OR)")
+              && !LemmaStack.dkconfig_synchronous_errors)
+            System.err.println("For improved error reporting, try using" +
+                               " --config_option " +
+                               "daikon.simplify.LemmaStack." +
+                               "synchronous_errors=true");
+
+          Assert.assertTrue(false, "Simplify error: " + result + " on "
+                            + proposition);
+        }
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
         }
@@ -64,7 +68,7 @@ public class CmdCheck
           // Suck in the counterexample, if given
           do {
             counterexample += result + "\n";
-            result = s.output.readLine();
+            result = s.readLine();
             if (result == null) {
               throw new SimplifyError("Probable core dump");
             }
@@ -72,12 +76,9 @@ public class CmdCheck
                    || result.equals(""));
         }
         // then, a blank line
-        String blank = s.output.readLine();
-        if (!("".equals(blank))) {
-          throw new SimplifyError ("Not a blank line '" + blank +
-                                   "' after output '" + result + "'");
-
-        }
+        String blank = s.readLine();
+        Assert.assertTrue("".equals(blank), "Not a blank line '" + blank +
+                          "' after output '" + result + "'");
       }
 
       // expect "##: [Inv|V]alid."

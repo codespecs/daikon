@@ -230,6 +230,7 @@ public final class Daikon {
   public static final String enable_temporal_SWITCH = "enable_temporal";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
   public static final String bottom_up_SWITCH = "bottom_up";
+  public static final String disc_reason_SWITCH = "disc_reason";
 
   // A pptMap which contains all the Program Points
   // This isn't used anymore; instead, methods have parameters or
@@ -336,6 +337,7 @@ public final class Daikon {
       Dataflow.init_hierarchy (all_ppts);
 
     PrintInvariants.print_invariants(all_ppts);
+    PrintInvariants.print_reasons(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();
     }
@@ -394,6 +396,7 @@ public final class Daikon {
       new LongOpt(enable_temporal_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -406,6 +409,12 @@ public final class Daikon {
         if (help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
+        } else if (disc_reason_SWITCH.equals(option_name)) {
+          try { PrintInvariants.discReasonSetup(g.getOptarg()); }
+          catch (IllegalArgumentException e) {
+            System.out.print(e.getMessage());
+            System.exit(1);
+          }
         } else if (ppt_regexp_SWITCH.equals(option_name)) {
           if (ppt_regexp != null)
             throw new Error("multiple --" + ppt_regexp_SWITCH

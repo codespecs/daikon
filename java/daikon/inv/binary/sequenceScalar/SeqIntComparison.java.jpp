@@ -377,9 +377,10 @@ public final class SEQINTEQUAL
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
+        Object obv[] = SUBSEQUENCE.isObviousSubSequence (seqvar(), other.seqvar());
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
-            && SUBSEQUENCE.isObviousSubSequence (seqvar(), other.seqvar())) {
+            && (obv[1] != null)) {
           return true;
         }
       }

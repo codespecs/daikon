@@ -89,6 +89,10 @@ public class CommonStringSequence
 
       if (size==0) {
         destroyAndFlow();
+        VarInfo var = var();
+
+        discardCode = DiscardInvariant.bad_sample;
+        discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);

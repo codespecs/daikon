@@ -212,11 +212,43 @@ The default value is `true'.
 Boolean.  True iff Member invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.sequenceScalar.SeqFloatComparison.enabled
+@item daikon.inv.binary.sequenceScalar.SeqFloatEqual.enabled
 Boolean.  True iff SeqIntComparison invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.sequenceScalar.SeqIntComparison.enabled
+@item daikon.inv.binary.sequenceScalar.SeqFloatGreaterEqual.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqFloatGreaterThan.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqFloatLessEqual.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqFloatLessThan.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqIntEqual.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqIntLessEqual.enabled
+Boolean.  True iff SeqIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.sequenceScalar.SeqIntLessThan.enabled
 Boolean.  True iff SeqIntComparison invariants should be considered.
 The default value is `true'.
 
@@ -292,7 +324,23 @@ The default value is `true'.
 Boolean.  True iff LinearBinary invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.twoSequence.PairwiseFloatComparison.enabled
+@item daikon.inv.binary.twoSequence.PairwiseFloatEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseFloatGreaterEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseFloatGreaterThan.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseFloatLessEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseFloatLessThan.enabled
 Boolean.  True iff PairwiseIntComparison invariants should be considered.
 The default value is `true'.
 
@@ -304,7 +352,23 @@ The default value is `true'.
 Boolean.  True iff PairwiseFunctionUnary invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.twoSequence.PairwiseIntComparison.enabled
+@item daikon.inv.binary.twoSequence.PairwiseIntEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseIntGreaterThan.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseIntLessEqual.enabled
+Boolean.  True iff PairwiseIntComparison invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.PairwiseIntLessThan.enabled
 Boolean.  True iff PairwiseIntComparison invariants should be considered.
 The default value is `true'.
 
@@ -324,16 +388,64 @@ The default value is `true'.
 Boolean.  True iff Reverse invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.twoSequence.SeqComparison.enabled
-Boolean.  True iff SeqComparison invariants should be considered.
+@item daikon.inv.binary.twoSequence.SeqSeqFloatEqual.enabled
+Boolean.  True iff SeqSeqFloatEqual invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.twoSequence.SeqComparisonFloat.enabled
-Boolean.  True iff SeqComparisonFloat invariants should be considered.
+@item daikon.inv.binary.twoSequence.SeqSeqFloatGreaterEqual.enabled
+Boolean.  True iff SeqSeqFloatGreaterEqual invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.binary.twoSequence.SeqComparisonString.enabled
-Boolean.  True iff SeqComparisonString invariants should be considered.
+@item daikon.inv.binary.twoSequence.SeqSeqFloatGreaterThan.enabled
+Boolean.  True iff SeqSeqFloatGreaterThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqFloatLessEqual.enabled
+Boolean.  True iff SeqSeqFloatLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqFloatLessThan.enabled
+Boolean.  True iff SeqSeqFloatLessThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqIntEqual.enabled
+Boolean.  True iff SeqSeqIntEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual.enabled
+Boolean.  True iff SeqSeqIntGreaterEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.enabled
+Boolean.  True iff SeqSeqIntGreaterThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqIntLessEqual.enabled
+Boolean.  True iff SeqSeqIntLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqIntLessThan.enabled
+Boolean.  True iff SeqSeqIntLessThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqStringEqual.enabled
+Boolean.  True iff SeqSeqStringEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqStringGreaterEqual.enabled
+Boolean.  True iff SeqSeqStringGreaterEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqStringGreaterThan.enabled
+Boolean.  True iff SeqSeqStringGreaterThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqStringLessEqual.enabled
+Boolean.  True iff SeqSeqStringLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqSeqStringLessThan.enabled
+Boolean.  True iff SeqSeqStringLessThan invariants should be considered.
 The default value is `true'.
 
 @item daikon.inv.binary.twoSequence.SubSequence.enabled

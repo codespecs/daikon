@@ -22,9 +22,7 @@ public class CmdRaw
 
     synchronized(s) {
       // send out the command
-      s.input.println(cmd);
-      s.input.flush();
-
+      s.sendLine(cmd);
       // there is no output from Simplify
     }
 

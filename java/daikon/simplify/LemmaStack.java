@@ -35,6 +35,18 @@ public class LemmaStack {
    **/
   public static boolean dkconfig_print_contradictions = false;
 
+  /**
+   * Boolean. If true, ask Simplify to check a simple proposition
+   * after each assumption is pushed, providing an opportunity to wait
+   * for output from Simplify and potentially receive error messages
+   * about the assumption. When false, long sequences of assumptions
+   * may be pushed in a row, so that by the time an error message
+   * arrives, it's not clear which input caused the error. Of course,
+   * Daikon's input to Simplify isn't supposed to cause errors, so
+   * this option should only be needed for debugging.
+   **/
+  public static boolean dkconfig_synchronous_errors = false;
+
   private Stack lemmas;
   private SessionManager session;
 
@@ -106,14 +118,12 @@ public class LemmaStack {
     try {
       assume(lem);
       lemmas.push(lem);
-
-      // The following debugging code causes us to flush all our input
-      // to Simplify after each lemma, and is useful to figure out
-      // which lemma an error message refers to. It's a significant
-      // slowdown, though.
-      if (false) {
+      if (dkconfig_synchronous_errors) {
+        // The following debugging code causes us to flush all our input
+        // to Simplify after each lemma, and is useful to figure out
+        // which lemma an error message refers to.
         try {
-          checkForContradiction();
+          checkString("(AND)");
         } catch (SimplifyError err) {
           System.err.println("Error after pushing " + lem.summarize() + " " +
                              lem.formula);

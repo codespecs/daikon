@@ -22,8 +22,8 @@ daikon.derive.unary.SequenceSum.enabled
 daikon.inv.Invariant.probability_limit
 daikon.inv.binary.sequenceScalar.Member.enabled
 daikon.inv.binary.sequenceScalar.SeqIntLessThan.enabled
-daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.enabled
 daikon.inv.binary.sequenceScalar.SeqIntLessEqual.enabled
+daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.enabled
 daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual.enabled
 daikon.inv.binary.sequenceScalar.SeqIntEqual.enabled
 daikon.inv.binary.sequenceString.Member.enabled

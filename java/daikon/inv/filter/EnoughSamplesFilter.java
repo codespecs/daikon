@@ -15,6 +15,9 @@ class EnoughSamplesFilter extends InvariantFilter {
     if (IsEqualityComparison.it.accept( invariant )) {
       return false;
     }
-    return !invariant.enoughSamples();
-  }
+    boolean answer = !invariant.enoughSamples();
+    if (answer && invariant.discardString.equals(""))
+      invariant.discardString = "Fix me, discarded for !enoughSamples()";
+    return answer;
+   }
 }
