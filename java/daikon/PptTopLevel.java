@@ -71,14 +71,6 @@ public class PptTopLevel extends Ppt {
   // parent point.
   Set controlling_ppts = new HashSet(); // [PptTopLevel]
 
-  public void set_values_null() {
-    values_num_samples = num_samples();
-    values_num_mod_non_missing_samples = num_mod_non_missing_samples();
-    values_num_values = num_values();
-    values_tuplemod_samples_summary = tuplemod_samples_summary();
-    values = null;
-  }
-
 
 
   PptTopLevel(String name, VarInfo[] var_infos) {
