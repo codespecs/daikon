@@ -266,7 +266,7 @@ public final class CLASSNAME
         }
 
         // Check all values against a, b, and c.
-        if (!wrapper.falsified) {
+        if (!wrapper.is_false()) {
           for (int i=0; i<MINTRIPLES; i++) { // values_seen == MINTRIPLES
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
@@ -827,7 +827,7 @@ public final class CLASSNAME
         if (Debug.logDetail())
           wrapper.log ("Adding point " + cp + " from " + c.wrapper.ppt);
         first.add_modified (cp.x, cp.y, cp.z, 1);
-        if (wrapper.falsified)
+        if (wrapper.is_false())
           return (null);
       }
     }
