@@ -216,7 +216,7 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 You can easily write your own invariants and have Daikon check them,
 in addition to all the other invariants that are already part of Daikon.
 Adding a new invariant to Daikon requires writing one Java class, adding
-a line to another file (a factory class) to inform Daikon of the new
+a line to another file to inform Daikon of the new
 class, and recompiling Daikon.
 
 The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
@@ -224,7 +224,7 @@ Daikon distribution contains a sample invariant.  This invariant is
 true if the variable is always positive (greater than zero).  This
 invariant is subsumed by other invariants in the system; it is provided
 only as a pedagogical example.  To enable the invariant, uncomment the
-appropriate line in @file{SingleScalarFactory.java}, then recompile
+appropriate line in @code{Daikon.setup_proto_invs()}, then recompile
 Daikon.
 
 
@@ -251,9 +251,7 @@ for invariants over a scalar and a sequence, such
 as ``x is a member of a[]''.
 @end table
 @noindent
-A complete list of the types appears in classes @samp{PptSlice1},
-@samp{PptSlice2}, and @samp{PptSlice3}, in their respective
-@samp{instantiate_invariants} methods.
+A complete list of invariants appears in @samp{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
 (tuples of values for all the variables of interest to the invariant;
@@ -269,7 +267,7 @@ Creates a new invariant object.  Its typical implementation is
 @example
   super(ppt);
 @end example
-@item instantiate
+@item static instantiate
 returns either a new invariant object or null.  For instance,
 @samp{instantiate} might check whether particular conditions that are
 required for the invariant to be sensible hold.  Its typical
@@ -277,11 +275,27 @@ implementation is
 @example
   return new @var{InvName}(ppt);
 @end example
-@item add_modified
+@item instantiate_dyn
+provides a non-static version of instantiate
+@item get_proto
+returns a prototype invariant used to create other invariants.  Its
+typical implementation is
+@example
+  if (!dkconfig_enabled)
+    return (null);
+  return new Postive (null);
+@end example
+@item check_modified
 presents a tuple of values to the invariant.  The @samp{count} variable
 indicates how many samples have this value.  For example, three calls to
-@samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
-one call to @samp{add_modified} with a @samp{count} parameter of 3.
+@samp{check_modified} with a @samp{count} parameter of 1 is equivalent to
+one call to @samp{check_modified} with a @samp{count} parameter of 3.
+Returns whether or not the sample is consistent with the invariant.
+Does not change the state of the invariant.
+@item add_modified
+similar to @samp{check_modified} except that it can change the state
+of the invariant if necessary.  If the invariant doesn't have any
+state, then simply calls @samp{check_modified}
 @item computeConfidence
 returns the probability that the observed data could not have happened by
 chance alone.  The result usually falls between 0 and 1, where 0 means
@@ -312,14 +326,8 @@ an invariant, you can make @samp{repr}, @samp{format_esc}, and
 implementations later as needed.
 @end table
 
-After the invariant is written, add a call to its @samp{instantiate}
-method in the @samp{instantiate} method of the appropriate
-factory; for instance, add a line like
-@example
-  result.add(MyInvariant.instantiate(ppt));
-@end example
-@noindent
-to @samp{SingleScalarFactory.instantiate}.
+After the invariant is written, add a call to its @samp{get_proto}
+method in the @samp{Daikon.setup_proto_invs} method.
 
 @node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
 @section New derived variables
@@ -584,71 +592,57 @@ Track logging is specified by three pieces of information:
 
    @end enumerate
 
-These items are specified in the String arrays @code{debugTrackClass},
-@code{debugTrackPpt} and @code{debugTrackVars} in Debug.java.  The class,
-program point, and each of the variables (in order) must match in order
-for information concerning the invariant to be printed.  Multiple items
-can be specified in each array.  Information will be printed if any of
-the items match.  For example, 
+These items are specified using the --track argument to Daikon.  Each of
+the the inputs to track logging can be specified in a single argument.
+The basic syntax is:
 @example
-    public static String[] debugTrackClass = @{
-      "LowerBound",
-      "UpperBound",
-    @}
+    class|class|...<var,var,var>@@ppt
 @end example
-@noindent
-will match Invariants of either @code{LowerBound} or @code{UpperBound}.
+As shown, multiple class arguments can be specified separated by pipe
+symbols (|).  The variables are specified in angle brackets (<>) and
+the program point is preceeded by an at sign (@@).  Each item is optional.
+For example:
+@example
+    IntEqual<x,y>@@makeEmpty()
+    LessThan|GreaterThan<return,orig(y)>@@EXIT99
+@end example
+Multiple --track switches can be specified. The class, program point,
+and each of the variables must match one of the specifications in order
+for information concerning the invariant to be printed.
 
 Matching is a simple substring comparison.  The specified item must be
-a substring of the actual item.  For instance, the above example
-will match not only @code{LowerBound} and @code{UpperBound}, but also 
-@code{EltUpperBound}, @code{EltUpperBoundFloat}, @code{UpperBoundFloat},
-@code{EltLowerBound}, @code{EltLowerBoundFloat}, and @code{LowerBoundFloat}.
+a substring of the actual item.  For instance, @code{LessThan} matches
+both @code{IntLessThan} and @code{FloatLessThan}.
 
 Program points and variables are specified exactly as they are seen in
 normal Daikon invariant output.  Specifically, @code{Ppt.name} and
 @code{VarInfo.name.name()} are used to generate the names for comparisons.
 
-Invariants are not the only classes that can be tracked.  Any class
-name is a valid entry.  Thus, for example, to print information about
-derived sequence variables from sequence @code{this.theArray[]} and
-scalar @code{x} at program point
-@code{DataStructures.DisjSets.find(int):::EXIT}, the tracking
-information would be setup as follows:
+Invariants are not the only classes that can be tracked.  Any class name
+is a valid entry.  Thus, for example, to print information about derived
+sequence variables from sequence @code{this.theArray[]} and scalar
+@code{x} at program point @code{DisjSets.find(int):::EXIT}, the tracking
+argument would be:
 
 @example
-  public static String[] debugTrackClass = @{
-     "SequenceScalarSubscriptFactory",
-  @};
-
-  public static String[] debugTrackPpt = @{
-    "DataStructures.DisjSets.find(int):::EXIT"
-  @};
-
-  public static String[][] debugTrackVars = @{
-    @{ "this.theArray[]",  "x" @},
-    @{ "x",                "this.theArray[]" @},
-  @};
-
+  SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
 @end example
 
-Track logging must be enabled.  This is done by enabling the underlying
-logger (@code{daikon.Debug}) via Daikon's @code{--dbg} switch (i.e.,
-@code{--dbg daikon.Debug}).  There are also two configuration options
-that can customize the output.  The option @code{daikon.Debug.showTraceback}
-will output a stack trace on each log statement.  The option 
-@code{daikon.Debug.logDetail} will cause more detailed (and often
-voluminous) output to be printed.  For more information,
-@ref{Configuration options,,,./daikon,Daikon User Manual}.
+There are two configuration options that can customize the output.  The
+option @code{daikon.Debug.showTraceback} will output a stack trace on
+each log statement.  The option @code{daikon.Debug.logDetail} will cause
+more detailed (and often voluminous) output to be printed.  For more
+information, @ref{Configuration options,,,./daikon,Daikon User Manual}.
 
 Note that all interesting information is not necessarily currently logged.
 It will often be necessary to add new logging statements for the specific
 information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
 
-More detailed information can be found in the Javadoc for @uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug} and
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,
-daikon.inv.Invariant}.
+More detailed information can be found in the Javadoc for
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug}
+and
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,daikon.inv.Invariant}.
 
 @menu
 * Adding track logging::        
