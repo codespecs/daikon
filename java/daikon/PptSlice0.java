@@ -119,12 +119,6 @@ public class PptSlice0
     // checkRep();
   }
 
-  public void removeInvariants(Collection c) {
-    for (Iterator itor = c.iterator(); itor.hasNext(); ) {
-      removeInvariant((Invariant) itor.next());
-    }
-  }
-
   public boolean hasImplication(Implication imp) {
     initInvariantsSeen();
     return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));
