@@ -33,7 +33,7 @@ public abstract class Invariant
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030822L;
+  static final long serialVersionUID = 20040921L;
 
   /**
    * General debug tracer.
@@ -118,12 +118,6 @@ public abstract class Invariant
    * call destroy().
    **/
   protected boolean falsified = false;
-
-  /**
-   * True once this invariant has flowed.  Prevents invariants from
-   * flowing twice.
-   **/
-  public boolean flowed = false;
 
   // Whether an invariant is a guarding predicate, that is, creately solely
   // for the purpose of ensuring invariants with variables that can be missing
@@ -394,7 +388,6 @@ public abstract class Invariant
   // have the caller do that.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
-    flowed = false;
   }
 
   /**
@@ -424,7 +417,6 @@ public abstract class Invariant
   public Object clone() {
     try {
       Invariant result = (Invariant) super.clone();
-      result.flowed = false;
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can never happen
@@ -649,10 +641,6 @@ public abstract class Invariant
     return ppt.varNames();
   }
 
-  public final String name() {
-    return this.getClass().getName() + varNames();
-  }
-
   // repr()'s output should not include result of getConfidence, because
   // repr() may be called from computeConfidence or elsewhere for
   // debugging purposes.
@@ -767,20 +755,6 @@ public abstract class Invariant
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + " needs to be implemented: " + format();
-  }
-
-  /**
-   * @return standard "format is not expressible" (indicating that the
-   * formalism is not powerful enough to express the logical formula) for
-   * the given requested format.  Made public so cores can call it.
-   **/
-  public String format_inexpressible(OutputFormat request) {
-    if ((request == OutputFormat.IOA) && debugPrint.isLoggable(Level.FINE)) {
-      debugPrint.fine ("Format_ioa: " + this.toString());
-    }
-    String classname = this.getClass().getName();
-    return "warning: method " + classname + ".format(" + request + ")"
-      + "cannot be expressed in this format: " + format();
   }
 
   /**
@@ -1060,15 +1034,6 @@ public abstract class Invariant
   private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
 
   /**
-   * Returns true if the invariant is an equality invariant (ie, a == b).
-   * false otherwise.  Must be overridden by all equality invariants
-   */
-  public boolean is_equality_inv() {
-    return (false);
-  }
-
-
-  /**
    * @return true iff the argument is the "same" invariant as this.
    * Same, in this case, means a matching type, formula, and variable
    * names.
@@ -1211,63 +1176,6 @@ public abstract class Invariant
     return (suppressed);
   }
 
-  /**
-   * Returns whether or not it is ok to copy/flow this invariant.
-   * Invariants which are NI suppressed (in some fashion) in the destination
-   * slice should not be copied.
-   */
-  public boolean copy_ok (PptSlice slice) {
-
-    if (Debug.logOn())
-      Debug.log (getClass(), slice, "checking " + getClass() + " = "
-                 + format());
-
-    NISuppressionSet ss = get_ni_suppressions();
-    if ((ss != null) && ss.suppressed (slice)) {
-      if (Debug.logOn())
-         Debug.log (getClass(), slice, "!copy_ok, ni-suppressed by " + ss);
-      return (false);
-    } else if (((getClass() == LinearTernary.class)
-                || (getClass() == LinearTernaryFloat.class))
-               &&  (slice.parent.is_constant (slice.var_infos[0])
-                    || slice.parent.is_constant (slice.var_infos[1])
-                    || slice.parent.is_constant (slice.var_infos[2]))) {
-      if (Debug.logOn())
-        Debug.log (getClass(), slice, "!copy_ok, linearternary constant");
-      return (false);
-    }
-
-    if (Debug.logOn())
-      Debug.log (getClass(), slice, "copy_ok, not suppressed by " + ss);
-    return (true);
-  }
-
-
-  // Diff replaced by package daikon.diff
-
-  //    String diff(Invariant other) {
-  //      throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());
-  //    }
-
-  //     # Possibly add an optional "args=None" argument, for formatting.
-  //     def diff(self, other):
-  //         """Returns None or a description of the difference."""
-  //         # print "diff(invariant)"
-  //         inv1 = self
-  //         inv2 = other
-  //         assert inv1.__class__ == inv2.__class__
-  //         if inv1.is_unconstrained() and inv2.is_unconstrained():
-  //             return None
-  //         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
-  //             return "One is unconstrained but the other is not"
-  //         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
-  //             return "Different small number of values"
-  //         if inv1.can_be_None ^ inv2.can_be_None:
-  //             return "One can be None but the other cannot"
-  //         # return "invariant.diff: no differences"  # debugging
-  //         return None
-
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Tests about the invariant (for printing)
@@ -1277,24 +1185,6 @@ public abstract class Invariant
   // omitted to allow for easier testing.
   public boolean isWorthPrinting() {
     return InvariantFilters.isWorthPrintingFilter().shouldKeep(this) == null;
-  }
-
-  /**
-   * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
-   **/
-  public final boolean isWorthPrinting_sansControlledCheck() {
-    return InvariantFilters.isWorthPrintingFilter_sansControlledCheck()
-             .shouldKeep(this) == null;
-  }
-
-  public final String isWorthPrinting_sansControlledCheck_debug() {
-    return
-      "iwpscc(" + format() + " @ " + ppt.name()
-      + ") <=== "
-      + enoughSamples()
-      + " " + (isObvious() != null)
-      + " " + justified()
-      ;
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -1959,15 +1849,6 @@ public abstract class Invariant
    * cannot suppress another invariant
    */
   public boolean isActive() {
-    return (true);
-  }
-
-  /**
-   * Returns whether or not this invariant can be flowed from an upper
-   * ppt to a lower ppt.  Invariants with sample based internal state
-   * (oneof, bounds, linearbinary, linearternary) cannot be flowed
-   */
-  public boolean isFlowable() {
     return (true);
   }
 
