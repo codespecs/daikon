@@ -62,6 +62,10 @@ chgrp $NEWUSERNAME .cshrc .cvsrc .emacs
 echo $NEWUSERNAME@mit.edu > .forward
 chown $NEWUSERNAME .forward
 chgrp $NEWUSERNAME .forward
+echo "## Add to PAG weppages"
+echo "## (Also ensure the person appears in ~mernst/www/research/students.html)"
+emacs /home/httpd/html/pag/people-tree.tree
+make -C /home/httpd/html/pag
 exit
 </pre>
 </blockquote>
