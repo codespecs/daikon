@@ -1306,6 +1306,7 @@ public abstract class VarInfoName
 	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
 	  if (i != 0) {
 	    int_list.append(" ");
+	    conditions.append(" ");
 	  }
 	  int_list.append(idx.simplify_name());
 	  conditions.append( "(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
