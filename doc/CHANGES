@@ -11,6 +11,14 @@ versions as the user manual.
 
 ===========================================================================
 
+
+Improved portability to Windows systems by changing instances of the
+literal "\n" in code to System.getProperty("line.separator"), or using
+println().
+
+Removed most calls to System.exit in Daikon.  This makes it easier to call
+methods (including main) defined by Daikon programmatically.
+
 Improved the manual's description of the output formats that Daikon can use
 when printing invariants; the formats are Daikon, DBC, ESC, IOA, Java, JML,
 Simplify, and repair.
@@ -24,12 +32,13 @@ Added the "--max_invariants_pp N" option to Annotate. If given, then
 Annotate will output at most N invariants per program point (which
 ones are output is not specified).
 
-Improved portability to Windows systems by changing instances of the
-literal "\n" in code to System.getProperty("line.separator"), or using
-println().
+Made Annotate public so it can be accessed programatically from other
+Java applications.
 
-Removed most calls to System.exit in Daikon.  This makes it easier to call
-methods (including main) defined by Daikon programmatically.
+Removed state-holding static variables from Annotate, so that multiple
+calls of main() from within another application always yield the same
+initial Annotate state.
+
 
 Changed the way that Linear* invariants are printed.
 [Perhaps change their names as well?]
