@@ -14,7 +14,7 @@ sub usage() {
 	"\n",
 	"Options:\n",
 	" -a, --algorithm ALG\n",    
-	"       ALG specifies an implemtation of a clustering algorithm.\n",
+	"       ALG specifies an implementation of a clustering algorithm.\n",
 	"       Current options are 'km' (for kmeans), 'hierarchical'\n",
 	"       and 'xm' (for xmeans). Default is xmeans.\n",
 	" -k,   The number of clusters to use (for algorithms which require\n",
@@ -87,12 +87,12 @@ foreach my $filename (@to_cluster) {
     my $outfile = "$filename.cluster";
     #this is for kmeans clustering
     if ($algorithm eq "km") {
-	$command = $command . " $ENV{INV}/tools/kmeans/kmeans $filename $ncluster > $outfile; ";
+	$command = $command . " $ENV{INV}/scripts/kmeans $filename $ncluster > $outfile; ";
     } elsif ($algorithm eq "hierarchical") {
 	#this is for hierarchical clustering
 	$command = $command . " difftbl $filename | cluster -w | clgroup -n $ncluster > $outfile; ";
     } elsif ($algorithm eq "xm") {
-	my $exec = "$ENV{INV}/tools/xmeans/kmeans/kmeans ";
+	my $exec = "$ENV{INV}/scripts/xmeans";
 	$command = $command. " $exec makeuni in  $filename; ";
 	$command = $command. " $exec kmeans -k 1 -method blacklist -max_leaf_size 40 -min_box_width 0.03 -cutoff_factor 0.5 -max_iter 200 -num_splits 6 -max_ctrs 15 -in $filename -printclusters out.clust; ";
 	$command = $command. " $exec membership in out.clust > $outfile ; rm out.clust ;";
