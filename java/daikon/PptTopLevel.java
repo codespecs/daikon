@@ -2648,7 +2648,7 @@ public class PptTopLevel
   /**
    * Returns whether or not the specified unary slice should be
    * created.  The variable must be a leader, not a constant, and
-   * not always missing
+   * not always missing.
    */
   public boolean is_slice_ok (VarInfo var1) {
 
@@ -2699,6 +2699,7 @@ public class PptTopLevel
 
     return (true);
   }
+
   /**
    * Returns whether or not the specified ternary slice should be created.
    * The slice should not be created if any of the following are true
