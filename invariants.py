@@ -19,11 +19,12 @@ false = (1==0)
 # Annoyingly, these variables get wiped out when I reload this file unless
 # I protect them.
 # But if they're indented, maybe my future tools for variable decls won't work.
-if not locals().has_key("var_names"):
-    var_names = {}          # from function name to tuple of variable names
-    var_values = {}	    # from function name to (tuple of values to occurrence count)
-    samples = {}            # from function name to number of samples
-    file_vars = {}          # from filename to (names, values, samples) tuple
+if not locals().has_key("fn_var_infos"):
+    fn_var_infos = {}           # from function name to list of var_infos
+    fn_var_values = {}	    # from function name to (tuple of values to occurrence count)
+
+    fn_samples = {}         # from function name to number of samples
+    file_fn_var_infos = {}  # from filename to (infos, values, samples) tuple
 
     # From function name to invocation count.  Used to add invocation
     # count variables for each program function
@@ -36,53 +37,117 @@ if not locals().has_key("var_names"):
     # We have a list for the param values to provide for recursive
     # function calls.  As we pop recursive calls to the function off
     # the stack, we pop orig parameter vals off the list.
-    ftn_to_orig_param_vals = {} 
-    
-integer_re = re.compile(r'^-?[0-9]+$')
-float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
-sequence_re = re.compile(r'^[^	]+\[\]$') # variable name for a sequence
+    ftn_to_orig_param_vals = {}
 
 def clear_variables():
     """Reset the values of some global variables."""
-    var_names.clear()
-    var_values.clear()
-    samples.clear()
-    file_vars.clear()
+    fn_var_infos.clear()
+    fn_var_values.clear()
+    fn_samples.clear()
+    file_fn_var_infos.clear()
+    ftn_names_to_call_ct = {}
+    ftn_to_orig_param_vals = {}
 
-def merge_variables(filename, sub_var_names, sub_var_values, sub_samples):
+def clear_invariants():
+    """Reset the values of invariants, globally."""
+    for var_infos in fn_var_infos.values():
+        for vi in var_infos:
+            vi.invariant = None
+            vi.invariants = {}
+
+
+integer_re = re.compile(r'^-?[0-9]+$')
+float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
+# variable name for a sequence; ends with "[]" or "[XXX..YYY]"
+# This should only be used once per variable; after that, read out the
+# type from the var_info object
+sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
+
+
+class var_info:
+    name = None                 # string
+    type = None                         # type information
+    # index = None                        # index in lists of variables.  Necessary?  No, but possibly useful...
+
+    # For these two, am I interested in indexing off just this variable,
+    # or would I rather index by pairs?  (I'm not sure...)
+    derived = None                      # info about derived variables (both what this is derived from and what is derived from this?)
+    invariant = None                   # not sure
+
+    # To find the invariant over a pair of variables, one must do a
+    # double-dispatch:  first look up the "invariants" field of one of the
+    # variables, then look up the other variable in that map.  This isn't
+    # beautiful, but I guess it will work.
+    invariants = None         # map from indices to multiple-arity invariants
+
+    def __init__(self, name, type):
+        self.name = name
+        self.type = type
+        # self.index = index
+        self.derived = {}
+        self.invariant = None
+        self.invariants = {}
+
+    def __repr__(self):
+        return "<var %s %s>" % (self.name, self.type)
+
+    def is_sequence(self):
+        return self.type == types.ListType
+
+
+def var_info_name_compare(vi1, vi2):
+    return cmp(vi1.name, vi2.name)
+
+def var_infos_compatible(vis1, vis2):
+    """The arguments are lists of var_info objects."""
+    # This just checks that the names are the same.
+    return (map(lambda vi: vi.name, vis1) == map(lambda vi: vi.name, vis2))
+
+
+def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_samples):
     """Merge the values for the arguments into the corresponding global variables.
-See `read_file' for a description of the argument types; arguments 2-4 are
-dictionaries mapping from a function name to information about the function."""
-    # Yuck, loop is outside assert
-    for fname in var_names.keys():
-        assert not(sub_var_values.has_key(fname)) or (var_names[fname] == sub_var_names[fname])
-    assert util.same_elements(sub_var_names.keys(), sub_var_values.keys())
-    assert util.same_elements(sub_var_names.keys(), sub_samples.keys())
-    assert not(file_vars.has_key(filename))
-    for fname in sub_var_names.keys():
-	if not(var_names.has_key(fname)):
-	    var_names[fname] = sub_var_names[fname]
-	    var_values[fname] = {}
+    See `read_file' for a description of the argument types; arguments 2-4 are
+    dictionaries mapping from a function name to information about the function.
+    """
+
+    assert not(file_fn_var_infos.has_key(filename))
+    for fname in sub_fn_var_infos.keys():
+        sub_var_infos = sub_fn_var_infos[fname]
+	if not(fn_var_infos.has_key(fname)):
+            var_infos = []
+            for vi in sub_var_infos:
+                var_infos.append(var_info(vi.name, vi.type))
+	    fn_var_infos[fname] = var_infos
+            fn_var_values[fname] = {}
 	else:
-            assert var_names[fname] == sub_var_names[fname]
-	    assert type(var_values[fname]) == types.DictType
-        for (values, count) in sub_var_values[fname].items():
-            # var_values[fname][value] += count
-            util.mapping_increment(var_values[fname], values, count)
-        # samples[fname] += sub_samples[fname]
-        util.mapping_increment(samples, fname, sub_samples[fname])
-    file_vars[filename] = (sub_var_names, sub_var_values, sub_samples)
+            assert var_infos_compatible(fn_var_infos[fname], sub_fn_var_infos[fname])
+        var_infos = fn_var_infos[fname]
+        var_values = fn_var_values[fname]
+        sub_var_values = sub_fn_var_values[fname]
+        for (values, count) in sub_var_values.items():
+            # var_values[value] += count
+            util.mapping_increment(var_values, values, count)
+        # fn_samples[fname] += sub_fn_samples[fname]
+        util.mapping_increment(fn_samples, fname, sub_fn_samples[fname])
+    file_fn_var_infos[filename] = sub_fn_var_infos
+
 
 def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     """Input: a dictionary mapping a tuple of elements to a count.
-All the key tuples in the input have the same length unless optional argument
-TUPLE_LEN is provided, in which case all tuples have at least that length.
-Output: a tuple of dictionaries, each mapping a single element to a count.
-The first output dictionary concerns the first element of the original keys,
-the second output the second element of the original keys, and so forth."""
+    All the key tuples in the input have the same length unless optional argument
+    TUPLE_LEN is provided, in which case all tuples have at least that length.
+    If TUPLE_LEN is a tuple, then only those indices are extracted.
+    Output: a tuple of dictionaries, each mapping a single element to a count.
+    The first output dictionary concerns the first element of the original keys,
+    the second output the second element of the original keys, and so forth."""
+
     if tuple_len == None:
         tuple_len = len(dot.keys()[0])
-    tuple_indices = range(0, tuple_len)
+    if type(tuple_len) == types.IntType:
+        tuple_indices = range(0, tuple_len)
+    else:
+        assert type(tuple_len) in [types.TupleType, types.ListType]
+        tuple_indices = tuple_len
     # Next four lines accomplish "result = ({},) * tuple_len", but with
     # distinct rather than identical dictionaries in the tuple.
     result = []
@@ -95,13 +160,13 @@ the second output the second element of the original keys, and so forth."""
             this_dict = result[i]
             util.mapping_increment(this_dict, this_key, count)
     return result
-# dict_of_tuples_to_tuple_of_dicts(var_values["PUSH-ACTION"])
+# dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
 
 
 def dict_of_sequences_to_element_dict(dot):
     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
-Output: a dictionary, mapping elements of all of the sequence instances
-to a count."""
+    Output: a dictionary, mapping elements of all of the sequence instances
+    to a count."""
     result = {}
     for (key_tuple, count) in dot.items():
         for this_key in key_tuple:
@@ -112,22 +177,488 @@ to a count."""
 
 def dict_of_tuples_slice(dot, indices):
     """Input: a dictionary mapping a tuple of elements to a count, and a
-list of indices.
-Output: a dictionary mapping a subset of the original elements to a count.
-The subset is chosen according to the input indices."""
+    list of indices.
+    Output: a dictionary mapping a subset of the original elements to a count.
+    The subset is chosen according to the input indices."""
+
     result = {}
     for (key_tuple, count) in dot.items():
         sliced_tuple = util.slice_by_sequence(key_tuple, indices)
         util.mapping_increment(result, sliced_tuple, count)
     return result
-# dict_of_tuples_slice(var_values["PUSH-ACTION"], (0,))
-# dict_of_tuples_slice(var_values["PUSH-ACTION"], (1,))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (0,))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (1,))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (2,))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (0,1))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
-# dict_of_tuples_slice(var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
+# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
+# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (2,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,1))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
+
+
+
+###########################################################################
+### Derived variables
+###
+
+
+# I want to introduce some derived values and compute invariants over them
+# before deciding whether to introduce other derived values.  Therefore,
+# rather than having one function that introduces all the derived values,
+# there are several passes.  (Actually, each pass is a combination of a
+# number of highly-specialized introduction routines which are plugged into
+# a harness which calls them.)
+
+# all_numeric_invariants alternates between introducing new variables and
+# computing new invariants (among the new variables, and between a new
+# variable and old variables, but no recomputation is done among old old
+# variables).  It repeats this cycle until fixpoint (or until we are done
+# adding variables).
+
+
+
+# In my documentation, I several lists of derived variables:
+#  * by the type of derivees
+#  * by the type of derived
+#  * by what is required
+#  * ordering over these things
+
+# To simplify cross-reference, name derived variables according like so:
+#  EE.D.n
+# where the "E"s are the type of derivees,
+#       the "D" is the type of the derived value, and
+#       the "n" is a number added for uniqueness.
+#  The types are "Q" for sequence and "C" for scalar.
+
+
+# Derived variables:
+#  sequence:
+#   * scalars:
+#      * Q.C.1:  size
+#        restriction: not if derived subsequence of known (symbolic) length
+#      * Q.C.2:  element at each index, counting from front
+#	 must know: bounds on size of array (Q.C.1)
+#        restriction: not sequences derived from prefix of another sequence
+# 	 caveat: maybe not the element at *each* index, but just extremal few.)
+#      * Q.C.3:  element at each index, counting from back
+#	 must know: bounds on size of array (Q.C.1)
+#	 restriction: not sequences of constant (literal) length
+#        restriction: not sequences derived from suffix of another sequence
+#		(that doesn't happen yet)
+# 	 caveat: maybe not the element at *each* index, but just extremal few.)
+#   * sequences:
+#      * Q.Q.1:  subsequence up to zero element, exclusive
+#        restriction: not sequences derived from prefix of another sequence
+#      * Q.Q.2:  subsequence up to zero element, inclusive
+#        restriction: not sequences derived from prefix of another sequence
+#  sequence, scalar:
+#   restriction: not sequences derived from prefix of another sequence
+#   restriction: scalar not (equal to) size of this sequence (Q.C.1)
+#   * scalars:
+#      * QC.C.1:  elt at that index
+#   * sequence:
+#      * QC.Q.1:  subsequence up to that index, inclusive
+#	 restriction: not if that index is greater than or equal to size (Q.C.1)
+#      * QC.Q.2:  subsequence up to that index, exclusive
+#		 (ie, prefix of that size)
+#	 restriction: not if that index is greater than size (Q.C.1)
+#      * QC.Q.3:  subsequence up to that element, inclusive (if elt in sequence)
+#      * QC.Q.4:  subsequence up to that element, exclusive (if elt in sequence)
+
+# I also want to avoid checking certain invariants which are vacuously true
+# over derived values.
+# Record information about how derived values were derived from something,
+# so as to avoid dumb invariants.
+# Avoid obvious invariants:
+#  * sequence membership:  an element of a sequence is a member of that
+#    sequence, or of some other sequence derived from it (or from which it
+#    was derived) which still covers that element.
+#  * subsequence:  a derived sequence is a subsequence of its larger
+#    containing sequence
+
+# Need a mapping from a sequence variable to the variable representing its size.
+
+
+
+
+# This routine does one "pass"; that is, it adds some set of derived
+# variables, according to the functions that are passed in.
+def introduce_new_variables_one_pass(var_infos, var_new_values, indices, functions):
+    """Add new computed variables to the dictionaries, by side effect.
+    The arguments are:
+      VAR_INFOS: list of var_info objects
+      INDICES: only values (partially) computed from these indices are candidates
+      FUNCTIONS: (long) list of functions for adding new variables; see the code
+    The first argument is typically an elements of global variable fn_var_infos;
+    in this function, we operate over only one function, not all functions.
+    """
+
+    (intro_from_sequence, intro_from_scalar,
+     intro_from_sequence_sequence, intro_from_sequence_scalar,
+     intro_from_scalar_sequence, intro_from_scalar_scalar) = functions
+
+    # We will modify this mutable list, then reinstall it as a tuple at the end.
+    var_new_values = {}       # map from old values to new values
+    for value in var_values.keys():
+        var_new_values[value] = list(value)
+
+    all_indices = range(0, len(var_infos))
+
+    for i in indices:
+        this_var_info = var_infos[i]
+        if this_var_info.is_sequence():
+            intro_from_sequence(var_infos, var_new_values, i)
+        else:
+            intro_from_scalar(var_infos, var_new_values, i)
+    for indices in util.choose(2, all_indices):
+        (i1,i2) = indices
+        if not (i1 in indices or i2 in indices):
+            # Neither of these variables is under consideration.
+            continue
+        this_dict = dict_of_tuples_slice(fn_var_values[fn_name], indices)
+        these_vars = util.slice_by_sequence(var_infos, indices)
+        if these_vars[0].is_sequence() and these_vars[1].is_sequence():
+            intro_from_sequence_sequence(var_infos, var_new_values, i1, i2)
+        elif these_vars[0].is_sequence():
+            intro_from_sequence_scalar(var_infos, var_new_values, i1, i2)
+        elif these_vars[1].is_sequence():
+            intro_from_scalar_sequence(var_infos, var_new_values, i1, i2)
+        else:
+            intro_from_scalar_scalar(var_infos, var_new_values, i1, i2)
+
+    # Done adding; install the new, expanded list of variables
+    for (vals, count) in var_values.items():
+        del var_values[vals]
+        var_values[tuple(var_new_values[vals])] = count
+
+
+###
+### Now, the specific functions for introducing new variables.
+###
+
+def introduce_from_sequence_pass1(var_infos, var_new_values, index):
+    """Add size (only)."""
+    seqvar = var_infos[index].name
+
+    ## For now, add size unconditionally; fix later.
+    # Add size only if this is an original
+    # sequence, not a subsequence (sequence slice) we have added
+    if true or not known_symbolic_size(seqvar):
+        # Add size
+        name_size = "size(%s)" % (seqvar,)
+        var_infos.append(var_info("size(%s)" % (seqvar,), types.IntType))
+        # Also add some "derived"-style info.
+
+        for new_values in var_new_values.values():
+            this_seq = new_values[index]
+            if this_seq == None:
+                this_seq_len = None
+            else:
+                this_seq_len = len(this_seq)
+            new_values.append(this_seq_len)
+
+
+def introduce_from_scalar_pass1(var_infos, var_new_values, index):
+    pass
+
+def introduce_from_sequence_sequence_pass1(var_infos, var_new_values, i1, i2):
+    pass
+
+def introduce_from_sequence_scalar_pass1(var_infos, var_new_values, i1, i2):
+    pass
+
+def introduce_from_scalar_sequence_pass1(var_infos, var_new_values, i1, i2):
+    pass
+
+def introduce_from_scalar_scalar_pass1(var_infos, var_new_values, i1, i2):
+    pass
+
+pass1_functions = (introduce_from_sequence_pass1,
+                   introduce_from_scalar_pass1,
+                   introduce_from_sequence_sequence_pass1,
+                   introduce_from_sequence_scalar_pass1,
+                   introduce_from_scalar_sequence_pass1,
+                   introduce_from_scalar_scalar_pass1)
+
+
+def introduce_from_sequence_pass2(var_infos, var_new_values, index):
+    # Add scalars from sequences (but don't examine any of the new scalars)
+    seqvar = var_infos[index].name
+
+    # Add sum (unconditionally)
+    var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType))
+    for new_values in var_new_values.values():
+        this_seq = new_values[seqidx]
+        if this_seq == None:
+            this_seq_sum = None
+        else:
+            this_seq_sum = util.sum(this_seq)
+        new_values.append(this_seq_sum)
+
+    # Add each individual element.
+    ## For now, add unconditionally; fix later.
+    # (only if not a prefix subsequence (sequence slice) we have added).
+    if true or not prefix_subsequence(seqvar):
+        seq_len_inv = length_inv_of(seqvar)
+        if seq_len_inv.min > 0:
+            for i in range(0, seq_len_min):
+                var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType))
+            for new_values in var_new_values.values():
+                for i in range(0, seq_len_min):
+                    seq = new_values[seqidx]
+                    if seq == None:
+                        elt_val = None
+                    else:
+                        elt_val = seq[i]
+                    new_values.append(elt_val)
+            if seq_len_inv.min != seq_len_inv.max:
+                for i in range(-seq_len_min, 0):
+                    var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType))
+                for new_values in var_new_values.values():
+                    for i in range(-seq_len_min, 0):
+                        seq = new_values[seqidx]
+                        if seq == None:
+                            elt_val = None
+                        else:
+                            elt_val = seq[i]
+                        new_values.append(elt_val)
+
+
+def introduce_from_scalar_pass2(var_infos, var_new_values, index):
+    pass
+
+def introduce_from_sequence_sequence_pass2(var_infos, var_new_values, i1, i2):
+    pass
+
+def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, sclidx):
+    seqvar = var_infos[seqidx].name
+    sclvar = var_infos[sclidx].name
+    scl_inv = var_infos[sclidx].invariant
+    seq_size_idx = var_infos[sclidx].derived['index']
+    seq_size_inv = var_infos[seq_size_idx].invariant
+
+    # Add subsequences
+
+    var_infos.append(var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType))
+    var_infos.append(var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType))
+    for new_values in var_new_values.values():
+        seq = new_values[seqidx]
+        scl = new_values[sclidx]
+        if (scl+1 <= len(seq)) and (scl+1 >= 0):
+            new_value_full = seq[0:scl+1]
+        else:
+            new_value_full = None
+        if (scl <= len(seq)) and (scl >= 0):
+            new_value_less_one = seq[0:scl]
+        else:
+            new_value_less_one = None
+        # print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
+        new_values.append(new_value_full)
+        new_values.append(new_value_less_one)
+
+    # Add scalars
+    # Determine whether it is constant; if so, ignore.
+    # Perhaps also check that it is within range at least once
+    # (or even every time) if not, not very interesting.
+    if not scl_inv.is_exact() and scl_inv.max >= 0 and scl_inv.min <= seq_size_inv.max:
+        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType))
+        for new_values in var_new_values.values():
+            this_seq = new_values[seqidx]
+            this_scl = new_values[sclidx]
+            if ((this_seq != None) and (this_scl != None)
+                and (this_scl < len(this_seq)) and (this_scl >= 0)):
+                new_values.append(this_seq[this_scl])
+            else:
+                new_values.append(None)
+
+
+
+def introduce_from_scalar_sequence_pass2(var_infos, var_new_values, sclidx, seqidx):
+    # Is there any subtlety here with respect to index ordering?  (Eg, do we
+    # always expect the lesser index to appear first?)
+    introduce_from_sequence_scalar_pass2(var_infos, var_new_values, var_derived, seqidx, sclidx)
+
+
+def introduce_from_scalar_scalar_pass2(var_infos, var_new_values, var_derived, i1, i2):
+    pass
+
+pass2_functions = (introduce_from_sequence_pass2,
+                   introduce_from_scalar_pass2,
+                   introduce_from_sequence_sequence_pass2,
+                   introduce_from_sequence_scalar_pass2,
+                   introduce_from_scalar_sequence_pass2,
+                   introduce_from_scalar_scalar_pass2)
+
+
+## Old definition
+# def introduce_new_variables(sub_fn_var_names, sub_fn_var_values, sub_fn_var_derived, indices):
+#     """Add new computed variables to the dictionaries, by side effect.
+#     Only values (partially) computed from an index in INDICES are candidates.
+#     The first three arguments are dictionaries mapping from a function name to
+#     information about the function; see `read_file' for a description."""
+#     #  * map from function name to tuple of variable names.
+#     #  * map from function name to (map from tuple of values to occurrence count)
+#     for fname in sub_fn_var_names.keys():
+#         all_vars = sub_fn_var_names[fname]
+#         sequence_vars = {}              # map from var name to index in all_vars
+#         scalar_vars = {}                # map from var name to index in all_vars
+#         for i in range(0, len(all_vars)):
+#             var = all_vars[i]
+#             if sequence_re.match(var):
+#                 if var[-2:] == "[]":
+#                     var = var[:-2]
+#                 sequence_vars[var] = i
+#             else:
+#                 scalar_vars[var] = i
+#         original_sequence_vars = sequence_vars.copy()
+#         new_vars = list(all_vars)
+# 
+#         these_var_values = sub_fn_var_values[fname]
+#         these_var_new_values = {}       # map from old values to new values
+#         for value in these_var_values.keys():
+#             these_var_new_values[value] = list(value)
+# 
+#         # Add subsequences (but don't examine any of the new subsequences)
+#         for (seqvar, seqidx) in sequence_vars.items():
+#             for (sclvar, sclidx) in scalar_vars.items():
+#                 name_full = "%s[0..%s]" % (seqvar, sclvar)
+#                 name_less_one = "%s[0..%s-1]" % (seqvar, sclvar)
+#                 sequence_vars[name_full] = len(new_vars)
+#                 new_vars.append(name_full)
+#                 sequence_vars[name_less_one] = len(new_vars)
+#                 new_vars.append(name_less_one)
+#                 for new_values in these_var_new_values.values():
+#                     seq = new_values[seqidx]
+#                     scl = new_values[sclidx]
+#                     if (scl+1 <= len(seq)) and (scl+1 >= 0):
+#                         new_value_full = seq[0:scl+1]
+#                     else:
+#                         new_value_full = None
+#                     if (scl <= len(seq)) and (scl >= 0):
+#                         new_value_less_one = seq[0:scl]
+#                     else:
+#                         new_value_less_one = None
+#                     # print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
+#                     new_values.append(new_value_full)
+#                     new_values.append(new_value_less_one)
+#         # Add scalars from sequences (but don't examine any of the new scalars)
+#         scalar_vars_items = scalar_vars.items() # map may change in the loop
+#         for (seqvar, seqidx) in sequence_vars.items():
+#             # Add sum unconditionally
+#             name_sum = "%s.sum" % (seqvar,)
+#             sequence_vars[name_sum] = len(new_vars)
+#             new_vars.append(name_sum)
+#             for new_values in these_var_new_values.values():
+#                 this_seq = new_values[seqidx]
+#                 if this_seq == None:
+#                     this_seq_sum = None
+#                 else:
+#                     this_seq_sum = util.sum(this_seq)
+#                 new_values.append(this_seq_sum)
+# 
+#             # Add some values only if this is an original
+#             # sequence, not a subsequence (sequence slice) we have added
+#             if original_sequence_vars.has_key(seqvar):
+# 
+#                 # Add size (remembering min and max for future use), sum
+#                 name_size = "%s.size_computed" % (seqvar,)
+#                 sequence_vars[name_size] = len(new_vars)
+#                 new_vars.append(name_size)
+# 
+#                 seq_len_min = 1000000
+#                 seq_len_max = 0
+#                 for new_values in these_var_new_values.values():
+#                     this_seq = new_values[seqidx]
+#                     if this_seq == None:
+#                         this_seq_len = None
+#                     else:
+#                         this_seq_len = len(this_seq)
+#                         seq_len_min = min(seq_len_min, this_seq_len)
+#                         seq_len_max = max(seq_len_max, this_seq_len)
+#                     new_values.append(this_seq_len)
+#                 if seq_len_min == 1000000:
+#                     seq_len_min = 0
+# 
+# 
+#                 ## Add each individual element.
+#                 if seq_len_min > 0:
+#                     for i in range(0, seq_len_min):
+#                         elt_name = "%s[%s]" % (seqvar, i)
+#                         scalar_vars[elt_name] = len(new_vars)
+#                         new_vars.append(elt_name)
+#                     for new_values in these_var_new_values.values():
+#                         for i in range(0, seq_len_min):
+#                             seq = new_values[seqidx]
+#                             if seq == None:
+#                                 elt_val = None
+#                             else:
+#                                 elt_val = seq[i]
+#                             new_values.append(elt_val)
+#                     if seq_len_min != seq_len_max:
+#                         for i in range(-seq_len_min, 0):
+#                             elt_name = "%s[%s]" % (seqvar, i)
+#                             scalar_vars[elt_name] = len(new_vars)
+#                             new_vars.append(elt_name)
+#                         for new_values in these_var_new_values.values():
+#                             for i in range(-seq_len_min, 0):
+#                                 seq = new_values[seqidx]
+#                                 if seq == None:
+#                                     elt_val = None
+#                                 else:
+#                                     elt_val = seq[i]
+#                                 new_values.append(elt_val)
+#                 ## Add element at each specific index, but not at constant indices
+#                 for (sclvar, sclidx) in scalar_vars_items:
+#                     # Determine whether it is constant; if so, ignore.
+#                     # Perhaps also check that it is within range at least once
+#                     # (or even every time) if not, not very interesting.
+#                     prev_val = None
+#                     for new_values in these_var_new_values.values():
+#                         new_value = new_values[sclidx]
+#                         if prev_val == None:
+#                             prev_val = new_value
+#                         elif prev_val != new_values:
+#                             prev_val = None
+#                             break
+#                     if prev_val != None:
+#                         break
+#                     # Non-constant value
+#                     elt_name = "%s[%s]" % (seqvar, sclvar)
+#                     scalar_vars[elt_name] = len(new_vars)
+#                     new_vars.append(elt_name)
+#                     for new_values in these_var_new_values.values():
+#                         this_seq = new_values[seqidx]
+#                         this_scl = new_values[sclidx]
+#                         if ((this_seq != None) and (this_scl != None)
+#                             and (this_scl < len(this_seq)) and (this_scl >= 0)):
+#                             new_values.append(this_seq[this_scl])
+#                         else:
+#                             new_values.append(None)
+# 
+#         # Done adding; install the new, expanded list of variables
+#         sub_fn_var_names[fname] = tuple(new_vars)
+#         for (vals, count) in these_var_values.items():
+#             del these_var_values[vals]
+#             these_var_values[tuple(these_var_new_values[vals])] = count
+
+
+## I could just count on finding their values to be constant and thus
+## eliminating them from further consideration...  For now, do that.
+# def eliminate_vacuous_variables(sub_fn_var_names, sub_fn_var_values):
+#     """Remove variables with constant value "None" from the dictionaries.
+#     See `read_file' for a description of the argument types; arguments are
+#     dictionaries mapping from a function name to information about the function."""
+#     for fname in sub_fn_var_names.keys():
+#         these_vars = sub_fn_var_names[fname]
+#         for i in range(0,len(these_vars)):
+#             for
+#             
+# 
+# Could use dict_of_tuples_slice but since we know there will be no
+# merging, it's more efficient to side-effect by hand (but still using
+# slice_by_sequence).
+
+
 
 
 ###########################################################################
@@ -177,7 +708,13 @@ def read_file_ftns(filename):
         ftn_names_to_call_ct[tag] = 0
 
         # Get parameter list and initialize ftn to param vals dict
-        (label, param_list) = string.split(leftover, "(", 1)
+        label_and_params = string.split(leftover, "(", 1)
+        if len(label_and_params) == 1:
+            # Backward compatibility if no parameter list specified
+            label = label_and_params
+            param_list = ""
+        else:
+            (label, param_list) = label_and_params
         param_list = param_list[:-2] # remove trailing newline and ')'
         param_list = string.split(param_list, ",")
         params_to_orig_val_list = {}
@@ -185,7 +722,7 @@ def read_file_ftns(filename):
             if param != '': # handle empty parameter list???
                 params_to_orig_val_list[param] = []
         ftn_to_orig_param_vals[tag] = params_to_orig_val_list
-        
+
         line = file.readline()
         while "\t" in line:
             # skip over (variable,value) line
@@ -198,13 +735,20 @@ def init_ftn_call_ct():
 
 def read_file(filename):
     """Read data from .inv file; return a tuple of three dictionaries.
- * map from function name to tuple of variable names.
- * map from function name to (map from tuple of values to occurrence count)
- * map from function name to number of samples"""
+     * map from function name to tuple of variable names.
+     * map from function name to (map from tuple of values to occurrence count)
+     * map from function name to number of samples
+    """
+
     file = open(filename, "r")
-    this_var_names = {}		# from function name to tuple of variable names
-    this_var_values = {}	# from function name to (tuple of values to occurrence count)
-    this_samples = {}           # from function name to number of samples
+
+    this_fn_var_infos = {}		# from function name to tuple of variable names
+    this_fn_var_values = {}	# from function name to (tuple of values to occurrence count)
+    this_fn_samples = {}           # from function name to number of samples
+    this_ftn_names = {}         # from function name to current number
+                                # of invocations
+
+    this_ftn_names = read_file_ftns(filename)
 
     init_ftn_call_ct()          # initialize function call cts to 0
     line = file.readline()
@@ -217,7 +761,7 @@ def read_file(filename):
 
         # Increment function invocation count if ':::BEGIN'
         (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
-        (label, paramList) = string.split(suffix, "(", 1)
+        label = string.split(suffix, "(", 1)[0]
         if label == "BEGIN":
             util.mapping_increment(ftn_names_to_call_ct, tag_sans_suffix, 1)
 
@@ -225,19 +769,25 @@ def read_file(filename):
         # Accessing global here, crappy
         params_to_orig_val_list = {}
         params_to_orig_val_list = ftn_to_orig_param_vals[tag_sans_suffix]
-        
-        these_var_names = []
+
+        these_var_infos = []
 	these_values = []
         line = file.readline()
         while "\t" in line:
             (this_var_name,this_value) = string.split(line, "\t", 1)
-            if sequence_re.match(this_var_name):
+            if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
                 # variable is a sequence
+                this_var_type = types.ListType
+                if this_var_name[-2:] == "[]":
+                    this_var_name = this_var_name[:-2]
                 lisp_delimiters = re.match("^#\((.*)\)$", this_value)
                 if lisp_delimiters:
                     this_value = lisp_delimiters.group(1)
                 this_value = string.split(this_value, " ")
-                this_value = this_value[:-1]   # remove trailing newline
+                # Can't do this unconditionally if we've eliminated the
+                # lisp_delimiters (which also strips trailing newline?).
+                if this_value[-1] == "\n":
+                    this_value = this_value[:-1]   # remove trailing newline
                 for seq_elem in range(0, len(this_value)):
                     # dumb to copy this: fix it
                     if integer_re.match(this_value[seq_elem]):
@@ -251,6 +801,7 @@ def read_file(filename):
                         raise "What value? " + `this_value[seq_elem]`
                 this_value = tuple(this_value)
             else:
+                this_var_type = types.IntType
                 if integer_re.match(this_value):
                     this_value = int(this_value)
                 elif float_re.match(this_value):
@@ -260,7 +811,7 @@ def read_file(filename):
                     this_value = 0
                 else:
                     raise "What value?"
-	    these_var_names.append(this_var_name)
+	    these_var_infos.append(var_info(this_var_name, this_var_type))
 	    these_values.append(this_value)
             # print this_var_name, this_value
 
@@ -270,46 +821,47 @@ def read_file(filename):
                     param_list = []
                     param_list = params_to_orig_val_list[this_var_name]
                     param_list.append(this_value)
-                                    
+
             line = file.readline()
         # Add invocation counts
         # Accessing global here-crappy
         for ftn_tag in ftn_names_to_call_ct.keys():
-            these_var_names.append(ftn_tag)
+            these_var_infos.append(var_info("calls(%s)" % (ftn_tag,), types.IntType))
             these_values.append(ftn_names_to_call_ct[ftn_tag])
 
         # Add original parameter values if end of function call
         # Then pop previous original param value off of param val list
         if label == "END":
             for (param, param_list) in params_to_orig_val_list.items():
+                # Shouldn't need to do this regexp match; just look up the type
                 if sequence_re.match(param):
-                    these_var_names.append(param + "_orig[]")
+                    these_var_infos.append(param + "_orig", types.ListType)
                 else:
-                    these_var_names.append(param + "_orig")
+                    these_var_infos.append(param + "_orig", types.IntType)
                 these_values.append(param_list[-1])
                 del param_list[-1]
-            
-        these_var_names = tuple(these_var_names)
+
 	these_values = tuple(these_values)
-	if not(this_var_names.has_key(tag)):
-	    this_var_names[tag] = these_var_names
-	    this_var_values[tag] = {}
+	if not(this_fn_var_infos.has_key(tag)):
+	    this_fn_var_infos[tag] = these_var_infos
+	    this_fn_var_values[tag] = {}
 	else:
-	    assert this_var_names[tag] == these_var_names
-	    assert type(this_var_values[tag]) == types.DictType
-        util.mapping_increment(this_var_values[tag], these_values, 1)
-        util.mapping_increment(this_samples, tag, 1)
-                
-    return (this_var_names, this_var_values, this_samples)
+	    assert var_infos_compatible(this_fn_var_infos[tag], these_var_infos)
+	    assert type(this_fn_var_values[tag]) == types.DictType
+        util.mapping_increment(this_fn_var_values[tag], these_values, 1)
+        util.mapping_increment(this_fn_samples, tag, 1)
+
+    return (this_fn_var_infos, this_fn_var_values, this_fn_samples)
 
 
 def print_hashtables():
     """Print the important global hashtables.  Principally for debugging."""
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-	print fn_name, var_names[fn_name], samples[fn_name], "samples"
-	vals = var_values[fn_name]
+    function_names = fn_var_infos.keys()
+    function_names.sort()
+    for fn_name in function_names:
+        print "==========================================================================="
+	print fn_name, map(lambda vi: vi.name, fn_var_infos[fn_name]), fn_samples[fn_name], "samples"
+	vals = fn_var_values[fn_name]
         # Also consider regular sorting, which orders the tuples rather
         # than their counts -- might make the patterns more evident.
         vals_items = vals.items()
@@ -323,54 +875,57 @@ def print_hashtables():
 ### Cubist
 ###
 
-def print_cubist_files():
-    """Create files for Cubist experiments."""
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        names = var_names[fn_name]
-        columns = len(names)
-        if columns > 1:
-            names = list(names)
-            for i in range(0, len(names)):
-                names[i] = string.replace(names[i], ".", " ")
-
-            dataname = fn_name + ".data"
-            fdata = open(dataname, "w")
-            vals = var_values[fn_name]
-            # print "vals:", vals
-            for this_tuple in vals.keys():
-                # print "this_tuple:", this_tuple
-                fdata.write(string.join(map(repr, this_tuple), ", "))
-                fdata.write("\n")
-            fdata.close()
-
-            for col in range(0, columns):
-                basename = "%s-%d" % (fn_name, col+1)
-                fnames = open(basename + ".names", "w")
-                fnames.write(names[col] + ".\n\n")
-                assert len(names) == columns
-                for name in names:
-                    fnames.write("%s: continuous.\n" % name)
-                fnames.close()
-
-                this_dataname = basename + ".data"
-                if os.path.exists(this_dataname):
-                    os.remove(this_dataname)
-                os.symlink(dataname, this_dataname)
-
-def run_cubist():
-    """Run cubist on the files created by `print_cubist_files'."""
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        names = var_names[fn_name]
-        columns = len(names)
-        if columns > 1:
-            for col in range(0, columns):
-                basename = "%s-%d" % (fn_name, col+1)
-                # This path is now wrong, as I've moved the program.
-                os.system("rm -f %s.out; /homes/gws/mernst/tmp/CubistR1/bin/cubistdemo -f %s > %s.out" % (basename, basename, basename))
+## Don't delete this!  But don't run it without fixing it first.
+## Not compatible with new data layout; bit rot must be corrected before
+## this can actually be run.
+# def print_cubist_files():
+#     """Create files for Cubist experiments."""
+#     function_names = fn_var_infos.keys()
+#     function_names.sort()
+#     for fn_name in function_names:
+#         names = fn_var_infos[fn_name]
+#         columns = len(names)
+#         if columns > 1:
+#             names = list(names)
+#             for i in range(0, len(names)):
+#                 names[i] = string.replace(names[i], ".", " ")
+# 
+#             dataname = fn_name + ".data"
+#             fdata = open(dataname, "w")
+#             vals = fn_var_values[fn_name]
+#             # print "vals:", vals
+#             for this_tuple in vals.keys():
+#                 # print "this_tuple:", this_tuple
+#                 fdata.write(string.join(map(repr, this_tuple), ", "))
+#                 fdata.write("\n")
+#             fdata.close()
+# 
+#             for col in range(0, columns):
+#                 basename = "%s-%d" % (fn_name, col+1)
+#                 fnames = open(basename + ".names", "w")
+#                 fnames.write(names[col] + ".\n\n")
+#                 assert len(names) == columns
+#                 for name in names:
+#                     fnames.write("%s: continuous.\n" % name)
+#                 fnames.close()
+# 
+#                 this_dataname = basename + ".data"
+#                 if os.path.exists(this_dataname):
+#                     os.remove(this_dataname)
+#                 os.symlink(dataname, this_dataname)
+# 
+# def run_cubist():
+#     """Run cubist on the files created by `print_cubist_files'."""
+#     function_names = fn_var_infos.keys()
+#     function_names.sort()
+#     for fn_name in function_names:
+#         names = fn_var_infos[fn_name]
+#         columns = len(names)
+#         if columns > 1:
+#             for col in range(0, columns):
+#                 basename = "%s-%d" % (fn_name, col+1)
+#                 # This path is now wrong, as I've moved the program.
+#                 os.system("rm -f %s.out; /homes/gws/mernst/tmp/CubistR1/bin/cubistdemo -f %s > %s.out" % (basename, basename, basename))
 
 
 ###########################################################################
@@ -378,7 +933,7 @@ def run_cubist():
 ###
 
 # A negative invariant is not reported unless the chance that the invariant
-# only happens not to be true (and isn't a true invariant) is at least this low.
+# only happens not to be true (and is not a true invariant) is at least this low.
 negative_invariant_confidence = .01     # .05 might also be reasonable
 
 ## An invariant may be exact or approximate.  If an invariant is exact,
@@ -387,76 +942,169 @@ negative_invariant_confidence = .01     # .05 might also be reasonable
 ## invariant is found over x, then only the three pairs (w,y), (w,z), and
 ## (y,z) are checked for two_scalar_numeric_invariant.
 
-def all_numeric_invariants():
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        print "=======================================================================================\n"
-        
-        print fn_name, samples[fn_name], "samples "
-        fn_vars = var_names[fn_name]
-        dicts = dict_of_tuples_to_tuple_of_dicts(var_values[fn_name])
-        assert len(fn_vars) == len(dicts)
-        non_exact_single_invs = []
-        for i in range(0, len(fn_vars)):
-            this_var = fn_vars[i]
-            this_dict = dicts[i]
-            if sequence_re.match(this_var):
-                this_inv = single_sequence_numeric_invariant(this_dict)
-            else:
-                this_inv = single_scalar_numeric_invariant(this_dict)
-            formatted = this_inv.format((this_var,))
-            if not this_inv.is_unconstrained():
-                print " ", formatted
-            if not this_inv.is_exact():
-                non_exact_single_invs.append(i)
-        exact_pair_invs = []
-        if len(non_exact_single_invs) > 1:
-            for indices in util.choose(2, non_exact_single_invs):
-                this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-                these_vars = util.slice_by_sequence(fn_vars, indices)
-                if sequence_re.match(these_vars[0]) \
-                   and sequence_re.match(these_vars[1]):
-                    this_inv = two_sequence_numeric_invariant(this_dict)
-                elif sequence_re.match(these_vars[0]) \
-                     or sequence_re.match(these_vars[1]):
-                    this_inv = scalar_sequence_numeric_invariant(this_dict)
-                else:
-                    this_inv = two_scalar_numeric_invariant(this_dict)
-                if this_inv != None:
-                    if (this_inv.is_exact()):
-                        exact_pair_invs.append(indices)
-                    formatted = this_inv.format(these_vars)
-                    if not this_inv.is_unconstrained():
-                        print "   ", formatted
-                # print "   ", these_vars, this_inv
-                # print "     ", `this_inv`
-        if len(non_exact_single_invs) > 2:
-            for indices in util.choose(3, non_exact_single_invs):
-                if (([indices[0],indices[1]] in exact_pair_invs) or
-                    ([indices[0],indices[2]] in exact_pair_invs) or
-                    ([indices[1],indices[2]] in exact_pair_invs)):
-                    continue
-                # print "didn't find two of", indices, "in", exact_pair_invs, ";", util.slice_by_sequence(fn_vars, indices), fn_vars
-                this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-                these_vars = util.slice_by_sequence(fn_vars, indices)
-                if (sequence_re.match(these_vars[0])
-                    or sequence_re.match(these_vars[1])
-                    or sequence_re.match(these_vars[2])):
-                    # print "got sequence in a triple"
-                    this_inv = None
-                else:
-                    this_inv = three_scalar_numeric_invariant(this_dict)
-                if this_inv != None:
-                    # if this_inv[0] == "linear":
-                    #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
-                    # print "     ", these_vars, `this_inv`
-                    formatted = this_inv.format(these_vars)
-                    if not this_inv.is_unconstrained():
-                        print "     ", formatted
+def all_numeric_invariants(fn_regexp=None):
+    """Compute and print all the numeric invariants."""
+    clear_invariants()
+
+    if type(fn_regexp) == types.StringType:
+        fn_regexp = re.compile(fn_regexp)
+
+    function_names = fn_var_infos.keys()
+    function_names.sort()
+    for fn_name in function_names:
+        if fn_regexp and fn_regexp.match(fn_name):
+            continue
+        # If we discover that two values are equal, then there is no sense
+        # in using both at any later stage; eliminate one of them and so
+        # avoid redundant computation.
+        # So don't derive anything from a variable until we've checked it
+        # for equality with everything else (ie, until we have inferred
+        # invariants over it).
+
+        ## For the moment, don't do this recursive looping thing.
+        # compute_invariants(via_calls_to, numeric_invariants_over_index,
+        #                    and_to, introduce_new_variables)
+
+        var_infos = fn_var_infos[fn_name]
+        var_values = fn_var_values[fn_name]
+
+        numeric_invariants_over_index(
+            range(0,len(var_infos)), var_infos, var_values)
+
+    print_invariants(fn_regexp)
 ## Testing:
 # all_numeric_invariants()
 
+
+def numeric_invariants_over_index(indices, var_infos, var_values):
+    """Install invariants in VAR_INFOS.
+    The installed invariants all have at least one element in INDICES.
+    VAR_INFOS and VAR_VALUES are elements of globals `fn_var_infos' and
+    `fn_var_values'."""
+
+    # Single invariants
+    dicts = dict_of_tuples_to_tuple_of_dicts(var_values, indices)
+    non_exact_single_invs = []      # list of indices
+    for j in range(0, len(indices)):
+        i = indices[j]
+        this_var_info = var_infos[i]
+        this_dict = dicts[j]
+        if this_var_info.type == types.ListType:
+            this_inv = single_sequence_numeric_invariant(this_dict)
+        else:
+            this_inv = single_scalar_numeric_invariant(this_dict)
+        assert this_var_info.invariant == None
+        assert this_inv != None
+        # print "Setting invariant for index", i, "to", this_inv
+        this_var_info.invariant = this_inv
+
+    all_indices = range(0, len(var_infos))
+    # Invariant pairs
+    for (i1,i2) in util.choose(2, all_indices):
+        if i1 == i2:
+            continue
+        if (not i1 in indices) and (not i2 in indices):
+            # Do nothing if neither variable is under consideration.
+            continue
+        if (var_infos[i1].invariant.is_exact()
+            or var_infos[i2].invariant.is_exact()):
+            # Do nothing if either of the variables is a constant.
+            continue
+        values = dict_of_tuples_slice(var_values, (i1,i2))
+        these_var_infos = util.slice_by_sequence(var_infos, (i1,i2))
+        if these_var_infos[0].is_sequence() and these_var_infos[1].is_sequence():
+            this_inv = two_sequence_numeric_invariant(values)
+        elif these_var_infos[0].is_sequence() or these_var_infos[1].is_sequence():
+            this_inv = scalar_sequence_numeric_invariant(values)
+        else:
+            this_inv = two_scalar_numeric_invariant(values)
+
+        #### NEED TO REIMPLEMENT THIS.
+        # if this_inv.is_equality():
+        #     # arbitrarily remove second one; fix this later
+        #     non_exact_single_invs.remove(indices[1])
+        # elif this_inv.is_exact():
+        #     exact_pair_invs.append(indices)
+
+        assert not var_infos[i1].invariants.has_key(i2)
+        var_infos[i1].invariants[i2] = this_inv
+
+    # Invariant triples
+    for (i1,i2,i3) in util.choose(3, all_indices):
+        if i1 == i2 or i1 == i3 or i2 == i3:
+            continue
+        if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
+            # Do nothing if none of the variables is under consideration.
+            continue
+        if (var_infos[i1].invariant.is_exact()
+            or var_infos[i2].invariant.is_exact()
+            or var_infos[i3].invariant.is_exact()):
+            # Do nothing if any of the variables is a constant.
+            continue
+        if ((var_infos[i1].invariants.has_key(i2)
+             and var_infos[i1].invariants[i2].is_exact())
+            or (var_infos[i1].invariants.has_key(i3)
+                and var_infos[i1].invariants[i3].is_exact())
+            or (var_infos[i2].invariants.has_key(i3)
+                and var_infos[i2].invariants[i3].is_exact())):
+            # Do nothing if any of the pairs are exactly related.
+            continue
+        values = dict_of_tuples_slice(var_values, (i1,i2,i3))
+        these_var_infos = util.slice_by_sequence(var_infos, (i1,i2,i3))
+        if (these_var_infos[0].is_sequence()
+            or these_var_infos[1].is_sequence()
+            or these_var_infos[2].is_sequence()):
+            # print "got sequence in a triple"
+            this_inv = invariant(values)
+        else:
+            this_inv = three_scalar_numeric_invariant(values)
+        assert not var_infos[i1].invariants.has_key((i2,i3))
+        var_infos[i1].invariants[(i2,i3)] = this_inv
+
+
+### A lot of the logic here should be moved into invariant computation;
+### then printing should just print all the existing invariants, or consult
+### some other data structure regarding whether to print invariants.  (???)
+
+# Ideas on better output in the future:
+#  * put all the comparisons together and at the end, and order them cleverly
+#  * when multiple things are equal to one another, put them together
+#  * put info about a particular array together when possible
+
+# Maybe this should (optionally?) print just for a given fn_name, so that
+# I can provide output more interactively and quickly.
+def print_invariants(fn_regexp=None):
+    """Print out non-unconstrained invariants."""
+    if type(fn_regexp) == types.StringType:
+        fn_regexp = re.compile(fn_regexp)
+
+    function_names = fn_var_infos.keys()
+    function_names.sort()
+    for fn_name in function_names:
+        if fn_regexp and fn_regexp.match(fn_name):
+            continue
+        print "==========================================================================="
+        print fn_name, fn_samples[fn_name], "samples"
+        var_infos = fn_var_infos[fn_name]
+        non_exact_single_invs = []
+        for vi in var_infos:
+            this_inv = vi.invariant
+            if not this_inv.is_unconstrained():
+                print " ", this_inv.format((vi.name,))
+        for vi in var_infos:
+            vname = vi.name
+            for (index,inv) in vi.invariants.items():
+                if type(index) != types.IntType:
+                    continue
+                if not inv.is_unconstrained():
+                    print "   ", inv.format((vname, var_infos[index].name))
+        for vi in var_infos:
+            vname = vi.name
+            for (index_pair,inv) in vi.invariants.items():
+                if type(index_pair) == types.IntType:
+                    continue
+                if not inv.is_unconstrained():
+                    print "     ", inv.format((vname, var_infos[index_pair[0]].name, var_infos[index_pair[0]].name))
 
 
 ###########################################################################
@@ -470,6 +1118,8 @@ class invariant:
                                         # maintain this as a range rather
                                         # than an exact number...
     samples = None                  # number of samples; >= values
+    can_be_None = None                  # only really sensible for single
+                                        # invariants, not those over pairs, etc. (?)
     unconstrained_internal = None   # None, true, or false
 
     def __init__(self, dict):
@@ -477,7 +1127,8 @@ class invariant:
         vals = dict.keys()
         self.values = len(vals)
         self.samples = util.sum(dict.values())
-        if len(vals) < 5:
+        self.can_be_None = None in vals
+        if len(vals) < 5 and not self.can_be_None:
             vals.sort()
             self.one_of = vals
 
@@ -486,16 +1137,20 @@ class invariant:
 
     def is_unconstrained(self):
         if self.unconstrained_internal == None:
-            self.format("foo")
+            self.format()
         return self.unconstrained_internal
 
-    def format(self, args):
+    def format(self, args="x"):
         """ARGS is uninterpreted.
-This function can return None:  it's intended to be used only as a helper.
-Any overriding implementation of this function should set the
-unconstrained_internal class-local variable.  Since this function sets it,
-too, callers of this function should be careful to do their manipulation
-after any call to this base method."""
+        This function can return None:  it's intended to be used only as a helper.
+        Any overriding implementation of this function should set the
+        unconstrained_internal class-local variable.  Since this function sets it,
+        too, callers of this function should be careful to do their manipulation
+        after any call to this base method.
+        The format function should be able to take no extra arguments, in which
+        case it supplies default variable names.
+        """
+
         self.unconstrained_internal = false
         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
             args = args[0]
@@ -522,14 +1177,21 @@ class single_scalar_numeric_invariant(invariant):
         invariant.__init__(self, dict)
         nums = dict.keys()
         nums.sort()
+        if nums == []:
+            self.min = None
+            self.max = None
+        else:
+            self.min = nums[0]
+            self.max = nums[-1]
         # For when we didn't sort nums
         # self.min = min(nums)
         # self.max = max(nums)
-        self.min = nums[0]
-        self.max = nums[-1]
         self.min_justified = false
         self.max_justified = false
-        if len(nums) < 3:
+        # Watch out: "None" sorts less than any number
+        if self.min == None:
+            self.max = None
+        elif len(nums) < 3:
             self.min_justified = true
             self.max_justified = true
         else:
@@ -556,11 +1218,11 @@ class single_scalar_numeric_invariant(invariant):
             # print "max (%d) justified=%d: %d max elts, %d adjacent" % (self.max, self.max_justified, num_max, dict[nums[-2]])
 
         self.can_be_zero = (0 in nums)
-        self.modulus = util.common_modulus(nums)
-        ## Too many false positives
-        # self.nonmodulus = util.common_nonmodulus_nonstrict(nums)
-        #error here
-        self.nonmodulus = util.common_nonmodulus_strict(nums)
+        if self.min != None:
+            self.modulus = util.common_modulus(nums)
+            ## Too many false positives
+            # self.nonmodulus = util.common_nonmodulus_nonstrict(nums)
+            self.nonmodulus = util.common_nonmodulus_strict(nums)
 
     ## Can do no more than the parent can
     #     def is_exact(self):
@@ -568,6 +1230,8 @@ class single_scalar_numeric_invariant(invariant):
     #             return true
 
     def nonzero_justified(self):
+        if self.min == None:
+            return false
         probability = 1 - 1.0/(self.max - self.min + 1)
         return probability**self.samples < negative_invariant_confidence
 
@@ -607,9 +1271,9 @@ class single_scalar_numeric_invariant(invariant):
         return result
 
     def __str__(self):
-        self.format(("x",))
+        return self.format()
 
-    def format(self, arg_tuple):
+    def format(self, arg_tuple=("x",)):
         (arg,) = arg_tuple
 
         as_base = invariant.format(self, arg)
@@ -631,12 +1295,12 @@ class single_scalar_numeric_invariant(invariant):
             return arg + result
         if self.min_justified:
             result = "%s >= %s" % (arg, self.min)
-            if min < 0 and nonzero:
+            if self.min < 0 and nonzero:
                 result = result + " and nonzero"
             return result
         if self.max_justified:
             result = "%s <= %s" % (arg, self.max)
-            if max > 0 and nonzero:
+            if self.max > 0 and nonzero:
                 result = result + " and nonzero"
             return result
         if nonzero:
@@ -649,28 +1313,21 @@ class single_scalar_numeric_invariant(invariant):
         return arg + " unconstrained"
 
 
-# single_scalar_numeric_invariant(dict_of_tuples_to_tuple_of_dicts(var_values["PUSH-ACTION"])[0])
+# single_scalar_numeric_invariant(dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])[0])
 
 
-def all_single_scalar_numeric_invariants():
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        fn_vars = var_names[fn_name]
-        dicts = dict_of_tuples_to_tuple_of_dicts(var_values[fn_name])
-        assert len(fn_vars) == len(dicts)
-        for i in range(0, len(fn_vars)):
-            this_var = fn_vars[i]
-            this_dict = dicts[i]
-            this_inv = single_scalar_numeric_invariant(this_dict)
-            print fn_name, this_var, samples[fn_name], "samples", this_inv
-## Testing:
-# all_single_scalar_numeric_invariants()
 
 
 ###########################################################################
 ### Invariants -- multiple scalars
 ###            
+
+## Need to add code like this to __init__ of all invariants over multiple values.
+#         if (not self.can_be_None) and (type(self.values[0]) == types.TupleType):
+#             for val in vals:
+#                 if None in val:
+#                     self.can_be_None = true
+#		      break
 
 ## For now, only look for perfectly-satisfied properties; deal with
 ## exceptions, disjunctions, and predicated properties later.
@@ -829,9 +1486,9 @@ class two_scalar_numeric_invariant(invariant):
         return result
 
     def __str__(self):
-        self.format(("x","y"))
+        return self.format()
 
-    def format(self, arg_tuple):
+    def format(self, arg_tuple=("x","y")):
 
         as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
         if as_base:
@@ -912,32 +1569,12 @@ class two_scalar_numeric_invariant(invariant):
         if (not self.can_be_equal) and self.nonequal_justified():
             return "%s != %s" % (x,y)
         elif self.one_of:
-            return "%s in %s" % (arg, self.one_of)
+            return "%s in %s" % ("(%s, %s)" % arg_tuple, self.one_of)
         else:
             self.unconstrained_internal = true
             return "(%s, %s) unconstrained" % (x,y)
 
 
-def all_two_scalar_numeric_invariants():
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        fn_vars = var_names[fn_name]
-        num_vars = len(fn_vars)
-        if num_vars < 2:
-            continue
-        for indices in util.choose(2, range(0,num_vars)):
-            this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-            these_vars = util.slice_by_sequence(fn_vars, indices)
-            this_inv = two_scalar_numeric_invariant(this_dict)
-            # print fn_name, these_vars, this_inv, `this_inv`
-            print fn_name, these_vars
-            print "   ", `this_inv`
-            print "   ", this_inv
-
-
-## Testing
-# all_two_scalar_numeric_invariants()
 
 
 # No need for add, sub
@@ -1061,9 +1698,10 @@ class three_scalar_numeric_invariant(invariant):
         return result
 
     def __str__(self):
-        self.format(("x","y","z"))
+        return self.format()
 
-    def format(self, arg_tuple):
+    def format(self, arg_tuple=("x","y","z")):
+
         as_base = invariant.format(self, "(%s, %s, %s)" % arg_tuple)
         if as_base:
             return as_base
@@ -1114,26 +1752,6 @@ class three_scalar_numeric_invariant(invariant):
         return "(%s, %s, %s) unconstrained" % (x,y,z)
 
 
-def all_three_scalar_numeric_invariants():
-    sorted_keys = var_names.keys()
-    sorted_keys.sort()
-    for fn_name in sorted_keys:
-        fn_vars = var_names[fn_name]
-        num_vars = len(fn_vars)
-        if num_vars < 3:
-            continue
-        for indices in util.choose(3, range(0,num_vars)):
-            this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-            these_vars = util.slice_by_sequence(fn_vars, indices)
-            this_inv = three_scalar_numeric_invariant(this_dict)
-            # print fn_name, these_vars, this_inv
-            print fn_name, these_vars
-            print "   ", `this_inv`
-            print "   ", this_inv
-
-
-
-# all_three_scalar_numeric_invariants()
 
 
 ###
@@ -1144,7 +1762,7 @@ def all_three_scalar_numeric_invariants():
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def bi_linear_relationship(pair1, pair2):
     """Given ((x0,y0),(x1,y1)), return (a,b) such that y = ax + b.
-If no such (a,b) exists, then return (0,0)."""
+    If no such (a,b) exists, then return (0,0)."""
 
     (x0, y0) = pair1
     (x1, y1) = pair2
@@ -1193,7 +1811,7 @@ def checked_tri_linear_relationship(triples, permutation):
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def tri_linear_relationship(triple1, triple2, triple3):
     """Given ((x1,y1,z1),(x2,y2,z2),(x3,y3,z3)), return (a,b,c) such that z=ax+by+c.
-If no such (a,b,c) exists, then return (0,0,0)."""
+    If no such (a,b,c) exists, then return (0,0,0)."""
 
     (x1, y1, z1) = triple1
     (x2, y2, z2) = triple2
@@ -1259,7 +1877,7 @@ If no such (a,b,c) exists, then return (0,0,0)."""
 
 def tri_linear_format(abc, xyz):
     """Given ((a,b,c),(x,y,z)), format "z=ax+by+c".
-The result omits addition of zero, multiplication by one, etc."""
+    The result omits addition of zero, multiplication by one, etc."""
     (a,b,c) = abc
     (x,y,z) = xyz
 
@@ -1336,6 +1954,10 @@ class single_sequence_numeric_invariant(invariant):
         self.non_decreasing = true
         self.non_increasing = true
         for seq in seqs:
+            if seq == None:
+                self.equal = self.non_decreasing = self.non_increasing = false
+                # if any element is missing, infer nothing over anything
+                return
             for i in range(1, len(seq)):
                 c = cmp(seq[i-1],seq[i])
                 # should we have strictly ascending/descending?
@@ -1380,13 +2002,15 @@ class single_sequence_numeric_invariant(invariant):
 
 
     def __repr__(self):
-        result = "<invariant-1 []: "
+        result = "<invariant-1 []>"
         # finish once get properties set
+        # result = "<invariant-1 []: "
+        return result
 
     def __str__(self):
-        self.format(("x[]",))
+        return self.format()
 
-    def format(self, arg_tuple):
+    def format(self, arg_tuple=("x[]",)):
         (arg,) = arg_tuple
 
         # as_base = invariant.format(self, arg)
@@ -1417,15 +2041,17 @@ class single_sequence_numeric_invariant(invariant):
         elif self.non_increasing:
             result = result + "\n" + "\tPer sequence elements non-increasing"
 
-        all_formatted = self.all_index_sni.format(("*every*element*",))
-        if not self.all_index_sni.is_unconstrained():
-            result = result + "\n" + "\tAll sequence elements: " + all_formatted
-        first_formatted = self.per_index_sni[0].format(("*first*element*",))
-        if not self.per_index_sni[0].is_unconstrained():
-            result = result + "\n" + "\tFirst sequence element: " + first_formatted
-        last_formatted = self.reversed_per_index_sni[0].format(("*last*element*",))
-        if not self.reversed_per_index_sni[0].is_unconstrained():
-            result = result + "\n" + "\tLast sequence element: " + last_formatted
+        if self.all_index_sni != None:
+            all_formatted = self.all_index_sni.format(("*every*element*",))
+            if not self.all_index_sni.is_unconstrained():
+                result = result + "\n" + "\tAll sequence elements: " + all_formatted
+        #         if not (0 == len(self.per_index_sni)):
+        #             first_formatted = self.per_index_sni[0].format(("*first*element*",))
+        #             if not self.per_index_sni[0].is_unconstrained():
+        #                 result = result + "\n" + "\tFirst sequence element: " + first_formatted
+        #             last_formatted = self.reversed_per_index_sni[0].format(("*last*element*",))
+        #             if not self.reversed_per_index_sni[0].is_unconstrained():
+        #                 result = result + "\n" + "\tLast sequence element: " + last_formatted
 
         if result == "":
             self.unconstrained_internal = true
@@ -1439,45 +2065,48 @@ class single_sequence_numeric_invariant(invariant):
 
 class scalar_sequence_numeric_invariant(invariant):
     # I'm not entirely sure what to do with this one
+    seq_first = None          # if true, the variables are (seq,scalar)
+                              # if false, the variables are (scalar,seq)
     member = None
     size = None
     per_index_linear = None   # Array whose elements describe the linear
                               # relationship between the number scalar and
                               # the sequence element at that index.
 
+
     def __init__(self, dict_of_pairs):
 
         invariant.__init__(self, dict_of_pairs)
         pairs = dict_of_pairs.keys()
 
+        if len(pairs) == 0:
+            raise "empty dictionary supplied"
+        self.seq_first = type(pairs[0][0]) == types.TupleType
+
+
         # For each (num, sequence), determine if num is a member of seq
         self.member = true
         for i in range(0, len(pairs)):
             (p1, p2) = pairs[i]
-            # This is dumb.  Do it better
-            if type(p1) == types.TupleType:
-                num = p2
-                seq = p1
+            if self.seq_first:
+                (seq,num) = pairs[i]
             else:
-                num = p1
-                seq = p2
+                (num,seq) = pairs[i]
             if not(num in seq):
                 self.member = false
+                break
 
         # Determine if the scalar is the size of the sequence.
         # Only need to check sequence size once.
         self.size = true
         for i in range(0, len(pairs)):
-            (p1, p2) = pairs[i]
-            # This is dumb.  Do it better
-            if type(p1) == types.TupleType:
-                num = p2
-                seq = p1
+            if self.seq_first:
+                (seq,num) = pairs[i]
             else:
-                num = p1
-                seq = p2
+                (num,seq) = pairs[i]
             if num != len(seq):
                 self.size = false
+                break
 
         ## Linear relationship --
         # Find linear relationship between single scalar and each element
@@ -1507,28 +2136,35 @@ class scalar_sequence_numeric_invariant(invariant):
         #    except OverflowError:
         #        pass
 
-    def __str__(self):
-        self.format(("num","seq"))
+    def __repr__(self):
+        result = "<invariant-2 (x,[])>"
+        return result
 
-    def format(self, arg_tuple):
+    def __str__(self):
+        return self.format()
+
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            if self.seq_first:
+                arg_tuple = ("seq","num")
+            else:
+                arg_tuple = ("num","seq")
+
         self.unconstrained_internal = false
 
-        (x, y) = arg_tuple
-
-        # How do we make sure which is num and which is seq???
-        if type(x) == types.TupleType:
-            if self.member:
-                return "%s is a member of %s" % (y,x)
-            if self.size:
-                return "%s is the size of %s" % (y,x)
+        # arg_tuple is a pair of names; it contains no info about types
+        if self.seq_first:
+            (seqvar, sclvar) = arg_tuple
         else:
-            if self.member:
-                return "%s is a member of %s" % (x,y)
-            if self.size:
-                return "%s is the size of %s" % (x,y)
+            (sclvar, seqvar) = arg_tuple
+
+        if self.member:
+            return "%s is a member of %s" % (sclvar,seqvar)
+        if self.size:
+            return "%s is the size of %s" % (sclvar,seqvar)
 
         self.unconstrained_internal = true
-        return "(%s,%s) are unconstrained" % (x,y)
+        return "(%s,%s) are unconstrained" % (arg_tuple)
 
 
 class two_sequence_numeric_invariant(invariant):
@@ -1558,12 +2194,15 @@ class two_sequence_numeric_invariant(invariant):
         # only want if equal size, right?
         maybe_linear = true
         (seq1,seq2) = pairs[0]
-        if len(seq1) == len(seq2):
+        if (len(seq1) == len(seq2)) and (len(seq1) > 1):
             try:
                 if len(pairs) > 1:
                     (a,b) = bi_linear_relationship((seq1[0],seq2[0]), \
                                                    (seq1[1],seq2[1]))
                     for (seq1,seq2) in pairs:
+                        if len(seq1) != len(seq2) or len(seq1) < 2:
+                            maybe_linear = false
+                            break
                         for i in range(0, len(seq1)):
                             if seq2[i] != a*seq1[i]+b:
                                 maybe_linear = false
@@ -1625,14 +2264,21 @@ class two_sequence_numeric_invariant(invariant):
         for (x, y) in pairs:
             if not(util.sub_sequence_of(x, y)):
                 self.sub_sequence = false
+                break
         for (x, y) in pairs:
             if not(util.sub_sequence_of(y, x)):
                 self.super_sequence = false
+                break
+
+    def __repr__(self):
+        result = "<invariant-2 ([],[])>"
+        return result
 
     def __str__(self):
-        self.format(("x[]","y[]"))
+        return self.format()
 
-    def format(self, arg_tuple):
+    def format(self, arg_tuple=("x[]","y[]")):
+
         # as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
         # if as_base:
         #     return as_base
@@ -1700,8 +2346,8 @@ class two_sequence_numeric_invariant(invariant):
 # invariants.read_invs('*.inv', "clear first")
 
 def read_merge_file(filename):
-    (this_var_names, this_var_values, this_samples) = read_file(filename)
-    merge_variables(filename, this_var_names, this_var_values, this_samples)
+    (this_fn_var_infos, this_fn_var_values, this_fn_samples) = read_file(filename)
+    merge_variables(filename, this_fn_var_infos, this_fn_var_values, this_fn_samples)
 
 # consider calling clear_variables() before calling this
 def read_inv(filename="medic/invariants.raw"):
@@ -1716,6 +2362,8 @@ def read_invs(files, clear=0):
     def env_repl(matchobj):
         return posix.environ[matchobj.group(0)[1:]]
     if type(files) == types.StringType:
+        files = re.sub(r'^~/', '$HOME/', files)
+        files = re.sub(r'^~', '/homes/fish/', files)
         files = re.sub(r'\$[a-zA-Z_]+', env_repl, files)
         files = glob.glob(files)
     if files == []:
@@ -1725,20 +2373,26 @@ def read_invs(files, clear=0):
         read_file_ftns(file)
     for file in files:
         read_merge_file(file)
+    # # This comes late, because the number of variables introduced depends
+    # # on the values (eg, sequence lengths).  It can't be done before
+    # # merging different files, because different variables would be
+    # # introduced in the different files.
+    # introduce_new_variables(fn_var_infos, fn_var_values)
+
 
 def _test():
     _test_tri_linear_relationship()
 
 
-def foo():
-    fn_name = "READ-COMPACT-TRANSLATION"
-    fn_vars = var_names[fn_name]
-    num_vars = len(fn_vars)
-    for indices in util.choose(2, range(0,num_vars)):
-        this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-        these_vars = util.slice_by_sequence(fn_vars, indices)
-        this_inv = two_scalar_numeric_invariant(this_dict)
-        # print fn_name, these_vars, this_inv, `this_inv`
-        print fn_name, these_vars
-        print "   ", `this_inv`
-        print "   ", this_inv
+# def foo():
+#     fn_name = "READ-COMPACT-TRANSLATION"
+#     fn_vars = fn_var_infos[fn_name]
+#     num_vars = len(fn_vars)
+#     for indices in util.choose(2, range(0,num_vars)):
+#         this_dict = dict_of_tuples_slice(fn_var_values[fn_name], indices)
+#         these_vars = util.slice_by_sequence(fn_vars, indices)
+#         this_inv = two_scalar_numeric_invariant(this_dict)
+#         # print fn_name, these_vars, this_inv, `this_inv`
+#         print fn_name, these_vars
+#         print "   ", `this_inv`
+#         print "   ", this_inv
