@@ -46,8 +46,8 @@ public abstract class VarInfoName
 	  protected String esc_name_impl() {
 	    return term.esc_name();
 	  }
-	  protected String simplify_name_impl() {
-	    return term.simplify_name();
+	  protected String simplify_name_impl(boolean prestate) {
+	    return term.simplify_name(prestate);
 	  }
 	  public Object accept(Visitor v) {
 	    return term.accept(v);
@@ -130,18 +130,26 @@ public abstract class VarInfoName
    * Simplify tool output format
    **/
   public String simplify_name() {
-    if (simplify_name_cached == null) {
+    return simplify_name(false);
+  }
+  /**
+   * @return the string representation (interned) of this name, in the
+   * Simplify tool output format, in the given pre/post-state context.
+   **/
+  protected String simplify_name(boolean prestate) {
+    int which = prestate ? 0 : 1;
+    if (simplify_name_cached[which] == null) {
       try {
-	simplify_name_cached = simplify_name_impl().intern();
+	simplify_name_cached[which] = simplify_name_impl(prestate).intern();
       } catch (RuntimeException e) {
 	System.err.println("repr = " + repr());
 	throw e;
       }
     }
-    return simplify_name_cached;
+    return simplify_name_cached[which];
   }
-  private String simplify_name_cached = null;
-  protected abstract String simplify_name_impl();
+  private String simplify_name_cached[] = new String[2];
+  protected abstract String simplify_name_impl(boolean prestate);
 
   /**
    * @return the string reprenentation (interned) of this name, in a
@@ -262,16 +270,19 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
-    protected String simplify_name_impl() {
+    protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
 	return name;
       } else {
-	return simplify_name_impl(name);
+	return simplify_name_impl(name, prestate);
       }
     }
-    protected static String simplify_name_impl(String s) {
+    protected static String simplify_name_impl(String s, boolean prestate) {
       if (s.startsWith("~") && s.endsWith("~")) {
 	s = s.substring(1, s.length()-2) + ":closure";
+      }
+      if (prestate) {
+	s = "__orig__" + s;
       }
       return "|" + s + "|";
     }
@@ -323,8 +334,8 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
-    protected String simplify_name_impl() {
-      return "(arrayLength " + sequence.term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitSizeOf(this);
@@ -361,7 +372,7 @@ public abstract class VarInfoName
       return "(format_esc needs to be changed: " +
 	function + " on " + argument.repr() + ")";
     }
-    protected String simplify_name_impl() {
+    protected String simplify_name_impl(boolean prestate) {
       return "(format_simplify needs to be changed: " +
 	function + " on " + argument.repr() + ")";
     }
@@ -399,8 +410,8 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
-    protected String simplify_name_impl() {
-      return "(select " + Simple.simplify_name_impl(field) + " " + term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitField(this);
@@ -433,8 +444,8 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
     }
-    protected String simplify_name_impl() {
-      return "(typeof " + term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return "(typeof " + term.simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitTypeOf(this);
@@ -467,8 +478,8 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\old(" + term.esc_name() + ")";
     }
-    protected String simplify_name_impl() {
-      return "(orig " + term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return term.simplify_name(true);
     }
     public Object accept(Visitor v) {
       return v.visitPrestate(this);
@@ -517,8 +528,8 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
-    protected String simplify_name_impl() {
-      return "(post " + term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return term.simplify_name(false);
     }
     public Object accept(Visitor v) {
       return v.visitPoststate(this);
@@ -556,10 +567,10 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + amount();
     }
-    protected String simplify_name_impl() {
+    protected String simplify_name_impl(boolean prestate) {
       return (amount < 0) ?
-	"(- " + term.simplify_name() + " " + (-amount) + ")" :
-	"(+ " + term.simplify_name() + " " + amount + ")";
+	"(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
+	"(+ " + term.simplify_name(prestate) + " " + amount + ")";
     }
     public Object accept(Visitor v) {
       return v.visitAdd(this);
@@ -618,8 +629,8 @@ public abstract class VarInfoName
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
     }
-    protected String simplify_name_impl() {
-      return "(select elems " + term.simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return "(select elems " + term.simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitElements(this);
@@ -702,9 +713,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
-    protected String simplify_name_impl() {
-      return "(select " + sequence.simplify_name() + " " +
-	indexExplicit(sequence, index).simplify_name() + ")";
+    protected String simplify_name_impl(boolean prestate) {
+      return "(select " + sequence.simplify_name(prestate) + " " +
+	indexExplicit(sequence, index).simplify_name(prestate) + ")";
     }
     public Object accept(Visitor v) {
       return v.visitSubscript(this);
@@ -763,7 +774,7 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
-    protected String simplify_name_impl() {
+    protected String simplify_name_impl(boolean prestate) {
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
     }
     public Object accept(Visitor v) {
@@ -1155,6 +1166,24 @@ public abstract class VarInfoName
 
   public static class QuantHelper {
 
+    /**
+     * A FreeVar is very much like a Simple, except that it doesn't
+     * care if it's in prestate or poststate for simplify formatting.
+     **/
+    public static class FreeVar
+      extends Simple
+    {
+      public FreeVar(String name) {
+	super(name);
+      }
+      protected String repr_impl() {
+	return "Free[" + super.repr_impl() + "]";
+      }
+      protected String simplify_name_impl(boolean prestate) {
+	return super.simplify_name_impl(false);
+      }
+    }
+    
     // <root, needy, index> -> <root', lower, upper>
     /**
      * Replaces a needy (unquantified term) with its subscripted
@@ -1271,7 +1300,7 @@ public abstract class VarInfoName
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
 	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
-	  VarInfoName idx = (new Simple(String.valueOf(tmp++))).intern();
+	  VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
 	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
 
 	  if (debug_quantify) {
