@@ -112,10 +112,10 @@ help:
 compile: compile-java
 
 compile-java:
-	cd java/daikon && $(MAKE) all
+	cd java && $(MAKE) all
 
 clean-java:
-	cd java/daikon && $(MAKE) clean
+	cd java && $(MAKE) clean
 
 ### Kvasir (C front end)
 
@@ -137,7 +137,7 @@ test:
 	cd tests && $(MAKE) all
 
 junit:
-	cd java/daikon && $(MAKE) junit
+	cd java && $(MAKE) junit
 
 ### Tags
 
@@ -160,13 +160,13 @@ test-the-dist: dist-ensure-directory-exists
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
 	## First, test daikon.jar.
-	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
 	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR):$(TOOLSJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -254,8 +254,8 @@ update-dist-dir: dist-ensure-directory-exists
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
 	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
 	# a method or class with more than 0xFFFF bytecodes.
-	cd java/daikon && $(MAKE) all_via_javac
-	cd java/daikon && $(MAKE) junit
+	cd java && $(MAKE) all_via_javac
+	cd java && $(MAKE) junit
 	$(MAKE) dist-dfej-linux-x86
 	$(MAKE) dist-dfej-windows
 	$(MAKE) dist-java-doc
@@ -334,7 +334,7 @@ www-dist:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
-	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
