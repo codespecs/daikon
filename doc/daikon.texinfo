@@ -4341,21 +4341,6 @@ equivalent file.
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
 
-@node    function definitions,  , dfec requirements, C/C++ front end dfec
-@subsection function definitions
-When compiling the instrumented code using @command{g++}, the compiler
-may report errors regarding use of functions with arguments of the
-template type DaikonSmartPointer.  The compiler may say these
-functions are not defined.  DaikonSmartPointer is a wrapper
-@command{dfec} uses to store information about pointers.  The most
-likely cause of the error is that if uninstrumented code declares an
-argument to a function as a void *, @command{dfec} will wrap this
-pointer into a DaikonSmartPointer; however, if the calling code simply
-omits the parameters on the function call, the function signatures
-will not match and the compiler will complain about a missing
-function.  The solution is to remove the void * from the function
-declaration in the uninstrumented code.
-
 
 @node Perl front end dfepl, CSV front end convertcsv.pl, C/C++ front end dfec, Front ends
 @section Perl front end dfepl
@@ -5592,11 +5577,33 @@ directory is placed on your path by the standard Daikon dotfiles.)
 @node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
 @subsection Problems compiling and linking instrumented programs
 
+This section discusses errors encountered when compiling instrumented
+code (with g++) and linking the resulting compiled files.  (In some
+cases, compiling and linking may be performed by a single command line
+invocation, but the two steps are still logically distinct.)
+
 
 
 @menu
 * Linker problems::             
 @end menu
+
+@node    Compiler problems,  , dfec requirements, C/C++ front end dfec
+@subsubsection Compiler problems
+
+@cindex DaikonSmartPointer errors in compilation of instrumented code
+@cindex function not defined errors in compilation of instrumented code
+
+A ``function not defined'' error regarding a function with an argument
+of template type DaikonSmartPointer may indicate a type mismatch in
+the original code.  In particular, if uninstrumented code declares a
+@samp{void *} parameter, @command{dfec} will wrap the
+pointer in a DaikonSmartPointer; however, if the calling code simply
+omits the parameters on the function call, the function signatures
+will not match and the compiler will complain about a missing
+function.  The solution is to remove the @samp{void *} from the function
+declaration in the uninstrumented code.
+
 
 @node    Linker problems,  , Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
 @subsubsection Linker problems
