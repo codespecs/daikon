@@ -186,6 +186,8 @@ public final class Equality
       }
       result.append(var.name.name());
       result.append("[" + var.comparability + "]");
+      if (var == leader())
+        result.append ("L");
     }
     return result.toString();
   }
@@ -470,6 +472,10 @@ public final class Equality
    * Convert Equality invariants into normal IntEqual type for
    * filtering, printing, etc.  Add these to parent.  Doesn't add equality
    * if the same equality is present at the global ppt.
+   *
+   * If the leader was changed to not be the first member of the group
+   * adds leader == leader invariant as well since that invariant is
+   * used in suppressions and obvious tests.
    **/
   public void postProcess () {
     if (this.numSamples() == 0) return; // All were missing or not present
@@ -488,7 +494,7 @@ public final class Equality
       debugPostProcess.fine ("  var1: " + leader.name.name());
     }
     for (int i = 0; i < vars.length; i++) {
-      if (vars[i] == leader) continue;
+      if ((vars[i] == leader) && (i == 0)) continue;
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine ("  var2: " + vars[i].name.name());
       }
