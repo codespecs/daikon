@@ -412,11 +412,11 @@ public final class VarInfo
   {
     VarInfo lower = this;
 
-    Assert.assert(lower != higher);
-    Assert.assert(lower.ppt != higher.ppt);
-    Assert.assert(lower.type == higher.type);
-    Assert.assert(lower.rep_type == higher.rep_type);
-    Assert.assert(lower.file_rep_type == higher.file_rep_type);
+    Assert.assert(lower != higher, "lower != higher");
+    Assert.assert(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
+    Assert.assert(lower.type == higher.type, "lower.type == higher.type");
+    Assert.assert(lower.rep_type == higher.rep_type, "lower.rep_type == higher.rep_type");
+    Assert.assert(lower.file_rep_type == higher.file_rep_type, "lower.file_rep_type == higher.file_rep_type");
 
     boolean already = lower.po_higher().contains(higher);
     Assert.assert(already == higher.po_lower().contains(lower));
