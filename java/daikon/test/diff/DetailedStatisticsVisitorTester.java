@@ -11,13 +11,13 @@ public class DetailedStatisticsVisitorTester extends TestCase {
 
   RootNode root = new RootNode();
   DetailedStatisticsVisitor v = new DetailedStatisticsVisitor(false);
-  
+
   VarInfo[] vars = { DiffTester.newIntVarInfo("x"),
                      DiffTester.newIntVarInfo("y"),
                      DiffTester.newIntVarInfo("z") };
   PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);
 
-  PptSlice slice0 = ppt.implication_view;
+  PptSlice slice0 = ppt.joiner_view;
   Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
   Invariant null_int_1_unjust = new DummyInvariant(slice0, "1", false);
   Invariant null_int_2_just = new DummyInvariant(slice0, "2", true);
@@ -54,7 +54,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   Invariant binary_1_unjust = new DummyInvariant(slice2, "1", false);
   Invariant binary_2_just = new DummyInvariant(slice2, "2", true);
   Invariant binary_2_unjust = new DummyInvariant(slice2, "2", false);
-  
+
   PptSlice slice3 = new PptSlice3(ppt, vars);
   Invariant ternary_1_just = new DummyInvariant(slice3, "1", true);
   Invariant ternary_1_unjust = new DummyInvariant(slice3, "1", false);
@@ -71,7 +71,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     super(name);
 
     PptNode pptNode = new PptNode(ppt, ppt);
-    
+
     pptNode.add(new InvNode(null_int_1_just, null_int_1_just));
     pptNode.add(new InvNode(null_int_1_just, null_int_1_unjust));
     pptNode.add(new InvNode(null_int_1_unjust, null_int_1_just));
