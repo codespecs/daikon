@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 
 import utilMDE.*;
+import java.util.*;
 
 // *****
 // Automatically generated from SequenceSubscriptFactory-cpp.java
@@ -126,18 +127,66 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     }
 
     // Get the lower and upper bounds for the variable, if any.
-    // [This seems to be missing; what was it?]
+    // [This nedds to be written.]
+
+    // If, for some j with a lower VarInfo index than i, j=index+1, then
+    // don't create array[index+1..].  If j=index-1, then don't create
+    // array[index-1] or array[0..index-1].
+    boolean suppress_minus_1 = false;
+    boolean suppress_plus_1 = false;
+
+    // This ought to be abstracted out.
+    {
+      Assert.assert(sclvar.ppt == seqvar.ppt);
+      for (Iterator itor = sclvar.ppt.views_iterator() ; itor.hasNext() ; ) {
+        PptSlice view = (PptSlice) itor.next();
+        // Don't check view.usesVar(sclvar), because we are only looking
+        // for interactions between sclvar and lower-numbered
+        // variables, so sclvar will be the second variable.
+        if ((view.arity == 2) && (view.var_infos[1] == sclvar)) {
+          LinearBinary lb = LinearBinary.find(view);
+          if ((lb != null) && (lb.core.a == 1)) {
+            // Don't set unconditionally, and don't break:  we want to check
+            // other variables as well.
+            if (lb.core.b == -1) {
+              suppress_plus_1 = true;
+            }
+            if (lb.core.b == 1) {
+              suppress_minus_1 = true;
+            }
+            // System.out.println("For " + sclvar.name + " suppression: minus=" + suppress_minus_1 + " plus=" + suppress_plus_1 + " because of " + lb.format());
+          }
+        }
+      }
+    }
+
+    if (suppress_minus_1) {
+      Global.tautological_suppressed_derived_variables += 2;
+    }
+    if (suppress_plus_1) {
+      Global.tautological_suppressed_derived_variables += 1;
+    }
 
     // End of applicability tests; now actually create the invariants
 
-    return new BinaryDerivation[] {
-      new SequenceScalarSubscript (seqvar, sclvar, false),
-      new SequenceScalarSubscript (seqvar, sclvar, true),
-      new SequenceScalarSubsequence (seqvar, sclvar, false, false),
-      new SequenceScalarSubsequence (seqvar, sclvar, false, true),
-      new SequenceScalarSubsequence (seqvar, sclvar, true, false),
-      new SequenceScalarSubsequence (seqvar, sclvar, true, true),
-    };
+    Vector result = new Vector(6);
+    // a[i]
+    result.add(new SequenceScalarSubscript (seqvar, sclvar, false));
+    // a[i-1]
+    if (! suppress_minus_1)
+      result.add(new SequenceScalarSubscript (seqvar, sclvar, true));
+    // a[i..]
+    result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false));
+    // a[i+1..]
+    if (! suppress_plus_1)
+      result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true));
+    // a[..i]
+    result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false));
+    // a[..i-1]
+    if (! suppress_minus_1)
+      result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true));
+
+    return (BinaryDerivation[]) result.toArray(new BinaryDerivation[0]);
   }
 
 }

@@ -1596,6 +1596,12 @@ public class PptTopLevel extends Ppt {
     return result;
   }
 
+  /**
+   * For some clients, this method may be more efficient than invariants_vector.
+   **/
+  public Iterator views_iterator() {
+    return views.iterator();
+  }
 
 
   // In original (Python) implementation, known as print_invariants_ppt.
