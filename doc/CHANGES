@@ -9,6 +9,12 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.16 (1 October 2002):
+
+Bugfix release.
+
+----------------
+
 2.3.15 (12 September 2002):
 
 Discontinued the compiled distribution; now there is only one Daikon

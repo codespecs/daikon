@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.15
+@center Daikon version 2.3.16
 
 @sp 1
-@c Daikon version 2.3.15 date
-@center September 12, 2002
+@c Daikon version 2.3.16 date
+@center October  1, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.15, released September 12, 2002.
+It describes Daikon version 2.3.16, released October  1, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.15, released September 12, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.15, released September 12, 2002.
+It describes Daikon version 2.3.16, released October  1, 2002.
 @end ifnottex
 
 @menu
@@ -370,6 +370,9 @@ applications.  Daikon operates by running the program and examining the
 values it computes, looking for patterns and relationships among those
 values.  Front ends (@pxref{Instrumentation}) exist for the Java, C,
 C++, and IOA languages; it is easy to extend Daikon to other applications.
+
+Daikon is freely available for most uses; for details, see
+@ref{License}.
 
 
 @node    Installing Daikon, Example use, Introduction, Top
@@ -1561,6 +1564,8 @@ variables.
 @item --dbg @var{category}
 @item --debug
 @cindex debugging flags
+@cindex category, for debugging
+@cindex Log4j package
 These debugging options cause output to be written to a log file (by
 default, to the terminal).  The @option{--dbg @var{category}} option
 enables debugging output for a specific part of Daikon; it may be
@@ -1798,10 +1803,12 @@ differentiate it from @code{a} as a procedure parameter, so that
 different properties can be reported over the two different variables.
 @end itemize
 
+@cindex local variables
+@cindex variables, local
 Daikon does not produce output for local variables, only for variables
 visible from outside a procedure.  Thus, its output forms a
 specification (mostly) from the view of a client of a procedure.  A
-future version of Daikon will permit output of local variables as a user
+future version of Daikon may permit output of local variables as a user
 option.
 
 @menu
@@ -4403,16 +4410,21 @@ A front end for Daikon produces files in Daikon's input format ---
 operate on data that would otherwise be inaccessible to it.
 (Typically, Daikon front ends arrange to obtain information from
 program executions, though front ends have been also been built for
-stock data, weather forecasts, and truck weight data, among others.)
+stock data, weather forecasts, and truck weight data, among others.
+In other words, it is possible to produce Daikon input from sources
+other than program executions, but this section focuses on the latter.)
 
 A front end for Daikon takes as input a target program to be analyzed.
 The front end produces two outputs:  a @file{.decls} file and an
 instrumented program.  Executing the instrumented program produces a
-@file{.dtrace} file.
+@file{.dtrace} file containing records for all the program points that
+appear in the @file{.dtrace} file.
 For more information about these files, see @ref{File formats}.
 
-Conceptually, instrumentation is very simple.  For instance, suppose we
-wish to instrument file @file{Example.java}.
+Conceptually, instrumentation is very simple.
+This section gives an example of how an instrumenter for Java might
+work; other languages are analogous.
+Suppose we wish to instrument file @file{Example.java}.
 @example
 class Example @{
   // Return either the square of x or the square of (x+1).
@@ -4636,6 +4648,8 @@ together, etc.)@ should not be compared to one another, because those
 variables are likely to be entirely unrelated and any properties over
 them are incidental and uninformative.
 
+Use of Ajax is optional and can be disabled via the
+@option{-noajax} argument to dfej (@pxref{dfej options}).
 If Ajax cannot be run, then a more primitive method of determining
 comparability is used instead.  Even if Ajax cannot be run, Daikon
 proceeds without error.
@@ -4675,6 +4689,7 @@ processed.  For example,
 @example
 lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
 @end example
+@noindent
 Removing the link identified, in this case @file{.../sources/sources},
 should solve the problem.
 
@@ -5210,7 +5225,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.15, released September 12, 2002.
+This manual describes Daikon version 2.3.16, released October  1, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -5402,8 +5417,13 @@ specification of the naming format.
 By convention, the entry and exit points for a function have names of
 a special form so that they can be associated with one another.
 (Currently, those names end with ":::ENTER" and ":::EXIT".)  This
-convention permits instrumenters not to remember the original values of
-variables and output them at the procedure exit point.
+convention permits instrumenters not to remember the original values
+of variables and output them at the procedure exit point.  When there
+are multiple exit points, then each one should be suffixed by a number
+(such as a line number, for example, "foo::EXIT22").  Daikon produces
+the main (non-numbered) ":::EXIT" point automatically.  All the
+numbered exits should contain the same set of variables; in general,
+this means that local variables are not included at exit points.
 
 Another convention is to have another program point whose name ends
 with ":::OBJECT" for the representation invariant of an object or
@@ -5615,6 +5635,7 @@ The format of the value information is:
 Value information includes:
 @itemize @bullet
 @item name of the program point
+
 @item for each variable:
 @itemize @bullet
 @item name
@@ -5629,6 +5650,13 @@ The entire array contents are in square brackets.  (Also, the array name
 should end in "[]"; use "a[]" for array contents, but "a" for the identity
 of the array itself.)
 @end itemize
+
+The value may also be the string "nonsensical" (without the
+quotes).  That means that the variable does not have a value because
+the expression that computes it cannot be evaluated.  For instance, if
+variable @samp{a} has value @samp{null}, then variable @samp{b} would
+have value @samp{nonsensical}.
+
 @item modified? (0 or 1).
 This value is 0 if the variable has not been assigned to since the
 last time this program point was executed, and 1 if the variable has
