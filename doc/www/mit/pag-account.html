@@ -12,6 +12,7 @@ To create an account on pag, perform the following steps:
 
 <ol>
 <li>
+<!--
 Run inquir (for instance, on oregano, and using the .el rather than .elc
 file) to get a UID.  Set the name and mail forwarding, at least, and note
 the UID for use in the <tt>useradd</tt> command below.<p>
@@ -23,17 +24,27 @@ Currently, I can't run inquir, so I send email to Greg Shomo
 If it is impossible to run inquir or get someone else to do so, then look
 at the end of
 <tt>/etc/passwd</tt> and choose a UID from there.  Don't just omit the
-"<tt>-u <em>UID</em></tt>" argument from the useradd command.
+"<tt>-u <em>UID</em></tt>" argument from the useradd command. <p>
+-->
+First find the correct UID for the new account.  It is important that
+the UID match other accounts the person has at MIT.  If they currently
+have a UID with csail, you can find it by executing the following: 
+<pre>
+    whois -h inquir.csail.mit.edu username
+</pre>  
+If not, mail Greg Shomo &lt;pag-admin@techsquare.com&gt; indicating 
+the name, username and the category (e.g., undergrad, grad, guest), 
+he will create a correct csail uid and let you know what it is. <p>
 
 <li>
-Create a new account on pag like so:
+Create a new account on pag (you must be logged onto pag) like so:
 <blockquote>
 <pre>
 su
 setenv NEWUSERNAME <em>username</em>
 setenv NEWUID <em>uid</em>
 
-useradd -d /g5/users/$NEWUSERNAME -u $NEWUID $NEWUSERNAME
+/usr/sbin/useradd -d /g5/users/$NEWUSERNAME -u $NEWUID $NEWUSERNAME
 <em>echo "## Add to 'invariants' and 'pag' groups"</em>
 emacs /etc/group
 <em>echo "## Insert full name"</em>
