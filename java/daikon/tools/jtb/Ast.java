@@ -731,7 +731,7 @@ public class Ast {
     for (Iterator itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType((FormalParameter) itor.next());
       String param = params[j].getName();
-      // System.out.println("Comparing " + param + " to " + ast_param + ":");
+      System.out.println("Comparing " + param + " to " + ast_param + ":");
       if (! typeMatch(param, ast_param)) {
         return false;
       }
@@ -803,8 +803,6 @@ public class Ast {
     }
     return false;
   }
-
-
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -934,6 +932,26 @@ public class Ast {
     GetParametersVisitor v = new GetParametersVisitor();
     FormalParameters fp = cd.f2;
     fp.accept(v);
+
+    // Inner class constructors have implicit outer class parameter, which had
+    // caused the constructor signatures not to match (and thus invariants would
+    // not merge into inner class constructors)
+
+    // Look into replacing getClass because that requires that the compiled class
+    // be in the classpath
+
+    Node innerClassNode = getParent(UnmodifiedClassDeclaration.class, cd);
+    Node outerClassNode = getParent(UnmodifiedClassDeclaration.class, innerClassNode);
+
+    if (outerClassNode != null) {
+      NodeToken nameToken = ((UnmodifiedClassDeclaration)outerClassNode).f1;
+      Name name = new Name(nameToken, new NodeListOptional());
+      Type type = new Type(new NodeChoice(name, 1), new NodeListOptional());
+      VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
+      FormalParameter implicitOuter = new FormalParameter(new NodeOptional(), type, blankParamName);
+      v.parameters.add(0, implicitOuter);
+    }
+
     return v.parameters;
   }
 

@@ -377,7 +377,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
     if (!lightweight) {
       if (!invariantInserted)
         insertJMLWorkaround(n);
-      insertBehavior(n, exceptions.isEmpty(), ensures_invs.length == 0);
+      insertBehavior(n,
+                     (exceptions != null ? exceptions.isEmpty() : true),
+                     (ensures_invs != null ? (ensures_invs.length == 0) : true));
       if (isImplementation || isOverride) {
 	insertAlso(n);
       }
