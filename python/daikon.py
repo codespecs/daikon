@@ -72,8 +72,7 @@ if not locals().has_key("fn_var_infos"):
     fn_derived_from = {}    # functions that have had derived vars introduced
 
     ## Function variables
-    # Used to add invocation count variables for each program function.
-    # (What do we do now, if not that??)
+    # This is used to add invocation count variables for each program function.
     # Note the function name does not include the suffix ':::EXIT'
     functions = []
     fn_invocations = {}       # from function name to invocation count
@@ -316,14 +315,13 @@ min_or_max_re = re.compile("^(min|max)\((.*)\)$")
 # These differ: "+" vs. "*" for the parenthesis group.
 java_type_re = re.compile(r'^(?:[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)+'
                           + r'|[a-zA-Z][a-z0-9]*[A-Z][a-zA-Z0-9]*)$');
-java_object_re = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)*@([0-9a-fA-F]+)$');
+java_object_re = re.compile((r'\[*(?:' + r'^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)*'
+                             + r'|' + r'[BCDFIJSZ]' + r')')
+                            + r'@([0-9a-fA-F]+)$');
 
 integral_types = ("int", "char", "float", "double", "integral", "boolean")
 known_types = integral_types + ("pointer", "address")
 
-# A program source type (ie, a declared type in the programming language) is:
-#  * a string (for scalar types), or
-#  * a tuple of (base_type, dimensionality), for array types
 
 class proglang_type:
     # base
@@ -354,6 +352,11 @@ class proglang_type:
                         base = "java_object"
         else:
             assert type(dimensionality) == types.IntType
+
+        # Deal with multidimensional arrays in a slightly hackish way.
+        if dimensionality > 1:
+            base = "java_object"
+            dimensionality = 1
 
         self.base = base
         self.dimensionality = dimensionality
@@ -691,7 +694,7 @@ def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
     """
 
     if debug_read:
-        print "merge_var_varlues", filename, sub_fn_var_values.keys()
+        print "merge_var_values", filename, sub_fn_var_values.keys()
 
     assert not fn_var_values_invalid_modinkey(sub_fn_var_values)
 
@@ -714,56 +717,56 @@ def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
 
 ## These functions specify their inputs and outputs as "modinkey" or "modincount".
 
-def dict_of_tuples_modinkey_to_tuple_of_dicts_modinval(dot, tuple_len=None):
-    """Input: a dictionary mapping a tuple of elements to a count.
-    All the key tuples in the input have the same length unless optional argument
-    TUPLE_LEN is provided, in which case all tuples have at least that length.
-    If TUPLE_LEN is a tuple, then only those indices are extracted.
-    if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
-    Output: a tuple of dictionaries, each mapping a single element to a count.
-    The first output dictionary concerns the first element of the original keys,
-    the second output the second element of the original keys, and so forth."""
-
-    assert not var_values_invalid_modinkey(dot)
-
-    if tuple_len == None:
-        tuple_len = len(dot.keys()[0])
-    if type(tuple_len) == types.IntType:
-        assert tuple_len <= len(dot.keys()[0])
-        if tuple_len == 0:
-            return ()
-        tuple_indices = range(0, tuple_len)
-    elif tuple_len == []:
-        return ()
-    else:
-        assert type(tuple_len) in [types.TupleType, types.ListType]
-        assert max(tuple_len) < len(dot.keys()[0])
-        assert min(tuple_len) >= 0
-        tuple_indices = tuple_len
-    # Next four lines accomplish "result = ({},) * tuple_len", but with
-    # distinct rather than identical dictionaries in the tuple.
-    result = []
-    for i in tuple_indices:
-        result.append({})
-    result = tuple(result)
-    for (key_tuple, count) in dot.items():
-        for i in range(0, len(tuple_indices)):
-            (this_key, this_modified) = key_tuple[tuple_indices[i]]
-            this_dict = result[i]
-            # Is this more efficient than the following?
-            #    this_dict_elt = this_dict.get(this_key, [0,0])
-            #    this_dict[this_key] = this_dict_elt
-            if this_dict.has_key(this_key):
-                this_dict_elt = this_dict[this_key]
-            else:
-                this_dict_elt = [0,0]
-                this_dict[this_key] = this_dict_elt
-            this_dict_elt[0] = this_dict_elt[0] + count
-            if this_modified:
-                this_dict_elt[1] = this_dict_elt[1] + count
-    return result
-# dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-# dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::EXIT'])
+# def dict_of_tuples_modinkey_to_tuple_of_dicts_modinval(dot, tuple_len=None):
+#     """Input: a dictionary mapping a tuple of elements to a count.
+#     All the key tuples in the input have the same length unless optional argument
+#     TUPLE_LEN is provided, in which case all tuples have at least that length.
+#     If TUPLE_LEN is a tuple, then only those indices are extracted.
+#     if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
+#     Output: a tuple of dictionaries, each mapping a single element to a count.
+#     The first output dictionary concerns the first element of the original keys,
+#     the second output the second element of the original keys, and so forth."""
+# 
+#     assert not var_values_invalid_modinkey(dot)
+# 
+#     if tuple_len == None:
+#         tuple_len = len(dot.keys()[0])
+#     if type(tuple_len) == types.IntType:
+#         assert tuple_len <= len(dot.keys()[0])
+#         if tuple_len == 0:
+#             return ()
+#         tuple_indices = range(0, tuple_len)
+#     elif tuple_len == []:
+#         return ()
+#     else:
+#         assert type(tuple_len) in [types.TupleType, types.ListType]
+#         assert max(tuple_len) < len(dot.keys()[0])
+#         assert min(tuple_len) >= 0
+#         tuple_indices = tuple_len
+#     # Next four lines accomplish "result = ({},) * tuple_len", but with
+#     # distinct rather than identical dictionaries in the tuple.
+#     result = []
+#     for i in tuple_indices:
+#         result.append({})
+#     result = tuple(result)
+#     for (key_tuple, count) in dot.items():
+#         for i in range(0, len(tuple_indices)):
+#             (this_key, this_modified) = key_tuple[tuple_indices[i]]
+#             this_dict = result[i]
+#             # Is this more efficient than the following?
+#             #    this_dict_elt = this_dict.get(this_key, [0,0])
+#             #    this_dict[this_key] = this_dict_elt
+#             if this_dict.has_key(this_key):
+#                 this_dict_elt = this_dict[this_key]
+#             else:
+#                 this_dict_elt = [0,0]
+#                 this_dict[this_key] = this_dict_elt
+#             this_dict_elt[0] = this_dict_elt[0] + count
+#             if this_modified:
+#                 this_dict_elt[1] = this_dict_elt[1] + count
+#     return result
+# # dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
+# # dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::EXIT'])
 
 ## These appear not to be used, so comment them out in favor of versions
 ## later in the file that actually are used.
@@ -855,6 +858,7 @@ def dict_of_tuples_slice_3(dot, i1, i2, i3):
 ### Dictionary utilities -- new version
 ###
 
+### Is this comment still correct?
 ## These take a dictionary with in-key modification information and
 ## produce a dictionary with in-value modification information.
 ## Their documentation needs to be updated to indicate this.
@@ -4916,7 +4920,7 @@ def read_inv(filename="medic/invariants.raw"):
 
 def read_decls_and_traces(files, clear=0, fn_regexp=None, num_files=None, random_seed=None):
     """Read declarations from the FILES, then read the traces in the FILES.
-    When declarations and data traces are inseparate files, it is more
+    When declarations and data traces are in separate files, it is more
     efficient to call read_declarations and then read_data_traces.
 
     FILES is either a sequence of file names or a single Unix file pattern.

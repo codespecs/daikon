@@ -10,7 +10,7 @@ false = (1==0)
 ### Numbers
 ###
 
-maxint = 2147483647      # largest positive 32-bit 2-complement int
+maxint = 2147483647      # largest positive 32-bit 2s-complement int
 
 ## Roundoff errors can make floating-point values not quite what they ought
 ## to be.  This is a fairly unpleasant hack around the problem.

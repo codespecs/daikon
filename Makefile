@@ -48,7 +48,8 @@ tags: TAGS
 ## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
 ## So I should be sure to do the make on a Linux machine. -MDE
 TAGS:  $(LISP_FILES) $(PYTHON_FILES)
-	etags $(LISP_FILES) $(PYTHON_FILES)
+	cd Daikon; make tags
+	etags $(LISP_FILES) $(PYTHON_FILES) --include=Daikon/TAGS
 
 ###########################################################################
 ### Distribution

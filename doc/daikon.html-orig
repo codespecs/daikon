@@ -318,6 +318,9 @@ To do all this from a single shell command, do the following:
 
 In the output, the "_orig" suffix refers to the original value of a formal
 parameter, for parameters possibly modified in the function body.
+Negative array indices count from the end of the array; for instance, index
+"-1" denotes the last element of the array.<p>
+
 ":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
 point the instrumentation was inserted; these invariants are
 program-point-specific.  ":::CLASS" and ":::CLASS-STATIC" indicate class
@@ -407,7 +410,7 @@ Your bug report will be most helpful if you include:
   <li>the contents of the VERSION file, which indicates the release date of
       your copy of Daikon
   <li>a description of exactly what you did and exactly what went wrong.
-      For instance, a transcipt of your commands and the system's output
+      For instance, a transcript of your commands and the system's output
       may provide this information.
   <li>input files that permit the problem to be replicated.  For instance,
       this might include your source files (both original and

@@ -10,6 +10,20 @@ Contents:
 File format for data trace files
 ================================
 
+[
+ Added to declaration file format:
+  * record lackwit_type_format
+  * add to each program point:
+     * specify that a variable is a constant, either at compile time
+       (static final) or at run time (blank final).  I have to be able to
+       do this at run time, so maybe only do it at run time?
+ Add to trace file format:
+  * never permit mixing declarations and traces
+  * specify relevant decls files, with message digests for them.  Possibly
+    omit comments from the message digests??
+    I'll keep a list of the decls files read so far.
+]
+
 A data trace (.dtrace) file contains two types of record:
  * static lexical information about a program point
  * dynamic information about values at a program point
