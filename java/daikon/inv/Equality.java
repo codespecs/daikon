@@ -30,10 +30,10 @@ public final class Equality
   public Equality(Collection variables, PptSlice ppt) {
     super(ppt);
     vars = (VarInfo[]) variables.toArray(new VarInfo[variables.size()]);
-    Assert.assert(vars.length >= 2);
+    Assert.assertTrue(vars.length >= 2);
     for (int i=0; i < vars.length; i++) {
-      Assert.assert(vars[0].ppt == vars[i].ppt);
-      Assert.assert(vars[0].rep_type.isArray() == vars[i].rep_type.isArray());
+      Assert.assertTrue(vars[0].ppt == vars[i].ppt);
+      Assert.assertTrue(vars[0].rep_type.isArray() == vars[i].rep_type.isArray());
     }
   }
 
@@ -88,7 +88,7 @@ public final class Equality
     String first = vars[0].name.name();
     for (int i = 1; i < vars.length; i++) {
       // appends " && ( v[0] == v[i] )" to the stringbuffer
-      if (i > 1) result.append(" && ")
+      if (i > 1) result.append(" && ");
       result.append("( ").append(first).append(" == "); // "interned"
       result.append(vars[i].name.name()).append( " ) ");
     }
@@ -99,7 +99,7 @@ public final class Equality
   public String format_ioa() {
     StringBuffer result = new StringBuffer();
     // There are always at least two vars
-    Assert.assert(vars.length >= 2);
+    Assert.assertTrue(vars.length >= 2);
     for (int i = 0; i < vars.length - 1; i++) {
       result.append (vars[i].name.ioa_name());
       result.append (" = ");

@@ -47,8 +47,8 @@ public abstract class SequenceString
   }
 
   public void add(String[] v1, String v2, int mod_index, int count) {
-    Assert.assert(! falsified);
-    Assert.assert((mod_index >= 0) && (mod_index < 4));
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     if (v1 == null) {
       // ppt.var_infos[seq_index].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {

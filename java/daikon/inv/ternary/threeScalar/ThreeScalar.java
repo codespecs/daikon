@@ -32,8 +32,8 @@ public abstract class ThreeScalar
   public void add(long v1, long v2, long v3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
-    Assert.assert(! falsified);
-    Assert.assert((mod_index >= 0) && (mod_index < 8));
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 8));
     if (mod_index == 0) {
       add_unmodified(v1, v2, v3, count);
     } else {

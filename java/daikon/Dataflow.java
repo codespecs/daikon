@@ -250,7 +250,7 @@ public class Dataflow
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    Assert.assert(entry_ppt != null, exit_ppt.name);
+    Assert.assertTrue(entry_ppt != null, exit_ppt.name);
 
     // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
     PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
@@ -265,13 +265,13 @@ public class Dataflow
       int new_vis_index = 0;
       for (int k = 0; k < entry_ppt.num_declvars; k++) {
         VarInfo vi = entry_ppt_vis[k];
-        Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
+        Assert.assertTrue(!vi.isDerived(),"Derived when making orig(): "+vi.name);
         if (vi.isStaticConstant())
           continue;
         VarInfo origvar = VarInfo.origVarInfo(vi);
         // Fix comparability
         VarInfo postvar = exit_ppt.findVar(vi.name);
-        Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
+        Assert.assertTrue(postvar != null,"Exit not superset of entry: "+vi.name);
         origvar.comparability = postvar.comparability.makeAlias(origvar.name);
         // Setup PO; relate orig(...) on EXIT to ... on ENTER
         origvar.addHigherPO(vi, static_po_group_nonce);
@@ -279,7 +279,7 @@ public class Dataflow
         new_vis[new_vis_index] = origvar;
         new_vis_index++;
       }
-      Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
+      Assert.assertTrue(new_vis_index == exit_ppt.num_orig_vars);
       static_po_group_nonce++; // advance once per (EXIT#) program point
     }
     exit_ppt.addVarInfos(new_vis);
@@ -320,7 +320,7 @@ public class Dataflow
                                         null, // method
                                         FileIO.object_suffix // point
                                         );
-          Assert.assert(objname.isObjectInstanceSynthetic());
+          Assert.assertTrue(objname.isObjectInstanceSynthetic());
           PptTopLevel object_ppt = ppts.get(objname);
           if (object_ppt != null) {
             debugInit.debug ("whose type is known");
@@ -416,7 +416,7 @@ public class Dataflow
     forall_derived_vars:
       for (int j = lower; j < upper; j++) {
         VarInfo vi = ppt.var_infos[j];
-        Assert.assert(vi.isDerived());
+        Assert.assertTrue(vi.isDerived());
         debug.debug("  vi = " + vi.name);
         // Obtain the bases of derived varable
         VarInfo[] bases = vi.derived.getBases();
@@ -474,7 +474,7 @@ public class Dataflow
     public final PptTopLevel[] ppts;
     public final int[][] ints;
     public PptsAndInts(PptTopLevel[] _ppts, int[][] _ints) {
-      Assert.assert(_ppts.length == _ints.length);
+      Assert.assertTrue(_ppts.length == _ints.length);
       ppts = _ppts;
       ints = _ints;
     }
@@ -627,14 +627,14 @@ public class Dataflow
         if (head == null) break;
 
         // Add a flow from ppt to head
-        Assert.assert(head.size() >= 1);
+        Assert.assertTrue(head.size() >= 1);
         PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
         int[] flow_transform = new int[nvis];
         Arrays.fill(flow_transform, -1);
         for (Iterator i = head.iterator(); i.hasNext(); ) {
           VarAndSource vs = (VarAndSource) i.next();
-          Assert.assert(vs.var.ppt == flow_ppt); // all flow to the same ppt
-          Assert.assert(flow_transform[vs.source] == -1); // with no overlap
+          Assert.assertTrue(vs.var.ppt == flow_ppt); // all flow to the same ppt
+          Assert.assertTrue(flow_transform[vs.source] == -1); // with no overlap
           flow_transform[vs.source] = vs.var.varinfo_index;
         }
         dataflow_ppts.add(flow_ppt);
@@ -661,7 +661,7 @@ public class Dataflow
         for (Iterator i = nonce_to_vars.keySet().iterator(); i.hasNext(); ) {
           Integer nonce = (Integer) i.next();
           List newpath = (List) nonce_to_vars.get(nonce);
-          Assert.assert(newpath != null);
+          Assert.assertTrue(newpath != null);
           worklist.add(newpath);
         }
 

@@ -62,7 +62,7 @@ public final class LinearBinaryCore
     // was a swap
     if (a == 0) {
       // can't swap horizontal line into vertical
-      Assert.assert(b == 0);
+      Assert.assertTrue(b == 0);
     } else {
       a = 1 / a;   // a' =  1/a
       b = -b * a;  // b' = -b/a
@@ -100,7 +100,7 @@ public final class LinearBinaryCore
             double xsep = ((double)x_cache[i] - x_cache[j]);
             double ysep = ((double)y_cache[i] - y_cache[j]);
             double separation = xsep*xsep + ysep*ysep;
-            // Assert.assert(separation > 0);
+            // Assert.assertTrue(separation > 0);
             if (separation > max_separation) {
               max_separation = separation;
               max_i = i;
@@ -276,7 +276,7 @@ public final class LinearBinaryCore
   public String format_reversed_using(OutputFormat format,
                                       VarInfoName x, VarInfoName y)
   {
-    Assert.assert(a == 1 || a == -1);
+    Assert.assertTrue(a == 1 || a == -1);
     return format_using(format, y, x, a, -b/a);
   }
 

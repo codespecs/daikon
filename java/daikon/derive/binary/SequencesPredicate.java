@@ -126,12 +126,12 @@ public final class SequencesPredicate
       length1 = ((long[]) val1).length;
     }
 
-    Assert.assert(val2 == null || val2 instanceof long[]);
+    Assert.assertTrue(val2 == null || val2 instanceof long[]);
 
     length1 = Math.min (length1, length2);
     length2 = Math.min (length1, length2);
 
-    Assert.assert(length1 == length2);
+    Assert.assertTrue(length1 == length2);
 
     int mod = ValueTuple.UNMODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;

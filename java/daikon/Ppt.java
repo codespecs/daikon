@@ -182,7 +182,7 @@ public abstract class Ppt
    **/
   public static final VarInfo[] common_vars(List ppts) {
     Vector result = new Vector();
-    Assert.assert(ppts.size() > 1);
+    Assert.assertTrue(ppts.size() > 1);
     // First, get all the variables from the first program point.
     {
       PptTopLevel ppt = (PptTopLevel) ppts.get(0);

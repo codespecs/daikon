@@ -546,7 +546,7 @@ public final class Diff {
                                   InvMap map1, InvMap map2) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
-    Assert.assert(ppt1 == null || ppt2 == null ||
+    Assert.assertTrue(ppt1 == null || ppt2 == null ||
                   PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
                   "Program points do not correspond");
 

@@ -34,8 +34,8 @@ public final class Member
 
   protected Member(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.INT);
-    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY);
+    Assert.assertTrue(sclvar().rep_type == ProglangType.INT);
+    Assert.assertTrue(seqvar().rep_type == ProglangType.INT_ARRAY);
   }
 
   // This only added so this invariant can be tested by the InvariantFormatTester automated
@@ -77,8 +77,8 @@ public final class Member
   // variables.
   public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
     /* [INCR]
-    Assert.assert(sclvar.isCanonical());
-    Assert.assert(seqvar.isCanonical());
+    Assert.assertTrue(sclvar.isCanonical());
+    Assert.assertTrue(seqvar.isCanonical());
     Vector scl_equalto = sclvar.equalTo();
     scl_equalto.add(0, sclvar);
     Vector seq_equalto = seqvar.equalTo();
@@ -183,7 +183,7 @@ public final class Member
           // min(B[0..I]) in B[0..J]
           // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
           // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
-          Assert.assert(seqvar_super == sclseqsuper);
+          Assert.assertTrue(seqvar_super == sclseqsuper);
           SequenceScalarSubsequence sclsss = (SequenceScalarSubsequence) sclvar_seq.derived;
           boolean scl_from_start = sclsss.from_start;
           if (scl_from_start == seq_from_start) {
@@ -317,7 +317,7 @@ public final class Member
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof Member);
+    Assert.assertTrue(other instanceof Member);
     return true;
   }
 }

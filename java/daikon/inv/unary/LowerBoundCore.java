@@ -24,7 +24,7 @@ import java.io.Serializable;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class LowerBoundCore 
+public class LowerBoundCore
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -35,7 +35,7 @@ public class LowerBoundCore
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
 
-  // min1  <  min2  <  min3 
+  // min1  <  min2  <  min3
   public long min1  = Long.MAX_VALUE ;
   int num_min1  = 0;
   long min2  = Long.MAX_VALUE ;
@@ -66,12 +66,12 @@ public class LowerBoundCore
     long modulus = calc_modulus();
     long range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
-    return "min1=" + min1 
-      + ", num_min1=" + num_min1 
-      + ", min2=" + min2 
-      + ", num_min2=" + num_min2 
-      + ", min3=" + min3 
-      + ", num_min3=" + num_min3 
+    return "min1=" + min1
+      + ", num_min1=" + num_min1
+      + ", min2=" + min2
+      + ", num_min2=" + num_min2
+      + ", min3=" + min3
+      + ", num_min3=" + num_min3
       + ", max=" + max  + ", range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
@@ -177,7 +177,7 @@ public class LowerBoundCore
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
     double bound_samples_prob = prob_is_ge(num_min1 , required_samples_at_bound);
-    utilMDE.Assert.assert(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
+    utilMDE.Assert.assertTrue(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
     long modulus = calc_modulus();
 

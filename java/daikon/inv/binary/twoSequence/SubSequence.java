@@ -128,8 +128,8 @@ public class SubSequence
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
     QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
-    Assert.assert(qret.bound_vars.size() == 2);
-    Assert.assert(qret.root_primes.length == 2);
+    Assert.assertTrue(qret.bound_vars.size() == 2);
+    Assert.assertTrue(qret.root_primes.length == 2);
 
     // These variables are, in order: Example element, free Index
     // variable, Lower bound, Upper bound, Span
@@ -233,7 +233,7 @@ public class SubSequence
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {
-    Assert.assert(var1_in_var2 || var2_in_var1);
+    Assert.assertTrue(var1_in_var2 || var2_in_var1);
 
     boolean new_var1_in_var2 = var1_in_var2;
     boolean new_var2_in_var1 = var2_in_var1;
@@ -363,7 +363,7 @@ public class SubSequence
             return true;
           }
       } else {
-        Assert.assert(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
+        Assert.assertTrue(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
       }
 
     }
@@ -385,7 +385,7 @@ public class SubSequence
 
   // Look up a previously instantiated SubSequence relationship.
   public static SubSequence find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSequence)
@@ -458,7 +458,7 @@ public class SubSequence
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {
             //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
-            //   Assert.assert(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
+            //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {
               SubSequence ss = SubSequence.find(ss_ppt);
@@ -476,7 +476,7 @@ public class SubSequence
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof SubSequence);
+    Assert.assertTrue(other instanceof SubSequence);
     return true;
   }
 

@@ -32,7 +32,7 @@ class InvariantTableModel extends AbstractTableModel {
   public String getColumnName( int column ) { return columnNames[ column ]; }
 
   public Object getValueAt( int row, int column ) {
-    Assert.assert( column >= 0  &&  column <= 4 );
+    Assert.assertTrue( column >= 0  &&  column <= 4 );
     Invariant invariant = (Invariant) filteredInvariants.get( row );
     if (column == 0)        return invariant.format();
     else if (column == 1)           return new Double(Double.NaN); // [INCR] invariant.ppt.num_values()

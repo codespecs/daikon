@@ -23,8 +23,8 @@ public class PptSlice0
   }
 
   public void addInvariant(Invariant inv) {
-    Assert.assert(inv != null);
-    // Assert.assert(inv instanceof Implication);
+    Assert.assertTrue(inv != null);
+    // Assert.assertTrue(inv instanceof Implication);
     invs.add(inv);
   }
 

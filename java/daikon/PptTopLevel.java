@@ -219,7 +219,7 @@ public class PptTopLevel
     }
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
-      Assert.assert((vi.value_index == -1) || (!vi.is_static_constant));
+      Assert.assertTrue((vi.value_index == -1) || (!vi.is_static_constant));
     }
 
     // values = new VarValuesOrdered(); // [[INCR]]
@@ -229,7 +229,7 @@ public class PptTopLevel
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
     num_orig_vars = 0;
-    Assert.assert(num_static_constant_vars == num_declvars - num_tracevars);
+    Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ public class PptTopLevel
    **/
   /* [INCR] ... we longer need to do this in stages
   public Vector __derive() {
-    Assert.assert(ArraysMDE.sorted_descending(derivation_indices));
+    Assert.assertTrue(ArraysMDE.sorted_descending(derivation_indices));
 
     Vector result = new Vector();
     for (int pass=1; pass<=derivation_passes; pass++) {
@@ -628,7 +628,7 @@ public class PptTopLevel
     //     }
 
     // System.out.println("PptTopLevel " + name + ": add " + vt);
-    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
+    Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars);
 
     // The way adding samples works: We have precomputed program
     // points that have any VarInfos that are higher than this point's
@@ -637,9 +637,9 @@ public class PptTopLevel
     // Simply walk down that list, transforming value tuples according
     // to transormation vectors.  Then call add of the right program points.
 
-    Assert.assert(dataflow_ppts != null, name);
-    Assert.assert(dataflow_transforms != null, name);
-    Assert.assert(dataflow_ppts.length == dataflow_transforms.length, name);
+    Assert.assertTrue(dataflow_ppts != null, name);
+    Assert.assertTrue(dataflow_transforms != null, name);
+    Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
 
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
@@ -648,7 +648,7 @@ public class PptTopLevel
       //       }
 
       int[] transform = dataflow_transforms[i];
-      Assert.assert(transform.length == var_infos.length);
+      Assert.assertTrue(transform.length == var_infos.length);
 
       // Map vt into the transformed tuple
       int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
@@ -678,7 +678,7 @@ public class PptTopLevel
    **/
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
-    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars, name);
+    Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars, name);
 
     //     if (debugFlow.isDebugEnabled()) {
     //       debugFlow.debug ("Add for " + this.name);
@@ -763,8 +763,8 @@ public class PptTopLevel
       // Using addDerivedVariables(derivations) would add data too
       addVarInfos(vis);
     }
-    Assert.assert(lower == upper);
-    Assert.assert(upper == var_infos.length);
+    Assert.assertTrue(lower == upper);
+    Assert.assertTrue(upper == var_infos.length);
 
     if (debug.isDebugEnabled())
       debug.debug("Done with create_derived_variables, " + var_infos.length + " vars");
@@ -851,7 +851,7 @@ public class PptTopLevel
 //        }
 //        if (views_to_remove_deferred.size() > 0) {
 //          // Inefficient, but easy to code.
-//          Assert.assert(slices_vector.containsAll(views_to_remove_deferred));
+//          Assert.assertTrue(slices_vector.containsAll(views_to_remove_deferred));
 //          slices_vector.removeAll(views_to_remove_deferred);
 //          views_to_remove_deferred.clear();
 //          if (slices_vector.size() == 0)
@@ -865,7 +865,7 @@ public class PptTopLevel
   public void removeView(Ppt slice) {
     // System.out.println("removeView " + slice.name + " " + slice);
     boolean removed = views.remove(slice);
-    Assert.assert(removed);
+    Assert.assertTrue(removed);
   }
 
 
@@ -924,7 +924,7 @@ public class PptTopLevel
    * slice and then looking for the invariant in the slice.
    **/
   public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
-    Assert.assert(v1.varinfo_index < v2.varinfo_index);
+    Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2)
@@ -940,7 +940,7 @@ public class PptTopLevel
    * in order of varinfo_index.
    **/
   public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
-    Assert.assert(v1.varinfo_index != v2.varinfo_index);
+    Assert.assertTrue(v1.varinfo_index != v2.varinfo_index);
     if (v1.varinfo_index < v2.varinfo_index) {
       return findSlice(v1, v2);
     } else {
@@ -955,8 +955,8 @@ public class PptTopLevel
    * slice and then looking for the invariant in the slice.
    **/
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
-    Assert.assert(v1.varinfo_index < v2.varinfo_index);
-    Assert.assert(v2.varinfo_index < v3.varinfo_index);
+    Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
+    Assert.assertTrue(v2.varinfo_index < v3.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 3)
@@ -1027,7 +1027,7 @@ public class PptTopLevel
                            + ", var_infos.length=" + var_infos.length);
 
     // This test prevents instantiate views for variables one at a time.
-    Assert.assert(var_infos.length == vi_index_limit);
+    Assert.assertTrue(var_infos.length == vi_index_limit);
 
     if (vi_index_min == vi_index_limit)
       return;
@@ -1117,10 +1117,10 @@ public class PptTopLevel
           boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
           int i3_min = ((target1 || target2) ? i2+1 : Math.max(i2+1, vi_index_min));
           for (int i3=i3_min; i3<vi_index_limit; i3++) {
-            Assert.assert(((i1 >= vi_index_min) && (i1 < vi_index_limit))
+            Assert.assertTrue(((i1 >= vi_index_min) && (i1 < vi_index_limit))
                           || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
-            Assert.assert((i1 < i2) && (i2 < i3));
+            Assert.assertTrue((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
             // Eventually, add back in this test as "if constant and no
             // comparability info exists" then continue.
@@ -1157,7 +1157,7 @@ public class PptTopLevel
     }
 
     // This method didn't add any new variables.
-    Assert.assert(old_num_vars == var_infos.length);
+    Assert.assertTrue(old_num_vars == var_infos.length);
   }
 
   /**
@@ -1174,7 +1174,7 @@ public class PptTopLevel
     case 1: {
       VarInfo vi = vis[0];
       // We may do inference over static constants
-      // Assert.assert(! vi.isStaticConstant());
+      // Assert.assertTrue(! vi.isStaticConstant());
       result = new PptSlice1(this, vi);
       break;
     }
@@ -1182,8 +1182,8 @@ public class PptTopLevel
       VarInfo v1 = vis[0];
       VarInfo v2 = vis[1];
       // We may do inference over static constants
-      // Assert.assert(! v1.isStaticConstant());
-      // Assert.assert(! v2.isStaticConstant());
+      // Assert.assertTrue(! v1.isStaticConstant());
+      // Assert.assertTrue(! v2.isStaticConstant());
       VarInfo tmp;
       if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
       result = new PptSlice2(this, v1, v2);
@@ -1194,9 +1194,9 @@ public class PptTopLevel
       VarInfo v2 = vis[1];
       VarInfo v3 = vis[2];
       // We may do inference over static constants
-      // Assert.assert(! v1.isStaticConstant());
-      // Assert.assert(! v2.isStaticConstant());
-      // Assert.assert(! v3.isStaticConstant());
+      // Assert.assertTrue(! v1.isStaticConstant());
+      // Assert.assertTrue(! v2.isStaticConstant());
+      // Assert.assertTrue(! v3.isStaticConstant());
       VarInfo tmp;
       if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
       if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
@@ -1218,7 +1218,7 @@ public class PptTopLevel
     for (int i=0; i<unary_views.size(); i++) {
       PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
       // System.out.println("set_dynamic_constant_slots " + unary_view.name + " " + views.contains(unary_view));
-      Assert.assert(unary_view.arity == 1);
+      Assert.assertTrue(unary_view.arity == 1);
       // If this view has been installed in the views slot (ie, it has not
       // been eliminated already).
       if (views.contains(unary_view)) {
@@ -1226,7 +1226,7 @@ public class PptTopLevel
         // // There is only one type of unary invariant in pass 1:
         // // OneOf{Scalar,Sequence}.  It must have been successful, or this
         // // view wouldn't have been installed.
-        // Assert.assert(unary_view.invs.size() == 1);
+        // Assert.assertTrue(unary_view.invs.size() == 1);
         // Invariant inv = (Invariant) unary_view.invs.elementAt(0);
 
         for (int j=0; j<unary_view.invs.size(); j++) {
@@ -1240,7 +1240,7 @@ public class PptTopLevel
               && (! (inv instanceof EltOneOfString))) {
             // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
             // Should be Long, not Integer.
-            Assert.assert(! (one_of.elt() instanceof Integer));
+            Assert.assertTrue(! (one_of.elt() instanceof Integer));
             one_of.var().dynamic_constant = one_of.elt();
             one_of.var().is_dynamic_constant = true;
             // System.out.println("set dynamic_constant to " + one_of.elt());
@@ -1258,7 +1258,7 @@ public class PptTopLevel
   void set_equal_to_slots(Vector binary_views, int vi_index_min, int vi_index_limit) {
     for (int i=0; i<binary_views.size(); i++) {
       PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
-      Assert.assert(binary_view.arity == 2);
+      Assert.assertTrue(binary_view.arity == 2);
 
       if (binary_view.debugged) {
         System.out.println("Binary view " + binary_view.name + " has "
@@ -1271,12 +1271,12 @@ public class PptTopLevel
         // There is only one type of binary invariant in pass 1:
         // {Int,Seq,String}Comparison.  It must have been successful, or
         // this view wouldn't have been installed.
-        Assert.assert(binary_view.invs.size() == 1);
+        Assert.assertTrue(binary_view.invs.size() == 1);
 
         Invariant inv = (Invariant) binary_view.invs.elementAt(0);
         inv.finished = true;
         // binary_view.already_seen_all = true;
-        Assert.assert(inv instanceof Comparison);
+        Assert.assertTrue(inv instanceof Comparison);
         // Not "inv.format" because that is null if not justified.
         // System.out.println("Is " + (IsEqualityComparison.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.repr());
@@ -1284,7 +1284,7 @@ public class PptTopLevel
             && inv.enoughSamples()) {
           VarInfo var1 = binary_view.var_infos[0];
           VarInfo var2 = binary_view.var_infos[1];
-          Assert.assert(var1.varinfo_index < var2.varinfo_index);
+          Assert.assertTrue(var1.varinfo_index < var2.varinfo_index);
           // System.out.println("found equality: " + var1.name + " = " + var2.name);
           // System.out.println("var1.equal_to="
           //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name)
@@ -1309,7 +1309,7 @@ public class PptTopLevel
             // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name);
           } else {
             // This is implied by the if-then sequence.
-            // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
+            // Assert.assertTrue((var1.equal_to != null) && (var2.equal_to != null));
             if (var1.compatible(var2)
                 && (var1.equal_to != var2.equal_to)) {
               // Used to be an assert
@@ -1325,8 +1325,8 @@ public class PptTopLevel
                                    ", " + var2.equal_to.varinfo_index + "] at " + name);
               }
             }
-            Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
-            Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
+            Assert.assertTrue(var1.equal_to.varinfo_index <= var1.varinfo_index);
+            Assert.assertTrue(var2.equal_to.varinfo_index <= var2.varinfo_index);
           }
         }
       } else {
@@ -1465,7 +1465,7 @@ public class PptTopLevel
     }
 
     // for (int i=0; i<splits.length; i++) {
-    //   Assert.assert(splits[i].instantiated() == false);
+    //   Assert.assertTrue(splits[i].instantiated() == false);
     // }
 
     Vector pconds = new Vector(2 * len);
@@ -1477,7 +1477,7 @@ public class PptTopLevel
       }
       pconds.add(cond1);
       PptConditional cond2 = new PptConditional(this, splits[i], true);
-      Assert.assert(cond2.splitter_valid());
+      Assert.assertTrue(cond2.splitter_valid());
       pconds.add(cond2);
     }
 
@@ -1529,7 +1529,7 @@ public class PptTopLevel
       //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
       // }
 
-      // Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
+      // Assert.assertTrue(exits.size() == 2, "Bad number of exits: " + exits.size());
       for (int i = 0; i < num_exits; i++) {
         for (int j = i+1; j < num_exits; j++) {
           PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(i);
@@ -1671,11 +1671,11 @@ public class PptTopLevel
 
 
     for (int i=0; i<exclusive_conditions.length; i++) {
-      Assert.assert(exclusive_conditions[i].length == 2);
+      Assert.assertTrue(exclusive_conditions[i].length == 2);
       Invariant excl1 = exclusive_conditions[i][0];
       Invariant excl2 = exclusive_conditions[i][1];
-      Assert.assert(excl1 != null);
-      Assert.assert(excl2 != null);
+      Assert.assertTrue(excl1 != null);
+      Assert.assertTrue(excl2 != null);
 
       if (debugAddImplications.isDebugEnabled()) {
         debugAddImplications.debug("Adding implications with conditions "
@@ -1683,11 +1683,11 @@ public class PptTopLevel
       }
 
       for (int j=0; j<different_invariants.length; j++) {
-        Assert.assert(different_invariants[j].length == 2);
+        Assert.assertTrue(different_invariants[j].length == 2);
         Invariant diff1 = different_invariants[j][0];
         Invariant diff2 = different_invariants[j][1];
 
-        Assert.assert((diff1 == null) || (diff2 == null)
+        Assert.assertTrue((diff1 == null) || (diff2 == null)
                       || (ArraysMDE.indexOf(excls1, diff1)
                           == ArraysMDE.indexOf(excls2, diff2)));
 
@@ -1810,7 +1810,7 @@ public class PptTopLevel
           // inv_group.remove(canon_orig);
           for (Iterator inv_itor=hs.iterator(); inv_itor.hasNext(); ) {
             Invariant inv = (Invariant) inv_itor.next();
-            Assert.assert(canonical_inv.get(inv) == canon_orig);
+            Assert.assertTrue(canonical_inv.get(inv) == canon_orig);
             canonical_inv.put(inv, canon_new);
           }
         }
@@ -1889,7 +1889,7 @@ public class PptTopLevel
         // reason we don't break out of the loop early:  also, there will
         // be few invariants in a slice, so breaking out is of minimal
         // benefit.)
-        Assert.assert(inv1.isExclusiveFormula(inv2)
+        Assert.assertTrue(inv1.isExclusiveFormula(inv2)
                       == inv2.isExclusiveFormula(inv1),
                       "Bad exclusivity: " + inv1.isExclusiveFormula(inv2) + " " + inv2.isExclusiveFormula(inv1)
                        + "    " + inv1.format() + "    " + inv2.format());
@@ -1987,7 +1987,7 @@ public class PptTopLevel
       try {
         StringBuffer result = new StringBuffer("(AND " + Global.lineSep);
         InputStream bg_stream = PptTopLevel.class.getResourceAsStream("simplify/daikon-background.txt");
-        Assert.assert(bg_stream != null, "Could not find simplify/daikon-background.txt");
+        Assert.assertTrue(bg_stream != null, "Could not find simplify/daikon-background.txt");
         BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream));
         String line;
         while ((line = lines.readLine()) != null) {
@@ -2114,7 +2114,7 @@ public class PptTopLevel
         Global.debugSimplify.debug("cmp(" + i + "," + (i+1) + ") = " + cmp);
         int rev_cmp = icfp.compare(invs[i+1], invs[i]);
         Global.debugSimplify.debug("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
-        Assert.assert(rev_cmp >= 0);
+        Assert.assertTrue(rev_cmp >= 0);
       }
     }
 

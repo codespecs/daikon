@@ -28,15 +28,16 @@ public final class SequenceLength
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assert(vi.rep_type.isArray());
+    Assert.assertTrue(vi.rep_type.isArray());
 
     if (vi.derived != null) {
-      Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
+      Assert.assertTrue((vi.derived instanceof SequenceScalarSubsequence) ||
                     (vi.derived instanceof SequenceStringIntersection) ||
                     (vi.derived instanceof SequenceScalarIntersection) ||
                     (vi.derived instanceof SequenceStringUnion) ||
                     (vi.derived instanceof SequenceScalarUnion) ||
-                    (vi.derived instanceof SequencesConcat)      ||
+                    (vi.derived instanceof SequencesConcat) ||
+                    (vi.derived instanceof SequencesPredicate) ||
                     (vi.derived instanceof SequencesJoin)
                     );
 

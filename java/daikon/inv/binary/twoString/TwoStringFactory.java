@@ -17,7 +17,7 @@ public final class TwoStringFactory {
     VarInfo var2 = ppt.var_infos[1];
 
     // Assert.assert((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));
-    Assert.assert((var1.rep_type == ProglangType.STRING)
+    Assert.assertTrue((var1.rep_type == ProglangType.STRING)
                   && (var2.rep_type == ProglangType.STRING));
 
     if (! var1.compatible(var2))

@@ -65,7 +65,7 @@ public class PptMap
     return new Iterator() {
         public boolean hasNext() {
           boolean result = iter_view.hasNext();
-          Assert.assert(result == iter_sort.hasNext());
+          Assert.assertTrue(result == iter_sort.hasNext());
           return result;
         }
         public Object next() {

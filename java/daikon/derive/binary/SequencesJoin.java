@@ -93,7 +93,7 @@ public final class SequencesJoin
       length2 = ((long[]) val2).length;
     }
 
-    Assert.assert(length1 == length2);
+    Assert.assertTrue(length1 == length2);
 
     /*
        debug.debug ("var1 name: " + var1().name);

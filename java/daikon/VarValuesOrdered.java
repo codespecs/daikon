@@ -78,14 +78,14 @@ public final class VarValuesOrdered {
 
   // Add new samples
   void add(ValueTuple vt, int count) {
-    Assert.assert(Intern.isInterned(vt.vals));
-    Assert.assert(Intern.isInterned(vt.mods));
+    Assert.assertTrue(Intern.isInterned(vt.vals));
+    Assert.assertTrue(Intern.isInterned(vt.mods));
     add(vt.vals, vt.mods, count);
   }
 
   void add(Object[] vals, int[] mods, int count) {
-    Assert.assert(Intern.isInterned(vals));
-    Assert.assert(Intern.isInterned(mods));
+    Assert.assertTrue(Intern.isInterned(vals));
+    Assert.assertTrue(Intern.isInterned(mods));
     // System.out.println("VarValuesOrdered.add(" + vals + ", " + mods + ", " + count + ")");
     int last_index = values.size()-1;
     if ((last_index > 0)
@@ -103,7 +103,7 @@ public final class VarValuesOrdered {
     tuplemod_samples[tuplemod] += count;
     num_samples += count;
 
-    Assert.assert(Intern.isInterned(vals));
+    Assert.assertTrue(Intern.isInterned(vals));
     values_set.add(vals);
   }
 
@@ -119,8 +119,8 @@ public final class VarValuesOrdered {
     for (int i=0; i<values.size(); i++) {
       Object[] vals = (Object[]) values.elementAt(i);
       int[] mods = (int[]) modbits.elementAt(i);
-      Assert.assert(vals.length == old_num_vars);
-      Assert.assert(mods.length == old_num_vars);
+      Assert.assertTrue(vals.length == old_num_vars);
+      Assert.assertTrue(mods.length == old_num_vars);
       ValueTuple vt = ValueTuple.makeFromInterned(vals, mods);
       vt.extend(derivs);
       values.set(i, vt.vals);
@@ -189,7 +189,7 @@ public final class VarValuesOrdered {
   // public Set keySet() { return map.keySet(); }
   // /** Associates the specified value with the specified key in this map. */
   // public int put(ValueTuple key, int value) {
-  //   Assert.assert(value >= 0);
+  //   Assert.assertTrue(value >= 0);
   //   Object prev_object = map.put(key, new Integer(value));
   //   int tuplemod = key.tupleMod();
   //   int prev = (prev_object == null) ? 0 : ((Integer)prev_object).intValue();
@@ -245,19 +245,19 @@ public final class VarValuesOrdered {
 
   public void dump() {
     int tuple_len = -1;
-    Assert.assert(values.size() == modbits.size());
-    Assert.assert(values.size() == counts.size());
+    Assert.assertTrue(values.size() == modbits.size());
+    Assert.assertTrue(values.size() == counts.size());
     for (int i=0; i<values.size(); i++) {
       Object[] vals = (Object[]) values.elementAt(i);
       int[] mods = (int[]) modbits.elementAt(i);
       int count = ((Integer) counts.elementAt(i)).intValue();
       if (i==0) { tuple_len = vals.length; }
-      Assert.assert(vals.length == tuple_len);
-      Assert.assert(mods.length == tuple_len);
+      Assert.assertTrue(vals.length == tuple_len);
+      Assert.assertTrue(mods.length == tuple_len);
       System.out.println(ValueTuple.valsToString(vals) + " "
                          + ArraysMDE.toString(mods) + ": " + count);
-      Assert.assert(Intern.isInterned(vals));
-      Assert.assert(Intern.isInterned(mods));
+      Assert.assertTrue(Intern.isInterned(vals));
+      Assert.assertTrue(Intern.isInterned(mods));
     }
   }
 

@@ -32,8 +32,8 @@ public final class TwoScalarFactory {
 
 
     // Assert.assert((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));
-    Assert.assert(var1.rep_type.isScalar());
-    Assert.assert(var2.rep_type.isScalar());
+    Assert.assertTrue(var1.rep_type.isScalar());
+    Assert.assertTrue(var2.rep_type.isScalar());
 
     if (! var1.compatible(var2)) {
       debug.debug ("Not comparable, returning");

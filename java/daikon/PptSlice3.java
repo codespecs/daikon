@@ -29,7 +29,7 @@ public final class PptSlice3
   /**
    * Debug tracer
    **/
-  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice3" );
+  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice3");
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
@@ -43,7 +43,7 @@ public final class PptSlice3
 
   public PptSlice3 (PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
-    Assert.assert(var_infos.length == 3 );
+    Assert.assertTrue(var_infos.length == 3);
 
     Dataflow.init_pptslice_po(this);
 
@@ -62,7 +62,7 @@ public final class PptSlice3
   }
 
   void instantiate_invariants() {
-    Assert.assert(!no_invariants);
+    Assert.assertTrue(!no_invariants);
 
     // This test should be done by caller (PptTopLevel):
     // if (isControlled()) return;
@@ -113,7 +113,7 @@ public final class PptSlice3
     int result =  tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
 
-    Assert.assert(result >= 0);
+    Assert.assertTrue(result >= 0);
     return result;
   }
 
@@ -122,12 +122,12 @@ public final class PptSlice3
      int result =  tm_total[1] + tm_total[2] + tm_total[3]
        + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
 
-    Assert.assert(result >= 0);
+    Assert.assertTrue(result >= 0);
     return result;
   }
 
   public String tuplemod_samples_summary() {
-    Assert.assert(! no_invariants);
+    Assert.assertTrue(! no_invariants);
     return "UUU=" + tm_total[0]
       + ", UUM=" + tm_total[1]
       + ", UMU=" + tm_total[2]
@@ -165,11 +165,11 @@ public final class PptSlice3
    * ValueTuple that encapsulates objects of any type whatever.)
    **/
   void add(ValueTuple full_vt, int count) {
-    Assert.assert(! no_invariants);
-    Assert.assert(invs.size() > 0);
-    // Assert.assert(! already_seen_all); // [INCR]
+    Assert.assertTrue(! no_invariants);
+    Assert.assertTrue(invs.size() > 0);
+    // Assert.assertTrue(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
-      Assert.assert(invs.get(i) != null);
+      Assert.assertTrue(invs.get(i) != null);
     }
 
     //     if (Global.debugInfer.isDebugEnabled()) {
@@ -188,7 +188,7 @@ public final class PptSlice3
       return;
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assert(vi1.is_static_constant);
+      Assert.assertTrue(vi1.is_static_constant);
       mod1 = ((num_mod_non_missing_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
@@ -199,7 +199,7 @@ public final class PptSlice3
       return;
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assert(vi2.is_static_constant);
+      Assert.assertTrue(vi2.is_static_constant);
       mod2 = ((num_mod_non_missing_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
@@ -210,7 +210,7 @@ public final class PptSlice3
       return;
     }
     if (mod3 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assert(vi3.is_static_constant);
+      Assert.assertTrue(vi3.is_static_constant);
       mod3 = ((num_mod_non_missing_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
@@ -248,12 +248,12 @@ public final class PptSlice3
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
 
-    Assert.assert((mod1 == vi1.getModified(full_vt))
+    Assert.assertTrue((mod1 == vi1.getModified(full_vt))
                   || ((vi1.getModified(full_vt) == ValueTuple.STATIC_CONSTANT)
                       && ((mod1 == ValueTuple.UNMODIFIED)
                           || (mod1 == ValueTuple.MODIFIED))));
 
-    Assert.assert((mod1 != ValueTuple.MISSING)
+    Assert.assertTrue((mod1 != ValueTuple.MISSING)
                   && (mod2 != ValueTuple.MISSING)
                   && (mod3 != ValueTuple.MISSING));
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
@@ -281,7 +281,7 @@ public final class PptSlice3
   }
 
   public void addInvariant(Invariant invariant) {
-    Assert.assert(invariant != null);
+    Assert.assertTrue(invariant != null);
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (Global.debugStatistics.isDebugEnabled() || this.debugged || debugSpecific.isDebugEnabled())
@@ -292,7 +292,7 @@ public final class PptSlice3
       // Make this invariant up to date by supplying it with all the values
       // which have already been seen.
       // (Do not do
-      //   Assert.assert(values_cache.entrySet().size() > 0);
+      //   Assert.assertTrue(values_cache.entrySet().size() > 0);
       // because all the values might have been missing.  We used to ignore
       // variables that could have some missing values, but no longer.)
 

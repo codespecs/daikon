@@ -33,7 +33,7 @@ public final class ThreeScalarFactory {
     VarInfo var2 = ppt.var_infos[1];
     VarInfo var3 = ppt.var_infos[2];
 
-    Assert.assert(var1.rep_type.isIntegral()
+    Assert.assertTrue(var1.rep_type.isIntegral()
                   && var2.rep_type.isIntegral()
                   && var3.rep_type.isIntegral());
 
@@ -51,7 +51,7 @@ public final class ThreeScalarFactory {
       return null;
     }
     // Check transitivity of "compatible" relationship.
-    Assert.assert(var1.compatible(var3));
+    Assert.assertTrue(var1.compatible(var3));
 
     {
       Vector result = new Vector();

@@ -57,7 +57,7 @@ public final class SequenceInitialFactory extends UnaryDerivationFactory {
     }
 
     int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
-    Assert.assert(num_invs > 0,
+    Assert.assertTrue(num_invs > 0,
                   "No SequenceInitial invariants to instantiate; "
                   + "lowerbound=" + lowerbound
                   + ", upperbound=" + upperbound
@@ -71,7 +71,7 @@ public final class SequenceInitialFactory extends UnaryDerivationFactory {
       }
     }
     // No longer needed (I hope!).
-    // Assert.assert(j == num_invs,
+    // Assert.assertTrue(j == num_invs,
     //               "SequenceInitial(" + vi.name + "): "
     //               + "j=" + j + ", num_invs=" + num_invs
     //               + ",lowerbound=" + lowerbound

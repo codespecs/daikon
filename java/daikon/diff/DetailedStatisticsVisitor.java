@@ -134,7 +134,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    **/
   private static double calculateProbabilityDifference(Invariant inv1,
                                                       Invariant inv2) {
-    Assert.assert(inv1 != null && inv2 != null);
+    Assert.assertTrue(inv1 != null && inv2 != null);
     double prob1 = Math.min(inv1.getProbability(), 1);
     double prob2 = Math.min(inv2.getProbability(), 1);
     double diff = Math.abs(prob1 - prob2);

@@ -72,7 +72,7 @@ public final class FunctionUnaryCore
   }
 
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
-    Assert.assert(function == null);
+    Assert.assertTrue(function == null);
     function = UtilMDE.methodForName(methodname);
   }
 

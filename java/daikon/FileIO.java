@@ -387,7 +387,7 @@ public final class FileIO {
     if (static_constant_value_string != null) {
       static_constant_value = rep_type.parse_value(static_constant_value_string);
       // Why can't the value be null?
-      Assert.assert(static_constant_value != null);
+      Assert.assertTrue(static_constant_value != null);
     }
     VarComparability comparability
       = VarComparability.parse(varcomp_format, comparability_string, prog_type);
@@ -608,7 +608,7 @@ public final class FileIO {
             System.out.print(":");
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-        Assert.assert(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
+        Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
 
         VarInfo[] vis = ppt.var_infos;
 
@@ -618,7 +618,7 @@ public final class FileIO {
         int num_tracevars = ppt.num_tracevars;
         int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
         // This is no longer true; we now derive variables before reading dtrace!
-        // Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
+        // Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
@@ -638,7 +638,7 @@ public final class FileIO {
           if ("this_invocation_nonce".equals(nonce_name_maybe)) {
 
               String nonce_name = reader.readLine();
-              Assert.assert(nonce_name.equals("this_invocation_nonce"));
+              Assert.assertTrue(nonce_name.equals("this_invocation_nonce"));
               nonce = new Integer(reader.readLine());
 
               if (Global.debugPrintDtrace) {
@@ -841,17 +841,17 @@ public final class FileIO {
     }
 
     for (int vi_index=0, val_index=0; val_index<num_tracevars; vi_index++) {
-      Assert.assert(vi_index < vis.length
+      Assert.assertTrue(vi_index < vis.length
                     // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
                     );
       VarInfo vi = vis[vi_index];
-      Assert.assert((! vi.is_static_constant)
+      Assert.assertTrue((! vi.is_static_constant)
                     || (vi.value_index == -1)
                     // , "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
                     );
       if (vi.is_static_constant)
         continue;
-      Assert.assert(val_index == vi.value_index
+      Assert.assertTrue(val_index == vi.value_index
                     // , "Differing val_index = " + val_index
                     // + " and vi.value_index = " + vi.value_index
                     // + " for " + vi.name + lineSep + vi.repr()
@@ -937,7 +937,7 @@ public final class FileIO {
         // System.out.println("Mod is " + mod + " (missing=" + ValueTuple.MISSING + "), rep=" + value_rep + " (modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
         vals[val_index] = vi.rep_type.parse_value(value_rep);
         // Testing, to catch a particular value once upon a time.
-        // Assert.assert(! vals[val_index].equals("null"));
+        // Assert.assertTrue(! vals[val_index].equals("null"));
       }
       val_index++;
 
@@ -951,7 +951,7 @@ public final class FileIO {
 
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
-    Assert.assert((blank_line == null) || (blank_line.equals("")),
+    Assert.assertTrue((blank_line == null) || (blank_line.equals("")),
                   "Line " + reader.getLineNumber() + ": " + blank_line);
   }
 
@@ -1025,10 +1025,10 @@ public final class FileIO {
           call_hashmap.remove(nonce);
         }
       }
-      Assert.assert(invoc != null);
+      Assert.assertTrue(invoc != null);
       {
         /* [INCR] punt cumulative modbits
-        Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars
+        Assert.assertTrue(ppt.num_orig_vars == entry_ppt.num_tracevars
                       // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
                       );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
@@ -1047,7 +1047,7 @@ public final class FileIO {
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
           if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
-            Assert.assert(vals[ppt.num_tracevars+i] == null);
+            Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
           }
         }
         /* [INCR] punt again
@@ -1067,10 +1067,10 @@ public final class FileIO {
     ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
     int filled_slots = ppt.num_orig_vars+ppt.num_tracevars+ppt.num_static_constant_vars;
     for (int i=0; i<filled_slots; i++) {
-      Assert.assert(!ppt.var_infos[i].isDerived());
+      Assert.assertTrue(!ppt.var_infos[i].isDerived());
     }
     for (int i=filled_slots; i<ppt.var_infos.length; i++) {
-      Assert.assert(ppt.var_infos[i].isDerived(),
+      Assert.assertTrue(ppt.var_infos[i].isDerived(),
                     "variable not derived: " + ppt.var_infos[i].repr());
     }
     int num_const = ppt.num_static_constant_vars;

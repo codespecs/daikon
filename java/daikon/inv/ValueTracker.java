@@ -24,7 +24,7 @@ public final class ValueTracker
   private int[] values_cache;
 
   public ValueTracker(int max_values) {
-    Assert.assert(max_values > 0);
+    Assert.assertTrue(max_values > 0);
     this.max_values = max_values;
     this.values_cache = new int[max_values];
   }

@@ -95,7 +95,7 @@ public abstract class VarInfoName
     }
 
     if (name.startsWith("orig(")) {
-      Assert.assert(name.endsWith(")"));
+      Assert.assertTrue(name.endsWith(")"));
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
@@ -373,7 +373,7 @@ public abstract class VarInfoName
     if (node == replacement)
       return this;
 
-    // Assert.assert(! replacement.hasNode(node)); // no infinite loop
+    // Assert.assertTrue(! replacement.hasNode(node)); // no infinite loop
     // It doesn't make sense to assert this as we have plenty of times when
     // we want to replace x by y where y may contain x.
 
@@ -484,7 +484,7 @@ public abstract class VarInfoName
 
     public final String name;
     public Simple(String name) {
-      Assert.assert(name != null);
+      Assert.assertTrue(name != null);
       this.name = name;
     }
     public boolean isLiteralConstant() {
@@ -586,7 +586,7 @@ public abstract class VarInfoName
     // The simple approach is wrong because this might be "orig(a[])"
     // return (new SizeOf((Elements) this)).intern();
     Elements elems = (new ElementsFinder(this)).elems();
-    Assert.assert(elems != null,
+    Assert.assertTrue(elems != null,
                   "applySize should have elements to use in " + this + ";\n"
                   + "that is, " + this + " does not appear to be a sequence/collection.\n"
                   + "Perhaps its name should be suffixed by \"[]\"?");
@@ -607,7 +607,7 @@ public abstract class VarInfoName
 
     public final Elements sequence;
     public SizeOf(Elements sequence) {
-      Assert.assert(sequence != null);
+      Assert.assertTrue(sequence != null);
       this.sequence = sequence;
     }
     protected String repr_impl() {
@@ -684,8 +684,8 @@ public abstract class VarInfoName
     public final String function;
     public final VarInfoName argument;
     public FunctionOf(String function, VarInfoName argument) {
-      Assert.assert(function != null);
-      Assert.assert(argument != null);
+      Assert.assertTrue(function != null);
+      Assert.assertTrue(argument != null);
       this.function = function;
       this.argument = argument;
     }
@@ -741,8 +741,8 @@ public abstract class VarInfoName
      * @param args the arguments to the function, of type VarInfoName
      **/
     public FunctionOfN(String function, List args) {
-      Assert.assert(function != null);
-      Assert.assert(args != null);
+      Assert.assertTrue(function != null);
+      Assert.assertTrue(args != null);
       this.args = args;
       this.function = function;
     }
@@ -830,7 +830,7 @@ public abstract class VarInfoName
    * "intersect(a[], b[])"
    **/
   public VarInfoName applyIntersection(VarInfoName seq2) {
-    Assert.assert(seq2 != null);
+    Assert.assertTrue(seq2 != null);
     return (new Intersection(this, seq2)).intern();
   }
 
@@ -859,7 +859,7 @@ public abstract class VarInfoName
    * "union(a[], b[])"
    **/
   public VarInfoName applyUnion(VarInfoName seq2) {
-    Assert.assert(seq2 != null);
+    Assert.assertTrue(seq2 != null);
     return (new Union(this, seq2)).intern();
   }
 
@@ -903,8 +903,8 @@ public abstract class VarInfoName
     public final VarInfoName term;
     public final String field;
     public Field(VarInfoName term, String field) {
-      Assert.assert(term != null);
-      Assert.assert(field != null);
+      Assert.assertTrue(term != null);
+      Assert.assertTrue(field != null);
       this.term = term;
       this.field = field;
     }
@@ -972,7 +972,7 @@ public abstract class VarInfoName
 
     public final VarInfoName term;
     public TypeOf(VarInfoName term) {
-      Assert.assert(term != null);
+      Assert.assertTrue(term != null);
       this.term = term;
     }
     protected String repr_impl() {
@@ -1032,7 +1032,7 @@ public abstract class VarInfoName
 
     public final VarInfoName term;
     public Prestate(VarInfoName term) {
-      Assert.assert(term != null);
+      Assert.assertTrue(term != null);
       this.term = term;
     }
     protected String repr_impl() {
@@ -1069,14 +1069,14 @@ public abstract class VarInfoName
 
   // sansOrig()
   //      int origpos = s.indexOf("orig(");
-  //      Assert.assert(origpos != -1);
+  //      Assert.assertTrue(origpos != -1);
   //      int rparenpos = s.lastIndexOf(")");
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
 
   //      int origpos = s.indexOf("\\old(");
-  //      Assert.assert(origpos != -1);
+  //      Assert.assertTrue(origpos != -1);
   //      int rparenpos = s.lastIndexOf(")");
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
@@ -1102,7 +1102,7 @@ public abstract class VarInfoName
 
     public final VarInfoName term;
     public Poststate(VarInfoName term) {
-      Assert.assert(term != null);
+      Assert.assertTrue(term != null);
       this.term = term;
     }
     protected String repr_impl() {
@@ -1156,7 +1156,7 @@ public abstract class VarInfoName
     public final VarInfoName term;
     public final int amount;
     public Add(VarInfoName term, int amount) {
-      Assert.assert(term != null);
+      Assert.assertTrue(term != null);
       this.term = term;
       this.amount = amount;
     }
@@ -1229,7 +1229,7 @@ public abstract class VarInfoName
 
     public final VarInfoName term;
     public Elements(VarInfoName term) {
-      Assert.assert(term != null);
+      Assert.assertTrue(term != null);
       this.term = term;
     }
     protected String repr_impl() {
@@ -1327,10 +1327,10 @@ public abstract class VarInfoName
    * "this[i]"
    **/
   public VarInfoName applySubscript(VarInfoName index) {
-    Assert.assert(index != null);
+    Assert.assertTrue(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assert(elems != null, "applySubscript should have elements to use in " + this);
+    Assert.assertTrue(elems != null, "applySubscript should have elements to use in " + this);
     if (finder.inPre()) {
       index = indexToPrestate(index);
     }
@@ -1363,8 +1363,8 @@ public abstract class VarInfoName
     public final Elements sequence;
     public final VarInfoName index;
     public Subscript(Elements sequence, VarInfoName index) {
-      Assert.assert(sequence != null);
-      Assert.assert(index != null);
+      Assert.assertTrue(sequence != null);
+      Assert.assertTrue(index != null);
       this.sequence = sequence;
       this.index = index;
     }
@@ -1416,7 +1416,7 @@ public abstract class VarInfoName
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assert(elems != null);
+    Assert.assertTrue(elems != null);
     if (finder.inPre()) {
       if (i != null) {
         i = indexToPrestate(i);
@@ -1439,8 +1439,8 @@ public abstract class VarInfoName
     public final Elements sequence;
     public final VarInfoName i, j;
     public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
-      Assert.assert(sequence != null);
-      Assert.assert((i != null) || (j != null));
+      Assert.assertTrue(sequence != null);
+      Assert.assertTrue((i != null) || (j != null));
       this.sequence = sequence;
       this.i = i;
       this.j = j;
@@ -1598,7 +1598,7 @@ public abstract class VarInfoName
      **/
     public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
-      Assert.assert(root.accept(this) != null);
+      Assert.assertTrue(root.accept(this) != null);
     }
     // state and accessors
     private final VarInfoName goal;
@@ -2022,7 +2022,7 @@ public abstract class VarInfoName
     extends AbstractVisitor
   {
     public QuantifierVisitor(VarInfoName root) {
-      Assert.assert(root != null);
+      Assert.assertTrue(root != null);
       simples = new HashSet();
       unquant = new HashSet();
       root.accept(this);
@@ -2172,10 +2172,10 @@ public abstract class VarInfoName
      * index (inclusive), in that order.
      **/
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
-      Assert.assert(root != null);
-      Assert.assert(needy != null);
-      Assert.assert(index != null);
-      Assert.assert((needy instanceof Elements) || (needy instanceof Slice));
+      Assert.assertTrue(root != null);
+      Assert.assertTrue(needy != null);
+      Assert.assertTrue(index != null);
+      Assert.assertTrue((needy instanceof Elements) || (needy instanceof Slice));
 
       // Figure out what to replace needy with, and the appropriate
       // bounds to use
@@ -2195,7 +2195,7 @@ public abstract class VarInfoName
         // unreachable; placate javac
         throw new IllegalStateException();
       }
-      Assert.assert(replace_with != null);
+      Assert.assertTrue(replace_with != null);
 
       // If needy was in prestate, adjust bounds appropriately
       if (root.inPrestateContext(needy)) {
@@ -2218,9 +2218,9 @@ public abstract class VarInfoName
       // replace needy
       VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
 
-      Assert.assert(root_prime != null);
-      Assert.assert(lower != null);
-      Assert.assert(upper != null);
+      Assert.assertTrue(root_prime != null);
+      Assert.assertTrue(lower != null);
+      Assert.assertTrue(upper != null);
 
       return new VarInfoName[] { root_prime, lower, upper };
     }
@@ -2241,7 +2241,7 @@ public abstract class VarInfoName
      * for the new variables.
      **/
     public static QuantifyReturn quantify(VarInfoName[] roots) {
-      Assert.assert(roots != null);
+      Assert.assertTrue(roots != null);
 
       if (QuantHelper.debug.isDebugEnabled()) {
         QuantHelper.debug.debug("roots: " + Arrays.asList(roots));
@@ -2283,12 +2283,12 @@ public abstract class VarInfoName
           // We assume that the input was one unquantified sequence
           // variable.  If uq has more than one element, then the
           // sequence had more than one dimension.
-          Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
+          Assert.assertTrue(uq.size() == 1, "We can only handle 1D arrays for now");
 
           VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
           VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
-          Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
+          Assert.assertTrue(!simples.contains(idx), "Index variable unexpectedly used");
 
           if (QuantHelper.debug.isDebugEnabled()) {
             QuantHelper.debug.debug("idx: " + idx);
@@ -2333,7 +2333,7 @@ public abstract class VarInfoName
       }
 
       public IOAQuantification (VarInfo[] sets) {
-        Assert.assert(sets != null);
+        Assert.assertTrue(sets != null);
 
         this.sets = sets;
         numVars = sets.length;
@@ -2348,7 +2348,7 @@ public abstract class VarInfoName
         // Build the quantifier
         StringBuffer quantifier = new StringBuffer();
         for (int i=0; i < qret.bound_vars.size(); i++) {
-          // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+          // Assert.assertTrue(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
           VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
           quantifier.append (quantifierUniversal);
           quantifier.append (var.ioa_name());
@@ -2416,7 +2416,7 @@ public abstract class VarInfoName
     public static String[] format_ioa(VarInfo[] sets) {
 
 
-      Assert.assert(sets != null);
+      Assert.assertTrue(sets != null);
 
 
       VarInfoName[] setnames = new VarInfoName[sets.length];
@@ -2430,7 +2430,7 @@ public abstract class VarInfoName
       // Build the quantifier
       StringBuffer quantifier = new StringBuffer();
       for (int i=0; i < qret.bound_vars.size(); i++) {
-        // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+        // Assert.assertTrue(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
         VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 
         quantifier.append ("\\A ");
@@ -2459,7 +2459,7 @@ public abstract class VarInfoName
       int numConditions = 0;
 
       for (int i=0; i < qret.bound_vars.size(); i++) {
-        // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+        // Assert.assertTrue(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
         VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
         if (i != 0)
           ptr_list.append(", ");
@@ -2577,7 +2577,7 @@ public abstract class VarInfoName
       return format_simplify(roots, false);
     }
     public static String[] format_simplify(VarInfoName[] roots, boolean elementwise) {
-      Assert.assert(roots != null);
+      Assert.assertTrue(roots != null);
 
       QuantifyReturn qret = quantify(roots);
 
@@ -2667,7 +2667,7 @@ public abstract class VarInfoName
       return format_java_style(roots, elementwise, true, format);
     }
     protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise, boolean forall, OutputFormat format) {
-      Assert.assert(roots != null);
+      Assert.assertTrue(roots != null);
 
       QuantifyReturn qret = quantify(roots);
 

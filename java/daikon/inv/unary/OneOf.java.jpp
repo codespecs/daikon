@@ -153,7 +153,7 @@ public final class ONEOFSCALAR
     is_boolean = (var().file_rep_type == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type == ProglangType.HASHCODE);
 #elif defined(ELT) || defined(SEQUENCE)
-    Assert.assert(var().type.isPseudoArray(),
+    Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
@@ -332,7 +332,7 @@ public final class ONEOFSCALAR
     if (num_elts == 1) {
 #if defined(SCALAR) || defined(ELT)
       if (is_boolean) {
-        Assert.assert((elts[0] == 0) || (elts[0] == 1));
+        Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
@@ -348,7 +348,7 @@ public final class ONEOFSCALAR
 #elif defined(SEQUENCE)
       if (is_hashcode) {
         // we only have one value, because add_modified dies if more
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         INT value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
@@ -426,8 +426,8 @@ public final class ONEOFSCALAR
     }
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 2) {
@@ -455,7 +455,7 @@ public final class ONEOFSCALAR
         String classname = this.getClass().toString().substring(6); // remove leading "class"
         result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
       } else {
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
         INT value = elts[0];
         if (var().name.isApplySizeSafe()) {
@@ -537,11 +537,11 @@ public final class ONEOFSCALAR
 
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " = " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       if (elts[0] == 0) {
         result = varname + " = " + "null";
       } else {
@@ -559,7 +559,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "size("+var().name.ioa_name() + ") = " + value.length;
@@ -686,8 +686,8 @@ public final class ONEOFSCALAR
     result = result.replace('$', '.');
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 1) {
@@ -701,9 +701,9 @@ public final class ONEOFSCALAR
         }
       } else {
         // add_modified allows two elements iff one is null
-        Assert.assert(num_elts == 2);
-        Assert.assert(elts[0] == 0);
-        Assert.assert(elts[1] != 0);
+        Assert.assertTrue(num_elts == 2);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
@@ -718,7 +718,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
       if (var().type.isArray()) {
         if (var().name.isApplySizeSafe()) {
@@ -816,8 +816,8 @@ public final class ONEOFSCALAR
     }
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 2) {
@@ -845,7 +845,7 @@ public final class ONEOFSCALAR
         String classname = this.getClass().toString().substring(6); // remove leading "class"
         result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
       } else {
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
         INT value = elts[0];
         if (var().name.isApplySizeSafe()) {
@@ -914,17 +914,17 @@ public final class ONEOFSCALAR
     }
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
         result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
       } else {
         // add_modified allows two elements iff one is null
-        Assert.assert(num_elts == 2);
-        Assert.assert(elts[0] == 0);
-        Assert.assert(elts[1] != 0);
+        Assert.assertTrue(num_elts == 2);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
     } else {
@@ -944,7 +944,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
@@ -985,7 +985,7 @@ public final class ONEOFSCALAR
 #else
   public void add_modified(INT v, int count) {
 #ifndef SCALAR
-    Assert.assert(Intern.isInterned(v));
+    Assert.assertTrue(Intern.isInterned(v));
 #endif
 #endif
     for (int i=0; i<num_elts; i++)
@@ -1061,7 +1061,7 @@ public final class ONEOFSCALAR
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
     if (var().isStaticConstant()) {
-      Assert.assert(num_elts <= 1);
+      Assert.assertTrue(num_elts <= 1);
       return true;
     }
     return super.isObviousDerived();
@@ -1151,10 +1151,10 @@ public final class ONEOFSCALAR
                 (elts[0] != 0 && other.elts[0] != 0));
       } else if (num_elts == 2 && other.num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assert(elts[0] == 0);
-        Assert.assert(other.elts[0] == 0);
-        Assert.assert(elts[1] != 0);
-        Assert.assert(other.elts[1] != 0);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(other.elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
+        Assert.assertTrue(other.elts[1] != 0);
 
         // Since we know the first elements of each invariant are
         // zero, and the second elements are nonzero, we can immediately
@@ -1177,7 +1177,7 @@ public final class ONEOFSCALAR
 
     if (is_hashcode && other.is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1 && other.num_elts == 1);
+      Assert.assertTrue(num_elts == 1 && other.num_elts == 1);
 
       long[] thisSeq = elts[0];
       long[] otherSeq = other.elts[0];
@@ -1249,7 +1249,7 @@ public final class ONEOFSCALAR
 
   // Look up a previously instantiated invariant.
   public static ONEOFSCALAR find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof ONEOFSCALAR)

@@ -17,7 +17,7 @@ public final class IsEqualityComparison implements Filter {
   private IsEqualityComparison() { }
 
   public boolean accept(Object o) {
-    Assert.assert(o instanceof Invariant);
+    Assert.assertTrue(o instanceof Invariant);
     if (!(o instanceof Comparison))
       return false;
     double chance_prob = ((Comparison) o).eq_probability();

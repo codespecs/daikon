@@ -96,7 +96,7 @@ public final class ProglangType
    * basetype should be interned.
    **/
   private ProglangType(String basetype, int dims) {
-    Assert.assert(basetype == basetype.intern());
+    Assert.assertTrue(basetype == basetype.intern());
     base = basetype;
     pseudoDimensions = dimensions = dims;
 
@@ -181,7 +181,7 @@ public final class ProglangType
   /** @param t_base must be interned **/
   private static ProglangType find(String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
-//    Assert.assert(t_base == t_base.intern());
+//    Assert.assertTrue(t_base == t_base.intern());
 
     // the string maps us to a vec of all plts with that base
     Vector v = (Vector)all_known_types.get(t_base);
@@ -215,7 +215,7 @@ public final class ProglangType
 
   private static ProglangType intern(String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
-//    Assert.assert(t_base == t_base.intern());
+//    Assert.assertTrue(t_base == t_base.intern());
     ProglangType result = find(t_base, t_dims);
     if (result != null) {
       return result;
@@ -251,7 +251,7 @@ public final class ProglangType
       return OBJECT;
     if (dimensions == 0)
       throw new Error("Called elementType on non-array type " + format());
-    Assert.assert(base == base.intern(), "Uninterned base " + base);
+    Assert.assertTrue(base == base.intern(), "Uninterned base " + base);
     return ProglangType.intern(base, dimensions-1);
   }
 
@@ -304,7 +304,7 @@ public final class ProglangType
         if (! (value.startsWith("\"") && value.endsWith("\""))) {
           System.out.println("Unquoted string value: " + value);
         }
-        // Assert.assert(value.startsWith("\"") && value.endsWith("\""));
+        // Assert.assertTrue(value.startsWith("\"") && value.endsWith("\""));
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring(1, value.length()-1);
         value = UtilMDE.unquote(value);
@@ -356,7 +356,7 @@ public final class ProglangType
 
       // Try requiring the square brackets around arrays (permits
       // distinguishing between null and an array containing just null).
-      Assert.assert(value.startsWith("[") && value.endsWith("]"),
+      Assert.assertTrue(value.startsWith("[") && value.endsWith("]"),
                     "Array values must be enlosed in square brackets");
       // Deal with [] surrounding Java array output
       if (value.startsWith("[") && value.endsWith("]")) {
@@ -376,7 +376,7 @@ public final class ProglangType
             if (parser.ttype == '\"') {
               v.add(parser.sval);
             } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-              Assert.assert(parser.sval.equals("null"));
+              Assert.assertTrue(parser.sval.equals("null"));
               v.add(null);
             } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
               v.add(Integer.toString((int)parser.nval));

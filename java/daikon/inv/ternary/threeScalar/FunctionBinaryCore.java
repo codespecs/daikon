@@ -56,8 +56,8 @@ public final class FunctionBinaryCore
    * order underneath us (rearrangement given by the permutation).
    **/
   public void permute(int[] permutation) {
-    Assert.assert(permutation.length == 3);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
+    Assert.assertTrue(permutation.length == 3);
+    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     int[] new_order = new int[3];
     new_order[permutation[0]] = var_indices[var_order][0];
     new_order[permutation[1]] = var_indices[var_order][1];
@@ -68,7 +68,7 @@ public final class FunctionBinaryCore
         return;
       }
     }
-    Assert.assert(false, "Could not find new ordering");
+    Assert.assertTrue(false, "Could not find new ordering");
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {
@@ -77,7 +77,7 @@ public final class FunctionBinaryCore
   }
 
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
-    Assert.assert(function == null);
+    Assert.assertTrue(function == null);
     function = UtilMDE.methodForName(methodname);
   }
 

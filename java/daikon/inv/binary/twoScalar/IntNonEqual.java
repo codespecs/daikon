@@ -160,7 +160,7 @@ public final class IntNonEqual
   // Look up a previously instantiated IntNonEqual  relationship.
   // Should this implementation be made more efficient?
   public static IntNonEqual  find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntNonEqual)

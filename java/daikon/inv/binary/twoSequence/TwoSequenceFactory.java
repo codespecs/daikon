@@ -20,12 +20,12 @@ public final class TwoSequenceFactory {
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    Assert.assert((var1.rep_type == ProglangType.INT_ARRAY)
+    Assert.assertTrue((var1.rep_type == ProglangType.INT_ARRAY)
                   && (var2.rep_type == ProglangType.INT_ARRAY));
 
     if (! var1.compatible(var2))
@@ -70,13 +70,13 @@ public final class TwoSequenceFactory {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctions.length;
       } else {
-        Assert.assert(Intern.isInterned(super1.name));
-        Assert.assert(Intern.isInterned(super2.name));
+        Assert.assertTrue(Intern.isInterned(super1.name));
+        Assert.assertTrue(Intern.isInterned(super2.name));
         // If the variables (super1 and super2) are different, then their
         // names must be different, too.  In other words. no two distinct
         // variables have the same names.
 
-        Assert.assert(super1.name != super2.name);
+        Assert.assertTrue(super1.name != super2.name);
 
         // SeqNonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));

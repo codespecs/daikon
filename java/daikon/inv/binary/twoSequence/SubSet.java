@@ -147,7 +147,7 @@ public class SubSet
         return;
       }
     }
-    Assert.assert(var1_in_var2 || var2_in_var1);
+    Assert.assertTrue(var1_in_var2 || var2_in_var1);
   }
 
 
@@ -173,7 +173,7 @@ public class SubSet
 
   // Look up a previously instantiated SubSet relationship.
   public static SubSet find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSet)
@@ -206,7 +206,7 @@ public class SubSet
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof SubSet);
+    Assert.assertTrue(other instanceof SubSet);
     return true;
   }
 

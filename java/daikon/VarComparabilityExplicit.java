@@ -82,7 +82,7 @@ public final class VarComparabilityExplicit
   }
 
   public VarComparability elementType() {
-    Assert.assert(dimensions > 0);
+    Assert.assertTrue(dimensions > 0);
     if (cached_element_type == null) {
       cached_element_type = new VarComparabilityExplicit(base, indices, dimensions-1, alias);
     }
@@ -147,8 +147,8 @@ public final class VarComparabilityExplicit
       re_matcher.matches(rep, dims_regexp(dims));
       MatchResult match = re_matcher.getMatch();
       // "+2" because "groups" includes the whole match (group 0).
-      Assert.assert(match != null);
-      Assert.assert(match.groups() == dims+2);
+      Assert.assertTrue(match != null);
+      Assert.assertTrue(match.groups() == dims+2);
 
       String base_raw = match.group(1);
       String[] indices_raw = new String[dims];
@@ -230,7 +230,7 @@ public final class VarComparabilityExplicit
 
     // Consistency check:
     // Either both objects refer to the other name, or neither does.
-    Assert.assert((ArraysMDE.indexOf(type1.base, name2) == -1)
+    Assert.assertTrue((ArraysMDE.indexOf(type1.base, name2) == -1)
                   == (ArraysMDE.indexOf(type2.base, name1) == -1));
     if (ArraysMDE.indexOf(type1.base, name2) == -1)
       return false;

@@ -120,7 +120,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       if (classNode == null) {
         PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-        Assert.assert(className != null);
+        Assert.assertTrue(className != null);
         root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
       }
     }
@@ -132,23 +132,23 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     //  right away.
     for (Iterator iter = (new TreeSet(pptMap.nameStringSet())).iterator(); iter.hasNext(); ) {
       String name = (String) iter.next();
-      Assert.assert( name != null );
+      Assert.assertTrue( name != null );
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
-      Assert.assert( classNode != null );
+      Assert.assertTrue( classNode != null );
       //            System.out.println(name);
       if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
         String programPointName = pptName.getPoint();
         DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
         if (programPointNode == null) {
           PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-          Assert.assert(topLevel != null);
+          Assert.assertTrue(topLevel != null);
           classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
         }
       } else {          // is a regular method ppt
         String methodName = pptName.getFullMethodName();
-        Assert.assert( methodName != null );
+        Assert.assertTrue( methodName != null );
         DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
         if (methodNode == null) {
           classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
@@ -165,12 +165,12 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
         continue;
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
-      Assert.assert( classNode != null );
+      Assert.assertTrue( classNode != null );
       DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-      Assert.assert( methodName != null );
+      Assert.assertTrue( methodName != null );
       String programPointName = pptName.getPoint();
       DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
-      Assert.assert( programPointNode == null );
+      Assert.assertTrue( programPointNode == null );
 
       //  Create a node for this program point.  If this is the first program point node
       //  under this method, simply add the node.  If there are already some program point
@@ -178,7 +178,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       //  EXIT97.
       PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
       if (methodNode.getChildCount() == 0) {
-        Assert.assert(topLevel != null);
+        Assert.assertTrue(topLevel != null);
         methodNode.add( new DefaultMutableTreeNode( topLevel ));
       } else {
         int exitNumber = pptName.getPointSubscript();
@@ -189,7 +189,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
           if (currentChildExitNumber > exitNumber)
             break;
         }
-        Assert.assert(topLevel != null);
+        Assert.assertTrue(topLevel != null);
         methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
       }
     }
@@ -204,8 +204,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
     for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
       DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
-      Assert.assert( child != null );
-      Assert.assert( child.toString() != null );
+      Assert.assertTrue( child != null );
+      Assert.assertTrue( child.toString() != null );
       if (child.toString().equals( name ))
         return child;
     }

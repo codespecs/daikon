@@ -44,11 +44,11 @@ public final class SequenceInitial
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assert(vi.rep_type == ProglangType.INT_ARRAY);
+    Assert.assertTrue(vi.rep_type == ProglangType.INT_ARRAY);
     // For now, applicable if not a derived variable; a better test is if
     // not a prefix subsequence (sequence slice) we have added.
     if (vi.derived != null) {
-      Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
+      Assert.assertTrue((vi.derived instanceof SequenceScalarSubsequence) ||
                     (vi.derived instanceof SequenceScalarIntersection) ||
                     (vi.derived instanceof SequenceScalarUnion));
       return false;

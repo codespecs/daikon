@@ -113,7 +113,7 @@ public final class VarComparabilityImplicit
     if ((type1.dimensions == 0) && (type2.dimensions == 0))
       return type1.base == type2.base;
     // One array, one non-array, and the non-array isn't universally comparable.
-    Assert.assert(type1.dimensions == 0 || type2.dimensions == 0);
+    Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
     return false;
   }
 

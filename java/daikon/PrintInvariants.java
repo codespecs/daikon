@@ -355,7 +355,7 @@ public class PrintInvariants {
                      && ((VarInfoName.Field)vin).term.name().endsWith("]")) {
             // "VAR[..].field" => VAR[..];
             vi = ppt.findVar(((VarInfoName.Field)vin).term.name());
-            Assert.assert(vi != null);
+            Assert.assertTrue(vi != null);
           } else if (derived instanceof SequenceScalarSubscript) {
             vi = ((SequenceScalarSubscript)vi.derived).seqvar();
           } else if (derived instanceof SequenceStringSubscript) {
@@ -364,7 +364,7 @@ public class PrintInvariants {
             vi = ((SequenceScalarSubsequence)vi.derived).seqvar();
           } else if (derived instanceof SequenceStringSubsequence) {
             vi = ((SequenceStringSubsequence)vi.derived).seqvar();
-            Assert.assert(vi != null);
+            Assert.assertTrue(vi != null);
           } else {
             break;
           }
@@ -374,7 +374,7 @@ public class PrintInvariants {
         if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
           VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
           VarInfo base = ppt.findVar(elems.term);
-          Assert.assert(base != null);
+          Assert.assertTrue(base != null);
           if (! base.type.isArray()) {
             vi = base;
           }
@@ -564,7 +564,7 @@ public class PrintInvariants {
       if (valid_equiv.size() > 0) {
         leader = (VarInfo) valid_equiv.get(0);
       } else {
-        Assert.assert(invalid_equiv.size() > 0);
+        Assert.assertTrue(invalid_equiv.size() > 0);
         leader = (VarInfo) invalid_equiv.get(0);
       }
       // Print the equality statements, stating expressible ones first.
@@ -974,7 +974,7 @@ public class PrintInvariants {
       //                   + slice.tuplemod_samples_summary());
       // slice.values_cache.dump();
       //}
-      //Assert.assert(slice.check_modbits());
+      //Assert.assertTrue(slice.check_modbits());
 
       print_invariant(inv, out, index, ppt);
     }

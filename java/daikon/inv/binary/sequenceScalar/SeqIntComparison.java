@@ -34,8 +34,8 @@ public final class SeqIntComparison
 
   protected SeqIntComparison(PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.INT);
-    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY);
+    Assert.assertTrue(sclvar().rep_type == ProglangType.INT);
+    Assert.assertTrue(seqvar().rep_type == ProglangType.INT_ARRAY);
     core = new IntComparisonCore(this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
@@ -91,7 +91,7 @@ public final class SeqIntComparison
     //   System.out.println("SeqIntComparison instantiate: " + seqvar.name + " " + sclvar.name + " " + sclseq.name + " obvious_le=" + obvious_le + ", obvious_ge=" + obvious_ge);
     // }
 
-    Assert.assert(seqvar.eltsCompatible(sclvar));
+    Assert.assertTrue(seqvar.eltsCompatible(sclvar));
 
     boolean only_eq = ! seqvar.type.elementIsIntegral();
     return new SeqIntComparison(ppt, seq_first, only_eq, obvious_le, obvious_ge);
@@ -193,7 +193,7 @@ public final class SeqIntComparison
 
   // Look up a previously instantiated invariant.
   public static SeqIntComparison find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIntComparison)

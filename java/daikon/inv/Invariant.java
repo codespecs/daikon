@@ -101,31 +101,31 @@ public abstract class Invariant
     if (x<=1)
       return 1;
     double result = (goal - x)/(goal-1);
-    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
     return result;
   }
 
   /** Return the probability that both conditions are satisfied. */
   public static final double prob_and(double p1, double p2) {
-    Assert.assert(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
-    Assert.assert(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p2);
+    Assert.assertTrue(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
+    Assert.assertTrue(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p2);
 
     // 1 - (1-p1)*(1-p2)
     double result = p1 + p2 - p1*p2;
 
-    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result);
+    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result);
     return result;
   }
 
   /** Return the probability that all three conditions are satisfied. */
   public static final double prob_and(double p1, double p2, double p3) {
-    Assert.assert(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
-    Assert.assert(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p1);
-    Assert.assert(0 <= p3 && p3 <= 1, "prob_and: bad p3 = " + p1);
+    Assert.assertTrue(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
+    Assert.assertTrue(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p1);
+    Assert.assertTrue(0 <= p3 && p3 <= 1, "prob_and: bad p3 = " + p1);
 
     double result =  1 - (1 - p1) * (1 - p2) * (1 - p3);
 
-    Assert.assert(0 <= result && result <= 1, "prob_and: bad result = " + result);
+    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result);
     return result;
   }
 
@@ -187,7 +187,7 @@ public abstract class Invariant
       System.out.println(this.format());
     }
     // System.out.println("getProbability: " + getClass().getName() + " " + ppt.varNames());
-    Assert.assert((result == PROBABILITY_JUSTIFIED)
+    Assert.assertTrue((result == PROBABILITY_JUSTIFIED)
                   || (result == PROBABILITY_UNJUSTIFIED)
                   || (result == PROBABILITY_NEVER)
                   || ((0 <= result) && (result <= 1))
@@ -290,15 +290,15 @@ public abstract class Invariant
                              )
   {
     // Check some sanity conditions
-    Assert.assert(falsified);
-    Assert.assert(new_ppt.arity == ppt.arity);
-    Assert.assert(permutation.length == ppt.arity);
+    Assert.assertTrue(falsified);
+    Assert.assertTrue(new_ppt.arity == ppt.arity);
+    Assert.assertTrue(permutation.length == ppt.arity);
     for (int i=0; i < ppt.arity; i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
-      Assert.assert(oldvi.type == newvi.type);
-      Assert.assert(oldvi.rep_type == newvi.rep_type);
-      Assert.assert(oldvi.file_rep_type == newvi.file_rep_type);
+      Assert.assertTrue(oldvi.type == newvi.type);
+      Assert.assertTrue(oldvi.rep_type == newvi.rep_type);
+      Assert.assertTrue(oldvi.file_rep_type == newvi.file_rep_type);
     }
 
     Invariant result;
@@ -471,7 +471,7 @@ public abstract class Invariant
         return 0;
       Invariant inv1 = (Invariant)o1;
       Invariant inv2 = (Invariant)o2;
-      // Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
+      // Assert.assertTrue(inv1.ppt.parent == inv2.ppt.parent);
       VarInfo[] vis1 = inv1.ppt.var_infos;
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
@@ -612,7 +612,7 @@ public abstract class Invariant
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
-    Assert.assert(vars1.length == vars2.length); // due to inv type match already
+    Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
       VarInfo var2 = vars2[i];
@@ -878,14 +878,14 @@ public abstract class Invariant
     }
 
     // At this point, we know all variables are constant.
-    Assert.assert(this instanceof OneOf ||
+    Assert.assertTrue(this instanceof OneOf ||
                   this instanceof Comparison ||
                   this instanceof Equality
                   , "Unexpected invariant with all vars constant: "
                   + this + "  " + repr_prob() + "  " + format()
                   );
     if (this instanceof Comparison) {
-      //      Assert.assert(! IsEqualityComparison.it.accept(this));
+      //      Assert.assertTrue(! IsEqualityComparison.it.accept(this));
       if (debugPrint.isDebugEnabled())
         debugPrint.debug("  [over constants:  " + this.repr_prob() + " ]");
       return true;
@@ -1110,7 +1110,7 @@ public abstract class Invariant
       VarInfo[] vars2 = inv2.ppt.var_infos;
 
       // due to inv type match already
-      Assert.assert(vars1.length == vars2.length);
+      Assert.assertTrue(vars1.length == vars2.length);
 
       for (int i=0; i < vars1.length; i++) {
         VarInfo var1 = vars1[i];
@@ -1159,7 +1159,7 @@ public abstract class Invariant
 
       int result = inv1.format().compareTo(inv2.format());
 
-      Assert.assert(result != 0, "isSameInvariant() returned false, " +
+      Assert.assertTrue(result != 0, "isSameInvariant() returned false, " +
                     "but compareTo() returned 0");
 
       return result;

@@ -186,7 +186,7 @@ public final class Daikon {
   {
     // Read command line options
     Set[] files = read_options(args);
-    Assert.assert(files.length == 4);
+    Assert.assertTrue(files.length == 4);
     Set decls_files = files[0];  // [File]
     Set dtrace_files = files[1]; // [File]
     Set spinfo_files = files[2]; // [File]

@@ -139,28 +139,28 @@ public final class VarInfo
    * @exception RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
-    Assert.assert(ppt != null);
-    Assert.assert(name != null);
-    Assert.assert(name == name.intern());
-    Assert.assert(type != null);
-    Assert.assert(file_rep_type != null);
-    Assert.assert(rep_type != null);
-    Assert.assert(comparability != null); // anything else ??
-    Assert.assert(0 <= varinfo_index && varinfo_index < ppt.var_infos.length);
-    Assert.assert(-1 <= value_index && value_index < varinfo_index);
-    Assert.assert(is_static_constant == (value_index == -1));
-    Assert.assert(is_static_constant || (static_constant_value == null));
+    Assert.assertTrue(ppt != null);
+    Assert.assertTrue(name != null);
+    Assert.assertTrue(name == name.intern());
+    Assert.assertTrue(type != null);
+    Assert.assertTrue(file_rep_type != null);
+    Assert.assertTrue(rep_type != null);
+    Assert.assertTrue(comparability != null); // anything else ??
+    Assert.assertTrue(0 <= varinfo_index && varinfo_index < ppt.var_infos.length);
+    Assert.assertTrue(-1 <= value_index && value_index < varinfo_index);
+    Assert.assertTrue(is_static_constant == (value_index == -1));
+    Assert.assertTrue(is_static_constant || (static_constant_value == null));
     if (po_higher == null) {
-      Assert.assert(po_higher_nonce == null);
+      Assert.assertTrue(po_higher_nonce == null);
     } else if (po_higher instanceof VarInfo) {
-      Assert.assert(po_higher_nonce != null);
-      Assert.assert(po_higher_nonce.length == 1);
+      Assert.assertTrue(po_higher_nonce != null);
+      Assert.assertTrue(po_higher_nonce.length == 1);
     } else {
-      Assert.assert(po_higher instanceof VarInfo[]);
+      Assert.assertTrue(po_higher instanceof VarInfo[]);
       VarInfo[] ary = (VarInfo[]) po_higher;
-      Assert.assert(! ArraysMDE.any_null(ary));
-      Assert.assert(po_higher_nonce != null);
-      Assert.assert(po_higher_nonce.length == ary.length);
+      Assert.assertTrue(! ArraysMDE.any_null(ary));
+      Assert.assertTrue(po_higher_nonce != null);
+      Assert.assertTrue(po_higher_nonce.length == ary.length);
     }
     // check lower/higher rep types matching, too ??
     // Derivation derived; ??
@@ -191,14 +191,14 @@ public final class VarInfo
   public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
                  VarComparability comparability, boolean is_static_constant,
                  Object static_constant_value, VarInfoAux aux) {
-    Assert.assert(file_rep_type != null);
-    Assert.assert(legalFileRepType(file_rep_type),
+    Assert.assertTrue(file_rep_type != null);
+    Assert.assertTrue(legalFileRepType(file_rep_type),
                   "Unsupported representation type " + file_rep_type.format()
                   + " for variable " + name);
     // Ensure that the type and rep type are somewhat consistent
-    Assert.assert(type.pseudoDimensions() >= file_rep_type.dimensions(),
+    Assert.assertTrue(type.pseudoDimensions() >= file_rep_type.dimensions(),
                   "Types dimensions incompatibility: " + type + " vs. " + file_rep_type);
-    Assert.assert(aux != null);
+    Assert.assertTrue(aux != null);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
@@ -293,7 +293,7 @@ public final class VarInfo
       for (int j=0; j<derivees_old.size(); j++) {
         Derivation deriv_old = (Derivation) derivees_old.elementAt(j);
         Derivation deriv_new = (Derivation) deriv_map.get(deriv_old);
-        Assert.assert(deriv_new != null);
+        Assert.assertTrue(deriv_new != null);
         derivees_new.add(deriv_new);
       }
     }
@@ -397,7 +397,7 @@ public final class VarInfo
       VarInfo lower = (VarInfo) lo.get(i);
       List hi = lower.po_higher();
       int index = hi.indexOf(this);
-      Assert.assert(index >= 0);
+      Assert.assertTrue(index >= 0);
       int nonce = lower.po_higher_nonce[index];
       result[i] = nonce;
     }
@@ -414,8 +414,8 @@ public final class VarInfo
   {
     VarInfo lower = this;
 
-    Assert.assert(lower != higher, "lower != higher");
-    //Assert.assert(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
+    Assert.assertTrue(lower != higher, "lower != higher");
+    //Assert.assertTrue(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
     // We remove this assertion because it could be that A has a member a
     // of type A, so A::this should be < A::this.a.  The only thing we want
     // to prevent is cycles, so the first assertion above is sufficient.
@@ -423,12 +423,12 @@ public final class VarInfo
     // handle recursing properly.
 
 
-    Assert.assert(lower.type == higher.type, "lower.type == higher.type");
-    Assert.assert(lower.rep_type == higher.rep_type, "lower.rep_type == higher.rep_type");
-    Assert.assert(lower.file_rep_type == higher.file_rep_type, "lower.file_rep_type == higher.file_rep_type");
+    Assert.assertTrue(lower.type == higher.type, "lower.type == higher.type");
+    Assert.assertTrue(lower.rep_type == higher.rep_type, "lower.rep_type == higher.rep_type");
+    Assert.assertTrue(lower.file_rep_type == higher.file_rep_type, "lower.file_rep_type == higher.file_rep_type");
 
     boolean already = lower.po_higher().contains(higher);
-    Assert.assert(already == higher.po_lower().contains(lower));
+    Assert.assertTrue(already == higher.po_lower().contains(lower));
     if (already)
       throw new IllegalArgumentException("Relation already exists");
 
@@ -481,7 +481,7 @@ public final class VarInfo
         worklist.addAll(lower ? head.po_lower() : head.po_higher());
       }
     }
-    Assert.assert(! result.contains(this));
+    Assert.assertTrue(! result.contains(this));
     return Collections.unmodifiableList(result).iterator();
   }
 
@@ -536,14 +536,14 @@ public final class VarInfo
 
   /* [INCR] ...
   public boolean hasExactInvariant(VarInfo other) {
-    Assert.assert(this.varinfo_index < other.varinfo_index);
+    Assert.assertTrue(this.varinfo_index < other.varinfo_index);
     for (int i=0; i<exact_nonunary_invariants.size(); i++) {
       Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
       if (inv.ppt.var_infos[0] != this) {
         System.out.println("Problem: " + inv.ppt.var_infos[0].name + ", " + this.name + " in " + this.ppt.name + ", " + inv.ppt.name);
       }
-      Assert.assert(inv.ppt.var_infos[0] == this);
-      Assert.assert(inv.isExact());
+      Assert.assertTrue(inv.ppt.var_infos[0] == this);
+      Assert.assertTrue(inv.isExact());
       if ((inv.ppt.arity == 2) && (inv.ppt.var_infos[1] == other)) {
         return true;
       }
@@ -554,14 +554,14 @@ public final class VarInfo
 
   /* [INCR] ...
   public boolean hasExactInvariant(VarInfo other1, VarInfo other2) {
-    Assert.assert(this.varinfo_index < other1.varinfo_index);
-    Assert.assert(other1.varinfo_index < other2.varinfo_index);
-    Assert.assert(this.ppt == other1.ppt);
-    Assert.assert(this.ppt == other2.ppt);
+    Assert.assertTrue(this.varinfo_index < other1.varinfo_index);
+    Assert.assertTrue(other1.varinfo_index < other2.varinfo_index);
+    Assert.assertTrue(this.ppt == other1.ppt);
+    Assert.assertTrue(this.ppt == other2.ppt);
     for (int i=0; i<exact_nonunary_invariants.size(); i++) {
       Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
-      Assert.assert(inv.ppt.var_infos[0] == this);
-      Assert.assert(inv.isExact());
+      Assert.assertTrue(inv.ppt.var_infos[0] == this);
+      Assert.assertTrue(inv.isExact());
       if ((inv.ppt.arity == 3)
           && (inv.ppt.var_infos[1] == other1)
           && (inv.ppt.var_infos[2] == other2)) {
@@ -850,7 +850,7 @@ public final class VarInfo
 
 //   Iterator invariants() {
 //     // This assertion will need to be relaxed eventually.
-//     Assert.assert(ppt instanceof PptTopLevel,
+//     Assert.assertTrue(ppt instanceof PptTopLevel,
 //                   "Ppt " + ppt + " is not instanceof PptTopLevel");
 //     // Could alternately have used ppt.invs.lookup(vi).
 //     // In fact, that's better, because it doesn't look at so many variables.
@@ -860,7 +860,7 @@ public final class VarInfo
 
   /* [INCR]
   public boolean isCanonical() {
-    Assert.assert(equal_to != null);
+    Assert.assertTrue(equal_to != null);
     return (equal_to == this);
   }
   */
@@ -868,7 +868,7 @@ public final class VarInfo
   // Canonical representative that's equal to this variable.
   /* [INCR]
   public VarInfo canonicalRep() {
-    Assert.assert(equal_to != null);
+    Assert.assertTrue(equal_to != null);
     return equal_to;
   }
   */
@@ -882,13 +882,13 @@ public final class VarInfo
   /* [INCR] ...
   public Vector equalTo() {
     // should only call this for canonical variables
-    Assert.assert(isCanonical());
+    Assert.assertTrue(isCanonical());
 
     Vector result = new Vector();
 
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
-      Assert.assert(vis[i].equal_to == vis[i].equal_to.equal_to);
+      Assert.assertTrue(vis[i].equal_to == vis[i].equal_to.equal_to);
       if (i == varinfo_index)
         continue;
       if (vis[i].equal_to == this)
@@ -904,7 +904,7 @@ public final class VarInfo
   // to the first.  This is called only while printing invariants.
   public Vector equalToNonobvious() {
     // should only call this for canonical variables
-    Assert.assert(isCanonical());
+    Assert.assertTrue(isCanonical());
 
     Vector result = new Vector();
 
@@ -933,7 +933,7 @@ public final class VarInfo
 
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
-      Assert.assert(vis[i].equal_to == vis[i].equal_to.equal_to);
+      Assert.assertTrue(vis[i].equal_to == vis[i].equal_to.equal_to);
       if (i == varinfo_index)
         continue;
       VarInfo vi = vis[i];
@@ -983,7 +983,7 @@ public final class VarInfo
           // "sansclass" is "b" in the above comment; "vi" is "b.class".
           // don't bother to intern, as findVar doesn't need it.
           VarInfo sansclass = ppt.findVar(sansclassname);
-          Assert.assert(sansclass != null);
+          Assert.assertTrue(sansclass != null);
           if (! sansclass.isCanonical()) {
             // We will omit vi.
             VarInfo a = sansclass.equal_to;
@@ -994,8 +994,8 @@ public final class VarInfo
             } else {
               a_class = ppt.findVar(a.name.applyTypeOf());
             }
-            Assert.assert(a_class != null);
-            Assert.assert(a_class.equal_to == this);
+            Assert.assertTrue(a_class != null);
+            Assert.assertTrue(a_class.equal_to == this);
             continue;
           }
         }
@@ -1111,15 +1111,15 @@ public final class VarInfo
   boolean comparable2(VarInfo other) {
     if (this.name != other.name)
       return false;
-    Assert.assert(type.equals(other.type), "type matches");
-    Assert.assert(file_rep_type.equals(other.file_rep_type),
+    Assert.assertTrue(type.equals(other.type), "type matches");
+    Assert.assertTrue(file_rep_type.equals(other.file_rep_type),
                   "file_rep_type matches (" +
                   name + ":" + file_rep_type + "," +
                   other.name + ":" + other.file_rep_type +
                   ")");
     // One of the VarInfos might be at a program point with more variables,
     // so the list of variables to which it is comparable could be larger.
-    // Assert.assert(comparability.equals(other.comparability));
+    // Assert.assertTrue(comparability.equals(other.comparability));
     return true;
   }
 
@@ -1179,7 +1179,7 @@ public final class VarInfo
   public VarInfo sequenceSize() {
     if (sequenceSize != null)
       return sequenceSize;
-    Assert.assert(rep_type.isArray());
+    Assert.assertTrue(rep_type.isArray());
     // we know the size follows the variable itself in the list
     VarInfo[] vis = ppt.var_infos;
     for (int i=varinfo_index+1; i<vis.length; i++) {
@@ -1334,7 +1334,7 @@ public final class VarInfo
               : (vari_shift >= varj_shift));
     }
     // different variables
-    Assert.assert(vari.ppt == varj.ppt);
+    Assert.assertTrue(vari.ppt == varj.ppt);
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
     if (indices_ppt == null)
       return false;
@@ -1354,7 +1354,7 @@ public final class VarInfo
 
         // a is 1 or -1, and the values are integers, so be must be an integer
         long b_int = (long)lb.core.b;
-        Assert.assert(lb.core.b == b_int);
+        Assert.assertTrue(lb.core.b == b_int);
         index_vari_minus_seq = (vari_is_var1 ? -b_int : b_int);
         index_vari_minus_seq += vari_shift - varj_shift;
       }
@@ -1439,11 +1439,11 @@ public final class VarInfo
     // Very limited implementation as of now.
     VarInfo super1 = seq1.isDerivedSubSequenceOf();
     VarInfo super2 = seq2.isDerivedSubSequenceOf();
-    Assert.assert(super1 == super2);
+    Assert.assertTrue(super1 == super2);
     SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) seq1.derived;
     SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) seq2.derived;
 
-    Assert.assert(sss1.seqvar() == sss2.seqvar());
+    Assert.assertTrue(sss1.seqvar() == sss2.seqvar());
     VarInfo index1 = sss1.sclvar();
     int shift1 = sss1.index_shift;
     boolean start1 = sss1.from_start;
@@ -1482,7 +1482,7 @@ public final class VarInfo
   public VarInfoName otherStateEquivalent(boolean post) {
 
     // Below is equivalent to:
-    // Assert.assert(post == isPrestate());
+    // Assert.assertTrue(post == isPrestate());
     if (post != isPrestate()) {
       throw new Error("Shouldn't happen (should it?): "
                       + (post ? "post" : "pre") + "StateEquivalent(" + name + ")");
@@ -1490,7 +1490,7 @@ public final class VarInfo
 
     // First look for equality invariants
     /* [INCR]
-    Assert.assert(isCanonical());
+    Assert.assertTrue(isCanonical());
     Vector equal_vars = equalTo();
     for (int i=0; i<equal_vars.size(); i++) {
       VarInfo vi = (VarInfo)equal_vars.elementAt(i);

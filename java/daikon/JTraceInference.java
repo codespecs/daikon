@@ -82,9 +82,9 @@ class JTraceInference extends Thread
 		Vector var_infos = new Vector();
 		while((control = getControl()) != CT_PptDeclEnd)
 		{
-		    Assert.assert(control == CT_string);
+		    Assert.assertTrue(control == CT_string);
 		    control = getControl();
-		    Assert.assert(control == CT_string);
+		    Assert.assertTrue(control == CT_string);
 
 		    String varname = getString();
 		    String proglang_type_string = getString();
@@ -133,7 +133,7 @@ class JTraceInference extends Thread
 		break loop;
 
 	    default:
-		Assert.assert(false, "Bad control code!");
+		Assert.assertTrue(false, "Bad control code!");
 		break;
 	    } // endswitch
 	}
@@ -160,7 +160,7 @@ class JTraceInference extends Thread
 	// from FileIO:
 
 	PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-	Assert.assert(ppt != null);
+	Assert.assertTrue(ppt != null);
 
 	// not vis.length, as that includes constants, derived variables, etc.
 	// Actually, we do want to leave space for _orig vars.
@@ -168,7 +168,7 @@ class JTraceInference extends Thread
 	VarInfo[] vis = ppt.var_infos;
 	int num_tracevars = ppt.num_tracevars;
 	int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-	Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
+	Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
 	Object[] vals = new Object[vals_array_size];
 	int[] mods = new int[vals_array_size];
@@ -183,18 +183,18 @@ class JTraceInference extends Thread
 
 	    // foreach variable associated with this ppt:
 	    for (int vi_index=0, val_index=0; val_index<num_tracevars; vi_index++) {
-		Assert.assert(vi_index < vis.length
+		Assert.assertTrue(vi_index < vis.length
 			      // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
 		    );
 		// XXX handling of final statics (compile-time constants)
 		VarInfo vi = vis[vi_index];
-		Assert.assert((! vi.is_static_constant)
+		Assert.assertTrue((! vi.is_static_constant)
 			      || (vi.value_index == -1)
 			      // , "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
 		    );
 		if (vi.is_static_constant)
 		    continue;
-		Assert.assert(val_index == vi.value_index
+		Assert.assertTrue(val_index == vi.value_index
 			      // , "Differing val_index = " + val_index
 			      // + " and vi.value_index = " + vi.value_index
 			      // + " for " + vi.name + lineSep + vi.repr()
@@ -238,7 +238,7 @@ class JTraceInference extends Thread
 		    value = Intern.internedLong(getInteger());
 		    break;
 		default:
-		    Assert.assert(false, "freak-up in control stream!");
+		    Assert.assertTrue(false, "freak-up in control stream!");
 //			    abort();
 		    break;
 		}

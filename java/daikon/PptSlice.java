@@ -118,7 +118,7 @@ public abstract class PptSlice
     this.var_infos = var_infos;
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {
-      Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
+      Assert.assertTrue(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
     }
     arity = var_infos.length;
     value_indices = new int[arity];
@@ -212,7 +212,7 @@ public abstract class PptSlice
   protected void addToOnePO(PptTopLevel adj,
                             VarInfo[] slice_vis)
   {
-    Assert.assert(slice_vis.length == arity);
+    Assert.assertTrue(slice_vis.length == arity);
 
     // Collection private_po = lower ? private_po_lower : private_po_higher;
     // Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
@@ -222,12 +222,12 @@ public abstract class PptSlice
     List slices;
     if (! private_po.contains(adj)) {
       private_po.add(adj);
-      Assert.assert(! private_po_vis.containsKey(adj));
+      Assert.assertTrue(! private_po_vis.containsKey(adj));
       slices = new ArrayList(1);
       private_po_vis.put(adj, slices);
     } else {
       slices = (List) private_po_vis.get(adj);
-      Assert.assert(slices != null);
+      Assert.assertTrue(slices != null);
     }
     slices.add(slice_vis);
   }
@@ -244,7 +244,7 @@ public abstract class PptSlice
   // Avoid constructing a new Vector every time through this function.
   void defer_invariant_removal() {
     invs_to_remove_deferred = itrd_cache;
-    Assert.assert(invs_to_remove_deferred.size() == 0);
+    Assert.assertTrue(invs_to_remove_deferred.size() == 0);
   }
 
   void undefer_invariant_removal() {
@@ -265,10 +265,10 @@ public abstract class PptSlice
   // I don't just use ppt.invs.remove because I want to be able to defer
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
-    Assert.assert(! no_invariants);
-    Assert.assert(invs.contains(inv));
+    Assert.assertTrue(! no_invariants);
+    Assert.assertTrue(invs.contains(inv));
     boolean removed = invs.remove(inv);
-    Assert.assert(removed);
+    Assert.assertTrue(removed);
     // This increment could also have been in Invariant.destroy().
     Global.falsified_invariants++;
     if (invs.size() == 0) {
@@ -423,7 +423,7 @@ public abstract class PptSlice
   public void clear_cache() {
     // Don't do check_modbits()!  We might have only partially filled up
     // the cache.  Do this at call sites where appropriate.
-    // Assert.assert(check_modbits());
+    // Assert.assertTrue(check_modbits());
 
     if (values_cache != null) {
       if (! no_invariants) {
@@ -444,7 +444,7 @@ public abstract class PptSlice
   public abstract String tuplemod_samples_summary();
 
   boolean check_modbits () {
-    Assert.assert(! no_invariants);
+    Assert.assertTrue(! no_invariants);
     /* [INCR] (we no longer track num_values)
     if (num_mod_non_missing_samples() < num_values()) {
       String message = "Bad mod bits in dtrace file:" + lineSep
@@ -489,7 +489,7 @@ public abstract class PptSlice
       PptSlice slice2 = (PptSlice) o2;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
-      // Assert.assert(slice1.parent == slice2.parent);
+      // Assert.assertTrue(slice1.parent == slice2.parent);
       if (slice1.arity == slice2.arity) {
         return slice1.varNames(slice1.var_infos)
           .compareTo(slice2.varNames(slice2.var_infos));
@@ -513,7 +513,7 @@ public abstract class PptSlice
       PptSlice slice2 = (PptSlice) o2;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
-      // Assert.assert(slice1.parent == slice2.parent);
+      // Assert.assertTrue(slice1.parent == slice2.parent);
       if (slice1.arity == slice2.arity) {
         return slice1.name.compareTo(slice2.name);
       } else {

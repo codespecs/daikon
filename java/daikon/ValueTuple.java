@@ -169,7 +169,7 @@ public final class ValueTuple implements Cloneable {
 
   static int parseModified(String raw) {
     int result = Integer.parseInt(raw);
-    Assert.assert((result >= 0) && (result < MODBIT_VALUES));
+    Assert.assertTrue((result >= 0) && (result < MODBIT_VALUES));
     return result;
   }
 
@@ -193,15 +193,15 @@ public final class ValueTuple implements Cloneable {
   /** Default constructor that interns its argument. */
   ValueTuple(Object[] vals, int[] mods) {
     for (int i=0; i<vals.length; i++)
-      Assert.assert(Intern.isInterned(vals[i]));
+      Assert.assertTrue(Intern.isInterned(vals[i]));
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
 
   // Private constructor that doesn't perform interning.
   private ValueTuple(Object[] vals, int[] mods, boolean check) {
-    Assert.assert((!check) || Intern.isInterned(vals));
-    Assert.assert((!check) || Intern.isInterned(mods));
+    Assert.assertTrue((!check) || Intern.isInterned(vals));
+    Assert.assertTrue((!check) || Intern.isInterned(mods));
     this.vals = vals;
     this.mods = mods;
   }
@@ -253,7 +253,7 @@ public final class ValueTuple implements Cloneable {
 
 
   public int size() {
-    Assert.assert(vals.length == mods.length);
+    Assert.assertTrue(vals.length == mods.length);
     return vals.length;
   }
 
@@ -294,7 +294,7 @@ public final class ValueTuple implements Cloneable {
   // For debugging
   public String toString() {
     StringBuffer sb = new StringBuffer("[");
-    Assert.assert(vals.length == mods.length);
+    Assert.assertTrue(vals.length == mods.length);
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append("; ");
@@ -333,7 +333,7 @@ public final class ValueTuple implements Cloneable {
 
   /** For each index i, do dest[i] = dest[i] or other[i]. */
   public static void orModsInto(int[] dest, int[] other) {
-    Assert.assert(dest.length == other.length);
+    Assert.assertTrue(dest.length == other.length);
     int len = dest.length;
     for (int i=0; i<len; i++)
       if ((dest[i] == UNMODIFIED) && (other[i] == MODIFIED))

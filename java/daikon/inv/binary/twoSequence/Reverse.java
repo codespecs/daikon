@@ -141,7 +141,7 @@ public class Reverse
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof Reverse);
+    Assert.assertTrue(other instanceof Reverse);
     return true;
   }
 

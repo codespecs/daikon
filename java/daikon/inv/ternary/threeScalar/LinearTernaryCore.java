@@ -57,8 +57,8 @@ public final class LinearTernaryCore
    * order underneath us (rearrangement given by the permutation).
    **/
   public void permute(int[] permutation) {
-    Assert.assert(permutation.length == 3);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
+    Assert.assertTrue(permutation.length == 3);
+    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     // Fix a, b, c
     // clever because a*v0 + b*v1 - v2 = -c
     double[] clever = new double[] { a, b, -1.0 };
@@ -173,7 +173,7 @@ public final class LinearTernaryCore
             double separation = (separation(i, j)
                                + separation(i, k)
                                + separation(j, k));
-            Assert.assert(separation > 0);
+            Assert.assertTrue(separation > 0);
             if (separation > max_separation) {
               max_separation = separation;
               maxsep_i = i;
@@ -357,7 +357,7 @@ public final class LinearTernaryCore
 
   // // Format as "x = cy+d" instead of as "y = ax+b".
   // public String format_reversed(String x, String y) {
-  //   Assert.assert(a == 1 || a == -1);
+  //   Assert.assertTrue(a == 1 || a == -1);
   //   return format(y, x, a, -b/a);
   // }
 

@@ -93,7 +93,7 @@ public final class NonEqualCore
         if (overlap < 0)
           return Invariant.PROBABILITY_JUSTIFIED;
 
-        Assert.assert(overlap >= 0);
+        Assert.assertTrue(overlap >= 0);
         overlap++;
         double range1 = (double)max1 - min1 + 1;
         double range2 = (double)max2 - min2 + 1;

@@ -186,7 +186,7 @@ public class PairwiseIntComparison
 
   // Look up a previously instantiated invariant.
   public static PairwiseIntComparison find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof PairwiseIntComparison)

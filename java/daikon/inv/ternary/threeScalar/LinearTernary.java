@@ -82,7 +82,7 @@ public class LinearTernary
 
       if (((seq == x_summand) || (seq == y_summand) || (seq == z_summand))
           && (x_seq == y_seq) && (x_seq == z_seq)) {
-        Assert.assert(y_seq == z_seq);
+        Assert.assertTrue(y_seq == z_seq);
         if (debugLinearTernary) {
           System.out.println(ppt.varNames() + " 3 sequences match");
         }
@@ -265,7 +265,7 @@ public class LinearTernary
 
   // Look up a previously instantiated invariant.
   public static LinearTernary find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 3);
+    Assert.assertTrue(ppt.arity == 3);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LinearTernary)

@@ -179,7 +179,7 @@ public class PptName
   {
     if (method == null) return null;
     int rparen = method.indexOf(')');
-    Assert.assert(rparen >= 0);
+    Assert.assertTrue(rparen >= 0);
     return method.substring(0, rparen+1);
   }
 
@@ -193,7 +193,7 @@ public class PptName
   {
     if (method == null) return null;
     int lparen = method.indexOf('(');
-    Assert.assert(lparen >= 0);
+    Assert.assertTrue(lparen >= 0);
     return method.substring(0, lparen);
   }
 
@@ -331,8 +331,8 @@ public class PptName
    **/
   public PptName makeEnter()
   {
-    Assert.assert(isExitPoint(), fullname);
-    Assert.assert(isExitPoint() || isThrowsPoint());
+    Assert.assertTrue(isExitPoint(), fullname);
+    Assert.assertTrue(isExitPoint() || isThrowsPoint());
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -342,7 +342,7 @@ public class PptName
    **/
   public PptName makeExit()
   {
-    Assert.assert(isExitPoint() || isEnterPoint(), fullname);
+    Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, method, FileIO.exit_suffix);
   }
 
@@ -352,7 +352,7 @@ public class PptName
    **/
   public PptName makeObject()
   {
-    Assert.assert(isExitPoint() || isEnterPoint(), fullname);
+    Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -362,7 +362,7 @@ public class PptName
    **/
   public PptName makeClassStatic()
   {
-    Assert.assert(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic(), fullname);
+    Assert.assertTrue(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic(), fullname);
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 

@@ -205,16 +205,16 @@ public class InvariantFilters {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
         VarInfo[] variables = invariant.ppt.var_infos;
-        Assert.assert( variables.length == 2 );
+        Assert.assertTrue( variables.length == 2 );
         for (int i = 0; i < variables.length; i++) {
           VarInfo vi = variables[i];
           if (true) { // vi.isCanonical()) { // [INCR] XXX; This whole method sucks now.
             if (! canonicalVariables.contains( vi )) {
-              Assert.assert(! ppts.containsKey(vi));
+              Assert.assertTrue(! ppts.containsKey(vi));
               canonicalVariables.add( vi );
               ppts.put( vi, invariant );
             } else {
-              Assert.assert(ppts.containsKey(vi));
+              Assert.assertTrue(ppts.containsKey(vi));
               Invariant old_inv = (Invariant) ppts.get(vi);
               if (PptTopLevel.icfp.compare(invariant, old_inv) < 0) {
                 ppts.put( vi, invariant );
@@ -253,7 +253,7 @@ public class InvariantFilters {
       }
     }
 
-    Assert.assert(ppts.size() == equivalentGroups.size());
+    Assert.assertTrue(ppts.size() == equivalentGroups.size());
 
     // Add equivalent groups as equality invariants.
     for ( Iterator egIter = equivalentGroups.iterator(); egIter.hasNext(); ) {
