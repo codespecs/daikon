@@ -44,7 +44,7 @@ public class SplitterObject implements Comparable {
 
   /**
    * @param loader The SplitterLoader used to load the compiled source.
-   * @requires loader is not null.
+   * Must not be null.
    */
   public void load (SplitterLoader loader) {
     Class tempClass = loader.load_Class(className, directory + className + ".class");

@@ -25,8 +25,8 @@ public class OrigModifier extends DepthFirstVisitor {
 
 
  /**
-  * @modifies n, this
-  * @effects corrects column fields of n.
+  * Corrects column fields of n.
+  * modifies n, this
   */
  public void visit(NodeToken n) {
   if (n.beginLine == columnshiftline) {
@@ -41,9 +41,9 @@ public class OrigModifier extends DepthFirstVisitor {
 
 
  /**
-  * @modifies n, this
-  * @effects checks if n is a variable name.  If so adds "orig(" to the
+  * Checks if n is a variable name.  If so adds "orig(" to the
   *          front of the name and ")" to the end.
+  * modifies n, this
   */
  public void visit(PrimaryExpression n) {
   // let simple variables be varibles with out "."'s in their names

@@ -1469,10 +1469,10 @@ public abstract class Invariant
    * this invariant statically obvious if its VarInfos were switched
    * with vis?"  Intended to be overridden by subclasses.  Should only
    * do static checking.
+   * Precondition: vis.length == this.ppt.var_infos.length
    * @param vis The VarInfos this invariant is obvious over.  The
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
-   * @pre vis.length == this.ppt.var_infos.length
    **/
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
     return null;

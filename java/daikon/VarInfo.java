@@ -740,7 +740,7 @@ public final class VarInfo
    * the name contains any of the variables.  We have to do this
    * because we only have name info, and we assume that x and x.a are
    * related from the names alone.
-   * @effects Sets isDerivedParamCached and derivedParamCached to
+   * Effects: Sets isDerivedParamCached and derivedParamCached to
    * values the first time this method is called.  Subsequent calls
    * use these cached values.
    **/
@@ -777,10 +777,10 @@ public final class VarInfo
    * this is returned.  For examplpe, "this" is always a parameter.
    * The return value of getDerivedParam for "this.a" (which is not a
    * parameter) is "this".
-   * @return null if the above condition doesn't hold.
-   * @effects Sets isDerivedParamCached and derivedParamCached to
+   * Effects: Sets isDerivedParamCached and derivedParamCached to
    * values the first time this method is called.  Subsequent calls
    * use these cached values.
+   * @return null if the above condition doesn't hold.
    **/
   public VarInfo getDerivedParam() {
     if (isDerivedParamCached != null) {

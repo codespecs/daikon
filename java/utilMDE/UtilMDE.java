@@ -366,7 +366,7 @@ public final class UtilMDE {
   private static PromiscuousLoader thePromiscuousLoader = new PromiscuousLoader();
 
   /**
-   * @param full_pathname the pathname of a .class file
+   * @param pathname the pathname of a .class file
    * @return a Java Object corresponding to the Class defined in the .class file
    **/
   public static Class loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {

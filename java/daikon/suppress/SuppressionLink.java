@@ -160,7 +160,7 @@ public class SuppressionLink implements Serializable {
   /**
    * Create a new SuppressionLink.  Requires that there be at least
    * one suppressor, and that the invariant doesn't suppress itself.
-   * @post state == CREATED;
+   * Postcondition: state == CREATED;
    **/
   public SuppressionLink (// SuppressionFactory argFactory,
                           Invariant argSuppressee,
@@ -215,8 +215,8 @@ public class SuppressionLink implements Serializable {
 
   /**
    * Unlink suppressors and suppresses to this.
-   * @pre state == LINKED and Invariants this links to point to this.
-   * @post state == UNLINKED
+   * Precondition: state == LINKED and Invariants this links to point to this.
+   * Postcondition: state == UNLINKED
    **/
   public void unlink() {
     Assert.assertTrue (suppressee.getSuppressor() == this,

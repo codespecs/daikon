@@ -3372,8 +3372,8 @@ public class PptTopLevel
    * Called at the start of inferencing.  Requires that this and its
    * parents have already has instantiated invariants.
    *
+   * Precondition: Invariants already instantiated
    * @see daikon.suppress.SuppressionFactory
-   * @pre Invariants already instantiated
    **/
   public void initiateSuppression() {
     if (!initiatedSuppression) {
@@ -3388,6 +3388,7 @@ public class PptTopLevel
    * invariants. Can be called repeatedly to refresh suppression, but
    * this is an expensive operation.
    *
+   * Precondition: Invariants already instantiated
    * @param in_process  should be set to true if samples are still being
    *                    processed. false otherwise (ie, at the end).
    *                    This is used to defer suppression on certain invariants
@@ -3395,7 +3396,6 @@ public class PptTopLevel
    *                    suppressed.
    *
    * @see daikon.suppress.SuppressionFactory
-   * @pre Invariants already instantiated
    **/
   public void suppressAll (boolean in_process) {
     if (Daikon.dkconfig_use_suppression_optimization) {
@@ -3429,6 +3429,7 @@ public class PptTopLevel
   /**
    * Try to suppress one invariant.  Links the invariant to a
    * SuppressionLink if suppression succeeds.
+   * Precondition: Invariants already instantiated.  inv not already suppressed.
    * @param inv         the Invariant to attempt suppression on, which has to
    *                    be a member of this.
    * @param in_process  should be set to true if samples are still being
@@ -3438,7 +3439,6 @@ public class PptTopLevel
    *                    suppressed.
    * @return true if invariant was suppressed
    * @see daikon.suppress.SuppressionFactory
-   * @pre Invariants already instantiated.  inv not already suppressed.
    **/
   public boolean attemptSuppression (Invariant inv, boolean in_process) {
     if (Daikon.dkconfig_use_suppression_optimization) {

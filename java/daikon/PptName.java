@@ -366,7 +366,7 @@ public class PptName
   // ==================== PRODUCERS ====================
 
   /**
-   * @requires this.isExitPoint()
+   * Requires: this.isExitPoint()
    * @return a name for the corresponding enter point
    **/
   public PptName makeEnter()
@@ -382,7 +382,7 @@ public class PptName
   }
 
   /**
-   * @requires this.isExitPoint() || this.isEnterPoint()
+   * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the combined exit point
    **/
   public PptName makeExit()
@@ -392,7 +392,7 @@ public class PptName
   }
 
   /**
-   * @requires this.isExitPoint() || this.isEnterPoint()
+   * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the corresponding object invariant
    **/
   public PptName makeObject()
@@ -402,7 +402,7 @@ public class PptName
   }
 
   /**
-   * @requires this.isExitPoint() || this.isEnterPoint() || this.isObjectInstanceSynthetic()
+   * Requires: this.isExitPoint() || this.isEnterPoint() || this.isObjectInstanceSynthetic()
    * @return a name for the corresponding class-static invariant
    **/
   public PptName makeClassStatic()

@@ -23,10 +23,10 @@ public final class DiscReasonMap {
   }
 
   /**
-   *@requires inv != null && disc_info != null && disc_info.shouldDiscard()
-   *@effects Adds disc_info to DiscReasonMap's internal data structure, unless
+   * Adds disc_info to DiscReasonMap's internal data structure, unless
    * a reason already exists for inv, in which case the old reason is kept and
    * disc_info is discarded
+   * Requires: inv != null && disc_info != null && disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
@@ -105,7 +105,7 @@ public final class DiscReasonMap {
   }
 
   /**
-   * @requires vars is given in the form "var1,var2,var3" in ascending
+   * Requires: vars is given in the form "var1,var2,var3" in ascending
    * alphabetical order with no spaces && invInfo.ppt() != null
    * @return a List of all DiscardInfos di such that && the di is for an
    * Invariant from discPpt whose class and vars match the params passed

@@ -221,9 +221,8 @@ public class SuppressionTemplate {
   ///
 
   /**
-   * Attempt to fill a given SuppressionTemplate with invariants.  If
+   * Attempt to fill this SuppressionTemplate with invariants.  If
    * successful, returns true.  Called by SuppressionFactory.
-   * @param supTemplate Template to fill.  Modified by this method.
    **/
   public boolean fill (PptTopLevel ppt) {
     return fill (ppt, true);
@@ -231,9 +230,8 @@ public class SuppressionTemplate {
 
 
   /**
-   * Attempt to fill a given SuppressionTemplate with invariants.  If
+   * Attempt to fill this SuppressionTemplate with invariants.  If
    * successful, returns true.  Called by SuppressionFactory.
-   * @param supTemplate Template to fill.  Modified by this method.
    * @param checkSelf Whether to check in this ppt.  When false, skip
    * scanning this ppt.  This is useful for detecting identical
    * invariants (due to weakening) across ppts.

@@ -34,7 +34,7 @@ public class TimedProcess {
   public static int dkconfig_compile_timeout = 6;
 
   /**
-   * @requires: p != null && command != null
+   * Requires: p != null && command != null
    */
   public TimedProcess (Process p, String command) {
     this.p = p;

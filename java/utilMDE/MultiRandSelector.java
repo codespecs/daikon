@@ -35,7 +35,7 @@ public class MultiRandSelector {
 
   /** @param num_elts the number of elements to select from each
    *  bucket
-   *  @param partioner determines how to partition the objects from
+   *  @param eq partioner that determines how to partition the objects from
    *  the iteration.</p>
    */
     public MultiRandSelector (int num_elts, Partitioner eq) {
