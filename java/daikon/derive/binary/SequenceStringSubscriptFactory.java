@@ -100,26 +100,23 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       compar_slice = sclvar.ppt.getView(sclvar, seqsize);
     }
     if (compar_slice != null) {
-      IntComparison compar = IntComparison.find(compar_slice);
-      if (compar != null) {
-        if ((sclvar.varinfo_index < seqsize.varinfo_index)
-            ? compar.core.can_be_gt // sclvar can be more than seqsize
-            : compar.core.can_be_lt // seqsize can be less than sclvar
-            ) {
-          Global.nonsensical_suppressed_derived_variables += 6;
-          return null;
-        } else if (compar.core.can_be_eq) {
-          Global.nonsensical_suppressed_derived_variables += 3;
-	  ArrayList result = new ArrayList();
-	  if (enable_subscript) {
-	    result.add(new SequenceStringSubscript (seqvar, sclvar, true)); // a[i-1]
-	  }
-	  if (enable_subsequence) {
-	    result.add(new SequenceStringSubsequence (seqvar, sclvar, true, true)); // a[..i-1]
-	    result.add(new SequenceStringSubsequence (seqvar, sclvar, false, false)); // a[i..]
-	  };
-	  return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
+      if ((sclvar.varinfo_index < seqsize.varinfo_index)
+          ? IntLessEqual.find(compar_slice) == null // sclvar can be more than seqsize
+          : IntGreaterEqual.find(compar_slice) == null // seqsize can be less than sclvar
+          ) {
+        Global.nonsensical_suppressed_derived_variables += 6;
+        return null;
+      } else if (IntEqual.find(compar_slice) != null) {
+        Global.nonsensical_suppressed_derived_variables += 3;
+        ArrayList result = new ArrayList();
+        if (enable_subscript) {
+          result.add(new SequenceStringSubscript (seqvar, sclvar, true)); // a[i-1]
         }
+        if (enable_subsequence) {
+          result.add(new SequenceStringSubsequence (seqvar, sclvar, true, true)); // a[..i-1]
+          result.add(new SequenceStringSubsequence (seqvar, sclvar, false, false)); // a[i..]
+        };
+        return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
       }
     }
 
