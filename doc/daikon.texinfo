@@ -2435,6 +2435,14 @@ Adding a new invariant to Daikon requires writing one Java class, adding
 a line to another file to inform Daikon of the new class, and
 recompiling Daikon.
 
+You can find a simple example of an invariant in file
+@file{java/daikon/inv/unary/scalar/Positive.java}.  This invariant is
+true if the variable is always positive (greater than zero).  This
+invariant is subsumed by other invariants ih the system; it is provided
+only as a pedagogical example.  To enable the invariant, uncomment a
+line in @file{SingleScalarFactory.java}, then recompile Daikon.
+
+
 The new Java class will be a concrete subclass of one of the following
 abstract classes:
 @itemize @bullet
@@ -3206,8 +3214,11 @@ the representation type might be "String".  Or, the declared type
 might be "Object" but the representation type might be "int"
 (because only the object's hashcode, not the object itself, is
 written to the data trace file).
-The representation type is currently constrained to be integer,
-string, or array of integer or string.
+
+The representation type is currently constrained to be integer, hashcode
+(a particular variety of integer), boolean, string, or array of integer
+or string.
+
 The representation type may optionally be followed by an equals
 sign and a value; in that case, the variable is known to have a
 compile-time constant value and should be omitted from the data
