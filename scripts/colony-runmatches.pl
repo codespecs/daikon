@@ -31,7 +31,14 @@ my $duplicate = 0;
 my $loadlimit = 0;
 my $firstline = 0;
 my $lastline = 0;
-my @machines = ('parsnip', 'peanut', 'rutabaga', 'beet', 'daikon', 'manioc', 'turnip', 'yam', 'scallion', 'shallot', 'potato', 'meoptiplex');
+my @machines = ('parsnip', 'peanut',
+                'beet', 'daikon', 'manioc', 'rutabaga', 'turnip',
+                'yam', 'scallion',
+                'shallot',
+                # These are so slow it's hardly worthwhile to include them
+                # 'potato',
+                # 'meoptiplex'
+                );
 my $current_dir;
 
 
