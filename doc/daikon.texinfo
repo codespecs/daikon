@@ -393,6 +393,12 @@ checker}.  It is easy to extend Daikon to other applications.
 Daikon is freely available for most uses; for details, see
 @ref{License}.
 
+More information on Daikon can be found in the Daikon Developer Manual.
+For instance, the Daikon Developer Manual indicates how to extend
+Daikon with new invariants, new derived variables, and front ends for
+new languages.  It also contains information about the implementation
+and about debugging flags.
+
 @menu
 * Mailing lists::               
 @end menu
@@ -405,20 +411,23 @@ Daikon is freely available for most uses; for details, see
 @cindex daikon-developers mailing list
 
 The following mailing lists (and their archives) are available:
-@itemize
+@table @samp
 @item daikon-announce@@pag.lcs.mit.edu
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
-To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/}.
+To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/} or
+@uref{http://pag.lcs.mit.edu/mailman/listinfo/daikon-announce}.
 @item daikon-discuss@@pag.lcs.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://pag.lcs.mit.edu/daikon/download/}.
+@uref{http://pag.lcs.mit.edu/daikon/download/} or
+@uref{http://pag.lcs.mit.edu/mailman/listinfo/daikon-discuss}.
 @item daikon-developers@@pag.lcs.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
-suggestions, and the like.
-@end itemize
+suggestions, and the like.  If you are an active contributor to Daikon,
+you may send mail to the list asking to be added.
+@end table
 
 
 @node    Installing Daikon, Example use, Introduction, Top
@@ -719,7 +728,7 @@ path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @node    Requirements,  , Installing the Context GUI, Installing Daikon
 @section Requirements for running Daikon
 
-In order to run Daikon, you must have a Java 1.3 (or later) JVM
+In order to run Daikon, you must have a Java 1.4 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
 
 If you wish to re-compile Daikon from scratch, you will need the C
@@ -5037,7 +5046,7 @@ java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
 @noindent
 creates the splitter info files @file{Foo.spinfo} and
 @file{Bar.spinfo}.
-Given an @option{-o @arg{filename}} argument, CreateSpinfo puts all the
+Given an @option{-o @var{filename}} argument, CreateSpinfo puts all the
 splitters in the specified file instead.
 The resulting splitter info file(s) contains each
 boolean expression that appears in the source code.  The conditional
@@ -6008,6 +6017,12 @@ There are no outstanding user-reported problems at this time.
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
 
+More information on Daikon can be found in the Daikon Developer Manual.
+For instance, the Daikon Developer Manual indicates how to extend
+Daikon with new invariants, new derived variables, and front ends for
+new languages.  It also contains information about the implementation
+and about debugging flags.
+
 The mailing list archives (@pxref{Mailing lists}) may contain helpful
 information (we strive to incorporate that information in this
 manual), or you may find discussions on those lists helpful to you.
@@ -6022,6 +6037,12 @@ Daikon homepage, @uref{http://pag.lcs.mit.edu/daikon/}.
 The Daikon invariant detector is named after an Asian radish.
 ``Daikon'' is pronounced like the combination of the two one-syllable
 English words "die-con".
+
+More information on Daikon can be found in the Daikon Developer Manual.
+For instance, the Daikon Developer Manual indicates how to extend
+Daikon with new invariants, new derived variables, and front ends for
+new languages.  It also contains information about the implementation
+and about debugging flags.
 
 
 @menu

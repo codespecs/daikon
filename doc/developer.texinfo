@@ -119,61 +119,12 @@ Debugging Daikon
 @node    Introduction, Daikon technologies, Top, Top
 @chapter Introduction
 
-The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
-reports likely program invariants.  An invariants is a property that
-holds a a certain point or points in a program; these are often seen in
-assert statements, documentation, and formal specifications.  Examples
-include arithmetic equations such as "x > abs(y)", "x = 3*y + 4*z - 7",
-or "x = 0 (mod 4)", and properties over arrays and other collections,
-including those accessed via pointers.  Daikon also reports implications
-(invariants whose truth depends on some other property), such as "p !=
-null => p.content in collection".
+This is the developer manual for the 
+@uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}.
+For information about Daikon, see its user manual.
+This manual is intended for those who are already familiar with the use
+of Daikon, but wish to customize or extend it.
 
-Invariants can be useful in program understanding and a host of other
-applications.  Daikon operates by running the program and examining the
-values it computes, looking for patterns and relationships among those
-values.  Front ends (@pxref{Instrumentation,,,daikon}) 
-exist for the Java, C,
-C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and Perl
-languages.  Front ends also exist for other applications, such as the
-@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
-checker}.  It is easy to extend Daikon to other applications.
-
-Daikon is freely available for most uses; for details, see 
-@ref{License,,,daikon}.
-
-Another excellent source of information for Daikon is its Java class
-documentation.  This is available on the
-@uref{http://pag.lcs.mit.edu/daikon/download,download page} for both
-Daikon @uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v2,V2} and
-Daikon @uref{http://pag.lcs.mit.edu/daikon/download/jdoc_v3,V3}.
-
-@menu
-* Mailing lists::               
-@end menu
-
-@node    Mailing lists,  , Introduction, Introduction
-@section Mailing lists
-@cindex mailing lists
-@cindex daikon-announce mailing list
-@cindex daikon-discuss mailing list
-@cindex daikon-developers mailing list
-
-The following mailing lists (and their archives) are available:
-@itemize
-@item daikon-announce@@pag.lcs.mit.edu
-A low-volume, announcement-only list.  For example,
-announcements of new releases are sent to this list.
-To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/}.
-@item daikon-discuss@@pag.lcs.mit.edu
-A moderated list for the community of Daikon users.  Use it to share
-tips and successes, and to get help with questions or problems (after
-checking the documentation).  To subscribe, visit
-@uref{http://pag.lcs.mit.edu/daikon/download/}.
-@item daikon-developers@@pag.lcs.mit.edu
-This list goes to the Daikon maintainers.  Use it for bug reports,
-suggestions, and the like.
-@end itemize
 
 @node    Daikon technologies, Extending Daikon, Introduction, Top
 @chapter Daikon technologies
@@ -198,7 +149,7 @@ Daikon does not check a redundant invariant for some data samples,
 some time can be saved.  If Daikon does not instantiate redundant
 invariants, then space and time can be saved.  Some invariants are
 redundant @emph{statically} --- that is, their redundancy can be known
-without any sample data.  For example, "A[i] is an element of A[]" can
+without any sample data.  For example, ``A[i] is an element of A[]'' can
 be known statically.  Other invariants are redundant
 @emph{dynamically} --- Daikon can only know they are redundant after
 some or all sample data is seen.  The next three sections show ways
@@ -210,7 +161,7 @@ More detail can be found in Chapter 7, ``Scalability'', of
 (Technical report MIT-LCS-TR-852, at
 @uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
 Jeremy W. Nimmer's Master's thesis.  and in Chapter 5, ``Enabling
-Incremental Dynamic Invariant Detection'', ofToh Ne Win's Master's
+Incremental Dynamic Invariant Detection'', of Toh Ne Win's Master's
 thesis (Technical report to be filed, at
 @uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
 
@@ -220,7 +171,7 @@ thesis (Technical report to be filed, at
 
 Dataflow hierarchy is a means to relate variables in different program
 points in a partial ordering.  Variables in program point X are
-related to variables in another program point Y by a "flow" relation
+related to variables in another program point Y by a ``flow'' relation
 if every sample seen of X's variables is also meant to be seen at Y.
 Y is called a parent program point of X.  For example, all the field
 variables in the ENTRY program point of a method in class C relate to
@@ -243,7 +194,7 @@ Daikon, the former program point's variables relate to the latter
 program point's CLASS method.  For example, if X:::y is of type Y, and
 Y contains fields a and b, X:::y, X:::y.a and X:::y.b relate to
 Y:::this, Y:::b and Y:::a.  Fourth, variables at ENTER program
-points are related to the "orig" versions at EXIT program points.
+points are related to the ``orig'' versions at EXIT program points.
 
 When using Daikon, the above four ways of relations in the dataflow
 hierarchy will result in some true invariants that are not reported at
@@ -251,7 +202,7 @@ some program points.  However, the invariant will be present in some
 parent program point.  Dataflow hierarchy is enabled by default, but
 can be disabled by the --nohierarchy flag.  When dataflow is enabled,
 the only samples that are examined by Daikon are the EXIT program
-points (plus "orig" variables) since these contain a complete view of
+points (plus ``orig'' variables) since these contain a complete view of
 the data.
 
 @node    Equality optimization, Suppression optimization, Dataflow hierarchy, Daikon technologies
@@ -260,8 +211,8 @@ the data.
 When N variables are equal within a program point there will be
 N(N-1)/2 pairwise invariants to represent the equality within the
 equal variables, and N copies of every other invariant.  For example,
-if a, b, and c are equal, then "a == b", "a == c", "b == c" will be
-reported as pairwise invariants, and "odd(a)", "odd(b)" and "odd(c)"
+if a, b, and c are equal, then ``a == b'', ``a == c'', ``b == c'' will be
+reported as pairwise invariants, and ``odd(a)'', ``odd(b)'' and ``odd(c)''
 will be reported.  If the variables will always be equal, then
 reporting N times the invariants is wasteful.  Daikon thus treats
 equality specially.
@@ -273,16 +224,16 @@ equality invariants.  Every equality set has a leader or
 @emph{canonical} representation by a variable in the set.
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
-the leader.  The user can easily determine that "odd(a)" and "a == b"
-imply "odd(b)".  Equality can be turned off at the command line with
+the leader.  The user can easily determine that ``odd(a)'' and ``a == b''
+imply ``odd(b)''.  Equality can be turned off at the command line with
 the --noequality flag.
 
 @node    Suppression optimization,  , Equality optimization, Daikon technologies
 @section Suppression optimization
 
 Suppression optimization allows for elimination of redundancy based on
-how a set of invariants might imply an invariant.  For example, "a[]
-contains no duplicates" implies "a[i..j] contains no duplicates".  We
+how a set of invariants might imply an invariant.  For example, ``a[]
+contains no duplicates'' implies ``a[i..j] contains no duplicates''.  We
 say that a set of @emph{suppressors} suppress a @emph{suppressee}
 invariant.  Suppression also works across the program point hierarchy:
 suppressors can exist in parent program points.  Suppressed invariants
@@ -388,26 +339,26 @@ Daikon.
 
 A Java class defining an invariant is a concrete subclass of one of
 the following abstract classes:
-@itemize @bullet
-@item
-@samp{SingleScalar}, for invariants over a single numeric (scalar) variable,
-such as "x != 0".
-@item
-@samp{TwoScalar}, for invariants over two numeric variables, such as "y
-= abs(x)".
-@item
-@samp{ThreeScalar}, for invariants over three numeric variables, such as
-"z = ax + by + c".
-@item
-@samp{SingleSequence}, for invariants over one sequence (array)
-variable, such as "a[] contains no duplicates".
-@item
-@samp{TwoSequence}, for invariants over two sequences, such as "a[] is a
-subsequence of b[]".
-@item
-@samp{SequenceScalar}, for invariants over a scalar and a sequence, such
-as "x is a member of a[]".
-@end itemize
+@table @samp
+@item SingleScalar
+for invariants over a single numeric (scalar) variable,
+such as ``x != 0''.
+@item TwoScalar
+for invariants over two numeric variables, such as ``y
+= abs(x)''.
+@item ThreeScalar
+for invariants over three numeric variables, such as
+``z = ax + by + c''.
+@item SingleSequence
+for invariants over one sequence (array)
+variable, such as ``a[] contains no duplicates''.
+@item TwoSequence
+for invariants over two sequences, such as ``a[] is a
+subsequence of b[]''.
+@item SequenceScalar
+for invariants over a scalar and a sequence, such
+as ``x is a member of a[]''.
+@end table
 @noindent
 A complete list of the types appears in classes @samp{PptSlice1},
 @samp{PptSlice2}, and @samp{PptSlice3}, in their respective
@@ -451,7 +402,7 @@ documentation): @samp{PROBABILITY_JUSTIFIED},
 @samp{PROBABILITY_NEVER}.
 
 For example, suppose your new invariant has a 50% chance of being true
-by chance for each sample.  ("x is even" is an example of such an
+by chance for each sample.  (``x is even'' is an example of such an
 invariant.)  Then a reasonable body for @samp{computeProbability} would
 be
 @example
@@ -497,39 +448,39 @@ different meanings in Daikon.  However, their meanings are not
 mutually exclusive, so some places of use in the code can be
 interchanged.
 
-@itemize
+@table @asis
 
 @item isObviousStatically
 
-  An invariant statically obvious if it is true from a fact that can
-  be known from just the program's code.  IsObviousStatically handles
-  any invariants that are statically true.  IsObviousStatically is
-  called at the beginning of inferencing for non-instantiation (see
-  below) and at the end for printing.
+An invariant statically obvious if it is true from a fact that can
+be known from just the program's code.  IsObviousStatically handles
+any invariants that are statically true.  IsObviousStatically is
+called at the beginning of inferencing for non-instantiation (see
+below) and at the end for printing.
 
 @item isObviousDynamically
 
-  An invariant dyanmically obvious if it is true from a fact that can
-  requires sample data.  IsObviousDynamically handles any invariants
-  that are dynamically true.  IsObviousDynamically is only called
-  after inferencing, for it would not be sound to call it before all
-  data samples have been seen. IsObviousDynamically can use facts on
-  the invariant itself, or search for other invariants to support the
-  obviousness of the invariant.
+An invariant dyanmically obvious if it is true from a fact that can
+requires sample data.  IsObviousDynamically handles any invariants
+that are dynamically true.  IsObviousDynamically is only called
+after inferencing, for it would not be sound to call it before all
+data samples have been seen. IsObviousDynamically can use facts on
+the invariant itself, or search for other invariants to support the
+obviousness of the invariant.
 
 @item Non-instantiation
 
-  Preventing the creation of an invariant because it is statically
-  obvious.  With equality, non-instantiation can only happen if all
-  equality permutations are statically obvious.
+Preventing the creation of an invariant because it is statically
+obvious.  With equality, non-instantiation can only happen if all
+equality permutations are statically obvious.
 
 @item Suppression
 
-  Mechanism for having an invariant implied by another set of
-  invariants not checked.  It is the sound method to avoid the
-  checking of such invariants during inferencing.
+Mechanism for having an invariant implied by another set of
+invariants not checked.  It is the sound method to avoid the
+checking of such invariants during inferencing.
 
-@end itemize
+@end table
 
 How these relate:
 
@@ -542,12 +493,12 @@ sound for during inferencing, unlike suppression.
 
 Suppression is limited to a specific set of dynamic obviousness, the
 ones involving other invariants.  Dynamic obviousness also includes
-singletons like "size(x[]) >= 0".
+singletons like ``size(x[]) >= 0''.
 
-The last question to ask is: "Can suppression handle everything
-isObviousDynamically can?"
+The last question to ask is: ``Can suppression handle everything
+isObviousDynamically can?''
 
-The short answer is, "No."  Supression is efficient because it saves
+The short answer is, ``No.''  Supression is efficient because it saves
 time during inferencing.  However, it is not adequate.  There are two
 issues.
 
@@ -749,10 +700,11 @@ suppress.
 @item
 Add an inner class to the suppressor invariant that inherits from
 daikon.suppress.SuppressionFactory.  It must support the method:
-
-  @samp{public abstract SuppressionLink generateSuppressionLink (Invariant inv)}
-
-where "inv" is the suppressee.  During inferencing, Daikon will pass
+@example
+  public abstract SuppressionLink generateSuppressionLink (Invariant inv)
+@end example
+@noindent
+where ``inv'' is the suppressee.  During inferencing, Daikon will pass
 potential suppressees to the generateSuppressionLink method and the
 method will tell Daikon whether suppression can occur.
 
@@ -763,9 +715,10 @@ factory itself may not search for suppressors, but must use
 invariants to look for.  The suppression factory should create a
 template with the right specifications filled in, and then pass the
 template to the method:
-
-  @samp{public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)}
-
+@example
+  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)
+@end example
+@noindent
 in daikon.PptTopLevel.  If a template fill is successful, the template
 will contain the suppressors, and the method will return true.  The
 generateSuppressionLink method should return @samp{null} if the
@@ -800,7 +753,7 @@ alternatives to using a debugger.
 @node General Logging, Track logging, Debugging Daikon, Debugging Daikon
 @section General Logging
 
-[Fill this section in after we have switched to java logging]
+[Fill this section in after we have switched to java logging.]
 
 @node Track logging, Adding Track logging, General Logging, Debugging Daikon
 @section Track logging
@@ -813,7 +766,7 @@ values across Daikon.
 
 Track logging is specified by three pieces of information: 
 
-   @itemize @bullet
+   @enumerate
    
    @item The class name of the invariant (e.g., @code{IntEqual})
 
@@ -823,7 +776,7 @@ Track logging is specified by three pieces of information:
    @item The variables that are used in the invariant (e.g., @code{return},
    @code{size(this.s[])})
 
-   @end itemize
+   @end enumerate
 
 These items are specified in the String arrays @code{debugTrackClass},
 @code{debugTrackPpt} and @code{debugTrackVars} in Debug.java.  The class,
@@ -831,14 +784,13 @@ program point, and each of the variables (in order) must match in order
 for information concerning the invariant to be printed.  Multiple items
 can be specified in each array.  Information will be printed if any of
 the items match.  For example, 
-
 @example
     public static String[] debugTrackClass = @{
       "LowerBound",
       "UpperBound",
     @}
 @end example
-
+@noindent
 will match Invariants of either @code{LowerBound} or @code{UpperBound}.
 
 Matching is a simple substring comparison.  The specified item must be
@@ -906,9 +858,9 @@ More detailed information can be found in the Javadoc for @uref{http://pag.lcs.m
 daikon.inv.Invariant}.
 
 @node Adding Track logging, Track log output, Track logging, Debugging Daikon
-@section Adding Track logging
+@subsection Adding Track logging
 
-As indicated in the previous section, @emph{Track} logging is based
+@emph{Track} logging is based
 around the class name, program point name, and variables of interest.
 Track logging methods accept these parameters and a string to be printed.
 Debug.java implements the following basic log methods:
@@ -956,7 +908,7 @@ using @code{logDetail()} should be commented out when not in active use.
 
 
 @node Track log output,  , Adding Track logging, Debugging Daikon
-@section Track log output
+@subsection Track log output
 
 Each call to a track log method will produce output in the same basic
 format. Space for three variables is always maintained for consistency:
