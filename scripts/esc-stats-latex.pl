@@ -30,6 +30,7 @@ my %types_map = (
 		 "axiom" => "Axiom",
 		 );
 my @printed_types = ("Object", "Requires", "Modifies", "Ensures");
+my %printed_types = ("Object" => 1, "Requires" => 1, "Modifies" => 1, "Ensures" => 1);
 
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes =
@@ -147,12 +148,13 @@ for my $file (@ARGV) {
       $redun{$type} += $evr + $enr + $ir;
       $miss{$type} += $a;
     } else {
-      # ignore $type
-      $verified += $evu;
-      $unverified += $enu;
-      $inexpressible += $iu;
-      $redundant += $evr + $enr + $ir;
-      $missing += $a;
+      if (defined($printed_types{$type})) {
+	$verified += $evu;
+	$unverified += $enu;
+	$inexpressible += $iu;
+	$redundant += $evr + $enr + $ir;
+	$missing += $a;
+      }
     }
   }
   close(SOURCE);
