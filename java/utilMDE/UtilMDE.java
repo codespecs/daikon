@@ -814,6 +814,63 @@ public final class UtilMDE {
   // // assert(UtilMDE.trimWhitespace("   ").equals(""));
 
 
+  /** Remove all whitespace before or after instances of delimiter. **/
+  public static String removeWhitespaceAround(String arg, String delimiter) {
+    arg = removeWhitespaceBefore(arg, delimiter);
+    arg = removeWhitespaceAfter(arg, delimiter);
+    return arg;
+  }
+
+  /** Remove all whitespace after instances of delimiter. **/
+  public static String removeWhitespaceAfter(String arg, String delimiter) {
+    // String orig = arg;
+    int delim_len = delimiter.length();
+    int delim_index = arg.indexOf(delimiter);
+    while (delim_index > -1) {
+      int non_ws_index = delim_index+delim_len;
+      while ((non_ws_index < arg.length())
+             && (Character.isWhitespace(arg.charAt(non_ws_index)))) {
+        non_ws_index++;
+      }
+      // if (non_ws_index == arg.length()) {
+      //   System.out.println("No nonspace character at end of: " + arg);
+      // } else {
+      //   System.out.println("'" + arg.charAt(non_ws_index) + "' not a space character at " + non_ws_index + " in: " + arg);
+      // }
+      if (non_ws_index != delim_index+delim_len) {
+        arg = arg.substring(0, delim_index + delim_len) + arg.substring(non_ws_index);
+      }
+      delim_index = arg.indexOf(delimiter, delim_index+1);
+    }
+    return arg;
+  }
+
+  /** Remove all whitespace before instances of delimiter. **/
+  public static String removeWhitespaceBefore(String arg, String delimiter) {
+    // System.out.println("removeWhitespaceBefore(\"" + arg + "\", \"" + delimiter + "\")");
+    // String orig = arg;
+    int delim_len = delimiter.length();
+    int delim_index = arg.indexOf(delimiter);
+    while (delim_index > -1) {
+      int non_ws_index = delim_index-1;
+      while ((non_ws_index >= 0)
+             && (Character.isWhitespace(arg.charAt(non_ws_index)))) {
+        non_ws_index--;
+      }
+      // if (non_ws_index == -1) {
+      //   System.out.println("No nonspace character at front of: " + arg);
+      // } else {
+      //   System.out.println("'" + arg.charAt(non_ws_index) + "' not a space character at " + non_ws_index + " in: " + arg);
+      // }
+      if (non_ws_index != delim_index-1) {
+        arg = arg.substring(0, non_ws_index + 1) + arg.substring(delim_index);
+      }
+      delim_index = arg.indexOf(delimiter, non_ws_index+2);
+    }
+    return arg;
+  }
+
+
   // @return either "n noun" or "n nouns" depending on n
   public static String nplural(int n, String noun)
   {

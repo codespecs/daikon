@@ -604,7 +604,7 @@ public final class TestUtilMDE extends TestCase {
     long[] laIntern = Intern.intern(laOrig);
     Object laOIntern = Intern.intern((Object) laOrig);
     assertTrue(laIntern == laOIntern);
-    
+
     Double dOrig = new Double(3.14);
     Double dIntern = Intern.intern(dOrig);
     Object dOIntern = Intern.intern((Object) dOrig);
@@ -1141,6 +1141,57 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.unquote("\\\\relax").equals("\\relax"));
     assertTrue(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
     assertTrue(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
+
+    assertTrue(UtilMDE.removeWhitespaceBefore("a,b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("a, b", ",").equals("a, b"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("a ,b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("a , b", ",").equals("a, b"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("ab=>cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("ab=> cd", "=>").equals("ab=> cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("ab =>cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("ab => cd", "=>").equals("ab=> cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("123cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore(" 123 cd", "123").equals("123 cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore(" 123cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("123 cd", "123").equals("123 cd"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("cd123", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceBefore("cd 123 ", "123").equals("cd123 "));
+    assertTrue(UtilMDE.removeWhitespaceBefore("cd123 ", "123").equals("cd123 "));
+    assertTrue(UtilMDE.removeWhitespaceBefore("cd 123", "123").equals("cd123"));
+
+    assertTrue(UtilMDE.removeWhitespaceAfter("a,b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("a, b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("a ,b", ",").equals("a ,b"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("a , b", ",").equals("a ,b"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("ab=>cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("ab=> cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("ab =>cd", "=>").equals("ab =>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("ab => cd", "=>").equals("ab =>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("123cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter(" 123 cd", "123").equals(" 123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter(" 123cd", "123").equals(" 123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("123 cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("cd123", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("cd 123 ", "123").equals("cd 123"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("cd123 ", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceAfter("cd 123", "123").equals("cd 123"));
+
+    assertTrue(UtilMDE.removeWhitespaceAround("a,b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAround("a, b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAround("a ,b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAround("a , b", ",").equals("a,b"));
+    assertTrue(UtilMDE.removeWhitespaceAround("ab=>cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("ab=> cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("ab =>cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("ab => cd", "=>").equals("ab=>cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("123cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround(" 123 cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround(" 123cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("123 cd", "123").equals("123cd"));
+    assertTrue(UtilMDE.removeWhitespaceAround("cd123", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceAround("cd 123 ", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceAround("cd123 ", "123").equals("cd123"));
+    assertTrue(UtilMDE.removeWhitespaceAround("cd 123", "123").equals("cd123"));
 
     assertTrue(UtilMDE.rpad("", 5).equals("     "));
     assertTrue(UtilMDE.rpad("abcd", 5).equals("abcd "));
