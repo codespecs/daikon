@@ -12,7 +12,7 @@ daikon.info: daikon.texinfo config-options.texinfo .fix-menu
 # sh seems not to permit redirecting standard error to standard out
 .fix-menu: daikon.texinfo
 	@echo "Updating menus in daikon.texinfo..."
-	@emacs --batch daikon.texinfo --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for"
+	@emacs --batch daikon.texinfo --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:'
 	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo
 	touch .fix-menu
 
