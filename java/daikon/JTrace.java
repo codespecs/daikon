@@ -11,14 +11,27 @@
 
 package daikon;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.*;
-
 import daikon.JTraceInference;
+import utilMDE.ArraysMDE;
 
-// This class is never instantiated. All methods are static.
-abstract class JTrace
+/**
+ * JTrace is a wrapper program that runs both a target program and
+ * Daikon's inference engine in parallel.  It also loads, starts, and
+ * stops the libJTrace.so debugger library. <p>
+ *
+ * When the target program exits, this class writes a binary-format
+ * ".inv" file that contains the detected invariants.  The file may be
+ * viewed with the PrintInvariants tool, or one of the GUIs.
+ **/
+public class JTrace
 {
-    public static void		main(String[] args)
+    // This class is never instantiated. All methods are static.
+    private JTrace() { }
+
+    public static void main(String[] args)
     {
 	// This usage message is displayed on behalf of the toplevel
 	// driver script.
@@ -28,7 +41,10 @@ abstract class JTrace
 	    return;
         }
 
-	Method main_method = loadTargetProgram(args[0]);
+	String target_name = args[0]; // first is program, rest is its args
+	String[] target_args = ArraysMDE.subarray(args, 1, args.length - 1);
+
+	Method main_method = loadTargetProgram(target_name);
 	if(main_method == null)
 	    return;
 
@@ -53,9 +69,7 @@ abstract class JTrace
 
 	// Now start the target program such that calls to exit from
 	// within it are caught as exceptions here:
-	String[] newargs = new String[args.length - 1]; // (cdr args)
-	System.arraycopy(args, 1, newargs, 0, newargs.length);
-	boolean ok = runTargetProgram(main_method, newargs);
+	boolean ok = runTargetProgram(main_method, target_args);
 
 	// target is dead!  Now finish off...
 
@@ -67,6 +81,18 @@ abstract class JTrace
 	    inference.joinX(); // ...wait for it to stop
 
 	System.setSecurityManager(null);
+
+	// Write out the invariant file
+	File inv_file = new File("temp.inv"); // XXX read name from command line with -o, like Daikon
+	try {
+	    FileIO.write_serialized_pptmap(inference.all_ppts, inv_file);
+	} catch (IOException e) {
+	    System.err.println("Error while writing '" + inv_file + "': " + e);
+	    System.exit(1);
+	}
+
+	// Display the invariants
+	PrintInvariants.print_invariants(inference.all_ppts);
 
 	println(V_INFO, "JTrace: Application thread stop.");
     }
