@@ -4056,12 +4056,12 @@ of the manual lists other requirements and limitations.
 @subsubsection C program requirements
 
 
-@command{dfec} only instruments ANSI/ISO C programs.  dfec does not
-support K&R C or other non-ANSI/ISO C dialects.  Before running
-@command{dfec}, you should ensure that your code is legal ANSI/ISO C
-and that it compiles cleanly, because @command{dfec} issues warnings
-about a number of erroneous C constructs that @command{gcc} and other
-compilers accept.
+@command{dfec} only instruments ANSI/ISO C programs.  @command{dfec}
+does not support K&R C or other non-ANSI/ISO C dialects.  Before
+running @command{dfec}, you should ensure that your code is legal
+ANSI/ISO C and that it compiles cleanly, because @command{dfec} issues
+warnings about a number of erroneous C constructs that @command{gcc}
+and other compilers accept.
 
 @cindex ANSI C
 @cindex ISO C
@@ -4088,7 +4088,9 @@ definition was allowed to have any number of arguments, but such
 declarations are obsolescent under the ANSI/ISO C standard, and in C++
 they always denote a function that takes no arguments.  To specify a
 prototype in ANSI/ISO C for a function that takes no arguments, write
-@code{f(void)}.
+@code{f(void)}.  @command{dfec} is more strict about type checking
+than @command{gcc} is.  You may have to remove or add some
+@command{const} modifiers.  
 
 If you do not understand a dfec error message that indicates a problem
 with your source code, you may wish to check your code for ANSI/ISO
@@ -4103,18 +4105,18 @@ command do indicate that your code is not ANSI/ISO C@.)
 are the exceptions.
 @enumerate
 @item
-@command{dfec} only instruments programs that are both legal C
-and legal C++.  However, most ANSI/ISO C programs are also legal C++
+@command{dfec} only instruments programs that are both legal C and
+legal C++.  However, most ANSI/ISO C programs are also legal C++
 programs.  Programs that define symbols that are C++ keywords, such as
 @samp{bool}, require that these symbols be changed to another name
 that does not conflict with the C++ namespace (for example,
 @samp{bool} can be changed to @samp{boolean}).
 
 If g++ gives an error message while compiling the instrumented code,
-then first try compiling the uninstrumented code with 
-@command{g++}, and remove any errors that g++ issues.  For instance,
-C++ requires declaration of prototypes, whereas C can sometimes guess
-the types for missing prototypes.
+then first try compiling the uninstrumented code with @command{g++},
+and remove any errors that g++ issues.  For instance, C++ requires
+declaration of prototypes, whereas C can sometimes guess the types for
+missing prototypes.
 
 @item 
 Instrumented programs must not redeclare functions defined in system
@@ -4128,14 +4130,17 @@ headers; for instance, do not do the following:
 The reason is that dfec expects every C file to contain either only
 code and declarations that are instrumented (with respect to smart
 pointer tracking), or no code that is instrumented (with respect to
-smart pointer tracking).  User code is so instrumented, but 
-library functions are not,
-so you should use the declaration in @file{stdlib.h} rather than
-repeating it in your own code.
+smart pointer tracking).  User code is so instrumented, but library
+functions are not, so you should use the declaration in
+@file{stdlib.h} rather than repeating it in your own code.
 @item
-dfec redefines certain functions defined in system headers.  If your
-program tries to define these as macros or otherwise uses them in a
-non-standard way, you may experience trouble.
+@command{dfec} requires that all function prototypes, or declarations
+are identical to the function definitions.  Some compilers may allow
+slight differences.
+@item
+@command{dfec} redefines certain functions defined in system headers.
+If your program tries to define these as macros or otherwise uses them
+in a non-standard way, you may experience trouble.
 @end enumerate
 
 
