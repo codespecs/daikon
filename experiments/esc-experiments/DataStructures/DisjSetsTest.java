@@ -25,7 +25,8 @@ class DisjSetsTest
   }
 
   public void testRandoms() {
-    int[] sizes = { 0, 1, 5, 50, 10 };
+    // Need to get lots of samples in the range 0..115
+    int[] sizes = { 0, 1, 5, 50, 10, 65, 25, 35 };
     for (int i=0; i < sizes.length; i++) {
       int size = sizes[i];
       System.out.println("size[" + i + "] = " + size);
@@ -55,36 +56,36 @@ class DisjSetsTest
       }
     }
 
-    ds = new DisjSets(200);
-    ds.find(197);
+    ds = new DisjSets(100);
+    ds.find(97);
 
-    ds = new DisjSets(204);
-    ds.unionCareful(191, 195);
+    ds = new DisjSets(104);
+    ds.unionCareful(91, 95);
     ds.find(10);
 
-    ds = new DisjSets(210);
-    ds.unionDisjoint(200, 209);
-    ds.find(209);
-    ds.unionDisjoint(200, 0);
-    ds.find(0);  
+    ds = new DisjSets(110);
+    ds.unionDisjoint(100, 109);
+    ds.find(109);
+    ds.unionDisjoint(100, 0);
+    ds.find(0);
 
     // this kills some spurious array endpoint invariants
-    ds = new DisjSets(210);
-    ds.unionCareful(208, 209);
-    ds.unionCareful(207, 208);
-    ds.unionCareful(206, 207);
-    ds.find(208);
+    ds = new DisjSets(110);
+    ds.unionCareful(108, 109);
+    ds.unionCareful(107, 108);
+    ds.unionCareful(106, 107);
+    ds.find(108);
 
-    ds = new DisjSets(215);
-    ds.unionCareful(214, 0);
-    ds.unionCareful(213, 214);
-    ds.unionCareful(214, 214);
+    ds = new DisjSets(115);
+    ds.unionCareful(114, 0);
+    ds.unionCareful(113, 114);
+    ds.unionCareful(114, 114);
   }
 
   private static Random rnd = new Random(1000);
   private static int rnd(int lessThan)
   {
-    int result = Math.abs(rnd.nextInt()) % lessThan;
+    int result = Math.abs(rnd.nextInt(lessThan));
     if ((0 <= result) && (result < lessThan))
       return result;
     else
@@ -98,8 +99,10 @@ class DisjSetsTest
   }
 
   public void testFromDsaaMain() {
-    int numElements = 128;
-    int numInSameSet = 16;
+    // int numElements = 128;
+    // int numInSameSet = 16;
+    int numElements = 64;
+    int numInSameSet = 8;
 
     DisjSets ds = new DisjSets( numElements );
     int set1, set2;
