@@ -26,6 +26,8 @@ use POSIX qw(tmpnam);
 # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
 # 9 Otherwise, dump the slurped output to stdout and exit
 
+my $debug = 0;
+
 my $tmpdir;
 BEGIN {
     $tmpdir = tmpnam();
@@ -34,6 +36,12 @@ BEGIN {
 }
 END {
     rmtree($tmpdir) if ($tmpdir);
+}
+
+sub debug {
+    while ($debug && @_) {
+	print shift, "\n";
+    }
 }
 
 sub slurpfile {
@@ -49,7 +57,7 @@ my $gensym_counter = 0;
 sub gensym {
     # returns some unique nonce
     my $result = $gensym_counter++;
-    while (length($result) < 9) {
+    while (length($result) < 4) {
 	$result = "0" . $result;
     }
     return $result;
@@ -90,8 +98,13 @@ sub copytmp {
 
 # 0 We are given a (possibly-annotated) source file and a txt-esc file
 
-my $sourcefile = $ARGV[0];
-my $txtescfile = $ARGV[1];
+if ($ARGV[0] eq "-d") {
+    print STDERR "Debugging on\n";
+    $debug = 1;
+    shift @ARGV;
+}
+my $sourcefile = shift @ARGV;
+my $txtescfile = shift @ARGV;
 
 unless ((-f $sourcefile) && (-f $txtescfile) && ($sourcefile =~ /\.java$/)) {
     print STDERR "Usage: $0 source.java annotations.txt-esc\n";
@@ -101,15 +114,15 @@ unless ((-f $sourcefile) && (-f $txtescfile) && ($sourcefile =~ /\.java$/)) {
 # 1 Read the txt file into memory, adding a nonce to the end of each invariant: ";//nonce-gensym"
 
 my @txtesc = slurpfile($txtescfile);
-@txtesc = grep(sub {
+#@txtesc = 
+grep {
     my $nonce = ";//nonce-" . gensym();
-    # Skip over things we shouldn't touch
-    return 1 if m/===========================================================================/;
-    return 1 if m/:::(ENTER|EXIT|OBJECT|CLASS)/;
-    return 1 if m/variables:/;
-    # Add a gensym to the rest
-    s|\n|$nonce\n|;
-}, @txtesc);
+    # Skip over things we shouldn't touch; add a gensym to the rest
+    m/===========================================================================/
+	|| m/\:\:\:(:ENTER|EXIT|OBJECT|CLASS)/
+	    || m/variables\:/
+		|| s|$|$nonce|;
+} @txtesc;
 
 # Iterative ("Houdini") looping
 while (1) {
@@ -121,30 +134,39 @@ while (1) {
 
     # 4 Merge the temp text file into the temp source file
     print STDERR `cd $tmpdir && merge-esc.pl $txtesctmp`;
+    unlink($sourcetmp);
+    rename("$sourcetmp-escannotated", $sourcetmp);
 
     # 5 Run ESC on the temp source file and slurp the results
-    my $notdir_sourcefile = notdir($sourcefile);
-    my @escoutput = `cd $tmpdir && escjava $notdir_sourcefile`;
+    debug("Running ESC");
+    my $notdir_sourcetmp = notdir($sourcetmp);
+    my @escoutput = `cd $tmpdir && escjava $notdir_sourcetmp`;
 
     # 6 Remove the two temporary files
     unlink($txtesctmp);
     unlink($sourcetmp);
 
     # 7 Grep the results for "/*@ ...; //nonce-gensym */"
-    my @failures = grep { m|; //nonce-\d+ |; } @escoutput;
-    @failures = grep { s|^\s*/\*\@ +(.*); //nonce-\d+ \*/\s*$||; } @failures;
+    my @failures = grep { m|;//nonce-\d+ |; } @escoutput;
+    #debug("ESC reported", @failures);
+    grep { s|^\s*/\*\@ +\w+ (.*);//nonce-.*|$1|s; } @failures;
 
     # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
+    my $txtesc_changed = 0;
     for my $failure (@failures) {
-	my $dec_check = scalar(@failures);
-	@txtesc = grep { !($_ eq $failure) } @txtesc;
-	if ($dec_check >= scalar(@failures)) {
-	    print STDERR "Could not find failure '$failure'\n";
-	}
+	$failure .= ";//nonce-";
+	debug("Removing '$failure'");
+	my $dec_check = $#txtesc;
+	@txtesc = grep { !/^\Q$failure/ } @txtesc;
+	if ($#txtesc < $dec_check) {
+	    $txtesc_changed = 1;
+	} else {
+	    print STDERR "Did not find '$failure'\n";
+	} 
     }
 
     # 9 Otherwise, dump the slurped output to stdout and exit
-    unless (@failures) {
+    unless ($txtesc_changed) {
 	print @escoutput;
 	exit;
     }
