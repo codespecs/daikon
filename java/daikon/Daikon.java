@@ -40,8 +40,8 @@ public final class Daikon {
     throw new Error("do not instantiate");
   }
 
-  public final static String release_version = "3.1.3";
-  public final static String release_date = "September 1, 2004";
+  public final static String release_version = "3.1.4";
+  public final static String release_date = "October 1, 2004";
   public static final String release_string =
     "Daikon version "
       + release_version
@@ -185,7 +185,7 @@ public final class Daikon {
    * calculated by joining the invariants from each of their children
    * points.
    **/
-  public static boolean dkconfig_df_bottom_up = true;
+  // public static boolean dkconfig_df_bottom_up = true;
 
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
@@ -872,10 +872,6 @@ public final class Daikon {
     // Set the fuzzy float comparison ratio.  This needs to be done after
     // any configuration options (which may set the ratio) are processed.
     Global.fuzzy.set_rel_diff(Invariant.dkconfig_fuzzy_ratio);
-
-    // Enable dynamic constants for bottom up only
-    if (!dkconfig_df_bottom_up)
-      dkconfig_use_dynamic_constant_optimization = false;
 
     // Setup ppt_max_name based on the specified percentage of ppts to process
     if (dkconfig_ppt_perc != 100) {
@@ -1572,20 +1568,16 @@ public final class Daikon {
       }
     }
 
-    // If we are processing dataflow bottom up
-    if (dkconfig_df_bottom_up) {
+    // Initialize the partial order hierarchy
+    debugProgress.fine("Init Hierarchy ... ");
+    PptRelation.init_hierarchy(all_ppts);
+    debugProgress.fine("Init Hierarchy ... done");
 
-      // Initialize the partial order hierarchy
-      debugProgress.fine("Init Hierarchy ... ");
-      PptRelation.init_hierarchy(all_ppts);
-      debugProgress.fine("Init Hierarchy ... done");
-
-      // Calculate invariants at all non-leaf ppts
-      if (use_dataflow_hierarchy) {
-        debugProgress.fine("createUpperPpts");
-        createUpperPpts(all_ppts);
-        debugProgress.fine("createUpperPpts ... done");
-      }
+    // Calculate invariants at all non-leaf ppts
+    if (use_dataflow_hierarchy) {
+      debugProgress.fine("createUpperPpts");
+      createUpperPpts(all_ppts);
+      debugProgress.fine("createUpperPpts ... done");
     }
 
     // Equality data for each PptTopLevel.
