@@ -10,7 +10,11 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
-SCRIPT_FILES := java-cpp.pl daikon.pl lines-from daikon.cshrc daikon.bashrc createspinfo.pl trace-untruncate trace-purge-fns.pl trace-purge-vars.pl
+SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
+	daikon.cshrc daikon.bashrc \
+	trace-untruncate trace-purge-fns.pl trace-purge-vars.pl \
+	checkargs.pm util_daikon.pm \
+	runcluster.pl decls-add-cluster.pl extract_vars.pl write_dtrace.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
@@ -328,8 +332,8 @@ daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daiko
 
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
+	cp -p daikon.jar /tmp/daikon
 	# # Now we are ready to make the daikon-compiled distribution
-	# cp -p daikon.jar /tmp/daikon
 	# (cd /tmp; tar cf daikon-compiled.tar daikon)
 	# cp -pf /tmp/daikon-compiled.tar .
 
@@ -397,7 +401,7 @@ daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daiko
 	## Front ends
 	mkdir /tmp/daikon/front-end
 
-	# # C/C++ instrumenter
+	# # C/C++ instrumenter -- now distributed separately
 	# mkdir /tmp/daikon/front-end/c
 	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
@@ -411,9 +415,13 @@ daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daiko
 	# the subsequence rm -rf shouldn't be necessary one day,
 	# but for the time being (and just in case)...
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
-	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES); rm -rf )
+	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES) )
 
-	# Make the source distribution proper
+	## Tools
+	cp -pR tools /tmp/daikon
+	(cd /tmp/daikon/tools; $(RM_TEMP_FILES); rm -f kmeans/kmeans; (cd hierarchical; rm -f clgroup cluster den difftbl) )
+
+	## Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
 	cp -pf /tmp/daikon.tar .
