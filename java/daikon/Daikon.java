@@ -277,7 +277,7 @@ public final class Daikon {
   /** Debug tracer **/
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
-  public static final Logger debugProgress =Logger.getLogger("daikon.Progress");
+  public static final Logger debugProgress = Logger.getLogger("daikon.Progress");
 
   public static final Logger debugEquality = Logger.getLogger("daikon.Equality");
 
@@ -958,21 +958,24 @@ public final class Daikon {
     if (dkconfig_df_bottom_up) {
 
       // Initialize the partial order hierarchy
-      debugProgress.fine ("Init Hierarchy");
+      debugProgress.fine ("Init Hierarchy ... ");
       PptRelation.init_hierarchy (all_ppts);
+      debugProgress.fine ("Init Hierarchy ... done");
 
       // Calculate invariants at all non-leaf ppts
       debugProgress.fine ("createUpperPpts");
       Dataflow.createUpperPpts (all_ppts);
+      debugProgress.fine ("createUpperPpts ... done");
     }
 
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization) {
-      debugProgress.fine ("Equality Post Process");
+      debugProgress.fine ("Equality Post Process ... ");
       for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
       }
+      debugProgress.fine ("Equality Post Process ... done");
     }
 
     if (debugEquality.isLoggable (Level.FINE)) {
@@ -983,18 +986,21 @@ public final class Daikon {
     }
 
     // One more round of suppression for printing
-    debugProgress.fine ("Suppress for printing");
+    debugProgress.fine ("Suppress for printing ... ");
     for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.suppressAll (false);
     }
+    debugProgress.fine ("Suppress for printing ... done");
 
     // Add implications
-    debugProgress.fine ("Adding Implications");
+    debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
+      // debugProgress.fine ("  Adding Implications for " + ppt.name);
       ppt.addImplications();
     }
+    debugProgress.fine ("Adding Implications ... done");
 
 
     // debug print suppressed invariants
