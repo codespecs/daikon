@@ -380,31 +380,31 @@ Examples
 
 The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
 reports likely program invariants.  An invariants is a property that
-holds a a certain point or points in a program; these are often seen in
-assert statements, documentation, and formal specifications.  Examples
-include arithmetic equations such as "x > abs(y)", "x = 3*y + 4*z - 7",
-or "x = 0 (mod 4)", and properties over arrays and other collections,
-including those accessed via pointers.  Daikon also reports implications
-(invariants whose truth depends on some other property), such as "p !=
-null => p.content in collection".
+holds a a certain point or points in a program; these are often seen
+in assert statements, documentation, and formal specifications.
+Examples include arithmetic equations such as "x > abs(y)", "x = 3*y +
+4*z - 7", or "x = 0 (mod 4)", and properties over arrays and other
+collections, including those accessed via pointers.  Daikon also
+reports implications (invariants whose truth depends on some other
+property), such as "p != null => p.content in collection".
 
 Invariants can be useful in program understanding and a host of other
-applications.  Daikon operates by running the program and examining the
-values it computes, looking for patterns and relationships among those
-values.  Front ends (@pxref{Instrumentation}) exist for the Java, C,
-C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and Perl
-languages.  Front ends also exist for other applications, such as the
-@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
+applications.  Daikon operates by running the program and examining
+the values it computes, looking for patterns and relationships among
+those values.  Front ends (@pxref{Instrumentation}) exist for the
+Java, C, C++, @uref{http://theory.lcs.mit.edu/tds/ioa/, ,IOA}, and
+Perl languages.  Front ends also exist for other applications, such as
+the @uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
 checker}.  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for most uses; for details, see
 @ref{License}.
 
-More information on Daikon can be found in the Daikon Developer Manual.
-For instance, the Daikon Developer Manual indicates how to extend
-Daikon with new invariants, new derived variables, and front ends for
-new languages.  It also contains information about the implementation
-and about debugging flags.
+More information on Daikon can be found in the Daikon Developer
+Manual.  For instance, the Daikon Developer Manual indicates how to
+extend Daikon with new invariants, new derived variables, and front
+ends for new languages.  It also contains information about the
+implementation and about debugging flags.
 
 @menu
 * Mailing lists::               
