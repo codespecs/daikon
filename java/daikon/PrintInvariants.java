@@ -1218,8 +1218,22 @@ public class PrintInvariants {
     } else if (Daikon.output_style == OutputFormat.JAVA
                || Daikon.output_style == OutputFormat.JML
                || Daikon.output_style == OutputFormat.DBCJAVA) {
+
       inv_rep = inv.format_using(Daikon.output_style);
-    } else {
+
+      // TODO: Remove once we revise OutputFormat
+      if (Daikon.output_style == OutputFormat.JAVA) {
+        inv_rep = inv.format_using (OutputFormat.DBCJAVA);
+        // if there is a $pre string in the format, then it contains
+        // the orig variable and should not be printed.
+        if (inv_rep.indexOf ("$pre") != -1) {
+          return;
+        }
+      }
+
+    }
+
+    else {
       throw new IllegalStateException("Unknown output mode");
     }
     if (Daikon.output_num_samples) {
