@@ -11,6 +11,8 @@ public final class Global {
   // There are some other variables in the Daikon class.  Probably move
   // them here eventually.
 
+  // When set, the following variables are never derived:
+  // min, max, sum, a[0], a[1], a[-2], a[-1] 
   // public static final boolean EXPERIMENTS = true;
   public static final boolean EXPERIMENTS = false;
 
