@@ -2291,34 +2291,37 @@ point name.  Note that currently only classes are matched, not each full
 ppt name.  Thus, either all of a classes methods are traced or none of
 them are.
 
-For example, to avoid detecting invariants over an iterator class, you
-can call Chicory like so:
+The argument is treated as a regular expression.
 
+Here are examples of how to avoid detecting invariants over various
+parts of your program.
+
+@itemize
+@item omit a whole package:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=HashSetLinear$HslIterator' ...
+  java daikon.Chicory '--ppt-omit-pattern=^junit\.'
+@end smallexample
+@smallexample
+  java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
 @end smallexample
 
-As another example, to avoid detecting invariants over a particular
-method, you could use:
+@item omit a single class:
+@smallexample
+java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
+@end smallexample
+
+@item omit a single method:
 @smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
      ...
 @end smallexample
 
-Finally, to avoid detecting invariants at a particular program point,
-try:
+@item omit a single program point:
 @smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
 @end smallexample
 
-The argument is treated as a regular expression.
-
-For example, to avoid detecting invariants over all classes in package
-daikon.util, you can call Chicory like so:
-@smallexample
-  java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
-@end smallexample
-
+@end itemize
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
