@@ -43,7 +43,10 @@ public class Fmt {
         if (cmd == '%')
           result.append ('%');
         else if (cmd == 's') {
-          result.append (args[current_arg].toString());
+          if (args[current_arg] == null)
+            result.append ("null");
+          else
+            result.append (args[current_arg].toString());
           current_arg++;
         }
       }
@@ -79,6 +82,11 @@ public class Fmt {
     return (spf (format, new Object[] {arg1, arg2, arg3, arg4}));
   }
 
+  static public String spf (String format, Object arg1, Object arg2,
+                           Object arg3, Object arg4, Object arg5) {
+    return (spf (format, new Object[] {arg1, arg2, arg3, arg4, arg5}));
+  }
+
   static public void pf (String format) {
     pf (format, new Object[0]);
   }
@@ -102,6 +110,12 @@ public class Fmt {
   static public void pf (String format, Object arg1, Object arg2,
                            Object arg3, Object arg4) {
     pf (format, new Object[] {arg1, arg2, arg3, arg4});
+    return;
+  }
+
+  static public void pf (String format, Object arg1, Object arg2,
+                           Object arg3, Object arg4, Object arg5) {
+    pf (format, new Object[] {arg1, arg2, arg3, arg4, arg5});
     return;
   }
 
