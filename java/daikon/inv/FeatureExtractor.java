@@ -125,7 +125,6 @@ public final class FeatureExtractor {
     // as the invariants in useful and nonuseful.
     // Then extract the descriptions of each invariant, also kept in the
     // same order
-
     // ########## Commented out in order to use reflect functions
     //    ArrayList usefulFeatures = getFeatures(useful);
     //    ArrayList nonusefulFeatures = getFeatures(nonuseful);
@@ -270,34 +269,6 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet allFeatures = new TreeSet();
     HashMap numbersToNames = new HashMap();
-    for (Iterator i = lookup.keySet().iterator(); i.hasNext(); ) {
-      Object key = i.next();
-      int num = ((Integer) lookup.get(key)).intValue();
-      IntDoublePair pair = new IntDoublePair(num, 0);
-      allFeatures.add(pair);
-      String name;
-      if (key instanceof Class)
-        name = ((Class) key).getName() + "Bool";
-      else if (key instanceof Field) {
-        name = ((Field) key).getName();
-        if (((Field) key).getType().equals(Boolean.TYPE))
-          name+= "Bool";
-        else
-          name += "Float";
-      }
-      else if (key instanceof String) {
-        name = (String) key;
-      }
-      else
-        throw new RuntimeException(key + " object cannot be converted to " +
-                                   "a feature.");
-      numbersToNames.put(pair, name);
-    }
-
-
-    /* old way using reflection on FeatureExtractor, not longer used
-    TreeSet allFeatures =  new TreeSet();
-    HashMap numbersToNames = new HashMap();
     for (Iterator i = lookup.keySet().iterator(); i.hasNext();) {
       Object key = i.next();
       int num = ((Integer) lookup.get(key)).intValue();
@@ -315,11 +286,7 @@ public final class FeatureExtractor {
       numbersToNames.put(pair, name);
     }
 
-
-      }
-    }
-    */
-
+    //    System.out.println(numbersToNames.get(new IntDoublePair(2784, 0.0)));
 
     // Now make the .names part
     names.write("|Beginning of .names file\n");
@@ -343,7 +310,7 @@ public final class FeatureExtractor {
       else
         throw new IOException("Feature " + current.number +
                               " not included in .names file");
-      // names.write(current.number + ": continuous.\n");
+      //names.write(current.number + ": continuous.\n");
     }
     names.write("|End of .names file\n");
     names.close();
@@ -383,10 +350,10 @@ public final class FeatureExtractor {
 
       // check which features are missing and add IntDoublePairs
       // with those features set to 0
-      for (Iterator h = allFeatures.iterator(); h.hasNext(); ) {
+      for (Iterator h = allFeatures.iterator(); h.hasNext();) {
         IntDoublePair current = (IntDoublePair) h.next();
         boolean contains = false;
-        for (Iterator j = allFets.iterator(); j.hasNext(); ) {
+        for (Iterator j = allFets.iterator(); j.hasNext();) {
           IntDoublePair jguy = (IntDoublePair) j.next();
           if (jguy.number == current.number)
             contains = true;
@@ -417,10 +384,7 @@ public final class FeatureExtractor {
 
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
-        if (fet.value == ((double) ((int) fet.value)))
-          output.write((int) fet.value + ",");
-        else
-          output.write(df.format(fet.value) + ",");
+        output.write(df.format(fet.value) + ",");
       }
       output.write(label + "\n");
     }
@@ -574,7 +538,7 @@ public final class FeatureExtractor {
       Class currentClass = (Class) classes.get(i);
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
-      // handle the class
+      //handle the class
       counter = new Integer(counter.intValue() + 1);
       answer.put(currentClass, counter);
 
@@ -591,328 +555,11 @@ public final class FeatureExtractor {
           //          if ((Boolean.TYPE.equals(fields[j].getType())) ||
           //          (Number.class.isAssignableFrom(fields[j].getType()))) {
           if (TYPES.contains(fields[j].getType())) {
-            counter = new Integer(counter.intValue() + 1);
-            answer.put(fields[j], counter);
-          }
-        }
-      }
-
-      // handle all the methods with 0 parameters
-      for (int j = 0; j < methods.length; j++) {
-        if ((answer.get(methods[j].getName()) == null) &&
-            (methods[j].getParameterTypes().length == 0)) {
-          //    if ((Boolean.TYPE.equals(methods[j].getReturnType())) ||
-          //    (Number.class.isAssignableFrom(methods[j].getReturnType()))) {
-          if (TYPES.contains(methods[j].getReturnType())) {
-            String name = methods[j].getName();
-            if (methods[j].getReturnType().equals(Boolean.TYPE))
+            String name = fields[j].getName();
+            if (fields[j].getType().equals(Boolean.TYPE))
               name += "Bool";
             else
               name += "Float";
-            counter = new Integer(counter.intValue() + 1);
-            answer.put(name, counter);
-          }
-        }
-      }
-    }
-    return answer;
-  }
-
-  private static ArrayList getInvariantClasses(File top)
-    throws ClassNotFoundException{
-    ArrayList answer = new ArrayList();
-    if (top.isDirectory()) {
-      File[] all = top.listFiles();
-      for (int i = 0; i < all.length; i++)
-        if (!(all[i].getAbsolutePath().indexOf("test") > -1))
-          answer.addAll(getInvariantClasses(all[i]));
-    } else if (top.getName().endsWith(".class")) {
-      String name = top.getAbsolutePath();
-      name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
-      name = name.replace('/', '.');
-
-      // have to remove the .ver2 or ver3 tags
-      if (name.indexOf("ver2") > -1)
-        name = name.substring(0, name.indexOf(".ver2")) +
-          name.substring(name.indexOf(".ver2") + 5);
-      if (name.indexOf("ver3") > -1)
-        name = name.substring(0, name.indexOf(".ver3")) +
-          name.substring(name.indexOf(".ver3") + 5);
-
-      try {
-        Class current = Class.forName(name);
-        if ((Invariant.class.isAssignableFrom(current)) ||
-            (Ppt.class.isAssignableFrom(current)) ||
-            (VarInfo.class.isAssignableFrom(current))) {
-          System.out.print("Class " + name + " loaded\n");
-          answer.add(current);
-        }
-      }
-      catch (ClassNotFoundException e) {}
-      catch (NoClassDefFoundError e) {}
-    }
-    return answer;
-  }
-
-  // Call getAllReflectFeatures on every Invariants in invariants
-  // to get all the features of that invariant
-  // and store those featues in a new TreeSet.
-  // return a ArrayList of TreeSets of features.
-  private static ArrayList getReflectFeatures(ArrayList invariants, HashMap lookup)
-    throws IllegalAccessException, InvocationTargetException {
-    ArrayList answer = new ArrayList();
-    // for each invariant, extract all the features and build a new TreeSet
-    for (int i = 0; i < invariants.size(); i++) {
-      answer.add(new TreeSet(getReflectFeatures(invariants.get(i), lookup)));
-    }
-    return answer;
-  }
-
-  // Extract the features of inv using reflection,
-  // return a Collection of these features in IntDoublePairs
-  private static Collection getReflectFeatures(Object inv, HashMap lookup)
-    throws IllegalAccessException, InvocationTargetException {
-    ArrayList answer = new ArrayList();
-    if (inv instanceof Invariants) {
-      answer.add(new IntDoublePair(((Integer)
-                                    lookup.get(inv)).intValue(), 1));
-      answer.addAll(getReflectFeatures(((Invariant)inv).ppt, lookup));
-      answer.addAll(getReflectFeatures(((Invariant)inv).ppt.var_infos,lookup));
-    }
-
-    Field[] fields = inv.getClass().getFields();
-
-    for (int i = 0; i < fields.length; i++) {
-      if (fields[i].getType().equals(Boolean.TYPE))
-        answer.add(new IntDoublePair(((Integer)
-                                      lookup.get(fields[i])).intValue(), 1));
-      else if (TYPES.contains(fields[i].getType()))
-        answer.add(new IntDoublePair(((Integer)
-                                      lookup.get(fields[i])).intValue(),
-                                     fields[i].getDouble(inv)));
-    }
-
-    Method[] methods = inv.getClass().getMethods();
-    for (int i = 0; i < methods.length; i++) {
-      if (methods[i].getParameterTypes().length == 0) {
-        if (methods[i].getReturnType().equals(Boolean.TYPE))
-          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Bool")).intValue(), 1));
-        else if (TYPES.contains(methods[i].getReturnType()))
-          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Float")).intValue(),
-                                       ((Number)
-                                        methods[i].invoke(inv, new Object[0])
-                                        ).doubleValue()));
-      }
-    }
-    return answer;
-  }
-
-
-  /* Function removed when reflection methods were added
-
-  // Extracts features for each of the elements on invariants
-  //   and returns a ArrayList of TreeSets of the features.
-
-  private static ArrayList getFeatures(ArrayList invariants) {
-    ArrayList answer = new ArrayList();
-    // for each invariant, extract all the features and build a new TreeSet
-    for (int i = 0; i < invariants.size(); i++) {
-      // extract the common features
-      // then test for all other possible features
-      TreeSet invariant = new TreeSet();
-
-      Invariant current = (Invariant) invariants.get(i);
-
-      invariant.addAll(getCommonFeatures(current));
-      invariant.addAll(getVarFeatures(current.ppt.var_infos));
-      if (current instanceof Modulus)
-        invariant.addAll(getModulusFeatures((Modulus) current));
-      if (current instanceof LowerBound)
-        invariant.addAll(getLowerBoundFeatures((LowerBound) current));
-      if (current instanceof NonZero)
-        invariant.addAll(getNonZeroFeatures((NonZero) current));
-      if (current instanceof NonModulus)
-        invariant.addAll(getNonModulusFeatures((NonModulus) current));
-      if (current instanceof OneOfScalar)
-        invariant.addAll(getOneOfScalarFeatures((OneOfScalar) current));
-      if (current instanceof Positive)
-        invariant.addAll(getPositiveFeatures((Positive) current));
-      if (current instanceof SingleFloat)
-        invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
-      if (current instanceof SingleScalar)
-        invariant.addAll(getSingleScalarFeatures((SingleScalar) current));
-      if (current instanceof UpperBound)
-        invariant.addAll(getUpperBoundFeatures((UpperBound) current));
-
-      if (current instanceof EltLowerBound)
-        invariant.addAll(getEltLowerBoundFeatures((EltLowerBound) current));
-      if (current instanceof EltNonZero)
-        invariant.addAll(getEltNonZeroFeatures((EltNonZero) current));
-      if (current instanceof EltOneOf)
-        invariant.addAll(getEltOneOfFeatures((EltOneOf) current));
-      if (current instanceof EltUpperBound)
-        invariant.addAll(getEltUpperBoundFeatures((EltUpperBound) current));
-      if (current instanceof EltwiseIntComparison)
-        invariant.addAll(getEltwiseIntComparisonFeatures((EltwiseIntComparison) current));
-      if (current instanceof NoDuplicates)
-        invariant.addAll(getNoDuplicatesFeatures((NoDuplicates) current));
-      if (current instanceof OneOfSequence)
-        invariant.addAll(getOneOfSequenceFeatures((OneOfSequence) current));
-      if (current instanceof SeqIndexComparison)
-        invariant.addAll(getSeqIndexComparisonFeatures((SeqIndexComparison) current));
-      if (current instanceof SeqIndexNonEqual)
-        invariant.addAll(getSeqIndexNonEqualFeatures((SeqIndexNonEqual) current));
-      if (current instanceof SingleFloatSequence)
-        invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
-
-      if (current instanceof OneOfString)
-        invariant.addAll(getOneOfStringFeatures((OneOfString) current));
-      if (current instanceof SingleString)
-        invariant.addAll(getSingleStringFeatures((SingleString) current));
-
-      if (current instanceof EltOneOfString)
-        invariant.addAll(getEltOneOfStringFeatures((EltOneOfString) current));
-      if (current instanceof OneOfStringSequence)
-        invariant.addAll(getOneOfStringSequenceFeatures((OneOfStringSequence) current));
-      if (current instanceof SingleStringSequence)
-        invariant.addAll(getSingleStringSequenceFeatures((SingleStringSequence) current));
-      if (current instanceof OneOf)
-        invariant.addAll(getOneOfFeatures((OneOf) current));
-      if (current instanceof Comparison)
-        invariant.addAll(getComparisonFeatures((Comparison) current));
-      if (current instanceof Implication)
-        invariant.addAll(getImplicationFeatures((Implication) current));
-
-      if (current instanceof SeqIntComparison)
-        invariant.addAll(getSeqIntComparisonFeatures((SeqIntComparison) current));
-      if (current instanceof SequenceScalar)
-        invariant.addAll(getSequenceScalarFeatures((SequenceScalar) current));
-
-      if (current instanceof SequenceString)
-        invariant.addAll(getSequenceStringFeatures((SequenceString) current));
-      if (current instanceof IntNonEqual)
-        invariant.addAll(getIntNonEqualFeatures((IntNonEqual) current));
-      if (current instanceof IntEqual)
-        invariant.addAll(getIntEqualFeatures((IntEqual) current));
-      if (current instanceof FunctionUnary)
-        invariant.addAll(getFunctionUnaryFeatures((FunctionUnary) current));
-      if (current instanceof IntGreaterEqual)
-        invariant.addAll(getIntGreaterEqualFeatures((IntGreaterEqual) current));
-      if (current instanceof IntGreaterThan)
-        invariant.addAll(getIntGreaterThanFeatures((IntGreaterThan) current));
-      if (current instanceof LinearBinary)
-        invariant.addAll(getLinearBinaryFeatures((LinearBinary) current));
-      if (current instanceof TwoScalar)
-        invariant.addAll(getTwoScalarFeatures((TwoScalar) current));
-      if (current instanceof IntLessEqual)
-        invariant.addAll(getIntLessEqualFeatures((IntLessEqual) current));
-      if (current instanceof IntLessThan)
-        invariant.addAll(getIntLessThanFeatures((IntLessThan) current));
-
-      if (current instanceof PairwiseIntComparison)
-        invariant.addAll(getPairwiseIntComparisonFeatures((PairwiseIntComparison) current));
-      if (current instanceof SeqComparison)
-        invariant.addAll(getSeqComparisonFeatures((SeqComparison) current));
-      if (current instanceof TwoSequence)
-        invariant.addAll(getTwoSequenceFeatures((TwoSequence) current));
-      if (current instanceof PairwiseLinearBinary)
-        invariant.addAll(getPairwiseLinearBinaryFeatures((PairwiseLinearBinary) current));
-      if (current instanceof SubSequence)
-        invariant.addAll(getSubSequenceFeatures((SubSequence) current));
-      if (current instanceof PairwiseFunctionUnary)
-        invariant.addAll(getPairwiseFunctionUnaryFeatures((PairwiseFunctionUnary) current));
-      if (current instanceof Reverse)
-        invariant.addAll(getReverseFeatures((Reverse) current));
-
-      if (current instanceof StringComparison)
-        invariant.addAll(getStringComparisonFeatures((StringComparison) current));
-      if (current instanceof TwoString)
-        invariant.addAll(getTwoStringFeatures((TwoString) current));
-
-      if (current instanceof ThreeScalar)
-        invariant.addAll(getThreeScalarFeatures((ThreeScalar) current));
-      if (current instanceof LinearTernary)
-        invariant.addAll(getLinearTernaryFeatures((LinearTernary) current));
-      if (current instanceof FunctionBinary)
-        invariant.addAll(getFunctionBinaryFeatures((FunctionBinary) current));
-
-      // Float Invariants
-      if (current instanceof MemberFloat)
-        invariant.addAll(getMemberFloatFeatures((MemberFloat) current));
-      if (current instanceof SeqFloatComparison)
-        invariant.addAll(getSeqFloatComparisonFeatures((SeqFloatComparison) current));
-      if (current instanceof SequenceFloat)
-        invariant.addAll(getSequenceFloatFeatures((SequenceFloat) current));
-      if (current instanceof FloatEqual)
-        invariant.addAll(getFloatEqualFeatures((FloatEqual) current));
-      if (current instanceof FloatNonEqual)
-        invariant.addAll(getFloatNonEqualFeatures((FloatNonEqual) current));
-      if (current instanceof FloatLessThan)
-        invariant.addAll(getFloatLessThanFeatures((FloatLessThan) current));
-      if (current instanceof FloatLessEqual)
-        invariant.addAll(getFloatLessEqualFeatures((FloatLessEqual) current));
-      if (current instanceof FloatGreaterThan)
-        invariant.addAll(getFloatGreaterThanFeatures((FloatGreaterThan) current));
-      if (current instanceof FloatGreaterEqual)
-        invariant.addAll(getFloatGreaterEqualFeatures((FloatGreaterEqual) current));
-      if (current instanceof FunctionUnaryFloat)
-        invariant.addAll(getFunctionUnaryFloatFeatures((FunctionUnaryFloat) current));
-      if (current instanceof LinearBinaryFloat)
-        invariant.addAll(getLinearBinaryFloatFeatures((LinearBinaryFloat) current));
-      if (current instanceof TwoFloat)
-        invariant.addAll(getTwoFloatFeatures((TwoFloat) current));
-      if (current instanceof SeqComparisonFloat)
-        invariant.addAll(getSeqComparisonFloatFeatures((SeqComparisonFloat) current));
-      if (current instanceof ReverseFloat)
-        invariant.addAll(getReverseFloatFeatures((ReverseFloat) current));
-      if (current instanceof SubSequenceFloat)
-        invariant.addAll(getSubSequenceFloatFeatures((SubSequenceFloat) current));
-      if (current instanceof PairwiseFloatComparison)
-        invariant.addAll(getPairwiseFloatComparisonFeatures((PairwiseFloatComparison) current));
-      if (current instanceof TwoSequenceFloat)
-        invariant.addAll(getTwoSequenceFloatFeatures((TwoSequenceFloat) current));
-      if (current instanceof PairwiseLinearBinaryFloat)
-        invariant.addAll(getPairwiseLinearBinaryFloatFeatures((PairwiseLinearBinaryFloat) current));
-      if (current instanceof PairwiseFunctionUnaryFloat)
-        invariant.addAll(getPairwiseFunctionUnaryFloatFeatures((PairwiseFunctionUnaryFloat) current));
-      if (current instanceof FunctionBinaryFloat)
-        invariant.addAll(getFunctionBinaryFloatFeatures((FunctionBinaryFloat) current));
-      if (current instanceof ThreeFloat)
-        invariant.addAll(getThreeFloatFeatures((ThreeFloat) current));
-      if (current instanceof LinearTernaryFloat)
-        invariant.addAll(getLinearTernaryFloatFeatures((LinearTernaryFloat) current));
-      if (current instanceof OneOfFloat)
-        invariant.addAll(getOneOfFloatFeatures((OneOfFloat) current));
-      if (current instanceof SingleFloat)
-        invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
-      if (current instanceof LowerBoundFloat)
-        invariant.addAll(getLowerBoundFloatFeatures((LowerBoundFloat) current));
-      if (current instanceof UpperBoundFloat)
-        invariant.addAll(getUpperBoundFloatFeatures((UpperBoundFloat) current));
-      if (current instanceof NonZeroFloat)
-        invariant.addAll(getNonZeroFloatFeatures((NonZeroFloat) current));
-      if (current instanceof OneOfFloatSequence)
-        invariant.addAll(getOneOfFloatSequenceFeatures((OneOfFloatSequence) current));
-      if (current instanceof EltOneOfFloat)
-        invariant.addAll(getEltOneOfFloatFeatures((EltOneOfFloat) current));
-      if (current instanceof EltLowerBoundFloat)
-        invariant.addAll(getEltLowerBoundFloatFeatures((EltLowerBoundFloat) current));
-      if (current instanceof EltUpperBoundFloat)
-        invariant.addAll(getEltUpperBoundFloatFeatures((EltUpperBoundFloat) current));
-      if (current instanceof NoDuplicatesFloat)
-        invariant.addAll(getNoDuplicatesFloatFeatures((NoDuplicatesFloat) current));
-      if (current instanceof SeqIndexComparisonFloat)
-        invariant.addAll(getSeqIndexComparisonFloatFeatures((SeqIndexComparisonFloat) current));
-      if (current instanceof SeqIndexNonEqualFloat)
-        invariant.addAll(getSeqIndexNonEqualFloatFeatures((SeqIndexNonEqualFloat) current));
-      if (current instanceof CommonFloatSequence)
-        invariant.addAll(getCommonFloatSequenceFeatures((CommonFloatSequence) current));
-      if (current instanceof EltNonZeroFloat)
-        invariant.addAll(getEltNonZeroFloatFeatures((EltNonZeroFloat) current));
-      if (current instanceof SingleFloatSequence)
-        invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
-      if (current instanceof EltwiseFloatComparison)
-        invariant.addAll(getEltwiseFloatComparisonFeatures((EltwiseFloatComparison) current));
 
             counter = new Integer(counter.intValue() + 1);
             answer.put(name, counter);
@@ -1063,7 +710,6 @@ public final class FeatureExtractor {
 
     return final_answer;
   }
-  */// End of removed functions
 
   /*********************************************
    * This IntDoublePair represents a connected int and double.
@@ -1075,7 +721,7 @@ public final class FeatureExtractor {
    * the IntDoublePair.  Two IntDoublePairs that have the same integer are
    * considered equal.
    *********************************************/
-  private static final class IntDoublePair implements Comparable {
+  private static final class IntDoublePair implements Comparable{
     // public fields
     public int number;
     public double value;
@@ -1385,7 +1031,6 @@ public final class FeatureExtractor {
       }
   }
 
-
   private static String shift(String vector) {
     String answer = new String();
     StringTokenizer tokens = new StringTokenizer(vector);
@@ -1405,22 +1050,16 @@ public final class FeatureExtractor {
   }
 
   // the THRESHOLD is zero
-    static double THRESHOLD = 0.0;
+  static double THRESHOLD = 0.0;
 
   public static int OneMoreOrderThanLargestFeature = 100000;
 
+  public static HashSet TYPES = new HashSet();
+  public static HashSet BANNED_METHODS = new HashSet();
   public static String CLASSES =
     "/PAG/g5/users/brun/research/invariants/daikon.ver3";
   public static int NUM_VARS = 8;
 
-  public static HashSet BANNED_METHODS = new HashSet();
-  static {
-    BANNED_METHODS.add("hashCode");
-    BANNED_METHODS.add("min_elt");
-    BANNED_METHODS.add("max_elt");
-  }
-
-  public static HashSet TYPES = new HashSet();
   static {
     TYPES.add(Boolean.TYPE);
     TYPES.add(Integer.TYPE);
@@ -1428,5 +1067,10 @@ public final class FeatureExtractor {
     TYPES.add(Long.TYPE);
     TYPES.add(Short.TYPE);
     TYPES.add(Float.TYPE);
+
+    BANNED_METHODS.add("hashCode");
+    BANNED_METHODS.add("min_elt");
+    BANNED_METHODS.add("max_elt");
   }
+
 }
