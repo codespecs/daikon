@@ -44,9 +44,10 @@ all:	all_directly
 all_via_daikon:	Runtime.class Diff.class ${AUTO_GENERATED_FILES}
 	${JAVAC} Daikon.java
 
-## This is so long I can't see the result on the same screen as the command.
+## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES}
-	${JAVAC} ${JAVA_FILES}
+	@echo ${JAVAC} '*.java ...'
+	@${JAVAC} ${JAVA_FILES}
 
 all_force:	all_directly
 
