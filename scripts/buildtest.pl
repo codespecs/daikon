@@ -1,10 +1,9 @@
 #!/usr/bin/env perl
 
-# Automatically builds and tests the software in the Daikon CVS
-# repository.  If the --quiet option is selected, only generates
-# output if a task fails (useful for cron job).  If the --nocleanup
-# option is selected, does not remove generated files (good for
-# debugging).
+# Builds and tests the software in the Daikon CVS repository.  If the
+# --quiet option is selected, only generates output if a task fails
+# (useful for cron job).  If the --nocleanup option is selected, does
+# not remove generated files (good for debugging).
 
 use strict;
 use English;
@@ -43,7 +42,9 @@ $ENV{"JAVAC"} = "javac -g";
 my $J2 = "";
 
 # Run java using the -classic switch, to workaround JVM exit deadlock
-# bug
+# bug.  The bug is present in version 1.3.1_02; have not tested with 1.4.
+# A similar bug has been reported against solaris:
+# http://developer.java.sun.com/developer/bugParade/bugs/4305128.html
 my $RUN_JAVA = '\'java -classic -Xmx256m\'';
 
 # The success of each step in the build/test process
@@ -88,7 +89,10 @@ if ($success{"dfej_configure"}) {
   $success{"dfej_complie"} = dfej_compile();
 }
 
-# Print the output files for any steps that failed.
+# Print the output files for any steps that failed.  Output steps are
+# sorted alphabetically, not in order of operation.  This is OK, since
+# failures should occur rarely, and multiple failures even more
+# rarely.
 my @failed_steps = ();
 foreach my $step (sort keys %success) {
   if (!$success{$step}) {
@@ -116,6 +120,13 @@ if (@failed_steps != 0) {
       print_log("\n\n");
     }
   }
+
+  # If quiet is not set, this output was printed earlier.  If quiet is
+  # set, the output was instead written to a log file (see function
+  # print_log).  If a step failed, we must print the log file now.  To
+  # summarize, if a step fails, the same output is printed whether or
+  # not quiet is set.  However, if all steps succeed, there is no
+  # output iff quiet is set.
   if ($quiet) {
     open LOG, $LOG or die "can't open $LOG: $!\n";
     my $log = join('', <LOG>);
@@ -140,6 +151,8 @@ foreach my $subdir ("daikon", "diff", "dfec") {
 if (! $nocleanup) {
   `rm -rf dfej invariants`;
 }
+
+exit();
 
 
 # SUBROUTINES
