@@ -834,6 +834,14 @@ public class PptTopLevel
                 }
                 result.add(tderiv);
               }
+            } else {
+              if (Global.debugDerive.isDebugEnabled()) {
+                Global.debugDerive.debug("Ternary instantiated but not used: "
+                                         + vi1.name.name() + " "
+                                         + vi2.name.name() + " "
+                                         + vi3.name.name() + " "
+                                         );
+              }
             }
           }
         }
