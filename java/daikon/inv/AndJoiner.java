@@ -36,6 +36,8 @@ public class AndJoiner
       return leftFormat + " and " + rightFormat;
     } else if (format == OutputFormat.JML || format == OutputFormat.ESCJAVA) {
       return "(" + leftFormat + ") && (" + rightFormat + ")";
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return "(AND " + leftFormat + " " + rightFormat + ")";
     } else {
       return format_unimplemented(format);
     }
