@@ -2,7 +2,7 @@ package utilMDE;
 import java.util.*;
 
 // *****
-// Automatically generated from MathMDE.java.cpp
+// Automatically generated from MathMDE.java.jpp
 // *****
 
 /** Mathematical utilities. */
