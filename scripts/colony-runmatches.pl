@@ -42,7 +42,11 @@ my @machines = ('parsnip', 'peanut',
 my $current_dir;
 
 
-cleanup();
+# using cleanup is bad because this script will not be able to
+# run multiple times on the same machine. The user should manually
+# delete the tmp files or the cleanup should be done intentially by a
+# commandline arg.
+#cleanup();
 
 while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/)) {
   my $arg = shift @ARGV;
@@ -91,6 +95,7 @@ my $parameters = join(' ', @ARGV);
 ###
 
 #Clean up old temp files
+#No other instances of the script may be running for this to work properly
 sub cleanup () {
     my $tmpdir = "/tmp/$ENV{'USER'}";
     opendir (DIR, $tmpdir);
