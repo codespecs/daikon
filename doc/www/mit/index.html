@@ -524,8 +524,8 @@ target.
 
     <li> Run the kvasir regression tests <p>
     <pre>
-      cd $inv/tests/kvasir-tests
-      make
+        cd $inv/tests/kvasir-tests
+        make
     </pre>
 
     <li> Run the regression tests.  These will use Chicory as the
@@ -553,8 +553,8 @@ target.
     last month: </p>
 
     <pre>
-      cd $inv/java
-      cvs -q log -d ">2004-12-01" -N | cvs-log-summarize.pl
+	cd $inv/java
+	cvs -q log -d "><em>2004-12-01</em>" -N | cvs-log-summarize.pl
     </pre>
 
     <li> Set the distribution date and versions number.  The date will
@@ -563,8 +563,8 @@ target.
     $inv/doc/VERSION </p>
 
     <pre>
-      cd $inv
-      make update-doc-dist-date-and-version
+	cd $inv
+	make update-doc-dist-date-and-version
     </pre>
 
     <li> Build everything to be distributed and copy it to the
@@ -572,7 +572,7 @@ target.
     of files that were added/removed since the last release.</p>
 
     <pre>
-      make staging
+        make staging
     </pre>
 
     <li> Test the distribution in the staging area.  The last part of
@@ -583,7 +583,7 @@ target.
     installing</b></p>
 
     <pre>
-      make test-staged-dist
+        make test-staged-dist
     </pre>
 
     <li> Update the website. </p>
