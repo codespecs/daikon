@@ -491,7 +491,7 @@ public final class Equality
       debugPostProcess.fine ("  var1: " + leader.name.name());
     }
     for (int i = 0; i < vars.length; i++) {
-      if ((vars[i] == leader) && (i == 0)) continue;
+      if (vars[i] == leader) continue;
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine ("  var2: " + vars[i].name.name());
       }
