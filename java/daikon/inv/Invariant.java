@@ -984,6 +984,8 @@ public abstract class Invariant
   }
   */ // ... [INCR]
 
+  ////////////////////////////////////////////////////////////////////////////
+  // Static and dynamic checks for obviousness
 
   /**
    * Return true if this invariant is necessarily true from a fact
@@ -993,6 +995,20 @@ public abstract class Invariant
    * suppression should do the dynamic checking.
    **/
   public boolean isObviousStatically() {
+    return isObviousStatically(this.ppt.var_infos);
+  }
+
+  /**
+   * Return true if this invariant is necessarily true from a fact
+   * that can be determined statically -- for the given varInfos
+   * rather than the varInfos this is on.  Intended to be overridden
+   * by subclasses.  Should only do static checking.
+   * @param vis The VarInfos this invariant is obvious over.  The
+   * position and data type of the variables is the *same* as that of
+   * this.ppt.var_infos.
+   * @pre vis.length == this.ppt.var_infos.length
+   **/
+  public boolean isObviousStatically(VarInfo[] vis) {
     return false;
   }
 
@@ -1002,9 +1018,7 @@ public abstract class Invariant
    * determined statically (i.e., the decls files).  For example, a ==
    * b, and f(a) is obvious, but f(b) is not.  In that case, this
    * method on f(a) would return false.  If f(b) is also obvious, then
-   * this method would return true.  Intended to be overridden by
-   * subclasses.  Should only do static checking, because suppression
-   * should do the dynamic checking.
+   * this method would return true.
    **/
   // This is used because we cannot decide to non-instantiate some
   // invariants just because isObviousStatically is true, since some
@@ -1014,8 +1028,58 @@ public abstract class Invariant
   // Of course, it's expensive to examine every possible permutation
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
-  public boolean isObviousStaticallyInEquals() {
-    return false;
+  public boolean isObviousStatically_AllInEquality() {
+    if (!isObviousStatically()) return false;
+    
+    for (int i = 0; i < ppt.var_infos.length; i++) {
+      if (ppt.var_infos[i].equalitySet.getVars().size() > 1) return false;
+    }
+    return true;
+  }
+
+  /**
+   * Return true if this invariant and some equality combinations of
+   * its member variables are statically obvious.  For example, a ==
+   * b, and f(a) is obvious, so is f(b).  We use the someInEquality
+   * (or least interesting) method during printing so we only print an
+   * invariant if all its variables are interesting, since a single,
+   * static, non interesting occurance means all the equality
+   * combinations aren't interesting.
+   * @return the VarInfo array that contains the VarInfos that showed
+   * this invariant to be obvious.  The contains variables that are
+   * elementwise in the same equality set as this.ppt.var_infos.  Can
+   * be null if no such assignment exists.
+   **/
+  public VarInfo[] isObviousStatically_SomeInEquality() {
+    if (isObviousStatically()) return this.ppt.var_infos;
+    return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
+                                                     new VarInfo[this.ppt.var_infos.length],
+                                                     0);
+  }
+
+  /**
+   * Recurse through vis and generate the cartesian product of 
+   **/
+  private VarInfo[] isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
+                                                             VarInfo[] assigned,
+                                                             int position) {
+    if (position == vis.length) {
+      if (isObviousStatically (assigned)) {
+        return assigned;
+      } else {
+        return null;
+      }
+    } else {
+      for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
+           iSet.hasNext(); ) {
+        VarInfo vi = (VarInfo) iSet.next();
+        assigned[position] = vi;
+        VarInfo[] temp =
+          isObviousStatically_SomeInEqualityHelper (vis, assigned, position + 1);
+        if (temp != null) return temp;
+      }
+      return null;
+    }
   }
 
   /**
@@ -1035,7 +1099,8 @@ public abstract class Invariant
     // // turns out until after testing it.
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
-    if (isObviousStatically() || isObviousDynamically()) {
+    if (isObviousStatically_SomeInEquality() != null ||
+        isObviousDynamically_SomeInEquality() != null) {
       if (debugPrint.isDebugEnabled())
         debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
       return true;
@@ -1046,13 +1111,73 @@ public abstract class Invariant
 
   /**
    * Return true if this invariant is necessarily true from a fact
-   * that can be determined dynamically (after checking data).
-   * Intended to be overriden by subclasses so they can filter
-   * invariants after checking.
+   * that can be determined dynamically (after checking data) on the
+   * given VarInfos.  Intended to be overriden by subclasses so they
+   * can filter invariants after checking.  Since this method is
+   * dynamic, it should only be called after all processing.
    **/
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    Assert.assertTrue (!Daikon.isInferencing);
     return false;
   }
+
+
+  /**
+   * Return true if this invariant is necessarily true from a fact
+   * that can be determined dynamically (after checking data).  Since
+   * this method is dynamic, it should only be called after all
+   * processing.
+   **/
+  public boolean isObviousDynamically() {
+    Assert.assertTrue (!Daikon.isInferencing);
+    return isObviousDynamically (ppt.var_infos);
+  }
+
+  /**
+   * Return true if this invariant and some equality combinations of
+   * its member variables are dynamically obvious.  For example, a ==
+   * b, and f(a) is obvious, so is f(b).  We use the someInEquality
+   * (or least interesting) method during printing so we only print an
+   * invariant if all its variables are interesting, since a single,
+   * dynamic, non interesting occurance means all the equality
+   * combinations aren't interesting.
+   * @return the VarInfo array that contains the VarInfos that showed
+   * this invariant to be obvious.  The contains variables that are
+   * elementwise in the same equality set as this.ppt.var_infos.  Can
+   * be null if no such assignment exists.
+   **/
+  public VarInfo[] isObviousDynamically_SomeInEquality() {
+    if (isObviousDynamically()) return this.ppt.var_infos;
+    return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
+                                                     new VarInfo[this.ppt.var_infos.length],
+                                                     0);
+  }
+
+  /**
+   * Recurse through vis and generate the cartesian product of 
+   **/
+  private VarInfo[] isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
+                                                             VarInfo[] assigned,
+                                                             int position) {
+    if (position == vis.length) {
+      if (isObviousDynamically (assigned)) {
+        return assigned;
+      } else {
+        return null;
+      }
+    } else {
+      for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
+           iSet.hasNext(); ) {
+        VarInfo vi = (VarInfo) iSet.next();
+        assigned[position] = vi;
+        VarInfo[] temp =
+          isObviousDynamically_SomeInEqualityHelper (vis, assigned, position + 1);
+        if (temp != null) return temp;
+      }
+      return null;
+    }
+  }
+
 
   // [INCR] ...
   /**

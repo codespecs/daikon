@@ -45,6 +45,10 @@ public class AndJoiner
     return left.isObviousDynamically() && right.isObviousDynamically();
   }
 
+  public boolean isObviousStatically(VarInfo[] vis) {
+    return left.isObviousStatically(vis) && right.isObviousStatically(vis);
+  }
+
   public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }

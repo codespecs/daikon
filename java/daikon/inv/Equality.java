@@ -69,8 +69,11 @@ public final class Equality
    **/
   private TreeSet/*VarInfo*/ vars;
 
-  public TreeSet getVars() {
-    return (TreeSet) Collections.unmodifiableSet (vars);
+  /**
+   * Returns the variables in their index order.  Unmodifiable.
+   **/
+  public Set getVars() {
+    return Collections.unmodifiableSet (vars);
   }
 
   /**
