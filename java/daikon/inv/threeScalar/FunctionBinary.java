@@ -26,12 +26,15 @@ class FunctionBinary extends ThreeScalar {
         System.out.println("FunctionBinary.instantiate(" + ppt.name + ", " + function.getName() + ", " + argresult.name + "=" + "f(" + arg1.name + "," + arg2.name + ")" + " )");
     }
 
-    // Skip if the arguments are constant (but not if the result
-    // is constant, as we might get something like y=abs(x)).
+    // Skip if the arguments are constant (but not if the result is
+    // constant, as we might get something like y=abs(x)).  (Actually, for
+    // now I'm skipping if the result is constant, too: that's a
+    // relationship over the two arguments, not a ternary relationship.)
     int[] indices = FunctionBinaryCore.var_indices[var_order];
+    VarInfo resultvar = ppt.var_infos[indices[0]];
     VarInfo arg1 = ppt.var_infos[indices[1]];
     VarInfo arg2 = ppt.var_infos[indices[2]];
-    if (arg1.isConstant() && arg2.isConstant()) {
+    if (resultvar.isConstant() || (arg1.isConstant() && arg2.isConstant())) {
       if (debugFunctionBinary)
         System.out.println("FunctionBinary.instantiate: both args are constant");
       return null;

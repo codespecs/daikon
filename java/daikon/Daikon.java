@@ -12,11 +12,14 @@ import java.io.*;
 
 public class Daikon {
 
-  static final boolean disable_splitting = false;
+  public static final boolean disable_splitting = false;
   // static final boolean disable_splitting = true;
 
-  static final boolean disable_ternary_invariants = false;
+  public static final boolean disable_ternary_invariants = false;
   // static final boolean disable_ternary_invariants = true;
+
+  public static final boolean check_program_types = true;
+  // static final boolean check_program_types = false;
 
 
   // The two arguments to daikon.Daikon are a comma-separated list of

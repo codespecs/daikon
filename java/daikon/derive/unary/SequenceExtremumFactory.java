@@ -8,6 +8,9 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     // System.out.println("SequenceExtremumFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 
+    // System.out.println("SequenceExtremum.applicable(" + vi.name + ") = "
+    //                    + SequenceExtremum.applicable(vi));
+
     if (!SequenceExtremum.applicable(vi))
       return null;
 

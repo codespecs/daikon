@@ -12,7 +12,7 @@ public class SingleSequenceFactory {
     // return (UnaryDerivation)new SequenceFirst(vi);
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assert(var.type.isArray());
+    Assert.assert(var.rep_type.equals(ProglangType.INT_ARRAY));
 
 
     if (pass == 1) {

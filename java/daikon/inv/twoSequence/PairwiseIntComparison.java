@@ -60,6 +60,8 @@ class PairwiseIntComparison extends TwoSequence {
       int v1 = a1[i];
       int v2 = a2[i];
       core.add_modified(v1, v2, count);
+      if (no_invariant)
+        return;
     }
   }
 

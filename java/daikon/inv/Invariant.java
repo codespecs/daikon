@@ -191,8 +191,14 @@ public abstract class Invariant {
       }
       String format1 = inv1.format();
       String format2 = inv2.format();
-      if ((format1 == null) || (format2 == null))
+      // Put nulls at the end of the list (or at the beginning; it doesn't
+      // matter).
+      if ((format1 == null) && (format2 == null))
         return 0;
+      if ((format1 == null) && (format2 != null))
+        return 1;
+      if ((format1 != null) && (format2 == null))
+        return -1;
       return format1.compareTo(format2);
     }
   }

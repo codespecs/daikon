@@ -15,9 +15,15 @@ public class ThreeScalarFactory {
     VarInfo var2 = ppt.var_infos[1];
     VarInfo var3 = ppt.var_infos[1];
 
-    Assert.assert((! var1.type.isArray())
-                  && (! var2.type.isArray())
-                  && (! var3.type.isArray()));
+    Assert.assert(var1.rep_type.equals(ProglangType.INT)
+                  && var2.rep_type.equals(ProglangType.INT)
+                  && var3.rep_type.equals(ProglangType.INT));
+
+    if (Daikon.check_program_types
+        && (! (var1.type.equals(var2.type)
+               && var2.type.equals(var3.type))))
+      return;
+    Assert.assert(var1.type.equals(var3.type));
 
     if (pass == 1) {
       // nothing to do

@@ -64,6 +64,8 @@ class PairwiseFunctionUnary extends TwoSequence {
       int y = y_arr[i];
 
       core.add_modified(x, y, count);
+      if (no_invariant)
+        return;
     }
   }
 

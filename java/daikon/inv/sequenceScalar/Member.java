@@ -12,8 +12,8 @@ public class Member extends SequenceScalar {
 
   protected Member(PptSlice ppt_, boolean seq_first_) {
     super(ppt_, seq_first_);
-    Assert.assert(! sclvar().type.isArray());
-    Assert.assert(seqvar().type.isArray());
+    Assert.assert(sclvar().rep_type.equals(ProglangType.INT));
+    Assert.assert(seqvar().rep_type.equals(ProglangType.INT_ARRAY));
   }
 
   public static Member instantiate(PptSlice ppt, boolean seq_first) {

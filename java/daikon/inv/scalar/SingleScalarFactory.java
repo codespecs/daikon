@@ -10,7 +10,8 @@ public class SingleScalarFactory {
   public static void instantiate(PptSlice ppt, int pass) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assert(! var.type.isArray());
+    // Assert.assert(! var.rep_type.isArray());
+    Assert.assert(var.rep_type.equals(ProglangType.INT));
 
     if (pass == 1) {
       OneOfScalar.instantiate(ppt);

@@ -275,10 +275,10 @@ public final class ProglangType {
 	throw new Error("To implement");
 	// value = tuple(eval(value));
       } else {
-	throw new Error("Can't parse a value of this type.");
+	throw new Error("Can't parse a value of this type");
       }
     } else {
-      throw new Error("Can't parse a value of this type.");
+      throw new Error("Can't parse a value of this type");
     }
   }
 

@@ -16,7 +16,8 @@ public class TwoSequenceFactory {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    Assert.assert(var1.rep_type.isArray() && var2.rep_type.isArray());
+    Assert.assert(var1.rep_type.equals(ProglangType.INT_ARRAY)
+                  && var2.rep_type.equals(ProglangType.INT_ARRAY));
 
     VarInfo super1 = var1.isDerivedSubSequenceOf();
     if (super1 == null)
@@ -25,6 +26,9 @@ public class TwoSequenceFactory {
     if (super2 == null)
       super2 = var2;
 
+    if (Daikon.check_program_types
+        && (! var1.type.equals(var2.type)))
+      return;
 
     if (pass == 1) {
       if (super1 != super2) {

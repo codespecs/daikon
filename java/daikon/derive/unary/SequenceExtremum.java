@@ -31,7 +31,7 @@ public class SequenceExtremum extends UnaryDerivation {
   }
 
   public static boolean applicable(VarInfo vi) {
-    if (!vi.rep_type.isArray())
+    if (! vi.rep_type.equals(ProglangType.INT_ARRAY))
       return false;
     if (vi.derived != null) {
       Assert.assert(vi.derived instanceof SequenceScalarSubsequence);

@@ -15,14 +15,23 @@ public class SequenceScalarFactory {
     {
       VarInfo vi0 = ppt.var_infos[0];
       VarInfo vi1 = ppt.var_infos[1];
-      if (vi0.type.isArray() && (!vi1.type.isArray())) {
+      if (vi0.rep_type.equals(ProglangType.INT_ARRAY)
+          && (vi1.rep_type.equals(ProglangType.INT))) {
         seq_first = true;
-      } else if ((!vi0.type.isArray()) && (vi1.type.isArray())) {
+      } else if (vi0.rep_type.equals(ProglangType.INT)
+                 && (vi1.rep_type.equals(ProglangType.INT_ARRAY))) {
         seq_first = false;
       } else {
         throw new Error("Bad types");
       }
     }
+
+    VarInfo seqvar = seq_first ? ppt.var_infos[0] : ppt.var_infos[1];
+    VarInfo sclvar = seq_first ? ppt.var_infos[1] : ppt.var_infos[0];
+
+    if (Daikon.check_program_types
+        && (! seqvar.type.elementType().equals(sclvar.type)))
+      return;
 
     if (pass == 2) {
       Member.instantiate(ppt, seq_first);

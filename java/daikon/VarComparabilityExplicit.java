@@ -55,6 +55,7 @@ public class VarComparabilityExplicit extends VarComparability {
   }
 
   public VarComparability elementType() {
+    Assert.assert(dimensions > 0);
     if (cached_element_type == null) {
       cached_element_type = new VarComparabilityExplicit(base, indices, dimensions-1, alias);
     }

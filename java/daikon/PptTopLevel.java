@@ -1428,6 +1428,8 @@ public class PptTopLevel extends Ppt {
 
   }
 
+  static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+
   /** Print invariants for a single program point. */
   public void print_invariants() {
     System.out.println(name + "  "
@@ -1468,7 +1470,7 @@ public class PptTopLevel extends Ppt {
                            + "=" + slice1.name
                            + " num_values=" + slice1.num_values()
                            + " num_samples=" + slice1.num_samples());
-          slice1.values_cache.dump();
+          // slice1.values_cache.dump();
         }
       }
     }
@@ -1507,7 +1509,7 @@ public class PptTopLevel extends Ppt {
 
     Vector invs_vector = invariants_vector();
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[] { });
-    Arrays.sort(invs_array, new Invariant.InvariantComparatorForPrinting());
+    Arrays.sort(invs_array, icfp);
 
     // int ia_index = 0;
     // for (Iterator inv_itor = invariants_sorted_for_printing() ; inv_itor.hasNext() ; ) {
@@ -1530,15 +1532,23 @@ public class PptTopLevel extends Ppt {
                            + slice.num_samples() + " samples");
         System.out.println("    Samples breakdown: "
                            + slice.values_cache.tuplemod_samples_summary());
-        slice.values_cache.dump();
+        // slice.values_cache.dump();
       }
 
       // It's hard to know in exactly what order to do these checks that
       // eliminate some invariants from consideration.  Which is cheapest?
       // Which is most often successful?
 
-      // This should be a symbolic constant, not an integer literal.
-      if (((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() < 5) {
+      // This "5" should be a symbolic constant, not an integer literal.
+      // Note exception for OneOf invariants.
+      int num_mod_non_missing_samples = ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples();
+      if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
+        System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() + ") than modified samples (" + num_mod_non_missing_samples + ")");
+      }
+
+
+      if ((num_mod_non_missing_samples < 5)
+          && (! (inv instanceof OneOf))) {
         if (Global.debugPrintInvariants) {
           System.out.println("  [Only " + ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSliceGeneric)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
         }

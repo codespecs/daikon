@@ -14,8 +14,13 @@ public class TwoScalarFactory {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    Assert.assert((! var1.type.isArray())
-                  && (! var2.type.isArray()));
+    // Assert.assert((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));
+    Assert.assert(var1.rep_type.equals(ProglangType.INT)
+                  && var2.rep_type.equals(ProglangType.INT));
+
+    if (Daikon.check_program_types
+        && (! var1.type.equals(var2.type)))
+      return;
 
     if (pass == 1) {
       IntComparison.instantiate(ppt);
