@@ -1,4 +1,4 @@
-UTILMDE_DIR := /g2/users/mernst/java/utilMDE
+UTILMDE_DIR := $(HOME)/java/utilMDE
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
 # Should these really be targets in the below, or should I use "make
