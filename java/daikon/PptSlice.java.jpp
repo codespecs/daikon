@@ -403,11 +403,16 @@ public final class PPTSLICE1
     // relevant
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].missingOutOfBounds()) {
+        List result = new ArrayList();
         for (int j = 0; j < invs.size(); j++) {
           Invariant inv = (Invariant) invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
             DiscReasonMap.put(inv, DiscardCode.bad_sample, var_infos[i].name.name() + " array index was out of bounds");
-          destroyAndFlowInv(inv);
+          if (Daikon.dkconfig_df_bottom_up) {
+            inv.falsify();
+            result.add (inv);
+          } else
+            destroyAndFlowInv(inv);
           if (inv.logOn())
             inv.log ("destroyed because " + var_infos[i].name.name()
                      + " array index out of bounds");
@@ -416,7 +421,11 @@ public final class PPTSLICE1
           VarInfo.debugMissing.fine ("Removing slice " + this +
                           " because var " + var_infos[i].name.name() +
                           " array index out of bounds");
-        return flow_and_remove_falsified();
+        if (Daikon.dkconfig_df_bottom_up) {
+          remove_falsified();
+          return (result);
+        } else
+          return flow_and_remove_falsified();
       }
     }
 
@@ -493,17 +502,32 @@ public final class PPTSLICE1
                       && ((mod1 == ValueTuple.UNMODIFIED)
                           || (mod1 == ValueTuple.MODIFIED))));
 
-#if defined(ARITY1)
-    add_val (val1, mod1, count);
-#elif defined(ARITY2)
-    add_val (val1, val2, mod1, mod2, count);
-#elif defined(ARITY3)
-    add_val (val1, val2, val3, mod1, mod2, mod3, count);
-#endif
+    if (Daikon.dkconfig_df_bottom_up) {
 
+      #if defined(ARITY1)
+        List weakened_invs = add_val_bu (val1, mod1, count);
+      #elif defined(ARITY2)
+        List weakened_invs = add_val_bu (val1, val2, mod1, mod2, count);
+      #elif defined(ARITY3)
+        List weakened_invs = add_val_bu (val1, val2, val3, mod1, mod2,
+                                         mod3, count);
+      #endif
+      remove_falsified();
+      return (weakened_invs);
+    } else {
+      #if defined(ARITY1)
+        add_val (val1, mod1, count);
+      #elif defined(ARITY2)
+        add_val (val1, val2, mod1, mod2, count);
+      #elif defined(ARITY3)
+        add_val (val1, val2, val3, mod1, mod2, mod3, count);
+      #endif
+    }
     // undefer_invariant_removal(); [INCR]
     return flow_and_remove_falsified();
   }
+
+  // Top down versions of
 
 #if defined (ARITY1)
   public void add_val (Object val1, int mod1, int count) {
@@ -517,7 +541,7 @@ public final class PPTSLICE1
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
-      if (inv.falsified) continue;
+      if (inv.is_false()) continue;
       if (inv.getSuppressor() != null) continue;
       Invariant clone = (Invariant) inv.clone();
       InvariantStatus status = inv.add(val1, mod1, count);
@@ -526,7 +550,7 @@ public final class PPTSLICE1
       } else if (status == InvariantStatus.WEAKENED) {
         flowClone(inv, clone);
       }
-      if (PrintInvariants.print_discarded_invariants && inv.falsified) {
+      if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
           "Falsified from sample: " + var_infos[0].name.name() + " = "
           + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
@@ -555,7 +579,7 @@ public final class PPTSLICE1
     if (array2 && ! array1) {
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
-        if (inv.falsified) continue;
+        if (inv.is_false()) continue;
         if (inv.getSuppressor() != null) continue;
         Invariant clone = (Invariant) inv.clone();
         InvariantStatus status = inv.add(val2, val1, mod1, count);
@@ -564,7 +588,7 @@ public final class PPTSLICE1
         } else if (status == InvariantStatus.WEAKENED) {
           flowClone(inv, clone);
         }
-        if (PrintInvariants.print_discarded_invariants && inv.falsified) {
+        if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
           DiscReasonMap.put(inv, DiscardCode.bad_sample,
                             "Falsified from sample: " +
                             var_infos[0].name.name() +
@@ -575,7 +599,7 @@ public final class PPTSLICE1
     } else {
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
-        if (inv.falsified) continue;
+        if (inv.is_false()) continue;
         if (inv.getSuppressor() != null) continue;
         Invariant clone = (Invariant) inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
@@ -584,7 +608,7 @@ public final class PPTSLICE1
         } else if (status == InvariantStatus.WEAKENED) {
           flowClone(inv, clone);
         }
-        if (PrintInvariants.print_discarded_invariants && inv.falsified) {
+        if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
           if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
               || (inv instanceof SeqSeqFloatEqual)
               || (inv instanceof SeqSeqStringEqual) ))
@@ -627,7 +651,7 @@ public final class PPTSLICE1
 
     for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
-      if (inv.falsified) continue;
+      if (inv.is_false()) continue;
       if (inv.getSuppressor() != null) continue;
       Invariant clone = (Invariant) inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
@@ -636,7 +660,7 @@ public final class PPTSLICE1
       } else if (status == InvariantStatus.WEAKENED) {
         flowClone(inv, clone);
       }
-      if (PrintInvariants.print_discarded_invariants && inv.falsified) {
+      if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
         // Currently there are no ternary invariants with arrays, but if
         // there are in the future, I don't want this to break.
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
@@ -650,6 +674,142 @@ public final class PPTSLICE1
     }
   }
 #endif
+
+  // Bottom up versions of the add routines.  These do not use any
+  // of the invariant flow/destroy routines
+
+#if defined (ARITY1)
+  public List /*Invariant*/ add_val_bu (Object val1, int mod1, int count) {
+
+    Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
+                      && mod1 != ValueTuple.MISSING_NONSENSICAL);
+    List result = new ArrayList();
+    for (int i=0; i < invs.size(); i++) {
+      UnaryInvariant inv = (UnaryInvariant) invs.get(i);
+      if (inv.is_false()) continue;
+      if (inv.getSuppressor() != null) continue;
+      InvariantStatus status = inv.add(val1, mod1, count);
+      if (status == InvariantStatus.FALSIFIED) {
+        inv.falsify();
+        result.add (inv);
+      } else if (status == InvariantStatus.WEAKENED) {
+        result.add (inv);
+      }
+      if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
+        DiscReasonMap.put(inv, DiscardCode.bad_sample,
+          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
+      }
+    }
+    return (result);
+  }
+#elif defined (ARITY2)
+
+  public List /*Invariant*/ add_val_bu (Object val1, Object val2,
+                                        int mod1, int mod2, int count) {
+
+    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+                       && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                       && (mod2 != ValueTuple.MISSING_FLOW
+                       && mod2 != ValueTuple.MISSING_NONSENSICAL));
+
+    List result = new ArrayList();
+    boolean array1 = var_infos[0].rep_type.isArray();
+    boolean array2 = var_infos[1].rep_type.isArray();
+    if (array2 && ! array1) {
+      for (int i=0; i < invs.size(); i++) {
+        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
+        if (inv.is_false()) continue;
+        if (inv.getSuppressor() != null) continue;
+        InvariantStatus status = inv.add(val2, val1, mod1, count);
+        if (status == InvariantStatus.FALSIFIED) {
+          inv.falsify();
+          result.add (inv);
+        } else if (status == InvariantStatus.WEAKENED) {
+          result.add (inv);
+        }
+        if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
+          DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                            "Falsified from sample: " +
+                            var_infos[0].name.name() +
+                            " = " + val1 + "," + var_infos[1].name.name() +
+                            " = " + ArraysMDE.toString(val2));
+        }
+      }
+    } else {
+      for (int i=0; i < invs.size(); i++) {
+        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
+        if (inv.is_false()) continue;
+        if (inv.getSuppressor() != null) continue;
+        Invariant clone = (Invariant) inv.clone();
+        InvariantStatus status = inv.add(val1, val2, mod1, count);
+        if (status == InvariantStatus.FALSIFIED) {
+          inv.falsify();
+          result.add (inv);
+        } else if (status == InvariantStatus.WEAKENED) {
+          result.add (inv);
+        }
+        if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
+          if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
+              || (inv instanceof SeqSeqFloatEqual)
+              || (inv instanceof SeqSeqStringEqual) ))
+              && ArraysMDE.length(val1) != ArraysMDE.length(val2)) {
+            // No need to print out two potentially huge arrays if the
+            // reason for discard was because of different array lengths
+            DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                                "Samples seen with different array lengths");
+          } else {
+            DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                    "Falsified from sample: " + var_infos[0].name.name()
+                    + " = " + (array1 ? ArraysMDE.toString(val1) : val1)
+                    + "," + var_infos[1].name.name()
+                    + " = " + (array2 ? ArraysMDE.toString(val2) : val2));
+          }
+        }
+      }
+    }
+    return (result);
+  }
+#elif defined (ARITY3)
+  public List /*Invariant*/ add_val_bu (Object val1, Object val2, Object val3,
+                                     int mod1, int mod2, int mod3, int count) {
+
+    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+                        && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                        && (mod2 != ValueTuple.MISSING_FLOW
+                        && mod2 != ValueTuple.MISSING_NONSENSICAL)
+                        && (mod3 != ValueTuple.MISSING_FLOW
+                        && mod3 != ValueTuple.MISSING_NONSENSICAL));
+
+    List result = new ArrayList();
+    for (int i=0; i < invs.size(); i++) {
+      TernaryInvariant inv = (TernaryInvariant) invs.get(i);
+      if (inv.is_false()) continue;
+      if (inv.getSuppressor() != null) continue;
+      Invariant clone = (Invariant) inv.clone();
+      InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
+      if (status == InvariantStatus.FALSIFIED) {
+        inv.falsify();
+        result.add (inv);
+      } else if (status == InvariantStatus.WEAKENED) {
+        result.add (inv);
+      }
+      if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
+        // Currently there are no ternary invariants with arrays, but if
+        // there are in the future, I don't want this to break.
+        DiscReasonMap.put(inv, DiscardCode.bad_sample,
+          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1)
+          + "," + var_infos[1].name.name() + " = "
+          + (var_infos[1].rep_type.isArray() ? ArraysMDE.toString(val2) : val2)
+          + "," + var_infos[2].name.name() + " = "
+          + (var_infos[2].rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
+      }
+    }
+    return (result);
+  }
+#endif
+
 
 //   private void destroyInv(Invariant inv) {
 //     inv.falsified = true;
@@ -1225,5 +1385,6 @@ public final class PPTSLICE1
     }
     return (false);
   }
+
 
 }

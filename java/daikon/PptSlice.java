@@ -113,9 +113,10 @@ public abstract class PptSlice
     Assert.assertTrue(this instanceof PptSliceEquality || arity() == var_infos.length);
     invs = new Invariants();
     // These seem to be used by both top-down and bottom-up (with global point).
-    invs_to_flow = new Invariants(1);
-    invs_changed = new Invariants(1);
+
     if (! Daikon.dkconfig_df_bottom_up) {
+      invs_to_flow = new Invariants(1);
+      invs_changed = new Invariants(1);
       private_po_lower = new ArrayList(2);
       private_po_lower_vis = new HashMap();
       po_lower = Collections.unmodifiableCollection(private_po_lower);
@@ -177,7 +178,7 @@ public abstract class PptSlice
    * and the list of changed Invariants.
    */
   public void destroyAndFlowInv(Invariant inv) {
-    inv.falsified = true;
+    inv.falsify();
     addToFlow(inv);
     if (inv.logOn() || debugFlow.isLoggable(Level.FINE)) {
       inv.log (debugFlow, "Destroyed " + inv.format());
@@ -340,23 +341,15 @@ public abstract class PptSlice
   protected List flow_and_remove_falsified() {
     // repCheck();  // Can do, but commented out for performance
 
+    Assert.assertTrue (!Daikon.dkconfig_df_bottom_up);
+
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
     for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
       Invariant inv = (Invariant) iFalsified.next();
-      if (inv.falsified) {
+      if (inv.is_false()) {
         to_remove.add(inv);
       }
-    }
-
-    // No flow is required in bottom up processing, simply remove the dead
-    // invariants and return the list of weakened invariants.
-    if (Daikon.dkconfig_df_bottom_up) {
-      removeInvariants(to_remove);
-      List result = new ArrayList (invs_changed);
-      invs_to_flow.clear();
-      invs_changed.clear();
-      return result;
     }
 
     // The following is simply for error checking
@@ -475,7 +468,7 @@ public abstract class PptSlice
         for (Iterator iInvsToFlow = invs_to_flow.iterator();
              iInvsToFlow.hasNext(); ) {
           Invariant inv = (Invariant) iInvsToFlow.next();
-          if (! inv.falsified) {
+          if (! inv.is_false()) {
             // The invariant must be destroyed before it can be
             // resurrected.  The invariant objects that flow are
             // provided by the invariants that are falsified or change
@@ -487,13 +480,7 @@ public abstract class PptSlice
             // hand, invariants with weaken-able computed constants
             // will flow a clone of themselves before they weaken.  In
             // that case, inv will not yet have been falsified.
-            inv.falsified = true;
-            if (inv.logOn() || debugFlow.isLoggable(Level.FINE)) {
-              inv.log (debugFlow, "Destroyed " + inv.format());
-            }
-            if (PrintInvariants.print_discarded_invariants) {
-              parent.falsified_invars.add(inv);
-            }
+            inv.falsify();
           }
           // debug
           if (debugFlow.isLoggable(Level.FINE)) {
@@ -542,6 +529,20 @@ public abstract class PptSlice
     invs_to_flow.clear();
     invs_changed.clear();
     return result;
+  }
+
+  /**
+   * Removes any falsified invariants from our list
+   */
+  protected void remove_falsified () {
+
+    // Remove the dead invariants
+    for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
+      Invariant inv = (Invariant) iFalsified.next();
+      if (inv.is_false()) {
+        iFalsified.remove();
+      }
+    }
   }
 
   /**
