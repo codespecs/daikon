@@ -16,6 +16,7 @@ The correct way to build the system is to run 'make'.
   #define TYPECOMPARISON Int
   #define FUNCTIONS Functions
   #define FUNCTIONUNARY FunctionUnary
+  #define NUMERIC NumericInt
   #define LINEARBINARY LinearBinary
   #define INTEQUAL IntEqual
 #elif (defined(TYPEDOUBLE))
@@ -25,6 +26,7 @@ The correct way to build the system is to run 'make'.
   #define TYPECOMPARISON Float
   #define FUNCTIONS FunctionsFloat
   #define FUNCTIONUNARY FunctionUnaryFloat
+  #define NUMERIC NumericFloat
   #define LINEARBINARY LinearBinaryFloat
   #define INTEQUAL FloatEqual
 #endif
@@ -98,20 +100,14 @@ public final class CLASSNAME {
     result.add(FloatGreaterEqual.instantiate(ppt));
 #endif
 
-    // Skip LineayBinary and FunctionUnary unless vars are integral
+    // Skip LineayBinary and Numeric unless vars are integral
     if (!integral) {
       Global.subexact_noninstantiated_invariants += 1;
       Global.subexact_noninstantiated_invariants += FUNCTIONS.unaryFunctionNames.length;
     } else {
       result.add(LINEARBINARY.instantiate(ppt));
-      int numFunctions = FUNCTIONS.unaryFunctionNames.length;
-      for (int i=0; i<2; i++) {
-        boolean invert = (i==1);
-        for (int j=0; j<numFunctions; j++) {
-          result.add(FUNCTIONUNARY.instantiate(ppt, FUNCTIONS.unaryFunctionNames[j], j, invert));
-        }
-      }
-    }
+      result.addAll (NUMERIC.instantiate_all (ppt));
+   }
     return result;
   }
 
