@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 
 # Creates the lackwit databases.  Requires that LACKWIT_HOME is set
-# correctly.  Requires that 'lh' is in your path.
+# correctly.  Requires that 'lh' is in your path (it appears
+# in directory front-end/c/).
 
 use English;
 use strict;
@@ -19,7 +20,8 @@ my ($lackwitdb, @files) = @ARGV;
 # Check that LACKWIT_HOME is set correctly, and that the required
 # files are present and readable
 my $lackwit_home = $ENV{LACKWIT_HOME};
--d $lackwit_home or die "LACKWIT_HOME is not set correctly\n";
+-e "$lackwit_home/bin/Lackwit"
+  or die "Environment variable LACKWIT_HOME is not set correctly\n";
 
 $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
@@ -39,7 +41,7 @@ foreach my $file (@files) {
   # created.  The files are left around for debugging purposes only.
   my $int_file = $file;
   $int_file =~ s!\.c!.int.c!;
-  $int_file =~ s!(.*)/(.*)\.c!$2.c!; # strip leading directories
+  $int_file =~ s!^(.*)/!!; # strip leading directories
   $int_file = "$lackwitdb/$int_file";
 
   my $lh_output;

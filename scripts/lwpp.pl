@@ -79,8 +79,9 @@
 # comparability of a structure field, we need to do some work on our
 # end.  When checking the comparability of s1->a, also check the
 # comparability of s1.  Say s1 is comparable to s2 and s3.  If either
-# s2->a or s3->a is in the list of interesting variables, make s1->a
-# comparable to them.
+# s2->a or s3->a is in the list of interesting variables (that is,
+# variables that appear in the decls file), make s1->a comparable to
+# them.
 
 # When determining the comparability of a struct field, lackwit can
 # crash if the expression involves pointers (like a->b) and the
@@ -114,17 +115,18 @@ my ($lackwitdb, $outfn) = @ARGV;
 # Check args
 -d $lackwitdb or die "$lackwitdb is not a directory\n";
 -e "$lackwitdb/globals.db" or die "$lackwitdb/globals.db does not exist\n";
--e $outfn or die "$outfn does not exist\n";
+-e $outfn or die "decls file $outfn does not exist\n";
 
 # Exit if the decls file is empty.
 if (-z $outfn) {
-  print STDERR "Warning: $outfn is empty\n";
+  print STDERR "Warning: decls file $outfn is empty\n";
   exit 0;
 }
 
 # Check that LACKWIT_HOME is set correctly
 my $lackwit_home = $ENV{LACKWIT_HOME};
--d $lackwit_home or die "LACKWIT_HOME is not set correctly\n";
+-e "$lackwit_home/bin/Lackwit"
+  or die "Environment variable LACKWIT_HOME is not set correctly\n";
 
 $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
@@ -173,10 +175,11 @@ while (<DECLS>) {
     my $start_vars = tell DECLS;
 
     # variables at this program point that Daikon finds interesting,
-    # namely parameters and global variables
+    # namely those appearing in the decls file.  This includes
+    # parameters and global variables.
     %interesting_vars = ();
 
-    # list of lists of comparable variables at this program point
+    # list of lists of comparable variables at this program point.
     # includes uninteresting variables, which will be filtered out later
     @compar_lists = ();
 
@@ -207,7 +210,13 @@ foreach my $implicit_type (sort {$a <=> $b;} values %explicit_to_implicit) {
   printf OUT "# %3s : $explicit_type\n", $implicit_type;
 }
 
+# finished processing
+exit(0);
 
+
+###########################################################################
+### Subroutines
+###
 
 # read the whole program point, creating the hash of interesting
 # variables and the list of lists of comparable variables
@@ -217,25 +226,24 @@ sub get_vars_and_comp {
   while (my $variable = <DECLS>) {
     last if ((!$variable) || ($variable =~ /^\s+$/));
     chomp $variable;
-    
+
     $variable = transform($variable);
-    
+
     my $declared_type = <DECLS>;
     my $rep_type = <DECLS>;
     my $old_comparability = <DECLS>;
-    
+
     if (is_array_element($variable)) {
-      my $array_base = $variable;
-      $array_base =~ s/\[\]//;
+      my $array_base = array_base($variable);
+
       my $element_variable = $array_base . $element_suffix;
-      my $index_variable = $array_base . $index_suffix;
       $interesting_vars{$element_variable} = 1;
-      $interesting_vars{$index_variable} = 1;
-      
       my %element_comparable_variables =
         get_comparable_variables($element_variable, $function);
       push @compar_lists, [keys %element_comparable_variables];
-      
+
+      my $index_variable = $array_base . $index_suffix;
+      $interesting_vars{$index_variable} = 1;
       my %index_comparable_variables =
         get_comparable_variables($index_variable, $function);
       push @compar_lists, [keys %index_comparable_variables];
@@ -252,7 +260,7 @@ sub get_vars_and_comp {
 # read the program point, printing the variables and implicit
 # comparability types to the output file
 sub print_vars_and_comp {
-  my ($function) = @_;  
+  my ($function) = @_;
 
   # process the variable declarations, one at a time
   while(my $variable = <DECLS>) {
@@ -263,19 +271,18 @@ sub print_vars_and_comp {
     chomp $declared_type;
     my $representation_type = <DECLS>;
     chomp $representation_type;
-    
+
     print OUT "$variable\n";
     print OUT "$declared_type\n";
     print OUT "$representation_type\n";
 
     # throw away old comparability information
     <DECLS>;
-    
+
     $variable = transform($variable);
 
     if (is_array_element($variable)) {
-      my $array_base = $variable;
-      $array_base =~ s/\[\]//;
+      my $array_base = array_base($variable);
       my $element_variable = $array_base . $element_suffix;
       my $index_variable = $array_base . $index_suffix;
       my $elem_imp_type = implicit_type($element_variable);
@@ -295,6 +302,11 @@ sub is_array_element {
   return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
 }
 
+sub array_base {
+  my ($variable) = @_;
+  $variable =~ s/\[\]//;
+  return $variable;
+}
 
 # returns true if the variable is a struct field
 sub is_struct_field {
@@ -304,7 +316,7 @@ sub is_struct_field {
 
 
 # Returns the list of comparable variables for the specified variable
-# in the specificed function.  Includes possibly uninteresting
+# in the specified function.  Includes possibly uninteresting
 # variables.
 sub get_comparable_variables {
   my ($variable, $function) = @_;
@@ -419,7 +431,7 @@ sub get_comparable_variables {
 # get_struct("a.b->c") = ("a.b", "->c")
 sub split_struct {
   my ($variable) = @_;
-  $variable =~ s/(.*)(\.|->)([^\.-]*)$//;
+  $variable =~ /(.*)(\.|->)([^\.-]*)$/;
   return ($1, $2.$3);
 }
 
@@ -443,11 +455,9 @@ sub lackwit {
 
 sub _lackwit {
   my ($function, $variable) = @_;
-#  my $result = `echo "searchlocal $function:$variable -all" | BackEnd 2>&1`;
-#this is horrible, but on solaris, the only way we can eat the
-#'Segmentation Fault' error message is by doing sh -c.  For some
-#reason, in Solaris, segfaults bypass stderr redirection in an
-#interactive shell
+  # On Solaris, "sh -c" is required to prevent the 'Segmentation Fault'
+  # error message from going to standard error.  For some reason, in
+  # Solaris, segfaults bypass stderr redirection in an interactive shell.
   my $result =
       `echo "searchlocal $function:$variable -all" | sh -c BackEnd 2>&1`;
   if ($CHILD_ERROR != 0) {
@@ -478,7 +488,7 @@ sub implicit_type {
       $explicit_to_implicit{$key} = 1;
     }
   }
-  return $explicit_to_implicit{$key};  
+  return $explicit_to_implicit{$key};
 }
 
 
@@ -536,10 +546,10 @@ sub disjoint_lists {
         if (! $other_list_removed) {
           $other_list_index++;
         }
-      }      
+      }
       $cur_elem_index++;
     }
-    $cur_list_index++;    
+    $cur_list_index++;
   }
   return @lists;
 }
@@ -558,8 +568,8 @@ sub unify_lists {
 }
 
 
-# takes a list of lists and a hash
-# filters each sublist, keeping only the elements present in the hash
+# takes a list of lists and a hash.
+# filters each sublist, keeping only the elements present in the hash.
 # returns the new list of lists
 sub filter_lists_by_hash {
   my ($lists_ref, $hash_ref) = @_;
