@@ -21,6 +21,14 @@ public class PptMap
     nameToPpt.put(ppt.name, ppt);
   }
 
+  public void addAll(List ppts)
+  {
+    for (Iterator iPpt = ppts.iterator(); iPpt.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) iPpt.next();
+      add (ppt);
+    }
+  }
+
   public PptTopLevel get(String name)
   {
     return (PptTopLevel) nameToPpt.get(name);
@@ -121,8 +129,24 @@ public class PptMap
     }
   }
 
+  /**
+   * Return the number of active PptSlices
+   **/
+  public int countSlices() {
+    int result = 0;
+    for (Iterator i = this.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      result += ppt.numViews();
+    }
+    return result;
+  }
+
   public int size() {
     return nameToPpt.size();
+  }
+
+  public String toString() {
+    return "PptMap: " + nameToPpt.toString();
   }
 
 }
