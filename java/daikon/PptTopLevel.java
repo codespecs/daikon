@@ -1483,7 +1483,22 @@ public class PptTopLevel
         PptSplitter ppt_split = (PptSplitter) ii.next();
         ppt_split.add_bottom_up (vt, count);
       }
-      return (null);
+      if (Daikon.use_dataflow_hierarchy)
+        return (null);
+    }
+
+    // If we are not using the hierarchy and this is a numbered exit, also
+    // apply these values to the combined exit
+    if (!Daikon.use_dataflow_hierarchy) {
+      // System.out.println ("ppt_name = " + ppt_name);
+      if (!(this instanceof PptConditional) && ppt_name.isNumberedExitPoint()){
+        PptTopLevel parent = Daikon.all_ppts.get (ppt_name.makeExit());
+        if (parent != null) {
+          // System.out.println ("parent is " + parent.name());
+          parent.get_missingOutOfBounds (this);
+          parent.add_bottom_up (vt, count);
+        }
+      }
     }
 
     // Set of invariants weakened by this sample
@@ -1492,7 +1507,7 @@ public class PptTopLevel
     // Instantiate slices and invariants if this is the first sample
     if (values_num_samples == 0) {
       debugFlow.fine ("  Instantiating views for the first time");
-      if (!Daikon.use_dynamic_constant_optimization)
+      if (!Daikon.dkconfig_use_dynamic_constant_optimization)
         instantiate_views_and_invariants();
     }
 
@@ -1510,7 +1525,7 @@ public class PptTopLevel
     }
 
     // Add samples to constants, adding new invariants as required
-    if (Daikon.use_dynamic_constant_optimization) {
+    if (Daikon.dkconfig_use_dynamic_constant_optimization) {
       if (constants == null)
         constants = new DynamicConstants (this);
       List non_missing = new ArrayList();
@@ -1828,6 +1843,19 @@ public class PptTopLevel
     }
 
     return (weakened_invs);
+  }
+
+  /**
+   * Gets any missing out of bounds variables from the specified ppt and
+   * applies them to the matching variable in this ppt.  Not particularly
+   * efficient.  The variables must match exactly.
+   */
+  public void get_missingOutOfBounds (PptTopLevel ppt) {
+
+    for (int ii = 0; ii < ppt.var_infos.length; ii++) {
+      if (ppt.var_infos[ii].missingOutOfBounds())
+        var_infos[ii].derived.missing_array_bounds = true;
+    }
   }
 
   /**
@@ -2652,7 +2680,7 @@ public class PptTopLevel
    */
   public boolean is_slice_ok (VarInfo var1) {
 
-    if (Daikon.use_dynamic_constant_optimization && constants == null)
+    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
     if ((constants != null) && (constants.is_constant (var1)))
       return (false);
@@ -4210,7 +4238,7 @@ public class PptTopLevel
     }
 
     // Merge any always missing variables from the children
-    if (Daikon.use_dynamic_constant_optimization) {
+    if (Daikon.dkconfig_use_dynamic_constant_optimization) {
       Assert.assertTrue (constants == null);
       constants = new DynamicConstants (this);
       constants.merge();
