@@ -249,6 +249,15 @@ public final class UtilMDE {
   }
 
   /**
+   * Convert a primitive java type name (eg, int, double, etc) to
+   * the single character JVM name (eg, I, D, etc).  Returns null
+   * primitive_name is not a valid name
+   */
+  public static String primitive_name_to_jvm (String primitive_name) {
+    return (String) primitiveClassesJvm.get (primitive_name);
+  }
+
+  /**
    * Convert a fully-qualified argument list from Java format to JVML format.
    * For example, convert "(java.lang.Integer[], int, java.lang.Integer[][])"
    * to "([Ljava/lang/Integer;I[[Ljava/lang/Integer;)".
