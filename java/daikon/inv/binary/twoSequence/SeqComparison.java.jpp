@@ -23,11 +23,11 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISECOMP_GT PairwiseIntGreaterThan
   #define PAIRWISECOMP_LE PairwiseIntLessEqual
   #define PAIRWISECOMP_GE PairwiseIntGreaterEqual
-  #define SEQCOMPAR_EQ SeqSeqIntEqual
-  #define SEQCOMPAR_LT SeqSeqIntLessThan
-  #define SEQCOMPAR_GT SeqSeqIntGreaterThan
-  #define SEQCOMPAR_LE SeqSeqIntLessEqual
-  #define SEQCOMPAR_GE SeqSeqIntGreaterEqual
+  #define SEQSEQ_EQ       SeqSeqIntEqual
+  #define SEQSEQ_LT       SeqSeqIntLessThan
+  #define SEQSEQ_GT       SeqSeqIntGreaterThan
+  #define SEQSEQ_LE       SeqSeqIntLessEqual
+  #define SEQSEQ_GE       SeqSeqIntGreaterEqual
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
@@ -42,11 +42,11 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISECOMP_GT PairwiseFloatGreaterThan
   #define PAIRWISECOMP_LE PairwiseFloatLessEqual
   #define PAIRWISECOMP_GE PairwiseFloatGreaterEqual
-  #define SEQCOMPAR_EQ SeqSeqFloatEqual
-  #define SEQCOMPAR_LT SeqSeqFloatLessThan
-  #define SEQCOMPAR_GT SeqSeqFloatGreaterThan
-  #define SEQCOMPAR_LE SeqSeqFloatLessEqual
-  #define SEQCOMPAR_GE SeqSeqFloatGreaterEqual
+  #define SEQSEQ_EQ       SeqSeqFloatEqual
+  #define SEQSEQ_LT       SeqSeqFloatLessThan
+  #define SEQSEQ_GT       SeqSeqFloatGreaterThan
+  #define SEQSEQ_LE       SeqSeqFloatLessEqual
+  #define SEQSEQ_GE       SeqSeqFloatGreaterEqual
 #elif (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
@@ -568,8 +568,8 @@ public class SEQSEQINTEQUAL
           PAIRWISECOMP_LE picLE = PAIRWISECOMP_LE.find(ppt);
           PAIRWISECOMP_GE picGE = PAIRWISECOMP_GE.find(ppt);
           if ((picEQ!= null) || (picLT!=null) || (picGT!=null) || (picLE!=null) || (picGE!=null)) {
-            //  if (logOn())
-            //   debug.log ("Obvious Dynamic from " + pic.format());
+            // if (logOn())
+            //  debug.log ("Obvious Dynamic from " + pic.format());
             return (true);
           }
         }
@@ -587,15 +587,19 @@ public class SEQSEQINTEQUAL
         //     + " " + avis[1].name.name());
         ppt = this.ppt.parent.findSlice_unordered (avis);
         if (ppt != null) {
-          SEQCOMPAR_EQ seq_eq = SEQCOMPAR_EQ.find(ppt);
-          SEQCOMPAR_LT seq_lt = SEQCOMPAR_LT.find(ppt);
-          SEQCOMPAR_GT seq_gt = SEQCOMPAR_GT.find(ppt);
-          SEQCOMPAR_LE seq_le = SEQCOMPAR_LE.find(ppt);
-          SEQCOMPAR_GE seq_ge = SEQCOMPAR_GE.find(ppt);
-          if ((seq_eq!=null) || (seq_lt!=null) || (seq_gt!=null) || (seq_le!=null) || (seq_ge!=null)) {
-            if (logOn())
-              debug.log ("Obvious Dynamic from other SeqComparison");
-            return (true);
+          List found = new ArrayList();
+          found.add (SEQSEQ_EQ.find(ppt));
+          found.add (SEQSEQ_LT.find(ppt));
+          found.add (SEQSEQ_GT.find(ppt));
+          found.add (SEQSEQ_LE.find(ppt));
+          found.add (SEQSEQ_GE.find(ppt));
+          for (int i = 0; i < found.size(); i++) {
+            Invariant inv = (Invariant) found.get (i);
+            if (inv != null) {
+              if (logOn())
+                debug.log ("Obvious Dynamic from " + inv.format());
+              return (true);
+            }
           }
         }
       }
