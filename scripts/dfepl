@@ -9,7 +9,7 @@ use warnings;
 BEGIN {
     require English;
     if ($^V ge 5.8.0) {
-        English->import("-no_match_vars"); # avoid speed penaly
+        English->import("-no_match_vars"); # avoid speed penalty
     } else {
         English->import();
     }
@@ -251,6 +251,7 @@ sub process_file_relative_to {
     my $bprog = dirname($prog) . "/" . basename($prog, ".pm");
     (my $pack = $bprog) =~ s[/][::]g;
     if (defined $types_search) {
+        # If what they specified was a file, look at it directly?
         print STDERR "Looking at $types_search/combined.types\n" if $verbose;
         if (-e "$types_search/combined.types") {
             $more_opts .= ",-t,$types_search/combined.types";
