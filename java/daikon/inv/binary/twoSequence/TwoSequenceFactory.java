@@ -21,22 +21,8 @@ public final class TwoSequenceFactory {
     Assert.assert((var1.rep_type == ProglangType.INT_ARRAY)
                   && (var2.rep_type == ProglangType.INT_ARRAY));
 
-    if (Daikon.check_program_types
-        && (! var1.type.elementType().castable(var2.type.elementType()))) {
-      // System.out.println("These have different program types: :  "
-      //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+    if (! var1.compatible(var2))
       return null;
-    }
-    // System.out.println("These have castable program types: :  "
-    //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
-    if (! Daikon.ignore_comparability) {
-      VarComparability compar1 = var1.comparability.elementType();
-      VarComparability compar2 = var2.comparability.elementType();
-      // The "name" arguments here are wrong.
-      if (! VarComparability.comparable(var1.name, compar1, var2.name, compar2)) {
-        return null;
-      }
-    }
 
     VarInfo super1 = var1.isDerivedSubSequenceOf();
     if (super1 == null)
