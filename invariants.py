@@ -1944,7 +1944,6 @@ class single_scalar_numeric_invariant(invariant):
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         min_missing = ((inv1.min_justified and not inv2.min_justified)
                        or (inv2.min_justified and not inv1.min_justified))
@@ -1954,7 +1953,7 @@ class single_scalar_numeric_invariant(invariant):
                        or (inv2.max_justified and not inv1.max_justified))
         max_different = (inv1.max_justified and inv2.max_justified
                          and (inv1.max != inv2.max))
-        print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified, inv1.max, inv2.max
+        # print "max_different=%s" % (max_different,), inv1.max_justified, inv2.max_justified, inv1.max, inv2.max
         nzj1 = inv1.nonzero_justified()
         nzj2 = inv1.nonzero_justified()
         zero_different = (nzj1 and not nzj2) or (nzj2 and not nzj1)
@@ -2293,7 +2292,6 @@ class two_scalar_numeric_invariant(invariant):
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         linear_different = (inv1.linear != inv2.linear)
         equal_different = (inv1.can_be_equal != inv2.can_be_equal)
@@ -2306,8 +2304,8 @@ class two_scalar_numeric_invariant(invariant):
 
         comparison_different = (comp1 != comp2)
 
-        difference_different = (inv1.difference_invariant != inv2.difference_invariant)
-        sum_different = (inv1.sum_invariant != inv2.sum_invariant)
+        difference_difference = inv1.difference_invariant.diff(inv2.difference_invariant)
+        sum_difference = inv1.sum_invariant.diff(inv2.sum_invariant)
 
         functions_different = (inv1.functions != inv2.functions)
         inv_functions_different = (inv1.inv_functions != inv2.inv_functions)
@@ -2316,8 +2314,8 @@ class two_scalar_numeric_invariant(invariant):
         if linear_different: result.append("Different linear reln")
         if equal_different: result.append("One can be equal, other can't")
         if comparison_different: result.append("Different comparison")
-        if difference_different: result.append("Different numeric difference (subtraction)")
-        if sum_different: result.append("Different sum")
+        if difference_difference: result.append("Different numeric difference (subtraction) (" + difference_difference + ")")
+        if sum_difference: result.append("Different sum (" + sum_difference + ")")
         if functions_different: result.append("Different functional relationship")
         if inv_functions_different: result.append("Different inverse functional relationship")
         if result == []:
@@ -2549,7 +2547,6 @@ class three_scalar_numeric_invariant(invariant):
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         result = []
         if (inv1.linear_z != inv2.linear_z): result.append("Different linear_z")
@@ -2971,7 +2968,6 @@ class single_sequence_numeric_invariant(invariant):
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         result = []
 
@@ -3263,7 +3259,6 @@ class two_sequence_numeric_invariant(invariant):
         as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         self.unconstrained_internal = false
 
@@ -3319,7 +3314,6 @@ class two_sequence_numeric_invariant(invariant):
         as_base = invariant.diff(inv1, inv2)
         if as_base:
             return as_base
-        print "no diff as_base"
 
         result = []
 
@@ -3350,6 +3344,13 @@ class two_sequence_numeric_invariant(invariant):
 ###########################################################################
 ### Persistence
 ###
+
+# Pickle files store the computational state of Python; in particular, they
+# contain representations of the data structures that hold both the raw
+# data and the computed invariants.  That means we can quickly load them
+# and have the invariants all ready to print, diff, whatever rather than
+# being forced to regenerate them from scratch (which is slow).
+
 
 # Perhaps I don't really need fn_samples.
 # Skip fn_var_values for now.
@@ -3394,7 +3395,7 @@ def diff_files(filename1, filename2):
 
 def diff_fn_var_infos(fn_var_infos1, fn_var_infos2):
     """Print differences between invariants in two sets of fn_var_infos."""
-    print "diff_fn_var_infos"
+    # print "diff_fn_var_infos"
     function_names1 = fn_var_infos1.keys()
     function_names1.sort()
     function_names2 = fn_var_infos2.keys()
@@ -3411,15 +3412,11 @@ def diff_fn_var_infos(fn_var_infos1, fn_var_infos2):
         print "==========================================================================="
         # print fn_name, fn_samples[fn_name], "samples"
         print fn_name
-        print "foo"
         diff_var_infos(fn_var_infos1[fn_name], fn_var_infos2[fn_name])
-        print "postfoo"
 
 
 def diff_var_infos(var_infos1, var_infos2):
     """Print differences between invariants in two sets of var_infos."""
-    # Maybe here iterate over calls to diff_var_info
-    print "bar"
 
     # var_infos1.sort(var_info_name_compare)
     # var_infos2.sort(var_info_name_compare)
@@ -3427,6 +3424,9 @@ def diff_var_infos(var_infos1, var_infos2):
     assert var_infos_compatible(var_infos1, var_infos2)
 
     print len(var_infos1), "var_infos:"
+
+    unary_same = 0
+    unary_different = 0
 
     for i in range(0, len(var_infos1)):
         vi1 = var_infos1[i]
@@ -3449,9 +3449,55 @@ def diff_var_infos(var_infos1, var_infos2):
         difference = inv1.diff(inv2)
         if difference:
             print difference
-            print inv1.format((vi1.name,))
-            print inv2.format((vi2.name,))
-        print "Still need to do non-unary invariants."
+            print " ", inv1.format((vi1.name,))
+            print " ", inv2.format((vi2.name,))
+            unary_different = unary_different + 1
+        else:
+            unary_same = unary_same + 1
+
+    pair_same = 0
+    pair_different = 0
+
+    for i in range(0, len(var_infos1)):
+        vi1 = var_infos1[i]
+        vi2 = var_infos2[i]
+        assert vi1.name == vi2.name
+        invs1 = vi1.invariants
+        invs2 = vi2.invariants
+        # keys1 = invs1.keys()
+        # keys1.sort()
+        # keys2 = invs2.keys()
+        # keys2.sort()
+        for j in range(i+1, len(var_infos1)):
+            in1 = invs1.has_key(j)
+            in2 = invs2.has_key(j)
+            if (not in1) and (not in2):
+                continue
+            if in1 and not in2:
+                print "First group contains invariant:", invs1[j].format((vi1.name, var_infos1[j].name))
+                pair_different = pair_different + 1
+                continue
+            if in1 and not in2:
+                print "Second group contains invariant:", invs2[j].format((vi2.name, var_infos2[j].name))
+                pair_different = pair_different + 1
+                continue
+            assert in1 and in2
+            # Should I check for whether the variables are canonical?
+            # I'm leaving them all in for now, lest it be too hard to
+            # compare numbers of identical/different invariants.
+            difference = invs1[j].diff(invs2[j])
+            if difference:
+                print difference
+                print " ", invs1[j].format((vi1.name, var_infos1[j].name))
+                print " ", invs2[j].format((vi2.name, var_infos2[j].name))
+                pair_different = pair_different + 1
+            else:
+                pair_same = pair_same + 1
+
+    print "Identical unary invariants:", unary_same
+    print "Differing unary invariants:", unary_different
+    print "Identical binary invariants:", pair_same
+    print "Differing binary invariants:", pair_different
 
 
 #     # Equality invariants
