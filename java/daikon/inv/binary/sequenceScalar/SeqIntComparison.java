@@ -1,8 +1,10 @@
 package daikon.inv.binary.sequenceScalar;
 
 import daikon.*;
+import daikon.derive.unary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
 import java.util.*;
 import utilMDE.*;
 
@@ -14,7 +16,7 @@ public final class SeqIntComparison extends SequenceScalar {
 
   static boolean debugSeqIntComparison = false;
 
-  protected SeqIntComparison(PptSlice ppt, boolean seq_first, boolean only_eq) {
+  protected SeqIntComparison(PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
     Assert.assert(sclvar().rep_type == ProglangType.INT );
     Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY );
@@ -39,12 +41,34 @@ public final class SeqIntComparison extends SequenceScalar {
                          + sclvar.name + " in " + seqvar.name);
     }
 
+    SequenceMin seqmin = null;
+    SequenceMax seqmax = null;
+    VarInfo sclseq = null;
+    if (sclvar.derived instanceof SequenceMin) {
+      seqmin = (SequenceMin) sclvar.derived;
+      sclseq = seqmin.base;
+    } else if (sclvar.derived instanceof SequenceMax) {
+      seqmax = (SequenceMax) sclvar.derived;
+      sclseq = seqmax.base;
+    }
+    if (seqvar == sclseq) {
+      return null;
+    }
+    boolean obvious_lt = false;
+    boolean obvious_le = false;
+    boolean obvious_gt = false;
+    boolean obvious_ge = false;
+    if ((sclseq != null) && (SubSequence.isObviousDerived(seqvar, sclseq))) {
+      obvious_le = (seqmin != null);
+      obvious_ge = (seqmax != null);
+    }
+
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
     ProglangType elt_type = seqvar.type.elementType();
     Assert.assert(elt_type == sclvar.type);
     boolean only_eq = ! elt_type.baseIsIntegral();
-    return new SeqIntComparison(ppt, seq_first, only_eq);
+    return new SeqIntComparison(ppt, seq_first, only_eq, obvious_le, obvious_ge);
   }
 
   // public boolean isObviousImplied() {
@@ -68,7 +92,7 @@ public final class SeqIntComparison extends SequenceScalar {
     String comparator = core.format_comparator();
     String[] esc_forall = seqvar().esc_forall();
     return "(" + esc_forall[0]
-      + "(" + esc_forall[1] + " " + comparator + " " + sclvar().name + "))";
+      + "(" + esc_forall[1] + " " + comparator + " " + sclvar().esc_name + "))";
   }
 
   public void add_modified(long [] a, long x, int count) {
@@ -124,59 +148,67 @@ public final class SeqIntComparison extends SequenceScalar {
 
 
   // Copied from IntComparison.
-  // public boolean isObviousImplied() {
-  //   if (isExact()) {
-  //     return false;
-  //   }
-  //   LinearBinary lb = LinearBinary.find(ppt);
-  //   if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
-  //     Assert.assert(lb.core.b != 0);
-  //     return true;
-  //   }
-  //   { // Sequence length tests
-  //     VarInfo var1 = ppt.var_infos[0];
-  //     VarInfo var2 = ppt.var_infos[1];
-  //     SequenceLength sl1 = null;
-  //     if (var1.isDerived() && (var1.derived instanceof SequenceLength))
-  //       sl1 = (SequenceLength) var1.derived;
-  //     SequenceLength sl2 = null;
-  //     if (var2.isDerived() && (var2.derived instanceof SequenceLength))
-  //       sl2 = (SequenceLength) var2.derived;
-  //     if ((sl1 != null) && (sl2 != null)
-  //         && ((sl1.shift == sl2.shift) && (sl1.shift != 0) || (sl2.shift != 0))) {
-  //       // "size(a)-1 cmp size(b)-1"; should just use "size(a) cmp size(b)"
-  //       return true;
-  //     }
-  //
-  //     // This might never get invoked, as equality is printed out specially.
-  //     VarInfo s1 = (sl1 == null) ? null : sl1.base;
-  //     VarInfo s2 = (sl2 == null) ? null : sl2.base;
-  //     if ((s1 != null) && (s2 != null)
-  //         && (s1.equal_to == s2.equal_to)) {
-  //       // lengths of equal arrays being compared
-  //       return true;
-  //     }
-  //
-  //     if (core.can_be_lt && (!core.can_be_eq)) {
-  //       if ((sl2 != null) && (sl2.shift == 0)) {
-  //         // "x < size(a)"  ("x <= size(a)-1" or "x < size(a)-1" would be more informative)
-  //         return true;
-  //       } else if ((sl1 != null) && (sl1.shift == -1)) {
-  //         // "size(a)-1 < x"  ("size(a) <= x" would be more informative)
-  //         return true;
-  //       }
-  //     } else if (core.can_be_gt && (!core.can_be_eq)) {
-  //       if ((sl1 != null) && (sl1.shift == 0)) {
-  //         // "size(a) > x"  ("size(a) >= x" would be more informative)
-  //         return true;
-  //       } else if ((sl2 != null) && (sl2.shift == -1)) {
-  //         // "x > size(a)-1"  ("x >= size(a)" would be more informative)
-  //         return true;
-  //       }
-  //     }
-  //   }
-  //
-  //   return false;
-  // }
+  public boolean isObviousImplied() {
+    if (isExact()) {
+      return false;
+    }
+    VarInfo seqvar = seqvar();
+    VarInfo sclvar = sclvar();
+    if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
+      // Sequence length tests
+      SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
+
+      if (core.can_be_lt && (!core.can_be_eq)) {
+        if ((scl_seqlen != null) && (scl_seqlen.shift == 0)) {
+          // "x < size(a)"  ("x <= size(a)-1" would be more informative)
+          return true;
+        }
+      } else if (core.can_be_gt && (!core.can_be_eq)) {
+        if ((scl_seqlen != null) && (scl_seqlen.shift == -1)) {
+          // "x > size(a)-1"  ("x >= size(a)" would be more informative)
+          return true;
+        }
+      }
+    }
+    // {
+    //   if (sclvar.isDerived() && ((sclvar.derived instanceof SequenceMin)
+    //                              || (sclvar.derived instanceof SequenceMax))) {
+    //     SequenceMin seqmin = null;
+    //     SequenceMin seqmax = null;
+    //     VarInfo sclseq;
+    //     if (sclvar.derived instanceof SequenceMin) {
+    //       seqmin = (SequenceMin sclvar.derived);
+    //       sclseq = seqmin.base;
+    //     } else if (sclvar.derived instanceof SequenceMax) {
+    //       seqmax = (SequenceMax sclvar.derived);
+    //       sclseq = seqmax.base;
+    //     } else {
+    //       throw new Error("Can't happen");
+    //     }
+    //     if (seqvar.equal_to == sclseq.equal_to) {
+    //       return true;
+    //     }
+    //     if (seqvar.isEqualToObviousMember
+    //
+    //     // Sequence max/min tests
+    //   // This might never get invoked, as equality is printed out specially.
+    //   SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
+    //
+    //   VarInfo sclseq = (scl_seqlen == null) ? null : scl_seqlen.base;
+    //
+    //
+    //   if ((sclseq != null)
+    //       && (seqvar.equal_to == sclseq.equal_to)) {
+    //     // lengths of equal arrays being compared
+    //     return true;
+    //   }
+
+
+
+
+
+
+    return false;
+  }
 
 }
