@@ -22,7 +22,7 @@ public final class PrintInvariants {
   // daikon.config.Configuration interface.
 
   /**
-   * Print invariant classsname with invariants in output of format()
+   * Print invariant classname with invariants in output of format()
    * method.  Note that this only works with the Invariant.format() method;
    * it doesn't have any effect on calls to format_using().  format() is
    * used in debugging statements, and format_using() is used in typical
