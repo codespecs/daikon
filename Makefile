@@ -38,7 +38,7 @@ WWW_DIR := /home/httpd/html/daikon/
 # This is the current directory!  Maybe I don't need a variable for it.
 #INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
-JDK := /g2/jdk
+JDK ?= /g2/jdk
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
