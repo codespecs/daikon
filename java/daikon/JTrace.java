@@ -177,9 +177,11 @@ abstract class JTrace
 
     private static class Enforcer extends SecurityManager
     {
-	// XXX note: might be better if we just block forever in here,
-	// rather than throw an exception: may get caught by a lazy
-	// exception handler declaration!
+	// XXX We need a better mechanism than this; otherwise a
+	// catch-all exception handler (such as that around the Java
+	// Swing event dispatcher) will suppress this, so it will
+	// never get seen by us.  Push the EOF control token through
+	// now?
 	public void checkExit(int status) // System.exit() called
 	    { throw new SystemExitException(); }
 	// permit all other calls XXX review this!
