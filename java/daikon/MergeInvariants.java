@@ -5,8 +5,7 @@ import java.io.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import utilMDE.Assert;
-import utilMDE.UtilMDE;
+import utilMDE.*;
 import daikon.inv.*;
 
 public class MergeInvariants {
@@ -20,6 +19,7 @@ public class MergeInvariants {
 
   public static File output_inv_file;
 
+  private static Stopwatch stopwatch = new Stopwatch();
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -194,6 +194,13 @@ public class MergeInvariants {
         continue;
       if (ppt.ppt_name.isCombinedExitPoint())
         continue;
+      // Remove any relations down to conditionals, since we want to
+      // build the ppt from the matching points in the specified maps
+      for (Iterator j = ppt.children.iterator(); j.hasNext(); ) {
+        PptRelation rel = (PptRelation) j.next();
+        if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
+          j.remove();
+      }
       for (int j = 0; j < pptmaps.size(); j++ ) {
         PptMap pmap = (PptMap) pptmaps.get (j);
         PptTopLevel child = pmap.get (ppt.ppt_name);
@@ -212,6 +219,7 @@ public class MergeInvariants {
                               + child.name() + " (" + inv_files.get(j) + ")"
                               + " samples = " + child.num_samples());
         PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
+        setup_conditional_merge (rel, ppt, child);
       }
     }
 
@@ -244,6 +252,17 @@ public class MergeInvariants {
       ppt.suppressAll (false);
     }
 
+    // Implications
+    stopwatch.reset();
+    System.out.println("Creating implications ");
+    debugProgress.fine ("Adding Implications ... ");
+    for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.addImplications();
+    }
+    debugProgress.fine ("Time spent in implications: " + stopwatch.format());
+
+
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
     for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
@@ -269,6 +288,27 @@ public class MergeInvariants {
       PrintInvariants.print_invariants (merge_ppts);
     }
 
+  }
+
+  /**
+   * Ses up the specified relation beteween each of the conditionals
+   * in ppt and the matching conditionals in child.  Each must have
+   * the same number of splitters setup in the same order.  The splitter
+   * match can't be checked because splitters can't be read back in.
+   */
+  private static void setup_conditional_merge (PptRelation rel,
+                                        PptTopLevel ppt, PptTopLevel child) {
+
+    Assert.assertTrue (ppt.has_splitters() == child.has_splitters());
+    if (!ppt.has_splitters())
+      return;
+
+    Assert.assertTrue (ppt.splitters.size() == child.splitters.size());
+    for (int ii = 0; ii < ppt.splitters.size(); ii++) {
+      PptSplitter ppt_split = (PptSplitter) ppt.splitters.get(ii);
+      PptSplitter child_split = (PptSplitter) child.splitters.get(ii);
+      ppt_split.add_relation (rel, child_split);
+    }
   }
 
 }
