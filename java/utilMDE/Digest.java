@@ -25,7 +25,7 @@ public class Digest {
     // Read to the end of the file, discarding everything we read.
     // The DigestInputStream automatically passes all the bytes read to
     // the update() method of the MessageDigest
-    while(in.read(buffer) != -1) /* do nothing */ ;
+    while (in.read(buffer) != -1) /* do nothing */ ;
 
     // Finally, compute and return the digest value.
     return md.digest();
