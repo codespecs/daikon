@@ -716,10 +716,10 @@ public class DaikonSimple {
      * and removing the invariant from the list of possibles if any invariant is falsified.
      */
     public void process_sample(
-      PptMap all_ppts,
-      PptTopLevel ppt,
-      ValueTuple vt,
-      Integer nonce) {
+                               PptMap all_ppts,
+                               PptTopLevel ppt,
+                               ValueTuple vt,
+                               Integer nonce) {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables
