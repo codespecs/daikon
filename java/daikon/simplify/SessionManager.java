@@ -94,6 +94,68 @@ public class SessionManager
     worker = null;
   }
 
+  private static String prover_background = null;
+
+  private static String proverBackground() {
+    if (prover_background == null) {
+      try {
+        StringBuffer result = new StringBuffer("");
+        InputStream bg_stream =
+          SessionManager.class.getResourceAsStream("daikon-background.txt");
+        Assert.assertTrue(bg_stream != null,
+                          "Could not find simplify/daikon-background.txt");
+        BufferedReader lines =
+          new BufferedReader(new InputStreamReader(bg_stream));
+        String line;
+        while ((line = lines.readLine()) != null) {
+          line = line.trim();
+          if (line.length() == 0) continue;
+          if (line.startsWith(";")) continue;
+          result.append(" ");
+          result.append(line);
+          result.append(daikon.Global.lineSep);
+        }
+        prover_background = result.toString();
+      } catch (IOException e) {
+        throw new RuntimeException("Could not load prover background");
+      }
+    }
+    return prover_background;
+  }
+
+  public static int prover_instantiate_count = 0;
+
+  // Start up simplify, and send the universal backgound.
+  // Is successful exactly when return != null.
+  public static SessionManager attemptProverStartup()
+  {
+    SessionManager prover;
+
+    // Limit ourselves to a few tries
+    if (prover_instantiate_count > 5) {
+      return null;
+    }
+
+    // Start the prover
+    try {
+      prover_instantiate_count++;
+      prover = new SessionManager();
+      if (daikon.Daikon.no_text_output) {
+        System.out.print("...");
+      }
+    } catch (SimplifyError e) {
+      System.err.println("Could not utilize Simpilify: " + e);
+      return null;
+    }
+
+    try {
+      prover.request(new CmdRaw(proverBackground()));
+    } catch (TimeoutException e) {
+      throw new RuntimeException("Timeout on universal background " + e);
+    }
+    return prover;
+  }
+
   /**
    * Helper thread which interacts with a Session, according to the
    * enclosing manager.

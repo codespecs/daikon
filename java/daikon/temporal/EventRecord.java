@@ -9,36 +9,73 @@ import java.util.*;
 
 class EventRecord
 {
-    // FIXME: Make this more efficient somehow?
-    // Possibly make this implement Collection? Or do we care?
-    Hashtable mEvents;
+    //FIXME: Make this more efficient somehow?
+    //Possibly make this implement Collection? Or do we care?
+    //HashSet mEvents;
+    boolean modified;
+    Vector kids;
+
+    Vector mEvents;
 
     EventRecord()
     {
-	mEvents = new Hashtable();
+//	mEvents = new HashSet(0);
+	mEvents = new Vector();
+	modified = false;
+
+	kids = new Vector();
     }
 
+    void disownKids()
+    {
+	for(Iterator i = kids.iterator(); i.hasNext(); )
+	    {
+		EventRecord r = (EventRecord)i.next();
+		
+		if (!r.modified)
+		    {
+			r.modified = true;
+			
+			r.mEvents = (Vector)mEvents.clone();
+			
+			r.disownKids();
+		    }
+		else
+		    {
+			//FIXME: Remove kids reference here later
+		    }
+	    }
+	
+    }
+    
     void add(Event e)
     {
-	mEvents.put(e, new Boolean(true));
+	if (!modified)
+	    {
+		modified = true;
+	    }
+
+	disownKids();
+			  
+	mEvents.add(e);
     }
 
     void addAll(Collection c)
     {
 	for (Iterator i = c.iterator(); i.hasNext(); )
 	{
-		add((Event)i.next());
+	    add((Event)i.next());
 	}
     }
 
     void add(EventRecord r)
     {
-	mEvents.putAll(r.mEvents);
+	mEvents.addAll(r.mEvents);
     }
 
     boolean hasEventMatching(Event e)
     {
-	return mEvents.containsKey(e);
+	return mEvents.contains(e);
     }
 
     boolean seenAnyEvents()
@@ -48,24 +85,26 @@ class EventRecord
 
     boolean noEventsConflictWith(Event e)
     {
-	for (Iterator i = mEvents.keySet().iterator(); i.hasNext(); )
+	for(Iterator i = mEvents.iterator(); i.hasNext(); )
 	    {
 		Event cur = (Event)i.next();
-
+		
 		if (e.sharesTypeWith(cur) && !e.matches(cur))
 		    {
 			return false;
 		    }
 	    }
-
+	
 	return true;
     }
 
     EventRecord duplicate()
     {
 	EventRecord out = new EventRecord();
+	
+	out.mEvents = mEvents;
 
-	out.mEvents = (Hashtable)mEvents.clone(); // FIXME: Is this right? How deep does clone copy, again?
+	kids.add(out);
 
 	return out;
     }

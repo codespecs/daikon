@@ -18,6 +18,7 @@ public class CmdCheck
 
   public final String proposition;
   public boolean valid = false;
+  public String counterexample = "";
 
   public CmdCheck(String proposition) {
     this.proposition = proposition.trim();
@@ -48,6 +49,17 @@ public class CmdCheck
         }
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
+        }
+        if (result.equals("Counterexample:")) {
+          // Suck in the counterexample, if given
+          do {
+            counterexample += result + "\n";
+            result = s.output.readLine();
+            if (result == null) {
+              throw new SimplifyError("Probable core dump");
+            }
+          } while (result.startsWith(" ") || result.startsWith("\t")
+                   || result.equals(""));
         }
         // then, a blank line
         String blank = s.output.readLine();

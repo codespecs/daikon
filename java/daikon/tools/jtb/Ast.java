@@ -582,12 +582,7 @@ public class Ast {
         int rparen = pptFullMethodName.indexOf(')');
         Assert.assertTrue(lparen > 0);
         Assert.assertTrue(rparen > lparen);
-        // String ppt_args_string = UtilMDE.
-        //   arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
-        String ppt_args_string = pptFullMethodName.substring(lparen, rparen+1);
-        Assert.assertTrue(ppt_args_string.startsWith("("), ppt_args_string);
-        Assert.assertTrue(ppt_args_string.endsWith(")"), ppt_args_string);
-        ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
+        String ppt_args_string = pptFullMethodName.substring(lparen+1, rparen);
         String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
         if ((ppt_args.length == 1)
             && (ppt_args[0].equals(""))) {
@@ -606,10 +601,7 @@ public class Ast {
             if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }
-          // Is the below test necessary since we do arglistFromJvm above?
-          // String ppt_arg_nonjvm = utilMDE.UtilMDE.classnameFromJvm(ppt_arg);
-          String ppt_arg_nonjvm = ppt_arg;
-          if ((ppt_arg_nonjvm != null) && typeMatch(ppt_arg_nonjvm, paramtype)) {
+          if ((ppt_arg != null) && typeMatch(ppt_arg, paramtype)) {
             if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }

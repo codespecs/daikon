@@ -37,7 +37,7 @@ public class Session
       input.flush();
 
       SessionManager.debugln("Session: eat prompt");
-      // eat first prompt
+      // eat first (and only, because we turn it off) prompt
       InputStream is = process.getInputStream();
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];

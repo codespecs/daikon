@@ -2700,6 +2700,38 @@ public abstract class VarInfoName
 
     //////////////////////////
 
+    public static String[] simplifyNameAndBounds(VarInfoName name) {
+      String[] results = new String[3];
+      boolean preState = false;
+      if (name instanceof Prestate) {
+        Prestate wrapped = (Prestate)name;
+        name = wrapped.term;
+        preState = true;
+      }
+      if (name instanceof Elements) {
+        Elements sequence = (Elements)name;
+        VarInfoName array = sequence.term;
+        results[0] = array.simplify_name(preState);
+        results[1] = sequence.getLowerBound().simplify_name(preState);
+        results[2] = sequence.getUpperBound().simplify_name(preState);
+        return results;
+      } else if (name instanceof Slice) {
+        Slice slice = (Slice)name;
+        VarInfoName array = ((Elements)slice.sequence).term;
+        results[0] = array.simplify_name(preState);
+        results[1] = slice.getLowerBound().simplify_name(preState);
+        results[2] = slice.getUpperBound().simplify_name(preState);
+        return results;
+      } else {
+        // There are some other cases this scheme can't handle.
+        // For instance, if every Book has an ISBN, a front-end
+        // might distribute the access to that field over an array
+        // of books, so that "books[].isbn" is an array of ISBNs,
+        // though its name has type Field.
+        return null;
+      }
+    }
+
     // <root*> -> <string string*>
     /**
      * Given a list of roots, return a String array where the first

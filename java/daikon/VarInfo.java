@@ -4,6 +4,7 @@ package daikon;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
 import daikon.VarInfoName.*;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.NonZero;
@@ -1307,6 +1308,10 @@ public final class VarInfo
       SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
       // System.out.println("isDerivedSubSequenceOf returning " + sss.seqvar().name);
       return sss.seqvar();
+    } else if (derived instanceof SequenceScalarArbitrarySubsequence) {
+      SequenceScalarArbitrarySubsequence ssas =
+        (SequenceScalarArbitrarySubsequence) derived;
+      return ssas.seqvar();
     } else {
       return null;
     }
@@ -1505,8 +1510,9 @@ public final class VarInfo
 
   // Given two variables I and J, indicate whether it is necessarily the
   // case that i<=j or i>=j.  The variables also each have a shift, so the
-  // test is really for whether (i+1)<=(j-1).
-  // The test is either:  i<=j or i>=j.
+  // test can really be something like (i+1)<=(j-1).
+  // The test is either:  i + i_shift <= j + j_shift (if test_lessequal)
+  //                      i + i_shift >= j + j_shift (if !test_lessequal)
   public static boolean compare_vars(VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
     // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
     if (vari == varj) {

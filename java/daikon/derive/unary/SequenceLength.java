@@ -2,6 +2,7 @@ package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
 import utilMDE.*;
 
 // originally from pass1.
@@ -31,20 +32,23 @@ public final class SequenceLength
     Assert.assertTrue(vi.rep_type.isArray());
 
     if (vi.derived != null) {
-      Assert.assertTrue((vi.derived instanceof SequenceScalarSubsequence)
-                    || (vi.derived instanceof SequenceStringIntersection)
-                    || (vi.derived instanceof SequenceScalarIntersection)
-                    || (vi.derived instanceof SequenceStringUnion)
-                    || (vi.derived instanceof SequenceScalarUnion)
-                    || (vi.derived instanceof SequencesConcat)
-                    || (vi.derived instanceof SequencesPredicate)
-                    || (vi.derived instanceof SequencesJoin)
-                    || (vi.derived instanceof SequenceFloatSubsequence)
-                    || (vi.derived instanceof SequenceFloatIntersection)
-                    || (vi.derived instanceof SequenceFloatUnion)
-                    || (vi.derived instanceof SequencesPredicateFloat)
-                    || (vi.derived instanceof SequencesJoinFloat)
-                    );
+      Assert.assertTrue
+        ((vi.derived instanceof SequenceScalarSubsequence)
+         || (vi.derived instanceof SequenceScalarArbitrarySubsequence)
+         || (vi.derived instanceof SequenceStringIntersection)
+         || (vi.derived instanceof SequenceScalarIntersection)
+         || (vi.derived instanceof SequenceStringUnion)
+         || (vi.derived instanceof SequenceScalarUnion)
+         || (vi.derived instanceof SequencesConcat)
+         || (vi.derived instanceof SequencesPredicate)
+         || (vi.derived instanceof SequencesJoin)
+         || (vi.derived instanceof SequenceFloatSubsequence)
+         || (vi.derived instanceof SequenceFloatArbitrarySubsequence)
+         || (vi.derived instanceof SequenceFloatIntersection)
+         || (vi.derived instanceof SequenceFloatUnion)
+         || (vi.derived instanceof SequencesPredicateFloat)
+         || (vi.derived instanceof SequencesJoinFloat)
+         );
 
       if (!( // All of the below give new information when taking a sizeof
             (vi.derived instanceof SequenceStringIntersection)

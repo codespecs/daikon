@@ -3,9 +3,9 @@ package daikon.inv;
  * An invariant feature extractor.
  * This class creates a labeling of invariants.
  * That is, it extracts features from invariants and then
- * gives a 1 or a -1 based on which of the two input files
- * the invariant came from.
- * The output goes to standard out and is in the format
+ * classifies the invariants as "good" or a "bad" based
+ * on which of the two input files the invariant came from.
+ * The output goes to file in one of the following formats:
  * SVM-Light, SVMfu, or C5 uses.
  *********************************************/
 
@@ -360,6 +360,8 @@ public final class FeatureExtractor {
     Field[] fields = FeatureExtractor.class.getFields();
     FeatureExtractor useless = new FeatureExtractor();
     for (int i = 0; i < fields.length; i++) {
+      // if this is a Variable Feature
+      // we have to replicate it for each variable
       if (fields[i].getName().startsWith("FetVar") ||
           fields[i].getName().startsWith("FetType")) {
         int val;
@@ -371,10 +373,11 @@ public final class FeatureExtractor {
           IntDoublePair temp = new IntDoublePair(j * 10000 + val, 0);
           allFeatures.add(temp);
           if (j == 0)
-            numbersToNames.put(temp, fields[i].getName() + "--union");
+            numbersToNames.put(temp, "union--" + fields[i].getName());
           else
-            numbersToNames.put(temp, fields[i].getName() + "--" + j);
+            numbersToNames.put(temp, "--" + j + fields[i].getName());
         }
+        // else if this is a not a Variable Feature but still a Feature
       } else if (fields[i].getName().startsWith("Fet")) {
         try {
           IntDoublePair temp = new IntDoublePair(fields[i].getInt(useless), 0);
@@ -382,7 +385,7 @@ public final class FeatureExtractor {
           numbersToNames.put(temp, fields[i].getName());
         }
         catch (IllegalAccessException e) {
-          throw new IOException("all fields starting with Fet must be of " +
+          throw new IOException("All fields starting with Fet must be of " +
                                 "type int\n" + e.getMessage()); }
 
 
@@ -394,10 +397,22 @@ public final class FeatureExtractor {
     names.write("good, bad.\n");
     for (Iterator all = allFeatures.iterator(); all.hasNext(); ) {
       IntDoublePair current = (IntDoublePair) all.next();
-      if (numbersToNames.containsKey(current))
-        names.write(numbersToNames.get(current) + ": continuous.\n");
+      if (numbersToNames.containsKey(current)) {
+        String currentName = (String) numbersToNames.get(current);
+        if (currentName.endsWith("Bool"))
+          names.write(currentName + ":0, 1.\n");
+        else if (currentName.endsWith("Float"))
+          names.write(currentName + ": continuous.\n");
+        else if (currentName.endsWith("Int"))
+          names.write(currentName + ": discrete.\n");
+        else throw new IOException("All feature names must end with one of " +
+                                   "Float, Bool, or Int.\nError: " +
+                                   currentName + "\n");
+      }
       else
-        names.write(current.number + ": continuous.\n");
+        throw new IOException("Feature " + current.number +
+                              " not included in .names file");
+      //names.write(current.number + ": continuous.\n");
     }
     names.write("|End of .names file\n");
     names.close();
@@ -812,24 +827,24 @@ public final class FeatureExtractor {
   private static Vector getCommonFeatures(Invariant inv) {
     Vector answer = new Vector();
     if (inv.enoughSamples()) {
-      answer.add(new IntDoublePair(FetEnoughSamples, 1));
-      answer.add(new IntDoublePair(FetGetProbability, inv.getProbability()));
-      if (inv.isExact()) answer.add(new IntDoublePair(FetIsExact, 1));
-      if (inv.justified()) answer.add(new IntDoublePair(FetJustified, 1));
-      if (inv.isWorthPrinting()) answer.add(new IntDoublePair(FetIsWorthPrinting, 1));
-      if (inv.hasFewModifiedSamples()) answer.add(new IntDoublePair(FetHasFewModifiedSamples, 1));
+      answer.add(new IntDoublePair(FetEnoughSamplesBool, 1));
+      answer.add(new IntDoublePair(FetGetProbabilityFloat, inv.getProbability()));
+      if (inv.isExact()) answer.add(new IntDoublePair(FetIsExactBool, 1));
+      if (inv.justified()) answer.add(new IntDoublePair(FetJustifiedBool, 1));
+      if (inv.isWorthPrinting()) answer.add(new IntDoublePair(FetIsWorthPrintingBool, 1));
+      if (inv.hasFewModifiedSamples()) answer.add(new IntDoublePair(FetHasFewModifiedSamplesBool, 1));
       /* [INCR]
-      if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariable, 1));
-      if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
+      if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariableBool, 1));
+      if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariablesBool, 1));
       */ // [INCR]
-      if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObvious, 1));
-      if (inv.isObviousStatically()) answer.add(new IntDoublePair(FetIsObviousStatically, 1));
-      if (inv.isObviousDynamically()) answer.add(new IntDoublePair(FetIsObviousDynamically, 1));
+      if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObviousBool, 1));
       /* [INCR]
-      if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
-      if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
-      */ // [INCR]
-      if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInteresting, 1));
+      if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerivedBool, 1));
+      if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImpliedBool, 1));
+      if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlledBool, 1));
+      if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostconditionBool, 1));
+      */ // INCR
+      if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInterestingBool, 1));
       answer.addAll(getPptFeatures(inv.ppt));
     }
     return answer;
@@ -838,16 +853,16 @@ public final class FeatureExtractor {
   // get the Ppt features
   private static Vector getPptFeatures(PptSlice ppt) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetArity, ppt.arity));
+    answer.add(new IntDoublePair(FetArityInt, ppt.arity));
     PptTopLevel pptTop = ppt.parent;
-    answer.add(new IntDoublePair(FetNumVars, pptTop.num_vars()));
-    answer.add(new IntDoublePair(FetNumArrayVars, pptTop.num_array_vars()));
+    answer.add(new IntDoublePair(FetNumVarsInt, pptTop.num_vars()));
+    answer.add(new IntDoublePair(FetNumArrayVarsInt, pptTop.num_array_vars()));
     /* [INCR]
     if (pptTop.entry_ppt != null)
-      answer.add(new IntDoublePair(FetPptIsExit, 1));
+      answer.add(new IntDoublePair(FetPptIsExitBool, 1));
     if (pptTop.combined_exit != null)
-      answer.add(new IntDoublePair(FetPptIsLineNumberedExit, 1));
-    answer.add(new IntDoublePair(FetPptNumOfExits, pptTop.exit_ppts.size()));
+      answer.add(new IntDoublePair(FetPptIsLineNumberedExitBool, 1));
+    answer.add(new IntDoublePair(FetPptNumOfExitsInt, pptTop.exit_ppts.size()));
     */ // [INCR]
     return answer;
   }
@@ -859,84 +874,83 @@ public final class FeatureExtractor {
     for (int i = 1; i <= var_infos.length; i++) {
       VarInfo var = var_infos[i-1];
       // delete feature because hash code is not a continuous function
-      //      answer.add(new IntDoublePair(i*10000 + FetVarInfoName, var.name.name().hashCode()));
       if (var.is_static_constant) {
-        answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Static_Constant, 1));
-        answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoIs_Static_ConstantBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Static_ConstantBool, 1)); }
       /* [INCR]
       if (var.canBeNull) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNull, 1));
-        answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNullBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Static_ConstantBool, 1)); }
       if (var.is_dynamic_constant) {
-        answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_Constant,1));
-        answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_Constant, 1)); }
+        answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_ConstantBool,1));
+        answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_ConstantBool, 1)); }
       */ // [INCR]
       if (var.isPrestate()) {
-        answer.add(new IntDoublePair(i*10000 + FetVarIsPrestate, 1));
-        answer.add(new IntDoublePair(FetVarIsPrestate, 1)); }
-      answer.add(new IntDoublePair(i * 10000 + FetVarDerivedDepth, var.derivedDepth()));
+        answer.add(new IntDoublePair(i*10000 + FetVarIsPrestateBool, 1));
+        answer.add(new IntDoublePair(FetVarIsPrestateBool, 1)); }
+      answer.add(new IntDoublePair(i * 10000 + FetVarDerivedDepthInt, var.derivedDepth()));
 
       VarInfoAux aux = var.aux;
       if (aux.getFlag(VarInfoAux.IS_PARAM)) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxIsParam, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxIsParam, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxIsParamBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxIsParamBool, 1)); }
       if (aux.getFlag(VarInfoAux.NULL_TERMINATING)) {
-        answer.add(new IntDoublePair(i*10000+FetVarInfoAuxNullTerminating, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxNullTerminating, 1)); }
+        answer.add(new IntDoublePair(i*10000+FetVarInfoAuxNullTerminatingBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxNullTerminatingBool, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_NULL)) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasNull, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxHasNull, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasNullBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasNullBool, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_SIZE)) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasSize, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxHasSize, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasSizeBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasSizeBool, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_ORDER)) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasOrder, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxHasOrder, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasOrderBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasOrderBool, 1)); }
       if (aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
-        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasDuplicates, 1));
-        answer.add(new IntDoublePair(FetVarInfoAuxHasDuplicates, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetVarInfoAuxHasDuplicatesBool, 1));
+        answer.add(new IntDoublePair(FetVarInfoAuxHasDuplicatesBool, 1)); }
 
       ProglangType type = var.type;
-      answer.add(new IntDoublePair(i*10000 + FetTypeDimensions, type.dimensions()));
+      answer.add(new IntDoublePair(i*10000 + FetTypeDimensionsInt, type.dimensions()));
       // delete feature because hash code is not a continuous function
       // answer.add(new IntDoublePair(i*10000 + FetTypeBase, type.base().hashCode()));
       if (type.isArray()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsArray, 1));
-        answer.add(new IntDoublePair(FetTypeIsArray, 1)); }
-      answer.add(new IntDoublePair(i*10000 + FetTypePseudoDimensions, type.pseudoDimensions()));
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsArrayBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsArrayBool, 1)); }
+      answer.add(new IntDoublePair(i*10000 + FetTypePseudoDimensionsInt, type.pseudoDimensions()));
       if (type.isPseudoArray()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsPseudoArray, 1));
-        answer.add(new IntDoublePair(FetTypeIsPseudoArray, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsPseudoArrayBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsPseudoArrayBool, 1)); }
       if (type.isPrimitive()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsPrimitive, 1));
-        answer.add(new IntDoublePair(FetTypeIsPrimitive, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsPrimitiveBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsPrimitiveBool, 1)); }
       if (type.baseIsPrimitive()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsArray, 1));
-        answer.add(new IntDoublePair(FetTypeBaseIsArray, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsArrayBool, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsArrayBool, 1)); }
       if (type.isIntegral()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsIntegral, 1));
-        answer.add(new IntDoublePair(FetTypeIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsIntegralBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsIntegralBool, 1)); }
       if (type.baseIsIntegral()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsIntegral, 1));
-        answer.add(new IntDoublePair(FetTypeBaseIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsIntegralBool, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsIntegralBool, 1)); }
       if (type.elementIsIntegral()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeElementIsIntegral, 1));
-        answer.add(new IntDoublePair(FetTypeElementIsIntegral, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeElementIsIntegralBool, 1));
+        answer.add(new IntDoublePair(FetTypeElementIsIntegralBool, 1)); }
       if (type.isScalar()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsScalar, 1));
-        answer.add(new IntDoublePair(FetTypeIsScalar, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsScalarBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsScalarBool, 1)); }
       if (type.isFloat()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsFloat, 1));
-        answer.add(new IntDoublePair(FetTypeIsFloat, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsFloatBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsFloatBool, 1)); }
       if (type.baseIsFloat()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsFloat, 1));
-        answer.add(new IntDoublePair(FetTypeBaseIsFloat, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsFloatBool, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsFloatBool, 1)); }
       if (type.isObject()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeIsObject, 1));
-        answer.add(new IntDoublePair(FetTypeIsObject, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeIsObjectBool, 1));
+        answer.add(new IntDoublePair(FetTypeIsObjectBool, 1)); }
       if (type.baseIsObject()) {
-        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsObject, 1));
-        answer.add(new IntDoublePair(FetTypeBaseIsObject, 1)); }
+        answer.add(new IntDoublePair(i*10000 + FetTypeBaseIsObjectBool, 1));
+        answer.add(new IntDoublePair(FetTypeBaseIsObjectBool, 1)); }
     }
 
  return answer;
@@ -944,346 +958,347 @@ public final class FeatureExtractor {
 
   private static Vector getModulusFeatures(Modulus inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetModulus, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetModulusBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getLowerBoundFeatures(LowerBound inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLowerBound, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetLowerBoundBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getLowerBoundCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getLowerBoundFloatFeatures(LowerBoundFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLowerBoundFloat, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetLowerBoundFloatBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getLowerBoundCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getNonZeroFeatures(NonZero inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetNonZero, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetNonZeroBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getNonZeroFloatFeatures(NonZeroFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetNonZeroFloat, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetNonZeroFloatBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getNonModulusFeatures(NonModulus inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetNonModulus, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetNonModulusBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getOneOfScalarFeatures(OneOfScalar inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfScalar, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetOneOfScalarBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getPositiveFeatures(Positive inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPositive, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetPositiveBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getSingleFloatFeatures(SingleFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleFloat, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSingleFloatBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getSingleScalarFeatures(SingleScalar inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleScalar, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSingleScalarBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getUpperBoundFeatures(UpperBound inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetUpperBound, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetUpperBoundBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getUpperBoundCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getUpperBoundFloatFeatures(UpperBoundFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetUpperBoundFloat, 1));
-    answer.add(new IntDoublePair(FetScalar, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetUpperBoundFloatBool, 1));
+    answer.add(new IntDoublePair(FetScalarBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getUpperBoundCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getUpperBoundCoreFeatures(UpperBoundCore core) {
     Vector answer = new Vector();
-    //    answer.add(new IntDoublePair(FetUpperBoundCoreMax1, core.max1));
+    //    answer.add(new IntDoublePair(FetUpperBoundCoreMax1Float, core.max1));
     return answer;
   }
 
   private static Vector getUpperBoundCoreFloatFeatures(UpperBoundCoreFloat core) {
     Vector answer = new Vector();
-    //    answer.add(new IntDoublePair(FetUpperBoundCoreFloatMax1, core.max1));
+    //    answer.add(new IntDoublePair(FetUpperBoundCoreFloatMax1Float, core.max1));
     return answer;
   }
 
   private static Vector getLowerBoundCoreFeatures(LowerBoundCore core) {
     Vector answer = new Vector();
-    //    answer.add(new IntDoublePair(FetLowerBoundCoreMin1, core.min1));
+    //    answer.add(new IntDoublePair(FetLowerBoundCoreMin1Float, core.min1));
     return answer;
   }
 
   private static Vector getLowerBoundCoreFloatFeatures(LowerBoundCoreFloat core) {
     Vector answer = new Vector();
-    //    answer.add(new IntDoublePair(FetLowerBoundCoreFloatMin1, core.min1));
+    //    answer.add(new IntDoublePair(FetLowerBoundCoreFloatMin1Float, core.min1));
     return answer;
   }
 
   private static Vector getEltLowerBoundFeatures(EltLowerBound inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltLowerBound, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltLowerBoundBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getLowerBoundCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getEltLowerBoundFloatFeatures(EltLowerBoundFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltLowerBoundFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltLowerBoundFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getLowerBoundCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSequenceFloatFeatures(SequenceFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSequenceFloat, 1));
+    answer.add(new IntDoublePair(FetSequenceFloatBool, 1));
     return answer;
   }
 
   private static Vector getMemberFloatFeatures(MemberFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetMemberFloat, 1));
+    answer.add(new IntDoublePair(FetMemberFloatBool, 1));
     return answer;
   }
 
   private static Vector getCommonFloatSequenceFeatures(CommonFloatSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetCommonFloatSequence, 1));
+    answer.add(new IntDoublePair(FetCommonFloatSequenceBool, 1));
     return answer;
   }
 
   private static Vector getEltNonZeroFeatures(EltNonZero inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltNonZero, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltNonZeroBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getEltNonZeroFloatFeatures(EltNonZeroFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltNonZeroFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltNonZeroFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getEltOneOfFeatures(EltOneOf inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltOneOf, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltOneOfBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getEltOneOfFloatFeatures(EltOneOfFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltOneOfFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltOneOfFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getEltUpperBoundFeatures(EltUpperBound inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltUpperBound, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltUpperBoundBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getUpperBoundCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getEltUpperBoundFloatFeatures(EltUpperBoundFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltUpperBoundFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltUpperBoundFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getUpperBoundCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getEltwiseIntComparisonFeatures(EltwiseIntComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltwiseIntComparison, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltwiseIntComparisonBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
 
-    // Provide the same features as the core without using the core as it is now
-    // not a part of EltwiseIntComparison (Alan - 1/20)
+    // Provide the same features as the core without using the core as it is
+    // now not a part of EltwiseIntComparison (Alan - 1/20)
 
-    if ((inv instanceof EltwiseIntEqual) || (inv instanceof EltwiseIntNonEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Eq, 1));
+    if ((inv instanceof EltwiseIntEqual)||(inv instanceof EltwiseIntNonEqual))
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_EqBool, 1));
     if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseIntLessEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Lt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_LtBool, 1));
     if ((inv instanceof EltwiseIntGreaterThan) || (inv instanceof EltwiseIntGreaterEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Gt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_GtBool, 1));
     return answer;
   }
 
   private static Vector getEltwiseFloatComparisonFeatures(EltwiseFloatComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetEltwiseFloatComparison, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetEltwiseFloatComparisonBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
 
-    // Provide the same features as the core without using the core as it is now
-    // not a part of EltwiseIntComparison (Alan - 1/20)
+    // Provide the same features as the core without using the core as it is
+    // now not a part of EltwiseIntComparison (Alan - 1/20)
 
     if ((inv instanceof EltwiseFloatEqual) || (inv instanceof EltwiseFloatNonEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Eq, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_EqBool, 1));
     if ((inv instanceof EltwiseFloatLessThan) || (inv instanceof EltwiseFloatLessEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Lt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_LtBool, 1));
     if ((inv instanceof EltwiseFloatGreaterThan) || (inv instanceof EltwiseFloatGreaterEqual))
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Gt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_GtBool, 1));
     return answer;
   }
 
   private static Vector getIntComparisonCoreFeatures(IntComparisonCore core) {
     Vector answer = new Vector();
     if (core.can_be_eq)
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Eq, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_EqBool, 1));
     if (core.can_be_lt)
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Lt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_LtBool, 1));
     if (core.can_be_gt)
-      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_Gt, 1));
+      answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_GtBool, 1));
+
     return answer;
   }
 
   private static Vector getFloatComparisonCoreFeatures(FloatComparisonCore core) {
     Vector answer = new Vector();
     if (core.can_be_eq)
-      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Eq, 1));
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_EqBool, 1));
     if (core.can_be_lt)
-      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Lt, 1));
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_LtBool, 1));
     if (core.can_be_gt)
-      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Gt, 1));
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_GtBool, 1));
     return answer;
   }
 
   private static Vector getNoDuplicatesFeatures(NoDuplicates inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetNoDuplicates, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetNoDuplicatesBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getNoDuplicatesFloatFeatures(NoDuplicatesFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetNoDuplicatesFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetNoDuplicatesFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getOneOfSequenceFeatures(OneOfSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfSequence, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetOneOfSequenceBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getOneOfFloatSequenceFeatures(OneOfFloatSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfFloatSequence, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetOneOfFloatSequenceBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getSeqIndexComparisonFeatures(SeqIndexComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqIndexComparison, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSeqIndexComparisonBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getIntComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSeqIndexComparisonFloatFeatures(SeqIndexComparisonFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqIndexComparisonFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSeqIndexComparisonFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getFloatComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSeqIndexNonEqualFeatures(SeqIndexNonEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqIndexNonEqual, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSeqIndexNonEqualBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getNonEqualCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSeqIndexNonEqualFloatFeatures(SeqIndexNonEqualFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqIndexNonEqualFloat, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSeqIndexNonEqualFloatBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     answer.addAll(getNonEqualCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getNonEqualCoreFeatures(NonEqualCore core) {
     Vector answer = new Vector();
-    //    answer.add(new IntDoublePair(FetNonEqualCoreMin1, core.min1));
-    //    answer.add(new IntDoublePair(FetNonEqualCoreMin2, core.min2));
-    //    answer.add(new IntDoublePair(FetNonEqualCoreMax1, core.max1));
-    //    answer.add(new IntDoublePair(FetNonEqualCoreMax2, core.max2));
+    //    answer.add(new IntDoublePair(FetNonEqualCoreMin1Float, core.min1));
+    //    answer.add(new IntDoublePair(FetNonEqualCoreMin2Float, core.min2));
+    //    answer.add(new IntDoublePair(FetNonEqualCoreMax1Float, core.max1));
+    //    answer.add(new IntDoublePair(FetNonEqualCoreMax2Float, core.max2));
     return answer;
   }
 
@@ -1294,172 +1309,170 @@ public final class FeatureExtractor {
 
   private static Vector getSingleFloatSequenceFeatures(SingleFloatSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleFloatSequence, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSingleFloatSequenceBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getSingleSequenceFeatures(SingleSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleSequence, 1));
-    answer.add(new IntDoublePair(FetSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSingleSequenceBool, 1));
+    answer.add(new IntDoublePair(FetSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getOneOfStringFeatures(OneOfString inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfString, 1));
-    answer.add(new IntDoublePair(FetString, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetOneOfStringBool, 1));
+    answer.add(new IntDoublePair(FetStringBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getSingleStringFeatures(SingleString inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleString, 1));
-    answer.add(new IntDoublePair(FetString, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.add(new IntDoublePair(FetSingleStringBool, 1));
+    answer.add(new IntDoublePair(FetStringBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
     return answer;
   }
 
   private static Vector getEltOneOfStringFeatures(EltOneOfString inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfString, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
-    answer.add(new IntDoublePair(FetStringSequence, 1));
+    answer.add(new IntDoublePair(FetOneOfStringBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
+    answer.add(new IntDoublePair(FetStringSequenceBool, 1));
     return answer;
   }
 
   private static Vector getOneOfStringSequenceFeatures(OneOfStringSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfStringSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
-    answer.add(new IntDoublePair(FetStringSequence, 1));
+    answer.add(new IntDoublePair(FetOneOfStringSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
+    answer.add(new IntDoublePair(FetStringSequenceBool, 1));
     return answer;
   }
 
   private static Vector getSingleStringSequenceFeatures(SingleStringSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSingleStringSequence, 1));
-    answer.add(new IntDoublePair(FetUnary, 1));
-    answer.add(new IntDoublePair(FetStringSequence, 1));
+    answer.add(new IntDoublePair(FetSingleStringSequenceBool, 1));
+    answer.add(new IntDoublePair(FetUnaryBool, 1));
+    answer.add(new IntDoublePair(FetStringSequenceBool, 1));
     return answer;
   }
 
   private static Vector getOneOfFeatures(OneOf inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfNum_elts, inv.num_elts()));
+    answer.add(new IntDoublePair(FetOneOfNum_eltsInt, inv.num_elts()));
     return answer;
   }
 
   private static Vector getOneOfFloatFeatures(OneOfFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetOneOfFloatNum_elts, inv.num_elts()));
+    answer.add(new IntDoublePair(FetOneOfFloatNum_eltsInt, inv.num_elts()));
     return answer;
   }
 
   private static Vector getComparisonFeatures(Comparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetComparison, 1));
-    answer.add(new IntDoublePair(FetComparisonEq_probability, inv.eq_probability()));
+    answer.add(new IntDoublePair(FetComparisonBool, 1));
+    answer.add(new IntDoublePair(FetComparisonEq_probabilityFloat, inv.eq_probability()));
     return answer;
   }
 
   private static Vector getImplicationFeatures(Implication inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetImplication, 1));
-    if (inv.iff) answer.add(new IntDoublePair(FetImplicationIff, 1));
+    answer.add(new IntDoublePair(FetImplicationBool, 1));
+    if (inv.iff) answer.add(new IntDoublePair(FetImplicationIffBool, 1));
     return answer;
   }
 
   private static Vector getSeqIntComparisonFeatures(SeqIntComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqIntComparison, 1));
-    answer.add(new IntDoublePair(FetSequenceScalar, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetSeqIntComparisonBool, 1));
+    answer.add(new IntDoublePair(FetSequenceScalarBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
     answer.addAll(getIntComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSeqFloatComparisonFeatures(SeqFloatComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqFloatComparison, 1));
-    answer.add(new IntDoublePair(FetSequenceScalar, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetSeqFloatComparisonBool, 1));
+    answer.add(new IntDoublePair(FetSequenceScalarBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
     answer.addAll(getFloatComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSequenceScalarFeatures(SequenceScalar inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSequenceScalar, 1));
-    answer.add(new IntDoublePair(FetSequenceScalar, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    if (inv.seq_first) answer.add(new IntDoublePair(FetSequenceScalarSeq_first, 1));
-    if (inv.seq_index==1) answer.add(new IntDoublePair(FetSequenceScalarSeq_index, 1));
-    if (inv.scl_index==1) answer.add(new IntDoublePair(FetSequenceScalarScl_index, 1));
+    answer.add(new IntDoublePair(FetSequenceScalarBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    if (inv.seq_first) answer.add(new IntDoublePair(FetSequenceScalarSeq_firstBool, 1));
+    if (inv.seq_index==1) answer.add(new IntDoublePair(FetSequenceScalarSeq_indexBool, 1));
+    if (inv.scl_index==1) answer.add(new IntDoublePair(FetSequenceScalarScl_indexBool, 1));
     return answer;
   }
 
   private static Vector getSequenceStringFeatures(SequenceString inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSequenceString, 1));
-    answer.add(new IntDoublePair(FetSequenceString, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    if (inv.seq_first) answer.add(new IntDoublePair(FetSequenceStringSeq_first, 1));
-    if (inv.seq_index==1) answer.add(new IntDoublePair(FetSequenceStringSeq_index, 1));
-    if (inv.scl_index==1) answer.add(new IntDoublePair(FetSequenceStringScl_index, 1));
+    answer.add(new IntDoublePair(FetSequenceStringBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    if (inv.seq_first) answer.add(new IntDoublePair(FetSequenceStringSeq_firstBool, 1));
+    if (inv.seq_index==1) answer.add(new IntDoublePair(FetSequenceStringSeq_indexBool, 1));
+    if (inv.scl_index==1) answer.add(new IntDoublePair(FetSequenceStringScl_indexBool, 1));
     return answer;
   }
 
   private static Vector getIntNonEqualFeatures(IntNonEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntNonEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntNonEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatNonEqualFeatures(FloatNonEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatNonEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatNonEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getIntEqualFeatures(IntEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatEqualFeatures(FloatEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFunctionUnaryFeatures(FunctionUnary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionUnary, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFunctionUnaryBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     answer.addAll(getFunctionUnaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getFunctionUnaryFloatFeatures(FunctionUnaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionUnaryFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFunctionUnaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     answer.addAll(getFunctionUnaryCoreFloatFeatures(inv.core));
     return answer;
   }
@@ -1467,84 +1480,84 @@ public final class FeatureExtractor {
   private static Vector getFunctionUnaryCoreFeatures(FunctionUnaryCore core) {
     Vector answer = new Vector();
     if (core.inverse)
-      answer.add(new IntDoublePair(FetFunctionUnaryCoreInverse, 1));
+      answer.add(new IntDoublePair(FetFunctionUnaryCoreInverseBool, 1));
     return answer;
   }
 
   private static Vector getFunctionUnaryCoreFloatFeatures(FunctionUnaryCoreFloat core) {
     Vector answer = new Vector();
     if (core.inverse)
-      answer.add(new IntDoublePair(FetFunctionUnaryCoreFloatInverse, 1));
+      answer.add(new IntDoublePair(FetFunctionUnaryCoreFloatInverseBool, 1));
     return answer;
   }
 
   private static Vector getIntGreaterEqualFeatures(IntGreaterEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntGreaterEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntGreaterEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatGreaterEqualFeatures(FloatGreaterEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatGreaterEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatGreaterEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getIntGreaterThanFeatures(IntGreaterThan inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntGreaterThan, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntGreaterThanBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatGreaterThanFeatures(FloatGreaterThan inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatGreaterThan, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatGreaterThanBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getLinearBinaryFeatures(LinearBinary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearBinary, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetLinearBinaryBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     answer.addAll(getLinearBinaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getLinearBinaryFloatFeatures(LinearBinaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearBinaryFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetLinearBinaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     answer.addAll(getLinearBinaryCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getLinearBinaryCoreFeatures(LinearBinaryCore core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearBinaryCoreA, core.a));
-    answer.add(new IntDoublePair(FetLinearBinaryCoreB, core.b));
+    answer.add(new IntDoublePair(FetLinearBinaryCoreAFloat, core.a));
+    answer.add(new IntDoublePair(FetLinearBinaryCoreBFloat, core.b));
     return answer;
   }
 
   private static Vector getLinearBinaryCoreFloatFeatures(LinearBinaryCoreFloat core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatA, core.a));
-    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatB, core.b));
+    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatAFloat, core.a));
+    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatBFloat, core.b));
     return answer;
   }
 
   private static Vector getTwoFloatFeatures(TwoFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetTwoFloat, 1));
+    answer.add(new IntDoublePair(FetTwoFloatBool, 1));
     return answer;
   }
 
@@ -1555,163 +1568,163 @@ public final class FeatureExtractor {
 
   private static Vector getIntLessEqualFeatures(IntLessEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntLessEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntLessEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatLessEqualFeatures(FloatLessEqual inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatLessEqual, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatLessEqualBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getIntLessThanFeatures(IntLessThan inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetIntLessThan, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetIntLessThanBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   private static Vector getFloatLessThanFeatures(FloatLessThan inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFloatLessThan, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.add(new IntDoublePair(FetFloatLessThanBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoScalarBool, 1));
     return answer;
   }
 
   /*  private static Vector getIntComparisonFeatures(IntComparisons inv) {
       Vector answer = new Vector();
-      answer.add(new IntDoublePair(FetIntComparison, 1));
-      answer.add(new IntDoublePair(FetBinary, 1));
-      answer.add(new IntDoublePair(FetTwoScalar, 1));
+      answer.add(new IntDoublePair(FetIntComparisonBool, 1));
+      answer.add(new IntDoublePair(FetBinaryBool, 1));
+      answer.add(new IntDoublePair(FetTwoScalarBool, 1));
       return answer;
       } */
 
   private static Vector getPairwiseIntComparisonFeatures(PairwiseIntComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseIntComparison, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseIntComparisonBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getIntComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getPairwiseFloatComparisonFeatures(PairwiseFloatComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseFloatComparison, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseFloatComparisonBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getFloatComparisonCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSeqComparisonFeatures(SeqComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqComparison, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetSeqComparisonBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getSeqComparisonFloatFeatures(SeqComparisonFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSeqFloatComparison, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetSeqFloatComparisonBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getTwoSequenceFeatures(TwoSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getTwoSequenceFloatFeatures(TwoSequenceFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetTwoSequenceFloat, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceFloatBool, 1));
     return answer;
   }
 
   private static Vector getPairwiseLinearBinaryFeatures(PairwiseLinearBinary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseLinearBinary, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseLinearBinaryBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getLinearBinaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getPairwiseLinearBinaryFloatFeatures(PairwiseLinearBinaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseLinearBinaryFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseLinearBinaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getLinearBinaryCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getSubSequenceFeatures(SubSequence inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSubSequence, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetSubSequenceBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getSubSequenceFloatFeatures(SubSequenceFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetSubSequenceFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetSubSequenceFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getPairwiseFunctionUnaryFeatures(PairwiseFunctionUnary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseFunctionUnary, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseFunctionUnaryBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getFunctionUnaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getPairwiseFunctionUnaryFloatFeatures(PairwiseFunctionUnaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetPairwiseFunctionUnaryFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetPairwiseFunctionUnaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     answer.addAll(getFunctionUnaryCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getReverseFeatures(Reverse inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetReverse, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetReverseBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getReverseFloatFeatures(ReverseFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetReverseFloat, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.add(new IntDoublePair(FetReverseFloatBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoSequenceBool, 1));
     return answer;
   }
 
   private static Vector getStringComparisonFeatures(StringComparison inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetStringComparison, 1));
-    answer.add(new IntDoublePair(FetBinary, 1));
-    answer.add(new IntDoublePair(FetTwoString, 1));
+    answer.add(new IntDoublePair(FetStringComparisonBool, 1));
+    answer.add(new IntDoublePair(FetBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTwoStringBool, 1));
     answer.addAll(getStringComparisonCoreFeatures(inv.core));
     return answer;
   }
@@ -1719,11 +1732,11 @@ public final class FeatureExtractor {
   private static Vector getStringComparisonCoreFeatures(StringComparisonCore core) {
     Vector answer = new Vector();
     if (core.can_be_eq)
-       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_Eq, 1));
+       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_EqBool, 1));
     if (core.can_be_lt)
-       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_Lt, 1));
+       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_LtBool, 1));
     if (core.can_be_gt)
-       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_Gt, 1));
+       answer.add(new IntDoublePair(FetStringComparisonCoreCan_Be_GtBool, 1));
     return answer;
   }
 
@@ -1734,77 +1747,77 @@ public final class FeatureExtractor {
 
   private static Vector getThreeScalarFeatures(ThreeScalar inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.add(new IntDoublePair(FetThreeScalarBool, 1));
     return answer;
   }
 
   private static Vector getThreeFloatFeatures(ThreeFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetThreeFloat, 1));
+    answer.add(new IntDoublePair(FetThreeFloatBool, 1));
     return answer;
   }
 
   private static Vector getLinearTernaryFeatures(LinearTernary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearTernary, 1));
-    answer.add(new IntDoublePair(FetTernary, 1));
-    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.add(new IntDoublePair(FetLinearTernaryBool, 1));
+    answer.add(new IntDoublePair(FetTernaryBool, 1));
+    answer.add(new IntDoublePair(FetThreeScalarBool, 1));
     answer.addAll(getLinearTernaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getLinearTernaryFloatFeatures(LinearTernaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearTernaryFloat, 1));
-    answer.add(new IntDoublePair(FetTernary, 1));
-    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.add(new IntDoublePair(FetLinearTernaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetTernaryBool, 1));
+    answer.add(new IntDoublePair(FetThreeScalarBool, 1));
     answer.addAll(getLinearTernaryCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getLinearTernaryCoreFeatures(LinearTernaryCore core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearTernaryCoreA, core.a));
-    answer.add(new IntDoublePair(FetLinearTernaryCoreB, core.b));
-    answer.add(new IntDoublePair(FetLinearTernaryCoreC, core.c));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreAFloat, core.a));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreBFloat, core.b));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreCFloat, core.c));
     return answer;
   }
 
   private static Vector getLinearTernaryCoreFloatFeatures(LinearTernaryCoreFloat core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatA, core.a));
-    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatB, core.b));
-    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatC, core.c));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatAFloat, core.a));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatBFloat, core.b));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatCFloat, core.c));
     return answer;
   }
 
   private static Vector getFunctionBinaryFeatures(FunctionBinary inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionBinary, 1));
-    answer.add(new IntDoublePair(FetTernary, 1));
-    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.add(new IntDoublePair(FetFunctionBinaryBool, 1));
+    answer.add(new IntDoublePair(FetTernaryBool, 1));
+    answer.add(new IntDoublePair(FetThreeScalarBool, 1));
     answer.addAll(getFunctionBinaryCoreFeatures(inv.core));
     return answer;
   }
 
   private static Vector getFunctionBinaryFloatFeatures(FunctionBinaryFloat inv) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionBinaryFloat, 1));
-    answer.add(new IntDoublePair(FetTernary, 1));
-    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.add(new IntDoublePair(FetFunctionBinaryFloatBool, 1));
+    answer.add(new IntDoublePair(FetTernaryBool, 1));
+    answer.add(new IntDoublePair(FetThreeScalarBool, 1));
     answer.addAll(getFunctionBinaryCoreFloatFeatures(inv.core));
     return answer;
   }
 
   private static Vector getFunctionBinaryCoreFeatures(FunctionBinaryCore core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionBinaryCoreVar_Order, core.var_order));
+    answer.add(new IntDoublePair(FetFunctionBinaryCoreVar_OrderInt, core.var_order));
     return answer;
   }
 
   private static Vector getFunctionBinaryCoreFloatFeatures(FunctionBinaryCoreFloat core) {
     Vector answer = new Vector();
-    answer.add(new IntDoublePair(FetFunctionBinaryCoreFloatVar_Order, core.var_order));
+    answer.add(new IntDoublePair(FetFunctionBinaryCoreFloatVar_OrderInt, core.var_order));
     return answer;
   }
 
@@ -1855,13 +1868,13 @@ public final class FeatureExtractor {
   }
 
   /*********************************************
-   * A tool for combining multiple SVMfu and C5 files.
+   * A tool for combining and normalizing multiple SVMfu and C5 files.
    *********************************************/
 
   public static final class CombineFiles {
 
     private static String USAGE =
-      "\tArguments:\n\t-i FileName:\ta C5 input file (with .data)\n" +
+      "\tArguments:\n\t-i FileName:\ta SVMfu or C5 input file (with .data)\n" +
       "\t-t Type:\tFormat, one of C5 or SVMfu\n" +
       "\t-o FileName:\toutput file name (with.data)\n" +
       "\t[-n] repeat:\tif present then the number of positive and negative\n" +
@@ -1932,7 +1945,7 @@ public final class FeatureExtractor {
       }
 
       // Now create two vectors, posvectors and negvectors, of the
-      // positive and negative TrainFu vectors respectively.
+      // positive and negative vectors respectively.
       Vector posvectors = new Vector();
       Vector negvectors = new Vector();
 
@@ -1983,6 +1996,127 @@ public final class FeatureExtractor {
     }
   }
 
+  /*********************************************
+   * A tool for classifying SVMfu and C5 files.
+   *********************************************/
+
+  public static final class ClassifyInvariants {
+
+    private static String USAGE =
+      "\tArguments:\n\t-d FileName:\tSVMfu or C5 training data (with .data)\n"+
+      "\t-s FileName:\tSVMfu or C5 test data (with .data)\n" +
+      "\t-t Type:\tFormat, one of C5 or SVMfu\n";
+
+    static public void main(String[] args)
+      throws IOException, ClassNotFoundException {
+
+      // First parse the arguments
+      if (args.length == 0) {
+        System.out.println(USAGE);
+        System.exit(0);
+      }
+      Vector trains = new Vector();
+      Vector tests = new Vector();
+      String type = null;
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equals("-t"))
+          type = args[++i];
+        else if (args[i].equals("-d"))
+          trains.add(args[++i]);
+        else if (args[i].equals("-s"))
+          tests.add(args[++i]);
+        else
+          throw new IOException("Invalid argument: " + args[i]);
+      }
+      // Check if the required fields are specified.
+      if (type == null)
+        throw new IOException("You must specify a format type (C5 or SVMfu)");
+      if (tests.size() == 0)
+        throw new IOException("You must specify at least one test data file");
+      if (trains.size() == 0)
+        throw new IOException("You must specify at least one train data file");
+
+      // Load the train files into 2 HashSets, pos and neg.
+      HashSet pos = new HashSet();
+      HashSet neg = new HashSet();
+
+      for (Iterator i = trains.iterator(); i.hasNext(); ) {
+        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+        br.readLine();
+        while (br.ready()) {
+          String vector = br.readLine();
+
+          if (type.equals("C5")) {
+            if (vector.indexOf("bad") > -1)
+              neg.add(vector.substring(0, vector.lastIndexOf("bad")));
+            else
+              pos.add(vector.substring(0, vector.lastIndexOf("good")));
+          } else if (type.equals("SVMfu")) {
+            int posind = vector.lastIndexOf("1");
+            int negind = vector.lastIndexOf("-1");
+
+            if (negind == posind - 1)
+              neg.add(vector.substring(0, vector.lastIndexOf("-1")));
+            else
+              pos.add(vector.substring(0, vector.lastIndexOf("1")));
+          }
+        }
+        br.close();
+      }
+
+      // Load the test files into two vectors: testBad and testGood
+      Vector testGood = new Vector();
+      Vector testBad = new Vector();
+
+      for (Iterator i = trains.iterator(); i.hasNext(); ) {
+        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+        br.readLine();
+        while (br.ready()) {
+          String vector = br.readLine();
+
+          if (type.equals("C5")) {
+            if (vector.indexOf("bad") > -1)
+              testBad.add(vector.substring(0, vector.lastIndexOf("bad")));
+            else
+              testGood.add(vector.substring(0, vector.lastIndexOf("good")));
+          } else if (type.equals("SVMfu")) {
+            int posind = vector.lastIndexOf("1");
+            int negind = vector.lastIndexOf("-1");
+
+            if (negind == posind - 1)
+              testBad.add(vector.substring(0, vector.lastIndexOf("-1")));
+            else
+              testGood.add(vector.substring(0, vector.lastIndexOf("1")));
+          }
+        }
+        br.close();
+      }
+    }
+
+      /*
+        for (Iterator i = pos.iterator(); i.hasNext(); )
+        if (type.equals("C5"))
+          posvectors.add(((String) i.next()) + "good");
+        else if (type.equals("SVMfu"))
+          posvectors.add(((String) i.next()) + "1");
+
+      // Print the output to the output file.
+      FileWriter fw = new FileWriter(output);
+      for (int repeat = 0; repeat < negrepeat; repeat++)
+        for (Iterator i = negvectors.iterator(); i.hasNext(); )
+          fw.write((String) i.next() + " \n");
+      for (int repeat = 0; repeat < posrepeat; repeat++)
+        for (Iterator i = posvectors.iterator(); i.hasNext(); )
+          fw.write((String) i.next() + " \n");
+      fw.close();
+
+      // Print a summary of positives and negatives to stdout.
+      System.out.println(posvectors.size() + "*" + posrepeat + " " +
+                         negvectors.size() + "*" + negrepeat);
+      }
+      */
+  }
+
   private static void writeVectors(Vector one, Vector two,
                                      String label, FileWriter fw)
     throws IOException {
@@ -2020,192 +2154,192 @@ public final class FeatureExtractor {
   static double THRESHOLD = 0.0;
 
   // A bunch of public static variables, one for each feature
-  public static int FetEnoughSamples = 1;
-  public static int FetGetProbability = 2;
-  public static int FetIsExact = 3;
-  public static int FetJustified = 4;
-  public static int FetIsWorthPrinting = 5;
-  public static int FetHasFewModifiedSamples = 6;
-  public static int FetHasNonCanonicalVariable = 7;
-  public static int FetHasOnlyConstantVariables = 8;
-  public static int FetIsObvious = 9;
-  public static int FetIsObviousStatically = 10;
-  public static int FetIsObviousDynamically = 11;
-  public static int FetIsControlled = 12;
-  public static int FetIsImpliedPostcondition = 13;
-  public static int FetIsInteresting = 14;
-  public static int FetArity = 15;
-  public static int FetNumVars = 16;
-  public static int FetNumArrayVars = 17;
-  public static int FetOneOfNum_elts = 50;
-  public static int FetComparison = 51;
-  public static int FetComparisonEq_probability = 52;
-  public static int FetImplication = 53;
-  public static int FetImplicationIff = 54;
-  public static int FetUnary = 81;
-  public static int FetScalar = 82;
-  public static int FetSequence = 83;
-  public static int FetString = 84;
-  public static int FetStringSequence = 85;
-  public static int FetBinary = 86;
-  public static int FetTwoScalar = 88;
-  public static int FetTwoSequence = 89;
-  public static int FetTwoString = 90;
-  public static int FetTernary = 91;
-  public static int FetThreeScalar = 92;
-  public static int FetModulus = 100;
-  public static int FetLowerBound = 200;
-  public static int FetLowerBoundCoreMin1 = 201;
-  public static int FetNonZero = 300;
-  public static int FetNonModulus = 400;
-  public static int FetOneOfScalar = 500;
-  public static int FetPositive = 600;
-  public static int FetSingleFloat = 700;
-  public static int FetSingleScalar = 800;
-  public static int FetUpperBound = 900;
-  public static int FetUpperBoundCoreMax1 = 901;
-  public static int FetEltLowerBound = 1000;
-  public static int FetEltNonZero = 1100;
-  public static int FetEltOneOf = 1200;
-  public static int FetEltUpperBound = 1300;
-  public static int FetEltwiseIntComparison = 1400;
-  public static int FetNoDuplicates = 1500;
-  public static int FetOneOfSequence = 1600;
-  public static int FetSeqIndexComparison = 1700;
-  public static int FetSeqIndexNonEqual = 1800;
-  public static int FetSingleFloatSequence = 1900;
-  public static int FetSingleSequence = 2000;
-  public static int FetOneOfString = 2200;
-  public static int FetSingleString = 2300;
-  public static int FetEltOneOfString = 2400;
-  public static int FetOneOfStringSequence = 2500;
-  public static int FetSingleStringSequence = 2600;
-  public static int FetSeqIntComparison = 2800;
-  public static int FetSequenceScalar = 2900;
-  public static int FetSequenceScalarSeq_first = 2901;
-  public static int FetSequenceScalarSeq_index = 2902;
-  public static int FetSequenceScalarScl_index = 2903;
-  public static int FetSequenceString = 3000;
-  public static int FetSequenceStringSeq_first = 3001;
-  public static int FetSequenceStringSeq_index = 3002;
-  public static int FetSequenceStringScl_index = 3003;
-  public static int FetIntNonEqual = 3100;
-  public static int FetIntEqual = 3200;
-  public static int FetNonEqualCoreMin1 = 3301;
-  public static int FetNonEqualCoreMin2 = 3302;
-  public static int FetNonEqualCoreMax1 = 3303;
-  public static int FetNonEqualCoreMax2 = 3304;
-  public static int FetFunctionUnary = 3400;
-  public static int FetFunctionUnaryCoreInverse = 3401;
-  public static int FetIntGreaterEqual = 3500;
-  public static int FetIntGreaterThan = 3600;
-  public static int FetLinearBinary = 3700;
-  public static int FetLinearBinaryCoreA = 3701;
-  public static int FetLinearBinaryCoreB = 3702;
-  public static int FetIntLessEqual = 3800;
-  public static int FetIntLessThan = 3900;
-  public static int FetIntComparisonCoreCan_Be_Eq = 4001;
-  public static int FetIntComparisonCoreCan_Be_Lt = 4002;
-  public static int FetIntComparisonCoreCan_Be_Gt = 4003;
-  public static int FetPairwiseIntComparison = 4800;
-  public static int FetSeqComparison = 4900;
-  public static int FetPairwiseLinearBinary = 5000;
-  public static int FetSubSequence = 5100;
-  public static int FetPairwiseFunctionUnary = 5200;
-  public static int FetReverse = 5300;
-  public static int FetStringComparison = 5500;
-  public static int FetStringComparisonCoreCan_Be_Eq = 5501;
-  public static int FetStringComparisonCoreCan_Be_Lt = 5502;
-  public static int FetStringComparisonCoreCan_Be_Gt = 5503;
-  public static int FetLinearTernary = 5700;
-  public static int FetLinearTernaryCoreA = 5701;
-  public static int FetLinearTernaryCoreB = 5702;
-  public static int FetLinearTernaryCoreC = 5703;
-  public static int FetFunctionBinary = 5800;
-  public static int FetFunctionBinaryCoreVar_Order = 5801;
-  public static int FetCommonFloatSequence = 5900;
-  public static int FetEltLowerBoundFloat = 6000;
-  public static int FetEltNonZeroFloat = 6100;
-  public static int FetEltOneOfFloat = 6200;
-  public static int FetEltUpperBoundFloat = 6300;
-  public static int FetEltwiseFloatComparison = 6400;
-  public static int FetFloatEqual = 6500;
-  public static int FetFloatGreaterEqual = 6600;
-  public static int FetFloatGreaterThan = 6700;
-  public static int FetFloatLessEqual = 6800;
-  public static int FetFloatLessThan = 6900;
-  public static int FetFloatNonEqual = 7000;
-  public static int FetFunctionBinaryFloat = 7100;
-  public static int FetFunctionUnaryFloat = 7200;
-  public static int FetLinearBinaryFloat = 7300;
-  public static int FetLinearTernaryFloat = 7400;
-  public static int FetLowerBoundFloat = 7500;
-  public static int FetMemberFloat = 7600;
-  public static int FetNoDuplicatesFloat = 7700;
-  public static int FetNonZeroFloat = 7800;
-  public static int FetOneOfFloat = 7900;
-  public static int FetOneOfFloatNum_elts = 7901;
-  public static int FetOneOfFloatSequence = 8000;
-  public static int FetPairwiseFloatComparison = 8100;
-  public static int FetPairwiseFunctionUnaryFloat = 8200;
-  public static int FetPairwiseLinearBinaryFloat = 8300;
-  public static int FetReverseFloat = 8400;
-  public static int FetSeqComparisonFloat = 8500;
-  public static int FetSeqFloatComparison = 8600;
-  public static int FetSeqIndexComparisonFloat = 8700;
-  public static int FetSeqIndexNonEqualFloat = 8800;
-  public static int FetSequenceFloat = 8900;
-  public static int FetSubSequenceFloat = 9200;
-  public static int FetThreeFloat = 9300;
-  public static int FetTwoFloat = 9400;
-  public static int FetTwoSequenceFloat = 9500;
-  public static int FetUpperBoundFloat = 9600;
-  public static int FetFunctionUnaryCoreFloatInverse = 9701;
-  public static int FetFunctionBinaryCoreFloatVar_Order = 9702;
-  public static int FetLinearBinaryCoreFloatA = 9703;
-  public static int FetLinearBinaryCoreFloatB = 9704;
-  public static int FetLinearTernaryCoreFloatA = 9703;
-  public static int FetLinearTernaryCoreFloatB = 9705;
-  public static int FetLinearTernaryCoreFloatC = 9706;
-  public static int FetFloatComparisonCoreCan_Be_Eq = 9707;
-  public static int FetFloatComparisonCoreCan_Be_Lt = 9708;
-  public static int FetFloatComparisonCoreCan_Be_Gt = 9709;
+  public static int FetEnoughSamplesBool = 1;
+  public static int FetGetProbabilityFloat = 2;
+  public static int FetIsExactBool = 3;
+  public static int FetJustifiedBool = 4;
+  public static int FetIsWorthPrintingBool = 5;
+  public static int FetHasFewModifiedSamplesBool = 6;
+  public static int FetHasNonCanonicalVariableBool = 7;
+  public static int FetHasOnlyConstantVariablesBool = 8;
+  public static int FetIsObviousBool = 9;
+  public static int FetIsObviousDerivedBool = 10;
+  public static int FetIsObviousImpliedBool = 11;
+  public static int FetIsControlledBool = 12;
+  public static int FetIsImpliedPostconditionBool = 13;
+  public static int FetIsInterestingBool = 14;
+  public static int FetArityInt = 15;
+  public static int FetNumVarsInt = 16;
+  public static int FetNumArrayVarsInt = 17;
+  public static int FetOneOfNum_eltsInt = 50;
+  public static int FetComparisonBool = 51;
+  public static int FetComparisonEq_probabilityFloat = 52;
+  public static int FetImplicationBool = 53;
+  public static int FetImplicationIffBool = 54;
+  public static int FetUnaryBool = 81;
+  public static int FetScalarBool = 82;
+  public static int FetSequenceBool = 83;
+  public static int FetStringBool = 84;
+  public static int FetStringSequenceBool = 85;
+  public static int FetBinaryBool = 86;
+  public static int FetTwoScalarBool = 88;
+  public static int FetTwoSequenceBool = 89;
+  public static int FetTwoStringBool = 90;
+  public static int FetTernaryBool = 91;
+  public static int FetThreeScalarBool = 92;
+  public static int FetModulusBool = 100;
+  public static int FetLowerBoundBool = 200;
+  public static int FetLowerBoundCoreMin1Float = 201;
+  public static int FetNonZeroBool = 300;
+  public static int FetNonModulusBool = 400;
+  public static int FetOneOfScalarBool = 500;
+  public static int FetPositiveBool = 600;
+  public static int FetSingleFloatBool = 700;
+  public static int FetSingleScalarBool = 800;
+  public static int FetUpperBoundBool = 900;
+  public static int FetUpperBoundCoreMax1Float = 901;
+  public static int FetEltLowerBoundBool = 1000;
+  public static int FetEltNonZeroBool = 1100;
+  public static int FetEltOneOfBool = 1200;
+  public static int FetEltUpperBoundBool = 1300;
+  public static int FetEltwiseIntComparisonBool = 1400;
+  public static int FetNoDuplicatesBool = 1500;
+  public static int FetOneOfSequenceBool = 1600;
+  public static int FetSeqIndexComparisonBool = 1700;
+  public static int FetSeqIndexNonEqualBool = 1800;
+  public static int FetSingleFloatSequenceBool = 1900;
+  public static int FetSingleSequenceBool = 2000;
+  public static int FetOneOfStringBool = 2200;
+  public static int FetSingleStringBool = 2300;
+  public static int FetEltOneOfStringBool = 2400;
+  public static int FetOneOfStringSequenceBool = 2500;
+  public static int FetSingleStringSequenceBool = 2600;
+  public static int FetSeqIntComparisonBool = 2800;
+  public static int FetSequenceScalarBool = 2900;
+  public static int FetSequenceScalarSeq_firstBool = 2901;
+  public static int FetSequenceScalarSeq_indexBool = 2902;
+  public static int FetSequenceScalarScl_indexBool = 2903;
+  public static int FetSequenceStringBool = 3000;
+  public static int FetSequenceStringSeq_firstBool = 3001;
+  public static int FetSequenceStringSeq_indexBool = 3002;
+  public static int FetSequenceStringScl_indexBool = 3003;
+  public static int FetIntNonEqualBool = 3100;
+  public static int FetIntEqualBool = 3200;
+  public static int FetNonEqualCoreMin1Float = 3301;
+  public static int FetNonEqualCoreMin2Float = 3302;
+  public static int FetNonEqualCoreMax1Float = 3303;
+  public static int FetNonEqualCoreMax2Float = 3304;
+  public static int FetFunctionUnaryBool = 3400;
+  public static int FetFunctionUnaryCoreInverseBool = 3401;
+  public static int FetIntGreaterEqualBool = 3500;
+  public static int FetIntGreaterThanBool = 3600;
+  public static int FetLinearBinaryBool = 3700;
+  public static int FetLinearBinaryCoreAFloat = 3701;
+  public static int FetLinearBinaryCoreBFloat = 3702;
+  public static int FetIntLessEqualBool = 3800;
+  public static int FetIntLessThanBool = 3900;
+  public static int FetIntComparisonCoreCan_Be_EqBool = 4001;
+  public static int FetIntComparisonCoreCan_Be_LtBool = 4002;
+  public static int FetIntComparisonCoreCan_Be_GtBool = 4003;
+  public static int FetPairwiseIntComparisonBool = 4800;
+  public static int FetSeqComparisonBool = 4900;
+  public static int FetPairwiseLinearBinaryBool = 5000;
+  public static int FetSubSequenceBool = 5100;
+  public static int FetPairwiseFunctionUnaryBool = 5200;
+  public static int FetReverseBool = 5300;
+  public static int FetStringComparisonBool = 5500;
+  public static int FetStringComparisonCoreCan_Be_EqBool = 5501;
+  public static int FetStringComparisonCoreCan_Be_LtBool = 5502;
+  public static int FetStringComparisonCoreCan_Be_GtBool = 5503;
+  public static int FetLinearTernaryBool = 5700;
+  public static int FetLinearTernaryCoreAFloat = 5701;
+  public static int FetLinearTernaryCoreBFloat = 5702;
+  public static int FetLinearTernaryCoreCFloat = 5703;
+  public static int FetFunctionBinaryBool = 5800;
+  public static int FetFunctionBinaryCoreVar_OrderInt = 5801;
+  public static int FetCommonFloatSequenceBool = 5900;
+  public static int FetEltLowerBoundFloatBool = 6000;
+  public static int FetEltNonZeroFloatBool = 6100;
+  public static int FetEltOneOfFloatBool = 6200;
+  public static int FetEltUpperBoundFloatBool = 6300;
+  public static int FetEltwiseFloatComparisonBool = 6400;
+  public static int FetFloatEqualBool = 6500;
+  public static int FetFloatGreaterEqualBool = 6600;
+  public static int FetFloatGreaterThanBool = 6700;
+  public static int FetFloatLessEqualBool = 6800;
+  public static int FetFloatLessThanBool = 6900;
+  public static int FetFloatNonEqualBool = 7000;
+  public static int FetFunctionBinaryFloatBool = 7100;
+  public static int FetFunctionUnaryFloatBool = 7200;
+  public static int FetLinearBinaryFloatBool = 7300;
+  public static int FetLinearTernaryFloatBool = 7400;
+  public static int FetLowerBoundFloatBool = 7500;
+  public static int FetMemberFloatBool = 7600;
+  public static int FetNoDuplicatesFloatBool = 7700;
+  public static int FetNonZeroFloatBool = 7800;
+  public static int FetOneOfFloatBool = 7900;
+  public static int FetOneOfFloatNum_eltsInt = 7901;
+  public static int FetOneOfFloatSequenceBool = 8000;
+  public static int FetPairwiseFloatComparisonBool = 8100;
+  public static int FetPairwiseFunctionUnaryFloatBool = 8200;
+  public static int FetPairwiseLinearBinaryFloatBool = 8300;
+  public static int FetReverseFloatBool = 8400;
+  public static int FetSeqComparisonFloatBool = 8500;
+  public static int FetSeqFloatComparisonBool = 8600;
+  public static int FetSeqIndexComparisonFloatBool = 8700;
+  public static int FetSeqIndexNonEqualFloatBool = 8800;
+  public static int FetSequenceFloatBool = 8900;
+  public static int FetSubSequenceFloatBool = 9200;
+  public static int FetThreeFloatBool = 9300;
+  public static int FetTwoFloatBool = 9400;
+  public static int FetTwoSequenceFloatBool = 9500;
+  public static int FetUpperBoundFloatBool = 9600;
+  public static int FetFunctionUnaryCoreFloatInverseBool = 9701;
+  public static int FetFunctionBinaryCoreFloatVar_OrderInt = 9702;
+  public static int FetLinearBinaryCoreFloatAFloat = 9703;
+  public static int FetLinearBinaryCoreFloatBFloat = 9704;
+  public static int FetLinearTernaryCoreFloatAFloat = 9703;
+  public static int FetLinearTernaryCoreFloatBFloat = 9705;
+  public static int FetLinearTernaryCoreFloatCFloat = 9706;
+  public static int FetFloatComparisonCoreCan_Be_EqBool = 9707;
+  public static int FetFloatComparisonCoreCan_Be_LtBool = 9708;
+  public static int FetFloatComparisonCoreCan_Be_GtBool = 9709;
 
   // 9800-9900 reserved for Ppt Features
-  public static int FetPptIsExit = 9801;
-  public static int FetPptIsLineNumberedExit = 9802;
-  public static int FetPptNumOfExits = 9803;
+  public static int FetPptIsExitBool = 9801;
+  public static int FetPptIsLineNumberedExitBool = 9802;
+  public static int FetPptNumOfExitsInt = 9803;
 
   // Variable Features (10000 - 49999)
   // 10000-19999 are for "invariant contains a variable that ...
   // 20000 - 29999 are for 1st variable is .... (etc. up to 3 variables)
   //  public static int FetVarInfoName = 10001;
-  public static int FetVarInfoIs_Static_Constant = 10002;
-  public static int FetVarInfoCanBeNull = 10003;
-  public static int FetVarInfoIs_Dynamic_Constant =  10004;
-  public static int FetTypeDimensions = 10005;
-  public static int FetTypeIsArray = 10007;
-  public static int FetTypeBaseIsArray = 10008;
-  public static int FetTypePseudoDimensions = 10009;
-  public static int FetTypeIsPseudoArray = 10010;
-  public static int FetTypeIsPrimitive = 10011;
-  public static int FetTypeBaseIsPrimitive = 10012;
-  public static int FetTypeIsIntegral = 10013;
-  public static int FetTypeBaseIsIntegral = 10014;
-  public static int FetTypeElementIsIntegral = 10015;
-  public static int FetTypeIsScalar = 10016;
-  public static int FetTypeIsFloat = 10017;
-  public static int FetTypeBaseIsFloat = 10018;
-  public static int FetTypeIsObject = 10019;
-  public static int FetTypeBaseIsObject = 10020;
-  public static int FetVarInfoAuxIsParam = 10021;
-  public static int FetVarInfoAuxNullTerminating = 10022;
-  public static int FetVarInfoAuxHasNull = 10023;
-  public static int FetVarInfoAuxHasSize = 10024;
-  public static int FetVarInfoAuxHasOrder = 10025;
-  public static int FetVarInfoAuxHasDuplicates = 10026;
-  public static int FetVarIsPrestate = 10027;
-  public static int FetVarDerivedDepth = 10028;
+  public static int FetVarInfoIs_Static_ConstantBool = 10002;
+  public static int FetVarInfoCanBeNullBool = 10003;
+  public static int FetVarInfoIs_Dynamic_ConstantBool =  10004;
+  public static int FetTypeDimensionsInt = 10005;
+  public static int FetTypeIsArrayBool = 10007;
+  public static int FetTypeBaseIsArrayBool = 10008;
+  public static int FetTypePseudoDimensionsInt = 10009;
+  public static int FetTypeIsPseudoArrayBool = 10010;
+  public static int FetTypeIsPrimitiveBool = 10011;
+  public static int FetTypeBaseIsPrimitiveBool = 10012;
+  public static int FetTypeIsIntegralBool = 10013;
+  public static int FetTypeBaseIsIntegralBool = 10014;
+  public static int FetTypeElementIsIntegralBool = 10015;
+  public static int FetTypeIsScalarBool = 10016;
+  public static int FetTypeIsFloatBool = 10017;
+  public static int FetTypeBaseIsFloatBool = 10018;
+  public static int FetTypeIsObjectBool = 10019;
+  public static int FetTypeBaseIsObjectBool = 10020;
+  public static int FetVarInfoAuxIsParamBool = 10021;
+  public static int FetVarInfoAuxNullTerminatingBool = 10022;
+  public static int FetVarInfoAuxHasNullBool = 10023;
+  public static int FetVarInfoAuxHasSizeBool = 10024;
+  public static int FetVarInfoAuxHasOrderBool = 10025;
+  public static int FetVarInfoAuxHasDuplicatesBool = 10026;
+  public static int FetVarIsPrestateBool = 10027;
+  public static int FetVarDerivedDepthInt = 10028;
 
   public static int MaxNumVars = 8;
 

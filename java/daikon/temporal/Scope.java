@@ -2,11 +2,6 @@ package daikon.temporal;
 
 import java.util.*;
 
-// FIXME: In the Future(TM), actually use this structure to store
-// scope state. Right now this is a trick for rollbacks. Do the same
-// thing to InvariantState
-// FIXME: Make inner classes here. Do it now! High priority 11/26
-
 /**
  * This class captures behavior common to all scopes. Each scope must
  * keep track of which events it has seen already (for the candidate
@@ -23,16 +18,22 @@ import java.util.*;
 
 public abstract class Scope extends EventReceptor
 {
+    //A structure to record what events have been already seen
     protected EventRecord mEventsSeen;
 
+    //Collections of child scopes and invariants
     protected Collection mChildScopes;
     protected Collection mChildInvariants;
 
+    //Is the scope currently active (i.e. entered but not yet exited)
     protected boolean isActive;
 
+    //Has the scope been entered/exited before?
     protected boolean enteredBefore;
     protected boolean exitedBefore;
 
+    //This is the maximum tree depth for dynamic invariant instantiation. Controls
+    //how complicated the invariants detected by the system will be.
     public static int MAX_DEPTH = 2;
 
     Scope()
@@ -41,14 +42,17 @@ public abstract class Scope extends EventReceptor
 
 	mEventsSeen = new EventRecord();
 
-	mChildScopes = new Vector();
-	mChildInvariants = new Vector();
+	mChildScopes = new Vector(0,0);
+	mChildInvariants = new Vector(0,0);
 
 	isActive = false;
 	enteredBefore = false;
 	exitedBefore = false;
     }
 
+    //This class is used to save scope state (for restoring purposes).
+    //This may be used by the generateStateSnapshot/restoreStateSnapshot
+    //routines.
     static private class ScopeState
     {
         EventRecord eventsSeen;
@@ -64,7 +68,7 @@ public abstract class Scope extends EventReceptor
      * its closing event.
      **/
 
-    // FIXME: Do I want to save/restore isActive?
+    // FIXME: Do I want to save/restore isActive? Yes, I think.
     Object generateStateSnapshot()
     {
 	ScopeState out = new ScopeState();
@@ -87,6 +91,7 @@ public abstract class Scope extends EventReceptor
 	exitedBefore = s.exitedBefore;
     }
 
+    //This generates snapshots for all descendants of this scope.
     Hashtable generateSubtreeSnapshots()
     {
 	Hashtable out = new Hashtable();
@@ -110,11 +115,13 @@ public abstract class Scope extends EventReceptor
 	return out;
     }
 
+    //Checks if the given event has been seen by this scope.
     public boolean seenEvent(Event e)
     {
 	return mEventsSeen.hasEventMatching(e);
     }
 
+    //Add a child to the appropriate collection.
     public void addChild(EventReceptor r)
     {
 	r.mParent = this;
@@ -129,6 +136,7 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
+    //Delete the child from the collection.
     void deleteChild(EventReceptor r)
     {
 	// FIXME: Do I need to be careful about garbage collection here? Don't think so, but.
@@ -143,6 +151,7 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
+    //Delete this scope and all its children.
     void delete()
     {
 	super.delete();
@@ -158,6 +167,7 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
+    //More scope-tree bookkeeping.
     void setParent(Scope s)
     {
 	s.addChild(this);
@@ -171,6 +181,8 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
+    //This sends the supplied events to all kids of the scope (and records the fact that the
+    //event has now been seen).
     void sendEventToKids(Event e)
     {
 	// FIXME: Restructure so that the basic events aren't recomputed
@@ -197,7 +209,6 @@ public abstract class Scope extends EventReceptor
      * When you enter a scope, tell your kids about it (and remember
      * that you are now active).
      **/
-
     public void enter()
     {
 	isActive = true;
@@ -216,7 +227,6 @@ public abstract class Scope extends EventReceptor
     /**
      * When you exit, tell your kids about it and fix your state.
      **/
-
     public void exit()
     {
 	isActive = false;
@@ -233,6 +243,7 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
+    //If your parent exits, you exit too.
     void parentScopeExiting()
     {
 	if (isActive())
@@ -253,7 +264,6 @@ public abstract class Scope extends EventReceptor
      * seen in a scope, as it might be true that everything that is
      * true so far is only true before E is seen.
      **/
-
     Vector duplicateChildren()
     {
 	// FIXME: Pass level around so that redundant getDepth() computations
@@ -281,7 +291,6 @@ public abstract class Scope extends EventReceptor
 
     // A wrapper to take care of the recursion depth issue - we don't want
     // to generate invariants specific to particular executions
-
     Hashtable generateNewCandidates(Event e)
     {
 	return generateNewCandidates(e, 0);
@@ -326,7 +335,7 @@ public abstract class Scope extends EventReceptor
 
 	//	System.out.println("Generating new candidate invariants at level " + String.valueOf(level) + " given event " + e.toString());
 
-	Vector newKids = new Vector();
+	Vector newKids = new Vector(0,0);
 
 	if (mEventsSeen.noEventsConflictWith(e))
 	    {
@@ -380,11 +389,13 @@ public abstract class Scope extends EventReceptor
 
 			newKids.add(newAfterUntil);
 
+			/*
 			ScopeBetween newBetween = new ScopeBetween(af.mEvent, e);
 			newBetween.addChildren(af.duplicateChildren());
 			newBetween.mEventsSeen.add(af.mEventsSeen);
 
 			newKids.add(newBetween);
+			*/
 		    }
 	    }
 
@@ -409,6 +420,7 @@ public abstract class Scope extends EventReceptor
 	return toString(0);
     }
 
+    //Return a string representing the kind of scope we are.
     public abstract String getNameString();
 
     // Utility function to help make printouts legible
@@ -424,6 +436,8 @@ public abstract class Scope extends EventReceptor
 	return space.toString();
     }
 
+    //Return a string representation properly indented (used to make pritned scope trees
+    //legible)
     public String toString(int level)
     {
 	StringBuffer res = new StringBuffer();
@@ -447,12 +461,14 @@ public abstract class Scope extends EventReceptor
 	return res.toString();
     }
 
-    // override me!
+    // This method is overridden by child scopes to instantiate a scope object
+    // of the proper class (which is then used in produceDuplicate())
     Scope instantiateDuplicateScope()
     {
 	return null;
     }
 
+    //Duplicate this scope and tie the duplicate.
     EventReceptor produceDuplicate()
     {
 	Scope s = instantiateDuplicateScope();
@@ -469,7 +485,7 @@ public abstract class Scope extends EventReceptor
 
     Vector getAllChildInvariants()
     {
-	Vector out = new Vector();
+	Vector out = new Vector(0,0);
 
 	out.addAll(mChildInvariants);
 
@@ -487,13 +503,20 @@ public abstract class Scope extends EventReceptor
 
     /**
      * This scope is special. It is entered and exited explicitly. It
-     * also does some basic bookkeeping for candidate insantiation.
+     * also does some basic bookkeeping for candidate instantiation.
      **/
-
     public static class ScopeGlobal extends Scope
     {
+	//This boolean flag controls whether dynamic invariant instantiation is turned on
+	//in the system or not.
         public boolean doDynamicInstantiation;
 
+	//The global scope is basically a singleton; each new instance of the global scope
+	//makes itself the 'official' instance. This is mostly for convenience (one can reset
+	//the state of the detector easily by creating a new global scope, which will then be
+	//garbage collected). For safety, it might be better to instead require the caller to
+	//explicitly deallocate the old global scope instead, first.
+	//FIXME: Can be removed, I think, given the global_scope reference in TemporalInvariantManager.
         public static ScopeGlobal GLOBAL_SCOPE = null;
 
         public ScopeGlobal()
@@ -503,11 +526,6 @@ public abstract class Scope extends EventReceptor
             ScopeGlobal.GLOBAL_SCOPE = this;
 
             mParent = null;
-        }
-
-        EventReceptor produceDuplicate()
-        {
-            throw new RuntimeException("Whatchoo talkin' bout, willis?");
         }
 
         public void printState()
@@ -520,6 +538,8 @@ public abstract class Scope extends EventReceptor
             return "GLOBAL:";
         }
 
+	//If supplied a single event, assume it is both a sample and a basic event. For convenience
+	//in test suite creation (and to allow ScopeGlobal to descend from Scope).
         public void processEvent(Event e)
         {
             Vector v = new Vector();
@@ -529,6 +549,7 @@ public abstract class Scope extends EventReceptor
             processEvent(e, v);
         }
 
+	//Run the given sample through the scope/invariant hierarchy.
         public void processEvent(Event sampleEvent, Vector basicEvents)
         {
             Vector newStuffHashes = null;
@@ -592,6 +613,7 @@ public abstract class Scope extends EventReceptor
         }
     }
 
+    //This class implements scopes which are active before a given event
     public static class ScopeBefore extends Scope
     {
         Event mEvent;
@@ -690,10 +712,14 @@ public abstract class Scope extends EventReceptor
     // Could probably also be correctly written as ScopeAfterBefore, but who cares
     public static class ScopeBetween extends Scope
     {
+	//Bounding events
         Event mEventA;
         Event mEventB;
 
-        private Hashtable savedStates;
+        private Hashtable savedStates; //States of all the kids; must be saved in case
+	//state entry must be rolled back
+
+	//Vector of all new kids created based on scope entry
         private Vector kidsCreated;
 
         public ScopeBetween(Event a, Event b)
@@ -714,6 +740,8 @@ public abstract class Scope extends EventReceptor
             super.enter();
         }
 
+	//Make sure to store newly created kids (so they can be destroyed if the
+	//scope is later determined never to have been active).
         Hashtable generateNewCandidates(Event e)
         {
             Hashtable res = super.generateNewCandidates(e);
@@ -731,6 +759,7 @@ public abstract class Scope extends EventReceptor
             return res;
         }
 
+	//Do the rollback.
         void rollback()
         {
             for (Iterator i = kidsCreated.iterator(); i.hasNext(); )
@@ -756,7 +785,7 @@ public abstract class Scope extends EventReceptor
             if (isActive())
                 {
                     // Parent scope is closing. This means we never saw our close event,
-                    // so we never actually were active. ha! we were just kidding
+                    // so we never actually were active. 
                     rollback();
                 }
             //	else

@@ -32,6 +32,9 @@ public class LogicalCompare {
       Invariant inv = (Invariant)invs.get(i);
       if (inv.format_using(OutputFormat.SIMPLIFY).indexOf("format_simplify") == -1)
         new_invs.add(inv);
+      else
+        System.out.println("Can't handle " + inv.format() + ": " +
+                           inv.format_using(OutputFormat.SIMPLIFY));
     }
     return new_invs;
   }
@@ -99,11 +102,33 @@ public class LogicalCompare {
 
   private static boolean check(Invariant inv) {
     CmdCheck cc = new CmdCheck(inv.format_using(OutputFormat.SIMPLIFY));
+    //System.out.print("[");
     try {
       simplifySession.request(cc);
+      //System.out.print("]");
       return cc.valid;
     } catch (TimeoutException e) {
       return false;
+    }
+  }
+
+  private static String getCounterexample(Invariant inv) {
+    CmdCheck cc = new CmdCheck(inv.format_using(OutputFormat.SIMPLIFY));
+    //System.out.print("[");
+    try {
+      simplifySession.request(cc);
+      //System.out.print("]");
+    } catch (TimeoutException e) {
+      Assert.assertTrue(false, "Unexpected timeout");
+      return null;
+    }
+    if (cc.valid) {
+      return null;
+    } else {
+      if (cc.counterexample != null)
+        return cc.counterexample;
+      else
+        return "(counterexamples disabled)";
     }
   }
 
@@ -169,8 +194,14 @@ public class LogicalCompare {
   private static void printInvariants(List/*<Invariant>*/ invs) {
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.get(i);
-      //System.out.println(inv.format() + " ==> " + inv.format_simplify());
+      //System.out.println(inv.format() + " ==> " + inv.format_using(OutputFormat.SIMPLIFY));
       System.out.println(inv.format());
+    }
+
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.get(i);
+      System.out.println("(BG_PUSH "
+                         + inv.format_using(OutputFormat.SIMPLIFY) +")");
     }
   }
 
@@ -179,7 +210,8 @@ public class LogicalCompare {
     for (int i = 0; i < consequences.size(); i++) {
       Invariant inv = (Invariant)consequences.get(i);
       assumeAll(assumptions);
-      boolean valid = check(inv);
+      String counterexample = getCounterexample(inv);
+      boolean valid = (counterexample == null);
       unAssumeAll(assumptions);
       if (valid) {
         Invariant[] ass_ary = (Invariant[])
@@ -190,10 +222,18 @@ public class LogicalCompare {
           System.out.println(((Invariant)assume.elementAt(j)).format());
         System.out.println("----------------------------------");
         System.out.println(inv.format());
+        System.out.println();
+        for (int j = 0; j < assume.size(); j++)
+          System.out.println("    "  + ((Invariant)assume.elementAt(j))
+                             .format_using(OutputFormat.SIMPLIFY));
+        System.out.println("    ------------------------------------------");
+        System.out.println("    " + inv.format_using(OutputFormat.SIMPLIFY));
       } else {
         System.out.println();
         System.out.print("Invalid: ");
         System.out.println(inv.format());
+        System.out.println("    " + inv.format_using(OutputFormat.SIMPLIFY));
+        System.out.print(counterexample);
       }
     }
   }
@@ -233,7 +273,8 @@ public class LogicalCompare {
     a_post = filterSimplifyFormat(a_post);
     t_post = filterSimplifyFormat(t_post);
 
-    simplifySession = new SessionManager();
+    simplifySession = SessionManager.attemptProverStartup();
+    Assert.assertTrue(simplifySession != null);
 
     System.out.println("Apre (real) is:");
     printInvariants(a_pre);

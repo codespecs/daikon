@@ -3,6 +3,7 @@ package daikon;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
@@ -566,6 +567,12 @@ public class PptTopLevel
         new SequencesPredicateFactory(),
     };
 
+  transient TernaryDerivationFactory[] ternaryDerivations
+    = new TernaryDerivationFactory[] {
+        new SequenceScalarArbitrarySubsequenceFactory(),
+        new SequenceStringArbitrarySubsequenceFactory(),
+        new SequenceFloatArbitrarySubsequenceFactory(),
+    };
 
   /* * [INCR] This is dead code now.
    *
@@ -601,7 +608,8 @@ public class PptTopLevel
       }
       result.addAll(deriveVariablesOnePass(this_di, last_di,
                                            unaryDerivations[pass-1],
-                                           binaryDerivations[pass-1]));
+                                           binaryDerivations[pass-1],
+                                           ternaryDerivations[pass-1]));
     }
     // shift values in derivation_indices:  convert [a,b,c] into [n,a,b]
     for (int i=derivation_passes; i>0; i--)
@@ -625,27 +633,28 @@ public class PptTopLevel
 
   /**
    * This routine creates derivations for one "pass"; that is, it adds
-   * some set of derived variables.
-   * All the results involve VarInfo objects at
-   * indices i such that vi_index_min <= i < vi_index_limit (and
-   * possibly also involve other VarInfos).
+   * some set of derived variables, according to the functions that
+   * are passed in.  All the results involve at least one VarInfo
+   * object at an index i such that vi_index_min <= i < vi_index_limit
+   * (and possibly other VarInfos outside that range).
    * @return a Vector of VarInfo
    **/
-  /* [INCR] let's rename this
-  Vector deriveVariablesOnePass(int vi_index_min, int vi_index_limit, UnaryDerivationFactory[] unary, BinaryDerivationFactory[] binary) {
-  */
+
+  // Formerly known as "deriveVariablesOnePass"
   private Derivation[] derive(int vi_index_min,
                               int vi_index_limit)
   {
     UnaryDerivationFactory[] unary = unaryDerivations;
     BinaryDerivationFactory[] binary = binaryDerivations;
+    TernaryDerivationFactory[] ternary = ternaryDerivations;
 
     if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug("Deriving one pass for ppt " + this.name);
       Global.debugDerive.debug("vi_index_min=" + vi_index_min
                                + ", vi_index_limit=" + vi_index_limit
                                + ", unary.length=" + unary.length
-                               + ", binary.length=" + binary.length);
+                               + ", binary.length=" + binary.length
+                               + ", ternary.length=" + ternary.length);
     }
 
     Collection result = new ArrayList();
@@ -737,6 +746,80 @@ public class PptTopLevel
         }
       }
     }
+
+    // Ternary derivations follow the same pattern, one level deeper.
+    for (int i1=0; i1<var_infos.length; i1++) {
+      VarInfo vi1 = var_infos[i1];
+      if (!worthDerivingFrom(vi1)) {
+        if (Global.debugDerive.isDebugEnabled()) {
+          Global.debugDerive.debug("Ternary first VarInfo: not worth " +
+                                   "deriving from " + vi1.name.name());
+        }
+        continue;
+      }
+      // This guarantees that at least one of the variables is under
+      // consideration.
+      // target1 indicates whether the first variable is under consideration.
+      boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
+      int i2_min, i2_limit;
+      if (target1) {
+        i2_min = i1+1;
+        i2_limit = var_infos.length;
+      } else {
+        i2_min = Math.max(i1+1, vi_index_min);
+        i2_limit = vi_index_limit;
+      }
+      // if (Global.debugDerive.isDebugEnabled())
+      //   Global.debugDerive.debug("i1=" + i1
+      //                      + ", i2_min=" + i2_min
+      //                      + ", i2_limit=" + i2_limit);
+      for (int i2=i2_min; i2<i2_limit; i2++) {
+        VarInfo vi2 = var_infos[i2];
+        if (!worthDerivingFrom(vi2)) {
+          if (Global.debugDerive.isDebugEnabled()) {
+            Global.debugDerive.debug("Ternary 2nd: not worth deriving from ("
+                                     + vi2.name.name() + ")");
+          }
+          continue;
+        }
+        boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
+        int i3_min, i3_limit;
+        if (target1 || target2) {
+          i3_min = i2+1;
+          i3_limit = var_infos.length;
+        } else {
+          i3_min = Math.max(i2+1, vi_index_min);
+          i3_limit = vi_index_limit;
+        }
+        for (int i3=i3_min; i3<i3_limit; i3++) {
+          VarInfo vi3 = var_infos[i3];
+          if (!worthDerivingFrom(vi3)) {
+            if (Global.debugDerive.isDebugEnabled()) {
+              Global.debugDerive.debug("Ternary 3rd: not worth deriving from ("
+                                       + vi3.name.name() + ")");
+            }
+            continue;
+          }
+          for (int di=0; di<ternary.length; di++) {
+            TernaryDerivationFactory d = ternary[di];
+            TernaryDerivation[] tderivs = d.instantiate(vi1, vi2, vi3);
+            if (tderivs != null) {
+              for (int tdi=0; tdi<tderivs.length; tdi++) {
+                TernaryDerivation tderiv = tderivs[tdi];
+                if ((Daikon.var_omit_regexp != null)
+                    && Global.regexp_matcher.contains
+                        (tderiv.getVarInfo().name.name(),
+                         Daikon.var_omit_regexp)) {
+                  continue;
+                }
+                result.add(tderiv);
+              }
+            }
+          }
+        }
+      }
+    }
+
 
     if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug ("Number of derived variables at program point " + this.name + ": " + result.size());
@@ -2853,66 +2936,6 @@ public class PptTopLevel
 
   // Created upon first use, then saved
   private static SessionManager prover = null;
-  private static String prover_background = null;
-  public static int prover_instantiate_count = 0;
-
-  private static String prover_background() {
-    if (prover_background == null) {
-      try {
-        StringBuffer result = new StringBuffer("(AND " + Global.lineSep);
-        InputStream bg_stream = PptTopLevel.class.getResourceAsStream("simplify/daikon-background.txt");
-        Assert.assertTrue(bg_stream != null, "Could not find simplify/daikon-background.txt");
-        BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream));
-        String line;
-        while ((line = lines.readLine()) != null) {
-          line = line.trim();
-          if (line.length() == 0) continue;
-          if (line.startsWith(";")) continue;
-          result.append(" ");
-          result.append(line);
-          result.append(Global.lineSep);
-        }
-        result.append(")");
-        prover_background = result.toString();
-      } catch (IOException e) {
-        throw new RuntimeException("Could not load prover background");
-      }
-    }
-    return prover_background;
-  }
-
-  // Start up simplify, and send the universal backgound.
-  // Is successful exactly when this.prover != null.
-  private static void attempt_prover_startup()
-  {
-    // If already started, we are fine
-    if (prover != null) {
-      return;
-    }
-
-    // Limit ourselves to a few tries
-    if (prover_instantiate_count > 5) {
-      return;
-    }
-
-    // Start the prover
-    try {
-      prover_instantiate_count++;
-      prover = new SessionManager();
-      if (Daikon.no_text_output) {
-        System.out.print("...");
-      }
-    } catch (SimplifyError e) {
-      System.err.println("Could not utilize Simpilify: " + e);
-      return;
-    }
-
-    try {
-      prover.request(new CmdAssume(prover_background()));
-    } catch (TimeoutException e) {
-      throw new RuntimeException("Timeout on universal background " + e);
-    }
-  }
 
   /**
    * Interface used by mark_implied_via_simplify to determine what
@@ -3147,8 +3170,10 @@ public class PptTopLevel
 
     // Send the background to the prover
     try {
-      attempt_prover_startup();
-      if (prover == null) return;
+      if (prover == null)
+        prover = SessionManager.attemptProverStartup();
+      if (prover == null)
+        return;
       prover.request(background);
     } catch (TimeoutException e) {
       prover = null;
@@ -3184,7 +3209,8 @@ public class PptTopLevel
       try {
         // If the background is necessarily false, we are in big trouble
         CmdCheck bad = new CmdCheck("(NOT " + bg + ")");
-        attempt_prover_startup();
+        if (prover == null)
+          SessionManager.attemptProverStartup();
         if (prover == null) return;
         prover.request(bad);
         if (bad.valid) {
@@ -3229,7 +3255,7 @@ public class PptTopLevel
       } catch (TimeoutException e) {
         // Reset the prover with the controlling invariant background
         prover = null;
-        attempt_prover_startup();
+        prover = SessionManager.attemptProverStartup();
         if (prover == null) return;
         try {
           prover.request(background);
