@@ -46,7 +46,7 @@ public class PrintInvariants {
       debugFiltering.removeAllAppenders();
       FileAppender fa = null;
       try {
-	fa = new FileAppender( new PatternLayout("%m"), "filtering_transcript", true);
+        fa = new FileAppender( new PatternLayout("%m"), "filtering_transcript", true);
       }
       catch (IOException ioe) {
 	System.err.println("Warning; unable to open file filtering_transcript");

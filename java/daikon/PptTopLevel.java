@@ -1621,6 +1621,7 @@ public class PptTopLevel
     template.filled = false;
     template.results = new Invariant[template.invTypes.length];
     template.transforms = new VarInfo[template.invTypes.length][];
+    Assert.assertTrue (template.invTypes.length == template.varInfos.length);
 
     firstloop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {

@@ -212,6 +212,12 @@ public final class CLASSNAME
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
+        // when b[i] in b[0..i] or b[i] in b[i..]
+        if (scl_index == sclvar_seq) {
+          return true;
+        }
+
+
         // This test returns true if scl+scl_shift<=seq+seq_shift
         // isObviousImplied: when i<=j, b[i] in b[0..j]
         // isObviousImplied: when i>=j, b[i] in b[j..]
@@ -528,6 +534,15 @@ public final class CLASSNAME
         return null;
       }
       VarInfo rightIndex = ((SequenceScalarSubsequence) seqvar.derived).sclvar();
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Attempting to find <= template for: ");
+        debug.debug (leftIndex.name.name());
+        debug.debug (rightIndex.name.name());
+        debug.debug ("In inv: " + inv.repr());
+      }
+      if (leftIndex == rightIndex) {
+        return null;
+      }
 
       {
         SuppressionTemplate template = new SuppressionTemplate();

@@ -165,6 +165,9 @@ public final class Member
         // This test returns true if scl+scl_shift<=seq+seq_shift
         // isObviousImplied: when i<=j, b[i] in b[0..j]
         // isObviousImplied: when i>=j, b[i] in b[j..]
+        if (scl_index == sclvar_seq) {
+          return true;
+        }
         if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
                                  seq_from_start)) {
           return true;
@@ -465,6 +468,15 @@ public final class Member
         return null;
       }
       VarInfo rightIndex = ((SequenceScalarSubsequence) seqvar.derived).sclvar();
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Attempting to find <= template for: ");
+        debug.debug (leftIndex.name.name());
+        debug.debug (rightIndex.name.name());
+        debug.debug ("In inv: " + inv.repr());
+      }
+      if (leftIndex == rightIndex) {
+        return null;
+      }
 
       {
         SuppressionTemplate template = new SuppressionTemplate();
