@@ -56,12 +56,17 @@ public final class ThreeScalarFactory {
 
     { // previously only if (pass == 2)
       // FIXME for equality
-      Vector result = new Vector();
+      Vector result = new Vector (FunctionBinary.instantiate_all (ppt));
+      result.add(LinearTernary.instantiate(ppt));
+      return (result);
+    }
+      /*
       for (int var_order = FunctionBinaryCore.order_symmetric_start;
            var_order <= FunctionBinaryCore.order_symmetric_max;
            var_order++) {
         for (int j=0; j<Functions.binarySymmetricFunctionNames.length; j++) {
-          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binarySymmetricFunctionNames[j], j, var_order);
+          //FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binarySymmetricFunctionNames[j], j, var_order);
+          FunctionBinary fb = null;
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
           if (fb != null) {
@@ -73,7 +78,8 @@ public final class ThreeScalarFactory {
            var_order <= FunctionBinaryCore.order_nonsymmetric_max;
            var_order++) {
         for (int j=0; j<Functions.binaryNonSymmetricFunctionNames.length; j++) {
-          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binaryNonSymmetricFunctionNames[j], j+Functions.binarySymmetricFunctionNames.length, var_order);
+          // FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binaryNonSymmetricFunctionNames[j], j+Functions.binarySymmetricFunctionNames.length, var_order);
+          FunctionBinary fb = null;
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
           if (fb != null)
@@ -86,6 +92,7 @@ public final class ThreeScalarFactory {
       }
       return result;
     }
+      */
   }
 
   private ThreeScalarFactory() {

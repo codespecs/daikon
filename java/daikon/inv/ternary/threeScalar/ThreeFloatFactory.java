@@ -56,12 +56,18 @@ public final class ThreeFloatFactory {
 
     { // previously only if (pass == 2)
       // FIXME for equality
-      Vector result = new Vector();
+      Vector result = new Vector (FunctionBinaryFloat.instantiate_all (ppt));
+      result.add(LinearTernaryFloat.instantiate(ppt));
+      return (result);
+    }
+      /*
+
       for (int var_order = FunctionBinaryCoreFloat.order_symmetric_start;
            var_order <= FunctionBinaryCoreFloat.order_symmetric_max;
            var_order++) {
         for (int j=0; j<FunctionsFloat.binarySymmetricFunctionNames.length; j++) {
-          FunctionBinaryFloat fb = FunctionBinaryFloat.instantiate(ppt, FunctionsFloat.binarySymmetricFunctionNames[j], j, var_order);
+          // FunctionBinaryFloat fb = FunctionBinaryFloat.instantiate(ppt, FunctionsFloat.binarySymmetricFunctionNames[j], j, var_order);
+           FunctionBinary fb = null;
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
           if (fb != null) {
@@ -73,7 +79,8 @@ public final class ThreeFloatFactory {
            var_order <= FunctionBinaryCoreFloat.order_nonsymmetric_max;
            var_order++) {
         for (int j=0; j<FunctionsFloat.binaryNonSymmetricFunctionNames.length; j++) {
-          FunctionBinaryFloat fb = FunctionBinaryFloat.instantiate(ppt, FunctionsFloat.binaryNonSymmetricFunctionNames[j], j+FunctionsFloat.binarySymmetricFunctionNames.length, var_order);
+          // FunctionBinaryFloat fb = FunctionBinaryFloat.instantiate(ppt, FunctionsFloat.binaryNonSymmetricFunctionNames[j], j+FunctionsFloat.binarySymmetricFunctionNames.length, var_order);
+           FunctionBinary fb = null;
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
 
@@ -87,6 +94,7 @@ public final class ThreeFloatFactory {
       }
       return result;
     }
+      */
   }
 
   private ThreeFloatFactory() {
