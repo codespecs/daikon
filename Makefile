@@ -209,10 +209,12 @@ update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) www
 	$(MAKE) update-dist-version-file
 
-update-dist-doc:
-	# "make" in doc directory will fail the first time, but show output.
+doc-all:
+	# "make" in doc directory may fail the first time, but do show output.
 	-cd doc && $(MAKE) all
 	cd doc && $(MAKE) all
+
+update-dist-doc: doc-all
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
 	# This isn't quite right:  $(DIST_DIR) should hold the
@@ -309,7 +311,7 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
+daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -427,6 +429,9 @@ daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daiko
 	# but for the time being (and just in case)...
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
 	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES) )
+
+	# # Perl instrumenter
+	# mkdir /tmp/daikon/front-end/perl
 
 	## Tools
 	cp -pR tools /tmp/daikon
