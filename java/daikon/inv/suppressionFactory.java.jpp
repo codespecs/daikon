@@ -60,16 +60,16 @@
       // Fill in each specified factory
       suppressionFactories[supers.length] = factory1.getInstance();
       #if defined(FACTORY2)
-        suppressionFactories[supers.length+1] = factory2.getInstance();
+      suppressionFactories[supers.length+1] = factory2.getInstance();
       #endif
       #if defined(FACTORY3)
-        suppressionFactories[supers.length+2] = factory3.getInstance();
+      suppressionFactories[supers.length+2] = factory3.getInstance();
       #endif
       #if defined(FACTORY4)
-        suppressionFactories[supers.length+3] = factory4.getInstance();
+      suppressionFactories[supers.length+3] = factory4.getInstance();
       #endif
       #if defined(FACTORY5)
-        suppressionFactories[supers.length+4] = factory5.getInstance();
+      suppressionFactories[supers.length+4] = factory5.getInstance();
       #endif
     }
     return suppressionFactories;

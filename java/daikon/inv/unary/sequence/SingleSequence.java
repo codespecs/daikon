@@ -183,9 +183,7 @@ public abstract class SingleSequence
                   (subSeqInv.var2_in_var1 && subSeqInv.var2() == transThisVar)) {
                 Invariant[] suppressors = new Invariant[] { similarTemplate.results[0],
                                                             subseqTemplate.results[0] };
-                return new SuppressionLink (this,
-                                            inv,
-                                            suppressors);
+                return new SuppressionLink (inv, suppressors);
               }
             }
 
@@ -208,9 +206,7 @@ public abstract class SingleSequence
                   debug.fine ("  Filling with non obvious subset");
                 }
 
-                return new SuppressionLink (this,
-                                            inv,
-                                            suppressors);
+                return new SuppressionLink (inv, suppressors);
               }
             }
           }

@@ -100,6 +100,8 @@ public class SuppressionTemplate {
    * @param var     The invariant's first VarInfo
    */
   public void set (int index, Class cls, VarInfo var) {
+    Assert.assertTrue(cls != null);
+    Assert.assertTrue(var != null);
     filled = false;
     invTypes[index] = cls;
     if (varInfos[index] == null) {
@@ -119,6 +121,9 @@ public class SuppressionTemplate {
    * @param var2    The invariant's second VarInfo
    */
   public void set (int index, Class cls, VarInfo var1, VarInfo var2) {
+    Assert.assertTrue(cls != null);
+    Assert.assertTrue(var1 != null);
+    Assert.assertTrue(var2 != null);
     filled = false;
     invTypes[index] = cls;
     if (varInfos[index] == null) {
@@ -140,6 +145,10 @@ public class SuppressionTemplate {
    * @param var3    The invariant's third VarInfo
    */
   public void set (int index, Class cls, VarInfo var1, VarInfo var2, VarInfo var3) {
+    Assert.assertTrue(cls != null);
+    Assert.assertTrue(var1 != null);
+    Assert.assertTrue(var2 != null);
+    Assert.assertTrue(var3 != null);
     filled = false;
     invTypes[index] = cls;
     if (varInfos[index] == null) {
@@ -160,6 +169,8 @@ public class SuppressionTemplate {
    * @param var_infos Array of the invariant's VarInfos
    */
   public void set (int index, Class cls, VarInfo[] var_infos) {
+    Assert.assertTrue(cls != null);
+    Assert.assertTrue(! ArraysMDE.any_null(var_infos));
     filled = false;
     invTypes[index] = cls;
     if (varInfos[index] == null) {

@@ -119,8 +119,11 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
-import java.util.*;
+import daikon.suppress.*;
+
 import utilMDE.*;
+
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -538,5 +541,21 @@ public final class SEQINTEQUAL
     //   }
     return super.isObviousDynamically (vis);
   }
+
+  // Create separate suppression factories for considering an array size (a
+  // single array index limit) and two
+  #define FACTORY_INVCLASS  SEQINTEQUAL
+  #define FACTORY_CNT       1
+  #define FACTORY1          empty_array_suppress
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[1]}
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+  public static SuppressionLink empty_array_suppress (SEQINTEQUAL inv,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+    VarInfo array_vi = inv.seqvar();
+    return sfact.findEmptyArray(inv, array_vi);
+  }
+
 
 }

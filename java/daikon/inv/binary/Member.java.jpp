@@ -686,7 +686,7 @@ public final class CLASSNAME
       }
 
       {
-        // Failed on finding the right SubSet/SuperSet invariants.  Now try SubSequence
+        // Failed to find the right SubSet/SuperSet invariants.  Now try SubSequence
         supTemplate.resetResults();
         supTemplate.set(0, SubSequence.class, sclSequence, seqvar);
         SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
@@ -784,10 +784,10 @@ public final class CLASSNAME
       int interval = 0;
       if (ssss.from_start) {
         interval = sssc.index_shift - ssss.index_shift ;
-        return findLessEqual (leftIndex, rightIndex, inv, interval);
+        return findLessEqualInt (inv, leftIndex, rightIndex, interval);
       } else {
         interval = ssss.index_shift + sssc.index_shift;
-        return findLessEqual (rightIndex, leftIndex, inv, interval);
+        return findLessEqualInt (inv, rightIndex, leftIndex, interval);
       }
     }
   }

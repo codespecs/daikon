@@ -345,11 +345,21 @@ public class CLASSNAME
 
   // Create a suppression factory for nodups and constant
   #define FACTORY_INVCLASS  CLASSNAME
-  #define FACTORY_CNT       1
-  #define FACTORY1          short_array_suppress
+  #define FACTORY_CNT       2
+  #define FACTORY1          empty_array_suppress
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[1]}
+  #define FACTORY2          short_array_suppress
+  #define FACTORY2_INV_CNT  1
+  #define FACTORY2_VAR_INFO {new VarInfo[1]}
   #include "daikon/inv/suppressionFactory.java.jpp"
+
+  public static SuppressionLink empty_array_suppress (CLASSNAME inv,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+    VarInfo array_vi = inv.var();
+    return sfact.findEmptyArray(inv, array_vi);
+  }
+
 
   /**
    * Suppress invariants of the form 'a has no duplicates' by the
@@ -368,6 +378,9 @@ public class CLASSNAME
       return null;
     }
     VarInfo array_size_vi = array_vi.sequenceSize();
+    if (array_size_vi == null) {
+      return null;
+    }
 
     // Build a template for NoDuplicates
     supTemplate.set(0, NoDuplicates.class, array_size_vi);

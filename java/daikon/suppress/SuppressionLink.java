@@ -54,10 +54,10 @@ public class SuppressionLink implements Serializable {
 
   // This is for debugging only.  For efficiency, we could remove the field.
   // (As of 10/24/2003, "getFactory()" is never called.)
-  /**
-   * Original factory that generated this.  Never null.
-   **/
-  private final SuppressionFactory factory;
+  // /**
+  //  * Original factory that generated this.  Never null.
+  //  **/
+  // private final SuppressionFactory factory;
 
   /**
    * What stage of use this link is in.  Gets modified.  Can be one of
@@ -96,14 +96,14 @@ public class SuppressionLink implements Serializable {
     return suppressee;
   }
 
-  /**
-   * Get the original factory that generated this.  Tells what type of
-   * suppression this does.
-   * @return never null.
-   **/
-  public SuppressionFactory getFactory() {
-    return factory;
-  }
+  // /**
+  //  * Get the original factory that generated this.  Tells what type of
+  //  * suppression this does.
+  //  * @return never null.
+  //  **/
+  // public SuppressionFactory getFactory() {
+  //   return factory;
+  // }
 
 
   // Not used as of 10/24/2003.
@@ -154,7 +154,8 @@ public class SuppressionLink implements Serializable {
       suppressorsString.append (", ");
     }
 
-    return ("SuppressionLink: fact:" + factory +
+    return ("SuppressionLink:" +
+            // " fact:" + factory +
             " inv: " + suppressee.repr() +
             " suppressors: (" + suppressorsString.toString() + ")");
   }
@@ -167,10 +168,10 @@ public class SuppressionLink implements Serializable {
    * one suppressor, and that the invariant doesn't suppress itself.
    * @post state == CREATED;
    **/
-  public SuppressionLink (SuppressionFactory argFactory,
+  public SuppressionLink (// SuppressionFactory argFactory,
                           Invariant argSuppressee,
                           Invariant[] argSuppressors) {
-    this.factory = argFactory;
+    // this.factory = argFactory;
     this.suppressee = argSuppressee;
     int num_suppressors = argSuppressors.length;
     this.suppressors = new Invariant[num_suppressors];
@@ -244,9 +245,9 @@ public class SuppressionLink implements Serializable {
    * Check the rep invariants of this.
    **/
   public void repCheck() {
-    if (this.factory == null) {
-      throw new Error("Must have non-null factory");
-    }
+    // if (this.factory == null) {
+    //   throw new Error("Must have non-null factory");
+    // }
     if (this.suppressors == null) {
       throw new Error("Must have non-null suppressors");
     }
