@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main entrypoint for the instrumenter. Asks which handler can handle the command given by
- * the user, and passes control to whoever does.
+ * Main entrypoint for the instrumenter.
+ * Passes control to whichever handler can handle the user-specified command.
  */
 public class Main extends CommandHandler {
 
@@ -22,17 +22,12 @@ public class Main extends CommandHandler {
         handlers.add(new InstrumentHandler());
 
         if (args.length < 1) {
-            System.err.println("No command given.");
-            System.err
-                .println("For more help, invoke the instrumenter with \"help\" as its sole argument.");
+            System.err.println("ERROR:  No command given.");
+            System.err.println("For more help, invoke the instrumenter with \"help\" as its sole argument.");
             System.exit(1);
         }
         if (args[0].toUpperCase().equals("HELP") || args[0].equals("?")) {
             usageMessage();
-            System.err.println("Commands");
-            System.err.println("========");
-            System.err.println();
-            System.err.println();
             usageMessage(handlers);
             System.exit(0);
         }
