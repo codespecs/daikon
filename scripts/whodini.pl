@@ -19,7 +19,7 @@ use POSIX qw(tmpnam);
 
 # Algorithm for this script:
 # 0 We are given a txt-esc file and some (possibly-annotated) source files
-# 1 Read the txt file into memory, adding a nonce to the end of each invariant: "; // gensym"
+# 1 Read the txt file into memory, adding a nonce to the beginning of each invariant
 # 2 Write the txt file (from memory) to a temp file
 # 3 Copy the source files to a temp file
 # 4 Merge the temp text file into the temp source files
@@ -132,7 +132,7 @@ my @sourcefiles = @ARGV;
     }
 }
 
-# 1 Read the txt file into memory, adding a nonce to the end of each invariant: ";//nonce-gensym"
+# 1 Read the txt file into memory, adding a nonce to the beginning of each invariant
 
 my @txtesc = slurpfile($txtescfile);
 #@txtesc =
