@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-13 23:22:34 mernst>
+# Time-stamp: <2001-03-14 13:13:05 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -306,10 +306,15 @@ END {
 	    # structure or a block end or some such.
 	    my $nextline;
 	    while ((defined($nextline = <IN>))
-		   && (! (($nextline =~ /\b(if|while|for)\b|\}/)
+		   && (! (
+			  # entering a control structure; don't want to do
+			  # assignments conditionally
+			  ($nextline =~ /\b(if|while|for)\b|\}/)
+			  # in a comment
 			  || (($nextline =~ /\/\*(.*)/) && (! $1 =~ /\*\//))
 			  # method call, but not an assignment
-			  || ($nextline =~ /^[^=]*\(/)))) {
+			  || (($nextline =~ /^[^=]*\(/)
+			      && ($nextline !~ /\bthis\s*\(/))))) {
 	      print OUT $nextline;
 	    }
 	    for my $field (@fields) {
