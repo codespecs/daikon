@@ -1660,6 +1660,10 @@ if they contain no differences.
 Verbose output.  Invariants are printed using the repr() method, instead
 of the format() method.
 
+@item -l
+For debugging use only.  Prints logging information describing the state
+of the program as it runs.
+
 @end table
 
 
