@@ -283,7 +283,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // Make sure each var is a sequence subscript
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
       return (null);
-    if (!v2.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
       return (null);
 
     SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
