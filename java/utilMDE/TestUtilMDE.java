@@ -1065,7 +1065,7 @@ public final class TestUtilMDE extends TestCase {
       Assert.assert(rfali.getLast().equals(new Integer(4)));
     }
 
-    // public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
+    // public static ArrayList randomElements(Iterator itor, int num_elts, Random random)
 
     // Iterate through numbers from zero up to the argument (non-inclusive)
     class IotaIterator implements Iterator {
