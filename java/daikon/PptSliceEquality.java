@@ -6,6 +6,7 @@ import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.*;
+import java.text.*;
 
 /**
  * Holds Equality invariants.
@@ -526,5 +527,74 @@ public class PptSliceEquality
       return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
     }
 
+  }
+
+  public static class Stats {
+
+    /** number of equality sets **/
+    public int set_cnt = 0;
+
+    /** total number of variables in all equality sets **/
+    public int var_cnt = 0;
+
+    /**
+     * Increments the number of equality sets and total variables by those
+     * in the specified ppt
+     */
+    void incr (PptTopLevel ppt) {
+      if (ppt.equality_view != null) {
+        for (int j = 0; j < ppt.equality_view.invs.size(); j++) {
+          set_cnt++;
+          Equality e = (Equality) ppt.equality_view.invs.get(j);
+          Collection vars = e.getVars();
+          var_cnt += vars.size();
+        }
+      }
+
+    }
+
+  }
+  /**
+   * print statistics concerning equality sets over the entire set of
+   * ppts to the specified logger
+   */
+  public static void print_equality_stats (Logger debug, PptMap all_ppts) {
+
+    if (!debug.isLoggable (Level.FINE))
+      return;
+
+    NumberFormat dfmt = NumberFormat.getInstance();
+    dfmt.setMaximumFractionDigits (2);
+    double equality_set_cnt = 0;
+    double vars_cnt = 0;
+    double total_sample_cnt = 0;
+    Map stats_map = Global.stats_map;
+
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      List slist = (List) stats_map.get (ppt);
+      int sample_cnt = 0;
+      double avg_equality_cnt = 0;
+      double avg_var_cnt = 0;
+      double avg_vars_per_equality = 0;
+      if (slist != null) {
+        sample_cnt = slist.size();
+        total_sample_cnt += sample_cnt;
+        for (int j = 0; j < slist.size(); j++) {
+          Stats stats = (Stats) slist.get (j);
+          avg_equality_cnt += stats.set_cnt;
+          avg_var_cnt += stats.var_cnt;
+          equality_set_cnt += stats.set_cnt;
+          vars_cnt += stats.var_cnt;
+        }
+        avg_equality_cnt = avg_equality_cnt / sample_cnt;
+        avg_var_cnt = avg_var_cnt / sample_cnt;
+      }
+      if (avg_equality_cnt > 0)
+        avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
+      debug.fine (ppt.ppt_name + " : " + dfmt.format (avg_equality_cnt) + " : "
+                  + dfmt.format (avg_var_cnt) + " : "
+                  + dfmt.format (avg_vars_per_equality));
+    }
   }
 }
