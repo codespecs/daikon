@@ -51,7 +51,7 @@ import utilMDE.*;
 public final class Member extends SEQUENCESCALAR {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public final static boolean debugMember = false;
@@ -287,7 +287,7 @@ public final class Member extends SEQUENCESCALAR {
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
-#endif  
+#endif
 
   public void add_modified(SCALAR[] a, SCALAR i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
