@@ -148,8 +148,8 @@ public final class TestUtilMDE extends TestCase {
     // public static double sum(double[][] a)
     assertTrue(0 == ArraysMDE.sum(new double[0][0]));
     assertTrue(79.5  == ArraysMDE.sum(new double[][] {{1.1, 2.2, 3.3, 4.4},
-                                                  {5.5, 6, 7, 8},
-                                                  {9, 10, 11, 12}}));
+                                                      {5.5, 6, 7, 8},
+                                                      {9, 10, 11, 12}}));
 
     // public static int element_range(int[] a)
     assertTrue(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
