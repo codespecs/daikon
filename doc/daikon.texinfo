@@ -6020,10 +6020,10 @@ Specify a single configuration setting.
 
 @item --dbg @var{category}
 @itemx --debug
-Enable debug loggers
+Enable debug loggers.
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
-Track information on specified invariant class, variables and ppt
+Track information on specified invariant class, variables and program point.
 
 @end table
 
@@ -6043,9 +6043,10 @@ Invariant diff is invoked as follows:
     java daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}] 
 @end example
 
-file1 and file2 are serialized invariants produced by running Daikon or Diff
-with the @option{-o} flag.  If @file{file2} is not specified,
-@file{file1} is compared with the empty set of invariants.
+@var{file1} and @var{file2} are files containing serialized invariants 
+produced by running Daikon or Diff
+with the @option{-o} flag.  If @var{file2} is not specified,
+@var{file1} is compared with the empty set of invariants.
 
 This section describes the optional flags.
 
@@ -6055,12 +6056,12 @@ Print usage message.
 
 @item -d
 Display the tree of differing invariants (default).  Invariants that are
-the same in file1 and file2 are not printed.  At least one of the
-invariants must be justified.  Does not print "uninteresting" invariants
+the same in @var{file1} and @var{file2} are not printed.  At least one of the
+invariants must be justified.  Does not print ``uninteresting'' invariants
 (currently some OneOf and Bound invariants).
 
 @item -u
-Include "uninteresting" invariants in the tree of differing invariants.
+Include ``uninteresting'' invariants in the tree of differing invariants.
 
 @item -y
 @itemx --ignore_unjustified
@@ -6080,21 +6081,23 @@ For internal use only.  Display the same statistics as @option{-s}, but as a
 tab-separated list.
 
 @item -m
-Compute (file1 - file2).  This is all the invariants that appear in
-file1 but not file2.  Unjustified invariants are treated as if they
+Compute (@var{file1} - @var{file2}).  This is all the invariants that appear in
+@var{file1} but not @var{file2}.  Unjustified invariants are treated as if they
 don't exist.  Output is written as a serialized InvMap to the file
 specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -x
-Compute (file1 XOR file2).  This is all the invariants that appear in
+Compute (@var{file1} XOR @var{file2}).  
+This is all the invariants that appear in
 one file but not the other.  Unjustified invariants are treated as if
 they don't exist.  Output is written as a serialized InvMap to the file
 specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -n
-Compute (file1 UNION file2).  This is all the invariants that appear in
+Compute (@var{file1} UNION @var{file2}).  
+This is all the invariants that appear in
 either file.  If the same invariant appears in both files, the one with
 the better justification is chosen.  Output is written as a serialized
 InvMap to the file specified with the @option{-o} option.  To view the contents
@@ -6124,8 +6127,8 @@ Print empty program points.  By default, program points are not printed
 if they contain no differences.
 
 @item -v
-Verbose output.  Invariants are printed using the repr() method, instead
-of the format() method.
+Verbose output.  Invariants are printed using the @code{repr()} method, instead
+of the @code{format()} method.
 
 @item -l
 For debugging use only.  Prints logging information describing the state
@@ -6406,16 +6409,18 @@ The Annotate program inserts Daikon-generated invariants into Java
 source code as  annotations in  DBC, ESC, Java or JML format.
 These annotations are comments that can be automatically verified or
 otherwise manipulated by other tools.
+
 Invoke Annotate like this:
 @example
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
 
-The first argument is a Daikon @file{.inv} or @file{.inv.gz} file produced by running
+The first argument is a Daikon @file{.inv} or @file{.inv.gz} file 
+produced by running
 Daikon with the @option{-o} command-line argument.  All subsequent
 arguments are @file{.java} files.  The original @file{.java} files are left
 unmodified, but Annotate produces new versions of the @file{.java} files
-(suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
+(with names suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
 @file{-dbcannotated}) that include the Daikon invariants as comments.
 
 The options are:
@@ -6431,22 +6436,22 @@ to the class files.  Since the class files are necessary to generate ``also''
 tags, those tags will be left out when this option is chosen.
 
 @item --max_invariants_pp @var{count}
-Output at most ``count'' invariants per program point (which ones are chosen
+Output at most @var{count} invariants per program point (which ones are chosen
 is not specified).
 
 @item --wrap_xml
 Each invariant is printed using the given format (ESC, JML or DBC),
-but the invariant expression is wrapped inside xml tags, along with other
+but the invariant expression is wrapped inside XML tags, along with other
 information about the invariant.
 
 For example, if this switch is set, the output format is ESC,
-and an invariant for method @code{foo(int x)} prints as
+and an invariant for method @code{foo(int x)} normally prints as
 
 @example
 /*@ requires x != 0; */
 @end example
 
-Then the results of print_invariant will look something like this (all
+Then the resulting output will look something like this (all
 in one line; we break it up here for clarity):
 
 @example
@@ -6486,8 +6491,11 @@ annotated includes logical shift operators. @xref{Known bugs}.
 
 The runtimechecker instrumenter inserts, into a Java file,
 instrumentation code that checks invariants as the program executes.
-For a full list of options, run @code{java
-daikon.tools.runtimechecker.Main help}.
+For a full list of options, run:
+
+@example
+java daikon.tools.runtimechecker.Main help
+@end example
 
 The @code{instrument} command to runtimechecker creates a new directory
 @file{instrumented-classes} containing a new version of the
@@ -6504,7 +6512,8 @@ To create a version of file
 @file{ubs/BoundedStack.java} that checks the invariants in 
 invariant file @file{BoundedStack.inv.gz}, do:
 @example
-java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
+java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz \
+    ubs/BoundedStack.java
 @end example
 @noindent
 The instrumented Java code references classes in the
@@ -6513,18 +6522,16 @@ present in the classpath when the instrumented classes are compiled and
 executed.
 
 Invariants are evaluated at the program points at which they should
-hold. ``Evaluating an invariant'' means executing an expression that
-evaluates to @code{true} if the invariant holds and @code{false} if the
-invariant doesn't hold.  Three things can happen when evaluating an
+hold. Three things can happen when evaluating an
 invariant:
 
 @itemize @bullet
 @item
-It evaluates to @code{true}, which means that the invariant holds.
+It evaluates to true, which means that the invariant holds.
 Program execution continues normally.
 
 @item
-It evaluates to @code{false}, which means that the invariant doesn't
+It evaluates to false, which means that the invariant doesn't
 hold. In this case the corresponding
 @code{daikon.tools.runtimechecker.Property} is added to a list in the
 class @code{daikon.tools.runtimechecker.Runtime}. A programmer can
@@ -6551,7 +6558,7 @@ The throwable is not rethrown.
 The instrumented class handles violations silently:
 it simply adds them to a list in the class
 @code{daikon.tools.runtimechecker.Runtime.}  
-No "invariant violation" exceptions are thrown, and the violated
+No ``invariant violation'' exceptions are thrown, and the violated
 invariants can only be obtained dynamically from class
 @code{daikon.tools.runtimechecker.Runtime}.
 
@@ -6619,7 +6626,7 @@ output file.
 
 InvariantChecker is invoked as follows:
 @example
-java daikon.tools.InvariantChecker [@var{options}] <@var{invariant-file}> <@var{dtrace-files}> 
+java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files} 
 @end example
 
 The @var{invariant-files} are invariant files (@file{.inv}) created by
@@ -6674,22 +6681,23 @@ all the method or function program points that exist in both files
 will be compared, with a exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
 Alternatively, one or two additional arguments may be supplied, which name an 
-ENTER program point and an EXIT program point to examine (if only an
-ENTER program point is supplied, the corresponding combined EXIT point
+@code{:::ENTER} program point and an @code{:::EXIT} program point to examine
+(if only an @code{:::ENTER} program point is supplied,
+the corresponding combined @code{:::EXIT} point
 is selected automatically).  To be precise, for each
 pair of program points representing a single method or function,
-LogicalCompare will check that each precondition (ENTER point
+LogicalCompare will check that each precondition (@code{:::ENTER} point
 invariant) in the ``stronger'' invariant set is implied by some
 combination of invariants in the ``weaker'' invariant set, and that
-each postcondition (EXIT point invariant) in the ``weaker'' invariant
+each postcondition (@code{:::EXIT} point invariant) in the ``weaker'' invariant
 set is implied by some combination of postconditions in the
 ``stronger'' set and preconditions in the ``weaker'' set.  In summary,
 the syntax of an invocation of LogicalCompare will have the following
 form:
 
 @example
-java daikon.tools.compare.LogicalCompare [options...]
-      WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]
+java daikon.tools.compare.LogicalCompare [@var{options}] \
+      @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
 @end example
 
 LogicalCompare accepts the following options:
@@ -6698,13 +6706,13 @@ LogicalCompare accepts the following options:
 @item --assume @var{file}
 Read additional assumptions about the behavior of compared routines
 from the file @var{file}.  The assumptions file should consist of lines
-starting with @code{PPT_NAME}, followed by the complete name of an
-ENTER program point, followed by lines each consisting of a Simplify
+starting with @samp{PPT_NAME}, followed by the complete name of an
+@code{:::ENTER} program point, followed by lines each consisting of a Simplify
 formula, optionally followed by a @code{#} and a human-readable
 annotation.  Blank lines and lines beginning with a @code{#} are
 ignored.  The assumption properties will be used as if they were
-invariants true at the strong EXIT point when checking weak EXIT point
-invariants.
+invariants true at the strong @code{:::EXIT} point when checking 
+weak @code{:::EXIT} point invariants.
 
 @item --cfg @var{option}=@var{value}
 Specify a single configuration setting.  The available settings are the
@@ -6720,7 +6728,7 @@ option, though because the invariants have already been generated,
 some will have no effect.
 
 @item --debug-all
-@itemx --dbg CATEGORY
+@itemx --dbg @var{category}
 These options have the same effect as the @option{--debug} and
 @option{--dbg} options to Daikon, causing debugging logs to be
 printed.
@@ -6774,11 +6782,11 @@ Usually such invariants reflect implementation details that would not
 be visible to the caller of a method.
 
 @item i
-Discard implication invariants when they appear in ENTER program
+Discard implication invariants when they appear in @code{:::ENTER} program
 points.
 @end table
 
-The default set of filters corresponds to the letters ``ijmp''.
+The default set of filters corresponds to the letters @option{ijmp}.
 
 @item --help
 Print a brief summary of available command-line options.
@@ -6822,7 +6830,7 @@ passed to Simplify.
 
 @item --show-sets
 Rather than testing implications among invariants, simply print the
-sets of weak and strong ENTER and EXIT point invariants that would
+sets of weak and strong @code{:::ENTER} and @code{:::EXIT} point invariants that would
 normally be compared.  The invariants are selected and filtered as
 implied by other options.
 
@@ -6920,12 +6928,14 @@ section tells you how to debug your problem if the
 answer is 0, but you believe that there are samples in the file you are
 feeding to Daikon.
 
-Daikon processes only ENTER program points that have a matching EXIT
+Daikon processes only @code{:::ENTER} program points that have a 
+matching @code{:::EXIT}
 program point.  (You can disable this behavior with the
 @option{--nohierarchy} switch to Daikon, see @xref{Command line
-options}.)  If no EXIT program points are present (perhaps every
-execution threw an exception, or you filtered out all the EXIT program
-points), then Daikon will not process any of the ENTER program points.
+options}.)  If no @code{:::EXIT} program points are present (perhaps every
+execution threw an exception, or you filtered out all the 
+@code{:::EXIT} program points), 
+then Daikon will not process any of the @code{:::ENTER} program points.
 You can make Daikon print information about unmatched procedure entries
 via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
 configuration option (@pxref{General configuration options}).
@@ -6963,7 +6973,7 @@ values are guaranteed to be correct.  If a @file{.dtrace} file uses
 the stack technique, then incorrect @code{orig(@var{x})} values are
 likely to occur.  You can tell which technique Daikon will use by
 examining the @file{.dtrace} file.  If the second line of each entry
-in the @file{.dtrace} file is "this_invocation_nonce", then Daikon
+in the @file{.dtrace} file is @samp{this_invocation_nonce}, then Daikon
 uses the nonce technique.  Otherwise, it uses the stack technique.
 Which technique is used is determined by the front end, which creates
 the @file{.dtrace} file, and typically cannot be controlled by the
@@ -6979,10 +6989,11 @@ user.
 
 Daikon requires a Java 5 JVM (@pxref{Requirements}).
 An error such as 
-@smallexample
-  Exception in thread "main" java.lang.UnsupportedClassVersionError:
-  daikon/Daikon (Unsupported major.minor version 49.0)
-@end smallexample
+@example
+Exception in thread "main" java.lang.UnsupportedClassVersionError:
+daikon/Daikon (Unsupported major.minor version 49.0)
+@end example
+@noindent
 indicates that you are trying to run Daikon on an older JVM.  You need to
 install a newer version of Java in order to run Daikon.
 
@@ -6999,8 +7010,8 @@ install a newer version of Java in order to run Daikon.
 
 If Daikon runs out of memory, generating a message like
 @example
-        Exception in thread "main" java.lang.OutOfMemoryError
-                <<no stack trace available>>
+Exception in thread "main" java.lang.OutOfMemoryError
+        <<no stack trace available>>
 @end example
 @noindent
 then it is likely that it has created more invariants than will fit
@@ -7016,28 +7027,28 @@ of physical memory.
 The default may be 64 megabytes or less; to permit use of up to 256
 megabytes, you would run Java like so:
 @example
-        java -mx256m ...
+java -mx256m ...
 @end example
 
 When using the Java HotSpot JVM, an additional parameter may need to
 be increased.  HotSpot uses a separately-limited memory region, called
-the `permanent generation', for several special kinds of allocation,
+the ``permanent generation'', for several special kinds of allocation,
 one of which (interned strings) Daikon sometimes uses heavily.  It may
 be necessary to increase this limit as well, with the
 @option{-XX:MaxPermSize=} option.  For instance, to use 512 megabytes,
 of which at most 256 can be used for the permanent generation, you
 would run Java like so:
 @example
-        java -Xmx512m -XX:MaxPermSize=256m
+java -Xmx512m -XX:MaxPermSize=256m
 @end example
 
 Another possible problem is the creation of too many derived variables.
-If you supply the @option{--output_num_samples} argument to Daikon
+If you supply the @option{--output_num_samples} option to Daikon
 (@pxref{Command line options}), then it will list all
 variables at each program point.  If some of these are of no interest,
-you may wish to suppress their creation.  (This manual does not
-presently tell you how to do that, but you can see the source code or
-ask an expert.)
+you may wish to suppress their creation.  For information on how to do that,
+see @ref{Options to enable/disable derived variables}.  Also see 
+@ref{Reducing variables} for other techniques.
 
 Any output generated before the out-of-memory error is perfectly valid.
 
@@ -7049,7 +7060,7 @@ Any output generated before the out-of-memory error is perfectly valid.
 
 The warning ``Could not utilize Simplify'' indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
-@command{Simplify} binary was not found on the user's path.
+Simplify binary was not found on the user's path.
 Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed.
 
@@ -7134,12 +7145,19 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @cindex runtime, of Daikon
 
 Daikon's runtime and space depend on the particular data that it analyzes.
-Informally, invariant detection time can be characterized as O((vars^3 *
-falsetime + trueinvs * testsuite) * procedures), where @var{vars} is the number
-of variables @emph{at a program point}, falsetime is the (small constant)
-time to falsify a potential invariant, trueinvs is the (small) number of
-true invariants at a program point, testsuite is the size of the test
-suite, and program is the number of instrumented program points.  The first
+Informally, invariant detection time can be characterized as 
+@example
+O((@var{vars}^3 * @var{falsetime} + @var{trueinvs} * @var{testsuite}) * @var{procedures})
+@end example
+@noindent
+where @var{vars} is the number of variables @emph{at a program point}, 
+@var{falsetime} is the (small constant) 
+time to falsify a potential invariant, 
+@var{trueinvs} is the (small) number of
+true invariants at a program point, 
+@var{testsuite} is the size of the test
+suite, and
+@var{procedures} is the number of instrumented program points.  The first
 two products multiply a number of invariants by the time to test each
 invariant.
 
@@ -7152,11 +7170,12 @@ each procedure independently.
 Another important factor affecting Daikon's runtime is the number of
 variables.  Because invariants involve up to three variables each, the
 number of invariants to check is cubic in the number of variables at a
-single program point.  Derived variables (such as @samp{a[i]},
-introduced whenever there is both an array @samp{a} and an integer
-@samp{i}) can increase the number of variables substantially.
+single program point.  Derived variables (such as @code{a[i]},
+introduced whenever there is both an array @code{a} and an integer
+@code{i}) can increase the number of variables substantially.
 The @option{daikon.Daikon.disable_derived_variables} and individual
-@option{daikon.derive.*.*.enabled} configuration variables may be used
+@option{daikon.derive.*.*.enabled} configuration variables 
+(@pxref{Options to enable/disable derived variables}) may be used
 to disable derived variables altogether or selectively, at the cost of
 detecting fewer invariants, especially over sequences.
 
@@ -7214,18 +7233,15 @@ points (functions) in your program.
 @enumerate
 @item 
 You can make Daikon ignore some program points.  With the
-@example
-  --ppt-select-pattern=@var{ppt_regexp}
-@end example
-@noindent
+@option{--ppt-select-pattern=@var{ppt_regexp}}
 flag (@pxref{Command line options}), only program points matching
 the regular expression are processed.  Likewise, the
-``@option{--ppt-omit-pattern=}@var{ppt_omit_regexp} option causes program points
+@option{--ppt-omit-pattern=@var{ppt_omit_regexp}} option causes program points
 matching the regular expression to be ignored.
 
-Also, the configuration variable @var{ppt_perc} allows a percentage of
-the program points to be processed. 
-@xref{Configuration options}, for details.
+Also, the configuration variable @option{daikon.Daikon.ppt_perc}
+allows a percentage of the program points to be processed. 
+@xref{General configuration options}, for details.
 
 @item 
 @cindex trace-purge-fns.pl script
@@ -7250,21 +7266,19 @@ You can instrument fewer methods, creating smaller @file{.dtrace}
 files in the first place (rather than cutting the @file{.dtrace} files
 down afterward).
 @itemize
-@item With dfej, use the 
-@example
-  --ppt-omit-pattern=@var{regexp}
-@end example
-@noindent
-argument (@pxref{dfej options}).  Dfej will not produce data trace
-output for classes or procedures that match @var{string}.  Running the
+@item With Chicory or dfej, use the @option{--ppt-omit-pattern} or
+@option{--ppt-select-pattern} options (@pxref{Chicory options}) to
+restrict which program points are traced.  Running the
 instrumented program will result in a smaller @file{.dtrace} file that
 contains fewer records.
+@item With Kvasir, use the @option{-ppt-list-file} option to specify a list
+of program points that should be traced.
 @item With dfec, split your program into multiple files, then
 instrument only some of them (see below).
 @end itemize
 
 @item
-You can instrument fewer files.
+If you are using a source-based front end, you can instrument fewer files.
 @itemize
 @item With dfej, only supply it the files you wish to instrument.
 @item With dfec, use the @option{-l} command (@pxref{dfec command-line
@@ -7335,7 +7349,7 @@ file, the last record may be only partially written.  Use the
 @command{daikon/bin/trace-untruncate} program to remove the last,
 possibly partial, record from the file:
 @example
-  trace-untruncate @var{myfile}.dtrace
+  trace-untruncate myfile.dtrace
 @end example
 @noindent
 modifies @file{myfile.dtrace} in place to remove the last record.
@@ -7436,7 +7450,7 @@ BCEL on your classpath.)
 @node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
 @subsection Problems installing dfej
 
-gcc 2.95.2 on Linux raises an internal error when compiling
+GCC 2.95.2 on Linux raises an internal error when compiling
 @file{stream.cpp} using the @option{-Wall} flag.  You can simply compile
 that file without the @option{-Wall} flag.
 
@@ -7504,9 +7518,10 @@ MyProg.java:0:0:0:0: Error: Could not find package named:
 @end example
 @noindent
 then the root of your packages in not in your classpath.  For example,
-if you have a package A in directory @file{src/A} and a class A.B, then you
-have to add the superdirectory of A (@file{src}) to your classpath so that
-dfej can find package A@.  For example,
+if you have a package @code{A} in directory @file{src/A} 
+and a class @code{A.B}, then you
+have to add the superdirectory of @code{A} (@file{src}) to your classpath so that
+dfej can find package @code{A}@.  For example,
 @example
 dfej -classpath src:$CLASSPATH src/A/B.java
 @end example
@@ -7545,7 +7560,11 @@ not intended dfej to examine.
 
 @cindex Ajax, problem with
 
-The warning ``Problem with Ajax; using original .decls files instead''
+The warning 
+@example
+Problem with Ajax; using original .decls files instead
+@end example
+@noindent
 indicates that the Ajax variable comparator could not run.
 
 Ajax
@@ -7568,17 +7587,22 @@ proceeds without error.
 @cindex ajax.jbc.InvalidClassDataError
 @cindex InvalidClassDataError, Ajax
 
-Ajax cannot deal with binary .class files of version later that 1.1.
-Thus, before running ajax, compile all your code using @command{javac
--target 1.1} to create correct format .class files.  Note that all the
-.jar files and other class files in your classpath used by the code
+Ajax cannot deal with binary @file{.class} files of version later that 1.1.
+Thus, before running ajax, compile all your code using 
+@command{javac -target 1.1} 
+to create correct format @file{.class} files.  Note that all the
+@file{.jar} files and other class files in your classpath used by the code
 also need to be compiled using @command{javac -target 1.1} in order
 for ajax to be able to execute.
 
 As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
-For instance, Ajax issues the error ``ajax.jbc.InvalidClassDataError:
-No such method in call'' for methods such as
-java.lang.Math.toDegrees(Double) that do not appear in JDK 1.1.
+For instance, Ajax issues the error 
+@example
+ajax.jbc.InvalidClassDataError: No such method in call
+@end example
+@noindent
+for methods such as
+@code{java.lang.Math.toDegrees(Double)} that do not appear in JDK 1.1.
 
 @cindex Invalid class loading, Ajax warning
 
@@ -7596,7 +7620,7 @@ Ajax may throw a RuntimeException with a message stating
 ``Too many levels of symbolic links''.  This can be caused
 by cycles in the classpath (for example, a link from a directory to
 itself).  To locate the problem link, rerun the the the failing command
-as before, but prefixed by ``strace ''.  If the original command had
+as before, but prefixed by @samp{strace}.  If the original command had
 been @samp{wc ~/.emacs}, then you would instead run 
 @samp{strace wc ~/.emacs}.
 Search the resulting output for the exception stack trace, containing
@@ -7636,16 +7660,16 @@ are using the Daikon regression tests, run @command{make clean}.)
 You should avoid giving a package and a variable the same name,
 because of a problem with the standard javac compiler that is exposed
 when dfej instruments inner classes.  Suppose that a package and a
-variable are both named @samp{link}.  When the compiler sees
-@samp{link.foo}, it doesn't know whether to interpret that as field
-@samp{foo} of the variable @samp{link}, or as class @samp{foo} of the
-package @samp{link}.  The compiler should just try both, but it
+variable are both named @code{link}.  When the compiler sees
+@code{link.foo}, it doesn't know whether to interpret that as field
+@code{foo} of the variable @code{link}, or as class @code{foo} of the
+package @code{link}.  The compiler should just try both, but it
 doesn't:  it only tries the variable.
 
 In the future, we plan to make dfej to work around this javac problem.  
 In the meanwhile, you can avoid the problem by not using the same name for a
 package and a variable.  Reusing such names is considered bad style anyway,
-because the name @samp{link.foo} is ambiguous to people as well as to the
+because the name @code{link.foo} is ambiguous to people as well as to the
 compiler.
 
 
@@ -7656,7 +7680,7 @@ compiler.
 @cindex initialization error, JVM
 @cindex Vector, dfej cannot instrument
 
-Instrumenting @samp{java.util.Vector} with dfej prevents the Java
+Instrumenting @code{java.util.Vector} with dfej prevents the Java
 Virtual Machine from initializing
 properly, because instrumented classes attempt to use the JVM's
 facilities when they are loaded, but the JVM loads Vector during its own
@@ -7689,8 +7713,8 @@ those encountered when running the instrumented code.
 dfec errors in system files, such as
 @file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
 runtime, @file{daikon_runtime.h}, are likely to indicate that you are
-using an unsupported version of gcc.  In particular, when you run
-dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
+using an unsupported version of GCC.  In particular, when you run
+dfec, the version of GCC on your path should be 2.95.2, 2.95.3, or
 2.96; @xref{gcc version}.
 
 @cindex ?: operator, types of operands
@@ -7821,8 +7845,8 @@ An error of the form ``template-argument ... uses local type'' is
 probably due to use of a nested (local) structure declaration; raise
 the declaration to top level in your C program.
 
-An error of the form @samp{`__T142459136' was not declared in this
-scope} likely means that you simultaneously declared and used an enum
+An error of the form ``__T142459136' was not declared in this scope''
+likely means that you simultaneously declared and used an enum
 or other type.  Separate the declaration from the use.
 
 
@@ -7849,21 +7873,21 @@ ld: fatal: Symbol referencing errors. No output written to MyProgram
 @noindent
 means that
 instrumented (or partially instrumented) code contains a declaration
-of @samp{foo(bar *)}, but the definition appears in uninstrumented
+of @code{foo(bar *)}, but the definition appears in uninstrumented
 code.  The instrumented version uses smart pointers, but the
 uninstrumented version does not.  You should supply the @file{.c} file
 containing the definition to dfec (preceded by @option{-l}
 if you do not wish to fully instrument the file).
 
 If you cannot specify the @file{.c} containing the definition of
-@samp{foo()} to dfec (for instance, if it appears in a pre-compiled
+@code{foo()} to dfec (for instance, if it appears in a pre-compiled
 library), then no code supplied to dfec should contain a declaration
-for @samp{foo()}.   The declaration should occur in a @file{.h} file
-that your code @samp{#include}s, but that is not specified on the dfec
+for @code{foo()}.   The declaration should occur in a @file{.h} file
+that your code @code{#include}s, but that is not specified on the dfec
 command line.
 
 Other linker problems may indicate a mismatch between part of
-your code that was compiled with gcc and part of it that was compiled
+your code that was compiled with GCC and part of it that was compiled
 with G++.  GCC creates files using ``C linkage'', and G++ creates
 files using ``C++ linkage''; the two are not compatible.  (It is
 possible to direct G++ to use C linkage in certain circumstances;
