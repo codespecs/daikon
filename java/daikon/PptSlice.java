@@ -398,6 +398,16 @@ public abstract class PptSlice
       }
     }
 
+    // No flow is required in bottom up processing, simply remove the dead
+    // invariants and return the list of weakened invariants.
+    if (Daikon.df_bottom_up) {
+      removeInvariants(to_remove);
+      List result = new ArrayList (invs_changed);
+      invs_to_flow.clear();
+      invs_changed.clear();
+      return result;
+    }
+
     // The following is simply for error checking
     if (to_remove.size() > invs_to_flow.size()) {
       // This block may no longer be necessary, as destroy() is only
@@ -533,26 +543,35 @@ public abstract class PptSlice
             debugFlow.fine (" " + inv.format() + " flowing from " +
                             parent.name + " to " + lower.name);
           }
-          // If its class does not already exist in lower
-          // for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
-          //   Object item = h.next();
 
-            // XXX Should this be some sort of same formula check
-            // instead?  Probably not; one class of invariant should
-            // be able to handle all data fed to it; we never need two
-            // invariants of the same class in the same pptslice.
-            // Maybe add that as rep invariant up above?
-          //            if (item.getClass() == inv.getClass()) {
-          Invariant alreadyThere = Invariant.find (inv.getClass(), slice);
-          if (alreadyThere != null) {
-            if (debugFlow.isLoggable(Level.FINE))
-              debugFlow.fine ("  except it was already there: " + alreadyThere.format());
-            continue for_each_invariant;
-          }
           // Let it be reborn
           Invariant reborn = inv.resurrect(slice, permutation);
           if (debugFlow.isLoggable(Level.FINE)) {
             debugFlow.fine ("  rebirthing invariant");
+          }
+
+          // If its class does not already exist in lower
+          // for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
+          //   Object item = h.next();
+
+          // Note that this must use reborn rather than the original
+          // invariant.  That is because certain invariants will create
+          // a new class when resurrecting (eg, switch from < to > because
+          // their variable order switched).  We must check the reborn
+          // invariant and not the previous one so we get the correct
+          // match.
+
+          // XXX Should this be some sort of same formula check
+          // instead?  Probably not; one class of invariant should
+          // be able to handle all data fed to it; we never need two
+          // invariants of the same class in the same pptslice.
+          // Maybe add that as rep invariant up above?
+          //            if (item.getClass() == inv.getClass()) {
+          Invariant alreadyThere = Invariant.find (reborn.getClass(), slice);
+          if (alreadyThere != null) {
+            if (debugFlow.isLoggable(Level.FINE))
+              debugFlow.fine ("  except it was already there: " + alreadyThere.format());
+            continue for_each_invariant;
           }
 
           slice.addInvariant(reborn);
