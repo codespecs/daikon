@@ -45,8 +45,7 @@ public class DaikonWriter
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
      *
-     * @param field
-     * @requires field != null
+     * @param field - requires field != null
      * @return true iff field warrants an [ = val ] entry in the decls files
      */
     protected boolean staticConstField(Field field)

@@ -49,12 +49,10 @@ public class DTraceWriter extends DaikonWriter
      *
      * @param writer
      *            Stream to write to
-     * @param daikonDepth
+     * @param depth
      *            Tree recursion to traverse for each variable
      * @param excludes
      *            Formatted strings can include wildcards
-     * @param thread
-     *		  EventThread for the trace interface
      */
     public DTraceWriter(PrintStream writer, int depth, String[] excludes, List includes)
     {

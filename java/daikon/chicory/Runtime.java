@@ -167,7 +167,7 @@ public class Runtime
      * @param obj - Object of the method that was entered.  Null if method is
      *              static
      * @param nonce - nonce identifying which enter/exit pair this is
-     * @param mi_index- index in methods of the MethodInfo for this method
+     * @param mi_index - index in methods of the MethodInfo for this method
      * @param args - array of arguments to method
      */
     public static void enter(Object obj, int nonce, int mi_index, Object[] args)
@@ -195,10 +195,10 @@ public class Runtime
      *
      * @param obj     - Object of the method that was entered.  Null if method is
      *                  static
-     * @param nonce   - nonce identifying which enter/exit pair this is
-     * @param mi_index- index in methods of the MethodInfo for this method
-     * @param args    - array of arguments to method
-     * @param ret_val - return value of method.  null if method is void
+     * @param nonce    - nonce identifying which enter/exit pair this is
+     * @param mi_index - index in methods of the MethodInfo for this method
+     * @param args     - array of arguments to method
+     * @param ret_val  - return value of method.  null if method is void
      */
     public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val)
     {
