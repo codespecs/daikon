@@ -73,12 +73,12 @@ public final class CLASSNAME {
       {"", " * ", ""},
       // plus: subsumed by LinearTernary.
 #if defined(LONG)
-      {"", " & ", ""},          // bitwise and
-      {"", " && ", ""},         // logical and
-      {"", " ^ ", ""},          // bitwise xor
+      {"(", " & ", ")"},          // bitwise and
+      {"(", " && ", ")"},         // logical and
+      {"(", " ^ ", ")"},          // bitwise xor
       {"utilMDE.MathMDE.logicalXor(", ", ", ")"}, // there is no ^^, alas
-      {"", " | ", ""},          // bitwise or
-      {"", " || ", ""},         // logical or
+      {"(", " | ", ")"},          // bitwise or
+      {"(", " || ", ")"},         // logical or
 #endif
       /// Non-operators.
       {"java.lang.Math.min(", ", ", ")"},
