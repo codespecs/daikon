@@ -291,6 +291,7 @@ Tools
 
 * MergeESC::                    
 * MakeInvariantChecker::        
+* LogicalCompare::              
 
 Troubleshooting
 
@@ -4443,7 +4444,8 @@ or modules, and writing out new versions of those files, instrumented
 to capture information about their execution, by default to another
 directory.  dfepl is used in two passes: first, before type
 information is available, instrumented versions are written to a
-@file{daikon-untyped}.  These untyped programs, when run, will write
+directory @file{daikon-untyped}.  These untyped programs, when run,
+will write
 files containing dynamically inferred type information (with the
 extension @file{.types}), by default to the @file{daikon-instrumented}
 directory.  When dfepl is rerun with this type information, it
@@ -5241,6 +5243,7 @@ distribution and are not described elsewhere in the manual.
 @menu
 * MergeESC::                    
 * MakeInvariantChecker::        
+* LogicalCompare::              
 @end menu
 
 @node    MergeESC, MakeInvariantChecker, Tools, Tools
@@ -5265,7 +5268,7 @@ unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
 
-@node    MakeInvariantChecker,  , MergeESC, Tools
+@node    MakeInvariantChecker, LogicalCompare, MergeESC, Tools
 @section MakeInvariantChecker
 
 @cindex MakeInvariantChecker tool
@@ -5302,7 +5305,170 @@ If the new trace violates any invariants in the set provided to
 MakeInvariantChecker, then MakeInvariantChecker prints a message that
 indicates the invariant and the variable values that violate it. 
 
+@node LogicalCompare,  , MakeInvariantChecker, Tools
+@section LogicalCompare
 
+@cindex LogicalCompare tool
+@cindex implication checking tool
+@cindex comparison tool, logical
+
+Given two sets of invariants describing the operation of a software
+module, or describing two implementations of a module with the same
+interface, we can define one set of invariants to be ``stronger'' than
+another roughly if in any situation where the ``stronger'' invariants
+hold, the ``weaker'' invariants also hold. The LogicalCompare tool
+examines two sets of invariants, and checks using the Simplify
+automatic theorem prover whether they satisfy a precise version of
+this relationship.
+
+Simplify must be separately obtained (from
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to use this program.
+
+The LogicalCompare program takes two mandatory arguments, which are
+@file{.inv} files containing invariants; the invariants will be
+checked to verify if the invariants in the first file are weaker
+(implied by) the invariants in the second file, and exceptions to this
+implication are printed. If no other regular arguments are supplied,
+all the method or function program points that exist in both files
+will be compared, with a exception message reported for each method
+that exists in the ``weaker'' set but not the ``stronger''.
+Alternatively, two additional arguments may be supplied, which name an
+ENTER and an EXIT program point to examine. To be precise, for each
+pair of program points representing a single method or function,
+LogicalCompare will check that each precondition (ENTER point
+invariant) in the ``stronger'' invariant set is implied by some
+combination of invariants in the ``weaker'' invariant set, and that
+each postcondition (EXIT point invariant) in the ``weaker'' invariant
+set is implied by some combination of postconditions in the
+``stronger'' set and preconditions in the ``weaker'' set. In summary,
+the syntax of an invocation of LogicalCompare will have the following
+form:
+
+@example
+java daikon.tools.compare.LogicalCompare [options...]
+      WEAK-INVS STRONG-INVS [ENTER-PPT EXIT-PPT] 
+@end example
+
+LogicalCompare accepts the following options:
+
+@table @code
+@item --cfg @var{option}=@var{value}
+Specify a single configuration setting. The available settings are the
+same as can be passed to Daikon's @option{--config_option} option,
+though because the invariants have already been generated, some will
+have no effect. See @xref{Configuration options} for a list of
+available options.
+
+@item --config-file=@var{file}
+Read configuration options from the file @var{file}. This file should
+have the same format as one passed to Daikon's @option{--config}
+option, though because the invariants have already been generated,
+some will have no effect.
+
+@item --debug-all
+@itemx --dbg CATEGORY
+These options have the same effect as the @option{--debug} and
+@option{--dbg} options to Daikon, causing debugging logs to be
+printed.
+
+@item --filters=[bBoOmjpi]
+Control which invariants are removed from consideration before
+implications are checked. Note that except as controlled by this
+option, LogicalCompare does not perform any of the filters that
+normally control whether invariants are printed by Daikon. Also,
+invariants that cannot be formatted for the Simplify automatic theorem
+prover will be discarded in any case, as there would be no other way
+to process them. Each letter controls a filter: an invariant is reject
+if it is reject by any filter (or, equivalently, kept only if it
+passes through every filter).
+
+@table @code
+@item b
+Discard bound invariants (such as ``x <= c'' and ``x >= c'' for a
+constant c), when Daikon considers the constant to be uninteresting.
+Currently, Daikon has a configurable range of interesting constant: by
+default, -1, 0, 1, and 2 are interesting, and no other numbers are.
+
+@item B
+Discard all bound invariants, whether or not the constants in them are
+considered interesting.
+
+@item o
+Discard ``one-of'' invariants (which signify that a variable always
+had one of a small set of values at runtime), when the values that the
+variable took are considered uninteresting by Daikon.
+
+@item O
+Discard all ``one-of'' invariants, whether or not the values involved
+are interesting.
+
+@item m
+Discard invariants for which it was never the case that all the
+variables involved in the invariant were present at the same time.
+
+@item j
+Discard invariants that Daikon determines to be statistically
+unjustified, according to its tests.
+
+@item p
+Discard invariants that refer to the values of pass-by-value
+parameters in the postcondition, or to the values of objects pointed
+to by parameters in postconditions, when the pointer is not
+necessarily the same as at the entrance to the method or function.
+Usually such invariants reflect implementation details that would not
+be visible to the caller of a method.
+
+@item i
+Discard implication invariants when they appear in ENTER program
+points.
+@end table
+
+The default set of filters corresponds to the letters ``ijmp''.
+
+@item --help
+@itemx -h
+Print a brief summary of available command-line options.
+
+@item --proofs
+For each implication among invariants that is verified, print a
+minimal set of conditions that establish the truth of the conclusion.
+The set is minimal, in the sense that if any condition were removed,
+the conclusion would no longer logically follow according to Simplify,
+but it is not the least such set: there may exist a smaller set of
+conditions that establish the conclusion, if that set is not a subset
+of the set printed. Beware that because this option uses a naive
+search technique, it may significantly slow down output.
+
+@item --post-after-pre-failure
+Even if implication is not verified between two invariant sets after
+examining the preconditions, continue to check the implication
+involving postconditions. This is somewhat dangerous, in that if the
+implication does not hold between the preconditions, the invariant
+sets may be inconsistent, in which case reasoning about the
+postconditions is nonsensical. The tool will abort with an error
+message describing the contradiction of this latter situation occurs.
+
+@item --show-count
+Print a count of the number of invariants checked for implication.
+
+@item --show-formulas
+For each invariant, show how it is represented as a logical formula
+passed to Simplify.
+
+@item --show-valid
+Print invariants that are verified to be implied (``valid''), as well
+as those for which the implication could not be verified (``invalid''
+invariants, which are always printed).
+
+@item --timing
+For each set of invariants checked, print the total time required for
+the check. This time includes both processing done by LogicalCompare
+directly, and time spent waiting for processing done by Simplify, but
+does not include time spent de-serializing the @file{.inv} input
+files.
+
+@end table
 
 @node    Troubleshooting, Details, Tools, Top
 @chapter Troubleshooting
@@ -6328,10 +6494,44 @@ to correct the problem.  Unfortunately, we cannot make any guarantees of
 support, or any other guarantees regarding the software.  As a condition
 of use, you agree to promptly communicate any changes, improvements, or
 enhancements to the authors for inclusion in a future release under
-these same conditions, and to prompty report any errors, problems, or bugs.
+these same conditions, and to promptly report any errors, problems, or bugs.
 If you do not agree to this license, please do
 not use or examine the software.  Other licensing terms are available;
 send mail to @email{mernst@@lcs.mit.edu}.
+
+Daikon uses the Java port of the GNU getopt library, which is
+copyright 1998 Aaron M. Renn. The getopt library is free software, and
+may be redistributed or modified under the terms of the GNU Library
+General Public License version 2. A copy of this license is included
+with the Daikon distribution as the file
+@file{java/gnu/getopt/COPYING.LIB}.
+
+@comment We plan to stop using the org.apache.oro.* regex package
+@comment soon, at which point this paragraph should be removed.
+This product includes software developed by the Apache Software
+Foundation (http://www.apache.org/), Copyright (c) 2000 The Apache
+Software Foundation. All rights reserved. The license governing this
+software is included with the Daikon distribution as the file
+@file{java/jakarta-oro-2.0.6/LICENSE}.
+
+Daikon's unit tests use the JUnit testing framework, which is governed
+by the Common Public License, version 1.0. JUnit is provided on an
+``as is'' basis, without warranties or conditions of any kind, either
+express or implied including, without limitation, any warranties or
+conditions of title, non-infringement, merchantability or fitness for
+a particular purpose. Neither the Daikon developers nor the authors of
+the JUnit framework shall have any liability for any direct, indirect,
+incidental, special, exemplary, or consequential damages (including
+without limitation lost profits), however caused and on any theory of
+liability, whether in contract, strict liability, or tort (including
+negligence or otherwise) arising in any way out of the use or
+distribution of JUnit or the exercise of any rights granted in
+the Common Public License, even if advised of the possibility of such
+damages. Those portions of JUnit that appear in the Daikon
+distribution may be redistributed under the same terms as Daikon
+itself; this offer is made by the Daikon developers exclusively and
+not by any other party. The Common Public License is included with the
+Daikon distribution as the file @file{java/junit/cpl-v10.html}.
 
 Note that the front ends discussed in this manual are separate
 programs, and some are made available under different licenses.  All
