@@ -1105,6 +1105,9 @@ Sets the probability limit for justifying invariants.  The default is
 @item --esc_output
 Write output in ESC-like format.
 
+@item --simplify_output
+Write output in Simplify format.
+
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
 for debugging.
