@@ -33,13 +33,3 @@ public abstract class InvariantFilter {
 
   abstract boolean shouldDiscardInvariant( Invariant invariant );
 }
-
-
-
-
-
-
-
-
-
-
