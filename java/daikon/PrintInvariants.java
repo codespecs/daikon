@@ -12,6 +12,7 @@ import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
+import daikon.diff.InvMap;
 
 public final class PrintInvariants {
 
@@ -28,6 +29,9 @@ public final class PrintInvariants {
    * output.
    **/
   public static boolean dkconfig_print_inv_class = false;
+
+  /** print all invariants without any filtering **/
+  public static boolean dkconfig_print_all = false;
 
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
@@ -237,9 +241,45 @@ public final class PrintInvariants {
         System.exit(1);
     }
     String filename = args[fileIndex];
-    PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-                                               true // use saved config
-                                               );
+
+    Object obj = UtilMDE.readObject (new File (filename));
+    PptMap ppts = null;
+    InvMap invs = null;
+    if (obj instanceof FileIO.SerialFormat)
+      ppts = ((FileIO.SerialFormat) obj).map;
+    else if (obj instanceof InvMap)
+      invs = (InvMap) obj;
+    else {
+      System.out.println ("Unexpected serialized file type: " +obj.getClass());
+      System.exit(1);
+    }
+
+    // Create a PptMap from the InvMap
+    if (invs != null) {
+      ppts = new PptMap();
+      for (Iterator i = invs.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        debug.fine ("processing ppt " + ppt.name + " (" + ppt.num_samples()
+                    + " samples)");
+        // debug.fine ("    Variables: " + VarInfo.toString (ppt.var_infos));
+        PptTopLevel nppt = new PptTopLevel (ppt.name, ppt.var_infos);
+        nppt.set_sample_number (ppt.num_samples());
+        ppts.add (nppt);
+        List /*Invariants*/ inv_list = invs.get (ppt);
+        for (Iterator j = inv_list.iterator(); j.hasNext(); ) {
+          Invariant inv = (Invariant) j.next();
+          debug.fine ("--processing invariant " + inv.format());
+          PptSlice slice = nppt.get_or_instantiate_slice (inv.ppt.var_infos);
+          inv.ppt = slice;
+          slice.addInvariant (inv);
+        }
+      }
+    }
+
+    //PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
+    //                                           true // use saved config
+    //                                           );
+
 
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
@@ -1285,7 +1325,8 @@ public final class PrintInvariants {
         debugPrint.fine ("      " + vi.name.name());
       }
       debugPrint.fine ("Equality set: ");
-      debugPrint.fine (ppt.equality_view.toString());
+      debugPrint.fine ((ppt.equality_view == null) ? "null"
+                       : ppt.equality_view.toString());
     }
     if (debugFiltering.isLoggable(Level.FINE)) {
       debugFiltering.fine ("------------------------------------------------------------------------------------------------\n");
@@ -1342,8 +1383,13 @@ public final class PrintInvariants {
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
 
-      InvariantFilter filter_result = fi.shouldKeep (inv);
-      boolean fi_accepted = (filter_result == null);
+      boolean fi_accepted = true;
+      InvariantFilter filter_result = null;
+      if (!dkconfig_print_all) {
+        filter_result = fi.shouldKeep (inv);
+        fi_accepted = (filter_result == null);
+      }
+
       if ((inv instanceof Implication)
           && PptSplitter.debug.isLoggable(Level.FINE))
         PptSplitter.debug.fine ("filter result = " + filter_result

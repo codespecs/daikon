@@ -1278,7 +1278,7 @@ public final class FileIO {
    * later overriding of SerialFormat.readObject if the save format
    * changes (ick).
    **/
-  private static final class SerialFormat implements Serializable
+  static final class SerialFormat implements Serializable
   {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or

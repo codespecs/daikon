@@ -5339,7 +5339,12 @@ public class PptTopLevel
       }
     }
   }
-  
+
+  /** sets the sample count **/
+  void set_sample_number (int val) {
+    values_num_samples = val;
+  }
+
   /**
 	* Increments the number of samples processed by the program point by 1
 	*/
