@@ -45,13 +45,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.derive.*;
-import daikon.derive.binary.*;
 import daikon.suppress.*;
-import daikon.inv.unary.sequence.EltOneOf;
-import daikon.VarInfoName.QuantHelper;
-import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import java.util.*;
 import utilMDE.*;

@@ -1,6 +1,5 @@
 package daikon.diff;
 
-import java.util.*;
 import daikon.*;
 import daikon.inv.*;
 

@@ -10,13 +10,8 @@ package daikon.tools.jtb;
 import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
-import jtb.syntaxtree.*;
-import jtb.JavaParser;
-import jtb.ParseException;
-import jtb.visitor.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.io.*;
 
 /**

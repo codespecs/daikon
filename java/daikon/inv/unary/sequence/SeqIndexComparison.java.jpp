@@ -136,18 +136,13 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
-import daikon.derive.binary.*;
-import daikon.derive.unary.*;
 import daikon.suppress.*;
 
 import utilMDE.ArraysMDE;
 import utilMDE.Assert;
 import java.util.Iterator;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Represents an invariant over PRIMITIVE sequences between the

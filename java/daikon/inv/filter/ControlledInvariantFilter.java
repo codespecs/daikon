@@ -2,10 +2,7 @@ package daikon.inv.filter;
 
 import daikon.PrintInvariants;
 import daikon.inv.*;
-import daikon.inv.filter.*;
 import java.util.logging.Level;
-import java.util.Vector;
-import java.util.Iterator;
 
 public class ControlledInvariantFilter extends InvariantFilter {
   public String getDescription() {

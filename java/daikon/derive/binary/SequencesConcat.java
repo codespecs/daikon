@@ -6,12 +6,6 @@ import daikon.derive.*;
 import utilMDE.*;
 
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Represents the concatenation of two base variables.  This derived

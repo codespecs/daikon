@@ -1,7 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
 
 public class UnjustifiedFilter extends InvariantFilter {
   public String getDescription() {

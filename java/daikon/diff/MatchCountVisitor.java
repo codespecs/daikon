@@ -4,8 +4,6 @@ import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
-import daikon.*;
-import daikon.inv.Invariant.OutputFormat;
 import java.util.*;
 
 /**

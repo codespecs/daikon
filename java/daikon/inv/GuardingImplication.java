@@ -2,8 +2,6 @@ package daikon.inv;
 
 import daikon.*;
 
-import java.util.*;
-
 /**
  *  This is a special implication invariant that guards any invariants that
  *  are over variables that are sometimes missing.  For example, if the

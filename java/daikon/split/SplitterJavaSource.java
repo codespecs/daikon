@@ -1,13 +1,8 @@
 package daikon.split;
 
 import daikon.*;
-import daikon.split.misc.*;
 import jtb.syntaxtree.*;
-import jtb.JavaParser;
 import jtb.ParseException;
-import jtb.visitor.*;
-import utilMDE.ArraysMDE;
-import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 

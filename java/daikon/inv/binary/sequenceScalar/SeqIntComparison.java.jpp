@@ -125,9 +125,7 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
 
@@ -135,8 +133,6 @@ import utilMDE.*;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
 
 
 /**

@@ -6,10 +6,8 @@ import daikon.inv.unary.UnaryInvariant;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
 import daikon.suppress.*;
-import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.util.*;
 
 /**
  * Invariants on a single sequence.

@@ -5,7 +5,6 @@ import java.io.IOException;
 import utilMDE.Assert;
 
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * A Check command takes a given proposition and asks the Session to
@@ -85,7 +84,7 @@ public class CmdCheck
       int colon = result.indexOf(": ");
       Assert.assertTrue(colon != -1);
       try {
-        int junk = Integer.parseInt(result.substring(0, colon));
+        Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
         Assert.assertTrue(false, "Expected number to prefix result '"
                           + result + "' while checking: " + proposition);

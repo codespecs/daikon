@@ -1,21 +1,14 @@
 package daikon.inv.filter;
 
-import utilMDE.Assert;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
-import daikon.inv.Invariant.OutputFormat;
 import daikon.PptMap;
-import daikon.PptSlice;
-import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.PrintInvariants;
 import daikon.Daikon;
-import daikon.Global;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the

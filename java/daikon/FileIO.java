@@ -1,6 +1,5 @@
 package daikon;
 
-import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
 
@@ -11,7 +10,6 @@ import java.util.logging.Level;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 
 public final class FileIO {
 
@@ -1364,14 +1362,14 @@ public final class FileIO {
         String ppt_name = line; // already interned
         {
           try {
-	    PptName parsed = new PptName(ppt_name);
+            PptName parsed = new PptName(ppt_name);
             // Enable the code below when Daikon stops using different
             // ppts for different exits
             if (false) {
               // Rename EXITnn to EXIT
               if (parsed.isExitPoint()) {
-		ppt_name = parsed.makeExit().name().intern();
-	      }
+                ppt_name = parsed.makeExit().name().intern();
+              }
             }
           } catch (Error e) {
             throw new Error("Illegal program point name \"" + ppt_name + "\""

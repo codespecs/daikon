@@ -4,7 +4,6 @@ import daikon.*;
 import daikon.inv.DiscardInfo;
 import daikon.suppress.SuppressionLink;
 
-import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 

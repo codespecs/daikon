@@ -1,7 +1,6 @@
 package daikon;
 
 import java.io.*;
-import java.lang.Runtime;
 
 public class MemMonitor implements Runnable {
 

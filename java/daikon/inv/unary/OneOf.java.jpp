@@ -181,12 +181,15 @@ package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.derive.unary.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.twoSequence.SubSequence;
+#ifdef IS_NUMERIC
+  import daikon.derive.unary.*;
+  import daikon.inv.unary.sequence.*;
+  import daikon.inv.binary.sequenceScalar.*;
+#endif
+#ifdef IS_ELT_NUMERIC
+  import daikon.inv.unary.scalar.*;
+  import daikon.inv.binary.twoSequence.SubSequence;
+#endif
 
 import utilMDE.*;
 
@@ -1154,7 +1157,6 @@ public final class ONEOFSCALAR
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
       }
     } else
 
@@ -1301,7 +1303,7 @@ public final class ONEOFSCALAR
       }
     }
 #elif defined(IS_SEQUENCE)
-    StringBuffer resultBuf = new StringBuffer();;
+    StringBuffer resultBuf = new StringBuffer();
     for (int i=0; i<num_elts; i++) {
       String length = null;
       String contents = null;

@@ -1,10 +1,8 @@
 package daikon.inv.ternary;
 
-import daikon.inv.*;
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import utilMDE.Assert;
-import utilMDE.ArraysMDE;
 import daikon.inv.InvariantStatus;
 
 /**

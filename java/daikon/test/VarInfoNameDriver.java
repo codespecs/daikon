@@ -2,7 +2,6 @@ package daikon.test;
 
 import java.util.*;
 import java.io.*;
-import junit.framework.*;
 
 import daikon.*;
 import utilMDE.Assert;

@@ -1,13 +1,8 @@
 package daikon.split;
 
-import java.util.*;
-import java.io.*;
-import junit.framework.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import daikon.*;
 import daikon.tools.jtb.*;
-import jtb.JavaParser;
 import jtb.ParseException;
 
 /**

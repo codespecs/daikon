@@ -3,7 +3,6 @@ package daikon.inv.binary.twoString;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
-import utilMDE.*;
 import java.io.Serializable;
 
 public final class StringComparisonCore

@@ -1,7 +1,5 @@
 package daikon.simplify;
 
-import java.io.IOException;
-
 /**
  * A Raw command provides no additional structure, allowing arbitrary
  * commands (as long as they have no ouput) to be sent to the

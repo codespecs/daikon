@@ -25,7 +25,6 @@ package daikon.derive.unary;
 import daikon.*;
 import utilMDE.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 public final class CLASSNAME extends UnaryDerivationFactory {
 

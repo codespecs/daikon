@@ -2,7 +2,6 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
 import utilMDE.*;
 
 /**

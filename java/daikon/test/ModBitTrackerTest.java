@@ -1,9 +1,7 @@
 package daikon.test;
 
 import junit.framework.*;
-import java.util.Comparator;
 import daikon.*;
-import utilMDE.ArraysMDE;
 import java.util.Random;
 import java.util.BitSet;
 

@@ -88,7 +88,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   public void set_function_id (int function_id) {
-    this.function_id = function_id;
+    CNAME(FUNCTION,PERM_NAME).function_id = function_id;
   }
 
   private static int var_order = PERMUTATION;

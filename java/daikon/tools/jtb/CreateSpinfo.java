@@ -3,12 +3,10 @@ package daikon.tools.jtb;
 import java.io.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import daikon.*;
 import jtb.syntaxtree.*;
 import jtb.JavaParser;
 import jtb.ParseException;
-import jtb.visitor.*;
 import utilMDE.*;
 import java.util.*;
 

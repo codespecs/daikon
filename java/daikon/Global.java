@@ -6,7 +6,6 @@ import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import utilMDE.*;
 
 public final class Global {

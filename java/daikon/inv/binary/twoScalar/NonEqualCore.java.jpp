@@ -29,13 +29,14 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoScalar;
 
-import daikon.*;
+#ifdef TYPEDOUBLE
+import daikon.Global;
+#endif
 import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
 import java.util.*;
 import java.lang.Math;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 

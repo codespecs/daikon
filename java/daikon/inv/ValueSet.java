@@ -5,8 +5,6 @@ import daikon.*;
 import utilMDE.*;
 
 import java.io.Serializable;
-import java.util.*;
-
 
 // This is the successor to ValueTracker1.
 // It is a thin wrapper around LimitedSizeIntSet.

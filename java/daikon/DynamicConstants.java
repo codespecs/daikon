@@ -8,7 +8,6 @@ import daikon.inv.unary.stringsequence.*;
 
 import java.io.*;
 import java.util.*;
-import java.text.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -428,8 +427,8 @@ public class DynamicConstants implements Serializable {
         for (Iterator k = leaders2.iterator(); k.hasNext(); ) {
           Constant con3 = (Constant) k.next();
           if ((con3.vi.varinfo_index < con2.vi.varinfo_index) ||
-          	  ((con3.vi.varinfo_index < con1.vi.varinfo_index)
-          	  && leaders1.contains (con3)))
+              ((con3.vi.varinfo_index < con1.vi.varinfo_index)
+               && leaders1.contains (con3)))
             continue;
           Constant con_arr[] = {con1, con2, con3};
           Arrays.sort (con_arr, ConIndexComparator.getInstance());

@@ -1,12 +1,8 @@
 package daikon.inv.filter;
 
 import daikon.PptTopLevel;
-import daikon.VarInfo;
 import daikon.Daikon;
 import daikon.inv.*;
-import daikon.inv.filter.*;
-
-import java.util.*;
 
 public class SimplifyFilter extends InvariantFilter {
   static String description = "Eliminate invariants based on Simplify (slow)";

@@ -1,14 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
-import daikon.VarInfo;
-import daikon.PptSlice1;
-import daikon.inv.unary.scalar.OneOfFloat;
-import daikon.inv.unary.scalar.OneOfScalar;
-import daikon.inv.unary.sequence.EltOneOf;
-import daikon.inv.unary.sequence.EltOneOfFloat;
-import daikon.PptSlice;
 
 public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }

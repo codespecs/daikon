@@ -1,11 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import daikon.inv.binary.twoScalar.IntEqual;
-import daikon.inv.binary.twoString.StringComparison;
-import daikon.inv.binary.twoScalar.FloatEqual;
-import daikon.inv.binary.twoSequence.*;
-import daikon.suppress.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;

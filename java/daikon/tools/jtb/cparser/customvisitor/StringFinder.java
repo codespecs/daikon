@@ -3,7 +3,6 @@ package daikon.tools.jtb.cparser.customvisitor;
 import daikon.tools.jtb.cparser.syntaxtree.*;
 import daikon.tools.jtb.cparser.visitor.*;
 import java.util.*;
-import java.io.*;
 
 /**
  * Identifies the strings in an C AST

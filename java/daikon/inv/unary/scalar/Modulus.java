@@ -2,7 +2,6 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.derive.unary.SequenceLength;
 import utilMDE.*;
 import java.util.Iterator;
@@ -71,8 +70,8 @@ public class Modulus
     }
 
     if (format == OutputFormat.DBCJAVA) {
-	name = var().name.dbc_name(var());
-	return name + " % " + modulus + " == " + remainder;
+      name = var().name.dbc_name(var());
+      return name + " % " + modulus + " == " + remainder;
     }
 
     if (format == OutputFormat.JAVA

@@ -98,7 +98,7 @@ public final class VarInfoAux
       }
 
       String token;
-      if (tok.ttype == tok.TT_WORD || tok.ttype == '\"') {
+      if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
         token = tok.sval.trim().intern();
       } else {
         token = ((char) tok.ttype + "").intern();

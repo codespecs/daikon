@@ -3,7 +3,6 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
-import daikon.suppress.*;
 import utilMDE.*;
 
 /**

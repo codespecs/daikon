@@ -2,10 +2,8 @@ package daikon.diff;
 
 import daikon.inv.Invariant;
 import daikon.inv.Implication;
-import java.io.*;
 import daikon.*;
 import java.util.*;
-import utilMDE.*;
 
 /** <B>ConsequentExtractorVisitor</B> is a visitor that
  *  takes in RootNode tree used by the other visitors in Diff

@@ -1,6 +1,5 @@
 package daikon.split;
 
-import java.lang.*;
 import java.io.*;
 import java.util.*;
 

@@ -5,7 +5,6 @@ import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.*;
 

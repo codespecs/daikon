@@ -2,11 +2,7 @@
 // MultiDiff.java
 
 package daikon.diff;
-import daikon.inv.*;
-import daikon.*;
 import java.io.*;
-import utilMDE.*;
-import java.util.*;
 
 /** <B>MultiDiff</B> is an executable application that performs the same
  *  functionality as Diff with a few key change.  First, it always outputs

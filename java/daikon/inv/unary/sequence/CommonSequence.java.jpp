@@ -31,13 +31,8 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
-
-import java.util.*;
-
 
 /**
  * Represents PRIMITIVE sequences that contain a common subset.  Prints as

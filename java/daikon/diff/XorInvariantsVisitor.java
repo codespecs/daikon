@@ -3,8 +3,6 @@ package daikon.diff;
 import daikon.inv.Invariant;
 import java.io.*;
 import daikon.*;
-import java.util.*;
-import utilMDE.*;
 
 /** <B>XorInvariantsVisitor</B> is a visitor that performs a
  * standard Diff on two PptMaps, that is, finds the set of

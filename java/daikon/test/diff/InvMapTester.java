@@ -2,7 +2,6 @@ package daikon.test.diff;
 
 import junit.framework.*;
 import daikon.*;
-import daikon.inv.*;
 import daikon.diff.*;
 
 import java.util.*;

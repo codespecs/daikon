@@ -4,25 +4,14 @@ import daikon.*;
 
 import daikon.config.Configuration;
 
-import daikon.inv.Invariant;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.ternary.threeScalar.ThreeScalar;
-
 import java.io.*;
-import java.lang.reflect.*;
 
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import junit.framework.*;
-
-import utilMDE.Assert;
-import utilMDE.ArraysMDE;
-import utilMDE.Intern;
 
 /**
  * This is a tester for the formatting of invariants in different
@@ -180,7 +169,7 @@ public class InvariantFormatTester extends TestCase
   private boolean execute() {
     // Calculate input file locations
     URL inputFileLocation =
-      ClassLoader.getSystemClassLoader().getSystemResource("InvariantFormatTest.commands");
+      InvariantFormatTester.class.getResource("InvariantFormatTest.commands");
 
     if (inputFileLocation == null)
       fail("Input file for invariant format tests missing." +

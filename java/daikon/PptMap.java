@@ -2,7 +2,6 @@ package daikon;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
 import utilMDE.*;
 
 /** Maps from a name (a String) to a PptTopLevel. */

@@ -1,29 +1,22 @@
 package daikon.gui.treeGUI;
 
 import daikon.*;
-import daikon.inv.*;
 import daikon.inv.filter.*;
 import utilMDE.*;
 
 import java.util.*;
-import java.awt.BorderLayout;	// not java.awt.* to avoid java.awt.List
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.*;
 import java.io.IOException;
 import java.io.File;
-import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
-import javax.swing.table.*;
 import javax.swing.tree.*;
 
 //  InvariantsGUI is a GUI for displaying daikon invariants.  InvariantsGUI reads in a

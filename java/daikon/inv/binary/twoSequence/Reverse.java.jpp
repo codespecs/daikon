@@ -28,7 +28,6 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import utilMDE.Assert;
 import java.util.logging.Logger;
 import java.util.logging.Level;

@@ -7,7 +7,6 @@ import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.VarInfoName.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
@@ -1270,8 +1269,8 @@ public final class VarInfo
 
       // For esc_output, dbc output, and java_output, omit noting that varibles are unmodified.
       if (Daikon.output_style == OutputFormat.ESCJAVA
-	  || Daikon.output_style == OutputFormat.ESCJAVA
-	  || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
+          || Daikon.output_style == OutputFormat.ESCJAVA
+          || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }

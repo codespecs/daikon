@@ -106,10 +106,8 @@ package daikon.inv.unary;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.derive.unary.*;
 import java.text.DecimalFormat;
 
-import java.util.*;
 import java.io.Serializable;
 
 // One reason not to combine LowerBound and Upperbound is that they have

@@ -15,18 +15,6 @@ import java.util.*;
 import java.text.*;
 import daikon.*;
 import daikon.diff.*;
-import daikon.inv.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.sequenceString.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.ternary.threeScalar.*;
 import utilMDE.*;
 
 public final class FeatureExtractor {

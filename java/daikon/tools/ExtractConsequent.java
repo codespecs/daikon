@@ -2,9 +2,7 @@ package daikon.tools;
 
 import java.util.*;
 import java.io.*;
-import java.lang.Math;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import gnu.getopt.*;
 import utilMDE.UtilMDE;
 import org.apache.oro.text.regex.*;
@@ -46,7 +44,7 @@ public class ExtractConsequent {
       inv = i;
       fakeFor = ff;
     }
-  };
+  }
 
   /* A HashMap whose keys are PPT names (Strings) and whose values are
       HashMaps whose keys are predicate names (Strings) and whose values are

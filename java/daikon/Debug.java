@@ -1,6 +1,5 @@
 package daikon;
 
-import daikon.*;
 import daikon.inv.*;
 import java.io.*;
 import java.util.*;

@@ -1,19 +1,13 @@
 package daikon.suppress;
 
-import daikon.*;
 import daikon.inv.Invariant;
 
 import java.util.*;
 import java.io.Serializable;
-import java.io.ObjectStreamException;
-import java.io.InvalidObjectException;
-import java.io.IOException;
 
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import utilMDE.Assert;
-import utilMDE.MathMDE;
 
 /**
  * Connects one Invariant to a set of suppressor invariants;

@@ -40,8 +40,6 @@ import daikon.derive.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
 
 /**
  * Intersection between two comparable sequences.

@@ -1,7 +1,6 @@
 package daikon.suppress;
 
 import daikon.*;
-import daikon.inv.*;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
@@ -11,7 +10,6 @@ import daikon.derive.binary.*;
 
 import utilMDE.*;
 
-import java.util.*;
 import java.util.logging.*;
 import java.io.Serializable;
 

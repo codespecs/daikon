@@ -1,10 +1,8 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
 import daikon.*;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Filter for not printing invariants that have a matching invariant

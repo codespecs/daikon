@@ -2,8 +2,6 @@ package daikon.inv.filter;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.filter.*;
-import daikon.inv.Invariant.OutputFormat;
 
 public class JMLCompilerWorkaroundFilter extends InvariantFilter {
   public static final String DESCRIPTION

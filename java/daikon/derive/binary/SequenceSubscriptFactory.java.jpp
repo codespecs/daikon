@@ -184,7 +184,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
         if (enable_subsequence) {
           result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
           result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
-        };
+        }
         if (debug != null) debug.log ("Found derivations: " + result);
         return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
       }
@@ -302,7 +302,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true)); // a[i+1..]
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false)); // a[..i]
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
-          };
+          }
           return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
         }
       }

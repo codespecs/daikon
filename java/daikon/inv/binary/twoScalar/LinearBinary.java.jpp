@@ -31,7 +31,6 @@ import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
 import utilMDE.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**

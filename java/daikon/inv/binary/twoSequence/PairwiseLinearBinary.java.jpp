@@ -30,7 +30,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import java.util.*;
 
@@ -166,7 +165,8 @@ public class CLASSNAME
   public String format_simplify() {
     VarInfoName[] vars = new VarInfoName[] { var1().name, var2().name };
     String[] form = VarInfoName.QuantHelper.format_simplify(vars, true);
-    return form[0] + core.format_simplify(form[1], form[2], core.a, core.b)
+    return form[0] + CORECLASS.format_simplify(form[1], form[2],
+                                               core.a, core.b)
       + form[3];
   }
 

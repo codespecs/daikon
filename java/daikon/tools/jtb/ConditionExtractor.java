@@ -1,11 +1,8 @@
 package daikon.tools.jtb;
 
 import java.util.*;
-import java.io.*;
-import junit.framework.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import daikon.*;
 
 // CreateSpinfo extracts the following expressions from the Java source:
 // For each method:

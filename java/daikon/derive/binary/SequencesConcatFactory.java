@@ -1,13 +1,9 @@
 package daikon.derive.binary;
 
 import daikon.*;
-import daikon.inv.binary.twoScalar.*; // for IntComparison
-import daikon.inv.unary.scalar.*; // for LowerBound
 
-import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.util.*;
 
 
 /**

@@ -8,8 +8,6 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.filter.*;
-import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.inv.binary.twoScalar.*;
@@ -22,11 +20,9 @@ import daikon.suppress.*;
 import utilMDE.Assert;
 import daikon.inv.filter.InvariantFilters;
 
-import java.io.*;
 import java.util.*;
 import java.text.*;
 
-import org.apache.oro.text.regex.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -4925,7 +4921,6 @@ public class PptTopLevel
       SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
       if (sl != null) {
         // System.out.println (invEquals + "suppressed by " + sl);
-        ;
       } else {
         newSlice.addInvariant (invEquals);
         // System.out.println ("created equality " + invEquals.format());

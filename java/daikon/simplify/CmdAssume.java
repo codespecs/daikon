@@ -1,7 +1,5 @@
 package daikon.simplify;
 
-import java.io.IOException;
-
 /**
  * An Assume command pushes some proposition onto the assumption stack
  * of the session.  The proposition is assumed to be true, and is not

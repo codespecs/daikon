@@ -3,7 +3,6 @@ package daikon.inv.filter;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
-import daikon.inv.filter.*;
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   public String getDescription() {

@@ -2,7 +2,6 @@ package daikon;
 
 import daikon.split.*;
 import daikon.inv.DummyInvariant;
-import utilMDE.Assert;
 import java.util.*;
 
 // Information about a disjunctive program point that represents just part

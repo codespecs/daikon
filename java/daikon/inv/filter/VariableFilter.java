@@ -1,7 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
 
 public class VariableFilter extends InvariantFilter {
   // This method is more for the property filters, but we need to implement

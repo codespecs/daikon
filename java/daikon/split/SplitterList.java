@@ -4,7 +4,6 @@ import java.util.*;
 import daikon.*;
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 // SplitterList maps from a program point name to an array of Splitter

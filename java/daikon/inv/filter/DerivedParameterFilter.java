@@ -1,10 +1,8 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
 import daikon.VarInfo;
 import daikon.PrintInvariants;
-import daikon.VarInfoAux;
 
 /**
  * Filter for not printing an Invariant if its VarInfos return

@@ -2,9 +2,6 @@ package daikon.tools;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.derive.Derivation;
-import daikon.derive.ValueAndModified;
-import daikon.config.Configuration;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 
@@ -14,8 +11,6 @@ import gnu.getopt.*;
 import java.io.*;
 import java.util.*;
 import java.util.Date;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  *   MakeInvariantChecker creates a java program that checks if the

@@ -146,9 +146,9 @@ public class LemmaStack {
   }
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
-  public void pushLemmas(Vector lemmas) throws SimplifyError {
-    for (int i = 0; i < lemmas.size(); i++) {
-      Lemma l = (Lemma)lemmas.elementAt(i);
+  public void pushLemmas(Vector newLemmas) throws SimplifyError {
+    for (int i = 0; i < newLemmas.size(); i++) {
+      Lemma l = (Lemma)newLemmas.elementAt(i);
       pushLemma(l);
     }
   }
@@ -262,7 +262,7 @@ public class LemmaStack {
     Vector new_lems = new Vector();
     for (int i = 0; i < lems.size(); i++) {
       if (!blacklist.contains(((Lemma)lems.elementAt(i)).invClass())) {
-        new_lems.add((Lemma)lems.elementAt(i));
+        new_lems.add(lems.elementAt(i));
       }
     }
     return new_lems;

@@ -1,7 +1,6 @@
 package daikon.simplify;
 
 import java.io.*;
-import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import utilMDE.Assert;

@@ -49,7 +49,6 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
-import daikon.inv.unary.scalar.*; // for LowerBound
 
 import utilMDE.*;
 import java.util.*;

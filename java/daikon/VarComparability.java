@@ -3,9 +3,6 @@ package daikon;
 import utilMDE.*;
 
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
-
 
 // Internally, we use the names "array[]", "array[]-element", and
 // "array[]-indexn".  These may be different depending on the programming

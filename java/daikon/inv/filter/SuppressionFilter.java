@@ -1,10 +1,7 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.inv.filter.*;
-import daikon.VarInfo;
 import daikon.PrintInvariants;
-import daikon.VarInfoAux;
 import java.util.logging.Level;
 
 /**

@@ -7,7 +7,6 @@ import utilMDE.*;
 
 import java.lang.reflect.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Class that defines an invariant so that it can be searched for as

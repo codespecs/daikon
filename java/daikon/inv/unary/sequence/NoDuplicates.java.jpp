@@ -35,12 +35,10 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
 import daikon.derive.binary.SEQUENCESPREDICATE;
-import daikon.derive.binary.SequencesConcat;
 import daikon.derive.binary.SEQUENCESJOIN;
 
 import utilMDE.*;

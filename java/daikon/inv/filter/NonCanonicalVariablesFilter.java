@@ -1,8 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.inv.*;
-import daikon.VarInfo;
-import daikon.inv.filter.*;
 
 public class NonCanonicalVariablesFilter extends InvariantFilter {
   public String getDescription() {

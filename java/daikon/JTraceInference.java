@@ -123,7 +123,7 @@ class JTraceInference extends Thread
                 JTrace.println(JTrace.V_DEBUG, "<NoData>");
                 for (;;)
                     try {
-                        currentThread().sleep(100); // sleep and try again
+                        Thread.sleep(100); // sleep and try again
                         break;
                     } catch(InterruptedException e) {}
                 break;

@@ -45,14 +45,9 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.sequence;
 
 import daikon.*;
-import daikon.derive.binary.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
-import daikon.inv.unary.scalar.UpperBound;
 import daikon.inv.ValueSet;
-import daikon.derive.ternary.*;
 import daikon.suppress.*;
 
 import utilMDE.*;

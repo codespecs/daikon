@@ -5,8 +5,6 @@ import java.util.*;
 
 import utilMDE.*;
 
-import daikon.Global;
-
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.

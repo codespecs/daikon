@@ -52,7 +52,6 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.*;
 import utilMDE.Assert;
-import utilMDE.ArraysMDE;
 import daikon.inv.InvariantStatus;
 
 /**

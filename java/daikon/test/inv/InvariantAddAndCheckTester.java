@@ -14,9 +14,6 @@ import daikon.inv.unary.*;
 import java.io.*;
 import java.lang.reflect.*;
 
-import java.net.URL;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -24,8 +21,6 @@ import java.util.Vector;
 import junit.framework.*;
 
 import utilMDE.Assert;
-import utilMDE.ArraysMDE;
-import utilMDE.Intern;
 
 /**
  * This is a tester for the results of adding or checking an sample

@@ -2,12 +2,6 @@ package daikon.inv.filter;
 
 import daikon.VarInfo;
 import daikon.inv.*;
-import daikon.inv.filter.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.PrintInvariants;
-
-import utilMDE.Assert;
-import java.util.logging.Level;
 
 public class ObviousEqualityFilter extends InvariantFilter {
   public String getDescription() {

@@ -6,7 +6,6 @@ import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import utilMDE.*;
-import daikon.inv.*;
 
 public class MergeInvariants {
 

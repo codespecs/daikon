@@ -2,8 +2,6 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.Debug;
-import daikon.inv.unary.sequence.EltOneOf;
-import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.DiscardInfo;
 import daikon.inv.filter.*;
 import daikon.suppress.*;

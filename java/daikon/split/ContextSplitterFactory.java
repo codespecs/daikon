@@ -2,12 +2,9 @@ package daikon.split;
 
 import java.io.*;
 import java.util.*;
-import daikon.*;
-import daikon.split.*;
 import daikon.split.misc.*;
 import utilMDE.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * This factory creates Splitters from map files.  The splitters

@@ -1,7 +1,6 @@
 package daikon.split;
 
 import daikon.*;
-import daikon.split.misc.*;
 
 import utilMDE.*;
 import jtb.ParseException;
@@ -9,7 +8,6 @@ import org.apache.oro.text.regex.*;
 // import java.util.regex.*;
 import java.io.*;
 import java.util.*;
-import java.lang.reflect.*;
 import java.util.logging.Logger;
 
 /**
@@ -284,11 +282,11 @@ public class SplitterFactory {
   }
 
   /**
-   * Used to abbreviate the re_compiler.quotemeta(exp) command.
-   * @return re_compiler.quotemeta(exp).
+   * Used to abbreviate the Perl5Compiler.quotemeta(exp) command.
+   * @return Perl5Compiler.quotemeta(exp).
    */
   private static String qm(String exp) {
-    return re_compiler.quotemeta(exp);
+    return Perl5Compiler.quotemeta(exp);
   }
 
   /**

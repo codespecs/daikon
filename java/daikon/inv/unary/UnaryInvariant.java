@@ -2,7 +2,6 @@ package daikon.inv.unary;
 
 import daikon.inv.*;
 import daikon.PptSlice;
-import daikon.inv.*;
 import utilMDE.Assert;
 import daikon.inv.InvariantStatus;
 

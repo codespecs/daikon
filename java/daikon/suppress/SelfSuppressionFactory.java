@@ -2,16 +2,9 @@ package daikon.suppress;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import daikon.inv.binary.twoScalar.*;
-
-import java.util.*;
-import java.io.Serializable;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import utilMDE.Assert;
-import utilMDE.MathMDE;
 
 /**
  * Generic Factory that suppresses invariants in upper ppts that are

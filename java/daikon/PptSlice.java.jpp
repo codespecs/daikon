@@ -38,18 +38,24 @@ This has a small execution cost -- see Vector values_order.
 package daikon;
 
 import daikon.inv.*;
+#ifdef ARITY1
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
+#endif
+#ifdef ARITY2
 import daikon.inv.binary.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.binary.sequenceScalar.*;
+#endif
+#ifdef ARITY3
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
+#endif
 
 import java.util.*;
 import java.util.logging.Logger;

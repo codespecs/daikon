@@ -4,7 +4,6 @@
 package daikon;
 
 import daikon.split.*;
-import daikon.split.misc.*;
 import daikon.inv.Invariant;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.config.Configuration;

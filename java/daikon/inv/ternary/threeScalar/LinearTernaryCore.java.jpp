@@ -74,7 +74,7 @@ public final class CLASSNAME
     public String toString() {
       return ("(" + x + ", " + y + " ," + z + ")");
     }
-  };
+  }
 
   // Points that define the plane.  The first three are normally the
   // current definition.  The next is a new point for consideration.

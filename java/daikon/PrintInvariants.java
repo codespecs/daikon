@@ -8,12 +8,10 @@ import java.util.logging.Level;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.derive.*;
-import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
-import daikon.inv.ternary.threeScalar.FunctionBinary;
 
 public class PrintInvariants {
 
@@ -169,8 +167,8 @@ public class PrintInvariants {
           test_output = true;
         } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
-	} else if (Daikon.dbc_output_SWITCH.equals(option_name)) {
-	    Daikon.output_style = OutputFormat.DBCJAVA;
+        } else if (Daikon.dbc_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -399,7 +397,7 @@ public class PrintInvariants {
       if (temp.length() < 2)
         throw new IllegalArgumentException("Missing '>'\n"+usage);
       if (temp.indexOf('>',1) == -1)
-        throw new IllegalArgumentException("Missing '>'\n"+usage);;
+        throw new IllegalArgumentException("Missing '>'\n"+usage);
       StringTokenizer parenTokens = new StringTokenizer(temp,"<>");
       if ((temp.indexOf('@')==-1 && parenTokens.countTokens() > 0)
           || (temp.indexOf('@')>-1 && parenTokens.countTokens() > 2))
@@ -719,7 +717,7 @@ public class PrintInvariants {
       }
     }
     if (Daikon.output_num_samples
-	|| (Daikon.output_style == OutputFormat.ESCJAVA)
+        || (Daikon.output_style == OutputFormat.ESCJAVA)
         || (Daikon.output_style == OutputFormat.DBCJAVA)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
@@ -747,8 +745,8 @@ public class PrintInvariants {
     // It would be nice to collect the list of indices that are modified,
     // and create a \forall to specify that the rest aren't.
     if (Daikon.output_style == OutputFormat.ESCJAVA
-	|| Daikon.output_style == OutputFormat.JML
-	) {
+        || Daikon.output_style == OutputFormat.JML
+        ) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
@@ -1077,20 +1075,20 @@ public class PrintInvariants {
      } else if (Daikon.output_style == OutputFormat.DBCJAVA) {
        VarInfo leader = (VarInfo) equal_vars.elementAt(0);
        for (int j = 1; j < equal_vars.size(); j++) {
-	 VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	 if (other.isDerivedSequenceMinMaxSum())
-	   break;
-	 if (leader.rep_type.isArray()) {
+         VarInfo other = (VarInfo) equal_vars.elementAt(j);
+         if (other.isDerivedSequenceMinMaxSum())
+           break;
+         if (leader.rep_type.isArray()) {
            out.println("quant.Quant.pairwiseEqual("
                        + leader.name.dbc_name(leader)
                        + other.name.dbc_name(leader)
                        + ")");
-	 } else {
-	   out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
-	 }
-	 if (obviously_equal.contains(other)) {
-	   out.println("    (obviously)");
-	 }
+         } else {
+           out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
+         }
+         if (obviously_equal.contains(other)) {
+           out.println("    (obviously)");
+         }
        }
      } else {
        throw new IllegalStateException("Unknown output mode");
@@ -1215,11 +1213,11 @@ public class PrintInvariants {
       }
       inv_rep += rawOutput;
       if (PptTopLevel.debug.isLoggable(Level.FINE)) {
-	PptTopLevel.debug.fine (inv.repr());
+        PptTopLevel.debug.fine (inv.repr());
       }
     } else if (Daikon.output_style == OutputFormat.JAVA
-	       || Daikon.output_style == OutputFormat.JML
-	       || Daikon.output_style == OutputFormat.DBCJAVA) {
+               || Daikon.output_style == OutputFormat.JML
+               || Daikon.output_style == OutputFormat.DBCJAVA) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else {
       throw new IllegalStateException("Unknown output mode");

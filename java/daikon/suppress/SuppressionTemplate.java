@@ -3,9 +3,6 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.Invariant;
 
-import java.util.*;
-import java.io.Serializable;
-
 import java.util.logging.Logger;
 import java.util.logging.Level;
 

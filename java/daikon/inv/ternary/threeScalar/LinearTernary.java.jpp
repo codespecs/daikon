@@ -42,8 +42,6 @@ import daikon.*;
 import daikon.inv.*        ;
 import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
-import daikon.derive.unary.*;
-import daikon.derive.binary.*;
 import java.util.*;
 import utilMDE.*;
 

@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.lang.reflect.*;
 
 // If you change this file, also change class daikon.test.VarInfoNameTest.
 
@@ -316,15 +315,15 @@ public abstract class VarInfoName
    * java style output format
    **/
   public String dbc_name(VarInfo var) {
-	if (dbc_name_cached == null) {
-	  try {
+    if (dbc_name_cached == null) {
+      try {
         dbc_name_cached = dbc_name_impl(var).intern();
-	  } catch (RuntimeException e) {
-		System.err.println("repr = " + repr());
-		throw e;
-	  }
-	}
-	return dbc_name_cached;
+      } catch (RuntimeException e) {
+        System.err.println("repr = " + repr());
+        throw e;
+      }
+    }
+    return dbc_name_cached;
   }
 
   private String dbc_name_cached = null; // interned
@@ -662,11 +661,11 @@ public abstract class VarInfoName
       return "return".equals(name) ? "\\result" : name;
     }
     protected String dbc_name_impl(VarInfo v) {
-	if (name.equals("return")) {
-	    return "$result";
-	} else {
-	    return name;
-	}
+      if (name.equals("return")) {
+        return "$result";
+      } else {
+        return name;
+      }
     }
 
     protected String identifier_name_impl() {
@@ -1394,8 +1393,8 @@ public abstract class VarInfoName
     }
     protected String dbc_name_impl(VarInfo v) {
       if (v == null) {
-	  throw new UnsupportedOperationException
-	      ("VarInfo not provided: '" + term.repr_impl() + "'");
+        throw new UnsupportedOperationException
+          ("VarInfo not provided: '" + term.repr_impl() + "'");
       }
       String preType = v.type.base();
       if ((term instanceof Slice)
@@ -1489,7 +1488,7 @@ public abstract class VarInfoName
     }
     protected String dbc_name_impl(VarInfo v) {
       return "(warning: DBC format cannot express a Poststate"
-	     + " [repr=" + repr() + "])";
+        + " [repr=" + repr() + "])";
     }
     protected String identifier_name_impl() {
       return "post_of_" + term.identifier_name() + "___";
@@ -1658,7 +1657,7 @@ public abstract class VarInfoName
       return term.dbc_name(v);
     }
     protected String dbc_name_impl(String index, VarInfo v) {
-	return term.dbc_name(v) + "[" + index + "]";
+      return term.dbc_name(v) + "[" + index + "]";
     }
     protected String identifier_name_impl(String index) {
       if (index.equals(""))

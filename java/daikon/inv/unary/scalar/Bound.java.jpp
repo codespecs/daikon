@@ -173,16 +173,17 @@ package daikon.inv.unary.SCALAR;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.scalar.*;
+#ifdef IS_SCALAR
+  import daikon.inv.unary.sequence.*;
+  import daikon.inv.binary.sequenceScalar.*;
+#endif
+#ifdef IS_ELT
+  import daikon.inv.unary.scalar.*;
+  import daikon.inv.binary.twoSequence.*;
+#endif
 import daikon.inv.unary.*;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import utilMDE.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import java.util.*;
 

@@ -1,9 +1,6 @@
 package daikon.derive.binary;
 
 import daikon.*;
-import daikon.derive.*;
-
-import utilMDE.*;
 
 /**
  * Derivations of the form A[0..i] or A[i..<end>], derived from A and

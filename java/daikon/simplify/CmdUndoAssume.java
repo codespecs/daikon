@@ -1,7 +1,5 @@
 package daikon.simplify;
 
-import java.io.IOException;
-
 /**
  * An UndoAssume command removes an assumption from the assumption
  * stack of the given session.  The command will not block.

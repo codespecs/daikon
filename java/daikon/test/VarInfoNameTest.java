@@ -4,9 +4,6 @@ import java.io.*;
 import java.util.*;
 import junit.framework.*;
 
-import daikon.*;
-
-
 /**
  * This tests various aspects of VarInfoName's and transforming
  * VarInfoName's.  This calls VarInfoNameDriver after parsing all

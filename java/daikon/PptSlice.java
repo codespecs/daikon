@@ -1,8 +1,6 @@
 package daikon;
 
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.suppress.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -644,8 +642,8 @@ public abstract class PptSlice
       if (slice1.arity() != slice2.arity()) {
         return slice2.arity() - slice1.arity();
       }
-      return slice1.varNames(slice1.var_infos)
-        .compareTo(slice2.varNames(slice2.var_infos));
+      return Ppt.varNames(slice1.var_infos)
+        .compareTo(Ppt.varNames(slice2.var_infos));
     }
   }
 

@@ -2,7 +2,6 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.sequenceString.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
@@ -10,7 +9,6 @@ import daikon.derive.unary.*;
 import utilMDE.*;
 
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 
@@ -170,7 +168,7 @@ public final class StringComparison
         return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
     } else if (format == OutputFormat.DBCJAVA) {
-	return format_unimplemented(format);
+      return format_unimplemented(format);
     } else if (format == OutputFormat.SIMPLIFY) {
       comparator = (comparator.equals("==") ? "EQ" : comparator);
       if (comparator.equals("?cmp?"))

@@ -1,10 +1,7 @@
 package daikon.diff;
 
 import java.io.*;
-import java.text.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;

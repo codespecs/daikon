@@ -49,7 +49,6 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
-import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;

@@ -2,14 +2,11 @@
 package daikon.tools.jtb;
 
 import java.util.*;
-import java.io.*;
-import junit.framework.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
 import utilMDE.Assert;
 import utilMDE.ArraysMDE;
-import utilMDE.UtilMDE;
 import daikon.inv.Invariant;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;

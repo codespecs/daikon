@@ -83,16 +83,16 @@ public class Lemma implements Comparable {
     new Lemma("the empty sequence is less than any non-empty sequence",
               "(FORALL (a i j b ip jp) (IMPLIES (AND (<= 0 i) (<= 0 ip) (< j (arrayLength a)) (< jp (arrayLength b)) (< j i) (>= jp ip)) (|lexical-<| a i j b ip jp)))"),
     new Lemma("lexical comparison with matching prefix (one-way)",
-              "(FORALL (a i j k b ip jp kp) (IMPLIES (AND (<= i k) (<= ip kp) (< k j) (< kp jp) (|lexical-==| a i k b ip kp)) (IMPLIES (< (select (select elems a) (+ k 1)) (select (select elems b) (+ kp 1)))	(|lexical-<| a i j b ip jp))))"),
+              "(FORALL (a i j k b ip jp kp) (IMPLIES (AND (<= i k) (<= ip kp) (< k j) (< kp jp) (|lexical-==| a i k b ip kp)) (IMPLIES (< (select (select elems a) (+ k 1)) (select (select elems b) (+ kp 1))) (|lexical-<| a i j b ip jp))))"),
     new Lemma("lexical comparison with matching prefix (one-way, reindexed)",
               "(FORALL (a i j k b ip jp kp) (IMPLIES (AND (<= i k) (<= ip kp) (<= k j) (<= kp jp) (|lexical-==| a i (- k 1) b ip (- kp 1))) (IMPLIES (< (select (select elems a) k) (select (select elems b) kp))(|lexical-<| a i j b ip jp))))"),
     new Lemma("lexical comparison with matching prefix (and matching indexes)",
-              "(FORALL (a i j b jp) (IMPLIES (AND (< i j) (<= j jp) (|lexical-==| a i (- j 1) b i (- j 1)) (< (select (select elems a) j) (select (select elems b) j)))	(|lexical-<| a i j b i jp)))"),
+              "(FORALL (a i j b jp) (IMPLIES (AND (< i j) (<= j jp) (|lexical-==| a i (- j 1) b i (- j 1)) (< (select (select elems a) j) (select (select elems b) j))) (|lexical-<| a i j b i jp)))"),
 // ;; (BG_PUSH
 // ;;  (FORALL (a i j k b ip jp kp)
 // ;;    (IMPLIES (AND (<= i k) (<= ip kp) (EQ k j) (< kp jp)
-// ;; 		 (|lexical-==| a i k b ip kp))
-// ;; 	    (|lexical-<| a i j b ip jp))))
+// ;;            (|lexical-==| a i k b ip kp))
+// ;;       (|lexical-<| a i j b ip jp))))
 //  A simplifed version of the above, specialized to matching indexes
     new Lemma("comparison with a strict prefix (matching indexes)",
               "(FORALL (a i j b jp) (IMPLIES (AND (< jp (arrayLength b)) (< j jp) (|lexical-==| a i j b i j)) (|lexical-<| a i j b i jp)))"),

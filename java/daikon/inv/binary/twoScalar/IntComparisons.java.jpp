@@ -292,16 +292,18 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoString.*;
-import daikon.derive.*;
-import daikon.derive.unary.*;
-import daikon.derive.binary.*;
+#ifdef IS_STRING
+  import daikon.inv.unary.string.*;
+#else
+  import daikon.inv.unary.scalar.*;
+  #ifdef NONEQUAL_OP
+    import daikon.inv.unary.sequence.*;
+  #else
+    import daikon.inv.binary.twoSequence.*;
+  #endif
+  import daikon.derive.unary.*;
+  import daikon.derive.binary.*;
+#endif
 import daikon.suppress.*;
 
 import utilMDE.*;
