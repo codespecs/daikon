@@ -5053,7 +5053,10 @@ java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
 @end example
 @noindent
 creates the splitter info files @file{Foo.spinfo} and
-@file{Bar.spinfo}.  The resulting splitter info file contains each
+@file{Bar.spinfo}.
+Given an @option{-o @arg{filename}} argument, CreateSpinfo puts all the
+splitters in the specified file instead.
+The resulting splitter info file(s) contains each
 boolean expression that appears in the source code.  The conditional
 statements that the programmer used in the source code are likely to
 have important semantic properties.  This simple heuristic of using
