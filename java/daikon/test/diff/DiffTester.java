@@ -11,6 +11,8 @@ import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.ternary.threeScalar.*;
+import daikon.split.*;
+import daikon.split.misc.*;
 
 import java.util.*;
 import java.io.*;
@@ -23,10 +25,15 @@ public class DiffTester extends TestCase {
   private Diff diffAll;
 
   private PptMap empty;
+
   private PptMap ppts1;
   private PptMap ppts2;
   private PptMap ppts3;
   private PptMap ppts4;
+
+  // ppts1 plus conditional program points
+  private PptMap pptsCond;
+
   private PptMap invs1;
   private PptMap invs2;
   private PptMap invs3;
@@ -72,16 +79,29 @@ public class DiffTester extends TestCase {
     ppts3.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ppts3.add(new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
 
-    ppts4 = new PptMap();
-    ppts4.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
-    PptTopLevel ppt1 =
-      new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
-    PptTopLevel ppt2 =
-      new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
-    // ppt1.combined_exit = ppt2; // [INCR]
-    ppts4.add(ppt1);
-    ppts4.add(ppt2);
+    {
+      ppts4 = new PptMap();
+      ppts4.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+      PptTopLevel ppt1 =
+	new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
+      PptTopLevel ppt2 =
+	new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
+      // ppt1.combined_exit = ppt2; // [INCR]
+      ppts4.add(ppt1);
+      ppts4.add(ppt2);
+    }
 
+    {
+      pptsCond = new PptMap();
+      PptTopLevel ppt1 =
+        new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]);
+      Splitter split = new ReturnTrueSplitter();
+      PptConditional pptCond = new PptConditional(ppt1, split, false);
+      ppt1.views_cond.addElement(pptCond);
+      pptsCond.add(ppt1);
+      pptsCond.add(new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+      pptsCond.add(new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    }
 
     // Invoke private method using reflection
     Method mAddViews = PptTopLevel.class.getDeclaredMethod
@@ -277,11 +297,11 @@ public class DiffTester extends TestCase {
        null);
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
        null);
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
        null);
     ref.add(node);
 
@@ -522,10 +542,61 @@ public class DiffTester extends TestCase {
     RootNode diff = diffSome.diffPptMap(map, map);
   }
 
+  // Runs diff on a PptMap containing a PptConditional, with
+  // examineAllPpts set to false.  The PptConditional should be
+  // ignored.
+  public void testConditionalPptsFalse() {
+    RootNode diff = diffSome.diffPptMap(ppts1, pptsCond);
+
+    RootNode ref = new RootNode();
+    PptNode node;
+    node = new PptNode
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    ref.add(node);
+
+    Assert.assertEquals(printTree(ref), printTree(diff));
+  }
+
+  // Runs diff on a PptMap containing a PptConditional, with
+  // examineAllPpts set to true.  The PptConditional should be
+  // ignored.
+  public void testConditionalPptsTrue() {
+    RootNode diff = diffAll.diffPptMap(ppts1, pptsCond);
+
+    RootNode ref = new RootNode();
+    PptNode node;
+    node = new PptNode
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode(null, new PptTopLevel
+      ("Foo.Baa(int):::ENTER;condition=\"return == true\"", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    ref.add(node);
+
+    Assert.assertEquals(printTree(ref), printTree(diff));
+  }
+
   private static String printTree(RootNode root) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(baos);
-    PrintAllVisitor v = new PrintAllVisitor(ps, false);
+    PrintAllVisitor v = new PrintAllVisitor(ps, false, true);
     root.accept(v);
     return baos.toString();
   }

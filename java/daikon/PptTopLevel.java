@@ -104,7 +104,7 @@ public class PptTopLevel
   // so I don't have to get too tense about installing them correctly and
   // iterating over them.  That should be fixed later.  For now, maybe have
   // two methods that add:  one that puts all the values in, one that doesn't.
-  Vector views_cond;
+  public Vector views_cond;
 
   /**
    * Together, dataflow_ppts and dataflow_tranforms describe how
