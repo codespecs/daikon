@@ -379,7 +379,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Java example files
 	cp -pR examples /tmp/daikon
 	# Keep .java files, delete everything else
-	cd /tmp/daikon && find examples \( -name '*.java' -o -name 'Birthday.accessors' -o -name 'Birthday.pm' -o -name 'test_bday.pl' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	cd /tmp/daikon && find examples \( -name '*.java' -o -name 'Birthday.accessors' -o -name 'Birthday.pm' -o -name 'test_bday.pl' -o -name 'standalone.pl' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 	# C example files
 	cp examples/c-examples.tar.gz /tmp/daikon/examples
 	cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
