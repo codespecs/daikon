@@ -5,7 +5,7 @@ package daikon;
 
 import daikon.split.*;
 import daikon.suppress.*;
-import daikon.inv.Invariant;
+import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.config.Configuration;
 
@@ -864,7 +864,7 @@ public final class Daikon {
 
   /** A way to output FileIO progress information easily */
   private final static FileIOProgress fileio_progress = new FileIOProgress();
-  static class FileIOProgress extends Thread {
+  public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
       pctFmt = NumberFormat.getPercentInstance();
@@ -1034,6 +1034,18 @@ public final class Daikon {
 //         }
 //       }
     }
+
+    // Print equality set info
+//     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+//       PptTopLevel ppt = (PptTopLevel) i.next();
+//       Fmt.pf ("ppt: %s", ppt.name);
+//       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
+//         continue;
+//       for (int j = 0; j < ppt.equality_view.invs.size(); j++) {
+//         Equality e = (Equality) ppt.equality_view.invs.get(j);
+//         Fmt.pf ("    equality set = %s", e);
+//       }
+//     }
 
     // Fmt.pf ("printing ternary invariants");
     // PrintInvariants.print_all_ternary_invs (all_ppts);
