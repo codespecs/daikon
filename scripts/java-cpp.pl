@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-07-13 21:42:49 mernst>
+# Time-stamp: <2002-07-14 17:35:30 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -57,6 +57,7 @@ my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
 my $tmpfile_in = "$system_temp_dir/java-cpp-$$-in";
 my $tmpfile_out = "$system_temp_dir/java-cpp-$$-out";
+my $tmpfile_err = "$system_temp_dir/java-cpp-$$-err";
 
 my $file_handle_nonce = 'fh00';
 
@@ -75,13 +76,19 @@ my $file_handle_nonce = 'fh00';
 
   my $argv = join(' ', @ARGV);
   # intentionally does not capture standard error; it goes straight through
-  system("cpp $argv $tmpfile_in > $tmpfile_out") == 0
-    or die "java-cpp.pl: cpp $argv $filename failed";
+  my $system_result = system("cpp $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err");
+  if ($system_result != 0) {
+    rewrite_errors($tmpfile_err, $filename);
+    # unlink($tmpfile_in);
+    unlink($tmpfile_out);
+    # unlink($tmpfile_err);
+    die "java-cpp.pl: cpp $argv $filename failed";
+  }
 
   unescape_comments($tmpfile_out);
-
   unlink($tmpfile_in);
   unlink($tmpfile_out);
+  unlink($tmpfile_err);
 }
 
 exit();
@@ -215,4 +222,18 @@ sub unescape_comments ( $ ) {
   }
 
   close(CPPFILE);
+}
+
+
+sub rewrite_errors ( $$ ) {
+  my ($tmp_filename, $orig_filename) = @_;
+
+  open(ERRFILE, $tmp_filename) || die "Cannot open $tmp_filename: $!\n";
+
+  while (<ERRFILE>) {
+    s/$tmpfile_in/$orig_filename/o;
+    print STDERR;
+  }
+
+  close(ERRFILE);
 }
