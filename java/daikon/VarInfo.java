@@ -128,6 +128,13 @@ public final class VarInfo
   public boolean is_dynamic_constant;  // required if dynamic_constant==null
   public Object dynamic_constant;
   */
+
+  /**
+   * Which equality group this belongs to.  Replaces equal_to.  Never null
+   * after this is put inside equalitySet.
+   **/
+  public Equality equalitySet;
+
   VarInfo sequenceSize;         // if null, not yet computed (or this VarInfo
                                 //   is not a sequence)
 
@@ -236,6 +243,7 @@ public final class VarInfo
          vi.is_static_constant, vi.static_constant_value, vi.aux);
     canBeMissing = vi.canBeMissing;
     postState = vi.postState;
+    equalitySet = vi.equalitySet;
   }
 
 
@@ -252,6 +260,7 @@ public final class VarInfo
                                  aux_nonparam);
     result.canBeMissing = vi.canBeMissing;
     result.postState = vi;
+    result.equalitySet = vi.equalitySet;
     return result;
   }
 
@@ -528,8 +537,8 @@ public final class VarInfo
       + ",derivees=" + derivees()
       + ",ppt=" + ppt.name
       + ",canBeMissing=" + canBeMissing
+      + (",equal_to=" + (equalitySet==null ? "null" : equalitySet.toString()))
       /* [INCR]
-      + ",equal_to=" + (equal_to==null ? "null" : equal_to.name.name())
       + ",isCanonical()=" + isCanonical()
       */ // [INCR]
       + ">";
@@ -723,10 +732,12 @@ public final class VarInfo
     //  return isDerivedParamAndUninterestingCached.booleanValue();
     // }
     if (isDerivedParamAndUninterestingCached != null) {
+      return isDerivedParamAndUninterestingCached.booleanValue();
     } else {
-      isDerivedParamAndUninterestingCached = _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
+      isDerivedParamAndUninterestingCached = 
+        _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
+      return isDerivedParamAndUninterestingCached.booleanValue();
     }
-    return isDerivedParamAndUninterestingCached.booleanValue();
   }
 
 
@@ -803,37 +814,34 @@ public final class VarInfo
         PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
-      PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
-      if (slice == null) {
-        Global.debugSuppressParam.debug ("No slice for equality in base, so uninteresting");
-        PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
-        return true; // There can't be an equal invariant in a null slice
-      }
-      if (Global.debugSuppressParam.isDebugEnabled()) {
-        Global.debugSuppressParam.debug ("Parent and orig slice for finding equality: " + slice.name);
-      }
-
-//       Invariant equalInv = Invariant.find (daikon.inv.binary.twoScalar.IntEqual.class, slice);
-//       if (equalInv == null) {
-//         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-//      PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
-//         return true;
-//       } else {
-//         Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
-//         return false;
-//       }
-
-      boolean seenEqual = false;
-      for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
-        Invariant sliceInv = (Invariant) iInvs.next();
-        if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
-      }
-      if (!seenEqual) {
-        Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-        PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
+      if (base.isEqualTo(origBase)) {
+        Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
+        return false;
+      } else {
+         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
+         PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
         return true;
       }
-      Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
+      //       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
+      //       if (slice == null) {
+      //         Global.debugSuppressParam.debug ("No slice for equality in base, so uninteresting");
+      //         PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
+      //         return true; // There can't be an equal invariant in a null slice
+      //       }
+      //       if (Global.debugSuppressParam.isDebugEnabled()) {
+      //         Global.debugSuppressParam.debug ("Parent and orig slice for finding equality: " + slice.name);
+      //       }
+      //       boolean seenEqual = false;
+      //       for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
+      //         Invariant sliceInv = (Invariant) iInvs.next();
+      //         if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
+      //       }
+      //       if (!seenEqual) {
+      //         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
+      //         PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
+      //         return true;
+      //       }
+
 
     } else {
       Global.debugSuppressParam.debug ("  Not a derived param.");
@@ -861,11 +869,21 @@ public final class VarInfo
     else
       return vt.getModified(value_index);
   }
-  public boolean isUnmodified(ValueTuple vt) { return ValueTuple.modIsUnmodified(getModified(vt)); }
-  public boolean isModified(ValueTuple vt) { return ValueTuple.modIsModified(getModified(vt)); }
-  public boolean isMissingNonsensical(ValueTuple vt) { return ValueTuple.modIsMissingNonsensical(getModified(vt)); }
-  public boolean isMissingFlow(ValueTuple vt) { return ValueTuple.modIsMissingFlow(getModified(vt)); }
-
+  public boolean isUnmodified(ValueTuple vt) {
+    return ValueTuple.modIsUnmodified(getModified(vt));
+  }
+  public boolean isModified(ValueTuple vt) {
+    return ValueTuple.modIsModified(getModified(vt));
+  }
+  public boolean isMissingNonsensical(ValueTuple vt) {
+    return ValueTuple.modIsMissingNonsensical(getModified(vt));
+  }
+  public boolean isMissingFlow(ValueTuple vt) {
+    return ValueTuple.modIsMissingFlow(getModified(vt));
+  }
+  public boolean isMissing(ValueTuple vt) {
+    return isMissingNonsensical(vt) || isMissingFlow(vt);
+  }
   /**
    * Get the value of this variable from a particular sample (ValueTuple)
    * @param vt the ValueTuple from which to extract the value
@@ -925,21 +943,21 @@ public final class VarInfo
 //     return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
 //   }
 
-  /* [INCR]
+  /**
+   * Whether this VarInfo is the leader of its equality set
+   **/
   public boolean isCanonical() {
-    Assert.assertTrue(equal_to != null);
-    return (equal_to == this);
+    if (!Daikon.use_equality_set) return true;
+    return (equalitySet.leader() == this);
   }
-  */
 
-  // Canonical representative that's equal to this variable.
-  /* [INCR]
+  /**
+   * Canonical representative that's equal to this variable.
+   **/
   public VarInfo canonicalRep() {
-    Assert.assertTrue(equal_to != null);
-    return equal_to;
+    return equalitySet.leader();
   }
-  */
-
+  
   /**
    * Returns all other variables that are equal to this variable.
    * Returns a fresh Vector.
@@ -1602,6 +1620,15 @@ public final class VarInfo
     return null;
   }
 
+  /**
+   * Check if two VarInfos are truly (non guarded) equal to each other
+   * right now.
+   **/
+  public boolean isEqualTo (VarInfo other) {
+    Assert.assertTrue (equalitySet != null);
+    return this.equalitySet == other.equalitySet;
+  }
+
 
   /** Debug tracer **/
   private static final Category debug = Category.getInstance("daikon.VarInfo");
@@ -1961,4 +1988,30 @@ public final class VarInfo
     return result;
   }
 
+  /**
+   * Compare names by index.
+   **/
+  public static final class IndexComparator 
+    implements Comparator, Serializable {
+    private IndexComparator() {
+    }
+
+    public int compare(Object o1, Object o2) {
+      VarInfo vi1 = (VarInfo) o1;
+      VarInfo vi2 = (VarInfo) o2;
+      if (vi1.varinfo_index < vi2.varinfo_index) {
+        return -1;
+      } else if (vi1.varinfo_index == vi2.varinfo_index) {
+        return 0;
+      } else {
+        return 1;
+      }
+    }
+
+    public static IndexComparator getInstance() {
+      return theInstance;
+    }
+
+    public static final IndexComparator theInstance = new IndexComparator();
+  }
 }
