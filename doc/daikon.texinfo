@@ -1973,6 +1973,13 @@ Java like so:
 	java -mx128m ...
 @end example
 
+Another possible problem is the creation of too many derived variables.
+If you supply the @option{--output_num_samples} argument to Daikon
+(@pxref{Command line options for Daikon}), then it will list all
+variables at the program point.  If some of these are of no interest,
+you may wish to suppress their creation.  (This manual does not
+presently tell you how to do that.)
+
 Any output generated before the out-of-memory error is perfectly valid.
 
 
@@ -1995,47 +2002,47 @@ files.  There are several solutions to this problem.
 
 @enumerate
 @item 
-    You can terminate the instrumented program when it has created a
-    sufficiently large @file{.dtrace} file.  If you interrupt the program
-    while it is in the middle of writing a record to the @file{.dtrace}
-    file, the last record may be only partially written.  Use the
-    @command{invariants/scripts/trace-untruncate} script to remove the last,
-    possibly partial, record from the file:
+You can terminate the instrumented program when it has created a
+sufficiently large @file{.dtrace} file.  If you interrupt the program
+while it is in the middle of writing a record to the @file{.dtrace}
+file, the last record may be only partially written.  Use the
+@command{invariants/scripts/trace-untruncate} script to remove the last,
+possibly partial, record from the file:
 @example
-      trace-untruncate @var{myfile}.dtrace
+  trace-untruncate @var{myfile}.dtrace
 @end example
 @noindent
-    modifies @file{myfile.dtrace} in place to remove the last record.
+modifies @file{myfile.dtrace} in place to remove the last record.
 @item 
-    If you wish to instrument fewer methods, you can use the 
+If you wish to instrument fewer methods, you can use the 
 @example
-      -daikon_omit=@var{STRING}
+  -daikon_omit=@var{STRING}
 @end example
 @noindent
-    argument to dfej.  (For a list of dfej's options, see @ref{dfej
-    options}.)  Dfej will not produce data trace output for classes or
-    procedures that match the STRING.  Running the instrumented program
-    will result in a smaller @file{.dtrace} file that contains fewer
-    records.
+argument to dfej.  (For a list of dfej's options, see @ref{dfej
+options}.)  Dfej will not produce data trace output for classes or
+procedures that match the STRING.  Running the instrumented program
+will result in a smaller @file{.dtrace} file that contains fewer
+records.
 @item 
-    You can pare down an existing @file{.dtrace} file using the
-    @command{invariants/scripts/trace-purge-fns.pl} and
-    @command{trace-purge-vars.pl} scripts. These remove (or retain) certain
-    program points, or certain variables, from @file{.dtrace} files; see
-    their documentation (at the top of the files) for details.  Removing
-    program points obviously prevents Daikon from considering them;
-    removing variables can eliminate certain large uses of memory or keep
-    Daikon from doing uninteresting comparisons.
+You can pare down an existing @file{.dtrace} file using the
+@command{invariants/scripts/trace-purge-fns.pl} and
+@command{trace-purge-vars.pl} scripts. These remove (or retain) certain
+program points, or certain variables, from @file{.dtrace} files; see
+their documentation (at the top of the files) for details.  Removing
+program points obviously prevents Daikon from considering them;
+removing variables can eliminate certain large uses of memory or keep
+Daikon from doing uninteresting comparisons.
 @item 
-    To make Daikon ignore some program points, use its
+To make Daikon ignore some program points, use its
 @example
-      -r @var{PPT_REGEXP}
+  -r @var{PPT_REGEXP}
 @end example
 @noindent
-    argument.  (Run "@command{java daikon.Daikon}" to see a list of
-    arguments.)  With the @option{-r} flag, only program points matching
-    the regular expression are processed.  This can take the place of the
-    @command{trace-purge-fns.pl} script.
+argument.  (Run "@command{java daikon.Daikon}" to see a list of
+arguments.)  With the @option{-r} flag, only program points matching
+the regular expression are processed.  This can take the place of the
+@command{trace-purge-fns.pl} script.
 @end enumerate
 
 
