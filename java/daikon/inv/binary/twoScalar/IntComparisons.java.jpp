@@ -496,6 +496,12 @@ invariants.
     return new INTEQUAL(ppt);
   }
 
+#ifdef (EQUAL_OP)
+  public boolean is_equality_inv() {
+    return (true);
+  }
+#endif
+
   protected Invariant resurrect_done_swapped() {
     #if defined (EQUAL_OP) || defined (NONEQUAL_OP)
       // we don't care if things swap; we have symmetry

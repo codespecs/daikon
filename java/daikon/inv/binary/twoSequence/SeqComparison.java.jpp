@@ -270,6 +270,7 @@ public class SEQSEQINTEQUAL
     super(seq_swap.ppt);
     orderMatters = seq_swap.orderMatters;
   }
+
   #endif
 
   //   public static SEQSEQINTEQUAL instantiate(PptSlice ppt) {
@@ -312,6 +313,12 @@ public class SEQSEQINTEQUAL
     // System.out.println("SEQSEQINTEQUAL.instantiate => " + result.repr());
     return result;
   }
+
+#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+  public boolean is_equality_inv() {
+    return (true);
+  }
+#endif
 
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
