@@ -58,7 +58,9 @@ public final class TwoSequenceFactory {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctions.length;
       } else {
-        Assert.assert(! super1.name.equals(super2.name));
+        Assert.assert(Intern.isInterned(super1.name));
+        Assert.assert(Intern.isInterned(super2.name));
+        Assert.assert(super1.name != super2.name);
 
         // NonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
