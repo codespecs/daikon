@@ -44,8 +44,8 @@ public class Debug {
       // "PptSliceEquality",
       // "PptTopLevel",
       // "PptSlice2",
-      // "LowerBound",
-      // "UpperBound",
+      "LowerBound",
+      "UpperBound",
       // "LinearBinary",
       // "SeqIndexComparison",
       // "SeqIndexNonEqual",
@@ -75,10 +75,11 @@ public class Debug {
       // "DataStructures.DisjSets.DisjSets(int):::EXIT"
       // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
       // "misc.StaticInteresting:::OBJECT"
-      "DataStructures.StackAr.top():::EXIT75"
-      // "DataStructures.StackAr.pop():::EXIT"
-      // "DataStructures.DisjSets.find(int):::EXIT70"
+      // "DataStructures.StackAr.top():::EXIT75",
+      // "DataStructures.StackAr.pop():::EXIT",
+      // "DataStructures.DisjSets.find(int):::EXIT70",
       // "misc.Fib",
+      "std.instr___fxstat(int;int;stat *;)int:::ENTER",
     };
 
   /**
@@ -93,18 +94,12 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.ends[return..]" , "this.begins[return..]"}
-      // { "orig(this.s[post(x)])", "this.s[return]" },
-      // { "this.s[return]", "orig(this.s[post(x)])" }
-      // { "orig(pegB)", "return", "orig(pegA)" },
-      // { "orig(pegB)", "orig(pegA)", "return" },
-      // { "return", "orig(pegB)", "orig(pegA)" },
-      // { "return", "orig(pegA)", "orig(pegB)" },
-      // { "orig(pegA)", "return", "orig(pegB)" },
-      // { "orig(pegA)", "orig(pegB)", "return" }
-      // { "this.ends[0..return-1]" }
-      { "return" }
-    };
+      // { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
+      // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
+      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
+      // {"size(this.theArray[])", "orig(size(this.theArray[]))"},
+      { "argSTAT_BUF.st_mtime" }
+     };
 
   // cached standard parts of the debug print so that multiple calls from
   // the same context don't have to repeat these each time
