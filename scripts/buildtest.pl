@@ -47,7 +47,7 @@ my $RUN_JAVA = '\'java -classic -Xmx256m\'';
 # The success of each step in the build/test process
 my %success = ();
 
-mkdir($DAIKONPARENT) or die "can't make directory $DAIKONPARENT: $!\n";
+mkdir($DAIKONPARENT, 0777) or die "can't make directory $DAIKONPARENT: $!\n";
 chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
 
 my $LOG = "buildtest.out";
@@ -124,10 +124,10 @@ if (@failed_steps != 0) {
 
 # Move the .diff files to another directory, then remove the source
 # checkouts
-mkdir("diffs") or die "can't make directory diffs: $!\n";
+mkdir("diffs", 0777) or die "can't make directory diffs: $!\n";
 
 foreach my $subdir ("daikon", "diff", "dfec") {
-  mkdir("diffs/$subdir") or die "can't make directory diffs/$subdir: $!\n";
+  mkdir("diffs/$subdir", 0777) or die "can't make directory diffs/$subdir: $!\n";
   my $diffs = `find invariants/tests/$subdir-tests -name "*.diff"`;
   foreach my $file (split '\n',$diffs) {
     `mv $file diffs/$subdir`;
