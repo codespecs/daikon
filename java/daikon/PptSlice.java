@@ -2,20 +2,34 @@ package daikon;
 
 import daikon.inv.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 import utilMDE.*;
 
-// This is a view on the full data (and maybe it does cacheing for a
-// while).  This will be efficient for iteration (albeit with repetition),
-// but inefficient for lookup (because we'd have to iterate over all
-// entries -- or at least all keys -- to find any such instance, but we
-// need to find them all to give a good result).
+/**
+ * This is a view on the full data (and maybe it does cacheing for a
+ * while).  This will be efficient for iteration (albeit with
+ * repetition), but inefficient for lookup (because we'd have to
+ * iterate over all entries -- or at least all keys -- to find any
+ * such instance, but we need to find them all to give a good result).
+ **/
 
 public abstract class PptSlice extends Ppt {
   public static final String lineSep = Global.lineSep;
 
+  /**
+   * Whether this particular program point is debugged
+   **/
+
   public boolean debugged;
+
+  /**
+   * Logging Category.
+   **/
+
+  public static final Category debug = Category.getInstance(PptSlice.class.getName());
 
   public Ppt parent;
   public int arity;
@@ -75,8 +89,8 @@ public abstract class PptSlice extends Ppt {
     // parent.addView(this);
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
-    debugged = (Global.debugPptSliceSpecific
-                && Global.isDebuggedPptSlice(this));
+    debugged = (Global.isDebuggedPptSlice(this)); 
+    
   }
 
   public boolean usesVar(VarInfo vi) {
@@ -129,18 +143,18 @@ public abstract class PptSlice extends Ppt {
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
     Assert.assert(! no_invariants);
-    if (this.debugged || Global.debugPptSlice)
-      System.out.println("PptSlice.removeInvariant(" + inv.name() + ")" +
-                         ((invs_to_remove_deferred != null)
-                          ? " will be deferred"
-                          : ""));
+    if (this.debugged || debug.isDebugEnabled())
+      debug.debug("PptSlice.removeInvariant(" + inv.name() + ")" +
+		  ((invs_to_remove_deferred != null)
+		   ? " will be deferred"
+		   : ""));
     Assert.assert(invs.contains(inv));
     if (invs_to_remove_deferred != null) {
       Assert.assert(! invs_to_remove_deferred.contains(inv));
       invs_to_remove_deferred.add(inv);
     } else {
-      if (Global.debugInfer)
-        System.out.println("PptSlice.removeInvariant(" + inv.name() + ")");
+      if (Global.debugInfer.isDebugEnabled())
+        Global.debugInfer.debug("PptSlice.removeInvariant(" + inv.name() + ")");
       boolean removed = invs.remove(inv);
       Assert.assert(removed);
       // This increment could also have been in Invariant.destroy().
