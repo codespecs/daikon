@@ -777,7 +777,7 @@ The invariants are printed to standard output, and a binary
 representation of the invariants is written to
 @file{StackAr.inv}.
 
-@item Examine the invariants.  There are four ways to do this.
+@item Examine the invariants.  There are five ways to do this.
 @itemize @bullet
 @item Examine the output from running Daikon.  (You may find it
 convenient to capture the output in a file; add @command{> StackAr.txt}
@@ -791,6 +791,16 @@ java daikon.PrintInvariants StackAr.inv
 
 For more options to the PrintInvariants program, @xref{Printing
 invariants}.
+
+@item Use the MergeEsc program to insert the invariants as comments
+into the Java source program.
+
+@example
+java daikon.tools.jtb.MergeESC StackAr.inv ../DataStructures/StackAr.java
+@end example
+
+Now examine file @file{../DataStructures/StackAr.java-escannotated}.  
+For more information about the MergeESC program, @xref{MergeESC}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
 contains a tree which hierarchically organizes program points according
@@ -822,7 +832,7 @@ The steps above can be divided into three stages:
 @item Instrumentation (steps 1-4)
 @example
 cd examples/StackAr
-javac DataStructures/*.java
+javac -g DataStructures/*.java
 dfej DataStructures/StackAr.java
 javac daikon-instrumented/DataStructures/StackAr.java
 @end example
@@ -938,7 +948,7 @@ Run this sample using the following steps:
 @item Instrumentation (steps 1-4)
 @example
 cd examples/QueueAr
-javac DataStructures/*.java
+javac -g DataStructures/*.java
 dfej DataStructures/QueueAr.java
 javac daikon-instrumented/DataStructures/QueueAr.java
 @end example
