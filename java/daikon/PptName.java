@@ -28,7 +28,7 @@ public class PptName
   private String method;     // interned method signature, including types; derived from fullname
   private String point;      // interned post-separator (separator is ":::"); derived from fullname
 
-  // Represenatation invariant:
+  // Representation invariant:
   //
   // Fullname is always present.  If fullname does not contain :::,
   // then all of the other fields are null.  Otherwise, fn_name is the
