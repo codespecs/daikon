@@ -51,9 +51,13 @@ pdf-direct: daikon.texinfo daikon.dvi
 daikon.pdf: daikon.dvi
 	dvipdfm $<
 
-clean:
+clean: texi-clean
 	rm -f daikon.log daikon.info daikon.info-[0-9] daikon.tmp daikon.dvi daikon.ps daikon.pdf daikon.html .fix-menu
+	rm -f *.bak
 	rm -rf daikon_manual_html
+
+texi-clean:
+	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg daikon.toc daikon.tp daikon.vr
 
 dist:
 	cd .. && $(MAKE) dist
