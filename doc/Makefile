@@ -42,3 +42,6 @@ pdf-direct: daikon.texinfo daikon.dvi
 
 pdf-via-ps: daikon.ps
 	ps2pdf $<
+
+dist:
+	cd .. && $(MAKE) dist
