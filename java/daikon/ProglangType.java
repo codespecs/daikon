@@ -48,6 +48,10 @@ public final class ProglangType
   // HashMap<String base, Vector<ProglangType>>
   private static HashMap all_known_types = new HashMap();
 
+  // The set of (interned) names of classes that implement
+  // java.util.List
+  public static HashSet list_implementors = new HashSet();
+
   // Use == to compare, because ProglangType objects are interned.
   public final static ProglangType INT = ProglangType.intern("int", 0);
   public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
@@ -61,7 +65,6 @@ public final class ProglangType
   public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
   public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
 
-  public final static ProglangType VECTOR = ProglangType.intern("java.util.Vector", 0);
   public final static ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
 
   public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
@@ -80,15 +83,13 @@ public final class ProglangType
   /**
    * The pseudo-dimensions is always at least as large as the
    * dimensions.  Dimensions is always the array depth of the type,
-   * while pseudo also incorporates knowledge of Vectors.  So VECTOR
+   * while pseudo also incorporates knowledge of Lists.  So List
    * has dims 0 but pseudo-dims as 1.
    **/
-  public int pseudoDimensions() {
-    int result = dimensions();
-    if (this == VECTOR) result++;
-    return result;
-  }
-  public boolean isPseudoArray() { return pseudoDimensions() > 0; }
+  public int pseudoDimensions() { return pseudoDimensions; }
+  private int pseudoDimensions;
+
+  public boolean isPseudoArray() { return pseudoDimensions > 0; }
 
   /**
    * No public constructor:  use parse() instead to get a canonical
@@ -98,7 +99,22 @@ public final class ProglangType
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
     base = basetype;
-    dimensions = dims;
+    pseudoDimensions = dimensions = dims;
+
+    /*
+     * We support the rendering of objects as lists for a range of
+     * classes derived from specific list abstraction classes.  This
+     * requires us to know whether a class is in fact some kind of
+     * list, so that we can treat is as a higher-dimensioned object.
+     *
+     * This is dual to the Implements(List) predicate in DFEJ.
+     *
+     * The list is supplied in the top of each .decls file, and also
+     * as --list_type <type> switches to Daikon.
+     */
+
+    if(list_implementors.contains(basetype))
+      pseudoDimensions++;
   }
 
   /**
@@ -232,7 +248,7 @@ public final class ProglangType
    * They may themselves be arrays if this is multidimensional.
    **/
   public ProglangType elementType() {
-    if (this == VECTOR)
+    if(pseudoDimensions > dimensions)
       return OBJECT;
     if (dimensions == 0)
       throw new Error("Called elementType on non-array type " + format());
@@ -544,9 +560,3 @@ public final class ProglangType
   }
 
 }
-
-/*
- * Local Variables:
- * c-basic-offset:	2
- * End:
- */

@@ -239,6 +239,8 @@ public final class EltOneOfString
 	}
       }
     }
+    // Inner classes
+    result = result.replace('$', '.');
 
     result = form[0] + "(" + result + ")" + form[2];
 

@@ -116,6 +116,7 @@ public final class Daikon {
   public static final String help_SWITCH = "help";
   public static final String ppt_regexp_SWITCH = "ppt";
   public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
+  public static final String list_type_SWITCH = "list_type";
   public static final String var_omit_regexp_SWITCH = "var_omit";
   public static final String no_text_output_SWITCH = "no_text_output";
   public static final String show_progress_SWITCH = "show_progress";
@@ -219,6 +220,7 @@ public final class Daikon {
       new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -269,6 +271,14 @@ public final class Daikon {
             // System.out.println("Regexp = " + regexp_string);
             ppt_omit_regexp = Global.regexp_compiler.compile(regexp_string);
           } catch (Exception e) {
+            throw new Error(e.toString());
+          }
+          break;
+        } else if (list_type_SWITCH.equals(option_name)) {
+          try {
+            String list_type_string = g.getOptarg();
+	    ProglangType.list_implementors.add(list_type_string);
+	  } catch (Exception e) {
             throw new Error(e.toString());
           }
           break;

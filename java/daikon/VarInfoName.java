@@ -385,6 +385,11 @@ public abstract class VarInfoName
    * A simple identifier like "a", "this.foo", etc.
    **/
   public static class Simple extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final String name;
     public Simple(String name) {
       Assert.assert(name != null);
@@ -496,6 +501,11 @@ public abstract class VarInfoName
    * or "sequence.length".
    **/
   public static class SizeOf extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final Elements sequence;
     public SizeOf(Elements sequence) {
       Assert.assert(sequence != null);
@@ -568,6 +578,11 @@ public abstract class VarInfoName
    * A function over a term, like "sum(argument)"
    **/
   public static class FunctionOf extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final String function;
     public final VarInfoName argument;
     public FunctionOf(String function, VarInfoName argument) {
@@ -613,6 +628,11 @@ public abstract class VarInfoName
    * A function of two variables
    **/
   public static class FunctionOfN extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final String function;
     public final List args;
 
@@ -723,6 +743,11 @@ public abstract class VarInfoName
    * only change is that it does special formatting for IOA.
    **/
   public static class Intersection extends FunctionOfN {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public Intersection(VarInfoName seq1, VarInfoName seq2) {
       super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
@@ -738,6 +763,11 @@ public abstract class VarInfoName
    * only change is that it does special formatting for IOA.
    **/
   public static class Union extends FunctionOfN {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public Union(VarInfoName seq1, VarInfoName seq2) {
       super ("intersection", Arrays.asList(new VarInfoName[] {seq1, seq2}));
     }
@@ -762,6 +792,11 @@ public abstract class VarInfoName
    * A 'getter' operation for some field, like a[i].foo
    **/
   public static class Field extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public final String field;
     public Field(VarInfoName term, String field) {
@@ -826,6 +861,11 @@ public abstract class VarInfoName
    * The type of the term, like "term.class"
    **/
   public static class TypeOf extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public TypeOf(VarInfoName term) {
       Assert.assert(term != null);
@@ -880,6 +920,11 @@ public abstract class VarInfoName
    * The prestate value of a term, like "orig(term)"
    **/
   public static class Prestate extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public Prestate(VarInfoName term) {
       Assert.assert(term != null);
@@ -942,6 +987,11 @@ public abstract class VarInfoName
    * within prestate, so like "orig(this.myArray[new(index)]".
    **/
   public static class Poststate extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public Poststate(VarInfoName term) {
       Assert.assert(term != null);
@@ -988,6 +1038,11 @@ public abstract class VarInfoName
    * An integer amount more or less than some other value
    **/
   public static class Add extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public final int amount;
     public Add(VarInfoName term, int amount) {
@@ -1060,6 +1115,11 @@ public abstract class VarInfoName
    * The elements of a container, like "term[]"
    **/
   public static class Elements extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final VarInfoName term;
     public Elements(VarInfoName term) {
       Assert.assert(term != null);
@@ -1174,6 +1234,11 @@ public abstract class VarInfoName
    * An element from a sequence, like "sequence[index]"
    **/
   public static class Subscript extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final Elements sequence;
     public final VarInfoName index;
     public Subscript(Elements sequence, VarInfoName index) {
@@ -1244,6 +1309,11 @@ public abstract class VarInfoName
    * A slice of elements from a sequence, like "sequence[i..j]"
    **/
   public static class Slice extends VarInfoName {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20020130L;
+
     public final Elements sequence;
     public final VarInfoName i, j;
     public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
@@ -1776,6 +1846,11 @@ public abstract class VarInfoName
     public static class FreeVar
       extends Simple
     {
+      // We are Serializable, so we specify a version to allow changes to
+      // method signatures without breaking serialization.  If you add or
+      // remove fields, you should change this number to the current date.
+      static final long serialVersionUID = 20020130L;
+
       public FreeVar(String name) {
 	super(name);
       }

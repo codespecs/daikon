@@ -234,6 +234,8 @@ public final class OneOfString
 	}
       }
     }
+    // Inner classes
+    result = result.replace('$', '.');
 
     return result;
   }

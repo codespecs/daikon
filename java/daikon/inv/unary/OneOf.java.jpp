@@ -477,6 +477,8 @@ public final class ONEOFSCALAR
 	}
       }
     }
+    // Inner classes
+    result = result.replace('$', '.');
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assert(num_elts == 1);
