@@ -7,9 +7,18 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.3 (February 11):
+2.3.4 (February 17):
 
-Maintenance release; the usual bugfixes.
+Add four new programs to the distribution:
+  createspinfo.pl trace-untruncate trace-purge-fns.pl trace-purge-vars.pl
+
+Manual enhancements:
+ * Add section on configuration options.
+ * Add paragraph about debugging options.
+ * Add text about two new GUI filters.
+ * Typo fixes.
+
+2.3.3 (February 11):
 
 Add new flags to Diff program.
 
