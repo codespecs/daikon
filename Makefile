@@ -13,6 +13,7 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := java-cpp.pl daikon.pl lines-from daikon.cshrc daikon.bashrc
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
+DAIKON_RESOURCE_FILES := daikon/config/defaults.txt daikon/simplify/daikon-background.txt
 AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -type f -print)
 WWW_DIR := /home/httpd/html/daikon/
@@ -234,7 +235,7 @@ www:
 
 .PHONY: www
 
-daikon.jar: $(DAIKON_JAVA_FILES) java/lib/ajax.jar
+daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
 	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
@@ -252,6 +253,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) java/lib/ajax.jar
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
+	(cd java; cp -fP --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
 	rm -rf /tmp/daikon-jar
