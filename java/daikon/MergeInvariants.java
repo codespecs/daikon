@@ -196,6 +196,17 @@ public class MergeInvariants {
       ppt.suppressAll (false);
     }
 
+    // Remove the PptRelation links so that when the file is written
+    // out it only includes the new information
+    for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      if (!ppt.ppt_name.isExitPoint())
+        continue;
+      if (ppt.ppt_name.isCombinedExitPoint())
+        continue;
+      ppt.children.clear();
+    }
+
     // Write serialized output - must be done before guarding invariants
     debugProgress.fine ("Writing Output");
     if (output_inv_file != null) {
