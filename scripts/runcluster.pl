@@ -113,6 +113,24 @@ foreach my $filename (@to_cluster) {
     system_or_die($command, $verbose);
   } elsif ($algorithm eq "xm") {
     # xmeans clustering
+
+    # filter out data that isn't a number  
+    open (FILE ,  "$filename");
+    open (OUT, ">$filename.new");
+    my @lines = <FILE>;
+      
+    foreach my $line (@lines) {
+        
+        $line =~ s/uninit/0/g;
+        $line =~ s/nan/10000/g;
+	print OUT "$line";
+    }
+    close OUT;
+    close FILE;
+    system_or_die ("mv $filename.new $filename", $verbose);
+    #end filter
+
+
     $command = "xmeans makeuni in $filename > xmeans-output-runcluster_temp-$filename-makeuni";
     system_or_die($command, $verbose);
     $command = "xmeans kmeans -k 1 -method blacklist -max_leaf_size 40 -min_box_width 0.03 -cutoff_factor 0.5 -max_iter 200 -num_splits 6 -max_ctrs 15 -in $filename -printclusters out.clust > xmeans-output-runcluster_temp-$filename-kmeans";
