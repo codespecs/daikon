@@ -752,6 +752,10 @@ public final class FileIO {
           return;
         }
 
+        // Only do leaves in bottom up
+        if (Daikon.df_bottom_up && ppt.ppt_name.isCombinedExitPoint())
+          return;
+
         // // Add invocation counts
         // if not no_invocation_counts {
         //   for ftn_ppt_name in fn_invocations.keys() {
