@@ -707,7 +707,6 @@ public final class FeatureExtractor {
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++)
-        if (!(all[i].getAbsolutePath().indexOf("test") > -1))
           answer.addAll(getInvariantClasses(all[i]));
     } else if (top.getName().endsWith(".class")) {
       String name = top.getAbsolutePath();
@@ -722,13 +721,18 @@ public final class FeatureExtractor {
         name = name.substring(0, name.indexOf(".ver3")) +
           name.substring(name.indexOf(".ver3") + 5);
 
-      Class current = Class.forName(name);
-      if ((Invariant.class.isAssignableFrom(current)) ||
-          (Ppt.class.isAssignableFrom(current)) ||
-          (VarInfo.class.isAssignableFrom(current))) {
-        System.out.print("Class " + name + " loaded\n");
-        answer.add(current);
+      try {
+        Class current = Class.forName(name);
+        if ((Invariant.class.isAssignableFrom(current)) ||
+            (Ppt.class.isAssignableFrom(current)) ||
+            (VarInfo.class.isAssignableFrom(current))) {
+          System.out.print("Class " + name + " loaded\n");
+          answer.add(current);
+        }
       }
+      catch (ClassNotFoundException e) {}
+      catch (NoClassDefFoundError e) {}
+
     }
     return answer;
   }
