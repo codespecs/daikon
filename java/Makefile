@@ -400,7 +400,10 @@ findbugs: .findbugs-output
 .PHONY: findbugs
 
 .findbugs-output: ../daikon.jar
-	rm -f findbugs-output
+	$(MAKE) findbugs-nocompile
+
+findbugs-nocompile:
+	rm -f .findbugs-output
 	~mernst/bin/share/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
 # This target is aimed at M-x compile in Emacs
