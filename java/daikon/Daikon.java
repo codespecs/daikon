@@ -441,6 +441,7 @@ public final class Daikon {
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0), // @CP
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
