@@ -1534,11 +1534,16 @@ public class PptTopLevel extends Ppt {
   }
 
 
+  static final boolean debug_addImplications = false;
+  // static final boolean debug_addImplications = true;
+
   private void addImplications_internal(Ppt ppt1, Ppt ppt2, boolean add_nonimplications) {
     // System.out.println("addImplications_internal: " + ppt1.name + ", " + ppt2.name);
 
     PptSlice[][] matched_views = match_views(ppt1, ppt2);
-    // System.out.println("Matched views=" + matched_views.length + " from " + ppt1.views.size() + ", " + ppt2.views.size());
+    if (debug_addImplications) {
+      System.out.println("Matched views=" + matched_views.length + " from " + ppt1.views.size() + ", " + ppt2.views.size());
+    }
 
     Vector exclusive_conditions_vec = new Vector(); // elements are pairs of Invariants
     Vector same_invariants_vec = new Vector(); // elements are Invariants
@@ -1548,39 +1553,44 @@ public class PptTopLevel extends Ppt {
       PptSlice slice2 = matched_views[i][1];
 
       if ((slice1 == null) || (slice2 == null)) {
-        // System.out.println("addImplications: matched views skipped "
-        //                    + (slice1 == null ? "null" : slice1.name) + " "
-        //                    + (slice2 == null ? "null" : slice2.name));
+        if (debug_addImplications) {
+          System.out.println("addImplications: matched views skipped "
+                             + (slice1 == null ? "null" : slice1.name) + " "
+                             + (slice2 == null ? "null" : slice2.name));
+        }
         continue;
       }
+
+      // Do not eliminate invariants that are not worth printing at this
+      // stage!  Perhaps x=y is not worth printing because it is true at a
+      // controller, but x!=y is worth printing; now we can't determine
+      // that there is an exclusive condition.  We'll eliminate those
+      // not-worth-printing invariants later, when we actually make the
+      // implication invariants.
 
       Invariants invs1 = new Invariants();
       for (int j=0; j<slice1.invs.size(); j++) {
         Invariant inv = (Invariant)slice1.invs.elementAt(j);
-        // invs1.add(inv);
-        if (inv.isWorthPrinting()) {
-          invs1.add(inv);
-          // System.out.println("invs1 worth printing: " + inv.format());
-        } else {
-          // System.out.println("invs1 not worth printing: " + inv.format());
+        invs1.add(inv);
+        if (debug_addImplications) {
+          System.out.println("invs1 " + inv.format());
         }
       }
       Invariants invs2 = new Invariants();
       for (int j=0; j<slice2.invs.size(); j++) {
         Invariant inv = (Invariant)slice2.invs.elementAt(j);
-        // invs2.add(inv);
-        if (inv.isWorthPrinting()) {
-          invs2.add(inv);
-          // System.out.println("invs2 worth printing: " + inv.format());
-        } else {
-          // System.out.println("invs2 not worth printing: " + inv.format());
+        invs2.add(inv);
+        if (debug_addImplications) {
+          System.out.println("invs2 " + inv.format());
         }
       }
 
       Vector this_excl = exclusive_conditions(invs1, invs2);
-      // System.out.println("addImplications: "
-      //                    + this_excl.size() + " exclusive conditions for "
-      //                    + slice1.name + " " + slice2.name);
+      if (debug_addImplications) {
+        System.out.println("addImplications: "
+                           + this_excl.size() + " exclusive conditions for "
+                           + slice1.name + " " + slice2.name);
+      }
       exclusive_conditions_vec.addAll(this_excl);
 
       Vector this_same = same_invariants(invs1, invs2);
@@ -1590,7 +1600,9 @@ public class PptTopLevel extends Ppt {
     if (add_nonimplications) {
       for (int i=0; i<same_invariants_vec.size(); i++) {
         Invariant same_inv = (Invariant)same_invariants_vec.elementAt(i);
-        // This test doesn't seem to be productive.
+        // This test doesn't seem to be productive.  (That comment may date
+        // from the time that all not-worth-printing invariants were
+        // already eliminated.)
         if (! same_inv.isControlled()) {
           implication_view.addInvariant(same_inv);
         }
@@ -1598,7 +1610,9 @@ public class PptTopLevel extends Ppt {
     }
 
     if (exclusive_conditions_vec.size() == 0) {
-      // System.out.println("addImplications: no exclusive conditions");
+      if (debug_addImplications) {
+        System.out.println("addImplications: no exclusive conditions");
+      }
       return;
     }
 
@@ -1609,9 +1623,11 @@ public class PptTopLevel extends Ppt {
     Invariant[][] different_invariants
       = (Invariant[][])different_invariants(matched_views).toArray(new Invariant[0][0]);
 
-    // System.out.println("addImplications: "
-    //                    + exclusive_conditions.length + " exclusive conditions, "
-    //                    + different_invariants.length + " different invariants");
+    if (debug_addImplications) {
+      System.out.println("addImplications: "
+                         + exclusive_conditions.length + " exclusive conditions, "
+                         + different_invariants.length + " different invariants");
+    }
 
 
     // Add an implication from each of a pair of mutually exclusive
@@ -1633,8 +1649,10 @@ public class PptTopLevel extends Ppt {
       Assert.assert(excl1 != null);
       Assert.assert(excl2 != null);
 
-      // System.out.println("Adding implications with conditions "
-      //                    + excl1.format() + " and " + excl2.format());
+      if (debug_addImplications) {
+        System.out.println("Adding implications with conditions "
+                           + excl1.format() + " and " + excl2.format());
+      }
 
       for (int j=0; j<different_invariants.length; j++) {
         Assert.assert(different_invariants[j].length == 2);
@@ -1645,9 +1663,11 @@ public class PptTopLevel extends Ppt {
                       || (ArraysMDE.indexOf(excls1, diff1)
                           == ArraysMDE.indexOf(excls2, diff2)));
 
-        // System.out.println("different_invariants "
-        //                    + ((diff1 == null) ? "null" : diff1.format())
-        //                    + ", " + ((diff2 == null) ? "null" : diff2.format()));
+        if (debug_addImplications) {
+          System.out.println("different_invariants "
+                             + ((diff1 == null) ? "null" : diff1.format())
+                             + ", " + ((diff2 == null) ? "null" : diff2.format()));
+        }
 
         // This adds an implication to itself; bad.
         // If one of the diffs implies the other, then should not add
@@ -1659,8 +1679,10 @@ public class PptTopLevel extends Ppt {
               boolean iff = (index1 != -1);
               Implication.makeImplication(this, excl1, diff1, iff);
             } else {
-              // System.out.println("consequent not worth printing:  (" + excl1.format() + ")  ==> " + diff1.format());
-              // System.out.println("  isWorthPrinting_debug: " + diff1.isWorthPrinting_sansControlledCheck_debug());
+              if (debug_addImplications) {
+                System.out.println("consequent not worth printing:  (" + excl1.format() + ")  ==> " + diff1.format());
+                System.out.println("  isWorthPrinting_debug: " + diff1.isWorthPrinting_sansControlledCheck_debug());
+              }
             }
           }
         }
@@ -1671,8 +1693,10 @@ public class PptTopLevel extends Ppt {
               boolean iff = (index2 != -1);
               Implication.makeImplication(this, excl2, diff2, iff);
             } else {
-              // System.out.println("consequent not worth printing:  (" + excl2.format() + ")  ==> " + diff2.format());
-              // System.out.println("  isWorthPrinting_debug: " + diff2.isWorthPrinting_sansControlledCheck_debug());
+              if (debug_addImplications) {
+                System.out.println("consequent not worth printing:  (" + excl2.format() + ")  ==> " + diff2.format());
+                System.out.println("  isWorthPrinting_debug: " + diff2.isWorthPrinting_sansControlledCheck_debug());
+              }
             }
           }
         }
