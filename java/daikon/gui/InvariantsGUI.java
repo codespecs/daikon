@@ -22,13 +22,13 @@ public class InvariantsGUI {
 	    objectFileName = args[0];
 
 	DefaultTreeModel treeModel = constructTreeModel( objectFileName );
-	DaikonTreeSelectionModel treeSelectionModel = new DaikonTreeSelectionModel();
-
 	JTree tree = new JTree( treeModel );
 	JPanel invariantTablePanel = new JPanel();
-	tree.addTreeSelectionListener( new InvariantTableSelectionListener( invariantTablePanel, treeSelectionModel ));
-
 	setupGUI( tree, invariantTablePanel );
+
+	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
+	DaikonTreeSelectionListener treeSelectionListener = new DaikonTreeSelectionListener( invariantTablePanel, treeSelectionModel );
+	treeSelectionModel.addTreeSelectionListener( treeSelectionListener );
     }
 
     protected static PptMap getPptMapFromFile( String fileName ) {
@@ -104,19 +104,8 @@ public class InvariantsGUI {
 	return new DefaultTreeModel( root );
     }
 
-    //  Returns node with user object <code>userObject</code> if there is one; otherwise return <code>null</code>.
-    //  Used by constructTree().
-    private static DefaultMutableTreeNode getChild( DefaultMutableTreeNode node, Object userObject ) {
-	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode)enum.nextElement());
-	    if (child.getUserObject().equals( userObject ))
-		return child;
-	}
-	return null;
-    }
-
-    //  Returns node with user object <code>userObject</code> if there is one; otherwise return <code>null</code>.
-    //  Used by constructTree().
+    //  Returns node with name <code>name</code> if there is one; otherwise return <code>null</code>.
+    //  Used by constructTreeModel().
     private static DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
 	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode)enum.nextElement());
@@ -139,27 +128,24 @@ public class InvariantsGUI {
 }
 
 
-class DaikonTreeSelectionModel extends DefaultTreeSelectionModel {
-    
-}
-    
-
-class InvariantTableSelectionListener implements TreeSelectionListener {
+class DaikonTreeSelectionListener implements TreeSelectionListener {
     JPanel panel;
     List invariantTables = new ArrayList();
     List invariantTableNames = new ArrayList();
-    DefaultTreeSelectionModel treeSelectionModel;
+    TreeSelectionModel treeSelectionModel;
 
-    public InvariantTableSelectionListener( JPanel invariantTablePanel, DefaultTreeSelectionModel treeSelectionModel ) {
+    public DaikonTreeSelectionListener( JPanel invariantTablePanel, TreeSelectionModel treeSelectionModel ) {
 	panel = invariantTablePanel;
 	panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
 	this.treeSelectionModel = treeSelectionModel;
     }
 
     public void valueChanged( TreeSelectionEvent e ) {
+	//	System.out.println( "DaikonTreeSelectionListener.valueChanged() event: " );
 	TreePath paths[] = e.getPaths();
 	for (int i=0; i < paths.length; i++) {
 	    Object userObject = ((DefaultMutableTreeNode) paths[i].getLastPathComponent()).getUserObject();
+	    //	    System.out.println( "\t" + userObject.toString() + ", " + e.isAddedPath(i));
 	    if (userObject.getClass().getName().equals( "daikon.PptTopLevel" )) {
 		String name = ((PptTopLevel) userObject).name;
 		if (e.isAddedPath( paths[i] )) {
@@ -167,31 +153,36 @@ class InvariantTableSelectionListener implements TreeSelectionListener {
 		    JScrollPane scrollPane = setupTable( invariants );
 		    invariantTables.add( scrollPane );
 		    invariantTableNames.add( name );
-		    //		    System.out.println(name + " added");
-		    //		    System.out.println( scrollPane.getPreferredSize());
+		    System.out.println( scrollPane.getPreferredSize());
 		}
 		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
 		    int index = invariantTableNames.indexOf( name );
 		    if (index == -1)
-			throw new Error( "InvariantTableSelectionListener.valueChanged(): " + name + " table not found." );
+			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
 		    panel.remove( (JScrollPane) invariantTables.get( index ));
-		    //		    System.out.println(name + " removed");
 		    invariantTables.remove( index );
 		    invariantTableNames.remove( index );
 		}
-	    } else {		// This is a class or a method node, not a PptTopLevel node.
-		if (e.isAddedPath( paths[i] )) {
+ 	    } else {		// This is a class or a method node, not a PptTopLevel node (ie leaf node).
+		if (e.isAddedPath( paths[i] )) { // Add children.
 		    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
 			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
 			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
-			//			treeSelectionModel.fireValueChanged( event );
-			System.out.println("added path");
+			//			System.out.println("adding path ending in " + newPath.getLastPathComponent().toString());
+			treeSelectionModel.addSelectionPath( newPath );
 		    }
-		    
 		}
-		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
+		else {		// Remove children.
+		    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
+			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
+			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
+			//			System.out.println("adding path ending in " + newPath.getLastPathComponent().toString());
+			treeSelectionModel.removeSelectionPath( newPath );
+		    }
 		}
 	    }		
 	}
@@ -211,6 +202,7 @@ class InvariantTableSelectionListener implements TreeSelectionListener {
 	return scrollPane;
     }
 }
+    
 
 class InvariantTableModel extends AbstractTableModel {
     Vector invariants;
@@ -250,7 +242,7 @@ class InvariantTableModel extends AbstractTableModel {
     }
 
     // I want the JTable customization code here, rather than in
-    // InvariantTableSelectionListener.
+    // DaikonTreeSelectionListener.
     public static void resizeColumns( JTable table ) {
 	for (int i = 0; i < table.getColumnCount(); i++) {
 	    TableColumn column = table.getColumnModel().getColumn( i );
