@@ -2019,7 +2019,7 @@ def read_data_trace_file(filename, fn_regexp=None):
 
         line = file.readline()
         # Expecting the end of a block of values.
-        assert (line == "\n") or (line == "")
+        assert ((line == "\n") or (line == "")), "Expecting end of trace file block for program point %s, but found variable %s" % (tag, line)
 
         # Add invocation counts
         # Accessing global here-crappy
