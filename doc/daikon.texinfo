@@ -1194,20 +1194,21 @@ Your bug report will be most helpful if you include:
 @item the contents of the @file{VERSION} file, which indicates the
       release date of your copy of Daikon.  If you are not using the
       most recent version, it is best if you download a newer version
-      from @uref{http://sdg.lcs.mit.edu/daikon/} to see whether your problem has already
-      been corrected.
+      from @uref{http://sdg.lcs.mit.edu/daikon/} to see whether your
+      problem has already been corrected.
 @item a description of exactly what you did and exactly what went wrong.
       For instance, a transcript of your commands and the system's output
       may provide this information.
-@item input files that permit the problem to be replicated.  For instance,
-      this might include your source files (both original and
-      instrumented), @file{.decl} files, and @file{.dtrace} files.  It
-      is often more difficult to reproduce an error than to correct it, so
-      please do not force me to spend a lot of time verifying the problem.
-      Also, if I can't reproduce the problem, then I will probably be
-      unable to fix it.
+@item input files that permit the problem to be replicated.  The
+      most important thing is the original, uninstrumented source files.
+      You might also include your instrumented source files,
+      @file{.decl} files, and @file{.dtrace} files.
 @item any other information that you consider relevant
 @end itemize
+
+It is frequently more difficult to reproduce an error than to correct
+it; if you make it easy to reproduce and verify the problem, then it is
+much more likely to be corrected.
 
 @menu
 * Known bugs::                  
