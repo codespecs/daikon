@@ -3,6 +3,8 @@
 // You can append methods after the last one, but don't rearrange
 // those already there.
 
+package daikon.test;
+
 import java.util.*;
 
 public class GenericTestClass <A, B extends String, C extends java.lang.Object, U> {

@@ -65,8 +65,8 @@ public final class TestAst extends TestCase {
       declString = Ast.print(decl);
     }
     assertTrue("pptName: " + pptName +
-               "\ndoesn't match method declaration:\n----------"
-               + declString + "\n----------\n",
+               "\ndoesn't match method declaration:\n----------\n"
+               + declString + "\n----------",
                result == true);
   }
 
@@ -96,12 +96,12 @@ public final class TestAst extends TestCase {
     List<ClassOrInterfaceDeclaration> classDecls = classDeclarationHarvester.decls;
 
     {
-      String expected = "GenericTestClass";
+      String expected = "daikon.test.GenericTestClass";
       assertEquals("Got: " + classDecls.get(0) + "\nExpected: " + expected,
                    Ast.getClassName(classDecls.get(0)), expected);
     }
     {
-      String expected = "GenericTestClass.Simple";
+      String expected = "daikon.test.GenericTestClass.Simple";
       assertEquals("Got: " + classDecls.get(1) + "\nExpected: " + expected,
                    Ast.getClassName(classDecls.get(1)), expected);
     }
@@ -121,123 +121,123 @@ public final class TestAst extends TestCase {
 
     decl = methodDecls.get(0);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo1");
-    checkMatch("GenericTestClass.foo1():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo1():::EXIT10", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo1():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo1():::EXIT10", decl, matcher);
 
     decl = methodDecls.get(1);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo2");
-    checkMatch("GenericTestClass.foo2():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo2():::EXIT12", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo2():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo2():::EXIT12", decl, matcher);
 
     decl = methodDecls.get(2);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo3");
-    checkMatch("GenericTestClass.foo3():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo3():::EXIT14", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo3():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo3():::EXIT14", decl, matcher);
 
     decl = methodDecls.get(3);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo4");
-    checkMatch("GenericTestClass.foo4():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo4():::EXIT16", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo4():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo4():::EXIT16", decl, matcher);
 
     decl = methodDecls.get(4);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo5");
-    checkMatch("GenericTestClass.foo5():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo5():::EXIT18", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo5():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo5():::EXIT18", decl, matcher);
 
     decl = methodDecls.get(5);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo55");
-    checkMatch("GenericTestClass.foo55():::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo55():::EXIT20", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo55():::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo55():::EXIT20", decl, matcher);
 
     decl = methodDecls.get(6);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo6");
-    checkMatch("GenericTestClass.foo6(java.util.List):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo6(java.util.List):::EXIT22", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo6(java.util.List):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo6(java.util.List):::EXIT22", decl, matcher);
 
     decl = methodDecls.get(7);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo7");
-    checkMatch("GenericTestClass.foo7(java.util.List):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo7(java.util.List):::EXIT24", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo7(java.util.List):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo7(java.util.List):::EXIT24", decl, matcher);
 
     decl = methodDecls.get(8);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo8");
-    checkMatch("GenericTestClass.foo8(java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo8(java.lang.Object):::EXIT26", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo8(java.lang.Object):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo8(java.lang.Object):::EXIT26", decl, matcher);
 
     decl = methodDecls.get(9);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo9");
-    checkMatch("GenericTestClass.foo9(java.lang.String):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo9(java.lang.String):::EXIT28", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo9(java.lang.String):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo9(java.lang.String):::EXIT28", decl, matcher);
 
     decl = methodDecls.get(10);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo10");
-    checkMatch("GenericTestClass.foo10(java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo10(java.lang.Object):::EXIT30", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo10(java.lang.Object):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo10(java.lang.Object):::EXIT30", decl, matcher);
 
     decl = methodDecls.get(11);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo11");
-    checkMatch("GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::EXIT32", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::EXIT32", decl, matcher);
 
     decl = methodDecls.get(12);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo115");
-    checkMatch("GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::EXIT35", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::EXIT35", decl, matcher);
 
     decl = methodDecls.get(13);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo12");
-    checkMatch("GenericTestClass.foo12(java.lang.Object, java.util.List):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo12(java.lang.Object, java.util.List):::EXIT37", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::EXIT37", decl, matcher);
 
     decl = methodDecls.get(14);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo13");
-    checkMatch("GenericTestClass.foo13(java.lang.Object, java.util.List):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo13(java.lang.Object, java.util.List):::EXIT39", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::EXIT39", decl, matcher);
 
     decl = methodDecls.get(15);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo14");
-    checkMatch("GenericTestClass.foo14(java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo14(java.lang.Object):::EXIT41", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo14(java.lang.Object):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo14(java.lang.Object):::EXIT41", decl, matcher);
 
     decl = methodDecls.get(16);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo15");
-    checkMatch("GenericTestClass.foo15(java.lang.String):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo15(java.lang.String):::EXIT43", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo15(java.lang.String):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo15(java.lang.String):::EXIT43", decl, matcher);
 
     decl = methodDecls.get(17);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo16");
-    checkMatch("GenericTestClass.foo16(java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo16(java.lang.Object):::EXIT45", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo16(java.lang.Object):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo16(java.lang.Object):::EXIT45", decl, matcher);
 
     decl = methodDecls.get(18);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo17");
-    checkMatch("GenericTestClass.foo17(java.lang.Object[]):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo17(java.lang.Object[]):::EXIT47", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo17(java.lang.Object[]):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo17(java.lang.Object[]):::EXIT47", decl, matcher);
 
     decl = methodDecls.get(19);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo18");
-    checkMatch("GenericTestClass.foo18(java.lang.Object[][]):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo18(java.lang.Object[][]):::EXIT49", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo18(java.lang.Object[][]):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo18(java.lang.Object[][]):::EXIT49", decl, matcher);
 
     decl = methodDecls.get(20);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo19");
-    checkMatch("GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::EXIT51", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::EXIT51", decl, matcher);
 
     decl = methodDecls.get(21);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo20");
-    checkMatch("GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53", decl, matcher);
 
     decl = methodDecls.get(22);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo1");
-    checkMatch("GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.Simple.foo1(java.util.Map.Entry):::EXIT12", decl, matcher);
 
     decl = methodDecls.get(23);
     assertEquals(decl.f2.f0.tokenImage, decl.f2.f0.tokenImage, "foo2");
-    checkMatch("GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl, matcher);
-    checkMatch("GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::ENTER", decl, matcher);
+    checkMatch("daikon.test.GenericTestClass.Simple.foo2(java.util.Map.Entry):::EXIT14", decl, matcher);
 
   }
 }
