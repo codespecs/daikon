@@ -1,6 +1,5 @@
 package daikon.split;
 
-
 import daikon.*;
 import daikon.split.misc.*;
 import java.io.*;
@@ -10,6 +9,7 @@ import jtb.syntaxtree.*;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.visitor.*;
+import java.util.regex.*;
 
 /**
  * FileWriter writes the splitter java file's contents to a string buffer
@@ -35,6 +35,9 @@ class SplitterJavaSource {
   /** A StatementReplacer for the .spinfo from which this file is being created. */
   private StatementReplacer statementReplacer;
 
+  /** Java reserved words that are replaced by replaceReservedWords. */
+  private static final String[] reservedWords = new String[]{"return"};
+
   private static final String lineSep = System.getProperty("line.separator");
 
   /**
@@ -59,7 +62,8 @@ class SplitterJavaSource {
     this.statementReplacer = statementReplacer;
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
-    String condition = statementReplacer.makeReplacements(originalCondition);
+    String condition = replaceReservedWords(originalCondition);
+    condition = statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     vars = makeVariableManagerArray(varInfos, condition, className);
 
@@ -255,15 +259,43 @@ class SplitterJavaSource {
    * @param st the string to added to fileText.
    */
   private void add(String st) {
-      fileText.append(st + lineSep);
-    }
+    fileText.append(st + lineSep);
+  }
 
   /**
    * Skips a line in fileText by adding a black line to fileText.
    */
   private void skipLine() {
-      fileText.append(lineSep);
+    fileText.append(lineSep);
+  }
+
+  /**
+   * Replaces instances of Java reserved words that could not appear
+   * in a valid Java condition or Java variable name that are being used
+   * as variable names in string.
+   * @param string the string in which the Java reserved words should be
+   *  replaced.
+   * @return string with the Java reserved words replaced with a substitute
+   *  names.
+   */
+  private static String replaceReservedWords(String string) {
+    // cheap hack so that pattern never need to look for a key word at
+    // the beginning or end of string.  That way one may simplify the pattern
+    // to looking for a reserved word that is not prefixed or suffix with a
+    // letter or number.
+    string = "(" + string + ")";
+    for (int i = 0; i < reservedWords.length; i++) {
+      String reservedWord = reservedWords[i];
+      Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
+      Matcher m = p.matcher(string);
+      while (m.find()) {
+        string = m.replaceFirst(m.group(1) + "daikon" +reservedWord + m.group(3));
+        m = p.matcher(string);
+      }
     }
+    return string.substring(1, string.length() - 1);
+  }
+
 
   /**
    * Returns a version of this condition in which the variable names are
@@ -341,32 +373,33 @@ class SplitterJavaSource {
               instanceof VarInfoName.TypeOf)));
   }
 
-    /**
-     * Determines if the variable represented by varInfo is
-     * a "size" variable.
-     * @param varInfo the VarInfo of the variable being tested.
-     * @return true iff varInfo is a "size" variable.
-     */
-    private static boolean isSizeVar(VarInfo varInfo) {
-      VarInfoName name = varInfo.name;
-      return ((name instanceof VarInfoName.Field &&
-               ((VarInfoName.Field) name).field.equals("size")) ||
-              (name instanceof VarInfoName.Prestate &&
-               ((VarInfoName.Prestate) name).term instanceof VarInfoName.Field &&
-               ((VarInfoName.Field) ((VarInfoName.Prestate) name).term).field.equals("size")));
-    }
-    /**
-     * Determines if the variable represented by varInfo is a
-     * "this" variable.
-     */
-    private static boolean isThisVar(VarInfo varInfo) {
-      VarInfoName name = varInfo.name;
-      return ((name instanceof VarInfoName.Simple &&
-               ((VarInfoName.Simple) name).name.equals("this")) ||
-              ((name instanceof VarInfoName.Prestate) &&
-               ((VarInfoName.Prestate) name).term instanceof VarInfoName.Simple &&
-               ((VarInfoName.Simple) ((VarInfoName.Prestate) name).term).name.equals("this")));
-    }
+  /**
+   * Determines if the variable represented by varInfo is
+   * a "size" variable.
+   * @param varInfo the VarInfo of the variable being tested.
+   * @return true iff varInfo is a "size" variable.
+   */
+  private static boolean isSizeVar(VarInfo varInfo) {
+    VarInfoName name = varInfo.name;
+    return ((name instanceof VarInfoName.Field &&
+             ((VarInfoName.Field) name).field.equals("size")) ||
+            (name instanceof VarInfoName.Prestate &&
+             ((VarInfoName.Prestate) name).term instanceof VarInfoName.Field &&
+             ((VarInfoName.Field) ((VarInfoName.Prestate) name).term).field.equals("size")));
+  }
+
+  /**
+   * Determines if the variable represented by varInfo is a
+   * "this" variable.
+   */
+  private static boolean isThisVar(VarInfo varInfo) {
+    VarInfoName name = varInfo.name;
+    return ((name instanceof VarInfoName.Simple &&
+             ((VarInfoName.Simple) name).name.equals("this")) ||
+            ((name instanceof VarInfoName.Prestate) &&
+             ((VarInfoName.Prestate) name).term instanceof VarInfoName.Simple &&
+             ((VarInfoName.Simple) ((VarInfoName.Prestate) name).term).name.equals("this")));
+  }
 
   /**
    * Protects quotations that appear in fileText by placing "\" in front of
@@ -376,7 +409,8 @@ class SplitterJavaSource {
   private static String protectQuotations(String condition) {
     for (int i = 0; i < condition.length(); i++) {
       if (condition.charAt(i) == '"') {
-        condition = condition.substring(0, i) + "\\" + condition.substring(i, condition.length());
+        condition = condition.substring(0, i) + "\\" +
+          condition.substring(i, condition.length());
         i=i+2;
       }
     }
@@ -387,14 +421,13 @@ class SplitterJavaSource {
    * Returns the name of the class from which pptName is from.
    */
   private static String getClassName(String pptName) {
-      int lastIndex = pptName.lastIndexOf('.');
-      if (lastIndex != -1) {
-        return pptName.substring(0, lastIndex);
-      } else {
-        return pptName;
-      }
+    int lastIndex = pptName.lastIndexOf('.');
+    if (lastIndex != -1) {
+      return pptName.substring(0, lastIndex);
+    } else {
+      return pptName;
     }
-
+  }
 
   /**
    * Print out a message if the debugPptSplit variable is set to "true"
@@ -403,86 +436,89 @@ class SplitterJavaSource {
     Global.debugSplit.fine(s);
   }
 
+  /**
+   * Return str with the char at index removed.
+   * This method requires: 0 <= index < str.length
+   * @param str the String from which the char at index should be removed.
+   * @param index the index of the char that should be removed from str.
+   * @return str with the char at index removed.
+   */
+  private static String removeCharAt(String str, int index) {
+    return str.substring(0, index) + str.substring(index+1);
+  }
 
-    /**
-     * Return str with the char at index removed.
-     * This method requires: 0 <= index < str.length
-     * @param str the String from which the char at index should be removed.
-     * @param index the index of the char that should be removed from str.
-     * @return str with the char at index removed.
-     */
-    private static String removeCharAt(String str, int index) {
-      return str.substring(0, index) + str.substring(index+1);
-    }
+  /**
+   * Returns str with chr inserted at index.
+   * This method requires: 0 <= index <= str.length
+   * @param str the String in which chr should be inserted.
+   * @param chr the char that should be inserted into str.
+   * @param index the index of the position where chr should be
+   *  inserted in to str.
+   * @return str with chr inserted at index
+   */
+  private static String insertCharAt(String str, char chr, int index) {
+    return str.substring(0, index) + chr + str.substring(index);
+  }
 
-    /**
-     * Returns str with chr inserted at index.
-     * This method requires: 0 <= index <= str.length
-     * @param str the String in which chr should be inserted.
-     * @param chr the char that should be inserted into str.
-     * @param index the index of the position where chr should be
-     *  inserted in to str.
-     * @return str with chr inserted at index
-     */
-    private static String insertCharAt(String str, char chr, int index) {
-      return str.substring(0, index) + chr + str.substring(index);
-    }
+  /**
+   * Calculates the variable name of the variable represented by varInfo.
+   * @return the name of the variable represented by varInfo
+   */
+  private static String getVarName(VarInfo varInfo) {
+    return varInfo.name.name();
+  }
 
-   /**
-     * Calculates the variable name of the variable represented by varInfo.
-     * @return the name of the variable represented by varInfo
-     */
-    private static String getVarName(VarInfo varInfo) {
-      return varInfo.name.name();
-    }
-
-    /**
-     * Calculates the name of the variable represented by varInfo in
-     * a compilable form.  Name are the same as base names (see getBaseName)
-     * except that the names of arrays are suffixed with "_identity" if it
-     * is a variable representing the array for equality tests or "_array"
-     * if it is a variable representing the elements of the array.
-     * @param varInfo the VarInfo of the variable whose compilable name is
-     *  desired.
-     * @return the name of the variable represented by varInfo in a compilable form.
-     */
-    private static String compilableName(VarInfo varInfo, String className) {
-      String name = getBaseName(varInfo, className);
-      if (varInfo.type.isArray()) {
-        if (varInfo.file_rep_type == ProglangType.HASHCODE) {
-          name += "_identity";
-        } else {
-          name += "_array";
-        }
-      }
-      return name;
-    }
-
-    /**
-     * Calculates the base name of a variable.  The base name
-     * of a variable is the part of the variable with prefixes
-     * "this." and className removed, and "orig()" replaced
-     * by "orig_".  For example orig(this.x) goes to orig_x.
-     * If className is "Class" then "Class.x" would yield "x" and
-     * "someOtherClass.x" would yield "someOtherClass_x".
-     * @param varInfo the VarInfo for the variable whose base name is
-     *  desired.
-     * @return the base name of the variable represented by varInfo.
-     */
-    private static String getBaseName(VarInfo varInfo, String className) {
-      String name = varInfo.name.name();
-      if (name.length() > 5 && name.substring(0, 5).equals("orig(") && name.endsWith(")")) {
-        name = name.substring(5, name.length() -1);
-        name = fixPrefixes(name, className);
-        name = "orig_" + name;
+  /**
+   * Calculates the name of the variable represented by varInfo in
+   * a compilable form.  Name are the same as base names (see getBaseName)
+   * except that the names of arrays are suffixed with "_identity" if it
+   * is a variable representing the array for equality tests or "_array"
+   * if it is a variable representing the elements of the array.
+   * @param varInfo the VarInfo of the variable whose compilable name is
+   *  desired.
+   * @return the name of the variable represented by varInfo in a compilable
+   *  form.
+   */
+  private static String compilableName(VarInfo varInfo, String className) {
+    String name = getBaseName(varInfo, className);
+    if (varInfo.type.isArray()) {
+      if (varInfo.file_rep_type == ProglangType.HASHCODE) {
+        name += "_identity";
       } else {
-        name = fixPrefixes(name, className);
+        name += "_array";
       }
-      name = name.replace('.', '_');
-      name = remove(name, ']');
-      name = remove(name, '[');
-      return name;
     }
+    return name;
+  }
+
+  /**
+   * Calculates the base name of a variable.  The base name
+   * of a variable is the part of the variable with prefixes
+   * "this." and className removed, and "orig()" replaced
+   * by "orig_".  For example orig(this.x) goes to orig_x.
+   * If className is "Class" then "Class.x" would yield "x" and
+   * "someOtherClass.x" would yield "someOtherClass_x".  Finally,
+   * Java Reserved words are replaced with appropriate substitutes.
+   * @param varInfo the VarInfo for the variable whose base name is
+   *  desired.
+   * @return the base name of the variable represented by varInfo.
+   */
+  private static String getBaseName(VarInfo varInfo, String className) {
+    String name = varInfo.name.name();
+    name = replaceReservedWords(name);
+    if (name.length() > 5 && name.substring(0, 5).equals("orig(") &&
+        name.endsWith(")")) {
+      name = name.substring(5, name.length() -1);
+      name = fixPrefixes(name, className);
+      name = "orig_" + name;
+    } else {
+      name = fixPrefixes(name, className);
+    }
+    name = name.replace('.', '_');
+    name = remove(name, ']');
+    name = remove(name, '[');
+    return name;
+  }
 
   /**
    * Returns an array of the base names of the variable in varInfos.
@@ -505,7 +541,7 @@ class SplitterJavaSource {
    */
   private static String fixPrefixes(String name, String className) {
     if (name.startsWith("this.")) {
-       return name.substring("this.".length());
+      return name.substring("this.".length());
     }
     int dotIndex = 0;
     while (dotIndex != -1) {
@@ -625,12 +661,11 @@ class SplitterJavaSource {
       fieldName = fieldName(varInfo, className);
       varInfoName = varInfoName(varInfo, className);
       type = makeIndexIfNeeded(getVarType(varInfo),
-                                  compilableName,
-                                  varInfo,
-                                  condition);
+                               compilableName,
+                               varInfo,
+                               condition);
       repr = getVarRepr(varInfo);
     }
-
 
     /**
      * Returns the VarInfo of the variable at index of this.
@@ -779,13 +814,12 @@ class SplitterJavaSource {
       int lastIndex = tokens.length - 1;
       if (tokens[lastIndex].kind == IDENTIFIER &&
           tokens[lastIndex - 1].kind != DOT &&
-            (! variables.contains(tokens[lastIndex].tokenImage))) {
+          (! variables.contains(tokens[lastIndex].tokenImage))) {
         variables.add(tokens[lastIndex].tokenImage);
       }
     }
-      return variables;
+    return variables;
   }
-
 
   /**
    * Returns type converted to index type if needed.  A index type
@@ -802,9 +836,9 @@ class SplitterJavaSource {
    * @return the type converted to index type if needed.
    */
   private static String makeIndexIfNeeded(String type,
-                                     String name,
-                                     VarInfo varInfo,
-                                     String condition)
+                                          String name,
+                                          VarInfo varInfo,
+                                          String condition)
     throws ParseException {
     if ((type.equals("int") || varInfo.type.isArray()) &&
         varInfo.file_rep_type != ProglangType.HASHCODE) {

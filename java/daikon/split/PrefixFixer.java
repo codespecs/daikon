@@ -1,7 +1,6 @@
 package daikon.split;
 
 import java.util.*;
-import java.io.*;
 import junit.framework.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
@@ -22,23 +21,14 @@ import jtb.ParseException;
  */
 class PrefixFixer extends DepthFirstVisitor {
 
-  /** The string holding the statement with all instances of prefix removed. */
-  private String newStatement;
-
   /** The last token visited by this. */
   private NodeToken lastToken;
 
   /** The token visited before lastToken. */
   private NodeToken twoTokensAgo;
 
-  /** Whether presently visiting the statement to be changed. */
-  private boolean withInStatement = false;
-
-  /** jtb's value for dot.*/
-  private static int DOT = 82;
-
-  /** jtb's value for an identifier. */
-  private static int IDENTIFIER = 71;
+  /** The token visited before twoTokensAgo. */
+  private NodeToken threeTokensAgo;
 
   /**
    * Creates a new instance of PrefixRemover to remove prefix.
@@ -52,56 +42,66 @@ class PrefixFixer extends DepthFirstVisitor {
    * @param statement valid segment of java code from which prefix
    *  should be fixed.
    */
-  public static String fixPrefix(String statement)
+  public static String fixPrefix(String expression)
     throws ParseException {
-    String statementClass = "class c { bool b = " + statement + "; }";
-    Reader input = new StringReader(statementClass);
-    JavaParser parser = new JavaParser(input);
-    Node root = parser.CompilationUnit();
+    Node root = Visitors.getJtbTree(expression);
     PrefixFixer fixer = new PrefixFixer();
     root.accept(fixer);
-    return fixer.newStatement;
+    fixer.fixLastToken();
+    return Ast.print(root);
   }
 
-
   /**
-   * This method should not be directly used by users of this class.
-   * Replaces the token image with "" if it is a prefix  or a "."
-   * following a prefix and appends to the tokenImage_ to the  next token.
+   * This method should not be directly used by users of this class;
+   * however, must be public to full-fill the visitor interface.
+   * Replaces the token image with "" if it is a prefix or a "."
+   * following a prefix. Appends to the tokenImage and "_" to the
+   * next token's image.
    */
   public void visit(NodeToken n) {
-    if (withInStatement && isMatch(n)) {
-      lastToken.tokenImage = "";
-      n.tokenImage = twoTokensAgo.tokenImage + "_" + n.tokenImage;
+    if (isMatch(n)) {
       twoTokensAgo.tokenImage = "";
+      lastToken.tokenImage =
+        threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
+      threeTokensAgo.tokenImage = "";
     }
     n.beginColumn = -1;
     n.endColumn = -1;
+    threeTokensAgo = twoTokensAgo;
     twoTokensAgo = lastToken;
     lastToken = n;
     super.visit(n);
   }
 
   /**
-   * Returns if twoTokensAgo is a prefix to n and n != "length"
+   * Fixes the last token if needed.
    */
-  private boolean isMatch(NodeToken n) {
-    return (n.kind == IDENTIFIER &&
-            lastToken != null &&
-            lastToken.kind == DOT &&
-            twoTokensAgo.kind == IDENTIFIER &&
-            (! n.tokenImage.equals("length")));
+  private void fixLastToken() {
+    if (threeTokensAgo != null &&
+        Visitors.isIdentifier(lastToken) &&
+        Visitors.isDot(twoTokensAgo) &&
+        Visitors.isIdentifier(threeTokensAgo) &&
+        (! lastToken.tokenImage.equals("length"))) {
+      twoTokensAgo.tokenImage = "";
+      lastToken.tokenImage =
+        threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
+      threeTokensAgo.tokenImage = "";
+    }
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * Sets the newStatement representing the new statement.
+   * Return whether n is at the end of a set of node tokens
+   * that form a prefixed name needing fixing.
    */
-  public void visit(VariableInitializer n) {
-    withInStatement = true;
-    super.visit(n);
-    withInStatement = false;
-    newStatement = Ast.print(n);
+  private boolean isMatch(NodeToken n) {
+    return ((! Visitors.isLParen(n)) &&
+            lastToken != null &&
+            Visitors.isIdentifier(lastToken) &&
+            twoTokensAgo != null &&
+            Visitors.isDot(twoTokensAgo) &&
+            threeTokensAgo != null &&
+            Visitors.isIdentifier(threeTokensAgo) &&
+            (! lastToken.tokenImage.equals("length")));
   }
 
 }

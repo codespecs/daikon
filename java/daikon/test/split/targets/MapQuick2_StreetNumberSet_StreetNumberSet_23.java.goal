@@ -24,7 +24,7 @@ public final class MapQuick2_StreetNumberSet_StreetNumberSet_23 extends Splitter
 return false; } 
 
   public boolean test(ValueTuple vt) { 
-    return(orig_items_hasMoreTokens()); 
+    return(orig_items.hasMoreTokens()); 
   } 
 
   public String repr() { 

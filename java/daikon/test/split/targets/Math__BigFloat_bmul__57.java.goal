@@ -1,0 +1,63 @@
+import daikon.*; 
+import daikon.inv.*; 
+import daikon.split.*; 
+
+public final class Math__BigFloat_bmul__57 extends Splitter { 
+
+  public String condition() { 
+    return "!orig($y._a.is_defined)"; 
+  } 
+
+  VarInfo orig_$y__a_is_defined_varinfo; // orig($y._a.is_defined)
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public Math__BigFloat_bmul__57() { } 
+  public Math__BigFloat_bmul__57(Ppt ppt) { 
+    orig_$y__a_is_defined_varinfo = ppt.findVarByRepr("Prestate[Field{is_defined}[Field{_a}[$y]]]");
+  }
+
+  public Splitter instantiate(Ppt ppt) { 
+    return new Math__BigFloat_bmul__57(ppt); 
+  } 
+
+  public boolean valid() { 
+    return (orig_$y__a_is_defined_varinfo != null); } 
+
+  public boolean test(ValueTuple vt) { 
+    boolean orig_$y__a_is_defined = orig_$y__a_is_defined_varinfo.getIntValue(vt) > 0;
+    return(!orig_$y__a_is_defined); 
+  } 
+
+  public String repr() { 
+    return "Math__BigFloat_bmul__57: "
+      + "orig_$y__a_is_defined_varinfo = " + orig_$y__a_is_defined_varinfo.repr() + " "
+      ;
+  } 
+
+  public void makeDummyInvariant(DummyInvariant inv) { 
+    dummyInvFactory = inv; 
+  } 
+
+  public void instantiateDummy(PptTopLevel ppt) { 
+    dummyInv = null; 
+    VarInfo orig_$y__a_is_defined_vi = ppt.findVarByRepr("Prestate[Field{is_defined}[Field{_a}[$y]]]");
+    if (orig_$y__a_is_defined_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {orig_$y__a_is_defined_vi});
+    }
+  } 
+
+  public DummyInvariant getDummyInvariant() { 
+    return dummyInv; 
+  } 
+
+  public int[] getIntArray(long[] longArray) { 
+    int[] intArray = new int[longArray.length]; 
+    for (int i = 0; i < intArray.length; i++) { 
+      intArray[i] = (int) longArray[i]; 
+    } 
+    return intArray; 
+  } 
+
+} 

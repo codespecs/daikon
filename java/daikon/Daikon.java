@@ -251,6 +251,8 @@ public final class Daikon {
       release_string,
       "Daikon invariant detector, copyright 1998-2003",
       // " by Michael Ernst <mernst@lcs.mit.edu>",
+      "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
+      "For licensing information, see the License section of the manual.",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
       "  Each file is a declaration file or a data trace file; the file type",

@@ -57,10 +57,10 @@ public class LogicalCompare {
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
-      "           APP-INVS TEST-INVS [ENTER-PPT EXIT-PPT]",
+      "           WEAK-INVS STRONG-INVS [ENTER-PPT EXIT-PPT]",
       "  -h, --help",
       "      Display this usage message",
-      "  --config-file  FILE",
+      "  --config-file FILE",
       "      Read configuration option file",
       "  --cfg OPTION=VALUE",
       "      Set individual configuration option",
@@ -69,19 +69,19 @@ public class LogicalCompare {
       "  --dbg CATEGORY",
       "      Enable a single category of debug log",
       "  --proofs",
-      "      Show minimal sufficient conditions for valid properties",
+      "      Show minimal sufficient conditions for valid invariants",
       "  --show-count",
-      "      Print count of properties checked",
+      "      Print count of invariants checked",
       "  --show-formulas",
-      "      Print Simplify representation of properties",
+      "      Print Simplify representation of invariants",
       "  --show-valid",
-      "      Show properties that are verified as well as those that fail",
+      "      Show invariants that are verified as well as those that fail",
       "  --post-after-pre-failure",
       "      Check postcondition match even if preconditions fail",
       "  --timing",
-      "      Show time required to check properties",
+      "      Show time required to check invariants",
       "  --filters [bBoOmjpi]",
-      "      Control which properties are removed from consideration",
+      "      Control which invariants are removed from consideration",
     }, Global.lineSep);
 
   // Filter options
@@ -314,7 +314,8 @@ public class LogicalCompare {
     t_post = filterInvariants(t_post, true);
 
     if (opt_show_count)
-      System.out.println("Tpre consists of " + t_pre.size() + " invariants.");
+      System.out.println("Strong preconditions consist of "
+                         + t_pre.size() + " invariants.");
     Vector/*<Lemma>*/ pre_assumptions = new Vector();
     pre_assumptions.addAll(translateStraight(a_pre));
     Vector/*<Lemma>*/ pre_conclusions = new Vector();
@@ -342,8 +343,8 @@ public class LogicalCompare {
     Collections.sort(post_conclusions);
 
     if (opt_show_count)
-      System.out.println("Apost consists of " + post_conclusions.size()
-                         + " invariants.");
+      System.out.println("Weak postconditions consist of "
+                         + post_conclusions.size() + " invariants.");
 
     evaluateImplications(post_assumptions, post_conclusions);
     long time_elapsed = System.currentTimeMillis() - processing_time_start;
@@ -387,10 +388,10 @@ public class LogicalCompare {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-        if (option_name.equals("--help")) {
+        if (option_name.equals("help")) {
           System.out.println(usage);
           System.exit(1);
-        } else if (option_name.equals("--config-file")) {
+        } else if (option_name.equals("config-file")) {
           String config_file = g.getOptarg();
           try {
             InputStream stream = new FileInputStream(config_file);

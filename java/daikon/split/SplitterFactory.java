@@ -27,7 +27,7 @@ public class SplitterFactory {
   private static String tempdir = createTempDir();
 
   /**
-   * Specifies whether or not the temporary Splitter files
+   * Boolean. Specifies whether or not the temporary Splitter files
    * should be deleted on exit.
    **/
   public static boolean dkconfig_delete_splitters_on_exit = true;
@@ -109,7 +109,7 @@ public class SplitterFactory {
                                  statementReplacer);
         file = splitterWriter.getFileText();
       } catch (ParseException e) {
-        System.out.println("Error while writing splitter java file for: " + lineSep +
+        System.out.println("Error in SplitterFactory while writing splitter java file for: " + lineSep +
                            splitObj.condition() + " cannot be parsed.");
         continue;
       }

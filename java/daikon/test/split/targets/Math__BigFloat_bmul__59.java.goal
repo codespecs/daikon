@@ -1,0 +1,73 @@
+import daikon.*; 
+import daikon.inv.*; 
+import daikon.split.*; 
+
+public final class Math__BigFloat_bmul__59 extends Splitter { 
+
+  public String condition() { 
+    return "orig($y._p) == 0 && orig($x._p) == 0 && $x._p != 0"; 
+  } 
+
+  VarInfo $x__p_varinfo; // $x._p
+  VarInfo orig_$x__p_varinfo; // orig($x._p)
+  VarInfo orig_$y__p_varinfo; // orig($y._p)
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public Math__BigFloat_bmul__59() { } 
+  public Math__BigFloat_bmul__59(Ppt ppt) { 
+    $x__p_varinfo = ppt.findVarByRepr("Field{_p}[$x]");
+    orig_$x__p_varinfo = ppt.findVarByRepr("Prestate[Field{_p}[$x]]");
+    orig_$y__p_varinfo = ppt.findVarByRepr("Prestate[Field{_p}[$y]]");
+  }
+
+  public Splitter instantiate(Ppt ppt) { 
+    return new Math__BigFloat_bmul__59(ppt); 
+  } 
+
+  public boolean valid() { 
+    return ($x__p_varinfo != null) && ($x__p_varinfo != null) && ($x__p_varinfo != null); } 
+
+  public boolean test(ValueTuple vt) { 
+    long $x__p = $x__p_varinfo.getIntValue(vt);
+    long orig_$x__p = orig_$x__p_varinfo.getIntValue(vt);
+    long orig_$y__p = orig_$y__p_varinfo.getIntValue(vt);
+    return(orig_$y__p==0&&orig_$x__p==0&&$x__p!=0); 
+  } 
+
+  public String repr() { 
+    return "Math__BigFloat_bmul__59: "
+      + "$x__p_varinfo = " + $x__p_varinfo.repr() + " "
+      + "orig_$x__p_varinfo = " + orig_$x__p_varinfo.repr() + " "
+      + "orig_$y__p_varinfo = " + orig_$y__p_varinfo.repr() + " "
+      ;
+  } 
+
+  public void makeDummyInvariant(DummyInvariant inv) { 
+    dummyInvFactory = inv; 
+  } 
+
+  public void instantiateDummy(PptTopLevel ppt) { 
+    dummyInv = null; 
+    VarInfo $x__p_vi = ppt.findVarByRepr("Field{_p}[$x]");
+    VarInfo orig_$x__p_vi = ppt.findVarByRepr("Prestate[Field{_p}[$x]]");
+    VarInfo orig_$y__p_vi = ppt.findVarByRepr("Prestate[Field{_p}[$y]]");
+    if ($x__p_vi != null && orig_$x__p_vi != null && orig_$y__p_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {$x__p_vi, orig_$x__p_vi, orig_$y__p_vi});
+    }
+  } 
+
+  public DummyInvariant getDummyInvariant() { 
+    return dummyInv; 
+  } 
+
+  public int[] getIntArray(long[] longArray) { 
+    int[] intArray = new int[longArray.length]; 
+    for (int i = 0; i < intArray.length; i++) { 
+      intArray[i] = (int) longArray[i]; 
+    } 
+    return intArray; 
+  } 
+
+} 

@@ -40,7 +40,7 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   // key = methodname (as String); value = conditional expressions (as Strings)
   HashMap conditions = new HashMap();
-  // key = method declaration; value = method bodies
+  // key = method declaration (String); value = method bodies (String)
   HashMap replaceStatements = new HashMap();
 
 
