@@ -3,10 +3,6 @@ Todo list sorted in approximate order of importance.
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
 
-  - Prmitives are at least sometimes printing as hashcodes rather than
-    as their primitive values.  See diffs in $inv/tests/daikon-tests/fib.
-    [jhp]
-
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
@@ -83,6 +79,13 @@ Completed Tasks (add new ones at the top)
 
     Feb 13 2005, jhp - a flame test is added to the 
     test-staged-dist target in $inv/Makefile
+
+  - Primitives are at least sometimes printing as hashcodes rather than
+    as their primitive values.  See diffs in $inv/tests/daikon-tests/fib.
+
+    Feb 11 2005, jhp - Static primitives were printed as hashcodes.  There
+    was a bug in the static code similar to the ones previously fixed
+    in the normal field code.  Fixed in the same way.
 
   - Cleanup directory structure in $inv/chicory,  remove JDI based files
   
