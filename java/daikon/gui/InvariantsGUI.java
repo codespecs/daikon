@@ -177,17 +177,14 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
  
-	JCheckBox showUnjustifiedCheckBox = new JCheckBox( "Show unjustified invariants" );
-	showUnjustifiedCheckBox.addItemListener( invariantsTablesPanel );
-	showUnjustifiedCheckBox.setName( "showUnjustifiedCheckBox" );
-	showUnjustifiedCheckBox.setFont( showUnjustifiedCheckBox.getFont().deriveFont( Font.PLAIN ));
-	JCheckBox showObviousCheckBox = new JCheckBox( "Show obvious invariants" );
-	showObviousCheckBox.addItemListener( invariantsTablesPanel );
-	showObviousCheckBox.setName( "showObviousCheckBox" );
+	JCheckBox showUnjustifiedCheckBox = createCheckBox( "Show unjustified invariants",
+							    InvariantFilters.UNJUSTIFIED_FILTER );
+	JCheckBox showObviousCheckBox = createCheckBox( "Show obvious invariants",
+							InvariantFilters.OBVIOUS_FILTER );
 
 	JPanel controlPanel = new JPanel();
 	controlPanel.add( showUnjustifiedCheckBox );
-	//	controlPanel.add( showObviousCheckBox );
+	controlPanel.add( showObviousCheckBox );
 
 	JPanel topPanel = new JPanel();	// includes control panel and tree
 	topPanel.setLayout( new BorderLayout());
@@ -209,6 +206,14 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 	splitPane.setDividerLocation( .4 );
+    }
+
+    JCheckBox createCheckBox( String text, String id ) {
+	JCheckBox checkBox = new JCheckBox( text );
+	checkBox.setName( id );
+	checkBox.addItemListener( invariantsTablesPanel );
+	checkBox.setFont( checkBox.getFont().deriveFont( Font.PLAIN ));
+	return checkBox;
     }
 
     public void actionPerformed( ActionEvent e ) {
@@ -268,9 +273,10 @@ class InvFileFilter extends FileFilter {
 
 
 class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
-    JScrollPane scrollPane;	// the main scrollPane, which contains the main panel
-    JPanel panel;		// the main panel
+    JScrollPane scrollPane;	 // the main scrollPane, which contains the main panel
+    JPanel panel = new JPanel(); // the main panel
     TreeSelectionModel treeSelectionModel;
+    InvariantFilters invariantFilters = new InvariantFilters();
 
     List tables = new ArrayList();
     List tableNames = new ArrayList();
@@ -280,9 +286,8 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
     
     public InvariantTablesPanel( JScrollPane scrollPane, TreeSelectionModel treeSelectionModel ) {
 	this.scrollPane = scrollPane;
-	this.panel = new JPanel();
-	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
 	this.scrollPane.setViewportView( panel );
+	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
 	this.treeSelectionModel = treeSelectionModel;
     }
 
@@ -360,8 +365,8 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
     }
 
     private JComponent setupTable( PptTopLevel topLevel ) {
-	Vector invariants = topLevel.invariants_vector();
-	InvariantTableModel tableModel = new InvariantTableModel( invariants );
+	List invariants = new ArrayList( topLevel.invariants_vector());
+	InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
 	tableModels.add( tableModel );
 	TableSorter sorter = new TableSorter( tableModel );
 	JTable table = new JTable( sorter );
@@ -406,23 +411,14 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
     }
 
     public void itemStateChanged( ItemEvent e ) {
-	if (((JCheckBox) e.getItem()).getName().equals( "showUnjustifiedCheckBox" )) {
-	    if (e.getStateChange() == ItemEvent.SELECTED)
-		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		    ((InvariantTableModel) iter.next()).showUnjustifiedInvariants( true );
-	    else
-		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		    ((InvariantTableModel) iter.next()).showUnjustifiedInvariants( false );
+	String filterID = ((JCheckBox) e.getItem()).getName();
+	boolean shouldTurnOn = (e.getStateChange() == ItemEvent.DESELECTED);
+	invariantFilters.changeFilterSetting( filterID, shouldTurnOn );
+	for (Iterator iter = tableModels.iterator(); iter.hasNext(); ) {
+	    InvariantTableModel tableModel = (InvariantTableModel) iter.next();
+	    tableModel.updateInvariantList( invariantFilters );
 	}
-	else if (((JCheckBox) e.getItem()).getName().equals( "showObviousCheckBox" )) {
-	    if (e.getStateChange() == ItemEvent.SELECTED)
-		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		    ((InvariantTableModel) iter.next()).showObviousInvariants( true );
-	    else
-		for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
-		    ((InvariantTableModel) iter.next()).showObviousInvariants( false );
-	}
-	    panel.repaint();
+	panel.repaint();
 	panel.revalidate();
     }
 
@@ -445,20 +441,19 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	scrollToCurrentTable();
     }
 }
-    
+
+
 
 class InvariantTableModel extends AbstractTableModel {
     static final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
     static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
 
-    Vector allInvariants;
-    Vector filteredInvariants = new Vector();	// only filtered invariants are displayed
+    List allInvariants;
+    List filteredInvariants;	// only filtered invariants are displayed
 
-    static boolean isShowingUnjustifiedInvariants = false;
-
-    public InvariantTableModel( Vector invariants ) {
+    public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
 	allInvariants = invariants;
-	showUnjustifiedInvariants( isShowingUnjustifiedInvariants );
+	updateInvariantList( invariantFilters );
     }
 
     public int getRowCount() { return filteredInvariants.size(); }
@@ -480,26 +475,87 @@ class InvariantTableModel extends AbstractTableModel {
     }
 
     //  Methods called by InvariantsGUI to control/filter what invariants are being displayed.
-
-    public void showUnjustifiedInvariants( boolean showUnjustifiedInvariants ) {
-	//  Assume this method is called only when showUnjustifiedInvariants changes.
-	if (showUnjustifiedInvariants)
-	    filteredInvariants = allInvariants;
-	else {
-	    filteredInvariants = new Vector();
-	    Invariant invariant;
-	    for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
-		invariant = (Invariant) iter.next();
-		if (invariant.justified())
-		    filteredInvariants.add( invariant );
-	    }
+    
+    public void updateInvariantList( InvariantFilters invariantFilters ) {
+	filteredInvariants = new ArrayList();
+	for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
+	    Invariant invariant = (Invariant) iter.next();
+	    if (invariantFilters.shouldKeep( invariant ))
+		filteredInvariants.add( invariant );
 	}
-	this.isShowingUnjustifiedInvariants = showUnjustifiedInvariants;
 	fireTableDataChanged();
-    }
-
-    public void showObviousInvariants( boolean showObviousInvariants ) {
     }
 }
 
+
+
+public class InvariantFilters {
+    //  These id numbers are stored in HashMap's and such, so it's
+    //  convenient for them to be String's rather than int's.
+    public static final String UNJUSTIFIED_FILTER = "0";
+    public static final String OBVIOUS_FILTER = "1";
+
+    HashMap filters = new HashMap();
+    
+    public InvariantFilters() {
+	filters.put( InvariantFilters.UNJUSTIFIED_FILTER, new UnjustifiedFilter());
+	filters.put( InvariantFilters.OBVIOUS_FILTER,     new ObviousFilter());
+    }
+
+    public boolean shouldKeep( Invariant invariant ) {
+	for (Iterator iter = filters.values().iterator(); iter.hasNext(); ) {
+	    InvariantFilter filter = (InvariantFilter) iter.next();
+	    if (filter.shouldDiscard( invariant ))
+		return false;
+	}
+	return true;
+    }
+    
+    public void changeFilterSetting( String filterID, boolean shouldTurnOn ) {
+	//  filterID is one of { UNJUSTIFIED_FILTER, OBVIOUS_FILTER, ... }
+	InvariantFilter filter = (InvariantFilter) filters.get( filterID );
+	if (shouldTurnOn)
+	    filter.turnOn();
+	else
+	    filter.turnOff();
+    }
+}
+
+
+
+abstract class InvariantFilter {
+    boolean isOn;
+
+    public InvariantFilter( boolean isOn ) {
+	this.isOn = isOn;
+    }
+
+    public InvariantFilter() {	// TODO:  This is a hack.  Should add constructors that take a boolean
+	this( true );		// for every subclass.
+    }
+
+    public void turnOn()  { isOn = true; }
+    public void turnOff() { isOn = false; }
+    
+    public boolean shouldDiscard( Invariant invariant ) {
+	if (! isOn)
+	    return false;
+	else
+	    return shouldDiscardInvariant( invariant );
+    }
+    
+    abstract boolean shouldDiscardInvariant( Invariant invariant );
+}
+
+class UnjustifiedFilter extends InvariantFilter {
+    boolean shouldDiscardInvariant( Invariant invariant ) {
+	return ! invariant.justified();
+    }
+}
+
+class ObviousFilter extends InvariantFilter {
+    public boolean shouldDiscardInvariant( Invariant invariant ) {
+	return invariant.isObvious();
+    }
+}
 
