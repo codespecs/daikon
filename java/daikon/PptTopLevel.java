@@ -1736,14 +1736,13 @@ public class PptTopLevel
         for (Iterator i = invs.iterator(); i.hasNext(); ) {
           Invariant inv = (Invariant) i.next();
           if (inv.getSuppressor() != null) {
-            debugSuppressInit.debug (" +" + inv.repr());
+            debugSuppressInit.debug (" y" + inv.repr());
           } else {
-            debugSuppressInit.debug (" -" + inv.repr());
+            debugSuppressInit.debug (" n" + inv.repr());
           }
         }
         debugSuppressInit.debug ("  end of suppressed invariants:");
       }
-
     }
   }
 

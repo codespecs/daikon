@@ -443,10 +443,13 @@ public final class PptSlice1
       Invariant inv = (Invariant) i.next();
       Assert.assertTrue (inv.ppt == this);
       Invariant newInv = inv.transfer (result, permutation);
+      //if (!newInv.isObvious()) {
       newInvs.add (newInv);
+      parent.attemptSuppression (newInv);
       Assert.assertTrue (newInv != inv);
       Assert.assertTrue (newInv.ppt == result);
       Assert.assertTrue (inv.ppt == this);
+      //}
     }
 
     result.invs.addAll (newInvs);
@@ -512,9 +515,12 @@ public final class PptSlice1
         Equality.debugPostProcess.debug ("after: " + newInv.repr());
       }
       newInvs.add (newInv);
+      // if (!newInv.isObvious()) {
+      parent.attemptSuppression (newInv);
       Assert.assertTrue (newInv != inv);
       Assert.assertTrue (newInv.ppt == result);
       Assert.assertTrue (inv.ppt == this);
+      // }
     }
 
     result.invs.addAll (newInvs);
