@@ -787,7 +787,7 @@ public class FeatureExtractor {
     return answer;
   }
 
-  private static Vector getSingleSequenceFeatures(SingleSequence inv) {
+  private static Vector getSingleSequenceFeatures(SingleScalarSequence inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSingleSequence, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
