@@ -437,8 +437,13 @@ sub lackwit {
 
 sub _lackwit {
   my ($function, $variable) = @_;
+#  my $result = `echo "searchlocal $function:$variable -all" | BackEnd 2>&1`;
+#this is horrible, but on solaris, the only way we can eat the
+#'Segmentation Fault' error message is by doing sh -c.  For some
+#reason, in Solaris, segfaults bypass stderr redirection in an
+#interactive shell
   my $result =
-    `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
+      `echo "searchlocal $function:$variable -all" | sh -c BackEnd 2>&1`;
   if ($CHILD_ERROR != 0) {
     if (is_struct_field($variable)) {
       return "";
