@@ -12,7 +12,7 @@ import java.util.*;
 
 public final class TwoSequenceFactory {
 
-  /** 
+  /**
    * Debugging logger
    **/
   public static final Category debug = Category.getInstance (TwoSequenceFactory.class.getName());
@@ -40,8 +40,8 @@ public final class TwoSequenceFactory {
 
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating for pass " + new Integer(pass) + " and ppt " + ppt.name);
-      debug.debug ("name1 " + super1.getDebugString());
-      debug.debug ("name2 " + super2.getDebugString());
+      debug.debug ("name1 " + super1.repr());
+      debug.debug ("name2 " + super2.repr());
     }
 
 

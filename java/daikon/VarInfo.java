@@ -25,7 +25,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   // Name and type
   public VarInfoName name;      // interned
-  
+
   /**
    * Type as declared in the program.
    **/
@@ -35,7 +35,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    * Type as written in the data trace file.  This is an interface
    * detail.
    **/
-  public ProglangType file_rep_type;  
+  public ProglangType file_rep_type;
 
 
   /**
@@ -76,7 +76,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   /**
    * Vector of Derivation objects
    **/
-  public Vector derivees;	
+  public Vector derivees;
 
   /**
    * The program point this variable is in.
@@ -260,7 +260,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return (o == null) ? "null" : o;
   }
 
-  String repr() {
+  public String repr() {
     return "<VarInfo " + checkNull(name) + ": "
       + "type=" + type
       + ",file_rep_type=" + file_rep_type
@@ -275,13 +275,6 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       + ",ppt=" + ppt
       + ",equal_to=" + equal_to
       + ">";
-  }
-
-  /**
-   * For debugging only
-   **/
-  public String getDebugString() {
-    return repr();
   }
 
   public boolean isConstant() {
@@ -380,7 +373,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
 
   /**
-   * Get the value of this variable at a particular step (i.e. ValueTuple) 
+   * Get the value of this variable at a particular step (i.e. ValueTuple)
    * @param vt The ValueTuple from which to extract the value
    **/
 
