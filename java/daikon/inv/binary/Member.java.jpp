@@ -434,8 +434,8 @@ public final class CLASSNAME
     private transient SuppressionTemplate template;
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof Member);
-      Member inv = (Member) arg;
+      Assert.assertTrue (arg instanceof CLASSNAME);
+      CLASSNAME inv = (CLASSNAME) arg;
       VarInfo sclSequence = inv.sclvar().isDerivedSequenceMember();
       if (sclSequence == null) return null;
       VarInfo seqvar = inv.seqvar();

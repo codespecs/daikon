@@ -531,8 +531,8 @@ public class SubSequenceFloat
     }
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof SubSequence);
-      SubSequence inv = (SubSequence) arg;
+      Assert.assertTrue (arg instanceof SubSequenceFloat);
+      SubSequenceFloat inv = (SubSequenceFloat) arg;
 
       SuppressionTemplate template = new SuppressionTemplate();
       template.invTypes = new Class[] {PairwiseIntComparison.class};

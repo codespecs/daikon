@@ -572,8 +572,8 @@ public class CLASSNAME
     }
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof SubSequence);
-      SubSequence inv = (SubSequence) arg;
+      Assert.assertTrue (arg instanceof CLASSNAME);
+      CLASSNAME inv = (CLASSNAME) arg;
 
       SuppressionTemplate template = new SuppressionTemplate();
       template.invTypes = new Class[] {PairwiseIntComparison.class};

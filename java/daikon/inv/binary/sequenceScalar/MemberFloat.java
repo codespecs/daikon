@@ -379,8 +379,8 @@ public final class MemberFloat
     private transient SuppressionTemplate template;
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof Member);
-      Member inv = (Member) arg;
+      Assert.assertTrue (arg instanceof MemberFloat);
+      MemberFloat inv = (MemberFloat) arg;
       VarInfo sclSequence = inv.sclvar().isDerivedSequenceMember();
       if (sclSequence == null) return null;
       VarInfo seqvar = inv.seqvar();
