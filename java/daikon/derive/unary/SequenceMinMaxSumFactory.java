@@ -16,6 +16,8 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       return null;
     if (elttype.base() == "char") // interned
       return null;
+    if (Daikon.esc_output)
+      return null;
 
     return new UnaryDerivation[] {
       new SequenceMin(vi),
