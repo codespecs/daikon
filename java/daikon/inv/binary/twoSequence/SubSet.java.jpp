@@ -135,6 +135,7 @@ public class SUBSET
     if (format == OutputFormat.JAVA) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.JML) return format_jml();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
   }
@@ -176,8 +177,33 @@ public class SUBSET
   }
 
   public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+    if (Invariant.dkconfig_simplify_define_predicates)
+      return format_simplify_defined();
+    else
+      return format_unimplemented(OutputFormat.SIMPLIFY);
+  }
+
+  private String format_simplify_defined() {
+#if defined(SUB) || defined(SUBFLOAT)
+    VarInfo subvar = var1();
+    VarInfo supervar = var2();
+#else
+    VarInfo subvar = var2();
+    VarInfo supervar = var1();
+#endif
+    String[] sub_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(subvar.name);
+    String[] super_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(supervar.name);
+
+    if (sub_name == null || super_name == null) {
+      return "format_simplify can't handle one of these sequences: "
+        + format();
+    }
+
+    return "(subset " +
+      sub_name[0] + " " + sub_name[1] + " " + sub_name[2] + " " +
+      super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
   }
 
   public String format_jml() {
