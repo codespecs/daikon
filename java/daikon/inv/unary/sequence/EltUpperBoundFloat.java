@@ -55,7 +55,7 @@ public class EltUpperBoundFloat
 
   public UpperBoundCoreFloat core;
 
-  private EltUpperBoundFloat (PptSlice ppt) {
+  private EltUpperBoundFloat(PptSlice ppt) {
     super(ppt);
     core = new UpperBoundCoreFloat(this);
   }
@@ -96,7 +96,7 @@ public class EltUpperBoundFloat
   }
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements <= " + core.max1 ;
+    return var().name.name() + " elements <= " + core.max1;
   }
 
   public String format_esc() {

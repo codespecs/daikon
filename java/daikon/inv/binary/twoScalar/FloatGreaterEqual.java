@@ -41,7 +41,7 @@ public final class FloatGreaterEqual
     return result;
   }
 
-  protected FloatGreaterEqual (PptSlice ppt) {
+  protected FloatGreaterEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -53,7 +53,7 @@ public final class FloatGreaterEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isFloat() && var2.file_rep_type. isFloat())) {
+    if (! (var1.file_rep_type.isFloat() && var2.file_rep_type.isFloat())) {
       return null;
     }
 
@@ -117,14 +117,14 @@ public final class FloatGreaterEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = ">=" ;
+      String comparator = ">=";
 
       return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
 
-    String comparator = ">=" ;
+    String comparator = ">=";
 
       return "(" + comparator + " " + var1name + " " + var2name + ")";
     }

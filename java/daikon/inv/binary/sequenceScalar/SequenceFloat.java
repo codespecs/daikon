@@ -21,7 +21,7 @@ public abstract class SequenceFloat
   public int seq_index;                // 0 or 1
   public int scl_index;                // 0 or 1
 
-  protected SequenceFloat (PptSlice ppt, boolean seq_first) {
+  protected SequenceFloat(PptSlice ppt, boolean seq_first) {
     super(ppt);
     this.seq_first = seq_first;
     if (seq_first) {
@@ -48,7 +48,7 @@ public abstract class SequenceFloat
     return ppt.var_infos[scl_index];
   }
 
-  public void add(double [] v1, double v2, int mod_index, int count) {
+  public void add(double[] v1, double v2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // Assert.assertTrue(!finished); // [INCR]
@@ -65,13 +65,13 @@ public abstract class SequenceFloat
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(double [] v1, double v2, int count);
+  public abstract void add_modified(double[] v1, double v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(double [] v1, double v2, int count) {
+  public void add_unmodified(double[] v1, double v2, int count) {
     return;
   }
 

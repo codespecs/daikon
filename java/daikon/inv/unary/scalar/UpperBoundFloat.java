@@ -55,7 +55,7 @@ public class UpperBoundFloat
 
   public UpperBoundCoreFloat core;
 
-  private UpperBoundFloat (PptSlice ppt) {
+  private UpperBoundFloat(PptSlice ppt) {
     super(ppt);
     core = new UpperBoundCoreFloat(this);
   }
@@ -86,7 +86,7 @@ public class UpperBoundFloat
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " <= " + core.max1 ;
+      return name + " <= " + core.max1;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

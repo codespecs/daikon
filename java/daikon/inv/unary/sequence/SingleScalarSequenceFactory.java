@@ -15,7 +15,7 @@ public final class SingleScalarSequenceFactory {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType.INT_ARRAY);
     Assert.assertTrue(var.type.pseudoDimensions() > 0);
 
     Vector result = new Vector();
@@ -30,7 +30,7 @@ public final class SingleScalarSequenceFactory {
         result.add(EltNonZero.instantiate(ppt));
         result.add(NoDuplicates.instantiate(ppt));
         result.add(CommonSequence.instantiate(ppt));
-        if (var.type. elementIsIntegral()) {
+        if (var.type.elementIsIntegral()) {
           result.add(EltwiseIntComparison.instantiate(ppt));
           result.add(EltLowerBound.instantiate(ppt));
           result.add(EltUpperBound.instantiate(ppt));
@@ -44,7 +44,7 @@ public final class SingleScalarSequenceFactory {
     return result;
   }
 
-  private SingleScalarSequenceFactory () {
+  private SingleScalarSequenceFactory() {
   }
 
 }

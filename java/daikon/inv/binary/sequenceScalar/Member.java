@@ -36,7 +36,7 @@ public final class Member
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected Member (PptSlice ppt, boolean seq_first) {
+  protected Member(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
     Assert.assertTrue(sclvar().rep_type == ProglangType.INT);
     Assert.assertTrue(seqvar().rep_type == ProglangType.INT_ARRAY);
@@ -316,7 +316,7 @@ public final class Member
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 
-  public void add_modified(long [] a, long i, int count) {
+  public void add_modified(long[] a, long i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debug.isDebugEnabled()) {
         debug.debug ("Member destroyed:  " + format() + " because " + i +
@@ -523,7 +523,7 @@ public final class Member
 
       int interval = 0;
       if (ssss.from_start) {
-        interval = sssc.index_shift - ssss.index_shift ;
+        interval = sssc.index_shift - ssss.index_shift;
         return findLessEqual (leftIndex, rightIndex, inv, interval);
       } else {
         interval = ssss.index_shift + sssc.index_shift;

@@ -56,8 +56,8 @@ public final class MathMDE {
     return x / y;
   }
 
-  public static long div (long x, long y) {
-    return x /y ;
+  public static long div(long x, long y) {
+    return x / y;
   }
 
   public static double div(double x, double y) {

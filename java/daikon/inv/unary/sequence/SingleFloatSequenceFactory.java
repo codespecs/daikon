@@ -15,7 +15,7 @@ public final class SingleFloatSequenceFactory {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assertTrue(var.rep_type == ProglangType. DOUBLE_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType.DOUBLE_ARRAY);
     Assert.assertTrue(var.type.pseudoDimensions() > 0);
 
     Vector result = new Vector();
@@ -30,7 +30,7 @@ public final class SingleFloatSequenceFactory {
         result.add(EltNonZeroFloat.instantiate(ppt));
         result.add(NoDuplicatesFloat.instantiate(ppt));
         result.add(CommonFloatSequence.instantiate(ppt));
-        if (var.type. elementIsFloat()) {
+        if (var.type.elementIsFloat()) {
           result.add(EltwiseFloatComparison.instantiate(ppt));
           result.add(EltLowerBoundFloat.instantiate(ppt));
           result.add(EltUpperBoundFloat.instantiate(ppt));
@@ -44,7 +44,7 @@ public final class SingleFloatSequenceFactory {
     return result;
   }
 
-  private SingleFloatSequenceFactory () {
+  private SingleFloatSequenceFactory() {
   }
 
 }

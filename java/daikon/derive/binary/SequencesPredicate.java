@@ -158,7 +158,7 @@ public final class SequencesPredicate
     }
 
     if (val1 instanceof long[]) {
-      long[] result = new long [count];
+      long[] result = new long[count];
       long[] values = (long[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {

@@ -45,7 +45,7 @@ public final class TwoScalarFactory {
     //   return null;
     // }
 
-    boolean integral = var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral() ;
+    boolean integral = var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral();
 
     Vector result = new Vector();
 
@@ -73,7 +73,7 @@ public final class TwoScalarFactory {
     return result;
   }
 
-  private TwoScalarFactory () {
+  private TwoScalarFactory() {
   }
 
 }

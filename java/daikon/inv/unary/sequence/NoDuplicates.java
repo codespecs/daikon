@@ -35,7 +35,7 @@ public class NoDuplicates
   public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicates");
   int elts = 0;
 
-  protected NoDuplicates (PptSlice ppt) {
+  protected NoDuplicates(PptSlice ppt) {
     super(ppt);
   }
 
@@ -173,7 +173,7 @@ public class NoDuplicates
 
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
         if (debug.isDebugEnabled()) {

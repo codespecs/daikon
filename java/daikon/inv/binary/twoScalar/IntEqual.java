@@ -33,7 +33,7 @@ public final class IntEqual
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntEqual");
 
-  protected IntEqual (PptSlice ppt) {
+  protected IntEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -103,7 +103,7 @@ public final class IntEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = "==" ;
+      String comparator = "==";
 
       if (format == OutputFormat.IOA) comparator = "=";
 

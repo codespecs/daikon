@@ -16,7 +16,7 @@ public abstract class TwoSequenceFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected TwoSequenceFloat (PptSlice ppt) {
+  protected TwoSequenceFloat(PptSlice ppt) {
     super(ppt);
   }
 
@@ -28,7 +28,7 @@ public abstract class TwoSequenceFloat
     return ppt.var_infos[1];
   }
 
-  public void add(double [] v1, double [] v2, int mod_index, int count) {
+  public void add(double[] v1, double [] v2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // [INCR] Assert.assertTrue(!finished);
@@ -43,13 +43,13 @@ public abstract class TwoSequenceFloat
     }
   }
 
-  public abstract void add_modified(double [] v1, double [] v2, int count);
+  public abstract void add_modified(double[] v1, double [] v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(double [] v1, double [] v2, int count) {
+  public void add_unmodified(double[] v1, double [] v2, int count) {
     return;
   }
 

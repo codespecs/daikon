@@ -41,8 +41,8 @@ public final class LinearBinaryCore
   // the two that are furthest apart in order to compute a and b.
   final static int MINPAIRS = 4;
 
-  long[] x_cache = new long [MINPAIRS];
-  long[] y_cache = new long [MINPAIRS];
+  long[] x_cache = new long[MINPAIRS];
+  long[] y_cache = new long[MINPAIRS];
 
   public LinearBinaryCore(Invariant wrapper) {
     this.wrapper = wrapper;

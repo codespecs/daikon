@@ -55,7 +55,7 @@ public class UpperBound
 
   public UpperBoundCore core;
 
-  private UpperBound (PptSlice ppt) {
+  private UpperBound(PptSlice ppt) {
     super(ppt);
     core = new UpperBoundCore(this);
   }
@@ -86,7 +86,7 @@ public class UpperBound
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " <= " + core.max1 ;
+      return name + " <= " + core.max1;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

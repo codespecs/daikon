@@ -33,7 +33,7 @@ public final class FloatEqual
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.FloatEqual");
 
-  protected FloatEqual (PptSlice ppt) {
+  protected FloatEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -103,7 +103,7 @@ public final class FloatEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = "==" ;
+      String comparator = "==";
 
       if (format == OutputFormat.IOA) comparator = "=";
 

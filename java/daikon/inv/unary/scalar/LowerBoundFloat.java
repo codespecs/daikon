@@ -55,7 +55,7 @@ public class LowerBoundFloat
 
   public LowerBoundCoreFloat core;
 
-  private LowerBoundFloat (PptSlice ppt) {
+  private LowerBoundFloat(PptSlice ppt) {
     super(ppt);
     core = new LowerBoundCoreFloat(this);
   }
@@ -86,7 +86,7 @@ public class LowerBoundFloat
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " >= " + core.min1 ;
+      return name + " >= " + core.min1;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

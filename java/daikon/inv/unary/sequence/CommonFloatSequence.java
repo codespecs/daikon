@@ -30,7 +30,7 @@ public class CommonFloatSequence
   private int elts;
   private double [] intersect = null;
 
-  protected CommonFloatSequence (PptSlice ppt) {
+  protected CommonFloatSequence(PptSlice ppt) {
     super(ppt);
   }
 
@@ -81,11 +81,11 @@ public class CommonFloatSequence
       return "(" + printIntersect() + " \\in " + vname + ") ***";
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
     if (intersect==null)
       intersect = a;
     else {
-      double[] tmp = new double [intersect.length];
+      double[] tmp = new double[intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&

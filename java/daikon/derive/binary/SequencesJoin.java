@@ -102,7 +102,7 @@ public final class SequencesJoin
        if (val2 != null) debug.debug ("val2 type: " + val2.getClass().getName());
     */
 
-    long[] result = new long [length1];
+    long[] result = new long[length1];
 
     for (int i = 0; i < length1; i++) {
       Object e1 = null;

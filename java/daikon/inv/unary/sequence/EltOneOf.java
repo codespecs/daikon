@@ -62,7 +62,7 @@ public final class EltOneOf
     Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOf" );
 
-    elts = new long [dkconfig_size];
+    elts = new long[dkconfig_size];
 
     num_elts = 0;
 
@@ -174,7 +174,7 @@ public final class EltOneOf
   }
 
   public String format_daikon() {
-    String varname = var().name.name() + " elements" ;
+    String varname = var().name.name() + " elements";
     if (num_elts == 1) {
 
       if (is_boolean) {
@@ -186,10 +186,10 @@ public final class EltOneOf
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
-            ;
+           ;
         }
       } else {
-        return varname + " == " + ((( elts[0] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L"))) ;
+        return varname + " == " + ((( elts[0] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")));
       }
 
     } else {
@@ -231,14 +231,14 @@ public final class EltOneOf
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
       }
     }
 
@@ -301,7 +301,7 @@ public final class EltOneOf
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
@@ -318,7 +318,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
       }
     }
 
@@ -347,13 +347,13 @@ public final class EltOneOf
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
       }
     }
 
@@ -405,7 +405,7 @@ public final class EltOneOf
     return result;
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
   OUTER:
    for (int ai=0; ai<a.length; ai++) {
     long v = a[ai];

@@ -23,7 +23,7 @@ public class FunctionUnary
 
   public FunctionUnaryCore core;
 
-  protected FunctionUnary (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
+  protected FunctionUnary(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCore(this, methodname, methodNumber, inverse);
   }

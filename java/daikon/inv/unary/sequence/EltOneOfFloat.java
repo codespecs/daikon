@@ -57,7 +57,7 @@ public final class EltOneOfFloat
     Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOfFloat" );
 
-    elts = new double [dkconfig_size];
+    elts = new double[dkconfig_size];
 
     num_elts = 0;
 
@@ -159,10 +159,10 @@ public final class EltOneOfFloat
   }
 
   public String format_daikon() {
-    String varname = var().name.name() + " elements" ;
+    String varname = var().name.name() + " elements";
     if (num_elts == 1) {
 
-      return varname + " == " + String.valueOf( elts[0] ) ;
+      return varname + " == " + String.valueOf( elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -194,7 +194,7 @@ public final class EltOneOfFloat
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 
@@ -238,7 +238,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 
@@ -258,7 +258,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 
@@ -293,7 +293,7 @@ public final class EltOneOfFloat
     return result;
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
   OUTER:
    for (int ai=0; ai<a.length; ai++) {
     double v = a[ai];

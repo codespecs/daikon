@@ -23,7 +23,7 @@ public class PairwiseLinearBinary
 
   public LinearBinaryCore core;
 
-  protected PairwiseLinearBinary (PptSlice ppt) {
+  protected PairwiseLinearBinary(PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCore(this);
   }
@@ -124,7 +124,7 @@ public class PairwiseLinearBinary
                                               seq2) + quantResult[3];
   }
 
-  public void add_modified(long [] x_arr, long [] y_arr, int count) {
+  public void add_modified(long[] x_arr, long [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
       return;

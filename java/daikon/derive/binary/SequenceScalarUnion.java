@@ -42,7 +42,7 @@ public final class SequenceScalarUnion
       return ValueAndModified.MISSING_NONSENSICAL;
     long[] val2_array = (long[]) val2;
 
-    long[] tmp = new long [val1_array.length+val2_array.length];
+    long[] tmp = new long[val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       long v = val1_array[i];

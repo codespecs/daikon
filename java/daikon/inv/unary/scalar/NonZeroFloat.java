@@ -44,7 +44,7 @@ public class NonZeroFloat
   // for pointers).
   long override_range = 0;
 
-  private NonZeroFloat (PptSlice ppt) {
+  private NonZeroFloat(PptSlice ppt) {
     super(ppt);
   }
 

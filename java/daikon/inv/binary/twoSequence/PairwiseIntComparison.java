@@ -36,12 +36,12 @@ public class PairwiseIntComparison
 
   public IntComparisonCore core;
 
-  protected PairwiseIntComparison (PptSlice ppt) {
+  protected PairwiseIntComparison(PptSlice ppt) {
     super(ppt);
     core = new IntComparisonCore(this);
   }
 
-  protected PairwiseIntComparison (PptSlice ppt, boolean only_eq) {
+  protected PairwiseIntComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
     core = new IntComparisonCore(this, only_eq);
   }
@@ -59,7 +59,7 @@ public class PairwiseIntComparison
     }
 
     boolean only_eq = false;
-    if (! (var1.type. elementIsIntegral() && var2.type. elementIsIntegral())) {
+    if (! (var1.type.elementIsIntegral() && var2.type.elementIsIntegral())) {
       only_eq = true;
     }
      PairwiseIntComparison result = new PairwiseIntComparison(ppt, only_eq);
@@ -151,7 +151,7 @@ public class PairwiseIntComparison
     return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
   }
 
-  public void add_modified(long [] a1, long [] a2, int count) {
+  public void add_modified(long[] a1, long [] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;

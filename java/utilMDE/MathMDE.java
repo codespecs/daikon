@@ -46,8 +46,8 @@ public final class MathMDE {
     return x / y;
   }
 
-  public static long div (long x, long y) {
-    return x /y ;
+  public static long div(long x, long y) {
+    return x / y;
   }
 
   public static double div(double x, double y) {
@@ -222,7 +222,7 @@ public final class MathMDE {
   }
 
   /** Return the greatest common divisor of the elements of int array a. */
-  public static int gcd(int [] a) {
+  public static int gcd(int[] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
@@ -240,7 +240,7 @@ public final class MathMDE {
    * Return the gcd (greatest common divisor) of the differences
    * between the elements of int array a.
    **/
-  public static int gcd_differences(int [] a) {
+  public static int gcd_differences(int[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
@@ -270,7 +270,7 @@ public final class MathMDE {
   }
 
   /** Return the greatest common divisor of the elements of long array a. */
-  public static long gcd(long [] a) {
+  public static long gcd(long[] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
@@ -288,7 +288,7 @@ public final class MathMDE {
    * Return the gcd (greatest common divisor) of the differences
    * between the elements of long array a.
    **/
-  public static long gcd_differences(long [] a) {
+  public static long gcd_differences(long[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
@@ -319,7 +319,7 @@ public final class MathMDE {
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
    **/
-  public static int [] modulus(int [] nums) {
+  public static int [] modulus(int[] nums) {
     if (nums.length < 3)
     return null;
 
@@ -331,7 +331,7 @@ public final class MathMDE {
     if (remainder < 0)
       remainder += modulus;
 
-    return new int [] { remainder, modulus };
+    return new int[] { remainder, modulus };
   }
 
   /**
@@ -361,7 +361,7 @@ public final class MathMDE {
       }
     if (count < 3)
       return null;
-    return new int [] { MathMDE.mod_positive(avalue, modulus), modulus } ;
+    return new int[] { MathMDE.mod_positive(avalue, modulus), modulus };
   }
 
   /**
@@ -383,7 +383,7 @@ public final class MathMDE {
    * like other numbers in the input, or they can merely be checked for the
    * condition without the strict density requirement.
    **/
-  public static int [] modulus_strict(int [] nums, boolean nonstrict_ends) {
+  public static int [] modulus_strict(int[] nums, boolean nonstrict_ends) {
     int first_index = 0;
     int last_index = nums.length-1;
     int first_nonstrict = 0; // arbitrary initial value
@@ -411,7 +411,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new int [] { r, modulus };
+    return new int[] { r, modulus };
   }
 
   /**
@@ -420,7 +420,7 @@ public final class MathMDE {
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
-   * For documentation, see modulus_strict(int [], boolean).
+   * For documentation, see modulus_strict(int[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
   public static int [] modulus_strict_int (Iterator itor, boolean nonstrict_ends) {
@@ -463,7 +463,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new int [] { r, modulus } ;
+    return new int[] { r, modulus };
   }
 
   /// modulus for long (as opposed to int) values
@@ -481,7 +481,7 @@ public final class MathMDE {
    * The largest possible modulus is used, and the trivial constraint that all
    * integers are equal to 0 mod 1 is not returned (null is returned instead).
    **/
-  public static long [] modulus(long [] nums) {
+  public static long [] modulus(long[] nums) {
     if (nums.length < 3)
     return null;
 
@@ -493,7 +493,7 @@ public final class MathMDE {
     if (remainder < 0)
       remainder += modulus;
 
-    return new long [] { remainder, modulus };
+    return new long[] { remainder, modulus };
   }
 
   /**
@@ -523,7 +523,7 @@ public final class MathMDE {
       }
     if (count < 3)
       return null;
-    return new long [] { MathMDE.mod_positive(avalue, modulus), modulus } ;
+    return new long[] { MathMDE.mod_positive(avalue, modulus), modulus };
   }
 
   /**
@@ -545,7 +545,7 @@ public final class MathMDE {
    * like other numbers in the input, or they can merely be checked for the
    * condition without the strict density requirement.
    **/
-  public static long [] modulus_strict(long [] nums, boolean nonstrict_ends) {
+  public static long [] modulus_strict(long[] nums, boolean nonstrict_ends) {
     int first_index = 0;
     int last_index = nums.length-1;
     long first_nonstrict = 0; // arbitrary initial value
@@ -573,7 +573,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new long [] { r, modulus };
+    return new long[] { r, modulus };
   }
 
   /**
@@ -582,7 +582,7 @@ public final class MathMDE {
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
-   * For documentation, see modulus_strict(long [], boolean).
+   * For documentation, see modulus_strict(long[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
   public static long [] modulus_strict_long (Iterator itor, boolean nonstrict_ends) {
@@ -625,7 +625,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new long [] { r, modulus } ;
+    return new long[] { r, modulus };
   }
 
   ///
@@ -638,11 +638,11 @@ public final class MathMDE {
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
    **/
-  public static int [] missing_numbers(int [] nums) {
+  public static int [] missing_numbers(int[] nums) {
     Arrays.sort(nums);
     int min = nums[0];
     int max = nums[nums.length-1];
-    int[] result = new int [ max - min + 1 - nums.length ];
+    int[] result = new int[ max - min + 1 - nums.length ];
     int result_index = 0;
     int val = min;
     for (int i=0; i<nums.length; i++) {
@@ -660,7 +660,7 @@ public final class MathMDE {
     } else {
       // There were duplicates in the nums array, so we didn't fill up
       // the result array.
-      int[] new_result = new int [result_index];
+      int[] new_result = new int[result_index];
       System.arraycopy(result, 0, new_result, 0, result_index);
       return new_result;
     }
@@ -683,7 +683,7 @@ public final class MathMDE {
     int current_index;
     boolean add_ends;
 
-    MissingNumbersIteratorInt (int [] nums, boolean add_ends) {
+    MissingNumbersIteratorInt (int[] nums, boolean add_ends) {
       this.add_ends = add_ends;
       Arrays.sort(nums);
       current_index = 0;
@@ -770,7 +770,7 @@ public final class MathMDE {
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static int [] nonmodulus_strict(int [] nums) {
+  public static int [] nonmodulus_strict(int[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -797,7 +797,7 @@ public final class MathMDE {
     return result;
   }
 
-  private static boolean check_first_and_last_nonmodulus(int [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
+  private static boolean check_first_and_last_nonmodulus(int[] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
     int r = rm[0];
     int m = rm[1];
     int first = ((Integer)rfali.getFirst()). intValue ();
@@ -820,7 +820,7 @@ public final class MathMDE {
   //  * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
   //  * m) but all missing numbers in their range are.
   //  */
-  // public static int [] nonmodulus_strict(int [] nums) {
+  // public static int [] nonmodulus_strict(int[] nums) {
   //   // This implementation is particularly inefficient; find a better way to
   //   // compute this.  Perhaps obtain the new modulus numbers incrementally
   //   // instead of all at once.
@@ -840,10 +840,10 @@ public final class MathMDE {
    **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
-  public static int [] nonmodulus_nonstrict(int [] nums) {
+  public static int [] nonmodulus_nonstrict(int[] nums) {
     if (nums.length < 4)
       return null;
-    int max_modulus = Math.min(nums.length/2, ArraysMDE.element_range(nums)/2) ;
+    int max_modulus = Math.min(nums.length/2, ArraysMDE.element_range(nums)/2);
 
     // System.out.println("nums.length=" + nums.length + ", range=" + ArraysMDE.element_range(nums) + ", max_modulus=" + max_modulus);
 
@@ -854,7 +854,7 @@ public final class MathMDE {
       boolean[] has_modulus = new boolean[m]; // initialized to false?
       int num_nonmodulus = m;
       for (int i=0; i<nums.length; i++) {
-	int rem = mod_positive(nums[i], m) ;
+	int rem = mod_positive(nums[i], m);
 	if (!has_modulus[rem]) {
 	  has_modulus[rem] = true;
 	  num_nonmodulus--;
@@ -867,7 +867,7 @@ public final class MathMDE {
       }
       // System.out.println("For m=" + m + ", num_nonmodulus=" + num_nonmodulus);
       if (num_nonmodulus == 1) {
-	return new int [] {ArraysMDE.indexOf(has_modulus, false), m};
+	return new int[] {ArraysMDE.indexOf(has_modulus, false), m};
       }
     }
     return null;
@@ -881,11 +881,11 @@ public final class MathMDE {
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
    **/
-  public static long [] missing_numbers(long [] nums) {
+  public static long [] missing_numbers(long[] nums) {
     Arrays.sort(nums);
     long min = nums[0];
     long max = nums[nums.length-1];
-    long[] result = new long [new Long( max - min + 1 - nums.length ).intValue() ];
+    long[] result = new long[new Long( max - min + 1 - nums.length ).intValue() ];
     int result_index = 0;
     long val = min;
     for (int i=0; i<nums.length; i++) {
@@ -903,7 +903,7 @@ public final class MathMDE {
     } else {
       // There were duplicates in the nums array, so we didn't fill up
       // the result array.
-      long[] new_result = new long [result_index];
+      long[] new_result = new long[result_index];
       System.arraycopy(result, 0, new_result, 0, result_index);
       return new_result;
     }
@@ -926,7 +926,7 @@ public final class MathMDE {
     int current_index;
     boolean add_ends;
 
-    MissingNumbersIteratorLong (long [] nums, boolean add_ends) {
+    MissingNumbersIteratorLong (long[] nums, boolean add_ends) {
       this.add_ends = add_ends;
       Arrays.sort(nums);
       current_index = 0;
@@ -1013,7 +1013,7 @@ public final class MathMDE {
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static long [] nonmodulus_strict(long [] nums) {
+  public static long [] nonmodulus_strict(long[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1040,7 +1040,7 @@ public final class MathMDE {
     return result;
   }
 
-  private static boolean check_first_and_last_nonmodulus(long [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
+  private static boolean check_first_and_last_nonmodulus(long[] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
     long r = rm[0];
     long m = rm[1];
     long first = ((Long)rfali.getFirst()). longValue ();
@@ -1063,7 +1063,7 @@ public final class MathMDE {
   //  * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
   //  * m) but all missing numbers in their range are.
   //  */
-  // public static long [] nonmodulus_strict(long [] nums) {
+  // public static long [] nonmodulus_strict(long[] nums) {
   //   // This implementation is particularly inefficient; find a better way to
   //   // compute this.  Perhaps obtain the new modulus numbers incrementally
   //   // instead of all at once.
@@ -1083,10 +1083,10 @@ public final class MathMDE {
    **/
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulus_strict instead.
-  public static long [] nonmodulus_nonstrict(long [] nums) {
+  public static long [] nonmodulus_nonstrict(long[] nums) {
     if (nums.length < 4)
       return null;
-    int max_modulus = new Long( Math.min(nums.length/2, ArraysMDE.element_range(nums)/2) ).intValue() ;
+    int max_modulus = new Long( Math.min(nums.length/2, ArraysMDE.element_range(nums)/2) ).intValue();
 
     // System.out.println("nums.length=" + nums.length + ", range=" + ArraysMDE.element_range(nums) + ", max_modulus=" + max_modulus);
 
@@ -1097,7 +1097,7 @@ public final class MathMDE {
       boolean[] has_modulus = new boolean[m]; // initialized to false?
       int num_nonmodulus = m;
       for (int i=0; i<nums.length; i++) {
-	int rem = new Long( mod_positive(nums[i], m) ).intValue() ;
+	int rem = new Long( mod_positive(nums[i], m) ).intValue();
 	if (!has_modulus[rem]) {
 	  has_modulus[rem] = true;
 	  num_nonmodulus--;
@@ -1110,7 +1110,7 @@ public final class MathMDE {
       }
       // System.out.println("For m=" + m + ", num_nonmodulus=" + num_nonmodulus);
       if (num_nonmodulus == 1) {
-	return new long [] {ArraysMDE.indexOf(has_modulus, false), m};
+	return new long[] {ArraysMDE.indexOf(has_modulus, false), m};
       }
     }
     return null;

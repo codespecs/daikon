@@ -30,7 +30,7 @@ public class CommonSequence
   private int elts;
   private long [] intersect = null;
 
-  protected CommonSequence (PptSlice ppt) {
+  protected CommonSequence(PptSlice ppt) {
     super(ppt);
   }
 
@@ -81,11 +81,11 @@ public class CommonSequence
       return "(" + printIntersect() + " \\in " + vname + ") ***";
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     if (intersect==null)
       intersect = a;
     else {
-      long[] tmp = new long [intersect.length];
+      long[] tmp = new long[intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&

@@ -55,7 +55,7 @@ public class LowerBound
 
   public LowerBoundCore core;
 
-  private LowerBound (PptSlice ppt) {
+  private LowerBound(PptSlice ppt) {
     super(ppt);
     core = new LowerBoundCore(this);
   }
@@ -86,7 +86,7 @@ public class LowerBound
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " >= " + core.min1 ;
+      return name + " >= " + core.min1;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

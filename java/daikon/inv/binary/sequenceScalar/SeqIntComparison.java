@@ -33,10 +33,10 @@ public final class SeqIntComparison
 
   static boolean debugSeqIntComparison = false;
 
-  protected SeqIntComparison (PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
+  protected SeqIntComparison(PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
-    Assert.assertTrue(sclvar().rep_type == ProglangType. INT);
-    Assert.assertTrue(seqvar().rep_type == ProglangType. INT_ARRAY);
+    Assert.assertTrue(sclvar().rep_type == ProglangType.INT);
+    Assert.assertTrue(seqvar().rep_type == ProglangType.INT_ARRAY);
     core = new IntComparisonCore(this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
@@ -165,7 +165,7 @@ public final class SeqIntComparison
     return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
-  public void add_modified(long [] a, long x, int count) {
+  public void add_modified(long[] a, long x, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
       if (falsified)

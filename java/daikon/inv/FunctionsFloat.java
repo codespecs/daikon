@@ -94,6 +94,6 @@ public final class FunctionsFloat {
   }
 
   // don't permit instantiation
-  private FunctionsFloat () { }
+  private FunctionsFloat() { }
 
 }

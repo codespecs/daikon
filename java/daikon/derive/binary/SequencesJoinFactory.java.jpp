@@ -37,7 +37,7 @@ import java.util.*;
 /**
  * Factory for SequencesJoin derived variables.
  **/
-public final class CLASSNAME  extends BinaryDerivationFactory {
+public final class CLASSNAME extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   public static final Category debug =

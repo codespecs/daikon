@@ -42,7 +42,7 @@ public final class SequenceStringUnion
       return ValueAndModified.MISSING_NONSENSICAL;
     String[] val2_array = (String[]) val2;
 
-    String[] tmp = new String [val1_array.length+val2_array.length];
+    String[] tmp = new String[val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       String v = val1_array[i];

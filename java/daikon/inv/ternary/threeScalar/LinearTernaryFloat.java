@@ -29,7 +29,7 @@ public class LinearTernaryFloat
 
   public LinearTernaryCoreFloat core;
 
-  protected LinearTernaryFloat (PptSlice ppt) {
+  protected LinearTernaryFloat(PptSlice ppt) {
     super(ppt);
     core = new LinearTernaryCoreFloat(this);
   }

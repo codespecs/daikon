@@ -195,7 +195,7 @@ public final class OneOfSequence
   }
 
   public String format_daikon() {
-    String varname = var().name.name() ;
+    String varname = var().name.name();
     if (num_elts == 1) {
 
       if (is_hashcode) {
@@ -214,7 +214,7 @@ public final class OneOfSequence
           return varname + " has only one value, of length " + value.length;
         }
       } else {
-        return varname + " == " + ArraysMDE.toString( elts[0] ) ;
+        return varname + " == " + ArraysMDE.toString( elts[0]);
       }
 
     } else {

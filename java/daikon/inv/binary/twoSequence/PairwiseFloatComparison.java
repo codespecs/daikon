@@ -36,12 +36,12 @@ public class PairwiseFloatComparison
 
   public FloatComparisonCore core;
 
-  protected PairwiseFloatComparison (PptSlice ppt) {
+  protected PairwiseFloatComparison(PptSlice ppt) {
     super(ppt);
     core = new FloatComparisonCore(this);
   }
 
-  protected PairwiseFloatComparison (PptSlice ppt, boolean only_eq) {
+  protected PairwiseFloatComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
     core = new FloatComparisonCore(this, only_eq);
   }
@@ -59,7 +59,7 @@ public class PairwiseFloatComparison
     }
 
     boolean only_eq = false;
-    if (! (var1.type. elementIsFloat() && var2.type. elementIsFloat())) {
+    if (! (var1.type.elementIsFloat() && var2.type.elementIsFloat())) {
       only_eq = true;
     }
      PairwiseFloatComparison result = new PairwiseFloatComparison(ppt, only_eq);
@@ -151,7 +151,7 @@ public class PairwiseFloatComparison
     return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
   }
 
-  public void add_modified(double [] a1, double [] a2, int count) {
+  public void add_modified(double[] a1, double [] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;

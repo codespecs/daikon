@@ -33,13 +33,13 @@ public class UpperBoundCoreFloat
   final static int required_samples_at_bound = 3; // for justification
 
   // max1 > max2 > max3
-  public double max1 = Double.MIN_VALUE ;
+  public double max1 = Double.MIN_VALUE;
   int num_max1 = 0;
-  double max2 = Double.MIN_VALUE ;
+  double max2 = Double.MIN_VALUE;
   int num_max2 = 0;
-  double max3 = Double.MIN_VALUE ;
+  double max3 = Double.MIN_VALUE;
   int num_max3 = 0;
-  double min = Double.MAX_VALUE ;
+  double min = Double.MAX_VALUE;
 
   int samples = 0;
 
@@ -124,17 +124,17 @@ public class UpperBoundCoreFloat
       // Disabled because array bounds could call this twice
       changed = true;
 
-      max3 = max2 ;
-      num_max3 = num_max2 ;
-      max2 = max1 ;
-      num_max2 = num_max1 ;
+      max3 = max2;
+      num_max3 = num_max2;
+      max2 = max1;
+      num_max2 = num_max1;
       max1 = v;
       num_max1 = count;
     } else if (v == max2) {
       num_max2 += count;
     } else if (v > max2) {
-      max3 = max2 ;
-      num_max3 = num_max2 ;
+      max3 = max2;
+      num_max3 = num_max2;
       max2 = v;
       num_max2 = count;
     } else if (v == max3) {
@@ -238,7 +238,7 @@ public class UpperBoundCoreFloat
 
   public boolean isSameFormula(UpperBoundCoreFloat other)
   {
-    return max1 == other. max1 ;
+    return max1 == other. max1;
   }
 
   public boolean isExact() {

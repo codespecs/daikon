@@ -33,10 +33,10 @@ public final class SeqFloatComparison
 
   static boolean debugSeqIntComparison = false;
 
-  protected SeqFloatComparison (PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
+  protected SeqFloatComparison(PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
-    Assert.assertTrue(sclvar().rep_type == ProglangType. DOUBLE);
-    Assert.assertTrue(seqvar().rep_type == ProglangType. DOUBLE_ARRAY);
+    Assert.assertTrue(sclvar().rep_type == ProglangType.DOUBLE);
+    Assert.assertTrue(seqvar().rep_type == ProglangType.DOUBLE_ARRAY);
     core = new FloatComparisonCore(this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
@@ -165,7 +165,7 @@ public final class SeqFloatComparison
     return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
-  public void add_modified(double [] a, double x, int count) {
+  public void add_modified(double[] a, double x, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
       if (falsified)

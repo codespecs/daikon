@@ -33,13 +33,13 @@ public class LowerBoundCoreFloat
   final static int required_samples_at_bound = 3; // for justification
 
   // min1 < min2 < min3
-  public double min1 = Double.MAX_VALUE ;
+  public double min1 = Double.MAX_VALUE;
   int num_min1 = 0;
-  double min2 = Double.MAX_VALUE ;
+  double min2 = Double.MAX_VALUE;
   int num_min2 = 0;
-  double min3 = Double.MAX_VALUE ;
+  double min3 = Double.MAX_VALUE;
   int num_min3 = 0;
-  double max = Double.MIN_VALUE ;
+  double max = Double.MIN_VALUE;
 
   int samples = 0;
 
@@ -124,17 +124,17 @@ public class LowerBoundCoreFloat
       // Disabled because array bounds could call this twice
       changed = true;
 
-      min3 = min2 ;
-      num_min3 = num_min2 ;
-      min2 = min1 ;
-      num_min2 = num_min1 ;
+      min3 = min2;
+      num_min3 = num_min2;
+      min2 = min1;
+      num_min2 = num_min1;
       min1 = v;
       num_min1 = count;
     } else if (v == min2) {
       num_min2 += count;
     } else if (v < min2) {
-      min3 = min2 ;
-      num_min3 = num_min2 ;
+      min3 = min2;
+      num_min3 = num_min2;
       min2 = v;
       num_min2 = count;
     } else if (v == min3) {
@@ -238,7 +238,7 @@ public class LowerBoundCoreFloat
 
   public boolean isSameFormula(LowerBoundCoreFloat other)
   {
-    return min1 == other. min1 ;
+    return min1 == other. min1;
   }
 
   public boolean isExact() {

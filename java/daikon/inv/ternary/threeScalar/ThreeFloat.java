@@ -15,7 +15,7 @@ public abstract class ThreeFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected ThreeFloat (PptSlice ppt) {
+  protected ThreeFloat(PptSlice ppt) {
     super(ppt);
   }
 

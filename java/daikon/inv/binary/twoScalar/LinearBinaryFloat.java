@@ -28,7 +28,7 @@ public class LinearBinaryFloat
 
   public LinearBinaryCoreFloat core;
 
-  protected LinearBinaryFloat (PptSlice ppt) {
+  protected LinearBinaryFloat(PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCoreFloat(this);
   }

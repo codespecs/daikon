@@ -55,7 +55,7 @@ public class EltLowerBoundFloat
 
   public LowerBoundCoreFloat core;
 
-  private EltLowerBoundFloat (PptSlice ppt) {
+  private EltLowerBoundFloat(PptSlice ppt) {
     super(ppt);
     core = new LowerBoundCoreFloat(this);
   }
@@ -96,7 +96,7 @@ public class EltLowerBoundFloat
   }
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements >= " + core.min1 ;
+    return var().name.name() + " elements >= " + core.min1;
   }
 
   public String format_esc() {

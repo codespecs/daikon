@@ -33,9 +33,9 @@ public final class SeqIndexComparison
 
   static boolean debugSeqIndexComparison = false;
 
-  protected SeqIndexComparison (PptSlice ppt) {
+  protected SeqIndexComparison(PptSlice ppt) {
     super(ppt);
-    Assert.assertTrue(var().rep_type == ProglangType. INT_ARRAY);
+    Assert.assertTrue(var().rep_type == ProglangType.INT_ARRAY);
     core = new IntComparisonCore(this);
     if (debugSeqIndexComparison) {
       System.out.println("Instantiated: " + format());
@@ -62,7 +62,7 @@ public final class SeqIndexComparison
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsIntegral()) {
+    if (! elt_type.baseIsIntegral()) {
       return null;
     }
 
@@ -169,7 +169,7 @@ public final class SeqIndexComparison
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)

@@ -15,7 +15,7 @@ public abstract class ThreeScalar
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected ThreeScalar (PptSlice ppt) {
+  protected ThreeScalar(PptSlice ppt) {
     super(ppt);
   }
 

@@ -125,6 +125,6 @@ public final class Functions {
   }
 
   // don't permit instantiation
-  private Functions () { }
+  private Functions() { }
 
 }

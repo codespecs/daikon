@@ -59,7 +59,7 @@ public final class OneOfScalar
   OneOfScalar (PptSlice ppt) {
     super(ppt);
 
-    elts = new long [dkconfig_size];
+    elts = new long[dkconfig_size];
 
     num_elts = 0;
 
@@ -169,7 +169,7 @@ public final class OneOfScalar
   }
 
   public String format_daikon() {
-    String varname = var().name.name() ;
+    String varname = var().name.name();
     if (num_elts == 1) {
 
       if (is_boolean) {
@@ -181,10 +181,10 @@ public final class OneOfScalar
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
-            ;
+           ;
         }
       } else {
-        return varname + " == " + ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")) ;
+        return varname + " == " + ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L"));
       }
 
     } else {
@@ -225,14 +225,14 @@ public final class OneOfScalar
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
       }
     }
 
@@ -288,7 +288,7 @@ public final class OneOfScalar
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
@@ -305,7 +305,7 @@ public final class OneOfScalar
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
       }
     }
 
@@ -331,13 +331,13 @@ public final class OneOfScalar
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
-          ;
+         ;
       }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"));
       }
     }
 

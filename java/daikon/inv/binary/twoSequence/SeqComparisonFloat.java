@@ -34,7 +34,7 @@ public class SeqComparisonFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE. DoubleArrayComparatorLexical() ;
+  static Comparator comparator = new ArraysMDE. DoubleArrayComparatorLexical();
 
   public final boolean only_check_eq;
 
@@ -47,7 +47,7 @@ public class SeqComparisonFloat
   int num_sc_samples = 0;
   private FloatValueTracker values_cache = new FloatValueTracker(8);
 
-  protected SeqComparisonFloat (PptSlice ppt, boolean only_eq, boolean order) {
+  protected SeqComparisonFloat(PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
@@ -77,9 +77,9 @@ public class SeqComparisonFloat
     ProglangType type2 = var2.type;
     // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
-                          && type1. baseIsFloat()
+                          && type1.baseIsFloat()
                           && (type2.dimensions() == 1)
-                          && type2. baseIsFloat()));
+                          && type2.baseIsFloat()));
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -110,7 +110,7 @@ public class SeqComparisonFloat
       + ",only_check_eq=" + only_check_eq
       + ",orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
-      ;
+     ;
   }
 
   public String format_using(OutputFormat format) {
@@ -145,7 +145,7 @@ public class SeqComparisonFloat
     return format_unimplemented(format);
   }
 
-  public void add_modified(double [] v1, double [] v2, int count) {
+  public void add_modified(double[] v1, double [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.

@@ -33,9 +33,9 @@ public final class SeqIndexComparisonFloat
 
   static boolean debugSeqIndexComparison = false;
 
-  protected SeqIndexComparisonFloat (PptSlice ppt) {
+  protected SeqIndexComparisonFloat(PptSlice ppt) {
     super(ppt);
-    Assert.assertTrue(var().rep_type == ProglangType. DOUBLE_ARRAY);
+    Assert.assertTrue(var().rep_type == ProglangType.DOUBLE_ARRAY);
     core = new FloatComparisonCore(this);
     if (debugSeqIndexComparison) {
       System.out.println("Instantiated: " + format());
@@ -62,7 +62,7 @@ public final class SeqIndexComparisonFloat
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsFloat()) {
+    if (! elt_type.baseIsFloat()) {
       return null;
     }
 
@@ -169,7 +169,7 @@ public final class SeqIndexComparisonFloat
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)

@@ -35,7 +35,7 @@ public class NoDuplicatesFloat
   public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicatesFloat");
   int elts = 0;
 
-  protected NoDuplicatesFloat (PptSlice ppt) {
+  protected NoDuplicatesFloat(PptSlice ppt) {
     super(ppt);
   }
 
@@ -173,7 +173,7 @@ public class NoDuplicatesFloat
 
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
         if (debug.isDebugEnabled()) {

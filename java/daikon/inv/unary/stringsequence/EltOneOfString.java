@@ -57,7 +57,7 @@ public final class EltOneOfString
     Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOfString" );
 
-    elts = new String [dkconfig_size];
+    elts = new String[dkconfig_size];
 
     num_elts = 0;
 
@@ -161,10 +161,10 @@ public final class EltOneOfString
   }
 
   public String format_daikon() {
-    String varname = var().name.name() + " elements" ;
+    String varname = var().name.name() + " elements";
     if (num_elts == 1) {
 
-      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"") ;
+      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"");
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -202,7 +202,7 @@ public final class EltOneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -247,7 +247,7 @@ public final class EltOneOfString
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
       } else {
         if ((str == null) || "null".equals(str)) {
           result += "\\typeof(null)";
@@ -352,7 +352,7 @@ public final class EltOneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+        result += " == " + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
       } else {
 	result += " == \\type";
 	if ((str == null) || "null".equals(str)) {
@@ -411,7 +411,7 @@ public final class EltOneOfString
     return result;
   }
 
-  public void add_modified(String [] a, int count) {
+  public void add_modified(String[] a, int count) {
   OUTER:
    for (int ai=0; ai<a.length; ai++) {
     String v = a[ai];

@@ -41,7 +41,7 @@ public final class FloatNonEqual
     return result;
   }
 
-  protected FloatNonEqual (PptSlice ppt) {
+  protected FloatNonEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -53,7 +53,7 @@ public final class FloatNonEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isFloat() && var2.file_rep_type. isFloat())) {
+    if (! (var1.file_rep_type.isFloat() && var2.file_rep_type.isFloat())) {
       return null;
     }
 
@@ -115,7 +115,7 @@ public final class FloatNonEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = "!=" ;
+      String comparator = "!=";
 
       if (format == OutputFormat.IOA) comparator = "~=";
 

@@ -28,7 +28,7 @@ public class PairwiseFunctionUnary
 
   public FunctionUnaryCore core;
 
-  protected PairwiseFunctionUnary (PptSlice ppt, String[] methodname, int function, boolean inverse) {
+  protected PairwiseFunctionUnary(PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
@@ -87,7 +87,7 @@ public class PairwiseFunctionUnary
       + quant1.getClosingExp();
   }
 
-  public void add_modified(long [] x_arr, long [] y_arr, int count) {
+  public void add_modified(long[] x_arr, long [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
       return;

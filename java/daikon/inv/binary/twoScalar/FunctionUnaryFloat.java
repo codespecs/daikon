@@ -23,7 +23,7 @@ public class FunctionUnaryFloat
 
   public FunctionUnaryCoreFloat core;
 
-  protected FunctionUnaryFloat (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
+  protected FunctionUnaryFloat(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat(this, methodname, methodNumber, inverse);
   }

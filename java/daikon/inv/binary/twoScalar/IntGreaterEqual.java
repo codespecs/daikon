@@ -41,7 +41,7 @@ public final class IntGreaterEqual
     return result;
   }
 
-  protected IntGreaterEqual (PptSlice ppt) {
+  protected IntGreaterEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -53,7 +53,7 @@ public final class IntGreaterEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral())) {
+    if (! (var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral())) {
       return null;
     }
 
@@ -117,14 +117,14 @@ public final class IntGreaterEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = ">=" ;
+      String comparator = ">=";
 
       return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
 
-    String comparator = ">=" ;
+    String comparator = ">=";
 
       return "(" + comparator + " " + var1name + " " + var2name + ")";
     }

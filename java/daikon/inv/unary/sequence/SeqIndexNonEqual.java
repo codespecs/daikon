@@ -29,12 +29,12 @@ public final class SeqIndexNonEqual
 
   static boolean debugSeqIndexNonEqual = false;
 
-  protected SeqIndexNonEqual (PptSlice ppt) {
+  protected SeqIndexNonEqual(PptSlice ppt) {
     super(ppt);
 
     VarInfo var = var();
-    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY);
-    Assert.assertTrue(var.type. elementIsIntegral());
+    Assert.assertTrue(var.rep_type == ProglangType.INT_ARRAY);
+    Assert.assertTrue(var.type.elementIsIntegral());
     core = new NonEqualCore(this, 0);
 
     if (debugSeqIndexNonEqual) {
@@ -53,7 +53,7 @@ public final class SeqIndexNonEqual
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsIntegral())
+    if (! elt_type.baseIsIntegral())
       return null;
 
     return new SeqIndexNonEqual(ppt);
@@ -128,7 +128,7 @@ public final class SeqIndexNonEqual
     return form[0] + "(NEQ " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)

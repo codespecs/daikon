@@ -36,7 +36,7 @@ public class SubSetFloat
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
 
-  protected SubSetFloat (PptSlice ppt) {
+  protected SubSetFloat(PptSlice ppt) {
     super(ppt);
   }
 
@@ -140,7 +140,7 @@ public class SubSetFloat
     return "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
   }
 
-  public void add_modified(double [] a1, double [] a2, int count) {
+  public void add_modified(double[] a1, double [] a2, int count) {
     boolean new_var1_in_var2 = var1_in_var2;
     boolean new_var2_in_var1 = var2_in_var1;
     boolean changed = false;

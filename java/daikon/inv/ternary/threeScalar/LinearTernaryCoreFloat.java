@@ -32,9 +32,9 @@ public final class LinearTernaryCoreFloat
   final static int MINTRIPLES = 5;
 
   // These are public to permit testing.
-  public double [] x_cache = new double [MINTRIPLES];
-  public double [] y_cache = new double [MINTRIPLES];
-  public double [] z_cache = new double [MINTRIPLES];
+  public double [] x_cache = new double[MINTRIPLES];
+  public double [] y_cache = new double[MINTRIPLES];
+  public double [] z_cache = new double[MINTRIPLES];
 
   public LinearTernaryCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;
@@ -80,7 +80,7 @@ public final class LinearTernaryCoreFloat
       c = c * d;
     }
     // Fix caches
-    double [][] caches = new double [3][];
+    double [][] caches = new double[3][];
     caches[permutation[0]] = x_cache;
     caches[permutation[1]] = y_cache;
     caches[permutation[2]] = z_cache;

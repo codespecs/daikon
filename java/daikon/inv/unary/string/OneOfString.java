@@ -54,7 +54,7 @@ public final class OneOfString
   OneOfString (PptSlice ppt) {
     super(ppt);
 
-    elts = new String [dkconfig_size];
+    elts = new String[dkconfig_size];
 
     num_elts = 0;
 
@@ -158,10 +158,10 @@ public final class OneOfString
   }
 
   public String format_daikon() {
-    String varname = var().name.name() ;
+    String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"") ;
+      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"");
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -198,7 +198,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")" ;
+        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")";
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -239,7 +239,7 @@ public final class OneOfString
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"");
       } else {
         if ((str == null) || "null".equals(str)) {
           result += "\\typeof(null)";
@@ -317,7 +317,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")" ;
+        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")";
       } else {
 	result += " == \\type";
 	if ((str == null) || "null".equals(str)) {

@@ -30,7 +30,7 @@ public class EltwiseIntComparison
 
   public IntComparisonCore core;
 
-  protected EltwiseIntComparison (PptSlice ppt, boolean only_eq) {
+  protected EltwiseIntComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
     core = new IntComparisonCore(this, only_eq);
   }
@@ -133,7 +133,7 @@ public class EltwiseIntComparison
     }
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {
       core.add_modified(a[i-1], a[i], count);
       if (falsified)

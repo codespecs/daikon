@@ -158,7 +158,7 @@ public final class SequencesPredicateFloat
     }
 
     if (val1 instanceof double[]) {
-      double[] result = new double [count];
+      double[] result = new double[count];
       double[] values = (double[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {

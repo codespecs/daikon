@@ -54,7 +54,7 @@ public final class OneOfFloat
   OneOfFloat (PptSlice ppt) {
     super(ppt);
 
-    elts = new double [dkconfig_size];
+    elts = new double[dkconfig_size];
 
     num_elts = 0;
 
@@ -156,10 +156,10 @@ public final class OneOfFloat
   }
 
   public String format_daikon() {
-    String varname = var().name.name() ;
+    String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + String.valueOf( elts[0] ) ;
+      return varname + " == " + String.valueOf( elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }
@@ -190,7 +190,7 @@ public final class OneOfFloat
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 
@@ -227,7 +227,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 
@@ -244,7 +244,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + String.valueOf( elts[i] ) ;
+        result += varname + " == " + String.valueOf( elts[i]);
       }
     }
 

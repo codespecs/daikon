@@ -37,7 +37,7 @@ public class SubSequenceFloat
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
 
-  protected SubSequenceFloat (PptSlice ppt) {
+  protected SubSequenceFloat(PptSlice ppt) {
     super(ppt);
   }
 
@@ -216,7 +216,7 @@ public class SubSequenceFloat
 
     // If indicies have same name modify the quantify return before forming string
     if (superIndexName.equals(subIndexName)) {
-      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
+      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char[] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
     }
 
     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
@@ -246,7 +246,7 @@ public class SubSequenceFloat
       " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
-  public void add_modified(double [] a1, double [] a2, int count) {
+  public void add_modified(double[] a1, double [] a2, int count) {
     Assert.assertTrue(var1_in_var2 || var2_in_var1);
 
     boolean new_var1_in_var2 = var1_in_var2;

@@ -55,7 +55,7 @@ public final class EltNonZero
   public static EltNonZero instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     EltNonZero result = new EltNonZero(ppt);
-    if (! ppt.var_infos[0].type. baseIsIntegral()) {
+    if (! ppt.var_infos[0].type.baseIsIntegral()) {
       result.pointer_type = true;
       result.override_range = 3;
       if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
@@ -169,7 +169,7 @@ public final class EltNonZero
     return form[0] + "(NEQ " + form[1] + " " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
 
-  public void add_modified(long [] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
       long v = a[ai];
 

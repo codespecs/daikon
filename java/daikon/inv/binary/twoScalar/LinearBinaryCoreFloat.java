@@ -41,8 +41,8 @@ public final class LinearBinaryCoreFloat
   // the two that are furthest apart in order to compute a and b.
   final static int MINPAIRS = 4;
 
-  double[] x_cache = new double [MINPAIRS];
-  double[] y_cache = new double [MINPAIRS];
+  double[] x_cache = new double[MINPAIRS];
+  double[] y_cache = new double[MINPAIRS];
 
   public LinearBinaryCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;

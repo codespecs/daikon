@@ -28,7 +28,7 @@ public class LinearBinary
 
   public LinearBinaryCore core;
 
-  protected LinearBinary (PptSlice ppt) {
+  protected LinearBinary(PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCore(this);
   }

@@ -55,7 +55,7 @@ public class EltUpperBound
 
   public UpperBoundCore core;
 
-  private EltUpperBound (PptSlice ppt) {
+  private EltUpperBound(PptSlice ppt) {
     super(ppt);
     core = new UpperBoundCore(this);
   }
@@ -96,7 +96,7 @@ public class EltUpperBound
   }
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements <= " + core.max1 ;
+    return var().name.name() + " elements <= " + core.max1;
   }
 
   public String format_esc() {

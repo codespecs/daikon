@@ -46,7 +46,7 @@ public class NonZero
 
   boolean pointer_type = false;
 
-  private NonZero (PptSlice ppt) {
+  private NonZero(PptSlice ppt) {
     super(ppt);
   }
 

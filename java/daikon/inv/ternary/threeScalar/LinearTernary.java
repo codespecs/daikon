@@ -29,7 +29,7 @@ public class LinearTernary
 
   public LinearTernaryCore core;
 
-  protected LinearTernary (PptSlice ppt) {
+  protected LinearTernary(PptSlice ppt) {
     super(ppt);
     core = new LinearTernaryCore(this);
   }

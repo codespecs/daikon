@@ -28,7 +28,7 @@ public class ReverseFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected ReverseFloat (PptSlice ppt) {
+  protected ReverseFloat(PptSlice ppt) {
     super(ppt);
   }
 
@@ -114,7 +114,7 @@ public class ReverseFloat
     else
       upperExtent = seq.applySize().jml_name();
 
-    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {name1});
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {name1});
     String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
 
     VarInfoName index = ((VarInfoName[])qret.bound_vars.get(0))[0];
@@ -124,7 +124,7 @@ public class ReverseFloat
     return results[0] + results[1] + " == " + preTag + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + postTag + results[2];
   }
 
-  public void add_modified(double [] a1, double [] a2, int count) {
+  public void add_modified(double[] a1, double [] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;

@@ -32,7 +32,7 @@ public class FunctionBinary
 
   public FunctionBinaryCore core;
 
-  protected FunctionBinary (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
+  protected FunctionBinary(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
     core = new FunctionBinaryCore(this, methodname, methodNumber, var_order);
   }
@@ -171,7 +171,7 @@ public class FunctionBinary
       SuppressionTemplate template = new SuppressionTemplate();
 
       template.invTypes = new Class[] {OneOfScalar.class};
-      template.varInfos = new VarInfo [][] {new VarInfo[1]};
+      template.varInfos = new VarInfo[][] {new VarInfo[1]};
 
       VarInfo[] vis = new VarInfo[] {inv.var1(), inv.var2(), inv.var3()};
       for (int i = 0; i < vis.length; i++) {

@@ -46,7 +46,7 @@ public final class IntNonEqual
     return result;
   }
 
-  protected IntNonEqual (PptSlice ppt) {
+  protected IntNonEqual(PptSlice ppt) {
     super(ppt);
   }
 
@@ -59,7 +59,7 @@ public final class IntNonEqual
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (dkconfig_integral_only == true) {
-      if (! (var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral())) {
+      if (! (var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral())) {
         return null;
       }
     }
@@ -122,7 +122,7 @@ public final class IntNonEqual
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA))
     {
-      String comparator = "!=" ;
+      String comparator = "!=";
 
       if (format == OutputFormat.IOA) comparator = "~=";
 

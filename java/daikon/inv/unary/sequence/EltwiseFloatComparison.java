@@ -30,7 +30,7 @@ public class EltwiseFloatComparison
 
   public FloatComparisonCore core;
 
-  protected EltwiseFloatComparison (PptSlice ppt, boolean only_eq) {
+  protected EltwiseFloatComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
     core = new FloatComparisonCore(this, only_eq);
   }
@@ -133,7 +133,7 @@ public class EltwiseFloatComparison
     }
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
     for (int i=1; i<a.length; i++) {
       core.add_modified(a[i-1], a[i], count);
       if (falsified)

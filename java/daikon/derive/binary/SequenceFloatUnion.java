@@ -42,7 +42,7 @@ public final class SequenceFloatUnion
       return ValueAndModified.MISSING_NONSENSICAL;
     double[] val2_array = (double[]) val2;
 
-    double[] tmp = new double [val1_array.length+val2_array.length];
+    double[] tmp = new double[val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
       double v = val1_array[i];

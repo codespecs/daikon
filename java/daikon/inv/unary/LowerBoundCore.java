@@ -33,13 +33,13 @@ public class LowerBoundCore
   final static int required_samples_at_bound = 3; // for justification
 
   // min1 < min2 < min3
-  public long min1 = Long.MAX_VALUE ;
+  public long min1 = Long.MAX_VALUE;
   int num_min1 = 0;
-  long min2 = Long.MAX_VALUE ;
+  long min2 = Long.MAX_VALUE;
   int num_min2 = 0;
-  long min3 = Long.MAX_VALUE ;
+  long min3 = Long.MAX_VALUE;
   int num_min3 = 0;
-  long max = Long.MIN_VALUE ;
+  long max = Long.MIN_VALUE;
 
   int samples = 0;
 
@@ -128,17 +128,17 @@ public class LowerBoundCore
       // Disabled because array bounds could call this twice
       changed = true;
 
-      min3 = min2 ;
-      num_min3 = num_min2 ;
-      min2 = min1 ;
-      num_min2 = num_min1 ;
+      min3 = min2;
+      num_min3 = num_min2;
+      min2 = min1;
+      num_min2 = num_min1;
       min1 = v;
       num_min1 = count;
     } else if (v == min2) {
       num_min2 += count;
     } else if (v < min2) {
-      min3 = min2 ;
-      num_min3 = num_min2 ;
+      min3 = min2;
+      num_min3 = num_min2;
       min2 = v;
       num_min2 = count;
     } else if (v == min3) {
@@ -242,7 +242,7 @@ public class LowerBoundCore
 
   public boolean isSameFormula(LowerBoundCore other)
   {
-    return min1 == other. min1 ;
+    return min1 == other. min1;
   }
 
   public boolean isExact() {

@@ -29,12 +29,12 @@ public final class SeqIndexNonEqualFloat
 
   static boolean debugSeqIndexNonEqual = false;
 
-  protected SeqIndexNonEqualFloat (PptSlice ppt) {
+  protected SeqIndexNonEqualFloat(PptSlice ppt) {
     super(ppt);
 
     VarInfo var = var();
-    Assert.assertTrue(var.rep_type == ProglangType. DOUBLE_ARRAY);
-    Assert.assertTrue(var.type. elementIsFloat());
+    Assert.assertTrue(var.rep_type == ProglangType.DOUBLE_ARRAY);
+    Assert.assertTrue(var.type.elementIsFloat());
     core = new NonEqualCoreFloat(this, 0);
 
     if (debugSeqIndexNonEqual) {
@@ -53,7 +53,7 @@ public final class SeqIndexNonEqualFloat
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type. baseIsFloat())
+    if (! elt_type.baseIsFloat())
       return null;
 
     return new SeqIndexNonEqualFloat(ppt);
@@ -128,7 +128,7 @@ public final class SeqIndexNonEqualFloat
     return form[0] + "(NEQ " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(double [] a, int count) {
+  public void add_modified(double[] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)

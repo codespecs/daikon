@@ -167,10 +167,10 @@ public final class OneOfStringSequence
   }
 
   public String format_daikon() {
-    String varname = var().name.name() ;
+    String varname = var().name.name();
     if (num_elts == 1) {
 
-      return varname + " == " + ArraysMDE.toString( elts[0] ) ;
+      return varname + " == " + ArraysMDE.toString( elts[0]);
     } else {
       return varname + " one of " + subarray_rep();
     }

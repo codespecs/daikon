@@ -28,7 +28,7 @@ public class PairwiseFunctionUnaryFloat
 
   public FunctionUnaryCoreFloat core;
 
-  protected PairwiseFunctionUnaryFloat (PptSlice ppt, String[] methodname, int function, boolean inverse) {
+  protected PairwiseFunctionUnaryFloat(PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat(this, methodname, function, inverse);
   }
@@ -87,7 +87,7 @@ public class PairwiseFunctionUnaryFloat
       + quant1.getClosingExp();
   }
 
-  public void add_modified(double [] x_arr, double [] y_arr, int count) {
+  public void add_modified(double[] x_arr, double [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
       return;
