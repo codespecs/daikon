@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-15 19:26:45 mistere>
+# Time-stamp: <2001-11-15 20:09:02 mistere>
 
 # The input is ... TODO
 
@@ -175,7 +175,7 @@ if ("spinfo" eq $mode) {
 } elsif ("remap" eq $mode) {
   my @lines = slurpfile($remap_file);
   for my $line (@lines) {
-    next if ("daikon_callsite_id == orig(daikon_callsite_id)" eq $line);
+    next if ("daikon_callsite_id == orig(daikon_callsite_id)\n" eq $line);
     for my $from (keys %remap) {
       my $to = $remap{$from};
       $line =~ s/\Q$from/$to/g;
