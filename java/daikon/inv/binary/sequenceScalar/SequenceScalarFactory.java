@@ -50,6 +50,7 @@ public final class SequenceScalarFactory {
     if (pass == 2) {
       // I could check that the length of the sequence isn't always 0.
       result.add(Member.instantiate(ppt, seq_first));
+      result.add(SeqIntComparison.instantiate(ppt, seq_first));
     }
     return result;
   }
