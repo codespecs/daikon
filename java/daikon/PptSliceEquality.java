@@ -159,7 +159,7 @@ public class PptSliceEquality
       if (vt.isMissing (vi)) {
         missings.add (vi);
       } else {
-        addToBindingList (vi.getValue(vt), vi, map);
+        addToBindingList (map, vi.getValue(vt), vi);
       }
     }
     Equality[] resultArray = new Equality[map.values().size() + (missings.size() > 0 ? 1 : 0)];
