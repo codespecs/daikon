@@ -4,10 +4,15 @@ In this directory (~mernst/research/notkin/invariants/):
  * examples: notes about test inputs (separated from notes file above)
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
- * invariants.py: the invariant detector, implemented in Python
+ * invariants.py, util.py: the invariant detector, implemented in Python
  * gries*.lisp:  the programs from David Gries' book (in Lisp syntax)
  * p*.inv: files created by running instrumented Gries programs
+
+
+Example programs:
  * medic/: files related to the Medic planner (my instrumented Lisp program)
     * medic/found-invariants-980523: sample output of my invariant detector
     * medic/data/: logs created by the instrumentation and read by the
       invariant detector; you are only interested in .inv files
+ * rothermel/: adaptations of Siemens test programs; from Gregg Rothermel
+ * edg/: EDG C/C++ front end version 2.38

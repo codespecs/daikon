@@ -1,4 +1,6 @@
 #!/uns/bin/python1.5
+# invariants.py -- detect patterns in collections of data
+# Michael Ernst <mernst@cs.washington.edu>
 
 import glob, operator, os, re, string, types
 
@@ -11,7 +13,8 @@ false = (1==0)
 ### Variables
 ###
 
-# Annoyingly, these variables get wiped out when I reload this file.
+# Annoyingly, these variables get wiped out when I reload this file unless
+# I protect them.
 # But if they're indented, maybe my future tools for variable decls won't work.
 if not locals().has_key("var_names"):
     var_names = {}          # from function name to tuple of variable names
@@ -24,13 +27,16 @@ integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 
 def clear_variables():
+    """Reset the values of some global variables."""
     var_names.clear()
     var_values.clear()
     samples.clear()
     file_vars.clear()
 
 def merge_variables(filename, sub_var_names, sub_var_values, sub_samples):
-    """Merge the values for the arguments into the corresponding global variables."""
+    """Merge the values for the arguments into the corresponding global variables.
+See `read_file' for a description of the argument types; arguments 2-4 are
+dictionaries mapping from a function name to information about the function."""
     # Yuck, loop is outside assert
     for fname in var_names.keys():
         assert not(sub_var_values.has_key(fname)) or (var_names[fname] == sub_var_names[fname])
@@ -52,7 +58,10 @@ def merge_variables(filename, sub_var_names, sub_var_values, sub_samples):
     file_vars[filename] = (sub_var_names, sub_var_values, sub_samples)
 
 def dict_of_tuples_to_tuple_of_dicts(dot):
-    """The dictionaries map a key to the number of occurrences of that key."""
+    """Input: a dictionary mapping a tuple of elements to a count.
+Output: a tuple of dictionaries, each mapping a single element to a count.
+The first output dictionary concerns the first element of the original keys,
+the second output the second element of the original keys, and so forth."""
     tuple_len = len(dot.keys()[0])
     tuple_indices = range(0, tuple_len)
     # Next four lines accomplish "result = ({},) * tuple_len", but with
@@ -71,7 +80,10 @@ def dict_of_tuples_to_tuple_of_dicts(dot):
 
 
 def dict_of_tuples_slice(dot, indices):
-    """The dictionaries map a key to the number of occurrences of that key."""
+    """Input: a dictionary mapping a tuple of elements to a count, and a
+list of indices.
+Output: a dictionary mapping a subset of the original elements to a count.
+The subset is chosen according to the input indices."""
     result = {}
     for (key_tuple, count) in dot.items():
         sliced_tuple = util.slice_by_sequence(key_tuple, indices)
@@ -91,7 +103,32 @@ def dict_of_tuples_slice(dot, indices):
 ### Input/output
 ###
 
+# An instrumented program produces a .inv file containing information about
+# run-time values of expressions and variables.  The invariant detector tries
+# to find patterns in the values recorded in one or more .inv files.
+# 
+# To detect invariants in a particular program, it is enough to insert code
+# in the application which creates a .inv file.  In Lisp, the
+# check-for-invariants macro performs this task.  Gries-style Lisp programs
+# can be automatically instrumented -- the calls to the check-for-invariants
+# macro are inserted by the instrument function found in gries-helper.lisp.
+# Given a file of Gries-style Lisp functions, instrument produces a new file
+# of instrumented Lisp code which can be compiled and run.
+# 
+# Each line of a .inv file is of the form
+# 
+#   tag varname1 value1 varname2 value2 ...
+# 
+# The tag is an arbitrary alphanumeric string indicating the program point at
+# which this data was collected.  The varnames are also alphanumeric.
+# Currently the values are integers.
+
+
 def read_file(filename):
+    """Read data from .inv file; return a tuple of three dictionaries.
+ * map from function name to tuple of variable names.
+ * map from function name to (map from tuple of values to occurrence count)
+ * map from function name to number of samples"""
     file = open(filename, "r")
     this_var_names = {}		# from function name to tuple of variable names
     this_var_values = {}	# from function name to (tuple of values to occurrence count)
@@ -133,7 +170,7 @@ def read_file(filename):
 
 
 def print_hashtables():
-    """Principally for debugging"""
+    """Print the important global hashtables.  Principally for debugging."""
     sorted_keys = var_names.keys()
     sorted_keys.sort()
     for fn_name in sorted_keys:
@@ -153,6 +190,7 @@ def print_hashtables():
 ###
 
 def print_cubist_files():
+    """Create files for Cubist experiments."""
     sorted_keys = var_names.keys()
     sorted_keys.sort()
     for fn_name in sorted_keys:
@@ -205,8 +243,9 @@ def run_cubist():
 ### Invariants -- numeric
 ###
 
-# Other reasonable values: .05, perhaps
-negative_invariant_confidence = .01
+# A negative invariant is not reported unless the chance that the invariant
+# only happens not to be true (and isn't a true invariant) is at least this low.
+negative_invariant_confidence = .01     # .05 might also be reasonable
 
 ## An invariant may be exact or approximate.
 
@@ -255,6 +294,7 @@ def all_numeric_invariants():
                     # print "     ", these_vars, this_inv
                     # print "       ", `this_inv`
                     print "     ", this_inv.format(these_vars)
+## Testing:
 # all_numeric_invariants()
 
 
@@ -262,6 +302,7 @@ def all_numeric_invariants():
 ###########################################################################
 ### Invariants -- single field
 ###            
+
 
 class invariant:
     one_of = None                   # list of 5 or fewer distinct values
@@ -296,8 +337,6 @@ This function can return None:  it's intended to be used only as a helper."""
 
 
 
-## A single invariant consists of:
-##  
 class single_field_numeric_invariant(invariant):
     min = None
     max = None
@@ -487,6 +526,7 @@ def all_single_field_numeric_invariants():
             this_dict = dicts[i]
             this_inv = single_field_numeric_invariant(this_dict)
             print fn_name, this_var, samples[fn_name], "samples", this_inv
+## Testing:
 # all_single_field_numeric_invariants()
 
 
@@ -502,13 +542,6 @@ def all_single_field_numeric_invariants():
 # counts anyway.  Or maybe that isn't such a concern and it is more
 # efficient to only aggregate the counts if everything looks good on other
 # grounds.
-
-# class invariant:
-#     one_of = None                   # list of 5 or fewer distinct values
-#     values = None                   # number of distinct values; perhaps
-#                                         # maintain this as a range rather
-#                                         # than an exact number...
-#     samples = None                  # number of samples; >= values
 
 class two_field_numeric_invariant(invariant):
 
@@ -755,6 +788,7 @@ def all_two_field_numeric_invariants():
             print "   ", `this_inv`
             print "   ", this_inv
 
+## Testing
 # all_two_field_numeric_invariants()
 
 
@@ -955,7 +989,9 @@ def all_three_field_numeric_invariants():
 
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def bi_linear_relationship(pair1, pair2):
-    ## Linear relationship -- try to fit y = ax + b.
+    """Given ((x0,y0),(x1,y1)), return (a,b) such that y = ax + b.
+If no such (a,b) exists, then return (0,0)."
+
     (x0, y0) = pair1
     (x1, y1) = pair2
     if (x0 == x1):
@@ -999,8 +1035,9 @@ def checked_tri_linear_relationship(triples, permutation):
 
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def tri_linear_relationship(triple1, triple2, triple3):
+    """Given ((x1,y1,z1),(x2,y2,z2),(x3,y3,z3)), return (a,b,c) such that z=ax+by+c.
+If no such (a,b,c) exists, then return (0,0,0)."
 
-    ## Linear relationship -- try to fit z = ax + by + z.
     (x1, y1, z1) = triple1
     (x2, y2, z2) = triple2
     (x3, y3, z3) = triple3
@@ -1061,6 +1098,8 @@ def tri_linear_relationship(triple1, triple2, triple3):
     return (a, b, c)
 
 def tri_linear_format(abc, xyz):
+    """Given ((a,b,c),(x,y,z)), format "z=ax+by+c".
+The result omits addition of zero, multiplication by one, etc."
     (a,b,c) = abc
     (x,y,z) = xyz
 
@@ -1141,14 +1180,14 @@ def _test():
 
 
 def foo():
-        fn_name = "READ-COMPACT-TRANSLATION"
-        fn_vars = var_names[fn_name]
-        num_vars = len(fn_vars)
-        for indices in util.choose(2, range(0,num_vars)):
-            this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
-            these_vars = util.slice_by_sequence(fn_vars, indices)
-            this_inv = two_field_numeric_invariant(this_dict)
-            # print fn_name, these_vars, this_inv, `this_inv`
-            print fn_name, these_vars
-            print "   ", `this_inv`
-            print "   ", this_inv
+    fn_name = "READ-COMPACT-TRANSLATION"
+    fn_vars = var_names[fn_name]
+    num_vars = len(fn_vars)
+    for indices in util.choose(2, range(0,num_vars)):
+        this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
+        these_vars = util.slice_by_sequence(fn_vars, indices)
+        this_inv = two_field_numeric_invariant(this_dict)
+        # print fn_name, these_vars, this_inv, `this_inv`
+        print fn_name, these_vars
+        print "   ", `this_inv`
+        print "   ", this_inv
