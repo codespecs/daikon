@@ -82,8 +82,10 @@ public final class SEQUENCESCALARSUBSCRIPT
       return ValueAndModified.MISSING_NONSENSICAL;
     SCALAR[] val1_array = (SCALAR[]) val1;
     int val2 = base2.getIndexValue(full_vt) + index_shift;
-    if ((val2 < 0) || (val2 >= val1_array.length))
+    if ((val2 < 0) || (val2 >= val1_array.length)) {
+      missing_array_bounds = true;
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     SCALAR val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))
