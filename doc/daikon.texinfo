@@ -2531,6 +2531,11 @@ Omit any global or static variables from the @file{.decls} and
 and Daikon's performance, at the expense of missing properties involving
 them.  The default is to keep global and static variables.
 
+@item --ignore-static-vars
+
+Omit any static variables but keep global variables in the 
+@file{.decls} and @file{.dtrace} files.
+
 @item --limit-static-vars
 
 Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
@@ -2540,20 +2545,22 @@ declared within a particular function are only observed at program points
 for that function.  This is a heuristic to reduce the amount of Kvasir
 output without greatly reducing the amount of useful output.
 
-@item --struct-depth=@var{N}
-
-For recursively-defined structures (structs or classes with members that
-are pointers to the SAME TYPE of struct or class), N (an integer between 
-0 and 100) specifies approximately how many levels of pointers to dereference. 
-This is useful for controlling the output of linked lists and trees. 
-
-@item --total-depth=@var{N}
+@item --nesting-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
 are structs or classes or pointers to structs or classes of ANY TYPE), 
 N (an integer between 0 and 100) specifies approximately how many levels
 of pointers to dereference.  This is useful for controlling the output
 of complex data structures with many references to other structures.
+The default is 2.
+
+@item --struct-depth=@var{N}
+
+For recursively-defined structures (structs or classes with members that
+are pointers to the SAME TYPE of struct or class), N (an integer between 
+0 and 100) specifies approximately how many levels of pointers to dereference. 
+This is useful for controlling the output of linked lists and trees. 
+The default is 2.
 
 @item --output-fifo
 
@@ -7348,7 +7355,7 @@ code.  Do this by reducing the class/structure instrumentation depth.
 @item With Chidory, use the @option{--nesting-depth=@var{N}} option.
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
-@option{--total-depth=@var{N}} option.
+@option{--nesting-depth=@var{N}} option.
 @item With dfec, use the @option{--struct-depth=@var{N}} option.
 @end itemize
 
