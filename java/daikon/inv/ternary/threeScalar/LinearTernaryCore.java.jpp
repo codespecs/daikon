@@ -33,6 +33,7 @@ import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
 import java.io.Serializable;
 
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -69,6 +70,9 @@ public final class CLASSNAME
     }
     protected Object clone() throws CloneNotSupportedException {
       return super.clone();
+    }
+    public String toString() {
+      return ("(" + x + ", " + y + " ," + z + ")");
     }
   };
 
@@ -137,6 +141,14 @@ public final class CLASSNAME
         a = pclever[0];
         b = pclever[1];
         c = pclever[2];
+
+        // We need to force C to always be -1 (as it is originally calculated)
+        // so that we always get the same equation
+        double div = c / -1.0;
+        a = a / div;
+        b = b / div;
+        c = c / div;
+        d = d / div;
       }
     }
     // Fix caches
@@ -146,12 +158,14 @@ public final class CLASSNAME
         Point p = def_points[i];
         if (p == null)
           continue;
+        wrapper.log ("orig def_points["+i+"] = " + p);
         temp[permutation[0]] = p.x;
         temp[permutation[1]] = p.y;
         temp[permutation[2]] = p.z;
         p.x = temp[0];
         p.y = temp[1];
         p.z = temp[2];
+        wrapper.log ("permutted def_points["+i+"] = " + p);
       }
     }
     // Assert that caches sync with a,b,c?
@@ -191,6 +205,9 @@ public final class CLASSNAME
     // XXX TODO FIXME: This method does not correctly deal with
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
+
+    if (Debug.logDetail())
+      wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z);
 
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
@@ -294,10 +311,11 @@ public final class CLASSNAME
 
         // Try to find small changes that will fit better.
         if (!try_new_equation (x, y, z)) {
-          if (debug.isLoggable(Level.FINE)) {
-            debug.fine ("Suppressing " + CLASSSTRING + " (" +
-                        wrapper.format() + ") at new value: "
-                        + y + " != " + a + "*" + x + "+" + b);
+          if (wrapper.logOn() || debug.isLoggable(Level.FINE)) {
+            wrapper.log (debug, "destroying  (" + wrapper.format()
+                  + ") where x=" + x + " y=" + y + " z=" + z
+                         + " a=" + a + " b=" + b + " c=" + c
+                         + " values_seen=" + values_seen);
           }
           wrapper.discardCode = DiscardCode.bad_sample;
 #if defined(TYPELONG)
@@ -337,6 +355,10 @@ public final class CLASSNAME
       double coef[];
       try {
         coef = calc_tri_linear (def_points);
+        if (Debug.logDetail())
+          wrapper.log ("Calc new plane with points " + def_points[0] + " " +
+                       def_points[1] + " " + def_points[2] + " " +
+                       def_points[3]);
       } catch (Exception e) {
         return (false);
       }
@@ -356,8 +378,8 @@ public final class CLASSNAME
       b = (min_b + max_b) / 2;
       c = (min_c + max_c) / 2;
       d = (min_d + max_d) / 2;
-      if (debug.isLoggable(Level.FINE))
-        debug.fine (wrapper.ppt.name + ": Trying new a (" + a +
+      if (wrapper.logOn() || debug.isLoggable(Level.FINE))
+        wrapper.log (debug, wrapper.ppt.name + ": Trying new a (" + a +
                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
 
       // if the new coefficients are 'equal' to their min and max and
@@ -531,8 +553,10 @@ public final class CLASSNAME
     float c_numerator = (float) (p0.z * (p1.x * p2.y - p2.x * p1.y)
                                 - p1.z * (p0.x * p2.y - p2.x * p0.y)
                                 + p2.z * (p0.x * p1.y - p1.x * p0.y));
-    return new double[] { a_numerator / denominator, b_numerator / denominator, -1,
-                          c_numerator / denominator };
+    double[] coef = new double[] { a_numerator / denominator,
+                                  b_numerator / denominator,
+                                  -1, c_numerator / denominator };
+    return (coef);
   }
 
 
@@ -615,8 +639,7 @@ public final class CLASSNAME
                              double a, double b, double c, double d)
   {
     if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
-      return wrapper.format_too_few_samples(format, "0 * " + z +
-                                            " == 0 * "+ x + " + 0 * " + y + " + 0");
+      return wrapper.format_too_few_samples(format, null);
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -738,5 +761,72 @@ public final class CLASSNAME
             && (c != other.c)
             && (d != other.d));
   }
+
+  /**
+   * In general, we can't merge formulas, but we can merge invariants with
+   * too few samples to have formed a plane with invariants with enough
+   * samples.  And those will appear to have different formulas.
+   */
+
+  public boolean mergeFormulasOk() {
+    return (true);
+  }
+
+  /**
+   * Merge the linear ternary cores in cores to form a new core. Any
+   * core in the list that has seen enough points to define a
+   * plane, must define the same plane. Any cores that have not
+   * yet seen enough points, will have each of their points applied to
+   * that invariant.  The merged core is returned.  Null is
+   * returned if the cores don't describe the same plane
+   *
+   * @param cores   List of LinearTernary cores to merge.  They should
+   *                all be permuted to match the variable order in
+   *                ppt.
+   */
+  public CLASSNAME merge (List cores, Invariant wrapper) {
+
+    // Look for any active planes.  All must define the same plane
+    CLASSNAME first = null;
+    for (int i = 0; i < cores.size(); i++) {
+      CLASSNAME c = (CLASSNAME) cores.get (i);
+      if (!c.isActive())
+        continue;
+      if (first == null)
+        first = (CLASSNAME) c.clone();
+      else {
+        if (!Global.fuzzy.eq (first.a, c.a)
+            || !Global.fuzzy.eq (first.b, c.b)
+            || !Global.fuzzy.eq (first.c, c.c)
+            || !Global.fuzzy.eq (first.d, c.d))
+          return (null);
+      }
+    }
+
+    // If no active planes were found, created an empty core
+    if (first == null)
+      first = new CLASSNAME (wrapper);
+    else
+      first.wrapper = wrapper;
+
+    // Merge in any points from non-active cores
+    for (int i = 0; i < cores.size(); i++) {
+      CLASSNAME c = (CLASSNAME) cores.get (i);
+      if (c.isActive())
+        continue;
+      for (int j = 0; j < c.values_seen; j++) {
+        Point cp = c.def_points[j];
+        if (Debug.logDetail())
+          wrapper.log ("Adding point " + cp + " from " + c.wrapper.ppt);
+        first.add_modified (cp.x, cp.y, cp.z, 1);
+        if (wrapper.falsified)
+          return (null);
+      }
+    }
+
+    return (first);
+  }
+
+
 
 }
