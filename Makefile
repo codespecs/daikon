@@ -126,6 +126,9 @@ compile-java:
 clean-java:
 	cd java && $(MAKE) clean
 
+javadoc:
+	cd java && $(MAKE) javadoc
+
 ### Kvasir (C front end)
 
 kvasir/kvasir/Makefile.in:
