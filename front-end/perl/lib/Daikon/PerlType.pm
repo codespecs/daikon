@@ -14,21 +14,22 @@ use Exporter;
 @EXPORT_OK = qw(DEPTH_LIMIT LIST_LIMIT
 		parse_type unparse_type type_lub unparse_to_code
 		guess_type_ref guess_type_scalar guess_type_array
-		guess_type_hash guess_type_object guess_type_list);
+		guess_type_hash guess_type_object guess_type_list
+                is_zero);
 
 # How deep in terms of nested references to go in a linked data
 # structure. We don't have any notion of recursive types, so this has
 # to be finite to keep from getting stuck in reference loops, and it
 # should probably be small because the size of the types we guess can
 # potentially be exponential in it. In arbitrary units.
-sub DEPTH_LIMIT () { 100 }
+sub DEPTH_LIMIT () { 122 }
 
 # How much traversing a scalar reference adds to our depth
 sub SCALAR_REF_DEPTH () { 20 }
 
 # How much looking at the output of an accessor method adds to our
 # depth
-sub ACCESSOR_METHOD_DEPTH () { 40 }
+sub ACCESSOR_METHOD_DEPTH () { 41 }
 
 # The number of elements at the start of a list type to possibly treat
 # as distinct entities. After this many, any remaining elements in the
@@ -422,8 +423,9 @@ sub guess_type_hash {
 	    @accessors = $hr->DAIKON_ACCESSORS();
 	}
 	$depth += ACCESSOR_METHOD_DEPTH;
-	my $acc_types = {map(($_ => guess_type_scalar(scalar($hr->$_()))),
-			     @accessors)};
+	my $acc_types =
+	  {map(($_ => guess_type_scalar(scalar($hr->$_()))),
+	       @accessors)};
 	$depth -= ACCESSOR_METHOD_DEPTH;
 	return ['object', $field_types, $acc_types];
     }
@@ -454,7 +456,7 @@ sub guess_type_hash {
         # comparison. The entry in perlfaq4 about determining whether
         # a scalar is a number might also be enlightening.
 	no warnings 'numeric';
-	if ($s != 0 or $s =~ /^-?(0+\.?0*|0*\.0+)([eE][-+]?(\d+))?\z$/) {
+	if ($s != 0 or is_zero($s)) {
 	    if (int($s) == $s) {
 		if ($s == 0 or $s == 1) {
 		    return "bool";
@@ -485,6 +487,13 @@ sub guess_type_list {
 	return ['list', [@fixed], $extra];
     }
     return ['list', [@fixed]];
+}
+
+# Given a string, return a boolean value that's true if the string
+# looks like a numeric zero, and false otherwise.
+sub is_zero {
+    my($s) = @_;
+    return $s =~ /^-?(0+\.?0*|0*\.0+)([eE][-+]?(\d+))?\z$/;
 }
 
 # Say perl -MDaikon::PerlType -e 'Daikon::PerlType::test_guess()'
