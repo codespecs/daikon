@@ -23,49 +23,49 @@ Daikon
 
   Documentation changes
 
-    The entire Daikon manual has been cleaned up and copy-edited (e.g., for
+    The Daikon manual has been cleaned up and copy-edited (e.g., for
     consistent use of punctuation and typographical conventions).  A few
-    sections have been reorganized, and some redundant material has
-    been eliminated.  These changes should make the manual more readable.
+    sections have been reorganized, and some redundant material has been
+    eliminated.  These changes should make the manual more readable.
 
 Kvasir
 
   User Changes
 
-     Added C++ support:
+    In order to reduce the amount of extraneous output, added heuristics 
+    to avoid dereferencing pointers to certain types of variables 
+    (such as FILE*) associated with the C library and operating 
+    system which are unlikely to be interesting for the user.
 
-       Features:
-         Outputs the member variables of C++ classes just like those 
-         within C structs, generates :::OBJECT and :::CLASS invariants,
-         properly performs C++ name demangling, 
-         treats member functions like regular functions with an extra 
-         'this' pointer parameter, and correctly outputs static class 
-         member variables.
+    Added C++ support:
 
-       Limitations:
-         Cannot print out the contents of classes which are 
-         defined in external libraries rather than in the user's program 
-         (e.g., Kvasir can properly output a C-string represented as 
-         char* but not the contents of the C++ string class).
-         Also, Kvasir can only recognize classes which have member function
-         definitions located outside of the class body like in typical C++ 
-         style instead of inside the class body like in Java style.
-         Support for inheritance and polymorphic member function calls 
-         have not yet been tested.
+      Features:
 
-     In order to reduce the amount of extraneous output, added heuristics 
-     to avoid dereferencing pointers to certain types of variables 
-     (such as FILE*) associated with the C library and operating 
-     system which are unlikely to be interesting for the user.
+        Kvasir outputs the member variables of C++ classes just like those
+	within C structs, generates :::OBJECT and :::CLASS invariants,
+	performs C++ name demangling, treats member functions like regular
+	functions with an extra 'this' pointer parameter, and outputs
+	static class member variables.
+
+      Limitations:
+
+	Kvasir does not print the contents of classes defined in external
+        libraries.  For example, Kvasir outputs the contents of a char*,
+        but not the contents of the C++ string class.
+
+        Kvasir ignores classes in which any member function definition
+        appears within the class body.  Kvasir only produces output for
+        classes all of whose member function definitions appear outside the
+        class body.
+
+        Support for inheritance and polymorphic member function calls have
+        not yet been tested.
 
   Bug Fixes
     
-     Fixed some segfaults which occurred while printing large 
-     multi-dimensional arrays.
-     
-     Fixed various other bugs which only showed up when running Kvasir 
-     on fairly large programs (e.g. Perl, gcc).  Now Kvasir can 
-     successfully run on programs of significant size.
+    Fixed a variety of segmentation faults in Kvasir.  Kvasir now runs on
+    programs of significant size (for example, gcc 3.4.3, which is over
+    300,000 lines of code).
 
 ---------------------------------
 
