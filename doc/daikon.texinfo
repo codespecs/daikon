@@ -36,11 +36,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.5.0
+@center Daikon version 2.3.0
 
 @sp 1
-@c Daikon version 2.5.0 date
-@center August 26, 2001
+@c Daikon version 2.3.0 date
+@center September 11, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,7 +59,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon invariant detector</h1>
 
 This is the manual for the Daikon invariant detector.
-It describes Daikon version 2.5.0, released August 26, 2001.
+It describes Daikon version 2.3.0, released September 11, 2001.
 
 @end html
 
@@ -3012,7 +3012,7 @@ Dynamically
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.5.0, released August 26, 2001.
+This manual describes Daikon version 2.3.0, released September 11, 2001.
 
 There have been two major implementations of Daikon, with different
 features and capabilities.  Readers of technical papers may be confused
