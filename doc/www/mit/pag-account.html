@@ -12,9 +12,13 @@ To create an account on geyer, perform the following two steps:
 
 <ol>
 <li>
-Run inquir (for instance, on oregano, and using the .el rather than .elc file) to get a
-UID.  Set the name and mail forwarding, at least, and note the UID for use
-in the <tt>useradd</tt> command below.
+Run inquir (for instance, on oregano, and using the .el rather than .elc
+file) to get a UID.  Set the name and mail forwarding, at least, and note
+the UID for use in the <tt>useradd</tt> command below.<p>
+
+If it is impossible to run inquir, then look at the end of
+<tt>/etc/passwd</tt> and choose a UID from there.  Don't just omit the
+"<tt>-u <em>UID</em></tt>" argument from the useradd command.
 
 <li>
 Create a new account on geyer like so:
