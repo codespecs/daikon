@@ -8,8 +8,7 @@ die()
 
 chdir()
 {
-    cd $1 >/dev/null 2>&1
-    [ `realpath \`pwd\`` = `realpath "$1"` ] || die "can't chdir to $1."
+    cd $1 >/dev/null 2>&1 || die "can't chdir to $1."
 }
 
 [ -z "$INV" ] && INV="$inv"
