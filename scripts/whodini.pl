@@ -4,11 +4,13 @@
 # whodini.pl -- Iteratively invoke ESC/Java on a source file until a fixed point is reached
 # Jeremy Nimmer <jnimmer@lcs.mit.edu>
 
-# Given a (possibly-annotated) source file, and some associated
-# txt-esc file, produces ESC/Java output from processing the original
-# source file, except uses as many of the annotations from the txt-esc
-# file as possible to aid the verfication.  This script attempts to
-# mimic the behavior of the Houdini tool from Compaq SRC
+# Usage: whodini.pl [-d] annotations.txt-esc source.java [source2.java ...]
+
+# Given a txt-esc file, and some number of (possibly-annotated) source
+# files, produces ESC/Java output from processing the original source
+# files, except uses as many of the annotations from the txt-esc file
+# as possible to aid the verfication.  This script attempts to mimic
+# the behavior of the Houdini tool from Compaq SRC.
 
 use Carp;
 use File::Copy;
@@ -16,7 +18,7 @@ use File::Path;
 use POSIX qw(tmpnam);
 
 # Algorithm for this script:
-# 0 We are given a (possibly-annotated) source file and a txt-esc file
+# 0 We are given a txt-esc file and some (possibly-annotated) source files
 # 1 Read the txt file into memory, adding a nonce to the end of each invariant: "; // gensym"
 # 2 Write the txt file (from memory) to a temp file
 # 3 Copy the source files to a temp file
@@ -108,7 +110,7 @@ sub copytmp {
     return $name;
 }
 
-# 0 We are given a (possibly-annotated) source file and a txt-esc file
+# 0 We are given a txt-esc file and some (possibly-annotated) source files
 
 if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
     print STDERR "Debugging on\n";
@@ -133,7 +135,7 @@ my @sourcefiles = @ARGV;
 # 1 Read the txt file into memory, adding a nonce to the end of each invariant: ";//nonce-gensym"
 
 my @txtesc = slurpfile($txtescfile);
-#@txtesc = 
+#@txtesc =
 grep {
     my $nonce = "/*nonce-" . gensym() . "*/ ";
     # Skip over things we shouldn't touch; add a gensym to the rest
@@ -193,7 +195,7 @@ while (1) {
 	    $txtesc_changed = 1;
 	} else {
 	    print STDERR "Did not find '$failure'\n";
-	} 
+	}
     }
 
     # 9 Otherwise, dump the slurped output to stdout (with a little tweaking first) and exit
