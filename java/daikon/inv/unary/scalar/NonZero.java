@@ -83,7 +83,7 @@ public class NonZero
   }
 
   public void add_modified(long v, int count) {
-    // The min and max tests will simultaneoulsy succeed exactly once (for
+    // The min and max tests will simultaneously succeed exactly once (for
     // the first value).
     if (v == 0) {
       if (debugNonZero || ppt.debugged) {
