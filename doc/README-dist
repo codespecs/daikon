@@ -53,8 +53,11 @@ C front end:
      * creates declaration files named <filename>.c.decls
     You may wish to perform this operation with a copy of your program,
     to safeguard your original source code.
+    Note that you may need to adjust the path to Perl for the
+    'instrumentor' script to work.  We are using Perl version 5.004_02.
  c. Create or modify a Makefile.  Either:
-     * add "dump_trace.c" to your Makefile, or
+     * add "dump_trace.o" to the list of OBJECTS that need to be
+       created in your makefile, or
      * add your source files to Makefile-sample
  d. Build your program in the usual way, perhaps by running "make"; this
     creates an instrumented executable.
