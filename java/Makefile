@@ -54,14 +54,14 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/binary/SequenceStringSubsequence.java \
 	daikon/derive/binary/SequenceScalarSubscriptFactory.java \
 	daikon/derive/binary/SequenceStringSubscriptFactory.java \
-	daikon/derive/binary/ScalarSequencesIntersection.java \
-	daikon/derive/binary/StringSequencesIntersection.java \
-	daikon/derive/binary/ScalarSequencesIntersectionFactory.java \
-	daikon/derive/binary/StringSequencesIntersectionFactory.java \
-	daikon/derive/binary/ScalarSequencesUnion.java \
-	daikon/derive/binary/StringSequencesUnion.java \
-	daikon/derive/binary/ScalarSequencesUnionFactory.java \
-	daikon/derive/binary/StringSequencesUnionFactory.java \
+	daikon/derive/binary/SequenceScalarIntersection.java \
+	daikon/derive/binary/SequenceStringIntersection.java \
+	daikon/derive/binary/SequenceScalarIntersectionFactory.java \
+	daikon/derive/binary/SequenceStringIntersectionFactory.java \
+	daikon/derive/binary/SequenceScalarUnion.java \
+	daikon/derive/binary/SequenceStringUnion.java \
+	daikon/derive/binary/SequenceScalarUnionFactory.java \
+	daikon/derive/binary/SequenceStringUnionFactory.java \
 
 ###########################################################################
 ### Compilation targets
@@ -185,9 +185,11 @@ check-serialize:
 
 .PHONY: junit
 # Include CLASSPATH on command line for Cygwin compatibility
+# Include . in CLASSPATH because you can have two versions of Daikon,
+# and you want to do junit tests on *this* version.
 junit:
 	@echo java daikon.test.MasterTester
-	@java -server -classpath ${CLASSPATH} daikon.test.MasterTester
+	@java -server -classpath .:${CLASSPATH} daikon.test.MasterTester
 
 ## Documentation
 
@@ -365,28 +367,28 @@ daikon/derive/binary/SequenceScalarSubscriptFactory.java: daikon/derive/binary/S
 daikon/derive/binary/SequenceStringSubscriptFactory.java: daikon/derive/binary/SequenceSubscriptFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-daikon/derive/binary/ScalarSequencesIntersection.java: daikon/derive/binary/SequencesIntersection.java.jpp
+daikon/derive/binary/SequenceScalarIntersection.java: daikon/derive/binary/SequencesIntersection.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-daikon/derive/binary/StringSequencesIntersection.java: daikon/derive/binary/SequencesIntersection.java.jpp
+daikon/derive/binary/SequenceStringIntersection.java: daikon/derive/binary/SequencesIntersection.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-daikon/derive/binary/ScalarSequencesIntersectionFactory.java: daikon/derive/binary/SequencesIntersectionFactory.java.jpp
+daikon/derive/binary/SequenceScalarIntersectionFactory.java: daikon/derive/binary/SequencesIntersectionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-daikon/derive/binary/StringSequencesIntersectionFactory.java: daikon/derive/binary/SequencesIntersectionFactory.java.jpp
+daikon/derive/binary/SequenceStringIntersectionFactory.java: daikon/derive/binary/SequencesIntersectionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-daikon/derive/binary/ScalarSequencesUnion.java: daikon/derive/binary/SequencesUnion.java.jpp
+daikon/derive/binary/SequenceScalarUnion.java: daikon/derive/binary/SequencesUnion.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-daikon/derive/binary/StringSequencesUnion.java: daikon/derive/binary/SequencesUnion.java.jpp
+daikon/derive/binary/SequenceStringUnion.java: daikon/derive/binary/SequencesUnion.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-daikon/derive/binary/ScalarSequencesUnionFactory.java: daikon/derive/binary/SequencesUnionFactory.java.jpp
+daikon/derive/binary/SequenceScalarUnionFactory.java: daikon/derive/binary/SequencesUnionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-daikon/derive/binary/StringSequencesUnionFactory.java: daikon/derive/binary/SequencesUnionFactory.java.jpp
+daikon/derive/binary/SequenceStringUnionFactory.java: daikon/derive/binary/SequencesUnionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 
