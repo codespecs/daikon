@@ -17,7 +17,7 @@ $WARNING=1;
 my $csv; # csv object
 
 my $USAGE =
-  "Usage: ./convertcsv.pl [options] <inputfilename>
+  "Usage: convertcsv.pl [options] <inputfilename>
   Options:
      -m [behavior]:  behavior for missing values in the csv file
         -m nonsensical : use Daikon \"nonsensical\" values.
@@ -90,6 +90,7 @@ my @actualVarNames;
 my %varNameIndex;
 
 # 1 if a declaration file is provided.
+# 0 otherwise
 my $declarationexists=1;
 
 if ($declarationfilename ne "") {
@@ -205,6 +206,15 @@ if ($declarationexists == 0){
     @actualVarNames = @variablenames;
 }
 
+my @isNumber;
+$length = scalar(@actualVarNames);
+
+for (my $j = 0; $j<$length; $j++) {
+    my $activeindex = $varNameIndex{$actualVarNames[$j]};
+    $isNumber[$activeindex] = 1;
+}
+
+
 while(<CSVHANDLE>) {
     # open the input file.
     my $i = 0;
@@ -243,11 +253,7 @@ while(<CSVHANDLE>) {
         }
         
         $dtraceline = $programpoint."\n";
-        $decls = $programpoint."\n";
-        
-        if ($decl == 1) {
-            if ($declarationexists == 0) {print DECLSHANDLE "DECLARE\n";}
-        }
+        $decls = "DECLARE\n".$programpoint."\n";
         
         for (my $j = 0; $j<$length; $j++)
         {                
@@ -293,28 +299,35 @@ while(<CSVHANDLE>) {
             print DTRACEHANDLE $dtraceline;
  
             if ($decl == 1) {
-                if (isnumber($variables[$activeindex])) {
-                    $decls = $decls.$variablenames[$activeindex].
-                        "\n"."double\n"."double\n1\n";
+                if ((isnumber($variables[$activeindex])) || ($variables[$activeindex] eq "")) {
+                    
                 }
                 else {
-                    $decls = $decls.$variablenames[$activeindex].
-                        "\n"."String\n"."String\n1\n";
+                    $isNumber[$activeindex] = 0;
                 }
-                if ($declarationexists == 0) { print DECLSHANDLE $decls; }
+                
             }
             $dtraceline = "";
-            $decls = "";
         }
-        print DTRACEHANDLE "\n";
-        
-        if ($decl == 1) {
-            
-            if ($declarationexists ==0) {print DECLSHANDLE "\n";}
-            $decl = 0;
-        }
+
+        print DTRACEHANDLE "\n";        
         $counter += 1;            
     }}
+
+for (my $j = 0; $j<$length; $j++) {                
+    my $activeindex = $varNameIndex{$actualVarNames[$j]};
+    if ($isNumber[$activeindex]) {
+        $decls = $decls.$variablenames[$activeindex].
+            "\n"."double\n"."double\n1\n";       
+    }
+    else {
+        $decls = $decls.$variablenames[$activeindex].
+            "\n"."String\n"."String\n1\n";
+    }
+    if ($declarationexists == 0) { print DECLSHANDLE $decls; }
+    $decls = "";
+}
+
 
 close(DECLSHANDLE);
 close(CSVHANDLE);
@@ -339,9 +352,17 @@ if ($missingaction =~ /interpolate/) {
 sub interpolate() {
     open (DTRACEHANDLE, ">".$outputfilename) ||
         die("Could not open $outputfilename for output.");
+    if ($declarationexists == 0) {
+        open (DECLSHANDLE, ">".$outputdecfilename) ||
+            die("Could not open $outputdecfilename for output.");
+    }
 
-    my $y0; my $y1; my $gradient; my $yintercept;     
     my $m;    
+
+    my $declsline = "DECLARE\n".$programpoint."\n";
+   
+    # set flag for creating a declarations file.
+    $decl = 1; 
     for (my $k = 0; $k < $counter; $k++) {
         $dtraceline = "\n".$programpoint."\n";        
         for (my $j = 0; $j < $length; $j++) {                             
@@ -352,17 +373,18 @@ sub interpolate() {
                     }
                     else {                      
                         for (my $n=0; $n<$m; $n++) {                            
-                            if (isnumber($variableArray{$activeindex}[$k+$n-1])) {                                   
-                                $y1 = $variableArray{$activeindex}[$k+$m];
-                                $y0 = $variableArray{$activeindex}[$k-1+$n];
+                            if (isnumber($variableArray{$activeindex}[$k+$n-1]) 
+                                || isnumber($variableArray{$activeindex}[$k+$m])) {                                   
+                                my $y1 = $variableArray{$activeindex}[$k+$m];
+                                my $y0 = $variableArray{$activeindex}[$k-1+$n];
                                 if ($y1 eq "") {
                                     $y1 = 0;
                                 }
                                 if ($y0 eq "") {
                                     $y0 = 0; 
                                 }
-                                $gradient = ($y1-$y0)/($m+1-$n);
-                                $yintercept = $y1-$gradient*($k+$m);
+                                my $gradient = ($y1-$y0)/($m+1-$n);
+                                my $yintercept = $y1-$gradient*($k+$m);
                                 $variableArray{$activeindex}[$k+$n] = $gradient*
                                     ($k+$n)+$yintercept;
                             }
@@ -374,23 +396,39 @@ sub interpolate() {
                             }}
                         $m = $counter;
                     }}
-                if ($m == $counter-$k) {
+                if (($m == $counter-$k) && ($variableArray{$activeindex}[$k+$m-1] eq "")) {
                     $variableArray{$activeindex}[$k] = $prevvalues[$activeindex];
-                }}
+                }
+            }
             if (isnumber($variableArray{$activeindex}[$k])) {                            
                 # store it as a number
                 $dtraceline = $dtraceline.$variablenames[$activeindex]."\n".
                     $variableArray{$activeindex}[$k]."\n"."1"."\n";
+                if ($decl == 1) {
+                    $declsline = $declsline.$variablenames[$activeindex]."\n".
+                        "double\ndouble\n1\n"
+                    }
             }
             else {              
                 # not a number so store it as a string.   
                 $dtraceline = $dtraceline.$variablenames[$activeindex].
                     "\n\"".$variableArray{$activeindex}[$k]."\"\n"."1"."\n";
+                if ($decl == 1) {
+                    $declsline = $declsline.$variablenames[$activeindex]."\n".
+                        "String\nString\n1\n"
+                    }
             }
             print DTRACEHANDLE $dtraceline;
+            if ($declarationexists == 0) {
+                print DECLSHANDLE $declsline;
+            }
             $dtraceline = "";
-        }}
+            $declsline = "";
+        }
+        $decl = 0;
+    }
     close(DTRACEHANDLE);
+    close(DECLSHANDLE);
 }
 
 
@@ -399,20 +437,13 @@ sub interpolate() {
 # Returns 1 if passed Object is a number (integer, double etc.)
 sub isnumber{  
     my ($num) = @_;   
-    # if it contains anything apart from
-    # a "." and [0-9], it can't be a number.
-   
-    if ($num =~ /[^0-9\.]/ ) {
-        return 0;
-    }
-    # if it contains two dots, it can't 
-    # be a number either.
-    elsif ($num =~ /\..*\./) {
-        return 0;
+    if ($num =~ /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/) {
+        return 1;
     }
     else {
-        return 1;
-    }}
+        return 0;
+      } 
+}
 
 
 # Removes spaces, double quotes, slashes, (square|curly|regular) brackets
