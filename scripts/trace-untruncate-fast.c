@@ -3,8 +3,11 @@
  *
  *  Author: Alan Donovan <adonovan@lcs.mit.edu>
  *
- *  trace-untruncate-fast.c -- truncate file at last blank
- *  line ("\n\n"), and then append "// EOF\n"
+ *  trace-untruncate-fast.c -- remove the last (possibly partial)
+ *  record from dtrace files whose names are given on the command
+ *  line.  More specifically, the programs removes the last paragraph
+ *  of a file (everything after the last double-newline), and does not
+ *  create backups.
  *
  **/
 
