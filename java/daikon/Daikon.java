@@ -225,7 +225,7 @@ public final class Daikon {
           if (pconds != null)
             ppt.addConditions(pconds);
         }
-        ppt.print_invariants_maybe();
+        ppt.print_invariants_maybe(System.out);
         {
           // Clear memory
           ppt.set_values_null();
