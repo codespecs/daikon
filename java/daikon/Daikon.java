@@ -6,6 +6,7 @@ package daikon;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.inv.Invariant;
+import daikon.config.Configuration;
 
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
@@ -114,13 +115,12 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
+  public static final String noternary_SWITCH = "noternary";
+  public static final String config_SWITCH = "config";
 
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
-
-
-  public static final String noternary_SWITCH = "noternary";
 
 
   static String usage =
@@ -166,6 +166,7 @@ public final class Daikon {
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -239,6 +240,15 @@ public final class Daikon {
 	  output_num_samples = true;
 	} else if (noternary_SWITCH.equals(option_name)) {
 	  disable_ternary_invariants = true;
+        } else if (config_SWITCH.equals(option_name)) {
+	  String config_file = g.getOptarg();
+	  try {
+	    InputStream stream = new FileInputStream(config_file);
+	    Configuration.getInstance().apply(stream);
+	  } catch (IOException e) {
+	    throw new RuntimeException("Could not open config file " + config_file);
+	  }
+          break;
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
