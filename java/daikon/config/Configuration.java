@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
 
+/**
+ * This class applies settings from a configuration file that lists
+ * variable names and values (see "defaults.txt" in this directory for an
+ * example).  Multiple configuration files can be read, and the results can
+ * be re-written to a new configuration file.
+ **/
 public final class Configuration
   implements Serializable
 {
@@ -22,7 +28,7 @@ public final class Configuration
   // ============================== STATIC COMPONENT ==============================
 
   private static final String DEFAULTS = "defaults.txt";
-  private static final String PREFIX = "dkconfig_";
+  protected static final String PREFIX = "dkconfig_";
 
   /**
    * @return singleton instance of this class
@@ -74,7 +80,7 @@ public final class Configuration
    * Take the settings given in the argument and call
    * this.apply(String) for each of them.  This essentially overlaps
    * the settings given in the argument over this (appending them to
-   * this in the process).  This method intended for loading a saved
+   * this in the process).  This method is intended for loading a saved
    * configuration from a file, since calling this method with the
    * Configuration singleton makes no sense.
    **/
@@ -158,7 +164,7 @@ public final class Configuration
     Assert.assert(clazz != null);
     Assert.assert(fieldname != null);
     Assert.assert(value != null);
-    
+
     Field field;
     try {
       field = clazz.getDeclaredField(PREFIX + fieldname);
@@ -176,7 +182,7 @@ public final class Configuration
     Assert.assert(field != null);
     Assert.assert(unparsed != null);
 
-    Object value; // typed version of value 
+    Object value; // typed version of value
     Class type = field.getType();
     if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
@@ -199,7 +205,7 @@ public final class Configuration
     } else {
       throw new ConfigException("Unsupported type " + type.getName());
     }
-    
+
     try {
       field.set(null, value);
     } catch (IllegalAccessException e) {

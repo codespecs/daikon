@@ -37,11 +37,15 @@ public class PptTopLevel
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // If true, implications are created for all pairwise combinations
-  // of conditions, and all pairwise combinations of exit points.  If
-  // false, implications are created for only the first two
-  // conditions, and implications are created only if there are
-  // exactly two exit points.
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  /**
+   * Boolean.  If true, implications are created for all pairwise
+   * combinations of conditions, and all pairwise combinations of exit
+   * points.  If false, implications are created for only the first
+   * two conditions, and implications are created only if there are
+   * exactly two exit points.
+   **/
   public static boolean dkconfig_pairwise_implications = false;
 
   /**
@@ -1446,6 +1450,8 @@ public class PptTopLevel
   }
   
   
+  // This method is correct only if the two conditional program points fully
+  // partition the input space (their conditionss are negations of one another).
   private void addImplications_internal(PptTopLevel ppt1,
 					PptTopLevel ppt2,
 					boolean add_nonimplications)
@@ -2028,7 +2034,7 @@ public class PptTopLevel
       PptTopLevel ppt = (PptTopLevel) ppts.next();
       all_cont.append("\t(AND \n");
       Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.invariants_vector()).iterator();
-      while(_invs.hasNext()) {
+      while (_invs.hasNext()) {
 	Invariant inv = (Invariant) _invs.next();
 	if (inv instanceof Implication) {
 	  continue;
@@ -2089,7 +2095,7 @@ public class PptTopLevel
 	    // State the object invariant on the incoming argument
 	    all_cont.append("\t(AND \n");
 	    Iterator _invs = InvariantFilters.addEqualityInvariants(OBJ.invariants_vector()).iterator();
-	    while(_invs.hasNext()) {
+	    while (_invs.hasNext()) {
 	      Invariant inv = (Invariant) _invs.next();
 	      if (!test.include(inv)) { // think: !inv.isWorthPrinting()
 		continue;

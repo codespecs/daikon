@@ -776,8 +776,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		Vector vect_place = new Vector();
 		Vector vect_invars = new Vector();
 
-		while(true)
-		{
+		while (true) {
 			display_string = dfc.getIndividualInvariants();
 
 			if (display_string == null)
@@ -1038,10 +1037,10 @@ class TableSorter extends TableMap
 
 		compares = 0;
 		Integer [] IntArray = new Integer[indexes.length];
-		for(int i = 0; i < indexes.length; i++)
+		for (int i = 0; i < indexes.length; i++)
 			IntArray[i] = new Integer(indexes[i]);
 		Arrays.sort(IntArray, new tableCompare());
-		for(int i = 0; i < indexes.length; i++)
+		for (int i = 0; i < indexes.length; i++)
 			indexes[i] = IntArray[i].intValue();
 	}
 

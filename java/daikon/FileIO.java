@@ -60,12 +60,17 @@ public final class FileIO
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
 
-  // If true, prints the unmatched procedure entries verbosely
+  /**
+   * Boolean.  If true, prints the unmatched procedure entries
+   * verbosely.
+   **/
   public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
 
-  // When false, set modbits to 1 iff the printed representation has
-  // changed.  When true, set modbits to 1 if the printed
-  // representation has changed; leave other modbits as is.
+  /**
+   * Boolean.  When false, set modbits to 1 iff the printed
+   * representation has changed.  When true, set modbits to 1 if the
+   * printed representation has changed; leave other modbits as is.
+   **/
   public static boolean dkconfig_add_changed = true;
 
 /// Variables
@@ -174,7 +179,7 @@ public final class FileIO
       if (line.equals("ListImplementors")) {
 	// Each line following is the name (in JVM form) of a class
 	// that implemnts java.util.List.
-	for(;;) {
+	for (;;) {
 	  line = reader.readLine();
 	  if (line == null || line.equals(""))
 	    break;

@@ -17,6 +17,9 @@ public class LinearTernary
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff LinearTernary invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public final static boolean debugLinearTernary = false;

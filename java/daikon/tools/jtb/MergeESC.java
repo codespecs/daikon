@@ -11,6 +11,7 @@ import jtb.ParseException;
 import jtb.visitor.*;
 
 // To do:  permit multiple .inv files as arguments.
+// In the meanwhile, the workaround is to use the UnionInvariants tool.
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC annotations.
@@ -18,7 +19,8 @@ import jtb.visitor.*;
  *
  * The first argument is a Daikon .inv file -- a serialized file of
  * Invariant objects.  All subsequent arguments are .java files that are
- * rewritten into -escannotated versions.
+ * rewritten into -escannotated versions.  (The original .java files are
+ * left unmodified.)
  * <p>
  **/
 class MergeESC {

@@ -22,6 +22,9 @@ public class SubSequence
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SubSequence invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public boolean var1_in_var2 = true;

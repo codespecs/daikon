@@ -23,7 +23,7 @@ public final class FileCompiler{
     }
     return null;
   }
-  
+
   /**
    * @param The path of the java source to be compiled
    * @return The process which executed the external compile command
@@ -32,7 +32,7 @@ public final class FileCompiler{
     int num_files = filenames.size();
     if (num_files > 0) {
       String to_compile = (String) filenames.elementAt(0);
-      for(int i = 1; i < num_files; i++) {
+      for (int i = 1; i < num_files; i++) {
 	to_compile += (" " + (String) filenames.elementAt(i));
       }
       try {

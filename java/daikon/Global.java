@@ -159,24 +159,21 @@ public final class Global {
   /// via log4j.
 
   public static boolean debugAll = false;
-  
+
   /**
    * Category for debugging statistics output
    **/
-
-  public static final Category debugStatistics = Category.getInstance ("daikon.statistics");
+  public static final Category debugStatistics = Category.getInstance("daikon.statistics");
 
   /**
    * Category for debugging Simplify output
    **/
-
-  public static final Category debugSimplify = Category.getInstance ("daikon.simplify");
+  public static final Category debugSimplify = Category.getInstance("daikon.simplify");
 
   /**
    * Logging Category to debug derived vars
    **/
   public static Category debugDerive = Category.getInstance("daikon.derive");
-
 
   /**
    * Logging Category to debug splitting

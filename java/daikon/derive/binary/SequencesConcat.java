@@ -32,6 +32,9 @@ public final class SequencesConcat
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SequencesConcat derived variables should be created.
+   **/
   public static boolean dkconfig_enabled = false;
 
   public VarInfo var1() { return base1; }

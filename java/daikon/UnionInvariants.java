@@ -16,13 +16,13 @@ public class UnionInvariants {
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants.", 
+      "      Suppress display of logically redundant invariants.",
     }, lineSep);
 
   public static void main(String[] args)
     throws Exception
   {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.Logger.setupLogs(daikon.Logger.INFO);
 
     File inv_file = null;
 
@@ -95,9 +95,21 @@ public class UnionInvariants {
 
     PptMap result = new PptMap();
     union(result, pptmaps);
+    // Mark redundant invariants (may have more given additional
+    // surrounding program points)
 
-    // TODO: Run Simplify on result if flag is set.  Edit simplify to
-    // do the smart type additions?  (It will run a long time, but...)
+    if (Daikon.suppress_redundant_invariants_with_simplify) {
+      System.out.print("Invoking Simplify to identify redundant invariants...");
+      System.out.flush();
+      long start = System.currentTimeMillis();
+      for (Iterator i = result.iterator() ; i.hasNext() ; ) {
+	PptTopLevel ppt = (PptTopLevel) i.next();
+	ppt.mark_implied_via_simplify();
+      }
+      long end = System.currentTimeMillis();
+      double elapsed = (end - start) / 1000.0;
+      System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
+    }
 
     // Write serialized output
     FileIO.write_serialized_pptmap(result, inv_file);
@@ -125,6 +137,7 @@ public class UnionInvariants {
 	if (collector.get(ppt.ppt_name) != null) {
 	  throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name);
 	}
+	System.out.println("Adding ppt " + ppt.name);
 	collector.add(ppt);
       }
     }

@@ -38,11 +38,25 @@ public class EltLowerBound
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff EltLowerBound  invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
-  // If the bound is not within these constraints, then don't report it.
-  // For instance, these could be set to -1 and 2 to only permit output
-  // of bounds in the range (-1,0,1,2).
+  /**
+   * Long integer.  Together with maximal_interesting, specifies the
+   * range of the computed constant that is "intersting" --- the range
+   * that should be reported.  For instance, setting this to -1 and
+   * maximal_interesting to 2 would only permit output of EltLowerBound 
+   * invariants whose cutoff was one of (-1,0,1,2).
+   **/
   public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
+  /**
+   * Long integer.  Together with minimal_interesting, specifies the
+   * range of the computed constant that is "intersting" --- the range
+   * that should be reported.  For instance, setting
+   * minimal_interesting to -1 and this to 2 would only permit output
+   * of EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
+   **/
   public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
 
   public LowerBoundCore  core;

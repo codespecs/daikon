@@ -123,7 +123,7 @@ public class ContextMiddle implements ContextLinker
 		if (iter == null)
 			return null;
 
-		while(iter.hasNext())
+		while (iter.hasNext())
 			return_string += (String)iter.next() + "\n";
 
 		return return_string;

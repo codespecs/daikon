@@ -29,6 +29,9 @@ public final class IntGreaterEqual
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff IntGreaterEqual  invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugIntGreaterEqual  = false;

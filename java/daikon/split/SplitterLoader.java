@@ -36,7 +36,7 @@ public class SplitterLoader extends ClassLoader{
     byte[] classData = read_Class_Data(full_pathname);
     if (classData == null){
       return null;
-    }else{
+    } else {
       return_class = defineClass(className, classData, 0, classData.length);
       resolveClass(return_class);
     }

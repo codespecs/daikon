@@ -25,6 +25,9 @@ public class NoDuplicates
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff NoDuplicates invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug = Category.getInstance(NoDuplicates.class.getName());

@@ -24,6 +24,9 @@ public final class EltNonZero
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff EltNonZero invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   long min = Long.MAX_VALUE;
@@ -66,7 +69,10 @@ public final class EltNonZero
         return term.esc_name() + ".containsNull == false";
       }
       if (! (var().name instanceof VarInfoName.Slice)) {
-        return var().name.esc_name() + ".containsNull == false";
+	// Calling var().name.esc_name() will always throw an
+	// exception, since var() is certainly a sequence.
+
+        // return var().name.esc_name() + ".containsNull == false";
       }
     }
     String[] form =

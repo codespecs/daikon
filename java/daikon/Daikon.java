@@ -33,6 +33,12 @@ public final class Daikon {
 
   public static final String lineSep = Global.lineSep;
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  /**
+   * Boolean.  Controls whether conditional program points (see Daikon
+   * manual) are displayed.
+   **/
   public static boolean dkconfig_output_conditionals = true;
 
   // All these variables really need to be organized better.
@@ -168,7 +174,7 @@ public final class Daikon {
     Set spinfo_files = files[2]; // [File]
     
     // Set up debug traces
-    Logger.setupLogs (Global.debugAll ? Logger.DEBUG : Logger.INFO);
+    Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
 
     // Load declarations and splitters
     PptMap all_ppts = load_decls_files(decls_files);
@@ -298,7 +304,7 @@ public final class Daikon {
 	} else if (debugAll_SWITCH.equals(option_name)) {
 	  Global.debugAll = true;
 	} else if (debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+	  Logger.setPriority(g.getOptarg(), Logger.DEBUG);
 	} else if (no_text_output_SWITCH.equals(option_name)) {
 	  no_text_output = true;
 	} else if (show_progress_SWITCH.equals(option_name)) {

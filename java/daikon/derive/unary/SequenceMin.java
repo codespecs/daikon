@@ -14,6 +14,9 @@ public final class SequenceMin
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SequenceMin derived variables should be generated.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public SequenceMin(VarInfo vi) {

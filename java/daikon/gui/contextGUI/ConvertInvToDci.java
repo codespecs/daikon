@@ -137,7 +137,7 @@ public class ConvertInvToDci
 
 					StringTokenizer tokens = new StringTokenizer(meth_args, ", ");
 					meth_args = "";
-					while(tokens.hasMoreTokens())
+					while (tokens.hasMoreTokens())
 					{
 						String strip_arg = tokens.nextToken();
 						strip_arg = ContextUtils.clearOutInfo(strip_arg, ".");

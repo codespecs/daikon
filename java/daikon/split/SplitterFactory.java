@@ -122,7 +122,7 @@ public class SplitterFactory {
 	System.err.println(ioe.toString() + " while writing Splitter source for " + ppt_name );
       }
     }
-    
+
     //wait for all the compilation processes to terminate
     for (int j = 0; j < processes.size(); j++) {
       try {
@@ -290,7 +290,7 @@ public class SplitterFactory {
 	  if (typ.equals("int[]") || typ.equals("String[]")) {
 	      file_string.append("    " + param_name + "_array_varinfo = ppt.findVar(\"" + param + "[]\") ; \n");
 	      test_string = distinguish_arraynames_from_hashCodes_in_teststring(param, test_string);
-	  }else{
+	  } else {
 	      file_string.append("    " + param_name + "_varinfo = ppt.findVar(\"" + param + "\") ; \n");
 	  }
 	}
@@ -309,7 +309,7 @@ public class SplitterFactory {
 
 	  if (all_types[i].equals("int[]") || all_types[i].equals("String[]")) {
 	    file_string.append( "(" + param_names[i] + "_array_varinfo != null) && ");
-	  }else{
+	  } else {
 	    file_string.append("(" + param_names[i] + "_varinfo != null) && ");
 	  }
 
@@ -353,7 +353,7 @@ public class SplitterFactory {
 	String name = ((PptTopLevel)ppt_itor.next()).name;
 	if (re_matcher.contains( name, ppt_pattern)) {
 	  return all_ppts.get(name);
-	}else if (re_matcher.contains( ppt_name, object_pattern) && re_matcher.contains(name, object_pattern)) {
+	} else if (re_matcher.contains( ppt_name, object_pattern) && re_matcher.contains(name, object_pattern)) {
 	  //At the OBJECT program point, try all the splitters
 	  return all_ppts.get(name);
 	}
@@ -427,7 +427,7 @@ public class SplitterFactory {
       for (int i = 0; i < replace.size(); i+=2) {
 	String replace_function = (String)replace.elementAt(i); //eg Max(int a, int b)
 	PatternMatcherInput replace_function_pattern = new PatternMatcherInput(replace_function);
-	if(re_matcher.contains(replace_function_pattern, arg_pattern)) {
+	if (re_matcher.contains(replace_function_pattern, arg_pattern)) {
 	  MatchResult result = re_matcher.getMatch();
 	  String function_name = result.group(1);  // Max
 	  String arguments = result.group(2); //int a, int b
@@ -519,7 +519,7 @@ public class SplitterFactory {
     if (varname.startsWith("this.")) {
 	bracket = "(" + varname + "|" + varname.substring(5) ;
 	dot_length = "(" + varname + "|" + varname.substring(5);
-    }else{
+    } else {
 	bracket = "(" + varname ;
 	dot_length = "(" + varname ;
     }
@@ -557,7 +557,7 @@ public class SplitterFactory {
   static String match_Splitter_varnames_with_teststring(String[] params, String[] param_names,
 							String test_string, String class_name ) {
 
-    
+
       for (int i = 0; i < params.length; i++) {
 
 	Pattern param_pattern;
@@ -565,7 +565,7 @@ public class SplitterFactory {
 	//not always used in the test string. Eg. instrumented variable is
 	//"this.myArray", but the condition test is "myArray.length == 0". In
 	//such a situation, search the test_string for this.myArray or myArray
-	//and change the test string to this_myArray.length == 0. 
+	//and change the test string to this_myArray.length == 0.
 	try {
 	  if (params[i].startsWith("this")) {
 	    String params_minus_this = params[i].substring(5);
@@ -578,7 +578,7 @@ public class SplitterFactory {
 	  } else {
 	    param_pattern = re_compiler.compile(params[i]);
 	  }
-	  
+
 	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
 	  PatternMatcherInput input = new PatternMatcherInput(test_string);
 	  //remove any parameters which are not used in the condition
@@ -587,7 +587,7 @@ public class SplitterFactory {
 	    while (re_matcher.contains(input, param_pattern)) {
 	      test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
 	    }
-	  }else{
+	  } else {
 	    params[i] = "**remove**"; //this parameter is not needed in the test. ignore later
 	  }
 	} catch(MalformedPatternException e) {
@@ -596,7 +596,7 @@ public class SplitterFactory {
       }
       return test_string;
   }
-  
+
   static Pattern find_index_pattern;
   static {
     try {
@@ -606,7 +606,7 @@ public class SplitterFactory {
     } catch (MalformedPatternException me){
       System.err.println("Error while compiling regular expresssion find_index_pattern in SplitterFactory");
     }
-  }  
+  }
 
     /**
      * Find all variables which are used to index into arrays and change their
@@ -640,9 +640,9 @@ public class SplitterFactory {
 	for (int i = 0; i < arrayIndexVariables.size(); i++) {
 	    for (int j = 0; j < params.length; j++) {
 	      String variable = (String) arrayIndexVariables.elementAt(i);
-		if ( variable.equals(params[j])) {
+		if (variable.equals(params[j])) {
 		  types[j] = "int_index";
-		}else if(params[j].startsWith("this.") && (params[j].substring(5)).equals(variable)) {
+		} else if (params[j].startsWith("this.") && (params[j].substring(5)).equals(variable)) {
 		  types[j] = "int_index";
 		}
 	    }
@@ -683,7 +683,7 @@ public class SplitterFactory {
       splitdir.mkdirs();
       if (splitdir.exists() && splitdir.isDirectory()){
 	tempdir = splitdir.getPath() + File.separator;
-      }else{
+      } else {
 	tempdir = "";
       }
     }catch(IOException e) {
@@ -703,24 +703,24 @@ public class SplitterFactory {
 
   /**
    * Declare the VarInfo for the parameter <parameter> of type <type> in the
-   * Java source of the Splitter. For example, for a variable named "myint" 
+   * Java source of the Splitter. For example, for a variable named "myint"
    * of type "int", it would print "VarInfo myint_varinfo" and for an array
    * "myarr", it would print "VarInfo myarr_array_varinfo"
    **/
   static StringBuffer print_parameter_declarations(StringBuffer splitter_source, String parameter, String type) {
     if (type.equals("int")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
-    }else if (type.equals("int_index")) {
+    } else if (type.equals("int_index")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
-    }else if (type.equals("int[]")) {
+    } else if (type.equals("int[]")) {
       splitter_source.append("  VarInfo " + parameter + "_array_varinfo; \n");
-    }else if (type.equals("String")) {
+    } else if (type.equals("String")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
-    }else if (type.equals("String[]")) {
+    } else if (type.equals("String[]")) {
       splitter_source.append("  VarInfo " + parameter + "_array_varinfo; \n");
-    }else if (type.equals("boolean")) {
+    } else if (type.equals("boolean")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
-    }else{
+    } else {
       debugPrint("Can't deal with this type " + type + " declared in Splitter file");
     }
     return splitter_source;
@@ -741,22 +741,22 @@ public class SplitterFactory {
       if (type.equals("int_index")) {
 	splitter_source.append("   int " + parameter + " = "
 			       + parameter + "_varinfo.getIndexValue(vt); \n");
-      }else if (type.equals("int")) {
+      } else if (type.equals("int")) {
 	splitter_source.append("    long " + parameter + " = "
 			       + parameter + "_varinfo.getIntValue(vt); \n");
-      }else if (type.equals("boolean")) {
+      } else if (type.equals("boolean")) {
 	splitter_source.append("    boolean " + parameter + " = (" + parameter
 			       + "_varinfo.getIntValue(vt) > 0 ? true : false ); \n");
-      }else if (type.equals("int[]")) {
+      } else if (type.equals("int[]")) {
 	splitter_source.append("  long[] " + parameter + "_array = " + parameter
 			       + "_array_varinfo.getIntArrayValue(vt); \n");
-      }else if (type.equals("String")) {
+      } else if (type.equals("String")) {
 	splitter_source.append("    String " + parameter + " = "
 			       + parameter + "_varinfo.getStringValue(vt); \n");
-      }else if (type.equals("String[]")) {
+      } else if (type.equals("String[]")) {
 	splitter_source.append("    String[] " + parameter + "_array = "
 			       + parameter + "_array_varinfo.getStringArrayValue(vt); \n");
-      }else{
+      } else {
 	debugPrint("Can't deal with this type " + type + " declared in Splitter File");
       }
     }

@@ -14,6 +14,9 @@ public final class SequenceMax
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SequencesMax derived variables should be generated.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public SequenceMax(VarInfo vi) {

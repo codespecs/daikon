@@ -21,7 +21,14 @@ public final class NonEqual
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff NonEqual invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
+  /**
+   * Boolean.  True iff only integer expressions should be compared
+   * for inequality (as opposed to also comparing pointer values).
+   **/
   public static boolean dkconfig_integral_only = false;
 
   public NonEqualCore core;

@@ -24,6 +24,9 @@ public final class Member
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff Member invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public final static boolean debugMember = false;
@@ -98,6 +101,7 @@ public final class Member
       // The scalar is not obviously (lexically) a member of any array.
       return false;
     }
+    // isObviousImplied: a[i] in a; max(a) in a
     if (sclvar_seq == seqvar) {
       // The scalar is a member of the same array.
       return true;
@@ -105,6 +109,7 @@ public final class Member
     // The scalar is a member of a different array than the sequence.
     // But maybe the relationship is still obvious, so keep checking.
 
+    // isObviousImplied: when b==a[0..i]:  b[j] in a; max(b) in a
     // If the scalar is a member of a subsequence of the sequence, then
     // the scalar is a member of the full sequence.
     // This is satisfied, for instance, when determining that
@@ -230,8 +235,8 @@ public final class Member
   }
 
   public String format_java() {
-    return "( (daikon.inv.FormatJavaHelper.memberOf(" 
-      + sclvar().name.name() 
+    return "( (daikon.inv.FormatJavaHelper.memberOf("
+      + sclvar().name.name()
       + " , " + seqvar().name.name() + " ) == true ) ";
   }
 

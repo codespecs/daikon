@@ -20,6 +20,9 @@ public final class ScalarSequencesUnion
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff ScalarSequencesUnion  derived variables should be generated.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public ScalarSequencesUnion (VarInfo vi1, VarInfo vi2) {

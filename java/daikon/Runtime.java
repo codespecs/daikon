@@ -44,27 +44,28 @@ public final class Runtime {
   /// Printing
   ///
 
-  public static class PrintStreamWithThrottle extends PrintStream
+  public static final class PrintStreamWithThrottle extends PrintStream
   {
-    public void print(boolean b)   { if (count==1) super.print(b); }
-    public void print(char c)      { if (count==1) super.print(c); }
-    public void print(char[] s)    { if (count==1) super.print(s); }
-    public void print(double d)    { if (count==1) super.print(d); }
-    public void print(float f)     { if (count==1) super.print(f); }
-    public void print(int i)       { if (count==1) super.print(i); }
-    public void print(long l)      { if (count==1) super.print(l); }
-    public void print(Object obj)  { if (count==1) super.print(obj); }
-    public void print(String s)    { if (count==1) super.print(s); }
-    public void println()          { if (count==1) super.println(); }
-    public void println(boolean x) { if (count==1) super.println(x); }
-    public void println(char x)    { if (count==1) super.println(x); }
-    public void println(char[] x)  { if (count==1) super.println(x); }
-    public void println(double x)  { if (count==1) super.println(x); }
-    public void println(float x)   { if (count==1) super.println(x); }
-    public void println(int x)     { if (count==1) super.println(x); }
-    public void println(long x)    { if (count==1) super.println(x); }
-    public void println(Object x)  { if (count==1) super.println(x); }
-    public void println(String x)  { if (count==1) super.println(x); }
+    // Use "count <= 1" for compatibility with older dfej
+    public void print(boolean b)   { if (count <= 1) super.print(b); }
+    public void print(char c)      { if (count <= 1) super.print(c); }
+    public void print(char[] s)    { if (count <= 1) super.print(s); }
+    public void print(double d)    { if (count <= 1) super.print(d); }
+    public void print(float f)     { if (count <= 1) super.print(f); }
+    public void print(int i)       { if (count <= 1) super.print(i); }
+    public void print(long l)      { if (count <= 1) super.print(l); }
+    public void print(Object obj)  { if (count <= 1) super.print(obj); }
+    public void print(String s)    { if (count <= 1) super.print(s); }
+    public void println()          { if (count <= 1) super.println(); }
+    public void println(boolean x) { if (count <= 1) super.println(x); }
+    public void println(char x)    { if (count <= 1) super.println(x); }
+    public void println(char[] x)  { if (count <= 1) super.println(x); }
+    public void println(double x)  { if (count <= 1) super.println(x); }
+    public void println(float x)   { if (count <= 1) super.println(x); }
+    public void println(int x)     { if (count <= 1) super.println(x); }
+    public void println(long x)    { if (count <= 1) super.println(x); }
+    public void println(Object x)  { if (count <= 1) super.println(x); }
+    public void println(String x)  { if (count <= 1) super.println(x); }
 
     // useful for emitting comments during debugging:
     public void printlnAlways(String s) { super.println(s); }
@@ -74,10 +75,10 @@ public final class Runtime {
     // instrumented List-derived object, we don't want to start
     // outputting the program points in the size()/get() methods of the
     // List object.
-    public int count;
+    public int count = 0;
 
-    PrintStreamWithThrottle(OutputStream out)
-      { super(out); count = 0; }
+    public PrintStreamWithThrottle(OutputStream out)
+    { super(out); }
   }
 
   // It's convenient to have an entire run in one data trace file, so

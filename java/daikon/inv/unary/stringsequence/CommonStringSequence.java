@@ -15,6 +15,9 @@ public class CommonStringSequence
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff CommonStringSequence invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugCommonStringSequence = false;

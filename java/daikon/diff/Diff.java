@@ -12,7 +12,7 @@ import gnu.getopt.*;
  * Diff is the main class for the invariant diff program.  The
  * invariant diff program outputs the differences between two sets of
  * invariants.
- * 
+ *
  * The following is a high-level description of the program.  Each
  * input file contains a serialized PptMap.  The PptMap is extracted
  * from each file, and the two PptMaps are combined to form a tree.
@@ -38,6 +38,12 @@ public final class Diff {
                  Global.lineSep);
 
   private boolean examineAllPpts;
+
+    // added to disrupt the tree when bug hunting -LL
+    private static boolean treeManip = false;
+
+    // this is set only when the manip flag is set "-z"
+    private static PptMap manip = null;
 
   /**
    * Determine which Ppts and Invariants should be paired together in
@@ -73,11 +79,13 @@ public final class Diff {
     boolean continuousJustification = false;
     boolean logging = false;
 
+
+
     boolean optionSelected = false;
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpevl");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpevlz");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -100,7 +108,7 @@ public final class Diff {
       case 't':
         optionSelected = true;
         tabSeparatedStats = true;
-        break;        
+        break;
       case 'j':
         continuousJustification = true;
         break;
@@ -110,6 +118,9 @@ public final class Diff {
       case 'e':
         printEmptyPpts = true;
         break;
+      case 'z':
+	treeManip = true;
+	break;
       case 'v':
         verbose = true;
         break;
@@ -164,10 +175,77 @@ public final class Diff {
 	map2 = FileIO.read_serialized_pptmap(new File(filename2),
 					     false // use saved config
 					     );
-      } else {
-	System.out.println(usage);
-	System.exit(1);
       }
+
+      else if (treeManip) {
+	  System.out.println ("Warning, the postSplit file must be second");
+	  if (numFiles < 3) {
+	      System.out.println
+		  ("Sorry, no manip file [preSplit] [postSplit] [manip]");
+	  }
+	  String filename1 = args[firstFileIndex];
+	  String filename2 = args[firstFileIndex + 1];
+	  String manipFile = args[firstFileIndex + 2];
+	  map1 = FileIO.read_serialized_pptmap(new File(filename1),
+					       false // use saved config
+					       );
+	  map2 = FileIO.read_serialized_pptmap(new File(filename2),
+					       false // use saved config
+					       );
+	  manip = FileIO.read_serialized_pptmap(new File(manipFile),
+					       false // use saved config
+					       );
+	  // form the root with tree manips
+	  RootNode root = diff.diffPptMap (map1, map2);
+
+	  // now run the stats visitor for checking matches
+	  MatchCountVisitor mcv = new MatchCountVisitor
+	      (System.out, verbose, false);
+	  root.accept (mcv);
+	  System.out.println ("Precison: " + mcv.calcPrecision());
+	  System.out.println ("Success");
+	  System.exit(0);
+
+      }
+
+      else if (numFiles > 2) {
+
+	  // The new stuff that allows multiple files -LL
+
+
+	  PptMap[] mapAr = new PptMap[numFiles];
+	int j = 0;
+	for (int i = firstFileIndex; i < args.length; i++) {
+	    String fileName = args[i];
+	    mapAr[j++] = FileIO.read_serialized_pptmap(new File (fileName),
+						       false);
+	}
+
+	// Cascade a lot of the different invariants into one map,
+	// and then put them into map1, map2
+
+	// Initialize it all
+	RootNode root = null;
+	MultiDiffVisitor v1 = new MultiDiffVisitor (mapAr[0]);
+
+	for (int i = 1; i < mapAr.length; i++) {
+	    root = diff.diffPptMap (mapAr[i], v1.currMap);
+	    root.accept (v1);
+	}
+
+	// now take the final result for the MultiDiffVisitor
+	// and use it along side a null empty map
+	map1 = v1.currMap;
+	map2 = new PptMap();
+
+	v1.printAll();
+	return;
+      }
+      else {
+	  System.out.println (usage);
+	  System.exit(0);
+      }
+
     } catch (IOException e) {
       throw new RuntimeException("Could not load .inv file: " + e);
     }
@@ -191,15 +269,15 @@ public final class Diff {
       DetailedStatisticsVisitor v =
         new DetailedStatisticsVisitor(continuousJustification);
       root.accept(v);
-      System.out.print(v.repr());      
+      System.out.print(v.repr());
     }
-    
+
     if (printDiff) {
       PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
         (System.out, verbose, printEmptyPpts);
       root.accept(v);
     }
-    
+
     if (printAll) {
       PrintAllVisitor v = new PrintAllVisitor
         (System.out, verbose, printEmptyPpts);
@@ -235,7 +313,7 @@ public final class Diff {
 
     Iterator opi = new OrderedPairIterator(l1.iterator(), l2.iterator(),
                                            PPT_COMPARATOR);
-    while(opi.hasNext()) {
+    while (opi.hasNext()) {
       Pair ppts = (Pair) opi.next();
       PptTopLevel ppt1 = (PptTopLevel) ppts.a;
       PptTopLevel ppt2 = (PptTopLevel) ppts.b;
@@ -259,8 +337,8 @@ public final class Diff {
       PptTopLevel ppt = (PptTopLevel) pptsIter.next();
       Iterator condIter = ppt.views_cond.iterator();
       while (condIter.hasNext()) {
-        PptConditional pptCond = (PptConditional) condIter.next();
-        pptsIter.add(pptCond);
+	PptConditional pptCond = (PptConditional) condIter.next();
+	pptsIter.add(pptCond);
       }
     }
   }
@@ -310,12 +388,18 @@ public final class Diff {
       invs2 = ppt2.invariants_vector();
       Collections.sort(invs2, INV_COMPARATOR);
     } else {
-      invs2 = Collections.EMPTY_LIST;
+
+	if ( treeManip && isCond (ppt1)) {
+
+	    invs2 = findCondPpt (manip, ppt1);
+
+	}
+	else invs2 = Collections.EMPTY_LIST;
     }
 
     Iterator opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
                                            INV_COMPARATOR);
-    while(opi.hasNext()) {
+    while (opi.hasNext()) {
       Pair invariants = (Pair) opi.next();
       Invariant inv1 = (Invariant) invariants.a;
       Invariant inv2 = (Invariant) invariants.b;
@@ -326,4 +410,39 @@ public final class Diff {
     return pptNode;
   }
 
+    private boolean isCond (PptTopLevel ppt) {
+
+	boolean ret =  (ppt instanceof PptConditional);
+
+	return ret;
+
+
+    }
+
+    private List findCondPpt (PptMap manip, PptTopLevel ppt) {
+	// targetName should look like this below
+	// Contest.smallestRoom(II)I:::EXIT9;condition="max < num
+	String targetName = ppt.name;
+
+	String targ = targetName.substring (0, targetName.indexOf(';'));
+
+	for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
+	    String somePptName = (String) i.next();
+	    // A conditional Ppt always contains the normal Ppt
+	    if (targ.equals (somePptName)) {
+		PptTopLevel repl = manip.get (somePptName);
+		System.out.println (targetName + "\n" + somePptName);
+		return repl.invariants_vector();
+	    }
+	    else {
+
+	    }
+	}
+	System.out.println ("Oh no!!!");
+	return Collections.EMPTY_LIST;
+    }
+
 }
+
+
+

@@ -703,7 +703,7 @@ public class Ast {
   // if no parent of that type.
   public static Node getParent(Class type, Node child) {
     Node currentNode = child.getParent();
-    while(true) {
+    while (true) {
       if (type.isInstance(currentNode)) {
         return currentNode;
       } else {

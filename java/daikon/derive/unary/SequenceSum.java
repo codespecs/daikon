@@ -13,6 +13,9 @@ public final class SequenceSum
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SequenceSum derived variables should be generated.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public SequenceSum(VarInfo vi) {

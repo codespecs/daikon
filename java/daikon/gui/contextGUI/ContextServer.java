@@ -101,7 +101,7 @@ public class ContextServer
 			list_temp = new LinkedList();
 			Iterator temp_iter = temp_map.keySet().iterator();
 
-			while(temp_iter.hasNext())
+			while (temp_iter.hasNext())
 			{
 				ContextMethodData dmdtemp = (ContextMethodData)temp_map.get(temp_iter.next());
 				list_temp.addAll(dmdtemp.getList());
@@ -277,9 +277,9 @@ public class ContextServer
 
 		// Ignoring lines until we find the first set of invariants, designated by a line
 		// of equals signs.
-		while(!in.readLine().startsWith("===")) ;
+		while (!in.readLine().startsWith("===")) ;
 
-		while(in.ready())
+		while (in.ready())
 		{
 			String inv_class = in.readLine();
 
@@ -338,7 +338,7 @@ public class ContextServer
 
 			// After we get the header information for the group of invariants, we keep
 			// getting invariants until we hit the next group of invariants.
-			while(in.ready())
+			while (in.ready())
 			{
 				line = in.readLine();
 
@@ -440,7 +440,7 @@ public class ContextServer
 			}
 
 			// Search for invariants and invariant headers
-			while(!(line = in.readLine()).equals("Exiting"))
+			while (!(line = in.readLine()).equals("Exiting"))
 			{
 				// Invariant with no data
 				if (line.startsWith("[No"))
@@ -542,7 +542,7 @@ public class ContextServer
 							place_find = param_list.indexOf(',', param_start);
 
 							// Count the number of parameters
-							while(place_find != -1)
+							while (place_find != -1)
 							{
 								num_param++;
 								param_start = place_find + 1;
@@ -869,7 +869,7 @@ public class ContextServer
 		{
 			ContextInvData dtemp = null;
 
-			while(iter_position < iter_list.size())
+			while (iter_position < iter_list.size())
 			{
 				if (iter_list.get(iter_position) instanceof String)
 					break;

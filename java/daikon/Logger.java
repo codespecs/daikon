@@ -12,14 +12,11 @@ import org.apache.log4j.Appender;
  * Allows creation of Console writers using one method.
  * Logger methods should only be called in a shell class
  * at setup, after which Category calls should be used
- * for logging. 
- *
+ * for logging.
  **/
-
 public class Logger {
 
   // Class variables so user doesn't have to use log4j.Priority
-
   public static final Priority DEBUG = Priority.DEBUG;
   public static final Priority INFO = Priority.INFO;
   public static final Priority WARN = Priority.WARN;
@@ -32,9 +29,7 @@ public class Logger {
    * messages, setting priority to INFO.  Removes previous appenders
    * at root.
    **/
-
   public static void setupLogs(Priority p, String pattern) {
-
     // Example: "@daikon.Daikon: This is a message \n"
     Layout layout = new PatternLayout(pattern);
     // Send debug and other info messages to System.err
@@ -44,13 +39,11 @@ public class Logger {
     Category.getRoot().addAppender (app);
     Category.getRoot().setPriority(p);
     Category.getRoot().debug ("Installed logger at priority " + p);
-
   }
 
   /**
    * Default method for setting up global logs.
    **/
-
   public static void setupLogs() {
     setupLogs (INFO);
   }
@@ -59,7 +52,6 @@ public class Logger {
    * Sets up global logs with a given priority.
    * Creates one ConsoleAppender.  Removes previous appenders at root.
    **/
-
   public static void setupLogs(Priority p) {
     setupLogs (p, "@ %20.20c: %m%n");
     // By default, take up 20 spaces min, and 20 spaces max for
@@ -68,12 +60,9 @@ public class Logger {
 
   /**
    * Changes the logging priority of a sub category
-   *
    **/
-
   public static void setPriority (String s, Priority p) {
     Category.getInstance(s).setPriority(p);
   }
-
 
 }

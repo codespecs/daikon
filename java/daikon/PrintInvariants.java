@@ -24,7 +24,7 @@ public class PrintInvariants {
       "  --" + Daikon.suppress_post_SWITCH,
       "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants.", 
+      "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.esc_output_SWITCH,
       "      Write output in ESC-like format.",
       "  --" + Daikon.simplify_output_SWITCH,
@@ -40,7 +40,7 @@ public class PrintInvariants {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
-    daikon.Logger.setupLogs (daikon.Logger.INFO);
+    daikon.Logger.setupLogs(daikon.Logger.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),

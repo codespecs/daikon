@@ -1,5 +1,12 @@
 # You can pretend this file is -*- perl -*-
 
+# Each configuration option corresponds to a variable in the Daikon source
+# code.  Those variables have names identical to the configuration options,
+# except that the variable names start with "dkconfig_" (for example,
+# daikon.FileIO.dkconfig_add_changed).  That prefix makes them easy to find
+# and reminds the reader that those variables should be set only via the
+# configuration mechanism, never via direct assignment in Java code.
+
 ### INVARIANT CONFIGURATION
 
 daikon.inv.unary.scalar.UpperBound.enabled = 1
@@ -93,6 +100,6 @@ daikon.derive.binary.SequencesPredicate.enabled = 0
 
 ### OTHER SETTINGS
 
-daikon.FileIO.add_changed = 1
-daikon.split.SplitterList.all_splitters = 0
-daikon.PptTopLevel.pairwise_implications = 0
+daikon.FileIO.add_changed = true
+daikon.split.SplitterList.all_splitters = false
+daikon.PptTopLevel.pairwise_implications = false

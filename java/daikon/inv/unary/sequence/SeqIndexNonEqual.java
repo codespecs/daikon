@@ -18,6 +18,9 @@ public final class SeqIndexNonEqual
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean.  True iff SeqIndexNonEqual invariants should be considered.
+   **/
   public static boolean dkconfig_enabled = true;
 
   public NonEqualCore core;
