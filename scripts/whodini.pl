@@ -116,12 +116,14 @@ unless ((-f $sourcefile) && (-f $txtescfile) && ($sourcefile =~ /\.java$/)) {
 my @txtesc = slurpfile($txtescfile);
 #@txtesc = 
 grep {
-    my $nonce = ";//nonce-" . gensym();
+    my $nonce = "/*nonce-" . gensym() . "*/ ";
     # Skip over things we shouldn't touch; add a gensym to the rest
-    m/===========================================================================/
-	|| m/\:\:\:(:ENTER|EXIT|OBJECT|CLASS)/
-	    || m/variables\:/
-		|| s|$|$nonce|;
+    unless (m/===========================================================================/
+	    || m/\:\:\:(:ENTER|EXIT|OBJECT|CLASS)/
+	    || m/[V|v]ariables\:/)
+    {
+	s|^|$nonce|;
+    }
 } @txtesc;
 
 # Iterative ("Houdini") looping
@@ -133,7 +135,7 @@ while (1) {
     $sourcetmp = copytmp($sourcefile);
 
     # 4 Merge the temp text file into the temp source file
-    print STDERR `cd $tmpdir && merge-esc.pl $txtesctmp`;
+    print STDERR `cd $tmpdir && merge-esc.pl -s $txtesctmp`;
     unlink($sourcetmp);
     rename("$sourcetmp-escannotated", $sourcetmp);
 
@@ -146,18 +148,17 @@ while (1) {
     unlink($txtesctmp);
     unlink($sourcetmp);
 
-    # 7 Grep the results for "/*@ ...; //nonce-gensym */"
-    my @failures = grep { m|;//nonce-\d+ |; } @escoutput;
-    #debug("ESC reported", @failures);
-    grep { s|^\s*/\*\@ +\w+ (.*);//nonce-.*|$1|s; } @failures;
+    # 7 Grep the results for "//@ ensures /*nonce-DDDD*/ ..." and extract the nonce
+    my @failures = grep { m|/\*nonce-\d{4}\*/|; } @escoutput;
+    debug("ESC reported", @failures);
+    grep { s|^\s*//\@ \w+ /\*(nonce-\d{4})\*/ .*$|$1|s; } @failures;
 
     # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
     my $txtesc_changed = 0;
     for my $failure (@failures) {
-	$failure .= ";//nonce-";
 	debug("Removing '$failure'");
 	my $dec_check = $#txtesc;
-	@txtesc = grep { !/^\Q$failure/ } @txtesc;
+	@txtesc = grep { !m/\Q$failure/ } @txtesc;
 	if ($#txtesc < $dec_check) {
 	    $txtesc_changed = 1;
 	} else {
