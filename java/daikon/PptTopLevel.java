@@ -1855,7 +1855,7 @@ public class PptTopLevel extends Ppt {
 
       String inv_rep = inv.format();
       if (inv_rep != null) {
-	if (Daikon.suppress_object_invariants_in_public_methods) {
+	if (Daikon.suppress_implied_controlled_invariants) {
 	  Invariant cont_inv = findControllingInvariant(inv);
 	  if (cont_inv != null) { // TODO: && will_print(cont_inv)
 	    // TODO: Fix global statistics for this?

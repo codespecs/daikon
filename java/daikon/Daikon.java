@@ -36,10 +36,12 @@ public final class Daikon {
   // warnings and the modbit problem can cause an error later.
   public final static boolean disable_modbit_check_error = false;
 
-  // when true, doesn't print invariants on public methods which are already
-  // given as part of the object invariant for that class
-  public static boolean suppress_object_invariants_in_public_methods = false;
-  // public final static boolean suppress_object_invariants_in_public_methods = true;
+  // When true, don't print invariants when their controlling ppt
+  // already has them.  For example, this is the case for invariants
+  // in public methods which are already given as part of the object
+  // invariant for that class.
+  public static boolean suppress_implied_controlled_invariants = false; 
+  // public static boolean suppress_implied_controlled_invariants = true; 
 
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
@@ -59,8 +61,7 @@ public final class Daikon {
     + "    -r ppt_regexp     Only process program points matching the regexp\n"
     + "    -o inv_file       Serialize invariants to the specified file;\n"
     + "                        they can later be postprocessed, compared, etc.\n"
-    + "    --suppress_object Suppress display of object invariants at program points\n"
-    + "                        where they are implied (public method entry / exit).\n"
+    + "    --suppress_cont   Suppress display of implied invariants (by controlling ppt).\n"
     + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
     + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
     ;
@@ -80,7 +81,7 @@ public final class Daikon {
     }
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt("suppress_object", LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("suppress_cont", LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("prob_limit", LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
@@ -90,8 +91,8 @@ public final class Daikon {
       case 0:
 	// got a long option
 	String option_name = longopts[g.getLongind()].getName();
-	if ("suppress_object".equals(option_name)) {
-	  suppress_object_invariants_in_public_methods = true;
+	if ("suppress_cont".equals(option_name)) {
+	  suppress_implied_controlled_invariants = true;
 	} else if ("prob_limit".equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else {
