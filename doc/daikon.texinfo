@@ -2654,6 +2654,10 @@ Write output as Java expressions.
 Output numbers of values and samples for invariants and program points;
 for debugging.
 
+@item --config @var{filename}
+Load the configuration settings specified in the given file.
+@xref{Configuration options}, for details.
+
 @item --config_option @var{name}=@var{value}
 Specify a single configuration setting.
 @xref{Configuration options}, for details.
