@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-13 01:43:02 mernst>
+# Time-stamp: <2001-03-13 20:51:05 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -172,8 +172,9 @@ END {
     $classname =~ s/\.java$//;
 
     while (defined($line = <IN>)) {
-      if ($line =~ /\bpublic\b.*\b(\w+)\s*(\([^\)]*\))/) {
-	# This looks like a declaration of public method $methodname.
+      if ($line =~ /\b(?:public|private|protected)\b[^=\n]*\b(\w+)\s*(\([^\)]*\))/) {
+	# This looks like a declaration of method $methodname.
+	# (Requires public or private or protected to avoid false alarms.)
 	my $methodname = $1;
 	my $args = $2;
 	my $fullmethname = "$classname.$methodname";
@@ -207,7 +208,7 @@ END {
 	  }
 	}
 	print OUT $prebrace;
-	my $found = 0;
+	my $found = "";
 	for my $ppt (keys %raw) {
 	  # print "Checking $fullmeth against $ppt\n";
 	  my $ppt_fullmeth = $ppt;
@@ -225,10 +226,14 @@ END {
 	    my $requires = ($overriding ? "also_requires" : "requires");
 	    my $ensures = ($overriding ? "also_ensures" : "ensures");
 	    my $modifies = ($overriding ? "also_modifies" : "modifies");
-	    $found = 1;
 	    if ($need_newline) {
 	      print OUT "\n";
+	      if ($found) {
+		# print OUT "/* Just found $ppt $ppt_fullmeth */\n";
+		# print OUT "/* Already found$found */\n";
+	      }
 	    }
+	    $found .= "  $ppt=$ppt_fullmeth";
 	    if ($ppt =~ /:::ENTER/) {
 	      # Skip @requires clauses for equals; they shouldn't hold
 	      if (! $equals) {
@@ -278,8 +283,17 @@ END {
 	  print "Warning:  no invariants for method $fullmeth on line $line";
 	}
 
-	print OUT $postbrace;
-	if ($methodname eq $classname) {
+	# Take special action if this is a constructor.
+	if (($methodname ne $classname) || (scalar(@fields) == 0)) {
+	  print OUT $postbrace;
+	} elsif ($postbrace =~ /^(.*)(\}.*\n?)$/) {
+	  print OUT "$1\n";
+	  for my $field (@fields) {
+	    print OUT "/*@ set $field.owner = this */\n";
+	  }
+	  print OUT $2;
+	} else {
+	  print OUT $postbrace;
 	  if (scalar(@fields) > 0) {
 	    # Skip over as many lines as possible, until I see a control
 	    # structure or a block end or some such.
