@@ -156,8 +156,8 @@ public final class Equality
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
-
     return format_unimplemented(format);
   }
 
