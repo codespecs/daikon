@@ -69,6 +69,8 @@ my $reference_depth = 3;
 my $accessor_depth = 1.5;
 my $list_depth = 3;
 
+my $do_usage = 0;
+
 sub careful_system {
     my @cmd = @_;
     die unless @cmd > 1; # Avoid the shell
@@ -122,10 +124,11 @@ unless (exists $ENV{"DAIKONDIR"}) {
 my $opt_parse = new Getopt::Long::Parser;
 $opt_parse->configure("bundling_override");
 my $parsed =
-  $opt_parse->getoptions("instrsourcedir|instr-basedir=s" => \$instr_basedir,
+  $opt_parse->getoptions("instrsourcedir|instr-basedir|instr-dir=s"
+                           => \$instr_basedir,
                          "types-basedir=s" => \$types_basedir,
-                         "decls-basedir=s" => \$decls_basedir,
-                         "dtrace-basedir=s" => \$dtrace_basedir,
+                         "decls-basedir|decls-dir=s" => \$decls_basedir,
+                         "dtrace-basedir|dtrace_dir=s" => \$dtrace_basedir,
                          "output-dir=s", => \$output_dir,
 #                        "instr-style=s" => \$instr_style,
                          "types-style=s" => \$types_style,
@@ -140,7 +143,8 @@ my $parsed =
                          "accessors-dir:s" => \$accessors_search,
                          "verbose|v+" => \$verbose,
                          "absolute!" => \$absolute,
-                         "reference-depth=f", => \$reference_depth,
+                         "reference-depth|nesting-depth=f",
+                           => \$reference_depth,
                          "accessor-depth=f", => \$accessor_depth,
                          "list-depth=n", => \$list_depth,
 # This is probably more control than anyone needs
@@ -148,9 +152,42 @@ my $parsed =
 #                        "decls-absolute!" => \$decls_absolute,
 #                        "dtrace-absolute!" => \$dtrace_absolute,
                          "perl=s", \$perl,
+                         "help|h" => \$do_usage,
                         );
 
 exit(1) unless $parsed;
+
+if ($do_usage) {
+    print <<EOM;
+This is dfepl, the Daikon front end for Perl. Dfepl is free software;
+it may be distributed under the same terms as Daikon itself or under
+those of Perl itself. For detailed information, see the Daikon manual,
+which appears in the Daikon distribution and also at
+http://pag.csail.mit.edu/daikon/.
+Options summary: 
+  --absolute/--noabsolute
+  --accessor-depth=NUM
+  -A/--accessors-dir=DIRECTORY
+  --decls-dir=DIRECTORY
+  --decls-style={combined,flat,tree}
+  --dtrace-append/--nodtrace-append
+  --dtrace-dir=DIRECTORY
+  --dtrace-style={combined,flat,tree}
+  --help/-h
+  --instr-dir=DIRECTORY
+  --list-depth=INTEGER
+  --output-dir=DIRECTORY
+  --perl=PATH
+  --nesting-depth=NUMBER
+  --types-append/--notypes-append
+  -T/--types-dir=DIRECTORY
+  --types-file=FILE/-t FILE
+  --types-dir=DIRECTORY
+  --types-style={combined,flat,tree}
+  --verbose/-v
+EOM
+    exit;
+}
 
 if (@types_files or defined($types_search)) {
     $use_types = 1;
