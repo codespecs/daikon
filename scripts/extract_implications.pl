@@ -19,6 +19,7 @@ $WARNING = 0;
 
 my $DERIVE_CONDITIONS = 0; # by default, don't derive conditions
 my $out = "cluster.spinfo"; 
+my $inv_file;
 
 while (scalar(@ARGV) > 0) {
     if ($ARGV[0] eq "--derive-conditions") {
@@ -29,11 +30,14 @@ while (scalar(@ARGV) > 0) {
 	shift @ARGV;
 	shift @ARGV;
     } else {
-	my $inv_file = $ARGV[0];
+	$inv_file = $ARGV[0];
 	@ARGV = ();
     }
 }
 
+if ($inv_file =~ /^\s*$/) {
+    die "$usage\n";
+}
 
 
 open (IN, $inv_file) || die "couldn't open $inv_file\n";
@@ -149,7 +153,7 @@ foreach my $p (keys %pptname_to_conds) {
     }
     
     if (scalar(@pptconds_toprint) > 0) {
-	print OUT "PPT_NAME $pptname\n";
+	print OUT "PPT_NAME $p\n";
 	foreach my $cond (@pptconds_toprint) {
 	    
 	    # remove conditions of the form "int i ....", which 
