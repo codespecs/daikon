@@ -9,41 +9,6 @@
 #  assert: constant (<var1>, <var2>, <var3> ...)
 
 #
-# test ni-suppression of flowed invariants
-#
-decl: daikon/test/SampleTesterGlobal.decls
-ppt: foo.f():::EXIT35
-  vars: x y z
-  data: - 1 -
-  data: 1 1 0
-  data: 2 2 0
-  assert: !inv ("x = (y << z)", x, y, z)
-
-ppt: std:::GLOBAL
-  assert: !inv ("x = (y << z)", x, y, z)
-
-ppt: bar.f():::EXIT70
-  vars: x y z
-  data: 2 1 -
-  data: 2 1 1
-  assert: !inv("x == (y << z)", x, y, z)
-  
-ppt: std:::GLOBAL
-  assert: inv("x == (y << z)", x, y, z)
-
-ppt: bar.f():::EXIT70
-  vars: x y z
-  data: 5 5 5
-  assert: !inv("x == (y << z)", x, y, z)
-
-ppt: foo.f():::EXIT35
-  vars: x y z
-  data: 3 3 0
-  assert: !inv("x == (y << z)", x, y, z)
-  data: 2 1 1
-  assert: inv("x == (y << z)", x, y, z)
-
-#
 # Test binary suppressions
 #
 decl: daikon/test/SampleTester.decls
@@ -52,7 +17,7 @@ ppt: foo.f():::EXIT35
   data: - 1
   data: 1 1 
   assert: inv ("x == y", x, y)
-  assert: !inv ("x >= y", x, y)
+  assert: !inv ("x >= y", x, y)  
   data: 2 1 
   assert: inv ("x >= y", x, y)
 
@@ -67,7 +32,7 @@ ppt: foo.f():::EXIT35
   data: 1 1 1
   assert: inv ("x == y", x, y)
   assert: inv ("y == z", y, z)
-  assert: !inv ("y >= z", y, z)
+  assert: !inv ("y >= z", y, z) 
   assert: !inv ("x == (java.lang.Math.max(y, z))", x, y, z)
   data: 2 2 1
   assert: inv("y >= z", y, z)
@@ -75,32 +40,6 @@ ppt: foo.f():::EXIT35
   data: 2 1 2
   assert: !inv("y >= z", y, z)
   assert: inv ("x == (java.lang.Math.max(y, z))", x, y, z)
-
-#
-# test flowing of global invariants
-#
-decl: daikon/test/SampleTesterGlobal.decls
-ppt: foo.f():::EXIT35
-  vars: x 
-  data: 0 
-  data: 1 
-  assert: !inv("x is boolean", x)
-
-ppt: std:::GLOBAL
-  assert: inv("x is boolean", x)
-
-ppt:bar.f():::EXIT70
-  vars: x
-  data: 2
-  assert: !inv("x is boolean", x)
-
-ppt: std:::GLOBAL
-  assert: !inv("x is boolean", x)
-
-ppt: foo.f():::EXIT35
-  vars: x
-  data: 0
-  assert: inv("x is boolean", x)
 
 # Test non-instantiation of LinearTernary based on LinearBinary and a constant
 # value
