@@ -27,7 +27,7 @@ my %types;
 
 # Read a .types file from the given filename, and incorporate that
 # information into %types for use in annotating. The types file might
-# have multiple entries for a given <program point, varaiable> pair
+# have multiple entries for a given <program point, variable> pair
 # (for instance, it might be the result of appending the types for
 # several runs), which we just lub together. We also union together
 # the types from the _s and _l (scalar and list context) versions of a
@@ -38,13 +38,13 @@ sub read_types {
     my $l;
     while ($l = <TYPES>) {
 	my($ppt, $var, $type) = split(' ', $l);
+	my $parsed = parse_type($type);
 	if (exists $types{$ppt}{$var}) {
 	    my $t = $types{$ppt}{$var};
-	    my $t2 = parse_type($type);
-	    $t = type_lub($t, $t2);
+	    $t = type_lub($t, $parsed);
 	    $types{$ppt}{$var} = $t;
 	} else {
-	    $types{$ppt}{$var} = parse_type($type);
+	    $types{$ppt}{$var} = $parsed;
 	}
 	my $union_ppt = $ppt;
 	$union_ppt =~ s/_[sl]\(\)/()/;
@@ -92,7 +92,7 @@ sub compile {
    }
 }
 
-# This is a bunch of code that was factored out of the B::Deparse
+# This sub is a bunch of code that was factored out of the B::Deparse
 # compile routine. To work with the 5.8.0 B::Deparse, we have to keep
 # it here, but eventually it should go back to B::Deparse since
 # there's nothing Daikon-specific about it.
@@ -196,27 +196,19 @@ sub make_trace_return {
     my $self = shift;
     my($val, $op) = @_;
     my $ppt = $self->{'ppt_base'};
-    $ppt =~ s/\(\)/_s()/;
-    # Name this exit point by its op sequence number relative to the
-    # sequence number of the beginning of this sub. Note that the op
-    # sequence number is only 16 bits, so it might wrap around on
-    # large programs, causing weird looking but hopefully still
-    # correct output. This number is easier to find on successive runs
-    # than a line number, but it may change between different versions
-    # of perl looking at the same code.
-    my $seq = $op->seq - $self->{'op_seq_base'};
-#    $ppt .= ":::EXIT$seq";
     $ppt .= ":::EXIT";
+    (my $ppt_s = $ppt) =~ s/\(\)/_s()/;
+    (my $ppt_l = $ppt) =~ s/\(\)/_l()/;
+
     my $scalar_type;
-    if (exists $types{$ppt}{"return"}) {
-	$scalar_type = unparse_type($types{$ppt}{"return"});
+    if (exists $types{$ppt_s}{"return"}) {
+	$scalar_type = unparse_type($types{$ppt_s}{"return"});
     } else {
 	$scalar_type = "unknown";
     }
-    $ppt =~ s/_s\(\)/_l()/;
     my $list_type;
-    if (exists $types{$ppt}{"return"}) {
-	$list_type = unparse_type($types{$ppt}{"return"});
+    if (exists $types{$ppt_l}{"return"}) {
+	$list_type = unparse_type($types{$ppt_l}{"return"});
     } else {
 	$list_type = "unknown";
     }
@@ -228,6 +220,14 @@ sub make_trace_return {
     # For the list context version, just wrap the list in an anonymous
     # array.
     my $list = "[$val]";
+    # Name this exit point by its op sequence number relative to the
+    # sequence number of the beginning of this sub. Note that the op
+    # sequence number is only 16 bits, so it might wrap around on
+    # large programs, causing weird looking but hopefully still
+    # correct output. This number is easier to find on successive runs
+    # than a line number, but it may change between different versions
+    # of perl looking at the same code.
+    my $seq = $op->seq - $self->{'op_seq_base'};
     # Evaluate only the appropriate version, depending on the runtime
     # context.
     my $ret_val = "(wantarray() ? $list : $scalar)";
@@ -374,6 +374,7 @@ sub is_args {
 	my $k = $op->first->sibling->first;
 	return 0 unless $$k;
 	for ($k = $k->first; $$k; $k = $k->sibling) {
+	    # If any of the args is @_, that counts.
 	    return 1 if $self->is_args($k);
 	}
     } else {
@@ -435,7 +436,7 @@ sub get_args {
     return ();
 }
 
-# In general, this routine handles OPs which represent a sequence of
+# In general, this routine handles OPs that represent a sequence of
 # statements like a block, subroutine body, etc. We've messed with it
 # in the particular case of the a subroutine body, to find the
 # variables that look like arguments so we can trace them.
@@ -529,10 +530,7 @@ sub pp_return {
     my($op, $cx) = @_;
     my(@exprs);
     my $kid = $op->first->sibling;
-#    return  if null $kid;
-    my $first;
-    $first = $self->deparse($kid, 6);
-     push @exprs, $first;
+    push @exprs, $self->deparse($kid, 6);
     $kid = $kid->sibling;
     for (; !null($kid); $kid = $kid->sibling) {
 	push @exprs, $self->deparse($kid, 6);

@@ -46,10 +46,15 @@ sub begin_trace {
 	return;
     }
     my $fh = new IO::File;
-    if (not -d "daikon-output") {
-	mkdir "daikon-output" or carp "Can't create daikon-output/: $!";
+    my $fname;
+    if ($ENV{"DTRACEFILE"}) {
+	$fname = $ENV{"DTRACEFILE"};
+    } else {
+	if (not -d "daikon-output") {
+	    mkdir "daikon-output" or carp "Can't create daikon-output/: $!";
+	}
+	$fname = "daikon-output/$package.dtrace";
     }
-    my $fname = "daikon-output/$package.dtrace";
     my $op;
     if ($ENV{"DTRACEAPPEND"}) {
 	$op = ">>"; # append to the .dtrace file
@@ -61,7 +66,7 @@ sub begin_trace {
 }
 
 # Finish tracing the subroutines in the given package. This is called
-# automatically from and END { } block. We wait until we're done to
+# automatically from an END { } block. We wait until we're done to
 # output the .decls file, and any type information we might have
 # guessed. (For the type information, we have to wait because our
 # guesses might need to be refined as we get more data. For the .decls
@@ -72,6 +77,9 @@ sub end_trace {
     close $filehandles{$package};
     delete $filehandles{$package};
 
+    if (not -d "daikon-output") {
+	mkdir "daikon-output" or carp "Can't create daikon-output/: $!";
+    }
     my $fname = "daikon-output/$package.decls";
     my $op;
     if ($ENV{"DTRACEAPPEND"}) {
@@ -176,7 +184,7 @@ sub trace_name {
 #    my $javaish_package = $package;
 #    $javaish_package =~ s/::/./g;
 
-    # The parens in the next line are import to get some tools
+    # The parens in the next line are important to get some tools
     # (e.g. the tree GUI) to work right. I guess otherwise they can't
     # tell that this is a subroutine.
     my $ppt_name = "${package}.${subname}():::$name";
@@ -237,7 +245,7 @@ sub trace_enter { trace_name("ENTER", @_); }
 # single int in list ("array") context. Recall that there's no way to
 # derive the list context return value from the scalar context value
 # or vice versa, so we have to have code paths that capture both, but
-# it the FOO expression might also have side effects, so we only want
+# the FOO expression might also have side effects, so we only want
 # to capture one value for each call to the subroutine. The scalar and
 # list types are in the usual unparsed format; they may not always be
 # as similar as they are the example above. "42" is a sequence number

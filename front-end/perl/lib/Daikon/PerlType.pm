@@ -109,7 +109,7 @@ sub min { $_[0] < $_[1] ? $_[0] : $_[1] }
 # hashes, code, globs, and lists are all syntactically segregated in
 # Perl; there's no context where you might have more than
 # one. References to all of these things (except lists) are possible
-# as scalars, though, so the ref type turns in to the equivalent of
+# as scalars, though, so the ref type turns into the equivalent of
 # \top internally.
 
 # Given an internal type representation, return a string representing
@@ -118,7 +118,7 @@ sub unparse_type {
     my($t) = @_;
     if (not ref $t) {
 	die "Can't print top" if $t eq "top";
-	return $t;
+	return $t; # 'int' unparses to 'int', etc.
     } else {
 	if ($t->[0] eq "ref") {
 	    if ($t->[1] eq "top") {
@@ -158,7 +158,7 @@ sub unparse_type {
     }
 }
 
-# Return a string of Perl code to constructing a type representation
+# Return a string of Perl code to construct a type representation
 # like the argument. This doesn't handle 'object' types.
 
 # sub unparse_to_code {
@@ -370,7 +370,7 @@ sub guess_type_ref {
 	# strings are), and exposes an internal distinction that
 	# certain scalars have an lvalue magic that makes funny things
 	# happen when you assign to them ($r = \substr($s, 0, 1); $$r
-	# = "hah!";). These all count as scalars for out purposes.
+	# = "hah!";). These all count as scalars for our purposes.
 	$t = guess_type_scalar($$r);
     } else {
 	die "Can't figure out the type";
@@ -471,7 +471,7 @@ sub guess_type_hash {
 
 # Guess a type for a list, passed in an array reference. Seeing a
 # single value, we can't tell which elements are fixed an which are
-# vairable, so we just assume that they're all fixed up to a
+# variable, so we just assume that they're all fixed up to a
 # predetermined limit.
 sub guess_type_list {
     my($ar) = @_;
