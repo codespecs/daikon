@@ -1,0 +1,1317 @@
+#if 0
+Do not attempt to compile this file with a Java compiler such as javac.
+You first need to preprocess it with cpp, the C preprocessor.
+The correct way to build the system is to run 'make'.
+#endif
+
+#if !(defined(BOOLEAN) \
+      || defined(BYTE) \
+      || defined(CHAR) \
+      || defined(DOUBLE) \
+      || defined(FLOAT) \
+      || defined(INT) \
+      || defined(LONG) \
+      || defined(SHORT) \
+      || defined(OBJECT) \
+      || defined(STRING))
+  #error "One of BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, INTEGER, LONG, SHORT, OBJECT, STRING  must be defined"
+#endif
+
+#if defined(BOOLEAN)
+  #define _TYPE boolean
+  #define _TYPE_WRAPPER_NAME Boolean
+  #define _TYPE_WRAPPER_GETVAL_METHOD booleanValue
+#elif defined(BYTE)
+  #define _TYPE byte
+  #define _TYPE_WRAPPER_NAME Byte
+  #define _TYPE_WRAPPER_GETVAL_METHOD byteValue
+#elif defined(CHAR)
+  #define _TYPE char
+  #define _TYPE_WRAPPER_NAME Character
+  #define _TYPE_WRAPPER_GETVAL_METHOD charValue
+#elif defined(DOUBLE)
+  #define _TYPE double
+  #define _TYPE_WRAPPER_NAME Double
+  #define _TYPE_WRAPPER_GETVAL_METHOD doubleValue
+#elif defined(FLOAT)
+  #define _TYPE float
+  #define _TYPE_WRAPPER_NAME Float
+  #define _TYPE_WRAPPER_GETVAL_METHOD floatValue
+#elif defined(INT)
+  #define _TYPE int
+  #define _TYPE_WRAPPER_NAME Integer
+  #define _TYPE_WRAPPER_GETVAL_METHOD intValue
+#elif defined(LONG)
+  #define _TYPE long
+  #define _TYPE_WRAPPER_NAME Long
+  #define _TYPE_WRAPPER_GETVAL_METHOD longValue
+#elif defined(SHORT)
+  #define _TYPE short
+  #define _TYPE_WRAPPER_NAME Short
+  #define _TYPE_WRAPPER_GETVAL_METHOD shortValue
+#elif defined(OBJECT)
+  #define _TYPE Object
+#elif defined(STRING)
+  #define _TYPE String
+#endif
+
+#if defined(INT)
+  #define COMPATIBLE long
+  #define CAST_TYPE long
+#endif
+#if defined(LONG)
+  #define COMPATIBLE int
+  #define CAST_TYPE long
+#endif
+#if defined(DOUBLE)
+  #define COMPATIBLE float
+  #define CAST_TYPE double
+#endif
+#if defined(FLOAT)
+  #define COMPATIBLE double
+  #define CAST_TYPE double
+#endif
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * min
+ */
+
+/*@ pure */ public static _TYPE min(_TYPE[] seq) {
+  Assert.assertTrue(seq.length > 0);
+  _TYPE retval = seq[0];
+  for (int i = 1 ; i < seq.length ; i++) {
+    if (seq[i] < retval) {
+      retval = seq[i];
+    }
+  }
+  return retval;
+}
+
+/**
+ * max
+ */
+
+/*@ pure */ public static _TYPE max(_TYPE[] seq) {
+  Assert.assertTrue(seq.length > 0);
+  _TYPE retval = seq[0];
+  for (int i = 1 ; i < seq.length ; i++) {
+    if (seq[i] > retval) {
+      retval = seq[i];
+    }
+  }
+  return retval;
+}
+
+#endif
+
+/**
+ * concat
+ */
+
+/*@ pure */ public static _TYPE[] concat(_TYPE[] seq1, _TYPE[] seq2) {
+  int newLength = seq1.length + seq2.length;
+  _TYPE[] retval = new _TYPE[newLength];
+  int i = 0;
+  for ( ; i < seq1.length ; i++) {
+    retval[i] = seq1[i];
+  }
+  for (int j = 0 ; j < seq2.length ; j++) {
+    retval[i+j] = seq2[j];
+  }
+  return retval;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static CAST_TYPE[] concat(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  int newLength = seq1.length + seq2.length;
+  CAST_TYPE[] retval = new CAST_TYPE[newLength];
+  int i = 0;
+  for ( ; i < seq1.length ; i++) {
+    retval[i] = seq1[i];
+  }
+  for (int j = 0 ; j < seq2.length ; j++) {
+    retval[i+j] = seq2[j];
+  }
+  return retval;
+}
+#endif
+
+/**
+ * union
+ */
+
+/*@ pure */ public static _TYPE[] union(_TYPE[] seq1, _TYPE[] seq2) {
+  return concat(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static CAST_TYPE[] union(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return concat(seq1, seq2);
+}
+#endif
+
+/**
+ * intersection -- quick dumb implementation, don't care about
+ *                 repetitions.
+ */
+
+
+/*@ pure */ public static _TYPE[] intersection(_TYPE[] seq1, _TYPE[] seq2) {
+  _TYPE[] intermediate = new _TYPE[seq1.length + seq2.length];
+  int length = 0;
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if ( memberOf(seq1[i], seq2) ) {
+      intermediate[length++] = seq1[i];
+    }
+  }
+  for (int i = 0 ; i < seq2.length ; i++) {
+    if ( memberOf(seq2[i], seq1) ) {
+      intermediate[length++] = seq2[i];
+    }
+  }
+  _TYPE[] retval = new _TYPE[length];
+  for (int i = 0 ; i < length; i++) {
+    retval[i] = intermediate[i];
+  }
+  return retval;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static CAST_TYPE[] intersection(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  CAST_TYPE[] intermediate = new CAST_TYPE[seq1.length + seq2.length];
+  int length = 0;
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if ( memberOf(seq1[i], seq2) ) {
+      intermediate[length++] = seq1[i];
+    }
+  }
+  for (int i = 0 ; i < seq2.length ; i++) {
+    if ( memberOf(seq2[i], seq1) ) {
+      intermediate[length++] = seq2[i];
+    }
+  }
+  CAST_TYPE[] retval = new CAST_TYPE[length];
+  for (int i = 0 ; i < length; i++) {
+    retval[i] = intermediate[i];
+  }
+  return retval;
+}
+#endif
+
+/**
+ *  seq1 \ seq2
+ */
+/*@ pure */ public static _TYPE[] setDiff(_TYPE[] seq1, _TYPE[] seq2) {
+  _TYPE[] intermediate = new _TYPE[seq1.length];
+  int length = 0;
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (!memberOf(seq1[i], seq2)) {
+      intermediate[length++] = seq1[i];
+    }
+  }
+  _TYPE[] retval = new _TYPE[length];
+  for (int i = 0 ; i < length ; i++ ) {
+    retval[i] = intermediate[i];
+  }
+  return retval;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static CAST_TYPE[] setDiff(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  CAST_TYPE[] intermediate = new CAST_TYPE[seq1.length];
+  int length = 0;
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (!memberOf(seq1[i], seq2)) {
+      intermediate[length++] = seq1[i];
+    }
+  }
+  CAST_TYPE[] retval = new CAST_TYPE[length];
+  for (int i = 0 ; i < length ; i++ ) {
+    retval[i] = intermediate[i];
+  }
+  return retval;
+}
+#endif
+
+/**
+ * lastIdx
+ */
+
+
+/*@ pure */ public static int lastIdx(_TYPE[] seq) {
+  return seq.length;
+}
+
+
+/**
+ * size
+ */
+
+/*@ pure */ public static int size(_TYPE[] seq) {
+  return seq.length;
+}
+
+/**
+ * setEqual
+ */
+
+/*@ pure */ public static boolean setEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  for (int i = 0; i < seq1.length ; i++) {
+    if ( !memberOf(seq1[i], seq2) ) {
+      return false;
+    }
+  }
+  for (int i = 0; i < seq2.length ; i++) {
+    if ( !memberOf(seq2[i], seq1) ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean setEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  for (int i = 0; i < seq1.length ; i++) {
+    if ( !memberOf(seq1[i], seq2) ) {
+      return false;
+    }
+  }
+  for (int i = 0; i < seq2.length ; i++) {
+    if ( !memberOf(seq2[i], seq1) ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#endif
+
+/**
+ * isReverse
+ */
+
+/*@ pure */ public static boolean isReverse(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  int length = seq1.length;
+  for (int i = 0 ; i < length ; i++) {
+    if (seq1[i] != seq2[length - i - 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean isReverse(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  int length = seq1.length;
+  for (int i = 0 ; i < length ; i++) {
+    if (seq1[i] != seq2[length - i - 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+/**
+ * isReverse
+ */
+
+/*@ pure */ public static boolean noDups(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    for (int j = 0 ; j < seq.length ; j++) {
+      if (i != j && seq[i] == seq[j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * memberOf
+ */
+
+/*@ pure */ public static boolean memberOf(_TYPE elt, _TYPE[] arr) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] == elt) { return true; }
+  }
+  return false;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean memberOf(_TYPE elt, COMPATIBLE[] arr) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] == elt) { return true; }
+  }
+  return false;
+}
+#endif
+
+/**
+ * eltsOneOf
+ */
+
+/*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, _TYPE[] arr) {
+  for (int c = 0 ; c < elt.length ; c++) {
+    if (!memberOf(elt[c], arr)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsOneOf(_TYPE[] elt, COMPATIBLE[] arr) {
+  for (int c = 0 ; c < elt.length ; c++) {
+    if (!memberOf(elt[c], arr)) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+/**
+ * slice
+ */
+
+/*@ pure */ public static _TYPE[] slice(_TYPE[] seq, int start , int end) {
+  int sliceStart = start;
+  int sliceEnd = end;
+  if (start < 0) { sliceStart = 0; }
+  if (end > seq.length-1) { sliceEnd = seq.length-1; }
+  if (sliceStart > sliceEnd) { return new _TYPE[] { }; }
+  _TYPE[] retval = new _TYPE[sliceEnd - sliceStart + 1];
+  int retvalIdx = 0;
+  for (int i = sliceStart ; i <= sliceEnd ; i++) {
+    retval[retvalIdx++] = seq[i];
+  }
+  return retval;
+}
+
+/**
+ * eltsEqual
+ */
+
+/*@ pure */ public static boolean eltsEqual(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] != elt) { return false; }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsEqual(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] != elt) { return false; }
+  }
+  return true;
+}
+#endif
+
+/**
+ * eltsNotEqual
+ */
+
+/*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] == elt) { return false; }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsNotEqual(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] == elt) { return false; }
+  }
+  return true;
+}
+#endif
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * eltsGT
+ */
+
+/*@ pure */ public static boolean eltsGT(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] <= elt) { return false; }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsGT(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] <= elt) { return false; }
+  }
+  return true;
+}
+#endif
+
+/**
+ * eltsGEQ
+ */
+
+/*@ pure */ public static boolean eltsGTE(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] < elt) { return false; }
+  }
+  return true;
+}
+
+/*@ pure */ public static boolean eltsGEQ(_TYPE[] arr, _TYPE elt) {
+  return eltsGTE(arr, elt);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsGTE(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] < elt) { return false; }
+  }
+  return true;
+}
+/*@ pure */ public static boolean eltsGEQ(_TYPE[] arr, COMPATIBLE elt) {
+  return eltsGTE(arr, elt);
+}
+
+#endif
+
+/**
+ * eltsLT
+ */
+
+/*@ pure */ public static boolean eltsLT(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] >= elt) { return false; }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsLT(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] >= elt) { return false; }
+  }
+  return true;
+}
+#endif
+
+/**
+ * eltsLEQ
+ */
+
+/*@ pure */ public static boolean eltsLEQ(_TYPE[] arr, _TYPE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] > elt) { return false; }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean eltsLEQ(_TYPE[] arr, COMPATIBLE elt) {
+  for (int i = 0 ; i < arr.length ; i++) {
+    if (arr[i] > elt) { return false; }
+  }
+  return true;
+}
+#endif
+
+#endif
+
+/**
+ * pairwiseEqual
+ */
+
+/*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] != seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] != seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+/**
+ * pairwiseNotEqual
+ */
+
+/*@ pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] == seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] == seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * pairwiseLT
+ */
+
+/*@ pure */ public static boolean pairwiseLT(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] >= seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] >= seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+/**
+ * pairwiseLEQ
+ */
+
+/*@ pure */ public static boolean pairwiseLEQ(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, _TYPE[] seq2) {
+  return pairwiseLEQ(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseLEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*@ pure */ public static boolean pairwiseLTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return pairwiseLEQ(seq1, seq2);
+}
+
+#endif
+
+/**
+ * pairwiseGT
+ */
+
+/*@ pure */ public static boolean pairwiseGT(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] <= seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] <= seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+#endif
+
+/**
+ * pairwiseGEQ
+ */
+
+/*@ pure */ public static boolean pairwiseGEQ(_TYPE[] seq1, _TYPE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, _TYPE[] seq2) {
+  return pairwiseGEQ(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean pairwiseGEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  if (seq1.length != seq2.length) {
+    return false;
+  }
+  for (int i = 0 ; i < seq1.length ; i++) {
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean pairwiseGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return pairwiseGEQ(seq1, seq2);
+}
+
+#endif
+
+#endif
+
+/**
+ * lexEqual
+ */
+
+/*@ pure */ public static boolean lexEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  return pairwiseEqual(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return pairwiseEqual(seq1, seq2);
+}
+
+#endif
+
+/**
+ * lexNotEqual
+ */
+
+/*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, _TYPE[] seq2) {
+  return !lexEqual(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexNotEqual(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return !lexEqual(seq1, seq2);
+}
+#endif
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * lexLT
+ */
+
+
+/*@ pure */ public static boolean lexLT(_TYPE[] seq1, _TYPE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return false; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return true; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return false; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] < seq2[i]) {
+      return true;
+    }
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexLT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return false; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return true; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return false; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] < seq2[i]) {
+      return true;
+    }
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+#endif
+
+/**
+ * lexLEQ
+ */
+
+/*@ pure */ public static boolean lexLEQ(_TYPE[] seq1, _TYPE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return true; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return true; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return false; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] < seq2[i]) {
+      return true;
+    }
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexLEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return true; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return true; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return false; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] < seq2[i]) {
+      return true;
+    }
+    if (seq1[i] > seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+#endif
+
+/**
+ * lexGT
+ */
+
+/*@ pure */ public static boolean lexGT(_TYPE[] seq1, _TYPE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return false; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return false; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return true; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] > seq2[i]) {
+      return true;
+    }
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexGT(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return false; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return false; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return true; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] > seq2[i]) {
+      return true;
+    }
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+#endif
+
+/**
+ * lexGEQ
+ */
+
+/*@ pure */ public static boolean lexGEQ(_TYPE[] seq1, _TYPE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return true; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return false; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return true; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] > seq2[i]) {
+      return true;
+    }
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, _TYPE[] seq2) {
+  return lexGEQ(seq1, seq2);
+}
+
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean lexGEQ(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  int maxlength = (seq1.length < seq2.length) ? seq2.length : seq1.length;
+  // we maintain the invariant that for j < i, seq1 and seq2 are
+  // pairwise equal up to j.
+  for (int i = 0 ; i <= maxlength ; i++) {
+    // case 1 : we've reached the end of at least one of the sequences
+    if (seq1.length == i && seq2.length == i) {
+      return true; // they're both equal
+    }
+    if (seq1.length == i && seq2.length > i) {
+      return false; // both equal up to i-1 and seq2 longer than seq1
+    }
+    if (seq1.length > i && seq2.length == i) {
+      return true; // both equal up to i-1 and seq1 longer than seq2
+    }
+    // case 2 : we haven't reached the end of either sequence
+    Assert.assertTrue(seq1.length < i && seq2.length < i);
+    if (seq1[i] > seq2[i]) {
+      return true;
+    }
+    if (seq1[i] < seq2[i]) {
+      return false;
+    }
+  }
+  throw new RuntimeException("Quant.java.jpp: lex method shouldn't have reached this point! (bad impl?)");
+}
+/*@ pure */ public static boolean lexGTE(_TYPE[] seq1, COMPATIBLE[] seq2) {
+  return lexGEQ(seq1, seq2);
+}
+
+#endif
+
+#endif
+
+/**
+ * eltwiseEqual
+ */
+
+/*@ pure */ public static boolean eltwiseEqual(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] != seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * eltwiseNotEqual
+ */
+
+/*@ pure */ public static boolean eltwiseNotEqual(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] == seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * eltwiseLT
+ */
+
+/*@ pure */ public static boolean eltwiseLT(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] >= seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * eltwiseLEQ
+ */
+
+/*@ pure */ public static boolean eltwiseLEQ(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] > seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * eltwiseGT
+ */
+
+/*@ pure */ public static boolean eltwiseGT(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] <= seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * eltwiseGEQ
+ */
+
+/*@ pure */ public static boolean eltwiseGEQ(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (i < seq.length-1) {
+      if (seq[i] < seq[i+1]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean eltwiseGTE(_TYPE[] seq) {
+  return eltwiseGEQ(seq);
+}
+
+#endif
+
+#if (defined(DOUBLE) || defined(FLOAT) || defined(INT) || defined(LONG) || defined(SHORT))
+
+/**
+ * indexEqual
+ */
+
+/*@ pure */ public static boolean indexEqual(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] != i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * indexNotEqual
+ */
+
+/*@ pure */ public static boolean indexNotEqual(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] == i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * indexLT
+ */
+
+/*@ pure */ public static boolean indexLT(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] >= i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * indexLEQ
+ */
+
+/*@ pure */ public static boolean indexLEQ(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] > i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * indexGT
+ */
+
+/*@ pure */ public static boolean indexGT(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] <= i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+/**
+ * indexGEQ
+ */
+
+// CP should change name to GEQ here and in Daikon's output format.
+/*@ pure */ public static boolean indexGTE(_TYPE[] seq) {
+  for (int i = 0 ; i < seq.length ; i++) {
+    if (seq[i] < i) {
+      return false;
+    }
+  }
+  return true;
+}
+/*@ pure */ public static boolean indexGEQ(_TYPE[] seq) {
+  return indexGTE(seq);
+}
+#endif
+
+
+/**
+ *
+ * ONLY works for field sequences with exactly one field representing
+ * a collection.
+ *
+ * for anything non-primitive, inst should be an Object, and we'll
+ * lose any more precise type information.
+ *
+ * CP: not sure about the below anymore...
+ * Unlike fieldArray(..), collect(..) could have been implemented
+ * without passing inst as an argument -- since we always return a
+ * Collection, we don't have the need for inst, which is to allow us
+ * to have multiple signatures for methods with different return
+ * types. But I don't lose anything by passing inst. Also, by having
+ * different version of collect, I don't need to compare the collected
+ * Objects against every primitive type to figure out which type it
+ * is.
+ */
+
+/*@ pure */  public static _TYPE[] collect(_TYPE inst, Object object,
+                                           String[] fields, int fieldsStartIdx) {
+
+  System.out.println("ENTERING COLLECT "
+                     + "inst=" + inst + ", object=" + object
+                     + "fields=" + utilMDE.ArraysMDE.toString(fields)
+                     + "fieldsStartIdx=" + fieldsStartIdx);
+
+
+  Field field = null;
+  Class cls = null;
+  Object fieldObj = null;
+  try {
+    field = object.getClass().getField(fields[fieldsStartIdx]);
+    cls = field.getType();
+    fieldObj = field.get(object);
+    System.out.println("***fieldObj="+fieldObj);
+  } catch (NoSuchFieldException e) {
+    throw new RuntimeException("quant.Quant.fieldArray: NoSuchFieldException: "
+                               + "inst=" + inst + ", object=" + object
+                               + "fields=" + utilMDE.ArraysMDE.toString(fields)
+                               + "fieldsStartIdx=" + fieldsStartIdx);
+  } catch (NullPointerException e) {
+    throw new RuntimeException("quant.Quant.fieldArray: NullPointerException: "
+                               + "inst=" + inst + ", object=" + object
+                               + "fields=" + utilMDE.ArraysMDE.toString(fields)
+                               + "fieldsStartIdx=" + fieldsStartIdx);
+  } catch (SecurityException e) {
+    throw new RuntimeException("quant.Quant.fieldArray: SecurityException: "
+                               + "inst=" + inst + ", object=" + object
+                               + "fields=" + utilMDE.ArraysMDE.toString(fields)
+                               + "fieldsStartIdx=" + fieldsStartIdx);
+  } catch (Exception e) {
+    throw new RuntimeException("quant.Quant.fieldArray: Exception: "
+                               + "inst=" + inst + ", object=" + object
+                               + "fields=" + utilMDE.ArraysMDE.toString(fields)
+                               + "fieldsStartIdx=" + fieldsStartIdx);
+  }
+
+  // base case: one field
+  if (fields.length - 1 == fieldsStartIdx) {
+
+#if (defined(OBJECT) || defined(STRING))
+
+    // Can't really check for this. Is there a way we could?
+    //Assert.assertTrue(inst.getClass().equals(fieldObj.getClass()));
+    //return new _TYPE[] { (_TYPE)fieldObj };
+    return new _TYPE[] { (_TYPE)fieldObj };
+
+#else
+
+    Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
+    return
+      new _TYPE[] { ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_WRAPPER_GETVAL_METHOD() };
+
+#endif
+
+  // recursive case: more than one field
+  } else {
+
+    if (fieldObj.getClass().isArray()) {
+
+      System.out.println("ITS AN ARRAY");
+
+      // collect elements across array
+      _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
+      for (int i = 0 ; i < intermediate.length ; i++) {
+        _TYPE[] oneEltArray = collect(inst, Array.get(fieldObj, i),
+                                      fields, fieldsStartIdx + 1);
+        Assert.assertTrue(oneEltArray.length == 1);
+        intermediate[i] = oneEltArray[0];
+      }
+      return intermediate;
+
+    } else {
+
+      return collect(inst, fieldObj, fields, fieldsStartIdx + 1);
+    }
+  }
+}
+
+/**
+ * ONLY works for field sequences with exactly one field representing
+ * a collection.
+ * requires: fieldStr.length() > 0
+ * at least one of the fields in fieldStr represents a collection [explain]
+ */
+
+/*@ pure */ public static _TYPE[] fieldArray(_TYPE inst, Object object, String fieldStr) {
+
+  Assert.assertTrue(fieldStr != null && !"".equals(fieldStr));
+  String[] splits = fieldStr.split("\\.");
+
+  _TYPE[] retval = collect(inst, object, splits, 0);
+  System.out.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
+  return retval;
+}
