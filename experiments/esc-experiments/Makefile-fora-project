@@ -183,7 +183,7 @@ merge:
 
 # Used to depend on ${PROJECT}.txt-esc, but that's not quite right.
 ${PROJECT}.esc: ${SOURCE_TO_DFEJ}
-	escjava ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
+	escjava -suggest ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
 
 esc-clean:
 	-rm -f ${PROJECT}.esc
