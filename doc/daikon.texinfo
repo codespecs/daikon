@@ -305,7 +305,7 @@ Alternately, you may add the @file{@var{parent}/daikon/java/} directory to
 your classpath.  This alternative permits you to modify Daikon; most
 users will not need to do so.  If your shell is @command{csh}, add the
 following to your @file{.cshrc} file, all on one line without any spaces
-after the periods
+after the colons
 @example
 setenv CLASSPATH @var{parent}/daikon/java:
 	@var{parent}/daikon/java/lib/jakarta-oro.jar:
