@@ -40,8 +40,8 @@ DIST_DIR := /home/httpd/html/daikon/dist
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 DIST_PAG_BIN_DIR := /g4/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
-DIST_DIR_FILES := daikon-source.tar.gz daikon-compiled.tar.gz daikon-logo.gif daikon.jar
-DIST_DIR_PATHS := daikon-source.tar.gz daikon-compiled.tar.gz doc/images/daikon-logo.gif daikon.jar
+DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
+DIST_DIR_PATHS := daikon.tar.gz doc/images/daikon-logo.gif daikon.jar
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
@@ -52,7 +52,7 @@ TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name dfej-solaris -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name 'dfej-solaris*' -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -76,7 +76,7 @@ help:
 	@echo " junit test"
 	@echo " tags TAGS"
 	@echo "Creating the Daikon distribution:"
-	@echo " daikon-compiled.tar daikon-source.tar daikon.jar"
+	@echo " daikon.tar daikon.jar"
 	@echo " dist dist-force"
 	@echo " dist-edg dist-edg-solaris"
 	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
@@ -123,7 +123,7 @@ DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 test-the-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
-	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
+	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
 	## First, test daikon.jar.
 	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
@@ -154,7 +154,7 @@ cvs-test:
 # The "dist" target not only creates .tar files, but also installs a new
 # distribution on the website, updates webpages, tests the distribution,
 # etc.  If you only want to make a new .tar file, do "make
-# daikon-source.tar".
+# daikon.tar".
 # The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
 # to work, so supply explicit "-S" flag instead.)
 dist:
@@ -180,7 +180,7 @@ doc/CHANGES: doc/daikon.texinfo
 
 # Is this the right way to do this?
 dist-force:
-	-rm -f daikon-source.tar.gz daikon-compiled.tar.gz
+	-rm -f daikon.tar.gz
 	$(MAKE) dist
 
 # 	echo CLASSPATH: $(CLASSPATH)
@@ -208,7 +208,7 @@ update-dist-doc:
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
 	# This isn't quite right:  $(DIST_DIR) should hold the
-	# daikon.html from daikon-source.tar.gz, not the current version.
+	# daikon.html from daikon.tar.gz, not the current version.
 	mkdir $(DIST_DIR)/doc
 	cd doc && cp -pf $(DOC_FILES_NO_IMAGES) $(DIST_DIR)/doc
 	cp -pR doc/images $(DIST_DIR)/doc
@@ -289,10 +289,6 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 	mv /tmp/ajax-jar/ajax.jar $@
 	rm -rf /tmp/ajax-jar
 
-# Use this ordering because daikon-compiled is made before daikon-source
-
-DAIKONBUILD=/tmp/daikon.build
-
 # This rule creates the files that comprise the distribution, but does
 # not copy them anywhere.
 # This rule could be changed to check out a fresh version of the
@@ -300,7 +296,7 @@ DAIKONBUILD=/tmp/daikon.build
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
+daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -332,12 +328,12 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
-	# Now we are ready to make the daikon-compiled distribution
-	cp -p daikon.jar /tmp/daikon
-	(cd /tmp; tar cf daikon-compiled.tar daikon)
-	cp -pf /tmp/daikon-compiled.tar .
+	# # Now we are ready to make the daikon-compiled distribution
+	# cp -p daikon.jar /tmp/daikon
+	# (cd /tmp; tar cf daikon-compiled.tar daikon)
+	# cp -pf /tmp/daikon-compiled.tar .
 
-	## Now make the daikon-source distribution
+	## Now make the daikon distribution
 	# First add some more files to the distribution
 
 	# Daikon itself
@@ -419,22 +415,13 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 
 	# Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
-	(cd /tmp; tar cf daikon-source.tar daikon)
-	cp -pf /tmp/daikon-source.tar .
+	(cd /tmp; tar cf daikon.tar daikon)
+	cp -pf /tmp/daikon.tar .
 
-## This apparently does not work
-# %.tar.gz : %.tar
-# 	-rm -rf $@
-# 	gzip -c $< > $@
-
-daikon-source.tar.gz: daikon-source.tar
+# Rule for daikon.tar.gz
+%.gz : %
 	-rm -rf $@
 	gzip -c $< > $@
-
-daikon-compiled.tar.gz: daikon-compiled.tar
-	-rm -rf $@
-	gzip -c $< > $@
-
 
 
 ### Front end binaries
