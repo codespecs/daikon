@@ -32,6 +32,7 @@ public class DiffTester extends TestCase {
   private PptMap imps2;
 
   public static void main(String[] args) {
+    daikon.Logger.setupLogs (Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 
