@@ -121,7 +121,7 @@ Avoiding work for redundant invariants
 @chapter Introduction
 
 This is the developer manual for the 
-@uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}.
+@uref{http://pag.lcs.mit.edu/daikon/, ,Daikon invariant detector}.
 For information about Daikon, see its user manual.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
@@ -143,7 +143,7 @@ Readers are also referred to Chapter 7, ``Implementation'', of
 D. Ernst, PhD dissertation, University of Washington Department of
 Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
-@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
+@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-ernst-phdthesis-abstract.html}.
 
 For Daikon version
 @c line break to avoid automatically updating the version number
