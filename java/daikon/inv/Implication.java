@@ -109,6 +109,8 @@ public class Implication
       if ( iff )
         // RRN: I'm not sure if this actually works for DBC;
         //      there seems to be no dedicated biconditional, however.
+        // CP: it should work if expressions always return boolean
+        //     which I am fixing to make sure of.
         return "((" + pred_fmt + ") == (" + consq_fmt + "))";
       else
         return "(" + pred_fmt + " $implies " + consq_fmt + ")";
