@@ -897,7 +897,7 @@ public final class Daikon {
     for (int i = g.getOptind(); i < args.length; i++) {
       String filename = args[i];
       File file = null;
-      if (!filename.equals("-")) {
+      if (!filename.equals("-") && !filename.equals("+")) {
         file = new File(filename);
         if (!file.exists()) {
             throw new Error("File " + file + " not found.");
@@ -1555,7 +1555,7 @@ public final class Daikon {
   }
 
   /**
-   * The main data-processing routine of the daikon engine.  At this
+   * The  data-processing routine of the daikon engine.  At this
    * point, the decls and spinfo files have been loaded, all of the
    * program points have been setup, and candidate invariants have
    * been instantiated.  This routine processes data to falsify the
