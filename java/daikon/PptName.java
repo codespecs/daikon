@@ -68,8 +68,8 @@ public class PptName
     cls = (className != null) ? className.intern() : null;
     method = (methodName != null) ? methodName.intern() : null;
     point = (pointName != null) ? pointName.intern() : null;
-    fullname = (((cls == null) ? "" : cls+".")
-                + ((method == null) ? "" : method)
+    fullname = (((cls == null) ? "" : cls)
+                + ((method == null) ? "" : "."+method)
                 + ((point == null) ? "" : FileIO.ppt_tag_separator+point));
   }
 
