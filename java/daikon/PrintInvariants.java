@@ -215,7 +215,7 @@ public class PrintInvariants {
 
     PrintWriter pw = new PrintWriter(System.out, true);
     PptTopLevel combined_exit = null;
-    boolean enable_exit_swap = true;
+    boolean enable_exit_swap = !Daikon.df_bottom_up;
 
     if (Daikon.no_text_output)
       return;
@@ -228,6 +228,9 @@ public class PrintInvariants {
 
     for (int i = 0 ; i < ppt_list.size(); i++) {
       PptTopLevel ppt = (PptTopLevel) ppt_list.get(i);
+
+      if (debug.isLoggable(Level.FINE))
+        debug.fine ("Looking at point " + ppt);
 
       // If this point is not an exit point, print out any retained combined
       // exit point
@@ -288,7 +291,8 @@ public class PrintInvariants {
       if (Daikon.output_num_samples) {
         out.println("[No samples for " + ppt.name + "]");
       }
-      return;
+      if (!Daikon.df_bottom_up)
+        return;
     }
     if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
       if (debugPrint.isLoggable(Level.FINE)) {
@@ -301,7 +305,8 @@ public class PrintInvariants {
           out.println("[No views for " + ppt.name + "]");
         }
       }
-      return;
+      if (!Daikon.df_bottom_up)
+        return;
     }
 
     /* [INCR]
