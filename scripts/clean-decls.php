@@ -12,7 +12,7 @@
   while (!feof ($STDIN)) {
     $line = trim (fgets ($STDIN));
     // echo "$line\n";
-    if (strpos ($line, "// Declarations for") === 0)
+    if (strpos ($line, "// Declarations ") === 0)
       continue;
     if (strpos ($line, "// Written") === 0) {
       $line = fgets ($STDIN);
