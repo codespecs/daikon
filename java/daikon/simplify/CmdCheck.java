@@ -33,6 +33,9 @@ public class CmdCheck
 	// read the answer
 	// first, the real result
 	result = s.output.readLine();           
+	if (result == null) {
+	  throw new SimplifyError("Probable core dump");
+	}
 	Assert.assert(!result.startsWith("Bad input:"), result);
 	if (result.equals("Abort (core dumped)")) {
 	  throw new SimplifyError(result);
