@@ -259,6 +259,97 @@ public abstract class Invariant implements java.io.Serializable {
   public abstract boolean isSameFormula(Invariant other);
 
 
+  public static interface IsSameInvariantNameExtractor
+  {
+    public String getFromFirst(VarInfo var1);
+    public String getFromSecond(VarInfo var2);
+  }
+  
+  public static class DefaultIsSameInvariantNameExtractor
+    implements IsSameInvariantNameExtractor
+  {
+    public String getFromFirst(VarInfo var1)  { return var1.name; }
+    public String getFromSecond(VarInfo var2) { return var2.name; }
+  }
+  private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
+
+  /**
+   * @return true iff the argument is the "same" invariant as this.
+   * Same, in this case, means a matching type, formula, and variable
+   * names.
+   **/
+  public boolean isSameInvariant(Invariant inv2)
+  {
+    return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
+  }
+
+  /**
+   * @param name_extractor lambda to extract the variable name from the VarInfos
+   * @return true iff the argument is the "same" invariant as this.
+   * Same, in this case, means a matching type, formula, and variable
+   * names.
+   **/
+  public boolean isSameInvariant(Invariant inv2,
+				 IsSameInvariantNameExtractor name_extractor)
+  {
+    Invariant inv1 = this;
+
+    // Can't be the same if they aren't the same type
+    if (!inv1.getClass().equals(inv2.getClass())) {
+      return false;
+    }
+
+    // Can't be the same if they aren't the same formula
+    if (!inv1.isSameFormula(inv2)) {
+      return false;
+    }
+
+    // The variable names much match up, in order
+    
+    VarInfo[] vars1 = inv1.ppt.var_infos;
+    VarInfo[] vars2 = inv2.ppt.var_infos;
+    
+    Assert.assert(vars1.length == vars2.length); // due to inv type match already
+    for (int i=0; i < vars1.length; i++) {
+      VarInfo var1 = vars1[i];
+      VarInfo var2 = vars2[i];
+      
+      // Do the easy check first
+      if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
+	continue;
+      }
+
+      // The names "match" iff there is an intersection of the names
+      // of aliased variables
+      Vector all_vars1 = var1.canonicalRep().equalTo();
+      Vector all_vars2 = var2.canonicalRep().equalTo();
+      all_vars1.add(var1.canonicalRep());
+      all_vars2.add(var2.canonicalRep());
+      Vector all_vars_names1 = new Vector(all_vars1.size());
+      for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
+	VarInfo elt = (VarInfo) iter.next();
+	String name = name_extractor.getFromFirst(elt);
+	all_vars_names1.add(name);
+      }
+      boolean intersection = false;
+      for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
+	VarInfo elt = (VarInfo) iter.next();
+	String name = name_extractor.getFromSecond(elt);
+	intersection = all_vars_names1.contains(name);
+	if (intersection) {
+	  break;
+	}
+      }
+      if (!intersection) {
+	return false;
+      }
+    }
+
+    // the type, formula, and vars all matched
+    return true;
+  }
+
+
   // This is a little grody; stick with code cut-and-paste for now.
   // // Look up a previously instantiated Invariant.
   // // Should this implementation be made more efficient?
