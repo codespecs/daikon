@@ -89,6 +89,8 @@ public class InvariantFilters {
       PrintInvariants.debugFiltering.debug(invariant.format() + "\n\t\t(type: " + invariant.getClass().getName() +  ")\n");
     }
 
+    if (invariant instanceof Implication) invariant = ((Implication) invariant).right;
+
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
