@@ -340,19 +340,11 @@ public class SUBSET
       SubSet inv = (SubSet) arg;
 
       SuppressionTemplate supTemplate = new SuppressionTemplate();
-      supTemplate.invTypes = new Class[] {PairwiseIntComparison.class};
+      supTemplate.invTypes = new Class[] {PairwiseIntEqual.class};
       supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
 
       SuppressionLink result = byTemplate (supTemplate, inv);
-      if (result != null) {
-        String comparator = ((PairwiseIntComparison) supTemplate.results[0]).getComparator();
-        if (comparator.indexOf("=") > -1 ||
-            comparator.indexOf("?") > -1) {
-          return result;
-        }
-      }
-      return null;
-
+      return result;
     }
 
   }

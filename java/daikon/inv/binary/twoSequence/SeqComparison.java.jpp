@@ -4,12 +4,11 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(TYPEDOUBLE) || defined(TYPELONG) || defined(TYPESTRING))
-  #error "TYPEDOUBLE, TYPELONG, or TYPESTRING must be defined"
+#if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING) || defined(LESSTHAN) || defined(LESSTHANFLOAT) || defined(LESSTHANSTRING) || defined(GREATERTHAN) || defined(GREATERTHANFLOAT) || defined(GREATERTHANSTRING) || defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined(GREATEREQUALSTRING))
+  #error "EQUAL, EQUALFLOAT, EQUALSTRING, LESSTHAN, LESSTHANFLOAT, LESSTHANSTRING, GREATERTHAN, GREATERTHANFLOAT, GREATERTHANSTRING, LESSEQUAL, LESSEQUALFLOAT, LESSEQUALSTRING, GREATEREQUAL, GREATEREQUALFLOAT, or GREATEREQUALSTRING must be defined"
 #endif
 
-#if defined(TYPELONG)
-  #define CLASSNAME SeqComparison
+#if (defined(EQUAL) || defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL))
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
   #define ARRAYCOMPARATOR new ArraysMDE.LongArrayComparatorLexical()
@@ -17,26 +16,28 @@ The correct way to build the system is to run 'make'.
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequence
   #define BASEISTYPE baseIsIntegral()
-  #define PAIRWISECOMP PairwiseIntComparison
-  #define CLASSSTRING "SeqComparison"
-  #define INTCOMPARISONCORE IntComparisonCore
   #define VALUETRACKER ValueTracker
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
-#elif defined(TYPEDOUBLE)
-  #define CLASSNAME SeqComparisonFloat
+  #define PAIRWISECOMP_EQ PairwiseIntEqual
+  #define PAIRWISECOMP_LT PairwiseIntLessThan
+  #define PAIRWISECOMP_GT PairwiseIntGreaterThan
+  #define PAIRWISECOMP_LE PairwiseIntLessEqual
+  #define PAIRWISECOMP_GE PairwiseIntGreaterEqual
+#elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
   #define ARRAYCOMPARATOR Global.fuzzy.new DoubleArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch (v1, v2)
   #define SUBSEQUENCE SubSequenceFloat
   #define BASEISTYPE baseIsFloat()
-  #define PAIRWISECOMP PairwiseFloatComparison
-  #define CLASSSTRING "SeqComparisonFloat"
-  #define INTCOMPARISONCORE FloatComparisonCore
   #define VALUETRACKER FloatValueTracker
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
-#elif defined(TYPESTRING)
-  #define CLASSNAME SeqComparisonString
+  #define PAIRWISECOMP_EQ PairwiseFloatEqual
+  #define PAIRWISECOMP_LT PairwiseFloatLessThan
+  #define PAIRWISECOMP_GT PairwiseFloatGreaterThan
+  #define PAIRWISECOMP_LE PairwiseFloatLessEqual
+  #define PAIRWISECOMP_GE PairwiseFloatGreaterEqual
+#elif (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
   #define ARRAYCOMPARATOR new ArraysMDE.StringArrayComparatorLexical()
@@ -44,11 +45,147 @@ The correct way to build the system is to run 'make'.
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequenceString
   #define BASEISTYPE baseIsString()
-  #define PAIRWISECOMP PairwiseStringComparison
-  #define CLASSSTRING "SeqComparisonString"
-  #define INTCOMPARISONCORE StringComparisonCore
   #define VALUETRACKER StringValueTracker
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
+  #define PAIRWISECOMP_EQ PairwiseStringEqual
+  #define PAIRWISECOMP_LT PairwiseStringLessThan
+  #define PAIRWISECOMP_GT PairwiseStringGreaterThan
+  #define PAIRWISECOMP_LE PairwiseStringLessEqual
+  #define PAIRWISECOMP_GE PairwiseStringGreaterEqual
+#endif
+
+#if defined(EQUAL)
+  #define SEQSEQINTEQUAL SeqSeqIntEqual
+  #define SEQSEQINTEQUALstring "SeqSeqIntEqual"
+  #define COMPAREQUALS(a,b) (a == b)
+  #define EQUALSstring "=="
+  #define EQUALSIOAstring "="
+  #define EQUALSSIMPLIFYstring "EQ"
+  #define PAIRWISEINTEQUAL PairwiseIntEqual
+#elif defined(EQUALFLOAT)
+  #define SEQSEQINTEQUAL SeqSeqFloatEqual
+  #define SEQSEQINTEQUALstring "SeqSeqFloatEqual"
+  #define COMPAREQUALS(a,b) (a == b)
+  #define EQUALSstring "=="
+  #define EQUALSIOAstring "="
+  #define EQUALSSIMPLIFYstring "EQ"
+  #define PAIRWISEINTEQUAL PairwiseFloatEqual
+#elif defined(EQUALSTRING)
+  #define SEQSEQINTEQUAL SeqSeqStringEqual
+  #define SEQSEQINTEQUALstring "SeqSeqStringEqual"
+  #define COMPAREQUALS(a,b) (a == b)
+  #define EQUALSstring "=="
+  #define EQUALSIOAstring "="
+  #define EQUALSSIMPLIFYstring "EQ"
+  #define PAIRWISEINTEQUAL PairwiseStringEqual
+#elif defined(LESSTHAN)
+  #define SEQSEQINTEQUAL SeqSeqIntLessThan
+  #define SEQSEQINTEQUALstring "SeqSeqIntLessThan"
+  #define SEQCOMPAR_SWAP SeqSeqIntGreaterThan
+  #define COMPAREQUALS(a,b) (a < b)
+  #define EQUALSstring "<"
+  #define EQUALSIOAstring "<"
+  #define EQUALSSIMPLIFYstring "<"
+  #define PAIRWISEINTEQUAL PairwiseIntLessThan
+#elif defined(LESSTHANFLOAT)
+  #define SEQSEQINTEQUAL SeqSeqFloatLessThan
+  #define SEQSEQINTEQUALstring "SeqSeqFloatLessThan"
+  #define SEQCOMPAR_SWAP SeqSeqFloatGreaterThan
+  #define COMPAREQUALS(a,b) (a < b)
+  #define EQUALSstring "<"
+  #define EQUALSIOAstring "<"
+  #define EQUALSSIMPLIFYstring "<"
+  #define PAIRWISEINTEQUAL PairwiseFloatLessThan
+#elif defined(LESSTHANSTRING)
+  #define SEQSEQINTEQUAL SeqSeqStringLessThan
+  #define SEQSEQINTEQUALstring "SeqSeqStringLessThan"
+  #define SEQCOMPAR_SWAP SeqSeqStringGreaterThan
+  #define COMPAREQUALS(a,b) (a < b)
+  #define EQUALSstring "<"
+  #define EQUALSIOAstring "<"
+  #define EQUALSSIMPLIFYstring "<"
+  #define PAIRWISEINTEQUAL PairwiseStringLessThan
+#elif defined(GREATERTHAN)
+  #define SEQSEQINTEQUAL SeqSeqIntGreaterThan
+  #define SEQSEQINTEQUALstring "SeqSeqIntGreaterThan"
+  #define SEQCOMPAR_SWAP SeqSeqIntLessThan
+  #define COMPAREQUALS(a,b) (a > b)
+  #define EQUALSstring ">"
+  #define EQUALSIOAstring ">"
+  #define EQUALSSIMPLIFYstring ">"
+  #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
+#elif defined(GREATERTHANFLOAT)
+  #define SEQSEQINTEQUAL SeqSeqFloatGreaterThan
+  #define SEQSEQINTEQUALstring "SeqSeqFloatGreaterThan"
+  #define SEQCOMPAR_SWAP SeqSeqFloatLessThan
+  #define COMPAREQUALS(a,b) (a > b)
+  #define EQUALSstring ">"
+  #define EQUALSIOAstring ">"
+  #define EQUALSSIMPLIFYstring ">"
+  #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
+#elif defined(GREATERTHANSTRING)
+  #define SEQSEQINTEQUAL SeqSeqStringGreaterThan
+  #define SEQSEQINTEQUALstring "SeqSeqStringGreaterThan"
+  #define SEQCOMPAR_SWAP SeqSeqStringLessThan
+  #define COMPAREQUALS(a,b) (a > b)
+  #define EQUALSstring ">"
+  #define EQUALSIOAstring ">"
+  #define EQUALSSIMPLIFYstring ">"
+  #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
+#elif defined(LESSEQUAL)
+  #define SEQSEQINTEQUAL SeqSeqIntLessEqual
+  #define SEQSEQINTEQUALstring "SeqSeqIntLessEqual"
+  #define SEQCOMPAR_SWAP SeqSeqIntGreaterEqual
+  #define COMPAREQUALS(a,b) (a <= b)
+  #define EQUALSstring "<="
+  #define EQUALSIOAstring "<="
+  #define EQUALSSIMPLIFYstring "<="
+  #define PAIRWISEINTEQUAL PairwiseIntLessEqual
+#elif defined(LESSEQUALFLOAT)
+  #define SEQSEQINTEQUAL SeqSeqFloatLessEqual
+  #define SEQSEQINTEQUALstring "SeqSeqFloatLessEqual"
+  #define SEQCOMPAR_SWAP SeqSeqFloatGreaterEqual
+  #define COMPAREQUALS(a,b) (a <= b)
+  #define EQUALSstring "<="
+  #define EQUALSIOAstring "<="
+  #define EQUALSSIMPLIFYstring "<="
+  #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
+#elif defined(LESSEQUALSTRING)
+  #define SEQSEQINTEQUAL SeqSeqStringLessEqual
+  #define SEQSEQINTEQUALstring "SeqSeqStringLessEqual"
+  #define SEQCOMPAR_SWAP SeqSeqStringGreaterEqual
+  #define COMPAREQUALS(a,b) (a <= b)
+  #define EQUALSstring "<="
+  #define EQUALSIOAstring "<="
+  #define EQUALSSIMPLIFYstring "<="
+  #define PAIRWISEINTEQUAL PairwiseStringLessEqual
+#elif defined(GREATEREQUAL)
+  #define SEQSEQINTEQUAL SeqSeqIntGreaterEqual
+  #define SEQSEQINTEQUALstring "SeqSeqIntGreaterEqual"
+  #define SEQCOMPAR_SWAP SeqSeqIntLessEqual
+  #define COMPAREQUALS(a,b) (a >= b)
+  #define EQUALSstring ">="
+  #define EQUALSIOAstring ">="
+  #define EQUALSSIMPLIFYstring ">="
+  #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
+#elif defined(GREATEREQUALFLOAT)
+  #define SEQSEQINTEQUAL SeqSeqFloatGreaterEqual
+  #define SEQSEQINTEQUALstring "SeqSeqFloatGreaterEqual"
+  #define SEQCOMPAR_SWAP SeqSeqFloatLessEqual
+  #define COMPAREQUALS(a,b) (a >= b)
+  #define EQUALSstring ">="
+  #define EQUALSIOAstring ">="
+  #define EQUALSSIMPLIFYstring ">="
+  #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
+#elif defined(GREATEREQUALSTRING)
+  #define SEQSEQINTEQUAL SeqSeqStringGreaterEqual
+  #define SEQSEQINTEQUALstring "SeqSeqStringGreaterEqual"
+  #define SEQCOMPAR_SWAP SeqSeqStringLessEqual
+  #define COMPAREQUALS(a,b) (a >= b)
+  #define EQUALSstring ">="
+  #define EQUALSIOAstring ">="
+  #define EQUALSSIMPLIFYstring ">="
+  #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
 #endif
 
 // ***** This file is automatically generated from SeqComparison.java.jpp
@@ -84,19 +221,19 @@ import java.util.*;
  * If the auxillary information (eg, order matters) doesn't match then
  * no comparison is made at all.
  **/
-public class CLASSNAME
+public class SEQSEQINTEQUAL
   extends SUPERCLASS
   implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030402L;
+  static final long serialVersionUID = 20030715L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff CLASSNAME invariants should be considered.
+   * Boolean.  True iff SEQSEQINTEQUAL invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -104,31 +241,24 @@ public class CLASSNAME
    * Debugging logger.
    **/
   final static Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence."
-                                                + CLASSSTRING);
+                                                + SEQSEQINTEQUALstring);
 
   static Comparator comparator = ARRAYCOMPARATOR;
-
-  public final boolean only_check_eq;
-
-  public boolean can_be_eq = false;
-  public boolean can_be_lt = false;
-  public boolean can_be_gt = false;
 
   boolean orderMatters;
 
   private VALUETRACKER values_cache = new VALUETRACKER(8);
 
-  protected CLASSNAME(PptSlice ppt, boolean only_eq, boolean order) {
+  protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
     super(ppt);
-    only_check_eq = only_eq;
     orderMatters = order;
   }
 
-  //   public static CLASSNAME instantiate(PptSlice ppt) {
+  //   public static SEQSEQINTEQUAL instantiate(PptSlice ppt) {
   //     return instantiate (ppt, false);
   //   }
 
-  public static CLASSNAME instantiate(PptSlice ppt, boolean onlyEq) {
+  public static SEQSEQINTEQUAL instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -140,72 +270,73 @@ public class CLASSNAME
 
     ProglangType type1 = var1.type;
     ProglangType type2 = var2.type;
+
+    #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
                           && type1.BASEISTYPE
                           && (type2.dimensions() == 1)
                           && type2.BASEISTYPE));
-    if (onlyEq) only_eq = true;
-    // System.out.println("only_eq: " + only_eq);
-    CLASSNAME result;
+    if (only_eq) return null;
+    #endif
+
+    SEQSEQINTEQUAL result;
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      result = new CLASSNAME(ppt, only_eq, true);
+      result = new SEQSEQINTEQUAL(ppt, true);
     } else {
-      result = new CLASSNAME(ppt, true, false);
+      #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+      return null;
+      #else
+      result = new SEQSEQINTEQUAL(ppt, false);
+      #endif
     }
-    // System.out.println("CLASSNAME.instantiate => " + result.repr());
+    // System.out.println("SEQSEQINTEQUAL.instantiate => " + result.repr());
     return result;
   }
 
   protected Object clone() {
-    CLASSNAME result = (CLASSNAME) super.clone();
+    SEQSEQINTEQUAL result = (SEQSEQINTEQUAL) super.clone();
     result.values_cache = (VALUETRACKER) values_cache.clone();
     return result;
   }
 
   protected Invariant resurrect_done_swapped() {
-    boolean tmp = can_be_lt;
-    can_be_lt = can_be_gt;
-    can_be_gt = tmp;
+    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return this;
+    #else
+    return new SEQCOMPAR_SWAP(ppt,orderMatters);
+    #endif
   }
 
   public String repr() {
-    return CLASSSTRING + varNames() + ": "
-      + "can_be_eq=" + can_be_eq
-      + ",can_be_lt=" + can_be_lt
-      + ",can_be_gt=" + can_be_gt
-      + ",only_check_eq=" + only_check_eq
+    return SEQSEQINTEQUALstring + varNames() + ": "
       + ",orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
       ;
   }
 
   public String format_using(OutputFormat format) {
-    // System.out.println("Calling " + CLASSSTRING + ".format for: " + repr());
+    // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }
-
-    String comparator = IntComparisonCore.format_comparator
-      (format, can_be_lt, can_be_eq, can_be_gt);
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.JAVA))
     {
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);
+      #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
                           : "");
 
-      // Lexically equal is equal by any definition
-      if (comparator == "==")   // "interned"
-        lexically = "";
-
-      return name1 + " " + comparator + " " + name2 + lexically;
+      return name1 + " " + EQUALSstring + " " + name2 + lexically;
+      #else
+      return name1 + " " + EQUALSstring + " " + name2;
+      #endif
     }
 
     if (format == OutputFormat.IOA) {
@@ -214,12 +345,12 @@ public class CLASSNAME
       }
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);
-      return name1 + " " + comparator + " " + name2 + " ***";
+      return name1 + " " + EQUALSIOAstring + " " + name2 + " ***";
     }
 
     if (format == OutputFormat.JML) { // Must complete
       String quantResult[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[] {var1().name,var2().name},true);
-      return quantResult[0] + quantResult[1] + comparator + quantResult[2] + quantResult[3];
+      return quantResult[0] + quantResult[1] + EQUALSstring + quantResult[2] + quantResult[3];
     }
     return format_unimplemented(format);
   }
@@ -232,9 +363,6 @@ public class CLASSNAME
   }
 
   private String format_simplify_defined() {
-    String comparator =
-      IntComparisonCore.format_comparator(OutputFormat.SIMPLIFY,
-                                          can_be_lt, can_be_eq, can_be_gt);
     String[] var1_name =
       VarInfoName.QuantHelper.simplifyNameAndBounds(var1().name);
     String[] var2_name =
@@ -243,13 +371,13 @@ public class CLASSNAME
       return "format_simplify can't handle one of these sequences: "
         + format();
     }
-    return "(|lexical-" + comparator + "| " +
+    return "(|lexical-" + EQUALSSIMPLIFYstring + "| " +
       var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " " +
       var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
 
   private String format_simplify_explicit() {
-    if (can_be_eq && !can_be_lt && !can_be_gt) {
+    #if (defined(EQUAL) || defined(EQUALSTRING) || defined(EQUALFLOAT))
       // A simple case: if two sequences are lexically equal iff they
       // are elementwise equal.
       String[] form =
@@ -257,11 +385,11 @@ public class CLASSNAME
           { var1().name, var2().name }, true); // elementwise
       return form[0] +
         "(EQ " + form[1] + " " + form[2] + ")" + form[3];
-    } else {
+    #else
       String classname = this.getClass().toString().substring(6);
       return "warning: method " + classname
         + ".format_simplify_explicit() needs to be implemented: " + format();
-    }
+    #endif
   }
 
 
@@ -272,6 +400,7 @@ public class CLASSNAME
     // if ((v1.length == 0) || (v2.length == 0)) {
     //   return;
     // }
+
     int comparison = 0;
     if (orderMatters) {
       // Standard element wise comparison
@@ -284,82 +413,45 @@ public class CLASSNAME
     if (logDetail())
       log ("add_modified (" + ArraysMDE.toString(v1) + ", " +
            ArraysMDE.toString(v2) + ") " + comparison);
-
-    boolean new_can_be_eq = can_be_eq;
-    boolean new_can_be_lt = can_be_lt;
-    boolean new_can_be_gt = can_be_gt;
-    boolean changed = false;
-    if (comparison == 0) {
-      new_can_be_eq = true;
-      if (!can_be_eq) changed = true;
-    } else if (comparison < 0) {
-      new_can_be_lt = true;
-      if (!can_be_lt) changed = true;
-    } else {
-      new_can_be_gt = true;
-      if (!can_be_gt) changed = true;
-    }
-
-    if (! changed) {
-      values_cache.add(v1, v2);
-      return;
-    }
-
-    if ((new_can_be_lt && new_can_be_gt)
-        || (only_check_eq && (new_can_be_lt || new_can_be_gt))) {
+    if (! COMPAREQUALS(comparison,0) ) {
       destroyAndFlow();
       return;
     }
-
-    // changed but didn't die
-    cloneAndFlow();
-    can_be_eq = new_can_be_eq;
-    can_be_lt = new_can_be_lt;
-    can_be_gt = new_can_be_gt;
-
     values_cache.add(v1, v2);
-    Assert.assertTrue (!(can_be_lt && can_be_gt));
-    Assert.assertTrue (can_be_gt || can_be_lt || can_be_eq);
   }
 
   protected double computeProbability() {
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
-    } else if (can_be_lt || can_be_gt) {
-      // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
-      return Math.pow(.5, values_cache.num_values());
     } else if (ppt.num_samples() == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
+    #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)) )
+    } else {
+      // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
+      return Math.pow(.5, values_cache.num_values());
+    #else
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
+    #endif
     }
   }
 
   // For Comparison interface
   public double eq_probability() {
-    if (can_be_eq && (!can_be_lt) && (!can_be_gt))
-      return computeProbability();
-    else
-      return Invariant.PROBABILITY_NEVER;
+    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+    return computeProbability();
+    #else
+    return Invariant.PROBABILITY_NEVER;
+    #endif
   }
 
   public boolean isSameFormula(Invariant o)
   {
-    CLASSNAME other = (CLASSNAME) o;
-    return
-      (can_be_eq == other.can_be_eq) &&
-      (can_be_lt == other.can_be_lt) &&
-      (can_be_gt == other.can_be_gt);
+    return true;
   }
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof CLASSNAME) {
-      CLASSNAME other = (CLASSNAME) o;
-      return (! ((can_be_eq && other.can_be_eq)
-                 || (can_be_lt && other.can_be_lt)
-                 || (can_be_gt && other.can_be_gt)));
-    }
     return false;
   }
 
@@ -398,7 +490,7 @@ public class CLASSNAME
   }
 
   public boolean isObviousStatically(VarInfo[] vis) {
-    #if !defined (TYPESTRING)
+    #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
       if ((SUBSEQUENCE.isObviousSubSequence(var1, var2))
@@ -410,7 +502,7 @@ public class CLASSNAME
   }
 
   public boolean isObviousDynamically(VarInfo[] vis) {
-    #if !defined (TYPESTRING)
+    #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
 
       Debug debug = new Debug (getClass(), ppt, vis);
 
@@ -418,16 +510,13 @@ public class CLASSNAME
         debug.log ("Checking IsObviousDynamically");
 
       PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
-      if (ppt != null) {
-         PAIRWISECOMP pic = PAIRWISECOMP.find(ppt);
-         if ((pic != null)
-             && (pic.core.can_be_eq == can_be_eq)
-             && (pic.core.can_be_lt == can_be_lt)
-             && (pic.core.can_be_gt == can_be_gt)) {
-           if (logOn())
-             debug.log ("Obvious Dynamic from " + pic.format());
-           return true;
-         }
+      if (ppt!=null) {
+        Invariant pic = PAIRWISEINTEQUAL.find(ppt);
+        if (pic != null) {
+          if (logOn())
+            debug.log ("Obvious Dynamic from " + pic.format());
+            return true;
+        }
       }
 
       // If either variable is a subsequence and the original arrays
@@ -444,10 +533,14 @@ public class CLASSNAME
         VarInfo[] avis = new VarInfo [] {arr1, arr2};
         ppt = this.ppt.parent.findSlice_unordered (avis);
         if (ppt != null) {
-          PAIRWISECOMP pic = PAIRWISECOMP.find(ppt);
-          if (pic != null) {
-            if (logOn())
-              debug.log ("Obvious Dynamic from " + pic.format());
+          PAIRWISECOMP_EQ picEQ = PAIRWISECOMP_EQ.find(ppt);
+          PAIRWISECOMP_LT picLT = PAIRWISECOMP_LT.find(ppt);
+          PAIRWISECOMP_GT picGT = PAIRWISECOMP_GT.find(ppt);
+          PAIRWISECOMP_LE picLE = PAIRWISECOMP_LE.find(ppt);
+          PAIRWISECOMP_GE picGE = PAIRWISECOMP_GE.find(ppt);
+          if ((picEQ!= null) || (picLT!=null) || (picGT!=null) || (picLE!=null) || (picGE!=null)) {
+            //  if (logOn())
+            //   debug.log ("Obvious Dynamic from " + pic.format());
             return (true);
           }
         }
@@ -465,10 +558,10 @@ public class CLASSNAME
         //     + " " + avis[1].name.name());
         ppt = this.ppt.parent.findSlice_unordered (avis);
         if (ppt != null) {
-          CLASSNAME pic = CLASSNAME.find(ppt);
-          if (pic != null) {
+          SEQSEQINTEQUAL lexical_pic = SEQSEQINTEQUAL.find(ppt);
+          if (lexical_pic != null) {
             if (logOn())
-              debug.log ("Obvious Dynamic from " + pic.format());
+              debug.log ("Obvious Dynamic from " + lexical_pic.format());
             return (true);
           }
         }
@@ -490,30 +583,37 @@ public class CLASSNAME
 
   public void repCheck() {
     super.repCheck();
+    /*
+      This code is no longer needed now that the can_be_x's are gone
     if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
         && ppt.num_samples() != 0) {
       System.err.println (this.repr());
       System.err.println (this.ppt.num_samples());
       throw new Error();
     }
+    */
   }
 
   public boolean isEqual() {
-    return (can_be_eq && !can_be_lt && !can_be_gt);
+    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+    return true;
+    #else
+    return false;
+    #endif
   }
 
   // Look up a previously instantiated invariant.
-  public static CLASSNAME find(PptSlice ppt) {
+  public static SEQSEQINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof CLASSNAME)
-        return (CLASSNAME) inv;
+      if (inv instanceof SEQSEQINTEQUAL)
+        return (SEQSEQINTEQUAL) inv;
     }
     return null;
   }
 
-#if !defined (TYPESTRING)
+#if !(defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
 
   // Create a suppression factory for pairwise and lexical
   #define FACTORY_CNT       2
@@ -547,8 +647,8 @@ public class CLASSNAME
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
     // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof CLASSNAME);
-    CLASSNAME inv = (CLASSNAME) arg;
+    Assert.assertTrue (arg instanceof SEQSEQINTEQUAL);
+    SEQSEQINTEQUAL inv = (SEQSEQINTEQUAL) arg;
 
     VarInfo v1 = inv.var1();
     VarInfo v2 = inv.var2();
@@ -561,13 +661,9 @@ public class CLASSNAME
     if (inv.isEqual())
       return (null);
 
-    // Don't do anything if we haven't figured out an invariant yet
-    if (!inv.can_be_eq && !inv.can_be_lt && !inv.can_be_gt)
-      return (null);
-
     // Build the suppression template based on the arguments
     if (!v1.isDerived() && !v2.isDerived()) {
-      supTemplate.set (0, PAIRWISECOMP.class, v1, v2);
+      supTemplate.set (0, PAIRWISEINTEQUAL.class, v1, v2);
     } else if (v1.isDerived() && v2.isDerived()) {
 
       // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
@@ -581,26 +677,21 @@ public class CLASSNAME
         || (der1.from_start != der2.from_start)
         || (der1.index_shift != der2.index_shift))
         return (null);
-      supTemplate.set (0, PAIRWISECOMP.class, der1.seqvar(), der2.seqvar());
+      supTemplate.set (0, PAIRWISEINTEQUAL.class, der1.seqvar(), der2.seqvar());
     } else // can't be matching subsequence
       return (null);
 
     // Any matches must have the same state as this one
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
     if (sl != null) {
-      PAIRWISECOMP pw = (PAIRWISECOMP) supTemplate.results[0];
+      PAIRWISEINTEQUAL pw = (PAIRWISEINTEQUAL) supTemplate.results[0];
       if (pw == null) {
         System.out.println ("pairwise_suppress: Unexpected null in supTemplate.results[0]");
         return (null);
       }
-      if ((pw.core.can_be_eq != inv.can_be_eq)
-        || (pw.core.can_be_lt != inv.can_be_lt)
-        || (pw.core.can_be_gt != inv.can_be_gt))
-        sl = null;
 
       if (logOn())
-        inv.log (IntComparisonCore.format_comparator
-               (OutputFormat.DAIKON, inv.can_be_lt, inv.can_be_eq, inv.can_be_gt)             + ((sl != null) ? " " : " Not ") + " Suppressed by '"
+        inv.log (((sl != null) ? " " : " Not ") + " Suppressed by '"
                   + pw.format() + "'");
     }
     return (sl);
@@ -627,15 +718,11 @@ public class CLASSNAME
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
     // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof CLASSNAME);
-    CLASSNAME inv = (CLASSNAME) arg;
+    Assert.assertTrue (arg instanceof SEQSEQINTEQUAL);
+    SEQSEQINTEQUAL inv = (SEQSEQINTEQUAL) arg;
 
     VarInfo v1 = inv.var1();
     VarInfo v2 = inv.var2();
-
-    // Don't do anything if we haven't figured out an invariant yet
-    if (!inv.can_be_eq && !inv.can_be_lt && !inv.can_be_gt)
-      return (null);
 
     if (logOn())
       inv.log ("Consider subsequence suppression by SeqComparison (x[], y[])");
@@ -653,21 +740,17 @@ public class CLASSNAME
       || (der1.from_start != der2.from_start)
       || (der1.index_shift != der2.index_shift))
       return (null);
-    supTemplate.set (0, CLASSNAME.class, der1.seqvar(), der2.seqvar());
+    supTemplate.set (0, SEQSEQINTEQUAL.class, der1.seqvar(), der2.seqvar());
 
     // Look for a matching SeqComparison
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
-    CLASSNAME seqcmp = (CLASSNAME) supTemplate.results[0];
+    SEQSEQINTEQUAL seqcmp = (SEQSEQINTEQUAL) supTemplate.results[0];
     if (sl != null) {
       if (seqcmp == null) {
-        System.out.println (CLASSSTRING +
+        System.out.println (SEQSEQINTEQUALstring +
                             "Unexpected null in supTemplate.results[0]");
         return (null);
       }
-      if ((seqcmp.can_be_eq != inv.can_be_eq)
-          || (seqcmp.can_be_lt != inv.can_be_lt)
-          || (seqcmp.can_be_gt != inv.can_be_gt))
-        sl = null;
 
       if (logOn())
         inv.log ("== " + ((sl != null) ? " " : " Not ") + " Suppressed by '"

@@ -14,14 +14,12 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPESCALAR INT
   #define PROGLANGTYPEARRAY INT_ARRAY
   #define MEMBER Member
-  #define SEQINTCOMPARISON SeqIntComparison
   #define CLASSSTRING "SequenceScalarFactory"
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME SequenceFloatFactory
   #define PROGLANGTYPESCALAR DOUBLE
   #define PROGLANGTYPEARRAY DOUBLE_ARRAY
   #define MEMBER MemberFloat
-  #define SEQINTCOMPARISON SeqFloatComparison
   #define CLASSSTRING "SequenceFloatFactory"
 #endif
 
@@ -81,7 +79,19 @@ public final class CLASSNAME {
     Vector result = new Vector();
     // I could check that the length of the sequence isn't always 0.
     result.add(MEMBER.instantiate(ppt, seq_first));
-    result.add(SEQINTCOMPARISON.instantiate(ppt, seq_first));
+    #if (defined TYPELONG)
+    result.add(SeqIntLessThan.instantiate(ppt, seq_first));
+    result.add(SeqIntGreaterThan.instantiate(ppt, seq_first));
+    result.add(SeqIntLessEqual.instantiate(ppt, seq_first));
+    result.add(SeqIntGreaterEqual.instantiate(ppt, seq_first));
+    result.add(SeqIntEqual.instantiate(ppt, seq_first));
+    #else
+    result.add(SeqFloatLessThan.instantiate(ppt, seq_first));
+    result.add(SeqFloatGreaterThan.instantiate(ppt, seq_first));
+    result.add(SeqFloatLessEqual.instantiate(ppt, seq_first));
+    result.add(SeqFloatGreaterEqual.instantiate(ppt, seq_first));
+    result.add(SeqFloatEqual.instantiate(ppt, seq_first));
+    #endif
     return result;
   }
 

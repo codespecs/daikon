@@ -4,29 +4,114 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(TYPEDOUBLE) || defined(TYPELONG))
-  #error "TYPEDOUBLE or TYPELONG must be defined"
+#if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
+  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
-
-#if defined(TYPELONG)
-  #define CLASSNAME PairwiseIntComparison
+#if (defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
-  #define CORECLASS IntComparisonCore
   #define ELEMENTISTYPE elementIsIntegral()
-  #define CLASSSTRING "PairwiseIntComparison"
+  #define VALUETRACKER ValueTracker
   #define SUBSEQUENCE SubSequence
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
-#elif defined(TYPEDOUBLE)
-  #define CLASSNAME PairwiseFloatComparison
+#elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
-  #define CORECLASS FloatComparisonCore
   #define ELEMENTISTYPE elementIsFloat()
-  #define CLASSSTRING "PairwiseFloatComparison"
+  #define VALUETRACKER FloatValueTracker
   #define SUBSEQUENCE SubSequenceFloat
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
+#endif
+
+#if defined(EQUAL)
+  #define PAIRWISEINTEQUAL PairwiseIntEqual
+  #define PAIRWISEINTEQUALstring "PairwiseIntEqual"
+  #define EQUALS(a,b) (a == b)
+  #define EQUALSstring "=="
+  #define EQUALSIOAstring "="
+  #define EQUALSSIMPLIFYstring "EQ"
+#elif defined(EQUALFLOAT)
+  #define PAIRWISEINTEQUAL PairwiseFloatEqual
+  #define PAIRWISEINTEQUALstring "PairwiseFloatEqual"
+  #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALSstring "=="
+  #define EQUALSIOAstring "="
+  #define EQUALSSIMPLIFYstring "EQ"
+#elif defined(LESSTHAN)
+  #define PAIRWISEINTEQUAL PairwiseIntLessThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseIntGreaterThan
+  #define PAIRWISEINTEQUALstring "PairwiseIntLessThan"
+  #define EQUALS(a,b) (a < b)
+  #define EQUALSstring "<"
+  #define EQUALSIOAstring "<"
+  #define EQUALSSIMPLIFYstring "<"
+#elif defined(LESSTHANFLOAT)
+  #define PAIRWISEINTEQUAL PairwiseFloatLessThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterThan
+  #define PAIRWISEINTEQUALstring "PairwiseFloatLessThan"
+  #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALSstring "<"
+  #define EQUALSIOAstring "<"
+  #define EQUALSSIMPLIFYstring "<"
+#elif defined(LESSEQUAL)
+  #define PAIRWISEINTEQUAL PairwiseIntLessEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseIntGreaterEqual
+  #define PAIRWISELT_SUPP PairwiseIntLessThan
+  #define PAIRWISEEQ_SUPP PairwiseIntEqual
+  #define PAIRWISEINTEQUALstring "PairwiseIntLessEqual"
+  #define EQUALS(a,b) (a <= b)
+  #define EQUALSstring "<="
+  #define EQUALSIOAstring "<="
+  #define EQUALSSIMPLIFYstring "<="
+#elif defined(LESSEQUALFLOAT)
+  #define PAIRWISEINTEQUAL PairwiseFloatLessEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterEqual
+  #define PAIRWISELT_SUPP PairwiseFloatLessThan
+  #define PAIRWISEEQ_SUPP PairwiseFloatEqual
+  #define PAIRWISEINTEQUALstring "PairwiseFloatLessEqual"
+  #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALSstring "<="
+  #define EQUALSIOAstring "<="
+  #define EQUALSSIMPLIFYstring "<="
+#elif defined(GREATERTHAN)
+  #define PAIRWISEINTEQUAL PairwiseIntGreaterThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseIntLessThan
+  #define PAIRWISEINTEQUALstring "PairwiseIntGreaterThan"
+  #define EQUALS(a,b) (a > b)
+  #define EQUALSstring ">"
+  #define EQUALSIOAstring ">"
+  #define EQUALSSIMPLIFYstring ">"
+#elif defined(GREATERTHANFLOAT)
+  #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
+  #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessThan
+  #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterThan"
+  #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALSstring ">"
+  #define EQUALSIOAstring ">"
+  #define EQUALSSIMPLIFYstring ">"
+#elif defined(GREATEREQUAL)
+  #define PAIRWISEINTEQUAL PairwiseIntGreaterEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseIntLessEqual
+  #define PAIRWISELT_SUPP PairwiseIntGreaterThan
+  #define PAIRWISEEQ_SUPP PairwiseIntEqual
+  #define PAIRWISEINTEQUALstring "PairwiseIntGreaterEqual"
+  #define EQUALS(a,b) (a >= b)
+  #define EQUALSstring ">="
+  #define EQUALSIOAstring ">="
+  #define EQUALSSIMPLIFYstring ">="
+#elif defined(GREATEREQUALFLOAT)
+  #define PAIRWISEINTEQUAL PairwiseFloatGreaterEqual
+  #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessEqual
+  #define PAIRWISELT_SUPP PairwiseFloatGreaterThan
+  #define PAIRWISEEQ_SUPP PairwiseFloatEqual
+  #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterEqual"
+  #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALSstring ">="
+  #define EQUALSIOAstring ">="
+  #define EQUALSSIMPLIFYstring ">="
+#else
+  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
 // ***** This file is automatically generated from PairwiseIntComparison.java.jpp
@@ -35,6 +120,9 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.Comparison;
+import daikon.inv.ValueTracker;
+import daikon.inv.FloatValueTracker;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
@@ -53,19 +141,19 @@ import java.util.logging.Level;
  * Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
  **/
 
-public class CLASSNAME
+public class PAIRWISEINTEQUAL
   extends SUPERCLASS
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030716L;
 
   /**
    * Debug tracer
    **/
   public static final Logger debug =
-    Logger.getLogger("daikon.inv.binary.twoSequence." + CLASSSTRING);
+    Logger.getLogger("daikon.inv.binary.twoSequence." + PAIRWISEINTEQUALstring);
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -76,39 +164,25 @@ public class CLASSNAME
 
   final static boolean debugPairwiseIntComparison = false;
 
-  public CORECLASS core;
+  public VALUETRACKER values_cache = new VALUETRACKER(8);
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
-    core = new CORECLASS(this);
   }
 
-  protected CLASSNAME(PptSlice ppt, boolean only_eq) {
-    super(ppt);
-    core = new CORECLASS(this, only_eq);
-  }
-
-  protected CLASSNAME(PptSlice ppt, boolean only_eq,
-                      boolean obvious_lt, boolean obvious_gt,
-                      boolean obvious_le, boolean obvious_ge) {
-    super(ppt);
-    core = new CORECLASS(this, only_eq,
-                         obvious_lt, obvious_gt,
-                         obvious_le, obvious_ge);
-  }
-
-  public static CLASSNAME instantiate(PptSlice ppt) {
+  public static PAIRWISEINTEQUAL instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    boolean only_eq = false;
+    #if !(defined(EQUAL) || defined(EQUALFLOAT))
     if (! (var1.type.ELEMENTISTYPE && var2.type.ELEMENTISTYPE)) {
-      only_eq = true;
+      return null;
     }
-    CLASSNAME result;
-    result = new CLASSNAME(ppt, only_eq);
+    #endif
+    PAIRWISEINTEQUAL result;
+    result = new PAIRWISEINTEQUAL(ppt);
     return result;
   }
 
@@ -135,25 +209,54 @@ public class CLASSNAME
     return super.isObviousStatically (vis);
   }
 
+  #if (defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
+  // Suppress <= by < or ==, and >= by > or ==
+  public boolean isObviousDynamically (VarInfo[] vis) {
+
+    PptSlice ppt = this.ppt.parent.findSlice(vis);
+    PAIRWISEEQ_SUPP picEQ = PAIRWISEEQ_SUPP.find(ppt);
+    if (picEQ!=null) {
+      if (logDetail() || debug.isLoggable(Level.FINE))
+        log (debug, format_daikon() + " implied by ==");
+      return true;
+    }
+
+    PAIRWISELT_SUPP picLT = PAIRWISELT_SUPP.find(ppt);
+    if (picLT!=null) {
+      if (logDetail() || debug.isLoggable(Level.FINE))
+        #if (defined(LESSEQUAL) || defined(LESSEQUALFLOAT))
+        log (debug, format_daikon() + " implied by <");
+        #else
+        log(debug, format_daikon() + "implied by >");
+        #endif
+      return true;
+    }
+
+    return super.isObviousDynamically(vis);
+
+  }
+  #endif
+
   protected Object clone() {
-    CLASSNAME result = (CLASSNAME) super.clone();
-    result.core = (CORECLASS) core.clone();
-    result.core.wrapper = result;
+    PAIRWISEINTEQUAL result = (PAIRWISEINTEQUAL) super.clone();
+    result.values_cache = (VALUETRACKER) values_cache.clone();
     return result;
   }
 
   protected Invariant resurrect_done_swapped() {
-    core.swap();
+    #if (defined(EQUAL) || defined(EQUALFLOAT))
     return this;
+    #else
+    return new PAIRWISEINTEQUAL_SWAP(ppt);
+    #endif
   }
 
   public String repr() {
-    return CLASSSTRING + varNames() + ": "
-      + core.repr();
+    return PAIRWISEINTEQUALstring + varNames() + ": ";
   }
 
   public String getComparator() {
-    return core.format_comparator();
+    return EQUALSstring;
   }
 
   public String format_using(OutputFormat format) {
@@ -167,8 +270,7 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    String comparator = core.format_comparator();
-    return var1().name.name() + " " + comparator + " " + var2().name.name()
+    return var1().name.name() + " " + EQUALSstring + " " + var2().name.name()
       + " (elementwise)";
   }
 
@@ -176,82 +278,91 @@ public class CLASSNAME
   public String format_ioa() {
     if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
-    String comparator = core.format_comparator_ioa();
     VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
     VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
 
     return quant1.getQuantifierExp() + quant1.getVarIndexedString(0) + " " +
-      comparator + " " + quant2.getVarIndexedString(0) + quant1.getClosingExp();
+      EQUALSIOAstring + " " + quant2.getVarIndexedString(0) + quant1.getClosingExp();
   }
 
   public String format_esc() {
-    String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var1().name, var2().name }, true); // elementwise
-    return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
+    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
   public String format_simplify() {
-    String comparator = core.format_comparator();
-    if ("==".equals(comparator)) {
-      comparator = "EQ";
-    }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var1().name, var2().name }, true); // elementwise
-    return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
+    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
   public String format_jml() {
-    String comparator = core.format_comparator();
     String quantResult[] =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var1().name, var2().name }, true);
-    return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
+    return quantResult[0] + quantResult[1] + " " + EQUALSstring + " " + quantResult[2] + quantResult[3];
   }
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+
+    if (logDetail() || debug.isLoggable(Level.FINE))
+      log (debug, "add_modified (" + var1().name.name() + ", " + var2().name.name() + ")");
+
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;
     }
+
     int len = a1.length;
     // int len = Math.min(a1.length, a2.length);
 
     for (int i=0; i<len; i++) {
       PRIMITIVE v1 = a1[i];
       PRIMITIVE v2 = a2[i];
-      core.add_modified(v1, v2, count);
-      if (falsified)
+      if (! EQUALS(v1, v2) ) {
+        destroyAndFlow();
         return;
+      }
+      values_cache.add(v1,v2);
     }
+    if (logDetail() || debug.isLoggable(Level.FINE))
+      log (debug, "Exited " + PAIRWISEINTEQUALstring + " add_modified");
   }
 
   protected double computeProbability() {
-    return core.computeProbability();
+   if (falsified) {
+     return Invariant.PROBABILITY_NEVER;
+   } else if (ppt.num_samples()==0)
+     return Invariant.PROBABILITY_UNJUSTIFIED;
+   else {
+     #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      return Math.pow(.5, values_cache.num_values());
+     #else
+      return Invariant.PROBABILITY_JUSTIFIED;
+     #endif
+   }
   }
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.isSameFormula(((CLASSNAME) other).core);
+    return true;
   }
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof CLASSNAME) {
-      return core.isExclusiveFormula(((CLASSNAME) other).core);
-    }
     return false;
   }
 
   // Look up a previously instantiated invariant.
-  public static CLASSNAME find(PptSlice ppt) {
+  public static PAIRWISEINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof CLASSNAME)
-        return (CLASSNAME) inv;
+      if (inv instanceof PAIRWISEINTEQUAL)
+        return (PAIRWISEINTEQUAL) inv;
     }
     return null;
   }
@@ -271,11 +382,11 @@ public class CLASSNAME
                   SuppressionTemplate supTemplate, SuppressionFactory sfact) {
 
     // We should only be called with our own invariant
-    Assert.assertTrue (arg instanceof CLASSNAME);
-    CLASSNAME inv = (CLASSNAME) arg;
+    Assert.assertTrue (arg instanceof PAIRWISEINTEQUAL);
+    PAIRWISEINTEQUAL inv = (PAIRWISEINTEQUAL) arg;
 
     // Don't do anything if we haven't figured out an invariant yet
-    if (!inv.core.can_be_eq && !inv.core.can_be_lt && !inv.core.can_be_gt)
+    if (((PAIRWISEINTEQUAL) arg).values_cache.num_values()==0)
       return (null);
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
@@ -293,21 +404,17 @@ public class CLASSNAME
       return (null);
 
     // Build the template and look for matches
-    supTemplate.set (0, CLASSNAME.class, der1.seqvar(), der2.seqvar());
+    supTemplate.set (0, PAIRWISEINTEQUAL.class, der1.seqvar(), der2.seqvar());
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
 
     // Any matches must have the same state as this one
     if (sl != null) {
-      CLASSNAME pw = (CLASSNAME) supTemplate.results[0];
+      PAIRWISEINTEQUAL pw = (PAIRWISEINTEQUAL) supTemplate.results[0];
       if (pw == null) {
-        System.out.println (CLASSSTRING + ".pairwise_suppress: "
+        System.out.println (PAIRWISEINTEQUALstring + ".pairwise_suppress: "
                             + "Unexpected null in supTemplate.results[0]");
         return (null);
       }
-      if ((pw.core.can_be_eq != inv.core.can_be_eq)
-        || (pw.core.can_be_lt != inv.core.can_be_lt)
-        || (pw.core.can_be_gt != inv.core.can_be_gt))
-        sl = null;
 
       if (logOn())
         inv.log (((sl != null) ? "" : "Not ") + " Suppressed by '"

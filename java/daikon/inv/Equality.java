@@ -4,9 +4,7 @@ import daikon.*;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoString.StringComparison;
 import daikon.inv.binary.twoScalar.FloatEqual;
-import daikon.inv.binary.twoSequence.SeqComparison;
-import daikon.inv.binary.twoSequence.SeqComparisonFloat;
-import daikon.inv.binary.twoSequence.SeqComparisonString;
+import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
 
 import utilMDE.*;
@@ -443,8 +441,7 @@ public final class Equality
         debugPostProcess.fine ("  stringEqual");
         ((StringComparison) invEquals).core.can_be_eq = true;
       } else if ((rep == ProglangType.INT_ARRAY)) {
-        invEquals = SeqComparison.instantiate (newSlice, true);
-        if (invEquals != null) ((SeqComparison) invEquals).can_be_eq = true;
+        invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
         debugPostProcess.fine ("  seqEqual");
       } else if ((rep == ProglangType.STRING_ARRAY)) {
         // JHP commented out to see what diffs are coming from here (5/3/3)
@@ -459,8 +456,7 @@ public final class Equality
           debugPostProcess.fine ("  floatEqual");
         } else if (rep == ProglangType.DOUBLE_ARRAY) {
           debugPostProcess.fine ("  seqFloatEqual");
-          invEquals = SeqComparisonFloat.instantiate (newSlice, true);
-          ((SeqComparisonFloat) invEquals).can_be_eq = true;
+          invEquals = SeqSeqFloatEqual.instantiate (newSlice, true);
         }
       } else {
         throw new Error ("No known Comparison invariant to convert equality into");

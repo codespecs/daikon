@@ -24,8 +24,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define VALUETRACKER ValueTracker
   #define INT(x) Int ## x
   #define LINEARBINARY LinearBinary
-  #define PAIRWISE_COMPARE PairwiseIntComparison
-  #define SEQ_COMPARISON SeqComparison
+  #define SEQSEQINTEQUAL SeqSeqIntEqual
   #define SEQ_SUBSCRIPT SequenceScalarSubscript
   #define NO_DUPS NoDuplicates
 #else
@@ -36,8 +35,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define VALUETRACKER FloatValueTracker
   #define INT(x) Float ## x
   #define LINEARBINARY LinearBinaryFloat
-  #define PAIRWISE_COMPARE PairwiseFloatComparison
-  #define SEQ_COMPARISON SeqComparisonFloat
+  #define SEQSEQINTEQUAL SeqSeqFloatEqual
   #define SEQ_SUBSCRIPT SequenceFloatSubscript
   #define NO_DUPS NoDuplicatesFloat
 #endif
@@ -47,6 +45,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "IntEqual"
   #define EQUALS(a,b) (a == b)
   #define EQUALSstring "=="
+  #define PAIRWISE_COMPARE PairwiseIntEqual
   #define DEBUGINTEQUAL debugIntEqual
   #define SEQINTEQUAL seqIntEqual
 #elif defined(EQUALFLOAT)
@@ -54,6 +53,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
   #define EQUALSstring "=="
+  #define PAIRWISE_COMPARE PairwiseFloatEqual
   #define DEBUGINTEQUAL debugIntEqual
   #define SEQINTEQUAL seqIntEqual
 #elif defined(NONEQUAL)
@@ -76,6 +76,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "IntLessThan"
   #define EQUALS(a,b) (a < b)
   #define EQUALSstring "<"
+  #define PAIRWISE_COMPARE PairwiseIntLessThan
   #define DEBUGINTEQUAL debugIntLessThan
   #define SEQINTEQUAL seqIntLessThan
 #elif defined(LESSTHANFLOAT)
@@ -84,6 +85,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
   #define EQUALSstring "<"
+  #define PAIRWISE_COMPARE PairwiseFloatLessThan
   #define DEBUGINTEQUAL debugIntLessThan
   #define SEQINTEQUAL seqIntLessThan
 #elif defined(LESSEQUAL)
@@ -92,6 +94,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "IntLessEqual"
   #define EQUALS(a,b) (a <= b)
   #define EQUALSstring "<="
+  #define PAIRWISE_COMPARE PairwiseIntLessEqual
   #define DEBUGINTEQUAL debugIntLessEqual
   #define SEQINTEQUAL seqIntLessEqual
 #elif defined(LESSEQUALFLOAT)
@@ -100,6 +103,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
   #define EQUALSstring "<="
+  #define PAIRWISE_COMPARE PairwiseFloatLessEqual
   #define DEBUGINTEQUAL debugIntLessEqual
   #define SEQINTEQUAL seqIntLessEqual
 #elif defined(GREATERTHAN)
@@ -108,6 +112,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "IntGreaterThan"
   #define EQUALS(a,b) (a > b)
   #define EQUALSstring ">"
+  #define PAIRWISE_COMPARE PairwiseIntGreaterThan
   #define DEBUGINTEQUAL debugIntGreaterThan
   #define SEQINTEQUAL seqIntGreaterThan
 #elif defined(GREATERTHANFLOAT)
@@ -116,6 +121,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
   #define EQUALSstring ">"
+  #define PAIRWISE_COMPARE PairwiseFloatGreaterThan
   #define DEBUGINTEQUAL debugIntGreaterThan
   #define SEQINTEQUAL seqIntGreaterThan
 #elif defined(GREATEREQUAL)
@@ -124,6 +130,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "IntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
   #define EQUALSstring ">="
+  #define PAIRWISE_COMPARE PairwiseIntGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
   #define SEQINTEQUAL seqIntGreaterEqual
 #elif defined(GREATEREQUALFLOAT)
@@ -132,6 +139,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define EQUALSstring ">="
+  #define PAIRWISE_COMPARE PairwiseFloatGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
   #define SEQINTEQUAL seqIntGreaterEqual
 #else
@@ -951,33 +959,21 @@ invariants.
         || (der1.index_shift != der2.index_shift))
       return (null);
 
+    #if (defined(NONEQUAL) || defined(NONEQUALFLOAT))
+    return null;
+    #else
     // Build a template for PAIRWISE_COMPARE
     supTemplate.invTypes[0] = PAIRWISE_COMPARE.class;
     supTemplate.varInfos[0][0] = der1.seqvar();
     supTemplate.varInfos[0][1] = der2.seqvar();
 
-    // matching invariants must also match our comparison
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
-    if (sl != null) {
-      boolean match = false;
+    if (logOn() && (sl!=null)) {
       PAIRWISE_COMPARE pw = (PAIRWISE_COMPARE) supTemplate.results[0];
-      #if defined (LESSTHAN) || defined (LESSTHANFLOAT)
-        match = pw.core.can_be_lt && !pw.core.can_be_eq;
-      #elif defined (LESSEQUAL) || defined (LESSEQUALFLOAT)
-        match = pw.core.can_be_lt && pw.core.can_be_eq;
-      #elif defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
-        match = pw.core.can_be_gt && !pw.core.can_be_eq;
-      #elif defined (GREATEREQUAL) || defined (GREATEREQUALFLOAT)
-        match = pw.core.can_be_gt && pw.core.can_be_eq;
-      #elif defined (EQUAL) || defined (EQUALFLOAT)
-        match = pw.core.can_be_eq && !pw.core.can_be_lt && !pw.core.can_be_gt;
-      #endif
-      if (logOn())
-        inv.log ((match ? "" : "Not ") + "suppressed by '" + pw.format() +"'");
-      if (!match)
-        sl = null;
+      inv.log ("Suppressed by '" + pw.format() +"'");
     }
     return (sl);
+    #endif
   }
 #endif
 
@@ -1011,11 +1007,11 @@ invariants.
     VarInfo bv1 = v1.derived.getBases()[0];
     VarInfo bv2 = v2.derived.getBases()[0];
     if (bv1.rep_type.baseIsString())
-      supTemplate.invTypes[0] = SeqComparisonString.class;
+      supTemplate.invTypes[0] = SeqSeqStringEqual.class;
     else if (bv1.rep_type.baseIsFloat())
-      supTemplate.invTypes[0] = SeqComparisonFloat.class;
+      supTemplate.invTypes[0] = SeqSeqFloatEqual.class;
     else
-      supTemplate.invTypes[0] = SeqComparison.class;
+      supTemplate.invTypes[0] = SeqSeqIntEqual.class;
     supTemplate.varInfos[0][0] = bv1;
     supTemplate.varInfos[0][1] = bv2;
     if (logOn())
@@ -1023,23 +1019,8 @@ invariants.
 
     // Invariants must match and represent equality
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
-    if (sl != null) {
-      boolean is_eq = false;
-      Invariant seqcomp = supTemplate.results[0];
-      if (seqcomp instanceof SeqComparison)
-        is_eq = ((SeqComparison) seqcomp).isEqual();
-      else if (seqcomp instanceof SeqComparisonFloat)
-        is_eq = ((SeqComparisonFloat) seqcomp).isEqual();
-      else
-        is_eq = ((SeqComparisonString) seqcomp).isEqual();
-      if (logOn())
-        inv.log ("Invariant " + (is_eq ? "" : "not ") + "suppressed by '"
-                              + seqcomp.format() + "'");
-      if (!is_eq)
-        sl = null;
-    } else {
-       inv.log ("invariant not suppressed (SeqComparison not found)");
-    }
+    if (sl == null)
+      inv.log ("invariant not suppressed (SeqComparison not found)");
     return (sl);
   }
 
@@ -1072,14 +1053,14 @@ invariants.
       return (null);
 
     // Build a template for lexical comparison
-    supTemplate.invTypes[0] = SEQ_COMPARISON.class;
+    supTemplate.invTypes[0] = SEQSEQINTEQUAL.class;
     supTemplate.varInfos[0][0] = der1.seqvar();
     supTemplate.varInfos[0][1] = der2.seqvar();
 
     // Matching invariants must represent equality
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
     if (sl != null) {
-      SEQ_COMPARISON seq = (SEQ_COMPARISON) supTemplate.results[0];
+      SEQSEQINTEQUAL seq = (SEQSEQINTEQUAL) supTemplate.results[0];
       if (logOn())
         inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"
                 + seq.format() +"'");
@@ -1116,7 +1097,7 @@ invariants.
       return (null);
 
     // Build a template for sequences being equal
-    supTemplate.invTypes[0] = SEQ_COMPARISON.class;
+    supTemplate.invTypes[0] = SEQSEQINTEQUAL.class;
     supTemplate.varInfos[0][0] = der1.seqvar();
     supTemplate.varInfos[0][1] = der2.seqvar();
 
@@ -1129,7 +1110,7 @@ invariants.
     // invariant for the subscripts only exists if they are equal.
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
     if (sl != null) {
-      SEQ_COMPARISON seq = (SEQ_COMPARISON) supTemplate.results[0];
+      SEQSEQINTEQUAL seq = (SEQSEQINTEQUAL) supTemplate.results[0];
       if (logOn()) {
         Invariant eq = supTemplate.results[1];
         inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"

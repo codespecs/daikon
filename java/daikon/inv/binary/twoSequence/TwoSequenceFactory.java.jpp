@@ -13,10 +13,13 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define PROGLANGTYPE INT_ARRAY
   #define LINEARBINARY LinearBinary
-  #define SEQCOMPARISON SeqComparison
+  #define SEQCOMPARISON_EQ SeqSeqIntEqual
+  #define SEQCOMPARISON_LT SeqSeqIntLessThan
+  #define SEQCOMPARISON_GT SeqSeqIntGreaterThan
+  #define SEQCOMPARISON_LE SeqSeqIntLessEqual
+  #define SEQCOMPARISON_GE SeqSeqIntGreaterEqual
   #define REVERSE Reverse
   #define SUBSEQUENCE SubSequence
-  #define PAIRWISEINTCOMPARISON PairwiseIntComparison
   #define PAIRWISELINEARBINARY PairwiseLinearBinary
   #define PAIRWISEFUNCTIONUNARY PairwiseFunctionUnary
   #define FUNCTIONS Functions
@@ -26,10 +29,13 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE double
   #define PROGLANGTYPE DOUBLE_ARRAY
   #define LINEARBINARY LinearBinaryFloat
-  #define SEQCOMPARISON SeqComparisonFloat
+  #define SEQCOMPARISON_EQ SeqSeqFloatEqual
+  #define SEQCOMPARISON_LT SeqSeqFloatLessThan
+  #define SEQCOMPARISON_GT SeqSeqFloatGreaterThan
+  #define SEQCOMPARISON_LE SeqSeqFloatLessEqual
+  #define SEQCOMPARISON_GE SeqSeqFloatGreaterEqual
   #define REVERSE ReverseFloat
   #define SUBSEQUENCE SubSequenceFloat
-  #define PAIRWISEINTCOMPARISON PairwiseFloatComparison
   #define PAIRWISELINEARBINARY PairwiseLinearBinaryFloat
   #define PAIRWISEFUNCTIONUNARY PairwiseFunctionUnaryFloat
   #define FUNCTIONS FunctionsFloat
@@ -107,7 +113,11 @@ public final class CLASSNAME {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SEQCOMPARISON.instantiate(ppt, false));
+        result.add(SEQCOMPARISON_EQ.instantiate(ppt, false));
+        result.add(SEQCOMPARISON_LT.instantiate(ppt, false));
+        result.add(SEQCOMPARISON_GT.instantiate(ppt, false));
+        result.add(SEQCOMPARISON_LE.instantiate(ppt, false));
+        result.add(SEQCOMPARISON_GE.instantiate(ppt, false));
       }
     }
     { // previously (pass == 2)
@@ -116,8 +126,18 @@ public final class CLASSNAME {
       result.add(SUBSEQUENCE.instantiate(ppt));
 #if defined(TYPELONG)
       result.add(SUBSET.instantiate(ppt));
+      result.add(PairwiseIntEqual.instantiate(ppt));
+      result.add(PairwiseIntLessThan.instantiate(ppt));
+      result.add(PairwiseIntGreaterThan.instantiate(ppt));
+      result.add(PairwiseIntLessEqual.instantiate(ppt));
+      result.add(PairwiseIntGreaterEqual.instantiate(ppt));
+#else
+      result.add(PairwiseFloatEqual.instantiate(ppt));
+      result.add(PairwiseFloatLessThan.instantiate(ppt));
+      result.add(PairwiseFloatGreaterThan.instantiate(ppt));
+      result.add(PairwiseFloatLessEqual.instantiate(ppt));
+      result.add(PairwiseFloatGreaterEqual.instantiate(ppt));
 #endif
-      result.add(PAIRWISEINTCOMPARISON.instantiate(ppt));
       result.add(PAIRWISELINEARBINARY.instantiate(ppt));
       int numFunctions = FUNCTIONS.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {

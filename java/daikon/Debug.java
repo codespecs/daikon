@@ -3,6 +3,7 @@ package daikon;
 import daikon.*;
 import java.io.Serializable;
 import java.util.*;
+import daikon.inv.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -43,8 +44,7 @@ public class Debug {
       // "IntEqual",
       //"IntGreaterEqual",
       //"SequenceScalarSubscriptFactory",
-      "LowerBound",
-      "UpperBound",
+      "PairwiseIntEqual", "PptSliceEquality"
     };
 
   /**
@@ -61,7 +61,10 @@ public class Debug {
       // "misc.Compar1.main(java.lang.String[]):::ENTER"
       // "DataStructures.DisjSets.find(int):::EXIT"
       // "DataStructures.StackAr.topAndPop():::EXIT",
-      "DataStructures.StackAr.makeEmpty()V:::ENTER"
+      //"DataStructures.StackAr.top():::EXIT75",
+      //"DataStructures.StackAr.pop():::ENTER",
+      "unionCareful(int, int):::EXIT"
+
     };
 
   /**
@@ -84,7 +87,10 @@ public class Debug {
       // { "orig(this.s[])",    "x" },
       // { "x",                 "orig(this.s[])" },
       // {"return", "orig(this.theArray[this.topOfStack])"},
-      { "this.topOfStack" },
+      { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
+      // { "orig(this.s[post(set1)+1..])", "this.s[orig(set1)+1..]" },
+      { "orig(this.s[post(set1)..])" },
+      { "this.s[orig(set1)..]" },
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -401,5 +407,23 @@ public class Debug {
     return (false);
   }
 
+ public static void check (PptMap all_ppts, String msg) {
+   if (all_ppts==null) return;
+    boolean found = false;
+
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      for (Iterator j = ppt.views_iterator(); j.hasNext(); ) {
+        PptSlice slice = (PptSlice) j.next();
+        for (int k = 0; k < slice.invs.size(); k++ ) {
+          Invariant inv = (Invariant) slice.invs.get(k);
+          if (inv.log (msg + ": found " + inv.format()))
+            found = true;
+        }
+      }
+    }
+    if (!found)
+      debugTrack.fine ("Found no points at '" + msg + "'");
+  }
 
 }

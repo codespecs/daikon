@@ -628,17 +628,11 @@ public final class CLASSNAME
       // have handled it, but in case it does, no big deal, just say no suppression
       if (sclSequence == seqvar) return null;
       {
-        supTemplate.invTypes[0] = PairwiseIntComparison.class;
+        supTemplate.invTypes[0] = PairwiseIntEqual.class;
         SuppressionLink sl = byTemplate (supTemplate, inv);
-        if (sl != null) {
-          String comparator = ((PairwiseIntComparison) supTemplate.results[0]).getComparator();
-          if (comparator.indexOf ("==") != -1 ||
-              comparator.indexOf ("?") != -1) {
-            return sl;
-          }
-        }
+        if (sl != null)
+          return sl;
       }
-
       {
         // Try to see if SubSet invariant is there
         supTemplate.resetResults();
