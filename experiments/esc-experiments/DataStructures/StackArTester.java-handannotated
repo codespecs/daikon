@@ -1,22 +1,28 @@
+/** -*- java -*- file */
 package DataStructures;
 
 import java.util.*;
 
 public class StackArTester
 {
-  private StackAr s = new StackAr(0);
+  /*@ spec_public non_null */ private StackAr s = new StackAr(0);
 
   private StackArTester() { }
 
   public void doNew(int size)
+  /*@ requires size >= 0 */
+  /*@ requires size <= 100 */
   {
     s = new StackAr(size);
     observe();
   }
 
-  private int phase;
+  /*@ spec_public */ private int phase;
   private final int maxPhase = 5;
   public Object createItem(int i)
+  /*@ requires i >= 0 */
+  /*@ requires i <= 1000 */
+  /*@ ensures \result != null */
   {
     switch (phase) {
     case 0:
@@ -35,16 +41,18 @@ public class StackArTester
   }
 
   public void push(int i)
+  /*@ requires i >= 0 */
+  /*@ requires i <= 1000 */
   {
     try {
-      s.push(createItem(i));
+      /*@ nowarn */ s.push(createItem(i));
       observe();
     } catch (Overflow e) { }
   }
 
   public void topAndPop()
   {
-    s.topAndPop();
+    /*@ nowarn */ s.topAndPop();
     observe();
   }
   public void top()
@@ -61,9 +69,13 @@ public class StackArTester
   }
 
   public void repPush(int n)
+  /*@ requires n >= 0 */
+  /*@ requires n <= 100 */
   {
     for (int i=0; i < n; i++) {
       int x = (int)(1000 * Math.random());
+      /*@ assume x >= 0 */
+      /*@ assume x < 1000 */
       push(x);
     }
   }
@@ -83,6 +95,8 @@ public class StackArTester
   }
 
   public void fillAndEmpty(int n)
+  /*@ requires n >= 0 */
+  /*@ requires n <= 100 */
   {
     doNew(n);
     repPush(n);
@@ -93,12 +107,14 @@ public class StackArTester
   }
 
   public void fillWithSame(int n)
+  /*@ requires n >= 0 */
+  /*@ requires n <= 100 */
   {
     doNew(n);
     Object elt = createItem(n);
     for (int i=0; i < n; i++) {
       try {
-	s.push(elt);
+        /*@ nowarn */ s.push(elt);
         observe();
       } catch (Overflow e) { }
     }
