@@ -1,10 +1,10 @@
 package PolyCalc;
 
-/** RatTermVec is a mutable, growable array of RatTerms.  Such arrays
+/** RatTermVec is a mutable, growable array of RatElts.  Such arrays
     are commonly referred to as <i>vectors</i>.	 One can access
-    RatTerms in a RatTermVec using an integer index (starting at
+    RatElts in a RatTermVec using an integer index (starting at
     zero).  The size of a RatTermVec grows (or shrinks) as needed to
-    accommodate the addition and removal of RatTerms.
+    accommodate the addition and removal of RatElts.
     <p>
     The current state of a RatTermVec can be notated as a sequence:
     [Ta, Tb, ...].  Examples of RatTermVecs include [] (an empty
@@ -13,13 +13,13 @@ package PolyCalc;
 */
 public class RatTermVec2 {
   // Definitions:
-  // For a RatTermVec r, let T(r,i) be "r.terms.get(i)"
+  // For a RatTermVec r, let T(r,i) be "r.elts.get(i)"
 
-  // AF(r) = forall i=0 to r.terms.size()-1, [T(r,0), T(r,1), ..., T(r,i), ...]
+  // AF(r) = forall i=0 to r.elts.size()-1, [T(r,0), T(r,1), ..., T(r,i), ...]
 
-  // RI(r) = r.terms != null && forall i=0 to r.terms.size()-1, T(r,i) is-a Term
+  // RI(r) = r.elts != null && forall i=0 to r.elts.size()-1, T(r,i) is-a Term
 
-  private RatTerm[] terms = new RatTerm[10];
+  private RatTerm[] elts = new RatTerm[10];
   private int used = 0;
 
   /** @effects: constructs a new empty RatTermVec, []. */
@@ -27,7 +27,7 @@ public class RatTermVec2 {
   }
 
   private RatTermVec2(RatTermVec2 other) {
-    System.arraycopy(other.terms, 0, terms, 0, other.used);
+    System.arraycopy(other.elts, 0, elts, 0, other.used);
     used = other.used;
   }
 
@@ -44,7 +44,7 @@ public class RatTermVec2 {
       "v.get(1)" will return the RatTerm t3.
   */
   public RatTerm get(int index) {
-    return terms[index];
+    return elts[index];
   }
 
   /** Appending operation.
@@ -57,7 +57,7 @@ public class RatTermVec2 {
       "v.addElement(t3);" will make v_post = [t2, t3, t4, t3].
   */
   public void addElement(RatTerm t) {
-    terms[used++] = t;
+    elts[used++] = t;
   }
 
   /** Insertion operation.
@@ -73,8 +73,8 @@ public class RatTermVec2 {
       "v.insert(t5, 1);" will make v_post = [t2, t5, t3, t4].
   */
   public void insert(RatTerm t, int index) {
-    System.arraycopy(terms, index, terms, index+1, (used - index));
-    terms[index] = t;
+    System.arraycopy(elts, index, elts, index+1, (used - index));
+    elts[index] = t;
     used++;
   }
 
@@ -91,9 +91,9 @@ public class RatTermVec2 {
       "v.remove(1);" will make v_post = [t2, t4].
   */
   public void remove(int index) {
-    System.arraycopy(terms, index+1, terms, index, (used - (index+1)));
+    System.arraycopy(elts, index+1, elts, index, (used - (index+1)));
     used--;
-    terms[used] = null;
+    elts[used] = null;
   }
 
   /** Replacement operation.
@@ -106,7 +106,7 @@ public class RatTermVec2 {
       "v.set(t5, 1);" will make v_post = [t2, t5, t4].
   */
   public void set(RatTerm t, int index) {
-    terms[index] = t;
+    elts[index] = t;
   }
 
   /** Copy operation.
@@ -121,7 +121,7 @@ public class RatTermVec2 {
 
   /** @return implementation specific debugging string. */
   public String printDebug() {
-    return "RatTermVec<terms:"+this.terms+">";
+    return "RatTermVec<elts:"+this.elts+">";
   }
 
   public String toString() { return printDebug(); }
