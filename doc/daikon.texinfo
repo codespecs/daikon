@@ -1079,13 +1079,16 @@ way you did before; the only behavioral change is writing a
 though multiple @file{.decls} files might have been created (one for
 each source file) when the program was instrumented.
 
-The instrumented Java program creates its @file{.dtrace} file in the
-@file{daikon-output/} subdirectory of the current directory.  It
-overwrites any previously existing @file{.dtrace} file.
+By default, the instrumented Java program creates its @file{.dtrace}
+file in the @file{daikon-output/} subdirectory of the current directory,
+and it overwrites any previously existing @file{.dtrace} file.
 
-The instrumented C/C++ program creates its @file{.dtrace} file in the
-current directory.  If a @file{.dtrace} file already existed, it is appended
-to.
+By default, the instrumented C/C++ program creates its @file{.dtrace}
+file in the current directory, and if a @file{.dtrace} file already
+existed, it is appended to.
+
+Environment variables DTRACEFILE and DTRACEAPPEND can override the default
+behaviors; see the documentation for the respective instrumenters.
 
 @c After running your program, run @command{bin/modbit-munge.pl} on the
 @c resulting @file{.dtrace} files:
@@ -2063,8 +2066,10 @@ to the current directory at runtime, or is absolute.  If the DTRACEFILE
 environment variable is set when the instrumented program is run, it
 overrides this default.  Furthermore, if the DTRACEAPPEND environment
 variable is set to any value, the dtrace file will be appended to
-instead of overwritten; this feature does not work with compressed data
-trace files.
+instead of overwritten.  Compressed data trace files may not be appended
+to.  In some cases you may find a single large data trace file more
+convenient; in other cases, a collection of smaller data trace files may
+give you more control over which subsets of runs to invoke Daikon on.
 
 @item -declsfiledir=@var{decldir}
 Specifies the directory in which to create
