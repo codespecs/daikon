@@ -2,6 +2,8 @@ package daikon;
 
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
+import daikon.diff.InvMap;
+import daikon.inv.Invariant;
 
 
 import utilMDE.*;
@@ -1315,15 +1317,43 @@ public final class FileIO {
     UtilMDE.writeObject(record, file);
   }
 
-  public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
-    throws IOException
-  {
+  /**
+   * Read either a serialized PptMap or a InvMap and return a
+   * PptMap.  If an InvMap is specified, it is converted to a PptMap
+   */
+  public static PptMap read_serialized_pptmap(File file,
+                                              boolean use_saved_config)
+    throws IOException {
+
     try {
-      SerialFormat record = (SerialFormat) UtilMDE.readObject(file);
-      if (use_saved_config) {
-        Configuration.getInstance().overlap(record.config);
+      Object obj = UtilMDE.readObject (file);
+      if (obj instanceof FileIO.SerialFormat) {
+        SerialFormat record = (SerialFormat) obj;
+        if (use_saved_config) {
+          Configuration.getInstance().overlap(record.config);
+        }
+        return (record.map);
+      } else if (obj instanceof InvMap) {
+        InvMap invs = (InvMap) obj;
+        PptMap ppts = new PptMap();
+        for (Iterator i = invs.pptIterator(); i.hasNext(); ) {
+          PptTopLevel ppt = (PptTopLevel) i.next();
+          PptTopLevel nppt = new PptTopLevel (ppt.name, ppt.var_infos);
+          nppt.set_sample_number (ppt.num_samples());
+          ppts.add (nppt);
+          List /*Invariants*/ inv_list = invs.get (ppt);
+          for (Iterator j = inv_list.iterator(); j.hasNext(); ) {
+            Invariant inv = (Invariant) j.next();
+            PptSlice slice = nppt.get_or_instantiate_slice (inv.ppt.var_infos);
+            inv.ppt = slice;
+            slice.addInvariant (inv);
+          }
+        }
+        return (ppts);
+      } else {
+        throw new IOException ("Unexpected serialized file type: "
+                               +obj.getClass());
       }
-      return record.map;
     } catch (ClassNotFoundException e) {
       throw new IOException("Error while loading inv file: " + e);
     } catch (InvalidClassException e) {
@@ -1331,151 +1361,6 @@ public final class FileIO {
     }
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException
-  }
-
-
-///////////////////////////////////////////////////////////////////////////
-/// Alternate implementation of read_data_trace_file
-/// (The two implementations need to be merged into one.)
-///
-
-  public interface DtraceProcessor {
-    void visit(daikon.PptTopLevel ppt, ValueTuple vt);
-  }
-
-  public static void readDataTraceFile(Collection files, // [File]
-                                       PptMap all_ppts,
-                                       DtraceProcessor dtraceProcessor)
-    throws IOException
-  {
-
-    for (Iterator i = files.iterator(); i.hasNext(); ) {
-      File file = (File) i.next();
-      try {
-        readDataTraceFile(file, all_ppts, dtraceProcessor);
-      }
-      catch (IOException e) {
-        if (e.getMessage().equals("Corrupt GZIP trailer")) {
-          System.out.print(file.getName() + " has a corrupt gzip trailer.  " +
-                           "All possible data was recovered.\n");
-        } else {
-          throw e;
-        }
-      }
-    }
-  }
-
-  /** Read data from .dtrace file. **/
-  static void readDataTraceFile(File filename, PptMap all_ppts,
-                                DtraceProcessor dtraceProcessor)
-    throws IOException
-  {
-    int pptcount = 1;
-    if (debugRead.isLoggable(Level.FINE)) {
-      debugRead.fine ("read_data_trace_file " + filename
-                      + ((Daikon.ppt_regexp != null) ? " " +
-                         Daikon.ppt_regexp.getPattern() : "")
-                      + ((Daikon.ppt_omit_regexp != null) ? " " +
-                         Daikon.ppt_omit_regexp.getPattern() : ""));
-    }
-
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
-    data_trace_reader = reader;
-    data_trace_filename = filename;
-
-    // Used for debugging: write new data trace file.
-    if (Global.debugPrintDtrace) {
-      Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
-    }
-
-      for (String line_ = reader.readLine(); line_ != null; line_ = reader.readLine()) {
-        if (line_.equals("") || isComment(line_)) {
-          continue;
-        }
-
-        String line = line_.intern();
-
-        if ((line == declaration_header) || !ppt_included (line)) {
-          // Discard this entire program point information
-          // System.out.println("Discarding non-matching dtrace program point " + line);
-          while ((line != null) && !line.equals(""))
-            line = reader.readLine();
-          continue;
-        }
-
-        String ppt_name = line; // already interned
-        {
-          try {
-            PptName parsed = new PptName(ppt_name);
-            // Enable the code below when Daikon stops using different
-            // ppts for different exits
-            if (false) {
-              // Rename EXITnn to EXIT
-              if (parsed.isExitPoint()) {
-                ppt_name = parsed.makeExit().name().intern();
-              }
-            }
-          } catch (Error e) {
-            throw new Error("Illegal program point name \"" + ppt_name + "\""
-                            + " at " + data_trace_filename
-                            + " line " + reader.getLineNumber());
-          }
-        }
-
-        if (pptcount++ % 10000 == 0)
-            System.out.print(":");
-
-        PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-        Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
-
-        VarInfo[] vis = ppt.var_infos;
-
-        // not vis.length, as that includes constants, derived variables, etc.
-        // Actually, we do want to leave space for _orig vars.
-        // And for the time being (and possibly forever), for derived variables.
-        int num_tracevars = ppt.num_tracevars;
-        int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-        // This is no longer true; we now derive variables before reading dtrace!
-        // Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
-
-        // Read an invocation nonce if one exists
-        Integer nonce = null;
-        {
-          // arbitrary number, hopefully big enough; catch exceptions
-          reader.mark(100);
-          String nonce_name_maybe;
-          try {
-            nonce_name_maybe = reader.readLine();
-          } catch (Exception e) {
-            nonce_name_maybe = null;
-          }
-          reader.reset();
-          if ("this_invocation_nonce".equals(nonce_name_maybe)) {
-
-              String nonce_name = reader.readLine();
-              Assert.assertTrue(nonce_name.equals("this_invocation_nonce"));
-              nonce = new Integer(reader.readLine());
-
-              if (Global.debugPrintDtrace) {
-                to_write_nonce = true;
-                nonce_value = nonce.toString();
-                nonce_string = nonce_name_maybe;
-              }
-          }
-        }
-
-        Object[] vals = new Object[vals_array_size];
-        int[] mods = new int[vals_array_size];
-
-        // Read a single record from the trace file;
-        // fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
-        ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
-
-        dtraceProcessor.visit(ppt, vt);
-      }
-    data_trace_filename = null;
-    data_trace_reader = null;
   }
 
   /**
