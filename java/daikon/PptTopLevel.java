@@ -606,6 +606,7 @@ public class PptTopLevel
 	int tj = transform[j];
 	if (tj == -1) continue;
 	int this_value_index = var_infos[j].value_index;
+	if (this_value_index == -1) continue; // is_static_constant
 	int ppt_value_index = ppt.var_infos[tj].value_index;
 	vals[ppt_value_index] = vt.vals[this_value_index];
 	mods[ppt_value_index] = vt.mods[this_value_index];

@@ -963,11 +963,12 @@ public final class FileIO
       Assert.assert(ppt.var_infos[i].isDerived(),
                     "variable not derived: " + ppt.var_infos[i].repr());
     }
+    int num_const = ppt.num_static_constant_vars;
     for (int i=filled_slots; i<ppt.var_infos.length; i++) {
       // Add this derived variable's value
       ValueAndModified vm = ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
-      vals[i] = vm.value;
-      mods[i] = vm.modified;
+      vals[i - num_const] = vm.value;
+      mods[i - num_const] = vm.modified;
     }
   }
 
