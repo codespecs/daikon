@@ -59,12 +59,31 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
+  /** returns a prototype CLASSNAME invariant **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
+
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return (instantiate (slice));
+  }
+
+  public static CLASSNAME instantiate (PptSlice slice) {
     if (!dkconfig_enabled) return null;
-    if (ppt.debug.isLoggable(Level.FINE)) {
-      ppt.debug.fine (CLASSSTRING + ".instantiate(" + ppt.name() + ")");
+
+    #if defined (TYPELONG)
+      // Don't look for linearbinary over hashcodes and booleans
+      if (!slice.var_infos[0].file_rep_type.isIntegral()
+          || !slice.var_infos[1].file_rep_type.isIntegral())
+        return null;
+    #endif
+
+    if (slice.debug.isLoggable(Level.FINE)) {
+      slice.debug.fine (CLASSSTRING + ".instantiate(" + slice.name() + ")");
     }
-    return new CLASSNAME(ppt);
+    return new CLASSNAME(slice);
   }
 
   public Object clone() {

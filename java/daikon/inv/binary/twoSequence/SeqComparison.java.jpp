@@ -12,11 +12,13 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
   #define NUMERIC
+  #define IS_INT
   #define ARRAYCOMPARATOR new ArraysMDE.LongArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset (v1, v2) && \
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequence
-  #define BASEISTYPE baseIsIntegral()
+  #define BASE_IS_TYPE baseIsIntegral()
+  #define BASE_IS_SCALAR baseIsScalar()
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define PAIRWISECOMP_EQ PairwiseIntEqual
   #define PAIRWISECOMP_LT PairwiseIntLessThan
@@ -32,10 +34,12 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
   #define NUMERIC
+  #define IS_FLOAT
   #define ARRAYCOMPARATOR Global.fuzzy.new DoubleArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch (v1, v2)
   #define SUBSEQUENCE SubSequenceFloat
-  #define BASEISTYPE baseIsFloat()
+  #define BASE_IS_TYPE baseIsFloat()
+  #define BASE_IS_SCALAR baseIsFloat()
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define PAIRWISECOMP_EQ PairwiseFloatEqual
   #define PAIRWISECOMP_LT PairwiseFloatLessThan
@@ -50,11 +54,13 @@ The correct way to build the system is to run 'make'.
 #elif (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
+  #define IS_STRING
   #define ARRAYCOMPARATOR new ArraysMDE.StringArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset (v1, v2) && \
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequenceString
-  #define BASEISTYPE baseIsString()
+  #define BASE_IS_TYPE baseIsString()
+  #define BASE_IS_SCALAR baseIsString()
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
   #define PAIRWISECOMP_EQ PairwiseStringEqual
   #define PAIRWISECOMP_LT PairwiseStringLessThan
@@ -298,44 +304,48 @@ public class SEQSEQINTEQUAL
 
   #endif
 
-     public static SEQSEQINTEQUAL instantiate(PptSlice ppt) {
-       return instantiate (ppt, false);
-     }
+  /** Returns the prototype invariant for SEQSEQINTEQUAL **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new SEQSEQINTEQUAL (null, false));
+  }
 
-  public static SEQSEQINTEQUAL instantiate(PptSlice ppt, boolean onlyEq) {
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+
+    return instantiate (slice);
+  }
+
+  public static SEQSEQINTEQUAL instantiate (PptSlice slice) {
+
     if (!dkconfig_enabled) return null;
 
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
-
-    // System.out.println("Ppt: " + ppt.name());
-    // System.out.println("vars[0]: " + var1.type.format() + " " + var1.name + " " + var1.aux);
-    // System.out.println("vars[1]: " + var2.type.format() + " " + var2.name + " " + var2.aux);
-
+    VarInfo var1 = slice.var_infos[0];
+    VarInfo var2 = slice.var_infos[1];
     ProglangType type1 = var1.type;
     ProglangType type2 = var2.type;
 
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
-                          && type1.BASEISTYPE
+                          && type1.BASE_IS_TYPE
                           && (type2.dimensions() == 1)
-                          && type2.BASEISTYPE));
+                          && type2.BASE_IS_TYPE));
     if (only_eq) return null;
     #endif
 
     SEQSEQINTEQUAL result;
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      result = new SEQSEQINTEQUAL(ppt, true);
+      result = new SEQSEQINTEQUAL(slice, true);
     } else {
       #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-      return null;
+        return null;
       #else
-      result = new SEQSEQINTEQUAL(ppt, false);
+        result = new SEQSEQINTEQUAL(slice, false);
       #endif
     }
-    // System.out.println("SEQSEQINTEQUAL.instantiate => " + result.repr());
     return result;
   }
 

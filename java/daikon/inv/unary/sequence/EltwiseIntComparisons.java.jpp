@@ -155,6 +155,18 @@ public class CLASSNAME
     super(ppt);
   }
 
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
+
+  /** Instantiate the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
   public static CLASSNAME instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     // Don't compute ordering relationships over object addresses for

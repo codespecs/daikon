@@ -12,12 +12,14 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
   #define ELEMENTISTYPE elementIsIntegral()
+  #define BASE_IS_SCALAR baseIsScalar()
   #define SUBSEQUENCE SubSequence
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
   #define ELEMENTISTYPE elementIsFloat()
+  #define BASE_IS_SCALAR baseIsFloat()
   #define SUBSEQUENCE SubSequenceFloat
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
 #endif
@@ -178,6 +180,18 @@ public class PAIRWISEINTEQUAL
 
   protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
+  }
+
+  /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new PAIRWISEINTEQUAL ((PptSlice) null));
+  }
+
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT))

@@ -13,12 +13,14 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
   #define CLASSSTRING "Reverse"
+  #define BASE_IS_TYPE baseIsScalar()
   #define EQUAL(a,b) ((a) == (b))
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME ReverseFloat
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
   #define CLASSSTRING "ReverseFloat"
+  #define BASE_IS_TYPE baseIsFloat()
   #define EQUAL(a,b) Global.fuzzy.eq(a, b)
 #endif
 
@@ -58,9 +60,22 @@ public class CLASSNAME
     super(ppt);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new CLASSNAME (null));
+  }
+
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+
+    return instantiate (slice);
+  }
+
+  public static CLASSNAME instantiate (PptSlice slice) {
     if (!dkconfig_enabled) return null;
-    CLASSNAME result = new CLASSNAME(ppt);
+    CLASSNAME result = new CLASSNAME(slice);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {

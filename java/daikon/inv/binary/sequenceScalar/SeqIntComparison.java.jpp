@@ -160,36 +160,38 @@ public final class SEQINTEQUAL
 
   static boolean debugSeqIntComparison = false;
 
-  protected SEQINTEQUAL(PptSlice ppt, boolean seq_first) {
-    super(ppt, seq_first);
-    Assert.assertTrue(sclvar().rep_type == ProglangType.PROGLANGTYPESCALAR);
-    Assert.assertTrue(seqvar().rep_type == ProglangType.PROGLANGTYPEARRAY);
+  protected SEQINTEQUAL(PptSlice ppt) {
+    super(ppt);
   }
 
-  // This constructor enables testing with InvariantFormatTester.
-  public static SEQINTEQUAL instantiate(PptSlice ppt) {
-    return instantiate(ppt,true);
+  /** Returns the prototype invariant for SEQINTEQUAL **/
+  public static Invariant get_proto () {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new SEQINTEQUAL (null));
   }
 
-  public static SEQINTEQUAL instantiate(PptSlice ppt, boolean seq_first) {
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static SEQINTEQUAL instantiate (PptSlice slice) {
+
     if (!dkconfig_enabled) return null;
 
-    VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
-    VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
-
-    // if (isEqualToObviousSeqIntComparison(sclvar, seqvar)) {
-    //   Global.implied_noninstantiated_invariants += 1;
-    //   if (debugSeqIntComparison) {
-    //     System.out.println("SeqIntComparison not instantiated (obvious): "
-    //                        + sclvar.name + " vs. " + seqvar.name);
-    //   }
-    //   return null;
-    // }
-
-    if (debugSeqIntComparison) {
-      System.out.println(SEQINTEQUALstring + " instantiated: "
-                         + sclvar.name + " vs. " + seqvar.name);
+    VarInfo seqvar = null;
+    VarInfo sclvar = null;
+    if (slice.var_infos[0].rep_type == ProglangType.PROGLANGTYPEARRAY) {
+      seqvar = slice.var_infos[0];
+      sclvar = slice.var_infos[1];
+    } else {
+      seqvar = slice.var_infos[1];
+      sclvar = slice.var_infos[0];
     }
+
+    Assert.assertTrue(sclvar.rep_type == ProglangType.PROGLANGTYPESCALAR);
+    Assert.assertTrue(seqvar.rep_type == ProglangType.PROGLANGTYPEARRAY);
 
     /*
     // This code is removed because these sorts of static checks
@@ -233,7 +235,7 @@ public final class SEQINTEQUAL
     if (!seqvar.type.elementIsIntegral())
       return null;
     #endif
-    return new SEQINTEQUAL(ppt, seq_first);
+    return new SEQINTEQUAL (slice);
   }
 
   public Object clone() {

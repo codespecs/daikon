@@ -46,9 +46,25 @@ public class NonModulus
     super(ppt);
   }
 
-  public static NonModulus instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    return new NonModulus(ppt);
+  /** Returns the prototype invariant for NonModulus **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new NonModulus (null);
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static NonModulus instantiate (PptSlice slice) {
+
+    if (!dkconfig_enabled)
+      return (null);
+    if (!slice.var_infos[0].file_rep_type.baseIsIntegral())
+      return (null);
+    return new NonModulus (slice);
   }
 
   public Object clone() {

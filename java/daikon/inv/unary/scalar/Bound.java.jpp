@@ -17,6 +17,7 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE double
   #define NUMWRAPPER Double
   #define LONGVALUE doubleValue()
+  #define BASE_IS_INTEGRAL baseIsFloat()
 #else
   #define BASE_INT
   #define ONEOFSCALAR OneOfScalar
@@ -26,6 +27,7 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define NUMWRAPPER Long
   #define LONGVALUE longValue()
+  #define BASE_IS_INTEGRAL baseIsIntegral()
 #endif
 
 #if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
@@ -239,9 +241,23 @@ public class LOWERBOUND
 
   private LOWERBOUNDCORE core;
 
-  private LOWERBOUND(PptSlice ppt) {
-    super(ppt);
+  private LOWERBOUND(PptSlice slice) {
+    super (slice);
+    if (slice == null)
+      return;
     core = new LOWERBOUNDCORE(this);
+  }
+
+  /** Returns the prototype invariant for LOWERBOUND **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new LOWERBOUND (null);
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
   }
 
   public Object clone() {
@@ -251,9 +267,13 @@ public class LOWERBOUND
     return result;
   }
 
-  public static LOWERBOUND instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    return new LOWERBOUND(ppt);
+  public static LOWERBOUND instantiate(PptSlice slice) {
+    if (!dkconfig_enabled)
+      return null;
+    if (!slice.var_infos[0].file_rep_type.BASE_IS_INTEGRAL) {
+      return (null);
+    }
+    return new LOWERBOUND (slice);
   }
 
   public PRIMITIVE MIN() {

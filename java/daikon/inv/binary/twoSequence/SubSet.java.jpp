@@ -13,11 +13,13 @@ The correct way to build the system is to run 'make'.
   #define LONG long
   #define SUBSEQUENCE SubSequence
   #define IS_SUBSET(a,b) ArraysMDE.isSubset(a,b)
+  #define BASE_IS_TYPE baseIsScalar()
 #elif (defined(SUBFLOAT) || defined(SUPFLOAT))
   #define TWOSEQUENCE TwoSequenceFloat
   #define LONG double
   #define SUBSEQUENCE SubSequenceFloat
   #define IS_SUBSET(a,b) Global.fuzzy.isSubset(a,b)
+  #define BASE_IS_TYPE baseIsFloat()
 #endif
 
 #if defined(SUB)
@@ -80,11 +82,23 @@ public class SUBSET
     super(ppt);
   }
 
-  public static SUBSET instantiate(PptSlice ppt) {
+  /** Returns the prototype invariant for SUBSET **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new SUBSET (null));
+  }
+
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static SUBSET instantiate (PptSlice slice) {
     if (!dkconfig_enabled) return null;
 
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+    VarInfo var1 = slice.var_infos[0];
+    VarInfo var2 = slice.var_infos[1];
 
     #if 0
       // This code is removed because these sorts of static checks
@@ -111,7 +125,7 @@ public class SUBSET
       debug.fine ("Instantiating " + var1.name + " and " + var2.name);
     }
 
-    return new SUBSET(ppt);
+    return new SUBSET (slice);
   }
 
   protected Invariant resurrect_done_swapped() {

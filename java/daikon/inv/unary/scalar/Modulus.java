@@ -40,9 +40,27 @@ public class Modulus
     super(ppt);
   }
 
-  public static Modulus instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    VarInfo x = ppt.var_infos[0];
+  /** Returns the prototype invariant for Modulus **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new Modulus (null);
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static Modulus instantiate(PptSlice slice) {
+
+    if (!dkconfig_enabled)
+      return (null);
+    VarInfo x = slice.var_infos[0];
+    if (!x.file_rep_type.baseIsIntegral())
+      return (null);
+
+    // JHP: This should be moved to Static Obvious
     if ((x.derived instanceof SequenceLength)
          && (((SequenceLength) x.derived).shift != 0)) {
       // do not instantiate x-1 = a (mod b).  Instead, choose a different a.
@@ -50,7 +68,7 @@ public class Modulus
       return null;
     }
 
-    return new Modulus(ppt);
+    return new Modulus (slice);
   }
 
   public String repr() {
