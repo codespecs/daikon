@@ -181,7 +181,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
   }
 
-#ifdef 0
+#if 0
   // JHP: remove this
   /**
    * Returns a list of all of the FunctionBinary invariants setup for the

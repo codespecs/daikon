@@ -772,3 +772,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   #endif
 
 }
+
+#undef PERMUTATION
+#undef PERM_NAME 
+#undef result 
+#undef arg1   
+#undef arg2   
+#undef result_index 
+#undef arg1_index   
+#undef arg2_index   
