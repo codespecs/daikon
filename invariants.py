@@ -3446,6 +3446,7 @@ def diff_var_infos(var_infos1, var_infos2):
             print "Equality difference for", vi1.name
             print vi1.invariant
             print vi2.invariant
+            continue
         assert can1 and can2
         # Both variables are canonical
         difference = inv1.diff(inv2)
