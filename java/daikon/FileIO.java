@@ -539,11 +539,12 @@ public final class FileIO {
         read_data_trace_file(file, all_ppts);
       }
       catch (IOException e) {
-        if (e.getMessage().equals("Corrupt GZIP trailer"))
+        if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.print(file.getName() + " has a corrupt gzip trailer.  " +
                            "All possible data was recovered.\n");
-        else
+        } else {
           throw e;
+        }
       }
     }
 
@@ -663,9 +664,6 @@ public final class FileIO {
         // This is no longer true; we now derive variables before reading dtrace!
         // Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
-        Object[] vals = new Object[vals_array_size];
-        int[] mods = new int[vals_array_size];
-
         // Read an invocation nonce if one exists
         Integer nonce = null;
         {
@@ -692,11 +690,15 @@ public final class FileIO {
           }
         }
 
-        // Fills up vals and mods arrays by side effect.
+        Object[] vals = new Object[vals_array_size];
+        int[] mods = new int[vals_array_size];
+
+        // Read a single record from the trace file;
+        // fills up vals and mods arrays by side effect.
         read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
+        ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
         // Add orig and derived variables; pass to inference (add_and_flow)
-        ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
         process_sample(ppt, vt, nonce);
         //Debug.check (all_ppts, "counter = " + count + " ppt = "
         //                  + ppt.name + " " + Debug.related_vars (ppt, vt));
@@ -882,7 +884,8 @@ public final class FileIO {
     }
   }
 
-  // This procedure fills up vals and mods by side effect.
+  // This procedure reads a single record from a trace file and
+  // fills up vals and mods by side effect.
   private static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
                                                       String filename,
                                                       PptTopLevel ppt,
@@ -1246,37 +1249,38 @@ public final class FileIO {
 /// (The two implementations need to be merged into one.)
 ///
 
+  public interface DtraceProcessor {
+    void visit(daikon.PptTopLevel ppt, ValueTuple vt);
+  }
 
-  public static HashMap readDataTraceFile(Collection files, // [File]
-                                          PptMap all_ppts,
-                                          daikon.tools.DtraceProcessor dtraceProcessor)
+  public static void readDataTraceFile(Collection files, // [File]
+                                       PptMap all_ppts,
+                                       DtraceProcessor dtraceProcessor)
     throws IOException
   {
 
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
       try {
-        HashMap values = readDataTraceFile(file, all_ppts, dtraceProcessor);
-        return values;
+        readDataTraceFile(file, all_ppts, dtraceProcessor);
       }
       catch (IOException e) {
-        if (e.getMessage().equals("Corrupt GZIP trailer"))
+        if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.print(file.getName() + " has a corrupt gzip trailer.  " +
                            "All possible data was recovered.\n");
-        else
+        } else {
           throw e;
+        }
       }
     }
-    return null;
   }
 
   /** Read data from .dtrace file. **/
-  static HashMap readDataTraceFile(File filename, PptMap all_ppts,
-                                   daikon.tools.DtraceProcessor dtraceProcessor)
+  static void readDataTraceFile(File filename, PptMap all_ppts,
+                                DtraceProcessor dtraceProcessor)
     throws IOException
   {
     int pptcount = 1;
-    HashMap values = new HashMap ();
     if (debugRead.isLoggable(Level.FINE)) {
       debugRead.fine ("read_data_trace_file " + filename
                       + ((Daikon.ppt_regexp != null) ? " " +
@@ -1348,9 +1352,6 @@ public final class FileIO {
         // This is no longer true; we now derive variables before reading dtrace!
         // Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
-        Object[] vals = new Object[vals_array_size];
-        int[] mods = new int[vals_array_size];
-
         // Read an invocation nonce if one exists
         Integer nonce = null;
         {
@@ -1377,26 +1378,18 @@ public final class FileIO {
           }
         }
 
-        // Fills up vals and mods arrays by side effect.
+        Object[] vals = new Object[vals_array_size];
+        int[] mods = new int[vals_array_size];
+
+        // Read a single record from the trace file;
+        // fills up vals and mods arrays by side effect.
         read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
+        ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
-        // Instead of doing this call assert PptName.
-
-        //List valu = (List) values.get(ppt_name);
-        //if (valu == null){
-        List newvals = new ArrayList();
-        newvals.add(vals);
-        //  values.put(ppt_name, newvals);
-        //}
-        //else {
-        //  valu.add(vals);
-        //}
-        //visitor.visit(newvals);
-        dtraceProcessor.visit(ppt,newvals);
+        dtraceProcessor.visit(ppt, vt);
       }
     data_trace_filename = null;
     data_trace_reader = null;
-    return values;
   }
 
 }

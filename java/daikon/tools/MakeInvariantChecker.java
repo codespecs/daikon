@@ -68,15 +68,15 @@ public final class MakeInvariantChecker {
 
   // SWITCHES
 
-  /** Specifies the behavior for "assertions".*/
+  /** Specifies the behavior for "assertions". */
   public static String assertion_behavior_SWITCH = "assertion_behavior";
 
-  /** Defines which filters to use when eliminating invariants.*/
+  /** Defines which filters to use when eliminating invariants. */
   public static String filter_behavior_SWITCH = "filter_behavior";
 
 
 
-  /** List of command line options.*/
+  /** List of command line options. */
   protected static String flagList =
     UtilMDE.join (new String [] {"    " + assertion_behavior_SWITCH +
                                  " -- defines the method to be called to check invariants.",
@@ -84,7 +84,7 @@ public final class MakeInvariantChecker {
                                  " -- determines what filters will be used in eliminating invariants."},
                   Daikon.lineSep + "    ");
 
-  /** Usage string.*/
+  /** Usage string. */
   protected static String usage =
     UtilMDE.join(new String[] {
       "Daikon invariant checker ",
@@ -105,10 +105,7 @@ public final class MakeInvariantChecker {
    *
    *  @param args - command line arguments.
    */
-
   public static void main(String[] args) {
-
-    show_banner();
 
     // Read command line options
     Set[] files = readOptions(args);
@@ -266,7 +263,7 @@ public final class MakeInvariantChecker {
       if (filename.indexOf(".inv") != -1) {
         inv_files.add(file);
       } else if (filename.endsWith(".java")) {
-        String className = replaceAllString(filename,".java","");
+        String className = replaceAllString(filename, ".java", "");
         if (! UtilMDE.canCreateAndWrite(file)) {
           throw new Error("Cannot write to file " + filename);
         }
@@ -290,20 +287,6 @@ public final class MakeInvariantChecker {
   }
 
 
-
-  /**   Prints a banner. */
-  private static void show_banner() {
-    System.err.
-      print(UtilMDE.join(new String [] {
-        "",
-        "******************************************************" ,
-        "************ Make Invariant Checker Module ***********" ,
-        "******************************************************" ,
-        ""},Daikon.lineSep));
-    System.err.flush();
-  }
-
-
   /**
    *  Reads in an invariant file (.inv) and extracts invariants,
    *  variables and variable types from the PptMap associated with the
@@ -316,7 +299,6 @@ public final class MakeInvariantChecker {
    *  @throws IOException if invariantFile cannot be read.
    *  @throws ClassNotFoundException if
    */
-
   private static HashMap processInvariants(File invariantFile) throws IOException, ClassNotFoundException{
     // See varNameMap declaration above for info.
     Daikon.output_style = OutputFormat.JAVA;
@@ -325,7 +307,7 @@ public final class MakeInvariantChecker {
       varNameMap = new HashMap();
 
     HashMap invariantInfo = new HashMap();
-    PptMap pptMap = (PptMap) FileIO.read_serialized_pptmap(invariantFile,false);
+    PptMap pptMap = (PptMap) FileIO.read_serialized_pptmap(invariantFile, false);
 
     Iterator pptIterator = pptMap.pptIterator();
 
@@ -333,9 +315,9 @@ public final class MakeInvariantChecker {
       PptTopLevel atoplevel = (PptTopLevel) pptIterator.next();
       List [] currentLists = (List []) invariantInfo.get(atoplevel);
       if (currentLists == null) {
-        currentLists = new List []{
+        currentLists = new List [] {
           new ArrayList(),
-          new ArrayList(),};
+          new ArrayList(), };
         invariantInfo.put(atoplevel, currentLists);
       }
 
@@ -348,7 +330,7 @@ public final class MakeInvariantChecker {
       VarInfo aVarInfo = (VarInfo)varInfos[i];
       VarInfoName aVarInfoName = aVarInfo.name;
 
-      varNameMap.put(aVarInfoName.java_name(),makeValidJavaIdentifier(aVarInfoName.java_name()));
+      varNameMap.put(aVarInfoName.java_name(), makeValidJavaIdentifier(aVarInfoName.java_name()));
       ((List) currentLists[0]).add(aVarInfo);
       }
 
@@ -374,7 +356,6 @@ public final class MakeInvariantChecker {
    * @param String type, varName, val
    * Generates statements of the form 'type varName = (type)
    * type.parsetype(val)'
-   *
    */
   private static String formatVariableInitialization(String type, String varName, String val) {
     // Primitive types such as double, int, boolean need to be parsed
@@ -505,7 +486,6 @@ public final class MakeInvariantChecker {
    * Returns true if s is a JavaKeyWord
    * Returns false otherwise.
    */
-
   public static boolean isJavaKeyWord(String s) {
     String [] keywords = new String []
       {"abstract", "double", "int", "strictfp",
@@ -603,8 +583,8 @@ public final class MakeInvariantChecker {
       if (actual.indexOf(target) == actual.indexOf(replacement)+ replacement.indexOf(target))
         return actual;
       else
-        return actual.substring(0,actual.indexOf(target))+
-          replacement+ replaceAllString(actual.substring(actual.indexOf(target)+target.length()),target,replacement);
+        return actual.substring(0, actual.indexOf(target))+
+          replacement+ replaceAllString(actual.substring(actual.indexOf(target)+target.length()), target, replacement);
   }
 
 
@@ -779,7 +759,7 @@ public final class MakeInvariantChecker {
       "          try {",
       "               PptMap pptMap = (PptMap) FileIO.read_serialized_pptmap(new File(invFileName),false);",
       "               AssertionChecker ac =  new AssertionChecker();",
-      "               FileIO.readDataTraceFile(dtrace_files,pptMap,null,ac);",
+      "               FileIO.readDataTraceFile(dtrace_files,pptMap,ac);",
       "               if (x != null)",
       "                    x.close();",
       "               }",
@@ -792,12 +772,14 @@ public final class MakeInvariantChecker {
     String assertionProcedures = Daikon.lineSep;
 
     String assertionProcedureDispatch =
-      "          private static void checkAssertions(PptTopLevel atoplevel, List info) {" + Daikon.lineSep;
+      "          private static void checkAssertions(PptTopLevel atoplevel, ValueTuple vt) {" + Daikon.lineSep +
+      "            List info = new ArrayList();" + Daikon.lineSep +
+      "            info.add(vt.vals);" + Daikon.lineSep;
 
     String assertionChecker = UtilMDE.join (new String [] {
-      "     public static final class AssertionChecker implements daikon.tools.DtraceProcessor{\n",
-      "          public void visit(PptTopLevel atoplevel, List n) {",
-      "               checkAssertions(atoplevel,n);",
+      "     public static final class AssertionChecker implements daikon.FileIO.DtraceProcessor{\n",
+      "          public void visit(PptTopLevel atoplevel, ValueTuple vt) {",
+      "               checkAssertions(atoplevel, vt);",
       "          }",
       ""}, Daikon.lineSep);
 
@@ -806,8 +788,8 @@ public final class MakeInvariantChecker {
 
 
     javaSourceWriter.print(UtilMDE.join (new String [] {
-      header ,
-      importStatements ,
+      header,
+      importStatements,
       formatClassDeclaration(javaFile.toString()),
       usage,
       bannerRoutine,
@@ -815,7 +797,8 @@ public final class MakeInvariantChecker {
       readOptions,
       mainModule,
       assertionChecker,
-      assertionProcedureDispatch}, Daikon.lineSep));
+      assertionProcedureDispatch},
+                                         Daikon.lineSep));
 
     Iterator pptPoints = invariantInformation.keySet().iterator();
     while (pptPoints.hasNext()){
