@@ -25,32 +25,29 @@ public class DummyInvariant
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030220L;
 
-  public String daikonFormat;
-  public String javaFormat;
-  public String escFormat;
-  public String simplifyFormat;
-  public String ioaFormat;
-  public String jmlFormat;
-  public String dbcFormat;
+  private String daikonFormat;
+  private String javaFormat;
+  private String escFormat;
+  private String simplifyFormat;
+  private String ioaFormat;
+  private String jmlFormat;
+  private String dbcFormat;
 
   private boolean negated = false;
+  
+  // Pre-instatiate(), set to true if we have reason to believe the user
+  // explicitly wanted this invariant to appear in the output.
+  // After instantiation, also requires that we've found an appropriate
+  // slice for the invariant to live in.
   public boolean valid = false;
 
   public DummyInvariant(PptSlice ppt) {
     super(ppt);
-
-    daikonFormat = "<dummy>";
-    javaFormat = "format_java not implemented for dummy invariant";
-    escFormat = "format_esc not implemented for dummy invariant";
-    simplifyFormat = "format_simplify not implemented for dummy invariant";
-    ioaFormat = "format_ioa not implemented for dummy invariant";
-    jmlFormat = "format_jml not implemented for dummy invariant";
-    dbcFormat = "format_dbc not implemented for dummy invariant";
   }
 
   public void setFormats(String daikonStr, String java, String esc,
                          String simplify, String ioa, String jml,
-                         String dbc) {
+                         String dbc, boolean desired) {
     if (daikonStr != null)
       daikonFormat = daikonStr;
     if (java != null)
@@ -64,14 +61,9 @@ public class DummyInvariant
     if (jml != null)
       jmlFormat = jml;
     if (dbc != null)
-      dbcFormat = jml;
+      dbcFormat = dbc;
 
-    // Note that java is missing from this disjuction on purpose
-    // [What is the reason?  And why are jml and dbc also missing?
-    // and why is the check against daikonStr and such, rather than
-    // daikonFormat and such?  -MDE 1/31/2004]
-    if (daikonStr != null || esc != null || simplify != null || ioa != null)
-      valid = true;
+    valid |= desired;
   }
 
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
@@ -147,7 +139,7 @@ public class DummyInvariant
       }
       inv.ppt = slice;
     }
-    inv.valid = true;
+    inv.valid = this.valid;
     return inv;
   }
 
@@ -172,13 +164,20 @@ public class DummyInvariant
   }
 
   public String format_daikon() {
-    if (negated)
-      return "not " + daikonFormat;
+    String df;
+    if (daikonFormat == null) 
+      df = "<dummy>";
     else
-      return daikonFormat;
+      df = daikonFormat;
+    if (negated)
+      return "not " + df;
+    else
+      return df;
   }
 
   public String format_java() {
+    if (javaFormat == null) 
+      return "format_java not implemented for dummy invariant";
     if (negated)
       return "!(" + javaFormat + ")";
     else
@@ -186,6 +185,8 @@ public class DummyInvariant
   }
 
   public String format_esc() {
+    if (escFormat == null) 
+      return "format_esc not implemented for dummy invariant";
     if (negated)
       return "!(" + escFormat + ")";
     else
@@ -193,6 +194,8 @@ public class DummyInvariant
   }
 
   public String format_simplify() {
+    if (simplifyFormat == null) 
+      return "format_simplify not implemented for dummy invariant";
     if (negated)
       return "(NOT " + simplifyFormat + ")";
     else
@@ -200,28 +203,33 @@ public class DummyInvariant
   }
 
   public String format_ioa() {
+    if (ioaFormat == null) 
+      return "format_ioa not implemented for dummy invariant";
     if (negated)
       return "~(" + ioaFormat + ")";
     else
       return ioaFormat;
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    throw new Error("Not implemented");
-  }
-
   public String format_jml() {
+    if (jmlFormat == null) 
+      return "format_jml not implemented for dummy invariant";
     if (negated)
       return "!(" + jmlFormat + ")";
     else
-      return ioaFormat;
+      return jmlFormat;
   }
 
   public String format_dbc() {
+    if (dbcFormat == null) 
+      return "format_dbc not implemented for dummy invariant";
     if (negated)
       return "!(" + dbcFormat + ")";
     else
-      return ioaFormat;
+      return dbcFormat;
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new Error("Not implemented");
+  }
 }
