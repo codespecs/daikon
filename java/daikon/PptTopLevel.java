@@ -3664,18 +3664,20 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Creates a list of parent variables that matches slice.  Returns
-   * null if any of the variables don't have a corresponding parent
-   * variables.  The corresponding parent variable can match ANY of
-   * the members of an equality set.  For example, if the child EXIT
-   * with variable A, with equality set members {A, orig(A)} is matched
-   * against ENTER, A does not have a relation (since it is a post
-   * value).  But orig(a) does have a relation.
+   * Creates a list of parent variables (i.e., variables at the parent
+   * program point) that matches slice.  Returns null if any of the
+   * variables don't have a corresponding parent variables.
+   *
+   * The corresponding parent variable can match ANY of the members of an
+   * equality set.  For example, suppose that the child is EXIT with
+   * variable A, with equality set members {A, orig(A)}; and suppose that
+   * this child is matched against ENTER.  A does not have a relation
+   * (since it is a post value), but orig(a) does have a relation.
    *
    * Note that there are cases where this is not exactly correct.
    * if you wanted to get all of the invariants over A where A
    * is an equality set with B, and A and B were in different
-   * equality sets at the parent, the invariants true at A in  the
+   * equality sets at the parent, the invariants true at A in the
    * child are the union of those true at A and B at the
    * parent.
    */
@@ -3683,8 +3685,8 @@ public class PptTopLevel extends Ppt {
 
     VarInfo[] pvis = new VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {
-      VarInfo cv = slice.var_infos[j];
-      VarInfo pv = null;
+      VarInfo cv = slice.var_infos[j]; // child variable
+      VarInfo pv = null;               // parent variable
       for (Iterator k = cv.equalitySet.getVars().iterator(); k.hasNext();) {
         cv = (VarInfo) k.next();
         pv = rel.parentVar(cv);

@@ -28,6 +28,8 @@ public class PptRelation implements Serializable {
   static final long serialVersionUID = 20030819L;
 
   // This should really be an enumerated type.
+  // The arrows point from parent to child, which is the opposite of the
+  // way that we usually draw them in diagrams.  (Consider changing this??)
   public static final String OBJECT_METHOD = "object -> method";
   public static final String CLASS_OBJECT = "class -> object";
   public static final String OBJECT_USER = "object -> user";
