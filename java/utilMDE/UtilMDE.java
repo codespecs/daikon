@@ -373,12 +373,6 @@ public final class UtilMDE {
     return thePromiscuousLoader.loadClassFromFile(className, pathname);
   }
 
-  /**
-   * @param full_pathname the pathname of a .class file
-   * @return a Java Object corresponding to the Class defined in the .class file
-   **/
-
-
 
   ///
   /// Classpath
@@ -400,6 +394,7 @@ public final class UtilMDE {
       System.setProperty("java.class.path", dir + pathSep + cp);
     }
   }
+
 
   ///
   /// File
@@ -1503,6 +1498,22 @@ public final class UtilMDE {
   /// Throwable
   ///
 
+  /** For the current backtrace, do "backtrace(new Throwable())". **/
+  public static String backTrace(Throwable t) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    t.printStackTrace(pw);
+    pw.close();
+    String result = sw.toString();
+    return result;
+  }
+
+  // Deprecated as of 2/1/2004.
+  /**
+   * @deprecated use "backtrace(new Throwable())" instead, to avoid
+   * spurious "at utilMDE.UtilMDE.backTrace(UtilMDE.java:1491)" in output.
+   * @see #backTrace(Throwable)
+   **/
   public static String backTrace() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
