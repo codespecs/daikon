@@ -65,8 +65,8 @@ public final class SequenceStringSubsequence extends BinaryDerivation {
 				    : "+" + index_shift));
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
-    String name = seqvar.name
-      + "[0.." + sclvar.name + index_shift_string + "]";
+    String name = addSubscript(seqvar.name,
+                               "0.." + sclvar.name + index_shift_string);
     return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);
   }
 

@@ -52,4 +52,11 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
     return !(base1.isCanonical() && base2.isCanonical());
   }
 
+  public static String addSubscript(String base, String subscript) {
+    if (base.endsWith("[]")) {
+      base = base.substring(0, base.length()-2);
+    }
+    return base + "[" + subscript + "]";
+  }
+
 }

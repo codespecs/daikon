@@ -53,8 +53,8 @@ public final class SequenceStringSubscript extends BinaryDerivation {
 				    ? Integer.toString(index_shift)
 				    : "+" + index_shift));
     VarInfo seqvar = seqvar();
-    String name = seqvar.name
-      + "[" + sclvar().name + index_shift_string + "]";
+    String name = addSubscript(seqvar.name,
+                               sclvar().name + index_shift_string);
     ProglangType type = seqvar.type.elementType();
     ProglangType rep_type = seqvar.rep_type.elementType();
     VarComparability compar = base1.comparability.elementType();

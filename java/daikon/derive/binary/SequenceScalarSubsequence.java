@@ -87,9 +87,10 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
 				    : "+" + index_shift));
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
-    String name = from_start ?
-      (seqvar.name + "[0.." + sclvar.name + index_shift_string + "]") :
-      (seqvar.name + "[" + sclvar.name + index_shift_string + "..]");
+    String name = addSubscript(seqvar.name,
+                               (from_start
+                                ? "0.." + sclvar.name + index_shift_string
+                                : sclvar.name + index_shift_string + ".."));
     return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);
   }
 

@@ -168,7 +168,10 @@ public final class ProglangType implements java.io.Serializable {
 //                      or ((base1 == "integral") and (base2 in integral_types)) // interned strings
 //                      or ((base2 == "integral") and (base1 in integral_types)))) // interned strings
 
-  // This used to be private.  Why???
+  /**
+   * Returns the type of elements of this.
+   * They may themselves be arrays if this is multidimensional.
+   **/
   public ProglangType elementType() {
     if (this == VECTOR)
       return OBJECT;

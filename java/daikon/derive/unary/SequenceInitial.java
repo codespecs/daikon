@@ -74,7 +74,7 @@ public final class SequenceInitial extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String name = base.name + "[" + index + "]";
+    String name = BinaryDerivation.addSubscript(base.name, "" + index);
     ProglangType ptype = base.type.elementType();
     ProglangType rtype = base.rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
