@@ -5626,8 +5626,8 @@ REPLACE
 ...
 @end example
 @noindent
-where @samp{replacement@var{i}} is a Java expression for the body
-of @samp{procedure@var{i}}.  In each condition, Daikon replaces procedure
+where @var{replacementi} is a Java expression for the body
+of @var{procedurei}.  In each condition, Daikon replaces procedure
 calls by their replacements.  A replace section may appear anywhere in
 the splitter info file.
 
@@ -5653,7 +5653,7 @@ to use many conditions that are inappropriate at certain program
 points, for instance because the program point does not have (in
 scope) all the variables that are used in the condition.  For example,
 the condition @code{myArray.length == x} is inapplicable at a program
-point if either of @samp{myArray} and @samp{x} is not in scope at that
+point if either of @code{myArray} and @code{x} is not in scope at that
 program point.  In this case, Daikon prints a warning message and
 proceeds, using conditions wherever they are valid.
 
@@ -5830,7 +5830,7 @@ If you get an error such as
 Encountered: "#" (35), after : ""
 @end example
 @noindent
-then you forgot to run cpp before running CreateSpinfoC@.
+then you forgot to run CPP before running CreateSpinfoC@.
 
 @node   Cluster analysis for splitters, Random selection for splitters, Static analysis for splitters, Enhancing conditional invariant detection
 @subsection Cluster analysis for splitters
@@ -5856,10 +5856,10 @@ To find splitting conditions using cluster analysis, run the
 @command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
 directory) in the following way:
 @example
-runcluster.pl [OPTIONS] dtrace_file(s) decls_files(s)
+runcluster.pl [@var{options}] @var{dtrace_file(s)} @var{decls_files(s)}
 @end example
 
-The options are:
+The @var{options} are:
 @table @option
 
 @cindex kmeans cluster analysis
@@ -5884,7 +5884,7 @@ The @command{runcluster.pl} script currently supports three clustering
 programs.  They are implementations of the kmeans algorithm,
 hierarchical clustering and the xmeans algorithm (kmeans algorithm
 with efficient discovery of the number of clusters).  The kmeans and
-hierarchical clustering tools are provided in the daikon
+hierarchical clustering tools are provided in the Daikon
 distribution.  The xmeans code and executable are publicly available at
 @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
@@ -5906,16 +5906,17 @@ not found over the entire data is a conditional invariant.
 To find splitting conditions using random selection, run the
 @command{daikon.tools.TraceSelect} program in the following way:
 @example
-java daikon.tools.TraceSelect num_reps sample_size [OPTIONS]
-dtrace_file decls_files(s) [DAIKON_OPTIONS]
+java daikon.tools.TraceSelect @var{num_reps} @var{sample_size} [@var{options}] \
+    @var{dtrace_file} @var{decls_files(s)} [@var{daikon_options}]
 @end example
-num_reps is the number of subsets to create, and sample_size is the
+
+@var{num_reps} is the number of subsets to create, and @var{sample_size} is the
 number of invocations to collect for each method.
 
-The DAIKON_OPTIONS are the same options that can be provided to the
+The @var{daikon_options} are the same options that can be provided to the
 daikon.Daikon program.
 
-The options are:
+The @var{options} for TraceSelect are:
 @table @option
 
 @item -NOCLEAN
