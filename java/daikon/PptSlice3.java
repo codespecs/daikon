@@ -34,12 +34,12 @@ public final class PptSlice3  extends PptSlice {
 
   int[] tm_total = new int[8 ];  // "tm" stands for "tuplemod"
 
-  public PptSlice3 (Ppt parent, VarInfo[] var_infos) {
+  public PptSlice3 (PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 3 );
 
-    init_po(true);
-    init_po(false);
+    Dataflow.init_pptslice_po(this, true);
+    Dataflow.init_pptslice_po(this, false);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
@@ -51,48 +51,8 @@ public final class PptSlice3  extends PptSlice {
     // instantiate_invariants();
   }
 
-  PptSlice3(Ppt parent, VarInfo var_info1, VarInfo var_info2, VarInfo var_info3) {
+  PptSlice3(PptTopLevel parent, VarInfo var_info1, VarInfo var_info2, VarInfo var_info3) {
     this(parent, new VarInfo[] { var_info1, var_info2, var_info3 });
-  }
-
-  /**
-   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
-   * Discover the set of slices H such that:
-   * <li> H.arity == this.arity
-   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
-   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
-   **/
-  void init_po(boolean lower) {
-  outer:
-    for (Iterator i = var_infos[0].closurePO(lower); i.hasNext(); ) {
-      VarInfo vi0_adj = (VarInfo) i.next();
-      PptTopLevel ppt_adj = vi0_adj.ppt;
-
-      for (Iterator j = var_infos[1].closurePO(lower); j.hasNext(); ) {
-	VarInfo vi1_adj = (VarInfo) j.next();
-	if (vi1_adj.ppt != ppt_adj) continue;
-	if (vi1_adj == vi0_adj) continue;
-
-	for (Iterator k = var_infos[2].closurePO(lower); k.hasNext(); ) {
-	  VarInfo vi2_adj = (VarInfo) k.next();
-	  if (vi2_adj.ppt != ppt_adj) continue;
-	  if (vi2_adj == vi0_adj) continue;
-	  if (vi2_adj == vi1_adj) continue;
-
-	  // Don't find the slice, just record the VarInfos.  Slices
-	  // come and go as things flow around; we can't depend on
-	  // them.
-
-	  VarInfo[] vis_adj = new VarInfo[] { vi0_adj, vi1_adj, vi2_adj };
-
-	  addToOnePO(lower, ppt_adj, vis_adj);
-	  continue outer;
-
-	} // k
-
-      } // j
-
-    } // i (outer)
   }
 
   void instantiate_invariants() {
@@ -309,6 +269,7 @@ public final class PptSlice3  extends PptSlice {
       long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }
     } else {

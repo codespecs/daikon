@@ -166,19 +166,24 @@ public class SubSequence extends TwoSequence {
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {
+    Assert.assert(var1_in_var2 || var2_in_var1);
+    // XXXXX We need to be able to "half-falsify" to flow correctly
+    // We should be broken up into two invariants
     if (var1_in_var2 && (ArraysMDE.indexOf(a2, a1) == -1)) {
-        var1_in_var2 = false;
-        if (!var2_in_var1) {
-          destroy();
-          return;
-        }
+      if (!var2_in_var1) {
+	destroy();
+	return;
+      }
+      // Set later so that resurrected invariant has old state
+      var1_in_var2 = false;
     }
     if (var2_in_var1 && (ArraysMDE.indexOf(a1, a2) == -1)) {
-        var2_in_var1 = false;
-        if (!var1_in_var2) {
-          destroy();
-          return;
-        }
+      if (!var1_in_var2) {
+	destroy();
+	return;
+      }
+      // Set later so that resurrected invariant has old state
+      var2_in_var1 = false;
     }
     Assert.assert(var1_in_var2 || var2_in_var1);
   }

@@ -40,14 +40,14 @@ public final class PptSlice1  extends PptSlice {
 
   int[] tm_total = new int[2 ];  // "tm" stands for "tuplemod"
 
-  public PptSlice1 (Ppt parent, VarInfo[] var_infos) {
+  public PptSlice1 (PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 1 );
 
     var_info = var_infos[0];
 
-    init_po(true);
-    init_po(false);
+    Dataflow.init_pptslice_po(this, true);
+    Dataflow.init_pptslice_po(this, false);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
@@ -59,33 +59,8 @@ public final class PptSlice1  extends PptSlice {
     // instantiate_invariants();
   }
 
-  PptSlice1(Ppt parent, VarInfo var_info) {
+  PptSlice1(PptTopLevel parent, VarInfo var_info) {
     this(parent, new VarInfo[] { var_info });
-  }
-
-  /**
-   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
-   * Discover the set of slices H such that:
-   * <li> H.arity == this.arity
-   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
-   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
-   **/
-  void init_po(boolean lower) {
-  outer:
-    for (Iterator i = var_infos[0].closurePO(lower); i.hasNext(); ) {
-      VarInfo vi0_adj = (VarInfo) i.next();
-      PptTopLevel ppt_adj = vi0_adj.ppt;
-
-	  // Don't find the slice, just record the VarInfos.  Slices
-	  // come and go as things flow around; we can't depend on
-	  // them.
-
-	  VarInfo[] vis_adj = new VarInfo[] { vi0_adj };
-
-	  addToOnePO(lower, ppt_adj, vis_adj);
-	  continue outer;
-
-    } // i (outer)
   }
 
   void instantiate_invariants() {
@@ -266,6 +241,7 @@ public final class PptSlice1  extends PptSlice {
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
@@ -273,6 +249,7 @@ public final class PptSlice1  extends PptSlice {
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING) {
@@ -281,6 +258,7 @@ public final class PptSlice1  extends PptSlice {
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.elementAt(i));
         SingleString inv = (SingleString) invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -288,6 +266,7 @@ public final class PptSlice1  extends PptSlice {
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -295,12 +274,14 @@ public final class PptSlice1  extends PptSlice {
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else {

@@ -30,9 +30,10 @@ public abstract class PptSlice extends Ppt {
    **/
   public static final Category debug = Category.getInstance(PptSlice.class.getName());
   public static final Category debugGeneral = Category.getInstance(PptSlice.class.getName() + ".general");
+  public static final Category debugFlow = Category.getInstance(PptSlice.class.getName() + ".flow");
 
   /** This is a slice of the 'parent' ppt */
-  public Ppt parent;
+  public PptTopLevel parent;
   public int arity;
 
   /**
@@ -110,7 +111,7 @@ public abstract class PptSlice extends Ppt {
   */ // ... [INCR]
 
 
-  PptSlice(Ppt parent, VarInfo[] var_infos) {
+  PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
     super(parent.name + varNames(var_infos));
     this.parent = parent;
     this.var_infos = var_infos;
@@ -164,16 +165,16 @@ public abstract class PptSlice extends Ppt {
     Assert.assert(slice_vis.length == arity);
 
     Collection private_po = lower ? private_po_lower : private_po_higher;
-    Map po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
+    Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
 
     List slices;
     if (! private_po.contains(adj)) {
       private_po.add(adj);
-      Assert.assert(! po_vis.containsKey(adj));
+      Assert.assert(! private_po_vis.containsKey(adj));
       slices = new ArrayList(1);
-      po_vis.put(adj, slices);
+      private_po_vis.put(adj, slices);
     } else {
-      slices = (List) po_vis.get(adj);
+      slices = (List) private_po_vis.get(adj);
       Assert.assert(slices != null);
     }
     slices.add(slice_vis);
@@ -238,8 +239,10 @@ public abstract class PptSlice extends Ppt {
     List worklist = new ArrayList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
-      if (inv.no_invariant)
+      if (inv.no_invariant) {
+	if (debugFlow.isDebugEnabled()) debugFlow.debug("at ppt " + parent.name + ", flowing falsified invariant " + inv.format());
 	worklist.add(inv);
+      }
     }
     if (worklist.size() == 0) {
       return;
@@ -263,10 +266,14 @@ public abstract class PptSlice extends Ppt {
 	for (Iterator i = worklist.iterator(); i.hasNext(); ) {
 	  Invariant inv = (Invariant) i.next();
 	  Assert.assert(inv.no_invariant);
+	  // debug
+	  if (debugFlow.isDebugEnabled()) debugFlow.debug(" " + inv.format() + " flowing to " + lower.name);
 	  // If its class does not already exist in lower
 	  for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
 	    Object item = h.next();
+	    // XXX Should this be some sort of same formula check instead?
 	    if (item.getClass() == inv.getClass()) {
+	      if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
 	      continue for_each_invariant;
 	    }
 	  }

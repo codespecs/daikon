@@ -44,14 +44,19 @@ public final class LinearBinaryCore
     Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     if (permutation[0] == 1) {
       // was a swap
-      a = 1 / a;   // a' =  1/a
-      b = -b * a;  // b' = -b/a
+      if (a == 0) {
+	Assert.assert(b == 0);
+      } else {
+	a = 1 / a;   // a' =  1/a
+	b = -b * a;  // b' = -b/a
+      }
 
       long[] tmp = x_cache;
       x_cache = y_cache;
       y_cache = tmp;
     }
   }
+
   public void add_modified(long x, long y, int count) {
     if (values_seen < MINPAIRS) {
       // We delay computation of a and b until we have seen several pairs

@@ -893,8 +893,12 @@ public class PptTopLevel
       if (vi.isStaticConstant())
         continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
-      if (slice1.po_higher.size() > 0)
-	continue; // let invariant flow from controlling slice
+      if (slice1.po_higher.size() > 0) {
+	// let invariant flow from controlling slice
+	if (Global.debugInfer.isDebugEnabled())
+	  Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled.");
+	continue;
+      }
       slice1.instantiate_invariants();
       unary_views.add(slice1);
     }
@@ -916,8 +920,12 @@ public class PptTopLevel
 	if (var2.isStaticConstant())
 	  continue;
         PptSlice slice2 = new PptSlice2(this, var1, var2);
-	if (slice2.po_higher.size() > 0)
-	  continue; // let invariant flow from controlling slice
+	if (slice2.po_higher.size() > 0) {
+	  // let invariant flow from controlling slice
+	  if (Global.debugInfer.isDebugEnabled())
+	    Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled.");
+	  continue;
+	}
         slice2.instantiate_invariants();
         binary_views.add(slice2);
       }
@@ -960,8 +968,12 @@ public class PptTopLevel
               continue;
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
-	    if (slice3.po_higher.size() > 0)
-	      continue; // let invariant flow from controlling slice
+	    if (slice3.po_higher.size() > 0) {
+	      // let invariant flow from controlling slice
+	      if (Global.debugInfer.isDebugEnabled())
+		Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled.");
+	      continue;
+	    }
             slice3.instantiate_invariants();
             ternary_views.add(slice3);
           }

@@ -37,12 +37,12 @@ public final class PptSlice2  extends PptSlice {
 
   int[] tm_total = new int[4 ];  // "tm" stands for "tuplemod"
 
-  public PptSlice2 (Ppt parent, VarInfo[] var_infos) {
+  public PptSlice2 (PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 2 );
 
-    init_po(true);
-    init_po(false);
+    Dataflow.init_pptslice_po(this, true);
+    Dataflow.init_pptslice_po(this, false);
 
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
@@ -54,40 +54,8 @@ public final class PptSlice2  extends PptSlice {
     // instantiate_invariants();
   }
 
-  PptSlice2(Ppt parent, VarInfo var_info1, VarInfo var_info2) {
+  PptSlice2(PptTopLevel parent, VarInfo var_info1, VarInfo var_info2) {
     this(parent, new VarInfo[] { var_info1, var_info2 });
-  }
-
-  /**
-   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
-   * Discover the set of slices H such that:
-   * <li> H.arity == this.arity
-   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
-   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
-   **/
-  void init_po(boolean lower) {
-  outer:
-    for (Iterator i = var_infos[0].closurePO(lower); i.hasNext(); ) {
-      VarInfo vi0_adj = (VarInfo) i.next();
-      PptTopLevel ppt_adj = vi0_adj.ppt;
-
-      for (Iterator j = var_infos[1].closurePO(lower); j.hasNext(); ) {
-	VarInfo vi1_adj = (VarInfo) j.next();
-	if (vi1_adj.ppt != ppt_adj) continue;
-	if (vi1_adj == vi0_adj) continue;
-
-	  // Don't find the slice, just record the VarInfos.  Slices
-	  // come and go as things flow around; we can't depend on
-	  // them.
-
-	  VarInfo[] vis_adj = new VarInfo[] { vi0_adj, vi1_adj };
-
-	  addToOnePO(lower, ppt_adj, vis_adj);
-	  continue outer;
-
-      } // j
-
-    } // i (outer)
   }
 
   void instantiate_invariants() {
@@ -292,6 +260,7 @@ public final class PptSlice2  extends PptSlice {
       String value2 = (String) val2;
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (string1 || string2) {
@@ -303,6 +272,7 @@ public final class PptSlice2  extends PptSlice {
       long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
@@ -310,6 +280,7 @@ public final class PptSlice2  extends PptSlice {
       long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
@@ -317,6 +288,7 @@ public final class PptSlice2  extends PptSlice {
       long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
@@ -324,6 +296,7 @@ public final class PptSlice2  extends PptSlice {
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.elementAt(i);
+	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else {

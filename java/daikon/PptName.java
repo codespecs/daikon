@@ -303,6 +303,13 @@ public class PptName
     return point.substring(FileIO.exit_suffix.length(), non_digit);
   }
 
+  /**
+   * @return true iff this program point is a constructor entry or exit.
+   **/
+  public boolean isConstructor() {
+    return (method != null)
+      && (method.startsWith("<init>"));
+  }
 
   // ==================== PRODUCERS ====================
 

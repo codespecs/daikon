@@ -8,7 +8,7 @@ import utilMDE.*;
 
 public class PptSlice0 extends PptSlice {
 
-  PptSlice0(Ppt parent) {
+  PptSlice0(PptTopLevel parent) {
      super(parent, new VarInfo[0]);
   }
 

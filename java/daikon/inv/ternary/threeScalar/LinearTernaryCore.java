@@ -57,10 +57,19 @@ public final class LinearTernaryCore
     pclever[permutation[0]] = clever[0];
     pclever[permutation[1]] = clever[1];
     pclever[permutation[2]] = clever[2];
-    double d = -1.0 / pclever[2];
-    a = pclever[0] * d;
-    b = pclever[1] * d;
-    c = c * d;
+    if (pclever[2] == 0) {
+      // We can't handle this form.  Need to change "z = ax + by + c"
+      // style into "az + by + cz = 1", so that we can zero out
+      // any term we wish.
+      values_seen = 0;
+      a = b = c = 0;
+      System.err.println("Warning; ternary invariant had a bad day.");
+    } else {
+      double d = -1.0 / pclever[2];
+      a = pclever[0] * d;
+      b = pclever[1] * d;
+      c = c * d;
+    }
     // Fix caches
     long[][] caches = new long[3][];
     caches[permutation[0]] = x_cache;
@@ -97,10 +106,12 @@ public final class LinearTernaryCore
           // LinearBinary, not a LinearTernary, term.  (It might not show up
           // as LinearBinary because there might not have been enough samples;
           // but a random varying third variable can create enough samples.)
+	  /* [INCR] this makes stuff to weird
           if ((a == 0) || (b == 0)) {
             wrapper.destroy();
             return;
           }
+	  */
 
           for (int i=0; i<MINTRIPLES; i++) {
             // I should permit a fudge factor here.
@@ -283,6 +294,7 @@ public final class LinearTernaryCore
     return "LinearTernaryCore" + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b
+      + ",c=" + c
       + ",values_seen=" + values_seen;
   }
 
@@ -295,7 +307,7 @@ public final class LinearTernaryCore
     // It shouldn't be the case that a or b is 0 for printed invariants;
     // but that can be true earlier on in processing.
     if ((a == 0) && (b == 0) && (c == 0)) {
-      return z + " == 0 * " + x + " + 0 * " + y + " + 0";
+      return z + " == ? * " + x + " + ? * " + y + " + ?";
     }
     return z + " == " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
   }
@@ -303,7 +315,7 @@ public final class LinearTernaryCore
   /* IOA */
   public String format_ioa(String x, String y, String z) {
     if ((a == 0) && (b == 0) && (c == 0)) {
-      return z + " = (0 * " + x + ") + (0 * " + y + ") + 0";
+      return z + " = (? * " + x + ") + (? * " + y + ") + ?";
     }
     return z + " = " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
   }
