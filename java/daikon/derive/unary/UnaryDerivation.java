@@ -3,11 +3,24 @@ package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
 
-public abstract class UnaryDerivation implements Derivation {
+import utilMDE.*;
+
+public abstract class UnaryDerivation implements Derivation, Cloneable {
+
+  public VarInfo var_info;
 
   public UnaryDerivation(VarInfo vi) { var_info = vi; }
 
-  public VarInfo var_info;
+  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
+    try {
+      UnaryDerivation result = (UnaryDerivation) this.clone();
+      result.var_info = new_vars[ArraysMDE.indexOf(old_vars, result.var_info)];
+      return result;
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+      throw new Error(e.toString());
+    }
+  }
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 

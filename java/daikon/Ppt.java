@@ -19,6 +19,7 @@ import utilMDE.*;
 //    own data structure with all the values, but depends on its parent
 //    (which may be any type of Ppt except a PptSlice, which wouldn't
 //    make good sense).
+// Actually, right now we assume all Views are Slices, which is a problem.
 
 
 // I want to indicate that every Ppt has a public member var_infos.  In
@@ -43,6 +44,8 @@ public abstract class Ppt {
   // where else these would be referred to.
   //  * This is actually a set, but is implemented as a WeakHashMap because
   //  * that is the only weak collection and I want the objects weakly held.
+  // I'm not sure why this was originally a HashSet, but that fact is now
+  // taken advantage of in instantiate_views.
   /**
    * All the Views on this.
    * Provided so that this Ppt can notify them when significant events
@@ -50,6 +53,15 @@ public abstract class Ppt {
    * discarding data.
    */
   HashSet views;
+
+  // Temporarily have a separate collection for PptConditional views.
+  // In the long run, I'm not sure whether the two HashSets will be
+  // separate or not.
+  // Right now, these are created only after all the values have been seen,
+  // so I don't have to get too tense about installing them correctly and
+  // iterating over them.  That should be fixed later.  For now, maybe have
+  // two methods that add:  one that puts all the values in, one that doesn't.
+  Vector views_cond;
 
   /** Add a new derived Ppt. */
   void addView(Ppt slice) {

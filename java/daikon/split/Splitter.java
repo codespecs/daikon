@@ -10,7 +10,7 @@ import daikon.*;
  * independently.
  */
 
-abstract class Splitter {
+public abstract class Splitter {
 
   /**
    * Creates a splitter "factory" that should only be used for creating
@@ -25,7 +25,16 @@ abstract class Splitter {
   abstract public Splitter instantiate(Ppt ppt);
 
   /**
-   * Returns true or false according as whether the values in the specified
+   * Returns true or false according to whether this was instantiated
+   * correctly and test(ValueTuple) can be called without error.
+   * An alternate design would have instantiate(Ppt) check this,
+   * but it's a bit easier on implementers of subclasses of Splitter
+   * for the work to be done (in just one place) by the caller.
+   */
+  abstract public boolean valid();
+
+  /**
+   * Returns true or false according to whether the values in the specified
    * VarTuple satisfy the condition represented by this Splitter.
    */
   abstract public boolean test(ValueTuple vt);

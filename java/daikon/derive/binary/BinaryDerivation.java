@@ -3,15 +3,29 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
-public abstract class BinaryDerivation implements Derivation {
+import utilMDE.*;
+
+public abstract class BinaryDerivation implements Derivation, Cloneable {
+
+  VarInfo var_info1;
+  VarInfo var_info2;
 
   public BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     var_info1 = vi1;
     var_info2 = vi2;
   }
 
-  VarInfo var_info1;
-  VarInfo var_info2;
+  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
+    try {
+      BinaryDerivation result = (BinaryDerivation) this.clone();
+      result.var_info1 = new_vars[ArraysMDE.indexOf(old_vars, result.var_info1)];
+      result.var_info2 = new_vars[ArraysMDE.indexOf(old_vars, result.var_info2)];
+      return result;
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+      throw new Error(e.toString());
+    }
+  }
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 

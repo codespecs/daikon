@@ -8,7 +8,7 @@ import utilMDE.*;
 // This is the data structure that holds the tuples of values see so far
 // (and how many times each was seen).
 
-public class ValueTuple {
+public class ValueTuple implements Cloneable {
 
   // These arrays should be interned.
 
@@ -29,6 +29,8 @@ public class ValueTuple {
 				// Don't use a single int because that
 				// won't scale to (say) more than 16
 				// values.
+
+
   // Right now there are only three meaningful values for a mod:
   public final static int UNMODIFIED = 0;
   public final static int MODIFIED = 1;
@@ -186,6 +188,29 @@ public class ValueTuple {
     return new ValueTuple(vals_, mods_, true);
   }
 
+
+  // Like clone(), but avoids its problems of default access and returning
+  // an Object.
+  public ValueTuple shallowcopy() {
+    return ValueTuple.makeFromInterned(vals, mods);
+  }
+
+  // public Object clone() {
+  //   return ValueTuple.makeFromInterned(vals, mods);
+  // }
+
+
+  public int size() {
+    Assert.assert(vals.length == mods.length);
+    return vals.length;
+  }
+
+  // Return a new ValueTuple containing this one's first len elements.
+  public ValueTuple trim(int len) {
+    Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
+    int[] new_mods = ArraysMDE.subarray(mods, 0, len);
+    return new ValueTuple(new_vals, new_mods);
+  }
 
 
   // This modifies the ValueTuple in place!!

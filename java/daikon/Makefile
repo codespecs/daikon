@@ -10,8 +10,10 @@ all_directly:
 
 all_force:	all_directly
 
-all_javac:
+all_via_javac:
 	javac -g ${JAVA_FILES}
+
+all_javac:	all_via_javac
 
 Runtime.class: Runtime.java
 	jikes -g +E +F Runtime.java

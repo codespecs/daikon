@@ -8,6 +8,8 @@ import daikon.inv.scalar.*;
 import daikon.inv.sequence.*;
 import daikon.inv.twoScalar.*;
 import daikon.inv.twoSequence.*;
+import daikon.split.*;
+import daikon.split.griesLisp.*;
 
 import java.util.*;
 import com.oroinc.text.regex.*;
@@ -65,9 +67,8 @@ class PptTopLevel extends Ppt {
     }
 
     values = new VarValues();
-    // I'm not sure why this *was* a HashSet, but that fact is now
-    // taken advantage of in instantiate_views.
     views = new HashSet();
+    views_cond = new Vector();
 
     // While there are no constants, this works.
     num_tracevars = var_infos.length;
@@ -312,6 +313,17 @@ class PptTopLevel extends Ppt {
   /// Derived variables
   ///
 
+  // Convenience function for PptConditional initializer (which can't
+  // contain statements but can call a function).
+  public VarInfo[] trace_and_orig_vars() {
+    // This doesn't work because ArraysMDE.subarray always returns an
+    // Object[], which cannot be cast to VarInfo[].
+    // return (VarInfo[]) ArraysMDE.subarray(var_infos, 0, num_tracevars + num_orig_vars);
+    VarInfo[] result = new VarInfo[num_tracevars + num_orig_vars];
+    System.arraycopy(var_infos, 0, result, 0, num_tracevars + num_orig_vars);
+    return result;
+  }
+
 
   // This is here because I think it doesn't make sense to derive except
   // from a PptTopLevel (and possibly a PptConditional?).  Perhaps move it
@@ -553,6 +565,7 @@ class PptTopLevel extends Ppt {
 
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
+    Assert.assert(vt.size() == var_infos.length);
 
     values.increment(vt, count);
 
@@ -630,7 +643,8 @@ class PptTopLevel extends Ppt {
     // now, don't bother:  I want to just get something working first.
     while (derivation_indices[derivation_passes] < var_infos.length) {
       Vector derivations = derive();
-      // This only does part of the work:  addVarInfos(derivations);
+
+      // Using "addVarInfos(derivations)" would do only part of the work.
       addDerivedVariables(derivations);
 
       Assert.assert(derivation_indices[0] == var_infos.length);
@@ -643,57 +657,57 @@ class PptTopLevel extends Ppt {
   }
 
 
-//         if fn_derived_from.has_key(fn_name):
-//             # Don't do any variable derivation, only invariant inference
-//             numeric_invariants_over_index(
-//                 range(0, len(var_infos)), var_infos, var_values)
-//         else:
-//             # Perform variable derivation as well as invariant inference
-//             fn_derived_from[fn_name] = true
-//
-//             derivation_functions = (None, pass1_functions, pass2_functions)
-//             derivation_passes = len(derivation_functions)-1
-//             # First number: invariants are computed up to this index, non-inclusive
-//             # Remaining numbers: values have been derived from up to these indices
-//             derivation_index = (0,) * (derivation_passes+1)
-//
-//             # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
-//             #   >= derivation_index[1] >= ...
-//
-//             while derivation_index[-1] < len(var_infos):
-//                 assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
-//                 for i in range(0,derivation_index[1]):
-//                     vi = var_infos[i]
-//                     assert (not vi.type.is_array()) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None or vi.is_derived
-//                 if debug_derive:
-//                     print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
-//
-//                 # If derivation_index == (a, b, c) and n = len(var_infos), then
-//                 # the body of this loop:
-//                 #     * computes invariants over a..n
-//                 #     * does pass1 introduction for b..a
-//                 #     * does pass2 introduction for c..b
-//                 # and afterward, derivation_index == (n, a, b).
-//
-//                 # original number of vars; this body may well add more
-//                 num_vars = len(var_infos)
-//                 if derivation_index[0] != num_vars:
-//                     numeric_invariants_over_index(
-//                         range(derivation_index[0], num_vars), var_infos, var_values)
-//
-//                 for pass_no in range(1,derivation_passes+1):
-//                     if debug_derive:
-//                         print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
-//                     if derivation_index[pass_no] == derivation_index[pass_no-1]:
-//                         continue
-//                     introduce_new_variables_one_pass(
-//                         var_infos, var_values,
-//                         range(derivation_index[pass_no], derivation_index[pass_no-1]),
-//                         derivation_functions[pass_no])
-//
-//                 derivation_index = (num_vars,) + derivation_index[:-1]
-//                 if debug_derive:
-//                     print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
+  //         if fn_derived_from.has_key(fn_name):
+  //             # Don't do any variable derivation, only invariant inference
+  //             numeric_invariants_over_index(
+  //                 range(0, len(var_infos)), var_infos, var_values)
+  //         else:
+  //             # Perform variable derivation as well as invariant inference
+  //             fn_derived_from[fn_name] = true
+  //
+  //             derivation_functions = (None, pass1_functions, pass2_functions)
+  //             derivation_passes = len(derivation_functions)-1
+  //             # First number: invariants are computed up to this index, non-inclusive
+  //             # Remaining numbers: values have been derived from up to these indices
+  //             derivation_index = (0,) * (derivation_passes+1)
+  //
+  //             # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
+  //             #   >= derivation_index[1] >= ...
+  //
+  //             while derivation_index[-1] < len(var_infos):
+  //                 assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
+  //                 for i in range(0,derivation_index[1]):
+  //                     vi = var_infos[i]
+  //                     assert (not vi.type.is_array()) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None or vi.is_derived
+  //                 if debug_derive:
+  //                     print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
+  //
+  //                 # If derivation_index == (a, b, c) and n = len(var_infos), then
+  //                 # the body of this loop:
+  //                 #     * computes invariants over a..n
+  //                 #     * does pass1 introduction for b..a
+  //                 #     * does pass2 introduction for c..b
+  //                 # and afterward, derivation_index == (n, a, b).
+  //
+  //                 # original number of vars; this body may well add more
+  //                 num_vars = len(var_infos)
+  //                 if derivation_index[0] != num_vars:
+  //                     numeric_invariants_over_index(
+  //                         range(derivation_index[0], num_vars), var_infos, var_values)
+  //
+  //                 for pass_no in range(1,derivation_passes+1):
+  //                     if debug_derive:
+  //                         print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
+  //                     if derivation_index[pass_no] == derivation_index[pass_no-1]:
+  //                         continue
+  //                     introduce_new_variables_one_pass(
+  //                         var_infos, var_values,
+  //                         range(derivation_index[pass_no], derivation_index[pass_no-1]),
+  //                         derivation_functions[pass_no])
+  //
+  //                 derivation_index = (num_vars,) + derivation_index[:-1]
+  //                 if debug_derive:
+  //                     print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
 
 
@@ -725,10 +739,10 @@ class PptTopLevel extends Ppt {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Printing invariants
+  /// Creating invariants
   ///
 
-  // is a Vector is we are adding views; this obviates the need for a
+  // Is a Vector if we are adding views; this obviates the need for a
   // "boolean adding_views" variable.
   private Vector views_to_remove_deferred = null;
   // This is to avoid making a new vector every time through the loop;
@@ -759,9 +773,7 @@ class PptTopLevel extends Ppt {
     slices = (PptSliceGeneric[]) slices_vector.toArray(new PptSliceGeneric[] { });
     num_slices = slices.length;
 
-    for (Iterator vt_itor = values.entrySet().iterator() ;
-         vt_itor.hasNext() ;
-         /* no increment in for loop */ ) {
+    for (Iterator vt_itor = values.entrySet().iterator(); vt_itor.hasNext(); ) {
       Map.Entry entry = (Map.Entry) vt_itor.next();
       ValueTuple vt = (ValueTuple) entry.getKey();
       int count = ((Integer) entry.getValue()).intValue();
@@ -1166,6 +1178,85 @@ class PptTopLevel extends Ppt {
   // }
 
 
+  ///////////////////////////////////////////////////////////////////////////
+  /// Creating conditioned views
+  ///
+
+  // This apparently can't appear in PptConditional, lest it never get called.
+  // I guess PptConditional isn't instantiated unless it needs to be, but
+  // it doesn't need to be unless GiesLisp has been instantiated already.)
+  static {
+    new GriesLisp();
+  }
+
+  public Splitter[] getSplitters() {
+    Splitter[] from_fullname = SplitterList.get(name);
+    if (Global.debugPptTopLevel)
+      System.out.println("getSplitters "
+                         + ((from_fullname != null) ? "succeeded" : "failed")
+                         + " with " + name);
+    if (from_fullname != null)
+      return from_fullname;
+    int tag_index = name.indexOf(FileIO.ppt_tag_separator);
+    if (tag_index != -1) {
+      String untagged_name = name.substring(0, tag_index);
+      Splitter[] from_untagged_name = SplitterList.get(untagged_name);
+      if (Global.debugPptTopLevel)
+        System.out.println("getSplitters "
+                           + ((from_untagged_name != null) ? "succeeded" : "failed")
+                           + " with " + untagged_name);
+      if (from_untagged_name != null)
+        return from_untagged_name;
+    }
+    return null;
+  }
+
+  public void addConditions(Splitter[] splits) {
+    if (splits == null) {
+      System.out.println("No splits for " + name);
+      return;
+    }
+
+    Vector pconds_vector = new Vector(2 * splits.length);
+    for (int i=0; i<splits.length; i++) {
+      PptConditional cond1 = new PptConditional(this, splits[i], false);
+      if (! cond1.splitter_valid())
+        continue;
+      pconds_vector.add(cond1);
+      PptConditional cond2 = new PptConditional(this, splits[i], true);
+      pconds_vector.add(cond2);
+    }
+    PptConditional[] pconds
+      = (PptConditional[]) pconds_vector.toArray(new PptConditional[] { });
+    int num_pconds = pconds.length;
+
+    for (Iterator vt_itor = values.entrySet().iterator() ; vt_itor.hasNext() ; ) {
+      Map.Entry entry = (Map.Entry) vt_itor.next();
+      ValueTuple vt = (ValueTuple) entry.getKey();
+      int count = ((Integer) entry.getValue()).intValue();
+      // I do not want to use the same ValueTuple every time through
+      // because the ValueTuple is modified in place.
+      // It's OK to reuse its elements, though; so use clone().
+      ValueTuple vt_trimmed = vt.trim(num_tracevars + num_orig_vars);
+      for (int i=0; i<num_pconds; i++)
+        pconds[i].add(vt_trimmed.shallowcopy(), count);
+    }
+
+    for (int i=0; i<num_pconds; i++) {
+      views_cond.add(pconds[i]);
+    }
+    for (int i=0; i<num_pconds; i++) {
+      pconds[i].initial_processing();
+    }
+
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Printing invariants
+  ///
+
+
   public Iterator invariants() {
     Iterator itorOfItors = new Iterator() {
         Iterator views_itor = views.iterator();
@@ -1196,6 +1287,12 @@ class PptTopLevel extends Ppt {
     }
     System.out.println("===========================================================================");
     print_invariants();
+
+    for (int i=0; i<views_cond.size(); i++) {
+      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+      pcond.print_invariants_maybe();
+    }
+
   }
 
   /** Print invariants for a single program point. */

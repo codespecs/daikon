@@ -8,7 +8,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class VarInfo {
+public class VarInfo implements Cloneable {
 
   // Name and type
   public String name;		// interned
@@ -100,6 +100,71 @@ public class VarInfo {
 
   public VarInfo(VarInfo vi) {
     this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.static_constant_value);
+  }
+
+  // I *think* I don't need to implement VarInfo.clone(), as the java.lang.Object
+  // version is sufficient.
+  // protected Object clone() { ... }
+
+  /// I'm not currently using this because doing this would prevent
+  /// any new variable derivation, and I do want such derivation to occur.
+  /// Furthermore, I don't want to try to deal with figuring out what
+  /// occurred and only doing what's new, etc.
+  // Given an array of VarInfo objects, return an array of clones, where
+  // references to the originals have been modified into references to the
+  // new ones (so that the new set is self-consistent).  The originals
+  // should not be modified by this operation.
+  public static VarInfo[] arrayclone_clever(VarInfo[] a_old) {
+    VarInfo[] a_new = new VarInfo[a_old.length];
+    for (int i=0; i<a_new.length; i++) {
+      try {
+        a_new[i] = (VarInfo) a_old[i].clone();
+      } catch (CloneNotSupportedException e) {
+        e.printStackTrace();
+        throw new Error(e.toString());
+      }
+      a_new[i].canBeMissing = false;
+      // I must set this; even though the specified variables will still
+      // be equal, they may have a different canonical representative.
+      a_new[i].equal_to = null;
+      // this doesn't really need to be set; if non-null, it's guaranteed
+      // to be the same in the child
+      // a_new[i].dynamic_constant = null;
+      a_new[i].ppt = null;
+    }
+    // I need to fix both of these slots:
+    //   public Derivation derived;	// whether (and how) derived
+    //   public Vector derivees;	// vector of Derivation objects
+    HashMap deriv_map = new HashMap();
+    for (int i=0; i<a_new.length; i++) {
+      Derivation deriv_old = a_old[i].derived;
+      Derivation deriv_new = deriv_old.switchVars(a_old, a_new);
+      deriv_map.put(deriv_old, deriv_new);
+      a_new[i].derived = deriv_new;
+    }
+    for (int i=0; i<a_new.length; i++) {
+      Vector derivees_old = a_old[i].derivees;
+      Vector derivees_new = new Vector(derivees_old.size());
+      for (int j=0; j<derivees_old.size(); j++) {
+        Derivation deriv_old = (Derivation) derivees_old.elementAt(j);
+        Derivation deriv_new = (Derivation) deriv_map.get(deriv_old);
+        Assert.assert(deriv_new != null);
+        derivees_new.add(deriv_new);
+      }
+    }
+    return a_new;
+  }
+
+  // Given an array of VarInfo objects, return an array of clones, where
+  // references to the originals have been modified into references to the
+  // new ones (so that the new set is self-consistent).  The originals
+  // should not be modified by this operation.
+  public static VarInfo[] arrayclone_simple(VarInfo[] a_old) {
+    int len = a_old.length;
+    VarInfo[] a_new = new VarInfo[len];
+    for (int i=0; i<len; i++)
+      a_new[i] = new VarInfo(a_old[i]);
+    return a_new;
   }
 
 

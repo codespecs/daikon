@@ -9,6 +9,9 @@ public interface Derivation {
   // public boolean applicable();
 
 
+  // This is essentially a clone() method that also switches the variables.
+  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
+
   // I think the separate computeModified and computeValue functions aren't
   // so useful, particularly since the same computation must usually be done
   // in both functions.

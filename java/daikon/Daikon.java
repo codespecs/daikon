@@ -3,7 +3,10 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.split.*;
+
 import utilMDE.*;
+
 import java.util.*;
 
 public class Daikon {
@@ -46,6 +49,8 @@ public class Daikon {
       String ppt_name = (String) itor.next();
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
       ppt.initial_processing();
+      Splitter[] pconds = ppt.getSplitters();
+      ppt.addConditions(pconds);
       ppt.print_invariants_maybe();
     }
 
