@@ -3,6 +3,7 @@ package daikon.inv.unary.stringsequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.*;
+import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 
@@ -128,7 +129,10 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 	  if (elts[i].startsWith("[")) {
 	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
 	  } else {
-	    result += "\\type(" + elts[i] + ")";
+            String str = elts[i];
+            if (str.startsWith("\"") && str.endsWith("\""))
+              str = str.substring(1, str.length()-1);
+	    result += "\\type(" + str + ")";
 	  }
 	}
       }
