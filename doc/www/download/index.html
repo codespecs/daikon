@@ -41,6 +41,7 @@ In addition to the below downloads, also see the
       The Daikon distribution includes everything you need to start using
       Daikon:  source files, compiled files (including <a
       href="daikon.jar">daikon.jar</a>), documentation, examples, and more.
+    <p>
   <li><b>Front ends</b>
     <ul>
       <li><b>Java front end, <tt>dfej</tt></b> (prebuilt binary)<br>
@@ -79,6 +80,44 @@ In addition to the below downloads, also see the
 	  <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris</a> (11 Sep 2002, 7.1 Mbytes)
 	</ul>
     </ul>
+    <p>
+  <li><b>Eclipse plugin</b>: Daikon is available as an Eclipse feature for Eclipse
+      3.0.1 and later.  The feature consists of a plugin containing the Daikon jar
+      library and a plugin containing a UI for using Daikon within Eclipse.  You need
+      to separately obtain the dfej front-end appropriate for your system from the
+      Daikon site.
+    <P>
+      To install the Daikon feature for Eclipse, follow these steps:
+    <ul>
+     <li> Start Eclipse.
+     <li> Open the dialog at Help >> Software Updates >> Find and Install.
+     <li> Choose "Search for new features to install" and "Next>".
+     <li> Select "New Remote Site".  Fill in the dialog with the name "Daikon" and
+          the URL "http://pag.csail.mit.edu/eclipse", and press "OK".
+     <li> Select "Daikon" in the list of sites to search and press "Next>".
+     <li> If all is well, the available versions of the plugin will be displayed;
+          select the most recent Daikon version and press "Next>".  The plugin version
+          number is the same as the version of Daikon which it wraps.
+     <li> Read and accept the license terms, and press "Next>".
+     <li> Choose the install location in which the plugin is to be installed, and
+          press "Finish".
+     <li> After installation, you will need to restart the workspace in order for the 
+          menu items to appear.
+     <li> You also need to download to your machine a copy of the dfej front-end
+          appropriate to your system, as described under "front-ends" above.
+     <li> In the Eclipse workbench, open the Preferences dialog (Window->Preferences);
+          the Daikon preferences are under the Java heading.
+          Enter the path to the dfej executable
+          in the appropriate text field.
+    </ul>
+    <p>
+      Documentation about using the plugin is available through the Eclipse Help facility.
+      That documentation is also reproduced <A HREF="daikonHelp.html">here</A>.
+      Feedback on the plugin itself should be sent to the Daikon mailing list (to the attention of David Cok).
+    <p>
+      The source code for the plugin is available <A HREF="http://pag.csail.mit.edu/eclipse/src/daikon-src.zip">here</A>,
+      in accord with the <A HREF=http://www.eclipse.org/legal/cpl-v10.html>Eclipse Common Public License</A>.
+    <p>
 
   <li><b>CVS</b>:  Daikon is also available via CVS; see the <a
       href="doc/developer.html#Historical">Daikon Developer Manual</a> for
