@@ -55,15 +55,11 @@ public final class FileIO {
 
   /// Settings
 
-  /* Expected behavior when changing modbits:
-    -changed       Set modbits to 1 iff the printed representation has changed.
-
-    -addchanged    Set modbits to 1 if the printed representation has changed.
-                   Leave other modbits as is.  This is the default.
-
-    Set this boolean to true if you want the "addchanged" behavior. Set to
-    False if you want the "changed" behavior
-  */
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.  When false, set modbits
+  // to 1 iff the printed representation has changed.  When true, set
+  // modbits to 1 if the printed representation has changed; leave
+  // other modbits as is.
   public static boolean dkconfig_add_changed = true;
 
 
