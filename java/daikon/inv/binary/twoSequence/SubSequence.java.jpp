@@ -644,7 +644,7 @@ public class CLASSNAME
       if (slice == null) {
         System.out.println("No slice: parent =" + ppt_parent);
       } else {
-        System.out.println("Slice var =" + slice.var_info);
+        System.out.println("Slice var =" + slice.var_infos[0]);
         Iterator superinvs = slice.invs.iterator();
         while (superinvs.hasNext()) {
           Object superinv = superinvs.next();
