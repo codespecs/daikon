@@ -6,6 +6,16 @@ package daikon;
 import daikon.split.*;
 import daikon.suppress.*;
 import daikon.inv.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.sequenceString.*;
+import daikon.inv.ternary.threeScalar.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.config.Configuration;
 
@@ -213,7 +223,7 @@ public final class Daikon {
    * When true, perform detailed internal checking.
    * These are essentially additional, possibly costly assert statements.
    */
-  public static boolean dkconfig_internal_check = false;
+  public static boolean dkconfig_internal_check = true;
 
   /**
    * If set, only ppts less than ppt_max_name are included.  Used by the
@@ -293,6 +303,12 @@ public final class Daikon {
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
 
+  /** current invariant (used for debugging) **/
+  public static Invariant current_inv = null;
+
+  /* List of prototype invariants (one for each type of invariant) */
+  public static List /*Invariant*/ proto_invs = new ArrayList();
+
   /** Debug tracer. **/
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
@@ -347,6 +363,9 @@ public final class Daikon {
     if (! noversion_output) {
       System.out.println(release_string);
     }
+
+    // Create the list of all invariant types
+    setup_proto_invs();
 
     if (PrintInvariants.print_discarded_invariants) {
       DiscReasonMap.initialize();
@@ -747,6 +766,220 @@ public final class Daikon {
       spinfo_files,
       map_files,
     };
+  }
+
+
+  /**
+   * Creates the list of prototype invariants for all Daikon invariants.
+   * New invariants must be added to this list
+   */
+  public static void setup_proto_invs() {
+
+    // Unary scalar invariants
+    {
+      // OneOf (OneOf.java.jpp)
+      proto_invs.add (OneOfScalar.get_proto());
+      proto_invs.add (OneOfFloat.get_proto());
+      proto_invs.add (OneOfString.get_proto());
+
+      // NonZero (NonZero.java.jpp)
+      proto_invs.add (NonZero.get_proto());
+      proto_invs.add (NonZeroFloat.get_proto());
+
+      // Lower and Upper bound (Bound.java.jpp)
+      proto_invs.add (LowerBound.get_proto());
+      proto_invs.add (LowerBoundFloat.get_proto());
+      proto_invs.add (UpperBound.get_proto());
+      proto_invs.add (UpperBoundFloat.get_proto());
+
+      // Modulus and NonModulus (Modulus.java and NonModulus.java)
+      proto_invs.add (Modulus.get_proto());
+      proto_invs.add (NonModulus.get_proto());
+
+      // Range invariant (Range.java.jpp)
+      proto_invs.addAll (RangeInt.get_proto_all());
+      proto_invs.addAll (RangeFloat.get_proto_all());
+
+      // Positive (x > 0) (Postive.java).  Positive is a sample invariant
+      // that is only included as an example.
+      // proto_invs.add (Postive.get_proto());
+    }
+
+    // Unary sequence invariants
+    {
+      // OneOf (OneOf.java.jpp)
+      proto_invs.add (OneOfSequence.get_proto());
+      proto_invs.add (OneOfFloatSequence.get_proto());
+      proto_invs.add (OneOfStringSequence.get_proto());
+      proto_invs.add (EltOneOf.get_proto());
+      proto_invs.add (EltOneOfFloat.get_proto());
+      proto_invs.add (EltOneOfString.get_proto());
+
+      // Sequence Index Comparisons (SeqIndexComparison.java.jpp)
+      proto_invs.add (SeqIndexIntEqual.get_proto());
+      proto_invs.add (SeqIndexIntNonEqual.get_proto());
+      proto_invs.add (SeqIndexIntGreaterEqual.get_proto());
+      proto_invs.add (SeqIndexIntGreaterThan.get_proto());
+      proto_invs.add (SeqIndexIntLessEqual.get_proto());
+      proto_invs.add (SeqIndexIntLessThan.get_proto());
+      proto_invs.add (SeqIndexFloatEqual.get_proto());
+      proto_invs.add (SeqIndexFloatNonEqual.get_proto());
+      proto_invs.add (SeqIndexFloatGreaterEqual.get_proto());
+      proto_invs.add (SeqIndexFloatGreaterThan.get_proto());
+      proto_invs.add (SeqIndexFloatLessEqual.get_proto());
+      proto_invs.add (SeqIndexFloatLessThan.get_proto());
+
+      // foreach i compare a[i] to a[i+1] (EltwiseIntComparisons.java.jpp)
+      proto_invs.add (EltwiseIntEqual.get_proto());
+      proto_invs.add (EltwiseIntLessEqual.get_proto());
+      proto_invs.add (EltwiseIntGreaterEqual.get_proto());
+      proto_invs.add (EltwiseIntLessThan.get_proto());
+      proto_invs.add (EltwiseIntGreaterThan.get_proto());
+      proto_invs.add (EltwiseFloatEqual.get_proto());
+      proto_invs.add (EltwiseFloatLessEqual.get_proto());
+      proto_invs.add (EltwiseFloatGreaterEqual.get_proto());
+      proto_invs.add (EltwiseFloatLessThan.get_proto());
+      proto_invs.add (EltwiseFloatGreaterThan.get_proto());
+
+      // EltNonZero (EltNonZero.java.jpp)
+      proto_invs.add (EltNonZero.get_proto());
+      proto_invs.add (EltNonZeroFloat.get_proto());
+
+      // No Duplicates (NoDuplicates.java.jpp)
+      proto_invs.add (NoDuplicates.get_proto());
+      proto_invs.add (NoDuplicatesFloat.get_proto());
+
+      // Element bounds (Bound.java.jpp)
+      proto_invs.add (EltLowerBound.get_proto());
+      proto_invs.add (EltUpperBound.get_proto());
+      proto_invs.add (EltLowerBoundFloat.get_proto());
+      proto_invs.add (EltUpperBoundFloat.get_proto());
+    }
+
+    // Binary scalar-scalar invariants
+    {
+      // Int, Float, String comparisons (from IntComparisons.java.jpp)
+      proto_invs.add (IntEqual.get_proto());
+      proto_invs.add (IntNonEqual.get_proto());
+      proto_invs.add (IntLessThan.get_proto());
+      proto_invs.add (IntGreaterThan.get_proto());
+      proto_invs.add (IntLessEqual.get_proto());
+      proto_invs.add (IntGreaterEqual.get_proto());
+      proto_invs.add (FloatEqual.get_proto());
+      proto_invs.add (FloatNonEqual.get_proto());
+      proto_invs.add (FloatLessThan.get_proto());
+      proto_invs.add (FloatGreaterThan.get_proto());
+      proto_invs.add (FloatLessEqual.get_proto());
+      proto_invs.add (FloatGreaterEqual.get_proto());
+      proto_invs.add (StringEqual.get_proto());
+      proto_invs.add (StringNonEqual.get_proto());
+      proto_invs.add (StringLessThan.get_proto());
+      proto_invs.add (StringGreaterThan.get_proto());
+      proto_invs.add (StringLessEqual.get_proto());
+      proto_invs.add (StringGreaterEqual.get_proto());
+
+      // LinearBinary over integer/float (from LinearBinary.java.jpp)
+      proto_invs.add (LinearBinary.get_proto());
+      proto_invs.add (LinearBinaryFloat.get_proto());
+
+      // Numeric invariants (from Numeric.java.jpp)
+      proto_invs.addAll (NumericInt.get_proto_all());
+      proto_invs.addAll (NumericFloat.get_proto_all());
+    }
+
+    // Binary sequence-sequence invariants
+    {
+      // Numeric invariants (from Numeric.java.jpp)
+      proto_invs.addAll (PairwiseNumericInt.get_proto_all());
+      proto_invs.addAll (PairwiseNumericFloat.get_proto_all());
+
+      // Lexical sequence comparisons (from SeqComparison.java.jpp)
+      proto_invs.add (SeqSeqIntEqual.get_proto());
+      proto_invs.add (SeqSeqIntLessThan.get_proto());
+      proto_invs.add (SeqSeqIntGreaterThan.get_proto());
+      proto_invs.add (SeqSeqIntLessEqual.get_proto());
+      proto_invs.add (SeqSeqIntGreaterEqual.get_proto());
+      proto_invs.add (SeqSeqFloatEqual.get_proto());
+      proto_invs.add (SeqSeqFloatLessThan.get_proto());
+      proto_invs.add (SeqSeqFloatGreaterThan.get_proto());
+      proto_invs.add (SeqSeqFloatLessEqual.get_proto());
+      proto_invs.add (SeqSeqFloatGreaterEqual.get_proto());
+      proto_invs.add (SeqSeqStringEqual.get_proto());
+      proto_invs.add (SeqSeqStringLessThan.get_proto());
+      proto_invs.add (SeqSeqStringGreaterThan.get_proto());
+      proto_invs.add (SeqSeqStringLessEqual.get_proto());
+      proto_invs.add (SeqSeqStringGreaterEqual.get_proto());
+
+      // Pairwise sequence comparisons (from PairwiseIntComparison.java.jpp)
+      proto_invs.add (PairwiseIntEqual.get_proto());
+      proto_invs.add (PairwiseIntLessThan.get_proto());
+      proto_invs.add (PairwiseIntGreaterThan.get_proto());
+      proto_invs.add (PairwiseIntLessEqual.get_proto());
+      proto_invs.add (PairwiseIntGreaterEqual.get_proto());
+      proto_invs.add (PairwiseFloatEqual.get_proto());
+      proto_invs.add (PairwiseFloatLessThan.get_proto());
+      proto_invs.add (PairwiseFloatGreaterThan.get_proto());
+      proto_invs.add (PairwiseFloatLessEqual.get_proto());
+      proto_invs.add (PairwiseFloatGreaterEqual.get_proto());
+
+      // Array Reverse (from Reverse.java.jpp)
+      proto_invs.add (Reverse.get_proto());
+      proto_invs.add (ReverseFloat.get_proto());
+
+      // Pairwise Linear Binary (from PairwiseLinearBinary.java.jpp)
+      proto_invs.add (PairwiseLinearBinary.get_proto());
+      proto_invs.add (PairwiseLinearBinaryFloat.get_proto());
+
+      // Subset and Superset (from SubSet.java.jpp)
+      proto_invs.add (SubSet.get_proto());
+      proto_invs.add (SuperSet.get_proto());
+      proto_invs.add (SubSetFloat.get_proto());
+      proto_invs.add (SuperSetFloat.get_proto());
+
+      // Subsequence (from SubSequence.java.jpp)
+      proto_invs.add (SubSequence.get_proto());
+      proto_invs.add (SubSequenceFloat.get_proto());
+      proto_invs.add (SuperSequence.get_proto());
+      proto_invs.add (SuperSequenceFloat.get_proto());
+    }
+
+    // Binary sequence-scalar invariants
+    {
+      // Comparison of scalar to each array element (SeqIntComparison.java.jpp)
+      proto_invs.add (SeqIntEqual.get_proto());
+      proto_invs.add (SeqIntLessThan.get_proto());
+      proto_invs.add (SeqIntGreaterThan.get_proto());
+      proto_invs.add (SeqIntLessEqual.get_proto());
+      proto_invs.add (SeqIntGreaterEqual.get_proto());
+      proto_invs.add (SeqFloatEqual.get_proto());
+      proto_invs.add (SeqFloatLessThan.get_proto());
+      proto_invs.add (SeqFloatGreaterThan.get_proto());
+      proto_invs.add (SeqFloatLessEqual.get_proto());
+      proto_invs.add (SeqFloatGreaterEqual.get_proto());
+
+      // Scalar is an element of the array (Member.java.jpp)
+      proto_invs.add (Member.get_proto());
+      proto_invs.add (MemberFloat.get_proto());
+      proto_invs.add (MemberString.get_proto());
+    }
+
+    // Ternary invariants
+    {
+      // FunctionBinary (FunctionBinary.java.jpp)
+      proto_invs.addAll (FunctionBinary.get_proto_all());
+      proto_invs.addAll (FunctionBinaryFloat.get_proto_all());
+
+      // LinearTernary (LinearTernary.java.jpp)
+      proto_invs.add (LinearTernary.get_proto());
+      proto_invs.add (LinearTernaryFloat.get_proto());
+    }
+
+    // Remove any null elements (can happen if an invariant is not enabled)
+    for (Iterator i = proto_invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      if (inv == null)
+        i.remove();
+    }
   }
 
 
