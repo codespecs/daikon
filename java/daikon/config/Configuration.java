@@ -88,10 +88,10 @@ public final class Configuration
           Assert.assertTrue(value != null);
           unparsed = String.valueOf(value);
         } catch (Exception e) {
-          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(new Throwable());
+          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(e);
           throw new Error(message);
         } catch (Error e) {     // especially NoClassDefFoundError
-          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(new Throwable());
+          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e + daikon.Global.lineSep + utilMDE.UtilMDE.backTrace(e);
           throw new Error(message);
         }
         addRecord(classname, fieldname, unparsed);
