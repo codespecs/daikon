@@ -253,6 +253,7 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
 	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
 	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
+	daikon/inv/ternary/threeScalar/ThreeScalarFactory.java \
     daikon/inv/binary/sequenceString/Member.java
 
 
