@@ -39,8 +39,8 @@ public class LinearTernaryCoreTest
       assertTrue(false);
       coef = null; // not reached
     }
-    // System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c);
-    // System.out.println("actual: " + ltc.a + " " + ltc.b + " " + ltc.c);
+   //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
+   //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
     assertTrue(coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d);
   }
@@ -57,7 +57,8 @@ public class LinearTernaryCoreTest
     one_test_set_tri_linear(new int[][] { { 1, 2, 6 },
                                           { 2, 1, -4 },
                                           { 3, 3, 7 } },
-                            -3, 7, -1, -5);
+                        //    -3, 7, -1, -5);
+                        3,-7,1, 5);
 
     // These have non-integer parameters; must have a LinearTernaryCoreFloat
     // in order to handle them.
