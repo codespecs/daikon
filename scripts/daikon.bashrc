@@ -39,9 +39,9 @@ export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 ## is what is produced by the system property "sun.boot.class.path".
 # export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
 
-if [-e ${DAIKONDIR}/java/ajax-ship/ajax.jar]; then
+if [ -e ${DAIKONDIR}/java/ajax-ship/ajax.jar ]; then
   export CLASSPATH=${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
-endif
+fi
 
 ## Indicates where Ajax should find its helper files such as
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
