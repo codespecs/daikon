@@ -212,7 +212,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	splitPane.setDividerSize( 2 );
 
 	getContentPane().removeAll();
-	setTitle( "Welcome to the Daikon GUI" );
+	setTitle( "Invariants Display" );
 	getContentPane().add( splitPane );
  	pack();
 	setSize( 600, 700 );
@@ -235,7 +235,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     }
 
     void createControlPanel() {
-	JFrame controlPanel = new JFrame( "Filter control panel" );
+	JFrame controlPanel = new JFrame( "Control Panel" );
 	controlPanel.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 	Container contentPane = controlPanel.getContentPane();
 	contentPane.setLayout( new BoxLayout( contentPane, BoxLayout.Y_AXIS ));
@@ -603,10 +603,11 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	headingLabel.setForeground( new Color( 50, 30, 100 ));
 	headingLabel.setAlignmentX( .5f );
 	JButton showVariablesButton = new JButton( "Show variables..." );
+	final InvariantTablesPanel invariantTablesPanel = this;	// wish I could use this$0
 	showVariablesButton.addActionListener( new ActionListener() {
 		//  Make this an inner class so it can see topLevel
 		public void actionPerformed( ActionEvent e ) {
-		    new VariableSelectionDialog( topLevel.var_infos, invariantFilters, this$0, variablesList );
+		    new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList );
 		}});
 	showVariablesButton.setAlignmentX( Component.RIGHT_ALIGNMENT );
 	JPanel headingPanel = new JPanel();
@@ -696,9 +697,10 @@ class VariableSelectionDialog extends JDialog {
 	    }
 	
         JButton cancelButton = new JButton( "Cancel" );
+	final VariableSelectionDialog variableSelectionDialog = this;	// wish I could use this$0
         cancelButton.addActionListener( new ActionListener() {
             public void actionPerformed( ActionEvent e ) {
-		this$0.setVisible( false );
+		variableSelectionDialog.setVisible( false );
             }});
         final JButton okButton = new JButton( "Filter on selected variables" );
         okButton.addActionListener( new ActionListener() {
@@ -710,7 +712,7 @@ class VariableSelectionDialog extends JDialog {
 			invariantsTablesPanel.updateInvariantsDisplay();
 			listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
 		    }
-		this$0.setVisible( false );
+		variableSelectionDialog.setVisible( false );
 		variablesList.setModel( listModel );
             }});
         getRootPane().setDefaultButton( okButton );
