@@ -48,10 +48,12 @@ def clear_variables():
     ftn_names_to_call_ct = {}
     ftn_to_orig_param_vals = {}
 
-def clear_invariants():
+def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
-    for var_infos in fn_var_infos.values():
-        for vi in var_infos:
+    for fn_name in fn_var_infos.keys():
+        if fn_regexp and fn_regexp.match(fn_name):
+            continue
+        for vi in fn_var_infos[fn_name]:
             vi.invariant = None
             vi.invariants = {}
 
@@ -695,7 +697,7 @@ pass2_functions = (introduce_from_sequence_pass2,
 def read_file_ftns(filename):
     """Read data from .inv file; add to dictionary mapping file
     names to invocation counts.  The invocation counts are initialized
-    to zero. Also initialize dict mapping files to parameters to
+    to zero.  Also initialize dict mapping files to parameters to
     original values."""
 
     file = open(filename, "r")
@@ -716,7 +718,7 @@ def read_file_ftns(filename):
         else:
             (label, param_list) = label_and_params
         param_list = param_list[:-2] # remove trailing newline and ')'
-        param_list = string.split(param_list, ",")
+        param_list = re.split("[, ]", param_list)
         params_to_orig_val_list = {}
         for param in param_list:
             if param != '': # handle empty parameter list???
@@ -775,6 +777,7 @@ def read_file(filename):
         line = file.readline()
         while "\t" in line:
             (this_var_name,this_value) = string.split(line, "\t", 1)
+            this_var_name_orig = this_var_name
             if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
                 # variable is a sequence
                 this_var_type = types.ListType
@@ -817,9 +820,9 @@ def read_file(filename):
 
             # If beginning of function, store the original param val
             if label == "BEGIN":
-                if this_var_name in params_to_orig_val_list.keys():
+                if this_var_name_orig in params_to_orig_val_list.keys():
                     param_list = []
-                    param_list = params_to_orig_val_list[this_var_name]
+                    param_list = params_to_orig_val_list[this_var_name_orig]
                     param_list.append(this_value)
 
             line = file.readline()
@@ -835,9 +838,11 @@ def read_file(filename):
             for (param, param_list) in params_to_orig_val_list.items():
                 # Shouldn't need to do this regexp match; just look up the type
                 if sequence_re.match(param):
-                    these_var_infos.append(param + "_orig", types.ListType)
+                    if param[-2:] == "[]":
+                        param = param[:-2]
+                    these_var_infos.append(var_info(param + "_orig", types.ListType))
                 else:
-                    these_var_infos.append(param + "_orig", types.IntType)
+                    these_var_infos.append(var_info(param + "_orig", types.IntType))
                 these_values.append(param_list[-1])
                 del param_list[-1]
 
@@ -944,14 +949,12 @@ negative_invariant_confidence = .01     # .05 might also be reasonable
 
 def all_numeric_invariants(fn_regexp=None):
     """Compute and print all the numeric invariants."""
-    clear_invariants()
-
     if type(fn_regexp) == types.StringType:
         fn_regexp = re.compile(fn_regexp)
 
-    function_names = fn_var_infos.keys()
-    function_names.sort()
-    for fn_name in function_names:
+    clear_invariants(fn_regexp)
+
+    for fn_name in fn_var_infos.keys():
         if fn_regexp and fn_regexp.match(fn_name):
             continue
         # If we discover that two values are equal, then there is no sense
