@@ -298,13 +298,13 @@ public class Dataflow
       int new_vis_index = 0;
       for (int k = 0; k < entry_ppt.num_declvars; k++) {
         VarInfo vi = entry_ppt_vis[k];
-        Assert.assertTrue(!vi.isDerived(),"Derived when making orig(): "+vi.name);
+        Assert.assertTrue(!vi.isDerived(), "Derived when making orig(): " + vi.name);
         if (vi.isStaticConstant())
           continue;
         VarInfo origvar = VarInfo.origVarInfo(vi);
         // Fix comparability
         VarInfo postvar = exit_ppt.findVar(vi.name);
-        Assert.assertTrue(postvar != null,"Exit not superset of entry: "+vi.name);
+        Assert.assertTrue(postvar != null, "Exit not superset of entry: "  + vi.name);
         origvar.comparability = postvar.comparability.makeAlias(origvar.name);
         // Setup PO; relate orig(...) on EXIT to ... on ENTER
         origvar.addHigherPO(vi, static_po_group_nonce);

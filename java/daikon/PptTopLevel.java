@@ -805,7 +805,7 @@ public class PptTopLevel
       checkCount++;
 
       if (debugSuppress.isDebugEnabled()) {
-        debugSuppress.debug ("  Checkcount: "+ checkCount);
+        debugSuppress.debug ("  Checkcount: " + checkCount);
       }
 
       Set weakenedInvs = new HashSet();

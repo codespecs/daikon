@@ -682,7 +682,7 @@ public class SplitterFactory {
           for (int j = 0; j < num_args; j++) {
             fname_regexp = fname_regexp + "\\s*(\\S*)";
             if (j+1 < num_args) {
-              fname_regexp = fname_regexp+"\\s*,";
+              fname_regexp = fname_regexp + "\\s*,";
             }
           }
           fname_regexp = fname_regexp + "\\s*\\)";
@@ -738,7 +738,7 @@ public class SplitterFactory {
           condition = Util.substitute(re_matcher, re_compiler.compile("#"), replace_subst, condition, 1);
         }
       } catch (MalformedPatternException e) {
-        debugPrint( e.toString() +" while performing replacement on condition " + condition);
+        debugPrint( e.toString() + " while performing replacement on condition " + condition);
       }
     }
     return condition;

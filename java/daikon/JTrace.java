@@ -196,7 +196,7 @@ public class JTrace
         }
         catch(Throwable e)
         {
-            println(V_ERROR, "JTrace: target's method `main' could not be "+
+            println(V_ERROR, "JTrace: target's method `main' could not be " +
                                "invoked: "  + e);
             return false;
         }

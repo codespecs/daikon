@@ -167,13 +167,13 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(D);
 
-	assert(!beforeD.seenEvent(D));
-	assert(!afterD.seenEvent(D));
-	assert(!afterA.seenEvent(D));
+	assertTrue(!beforeD.seenEvent(D));
+	assertTrue(!afterD.seenEvent(D));
+	assertTrue(!afterA.seenEvent(D));
 
-	assert(beforeA.seenEvent(D));
-	assert(beforeB.seenEvent(D));
-	assert(!afterC.seenEvent(D));
+	assertTrue(beforeA.seenEvent(D));
+	assertTrue(beforeB.seenEvent(D));
+	assertTrue(!afterC.seenEvent(D));
 
 	global.processEvent(C);
 
