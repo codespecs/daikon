@@ -31,23 +31,35 @@ class DisjSets
   }
 
   /**
-   * Union two disjoint sets.
-   * For simplicity, we assume root1 and root2 are distinct
-   * and represent set names.
+   * Union two disjoint sets.  For simplicity, we assume root1 and
+   * root2 are distinct and represent set names.
+   * 
    * @param root1 the root of set 1.
    * @param root2 the root of set 2.
-   */
-  public void union( int root1, int root2 )
+   **/
+  public void unionDisjoint( int root1, int root2 )
   {
     s[ root2 ] = root1;
   }
 
   /**
+   * Union any two sets.
+   * @param set1 element in set 1.
+   * @param set2 element in set 2.
+   **/
+  public void unionCareful( int set1, int set2 )
+  {
+    int root1 = find(set1);
+    int root2 = find(set2);
+    unionDisjoint(root1, root2);
+  }
+  
+  /**
    * Perform a find.
    * Error checks omitted again for simplicity.
    * @param x the element being searched for.
    * @return the set containing x.
-   */
+   **/
   public int find( int x )
   {
     if( s[ x ] < 0 )
