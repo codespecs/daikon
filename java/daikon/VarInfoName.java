@@ -30,13 +30,6 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-6)).applyTypeOf();
     }
 
-    // foo[].size (for multi-dimentional arrays or vectors)
-    if (name.endsWith("[].size")) {
-      // XXX: HACK! This is not the right thing to do (?), but OK for now
-      name = name.substring(0, name.length()-"[].size".length());
-      return parse(name + ".size").applyElements();
-    }
-
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only leagal characters would be more robust
@@ -48,6 +41,17 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-2)).applyElements();
     }
 
+    // a[].foo or a[].foo.bar
+    if (name.indexOf("[]") >= 0) {
+      int brackets = name.lastIndexOf("[]");
+      int dot = name.lastIndexOf('.');
+      if (dot >= brackets) {
+	String first = name.substring(0, dot);
+	String field = name.substring(dot+1);
+	return parse(first).applyField(field);
+      }
+    }
+    
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
@@ -276,6 +280,39 @@ public abstract class VarInfoName
     }
     public Object accept(Visitor v) {
       return v.visitFunctionOf(this);
+    }
+  }
+
+  /**
+   * 
+   **/
+  public VarInfoName applyField(String field) {
+    return (new Field(this, field)).intern();
+  }
+
+  /**
+   * 
+   **/
+  public static class Field extends VarInfoName {
+    public final VarInfoName term;
+    public final String field;
+    public Field(VarInfoName term, String field) {
+      Assert.assert(term != null);
+      Assert.assert(field != null);
+      this.term = term;
+      this.field = field;
+    }
+    protected String name_impl() {
+      return term.name() + "." + field;
+    }
+    protected String esc_name_impl() {
+      return name_impl();
+    }
+    protected String simplify_name_impl() {
+      return "(select " + field + " " + term.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitField(this);
     }
   }
 
@@ -628,6 +665,7 @@ public abstract class VarInfoName
     public Object visitSimple(Simple o);
     public Object visitSizeOf(SizeOf o);
     public Object visitFunctionOf(FunctionOf o);
+    public Object visitField(Field o);
     public Object visitTypeOf(TypeOf o);
     public Object visitPrestate(Prestate o);
     public Object visitPoststate(Poststate o);
@@ -653,6 +691,9 @@ public abstract class VarInfoName
     }
     public Object visitFunctionOf(FunctionOf o) {
       return o.argument.accept(this);
+    }
+    public Object visitField(Field o) {
+      return o.term.accept(this);
     }
     public Object visitTypeOf(TypeOf o) {
       return o.term.accept(this);
@@ -701,6 +742,9 @@ public abstract class VarInfoName
     }
     public Object visitFunctionOf(FunctionOf o) {
       return (o == goal) ? goal : super.visitFunctionOf(o);
+    }
+    public Object visitField(Field o) {
+      return (o == goal) ? goal : super.visitField(o);
     }
     public Object visitTypeOf(TypeOf o) {
       return (o == goal) ? goal : super.visitTypeOf(o);
@@ -812,6 +856,10 @@ public abstract class VarInfoName
       return (o == old) ? _new :
 	((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
     }
+    public Object visitField(Field o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitField(o)).applyField(o.field);
+    }
     public Object visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
 	((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
@@ -875,6 +923,10 @@ public abstract class VarInfoName
     public Object visitFunctionOf(FunctionOf o) {
       result.add(o);
       return super.visitFunctionOf(o);
+    }
+    public Object visitField(Field o) {
+      result.add(o);
+      return super.visitField(o);
     }
     public Object visitTypeOf(TypeOf o) {
       result.add(o);
