@@ -3,7 +3,7 @@ package daikon;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.IOException;
-import utilMDE.Assert;
+import utilMDE.*;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a
@@ -326,11 +326,42 @@ public class PptName
 
   /**
    * @return true iff this program point is a constructor entry or exit.
+   * There are two ways in which this works.  With older decl files, the
+   * method name starts with <init>.  Newer decl files do not have <init>
+   * but their method name includes the class name.  For compatibility
+   * both mechanisms are checked.
    **/
   public boolean isConstructor() {
-    return (method != null)
-      && (method.startsWith("<init>"));
+
+    if (method != null) {
+
+      if (method.startsWith ("<init>"))
+        return (true);
+
+      if (cls == null)
+        return (false);
+
+      String class_name = UtilMDE.unqualified_name (cls);
+      int arg_start = method.indexOf ('(');
+      String method_name = method;
+      if (arg_start != -1)
+        method_name = method.substring (0, arg_start);
+
+      // System.out.println ("fullname = " + fullname);
+      // System.out.println ("fn_name = " + fn_name);
+      // System.out.println ("method = " + method);
+      // System.out.println ("cls = " + cls);
+      // System.out.println ("class_name = " + class_name);
+      // System.out.println ("method_name = " + method_name);
+
+      if (class_name.equals (method_name))
+        return (true);
+    }
+
+    return (false);
+
   }
+
 
   // ==================== PRODUCERS ====================
 
