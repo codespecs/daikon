@@ -29,7 +29,7 @@ public abstract class Invariant
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030610L;
+  static final long serialVersionUID = 20030721L;
 
   /**
    * General debug tracer.
@@ -224,9 +224,9 @@ public abstract class Invariant
 
   /**
    * Stores the enumeration instance representing why this Invariant has
-   * been discarded.  Initialized to DiscardInvariant.not_discarded.
+   * been discarded.  Initialized to DiscardCode.not_discarded.
    */
-  public DiscardInvariant discardCode = DiscardInvariant.not_discarded;
+  public DiscardCode discardCode = DiscardCode.not_discarded;
 
   /**
    * Stores a string that describes why this Invariant has been discarded.  If
@@ -298,7 +298,8 @@ public abstract class Invariant
                     (getProbability() <= dkconfig_probability_limit);
     if (!just  && logOn())
       log ("Not justified, enoughSamples = " + enoughSamples()
-           + ", probability = " + getProbability() + ", repr = " + repr());
+           + ", probability = " + getProbability() + ", repr = " + repr() +
+           ", ppt.num_values() = " + ppt.num_values());
     return (just);
   }
 
@@ -1124,7 +1125,7 @@ public abstract class Invariant
     boolean result = (num_mod_non_missing_samples
                       < Invariant.min_mod_non_missing_samples);
     if (result) {
-      discardCode = DiscardInvariant.few_modified_samples;
+      discardCode = DiscardCode.few_modified_samples;
       discardString = "Had " + num_mod_non_missing_samples + " modified samples < min_mod_non_missing_samples==" +
         min_mod_non_missing_samples;
     }
