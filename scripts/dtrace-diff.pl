@@ -46,7 +46,8 @@ sub gzopen {
 	} else {
 	  $gzcat = 'gzcat';	# command output contains newline, etc.
 	}
-	print STDERR "gzcat = $gzcat\n";
+	# print STDERR "gzcat = $gzcat\n";
+	$fn = "$gzcat " . $fn . "|";
     }
     open ($fh, $fn) or die "couldn't open \"$fn\"\n";
     return [$fh, 0];
@@ -96,6 +97,7 @@ sub load_decls {
 sub load_ppt {
 #loads a single ppt from a dtrace fh given by $1
     my $dtfh = shift;
+    my $dtfhname = shift;
     my $pptname = getline($dtfh);
     while ((defined $pptname) && ($pptname eq "")) {
 	$pptname = getline($dtfh);
@@ -110,12 +112,14 @@ sub load_ppt {
     while (my $varname = getline($dtfh)) {
         my $modbit, $varval;
 	(defined ($varval = getline($dtfh)))
-	    or die "malformed dtrace file";
+	    # or die "malformed dtrace file (ppt $pptname, var $varname, no varval) $dtfhname";
+	    or die "malformed dtrace file (ppt $pptname) $dtfhname";
 	unless ($varname eq 'this_invocation_nonce') {
 	(defined ($modbit = getline($dtfh)))
-	    or die "malformed dtrace file";
+	    # or die "malformed dtrace file (ppt $pptname, var $varname, val $varval, no modbit) $dtfhname";
+  	    or die "malformed dtrace file (ppt $pptname, no modbit) $dtfhname";
         }
-	die "duplicate entry in dtracefile for var $varname at $pptname\n"
+	die "duplicate entry in dtracefile for var $varname at $pptname in $dtfhname\n"
 	    if (defined $$ppthash{$varname});
 	$$ppthash{$varname} = [$varval, $modbit];
     }
@@ -216,7 +220,7 @@ sub cmp_dtracen {
     $dtb = gzopen(DTB, $dtbname);
 
   PPT: while (1) {
-      my $ppta = load_ppt($dta); my $pptb = load_ppt($dtb);
+      my $ppta = load_ppt($dta, $dtaname); my $pptb = load_ppt($dtb, $dtbname);
       if ((not defined $ppta) && (not defined $pptb)) {
 	  last PPT;
       } elsif (not defined $ppta) {
