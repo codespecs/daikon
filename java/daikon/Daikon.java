@@ -40,8 +40,8 @@ public final class Daikon {
     throw new Error("do not instantiate");
   }
 
-  public final static String release_version = "3.1.7";
-  public final static String release_date = "January 1, 2005";
+  public final static String release_version = "4.0.0";
+  public final static String release_date = "February 7, 2005";
   public static final String release_string =
     "Daikon version "
       + release_version
