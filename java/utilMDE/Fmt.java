@@ -45,9 +45,18 @@ public class Fmt {
         else if (cmd == 's') {
           if (args[current_arg] == null)
             result.append ("null");
-          else
-            result.append (args[current_arg].toString());
+          else {
+            Object arg = args[current_arg];
+            if (arg instanceof long[])
+              result.append (ArraysMDE.toString ((long[])arg));
+            else if (arg instanceof String[])
+              result.append (ArraysMDE.toString ((String[])arg));
+            else if (arg instanceof double[])
+              result.append (ArraysMDE.toString ((double[])arg));
+            else
+              result.append (arg.toString());
           current_arg++;
+          }
         }
       }
     }
