@@ -20,6 +20,7 @@ $WARNING = 0;
 my $DERIVE_CONDITIONS = 0; # by default, don't derive conditions
 my $out = "cluster.spinfo"; 
 my $inv_file;
+my $cond_cluster_num; # the cluster number of the current condition
 
 while (scalar(@ARGV) > 0) {
     if ($ARGV[0] eq "--derive-conditions") {
@@ -44,26 +45,29 @@ open (IN, $inv_file) || die "couldn't open $inv_file\n";
 open (OUT, ">$out") || die "couldn't open $out for output\n";
 
 my %pptname_to_conds = ();
-my ($line, $pptname);
+my %allconds = ();
 
+my $pptname;
 while (<IN>) {
-    $line = $_;
+    
+    my $line = $_;
     chomp($line);
     if ($line =~ /:::/) {
 	$pptname = &cleanup_pptname($line);
 	chomp($pptname);
 	next;
-    }
+    } 
     
-    #eliminate unwanted invariants
+    #eliminate unwanted invariants and lines
     if ($line =~ /subsequence/ || $line =~ /elements/ 
-	|| $line =~ /in this/ || $line =~ /orig\(.*?\[.*?\].*?\)/
+	|| $line =~ /in this/ || $line =~ /orig/
 	|| $line =~ /contains no duplicates/ || $line =~ /Format/
 	|| $line =~ /\[.*cluster.*\]/ || $line =~ /reverse/ 
-	|| $line =~ /implemented/) {
+	|| $line =~ /implemented/ || $line =~ /has only one value/
+	|| $line =~ /===+/ 
+	|| $line =~ /class/) {
 	next;
     }
-    
     
     #remove all invariants which involve the cluster variable as the 
     #index of an array eg. someArray[cluster..] etc
@@ -76,113 +80,94 @@ while (<IN>) {
 	next;
     }
     
-    #remove predicates depending on cluster. Eg. in the java output,
+    # remove conditions of the form "int i ....", which 
+    # are extracted from range implications
+    if ($line =~ /\s*int\s*/) {
+	next;
+    }
+    
+    #remove predicates depending on the variable 'cluster'. Eg. in the java output,
     #(cluster == 1) ==> (condition) is written "(condition) || !(cluster == 1).
     #In this case, remove "|| !(cluster == 1) and extract only the condition.
-    if ($line =~ /\(cluster\s*==/) {
+    if ($line =~ /\(cluster\s*==\s*(\d*)/) {
+        $cond_cluster_num = $1;
 	$line =~ s/\!?\(cluster.*?\)//;
-	$line =~ s/^\s*\|\|\s*//; # remove trailing and leading ||
-	$line =~ s/\s*\|\|\s*$//;
+	$line =~ s/^\s*\|\|\s*//; # remove leading ||
+	$line =~ s/\s*\|\|\s*$//; # remove trailing ||
 	if ( $line =~ /\((.*)\)/ ) { #strip off the parentheses at the end.
 	    $line = $1;
 	}
+	
+	
+	
     } else {
+	#this is an invariant which doesn't involve the cluster implication.
+	#discard and read the next line
 	next;
     }
     
-    if ($line =~ /(cluster|===+|class )/) {
+    #If the line still has cluster in it, then this must be the cluster variable in an
+    #invariant, so discard the invariant.
+    if ($line =~ /(cluster)/) {
 	next;
     }
     
-    my @temparray = $pptname_to_conds{$pptname};
-    #remove all duplicates at a program point. However we want
-    #to preserve duplicates across program points (or do we?)
-    # use hashing!! more efficient
-    my $duplicate = 0;
-    for(my $i = 0; $i < scalar(@temparray); $i++) {
-	if( $line eq $temparray[$i] ) {
-	    $duplicate = 1;
-	    next;
-	}
-    }
-    if ($duplicate == 0) {
-	push @{$pptname_to_conds{$pptname}}, $line;
-    }  
+    push @{$pptname_to_conds{$pptname}{$cond_cluster_num}}, $line;
 }
 
-my @allconds = ();
-
-foreach my $p (keys %pptname_to_conds) {
+my %printed_conds = (); # this stores all the conditions already printed, so that
+                        # a condition is not printed more than once
     
-    my @conds = @{$pptname_to_conds{$p}};
-    my @pptconds_toprint = ();
+foreach my $pptname (keys %pptname_to_conds) {
+    my @pptconds_toprint = (); #the conditions to print @ each program point
     
-    foreach my $cond (@conds) {
-	my @derived = ();
+    # get the hashset (cluster_num => @conditions)
+    my %cluster_hash = %{$pptname_to_conds{$pptname}};
+    
+    
+    foreach my $cluster_num (keys %cluster_hash) {
+	my @conds = @{$cluster_hash{$cluster_num}};
+	my %conjunction = (); # a conjunction of all the conditions at the ppt.
 	
-	if ($DERIVE_CONDITIONS) {
-	    @derived = &derive_conditions($cond);
-	} else {
-	    push @derived, $cond;
-	}
-	
-	#look through all the conditions you've already obtained to see
-	#if this already exists. If we are using indiscriminate splitting
-	#then we need only one of each condition for all the program 
-	#points. However if we are not using indiscriminate splitting,
-	#we have to remove this block altogether.
-	#======================================
-      allconds:       #look through all the conditions we have, to see if we have a duplicate
-	foreach my $possible (@derived) {
-	    my $duplicate = 0;
-	    my $tmp = $possible;
-	    $tmp =~ s/\s//g;
-	    foreach my $exists (@allconds) {
-		if($exists eq $tmp) {
-		    $duplicate = 1;
-		    next allconds;
+	foreach my $cond (@conds) {
+	    # we don't want splitting conditions comparing a variable against a 
+	    # number, except if the number is -2, -1 , 0, 1, 2, 
+	    if ($cond =~ /[=><!]=?\D*-?(\d+)/) { #extract the number
+		if ($1 !~ /^\s*(0|1|2)\s*$/) {
+		    next;
 		}
 	    }
-	    if ($duplicate == 0) {
-		push @pptconds_toprint, $possible;
-		#we haven't seen it before. save it
-		push @allconds, $tmp;
+	    
+	    if ($cond !~ /return/) {
+		$conjunction{$cond} = 1;
+	    }
+	    if ($DERIVE_CONDITIONS) {
+		my @derived = &derive_conditions($cond);
+		@pptconds_toprint = (@pptconds_toprint, @derived);
+	    } else {
+		push @pptconds_toprint, $cond;
 	    }
 	}
-	#======================================
+	
+	push @pptconds_toprint, join ( ' && ', keys(%conjunction));
     }
     
     if (scalar(@pptconds_toprint) > 0) {
-	print OUT "PPT_NAME $p\n";
+	print OUT "PPT_NAME $pptname\n";
 	foreach my $cond (@pptconds_toprint) {
 	    
-	    # remove conditions of the form "int i ....", which 
-	    # are extracted from range implications
-	    if ($cond =~ /\s*int\s*/) {
-		next;
-	    }
-	    
-	    #for now don't use orig variables. can comment
-	    #this out if you want it.
-	    if ($cond =~ /orig(_|\()/ ) {
-		next;
-	    }
-	    
-	    #we made this substitution in &derive_implications
-	    while ($cond =~ /orig_.*?_/) {
-		$cond =~ s/orig_(.*?)_/orig($1)/;
-	    }
-	    
-	    # we don't want splitting conditions comparing a variable against a 
-	    # number, except if the number is -2, -1 , 0, 1, 2, 
-	    if ($cond =~ /[=><!]=?.*?(-?\d+)\s*/) { #extract the number
-		if ( $1 =~ /^\s*-?(0|1|2)\s*$/) {  #throw away if it's not (-)0,1,2
+	    # this is the last line of filtering. If you've already printed
+	    # it, don't. (This is the case for indiscriminate splitting: we
+	    # need just one of each splitting condition in the entire file.
+
+	    my $hash = $cond; #store it in the global list of conditions
+	    $hash =~ s/\s//;
+	    if (!exists $printed_conds{$hash}) {
+		$printed_conds{$hash} = 1;
+		if ($cond !~ /^\s*$/) {
 		    print OUT "$cond\n";
-		}
-		next;
+		} 
 	    }
-	    
-	    print OUT "$cond\n";
 	}
 	print OUT "\n";
     }
@@ -195,8 +180,8 @@ sub cleanup_pptname {
     #clean out the pptname and leave only the stem. Therefore
     #DataStructures.StackAr.<init>(I)V:::ENTER would be cleaned
     #up to DataStructures.StackAr
-    my ($pptname);
-    $pptname = $_[0];
+
+    my $pptname = $_[0];
     $pptname =~ s/<.*>//;
     $pptname =~ s/\(.*\)//;
     $pptname =~ s/EXIT.*//;
@@ -215,10 +200,6 @@ sub derive_conditions {
     $kraw = $_[0];
     @result = ();
     
-    #substitute "orig(x) with "orig_x_"
-    while($kraw =~ /orig\s*\(.*?\)/) {
-	$kraw =~ s/orig\s*\((.*?)\)/orig_$1_/;
-    }
     #now, I'm just checking for the simple case of 
     #var1 op var2. eg: a > b
     #ignore more complex ones like (a > b) || (a < c) ...
