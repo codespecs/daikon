@@ -19,7 +19,7 @@ use Carp;
 use List::Util 'shuffle';
 use util_daikon;
 
-sub usage() {
+sub usage () {
     print STDERR
 	"Usage: extract_vars.pl [OPTIONS] DTRACE_FILES DECL_FILES\n",
 	"Reads compressed (gzipped) or uncompressed dtrace files\n",
@@ -162,7 +162,7 @@ exit();
 
 ####################### subroutines ###################
 
-sub sample_large_ppts() {
+sub sample_large_ppts () {
 # so far, memory has not been a problem. If it turns out to be a
 # problem, we can read trace file again and printing only the sampled
 # invocations, instead of saving all the values in
@@ -237,7 +237,7 @@ sub sample_large_ppts() {
 
 # reads a paragraph of a dtrace file (an execution) and returns an
 # array in the format [pptname, invocation_nonce, @variable_values]
-sub read_execution( $ ) {
+sub read_execution ( $ ) {
   my @vararray = ();
   my @objarray;
 
@@ -309,7 +309,7 @@ sub read_execution( $ ) {
   return @vararray;
 }
 
-sub open_file_for_output_seq ($$) {
+sub open_file_for_output_seq ( $$ ) {
   # prep the file for writing the variable values. Now it just prints the number of variables
   # at this program point
   my ($pptname, $pptfilename) = @_;
@@ -332,7 +332,7 @@ sub open_file_for_output_seq ($$) {
 # we are writing) and the invocation nonce.
 my %pptname_to_nonce_translation = ();
 
-sub open_file_for_output_xmeans($$) {
+sub open_file_for_output_xmeans ( $$ ) {
   #open and prepare a file for writing the variable values for the ppt
   #specified in args(0)
 
@@ -362,11 +362,10 @@ sub open_file_for_output_xmeans($$) {
   }
 }
 
-sub output_xmeans(@) {
-  #prints out the variable values in column format, one invocation per line
-  # point1 var1 var2 ... varN
-  # point2 var1 var2 ... varN
-
+#prints out the variable values in column format, one invocation per line
+# point1 var1 var2 ... varN
+# point2 var1 var2 ... varN
+sub output_xmeans ( @ ) {
   my @output_vararray = @_;
   my $output_pptname = $output_vararray[0];
   my $output_nvars = $pptname_to_nvars{$output_pptname};
@@ -384,28 +383,27 @@ sub output_xmeans(@) {
 }
 
 
-sub output_seq(@) {
-  #prints out the variable values in the following form:
-  # vector length (N)
-  #point 1
-  #var1
-  #var2
-  # .
-  # .
-  # .
-  # varN
-  #point 2
-  #var1
-  #var2
-  # .
-  # .
-  # .
-  # varN
-  #point 3
-  # .
-  # .
-  # .
-
+#prints out the variable values in the following form:
+# vector length (N)
+#point 1
+#var1
+#var2
+# .
+# .
+# .
+# varN
+#point 2
+#var1
+#var2
+# .
+# .
+# .
+# varN
+#point 3
+# .
+# .
+# .
+sub output_seq ( @ ) {
   my @output_vararray = @_;
   my $output_pptname = $output_vararray[0];
   my $output_nvars = $pptname_to_nvars{$output_pptname};
@@ -416,9 +414,9 @@ sub output_seq(@) {
   }
 }
 
-#read an opened file till you reach a blank line, then return
-#(used to skip a paragraph of lines).
-sub skip_till_next(*) {
+# read an opened file till you reach a blank line, then return
+# (used to skip a paragraph of lines).
+sub skip_till_next ( * ) {
   local *FHANDLE = $_[0];
   while (my $line = <FHANDLE>) {
     if ($line =~ /^\s*$/) {
@@ -430,7 +428,7 @@ sub skip_till_next(*) {
 # return an array of $target random numbers between 0 (inclusive) and
 # $max(exclusive). These are used to sample the invocations at a
 # program point.
-sub get_random_numbers($$) {
+sub get_random_numbers ( $$ ) {
   my ($target, $max) = @_;
   if ($target < 2*$max) {
     my @list = (0.. $max-1);
@@ -452,8 +450,8 @@ sub get_random_numbers($$) {
   }
 }				#get_random_numbers
 
-#read a decls file, figure out the number of variables at each program
-#point, and open an output file for each decls file
+# read a decls file, figure out the number of variables at each program
+# point, and open an output file for each decls file
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
   open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
@@ -482,7 +480,7 @@ sub read_decls_file ( $ ) {
   }
 }				#read_decls_file
 
-sub read_decl_ppt() {
+sub read_decl_ppt () {
   #read a program point declaration in the decls file.
 
   my $nvars;			#number of variables at the program point

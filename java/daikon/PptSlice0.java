@@ -31,7 +31,9 @@ public class PptSlice0
   // read them in, but their format methods croaked when they couldn't
   // get their varInfos -smcc
 
-  // Really a HashSet<ImplicationByFormatWrapper>
+  // Really a HashSet<ImplicationByFormatWrapper>.
+  // This should not be transient:  more implications can be created during
+  // printing, for instance due to guarding.
   private /* [INCR] transient */ HashSet invariantsSeen = new HashSet();
 
   void init_po() {

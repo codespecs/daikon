@@ -34,7 +34,8 @@
 ;; Testing: (list (float-time) (float-time-2))
 
 (defun daikon-tags-table ()
-  "Use the Daikon TAGS table."
+  "Use the Daikon TAGS table.
+Remake it first if it is more than a week old."
   (interactive)
   (let* ((tags-file (substitute-in-file-name "$inv/java/TAGS"))
 	 (tags-file-exists (file-exists-p tags-file)))

@@ -25,7 +25,7 @@ sub usage() {
     "       Don't delete the temporary files created by the clustering\n",
     "       process\n",
     " --verbose\n",
-    "       Show progress, subcommands executed, etc.",
+    "       Show progress, subcommands executed, etc.\n",
     ;
 } #usage
 
@@ -72,7 +72,7 @@ if ($algorithm eq "xm") {
   if (system("xmeans 2>&1 > /dev/null") != 0) {
     die "Could not run the 'xmeans' binary.\n"
       . "Download it from http://www.cs.cmu.edu/~dpelleg/kmeans.html\n"
-      . "or choose a different clustering algorithm.";
+      . "or choose a different clustering algorithm.\n";
   }
 }
 
@@ -124,7 +124,7 @@ foreach my $filename (@to_cluster) {
     system_or_die($command, $verbose);
     unlink("out.clust");
   } else {
-    &dieusage ("unknown algorithm $algorithm\n");
+    &dieusage("unknown algorithm $algorithm");
   }
 }
 
@@ -236,6 +236,7 @@ sub remove_temporary_files () {
 sub dieusage ( $ ) {
   my ($msg) = @_;
   if ($msg !~ /^\s*$/) {
+    $msg =~ s/([^\n])\z/$1\n/;	# add newline if not present
     print STDERR "$msg\n";
   }
   &usage();
