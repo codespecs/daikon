@@ -122,6 +122,14 @@ public final class StringComparison extends TwoString implements Comparison {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String comparator = core.format_comparator();
+    comparator = (comparator.equals("==") ? "=" : comparator);
+    return var1().name.ioa_name(classname)+" "+comparator+" "+var2().name.ioa_name(classname);
+  }
+
+
   public String format_simplify() {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
