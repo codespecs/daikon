@@ -578,7 +578,10 @@ the value of @samp{*p} or @samp{p->field} will result in a segmentation
 fault when @samp{*p} is accessed.  (If you choose never to dereference a
 pointer while performing instrumentation, then you do not need to worry
 about invalid references.  However, you will be unable to output any
-fields of a struct or class, making your front end much less useful.)
+fields of a pointer to a struct or class, making your front end less
+useful.  You will still be abel to output fields of a regular variable
+to a struct or class, but most interesting uses of structs and classes
+in C and C++ are through pointers.)
 
 C relies on the programmer to remember which variables are valid, and
 the programmer must take care never to access invalid variables.
@@ -610,7 +613,7 @@ insurmountable.  There exist many tools for detecting or debugging
 memory errors in C, and they need to perform exactly the same memory
 tracking as a Daikon front end must perform.  Therefore, a Daikon front
 end can use the same well-known techniques, and possibly can even be
-built on top of such a tool.  For instance, the C front end Kvasir is
+built on top of such a tool.  For instance, one C front end, named Kvasir, is
 built on top of the Valgrind tool (@uref{http://valgrind.kde.org/}),
 greatly reducing the implementation effort.  Valgrind only works under
 Linux, but a C front end for another platform could build on a similar
@@ -1408,7 +1411,7 @@ ppt: foo.f():::EXIT35
 @c   help.  Please let us know anything interesting you learn, and we
 @c   wish you the best of luck with your research!
 @c Distributions in 2005:
-@c   1/7/2005	Miryung Kim <miryung@cs.washington.edu>
+@c   1/7/2005   Miryung Kim <miryung@cs.washington.edu>
 
 
 This section is intended primarily for researchers who are analyzing
