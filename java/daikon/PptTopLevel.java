@@ -2031,7 +2031,7 @@ public class PptTopLevel extends Ppt {
       }
       return;
     }
-    if (Daikon.esc_output && (combined_exit != null)) {
+    if ((combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
       return;
     }
     /// Old, more broken version.
@@ -2066,7 +2066,7 @@ public class PptTopLevel extends Ppt {
     out.println("===========================================================================");
     print_invariants(out);
 
-    if (! Daikon.esc_output) {
+    if (Daikon.output_style == Daikon.OUTPUT_STYLE_NORMAL) {
       for (int i=0; i<views_cond.size(); i++) {
         PptConditional pcond = (PptConditional) views_cond.elementAt(i);
         pcond.print_invariants_maybe(out, all_ppts);
@@ -2098,6 +2098,22 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
+  /**
+   * Simplify the names of variables before printing them.  For
+   * example, "orig(a[post(i)])" might change into "orig(a[i+1])".  We
+   * might want to switch off this behavior, depending on various
+   * heuristics.  We'll have to try it and see which output we like
+   * best.  In any case, we have to do this for ESC output, since ESC
+   * doesn't have anything like post().
+   **/
+  public void simplify_variable_names() {
+    Iterator iter = Arrays.asList(var_infos).iterator();
+    while (iter.hasNext()) {
+      VarInfo vi = (VarInfo) iter.next();
+      vi.simplify_expression();
+    }
+  }
+
   // To avoid the leading "UtilMDE." on all calls.
   private static String nplural(int n, String noun) {
     return UtilMDE.nplural(n, noun);
@@ -2107,6 +2123,10 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
+
+    // make names easier to read before printing
+    simplify_variable_names();
+
     // System.out.println("This = " + this + ", Name(2) = " + name + " = " + ppt_name);
     String better_name = name;
     int init_pos = better_name.indexOf(".<init>");
@@ -2133,7 +2153,7 @@ public class PptTopLevel extends Ppt {
     } else {
       out.println(better_name);
     }
-    if (Daikon.output_num_samples || Daikon.esc_output) {
+    if (Daikon.output_num_samples || (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC)) {
       out.print("    Variables:");
       for (int i=0; i<var_infos.length; i++)
         out.print(" " + var_infos[i].name);
@@ -2147,7 +2167,7 @@ public class PptTopLevel extends Ppt {
       VarInfo vi = var_infos[i];
       // This test is purely an optimization.
       if (! vi.isOrigVar()) {
-        VarInfo vi_orig = findVar(VarInfo.makeOrigName(vi.name));
+        VarInfo vi_orig = findVar(vi.name.applyPrestate());
         if (vi_orig != null) {
           // Assert.assert(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           // Assert.assert(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
@@ -2158,9 +2178,9 @@ public class PptTopLevel extends Ppt {
             // System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             PptSlice1 view = getView(vi);
             if ((view != null) && (view.num_values() > 0)) {
-              // The isPrimitive test is wrong.  We should suppress for only
-              // parameters, not all primitive values.
-              if (vi.type.isPrimitive() && (vi.name.indexOf(".") == -1)) {
+              // Using only the isPrimitive test is wrong.  We should suppress
+	      // for only parameters, not all primitive values.
+              if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
                 modified_primitive_vars.add(vi);
               } else {
                 modified_vars.add(vi);
@@ -2170,7 +2190,7 @@ public class PptTopLevel extends Ppt {
         }
       }
     }
-    if (Daikon.output_num_samples || Daikon.esc_output) {
+    if (Daikon.output_num_samples || (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
@@ -2253,24 +2273,41 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       if (vi.isCanonical()) {
-        Vector equal_vars = vi.equalToNonobvious();
+
+	// switch commented lines to include obviously equal in output
+	Vector equal_vars = vi.equalToNonobvious();
+	Vector obviously_equal = new Vector();
+	// Vector equal_vars = vi.equalTo();
+	// Vector obviously_equal = new Vector(equal_vars);
+	// obviously_equal.removeAll(vi.equalToNonobvious());
+	
         if (equal_vars.size() > 0) {
-          if (Daikon.esc_output) {
+	  switch (Daikon.output_style) {
+          case Daikon.OUTPUT_STYLE_ESC:
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
               if (vi.rep_type.isArray()) {
-                String[] forall = VarInfo.esc_forall_2(vi, other);
-                System.out.println("(" + forall[0] + "(" + forall[1] + " == " + forall[2] + "))");
+		String[] form =
+		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+		    { vi.name, other.name });
+                out.println("(" + form[0] + "( " + form[1] + " == " + form[2] + " ))");
               } else {
-		System.out.println(vi.esc_name + " == " + other.esc_name);
+		out.println(vi.name.esc_name() + " == " + other.name.esc_name());
+	      }
+	      if (obviously_equal.contains(other)) {
+		out.println("    (obviously)");
 	      }
             }
-          } else {
-            StringBuffer sb = new StringBuffer(vi.name);
+	    break;
+          case Daikon.OUTPUT_STYLE_NORMAL:
+            StringBuffer sb = new StringBuffer(vi.name.name());
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
               sb.append(" == "); // "interned"
               sb.append(other.name);
+	      if (obviously_equal.contains(other)) {
+		sb.append(" (obviously)");
+	      }
             }
             PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
             PptSlice slice1 = ppt_tl.findSlice(vi);
@@ -2284,11 +2321,27 @@ public class PptTopLevel extends Ppt {
               }
             }
             out.println(sb.toString());
+	    break;
+	  case Daikon.OUTPUT_STYLE_SIMPLIFY:
+            for (int j=0; j<equal_vars.size(); j++) {
+              VarInfo other = (VarInfo) equal_vars.elementAt(j);
+              if (vi.rep_type.isArray()) {
+                // String[] forall = VarInfo.esc_forall_2(vi, other);
+                // out.println("(" + forall[0] + "(" + forall[1] + " == " + forall[2] + "))");
+		out.println("format_simplify on array elemenwise equality needed " +
+			    vi.name + " eq " + other.name);
+              } else {
+		out.println("(EQ " + vi.name.simplify_name() +
+			    " " + other.name.simplify_name() + ")");
+	      }
+            }
+	    break;
+	  default:
+	    throw new IllegalStateException("Unknown output mode");
           }
         }
       }
     }
-
 
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
@@ -2320,11 +2373,24 @@ public class PptTopLevel extends Ppt {
 
       // isWorthPrinting checks many conditions for suppression
       if (! inv.isWorthPrinting()) {
-        // System.out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
+	// System.out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
 	continue;
       }
 
-      String inv_rep = (Daikon.esc_output ? inv.format_esc() : inv.format());
+      String inv_rep;
+      switch (Daikon.output_style) {
+      case Daikon.OUTPUT_STYLE_NORMAL:
+	inv_rep = inv.format();
+	break;
+      case Daikon.OUTPUT_STYLE_ESC:
+	inv_rep = inv.format_esc();
+	break;
+      case Daikon.OUTPUT_STYLE_SIMPLIFY:
+	inv_rep = inv.format_simplify();
+	break;
+      default:
+	throw new IllegalStateException("Unknown output mode");	
+      }
       if (Daikon.output_num_samples) {
         inv_rep += num_values_samples;
       }
@@ -2333,6 +2399,26 @@ public class PptTopLevel extends Ppt {
         out.println("  [" + inv.repr_prob() + "]");
       }
       Global.reported_invariants++;
+
+//    {
+//  	// Print out any subexpressions of this which are
+//  	// non-canonical (and thus could be replaced with a canonical
+//  	// form).  There are never any of these, though, since we
+//  	// don't derive from non-canonical variables.
+//  	Iterator iter = Arrays.asList(inv.ppt.var_infos).iterator();
+//  	while (iter.hasNext()) {
+//  	  VarInfoName name = ((VarInfo) iter.next()).name;
+//  	  Iterator nodes = (new VarInfoName.InorderFlattener(name)).nodes().iterator();
+//  	  nodes.next(); // skip the root
+//  	  while (nodes.hasNext()) {
+//  	    VarInfoName node = (VarInfoName) nodes.next();
+//  	    VarInfo info = findVar(node);
+//  	    if ((info != null) && !info.isCanonical()) {
+//  	      out.println("** sub node not canonical: " + node);
+//  	    }
+//  	  }
+//  	}
+//    }
     }
   }
 
@@ -2369,16 +2455,6 @@ public class PptTopLevel extends Ppt {
   //     }
   //   }
   // }
-
-  /**
-   * @requires inv is an invariant over this (program point)
-   * @return true iff print_invariants() would print this invariant
-   **/
-  public boolean isWorthPrinting(Invariant inv)
-  {
-    return inv.isWorthPrinting();
-  }
-
 
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
