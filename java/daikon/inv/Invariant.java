@@ -352,9 +352,11 @@ public abstract class Invariant implements java.io.Serializable {
 
 
 
-  String diff(Invariant other) {
-    throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());
-  }
+  // Diff replaced by package daikon.diff
+
+  //    String diff(Invariant other) {
+  //      throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());
+  //    }
 
   //     # Possibly add an optional "args=None" argument, for formatting.
   //     def diff(self, other):
