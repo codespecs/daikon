@@ -99,8 +99,10 @@ public final class SEQUENCESCALARSUBSEQUENCE
       end_exclusive = val2+index_shift+1; // +1: endpoint is exclusive
       // end_exclusive = 0 is acceptable; that means the empty array (given
       // that begin_inclusive is 0)
-      if ((end_exclusive < 0) || (end_exclusive > val1_array.length))
+      if ((end_exclusive < 0) || (end_exclusive > val1_array.length)) {
+        missing_array_bounds = true;
         return ValueAndModified.MISSING_NONSENSICAL;
+      }
     } else {
       // The subsequence is a[val2+index_shift..a.length-1]
       begin_inclusive = val2+index_shift;
@@ -109,8 +111,10 @@ public final class SEQUENCESCALARSUBSEQUENCE
       // empty array (given that end_exclusive is val1_arrayl.length)
       // (It is permitted to have a[a.length..a.length-1], which means
       // the empty array.  But a[MAX_INT..MAX_INT-1] is not meaningful.)
-      if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length))
+      if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length)) {
+        missing_array_bounds = true;
         return ValueAndModified.MISSING_NONSENSICAL;
+      }
     }
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
