@@ -45,11 +45,7 @@ DIST_DIR_PATHS := daikon-source.tar.gz daikon-compiled.tar.gz doc/images/daikon-
 # # Location for NFS-mounted binaries
 # NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
-# For really big files
-# DIST_DIR_2 := /projects/se/people/mernst/www
-DIST_DIR_2 := $(DIST_DIR)
-
-CVS_REP := /g4/projects/invariants/.CVS/
+CVS_REPOSITORY := /g4/projects/invariants/.CVS/
 RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
 TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
 
@@ -125,6 +121,9 @@ test-the-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
+	## First, test daikon.jar.
+	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
+	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
@@ -139,7 +138,7 @@ TESTCVSJAVA=$(TESTCVS)/invariants/java
 cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
-	cd $(TESTCVS) && cvs -Q -d $(CVS_REP) co invariants
+	cd $(TESTCVS) && cvs -Q -d $(CVS_REPOSITORY) co invariants
 	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/log4j.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
 
 
@@ -454,9 +453,9 @@ dist-dfec-linux:
 ## Old version
 # dist-edg: dist-edg-solaris
 # 
-# dist-edg-solaris: $(DIST_DIR_2)/edgcpfe-solaris
+# dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
 # 
-# $(DIST_DIR_2)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+# $(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
 # 	cp -pf $< $@
 # 	update-link-dates $(DIST_DIR)/index.html
 # 
