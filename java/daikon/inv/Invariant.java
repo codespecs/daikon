@@ -478,7 +478,7 @@ public abstract class Invariant implements java.io.Serializable {
 		  + this + "  " + repr_prob() + "  " + format()
 		  );
     if (this instanceof Comparison) {
-      //      Assert.assert(! IsEquality.it.accept(this));
+      //      Assert.assert(! IsEqualityComparison.it.accept(this));
       if (Global.debugPrintInvariants)
 	System.out.println("  [over constants:  " + this.repr_prob() + " ]");
       return true;
