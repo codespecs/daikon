@@ -576,7 +576,7 @@ public final class INTEQUAL
       #if defined(EQUAL_OP)
         comparator = "=";
       #elif defined(NONEQUAL_OP)
-      	comparator = "!=";
+        comparator = "!=";
       #endif
 
       #if (defined(EQUAL_OP)||defined(NONEQUAL_OP))
@@ -937,12 +937,18 @@ public final class INTEQUAL
   /**
    * Checks to see if there is a linear binary relationship between the
    * variables that implies > or <
+   *  a * x + b * y + c == 0
    *
-   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x
-   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) ==> y > x 
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) ==> y < x 
+   *
    *
    * Returns null if this is not true.  Appropriate DiscardInfo otherwise.
    */
+   //old
+   //   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x 
+   //   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
+   
   private DiscardInfo lb_implies (VarInfo[] vis) {
 
     // Look for a linear binary invariant over the same variables
@@ -952,11 +958,11 @@ public final class INTEQUAL
       return (null);
 
     // Only 'a == 1' implies a less than or greater than relationship
-    if (lb.core.a != 1.0)
+    if (-lb.core.a/lb.core.b != 1.0)
       return (null);
 
     // The b coefficient determines less than or greater than
-    if (EQUALS (lb.core.b, 0))
+    if (EQUALS (-lb.core.c/lb.core.b, 0))
       return (null);
 
     return new DiscardInfo (this, DiscardCode.obvious, "implied by "

@@ -47,24 +47,28 @@ public final class CLASSNAME
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
+  //***old  
   // This invariant represents y == ax + b; the first argument is x, second is y
   // (This form rules out vertical lines.  We should instead state
   // this invariant like "ax + by = 1".  This would make swapping
   // easier and allow for vertical lines.)
-  public double a = 0, b = 0;
+  //***old
+  
+  // This invariant represents ax + by + c = 0; the first argument is x, second is y
+  public double a = 0, b = 0, c = 0;
 
   public PRIMITIVE min_x, min_y, max_x, max_y;
-  public double min_a, max_a, min_b, max_b;
+  public double min_a, max_a, min_b, max_b, min_c, max_c;
 
   public Invariant wrapper;
 
   // The number of distinct values (not samples) observed.
   public int values_seen = 0;
 
-  // We delay computation of a and b until we have seen several pairs so
-  // that we can compute a and b based on a far-separated pair.  We reduce
+  // We delay computation of a, b and c until we have seen several pairs so
+  // that we can compute a, b and c based on a far-separated pair.  We reduce
   // the likelihood of roundoff error by getting 4 points, then choosing
-  // the two that are furthest apart in order to compute a and b.
+  // the two that are furthest apart in order to compute a, b and c.
   static final int MINPAIRS = 4;
 
   public PRIMITIVE[] x_cache = new PRIMITIVE[MINPAIRS];
@@ -87,6 +91,7 @@ public final class CLASSNAME
     }
   }
 
+//There is no more need for swap because the equation is in standard form.
   public void swap() {
     // was a swap
     if (values_seen < MINPAIRS) {
@@ -98,9 +103,16 @@ public final class CLASSNAME
         values_seen = Integer.MAX_VALUE;
         a = 0;
         b = 0;
+        c = 0;
       } else {
-        a = 1 / a;   // a' =  1/a
-        b = -b * a;  // b' = -b/a
+    //since the equation is already in standard form, just guarantee that the x coefficient is positive
+    
+    if(b < 0) {
+      a = b/-1.0;
+      b = a/-1.0;
+      c = c/-1.0;
+  }
+  
       }
     }
 
@@ -118,7 +130,7 @@ public final class CLASSNAME
     min_y = tmp_val;
 
 
-  }
+ }
 
   /**
    * Returns whether or not the invariant is currently active.  We become
@@ -137,6 +149,159 @@ public final class CLASSNAME
   public boolean isFlowable() {
     return (false);
   }
+
+//  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+//     if (values_seen < MINPAIRS) {
+
+//       // We delay computation of a and b until we have seen several pairs
+//       // so that we can compute a and b based on a far-separated pair.  If
+//       // the points in a pair are nearby, then roundoff errors in the
+//       // computation of the slope can be non-negligible.
+
+//       for (int i=0; i<values_seen; i++)
+//         if ((x_cache[i] == x) && (y_cache[i] == y))
+//           return InvariantStatus.NO_CHANGE;
+
+// //       x_cache[values_seen] = x;
+// //       y_cache[values_seen] = y;
+// //       values_seen++;
+
+//       PRIMITIVE[] x_vals = new PRIMITIVE[MINPAIRS + 1];
+//       PRIMITIVE[] y_vals = new PRIMITIVE[MINPAIRS + 1];
+//       for (int i = 0; i < x_cache.length; i++) {
+//         x_vals[i] = x_cache[i];
+//         y_vals[i] = y_cache[i];
+//       }
+//       x_vals[values_seen] = x;
+//       y_vals[values_seen] = y;
+
+
+//       if (values_seen + 1 == MINPAIRS) {
+//         // Find the most separated pair.
+//         int[] sep_indices = maxsep_point(x_vals, y_vals);
+//         int max_i = sep_indices[0];
+//         int max_j = sep_indices[1];
+
+//         // Set a and b based on that pair
+//         if (max_i == -1) {
+//           //          values_seen--;
+//           return InvariantStatus.FALSIFIED;
+//         }
+//         // remember the min and max pairs
+//         if (x_vals[max_i] < x_vals[max_j]) {
+//           // swap max_i and max_j
+//           int tmp = max_i;
+//           max_i = max_j;
+//           max_j = tmp;
+//         }
+//         PRIMITIVE min_x = x_cache[max_i];
+//         PRIMITIVE min_y = y_cache[max_i];
+//         PRIMITIVE max_x = x_cache[max_j];
+//         PRIMITIVE max_y = y_cache[max_j];
+
+//         double[] aAndB = new PRIMITIVE[2];
+
+//         // calculate a and b for this pair and remember them as min/max a,b
+//         find_bi_linear(min_x, max_x, min_y, max_y, aAndB);
+
+//         double a = aAndB[0];
+//         double b = aAndB[1];
+// //         double min_a = a;
+// //         double max_a = a;
+// //         double min_b = b;
+// //         double max_b = b;
+
+
+//         // Check all values against a and b.
+//         if (a == 0) {
+//           return InvariantStatus.FALSIFIED;
+//         }
+//         for (int i=0; i<MINPAIRS + 1; i++) {
+//           // if the point is close enough in either x or y it is close enough
+//           // The double check is used because lines with different slopes may
+//           // indicate an unreasonably high x or y diff when the actual point
+//           // is very close.  It would probably be better to calculate the
+//           // actual distance from the line, but it would be unclear what to
+//           // compare this to (average or X and Y?).  This seems like a
+//           // reasonable compromise
+//           if ((!EQUAL (y_vals[i],  a*x_vals[i]+b))
+//               && (!EQUAL (x_vals[i], ((y_vals[i] - b) / a)))) {
+//             return InvariantStatus.FALSIFIED;
+//           }
+//         }
+
+// //         // check to see if this alread exists at the global ppt, it it
+// //         // does, falsify it here to eliminate the duplicate copy.  This
+// //         // is not the best place to do this, but easy for now
+// //         PptSlice gslice = wrapper.ppt.find_global_slice
+// //                                                   (wrapper.ppt.var_infos);
+// //         if (gslice != null) {
+// //           if (gslice.contains_inv_exact (wrapper))
+// //             return InvariantStatus.FALSIFIED;
+// //         }
+// //       }
+//     } else {
+//       // Check the new value against a and b. (see prev explanation for double
+//       // EQUAL check)
+//       if ((! EQUAL (y, a*x+b))  && (!EQUAL (x, (y - b)/ a))) {
+//         // see if this new point is off one end or the other
+//         if (x < min_x) {
+//           min_x = x;
+//           min_y = y;
+//         } else if (x > max_x) {
+//           max_x = x;
+//           max_y = y;
+//         }
+
+//         PRIMITIVE delta_x = max_x - min_x;
+//         // should be fixed in the future to permit vertical lines
+//         if (delta_x == 0) {
+//           return InvariantStatus.FALSIFIED;
+//         }
+
+//         // calculate a new a and b possibly using a new end point
+//         double new_a = (max_y - min_y) / (max_x - min_x);
+//         double new_b = (min_y*max_x - min_x*max_y) / (max_x-min_x);
+
+//         // if the a or b is a new min/max remember it.
+//         if (new_a < min_a) min_a = new_a;
+//         if (new_a > max_a) max_a = new_a;
+//         if (new_b < min_b) min_b = new_b;
+//         if (new_b > max_b) max_b = new_b;
+
+//         //pick a new a and b as the average of their endpoints
+//         new_a = (min_a + max_a) / 2;
+//         new_b = (min_b + max_b) / 2;
+//         if (debug.isLoggable(Level.FINE))
+//             debug.fine (wrapper.ppt.name() + ": Trying new a (" + new_a +
+//                          ") and b (" + new_b + ")");
+
+//         // if the new a and b are 'equal' to min/max a and b and
+//         // this point fits, then this new equation is good enough both
+//         // for existing points and the new point.
+//         if (Global.fuzzy.eq(new_a, min_a) && Global.fuzzy.eq(new_a, max_a) &&
+//             Global.fuzzy.eq(new_b, min_b) && Global.fuzzy.eq(new_b, max_b) &&
+//             EQUAL (y, new_a*x + new_b)) {
+//           a = new_a;
+//           b = new_b;
+//           if (debug.isLoggable(Level.FINE))
+//             debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
+//                          + b + ")");
+//         } else {
+//           if (debug.isLoggable(Level.FINE)) {
+//             debug.fine ("Suppressing " + CLASSSTRING + " (" +
+//                         wrapper.format() + ") at new value: "
+//                         + y + " != " + a + "*" + x + "+" + b);
+//           }
+//           return InvariantStatus.FALSIFIED;
+//         }
+//         //??? wrapper.destroyAndFlow();
+//         //??? return;
+//       }
+//     }
+//     return InvariantStatus.NO_CHANGE;
+//   }
+
 
   // Note that this method is relatively inconsistent with respect to
   // differing ordering of the points.  It will always give exactly the
@@ -166,7 +331,7 @@ public final class CLASSNAME
         int max_i = sep_indices[0];
         int max_j = sep_indices[1];
 
-        // Set a and b based on that pair
+        // Set a, b and c based on that pair
         if (max_i == -1) {
           values_seen--;
           wrapper.log ("falsified, max_i = -1");
@@ -184,7 +349,7 @@ public final class CLASSNAME
         max_x = x_cache[max_j];
         max_y = y_cache[max_j];
 
-        // calculate a and b for this pair and remember them as min/max a,b
+        // calculate a, b and c for this pair and remember them as min/max a,b,c
         if (set_bi_linear(min_x, max_x, min_y, max_y) ==
             InvariantStatus.FALSIFIED) {
           values_seen--;
@@ -195,16 +360,19 @@ public final class CLASSNAME
         max_a = a;
         min_b = b;
         max_b = b;
+        min_c = c;
+        max_c = c;
         if (debug.isLoggable(Level.FINE))
             debug.fine (wrapper.ppt.name() + ": Initial a (" + a +
-                         ") and b (" + b + ")");
+                         ") and b (" + b + ") and c (" + c + ")");
 
-        // Check all values against a and b.
+        // Check all values against a, b, and c.
         if (a == 0) {
           wrapper.log ("falsified, a == 0");
           values_seen--;
           return InvariantStatus.FALSIFIED;
         }
+       
         for (int i=0; i<MINPAIRS; i++) {
           // if the point is close enough in either x or y it is close enough
           // The double check is used because lines with different slopes may
@@ -213,8 +381,8 @@ public final class CLASSNAME
           // actual distance from the line, but it would be unclear what to
           // compare this to (average or X and Y?).  This seems like a
           // reasonable compromise
-          if ((!EQUAL (y_cache[i],  a*x_cache[i]+b))
-              && (!EQUAL (x_cache[i], ((y_cache[i] - b) / a)))) {
+          if ((!EQUAL (-b*y_cache[i],  a*x_cache[i]+c))
+              && (!EQUAL (x_cache[i], ((-b*y_cache[i] - c) / a)))) {
             if (debug.isLoggable(Level.FINE)) {
               debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") at index " + i + ": "
                           + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
@@ -229,7 +397,7 @@ public final class CLASSNAME
     } else {
       // Check the new value against a and b. (see prev explanation for double
       // EQUAL check)
-      if ((! EQUAL (y, a*x+b))  && (!EQUAL (x, (y - b)/ a))) {
+      if ((! EQUAL (y, (-c-a*x)/b))  && (!EQUAL (x, (-c-b*y)/ a))) {
         // see if this new point is off one end or the other
         if (x < min_x) {
           min_x = x;
@@ -245,39 +413,59 @@ public final class CLASSNAME
           return InvariantStatus.FALSIFIED;
         }
 
-        // calculate a new a and b possibly using a new end point
-        double new_a = (max_y - min_y) / (max_x - min_x);
-        double new_b = (min_y*max_x - min_x*max_y) / (max_x-min_x);
+        // calculate a new a, b, c possibly using a new end point
+       
+        double[] res = new double[3];
+        boolean ok = find_bi_linear(min_x, max_x, min_y, max_y, res);
+        double new_a = 0;
+        double new_b = 0;
+        double new_c = 0;
+        if(ok) {
+        new_a = res[0];
+        new_b = res[1];
+        new_c = res[2];
+        }
+        
+       // double new_a = (max_y - min_y) / (max_x - min_x);
+       // double new_b = (min_y*max_x - min_x*max_y) / (max_x-min_x);
+       // double new_c = 0;
 
         // if the a or b is a new min/max remember it.
         if (new_a < min_a) min_a = new_a;
         if (new_a > max_a) max_a = new_a;
         if (new_b < min_b) min_b = new_b;
         if (new_b > max_b) max_b = new_b;
+        if (new_c < min_c) min_c = new_c;
+        if (new_c > max_c) max_c = new_c;
 
-        //pick a new a and b as the average of their endpoints
+        //pick a new a, b, c as the average of their endpoints
         new_a = (min_a + max_a) / 2;
         new_b = (min_b + max_b) / 2;
+        new_c = (min_c + max_c) / 2;
         if (debug.isLoggable(Level.FINE))
             debug.fine (wrapper.ppt.name() + ": Trying new a (" + new_a +
                          ") and b (" + new_b + ")");
 
-        // if the new a and b are 'equal' to min/max a and b and
+        // if the new a, b, c are 'equal' to min/max a, b, c and
         // this point fits, then this new equation is good enough both
         // for existing points and the new point.
+    
         if (Global.fuzzy.eq(new_a, min_a) && Global.fuzzy.eq(new_a, max_a) &&
             Global.fuzzy.eq(new_b, min_b) && Global.fuzzy.eq(new_b, max_b) &&
-            EQUAL (y, new_a*x + new_b)) {
+            Global.fuzzy.eq(new_c, min_c) && Global.fuzzy.eq(new_c, max_c) &&
+            EQUAL (-new_b * y, new_a*x + new_c)) {
           a = new_a;
           b = new_b;
+          c = new_c;
           if (debug.isLoggable(Level.FINE))
             debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
-                         + b + ")");
+                         + b + ") and c (" + c + ")");
         } else {
           if (debug.isLoggable(Level.FINE)) {
             debug.fine ("Suppressing " + CLASSSTRING + " (" +
-                        wrapper.format() + ") at new value: "
-                        + y + " != " + a + "*" + x + "+" + b);
+                        wrapper.format() + ") at new value: " + 
+                        a + " * x + " + b + " * y + " + c + " != 0"); 
+//                        + y + " != " + a + "*" + x + "+" + b);
           }
           return InvariantStatus.FALSIFIED;
         }
@@ -331,9 +519,15 @@ public final class CLASSNAME
     return maxsep_point(x_cache, y_cache);
   }
 
-  /**
-   * Given ((x0,y0),(x1,y1)), finds a and b such that y = ax + b.
-   * Places a and b (if they exist) into result at indexes 0 and 1
+//  /**
+//   * Given ((x0,y0),(x1,y1)), finds a and b such that y = ax + b.
+//   * Places a and b (if they exist) into result at indexes 0 and 1
+//   * respectively.
+//   * @return true if such an a and b exist.
+//   */
+   /**
+   * Given ((x0,y0),(x1,y1)), finds a,b and c such that ax + by + c = 0.
+   * Places a, b and c (if they exist) into result at indexes 0, 1 and 2
    * respectively.
    * @return true if such an a and b exist.
    */
@@ -347,27 +541,76 @@ public final class CLASSNAME
       // invariant would not have been instantiated).
       return false;
     }
-    result[0] = (y1-y0)/(double) (x1-x0);
-    result[1] = (y0*x1-x0*y1)/(double)(x1-x0);
+
+// This was the original calculation where result[0] = a and result[1] = b and y = ax + b
+//    result[0] = (y1-y0)/(double) (x1-x0);
+//    result[1] = (y0*x1-x0*y1)/(double)(x1-x0);
+//
+// To get this in standard form:
+// ax - y + b = 0
+// ((y1-y0)/(x1-x0)) * a - y + (y0*x1-x0*y1)/(x1-x0) = 0
+// (y1-y0)*a - (x1-x0)y + (y0*x1-x0*y1) = 0
+//
+
+    
+    double i_var = y1-y0;
+    double j_var = x0-x1;
+    double Stand_const = y0*x1-x0*y1;
+    
+    // call gcd function to get the greatest common divisor of the output
+  // and put the coefficients in lowest terms
+double myGCD = MathMDE.gcd(MathMDE.gcd((int)i_var, (int)j_var) , (int)Stand_const);
+
+double standard_i_var = 0;
+double standard_j_var = 0;
+double standard_Stand_const = 0;
+  
+
+// check to see if the "x" term is negative.  If it is,
+// divide all terms by -1.  Also reduce all terms by dividing by
+// the gcd.  If the gcd is 1, no harm done -- divide by 1.
+// ensures postive x coefficient
+
+if(i_var == 0) {
+  standard_i_var = 0;
+  standard_j_var = (j_var)/(myGCD);
+  standard_Stand_const = Stand_const/myGCD;
+}
+else if(i_var < 0) {
+    standard_i_var = -(i_var)/myGCD;
+    standard_j_var = -(j_var)/myGCD;
+    standard_Stand_const = -(Stand_const)/myGCD;
+} else if(i_var > 0) {
+  standard_i_var = i_var/myGCD;
+  standard_j_var = j_var/myGCD;
+  standard_Stand_const = Stand_const/myGCD;
+}
+
+result[0] = standard_i_var;
+result[1] = standard_j_var;
+result[2] = standard_Stand_const;
+
+
     return true;
   }
 
   /**
-   * Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
+   * Given ((x0,y0),(x1,y1)), set a, b and c such that ax + by + c = 0.
    **/
   private InvariantStatus set_bi_linear(PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1) {
-    double[] aAndB = new double[2];
-    if (! find_bi_linear(x0, x1, y0, y1, aAndB)) {
+    double[] AandBandC = new double[3];
+    if (! find_bi_linear(x0, x1, y0, y1, AandBandC)) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       return InvariantStatus.FALSIFIED;
     }
-    a = aAndB[0];
-    b = aAndB[1];
+    a = AandBandC[0];
+    b = AandBandC[1];
+    c = AandBandC[2];
     wrapper.log (Fmt.spf ("x0=%s, x1=%s, y0=%s, y1=%s", "" + x0, "" + x1,
                           "" + y0, "" + y1));
-    wrapper.log (Fmt.spf ("a=%s, b=%s,", "" + a, "" + b));
+    wrapper.log (Fmt.spf ("a=%s, b=%s, c=%s", "" + a, "" + b, "" + c));
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -383,6 +626,7 @@ public final class CLASSNAME
     return CLASSSTRING + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b
+      + ",c=" + c
       + ",values_seen=" + values_seen;
   }
 
@@ -394,25 +638,27 @@ public final class CLASSNAME
                                   VarInfoName var,
                                   VarInfo vi,
                                   boolean first) {
-    if (coeff == 0)
+    int ncoeff = (int) coeff;
+                 
+    if (ncoeff == 0)
       return "";
     String sign;
-    if (coeff < 0) {
+    if (ncoeff < 0) {
       if (first) {
         sign = "- ";
       } else {
         sign = " - ";
       }
-      coeff = -coeff;
+      ncoeff = -ncoeff;
     } else if (first) {
       sign = "";
     } else {
       sign = " + ";
     }
-    String coeff_string = (coeff == (int)coeff) ? "" + (int)coeff : "" + coeff;
+    String coeff_string = (ncoeff == (int)ncoeff) ? "" + (int)ncoeff : "" + ncoeff;
     if (var == null)
       return sign + coeff_string;
-    if (coeff == 1)
+    if (ncoeff == 1)
       return sign + var.name_using(format, vi);
     else
       return sign + coeff_string + " * " + var.name_using(format, vi);
@@ -420,11 +666,29 @@ public final class CLASSNAME
 
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfo vix, VarInfoName y, VarInfo viy,
-                             double a, double b) {
-    if (a == 0 && b == 0) {
-      return wrapper.format_too_few_samples(format, "0 * " + y
-                                            + " == 0 * " + x + " + 0");
+                             double u, double v, double w) {
+                             
+    //recall that a, b, c in the linear binary equation means ax + by + c = 0;
+    //since the output format of the invariant is slope intercept form
+    //the output is of the form by = -ax - c 
+    
+    int a = (int) u;
+    int b = (int) v;
+    int c = (int) w;
+    
+    //make y coeff positive
+  if(b < 0) {
+  a = -a;
+  b = -b;
+  c = -c;
+  }     
+    
+    if (a == 0 && b == 0 && c == 0) {
+//      return wrapper.format_too_few_samples(format, "0 * " + y
+//                                            + " == 0 * " + x + " + 0");
+      return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
     }
+
 
     String xname = x.name_using(format, vix);
     String yname = y.name_using(format, viy);
@@ -434,15 +698,18 @@ public final class CLASSNAME
       if (viy.type.isFloat() || vix.type.isFloat()) {
         return
           "daikon.Quant.fuzzy.eq("
-          + yname
+       //   + yname
+        +  formatTerm(format, b, y, viy, true)
           + ", "
-          + formatTerm(format, a, x, vix, true)
-          + formatTerm(format, b, null, null, false)
+          + formatTerm(format, -a, x, vix, true)
+          + formatTerm(format, -c, null, null, false)
           + ")";
       } else {
-        return yname + " == "
-          + formatTerm(format, a, x, vix, true)
-          + formatTerm(format, b, null, null, false);
+      //  return yname 
+        return formatTerm(format, b, y, viy, true)
+        + " == "
+          + formatTerm(format, -a, x, vix, true)
+          + formatTerm(format, -c, null, null, false);
       }
     }
 
@@ -452,57 +719,88 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      return yname + eq
-        + formatTerm(format, a, x, vix, true)
-        + formatTerm(format, b, null, null, false);
+      return formatTerm(format, b, y, viy, true) + eq
+        + formatTerm(format, -a, x, vix, true)
+        + formatTerm(format, -c, null, null, false);
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(x.simplify_name(), y.simplify_name(), a, b);
+      return format_simplify(x.simplify_name(), y.simplify_name(), u, v, w);
     }
     throw new Error("Unknown OutputFormat: " + format);
   }
 
   public static String format_simplify(String str_x, String str_y,
-                                       double a, double b) {
+                                       double a, double b, double c) {
+    
+    //make y coeff positive and prep the coeffs for printing
+    // originally: y == a x + b
+    // not anymore, now: ax + by + c = 0; so by = -ax - c 
+    // so either b or a & c are negated because one of them moved to the other side
+    
+  if(b < 0) {
+  b = -b;
+  } else  {
+  a = -a;
+  c = -c;
+  }            
       int ia = (int) a;
       int ib = (int) b;
-
-      String str_a, str_b;
-      if (ia == a && ib == b) {
+      int ic = (int) c;
+      
+      
+      String str_a, str_b, str_c;
+      if (ia == a && ib == b && ic == c) {
         // integer
         str_a = Invariant.simplify_format_long(ia);
         str_b = Invariant.simplify_format_long(ib);
-      } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
+        str_c = Invariant.simplify_format_long(ic);
+    //***** what does this do?
+    //  } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
         // make integer by swapping
-        ia = (int)(1.0 / a);
-        ib = 0;
-        str_a = Invariant.simplify_format_long(ia);
-        str_b = Invariant.simplify_format_long(ib);
-        String temp = str_x;
-        str_x = str_y;
-        str_y = temp;
+    //    ia = (int)(1.0 / a);
+    //    ib = 0;
+    //    str_a = Invariant.simplify_format_long(ia);
+    //    str_b = Invariant.simplify_format_long(ib);
+    //    String temp = str_x;
+    //    str_x = str_y;
+    //    str_y = temp;
       } else {
         // floating point; probably not very useful
         str_a = Invariant.simplify_format_double(a);
         str_b = Invariant.simplify_format_double(b);
+        str_c = Invariant.simplify_format_double(c);
       }
 
       // y == a x + b
+      // not anymore, now: ax + by + c = 0; so by = -ax - c [coefficients already negated above]
+//      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
+//      String str_axpb = (b == 0.0) ? str_ax :
+//        "(+ " + str_ax + " " + str_b + ")";
+//      return "(EQ " + str_y + " " + str_axpb + ")";
+        
       String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
-      String str_axpb = (b == 0.0) ? str_ax :
-        "(+ " + str_ax + " " + str_b + ")";
-      return "(EQ " + str_y + " " + str_axpb + ")";
+      String str_axpc = (c == 0.0) ? str_ax :
+        "(+ " + str_ax + " " + str_c + ")";
+      String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
+      return "(EQ " + str_by + " " + str_axpc + ")";
   }
 
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
-    String result = format_using(format, x, xvi, y, yvi, a, b);
+    String result = format_using(format, x, xvi, y, yvi, a, b, c);
     if (result != null) {
       return result;
     } else {
       return wrapper.format_unimplemented(format);
     }
+  }
+
+  // Format as "x = cy+d" instead of as "y = ax+b".
+  public String format_reversed_using(OutputFormat format,
+                                      VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
+    Assert.assertTrue(a == 1 || a == -1);
+    return format_using(format, y, yvi, x, xvi, b, a, c);
   }
 
   /**
@@ -539,7 +837,8 @@ public final class CLASSNAME
         result = (CLASSNAME) c.clone();
       else {
         if (!Global.fuzzy.eq (result.a, c.a)
-            || !Global.fuzzy.eq (result.b, c.b))
+            || !Global.fuzzy.eq (result.b, c.b) 
+            || !Global.fuzzy.eq(result.c, c.c))
           return (null);
       }
     }
@@ -578,7 +877,8 @@ public final class CLASSNAME
         (values_seen >= MINPAIRS) &&
         (other.values_seen >= MINPAIRS) &&
         (a == other.a) &&
-        (b == other.b);
+        (b == other.b) &&
+        (c == other.c);
     }
   }
 
@@ -588,8 +888,11 @@ public final class CLASSNAME
       return false;
     }
 
-    return ((a == other.a)
-            && (b != other.b));
+//**********TODO: what's this
+ //   return ((a == other.a)
+ //           && (b != other.b));
+      return ((-a/b == -other.a/other.b)
+            && (-c/b != -other.c/other.b));
   }
 
 }

@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 /**
- * Represents a Linear invariant (y = ax + b) between two PRIMITIVE
+ * Represents a Linear invariant (ax + by + c = 0) between two PRIMITIVE
  * scalars.
  **/
 public class CLASSNAME
@@ -210,8 +210,14 @@ public class CLASSNAME
     if (core.a == 0) {
       return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
     }
-    if (core.a == 1 && core.b == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
+    if (core.b == 0) {
+      return new DiscardInfo(this, DiscardCode.obvious, var1().name.name() + " is constant");
+    }
+//    if (core.a == 1 && core.b == 0) {
+//      return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
+//    }
+    if (core.a == -core.b && core.c == 0) {
+     return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
     }
     return null;
   }
