@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2004-02-06 09:00:14 mernst>
+# Time-stamp: <2005-01-31 10:17:16 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -23,6 +23,13 @@
 #   <!-- omit from toc -->
 # For instance, this would not appear:
 #   <h1>The title of the document</h1>			<!-- omit from toc -->
+
+# This script does not fully parse the HTML document; instead, it
+# pattern-matches against specific lines in the document.  That menas that
+# it will generate table-of-contents lines for commented-out sections of a
+# document.  To ensure that a header line doesn't appear in the table of
+# contents, start a comment startss on that line, such as:
+#   <!-- <h2>...</h2>  ...
 
 
 # As noted above, header lines should contain anchor tags.
