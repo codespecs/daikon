@@ -26,10 +26,6 @@ public final class Daikon {
   // because so many more invariants get instantiated.
   public final static boolean check_program_types = true;
 
-  // If true, variables of declared type byte or char will be compared
-  // to variables of declared type int.
-  public final static boolean compare_byte_char_to_integer = false;
-
   // Problem with setting this to true:
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
