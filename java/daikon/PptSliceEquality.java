@@ -176,6 +176,7 @@ public class PptSliceEquality
       Integer sample_cnt = (Integer) sample_cnt_map.get (v);
       if (sample_cnt != null)
         eq.setSamples (sample_cnt.intValue());
+      v.equalitySet = eq;
       newInvs.add (eq);
     }
     invs.addAll (newInvs);
