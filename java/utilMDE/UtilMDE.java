@@ -54,7 +54,7 @@ public final class UtilMDE {
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)));
+      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)), "ISO-8859-1");
     } else {
       file_reader = new FileReader(filename);
     }
@@ -806,7 +806,8 @@ public final class UtilMDE {
 
   // Inspired by the function of the same name in Ajax (but independent code).
   /**
-   * Quote \, ", \n, and \r characters in the target; return a new string.
+   * Quote \, ", \n, and \r characters in the target; return a new
+   * string if any modifications were necessary.
    **/
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
@@ -860,6 +861,46 @@ public final class UtilMDE {
       return "\\r";
     default:
       return new String(new char[] { c });
+    }
+  }
+
+  /**
+   * Quote unprintable characters in the target; return a new string.
+   **/
+  public static String quoteMore(String orig) {
+    StringBuffer sb = new StringBuffer();
+    int orig_len = orig.length();
+    for (int i=0; i<orig_len; i++) {
+      char c = orig.charAt(i);
+      sb.append(quoteMore(c));
+    }
+    return sb.toString();
+  }
+
+  // Like quote(), but quote more characters so that the result is
+  // sure to be printable ASCII. I'm not particularly worried about
+  // overhead.
+  private static String quoteMore(char c) {
+    if (c == '\"') {
+      return "\\\"";
+    } else if (c == '\\') {
+      return "\\\\";
+    } else if (c == '\n') {
+      return "\\n";
+    } else if (c == '\r') {
+      return "\\r";
+    } else if (c == '\t') {
+      return "\\t";
+    } else if (c >= ' ' && c <= '~') {
+      return new String(new char[] { c });
+    } else if (c < 256) {
+      String octal = Integer.toOctalString(c);
+      return "\\" + octal;
+    } else {
+      String hex = Integer.toHexString(c);
+      while (hex.length() < 4)
+        hex = "0" + hex;
+      return "\\u" + hex;
     }
   }
 
