@@ -3,7 +3,8 @@
 
 OPT = -s -Wall
 
-all: difftbl cluster den denxview clgroup
+# all: difftbl cluster den denxview clgroup
+all: difftbl cluster den clgroup
 
 difftbl: difftbl.c
 	gcc $(OPT) -o difftbl difftbl.c -lm

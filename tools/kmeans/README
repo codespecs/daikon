@@ -1,7 +1,7 @@
 INTRODUCTION
 This package contains software for the kmeans clustering algorithm.
 The software has been successfully compiled on the Intel/Linux platform.
-To compile, just run the Makefile. The executable is 'km'
+To compile, just run the Makefile. The executable is 'kmeans'.
 
 CLASSES
 
@@ -14,7 +14,7 @@ Class name  Declared in     Implemented in  Description of purpose
 ----------  -----------     --------------  ----------------------
 Point       point.h         point.cpp       Stores a single point and some
                                             extra information about it.
-Cluster  cluster.h    cluster.cpp  Stores sufficient statistics
+Cluster     cluster.h       cluster.cpp     Stores sufficient statistics
                                             about a cluster. Has functions 
 					    to compute distances etc.
 KMeans      kmeans.h        kmeans.cpp      An implementation of the
