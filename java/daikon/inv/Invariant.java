@@ -116,7 +116,7 @@ public abstract class Invariant
    * or about to be destroyed.  This should never be set directly; instead,
    * call destroy().
    **/
-  public boolean falsified = false;
+  protected boolean falsified = false;
 
   /**
    * True once this invariant has flowed.  Prevents invariants from
@@ -420,6 +420,26 @@ public abstract class Invariant
     suppressor = null;
     flowed = false;
     suppressees = null;
+  }
+
+  /**
+   * Marks the invariant as falsified.  Should always be called rather
+   * than just setting the flag so that we can track when this happens
+   */
+  public void falsify() {
+    falsified = true;
+    if (Debug.logOn())
+      log ("Destroyed " + format());
+  }
+
+  /** clear the falsified flag */
+  public void clear_falsified() {
+    falsified = false;
+  }
+
+  /** returns whether or not his invariant has been destroyed */
+  public boolean is_false() {
+    return (falsified);
   }
 
 //   /**
@@ -2185,6 +2205,7 @@ public abstract class Invariant
     }
     return (out);
   }
+
 }
 
 
