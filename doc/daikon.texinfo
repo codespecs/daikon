@@ -371,6 +371,7 @@ your shell is @command{csh}, place something like the following in your
 @example
 setenv CLASSPATH $@{CLASSPATH@}:$HOME/java/jdk/jre/lib/rt.jar
 @end example
+(Don't use ``@samp{~username}''; use ``@samp{$HOME}'', as in the example.)
 
 @item
 Obtain or build an executable for dfej, the Daikon front end for Java.
