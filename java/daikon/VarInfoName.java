@@ -1328,6 +1328,7 @@ public abstract class VarInfoName
     protected String java_name_impl(VarInfo v) {
       return term.java_name(v) + ".getClass().toString()";
     }
+    // [[[ FIXME: this is wrong (term can be an array) ]]]
     protected String jml_name_impl(VarInfo v) {
       return term.jml_name(v) + ".getClass().toString()";
     }

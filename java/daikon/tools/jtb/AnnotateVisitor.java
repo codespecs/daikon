@@ -360,7 +360,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
 	  visit((NodeChoice)nlo.nodes.get(i));
 	}
 	if (!behaviorInserted)
-	  addComment(n, "@ " + "protected " + getBehaviorString() + lineSep, true);
+	  addComment(n, "@ " + "private " + getBehaviorString() + lineSep, true);
       }
 
       public void visit(MethodDeclaration md) {
@@ -465,8 +465,10 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
     HashMap exceptions = get_exceptions(ppts, n);
 
-    if (!lightweight)
+    if (!lightweight) {
       addComment(n, JML_END_COMMENT, true);
+      insertAssignableEverything(n);
+    }
 
     boolean invariantInserted =
       insertInvariants(n, ensures_tag, ensures_invs, lightweight);
@@ -484,7 +486,12 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
   }
 
+  public void insertAssignableEverything(Node n) {
+    addComment(n, "@ assignable \\everything;" + lineSep, true);
+  }
+
   public void insertJMLWorkaround(Node n) {
+    insertAssignableEverything(n);
     addComment(n, "@ requires true;" + lineSep, true);
   }
 
@@ -499,6 +506,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     boolean invariantInserted = false;
+    boolean assignableInserted = false;
 
     for (int i=invs.length-1; i>=0; i--) {
       String inv = invs[i];
@@ -513,6 +521,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)
 		 || (inv.endsWith(".toString"))
+		 || (inv.indexOf(".getClass") != -1) // [[[ FIXME: fix TypeOf (a subclass of VarInfoName) ]]]
                  || (inv.indexOf("warning: method") != -1)
 		 || (inv.indexOf("inexpressible") != -1)
 		 || (inv.indexOf("unimplemented") != -1)) {
@@ -532,14 +541,15 @@ class AnnotateVisitor extends DepthFirstVisitor {
           if (lightweight && prefix.startsWith("also_")) {
             inv = "also_" + inv;
           }
-          String commentContents = "@ " + inv + ";";
-          if (useJavaComment)
-            commentContents = javaLineComment(commentContents);
-          else
-            commentContents += lineSep;
-          addComment(n, commentContents, true);
-          invariantInserted = true;
         }
+        String commentContents = "@ " + inv + ";";
+        if (useJavaComment)
+          commentContents = javaLineComment(commentContents);
+        else
+          commentContents += lineSep;
+        addComment(n, commentContents, true);
+        invariantInserted = true;
+        assignableInserted = true;
       } else {
 	String commentContents = (Daikon.output_style == Invariant.OutputFormat.DBCJAVA ? "  " : "@ ")
           + prefix + " " + inv
@@ -553,6 +563,10 @@ class AnnotateVisitor extends DepthFirstVisitor {
         invariantInserted = true;
       }
     }
+//     if (!assignableInserted && (Daikon.output_style == Invariant.OutputFormat.JML)) {
+//       insertAssignableEverything(n);
+//     }
+
     return invariantInserted;
   }
 
