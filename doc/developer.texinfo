@@ -1216,7 +1216,10 @@ ppt: foo.f():::EXIT35
 This section is intended primarily for researchers who are analyzing
 historical versions of Daikon.  A number of researchers (for example, in
 the testing community) use Daikon because it contains both a CVS
-repository and a set of tests.
+repository and a set of tests.  (The CVS repository can also be useful
+to those making non-trivial changes to the Daikon code base, because the
+CVS repository includes regression tests that are more extensive than
+the unit tests that are included in the Daikon distribution.)
 
 If you wish access to the Daikon CVS repository, send mail to
 @email{daikon-developers@@lists.csail.mit.edu}.  We appreciate it if you
