@@ -1,6 +1,7 @@
 package daikon;
 
 import java.util.*;
+import java.io.ObjectStreamException;
 
 import com.oroinc.text.regex.*;
 
@@ -59,7 +60,7 @@ public final class ProglangType implements java.io.Serializable {
   /**
    * No public constructor:  use parse() instead to get a canonical
    * representation.
-   * basetype should be interned
+   * basetype should be interned.
    **/
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
@@ -97,6 +98,10 @@ public final class ProglangType implements java.io.Serializable {
     }
   }
 
+  /** For serialization. **/
+  public Object readResolve() throws ObjectStreamException {
+    return intern(base.intern(), dimensions);
+  }
 
   public boolean equals(Object o) {
     return this == o;
@@ -151,6 +156,7 @@ public final class ProglangType implements java.io.Serializable {
   // }
 
   private static ProglangType intern(String t_base, int t_dims) {
+    Assert.assert(t_base == t_base.intern());
     ProglangType result = find(t_base, t_dims);
     if (result != null) {
       return result;
@@ -177,6 +183,7 @@ public final class ProglangType implements java.io.Serializable {
       return OBJECT;
     if (dimensions == 0)
       throw new Error("Called elementType on non-array type " + format());
+    Assert.assert(base == base.intern(), "Uninterned base " + base);
     return ProglangType.intern(base, dimensions-1);
   }
 
@@ -375,6 +382,11 @@ public final class ProglangType implements java.io.Serializable {
 
   public boolean isIntegral() {
     return ((dimensions == 0) && baseIsIntegral());
+  }
+
+  // More efficient than elementType().isIntegral()
+  public boolean elementIsIntegral() {
+    return ((dimensions == 1) && baseIsIntegral());
   }
 
   public boolean isIndex() {
