@@ -134,16 +134,22 @@ system("mv -f $outfn $backupdecls")
     and die "Couldn't back up $outfn!\n";
 open DECLS, $backupdecls or die "Can't open $backupdecls: $!\n";
 
+sub die_and_restore {
+    my $diemsg = shift;
+    `mv -f $backupdecls $outfn`;
+    die $diemsg;
+}
+
 my $first_line = <DECLS>;
 if ($first_line =~ /VarComparability/) {
-  die "Invalid declaration file.  " .
+  die_and_restore "Invalid declaration file.  " .
     "Perhaps it has already been processed.\n";
 }
 
 # reset the filehandle position
 seek(DECLS, 0, 0);
 
-open OUT, ">$outfn" or die "Can't open $outfn for write: $!\n";
+open OUT, ">$outfn" or die_and_restore "Can't open $outfn for write: $!\n";
 print OUT "VarComparability\n";
 print OUT "implicit\n";
 print OUT "\n";
@@ -448,7 +454,7 @@ sub _lackwit {
     if (is_struct_field($variable)) {
       return "";
     } else {
-      die "FAILURE: BackEnd failed on $function:$variable\n";
+      die_and_restore "FAILURE: BackEnd failed on $function:$variable";
     }
   }
   return $result;
