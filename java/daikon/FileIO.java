@@ -14,23 +14,6 @@ import java.util.*;
 
 public final class FileIO {
 
-  // We get all the declarations before reading any traces because at each
-  // program point, we need to know the names of all the available variables,
-  // which includes all global variables (of which these are examples).
-  //  * Alternative:  in each trace file, declare all the functions before
-  //    any data are seen
-  //     + more reasonable for on-line information (can't know when a
-  //       new declaration would be seen)
-  //     + obviates the need for this function and extra pass over the data
-  //     - forces declaration of all functions ahead of time
-  //     * perhaps not reasonable (at the least, complicated) for dynamic
-  //       loading of code; but I should know what I've instrumented and can
-  //       specify all those declaration files; it isn't possible to instrument
-  //       as part of dynamic loading
-  //  * Alternative:  go back and update info to insert new "missing" or
-  //    "zero" values everywhere that the variables weren't yet known about
-  //     - tricky for online operation
-
   /** Nobody should ever instantiate a FileIO. **/
   private FileIO() {
     throw new Error();
@@ -53,12 +36,13 @@ public final class FileIO {
   public static final String object_suffix = "OBJECT";
   public static final String object_tag = ppt_tag_separator + object_suffix;
   public static final String class_static_suffix = "CLASS";
-  public static final String class_static_tag =
-    ppt_tag_separator + class_static_suffix;
+  public static final String class_static_tag = ppt_tag_separator
+                                                        + class_static_suffix;
   public static final String global_suffix = "GLOBAL";
 
   /** Total number of samples read in. */
   public static int samples_considered = 0;
+
   /**
    * Total number of samples passed to process_sample().  This should
    * exactly match the number processed except for dataflow optimizations
@@ -117,11 +101,6 @@ public final class FileIO {
 
   /// Variables
 
-  // I'm not going to make this static because then it doesn't get restored
-  // when reading from a file; and it won't be *that* expensive to add yet
-  // one more slot to the Ppt object.
-  // static HashMap entry_ppts = new HashMap(); // maps from Ppt to Ppt
-
   // This hashmap maps every program point to an array, which contains the
   // old values of all variables in scope the last time the program point
   // was executed. This enables us to determine whether the values have been
@@ -156,11 +135,6 @@ public final class FileIO {
   ///////////////////////////////////////////////////////////////////////////
   /// Declaration files
   ///
-
-  /** This is intended to be used only interactively, while debugging. */
-  static void reset_declarations() {
-    throw new Error("to implement");
-  }
 
   /**
    * @param files files to be read (java.io.File)
@@ -278,12 +252,10 @@ public final class FileIO {
   }
 
   // The "DECLARE" line has alredy been read.
-  private static PptTopLevel read_declaration(
-    LineNumberReader file,
-    PptMap all_ppts,
-    int varcomp_format,
-    File filename)
-    throws IOException {
+  private static PptTopLevel read_declaration(LineNumberReader file,
+                                             PptMap all_ppts,
+                                             int varcomp_format,
+                                             File filename) throws IOException{
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 
@@ -295,23 +267,7 @@ public final class FileIO {
         filename);
     }
 
-    // Despite the comments below, its not clear to me why we have to
-    // create all ppts if we the user has explicitly asked them to
-    // be excluded.
-    //if (!daikon.split.SplitterList.dkconfig_all_splitters) {
-    // If all the splitters are to be tried at all program points,
-    // then we need to create all the program points because the
-    // creation of splitters requires information from the program
-    // points.
-
-    // XXX Re-examine the below rant
-    // JWN: The above is crazy!  Program points are now EXPENSIVE --
-    // they create all derived variables and possible invariants.
-    // I am turning off all_splitters by default.
-
-    if (!ppt_included(ppt_name)) {
-      // Discard this declaration
-      // System.out.println("Discarding non-matching program point declaration " + ppt_name);
+    if (!ppt_included (ppt_name)) {
       String line = file.readLine();
       // This fails if some lines of a declaration (e.g., the comparability
       // field) are empty.
@@ -320,75 +276,31 @@ public final class FileIO {
       }
       return null;
     }
-    // }
 
     // The var_infos that will populate the new program point
     List var_infos = new ArrayList();
 
-    // Enable this code when Daikon supports handling of multiple exit
-    // points via a variable rather than via separate ppts
-    if (false) {
-      //     Rename EXITnn to EXIT
-      {
-        PptName parsed_name = new PptName(ppt_name);
-        if (parsed_name.isExitPoint()) {
-          PptName new_name = parsed_name.makeExit();
-          // Punt if we already read a different EXITnn
-          if (all_ppts.get(new_name) != null) {
-            String line = file.readLine();
-            while ((line != null) && !line.equals("")) {
-              // This fails if some lines of a declaration (e.g., the
-              // comparability field) are empty.
-              line = file.readLine();
-            }
-            return null;
-          }
-          // Override what was read from file
-          ppt_name = new_name.name().intern();
-          // Add the pseudo-variable $return_line
-          if (false) {
-            // Skip this for now; we're not sure how to make it work
-            ProglangType prog_type = ProglangType.INT;
-            // ?? new special type like HASHCODE
-            ProglangType file_rep_type = ProglangType.INT;
-            VarComparability comparability = VarComparabilityNone.it;
-            // ?? comparable to nothing -- explicit?
-            VarInfo line =
-              new VarInfo(
-                VarInfoName.parse("$return_line"),
-                prog_type,
-                file_rep_type,
-                comparability,
-                VarInfoAux.getDefault());
-            var_infos.add(line);
-          }
-        }
-      }
-    }
-
     // Each iteration reads a variable name, type, and comparability.
     // Possibly abstract this out into a separate function??
     VarInfo vi;
-    while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name))
-      != null) {
-      for (int i = 0; i < var_infos.size(); i++) {
-        if (vi.name == ((VarInfo) var_infos.get(i)).name) {
+    while ((vi = read_VarInfo(file, varcomp_format,filename,ppt_name))!= null){
+      for (int i=0; i<var_infos.size(); i++) {
+        if (vi.name == ((VarInfo)var_infos.get(i)).name) {
           throw new FileIOException("Duplicate variable name", file, filename);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
       // against null above.
       if ((Daikon.var_omit_regexp != null)
-        && Global.regexp_matcher.contains(
-          vi.name.name(),
-          Daikon.var_omit_regexp)) {
+          && Global.regexp_matcher.contains(vi.name.name(),
+                                            Daikon.var_omit_regexp)) {
         continue;
       }
       var_infos.add(vi);
     }
 
-    VarInfo[] vi_array =
-      (VarInfo[]) var_infos.toArray(new VarInfo[var_infos.size()]);
+    VarInfo[] vi_array = (VarInfo[])
+                            var_infos.toArray(new VarInfo[var_infos.size()]);
     return new PptTopLevel(ppt_name, vi_array);
   }
 
@@ -595,17 +507,6 @@ public final class FileIO {
   static HashMap call_hashmap = new HashMap();
   // map from Integer to Invocation
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Data trace files
-  ///
-
-  // Eventually add these arguments to this function; they were in the Python
-  // version.
-  //  *     NUM_FILES indicates how many (randomly chosen) files are to be read;
-  //  *       it defaults to all of the files.
-  //  *     RANDOM_SEED is a triple of numbers, each in range(0,256), used to
-  //  *       initialize the random number generator.
-
   /** Reads data trace files using the default sample processor. **/
   public static void read_data_trace_files(Collection /*File*/
   files, PptMap all_ppts) throws IOException {
@@ -640,6 +541,7 @@ public final class FileIO {
     process_unmatched_procedure_entries();
   }
 
+  /** Count the number of lines in the specified file **/
   private static long count_lines(File filename) throws IOException {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
     long count = 0;
@@ -677,23 +579,17 @@ public final class FileIO {
   }
 
   /** Read data from .dtrace file. **/
-  static void read_data_trace_file(
-    File filename,
-    PptMap all_ppts,
-    Processor processor)
-    throws IOException {
+  static void read_data_trace_file(File filename, PptMap all_ppts,
+                                   Processor processor) throws IOException {
+
     int pptcount = 1;
 
     if (debugRead.isLoggable(Level.FINE)) {
-      debugRead.fine(
-        "read_data_trace_file "
-          + filename
-          + ((Daikon.ppt_regexp != null)
-            ? " " + Daikon.ppt_regexp.getPattern()
-            : "")
-          + ((Daikon.ppt_omit_regexp != null)
-            ? " " + Daikon.ppt_omit_regexp.getPattern()
-            : ""));
+      debugRead.fine ("read_data_trace_file " + filename
+                      + ((Daikon.ppt_regexp != null)
+                         ? " " + Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null)
+                         ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -707,23 +603,20 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter =
-        new PrintWriter(new FileWriter(new File(filename + ".debug")));
+      Global.dtraceWriter
+             = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
-    // init_ftn_call_ct();          // initialize function call counts to 0
 
-    // try {
     // "line_" is uninterned, "line" is interned
-    for (String line_ = reader.readLine();
-      line_ != null;
-      line_ = reader.readLine()) {
+    for (String line_ = reader.readLine(); line_ != null;
+                                              line_ = reader.readLine()) {
       if (line_.equals("") || isComment(line_)) {
         continue;
       }
 
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
-        && (reader.getLineNumber() > dkconfig_max_line_number))
+          && (reader.getLineNumber() > dkconfig_max_line_number))
         break;
 
       // Keep track of the total number of samples we have seen.
@@ -731,51 +624,29 @@ public final class FileIO {
 
       String line = line_.intern();
 
-      if ((line == declaration_header) || !ppt_included(line)) {
-        // Discard this entire program point information
-        // System.out.println("Discarding non-matching dtrace program point " + line);
+      if ((line == declaration_header) || !ppt_included (line)) {
         while ((line != null) && !line.equals(""))
           line = reader.readLine();
         continue;
       }
 
+      // Parse the ppt name
       String ppt_name = line; // already interned
-      {
-        try {
-          PptName parsed = new PptName(ppt_name);
-          // Enable the code below when Daikon stops using different
-          // ppts for different exits
-          if (false) {
-            // Rename EXITnn to EXIT
-            if (parsed.isExitPoint()) {
-              ppt_name = parsed.makeExit().name().intern();
-            }
-          }
-        } catch (Error e) {
-          throw new Error(
-            "Illegal program point name \""
-              + ppt_name
-              + "\""
-              + " at "
-              + data_trace_filename
-              + " line "
-              + reader.getLineNumber());
-        }
+      try {
+        PptName parsed = new PptName(ppt_name);
+      } catch (Error e) {
+        throw new Error("Illegal program point name \"" + ppt_name + "\""
+                        + " at " + data_trace_filename
+                        + " line " + reader.getLineNumber());
       }
-
-      // if (pptcount++ % 10000 == 0)
-      //    System.out.print(":");
 
       if (Daikon.debugTrace.isLoggable(Level.FINE)) {
         data_num_slices = all_ppts.countSlices();
       }
 
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-      Assert.assertTrue(
-        ppt != null,
-        "Program point "
-          + ppt_name
-          + " appears in dtrace file but not in any decl file");
+      Assert.assertTrue(ppt != null, "Program point " + ppt_name
+                      + " appears in dtrace file but not in any decl file");
 
       VarInfo[] vis = ppt.var_infos;
 
@@ -784,22 +655,20 @@ public final class FileIO {
       // And for the time being (and possibly forever), for derived variables.
       int num_tracevars = ppt.num_tracevars;
       int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-      // This is no longer true; we now derive variables before reading dtrace!
-      // Assert.assertTrue(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
       // Read an invocation nonce if one exists
       Integer nonce = null;
-      {
-        // arbitrary number, hopefully big enough; catch exceptions
-        reader.mark(100);
-        String nonce_name_maybe;
-        try {
-          nonce_name_maybe = reader.readLine();
-        } catch (Exception e) {
-          nonce_name_maybe = null;
-        }
-        reader.reset();
-        if ("this_invocation_nonce".equals(nonce_name_maybe)) {
+
+      // arbitrary number, hopefully big enough; catch exceptions
+      reader.mark(100);
+      String nonce_name_maybe;
+      try {
+        nonce_name_maybe = reader.readLine();
+      } catch (Exception e) {
+        nonce_name_maybe = null;
+      }
+      reader.reset();
+      if ("this_invocation_nonce".equals(nonce_name_maybe)) {
 
           String nonce_name = reader.readLine();
           Assert.assertTrue(nonce_name.equals("this_invocation_nonce"));
@@ -810,7 +679,6 @@ public final class FileIO {
             nonce_value = nonce.toString();
             nonce_string = nonce_name_maybe;
           }
-        }
       }
 
       Object[] vals = new Object[vals_array_size];
@@ -819,30 +687,25 @@ public final class FileIO {
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
       try {
-        read_vals_and_mods_from_trace_file(
-          reader,
-          filename.toString(),
-          ppt,
-          vals,
-          mods);
+        read_vals_and_mods_from_trace_file (reader, filename.toString(),
+                                            ppt, vals, mods);
       } catch (IOException e) {
         String nextLine = reader.readLine();
         if ((e instanceof EOFException) || (nextLine == null)) {
-          System.out.println();
-          System.out.println(
-            "WARNING: Unexpected EOF while processing "
-              + "trace file - last record of trace file ignored");
+          System.out.println ();
+          System.out.println ("WARNING: Unexpected EOF while processing "
+                        + "trace file - last record of trace file ignored");
           break;
         } else if (dkconfig_continue_after_file_exception) {
-          System.out.println();
-          System.out.println(
-            "WARNING: IOException while processing "
-              + "trace file - record ignored");
-          System.out.print("Ignored backtrace:");
+          System.out.println ();
+          System.out.println ("WARNING: IOException while processing "
+                        + "trace file - record ignored");
+          System.out.print ("Ignored backtrace:");
           e.printStackTrace(System.out);
-          System.out.println();
-          while (nextLine != null && !nextLine.equals("")) {
-            // System.out.println("Discarded line " + reader.getLineNumber() + ": " + nextLine);
+          System.out.println ();
+          while (nextLine != null && ! nextLine.equals("")) {
+            // System.out.println("Discarded line " + reader.getLineNumber()
+            //                     + ": " + nextLine);
             nextLine = reader.readLine();
           }
           continue;
@@ -853,45 +716,24 @@ public final class FileIO {
 
       ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
-      // If we are only reading the sample, don't process them
-      //        if (dkconfig_read_samples_only) {
-      //  samples_processed++;
-      //  continue;
-      // }
-
       // Add orig and derived variables; pass to inference (add_and_flow)
       try {
-        processor.process_sample(all_ppts, ppt, vt, nonce);
+        processor.process_sample (all_ppts, ppt, vt, nonce);
       } catch (Error e) {
-        if (!dkconfig_continue_after_file_exception) {
+        if (! dkconfig_continue_after_file_exception) {
           throw e;
         } else {
-          System.out.println();
-          System.out.println(
-            "WARNING: Error while processing " + "trace file - record ignored");
-          System.out.print("Ignored backtrace:");
+          System.out.println ();
+          System.out.println ("WARNING: Error while processing "
+                        + "trace file - record ignored");
+          System.out.print ("Ignored backtrace:");
           e.printStackTrace(System.out);
-          System.out.println();
+          System.out.println ();
         }
       }
       // Debug.check (all_ppts, " ppt = " + ppt.name()
       //             + " " + Debug.related_vars (ppt, vt));
     }
-    // }
-    // // This catch clause is a bit of a pain.  On the plus side, it gives
-    // // line number information in the error message.  On the minus side, it
-    // // prevents the debugger from getting to the right frame.  As a
-    // // compromise, perhaps eliminate this but have callers use the public
-    // // "data_trace_reader" and "data_trace_filename" members.
-    // catch (RuntimeException e) {
-    //   System.out.println(lineSep + "At " + filename + " line " + reader.getLineNumber() + ":");
-    //   e.printStackTrace();
-    //   throw e;
-    // } catch (Error e) {
-    //   System.out.println(lineSep + "At " + filename + " line " + reader.getLineNumber() + ":");
-    //   e.printStackTrace();
-    //   throw e;
-    // }
 
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter.close();
@@ -903,7 +745,6 @@ public final class FileIO {
 
   static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
   static PptTopLevel.Stats stats = new PptTopLevel.Stats();
-  static PptTopLevel.Stats gstats = new PptTopLevel.Stats();
   static boolean store_stats = false;
 
   /**
@@ -921,96 +762,49 @@ public final class FileIO {
     // processing below becaue of the dataflow optimizations.
     samples_processed++;
 
-    { // For now, keep indentation the same
-      {
+    // Add orig variables.  This must be above the check below because
+    // it saves away the orig values from enter points for later use
+    // by exit points.
+    add_orig_variables(ppt, vt.vals, vt.mods, nonce);
 
-        // Add orig variables.  This must be above the check below because
-        // it saves away the orig values from enter points for later use
-        // by exit points.
-        add_orig_variables(ppt, vt.vals, vt.mods, nonce);
-
-        // Only process the leaves of the ppt tree
-        if (Daikon.use_dataflow_hierarchy) {
-          if (!ppt.ppt_name.isExitPoint())
-            return;
-          Assert.assertTrue(!ppt.ppt_name.isCombinedExitPoint());
-        }
-
-        // Add derived variables
-        add_derived_variables(ppt, vt.vals, vt.mods);
-
-        // Causes interning
-        vt = new ValueTuple(vt.vals, vt.mods);
-
-        if (debugRead.isLoggable(Level.FINE)) {
-          debugRead.fine("Adding ValueTuple to " + ppt.name());
-          debugRead.fine("  length is " + vt.vals.length);
-        }
-
-        // If we are only reading the sample, don't process them
-        if (dkconfig_read_samples_only) {
-          samples_processed++;
-          return;
-        }
-
-        long start = 0;
-        long start_mem = 0;
-        if (Daikon.debugStats.isLoggable(Level.FINE)) {
-          // runtime.gc();
-          start_mem = runtime.freeMemory();
-          start = System.currentTimeMillis();
-        }
-
-        if (Daikon.dkconfig_df_bottom_up)
-          ppt.add_global_bottom_up(vt, 1);
-        else
-          ppt.add_and_flow(vt, 1);
-
-        if (debugVars.isLoggable(Level.FINE))
-          debugVars.fine(ppt.name() + " vars: " + Debug.int_vars(ppt, vt));
-
-        // Keep track of statistics
-        if (Daikon.debugStats.isLoggable(Level.FINE)) {
-          // runtime.gc();
-          if (store_stats)
-            stats = new PptTopLevel.Stats();
-          stats.set(
-            ppt,
-            (int) (System.currentTimeMillis() - start),
-            (int) (start_mem - runtime.freeMemory()));
-          if (PptTopLevel.global != null)
-            gstats.set(
-              PptTopLevel.global,
-              (int) (System.currentTimeMillis() - start),
-              (int) (start_mem - runtime.freeMemory()));
-          if (store_stats) {
-            List slist = (List) Global.stats_map.get(ppt);
-            if (slist == null) {
-              slist = new ArrayList();
-              Global.stats_map.put(ppt, slist);
-            }
-            slist.add(stats);
-          } else {
-            //if ((ppt.num_samples() < 10) || (ppt.num_samples() % 100) == 0) {
-            if (!debugVars.isLoggable(Level.FINE))
-              Daikon.debugStats.fine("vars: " + Debug.related_vars(ppt, vt));
-            if (PptTopLevel.global != null)
-              gstats.dump(Daikon.debugStats);
-            stats.dump(Daikon.debugStats);
-            //if ((ppt.num_samples() % 10) == 0)
-            //PptTopLevel.count_unique_inv_lists (Daikon.debugStats, all_ppts);
-            //}
-          }
-        }
-
-      }
+    // Only process the leaves of the ppt tree
+    if (Daikon.use_dataflow_hierarchy) {
+      if (!ppt.ppt_name.isExitPoint())
+        return;
+      Assert.assertTrue (!ppt.ppt_name.isCombinedExitPoint());
     }
+
+    // Add derived variables
+    add_derived_variables(ppt, vt.vals, vt.mods);
+
+    // Causes interning
+    vt = new ValueTuple(vt.vals, vt.mods);
+
+    if (debugRead.isLoggable(Level.FINE)) {
+      debugRead.fine ("Adding ValueTuple to " + ppt.name());
+      debugRead.fine ("  length is " + vt.vals.length);
+    }
+
+    // If we are only reading the sample, don't process them
+    if (dkconfig_read_samples_only) {
+      samples_processed++;
+      return;
+    }
+
+    ppt.add_bottom_up (vt, 1);
+
+    if (debugVars.isLoggable (Level.FINE))
+      debugVars.fine (ppt.name() + " vars: " + Debug.int_vars (ppt, vt));
+
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter.close();
     }
 
   }
 
+  /**
+   * Print each call that does not have a matching exit
+   */
   public static void process_unmatched_procedure_entries() {
 
     if (dkconfig_unmatched_procedure_entries_quiet)
@@ -1088,13 +882,11 @@ public final class FileIO {
 
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.
-  private static void read_vals_and_mods_from_trace_file(
-    LineNumberReader reader,
-    String filename,
-    PptTopLevel ppt,
-    Object[] vals,
-    int[] mods)
-    throws IOException {
+  private static void read_vals_and_mods_from_trace_file
+                        (LineNumberReader reader, String filename,
+                         PptTopLevel ppt, Object[] vals, int[] mods)
+    throws IOException
+  {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
@@ -1213,9 +1005,8 @@ public final class FileIO {
       //                   + " for program point " + ppt.name());
 
       // MISSING_FLOW is only found during flow algorithm
-      Assert.assertTrue(
-        mod != ValueTuple.MISSING_FLOW,
-        "Data trace value can't be missing due to flow");
+      Assert.assertTrue (mod != ValueTuple.MISSING_FLOW,
+                         "Data trace value can't be missing due to flow");
 
       if (mod != ValueTuple.MISSING_NONSENSICAL) {
         // Set the modbit now, depending on whether the value of the variable
@@ -1398,11 +1189,10 @@ public final class FileIO {
     }
   }
 
-  // Add derived variables
-  public static void add_derived_variables(
-    PptTopLevel ppt,
-    Object[] vals,
-    int[] mods) {
+  /** Add derived variables **/
+  public static void add_derived_variables(PptTopLevel ppt,
+                                            Object[] vals,
+                                            int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
     ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
