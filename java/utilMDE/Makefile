@@ -43,8 +43,11 @@ tags:
 test:
 	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
 
-doc: $(JAVA_FILES)
+doc: javadoc
+
+javadoc: $(JAVA_FILES)
 	mkdir -p doc
+	# javadoc 1.4 doesn't like being given package names; give all *.java files instead
 	javadoc -d doc utilMDE
 	# makes "doc" (the target of this rule) look up to date
 	touch doc
