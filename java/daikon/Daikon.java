@@ -45,6 +45,19 @@ public final class Daikon {
    **/
   public static boolean dkconfig_enable_floats = true;
 
+  /**
+   * Integer. Percentage of ppts to process.  All ppts are sorted and
+   * the first dkconfig_ppt_perc ppts are included.  A percentage of
+   * 100 (default) matches all ppts.
+   */
+  public static int dkconfig_ppt_perc = 100;
+
+  /**
+   * Boolean.  Controls whether or not total samples read and processed
+   * are printed at the end of processing
+   */
+  public static boolean dkconfig_print_sample_totals = true;
+
   // All these variables really need to be organized better.
 
   public final static String lineSep = Global.lineSep;
@@ -164,6 +177,13 @@ public final class Daikon {
   public static Pattern ppt_regexp;
   public static Pattern ppt_omit_regexp;
   public static Pattern var_omit_regexp;
+
+  /**
+   * If set, only ppts less than ppt_max_name are included.  Used by the
+   * configuration option dkconfig_ppt_percent to only work on a specified
+   * percent of the ppts.
+   */
+  public static String ppt_max_name = null;
 
   // The invariants detected will be serialized and written to this
   // file.
@@ -391,6 +411,9 @@ public final class Daikon {
     if (output_num_samples) {
       Global.output_statistics();
     }
+    if (dkconfig_print_sample_totals)
+      System.out.println (FileIO.samples_processed + " samples processed of " +
+                          FileIO.samples_considered + " total samples");
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable (Level.FINE)) {
@@ -699,6 +722,12 @@ public final class Daikon {
     // Enable dynamic constants for bottom up only
     if (!dkconfig_df_bottom_up)
       use_dynamic_constant_optimization = false;
+
+    // Setup ppt_max_name based on the specified percentage of ppts to process
+    if (dkconfig_ppt_perc != 100) {
+      ppt_max_name = setup_ppt_perc (decl_files, dkconfig_ppt_perc);
+      System.out.println ("Max ppt name = " + ppt_max_name);
+    }
 
     return new Set[] {
       decl_files,
@@ -1208,5 +1237,59 @@ public final class Daikon {
       PptTopLevel ppt = (PptTopLevel)i.next();
       ppt.processOmissions(omit_types);
     }
+  }
+
+  /**
+   * Returns the max ppt that corresponds the specified percentage
+   * of ppts (presuming that only those ppts <= max_ppt will be
+   * processed)
+   */
+  private static String setup_ppt_perc (Collection decl_files, int ppt_perc) {
+
+    // Make sure the percentage is valid
+    if ((ppt_perc < 1) || (ppt_perc > 100))
+      throw new Error ("ppt_perc of " + ppt_perc + " is out of range 1..100");
+    if (ppt_perc == 100)
+      return null;
+
+    // Keep track of all of the ppts in a set ordered by the ppt name
+    Set ppts = new TreeSet();
+
+    // Read all of the ppt names out of the decl files
+    try {
+      for (Iterator i = decl_files.iterator(); i.hasNext(); ) {
+        File file = (File) i.next();
+
+        // Open the file
+        LineNumberReader fp = UtilMDE.LineNumberFileReader(file);
+
+        // Read each ppt name from the file
+        for (String line = fp.readLine(); line != null; line = fp.readLine()) {
+          if (line.equals("") || FileIO.isComment(line))
+            continue;
+          if (!line.equals ("DECLARE"))
+            continue;
+          String ppt_name = fp.readLine();
+          ppts.add (ppt_name);
+        }
+
+        fp.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new Error (e);
+    }
+
+    // Determine the ppt_name that matches the specified percentage
+    int ppt_cnt = (ppts.size() * ppt_perc) / 100;
+    if (ppt_cnt == 0)
+      throw new Error ("ppt_perc of " + ppt_perc + " over " + ppts.size()
+                       + " results in 0 ppts to process");
+    for (Iterator i = ppts.iterator(); i.hasNext(); ) {
+      String ppt_name = (String) i.next();
+      if (--ppt_cnt <= 0)
+        return (ppt_name);
+    }
+    throw new Error ("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
   }
 }
