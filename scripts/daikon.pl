@@ -55,7 +55,7 @@ sub find {
     my $name = shift || die;
     my $root = shift || '.';
     my @result;
-    open(F, "find $root -name '$name' |");
+    open(F, "find $root -follow -name '$name' |");
     while (my $line = <F>) {
 	chomp $line;
 	push @result, $line;
@@ -176,6 +176,8 @@ while (1) {
     # find the results
     $dtrace = join(' ', find('*.dtrace', 'daikon-output/'));
     $decls = join(' ', find('*.decls', 'daikon-output/'));
+    $outerr = !($dtrace && $decls);
+    last if $outerr;
 
     # run modbit-munge
     print "Running modbit-munge...\n" if $verbose;
@@ -203,6 +205,7 @@ system("rm -rf $working") && die("Could not remove working dir");
 die("dfej error") if $dfejerr;
 die("jikes error") if $jikeserr;
 die("java test suite error") if $javaerr;
+die("missing output files") if $outerr;
 die("modbit error") if $mberr;
 die("daikon error") if $dkerr;
 die("gzip error") if $gzerr;
