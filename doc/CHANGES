@@ -52,6 +52,23 @@ used for all of the implications.  [more detail to be added, jhp]
 
 [Unified flags for dfej, Daikon, Kvasir, trace2.]
 
+Kvasir
+
+  User Changes
+
+    Added a command-line option, --limit-static-vars, to limit the 
+    amount of output in order to improve the likelihood of finding 
+    more useful invariants. Began implementing pointer-type disambiguation
+    so that users can exert finer control of whether pointer variables
+    are printed as single elements or arrays (still not fully implemented).
+
+  Bug Fixes
+
+    On the whole, Kvasir produces more accurate output than before due
+    to various fixes for bugs which caused Kvasir to produce incorrect
+    output for obscure test cases.
+
+
 [Carlos should write up this change.]
 Annotate respects whitespace
 
