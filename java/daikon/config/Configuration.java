@@ -9,9 +9,9 @@ import utilMDE.Assert;
 
 /**
  * This class applies settings from a configuration file that lists
- * variable names and values (see "defaults.txt" in this directory for an
- * example).  Multiple configuration files can be read, and the results can
- * be re-written to a new configuration file.
+ * variable names and values (see "example-settings.txt" in this directory
+ * for an example).  Multiple configuration files can be read, and the
+ * results can be re-written to a new configuration file.
  *
  * <p> Important note: classes that have fields set via this
  * Configuration (dkconfig) interface may not reference daikon.Global
@@ -48,7 +48,20 @@ public final class Configuration
   private static Configuration instance = null;
 
   /**
-   * Load the defaults
+   * Load the defaults.
+   *
+   * In order to permit accurate reconstruction of the current
+   * configuration (in a later run, say, or when loading state from a
+   * file), the private "statements" list in this class should contain the
+   * name and value of every configuration option.  Reading
+   * configurable.txt file supplies that list with every configuration
+   * option.  (Omitted configuration options receive their default values;
+   * but the default might change from one version of Daikon to another.)
+   *
+   * As of 1/2003, the configurable.txt file is out of date.  It should be
+   * automatically generated, or the list of all configuration options
+   * should be obtained in some other way, or the problem regarding changes
+   * to default values should be simply accepted (and documented).
    **/
   private Configuration() {
     InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
