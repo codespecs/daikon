@@ -83,8 +83,8 @@ public final class FileIO {
 
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
-  static boolean to_write_nonce = false;
-  static String nonce_value, nonce_string;
+  private static boolean to_write_nonce = false;
+  private static String nonce_value, nonce_string;
 
   // Logging Categories
 
@@ -116,11 +116,15 @@ public final class FileIO {
   }
 
   /**
-   * Calls @link{read_declaration_file(String)} for each element
-   * of files.  See the definition of that function.
+   * @param files files to be read (java.io.File)
+   * @return a new PptMap containing declarations read from the files
+   * listed in the argument; connection information (controlling
+   * variables and entry ppts) is set correctly upon return.
    **/
-  static void read_declaration_files(Collection files, PptMap all_ppts) {
-
+  public static PptMap read_declaration_files(Collection files // [File]
+					      )
+    throws IOException
+  {
     // XXX for now, hard-code these list-implementing types. We should
     // make the front-end dump the language-specific ones into .decls.
     ProglangType.list_implementors.add("java.util.List");
@@ -131,36 +135,30 @@ public final class FileIO {
     ProglangType.list_implementors.add("java.util.LinkedList");
     ProglangType.list_implementors.add("java.util.Stack");
 
+    PptMap all_ppts = new PptMap();
+    // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext(); ) {
-      String file = (String) i.next();
+      File file = (File) i.next();
       System.out.print(".");  // show progress
-      try {
-	read_declaration_file(file, all_ppts);
-      } catch (IOException e) {
-	e.printStackTrace();
-	throw new Error(e.toString());
-      }
+      read_declaration_file(file, all_ppts);
     }
+    return all_ppts;
   }
 
-
-  /**
-   * @param filename
-   * @return a vector of PptTopLevel objects
-   **/
-  static Vector read_declaration_file(String filename, PptMap all_ppts) throws IOException {
-
+  /** Read one decls file; add it to all_ppts. **/
+  private static void read_declaration_file(File filename,
+					    PptMap all_ppts)
+    throws IOException
+  {
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_declaration_file " + filename
 		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
 		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
-    Vector new_ppts = new Vector();
-
     int varcomp_format = VarComparability.NONE;
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
 
     String line = reader.readLine();
 
@@ -174,7 +172,7 @@ public final class FileIO {
 	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
 	// ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
-          new_ppts.add(ppt);
+          all_ppts.add(ppt);
         }
 	continue;
       }
@@ -218,17 +216,16 @@ public final class FileIO {
       }
       continue;
     }
-    for (int i=0; i<new_ppts.size(); i++) {
-      PptTopLevel ppt = (PptTopLevel) new_ppts.elementAt(i);
-      all_ppts.add(ppt);
-    }
-    after_processing_file_declarations(new_ppts, all_ppts);
-    return new_ppts;
   }
 
 
   // The "DECLARE" line has alredy been read.
-  static PptTopLevel read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, String filename) throws IOException {
+  private static PptTopLevel read_declaration(LineNumberReader file,
+					      PptMap all_ppts,
+					      int varcomp_format,
+					      File filename)
+    throws IOException
+  {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 
@@ -243,6 +240,12 @@ public final class FileIO {
       // then we need to create all the program points because the
       // creation of splitters requires information from the program
       // points.
+
+      // XXX Re-examine the below rant
+      // JWN: The above is crazy!  Program points are now EXPENSIVE --
+      // they create all derived variables and possible invariants.
+      // I am turning off all_splitters by default.
+
       if (((Daikon.ppt_omit_regexp != null)
 	   && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
 	  || ((Daikon.ppt_regexp != null)
@@ -259,11 +262,39 @@ public final class FileIO {
       }
     }
 
+    // The var_infos that will populate the new program point
+    List var_infos = new ArrayList();
 
-    // if (ppt_name.endsWith(":::ENTER"))
-    //   functions.add(ppt_name.substring(0, ppt_name.length() - 8));
-
-    Vector var_infos = new Vector();
+    // Rename EXITnn to EXIT
+    {
+      PptName parsed_name = new PptName(ppt_name);
+      if (parsed_name.isExitPoint()) {
+	PptName new_name = parsed_name.makeExit();
+	// Punt if we already read a different EXITnn
+	if (all_ppts.get(new_name) != null) {
+	  String line = file.readLine();
+	  while ((line != null) && !line.equals("")) {
+	    // This fails if some lines of a declaration (e.g., the
+	    // comparability field) are empty.
+	    line = file.readLine();
+	  }
+	  return null;
+	}
+	// Override what was read from file
+	ppt_name = new_name.name().intern();
+	// Add the pseudo-variable $return_line
+	if (false) {
+	  // Skip this for now; we're not sure how to make it work
+	  ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
+	  ProglangType file_rep_type = ProglangType.INT;
+	  VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
+	  VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
+				     prog_type, file_rep_type, comparability,
+                                     VarInfoAux.getDefault());
+	  var_infos.add(line);
+	}
+      }
+    }
 
     // Each iteration reads a variable name, type, and comparability.
     VarInfo vi;
@@ -292,7 +323,12 @@ public final class FileIO {
    * Return null after reading the last variable in this program point
    * declaration.
    **/
-  static VarInfo read_VarInfo(LineNumberReader file, int varcomp_format, String filename, String ppt_name) throws IOException {
+  private static VarInfo read_VarInfo(LineNumberReader file,
+				      int varcomp_format,
+				      File filename,
+				      String ppt_name)
+    throws IOException
+  {
     String line = file.readLine();
     if ((line == null) || (line.equals("")))
       return null;
@@ -447,202 +483,15 @@ public final class FileIO {
   // are associated with which entries.
   // call_stack is for functions without nonces.
 
-  // Reading a data trace file first initializes this.  I could save some
-  // Object overhead by using two parallel stacks instead of Invocation
-  // objects; but that's not worth it.
-  static Stack call_stack;		// stack of Invocation objects
-
-  static HashMap call_hashmap; 	// map from Integer (invocation nonce) to Invocation
-
-
-  // Only processes the ppts in the given Vector.
-  static void after_processing_file_declarations(Vector ppts, PptMap all_ppts) {
-
-    /// Add _orig vars.
-
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.set_controlling_ppts(all_ppts);
-      ppt.compute_entry_ppt(all_ppts);
-      if (ppt.entry_ppt != null) {
-	ppt.add_orig_vars(ppt.entry_ppt);
-      }
-    }
-  }
-
-
-// This should call the new version; but as of 1/9/2000, it isn't called at all.
-// /// Old version.
-// /// This should probably call the new version.
-// // I ought to be able to call this individually for each program point,
-// // after processing its declarations, right?  Yes for adding _orig
-// // variables (but only after reading the corresponding entry program
-// // point!), but, not for adding invocation counts, unless I have a way to
-// // add new variables to an existing program point.
-//
-// // I probably *do* want to have original values even for global variables,
-// // so I probably want to add original values after globals.
-// // What about original vs. final invocation counts?  That could give info
-// // about the dynamic call graph.  For now I'll do it, to avoid potential
-// // problems with number of orig vars not equaling number of final vars.
-//   static void after_processing_file_declarations(PptMap all_ppts) {
-//
-//     //// Take care not to call this multiple times.  If fn_truevars is set,
-//     //// it has been called.  But we need to set all the fn_truevars (for use
-//     //// adding _orig) before doing the rest of the work.
-//
-//     /// Add _orig vars.
-//
-//     for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
-//       PptTopLevel ppt = (PptTopLevel) itor.next();
-//       PptTopLevel entry_ppt = ppt.entry_ppt(all_ppts);
-//       if (entry_ppt != null)
-// 	entry_ppts.put(ppt, entry_ppt);
-//     }
-//     for (Iterator itor = entry_ppts.entrySet().iterator() ; itor.hasNext() ; ) {
-//       Map.Entry entry = (Map.Entry) itor.next();
-//       PptTopLevel exit_ppt = (PptTopLevel) entry.getKey();
-//       PptTopLevel entry_ppt = (PptTopLevel) entry.getValue();
-//       exit_ppt.add_orig_vars(entry_ppt);
-//     }
-//
-//     // // Add function invocation counts.
-//     // Vector fn_names = new HashSet();
-//     // for (int i=0; i<all_ppts.size(); i++) {
-//     //   String fn_name = ppt.fn_name();
-//     //   if (fn_name != null)
-//     //     fn_names.add(fn_name);
-//     // }
-//     // for (int i=0; i<all_ppts.size(); i++) {
-//     //   Ppt ppt = all_ppts[i];
-//     //   ppt.add_fn_invocation_counts();
-//     // }
-//
-// //     for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
-// //       PptTopLevel ppt = (PptTopLevel) itor.next();
-// //       ppt.initial_processing();
-// //     }
-//
-//
-//   }
+  // I could save some Object overhead by using two parallel stacks
+  // instead of Invocation objects; but that's not worth it.
+  static Stack call_stack = new Stack(); // stack of Invocation objects
+  static HashMap call_hashmap = new HashMap(); // map from Integer to Invocation
 
 
 ///////////////////////////////////////////////////////////////////////////
 /// Data trace files
 ///
-
-
-// This is going to manage the orig variables, augmenting variable lists
-// before the rest of the system ever sees them.
-
-// This is important, but it's largely user interface,
-// so I can get around to it later.
-// /**
-//  * Read data traces from FILES.
-//  * See read_decls_and_traces for more documentation.
-//  */
-//   void read_data_traces(String[] files, int clear, Pattern fn_regexp, Integer num_files, Long random_seed) {
-//     if (clear) {
-//       clear_trace_variables();
-//     }
-//     fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE);
-//
-//     files_orig = files;
-//     if type(files) == types.StringType {
-//       files = util.expand_file_name(files);
-//       files = glob.glob(files);
-//     }
-//     if files == [] {
-//       raise "No files specified";
-//     }
-//     if (num_files != null) {
-//       int num_files_int = num_files.intValue();
-//       if num_files_int == 0 {
-// 	raise "Requested 0 of %d files" % len(files);
-//       }
-//       total_files = len(files);
-//       if (num_files_int > total_files) {
-// 	raise "Requested %d files, but only %d supplied" % (num_files, total_files);
-//       }
-//       if (random_seed != null)
-// 	Global.random.setSeed(random_seed.longValue());
-//       files = util.random_subset(files, num_files);
-//       //// Skip this, too wordy.  We can always determine them later.
-//       // print num_files, "files randomly chosen:"
-//       // for file in files:
-//       //     print " ", file
-//       assert num_files == None or num_files == len(files);
-//     }
-//
-//     for file in files {
-//       read_merge_data_trace_file(file, fn_regexp);
-//     }
-//
-//     if (__debug__) {                       // for loop is outside assert, yuck
-//       for fname in fn_var_values.keys() {
-// 	assert ((len(fn_var_values[fname].keys()) == 0)
-// 		or (len(fn_var_infos[fname]) == len(fn_var_values[fname].keys()[0])));
-//       }
-//     }
-//   }
-
-
-
-
-// An instrumented program produces a .dtrace file containing information about
-// run-time values of expressions and variables.  The invariant detector tries
-// to find patterns in the values recorded in one or more trace files.
-// To detect invariants in a particular program, it is enough to insert code
-// in the application which creates a trace file.  In Lisp, the
-// `write-to-data-trace' macro and `instrument' function perform this task.
-// For documentation of the data trace file format, see dtrace-format.txt.
-
-
-
-
-// All this appears in the Ppt now, and none of this is called as of 1/9/2000.
-// It should probably all be deleted.
-// // Since I want Ppts to be dumb, fat, and happy, they won't contain any
-// // info about number of nonconstant variables, etc.  That all appears here.
-//
-//   // Additional information useful when reading from a data trace file.
-//   // I doubt this will be able to be garbage-collected, unfortunately.
-//   static final class PptReadingInfo {
-//     int trace_vars;		// number of vars actually in the trace file
-//     int[] vi_index;		// map from position in trace file (and thus in
-// 				//   ValueTuple) to VarInfo index
-//
-//     PptReadingInfo(PptTopLevel ppt) {
-//       trace_vars = 0;
-//       for (int i=0; i<ppt.var_infos.length; i++) {
-// 	VarInfo vi = ppt.var_infos[i];
-// 	if (! (vi.isStaticConstant() || vi.isDerived())) {
-// 	  trace_vars++;
-// 	}
-//       }
-//       vi_index = new int[trace_vars];
-//       int trace_var = 0;
-//       for (int i=0; i<ppt.var_infos.length; i++) {
-// 	VarInfo vi = ppt.var_infos[i];
-// 	if (! (vi.isStaticConstant() || vi.isDerived())) {
-// 	  vi_index[trace_var] = i;
-// 	  trace_var++;
-// 	}
-//       }
-//       Assert.assert(trace_var == trace_vars);
-//     }
-//   }
-//
-//   // returns a map from program point name to PptReadingInfo
-//   static HashMap getPptReadingInfoMap(PptMap all_ppts) {
-//     HashMap result = new HashMap(all_ppts.size());
-//
-//     for (Iterator itor = all_ppts.entrySet().iterator() ; itor.hasNext() ; ) {
-//       Map.Entry entry = (Map.Entry) itor.next();
-//       result.put(entry.getKey(), new PptReadingInfo((PptTopLevel) entry.getValue()));
-//     }
-//     return result;
-//   }
 
 
   // Eventually add these arguments to this function; they were in the Python
@@ -654,34 +503,29 @@ public final class FileIO {
 
   /**
    * Read data from .dtrace files.
-   * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
+   * Calls @link{read_data_trace_file(File,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  static void read_data_trace_files(Collection files, PptMap all_ppts) throws IOException {
-
-    init_call_stack_and_hashmap();
-
+  public static void read_data_trace_files(Collection files, // [File]
+					   PptMap all_ppts)
+    throws IOException
+  {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
-      System.out.print(".");
-      String file = (String) i.next();
+      File file = (File) i.next();
       read_data_trace_file(file, all_ppts);
     }
 
     process_unmatched_procedure_entries();
   }
 
-
-  // for debugging only.  We stash values here to be examined/printed later.
-  static public LineNumberReader data_trace_reader;
-  static public String data_trace_filename;
-
-  static void init_call_stack_and_hashmap() {
-    call_stack = new Stack();
-    call_hashmap = new HashMap();
-  }
+  // We stash values here to be examined/printed later.  Used to be
+  // for debugging only, but now also used for Daikon progress output.
+  public static LineNumberReader data_trace_reader;
+  public static File data_trace_filename;
 
   /** Read data from .dtrace file. **/
-  static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
+  public static void read_data_trace_file(File filename, PptMap all_ppts)
+    throws IOException {
     int pptcount = 1;
 
     if (debugRead.isDebugEnabled()) {
@@ -690,7 +534,7 @@ public final class FileIO {
 		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
     data_trace_reader = reader;
     data_trace_filename = filename;
 
@@ -703,6 +547,10 @@ public final class FileIO {
     // Maps from a function to the cumulative modification bits seen for
     // the entry since the time other elements were seen.  There is one tag
     // for each exit point associated with this entry.
+    // I propose we no longer need this, since we will feed in one sample
+    // per exit point; modbits will end up correct automatically.
+    /* [INCR] ... (punting modbits fixing for now)
+    // [PptTopLevel -> [PptTopLevel -> int[]]]
     HashMap cumulative_modbits = new HashMap();
     for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
@@ -719,7 +567,7 @@ public final class FileIO {
         subhash.put(ppt, mods);
       }
     }
-
+    */ // ... [INCR]
 
     // try {
       // "line_" is uninterned, "line" is interned
@@ -743,6 +591,12 @@ public final class FileIO {
         }
 
         String ppt_name = line; // already interned
+	{ // Rename EXITnn to EXIT
+	  PptName parsed = new PptName(ppt_name);
+	  if (parsed.isExitPoint()) {
+	    ppt_name = parsed.makeExit().name().intern();
+	  }
+	}
 
 	if (pptcount++ % 10000 == 0)
 	    System.out.print(":");
@@ -757,7 +611,8 @@ public final class FileIO {
         // And for the time being (and possibly forever), for derived variables.
         int num_tracevars = ppt.num_tracevars;
         int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-        Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
+	// This is no longer true; we now derive variables before reading dtrace!
+        // Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
@@ -789,49 +644,11 @@ public final class FileIO {
         }
 
         // Fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_data_trace_file(reader, ppt, vals, mods);
+        read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);
 
-        // Now add some additional variable values that don't appear directly
-        // in the data trace file but aren't traditional derived variables.
-
-        add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce);
-
-        // // Add invocation counts
-        // if not no_invocation_counts {
-        //   for ftn_ppt_name in fn_invocations.keys() {
-        //     calls_var_name = "calls(%s)" % ftn_ppt_name;
-        //     assert calls_var_name == these_var_infos[current_var_index].name;
-        //     these_values.append((fn_invocations[ftn_ppt_name],1))e;
-        //     current_var_index++;
-        //   }
-        // }
-
-        // Add derived variables
-        add_derived_variables(ppt, vals, mods);
-
-
-        vals = Intern.intern(vals);
-        Assert.assert(Intern.isInterned(vals));
-
-        // Done adding additional variable values that don't appear directly
-        // in the data trace file.
-
-        ValueTuple vt = new ValueTuple(vals, mods);
-
-        if (debugRead.isDebugEnabled()) {
-          debugRead.debug("Adding ValueTuple to " + ppt.name);
-        }
-        ppt.add(vt, 1);
-
-        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
-        if (exit_ppt != null) {
-          VarInfo[] exit_vis = exit_ppt.var_infos;
-          // System.out.println("ppt = " + ppt.name);
-          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
-          // System.out.println(" vt = " + vt.toString());
-          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
-          exit_ppt.add(exit_vt, 1);
-        }
+	// Add orig and derived variables; pass to inference (add_and_flow)
+	ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
+	process_sample(ppt, vt, nonce);
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -853,10 +670,71 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
+    data_trace_filename = null;
+    data_trace_reader = null;
   }
 
+  /**
+   * @param vt trace data only
+   **/
+  public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)
+  {
+    { // For now, keep indentation the same
+      {
+        // Now add some additional variable values that don't appear directly
+        // in the data trace file but aren't traditional derived variables.
 
-  static void process_unmatched_procedure_entries() {
+        // add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce); // [INCR] (punt modbits)
+        add_orig_variables(ppt, vt.vals, vt.mods, nonce);
+
+	// XXX (for now, until front ends are changed)
+	if (! ppt.ppt_name.isExitPoint()) {
+	  return;
+	}
+
+        // // Add invocation counts
+        // if not no_invocation_counts {
+        //   for ftn_ppt_name in fn_invocations.keys() {
+        //     calls_var_name = "calls(%s)" % ftn_ppt_name;
+        //     assert calls_var_name == these_var_infos[current_var_index].name;
+        //     these_values.append((fn_invocations[ftn_ppt_name],1))e;
+        //     current_var_index++;
+        //   }
+        // }
+
+        // Add derived variables
+        add_derived_variables(ppt, vt.vals, vt.mods);
+
+        // Done adding additional variable values that don't appear directly
+        // in the data trace file.
+
+	// Causes interning
+        vt = new ValueTuple(vt.vals, vt.mods);
+
+        if (debugRead.isDebugEnabled()) {
+          debugRead.debug("Adding ValueTuple to " + ppt.name);
+        }
+        ppt.add_and_flow(vt, 1);
+
+	// Feeding values to EXITnn points will automatically have
+	// them flow up to the corresponding EXIT point.
+	/* [INCR] ...
+        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
+        if (exit_ppt != null) {
+          VarInfo[] exit_vis = exit_ppt.var_infos;
+          // System.out.println("ppt = " + ppt.name);
+          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
+          // System.out.println(" vt = " + vt.toString());
+          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
+          exit_ppt.add(exit_vt, 1);
+        }
+	*/
+      }
+    }
+
+  }
+
+  private static void process_unmatched_procedure_entries() {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("No return from procedure observed "
@@ -926,7 +804,12 @@ public final class FileIO {
   }
 
   // This procedure fills up vals and mods by side effect.
-  static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods) throws IOException {
+  private static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
+							 PptTopLevel ppt,
+							 Object[] vals,
+							 int[] mods)
+    throws IOException
+  {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
@@ -1042,7 +925,6 @@ public final class FileIO {
           System.exit(1);
         }
         vals[val_index] = null;
-        vis[val_index].canBeMissing = true;
       } else {
         // System.out.println("Mod is " + mod + " (missing=" + ValueTuple.MISSING + "), rep=" + value_rep + " (modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
         vals[val_index] = vi.rep_type.parse_value(value_rep);
@@ -1066,8 +948,12 @@ public final class FileIO {
   }
 
 
-  static void add_orig_variables(PptTopLevel ppt, HashMap cumulative_modbits, Object[] vals, int[] mods, Integer nonce) throws IOException {
-
+  private static void add_orig_variables(PptTopLevel ppt,
+					 // HashMap cumulative_modbits,
+					 Object[] vals,
+					 int[] mods,
+					 Integer nonce)
+  {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.fn_name();
     String ppt_name = ppt.name;
@@ -1078,6 +964,7 @@ public final class FileIO {
       } else {
         call_hashmap.put(nonce, invok);
       }
+      /* [INCR] ... Punting cumulative modbits; see comments way above.
       HashMap subhash = (HashMap) cumulative_modbits.get(ppt);
       // If subhash is null, then there must have been no exit program
       // point that mapped back to this entry.  That could happen if the
@@ -1094,11 +981,15 @@ public final class FileIO {
           ValueTuple.orModsInto(exitmods, mods);
         }
       }
-    } else {
-      PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt;
-      if (entry_ppt != null) {
-        Invocation invoc;
-        // Set invoc
+      */ // ... [INCR]
+      return;
+    }
+
+    // PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt; // [INCR]
+    if (ppt.ppt_name.isExitPoint()) {
+      Invocation invoc;
+      // Set invoc
+      {
         if (nonce == null) {
           if (call_stack.empty()) {
             throw new Error("Function exit without corresponding entry: "
@@ -1110,46 +1001,59 @@ public final class FileIO {
             // at runtime.
             System.err.println("Exceptional exit from function " + fn_name
                                + ", expected to first exit from " + invoc.fn_name()
-                               + "; at " + data_trace_filename + " line " + data_trace_reader.getLineNumber());
+                               + ((data_trace_filename == null) ? "" :
+				  "; at " + data_trace_filename + " line "
+				  + data_trace_reader.getLineNumber())
+			       );
             invoc = (Invocation) call_stack.pop();
           }
         } else {
-          if (! call_hashmap.containsKey(nonce)) {
+	  // nonce != null
+          invoc = (Invocation) call_hashmap.get(nonce);
+          if (invoc == null) {
             throw new Error("Didn't find call to " + ppt.name + " with nonce " + nonce);
           }
           invoc = (Invocation) call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
         }
+      }
+      Assert.assert(invoc != null);
+      {
+	/* [INCR] punt cumulative modbits
         Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars
                       // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
                       );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
+	*/
         for (int i=0; i<ppt.num_orig_vars; i++) {
           vals[ppt.num_tracevars+i] = invoc.vals[i];
           int mod = invoc.mods[i];
+	  /* [INCR] punt again
           if ((mod == ValueTuple.UNMODIFIED)
               && (entrymods[i] == ValueTuple.MODIFIED)) {
             // System.out.println("Entrymods made a difference.");
             mod = ValueTuple.MODIFIED;
           }
+	  */
           mods[ppt.num_tracevars+i] = mod;
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
           if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
-            vis[ppt.num_tracevars+i].canBeMissing = true;
             Assert.assert(vals[ppt.num_tracevars+i] == null);
           }
         }
+	/* [INCR] punt again
         Arrays.fill(entrymods, 0);
+	*/
       }
     }
   }
 
   // Add derived variables
-  static void add_derived_variables(PptTopLevel ppt, Object[] vals, int[] mods) throws IOException {
-    // !!! In V2, we belive that this method does nothing, since there
-    // are no derived variables present while reading the trace file !!!
-
+  private static void add_derived_variables(PptTopLevel ppt,
+					    Object[] vals,
+					    int[] mods)
+  {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
     ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
@@ -1161,11 +1065,12 @@ public final class FileIO {
       Assert.assert(ppt.var_infos[i].isDerived(),
                     "variable not derived: " + ppt.var_infos[i].repr());
     }
+    int num_const = ppt.num_static_constant_vars;
     for (int i=filled_slots; i<ppt.var_infos.length; i++) {
       // Add this derived variable's value
       ValueAndModified vm = ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
-      vals[i] = vm.value;
-      mods[i] = vm.modified;
+      vals[i - num_const] = vm.value;
+      mods[i - num_const] = vm.modified;
     }
   }
 

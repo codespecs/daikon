@@ -3,13 +3,25 @@ This file describes how to merge the changes on the ENGINE_V2_PATCHES
 branch of the $inv/java/daikon part of the repository into the trunk
 (which is version 3 of Daikon).
 
-(1) Ensure that your V3 checkout is up to date, and builds:
+(1) Ensure that your V2 checkout is up to date, and builds:
+    Commit if the last command shows any diffs.
+
+  cd $inv/java
+  make use-ver2
+  cvs -q update
+  make
+  cvs -q diff --brief
+
+(1) Ensure that your V3 checkout is up to date, and builds.
+    Commit if the last command shows any diffs.
 
   cd $inv/java
   make use-ver3
-  cvs up
+  cvs -q update
   make
+  cvs -q diff --brief
   
+
 (2) Make a backup of your current version of the trunk
 
   cd $inv
