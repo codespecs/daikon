@@ -53,7 +53,7 @@ my $team2 = shift @ARGV;
 my $outputfile = shift @ARGV;
 my $java_args = join(' ', @ARGV);
 
-my $tmpdir = "/tmp/$ENV{'USER'}";
+my $tmpdir = "/scratch/$ENV{'USER'}";
 if (! -d $tmpdir) {
   mkdir $tmpdir or die "Cannot create directory $tmpdir";
 }
@@ -67,7 +67,7 @@ my $javacp = join(':', map { "$colony_dir/$_" } @javacp_list);
 #   cd ~/tmp/steering-experiments/lees-2003/colony
 #   java -cp sources:../common/classes:teams:. colony.simulator.SimClient GUI -1 testout.txt
 
-my $java_command = "java -cp $javacp colony.simulator.SimClient $java_args";
+my $java_command = "java -Xmx256M -cp $javacp colony.simulator.SimClient $java_args";
 
 my $this_dir = setup_directory();
 my $command = "cd $this_dir; $java_command > $this_dir/java-output.txt 2> java_err.txt";

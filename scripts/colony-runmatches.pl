@@ -235,7 +235,15 @@ while (defined($line = <IN>)) {
   } else {
     # Not system_or_die; it's OK if it dies.  We'll notice the missing run
     # (by hand?) and come back to it later.
-    system("colony-runmatch.pl $team1 $team2 $output_filename $parameters");
+
+    #It is way too dangerous to let allow this script to continue if the 
+    #call to colony-runmatch.pl fails.  A failing call will leave the files
+    #on tmp and will do this for all matches in the tournament.  That amounts
+    #to some 400 matches on the tmp directory which causes many problems.
+    #Using the scratch or user drives may make the problem less severe but
+    #really has the same problem.  The best solution for now is to die no
+    #matter what.
+    system_or_die("colony-runmatch.pl $team1 $team2 $output_filename $parameters");
   }
 }
 close(IN);
