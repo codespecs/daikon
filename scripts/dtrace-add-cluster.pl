@@ -109,6 +109,7 @@ foreach my $dtrace_file (@dtrace_files) {
   print "Reading from $dtrace_file\n";
   while (<DTRACE_IN>) {
     my $line = $_;
+#    print ("$line");
     if ($line =~ /:::/) {
       my $pptname = $line;
       chomp ($pptname);
@@ -163,7 +164,10 @@ sub insert_cluster_info ( $ ) {
 
   my $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
   if ((! defined($cluster_number)) || ($cluster_number == 0)) {
-    &skip_till_next(*DTRACE_IN);
+      chomp ($line);
+      if (! ($line eq "")) {
+	  &skip_till_next(*DTRACE_IN);
+      }
   } else {
     my $output = "$pptname\nthis_invocation_nonce\n$invoc\n";
     $output = $output."cluster\n$cluster_number\n1\n";
@@ -181,12 +185,12 @@ sub insert_cluster_info ( $ ) {
 
 # read an opened file till you reach a blank line, then return
 sub skip_till_next(*) {
-  local *FHANDLE = $_[0];
-  my $line;
-  do {
-    $line = <FHANDLE>;
-  } until ($line =~ /^\s*$/);
-  return;
+     local *FHANDLE = $_[0];
+    my $line;
+    do {
+	$line = <FHANDLE>;
+    } until ($line =~ /^\s*$/);
+    return;
 }				# skip_till_next
 
 
