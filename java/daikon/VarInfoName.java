@@ -292,9 +292,10 @@ public abstract class VarInfoName
   // formatting methods. So in places where the VarInfo argument is
   // required by the formatting code, we use this variable to check
   // whether we're doing testing. If we are, then we know that the
-  // VarInfo is probably null, and we do something other than the
-  // normal thing. (Unfortunately, this prevents testing of some
-  // those formats that make use of VarInfo information).
+  // VarInfo being passed is probably null, and we do something other
+  // than the normal thing (which would probably be to signal an
+  // error). Unfortunately, this prevents testing of some those
+  // formats that make use of VarInfo information.
   public static boolean testCall = false;
 
   /**
