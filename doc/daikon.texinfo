@@ -1276,8 +1276,9 @@ Suppress display of implied invariants (by controlling ppt).
 Suppress display of obvious postconditions on prestate.
 
 @item --prob_limit @var{pct}
-Set the probability limit for justifying invariants.  The default is
-.01 (1%).  Smaller values yield stronger filtering.
+Set the probability limit for justifying invariants.  @var{pct} must be
+between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
+filtering.
 
 @item --esc_output
 Write output in ESC-like format.
