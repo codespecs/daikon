@@ -249,6 +249,8 @@ clean:
 dist_clean: clean
 	-rm -f TAGS
 
+veryclean: very_clean
+
 very-clean: very_clean
 
 very_clean: dist_clean
