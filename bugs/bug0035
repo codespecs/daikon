@@ -1,5 +1,6 @@
 Version:      $Id$
-Owner:        Alan <adonovan>, Mike <mernst>, Jeremy <mistere>
+Owner:        Alan <adonovan>, Mike <mernst>
+Cc:           Jeremy <mistere>
 Tool:         dfej
 Summary:      dfej does not instrument this.class
 Severity:     Vexing
@@ -23,6 +24,9 @@ If we decide against this change, we need to fix the assertion
 
 --
 $Log$
-Revision 1.1  2002-03-29 08:26:32  mistere
+Revision 1.2  2002-04-03 20:18:14  mistere
+Manually update to use Cc field wher appropriate.
+
+Revision 1.1  2002/03/29 08:26:32  mistere
 new bug0035
 

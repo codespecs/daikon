@@ -1,5 +1,6 @@
 Version:      $Id$
-Owner:        Jeremy <mistere>, Mike <mernst>
+Owner:        Mike <mernst>
+Cc:           Jeremy <mistere>
 Tool:         dfej (Ajax)
 Summary:      Crash on myvector[] elements (can't find array)
 Severity:     Vexing
@@ -16,8 +17,8 @@ information. [mistere]
 
 --
 $Log$
-Revision 1.1  2002-03-12 04:50:54  adonovan
-repairing repository broken during attemp to move it today... :-(
+Revision 1.2  2002-04-03 20:18:14  mistere
+Manually update to use Cc field wher appropriate.
 
 Revision 1.1  2002/03/07 19:15:59  mistere
 new bug0017
