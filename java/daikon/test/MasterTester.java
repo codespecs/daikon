@@ -17,12 +17,16 @@ public class MasterTester extends TestCase {
 
   public static Test suite() {
     TestSuite result = new TestSuite();
+    // To determine what should be in this list:
+    //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
+
     result.addTest(new TestSuite(DiffTester.class));
     result.addTest(new TestSuite(DetailedStatisticsVisitorTester.class));    
     result.addTest(new TestSuite(InvariantTester.class));
     result.addTest(new TestSuite(LinearTernaryCoreTest.class));
-    result.addTest(new TestSuite(VarInfoNameTest.class));
     result.addTest(new TestSuite(ProglangTypeTester.class));
+    result.addTest(new TestSuite(VarComparabilityTest.class));
+    result.addTest(new TestSuite(VarInfoNameTest.class));
     return result;
   }
 
