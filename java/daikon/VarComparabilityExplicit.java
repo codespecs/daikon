@@ -215,8 +215,8 @@ public final class VarComparabilityExplicit
 
   // This is the key function of the class.
   // I could also add a member version.
-  static boolean comparable(VarInfoName name1_, VarComparabilityExplicit type1,
-                            VarInfoName name2_, VarComparabilityExplicit type2) {
+  static boolean comparable(VarInfoName viname1_, VarComparabilityExplicit type1,
+                            VarInfoName viname2_, VarComparabilityExplicit type2) {
     if (type1.alwaysComparable() || type2.alwaysComparable())
       return true;
 
@@ -224,23 +224,23 @@ public final class VarComparabilityExplicit
       return false;
     int dims = type1.dimensions;
 
-    VarInfoName name1 = name1_, name2 = name2_; // for debugging
+    VarInfoName viname1 = viname1_, viname2 = viname2_; // for debugging
     if (type1.alias != null)
-      name1 = type1.alias;
+      viname1 = type1.alias;
     if (type2.alias != null)
-      name2 = type2.alias;
+      viname2 = type2.alias;
 
     // Consistency check:
     // Either both objects refer to the other name, or neither does.
-    Assert.assertTrue((ArraysMDE.indexOf(type1.base, name2) == -1)
-                  == (ArraysMDE.indexOf(type2.base, name1) == -1));
-    if (ArraysMDE.indexOf(type1.base, name2) == -1)
+    Assert.assertTrue((ArraysMDE.indexOf(type1.base, viname2) == -1)
+                  == (ArraysMDE.indexOf(type2.base, viname1) == -1));
+    if (ArraysMDE.indexOf(type1.base, viname2) == -1)
       return false;
 
     // The base matches.  Now check each dimension, if an array.
     for (int i=0; i<dims; i++) {
-      VarInfoName indexvar1 = new IndexVar(name1, i);
-      VarInfoName indexvar2 = new IndexVar(name2, i);
+      VarInfoName indexvar1 = new IndexVar(viname1, i);
+      VarInfoName indexvar2 = new IndexVar(viname2, i);
       if (!comparable(indexvar1, (VarComparabilityExplicit)type1.indexType(i),
                       indexvar2, (VarComparabilityExplicit)type2.indexType(i)))
         return false;

@@ -144,8 +144,8 @@ public final class CLASSNAME
       }
     }
 
-    // If this is just part of an array or Collection (name instanceof
-    // VarInfoName.Slice), then calling name.esc_name() will always throw
+    // If this is just part of an array or Collection (viname instanceof
+    // VarInfoName.Slice), then calling viname.esc_name() will always throw
     // an exception, since var() is certainly a sequence.  So use the
     // standard quantification.
 
@@ -209,8 +209,8 @@ public final class CLASSNAME
       }
     }
 
-    // If this is just part of an array or Collection (name instanceof
-    // VarInfoName.Slice), then calling name.dbc_name() will always throw
+    // If this is just part of an array or Collection (viname instanceof
+    // VarInfoName.Slice), then calling viname.dbc_name() will always throw
     // an exception, since var() is certainly a sequence.  So use the
     // standard quantification.
 

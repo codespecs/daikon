@@ -134,8 +134,9 @@ public abstract class Invariant
   /**
    * Set of SuppressionLinks this suppresses (perhaps in conjunction
    * with some other invariants).  Each link holds a suppressed
-   * invariant.  Never null, but can be empty.  Clones of this
-   * have this field set to an empty set.
+   * invariant.
+   * As a space optimization, is permitted to be null (meaning empty).
+   * Clones of this have this field set to empty.
    **/
   private Set/*[SuppressionLink]*/ suppressees;
 
@@ -314,7 +315,7 @@ public abstract class Invariant
     this.ppt = ppt;
     suppressor = null;
     flowed = false;
-    suppressees = new HashSet();
+    suppressees = null;
   }
 
   /**
@@ -417,7 +418,7 @@ public abstract class Invariant
     try {
       Invariant result = (Invariant) super.clone();
       result.suppressor = null;
-      result.suppressees = new HashSet();
+      result.suppressees = null;
       result.flowed = false;
       return result;
     } catch (CloneNotSupportedException e) {
@@ -1929,11 +1930,23 @@ public abstract class Invariant
     suppressor = sl;
   }
 
+  /** The number of suppressees of this. **/
+  public int numSuppressees() {
+    if (suppressees == null) {
+      return 0;
+    }
+    return suppressees.size();
+  }
+
   /**
    * Get the SuppressionLinks that this is suppressing.
+   * Returns an unmodifiable collection.
    * @return never null.
    **/
   public Set getSuppressees () {
+    if (suppressees == null) {
+      return Collections.EMPTY_SET;
+    }
     return Collections.unmodifiableSet (suppressees);
   }
 
@@ -1942,6 +1955,9 @@ public abstract class Invariant
    * @param sl The link to add.  Must not already be linked to.
    **/
   public void addSuppressee (SuppressionLink sl) {
+    if (suppressees == null) {
+      suppressees = new LinkedHashSet();
+    }
     Assert.assertTrue (!(suppressees.contains(sl)));
     suppressees.add (sl);
   }
@@ -1975,9 +1991,11 @@ public abstract class Invariant
    **/
   public void repCheck() {
     if (suppressor != null) suppressor.repCheck();
-    for (Iterator i = suppressees.iterator(); i.hasNext(); ) {
-      SuppressionLink sl = (SuppressionLink) i.next();
-      sl.repCheck();
+    if (suppressees != null) {
+      for (Iterator i = suppressees.iterator(); i.hasNext(); ) {
+        SuppressionLink sl = (SuppressionLink) i.next();
+        sl.repCheck();
+      }
     }
   }
 

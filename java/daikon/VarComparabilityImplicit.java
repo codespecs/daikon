@@ -124,8 +124,8 @@ public final class VarComparabilityImplicit
       return unknown;
   }
 
-  static boolean comparable(VarInfoName name1, VarComparabilityImplicit type1,
-                            VarInfoName name2, VarComparabilityImplicit type2) {
+  static boolean comparable(VarInfoName viname1, VarComparabilityImplicit type1,
+                            VarInfoName viname2, VarComparabilityImplicit type2) {
     if ((type1.dimensions == 0) && (type1.base < 0))
       return true;
     if ((type2.dimensions == 0) && (type2.base < 0))

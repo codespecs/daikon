@@ -1249,7 +1249,7 @@ public final class PPTSLICE1
     for (int i = 0; i < child_invs.size(); i++) {
       Invariant child_inv = (Invariant) child_invs.get (i);
       if (parent_inv.isSameFormula (child_inv)
-          && (child_inv.getSuppressees().size() == 0))
+          && (child_inv.numSuppressees() == 0))
 //         if (child_inv.ppt.var_infos[0].name.name().equals ("capacity"))
 //           System.out.println ("removing inv " + child_inv + "in ppt "
 //                               + child_inv.ppt + " parent inv = " + parent_inv

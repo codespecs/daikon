@@ -177,20 +177,6 @@ public class PptName
     return method;
   }
 
-//   /**
-//    * @return same as getSignature(), except without the return
-//    * type information.
-//    * May be null.
-//    * e.g. "pop()"
-//    **/
-//   public String getSignatureWithoutReturn()
-//   {
-//     if (method == null) return null;
-//     int rparen = method.indexOf(')');
-//     Assert.assertTrue(rparen >= 0);
-//     return method.substring(0, rparen+1);
-//   }
-
   /**
    * @return the name (identifier) of the method, not taking into
    * account any arguments, return values, etc.

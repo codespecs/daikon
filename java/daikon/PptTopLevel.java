@@ -976,7 +976,7 @@ public class PptTopLevel
     // Doable, but commented out for efficiency
     // repCheck();
 
-    // System.out.println("PptTopLevel " + name + ": add " + vt);
+    // System.out.println("PptTopLevel " + name() + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars);
 
     // The way adding samples works: We have precomputed program
@@ -991,10 +991,10 @@ public class PptTopLevel
     Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
 
     if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine ("<<<< Doing add_and_flow() for " + name);
+      debugFlow.fine ("<<<< Doing add_and_flow() for " + name());
     }
     if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<<< Doing add_and_flow() for " + name);
+      debugSuppress.fine ("<<<< Doing add_and_flow() for " + name());
     }
 
     for (int i=0; i < dataflow_ppts.length; i++) {
@@ -1039,7 +1039,7 @@ public class PptTopLevel
     // Doable, but commented out for efficiency
     // repCheck();
 
-    // System.out.println("PptTopLevel " + name + ": add " + vt);
+    // System.out.println("PptTopLevel " + name() + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars, name);
 
     //     if (debugFlow.isLoggable(Level.FINE)) {
@@ -1047,12 +1047,12 @@ public class PptTopLevel
     //     }
 
     if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<< Doing add for " + name);
+      debugSuppress.fine ("<<< Doing add for " + name());
       // debugSuppress.fine ("    with vt " + vt);
     }
 
     if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine ("<<< Doing add for " + name);
+      debugFlow.fine ("<<< Doing add for " + name());
       debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
     }
 
@@ -1111,13 +1111,8 @@ public class PptTopLevel
 
       for (Iterator itor = weakenedInvs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
-        // Why copy?  Because we want to keep unlink() as an atomic
-        // operation that removes the SuppressionLink from the
-        // suppressor's suppressed field.  Without copying, we get a
-        // ConcurrentModifiecationException.
-        Set suppressees = new LinkedHashSet(inv.getSuppressees());
 
-        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn()) && suppressees.size() > 0) {
+        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn()) && inv.numSuppressees() > 0) {
           debugSuppress.fine (" Inv " + inv.repr() +
                                " was falsified or weakened with suppressees");
           inv.log (" Inv " + inv.repr() +
@@ -1140,33 +1135,42 @@ public class PptTopLevel
           }
         }
 
-        for (Iterator iSuppressees = suppressees.iterator();
-             iSuppressees.hasNext(); ) {
-          SuppressionLink sl = (SuppressionLink) iSuppressees.next();
-          Invariant invSuppressed = sl.getSuppressee();
-          sl.unlink();
-          Assert.assertTrue (invSuppressed.getSuppressor() == null);
-          if (debugSuppress.isLoggable(Level.FINE) || invSuppressed.logOn()) {
-            debugSuppress.fine ("  Attempting re-suppression of: " + invSuppressed.repr());
-            invSuppressed.log ("  Attempting re-suppression of: " + invSuppressed.repr());
-          }
-          PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
-          if (attemptSuppression (invSuppressed, true)) {
+        if (inv.numSuppressees() > 0) {
+
+          // Why copy?  Because we want to keep unlink() as an atomic
+          // operation that removes the SuppressionLink from the
+          // suppressor's suppressed field.  Without copying, we get a
+          // ConcurrentModifiecationException.
+          Set suppressees = new LinkedHashSet(inv.getSuppressees());
+
+          for (Iterator iSuppressees = suppressees.iterator();
+               iSuppressees.hasNext(); ) {
+            SuppressionLink sl = (SuppressionLink) iSuppressees.next();
+            Invariant invSuppressed = sl.getSuppressee();
+            sl.unlink();
+            Assert.assertTrue (invSuppressed.getSuppressor() == null);
             if (debugSuppress.isLoggable(Level.FINE) || invSuppressed.logOn()) {
-              debugSuppress.fine ("  Re-suppressed by " + invSuppressed.getSuppressor());
-              invSuppressed.log ("  Re-suppressed by " + invSuppressed.getSuppressor() +
-                       " samples: " + inv.ppt.num_samples());
+              debugSuppress.fine ("  Attempting re-suppression of: " + invSuppressed.repr());
+              invSuppressed.log ("  Attempting re-suppression of: " + invSuppressed.repr());
             }
-          } else if (suppressedPpt == this) {
-            // If invSuppressed didn't get resuppressed, we have to check values
-            debugSuppress.fine ("  Will re-check because in same ppt");
-            if (invSuppressed.logOn()) {
-              invSuppressed.log ("  Will re-check because in same ppt");
+            PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
+            if (attemptSuppression (invSuppressed, true)) {
+              if (debugSuppress.isLoggable(Level.FINE) || invSuppressed.logOn()) {
+                debugSuppress.fine ("  Re-suppressed by " + invSuppressed.getSuppressor());
+                invSuppressed.log ("  Re-suppressed by " + invSuppressed.getSuppressor() +
+                                   " samples: " + inv.ppt.num_samples());
+              }
+            } else if (suppressedPpt == this) {
+              // If invSuppressed didn't get resuppressed, we have to check values
+              debugSuppress.fine ("  Will re-check because in same ppt");
+              if (invSuppressed.logOn()) {
+                invSuppressed.log ("  Will re-check because in same ppt");
+              }
+              viewsToCheck.add (invSuppressed.ppt);
+            } else {
+              // Do nothing because suppressedParent is a child of this,
+              // and will be checked in good time.
             }
-            viewsToCheck.add (invSuppressed.ppt);
-          } else {
-            // Do nothing because suppressedParent is a child of this,
-            // and will be checked in good time.
           }
         }
       }
@@ -1177,7 +1181,7 @@ public class PptTopLevel
       if (view.invs.size() == 0) {
         itor.remove();
         if (Global.debugInfer.isLoggable(Level.FINE)) {
-          Global.debugInfer.fine ("add(ValueTulple,int): slice died: " + name + view.varNames());
+          Global.debugInfer.fine ("add(ValueTulple,int): slice died: " + name() + view.varNames());
         }
       }
     }
@@ -1190,7 +1194,7 @@ public class PptTopLevel
     }
 
     if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine (">>> End of add for " + name);
+      debugSuppress.fine (">>> End of add for " + name());
     }
 
     return new ArrayList();
@@ -1220,11 +1224,11 @@ public class PptTopLevel
                       name);
 
     if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<< Doing add for " + name);
+      debugSuppress.fine ("<<< Doing add for " + name());
       debugSuppress.fine ("    with vt " + vt);
     }
     if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine ("<<< Doing add for " + name);
+      debugFlow.fine ("<<< Doing add for " + name());
       debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
     }
 
@@ -1342,11 +1346,12 @@ public class PptTopLevel
 
         // Get current invariant and its list of suppression links
         Invariant inv = (Invariant) itor.next();
-        Set suppressees = new LinkedHashSet(inv.getSuppressees());
+
         if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn())
-          && suppressees.size() > 0)
+            && inv.numSuppressees() > 0) {
           inv.log (debugSuppress, " Inv " + inv.repr() +
                    " was falsified or weakened with suppressees");
+        }
 
         // Try and suppress the weakened invariant (its new weakened
         // state might allow suppression, where its previous state did not)
@@ -1357,22 +1362,26 @@ public class PptTopLevel
           }
         }
 
-        // Loop through each invariant suppressed by this one and attempt
-        // to resuppress it clearing out the existing suppressions at the
-        // same time.  If not resuppressed, add it to the list
-        // of unsuppressed invariants
-        for (Iterator isup = suppressees.iterator(); isup.hasNext(); ) {
-          SuppressionLink sl = (SuppressionLink) isup.next();
-          Invariant sup_inv = sl.getSuppressee();
-          sl.unlink();
-          if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-            sup_inv.log (debugSuppress, "Attempting resuppression");
-          if (attemptSuppression (sup_inv, true)) {
+        if (inv.numSuppressees() > 0) {
+          Set suppressees = new LinkedHashSet(inv.getSuppressees());
+
+          // Loop through each invariant suppressed by this one and attempt
+          // to resuppress it clearing out the existing suppressions at the
+          // same time.  If not resuppressed, add it to the list
+          // of unsuppressed invariants.
+          for (Iterator isup = suppressees.iterator(); isup.hasNext(); ) {
+            SuppressionLink sl = (SuppressionLink) isup.next();
+            Invariant sup_inv = sl.getSuppressee();
+            sl.unlink();
             if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-              sup_inv.log (debugSuppress, "Re-suppressed by "
-                            + sup_inv.getSuppressor());
-          } else {
-            unsuppressed_invs.add (sup_inv);
+              sup_inv.log (debugSuppress, "Attempting resuppression");
+            if (attemptSuppression (sup_inv, true)) {
+              if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
+                sup_inv.log (debugSuppress, "Re-suppressed by "
+                             + sup_inv.getSuppressor());
+            } else {
+              unsuppressed_invs.add (sup_inv);
+            }
           }
         }
       }
@@ -1461,7 +1470,7 @@ public class PptTopLevel
         itor.remove();
         if (Global.debugInfer.isLoggable(Level.FINE))
           Global.debugInfer.fine ("add(ValueTulple,int): slice died: "
-                                  + name + view.varNames());
+                                  + name() + view.varNames());
       }
     }
   */
@@ -1642,7 +1651,7 @@ public class PptTopLevel
    **/
   public void create_derived_variables() {
     if (debug.isLoggable(Level.FINE))
-      debug.fine ("create_derived_variables for " + name);
+      debug.fine ("create_derived_variables for " + name());
 
     int first_new = var_infos.length;
     // Make ALL of the derived variables.  The loop terminates
@@ -1682,7 +1691,7 @@ public class PptTopLevel
    **/
   public void instantiate_views_and_invariants() {
     if (debug.isLoggable(Level.FINE))
-      debug.fine ("instantiate_views_and_invariants for " + name);
+      debug.fine ("instantiate_views_and_invariants for " + name());
 
     // Now make all of the views (and thus candidate invariants)
     instantiate_views(0, var_infos.length);
@@ -1786,13 +1795,13 @@ public class PptTopLevel
       slices_vector.toArray(new PptSlice[slices_vector.size()]);
     int num_slices = slices.length;
 
-    // System.out.println("Adding views for " + name);
+    // System.out.println("Adding views for " + name());
     // for (int i=0; i<slices.length; i++) {
     //   System.out.println("  View: " + slices[i].name);
     // }
     // values.dump();
 
-    // System.out.println("Number of samples for " + name + ": "
+    // System.out.println("Number of samples for " + name() + ": "
     //                    + values.num_samples()
     //                    + ", number of values: " + values.num_values());
     // If I recorded mod bits in value.ValueSet(), I could use it here instead.
@@ -2205,7 +2214,7 @@ public class PptTopLevel
 
 
     if (debug.isLoggable(Level.FINE))
-      debug.fine (views.size() - old_num_views + " new views for " + name);
+      debug.fine (views.size() - old_num_views + " new views for " + name());
 
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
@@ -2562,7 +2571,7 @@ public class PptTopLevel
           // in which we are examining pairs.
           var1.equal_to = var1;
           var2.equal_to = var1;
-          // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name);
+          // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name());
         } else {
           Assert.assertTrue((var1.equal_to != null) && (var2.equal_to != null));
           if (var1.compatible(var2)
@@ -2582,7 +2591,7 @@ public class PptTopLevel
                                  " (= " + var1.equal_to.name.name() + "), " + var2.name.name() + " (= " +
                                  var2.equal_to.name.name() + ") [indices " + var1.varinfo_index +
                                  ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index +
-                                 ", " + var2.equal_to.varinfo_index + "] at " + name);
+                                 ", " + var2.equal_to.varinfo_index + "] at " + name());
                 debugEqualTo.fine ("*****");
             }
 
@@ -2741,7 +2750,7 @@ public class PptTopLevel
   public void suppressAll (boolean in_process) {
     if (Daikon.use_suppression_optimization) {
       if (debugSuppressInit.isLoggable(Level.FINE)) {
-        debugSuppressInit.fine ("SuppressAll for: " + name);
+        debugSuppressInit.fine ("SuppressAll for: " + name());
       }
       List invs = getInvariants();
       for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -2839,7 +2848,7 @@ public class PptTopLevel
 
     // This is useful if this code is getting called more than expected.
     // System.out.println ("suppressionTemplate: " + supTemplate.searchString()
-    //                    + " ppt: " + name);
+    //                    + " ppt: " + name());
     // Throwable stack = new Throwable("debug traceback");
     // stack.fillInStackTrace();
     // stack.printStackTrace();
@@ -2996,12 +3005,12 @@ public class PptTopLevel
 
 
   public void addConditions(Splitter[] splits) {
-    // System.out.println("addConditions(" + splits.length + ") for " + name);
+    // System.out.println("addConditions(" + splits.length + ") for " + name());
 
     int len = splits.length;
     if ((splits == null) || (len == 0)) {
       if (Global.debugSplit.isLoggable(Level.FINE))
-        Global.debugSplit.fine ("No splits for " + name);
+        Global.debugSplit.fine ("No splits for " + name());
       return;
     }
 
@@ -3080,7 +3089,7 @@ public class PptTopLevel
 
           // System.out.println("----------------");
           // System.out.println("splitter condition: " + pconds[i].splitter.condition() + " " + pconds[i].splitter.getClass().getName());
-          // System.out.println("ppt: " + name);
+          // System.out.println("ppt: " + name());
           // System.out.print("vars:");
           // for (int j=0; j<var_infos.length; j++) {
           //   System.out.print(" " + var_infos[j].name.name());
@@ -4260,7 +4269,7 @@ public class PptTopLevel
     //   PptSlice slice = (PptSlice) views_itor.next();
     //   result.addAll(slice.invs);
     // }
-    // // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
+    // // System.out.println(implication_view.invs.size() + " implication invs for " + name() + " at " + implication_view.name);
     // result.addAll(implication_view.invs);
     return Collections.unmodifiableList(result);
   }

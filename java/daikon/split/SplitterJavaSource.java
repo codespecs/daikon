@@ -379,12 +379,12 @@ class SplitterJavaSource {
    * @return true iff varInfo is a "size" variable.
    */
   private static boolean isSizeVar(VarInfo varInfo) {
-    VarInfoName name = varInfo.name;
-    return ((name instanceof VarInfoName.Field &&
-             ((VarInfoName.Field) name).field.equals("size")) ||
-            (name instanceof VarInfoName.Prestate &&
-             ((VarInfoName.Prestate) name).term instanceof VarInfoName.Field &&
-             ((VarInfoName.Field) ((VarInfoName.Prestate) name).term).field.equals("size")));
+    VarInfoName viname = varInfo.name;
+    return ((viname instanceof VarInfoName.Field &&
+             ((VarInfoName.Field) viname).field.equals("size")) ||
+            (viname instanceof VarInfoName.Prestate &&
+             ((VarInfoName.Prestate) viname).term instanceof VarInfoName.Field &&
+             ((VarInfoName.Field) ((VarInfoName.Prestate) viname).term).field.equals("size")));
   }
 
   /**
@@ -392,12 +392,12 @@ class SplitterJavaSource {
    * "this" variable.
    */
   private static boolean isThisVar(VarInfo varInfo) {
-    VarInfoName name = varInfo.name;
-    return ((name instanceof VarInfoName.Simple &&
-             ((VarInfoName.Simple) name).name.equals("this")) ||
-            ((name instanceof VarInfoName.Prestate) &&
-             ((VarInfoName.Prestate) name).term instanceof VarInfoName.Simple &&
-             ((VarInfoName.Simple) ((VarInfoName.Prestate) name).term).name.equals("this")));
+    VarInfoName viname = varInfo.name;
+    return ((viname instanceof VarInfoName.Simple &&
+             ((VarInfoName.Simple) viname).name.equals("this")) ||
+            ((viname instanceof VarInfoName.Prestate) &&
+             ((VarInfoName.Prestate) viname).term instanceof VarInfoName.Simple &&
+             ((VarInfoName.Simple) ((VarInfoName.Prestate) viname).term).name.equals("this")));
   }
 
   /**

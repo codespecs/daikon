@@ -104,27 +104,27 @@ public abstract class VarComparability {
   }
 
   /** Returns whether two variables are comparable **/
-  public static boolean comparable(VarInfoName name1, VarComparability type1,
-                                   VarInfoName name2, VarComparability type2) {
+  public static boolean comparable(VarInfoName viname1, VarComparability type1,
+                                   VarInfoName viname2, VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities " +
                       "of different types: " + Global.lineSep
-                      + "    " + name1 + " " + type1 + Global.lineSep
-                      + "    " + name2 + " " + type2);
+                      + "    " + viname1 + " " + type1 + Global.lineSep
+                      + "    " + viname2 + " " + type2);
 
     if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
       return VarComparabilityNone.comparable
-        (name1, (VarComparabilityNone)type1,
-         name2, (VarComparabilityNone)type2);
+        (viname1, (VarComparabilityNone)type1,
+         viname2, (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
         return VarComparabilityImplicit.comparable
-          (name1, (VarComparabilityImplicit)type1,
-           name2, (VarComparabilityImplicit)type2);
+          (viname1, (VarComparabilityImplicit)type1,
+           viname2, (VarComparabilityImplicit)type2);
     } else if (type1 instanceof VarComparabilityExplicit) {
       return VarComparabilityExplicit.comparable
-        (name1, (VarComparabilityExplicit)type1,
-         name2, (VarComparabilityExplicit)type2);
+        (viname1, (VarComparabilityExplicit)type1,
+         viname2, (VarComparabilityExplicit)type2);
     } else {
       throw new Error("Unrecognized subtype of VarComparability: " + type1);
     }
