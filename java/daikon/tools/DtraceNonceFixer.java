@@ -1,4 +1,4 @@
-// DtraceNonceDoctor.java
+// DtraceNonceFixer.java
 
 
 package daikon.tools;
@@ -20,9 +20,8 @@ import utilMDE.*;
  * to add to the remaining nonces and repeat.  This should only require
  * one pass through the file.
  *
- *
- *
- * @author Lee Lin 4/8/2002 */
+ */
+
 
 
 public class DtraceNonceFixer {
