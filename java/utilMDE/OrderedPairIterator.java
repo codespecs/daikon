@@ -3,7 +3,7 @@ package utilMDE;
 import java.util.*;
 
 /**
- * Given two sequences/iterators/whatever, thsi class returns a new
+ * Given two sequences/iterators/whatever, this class returns a new
  * sequence/iterator/whatever which pairs the matching elements of the
  * inputs.
  *
