@@ -42,9 +42,8 @@ public abstract class Invariant implements java.io.Serializable {
   public final static double PROBABILITY_NEVER = 3;
 
   // The probability that the invariant occurred by chance must be less
-  // than this in order for it to be displayed.  Maybe it should be
-  // user-settable rather than final.
-  public final static double probability_limit = .01;
+  // than this in order for it to be displayed.
+  public static double probability_limit = .01;
 
   /**
    * At least this many samples are required, or else we don't report any
