@@ -210,7 +210,7 @@ public final class Member extends SequenceString  {
   }
 
   public String format() {
-    return sclvar().name + " in " + seqvar().name;
+    return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
   public String format_esc() {

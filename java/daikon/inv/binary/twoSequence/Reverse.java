@@ -21,7 +21,7 @@ public class Reverse extends TwoSequence {
   }
 
   public String format() {
-    return var1().name + " is the reverse of " + var2().name;
+    return var1().name.name() + " is the reverse of " + var2().name.name();
   }
 
   public String format_esc() {
@@ -29,7 +29,7 @@ public class Reverse extends TwoSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

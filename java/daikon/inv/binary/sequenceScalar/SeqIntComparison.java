@@ -87,7 +87,7 @@ public final class SeqIntComparison extends SequenceScalar {
 
   public String format() {
     String comparator = core.format_comparator();
-    return seqvar().name.name() + " elements " + comparator + " " + sclvar().name;
+    return seqvar().name.name() + " elements " + comparator + " " + sclvar().name.name();
   }
 
   public String format_esc() {

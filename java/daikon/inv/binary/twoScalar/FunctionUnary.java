@@ -23,6 +23,7 @@ public class FunctionUnary extends TwoScalar {
   }
 
   public String format() {
+    // core.format takes VarInfoName objects, not Strings.  (Why?)
     return core.format(var1().name, var2().name);
   }
 
@@ -31,7 +32,7 @@ public class FunctionUnary extends TwoScalar {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long x_int, long y_int, int count) {
