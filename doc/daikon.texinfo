@@ -1413,7 +1413,7 @@ Omit ``reflexive'' invariants, those in which a variable appears more
 than once.
 Usually, such invariants are not interesting, because their meaning is
 duplicated by invariants with fewer variables: for instance, @code{x =
-x + x} and @code{y = z + z} can be expressed as @code{x = 0} and
+x - x} and @code{y = z + z} can be expressed as @code{x = 0} and
 @code{y = 2 * z} instead.
 However, Daikon generates and uses such invariants internally to
 decide what invariants to create when two previously equal variables
