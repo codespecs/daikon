@@ -518,9 +518,13 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // If size of a non-canonical array, omit.
       if ((vi.derived != null)
           && (vi.derived instanceof SequenceLength)) {
+        // This is the size of an array; is that array non-canonical?
+
         VarInfo seq_contents = ((SequenceLength) vi.derived).base;
         String seq_contents_name = seq_contents.name;
         String seq_object_name = null;
+        // We expect the variable name to end with "[]", possibly wrapped
+        // in "orig()" and/or suffixed by ".class".
         if (seq_contents_name.endsWith("[]")) {
           seq_object_name = seq_contents_name.substring(0, seq_contents_name.length()-2);
         } else if (seq_contents.isOrigVar()
@@ -531,8 +535,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
                    && seq_contents.postState.name.endsWith("[].class")) {
           continue;
         } else {
-          throw new Error("What object name? " + seq_contents_name
-                          + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
+          // throw new Error("What object name? " + seq_contents_name
+          //                 + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
+          System.out.println("Warning: sequence variable " + seq_contents_name
+                             + " does not end with \"[]\"");
+          seq_object_name = seq_contents_name;
         }
         VarInfo seq_object = ppt.findVar(seq_object_name);
         // System.out.println("seq_object_name = " + seq_object_name);
