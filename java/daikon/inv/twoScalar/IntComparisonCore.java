@@ -4,8 +4,8 @@ import daikon.*;
 import daikon.inv.*;
 
 
-// Also see NonEqual, NonAliased
-public class IntComparisonCore {
+// Also see NonEqual
+public final class IntComparisonCore implements java.io.Serializable {
 
   public boolean can_be_eq = false;
   public boolean can_be_lt = false;
@@ -17,6 +17,8 @@ public class IntComparisonCore {
   // found those quantities equal, but if the relationship can be "<", then
   // it is "<=" (because we know they can be "="), so it's obvious and
   // uninteresting.
+  // In other words, if the thing that's obviously possible hsn't yet
+  // happened, then the invariant is interesting.
 
   // These are final for efficiency's sake.
   public final boolean only_check_eq;
@@ -65,14 +67,56 @@ public class IntComparisonCore {
     }
   }
 
+  // This is very tricky, because whether two variables are equal should
+  // presumably be transitive, but it's not guaranteed to be so when using
+  // this method and not dropping out all variables whose values are ever
+  // missing.
   public double computeProbability() {
     if (wrapper.no_invariant) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, wrapper.ppt.num_values());
     } else {
-      return 0;
+      // It's an equality invariant.  I ought to use the actual ranges somehow.
+      // Actually, I can't even use this .5 test because it can make
+      // equality non-transitive.
+      // return Math.pow(.5, wrapper.ppt.num_values());
+      return Invariant.PROBABILITY_JUSTIFIED;
     }
+  }
+
+  public String repr() {
+    return "IntComparisonCore: "
+      + "can_be_eq=" + can_be_eq
+      + ",can_be_lt=" + can_be_lt
+      + ",can_be_gt=" + can_be_gt
+      + ",only_check_eq=" + only_check_eq
+      + ",obvious_can_be_lt=" + obvious_can_be_lt
+      + ",obvious_can_be_gt=" + obvious_can_be_gt
+      + ",obvious_can_be_le=" + obvious_can_be_le
+      + ",obvious_can_be_ge=" + obvious_can_be_ge;
+  }
+
+  // I could alternately take two variable names as arguments and return
+  // the full formatted thing...
+  /** Return a comparator such as "<=" or ">" or "=". **/
+  public String format_comparator() {
+    if (can_be_eq || can_be_gt || can_be_lt) {
+      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
+      String comparison = (can_be_eq ? "=" : "");
+      // if (debugIntComparison) {
+      //   System.out.println(repr()
+      //                      + "; inequality=\"" + inequality + "\""
+      //                      + ",comparison=\"" + comparison + "\"");
+      // }
+      return inequality + comparison;
+    } else {
+      return null;
+    }
+  }
+
+  public boolean isExact() {
+    return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
 
 }
@@ -112,3 +156,19 @@ public class IntComparisonCore {
 //         self.comparison_obvious = ">="
 //     elif aref1 and max2 and aref1 == max2:
 //         self.comparison_obvious = "<="
+
+
+    // Yes, this comparison is obvious.  However:
+    //  * we don't know whether it is an equality or a non-strict inequality.
+    //  * we may wish to have the comparison on hand later, when we iterate
+    //    over all IntComparison objects.
+    // I should suppress this on *output*, not on computation.
+    // Better yet:  suppress it as soon as it becomes obvious.
+    // if ((seqvar1 != null) && (seqvar1 == var2.isDerivedSequenceMember())) {
+    //   if ((var1.derived instanceof SequenceMax)
+    //       || (var1.derived instanceof SequenceMin)
+    //       || (var2.derived instanceof SequenceMax)
+    //       || (var2.derived instanceof SequenceMin)) {
+    //     return null;
+    //   }
+    // }

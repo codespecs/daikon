@@ -48,6 +48,6 @@ class Reverse extends TwoSequence {
     if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else
-      return 0;
+      return Invariant.PROBABILITY_JUSTIFIED;
   }
 }
