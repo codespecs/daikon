@@ -142,6 +142,14 @@ public class PptSliceEquality
         sample_cnt_map.put (cp.v1, new Integer(cp.samples));
       }
       vlist.add (cp.v2);
+      vlist = (ArrayList) varmap.get (cp.v2);
+      if (vlist == null) {
+        vlist = new ArrayList();
+        vlist.add (cp.v2);
+        varmap.put (cp.v2, vlist);
+        sample_cnt_map.put (cp.v2, new Integer(cp.samples));
+      }
+      vlist.add (cp.v1);
     }
 
     // Loop through each variable, building the appropriate equality set
