@@ -317,7 +317,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  // Add "_orig" variables to the program point.
+  // Add "_orig" (prestate) variables to the program point.
   // Derivation should not yet have occurred for the entry program point.
   void add_orig_vars(PptTopLevel entry_ppt) {
 
@@ -331,7 +331,12 @@ public class PptTopLevel extends Ppt {
       VarInfo vi = begin_vis[i];
       if (vi.isStaticConstant() || vi.isDerived())
 	continue;
-      new_vis[new_vis_index] = VarInfo.origVarInfo(vi);
+      VarInfo origvar = VarInfo.origVarInfo(vi);
+      {
+        VarInfo postvar = findVar(vi.name);
+        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+      }
+      new_vis[new_vis_index] = origvar;
       new_vis_index++;
     }
     Assert.assert(new_vis_index == num_orig_vars);
