@@ -1,8 +1,10 @@
 package daikon;
 
 import daikon.inv.Invariant.OutputFormat;
-import daikon.derive.*; // see Subscript.dbc_name_impl(VarInfo v)
-import daikon.derive.binary.*; // see Subscript.dbc_name_impl(VarInfo v)
+import daikon.derive.*; // see dbc_name_impl(VarInfo v)
+import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
+import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
+import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
 
 import utilMDE.*;
 
@@ -659,7 +661,6 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
 	if (name.equals("return")) {
 	    return "$result";
@@ -827,7 +828,6 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return sequence.term.jml_name() + ".length";
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
       return sequence.term.dbc_name(v) + ".length";
     }
@@ -915,11 +915,15 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return function + "(" + argument.jml_name() + ")";
     }
-    //@tx
+
     protected String dbc_name_impl(VarInfo v) {
-       return "(warning: DBC format needs to be implemented: "
-         + repr_impl() + ")";
+      Assert.assertTrue(v.isDerived());
+      Derivation derived = v.derived;
+      Assert.assertTrue(derived instanceof UnaryDerivation);
+      return "quant.Quant." + function + "("
+        + argument.dbc_name_impl(((UnaryDerivation)derived).base) + ")";
     }
+
     protected String identifier_name_impl() {
       return function + "_of_" + argument.identifier_name() + "___";
     }
@@ -1016,16 +1020,19 @@ public abstract class VarInfoName
       }
       return function + "(" + sb.toString() + ")";
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
-      StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext(); ) {
-	  sb.append (((VarInfoName) i.next()).repr());
-	  if (i.hasNext()) sb.append (", ");
-      }
-      return "(warning: DBC format needs to be implemented: " +
-	  function + " on " + sb.toString() + ")";
+      Assert.assertTrue(v.isDerived());
+      Derivation derived = v.derived;
+      Assert.assertTrue(derived instanceof BinaryDerivation);
+                        //there are currently no ternary function applications
+                        //|| derived instanceof TernaryDerivation);
+      Assert.assertTrue(args.size() == 2);
+
+      return "quant.Quant." + function + "("
+        + ((VarInfoName)args.get(0)).dbc_name_impl(((BinaryDerivation)derived).base1)  + ", "
+        + ((VarInfoName)args.get(1)).dbc_name_impl(((BinaryDerivation)derived).base2)  + ")";
     }
+
     protected String identifier_name_impl() {
       StringBuffer sb = new StringBuffer(function);
       sb.append("_of_");
@@ -1160,10 +1167,95 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return term.jml_name() + "." + field;
     }
-    //@tx
-    protected String dbc_name_impl(VarInfo v) {
-      return term.dbc_name(v) + "." + field;
+
+    // performs: foo[] --> foo.  requires: if foo does have "[]", it's
+    // only at the end of the string.
+    private String removeBrackets(String str) {
+      if (str.indexOf("[]") != -1) {
+        Assert.assertTrue(str.indexOf("[]") == str.length()-2);
+        return str.substring(0,str.length()-2);
+      } else {
+        return str;
+      }
     }
+
+    protected String dbc_name_impl(VarInfo v) {
+      if (term.name().indexOf("[]") != -1) {
+        // How to translate foo[].f, which is the array obtained from
+        // collecting o.f for every element o in the array foo?  Just as
+        // we did for slices, we'll translate this into a call of an
+        // external function to do the job:
+
+        // x.y.foo[].bar.f
+        // ---translates-into--->
+        // quant.Quant.fieldArray(<type instance>, x, "y.foo[].bar.f")
+
+        // [explain clunky <type instance>]
+
+        // The method fieldArray should take care of the
+        // "y.foo[].bar.f" mess for object x.
+
+        // v is not the varinfo for term in the expression below! So
+        // we're passing on the incorrect VarInfo. But I think (verify
+        // with Mike) that we'll never ask for orig(term) alone, but
+        // always along with its field: orig(term.field). So it's ok
+        // to pass the wrong thing here, which we do because passing
+        // null is not allowed.
+
+        String preType = v.type.base();
+        String i/*nstance*/ = null;
+        if (preType.equals(ProglangType.BASE_BOOLEAN)) {
+          i = "false";
+        } else if (preType.equals(ProglangType.BASE_BYTE)) {
+          i = "(byte)0";
+        } else if (preType.equals(ProglangType.BASE_CHAR)) {
+          i = "'a'";
+        } else if (preType.equals(ProglangType.BASE_DOUBLE)) {
+          i = "(double)0";
+        } else if (preType.equals(ProglangType.BASE_FLOAT)) {
+          i = "(float)0";
+        } else if (preType.equals(ProglangType.BASE_INT)) {
+          i = "(int)0";
+        } else if (preType.equals(ProglangType.BASE_LONG)) {
+          i = "(long)0";
+        } else if (preType.equals(ProglangType.BASE_SHORT)) {
+          i = "(short)0";
+        } else if (preType.equals(ProglangType.BASE_OBJECT)) {
+          i = "new Object()";
+        } else if (preType.equals(ProglangType.BASE_STRING)) {
+          i = "new String()";
+        } else if (preType.equals(ProglangType.BASE_INTEGER)) {
+          i = "new Integer()";
+        } else if (preType.equals(ProglangType.BASE_HASHCODE)) {
+          i = "new Object()"; //CP: check the validity of this
+        } else {
+          i = "new Object()"; //CP: This will happen for Objects -- what else could it happen for?
+        }
+
+        String[] splits = term.name().split("\\.");
+        if (splits[0].equals(term.name())) {
+          // Simple case: foo[]
+          return
+            "quant.Quant.fieldArray(" + i + ", " + term.dbc_name(v) + ", "
+            + "\"" + field + "\"" + ")";
+        } else {
+          // complicated case: x.y.foo[].bar
+          String object = removeBrackets(splits[0]);
+          Assert.assertTrue(splits.length > 1);
+          String fields = "";
+          for (int j = 1 ; j < splits.length ; j++) {
+            if (j != 1) { fields += "."; }
+            fields += removeBrackets(splits[j]);
+          }
+          return
+            "quant.Quant.fieldArray(" + i + ", " + object + ", "
+            + "\"" + fields + "." + field + "\"" + ")";
+        }
+      } else {
+        return term.dbc_name(v) + "." + field;
+      }
+    }
+
     protected String identifier_name_impl() {
       return term.identifier_name() + "_dot_" + field;
     }
@@ -1234,9 +1326,8 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return "\\typeof(" + term.jml_name() + ")";
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
-      return term.dbc_name(v) + ".getClass()";
+      return term.dbc_name(v) + ".getClass().toString()";
     }
     protected String identifier_name_impl() {
       return "type_of_" + term.identifier_name() + "___";
@@ -1301,15 +1392,22 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return "\\old(" + term.jml_name() + ")";
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
       if (v == null) {
 	  throw new UnsupportedOperationException
 	      ("VarInfo not provided: '" + term.repr_impl() + "'");
       }
+      String preType = v.type.base();
+      if ((term instanceof Slice)
+          // Slices are obtained by calling quant.Quant.slice(...)
+          // which returns things of type java.lang.Object
+          && (v.type.dimensions()) > 0
+          && (v.type.base().equals("java.lang.Object"))) {
+        preType = "java.lang.Object";
+      }
       String brackets = "";
       for (int i = 0 ; i < v.type.dimensions(); i++) { brackets += "[]"; }
-      return "$pre(" + v.type.base() + brackets + ", " + term.dbc_name(v) + ")";
+      return "$pre(" + preType + brackets + ", " + term.dbc_name(v) + ")";
       //+ "*******DERIVED CLASS=" + (v.isDerived()  ? v.derived.getClass().getName() : "v NOT DERIVED")
       //+ "*******v.name.repl_impl()= " + v.name.repr_impl() + ")";
     }
@@ -1389,7 +1487,6 @@ public abstract class VarInfoName
       //        throw new UnsupportedOperationException("JML cannot format a Poststate" +
       //                                                " [repr=" + repr() + "]");
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
       return "(warning: DBC format cannot express a Poststate"
 	     + " [repr=" + repr() + "])";
@@ -1460,7 +1557,6 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return term.jml_name() + amount();
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v) + amount();
     }
@@ -1558,16 +1654,12 @@ public abstract class VarInfoName
     protected String jml_name_impl(String index) {
       return term.jml_name() + "[" + index + "]";
     }
-
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v);
     }
-    //@tx
     protected String dbc_name_impl(String index, VarInfo v) {
 	return term.dbc_name(v) + "[" + index + "]";
     }
-
     protected String identifier_name_impl(String index) {
       if (index.equals(""))
         return term.identifier_name() + "_elems";
@@ -1800,9 +1892,66 @@ public abstract class VarInfoName
       throw new UnsupportedOperationException("JML cannot format an unquantified slice of elements");
     }
 
+    // In DBC formatting, a slice should always be used inside the
+    // call of a method, so its formatting consists of three arguments
+    // for the method.
     protected String dbc_name_impl(VarInfo v) {
-      return "(warning: DBC cannot format an unquantified slice of elements" + repr_impl() + ")";
+      Assert.assertTrue(v != null);
+      Assert.assertTrue(v.isDerived());
+      Derivation derived = v.derived;
+      Assert.assertTrue(derived instanceof SequenceSubsequence ||
+                        derived instanceof SequenceScalarArbitrarySubsequence ||
+                        derived instanceof SequenceFloatArbitrarySubsequence ||
+                        derived instanceof SequenceStringArbitrarySubsequence);
+      if (derived instanceof SequenceSubsequence) {
+        Assert.assertTrue(i == null || j == null);
+        if (i == null) { // sequence[0..j]
+          Assert.assertTrue(j != null);
+          return
+            "quant.Quant.slice("
+            + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
+            + ", 0,  "
+            + j.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
+            + ")";
+        } else {
+          return
+            "quant.Quant.slice("
+            + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar())
+            + ", " + i.dbc_name_impl(((SequenceSubsequence)derived).sclvar())
+            + ", quant.Quant.lastIdx(" + sequence.dbc_name_impl(((SequenceSubsequence)derived).seqvar()) + ")"
+            + ")";
+        }
+      } else {
+        Assert.assertTrue(i != null && j != null);
+        if(derived instanceof SequenceScalarArbitrarySubsequence) {
+          SequenceScalarArbitrarySubsequence derived2 = (SequenceScalarArbitrarySubsequence)derived;
+          return
+            "quant.Quant.slice("
+            + sequence.dbc_name_impl(derived2.seqvar())
+            + i.dbc_name_impl(derived2.startvar())
+            + j.dbc_name_impl(derived2.endvar())
+            + ")";
+        } else if(derived instanceof SequenceFloatArbitrarySubsequence) {
+          SequenceFloatArbitrarySubsequence derived2 = (SequenceFloatArbitrarySubsequence)derived;
+          return
+            "quant.Quant.slice("
+            + sequence.dbc_name_impl(derived2.seqvar())
+            + i.dbc_name_impl(derived2.startvar())
+            + j.dbc_name_impl(derived2.endvar())
+            + ")";
+        } else {
+          SequenceStringArbitrarySubsequence derived2 = (SequenceStringArbitrarySubsequence)derived;
+          return
+            "quant.Quant.slice("
+            + sequence.dbc_name_impl(derived2.seqvar())
+            + i.dbc_name_impl(derived2.startvar())
+            + j.dbc_name_impl(derived2.endvar())
+            + ")";
+        }
+
+      }
     }
+
     protected String identifier_name_impl() {
       String start = (i == null) ? "0" : i.identifier_name();
       String end   = (j == null) ? ""  : j.identifier_name();
@@ -2588,8 +2737,6 @@ public abstract class VarInfoName
       protected String jml_name_impl() {
         return super.jml_name_impl();
       }
-      // RRN TODO: do we need to add a DBC method here?
-
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
       // }
@@ -3071,8 +3218,8 @@ public abstract class VarInfoName
      * distribution). These methods always return a boolean value and
      * look something like this:
      *
-     *   Quant.elementsEqual(this.theArray, null)
-     *   Quant.elementsOneOf(this.arr, new int[] { 1, 2, 3 })
+     *   Quant.eltsEqual(this.theArray, null)
+     *   Quant.eltsOneOf(this.arr, new int[] { 1, 2, 3 })
      *
      */
     //     /**
