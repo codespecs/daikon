@@ -1267,6 +1267,10 @@ postprocessed, compared, etc.
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.
 
+@item --config_option @var{name}=@var{value}
+Specify a single configuration setting.
+@xref{Configuration options}, for details.
+
 @item --files_from @var{filename}
 Read a list of @var{decl}, @var{dtrace}, or @var{spinfo} files from the
 given text file, one filename per line, as an alternative to providing
@@ -2941,6 +2945,9 @@ configuration files in order, possibly overriding the defaults.  You may
 wish to use the supplied default configuration file as an example when
 creating your own configuration files (which only need include the
 specific configuration options you wish to change).
+
+You may also specify configuration setting directly on the command line,
+using the @option{--config_option @var{name}=@var{value}} option.
 
 The debugging flags @option{--debug} and @option{--dbg @var{category}}
 (@pxref{Command line options}) permit Daikon to produce debugging
