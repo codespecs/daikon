@@ -119,11 +119,12 @@ Introduction
 Installing Daikon
 
 * Installing dfej::             
+* Installing Kvasir::           
 * Installing dfec::             
 * Installing the Context GUI::  
 * Requirements::                
 
-Installing dfec, the Daikon front end for C
+Installing dfec, the source-based Daikon front end for C
 
 * dfec EDG sources::            
 
@@ -145,9 +146,9 @@ Example use of Daikon
 * C examples::                  
 * Perl examples::               
 
-C examples
+Dfec examples
 
-* C examples summary::          
+* Dfec C examples summary::     
 * Dealing with large examples::  
 
 Using Daikon to detect invariants
@@ -233,6 +234,7 @@ Java front end dfej
 Binary C front end Kvasir
 
 * Using Kvasir::                
+* Kvasir limitations::          
 
 Source-based C front end dfec
 
@@ -561,12 +563,13 @@ make
 
 @menu
 * Installing dfej::             
+* Installing Kvasir::           
 * Installing dfec::             
 * Installing the Context GUI::  
 * Requirements::                
 @end menu
 
-@node    Installing dfej, Installing dfec, Installing Daikon, Installing Daikon
+@node    Installing dfej, Installing Kvasir, Installing Daikon, Installing Daikon
 @section Installing dfej, the Daikon front end for Java
 
 @cindex installing dfej
@@ -640,15 +643,43 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 
 @end itemize
 
-@node    Installing dfec, Installing the Context GUI, Installing dfej, Installing Daikon
-@section Installing dfec, the Daikon front end for C
+@node    Installing Kvasir, Installing dfec, Installing dfej, Installing Daikon
+@section Installing Kvasir, the binary-based Daikon front end for C
+
+@cindex installing Kvasir
+@cindex Kvasir installation
+
+Kvasir is the recommended C front end for use on Linux/x86. The source
+code for Kvasir is included in the main Daikon distribution, but it is
+not compiled by default.
+
+To compile and install Kvasir, give the command @code{make kvasir}
+from the top-level Daikon directory:
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
+
+This will check that you have the appropriate prerequisites (such as
+GCC), configure Kvasir for your machine, compile it, and install
+binaries for it in the directory @file{kvasir/inst}.
+
+Once Kvasir has been installed, it can be used via the
+@file{kvasir-dfec} script in the @file{$DAIKONDIR/bin} directory; if
+you have set up the Daikon environment according to the instructions
+above, it should be in your @code{PATH}. For instructions on using
+Kvasir, see @ref{Binary C front end Kvasir}.
+
+@node    Installing dfec, Installing the Context GUI, Installing Kvasir, Installing Daikon
+@section Installing dfec, the source-based Daikon front end for C
 
 @cindex installing dfec
 @cindex dfec installation
 
-For instructions on detecting invariants in C programs,
-@xref{Source-based C front end dfec}.  If you wish to detect
-invariants in C programs, first perform the following installation
+Daikon's older, source-code based front end for the C language, named
+dfec, is distributed separately. If you wish to use dfec,
+first perform the following installation
 steps.
 
 @enumerate
@@ -1201,14 +1232,102 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 @section C examples
 
 The Daikon distribution comes with several example C programs in the
-@file{examples/c-examples} directory to enable users to become familiar
+@file{examples} directory to enable users to become familiar
 with Daikon.
+There are two sets of examples, corresponding to the two supplied C
+front ends. Examples intended for use with the binary-based front end
+Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
+older source-based front end dfec are in a subdirectory
+@file{dfec-examples}.  It should be possible to instrument the dfec
+examples with Kvasir, though we will not give directions here.
+Instrumenting the Kvasir examples with dfec is not recommended.
 
 In order to detect invariants over C programs, you must
-install dfec, the Daikon front end for C; see @ref{Installing dfec}.
+install either Kvasir, the binary-based front end for C programs (for
+Linux/x86 only) or dfec, the source-based Daikon front end for C; see
+@ref{Installing Kvasir} or @ref{Installing dfec} respectively.
 
+@subsection Kvasir examples
 
-To detect invariants for a program, you need to perform three basic
+To detect invariants for a program with Kvasir, you need to perform
+three basic tasks: compile the target program (step 1), run the
+instrumented program to create a data trace file (step 2), and run
+Daikon over the data trace file to produce invariants (steps 3-4).
+The following instructions are for the bzip2 example.
+
+@enumerate
+@item Change to the directory containing the bzip2 program.
+@example
+cd $DAIKONDIR/examples/kvasir-examples/bzip2
+@end example
+
+@item Compile the program with DWARF-2 debugging information enabled.
+@example
+gcc -gdwarf-2 bzip2.c -o bzip2
+@end example
+
+Kvasir can also be used for programs constructed by compiling a number
+of @file{.c} files separately, and then linking them together; in such
+a program, specify @code{-gdwarf-2} for each source file containing
+code you wish invariants about. For simplicity in this example, we
+have combined all the files from the original bzip2 application into a
+single file.
+
+@item Run the program using the kvasir-dfec script
+@example
+kvasir-dfec ./bzip2 -vvc bzip2.c >bzip2.c.bz2
+@end example
+
+Run the program just as you normally would, but prepend
+@code{kvasir-dfec} to the front of the command line. Any options to
+the program can be specified as usual; here, for instance, we give
+commands to compress the file @file{bzip2.c} to a file
+@file{bzip2.c.bz2}, and give extra progress information.  Note that we
+specified the program as @file{./bzip2}, rather than simply
+@file{bzip2}, to unambiguously specify that the program in the current
+directory was meant, rather than one elsewhere in your @code{PATH}.
+
+Executing under Kvasir, the program will run normally, but with
+additional checks and collecting trace information (for this reason,
+the program will run more slowly that usual). Kvasir creates a
+directory named @file{daikon-output} under the current directory, and
+creates files @file{bzip2.decls} and @file{bzip2.dtrace} describing
+its observations.
+
+Kvasir will also print messages if it observes your program doing
+something with undefined effects; these may indicate bugs in your
+program, or they may be spurious. (If they are bugs, they can also be
+tracked down by using Valgrind with its regular memory checking
+tool; if they do not appear with that tool, they are probably
+spurious). In this example, you may see a warning about an
+uninitialized byte being passed to the @code{write} system call via
+@code{printf}; it can be ignored.
+
+@item Run Daikon on the trace file.
+@example
+java daikon.Daikon -o bzip2.inv \
+     daikon-output/bzip2.decls daikon-output/bzip2.dtrace
+@end example
+
+The invariants are printed to standard out, and a binary representation
+of the invariants is written to @file{bzip2.inv}.
+
+@item Examine the invariants.  As described in the Daikon manual, there are
+several ways to do this:
+@itemize 
+@item Examine the output from running Daikon.
+@item Use the PrintInvariants program to display the invariants.
+@item Use the Daikon Tree GUI to browse the invariants.
+@item Use the Daikon Context GUI to browse the invariants.
+@end itemize
+@noindent
+For help understanding the invariants, see @ref{Interpreting output}.
+
+@end enumerate
+
+@subsection Dfec examples
+
+To detect invariants for a program with dfec, you need to perform three basic
 tasks: instrument the target program (steps 1-3), run the instrumented
 program to create a data trace file (step 4), and run Daikon over the
 data trace file to produce invariants (steps 5-6).  The following
@@ -1218,7 +1337,7 @@ be run in exactly the same manner.
 @enumerate
 @item Change to the directory containing the print_tokens program.
 @example
-cd $DAIKONDIR/examples/c-examples/print_tokens
+cd $DAIKONDIR/examples/dfec-examples/print_tokens
 @end example
 
 @item Instrument the program using dfec, the C front end.
@@ -1302,18 +1421,18 @@ For help understanding the invariants, see @ref{Interpreting output}.
 @end enumerate
 
 @menu
-* C examples summary::          
+* Dfec C examples summary::     
 * Dealing with large examples::  
 @end menu
 
-@node    C examples summary, Dealing with large examples, C examples, C examples
-@subsection C examples summary
+@node    Dfec C examples summary, Dealing with large examples, C examples, C examples
+@subsection Dfec C examples summary
 
 The above steps can be divided into three stages:
 
 Instrumentation (Steps 1-3)
 @example
-cd $DAIKONDIR/examples/c-examples/print_tokens
+cd $DAIKONDIR/examples/dfec-examples/print_tokens
 dfec print_tokens.c stream.h tokens.h
 g++ -g -w -o print_tokens daikon-instrumented/print_tokens.cc \
     $DFECDIR/daikon_runtime.o
@@ -1333,7 +1452,7 @@ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 @end example
 
 
-@node    Dealing with large examples,  , C examples summary, C examples
+@node    Dealing with large examples,  , Dfec C examples summary, C examples
 @subsection Dealing with large examples
 
 Beware that several of the C example programs require significant
@@ -1437,7 +1556,7 @@ dfepl -T Birthday.pm
 This step repeats step 2, except that the @option{-T} flag to
 @command{dfepl} tells it to use the type information generated in the
 previous step, and to put the output in the directory
-@file{daikon-instrumented}. @command{dfepl} also uses converts the
+@file{daikon-instrumented}. @command{dfepl} also converts the
 type information into a file @file{daikon-output/Birthday.decls}
 containing subroutine declarations suitable for Daikon.
 
@@ -1605,6 +1724,20 @@ For more information about dfej, see @ref{Java front end dfej}.
 
 @node    Instrumenting C programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
 @subsection Instrumenting C programs
+
+There are two ways to instrument C programs. Compiled programs
+originally written in C can be instrumented on the fly using the
+Kvasir tool, or C programs in source code form can be instrumented
+with the @command{dfec} tool. Kvasir can only be used on Linux/x86,
+but when it's available, it's usually easier to use.
+
+To use Kvasir with your program, first make sure that your program has
+been compiled with DWARF-2 format debugging information, such as by
+giving the @code{-gdwarf-2} flag to GCC when compiling. Then, run your
+program as usual, but prepend @code{kvasir-dfec} to the command line.
+For more information about Kvasir, including more detailed
+documentation on its command-line options, see @ref{Binary C
+front end Kvasir}.
 
 To instrument C source, invoke @command{dfec} on all the source and
 header files at once:
@@ -3526,19 +3659,12 @@ compiled without optimization; and second, the programs should be
 written in C. (In the future, Kvasir may support C++ and other
 languages that follow C calling conventions.)
 
-@c Be sure to remove this once it becomes our of date
-As of Daikon version 3.0.5, Kvasir is still in an early stage of
-development. While it works well on many programs, it does not yet
-support all of the options that the older dfec did, nor all of its
-features. The most important limitation of the current version is that
-it does not support arrays: arrays are instead treated as pointers, so
-that only the directly pointed-to value is printed.
-
 @menu
 * Using Kvasir::                
+* Kvasir limitations::          
 @end menu
 
-@node Using Kvasir,  , Binary C front end Kvasir, Binary C front end Kvasir
+@node Using Kvasir, Kvasir limitations, Binary C front end Kvasir, Binary C front end Kvasir
 @subsection Using Kvasir
 
 The first step in using Kvasir is to compile your program using the
@@ -3566,6 +3692,83 @@ As well as running your program (more slowly that usual), this command
 will also create a directory @file{daikon-output} in the current
 directory containing @file{program.decls} and @file{program.dtrace}
 files suitable as input to Daikon.
+
+By default, Kvasir will overwrite the @file{program.decls} and
+@file{program.dtrace} files on each program run. To collect
+information about a number of runs of a program, set the
+@code{DTRACEAPPEND} environment variable to 1; this will cause Kvasir
+to append to rather than overwrite the @file{program.dtrace} file
+
+@node Kvasir limitations,  , Using Kvasir, Binary C front end Kvasir
+@subsection Kvasir limitations
+
+@c Be sure to remove this once it becomes our of date
+As of Daikon version 3.0.5, Kvasir is still in an active stage of
+development. While it works well on many programs, it does not yet
+support all of the options that the older dfec did, nor all of its
+features. This subsection lists some of the known limitations of the
+first Kvasir release; if you encounter any problems other than listed
+here, please report them as bugs. The limitations are listed roughly
+in decreasing order of severity.
+
+@itemize
+@item
+Kvasir does not support arrays. Arrays are instead treated as
+pointers, so that only the directly pointed-to value (that is, the 0th
+element) is printed. Character arrays are a partial exception;
+pointers to characters are always treated as pointing to
+null-terminated character strings. However, character arrays inside
+structures are not handled correctly.
+
+@item
+Global variables are ignored. Kvasir's trace output includes only
+function parameters and return values (and the objects they point to).
+A possible workaround is to create a struct containing all of your
+global variables, and pass a pointer to this structure to every
+function.
+
+@item
+Kvasir-traced programs take longer (often a good fraction of a second)
+to start. When tracing short-lived programs, this overhead can
+dominate Kvasir's per-instruction runtime overhead.
+
+@item
+Kvasir always prints the contents of structures according to their
+compile-time type. Programs that use generic pointers and structural
+equivalence to simulate object-orientation will have derived-`class'
+fields missing when a structure is passed via a base-`class' pointer.
+
+@item
+None of the options of the source-based dfec are supported.
+Specifically: It is not possible to change the name of the dtrace or
+decls files (except by changing the name of your program). It is not
+possible to specify what directory the dtrace or decls will be placed
+in: Kvasir always puts them in a subdirectory @file{daikon-output} of
+the current working directory when your program starts. Compression of
+the trace output is not supported. Pointer type disambiguation is not
+supported. Variable comparability information (as supplied by the
+Lackwit tool) is not supported. The depth to which nested structures
+are explored is fixed at 3. The only environment variable obeyed is
+@code{DTRACEAPPEND}.
+
+@item
+Kvasir behaves somewhat differently with different versions of GCC.
+We have tested Kvasir with GCC versions 2.95.3 and 3.2.1, and the
+version labeled 2.96 that comes with Red Hat 7.3. While Kvasir runs
+correctly with the output of each compiler for some programs, it gives
+different results depending on the compiler for other programs, and we
+have observed it to crash on the output of GCC 2.95.3 in circumstances
+we are still investigating. If feasible, we recommend that you use
+Kvasir with a relatively recent version of GCC such as 3.2.1.
+
+@item
+Kvasir is incompatible with some compiler optimizations. It is
+definitely incompatible with the @code{-fomit-frame-pointer}
+optimization, and it may have trouble with other optimizations as
+well. We recommend that you compile programs for Kvasir without
+optimization.
+
+@end itemize
 
 @node    Source-based C front end dfec, Perl front end dfepl, Binary C front end Kvasir, Front ends
 @section Source-based C front end dfec
@@ -7115,7 +7318,8 @@ Kvasir is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details. You should have received a copy of the GNU General
-Public License along with Kvasir; if not, write to the Free
+Public License along with Kvasir, in a file kvasir/COPYING;
+if not, write to the Free
 Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
 
@@ -7145,6 +7349,7 @@ Nii Dodoo,
 Alan Dunn,
 Michael Ernst,
 William Griswold,
+Philip Guo,
 Melissa Hao,
 Michael Harder,
 Lee Lin,
