@@ -162,20 +162,20 @@ public final class CLASSNAME
         // so that we always get the same equation
         // now that we do not guarantee C to be -1; the following is not
         // necessary, right? CX 8/9/04
-        
+
        // double div = c / -1.0;
        // a = a / div;
        // b = b / div;
        // c = c / div;
        // d = d / div;
-       
+
       //we still need to guarantee the canonical form of coefficients (e.g. positive x coeff)
        if (a < 0) {
        a = a/-1.0;
        b = b/-1.0;
        c = c/-1.0;
        d = d/-1.0;
-       
+
        }
       }
     }
@@ -205,27 +205,18 @@ public final class CLASSNAME
     // didn't fit even before the permutation. -smcc
   }
 
- 
-   
+
+
   /**
    * Returns whether or not the invariant is currently active.  We become
    * active after MINTRIPLES values have been seen and a line is not calculated.
    * Before that, a, b, and c are uninitialized
    */
-   // this is the check used throughout the file as a shortcut because 
+   // this is the check used throughout the file as a shortcut because
    // the invariant must have seen enough samples and not be a line for all the
    // other calculations and comparisons done to be sensible
   public boolean isActive() {
    return (line_flag == -1 && values_seen >= MINTRIPLES);
-  }
-
-  /**
-   * LinearTernary can't be flowed because it keeps samples to build the
-   * plane.  These sample can't be flowed from ppt to ppt (since they probably
-   * didn't occur at the lower ppt).
-   */
-  public boolean isFlowable() {
-    return (false);
   }
 
   /**
@@ -308,7 +299,7 @@ public final class CLASSNAME
    * InvariantStatus.FALSIFIED if one of the points invalidated the
    * LinearTernary invariant
    */
-   
+
   public InvariantStatus setup (ONEOF oo, VarInfo v1, PRIMITIVE con1,
                                 VarInfo v2, PRIMITIVE con2) {
 
@@ -370,14 +361,14 @@ public final class CLASSNAME
       // computation of the slope can be non-negligible.
 
       // skip points we've already seen
-      for (int i = 0; i < values_seen; i++) 
-        if (def_points[i].equals (x, y, z)) 
+      for (int i = 0; i < values_seen; i++)
+        if (def_points[i].equals (x, y, z))
           return InvariantStatus.NO_CHANGE;
-				
+
       def_points[values_seen] = new Point (x, y, z);
-     
+
       values_seen++;
-      
+
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
 
@@ -388,23 +379,23 @@ public final class CLASSNAME
 		if(line_flag == -1) {
 		InvariantStatus stat = planarIntervention(def_points);
     	return stat;
-      	
+
       	} else {
-      	
+
       	// points fit in a line
       	return InvariantStatus.NO_CHANGE;
       	}
       } else  {
-      
+
       // still haven't still enough values
       return InvariantStatus.NO_CHANGE;
     	}
     } else {
 
 	//at this point either a line or a plane must have been formed
-		
-	
-	// if line already broken, fit to plane equation			
+
+
+	// if line already broken, fit to plane equation
     if(line_flag == -1) {
       // If the new value doesn't fit the equation
       if (!EQUAL (-c*z, a*x+b*y+d)) {
@@ -421,29 +412,29 @@ public final class CLASSNAME
           return InvariantStatus.FALSIFIED;
         }
       } else {
-      
+
       // point fits the current plane equation
       return InvariantStatus.NO_CHANGE;
       }
     } else {
-    	
-    	// try to fit to the current line 		
+
+    	// try to fit to the current line
     	if(!try_points(x, y, z)) {
     		//put the crucial point in, so that it can be tested against the new line
     		def_points[MINTRIPLES-1] = new Point (x, y, z);
-    		
+
     		// try to fit the points onto a line again (not sure if this
     		// is really necessary, maybe the fuzzy equals really does
     		// make a difference)
     		linearIntervention(def_points);
     	}
-		
+
 		// new point has broken the line, try to fit to a plane
     	if(line_flag == -1) {
     	InvariantStatus stat = planarIntervention(def_points);
     	return stat;
     	} else {
-    		
+
     		// fuzzy equals does make a difference
     		return InvariantStatus.NO_CHANGE;
     	}
@@ -454,18 +445,18 @@ public final class CLASSNAME
     //should never get here because values_seen is either < or >= MINTRIPLES
     return InvariantStatus.NO_CHANGE;
   }
-	
+
  /**
    * Attempts to fit the points in def_point to a plane and calculates the
-   * coefficients (a, b, c, d) if possible.  
+   * coefficients (a, b, c, d) if possible.
    *
-   * @param def_point  Array of points.  Must have at least 3 elements.  
-   * 
-   * @return the status of the invariant 
+   * @param def_point  Array of points.  Must have at least 3 elements.
+   *
+   * @return the status of the invariant
    *		 (whether the plane fitting was successful)
    */
 	private InvariantStatus planarIntervention(Point[] def_point) {
-	
+
 	// Find the three points with the maximum separation
         maxsep_triples (def_point);
         if (def_point[0] == null) {
@@ -478,10 +469,10 @@ public final class CLASSNAME
 		wrapper.log("Definitive point2: " + def_point[1]);
 		wrapper.log("Definitive point3: " + def_point[2]);
 		}
-		
+
         // calculate the coefficients of the equation (a, b, c, d)
         double[] coef = calc_tri_linear (def_point);
-     
+
         a = coef[0];
         b = coef[1];
         c = coef[2];
@@ -505,7 +496,7 @@ public final class CLASSNAME
 
         // Check all values against a, b, and c.
         if (!wrapper.is_false()) {
-          for (int i=0; i<values_seen; i++) { 
+          for (int i=0; i<values_seen; i++) {
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
             if (!EQUAL (-c * def_point[i].z,
@@ -529,63 +520,49 @@ public final class CLASSNAME
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
             def_point[ii] = null;
-
-          // check to see if this already exists at the global ppt, it it
-          // does, falsify it here to eliminate the duplicate copy.  This
-          // is not the best place to do this, but easy for now
-          PptSlice gslice = wrapper.ppt.find_global_slice
-                                                    (wrapper.ppt.var_infos);
-          if (gslice != null) {
-            if (gslice.contains_inv_exact (wrapper)) {
-              if (Debug.logOn())
-                wrapper.log ("Matched at global");
-              return InvariantStatus.FALSIFIED;
-            }
-          }
-
         }
-	
+
 		//if it passes all the checks, then no change to the Invariant
 		return InvariantStatus.NO_CHANGE;
 	}
 
-	
+
  /**
    * Attempts to fit the points in def_point to a line and calculates the
-   * the corresponding line classification (line_flag) and constants 
+   * the corresponding line classification (line_flag) and constants
    * (constants[]) if possible.  If not (points in def_point form a plane)
    * resets line_flag to -1 and constants[] elements to -999.
    *
-   * @param def_point  Array of points.  Must have at least 2 elements.  
+   * @param def_point  Array of points.  Must have at least 2 elements.
    *
    */
    private void linearIntervention(Point[] def_point) {
 
-	
-	// make a copy of the array so that the points don't get clobbered because 
-	// if a line fails to form; the calc_tri_linear code will need an 
+
+	// make a copy of the array so that the points don't get clobbered because
+	// if a line fails to form; the calc_tri_linear code will need an
 	// unmodified copy of def_point
-	
+
 		Point[] dummy = new Point[def_point.length];
 		for (int i = 0; i < def_point.length; i++)
 			dummy[i] = def_point[i];
-			
-		// find the max separation points		
+
+		// find the max separation points
 		maxsep_doubles(dummy);
 
 		//dummy[0] could be null when all the points are NaN
 		if(dummy[0] != null) {
 		//find the equation (constants and coeffs now stored in constants[])
 		calc_bi_linear(dummy);
-		
-		
+
+
 		//check the other points against the constants and coefficients
 		for(int i = 0; i < def_point.length; i++) {
 			//try to fit the current point to the current line
 			boolean ok = try_points(def_point[i].x, def_point[i].y, def_point[i].z);
-			
+
 			if(!ok) {
-			
+
 			line_flag = -1;
 			for(int j = 0; j < constants.length; j++)
 				constants[j] = -999;		//reset constants array
@@ -596,13 +573,13 @@ public final class CLASSNAME
 	}
 
 
-	
+
  /**
-   * Attempts to fit the new point (x,y,z) onto the current line 
+   * Attempts to fit the new point (x,y,z) onto the current line
    * (indicated by line_flag and constants[]).  Method should only be called
    * if the current points define a line (line_flag is not -1)
    *
-   * @param x,y,z  x,y,z components of the point.    
+   * @param x,y,z  x,y,z components of the point.
    *
    */
 	private boolean try_points(double x, double y, double z) {
@@ -885,7 +862,7 @@ public final class CLASSNAME
     double ysep = (p1.y - p2.y);
     double zsep = (p1.z - p2.z);
     return Math.sqrt(xsep*xsep + ysep*ysep + zsep*zsep);
-    
+
   }
 
  /**
@@ -926,7 +903,7 @@ public final class CLASSNAME
 	 for (int j=i+1; j < pa.length-1; j++) {
 	   double sep_i_j = separations[i][j];
 	   for (int k = j+1; k < pa.length; k++) {
-	   
+
 	   	// using the sum of separations is valid, as long as separation is
 	   	// the actual distance between points and not the square of the distance
 		 double separation = sep_i_j + separations[i][k] + separations[j][k];
@@ -947,11 +924,11 @@ public final class CLASSNAME
    if (Debug.logDetail())
 	 wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
    return (max_separation);
-    
+
  }
 
 
- 
+
 
   // Given ((x0,y0,z0),(x1,y1,z1), (x2,y2,z2), calculate a, b, c and d
   // such that ax + by + cz + d = 0.
@@ -967,12 +944,12 @@ public final class CLASSNAME
   // The vector normal to the plane can be calculated by doing the cross product
   // of two line segments on the plane (<point2 - point0> and <point1 - point0>)
   //
-  // Given the normal vector and and a point on the plane, the standard form 
+  // Given the normal vector and and a point on the plane, the standard form
   // of the plane is:
   // n1*x + n2*y + n3*z = p where p is the dot product of r and n
   //
   //
-  
+
   /**
    * Calculates the coefficients for the equation ax + by + cz + d = 0 for the
    * first three points in points.
@@ -991,7 +968,7 @@ public final class CLASSNAME
     Point p2 = points[2];
 
 
-// the following code is taken from the source page of 
+// the following code is taken from the source page of
 // http://jblanco_60.tripod.com/plane.html (the math behind the implementation
 // is detailed above)
 
@@ -1004,7 +981,7 @@ double qz = p1.z;
 double rx = p2.x;
 double ry = p2.y;
 double rz = p2.z;
-	
+
 // define the i, j, k components of the two line segments on the plane
 double a1 = (qx - px);
 double a2 = (qy - py);
@@ -1036,7 +1013,7 @@ double standard_i_var = 0;
 double standard_j_var = 0;
 double standard_k_var = 0;
 double standard_Stand_const = 0;
-	
+
 
 // check to see if the "x" term is negative.  If it is,
 // divide all terms by -1.  Also reduce all terms by dividing by
@@ -1064,13 +1041,13 @@ else if(i_var < 0) {
 double[] coef = new double[] {standard_i_var,
 							 standard_j_var,
 								  standard_k_var, standard_Stand_const };
-								  								  
+
 return coef;
-	
+
 }
 
 // old version of calculating the coefficients
-// new version does not throw any exceptions, able to handle 0 coeff possibility   
+// new version does not throw any exceptions, able to handle 0 coeff possibility
 // Given ((x0,y0,z0),(x1,y1,z1)), calculate a, b, and c
   // such that ax + by + cz + d = 0.
   //
@@ -1126,7 +1103,7 @@ return coef;
 //									b_numerator / denominator,
 //								   -1, c_numerator / denominator };
 //	  return (coef);
-  
+
 
 
 
@@ -1163,9 +1140,9 @@ return coef;
   public double computeConfidence() {
   	if(isActive()) {
     return Invariant.conf_is_ge(values_seen, MINTRIPLES);
-    } else 
+    } else
     return 0;
-    
+
   }
 
   public String repr() {
