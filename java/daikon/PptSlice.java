@@ -464,7 +464,6 @@ public abstract class PptSlice
               throw new Error();
             }
           }
-          // Arrays.sort (slice_vis, VarInfo.IndexComparator.getInstance());
         }
 
         for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
@@ -533,9 +532,10 @@ public abstract class PptSlice
             // invariants of the same class in the same pptslice.
             // Maybe add that as rep invariant up above?
           //            if (item.getClass() == inv.getClass()) {
-          if (Invariant.find (inv.getClass(), slice) != null) {
+          Invariant alreadyThere = Invariant.find (inv.getClass(), slice);
+          if (alreadyThere != null) {
             if (debugFlow.isDebugEnabled())
-              debugFlow.debug("  except it was already there");
+              debugFlow.debug("  except it was already there: " + alreadyThere.format());
             continue for_each_invariant;
           }
           // Let it be reborn
