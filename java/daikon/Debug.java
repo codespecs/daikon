@@ -44,7 +44,7 @@ public class Debug {
       // "PptSliceEquality",
       // "PairwiseIntLessEqual", "PairwiseIntGreaterEqual",
       // "SeqSeqIntEqual",
-      "SeqIndexComparison"
+      "PairwiseIntEqual", "PairwiseFloatEqual"
     };
 
   /**
@@ -67,7 +67,7 @@ public class Debug {
       // "DataStructures.DisjSets.DisjSets(int):::EXIT"
       // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
       // "misc.StaticInteresting:::OBJECT"
-      "MapQuick1.StreetNumberSet.min():::EXIT"
+      "PolyCalc.RatPoly.RatPoly(int, int):::EXIT"
       // "DataStructures.StackAr.pop():::EXIT"
       // "DataStructures.DisjSets.find(int):::EXIT70"
     };
@@ -104,7 +104,9 @@ public class Debug {
       // { "return", "orig(pegA)", "orig(pegB)" },
       // { "orig(pegA)", "return", "orig(pegB)" },
       // { "orig(pegA)", "orig(pegB)", "return" }
-      { "this.ends[0..return-1]" }
+      // { "this.ends[0..return-1]" }
+      { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
+      { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
     };
 
   // cached standard parts of the debug print so that multiple calls from

@@ -13,13 +13,11 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define CLASSSTRING "LinearTernaryCore"
   #define EQUAL(a,b) ((a) == (b))
-  #define VALUETRACKER ValueTracker
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
   #define PRIMITIVE double
   #define CLASSSTRING "LinearTernaryCoreFloat"
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
-  #define VALUETRACKER ValueTracker
 #else
   #error "Either TYPELONG or TYPEDOUBLE must be defined"
 #endif
@@ -45,16 +43,15 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030413L;
+  static final long serialVersionUID = 20030812L;
 
   /** Debug tracer **/
   final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar." + CLASSSTRING);
 
   // z == ax + by + c; first argument is x, second is y, third is z
-  public double a = 0, b = 0, c = 0;
-  public double min_a, max_a, min_b, max_b, min_c, max_c;
+  public double a = 0, b = 0, c = 0, d = 0;
+  public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
   public double separation = 0;
-  VALUETRACKER values_cache = new ValueTracker(8);
 
   //inner class to store points in for more convenient access
   public static class Point implements Serializable, Cloneable {
@@ -91,10 +88,6 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  public final static int minTriples() {
-    return MINTRIPLES;
-  }
-
   public Object clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
@@ -119,8 +112,7 @@ public final class CLASSNAME
     Assert.assertTrue(permutation.length == 3);
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     // Fix a, b, c
-    // clever because a*v0 + b*v1 - v2 = -c
-    double[] clever = new double[] { a, b, -1.0 };
+    double[] clever = new double[] { a, b, c };
     double[] pclever = new double[3];
     pclever[permutation[0]] = clever[0];
     pclever[permutation[1]] = clever[1];
@@ -129,22 +121,22 @@ public final class CLASSNAME
       // Seen enough values, so permuting a, b, c is useful
       // This is needed so we don't have div by 0 errors
       //      if (pclever[2] == 0) {
-      if (a == 0 || b == 0) { // Means a bit more than above, but this
+      if (a == 0 || b == 0 || c == 0) { // Means a bit more than above, but this
                               // should be okay
         // Can't handle this form once rotated.  But if we've seen
         // enough values, yet a or b is zero, then this is covered by
         // a LinearBinary or a constant, so let me just destroy myself
         values_seen = Integer.MAX_VALUE;
-        a = b = c = 0;
+        a = b = c = d = 0;
         if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  Ternary invariant destroyed because a or b = 0");
+          debug.fine ("  Ternary invariant destroyed because a, b, or b = 0");
         }
         return;
       } else {
-        double d = -1.0 / pclever[2];
-        a = pclever[0] * d;
-        b = pclever[1] * d;
-        c = c * d;
+        // double d = -1.0 / pclever[2];
+        a = pclever[0];
+        b = pclever[1];
+        c = pclever[2];
       }
     }
     // Fix caches
@@ -207,16 +199,16 @@ public final class CLASSNAME
       // computation of the slope can be non-negligible.
 
       // skip points we've already seen
-      for (int i=0; i<values_seen; i++)
+      for (int i = 0; i < values_seen; i++)
         if (def_points[i].equals (x, y, z))
           return;
 
       def_points[values_seen] = new Point (x, y, z);
       values_seen++;
-      values_cache.add(x, y, z);
 
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
+
         // Find the three points with the maximum separation
         maxsep_triples (def_points);
         if (def_points[0] == null) {
@@ -226,61 +218,67 @@ public final class CLASSNAME
           return;
         }
 
-        // calculate the coefficients of the equation (a, b, c)
+        // calculate the coefficients of the equation (a, b, c, d)
         double coef[];
         try {
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
-          wrapper.destroyAndFlow();
           wrapper.discardCode = DiscardCode.bad_sample;
           wrapper.discardString = "Exception thrown while calculating coefficients: "+e;
+          wrapper.destroyAndFlow();
           return;
         }
         a = coef[0];
         b = coef[1];
         c = coef[2];
+        d = coef[3];
 
-        // If one of these coefficients is zero, this should be a
+        // If one of these coefficients is zero (except for d), this should be a
         // LinearBinary, not a LinearTernary, term.  (It might not show up
         // as LinearBinary because there might not have been enough samples;
         // but a random varying third variable can create enough samples.)
-        if ((a == 0) || (b == 0) ||
+        if ((a == 0) || (b == 0) || (c == 0) ||
             (Math.abs(a) >= Double.MAX_VALUE) ||
-            (Math.abs(b) >= Double.MAX_VALUE)) {
-          wrapper.destroyAndFlow();
+            (Math.abs(b) >= Double.MAX_VALUE) ||
+            (Math.abs(c) >= Double.MAX_VALUE)) {
           wrapper.discardCode = DiscardCode.bad_sample;
           if (a==0)
             wrapper.discardString = "For "+wrapper.format()+" 'a' was calculated to be 0";
           if (b==0)
             wrapper.discardString = "For "+wrapper.format()+" 'b' was calculated to be 0";
+          wrapper.destroyAndFlow();
           return;
         }
 
         // Check all values against a, b, and c.
         if (!wrapper.falsified) {
           for (int i=0; i<MINTRIPLES; i++) { // values_seen == MINTRIPLES
-            if (!EQUAL (def_points[i].z,
-                        a*def_points[i].x + b*def_points[i].y + c)) {
+            // Global.fuzzy.eq works by comparing ratios between numbers, so comparing
+            // the sum of everything to 0 won't work.
+            if (!EQUAL (-c * def_points[i].z,
+                        a*def_points[i].x + b*def_points[i].y + d)) {
               if (debug.isLoggable(Level.FINE)) {
                 debug.fine ("Suppressing " + CLASSSTRING + " at index " + i + ": "
-                            + def_points[i].z + " != "
+                            + "0 != "
                             + a + "*" + def_points[i].x
-                            + "+" + b + "*" + def_points[i].y + "+" + c);
+                            + "+" + b + "*" + def_points[i].y + "+" + c + "*" + def_points[i].z
+                            + "+" + d);
               }
-              wrapper.destroyAndFlow();
               wrapper.discardCode = DiscardCode.bad_sample;
-              #if defined(TYPELONG)
+#if defined(TYPELONG)
               LinearTernary ltInv = (LinearTernary) wrapper;
-              #elif defined(TYPEDOUBLE)
+#elif defined(TYPEDOUBLE)
               LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
-              #endif
+#endif
               String name1 = ltInv.var1().name.name();
               String name2 = ltInv.var2().name.name();
               String name3 = ltInv.var3().name.name();
 
-              wrapper.discardString = "(a,b,c) calculated to be ("+a+","+b+","+c+") failed"+
+              wrapper.discardString = "(a,b,c,d) calculated to be ("+a+","+b+","+c+","+d+") failed"+
                 "for sample ("+name1+","+name2+","+name3+") = ("+def_points[i].x+","+def_points[i].y+
                 ","+def_points[i].z+")";
+              wrapper.destroyAndFlow();
+
               return;
             }
         }
@@ -292,7 +290,7 @@ public final class CLASSNAME
       }
     } else {
       // If the new value doesn't fit the equation
-      if (!EQUAL (z, a*x+b*y+c)) {
+      if (!EQUAL (-c*z, a*x+b*y+d)) {
 
         // Try to find small changes that will fit better.
         if (!try_new_equation (x, y, z)) {
@@ -301,20 +299,18 @@ public final class CLASSNAME
                         wrapper.format() + ") at new value: "
                         + y + " != " + a + "*" + x + "+" + b);
           }
-          wrapper.destroyAndFlow();
           wrapper.discardCode = DiscardCode.bad_sample;
-          #if defined(TYPELONG)
+#if defined(TYPELONG)
           LinearTernary ltInv = (LinearTernary) wrapper;
-          #elif defined(TYPEDOUBLE)
+#elif defined(TYPEDOUBLE)
           LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
-          #endif
+#endif
           String name1 = ltInv.var1().name.name();
           String name2 = ltInv.var2().name.name();
           String name3 = ltInv.var3().name.name();
-
-          wrapper.discardString = "(a,b,c) calculated to be ("+a+","+b+","+c+") failed"+
-            "for sample ("+name1+","+name2+","+name3+") = ("+x+","+y+
-            ","+z+")";
+          wrapper.discardString = "(a,b,c,d) calculated to be ("+a+","+b+","+c+","+d+
+            ") failed for sample ("+name1+","+name2+","+name3+") = ("+x+","+y+","+z+")";
+          wrapper.destroyAndFlow();
           return;
         }
       }
@@ -352,14 +348,17 @@ public final class CLASSNAME
       if (coef[1] > max_b) max_b = coef[1];
       if (coef[2] < min_c) min_c = coef[2];
       if (coef[2] > max_c) max_c = coef[2];
+      if (coef[3] < min_d) min_d = coef[3];
+      if (coef[3] > max_d) max_d = coef[3];
 
       // Pick a new a, b, and c as the average of their endpoints
       a = (min_a + max_a) / 2;
       b = (min_b + max_b) / 2;
       c = (min_c + max_c) / 2;
+      d = (min_d + max_d) / 2;
       if (debug.isLoggable(Level.FINE))
         debug.fine (wrapper.ppt.name + ": Trying new a (" + a +
-                     "), b (" + b + ") and c (" + c + ")");
+                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
 
       // if the new coefficients are 'equal' to their min and max and
       // this point fits, then this new equation is good enough both
@@ -367,10 +366,11 @@ public final class CLASSNAME
       if (Global.fuzzy.eq(a, min_a) && Global.fuzzy.eq(a, max_a) &&
           Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b) &&
           Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c) &&
-          EQUAL (z, a*x+b*y+c)) {
+          Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d) &&
+          EQUAL (-c*z, a*x+b*y+d)) {
         if (debug.isLoggable(Level.FINE))
           debug.fine (wrapper.ppt.name + ": New a (" + a + ") and b ("
-                       + b + ")");
+                       + b + ") and c (" + c + ")");
         return (true);
       } else {
         return (false);
@@ -531,7 +531,7 @@ public final class CLASSNAME
     float c_numerator = (float) (p0.z * (p1.x * p2.y - p2.x * p1.y)
                                 - p1.z * (p0.x * p2.y - p2.x * p0.y)
                                 + p2.z * (p0.x * p1.y - p1.x * p0.y));
-    return new double[] { a_numerator / denominator, b_numerator / denominator,
+    return new double[] { a_numerator / denominator, b_numerator / denominator, -1,
                           c_numerator / denominator };
   }
 
@@ -585,6 +585,7 @@ public final class CLASSNAME
       + "a=" + a
       + ",b=" + b
       + ",c=" + c
+      + ",d=" + d
       + ",values_seen=" + values_seen;
   }
 
@@ -611,15 +612,14 @@ public final class CLASSNAME
 
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfoName y, VarInfoName z,
-                             double a, double b, double c)
+                             double a, double b, double c, double d)
   {
-    if ((a == 0) && (b == 0) && (c == 0)) {
-      return wrapper.format_too_few_samples(format, "0 * " + z
-                                            + " == 0 * "+ x + " + 0 * " + y + " + 0");
+    if ((a == 0) && (b == 0) && (c == 0) && (d == 0)) {
+      return wrapper.format_too_few_samples(format, "0 * "+ x + " + 0 * " + y + " + 0 * " + z + " + 0 == 0");
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(x, y, z, a, b, c);
+      return format_simplify(x, y, z, a, b, c, d);
     }
 
     if ((format == OutputFormat.DAIKON)
@@ -630,50 +630,55 @@ public final class CLASSNAME
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
 
-      return z.name_using(format) + eq
-        + formatTerm(format, a, x, true)
-        + formatTerm(format, b, y, false)
-        + formatTerm(format, c, null, false);
+      return formatTerm(format, a, x, true)
+        + formatTerm(format, b, y, (a == 0))
+        + formatTerm(format, c, z, (a == 0) && (b == 0))
+        + formatTerm(format, d, null, (a == 0) && (b == 0) && (c == 0))
+        + eq + "0";
     }
 
     return null;
   }
 
   public static String format_simplify(VarInfoName x, VarInfoName y, VarInfoName z,
-                                       double da, double db, double dc) {
+                                       double da, double db, double dc, double dd) {
     int ia = (int) da;
     int ib = (int) db;
     int ic = (int) dc;
+    int id = (int) dd;
 
-    String str_a, str_b, str_c;
-    if (ia != da || ib != db || ic != dc) {
+    String str_a, str_b, str_c, str_d;
+    if (ia != da || ib != db || ic != dc || id != dd) {
       // floating point
       str_a = Invariant.simplify_format_double(da);
       str_b = Invariant.simplify_format_double(db);
       str_c = Invariant.simplify_format_double(dc);
+      str_d = Invariant.simplify_format_double(dd);
     } else {
       // integer
       str_a = ia + "";
       str_b = ib + "";
       str_c = ic + "";
+      str_d = id + "";
     }
 
-    // z == ax + by + c
+    // 0 == ax + by + cz + d
     String str_z = z.simplify_name();
     String str_x = x.simplify_name();
     String str_y = y.simplify_name();
     String str_ax = (da == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
     String str_by = (db == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
-    String str_axPby = "(+ " + str_ax + " " + str_by + ")";
-    String str_axPbyPc = (dc == 0.0) ? str_axPby :
-      "(+ " + str_axPby + " " + str_c + ")";
-    return "(EQ " + str_z + " " + str_axPbyPc + ")";
+    String str_cz = (dc == 1.0) ? str_z : "(* " + str_c + " " + str_z + ")";
+    String str_axPbyPcz = "(+ " + str_ax + " " + str_by + " " + str_cz + ")";
+    String str_axPbyPczPd = (dd == 0.0) ? str_axPbyPcz :
+      "(+ " + str_axPbyPcz + " " + str_d + ")";
+    return "(EQ 0 " + str_axPbyPczPd + ")";
   }
 
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfoName y, VarInfoName z)
   {
-    String result = format_using(format, x, y, z, a, b, c);
+    String result = format_using(format, x, y, z, a, b, c, d);
     if (result != null) {
       return result;
     }
@@ -692,15 +697,19 @@ public final class CLASSNAME
   {
     boolean thisMeaningless =
       values_seen < MINTRIPLES ||
-      (a == 0 && b == 0 && c == 0) ||
+      (a == 0 && b == 0 && c == 0 && d == 0) ||
       Math.abs(a) >= Double.MAX_VALUE ||
-      Math.abs(b) >= Double.MAX_VALUE
+      Math.abs(b) >= Double.MAX_VALUE ||
+      Math.abs(c) >= Double.MAX_VALUE ||
+      Math.abs(d) >= Double.MAX_VALUE
       ;
     boolean otherMeaningless =
       other.values_seen < MINTRIPLES ||
-      (other.a == 0 && other.b == 0 && other.c == 0) ||
+      (other.a == 0 && other.b == 0 && other.c == 0 || other.d == 0) ||
       Math.abs(other.a) >= Double.MAX_VALUE ||
-      Math.abs(other.b) >= Double.MAX_VALUE
+      Math.abs(other.b) >= Double.MAX_VALUE ||
+      Math.abs(other.c) >= Double.MAX_VALUE ||
+      Math.abs(other.d) >= Double.MAX_VALUE
       ;
 
     if (thisMeaningless && otherMeaningless) {
@@ -710,7 +719,8 @@ public final class CLASSNAME
               && (other.values_seen >= MINTRIPLES)
               && (a == other.a)
               && (b == other.b)
-              && (c == other.c));
+              && (c == other.c)
+              && (d == other.d));
     }
   }
 
@@ -723,7 +733,8 @@ public final class CLASSNAME
 
     return ((a == other.a)
             && (b != other.b)
-            && (c != other.c));
+            && (c != other.c)
+            && (d != other.d));
   }
 
 }

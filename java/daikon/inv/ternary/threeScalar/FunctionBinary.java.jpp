@@ -149,10 +149,6 @@ public class CLASSNAME
     core.add_modified(x, y, z, count);
   }
 
-  public boolean inProcessSuppressOk() {
-    return core.inProcessSuppressOk();
-  }
-
   protected double computeProbability() {
     return core.computeProbability();
   }

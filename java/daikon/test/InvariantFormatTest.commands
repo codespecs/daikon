@@ -498,15 +498,15 @@ Goal (simplify): (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLe
 
 ; Cannot test FunctionBinary within this framework
 
-; c = 2a + 3b - 6
+; 2a + 3b - c - 6 = 0
 daikon.inv.ternary.threeScalar.LinearTernary
 int int int
-Goal (daikon): c == 2 * a + 3 * b - 6
-Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == 2 * a + 3 * b - 6
-Goal (esc): c == 2 * a + 3 * b - 6
-Goal (ioa): c = 2 * a + 3 * b - 6
-Goal (jml): c == 2 * a + 3 * b - 6
-Goal (simplify): (EQ |c| (+ (+ (* 2 |a|) (* 3 |b|)) -6))
+Goal (daikon): 2 * a + 3 * b - c - 6 == 0
+Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: 2 * a + 3 * b - c - 6 == 0
+Goal (esc): 2 * a + 3 * b - c - 6 == 0
+Goal (ioa): 2 * a + 3 * b - c - 6 = 0
+Goal (jml): 2 * a + 3 * b - c - 6 == 0
+Goal (simplify): (EQ 0 (+ (+ (* 2 |a|) (* 3 |b|) (* -1 |c|)) -6))
 1
 1
 -1
@@ -526,15 +526,15 @@ Goal (simplify): (EQ |c| (+ (+ (* 2 |a|) (* 3 |b|)) -6))
 10
 44
 
-; c = a - b
+; a - b - c = 0
 daikon.inv.ternary.threeScalar.LinearTernary
 int int int
-Goal (daikon): c == a - b
-Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == a - b
-Goal (esc): c == a - b
-Goal (ioa): c = a - b
-Goal (jml): c == a - b
-Goal (simplify): (EQ |c| (+ |a| (* -1 |b|)))
+Goal (daikon): a - b - c == 0
+Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: a - b - c == 0
+Goal (esc): a - b - c == 0
+Goal (ioa): a - b - c = 0
+Goal (jml): a - b - c == 0
+Goal (simplify): (EQ 0 (+ |a| (* -1 |b|) (* -1 |c|)))
 0
 0
 0

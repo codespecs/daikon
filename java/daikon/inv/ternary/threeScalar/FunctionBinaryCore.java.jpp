@@ -14,7 +14,6 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define FUNCTIONS Functions
   #define CLASSSTRING "FunctionBinaryCore"
-  #define VALUETRACKER ValueTracker
   #define EQUAL(a,b) ((a) == (b))
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME FunctionBinaryCoreFloat
@@ -22,7 +21,6 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE double
   #define FUNCTIONS FunctionsFloat
   #define CLASSSTRING "FunctionBinaryCoreFloat"
-  #define VALUETRACKER FloatValueTracker
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
 #else
   #error "bad def"
@@ -60,8 +58,6 @@ public final class CLASSNAME
   int values_seen = 0;
   int equal_values = 0;
 
-  private VALUETRACKER values_cache = new VALUETRACKER(8);
-
   public Invariant wrapper;
 
   public CLASSNAME(Invariant wrapper, String[] methodname, int methodNumber, int var_order) {
@@ -75,7 +71,6 @@ public final class CLASSNAME
   public Object clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
-      result.values_cache = (VALUETRACKER) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -186,21 +181,7 @@ public final class CLASSNAME
       return;
     }
 
-    values_cache.add(x, y, z);
-    if (wrapper.logOn() && methodname[1].equals(" || "))
-      wrapper.log ("Exiting add_modified with values: " + x + ", " + y + ", " + z + ", " +
-                   "ppt.num_values()==" + wrapper.ppt.num_values() + ", values_cache.num_values()==" +
-                   values_cache.num_values());
   }
-
-  /**
-   * Don't allow suppression because it will not allow us to track equal_values
-   * and values_cache which are needed for computeProbability
-   */
-  public boolean inProcessSuppressOk() {
-    return false;
-  }
-
 
   public double computeProbability() {
     if (wrapper.falsified) {
@@ -219,11 +200,11 @@ public final class CLASSNAME
     double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
     if (answer > Invariant.dkconfig_probability_limit) {
       wrapper.discardCode = DiscardCode.bad_probability;
-      wrapper.discardString = "Number of samples seen not close to goal: " + values_cache.num_values() + " samples " +
+      wrapper.discardString = "Number of samples seen not close to goal: " + wrapper.ppt.num_values() + " samples " +
         "seen,goal was 5";
     }
     if (wrapper.logDetail())
-      wrapper.log ("values_cache.num_values()==" + values_cache.num_values() + ", ppt.num_values()==" + wrapper.ppt.num_values());
+      wrapper.log ("ppt.num_values()==" + wrapper.ppt.num_values() + ", ppt.num_values()==" + wrapper.ppt.num_values());
     return answer;
   }
 

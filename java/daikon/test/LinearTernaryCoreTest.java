@@ -27,7 +27,7 @@ public class LinearTernaryCoreTest
     ltc.def_points[index] = new LinearTernaryCore.Point (x, y, z);
   }
 
-  void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c) {
+  void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     for (int i=0; i<triples.length; i++) {
       assertTrue(triples[i].length == 3);
@@ -37,7 +37,7 @@ public class LinearTernaryCoreTest
     // System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c);
     // System.out.println("actual: " + ltc.a + " " + ltc.b + " " + ltc.c);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
-    assertTrue(coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c);
+    assertTrue(coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d);
   }
 
   public void test_set_tri_linear() {
@@ -46,13 +46,13 @@ public class LinearTernaryCoreTest
     one_test_set_tri_linear(new int[][] { { 1, 2, 1 },
                                           { 2, 1, 7 },
                                           { 3, 3, 7 } },
-                            4, -2, 1);
+                            4, -2, -1, 1);
     //     # like the above, but swap y and z; results in division-by-zero problem
     //     # tri_linear_relationship((1,1,2),(2,7,1),(3,7,3))
     one_test_set_tri_linear(new int[][] { { 1, 2, 6 },
                                           { 2, 1, -4 },
                                           { 3, 3, 7 } },
-                            -3, 7, -5);
+                            -3, 7, -1, -5);
 
     // These have non-integer parameters; must have a LinearTernaryCoreFloat
     // in order to handle them.
@@ -86,11 +86,12 @@ public class LinearTernaryCoreTest
   private static VarInfoName y_vin = VarInfoName.parse("y");
   private static VarInfoName z_vin = VarInfoName.parse("z");
 
-  public void one_test_format(double a, double b, double c, String goal_result) {
+  public void one_test_format(double a, double b, double c, double d, String goal_result) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     ltc.a = a;
     ltc.b = b;
     ltc.c = c;
+    ltc.d = d;
     String actual_result = ltc.format_using(OutputFormat.DAIKON,
                                             x_vin, y_vin, z_vin);
     // System.out.println("Expecting: " + goal_result);
@@ -101,18 +102,18 @@ public class LinearTernaryCoreTest
   public void test_format() {
     // Need tests with all combinations of: integer/noninteger, and values
     // -1,0,1,other.
-    one_test_format(1, 2, 3, "z == x + 2 * y + 3");
-    one_test_format(-1, 2, 3, "z == - x + 2 * y + 3");
-    one_test_format(-1, -2, 3, "z == - x - 2 * y + 3");
-    one_test_format(-1, -2, -3, "z == - x - 2 * y - 3");
-    one_test_format(-1, 2, 0, "z == - x + 2 * y");
-    one_test_format(-1, 0, 3, "z == - x + 3");
-    one_test_format(0, -2, -3, "z ==  - 2 * y - 3");
-    one_test_format(-1, 1, 0, "z == - x + y");
-    one_test_format(-1, -1, 3, "z == - x - y + 3");
-    one_test_format(3, -2, -3, "z == 3 * x - 2 * y - 3");
-    one_test_format(3.2, -2.2, -3.4, "z == 3.2 * x - 2.2 * y - 3.4");
-    one_test_format(3.0, -2.0, -3.0, "z == 3 * x - 2 * y - 3");
-    one_test_format(-1.0, 1.0, 0.0, "z == - x + y");
+    one_test_format(1, 2, 1, 3, "x + 2 * y + z + 3 == 0");
+    one_test_format(-1, 2, 1, 3, "- x + 2 * y + z + 3 == 0");
+    one_test_format(-1, -2, -1, 3, "- x - 2 * y - z + 3 == 0");
+    one_test_format(-1, -2, -4, -3, "- x - 2 * y - 4 * z - 3 == 0");
+    one_test_format(-1, 2, 3, 0, "- x + 2 * y + 3 * z == 0");
+    one_test_format(-1, 0, 0, 3, "- x + 3 == 0");
+    one_test_format(0, -2, 5, -3, "- 2 * y + 5 * z - 3 == 0");
+    one_test_format(-1, 1, -2, 0, "- x + y - 2 * z == 0");
+    one_test_format(-1, -1, 2, 3, "- x - y + 2 * z + 3 == 0");
+    one_test_format(3, -2, 0, -3, "3 * x - 2 * y - 3 == 0");
+    one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
+    one_test_format(3.0, -2.0, 2.0, -3.0, "3 * x - 2 * y + 2 * z - 3 == 0");
+    one_test_format(-1.0, 1.0, 0.0, 0.0, "- x + y == 0");
   }
 }

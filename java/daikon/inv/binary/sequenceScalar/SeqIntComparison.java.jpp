@@ -15,7 +15,6 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY INT_ARRAY
   #define ELTONEOF EltOneOf
   #define SUBSEQUENCE SubSequence
-  #define VALUETRACKER ValueTracker
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS SequenceFloat
   #define PRIMITIVE double
@@ -23,7 +22,6 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY DOUBLE_ARRAY
   #define ELTONEOF EltOneOfFloat
   #define SUBSEQUENCE SubSequenceFloat
-  #define VALUETRACKER FloatValueTracker
 #endif
 
 #if defined(EQUAL)
@@ -153,8 +151,6 @@ public final class SEQINTEQUAL
 
   static boolean debugSeqIntComparison = false;
 
-  VALUETRACKER values_cache = new VALUETRACKER(8);
-
   protected SEQINTEQUAL(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
     Assert.assertTrue(sclvar().rep_type == ProglangType.PROGLANGTYPESCALAR);
@@ -274,7 +270,7 @@ public final class SEQINTEQUAL
         { seqvar().name, sclvar().name });
     return form[0] + form[1] + " " + EQUALSstring + " " + form[2] + form[3];
   }
-  public int num_values=0;
+
   public void add_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
@@ -302,15 +298,13 @@ public final class SEQINTEQUAL
         return;
       }
       #endif
-      values_cache.add(a[i], x);
-      num_values++;
     }
   }
 
   protected double computeProbability() {
     if (falsified) {
       return PROBABILITY_NEVER;
-    } if (num_values==0) {
+    } if (ppt.num_values() == 0) {
       discardCode = DiscardCode.not_enough_samples;
       discardString = "No samples seen for this Invariant";
       return PROBABILITY_UNJUSTIFIED;

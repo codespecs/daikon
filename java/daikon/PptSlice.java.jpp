@@ -312,21 +312,6 @@ public final class PPTSLICE1
   }
 
 #if 0
-  This method is only used by LinearTernary
-#endif
-#if defined(ARITY3)
-  // Returns the number of distinct points seen
-  public int num_point_values() {
-    if (values_cache == null) {
-      return 0;
-    } else {
-      return this.values_cache.num_point_values();
-    }
-
-  }
-#endif
-
-#if 0
   This method is only used by some twoSequence Invariants, like PairwiseIntComparison
 #endif
 #if defined(ARITY2)

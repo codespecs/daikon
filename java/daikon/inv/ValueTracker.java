@@ -5,15 +5,11 @@ import java.io.Serializable;
 import utilMDE.*;
 
 import daikon.Global;
-import daikon.inv.ternary.threeScalar.LinearTernaryCore;
-import daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat;
 
 /**
  * ValueTracker stores up to some maximum number of unique non-zero integer
  * values, at which point its rep is nulled.  This is used for efficienct
  * justification tests.
- *
- * Declared final only for efficiency.
  **/
 public class ValueTracker
   implements Serializable, Cloneable
@@ -21,7 +17,7 @@ public class ValueTracker
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030811L;
 
   public final int max_values;
 
@@ -41,15 +37,10 @@ public class ValueTracker
 
   private double[] elt_values_cache;
 
-  // Keep track of MINTRIPLES points seen to be used by computeProbability
-  // in LinearTernary
-  private double[][] point_tracker = new double[LinearTernaryCore.minTriples()][3];
-
   // Keep track of where the ends of the caches are
   private int values_end = 0;
   private int elt_values_end = 0;
   private int seq_index_values_end = 0;
-  private int point_tracker_end = 0;
 
   private int no_dup_elt_count; // Keeps track of number of arrays with length > 1
                                    // for the NoDuplicates invariant
@@ -69,10 +60,6 @@ public class ValueTracker
 
   public int num_values() {
     return values_end;
-  }
-
-  public int num_point_values() {
-    return point_tracker_end;
   }
 
   public int num_seq_index_values() {
@@ -112,15 +99,15 @@ public class ValueTracker
 
   public void add(long[] v1, long[] v2) {
     // The values_cache will always reach its capacity before
-    // the elt_values_cache, by definition
+    // the elt_values_cache (or at the same time), by definition
     if (values_cache != null) {
       long av1 = 0;
       for (int i = 0; i < v1.length; i++) {
-        av1 ^= v1[i];
+        av1 = hashLong(av1 + v1[i]);
       }
       long av2 = 0;
       for (int i = 0; i < v2.length; i++) {
-        av2 ^= v2[i];
+        av2 = hashLong(av2 + v2[i]);
       }
       add(av1, av2);
     }
@@ -170,19 +157,6 @@ public class ValueTracker
     if (values_cache != null) {
       add((37*((37*hashLong(v1)) + hashLong(v2))) + hashLong(v3));
     }
-
-    if (point_tracker == null) return;
-    // Add (v1,v2,v3) to the point_tracker if it hasn't been seen before
-    for (int i=0; i < point_tracker_end; i++) {
-      if ((v1 == point_tracker[i][0]) && (v2 == point_tracker[i][1]) &&
-          (v3 == point_tracker[i][2]))
-        return;
-    }
-    point_tracker[point_tracker_end][0] = v1;
-    point_tracker[point_tracker_end][1] = v2;
-    point_tracker[point_tracker_end][2] = v3;
-    if (++point_tracker_end == LinearTernaryCore.minTriples())
-      point_tracker = null;
   }
 
   public void add(long v1, long v2) {
@@ -309,19 +283,6 @@ public class ValueTracker
     if (values_cache != null) {
       add(((v1 * 17) + v2 * 13) + v3);
     }
-
-    if (point_tracker == null) return;
-    // Add (v1,v2,v3) to the point_tracker if it hasn't been seen before
-    for (int i=0; i < point_tracker_end; i++) {
-      if ((v1 == point_tracker[i][0]) && (v2 == point_tracker[i][1]) &&
-          (v3 == point_tracker[i][2]))
-        return;
-    }
-    point_tracker[point_tracker_end][0] = v1;
-    point_tracker[point_tracker_end][1] = v2;
-    point_tracker[point_tracker_end][2] = v3;
-    if (++point_tracker_end == LinearTernaryCore.minTriples())
-      point_tracker = null;
   }
 
   public void add(double v1, double v2) {
@@ -392,7 +353,10 @@ public class ValueTracker
         result.values_cache = (double[]) values_cache.clone();
       }
       if (elt_values_cache != null) {
-        elt_values_cache = (double[]) elt_values_cache.clone();
+        result.elt_values_cache = (double[]) elt_values_cache.clone();
+      }
+      if (seq_index_cache != null) {
+        result.seq_index_cache = (double[]) seq_index_cache.clone();
       }
       return result;
     } catch (CloneNotSupportedException e) {

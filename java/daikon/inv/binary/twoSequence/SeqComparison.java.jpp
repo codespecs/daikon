@@ -16,7 +16,6 @@ The correct way to build the system is to run 'make'.
                                       ArraysMDE.isSubset (v2, v1))
   #define SUBSEQUENCE SubSequence
   #define BASEISTYPE baseIsIntegral()
-  #define VALUETRACKER ValueTracker
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define PAIRWISECOMP_EQ PairwiseIntEqual
   #define PAIRWISECOMP_LT PairwiseIntLessThan
@@ -35,7 +34,6 @@ The correct way to build the system is to run 'make'.
   #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch (v1, v2)
   #define SUBSEQUENCE SubSequenceFloat
   #define BASEISTYPE baseIsFloat()
-  #define VALUETRACKER FloatValueTracker
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define PAIRWISECOMP_EQ PairwiseFloatEqual
   #define PAIRWISECOMP_LT PairwiseFloatLessThan
@@ -263,8 +261,6 @@ public class SEQSEQINTEQUAL
 
   boolean orderMatters;
 
-  protected VALUETRACKER values_cache = new VALUETRACKER(8);
-
   protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
     super(ppt);
     orderMatters = order;
@@ -274,7 +270,6 @@ public class SEQSEQINTEQUAL
   protected SEQSEQINTEQUAL(SEQCOMPAR_SWAP seq_swap) {
     super(seq_swap.ppt);
     orderMatters = seq_swap.orderMatters;
-    values_cache = (VALUETRACKER)seq_swap.values_cache.clone();
   }
   #endif
 
@@ -317,19 +312,6 @@ public class SEQSEQINTEQUAL
     }
     // System.out.println("SEQSEQINTEQUAL.instantiate => " + result.repr());
     return result;
-  }
-
-  protected Object clone() {
-    SEQSEQINTEQUAL result = (SEQSEQINTEQUAL) super.clone();
-    result.values_cache = (VALUETRACKER) values_cache.clone();
-    return result;
-  }
-
-  /**
-   * Suppress is not ok since we keep track of values with ValueTracker
-   */
-  public boolean inProcessSuppressOk() {
-    return false;
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -452,7 +434,6 @@ public class SEQSEQINTEQUAL
         ", " + var2 + "==" + ArraysMDE.toString(v2);
       return;
     }
-    values_cache.add(v1, v2);
   }
 
   protected double computeProbability() {

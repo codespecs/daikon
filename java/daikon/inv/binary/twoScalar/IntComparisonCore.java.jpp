@@ -42,7 +42,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030402L;
+  static final long serialVersionUID = 20030812L;
 
   public static final Logger debug
         = Logger.getLogger ("daikon.inv.binary.twoScalar." + CLASSSTRING);
@@ -65,8 +65,6 @@ public final class CLASSNAME
   public boolean obvious_can_be_gt;
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
-
-  public VALUETRACKER values_cache = new VALUETRACKER(8);
 
   public Invariant wrapper;
 
@@ -95,7 +93,6 @@ public final class CLASSNAME
   public Object clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
-      result.values_cache = (VALUETRACKER) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -144,7 +141,6 @@ public final class CLASSNAME
     }
 
     if (! changed) {
-      values_cache.add(v1, v2);
       return;
     }
 
@@ -163,7 +159,6 @@ public final class CLASSNAME
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
 
-    values_cache.add(v1, v2);
   }
 
   // This is very tricky, because whether two variables are equal should

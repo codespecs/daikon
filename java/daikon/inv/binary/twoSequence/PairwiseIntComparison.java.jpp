@@ -12,14 +12,12 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
   #define ELEMENTISTYPE elementIsIntegral()
-  #define VALUETRACKER ValueTracker
   #define SUBSEQUENCE SubSequence
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
   #define ELEMENTISTYPE elementIsFloat()
-  #define VALUETRACKER FloatValueTracker
   #define SUBSEQUENCE SubSequenceFloat
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
 #endif
@@ -176,13 +174,8 @@ public class PAIRWISEINTEQUAL
 
   final static boolean debugPairwiseIntComparison = false;
 
-  public VALUETRACKER values_cache = new VALUETRACKER(8);
-
-  protected int num_values;
-
   protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
-    num_values = 0;
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -190,8 +183,6 @@ public class PAIRWISEINTEQUAL
     super(swapped_pic.ppt);
     if (logOn())
       log ("Instantiated from resurrect_done_swapped");
-    this.values_cache = (VALUETRACKER)swapped_pic.values_cache.clone();
-    this.num_values = swapped_pic.num_values;
   }
   #endif
 
@@ -266,12 +257,6 @@ public class PAIRWISEINTEQUAL
 
     }
   #endif
-
-  protected Object clone() {
-    PAIRWISEINTEQUAL result = (PAIRWISEINTEQUAL) super.clone();
-    result.values_cache = (VALUETRACKER) values_cache.clone();
-    return result;
-  }
 
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
@@ -360,20 +345,11 @@ public class PAIRWISEINTEQUAL
         destroyAndFlow();
         return;
       }
-      num_values++;
-      values_cache.add(v1,v2);
     }
     if (logDetail() || debug.isLoggable(Level.FINE))
       log (debug, "saw add_modified (" + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2) + ")" +
-           " values_cache.num_values()==" + values_cache.num_values() + ", ppt.num_values()==" + ppt.num_values() +
+           " ppt.num_values()==" + ppt.num_values() + ", ppt.num_values()==" + ppt.num_values() +
            ", ppt.num_elt_values==" + ((PptSlice2) ppt).num_elt_values());
-  }
-
-  /**
-   * Suppress is not ok since we keep track of values with ValueTracker
-   */
-  public boolean inProcessSuppressOk() {
-    return false;
   }
 
   protected double computeProbability() {
@@ -381,7 +357,7 @@ public class PAIRWISEINTEQUAL
       discardCode = DiscardCode.not_enough_samples;
       discardString = "No samples seen for this Invariant";
       return Invariant.PROBABILITY_NEVER;
-    } else if (num_values==0)
+    } else if (((PptSlice2) ppt).num_elt_values()==0)
       return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
 #if !(defined(EQUAL) || defined(EQUALFLOAT))

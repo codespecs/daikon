@@ -375,16 +375,16 @@ public class PrintInvariants {
     }
     firstChar = temp.charAt(0);
 
-    //User wants to specify the variable names of interest
+    // User wants to specify the variable names of interest
     if (firstChar=='<') {
       if (temp.length() < 2)
         throw new IllegalArgumentException("Missing '>'\n"+usage);
       if (temp.indexOf('>',1) == -1)
         throw new IllegalArgumentException("Missing '>'\n"+usage);;
       StringTokenizer parenTokens = new StringTokenizer(temp,"<>");
-      if ((temp.indexOf('@')==-1 && parenTokens.countTokens() > 2)
-          || (temp.indexOf('@')>-1 && parenTokens.countTokens() > 4))
-        throw new IllegalArgumentException("Too many parens\n"+usage);
+      if ((temp.indexOf('@')==-1 && parenTokens.countTokens() > 0)
+          || (temp.indexOf('@')>-1 && parenTokens.countTokens() > 2))
+        throw new IllegalArgumentException("Too many brackets\n"+usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(),",");
       if (vars.hasMoreTokens()) {
         discVars = new ArrayList(3);
