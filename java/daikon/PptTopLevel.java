@@ -743,6 +743,9 @@ public class PptTopLevel
         }
         for (int di=0; di<binary.length; di++) {
           BinaryDerivationFactory d = binary[di];
+          if (Debug.logOn())
+            Debug.log (d.getClass(), vi1.ppt, new VarInfo[] {vi1, vi2},
+                           "Trying Binary Derivation ");
           BinaryDerivation[] bderivs = d.instantiate(vi1, vi2);
           if (bderivs != null) {
             for (int bdi=0; bdi<bderivs.length; bdi++) {
@@ -752,6 +755,10 @@ public class PptTopLevel
                 continue;
               }
               result.add(bderiv);
+              if (Debug.logOn())
+                Debug.log (d.getClass(), vi1.ppt, new VarInfo[] {vi1, vi2},
+                               "Created Binary Derivation "
+                                + bderiv.getVarInfo().name.name());
             }
           }
         }
@@ -1018,7 +1025,7 @@ public class PptTopLevel
       for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
         PptSlice view = (PptSlice) itor.next();
         if (view.invs.size() == 0) {
-          System.err.println("No invs for " + view.name);
+          // System.err.println("No invs for " + view.name);
           continue;
         }
         if (!view.no_invariants) {
@@ -1052,7 +1059,7 @@ public class PptTopLevel
         // among suppressors such that the weakened form of the inv
         // qualifies (e.g. LowerBound)
         if (!inv.falsified && inv.getSuppressor() == null) {
-          if (attemptSuppression (inv)) {
+          if (attemptSuppression (inv, true)) {
             if (debugSuppress.isDebugEnabled()) {
               debugSuppress.debug ("Suppressor res-suppressed");
             }
@@ -1069,7 +1076,7 @@ public class PptTopLevel
             debugSuppress.debug ("  Attempting re-suppression of: " + invSuppressed.repr());
           }
           PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
-          if (attemptSuppression (invSuppressed)) {
+          if (attemptSuppression (invSuppressed, true)) {
             if (debugSuppress.isDebugEnabled()) {
               debugSuppress.debug ("  Re-suppressed by " + invSuppressed.getSuppressor());
             }
@@ -1517,10 +1524,12 @@ public class PptTopLevel
       VarInfo var1 = var_infos[i1];
       if (!var1.isCanonical()) {
         if (debug.isDebugEnabled())
-          debug.debug ("Skipping binary: " + var1.name.name() + " (leader is "
-                       + var1.canonicalRep().name.name() + ")");
+          debug.debug ("Skipping var1 binary: " + var1.name.name()
+                     + " (leader is " + var1.canonicalRep().name.name() + ")");
         continue;
       }
+      if (debug.isDebugEnabled())
+        debug.debug ("Processing var1 binary: " + var1.name.name());
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -1531,13 +1540,13 @@ public class PptTopLevel
         VarInfo var2 = var_infos[i2];
         if (!var2.isCanonical()) {
           if (debug.isDebugEnabled())
-            debug.debug ("Skipping binary: " + var2.name.name() + "(leader is "
-                         + var2.canonicalRep().name.name() + ")");
+            debug.debug ("Skipping var2 binary: " + var2.name.name()
+                    + "(leader is " + var2.canonicalRep().name.name() + ")");
           continue;
         }
 
         if (debug.isDebugEnabled())
-          debug.debug ("Creating binary:" + var1.name.name() + ", "
+          debug.debug ("Creating binary: " + var1.name.name() + ", "
                        + var2.name.name());
 
         // Eventually, add back in this test as "if constant and no
@@ -1988,7 +1997,7 @@ public class PptTopLevel
    **/
   public void initiateSuppression() {
     if (!initiatedSuppression) {
-      suppressAll();
+      suppressAll (true);
       initiatedSuppression = true;
     }
   }
@@ -1999,10 +2008,16 @@ public class PptTopLevel
    * invariants. Can be called repeatedly to refresh suppression, but
    * this is an expensive operation.
    *
+   * @param in_process  should be set to true if samples are still being
+   *                    processed. false otherwise (ie, at the end).
+   *                    This is used to defer suppression on certain invariants
+   *                    that lose important internal state information when
+   *                    suppressed.
+   *
    * @see daikon.suppress.SuppressionFactory
    * @pre Invariants already instantiated
    **/
-  public void suppressAll() {
+  public void suppressAll (boolean in_process) {
     if (Daikon.use_suppression_optimization) {
       if (debugSuppressInit.isDebugEnabled()) {
         debugSuppressInit.debug ("SuppressAll for: " + name);
@@ -2011,7 +2026,7 @@ public class PptTopLevel
       for (Iterator i = invs.iterator(); i.hasNext(); ) {
         Invariant inv = (Invariant) i.next();
         if (inv.getSuppressor() == null) {
-          attemptSuppression (inv);
+          attemptSuppression (inv, in_process);
         }
       }
       if (debugSuppressInit.isDebugEnabled()) {
@@ -2034,18 +2049,27 @@ public class PptTopLevel
   /**
    * Try to suppress one invariant.  Links the invariant to a
    * SuppressionLink if suppression succeeds.
-   * @param inv the Invariant to attempt suppression on, which has to
-   * be a member of this.
+   * @param inv         the Invariant to attempt suppression on, which has to
+   *                    be a member of this.
+   * @param in_process  should be set to true if samples are still being
+   *                    processed. false otherwise (ie, at the end).
+   *                    This is used to defer suppression on certain invariants
+   *                    that lose important internal state information when
+   *                    suppressed.
    * @return true if invariant was suppressed
    * @see daikon.suppress.SuppressionFactory
    * @pre Invariants already instantiated.  inv not already suppressed.
    **/
-  public boolean attemptSuppression (Invariant inv) {
+  public boolean attemptSuppression (Invariant inv, boolean in_process) {
     if (Daikon.use_suppression_optimization) {
       if (inv.getSuppressor() != null) {
         System.err.println ("Error: the invariant " + inv.format() +
                             " already has a suppressor");
         Assert.assertTrue (inv.getSuppressor() == null);
+      }
+      if (in_process && !inv.inProcessSuppressOk()) {
+        inv.log ("No suppression search- inProcessSuppressOk is false");
+        return (false);
       }
       SuppressionFactory[] factories = inv.getSuppressionFactories();
       for (int i = 0; i < factories.length; i++) {
@@ -2093,6 +2117,13 @@ public class PptTopLevel
     Assert.assertTrue (supTemplate.invTypes.length == supTemplate.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
     debugSuppressFill.debug ("Starting template fill");
+
+    // This is useful if this code is getting called more than expected.
+    // System.out.println ("suppressionTemplate: " + supTemplate.searchString()
+    //                    + " ppt: " + name);
+    // Throwable stack = new Throwable("debug traceback");
+    // stack.fillInStackTrace();
+    // stack.printStackTrace();
 
     if (checkSelf) {
       firstLoop:
@@ -2153,16 +2184,33 @@ public class PptTopLevel
       for (int iPpts = dataflow_ppts.length - (checkSelf ? 1 : 2);
            iPpts >= 0; iPpts--) {
         PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
-        //         if (debugSuppressFill.isDebugEnabled()) {
-        //           debugSuppressFill.debug ("  Flow ppt: " + dataflowPpt.name);
-        //         }
+//         if (Debug.logOn() || debugSuppressFill.isDebugEnabled())
+//           Debug.log (debugSuppressFill, getClass(), this, varInfos,
+//                          "  Flow ppt: " + dataflowPpt.name);
         int[] dataflowTransform = dataflow_transforms[iPpts];
+        if (false && Debug.logOn()) {
+          String new_vars = "";
+          String cur_vars = "";
+          for (int ii = 0; ii < dataflowPpt.var_infos.length; ii++)
+            new_vars += dataflowPpt.var_infos[ii].name.name() + " ";
+          for (int ii = 0; ii < var_infos.length; ii++)
+            cur_vars += var_infos[ii].name.name() + " ";
+          Debug.log (getClass(), this, varInfos, "dataflow transforms = "
+                         + ArraysMDE.toString (dataflowTransform)
+                         + ": new_vars = " + new_vars
+                         + ": cur vars = " + cur_vars);
+        }
         VarInfo[] newVarInfos = new VarInfo[varInfos.length];
         forEachVarInfo:
         for (int iVarInfos = 0; iVarInfos < varInfos.length; iVarInfos++) {
           int newIndex = dataflowTransform[varInfos[iVarInfos].varinfo_index];
           if (newIndex >= 0) {
             newVarInfos[iVarInfos] = dataflowPpt.var_infos[newIndex];
+//             if (Debug.logOn() || debugSuppressFill.isDebugEnabled())
+//               Debug.log (debugSuppressFill, GetClass(), this, varInfos,
+//                             "transformed "
+//                             + varInfos[iVarInfos].name.name() + " to "
+//                             + newVarInfos[iVarInfos].name.name());
           } else {
             continue forEachTransform;
           }
