@@ -98,6 +98,7 @@ It describes Daikon version 2.4.8, released May 13, 2003.
 * GUIs::                        
 * Front ends::                  
 * Enhancing Daikon output::     
+* Daikon technologies::         
 * Tools::                       
 * Extending Daikon::            
 * Troubleshooting::             
@@ -288,6 +289,12 @@ Enhancing conditional invariant detection
 * Static analysis for splitters::  
 * Cluster analysis for splitters::  
 
+Daikon technologies
+
+* Dataflow hierarchy::          
+* Equality optimization::       
+* Suppression optimization::    
+
 Tools
 
 * MergeESC::                    
@@ -299,6 +306,7 @@ Extending Daikon
 * New derived variables::       
 * New formatting for invariants::  
 * New front ends::              
+* New suppressors::             
 
 Troubleshooting
 
@@ -1896,6 +1904,15 @@ options.
 Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
 filtering.
+
+@item --nohierarchy
+Avoid connecting program points in a dataflow hierarchy as described
+in @ref{Dataflow hierarchy}.  For example, Daikon normally connects
+the ENTER program points of a class with the class's CLASS program
+point, so that any invariant that holds on the CLASS program point is
+considered to hold true on the ENTER program point.  With no
+hierarchy, each program point is treated independently.  This is for
+using Daikon on applications that do not have a concept of hierarchy.
 
 @item --esc_output
 Write output in ESC-like format.
@@ -4595,7 +4612,7 @@ produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 @command{convertcsv.pl} without any arguments in order to see a usage
 message.
 
-@node    Enhancing Daikon output, Tools, Front ends, Top
+@node    Enhancing Daikon output, Daikon technologies, Front ends, Top
 @chapter Enhancing Daikon output
 
 @menu
@@ -5090,7 +5107,130 @@ distribution. The xmeans code and executable are publicly available at
 @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
 
-@node    Tools, Extending Daikon, Enhancing Daikon output, Top
+
+@node    Daikon technologies, Tools, Enhancing Daikon output, Top
+@chapter Daikon technologies
+
+@menu
+* Dataflow hierarchy::          
+* Equality optimization::       
+* Suppression optimization::    
+@end menu
+
+This chapter describes some of the techniques used in Daikon to make
+it efficient in terms of time and space needed.  These techniques can
+be enabled or disabled at the Daikon command line, as described in
+@ref{Command line options}.
+
+@c @node    Elimination of redundant invariants, Daikon technologies, Top
+@c @section Elimination of redundant invariants
+
+The major way Daikon optimizes its use of computer resources is to
+avoid performing work for redundant invariants.  For example, if
+Daikon does not check a redundant invariant for some data samples,
+some time can be saved.  If Daikon does not instantiate redundant
+invariants, then space and time can be saved.  Some invariants are
+redundant @emph{statically} --- that is, their redundancy can be known
+without any sample data.  For example, "A[i] is an element of A[]" can
+be known statically.  Other invariants are redundant
+@emph{dynamically} --- Daikon can only know they are redundant after
+some or all sample data is seen.  The next three sections show ways
+that Daikon is optimized based on saving work for dynamically
+redundant invariants.
+
+More detail can be found in Chapter 7, ``Scalability'', of
+@cite{Automatic Generation and Checking of Program Specifications}
+(Technical report MIT-LCS-TR-852, at
+@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
+Jeremy W. Nimmer's Master's thesis.  and in Chapter 5, ``Enabling
+Incremental Dynamic Invariant Detection'', ofToh Ne Win's Master's
+thesis (Technical report to be filed, at
+@uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
+
+
+@node    Dataflow hierarchy, Equality optimization, Daikon technologies, Daikon technologies
+@section Dataflow hierarchy
+
+Dataflow hierarchy is a means to relate variables in different program
+points in a partial ordering.  Variables in program point X are
+related to variables in another program point Y by a "flow" relation
+if every sample seen of X's variables is also meant to be seen at Y.
+Y is called a parent program point of X.  For example, all the field
+variables in the ENTRY program point of a method in class C relate to
+the field variables in the CLASS program point of C.  This is because
+the state of C, when in context at the entry ENTRY program point, is
+also in context at the CLASS program point.  Any invariant that holds
+true on a parent program point must hold on the child program point.
+The purpose of dataflow hierarchy is to reduce the presence of
+redundant invariants by only keeping invariants at the highest parent
+at which they apply.  This saves both time and space.
+
+There are many ways that program points can be connected.  Daikon
+provides for four ways.  First, CLASS program points are parents of
+all their method program points.  Second, between two classes that are
+related by inheritance, corresponding program points relate --- for
+example, java.util.Vector:::CLASS is a child of
+java.util.List:::Class.  Third, when a program point contains
+variables of a type whose CLASS program point is also available to
+Daikon, the former program point's variables relate to the latter
+program point's CLASS method.  For example, if X:::y is of type Y, and
+Y contains fields a and b, X:::y, X:::y.a and X:::y.b relate to
+Y:::this, Y:::b and Y:::a.  Fourth, variables at ENTER program
+points are related to the "orig" versions at EXIT program points.
+
+When using Daikon, the above four ways of relations in the dataflow
+hierarchy will result in some true invariants that are not reported at
+some program points.  However, the invariant will be present in some
+parent program point.  Dataflow hierarchy is enabled by default, but
+can be disabled by the --nohierarchy flag.  When dataflow is enabled,
+the only samples that are examined by Daikon are the EXIT program
+points (plus "orig" variables) since these contain a complete view of
+the data.
+
+@node    Equality optimization, Suppression optimization, Dataflow hierarchy, Daikon technologies
+@section Equality optimization
+
+When N variables are equal within a program point there will be
+N(N-1)/2 pairwise invariants to represent the equality within the
+equal variables, and N copies of every other invariant.  For example,
+if a, b, and c are equal, then "a == b", "a == c", "b == c" will be
+reported as pairwise invariants, and "odd(a)", "odd(b)" and "odd(c)"
+will be reported.  If the variables will always be equal, then
+reporting N times the invariants is wasteful.  Daikon thus treats
+equality specially.
+
+Each group of variables that are equal from the start of inferencing
+are placed in @emph{equality sets}.  An equality set can hold an
+arbitrary number of variables, and replaces the O(N^2) pairwise
+equality invariants.  Every equality set has a leader or
+@emph{canonical} representation by a variable in the set.
+Non-equality invariants are only instantiated and checked on the
+leader.  When printing invariants, Daikon reports only invariants on
+the leader.  The user can easily determine that "odd(a)" and "a == b"
+imply "odd(b)".  Equality can be turned off at the command line with
+the --noequality flag.
+
+@node    Suppression optimization,  , Equality optimization, Daikon technologies
+@section Suppression optimization
+
+Suppression optimization allows for elimination of redundancy based on
+how a set of invariants might imply an invariant.  For example, "a[]
+contains no duplicates" implies "a[i..j] contains no duplicates".  We
+say that a set of @emph{suppressors} suppress a @emph{suppressee}
+invariant.  Suppression also works across the program point hierarchy:
+suppressors can exist in parent program points.  Suppressed invariants
+are not eliminated during inferencing, but tagged as suppressed.  They
+are not checked against samples while suppressed.  The only way an
+invariant becomes unsuppressed is if one of its suppressors becomes
+falsified, in which case the implication for supression no longer
+holds.
+
+Thus when certain invariants are not found in Daikon, they may be
+hidden due to suppression.  Suppression is off by default, but it can
+be enabled by the --suppress command line flag.
+
+
+@node    Tools, Extending Daikon, Daikon technologies, Top
 @chapter Tools
 
 This chapter gives information about tools that are part of the Daikon
@@ -5155,6 +5295,7 @@ technical report MIT-LCS-TR-852, at
 * New derived variables::       
 * New formatting for invariants::  
 * New front ends::              
+* New suppressors::             
 @end menu
 
 @node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
@@ -5351,7 +5492,7 @@ new output format.
 @end itemize
 
 
-@node    New front ends,  , New formatting for invariants, Extending Daikon
+@node    New front ends, New suppressors, New formatting for invariants, Extending Daikon
 @section New front ends
 
 @cindex front end, writing
@@ -5459,6 +5600,71 @@ class Example @{
 @}
 @end example
 
+
+
+@node New suppressors,  , New front ends, Extending Daikon
+@section New suppressors
+
+As mentioned in @ref{Daikon technologies} one way to make Daikon more
+efficient, and to reduce clutter in output to the user, is to reduce
+the number of redundant invariants of various kinds.  This section
+describes how to add a new suppressor relation, such that if invariant
+A implies B, B is not checked as long as A holds, saving time.
+Suppression implications use some terminology.  A @emph{suppressor} is
+one of a set of invariants that imply and suppress a
+@emph{suppressee}.  A @emph{suppression factory} is the Java class
+that handles the finding of suppressors for a suppressee.  There is
+one suppression factory for each kind of suppression relation (i.e.,
+each unique tuple of suppressors and suppressees).  A
+@emph{suppression link} is what a suppression factory produces and
+serves as the data structure to track the suppression relation.  When
+writing new suppressors, the programmer only needs to write new
+suppression factories and install them properly.  The Daikon system
+manages the suppression link objects.
+
+The steps to do this are as follows:
+
+@enumerate
+@item
+In the daikon.inv package, find the invariant type that is to be
+suppressed by a set of suppressor invariants.  Suppression factories
+are connected, in code and in operation, to the invariants they
+suppress.
+
+@item
+Add an inner class to the suppressor invariant that inherits from
+daikon.suppress.SuppressionFactory.  It must support the method:
+
+  @samp{public abstract SuppressionLink generateSuppressionLink (Invariant inv)}
+
+where "inv" is the suppressee.  During inferencing, Daikon will pass
+potential suppressees to the generateSuppressionLink method and the
+method will tell Daikon whether suppression can occur.
+
+@item
+Create logic to support the searching of the desired suppressors.  The
+factory itself may not search for suppressors, but must use
+@emph{suppression templates}, which tell Daikon what kinds of
+invariants to look for.  The suppression factory should create a
+template with the right specifications filled in, and then pass the
+template to the method:
+
+  @samp{public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)}
+
+in daikon.PptTopLevel.  If a template fill is successful, the template
+will contain the suppressors, and the method will return true.  The
+generateSuppressionLink method should return @samp{null} if the
+template fill was unsuccessful.
+
+@item
+Install the suppression factory by adding a single static instance of
+it to the list of factories returned by the @samp{getSuppressionFactories}
+method of the suppressor.
+
+@end enumerate
+
+More detailed instructions can be found in the Javadoc of the
+@samp{daikon.suppress} package.
 
 @node    Troubleshooting, Details, Extending Daikon, Top
 @chapter Troubleshooting
@@ -6377,7 +6583,9 @@ program point) once, then discard it.  By contrast, Daikon 1 and
 Daikon 2 made multiple passes over the data.  This simplified their
 algorithms but required storing all the data in memory at once, which
 was prohibitive, particularly since data trace files may be gigabytes
-in size.
+in size.  Daikon 3 also introduces the idea of a @emph{dataflow
+hierarchy}, a way to relate and connect program points based on their
+variables, as explained in @ref{Daikon technologies}.
 
 
 @node    License, Credits, History, Details
