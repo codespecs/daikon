@@ -62,6 +62,8 @@ import java.util.*;
 // to that index.
 
 public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactory {
+  static boolean debug_set = false;
+  static boolean debug_class_match = false;
 
   // When calling/creating the derivations, arrange that:
   //   base1 is the sequence
@@ -70,7 +72,11 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
 
     Debug debug = null;
-    if (Debug.logOn())
+    if (!debug_set) {
+      debug_class_match = Debug.class_match (getClass());
+      debug_set = true;
+    }
+    if (debug_class_match && Debug.logOn())
       debug = Debug.newDebug (getClass(), vi1.ppt, Debug.vis (vi1, vi2));
     if (debug != null)
       debug.log ("Considering Sequence Subscript Derivation");
