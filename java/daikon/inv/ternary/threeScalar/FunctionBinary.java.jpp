@@ -65,6 +65,10 @@ import java.util.logging.Level;
  * to these methods
  */
 public abstract class CLASSNAME extends SUPERCLASS {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20031030L;
 
   public static boolean dkconfig_enabled = true;
 

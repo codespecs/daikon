@@ -46,6 +46,10 @@
  * permutation result = FUNCTION (arg1, arg2)
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20031030L;
 
   #ifdef ARG1_BOUND
     // arg1 must be between arg1_bound[0] and arg1_bound[1] inclusive
