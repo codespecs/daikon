@@ -125,7 +125,6 @@ public final class CLASSNAME
   // finds a line with a different order.  Current code always guarantees
   // that the points arrive in the same order (I think).
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
-
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("min point: " + wrapper.ppt.name +": " + x + ", " + y);
@@ -166,7 +165,9 @@ public final class CLASSNAME
         max_y = y_cache[max_j];
 
         // calculate a and b for this pair and remember them as min/max a,b
-        set_bi_linear(min_x, max_x, min_y, max_y);
+        if (set_bi_linear(min_x, max_x, min_y, max_y) == InvariantStatus.FALSIFIED) {
+          return InvariantStatus.FALSIFIED;
+        }
         min_a = a;
         max_a = a;
         min_b = b;
@@ -305,18 +306,18 @@ public final class CLASSNAME
    * Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
    * @return true if such an (a,b) exists
    **/
-  boolean set_bi_linear(PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1) {
+  private InvariantStatus set_bi_linear(PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1) {
     if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
-      return false;
+      return InvariantStatus.FALSIFIED;
     }
     a = (y1-y0)/(x1-x0);
     b = (y0*x1-x0*y1)/(x1-x0);
-    return true;
+    return InvariantStatus.NO_CHANGE;
   }
 
   public boolean enoughSamples() {

@@ -1420,12 +1420,14 @@ public final class ONEOFSCALAR
   /* Old version with interleaved #ifdefs, replaced with following version
      using separate ELT and non-elt routines with a shared subroutine
 #if defined(IS_ELT)
-  public void add_modified(INT[] a, int count) {
+  public InvariantStatus add_modified(INT[] a, int count) {
+    InvariantStatus status = InvariantStatus.NO_CHANGE;
   OUTER:
    for (int ai=0; ai<a.length; ai++) {
     INT v = a[ai];
 #else
-  public void add_modified(INT v, int count) {
+  public InvariantStatus add_modified(INT v, int count) {
+    InvariantStatus status = InvariantStatus.NO_CHANGE;
   #if !(defined(SCALAR) || defined(FLOAT))
     Assert.assertTrue(Intern.isInterned(v));
   #endif
@@ -1437,7 +1439,7 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT)
         continue OUTER;
 #else
-        return;
+        return InvariantStatus.NO_CHANGE;
 #endif
       }
     }
@@ -1481,12 +1483,12 @@ public final class ONEOFSCALAR
 
     elts[num_elts] = v;
     num_elts++;
+    status = InvariantStatus.WEAKENED;
 #if defined(IS_ELT)
    }
-  }
-#else
-  }
 #endif
+  return status;
+  }
   */
 
 

@@ -236,6 +236,7 @@ public class LOWERBOUNDCORE
       NUM_MIN2 = NUM_MIN1;
       MIN1 = v;
       NUM_MIN1 = count;
+      return InvariantStatus.WEAKENED;
     } else if (v == MIN2) {
       NUM_MIN2 += count;
     } else if (v LT MIN2) {

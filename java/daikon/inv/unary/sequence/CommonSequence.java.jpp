@@ -115,9 +115,10 @@ public class CLASSNAME
 
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     // System.out.println ("common: " + ArraysMDE.toString (a));
-    if (intersect==null)
+    if (intersect==null) {
       intersect = a;
-    else {
+      return InvariantStatus.NO_CHANGE;
+    } else {
       PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
       int    size = 0;
       for (int i=0; i<a.length; i++) {

@@ -149,7 +149,6 @@ public class CLASSNAME
     }
     int len = x_arr.length;
     // int len = Math.min(x_arr.length, y_arr.length);
-
     for (int i=0; i<len; i++) {
       PRIMITIVE x  = x_arr[i];
       PRIMITIVE y = y_arr[i];

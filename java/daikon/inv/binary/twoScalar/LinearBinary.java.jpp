@@ -33,6 +33,7 @@ import daikon.inv.DiscardInfo;
 import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
+import daikon.inv.InvariantStatus;
 
 /**
  * Represents a Linear invariant (y = ax + b) between two PRIMITIVE

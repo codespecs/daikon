@@ -76,9 +76,10 @@ public class CommonStringSequence
   }
 
   public InvariantStatus add_modified(String[] a, int count) {
-    if (intersect==null)
+    if (intersect==null) {
       intersect = a;
-    else {
+      return InvariantStatus.NO_CHANGE;
+    } else {
       String[] tmp = new String[intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)

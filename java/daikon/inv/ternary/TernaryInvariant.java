@@ -5,6 +5,7 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import utilMDE.Assert;
 import utilMDE.ArraysMDE;
+import daikon.inv.InvariantStatus;
 
 /**
  * Exists simply to provide a more intelligent resusurrect_done method.

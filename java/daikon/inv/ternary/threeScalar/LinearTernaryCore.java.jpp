@@ -198,7 +198,6 @@ public final class CLASSNAME
    *
    * @see FuzzyFloat
    */
-
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     // XXX TODO FIXME: This method does not correctly deal with
     // calling addToFlow.  A proper clone, etc. should be created and

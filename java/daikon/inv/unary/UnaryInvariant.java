@@ -2,11 +2,13 @@ package daikon.inv.unary;
 
 import daikon.inv.*;
 import daikon.PptSlice;
-import daikon.inv.Invariant;
+import daikon.inv.*;
 import utilMDE.Assert;
+import daikon.inv.InvariantStatus;
 
 /**
- * Exists simply to provide the do-nothing resusurrect_done method.
+ * Exists simply to provide the do-nothing resusurrect_done method and
+ * abstract add method.
  **/
 public abstract class UnaryInvariant
   extends Invariant
