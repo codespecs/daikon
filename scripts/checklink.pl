@@ -33,6 +33,8 @@ use strict;
 
 package W3C::UserAgent;
 
+no warnings 'recursion';
+
 use LWP::UserAgent      qw();
 # @@@ Needs also W3C::CheckLink but can't use() it here.
 
@@ -1900,6 +1902,7 @@ EOF
 
   # Show directory redirects
   if ($Opts{Dir_Redirects} && ($#dir_redirect_urls > -1)) {
+    print_doc_header();
     print('<h3>') if $Opts{HTML};
     print("\nList of directory redirects");
     print("</h3>\n<p>The links below are not broken, but the document does not use the exact URL.</p>") if $Opts{HTML};
