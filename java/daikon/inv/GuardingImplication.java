@@ -4,6 +4,12 @@ import daikon.*;
 
 import java.util.*;
 
+/**
+ *  This is a special implication invariant that guards any invariants that
+ *  are over variables that are sometimes missing.  For example, if the
+ *  invariant 'a.x = 0' is true, the guarded implication is 'a != null =>
+ *  a.x = 0'
+ **/
 public class GuardingImplication
   extends Implication
 {
