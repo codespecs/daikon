@@ -186,8 +186,10 @@ END {
     open(IN, "$javafile") or die "Cannot open $javafile: $!";
     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
 
+    # We assume that classes never have the same sans-package name
     my $classname = $javafile;
     $classname =~ s/\.java$//;
+    $classname =~ s|^.+/([^/]+)$|\1|; # Strip directories
 
     while (defined($line = <IN>)) {
       if ($line =~ /\b(?:public|private|protected)\b[^=()\n]*\b(\w+)\s*(\([^\)]*\))/) {
