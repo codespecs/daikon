@@ -1867,25 +1867,19 @@ public class PptTopLevel extends Ppt {
       }
 
       String inv_rep = inv.format();
-      if (inv_rep != null) {
-	if (Daikon.suppress_implied_controlled_invariants) {
-	  Invariant cont_inv = find_controlling_invariant(inv);
-	  if (cont_inv != null) { // TODO: && will_print(cont_inv)
-	    // TODO: Fix global statistics for this?
-	    continue;
-	  }
+      Assert.assert(inv_rep != null, "Format was null: " + inv.repr());
+      if (Daikon.suppress_implied_controlled_invariants) {
+	Invariant cont_inv = find_controlling_invariant(inv);
+	if (cont_inv != null) { // TODO: && will_print(cont_inv)
+	  // TODO: Fix global statistics for this?
+	  continue;
 	}
-	System.out.println(inv_rep + num_values_samples);
-	if (Global.debugPrintInvariants) {
-	  System.out.println("  [" + inv.repr() + "]");
-	}
-	Global.reported_invariants++;
-      } else {
-        if (Global.debugPrintInvariants) {
-          System.out.println("[format returns null: " + inv.repr() + " ]");
-        }
-        Global.unjustified_invariants++;
       }
+      System.out.println(inv_rep + num_values_samples);
+      if (Global.debugPrintInvariants) {
+	System.out.println("  [" + inv.repr() + "]");
+      }
+      Global.reported_invariants++;
     }
   }
 
