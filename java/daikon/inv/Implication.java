@@ -243,7 +243,7 @@ public class Implication
 
   /**
    * Logs a description of the invariant and the specified msg via the
-   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
    * VarInfo[], String)}.  Uses the consequent as the logger
    */
 
@@ -256,7 +256,7 @@ public class Implication
 
  /**
   * Logs a description of the invariant and the specified msg via the
-  * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+  * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
   * VarInfo[], String)}.  Uses the consequent as the logger
   *
   * @return whether or not it logged anything

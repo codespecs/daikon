@@ -3,12 +3,12 @@ package daikon.split;
 import daikon.*;
 
 import utilMDE.*;
+import utilMDE.FileCompiler;
 import jtb.ParseException;
-import org.apache.oro.text.regex.*;
-// import java.util.regex.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.*;
 
 /**
  * This class contains static method read_spinfofile( spinfofilename ),
@@ -16,9 +16,6 @@ import java.util.logging.Logger;
  **/
 public class SplitterFactory {
   private SplitterFactory() { throw new Error("do not instantiate"); }
-
-  private static Perl5Matcher re_matcher = new Perl5Matcher();
-  private static Perl5Compiler re_compiler = new Perl5Compiler();
 
   public static final Logger debug =
     Logger.getLogger("daikon.split.SplitterFactory");
@@ -34,6 +31,22 @@ public class SplitterFactory {
    * should be deleted on exit.
    **/
   public static boolean dkconfig_delete_splitters_on_exit = true;
+
+  /**
+   * String.  Specifies which Java compiler is used to compile
+   * Splitters.  This can be the full path name or whatever is used on
+   * the commandline.
+   **/
+  private static String dkconfig_compiler = "javac";
+
+  /**
+   * Positive integer.  Specifies the Splitter compilation timeout, in
+   * seconds, after which the compilation process is terminated and
+   * retried, on the assumption that it has hung.
+   **/
+  public static int dkconfig_compile_timeout = 6;
+
+  private static FileCompiler fileCompiler; // lazily initialized
 
   // It would be better for SplitterFactory to use PrintWriters (or
   // PrintStreams) backed by ByteArrayOutputStreams, rather than
@@ -112,6 +125,7 @@ public class SplitterFactory {
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)
     throws IOException {
+
     // System.out.println("loadSplitters for " + ppt.name);
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
@@ -150,14 +164,21 @@ public class SplitterFactory {
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }
-    FileCompiler.compileFiles(fileNames);
+    compileFiles(fileNames);
     SplitterLoader loader = new SplitterLoader();
     for (int i = 0; i < splitterObjects.length; i++) {
       splitterObjects[i].load(loader);
     }
   }
 
-
+  private static void compileFiles(List /*String*/ fileNames) {
+    // We delay setting fileCompiler until now because we want to permit
+    // the user to set the dkconfig_compiler variable.
+    if (fileCompiler == null) {
+      fileCompiler = new FileCompiler(dkconfig_compiler, dkconfig_compile_timeout);
+    }
+    fileCompiler.compileFiles(fileNames);
+  }
 
   /**
    * Finds the PptTopLevel for ppt_name.
@@ -173,7 +194,7 @@ public class SplitterFactory {
       return (PptTopLevel) exact_result;
     }
     if (ppt_name.endsWith(":::EXIT")) {
-      String regex = qm(ppt_name) + "[0-9]+";
+      String regex = Pattern.quote(ppt_name) + "[0-9]+";
       PptTopLevel numbered_exit = findPptRegex(regex, all_ppts);
       if (numbered_exit != null) {
         return numbered_exit;
@@ -186,13 +207,13 @@ public class SplitterFactory {
     int index = ppt_name.indexOf("OBJECT");
     if (index == -1) {
       // Didn't find "OBJECT" suffix; add ".*EXIT".
-      regex = qm(ppt_name) + ".*EXIT";
+      regex = Pattern.quote(ppt_name) + ".*EXIT";
     } else {
       // Found "OBJECT" suffix.
       if (ppt_name.length() > 6) {
-        regex = qm(ppt_name.substring(0, index-1)) + ":::OBJECT";
+        regex = Pattern.quote(ppt_name.substring(0, index-1)) + ":::OBJECT";
       } else {
-        regex = qm(ppt_name);
+        regex = Pattern.quote(ppt_name);
       }
     }
 
@@ -203,11 +224,11 @@ public class SplitterFactory {
 
   private static PptTopLevel findPptRegex(String ppt_regex, PptMap all_ppts) {
     // System.out.println("findPptRegex: " + ppt_regex);
-    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(ppt_regex);
+    Pattern pattern = Pattern.compile(ppt_regex);
     for (Iterator itor = all_ppts.pptIterator(); itor.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel)itor.next();
       String name = ppt.name;
-      java.util.regex.Matcher matcher = pattern.matcher(name);
+      Matcher matcher = pattern.matcher(name);
       // System.out.println("  considering " + name);
       if (matcher.find()) {
         // return more than one? do more than one match??
@@ -280,14 +301,6 @@ public class SplitterFactory {
       debugPrintln(e.toString());
     }
     return ""; // Use current directory
-  }
-
-  /**
-   * Used to abbreviate the Perl5Compiler.quotemeta(exp) command.
-   * @return Perl5Compiler.quotemeta(exp).
-   */
-  private static String qm(String exp) {
-    return Perl5Compiler.quotemeta(exp);
   }
 
   /**

@@ -1047,6 +1047,13 @@ public final class UtilMDE {
     }
   }
 
+  /** Return a String containing all the characters from the input stream. **/
+  public static String streamString(java.io.InputStream is) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    streamCopy(is, baos);
+    return baos.toString();
+  }
+
 
   ///
   /// String

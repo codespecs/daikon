@@ -6285,21 +6285,6 @@ Daikon; it also tells you how to report bugs in a useful manner.
 @end menu
 
 
-@node    Installation problems, dfej problems, Troubleshooting, Troubleshooting
-@section Problems installing Daikon
-
-The tar file may appear to contain a file named @file{././@@LongLink}.
-This is inserted in a tar file when a filename is longer than a specific
-maximum length (often 100 characters).  If you see this file, then your
-version of the tar program does not recognize this indication.  It is
-possible that some filenames (including the one contained in
-@file{././@@LongLink}) have been truncated.
-
-@c As of Daikon 2.3.5 (March 1, 2002), the two affected files were:
-@c daikon/java/jakarta-oro-2.0.3/docs/classes/org/apache/oro/text/regex/MalformedPatternException.class
-@c daikon/java/jakarta-oro-2.0.3/docs/classes/org/apache/oro/text/perl/MalformedPerl5PatternException.class
-
-
 @node    dfej problems, dfec problems, Installation problems, Troubleshooting
 @section Problems with dfej
 
@@ -7416,14 +7401,6 @@ may be redistributed or modified under the terms of the GNU Library
 General Public License version 2.  A copy of this license is included
 with the Daikon distribution as the file
 @file{java/gnu/getopt/COPYING.LIB}.
-
-@comment We plan to stop using the org.apache.oro.* regex package
-@comment soon, at which point this paragraph should be removed.
-@c This product includes software developed by the Apache Software
-@c Foundation (http://www.apache.org/), Copyright (c) 2000 The Apache
-@c Software Foundation.  All rights reserved.  The license governing this
-@c software is included with the Daikon distribution as the file
-@c @file{java/jakarta-oro-2.0.6/LICENSE}.
 
 Daikon's unit tests use the JUnit testing framework, which is governed
 by the Common Public License, version 1.0.  JUnit is provided on an

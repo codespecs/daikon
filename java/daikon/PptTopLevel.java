@@ -593,9 +593,7 @@ public class PptTopLevel extends Ppt {
           for (int udi = 0; udi < uderivs.length; udi++) {
             UnaryDerivation uderiv = uderivs[udi];
             if ((Daikon.var_omit_regexp != null)
-              && Global.regexp_matcher.contains(
-                uderiv.getVarInfo().name.name(),
-                Daikon.var_omit_regexp)) {
+                && Daikon.var_omit_regexp.matcher(uderiv.getVarInfo().name.name()).find()) {
               continue;
             }
             result.add(uderiv);
@@ -662,9 +660,7 @@ public class PptTopLevel extends Ppt {
             for (int bdi = 0; bdi < bderivs.length; bdi++) {
               BinaryDerivation bderiv = bderivs[bdi];
               if ((Daikon.var_omit_regexp != null)
-                && Global.regexp_matcher.contains(
-                  bderiv.getVarInfo().name.name(),
-                  Daikon.var_omit_regexp)) {
+                  && Daikon.var_omit_regexp.matcher(bderiv.getVarInfo().name.name()).find()) {
                 continue;
               }
               result.add(bderiv);
@@ -757,9 +753,7 @@ public class PptTopLevel extends Ppt {
               for (int tdi = 0; tdi < tderivs.length; tdi++) {
                 TernaryDerivation tderiv = tderivs[tdi];
                 if ((Daikon.var_omit_regexp != null)
-                  && Global.regexp_matcher.contains(
-                    tderiv.getVarInfo().name.name(),
-                    Daikon.var_omit_regexp)) {
+                    && Daikon.var_omit_regexp.matcher(tderiv.getVarInfo().name.name()).find()) {
                   continue;
                 }
                 result.add(tderiv);

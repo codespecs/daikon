@@ -18,7 +18,7 @@ export JDKDIR=${JDKDIR:-/g2/jdk}
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then
-  CPADD=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/log4j.jar
+  CPADD=${DAIKONDIR}/java
 else
   CPADD=${DAIKONDIR}/daikon.jar
 fi

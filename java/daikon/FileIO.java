@@ -167,10 +167,10 @@ public final class FileIO {
         "read_declaration_file "
           + filename
           + ((Daikon.ppt_regexp != null)
-            ? " " + Daikon.ppt_regexp.getPattern()
+            ? " " + Daikon.ppt_regexp.pattern()
             : "")
           + ((Daikon.ppt_omit_regexp != null)
-            ? " " + Daikon.ppt_omit_regexp.getPattern()
+            ? " " + Daikon.ppt_omit_regexp.pattern()
             : ""));
     }
 
@@ -295,8 +295,7 @@ public final class FileIO {
       // Can't do this test in read_VarInfo, it seems, because of the test
       // against null above.
       if ((Daikon.var_omit_regexp != null)
-          && Global.regexp_matcher.contains(vi.name.name(),
-                                            Daikon.var_omit_regexp)) {
+          && Daikon.var_omit_regexp.matcher(vi.name.name()).find()) {
         continue;
       }
       var_infos.add(vi);
@@ -606,9 +605,9 @@ public final class FileIO {
     if (debugRead.isLoggable(Level.FINE)) {
       debugRead.fine ("read_data_trace_file " + filename
                       + ((Daikon.ppt_regexp != null)
-                         ? " " + Daikon.ppt_regexp.getPattern() : "")
+                         ? " " + Daikon.ppt_regexp.pattern() : "")
                       + ((Daikon.ppt_omit_regexp != null)
-                         ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+                         ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -989,8 +988,8 @@ public final class FileIO {
       }
 
       while ((Daikon.var_omit_regexp != null)
-        && (line != null)
-        && Global.regexp_matcher.contains(line, Daikon.var_omit_regexp)) {
+             && (line != null)
+             && Daikon.var_omit_regexp.matcher(line).find()) {
         line = reader.readLine(); // value
         line = reader.readLine(); // modbit
         if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
@@ -1138,8 +1137,8 @@ public final class FileIO {
     String line = reader.readLine();
     // First, we might get some variables that ought to be omitted.
     while ((Daikon.var_omit_regexp != null)
-      && (line != null)
-      && Global.regexp_matcher.contains(line, Daikon.var_omit_regexp)) {
+           && (line != null)
+           && Daikon.var_omit_regexp.matcher(line).find()) {
       line = reader.readLine(); // value
       line = reader.readLine(); // modbit
       line = reader.readLine(); // next variable name
@@ -1347,12 +1346,12 @@ public final class FileIO {
     // System.out.println ("ppt_name = '" + ppt_name + "' max name = '"
     //                     + Daikon.ppt_max_name + "'");
     if (((Daikon.ppt_omit_regexp != null)
-      && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
-      || ((Daikon.ppt_regexp != null)
-        && !Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))
-      || ((Daikon.ppt_max_name != null)
-        && ((Daikon.ppt_max_name.compareTo(ppt_name) < 0)
-          && (ppt_name.indexOf(global_suffix) == -1))))
+         && Daikon.ppt_omit_regexp.matcher(ppt_name).find())
+        || ((Daikon.ppt_regexp != null)
+            && !Daikon.ppt_regexp.matcher(ppt_name).find())
+        || ((Daikon.ppt_max_name != null)
+            && ((Daikon.ppt_max_name.compareTo(ppt_name) < 0)
+                && (ppt_name.indexOf(global_suffix) == -1))))
       return (false);
     else
       return (true);

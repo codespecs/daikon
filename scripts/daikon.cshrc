@@ -21,7 +21,7 @@ setenv CPADD ${DAIKONDIR}/daikon.jar
 # In csh, can't use "&&" here to protect the use of the variable; use two "if"s
 if ($?DAIKONCLASS_SOURCES) then
   if ($DAIKONCLASS_SOURCES) then
-    setenv CPADD ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/log4j.jar
+    setenv CPADD ${DAIKONDIR}/java
   endif
 endif
 endif

@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import utilMDE.*;
 
 /**
- * Debug class used with the log4j logger to create standardized output.
+ * Debug class used with the logger to create standardized output.
  * It can be setup to track combinations of classes, program points,
  * and variables.  The most common class to track is an invariant, but
  * any class can be used.
@@ -318,7 +318,7 @@ public class Debug {
 
   /**
    * Logs the cached class, cached ppt, cached variables and the
-   * specified msg via the log4j logger as described in {@link
+   * specified msg via the logger as described in {@link
    * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
@@ -329,7 +329,7 @@ public class Debug {
 
   /**
    * Logs a description of the class, ppt, ppt variables and the
-   * specified msg via the log4j logger as described in {@link
+   * specified msg via the logger as described in {@link
    * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
@@ -342,7 +342,7 @@ public class Debug {
 
   /**
    * Logs a description of the class, ppt, variables and the specified
-   * msg via the log4j logger.  The class, ppt, and variables are
+   * msg via the logger.  The class, ppt, and variables are
    * checked against those described in {@link #debugTrackClass},
    * {@link #debugTrackPpt}, and {@link #debugTrackVars}.  Only
    * those that match are printed.  Variables will match if they are
@@ -428,7 +428,7 @@ public class Debug {
 
  /**
   * Logs a description of the cached class, ppt, and variables and the
-  * specified msg via the log4j logger as described in {@link
+  * specified msg via the logger as described in {@link
   * #log(Logger, Class, Ppt, VarInfo[], String)}
   *
   * @return whether or not it logged anything
@@ -442,7 +442,7 @@ public class Debug {
 
   /**
    * Logs a description of the class, ppt, ppt variables and the
-   * specified msg via the log4j logger as described in {@link
+   * specified msg via the logger as described in {@link
    * #log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @return whether or not it logged anything
@@ -454,7 +454,7 @@ public class Debug {
 
   /**
    * Logs a description of the class, ppt, variables and the specified
-   * msg via the log4j logger as described in {@link #log(Logger,
+   * msg via the logger as described in {@link #log(Logger,
    * Class, Ppt, String)}.  Accepts vis because sometimes the
    * variables are different from those in the ppt.
    *

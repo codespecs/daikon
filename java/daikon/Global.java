@@ -4,7 +4,7 @@ package daikon;
 
 import java.io.*;
 import java.util.*;
-import org.apache.oro.text.regex.*;
+import java.util.regex.*;
 import java.util.logging.Logger;
 import utilMDE.*;
 
@@ -28,15 +28,11 @@ public final class Global {
   public static final String lineSep = System.getProperty("line.separator");
 
   // Regular expressions
-  public static final Perl5Compiler regexp_compiler;
-  public static final Perl5Matcher regexp_matcher;
-  public static final Pattern ws_regexp;
+  public static final java.util.regex.Pattern ws_regexp;
 
   static {
-    regexp_compiler = new Perl5Compiler();
-    regexp_matcher = new Perl5Matcher();
     try {
-      ws_regexp = regexp_compiler.compile("[ \\t]+");
+      ws_regexp = Pattern.compile("[ \\t]+");
     } catch (Exception e) {
       throw new Error(e.toString());
     }
@@ -157,7 +153,7 @@ public final class Global {
   ///////////////////////////////////////////////////////////////////////////
   /// Debugging
   /// Anything that's commented in the false section is now implemented
-  /// via log4j.
+  /// via the logger.
 
   public static boolean debugAll = false;
 

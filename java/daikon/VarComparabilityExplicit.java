@@ -1,10 +1,10 @@
 package daikon;
 
 import utilMDE.*;
-import org.apache.oro.text.regex.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import java.util.logging.Level;
 
 
@@ -134,8 +134,6 @@ public final class VarComparabilityExplicit
     return indexTypes[dim];
   }
 
-  static final PatternMatcher re_matcher = Global.regexp_matcher;
-
   static VarComparabilityExplicit parse(String rep, ProglangType vartype) {
     String rep_ = rep;          // for debugging
 
@@ -147,16 +145,16 @@ public final class VarComparabilityExplicit
       //  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
       int dims = vartype.dimensions();
       // Permit "[]" to appear in variable names.
-      re_matcher.matches(rep, dims_regexp(dims));
-      MatchResult match = re_matcher.getMatch();
-      // "+2" because "groups" includes the whole match (group 0).
-      Assert.assertTrue(match != null);
-      Assert.assertTrue(match.groups() == dims+2);
+      Matcher m = dims_regexp(dims).matcher(rep);
+      boolean has_match = m.matches();
+      // "+1" because "groupCount" does not include the whole match (group 0).
+      Assert.assertTrue(has_match);
+      Assert.assertTrue(m.groupCount() == dims+1);
 
-      String base_raw = match.group(1);
+      String base_raw = m.group(1);
       String[] indices_raw = new String[dims];
       for (int i=0; i<dims; i++) {
-        indices_raw[i] = match.group(i+2);
+        indices_raw[i] = m.group(i+2);
       }
 
       // I could consider interning the arrays themselves; is that
@@ -180,8 +178,8 @@ public final class VarComparabilityExplicit
     }
   }
 
-  static Vector dims_regexps = new Vector();
-  static Perl5Pattern dims_regexp(int dims) {
+  static Vector/*Pattern*/ dims_regexps = new Vector/*Pattern*/();
+  static Pattern dims_regexp(int dims) {
     if (dims_regexps.size() <= dims) {
       // add all the elements up to the missing one
       for (int i=dims_regexps.size(); i<=dims; i++) {
@@ -190,23 +188,21 @@ public final class VarComparabilityExplicit
           regexp.append("\\[\\(?((?:[^\\]\\)]|\\[\\])*)\\)?\\]");
         regexp.append("$");
         try {
-          dims_regexps.add(Global.regexp_compiler.compile(regexp.toString()));
+          dims_regexps.add(Pattern.compile(regexp.toString()));
         } catch (Exception e) {
           e.printStackTrace();
           throw new Error(e.toString());
         }
       }
     }
-    return (Perl5Pattern) dims_regexps.elementAt(dims);
+    return (Pattern) dims_regexps.elementAt(dims);
   }
 
 
 
   /** Split on whitespace and return an array of the resulting words, interned. **/
   static final String[] ws_split_to_interned_array(String s) {
-    Vector vec = new Vector();
-    Util.split(vec, re_matcher, Global.ws_regexp, s);
-    String[] result = (String[]) vec.toArray(new String[0]);
+    String[] result = Global.ws_regexp.split(s);
     Intern.internStrings(result);
     return result;
   }

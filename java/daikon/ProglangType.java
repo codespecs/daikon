@@ -3,8 +3,6 @@ package daikon;
 import java.util.*;
 import java.io.*;
 
-import org.apache.oro.text.regex.*;
-
 import utilMDE.*;
 
 /**
@@ -447,9 +445,7 @@ public final class ProglangType
         }
         value_strings = (String[]) v.toArray(new String[0]);
       } else {
-        Vector v = new Vector();
-        Util.split(v, Global.regexp_matcher, Global.ws_regexp, value);
-        value_strings = (String[]) v.toArray(new String[0]);
+        value_strings = Global.ws_regexp.split(value);
       }
       int len = value_strings.length;
 

@@ -3,7 +3,7 @@ package daikon;
 import java.util.logging.*;
 
 /**
- * Standard methods for setting up logging with Log4j.
+ * Standard methods for setting up logging.
  * Allows creation of Console writers using one method.
  * Logger methods should only be called in a shell class
  * at setup, after which Logger calls should be used
@@ -12,7 +12,7 @@ import java.util.logging.*;
 public final class LogHelper {
   private LogHelper() { throw new Error("do not instantiate"); }
 
-  // Class variables so user doesn't have to use log4j.Level
+  // Class variables so user doesn't have to use "Level." prefix.
   public static final Level FINE = Level.FINE;
   public static final Level INFO = Level.INFO;
   public static final Level WARNING = Level.WARNING;

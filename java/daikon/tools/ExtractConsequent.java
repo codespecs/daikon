@@ -3,9 +3,9 @@ package daikon.tools;
 import java.util.*;
 import java.io.*;
 import java.util.logging.Logger;
+import java.util.regex.*;
 import gnu.getopt.*;
 import utilMDE.UtilMDE;
-import org.apache.oro.text.regex.*;
 import daikon.*;
 import daikon.inv.*;
 
@@ -22,8 +22,6 @@ public class ExtractConsequent {
 
   public static final Logger debug = Logger.getLogger ("daikon.ExtractConsequent");
   private static final String lineSep = Global.lineSep;
-  private static Perl5Matcher re_matcher = new Perl5Matcher();
-  private static Perl5Compiler re_compiler = new Perl5Compiler();
 
   private static class HashedConsequent {
     Invariant inv;
@@ -209,9 +207,10 @@ public class ExtractConsequent {
         String conj = conjunctionJava.toString();
         // Avoid inserting self-contradictory conditions such as "x == 1 &&
         // x == 2", or conjunctions of only a single condition.
-        if (count < 2 || re_matcher.contains(conj, contradict_inv_pattern)
-            || re_matcher.contains(conj, useless_inv_pattern_1)
-            || re_matcher.contains(conj, useless_inv_pattern_2)) {
+        if (count < 2
+            || contradict_inv_pattern.matcher(conj).find()
+            || useless_inv_pattern_1.matcher(conj).find()
+            || useless_inv_pattern_2.matcher(conj).find()) {
           // System.out.println("Suppressing: " + conj);
         } else {
           allConds.add(combineDummy(conjunctionJava.toString(),
@@ -342,7 +341,8 @@ public class ExtractConsequent {
         }
 
         String inv_string = inv.format_using(OutputFormat.JAVA);
-        if (re_matcher.contains(inv_string, orig_pattern) || re_matcher.contains(inv_string, dot_class_pattern)) {
+        if (orig_pattern.matcher(inv_string).find()
+            || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
         String fake_inv_string = simplify_inequalities(inv_string);
@@ -423,7 +423,8 @@ public class ExtractConsequent {
     if (pptname.endsWith("."))
       pptname = pptname.substring(0, pptname.length()-2);
 
-    return Util.substitute(re_matcher, non_word_pattern, non_word_sub, pptname, Util.SUBSTITUTE_ALL);
+    Matcher m = non_word_pattern.matcher(pptname);
+    return m.replaceAll(".");
   }
 
   /**
@@ -436,48 +437,46 @@ public class ExtractConsequent {
    **/
   private static String simplify_inequalities (String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
-      if (re_matcher.contains(condition, gteq_pattern))
-        condition = Util.substitute(re_matcher, gteq_pattern, lt_subst, condition, 1);
-      else if (re_matcher.contains(condition, lteq_pattern))
-        condition = Util.substitute(re_matcher, lteq_pattern, gt_subst, condition, 1);
-      else if (re_matcher.contains(condition, neq_pattern))
-        condition = Util.substitute(re_matcher, neq_pattern, eq_subst, condition, 1);
+      if (gteq_pattern.matcher(condition).find())
+        condition = gteq_pattern.matcher(condition).replaceFirst("<");
+      else if (lteq_pattern.matcher(condition).find())
+        condition = lteq_pattern.matcher(condition).replaceFirst(">");
+      else if (neq_pattern.matcher(condition).find())
+        condition = neq_pattern.matcher(condition).replaceFirst("==");
+      else
+        throw new Error("this can't happen");
     }
     return condition;
   }
 
   private static boolean contains_exactly_one (String string,
                                                Pattern pattern) {
-    PatternMatcherInput input = new PatternMatcherInput(string);
+    Matcher m = pattern.matcher(string);
     // return true if first call returns true and second returns false
-    return (re_matcher.contains(input, pattern)
-            && !re_matcher.contains(input, pattern));
+    return (m.find()
+            && !m.find());
   }
 
   static Pattern orig_pattern, dot_class_pattern, non_word_pattern;
   static Pattern gteq_pattern, lteq_pattern, neq_pattern, inequality_pattern;
   static Pattern contradict_inv_pattern, useless_inv_pattern_1, useless_inv_pattern_2;
-  static StringSubstitution gt_subst = new StringSubstitution(">");
-  static StringSubstitution eq_subst = new StringSubstitution("==");
-  static StringSubstitution lt_subst = new StringSubstitution("<");
-  static StringSubstitution non_word_sub = new StringSubstitution(".");
   static {
     try {
-      non_word_pattern = re_compiler.compile("\\W+");
-      orig_pattern = re_compiler.compile("orig\\s*\\(");
-      dot_class_pattern = re_compiler.compile("\\.class");
-      inequality_pattern = re_compiler.compile(  "[\\!<>]=");
-      gteq_pattern = re_compiler.compile(">=");
-      lteq_pattern = re_compiler.compile("<=");
-      neq_pattern = re_compiler.compile("\\!=");
+      non_word_pattern = Pattern.compile("\\W+");
+      orig_pattern = Pattern.compile("orig\\s*\\(");
+      dot_class_pattern = Pattern.compile("\\.class");
+      inequality_pattern = Pattern.compile(  "[\\!<>]=");
+      gteq_pattern = Pattern.compile(">=");
+      lteq_pattern = Pattern.compile("<=");
+      neq_pattern = Pattern.compile("\\!=");
       contradict_inv_pattern
-        = re_compiler.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
+        = Pattern.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
       useless_inv_pattern_1
-        = re_compiler.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
+        = Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
       useless_inv_pattern_2
-        = re_compiler.compile("(^| && )(.*) < -?[0-9]+ &.*& \\2 < -?[0-9]+($| && )");
-    } catch (MalformedPatternException me) {
-      throw new Error("ExtractConsequent: Error while compiling pattern");
+        = Pattern.compile("(^| && )(.*) < -?[0-9]+ &.*& \\2 < -?[0-9]+($| && )");
+    } catch (PatternSyntaxException me) {
+      throw new Error("ExtractConsequent: Error while compiling pattern" + me);
     }
   }
 }

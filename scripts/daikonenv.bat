@@ -21,7 +21,7 @@ REM set DAIKONCLASS_SOURCES=1
 REM For Windows, adjacent semicolons in CLASSPATH are harmless, but keep
 REM the CPADD logic for parallelism with daikon.bashrc and daikon.cshrc.
 if defined %DAIKONCLASS_SOURCES% (
-  set CPADD=%DAIKONDIR%\java;%DAIKONDIR%\java\lib\log4j.jar
+  set CPADD=%DAIKONDIR%\java
 ) else (
   set CPADD=%DAIKONDIR%\daikon.jar
 )

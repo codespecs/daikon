@@ -24,7 +24,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
-import org.apache.oro.text.regex.*;
+import java.util.regex.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import gnu.getopt.*;
@@ -779,7 +779,7 @@ public final class Daikon {
               String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               ppt_regexp =
-                Global.regexp_compiler.compile(regexp_string);
+                Pattern.compile(regexp_string);
             } catch (Exception e) {
               throw new Error(e.toString());
             }
@@ -794,7 +794,7 @@ public final class Daikon {
               String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               ppt_omit_regexp =
-                Global.regexp_compiler.compile(regexp_string);
+                Pattern.compile(regexp_string);
             } catch (Exception e) {
               throw new Error(e.toString());
             }
@@ -809,7 +809,7 @@ public final class Daikon {
               String regexp_string = g.getOptarg();
               // System.out.println("Regexp = " + regexp_string);
               var_omit_regexp =
-                Global.regexp_compiler.compile(regexp_string);
+                Pattern.compile(regexp_string);
             } catch (Exception e) {
               throw new Error(e.toString());
             }

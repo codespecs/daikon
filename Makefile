@@ -9,7 +9,7 @@ IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
-DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html 
+DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html
 EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
@@ -187,8 +187,8 @@ test-staged-dist: $(STAGING_DIST)
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
-	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR):$(TOOLSJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
+	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
 
@@ -201,7 +201,7 @@ cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
 	cd $(TESTCVS) && cvs -Q -d $(CVS_REPOSITORY) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/log4j.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
 
 
 ###########################################################################
@@ -253,7 +253,7 @@ staging: doc/CHANGES update-doc-dist-date-and-version
 	@echo "***** New or removed files:"
 	tar tzf $(WWW_ROOT)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
 	tar tzf $(STAGING_DIST)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
-	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt 
+	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
@@ -331,7 +331,7 @@ update-dist-version-file:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
-	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
@@ -347,7 +347,6 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/${USER}/daikon-jar && jar cf $@ *
 	mv /tmp/${USER}/daikon-jar/$@ $@
@@ -475,12 +474,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
 
-	## JHP: I don't think we need this anymore
-	## Log4j is a loss; can't include source because its build
-	## configuration is so weird that it cannot be easily integrated.
-	# mkdir /tmp/daikon/java/lib
-	# cp -p java/lib/log4j.jar /tmp/daikon/java/lib
-
 	## Front ends
 	mkdir /tmp/daikon/front-end
 
@@ -522,7 +515,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
 	gzip -c /tmp/daikon.tar > $(STAGING_DIST)/download/daikon.tar.gz
-	# cp -pf /tmp/daikon.tar 
+	# cp -pf /tmp/daikon.tar
 	rm -f /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
 	cp -pf /tmp/daikon.zip $(STAGING_DIST)/download/daikon.zip

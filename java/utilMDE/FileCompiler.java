@@ -1,66 +1,79 @@
-package daikon.split;
+package utilMDE;
 
 import java.io.*;
 import java.util.*;
-import org.apache.oro.text.regex.*;
-import utilMDE.*;
+import java.util.regex.*;
 
 /**
- * This class has a method compile_source which can be used to compile Java source.
- * It invokes the external command javac/jikes.
+ * This class has a method compile_source which can be used to compile Java
+ * source.  It invokes the external command javac/jikes.
  **/
 public final class FileCompiler {
-  private FileCompiler() { throw new Error("do not instantiate"); }
 
-  public static Runtime commander = java.lang.Runtime.getRuntime();
-  private static Perl5Matcher re_matcher = new Perl5Matcher();
-  private static Perl5Compiler re_compiler = new Perl5Compiler();
+  public static Runtime runtime = java.lang.Runtime.getRuntime();
   /** Matches the names of Java source files, without directory name. **/
-  static Pattern splitter_classname_pattern;
+  static Pattern java_filename_pattern;
   private static String lineSep = System.getProperty("line.separator");
+  /** External command used to compile Java files. **/
+  private String compiler;
+  private long timeLimit;
 
   static {
     try {
-      splitter_classname_pattern
-        = re_compiler.compile("([^" + UtilMDE.escapeNonJava(File.separator)
-                              + "]+)\\.java");
-    } catch (MalformedPatternException me) {
+      java_filename_pattern
+        = Pattern.compile("([^" + UtilMDE.escapeNonJava(File.separator)
+                          + "]+)\\.java");
+    } catch (PatternSyntaxException me) {
       me.printStackTrace();
       throw new Error("Error in regexp: " + me.toString());
     }
   }
 
-  /**
-   * String.  Specifies which Java compiler is used to compile
-   * Splitters.  This can be the full path name or whatever is used on
-   * the commandline.
-   **/
-  public static String dkconfig_compiler = "javac";
 
+  /**
+   * Creates a new FileCompiler.  Equivalent to FileCompiler("javac", 6000).
+   * @see #FileCompiler(String)
+   **/
+  public FileCompiler() {
+    this("javac", 6000);
+  }
+
+  /**
+   * Creates a new FileCompiler.
+   * @param compiler A command that runs a Java compiler; for instance, it
+   * could be the full path name or whatever is used on the commandline.
+   * @param timeLimit The maximum permitted compilation time, in msec.
+   **/
+  public FileCompiler(String compiler, long timeLimit) {
+    this.compiler = compiler;
+    this.timeLimit = timeLimit;
+  }
 
   /**
    * Compiles the files given by fileNames.
    * @param fileNames pathes to the files to be compiled as Strings.
    */
-  public static void compileFiles(List fileNames) {
-    List /*TimedProcess*/ processes = new ArrayList();
+  public void compileFiles(List fileNames) {
+    List /*TimeLimitProcess*/ processes = new ArrayList();
     processes.add(compile_source(fileNames));
     StringBuffer errorString = new StringBuffer(); // stores the error messages
 
     // Wait for all the compilation processes to terminate.
     for (int i = 0; i < processes.size(); i++) {
-      TimedProcess tp = (TimedProcess) processes.get(i);
-      errorString.append(lineSep);
-      errorString.append(tp.getErrorMessage());
-      if (!tp.finished()) {
+      TimeLimitProcess tp = (TimeLimitProcess) processes.get(i);
+      try {
         tp.waitFor();
+      } catch (InterruptedException e) {
+        // nothing to do
       }
+      errorString.append(lineSep);
+      errorString.append(UtilMDE.streamString(tp.getErrorStream()));
     }
 
     // javac tends to stop without completing the compilation if there
-    // is an error in one of the files. Remove all the erring files
+    // is an error in one of the files.  Remove all the erring files
     // and recompile only the good ones.
-    if (dkconfig_compiler.equals("javac")) {
+    if (compiler.equals("javac")) {
       recompile_without_errors (fileNames, errorString.toString());
     }
 
@@ -70,10 +83,10 @@ public final class FileCompiler {
    * @param filename the path of the java source to be compiled
    * @return The process which executed the external compile command
    **/
-  private static TimedProcess compile_source(String filename) {
-    String command = dkconfig_compiler + " " + filename;
+  private TimeLimitProcess compile_source(String filename) {
+    String command = compiler + " " + filename;
     try {
-      return new TimedProcess(commander.exec(command), command);
+      return new TimeLimitProcess(runtime.exec(command), timeLimit);
     } catch (IOException e) {
       System.err.println("IOException while compiling " + filename);
       System.err.println(e.toString());
@@ -83,9 +96,9 @@ public final class FileCompiler {
 
   /**
    * @param filenames the paths of the java source to be compiled as Strings.
-   * @return The process which executed the external compile command
+   * @return The process that executed the external compile command
    **/
-  private static TimedProcess compile_source(List filenames) {
+  private TimeLimitProcess compile_source(List filenames) {
     int num_files = filenames.size();
 
     if (num_files > 0) {
@@ -94,9 +107,9 @@ public final class FileCompiler {
         to_compile += (" " + (String) filenames.get(i));
       }
 
-      String command = dkconfig_compiler + " " + to_compile;
+      String command = compiler + " " + to_compile;
       try {
-        return new TimedProcess( commander.exec(command), command);
+        return new TimeLimitProcess(runtime.exec(command), timeLimit);
       } catch (IOException e) {
         System.err.println("IOException while compiling files");
         System.err.println(e.toString());
@@ -112,14 +125,13 @@ public final class FileCompiler {
    * compile all the files supplied to it if some of them contain
    * errors. So some "good" files end up not being compiled.
    */
-  private static void recompile_without_errors (List fileNames, String errorString) {
+  private void recompile_without_errors (List fileNames, String errorString) {
     // search the error string and extract the files with errors.
     if (errorString != null) {
       HashSet errors = new HashSet();
-      PatternMatcherInput input = new PatternMatcherInput(errorString);
-      while (re_matcher.contains(input, splitter_classname_pattern)) {
-        MatchResult result = re_matcher.getMatch();
-        errors.add(result.group(1));
+      Matcher m = java_filename_pattern.matcher(errorString);
+      while (m.find()) {
+        errors.add(m.group(1));
       }
       List /*String*/ retry = new ArrayList();
       // Collect all the files that were not compiled
@@ -133,19 +145,12 @@ public final class FileCompiler {
           }
         }
 
-      TimedProcess tp = FileCompiler.compile_source(retry);
+      TimeLimitProcess tp = compile_source(retry);
 
       try {
-        Thread.sleep(3000);
-      } catch (InterruptedException ie) {
-        ie.printStackTrace();
-      }
-
-      // We don't want to wait for the old process for too long. We
-      // wait for a short time, kill the process and recompile the set
-      // of files, removing the leading file
-      if (tp != null && !tp.finished()) {
         tp.waitFor();
+      } catch (InterruptedException e) {
+        // nothing to do (?)
       }
     }
   }

@@ -1846,7 +1846,7 @@ public abstract class Invariant
 
   /**
    * Logs a description of the invariant and the specified msg via the
-   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
    * VarInfo[], String)}.
    */
 
@@ -1859,7 +1859,7 @@ public abstract class Invariant
 
  /**
   * Logs a description of the invariant and the specified msg via the
-  * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+  * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
   * VarInfo[], String)}.
   *
   * @return whether or not it logged anything

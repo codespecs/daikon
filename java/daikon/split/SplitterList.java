@@ -3,7 +3,6 @@ package daikon.split;
 import java.util.*;
 import daikon.*;
 import utilMDE.*;
-import org.apache.oro.text.regex.*;
 import java.util.logging.Level;
 
 // SplitterList maps from a program point name to an array of Splitter
@@ -34,10 +33,6 @@ public abstract class SplitterList
 
   // maps from string to Splitter[]
   private static final HashMap ppt_splitters = new HashMap();
-  // These aren't "PatternMatcher" and "PatternCompiler" because we want
-  // Perl5Compiler.quotemeta().
-  private static final Perl5Matcher re_matcher = new Perl5Matcher();
-  private static final Perl5Compiler re_compiler = new Perl5Compiler();
 
   /**
    * Associate an array of splitters with the program point pptname.
