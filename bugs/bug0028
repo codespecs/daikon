@@ -8,6 +8,118 @@ Reproducible: Yes
 Description:
 
 [mistere]
+I am adding three patches below which are a start on this change.
+They are still incomplete, but the dfej one, at least, is the right
+thing.  We just need to get Daikon to handle it.
+
+Index: java/daikon/VarInfo.java
+===================================================================
+RCS file: /g4/projects/invariants/.CVS/invariants/java/daikon/VarInfo.java,v
+retrieving revision 1.75.2.12
+diff -u -r1.75.2.12 VarInfo.java
+--- java/daikon/VarInfo.java	5 May 2002 08:15:44 -0000	1.75.2.12
++++ java/daikon/VarInfo.java	29 Mar 2002 08:26:44 -0000
+@@ -793,6 +793,13 @@
+    **/
+   public boolean isValidEscExpression()
+   {
++    // Any functions are invalid
++    if (name.hasNodeOfType(VarInfoName.FunctionOf.class)
++	|| name.hasNodeOfType(VarInfoName.FunctionOfN.class))
++    {
++      return false;
++    }
++
+     // "myVector.length" is invalid
+     boolean is_length = (derived instanceof SequenceLength);
+     boolean is_array_length = is_length && ((SequenceLength) derived).base.type.isArray();
+
+Index: java/daikon/VarInfoName.java
+===================================================================
+RCS file: /g4/projects/invariants/.CVS/invariants/java/daikon/VarInfoName.java,v
+retrieving revision 1.46.2.17
+diff -u -r1.46.2.17 VarInfoName.java
+--- java/daikon/VarInfoName.java	25 Mar 2002 21:28:04 -0000	1.46.2.17
++++ java/daikon/VarInfoName.java	28 Mar 2002 22:59:26 -0000
+@@ -48,6 +48,12 @@
+       return parse(name.substring(0, name.length()-6)).applyTypeOf();
+     }
+ 
++    // x.size() -- for Vectors whose elements we can't print
++    if (name.endsWith(".size()")) {
++      VarInfoName vec = parse(name.substring(0, name.length()-7));
++      return vec.applyFunction("size");
++    }
++
+     // x or this.x
+     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
+       // checking for only legal characters would be more robust
+@@ -1612,6 +1618,10 @@
+     }
+     public Object visitElements(Elements o) {
+       return o;
++    }
++    public Object visitSizeOf(SizeOf o) {
++      // skip the sized sequence
++      return o.sequence.term.accept(this);
+     }
+     public Object visitSubscript(Subscript o) {
+       // skip the subscripted sequence
+
+Index: front-end/dfej/src/daikon-new-methods.cpp
+===================================================================
+RCS file: /g4/projects/invariants/.CVS/dfej/src/daikon-new-methods.cpp,v
+retrieving revision 1.75
+diff -u -r1.75 daikon-new-methods.cpp
+--- front-end/dfej/src/daikon-new-methods.cpp	5 Mar 2002 23:06:15 -0000	1.75
++++ front-end/dfej/src/daikon-new-methods.cpp	28 Mar 2002 21:25:22 -0000
+@@ -715,7 +715,7 @@
+     daikonPrint_modbit_java(os, varname, printstream, use_ppt_id, false, prefix_varname);
+     // Print its length.  Because we are not printing its elements, the
+     // engine has no other way of knowing the length.
+-    string varname_size = varname_array + ".size";
++    string varname_size = varname_array + ".size()";
+     print_varname_java(os, varname_size, prefix_expr, printstream, prefix_varname);
+     if (dims == 1) {
+       os << "daikon.Runtime.println_array_List_size(" << printstream << ", " << varname << ");\n";
+@@ -795,7 +795,7 @@
+        << printstream << ".println(\"" << MISSING << "\");\n";
+     // Print its length.  Because we are not printing its elements, the
+     // engine has no other way of knowing the length.
+-    string varname_size = varname_array + ".size";
++    string varname_size = varname_array + ".size()";
+     print_varname_java(os, varname_size, prefix_expr, printstream, prefix_varname);
+     os << printstream << ".println(\"missing\");\n"
+        << printstream << ".println(\"" << MISSING << "\");\n";
+@@ -920,7 +920,7 @@
+   } else if (subtype -> IsArray() || 
+ 	     subtype -> Implements(daikon_control -> List())) {
+     os << prefixed_varname(varname, prefix);
+-    os << ".size" << "\n";
++    os << ".size()" << "\n";
+     os << "int[]" << "\n";
+     os << "int[]" << "\n";
+     os << lackwitTypeDummy << "\n";
+@@ -1860,7 +1860,7 @@
+         }
+         // Length
+         {
+-          string fieldname_dot_size = fieldname + ".size";
++          string fieldname_dot_size = fieldname + ".size()";
+           print_varname_java(os, fieldname_dot_size, prefix_array.c_str(), "ps", NULL);
+           if (version == dpa_missing) {
+             os << "  ps.println(\"missing\");\n"
+@@ -2114,7 +2114,7 @@
+         os << lackwitTypeDummy << "\n";
+         // Size
+         {
+-          os << prefix_array << "." << f -> Name() << ".size\n";
++          os << prefix_array << "." << f -> Name() << ".size()\n";
+           os << "int[]\n";
+           os << "int[]\n";
+           os << lackwitTypeDummy << "\n";
+
+[mistere]
 After talking with Michael today, we concluded that the best fix is to
 rename this pseudo-field to ".size()" and parse ".size()" as a SizeOf
 element, just like ".length".  This will prevent ESC formatting of the
@@ -48,7 +160,10 @@ Do we agree?
 
 --
 $Log$
-Revision 1.2  2002-03-27 21:07:35  mistere
+Revision 1.3  2002-05-05 08:22:39  mistere
+changed bug0028
+
+Revision 1.2  2002/03/27 21:07:35  mistere
 changed bug0028
 
 Revision 1.1  2002/03/26 09:48:49  mistere
