@@ -32,7 +32,7 @@ public final class SequenceScalarSubscript
   // Value is -1 or 0.
   public final int index_shift;
 
-  public SequenceScalarSubscript (VarInfo vi1, VarInfo vi2, boolean less1) {
+  public SequenceScalarSubscript(VarInfo vi1, VarInfo vi2, boolean less1) {
     super(vi1, vi2);
     if (less1)
       index_shift = -1;

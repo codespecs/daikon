@@ -28,7 +28,7 @@ public final class SequenceScalarIntersection
    **/
   public static boolean dkconfig_enabled = false;
 
-  public SequenceScalarIntersection (VarInfo vi1, VarInfo vi2) {
+  public SequenceScalarIntersection(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 

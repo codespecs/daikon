@@ -44,7 +44,7 @@ public final class LinearBinaryCoreFloat
   double [] x_cache = new double [MINPAIRS];
   double [] y_cache = new double [MINPAIRS];
 
-  public LinearBinaryCoreFloat (Invariant wrapper) {
+  public LinearBinaryCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 

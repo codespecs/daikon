@@ -33,7 +33,7 @@ public final class NonEqualCoreFloat
   //   this(wrapper, 0);
   // }
 
-  public NonEqualCoreFloat (Invariant wrapper, long override_range) {
+  public NonEqualCoreFloat(Invariant wrapper, long override_range) {
     this.wrapper = wrapper;
     this.override_range = override_range;
   }

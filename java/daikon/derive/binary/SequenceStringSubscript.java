@@ -32,7 +32,7 @@ public final class SequenceStringSubscript
   // Value is -1 or 0.
   public final int index_shift;
 
-  public SequenceStringSubscript (VarInfo vi1, VarInfo vi2, boolean less1) {
+  public SequenceStringSubscript(VarInfo vi1, VarInfo vi2, boolean less1) {
     super(vi1, vi2);
     if (less1)
       index_shift = -1;

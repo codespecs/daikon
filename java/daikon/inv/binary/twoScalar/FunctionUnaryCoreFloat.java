@@ -41,7 +41,7 @@ public final class FunctionUnaryCoreFloat
 
   public Invariant wrapper;
 
-  public FunctionUnaryCoreFloat (Invariant wrapper, String[] methodname, int methodNumber, boolean inverse) {
+  public FunctionUnaryCoreFloat(Invariant wrapper, String[] methodname, int methodNumber, boolean inverse) {
     this.wrapper = wrapper;
     this.methodname = methodname;
     this.inverse = inverse;

@@ -33,7 +33,7 @@ public final class NonEqualCore
   //   this(wrapper, 0);
   // }
 
-  public NonEqualCore (Invariant wrapper, long override_range) {
+  public NonEqualCore(Invariant wrapper, long override_range) {
     this.wrapper = wrapper;
     this.override_range = override_range;
   }

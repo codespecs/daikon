@@ -36,7 +36,7 @@ public final class LinearTernaryCore
   public long [] y_cache = new long [MINTRIPLES];
   public long [] z_cache = new long [MINTRIPLES];
 
-  public LinearTernaryCore (Invariant wrapper) {
+  public LinearTernaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 

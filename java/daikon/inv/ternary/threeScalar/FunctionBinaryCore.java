@@ -34,7 +34,7 @@ public final class FunctionBinaryCore
 
   public Invariant wrapper;
 
-  public FunctionBinaryCore (Invariant wrapper, String[] methodname, int methodNumber, int var_order) {
+  public FunctionBinaryCore(Invariant wrapper, String[] methodname, int methodNumber, int var_order) {
     this.wrapper = wrapper;
     this.methodname = methodname;
     this.methodNumber = methodNumber;

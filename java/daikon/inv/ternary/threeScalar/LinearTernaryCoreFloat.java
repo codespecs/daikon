@@ -36,7 +36,7 @@ public final class LinearTernaryCoreFloat
   public double [] y_cache = new double [MINTRIPLES];
   public double [] z_cache = new double [MINTRIPLES];
 
-  public LinearTernaryCoreFloat (Invariant wrapper) {
+  public LinearTernaryCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 

@@ -36,9 +36,9 @@ public final class PptSlice3
   // That is, the first element is (unmod,unmod,unmod);
   // the second element is (unmod,unmod,mod); etc.
 
-  int[] tm_total = new int[8 ];  // "tm" stands for "tuplemod"
+  int[] tm_total = new int[8];  // "tm" stands for "tuplemod"
 
-  public PptSlice3 (PptTopLevel parent, VarInfo[] var_infos) {
+  public PptSlice3(PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assertTrue(var_infos.length == 3);
 
@@ -233,7 +233,7 @@ public final class PptSlice3
       /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
-        tm_arr = new int[8 ];
+        tm_arr = new int[8];
         values_cache.put(vals, tm_arr);
       }
       */ // ... [INCR]

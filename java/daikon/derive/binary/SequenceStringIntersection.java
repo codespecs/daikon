@@ -28,7 +28,7 @@ public final class SequenceStringIntersection
    **/
   public static boolean dkconfig_enabled = false;
 
-  public SequenceStringIntersection (VarInfo vi1, VarInfo vi2) {
+  public SequenceStringIntersection(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 

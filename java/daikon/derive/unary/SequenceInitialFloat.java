@@ -31,7 +31,7 @@ public final class SequenceInitialFloat
   // array length required for the subscript to be meaningful:  (ie, 1 or 2)
   final int minLength;
 
-  public SequenceInitialFloat (VarInfo vi, int index) {
+  public SequenceInitialFloat(VarInfo vi, int index) {
     super(vi);
     this.index = index;
     if (index < 0)

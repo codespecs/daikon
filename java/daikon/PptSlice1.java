@@ -39,9 +39,9 @@ public final class PptSlice1
   // values_cache maps (interned) values to 2-element arrays of
   // [num_unmodified, num_modified].
 
-  int[] tm_total = new int[2 ];  // "tm" stands for "tuplemod"
+  int[] tm_total = new int[2];  // "tm" stands for "tuplemod"
 
-  public PptSlice1 (PptTopLevel parent, VarInfo[] var_infos) {
+  public PptSlice1(PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assertTrue(var_infos.length == 1);
 
@@ -206,7 +206,7 @@ public final class PptSlice1
       /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
-        tm_arr = new int[2 ];
+        tm_arr = new int[2];
         values_cache.put(vals, tm_arr);
       }
       */ // ... [INCR]

@@ -44,7 +44,7 @@ public final class LinearBinaryCore
   long [] x_cache = new long [MINPAIRS];
   long [] y_cache = new long [MINPAIRS];
 
-  public LinearBinaryCore (Invariant wrapper) {
+  public LinearBinaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 

@@ -50,7 +50,7 @@ public class LowerBoundCoreFloat
 
   public Invariant wrapper;
 
-  public LowerBoundCoreFloat (Invariant wrapper) {
+  public LowerBoundCoreFloat(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 

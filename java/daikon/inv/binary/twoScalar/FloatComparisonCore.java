@@ -39,15 +39,15 @@ public final class FloatComparisonCore
 
   public Invariant wrapper;
 
-  public FloatComparisonCore (Invariant wrapper) {
+  public FloatComparisonCore(Invariant wrapper) {
     this(wrapper, false, false, false, false, false);
   }
 
-  public FloatComparisonCore (Invariant wrapper, boolean only_eq) {
+  public FloatComparisonCore(Invariant wrapper, boolean only_eq) {
     this(wrapper, only_eq, false, false, false, false);
   }
 
-  public FloatComparisonCore (Invariant wrapper, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+  public FloatComparisonCore(Invariant wrapper, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
     this.wrapper = wrapper;
     only_check_eq = only_eq;
     obvious_can_be_lt = obvious_lt;

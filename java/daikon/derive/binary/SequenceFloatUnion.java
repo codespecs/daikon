@@ -22,7 +22,7 @@ public final class SequenceFloatUnion
    **/
   public static boolean dkconfig_enabled = false;
 
-  public SequenceFloatUnion (VarInfo vi1, VarInfo vi2) {
+  public SequenceFloatUnion(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 

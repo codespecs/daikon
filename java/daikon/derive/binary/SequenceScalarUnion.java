@@ -22,7 +22,7 @@ public final class SequenceScalarUnion
    **/
   public static boolean dkconfig_enabled = false;
 
-  public SequenceScalarUnion (VarInfo vi1, VarInfo vi2) {
+  public SequenceScalarUnion(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
 
