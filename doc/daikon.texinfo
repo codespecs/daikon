@@ -1889,7 +1889,7 @@ The following characters are recognized:
 @table @code
 @item 0 (zero)
 Omit information about program points that appeared in the
-@file{.decls} file, but not in any @file{.dtrace} file. (In Daikon's
+@file{.decls} file, but not in any @file{.dtrace} file.  (In Daikon's
 terminology, such program points have ``seen zero samples''.)
 
 @item r
