@@ -79,6 +79,13 @@ public class PptTopLevel
    */
   public static boolean dkconfig_remove_merged_invs = false;
 
+  /**
+   * Boolean.  If true, flow global invariants that are falsified
+   * immediately to all children as opposed to waiting for the next sample
+   * to arrive at that child
+   */
+  public static boolean dkconfig_flow_globals_immed = false;
+
   /** number of invariants after equality set processing for the last sample */
   public int instantiated_inv_cnt = 0;
 
@@ -1430,17 +1437,35 @@ public class PptTopLevel
       ValueTuple post_vt = transform_sample (global, global_transform_post,
                                              vt);
       weakened_invs.addAll (global.add_bottom_up (post_vt, count));
-    }
 
-    // Add any invariants that have weakened since the last time this ppt
-    // was processed to this ppt.
-    add_weakened_global_invs();
+      // If flowing immediately
+      if (dkconfig_flow_globals_immed) {
+
+        // Add all of the weakened invariants to each leaf
+        for (Iterator i = Daikon.all_ppts.ppt_all_iterator(); i.hasNext(); ) {
+          PptTopLevel ppt = (PptTopLevel) i.next();
+          if (!ppt.ppt_name.isNumberedExitPoint())
+            continue;
+          for (Iterator j = weakened_invs.iterator(); j.hasNext(); ) {
+            Invariant inv = (Invariant) j.next();
+            add_weakened_global_inv (inv, global_transform_orig);
+            add_weakened_global_inv (inv, global_transform_post);
+          }
+        }
+        weakened_invs.clear();
+
+      } else {
+
+        // Add any invariants that have weakened since the last time this ppt
+        // was processed to this ppt.
+        add_weakened_global_invs();
+      }
+    }
 
     // Add the sample to this ppt
     add_bottom_up (vt, count);
 
     // check_vs_global();
-
   }
 
   /**
@@ -1495,7 +1520,7 @@ public class PptTopLevel
         PptTopLevel parent = Daikon.all_ppts.get (ppt_name.makeExit());
         if (parent != null) {
           // System.out.println ("parent is " + parent.name());
-          parent.get_missingOutOfBounds (this);
+          parent.get_missingOutOfBounds (this, vt);
           parent.add_bottom_up (vt, count);
         }
       }
@@ -1847,14 +1872,28 @@ public class PptTopLevel
 
   /**
    * Gets any missing out of bounds variables from the specified ppt and
-   * applies them to the matching variable in this ppt.  Not particularly
-   * efficient.  The variables must match exactly.
+   * applies them to the matching variable in this ppt if the variable
+   * is MISSING_NONSENSICAL.  The goal is to set the missing_array_bounds
+   * flag only if it was missing in ppt on THIS sample.
+   *
+   * This could fail if missing_array_bounds was set on a previous sample
+   * and the MISSING_NONSENSICAL flag is set for a different reason on
+   * this sample.  This could happen with an array in an object.
+   *
+   * This implmeentation is also not particularly efficient and the
+   * variables must match exactly.
+   *
+   * Missing out of bounds really needs to be implemented as a separate
+   * flag in the missing bits.  That would clear up all of this mess.
    */
-  public void get_missingOutOfBounds (PptTopLevel ppt) {
+  public void get_missingOutOfBounds (PptTopLevel ppt, ValueTuple vt) {
 
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
-      if (ppt.var_infos[ii].missingOutOfBounds())
-        var_infos[ii].derived.missing_array_bounds = true;
+      if (ppt.var_infos[ii].missingOutOfBounds()) {
+        int mod = vt.getModified (ppt.var_infos[ii]);
+        if (mod == ValueTuple.MISSING_NONSENSICAL)
+          var_infos[ii].derived.missing_array_bounds = true;
+      }
     }
   }
 
@@ -3242,7 +3281,7 @@ public class PptTopLevel
    * @pre Invariants already instantiated
    **/
   public void suppressAll (boolean in_process) {
-    if (Daikon.use_suppression_optimization) {
+    if (Daikon.dkconfig_use_suppression_optimization) {
       if (debugSuppressInit.isLoggable(Level.FINE)) {
         debugSuppressInit.fine ("SuppressAll for: " + name());
       }
@@ -3285,7 +3324,7 @@ public class PptTopLevel
    * @pre Invariants already instantiated.  inv not already suppressed.
    **/
   public boolean attemptSuppression (Invariant inv, boolean in_process) {
-    if (Daikon.use_suppression_optimization) {
+    if (Daikon.dkconfig_use_suppression_optimization) {
       if (inv.getSuppressor() != null) {
         System.err.println ("Error: the invariant " + inv.format() +
                             " already has a suppressor");
@@ -4661,6 +4700,22 @@ public class PptTopLevel
                       + inv.getSuppressor());
       }
     }
+  }
+
+  /**
+   * Returns true if all non-derived variables at this program point
+   * are parameters.  Can be used to infer that a method is a constructor
+   * ENTER point (since the objects fields are not included in that
+   * case).  There is no guarantee, however, that that inference is
+   * always correct
+   */
+  public boolean only_param_vars() {
+    for (int i = 0; i < var_infos.length; i++) {
+      VarInfo var = var_infos[i];
+      if (!var.aux.getFlag(VarInfoAux.IS_PARAM) || var.isPrestate())
+        return (false);
+    }
+    return (true);
   }
 
   /**
