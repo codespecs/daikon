@@ -4,7 +4,7 @@
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though all other versions are built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps dfepl-flow.png
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
@@ -14,7 +14,7 @@ README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
-	dfepl dtrace-perl \
+	dfepl dtrace-perl dtype-perl \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
