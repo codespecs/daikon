@@ -241,6 +241,13 @@ public class LinearTernaryFloat
     // VarInfo var1 = ppt.var_infos[0];
     // VarInfo var2 = ppt.var_infos[1];
     // VarInfo var3 = ppt.var_infos[2];
+    return false;
+  }
+
+  public boolean isObviousImplied() {
+    if (core.a == 0 || core.b == 0) {
+      return true;
+    }
 
     return false;
   }

@@ -191,6 +191,9 @@ public class InvariantFilters {
   //  invariants are useful when it comes to displaying invariants.
   public static List addEqualityInvariants( List invariants ) {
 
+    return invariants; // INCR
+
+    /* [INCR]
     // Performing this operation using the following struture would
     // make more sense to me: Map[Canonical -> Set[Non-Canonicals]],
     // instead of HashSet[List[Canonical, Non-Canonicals]].  -JWN 7/9/01
@@ -316,5 +319,6 @@ public class InvariantFilters {
     equality_invariants = PrintInvariants.sort_invariant_list(equality_invariants);
     equality_invariants.addAll(invariants);
     return equality_invariants;
+    */ // [INCR]
   }
 }
