@@ -1678,27 +1678,6 @@ public final class ONEOFSCALAR
 #endif
 
   /**
-   * @return true if this invariant has few modified (non-repeated) samples.
-   * This is special for OneOf invariants.
-   **/
-  public boolean hasFewModifiedSamples() {
-    int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
-
-    // A OneOf should have at least as many samples as it has values.
-    // That isn't true for "elements", though:  a single sample "[1 2]"
-    // contains two values for the elements.
-#ifndef IS_ELT
-    if (num_elts() > num_mod_non_missing_samples) {
-      System.out.println("OneOf problem: num_elts " + num_elts()
-                         + ", num_mod " + num_mod_non_missing_samples + ": "
-                         + format() + "  " + repr());
-    }
-#endif
-    return false;
-  }
-
-
-  /**
    * Oneof can merge different formulas from lower points to create a single
    * formula at an upper point.
    */

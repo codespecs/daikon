@@ -93,9 +93,6 @@ public class ControlledInvariantFilter extends InvariantFilter {
     }
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      if (inv.hasFewModifiedSamples()) {
-        PrintInvariants.debugFiltering.fine ("\t\thas few modified samples " + inv.format() + "\n");
-      }
       if (!inv.enoughSamples()) {
         PrintInvariants.debugFiltering.fine ("\t\tnot enough samples " + inv.format() + "\n");
       }

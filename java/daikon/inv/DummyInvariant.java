@@ -151,10 +151,6 @@ public class DummyInvariant
     return 0;
   }
 
-  public boolean hasFewModifiedSamples() {
-    return false;
-  }
-
   public void negate() {
     negated = !negated;
   }

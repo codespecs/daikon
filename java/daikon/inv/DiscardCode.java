@@ -19,7 +19,7 @@ import daikon.inv.filter.*;
 
     bad_probability // has an unjustified probability
 
-    few_modified_samples // has had few modified samples
+    unused // was few_modified_samples
 
     not_enough_samples // not enough samples seen for the Invariant
 
@@ -47,7 +47,7 @@ public class DiscardCode implements Comparable,Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030822L;
+  static final long serialVersionUID = 20031016L;
 
   /** used when an invariant has not been discarded */
   public static final DiscardCode not_discarded = new DiscardCode(-1);
@@ -60,9 +60,6 @@ public class DiscardCode implements Comparable,Serializable {
 
   /** used when an invariant has an unjustified probability */
   public static final DiscardCode bad_probability = new DiscardCode(2);
-
-  /** used when an invariant has few modified samples */
-  public static final DiscardCode few_modified_samples = new DiscardCode(3);
 
   /** used when an invariant has not had enough samples */
   public static final DiscardCode not_enough_samples = new DiscardCode(4);
@@ -110,7 +107,7 @@ public class DiscardCode implements Comparable,Serializable {
   }
 
   /** The enumeration members in assorted order: <br>
-      not_discarded, obvious, bad_sample, bad_probability, few_modified_samples, not_enough_samples, non_canonical_var,<br>
+      not_discarded, obvious, bad_sample, bad_probability, [unused], not_enough_samples, non_canonical_var,<br>
       implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
@@ -135,8 +132,6 @@ public class DiscardCode implements Comparable,Serializable {
       return control_check;
     else if (filter instanceof DerivedParameterFilter)
       return derived_param;
-    else if (filter instanceof FewModifiedSamplesFilter)
-      return few_modified_samples;
     else if (filter instanceof ImpliedPostconditionFilter)
       return implied_post_condition;
     else if (filter instanceof NonCanonicalVariablesFilter)
@@ -208,7 +203,7 @@ public class DiscardCode implements Comparable,Serializable {
     else if (enumValue==2)
       return bad_probability;
     else if (enumValue==3)
-      return few_modified_samples;
+      throw new Error("few_modified_samples no longer exists");
     else if (enumValue==4)
       return not_enough_samples;
     else if (enumValue==5)

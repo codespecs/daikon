@@ -75,7 +75,6 @@ public class InvariantFilters {
     addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());
     addPropertyFilter( new ObviousFilter());
-    addPropertyFilter( new FewModifiedSamplesFilter());
     addPropertyFilter( new OnlyConstantVariablesFilter());
     // UninterestingConstantFilter is turned off for the moment, since
     // without a static check it's too strong, not to mention being a
@@ -104,9 +103,9 @@ public class InvariantFilters {
     return new InvariantFilters(new Vector());
   }
 
-  public static InvariantFilters isWorthPrintingFilter_sansControlledCheck() {
+  private static InvariantFilters isWorthPrintingFilter_sansControlledCheck_filters;
+  static {
     Vector v = new Vector();
-    v.add(new FewModifiedSamplesFilter());
     v.add(new EnoughSamplesFilter());
     v.add(new NonCanonicalVariablesFilter());
     v.add(new ObviousFilter());
@@ -115,12 +114,18 @@ public class InvariantFilters {
     v.add(new OnlyConstantVariablesFilter());
     // v.add(new UninterestingConstantFilter());
     // v.add(new DerivedParameterFilter());
-    return (new InvariantFilters(v));
+    isWorthPrintingFilter_sansControlledCheck_filters = new InvariantFilters(v);
   }
 
-  public static InvariantFilters isWorthPrintingFilter() {
+  public static InvariantFilters isWorthPrintingFilter_sansControlledCheck() {
+    return isWorthPrintingFilter_sansControlledCheck_filters;
+  }
+
+  private static InvariantFilters isWorthPrintingFilter_filters;
+  // I hope this static block is invoked only after
+  // suppress_implied_controlled_invariants is set.
+  static {
     Vector v = new Vector();
-    v.add(new FewModifiedSamplesFilter());
     v.add(new EnoughSamplesFilter());
     v.add(new NonCanonicalVariablesFilter());
     v.add(new ObviousFilter());
@@ -130,7 +135,10 @@ public class InvariantFilters {
     //v.add(new UninterestingConstantFilter());
     if (Daikon.suppress_implied_controlled_invariants)
       v.add(new ControlledInvariantFilter());
-    return (new InvariantFilters(v));
+    isWorthPrintingFilter_filters = new InvariantFilters(v);
+  }
+  public static InvariantFilters isWorthPrintingFilter() {
+    return isWorthPrintingFilter_sansControlledCheck_filters;
   }
 
   /**

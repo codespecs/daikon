@@ -1302,25 +1302,14 @@ public abstract class Invariant
   final public String isWorthPrinting_sansControlledCheck_debug() {
     return
       "iwpscc(" + format() + " @ " + ppt.name()
-      + ") <=== " + (! hasFewModifiedSamples())
-      + " " + enoughSamples()
+      + ") <=== "
+      + enoughSamples()
       // + " " + (! hasNonCanonicalVariable()) [INCR]
       // + " " + (! hasOnlyConstantVariables()) [INCR]
       + " " + (! isObvious().shouldDiscard())
       + " " + justified()
       // + " " + isWorthPrinting_PostconditionPrestate() [INCR]
       ;
-  }
-
-  /**
-   * @return true if this invariant has few modified (non-repeated) samples.
-   * An exception is made for OneOf invariants.
-   **/
-  // This used to be final, but it had an instanceof check for
-  // "OneOf". That seems silly, so it's now overriden there.
-  public boolean hasFewModifiedSamples() {
-    int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
-    return (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
   }
 
   // This used to be final, but I want to override in EqualityInvariant.
