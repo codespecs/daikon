@@ -2,9 +2,9 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.IntComparisonCore;
 import utilMDE.*;
-
-// I should reimplement this, using IntComparisonCore.
+import java.util.*;
 
 
 // This compares adjacent elements in the sequence.
@@ -12,15 +12,11 @@ public class EltwiseIntComparison extends SingleSequence {
 
   final static boolean debugEltwiseIntComparison = false;
 
-  public final boolean only_check_eq;
-
-  boolean can_be_eq = false;
-  boolean can_be_lt = false;
-  boolean can_be_gt = false;
+  public IntComparisonCore core;
 
   protected EltwiseIntComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
-    only_check_eq = only_eq;
+    core = new IntComparisonCore(this, only_eq);
   }
 
   public static EltwiseIntComparison instantiate(PptSlice ppt) {
@@ -32,26 +28,19 @@ public class EltwiseIntComparison extends SingleSequence {
 
   public String repr() {
     return "EltwiseIntComparison" + varNames() + ": "
-      + "can_be_eq=" + can_be_eq
-      + ",can_be_lt=" + can_be_lt
-      + ",can_be_gt=" + can_be_gt
-      + ",only_check_eq=" + only_check_eq;
+      + core.repr()
+      + ",no_invariant=" + no_invariant;
   }
 
   public String format() {
-    // Don't do this; format() shouldn't check justification (in general...).
-    // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
-    String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-    String comparison = (can_be_eq ? "=" : "");
     if (debugEltwiseIntComparison) {
       System.out.println(repr()
-			 + "; inequality=\"" + inequality + "\""
-			 + ",comparison=\"" + comparison + "\"");
+			 + ";comparison=\"" + core.format_comparator() + "\"");
     }
-    if (can_be_eq && !(can_be_lt || can_be_gt)) {
+    if (core.can_be_eq && !(core.can_be_lt || core.can_be_gt)) {
       return var().name + " elements are equal";
     } else {
-      return (var().name + " sorted by " + inequality + comparison);
+      return (var().name + " sorted by " + core.format_comparator());
     }
   }
 
@@ -63,58 +52,59 @@ public class EltwiseIntComparison extends SingleSequence {
     return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
-  public void add_modified(long[] a, int count) {
+  public void add_modified(long [] a, int count) {
     for (int i=1; i<a.length; i++) {
-      long v1 = a[i-1];
-      long v2 = a[i];
-      if (v1 == v2)
-        can_be_eq = true;
-      else if (v1 < v2)
-        can_be_lt = true;
-      else
-        can_be_gt = true;
-    }
-    if ((can_be_lt && can_be_gt)
-        || (only_check_eq && (can_be_lt || can_be_gt))) {
-      destroy();
-      return;
+      core.add_modified(a[i-1], a[i], count);
+      if (no_invariant)
+        return;
     }
   }
+
+  // Perhaps check whether all the arrays of interest have length 0 or 1.
 
   protected double computeProbability() {
-    if (no_invariant) {
-      return Invariant.PROBABILITY_NEVER;
-    } else if (! (can_be_lt || can_be_gt || can_be_eq)) {
-      // This can happen if all the arrays of interest have
-      // length 0 or 1.  (Mabye I should check that.)
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, ppt.num_values());
-    } else {
-      Assert.assert(can_be_eq);
-      return Invariant.PROBABILITY_JUSTIFIED;
-    }
+    return core.computeProbability();
   }
 
-  public boolean isSameFormula(Invariant o)
-  {
-    EltwiseIntComparison other = (EltwiseIntComparison) o;
-    return
-      (can_be_eq == other.can_be_eq) &&
-      (can_be_gt == other.can_be_gt) &&
-      (can_be_lt == other.can_be_lt);
+  public boolean isExact() {
+    return core.isExact();
   }
 
-  public boolean isExclusiveFormula(Invariant o)
+  public boolean isSameFormula(Invariant other)
   {
-    if (o instanceof EltwiseIntComparison) {
-      EltwiseIntComparison other = (EltwiseIntComparison) o;
-      return (! ((can_be_eq && other.can_be_eq)
-                 || (can_be_gt && other.can_be_gt)
-                 || (can_be_lt && other.can_be_lt)));
-    }
-    return false;
+    return core.isSameFormula(((EltwiseIntComparison) other).core);
   }
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    return core.isExclusiveFormula(((EltwiseIntComparison) other).core);
+  }
+
+  // Look up a previously instantiated invariant.
+  public static EltwiseIntComparison find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof EltwiseIntComparison)
+        return (EltwiseIntComparison) inv;
+    }
+    return null;
+  }
+
+
+
+  // Copied from IntComparison.
+  // public boolean isExclusiveFormula(Invariant other)
+  // {
+  //   if (other instanceof IntComparison) {
+  //     return core.isExclusiveFormula(((IntComparison) other).core);
+  //   }
+  //   if (other instanceof NonEqual) {
+  //     return isExact();
+  //   }
+  //   return false;
+  // }
+
 
   public boolean isObviousImplied() {
     EltOneOf eoo = EltOneOf.find(ppt);
