@@ -3,6 +3,8 @@
 
 # Count number of each modbit value in the argument .dtrace files.
 
+# (This does not properly deal with "this_invocation_nonce".  -MDE 9/2003)
+
 
 BEGIN {
   $debug = 0;
