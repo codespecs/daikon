@@ -297,6 +297,10 @@ Problems running dfej
 
 * Ajax errors::                 
 
+Problems with dfec
+
+* Linker problems::             
+
 Problems running Daikon
 
 * No return from procedure::    
@@ -3377,7 +3381,7 @@ this problem, see @ref{Memory tracking in libraries}.
 If there are calls from uninstrumented code to instrumented code, your
 program will not link, because the instrumented code is C++ and the
 uninstrumented code is C@.  If certain functions are called from
-instrumented code (an example is @code{usage} in @file{wc.c}), then
+uninstrumented code (an example is @code{usage} in @file{wc.c}), then
 you can place
 @example
 #ifdef DAIKON_RUNTIME_H
@@ -3523,6 +3527,7 @@ compilers accept.
 @cindex K&R C
 @cindex C prototypes
 @cindex prototypes, C
+@cindex protoize tool
 
 To convert K&R prototypes to ANSI/ISO prototypes, use the
 @command{protoize} program; even if you believe your code to be
@@ -4644,18 +4649,101 @@ occurred and to prevent memory corruption.  The Daikon runtime's
 discovery of these errors, while not directly related to invariant
 detection, is a pleasant side effect of using Daikon.
 
-To learn exactly where the error occurred in your program, you can
-either run a debugger (such as @uref{http://sources.redhat.com/gdb/, ,
-GDB}) on the @file{core} file left behind when the Daikon runtime
-halts the instrumented program, or you can run the instrumented
-program under the debugger.  Correct the error, then re-instrument it
-and run it again.
+@cindex daikon_runtime.h file
+@cindex customizing the Daikon C runtime
 
-@c 5/15/2002
-(In a future release, we plan to permit programs to continue running
-even if they commit memory errors, in certain cases and when users set
-special flags to enable this behavior.)
+The Daikon runtime has a variety of possible behaviors when a program
+contains a memory error.  For instance, it can halt immediately; it
+can allocate extra buffer space around arrays (but cannot do so around
+dynamically allocated (malloced) blocks, because the type is not known
+at the type of the malloc call) and only halt if the program goes
+beyond those bounds; or the checking can be turned off entirely, which
+is extremely dangerous.  These and many other customizations for the
+Daikon C runtime library are described in the @file{daikon_runtime.h}
+file.
 
+@cindex Lackwit error, identifier undefined
+@cindex identifier undefined, Lackwit error
+@cindex undefined identifier, Lackwit error
+
+If Lackwit (but not dfec proper) gives errors of the form
+``identifier "strcat" is undefined'', then you have failed to include
+the proper header file.  In this case, you should add @samp{#include
+<string.h>} to the program to make the program valid ANSI C@.  dfec
+does not produce this particular error, because it includes
+@file{daikon_runtime.h}, which itself includes @file{string.h}.
+
+@cindex lwpp-init.pl error
+
+If Lackwit gives an error of the form
+@example
+sh: lwpp-init.pl: not found
+@end example
+then you have not correctly installed the dfec distribution
+(@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
+in the directory referred to by environment variable DFECDIR.  (That
+directory is placed on your path by the standard 
+
+
+@menu
+* Linker problems::             
+@end menu
+
+@node    Linker problems,  , dfec problems, dfec problems
+@subsection Linker problems
+
+This section discusses problems that may occur when linking files that
+have been instrumented by dfec.  For more details,
+@xref{Instrumentation scope}.
+
+@cindex undefined symbol error
+@cindex error, undefined symbol
+@cindex ld error
+@cindex symbol referencing errors
+@cindex DaikonSmartPointer link errors
+
+A linker error involving DaikonSmartPointer, such as
+@example
+Undefined                       first referenced
+ symbol                             in file
+foo(DaikonSmartPointer<Bar>)/var/tmp/ccPtoCZc.o
+ld: fatal: Symbol referencing errors. No output written to MyProgram
+@end example
+@noindent
+means that
+instrumented (or partially instrumented) code contains a declaration
+of @samp{foo(bar *)}, but the definition appears in uninstrumented
+code.  The instrumented version uses smart pointers, but the
+uninstrumented version does not.  You should supply the @file{.c} file
+containing the definition to @command{dfec} (preceded by @option{-l}
+if you do not wish to fully instrument the file).
+
+If you cannot specify the @file{.c} containing the definition of
+@samp{foo()} to dfec (for instance, if it appears in a pre-compiled
+library), then no code supplied to dfec should contain a declaration
+for @samp{foo()}.   The declaration should occur in a @file{.h} file
+that your code @samp{#include}s, but that is not specified on the dfec
+command line.
+
+Other linker problems may indicate a mismatch between part of
+your code that was compiled with gcc and part of it that was compiled
+with g++.  gcc creates files using ``C linkage'', and g++ creates
+files using ``C++ linkage''; the two are not compatible.  (It is
+possible to direct g++ to use C linkage in certain circumstances;
+@xref{Instrumentation scope}.)
+While g++ can compile and link in the same step,
+you should never provide the link step (the one that creates an
+executable) with uninstrumented C code.  You should only provide the
+link invocation of g++ with either
+@itemize @bullet
+@item
+@file{.cc} files (or their @file{.o} versions) that were output
+by dfec, or
+@item
+@file{.o} or @file{.a} files for (completely) uninstrumented code;
+these files should be created by calling gcc, never
+g++.
+@end itemize
 
 
 @c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
@@ -4990,12 +5078,23 @@ much more likely to be corrected.
 The following problems are already known.  (You may report them again,
 to encourage us to release the fix faster, if you like.)
 
-[There are no outstanding user-reported problems at this time.]
+@c [There are no outstanding user-reported problems at this time.]
 
-@c @itemize @bullet
+@itemize @bullet
 @c @item C/C++ front end:
 @c @item Daikon:
-@c @end itemize
+@item Context GUI:
+@c 7/18/2002
+@cindex question marks, in Context GUI
+@cindex Context GUI, question marks in
+The context GUI sometimes prints invariants containing question marks,
+such as ``y == ? * x + ?''.  These invariants have not yet received
+sufficient values and should not be displayed.
+For instance, suppose we would like to report y=ax+b
+for variables x and y.  We need to see at least two (x,y) pairs before we
+know what a and b should be.  If we haven't seen two (x,y) pairs, then a
+and b are unknown and are printed as question marks.
+@end itemize
 
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
