@@ -215,13 +215,12 @@ public final class SeqIndexComparisonFloat
   // }
 
   // Copied from IntComparison.
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     if (isExact()) {
       return false;
     }
-    VarInfo seqvar = var();
 
-    return false;
+    return super.isObviousDynamically(vis);
   }
 
 }

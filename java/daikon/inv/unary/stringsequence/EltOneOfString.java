@@ -12,6 +12,8 @@ import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 import java.io.*;
 
@@ -29,6 +31,11 @@ public final class EltOneOfString
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
+
+  /**
+   * Debugging logger.
+   **/
+  public static final Logger debug = Logger.getLogger (EltOneOfString.class.getName());
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -461,15 +468,15 @@ public final class EltOneOfString
     }
   }
 
-  public boolean isObviousStatically() {
+  public boolean isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
-    if (var().isStaticConstant()) {
+    if (vis[0].isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
     }
-    return super.isObviousStatically();
+    return super.isObviousStatically(vis);
   }
 
   public boolean isSameFormula(Invariant o)

@@ -82,12 +82,6 @@ public class SeqComparisonFloat
     // System.out.println("vars[0]: " + var1.type.format());
     // System.out.println("vars[1]: " + var2.type.format());
 
-    if ((SubSequenceFloat.isObviousDerived(var1, var2))
-        || (SubSequenceFloat.isObviousDerived(var2, var1))) {
-      Global.implied_noninstantiated_invariants++;
-      return null;
-    }
-
     ProglangType type1 = var1.type;
     ProglangType type2 = var2.type;
     // This intentonally checks dimensions(), not pseudoDimensions.
@@ -259,16 +253,32 @@ public class SeqComparisonFloat
     return false;
   }
 
-  // Copied from IntComparison.
-  public boolean isObviousDynamically() {
-    PairwiseFloatComparison pic = PairwiseFloatComparison.find(ppt);
-    if ((pic != null)
-        && (pic.core.can_be_eq == can_be_eq)
-        && (pic.core.can_be_lt == can_be_lt)
-        && (pic.core.can_be_gt == can_be_gt)) {
+  public boolean isObviousStatically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    // It's a postProceesed equality
+    if (var1.equalitySet == var2.equalitySet) return false; 
+    if ((SubSequenceFloat.isObviousSubSequence(var1, var2))
+        || (SubSequenceFloat.isObviousSubSequence(var2, var1))) {
       return true;
     }
-    return false;
+    return super.isObviousStatically (vis);
+  }
+  
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    // It's a postProceesed equality
+    if (vis[0].equalitySet == vis[1].equalitySet) return false; 
+    PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
+    if (ppt != null) {
+       PairwiseFloatComparison pic = PairwiseFloatComparison.find(ppt);
+       if ((pic != null)
+           && (pic.core.can_be_eq == can_be_eq)
+           && (pic.core.can_be_lt == can_be_lt)
+           && (pic.core.can_be_gt == can_be_gt)) {
+         return true;
+       }
+    }
+    return super.isObviousDynamically(vis);
   }
 
   public void repCheck() {

@@ -80,13 +80,10 @@ public class LinearBinary
     return true;
   }
 
-  public boolean isObviousStatically() {
-    if (core.a == 0) return true;                // Constant
-    if (core.a == 1 && core.b == 0) return true; // Equality
-
+  public boolean isObviousStatically(VarInfo[] vis) {
     // Obvious derived
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
     // avoid comparing "size(a)" to "size(a)-1"; yields "size(a)-1 = size(a) - 1"
     if (var1.isDerived() && (var1.derived instanceof SequenceLength)
         && var2.isDerived() && (var2.derived instanceof SequenceLength)) {
@@ -106,7 +103,13 @@ public class LinearBinary
       return true;
     }
 
-    return super.isObviousStatically();
+    return super.isObviousStatically(vis);
+  }
+
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    if (core.a == 0) return true;                // Constant
+    if (core.a == 1 && core.b == 0) return true; // Equality
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant other)

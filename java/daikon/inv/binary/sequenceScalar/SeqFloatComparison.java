@@ -82,7 +82,7 @@ public final class SeqFloatComparison
     boolean obvious_le = false;
     boolean obvious_gt = false;
     boolean obvious_ge = false;
-    if ((sclseq != null) && (SubSequenceFloat.isObviousDerived(seqvar, sclseq))) {
+    if ((sclseq != null) && (SubSequenceFloat.isObviousSubSequence(seqvar, sclseq))) {
       // System.out.println("SeqIntComparison instantiate; is obvious derived: " + seqvar.name + " " + sclvar.name + " " + sclseq.name);
       obvious_ge = (seqmin != null);
       obvious_le = (seqmax != null);
@@ -211,8 +211,10 @@ public final class SeqFloatComparison
   // }
 
   // Initially copied from IntComparison.
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
+    VarInfo seqvar = seqvar(vis);
+    VarInfo sclvar = sclvar(vis);
 
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
@@ -225,7 +227,7 @@ public final class SeqFloatComparison
         SeqFloatComparison other = (SeqFloatComparison) inv;
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
-            && SubSequenceFloat.isObviousDerived(seqvar(), other.seqvar())) {
+            && SubSequenceFloat.isObviousSubSequence (seqvar(), other.seqvar())) {
           return true;
         }
       }
@@ -235,8 +237,6 @@ public final class SeqFloatComparison
       return false;
     }
 
-    VarInfo seqvar = seqvar();
-    VarInfo sclvar = sclvar();
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
       // Sequence length tests
       SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
@@ -268,8 +268,8 @@ public final class SeqFloatComparison
     // one and it has the same invariant, then this one is obvious.
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
-      if (SubSequenceFloat.isObviousDerived(seqvar, vi)) {
-        PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
+      if (SubSequenceFloat.isObviousSubSequenceDynamically(seqvar, vi)) {
+        PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar);
         if (other_slice != null) {
           SeqFloatComparison other_sic = SeqFloatComparison.find(other_slice);
           if ((other_sic != null) && other_sic.enoughSamples()) {
@@ -311,8 +311,7 @@ public final class SeqFloatComparison
     //     // lengths of equal arrays being compared
     //     return true;
     //   }
-
-    return false;
+    return super.isObviousDynamically (vis);
   }
 
 }

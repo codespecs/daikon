@@ -65,12 +65,6 @@ public class PairwiseIntComparison
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    if ((SubSequence.isObviousDerived(var1, var2))
-        || (SubSequence.isObviousDerived(var2, var1))) {
-      Global.implied_noninstantiated_invariants++;
-      return null;
-    }
-
     boolean only_eq = false;
     if (! (var1.type.elementIsIntegral() && var2.type.elementIsIntegral())) {
       only_eq = true;
@@ -82,16 +76,30 @@ public class PairwiseIntComparison
     } else {
       result = new PairwiseIntComparison(ppt, only_eq);
     }
+    return result;
+  }
+
+  public boolean isObviousStatically (VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    
+    if ((SubSequence.isObviousSubSequence(var1, var2))
+        || (SubSequence.isObviousSubSequence(var2, var1))) {
+      Global.implied_noninstantiated_invariants++;
+      return true;
+    }
+
     // Don't instantiate if the variables can't have order
-    if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
+        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
         debug.debug ("Not instantitating for because order has no meaning: " +
-                     result.var1().name + " and " + result.var2().name);
+                     var1.name + " and " + var2.name);
       }
-      return null;
+      return true;
     }
-    return result;
+    
+    return super.isObviousStatically (vis);
   }
 
   protected Object clone() {

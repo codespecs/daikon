@@ -247,7 +247,7 @@ public class EltwiseIntLessEqual
     return seenNonTrivialSample;
   }
 
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     if (!hasSeenNonTrivialSample())
       return true;
 
@@ -287,7 +287,7 @@ public class EltwiseIntLessEqual
     // also, sorted by < for entire -> sorted by <= for subsequence
     //       sorted by > for entire -> sorted by >= for subsequence
 
-    Derivation deriv = ppt.var_infos[0].derived;
+    Derivation deriv = vis[0].derived;
 
     if (deriv != null && ((deriv instanceof SequenceScalarSubsequence) || (deriv instanceof SequenceFloatSubsequence))) {
       // Find the slice with the full sequence, check for an invariant of this type
@@ -312,6 +312,7 @@ public class EltwiseIntLessEqual
         }
       }
     }
-    return false;
+
+    return super.isObviousDynamically(vis);
   }
 }

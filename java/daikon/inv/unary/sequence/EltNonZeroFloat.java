@@ -58,12 +58,7 @@ public final class EltNonZeroFloat
     if (! ppt.var_infos[0].type.baseIsFloat()) {
       result.pointer_type = true;
       result.override_range = 3;
-      if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
-        // If it's not a number and null doesn't have special meaning...
-        return null;
      }
-
-    }
 
     if (debug.isDebugEnabled()) {
       System.out.println("EltNonZeroFloat.instantiate: " + result.format());
@@ -244,25 +239,39 @@ public final class EltNonZeroFloat
     return false;
   }
 
-  public boolean isObviousDynamically() {
+  public boolean isObviousStatically(VarInfo[] vis) {
+    if (!vis[0].aux.getFlag(VarInfoAux.HAS_NULL)) {
+      // If it's not a number and null doesn't have special meaning...
+      return true;
+    }
+    return super.isObviousStatically (vis);
+  }
+
+  public boolean isObviousDynamically(VarInfo[] vis) {
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
+
+    VarInfo v1 = vis[0];
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Testing isObviousDynamically for " + v1.name.name());
+    }
 
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZeroFloat) && (inv != this) && inv.enoughSamples()) {
-        VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        if (SubSequence.isObviousDerived(v1, v2)) {
-          // System.out.println("obvious: " + format() + "   because of " + inv.format());
-          return true;
+        if (debug.isDebugEnabled()) {
+          debug.debug ("  Have to test: " + inv.repr());
         }
 
+        // First see if the subsequence relationship can be determined from the VarInfos
+        if (SubSequence.isObviousSubSequenceDynamically(v1, v2)) {
+          return true;
+        }
+        //     Otherwise, look for the actual SubSequence invariant
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
-        if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
-        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
-        PptSlice2 slice_2seq = parent.findSlice(v1, v2);
+        PptSlice2 slice_2seq = parent.findSlice_unordered (v1, v2);
         if (slice_2seq == null) {
           // System.out.println("EltNonZeroFloat.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
         } else  {
@@ -275,14 +284,15 @@ public final class EltNonZeroFloat
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
+              debug.debug ("  True from subsequence search");
               return true;
             }
           }
         }
       }
     }
-
-    return false;
+ 
+    return super.isObviousDynamically(vis);
   }
 
   // Look up a previously instantiated invariant.

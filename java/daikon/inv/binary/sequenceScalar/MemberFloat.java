@@ -54,18 +54,6 @@ public final class MemberFloat
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
-    // SUPPRESSED INVARIANT: Member, if isEqualToObviousMember (complicated)
-    // [INCR] for now, don't use equalTo() information.
-    // if (isEqualToObviousMember(sclvar, seqvar)) {
-    if (isObviousMember(sclvar, seqvar)) {
-      Global.implied_noninstantiated_invariants += 1;
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Member not instantiated (obvious): "
-                     + sclvar.name + " in " + seqvar.name);
-      }
-      return null;
-    }
-
     if (debug.isDebugEnabled()) {
       debug.debug ("Member instantiated: "
                    + sclvar.name + " in " + seqvar.name);
@@ -73,14 +61,19 @@ public final class MemberFloat
     return new MemberFloat(ppt, seq_first);
   }
 
-  public boolean isObviousStatically() {
-    return isEqualToObviousMember(sclvar(), seqvar());
+  public boolean isObviousStatically(VarInfo[] vis) {
+    VarInfo seqvar = vis[seq_first ? 0 : 1];
+    VarInfo sclvar = vis[seq_first ? 1 : 0];
+    if (isObviousMember(sclvar, seqvar)) {
+      return true;
+    }
+    return super.isObviousStatically (vis);
   }
 
+  /* [INCR]  
   // Like isObviousMember, but also checks everything equal to the given
   // variables.
   public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
-    /* [INCR]
     Assert.assertTrue(sclvar.isCanonical());
     Assert.assertTrue(seqvar.isCanonical());
     Vector scl_equalto = sclvar.equalTo();
@@ -96,10 +89,14 @@ public final class MemberFloat
           return true;
       }
     }
-    */ // [INCR]
     return isObviousMember (sclvar, seqvar);
   }
+  */ // [INCR]
 
+  /**
+   * Check whether sclvar is a member of seqvar can be determined
+   * statically.
+   **/
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 
     VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();

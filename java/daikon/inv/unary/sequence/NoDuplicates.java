@@ -44,13 +44,6 @@ public class NoDuplicates
     if (!dkconfig_enabled) return null;
     NoDuplicates result = new NoDuplicates(ppt);
     // Don't instantiate if the variable can't have dupliates
-    if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
-      if (debug.isDebugEnabled()) {
-        debug.debug ("Not instantitating for because duplicates has no meaning: " +
-                     result.var().name.name());
-      }
-      return null;
-    }
     return result;
   }
 
@@ -207,26 +200,32 @@ public class NoDuplicates
     }
   }
 
+  public boolean isObviousStatically (VarInfo[] vis) {
+    if (!vis[0].aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
+      return true;
+    }
+    return super.isObviousStatically (vis);
+  }
+
   // Lifted from EltNonZero; should abstract some of this out.
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     // For every other NoDuplicates at this program point, see if there is a
     // subsequence relationship between that array and this one.
+    VarInfo v1 = vis[0];
 
     PptTopLevel parent = ppt.parent;
+
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof NoDuplicates) && (inv != this) && inv.enoughSamples()) {
-        VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        if (SubSequence.isObviousDerived(v1, v2)) {
+        if (SubSequence.isObviousSubSequenceDynamically(v1, v2)) {
           // System.out.println("obvious: " + format() + "   because of " + inv.format());
           return true;
         }
 
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
-        if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
-        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
-        PptSlice2 slice_2seq = parent.findSlice(v1, v2);
+        PptSlice2 slice_2seq = parent.findSlice_unordered(v1, v2);
         if (slice_2seq == null) {
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
         } else  {
@@ -256,7 +255,7 @@ public class NoDuplicates
         return true;
     }
 
-    return false;
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant other)

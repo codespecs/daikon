@@ -12,6 +12,8 @@ import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 import java.io.*;
 
@@ -29,6 +31,11 @@ public final class EltOneOfFloat
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
+
+  /**
+   * Debugging logger.
+   **/
+  public static final Logger debug = Logger.getLogger (EltOneOfFloat.class.getName());
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -338,19 +345,19 @@ public final class EltOneOfFloat
     }
   }
 
-  public boolean isObviousStatically() {
+  public boolean isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
-    if (var().isStaticConstant()) {
+    if (vis[0].isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
     }
-    return super.isObviousStatically();
+    return super.isObviousStatically(vis);
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo v = var();
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo v = vis[0];
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
     for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
@@ -361,13 +368,14 @@ public final class EltOneOfFloat
       if (inv instanceof EltOneOfFloat) {
         EltOneOfFloat other = (EltOneOfFloat) inv;
         if (isSameFormula(other)
-            && SubSequence.isObviousDerived(v, other.var())) {
+            && SubSequence.isObviousSubSequenceDynamically(v, other.var())) {
+          debug.debug ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
           return true;
         }
       }
     }
 
-    return super.isObviousDynamically();
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant o)

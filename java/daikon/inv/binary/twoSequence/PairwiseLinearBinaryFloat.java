@@ -161,9 +161,9 @@ public class PairwiseLinearBinaryFloat
     return false;
   }
 
-  public boolean isObviousStatically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     if (core.a == 0) return true;                // Constant
     if (core.a == 1 && core.b == 0) return true; // Equality
-    return false;
+    return super.isObviousDynamically(vis);
   }
 }

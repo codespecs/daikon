@@ -183,15 +183,15 @@ public final class SeqIndexNonEqualFloat
   // }
 
   // Copied from IntComparison.
-  public boolean isObviousDynamically() {
-    VarInfo seqvar = var();
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo seqvar = vis[0];
 
     // For each other sequence variable, if it is a supersequence of this
     // one and it has the same invariant, then this one is obvious.
     PptTopLevel pptt = ppt.parent;
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
-      if (SubSequenceFloat.isObviousDerived(seqvar, vi)) {
+      if (SubSequenceFloat.isObviousSubSequenceDynamically(seqvar, vi)) {
         PptSlice1 other_slice = pptt.findSlice(vi);
         // I'm not sure exactly how this can be null, but it can.
         if (other_slice != null) {
@@ -203,7 +203,7 @@ public final class SeqIndexNonEqualFloat
       }
     }
 
-    return super.isObviousDynamically();
+    return super.isObviousDynamically(vis);
   }
 
 }

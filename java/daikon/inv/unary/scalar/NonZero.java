@@ -63,10 +63,6 @@ public class NonZero
     if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
       result.pointer_type = true;
       result.override_range = 3;
-      if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
-        // If it's not a number and null doesn't have special meaning...
-        return null;
-      }
     }
 
     return result;
@@ -164,8 +160,8 @@ public class NonZero
     }
   }
 
-  public boolean isObviousStatically() {
-    VarInfo var = var();
+  public boolean isObviousStatically(VarInfo[] vis) {
+    VarInfo var = vis[0];
     // In Java, "this" can never be non-null, so "this != null" is vacuous.
     if (var.name.name() == "this") { // interned
       return true;
@@ -174,11 +170,17 @@ public class NonZero
         ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
       return true;
     }
-    return super.isObviousStatically();
+
+    if (!var.aux.getFlag(VarInfoAux.HAS_NULL)) {
+      // If it's not a number and null doesn't have special meaning...
+      return true;
+    }
+
+    return super.isObviousStatically(vis);
   }
 
-  public boolean isObviousDynamically() {
-    VarInfo var = var();
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    VarInfo var = vis[0];
 
     // System.out.println("isObviousImplied: " + format());
 
@@ -224,7 +226,7 @@ public class NonZero
       }
     }
 
-    return super.isObviousDynamically();
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant other)

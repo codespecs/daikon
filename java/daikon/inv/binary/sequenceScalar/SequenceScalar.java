@@ -48,6 +48,22 @@ public abstract class SequenceScalar
     return ppt.var_infos[scl_index];
   }
 
+  /**
+   * Return the sequence variable in the tuple whose VarInfos are
+   * corresponds to this.ppt.var_infos.
+   **/
+  public VarInfo seqvar(VarInfo[] vis) {
+    return vis[seq_index];
+  }
+
+  /**
+   * Return the scalar variable in the tuple whose VarInfos are
+   * corresponds to this.ppt.var_infos.
+   **/
+  public VarInfo sclvar(VarInfo[] vis) {
+    return vis[scl_index];
+  }
+
   public void add(long[] v1, long v2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));

@@ -47,20 +47,6 @@ public class SubSequence
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    // System.out.println("SubSequence.isObviousDerived(" + format() + ") = "
-    //                    + ((SubSequence.isObviousDerived(var1(), var2()))
-    //                       || (SubSequence.isObviousDerived(var2(), var1()))));
-    if ((SubSequence.isObviousDerived(var1, var2))
-        || (SubSequence.isObviousDerived(var2, var1))) {
-      Global.implied_noninstantiated_invariants++;
-      return null;
-    }
-
-    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      // Doesn't make sense to instantitate if order doens't matter
-      return null;
-    }
 
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
@@ -285,25 +271,29 @@ public class SubSequence
       return Invariant.PROBABILITY_JUSTIFIED;
   }
 
-  // Convenience name to make this easier to find.
-  public static boolean isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
-    return isObviousDerived(subvar, supervar);
-  }
-
   /**
    * Returns true if the two original variables are related in a way
    * that makes subsequence or subset detection not informative.
+   * Determined statically.
    **/
-  // This is abstracted out so it can be called by SuperSequence as well.
-  public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-
-     if (debug.isDebugEnabled()) {
-      debug.debug("static SubSequence.isObviousDerived(" + subvar.name +
-                  ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() +
-                  " " + supervar.isDerivedSubSequenceOf());
+  public static boolean isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+    // Must typecheck since this could be called with non sequence variables in
+    // some methods.
+    ProglangType rep1 = subvar.rep_type;
+    ProglangType rep2 = supervar.rep_type;
+    if (!(((rep1 == ProglangType.INT_ARRAY)
+           && (rep2 == ProglangType.INT_ARRAY)) ||
+          ((rep1 == ProglangType.DOUBLE_ARRAY)
+           && (rep2 == ProglangType.DOUBLE_ARRAY)) ||
+          ((rep1 == ProglangType.STRING_ARRAY)
+           && (rep2 == ProglangType.STRING_ARRAY))
+          )) return false;
+        
+    if (debug.isDebugEnabled()) {
+      debug.debug("isObviousSubSequence " +
+                  subvar.name.name() + "in " + supervar.name.name());
     }
-
-     // For unions and intersections, it probably doesn't make sense to
+    // For unions and intersections, it probably doesn't make sense to
     // do subsequence or subset detection.  This is mainly to prevent
     // invariants of the form (x subset of union(x, y)) but this means
     // we also miss those of the form (z subset of union(x,y)) which
@@ -313,7 +303,7 @@ public class SubSequence
         supervar.derived instanceof SequenceScalarUnion ||
         subvar.derived instanceof SequenceScalarIntersection ||
         subvar.derived instanceof SequenceScalarUnion) {
-      debug.debug ("Returning true because of union or intersection");
+      debug.debug ("  returning true because of union or intersection");
       return true;
     }
 
@@ -322,25 +312,29 @@ public class SubSequence
       // of x[]
       SequencesPredicate derived = (SequencesPredicate) subvar.derived;
       if (derived.var1().equals(supervar)) {
-        debug.debug ("Returning true because of predicate slicing");
+        debug.debug ("  returning true because of predicate slicing");
         return true;
       }
     }
 
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
-    if (subvar_super == null)
+    if (subvar_super == null) {
       // If it's not a union, intersection or a subsequence, it's not obvious
+      debug.debug ("  returning false because subvar_super == null");
       return false;
+    }
 
     if (subvar_super == supervar) {
       // System.out.println("SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") = true");
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
+      debug.debug ("  returning true because subvar_super == supervar");
       return true;
     }
 
+    // a[0..i] cmp a[0..i+x]
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
-    if (subvar_super == supervar_super) {
-     // both sequences are derived from the same supersequence
+    if (subvar_super != null && subvar_super == supervar_super) {
+      // both sequences are derived from the same supersequence
       if ((subvar.derived instanceof SequenceScalarSubsequence ||
            subvar.derived instanceof SequenceScalarArbitrarySubsequence) &&
           (supervar.derived instanceof SequenceScalarSubsequence ||
@@ -427,25 +421,19 @@ public class SubSequence
         VarInfo index2 = sss2.sclvar();
         int shift2 = sss2.index_shift;
         boolean start2 = sss2.from_start;
-        if (start1 == start2)
-          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
-            // System.out.println("Obvious subsequence: " + subvar.name + " " + supervar.name);
-            return true;
+        if (index1 == index2) {
+          if (start1 == true && start2 == true) {
+            if (shift1 <= shift2) return true;
+          } else if (start1 == false && start2 == false) {
+            if (shift1 >= shift2) return true;            
           }
+        }
       } else {
-        Assert.assertTrue(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
+        Assert.assertTrue(false, "how can this happen? " + subvar.name +
+                          " " + subvar.derived.getClass() + " " +
+                          supervar.name + " " + supervar.derived.getClass());
       }
-
     }
-
-    /// To finish later.
-    // VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
-    // if (supervar_super == null)
-    //   return false;
-    // if (subvar_super == supervar_super) {
-    //   // both variables are derived from the same sequence; eg,
-    //   // a[0..i] and a[0..j-1]
-    //   // Use compare_vars to determine whether the relationship
 
     return false;
   }
@@ -461,17 +449,23 @@ public class SubSequence
     return null;
   }
 
-  public boolean isObviousStatically() {
+  public boolean isObviousStatically(VarInfo[] vis) {
     // Why both ways?  Because even if x[0..i+1] is a subsequence of
     // x[0..i] it's not interesting, since the only case this can
     // happen is when i is above x.length.
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
-    if ((SubSequence.isObviousDerived(var1, var2))
-        || (SubSequence.isObviousDerived(var2, var1))) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    if ((SubSequence.isObviousSubSequence(var1, var2))
+        || (SubSequence.isObviousSubSequence(var2, var1))) {
       return true;
     }
-    return super.isObviousStatically();
+
+    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
+        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+      // Doesn't make sense to consider subsequence if order doens't matter
+      return true;
+    }
+    return super.isObviousStatically(vis);
   }
 
   // Two ways to go about this:
@@ -481,7 +475,7 @@ public class SubSequence
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
 
@@ -489,77 +483,148 @@ public class SubSequence
       // Suppress this invariant; we should get an equality invariant from
       // elsewhere.
       return true;
-    } else {
-      VarInfo subvar = (var1_in_var2 ? var1() : var2());
-      VarInfo supervar = (var1_in_var2 ? var2() : var1());
+    }
+    if (var1_in_var2 && isObviousSubSequenceDynamically (vis[0], vis[1])) return true;
+    if (var2_in_var1 && isObviousSubSequenceDynamically (vis[1], vis[0])) return true;
+    return super.isObviousDynamically(vis);
+  }
 
-      PptTopLevel ppt_parent = (PptTopLevel) ppt.parent;
+  /**
+   * Returns true if the two original variables are related in a way
+   * that makes subsequence or subset detection not informative.
+   * Determined statically.
+   **/
+  public static boolean isObviousSubSequenceDynamically(VarInfo subvar, VarInfo supervar) {
+    ProglangType rep1 = subvar.rep_type;
+    ProglangType rep2 = supervar.rep_type;
+    if (!(((rep1 == ProglangType.INT_ARRAY)
+           && (rep2 == ProglangType.INT_ARRAY)) ||
+          ((rep1 == ProglangType.DOUBLE_ARRAY)
+           && (rep2 == ProglangType.DOUBLE_ARRAY)) ||
+          ((rep1 == ProglangType.STRING_ARRAY)
+           && (rep2 == ProglangType.STRING_ARRAY))
+          )) return false;
 
-      // If the elements of supervar are always the same (EltOneOf),
-      // we aren't going to learn anything new from this invariant,
-      // since each sequence should have an EltOneOf over it.
-      if (false) {
-        System.out.println("Checking " + format());
-        PptSlice1 slice = ppt_parent.findSlice(supervar);
-        if (slice == null) {
-          System.out.println("No slice: ppt=" + ppt + " parent =" + ppt.parent);
-        } else {
-          System.out.println("Slice var =" + slice.var_info);
-          Iterator superinvs = slice.invs.iterator();
-          while (superinvs.hasNext()) {
-            Object superinv = superinvs.next();
-            System.out.println("Inv = " + superinv);
-            if (superinv instanceof EltOneOf) {
-              EltOneOf eltinv = (EltOneOf) superinv;
-              if (eltinv.num_elts() > 0) {
-                System.out.println(format() + " obvious because of " + eltinv.format());
-                return true;
-              }
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Checking isObviousSubSequenceDynamically " +
+                   subvar.name.name() + " in " + supervar.name.name());
+    }
+    
+    if (isObviousSubSequence (subvar, supervar)) return true;
+    debug.debug ("  not isObviousSubSequence(statically)");
+
+    PptTopLevel ppt_parent = subvar.ppt;
+
+    // If the elements of supervar are always the same (EltOneOf),
+    // we aren't going to learn anything new from this invariant,
+    // since each sequence should have an EltOneOf over it.
+    if (false) {
+      PptSlice1 slice = ppt_parent.findSlice(supervar);
+      if (slice == null) {
+        System.out.println("No slice: parent =" + ppt_parent);
+      } else {
+        System.out.println("Slice var =" + slice.var_info);
+        Iterator superinvs = slice.invs.iterator();
+        while (superinvs.hasNext()) {
+          Object superinv = superinvs.next();
+          System.out.println("Inv = " + superinv);
+          if (superinv instanceof EltOneOf) {
+            EltOneOf eltinv = (EltOneOf) superinv;
+            if (eltinv.num_elts() > 0) {
+              System.out.println(" obvious because of " + eltinv.format());
+              return true;
             }
           }
         }
       }
+    }
 
-      // Also need to check A[0..i] subseq A[0..j] via compare_vars.
+    // Check for a[0..i] subseq a[0..j] but i < j.
+    VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
+    VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
 
-      // A subseq B[0..n] => A subseq B
-
-      List derivees = supervar.derivees();
-      // For each variable derived from supervar ("B")
-      for (int i=0; i<derivees.size(); i++) {
-        Derivation der = (Derivation) derivees.get(i);
-        // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
-        if (der instanceof SequenceScalarSubsequence) {
-          // If that variable is "B[0..n]"
-          VarInfo supervar_part = der.getVarInfo();
-          // Get the canonical version; being equal to it is good enough.
-          if (supervar_part.equalitySet.leader() == subvar) {
+    if (subvar_super != null && subvar_super == supervar_super) {
+      // both sequences are derived from the same supersequence
+      if ((subvar.derived instanceof SequenceScalarSubsequence)
+          && (supervar.derived instanceof SequenceScalarSubsequence)) {
+        SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) subvar.derived;
+        SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) supervar.derived;
+        VarInfo index1 = sss1.sclvar();
+        int shift1 = sss1.index_shift;
+        boolean start1 = sss1.from_start;
+        VarInfo index2 = sss2.sclvar();
+        int shift2 = sss2.index_shift;
+        boolean start2 = sss2.from_start;
+        if (start1 == start2)
+          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
+            debug.debug ("True from comparing indices");
             return true;
           }
+      } else if ((subvar.derived instanceof SequenceStringSubsequence)
+                 && (supervar.derived instanceof SequenceStringSubsequence)) {
+        // Copied from just above
+        SequenceStringSubsequence sss1 = (SequenceStringSubsequence) subvar.derived;
+        SequenceStringSubsequence sss2 = (SequenceStringSubsequence) supervar.derived;
+        VarInfo index1 = sss1.sclvar();
+        int shift1 = sss1.index_shift;
+        boolean start1 = sss1.from_start;
+        VarInfo index2 = sss2.sclvar();
+        int shift2 = sss2.index_shift;
+        boolean start2 = sss2.from_start;
+        if (start1 == start2)
+          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
+            debug.debug ("True from comparing indices");
+            return true;
+          }
+      } else {
+        Assert.assertTrue(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
+      }
 
-          if (supervar_part.isCanonical())
-          {
-            if (subvar == supervar_part) {
-              System.err.println ("Error: variables " +
-                                  subvar.name.name() +
-                                  " and " +
-                                  supervar_part.name.name() +
-                                  " are identical.  Canonical");
-              System.err.println (subvar.isCanonical());
-              System.err.println (supervar_part.isCanonical());
-              System.err.println ("In: " + repr());
-              throw new Error();
-            }
+    }
 
-            PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
-            // System.out.println("  ... considering " + supervar_part.name.name());
-            // if (ss_ppt == null) {
-            //   System.out.println("      no ppt for " + subvar.name.name() + " " + supervar_part.name.name());
-            //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
-            // }
-            if (ss_ppt != null) {
-              SubSequence ss = SubSequence.find(ss_ppt);
-              if ((ss != null) && ss.enoughSamples()) {
+    // Also need to check A[0..i] subseq A[0..j] via compare_vars.
+
+    // A subseq B[0..n] => A subseq B
+
+    List derivees = supervar.derivees();
+    // For each variable derived from supervar ("B")
+    for (int i=0; i<derivees.size(); i++) {
+      Derivation der = (Derivation) derivees.get(i);
+      // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
+      if (der instanceof SequenceScalarSubsequence) {
+        // If that variable is "B[0..n]"
+        VarInfo supervar_part = der.getVarInfo();
+        // Get the canonical version; being equal to it is good enough.
+        if (supervar_part.equalitySet.leader() == subvar) {
+          return true;
+        }
+
+        if (supervar_part.isCanonical()) {
+          if (subvar == supervar_part) {
+            System.err.println ("Error: variables " +
+                                subvar.name.name() +
+                                " and " +
+                                supervar_part.name.name() +
+                                " are identical.  Canonical");
+            System.err.println (subvar.isCanonical());
+            System.err.println (supervar_part.isCanonical());
+            throw new Error();
+          }
+          boolean subvar_is_first = subvar.varinfo_index < supervar_part.varinfo_index;
+          PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
+          // System.out.println("  ... considering " + supervar_part.name.name());
+          // if (ss_ppt == null) {
+          //   System.out.println("      no ppt for " + subvar.name.name() + " " + supervar_part.name.name());
+          //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
+          // }
+          if (ss_ppt != null) {
+            SubSequence ss = SubSequence.find(ss_ppt);
+            if ((ss != null) && ss.enoughSamples() && ss.ppt.num_samples() > 0) {
+              if (subvar_is_first ? ss.var1_in_var2 : ss.var2_in_var1) {
+                if (debug.isDebugEnabled()) {
+                  debug.debug ("  true from A subseq B[0..n] " + supervar_part.name.name());
+                  debug.debug ("  " + ss.repr());
+                }
                 return true;
               }
             }
@@ -567,7 +632,7 @@ public class SubSequence
         }
       }
     }
-    return super.isObviousDynamically();
+    return false;
   }
 
   public boolean isSameFormula(Invariant other)
@@ -610,7 +675,6 @@ public class SubSequence
     }
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof SubSequence);
       SubSequence inv = (SubSequence) arg;
 
       SuppressionTemplate template = new SuppressionTemplate();
@@ -620,14 +684,11 @@ public class SubSequence
       SuppressionLink result = byTemplate (template, inv);
       if (result != null) {
         String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
-        if (comparator.indexOf("=") > -1 ||
-            comparator.indexOf("?") > -1) {
+        if (comparator.indexOf("==") > -1) {
           return result;
         }
       }
       return null;
     }
-
   }
-
 }

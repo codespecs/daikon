@@ -236,12 +236,12 @@ public class LinearTernaryFloat
     return true;
   }
 
-  public boolean isObviousStatically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
     if (core.a == 0 || core.b == 0) {
       return true;
     }
 
-    return false;
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant other)

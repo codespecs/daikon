@@ -45,11 +45,8 @@ public class SubSetFloat
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
-    //                    + ((SubSet.isObviousDerived(var1(), var2()))
-    //                       || (SubSet.isObviousDerived(var2(), var1()))));
-    if ((SubSetFloat.isObviousDerived(var1, var2))
-        || (SubSetFloat.isObviousDerived(var2, var1))) {
+    if ((SubSetFloat.isObviousSubSet(var1, var2))
+        || (SubSetFloat.isObviousSubSet(var2, var1))) {
       Global.implied_noninstantiated_invariants++;
       if (debug.isDebugEnabled()) {
         debug.debug (var1 + ", " + var2);
@@ -190,22 +187,17 @@ public class SubSetFloat
 
   // Convenience name to make this easier to find.
   public static boolean isObviousSubSet(VarInfo subvar, VarInfo supervar) {
-    return isObviousDerived(subvar, supervar);
+    return SubSequenceFloat.isObviousSubSequence(subvar, supervar);
   }
 
-  // This is abstracted out so it can be called by SuperSequence as well.
-  public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-    return SubSequenceFloat.isObviousDerived (subvar, supervar);
-  }
-
-  public boolean isObviousStatically() {
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
-    if ((SubSetFloat.isObviousDerived(var1, var2))
-        || (SubSetFloat.isObviousDerived(var2, var1))) {
+  public boolean isObviousStatically(VarInfo[] vis) {
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
+    if ((SubSetFloat.isObviousSubSet(var1, var2))
+        || (SubSetFloat.isObviousSubSet(var2, var1))) {
       return true;
     }
-    return super.isObviousStatically();
+    return super.isObviousStatically(vis);
   }
 
   // Look up a previously instantiated SubSet relationship.
@@ -226,7 +218,7 @@ public class SubSetFloat
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public boolean isObviousDynamically() {
+  public boolean isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
 
@@ -235,7 +227,7 @@ public class SubSetFloat
       // elsewhere.
       return true;
     }
-    return super.isObviousDynamically();
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isSameFormula(Invariant other)

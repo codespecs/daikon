@@ -69,15 +69,6 @@ public class EltLowerBoundFloat
 
   public static EltLowerBoundFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    VarInfo x = ppt.var_infos[0];
-    if ((x.derived instanceof SequenceLength)
-         && (((SequenceLength) x.derived).shift != 0)) {
-      // Do not instantiate size(a[])-1 < 50. Instead, we rely on a
-      // simpler invariant with a different constant, like
-      // "size(a[]) < 51".
-      Global.implied_noninstantiated_invariants += 1;
-      return null;
-    }
     return new EltLowerBoundFloat(ppt);
   }
 
@@ -177,10 +168,19 @@ public class EltLowerBoundFloat
     return core.isSameFormula(((EltLowerBoundFloat) other).core);
   }
 
-  public boolean isObviousDynamically() {
-    PptTopLevel pptt = ppt.parent;
-    VarInfo v = var();
+  public boolean isObviousStatically (VarInfo[] vis) {
+    VarInfo var = vis[0];
+    if ((var.derived instanceof SequenceLength)
+         && (((SequenceLength) var.derived).shift != 0)) {
+      return true;
+    }
+    return super.isObviousStatically (vis);
+  }
 
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    PptTopLevel pptt = ppt.parent;
+    VarInfo v = vis[0];
+    
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.min1 < dkconfig_minimal_interesting) ||
         (core.min1 > dkconfig_maximal_interesting)) {
@@ -205,7 +205,7 @@ public class EltLowerBoundFloat
       if (inv instanceof EltLowerBoundFloat) {
         EltLowerBoundFloat other = (EltLowerBoundFloat) inv;
         if (isSameFormula(other)
-            && SubSequenceFloat.isObviousDerived(v, other.var())) {
+            && SubSequenceFloat.isObviousSubSequenceDynamically(v, other.var())) {
           return true;
         }
       }
@@ -216,7 +216,7 @@ public class EltLowerBoundFloat
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
 
-      if (SubSequenceFloat.isObviousDerived(v, vi))
+      if (SubSequenceFloat.isObviousSubSequenceDynamically(v, vi))
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
@@ -230,7 +230,7 @@ public class EltLowerBoundFloat
       }
     }
 
-    return super.isObviousDynamically();
+    return super.isObviousDynamically(vis);
   }
 
   public boolean isExclusiveFormula(Invariant other) {

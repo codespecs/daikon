@@ -170,17 +170,17 @@ public class InvariantFilters {
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName());
+        PrintInvariants.debugFiltering.debug("  applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {
         if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName());
+          PrintInvariants.debugFiltering.debug("  *failed " + filter.getClass().getName());
         }
         return false;
       }
     }
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)");
+      PrintInvariants.debugFiltering.debug("  succeeded InvariantFilters");
     }
     return true;
   }
