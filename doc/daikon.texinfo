@@ -798,7 +798,8 @@ Windows.  (The incompatibility does not exist if the program was
 compiled for Cygwin).  The incompatibility is that Windows programs
 use the semicolon (@samp{;}) as their path separator (for instance,
 for CLASSPATH), but Unix and Cygwin programs use the colon (@samp{:})
-as their path separator.
+as their path separator.  The dfej executable compiled on Cygwin seems
+to accept both Windows-style and Cygwin/Unix-style paths.
 
 The @file{cygwin-runner.pl} script in the @file{bin/} directory may
 help you run windows-native Java tools from within the Cygwin
