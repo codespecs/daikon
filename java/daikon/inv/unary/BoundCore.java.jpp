@@ -101,14 +101,48 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
   }
 
   public String repr() {
+    long modulus = calc_modulus();
+    long range = calc_range();
+    double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
     return MINSTR + "1=" + MIN1
       + ", num_" + MINSTR + "1=" + NUM_MIN1
       + ", " + MINSTR + "2=" + MIN2
       + ", num_" + MINSTR + "2=" + NUM_MIN2
       + ", " + MINSTR + "3=" + MIN3
       + ", num_" + MINSTR + "3=" + NUM_MIN3
-      + ", " + MAXSTR + "=" + MAX;
+      + ", " + MAXSTR + "=" + MAX + ", " + "range=" + range + ", " +
+      "avg_samp=" + (int) avg_samples_per_val;
   }
+
+  private double calc_avg_samples_per_val(long modulus, long range) {
+    double avg_samples_per_val =
+      ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
+#ifdef LOWER
+    if (MIN1 == 0) {
+      avg_samples_per_val /= 5;
+    }
+#endif
+    return avg_samples_per_val;
+  }
+
+  private long calc_range() {
+    return SIGNADJUST(MAX - MIN1) + 1;
+  }
+
+  private long calc_modulus() {
+    // Need to reinstate this at some point.
+    // {
+    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
+    //     Invariant inv = (Invariant) itor.next();
+    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
+    //       modulus = ((Modulus) inv).modulus;
+    //       break;
+    //     }
+    //   }
+    // }
+    return 1;
+  }
+
 
   public void add_modified(long value, int count) {
     samples += count;
@@ -152,17 +186,7 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     if (NUM_MIN1 < required_samples_at_bound)
       return Invariant.PROBABILITY_UNKNOWN;
 
-    long modulus = 1;
-    // Need to reinstate this at some point.
-    // {
-    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
-    //     Invariant inv = (Invariant) itor.next();
-    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
-    //       modulus = ((Modulus) inv).modulus;
-    //       break;
-    //     }
-    //   }
-    // }
+    long modulus = calc_modulus();
 
     // Accept a bound if:
     //  * it contains more than twice as many elements as it ought to by
@@ -172,14 +196,8 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     //    least 3.
 
     // If I used Math.abs, the order of arguments to minus would not matter.
-    long range = SIGNADJUST(MAX - MIN1) + 1;
-    double avg_samples_per_val = ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
-
-#ifdef LOWER
-    if (MIN1 == 0) {
-      avg_samples_per_val /= 5;
-    }
-#endif
+    long range = calc_range();
+    double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // System.out.println("  [Need to fix computation of " + LOWERBOUNDCORESTR + ".computeProbability()]");
     boolean truncated_justified = NUM_MIN1 > 5*avg_samples_per_val;

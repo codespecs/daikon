@@ -45,13 +45,42 @@ public class UpperBoundCore  implements java.io.Serializable {
   }
 
   public String repr() {
+    long modulus = calc_modulus();
+    long range = calc_range();
+    double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
     return "max1=" + max1 
       + ", num_max1=" + num_max1 
       + ", max2=" + max2 
       + ", num_max2=" + num_max2 
       + ", max3=" + max3 
       + ", num_max3=" + num_max3 
-      + ", min=" + min ;
+      + ", min=" + min  + ", range=" + range + ", " +
+      "avg_samp=" + (int) avg_samples_per_val;
+  }
+
+  private double calc_avg_samples_per_val(long modulus, long range) {
+    double avg_samples_per_val =
+      ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
+
+    return avg_samples_per_val;
+  }
+
+  private long calc_range() {
+    return - (min  - max1 ) + 1;
+  }
+
+  private long calc_modulus() {
+    // Need to reinstate this at some point.
+    // {
+    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
+    //     Invariant inv = (Invariant) itor.next();
+    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
+    //       modulus = ((Modulus) inv).modulus;
+    //       break;
+    //     }
+    //   }
+    // }
+    return 1;
   }
 
   public void add_modified(long value, int count) {
@@ -96,17 +125,7 @@ public class UpperBoundCore  implements java.io.Serializable {
     if (num_max1  < required_samples_at_bound)
       return Invariant.PROBABILITY_UNKNOWN;
 
-    long modulus = 1;
-    // Need to reinstate this at some point.
-    // {
-    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
-    //     Invariant inv = (Invariant) itor.next();
-    //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
-    //       modulus = ((Modulus) inv).modulus;
-    //       break;
-    //     }
-    //   }
-    // }
+    long modulus = calc_modulus();
 
     // Accept a bound if:
     //  * it contains more than twice as many elements as it ought to by
@@ -116,8 +135,8 @@ public class UpperBoundCore  implements java.io.Serializable {
     //    least 3.
 
     // If I used Math.abs, the order of arguments to minus would not matter.
-    long range = - (min  - max1 ) + 1;
-    double avg_samples_per_val = ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
+    long range = calc_range();
+    double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // System.out.println("  [Need to fix computation of UpperBoundCore.computeProbability()]");
     boolean truncated_justified = num_max1  > 5*avg_samples_per_val;
