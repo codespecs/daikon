@@ -10,17 +10,26 @@ body {
 }
 a {
                   text-decoration:     none;
-                  color:               rgb( 44, 66, 88 );
+                  color:               rgb( 50, 100, 150 );
+}
+font.keyword {
+                  color:               rgb( 150, 200, 50 );
 }
 h1 {
-                  color:               rgb( 44, 66, 88 );
+                  color:               rgb( 50, 90, 130 );
                   line-height:         20pt;
 }
 h2 {
-                  color:               rgb( 44, 66, 88 );
-                  line-height:         30pt;
+                  color:               rgb( 50, 90, 130 );
 }
 h3 {
+                  color:               rgb( 50, 90, 130 );
+}
+h4 {
+                  color:               rgb( 50, 90, 130 );
+}
+h5 {
+                  color:               rgb( 50, 90, 130 );
 }
 -->
 </style>
@@ -30,59 +39,125 @@ h3 {
 
 <h1> Daikon GUI manual </h1>
 
-<ul>
-  <li><a href="#intro"> Introduction </a>
-  <li><a href="#start"> Starting up the GUI </a>
-  <li><a href="#use"> Using the GUI </a>
-  <li><a href="#contact"> Contact us </a>
+<ul><li><a href="#intro"> Introduction </a>
+    <li><a href="#start"> Starting up the GUI </a>
+    <li><a href="#use"> Using the GUI </a>
+    <ul><li><a href="#invariants-display"> Invariants Display </a>
+            <ul><li><a href="#file-menu"> File menu </a>
+                <li><a href="#program-point-tree"> Program point tree </a>
+               	<li><a href="#invariant-tables"> Invariants tables </a>
+            </ul>
+ 	<li><a href="#control-panel"> Control Panel </a>
+            <ul><li><a href="#property-filters"> Property filters </a>
+                <li><a href="#variable-filters"> Variable filters </a>
+            </ul>
+    </ul>		
+    <li><a href="#contact"> Contact us </a>
 </ul>
 
 <p><hr width=300 align=left>
 
 
-<h3><a name="intro"> Introduction </a></h3>
+<h3><a name="intro"></a> Introduction </h3>
 
 By default, Daikon outputs a long textual list of invariants.  Sometimes one is
-overwhelmed by the sheer number of invariants.  The graphical user interface (GUI)
-is designed to make the task of browsing invariants easier.  The GUI contains a tree which
+overwhelmed by the sheer number of invariants.  The graphical user interface (GUI) is
+designed to make the task of browsing invariants easier.  The GUI contains a tree which
 hierarchically organizes program points according to their class and method.  Using the
 GUI, you can look at invariants for only the methods and program points you care about.
 You can also sort invariants by a property (eg, probability) or filter invariants (eg,
 only look at invariants containing a certain variable). <p>
 
 
-<h3><a name="start"> Starting up the GUI </a></h3>
+<h3><a name="start"></a> Starting up the GUI </h3>
 
 To use the GUI, first make a <tt>.inv</tt> file by invoking Daikon with the <tt>-o</tt>
 option; to create <tt>foo.inv</tt>, you would do
 
-<pre>    java daikon.Daikon -o <em>foo</em>.inv <em>decl-files...</em> <em>trace-files...</em></pre>
+<pre>    java daikon.Daikon -o foo.inv <em>decl-files...</em> <em>trace-files...</em></pre>
 
 Then, run the GUI with the <tt>.inv</tt> file as an argument:
 
 <pre>    java daikon.gui.InvariantsGUI foo.inv</pre>
 
-
-<h3><a name="use"> Using the GUI </a></h3>
-
-The GUI consists of three sections.  At the very top we have the control panel.  Use the
-control panel to control what invariants are displayed.  For example, checking the "Show
-unjustified invariants" checkbox will display justified <u>and</u> unjustified
-invariants. <p>
-
-Under the control panel, we have the program point tree -- a hierarchy of program points broken down
-by class and method.  Click on various program points in the tree to see tables of
-invariants for those program points.  You may use the <tt>Ctrl</tt> and <tt>Shift</tt>
-keys to make an arbitrary selection of program points.  Selecting a class or method will
-automatically select all the Ppt's associated with that method or class. <p>
-
-At the bottom of the GUI, we have the invariant tables panel.  A table will be displayed
-for each program point that is selected in the Ppt tree.  Use <tt>Alt</tt> along with the
-or down arrow keys to scroll through the tables.  You can sort a column in a table by
-clicking on the column header.  Shift-click to sort the column in reverse order. <p>
+You can also run the GUI with no arguments.  If you do this, you will immediately see a
+file browser that asks you to choose a <tt>.inv</tt> file.
 
 
-<h3><a name="contact"> Contact us </a></h3>
+<h3><a name="use"></a> Using the GUI </h3>
+
+This GUI consists of two windows.  The main window is the Invariants Display, where you
+can navigate through program points and view invariants.  The other window is the Filter
+Control Panel, where you can control the filters that are being applied to the Invariants
+Display. <p>
+
+<h4><a name="invariants-display"></a> Invariants Display </h4>
+
+<table><tr>
+<td valign=top>
+<h5><a name="file-menu"></a> File menu </h5>
+
+The <font class=keyword>Load file</font> menu option brings up a file browser which you
+can use to select another <tt>.inv</tt> file.  The <font class=keyword>Quit</font> menu
+options lets you quit the GUI.
+
+<h5><a name="program-point-tree"></a> Program point tree </h5>
+The top part of the Invariants Display consists of the Program point tree - a hierarchy of
+program points broken down by class and method.  Click on various program points in the
+tree to see tables of invariants for those program points.  You may use the <tt>Ctrl</tt>
+and <tt>Shift</tt> keys to make an arbitrary selection of program points.  Selecting a
+class or method will automatically select all the Ppt's associated with that method or
+class. <p>
+
+<h5><a name="invariant-tables"></a> Invariant tables </h5>
+At the bottom of the Invariants Display, we have Invariant tables which display the actual
+invariants.  Here are some tricks for navigating through the tables:
+
+<ul><li>Use <tt>Alt</tt> along with the up or down arrow keys to scroll a table at a time.
+<li>Sort a column in a table by clicking on the column header.  Shift-click to sort the
+column in reverse order.</ul>
+
+</td>
+<td width=20></td>
+<td><img src="http://www.mit.edu/~mhao/gr/InvariantsDisplay-small.gif" width=298 height=348></td>
+</tr></table>
+
+<h4><a name="control-panel"></a> Control Panel </h4>
+
+The Control Panel gives you control over which invariants are displayed. <p>
+<center><table><tr><td>
+<img src="http://www.mit.edu/~mhao/gr/ControlPanel.gif" width=411 height=425>
+</td></tr></table></center><p>
+
+<h5><a name="property-filters"></a> Property filters </h5>
+By default, all the Property filters are on.  Property filters narrow down the list of
+invariants that are displayed.  For example, the "Suppress unjustified invariants" filter
+hides unjustified invariants, which most people will not care about.  You can adjust which
+Property filters are being applied. <p>
+
+<h5><a name="variable-filters"></a> Variable filters </h5>
+Variable filters let you display only the invariants that contain certain variables.  The
+left-hand box displays the variables that you are interested.  By default, the box is
+empty and invariants containing any variables are displayed.  There are two ways to add
+variables to the variables list: <p>
+
+<ol><li>Type the name of the variable into the <font class=keyword>Add variable</font>
+textfield, and click the <font class=keyword>Add variable</font> button (or just press
+enter).
+<li>Each Invariant table in the Invariants Display has a <font class=keyword>Show
+variables</font> button.  Click on that button to see a list of variables for that program
+point.  Select any set of variables and click the <font class=keyword>Filter on selected
+variables</font> button.</ol> <p>
+
+To remove variables from the variables list, select the variables in question and click on
+the <font class=keyword>Remove selected variables</font> button. <p>
+
+If you click on the <font class=keyword>any variable</font> checkbox, invariants will be
+displayed if they contain any of the variables in the variables list.  If you click on the
+<font class=keyword>all variables</font> checkbox, invariants will be displayed if they
+contain all of the variables in the variables list. <p>
+
+<h3><a name="contact"></a> Contact us </h3>
 
 Please <a href="mailto:mhao@mit.edu">contact us</a> with any questions, comments, or
 suggestions on the GUI or this manual. <p>
