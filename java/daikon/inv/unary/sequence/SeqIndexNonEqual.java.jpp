@@ -48,7 +48,7 @@ import utilMDE.*;
 
 /**
  * Represents PRIMITIVE sequences where the element stored at index i is
- * not equal to i.  Prints as "x[i] != i"
+ * not equal to i, for any i.  Prints as "x[i] != i"
  **/
 
 public final class CLASSNAME
@@ -193,11 +193,8 @@ public final class CLASSNAME
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof SEQINDEXCOMPARISON) {
-      if (((SEQINDEXCOMPARISON)other).isExact()) {
-        return true;
-      }
-    }
+    // N.B. a[i] == i and a[i] != i are not mutually exclusive, since
+    // they're both true (vacuously) about the empty sequence.
     return false;
   }
 
