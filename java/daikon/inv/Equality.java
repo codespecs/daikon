@@ -110,6 +110,10 @@ public final class Equality extends Invariant {
     return false;
   }
 
+  // When A and B are pointers, don't say (EQ A B); instead say (EQ
+  // (hash A) (hash B)).  If we said the former, Simplify would
+  // presume that A and B were always interchangeable, which is not
+  // the case when your programming language involves mutation.
   private String format_elt(String simname) {
     String result = simname;
     if (is_reference()) {
