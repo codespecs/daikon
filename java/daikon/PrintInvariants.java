@@ -998,7 +998,8 @@ public class PrintInvariants {
       InvariantFilters fi = new InvariantFilters();
       fi.ppt_map = ppt_map;
 
-      boolean pi_accepted = accept_invariant(inv);
+      // Deprecated, so I'm commenting this out.  Use new filters system instead
+      // boolean pi_accepted = accept_invariant(inv);
       boolean fi_accepted = fi.shouldKeep(inv);
 
       // Never print the guarding predicates themselves, they should only
