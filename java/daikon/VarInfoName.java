@@ -1071,7 +1071,7 @@ public abstract class VarInfoName
 	  conditions.append(")");
 	}
       }
-      result[0] = "(FORALL (" + int_list + ") (IMPLES (AND " + conditions + ") ";
+      result[0] = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
       result[result.length-1] = "))"; // close IMPLIES, FORALL
 
       // stringify the terms
