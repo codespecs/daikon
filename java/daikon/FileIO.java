@@ -75,6 +75,11 @@ public final class FileIO {
    **/
   public static boolean dkconfig_add_changed = true;
 
+  /**
+   * Integer.  Maximum number of lines to read from the dtrace file.  If
+   * 0, reads the entire file
+   */
+  public static int dkconfig_max_line_number = 0;
 
 /// Variables
 
@@ -608,10 +613,16 @@ public final class FileIO {
 
     // try {
       // "line_" is uninterned, "line" is interned
-      for (String line_ = reader.readLine(); line_ != null; line_ = reader.readLine()) {
+      for (String line_ = reader.readLine(); line_ != null;
+                                                line_ = reader.readLine()) {
         if (line_.equals("") || isComment(line_)) {
           continue;
         }
+
+        // stop at a specified point in the file
+        if ((dkconfig_max_line_number > 0)
+            && (reader.getLineNumber() > dkconfig_max_line_number))
+          break;
 
         String line = line_.intern();
 
@@ -729,13 +740,16 @@ public final class FileIO {
     data_trace_reader = null;
   }
 
+  static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
+  static PptTopLevel.Stats stats = new PptTopLevel.Stats();
+  static boolean store_stats = false;
+
   /**
    * Add orig() and derived variables to vt (by side effect), then
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
-  public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)
-  {
+  public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)  {
     { // For now, keep indentation the same
       {
         // Now add some additional variable values that don't appear directly
@@ -765,6 +779,7 @@ public final class FileIO {
         //   }
         // }
 
+
         // Add derived variables
         add_derived_variables(ppt, vt.vals, vt.mods);
 
@@ -778,21 +793,41 @@ public final class FileIO {
           debugRead.fine ("Adding ValueTuple to " + ppt.name);
           debugRead.fine ("  length is " + vt.vals.length);
         }
+
+        long start = 0;
+        long start_mem = 0;
+        if (Daikon.debugStats.isLoggable (Level.FINE)) {
+          // runtime.gc();
+          start_mem = runtime.freeMemory();
+          start = System.currentTimeMillis();
+        }
+
         if (Daikon.df_bottom_up)
           ppt.add_bottom_up (vt, 1);
         else
           ppt.add_and_flow(vt, 1);
 
-        // Keep track of equality set statistics
+        // Keep track of statistics
         if (Daikon.debugStats.isLoggable (Level.FINE)) {
-          List slist = (List) Global.stats_map.get (ppt);
-          if (slist == null) {
-            slist = new ArrayList();
-            Global.stats_map.put (ppt, slist);
+          // runtime.gc();
+          if (store_stats)
+            stats = new PptTopLevel.Stats();
+          stats.set (ppt, (int) (System.currentTimeMillis() - start),
+                      (int) (start_mem - runtime.freeMemory()));
+
+          if (store_stats) {
+            List slist = (List) Global.stats_map.get (ppt);
+            if (slist == null) {
+              slist = new ArrayList();
+              Global.stats_map.put (ppt, slist);
+            }
+            slist.add (stats);
+          } else {
+            //if ((ppt.num_samples() < 10) || (ppt.num_samples() % 100) == 0) {
+              Daikon.debugStats.fine ("vars: " + Debug.related_vars (ppt, vt));
+              stats.dump (Daikon.debugStats);
+            //}
           }
-          PptSliceEquality.Stats stats = new PptSliceEquality.Stats();
-          stats.incr (ppt);
-          slist.add (stats);
         }
 
         // Feeding values to EXITnn points will automatically have
