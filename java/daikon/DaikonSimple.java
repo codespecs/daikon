@@ -60,6 +60,9 @@ public class DaikonSimple {
 		Daikon.suppress_implied_controlled_invariants = false;
 		NIS.dkconfig_enabled = false;
 
+		// Create the list of all invariant types
+		Daikon.setup_proto_invs();
+
 		// Read command line options
 		Set[] files = read_options(args);
 		Assert.assertTrue(files.length == 4);
@@ -73,7 +76,9 @@ public class DaikonSimple {
 		}
 
 		// Load declarations
+
 		PptMap all_ppts = FileIO.read_declaration_files(decls_files);
+
 		System.out.println(lineSep);
 
 		//	adding orig and derived variables                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
@@ -86,40 +91,50 @@ public class DaikonSimple {
 		SimpleProcessor processor = new SimpleProcessor();
 		FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
 
-
-		//		print out the invariants for each program point (sort first)
 		Iterator t = all_ppts.pptIterator();
 
-				while (t.hasNext()) {
-					PptTopLevel ppt = (PptTopLevel) t.next();
-					List invs =
-						PrintInvariants.sort_invariant_list(ppt.invariants_vector());
-					Iterator i = invs.iterator();
+		
+		//		print out the invariants for each program point (sort first)
+		t = all_ppts.pptIterator();
 
-					System.out.println("===================================================+");	
-					System.out.println(ppt.name() + " +");
-					while (i.hasNext()) {
-						Invariant x = (Invariant) i.next();
-						VarInfo[] vars = x.ppt.var_infos;
+		while (t.hasNext()) {
+			PptTopLevel ppt = (PptTopLevel) t.next();
+			List invs =
+				PrintInvariants.sort_invariant_list(ppt.invariants_vector());
+			Iterator i = invs.iterator();
 
-						//this is the most non-intrusive way to filter out the invs
-//						//filter out reflexive invariants in the binary invs
-						if (!((x.ppt instanceof PptSlice2) && vars[0] == vars[1])) {
+			if (ppt.num_samples() != 0) {
 
-							//filter out the reflexive and partially reflexive invs in the 
-							//ternary slices
-							if (!((x.ppt instanceof PptSlice3)
-								&& (vars[0] == vars[1]
-									|| vars[1] == vars[2]
-									|| vars[0] == vars[2]))) {
+				System.out.println(
+					"===================================================+");
+				System.out.println(ppt.name() + " +");
+				while (i.hasNext()) {
+					Invariant x = (Invariant) i.next();
+					VarInfo[] vars = x.ppt.var_infos;
+
+					//this is the most non-intrusive way to filter out the invs
+					//filter out reflexive invariants in the binary invs
+					if (!((x.ppt instanceof PptSlice2)
+						&& vars[0] == vars[1])) {
+
+						//filter out the reflexive and partially reflexive invs in the 
+						//ternary slices
+						if (!((x.ppt instanceof PptSlice3)
+							&& (vars[0] == vars[1]
+								|| vars[1] == vars[2]
+								|| vars[0] == vars[2]))) {
+							if (x.ppt.num_values() != 0) {
+
 								System.out.println(x.getClass());
 								System.out.println(x);
+							}
 						}
 					}
 				}
-				}
-				System.exit(0);
-						
+			}
+		}
+
+	
 		//				
 		// Write serialized output
 		// Unresolved problem: the current implementation of PrintInvariants, taking 
@@ -140,6 +155,8 @@ public class DaikonSimple {
 						+ e.toString());
 			}
 		}
+
+		System.exit(0);
 
 		//using print_invariants will add invariant filtering
 		//	PrintInvariants.print_invariants(all_ppts);
@@ -389,9 +406,9 @@ public class DaikonSimple {
 		for (int i = vi_index_min; i < vi_index_limit; i++) {
 			VarInfo vi = ppt.var_infos[i];
 
-			if (!is_slice_ok(vi, ppt))
+			if (!is_slice_ok(vi, ppt)) {
 				continue;
-
+			}
 			// Eventually, add back in this test as "if constant and no
 			// comparability info exists" then continue.
 			// if (vi.isStaticConstant()) continue;
@@ -422,11 +439,9 @@ public class DaikonSimple {
 				VarInfo var2 = ppt.var_infos[i2];
 
 				if (!var1.isCanonical()) {
-
 					continue;
 				}
 				if (!var2.isCanonical()) {
-
 					continue;
 				}
 
@@ -445,16 +460,16 @@ public class DaikonSimple {
 				// comparability info exists" then continue.
 				// if (var2.isStaticConstant()) continue;
 				if (!is_slice_ok(var1, var2, ppt)) {
-
 					continue;
 				}
-				PptSlice2 slice2 = new PptSlice2(ppt, var1, var2);
 
+				PptSlice2 slice2 = new PptSlice2(ppt, var1, var2);
 				slice2.instantiate_invariants();
 				binary_views.add(slice2);
 			}
 		}
 		ppt.addViews(binary_views);
+
 		binary_views = null;
 
 		// 3. all ternary views
@@ -507,21 +522,22 @@ public class DaikonSimple {
 
 						continue;
 					} else {
-						
+
 						//System.out.println("slice ok");
 					}
 					PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
 					slice3.instantiate_invariants();
-				
 					ternary_views.add(slice3);
 				}
 			}
 		}
+
 		ppt.addViews(ternary_views);
 
 		// This method didn't add any new variables.
 		Assert.assertTrue(old_num_vars == ppt.var_infos.length);
 		ppt.repCheck();
+
 	}
 
 	/**
@@ -572,8 +588,8 @@ public class DaikonSimple {
 		//	   // This is not turned on for now since suppressions need invariants
 		//	   // of the form a == a even when a is the only item in the set.
 		//	   if (false) {
-//				   if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
-//					   return (false);
+		//				   if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
+		//					   return (false);
 		//	   }
 
 		return (true);
@@ -661,18 +677,17 @@ public class DaikonSimple {
 
 		// Don't create a reflexive slice (all vars the same) if there are
 		// only two vars in the equality set
-//			   if ((v1 == v2) && (v2 == v3))
-//				 return (false);
+		//			   if ((v1 == v2) && (v2 == v3))
+		//				 return (false);
 
 		// Don't create a partially reflexive slice (two vars the same) if there
 		// is only one variable in its equality set
 		//	   if (false) {
-//				 if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
-//				   return (false);
-//				 if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
-//				   return (false);
+		//				 if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
+		//				   return (false);
+		//				 if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
+		//				   return (false);
 		//	   }
-
 
 		return (true);
 	}
@@ -701,8 +716,9 @@ public class DaikonSimple {
 
 		private void add(PptTopLevel ppt, ValueTuple vt) {
 			// if this is a numbered exit, apply to the combined exit as well
-			if (!(ppt instanceof PptConditional)
-				&& ppt.ppt_name.isNumberedExitPoint()) {
+			//	if (!(ppt instanceof PptConditional)
+			//		&& ppt.ppt_name.isNumberedExitPoint()) {
+			if (ppt.ppt_name.isNumberedExitPoint()) {
 				PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
 				if (parent != null) {
 					parent.get_missingOutOfBounds(ppt, vt);
@@ -720,7 +736,7 @@ public class DaikonSimple {
 				//ppt.instantiate_views_and_invariants();
 			}
 
-			//manually inc the sample number because i don't use of ppt's add methods
+			//manually inc the sample number because i don't use any of ppt's add methods
 			ppt.incSampleNumber();
 
 			// Loop through each slice
@@ -742,21 +758,12 @@ public class DaikonSimple {
 					// relevant
 					//  If any variables are out of bounds, remove the invariants
 					if (v.missingOutOfBounds()) {
-						//						for (int a = 0; a < slice.invs.size(); a++) {
-						//							Invariant inv = (Invariant) slice.invs.get(a);
-						//							result.add(inv);
-						//						}
+
 						while (k.hasNext()) {
 							Invariant inv = (Invariant) k.next();
 							k.remove();
 						}
 						missing = true;
-						//						Iterator y = result.iterator();
-						//						while (y.hasNext()) {
-						//							Invariant inv = (Invariant) y.next();
-						//							slice.removeInvariant(inv);
-						//							y.remove();
-						//						}
 						break;
 					}
 
@@ -777,10 +784,24 @@ public class DaikonSimple {
 						if (status == InvariantStatus.FALSIFIED) {
 							//to_remove.add(inv);
 							k.remove();
-											
+
 						}
 					}
 				}
+
+				//update num_samples and num_values of a slice
+				for (int j = 0; j < vt.vals.length; j++) {
+					if (!vt.isMissing(j)) {
+						ValueSet vs = ppt.value_sets[j];
+						vs.add(vt.vals[j]);
+						// System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
+					} else {
+						ValueSet vs = ppt.value_sets[j];
+						// System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
+					}
+				}
+				ppt.mbtracker.add(vt, 1);
+
 			}
 		}
 	}
