@@ -159,9 +159,6 @@ public class PptSplitter implements Serializable {
     // Remove all of the NIS suppressed invariants that we previously created
     for (int i = 0; i < ppts.length; i++)
       ppts[i].remove_invs (suppressed_invs[i]);
-
-
-
   }
 
   /**
@@ -770,6 +767,23 @@ public class PptSplitter implements Serializable {
     Invariant orig_cons = (Invariant) orig_invs.get (consequent);
     Assert.assertTrue (orig_pred != null);
     Assert.assertTrue (orig_cons != null);
+
+    // JHP: if this code is enabled, other implications are added.  It
+    // is not at all clear to me how/why that happens.  This should be
+    // investigated.  For now, though, the implication is created here
+    // and noted as obvious in Implication.isObviousDynamically_SomeInEquality
+    // Also, this could possibly be better implemented by changing the
+    // way that we create the list of invariants that is one conditional
+    // and not in the other to not include an invariant if it is suppressed
+    // on the other side.  This would have the pleasant side effect of not
+    // forcing all of the suppressed invariants to be created before
+    // determining implications.
+    if (false && orig_cons.is_ni_suppressed()) {
+      if (Debug.logOn())
+        orig_cons.log ("not creating implication, suppressed");
+      return;
+    }
+
     // System.out.println("add_implication:");
     // System.out.println("  predicate = " + predicate.format());
     // System.out.println("  consequent= " + consequent.format());
