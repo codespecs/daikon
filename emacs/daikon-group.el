@@ -1,6 +1,7 @@
 (setq load-path (cons (substitute-in-file-name "${INV}/emacs/")
 		      load-path))
 
+;;; Java and C mode
 (load "c-set-basic-offset")
 (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
@@ -11,11 +12,18 @@
 (add-to-list 'auto-mode-alist '("\\.jpp\\'" . java-mode))
 (add-to-list 'auto-mode-alist '("\\.java\\.goal\\'" . java-mode))
 
+;;; Ediff customizations
+(setq ediff-window-setup-function 'ediff-setup-windows-plain) ; no multiframe
+(setq-default ediff-ignore-similar-regions t)	; ignore whitespace differences
+(setq ediff-whitespace " \n\t\f\r\240")	; by default omits \r, \240, etc.
+
+;;; PCL-CVS
 (if (not (fboundp 'cvs-update))
     (if (= 20 emacs-major-version)
 	(autoload 'cvs-update "pcl-cvs" nil t) ; Emacs 20
       (autoload 'cvs-update "pcvs" nil t))) ; Emacs 21
 
+;;; Daikon tags table and manual
 
 (defun daikon-tags-table ()
   "Use the Daikon TAGS table."
@@ -66,4 +74,3 @@ Does nothing if a compilation is already running unless `force' is non-nil."
 		    (setq compilation-is-running t))
 		nil))))
     compilation-is-running))
-
