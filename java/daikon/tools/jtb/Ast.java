@@ -125,6 +125,7 @@ public class Ast {
     return create(type, new Class[]{}, new Object[]{}, stringRep);
   }
 
+
   // Creates an AST from a String
   public static Node create(String type, Class[] argTypes, Object[] args, String stringRep) {
     JavaParser parser = new JavaParser(new StringReader(stringRep));
@@ -161,7 +162,12 @@ public class Ast {
     }
   }
 
-  public static String getType(FormalParameter p) {
+  public static String getType(FormalParameter fp) {
+
+    StringWriter w = new StringWriter();
+    fp.accept(new TreeDumper(w));
+
+    FormalParameter p = (FormalParameter)create("FormalParameter", w.toString());
 
     p.accept(new TreeFormatter());
 
@@ -1092,15 +1098,45 @@ public class Ast {
   }
 
   public static boolean isStatic(ClassOrInterfaceDeclaration n) {
+    return isStaticInternal((Node)n);
+  }
+
+  public static boolean isStatic(MethodDeclaration n) {
+    return isStaticInternal((Node)n);
+  }
+
+  public static Modifiers getModifiers(ClassOrInterfaceDeclaration n) {
+    return getModifiersInternal((Node)n);
+  }
+
+  public static Modifiers getModifiers(MethodDeclaration n) {
+    return getModifiersInternal((Node)n);
+  }
+
+  private static Modifiers getModifiersInternal(Node n) {
+
+    Assert.assertTrue((n instanceof MethodDeclaration)
+                      || (n instanceof ClassOrInterfaceDeclaration));
+
+    ClassOrInterfaceBodyDeclaration decl =
+      (ClassOrInterfaceBodyDeclaration)getParent(ClassOrInterfaceBodyDeclaration.class, n);
+    Assert.assertTrue(decl != null);
+    NodeSequence seq = (NodeSequence)decl.f0.choice;
+    return (Modifiers)seq.elementAt(0);
+  }
+
+
+  private static boolean isStaticInternal(Node n) {
     /**
      * Grammar production for ClassOrInterfaceBodyDeclaration
      * f0 -> Initializer()
      *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
      *       | ";"
      */
+    Assert.assertTrue((n instanceof MethodDeclaration)
+                      || (n instanceof ClassOrInterfaceDeclaration));
 
-    NodeSequence seq = (NodeSequence)n.getParent();
-    Modifiers modifiers = (Modifiers)seq.elementAt(0);
+    Modifiers modifiers = getModifiersInternal(n);
     if (modifierPresent(modifiers, "static")) {
       return true;
     } else {

@@ -58,6 +58,9 @@ public class PptNameMatcher {
         // remove some generics stuff).
         //p.accept(new TreeFormatter());
         FormalParameter param = (FormalParameter)Ast.create("FormalParameter", Ast.print(p));
+
+
+
         Type type2 = param.f1;
         ReferenceType refType2 = (ReferenceType)type2.f0.choice;
 
@@ -67,14 +70,33 @@ public class PptNameMatcher {
         NodeSequence intermediateSequenceOrig = (NodeSequence)refType.f0.choice;
         NodeSequence seq = (NodeSequence)intermediateSequence.elementAt(0);
         NodeSequence seqOrig = (NodeSequence)intermediateSequenceOrig.elementAt(0);
+
+
         Vector singleElementVector = seq.nodes;
         Vector singleElementVectorOrig = seqOrig.nodes;
         // Replace the ClassOrInterfaceType with its ungenerified version.
+
+//     System.out.println("@0");
+//     param.accept(new TreeDumper());
+
+
         ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
         ClassOrInterfaceType tOrig = (ClassOrInterfaceType)singleElementVectorOrig.get(0);
         Assert.assertTrue(tOrig.unGenerifiedVersionOfThis != null);
         singleElementVector.set(0, tOrig.unGenerifiedVersionOfThis);
         // Return getType of the ungenerified version of p.
+
+        // tOrig.unGenerifiedVersionOfThis may have line/col numbering
+        // that's inconsistent with param, so we call a formatter
+        // here. param is only used for matching, and afterwards it's
+        // discarded. So it's ok to reformat it.
+        param.accept(new TreeFormatter());
+
+
+//     System.out.println("@1");
+//     param.accept(new TreeDumper());
+//     System.out.println("@2");
+
         return Ast.getType(param);
 
       }

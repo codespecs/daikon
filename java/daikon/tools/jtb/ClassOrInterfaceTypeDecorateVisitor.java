@@ -213,6 +213,19 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     t.accept(new TreeDumper(w));
     ClassOrInterfaceType n = (ClassOrInterfaceType)Ast.create("ClassOrInterfaceType", w.toString());
 
+    ungenerify(n);
+
+    t.unGenerifiedVersionOfThis = n;
+
+  }
+
+  /**
+   * ClassOrInterfaceType:
+   * f0 -> <IDENTIFIER>
+   * f1 -> [ TypeArguments() ]
+   * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+   */
+  private void ungenerify(ClassOrInterfaceType n) {
 
     // Drop all type arguments.
     n.f1 = new NodeOptional(); // This removes optional node, if present.
@@ -262,10 +275,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       //System.out.print("n::::");
       //System.out.println(sw.toString().trim());
     }
-
-    t.unGenerifiedVersionOfThis = n;
-
-  }
+}
 
   // Makes a copy of the stacks and of the map. The
   // ClassOrInterfaceType objects are not copied.

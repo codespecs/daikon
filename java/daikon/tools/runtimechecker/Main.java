@@ -51,17 +51,15 @@ public class Main extends CommandHandler {
                 }
             }
 
-        } catch (Exception e) {
-            System.err.println("Exception thrown while handling command:" + e);
+        } catch (Throwable e) {
+            System.out.println("Throwable thrown while handling command:" + e);
             e.printStackTrace();
             success = false;
         } finally {
             if (!success) {
                 System.err.println("The instrumenter failed.");
                 h.usageMessage();
-                System.exit(1);
             } else {
-                System.exit(0);
             }
         }
     }

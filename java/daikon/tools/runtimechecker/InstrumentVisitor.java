@@ -229,29 +229,24 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     public void visit(MethodDeclaration method) {
         super.visit(method);
 
+        method.accept(new TreeFormatter());
+
+//         System.out.println("@@@0");
+//         method.accept(new TreeDumper());
+//         System.out.println("@@@1");
+
         if (generated_methods.contains(method)) {
             return;
         }
 
         // Determine if method is static.
-        boolean isStatic = false;
-
-        NodeSequence seq = (NodeSequence)method.getParent().getParent();
-        Modifiers modifiers = (Modifiers)seq.elementAt(0);
-
-
-        for (Enumeration e = modifiers.f0.elements(); e.hasMoreElements();) {
-            NodeChoice nodechoice = (NodeChoice) e.nextElement();
-            NodeToken modifier = (NodeToken) nodechoice.choice;
-            if (modifier.tokenImage.equals("static")) {
-                isStatic = true;
-            }
-        }
+        boolean isStatic = Ast.isStatic(method);
 
         // Find declared throwables.
         List<String> declaredThrowables = getDeclaredThrowables(method.f3);
 
         List/* PptTopLevel */matching_ppts = pptMatcher.getMatches(pptmap, method);
+
         String name = Ast.getName(method);
         String returnType = Ast.getReturnType(method);
         String maybeReturn = (returnType.equals("void") ? "" : "return");
@@ -337,13 +332,15 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         wrapper.f4.choice = block;
         wrapper.accept(new TreeFormatter());
 
-        NodeSequence modifiers_declaration = (NodeSequence)method.getParent().getParent();
-        ((Modifiers)modifiers_declaration.elementAt(0)).accept(new TreeFormatter());
+        Modifiers modifiersOrig = Ast.getModifiers(method);
+        Modifiers modifiers = (Modifiers)Ast.copy("Modifiers", modifiersOrig);
+        modifiers.accept(new TreeFormatter());
 
-        ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+        ClassOrInterfaceBody c =
+            (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
         StringBuffer modifiers_declaration_stringbuffer  = new StringBuffer();
-        modifiers_declaration_stringbuffer.append(Ast.print((Modifiers)modifiers_declaration.elementAt(0)));
+        modifiers_declaration_stringbuffer.append(Ast.print(modifiers));
         modifiers_declaration_stringbuffer.append(" ");
         modifiers_declaration_stringbuffer.append(Ast.print(wrapper));
 
