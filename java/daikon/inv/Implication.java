@@ -55,7 +55,7 @@ public class Implication extends Invariant {
 
   public String format() {
     String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
-    return "(" + predicate.format() + ")" + arrow + consequent.format();
+    return "(" + predicate.format() + ")" + arrow + "(" + consequent.format() + ")";
   }
 
   public String format_esc() {
