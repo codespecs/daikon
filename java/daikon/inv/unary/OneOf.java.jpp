@@ -311,7 +311,7 @@ public final class ONEOFSCALAR
     result.elts = (INT[]) elts.clone();
 #ifdef IS_SEQUENCE
     for (int i=0; i < num_elts; i++) {
-      result.elts[i] = (INT) elts[i].clone();
+      result.elts[i] = Intern.intern((INT) elts[i].clone());
     }
 #endif
     result.num_elts = this.num_elts;
@@ -1509,6 +1509,9 @@ public final class ONEOFSCALAR
 
   public InvariantStatus add_modified(INT v, int count) {
     if (!add_mod_elem (v, count)) {
+      if (logOn())
+        log ("destroyed on sample " + TOSTRING (v) + " previous vals = "
+            + TOSTRING (elts[0]) + " num_elts = " + num_elts);
       destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
@@ -1526,8 +1529,8 @@ public final class ONEOFSCALAR
 
   public boolean add_mod_elem (INT v, int count) {
 
-    // Look for v is our list of previously seen values.  If its
-    // found, we're all set
+    // Look for v in our list of previously seen values.  If it's
+    // found, we're all set.
     for (int i=0; i<num_elts; i++) {
       //if (logDetail())
       //  log ("add_modified (" + v + ")");
