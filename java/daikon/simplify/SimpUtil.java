@@ -16,7 +16,6 @@ public class SimpUtil
     Assert.assert(s != null);
     Assert.assert(s.indexOf("((") == -1, "'((' may not appear, '"+s+"'");
     Assert.assert(s.charAt(0) == '(', "starts with lparen, '"+s+"'");
-    Assert.assert(s.indexOf('~') == -1, "~ may not appear, '"+s+"'");
     Assert.assert(s.charAt(s.length()-1) == ')', "ends with rparen, '"+s+"'");
 
     int paren = 0;
