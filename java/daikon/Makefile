@@ -133,22 +133,22 @@ inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound-cpp.java
 inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/unary/scalar/OneOfScalar.java: inv/OneOf-cpp.java
+inv/unary/scalar/OneOfScalar.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/unary/string/OneOfString.java: inv/OneOf-cpp.java
+inv/unary/string/OneOfString.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-inv/unary/sequence/OneOfSequence.java: inv/OneOf-cpp.java
+inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
 
-inv/unary/sequence/EltOneOf.java: inv/OneOf-cpp.java
+inv/unary/sequence/EltOneOf.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELT)
 
-inv/unary/stringsequence/EltOneOfString.java: inv/OneOf-cpp.java
+inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
 
-inv/unary/stringsequence/OneOfStringSequence.java: inv/OneOf-cpp.java
+inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRINGSEQUENCE)
 
 PptSlice1.java: PptSlice-cpp.java
