@@ -117,6 +117,20 @@ compile-java:
 clean-java:
 	cd java/daikon && $(MAKE) clean
 
+### Kvasir (C front end)
+
+kvasir/Makefile.in:
+	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
+	ln -s valgrind-kvasir kvasir
+	touch $@
+
+kvasir/kvasir/Makefile.in: kvasir/Makefile.in
+	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
+	touch $@
+
+build-kvasir: kvasir/kvasir/Makefile.in
+	cd kvasir && ./configure --prefix=`pwd`/inst && make && make install
+
 ### Testing the code
 
 test:
@@ -131,18 +145,6 @@ tags: TAGS
 
 TAGS:
 	cd java && $(MAKE) tags
-
-kvasir/Makefile.in:
-	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
-	ln -s valgrind-kvasir kvasir
-	touch $@
-
-kvasir/kvasir/Makefile.in: kvasir/Makefile.in
-	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
-	touch $@
-
-build-kvasir: kvasir/kvasir/Makefile.in
-	cd kvasir && ./configure --prefix=`pwd`/inst && make && make install
 
 ###########################################################################
 ### Test the distribution
@@ -698,7 +700,8 @@ showvars:
 
 
 
-# Only run (one of) the "setup" targets once.
+## v2 is now obsolete, so there is no longer any need to perform these steps.
+# Only run the "setup" targets once.
 setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
 
 setup-v2-and-v3-daikon:
