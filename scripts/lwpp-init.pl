@@ -41,8 +41,12 @@ foreach my $file (@files) {
   $int_file =~ s!\.c!.int.c!;
   $int_file =~ s!(.*)/(.*)\.c!$2.c!; # strip leading directories
   $int_file = "$lackwitdb/$int_file";
-
-  `lh -\$ -w --gen_c_file_name $int_file $file`;
+  
+  if ($file =~ /libc\.c/) {
+    `lh -\$ -w -D_LINUX_IN_H -D_LIBIO_H --gen_c_file_name $int_file $file`;
+  } else {
+    `lh -w --gen_c_file_name $int_file $file`;
+  }
   my $ret = `gcc -c $int_file -o /dev/null 2>&1`;
   $ret =~ /^(.*)Launching real compiler/s;
   die "Error processing $int_file\n$1\n" if ($1);
