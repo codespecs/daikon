@@ -67,7 +67,8 @@
 @item daikon.inv.Invariant.probability_limit
   Real number between 0 and 1.  The probability that the invariant
  occurred by chance must be less than this in order for it to be
- displayed.
+ displayed.  (May also be set via --prob_limit switch to Daikon;
+ refer to manual.)
 
 @item daikon.inv.binary.sequenceScalar.Member.enabled
   Boolean.  True iff Member invariants should be considered.
