@@ -109,21 +109,47 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 
     String result = "";
 
+    // Format   \typeof(theArray) = "[Ljava.lang.Object;"
+    //   as     \typeof(theArray) == \type(java.lang.Object[])
+    // ... but still ...
+    // format   \typeof(other) = "package.SomeClass;"
+    //   as     \typeof(other) == \type(package.SomeClass)
+
+    boolean is_type = varname.startsWith("\\typeof");
     for (int i=0; i<num_elts; i++) {
       if (i>0) result += " || ";
-      result += varname + " == \"" + UtilMDE.quote( elts[i] ) + "\"" ;
+      result += varname + " == ";
+      if (!is_type) {
+	result += "\"" + UtilMDE.quote( elts[i] ) + "\"";
+      } else {
+	if (elts[i].equals("null")) {
+	  result += "\\typeof(null)";
+	} else {
+	  if (elts[i].startsWith("[")) {
+	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
+	  } else {
+	    result += "\\type(" + elts[i] + ")";
+	  }
+	}
+      }
     }
-    return "(" + esc_forall[0] + "(" + result + "))";
 
+    result = "(" + esc_forall[0] + "(" + result + "))";
+
+    return result;
   }
 
-  public void add_modified(String[] a, int count) {
+  public void add_modified(String [] a, int count) {
+  OUTER:
     for (int ai=0; ai<a.length; ai++) {
-      String v = a[ai];
+      String  v = a[ai];
 
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
-        return;
+      if (elts[i] == v) {
+
+        continue OUTER;
+
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;

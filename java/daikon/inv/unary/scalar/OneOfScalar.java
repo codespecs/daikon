@@ -128,25 +128,34 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     String result = "";
 
     if (is_boolean) {
+      Assert.assert(num_elts == 1);
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
-      return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
       if (elts[0] == 0) {
-        return varname + " == null";
+        result = varname + " == null";
       } else {
-        return varname + " has only one value (hashcode=" + elts[0] + ")";
+        result = varname + " has only one value (hashcode=" + elts[0] + ")";
       }
     } else {
-      return varname + " == " +  elts[0]  ;
+      for (int i=0; i<num_elts; i++) {
+        if (i>0) result += " || ";
+        result += varname + " == " +  elts[i]  ;
+      }
     }
 
+    return result;
   }
 
   public void add_modified(long  v, int count) {
 
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
+      if (elts[i] == v) {
+
         return;
+
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;

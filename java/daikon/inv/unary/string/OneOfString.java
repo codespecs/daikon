@@ -132,8 +132,8 @@ public final class OneOfString  extends SingleString  implements OneOf {
 	}
       }
     }
-    return result;
 
+    return result;
   }
 
   public void add_modified(String  v, int count) {
@@ -141,8 +141,11 @@ public final class OneOfString  extends SingleString  implements OneOf {
     Assert.assert(Intern.isInterned(v));
 
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
+      if (elts[i] == v) {
+
         return;
+
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;

@@ -90,7 +90,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   private INT[] elts;
   private int num_elts;
-#if defined(SCALAR)
+#if defined(SCALAR) || defined(ELT)
   private boolean is_boolean;
   private boolean is_hashcode;
 #endif
@@ -110,6 +110,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SCALAR)
     is_boolean = (var().type == ProglangType.BOOLEAN);
     is_hashcode = var().type.isObject() || var().type.isArray();
+#elif defined(ELT)
+    is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 #endif
   }
 
@@ -184,7 +187,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   public String format() {
     String varname = NAME;
     if (num_elts == 1) {
-#if defined(SCALAR)
+#if defined(SCALAR) || defined(ELT)
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
@@ -213,7 +216,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     String varname = ESCNAME;
 #endif
     String result = "";
-#if defined(STRING)
+#if defined(STRING) || defined(ELTSTRING)
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
     // ... but still ...
@@ -238,40 +241,39 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 	}
       }
     }
-    return result;
-#elif defined(SCALAR)
+#elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
+      Assert.assert(num_elts == 1);
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
-      return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
       if (elts[0] == 0) {
-        return varname + " == " + "null";
+        result = varname + " == " + "null";
       } else {
-        return varname + " has only one value (hashcode=" + elts[0] + ")";
+        result = varname + " has only one value (hashcode=" + elts[0] + ")";
       }
     } else {
-      return varname + " == " + TOSTRING(elts[0]);
+      for (int i=0; i<num_elts; i++) {
+        if (i>0) result += " || ";
+        result += varname + " == " + TOSTRING(elts[i]);
+      }
     }
-#elif defined(ELT) || defined(ELTSTRING)
-    for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
-      result += varname + " == " + TOSTRING(elts[i]);
-    }
-    return "(" + esc_forall[0] + "(" + result + "))";
 #else
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    result = "format_esc " + this.getClass() + " needs to be changed: " + format();
 #endif
+#if defined(ELT) || defined(ELTSTRING)
+    result = "(" + esc_forall[0] + "(" + result + "))";
+#endif
+    return result;
   }
 
 
-#if defined(ELT)
-  public void add_modified(long[] a, int count) {
+#if defined(ELT) || defined(ELTSTRING)
+  public void add_modified(INT[] a, int count) {
+  OUTER:
     for (int ai=0; ai<a.length; ai++) {
-      long v = a[ai];
-#elif defined(ELTSTRING)
-  public void add_modified(String[] a, int count) {
-    for (int ai=0; ai<a.length; ai++) {
-      String v = a[ai];
+      INT v = a[ai];
 #else
   public void add_modified(INT v, int count) {
 #ifndef SCALAR
@@ -279,13 +281,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
 #endif
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
+      if (elts[i] == v) {
+#if defined(ELT) || defined(ELTSTRING)
+        continue OUTER;
+#else
         return;
+#endif
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;
     }
-#if defined(SCALAR)
+#if defined(SCALAR) || defined(ELT)
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
       destroy();
@@ -301,10 +308,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
     elts[num_elts] = v;
     num_elts++;
-#if defined(ELT)
-    }
-  }
-#elif defined(ELTSTRING)
+#if defined(ELT) || defined(ELTSTRING)
     }
   }
 #else
@@ -316,7 +320,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
-#if defined(SCALAR)
+#if defined(SCALAR) || defined(ELT)
     } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
@@ -392,7 +396,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       }
       return true;
     }
-#if defined(SCALAR)
+#if defined(SCALAR) || defined(ELT)
     // Many more checks can be added here:  against nonzero, modulus, etc.
     if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;

@@ -29,12 +29,18 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   private long [] elts;
   private int num_elts;
 
+  private boolean is_boolean;
+  private boolean is_hashcode;
+
   EltOneOf (PptSlice ppt) {
     super(ppt);
 
     elts = new long [LIMIT];
 
     num_elts = 0;
+
+    is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 
   }
 
@@ -97,7 +103,18 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     String varname = var().name + " elements" ;
     if (num_elts == 1) {
 
-      return varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
+      if (is_boolean) {
+        Assert.assert((elts[0] == 0) || (elts[0] == 1));
+        return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+      } else if (is_hashcode) {
+        if (elts[0] == 0) {
+          return varname + " == null";
+        } else {
+          return varname + " has only one value (hashcode=" + elts[0] + ")";
+        }
+      } else {
+        return varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
+      }
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -111,24 +128,56 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
     String result = "";
 
-    for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
-      result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " == null";
+      } else {
+        result = varname + " has only one value (hashcode=" + elts[0] + ")";
+      }
+    } else {
+      for (int i=0; i<num_elts; i++) {
+        if (i>0) result += " || ";
+        result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
+      }
     }
-    return "(" + esc_forall[0] + "(" + result + "))";
 
+    result = "(" + esc_forall[0] + "(" + result + "))";
+
+    return result;
   }
 
-  public void add_modified(long[] a, int count) {
+  public void add_modified(long [] a, int count) {
+  OUTER:
     for (int ai=0; ai<a.length; ai++) {
-      long v = a[ai];
+      long  v = a[ai];
 
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
-        return;
+      if (elts[i] == v) {
+
+        continue OUTER;
+
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;
+    }
+
+    if ((is_boolean && (num_elts == 1))
+        || (is_hashcode && (num_elts == 2))) {
+      destroy();
+      return;
+    }
+    if (is_hashcode && (num_elts == 1)) {
+      // Permit two object values only if one of them is null
+      if ((elts[0] != 0) && (v != 0)) {
+        destroy();
+        return;
+      }
     }
 
     elts[num_elts] = v;
@@ -141,6 +190,10 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
+
+    } else if (is_hashcode && (num_elts > 1)) {
+      // This should never happen
+      return Invariant.PROBABILITY_UNJUSTIFIED;
 
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
@@ -175,6 +228,21 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       }
       return true;
     }
+
+    // Many more checks can be added here:  against nonzero, modulus, etc.
+    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
+      return true;
+    }
+    long elts_min = Long.MAX_VALUE;
+    long elts_max = Long.MIN_VALUE;
+    for (int i=0; i < num_elts; i++) {
+      elts_min = Math.min(elts_min, elts[i]);
+      elts_max = Math.max(elts_max, elts[i]);
+    }
+    if ((o instanceof LowerBound) && (elts_max < ((LowerBound)o).min1))
+      return true;
+    if ((o instanceof UpperBound) && (elts_min > ((UpperBound)o).max1))
+      return true;
 
     return false;
   }

@@ -111,8 +111,9 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
     String result = "";
 
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    result = "format_esc " + this.getClass() + " needs to be changed: " + format();
 
+    return result;
   }
 
   public void add_modified(String[]  v, int count) {
@@ -120,8 +121,11 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     Assert.assert(Intern.isInterned(v));
 
     for (int i=0; i<num_elts; i++)
-      if (elts[i] == v)
+      if (elts[i] == v) {
+
         return;
+
+      }
     if (num_elts == LIMIT) {
       destroy();
       return;
