@@ -310,7 +310,7 @@ public class InvariantChecker {
                         : String.valueOf(lnr.getLineNumber());
             output_stream.println ("At ppt " + ppt.name + ", Invariant '"
                  + pre_inv.format() + "' invalidated by sample "
-                 + Debug.toString (slice.var_infos, vt) + "at line = " + line);
+                 + Debug.toString (slice.var_infos, vt) + "at line " + line);
             error_cnt++;
           }
         }
