@@ -24,9 +24,6 @@ When the task is complete, move it to the bottom of the file.
     only Chicory, but annotate as well.  Carlos suggested the files
     in ~jhp/tmp/bst.tar
 
-  - Add a simple test of chicory to the tests that are performed on
-    the build itself (before it is copied to the website).
-
   - Switch over the regression tests to chicory, leaving dfej as a
     user option.  Checkin the changed goal files.
 
@@ -34,9 +31,14 @@ When the task is complete, move it to the bottom of the file.
     of lines) to the regression tests.  This will allow us to see
     more quickly when a Chicory change causes dtrace diffs.
 
-  - Write a new dtrace-diff program in Jana.  There is probably already
+  - Write a new dtrace-diff program in Java.  There is probably already
     Jana code that can read a dtrace file.  The diff should be very
     simple at that point.
+
+  - Daikon output is handled via StreamRedirectThread.  Daikon writes
+    out progress indications that are designed to write over one another.
+    They are all on separate lines when run through Chicory.  Run Daikon
+    standalone and through Chicory to see the difference.
 
   - Implement online mode 
     [etf]
@@ -74,7 +76,13 @@ When the task is complete, move it to the bottom of the file.
     This is low-priority, because it's obscure.  In Java, people shouldn't
     be writing this kind of code anyway.
 
-Completed Tasks
+Completed Tasks (add new ones at the top)
+
+  - Add a simple test of chicory to the tests that are performed on
+    the build itself (before it is copied to the website).
+
+    Feb 13 2005, jhp - a flame test is added to the 
+    test-staged-dist target in $inv/Makefile
 
   - Cleanup directory structure in $inv/chicory,  remove JDI based files
   
