@@ -73,7 +73,11 @@ public class LimitedSizeIntSet
   }
 
 
-  /** A lower bound on the number of elements in the set. */
+  /**
+   * A lower bound on the number of elements in the set.  Returns either
+   * the number of elements that have been inserted in the set, or
+   * max_size(), whichever is less.
+   **/
   public int size() {
     return num_values;
   }
@@ -81,6 +85,7 @@ public class LimitedSizeIntSet
   /**
    * An upper bound how many distinct elements can be individually
    * represented in the set.
+   * Returns max_values+1 (where max_values is the argument to the constructor).
    **/
   public int max_size() {
     if (values == null) {
@@ -109,8 +114,8 @@ public class LimitedSizeIntSet
   /**
    * Merges a list of LimitedSizeIntSet objects into a single object that
    * represents the values seen by the entire list.  Returns the new
-   * object, whose max_values is the same as the first element in the list.
-   */
+   * object, whose max_values is the given integer.
+   **/
   public static LimitedSizeIntSet merge (int max_values, List /*LimitedSizeIntSet*/ slist) {
     LimitedSizeIntSet result = new LimitedSizeIntSet(max_values);
     for (Iterator itor = slist.iterator(); itor.hasNext(); ) {
