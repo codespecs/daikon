@@ -367,13 +367,21 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation (parent, child, ENTER_EXIT);
 
-    // Look for orig versions of each non-derived parent variable in the child
+    // Look for orgig versions of each non-derived parent variable in the child
+    // Note that static constants don't have orig versions (since they are
+    // known to be the same), so we connect to the post version instead.
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
       if (vp.derived != null)
         continue;
-      VarInfoName orig_name = vp.name.applyPrestate().intern();
-      rel.relate (vp, orig_name);
+      if (vp.isStaticConstant()) {
+        boolean found = rel.relate (vp, vp.name);
+        Assert.assertTrue (found);
+      } else {
+        VarInfoName orig_name = vp.name.applyPrestate().intern();
+        boolean found = rel.relate (vp, orig_name);
+        Assert.assertTrue (found);
+      }
     }
 
     // Look for orig versions of derived variables in the child.  This is
@@ -411,16 +419,22 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Make sure every ENTER variable was found in the EXIT point
+    // Make sure every non-static ENTER variable was found in the EXIT point
+    boolean all_found = true;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
+      if (vp.isStaticConstant())
+        continue;
       if (!rel.parent_to_child_map.containsKey (vp)) {
         System.out.println ("No match for " + vp.name.name() + " from parent "
                             + parent.name() + " in child " + child.name());
-        for (int j = 0; j < child.var_infos.length; j++)
-          System.out.println ("    " + child.var_infos[j].name.name());
-        //Assert.assertTrue (false, "Missing orig variable in EXIT");
+        all_found = false;
       }
+    }
+    if (!all_found) {
+      for (int j = 0; j < child.var_infos.length; j++)
+        System.out.println ("    " + child.var_infos[j].name.name());
+      //Assert.assertTrue (false, "Missing orig variable in EXIT");
     }
     return (rel);
   }
