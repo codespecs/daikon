@@ -74,10 +74,9 @@ public final class Member extends SequenceString  {
   public static boolean isObviousMember(PptSlice ppt, VarInfo sclvar, VarInfo seqvar) {
 
     VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();
-    // System.out.println("Member.isObviousMember being called");
-    // System.out.println("sclvar=" + sclvar.name
-    //                    + ", sclvar.derived=" + sclvar.derived
-    //                    + ", sclvar_seq=" + sclvar_seq);
+    // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):");
+    // System.out.println("  sclvar.derived=" + sclvar.derived
+    //                    + ", sclvar_seq=" + ((sclvar_seq == null) ? "null" : sclvar_seq.name));
 
     if (sclvar_seq == null)
       return false;
@@ -110,7 +109,7 @@ public final class Member extends SequenceString  {
     // [Do I need to treat sclvar_seq.derived in {SequenceMin, SequenceMax}
     // specially?]
 
-    // the sequence is B[0..J-1] or similar.  Get informatin about it
+    // the sequence is B[0..J-1] or similar.  Get information about it
     SequenceStringSubsequence  seqsss = (SequenceStringSubsequence ) seqvar.derived;
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
@@ -123,6 +122,7 @@ public final class Member extends SequenceString  {
       SequenceStringSubscript  sclsss = (SequenceStringSubscript ) sclvar.derived;
       VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
       int scl_shift = sclsss.index_shift;
+      // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
       if (scl_index == seq_index) {
         // same variable: B[I] in B[0..I] or B[I] in B[I..]
         if (seq_from_start) {
@@ -197,7 +197,7 @@ public final class Member extends SequenceString  {
               // g
               // h
               if ((scl_can_be_lt && ! scl_can_be_eq)
-                  || (scl_can_be_lt && scl_can_be_eq && (scl_shift < seq_shift)))
+                  || (scl_can_be_lt && scl_can_be_eq && (scl_shift <= seq_shift)))
                 return true;
             }
           } else {
