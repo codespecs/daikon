@@ -149,10 +149,10 @@ kvasir/kvasir/Makefile.in:
 kvasir/config.status: kvasir/kvasir/Makefile.in
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/config.status
+kvasir/coregrind/valgrind: kvasir/config.status kvasir/coregrind/*.[ch]
 	cd kvasir && $(MAKE)
 
-kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind kvasir/kvasir/*.[ch]
+kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind kvasir/kvasir/*.[ch] kvasir/kvasir/memcheck/*.[ch]
 	cd kvasir/kvasir && $(MAKE)
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
