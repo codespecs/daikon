@@ -3649,13 +3649,13 @@ def diff_var_infos(var_infos1, var_infos2):
             if ((len(var_infos1) != len(var_infos2))
                 or not var_infos_compatible(var_infos1, var_infos2)):
                 raise "var_infos still incompatible"
-        # Should duplicate the above code block for the case of
-        # len(var_infos2) > len(var_infos2) or just generalize it.
-        raise "var_infos incompatible"
+        else:
+            # Should duplicate the above code block for the case of
+            # len(var_infos2) > len(var_infos2) or just generalize it.
+            raise "var_infos incompatible"
 
-   assert len(var_infos1) == len(var_infos2)
-   assert var_infos_compatible(var_infos1, var_infos2)
-
+    assert len(var_infos1) == len(var_infos2)
+    assert var_infos_compatible(var_infos1, var_infos2)
 
     print len(var_infos1), "var_infos:"
 
