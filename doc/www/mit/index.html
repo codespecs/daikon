@@ -310,16 +310,12 @@ The following commands create and populate the
     chmod -R g+r .
     chmod g+x `find . -type d -print`
     cd ~/research/invariants
-    make setup-v2-and-v3
-    make use-ver3
     make compile
 </pre>
-(The <tt>make use-ver3</tt> line ensures that you use Daikon version
-3, rather than the old version 2.)
 <p>
 
 Before trying to compile (via <tt>make</tt> in any directory under
-<tt>$inv/java</tt>, log out and log back in, to set up your environment.
+<tt>$inv/java</tt>), log out and log back in, to set up your environment.
 <p>
 
 Optionally, you may check out a copy of the <tt>dfej</tt> directory.
