@@ -701,7 +701,7 @@ public class PptTopLevel extends Ppt {
   // I can't decide which loop it's more efficient to make the inner loop:
   // the loop over samples or the loop over slices.
 
-  // slices_vector si a Vector of PptSlice; this routine does not modify it.
+  // slices_vector is a Vector of PptSlice; this routine does not modify it.
   // Maybe this should return the rejected views.
   public void addViews(Vector slices_vector) {
     if (slices_vector.isEmpty())
@@ -831,6 +831,14 @@ public class PptTopLevel extends Ppt {
         return (PptSlice2) view;
     }
     return null;
+  }
+
+  public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
+    if (v1.varinfo_index < v2.varinfo_index) {
+      return findSlice(v1, v2);
+    } else {
+      return findSlice(v2, v1);
+    }
   }
 
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
@@ -1019,14 +1027,14 @@ public class PptTopLevel extends Ppt {
       }
       if (views.contains(unary_view)) {
         // There is only one type of unary invariant in pass 1:
-        // OneOf{Scalar,Sequence}.  It must have been successful, or this
+        // OneOf{scalar,Sequence}.  It must have been successful, or this
         // view wouldn't have been installed.
-        Assert.assert(unary_view.invs.size() == 1);
-        Invariant inv = (Invariant) unary_view.invs.elementAt(0);
-        Assert.assert((inv instanceof OneOfScalar)
-                      || (inv instanceof OneOfString)
-                      || (inv instanceof OneOfSequence)
-                      || (inv instanceof OneOfStringSequence));
+        // Assert.assert(unary_view.invs.size() == 1);
+
+        for (int j=0; j<unary_view.invs.size(); j++) {
+          Invariant inv = (Invariant) unary_view.invs.elementAt(j);
+          Assert.assert(inv instanceof OneOf);
+        }
       } else {
         // The old one was a failure (and so saw only a subset of all the
         // values); recreate it.
@@ -1200,22 +1208,29 @@ public class PptTopLevel extends Ppt {
       // If this view has been installed in the views slot (ie, it has not
       // been eliminated already).
       if (views.contains(unary_view)) {
-        // There is only one type of unary invariant in pass 1:
-        // OneOf{Scalar,Sequence}.  It must have been successful, or this
-        // view wouldn't have been installed.
-        Assert.assert(unary_view.invs.size() == 1);
-        Invariant inv = (Invariant) unary_view.invs.elementAt(0);
-        inv.finished = true;
-        // unary_view.already_seen_all = true;
-        OneOf one_of = (OneOf) inv;
-        // System.out.println("num_elts: " + one_of.num_elts());
-        if (one_of.num_elts() == 1) {
-          // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
-	  // Should be Long, not Integer.
-	  Assert.assert(! (one_of.elt() instanceof Integer));
-          one_of.var().dynamic_constant = one_of.elt();
-          one_of.var().is_dynamic_constant = true;
-          // System.out.println("set dynamic_constant to " + one_of.elt());
+        // This is not true any longer.
+        // // There is only one type of unary invariant in pass 1:
+        // // OneOf{Scalar,Sequence}.  It must have been successful, or this
+        // // view wouldn't have been installed.
+        // Assert.assert(unary_view.invs.size() == 1);
+        // Invariant inv = (Invariant) unary_view.invs.elementAt(0);
+
+        for (int j=0; j<unary_view.invs.size(); j++) {
+          Invariant inv = (Invariant) unary_view.invs.elementAt(j);
+          inv.finished = true;
+          // unary_view.already_seen_all = true;
+          OneOf one_of = (OneOf) inv;
+          // System.out.println("num_elts: " + one_of.num_elts());
+          if ((one_of.num_elts() == 1)
+              && (! (inv instanceof EltOneOf))
+              && (! (inv instanceof EltOneOfString))) {
+            // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
+            // Should be Long, not Integer.
+            Assert.assert(! (one_of.elt() instanceof Integer));
+            one_of.var().dynamic_constant = one_of.elt();
+            one_of.var().is_dynamic_constant = true;
+            // System.out.println("set dynamic_constant to " + one_of.elt());
+          }
         }
       } else {
         unary_view.clear_cache();

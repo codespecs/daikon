@@ -2,44 +2,38 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.derive.binary.*;
+
+
 import utilMDE.*;
 
 
 // Also serves as NonAliased.
 public final class NonEqual extends TwoScalar {
-  long min1 = Long.MAX_VALUE;
-  long min2 = Long.MAX_VALUE;
-  long max1 = Long.MIN_VALUE;
-  long max2 = Long.MIN_VALUE;
 
-  // If nonzero, use this as the range instead of the actual range.
-  // This lets one use a specified probability of nonzero (say, 1/10
-  // for pointers).
-  long override_range = 0;
-
-  // Get this from the Ppt
-  // int samples = 0;
+  public NonEqualCore core;
 
   protected NonEqual(PptSlice ppt) {
     super(ppt);
+    int override_range = 0;
+    if (! ppt.var_infos[0].type.isIntegral()) {
+      override_range = 10;
+    }
+    core = new NonEqualCore(this, override_range);
   }
 
   public static NonEqual instantiate(PptSlice ppt) {
     NonEqual result = new NonEqual(ppt);
-    if (! ppt.var_infos[0].type.isIntegral()) {
-      result.override_range = 10;
-    }
-    // System.out.println("Nonequal override_range = " + result.override_range + " for " + ppt.name);
+    // System.out.println("NonEqual override_range = " + result.core.override_range + " for " + ppt.name);
     return result;
   }
 
   public String repr() {
     return "NonEqual" + varNames() + ": "
-      + "no_invariant=" + no_invariant
-      + ",min1=" + min1
-      + ",min2=" + min2
-      + ",max1=" + max1
-      + ",max2=" + max2;
+      + core.repr()
+      + ",no_invariant=" + no_invariant;
   }
 
   public String format() {
@@ -56,68 +50,20 @@ public final class NonEqual extends TwoScalar {
       System.out.println("NonEqual" + ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
-    // probability_cache_accurate = false;
-    if (v1 == v2) {
-      if (ppt.debugged) {
-        System.out.println("NonEqual.destroy()");
-      }
-      destroy();
-      return;
-    }
-    if (v1 < min1) min1 = v1;
-    if (v1 > max1) max1 = v1;
-    if (v2 < min2) min2 = v2;
-    if (v2 > max2) max2 = v2;
+    core.add_modified(v1, v2, count);
   }
-
 
   protected double computeProbability() {
-    if (no_invariant)
-      return Invariant.PROBABILITY_NEVER;
-    else if ((min1 > max2) || (max1 < min2))
-      return Invariant.PROBABILITY_UNKNOWN;
-    else {
-      double probability_one_nonequal;
-      if (override_range != 0) {
-        probability_one_nonequal = 1 - 1/(double)override_range;
-      } else {
-        long overlap = Math.min(max1, max2) - Math.max(min1, min2);
-        // Looks like we're comparing pointers.  Fix this later.
-        if (overlap < 0)
-          return Invariant.PROBABILITY_JUSTIFIED;
-
-        Assert.assert(overlap >= 0);
-        overlap++;
-        long range1 = max1 - min1 + 1;
-        long range2 = max2 - min2 + 1;
-
-        // probability of being equal by chance
-        //  = (overlap/range1) * (overlap/range2) * (1/overlap)
-        //  = overlap/(range1 * range2)
-
-        // Hack; but this seems too stringent otherwise
-        overlap *= 2;
-
-        probability_one_nonequal = 1-((double)overlap)/(range1 * range2);
-      }
-
-      return Math.pow(probability_one_nonequal, ppt.num_mod_non_missing_samples());
-    }
+    return core.computeProbability();
   }
 
-  // We don't suppress before creation because this uses different
-  // justification rules than IntComparison.
-  public boolean isObviousImplied() {
-    IntComparison ic = IntComparison.find(ppt);
-    if ((ic != null) && (! ic.core.can_be_eq) && ic.justified())
-      return true;
-    return false;
+  public boolean isExact() {
+    return core.isExact();
   }
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof NonEqual);
-    return true;
+    return core.isSameFormula(((NonEqual) other).core);
   }
 
   public boolean isExclusiveFormula(Invariant other)
@@ -127,6 +73,52 @@ public final class NonEqual extends TwoScalar {
         return true;
       }
     }
+    return false;
+  }
+
+  public boolean isObviousImplied() {
+    // If we are comparing a sequence element to it index, then
+    // check for SeqIndexNonEqual.
+
+    VarInfo v1 = var1();
+    VarInfo v2 = var2();
+
+    VarInfo seq = null;
+    VarInfo seq_elt = null;
+    if ((v1.derived != null)
+        && (v1.derived instanceof SequenceScalarSubscript)) {
+      SequenceScalarSubscript sss = (SequenceScalarSubscript) v1.derived;
+      if (sss.sclvar() == v2) {
+        seq = sss.seqvar();
+        seq_elt = v1;
+      }
+    }
+    if ((v2.derived != null)
+        && (v2.derived instanceof SequenceScalarSubscript)) {
+      SequenceScalarSubscript sss = (SequenceScalarSubscript) v2.derived;
+      if (sss.sclvar() == v1) {
+        seq = sss.seqvar();
+        seq_elt = v2;
+      }
+    }
+    if (seq_elt != null) {
+      // For each sequence variable, if seq_elt is an obvious member, and
+      // the sequence has the same invariant, then this one is obvious.
+      PptTopLevel pptt = (PptTopLevel) ppt.parent;
+      for (int i=0; i<pptt.var_infos.length; i++) {
+        VarInfo vi = pptt.var_infos[i];
+        if (Member.isObviousMember(seq_elt, vi)) {
+          PptSlice1 other_slice = pptt.findSlice(seq);
+          if (other_slice != null) {
+            SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
+            if ((sine != null) && sine.justified()) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
     return false;
   }
 

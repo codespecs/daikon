@@ -254,6 +254,40 @@ public final class IntComparison extends TwoScalar implements Comparison {
       }
     }
 
+    // For each sequence variable, if this is an obvious member, and
+    // it has the same invariant, then this one is obvious.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (int i=0; i<pptt.var_infos.length; i++) {
+      VarInfo vi = pptt.var_infos[i];
+      if (Member.isObviousMember(var1, vi)) {
+        PptSlice2 other_slice = pptt.findSlice_unordered(vi, var2);
+        if (other_slice != null) {
+          SeqIntComparison sic = SeqIntComparison.find(other_slice);
+          if ((sic != null)
+              && sic.justified()
+              && sic.core.can_be_eq == this.core.can_be_eq
+              && sic.core.can_be_lt == this.core.can_be_lt
+              && sic.core.can_be_gt == this.core.can_be_gt) {
+            return true;
+          }
+        }
+      }
+      if (Member.isObviousMember(var2, vi)) {
+        PptSlice2 other_slice = pptt.findSlice_unordered(vi, var1);
+        if (other_slice != null) {
+          SeqIntComparison sic = SeqIntComparison.find(other_slice);
+          if ((sic != null)
+              && sic.justified()
+              && sic.core.can_be_eq == this.core.can_be_eq
+              && sic.core.can_be_lt == this.core.can_be_gt
+              && sic.core.can_be_gt == this.core.can_be_lt) {
+            return true;
+          }
+        }
+      }
+    }
+
+
     return false;
   }
 

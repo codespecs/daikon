@@ -18,9 +18,9 @@ public final class SeqIntComparison extends SequenceScalar {
 
   protected SeqIntComparison(PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.INT );
-    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY );
-    core = new IntComparisonCore(this, only_eq);
+    Assert.assert(sclvar().rep_type == ProglangType.INT);
+    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY);
+    core = new IntComparisonCore(this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
   public static SeqIntComparison instantiate(PptSlice ppt, boolean seq_first) {
@@ -31,14 +31,14 @@ public final class SeqIntComparison extends SequenceScalar {
     //   Global.implied_noninstantiated_invariants += 1;
     //   if (debugSeqIntComparison) {
     //     System.out.println("SeqIntComparison not instantiated (obvious): "
-    //                        + sclvar.name + " in " + seqvar.name);
+    //                        + sclvar.name + " vs. " + seqvar.name);
     //   }
     //   return null;
     // }
 
     if (debugSeqIntComparison) {
       System.out.println("SeqIntComparison instantiated: "
-                         + sclvar.name + " in " + seqvar.name);
+                         + sclvar.name + " vs. " + seqvar.name);
     }
 
     SequenceMin seqmin = null;
@@ -59,9 +59,13 @@ public final class SeqIntComparison extends SequenceScalar {
     boolean obvious_gt = false;
     boolean obvious_ge = false;
     if ((sclseq != null) && (SubSequence.isObviousDerived(seqvar, sclseq))) {
-      obvious_le = (seqmin != null);
-      obvious_ge = (seqmax != null);
+      // System.out.println("SeqIntComparison instantiate; is obvious derived: " + seqvar.name + " " + sclvar.name + " " + sclseq.name);
+      obvious_ge = (seqmin != null);
+      obvious_le = (seqmax != null);
     }
+    // if (sclseq != null) {
+    //   System.out.println("SeqIntComparison instantiate: " + seqvar.name + " " + sclvar.name + " " + sclseq.name + " obvious_le=" + obvious_le + ", obvious_ge=" + obvious_ge);
+    // }
 
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
@@ -170,6 +174,22 @@ public final class SeqIntComparison extends SequenceScalar {
         }
       }
     }
+
+    // For each other sequence variable, if it is a supersequence of this
+    // one and it has the same invariant, then this one is obvious.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (int i=0; i<pptt.var_infos.length; i++) {
+      VarInfo vi = pptt.var_infos[i];
+      if (SubSequence.isObviousDerived(seqvar, vi)) {
+        PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
+        SeqIntComparison other_sic = SeqIntComparison.find(other_slice);
+        if ((other_sic != null) && other_sic.justified()) {
+          return true;
+        }
+      }
+    }
+
+
     // {
     //   if (sclvar.isDerived() && ((sclvar.derived instanceof SequenceMin)
     //                              || (sclvar.derived instanceof SequenceMax))) {

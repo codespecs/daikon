@@ -52,11 +52,6 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public final static int min_mod_non_missing_samples = 5;
 
-  // // Do I want to have this cache at all?  It may not be that expensive
-  // // to compute from scratch, and I may not be interested in it that often.
-  // protected double probability_cache = 0;
-  // protected boolean probability_cache_accurate = false;
-
   // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
   public double getProbability() {
     if (no_invariant)
@@ -69,19 +64,16 @@ public abstract class Invariant implements java.io.Serializable {
       System.out.println(repr());
       System.out.println(this.format());
     }
+    // System.out.println("getProbability: " + getClass().getName() + " " + ppt.varNames());
     Assert.assert((result == PROBABILITY_JUSTIFIED)
 		  || (result == PROBABILITY_UNJUSTIFIED)
 		  || (result == PROBABILITY_UNKNOWN)
 		  || (result == PROBABILITY_NEVER)
-		  || ((0 <= result) && (result <= 1)),
-                  // don't call format(); it might call justified which calls this!
-		  getClass().getName() + ": " + repr());
+		  || ((0 <= result) && (result <= 1))
+                  // This can be expensive, so comment out.
+                  // , getClass().getName() + ": " + repr()
+                  );
     return result;
-    // if (!probability_cache_accurate) {
-    //   probability_cache = computeProbability();
-    //   probability_cache_accurate = true;
-    // }
-    // return probability_cache;
   }
   /** No need to check for no_invariant, as caller does that. **/
   protected abstract double computeProbability();
@@ -108,8 +100,6 @@ public abstract class Invariant implements java.io.Serializable {
   // have the caller do that.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
-    // probability_cache_accurate = false;
-
     // We don't want to add the invariant yet, as this constructor is
     // called from the constructors for subclasses of Invariant.
     //     if (Global.debugInfer)

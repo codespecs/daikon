@@ -56,7 +56,7 @@ public class LinearBinary extends TwoScalar {
   public boolean isObviousDerived() {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-    // avoid "size(a)-1 = size(a) - 1"
+    // avoid comparing "size(a)" to "size(a)-1"; yields "size(a)-1 = size(a) - 1"
     if (var1.isDerived() && (var1.derived instanceof SequenceLength)
         && var2.isDerived() && (var2.derived instanceof SequenceLength)) {
       SequenceLength sl1 = (SequenceLength) var1.derived;
@@ -65,6 +65,16 @@ public class LinearBinary extends TwoScalar {
         return true;
       }
     }
+    // avoid comparing "size(a)-1" to anything; should compare "size(a)" instead
+    if (var1.isDerived() && (var1.derived instanceof SequenceLength)
+        && ((SequenceLength) var1.derived).shift != 0) {
+      return true;
+    }
+    if (var2.isDerived() && (var2.derived instanceof SequenceLength)
+        && ((SequenceLength) var2.derived).shift != 0) {
+      return true;
+    }
+
     return false;
   }
 

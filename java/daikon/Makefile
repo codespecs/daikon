@@ -20,12 +20,16 @@ AUTO_GENERATED_FILES = \
 	PptSlice1.java \
 	PptSlice2.java \
 	PptSlice3.java \
+	inv/unary/LowerBoundCore.java \
+	inv/unary/UpperBoundCore.java \
 	inv/unary/scalar/LowerBound.java \
 	inv/unary/scalar/UpperBound.java \
 	inv/unary/scalar/OneOfScalar.java \
 	inv/unary/string/OneOfString.java \
 	inv/unary/sequence/OneOfSequence.java \
 	inv/unary/sequence/EltOneOf.java \
+	inv/unary/sequence/EltLowerBound.java \
+	inv/unary/sequence/EltUpperBound.java \
 	inv/unary/stringsequence/EltOneOfString.java \
 	inv/unary/stringsequence/OneOfStringSequence.java \
 	inv/binary/sequenceScalar/Member.java \
@@ -89,7 +93,8 @@ TAGS:	tags
 # Used to include "*.py", but no such in daikon/ directory.
 # I could make this ../*.py, but probably don't want to include that old code.
 tags:
-	etags ${TAG_FILES} $(UTILMDE_DIR)/*.java
+	@echo etags '*.java ...'
+	@etags ${TAG_FILES} $(UTILMDE_DIR)/*.java
 
 doc: $(JAVA_FILES)
 	javadoc -d doc `find -name '*.java' -exec dirname {} \; | sort | uniq | perl -p -e 's/^./daikon/g' | perl -p -e 's:/:.:g'`
@@ -151,6 +156,12 @@ PptSlice2.java: PptSlice-cpp.java
 PptSlice3.java: PptSlice-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ARITY3)
 
+inv/unary/LowerBoundCore.java: inv/unary/BoundCore-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=LOWER)
+
+inv/unary/UpperBoundCore.java: inv/unary/BoundCore-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=UPPER)
+
 inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
@@ -168,6 +179,12 @@ inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf-cpp.java
 
 inv/unary/sequence/EltOneOf.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELT)
+
+inv/unary/sequence/EltLowerBound.java: inv/unary/scalar/Bound-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ELTLOWER)
+
+inv/unary/sequence/EltUpperBound.java: inv/unary/scalar/Bound-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ELTUPPER)
 
 inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)

@@ -100,6 +100,8 @@ public final class SequenceScalarSubsequence  extends BinaryDerivation {
                                (from_start
                                 ? "0.." + sclvar.esc_name + index_shift_string
                                 : sclvar.esc_name + index_shift_string + ".."));
+    Assert.assert(seqvar.type.base() == seqvar.type.base().intern());
+    Assert.assert(seqvar.rep_type.base() == seqvar.rep_type.base().intern());
     return new VarInfo(name, esc_name, seqvar.type, seqvar.rep_type, seqvar.comparability);
   }
 
