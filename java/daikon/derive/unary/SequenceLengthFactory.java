@@ -46,13 +46,13 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       // If $Field appears before $Elements, omit.
       Iterator nodes = (new VarInfoName.InorderFlattener(vi.name)).nodes().iterator();
       while (nodes.hasNext()) {
-	VarInfoName node = (VarInfoName) nodes.next();
-	if (node instanceof VarInfoName.Field) {
-	  return null;
-	}
-	if (node instanceof VarInfoName.Elements) {
-	  break;
-	}
+        VarInfoName node = (VarInfoName) nodes.next();
+        if (node instanceof VarInfoName.Field) {
+          return null;
+        }
+        if (node instanceof VarInfoName.Elements) {
+          break;
+        }
       }
     }
 
@@ -67,7 +67,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
     if (vi.aux.getFlag(VarInfoAux.NULL_TERMINATING)) {
       return new UnaryDerivation[] { new SequenceLength(vi, 0),
-				     new SequenceLength(vi, -1) };
+                                     new SequenceLength(vi, -1) };
     } else {
       // If it can't terminate with nulls, then all members are important,
       // so we only need to do shift for 0

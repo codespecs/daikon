@@ -317,7 +317,7 @@ public final class Member
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
@@ -325,7 +325,7 @@ public final class Member
     // Uses jml exists option
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ seqvar().name, sclvar().name },false,false);
+        { seqvar().name, sclvar().name },false,false);
     return form[0] + form[1] + " == " + form[2] + form[3];
   }
 
@@ -333,7 +333,7 @@ public final class Member
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 #endif

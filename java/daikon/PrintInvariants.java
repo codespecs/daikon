@@ -95,38 +95,38 @@ public class PrintInvariants {
           System.out.println(usage);
           System.exit(1);
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_controlled_invariants = true;
-	} else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
-	} else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
-	  Daikon.suppress_redundant_invariants_with_simplify = true;
-	} else if (Daikon.esc_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.ESCJAVA;
-	} else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.SIMPLIFY;
-	} else if (Daikon.java_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.JAVA;
-	} else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.IOA;
-	} else if (Daikon.test_ioa_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.IOATEST;
-	  test_output = true;
-	} else if (Daikon.jml_output_SWITCH.equals(option_name)) {
-	  Daikon.output_style = OutputFormat.JML;
-	} else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
-	  Daikon.output_num_samples = true;
+          Daikon.suppress_implied_controlled_invariants = true;
+        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
+          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
+        } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          Daikon.suppress_redundant_invariants_with_simplify = true;
+        } else if (Daikon.esc_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.ESCJAVA;
+        } else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.SIMPLIFY;
+        } else if (Daikon.java_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.JAVA;
+        } else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.IOA;
+        } else if (Daikon.test_ioa_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.IOATEST;
+          test_output = true;
+        } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
+          Daikon.output_style = OutputFormat.JML;
+        } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
+          Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-	  String item = g.getOptarg();
-	  daikon.config.Configuration.getInstance().apply(item);
+          String item = g.getOptarg();
+          daikon.config.Configuration.getInstance().apply(item);
           break;
-	} else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-	  Global.debugAll = true;
-	} else if (Daikon.debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority(g.getOptarg(), Logger.DEBUG);
-	} else {
-	  throw new RuntimeException("Unknown long option received: " +
+        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
+          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+        } else {
+          throw new RuntimeException("Unknown long option received: " +
                                      option_name);
-	}
+        }
         break;
       case 'h':
         System.out.println(usage);
@@ -147,8 +147,8 @@ public class PrintInvariants {
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-					       true // use saved config
-					       );
+                                               true // use saved config
+                                               );
     ppt_map = ppts;
     print_invariants(ppts);
   }
@@ -183,7 +183,7 @@ public class PrintInvariants {
     // Be slient if we never saw any samples
     if (ppt.num_samples() == 0) {
       if (Daikon.output_num_samples) {
-	out.println("[No samples for " + ppt.name + "]");
+        out.println("[No samples for " + ppt.name + "]");
       }
       return;
     }
@@ -201,7 +201,7 @@ public class PrintInvariants {
     print_invariants(ppt, out);
 
     if (Daikon.dkconfig_output_conditionals
-	&& Daikon.output_style == OutputFormat.DAIKON)
+        && Daikon.output_style == OutputFormat.DAIKON)
     {
       for (int i=0; i<ppt.views_cond.size(); i++) {
         PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
@@ -219,14 +219,14 @@ public class PrintInvariants {
       // Replace <init> with name of class
       int init_pos = better_name.indexOf(".<init>");
       if (init_pos != -1) {
-	String before = better_name.substring(0, init_pos);
-	String after = better_name.substring(init_pos+7);
-	String classname = before;
-	int lastdot = before.lastIndexOf('.'); // Not corrent for inners, but oh well
-	if (lastdot >= 0) {
-	  classname = before.substring(lastdot+1);
-	}
-	better_name = before + "." + classname + after;
+        String before = better_name.substring(0, init_pos);
+        String after = better_name.substring(init_pos+7);
+        String classname = before;
+        int lastdot = before.lastIndexOf('.'); // Not corrent for inners, but oh well
+        if (lastdot >= 0) {
+          classname = before.substring(lastdot+1);
+        }
+        better_name = before + "." + classname + after;
       }
     }
     int open_paren_pos = better_name.indexOf("(");
@@ -248,7 +248,7 @@ public class PrintInvariants {
       // out.println("    Samples breakdown: " + tuplemod_samples_summary()); // [[INCR]]
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
-	out.print("% ");  // IOA comment style
+        out.print("% ");  // IOA comment style
       }
       out.println(better_name);
     }
@@ -297,9 +297,9 @@ public class PrintInvariants {
             // The test "((view != null) && (view.num_values() > 0))" is
             // fallacious becuase the view might have been removed (is now
             // null) because all invariants at it were false.
-	    if (view == null) { // [INCR] || (view.num_values() > 0)) {
+            if (view == null) { // [INCR] || (view.num_values() > 0)) {
               // Using only the isPrimitive test is wrong.  We should suppress
-	      // for only parameters, not all primitive values.  That's why we
+              // for only parameters, not all primitive values.  That's why we
               // look for the period in the name.
               if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
                 modified_primitive_args.add(vi);
@@ -369,16 +369,16 @@ public class PrintInvariants {
             break;
           }
         }
-	// Change this.myvector[*] to this.myvector (or would it be
-	// best to just remove it?)
-	if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
-	  VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
-	  VarInfo base = ppt.findVar(elems.term);
-	  Assert.assert(base != null);
-	  if (! base.type.isArray()) {
-	    vi = base;
-	  }
-	}
+        // Change this.myvector[*] to this.myvector (or would it be
+        // best to just remove it?)
+        if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
+          VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
+          VarInfo base = ppt.findVar(elems.term);
+          Assert.assert(base != null);
+          if (! base.type.isArray()) {
+            vi = base;
+          }
+        }
         // System.out.println("really modified var: " + ((vi == null) ? "null" : vi.name.name()));
         if ((vi != null) && (! mods.contains(vi))) {
           mods.add(vi);
@@ -447,14 +447,14 @@ public class PrintInvariants {
     // Filter for parameters here
     if (vi.ppt.ppt_name.isExitPoint()) {
       for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-	VarInfo var = (VarInfo) i.next();
-	if (debugPrintEquality.isDebugEnabled()) {
-	  debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
-	}
-	if (var.isDerivedParamAndUninteresting()) {
+        VarInfo var = (VarInfo) i.next();
+        if (debugPrintEquality.isDebugEnabled()) {
+          debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+        }
+        if (var.isDerivedParamAndUninteresting()) {
 
-	  i.remove();
-	}
+          i.remove();
+        }
       }
     }
 
@@ -501,18 +501,18 @@ public class PrintInvariants {
 
     if (debugPrintEquality.isDebugEnabled()) {
       StringBuffer sb = new StringBuffer();
-	debugPrintEquality.debug("Resultant quality set for "  + vi.ppt.name + " " + vi.name.name());
+        debugPrintEquality.debug("Resultant quality set for "  + vi.ppt.name + " " + vi.name.name());
       for (Iterator j = equal_vars.iterator(); j.hasNext();) {
-	sb.append ("  " + ((VarInfo) j.next()).name.name());
+        sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
       debugPrintEquality.debug (sb);
     }
 
     if (debugPrintEquality.isDebugEnabled()) {
       StringBuffer sb = new StringBuffer();
-	debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
+        debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
       for (Iterator j = equal_vars.iterator(); j.hasNext();) {
-	sb.append ("  " + ((VarInfo) j.next()).name.name());
+        sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
       debugPrintEquality.debug (sb);
     }
@@ -522,25 +522,25 @@ public class PrintInvariants {
     if (Daikon.output_style == OutputFormat.DAIKON) {
       StringBuffer sb = new StringBuffer();
       if (equal_vars.size() > 1) {
-	for (int j=0; j<equal_vars.size(); j++) {
-	  VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	  if (j != 0) sb.append(" == "); // "interned"
-	  sb.append(other.name.name());
-	  if (obviously_equal.contains(other)) {
-	    sb.append(" (obviously)");
-	  }
-	}
+        for (int j=0; j<equal_vars.size(); j++) {
+          VarInfo other = (VarInfo) equal_vars.elementAt(j);
+          if (j != 0) sb.append(" == "); // "interned"
+          sb.append(other.name.name());
+          if (obviously_equal.contains(other)) {
+            sb.append(" (obviously)");
+          }
+        }
       }
       PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
       PptSlice slice1 = ppt_tl.findSlice(vi);
       if (Daikon.output_num_samples) {
-	if (slice1 != null) {
-	  sb.append("\t\t(" +
-		    // [INCR] nplural(slice1.num_values(), "value") + ", " +
-		    nplural(slice1.num_samples(), "sample") + ")");
-	} else {
-	  // sb.append("\t\t(no slice)");
-	}
+        if (slice1 != null) {
+          sb.append("\t\t(" +
+                    // [INCR] nplural(slice1.num_values(), "value") + ", " +
+                    nplural(slice1.num_samples(), "sample") + ")");
+        } else {
+          // sb.append("\t\t(no slice)");
+        }
       }
       out.println(sb.toString());
     } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
@@ -549,106 +549,106 @@ public class PrintInvariants {
       List valid_equiv = new ArrayList(); // [VarInfo]
       List invalid_equiv = new ArrayList(); // [VarInfo]
       for (int j=0; j<equal_vars.size(); j++) {
-	VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	if (other.isDerivedSequenceMinMaxSum()) {
-	  break;
-	}
-	if (other.isValidEscExpression()) {
-	  valid_equiv.add(other);
-	} else {
-	  invalid_equiv.add(other);
-	}
+        VarInfo other = (VarInfo) equal_vars.elementAt(j);
+        if (other.isDerivedSequenceMinMaxSum()) {
+          break;
+        }
+        if (other.isValidEscExpression()) {
+          valid_equiv.add(other);
+        } else {
+          invalid_equiv.add(other);
+        }
       }
       // Choose a leader, preferring the valid variables.
       VarInfo leader;
       if (valid_equiv.size() > 0) {
-	leader = (VarInfo) valid_equiv.get(0);
+        leader = (VarInfo) valid_equiv.get(0);
       } else {
-	Assert.assert(invalid_equiv.size() > 0);
-	leader = (VarInfo) invalid_equiv.get(0);
+        Assert.assert(invalid_equiv.size() > 0);
+        leader = (VarInfo) invalid_equiv.get(0);
       }
       // Print the equality statements, stating expressible ones first.
       equal_vars.clear();
       equal_vars.addAll(valid_equiv);
       equal_vars.addAll(invalid_equiv);
       for (int j=0; j<equal_vars.size(); j++) {
-	VarInfo other = (VarInfo) equal_vars.get(j);
-	if (other == leader) continue;
-	if (j >= valid_equiv.size()) {
-	  out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
-	}
-	if (leader.rep_type.isArray()) {
-	  String[] form =
-	    VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	      { leader.name, other.name }, true); // elementwise
-	  out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-	} else {
-	  out.println(leader.name.esc_name() + " == " + other.name.esc_name());
-	}
-	if (obviously_equal.contains(other)) {
-	  out.println("    (obviously)");
-	}
+        VarInfo other = (VarInfo) equal_vars.get(j);
+        if (other == leader) continue;
+        if (j >= valid_equiv.size()) {
+          out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
+        }
+        if (leader.rep_type.isArray()) {
+          String[] form =
+            VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+              { leader.name, other.name }, true); // elementwise
+          out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+        } else {
+          out.println(leader.name.esc_name() + " == " + other.name.esc_name());
+        }
+        if (obviously_equal.contains(other)) {
+          out.println("    (obviously)");
+        }
       }
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       for (int j=1; j<equal_vars.size(); j++) {
-	VarInfo me  = (VarInfo) equal_vars.elementAt(0);
-	VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	if (other.isDerivedSequenceMinMaxSum())
-	  break;
-	if (me.rep_type.isArray()) {
-	  String[] form =
-	    VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	      { me.name, other.name }, true); // elementwise
-	  out.println(form[0] + "(EQ " + form[1] + " " + form[2] + " )" + form[3]);
-	} else {
-	  out.println("(EQ " + me.name.simplify_name() +
-		      " " + other.name.simplify_name() + ")");
-	}
+        VarInfo me  = (VarInfo) equal_vars.elementAt(0);
+        VarInfo other = (VarInfo) equal_vars.elementAt(j);
+        if (other.isDerivedSequenceMinMaxSum())
+          break;
+        if (me.rep_type.isArray()) {
+          String[] form =
+            VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+              { me.name, other.name }, true); // elementwise
+          out.println(form[0] + "(EQ " + form[1] + " " + form[2] + " )" + form[3]);
+        } else {
+          out.println("(EQ " + me.name.simplify_name() +
+                      " " + other.name.simplify_name() + ")");
+        }
       }
     } else if (Daikon.output_style == OutputFormat.IOA) {
       StringBuffer sb = new StringBuffer();
       String invName = get_ioa_invname (invCounter, ppt);
       if (debugPrint.isDebugEnabled()) {
-	debugPrint.debug("Printing equality for " + invName);
+        debugPrint.debug("Printing equality for " + invName);
       }
       sb.append("invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ");
       sb.append (get_ioa_precondition (invCounter, ppt));
 
       StringBuffer sb2 = new StringBuffer();
       for (int j = 1; j < equal_vars.size(); j++) {
-	VarInfo one = (VarInfo) equal_vars.get(j-1);
-	VarInfo two = (VarInfo) equal_vars.get(j);
-	if (j > 1) sb2.append (" /\\ ");
-	sb2.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
+        VarInfo one = (VarInfo) equal_vars.get(j-1);
+        VarInfo two = (VarInfo) equal_vars.get(j);
+        if (j > 1) sb2.append (" /\\ ");
+        sb2.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
       }
 
       String rawOutput = sb2.toString();
       int startPos = rawOutput.indexOf("anIndex");
       if (startPos != -1) {
-	int endPos = rawOutput.indexOf ("]", startPos);
-	String qvar = rawOutput.substring (startPos, endPos);
-	rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
+        int endPos = rawOutput.indexOf ("]", startPos);
+        String qvar = rawOutput.substring (startPos, endPos);
+        rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
       }
 
       sb.append(rawOutput);
       out.println(sb.toString());
     } else if (Daikon.output_style == OutputFormat.JAVA) {
       for (int j = 1; j < equal_vars.size(); j++) {
-	VarInfo me = (VarInfo) equal_vars.elementAt(0);
-	VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	if (other.isDerivedSequenceMinMaxSum())
-	  break;
-	if (me.rep_type.isArray()) {
-	  String[] form =
-	    VarInfoName.QuantHelper.format_java(new VarInfoName[]
-	      { me.name, other.name }, true); // elementwise
-	  out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-	} else {
-	  out.println(me.name.java_name() + " == " + other.name.java_name());
-	}
-	if (obviously_equal.contains(other)) {
-	  out.println("    (obviously)");
-	}
+        VarInfo me = (VarInfo) equal_vars.elementAt(0);
+        VarInfo other = (VarInfo) equal_vars.elementAt(j);
+        if (other.isDerivedSequenceMinMaxSum())
+          break;
+        if (me.rep_type.isArray()) {
+          String[] form =
+            VarInfoName.QuantHelper.format_java(new VarInfoName[]
+              { me.name, other.name }, true); // elementwise
+          out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+        } else {
+          out.println(me.name.java_name() + " == " + other.name.java_name());
+        }
+        if (obviously_equal.contains(other)) {
+          out.println("    (obviously)");
+        }
       }
     } else {
       throw new IllegalStateException("Unknown output mode");
@@ -663,8 +663,8 @@ public class PrintInvariants {
     //which are invoked in the return clause.
     if (vi.isCanonical()) {
       return ((get_equal_vars(vi).size() > 1)  &&
-	      (! (Daikon.suppress_redundant_invariants_with_simplify &&
-		  ppt.redundant_invs.contains(vi))));
+              (! (Daikon.suppress_redundant_invariants_with_simplify &&
+                  ppt.redundant_invs.contains(vi))));
     } else {
       return false;
     }
@@ -691,40 +691,40 @@ public class PrintInvariants {
 
     if (!inv.isWorthPrinting())
       {
-	reason = "isn't worth printing";
-	return(false);
+        reason = "isn't worth printing";
+        return(false);
       }
 
     if (Daikon.suppress_redundant_invariants_with_simplify &&
-	inv.ppt.parent.redundant_invs.contains(inv))
+        inv.ppt.parent.redundant_invs.contains(inv))
       {
-	reason = "is redundant";
-	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
-	return(false);
+        reason = "is redundant";
+        daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
+        return(false);
       }
 
     if (Daikon.output_style != OutputFormat.DAIKON ||
-	Daikon.output_style != OutputFormat.IOA) {
+        Daikon.output_style != OutputFormat.IOA) {
       // don't print out invariants with min(), max(), or sum() variables
       boolean mms = false;
       VarInfo[] varbls = inv.ppt.var_infos;
       for (int v=0; !mms && v<varbls.length; v++) {
-	mms |= varbls[v].isDerivedSequenceMinMaxSum();
+        mms |= varbls[v].isDerivedSequenceMinMaxSum();
       }
       if (mms) {
-	reason = "has min/max/sum";
-	return(false);
+        reason = "has min/max/sum";
+        return(false);
       }
     }
 
     if (inv.ppt.ppt_name.isExitPoint()) {
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
-	VarInfo vi = inv.ppt.var_infos[i];
-	// ppt has to be a PptSlice, not a PptTopLevel
-	if (vi.isDerivedParamAndUninteresting()) {
-	  reason = "is derived parameter & uninteresting";
-	  return false;
-	}
+        VarInfo vi = inv.ppt.var_infos[i];
+        // ppt has to be a PptSlice, not a PptTopLevel
+        if (vi.isDerivedParamAndUninteresting()) {
+          reason = "is derived parameter & uninteresting";
+          return false;
+        }
       }
     }
 
@@ -750,17 +750,17 @@ public class PrintInvariants {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
       if (inv.isValidEscExpression()) {
-	inv_rep = inv.format_using(Daikon.output_style);
+        inv_rep = inv.format_using(Daikon.output_style);
       } else {
-	inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+        inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
       }
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.IOA) {
       String invName = get_ioa_invname (invCounter, ppt);
       if (debugPrint.isDebugEnabled()) {
-	debugPrint.debug ("Printing normal for " + invName + " with inv " +
-			  inv.getClass().getName());
+        debugPrint.debug ("Printing normal for " + invName + " with inv " +
+                          inv.getClass().getName());
       }
 
       inv_rep = "invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ";
@@ -773,13 +773,13 @@ public class PrintInvariants {
       String rawOutput = inv.format_using(Daikon.output_style);
       int startPos = rawOutput.indexOf("anIndex");
       if (startPos != -1) {
-	int endPos = rawOutput.indexOf ("]", startPos);
-	String qvar = rawOutput.substring (startPos, endPos);
-	rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
+        int endPos = rawOutput.indexOf ("]", startPos);
+        String qvar = rawOutput.substring (startPos, endPos);
+        rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
       }
       inv_rep += rawOutput;
       if (PptTopLevel.debug.isDebugEnabled()) {
-	PptTopLevel.debug.debug (inv.repr());
+        PptTopLevel.debug.debug (inv.repr());
       }
     } else if (Daikon.output_style == OutputFormat.JAVA) {
       inv_rep = inv.format_using(Daikon.output_style);
@@ -798,23 +798,23 @@ public class PrintInvariants {
 
     // this is not guaranteed to work or even compile if uncommented.
 //    {
-//  	// Print out any subexpressions of this which are
-//  	// non-canonical (and thus could be replaced with a canonical
-//  	// form).  There are never any of these, though, since we
-//  	// don't derive from non-canonical variables.
-//  	Iterator iter = Arrays.asList(inv.ppt.var_infos).iterator();
-//  	while (iter.hasNext()) {
-//  	  VarInfoName name = ((VarInfo) iter.next()).name;
-//  	  Iterator nodes = (new VarInfoName.InorderFlattener(name)).nodes().iterator();
-//  	  nodes.next(); // skip the root
-//  	  while (nodes.hasNext()) {
-//  	    VarInfoName node = (VarInfoName) nodes.next();
-//  	    VarInfo info = findVar(node);
-//  	    if ((info != null) && !info.isCanonical()) {
-//  	      out.println("** sub node not canonical: " + node);
-//  	    }
-//  	  }
-//  	}
+//      // Print out any subexpressions of this which are
+//      // non-canonical (and thus could be replaced with a canonical
+//      // form).  There are never any of these, though, since we
+//      // don't derive from non-canonical variables.
+//      Iterator iter = Arrays.asList(inv.ppt.var_infos).iterator();
+//      while (iter.hasNext()) {
+//        VarInfoName name = ((VarInfo) iter.next()).name;
+//        Iterator nodes = (new VarInfoName.InorderFlattener(name)).nodes().iterator();
+//        nodes.next(); // skip the root
+//        while (nodes.hasNext()) {
+//          VarInfoName node = (VarInfoName) nodes.next();
+//          VarInfo info = findVar(node);
+//          if ((info != null) && !info.isCanonical()) {
+//            out.println("** sub node not canonical: " + node);
+//          }
+//        }
+//      }
 //    }
   }
 
@@ -841,10 +841,10 @@ public class PrintInvariants {
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
         debugPrint.debug("      " + vi.name.name()
-			 // + " constant=" + vi.isConstant() // [INCR]
-			 // + " canonical=" + vi.isCanonical() // [INCR]
-			 // + " equal_to=" + vi.equal_to.name // [INCR]
-			 );
+                         // + " constant=" + vi.isConstant() // [INCR]
+                         // + " canonical=" + vi.isCanonical() // [INCR]
+                         // + " equal_to=" + vi.equal_to.name // [INCR]
+                         );
       }
     }
 
@@ -873,45 +873,45 @@ public class PrintInvariants {
 
       boolean pi_accepted = accept_invariant(inv);
       boolean fi_accepted = true;
-      
+
       if (final_output_should_use_new_filtering) {
-	fi.ppt_map = ppt_map;
-	fi_accepted = fi.shouldKeep(inv);
+        fi.ppt_map = ppt_map;
+        fi_accepted = fi.shouldKeep(inv);
       }
 
       if((fi_accepted != pi_accepted) && should_gather_data) {
-	FileWriter outputFile = null;
-	try {
-	  outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
-	  outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.isWorthPrinting() + "\t" + inv.getClass().getName() + "\t" + reason + "\t" + inv.format() + "\n");
-	  outputFile.close();
-	}
-	catch(IOException e) {
-	  System.out.println(e);
-	}
+        FileWriter outputFile = null;
+        try {
+          outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
+          outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.isWorthPrinting() + "\t" + inv.getClass().getName() + "\t" + reason + "\t" + inv.format() + "\n");
+          outputFile.close();
+        }
+        catch(IOException e) {
+          System.out.println(e);
+        }
       }
 
       if(should_gather_data) {
-	FileWriter outputFile = null;
-	try {
-	  outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/rejection_reasons", true);
-	  outputFile.write(pi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\t" + reason + "\n");
-	  outputFile.close();
-	}
-	catch(IOException e) {
-	  System.out.println(e);
-	}
+        FileWriter outputFile = null;
+        try {
+          outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/rejection_reasons", true);
+          outputFile.write(pi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\t" + reason + "\n");
+          outputFile.close();
+        }
+        catch(IOException e) {
+          System.out.println(e);
+        }
       }
 
       if(fi_accepted && final_output_should_use_new_filtering) {
-	invCounter++;
-	Global.reported_invariants++;
-	accepted_invariants.add(inv);
+        invCounter++;
+        Global.reported_invariants++;
+        accepted_invariants.add(inv);
       }
       if(pi_accepted && !final_output_should_use_new_filtering) {
-	invCounter++;
-	Global.reported_invariants++;
-	accepted_invariants.add(inv);
+        invCounter++;
+        Global.reported_invariants++;
+        accepted_invariants.add(inv);
       }
     }
 
@@ -920,23 +920,23 @@ public class PrintInvariants {
     }
     else {
       for (int i=0; i<ppt.var_infos.length; i++) {
-	VarInfo vi = ppt.var_infos[i];
+        VarInfo vi = ppt.var_infos[i];
 
-	//if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
-	{
-	  invCounter++;
-	  if (debugPrintEquality.isDebugEnabled()) {
-	    debugPrint.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
-	    //appears not to work (compile) b/c ver 3 uses something
-	    //other than vi.equalTo.
-	    //StringBuffer sb = new StringBuffer();
-	    //for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
-	    //  sb.append ("  " + ((VarInfo) j.next()).name.name());
-	    //}
-	    //debugPrintEquality.debug (sb);	
-	  }
-	  print_equality_invariants(vi, out, invCounter, ppt);
-	}
+        //if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
+        {
+          invCounter++;
+          if (debugPrintEquality.isDebugEnabled()) {
+            debugPrint.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
+            //appears not to work (compile) b/c ver 3 uses something
+            //other than vi.equalTo.
+            //StringBuffer sb = new StringBuffer();
+            //for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+            //  sb.append ("  " + ((VarInfo) j.next()).name.name());
+            //}
+            //debugPrintEquality.debug (sb);
+          }
+          print_equality_invariants(vi, out, invCounter, ppt);
+        }
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
@@ -969,9 +969,9 @@ public class PrintInvariants {
       //PptSlice slice = inv.ppt;
       //if (debugPrint.isDebugEnabled()) {
       //  debugPrint.debug("Slice: " + slice.varNames() + "  "
-      //		   + slice.num_samples() + " samples");
+      //                   + slice.num_samples() + " samples");
       //  debugPrint.debug("    Samples breakdown: "
-      //		   + slice.tuplemod_samples_summary());
+      //                   + slice.tuplemod_samples_summary());
       // slice.values_cache.dump();
       //}
       //Assert.assert(slice.check_modbits());
@@ -990,12 +990,12 @@ public class PrintInvariants {
     String replaced = "";
     if (PrintInvariants.test_output) {
       if (ppt.ppt_name.getFullMethodName() != null) {
-	replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+        replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
       }
       return "Inv" + replaced;
     } else {
       if (ppt.ppt_name.getFullMethodName() != null) {
-	replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
+        replaced = ppt.ppt_name.getFullMethodName().replace('(', '_').replace(')', '_');
       }
       return "Inv" + replaced + numbering;
     }

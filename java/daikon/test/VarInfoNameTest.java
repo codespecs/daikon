@@ -14,7 +14,7 @@ import daikon.*;
  * does transform tests, and its output is compared to the
  * "varInfoNameTest.<foo>.goal" file by this.
  *
- * <br> 
+ * <br>
  *
  * To add a new test case, add a line to the <foo> file and a line to
  * the goal file with intended output.  Format of the <foo> file is
@@ -66,8 +66,8 @@ public class VarInfoNameTest
     try {
       BufferedReader buf = new BufferedReader(new InputStreamReader(goal_stream));
       while (buf.ready()) {
-	String line = buf.readLine();
-	_goal.add(line);
+        String line = buf.readLine();
+        _goal.add(line);
       }
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
@@ -82,36 +82,36 @@ public class VarInfoNameTest
     for (int i=0; i < goal.length; i++) {
       String goal_line = goal[i];
       if (i >= actual.length) {
-	fail("Diff error:\nActual had too few lines, starting with goal line:\n\t" + goal_line);
+        fail("Diff error:\nActual had too few lines, starting with goal line:\n\t" + goal_line);
       }
       String actual_line = actual[i];
       if (!goal_line.equals(actual_line)) {
-	String goals = "";
-	String actuals = "";
-	int low = Math.max(0, i-3);
-	int high = Math.min(Math.min(i+3, actual.length-1), goal.length-1);
-	for (int j = low; j <= high; j++) {
-	  if (!goal[j].equals(actual[j])) {
-	    goals += ">";
-	    actuals += ">";
-	  }
-	  goals += "\t" + goal[j] + "\n";
-	  actuals += "\t" + actual[j] + "\n";
-	}
-	fail("Diff error:\nDifferent output encountered.  Expected:\n" +
-	     goals + "Received:\n" + actuals + " on line: " + i);
+        String goals = "";
+        String actuals = "";
+        int low = Math.max(0, i-3);
+        int high = Math.min(Math.min(i+3, actual.length-1), goal.length-1);
+        for (int j = low; j <= high; j++) {
+          if (!goal[j].equals(actual[j])) {
+            goals += ">";
+            actuals += ">";
+          }
+          goals += "\t" + goal[j] + "\n";
+          actuals += "\t" + actual[j] + "\n";
+        }
+        fail("Diff error:\nDifferent output encountered.  Expected:\n" +
+             goals + "Received:\n" + actuals + " on line: " + i);
       }
     }
     if (actual.length > goal.length) {
       StringBuffer extra = new StringBuffer();
       for (int i = goal.length; i < actual.length; i++) {
-	extra.append ("\t");
-	extra.append (actual[i]);
-	extra.append ("\n");
+        extra.append ("\t");
+        extra.append (actual[i]);
+        extra.append ("\n");
       }
       fail("Diff error:\nActual had extra lines:\n" +
-	   extra.toString());
-      
+           extra.toString());
+
     }
   }
 

@@ -49,8 +49,8 @@ public final class EltNonZero
       result.pointer_type = true;
       result.override_range = 3;
       if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
-	// If it's not a number and null doesn't have special meaning...
-	return null;
+        // If it's not a number and null doesn't have special meaning...
+        return null;
       }
     }
     // System.out.println("EltNonZero.instantiate: " + result.format());
@@ -105,7 +105,7 @@ public final class EltNonZero
 
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " != " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
 
@@ -132,7 +132,7 @@ public final class EltNonZero
 
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + form[1] + " != " + (pointer_type ? "null" : "0") + form[2];
   }
 
@@ -151,7 +151,7 @@ public final class EltNonZero
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(NEQ " + form[1] + " " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
 
@@ -162,7 +162,7 @@ public final class EltNonZero
       // The min and max tests will simultaneoulsy succeed exactly once (for
       // the first value).
       if (v == 0) {
-	flowThis();
+        flowThis();
         destroy();
         return;
       }

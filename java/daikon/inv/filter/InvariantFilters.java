@@ -3,7 +3,7 @@ package daikon.inv.filter;
 import utilMDE.Assert;
 import java.util.*;
 import daikon.inv.*;
-import daikon.inv.IsEqualityComparison;	       // For equality invariants work-around
+import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
 import daikon.PptMap;
 import daikon.PptSlice;
 import daikon.PptTopLevel;
@@ -73,28 +73,28 @@ public class InvariantFilters {
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
-	boolean hasAnyVariable = false;
-	for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-	  InvariantFilter filter = (InvariantFilter) iter.next();
-	  if (! filter.shouldDiscard( invariant ))
-	    hasAnyVariable = true;
-	}
-	if (! hasAnyVariable)
-	  return false;
+        boolean hasAnyVariable = false;
+        for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
+          InvariantFilter filter = (InvariantFilter) iter.next();
+          if (! filter.shouldDiscard( invariant ))
+            hasAnyVariable = true;
+        }
+        if (! hasAnyVariable)
+          return false;
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
-	for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-	  InvariantFilter filter = (InvariantFilter) iter.next();
-	  if (filter.shouldDiscard( invariant ))
-	    return false;
-	}
+        for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
+          InvariantFilter filter = (InvariantFilter) iter.next();
+          if (filter.shouldDiscard( invariant ))
+            return false;
+        }
       }
     }
     //  Property filters.
     for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (filter.shouldDiscard( invariant )) {
-	//		System.out.println( filter.getClass().getName() + " rules out    \t" + invariant.format());
-	return false;
+        //              System.out.println( filter.getClass().getName() + " rules out    \t" + invariant.format());
+        return false;
       }
     }
     return true;
@@ -138,8 +138,8 @@ public class InvariantFilters {
   public void removeVariableFilter( String variable ) {
     for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
       if (((VariableFilter) iter.next()).getVariable().equals( variable )) {
-	iter.remove();
-	return;
+        iter.remove();
+        return;
       }
     }
     throw new Error( "InvariantFilters.removeVariableFilter():  filter for variable '" + variable + "' not found" );
@@ -204,11 +204,11 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-	VarInfo[] variables = invariant.ppt.var_infos;
-	Assert.assert( variables.length == 2 );
-	for (int i = 0; i < variables.length; i++) {
+        VarInfo[] variables = invariant.ppt.var_infos;
+        Assert.assert( variables.length == 2 );
+        for (int i = 0; i < variables.length; i++) {
           VarInfo vi = variables[i];
-	  if (true) { // vi.isCanonical()) { // [INCR] XXX; This whole method sucks now.
+          if (true) { // vi.isCanonical()) { // [INCR] XXX; This whole method sucks now.
             if (! canonicalVariables.contains( vi )) {
               Assert.assert(! ppts.containsKey(vi));
               canonicalVariables.add( vi );
@@ -220,7 +220,7 @@ public class InvariantFilters {
                 ppts.put( vi, invariant );
               }
             }
-	  }
+          }
         }
       }
     }
@@ -234,22 +234,22 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-	// We don't need this invariant, since it will be included in
-	// the equality invariant.
-	iter.remove();
+        // We don't need this invariant, since it will be included in
+        // the equality invariant.
+        iter.remove();
 
-	VarInfo variable1 = ((Comparison) invariant).var1();
-	VarInfo variable2 = ((Comparison) invariant).var2();
-	for (Iterator iter2 = equivalentGroups.iterator(); iter2.hasNext(); ) {
-	  List equivalentGroup = (List) iter2.next();
-	  if (equivalentGroup.contains( variable1 )
+        VarInfo variable1 = ((Comparison) invariant).var1();
+        VarInfo variable2 = ((Comparison) invariant).var2();
+        for (Iterator iter2 = equivalentGroups.iterator(); iter2.hasNext(); ) {
+          List equivalentGroup = (List) iter2.next();
+          if (equivalentGroup.contains( variable1 )
               &&  ! equivalentGroup.contains( variable2 )) {
-	    equivalentGroup.add( variable2 );
-	  } else if (equivalentGroup.contains( variable2 )
+            equivalentGroup.add( variable2 );
+          } else if (equivalentGroup.contains( variable2 )
                      &&  ! equivalentGroup.contains( variable1 )) {
-	    equivalentGroup.add( variable1 );
+            equivalentGroup.add( variable1 );
           }
-	}
+        }
       }
     }
 

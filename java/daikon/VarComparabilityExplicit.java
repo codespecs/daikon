@@ -53,8 +53,8 @@ public final class VarComparabilityExplicit
   String[][] indices;           // indices[0] is a list of the names of
                                 // variables comparable to the first index
                                 // of this array.
-  int dimensions;		// indicates how many of the indices are in use;
-				// there may be more indices than this
+  int dimensions;               // indicates how many of the indices are in use;
+                                // there may be more indices than this
   VarInfoName alias;
 
   // These are caches to avoid recomputation.  Their contents are are not
@@ -65,7 +65,7 @@ public final class VarComparabilityExplicit
 
 
   VarComparabilityExplicit(String[] base, String[][] indices, int dimensions,
-			   VarInfoName alias) {
+                           VarInfoName alias) {
     this.base = base;
     this.indices = indices;
     this.dimensions = dimensions;
@@ -124,9 +124,9 @@ public final class VarComparabilityExplicit
   public VarComparability indexType(int dim) {
     if (indexTypes[dim] == null) {
       indexTypes[dim] = new VarComparabilityExplicit(indices[dim], null, 0,
-						     ((alias == null)
-						      ? null
-						      : new IndexVar(alias, dim)));
+                                                     ((alias == null)
+                                                      ? null
+                                                      : new IndexVar(alias, dim)));
     }
     return indexTypes[dim];
   }
@@ -138,7 +138,7 @@ public final class VarComparabilityExplicit
 
     if (vartype.isArray()) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Parsing array " + rep + " " + vartype.toString());
+        debug.debug ("Parsing array " + rep + " " + vartype.toString());
       }
       // The VarComparability is of the form
       //  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
@@ -153,7 +153,7 @@ public final class VarComparabilityExplicit
       String base_raw = match.group(1);
       String[] indices_raw = new String[dims];
       for (int i=0; i<dims; i++) {
-	indices_raw[i] = match.group(i+2);
+        indices_raw[i] = match.group(i+2);
       }
 
       // I could consider interning the arrays themselves; is that
@@ -162,7 +162,7 @@ public final class VarComparabilityExplicit
       String[] new_base = ws_split_to_interned_array(base_raw);
       String[][] new_indices = new String[dims][];
       for (int i=0; i<dims; i++) {
-	new_indices[i] = ws_split_to_interned_array(indices_raw[i]);
+        new_indices[i] = ws_split_to_interned_array(indices_raw[i]);
       }
 
       return new VarComparabilityExplicit(new_base, new_indices, dims, null);
@@ -170,7 +170,7 @@ public final class VarComparabilityExplicit
     } else {
       // scalar variable
       if (rep.startsWith("(") && rep.endsWith(")")) {
-	rep = rep.substring(1, rep.length()-1);
+        rep = rep.substring(1, rep.length()-1);
       }
       String[] new_base = ws_split_to_interned_array(rep);
       return new VarComparabilityExplicit(new_base, null, 0, null);
@@ -182,16 +182,16 @@ public final class VarComparabilityExplicit
     if (dims_regexps.size() <= dims) {
       // add all the elements up to the missing one
       for (int i=dims_regexps.size(); i<=dims; i++) {
-	StringBuffer regexp = new StringBuffer("^\\(([^)]*)\\)");
-	for (int j=0; j<dims; j++)
-	  regexp.append("\\[\\(?((?:[^\\]\\)]|\\[\\])*)\\)?\\]");
-	regexp.append("$");
-	try {
-	  dims_regexps.add(Global.regexp_compiler.compile(regexp.toString()));
-	} catch (Exception e) {
+        StringBuffer regexp = new StringBuffer("^\\(([^)]*)\\)");
+        for (int j=0; j<dims; j++)
+          regexp.append("\\[\\(?((?:[^\\]\\)]|\\[\\])*)\\)?\\]");
+        regexp.append("$");
+        try {
+          dims_regexps.add(Global.regexp_compiler.compile(regexp.toString()));
+        } catch (Exception e) {
           e.printStackTrace();
-	  throw new Error(e.toString());
-	}
+          throw new Error(e.toString());
+        }
       }
     }
     return (Perl5Pattern) dims_regexps.elementAt(dims);
@@ -214,7 +214,7 @@ public final class VarComparabilityExplicit
   // This is the key function of the class.
   // I could also add a member version.
   static boolean comparable(VarInfoName name1_, VarComparabilityExplicit type1,
-			    VarInfoName name2_, VarComparabilityExplicit type2) {
+                            VarInfoName name2_, VarComparabilityExplicit type2) {
     if (type1.alwaysComparable() || type2.alwaysComparable())
       return true;
 
@@ -231,7 +231,7 @@ public final class VarComparabilityExplicit
     // Consistency check:
     // Either both objects refer to the other name, or neither does.
     Assert.assert((ArraysMDE.indexOf(type1.base, name2) == -1)
-		  == (ArraysMDE.indexOf(type2.base, name1) == -1));
+                  == (ArraysMDE.indexOf(type2.base, name1) == -1));
     if (ArraysMDE.indexOf(type1.base, name2) == -1)
       return false;
 
@@ -241,7 +241,7 @@ public final class VarComparabilityExplicit
       VarInfoName indexvar2 = new IndexVar(name2, i);
       if (!comparable(indexvar1, (VarComparabilityExplicit)type1.indexType(i),
                       indexvar2, (VarComparabilityExplicit)type2.indexType(i)))
-	return false;
+        return false;
     }
 
     return true;

@@ -98,18 +98,18 @@ public final class StringComparisonCore
 
     if (v1 == v2) {
       if (! can_be_eq) {
-	new_can_be_eq = true;
-	changed = true;
+        new_can_be_eq = true;
+        changed = true;
       }
     } else if (v1.compareTo(v2) < 0) {
       if (! can_be_lt) {
-	new_can_be_lt = true;
-	changed = true;
+        new_can_be_lt = true;
+        changed = true;
       }
     } else {
       if (! can_be_gt) {
-	new_can_be_gt = true;
-	changed = true;
+        new_can_be_gt = true;
+        changed = true;
       }
     }
 
@@ -147,15 +147,15 @@ public final class StringComparisonCore
       return Math.pow(.5, values_cache.num_values());
     } else {
       if (can_be_eq) {
-	// It's an equality invariant.  I ought to use the actual ranges somehow.
-	// Actually, I can't even use this .5 test because it can make
-	// equality non-transitive.
-	// return Math.pow(.5, wrapper.ppt.num_values());
-	return Invariant.PROBABILITY_JUSTIFIED;
+        // It's an equality invariant.  I ought to use the actual ranges somehow.
+        // Actually, I can't even use this .5 test because it can make
+        // equality non-transitive.
+        // return Math.pow(.5, wrapper.ppt.num_values());
+        return Invariant.PROBABILITY_JUSTIFIED;
       } else {
-	// None of the can_be_X's are set.
-	// (We haven't seen any samples.)
-	return Invariant.PROBABILITY_UNJUSTIFIED;
+        // None of the can_be_X's are set.
+        // (We haven't seen any samples.)
+        return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
   }
@@ -178,9 +178,9 @@ public final class StringComparisonCore
   public String format_comparator(OutputFormat format) {
     if (can_be_eq && (! can_be_gt) && (! can_be_lt)) {
       if (format == OutputFormat.IOA) {
-	return "=";
+        return "=";
       } else {
-	return "==";
+        return "==";
       }
     } else if (can_be_eq || can_be_gt || can_be_lt) {
       // TODO: reenable after making distribution.
@@ -265,7 +265,3 @@ public final class StringComparisonCore
     //     return null;
     //   }
     // }
-
-
-
-

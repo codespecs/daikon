@@ -109,16 +109,16 @@ public final class SequencesJoin
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof long[]) {
-	e1 = new Long (((long[]) val1) [i]);
+        e1 = new Long (((long[]) val1) [i]);
       }
       if (val2 instanceof long[]) {
-	e2 = new Long (((long[]) val2) [i]);
+        e2 = new Long (((long[]) val2) [i]);
       }
       if (val1 instanceof Object[]) {
-	e1 = ((Object[]) val1) [i];
+        e1 = ((Object[]) val1) [i];
       }
       if (val2 instanceof Object[]) {
-	e2 = ((Object[]) val2) [i];
+        e2 = ((Object[]) val2) [i];
       }
       if (e1 == null) e1 = new Long(0);
       if (e2 == null) e2 = new Long(0);
@@ -130,14 +130,14 @@ public final class SequencesJoin
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
       if (val1 instanceof long[]) {
-	debug.debug (ArraysMDE.toString((long[]) val1));
+        debug.debug (ArraysMDE.toString((long[]) val1));
       } else {
-	debug.debug (ArraysMDE.toString((Object[]) val1));
+        debug.debug (ArraysMDE.toString((Object[]) val1));
       }
       if (val2 instanceof long[]) {
-	debug.debug (ArraysMDE.toString((long[]) val2));
+        debug.debug (ArraysMDE.toString((long[]) val2));
       } else {
-	debug.debug (ArraysMDE.toString((Object[]) val2));
+        debug.debug (ArraysMDE.toString((Object[]) val2));
       }
       debug.debug (ArraysMDE.toString(result));
 
@@ -178,15 +178,15 @@ public final class SequencesJoin
     // Generate a new comparability based on base comparabilities' indices
     VarComparability comparability =
       VarComparability.makeComparabilitySameIndices (newTypeName,
-						     var1.comparability);
+                                                     var1.comparability);
 
     return new VarInfo(VarInfoName.applyFunctionOfN("join",
                                                     new VarInfoName[] {var1.name, var2.name}).applyElements(),
-		       decltype,
-		       ProglangType.HASHCODE_ARRAY,
-		       comparability,
-		       var1.aux
-		       );
+                       decltype,
+                       ProglangType.HASHCODE_ARRAY,
+                       comparability,
+                       var1.aux
+                       );
   }
 
   public String toString() {

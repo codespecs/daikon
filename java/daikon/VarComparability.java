@@ -69,13 +69,13 @@ public abstract class VarComparability {
    * the same indices as this.
    **/
   public static VarComparability makeComparabilitySameIndices (String elemTypeName,
-							       VarComparability old) {
+                                                               VarComparability old) {
     if (old instanceof VarComparabilityExplicit) {
       String[] elems = new String[] {elemTypeName};
       Intern.internStrings (elems);
       return new VarComparabilityExplicit (elems, ((VarComparabilityExplicit) old).indices,
-					   ((VarComparabilityExplicit) old).dimensions,
-					   null);
+                                           ((VarComparabilityExplicit) old).dimensions,
+                                           null);
     } else if (old instanceof VarComparabilityNone) {
       return VarComparabilityNone.it;
     } else {
@@ -117,7 +117,7 @@ public abstract class VarComparability {
         (name1, (VarComparabilityNone)type1,
          name2, (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
-	return VarComparabilityImplicit.comparable
+        return VarComparabilityImplicit.comparable
           (name1, (VarComparabilityImplicit)type1,
            name2, (VarComparabilityImplicit)type2);
     } else if (type1 instanceof VarComparabilityExplicit) {

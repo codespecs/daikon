@@ -41,20 +41,20 @@ public class VarInfoNameDriver {
     String command;
     while ((command = commands.readLine()) != null) {
       if (command.startsWith(";")) {
-	output.println(command);
-	continue;
+        output.println(command);
+        continue;
       }
 
       // tokenize arguments
       StringTokenizer tok = new StringTokenizer(command);
       LinkedList list = new LinkedList();
       while (tok.hasMoreTokens()) {
-	list.add(tok.nextToken());
+        list.add(tok.nextToken());
       }
 
       // ignore blank lines
       if (list.size() == 0) {
-	continue;
+        continue;
       }
 
       output.println("; " + command);
@@ -64,7 +64,7 @@ public class VarInfoNameDriver {
       String[] args = (String[]) list.toArray(new String[list.size()]);
       Handler handler = (Handler) handlers.get(method);
       if (handler == null) {
-	throw new UnsupportedOperationException("Unknown method: " + method);
+        throw new UnsupportedOperationException("Unknown method: " + method);
       }
       handler.handle(variables, args, output);
     }
@@ -122,14 +122,14 @@ public class VarInfoNameDriver {
     public void handle(Map vars, String[] args, PrintStream out) {
       VarInfoName[] roots = new VarInfoName[args.length];
       for (int i=0; i < args.length; i++) {
-	roots[i] = (VarInfoName) vars.get(args[i]);
+        roots[i] = (VarInfoName) vars.get(args[i]);
       }
       String[] result = VarInfoName.QuantHelper.format_esc(roots);
       String result2 = VarInfoName.QuantHelper.format_esc(roots, true)[0];
       for (int i=0; i < result.length; i++) {
-	if (i != 0 && i != result.length-1) { out.print('\t'); }
-	out.println(result[i]);
-	if (i == 0 && roots.length > 1) { out.println(result2); }
+        if (i != 0 && i != result.length-1) { out.print('\t'); }
+        out.println(result[i]);
+        if (i == 0 && roots.length > 1) { out.println(result2); }
       }
     }
   }
@@ -140,12 +140,12 @@ public class VarInfoNameDriver {
     public void handle(Map vars, String[] args, PrintStream out) {
       VarInfoName[] roots = new VarInfoName[args.length];
       for (int i=0; i < args.length; i++) {
-	roots[i] = (VarInfoName) vars.get(args[i]);
+        roots[i] = (VarInfoName) vars.get(args[i]);
       }
       String[] result = VarInfoName.QuantHelper.format_simplify(roots);
       for (int i=0; i < result.length; i++) {
-	if (i != 0 && i != result.length-1) { out.print('\t'); }
-	out.println(result[i]);
+        if (i != 0 && i != result.length-1) { out.print('\t'); }
+        out.println(result[i]);
       }
     }
   }
@@ -176,8 +176,8 @@ public class VarInfoNameDriver {
       VarInfoName a = (VarInfoName) vars.get(args[0]);
       VarInfoName b = (VarInfoName) vars.get(args[1]);
       out.println(args[0] + ".hash " +
-		  ((a.hashCode() == b.hashCode()) ? "=" : "!") +
-		  "= " + args[1] + ".hash");
+                  ((a.hashCode() == b.hashCode()) ? "=" : "!") +
+                  "= " + args[1] + ".hash");
     }
   }
   static { handlers.put("hash", new HashCode()); }
@@ -330,7 +330,7 @@ public class VarInfoNameDriver {
       String func = args[1];
       List function_vars = new Vector();
       for (int x=2; x<args.length; x++)
-	function_vars.add((VarInfoName)vars.get(args[x]));
+        function_vars.add((VarInfoName)vars.get(args[x]));
       VarInfoName result = VarInfoName.applyFunctionOfN(func,function_vars);
       vars.put(args[0], result);
       out.println(args[0] + " = " + result.name());
@@ -357,10 +357,10 @@ public class VarInfoNameDriver {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
       for (int x=0; x<args.length; x++)
-	roots[x] = (VarInfoName)vars.get(args[x]);
+        roots[x] = (VarInfoName)vars.get(args[x]);
       String result[] = VarInfoName.QuantHelper.format_jml(roots);
       for (int x=0; x<result.length; x++)
-	out.println(result[x]);
+        out.println(result[x]);
     }
   }
   static { handlers.put("quantify_format_jml", new QuantifyFormatJML()); }
@@ -371,10 +371,10 @@ public class VarInfoNameDriver {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
       for (int x=0; x<args.length; x++)
-	roots[x] = (VarInfoName)vars.get(args[x]);
+        roots[x] = (VarInfoName)vars.get(args[x]);
       String result[] = VarInfoName.QuantHelper.format_jml(roots, true);
       for (int x=0; x<result.length; x++)
-	out.println(result[x]);
+        out.println(result[x]);
     }
   }
   static { handlers.put("quantify_format_jml_elem", new QuantifyFormatJMLElementwise()); }
@@ -385,13 +385,11 @@ public class VarInfoNameDriver {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
       for (int x=0; x<args.length; x++)
-	roots[x] = (VarInfoName)vars.get(args[x]);
+        roots[x] = (VarInfoName)vars.get(args[x]);
       String result[] = VarInfoName.QuantHelper.format_jml(roots, false, false);
       for (int x=0; x<result.length; x++)
-	out.println(result[x]);
+        out.println(result[x]);
     }
   }
   static { handlers.put("quantify_format_jml_exists", new QuantifyFormatJMLExists()); }
 }
-
-

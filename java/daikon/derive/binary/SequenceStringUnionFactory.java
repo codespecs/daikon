@@ -40,6 +40,6 @@ public final class SequenceStringUnionFactory  extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-	new SequenceStringUnion (seq1, seq2) };
+        new SequenceStringUnion (seq1, seq2) };
   }
 }

@@ -76,23 +76,23 @@ public final class SCALARSEQUENCESUNION
     for (int i=0; i<val1_array.length; i++) {
       SCALAR v = val1_array[i];
       if ((size==0) ||
-	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
-	tmp[size++] = v;
+          (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
+        tmp[size++] = v;
     }
     for (int i=0; i<val2_array.length; i++) {
       SCALAR v = val2_array[i];
       if ((size==0) ||
-	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
-	tmp[size++] = v;
+          (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
+        tmp[size++] = v;
     }
 
     SCALAR[] union = ArraysMDE.subarray(tmp, 0, size);
     union = (SCALAR []) Intern.intern(union);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified(union, mod);
   }
 

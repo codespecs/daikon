@@ -18,7 +18,7 @@ import utilMDE.*;
 // This file looks a *lot* like part of PptTopLevel.
 // (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
-public final class PptSlice3 
+public final class PptSlice3
   extends PptSlice
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -268,7 +268,7 @@ public final class PptSlice3
       long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }
     } else {

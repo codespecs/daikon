@@ -34,21 +34,21 @@ package daikon.gui.contextGUI;
 
 public interface ContextLinker
 {
-	public String addFile(String filename);
-	public String getInvariants();
-	public String getIndividualInvariants();
-	public String setIterator(String class_name, String method_name, String var_name, String place_name);
-	public void setClassIterator();
-	public String getClasses();
-	public void setMethodIterator(String class_name);
-	public String getMethods();
-	public void setVariableIterator(String class_name, String method_name);
-	public String getVariables();
-	public void setPlaceIterator(String class_name, String method_name, String place_name);
-	public String getPlaces();
-	public void rebuild();
-	public void clear();
-	public void destroyDatabase();
-	public void setCFile(boolean new_CFILE);
-	public boolean getCFile();
+    public String addFile(String filename);
+    public String getInvariants();
+    public String getIndividualInvariants();
+    public String setIterator(String class_name, String method_name, String var_name, String place_name);
+    public void setClassIterator();
+    public String getClasses();
+    public void setMethodIterator(String class_name);
+    public String getMethods();
+    public void setVariableIterator(String class_name, String method_name);
+    public String getVariables();
+    public void setPlaceIterator(String class_name, String method_name, String place_name);
+    public String getPlaces();
+    public void rebuild();
+    public void clear();
+    public void destroyDatabase();
+    public void setCFile(boolean new_CFILE);
+    public boolean getCFile();
 }

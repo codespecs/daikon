@@ -20,8 +20,8 @@ import java.util.*;
 // it is automatically generated from IntComparisons.java.jpp
 // *****
 
-public final class IntGreaterThan 
-  extends TwoScalar  
+public final class IntGreaterThan
+  extends TwoScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -35,8 +35,8 @@ public final class IntGreaterThan
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debugIntGreaterThan 
-    = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterThan" );
+  public static final Category debugIntGreaterThan
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterThan");
 
   private ValueTracker values_cache = new ValueTracker(8);
 
@@ -64,8 +64,8 @@ public final class IntGreaterThan
 
     if (debugIntGreaterThan.isDebugEnabled() || ppt.debugged) {
       debugIntGreaterThan.debug("IntGreaterThan.instantiate(" + ppt.name + ")"
-			  + ", seqvar1=" + seqvar1
-			  + ", seqvar2=" + seqvar2);
+                          + ", seqvar1=" + seqvar1
+                          + ", seqvar2=" + seqvar2);
     }
 
     { // Tests involving sequence lengths.
@@ -104,14 +104,14 @@ public final class IntGreaterThan
 
       if (debugIntGreaterThan.isDebugEnabled() || ppt.debugged) {
         debugIntGreaterThan.debug("IntGreaterThan.instantiate: "
-			    + "min1=" + min1
-			    + ", max1=" + max1
-			    + ", min2=" + min2
-			    + ", max2=" + max2
-			    + ", super1=" + super1
-			    + ", super2=" + super2
-			    + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
-			    + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
+                            + "min1=" + min1
+                            + ", max1=" + max1
+                            + ", min2=" + min2
+                            + ", max2=" + max2
+                            + ", super1=" + super1
+                            + ", super2=" + super2
+                            + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+                            + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
       }
       if (seqvar1 == seqvar2) {
         // Both variables are derived from the same sequence.  The
@@ -165,7 +165,7 @@ public final class IntGreaterThan
     Assert.assert(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof IntGreaterThan )
+      if (inv instanceof IntGreaterThan)
         return (IntGreaterThan) inv;
     }
     return null;
@@ -180,10 +180,10 @@ public final class IntGreaterThan
     String var2name = var2().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.JML)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.IOA))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.IOA))
     {
       String comparator = ">" ;
 
@@ -230,7 +230,7 @@ public final class IntGreaterThan
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
     return (Math.pow(.5, values_cache.num_values())
-	    * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+            * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 
   }
 

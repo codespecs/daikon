@@ -49,9 +49,9 @@ public final class LinearBinaryCore
     try {
       LinearBinaryCore result = (LinearBinaryCore) super.clone();
       if (x_cache != null)
-	result.x_cache = (long[]) x_cache.clone();
+        result.x_cache = (long[]) x_cache.clone();
       if (y_cache != null)
-	result.y_cache = (long[]) y_cache.clone();
+        result.y_cache = (long[]) y_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -81,61 +81,61 @@ public final class LinearBinaryCore
       // computation of the slope can be non-negligible.
 
       for (int i=0; i<values_seen; i++)
-	if ((x_cache[i] == x) && (y_cache[i] == y))
-	  return;
+        if ((x_cache[i] == x) && (y_cache[i] == y))
+          return;
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;
       if (values_seen == MINPAIRS) {
-	// Find the most separated pair
+        // Find the most separated pair
         // Do I really need to check in two dimensions, or would one be enough?
         // indices of the most-separated pair
-	int max_i = -1;
-	int max_j = -1;
+        int max_i = -1;
+        int max_j = -1;
         // (square of the) distance between the most separated pair
-	double max_separation = 0;
-	for (int i=0; i<MINPAIRS-1; i++) {
-	  for (int j=i+1; j<MINPAIRS; j++) {
+        double max_separation = 0;
+        for (int i=0; i<MINPAIRS-1; i++) {
+          for (int j=i+1; j<MINPAIRS; j++) {
             // not long, lest we get wraparound
-	    double xsep = ((double)x_cache[i] - x_cache[j]);
-	    double ysep = ((double)y_cache[i] - y_cache[j]);
-	    double separation = xsep*xsep + ysep*ysep;
+            double xsep = ((double)x_cache[i] - x_cache[j]);
+            double ysep = ((double)y_cache[i] - y_cache[j]);
+            double separation = xsep*xsep + ysep*ysep;
             // Assert.assert(separation > 0);
-	    if (separation > max_separation) {
-	      max_separation = separation;
-	      max_i = i;
-	      max_j = j;
-	    }
-	  }
-	}
-	// Set a and b based on that pair
-	boolean ok =
-	  set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
-	if (a == 0) {
-	  ok = false;
-	  debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") because a == 0");
-	}
-	// Check all values against a and b.
-	for (int i=0; ok && i<MINPAIRS; i++) {
-	  // I should permit a fudge factor here.
-	  if (y_cache[i] != a*x_cache[i]+b) {
-	    if (debug.isDebugEnabled()) {
-	      debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
-			  + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
-	      debug.debug("    ");
-	    }
-	    ok = false;
+            if (separation > max_separation) {
+              max_separation = separation;
+              max_i = i;
+              max_j = j;
+            }
+          }
+        }
+        // Set a and b based on that pair
+        boolean ok =
+          set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
+        if (a == 0) {
+          ok = false;
+          debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") because a == 0");
+        }
+        // Check all values against a and b.
+        for (int i=0; ok && i<MINPAIRS; i++) {
+          // I should permit a fudge factor here.
+          if (y_cache[i] != a*x_cache[i]+b) {
+            if (debug.isDebugEnabled()) {
+              debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
+                          + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
+              debug.debug("    ");
+            }
+            ok = false;
           }
         }
         if (! ok) {
-	  values_seen--;
-	  wrapper.flowClone();
-	  wrapper.destroy();
-	  return;
-	} else {
-	  x_cache = null;
-	  y_cache = null;
-	}
+          values_seen--;
+          wrapper.flowClone();
+          wrapper.destroy();
+          return;
+        } else {
+          x_cache = null;
+          y_cache = null;
+        }
       }
     } else {
       // Check the new value against a and b.
@@ -144,7 +144,7 @@ public final class LinearBinaryCore
           debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
-	wrapper.flowThis();
+        wrapper.flowThis();
         wrapper.destroy();
         return;
       }
@@ -189,9 +189,9 @@ public final class LinearBinaryCore
   // Variable "first" indicates whether this is the leading term
   // Variable "var" is the name of the variable; may be null for the constant term.
   public static String formatTerm(OutputFormat format,
-				  double coeff,
-				  VarInfoName var,
-				  boolean first)
+                                  double coeff,
+                                  VarInfoName var,
+                                  boolean first)
   {
     if (coeff == 0)
       return "";
@@ -218,8 +218,8 @@ public final class LinearBinaryCore
   }
 
   public static String format_using(OutputFormat format,
-				    VarInfoName x, VarInfoName y,
-				    double a, double b)
+                                    VarInfoName x, VarInfoName y,
+                                    double a, double b)
   {
     String xname = x.name_using(format);
     String yname = y.name_using(format);
@@ -231,16 +231,16 @@ public final class LinearBinaryCore
     }
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.JML)
-	|| (format == OutputFormat.IOA))
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.IOA))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
       return yname + eq
-	+ formatTerm(format, a, x, true)
-	+ formatTerm(format, b, null, false);
+        + formatTerm(format, a, x, true)
+        + formatTerm(format, b, null, false);
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -249,7 +249,7 @@ public final class LinearBinaryCore
 
       //      no data            or      non-integral
       if (((ia == 0) && (ib == 0)) || (ia != a) || (ib != b)) {
-	return null;
+        return null;
       }
 
       // y == a x + b
@@ -262,7 +262,7 @@ public final class LinearBinaryCore
   }
 
   public String format_using(OutputFormat format,
-			     VarInfoName x, VarInfoName y)
+                             VarInfoName x, VarInfoName y)
   {
     String result = format_using(format, x, y, a, b);
     if (result != null) {
@@ -274,7 +274,7 @@ public final class LinearBinaryCore
 
   // Format as "x = cy+d" instead of as "y = ax+b".
   public String format_reversed_using(OutputFormat format,
-				      VarInfoName x, VarInfoName y)
+                                      VarInfoName x, VarInfoName y)
   {
     Assert.assert(a == 1 || a == -1);
     return format_using(format, y, x, a, -b/a);

@@ -62,10 +62,10 @@ public final class TwoScalarFactory {
     } else {
       result.add(LinearBinary.instantiate(ppt));
       for (int i=0; i<2; i++) {
-	boolean invert = (i==1);
-	for (int j=0; j<Functions.unaryFunctions.length; j++) {
-	  result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
-	}
+        boolean invert = (i==1);
+        for (int j=0; j<Functions.unaryFunctions.length; j++) {
+          result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
+        }
       }
     }
 

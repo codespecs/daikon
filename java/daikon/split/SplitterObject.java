@@ -7,21 +7,21 @@ import java.util.*;
 
 
 /**
- * A SplitterObject is a representation of a Splitter. It holds all the information about a splitter. 
+ * A SplitterObject is a representation of a Splitter. It holds all the information about a splitter.
  **/
 public class SplitterObject implements Comparable{
-  
+
   private Splitter splitter;
   private String condition; //the condition
   private String className = "Unassigned"; //the Java classname of this Splitter
   private String directory; //the directory where it resides
   private String pptName; //the program point with which it is associated
-  private boolean exists = false; 
+  private boolean exists = false;
   private String testString = "Unassigned";
   private String errorMessage = "Splitter for " + this.condition + " valid";
   private int guid = -999;
   private File f;
-  
+
   /**
    * @param condition The splitting condition of this splitter
    * @param directory The directory where the source of this splitter is located.
@@ -31,7 +31,7 @@ public class SplitterObject implements Comparable{
     this.pptName = pptName;
     this.directory = directory;
   }
-  
+
   /**
    * @param loader The SplitterLoader used to load the compiled source.
    * @requires loader is not null.
@@ -40,13 +40,13 @@ public class SplitterObject implements Comparable{
     Class tempClass = loader.load_Class(className, directory + className + ".class");
     if (tempClass != null) {
       try {
-	splitter = (Splitter) tempClass.newInstance();
+        splitter = (Splitter) tempClass.newInstance();
       } catch (ClassFormatError ce) {
-	debugPrint(ce.toString());
+        debugPrint(ce.toString());
       } catch (InstantiationException ie) {
-	debugPrint(ie.toString());
+        debugPrint(ie.toString());
       } catch (IllegalAccessException iae) {
-	debugPrint(iae.toString());
+        debugPrint(iae.toString());
       }
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
@@ -63,10 +63,10 @@ public class SplitterObject implements Comparable{
   public boolean splitterExists() {
     return exists;
   }
-  
+
   /**
    * @return true if the .class file exists for the Splitter
-   * represented by this SplitterObject, false otherwise 
+   * represented by this SplitterObject, false otherwise
    */
   public boolean compiled () {
     if (f != null && f.exists()) {
@@ -75,15 +75,15 @@ public class SplitterObject implements Comparable{
     }
     return false;
   }
-  
+
   /**
-   * @return the Splitter that this SplitterObject represents. Null if 
+   * @return the Splitter that this SplitterObject represents. Null if
    * splitterExists() == false
    */
   public Splitter getSplitter() {
     return this.splitter;
   }
-  
+
   /**
    * set the error message of this this SplitterObject. This indicates the status of
    * the Splitter.
@@ -91,7 +91,7 @@ public class SplitterObject implements Comparable{
   public void setError(String errorString) {
     this.errorMessage = errorString;
   }
-  
+
   /**
    * set the unique ID of this splitterObject
    */
@@ -105,14 +105,14 @@ public class SplitterObject implements Comparable{
   public int getGUID( ) {
     return this.guid;
   }
-  
+
   /**
    * get the error message of this SplitterObject.
    */
   public String getError () {
     return this.errorMessage;
   }
-  
+
   /**
    * @return the full source of the Splitter.
    */
@@ -126,14 +126,14 @@ public class SplitterObject implements Comparable{
   public String getPptName () {
     return this.pptName;
   }
-  
+
   /**
    * @return the className of the Splitter
    */
   public String getClassName() {
     return this.className;
   }
-  
+
   /**
    * set the className of this Splitter
    */
@@ -141,7 +141,7 @@ public class SplitterObject implements Comparable{
     this.className = className;
     f = new File(directory + className + ".class");
   }
-  
+
   public void setDirectory (String directory) {
     this.directory = directory;
   }
@@ -149,7 +149,7 @@ public class SplitterObject implements Comparable{
   public String getDirectory () {
     return this.directory;
   }
-  
+
   /**
    * @return the condition represented by the Splitter
    */
@@ -164,16 +164,16 @@ public class SplitterObject implements Comparable{
   public String getTestString() {
     return this.testString;
   }
-  
+
   public void debugPrint(String s) {
     System.out.println(s);
   }
 
   public String toString() {
-    return (className + ": " + "condition: " + condition + ", testString: " + testString 
-	    + ", @ " + pptName);
+    return (className + ": " + "condition: " + condition + ", testString: " + testString
+            + ", @ " + pptName);
   }
-  
+
   public int compareTo(Object o) {
     return this.guid - ((SplitterObject) o).getGUID();
   }

@@ -24,7 +24,7 @@ public final class ValueTuple implements Cloneable {
 
   // These arrays are interned, and so are their elements.
 
-  public Object[] vals;		// the values themselves (as Objects, if necessary)
+  public Object[] vals;         // the values themselves (as Objects, if necessary)
 
   // consider putting this in the first slot of "vals", to avoid the Object
   // overhead of a pair of val and mods.  Do I need to worry about trickery
@@ -36,11 +36,11 @@ public final class ValueTuple implements Cloneable {
   // the packed representation if appropriate.  (That does seem cleaner,
   // although it might be less efficient.)
 
-  public int[] mods;		// modification bit per value, possibly packed
-				// into fewer ints than the vals above.
-				// Don't use a single int because that
-				// won't scale to (say) more than 16
-				// values.
+  public int[] mods;            // modification bit per value, possibly packed
+                                // into fewer ints than the vals above.
+                                // Don't use a single int because that
+                                // won't scale to (say) more than 16
+                                // values.
 
 
   // Right now there are only three meaningful values for a mod:
@@ -111,12 +111,12 @@ public final class ValueTuple implements Cloneable {
     int i1 = 0, i2 = 0;
     for (int tm=0; tm<TUPLEMOD_VALUES; tm++) {
       if (!tuplemodHasMissing(tm)) {
-	tuplemod_not_missing[i1] = tm;
-	i1++;
+        tuplemod_not_missing[i1] = tm;
+        i1++;
       }
       if (tuplemodHasModified(tm) && !tuplemodHasMissing(tm)) {
-	tuplemod_modified_not_missing[i2] = tm;
-	i2++;
+        tuplemod_modified_not_missing[i2] = tm;
+        i2++;
       }
     }
   }
@@ -146,8 +146,8 @@ public final class ValueTuple implements Cloneable {
    **/
   static String tuplemodToStringBrief(int tuplemod) {
     return ((tuplemodHasModified(tuplemod) ? "M" : "m")
-	    + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
-	    + (tuplemodHasMissing(tuplemod) ? "X" : "x"));
+            + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
+            + (tuplemodHasMissing(tuplemod) ? "X" : "x"));
   }
 
 
@@ -297,13 +297,13 @@ public final class ValueTuple implements Cloneable {
     Assert.assert(vals.length == mods.length);
     for (int i=0; i<vals.length; i++) {
       if (i>0)
-	sb.append("; ");
+        sb.append("; ");
       if (vals[i] instanceof String)
         sb.append("\"" + vals[i] + "\"");
       else if (vals[i] instanceof long[])
         sb.append(ArraysMDE.toString((long[])vals[i]));
       else if (vals[i] instanceof int[])
-	// shouldn't reach this case -- should be long[], not int[]
+        // shouldn't reach this case -- should be long[], not int[]
         sb.append(ArraysMDE.toString((int[])vals[i]));
       else
         sb.append(vals[i]);
@@ -318,11 +318,11 @@ public final class ValueTuple implements Cloneable {
     StringBuffer sb = new StringBuffer("[");
     for (int i=0; i<vals.length; i++) {
       if (i>0)
-	sb.append(", ");
+        sb.append(", ");
       if (vals[i] instanceof long[])
         sb.append(ArraysMDE.toString((long[])vals[i]));
       else if (vals[i] instanceof int[])
-	// shouldn't reach this case -- should be long[], not int[]
+        // shouldn't reach this case -- should be long[], not int[]
         sb.append(ArraysMDE.toString((int[])vals[i]));
       else
         sb.append(vals[i]);

@@ -10,7 +10,7 @@ import utilMDE.*;
 // it is automatically generated from SequenceSubscript.java.jpp
 // *****
 
-public final class SequenceStringSubscript 
+public final class SequenceStringSubscript
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -59,9 +59,9 @@ public final class SequenceStringSubscript
       return ValueAndModified.MISSING;
     String  val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified( val  , mod);
   }
 
@@ -87,7 +87,7 @@ public final class SequenceStringSubscript
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceStringSubscript )
+    return (other instanceof SequenceStringSubscript)
       && (((SequenceStringSubscript) other).index_shift == this.index_shift);
   }
 

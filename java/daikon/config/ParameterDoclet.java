@@ -30,23 +30,23 @@ public class ParameterDoclet
       String opt = optset[0];
 
       if ("--texinfo".equals(opt)) {
-	String fname = optset[1];
-	System.out.println("Opening " + fname + " for output...");
-	PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
-	pd.writeTexInfo(outf);
-	outf.close();
+        String fname = optset[1];
+        System.out.println("Opening " + fname + " for output...");
+        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        pd.writeTexInfo(outf);
+        outf.close();
       } else if ("--text".equals(opt)) {
-	String fname = optset[1];
-	System.out.println("Opening " + fname + " for output...");
-	PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
-	pd.writeText(outf);
-	outf.close();
+        String fname = optset[1];
+        System.out.println("Opening " + fname + " for output...");
+        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        pd.writeText(outf);
+        outf.close();
       } else if ("--list".equals(opt)) {
-	String fname = optset[1];
-	System.out.println("Opening " + fname + " for output...");
-	PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
-	pd.writeList(outf);
-	outf.close();
+        String fname = optset[1];
+        System.out.println("Opening " + fname + " for output...");
+        PrintWriter outf = new PrintWriter(UtilMDE.BufferedFileWriter(fname));
+        pd.writeList(outf);
+        outf.close();
       }
     }
 

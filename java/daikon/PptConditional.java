@@ -29,7 +29,7 @@ public final class PptConditional
 
   public PptConditional(PptTopLevel parent, Splitter splitter, boolean inverse) {
     super(ctor_name_helper(parent, splitter, inverse),
-	  ctor_vis_helper(parent, splitter, inverse));
+          ctor_vis_helper(parent, splitter, inverse));
     // Assert.assert(splitter.instantiated() == false);
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
@@ -41,8 +41,8 @@ public final class PptConditional
   }
 
   private static String ctor_name_helper(PptTopLevel parent,
-					 Splitter splitter,
-					 boolean splitter_inverse)
+                                         Splitter splitter,
+                                         boolean splitter_inverse)
   {
     if (splitter_inverse) {
       return parent.name + ";condition=\"not(" + splitter.condition() + ")\"";
@@ -53,8 +53,8 @@ public final class PptConditional
 
 
   private static VarInfo[] ctor_vis_helper(PptTopLevel parent,
-					   Splitter splitter,
-					   boolean splitter_inverse)
+                                           Splitter splitter,
+                                           boolean splitter_inverse)
   {
     // return VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars());
     return VarInfo.arrayclone_simple(parent.var_infos);
@@ -97,7 +97,7 @@ public final class PptConditional
     if (splitter != null) {
       Package pkg = splitter.getClass().getPackage();
       if (pkg == null) { // no package
-	splitter = null;
+        splitter = null;
       }
     }
     out.defaultWriteObject();

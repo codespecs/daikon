@@ -24,8 +24,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfString 
-  extends SingleString 
+public final class OneOfString
+  extends SingleString
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -128,7 +128,7 @@ public final class OneOfString
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") );
+      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
     }
     sb.append(" }");
     return sb.toString();
@@ -177,7 +177,7 @@ public final class OneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
+    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -199,19 +199,19 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
+        result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
       } else {
-	result += " == ";
-	if ((str == null) || "null".equals(str)) {
-	  result += "== null)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == ";
+        if ((str == null) || "null".equals(str)) {
+          result += "== null)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 
@@ -239,19 +239,19 @@ public final class OneOfString
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+        result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
       } else {
-	if ((str == null) || "null".equals(str)) {
-	  result += "\\typeof(null)";
-	} else if (str.startsWith("[")) {
-	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "\\type(" + str + ")";
-	}
-	result += "***";   // to denote that it's not correct IOA syntax
+        if ((str == null) || "null".equals(str)) {
+          result += "\\typeof(null)";
+        } else if (str.startsWith("[")) {
+          result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "\\type(" + str + ")";
+        }
+        result += "***";   // to denote that it's not correct IOA syntax
       }
       result += ")";
     } // end for
@@ -267,7 +267,7 @@ public final class OneOfString
       return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
     } else {
       if (str.startsWith("\"") && str.endsWith("\"")) {
-	str = str.substring(1, str.length()-1);
+        str = str.substring(1, str.length()-1);
       }
       return "\\type(" + str + ")";
     }
@@ -316,19 +316,19 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
+        result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
       } else {
-	result += " == ";
-	if ((str == null) || "null".equals(str)) {
-	  result += "== null)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == ";
+        if ((str == null) || "null".equals(str)) {
+          result += "== null)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 
@@ -351,9 +351,9 @@ public final class OneOfString
       if (value == null) {
         // do nothing
       } else if (value.startsWith("[")) {
-	value = UtilMDE.classnameFromJvm(value);
+        value = UtilMDE.classnameFromJvm(value);
       } else if (value.startsWith("\"") && value.endsWith("\"")) {
-	value = value.substring(1, value.length()-1);
+        value = value.substring(1, value.length()-1);
       }
       value = "|T_" + value + "|";
       result += " (EQ " + varname + " " + value + ")";
@@ -429,14 +429,14 @@ public final class OneOfString
 
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
-	return false;
+        return false;
 
     return true;
   }
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfString ) {
+    if (o instanceof OneOfString) {
       OneOfString  other = (OneOfString) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -467,7 +467,7 @@ public final class OneOfString
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfString )
+      if (inv instanceof OneOfString)
         return (OneOfString) inv;
     }
     return null;

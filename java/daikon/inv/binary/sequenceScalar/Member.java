@@ -15,7 +15,7 @@ import utilMDE.*;
 // *****
 
 public final class Member
-  extends SequenceScalar 
+  extends SequenceScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -34,8 +34,8 @@ public final class Member
 
   protected Member(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.INT );
-    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY );
+    Assert.assert(sclvar().rep_type == ProglangType.INT);
+    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY);
   }
 
   // This only added so this invariant can be tested by the InvariantFormatTester automated
@@ -144,7 +144,7 @@ public final class Member
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
 
-    if (seqvar.derived instanceof SequenceScalarSubsequence ) {
+    if (seqvar.derived instanceof SequenceScalarSubsequence) {
       // the sequence is B[0..J-1] or similar.  Get information about it.
       SequenceScalarSubsequence  seqsss = (SequenceScalarSubsequence) seqvar.derived;
       // System.out.println("seqvar: " + seqvar.name);
@@ -152,7 +152,7 @@ public final class Member
       int seq_shift = seqsss.index_shift;
       boolean seq_from_start = seqsss.from_start;
 
-      if (sclvar.derived instanceof SequenceScalarSubscript ) {
+      if (sclvar.derived instanceof SequenceScalarSubscript) {
         // B[I] in B[0..J]
 
         SequenceScalarSubscript  sclsss = (SequenceScalarSubscript) sclvar.derived;
@@ -248,14 +248,12 @@ public final class Member
       return format_java();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
-
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
     } else if (format == OutputFormat.JML) {
       return format_jml();
-
     } else {
       return format_unimplemented(format);
     }
@@ -279,7 +277,7 @@ public final class Member
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
@@ -287,7 +285,7 @@ public final class Member
     // Uses jml exists option
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ seqvar().name, sclvar().name },false,false);
+        { seqvar().name, sclvar().name },false,false);
     return form[0] + form[1] + " == " + form[2] + form[3];
   }
 
@@ -295,7 +293,7 @@ public final class Member
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 

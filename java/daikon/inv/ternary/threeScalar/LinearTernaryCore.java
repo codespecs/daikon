@@ -103,29 +103,29 @@ public final class LinearTernaryCore
       // computation of the slope can be non-negligible.
 
       for (int i=0; i<values_seen; i++)
-	if ((x_cache[i] == x) && (y_cache[i] == y) && (z_cache[i] == z))
-	  return;
+        if ((x_cache[i] == x) && (y_cache[i] == y) && (z_cache[i] == z))
+          return;
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       z_cache[values_seen] = z;
       values_seen++;
       if (values_seen == MINTRIPLES) {
-	// Set a, b, and c based on an appropriate set of 3 (x, y, z) values.
+        // Set a, b, and c based on an appropriate set of 3 (x, y, z) values.
         int[] maxsep_indices = maxsep_triples();
-	set_tri_linear(maxsep_indices);
+        set_tri_linear(maxsep_indices);
 
-	// Check all values against a, b, and c.
+        // Check all values against a, b, and c.
         if (!wrapper.falsified) {
           // If one of these coefficients is zero, this should be a
           // LinearBinary, not a LinearTernary, term.  (It might not show up
           // as LinearBinary because there might not have been enough samples;
           // but a random varying third variable can create enough samples.)
-	  /* [INCR] this makes stuff to weird
+          /* [INCR] this makes stuff to weird
           if ((a == 0) || (b == 0)) {
             wrapper.destroy();
             return;
           }
-	  */
+          */
 
           for (int i=0; i<MINTRIPLES; i++) {
             // I should permit a fudge factor here.
@@ -313,17 +313,17 @@ public final class LinearTernaryCore
   }
 
   public static String format_using(OutputFormat format,
-				    VarInfoName x, VarInfoName y, VarInfoName z,
-				    double a, double b, double c)
+                                    VarInfoName x, VarInfoName y, VarInfoName z,
+                                    double a, double b, double c)
   {
     String xname = x.name_using(format);
     String yname = y.name_using(format);
     String zname = z.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.IOA)
-	|| (format == OutputFormat.JML))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.JML))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
@@ -331,20 +331,20 @@ public final class LinearTernaryCore
       // It shouldn't be the case that a or b is 0 for printed invariants;
       // but that can be true earlier on in processing.
       if ((a == 0) && (b == 0) && (c == 0)) {
-	return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
+        return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
       }
 
       return zname + " == "
-	+ LinearBinaryCore.formatTerm(format, a, x, true)
-	+ LinearBinaryCore.formatTerm(format, b, y, false)
-	+ LinearBinaryCore.formatTerm(format, c, null, false);
+        + LinearBinaryCore.formatTerm(format, a, x, true)
+        + LinearBinaryCore.formatTerm(format, b, y, false)
+        + LinearBinaryCore.formatTerm(format, c, null, false);
     }
 
     return null;
   }
 
   public String format_using(OutputFormat format,
-			     VarInfoName x, VarInfoName y, VarInfoName z)
+                             VarInfoName x, VarInfoName y, VarInfoName z)
   {
     String result = format_using(format, x, y, z, a, b, c);
     if (result != null) {

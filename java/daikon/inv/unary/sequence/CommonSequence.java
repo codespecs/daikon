@@ -52,7 +52,7 @@ public class CommonSequence
     for (int i=0; i<intersect.length; i++) {
       result += intersect[i];
       if (i!=intersect.length-1)
-	result += ", ";
+        result += ", ";
     }
     result += "}";
     return result;
@@ -85,15 +85,15 @@ public class CommonSequence
       long[] tmp = new long[intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++)
-	if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
-	    ((size==0) ||
-	     (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
-	  tmp[size++] = a[i];
+        if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
+            ((size==0) ||
+             (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
+          tmp[size++] = a[i];
 
       if (size==0) {
-	flowThis();
-	destroy();
-	return;
+        flowThis();
+        destroy();
+        return;
       }
 
       intersect = ArraysMDE.subarray(tmp, 0, size);

@@ -70,7 +70,7 @@ public class EltwiseIntComparison
   public String format_daikon() {
     if (debugEltwiseIntComparison) {
       System.out.println(repr()
-			 + ";comparison=\"" + core.format_comparator() + "\"");
+                         + ";comparison=\"" + core.format_comparator() + "\"");
     }
     if (core.can_be_eq && !(core.can_be_lt || core.can_be_gt)) {
       return var().name.name() + " elements are equal";
@@ -92,9 +92,9 @@ public class EltwiseIntComparison
     } else {
       // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
       result = result +
-	" /\\ " + quant.getVarName(0).ioa_name() + "+1 = " + quant.getVarName(1).ioa_name() +
-	") => " +
-	quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
+        " /\\ " + quant.getVarName(0).ioa_name() + "+1 = " + quant.getVarName(1).ioa_name() +
+        ") => " +
+        quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
     }
     return result + quant.getClosingExp();
   }
@@ -102,7 +102,7 @@ public class EltwiseIntComparison
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name, var().name });
+        { var().name, var().name });
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
       return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
@@ -114,7 +114,7 @@ public class EltwiseIntComparison
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var().name, var().name });
+        { var().name, var().name });
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
       return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
@@ -126,7 +126,7 @@ public class EltwiseIntComparison
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name, var().name });
+        { var().name, var().name });
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
       return form[0] + "(EQ"  + " " + form[1] + " " + form[2] + ")" + form[3];

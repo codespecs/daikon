@@ -39,15 +39,15 @@ This directory contains Derivation objects (for derived variables).
 //      * Q.C.1:  size
 //        restriction: not if derived subsequence of known (symbolic) length
 //      * Q.C.2:  element at each index, counting from front
-//	 must know: bounds on size of array (Q.C.1)
+//       must know: bounds on size of array (Q.C.1)
 //        restriction: not sequences derived from prefix of another sequence
-// 	 caveat: maybe not the element at *each* index, but just extremal few.)
+//       caveat: maybe not the element at *each* index, but just extremal few.)
 //      * Q.C.3:  element at each index, counting from back
-//	 must know: bounds on size of array (Q.C.1)
-//	 restriction: not sequences of constant (literal) length
+//       must know: bounds on size of array (Q.C.1)
+//       restriction: not sequences of constant (literal) length
 //        restriction: not sequences derived from suffix of another sequence
-//		(that doesn't happen yet)
-// 	 caveat: maybe not the element at *each* index, but just extremal few.)
+//              (that doesn't happen yet)
+//       caveat: maybe not the element at *each* index, but just extremal few.)
 //   * sequences:
 //      * Q.Q.1:  subsequence up to zero element, exclusive
 //        restriction: not sequences derived from prefix of another sequence
@@ -60,10 +60,10 @@ This directory contains Derivation objects (for derived variables).
 //      * QC.C.1:  elt at that index
 //   * sequence:
 //      * QC.Q.1:  subsequence up to that index, inclusive
-//	 restriction: not if that index is greater than or equal to size (Q.C.1)
+//       restriction: not if that index is greater than or equal to size (Q.C.1)
 //      * QC.Q.2:  subsequence up to that index, exclusive
-//		 (ie, prefix of that size)
-//	 restriction: not if that index is greater than size (Q.C.1)
+//               (ie, prefix of that size)
+//       restriction: not if that index is greater than size (Q.C.1)
 //      * QC.Q.3:  subsequence up to that element, inclusive (if elt in sequence)
 //      * QC.Q.4:  subsequence up to that element, exclusive (if elt in sequence)
 

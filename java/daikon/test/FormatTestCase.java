@@ -82,10 +82,10 @@ class FormatTestCase {
      * @param formatString the format that this test case belongs to
      **/
     public SingleOutputTestCase(Method outputProducer,
-				Object[] outputProducerArgs,
-				String goalOutput,
-				int goalLineNumber,
-				String formatString) {
+                                Object[] outputProducerArgs,
+                                String goalOutput,
+                                int goalLineNumber,
+                                String formatString) {
       this.outputProducer = outputProducer;
       this.outputProducerArgs = outputProducerArgs;
       this.goalOutput = goalOutput;
@@ -102,15 +102,15 @@ class FormatTestCase {
      **/
     public String createTestOutput(Invariant inv) {
       try {
-	if (resultCache == null)
-	  resultCache = (String)outputProducer.invoke(inv,outputProducerArgs);
-	return resultCache;
+        if (resultCache == null)
+          resultCache = (String)outputProducer.invoke(inv,outputProducerArgs);
+        return resultCache;
       }
       catch (IllegalAccessException e) {
-	throw new RuntimeException(e.toString());
+        throw new RuntimeException(e.toString());
       }
       catch (InvocationTargetException e) {
-	throw new RuntimeException(e.toString());
+        throw new RuntimeException(e.toString());
       }
     }
 
@@ -152,9 +152,9 @@ class FormatTestCase {
      **/
     public String getDiffString() {
       if (resultCache != null && !resultCache.equals(goalOutput)) {
-	return "Error on line " + goalLineNumber + ":\n" +
-	  "Expected result:\n" + goalOutput + "\n" +
-	  "Returned result:\n" + resultCache;
+        return "Error on line " + goalLineNumber + ":\n" +
+          "Expected result:\n" + goalOutput + "\n" +
+          "Returned result:\n" + resultCache;
       }
       return "";
     }
@@ -219,14 +219,14 @@ class FormatTestCase {
       SingleOutputTestCase current = (SingleOutputTestCase)testCases.get(i);
       int currentGoalLineNumber = current.getGoalLineNumber();
       for (int j=currentLine; j<currentGoalLineNumber; j++) {
-	currentLineOfText = theInputFile.readLine();
-	if (parseGoal(currentLineOfText) == null)
-	  output.append(currentLineOfText + "\n");
+        currentLineOfText = theInputFile.readLine();
+        if (parseGoal(currentLineOfText) == null)
+          output.append(currentLineOfText + "\n");
       }
       output.append(GOAL_PREFIX + " (" + current.getFormatString() + "): " +
-		    current.createTestOutput(invariantToTest));
+                    current.createTestOutput(invariantToTest));
       if (i != testCases.size()-1)
-	output.append("\n");
+        output.append("\n");
       currentLine = currentGoalLineNumber;
     }
 
@@ -264,7 +264,7 @@ class FormatTestCase {
       currentDiffString = ((SingleOutputTestCase)testCases.get(i)).getDiffString();
       result.append(currentDiffString);
       if (i != testCases.size() && currentDiffString != "") // "interned"
-	result.append("\n\n");
+        result.append("\n\n");
     }
 
     return result.toString();
@@ -304,7 +304,7 @@ class FormatTestCase {
   static String getFormat(String partialGoalString) {
     try {
       return partialGoalString.substring(partialGoalString.indexOf('(')+1,
-					 partialGoalString.indexOf(')'));
+                                         partialGoalString.indexOf(')'));
     }
     catch (IndexOutOfBoundsException e) {
     }
@@ -315,7 +315,7 @@ class FormatTestCase {
   static String getGoalOutput(String partialGoalString) {
     try {
       return partialGoalString.substring(partialGoalString.indexOf(':')+2,
-					 partialGoalString.length());
+                                         partialGoalString.length());
     }
     catch (IndexOutOfBoundsException e) {
     }
@@ -391,27 +391,27 @@ class FormatTestCase {
     if (!generateGoals) {
       goalOutput = parseGoal(getNextRealLine(commands));
       if (goalOutput == null)
-	throw new RuntimeException("Bad format of goal data");
+        throw new RuntimeException("Bad format of goal data");
     } else {
       formatStrings = InvariantFormatTester.TEST_FORMAT_LIST.iterator();
     }
 
     while (goalOutput != null) {
       if (generateGoals) {
-	if (!formatStrings.hasNext()) {
-	  goalOutput = null;
-	} else {
-	  format = (String)formatStrings.next();
-	  goalOutput = "init"; // Need something non-whitespace
-	}
+        if (!formatStrings.hasNext()) {
+          goalOutput = null;
+        } else {
+          format = (String)formatStrings.next();
+          goalOutput = "init"; // Need something non-whitespace
+        }
       } else {
-	format = getFormat(goalOutput);
-	goalOutput = getGoalOutput(goalOutput);
+        format = getFormat(goalOutput);
+        goalOutput = getGoalOutput(goalOutput);
 
-	if (format == null || goalOutput == null) {
-	  throw new RuntimeException("Goal string formatted incorrectly");
-	}
-	goalLineNumber++;
+        if (format == null || goalOutput == null) {
+          throw new RuntimeException("Goal string formatted incorrectly");
+        }
+        goalLineNumber++;
       }
 
       // System.out.println("Possibly add a test case:");
@@ -419,43 +419,43 @@ class FormatTestCase {
 
       // Get the method used to perform the formatting
       if (goalOutput != null && !InvariantFormatTester.isWhitespace(goalOutput)) {
-	// System.out.println("Using format: " + format);
+        // System.out.println("Using format: " + format);
 
-	try {
-	  outputProducer = classToTest.getMethod("format_" + format, null);
-	  outputProducerArgs = null;
-	}
-	catch (NoSuchMethodException e) {
-	  try {
-	    outputProducer =
-	      classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
-	    outputProducerArgs = new Object [] {getOutputFormat(format)};
-	  }
-	  catch (NoSuchMethodException e2) {
-	    throw new RuntimeException("Could not find format method");
-	  }
-	}
+        try {
+          outputProducer = classToTest.getMethod("format_" + format, null);
+          outputProducerArgs = null;
+        }
+        catch (NoSuchMethodException e) {
+          try {
+            outputProducer =
+              classToTest.getMethod("format_using", new Class [] {OutputFormat.class});
+            outputProducerArgs = new Object [] {getOutputFormat(format)};
+          }
+          catch (NoSuchMethodException e2) {
+            throw new RuntimeException("Could not find format method");
+          }
+        }
 
-	// System.out.println("Adding a test case");
+        // System.out.println("Adding a test case");
 
-	// System.out.println("Method name: " + outputProducer.getName());
-	// System.out.println("Goal output: " + goalOutput);
-	// System.out.println("Goal line number: " + goalLineNumber);
-	// System.out.println("Format string: " + format);
+        // System.out.println("Method name: " + outputProducer.getName());
+        // System.out.println("Goal output: " + goalOutput);
+        // System.out.println("Goal line number: " + goalLineNumber);
+        // System.out.println("Format string: " + format);
 
-	// Add a test case for the invariant for the proper format
-	testCases.add(new SingleOutputTestCase(outputProducer, outputProducerArgs, goalOutput, goalLineNumber, format));
+        // Add a test case for the invariant for the proper format
+        testCases.add(new SingleOutputTestCase(outputProducer, outputProducerArgs, goalOutput, goalLineNumber, format));
 
-	try {
-	  if (!generateGoals) {
-	    currentLine = commands.readLine();
-	    // System.out.println("In goal section, currentLine = " + currentLine);
-	    goalOutput = parseGoal(currentLine);
-	  }
-	}
-	catch (IOException e) {
-	  throw new RuntimeException("Error in reading command file");
-	}
+        try {
+          if (!generateGoals) {
+            currentLine = commands.readLine();
+            // System.out.println("In goal section, currentLine = " + currentLine);
+            goalOutput = parseGoal(currentLine);
+          }
+        }
+        catch (IOException e) {
+          throw new RuntimeException("Error in reading command file");
+        }
       }
     }
 
@@ -472,9 +472,9 @@ class FormatTestCase {
       // If generating goals, goalOutput will have the proper first line
       // Otherwise, currentLine will have the proper first sample line
       if (generateGoals)
-	getSamples(types, (BufferedReader)commands, samples, generateGoals, goalOutput);
+        getSamples(types, (BufferedReader)commands, samples, generateGoals, goalOutput);
       else
-	getSamples(types, (BufferedReader)commands, samples, generateGoals, currentLine);
+        getSamples(types, (BufferedReader)commands, samples, generateGoals, currentLine);
     }
 
     // Use the add_modified function of the appropriate invariant to
@@ -542,8 +542,8 @@ class FormatTestCase {
     String arrayModifier = "";
 
     if (type == ProglangType.INT_ARRAY ||
-	type == ProglangType.DOUBLE_ARRAY ||
-	type == ProglangType.STRING_ARRAY) { // Is it an array ?
+        type == ProglangType.DOUBLE_ARRAY ||
+        type == ProglangType.STRING_ARRAY) { // Is it an array ?
       arrayModifier = "[]";
     }
 
@@ -555,8 +555,8 @@ class FormatTestCase {
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
     return new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
-					  arrayModifier), type, type,
-			/* comparability = */ null, VarInfoAux.getDefault());
+                                          arrayModifier), type, type,
+                        /* comparability = */ null, VarInfoAux.getDefault());
   }
 
   /**
@@ -578,19 +578,19 @@ class FormatTestCase {
       //result[i] = ProglangType.parse(typeName);
 
       if (typeName.equalsIgnoreCase("int"))
-	result[i] = ProglangType.INT;
+        result[i] = ProglangType.INT;
       else if (typeName.equalsIgnoreCase("double"))
-	result[i] = ProglangType.DOUBLE;
+        result[i] = ProglangType.DOUBLE;
       else if (typeName.equalsIgnoreCase("string"))
-	result[i] = ProglangType.STRING;
+        result[i] = ProglangType.STRING;
       else if (typeName.equalsIgnoreCase("int_array"))
-	result[i] = ProglangType.INT_ARRAY;
+        result[i] = ProglangType.INT_ARRAY;
       else if (typeName.equalsIgnoreCase("double_array"))
-	result[i] = ProglangType.DOUBLE_ARRAY;
+        result[i] = ProglangType.DOUBLE_ARRAY;
       else if (typeName.equalsIgnoreCase("string_array"))
-	result[i] = ProglangType.STRING_ARRAY;
+        result[i] = ProglangType.STRING_ARRAY;
       else
-	return null;
+        return null;
 
       Assert.assert(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
     }
@@ -655,7 +655,7 @@ class FormatTestCase {
 
   private static void getSamples(ProglangType types[], BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
-		                       firstLine);
+                                       firstLine);
 
     // System.out.println("firstLine in getSamples: " + firstLine);
     // System.out.println("currentLine line in getSamples: " + currentLine);
@@ -663,30 +663,30 @@ class FormatTestCase {
     try {
       // Read until end of file or seperator (whitespace line) encountered
       while (currentLine != null && !InvariantFormatTester.isWhitespace(currentLine)) {
-	// Skip over goal lines and comments
-	while (InvariantFormatTester.isComment(currentLine) ||
-	       (generateGoals && parseGoal(currentLine) != null)) {
-	  currentLine = commands.readLine();
-	  // System.out.println("In getSamples early part, currentLine = " + currentLine);
-	}
-	// System.out.println("Current line: " + currentLine);
+        // Skip over goal lines and comments
+        while (InvariantFormatTester.isComment(currentLine) ||
+               (generateGoals && parseGoal(currentLine) != null)) {
+          currentLine = commands.readLine();
+          // System.out.println("In getSamples early part, currentLine = " + currentLine);
+        }
+        // System.out.println("Current line: " + currentLine);
 
-	// if (!InvariantFormatTester.isComment(currentLine) &&
-	//    !InvariantFormatTester.isWhitespace(currentLine)) {
+        // if (!InvariantFormatTester.isComment(currentLine) &&
+        //    !InvariantFormatTester.isWhitespace(currentLine)) {
 
-	// if current line is not whitespace then we have a valid line (that is, end hasn't been reached
-	if (!InvariantFormatTester.isWhitespace(currentLine)) {
-	  // System.out.println(InvariantFormatTester.isComment(currentLine));
-	  Object sample[] = new Object [types.length];
-	  for (int i=0; i<types.length; i++) {
-	    // Parse each line according to a type in the paramTypes array
-	    // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
-	    sample[i] = types[i].parse_value(currentLine);
-	    currentLine = commands.readLine();
-	  }
-	  samples.add(sample);
-	  // System.out.println("Debug: current sample: sample[" + i + "] == " + sample[i]);
-	}
+        // if current line is not whitespace then we have a valid line (that is, end hasn't been reached
+        if (!InvariantFormatTester.isWhitespace(currentLine)) {
+          // System.out.println(InvariantFormatTester.isComment(currentLine));
+          Object sample[] = new Object [types.length];
+          for (int i=0; i<types.length; i++) {
+            // Parse each line according to a type in the paramTypes array
+            // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
+            sample[i] = types[i].parse_value(currentLine);
+            currentLine = commands.readLine();
+          }
+          samples.add(sample);
+          // System.out.println("Debug: current sample: sample[" + i + "] == " + sample[i]);
+        }
       }
     }
     catch (IOException e) {
@@ -882,26 +882,26 @@ class FormatTestCase {
       Object currentSample[] = (Object [])samples.get(i);
 
       for (int j=0; j<sampleSize; j++) {
-	currentClass = currentSample[j].getClass();
+        currentClass = currentSample[j].getClass();
 
-	// Intern all objects that can be interned because some equality
-	// functions will not work correctly unless the objects are
-	// interned
-	if (currentClass.equals(String.class)) {
-	  // Intern strings
-	  currentSample[j] = Intern.intern(currentSample[j]);
-	} else if (currentClass.isArray()) {
-	  // Intern arrays
-	  if (currentClass.getComponentType().equals(String.class)) {
-	    for (int k=0; k<((String [])(currentSample[j])).length; k++) {
-	      // Intern Strings that are inside arrays
-	      ((String [])currentSample[j])[k] = Intern.intern(((String [])currentSample[j])[k]);
-	    }
-	  }
-	  currentSample[j] = Intern.intern(currentSample[j]);
-	}
+        // Intern all objects that can be interned because some equality
+        // functions will not work correctly unless the objects are
+        // interned
+        if (currentClass.equals(String.class)) {
+          // Intern strings
+          currentSample[j] = Intern.intern(currentSample[j]);
+        } else if (currentClass.isArray()) {
+          // Intern arrays
+          if (currentClass.getComponentType().equals(String.class)) {
+            for (int k=0; k<((String [])(currentSample[j])).length; k++) {
+              // Intern Strings that are inside arrays
+              ((String [])currentSample[j])[k] = Intern.intern(((String [])currentSample[j])[k]);
+            }
+          }
+          currentSample[j] = Intern.intern(currentSample[j]);
+        }
 
-	params[j] = currentSample[j];
+        params[j] = currentSample[j];
       }
 
       // Set count to 1
@@ -929,13 +929,13 @@ class FormatTestCase {
       //        }
 
       try {
-	addModified.invoke(inv,params);
+        addModified.invoke(inv,params);
       }
       //        catch (Exception e) {
-      //    	throw new RuntimeException(e.toString());
+      //        throw new RuntimeException(e.toString());
       //        }
       catch (Exception e) {
-	throw new RuntimeException("Error in populating invariant with add_modified: " + e.toString());
+        throw new RuntimeException("Error in populating invariant with add_modified: " + e.toString());
       }
     }
   }
@@ -953,7 +953,7 @@ class FormatTestCase {
     for (int i=0; i<methods.length; i++) {
       currentMethod = methods[i];
       if (currentMethod.getName().lastIndexOf("add_modified") != -1) { // Method should be called add_modified
-	return currentMethod;
+        return currentMethod;
       }
     }
     return null;

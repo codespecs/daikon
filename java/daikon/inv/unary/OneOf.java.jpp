@@ -154,7 +154,7 @@ public final class ONEOFSCALAR
     is_hashcode = (var().file_rep_type == ProglangType.HASHCODE);
 #elif defined(ELT) || defined(SEQUENCE)
     Assert.assert(var().type.isPseudoArray(),
-		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
+                  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
     // System.out.println("is_hashcode=" + is_hashcode + " for " + format()
@@ -347,9 +347,9 @@ public final class ONEOFSCALAR
       }
 #elif defined(SEQUENCE)
       if (is_hashcode) {
-	// we only have one value, because add_modified dies if more
-	Assert.assert(num_elts == 1);
-	INT value = elts[0];
+        // we only have one value, because add_modified dies if more
+        Assert.assert(num_elts == 1);
+        INT value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
         } else if ((value.length == 1) && (value[0] == 0)) {
@@ -358,7 +358,7 @@ public final class ONEOFSCALAR
           return varname + " contains no nulls and has only one value, of length " + value.length;
         } else if (all_nulls(0)) {
           return varname + " contains only nulls and has only one value, of length " + value.length;
-	} else {
+        } else {
           return varname + " has only one value, of length " + value.length;
         }
       } else {
@@ -409,19 +409,19 @@ public final class ONEOFSCALAR
       result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += JAVA_EQUALS(TOSTRING(str));
+        result += JAVA_EQUALS(TOSTRING(str));
       } else {
-	result += " == ";
-	if ((str == null) || "null".equals(str)) {
-	  result += "== null)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == ";
+        if ((str == null) || "null".equals(str)) {
+          result += "== null)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 #elif defined(SCALAR) || defined(ELT)
@@ -436,7 +436,7 @@ public final class ONEOFSCALAR
         result = varname + " == " + "null";
       } else {
         result = varname + " != null";
-	  // varname + " has only one value"
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -517,19 +517,19 @@ public final class ONEOFSCALAR
       result += varname + " = ";
       String str = elts[i];
       if (!is_type()) {
-	result += TOSTRING(str);
+        result += TOSTRING(str);
       } else {
-	if ((str == null) || "null".equals(str)) {
-	  result += "\\typeof(null)";
-	} else if (str.startsWith("[")) {
-	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "\\type(" + str + ")";
-	}
-	result += "***";   // to denote that it's not correct IOA syntax
+        if ((str == null) || "null".equals(str)) {
+          result += "\\typeof(null)";
+        } else if (str.startsWith("[")) {
+          result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "\\type(" + str + ")";
+        }
+        result += "***";   // to denote that it's not correct IOA syntax
       }
       result += ")";
     } // end for
@@ -562,13 +562,13 @@ public final class ONEOFSCALAR
       Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "size("+var().name.ioa_name() + ") = " + value.length;
+        length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
       if (no_nulls(0)) {
-	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
       } else if (all_nulls(0)) {
-	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
       }
     }
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
@@ -604,7 +604,7 @@ public final class ONEOFSCALAR
       return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
     } else {
       if (str.startsWith("\"") && str.endsWith("\"")) {
-	str = str.substring(1, str.length()-1);
+        str = str.substring(1, str.length()-1);
       }
       return "\\type(" + str + ")";
     }
@@ -634,30 +634,30 @@ public final class ONEOFSCALAR
     if (is_type() && num_elts == 1) {
       VarInfoName hunt = var().name;
       if (hunt instanceof VarInfoName.Prestate) {
-	hunt = ((VarInfoName.Prestate) hunt).term;
+        hunt = ((VarInfoName.Prestate) hunt).term;
       }
       if (hunt instanceof VarInfoName.TypeOf) {
-	hunt = ((VarInfoName.TypeOf) hunt).term;
-	if (hunt instanceof VarInfoName.Elements) {
-	  VarInfoName contents = ((VarInfoName.Elements) hunt).term;
-	  VarInfo elems_var = ppt.parent.findVar(hunt);
-	  if (elems_var != null) {
-	    if (! elems_var.type.isArray()) {
-	      varname = contents.esc_name();
-	      String type = format_esc_string2type(elts[0]);
-	      result = varname + ".elementType == " + type;
-	      // Do not use the \forall, return this directly
-	      return result;
-	    } else {
-	      valid = true;
-	      result = "";
-	      for (int i=0; i<num_elts; i++) {
-		if (i != 0) { result += " || "; }
-		result += varname + " == " + format_esc_string2type(elts[i]);
-	      }
-	    }
-	  }
-	}
+        hunt = ((VarInfoName.TypeOf) hunt).term;
+        if (hunt instanceof VarInfoName.Elements) {
+          VarInfoName contents = ((VarInfoName.Elements) hunt).term;
+          VarInfo elems_var = ppt.parent.findVar(hunt);
+          if (elems_var != null) {
+            if (! elems_var.type.isArray()) {
+              varname = contents.esc_name();
+              String type = format_esc_string2type(elts[0]);
+              result = varname + ".elementType == " + type;
+              // Do not use the \forall, return this directly
+              return result;
+            } else {
+              valid = true;
+              result = "";
+              for (int i=0; i<num_elts; i++) {
+                if (i != 0) { result += " || "; }
+                result += varname + " == " + format_esc_string2type(elts[i]);
+              }
+            }
+          }
+        }
       }
     }
     if (! valid) {
@@ -691,20 +691,20 @@ public final class ONEOFSCALAR
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 1) {
-	if (elts[0] == 0) {
-	  result = varname + " == " + "null";
-	} else {
-	  result = varname + " != null";
-	  // varname + " has only one value"
+        if (elts[0] == 0) {
+          result = varname + " == " + "null";
+        } else {
+          result = varname + " != null";
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
-	}
+        }
       } else {
-	// add_modified allows two elements iff one is null
-	Assert.assert(num_elts == 2);
-	Assert.assert(elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+        // add_modified allows two elements iff one is null
+        Assert.assert(num_elts == 2);
+        Assert.assert(elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
       result = "";
@@ -721,16 +721,16 @@ public final class ONEOFSCALAR
       Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().type.isArray()) {
-	if (var().name.isApplySizeSafe()) {
-	  length = var().name.applySize().esc_name() + " == " + value.length;
-	}
-	if (no_nulls(0)) {
-	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	  forall = form[0] + "(" + form[1] + " != null)" + form[2];
-	} else if (all_nulls(0)) {
-	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	  forall = form[0] + "(" + form[1] + " == null)" + form[2];
-	}
+        if (var().name.isApplySizeSafe()) {
+          length = var().name.applySize().esc_name() + " == " + value.length;
+        }
+        if (no_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " != null)" + form[2];
+        } else if (all_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " == null)" + form[2];
+        }
       }
     }
     if (length == "" && forall == "") { // interned
@@ -748,30 +748,30 @@ public final class ONEOFSCALAR
     if (var().name instanceof VarInfoName.TypeOf) {
       VarInfoName term = ((VarInfoName.TypeOf) var().name).term;
       if (term instanceof VarInfoName.Elements) {
-	String varname = ((VarInfoName.Elements) term).term.esc_name();
-	String type = null;
-	boolean consistent = true;
-	for (int i=0; consistent && i<num_elts; i++) {
-	  String[] elt = elts[i];
-	  for (int j=0; consistent && j<elt.length; j++) {
-	    String maybe = format_esc_string2type(elt[j]);
-	    if (type == null) {
-	      type = maybe;
-	    } else {
-	      consistent &= type.equals(maybe);
-	    }
-	  }
-	}
-	if (consistent && (type != null)) {
-	  VarInfo term_var = ppt.parent.findVar(term);
-	  if (term_var != null) {
-	    if (term_var.type.isArray()) {
-	      return "\\elemtype(" + varname + ") == " + type;
-	    } else {
-	      return varname + ".elementType == " + type;
-	    }
-	  }
-	}
+        String varname = ((VarInfoName.Elements) term).term.esc_name();
+        String type = null;
+        boolean consistent = true;
+        for (int i=0; consistent && i<num_elts; i++) {
+          String[] elt = elts[i];
+          for (int j=0; consistent && j<elt.length; j++) {
+            String maybe = format_esc_string2type(elt[j]);
+            if (type == null) {
+              type = maybe;
+            } else {
+              consistent &= type.equals(maybe);
+            }
+          }
+        }
+        if (consistent && (type != null)) {
+          VarInfo term_var = ppt.parent.findVar(term);
+          if (term_var != null) {
+            if (term_var.type.isArray()) {
+              return "\\elemtype(" + varname + ") == " + type;
+            } else {
+              return varname + ".elementType == " + type;
+            }
+          }
+        }
       }
     }
     result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
@@ -799,19 +799,19 @@ public final class ONEOFSCALAR
       result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += JAVA_EQUALS(TOSTRING(str));
+        result += JAVA_EQUALS(TOSTRING(str));
       } else {
-	result += " == ";
-	if ((str == null) || "null".equals(str)) {
-	  result += "== null)";
-	} else if (str.startsWith("[")) {
-	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
-	} else {
-	  if (str.startsWith("\"") && str.endsWith("\"")) {
-	    str = str.substring(1, str.length()-1);
-	  }
-	  result += "(" + str + ")";
-	}
+        result += " == ";
+        if ((str == null) || "null".equals(str)) {
+          result += "== null)";
+        } else if (str.startsWith("[")) {
+          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+        } else {
+          if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length()-1);
+          }
+          result += "(" + str + ")";
+        }
       }
     }
 #elif defined(SCALAR) || defined(ELT)
@@ -826,7 +826,7 @@ public final class ONEOFSCALAR
         result = varname + " == " + "null";
       } else {
         result = varname + " != null";
-	  // varname + " has only one value"
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -899,9 +899,9 @@ public final class ONEOFSCALAR
       if (value == null) {
         // do nothing
       } else if (value.startsWith("[")) {
-	value = UtilMDE.classnameFromJvm(value);
+        value = UtilMDE.classnameFromJvm(value);
       } else if (value.startsWith("\"") && value.endsWith("\"")) {
-	value = value.substring(1, value.length()-1);
+        value = value.substring(1, value.length()-1);
       }
       value = "|T_" + value + "|";
       result += " (EQ " + varname + " " + value + ")";
@@ -919,13 +919,13 @@ public final class ONEOFSCALAR
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
-	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
+        result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
       } else {
-	// add_modified allows two elements iff one is null
-	Assert.assert(num_elts == 2);
-	Assert.assert(elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
+        // add_modified allows two elements iff one is null
+        Assert.assert(num_elts == 2);
+        Assert.assert(elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
     } else {
       result = "";
@@ -933,10 +933,10 @@ public final class ONEOFSCALAR
         result += " (EQ " + varname + " " + TOSTRING(elts[i]) + ")";
       }
       if (num_elts > 1) {
-	result = "(OR" + result + ")";
+        result = "(OR" + result + ")";
       } else {
-	// chop leading space
-	result = result.substring(1);
+        // chop leading space
+        result = result.substring(1);
       }
     }
 #elif defined(SEQUENCE)
@@ -947,14 +947,14 @@ public final class ONEOFSCALAR
       Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
+        length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
     if (length == "" && forall == "") { // interned
@@ -1023,7 +1023,7 @@ public final class ONEOFSCALAR
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
-	flowThis();
+        flowThis();
         destroy();
         return;
       }
@@ -1150,11 +1150,11 @@ public final class ONEOFSCALAR
         return ((elts[0] == 0 && other.elts[0] == 0) ||
                 (elts[0] != 0 && other.elts[0] != 0));
       } else if (num_elts == 2 && other.num_elts == 2) {
-	// add_modified allows two elements iff one is null
-	Assert.assert(elts[0] == 0);
-	Assert.assert(other.elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	Assert.assert(other.elts[1] != 0);
+        // add_modified allows two elements iff one is null
+        Assert.assert(elts[0] == 0);
+        Assert.assert(other.elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        Assert.assert(other.elts[1] != 0);
 
         // Since we know the first elements of each invariant are
         // zero, and the second elements are nonzero, we can immediately
@@ -1198,7 +1198,7 @@ public final class ONEOFSCALAR
 
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
-	return false;
+        return false;
 
     return true;
   }

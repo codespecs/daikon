@@ -37,8 +37,8 @@ public final class VarComparabilityImplicit
   int base;
   VarComparabilityImplicit[] indexTypes; // indexTypes[0] is comparability of
                                 // the first index of this array.
-  int dimensions;		// Indicates how many of the indices are in use;
-				// there may be more indices than this.
+  int dimensions;               // Indicates how many of the indices are in use;
+                                // there may be more indices than this.
 
   private VarComparabilityImplicit cached_element_type;
 
@@ -99,7 +99,7 @@ public final class VarComparabilityImplicit
   }
 
   static boolean comparable(VarInfoName name1, VarComparabilityImplicit type1,
-			    VarInfoName name2, VarComparabilityImplicit type2) {
+                            VarInfoName name2, VarComparabilityImplicit type2) {
     if ((type1.dimensions == 0) && (type1.base < 0))
       return true;
     if ((type2.dimensions == 0) && (type2.base < 0))

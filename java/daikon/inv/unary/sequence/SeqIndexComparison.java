@@ -140,7 +140,7 @@ public final class SeqIndexComparison
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " " + comparator + " i)" + form[2];
   }
 
@@ -164,7 +164,7 @@ public final class SeqIndexComparison
     }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 

@@ -21,7 +21,7 @@ import daikon.inv.filter.InvariantFilters;
 
 class InvariantTablesPanel implements TreeSelectionListener {
   JScrollPane scrollPane = new JScrollPane(); // the main scrollPane, which contains the main panel
-  JPanel panel = new JPanel();	              // the main panel
+  JPanel panel = new JPanel();                // the main panel
   TreeSelectionModel treeSelectionModel;
   final InvariantFilters invariantFilters;
   final JList variablesList;
@@ -30,7 +30,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
   List tableNames = new ArrayList();
   List tableHeights = new ArrayList();
   List tableModels = new ArrayList();
-  int currentTableIndex;	// used by scrollToTable methods
+  int currentTableIndex;        // used by scrollToTable methods
 
   public InvariantTablesPanel( TreeSelectionModel treeSelectionModel, InvariantFilters invariantFilters, JList variablesList ) {
     this.scrollPane.setViewportView( panel );
@@ -51,33 +51,33 @@ class InvariantTablesPanel implements TreeSelectionListener {
       //  A leaf node (PptTopLevel node) was selected or deselected.  Add or remove
       //  the appropriate invariant tables.
       if (userObject.getClass() == daikon.PptTopLevel.class) {
-	if (e.isAddedPath( paths[i] )) {
-	  setupTable( (PptTopLevel) userObject );
-	} else {	// paths[i] was deselected -- it should be in invariantTableNames.
-	  String name = ((PptTopLevel) userObject).name;
-	  int index = tableNames.indexOf( name );
-	  if (index == -1)
-	    //			throw new Exception( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
-	    InvariantsGUI.showErrorMessage( "Error processing deselection event." + InvariantsGUI.PLEASE_REPORT_ERROR_STRING );
-	  panel.remove( (JComponent) tables.get( index ));
-	  tables.remove( index );
-	  tableNames.remove( index );
-	  tableHeights.remove( index );
-	  tableModels.remove( index );
-	}
+        if (e.isAddedPath( paths[i] )) {
+          setupTable( (PptTopLevel) userObject );
+        } else {        // paths[i] was deselected -- it should be in invariantTableNames.
+          String name = ((PptTopLevel) userObject).name;
+          int index = tableNames.indexOf( name );
+          if (index == -1)
+            //                  throw new Exception( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
+            InvariantsGUI.showErrorMessage( "Error processing deselection event." + InvariantsGUI.PLEASE_REPORT_ERROR_STRING );
+          panel.remove( (JComponent) tables.get( index ));
+          tables.remove( index );
+          tableNames.remove( index );
+          tableHeights.remove( index );
+          tableModels.remove( index );
+        }
 
-	//  A non-leaf node was selected or deselected.  Select or deselect its children.
+        //  A non-leaf node was selected or deselected.  Select or deselect its children.
       } else {
-	if (e.isAddedPath( paths[i] )) // Add children.
-	  for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
-	    treeSelectionModel.addSelectionPath( newPath );
-	  }
-	else		// Remove children.
-	  for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
-	    treeSelectionModel.removeSelectionPath( newPath );
-	  }
+        if (e.isAddedPath( paths[i] )) // Add children.
+          for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
+            TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+            treeSelectionModel.addSelectionPath( newPath );
+          }
+        else            // Remove children.
+          for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
+            TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+            treeSelectionModel.removeSelectionPath( newPath );
+          }
       }
     }
 
@@ -89,36 +89,36 @@ class InvariantTablesPanel implements TreeSelectionListener {
     DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
     if (leadNode.getUserObject().getClass() == daikon.PptTopLevel.class)
       lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
-    else {			//  The last selected node was not a leaf node -- ie, it was a method or a class node.
-	                        //  If any of this node's children are selected, display their table.
+    else {                      //  The last selected node was not a leaf node -- ie, it was a method or a class node.
+                                //  If any of this node's children are selected, display their table.
       DefaultMutableTreeNode child;
       for (Enumeration enum = leadNode.children(); enum.hasMoreElements(); ) {
-	child = (DefaultMutableTreeNode) enum.nextElement();
-	if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child )))
-	  if (child.getUserObject().getClass() == daikon.PptTopLevel.class) {
-	    lastTableName = ((PptTopLevel) child.getUserObject()).name;
-	    break;
-	  }
+        child = (DefaultMutableTreeNode) enum.nextElement();
+        if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child )))
+          if (child.getUserObject().getClass() == daikon.PptTopLevel.class) {
+            lastTableName = ((PptTopLevel) child.getUserObject()).name;
+            break;
+          }
       }
     }
     if (tableNames.indexOf( lastTableName ) == -1) {
-      //	    System.out.println( "InvariantTablesPanel.valueChanged(): '" + lastTableName + "' not valid" );
+      //            System.out.println( "InvariantTablesPanel.valueChanged(): '" + lastTableName + "' not valid" );
     } else {
       currentTableIndex = tableNames.indexOf( lastTableName );
       scrollToCurrentTable();
     }
 
-    //	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
+    //      System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
     panel.repaint();
     panel.revalidate();
   }
 
   private void setupTable( final PptTopLevel topLevel ) {
-    //  	System.out.print("vars for " + topLevel.name + " (" + topLevel.var_infos.length + ") : ");
-    //  	for (int i=0; i < topLevel.var_infos.length; i++)
-    //  	    if (! topLevel.var_infos[i].isDerived())
-    //  		System.out.print( topLevel.var_infos[i].name + " " );
-    //  	System.out.println();
+    //          System.out.print("vars for " + topLevel.name + " (" + topLevel.var_infos.length + ") : ");
+    //          for (int i=0; i < topLevel.var_infos.length; i++)
+    //              if (! topLevel.var_infos[i].isDerived())
+    //                  System.out.print( topLevel.var_infos[i].name + " " );
+    //          System.out.println();
 
     List invariants = new ArrayList( topLevel.invariants_vector());
     InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
@@ -142,9 +142,9 @@ class InvariantTablesPanel implements TreeSelectionListener {
     String headingString;
     if (pptName.getShortMethodName() == null)
       headingString = pptName.getFullClassName() + " : " + pptName.getPoint();
-    else			// want SHORT method name so table headings doesn't get too wide
+    else                        // want SHORT method name so table headings doesn't get too wide
       headingString = pptName.getFullClassName() + "." + pptName.getShortMethodName() + "() : " + pptName.getPoint();
-    //	JEditorPane heading = new JEditorPane( "text/plain", headingString );
+    //  JEditorPane heading = new JEditorPane( "text/plain", headingString );
     JLabel headingLabel = new JLabel( headingString );
     headingLabel.setForeground( new Color( 50, 30, 100 ));
     headingLabel.setAlignmentX( .5f );
@@ -154,10 +154,10 @@ class InvariantTablesPanel implements TreeSelectionListener {
     final InvariantTablesPanel invariantTablesPanel = this;
 
     showVariablesButton.addActionListener( new ActionListener() {
-	//  Make this an inner class so it can see topLevel
-	public void actionPerformed( ActionEvent e ) {
-	  new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList );
-	}});
+        //  Make this an inner class so it can see topLevel
+        public void actionPerformed( ActionEvent e ) {
+          new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList );
+        }});
     showVariablesButton.setAlignmentX( Component.RIGHT_ALIGNMENT );
     JPanel headingPanel = new JPanel();
     headingPanel.setLayout( new BoxLayout( headingPanel, BoxLayout.X_AXIS ));
@@ -171,7 +171,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
     tablePanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
     tablePanel.add( scrollPane );
     tablePanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
-							      BorderFactory.createEtchedBorder()));
+                                                              BorderFactory.createEtchedBorder()));
     panel.add( tablePanel );
 
     this.tables.add( tablePanel );

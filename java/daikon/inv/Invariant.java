@@ -188,9 +188,9 @@ public abstract class Invariant
     }
     // System.out.println("getProbability: " + getClass().getName() + " " + ppt.varNames());
     Assert.assert((result == PROBABILITY_JUSTIFIED)
-		  || (result == PROBABILITY_UNJUSTIFIED)
-		  || (result == PROBABILITY_NEVER)
-		  || ((0 <= result) && (result <= 1))
+                  || (result == PROBABILITY_UNJUSTIFIED)
+                  || (result == PROBABILITY_NEVER)
+                  || ((0 <= result) && (result <= 1))
                   // This can be expensive, so comment out.
                   // , getClass().getName() + ": " + repr()
                   );
@@ -286,8 +286,8 @@ public abstract class Invariant
    * @param permutation gives the varinfo array index mapping
    **/
   public Invariant resurrect(PptSlice new_ppt,
-			     int[] permutation
-			     )
+                             int[] permutation
+                             )
   {
     // Check some sanity conditions
     Assert.assert(falsified);
@@ -428,7 +428,7 @@ public abstract class Invariant
   public boolean isValidEscExpression() {
     for (int i=0; i < ppt.var_infos.length; i++) {
       if (! ppt.var_infos[i].isValidEscExpression()) {
-	return false;
+        return false;
       }
     }
     return true;
@@ -468,7 +468,7 @@ public abstract class Invariant
   public static final class InvariantComparatorForPrinting implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
-	return 0;
+        return 0;
       Invariant inv1 = (Invariant)o1;
       Invariant inv2 = (Invariant)o2;
       // Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
@@ -476,7 +476,7 @@ public abstract class Invariant
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
       if (arity_cmp != 0)
-	return arity_cmp;
+        return arity_cmp;
       // Comparing on variable index is wrong in general:  variables of the
       // same name may have different indices at different program points.
       // However, it's safe if the invariants are from the same program
@@ -591,7 +591,7 @@ public abstract class Invariant
    * names.
    **/
   public boolean isSameInvariant(Invariant inv2,
-				 IsSameInvariantNameExtractor name_extractor)
+                                 IsSameInvariantNameExtractor name_extractor)
   {
     Invariant inv1 = this;
 
@@ -619,7 +619,7 @@ public abstract class Invariant
 
       // Do the easy check first
       if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
-	continue;
+        continue;
       }
 
       // The names "match" iff there is an intersection of the names
@@ -630,21 +630,21 @@ public abstract class Invariant
       all_vars1.add(var2); // all_vars2.add(var2.canonicalRep()); // [INCR]
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	VarInfoName name = name_extractor.getFromFirst(elt);
-	all_vars_names1.add(name);
+        VarInfo elt = (VarInfo) iter.next();
+        VarInfoName name = name_extractor.getFromFirst(elt);
+        all_vars_names1.add(name);
       }
       boolean intersection = false;
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	VarInfoName name = name_extractor.getFromSecond(elt);
-	intersection = all_vars_names1.contains(name);
-	if (intersection) {
-	  break;
-	}
+        VarInfo elt = (VarInfo) iter.next();
+        VarInfoName name = name_extractor.getFromSecond(elt);
+        intersection = all_vars_names1.contains(name);
+        if (intersection) {
+          break;
+        }
       }
       if (!intersection) {
-	return false;
+        return false;
       }
     }
 
@@ -751,15 +751,15 @@ public abstract class Invariant
       Invariant contr_inv = (Invariant) contr_invs.remove(0);
       if (debugIsWorthPrinting.isDebugEnabled()) {
         debugIsWorthPrinting.debug("Controller " + contr_inv.format() + " at " +
-				   contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
+                                   contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
       }
 
       processed.add(contr_inv);
       if (contr_inv.isWorthPrinting_sansControlledCheck()) {
-	// we have a printable controller, so we shouldn't print
+        // we have a printable controller, so we shouldn't print
         if (debugIsWorthPrinting.isDebugEnabled()) {
           debugIsWorthPrinting.debug("  not worth printing, sans controlled check, due to controller " +
-				     contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
+                                     contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
         }
         return false;
       }
@@ -768,10 +768,10 @@ public abstract class Invariant
       // been processed already
       Iterator iter = contr_inv.find_controlling_invariants().iterator();
       while (iter.hasNext()) {
-	Object elt = iter.next();
-	if (!processed.contains(elt) && !contr_invs.contains(elt)) {
-	  contr_invs.add(elt);
-	}
+        Object elt = iter.next();
+        if (!processed.contains(elt) && !contr_invs.contains(elt)) {
+          contr_invs.add(elt);
+        }
       }
     }
 
@@ -806,9 +806,9 @@ public abstract class Invariant
          // && (! hasNonCanonicalVariable()) [INCR]
          // && (! hasOnlyConstantVariables()) [INCR]
          && (! isObvious())
-	 && justified()
+         && justified()
          // && isWorthPrinting_PostconditionPrestate() [INCR]
-	 );
+         );
     return result;
   }
 
@@ -874,20 +874,20 @@ public abstract class Invariant
     VarInfo[] varInfos = ppt.var_infos;
     for (int i=0; i < varInfos.length; i++) {
       if (! varInfos[i].isConstant())
-	return false;
+        return false;
     }
 
     // At this point, we know all variables are constant.
     Assert.assert(this instanceof OneOf ||
-		  this instanceof Comparison ||
-		  this instanceof Equality
-		  , "Unexpected invariant with all vars constant: "
-		  + this + "  " + repr_prob() + "  " + format()
-		  );
+                  this instanceof Comparison ||
+                  this instanceof Equality
+                  , "Unexpected invariant with all vars constant: "
+                  + this + "  " + repr_prob() + "  " + format()
+                  );
     if (this instanceof Comparison) {
       //      Assert.assert(! IsEqualityComparison.it.accept(this));
       if (debugPrint.isDebugEnabled())
-	debugPrint.debug("  [over constants:  " + this.repr_prob() + " ]");
+        debugPrint.debug("  [over constants:  " + this.repr_prob() + " ]");
       return true;
     }
     return false;
@@ -910,7 +910,7 @@ public abstract class Invariant
     // // // obvious-derived invariants to lists in the first place.
     if (isObviousDerived() || isObviousImplied()) {
       if (debugPrint.isDebugEnabled())
-	debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
+        debugPrint.debug("  [obvious:  " + repr_prob() + " ]");
       return true;
     }
     return false;
@@ -958,10 +958,10 @@ public abstract class Invariant
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
       Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator(); // unstable
       while (entryInvariants.hasNext()) {
-	Invariant entryInvariant = (Invariant) entryInvariants.next();
-	// If entryInvariant with orig() applied to everything matches this invariant
-	if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
-	  return true;
+        Invariant entryInvariant = (Invariant) entryInvariants.next();
+        // If entryInvariant with orig() applied to everything matches this invariant
+        if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
+          return true;
       }
     }
     return false;
@@ -973,19 +973,19 @@ public abstract class Invariant
 
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
       if (pptt.entry_ppt != null) {
-	Iterator entry_invs = pptt.entry_ppt.invariants_iterator(); // unstable
-	while (entry_invs.hasNext()) {
-	  Invariant entry_inv = (Invariant) entry_invs.next();
-	  // If entry_inv with orig() applied to everything matches this
-	  if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
-	    if (entry_inv.isWorthPrinting_sansControlledCheck()) {
+        Iterator entry_invs = pptt.entry_ppt.invariants_iterator(); // unstable
+        while (entry_invs.hasNext()) {
+          Invariant entry_inv = (Invariant) entry_invs.next();
+          // If entry_inv with orig() applied to everything matches this
+          if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
+            if (entry_inv.isWorthPrinting_sansControlledCheck()) {
               if (debugIsWorthPrinting.isDebugEnabled()) {
                 debugIsWorthPrinting.debug("isWorthPrinting_PostconditionPrestate => false for " + format());
               }
-	      return false;
-	    }
-	  }
-	}
+              return false;
+            }
+          }
+        }
       }
     }
     return true;
@@ -998,8 +998,8 @@ public abstract class Invariant
   /*
   private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
     new DefaultIsSameInvariantNameExtractor() {
-	public VarInfoName getFromFirst(VarInfo var)
-	{ return super.getFromFirst(var).applyPrestate(); }
+        public VarInfoName getFromFirst(VarInfo var)
+        { return super.getFromFirst(var).applyPrestate(); }
       };
   */
 
@@ -1034,13 +1034,13 @@ public abstract class Invariant
       }
       Iterator candidates = controller.invariants_iterator(); // unstable
       while (candidates.hasNext()) {
-	Invariant cand_inv = (Invariant) candidates.next();
-	if (isSameInvariant(cand_inv)) {
+        Invariant cand_inv = (Invariant) candidates.next();
+        if (isSameInvariant(cand_inv)) {
           if (debugIsWorthPrinting.isDebugEnabled()) {
             debugIsWorthPrinting.debug("Controller found: " + cand_inv.format() + " [worth printing: " + cand_inv.isWorthPrinting() + "]]");
           }
-	  results.add(cand_inv);
-	}
+          results.add(cand_inv);
+        }
         if (debugIsWorthPrinting.isDebugEnabled()) {
           debugIsWorthPrinting.debug("Failed candidate: " + cand_inv.format());
         }

@@ -10,7 +10,7 @@ import java.util.*;
 
 class SimplifyFilter extends InvariantFilter {
   static String description = "Eliminate invariants based on Simplify (slow)";
-  InvariantFilters filters;	// need this reference for MyTester
+  InvariantFilters filters;     // need this reference for MyTester
   PptTopLevel previousTopLevel; // hack for speed, used in shouldDiscardInvariant()
 
   public String getDescription() {
@@ -24,12 +24,12 @@ class SimplifyFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (Daikon.suppress_redundant_invariants_with_simplify &&
-	invariant.ppt.parent.redundant_invs.contains(invariant)) {
+        invariant.ppt.parent.redundant_invs.contains(invariant)) {
       return (true);
     }
 
     return(false);
- 
+
 //      PptTopLevel topLevel = invariant.ppt.parent;
 
 //      // Using previousTopLevel is a hack for speed.  If the current topLevel is
@@ -38,7 +38,7 @@ class SimplifyFilter extends InvariantFilter {
 //      // since the last time we ran Simplify, so we'll use the results (ie,
 //      // redundant_invs) from last time.  This way, Simplify is only run once per
 //      // Ppt rather than once per invariant.
-//      if (topLevel != previousTopLevel) {	// run Simplify on this Ppt
+//      if (topLevel != previousTopLevel) {     // run Simplify on this Ppt
 //        topLevel.redundant_invs = new HashSet();
 //        topLevel.mark_implied_via_simplify(filters.getPptMap(), new MyTester());
 //      }
@@ -56,11 +56,11 @@ class SimplifyFilter extends InvariantFilter {
 //      // equality comparison invariants haven't been converted to Equality
 //      // invariants yet.
 //      if (IsEqualityComparison.it.accept( invariant )) {
-//  	VarInfo[] variables = invariant.ppt.var_infos;
-//  	for (int i = 0; i < variables.length; i++)
-//  	    if (redundantInvariants.contains( variables[i] ))
-//  		return true;
-//  	return false;
+//      VarInfo[] variables = invariant.ppt.var_infos;
+//      for (int i = 0; i < variables.length; i++)
+//          if (redundantInvariants.contains( variables[i] ))
+//              return true;
+//      return false;
 //      }
 //      else {
 //        return redundantInvariants.contains( invariant );

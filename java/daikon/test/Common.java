@@ -12,18 +12,18 @@ public class Common
   public static VarInfo makeIntVarInfo(String name)
   {
     return new VarInfo(VarInfoName.parse(name),
-		       ProglangType.INT,
-		       ProglangType.INT,
-		       null, // null Comparability
+                       ProglangType.INT,
+                       ProglangType.INT,
+                       null, // null Comparability
                        VarInfoAux.getDefault());
   }
 
   public static VarInfo makeHashcodeVarInfo(String name)
   {
     return new VarInfo(VarInfoName.parse(name),
-		       ProglangType.HASHCODE,
-		       ProglangType.HASHCODE,
-		       null, // null Comparability
+                       ProglangType.HASHCODE,
+                       ProglangType.HASHCODE,
+                       null, // null Comparability
                        VarInfoAux.getDefault());
   }
 
@@ -31,18 +31,18 @@ public class Common
   public static VarInfo makeIntArrayVarInfo(String name)
   {
     return new VarInfo(VarInfoName.parse(name),
-		       ProglangType.INT_ARRAY,
-		       ProglangType.INT_ARRAY,
-		       null, // null Comparability
+                       ProglangType.INT_ARRAY,
+                       ProglangType.INT_ARRAY,
+                       null, // null Comparability
                        VarInfoAux.getDefault());
   }
 
   public static VarInfo makeHashcodeArrayVarInfo(String name)
   {
     return new VarInfo(VarInfoName.parse(name),
-		       ProglangType.HASHCODE_ARRAY,
-		       ProglangType.HASHCODE_ARRAY,
-		       null, // null Comparability
+                       ProglangType.HASHCODE_ARRAY,
+                       ProglangType.HASHCODE_ARRAY,
+                       null, // null Comparability
                        VarInfoAux.getDefault());
   }
 

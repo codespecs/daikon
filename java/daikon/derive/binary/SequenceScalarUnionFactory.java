@@ -40,6 +40,6 @@ public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-	new SequenceScalarUnion (seq1, seq2) };
+        new SequenceScalarUnion (seq1, seq2) };
   }
 }

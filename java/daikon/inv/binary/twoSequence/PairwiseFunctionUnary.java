@@ -39,10 +39,10 @@ public class PairwiseFunctionUnary
       new PairwiseFunctionUnary(ppt, methodname, function, inverse);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
-	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+        !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for because order has no meaning: " +
-		     result.var1().name + " and " + result.var2().name);
+        debug.debug ("Not instantitating for because order has no meaning: " +
+                     result.var1().name + " and " + result.var2().name);
       }
       return null;
     }
@@ -82,8 +82,8 @@ public class PairwiseFunctionUnary
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-			  quant1.getVarName(0),
-			  quant2.getVarName(0))
+                          quant1.getVarName(0),
+                          quant2.getVarName(0))
       + quant1.getClosingExp();
   }
 

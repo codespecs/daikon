@@ -39,8 +39,8 @@ public class FunctionBinary
       VarInfo arg2 = ppt.var_infos[indices[2]];
       if (debug.isDebugEnabled())
         debug.debug("FunctionBinary.instantiate(" + ppt.name + ", " +
-		    function.getName() + ", " + argresult.name + "=" + "f(" +
-		    arg1.name + "," + arg2.name + ")" + " )");
+                    function.getName() + ", " + argresult.name + "=" + "f(" +
+                    arg1.name + "," + arg2.name + ")" + " )");
     }
 
     // SUPPRESS INVARIANT: if any var is constant, suppress FunctionBinary.

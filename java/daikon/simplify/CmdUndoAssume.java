@@ -18,10 +18,10 @@ public class CmdUndoAssume
       // send out the (BG_POP)
       s.input.println("(BG_POP)");
       s.input.flush();
-      
+
       // there is no output from Simplify
     }
-	
+
   }
 
   public String toString() {

@@ -67,12 +67,12 @@ public final class SequencesConcat
     if (var1().rep_type == ProglangType.INT_ARRAY) {
       // val1 instanceof long[] || val2 instanceof long[]
       long[] result = ArraysMDE.concat (val1 == null ? null : (long[]) val1,
-					val2 == null ? null : (long[]) val2);
+                                        val2 == null ? null : (long[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
     } else if (var1().rep_type == ProglangType.STRING_ARRAY) {
       // val1 instanceof String[] || val2 instanceof String[]
       String[] result = ArraysMDE.concat (val1 == null ? null : (String[]) val1,
-					  val2 == null ? null : (String[]) val2);
+                                          val2 == null ? null : (String[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
     } else {
       throw new Error ("Attempted to concatenate unknown arrays");
@@ -83,11 +83,11 @@ public final class SequencesConcat
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
     return new VarInfo(VarInfoName.applyFunctionOfN("concat",
-						    new VarInfoName[] {var1.name, var2().name}),
-		       var1.type,
-		       var1.file_rep_type,
-		       var1.comparability,
-		       var1.aux);
+                                                    new VarInfoName[] {var1.name, var2().name}),
+                       var1.type,
+                       var1.file_rep_type,
+                       var1.comparability,
+                       var1.aux);
   }
 
   public String toString() {
@@ -100,13 +100,3 @@ public final class SequencesConcat
   }
 
 }
-
-
-
-
-
-
-
-
-
-

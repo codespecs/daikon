@@ -10,7 +10,7 @@ import utilMDE.*;
 // it is automatically generated from SequenceSubsequence.java.jpp
 // *****
 
-public final class SequenceStringSubsequence 
+public final class SequenceStringSubsequence
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -77,18 +77,18 @@ public final class SequenceStringSubsequence
       begin_inclusive = 0;
       end_exclusive = val2+index_shift+1; // +1: endpoint is exclusive
       if ((end_exclusive < 0) || (end_exclusive > val1_array.length))
-	return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING;
     } else {
       begin_inclusive = val2+index_shift;
       end_exclusive = val1_array.length;
       if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length))
-	return ValueAndModified.MISSING;
+        return ValueAndModified.MISSING;
     }
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
 
     if ((begin_inclusive == 0) && (end_exclusive == val1_array.length))
       return new ValueAndModified(val1, mod);
@@ -105,23 +105,23 @@ public final class SequenceStringSubsequence
     VarInfoName name;
     if (from_start) {
       if (index_shift == 0) {
-	// q[0..c]
-	name = seqvar.name.applySlice(null, sclvar.name);
+        // q[0..c]
+        name = seqvar.name.applySlice(null, sclvar.name);
       } else if (index_shift == -1) {
-	// q[0..c-1]
-	name = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
+        // q[0..c-1]
+        name = seqvar.name.applySlice(null, sclvar.name.applyDecrement());
       } else {
-	throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
+        throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
       }
     } else {
       if (index_shift == 0) {
-	// q[c..]
-	name = seqvar.name.applySlice(sclvar.name, null);
+        // q[c..]
+        name = seqvar.name.applySlice(sclvar.name, null);
       } else if (index_shift == 1) {
-	// q[c+1..]
-	name = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
+        // q[c+1..]
+        name = seqvar.name.applySlice(sclvar.name.applyIncrement(), null);
       } else {
-	throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
+        throw new UnsupportedOperationException("Unsupported shift: " + index_shift);
       }
     }
 
@@ -130,7 +130,7 @@ public final class SequenceStringSubsequence
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceStringSubsequence )
+    return (other instanceof SequenceStringSubsequence)
       && (((SequenceStringSubsequence) other).index_shift == this.index_shift)
       && (((SequenceStringSubsequence) other).from_start == this.from_start);
   }

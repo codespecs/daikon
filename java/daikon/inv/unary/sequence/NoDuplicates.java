@@ -46,8 +46,8 @@ public class NoDuplicates
     // Don't instantiate if the variable can't have dupliates
     if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for because duplicates has no meaning: " +
-		     result.var().name.name());
+        debug.debug ("Not instantitating for because duplicates has no meaning: " +
+                     result.var().name.name());
       }
       return null;
     }
@@ -80,7 +80,7 @@ public class NoDuplicates
       VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
 
       return quantResult[0] + "(" + index1.jml_name() + " != " + index2.jml_name() + ") ==> (" + quantResult[1] + " != " +
-	quantResult[2] + ")" + quantResult[3];
+        quantResult[2] + ")" + quantResult[3];
     }
 
     return format_unimplemented(format);
@@ -95,7 +95,7 @@ public class NoDuplicates
     // We first see if we can special case for certain types of variables
     if (var().isDerived() && var().derived instanceof SequencesPredicate) {
       VarInfoName.FunctionOfN myName =
-	(VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
+        (VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
       String predicateValue = myName.getArg(2).ioa_name();
 
       SequencesPredicate derivation = (SequencesPredicate) var().derived;
@@ -109,24 +109,24 @@ public class NoDuplicates
 
       VarInfoName varOrigName = varFieldName.term;
       VarInfo fakeVarOrig = new VarInfo (varOrigName, varField.type,
-					 varField.file_rep_type,
-					 varField.comparability,
-					 VarInfoAux.getDefault());
+                                         varField.file_rep_type,
+                                         varField.comparability,
+                                         VarInfoAux.getDefault());
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 
       //     \A i : type, j : type(   i \in X
       return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-	//         /\ j \ in X
-	" /\\ " + quant.getMembershipRestriction(1) +
-	//           i.field = j.field
-	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName + " = " + quant.getVarName(1).ioa_name() + "." + fieldName +
-	//           i.pred = value
-	" /\\ " + quant.getVarName(0).ioa_name() + "." + predicateName + " = " + predicateValue +
-	//           j.pred = value
-	" /\\ " + quant.getVarName(1).ioa_name() + "." + predicateName + " = " + predicateValue +
-	//  =>      i           =       j           )
-	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
+        //         /\ j \ in X
+        " /\\ " + quant.getMembershipRestriction(1) +
+        //           i.field = j.field
+        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName + " = " + quant.getVarName(1).ioa_name() + "." + fieldName +
+        //           i.pred = value
+        " /\\ " + quant.getVarName(0).ioa_name() + "." + predicateName + " = " + predicateValue +
+        //           j.pred = value
+        " /\\ " + quant.getVarName(1).ioa_name() + "." + predicateName + " = " + predicateValue +
+        //  =>      i           =       j           )
+        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else if (var().isDerived() && var().derived instanceof SequencesJoin) {
       SequencesJoin derivation = (SequencesJoin) var().derived;
@@ -139,33 +139,33 @@ public class NoDuplicates
 
       VarInfoName varOrigName = varFieldName1.term;
       VarInfo fakeVarOrig = new VarInfo (varOrigName, varField1.type,
-					 varField1.file_rep_type,
-					 varField1.comparability,
-					 VarInfoAux.getDefault());
+                                         varField1.file_rep_type,
+                                         varField1.comparability,
+                                         VarInfoAux.getDefault());
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 
       //     \A i : type, j : type(   i \in X
       return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-	//         /\ j \ in X
-	" /\\ " + quant.getMembershipRestriction(1) +
-	//           i.field = j.field
-	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName1 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName1 +
-	//           i.field = j.field
-	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName2 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName2 +
-	//  =>      i           =       j           )
-	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
+        //         /\ j \ in X
+        " /\\ " + quant.getMembershipRestriction(1) +
+        //           i.field = j.field
+        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName1 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName1 +
+        //           i.field = j.field
+        " /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName2 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName2 +
+        //  =>      i           =       j           )
+        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else {
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var(), var());
 
       //     \A i, j(                 i \in X /\ j \ in X
       return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
-	" /\\ " + quant.getMembershipRestriction(1) +
-	//           X[i] = X[j]
-	" /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
-	//  =>      i           =       j           )
-	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
+        " /\\ " + quant.getMembershipRestriction(1) +
+        //           X[i] = X[j]
+        " /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
+        //  =>      i           =       j           )
+        ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     }
 
@@ -174,11 +174,11 @@ public class NoDuplicates
   public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
-	flowThis();
-	if (debug.isDebugEnabled()) {
-	  debug.debug ("Flowing myself with: " + var().name.repr());
-	  debug.debug (ArraysMDE.toString(a));
-	}
+        flowThis();
+        if (debug.isDebugEnabled()) {
+          debug.debug ("Flowing myself with: " + var().name.repr());
+          debug.debug (ArraysMDE.toString(a));
+        }
         destroy();
         return;
       }

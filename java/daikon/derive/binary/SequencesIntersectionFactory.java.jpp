@@ -83,6 +83,6 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
 
 
     return new BinaryDerivation[] {
-	new SCALARSEQUENCESINTERSECTION(seq1, seq2) };
+        new SCALARSEQUENCESINTERSECTION(seq1, seq2) };
   }
 }

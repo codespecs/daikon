@@ -21,7 +21,7 @@ import utilMDE.*;
 // This file looks a *lot* like part of PptTopLevel.
 // (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
-public final class PptSlice2 
+public final class PptSlice2
   extends PptSlice
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -257,7 +257,7 @@ public final class PptSlice2
       String value2 = (String) val2;
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (string1 || string2) {
@@ -269,7 +269,7 @@ public final class PptSlice2
       long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
@@ -277,7 +277,7 @@ public final class PptSlice2
       long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
@@ -285,7 +285,7 @@ public final class PptSlice2
       long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
@@ -293,7 +293,7 @@ public final class PptSlice2
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else {

@@ -50,7 +50,7 @@ public abstract class SplitterList
 
     if ((Global.debugSplit != null) && Global.debugSplit.isDebugEnabled()) {
       Global.debugSplit.debug("Registering splitters for " + pptname + ":"
-			      + Arrays.asList(splits).toString());
+                              + Arrays.asList(splits).toString());
     }
 
     if (ppt_splitters.containsKey(pptname)) {
@@ -192,41 +192,41 @@ public abstract class SplitterList
       // a PptName, assumed to begin with "ClassName.functionName"
       String name = (String)itor.next();
       try {
-	Pattern pat = re_compiler.compile(name);
-	if (re_matcher.contains(pptName, pat)) {
-	  Splitter[] result = get_raw(name);
-	  if (result != null) {
-	    splitterArrays.addElement(result);
-	  }
-	  // For the OBJECT program point, we want to use all the splitter.
-	} else if (re_matcher.contains(pptName, opat) && re_matcher.contains(name, opat)) {
-	  Iterator all = ppt_splitters.values().iterator();
-	  while (all.hasNext()) {
-	    splitterArrays.addElement((Splitter[])all.next());
-	  }
-	}
+        Pattern pat = re_compiler.compile(name);
+        if (re_matcher.contains(pptName, pat)) {
+          Splitter[] result = get_raw(name);
+          if (result != null) {
+            splitterArrays.addElement(result);
+          }
+          // For the OBJECT program point, we want to use all the splitter.
+        } else if (re_matcher.contains(pptName, opat) && re_matcher.contains(name, opat)) {
+          Iterator all = ppt_splitters.values().iterator();
+          while (all.hasNext()) {
+            splitterArrays.addElement((Splitter[])all.next());
+          }
+        }
       } catch (Exception e) {
-	if (Global.debugSplit.isDebugEnabled()) {
-	  Global.debugSplit.debug("Error matching regex for " + pptName + "\n" + e.toString());
-	}
+        if (Global.debugSplit.isDebugEnabled()) {
+          Global.debugSplit.debug("Error matching regex for " + pptName + "\n" + e.toString());
+        }
       }
     }
 
     if (splitterArrays.size() == 0) {
       if (Global.debugSplit.isDebugEnabled()) {
-	Global.debugSplit.debug("SplitterList.get found no splitters for " + pptName);
+        Global.debugSplit.debug("SplitterList.get found no splitters for " + pptName);
       }
       return null;
     } else {
       Vector splitters = new Vector();
       for (int i = 0; i < splitterArrays.size(); i++) {
-	Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
-	for (int j = 0; j < tempsplitters.length; j++) {
-	  splitters.addElement(tempsplitters[j]);
-	}
+        Splitter[] tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+        for (int j = 0; j < tempsplitters.length; j++) {
+          splitters.addElement(tempsplitters[j]);
+        }
       }
       if (Global.debugSplit.isDebugEnabled()) {
-	Global.debugSplit.debug("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
+        Global.debugSplit.debug("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
       }
       return (Splitter[])splitters.toArray(new Splitter[0]);
     }
@@ -243,29 +243,24 @@ public abstract class SplitterList
     while (all_splitters.hasNext()) {
       Splitter[] splitter_array = (Splitter[])all_splitters.next();
       for (int i = 0; i < splitter_array.length; i++) {
-	Splitter tempsplitter = splitter_array[i];
-	int j = 0; boolean duplicate = false;
-	// Weed out splitters with the same condition.
-	if (!splitters.isEmpty()) {
-	  for (j = 0; j < splitters.size(); j++) {
-	    if ((tempsplitter.condition().trim()).equals( ((Splitter)splitters.elementAt(j)).condition().trim())) {
-	      // System.err.println(" duplicate " + tempsplitter.condition() + " \n");
-	      duplicate = true;
-	      break;
-	    }
-	  }
-	}
-	if (!duplicate) {
-	  splitters.addElement(tempsplitter);
-	}
+        Splitter tempsplitter = splitter_array[i];
+        int j = 0; boolean duplicate = false;
+        // Weed out splitters with the same condition.
+        if (!splitters.isEmpty()) {
+          for (j = 0; j < splitters.size(); j++) {
+            if ((tempsplitter.condition().trim()).equals( ((Splitter)splitters.elementAt(j)).condition().trim())) {
+              // System.err.println(" duplicate " + tempsplitter.condition() + " \n");
+              duplicate = true;
+              break;
+            }
+          }
+        }
+        if (!duplicate) {
+          splitters.addElement(tempsplitter);
+        }
       }
     }
     return (Splitter[])splitters.toArray(new Splitter[0]);
   }
 
 }
-
-
-
-
-

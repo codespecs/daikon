@@ -23,7 +23,7 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
    * Debug tracer.
    **/
 
-  public static final Category debug = Category.getInstance("daikon.derive.binarySequenceScalarIntersectionFactory" );
+  public static final Category debug = Category.getInstance("daikon.derive.binarySequenceScalarIntersectionFactory");
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 
@@ -52,6 +52,6 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
     }
 
     return new BinaryDerivation[] {
-	new SequenceScalarIntersection (seq1, seq2) };
+        new SequenceScalarIntersection (seq1, seq2) };
   }
 }

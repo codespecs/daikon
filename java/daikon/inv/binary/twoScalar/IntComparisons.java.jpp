@@ -135,8 +135,8 @@ public final class INTEQUAL
 
     if (DEBUGINTEQUAL.isDebugEnabled() || ppt.debugged) {
       DEBUGINTEQUAL.debug(INTEQUALstring + ".instantiate(" + ppt.name + ")"
-			  + ", seqvar1=" + seqvar1
-			  + ", seqvar2=" + seqvar2);
+                          + ", seqvar1=" + seqvar1
+                          + ", seqvar2=" + seqvar2);
     }
 
     { // Tests involving sequence lengths.
@@ -175,14 +175,14 @@ public final class INTEQUAL
 
       if (DEBUGINTEQUAL.isDebugEnabled() || ppt.debugged) {
         DEBUGINTEQUAL.debug(INTEQUALstring + ".instantiate: "
-			    + "min1=" + min1
-			    + ", max1=" + max1
-			    + ", min2=" + min2
-			    + ", max2=" + max2
-			    + ", super1=" + super1
-			    + ", super2=" + super2
-			    + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
-			    + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
+                            + "min1=" + min1
+                            + ", max1=" + max1
+                            + ", min2=" + min2
+                            + ", max2=" + max2
+                            + ", super1=" + super1
+                            + ", super2=" + super2
+                            + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+                            + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
       }
       if (seqvar1 == seqvar2) {
         // Both variables are derived from the same sequence.  The
@@ -256,10 +256,10 @@ public final class INTEQUAL
     String var2name = var2().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.JML)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.IOA))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.IOA))
     {
       String comparator = EQUALSstring;
 #if defined(EQUAL)
@@ -327,7 +327,7 @@ public final class INTEQUAL
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
     return (Math.pow(.5, values_cache.num_values())
-	    * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+            * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 #endif
   }
 
@@ -410,7 +410,7 @@ public final class INTEQUAL
 #ifdef EQUAL
     // a+c=b+c is implied, because a=b must have also been reported.
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
-	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
+              ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 #else
 #ifdef NONEQUAL
     { // If we know x<y or x>y, then x!=y is uninteresting

@@ -51,7 +51,7 @@ public class TimedProcess {
     String s;
     try {
       while ((s = error.readLine()) != null) {
-	errorMessage.append(s);
+        errorMessage.append(s);
       }
       return errorMessage.toString();
     } catch (IOException ioe) {
@@ -69,7 +69,7 @@ public class TimedProcess {
       //an exception if the process is not finished
       String s;
       while ((s = error.readLine()) != null) {
-	errorMessage.append(s);
+        errorMessage.append(s);
       }
       int exit =  p.exitValue();
       return true;
@@ -108,11 +108,11 @@ public class TimedProcess {
   class timerTask extends TimerTask {
     public void run() {
       try {
-	int exit = p.exitValue();
-	//System.out.println("\nProcess " + command + "\nexited with status " + exit);
+        int exit = p.exitValue();
+        //System.out.println("\nProcess " + command + "\nexited with status " + exit);
       } catch (IllegalThreadStateException ie) {
-	System.out.println("Process " + command + "\nterminated after "
-			   + waitTime + " seconds");
+        System.out.println("Process " + command + "\nterminated after "
+                           + waitTime + " seconds");
       }
       p.destroy();
       timer.cancel();

@@ -63,18 +63,18 @@ public class PptMap
     final Iterator iter_view = nameToPpt.values().iterator();
     final Iterator iter_sort = sorted.iterator();
     return new Iterator() {
-	public boolean hasNext() {
-	  boolean result = iter_view.hasNext();
-	  Assert.assert(result == iter_sort.hasNext());
-	  return result;
-	}
-	public Object next() {
-	  iter_view.next(); // to check for concurrent modifications
-	  return iter_sort.next();
-	}
-	public void remove() {
-	  throw new UnsupportedOperationException();
-	}
+        public boolean hasNext() {
+          boolean result = iter_view.hasNext();
+          Assert.assert(result == iter_sort.hasNext());
+          return result;
+        }
+        public Object next() {
+          iter_view.next(); // to check for concurrent modifications
+          return iter_sort.next();
+        }
+        public void remove() {
+          throw new UnsupportedOperationException();
+        }
       };
   }
 

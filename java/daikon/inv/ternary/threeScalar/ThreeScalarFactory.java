@@ -17,7 +17,7 @@ public final class ThreeScalarFactory {
    * Debug tracer
    **/
   final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.ThreeScalarFactory");
-  
+
 
   public final static int max_instantiate
     =  ((Functions.binarySymmetricFunctions.length
@@ -35,7 +35,7 @@ public final class ThreeScalarFactory {
 
     Assert.assert(var1.rep_type.isIntegral()
                   && var2.rep_type.isIntegral()
-		  && var3.rep_type.isIntegral());
+                  && var3.rep_type.isIntegral());
 
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating for " + ppt.name);
@@ -80,7 +80,7 @@ public final class ThreeScalarFactory {
       }
       result.add(LinearTernary.instantiate(ppt));
       if (debug.isDebugEnabled()) {
-	debug.debug ("Instantiated invs " + result);
+        debug.debug ("Instantiated invs " + result);
       }
       return result;
     }

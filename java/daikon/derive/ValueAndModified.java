@@ -4,14 +4,14 @@ import daikon.*;
 
 import utilMDE.*;
 
-/** 
+/**
  * This is a temporary structure for grouping elements to be returned
  * from computeValueAndModified, not for permanent storage.
  **/
 
 public final class ValueAndModified {
   // The constructor checks that it is interned, contradicting this comment.
-  public Object value;		// not necessarily an interned value
+  public Object value;          // not necessarily an interned value
   public int modified;
 
   public final static ValueAndModified MISSING

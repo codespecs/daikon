@@ -30,48 +30,48 @@ public class CmdCheck
 
       String result;
       synchronized(s) {
-	// send out the proposition
-	s.input.println(proposition);
-	s.input.flush();
+        // send out the proposition
+        s.input.println(proposition);
+        s.input.flush();
 
-	// read the answer
-	// first, the real result
-	result = s.output.readLine();
-	if (debug.isDebugEnabled()) {
-	  debug.debug ("First line: " + result);
-	}
-	if (result == null) {
-	  throw new SimplifyError("Probable core dump");
-	}
-	if (result.startsWith("Bad input:")) {
-	  throw new SimplifyError(result + "\n" + proposition);
-	}
-	if (result.equals("Abort (core dumped)")) {
-	  throw new SimplifyError(result);
-	}
-	// then, a blank line
-	String blank = s.output.readLine();
-	if (!("".equals(blank))) {
-	  throw new SimplifyError ("Not a blank line '" + blank +
-				   "' after output '" + result + "'");
+        // read the answer
+        // first, the real result
+        result = s.output.readLine();
+        if (debug.isDebugEnabled()) {
+          debug.debug ("First line: " + result);
+        }
+        if (result == null) {
+          throw new SimplifyError("Probable core dump");
+        }
+        if (result.startsWith("Bad input:")) {
+          throw new SimplifyError(result + "\n" + proposition);
+        }
+        if (result.equals("Abort (core dumped)")) {
+          throw new SimplifyError(result);
+        }
+        // then, a blank line
+        String blank = s.output.readLine();
+        if (!("".equals(blank))) {
+          throw new SimplifyError ("Not a blank line '" + blank +
+                                   "' after output '" + result + "'");
 
-	}
+        }
       }
 
       // expect "##: [Inv|V]alid."
       int colon = result.indexOf(": ");
       Assert.assert(colon != -1);
       try {
-	int junk = Integer.parseInt(result.substring(0, colon));
+        int junk = Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-	Assert.assert(false, "Expected number to prefix result '" + result + "'");
+        Assert.assert(false, "Expected number to prefix result '" + result + "'");
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
-	valid = true;
+        valid = true;
       } else {
-	Assert.assert("Invalid.".equals(result));
-	valid = false;
+        Assert.assert("Invalid.".equals(result));
+        valid = false;
       }
 
       SessionManager.debugln("Result: " + valid);

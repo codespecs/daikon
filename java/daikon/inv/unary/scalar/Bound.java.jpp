@@ -172,10 +172,10 @@ public class LOWERBOUND
     String name = var().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.IOA)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.JML))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.JML))
     {
       return name + " " + GTSTR + "= " + MIN1;
     }
@@ -214,14 +214,14 @@ public class LOWERBOUND
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
   }
 
@@ -236,7 +236,7 @@ public class LOWERBOUND
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + GTSTR + "= " + form[1] + " " + MIN1 + ")" + form[2];
   }
 
@@ -289,7 +289,7 @@ public class LOWERBOUND
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((MIN1 < dkconfig_minimal_interesting) ||
-	(MIN1 > dkconfig_maximal_interesting)) {
+        (MIN1 > dkconfig_maximal_interesting)) {
       return true;
     }
     ONEOF oo = ONEOF.find(ppt);

@@ -45,9 +45,9 @@ public class Implication
    * the PptTopLevel already contains this Implication.
    **/
    public static Implication makeImplication(PptTopLevel ppt,
-					     Invariant predicate,
-					     Invariant consequent,
-					     boolean iff)
+                                             Invariant predicate,
+                                             Invariant consequent,
+                                             boolean iff)
   {
     if (predicate.isSameInvariant(consequent)) {
       return null;
@@ -58,11 +58,11 @@ public class Implication
     // you still want Bound invariants?
     if (predicate instanceof OneOf) {
       if ( ((OneOf) predicate).num_elts() > 1)
-	return null;
+        return null;
     }
     if (consequent instanceof OneOf) {
       if ( ((OneOf) consequent).num_elts() > 1)
-	return null;
+        return null;
     }
 
     // Don't add this Implication to the program point if the program

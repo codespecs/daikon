@@ -84,8 +84,8 @@ public final class FunctionUnaryCore
     boolean ok = false;
     try {
       ok = inverse ?
-	x.equals(function.invoke(null, new Object[] { y })) :
-	y.equals(function.invoke(null, new Object[] { x }));
+        x.equals(function.invoke(null, new Object[] { y })) :
+        y.equals(function.invoke(null, new Object[] { x }));
     } catch (Exception e) {
       // ok == false
     }
@@ -108,14 +108,14 @@ public final class FunctionUnaryCore
 
 
   public String format_using(OutputFormat format,
-			     VarInfoName vname1,
-			     VarInfoName vname2)
+                             VarInfoName vname1,
+                             VarInfoName vname2)
   {
     String argname = (inverse ? vname2 : vname1).name_using(format);
     String resultname = (inverse ? vname1 : vname2).name_using(format);
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.IOA)
-	|| (format == OutputFormat.JML))
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.JML))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

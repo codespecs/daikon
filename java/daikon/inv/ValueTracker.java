@@ -33,7 +33,7 @@ public final class ValueTracker
     if (values_cache != null) {
       int result = ArraysMDE.indexOf(values_cache, 0);
       if (result == -1) {
-	result = max_values;
+        result = max_values;
       }
       return result;
     } else {
@@ -90,11 +90,11 @@ public final class ValueTracker
     for (int i = 0; i < max_values; i++) {
       int elt = values_cache[i];
       if (elt == 0) {
-	values_cache[i] = v1;
-	return;
+        values_cache[i] = v1;
+        return;
       }
       if (elt == v1) {
-	return;
+        return;
       }
     }
 
@@ -105,7 +105,7 @@ public final class ValueTracker
     try {
       ValueTracker result = (ValueTracker) super.clone();
       if (values_cache != null) {
-	result.values_cache = (int[]) values_cache.clone();
+        result.values_cache = (int[]) values_cache.clone();
       }
       return result;
     } catch (CloneNotSupportedException e) {

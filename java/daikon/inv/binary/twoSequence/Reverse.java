@@ -37,10 +37,10 @@ public class Reverse
     Reverse result = new Reverse(ppt);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
-	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+        !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for Reverse because order has no meaning: " +
-		     result.var1().name + " and " + result.var2().name);
+        debug.debug ("Not instantitating for Reverse because order has no meaning: " +
+                     result.var1().name + " and " + result.var2().name);
       }
       return null;
     }
@@ -125,7 +125,7 @@ public class Reverse
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--)
       if (a1[i] != a2[j]) {
-	flowThis();
+        flowThis();
         destroy();
         return;
       }

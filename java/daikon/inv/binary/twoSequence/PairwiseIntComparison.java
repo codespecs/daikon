@@ -66,10 +66,10 @@ public class PairwiseIntComparison
     PairwiseIntComparison result = new PairwiseIntComparison(ppt, only_eq);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
-	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
+        !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for because order has no meaning: " +
-		     result.var1().name + " and " + result.var2().name);
+        debug.debug ("Not instantitating for because order has no meaning: " +
+                     result.var1().name + " and " + result.var2().name);
       }
       return null;
     }
@@ -126,7 +126,7 @@ public class PairwiseIntComparison
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var1().name, var2().name }, true); // elementwise
+        { var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }
 
@@ -137,7 +137,7 @@ public class PairwiseIntComparison
     }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var1().name, var2().name }, true); // elementwise
+        { var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
@@ -145,7 +145,7 @@ public class PairwiseIntComparison
     String comparator = core.format_comparator();
     String quantResult[] =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var1().name, var2().name }, true);
+        { var1().name, var2().name }, true);
     return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
   }
 

@@ -88,10 +88,10 @@ public class NonModulus
       // possible modulus?
       long[] result = MathMDE.nonmodulus_strict_long(elements.iterator());
       if (result == null) {
-	no_result_yet = true;
+        no_result_yet = true;
       } else {
-	remainder = result[0];
-	modulus = result[1];
+        remainder = result[0];
+        modulus = result[1];
         no_result_yet = false;
       }
     }
@@ -101,9 +101,9 @@ public class NonModulus
   // XXX have to deal with flowing this; maybe it should live at all ppts?
   public void add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
-	&& results_accurate
-	&& (! no_result_yet)
-	&& (MathMDE.mod_positive(value, modulus) == remainder))
+        && results_accurate
+        && (! no_result_yet)
+        && (MathMDE.mod_positive(value, modulus) == remainder))
       results_accurate = false;
   }
 

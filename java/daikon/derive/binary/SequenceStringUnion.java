@@ -10,7 +10,7 @@ import utilMDE.*;
 // it is automatically generated from SequencesUnion.java.jpp
 // *****
 
-public final class SequenceStringUnion 
+public final class SequenceStringUnion
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -50,23 +50,23 @@ public final class SequenceStringUnion
     for (int i=0; i<val1_array.length; i++) {
       String  v = val1_array[i];
       if ((size==0) ||
-	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
-	tmp[size++] = v;
+          (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
+        tmp[size++] = v;
     }
     for (int i=0; i<val2_array.length; i++) {
       String  v = val2_array[i];
       if ((size==0) ||
-	  (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
-	tmp[size++] = v;
+          (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
+        tmp[size++] = v;
     }
 
     String [] union = ArraysMDE.subarray(tmp, 0, size);
     union = (String  []) Intern.intern(union);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified(union, mod);
   }
 
@@ -80,7 +80,7 @@ public final class SequenceStringUnion
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceStringUnion );
+    return (other instanceof SequenceStringUnion);
   }
 
 }

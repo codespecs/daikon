@@ -33,17 +33,17 @@ import java.util.*;
 
 class ContextUtils
 {
-	// This weeds out unwanted parts of the string for the display that are marked by
-	// some search string.
-	public static String clearOutInfo(String fix_txt, String search_string)
-	{
-		int find_position = fix_txt.lastIndexOf(search_string);
+    // This weeds out unwanted parts of the string for the display that are marked by
+    // some search string.
+    public static String clearOutInfo(String fix_txt, String search_string)
+    {
+        int find_position = fix_txt.lastIndexOf(search_string);
 
-		// returns shortened string
-		if (find_position != -1)
-			return fix_txt.substring(find_position + 1);
+        // returns shortened string
+        if (find_position != -1)
+            return fix_txt.substring(find_position + 1);
 
-		// didn't find string to fix
-		return fix_txt;
-	}
+        // didn't find string to fix
+        return fix_txt;
+    }
 }

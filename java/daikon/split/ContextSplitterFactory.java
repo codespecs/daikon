@@ -44,8 +44,8 @@ public class ContextSplitterFactory
    * splitters from them, and put the splitters into SplitterList.
    **/
   public static void load_mapfiles_into_splitterlist(Collection files, // [String]
-						     int grain
-						     )
+                                                     int grain
+                                                     )
   {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       String filename = (String) i.next();
@@ -55,15 +55,15 @@ public class ContextSplitterFactory
 
       PptNameAndSplitters[] splitters;
       try {
-	MapfileEntry entries[] = parse_mapfile(file);
-	splitters = make_context_splitters(entries, grain);
+        MapfileEntry entries[] = parse_mapfile(file);
+        splitters = make_context_splitters(entries, grain);
       } catch (IOException e) {
-	throw new Error(e.toString());
+        throw new Error(e.toString());
       }
 
       for (int j=0; j < splitters.length; j++) {
-	PptNameAndSplitters nas = splitters[j];
-	SplitterList.put(nas.ppt_name, nas.splitters);
+        PptNameAndSplitters nas = splitters[j];
+        SplitterList.put(nas.ppt_name, nas.splitters);
       }
     }
   }
@@ -85,15 +85,15 @@ public class ContextSplitterFactory
     public final String tometh;
 
     public MapfileEntry(long id,
-			String fromclass,
-			String frommeth,
-			String fromfile,
-			long fromline,
-			long fromcol,
-			String toexpr,
-			String toargs,
-			String toclass,
-			String tometh)
+                        String fromclass,
+                        String frommeth,
+                        String fromfile,
+                        long fromline,
+                        long fromcol,
+                        String toexpr,
+                        String toargs,
+                        String toclass,
+                        String tometh)
     {
       this.id = id;
       this.fromclass = fromclass;
@@ -120,73 +120,73 @@ public class ContextSplitterFactory
       LineNumberReader reader = UtilMDE.LineNumberFileReader(mapfile.toString());
       String reader_line;
       while ((reader_line = reader.readLine()) != null) {
-	String line = reader_line;
-	// Remove comments, skip blank lines
-	{
-	  int hash = line.indexOf('#');
-	  if (hash >= 0) {
-	    line = line.substring(0, hash);
-	  }
-	  line = line.trim();
-	  if (line.length() == 0) {
-	    continue;
-	  }
-	}
+        String line = reader_line;
+        // Remove comments, skip blank lines
+        {
+          int hash = line.indexOf('#');
+          if (hash >= 0) {
+            line = line.substring(0, hash);
+          }
+          line = line.trim();
+          if (line.length() == 0) {
+            continue;
+          }
+        }
 
-	// Example line:
-	//   0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
-	// where this ^ is a tab and the rest are single spaces
-	long id;
-	String fromclass, frommeth, fromfile; long fromline, fromcol;
-	String toexpr, toargs, toclass, tometh;
+        // Example line:
+        //   0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
+        // where this ^ is a tab and the rest are single spaces
+        long id;
+        String fromclass, frommeth, fromfile; long fromline, fromcol;
+        String toexpr, toargs, toclass, tometh;
 
-	int tab = line.indexOf('\t');
-	int arrow = line.indexOf(" -> ");
-	Assert.assert(tab >= 0);
-	Assert.assert(arrow >= tab);
+        int tab = line.indexOf('\t');
+        int arrow = line.indexOf(" -> ");
+        Assert.assert(tab >= 0);
+        Assert.assert(arrow >= tab);
 
-	id = Long.decode(line.substring(0, tab)).longValue();
+        id = Long.decode(line.substring(0, tab)).longValue();
 
-	// parse "called from" data
-	{
-	  StringTokenizer tok = new StringTokenizer(line.substring(tab+1,arrow));
-	  fromclass = tok.nextToken();
-	  frommeth = tok.nextToken();
-	  String temp = tok.nextToken();
-	  Assert.assert(temp.startsWith("["));
-	  Assert.assert(temp.endsWith("]"));
-	  temp = temp.substring(1, temp.length()-1);
-	  int one = temp.indexOf(':');
-	  int two = temp.lastIndexOf(':');
-	  fromfile = temp.substring(0, one);
-	  fromline = Integer.parseInt(temp.substring(one+1,two));
-	  fromcol = Integer.parseInt(temp.substring(two+1));
-	  Assert.assert(! tok.hasMoreTokens());
-	}
+        // parse "called from" data
+        {
+          StringTokenizer tok = new StringTokenizer(line.substring(tab+1,arrow));
+          fromclass = tok.nextToken();
+          frommeth = tok.nextToken();
+          String temp = tok.nextToken();
+          Assert.assert(temp.startsWith("["));
+          Assert.assert(temp.endsWith("]"));
+          temp = temp.substring(1, temp.length()-1);
+          int one = temp.indexOf(':');
+          int two = temp.lastIndexOf(':');
+          fromfile = temp.substring(0, one);
+          fromline = Integer.parseInt(temp.substring(one+1,two));
+          fromcol = Integer.parseInt(temp.substring(two+1));
+          Assert.assert(! tok.hasMoreTokens());
+        }
 
-	// parse "call into" data
-	{
-	  String to = line.substring(arrow + 4); // 4: " -> "
-	  Assert.assert(to.startsWith("\""), to);
-	  int endquote = to.indexOf("\" ", 1);
-	  toexpr = line.substring(1, endquote);
-	  StringTokenizer tok = new StringTokenizer(to.substring(endquote+1));
-	  toargs = tok.nextToken();
-	  toclass = tok.nextToken();
-	  tometh = tok.nextToken();
-	  Assert.assert(! tok.hasMoreTokens());
-	}
+        // parse "call into" data
+        {
+          String to = line.substring(arrow + 4); // 4: " -> "
+          Assert.assert(to.startsWith("\""), to);
+          int endquote = to.indexOf("\" ", 1);
+          toexpr = line.substring(1, endquote);
+          StringTokenizer tok = new StringTokenizer(to.substring(endquote+1));
+          toargs = tok.nextToken();
+          toclass = tok.nextToken();
+          tometh = tok.nextToken();
+          Assert.assert(! tok.hasMoreTokens());
+        }
 
-	// As we add better error messages, use this:
-	// "Malformed line " + reader.getLineNumber()
-	// + " (\"" + reader_line + "\")"
-	// + " in " + mapfile;
+        // As we add better error messages, use this:
+        // "Malformed line " + reader.getLineNumber()
+        // + " (\"" + reader_line + "\")"
+        // + " in " + mapfile;
 
-	MapfileEntry entry = new MapfileEntry
-	  (id, fromclass, frommeth, fromfile, fromline, fromcol,
-	   toexpr, toargs, toclass, tometh);
+        MapfileEntry entry = new MapfileEntry
+          (id, fromclass, frommeth, fromfile, fromline, fromcol,
+           toexpr, toargs, toclass, tometh);
 
-	result.add(entry);
+        result.add(entry);
       }
     } catch (NumberFormatException e) {
       throw new IOException("Malformed number: " + e);
@@ -202,7 +202,7 @@ public class ContextSplitterFactory
    * granularity.
    **/
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries,
-							     int grain)
+                                                             int grain)
   {
     // Use a 2-deep map structure.  First key is an identifier
     // (~pptname) for the callee.  Second key is an idenfier for the
@@ -219,32 +219,32 @@ public class ContextSplitterFactory
       String caller_condition;
       switch (grain) {
       case GRAIN_LINE:
-	caller_condition = "<Called from "
-	  + entry.fromclass + "." + entry.frommeth
-	  + ":" + entry.fromline + ":" + entry.fromcol + ">";
-	break;
+        caller_condition = "<Called from "
+          + entry.fromclass + "." + entry.frommeth
+          + ":" + entry.fromline + ":" + entry.fromcol + ">";
+        break;
       case GRAIN_METHOD:
-	caller_condition = "<Called from "
-	  + entry.fromclass + "." + entry.frommeth + ">";
-	break;
+        caller_condition = "<Called from "
+          + entry.fromclass + "." + entry.frommeth + ">";
+        break;
       case GRAIN_CLASS:
-	caller_condition = "<Called from "
-	  + entry.fromclass + ">";
-	break;
+        caller_condition = "<Called from "
+          + entry.fromclass + ">";
+        break;
       default:
-	throw new UnsupportedOperationException("Unknown grain " + grain);
+        throw new UnsupportedOperationException("Unknown grain " + grain);
       }
 
       // Place the ID into the mapping
       Map caller2ids = (Map) callee2caller2ids.get(callee_ppt_name);
       if (caller2ids == null) {
-	caller2ids = new HashMap();
-	callee2caller2ids.put(callee_ppt_name, caller2ids);
+        caller2ids = new HashMap();
+        callee2caller2ids.put(callee_ppt_name, caller2ids);
       }
       Set ids = (Set) caller2ids.get(caller_condition);
       if (ids == null) {
-	ids = new TreeSet();
-	caller2ids.put(caller_condition, ids);
+        ids = new TreeSet();
+        caller2ids.put(caller_condition, ids);
       }
       ids.add(new Long(entry.id));
     } // for all entries
@@ -262,27 +262,27 @@ public class ContextSplitterFactory
 
       // For each caller of that callee
       for (Iterator j = caller2ids.entrySet().iterator(); j.hasNext(); ) {
-	Map.Entry jpair = (Map.Entry) j.next();
-	String caller_condition = (String) jpair.getKey();
-	List ids = new ArrayList((Set) jpair.getValue());
+        Map.Entry jpair = (Map.Entry) j.next();
+        String caller_condition = (String) jpair.getKey();
+        List ids = new ArrayList((Set) jpair.getValue());
 
-	// Make a splitter
-	long[] ids_array = new long[ids.size()];
-	for (int k=0; k < ids_array.length; k++) {
-	  ids_array[k] = ((Long) ids.get(k)).longValue();
-	}
+        // Make a splitter
+        long[] ids_array = new long[ids.size()];
+        for (int k=0; k < ids_array.length; k++) {
+          ids_array[k] = ((Long) ids.get(k)).longValue();
+        }
 
-	debug.debug("Creating splitter for " + callee_ppt_name
-		    + " with ids " +  ids
-		    + " named " + caller_condition);
+        debug.debug("Creating splitter for " + callee_ppt_name
+                    + " with ids " +  ids
+                    + " named " + caller_condition);
 
-	Splitter splitter = new CallerContextSplitter(ids_array, caller_condition);
-	splitters.add(splitter);
+        Splitter splitter = new CallerContextSplitter(ids_array, caller_condition);
+        splitters.add(splitter);
       }
 
       // Collect all splitters for one callee_ppt_name
       Splitter[] splitters_array = (Splitter[])
-	splitters.toArray(new Splitter[splitters.size()]);
+        splitters.toArray(new Splitter[splitters.size()]);
       result.add(new PptNameAndSplitters(callee_ppt_name, splitters_array));
     }
 

@@ -155,7 +155,7 @@ public final class Runtime {
     try {
       Class rt = java.lang.Runtime.class;
       rt.getMethod("addShutdownHook", new Class[] {
-	java.lang.Thread.class
+        java.lang.Thread.class
       });
       return true;
     } catch (Exception e) {
@@ -170,17 +170,17 @@ public final class Runtime {
         public void run() {
           if (dtrace != null) {
 
-	    // When the program being instrumented exits, the buffers
-	    // of the "dtrace" (PrintStream) object are not flushed,
-	    // so we miss the tail of the file.
+            // When the program being instrumented exits, the buffers
+            // of the "dtrace" (PrintStream) object are not flushed,
+            // so we miss the tail of the file.
 
-	    synchronized (daikon.Runtime.dtrace)
-	    {
-	      dtrace.println();
+            synchronized (daikon.Runtime.dtrace)
+            {
+              dtrace.println();
               // this lets us know we didn't lose any
-	      dtrace.println("# EOF (added by daikon.Runtime.addShutdownHook)");
-	      dtrace.close();
-	    }
+              dtrace.println("# EOF (added by daikon.Runtime.addShutdownHook)");
+              dtrace.close();
+            }
           }
         }
       });

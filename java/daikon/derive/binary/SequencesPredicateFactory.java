@@ -31,12 +31,12 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
 
     if (!(var1.rep_type.isArray()) ||
-	!(var2.rep_type.isArray())) {
+        !(var2.rep_type.isArray())) {
       return null;
     }
 
     if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-	!var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       // Order doesn't matter, then predication is meaningless
       return null;
     }
@@ -61,7 +61,7 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     if (SequencesPredicate.dkconfig_fieldOnly) {
 
       if (!(var1.name instanceof VarInfoName.Field) ||
-	  !(var2.name instanceof VarInfoName.Field))   return null;
+          !(var2.name instanceof VarInfoName.Field))   return null;
 
       VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
       VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
@@ -89,7 +89,7 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
     if (debug.isDebugEnabled()) {
       debug.debug (var1.ppt + ": " + var1.name + " and " +
-		   var2.name + " are worth deriving from");
+                   var2.name + " are worth deriving from");
     }
 
     return new BinaryDerivation[] {
@@ -108,7 +108,7 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     if (!enabled) return null;
 
     if (!(var1.rep_type.isArray()) ||
-	!(var2.rep_type.isArray())) {
+        !(var2.rep_type.isArray())) {
       return null;
     }
 
@@ -127,7 +127,7 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     if (var1.name.equals(var2.name)) return null;
 
     if (!(var1.name instanceof VarInfoName.Field) ||
-	!(var2.name instanceof VarInfoName.Field))   return null;
+        !(var2.name instanceof VarInfoName.Field))   return null;
 
     VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
     VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
@@ -142,7 +142,7 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
     if (debug.isDebugEnabled()) {
       debug.debug (var1.ppt + ": " + var1.name + " and " +
-		   var2.name + " are worth deriving from");
+                   var2.name + " are worth deriving from");
     }
 
     return new BinaryDerivation[] {
@@ -152,5 +152,3 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
   }
   */
 }
-
-

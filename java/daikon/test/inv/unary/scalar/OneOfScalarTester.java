@@ -24,7 +24,7 @@ public class OneOfScalarTester extends TestCase {
                                  ProglangType.INT,
                                  ProglangType.INT,
                                  null, // null Comparability
-				 VarInfoAux.getDefault());
+                                 VarInfoAux.getDefault());
     // [INCR]
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;
@@ -36,7 +36,7 @@ public class OneOfScalarTester extends TestCase {
                                  ProglangType.HASHCODE,
                                  ProglangType.HASHCODE,
                                  null, // null Comparability
-				 VarInfoAux.getDefault());
+                                 VarInfoAux.getDefault());
     // [INCR]
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;

@@ -157,10 +157,10 @@ public final class SequencesPredicate
       long[] values = (long[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
-	if (predicate[i] == choose) {
-	  result[j] = (values[i]);
-	  j++;
-	}
+        if (predicate[i] == choose) {
+          result[j] = (values[i]);
+          j++;
+        }
       }
       return new ValueAndModified (Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
@@ -168,10 +168,10 @@ public final class SequencesPredicate
       Object[] values = (Object[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
-	if (predicate[i] == choose) {
-	  result[j] = (values[i]);
-	  j++;
-	}
+        if (predicate[i] == choose) {
+          result[j] = (values[i]);
+          j++;
+        }
       }
       return new ValueAndModified (Intern.intern(result), mod);
     } else if (val1 == null) {
@@ -194,11 +194,11 @@ public final class SequencesPredicate
                                                         new VarInfoName.Simple(name)
                                      }).applyElements();
     return new VarInfo(new_name,
-		       var1.type,
-		       var1.file_rep_type,
-		       var1.comparability,
-		       var1.aux
-		       );
+                       var1.type,
+                       var1.file_rep_type,
+                       var1.comparability,
+                       var1.aux
+                       );
   }
 
   public String toString() {
@@ -212,11 +212,10 @@ public final class SequencesPredicate
     if (other instanceof SequencesPredicate) {
       SequencesPredicate o = (SequencesPredicate) other;
       return o.var1().equals(var1())
-	&& o.var2().equals(var2())
-	&& choose == o.choose;
+        && o.var2().equals(var2())
+        && choose == o.choose;
     }
     return false;
   }
 
 }
-

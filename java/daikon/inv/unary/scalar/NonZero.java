@@ -61,8 +61,8 @@ public class NonZero
       result.pointer_type = true;
       result.override_range = 3;
       if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
-	// If it's not a number and null doesn't have special meaning...
-	return null;
+        // If it's not a number and null doesn't have special meaning...
+        return null;
       }
     }
     return result;
@@ -79,8 +79,8 @@ public class NonZero
     String name = var().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.JML))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.JML))
     {
       return name + " != " + zero();
     }
@@ -91,7 +91,7 @@ public class NonZero
 
     if (format == OutputFormat.IOA) {
       return name + " ~= "
-	+ (pointer_type ? "nil" : "0");
+        + (pointer_type ? "nil" : "0");
     }
 
     return format_unimplemented(format);
@@ -163,7 +163,7 @@ public class NonZero
       return true;
     }
     if (var.name instanceof VarInfoName.Prestate &&
-	((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
+        ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
       return true;
     }
 

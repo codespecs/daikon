@@ -38,9 +38,9 @@ public final class Configuration
   public static Configuration getInstance() {
     if (instance == null) {
       synchronized (Configuration.class) {
-	if (instance == null) {
-	  instance = new Configuration();
-	}
+        if (instance == null) {
+          instance = new Configuration();
+        }
       }
     }
     return instance;
@@ -54,34 +54,34 @@ public final class Configuration
     InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
     // System.out.println("CONFIGURABLE_LIST stream: " + stream);
     Assert.assert(stream != null, "Cannot load list of configurable "
-		  + "fields from '" + CONFIGURABLE_LIST + "'");
+                  + "fields from '" + CONFIGURABLE_LIST + "'");
     try {
 
       LineNumberReader lines = new LineNumberReader(new BufferedReader(new InputStreamReader(stream)));
       String line;
       while ((line = lines.readLine()) != null) {
-	line = line.trim();
-	if (line.length() == 0) continue;    // skip blank lines
+        line = line.trim();
+        if (line.length() == 0) continue;    // skip blank lines
         if (line.charAt(0) == '#') continue; // skip comments
 
-	int n = line.lastIndexOf('.');
-	String classname = line.substring(0, n);
-	String fieldname = line.substring(n+1);
-	String unparsed;
-	try {
-	  Class c = Class.forName(classname);
-	  Field f = c.getField(Configuration.PREFIX + fieldname);
-	  Object value = f.get(null);
-	  Assert.assert(value != null);
-	  unparsed = String.valueOf(value);
-	} catch (Exception e) {
+        int n = line.lastIndexOf('.');
+        String classname = line.substring(0, n);
+        String fieldname = line.substring(n+1);
+        String unparsed;
+        try {
+          Class c = Class.forName(classname);
+          Field f = c.getField(Configuration.PREFIX + fieldname);
+          Object value = f.get(null);
+          Assert.assert(value != null);
+          unparsed = String.valueOf(value);
+        } catch (Exception e) {
           String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e;
-	  throw new Error(message);
-	} catch (Error e) {     // especially NoClassDefFoundError
+          throw new Error(message);
+        } catch (Error e) {     // especially NoClassDefFoundError
           String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e;
-	  throw new Error(message);
+          throw new Error(message);
         }
-	addRecord(classname, fieldname, unparsed);
+        addRecord(classname, fieldname, unparsed);
       }
 
     } catch (IOException e) {
@@ -140,10 +140,10 @@ public final class Configuration
       BufferedReader lines = new BufferedReader(new InputStreamReader(input));
       String line;
       while ((line = lines.readLine()) != null) {
-	line = line.trim();
-	if (line.length() == 0) continue;    // skip blank lines
-	if (line.charAt(0) == '#') continue; // skip # comment lines
-	apply(line);
+        line = line.trim();
+        if (line.length() == 0) continue;    // skip blank lines
+        if (line.charAt(0) == '#') continue; // skip # comment lines
+        apply(line);
       }
 
     } catch (IOException e) {
@@ -224,35 +224,35 @@ public final class Configuration
 
     if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
-	value = Boolean.TRUE;
+        value = Boolean.TRUE;
       } else {
-	value = Boolean.FALSE;
+        value = Boolean.FALSE;
       }
     } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
       try {
-	// decode instead of valueOf to handle "0x" and other styles
-	value = Integer.decode(unparsed);
+        // decode instead of valueOf to handle "0x" and other styles
+        value = Integer.decode(unparsed);
       } catch (NumberFormatException e) {
-	throw new ConfigException("Unsupported int " + unparsed);
+        throw new ConfigException("Unsupported int " + unparsed);
       }
     } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
       try {
-	// decode instead of valueOf to handle "0x" and other styles
-	value = Long.decode(unparsed);
+        // decode instead of valueOf to handle "0x" and other styles
+        value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
-	throw new ConfigException("Unsupported long " + unparsed);
+        throw new ConfigException("Unsupported long " + unparsed);
       }
     } else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
       try {
-	value = Float.valueOf(unparsed);
+        value = Float.valueOf(unparsed);
       } catch (NumberFormatException e) {
-	throw new ConfigException("Unsupported float " + unparsed);
+        throw new ConfigException("Unsupported float " + unparsed);
       }
     } else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
       try {
-	value = Double.valueOf(unparsed);
+        value = Double.valueOf(unparsed);
       } catch (NumberFormatException e) {
-	throw new ConfigException("Unsupported double " + unparsed);
+        throw new ConfigException("Unsupported double " + unparsed);
       }
     } else if (type.getName().equals("java.lang.String")) {
       value = unparsed;

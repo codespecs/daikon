@@ -89,41 +89,41 @@ public final class VarInfoAux
     String value = "";
     boolean seenEqual = false;
     for (int tokInfo = tok.nextToken(); tokInfo != StreamTokenizer.TT_EOF;
-	 tokInfo = tok.nextToken()) {
+         tokInfo = tok.nextToken()) {
       if (map == theDefault.map) {
-	// We use default values if none are specified We initialize
-	// here rather than above to save time when there are no
-	// tokens.
+        // We use default values if none are specified We initialize
+        // here rather than above to save time when there are no
+        // tokens.
 
-	map = new HashMap(theDefault.map);
+        map = new HashMap(theDefault.map);
       }
 
       String token;
       if (tok.ttype == tok.TT_WORD || tok.ttype == '\"') {
-	token = tok.sval.trim().intern();
+        token = tok.sval.trim().intern();
       } else {
-	token = ((char) tok.ttype + "").intern();
+        token = ((char) tok.ttype + "").intern();
       }
 
       debug.debug ("Token info: " + tokInfo + " " + token);
 
-      if (token == ",") {
-	if (!seenEqual)
-	  throw new IOException ("Aux option did not contain an '='");
-	map.put (key.intern(), value.intern());
-	key = "";
-	value = "";
-	seenEqual = false;
-      } else if (token == "=") {
-	if (seenEqual)
-	  throw new IOException ("Aux option contained more than one '='");
-	seenEqual = true;
+      if (token == ",") {       // interned
+        if (!seenEqual)
+          throw new IOException ("Aux option did not contain an '='");
+        map.put (key.intern(), value.intern());
+        key = "";
+        value = "";
+        seenEqual = false;
+      } else if (token == "=") { // interned
+        if (seenEqual)
+          throw new IOException ("Aux option contained more than one '='");
+        seenEqual = true;
       } else {
-	if (!seenEqual) {
-	  key = (key + " " + token).trim();
-	} else {
-	  value = (value + " " + token).trim();
-	}
+        if (!seenEqual) {
+          key = (key + " " + token).trim();
+        } else {
+          value = (value + " " + token).trim();
+        }
       }
     }
 

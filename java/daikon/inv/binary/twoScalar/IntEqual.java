@@ -20,8 +20,8 @@ import java.util.*;
 // it is automatically generated from IntComparisons.java.jpp
 // *****
 
-public final class IntEqual 
-  extends TwoScalar implements Comparison 
+public final class IntEqual
+  extends TwoScalar implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -35,8 +35,8 @@ public final class IntEqual
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debugIntEqual 
-    = Category.getInstance("daikon.inv.binary.twoScalar.IntEqual" );
+  public static final Category debugIntEqual
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntEqual");
 
   protected IntEqual (PptSlice ppt) {
     super(ppt);
@@ -52,8 +52,8 @@ public final class IntEqual
 
     if (debugIntEqual.isDebugEnabled() || ppt.debugged) {
       debugIntEqual.debug("IntEqual.instantiate(" + ppt.name + ")"
-			  + ", seqvar1=" + seqvar1
-			  + ", seqvar2=" + seqvar2);
+                          + ", seqvar1=" + seqvar1
+                          + ", seqvar2=" + seqvar2);
     }
 
     { // Tests involving sequence lengths.
@@ -92,14 +92,14 @@ public final class IntEqual
 
       if (debugIntEqual.isDebugEnabled() || ppt.debugged) {
         debugIntEqual.debug("IntEqual.instantiate: "
-			    + "min1=" + min1
-			    + ", max1=" + max1
-			    + ", min2=" + min2
-			    + ", max2=" + max2
-			    + ", super1=" + super1
-			    + ", super2=" + super2
-			    + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
-			    + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
+                            + "min1=" + min1
+                            + ", max1=" + max1
+                            + ", min2=" + min2
+                            + ", max2=" + max2
+                            + ", super1=" + super1
+                            + ", super2=" + super2
+                            + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+                            + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
       }
       if (seqvar1 == seqvar2) {
         // Both variables are derived from the same sequence.  The
@@ -151,7 +151,7 @@ public final class IntEqual
     Assert.assert(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof IntEqual )
+      if (inv instanceof IntEqual)
         return (IntEqual) inv;
     }
     return null;
@@ -166,10 +166,10 @@ public final class IntEqual
     String var2name = var2().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.JML)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.IOA))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.JML)
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.IOA))
     {
       String comparator = "==" ;
 
@@ -283,7 +283,7 @@ public final class IntEqual
 
     // a+c=b+c is implied, because a=b must have also been reported.
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
-	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
+              ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 
   } // isObviousImplied
 

@@ -145,7 +145,7 @@ public class TableSorter extends TableMap {
             } else if (result > 0) {
                 return 1;
             } else {
-        	return 0;
+                return 0;
             }
         }
     }

@@ -11,7 +11,7 @@ public class CmdAssume
   implements Cmd
 {
   public final String proposition;
-    
+
   public CmdAssume(String proposition) {
     this.proposition = proposition.trim();
     SimpUtil.assert_well_formed(proposition);
@@ -24,10 +24,10 @@ public class CmdAssume
       // send out the (BG_PUSH proposition)
       s.input.println("(BG_PUSH " + proposition + ")");
       s.input.flush();
-      
+
       // there is no output from Simplify
     }
-	
+
   }
 
   public String toString() {

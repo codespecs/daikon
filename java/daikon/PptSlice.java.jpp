@@ -411,7 +411,7 @@ public final class PPTSLICE1
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
@@ -419,7 +419,7 @@ public final class PPTSLICE1
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING) {
@@ -428,7 +428,7 @@ public final class PPTSLICE1
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.get(i));
         SingleString inv = (SingleString) invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -436,7 +436,7 @@ public final class PPTSLICE1
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -444,14 +444,14 @@ public final class PPTSLICE1
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else {
@@ -470,7 +470,7 @@ public final class PPTSLICE1
       String value2 = (String) val2;
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (string1 || string2) {
@@ -482,7 +482,7 @@ public final class PPTSLICE1
       long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
@@ -490,7 +490,7 @@ public final class PPTSLICE1
       long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
@@ -498,7 +498,7 @@ public final class PPTSLICE1
       long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
@@ -506,7 +506,7 @@ public final class PPTSLICE1
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else {
@@ -528,7 +528,7 @@ public final class PPTSLICE1
       long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }
     } else {

@@ -33,7 +33,7 @@ import utilMDE.*;
 import org.apache.log4j.Category;
 
 
-/** 
+/**
  * Intersection between two comparable sequences.
  **/
 
@@ -87,17 +87,17 @@ public final class SCALARSEQUENCESINTERSECTION
     for (int i=0; i<val1_array.length; i++) {
       SCALAR v = val1_array[i];
       if ((ArraysMDE.indexOf(val2_array, v)!=-1) &&
-	  (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
-	tmp[size++] = v;
+          (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
+        tmp[size++] = v;
     }
 
     SCALAR[] intersect = ArraysMDE.subarray(tmp, 0, size);
     intersect = (SCALAR []) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified(intersect, mod);
   }
 

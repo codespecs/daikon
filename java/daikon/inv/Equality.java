@@ -88,10 +88,11 @@ public final class Equality
     String first = vars[0].name.name();
     for (int i = 1; i < vars.length; i++) {
       // appends " && ( v[0] == v[i] )" to the stringbuffer
-      result.append (" && ( ").append (first).append (" == " );
-      result.append (vars[i].name.name()).append ( " ) ");
+      if (i > 1) result.append(" && ")
+      result.append("( ").append(first).append(" == "); // "interned"
+      result.append(vars[i].name.name()).append( " ) ");
     }
-    return result.toString().substring(4); // trims the " && "
+    return result.toString();
   }
 
   /* IOA */
@@ -104,7 +105,7 @@ public final class Equality
       result.append (" = ");
       result.append (vars[i+1].name.ioa_name());
       if (i < vars.length - 1) {
-	result.append (" /\\ ");
+        result.append (" /\\ ");
       }
     }
 
@@ -116,24 +117,24 @@ public final class Equality
     StringBuffer result = new StringBuffer();
     if (vars[0].rep_type.isArray()) {
       for (int i=1; i < vars.length; i++) {
-	if (i > 1) {
-	  result.append(Global.lineSep + "&& ");
-	}
-	String[] form =
-	  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	    { vars[0].name, vars[i].name }, true); // elementwise
-	result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+        if (i > 1) {
+          result.append(Global.lineSep + "&& ");
+        }
+        String[] form =
+          VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+            { vars[0].name, vars[i].name }, true); // elementwise
+        result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
       }
     } else {
       for (int i=1; i < vars.length; i++) {
-	if (i > 1) {
-	  result.append(" && ");
-	}
-	result.append("(");
-	result.append(vars[0].name.esc_name());
-	result.append(" == ");
-	result.append(vars[i].name.esc_name());
-	result.append(")");
+        if (i > 1) {
+          result.append(" && ");
+        }
+        result.append("(");
+        result.append(vars[0].name.esc_name());
+        result.append(" == ");
+        result.append(vars[i].name.esc_name());
+        result.append(")");
       }
     }
     return result.toString();
@@ -177,22 +178,22 @@ public final class Equality
     StringBuffer result = new StringBuffer("(AND");
     if (vars[0].rep_type.isArray()) {
       for (int i=1; i < vars.length; i++) {
-	String[] form =
-	  VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	    { vars[0].name, vars[i].name }, true); // elementwise
-	String a = format_elt(form[1]);
-	String b = format_elt(form[2]);
-	result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
+        String[] form =
+          VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+            { vars[0].name, vars[i].name }, true); // elementwise
+        String a = format_elt(form[1]);
+        String b = format_elt(form[2]);
+        result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
       }
     } else {
       for (int i=1; i < vars.length; i++) {
-	String a = format_elt(vars[0].name.simplify_name());
-	String b = format_elt(vars[i].name.simplify_name());
-	result.append(" (EQ ");
-	result.append(a);
-	result.append(" ");
-	result.append(b);
-	result.append(")");
+        String a = format_elt(vars[0].name.simplify_name());
+        String b = format_elt(vars[i].name.simplify_name());
+        result.append(" (EQ ");
+        result.append(a);
+        result.append(" ");
+        result.append(b);
+        result.append(")");
       }
     }
     result.append(")");

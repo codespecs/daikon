@@ -89,9 +89,9 @@ public class Dataflow
 
     if (debugInit.isDebugEnabled()) {
       for (int i=0; i< ppt.var_infos.length; i++) {
-	VarInfo vi = ppt.var_infos[i];
-	debugInit.debug ("Parent for " + vi.name.name() + ":" +
-			 vi.po_higher());
+        VarInfo vi = ppt.var_infos[i];
+        debugInit.debug ("Parent for " + vi.name.name() + ":" +
+                         vi.po_higher());
 
       }
     }
@@ -118,10 +118,10 @@ public class Dataflow
    * @see VarInfo.po_lower
    **/
   private static void setup_po_same_name(VarInfo[] lower,
-					 VarInfo[] higher)
+                                         VarInfo[] higher)
   {
     setup_po_same_name(lower, VarInfoName.IDENTITY_TRANSFORMER,
-		       higher, VarInfoName.IDENTITY_TRANSFORMER);
+                       higher, VarInfoName.IDENTITY_TRANSFORMER);
   }
 
   /**
@@ -132,27 +132,27 @@ public class Dataflow
    * @see VarInfo.po_lower
    **/
   private static void setup_po_same_name(VarInfo[] lower,
-					 VarInfoName.Transformer lower_xform,
-					 VarInfo[] higher,
-					 VarInfoName.Transformer higher_xform)
+                                         VarInfoName.Transformer lower_xform,
+                                         VarInfo[] higher,
+                                         VarInfoName.Transformer higher_xform)
   {
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
       VarInfoName higher_vi_name = higher_xform.transform(higher_vi.name);
       for (int j=0; j<lower.length; j++) {
-	VarInfo lower_vi = lower[j];
-	VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
-	if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
-	  // Commented because it's inside a loop
-	  // 	  if (debugInit.isDebugEnabled()) {
-	  // 	    debugInit.debug ("Lower and higher: " + lower_vi_name.name() + " " + higher_vi_name.name());
-	  // 	    debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name + " " + higher_vi.ppt.name);
-	  
-	  // 	  }
+        VarInfo lower_vi = lower[j];
+        VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
+        if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
+          // Commented because it's inside a loop
+          //      if (debugInit.isDebugEnabled()) {
+          //        debugInit.debug ("Lower and higher: " + lower_vi_name.name() + " " + higher_vi_name.name());
+          //        debugInit.debug ("Lower and higher ppt: " + lower_vi.ppt.name + " " + higher_vi.ppt.name);
 
-	  
-	  lower_vi.addHigherPO(higher_vi, static_po_group_nonce);
-	}
+          //      }
+
+
+          lower_vi.addHigherPO(higher_vi, static_po_group_nonce);
+        }
       }
     }
     static_po_group_nonce++;
@@ -211,12 +211,12 @@ public class Dataflow
       boolean ctor = ppt_name.isConstructor();
       boolean exit = ppt_name.isCombinedExitPoint();
       if ((enter && !ctor) || exit) {
-	// TODO: also require that this is a public method (?)
-	controlling_ppt = ppts.get(ppt_name.makeObject());
-	if (controlling_ppt == null) {
-	  // If we didn't find :::OBJECT, fall back to :::CLASS
-	  controlling_ppt = ppts.get(ppt_name.makeClassStatic());
-	}
+        // TODO: also require that this is a public method (?)
+        controlling_ppt = ppts.get(ppt_name.makeObject());
+        if (controlling_ppt == null) {
+          // If we didn't find :::OBJECT, fall back to :::CLASS
+          controlling_ppt = ppts.get(ppt_name.makeClassStatic());
+        }
       }
     }
     // Create VarInfo relations with the controller when names match.
@@ -224,7 +224,7 @@ public class Dataflow
 
     if (controlling_ppt != null) {
       if (debugInit.isDebugEnabled()) {
-	debugInit.debug ("Controlling ppt is " + controlling_ppt.ppt_name);
+        debugInit.debug ("Controlling ppt is " + controlling_ppt.ppt_name);
       }
       setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
     } else {
@@ -264,20 +264,20 @@ public class Dataflow
       VarInfo[] entry_ppt_vis = entry_ppt.var_infos;
       int new_vis_index = 0;
       for (int k = 0; k < entry_ppt.num_declvars; k++) {
-	VarInfo vi = entry_ppt_vis[k];
-	Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
-	if (vi.isStaticConstant())
-	  continue;
-	VarInfo origvar = VarInfo.origVarInfo(vi);
-	// Fix comparability
-	VarInfo postvar = exit_ppt.findVar(vi.name);
-	Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
-	origvar.comparability = postvar.comparability.makeAlias(origvar.name);
-	// Setup PO; relate orig(...) on EXIT to ... on ENTER
-	origvar.addHigherPO(vi, static_po_group_nonce);
-	// Add to new_vis
-	new_vis[new_vis_index] = origvar;
-	new_vis_index++;
+        VarInfo vi = entry_ppt_vis[k];
+        Assert.assert(!vi.isDerived(),"Derived when making orig(): "+vi.name);
+        if (vi.isStaticConstant())
+          continue;
+        VarInfo origvar = VarInfo.origVarInfo(vi);
+        // Fix comparability
+        VarInfo postvar = exit_ppt.findVar(vi.name);
+        Assert.assert(postvar != null,"Exit not superset of entry: "+vi.name);
+        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+        // Setup PO; relate orig(...) on EXIT to ... on ENTER
+        origvar.addHigherPO(vi, static_po_group_nonce);
+        // Add to new_vis
+        new_vis[new_vis_index] = origvar;
+        new_vis_index++;
       }
       Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
       static_po_group_nonce++; // advance once per (EXIT#) program point
@@ -307,28 +307,28 @@ public class Dataflow
     for (int i=0; i<vis.length; i++) {
       VarInfo vi = vis[i];
       if (debugInit.isDebugEnabled()) {
-	debugInit.debug ("Processing VarInfo: " + vi.name.name());
+        debugInit.debug ("Processing VarInfo: " + vi.name.name());
       }
-      
+
       if (vi.name.equals(VarInfoName.THIS)) continue;
       // Arguments are the things with no controller yet
       if (vi.po_higher().size() == 0) {
-	debugInit.debug ("which is an orphan");
-	orphans.add(vi);
-	if (! vi.type.isPseudoArray()) {
-	  PptName objname = new PptName(vi.type.base(), // class
-					null, // method
-					FileIO.object_suffix // point
-					);
-	  Assert.assert(objname.isObjectInstanceSynthetic());
-	  PptTopLevel object_ppt = ppts.get(objname);
-	  if (object_ppt != null) {
-	    debugInit.debug ("whose type is known");
-	    known.put(vi, object_ppt);
-	  } else {
-	    // TODO: Note that orphan has no relatives, for later hook?
-	  }
-	}
+        debugInit.debug ("which is an orphan");
+        orphans.add(vi);
+        if (! vi.type.isPseudoArray()) {
+          PptName objname = new PptName(vi.type.base(), // class
+                                        null, // method
+                                        FileIO.object_suffix // point
+                                        );
+          Assert.assert(objname.isObjectInstanceSynthetic());
+          PptTopLevel object_ppt = ppts.get(objname);
+          if (object_ppt != null) {
+            debugInit.debug ("whose type is known");
+            known.put(vi, object_ppt);
+          } else {
+            // TODO: Note that orphan has no relatives, for later hook?
+          }
+        }
       }
     }
     // For each known-type variable, substitute its name for
@@ -345,16 +345,16 @@ public class Dataflow
       final VarInfo known_vi = (VarInfo) it.next();
       PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
       setup_po_same_name(orphans_array, // lower
-			 VarInfoName.IDENTITY_TRANSFORMER,
-			 object_ppt.var_infos, // higher
-			 // but with known_vi.name in for "this"
-			 new VarInfoName.Transformer() {
-			     public VarInfoName transform(VarInfoName v) {
-			       return v.replaceAll(VarInfoName.THIS,
-						   known_vi.name);
-			     }
-			   }
-			 );
+                         VarInfoName.IDENTITY_TRANSFORMER,
+                         object_ppt.var_infos, // higher
+                         // but with known_vi.name in for "this"
+                         new VarInfoName.Transformer() {
+                             public VarInfoName transform(VarInfoName v) {
+                               return v.replaceAll(VarInfoName.THIS,
+                                                   known_vi.name);
+                             }
+                           }
+                         );
     }
 
   }
@@ -374,16 +374,16 @@ public class Dataflow
    * base(s)).
    **/
   public static void relate_derived_variables(PptTopLevel ppt,
-					      int lower,
-					      int upper)
+                                              int lower,
+                                              int upper)
   {
     debug.debug("relate_derived_variables on " + ppt.name);
 
     // For all immediately higher groups of variables
     PptsAndInts flow = compute_ppt_flow(ppt,
-					false, // one step only
-					true   // higher
-					);
+                                        false, // one step only
+                                        true   // higher
+                                        );
     int size = flow.ppts.length - 1; // -1 because don't want self
     debug.debug("size = " + size);
     for (int i = 0; i < size; i++) {
@@ -394,19 +394,19 @@ public class Dataflow
       int nonce = -1;
     nonce_search:
       for (int search = 0; search < flow_ints.length; search++) {
-	if (flow_ints[search] != -1) {
-	  VarInfo search_vi = ppt.var_infos[search];
-	  int count = 0;
-	  for (Iterator j = search_vi.po_higher().iterator(); j.hasNext(); ) {
-	    VarInfo up_vi = (VarInfo) j.next();
-	    if (up_vi.ppt == flow_ppt) {
-	      nonce = search_vi.po_higher_nonce()[count];
-	      break nonce_search;
-	    }
-	    count++;
-	  }
-	  throw new IllegalStateException("Path was not 1-length");
-	}
+        if (flow_ints[search] != -1) {
+          VarInfo search_vi = ppt.var_infos[search];
+          int count = 0;
+          for (Iterator j = search_vi.po_higher().iterator(); j.hasNext(); ) {
+            VarInfo up_vi = (VarInfo) j.next();
+            if (up_vi.ppt == flow_ppt) {
+              nonce = search_vi.po_higher_nonce()[count];
+              break nonce_search;
+            }
+            count++;
+          }
+          throw new IllegalStateException("Path was not 1-length");
+        }
       }
       if (nonce == -1) throw new IllegalStateException("Mapless path");
 
@@ -415,43 +415,43 @@ public class Dataflow
       // For all derived variables to relate
     forall_derived_vars:
       for (int j = lower; j < upper; j++) {
-	VarInfo vi = ppt.var_infos[j];
-	Assert.assert(vi.isDerived());
-	debug.debug("  vi = " + vi.name);
-	// Obtain the bases of derived varable
-	VarInfo[] bases = vi.derived.getBases();
-	// See where this path maps them
-	VarInfo[] basemap = new VarInfo[bases.length];
-	for (int k = 0; k < bases.length; k++) {
-	  VarInfo base = bases[k];
-	  int newindex = flow_ints[base.varinfo_index];
-	  if (newindex == -1) {
-	    debug.debug("  vars not mapped in path: vi = " + vi.name
-			+ "; bases = " + Ppt.varNames(bases));
-	    continue forall_derived_vars;
-	  }
-	  basemap[k] = flow_ppt.var_infos[newindex];
-	}
-	// Find the derived varaible of the same class over the related bases
-	VarInfo vi_higher = null;
-	for (int k = 0; k < flow_ppt.var_infos.length; k++) {
-	  VarInfo maybe = flow_ppt.var_infos[k];
-	  if (maybe.derived == null) continue;
-	  if (vi.derived.isSameFormula(maybe.derived)) {
-	    VarInfo[] maybe_bases = maybe.derived.getBases();
-	    if (Arrays.equals(basemap, maybe_bases)) {
-	      vi_higher = maybe;
-	      break;
-	    }
-	  }
-	}
-	if (vi_higher == null) {
-	  debug.debug("  No match found for " + vi.derived.getClass()
-		      + " using " + Ppt.varNames(basemap));
-	  continue forall_derived_vars;
-	}
-	// Create the new relation
-	vi.addHigherPO(vi_higher, nonce);
+        VarInfo vi = ppt.var_infos[j];
+        Assert.assert(vi.isDerived());
+        debug.debug("  vi = " + vi.name);
+        // Obtain the bases of derived varable
+        VarInfo[] bases = vi.derived.getBases();
+        // See where this path maps them
+        VarInfo[] basemap = new VarInfo[bases.length];
+        for (int k = 0; k < bases.length; k++) {
+          VarInfo base = bases[k];
+          int newindex = flow_ints[base.varinfo_index];
+          if (newindex == -1) {
+            debug.debug("  vars not mapped in path: vi = " + vi.name
+                        + "; bases = " + Ppt.varNames(bases));
+            continue forall_derived_vars;
+          }
+          basemap[k] = flow_ppt.var_infos[newindex];
+        }
+        // Find the derived varaible of the same class over the related bases
+        VarInfo vi_higher = null;
+        for (int k = 0; k < flow_ppt.var_infos.length; k++) {
+          VarInfo maybe = flow_ppt.var_infos[k];
+          if (maybe.derived == null) continue;
+          if (vi.derived.isSameFormula(maybe.derived)) {
+            VarInfo[] maybe_bases = maybe.derived.getBases();
+            if (Arrays.equals(basemap, maybe_bases)) {
+              vi_higher = maybe;
+              break;
+            }
+          }
+        }
+        if (vi_higher == null) {
+          debug.debug("  No match found for " + vi.derived.getClass()
+                      + " using " + Ppt.varNames(basemap));
+          continue forall_derived_vars;
+        }
+        // Create the new relation
+        vi.addHigherPO(vi_higher, nonce);
       }
     }
   }
@@ -506,9 +506,9 @@ public class Dataflow
 
     if (receives_samples) {
       PptsAndInts rec = compute_ppt_flow(ppt,
-					 true, // full paths
-					 true  // higher
-					 );
+                                         true, // full paths
+                                         true  // higher
+                                         );
       // Store result into ppt
       ppt.dataflow_ppts = rec.ppts;
       ppt.dataflow_transforms = rec.ints;
@@ -527,9 +527,9 @@ public class Dataflow
   {
     {
       PptsAndInts rec = compute_ppt_flow(ppt,
-					 false, // one-step paths
-					 false  // lower
-					 );
+                                         false, // one-step paths
+                                         false  // lower
+                                         );
       // Remove last element (don't flow invariant to same ppt)
       rec = rec.makeSubArray(rec.ppts.length - 1);
       // Store result into ppt
@@ -543,8 +543,8 @@ public class Dataflow
    * either just one step up or all paths to completion.
    **/
   public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
-					     boolean all_steps,
-					     boolean higher)
+                                             boolean all_steps,
+                                             boolean higher)
   {
     // Create the worklist 'first' to contain all variables in ppt.
     // That way, the result will be the flow from the whole program
@@ -567,9 +567,9 @@ public class Dataflow
    * point for the flow computation.
    **/
   public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
-					     VarInfo[] start,
-					     boolean all_steps,
-					     boolean higher)
+                                             VarInfo[] start,
+                                             boolean all_steps,
+                                             boolean higher)
   {
     // We could assert that start's VarInfos are from ppt.
 
@@ -590,9 +590,9 @@ public class Dataflow
    * point for the flow computation.
    **/
   private static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
-					      List start, // [VarAndSource]
-					      boolean all_steps,
-					      boolean higher)
+                                              List start, // [VarAndSource]
+                                              boolean all_steps,
+                                              boolean higher)
   {
     // We could assert that start's VarInfos are from ppt, and that
     // the VarAndSources have right the varinfo_index for them.
@@ -601,8 +601,8 @@ public class Dataflow
       // Return the trivial result: one self-step with an empty
       // projection.
       return new PptsAndInts
-	(new PptTopLevel[] { ppt },
-	 new int[][] { new int[0] } );
+        (new PptTopLevel[] { ppt },
+         new int[][] { new int[0] } );
     }
 
     // These two lists collect the result that will be returned
@@ -620,56 +620,56 @@ public class Dataflow
 
       // While worklist is non-empty, process the first element
       while (! worklist.isEmpty()) {
-	List head = (List) worklist.removeFirst();
+        List head = (List) worklist.removeFirst();
 
-	// Use null element to signal a gap, and thus completion.
+        // Use null element to signal a gap, and thus completion.
         // A null element appears only if all_steps is false.
-	if (head == null) break;
+        if (head == null) break;
 
-	// Add a flow from ppt to head
-	Assert.assert(head.size() >= 1);
-	PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
-	int[] flow_transform = new int[nvis];
-	Arrays.fill(flow_transform, -1);
-	for (Iterator i = head.iterator(); i.hasNext(); ) {
-	  VarAndSource vs = (VarAndSource) i.next();
-	  Assert.assert(vs.var.ppt == flow_ppt); // all flow to the same ppt
-	  Assert.assert(flow_transform[vs.source] == -1); // with no overlap
-	  flow_transform[vs.source] = vs.var.varinfo_index;
-	}
-	dataflow_ppts.add(flow_ppt);
-	dataflow_transforms.add(flow_transform);
+        // Add a flow from ppt to head
+        Assert.assert(head.size() >= 1);
+        PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
+        int[] flow_transform = new int[nvis];
+        Arrays.fill(flow_transform, -1);
+        for (Iterator i = head.iterator(); i.hasNext(); ) {
+          VarAndSource vs = (VarAndSource) i.next();
+          Assert.assert(vs.var.ppt == flow_ppt); // all flow to the same ppt
+          Assert.assert(flow_transform[vs.source] == -1); // with no overlap
+          flow_transform[vs.source] = vs.var.varinfo_index;
+        }
+        dataflow_ppts.add(flow_ppt);
+        dataflow_transforms.add(flow_transform);
 
-	// Extend head using all higher (or lower) nonces
-	Map nonce_to_vars = new HashMap(); // [Integer -> List[VarAndSource]]
-	for (Iterator i = head.iterator(); i.hasNext(); ) {
-	  VarAndSource vs = (VarAndSource) i.next();
-	  List higher_vis = higher ? vs.var.po_higher() : vs.var.po_lower();
-	  int[] higher_nonces = higher ? vs.var.po_higher_nonce() : vs.var.po_lower_nonce();
-	  for (int nonce_idx = 0; nonce_idx < higher_vis.size(); nonce_idx++) {
-	    VarInfo higher_vi = (VarInfo) higher_vis.get(nonce_idx);
-	    Integer higher_nonce = new Integer(higher_nonces[nonce_idx]);
+        // Extend head using all higher (or lower) nonces
+        Map nonce_to_vars = new HashMap(); // [Integer -> List[VarAndSource]]
+        for (Iterator i = head.iterator(); i.hasNext(); ) {
+          VarAndSource vs = (VarAndSource) i.next();
+          List higher_vis = higher ? vs.var.po_higher() : vs.var.po_lower();
+          int[] higher_nonces = higher ? vs.var.po_higher_nonce() : vs.var.po_lower_nonce();
+          for (int nonce_idx = 0; nonce_idx < higher_vis.size(); nonce_idx++) {
+            VarInfo higher_vi = (VarInfo) higher_vis.get(nonce_idx);
+            Integer higher_nonce = new Integer(higher_nonces[nonce_idx]);
             // newpath has type List[VarAndSource].
-	    List newpath = (List) nonce_to_vars.get(higher_nonce);
-	    if (newpath == null) {
-	      newpath = new ArrayList();
-	      nonce_to_vars.put(higher_nonce, newpath);
-	    }
-	    newpath.add(new VarAndSource(higher_vi, vs.source));
-	  }
-	}
-	for (Iterator i = nonce_to_vars.keySet().iterator(); i.hasNext(); ) {
-	  Integer nonce = (Integer) i.next();
-	  List newpath = (List) nonce_to_vars.get(nonce);
-	  Assert.assert(newpath != null);
-	  worklist.add(newpath);
-	}
+            List newpath = (List) nonce_to_vars.get(higher_nonce);
+            if (newpath == null) {
+              newpath = new ArrayList();
+              nonce_to_vars.put(higher_nonce, newpath);
+            }
+            newpath.add(new VarAndSource(higher_vi, vs.source));
+          }
+        }
+        for (Iterator i = nonce_to_vars.keySet().iterator(); i.hasNext(); ) {
+          Integer nonce = (Integer) i.next();
+          List newpath = (List) nonce_to_vars.get(nonce);
+          Assert.assert(newpath != null);
+          worklist.add(newpath);
+        }
 
-	// Put in a null to signal that all of the fields of the original
-	// worklist element have been added to the worklist.
-	if (! all_steps) {
-	  worklist.add(null);
-	}
+        // Put in a null to signal that all of the fields of the original
+        // worklist element have been added to the worklist.
+        if (! all_steps) {
+          worklist.add(null);
+        }
       }
 
       // We want to flow from the highest point to the lowest
@@ -720,13 +720,13 @@ public class Dataflow
       // Add to slice's partial order
       VarInfo[] vis_adj = new VarInfo[slice.arity];
       for (int j = 0; j < slice.arity; j++) {
-	int slice_index = slice.var_infos[j].varinfo_index;
-	int adj_index = flow_ints[slice_index];
-	if (adj_index == -1) {
-	  // slice doesn't flow here
-	  continue for_all_paths;
-	}
-	vis_adj[j] = adj_ppt.var_infos[adj_index];
+        int slice_index = slice.var_infos[j].varinfo_index;
+        int adj_index = flow_ints[slice_index];
+        if (adj_index == -1) {
+          // slice doesn't flow here
+          continue for_all_paths;
+        }
+        vis_adj[j] = adj_ppt.var_infos[adj_index];
       }
       slice.addToOnePO(adj_ppt, vis_adj);
     }
@@ -736,9 +736,9 @@ public class Dataflow
       PptConditional adj_ppt = (PptConditional) i.next();
       VarInfo[] vis_adj = new VarInfo[slice.arity];
       for (int j = 0; j < slice.arity; j++) {
-	int slice_index = slice.var_infos[j].varinfo_index;
-	int adj_index = slice_index;
-	vis_adj[j] = adj_ppt.var_infos[adj_index];
+        int slice_index = slice.var_infos[j].varinfo_index;
+        int adj_index = slice_index;
+        vis_adj[j] = adj_ppt.var_infos[adj_index];
       }
       slice.addToOnePO(adj_ppt, vis_adj);
     }
@@ -755,7 +755,7 @@ public class Dataflow
    * and relationships to the given stream.
    **/
   public static void dump_ppts(OutputStream outstream,
-			       PptMap ppts)
+                               PptMap ppts)
   {
     Map po_lower_stats = new HashMap();
     Map po_higher_stats = new HashMap();
@@ -768,42 +768,42 @@ public class Dataflow
 
       out.println(ppt.name);
       for (int i=0; i < ppt.var_infos.length; i++) {
-	VarInfo vi = ppt.var_infos[i];
-	out.println(vi.name.toString());
-	out.println("  Declared type: " + vi.type.format() );
-	out.println("  File rep type: " + vi.file_rep_type.format() );
-	out.println("  Internal type: " + vi.rep_type.format() );
-	out.println("  Comparability: " + vi.comparability );
-	out.println("  PO higher:");
-	int count = 0;
-	for (Iterator vs = vi.po_higher().iterator(); vs.hasNext(); ) {
-	  VarInfo v = (VarInfo) vs.next();
-	  int nonce = vi.po_higher_nonce()[count++];
-	  out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
-	}
-	{ // stats
-	  Integer _count = new Integer(count);
-	  Integer _n = (Integer) po_higher_stats.get(_count);
-	  int n;
-	  if (_n == null) { n = 0; }
-	  else { n = _n.intValue(); }
-	  po_higher_stats.put(_count, new Integer(n+1));
-	}
-	out.println("  PO lower:");
-	count = 0;
-	for (Iterator vs = vi.po_lower().iterator(); vs.hasNext(); ) {
-	  VarInfo v = (VarInfo) vs.next();
-	  int nonce = vi.po_lower_nonce()[count++];
-	  out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
-	}
-	{ // stats
-	  Integer _count = new Integer(count);
-	  Integer _n = (Integer) po_lower_stats.get(_count);
-	  int n;
-	  if (_n == null) { n = 0; }
-	  else { n = _n.intValue(); }
-	  po_lower_stats.put(_count, new Integer(n+1));
-	}
+        VarInfo vi = ppt.var_infos[i];
+        out.println(vi.name.toString());
+        out.println("  Declared type: " + vi.type.format() );
+        out.println("  File rep type: " + vi.file_rep_type.format() );
+        out.println("  Internal type: " + vi.rep_type.format() );
+        out.println("  Comparability: " + vi.comparability );
+        out.println("  PO higher:");
+        int count = 0;
+        for (Iterator vs = vi.po_higher().iterator(); vs.hasNext(); ) {
+          VarInfo v = (VarInfo) vs.next();
+          int nonce = vi.po_higher_nonce()[count++];
+          out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
+        }
+        { // stats
+          Integer _count = new Integer(count);
+          Integer _n = (Integer) po_higher_stats.get(_count);
+          int n;
+          if (_n == null) { n = 0; }
+          else { n = _n.intValue(); }
+          po_higher_stats.put(_count, new Integer(n+1));
+        }
+        out.println("  PO lower:");
+        count = 0;
+        for (Iterator vs = vi.po_lower().iterator(); vs.hasNext(); ) {
+          VarInfo v = (VarInfo) vs.next();
+          int nonce = vi.po_lower_nonce()[count++];
+          out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
+        }
+        { // stats
+          Integer _count = new Integer(count);
+          Integer _n = (Integer) po_lower_stats.get(_count);
+          int n;
+          if (_n == null) { n = 0; }
+          else { n = _n.intValue(); }
+          po_lower_stats.put(_count, new Integer(n+1));
+        }
       }
       out.println();
 
@@ -815,14 +815,14 @@ public class Dataflow
     for (int i = 0; i < 1000; i++) {
       Integer count = (Integer) po_higher_stats.get(new Integer(i));
       if (count != null) {
-	out.println("    " + i + " : " + count);
+        out.println("    " + i + " : " + count);
       }
     }
     out.println("  PO lower frequencies:");
     for (int i = 0; i < 1000; i++) {
       Integer count = (Integer) po_lower_stats.get(new Integer(i));
       if (count != null) {
-	out.println("    " + i + " : " + count);
+        out.println("    " + i + " : " + count);
       }
     }
     out.println();
@@ -836,7 +836,7 @@ public class Dataflow
    * Writes a textual (debugging) form of the dataflow
    **/
   public static void dump_flow(OutputStream outstream,
-			       PptMap ppts)
+                               PptMap ppts)
   {
     PrintStream out = new PrintStream(outstream);
 
@@ -844,20 +844,20 @@ public class Dataflow
       PptTopLevel ppt = (PptTopLevel) iter.next();
 
       if (ppt.dataflow_ppts != null) {
-	out.println(ppt.name);
-	for (int j = 0; j < ppt.dataflow_ppts.length; j++) {
-	  PptTopLevel df_ppt = ppt.dataflow_ppts[j];
-	  int[] df_ints = ppt.dataflow_transforms[j];
-	  out.println("    To " + df_ppt.name + ":");
-	  for (int k = 0; k < ppt.var_infos.length; k++) {
-	    int map = df_ints[k];
-	    if (map != -1) {
-	      out.println("      " + ppt.var_infos[k].name.name()
-			  + " -> " + df_ppt.var_infos[map].name.name());
-	    }
-	  }
-	}
-	out.println();
+        out.println(ppt.name);
+        for (int j = 0; j < ppt.dataflow_ppts.length; j++) {
+          PptTopLevel df_ppt = ppt.dataflow_ppts[j];
+          int[] df_ints = ppt.dataflow_transforms[j];
+          out.println("    To " + df_ppt.name + ":");
+          for (int k = 0; k < ppt.var_infos.length; k++) {
+            int map = df_ints[k];
+            if (map != -1) {
+              out.println("      " + ppt.var_infos[k].name.name()
+                          + " -> " + df_ppt.var_infos[map].name.name());
+            }
+          }
+        }
+        out.println();
       }
 
     }

@@ -132,7 +132,7 @@ public final class SeqIntComparison
   /* IOA */
   public String format_ioa() {
     String comparator = core.format_comparator().equals("==") ?
-	"=" : core.format_comparator();
+        "=" : core.format_comparator();
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(seqvar());
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
       " => " + quant.getVarIndexed(0) + comparator + sclvar().name.ioa_name() + quant.getClosingExp();
@@ -142,7 +142,7 @@ public final class SeqIntComparison
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }
 
@@ -153,7 +153,7 @@ public final class SeqIntComparison
     }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
@@ -161,7 +161,7 @@ public final class SeqIntComparison
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
+        { seqvar().name, sclvar().name });
     return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
@@ -264,10 +264,10 @@ public final class SeqIntComparison
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
       if (seqslice != null) {
-	EltOneOf eoo = EltOneOf.find(seqslice);
-	if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
-	  return true;
-	}
+        EltOneOf eoo = EltOneOf.find(seqslice);
+        if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
+          return true;
+        }
       }
     }
 

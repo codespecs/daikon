@@ -37,7 +37,7 @@ public final class VarComparabilityNone
   }
 
   static boolean comparable(VarInfoName name1, VarComparabilityNone type1,
-			    VarInfoName name2, VarComparabilityNone type2) {
+                            VarInfoName name2, VarComparabilityNone type2) {
     return true;
   }
 }

@@ -74,15 +74,15 @@ public final class VarInfo
    * The index in a ValueTuple.  It can differ from varinfo_index due to
    * constants (and possibly other factors).
    **/
-  public int value_index;	// index in lists of values, VarTuple objects
+  public int value_index;       // index in lists of values, VarTuple objects
                                 // (-1 iff is_static_constant or not yet set)
 
   public boolean is_static_constant;  // required if static_constant_value==null
-				//   (is_static_constant
+                                //   (is_static_constant
                                 //   iff (value_index == -1)
-  Object static_constant_value;	// null if not statically constant
+  Object static_constant_value; // null if not statically constant
                                 // once upon a time (still?):
-  				//   (static_constant_value != null)
+                                //   (static_constant_value != null)
                                 //   iff (value_index == -1)
 
   // Partial ordering relationships between variables.
@@ -189,15 +189,15 @@ public final class VarInfo
   }
 
   public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
-		 VarComparability comparability, boolean is_static_constant,
-		 Object static_constant_value, VarInfoAux aux) {
+                 VarComparability comparability, boolean is_static_constant,
+                 Object static_constant_value, VarInfoAux aux) {
     Assert.assert(file_rep_type != null);
     Assert.assert(legalFileRepType(file_rep_type),
                   "Unsupported representation type " + file_rep_type.format()
                   + " for variable " + name);
     // Ensure that the type and rep type are somewhat consistent
     Assert.assert(type.pseudoDimensions() >= file_rep_type.dimensions(),
-		  "Types dimensions incompatibility: " + type + " vs. " + file_rep_type);
+                  "Types dimensions incompatibility: " + type + " vs. " + file_rep_type);
     Assert.assert(aux != null);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
@@ -222,13 +222,13 @@ public final class VarInfo
   }
 
   public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type,
-		 VarComparability comparability, VarInfoAux aux) {
+                 VarComparability comparability, VarInfoAux aux) {
     this(name, type, file_rep_type, comparability, false, null, aux);
   }
 
   public VarInfo(VarInfo vi) {
     this(vi.name, vi.type, vi.file_rep_type, vi.comparability,
-	 vi.is_static_constant, vi.static_constant_value, vi.aux);
+         vi.is_static_constant, vi.static_constant_value, vi.aux);
     postState = vi.postState;
   }
 
@@ -275,8 +275,8 @@ public final class VarInfo
       a_new[i].ppt = null;
     }
     // I need to fix both of these slots:
-    //   public Derivation derived;	// whether (and how) derived
-    //   public Vector derivees;	// vector of Derivation objects
+    //   public Derivation derived;     // whether (and how) derived
+    //   public Vector derivees;        // vector of Derivation objects
     HashMap deriv_map = new HashMap();
     for (int i=0; i<a_new.length; i++) {
       Derivation deriv_old = a_old[i].derived;
@@ -410,7 +410,7 @@ public final class VarInfo
    * an error if the link already exists.
    **/
   public void addHigherPO(VarInfo higher,
-			  int nonce)
+                          int nonce)
   {
     VarInfo lower = this;
 
@@ -477,8 +477,8 @@ public final class VarInfo
     while (! worklist.isEmpty()) {
       VarInfo head = (VarInfo) worklist.removeFirst();
       if (! result.contains(head)) {
-	result.add(head);
-	worklist.addAll(lower ? head.po_lower() : head.po_higher());
+        result.add(head);
+        worklist.addAll(lower ? head.po_lower() : head.po_higher());
       }
     }
     Assert.assert(! result.contains(this));
@@ -591,7 +591,7 @@ public final class VarInfo
       Derivation der = vi.derived;
       if (der == null) continue;
       if (ArraysMDE.indexOf(der.getBases(), this) >= 0) {
-	result.add(der);
+        result.add(der);
       }
     }
     return result;
@@ -644,9 +644,9 @@ public final class VarInfo
       VarInfoName base = (VarInfoName) baseMaybe;
       derivedParamCached = this.ppt.findVar(base);
       if (Global.debugSuppress.isDebugEnabled()) {
-	Global.debugSuppress.debug (name.name() + " is a derived param");
-	Global.debugSuppress.debug ("derived from " + base.name());
-	Global.debugSuppress.debug (paramVars);
+        Global.debugSuppress.debug (name.name() + " is a derived param");
+        Global.debugSuppress.debug ("derived from " + base.name());
+        Global.debugSuppress.debug (paramVars);
       }
       result = true;
     }
@@ -714,20 +714,20 @@ public final class VarInfo
       // changes (the default for the rest of the code here, and
       // boring if X stays the same (because it's obviously true).
       if (name instanceof VarInfoName.TypeOf) {
-	VarInfoName base = ((VarInfoName.TypeOf) name).term;
-	VarInfo baseVar = ppt.findVar(base);
-	if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-	  Global.debugSuppress.debug ("TypeOf returning true");
-	  return true;
-	}
+        VarInfoName base = ((VarInfoName.TypeOf) name).term;
+        VarInfo baseVar = ppt.findVar(base);
+        if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+          Global.debugSuppress.debug ("TypeOf returning true");
+          return true;
+        }
       }
       if (name instanceof VarInfoName.SizeOf) {
-	VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
-	VarInfo baseVar = ppt.findVar(base);
-	if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-	  Global.debugSuppress.debug ("SizeOf returning true");
-	  return true;
-	}
+        VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
+        VarInfo baseVar = ppt.findVar(base);
+        if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+          Global.debugSuppress.debug ("SizeOf returning true");
+          return true;
+        }
       }
 
 
@@ -749,25 +749,25 @@ public final class VarInfo
       if (base.name.name().equals("this")) return false;
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
-	Global.debugSuppress.debug ("No orig variable for base, returning true ");
-	return true; // There can't be an equal invariant without orig
+        Global.debugSuppress.debug ("No orig variable for base, returning true ");
+        return true; // There can't be an equal invariant without orig
       }
       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       if (slice == null) {
-	Global.debugSuppress.debug ("No slice for equality in base, so uninteresting");
-	return true; // There can't be an equal invariant in a null slice
+        Global.debugSuppress.debug ("No slice for equality in base, so uninteresting");
+        return true; // There can't be an equal invariant in a null slice
       }
       if (Global.debugSuppress.isDebugEnabled()) {
-	Global.debugSuppress.debug ("Parent and orig slice for finding equality: " + slice.name);
+        Global.debugSuppress.debug ("Parent and orig slice for finding equality: " + slice.name);
       }
       boolean seenEqual = false;
       for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
-	Invariant sliceInv = (Invariant) iInvs.next();
-	if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
+        Invariant sliceInv = (Invariant) iInvs.next();
+        if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
       }
       if (!seenEqual) {
-	Global.debugSuppress.debug ("Didn't see equality in base, so uninteresting");
-	return true;
+        Global.debugSuppress.debug ("Didn't see equality in base, so uninteresting");
+        return true;
       }
       Global.debugSuppress.debug ("Saw equality.  Derived worth printing.");
 
@@ -921,12 +921,12 @@ public final class VarInfo
         if (controller_var != null) {
           // System.out.println("Considering " + name + " in " + controller.name);
           // This can fail if there are no :::OBJECT program points in the .dtrace file.
-	  if (controller_var.equal_to != null) { // XXX is this a good thing?
-	    Vector this_equalTo = controller_var.equal_to.equalTo();
-	    for (int i=0; i<this_equalTo.size(); i++) {
-	      controlling_equalTo.add(((VarInfo)this_equalTo.elementAt(i)).name);
-	    }
-	  }
+          if (controller_var.equal_to != null) { // XXX is this a good thing?
+            Vector this_equalTo = controller_var.equal_to.equalTo();
+            for (int i=0; i<this_equalTo.size(); i++) {
+              controlling_equalTo.add(((VarInfo)this_equalTo.elementAt(i)).name);
+            }
+          }
         }
       }
     }
@@ -940,9 +940,9 @@ public final class VarInfo
       if (vi.equal_to != this)
         continue;
       if (controlling_equalTo.contains(vi.name)) {
-	if (PrintInvariants.debugPrintEquality.isDebugEnabled()) {
-	  PrintInvariants.debugPrintEquality.debug ("Obviously equal because of controlling ppt: " + vi.name.name());
-	}
+        if (PrintInvariants.debugPrintEquality.isDebugEnabled()) {
+          PrintInvariants.debugPrintEquality.debug ("Obviously equal because of controlling ppt: " + vi.name.name());
+        }
         continue;
       }
 
@@ -953,7 +953,7 @@ public final class VarInfo
       // Variables that both are one less than something else
       // (or generalized, the same shift from something else).
       if ((name instanceof VarInfoName.Add) && (vi.name instanceof VarInfoName.Add) &&
-	  ((((VarInfoName.Add) name).amount) == (((VarInfoName.Add) vi.name).amount))) {
+          ((((VarInfoName.Add) name).amount) == (((VarInfoName.Add) vi.name).amount))) {
         continue;
       }
 
@@ -966,16 +966,16 @@ public final class VarInfo
         //  * there exists an a such that a=b (ie, equal_to slot of "b"'s
         //     varinfo is non-null); also, assert that "a.class" is in equalTo
 
-	VarInfoName sansclassname = null;
-	if (vi.name instanceof VarInfoName.TypeOf) {
-	   sansclassname = ((VarInfoName.TypeOf) vi.name).term;
-	} else if (vi.isPrestate()) {
-	  VarInfoName post = vi.postState.name;
-	  if (post instanceof VarInfoName.TypeOf) {
-	    // parent of "orig(x.class)" is "orig(x)"
-	    sansclassname = ((VarInfoName.TypeOf) post).term.applyPrestate();
-	  }
-	}
+        VarInfoName sansclassname = null;
+        if (vi.name instanceof VarInfoName.TypeOf) {
+           sansclassname = ((VarInfoName.TypeOf) vi.name).term;
+        } else if (vi.isPrestate()) {
+          VarInfoName post = vi.postState.name;
+          if (post instanceof VarInfoName.TypeOf) {
+            // parent of "orig(x.class)" is "orig(x)"
+            sansclassname = ((VarInfoName.TypeOf) post).term.applyPrestate();
+          }
+        }
 
         if (sansclassname != null) {
           // System.out.println("Considering .class: " + vi.name + "sansclass=" + sansclassname);
@@ -988,12 +988,12 @@ public final class VarInfo
             // We will omit vi.
             VarInfo a = sansclass.equal_to;
             VarInfo a_class;
-	    if (a.name instanceof VarInfoName.Prestate) {
-	      VarInfoName.Prestate a_name = (VarInfoName.Prestate) a.name;
-	      a_class = ppt.findVar(a_name.term.applyTypeOf());
-	    } else {
-	      a_class = ppt.findVar(a.name.applyTypeOf());
-	    }
+            if (a.name instanceof VarInfoName.Prestate) {
+              VarInfoName.Prestate a_name = (VarInfoName.Prestate) a.name;
+              a_class = ppt.findVar(a_name.term.applyTypeOf());
+            } else {
+              a_class = ppt.findVar(a.name.applyTypeOf());
+            }
             Assert.assert(a_class != null);
             Assert.assert(a_class.equal_to == this);
             continue;
@@ -1020,33 +1020,33 @@ public final class VarInfo
         // We expect the variable name to end with "[]", possibly wrapped
         // in "orig()" and/or suffixed by ".class".
         if (seq_contents.isPrestate()) {
-	  VarInfoName unorig = seq_contents.postState.name;
-	  // orig(a[].class) -> skip
-	  if (unorig instanceof VarInfoName.TypeOf) continue;
-	  // orig(a[]) -> orig(a)
-	  if (unorig instanceof VarInfoName.Elements) {
-	    seq_object_name = ((VarInfoName.Elements) unorig).term.applyPrestate();
-	  }
-	} else {
-	  // a[] -> a
-	  if (seq_contents.name instanceof VarInfoName.Elements) {
-	    seq_object_name = ((VarInfoName.Elements) seq_contents.name).term;
-	  }
+          VarInfoName unorig = seq_contents.postState.name;
+          // orig(a[].class) -> skip
+          if (unorig instanceof VarInfoName.TypeOf) continue;
+          // orig(a[]) -> orig(a)
+          if (unorig instanceof VarInfoName.Elements) {
+            seq_object_name = ((VarInfoName.Elements) unorig).term.applyPrestate();
+          }
+        } else {
+          // a[] -> a
+          if (seq_contents.name instanceof VarInfoName.Elements) {
+            seq_object_name = ((VarInfoName.Elements) seq_contents.name).term;
+          }
         }
 
-	if (seq_object_name == null) {
-	  // This can happen with e.g. this.seq[].field
-	  // Used to be error; dfec actually does this though (?)
+        if (seq_object_name == null) {
+          // This can happen with e.g. this.seq[].field
+          // Used to be error; dfec actually does this though (?)
           // System.out.println("equalToNonobvious: cannot handle sequence variable " + seq_contents.name);
-	  seq_object_name = seq_contents.name;
-	}
+          seq_object_name = seq_contents.name;
+        }
 
         VarInfo seq_object = ppt.findVar(seq_object_name);
 
         // First part of test is for Lisp output files; shouldn't happen in general
         if (seq_object != null && ! seq_object.isCanonical()) {
           continue;
-	}
+        }
       }
 
       // For esc_output and java_output, omit noting that varibles are unmodified.
@@ -1097,7 +1097,7 @@ public final class VarInfo
 
     for (int i=0; i<vis1.length; i++)
       if (!vis1[i].comparable2(vis2[i]))
-	return false;
+        return false;
 
     return true;
   }
@@ -1113,10 +1113,10 @@ public final class VarInfo
       return false;
     Assert.assert(type.equals(other.type), "type matches");
     Assert.assert(file_rep_type.equals(other.file_rep_type),
-		  "file_rep_type matches (" +
-		  name + ":" + file_rep_type + "," +
-		  other.name + ":" + other.file_rep_type +
-		  ")");
+                  "file_rep_type matches (" +
+                  name + ":" + file_rep_type + "," +
+                  other.name + ":" + other.file_rep_type +
+                  ")");
     // One of the VarInfos might be at a program point with more variables,
     // so the list of variables to which it is comparable could be larger.
     // Assert.assert(comparability.equals(other.comparability));
@@ -1198,27 +1198,27 @@ public final class VarInfo
       VarInfoName search = this.name;
       boolean pre = false;
       if (search instanceof VarInfoName.Prestate) {
-	search = ((VarInfoName.Prestate) search).term;
-	pre = true;
+        search = ((VarInfoName.Prestate) search).term;
+        pre = true;
       }
       while (search instanceof VarInfoName.Field) {
-	search = ((VarInfoName.Field) search).term;
+        search = ((VarInfoName.Field) search).term;
       }
       if (pre) {
-	search = search.applyPrestate();
+        search = search.applyPrestate();
       }
       search = search.applySize();
       VarInfo result = ppt.findVar(search);
       if (result != null) {
-	return result;
+        return result;
 //        } else {
-//  	System.out.println("Warning: Size variable " + search + " not found.");
-//  	System.out.print("Variables: ");
-//  	for (int i=0; i<ppt.var_infos.length; i++) {
-//  	  VarInfo vi = ppt.var_infos[i];
-//  	  System.out.print(vi.name + " ");
-//  	}
-//  	System.out.println();
+//      System.out.println("Warning: Size variable " + search + " not found.");
+//      System.out.print("Variables: ");
+//      for (int i=0; i<ppt.var_infos.length; i++) {
+//        VarInfo vi = ppt.var_infos[i];
+//        System.out.print(vi.name + " ");
+//      }
+//      System.out.println();
       }
     }
 //    throw new Error("Couldn't find size of " + name);
@@ -1251,11 +1251,11 @@ public final class VarInfo
     for (Iterator i = name.inOrderTraversal().iterator(); i.hasNext(); ) {
       Object next = i.next();
       if (next instanceof VarInfoName.Elements) {
-	VarInfoName.Elements elems = (VarInfoName.Elements) next;
-	VarInfo seq = ppt.findVar(elems.term);
-	if (! seq.type.isArray()) {
-	  return false;
-	}
+        VarInfoName.Elements elems = (VarInfoName.Elements) next;
+        VarInfo seq = ppt.findVar(elems.term);
+        if (! seq.type.isArray()) {
+          return false;
+        }
       }
     }
 
@@ -1507,23 +1507,23 @@ public final class VarInfo
         LinearBinary lb = (LinearBinary) lbs.elementAt(i);
 
         if (this.equals(lb.var2()) && (post != lb.var1().isPrestate())) {
-	  // this = a * v1 + b
-	  double a = lb.core.a, b = lb.core.b;
-	  if (a == 1) {
-	    // this = v1 + b
-	    int add = (int) b;
-	    return lb.var1().name.applyAdd(add);
-	  }
+          // this = a * v1 + b
+          double a = lb.core.a, b = lb.core.b;
+          if (a == 1) {
+            // this = v1 + b
+            int add = (int) b;
+            return lb.var1().name.applyAdd(add);
+          }
         }
 
-	if (this.equals(lb.var1()) && (post != lb.var2().isPrestate())) {
-	  // v2 = a * this + b
-	  double a = lb.core.a, b = lb.core.b;
-	  if (a == 1) {
-	    // this = v2 - b
-	    int add = -((int) b);
-	    return lb.var2().name.applyAdd(add);
-	  }
+        if (this.equals(lb.var1()) && (post != lb.var2().isPrestate())) {
+          // v2 = a * this + b
+          double a = lb.core.a, b = lb.core.b;
+          if (a == 1) {
+            // this = v2 - b
+            int add = -((int) b);
+            return lb.var2().name.applyAdd(add);
+          }
         }
       }
 
@@ -1554,7 +1554,7 @@ public final class VarInfo
 
     if (!isDerived()) {
       if (debugSimplifyExpression.isDebugEnabled())
-	debugSimplifyExpression.debug("** Punt because not derived variable");
+        debugSimplifyExpression.debug("** Punt because not derived variable");
       return;
     }
 
@@ -1564,8 +1564,8 @@ public final class VarInfo
     while (nodes.hasNext()) {
       Object node = nodes.next();
       if (node instanceof VarInfoName.Poststate) {
-	postexpr = (VarInfoName.Poststate) node;
-	break;
+        postexpr = (VarInfoName.Poststate) node;
+        break;
       }
     }
     if (postexpr == null) {
@@ -1594,23 +1594,23 @@ public final class VarInfo
     VarInfo postvar = post_context.findVar(postexpr.term);
     if (postvar == null) {
       if (debugSimplifyExpression.isDebugEnabled())
-	debugSimplifyExpression.debug("** Punt because no VarInfo for postvar " + postexpr.term);
+        debugSimplifyExpression.debug("** Punt because no VarInfo for postvar " + postexpr.term);
       return;
     }
     VarInfoName pre_expr = postvar.preStateEquivalent();
     if (pre_expr != null) {
       // strip off any orig() so we don't get orig(a[orig(i)])
       if (pre_expr instanceof VarInfoName.Prestate) {
-	pre_expr = ((VarInfoName.Prestate) pre_expr).term;
+        pre_expr = ((VarInfoName.Prestate) pre_expr).term;
       } else if (pre_expr instanceof VarInfoName.Add) {
-	VarInfoName.Add add = (VarInfoName.Add) pre_expr;
-	if (add.term instanceof VarInfoName.Prestate) {
-	  pre_expr = ((VarInfoName.Prestate) add.term).term.applyAdd(add.amount);
-	}
+        VarInfoName.Add add = (VarInfoName.Add) pre_expr;
+        if (add.term instanceof VarInfoName.Prestate) {
+          pre_expr = ((VarInfoName.Prestate) add.term).term.applyAdd(add.amount);
+        }
       }
       name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(name);
       if (debugSimplifyExpression.isDebugEnabled())
-	debugSimplifyExpression.debug("** Replaced with: " + name);
+        debugSimplifyExpression.debug("** Replaced with: " + name);
     }
 
     if (debugSimplifyExpression.isDebugEnabled())

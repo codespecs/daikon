@@ -24,8 +24,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class EltLowerBound 
-  extends SingleSequence 
+public class EltLowerBound
+  extends SingleSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -105,14 +105,14 @@ public class EltLowerBound
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
@@ -126,7 +126,7 @@ public class EltLowerBound
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
   }
 
@@ -169,7 +169,7 @@ public class EltLowerBound
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.min1  < dkconfig_minimal_interesting) ||
-	(core.min1  > dkconfig_maximal_interesting)) {
+        (core.min1  > dkconfig_maximal_interesting)) {
       return true;
     }
     EltOneOf  oo = EltOneOf.find(ppt);
@@ -189,7 +189,7 @@ public class EltLowerBound
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltLowerBound ) {
+      if (inv instanceof EltLowerBound) {
         EltLowerBound  other = (EltLowerBound) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
@@ -234,7 +234,7 @@ public class EltLowerBound
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof EltUpperBound ) {
+    if (other instanceof EltUpperBound) {
       if (core.min1  >  ((EltUpperBound) other). core.max1 )
         return true;
     }
@@ -249,7 +249,7 @@ public class EltLowerBound
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltLowerBound )
+      if (inv instanceof EltLowerBound)
         return (EltLowerBound) inv;
     }
     return null;

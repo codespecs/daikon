@@ -55,23 +55,23 @@ public class UnionInvariants {
           System.out.println(usage);
           System.exit(1);
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_controlled_invariants = true;
-	} else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
-	} else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
-	  Daikon.suppress_redundant_invariants_with_simplify = true;
-	} else {
-	  throw new RuntimeException("Unknown long option received: " +
+          Daikon.suppress_implied_controlled_invariants = true;
+        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
+          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
+        } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          Daikon.suppress_redundant_invariants_with_simplify = true;
+        } else {
+          throw new RuntimeException("Unknown long option received: " +
                                      option_name);
-	}
+        }
         break;
       case 'h':
         System.out.println(usage);
         System.exit(1);
         break;
       case 'o':
-	if (inv_file != null)
-	  throw new Error("multiple serialization output files supplied on command line");
+        if (inv_file != null)
+          throw new Error("multiple serialization output files supplied on command line");
 
         String inv_filename = g.getOptarg();
         System.out.println("Inv filename = " + inv_filename);
@@ -102,9 +102,9 @@ public class UnionInvariants {
       String filename = args[i];
       System.out.println("Reading " + filename + "...");
       PptMap ppt_map =
-	FileIO.read_serialized_pptmap(new File(filename),
-				      true // use saved config
-				      );
+        FileIO.read_serialized_pptmap(new File(filename),
+                                      true // use saved config
+                                      );
       union(result, ppt_map);
     }
 
@@ -119,8 +119,8 @@ public class UnionInvariants {
       System.out.flush();
       long start = System.currentTimeMillis();
       for (Iterator i = result.iterator() ; i.hasNext() ; ) {
-	PptTopLevel ppt = (PptTopLevel) i.next();
-	ppt.mark_implied_via_simplify(result);
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        ppt.mark_implied_via_simplify(result);
       }
       long end = System.currentTimeMillis();
       double elapsed = (end - start) / 1000.0;
@@ -138,21 +138,21 @@ public class UnionInvariants {
    * Union multiple PptMaps into one.
    **/
   public static void union(PptMap collector,  // mutated
-			   PptMap source      // unmodified (but aliased into)
-			   )
+                           PptMap source      // unmodified (but aliased into)
+                           )
   {
     for (Iterator i = source.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
 
       /* [INCR] ...
       if (! ppt.has_samples())
-	continue;
+        continue;
       */ // ... [INCR]
       if ((ppt.views.size() == 0) && (ppt.implication_view.invs.size() == 0))
-	continue;
+        continue;
 
       if (collector.get(ppt.ppt_name) != null) {
-	throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name);
+        throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name);
       }
 
       System.out.println("Adding ppt " + ppt.name);

@@ -32,7 +32,7 @@ public final class SequencesConcatFactory  extends BinaryDerivationFactory {
     }
 
     if (var1.rep_type != ProglangType.INT_ARRAY &&
-	var1.rep_type != ProglangType.STRING_ARRAY) {
+        var1.rep_type != ProglangType.STRING_ARRAY) {
       return null;
     }
 
@@ -61,5 +61,3 @@ public final class SequencesConcatFactory  extends BinaryDerivationFactory {
   }
 
 }
-
-

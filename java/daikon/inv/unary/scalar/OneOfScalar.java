@@ -24,8 +24,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfScalar 
-  extends SingleScalar 
+public final class OneOfScalar
+  extends SingleScalar
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -156,7 +156,7 @@ public final class OneOfScalar
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) );
+      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
     }
     sb.append(" }");
     return sb.toString();
@@ -241,7 +241,7 @@ public final class OneOfScalar
         result = varname + " == null";
       } else {
         result = varname + " != null";
-	  // varname + " has only one value"
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -297,20 +297,20 @@ public final class OneOfScalar
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 1) {
-	if (elts[0] == 0) {
-	  result = varname + " == null";
-	} else {
-	  result = varname + " != null";
-	  // varname + " has only one value"
+        if (elts[0] == 0) {
+          result = varname + " == null";
+        } else {
+          result = varname + " != null";
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
-	}
+        }
       } else {
-	// add_modified allows two elements iff one is null
-	Assert.assert(num_elts == 2);
-	Assert.assert(elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+        // add_modified allows two elements iff one is null
+        Assert.assert(num_elts == 2);
+        Assert.assert(elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
       result = "";
@@ -340,7 +340,7 @@ public final class OneOfScalar
         result = varname + " == null";
       } else {
         result = varname + " != null";
-	  // varname + " has only one value"
+          // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
@@ -367,13 +367,13 @@ public final class OneOfScalar
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
-	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
+        result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
       } else {
-	// add_modified allows two elements iff one is null
-	Assert.assert(num_elts == 2);
-	Assert.assert(elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
+        // add_modified allows two elements iff one is null
+        Assert.assert(num_elts == 2);
+        Assert.assert(elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
     } else {
       result = "";
@@ -381,10 +381,10 @@ public final class OneOfScalar
         result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
       }
       if (num_elts > 1) {
-	result = "(OR" + result + ")";
+        result = "(OR" + result + ")";
       } else {
-	// chop leading space
-	result = result.substring(1);
+        // chop leading space
+        result = result.substring(1);
       }
     }
 
@@ -414,7 +414,7 @@ public final class OneOfScalar
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
-	flowThis();
+        flowThis();
         destroy();
         return;
       }
@@ -510,11 +510,11 @@ public final class OneOfScalar
         return ((elts[0] == 0 && other.elts[0] == 0) ||
                 (elts[0] != 0 && other.elts[0] != 0));
       } else if (num_elts == 2 && other.num_elts == 2) {
-	// add_modified allows two elements iff one is null
-	Assert.assert(elts[0] == 0);
-	Assert.assert(other.elts[0] == 0);
-	Assert.assert(elts[1] != 0);
-	Assert.assert(other.elts[1] != 0);
+        // add_modified allows two elements iff one is null
+        Assert.assert(elts[0] == 0);
+        Assert.assert(other.elts[0] == 0);
+        Assert.assert(elts[1] != 0);
+        Assert.assert(other.elts[1] != 0);
 
         // Since we know the first elements of each invariant are
         // zero, and the second elements are nonzero, we can immediately
@@ -527,14 +527,14 @@ public final class OneOfScalar
 
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
-	return false;
+        return false;
 
     return true;
   }
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfScalar ) {
+    if (o instanceof OneOfScalar) {
       OneOfScalar  other = (OneOfScalar) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -547,7 +547,7 @@ public final class OneOfScalar
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof NonZero ) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     long elts_min = Long.MAX_VALUE;
@@ -580,7 +580,7 @@ public final class OneOfScalar
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfScalar )
+      if (inv instanceof OneOfScalar)
         return (OneOfScalar) inv;
     }
     return null;

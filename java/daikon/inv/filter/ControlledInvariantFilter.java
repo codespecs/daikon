@@ -51,7 +51,7 @@ class ControlledInvariantFilter extends InvariantFilter {
 //        boolean shouldKeep = filters.shouldKeep( controllingInvariant );
 //        filters.changeFilterSetting( SimplifyFilter.description, simplifyFilterOn );
 //        if (shouldKeep)
-//  	return true;
+//      return true;
 //      }
 //      return false;
     */
@@ -64,12 +64,12 @@ class ControlledInvariantFilter extends InvariantFilter {
   Vector getAllControllingInvariants( Invariant invariant ) {
     Vector parents = invariant.find_controlling_invariants();
     Vector allControllingInvariants = new Vector();
-    if (parents.size() == 0)	// base case: just return this invariant
+    if (parents.size() == 0)    // base case: just return this invariant
       allControllingInvariants.add( invariant );
-    else			// aggregate all the parents' trees
+    else                        // aggregate all the parents' trees
       for (int i=0; i < parents.size(); i++) {
-	Invariant parent = (Invariant) parents.get( i );
-	allControllingInvariants.addAll( getAllControllingInvariants( parent ));
+        Invariant parent = (Invariant) parents.get( i );
+        allControllingInvariants.addAll( getAllControllingInvariants( parent ));
       }
     return allControllingInvariants;
   }

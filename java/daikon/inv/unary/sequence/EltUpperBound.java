@@ -24,8 +24,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class EltUpperBound 
-  extends SingleSequence 
+public class EltUpperBound
+  extends SingleSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -105,14 +105,14 @@ public class EltUpperBound
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
   }
 
@@ -126,7 +126,7 @@ public class EltUpperBound
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(<= " + form[1] + " " + core.max1  + ")" + form[2];
   }
 
@@ -169,14 +169,14 @@ public class EltUpperBound
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.max1  < dkconfig_minimal_interesting) ||
-	(core.max1  > dkconfig_maximal_interesting)) {
+        (core.max1  > dkconfig_maximal_interesting)) {
       return true;
     }
     EltOneOf  oo = EltOneOf.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.max1  == oo.MINELT(), since the LowerBound
       // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo. max_elt_long ()) {
+      if (core.max1  >=  oo.max_elt_long()) {
         return true;
       }
     }
@@ -189,7 +189,7 @@ public class EltUpperBound
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltUpperBound ) {
+      if (inv instanceof EltUpperBound) {
         EltUpperBound  other = (EltUpperBound) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
@@ -207,7 +207,6 @@ public class EltUpperBound
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
-
       }
     }
 
@@ -235,7 +234,7 @@ public class EltUpperBound
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof EltLowerBound ) {
+    if (other instanceof EltLowerBound) {
       if (core.max1  <  ((EltLowerBound) other). core.min1 )
         return true;
     }
@@ -250,7 +249,7 @@ public class EltUpperBound
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltUpperBound )
+      if (inv instanceof EltUpperBound)
         return (EltUpperBound) inv;
     }
     return null;

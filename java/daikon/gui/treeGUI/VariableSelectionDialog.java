@@ -30,10 +30,10 @@ class VariableSelectionDialog extends JDialog {
     variablesPanel.add( new JLabel( "Select the variables of interest: " ));
     for (int i=0; i < varInfos.length; i++)
       if (! varInfos[i].isDerived()) {
-	final VarInfo varInfo = varInfos[i];
-	JCheckBox checkBox = new JCheckBox( varInfo.name.name() );
-	variablesPanel.add( checkBox );
-	variableCheckBoxes.add( checkBox );
+        final VarInfo varInfo = varInfos[i];
+        JCheckBox checkBox = new JCheckBox( varInfo.name.name() );
+        variablesPanel.add( checkBox );
+        variableCheckBoxes.add( checkBox );
       }
 
     JButton cancelButton = new JButton( "Cancel" );
@@ -42,22 +42,22 @@ class VariableSelectionDialog extends JDialog {
     final VariableSelectionDialog variableSelectionDialog = this;
 
     cancelButton.addActionListener( new ActionListener() {
-	public void actionPerformed( ActionEvent e ) {
-	  variableSelectionDialog.setVisible( false );
-	}});
+        public void actionPerformed( ActionEvent e ) {
+          variableSelectionDialog.setVisible( false );
+        }});
     final JButton okButton = new JButton( "Filter on selected variables" );
     okButton.addActionListener( new ActionListener() {
-	public void actionPerformed( ActionEvent e ) {
-	  DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-	  for (int i=0; i < variableCheckBoxes.size(); i++ )
-	    if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
-	      invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-	      invariantsTablesPanel.updateInvariantsDisplay();
-	      listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-	    }
-	  variableSelectionDialog.setVisible( false );
-	  variablesList.setModel( listModel );
-	}});
+        public void actionPerformed( ActionEvent e ) {
+          DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+          for (int i=0; i < variableCheckBoxes.size(); i++ )
+            if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
+              invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+              invariantsTablesPanel.updateInvariantsDisplay();
+              listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+            }
+          variableSelectionDialog.setVisible( false );
+          variablesList.setModel( listModel );
+        }});
     getRootPane().setDefaultButton( okButton );
 
     JPanel buttonsPanel = new JPanel();

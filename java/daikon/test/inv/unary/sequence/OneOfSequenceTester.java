@@ -26,7 +26,7 @@ public class OneOfSequenceTester extends TestCase {
                                  ProglangType.INT_ARRAY,
                                  ProglangType.INT_ARRAY,
                                  null, // null Comparability
-				 VarInfoAux.getDefault());
+                                 VarInfoAux.getDefault());
     // [INCR]
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;
@@ -38,7 +38,7 @@ public class OneOfSequenceTester extends TestCase {
                                  ProglangType.HASHCODE_ARRAY,
                                  ProglangType.HASHCODE_ARRAY,
                                  null, // null Comparability
-				 VarInfoAux.getDefault());
+                                 VarInfoAux.getDefault());
     // [INCR]
     // // VarInfo.isCanonical() insists that equal_to be non-null.
     // result.equal_to = result;

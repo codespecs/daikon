@@ -73,9 +73,9 @@ public final class ProglangType
 
 
 
-  private String base;		// interned name of base type
+  private String base;          // interned name of base type
   public String base() { return base; }
-  private int dimensions;	// number of dimensions
+  private int dimensions;       // number of dimensions
   public int dimensions() { return dimensions; }
   public boolean isArray() { return dimensions > 0; }
 
@@ -193,7 +193,7 @@ public final class ProglangType
     {
       ProglangType candidate = (ProglangType)v.elementAt(ii);
       if (candidate.dimensions() == t_dims)
-	return candidate;
+        return candidate;
     }
 
     return null;
@@ -305,10 +305,10 @@ public final class ProglangType
           System.out.println("Unquoted string value: " + value);
         }
         // Assert.assert(value.startsWith("\"") && value.endsWith("\""));
-	if (value.startsWith("\"") && value.endsWith("\""))
-	  value = value.substring(1, value.length()-1);
+        if (value.startsWith("\"") && value.endsWith("\""))
+          value = value.substring(1, value.length()-1);
         value = UtilMDE.unquote(value);
-	return value.intern();
+        return value.intern();
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer
         // (as I believe the C front end does).
@@ -335,16 +335,16 @@ public final class ProglangType
           return LongOne;
         if (value.equals("null"))
           return LongZero;
-	return Intern.internedLong(value);
+        return Intern.internedLong(value);
       } else if (base == BASE_DOUBLE) {
         // Must ignore case, because dfej outputs "NaN", while dfec
         // outputs "nan".  dfec outputs "nan", because this string
         // comes from the C++ library.
         if (value.equalsIgnoreCase("NaN"))
           return DoubleNaN;
-	return Intern.internedDouble(value);
+        return Intern.internedDouble(value);
       } else {
-	throw new Error("unrecognized type " + base);
+        throw new Error("unrecognized type " + base);
       }
     } else if (dimensions == 1) {
       // variable is an array
@@ -379,7 +379,7 @@ public final class ProglangType
               Assert.assert(parser.sval.equals("null"));
               v.add(null);
             } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
-	      v.add(Integer.toString((int)parser.nval));
+              v.add(Integer.toString((int)parser.nval));
             } else {
               System.out.println("Bad ttype " + (char)parser.ttype + " [int=" + parser.ttype + "] while parsing " + value_);
               v.add(null);
@@ -444,11 +444,11 @@ public final class ProglangType
 
     } else if (dimensions == 2) {
       if (base == BASE_CHAR) {
-	// Array of strings
-	throw new Error("To implement");
-	// value = tuple(eval(value));
+        // Array of strings
+        throw new Error("To implement");
+        // value = tuple(eval(value));
       } else {
-	throw new Error("Can't parse a value of type " + format());
+        throw new Error("Can't parse a value of type " + format());
       }
     } else {
       throw new Error("Can't parse a value of type " + format());

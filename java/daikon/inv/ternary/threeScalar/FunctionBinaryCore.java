@@ -64,8 +64,8 @@ public final class FunctionBinaryCore
     new_order[permutation[2]] = var_indices[var_order][2];
     for (int i=0; i < var_indices.length; i++) {
       if (Arrays.equals(new_order, var_indices[i])) {
-	var_order = i;
-	return;
+        var_order = i;
+        return;
       }
     }
     Assert.assert(false, "Could not find new ordering");
@@ -108,12 +108,12 @@ public final class FunctionBinaryCore
     }
 
     try {
-	if (! result.equals(function.invoke(null, new Object[] { arg1, arg2 }))) {
+        if (! result.equals(function.invoke(null, new Object[] { arg1, arg2 }))) {
           // System.out.println("FunctionBinaryCore failed: "
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
-	  wrapper.flowThis();
-	  wrapper.destroy();
+          wrapper.flowThis();
+          wrapper.destroy();
           return;
         }
     } catch (Exception e) {

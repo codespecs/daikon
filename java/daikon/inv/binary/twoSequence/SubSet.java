@@ -49,8 +49,8 @@ public class SubSet
         || (SubSet.isObviousDerived(var2, var1))) {
       Global.implied_noninstantiated_invariants++;
       if (debug.isDebugEnabled()) {
-	debug.debug (var1 + ", " + var2);
-	debug.debug ("Obvious derived, returning null");
+        debug.debug (var1 + ", " + var2);
+        debug.debug ("Obvious derived, returning null");
       }
       return null;
     }
@@ -136,15 +136,15 @@ public class SubSet
     if (var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
       var1_in_var2 = false;
       if (!var2_in_var1) {
-	destroy();
-	return;
+        destroy();
+        return;
       }
     }
     if (var2_in_var1 && (!ArraysMDE.isSubset(a2, a1))) {
       var2_in_var1 = false;
       if (!var1_in_var2) {
-	destroy();
-	return;
+        destroy();
+        return;
       }
     }
     Assert.assert(var1_in_var2 || var2_in_var1);
@@ -177,7 +177,7 @@ public class SubSet
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SubSet)
-	return (SubSet) inv;
+        return (SubSet) inv;
     }
     return null;
   }

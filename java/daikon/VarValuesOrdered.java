@@ -24,7 +24,7 @@ public final class VarValuesOrdered {
   private Vector values;
   private Vector modbits;
   private Vector counts;        // for run-length encoding
-  private int num_samples;	// total number of samples; sum of count Vector.
+  private int num_samples;      // total number of samples; sum of count Vector.
                                 //   also computable from tuplemod_*.
 
   private HashSet values_set;   // for count of values.
@@ -37,7 +37,7 @@ public final class VarValuesOrdered {
   // tuplemod_values, so there is no need to maintain them separately.
   // (Would they be used frequently enough to justify maintaining them?)
 
-  private int[] tuplemod_samples;	// multiplicities of all tuples with each tuplemod
+  private int[] tuplemod_samples;       // multiplicities of all tuples with each tuplemod
 
 
   VarValuesOrdered() {
@@ -63,7 +63,7 @@ public final class VarValuesOrdered {
     StringBuffer sb = new StringBuffer();
     for (int tm=0; tm<ValueTuple.TUPLEMOD_VALUES; tm++) {
       if (tm != 0)
-	sb.append("; ");
+        sb.append("; ");
       sb.append(ValueTuple.tuplemodToStringBrief(tm));
       sb.append("=");
       sb.append(tuplemod_samples[tm]);

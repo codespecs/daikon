@@ -166,10 +166,10 @@ public abstract class PptSlice
   {
     Dataflow.PptsAndInts higher =
       Dataflow.compute_ppt_flow(parent,
-				var_infos,
-				false, // just one step
-				true   // higher
-				);
+                                var_infos,
+                                false, // just one step
+                                true   // higher
+                                );
 
     // We always have at least one path, since the dataflow result
     // includes 'here' as its last element -- we ignore the 'here'
@@ -181,19 +181,19 @@ public abstract class PptSlice
       int[] flow = higher.ints[i];
       boolean all = true;       // below, all controls whether to return
       for (int j = 0; all && (j < arity); j++) {
-	int varinfo_index = var_infos[j].varinfo_index;
-	int var_flow_to = flow[varinfo_index];
-	boolean flows = (var_flow_to != -1);
-	all = all && flows;
+        int varinfo_index = var_infos[j].varinfo_index;
+        int var_flow_to = flow[varinfo_index];
+        boolean flows = (var_flow_to != -1);
+        all = all && flows;
       }
       if (Global.debugInfer.isDebugEnabled()) {
-	Global.debugInfer.debug
-	  ("isControlled: "
-	   + name + " controlled by " + higher.ppts[i].name + "? : "
-	   + (all ? "yes" : "no"));
+        Global.debugInfer.debug
+          ("isControlled: "
+           + name + " controlled by " + higher.ppts[i].name + "? : "
+           + (all ? "yes" : "no"));
       }
       if (all) {
-	return true;
+        return true;
       }
     }
 
@@ -210,7 +210,7 @@ public abstract class PptSlice
    * @see po_lower, po_lower_vis
    **/
   protected void addToOnePO(PptTopLevel adj,
-			    VarInfo[] slice_vis)
+                            VarInfo[] slice_vis)
   {
     Assert.assert(slice_vis.length == arity);
 
@@ -306,7 +306,7 @@ public abstract class PptSlice
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       if (inv.falsified) {
-	to_remove.add(inv);
+        to_remove.add(inv);
       }
     }
     // Could also assert that classes of invariants killed are all
@@ -316,15 +316,15 @@ public abstract class PptSlice
     if (to_remove.size() > invs_to_flow.size()) {
       Set naughty = new HashSet();
       for (Iterator i = to_remove.iterator(); i.hasNext(); ) {
-	Invariant inv = (Invariant) i.next();
-	naughty.add(inv.repr());
+        Invariant inv = (Invariant) i.next();
+        naughty.add(inv.repr());
       }
       for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
-	Invariant inv = (Invariant) i.next();
-	naughty.remove(inv.repr());
+        Invariant inv = (Invariant) i.next();
+        naughty.remove(inv.repr());
       }
       throw new RuntimeException
-	("Class(es) did not call addToFlow after calling destroy: " + naughty);
+        ("Class(es) did not call addToFlow after calling destroy: " + naughty);
     }
     removeInvariants(to_remove);
 
@@ -349,59 +349,59 @@ public abstract class PptSlice
       // For all of the slices
       List slices_vis = (List) private_po_lower_vis.get(lower);
       for (Iterator k = slices_vis.iterator(); k.hasNext(); ) {
-	VarInfo[] slice_vis = (VarInfo[]) k.next();
-	// Ensure the slice exists.
-	PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
-	// Compute the permutation
-	int[] permutation = new int[slice.arity];
-	for (int i=0; i < arity; i++) {
+        VarInfo[] slice_vis = (VarInfo[]) k.next();
+        // Ensure the slice exists.
+        PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
+        // Compute the permutation
+        int[] permutation = new int[slice.arity];
+        for (int i=0; i < arity; i++) {
           // slice.var_infos is small, so this call is relatively inexpensive
-	  permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
-	}
-	// For each invariant
+          permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
+        }
+        // For each invariant
       for_each_invariant:
-	for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
-	  Invariant inv = (Invariant) i.next();
-	  if (! inv.falsified) {
-	    // The invariant must be destroyed before it can be
-	    // resurrected.  The invariant objects that flow are
-	    // provided by the invariants that are falsified or change
-	    // formula.  Depending on the characteristics of the
-	    // invariant, the item to flow may or may not have been
-	    // destroyed.  Invariants that do not compute any
-	    // constants will often just flow themselves directly,
-	    // which means that inv will be falsified.  On the other
-	    // hand, invariants with weaken-able computed constants
-	    // will flow a clone of themselves before they weaken.  In
-	    // that case, inv will not yet have been falsified.
-	    inv.destroy();
-	  }
-	  // debug
-	  if (debugFlow.isDebugEnabled()) {
-	    debugFlow.debug(" " + inv.format() + " flowing from " +
-			    parent.name + " to " + lower.name);
-	  }
-	  // If its class does not already exist in lower
-	  for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
-	    Object item = h.next();
-	    // XXX Should this be some sort of same formula check
-	    // instead?  Probably not; one class of invariant should
-	    // be able to handle all data fed to it; we never need two
-	    // invariants of the same class in the same pptslice.
-	    // Maybe add that as rep invariant up above?
-	    if (item.getClass() == inv.getClass()) {
-	      if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
-	      continue for_each_invariant;
-	    }
-	  }
-	  // Let it be reborn
-	  Invariant reborn = inv.resurrect(slice, permutation);
-	  if (debugFlow.isDebugEnabled()) {
-	    debugFlow.debug("  rebirthing invariant");
-	  }
+        for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
+          Invariant inv = (Invariant) i.next();
+          if (! inv.falsified) {
+            // The invariant must be destroyed before it can be
+            // resurrected.  The invariant objects that flow are
+            // provided by the invariants that are falsified or change
+            // formula.  Depending on the characteristics of the
+            // invariant, the item to flow may or may not have been
+            // destroyed.  Invariants that do not compute any
+            // constants will often just flow themselves directly,
+            // which means that inv will be falsified.  On the other
+            // hand, invariants with weaken-able computed constants
+            // will flow a clone of themselves before they weaken.  In
+            // that case, inv will not yet have been falsified.
+            inv.destroy();
+          }
+          // debug
+          if (debugFlow.isDebugEnabled()) {
+            debugFlow.debug(" " + inv.format() + " flowing from " +
+                            parent.name + " to " + lower.name);
+          }
+          // If its class does not already exist in lower
+          for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
+            Object item = h.next();
+            // XXX Should this be some sort of same formula check
+            // instead?  Probably not; one class of invariant should
+            // be able to handle all data fed to it; we never need two
+            // invariants of the same class in the same pptslice.
+            // Maybe add that as rep invariant up above?
+            if (item.getClass() == inv.getClass()) {
+              if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
+              continue for_each_invariant;
+            }
+          }
+          // Let it be reborn
+          Invariant reborn = inv.resurrect(slice, permutation);
+          if (debugFlow.isDebugEnabled()) {
+            debugFlow.debug("  rebirthing invariant");
+          }
 
-	  slice.addInvariant(reborn);
-	}
+          slice.addInvariant(reborn);
+        }
       }
     }
     invs_to_flow.clear();
@@ -457,10 +457,10 @@ public abstract class PptSlice
         // + ((values_cache == null)
         //    ? "Values cache has been cleared" + lineSep
         //    : "Values cache has not been cleared")
-	;
+        ;
       if (! Daikon.disable_modbit_check_message) {
         System.out.println(message);
-	// [INCR]
+        // [INCR]
         if (values_cache != null) {
           System.out.println("To do:  Dump values_cache");
           // This is probably specific to the specializers of PptSlice.

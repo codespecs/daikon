@@ -128,7 +128,7 @@ public final class FileIO {
    * variables and entry ppts) is set correctly upon return.
    **/
   public static PptMap read_declaration_files(Collection files // [File]
-					      )
+                                              )
     throws IOException
   {
     // XXX for now, hard-code these list-implementing types. We should
@@ -153,13 +153,13 @@ public final class FileIO {
 
   /** Read one decls file; add it to all_ppts. **/
   private static void read_declaration_file(File filename,
-					    PptMap all_ppts)
+                                            PptMap all_ppts)
     throws IOException
   {
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_declaration_file " + filename
-		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
-		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+                      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     int varcomp_format = VarComparability.NONE;
@@ -171,16 +171,16 @@ public final class FileIO {
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
       if (debugRead.isDebugEnabled())
-	debugRead.debug("read_declaration_file line: " + line);
+        debugRead.debug("read_declaration_file line: " + line);
       if (line.equals("") || isComment(line))
-	continue;
+        continue;
       if (line.equals(declaration_header)) {
-	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
-	// ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
+        PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
+        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
           all_ppts.add(ppt);
         }
-	continue;
+        continue;
       }
       if (line.equals("VarComparability")) {
         line = reader.readLine();
@@ -196,29 +196,29 @@ public final class FileIO {
         continue;
       }
       if (line.equals("ListImplementors")) {
-	// Each line following is the name (in JVM form) of a class
-	// that implemnts java.util.List.
-	for (;;) {
-	  line = reader.readLine();
-	  if (line == null || line.equals(""))
-	    break;
-	  if (isComment(line))
-	    continue;
-	  ProglangType.list_implementors.add(line.intern());
-	}
-	continue;
+        // Each line following is the name (in JVM form) of a class
+        // that implemnts java.util.List.
+        for (;;) {
+          line = reader.readLine();
+          if (line == null || line.equals(""))
+            break;
+          if (isComment(line))
+            continue;
+          ProglangType.list_implementors.add(line.intern());
+        }
+        continue;
       }
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
       if (debugRead.isDebugEnabled())
-	debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
+        debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
       while ((line != null) && (!line.equals("")) && (!isComment(line))) {
-	System.out.println("Unrecognized paragraph contains line = `" + line + "'");
-	System.out.println("" + (line != null) + " " + (line.equals("")) + " " + (isComment(line)));
-	if (line == null)
-	  throw new IllegalStateException();
-	line = reader.readLine();
+        System.out.println("Unrecognized paragraph contains line = `" + line + "'");
+        System.out.println("" + (line != null) + " " + (line.equals("")) + " " + (isComment(line)));
+        if (line == null)
+          throw new IllegalStateException();
+        line = reader.readLine();
       }
       continue;
     }
@@ -227,9 +227,9 @@ public final class FileIO {
 
   // The "DECLARE" line has alredy been read.
   private static PptTopLevel read_declaration(LineNumberReader file,
-					      PptMap all_ppts,
-					      int varcomp_format,
-					      File filename)
+                                              PptMap all_ppts,
+                                              int varcomp_format,
+                                              File filename)
     throws IOException
   {
     // We have just read the "DECLARE" line.
@@ -238,7 +238,7 @@ public final class FileIO {
     // This program point name has already been encountered.
     if (all_ppts.containsName(ppt_name)) {
       throw new FileIOException ("Duplicate declaration of program point",
-				 file, filename);
+                                 file, filename);
     }
 
     if (!daikon.split.SplitterList.dkconfig_all_splitters) {
@@ -253,18 +253,18 @@ public final class FileIO {
       // I am turning off all_splitters by default.
 
       if (((Daikon.ppt_omit_regexp != null)
-	   && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
-	  || ((Daikon.ppt_regexp != null)
-	      && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
-	// Discard this declaration
-	// System.out.println("Discarding non-matching program point declaration " + ppt_name);
-	String line = file.readLine();
-	// This fails if some lines of a declaration (e.g., the comparability
-	// field) are empty.
-	while ((line != null) && !line.equals("")) {
-	  line = file.readLine();
-	}
-	return null;
+           && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
+          || ((Daikon.ppt_regexp != null)
+              && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
+        // Discard this declaration
+        // System.out.println("Discarding non-matching program point declaration " + ppt_name);
+        String line = file.readLine();
+        // This fails if some lines of a declaration (e.g., the comparability
+        // field) are empty.
+        while ((line != null) && !line.equals("")) {
+          line = file.readLine();
+        }
+        return null;
       }
     }
 
@@ -275,30 +275,30 @@ public final class FileIO {
     {
       PptName parsed_name = new PptName(ppt_name);
       if (parsed_name.isExitPoint()) {
-	PptName new_name = parsed_name.makeExit();
-	// Punt if we already read a different EXITnn
-	if (all_ppts.get(new_name) != null) {
-	  String line = file.readLine();
-	  while ((line != null) && !line.equals("")) {
-	    // This fails if some lines of a declaration (e.g., the
-	    // comparability field) are empty.
-	    line = file.readLine();
-	  }
-	  return null;
-	}
-	// Override what was read from file
-	ppt_name = new_name.name().intern();
-	// Add the pseudo-variable $return_line
-	if (false) {
-	  // Skip this for now; we're not sure how to make it work
-	  ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
-	  ProglangType file_rep_type = ProglangType.INT;
-	  VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
-	  VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
-				     prog_type, file_rep_type, comparability,
+        PptName new_name = parsed_name.makeExit();
+        // Punt if we already read a different EXITnn
+        if (all_ppts.get(new_name) != null) {
+          String line = file.readLine();
+          while ((line != null) && !line.equals("")) {
+            // This fails if some lines of a declaration (e.g., the
+            // comparability field) are empty.
+            line = file.readLine();
+          }
+          return null;
+        }
+        // Override what was read from file
+        ppt_name = new_name.name().intern();
+        // Add the pseudo-variable $return_line
+        if (false) {
+          // Skip this for now; we're not sure how to make it work
+          ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
+          ProglangType file_rep_type = ProglangType.INT;
+          VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
+          VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
+                                     prog_type, file_rep_type, comparability,
                                      VarInfoAux.getDefault());
-	  var_infos.add(line);
-	}
+          var_infos.add(line);
+        }
       }
     }
 
@@ -330,9 +330,9 @@ public final class FileIO {
    * declaration.
    **/
   private static VarInfo read_VarInfo(LineNumberReader file,
-				      int varcomp_format,
-				      File filename,
-				      String ppt_name)
+                                      int varcomp_format,
+                                      File filename,
+                                      String ppt_name)
     throws IOException
   {
     String line = file.readLine();
@@ -365,7 +365,7 @@ public final class FileIO {
       hash_position = proglang_type_string_and_aux.length();
     } else {
       aux_string = proglang_type_string_and_aux.substring(hash_position+1,
-							  proglang_type_string_and_aux.length());
+                                                          proglang_type_string_and_aux.length());
     }
 
     String proglang_type_string = proglang_type_string_and_aux.substring(0, hash_position).trim();
@@ -395,14 +395,14 @@ public final class FileIO {
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
       throw new FileIOException("Unsupported (file) representation type " +
-				file_rep_type.format() + " (parsed as " +
-				rep_type + ")" + " for variable " +
-				varname, file, filename);
+                                file_rep_type.format() + " (parsed as " +
+                                rep_type + ")" + " for variable " +
+                                varname, file, filename);
     }
     if (! VarInfo.legalRepType(rep_type)) {
       throw new FileIOException("Unsupported (converted) representation type " +
-				file_rep_type.format() + " for variable " +
-				varname, file, filename);
+                                file_rep_type.format() + " for variable " +
+                                varname, file, filename);
     }
 
     return new VarInfo(VarInfoName.parse(varname), prog_type, file_rep_type, comparability, is_static_constant, static_constant_value, aux);
@@ -513,7 +513,7 @@ public final class FileIO {
    * element of filenames.
    **/
   public static void read_data_trace_files(Collection files, // [File]
-					   PptMap all_ppts)
+                                           PptMap all_ppts)
     throws IOException
   {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
@@ -536,8 +536,8 @@ public final class FileIO {
 
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_data_trace_file " + filename
-		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
-		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+                      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -597,15 +597,15 @@ public final class FileIO {
         }
 
         String ppt_name = line; // already interned
-	{ // Rename EXITnn to EXIT
-	  PptName parsed = new PptName(ppt_name);
-	  if (parsed.isExitPoint()) {
-	    ppt_name = parsed.makeExit().name().intern();
-	  }
-	}
+        { // Rename EXITnn to EXIT
+          PptName parsed = new PptName(ppt_name);
+          if (parsed.isExitPoint()) {
+            ppt_name = parsed.makeExit().name().intern();
+          }
+        }
 
-	if (pptcount++ % 10000 == 0)
-	    System.out.print(":");
+        if (pptcount++ % 10000 == 0)
+            System.out.print(":");
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
         Assert.assert(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
@@ -617,13 +617,13 @@ public final class FileIO {
         // And for the time being (and possibly forever), for derived variables.
         int num_tracevars = ppt.num_tracevars;
         int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-	// This is no longer true; we now derive variables before reading dtrace!
+        // This is no longer true; we now derive variables before reading dtrace!
         // Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
 
-	// Read an invocation nonce if one exists
+        // Read an invocation nonce if one exists
         Integer nonce = null;
         {
           // arbitrary number, hopefully big enough; catch exceptions
@@ -637,24 +637,24 @@ public final class FileIO {
           reader.reset();
           if ("this_invocation_nonce".equals(nonce_name_maybe)) {
 
-	      String nonce_name = reader.readLine();
-	      Assert.assert(nonce_name.equals("this_invocation_nonce"));
-	      nonce = new Integer(reader.readLine());
+              String nonce_name = reader.readLine();
+              Assert.assert(nonce_name.equals("this_invocation_nonce"));
+              nonce = new Integer(reader.readLine());
 
-	      if (Global.debugPrintDtrace) {
-		to_write_nonce = true;
-		nonce_value = nonce.toString();
-		nonce_string = nonce_name_maybe;
-	      }
+              if (Global.debugPrintDtrace) {
+                to_write_nonce = true;
+                nonce_value = nonce.toString();
+                nonce_string = nonce_name_maybe;
+              }
           }
         }
 
         // Fills up vals and mods arrays by side effect.
         read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);
 
-	// Add orig and derived variables; pass to inference (add_and_flow)
-	ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
-	process_sample(ppt, vt, nonce);
+        // Add orig and derived variables; pass to inference (add_and_flow)
+        ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
+        process_sample(ppt, vt, nonce);
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -695,10 +695,10 @@ public final class FileIO {
         // add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce); // [INCR] (punt modbits)
         add_orig_variables(ppt, vt.vals, vt.mods, nonce);
 
-	// XXX (for now, until front ends are changed)
-	if (! ppt.ppt_name.isExitPoint()) {
-	  return;
-	}
+        // XXX (for now, until front ends are changed)
+        if (! ppt.ppt_name.isExitPoint()) {
+          return;
+        }
 
         // // Add invocation counts
         // if not no_invocation_counts {
@@ -716,7 +716,7 @@ public final class FileIO {
         // Done adding additional variable values that don't appear directly
         // in the data trace file.
 
-	// Causes interning
+        // Causes interning
         vt = new ValueTuple(vt.vals, vt.mods);
 
         if (debugRead.isDebugEnabled()) {
@@ -724,9 +724,9 @@ public final class FileIO {
         }
         ppt.add_and_flow(vt, 1);
 
-	// Feeding values to EXITnn points will automatically have
-	// them flow up to the corresponding EXIT point.
-	/* [INCR] ...
+        // Feeding values to EXITnn points will automatically have
+        // them flow up to the corresponding EXIT point.
+        /* [INCR] ...
         PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
         if (exit_ppt != null) {
           VarInfo[] exit_vis = exit_ppt.var_infos;
@@ -736,7 +736,7 @@ public final class FileIO {
           ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
           exit_ppt.add(exit_vt, 1);
         }
-	*/
+        */
       }
     }
 
@@ -746,7 +746,7 @@ public final class FileIO {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("No return from procedure observed "
-			 + (call_stack.size() + call_hashmap.size())
+                         + (call_stack.size() + call_hashmap.size())
                          + " times.");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
@@ -813,9 +813,9 @@ public final class FileIO {
 
   // This procedure fills up vals and mods by side effect.
   private static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
-							 PptTopLevel ppt,
-							 Object[] vals,
-							 int[] mods)
+                                                         PptTopLevel ppt,
+                                                         Object[] vals,
+                                                         int[] mods)
     throws IOException
   {
     VarInfo[] vis = ppt.var_infos;
@@ -834,9 +834,9 @@ public final class FileIO {
       Global.dtraceWriter.println(ppt.name);
 
       if (to_write_nonce) {
-	Global.dtraceWriter.println(nonce_string);
-	Global.dtraceWriter.println(nonce_value);
-	to_write_nonce = false;
+        Global.dtraceWriter.println(nonce_string);
+        Global.dtraceWriter.println(nonce_value);
+        to_write_nonce = false;
       }
     }
 
@@ -878,7 +878,7 @@ public final class FileIO {
       if (!VarInfoName.parse(line).equals(vi.name)) {
         throw new FileIOException("Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name,
-			reader, data_trace_filename);
+                        reader, data_trace_filename);
 
       }
       line = reader.readLine();
@@ -897,7 +897,7 @@ public final class FileIO {
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new FileIOException("Bad modbit"
                         + " at " + data_trace_filename,
-			reader, data_trace_filename);
+                        reader, data_trace_filename);
       }
       String mod_string = line;
       int mod = ValueTuple.parseModified(line);
@@ -922,9 +922,9 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
-	Global.dtraceWriter.println(vi.name);
-	Global.dtraceWriter.println(value_rep);
-	Global.dtraceWriter.println(mod);
+        Global.dtraceWriter.println(vi.name);
+        Global.dtraceWriter.println(value_rep);
+        Global.dtraceWriter.println(mod);
       }
 
       if (ValueTuple.modIsMissing(mod)) {
@@ -952,15 +952,15 @@ public final class FileIO {
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
     Assert.assert((blank_line == null) || (blank_line.equals("")),
-		  "Line " + reader.getLineNumber() + ": " + blank_line);
+                  "Line " + reader.getLineNumber() + ": " + blank_line);
   }
 
 
   private static void add_orig_variables(PptTopLevel ppt,
-					 // HashMap cumulative_modbits,
-					 Object[] vals,
-					 int[] mods,
-					 Integer nonce)
+                                         // HashMap cumulative_modbits,
+                                         Object[] vals,
+                                         int[] mods,
+                                         Integer nonce)
   {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.fn_name();
@@ -1010,13 +1010,13 @@ public final class FileIO {
             System.err.println("Exceptional exit from function " + fn_name
                                + ", expected to first exit from " + invoc.fn_name()
                                + ((data_trace_filename == null) ? "" :
-				  "; at " + data_trace_filename + " line "
-				  + data_trace_reader.getLineNumber())
-			       );
+                                  "; at " + data_trace_filename + " line "
+                                  + data_trace_reader.getLineNumber())
+                               );
             invoc = (Invocation) call_stack.pop();
           }
         } else {
-	  // nonce != null
+          // nonce != null
           invoc = (Invocation) call_hashmap.get(nonce);
           if (invoc == null) {
             throw new Error("Didn't find call to " + ppt.name + " with nonce " + nonce);
@@ -1027,22 +1027,22 @@ public final class FileIO {
       }
       Assert.assert(invoc != null);
       {
-	/* [INCR] punt cumulative modbits
+        /* [INCR] punt cumulative modbits
         Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars
                       // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
                       );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
-	*/
+        */
         for (int i=0; i<ppt.num_orig_vars; i++) {
           vals[ppt.num_tracevars+i] = invoc.vals[i];
           int mod = invoc.mods[i];
-	  /* [INCR] punt again
+          /* [INCR] punt again
           if ((mod == ValueTuple.UNMODIFIED)
               && (entrymods[i] == ValueTuple.MODIFIED)) {
             // System.out.println("Entrymods made a difference.");
             mod = ValueTuple.MODIFIED;
           }
-	  */
+          */
           mods[ppt.num_tracevars+i] = mod;
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
@@ -1050,17 +1050,17 @@ public final class FileIO {
             Assert.assert(vals[ppt.num_tracevars+i] == null);
           }
         }
-	/* [INCR] punt again
+        /* [INCR] punt again
         Arrays.fill(entrymods, 0);
-	*/
+        */
       }
     }
   }
 
   // Add derived variables
   private static void add_derived_variables(PptTopLevel ppt,
-					    Object[] vals,
-					    int[] mods)
+                                            Object[] vals,
+                                            int[] mods)
   {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
@@ -1122,7 +1122,7 @@ public final class FileIO {
     try {
       SerialFormat record = (SerialFormat) UtilMDE.readObject(file);
       if (use_saved_config) {
-	Configuration.getInstance().overlap(record.config);
+        Configuration.getInstance().overlap(record.config);
       }
       return record.map;
     } catch (ClassNotFoundException e) {

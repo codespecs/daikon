@@ -21,7 +21,7 @@ import utilMDE.*;
 // This file looks a *lot* like part of PptTopLevel.
 // (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
-public final class PptSlice1 
+public final class PptSlice1
   extends PptSlice
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -237,7 +237,7 @@ public final class PptSlice1
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
@@ -245,7 +245,7 @@ public final class PptSlice1
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING) {
@@ -254,7 +254,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.get(i));
         SingleString inv = (SingleString) invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -262,7 +262,7 @@ public final class PptSlice1
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -270,14 +270,14 @@ public final class PptSlice1
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.get(i);
-	if (inv.falsified) continue;
+        if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else {

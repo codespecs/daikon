@@ -146,9 +146,9 @@ public final class StringComparison
 
     if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
       if (comparator.equals("==")) {
-	return name1 + ".equals(" + name2 + ")";
+        return name1 + ".equals(" + name2 + ")";
       } else {
-	return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
+        return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
     } else {
       return name1 + " " + comparator + " " + var2().name;

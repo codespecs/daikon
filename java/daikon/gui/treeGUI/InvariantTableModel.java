@@ -18,7 +18,7 @@ class InvariantTableModel extends AbstractTableModel {
   static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
 
   List allInvariants;
-  List filteredInvariants;	// only filtered invariants are displayed
+  List filteredInvariants;      // only filtered invariants are displayed
 
   public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
     allInvariants = invariants;
@@ -34,11 +34,11 @@ class InvariantTableModel extends AbstractTableModel {
   public Object getValueAt( int row, int column ) {
     Assert.assert( column >= 0  &&  column <= 4 );
     Invariant invariant = (Invariant) filteredInvariants.get( row );
-    if (column == 0)	    return invariant.format();
-    else if (column == 1)	    return new Double(Double.NaN); // [INCR] invariant.ppt.num_values()
-    else if (column == 2)	    return new Integer( invariant.ppt.num_samples());
-    else if (column == 3)	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
-    else /* (column == 4) */	    return new Boolean( invariant.justified());
+    if (column == 0)        return invariant.format();
+    else if (column == 1)           return new Double(Double.NaN); // [INCR] invariant.ppt.num_values()
+    else if (column == 2)           return new Integer( invariant.ppt.num_samples());
+    else if (column == 3)           return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
+    else /* (column == 4) */        return new Boolean( invariant.justified());
   }
 
   //  Must override this method so TableSorter will sort numerical columns properly.
@@ -51,7 +51,7 @@ class InvariantTableModel extends AbstractTableModel {
     for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (invariantFilters.shouldKeep( invariant ))
-	filteredInvariants.add( invariant );
+        filteredInvariants.add( invariant );
     }
     filteredInvariants = InvariantFilters.addEqualityInvariants( filteredInvariants );
 

@@ -90,7 +90,7 @@ public class Modulus
       // only one value seen so far
       long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
-	flowThis();
+        flowThis();
         destroy();
         return;
       }
@@ -108,7 +108,7 @@ public class Modulus
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
-	  flowThis();
+          flowThis();
           destroy();
           return;
         } else {

@@ -86,7 +86,7 @@ public class PptName
   {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException
-	("One of class or method must be given");
+        ("One of class or method must be given");
     }
     // First set class name
     if (className != null) {
@@ -97,9 +97,9 @@ public class PptName
     if (methodName != null) {
       method = methodName.intern();
       if (cls != null) {
-	fn_name = (cls + "." + method).intern();
+        fn_name = (cls + "." + method).intern();
       } else {
-	fn_name = method;
+        fn_name = method;
       }
     }
     // Then add point
@@ -235,14 +235,14 @@ public class PptName
     if (point != null) {
       // returns the largest substring [i..] which parses to an integer
       for (int i = 0; i < point.length(); i++) {
-	char c = point.charAt(i);
-	if (('0' <= c) && (c <= '9')) {
-	  try {
-	    result = Integer.parseInt(point.substring(i));
-	    break;
-	  } catch (NumberFormatException e) {
-	  }
-	}
+        char c = point.charAt(i);
+        if (('0' <= c) && (c <= '9')) {
+          try {
+            result = Integer.parseInt(point.substring(i));
+            break;
+          } catch (NumberFormatException e) {
+          }
+        }
       }
     }
     return result;

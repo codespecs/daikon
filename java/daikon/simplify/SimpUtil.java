@@ -7,12 +7,12 @@ import utilMDE.Assert;
  **/
 public class SimpUtil
 {
-  
+
   public static void assert_well_formed(String s) {
     if (!Assert.enabled) {
       return;
     }
-    
+
     Assert.assert(s != null);
     Assert.assert(s.indexOf("((") == -1, "'((' may not appear, '"+s+"'");
     Assert.assert(s.charAt(0) == '(', "starts with lparen, '"+s+"'");
@@ -23,10 +23,10 @@ public class SimpUtil
     for (int i=0; i < cs.length; i++) {
       char c = cs[i];
       if (c == '(') {
-	paren++;
+        paren++;
       } else if (c == ')') {
-	Assert.assert(paren > 0, "too deep at char " + i + " in '" + s + "'");
-	paren--;
+        Assert.assert(paren > 0, "too deep at char " + i + " in '" + s + "'");
+        paren--;
       }
     }
     Assert.assert(paren == 0, "unbalanced parens in '" + s + "'");

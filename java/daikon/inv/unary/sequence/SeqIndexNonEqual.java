@@ -94,7 +94,7 @@ public final class SeqIndexNonEqual
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(" + form[1] + " != i)" + form[2];
   }
 
@@ -122,7 +122,7 @@ public final class SeqIndexNonEqual
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var().name });
+        { var().name });
     return form[0] + "(NEQ " + form[1] + " |i|)" + form[2];
   }
 

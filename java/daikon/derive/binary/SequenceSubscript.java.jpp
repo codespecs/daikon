@@ -83,9 +83,9 @@ public final class SEQUENCESCALARSUBSCRIPT
       return ValueAndModified.MISSING;
     SCALAR val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified(INTERN(val), mod);
   }
 

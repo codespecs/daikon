@@ -24,11 +24,11 @@ public final class Daikon {
   static {
     System.err.
       print("**************************************************\n" +
-	    "*                     WARNING                    *\n" +
-	    "**************************************************\n" +
-	    "* You are using the REDESIGN version (V3) of the *\n" +
-	    "* Daikon engine. Make sure this is what you want.*\n" +
-	    "**************************************************\n");
+            "*                     WARNING                    *\n" +
+            "**************************************************\n" +
+            "* You are using the REDESIGN version (V3) of the *\n" +
+            "* Daikon engine. Make sure this is what you want.*\n" +
+            "**************************************************\n");
     System.err.flush();
   }
 
@@ -218,10 +218,10 @@ public final class Daikon {
     // Write serialized output
     if (inv_file != null) {
       try {
-	FileIO.write_serialized_pptmap(all_ppts, inv_file);
+        FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
-	System.err.println("Error while writing '" + inv_file + "': " + e);
-	System.exit(1);
+        System.err.println("Error while writing '" + inv_file + "': " + e);
+        System.exit(1);
       }
     }
 
@@ -280,8 +280,8 @@ public final class Daikon {
     while ((c = g.getopt()) != -1) {
       switch(c) {
       case 0:
-	// got a long option
-	String option_name = longopts[g.getLongind()].getName();
+        // got a long option
+        String option_name = longopts[g.getLongind()].getName();
         if (help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
@@ -312,8 +312,8 @@ public final class Daikon {
         } else if (list_type_SWITCH.equals(option_name)) {
           try {
             String list_type_string = g.getOptarg();
-	    ProglangType.list_implementors.add(list_type_string);
-	  } catch (Exception e) {
+            ProglangType.list_implementors.add(list_type_string);
+          } catch (Exception e) {
             throw new Error(e.toString());
           }
           break;
@@ -329,100 +329,100 @@ public final class Daikon {
             throw new Error(e.toString());
           }
           break;
-	} else if (debugAll_SWITCH.equals(option_name)) {
-	  Global.debugAll = true;
-	} else if (debug_SWITCH.equals(option_name)) {
-	  Logger.setPriority(g.getOptarg(), Logger.DEBUG);
-	} else if (no_text_output_SWITCH.equals(option_name)) {
-	  no_text_output = true;
-	} else if (show_progress_SWITCH.equals(option_name)) {
-	  show_progress = true;
-	} else if (suppress_cont_SWITCH.equals(option_name)) {
-	  suppress_implied_controlled_invariants = true;
-	} else if (suppress_post_SWITCH.equals(option_name)) {
-	  suppress_implied_postcondition_over_prestate_invariants = true;
-	} else if (suppress_redundant_SWITCH.equals(option_name)) {
-	  suppress_redundant_invariants_with_simplify = true;
-	} else if (prob_limit_SWITCH.equals(option_name)) {
-	  double limit = Double.parseDouble(g.getOptarg());
-	  if ((limit < 0.0) || (limit > 1.0)) {
-	    throw new Error(prob_limit_SWITCH + " must be between [0..1]");
-	  }
-	  Configuration.getInstance().apply
-	    ("daikon.inv.Invariant.probability_limit", String.valueOf(limit));
-	} else if (esc_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.ESCJAVA;
-	} else if (simplify_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.SIMPLIFY;
-	} else if (ioa_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.IOA;
-	} else if (test_ioa_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.IOA;
-	  PrintInvariants.test_output = true;
-	} else if (java_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.JAVA;
-	} else if (jml_output_SWITCH.equals(option_name)) {
-	  output_style = OutputFormat.JML;
-	} else if (mem_stat_SWITCH.equals(option_name)) {
-	  use_mem_monitor = true;
-	} else if (output_num_samples_SWITCH.equals(option_name)) {
-	  output_num_samples = true;
-	} else if (noternary_SWITCH.equals(option_name)) {
-	  disable_ternary_invariants = true;
+        } else if (debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (debug_SWITCH.equals(option_name)) {
+          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+        } else if (no_text_output_SWITCH.equals(option_name)) {
+          no_text_output = true;
+        } else if (show_progress_SWITCH.equals(option_name)) {
+          show_progress = true;
+        } else if (suppress_cont_SWITCH.equals(option_name)) {
+          suppress_implied_controlled_invariants = true;
+        } else if (suppress_post_SWITCH.equals(option_name)) {
+          suppress_implied_postcondition_over_prestate_invariants = true;
+        } else if (suppress_redundant_SWITCH.equals(option_name)) {
+          suppress_redundant_invariants_with_simplify = true;
+        } else if (prob_limit_SWITCH.equals(option_name)) {
+          double limit = Double.parseDouble(g.getOptarg());
+          if ((limit < 0.0) || (limit > 1.0)) {
+            throw new Error(prob_limit_SWITCH + " must be between [0..1]");
+          }
+          Configuration.getInstance().apply
+            ("daikon.inv.Invariant.probability_limit", String.valueOf(limit));
+        } else if (esc_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.ESCJAVA;
+        } else if (simplify_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.SIMPLIFY;
+        } else if (ioa_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.IOA;
+        } else if (test_ioa_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.IOA;
+          PrintInvariants.test_output = true;
+        } else if (java_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.JAVA;
+        } else if (jml_output_SWITCH.equals(option_name)) {
+          output_style = OutputFormat.JML;
+        } else if (mem_stat_SWITCH.equals(option_name)) {
+          use_mem_monitor = true;
+        } else if (output_num_samples_SWITCH.equals(option_name)) {
+          output_num_samples = true;
+        } else if (noternary_SWITCH.equals(option_name)) {
+          disable_ternary_invariants = true;
         } else if (config_SWITCH.equals(option_name)) {
-	  String config_file = g.getOptarg();
-	  try {
-	    InputStream stream = new FileInputStream(config_file);
-	    Configuration.getInstance().apply(stream);
-	  } catch (IOException e) {
-	    throw new RuntimeException("Could not open config file " + config_file);
-	  }
+          String config_file = g.getOptarg();
+          try {
+            InputStream stream = new FileInputStream(config_file);
+            Configuration.getInstance().apply(stream);
+          } catch (IOException e) {
+            throw new RuntimeException("Could not open config file " + config_file);
+          }
           break;
         } else if (config_option_SWITCH.equals(option_name)) {
-	  String item = g.getOptarg();
-	  Configuration.getInstance().apply(item);
+          String item = g.getOptarg();
+          Configuration.getInstance().apply(item);
           break;
         } else if (files_from_SWITCH.equals(option_name)) {
-	  try {
-	    BufferedReader files_from = UtilMDE.BufferedFileReader(g.getOptarg());
-	    String filename;
-	    while ((filename = files_from.readLine()) != null) {
-	      // This code is duplicated below outside the options loop.
-	      // These aren't "endsWith()" because there might be a suffix
-	      // on the end (eg, a date).
-	      File file = new File(filename);
-	      if (! file.exists()) {
-		throw new Error("File " + filename + " not found.");
-	      }
-	      if (filename.indexOf(".decls") != -1) {
-		decl_files.add(file);
-	      } else if (filename.indexOf(".dtrace") != -1) {
-		dtrace_files.add(file);
-	      } else if (filename.indexOf(".spinfo") != -1) {
-		spinfo_files.add(file);
-	      } else if (filename.indexOf(".map") != -1) {
-		map_files.add(file);
-	      } else {
-		throw new Error("Unrecognized file extension: " + filename);
-	      }
-	    }
-	  } catch (IOException e) {
-	    throw new RuntimeException("Error reading --files_from file");
-	  }
-	  break;
-	} else if (noversion_SWITCH.equals(option_name)) {
+          try {
+            BufferedReader files_from = UtilMDE.BufferedFileReader(g.getOptarg());
+            String filename;
+            while ((filename = files_from.readLine()) != null) {
+              // This code is duplicated below outside the options loop.
+              // These aren't "endsWith()" because there might be a suffix
+              // on the end (eg, a date).
+              File file = new File(filename);
+              if (! file.exists()) {
+                throw new Error("File " + filename + " not found.");
+              }
+              if (filename.indexOf(".decls") != -1) {
+                decl_files.add(file);
+              } else if (filename.indexOf(".dtrace") != -1) {
+                dtrace_files.add(file);
+              } else if (filename.indexOf(".spinfo") != -1) {
+                spinfo_files.add(file);
+              } else if (filename.indexOf(".map") != -1) {
+                map_files.add(file);
+              } else {
+                throw new Error("Unrecognized file extension: " + filename);
+              }
+            }
+          } catch (IOException e) {
+            throw new RuntimeException("Error reading --files_from file");
+          }
+          break;
+        } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
         } else {
-	  throw new RuntimeException("Unknown long option received: " + option_name);
-	}
-	break;
+          throw new RuntimeException("Unknown long option received: " + option_name);
+        }
+        break;
       case 'h':
         System.out.println(usage);
         System.exit(1);
         break;
       case 'o':
-	if (inv_file != null)
-	  throw new Error("multiple serialization output files supplied on command line");
+        if (inv_file != null)
+          throw new Error("multiple serialization output files supplied on command line");
 
         String inv_filename = g.getOptarg();
         inv_file = new File(inv_filename);
@@ -456,9 +456,9 @@ public final class Daikon {
       } else if (file.toString().indexOf(".dtrace") != -1) {
         dtrace_files.add(file);
       } else if (file.toString().indexOf(".spinfo") != -1) {
-	spinfo_files.add(file);
+        spinfo_files.add(file);
       } else if (file.toString().indexOf(".map") != -1) {
-	map_files.add(file);
+        map_files.add(file);
       } else {
         throw new Error("Unrecognized argument: " + file);
       }
@@ -498,36 +498,36 @@ public final class Daikon {
   }
 
   private static void load_spinfo_files(PptMap all_ppts,
-					Set spinfo_files // [File]
-					)
+                                        Set spinfo_files // [File]
+                                        )
   {
     elapsedTime(); // reset timer
     if (!disable_splitting && spinfo_files.size() > 0) {
       try {
-	System.out.print("Reading splitter info files ");
-	create_splitters(all_ppts, spinfo_files);
-	System.out.print(" (read ");
-	System.out.print(UtilMDE.nplural(spinfo_files.size(), "file"));
-	System.out.println(")");
+        System.out.print("Reading splitter info files ");
+        create_splitters(all_ppts, spinfo_files);
+        System.out.print(" (read ");
+        System.out.print(UtilMDE.nplural(spinfo_files.size(), "file"));
+        System.out.println(")");
       } catch (IOException e) {
-	System.out.println();
-	e.printStackTrace();
-	throw new Error(e.toString());
+        System.out.println();
+        e.printStackTrace();
+        throw new Error(e.toString());
       } finally {
-	debugTrace.debug("Time spent on load_spinfo_files: " + elapsedTime());
+        debugTrace.debug("Time spent on load_spinfo_files: " + elapsedTime());
       }
     }
   }
 
   private static void load_map_files(PptMap all_ppts,
-				     Set map_files // [File]
-				     )
+                                     Set map_files // [File]
+                                     )
   {
     elapsedTime(); // reset timer
     if (!disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist
-	(map_files, ContextSplitterFactory.dkconfig_granularity);
+        (map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(map_files.size(), "file"));
       System.out.println(")");
@@ -547,17 +547,17 @@ public final class Daikon {
 
       Splitter[] pconds = null;
       if (SplitterList.dkconfig_all_splitters) {
-	pconds = SplitterList.get_all();
+        pconds = SplitterList.get_all();
       } else {
-	pconds = SplitterList.get(ppt.name);
+        pconds = SplitterList.get(ppt.name);
       }
       if (pconds != null) {
-	if (Global.debugSplit.isDebugEnabled()) {
-	  Global.debugSplit.debug("Got "
-				  + UtilMDE.nplural(pconds.length, "splitter")
-				  + " for " + ppt.name);
-	}
-	ppt.add_splitters(pconds);
+        if (Global.debugSplit.isDebugEnabled()) {
+          Global.debugSplit.debug("Got "
+                                  + UtilMDE.nplural(pconds.length, "splitter")
+                                  + " for " + ppt.name);
+        }
+        ppt.add_splitters(pconds);
       }
     }
   }
@@ -572,18 +572,18 @@ public final class Daikon {
     public void run() {
       DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
       while (true) {
-	System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
-	try {
-	  sleep(5000);
-	} catch (InterruptedException e) {
-	  // hmm
-	}
+        System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
+        try {
+          sleep(5000);
+        } catch (InterruptedException e) {
+          // hmm
+        }
       }
     }
     private String message() {
       File file = FileIO.data_trace_filename;
       if (file == null) {
-	return "[no status]";
+        return "[no status]";
       }
       LineNumberReader lnr = FileIO.data_trace_reader;
       String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
@@ -599,7 +599,7 @@ public final class Daikon {
    * candidate invariants.
    **/
   private static void process_data(PptMap all_ppts,
-				   Set dtrace_files)
+                                   Set dtrace_files)
   {
     MemMonitor monitor = null;
     if (use_mem_monitor) {
@@ -610,17 +610,17 @@ public final class Daikon {
     elapsedTime(); // reset timer
     try {
       System.out.println("Processing trace data; reading "
-			 + UtilMDE.nplural(dtrace_files.size(), "file")
-			 + ":");
+                         + UtilMDE.nplural(dtrace_files.size(), "file")
+                         + ":");
       fileio_progress.start();
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
       fileio_progress.stop();
       System.out.println();
       System.out.print("Creating implications "); // XXX untested code
       for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
-	PptTopLevel ppt = (PptTopLevel) itor.next();
-	System.out.print('.');
-	// ppt.addImplications();
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        System.out.print('.');
+        // ppt.addImplications();
       }
       System.out.println();
     } catch (IOException e) {
@@ -640,8 +640,8 @@ public final class Daikon {
       System.out.flush();
       elapsedTime(); // reset timer
       for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
-	PptTopLevel ppt = (PptTopLevel) itor.next();
-	ppt.mark_implied_via_simplify(all_ppts);
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        ppt.mark_implied_via_simplify(all_ppts);
         System.out.print(".");
         System.out.flush();
       }
@@ -659,27 +659,27 @@ public final class Daikon {
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
       SplitterObject[][] splitterObjectArrays =
-	SplitterFactory.read_spinfofile(filename, all_ppts);
+        SplitterFactory.read_spinfofile(filename, all_ppts);
       for (int j = 0; j < splitterObjectArrays.length; j++) {
-	int numsplitters = splitterObjectArrays[j].length;
-	String pptname = splitterObjectArrays[j][0].getPptName();
-	Vector splitters = new Vector();
-	for (int k = 0; k < numsplitters; k++) {
-	  if (splitterObjectArrays[j][k].splitterExists()) {
-	    splitters.addElement(splitterObjectArrays[j][k].getSplitter());
-	  } else {
-	    System.out.println(splitterObjectArrays[j][k].getError());
-	  }
-	}
+        int numsplitters = splitterObjectArrays[j].length;
+        String pptname = splitterObjectArrays[j][0].getPptName();
+        Vector splitters = new Vector();
+        for (int k = 0; k < numsplitters; k++) {
+          if (splitterObjectArrays[j][k].splitterExists()) {
+            splitters.addElement(splitterObjectArrays[j][k].getSplitter());
+          } else {
+            System.out.println(splitterObjectArrays[j][k].getError());
+          }
+        }
 
-	if (splitters.size() >= 1) {
-	  // If the pptname is ALL, associate it with all program points.
-	  if (pptname.equals("ALL")) {
-	    SplitterList.put(".*", (Splitter[]) splitters.toArray(new Splitter[0]));
-	  } else {
-	    SplitterList.put( pptname, (Splitter[])splitters.toArray(new Splitter[0]));
-	  }
-	}
+        if (splitters.size() >= 1) {
+          // If the pptname is ALL, associate it with all program points.
+          if (pptname.equals("ALL")) {
+            SplitterList.put(".*", (Splitter[]) splitters.toArray(new Splitter[0]));
+          } else {
+            SplitterList.put( pptname, (Splitter[])splitters.toArray(new Splitter[0]));
+          }
+        }
       }
     }
   }

@@ -56,11 +56,11 @@ public abstract class VarInfoName
       // checking for only legal characters would be more robust
       int dot = name.lastIndexOf('.');
       if (dot >= 0) {
-	String first = name.substring(0, dot);
-	String field = name.substring(dot+1);
-	return parse(first).applyField(field);
+        String first = name.substring(0, dot);
+        String field = name.substring(dot+1);
+        return parse(first).applyField(field);
       } else {
-	return (new Simple(name)).intern();
+        return (new Simple(name)).intern();
       }
     }
 
@@ -75,11 +75,11 @@ public abstract class VarInfoName
       // not the last open bracket.
       int lbracket = name.lastIndexOf("[");
       if (lbracket >= 0) {
-	String seqname = name.substring(0, lbracket) + "[]";
-	String idxname = name.substring(lbracket + 1, name.length() - 1);
-	VarInfoName seq = parse(seqname);
-	VarInfoName idx = parse(idxname);
-	return seq.applySubscript(idx);
+        String seqname = name.substring(0, lbracket) + "[]";
+        String idxname = name.substring(lbracket + 1, name.length() - 1);
+        VarInfoName seq = parse(seqname);
+        VarInfoName idx = parse(idxname);
+        return seq.applySubscript(idx);
       }
     }
 
@@ -88,9 +88,9 @@ public abstract class VarInfoName
       int brackets = name.lastIndexOf("[]");
       int dot = name.lastIndexOf('.');
       if (dot >= brackets) {
-	String first = name.substring(0, dot);
-	String field = name.substring(dot+1);
-	return parse(first).applyField(field);
+        String first = name.substring(0, dot);
+        String field = name.substring(dot+1);
+        return parse(first).applyField(field);
       }
     }
 
@@ -122,10 +122,10 @@ public abstract class VarInfoName
   public String name() {
     if (name_cached == null) {
       try {
-	name_cached = name_impl().intern();
+        name_cached = name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("repr = " + repr());
-	throw e;
+        System.err.println("repr = " + repr());
+        throw e;
       }
     }
     return name_cached;
@@ -142,10 +142,10 @@ public abstract class VarInfoName
   public String esc_name() {
     if (esc_name_cached == null) {
       try {
-	esc_name_cached = esc_name_impl().intern();
+        esc_name_cached = esc_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("repr = " + repr());
-	throw e;
+        System.err.println("repr = " + repr());
+        throw e;
       }
     }
     // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
@@ -170,10 +170,10 @@ public abstract class VarInfoName
     int which = prestate ? 0 : 1;
     if (simplify_name_cached[which] == null) {
       try {
-	simplify_name_cached[which] = simplify_name_impl(prestate).intern();
+        simplify_name_cached[which] = simplify_name_impl(prestate).intern();
       } catch (RuntimeException e) {
-	System.err.println("repr = " + repr());
-	throw e;
+        System.err.println("repr = " + repr());
+        throw e;
       }
     }
     return simplify_name_cached[which];
@@ -194,10 +194,10 @@ public abstract class VarInfoName
 
     if (ioa_name_cached == null) {
       try {
-	ioa_name_cached = ioa_name_impl().intern();
+        ioa_name_cached = ioa_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("name = " + name());
-	throw e;
+        System.err.println("name = " + name());
+        throw e;
       }
     }
     return ioa_name_cached;
@@ -219,10 +219,10 @@ public abstract class VarInfoName
   public String java_name() {
     if (java_name_cached == null) {
       try {
-	java_name_cached = java_name_impl().intern();
+        java_name_cached = java_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("repr = " + repr());
-	throw e;
+        System.err.println("repr = " + repr());
+        throw e;
       }
     }
     return java_name_cached;
@@ -236,10 +236,10 @@ public abstract class VarInfoName
   public String jml_name() {
     if (jml_name_cached == null) {
       try {
-	jml_name_cached = jml_name_impl().intern();
+        jml_name_cached = jml_name_impl().intern();
       } catch (RuntimeException e) {
-	System.err.println("repr = " + repr());
-	throw e;
+        System.err.println("repr = " + repr());
+        throw e;
       }
     }
     // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " + this.getClass().getName());
@@ -337,7 +337,7 @@ public abstract class VarInfoName
     Iterator nodes = inOrderTraversal().iterator();
     while (nodes.hasNext()) {
       if (type.equals(nodes.next().getClass())) {
-	return true;
+        return true;
       }
     }
     return false;
@@ -372,11 +372,11 @@ public abstract class VarInfoName
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
     if (node == replacement)
       return this;
-    
+
     // Assert.assert(! replacement.hasNode(node)); // no infinite loop
     // It doesn't make sense to assert this as we have plenty of times when
     // we want to replace x by y where y may contain x.
-    
+
     VarInfoName result = this;
     Replacer r = new Replacer(node, replacement);
 
@@ -432,13 +432,13 @@ public abstract class VarInfoName
 
     while ((this_index>=0) || (class_index>=0)) {
       if (this_index>=0) {
-	ioa_name = varname.substring(this_index+5, varname.length());
-	if (this_index>0)
-	  ioa_name = varname.substring(0, this_index) + ioa_name;
+        ioa_name = varname.substring(this_index+5, varname.length());
+        if (this_index>0)
+          ioa_name = varname.substring(0, this_index) + ioa_name;
       } else if (class_index>=0) {
-	ioa_name = varname.substring(class_index+classname.length(), varname.length());
-	if (class_index>0)
-	  ioa_name = varname.substring(0, class_index) + ioa_name;
+        ioa_name = varname.substring(class_index+classname.length(), varname.length());
+        if (class_index>0)
+          ioa_name = varname.substring(0, class_index) + ioa_name;
       }
       this_index = ioa_name.indexOf("this.");
       class_index = ioa_name.indexOf(classname+".");
@@ -489,10 +489,10 @@ public abstract class VarInfoName
     }
     public boolean isLiteralConstant() {
       try {
-	Integer.parseInt(name);
-	return true;
+        Integer.parseInt(name);
+        return true;
       } catch (NumberFormatException e) {
-	return false;
+        return false;
       }
     }
     protected String repr_impl() {
@@ -511,9 +511,9 @@ public abstract class VarInfoName
 
     protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
-	return name;
+        return name;
       } else {
-	return simplify_name_impl(name, prestate);
+        return simplify_name_impl(name, prestate);
       }
     }
     // Names must be either a legal C/Java style identifier, or
@@ -522,10 +522,10 @@ public abstract class VarInfoName
     // execution of Daikon.
     protected static String simplify_name_impl(String s, boolean prestate) {
       if (s.startsWith("~") && s.endsWith("~")) {
-	s = s.substring(1, s.length()-2) + ":closure";
+        s = s.substring(1, s.length()-2) + ":closure";
       }
       if (prestate) {
-	s = "__orig__" + s;
+        s = "__orig__" + s;
       }
       return "|" + s + "|";
     }
@@ -697,18 +697,18 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       return "(warning: format_esc() needs to be implemented: " +
-	function + " on " + argument.repr() + ")";
+        function + " on " + argument.repr() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(warning: format_simplify() needs to be implemented: " +
-	function + " on " + argument.repr() + ")";
+        function + " on " + argument.repr() + ")";
     }
     protected String ioa_name_impl() {
       return function + "(" + argument.ioa_name() + ")**";
     }
     protected String java_name_impl() {
       return "(warning: format_java() needs to be implemented: " +
-	function + " on " + argument.repr() + ")";
+        function + " on " + argument.repr() + ")";
     }
     protected String jml_name_impl() {
       return function + "(" + argument.jml_name() + ")";
@@ -750,59 +750,59 @@ public abstract class VarInfoName
     protected String repr_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).repr());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).repr());
+        if (i.hasNext()) sb.append (", ");
       }
       return "FunctionOfN{" + function + "}[" + sb.toString() + "]";
     }
     protected String name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).name());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).name());
+        if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
     }
     protected String esc_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).repr());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).repr());
+        if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_esc() needs to be implemented: " +
-	function + " on " + sb.toString() + ")";
+        function + " on " + sb.toString() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).repr());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).repr());
+        if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_simplify() needs to be implemented: " +
-	function + " on " + sb.toString() + ")";
+        function + " on " + sb.toString() + ")";
     }
     protected String ioa_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).ioa_name());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).ioa_name());
+        if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
     }
     protected String java_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).repr());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).repr());
+        if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_java() needs to be implemented: " +
-	function + " on " + sb.toString() + ")";
+        function + " on " + sb.toString() + ")";
     }
     protected String jml_name_impl() {
       StringBuffer sb = new StringBuffer();
       for (Iterator i = args.iterator(); i.hasNext();) {
-	sb.append (((VarInfoName) i.next()).jml_name());
-	if (i.hasNext()) sb.append (", ");
+        sb.append (((VarInfoName) i.next()).jml_name());
+        if (i.hasNext()) sb.append (", ");
       }
       return function + "(" + sb.toString() + ")";
     }
@@ -1125,7 +1125,7 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       throw new UnsupportedOperationException("JML cannot format a Poststate" +
-					      " [repr=" + repr() + "]");
+                                              " [repr=" + repr() + "]");
     }
     protected Class resolveType(PptTopLevel ppt) {
       return term.resolveType(ppt);
@@ -1174,8 +1174,8 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0) ?
-	"(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
-	"(+ " + term.simplify_name(prestate) + " " + amount + ")";
+        "(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
+        "(+ " + term.simplify_name(prestate) + " " + amount + ")";
     }
     protected String ioa_name_impl() {
       return term.ioa_name() + amount();
@@ -1243,7 +1243,7 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements" +
-					      " [repr=" + repr() + "]");
+                                              " [repr=" + repr() + "]");
     }
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
@@ -1259,7 +1259,7 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       /* throw new UnsupportedOperationException("Java cannot format an unquantified sequence of elements" +
-	 " [repr=" + repr() + "]");
+         " [repr=" + repr() + "]");
       */
       // For now, do return the default implementation.
       return name_impl();
@@ -1269,7 +1269,7 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       throw new UnsupportedOperationException("JML cannot format an unquantified sequence of elements" +
-					      " [repr=" + repr() + "]");
+                                              " [repr=" + repr() + "]");
     }
     protected String jml_name_impl(String index) {
       return term.jml_name() + "[" + index + "]";
@@ -1310,9 +1310,9 @@ public abstract class VarInfoName
     } else if (index instanceof Add) {
       Add add = (Add) index;
       if (add.term instanceof Prestate) {
-	index = ((Prestate) add.term).term.applyAdd(add.amount); // #1
+        index = ((Prestate) add.term).term.applyAdd(add.amount); // #1
       } else {
-	index = index.applyPoststate();  // #2
+        index = index.applyPoststate();  // #2
       }
     } else if (index.isLiteralConstant()) {
       // we don't want orig(a[post(0)]), so leave index alone
@@ -1379,7 +1379,7 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + sequence.simplify_name(prestate) + " " +
-	indexExplicit(sequence, index).simplify_name(prestate) + ")";
+        indexExplicit(sequence, index).simplify_name(prestate) + ")";
     }
     protected String ioa_name_impl() {
       return sequence.ioa_name_impl(indexExplicit(sequence, index).ioa_name());
@@ -1419,10 +1419,10 @@ public abstract class VarInfoName
     Assert.assert(elems != null);
     if (finder.inPre()) {
       if (i != null) {
-	i = indexToPrestate(i);
+        i = indexToPrestate(i);
       }
       if (j != null) {
-	j = indexToPrestate(j);
+        j = indexToPrestate(j);
       }
     }
     Replacer r = new Replacer(finder.elems(), (new Slice(elems, i, j)).intern());
@@ -1447,16 +1447,16 @@ public abstract class VarInfoName
     }
     protected String repr_impl() {
       return "Slice{" +
-	((i == null) ? "" : i.repr()) + "," +
-	((j == null) ? "" : j.repr()) + "}[" +
-	sequence.repr() + "]";
+        ((i == null) ? "" : i.repr()) + "," +
+        ((j == null) ? "" : j.repr()) + "}[" +
+        sequence.repr() + "]";
     }
     protected String name_impl() {
       return sequence.name_impl("" +
-				((i == null) ? "0" : i.name()) +
-				".." +
-				((j == null) ? ""  : j.name())
-				);
+                                ((i == null) ? "0" : i.name()) +
+                                ".." +
+                                ((j == null) ? ""  : j.name())
+                                );
     }
     protected String esc_name_impl() {
       //return the default implementation for now.
@@ -1471,7 +1471,7 @@ public abstract class VarInfoName
       String result = "\\A e:Int (";
       result += ((i == null) ? "0" : i.ioa_name()) + " <= e <= ";
       result += ((j == null) ? "size("+sequence.ioa_name_impl()+")" :
-		 j.ioa_name()) + ") => ";
+                 j.ioa_name()) + ") => ";
       result += sequence.ioa_name_impl("e");
       return result;
     }
@@ -1553,8 +1553,8 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
       for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious();) {
-	VarInfoName vin = (VarInfoName)i.previous();
-	retval = vin.accept(this);
+        VarInfoName vin = (VarInfoName)i.previous();
+        retval = vin.accept(this);
       }
       return retval;
     }
@@ -1619,9 +1619,9 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();
-	retval = vin.accept(this);
-	if (retval != null) return retval;
+        VarInfoName vin = (VarInfoName)i.next();
+        retval = vin.accept(this);
+        if (retval != null) return retval;
       }
       return retval;
     }
@@ -1679,7 +1679,7 @@ public abstract class VarInfoName
     public Finder(Set argGoals) {
       goals = new HashSet();
       for (Iterator i = argGoals.iterator(); i.hasNext(); ) {
-	this.goals.add (((VarInfoName) i.next()).intern());
+        this.goals.add (((VarInfoName) i.next()).intern());
       }
     }
 
@@ -1716,9 +1716,9 @@ public abstract class VarInfoName
       Object result = null;
       if (goals.contains(o)) return o;
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();
-	result = vin.accept(this);
-	if (result != null) return result;
+        VarInfoName vin = (VarInfoName)i.next();
+        result = vin.accept(this);
+        if (result != null) return result;
       }
       return result;
     }
@@ -1755,12 +1755,12 @@ public abstract class VarInfoName
       Object temp = o.sequence.accept(this);
       if (temp != null) return temp;
       if (o.i != null) {
-	temp = o.i.accept(this);
-	if (temp != null) return temp;
+        temp = o.i.accept(this);
+        if (temp != null) return temp;
       }
       if (o.j != null) {
-	temp = o.j.accept(this);
-	if (temp != null) return temp;
+        temp = o.j.accept(this);
+        if (temp != null) return temp;
       }
       return null;
     }
@@ -1793,9 +1793,9 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();
-	retval = vin.accept(this);
-	if (retval != null) return retval;
+        VarInfoName vin = (VarInfoName)i.next();
+        retval = vin.accept(this);
+        if (retval != null) return retval;
       }
       return retval;
     }
@@ -1848,11 +1848,11 @@ public abstract class VarInfoName
     }
     public Object visitSizeOf(SizeOf o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitSizeOf(o)).applySize();
+        ((VarInfoName) super.visitSizeOf(o)).applySize();
     }
     public Object visitFunctionOf(FunctionOf o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
+        ((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
     }
     public Object visitFunctionOfN(FunctionOfN o) {
       // If o is getting replaced, then just replace it
@@ -1860,46 +1860,46 @@ public abstract class VarInfoName
       if (o == old) return _new;
       ArrayList newArgs = new ArrayList();
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();
-	Object retval = vin.accept(this);
-	newArgs.add (retval);
+        VarInfoName vin = (VarInfoName)i.next();
+        Object retval = vin.accept(this);
+        newArgs.add (retval);
       }
       return VarInfoName.applyFunctionOfN(o.function, newArgs);
     }
     public Object visitField(Field o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitField(o)).applyField(o.field);
+        ((VarInfoName) super.visitField(o)).applyField(o.field);
     }
     public Object visitTypeOf(TypeOf o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
+        ((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
     }
     public Object visitPrestate(Prestate o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitPrestate(o)).applyPrestate();
+        ((VarInfoName) super.visitPrestate(o)).applyPrestate();
     }
     public Object visitPoststate(Poststate o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitPoststate(o)).applyPoststate();
+        ((VarInfoName) super.visitPoststate(o)).applyPoststate();
     }
     public Object visitAdd(Add o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitAdd(o)).applyAdd(o.amount);
+        ((VarInfoName) super.visitAdd(o)).applyAdd(o.amount);
     }
     public Object visitElements(Elements o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitElements(o)).applyElements();
+        ((VarInfoName) super.visitElements(o)).applyElements();
     }
     public Object visitSubscript(Subscript o) {
       return (o == old) ? _new :
-	((VarInfoName) o.sequence.accept(this)).
-	applySubscript((VarInfoName) o.index.accept(this));
+        ((VarInfoName) o.sequence.accept(this)).
+        applySubscript((VarInfoName) o.index.accept(this));
     }
     public Object visitSlice(Slice o) {
       return (o == old) ? _new :
-	((VarInfoName) o.sequence.accept(this)).
-	applySlice((o.i == null) ? null : ((VarInfoName) o.i.accept(this)),
-		   (o.j == null) ? null : ((VarInfoName) o.j.accept(this)));
+        ((VarInfoName) o.sequence.accept(this)).
+        applySlice((o.i == null) ? null : ((VarInfoName) o.i.accept(this)),
+                   (o.j == null) ? null : ((VarInfoName) o.j.accept(this)));
     }
   }
 
@@ -1965,8 +1965,8 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       result.add (o);
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();
-	Object retval = vin.accept(this);
+        VarInfoName vin = (VarInfoName)i.next();
+        Object retval = vin.accept(this);
       }
       return null;
     }
@@ -2056,7 +2056,7 @@ public abstract class VarInfoName
     //  ary[][]                  ==> { ary[], ary[][] }
     public Set unquants() {
       if (QuantHelper.debug.isDebugEnabled()) {
-	QuantHelper.debug.debug("unquants: " + unquant);
+        QuantHelper.debug.debug("unquants: " + unquant);
       }
       return Collections.unmodifiableSet(unquant);
     }
@@ -2140,19 +2140,19 @@ public abstract class VarInfoName
       static final long serialVersionUID = 20020130L;
 
       public FreeVar(String name) {
-	super(name);
+        super(name);
       }
       protected String repr_impl() {
-	return "Free[" + super.repr_impl() + "]";
+        return "Free[" + super.repr_impl() + "]";
       }
       protected String jml_name_impl() {
-	return super.jml_name_impl();
+        return super.jml_name_impl();
       }
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
       // }
       protected String simplify_name_impl(boolean prestate) {
-	return super.simplify_name_impl(false);
+        return super.simplify_name_impl(false);
       }
     }
 
@@ -2182,37 +2182,37 @@ public abstract class VarInfoName
       VarInfoName replace_with;
       VarInfoName lower, upper;
       if (needy instanceof Elements) {
-	Elements sequence = (Elements) needy;
-	replace_with = sequence.getSubscript(index);
-	lower = sequence.getLowerBound();
-	upper = sequence.getUpperBound();
+        Elements sequence = (Elements) needy;
+        replace_with = sequence.getSubscript(index);
+        lower = sequence.getLowerBound();
+        upper = sequence.getUpperBound();
       } else if (needy instanceof Slice) {
-	Slice slice = (Slice) needy;
-	replace_with = slice.getSubscript(index);
-	lower = slice.getLowerBound();
-	upper = slice.getUpperBound();
+        Slice slice = (Slice) needy;
+        replace_with = slice.getSubscript(index);
+        lower = slice.getLowerBound();
+        upper = slice.getUpperBound();
       } else {
-	// unreachable; placate javac
-	throw new IllegalStateException();
+        // unreachable; placate javac
+        throw new IllegalStateException();
       }
       Assert.assert(replace_with != null);
 
       // If needy was in prestate, adjust bounds appropriately
       if (root.inPrestateContext(needy)) {
-	if (!lower.isLiteralConstant()) {
-	  if (lower instanceof Poststate) {
-	    lower = ((Poststate) lower).term;
-	  } else {
-	    lower = lower.applyPrestate();
-	  }
-	}
-	if (!upper.isLiteralConstant()) {
-	  if (upper instanceof Poststate) {
-	    upper = ((Poststate) upper).term;
-	  } else {
-	    upper = upper.applyPrestate();
-	  }
-	}
+        if (!lower.isLiteralConstant()) {
+          if (lower instanceof Poststate) {
+            lower = ((Poststate) lower).term;
+          } else {
+            lower = lower.applyPrestate();
+          }
+        }
+        if (!upper.isLiteralConstant()) {
+          if (upper instanceof Poststate) {
+            upper = ((Poststate) upper).term;
+          } else {
+            upper = upper.applyPrestate();
+          }
+        }
       }
 
       // replace needy
@@ -2244,7 +2244,7 @@ public abstract class VarInfoName
       Assert.assert(roots != null);
 
       if (QuantHelper.debug.isDebugEnabled()) {
-	QuantHelper.debug.debug("roots: " + Arrays.asList(roots));
+        QuantHelper.debug.debug("roots: " + Arrays.asList(roots));
       }
 
       // create empty result
@@ -2258,51 +2258,51 @@ public abstract class VarInfoName
       // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i=0; i < roots.length; i++) {
-	if (QuantHelper.debug.isDebugEnabled()) {
-	  QuantHelper.debug.debug("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
-	}
+        if (QuantHelper.debug.isDebugEnabled()) {
+          QuantHelper.debug.debug("Calling quanthelper on: " + new Integer(i) + " " + roots[i]);
+        }
 
-	helper[i] = new QuantifierVisitor(roots[i]);
-	simples.addAll(helper[i].simples());
+        helper[i] = new QuantifierVisitor(roots[i]);
+        simples.addAll(helper[i].simples());
       }
 
       // choose names for the indices that don't conflict, and then
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i=0; i < roots.length; i++) {
-	List uq = new ArrayList(helper[i].unquants());
-	if (uq.size() == 0) {
-	  // nothing needs quantification
-	  result.root_primes[i] = roots[i];
-	} else {
-	  if (QuantHelper.debug.isDebugEnabled()) {
-	    QuantHelper.debug.debug("root: " + roots[i]);
-	    QuantHelper.debug.debug("uq_elts: " + uq.toString());
-	  }
+        List uq = new ArrayList(helper[i].unquants());
+        if (uq.size() == 0) {
+          // nothing needs quantification
+          result.root_primes[i] = roots[i];
+        } else {
+          if (QuantHelper.debug.isDebugEnabled()) {
+            QuantHelper.debug.debug("root: " + roots[i]);
+            QuantHelper.debug.debug("uq_elts: " + uq.toString());
+          }
 
           // We assume that the input was one unquantified sequence
           // variable.  If uq has more than one element, then the
           // sequence had more than one dimension.
-	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
+          Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
 
-	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
+          VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
-	  VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
-	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
+          VarInfoName idx = (new FreeVar(String.valueOf(tmp++))).intern();
+          Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
 
-	  if (QuantHelper.debug.isDebugEnabled()) {
-	    QuantHelper.debug.debug("idx: " + idx);
-	  }
+          if (QuantHelper.debug.isDebugEnabled()) {
+            QuantHelper.debug.debug("idx: " + idx);
+          }
 
-	  // call replace and unpack results
-	  VarInfoName[] replace_result = replace(roots[i], uq_elt, idx);
-	  VarInfoName root_prime = replace_result[0];
-	  VarInfoName lower = replace_result[1];
-	  VarInfoName upper = replace_result[2];
+          // call replace and unpack results
+          VarInfoName[] replace_result = replace(roots[i], uq_elt, idx);
+          VarInfoName root_prime = replace_result[0];
+          VarInfoName lower = replace_result[1];
+          VarInfoName upper = replace_result[2];
 
-	  result.root_primes[i] = root_prime;
-	  result.bound_vars.add(new VarInfoName[] { idx, lower, upper });
-	}
+          result.root_primes[i] = root_prime;
+          result.bound_vars.add(new VarInfoName[] { idx, lower, upper });
+        }
       }
 
       return result;
@@ -2325,71 +2325,71 @@ public abstract class VarInfoName
       private int numVars;
 
       public IOAQuantification (VarInfo v1) {
-	this (new VarInfo[] { v1 });
+        this (new VarInfo[] { v1 });
       }
 
       public IOAQuantification (VarInfo v1, VarInfo v2) {
-	this (new VarInfo[] { v1, v2 });
+        this (new VarInfo[] { v1, v2 });
       }
 
       public IOAQuantification (VarInfo[] sets) {
-	Assert.assert(sets != null);
+        Assert.assert(sets != null);
 
-	this.sets = sets;
-	numVars = sets.length;
+        this.sets = sets;
+        numVars = sets.length;
 
-	setNames = new VarInfoName[sets.length];
-	for (int i=0; i<sets.length; i++)
-	  setNames[i] = sets[i].name;
+        setNames = new VarInfoName[sets.length];
+        for (int i=0; i<sets.length; i++)
+          setNames[i] = sets[i].name;
 
-	qret = quantify(setNames);
+        qret = quantify(setNames);
 
 
-	// Build the quantifier
-	StringBuffer quantifier = new StringBuffer();
-	for (int i=0; i < qret.bound_vars.size(); i++) {
-	  // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
-	  VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
-	  quantifier.append (quantifierUniversal);
-	  quantifier.append (var.ioa_name());
-	  quantifier.append (" : ");
-	  quantifier.append (sets[i].domainTypeIOA());
-	  quantifier.append (" ");
+        // Build the quantifier
+        StringBuffer quantifier = new StringBuffer();
+        for (int i=0; i < qret.bound_vars.size(); i++) {
+          // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+          VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+          quantifier.append (quantifierUniversal);
+          quantifier.append (var.ioa_name());
+          quantifier.append (" : ");
+          quantifier.append (sets[i].domainTypeIOA());
+          quantifier.append (" ");
 
-	}
-	quantifierExp = quantifier.toString() + "(";
+        }
+        quantifierExp = quantifier.toString() + "(";
       }
 
       public String getQuantifierExp() {
-	// \A i : DomainType
-	return quantifierExp;
+        // \A i : DomainType
+        return quantifierExp;
       }
 
       public String getMembershipRestrictions() {
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < numVars; i++) {
-	  if (i != 0) sb.append(" /\\ ");
-	  sb.append (getMembershipRestriction(i));
-	}
-	return sb.toString();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < numVars; i++) {
+          if (i != 0) sb.append(" /\\ ");
+          sb.append (getMembershipRestriction(i));
+        }
+        return sb.toString();
       }
 
       public String getMembershipRestriction(int num) {
-	return getVarName(num).ioa_name() + " \\in " + setNames[num].ioa_name();
+        return getVarName(num).ioa_name() + " \\in " + setNames[num].ioa_name();
       }
 
       public String getClosingExp() {
-	// This isn't very smart right now, but maybe later we can
-	// pretty print based on whether we need parens or not
-	return ")";
+        // This isn't very smart right now, but maybe later we can
+        // pretty print based on whether we need parens or not
+        return ")";
       }
 
       public VarInfoName getVarName (int num) {
-	return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
+        return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
       }
 
       public String getVarIndexed (int num) {
-	return qret.root_primes[num].ioa_name();
+        return qret.root_primes[num].ioa_name();
       }
 
     }
@@ -2421,7 +2421,7 @@ public abstract class VarInfoName
 
       VarInfoName[] setnames = new VarInfoName[sets.length];
       for (int i=0; i<sets.length; i++)
-	setnames[i] = sets[i].name;
+        setnames[i] = sets[i].name;
 
       QuantifyReturn qret = quantify(setnames);
 
@@ -2430,18 +2430,18 @@ public abstract class VarInfoName
       // Build the quantifier
       StringBuffer quantifier = new StringBuffer();
       for (int i=0; i < qret.bound_vars.size(); i++) {
-	// Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
-	VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+        // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+        VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 
-	quantifier.append ("\\A ");
-	quantifier.append (var.ioa_name());
-	quantifier.append (" : ");
-	quantifier.append (sets[i].domainTypeIOA());
-	quantifier.append (" ");
+        quantifier.append ("\\A ");
+        quantifier.append (var.ioa_name());
+        quantifier.append (" : ");
+        quantifier.append (sets[i].domainTypeIOA());
+        quantifier.append (" ");
 
-	// Build the variables
-	result[i * 2 + 1] = var.ioa_name();
-	result[i * 2 + 2] = qret.root_primes[i].ioa_name();
+        // Build the variables
+        result[i * 2 + 1] = var.ioa_name();
+        result[i * 2 + 2] = qret.root_primes[i].ioa_name();
       }
       result[0] = result[0] + "(";
       result[sets.length * 2 + 1] = ")";
@@ -2459,45 +2459,45 @@ public abstract class VarInfoName
       int numConditions = 0;
 
       for (int i=0; i < qret.bound_vars.size(); i++) {
-	// Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
-	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
-	if (i != 0)
-	  ptr_list.append(", ");
+        // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+        VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+        if (i != 0)
+          ptr_list.append(", ");
 
-	// if the corresponding var is of type 'Set':
-	//    - 'ptr' is an IOA Set element, of type elementTypeIOA()
-	//    - the following condition must be added: (ptr /in set)
-	// otherwise, if type is IOA Array, ptr is an integer index
-	if (v_roots[i].isIOASet()) {
-	  ptr_list.append(ptr + ":" + v_roots[i].elementTypeIOA());
-	  if (conditions.length()>0)
-	    conditions.append(" /\\ ");
-	  conditions.append("("+ptr.ioa_name() +" \\in ");
-	  conditions.append(roots[i].ioa_name()+")");
-	  numConditions++;
-	} else
-	  ptr_list.append(ptr.ioa_name() + ":Int");
+        // if the corresponding var is of type 'Set':
+        //    - 'ptr' is an IOA Set element, of type elementTypeIOA()
+        //    - the following condition must be added: (ptr /in set)
+        // otherwise, if type is IOA Array, ptr is an integer index
+        if (v_roots[i].isIOASet()) {
+          ptr_list.append(ptr + ":" + v_roots[i].elementTypeIOA());
+          if (conditions.length()>0)
+            conditions.append(" /\\ ");
+          conditions.append("("+ptr.ioa_name() +" \\in ");
+          conditions.append(roots[i].ioa_name()+")");
+          numConditions++;
+        } else
+          ptr_list.append(ptr.ioa_name() + ":Int");
       }
 
       result[0] = "\\A " + ptr_list + " (";
       result[roots.length+1] = ")";
 
       if (numConditions>0) {
-	  result[0] += (numConditions==1) ? conditions+" => (" :
-	      "(" + conditions + ") => (";
-	result[roots.length+1] += ")";
+          result[0] += (numConditions==1) ? conditions+" => (" :
+              "(" + conditions + ") => (";
+        result[roots.length+1] += ")";
       }
 
       // stringify the terms.  If root is 'Set' type, the pointer is sent instead
       for (int i=0; i < roots.length; i++) {
-	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
-	if (v_roots[i].isIOASet()) {
-	  result[i+1] = ptr.ioa_name();
-	  result[roots.length+i+2] = result[i+1];
-	} else {
-	  result[i+1] = qret.root_primes[i].ioa_name();
-	  result[roots.length+i+2] = ptr.ioa_name();
-	}
+        VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
+        if (v_roots[i].isIOASet()) {
+          result[i+1] = ptr.ioa_name();
+          result[roots.length+i+2] = result[i+1];
+        } else {
+          result[i+1] = qret.root_primes[i].ioa_name();
+          result[roots.length+i+2] = ptr.ioa_name();
+        }
       }
       return result;
     }
@@ -2585,35 +2585,35 @@ public abstract class VarInfoName
       String[] result = new String[roots.length+2];
       StringBuffer int_list, conditions;
       {
-	// "i j ..."
-	int_list = new StringBuffer();
-	// "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
-	// if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-	conditions = new StringBuffer();
-	for (int i=0; i < qret.bound_vars.size(); i++) {
-	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-	  if (i != 0) {
-	    int_list.append(" ");
-	    conditions.append(" ");
-	  }
-	  int_list.append(idx.simplify_name());
-	  conditions.append( "(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
-	  conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
-	  if (elementwise && (i >= 1)) {
-	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
-	    conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
-	    conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
-	  }
-	}
+        // "i j ..."
+        int_list = new StringBuffer();
+        // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
+        // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
+        conditions = new StringBuffer();
+        for (int i=0; i < qret.bound_vars.size(); i++) {
+          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+          if (i != 0) {
+            int_list.append(" ");
+            conditions.append(" ");
+          }
+          int_list.append(idx.simplify_name());
+          conditions.append( "(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
+          conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
+          if (elementwise && (i >= 1)) {
+            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName _idx = _boundv[0], _low = _boundv[1];
+            conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+            conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+          }
+        }
       }
       result[0] = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
       result[result.length-1] = "))"; // close IMPLIES, FORALL
 
       // stringify the terms
       for (int i=0; i < roots.length; i++) {
-	result[i+1] = qret.root_primes[i].simplify_name();
+        result[i+1] = qret.root_primes[i].simplify_name();
       }
 
       return result;
@@ -2686,50 +2686,50 @@ public abstract class VarInfoName
       String[] result = new String[qret.root_primes.length+2];
       StringBuffer int_list, conditions, closing;
       {
-	// "i, j, ..."
-	int_list = new StringBuffer();
-	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
-	// if elementwise, also do "(i-ai) == (b-bi) && ..."
-	conditions = new StringBuffer();
-	closing = new StringBuffer();
-	for (int i=0; i < qret.bound_vars.size(); i++) {
-	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-	  if (i != 0) {
-	    int_list.append(", ");
-	    conditions.append(" && ");
-	  }
-	  closing.append(quant_increment(idx, i, format));
+        // "i, j, ..."
+        int_list = new StringBuffer();
+        // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+        // if elementwise, also do "(i-ai) == (b-bi) && ..."
+        conditions = new StringBuffer();
+        closing = new StringBuffer();
+        for (int i=0; i < qret.bound_vars.size(); i++) {
+          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+          if (i != 0) {
+            int_list.append(", ");
+            conditions.append(" && ");
+          }
+          closing.append(quant_increment(idx, i, format));
 
-	  int_list.append(quant_var_initial_state(idx, low, format));
-	  conditions.append(quant_execution_condition(low, idx, high, format));
+          int_list.append(quant_var_initial_state(idx, low, format));
+          conditions.append(quant_execution_condition(low, idx, high, format));
 
-	  if (elementwise && (i >= 1)) {
-	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
-	    if (format == OutputFormat.JAVA)
-	       conditions.append(" || ");
-	    else
-	       conditions.append(" && ");
+          if (elementwise && (i >= 1)) {
+            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName _idx = _boundv[0], _low = _boundv[1];
+            if (format == OutputFormat.JAVA)
+               conditions.append(" || ");
+            else
+               conditions.append(" && ");
 
-	    conditions.append(quant_element_conditions(_idx, _low, idx, low, format));
-	  }
-	}
+            conditions.append(quant_element_conditions(_idx, _low, idx, low, format));
+          }
+        }
       }
 
       if (forall)
-	 result[0] = quant_format_forall(format);
+         result[0] = quant_format_forall(format);
       else
-	 result[0] = quant_format_exists(format);
+         result[0] = quant_format_exists(format);
 
       result[0] += (int_list + quant_seperator1(format) +
                     conditions + quant_seperator2(format) +
-		    closing + quant_step_terminator(format));
+                    closing + quant_step_terminator(format));
       result[result.length-1] = ")";
 
       // stringify the terms
       for (int i=0; i < qret.root_primes.length; i++) {
-	result[i+1] = qret.root_primes[i].name_using(format);
+        result[i+1] = qret.root_primes[i].name_using(format);
       }
 
       return result;
@@ -2744,13 +2744,13 @@ public abstract class VarInfoName
      */
     protected static String quant_increment(VarInfoName idx, int i, OutputFormat format) {
       if (format != OutputFormat.JAVA) {
-	return "";
+        return "";
       } else {
-	if (i != 0) {
-	  return (", " + idx.java_name() + "++");
-	} else {
-	  return (idx.java_name() + "++");
-	}
+        if (i != 0) {
+          return (", " + idx.java_name() + "++");
+        } else {
+          return (idx.java_name() + "++");
+        }
       }
     }
 
@@ -2759,12 +2759,12 @@ public abstract class VarInfoName
      * variable.
      */
     protected static String quant_var_initial_state(VarInfoName idx,
-						    VarInfoName low,
-						    OutputFormat format) {
+                                                    VarInfoName low,
+                                                    OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-	return idx.java_name() + " == " + low.java_name();
+        return idx.java_name() + " == " + low.java_name();
       } else {
-	return idx.name_using(format);
+        return idx.name_using(format);
       }
     }
 
@@ -2773,14 +2773,14 @@ public abstract class VarInfoName
      * quantification.
      */
     protected static String quant_execution_condition(VarInfoName low,
-						      VarInfoName idx,
-						      VarInfoName high,
-						      OutputFormat format) {
+                                                      VarInfoName idx,
+                                                      VarInfoName high,
+                                                      OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-	return idx.java_name() + " <= " + high.java_name();
+        return idx.java_name() + " <= " + high.java_name();
       } else {
-	return low.name_using(format) + " <= " + idx.name_using(format) + " && " +
-	  idx.name_using(format) + " <= " + high.name_using(format);
+        return low.name_using(format) + " <= " + idx.name_using(format) + " && " +
+          idx.name_using(format) + " <= " + high.name_using(format);
       }
     }
 
@@ -2789,30 +2789,30 @@ public abstract class VarInfoName
      * quantification is element-wise.
      */
     protected static String quant_element_conditions(VarInfoName _idx,
-						     VarInfoName _low,
-						     VarInfoName idx,
-						     VarInfoName low,
-						     OutputFormat format) {
+                                                     VarInfoName _low,
+                                                     VarInfoName idx,
+                                                     VarInfoName low,
+                                                     OutputFormat format) {
       StringBuffer conditions = new StringBuffer();
 
       if (ZERO.equals(_low)) {
-	conditions.append(_idx.name_using(format));
+        conditions.append(_idx.name_using(format));
       } else {
-	conditions.append("(");
-	conditions.append(_idx.name_using(format));
-	conditions.append("-(");
-	conditions.append(_low.name_using(format));
-	conditions.append("))");
+        conditions.append("(");
+        conditions.append(_idx.name_using(format));
+        conditions.append("-(");
+        conditions.append(_low.name_using(format));
+        conditions.append("))");
       }
       conditions.append(" == ");
       if (ZERO.equals(low)) {
-	conditions.append(idx.name_using(format));
+        conditions.append(idx.name_using(format));
       } else {
-	conditions.append("(");
-	conditions.append(idx.name_using(format));
-	conditions.append("-(");
-	conditions.append(low.name_using(format));
-	conditions.append("))");
+        conditions.append("(");
+        conditions.append(idx.name_using(format));
+        conditions.append("-(");
+        conditions.append(low.name_using(format));
+        conditions.append("))");
       }
 
       return conditions.toString();
@@ -2824,9 +2824,9 @@ public abstract class VarInfoName
      */
     protected static String quant_format_forall(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-	return "(for (int ";
+        return "(for (int ";
       } else {
-	return "(\\forall int ";
+        return "(\\forall int ";
       }
     }
 
@@ -2845,9 +2845,9 @@ public abstract class VarInfoName
      */
     protected static String quant_seperator1(OutputFormat format) {
       if (format == OutputFormat.JML) {
-	return "; ";
+        return "; ";
       } else {
-	return "; (";
+        return "; (";
       }
     }
 
@@ -2858,9 +2858,9 @@ public abstract class VarInfoName
      */
     protected static String quant_seperator2(OutputFormat format) {
       if (format == OutputFormat.ESCJAVA) {
-	return ") ==> ";
+        return ") ==> ";
       } else {
-	return "; ";
+        return "; ";
       }
     }
 
@@ -2870,7 +2870,7 @@ public abstract class VarInfoName
      */
     protected static String quant_step_terminator(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
-	return ")";
+        return ")";
       }
       return "";
     }
@@ -2895,9 +2895,9 @@ public abstract class VarInfoName
    **/
   public static final Transformer IDENTITY_TRANSFORMER
     = new Transformer() {
-	public VarInfoName transform(VarInfoName v) {
-	  return v;
-	}
+        public VarInfoName transform(VarInfoName v) {
+          return v;
+        }
       };
 
 }

@@ -53,7 +53,7 @@ public class SubSequence
     }
 
     if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-	!var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       // Doesn't make sense to instantitate if order doens't matter
       return null;
     }
@@ -286,8 +286,8 @@ public class SubSequence
 
     if (debug.isDebugEnabled()) {
       debug.debug("static SubSequence.isObviousDerived(" + subvar.name +
-		  ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() +
-		  " " + supervar.isDerivedSubSequenceOf());
+                  ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() +
+                  " " + supervar.isDerivedSubSequenceOf());
     }
 
     // For unions and intersections, it probably doesn't make sense to
@@ -297,9 +297,9 @@ public class SubSequence
     // might be useful.  Subsequence, however, seems totally useless
     // on unions and intersections.
     if (supervar.derived instanceof SequenceScalarIntersection ||
-	supervar.derived instanceof SequenceScalarUnion ||
-	subvar.derived instanceof SequenceScalarIntersection ||
-	subvar.derived instanceof SequenceScalarUnion ) {
+        supervar.derived instanceof SequenceScalarUnion ||
+        subvar.derived instanceof SequenceScalarIntersection ||
+        subvar.derived instanceof SequenceScalarUnion ) {
       debug.debug ("Returning true because of union or intersection");
       return true;
     }
@@ -309,8 +309,8 @@ public class SubSequence
       // of x[]
       SequencesPredicate derived = (SequencesPredicate) subvar.derived;
       if (derived.var1().equals(supervar)) {
-	debug.debug ("Returning true because of predicate slicing");
-	return true;
+        debug.debug ("Returning true because of predicate slicing");
+        return true;
       }
     }
 
@@ -420,25 +420,25 @@ public class SubSequence
       // we aren't going to learn anything new from this invariant,
       // since each sequence should have an EltOneOf over it.
       if (false) {
-	System.out.println("Checking " + format());
-	PptSlice1 slice = ppt_parent.findSlice(supervar);
-	if (slice == null) {
-	  System.out.println("No slice: ppt=" + ppt + " parent =" + ppt.parent);
-	} else {
-	  System.out.println("Slice var =" + slice.var_info);
-	  Iterator superinvs = slice.invs.iterator();
-	  while (superinvs.hasNext()) {
-	    Object superinv = superinvs.next();
-	    System.out.println("Inv = " + superinv);
-	    if (superinv instanceof EltOneOf) {
-	      EltOneOf eltinv = (EltOneOf) superinv;
-	      if (eltinv.num_elts() > 0) {
-		System.out.println(format() + " obvious because of " + eltinv.format());
-		return true;
-	      }
-	    }
-	  }
-	}
+        System.out.println("Checking " + format());
+        PptSlice1 slice = ppt_parent.findSlice(supervar);
+        if (slice == null) {
+          System.out.println("No slice: ppt=" + ppt + " parent =" + ppt.parent);
+        } else {
+          System.out.println("Slice var =" + slice.var_info);
+          Iterator superinvs = slice.invs.iterator();
+          while (superinvs.hasNext()) {
+            Object superinv = superinvs.next();
+            System.out.println("Inv = " + superinv);
+            if (superinv instanceof EltOneOf) {
+              EltOneOf eltinv = (EltOneOf) superinv;
+              if (eltinv.num_elts() > 0) {
+                System.out.println(format() + " obvious because of " + eltinv.format());
+                return true;
+              }
+            }
+          }
+        }
       }
 
       // Also need to check A[0..i] subseq A[0..j] via compare_vars.
@@ -453,7 +453,7 @@ public class SubSequence
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();
           // if (supervar_part.isCanonical()) // [INCR]
-	  {
+          {
             PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {

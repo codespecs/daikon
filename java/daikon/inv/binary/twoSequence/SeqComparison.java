@@ -117,7 +117,7 @@ public class SeqComparison
       (format, can_be_lt, can_be_eq, can_be_gt);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.JAVA))
+        || (format == OutputFormat.JAVA))
     {
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);
@@ -129,7 +129,7 @@ public class SeqComparison
 
     if (format == OutputFormat.IOA) {
       if (var1().isIOASet() || var2().isIOASet()) {
-	return "Not valid for Sets: " + format();
+        return "Not valid for Sets: " + format();
       }
       String name1 = var1().name.name_using(format);
       String name2 = var2().name.name_using(format);

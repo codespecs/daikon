@@ -24,8 +24,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfSequence 
-  extends SingleSequence 
+public final class OneOfSequence
+  extends SingleSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -66,7 +66,7 @@ public final class OneOfSequence
     num_elts = 0;
 
     Assert.assert(var().type.isPseudoArray(),
-		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
+                  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
     // System.out.println("is_hashcode=" + is_hashcode + " for " + format()
@@ -198,9 +198,9 @@ public final class OneOfSequence
     if (num_elts == 1) {
 
       if (is_hashcode) {
-	// we only have one value, because add_modified dies if more
-	Assert.assert(num_elts == 1);
-	long[]  value = elts[0];
+        // we only have one value, because add_modified dies if more
+        Assert.assert(num_elts == 1);
+        long[]  value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
         } else if ((value.length == 1) && (value[0] == 0)) {
@@ -209,7 +209,7 @@ public final class OneOfSequence
           return varname + " contains no nulls and has only one value, of length " + value.length;
         } else if (all_nulls(0)) {
           return varname + " contains only nulls and has only one value, of length " + value.length;
-	} else {
+        } else {
           return varname + " has only one value, of length " + value.length;
         }
       } else {
@@ -286,13 +286,13 @@ public final class OneOfSequence
       Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "size("+var().name.ioa_name() + ") = " + value.length;
+        length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
       if (no_nulls(0)) {
-	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
       } else if (all_nulls(0)) {
-	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
       }
     }
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
@@ -320,16 +320,16 @@ public final class OneOfSequence
       Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().type.isArray()) {
-	if (var().name.isApplySizeSafe()) {
-	  length = var().name.applySize().esc_name() + " == " + value.length;
-	}
-	if (no_nulls(0)) {
-	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	  forall = form[0] + "(" + form[1] + " != null)" + form[2];
-	} else if (all_nulls(0)) {
-	  String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	  forall = form[0] + "(" + form[1] + " == null)" + form[2];
-	}
+        if (var().name.isApplySizeSafe()) {
+          length = var().name.applySize().esc_name() + " == " + value.length;
+        }
+        if (no_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " != null)" + form[2];
+        } else if (all_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " == null)" + form[2];
+        }
       }
     }
     if (length == "" && forall == "") { // interned
@@ -396,14 +396,14 @@ public final class OneOfSequence
       Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
-	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
+        length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
     if (length == "" && forall == "") { // interned
@@ -511,14 +511,14 @@ public final class OneOfSequence
 
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
-	return false;
+        return false;
 
     return true;
   }
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfSequence ) {
+    if (o instanceof OneOfSequence) {
       OneOfSequence  other = (OneOfSequence) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -549,7 +549,7 @@ public final class OneOfSequence
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfSequence )
+      if (inv instanceof OneOfSequence)
         return (OneOfSequence) inv;
     }
     return null;

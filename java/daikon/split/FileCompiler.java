@@ -47,14 +47,14 @@ public final class FileCompiler {
     if (num_files > 0) {
       String to_compile = (String) filenames.get(0);
       for (int i = 1; i < num_files; i++) {
-	to_compile += (" " + (String) filenames.get(i));
+        to_compile += (" " + (String) filenames.get(i));
       }
 
       String command = dkconfig_compiler + " " + to_compile;
       try {
-	return new TimedProcess( commander.exec(command), command);
+        return new TimedProcess( commander.exec(command), command);
       } catch (IOException e) {
-	System.err.println("IOException while compiling files \n" + e.toString());
+        System.err.println("IOException while compiling files \n" + e.toString());
       }
     }
     return null;

@@ -24,8 +24,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfStringSequence 
-  extends SingleStringSequence 
+public final class OneOfStringSequence
+  extends SingleStringSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -220,7 +220,7 @@ public final class OneOfStringSequence
       return "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
     } else {
       if (str.startsWith("\"") && str.endsWith("\"")) {
-	str = str.substring(1, str.length()-1);
+        str = str.substring(1, str.length()-1);
       }
       return "\\type(" + str + ")";
     }
@@ -240,30 +240,30 @@ public final class OneOfStringSequence
     if (var().name instanceof VarInfoName.TypeOf) {
       VarInfoName term = ((VarInfoName.TypeOf) var().name).term;
       if (term instanceof VarInfoName.Elements) {
-	String varname = ((VarInfoName.Elements) term).term.esc_name();
-	String type = null;
-	boolean consistent = true;
-	for (int i=0; consistent && i<num_elts; i++) {
-	  String[] elt = elts[i];
-	  for (int j=0; consistent && j<elt.length; j++) {
-	    String maybe = format_esc_string2type(elt[j]);
-	    if (type == null) {
-	      type = maybe;
-	    } else {
-	      consistent &= type.equals(maybe);
-	    }
-	  }
-	}
-	if (consistent && (type != null)) {
-	  VarInfo term_var = ppt.parent.findVar(term);
-	  if (term_var != null) {
-	    if (term_var.type.isArray()) {
-	      return "\\elemtype(" + varname + ") == " + type;
-	    } else {
-	      return varname + ".elementType == " + type;
-	    }
-	  }
-	}
+        String varname = ((VarInfoName.Elements) term).term.esc_name();
+        String type = null;
+        boolean consistent = true;
+        for (int i=0; consistent && i<num_elts; i++) {
+          String[] elt = elts[i];
+          for (int j=0; consistent && j<elt.length; j++) {
+            String maybe = format_esc_string2type(elt[j]);
+            if (type == null) {
+              type = maybe;
+            } else {
+              consistent &= type.equals(maybe);
+            }
+          }
+        }
+        if (consistent && (type != null)) {
+          VarInfo term_var = ppt.parent.findVar(term);
+          if (term_var != null) {
+            if (term_var.type.isArray()) {
+              return "\\elemtype(" + varname + ") == " + type;
+            } else {
+              return varname + ".elementType == " + type;
+            }
+          }
+        }
       }
     }
     result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
@@ -346,14 +346,14 @@ public final class OneOfStringSequence
 
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
-	return false;
+        return false;
 
     return true;
   }
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfStringSequence ) {
+    if (o instanceof OneOfStringSequence) {
       OneOfStringSequence  other = (OneOfStringSequence) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -384,7 +384,7 @@ public final class OneOfStringSequence
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfStringSequence )
+      if (inv instanceof OneOfStringSequence)
         return (OneOfStringSequence) inv;
     }
     return null;

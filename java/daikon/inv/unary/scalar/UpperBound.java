@@ -24,8 +24,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class UpperBound 
-  extends SingleScalar 
+public class UpperBound
+  extends SingleScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -83,10 +83,10 @@ public class UpperBound
     String name = var().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.IOA)
-	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.JML))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.IOA)
+        || (format == OutputFormat.JAVA)
+        || (format == OutputFormat.JML))
     {
       return name + " <= " + core.max1 ;
     }
@@ -132,14 +132,14 @@ public class UpperBound
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.max1  < dkconfig_minimal_interesting) ||
-	(core.max1  > dkconfig_maximal_interesting)) {
+        (core.max1  > dkconfig_maximal_interesting)) {
       return true;
     }
     OneOfScalar  oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.max1  == oo.MINELT(), since the LowerBound
       // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo. max_elt_long ()) {
+      if (core.max1  >=  oo.max_elt_long()) {
         return true;
       }
     }
@@ -153,7 +153,6 @@ public class UpperBound
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
-
       }
     }
 
@@ -181,7 +180,7 @@ public class UpperBound
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof LowerBound ) {
+    if (other instanceof LowerBound) {
       if (core.max1  <  ((LowerBound) other). core.min1 )
         return true;
     }
@@ -196,7 +195,7 @@ public class UpperBound
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof UpperBound )
+      if (inv instanceof UpperBound)
         return (UpperBound) inv;
     }
     return null;

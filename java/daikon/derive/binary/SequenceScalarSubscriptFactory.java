@@ -168,7 +168,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
       // System.out.println("It is constant (" + scl_constant + "): " + sclvar.name);
       if (scl_constant < 0) {
         Global.nonsensical_suppressed_derived_variables += 6;
-	return null;
+        return null;
       }
       if (scl_constant == 0) {
         Global.tautological_suppressed_derived_variables += 3;
@@ -183,7 +183,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
           new SequenceScalarSubsequence (seqvar, sclvar, true, false),
           new SequenceScalarSubsequence (seqvar, sclvar, false, false),
           new SequenceScalarSubsequence (seqvar, sclvar, false, true),
-	} : null;
+        } : null;
       }
     }
     */ // ... [INCR]
@@ -215,18 +215,18 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
           } : null;
         } else if (lower_bound == 0) {
           Global.nonsensical_suppressed_derived_variables += 1;
-	  ArrayList result = new ArrayList();
-	  if (enable_subscript) {
+          ArrayList result = new ArrayList();
+          if (enable_subscript) {
             result.add(new SequenceScalarSubscript (seqvar, sclvar, false)); // a[i]
-	  }
-	  if (enable_subsequence) {
+          }
+          if (enable_subsequence) {
             result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false)); // a[i..]
             result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true)); // a[i+1..]
             result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false)); // a[..i]
             result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true)); // a[..i-1]
-	  };
-	  return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
-	}
+          };
+          return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
+        }
       }
     }
     }
@@ -282,19 +282,19 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
       result.add(new SequenceScalarSubscript (seqvar, sclvar, false));
       // a[i-1]
       if (! suppress_minus_1)
-	result.add(new SequenceScalarSubscript (seqvar, sclvar, true));
+        result.add(new SequenceScalarSubscript (seqvar, sclvar, true));
     }
     if (enable_subsequence) {
       // a[i..]
       result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false));
       // a[i+1..]
       if (! suppress_plus_1)
-	result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true));
+        result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true));
       // a[..i]
       result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false));
       // a[..i-1]
       if (! suppress_minus_1)
-	result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true));
+        result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true));
     }
     return (BinaryDerivation[]) result.toArray(new BinaryDerivation[0]);
   }

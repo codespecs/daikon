@@ -6,7 +6,7 @@ import daikon.derive.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
-/** 
+/**
  * Intersection between two comparable sequences.
  **/
 
@@ -15,10 +15,10 @@ import org.apache.log4j.Category;
 // it is automatically generated from SequencesIntersection.java.jpp
 // *****
 
-public final class SequenceScalarIntersection 
+public final class SequenceScalarIntersection
   extends BinaryDerivation
 {
-  public static final Category debug = Category.getInstance("daikon.derive.binarySequenceScalarIntersection" );
+  public static final Category debug = Category.getInstance("daikon.derive.binarySequenceScalarIntersection");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -59,17 +59,17 @@ public final class SequenceScalarIntersection
     for (int i=0; i<val1_array.length; i++) {
       long  v = val1_array[i];
       if ((ArraysMDE.indexOf(val2_array, v)!=-1) &&
-	  (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
-	tmp[size++] = v;
+          (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
+        tmp[size++] = v;
     }
 
     long [] intersect = ArraysMDE.subarray(tmp, 0, size);
     intersect = (long  []) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
-		&& (mod2 == ValueTuple.UNMODIFIED))
-	       ? ValueTuple.UNMODIFIED
-	       : ValueTuple.MODIFIED);
+                && (mod2 == ValueTuple.UNMODIFIED))
+               ? ValueTuple.UNMODIFIED
+               : ValueTuple.MODIFIED);
     return new ValueAndModified(intersect, mod);
   }
 
@@ -85,7 +85,7 @@ public final class SequenceScalarIntersection
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceScalarIntersection );
+    return (other instanceof SequenceScalarIntersection);
   }
 
 }
