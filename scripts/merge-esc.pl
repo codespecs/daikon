@@ -170,8 +170,10 @@ END {
     @final_fields = ();
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
     while (defined($line = <GETFIELDS>)) {
-      if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
-	my $fieldname = $3;
+      # This regexp is repeated near the end below.  Make sure to
+      # change it in both locations.
+      if ($line =~ /^(\s+)(final\s+)?(private[^=]*\b(\w+)\s*[;=].*)$/) {
+	my $fieldname = $4;
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
 	  push(@fields,$fieldname);
@@ -207,6 +209,10 @@ END {
 	my $eolre = "\\n?\$";
 	my $need_newline = 1;
 	if ($line =~ /^\s*\{.*$eolre/) {
+	  $prebrace = "";
+	  $postbrace = $line;
+	  $need_newline = 0;
+	} elsif ($line =~ /\babstract\b/i) {
 	  $prebrace = "";
 	  $postbrace = $line;
 	  $need_newline = 0;
@@ -384,10 +390,13 @@ END {
 	next;
       }
 
-      if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
-	my ($spaces, $body, $fieldname) = ($1, $2, $3);
+      # This regexp is repeated in the GETFIELDS loop above.  Make
+      # sure to change it in both locations.
+      if ($line =~ /^(\s+)(final\s+)?(private[^=]*\b(\w+)\s*[;=].*)$/) {
+	my ($spaces, $mods, $body, $fieldname) = ($1, $2, $3, $4);
+	$mods = "" unless defined($mods); # to prevent warnings
 	my $is_object = grep(/^$fieldname$/, @fields);
-	print OUT "$spaces/*@ spec_public */ $body\n";
+	print OUT "$spaces/*@ spec_public */ $mods$body\n";
 	if ($is_object) {
 	  print OUT "/*@ invariant $fieldname.owner == this */\n";
 	}
