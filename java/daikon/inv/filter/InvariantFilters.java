@@ -99,7 +99,7 @@ public class InvariantFilters {
 	    filter.turnOn();
 	}
     }
-p
+
     public void turnFiltersOff() {
 	for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
 	    InvariantFilter filter = (InvariantFilter) iter.next();
