@@ -76,10 +76,10 @@ public abstract class PptSlice
   private Invariants invs_changed;
 
   // Keep private, modifiable copies and public read-only views
-  private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
+  private final Collection private_po_lower;
   // Map[PptTopLevel -> List[VarInfo[arity]]]; store as the value an array
   // where this.var_infos corresponds to the VarInfos in value.
-  private final Map private_po_lower_vis = new HashMap();
+  private final Map private_po_lower_vis;
 
   /**
    * Slices immediately lower in the partial order (compared to this).
@@ -90,8 +90,8 @@ public abstract class PptSlice
    * ordering, and is the minimal nearest set of slices which are
    * higher for all VarInfos.
    **/
-  public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
-  public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
+  public final Collection po_lower;
+  public final Map po_lower_vis;
 
   /* [INCR]
   // These are used only when the values_cache has been set to null.
@@ -118,8 +118,20 @@ public abstract class PptSlice
     }
     Assert.assertTrue(this instanceof PptSliceEquality || arity() == var_infos.length);
     invs = new Invariants();
-    invs_to_flow = new Invariants();
-    invs_changed = new Invariants();
+    // These seem to be used by both top-down and bottom-up (with global point).
+    invs_to_flow = new Invariants(1);
+    invs_changed = new Invariants(1);
+    if (! Daikon.dkconfig_df_bottom_up) {
+      private_po_lower = new ArrayList(2);
+      private_po_lower_vis = new HashMap();
+      po_lower = Collections.unmodifiableCollection(private_po_lower);
+      po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
+    } else {
+      private_po_lower = null;
+      private_po_lower_vis = null;
+      po_lower = null;
+      po_lower_vis = null;
+    }
 
     if (debugGeneral.isLoggable(Level.FINE)) {
       debugGeneral.fine (ArraysMDE.toString(var_infos));
@@ -757,26 +769,28 @@ public abstract class PptSlice
 
   public void repCheck() {
 
-    for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
-      PptTopLevel lower = (PptTopLevel) iPptLower.next();
-      // For all of the slices
-      List slices_vis = (List) private_po_lower_vis.get(lower);
-      for_each_slice:
+    if (! Daikon.dkconfig_df_bottom_up) {
+      for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
+        PptTopLevel lower = (PptTopLevel) iPptLower.next();
+        // For all of the slices
+        List slices_vis = (List) private_po_lower_vis.get(lower);
+        for_each_slice:
 
-      for (Iterator iLowerSlices = slices_vis.iterator();
-           iLowerSlices.hasNext(); ) {
-        VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
+        for (Iterator iLowerSlices = slices_vis.iterator();
+             iLowerSlices.hasNext(); ) {
+          VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
 
-        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          if (slice_vis[iSliceVis].type !=
-              this.var_infos[iSliceVis].type) {
-            System.err.println ("RepCheck failure: " +
-                                var_infos[iSliceVis].name.name() +
-                                " and " +
-                                slice_vis[iSliceVis].name.name() +
-                                " have different types");
-            System.err.println ("in ppt " + this);
-            throw new Error();
+          for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
+            if (slice_vis[iSliceVis].type !=
+                this.var_infos[iSliceVis].type) {
+              System.err.println ("RepCheck failure: " +
+                                  var_infos[iSliceVis].name.name() +
+                                  " and " +
+                                  slice_vis[iSliceVis].name.name() +
+                                  " have different types");
+              System.err.println ("in ppt " + this);
+              throw new Error();
+            }
           }
         }
       }
