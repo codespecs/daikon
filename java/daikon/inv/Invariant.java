@@ -428,7 +428,7 @@ public abstract class Invariant
    */
   public void falsify() {
     falsified = true;
-    if (Debug.logOn())
+    if (logOn())
       log ("Destroyed " + format());
   }
 
@@ -582,12 +582,14 @@ public abstract class Invariant
     // Let subclasses fix what they need to
     result = result.resurrect_done(permutation);
 
-    if (logOn())
+    if (logOn()) {
       result.log ("Created " + result.format() + " via transfer from "
                   + format() + " using permutation "
                   + ArraysMDE.toString (permutation)
                   + " old_ppt = " + VarInfo.toString (ppt.var_infos)
                   + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
+      // result.log (UtilMDE.backTrace());
+    }
     //if (debug.isLoggable(Level.FINE))
     //    debug.fine ("Invariant.transfer to " + new_ppt.name() + " "
     //                 + result.repr());
@@ -604,6 +606,14 @@ public abstract class Invariant
 
     Invariant result = (Invariant) this.clone();
     result = result.resurrect_done (permutation);
+
+    if (logOn())
+      result.log ("Created " + result.format() + " via clone_and_permute from "
+                  + format() + " using permutation "
+                  + ArraysMDE.toString (permutation)
+                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
+                  // + " new_ppt = " + VarInfo.toString (new_ppt.var_infos)
+                  );
 
     return (result);
   }
@@ -640,6 +650,13 @@ public abstract class Invariant
     result.ppt = new_ppt;
     // Let subclasses fix what they need to
     result = result.resurrect_done(permutation);
+
+    if (logOn())
+      result.log ("Created " + result.format() + " via resurrect from "
+                  + format() + " using permutation "
+                  + ArraysMDE.toString (permutation)
+                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
+                  + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
 
     return result;
   }
@@ -2140,6 +2157,11 @@ public abstract class Invariant
     return (true);
   }
 
+  // TODO: The logDetail and (especially) logOn methods are misleading,
+  // because they are static but are very often called with an instance as
+  // the receiver, suggesting that they have something to do with the
+  // receiver.  This should be corrected.  -MDE
+
   /**
    * Returns whether or not detailed logging is on.  Note that this check
    * is not performed inside the logging calls themselves, it must be
@@ -2196,7 +2218,7 @@ public abstract class Invariant
 
     String out = "";
     for (int i = 0; i < invs.length; i++) {
-      if (out != "")
+      if (out != "")            // interned
         out += ", ";
       if (invs[i] == null)
         out += "null";
