@@ -28,15 +28,15 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
 WWW_DIR := /home/httpd/html/daikon/
-# build the windows version of dfej here
-MINGW_DFEJ_LOC := /tmp
-
 # This needs not to be hardcoded to a particular users directory if
 # anyone else is going to use it.
 # MERNST_DIR := /g2/users/mernst
 # This is the current directory!  Maybe I don't need a variable for it.
 #INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
+
+# build the windows version of dfej here
+MINGW_DFEJ_LOC := $(INV_DIR)
 
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
