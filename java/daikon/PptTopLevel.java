@@ -212,9 +212,9 @@ public class PptTopLevel extends Ppt {
   // string to display in the actual JTree by calling toString().
   public String toString() {
     PptName pptName = new PptName( name );
-    if (pptName.isObjectInstanceSynthetic())   // display "Sort : OBJECT"
+    if (pptName.isObjectInstanceSynthetic())   // display "MyClassName : OBJECT"
 	return pptName.getFullClassName() + " : " + FileIO.object_suffix;
-    else if (pptName.isClassStaticSynthetic()) // display "Sort : CLASS"
+    else if (pptName.isClassStaticSynthetic()) // display "MyClassName : CLASS"
 	return pptName.getFullClassName() + " : " + FileIO.class_static_suffix;
     else			               // only display "EXIT184"
 	return pptName.getPoint();
@@ -1992,6 +1992,8 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.
    **/
   public void mark_implied_via_simplify() {
+    SessionManager.debugln("Simplify checking " + ppt_name);
+
     // Create the list of invariants from this ppt which are
     // expressible in Simplify
     Invariant[] invs;
@@ -2114,6 +2116,7 @@ public class PptTopLevel extends Ppt {
 	  redundant_invs.add(inv);
 	  present[checking] = false;
 	}
+	SessionManager.debugln((present[checking] ? "UNIQUE" : "REDUNDANT") + " " + invs[checking].format());
       } catch (TimeoutException e) {
 	// Reset the prover with the controlling invariant background
 	prover = null;
@@ -2561,7 +2564,7 @@ public class PptTopLevel extends Ppt {
       // probably should not be, in general.
       if (Daikon.suppress_redundant_invariants_with_simplify &&
 	  ((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
-	// out.println("Redundant: " + inv.format());
+	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
 	continue;
       }
 
