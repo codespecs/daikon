@@ -3577,8 +3577,8 @@ change, or when compiling a system requires many files to be in place.
 
 @item --disambigfilename=@var{filename}
 Specifies the filename for the pointer type disambiguation file
-(@pxref{Pointer type disambiguation}).  If
-this file exists, dfec uses it
+(@pxref{Pointer type disambiguation}), which must be given relative to
+the @file{daikon-output} directory.  If this file exists, dfec uses it
 to make decisions about how to output the referents of pointer
 variables.  If the file does not exist, dfec creates it,
 specifying default instrumentation behavior for all
@@ -4173,34 +4173,47 @@ they always denote a function that takes no arguments.  To specify a
 prototype in ANSI/ISO C for a function that takes no arguments, write
 @code{f(void)}.
 
-@item typechecking, casts, and const
-C++ is stricter about typechecking than C is.  Some C compilers permit
+@item type checking, casts, and const
+C++ is stricter about type checking than C is.  Some C compilers permit
 function prototypes to differ slightly from function definitions.
-Whereas C silently inserts casts,
+Whereas C silently inserts conversions,
 C++ requires types to match or explicit casts to be inserted.
 Therefore, your program may need to have variable types refined or
 changed.
 
 Furthermore, certain functions have different types in the C and C++
 standard libraries.  In particular, more functions have parameters
-annotated as ``const'' in the C++ library.  In order to satisfy the
-typechecker, you may need to change the types of variables that are
-passed as paramters:  you will need to add ``const'' to the type in
-order to permit them to be passed to the library routines.  Similarly,
-you may need to add ``const'' in other places, such as when a
-constant string is being assigned to a variable (the variable will
-have to be declared as ``const char *'' rather than as ``char *''.
-Because C++ tracks types through assignments, these const insertions
-may ripple through your program.
+annotated as ``const'' in the C++ library, and in more modern C
+libraries, than in older C libraries. 
+In order to satisfy the type checker, you may need to change the types
+of variables, for instance by adding ``const'' the types of variables
+that are assigned string literals, or assigned the results of functions
+that return ``const'' pointers.
+Alternatively, you can add casts every time a value of type ``char *''
+(for instance) must be converted to a value of type ``const char *''.
+Adding such casts is only safe if your program never actually modifies
+the value pointed to.
+In some cases, changing the declaration of a variable may be easier,
+since only the declaration, and not each use, must be changed.
+In others, adding casts will require fewer changes, because when
+variable becomes const, other variables that receive its value may
+also need to be declared const, causing a cascade of required
+changes.
 
 @item reserved words
 C++ reserves the following keywords that are not reserved words in C:
 @example
-  catch class delete except finally friend inline new operator 
-  private protected public template this throw try virtual
+  asm catch class const_cast delete dynamic_cast explicit export
+  friend inline mutable namespace new operator private protected public
+  reinterpret_cast static_cast template this throw try typeid typename
+  using virtual
+
+  and and_eq bitand bitor bool compl false not not_eq or or_eq true
+  wchar_t xor xor_eq
 @end example
 @noindent
-Earlier versions of C do not reserve ``bool'', but ANSI/ISO C and C++ do.
+(Those in the second group are defined as macros in the 1999 ISO C
+standard).
 Additionally, the C++ standard libraries define certain other
 identifiers, such as ``string''.
 Any use of these words as identifiers must be changed.
