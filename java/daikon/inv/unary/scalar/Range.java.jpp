@@ -387,7 +387,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(GTE 0 %var1%)");
+        return ("(>= %var1% 0)");
       else
         return ("%var1% >= 0");
     }
@@ -429,7 +429,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(GTE 64 %var1%)");
+        return ("(>= 64 %var1%)");
       else
         return ("%var1% >= 64");
     }
@@ -515,7 +515,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("Simplify Not Implemented");
+        return ("(EXISTS (p) (EQ %var1% (pow 2 p)))");
       else
         return ("%var1% is a power of 2");
     }
@@ -564,7 +564,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("Simplify Not Implemented");
+        return ("(EQ (MOD %var1% 2) 0)");
       else
         return ("%var1% is even");
     }
@@ -606,7 +606,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(>= %var1% 0) (>= 63 %var1%)");
+        return ("(AND (>= %var1% 0) (>= 63 %var1%))");
       else
         return ("0 <= %var1% <= 63");
     }
