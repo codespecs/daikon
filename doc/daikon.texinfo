@@ -240,6 +240,7 @@ Java front end dfej
 Binary C front end Kvasir
 
 * Using Kvasir::                
+* Kvasir options::              
 * Kvasir limitations::          
 
 Source-based C front end dfec
@@ -3803,10 +3804,11 @@ languages that follow C calling conventions.)
 
 @menu
 * Using Kvasir::                
+* Kvasir options::              
 * Kvasir limitations::          
 @end menu
 
-@node Using Kvasir, Kvasir limitations, Binary C front end Kvasir, Binary C front end Kvasir
+@node Using Kvasir, Kvasir options, Binary C front end Kvasir, Binary C front end Kvasir
 @subsection Using Kvasir
 
 The first step in using Kvasir is to compile your program using the
@@ -3835,11 +3837,9 @@ also creates a directory @file{daikon-output} in the current
 directory containing @file{program.decls} and @file{program.dtrace}
 files suitable as input to Daikon.
 
-By default, Kvasir overwrites the @file{program.decls} and
-@file{program.dtrace} files on each program run. To collect
-information about a number of runs of a program, set the
-@code{DTRACEAPPEND} environment variable to 1; this causes Kvasir
-to append to rather than overwrite the @file{program.dtrace} file.
+A number of options to Kvasir may be supplied between
+@code{kvasir-dtrace} and the name of your program; see below for a
+list.
 
 Note that Kvasir uses a different scheme for naming variables than dfec
 or the Java front end do. Because C does not have classes, the `class'
@@ -3852,7 +3852,89 @@ selection operator, so a slash is used instead: global variables are
 prefixed with a slash, and file-static variables are prefixed with their
 filename (with periods converted into underscores) and then a slash.
 
-@node Kvasir limitations,  , Using Kvasir, Binary C front end Kvasir
+@node Kvasir options, Kvasir limitations, Using Kvasir, Binary C front end Kvasir
+@subsection Kvasir options
+
+@table @code
+
+@item --asserts-aborts
+@itemx --no-asserts-aborts
+
+Enable (disable) Kvasir's internal consistency checks. By default, they
+are disabled. 
+
+@item --debug
+@itemx --no-debug
+
+Enable (disable) progress messages meant for debugging problems with
+Kvasir itself. By default, they are disabled. This option is intended
+mainly for Kvasir's developers.
+
+@item --decls-file=@var{filename.decls}
+
+Write the @code{.decls} file listing the names of functions and
+variables to the specified file name. The default is
+@code{daikon-output/@var{programname}.decls}, where @var{programname}
+is the name of the program.
+
+@item --dtrace-append
+
+Append new trace information to the end of an existing @code{.dtrace}
+file. The default is to overwrite a pre-existing @code{.dtrace} file.
+
+@item --dtrace-file=@var{filename.dtrace}
+
+Write the @code{.dtrace} trace file giving the values of variables to
+the specified file name. The default is
+@code{daikon-output/@var{programname}.dtrace}, where @var{programname}
+is the name of the program. A filename of @code{-} may be used to
+specify the standard output; in this case, the regular standard output
+of the program will be redirected back to the terminal, to avoid
+intermixing it with the trace output.
+
+@item --dtrace-gzip
+
+Compress trace information with the @code{gzip} program before writing
+it to the @code{.dtrace} file. You must have the @code{gzip} program
+available.
+
+@item --dump-ppt-file=@var{filename}
+@itemx --dump-var-file=@var{filename}
+
+Print a list of all the program points (respectively all the variables)
+in the program to the specified file. An edited version of this file can
+then be used with the @code{--ppt-list-file} (respectively
+@code{--var-list-file}) option.
+
+@item --ignore-globals
+
+Omit any global or static variables from the @code{.decls} and
+@code{.dtrace} files. Leaving these out can significantly improve Kvasir
+and Daikon's performance, at the expense of missing properties involving
+them. The default is to keep global and static variables.
+
+@item --output-fifo
+
+Create the output @code{.decls} and @code{.dtrace} files as FIFOs (also
+known as `named pipes'). Kvasir will then open first the @code{.decls}
+FIFO and then the @code{.dtrace} FIFO, blocking until another program
+(such as Daikon) reads from them. Using FIFOs for the output of Kvasir
+avoids the need for large trace files, but FIFOs are not supported by
+some file systems, including AFS.
+
+@item --ppt-list-file=@var{filename}
+@itemx --var-list-file=@var{filename}
+
+Trace only the program points (respectively variables) listed in the
+given file. Other program points (respectively variables) will be
+omitted from the @code{.decls} and @code{.dtrace} files. A convenient
+way to produce such files is by editing the output produced by the
+@code{--dump-ppt-file} (respectively @code{--dump-var-file}) option
+described above.
+
+@end table
+
+@node Kvasir limitations,  , Kvasir options, Binary C front end Kvasir
 @subsection Kvasir limitations
 
 @c Be sure to remove this once it becomes out of date
@@ -3886,27 +3968,21 @@ equivalence to simulate object-orientation will have derived-`class'
 fields missing when a structure is passed via a base-`class' pointer.
 
 @item
-None of the options of the source-based dfec are supported.
-Specifically: It is not possible to change the name of the dtrace or
-decls files (except by changing the name of your program). It is not
-possible to specify what directory the dtrace or decls will be placed
-in: Kvasir always puts them in a subdirectory @file{daikon-output} of
-the current working directory when your program starts. Compression of
-the trace output is not supported. Pointer type disambiguation is not
+Not all of the options of the source-based dfec are supported.
+Pointer type disambiguation is not
 supported. Variable comparability information (as supplied by the
 Lackwit tool) is not supported. The depth to which nested structures
-are explored is fixed at 3. The only environment variable obeyed is
-@code{DTRACEAPPEND}.
+are explored is fixed. Of the environment variables obeyed by dfec,
+only @code{DTRACEAPPEND} is recognized.
 
 @item
 Kvasir behaves somewhat differently with different versions of GCC.
-We have tested Kvasir with GCC versions 2.95.3 and 3.2.1, and the
-version labeled 2.96 that comes with Red Hat 7.3. While Kvasir runs
-correctly with the output of each compiler for some programs, it gives
-different results depending on the compiler for other programs, and we
-have observed it to crash on the output of GCC 2.95.3 in circumstances
-we are still investigating. If feasible, we recommend that you use
-Kvasir with a relatively recent version of GCC such as 3.2.1.
+We have had the best results with versions 3.3 (which we use for
+testing) and 3.4. If feasible, we recommend that you use
+Kvasir with such a relatively recent version of GCC. Incompatibilities
+between Kvasir and the debugging information produced by older GCC
+versions can lead to incorrect output and, in some cases for version
+2.95, can cause Kvasir to crash.
 
 @item
 Kvasir is incompatible with some compiler optimizations. It is
