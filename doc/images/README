@@ -1,8 +1,14 @@
-.gif	the original (though it came from a .bmp earlier on)
-.ps	xv daikon-logo.gif, then save as PostScript (has a bad BoundingBox)
-.epsi	ps2epsi daikon-logo.ps  (has a good BoundingBox)
-.eps	cp -p daikon-logo.epsi daikon-logo.eps
-.pdf	ps2pdf daikon-logo.eps; mv daikon-logo.eps.pdf daikon-logo.pdf
+Texinfo uses:
+ (.png or .jpg), .eps, .pdf, .txt
+
+Where the files come from:
+ .gif	the original
+	(daikon-logo.gif came from a .bmp earlier on)
+ .ps	xv daikon-logo.gif, then save as PostScript (has a bad BoundingBox)
+ .epsi	ps2epsi daikon-logo.ps  (has a good BoundingBox)
+ .eps	cp -p daikon-logo.epsi daikon-logo.eps
+ .pdf	ps2pdf daikon-logo.eps; mv daikon-logo.eps.pdf daikon-logo.pdf
 	(bad BoundingBox; I also tried renaming the .eps file as .ps first)
-.jpg	xv daikon-logo.giv, then save as JPEG
-.png	xv daikon-logo.giv, then save as PNG
+ .png	xv daikon-logo.giv, then save as PNG
+ .jpg	xv daikon-logo.giv, then save as JPEG
+	(used only if xv crashes when trying to write PNG)
