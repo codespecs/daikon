@@ -36,11 +36,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.1
+@center Daikon version 2.3.2
 
 @sp 1
-@c Daikon version 2.3.1 date
-@center October  8, 2001
+@c Daikon version 2.3.2 date
+@center December  5, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,7 +59,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.1, released October  8, 2001.
+It describes Daikon version 2.3.2, released December  5, 2001.
 
 @end html
 
@@ -582,7 +582,8 @@ You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
 need a Java compiler such as @command{javac} or @command{jikes}.  If you
 wish to analyze C or C++ programs, you need a C or C++ compiler such as
-@command{gcc}.
+@command{gcc}.  (In fact, @file{dfec} assumes that @command{gcc} is
+installed.)
 
 If you wish to build the Daikon front end for Java (dfej) yourself,
 rather than using a precompiled binary provided at
@@ -3570,7 +3571,7 @@ The Daikon invariant detector is named after an Asian radish.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.1, released October  8, 2001.
+This manual describes Daikon version 2.3.2, released December  5, 2001.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
