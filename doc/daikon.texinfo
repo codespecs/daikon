@@ -6234,27 +6234,25 @@ belongs to (@code{null} for object invariants).
 
 The runtimechecker instrumenter inserts, into a Java file,
 instrumentation code that checks invariants as the program executes.
-Suppose that you have the .
-You can instrument the program, then run it with no arguments
-created invariants in 
-To create a version of file
-@file{ubs/BoundedStack.java} that checks the invariants in 
-invariant file @file{BoundedStack.inv.gz}
+For a full list of options, run @code{java
+daikon.tools.runtimechecker.Main help}.
 
-with the invariants in the , then run the instrumented program, do:
+The @code{instrument} command to runtimechecker creates a new directory
+@file{instrumented-classes} containing a new version of the
+user-specified Java files, instrumented to check invariants at runtime.
+
+for example, to create a version of file
+@file{ubs/BoundedStack.java} that checks the invariants in 
+invariant file @file{BoundedStack.inv.gz}, do:
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
 @end example
 @noindent
-(For a list of options, type @code{java daikon.tools.runtimechecker.Main help}.)
 
-The @code{instrument} command creates a new directory
-@file{instrumented-classes} containing a new version of
-@file{BoundedStack.java}, instrumented to check invariants at runtime.
-
-The instrumented class will reference classes in the
+The instrumented Java code references classes in the
 @code{daikon.tools.runtimechecker} package, so those classes must be
-present in the classpath when the class is executed.
+present in the classpath when the instrumented program is compiled and
+executed.
 
 Invariants are evaluated at the program points at which they should
 hold. ``Evaluating an invariant'' means executing an expression that
@@ -6277,8 +6275,8 @@ obtain the growing list of violated invariants through the method
 that class for other useful methods.)
 
 @item
-A throwable is thrown when evaluating the invariant. In this case, the
-throwable is added to the list
+A @code{Throwable} (exception) is thrown when evaluating the
+invariant.  In this case, the throwable is added to the list
 @code{daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors}.
 The throwable is not rethrown.
 
