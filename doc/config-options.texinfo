@@ -10,6 +10,16 @@
  manual) are displayed.
   The default value is `true'.
 
+@item daikon.Debug.logDetail
+  Determines whether or not detailed info (such as from add_modified)
+ is printed
+  The default value is `false'.
+
+@item daikon.Debug.showTraceback
+  Determines whether or not traceback information is printed for each
+ call to log.
+  The default value is `false'.
+
 @item daikon.FileIO.add_changed
   Boolean.  When false, set modbits to 1 iff the printed
  representation has changed.  When true, set modbits to 1 if the
@@ -320,6 +330,10 @@
 
 @item daikon.inv.binary.twoSequence.SeqComparisonFloat.enabled
   Boolean.  True iff SeqComparisonFloat invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.binary.twoSequence.SeqComparisonString.enabled
+  Boolean.  True iff SeqComparisonString invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoSequence.SubSequence.enabled
