@@ -1,28 +1,30 @@
 REPLACE
-isFull()
-currentSize == theArray.length
 isEmpty()
 currentSize == 0
-
-PPT_NAME DataStructures.QueueAr.isFull
+isFull()
 currentSize == theArray.length
 
-PPT_NAME DataStructures.QueueAr.increment
-++x == theArray.length
-
-PPT_NAME DataStructures.QueueAr.isEmpty
-orig(currentSize) == 0
-
-PPT_NAME DataStructures.QueueAr.main
-i < 10
-!q.isEmpty()
-
 PPT_NAME DataStructures.QueueAr.dequeue
+++front == theArray.length
 isEmpty()
+orig(++front == theArray.length)
+orig(isEmpty())
 
 PPT_NAME DataStructures.QueueAr.enqueue
+++back == theArray.length
 isFull()
+orig(++back == theArray.length)
+orig(isFull())
 
 PPT_NAME DataStructures.QueueAr.getFront
 isEmpty()
+orig(isEmpty())
+
+PPT_NAME DataStructures.QueueAr.isEmpty
+currentSize == 0
+orig(currentSize == 0)
+
+PPT_NAME DataStructures.QueueAr.isFull
+currentSize == theArray.length
+orig(currentSize == theArray.length)
 
