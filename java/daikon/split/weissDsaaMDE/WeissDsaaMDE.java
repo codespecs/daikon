@@ -8,7 +8,7 @@ import daikon.split.*;
 
 // Instantiate this class in order to install all the appropriate splitters
 // in SplitterList.
-public class WeissDsaaMDE {
+public final class WeissDsaaMDE {
 
   static {
 
