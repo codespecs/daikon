@@ -272,14 +272,6 @@ public abstract class Ppt
       if ((o1 instanceof PptTopLevel) && (o2 instanceof PptTopLevel)) {
         PptTopLevel p1 = (PptTopLevel) o1;
         PptTopLevel p2 = (PptTopLevel) o2;
-        if (p1.ppt_name.isExitPoint() && p2.ppt_name.isExitPoint()) {
-          // [INCR] if ((p1.combined_exit == null) && (p2.combined_exit == null)) {
-            String fullName1 = p1.ppt_name.getNameWithoutPoint();
-            String fullName2 = p2.ppt_name.getNameWithoutPoint();
-            if (fullName1.equals(fullName2))
-              return 0;
-          // [INCR] }
-        }
       }
 
       String name1 = ((Ppt) o1).name;
