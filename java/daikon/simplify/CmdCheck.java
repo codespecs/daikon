@@ -61,7 +61,8 @@ public class CmdCheck
 	Assert.assert("Invalid.".equals(result));
 	valid = false;
       }
-	
+
+      SessionManager.debugln("Result: " + valid);
     } catch (IOException e) {
       throw new SimplifyError(e.toString());
     }
