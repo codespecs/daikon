@@ -19,9 +19,9 @@ public class SplitterLoader extends ClassLoader{
       byte[] classBytes= new byte[fi.available()];
       fi.read(classBytes);
       return classBytes;
-    }catch(FileNotFoundException e){
+    } catch (FileNotFoundException e){
       System.out.println("Error reading splitter class data: " + fileName + " not found");
-    }catch(IOException ioe){
+    } catch (IOException ioe){
       System.out.println("IO Error while reading class data " + fileName);
     }
     return null;

@@ -503,7 +503,7 @@ public class PrintInvariants {
 	      if (vi.rep_type.isArray()) {
 		String[] form =
 		  VarInfoName.QuantHelper.format_java(new VarInfoName[]
-		    { vi.name, other.name }, true); //elementwise
+		    { vi.name, other.name }, true); // elementwise
 		out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
 	      } else {
 		out.println(vi.name.java_name() + " == " + other.name.java_name());

@@ -4,7 +4,8 @@ import daikon.inv.Invariant;
 import java.io.*;
 import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
-  
+import java.util.*;
+
 /** MatchCountVisitor is a visitor that almost does the opposite of
  * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
  * if they are the same, and only if they are a part of a conditional ppt.
@@ -16,8 +17,12 @@ import daikon.inv.Invariant.OutputFormat;
  **/
 public class MatchCountVisitor extends PrintAllVisitor {
 
-    private static int cnt = 0;
-    private static int recall = 0;
+    // invariants found by the splitting
+    private static HashSet cnt = new HashSet();
+    // target set of invariants
+    private static HashSet targSet = new HashSet();
+    // invariants found matching
+    private static HashSet recall = new HashSet();
 
   public MatchCountVisitor (PrintStream ps, boolean verbose,
                                          boolean printEmptyPpts) {
@@ -36,8 +41,34 @@ public class MatchCountVisitor extends PrintAllVisitor {
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
+    String key1 = "";
+    String key2 = "";
+    
+    if (inv1 != null) {
+	String tmpStr1 = inv1.ppt.name;
+	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)" 
+	String thisPptName1 = tmpStr1.substring (0,
+						tmpStr1.lastIndexOf (';'));
+	key1 = thisPptName1 + "$" + inv1.format_using(OutputFormat.JAVA);
+	cnt.add (key1);
+    }
+
+    if (inv2 != null) {
+	String tmpStr2 = inv2.ppt.name;
+	// since inv2 is part of the "doctored" PptMap, the
+	// inv2.ppt.name is actually NOT a conditional invariant at all.
+	String thisPptName2 = tmpStr2.substring (0,
+						tmpStr2.lastIndexOf ('('));
+	key2 = thisPptName2 + "$" + inv2.format_using(OutputFormat.JAVA);
+	targSet.add (key2);
+
+    }
+
     if (shouldPrint(inv1, inv2)) {
-      super.visit(node);
+	// inv1 and inv2 should be the same, so it doesn't matter
+	// which one we choose when adding to recall -LL
+        recall.add (key1);
+	System.out.println(key1);
     }
   }
 
@@ -46,24 +77,29 @@ public class MatchCountVisitor extends PrintAllVisitor {
    **/
   protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
    
-      cnt++;
-
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 )
 	//   rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2) 
 	{
 	// now you have a match
-	recall++;
-	System.out.println (inv1.format_using(OutputFormat.JAVA));
+	
+	    return true;
     }
 
 
     return false;
   }
 
+    public double calcRecall() {
+	System.out.println ("Recall: "+ recall.size() +" / "+ targSet.size());
+	if (targSet.size() == 0) return -1; // avoids divide by zero
+	return (double) recall.size() / targSet.size();
+    }
+
     public double calcPrecision() {
-	if (cnt == 0) return -1;
-	return (double) recall / cnt;
+	System.out.println ("Prec: "+ recall.size() +" / "+ cnt.size());
+	if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
+	return (double) recall.size() / cnt.size();
     }
 
     

@@ -171,17 +171,17 @@ public final class Global {
   public static final Category debugSimplify = Category.getInstance("daikon.simplify");
 
   /**
-   * Logging Category to debug derived vars
+   * Category for debugging derived vars
    **/
   public static Category debugDerive = Category.getInstance("daikon.derive");
 
   /**
-   * Logging Category to debug splitting
+   * Category for debugging splitting
    **/
   public static Category debugSplit = Category.getInstance("daikon.split");
 
   /**
-   * Logging Category to debug inferences
+   * Category for debugging inferences
    **/
   public static Category debugInfer = Category.getInstance("daikon.infer");
 

@@ -176,7 +176,7 @@ public class TableSorter extends TableMap {
     }
 
     public void tableChanged(TableModelEvent e) {
-        //System.out.println("Sorter: tableChanged");
+        // System.out.println("Sorter: tableChanged");
         reallocateIndexes();
 
         super.tableChanged(e);
@@ -195,7 +195,7 @@ public class TableSorter extends TableMap {
         // n2sort();
         // qsort(0, indexes.length-1);
         shuttlesort((int[])indexes.clone(), indexes, 0, indexes.length);
-        //System.out.println("Compares: "+compares);
+        // System.out.println("Compares: "+compares);
     }
 
     public void n2sort() {
@@ -304,7 +304,7 @@ public class TableSorter extends TableMap {
                 int viewColumn = columnModel.getColumnIndexAtX(e.getX());
                 int column = tableView.convertColumnIndexToModel(viewColumn);
                 if (e.getClickCount() == 1 && column != -1) {
-                    //System.out.println("Sorting ...");
+                    // System.out.println("Sorting ...");
                     int shiftPressed = e.getModifiers()&InputEvent.SHIFT_MASK;
                     boolean ascending = (shiftPressed == 0);
                     sorter.sortByColumn(column, ascending);

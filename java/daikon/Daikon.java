@@ -147,7 +147,7 @@ public final class Daikon {
   static String usage =
     UtilMDE.join(new String[] {
       "Daikon invariant detector.",
-      "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>",
+      "Copyright 1998-2002 by Michael Ernst <mernst@lcs.mit.edu>",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
       "  Each file is a declaration file or a data trace file; the file type",
@@ -575,7 +575,7 @@ public final class Daikon {
       for (int j = 0; j < siz; j+=2) {
 	String pptname = (String) spnames_and_splitters.elementAt(j);
 	pptname.trim();
-	//if the pptname is ALL, associate it with all program points.
+	// If the pptname is ALL, associate it with all program points.
 	if (pptname.equals("ALL")) {
 	  SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
 	} else {

@@ -51,7 +51,7 @@ public class PptTopLevel
 
   /**
    * Logging Category for this class.
-   **/  
+   **/
   public static final Category debug =
     Category.getInstance (PptTopLevel.class.getName());
 
@@ -1232,14 +1232,14 @@ public class PptTopLevel
     // This does work, though.
 
     if (! Daikon.disable_splitting) {
-       //new MiscSplitters();
+      // new MiscSplitters();
 
       SplitterList.put(".*", new Splitter[] {
 	new ReturnTrueSplitter(),
       });
 
-      //new GriesLisp();
-      //new WeissDsaaMDE();
+      // new GriesLisp();
+      // new WeissDsaaMDE();
       // These are outdated; they look for "field" instead of "this.field".
       // new SplitterList4Dsaa();
     }
@@ -1458,7 +1458,8 @@ public class PptTopLevel
       // for (int i=0; i<exits.size(); i++) {
       //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
       // }
-      //Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
+
+      // Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
       for (int i = 0; i < num_exits; i++) {
 	for (int j = i+1; j < num_exits; j++) {
 	  PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(i);

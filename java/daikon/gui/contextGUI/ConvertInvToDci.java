@@ -93,112 +93,111 @@ public class ConvertInvToDci
 
 		try {
 
+            out_info = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output_file)));
+            PptMap ppt = FileIO.read_serialized_pptmap(new File(args[0]),
+                                   true // use saved config
+                                   );
+            for (Iterator iter = ppt.nameStringSet().iterator(); iter.hasNext(); ) {
+                out_info.write("==========");
+                out_info.newLine();
 
-		out_info = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output_file)));
-		PptMap ppt = FileIO.read_serialized_pptmap(new File(args[0]),
-							   true // use saved config
-							   );
-		for (Iterator iter = ppt.nameStringSet().iterator(); iter.hasNext(); ) {
-			out_info.write("==========");
-			out_info.newLine();
+                String name = (String) iter.next();
+                PptName pptName = new PptName(name);
 
-			String name = (String) iter.next();
-			PptName pptName = new PptName(name);
+                String meth_args = null;
+                int place_find = name.indexOf('(');
+                if (place_find != -1)
+                {
+                    meth_args = name.substring(place_find);
+                    place_find = meth_args.indexOf(')');
+                    if (place_find != -1)
+                        meth_args = meth_args.substring(0, place_find+1);
+                    else
+                        meth_args = null;
+                }
 
-			String meth_args = null;
-			int place_find = name.indexOf('(');
-			if (place_find != -1)
-			{
-				meth_args = name.substring(place_find);
-				place_find = meth_args.indexOf(')');
-				if (place_find != -1)
-					meth_args = meth_args.substring(0, place_find+1);
-				else
-					meth_args = null;
-			}
+                if (meth_args != null)
+                {
+                    if (meth_args.equals("()"))
+                        meth_args = null;
+                    else
+                    {
+                        try {
 
-			if (meth_args != null)
-			{
-				if (meth_args.equals("()"))
-					meth_args = null;
-				else
-				{
-					try {
+                        meth_args = UtilMDE.arglistFromJvm(meth_args);
+                        meth_args = meth_args.substring(1);
+                        meth_args = meth_args.substring(0, meth_args.length() - 1);
 
-					meth_args = UtilMDE.arglistFromJvm(meth_args);
-					meth_args = meth_args.substring(1);
-					meth_args = meth_args.substring(0, meth_args.length() - 1);
-
-					} catch (Error e) {
-						error_msg = e.toString();
-						return null;
-					}
+                        } catch (Error e) {
+                            error_msg = e.toString();
+                            return null;
+                        }
 
 
-					StringTokenizer tokens = new StringTokenizer(meth_args, ", ");
-					meth_args = "";
-					while (tokens.hasMoreTokens())
-					{
-						String strip_arg = tokens.nextToken();
-						strip_arg = ContextUtils.clearOutInfo(strip_arg, ".");
-						/*place_find = strip_arg.lastIndexOf(".");
-						if (place_find != -1)
-							strip_arg = strip_arg.substring(place_find+1);*/
+                        StringTokenizer tokens = new StringTokenizer(meth_args, ", ");
+                        meth_args = "";
+                        while (tokens.hasMoreTokens())
+                        {
+                            String strip_arg = tokens.nextToken();
+                            strip_arg = ContextUtils.clearOutInfo(strip_arg, ".");
+                            /*place_find = strip_arg.lastIndexOf(".");
+                            if (place_find != -1)
+                                strip_arg = strip_arg.substring(place_find+1);*/
 
-						strip_arg = ContextUtils.clearOutInfo(strip_arg, "$");
-						/*place_find = strip_arg.lastIndexOf("$");
-						if (place_find != -1)
-							strip_arg = strip_arg.substring(place_find+1);*/
+                            strip_arg = ContextUtils.clearOutInfo(strip_arg, "$");
+                            /*place_find = strip_arg.lastIndexOf("$");
+                            if (place_find != -1)
+                                strip_arg = strip_arg.substring(place_find+1);*/
 
-						meth_args += strip_arg + " ";
-					}
-					meth_args = meth_args.trim();
-				}
-			}
+                            meth_args += strip_arg + " ";
+                        }
+                        meth_args = meth_args.trim();
+                    }
+                }
 
-			// Extracts out the method, class and point
-			String className = pptName.getShortClassName();
-			String methodName = pptName.getShortMethodName();
-			String point = pptName.getPoint();
-			if (methodName == null) {
-				methodName = pptName.getPoint();
-				point = null;
-			}
-			if (methodName.equals("<init>"))
-				methodName = "Constructor";
-			//System.out.println("className is " + className + ", MethodName is " + methodName);
+                // Extracts out the method, class and point
+                String className = pptName.getShortClassName();
+                String methodName = pptName.getShortMethodName();
+                String point = pptName.getPoint();
+                if (methodName == null) {
+                    methodName = pptName.getPoint();
+                    point = null;
+                }
+                if (methodName.equals("<init>"))
+                    methodName = "Constructor";
+                // System.out.println("className is " + className + ", MethodName is " + methodName);
 
-			className = ContextUtils.clearOutInfo(className, "$");
-			methodName = ContextUtils.clearOutInfo(methodName, "$");
+                className = ContextUtils.clearOutInfo(className, "$");
+                methodName = ContextUtils.clearOutInfo(methodName, "$");
 
-			out_info.write(className);
-			out_info.newLine();
-			out_info.write(methodName);
-			if (meth_args != null)
-				out_info.write(" " + meth_args);
-			out_info.newLine();
-			if (point != null) {
-				if (point.startsWith("EXIT"))
-					point = "EXIT";
-				else if (point.startsWith("ENTER"))
-					point = "ENTER";
-				out_info.write(point);
-				out_info.newLine();
-			}
+                out_info.write(className);
+                out_info.newLine();
+                out_info.write(methodName);
+                if (meth_args != null)
+                    out_info.write(" " + meth_args);
+                out_info.newLine();
+                if (point != null) {
+                    if (point.startsWith("EXIT"))
+                        point = "EXIT";
+                    else if (point.startsWith("ENTER"))
+                        point = "ENTER";
+                    out_info.write(point);
+                    out_info.newLine();
+                }
 
-			// Extracts out the invariants for the method, class, and point
-			PptTopLevel pptvalues = (PptTopLevel)ppt.get(pptName);
-			for (Iterator iter1 = pptvalues.invariants_vector().iterator(); iter1.hasNext(); ) {
-				Invariant inv = (Invariant)iter1.next();
-				//System.out.println(inv.format());
-				out_info.write(inv.format());
-				out_info.newLine();
-			}
-			out_info.flush();
-		}
+                // Extracts out the invariants for the method, class, and point
+                PptTopLevel pptvalues = (PptTopLevel)ppt.get(pptName);
+                for (Iterator iter1 = pptvalues.invariants_vector().iterator(); iter1.hasNext(); ) {
+                    Invariant inv = (Invariant)iter1.next();
+                    // System.out.println(inv.format());
+                    out_info.write(inv.format());
+                    out_info.newLine();
+                }
+                out_info.flush();
+            }
 
-		//System.out.println("");
-		}
+            // System.out.println("");
+        }
 		catch (IOException e)
 		{
 			return_state = e.getMessage();
@@ -215,7 +214,7 @@ public class ConvertInvToDci
 			out_info.close();
 
 			}
-			catch(IOException e) {
+			catch (IOException e) {
 			}
 
 			if (return_state != null)

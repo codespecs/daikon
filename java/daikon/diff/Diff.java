@@ -43,7 +43,8 @@ public final class Diff {
     private static boolean treeManip = false;
 
     // this is set only when the manip flag is set "-z"
-    private static PptMap manip = null;
+    private static PptMap manip1 = null;
+    private static PptMap manip2 = null;
 
   /**
    * Determine which Ppts and Invariants should be paired together in
@@ -112,15 +113,16 @@ public final class Diff {
       case 'j':
         continuousJustification = true;
         break;
+      case 'z':
+	treeManip = true;
+	// no break on purpose, only makes sense
+	// if -p is also on -LL
       case 'p':
         examineAllPpts = true;
         break;
       case 'e':
         printEmptyPpts = true;
         break;
-      case 'z':
-	treeManip = true;
-	break;
       case 'v':
         verbose = true;
         break;
@@ -178,23 +180,41 @@ public final class Diff {
       }
 
       else if (treeManip) {
-	  System.out.println ("Warning, the postSplit file must be second");
+	  System.out.println ("Warning, the preSplit file must be second");
 	  if (numFiles < 3) {
 	      System.out.println
-		  ("Sorry, no manip file [preSplit] [postSplit] [manip]");
+		  ("Sorry, no manip file [postSplit] [preSplit] [manip]");
 	  }
 	  String filename1 = args[firstFileIndex];
 	  String filename2 = args[firstFileIndex + 1];
-	  String manipFile = args[firstFileIndex + 2];
+	  String manipA = args[firstFileIndex + 2];
+	  String manipB = args[firstFileIndex + 3];
 	  map1 = FileIO.read_serialized_pptmap(new File(filename1),
 					       false // use saved config
 					       );
 	  map2 = FileIO.read_serialized_pptmap(new File(filename2),
 					       false // use saved config
 					       );
-	  manip = FileIO.read_serialized_pptmap(new File(manipFile),
+	  manip1 = FileIO.read_serialized_pptmap(new File(manipA),
 					       false // use saved config
 					       );
+	  manip2 = FileIO.read_serialized_pptmap(new File(manipB),
+					       false // use saved config
+					       );
+
+	  // get the xor from these two manips
+	  RootNode manipRoot = diff.diffPptMap (manip1, manip2);
+	  XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
+							      false,
+							      false);
+	  manipRoot.accept (xiv);
+
+	  // stores the new xor set into manip1.  This might
+	  // be a hack of a design, but as far as I can tell,
+	  // it's quite hard to build a PptMap from scratch
+	  // due to the creational patterns invovled. -LL
+	  
+	  
 	  // form the root with tree manips
 	  RootNode root = diff.diffPptMap (map1, map2);
 
@@ -203,6 +223,7 @@ public final class Diff {
 	      (System.out, verbose, false);
 	  root.accept (mcv);
 	  System.out.println ("Precison: " + mcv.calcPrecision());
+	  System.out.println ("Recall: " + mcv.calcRecall());
 	  System.out.println ("Success");
 	  System.exit(0);
 
@@ -390,9 +411,14 @@ public final class Diff {
     } else {
 
 	if ( treeManip && isCond (ppt1)) {
-
-	    invs2 = findCondPpt (manip, ppt1);
-
+	    // remember, only want to mess with the second list
+	    invs2 = findCondPpt (manip1, ppt1);
+	    List tmpList = findCondPpt (manip2, ppt1);
+	        
+	    invs2.addAll (tmpList);
+	    // must call sort or it won't work! -LL after much debugging
+	    Collections.sort(invs2, INV_COMPARATOR);
+	
 	}
 	else invs2 = Collections.EMPTY_LIST;
     }
@@ -431,7 +457,7 @@ public final class Diff {
 	    // A conditional Ppt always contains the normal Ppt
 	    if (targ.equals (somePptName)) {
 		PptTopLevel repl = manip.get (somePptName);
-		System.out.println (targetName + "\n" + somePptName);
+
 		return repl.invariants_vector();
 	    }
 	    else {
@@ -443,6 +469,7 @@ public final class Diff {
     }
 
 }
+
 
 
 

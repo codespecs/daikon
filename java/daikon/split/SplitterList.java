@@ -159,8 +159,8 @@ public abstract class SplitterList {
     Vector splitters = new Vector();
 
     while (itor.hasNext()) {
-      String name = (String)itor.next(); //a daikon PptName, assumed
-      //to begin with  "ClassName.functionName"
+      // a PptName, assumed to begin with "ClassName.functionName"
+      String name = (String)itor.next();
       try{
 	Pattern pat = re_compiler.compile(name);
 	Pattern opat = re_compiler.compile("OBJECT");
@@ -169,14 +169,14 @@ public abstract class SplitterList {
 	  if (result != null) {
 	    splitterArrays.addElement(result);
 	  }
-	  //for the OBJECT program point, we want to use all the splitter.
+	  // For the OBJECT program point, we want to use all the splitter.
 	} else if (re_matcher.contains(pptName, opat) && re_matcher.contains(name, opat)) {
 	  Iterator all = ppt_splitters.values().iterator();
 	  while (all.hasNext()) {
 	    splitterArrays.addElement((Splitter[])all.next());
 	  }
 	}
-      }catch(Exception e) {
+      } catch (Exception e) {
 	if (Global.debugSplit.isDebugEnabled()) {
 	  Global.debugSplit.debug("Error matching regex for " + pptName + "\n" + e.toString());
 	}
@@ -216,11 +216,11 @@ public abstract class SplitterList {
       for (int i = 0; i < splitter_array.length; i++) {
 	Splitter tempsplitter = splitter_array[i];
 	int j = 0; boolean duplicate = false;
-	//Weed out splitters with the same condition
+	// Weed out splitters with the same condition.
 	if (!splitters.isEmpty()) {
 	  for (j = 0; j < splitters.size(); j++) {
 	    if ((tempsplitter.condition().trim()).equals( ((Splitter)splitters.elementAt(j)).condition().trim())) {
-	      //System.err.println(" duplicate " + tempsplitter.condition() + " \n");
+	      // System.err.println(" duplicate " + tempsplitter.condition() + " \n");
 	      duplicate = true;
 	      break;
 	    }

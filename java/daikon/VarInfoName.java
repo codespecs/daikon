@@ -1169,7 +1169,7 @@ public abstract class VarInfoName
       /* throw new UnsupportedOperationException("JAVA cannot format an unquantified sequence of elements" +
 	 " [repr=" + repr() + "]");
       */
-      //for now, do return the default implementation
+      // For now, do return the default implementation.
       return name_impl();
     }
     protected String java_name_impl(String index) {
@@ -1368,7 +1368,7 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       //throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
-      //for now, return the default implementation
+      // For now, return the default implementation.
       return name_impl();
     }
     protected Class resolveType(PptTopLevel ppt) {
@@ -2065,7 +2065,7 @@ public abstract class VarInfoName
 	// Build the quantifier
 	StringBuffer quantifier = new StringBuffer();
 	for (int i=0; i < qret.bound_vars.size(); i++) {
-	  //Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	  // Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
 	  VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	  quantifier.append (quantifierUniversal);
 	  quantifier.append (var.ioa_name());
@@ -2149,7 +2149,7 @@ public abstract class VarInfoName
       // Build the quantifier
       StringBuffer quantifier = new StringBuffer();
       for (int i=0; i < qret.bound_vars.size(); i++) {
-	//Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	// Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
 	VarInfoName var = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 
 	quantifier.append ("\\A ");
@@ -2178,7 +2178,7 @@ public abstract class VarInfoName
       int numConditions = 0;
 
       for (int i=0; i < qret.bound_vars.size(); i++) {
-	//Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
+	// Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
 	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	if (i != 0)
 	  ptr_list.append(", ");

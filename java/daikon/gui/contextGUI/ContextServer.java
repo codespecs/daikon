@@ -260,9 +260,9 @@ public class ContextServer
 		{
 			in = new BufferedReader(new FileReader(new_filename));
 		}
-		catch(FileNotFoundException fe)
+		catch (FileNotFoundException fe)
 		{
-			//return "File " + pathname + " Not Found";
+			// return "File " + pathname + " Not Found";
 			return "Error in reading cache file for " + fo_inv.getName();
 		}
 
@@ -371,10 +371,10 @@ public class ContextServer
 			class_hash = null;
 		}
 
-		} catch(IOException ioe){
+		} catch (IOException ioe){
 			return("Error reading in file: " + ioe.toString());
 		}
-		catch(NullPointerException npe)
+		catch (NullPointerException npe)
 		{
 			return("Error in reading in file: " + npe.toString());
 		}
@@ -382,7 +382,7 @@ public class ContextServer
 		{
 			try {
 				in.close();
-			} catch(IOException eie) {}
+			} catch (IOException eie) {}
 
 			if (cache_file == null)
 			{
@@ -399,7 +399,7 @@ public class ContextServer
 	}
 
 	// Function not used anymore, but left in if I ever brought this file format back.
-	public String addFiletoData(String pathname) //throws FileNotFoundException
+	public String addFiletoData(String pathname) // throws FileNotFoundException
 	{
 		if (filelist.contains(pathname))
 			return "File Already in Database";
@@ -412,7 +412,7 @@ public class ContextServer
 		{
 			in = new BufferedReader(new FileReader(pathname));
 		}
-		catch(FileNotFoundException fe)
+		catch (FileNotFoundException fe)
 		{
 			return "File Not Found";
 		}

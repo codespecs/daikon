@@ -171,7 +171,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		{
 			JFileChooser chooser = new JFileChooser(new File("."));
 			ExampleFileFilter filter = new ExampleFileFilter();
-			//filter.addExtension("dci");
+			// filter.addExtension("dci");
 			filter.addExtension(".inv");
 			filter.addExtension(".inv.gz");
 
@@ -468,8 +468,8 @@ public final class ContextGUI extends JApplet implements ActionListener
 	// This just hides the gui from the user.
 	public void endGui()
 	{
-		//dfc.destroyDatabase();
-		//dfc = null;
+		// dfc.destroyDatabase();
+		// dfc = null;
 		app.setVisible(false);
 		app.dispose();
 		app = null;
@@ -539,7 +539,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		String columnNames[] = {"Method", "Pt.", "Invar."};
 
 		mtm = new MyTableModel(data,columnNames);
-		//jtinvars = new JTable(mtm);
+		// jtinvars = new JTable(mtm);
 		TableSorter sorter = new TableSorter(mtm);
 		jtinvars = new JTable(sorter);
 		sorter.addMouseListenerToHeaderInTable(jtinvars);

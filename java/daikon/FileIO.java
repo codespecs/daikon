@@ -81,7 +81,8 @@ public final class FileIO
   // modified since this program point was last executed.
   static HashMap ppt_to_value_reps = new HashMap();
 
-  //for debugging purposes: printing out a modified trace file with changed modbits
+  // For debugging purposes: printing out a modified trace file with
+  // changed modbits.
   private static boolean to_write_nonce = false;
   private static String nonce_value, nonce_string;
 
@@ -224,10 +225,10 @@ public final class FileIO
     }
 
     if (!daikon.split.SplitterList.dkconfig_all_splitters) {
-      //if all the splitters are to be tried at all program points,
-      //then we need to create all the program points because the
-      //creation of splitters requires information from the program
-      //points
+      // If all the splitters are to be tried at all program points,
+      // then we need to create all the program points because the
+      // creation of splitters requires information from the program
+      // points.
 
       // XXX Re-examine the below rant
       // JWN: The above is crazy!  Program points are now EXPENSIVE --
@@ -457,7 +458,7 @@ public final class FileIO
     data_trace_reader = reader;
     data_trace_filename = filename;
 
-    //used for debugging: write new data trace file
+    // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
