@@ -77,19 +77,21 @@ public final class VarInfo
   public int varinfo_index;
 
   /**
-   * The index in a ValueTuple.  It can differ from varinfo_index due to
+   * The index in a ValueTuple (more generally, in a list of values).
+   * It can differ from varinfo_index due to
    * constants (and possibly other factors).
+   * It is -1 iff is_static_constant or not yet set.
    **/
-  public int value_index;       // index in lists of values, VarTuple objects
-                                // (-1 iff is_static_constant or not yet set)
+  public int value_index;
 
-  public boolean is_static_constant;  // required if static_constant_value==null
-                                //   (is_static_constant
-                                //   iff (value_index == -1)
-  Object static_constant_value; // null if not statically constant
-                                // once upon a time (still?):
-                                //   (static_constant_value != null)
-                                //   iff (value_index == -1)
+  /**
+   * is_static_constant iff (value_index == -1);
+   * is_static_constant == (static_constant_value != null)
+   **/
+  public boolean is_static_constant;
+
+  /** null if not statically constant **/
+  Object static_constant_value;
 
   // Partial ordering relationships between variables.
   // If A is higher than B then every value seen at B is seen at A.
