@@ -80,7 +80,7 @@ public abstract class Ppt {
   //   Assert.assert(removed);
   // }
 
-  PptSliceGeneric getView(VarInfo vi) {
+  public PptSliceGeneric getView(VarInfo vi) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSliceGeneric slice = (PptSliceGeneric) itor.next();
       if ((slice.arity == 1) && slice.usesVar(vi))
@@ -89,7 +89,7 @@ public abstract class Ppt {
     return null;
   }
 
-  PptSliceGeneric getView(VarInfo vi1, VarInfo vi2) {
+  public PptSliceGeneric getView(VarInfo vi1, VarInfo vi2) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSliceGeneric slice = (PptSliceGeneric) itor.next();
       if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))

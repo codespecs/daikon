@@ -48,8 +48,9 @@ public class Daikon {
     // processing only to bail out at the end.
     for (int i=0; i<args.length; i++) {
       String file = args[i];
-      if (! (file.endsWith(".decls") || file.endsWith(".dtrace"))) {
-        throw new Error("Unrecognized file suffix: " + file);
+      if ((file.indexOf(".decls") == -1) &&
+          (file.indexOf(".dtrace") == -1)) {
+        throw new Error("Unrecognized file type: " + file);
       }
     }
 
@@ -61,14 +62,14 @@ public class Daikon {
     try {
       for (int i=0; i<args.length; i++) {
         String file = args[i];
-        if (file.endsWith(".decls")) {
+        if (file.indexOf(".decls") != -1) {
           FileIO.read_declaration_file(file, all_ppts, null);
           num_decl_files++;
-        } else if (file.endsWith(".dtrace")) {
+        } else if (file.indexOf(".dtrace") != -1) {
           FileIO.read_data_trace_file(file, all_ppts, null);
           num_dtrace_files++;
         } else {
-          throw new Error("Unrecognized file suffix: " + file);
+          throw new Error("Unrecognized file type: " + file);
         }
       }
     } catch (IOException e) {
@@ -107,9 +108,12 @@ public class Daikon {
         // System.out.println("end dump-------------------------------------------------------------------");
         ppt.initial_processing();
         if (! disable_splitting) {
-          Splitter[] pconds = ppt.getSplitters();
+          Splitter[] pconds = SplitterList.get(ppt.name);
           if (Global.debugPptSplit)
-            System.out.println("Got " + pconds.length + " splitters for " + ppt.name);
+            System.out.println("Got " + ((pconds == null)
+                                         ? "no"
+                                         : Integer.toString(pconds.length))
+                               + " splitters for " + ppt.name);
           ppt.addConditions(pconds);
         }
         ppt.print_invariants_maybe();

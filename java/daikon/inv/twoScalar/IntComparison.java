@@ -11,7 +11,7 @@ import utilMDE.*;
 import java.util.*;
 
 // Also see NonEqual, NonAliased
-class IntComparison extends TwoScalar implements Comparison {
+public class IntComparison extends TwoScalar implements Comparison {
 
   final static boolean debugIntComparison = false;
 

@@ -28,7 +28,7 @@ public class VarInfo implements Cloneable {
   public Derivation derived;	// whether (and how) derived
   public Vector derivees;	// vector of Derivation objects
 
-  Ppt ppt;
+  public Ppt ppt;
 
   // Use the simpler canBeMissing instead
   // PptSliceGeneric ppt_unary;    // For unary invariants over this variable
@@ -200,17 +200,26 @@ public class VarInfo implements Cloneable {
   public boolean isConstant() {
     return (isStaticConstant() || isDynamicConstant());
   }
-
   public boolean isDynamicConstant() {
     return (dynamic_constant != null);
   }
   public boolean isStaticConstant() {
     return (static_constant_value != null);
   }
+  public Object constantValue() {
+    if (isStaticConstant()) {
+      return static_constant_value;
+    } else if (isDynamicConstant()) {
+      return dynamic_constant;
+    } else {
+      throw new Error("Variable " + name + " is not constant");
+    }
+  }
+
+
   public boolean isDerived() {
     return (derived != null);
   }
-
   public int derivedDepth() {
     if (derived == null)
       return 0;

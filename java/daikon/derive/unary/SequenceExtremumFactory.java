@@ -1,6 +1,7 @@
 package daikon.derive.unary;
 
 import daikon.*;
+import utilMDE.*;
 
 public class SequenceExtremumFactory extends UnaryDerivationFactory {
 
@@ -14,10 +15,51 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     if (!SequenceExtremum.applicable(vi))
       return null;
 
-    UnaryDerivation[] result = new UnaryDerivation[4];
-    for (int i=0; i<4; i++)
-      // the index is 0, 1, -1, or -2
-      result[i] = new SequenceExtremum(vi, i-2);
+    // by default, we use the indices 0, 1, -1, -2.
+    int lowerbound = -2;
+    int upperbound = 1;
+
+    // If the length is the constant 0 or 1, adjust the bounds accordingly.
+    VarInfo lengthvar = vi.sequenceSize();
+    if (lengthvar.isConstant()) {
+      int length_constant = ((Integer) lengthvar.constantValue()).intValue();
+      if (length_constant == 0)
+        return new UnaryDerivation[] { };
+      else if (length_constant <= 4) {
+        lowerbound = 0;
+        upperbound = length_constant - 1;
+      }
+    }
+
+    boolean suppress_zero = false;
+    // We know that var.~ll~[0] == var and var.~ll~.field[0] == var.field.
+    if (vi.name.indexOf("~ll~") != -1) {
+      suppress_zero = true;
+      if ((lowerbound == 0) && (upperbound == 0))
+        return new UnaryDerivation[] { };
+    }
+
+    int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
+    Assert.assert(num_invs > 0,
+                  "No SequenceExtremum invariants to instantiate; "
+                  + "lowerbound=" + lowerbound
+                  + ", upperbound=" + upperbound
+                  + ", suppress_zero=" + suppress_zero);
+    UnaryDerivation[] result = new UnaryDerivation[num_invs];
+    int j=0;
+    for (int i=lowerbound; i<=upperbound; i++) {
+      if (! ((i == 0) && suppress_zero)) {
+        result[j] = new SequenceExtremum(vi, i);
+        j++;
+      }
+    }
+    // No longer needed (I hope!).
+    // Assert.assert(j == num_invs,
+    //               "SequenceExtremum(" + vi.name + "): "
+    //               + "j=" + j + ", num_invs=" + num_invs
+    //               + ",lowerbound=" + lowerbound
+    //               + ", upperbound=" + upperbound
+    //               + ", suppress_zero=" + suppress_zero);
     return result;
   }
 

@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.*;
 
 
-class FileIO {
+public class FileIO {
 
 // We get all the declarations before reading any traces because at each
 // program point, we need to know the names of all the available variables,
@@ -52,11 +52,11 @@ class FileIO {
 
 
   // Program point name tags
-  final static String ppt_tag_separator = ":::";
-  final static String enter_tag = ppt_tag_separator + "ENTER";
+  public final static String ppt_tag_separator = ":::";
+  public final static String enter_tag = ppt_tag_separator + "ENTER";
   // This does not necessarily appear at the end of the program point name;
   // a number may follow it.
-  final static String exit_tag = ppt_tag_separator + "EXIT";
+  public final static String exit_tag = ppt_tag_separator + "EXIT";
 
 
 /// Variables
@@ -117,7 +117,7 @@ class FileIO {
 
     Vector new_ppts = new Vector();
 
-    BufferedReader reader = UtilMDE.BufferedFileReader(filename);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
     String line = reader.readLine();
 
     // line == null when we hit end of file
@@ -170,7 +170,7 @@ class FileIO {
   // This has certain parallels with read_data_trace file; but I think
   // separating the implementations is clearer, even if there's a bit of
   // duplication.
-  static Ppt read_declaration(BufferedReader file, PptMap all_ppts, Object fn_regexp, String filename) throws IOException {
+  static Ppt read_declaration(LineNumberReader file, PptMap all_ppts, Object fn_regexp, String filename) throws IOException {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
     // if (fn_regexp and not fn_regexp.search(ppt_name)):
@@ -181,7 +181,9 @@ class FileIO {
 
     // This program point name has already been encountered.
     if (all_ppts.containsKey(ppt_name)) {
-      throw new Error("Already contains program point " + ppt_name);
+      throw new Error("Duplicate program point " + ppt_name
+                      + " found at file " + filename
+                      + " line " + file.getLineNumber());
     }
 
     // if (ppt_name.endsWith(":::ENTER"))
@@ -679,6 +681,8 @@ class FileIO {
           Object val = invok.vals[j];
           if (val instanceof int[])
             System.out.print(ArraysMDE.toString((int[]) val));
+          else if (val instanceof String)
+            System.out.print((String)val);
           else
             System.out.print(val);
         }

@@ -533,7 +533,8 @@ public class PptTopLevel extends Ppt {
     }
 
     for (int i=0; i<result.size(); i++) {
-      Assert.assert(result.elementAt(i) instanceof Derivation);
+      Assert.assert(result.elementAt(i) instanceof Derivation,
+                    "Non-Derivation " + result.elementAt(i) + " at index " + i);
     }
 
     return result;
@@ -1319,28 +1320,6 @@ public class PptTopLevel extends Ppt {
     new SplitterList4Dsaa();
     new GriesLisp();
     new WeissDsaaMDE();
-  }
-
-  public Splitter[] getSplitters() {
-    Splitter[] from_fullname = SplitterList.get(name);
-    if (Global.debugPptSplit)
-      System.out.println("getSplitters found "
-                         + ((from_fullname == null) ? "no" : "" + from_fullname.length)
-                         + " splitters for " + name);
-    if (from_fullname != null)
-      return from_fullname;
-    int tag_index = name.indexOf(FileIO.ppt_tag_separator);
-    if (tag_index != -1) {
-      String untagged_name = name.substring(0, tag_index);
-      Splitter[] from_untagged_name = SplitterList.get(untagged_name);
-      if (Global.debugPptSplit)
-        System.out.println("getSplitters found "
-                           + ((from_fullname == null) ? "no" : "" + from_untagged_name.length)
-                           + " splitters for " + name);
-      if (from_untagged_name != null)
-        return from_untagged_name;
-    }
-    return null;
   }
 
   public void addConditions(Splitter[] splits) {

@@ -11,12 +11,20 @@ class NonZero extends SingleScalar {
   int min = Integer.MAX_VALUE;
   int max = Integer.MIN_VALUE;
 
+  // If nonzero, use this as the range instead of the actual range.
+  // This lets one use a specified probability of nonzero (say, 1/10
+  // for pointers).
+  int override_range = 0;
+
   private NonZero(PptSlice ppt_) {
     super(ppt_);
   }
 
   public static NonZero instantiate(PptSlice ppt) {
-    return new NonZero(ppt);
+    NonZero result = new NonZero(ppt);
+    if (! ppt.var_infos[0].type.isIntegral())
+      result.override_range = 10;
+    return result;
   }
 
   public String repr() {
@@ -52,10 +60,10 @@ class NonZero extends SingleScalar {
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  In that case,
     // do still check for no values yet received.
-    else if ((min > 0) || (max < 0))
+    else if ((override_range == 0) && ((min > 0) || (max < 0)))
       return Invariant.PROBABILITY_UNKNOWN;
     else {
-      int range = max - min + 1;
+      int range = (override_range == 0) ? max - min + 1 : override_range;
       double probability_one_elt_nonzero = 1 - 1.0/range;
       // This could underflow; so consider doing
       //   double log_confidence = self.samples*math.log(probability);

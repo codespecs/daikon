@@ -84,8 +84,8 @@ class EltIntComparison extends SingleSequence {
 
   public void add_modified(int[] a, int count) {
     for (int i=1; i<a.length; i++) {
-      int v1 = a[0];
-      int v2 = a[1];
+      int v1 = a[i-1];
+      int v2 = a[i];
       if (v1 == v2)
         can_be_eq = true;
       else if (v1 < v2)
