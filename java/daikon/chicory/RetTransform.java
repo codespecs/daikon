@@ -73,28 +73,47 @@ public class RetTransform implements ClassFileTransformer {
 
     // Don't instrument class if it matches an excluded regular expression
     for (String regex : Runtime.daikon_omit_regex) {
-      Pattern pattern = Pattern.compile (regex);
+        Pattern pattern = null;
+        try
+        {
+        pattern = Pattern.compile (regex);
+        }
+        catch(Exception e)
+        {
+            System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
+        }
       Matcher m = pattern.matcher (className);
       if (m.find()) {
         log ("not instrumenting %s, it matches regex %s\n", className, regex);
         return (null);
       }
     }
+    
 
     // If any include regular expressions are specified, only instrument
     // classes that match them
     if (Runtime.daikon_include_regex.size() > 0) {
       boolean match = false;
       for (String regex : Runtime.daikon_include_regex) {
-        Pattern pattern = Pattern.compile (regex);
+        Pattern pattern = null;
+        try
+        {
+        pattern = Pattern.compile (regex);
+        }
+        catch(Exception e)
+        {
+            System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
+        }
         Matcher m = pattern.matcher (className);
         if (m.find()) {
           match = true;
+          //System.out.printf ("instrumenting %s, it matches regex %s\n", className, regex);
           log ("instrumenting %s, it matches regex %s\n", className, regex);
           break;
         }
       }
       if (!match) {
+        //System.out.printf ("not instrumenting %s, it doesn't match any regex\n", className);
         log ("not instrumenting %s, it doesn't match any regex\n", className);
         return (null);
       }
