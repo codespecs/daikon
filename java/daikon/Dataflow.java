@@ -239,11 +239,18 @@ public class Dataflow
       PptName exit_name = ppt.ppt_name.makeExit();
       PptTopLevel exit_ppt = ppts.get(exit_name);
 
+      if (debugInit.isLoggable(Level.FINE))
+        debugInit.fine ("create_combined_exits: encounted exit "
+                        + exitnn_ppt.ppt_name);
+
       // Create the exit, if necessary
       if (exit_ppt == null) {
         VarInfo[] exit_vars = VarInfo.arrayclone_simple(ppt.var_infos);
         exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
         newPpts.add(exit_ppt);
+        if (debugInit.isLoggable(Level.FINE))
+          debugInit.fine ("create_combined_exits: created exit "
+                          + exit_name);
       }
     }
 
