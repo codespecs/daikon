@@ -6,7 +6,9 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-JAVAC ?= javac -g -target 1.1
+JAVAC ?= javac
+JAVAC_ARGS ?= -g -target 1.1
+JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS}
 JAVA ?= java
 
 ### end of user customizations
@@ -205,15 +207,15 @@ all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
 all_directly: ${AUTO_GENERATED_FILES}
-	@echo ${JAVAC} '*.java ...'
-	@${JAVAC} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} '*.java ...'
+	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${JAVA_FILES_EXCEPT_DAIKON}
-	@echo ${JAVAC} '*.java ... (except Daikon.java)'
-	@${JAVAC} ${JAVA_FILES_EXCEPT_DAIKON}
+	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
+	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
 
 all_except: all_except_daikon
@@ -221,14 +223,14 @@ all_except: all_except_daikon
 all_force:	all_directly
 
 all_via_javac:
-	$(MAKE) JAVAC='javac -g' all
+	$(MAKE) JAVAC='javac' all
 
 all_javac:	all_via_javac
 
 javac:	all_via_javac
 
 all_via_jikes:
-	$(MAKE) JAVAC='jikes -g +E +F' all
+	$(MAKE) JAVAC='jikes +E +F' all
 
 all_jikes:	all_via_jikes
 
@@ -237,13 +239,13 @@ jikes:	all_via_jikes
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
 daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES}
-	${JAVAC} daikon/Daikon.java
+	${JAVAC_COMMAND} daikon/Daikon.java
 
 daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES}
-	${JAVAC} daikon/Diff.java
+	${JAVAC_COMMAND} daikon/Diff.java
 
 daikon/Runtime.class: daikon/Runtime.java
-	${JAVAC} daikon/Runtime.java
+	${JAVAC_COMMAND} daikon/Runtime.java
 
 # No longer needed because symlink is created when setting the
 # JAVA_FILES variable
@@ -399,6 +401,8 @@ use-%:
 ## For debugging the Makefile.
 showvars:
 	@echo JAVAC = ${JAVAC}
+	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
+	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVA = ${JAVA}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
