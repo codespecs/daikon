@@ -41,14 +41,11 @@ public final class Runtime {
       File file = new File(filename);
       File parent = file.getParentFile();
       if (parent != null) parent.mkdirs();
-      FileOutputStream fos = new FileOutputStream(file);
+      OutputStream os = new FileOutputStream(file);
       if (filename.endsWith(".gz")) {
-	//throw new Error("Cannot guarantee closing a GZIPOutputStream");
-        dtrace = new PrintStream(new BufferedOutputStream(
-                   new GZIPOutputStream(fos), 8192));
-      } else {
-        dtrace = new PrintStream(new BufferedOutputStream(fos, 8192));
+        os = new GZIPOutputStream(os);
       }
+      dtrace = new PrintStream(new BufferedOutputStream(os, 8192));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error("" + e);
