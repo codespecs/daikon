@@ -1,4 +1,6 @@
-#! /uns/bin/perl -wpi.bak
+: # Use -*- Perl -*- without knowing its path
+  eval 'exec perl -S -wni.bak $0 "$@"'
+  if 0;
 # Remove variables from .dtrace files.
 # Usage:  trace-purge-vars.pl [-v] regexp file ...
 
@@ -8,6 +10,7 @@
 # I'm intentionally not operating by paragraphs, because I want the regexp
 # to only apply to the variable lines.
 
+# Problem: this hangs if given a file ending in a partial record.
 
 BEGIN {
   $debug = 0;
@@ -27,19 +30,33 @@ BEGIN {
 if (/^$/) {
   undef($ppt);
   if ($debug) { print STDERR "[blank line]\n"; }
+  print;
 } elsif (! defined($ppt)) {
   $ppt = $_;
+  if ($debug) { print STDERR "ppt: $_"; }
+  print;
 } else {
   $var = $_;
-  $_ = "";
-  $val = <>;
-  $mod = <>;
-  $match = ($var =~ /$regexp/);
-  if ($match ? $discard : !$discard) {
-    # nothing to do
-  } else {
+  if ($var eq "this_invocation_nonce\n") {
+    $val = <>;
     print $var;
     print $val;
-    print $mod;
+    undef($var);
+    undef($val);
+  } else {
+    if ($debug) { print STDERR "not nonce: $var"; }
+    $val = <>;
+    $mod = <>;
+    $match = ($var =~ /$regexp/);
+    if ($match ? $discard : !$discard) {
+      # nothing to do
+    } else {
+      print $var;
+      print $val;
+      print $mod;
+      undef($var);
+      undef($val);
+      undef($mod);
+    }
   }
 }
