@@ -171,7 +171,12 @@ dist-and-test: dist-notest test-the-dist
 dist-ensure-directory-exists: $(DIST_DIR)
 
 # Create the distribution, but don't test it.
-dist-notest: dist-ensure-directory-exists clean-java compile-java $(DIST_DIR_PATHS)
+# Note that update-doc-dist-date-and-version must occur before the Java
+# files are recompiled and before the .tar files are created.
+# ("doc/CHANGES" goes even before that, because
+# update-doc-dist-date-and-version changes its modification date.)
+
+dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
@@ -194,8 +199,7 @@ dist-force:
 # Given up-to-date .tar files, copies them (and documentation) to
 # distribution directory (ie, webpage).
 update-dist-dir: dist-ensure-directory-exists
-	$(MAKE) update-doc-dist-date
-	$(MAKE) update-doc-dist-version
+	$(MAKE) update-doc-dist-date-and-version
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
 	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
 	# a method or class with more than 0xFFFF bytecodes.
@@ -224,6 +228,10 @@ update-dist-doc:
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
 
+update-doc-dist-date-and-version:
+	$(MAKE) update-doc-dist-date
+	$(MAKE) update-doc-dist-version
+
 # Update the documentation with a new distribution date (today).
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
@@ -232,7 +240,7 @@ update-doc-dist-date:
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
-# Update the documentation according to the version number.
+# Update the documentation according to the version number in VERSION.
 # This isn't done as part of "make dist" because then subsequent "make www"
 # would show the new version.
 # I removed the dependence on "update-dist-version-file" because this rule
