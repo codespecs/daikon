@@ -1,0 +1,7 @@
+; -*- lisp -*- style
+
+(EQ (typeof null) |T_null|)
+;(EQ |T_null| (orig |T_null|))
+(EQ |this| |__orig__this|)
+;(FORALL (|x|) (PATS (orig (arrayLength |x|))) (IMPLIES (EQ |x| (orig |x|)) (EQ (arrayLength |x|) (orig (arrayLength |x|)))))
+;(FORALL (|x|) (PATS (orig (- (arrayLength |x|) 1))) (IMPLIES (EQ |x| (orig |x|)) (EQ (- (arrayLength |x|) 1) (orig (- (arrayLength |x|) 1)))))
