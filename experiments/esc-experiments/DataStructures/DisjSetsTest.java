@@ -4,6 +4,7 @@ import java.util.*;
 
 class DisjSetsTest
 {
+
   // Test main; all finds on same output line should be identical
   public static void main( String [ ] args )
   {
@@ -53,12 +54,13 @@ class DisjSetsTest
 	observe(ds, i);
       }
     }
-    
+
     ds = new DisjSets(200);
     ds.find(197);
 
     ds = new DisjSets(204);
     ds.unionCareful(191, 195);
+    ds.find(10);
 
     ds = new DisjSets(210);
     ds.unionDisjoint(200, 209);
@@ -115,10 +117,7 @@ class DisjSetsTest
 
     for( int i = 0; i < numElements; i++ )
       {
-	System.out.print( ds.find( i )+ "*" );
-	if( i % numInSameSet == numInSameSet - 1 )
-	  System.out.println( );
+	ds.find( i );
       }
-    System.out.println( );
   }
 }
