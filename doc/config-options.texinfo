@@ -960,20 +960,52 @@ Positive integer.  Specifies the maximum set size for this type
 of invariant (x is one of 'n' items).
 The default value is `3'.
 
-@item daikon.inv.unary.sequence.SeqIndexComparison.enabled
-Boolean.  True iff SeqIndexComparison invariants should be considered.
+@item daikon.inv.unary.sequence.SeqIndexFloatEqual.enabled
+Boolean.  True iff SeqIndexFloatEqual invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.unary.sequence.SeqIndexComparisonFloat.enabled
-Boolean.  True iff SeqIndexComparisonFloat invariants should be considered.
+@item daikon.inv.unary.sequence.SeqIndexFloatGreaterEqual.enabled
+Boolean.  True iff SeqIndexFloatGreaterEqual invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.unary.sequence.SeqIndexNonEqual.enabled
-Boolean.  True iff SeqIndexNonEqual invariants should be considered.
+@item daikon.inv.unary.sequence.SeqIndexFloatGreaterThan.enabled
+Boolean.  True iff SeqIndexFloatGreaterThan invariants should be considered.
 The default value is `true'.
 
-@item daikon.inv.unary.sequence.SeqIndexNonEqualFloat.enabled
-Boolean.  True iff SeqIndexNonEqual invariants should be considered.
+@item daikon.inv.unary.sequence.SeqIndexFloatLessEqual.enabled
+Boolean.  True iff SeqIndexFloatLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexFloatLessThan.enabled
+Boolean.  True iff SeqIndexFloatLessThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexFloatNonEqual.enabled
+Boolean.  True iff SeqIndexFloatNonEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntEqual.enabled
+Boolean.  True iff SeqIndexIntEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntGreaterEqual.enabled
+Boolean.  True iff SeqIndexIntGreaterEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntGreaterThan.enabled
+Boolean.  True iff SeqIndexIntGreaterThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntLessEqual.enabled
+Boolean.  True iff SeqIndexIntLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntLessThan.enabled
+Boolean.  True iff SeqIndexIntLessThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.unary.sequence.SeqIndexIntNonEqual.enabled
+Boolean.  True iff SeqIndexIntNonEqual invariants should be considered.
 The default value is `true'.
 
 @item daikon.inv.unary.string.OneOfString.enabled

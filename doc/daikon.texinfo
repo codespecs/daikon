@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 3.0.1
+@center Daikon version 3.0.2
 
 @sp 1
-@c Daikon version 3.0.1 date
-@center February 2, 2004
+@c Daikon version 3.0.2 date
+@center February 27, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 3.0.1, released February 2, 2004.
+@c It describes Daikon version 3.0.2, released February 27, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -86,7 +86,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 3.0.1, released February 2, 2004.
+It describes Daikon version 3.0.2, released February 27, 2004.
 @end ifnottex
 
 @menu
@@ -3297,7 +3297,7 @@ to the current directory.
 @cindex limiting trace file size
 The following two environment variables can control the size of your
 trace file.  (There aren't currently dfej command-line arguments to
-default the set these, but there probably should be.)
+set these, but there probably should be.)
 
 @cindex DTRACELIMIT environment variable
 @cindex environment variable DTRACELIMIT
@@ -4263,7 +4263,7 @@ also need to be declared const, causing a cascade of required
 changes.
 
 @item reserved words
-@item string, use in C programs
+@cindex string, use in C programs
 
 C++ reserves the following keywords that are not reserved words in C:
 @example
@@ -6727,7 +6727,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 3.0.1, released February 2, 2004.
+This manual describes Daikon version 3.0.2, released February 27, 2004.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

@@ -666,23 +666,65 @@ Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements < y' where x is a
  double sequence and y is a double scalar.
 
-@item SeqIndexComparison
-Represents invariants asserting that an ordering holds between
- elements of a long sequence and the indices of those elements.
- Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
+@item SeqIndexFloatEqual
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] == i'.
 
-@item SeqIndexComparisonFloat
-Represents invariants asserting that an ordering holds between
- elements of a double sequence and the indices of those elements.
- Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
+@item SeqIndexFloatGreaterEqual
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] >= i'.
 
-@item SeqIndexNonEqual
-Represents long sequences where the element stored at index i is
- not equal to i, for any i.  Prints as "x[i] != i"
+@item SeqIndexFloatGreaterThan
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] > i'.
 
-@item SeqIndexNonEqualFloat
-Represents double sequences where the element stored at index i is
- not equal to i, for any i.  Prints as "x[i] != i"
+@item SeqIndexFloatLessEqual
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] <= i'.
+
+@item SeqIndexFloatLessThan
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] < i'.
+
+@item SeqIndexFloatNonEqual
+Represents an invariant over double sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] != i'.
+
+@item SeqIndexIntEqual
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] == i'.
+
+@item SeqIndexIntGreaterEqual
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] >= i'.
+
+@item SeqIndexIntGreaterThan
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] > i'.
+
+@item SeqIndexIntLessEqual
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] <= i'.
+
+@item SeqIndexIntLessThan
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] < i'.
+
+@item SeqIndexIntNonEqual
+Represents an invariant over long sequences between the
+ index of an element of the sequence and the element itself.
+ Prints as 'x[i] != i'.
 
 @item SeqIntEqual
 Represents long scalars with an invariant to each element of

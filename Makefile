@@ -23,7 +23,7 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 MIT_PHP := scripts/log2html.php scripts/emacs_launch.php
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
-DAIKON_RESOURCE_FILES := daikon/config/configurable.txt daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
+DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
 AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 # Find might be cleaner, but this works.
 # I don't know why, but a "-o name ." clause makes find err, so use grep instead
