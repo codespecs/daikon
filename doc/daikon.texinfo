@@ -1087,10 +1087,10 @@ The Daikon invariant detector is invoked as follows:
 This section describes the optional flags.
 
 
-@c Not @option{} or @samp{} because they add quotes in the output,
+@c Unfortuntely, @option{} adds quotes in the Info and printed output
 @c which is not necessary in a table.  However, @t and @code compress
-@c the two hyphens to 1, which is even worse.
-@table @t
+@c the two hyphens to 1 in Info and HTML output, which is even worse.
+@table @option
 @item -h
 @item --help
 Print usage message.
@@ -1195,7 +1195,7 @@ options for @command{daikon.pl}.
 @node    daikon.pl arguments,  , All-in-one script, All-in-one script
 @subsection Command line options for daikon.pl
 
-@table @t
+@table @option
 @item -o
 @item --output @var{FILE}
 Save invariants in @file{@var{FILE}.inv} and source in
@@ -1436,8 +1436,8 @@ property filters:
 
 @item Suppress controlled invariants
 
-A controlled invariant is an invariant that is "controlled" -- or
-implied -- by another program point.  For example, for Java instrumented
+A controlled invariant is an invariant that is "controlled" --- or
+implied --- by another program point.  For example, for Java instrumented
 code each class is associated with an object program point, which
 contain invariants that are found at the entry and exit of all public
 methods.  So in addition to the usual program points such as
@@ -1478,8 +1478,8 @@ This filter suppresses invariants containing only constants.
 This filter suppresses invariants with a relatively few number of
 modified samples.  An example of such an invariant would be the
 following: ``x >= 5'', where ``x'' is observed to be 5 three times
-and 10 five times.  The observed values of @code{x} -- ie, the samples of
-@code{x} -- did not change enough for Daikon to be confident that this
+and 10 five times.  The observed values of @code{x} --- ie, the samples of
+@code{x} --- did not change enough for Daikon to be confident that this
 invariant is an actual invariant.
 
 @item Suppress obvious invariants
@@ -1812,13 +1812,13 @@ comment immediately before the declared type (but after any modifiers like
 "public" or "static").  For example, a list element that only contains
 @code{Integer}s might be annotated as follows:
 @example
-  class ListNode {
+  class ListNode @{
     /*refined_type: Integer*/ Object element;
     ListNode next;
 
-    ListNode( /*refined_type: Integer*/ Object theElement ) { ... }
-    ListNode( /*refined_type: Integer*/ Object theElement, ListNode n ) { ... }
-  }
+    ListNode( /*refined_type: Integer*/ Object theElement ) @{ ... @}
+    ListNode( /*refined_type: Integer*/ Object theElement, ListNode n ) @{ ... @}
+  @}
 @end example
 
 
@@ -1981,7 +1981,7 @@ interrupted.
 
 In some cases, exceptional exit from a procedure can cause orig(x) values
 to be incorrect.  This depends on the technique used to associate procedure
-exits with entries.  Daikon has two such techniques -- the nonce technique
+exits with entries.  Daikon has two such techniques --- the nonce technique
 (which is the default for Java programs) and the stack technique.  If
 Daikon is using the nonce technique, orig(x) values are guaranteed to be
 correct.  If Daikon is using the stack technique, then the orig(x) values
