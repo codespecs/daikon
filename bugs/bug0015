@@ -1,11 +1,16 @@
 Version:      $Id$
-Owner:        adonovan <adonovan@lcs.mit.edu>
+Owner:        Alan <adonovan@lcs.mit.edu>, Jeremy <mistere>
 Tool:         dfej
-Summary:      dfej causes testcase RatNum to fail during execution
+Summary:      dfej+context causes testcase RatNum to fail during execution
 Severity:     Vexing
-Status:       New
-Reproducible: NotSure
+Status:       Closed
+Reproducible: No
 Description:
+
+[mistere]
+I can no longer reproduce this bug, so I'm marking it closed.  It may
+have been fixed when I changed the testing infrastructure to
+callsite-transform all files, instead of just instumented ones.
 
 [06-Mar-02, adonovan, quoting mistere on 29-Nov-01]
 So the test case which fails is esc-experiments/RatNum.  First make
@@ -75,8 +80,8 @@ make: *** [/scratch/mistere/tests/esc-experiments/RatNum/.run-timestamp] Error 1
 
 --
 $Log$
-Revision 1.1  2002-03-12 04:50:54  adonovan
-repairing repository broken during attemp to move it today... :-(
+Revision 1.2  2002-03-28 00:54:41  mistere
+changed bug0015
 
 Revision 1.1  2002/03/07 06:42:18  adonovan
 new bug0015
