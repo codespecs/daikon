@@ -42,6 +42,7 @@ public class InvariantFilters {
     addPropertyFilter( (InvariantFilter) new OnlyConstantVariablesFilter());
     addPropertyFilter( (InvariantFilter) new ImpliedPostconditionFilter());
     //    addPropertyFilter( (InvariantFilter) new RedundantFilter());
+    addPropertyFilter( (InvariantFilter) new SimplifyFilter( this ));
     addPropertyFilter( (InvariantFilter) new ObviousEqualityFilter());
 
     // This filter should be added last for speed, because its shouldDiscard()
@@ -87,6 +88,11 @@ public class InvariantFilters {
 
   public Iterator getPropertyFiltersIterator() {
     return propertyFilters.values().iterator();
+  }
+
+  public boolean getFilterSetting( String description ) {
+    InvariantFilter filter = (InvariantFilter) propertyFilters.get( description );
+    return filter.getSetting();
   }
 
   public void changeFilterSetting( String description, boolean turnOn ) {

@@ -20,6 +20,10 @@ public abstract class InvariantFilter {
   public void turnOn()  { isOn = true; }
   public void turnOff() { isOn = false; }
 
+  public boolean getSetting() {
+    return isOn;
+  }
+
   public boolean shouldDiscard( Invariant invariant ) {
     if (! isOn)
       return false;
