@@ -267,6 +267,39 @@ public final class UtilMDE {
     }
   }
 
+  
+  /**
+   * Writes an Object to a File
+   **/
+  public static void writeObject(Object o, File file) throws IOException {
+    // 8192 is the buffer size in BufferedReader
+    OutputStream bytes =
+      new BufferedOutputStream(new FileOutputStream(file), 8192);
+    if (file.getName().endsWith(".gz")) {
+      bytes = new GZIPOutputStream(bytes);
+    }
+    ObjectOutputStream objs = new ObjectOutputStream(bytes);
+    objs.writeObject(o);
+    objs.close();
+  }
+
+
+  /**
+   * Reads an Object from a File
+   **/
+  public static Object readObject(File file) throws
+  IOException, ClassNotFoundException {
+    // 8192 is the buffer size in BufferedReader
+    InputStream istream =
+      new BufferedInputStream(new FileInputStream(file), 8192);
+    if (file.getName().endsWith(".gz")) {
+      istream = new GZIPInputStream(istream);
+    }
+    ObjectInputStream objs = new ObjectInputStream(istream);
+    return objs.readObject();
+  }
+
+
   ///
   /// HashMap
   ///
