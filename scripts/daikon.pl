@@ -221,9 +221,9 @@ while (1) {
     last;
 }
 
-# unlink("daikon-java") or die("Could not unlink symlink 2 (daikon-java)");
-# unlink("daikon-output") or die("Could not unlink symlink 1 (daikon-output)");
-# system("rm -rf $working") && die("Could not remove working dir");
+unlink("daikon-java") or die("Could not unlink symlink 2 (daikon-java)");
+unlink("daikon-output") or die("Could not unlink symlink 1 (daikon-output)");
+system("rm -rf $working") && die("Could not remove working dir");
 
 if ($dfejerr) {
   print $dfejoutput;
