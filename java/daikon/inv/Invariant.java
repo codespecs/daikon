@@ -189,6 +189,11 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public abstract String format_simplify();
 
+  /**
+   * IOA Representation
+   **/
+  public abstract String format_ioa(String classname);
+				    
   // This should perhaps be merged with some kind of PptSlice comparator.
   /**
    * Compare based on arity, then printed representation.

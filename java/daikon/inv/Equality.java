@@ -63,6 +63,18 @@ public final class Equality extends Invariant {
     }
     return result.toString();
   }
+  
+  /* IOA */
+  public String format_ioa(String classname) {
+    String result;
+    String v0 = vars[0].name.ioa_name(classname);
+    result = v0 + " = " + vars[1].name.ioa_name(classname);
+    for (int i=2; i<vars.length; i++) {
+      result += "\ninvariant of " + classname + ": ";
+      result += v0 + " = " + vars[i].name.ioa_name(classname);
+    }
+    return result;
+  }
 
   public String format_esc() {
     StringBuffer result = new StringBuffer();

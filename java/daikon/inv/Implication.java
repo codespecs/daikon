@@ -61,6 +61,15 @@ public class Implication extends Invariant {
     return "(" + predicate.format() + ")" + arrow + "(" + consequent.format() + ")";
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String arrow = (iff ? "  <=>  " : "  =>  ");
+    String pred_fmt = predicate.format_ioa(classname);
+    String consq_fmt = consequent.format_ioa(classname);
+    return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
+  }
+
+
   public String format_esc() {
     String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
     String pred_fmt = predicate.format_esc();
