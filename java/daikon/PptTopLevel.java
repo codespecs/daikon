@@ -1217,7 +1217,7 @@ public class PptTopLevel
     values_num_samples += count;
 
     // For reasons I do not understand, in the "suppress" version of the
-    // tests. calling mbtracker.add here causes (bad) diffs, but calling it
+    // tests, calling mbtracker.add here causes (bad) diffs, but calling it
     // at the end of this routine is fine.  So for now, just call it at the
     // end of the routine.
     // // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
@@ -1354,7 +1354,7 @@ public class PptTopLevel
       debugSuppress.fine (">>> End of add for " + name());
     }
 
-    // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
+    // System.out.println("About to call ModBitTracker.add for " + name() + " (current size " + mbtracker.num_samples() + ")" + " <= " + vt.toString());
     mbtracker.add(vt, count);
 
     return new ArrayList();
@@ -1504,7 +1504,7 @@ public class PptTopLevel
 
     values_num_samples += count;
 
-    // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
+    // System.out.println("About to call ModBitTracker.add for " + name() + " (current size " + mbtracker.num_samples() + ")" + " <= " + vt.toString());
     mbtracker.add(vt, count);
 
     // System.out.println("About to call ValueSet.add for " + name() + " <= " + vt.toString());
@@ -4820,14 +4820,16 @@ public class PptTopLevel
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
     for (int childno = 0; childno < children.size(); childno++) {
       PptRelation rel = (PptRelation) children.get(childno);
-      int mbsize = mbtracker.num_samples();
-      for (int sampno=0; sampno<mbsize; sampno++) {
+      ModBitTracker child_mbtracker = rel.child.mbtracker;
+      int child_mbsize = child_mbtracker.num_samples();
+      // System.out.println("mergeInvs child #" + childno + "=" + rel.child.name() + " has size " + child_mbsize + " for " + name());
+      for (int sampno=0; sampno<child_mbsize; sampno++) {
         Arrays.fill(mods, ValueTuple.MISSING_FLOW);
         for (int j = 0; j < var_infos.length; j++) {
           VarInfo parent_vi = var_infos[j];
           VarInfo child_vi = rel.childVar(parent_vi);
-          if (child_vi != null) {
-            if (rel.child.mbtracker.get(child_vi.value_index, sampno)) {
+          if ((child_vi != null) && (child_vi.value_index != -1)) {
+            if (child_mbtracker.get(child_vi.value_index, sampno)) {
               mods[parent_vi.value_index] = ValueTuple.MODIFIED;
             }
           }
