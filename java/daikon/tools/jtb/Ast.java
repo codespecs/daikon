@@ -943,7 +943,7 @@ public class Ast {
     Node innerClassNode = getParent(UnmodifiedClassDeclaration.class, cd);
     Node outerClassNode = getParent(UnmodifiedClassDeclaration.class, innerClassNode);
 
-    if (outerClassNode != null) {
+    if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
       NodeToken nameToken = ((UnmodifiedClassDeclaration)outerClassNode).f1;
       Name name = new Name(nameToken, new NodeListOptional());
       Type type = new Type(new NodeChoice(name, 1), new NodeListOptional());
