@@ -86,6 +86,10 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
+    if (core.a == 0 && core.b == 0) {
+      return format_too_few_samples(format, null);
+    }
+
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JML) return format_jml();
