@@ -288,6 +288,7 @@ Troubleshooting
 * dfej problems::               
 * dfec problems::               
 * Daikon problems::             
+* Large dtrace files::          
 * Other problems::              
 * Reporting bugs::              
 * Known bugs::                  
@@ -321,16 +322,15 @@ Problems running Daikon
 * JVM initialization error::    
 * Daikon runs slowly::          
 
-Other problems
-
-* Large dtrace files::          
-* Tree GUI font errors::        
-
 Large data trace (.dtrace) files
 
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
+
+Other problems
+
+* Tree GUI font errors::        
 
 Details
 
@@ -4662,6 +4662,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * dfej problems::               
 * dfec problems::               
 * Daikon problems::             
+* Large dtrace files::          
 * Other problems::              
 * Reporting bugs::              
 * Known bugs::                  
@@ -4977,7 +4978,7 @@ Daikon C runtime library are described in the @file{daikon_runtime.h}
 file.
 
 
-@node    Daikon problems, Other problems, dfec problems, Troubleshooting
+@node    Daikon problems, Large dtrace files, dfec problems, Troubleshooting
 @section Problems running Daikon
 
 You may find the debugging flags @option{--debug} and @option{--dbg
@@ -5165,17 +5166,8 @@ introduced whenever there is both an array @samp{a} and an integer
 For details on improving Daikon's performance, see @ref{Out of
 memory}, and @ref{Large dtrace files}.
 
-
-@node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
-@section Other problems
-
-@menu
-* Large dtrace files::          
-* Tree GUI font errors::        
-@end menu
-
-@node    Large dtrace files, Tree GUI font errors, Other problems, Other problems
-@subsection Large data trace (.dtrace) files
+@node    Large dtrace files, Other problems, Daikon problems, Troubleshooting
+@section Large data trace (.dtrace) files
 
 @cindex data trace files, too large
 @cindex large data trace files
@@ -5204,7 +5196,7 @@ Diff} to combine the resulting @file{.inv} files into one.
 @end menu
 
 @node    Reducing program points, Reducing variables, Large dtrace files, Large dtrace files
-@subsubsection Reducing program points (functions)
+@subsection Reducing program points (functions)
 
 Here are ways to compute invariants over a subset of the program
 points (functions) in your program.
@@ -5268,7 +5260,7 @@ not to instrument.
 @end enumerate
 
 @node    Reducing variables, Reducing executions, Reducing program points, Large dtrace files
-@subsubsection Reducing variables
+@subsection Reducing variables
 
 Here are ways to compute invariants over a subset of the variables in
 your program.  This changes the resulting invariants, because
@@ -5304,7 +5296,7 @@ code.  Do this by reducing the class/structure instrumentation depth.
 @end enumerate
 
 @node    Reducing executions,  , Reducing variables, Large dtrace files
-@subsubsection Reducing executions
+@subsection Reducing executions
 
 Here are ways to run Daikon over fewer executions of each program
 point.  (You cannot combine the resulting invariants in order to
@@ -5330,9 +5322,14 @@ modifies @file{myfile.dtrace} in place to remove the last record.
 
 @end enumerate
 
+@node    Other problems, Reporting bugs, Large dtrace files, Troubleshooting
+@section Other problems
 
+@menu
+* Tree GUI font errors::        
+@end menu
 
-@node    Tree GUI font errors,  , Large dtrace files, Other problems
+@node    Tree GUI font errors,  , Other problems, Other problems
 @subsection Tree GUI font errors
 
 @cindex font not found
