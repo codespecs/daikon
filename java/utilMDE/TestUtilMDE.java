@@ -1437,6 +1437,8 @@ public final class TestUtilMDE extends TestCase {
       File readOnly = new File("temp");
       readOnly.createNewFile();
       readOnly.setReadOnly();
+      // This test could fail if run by the superuser (who can overwrite
+      // any file).
       junit.framework.Assert.assertEquals(false,
         UtilMDE.canCreateAndWrite(readOnly));
       readOnly.delete();
@@ -1446,7 +1448,8 @@ public final class TestUtilMDE extends TestCase {
       junit.framework.Assert.assertEquals(false,
         UtilMDE.canCreateAndWrite(new File("temp/temp")));
     } catch (IOException e) {
-      junit.framework.Assert.fail(e.toString());
+      e.printStackTrace();
+      junit.framework.Assert.fail("failure while testing UtilMDE.canCreateAndWrite(): " + e.toString());
     }
 
     {
