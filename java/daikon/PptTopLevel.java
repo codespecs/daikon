@@ -78,16 +78,15 @@ public class PptTopLevel extends Ppt {
   private int values_num_values;
   private String values_tuplemod_samples_summary;
 
+  // [INCR] ...
   // Assumption: The "depends on" graph is acyclic
   // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
   // This is necessary because we search the graph in isWorthPrinting.
-
-  public PptTopLevel entry_ppt;        	// null if this isn't an exit point
-  public Vector exit_ppts = new Vector(1); // elts are PptTopLevel objects;
-                                // this is set for entry program points
-  public PptTopLevel combined_exit;	// null if this isn't a line-numbered exit point
-  public int[] combined_exit_var_indices; // null if combined_exit == null
-
+//    public PptTopLevel entry_ppt;        	// null if this isn't an exit point
+//    public Vector exit_ppts = new Vector(1); // elts are PptTopLevel objects;
+//                                  // this is set for entry program points
+//    public PptTopLevel combined_exit;	// null if this isn't a line-numbered exit point
+//    public int[] combined_exit_var_indices; // null if combined_exit == null
   // PptTopLevel has any number of 'controlling' ppts.  Any invariants
   // which exist in the controlling ppts are necessarily true in the
   // controlled ppts, and therefore may be suppressed in the output.
@@ -95,7 +94,8 @@ public class PptTopLevel extends Ppt {
   // and conditional points are controlled by the unconditional
   // parent point.  This set contains only the immediate controllers,
   // not the transitive closure of all controllers.
-  public Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
+//    public Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
+  // ... [INCR]
 
   public PptSlice0 implication_view = new PptSlice0(this);
 
@@ -191,9 +191,11 @@ public class PptTopLevel extends Ppt {
   Iterator var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
   }
-  public PptTopLevel entry_ppt() {
-    return entry_ppt;
-  }
+  // [INCR] ...
+//    public PptTopLevel entry_ppt() {
+//      return entry_ppt;
+//    }
+  // ... [INCR]
 
   // [[INCR]] .... and below ...
 //    // These accessors are for abstract methods declared in Ppt
@@ -268,17 +270,24 @@ public class PptTopLevel extends Ppt {
 
   // Some of this should perhaps be moved up into Ppt.
 
-  // I'm not using a Vector for the var_infos field, even though that would
-  // simplify adding new elements, because I want static typechecking and I
-  // don't want the overheads of lots of casts and of extra space for
-  // Vector objects.
-
-  private void addVarInfo(VarInfo vi) {
+  /**
+   * Appends vi to the var_infos array of this ppt.  Also sets vi's
+   * varinfo_index, value_index, and ppt fields.  Method is not
+   * private so that FileIO can access it; should not be called by
+   * other classes.
+   **/
+  void addVarInfo(VarInfo vi) {
     VarInfo[] vis = new VarInfo[] { vi };
     addVarInfos(vis);
   }
 
-  private void addVarInfos(VarInfo[] vis) {
+  /**
+   * Has the effect of performing addVarInfo(VarInfo) over all
+   * elements in vis.  Method is not private so that FileIO can access
+   * it; should not be called by other classes.
+   * @see addVarInfos(VarInfo)
+   **/
+  void addVarInfos(VarInfo[] vis) {
     if (vis.length == 0)
       return;
     int old_length = var_infos.length;
@@ -287,102 +296,16 @@ public class PptTopLevel extends Ppt {
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
     for (int i=old_length; i<new_var_infos.length; i++) {
       VarInfo vi = new_var_infos[i];
-       vi.varinfo_index = i;
-       vi.value_index = i - num_static_constant_vars;
-       vi.ppt = this;
-    }
-    var_infos = new_var_infos;
-  }
-
-  private void addVarInfos(Vector v) {
-    int size = v.size();
-    if (size == 0)
-      return;
-    int old_length = var_infos.length;
-    VarInfo[] new_var_infos = new VarInfo[var_infos.length + v.size()];
-    System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
-    for (int i=0; i<size; i++) {
-      VarInfo vi = (VarInfo) v.elementAt(i);
-      new_var_infos[i+old_length] = vi;
-      vi.varinfo_index = i+old_length;
-      vi.value_index = i+old_length - num_static_constant_vars;
+      vi.varinfo_index = i;
+      vi.value_index = i - num_static_constant_vars;
       vi.ppt = this;
     }
     var_infos = new_var_infos;
   }
 
-
-  ///////////////////////////////////////////////////////////////////////////
-  /// Finding an object or class ppt for a given ppt
-  ///
-
-  void set_controlling_ppts(PptMap all_ppts)
-  {
-    // TODO: also require that this is a public method
-    if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
-      PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeObject());
-      if (object_ppt != null) {
-	controlling_ppts.add(object_ppt);
-      } else {
-	// If we didn't find :::OBJECT, fall back to :::CLASS
-	PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
-	if (class_ppt != null) {
-	  controlling_ppts.add(class_ppt);
-	}
-      }
-    } else if (ppt_name.isObjectInstanceSynthetic()) {
-      PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
-      if (class_ppt != null) {
-	controlling_ppts.add(class_ppt);
-      }
-    }
-  }
-
-
   ///////////////////////////////////////////////////////////////////////////
   /// Adding special variables
   ///
-
-  // Given a program point, if it represents a function exit, then
-  // return the corresponding function entry point.  The result is
-  // cached in the entry_ppt slot, to prevent repeating this expensive
-  // computation.
-
-  void compute_entry_ppt(PptMap all_ppts) {
-    if (ppt_name.isExitPoint()) {
-      entry_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeEnter());
-      // System.out.println("Adding exit point " + this.name + " to " + entry_ppt.name);
-      entry_ppt.exit_ppts.add(this);
-    }
-  }
-
-  // Add "_orig" (prestate) variables to the program point.
-  // Derivation should not yet have occurred for the entry program point.
-  void add_orig_vars(PptTopLevel entry_ppt) {
-
-    VarInfo[] begin_vis = entry_ppt.var_infos;
-    num_orig_vars = begin_vis.length - entry_ppt.num_static_constant_vars;
-    Assert.assert(num_orig_vars == entry_ppt.num_tracevars);
-    // Don't bother to include the constants.
-    VarInfo[] new_vis = new VarInfo[num_orig_vars];
-    int new_vis_index = 0;
-    for (int i=0; i<begin_vis.length; i++) {
-      VarInfo vi = begin_vis[i];
-      if (vi.isStaticConstant() || vi.isDerived())
-	continue;
-      VarInfo origvar = VarInfo.origVarInfo(vi);
-      {
-        VarInfo postvar = findVar(vi.name);
-        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
-      }
-      new_vis[new_vis_index] = origvar;
-      new_vis_index++;
-    }
-    Assert.assert(new_vis_index == num_orig_vars);
-    addVarInfos(new_vis);
-  }
-
-
 
   /// Possibly just blow this off; I'm not sure I care about it.
   /// In any event, leave it until later.
@@ -1607,6 +1530,8 @@ public class PptTopLevel extends Ppt {
       PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
       PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
       addImplications_internal(cond1, cond2, false);
+      // [INCR] ...
+      /*
     } else if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
       if (exits.size() == 2) {
@@ -1625,6 +1550,8 @@ public class PptTopLevel extends Ppt {
         // addImplications_internal(ppt1, ppt2, true);
         addImplications_internal(ppt1, ppt2, false);
       }
+      */
+      // ... [INCR]
     } else {
       // System.out.println("No implications to add for " + this.name);
     }
@@ -1698,9 +1625,8 @@ public class PptTopLevel extends Ppt {
         // This test doesn't seem to be productive.  (That comment may date
         // from the time that all not-worth-printing invariants were
         // already eliminated.)
-        if (! same_inv.isControlled()) {
-          implication_view.addInvariant(same_inv);
-        }
+        // if (! same_inv.isControlled()) // [INCR]
+	implication_view.addInvariant(same_inv);
       }
     }
 
@@ -2188,13 +2114,14 @@ public class PptTopLevel extends Ppt {
     // Form the closure of the controllers
     Set closure = new HashSet();
     {
-      Set working = new HashSet(controlling_ppts);
+      // Set working = new HashSet(controlling_ppts); // [INCR]
+      Set working = new HashSet();
       while (!working.isEmpty()) {
 	PptTopLevel ppt = (PptTopLevel) working.iterator().next();
 	working.remove(ppt);
 	if (!closure.contains(ppt)) {
 	  closure.add(ppt);
-	  working.addAll(ppt.controlling_ppts);
+	  // working.addAll(ppt.controlling_ppts); // [INCR]
 	}
       }
     }
@@ -2250,6 +2177,8 @@ public class PptTopLevel extends Ppt {
     }
 
     // Restate OBJECT invariants on incoming arguments of our same type
+    // [INCR] ...
+    /*
     if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
       // Guess the OBJECT ppt; usually right
       PptTopLevel OBJ = (PptTopLevel) controlling_ppts.iterator().next();
@@ -2301,6 +2230,8 @@ public class PptTopLevel extends Ppt {
 	}
       }
     }
+    */
+    // ... [INCR]
 
     all_cont.append(")");
     CmdAssume background = new CmdAssume(all_cont.toString());
@@ -2477,12 +2408,16 @@ public class PptTopLevel extends Ppt {
       }
       return;
     }
+    // [INCR] ...
+    /*
     if ((combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
       if (Daikon.output_num_samples) {
         out.println("[Is combined exit, output style " + Daikon.output_style + ": " + name + "]");
       }
       return;
     }
+    */
+    // ... [INCR]
     /// Old, more broken version.
     // // This suppression test does not work, because even if :::EXIT exists,
     // // it doesn't yet have any implication invariants, and we won't know
