@@ -5,8 +5,7 @@ import daikon.inv.*;
 
 import java.lang.reflect.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
+import utilMDE.*;
 
 public class TwoSequenceFactory {
 
@@ -17,9 +16,8 @@ public class TwoSequenceFactory {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
-    if (!(var1.rep_type.isArray()
-	  && var2.rep_type.isArray()))
-      return;
+    Assert.assert(var1.rep_type.isArray() && var2.rep_type.isArray());
+
     VarInfo super1 = var1.isObviousSubSequenceOf();
     if (super1 == null)
       super1 = var1;

@@ -24,15 +24,6 @@ import utilMDE.*;
 
 class PptTopLevel extends Ppt {
 
-  final static boolean debugPptTopLevel = false;
-  // final static boolean debugPptTopLevel = true;
-
-  final static boolean debugDerive = false;
-  // final static boolean debugDerive = true;
-
-  final static boolean debugInfer = false;
-  // final static boolean debugInfer = true;
-
   // do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_dreived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
@@ -399,10 +390,10 @@ class PptTopLevel extends Ppt {
     for (int pass=1; pass<=derivation_passes; pass++) {
       int this_di = derivation_indices[pass];
       int last_di = derivation_indices[pass-1];
-      if (debugDerive)
+      if (Global.debugDerive)
         System.out.println("pass=" + pass + ", range=" + this_di + ".." + last_di);
       if (this_di == last_di) {
-        if (debugDerive) {
+        if (Global.debugDerive) {
           System.out.println("Bailing...");
         }
 	continue;
@@ -417,7 +408,7 @@ class PptTopLevel extends Ppt {
       derivation_indices[i] = derivation_indices[i-1];
     derivation_indices[0] = var_infos.length + result.size();
 
-    if (debugDerive) {
+    if (Global.debugDerive) {
       System.out.println(name + ": derived " + result.size() + " new variables; "
                          + "new derivation_indices: "
                          + ArraysMDE.toString(derivation_indices));
@@ -444,7 +435,7 @@ class PptTopLevel extends Ppt {
   //   FUNCTIONS: (long) list of functions for adding new variables; see the code
   Vector deriveVariablesOnePass(int vi_index_min, int vi_index_limit, UnaryDerivationFactory[] unary, BinaryDerivationFactory[] binary) {
 
-    if (debugDerive)
+    if (Global.debugDerive)
       System.out.println("deriveVariablesOnePass: vi_index_min=" + vi_index_min
                          + ", vi_index_limit=" + vi_index_limit
                          + ", unary.length=" + unary.length
@@ -455,7 +446,7 @@ class PptTopLevel extends Ppt {
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
       if (!worthDerivingFrom(vi)) {
-        if (debugDerive) {
+        if (Global.debugDerive) {
           System.out.println("Not worth deriving from " + vi.name);
         }
 	continue;
@@ -479,7 +470,7 @@ class PptTopLevel extends Ppt {
     for (int i1=0; i1<var_infos.length; i1++) {
       VarInfo vi1 = var_infos[i1];
       if (!worthDerivingFrom(vi1)) {
-        if (debugDerive) {
+        if (Global.debugDerive) {
           System.out.println("Not worth deriving from " + vi1.name);
         }
 	continue;
@@ -487,14 +478,14 @@ class PptTopLevel extends Ppt {
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
       int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
       int i2_limit = (target1 ? var_infos.length : vi_index_limit);
-      // if (debugDerive)
+      // if (Global.debugDerive)
       //   System.out.println("i1=" + i1
       //                      + ", i2_min=" + i2_min
       //                      + ", i2_limit=" + i2_limit);
       for (int i2=i2_min; i2<i2_limit; i2++) {
 	VarInfo vi2 = var_infos[i2];
 	if (!worthDerivingFrom(vi2)) {
-          if (debugDerive) {
+          if (Global.debugDerive) {
             System.out.println("Not worth deriving from ("
                                + vi1.name + "," + vi2.name + ")");
           }
@@ -618,7 +609,7 @@ class PptTopLevel extends Ppt {
 
 
   public void initial_processing() {
-    if (debugPptTopLevel)
+    if (Global.debugPptTopLevel)
       System.out.println("initial_processing for " + name);
 
     // I probably can't do anything about it if this is called
@@ -645,7 +636,7 @@ class PptTopLevel extends Ppt {
       Assert.assert(derivation_indices[0] == var_infos.length);
       instantiate_views(var_infos.length - derivations.size(), var_infos.length);
     }
-    if (debugPptTopLevel)
+    if (Global.debugPptTopLevel)
       System.out.println("Done with initial_processing, " + var_infos.length
                          + " variables");
     Assert.assert(derivation_indices[derivation_passes] == var_infos.length);
@@ -886,7 +877,7 @@ class PptTopLevel extends Ppt {
    * index i such that min_index <= i < index_limit.
    */
   void instantiate_views(int vi_index_min, int vi_index_limit) {
-    if (debugInfer)
+    if (Global.debugInfer)
       System.out.println("instantiate_views: " + this.name
                          + ", vi_index_min=" + vi_index_min
                          + ", vi_index_limit=" + vi_index_limit
@@ -950,7 +941,7 @@ class PptTopLevel extends Ppt {
     Vector binary_views = new Vector();
     for (int i1=0; i1<var_infos.length; i1++) {
       if (var_infos[i1].canBeMissing) {
-        if (debugDerive) {
+        if (Global.debugDerive) {
           System.out.println(var_infos[i1].name + " can be missing");
         }
         continue;
@@ -961,7 +952,7 @@ class PptTopLevel extends Ppt {
       //   continue;
       // But I can check if we've already computed invariants over it.
       if ((i1 < vi_index_min) && (!var_infos[i1].isCanonical())) {
-        if (debugDerive) {
+        if (Global.debugDerive) {
           System.out.println("Skipping non-canonical non-target variable1 "
                              + var_infos[i1].name);
         }
@@ -969,7 +960,7 @@ class PptTopLevel extends Ppt {
       }
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
       int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
-      if (debugInfer)
+      if (Global.debugInfer)
         System.out.println("instantiate_views"
                            + "(" + vi_index_min + "," + vi_index_limit + ")"
                            + " i1=" + i1
@@ -977,7 +968,7 @@ class PptTopLevel extends Ppt {
                            );
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
         if (var_infos[i2].canBeMissing) {
-          if (debugDerive) {
+          if (Global.debugDerive) {
             System.out.println(var_infos[i2].name + " can be missing");
           }
           continue;
@@ -988,7 +979,7 @@ class PptTopLevel extends Ppt {
         //   continue;
         // But I can check if we've already computed invariants over it.
         if ((i2 < vi_index_min) && (!var_infos[i2].isCanonical())) {
-          if (debugDerive) {
+          if (Global.debugDerive) {
             System.out.println("Skipping non-canonical non-target variable2 "
                                + var_infos[i2].name);
           }
@@ -1058,7 +1049,7 @@ class PptTopLevel extends Ppt {
     }
 
     // 3. all other unary invariants
-    if (debugPptTopLevel)
+    if (Global.debugPptTopLevel)
       System.out.println(unary_views.size() + " unary views for pass 2 instantiate_invariants");
     Vector unary_views_pass2 = new Vector(unary_views.size());
     for (int i=0; i<unary_views.size(); i++) {
@@ -1066,7 +1057,7 @@ class PptTopLevel extends Ppt {
       Assert.assert(unary_view.arity == 1);
       VarInfo var = unary_view.var_infos[0];
       if (!var.isCanonical()) {
-        if (debugPptTopLevel)
+        if (Global.debugPptTopLevel)
           System.out.println("Skipping pass 2 unary instantiate_invariants: "
                              + var.name + " is not canonical");
         continue;
@@ -1121,7 +1112,7 @@ class PptTopLevel extends Ppt {
     // (However, arity 3 is not yet implemented.)
 
 
-    if (debugPptTopLevel)
+    if (Global.debugPptTopLevel)
       System.out.println(views.size() - old_num_views + " new views for " + name);
 
     // This method didn't add any new variables.
@@ -1151,7 +1142,7 @@ class PptTopLevel extends Ppt {
   //       // }
   //     }
   //   }
-  //   if (debugPptTopLevel)
+  //   if (Global.debugPptTopLevel)
   //     System.out.println("" + views.size() + " views for " + name);
   // }
 
@@ -1236,7 +1227,7 @@ class PptTopLevel extends Ppt {
       // // I could imagine printing information about the PptSliceGeneric
       // // if it has changed since the last Invariant I examined.
       // PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-      // if (debugPptTopLevel) {
+      // if (Global.debugPptTopLevel) {
       //   System.out.println("Slice: " + slice.varNames() + "  "
       //                      + slice.num_samples() + " samples");
       //   System.out.println("    Samples breakdown: "
@@ -1262,7 +1253,7 @@ class PptTopLevel extends Ppt {
           }
         }
         if (! all_canonical) {
-          if (debugPptTopLevel) {
+          if (Global.debugPptTopLevel) {
             System.out.println("[not all vars canonical:  " + inv.repr() + " ]");
             // This *does* happen, because we instantiate all invariants
             // simultaneously. so we don't yet know which of the new
@@ -1274,14 +1265,14 @@ class PptTopLevel extends Ppt {
       }
 
       if (inv.isObvious()) {
-        if (debugPptTopLevel) {
+        if (Global.debugPptTopLevel) {
           System.out.println("[obvious:  " + inv.repr() + " ]");
         }
         continue;
       }
 
       if (!inv.justified()) {
-        if (debugPptTopLevel) {
+        if (Global.debugPptTopLevel) {
           System.out.println("[not justified:  " + inv.repr() + " ]");
         }
         continue;
@@ -1290,11 +1281,11 @@ class PptTopLevel extends Ppt {
       String inv_rep = inv.format();
       if (inv_rep != null) {
         System.out.println(inv_rep);
-        if (debugPptTopLevel) {
+        if (Global.debugPptTopLevel) {
           System.out.println("  " + inv.repr());
         }
       } else {
-        if (debugPptTopLevel) {
+        if (Global.debugPptTopLevel) {
           System.out.println("[format returns null: " + inv.repr() + " ]");
         }
       }
@@ -1312,7 +1303,7 @@ class PptTopLevel extends Ppt {
     // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
     for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
       PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-      if (debugPptTopLevel) {
+      if (Global.debugPptTopLevel) {
         System.out.println("Slice: " + slice.varNames() + "  "
                            + slice.num_samples() + " samples");
         System.out.println("    Samples breakdown: "
@@ -1325,11 +1316,11 @@ class PptTopLevel extends Ppt {
 	String inv_rep = inv.format();
 	if (inv_rep != null) {
 	  System.out.println(inv_rep);
-          if (debugPptTopLevel) {
+          if (Global.debugPptTopLevel) {
             System.out.println("  " + inv.repr());
           }
 	} else {
-          if (debugPptTopLevel) {
+          if (Global.debugPptTopLevel) {
             System.out.println("[suppressed: " + inv.repr() + " ]");
           }
 	}
@@ -1347,7 +1338,7 @@ class PptTopLevel extends Ppt {
   //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
   //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
   //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-  //     if (debugPptTopLevel) {
+  //     if (Global.debugPptTopLevel) {
   //       System.out.println("Slice: " + slice.varNames() + "  "
   //                          + slice.num_samples() + " samples");
   //       System.out.println("    Samples breakdown: "
@@ -1360,11 +1351,11 @@ class PptTopLevel extends Ppt {
   //       String inv_rep = inv.format();
   //       if (inv_rep != null) {
   //         System.out.println(inv_rep);
-  //         if (debugPptTopLevel) {
+  //         if (Global.debugPptTopLevel) {
   //           System.out.println("  " + inv.repr());
   //         }
   //       } else {
-  //         if (debugPptTopLevel) {
+  //         if (Global.debugPptTopLevel) {
   //           System.out.println("[suppressed: " + inv.repr() + " ]");
   //         }
   //       }

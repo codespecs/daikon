@@ -5,8 +5,6 @@ import daikon.inv.*;
 
 class Linear extends TwoScalar {
 
-  final static boolean debugLinear = false;
-
   LinearCore core;
 
   protected Linear(PptSlice ppt_) {

@@ -5,9 +5,6 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
-
 public abstract class SequenceScalar extends Invariant {
 
   // By convention, the sequence is always passed in first

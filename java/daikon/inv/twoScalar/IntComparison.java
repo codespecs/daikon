@@ -21,17 +21,23 @@ class IntComparison extends TwoScalar implements Comparison {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isObviousSequenceMember();
-    // System.out.println("IntComparison.instantiate(" + ppt.name + ")"
-    //                    + ", seqvar1=" + seqvar1
-    //                    + ", seqvar2=" + var2.isObviousSequenceMember());
-    if ((seqvar1 != null) && (seqvar1 == var2.isObviousSequenceMember())) {
-      if ((var1.derived instanceof SequenceMax)
-          || (var1.derived instanceof SequenceMin)
-          || (var2.derived instanceof SequenceMax)
-          || (var2.derived instanceof SequenceMin)) {
-        return null;
-      }
-    }
+    if (debugIntComparison)
+      System.out.println("IntComparison.instantiate(" + ppt.name + ")"
+                         + ", seqvar1=" + seqvar1
+                         + ", seqvar2=" + var2.isObviousSequenceMember());
+    // Yes, this comparison is obvious.  However:
+    //  * we don't know whether it is an equality or a non-strict inequality.
+    //  * we may wish to have the comparison on hand later, when we iterate
+    //    over all IntComparison objects.
+    // I should suppress this on *output*, not on computation.
+    // if ((seqvar1 != null) && (seqvar1 == var2.isObviousSequenceMember())) {
+    //   if ((var1.derived instanceof SequenceMax)
+    //       || (var1.derived instanceof SequenceMin)
+    //       || (var2.derived instanceof SequenceMax)
+    //       || (var2.derived instanceof SequenceMin)) {
+    //     return null;
+    //   }
+    // }
 
     return new IntComparison(ppt);
   }

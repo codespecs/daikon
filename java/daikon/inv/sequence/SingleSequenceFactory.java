@@ -2,8 +2,7 @@ package daikon.inv.sequence;
 
 import daikon.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
+import utilMDE.*;
 
 public class SingleSequenceFactory {
 
@@ -13,8 +12,7 @@ public class SingleSequenceFactory {
     // return (UnaryDerivation)new SequenceFirst(vi);
 
     // Not really the right place for this test
-    if (ppt.var_infos[0].type.dimensions() == 0)
-      return;
+    Assert.assert(ppt.var_infos[0].type.isArray());
 
     if (pass == 1) {
       OneOfSequence.instantiate(ppt);

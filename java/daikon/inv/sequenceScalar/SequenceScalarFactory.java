@@ -4,9 +4,6 @@ import daikon.*;
 
 import java.lang.reflect.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
-
 public class SequenceScalarFactory {
 
 
@@ -23,7 +20,7 @@ public class SequenceScalarFactory {
       } else if ((!vi0.type.isArray()) && (vi1.type.isArray())) {
         seq_first = false;
       } else {
-        return;
+        throw new Error("Bad types");
       }
     }
 

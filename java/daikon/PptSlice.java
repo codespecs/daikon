@@ -14,9 +14,6 @@ import utilMDE.*;
 
 public abstract class PptSlice extends Ppt {
 
-  static final boolean debugPptSlice = false;
-  // static final boolean debugPptSlice = true;
-
   public Ppt parent;
   public int arity;
   // var_infos appears in Ppt; don't repeat it here!!
@@ -64,8 +61,8 @@ public abstract class PptSlice extends Ppt {
   // I don't just use ppt.invs.remove because I want to take action
   // if the vector becomes void.
   public void removeInvariant(Invariant inv) {
-    if (debugPptSlice)
-      System.out.println("PptSlice.removeInvariant(" + inv + ")");
+    if (Global.debugInfer)
+      System.out.println("PptSlice.removeInvariant(" + inv.name() + ")");
     boolean removed = invs.remove(inv);
     Assert.assert(removed);
     if (invs.size() == 0)

@@ -47,9 +47,6 @@ class FileIO {
 
 /// Constants
 
-  final static boolean debugRead = false;
-  // final static boolean debugRead = true;
-
   final static String comment_prefix = "//";
   final static String declaration_header = "DECLARE";
 
@@ -114,7 +111,7 @@ class FileIO {
 
     // Get all function names to add checks on ftn invocation counts
 
-    if (debugRead)
+    if (Global.debugRead)
       System.out.println("read_declaration_file " + filename + " " + ((fn_regexp != null) ? fn_regexp.getPattern() : ""));
 
     BufferedReader reader = UtilMDE.BufferedFileReader(filename);
@@ -122,7 +119,7 @@ class FileIO {
 
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
-      if (debugRead)
+      if (Global.debugRead)
 	System.out.println("read_declaration_file line: " + line);
       if (line.equals("") || line.startsWith("//"))
 	continue;
@@ -146,7 +143,7 @@ class FileIO {
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
-      if (debugRead)
+      if (Global.debugRead)
 	System.out.println("Found odd line, skipping paragraph: " + line);
       while ((line != null) && line.equals("") && !line.startsWith("//")) {
 	System.out.println("Offending line = `" + line + "'");
@@ -448,7 +445,7 @@ class FileIO {
 
     // fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
-    if (debugRead) {
+    if (Global.debugRead) {
       System.out.println("read_data_trace_file " + filename + " " + fn_regexp);
     }
 
@@ -584,7 +581,7 @@ class FileIO {
 
       ValueTuple vt = new ValueTuple(vals, mods);
 
-      if (debugRead) {
+      if (Global.debugRead) {
 	System.out.println("Adding ValueTuple to " + ppt.name);
       }
       ppt.add(vt, 1);

@@ -51,12 +51,6 @@ public abstract class Invariant {
     return (!no_invariant) && (getProbability() <= probability_limit);
   }
 
-  // Has to be public because of wrappers.
-  public void destroy() {
-    no_invariant = true;
-    ppt.removeInvariant(this);
-  }
-
   // Implementations of this need to examine all the data values already
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
@@ -64,7 +58,14 @@ public abstract class Invariant {
     ppt = ppt_;
     // probability_cache_accurate = false;
     ppt.invs.add(this);
-    // System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
+    if (Global.debugInfer)
+      System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
+  }
+
+  // Has to be public because of wrappers.
+  public void destroy() {
+    no_invariant = true;
+    ppt.removeInvariant(this);
   }
 
   // Regrettably, I can't declare a static abstract method.

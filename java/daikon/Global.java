@@ -35,4 +35,18 @@ public class Global {
   // Perhaps I shouldn't have anything in this category (ie, no global
   // variables)?
 
+
+  /// Debugging
+
+  public final static boolean debugRead = false;
+  public final static boolean debugPptTopLevel = false;
+  public final static boolean debugDerive = false;
+  public final static boolean debugInfer = false;
+  public final static boolean debugPptSliceGeneric = false;
+
+  // public final static boolean debugRead = true;
+  // public final static boolean debugPptTopLevel = true;
+  // public final static boolean debugDerive = true;
+  // public final static boolean debugInfer = true;
+  // public final static boolean debugPptSliceGeneric = true;
 }

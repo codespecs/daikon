@@ -4,9 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
-
 public abstract class SingleScalar extends Invariant {
 
   protected SingleScalar(PptSlice ppt_) {

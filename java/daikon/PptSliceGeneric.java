@@ -19,9 +19,6 @@ import utilMDE.*;
 
 public class PptSliceGeneric extends PptSlice {
 
-  static final boolean debugPptSliceGeneric = false;
-  // static final boolean debugPptSliceGeneric = true;
-
   // This is in PptSlice; don't repeat it here!
   // Invariants invs;
 
@@ -35,7 +32,7 @@ public class PptSliceGeneric extends PptSlice {
     // super(parent_, var_infos_);
     super(parent_, var_infos_);
     values_cache = new VarValues();
-    if (debugPptSliceGeneric)
+    if (Global.debugPptSliceGeneric)
       System.out.println("Created PptSliceGeneric " + this.name);
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++)
@@ -64,21 +61,30 @@ public class PptSliceGeneric extends PptSlice {
 
   void instantiate_invariants(int pass) {
     // Instantiate invariants
-    if (debugPptSliceGeneric)
+    if (Global.debugPptSliceGeneric)
       System.out.println("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
     if (arity == 1) {
-      SingleScalarFactory.instantiate(this, pass);
-      SingleSequenceFactory.instantiate(this, pass);
+      if (var_infos[0].type.isArray()) {
+        SingleSequenceFactory.instantiate(this, pass);
+      } else {
+        SingleScalarFactory.instantiate(this, pass);
+      }
     } else if (arity == 2) {
-      TwoScalarFactory.instantiate(this, pass);
-      SequenceScalarFactory.instantiate(this, pass);
-      TwoSequenceFactory.instantiate(this, pass);
+      boolean array1 = var_infos[0].type.isArray();
+      boolean array2 = var_infos[1].type.isArray();
+      if (array1 && array2) {
+        TwoSequenceFactory.instantiate(this, pass);
+      } else if (array1 || array2) {
+        SequenceScalarFactory.instantiate(this, pass);
+      } else {
+        TwoScalarFactory.instantiate(this, pass);
+      }
     } else if (arity == 3) {
       throw new Error("arity 3 not yet implemented");
     } else {
       throw new Error("bad arity");
     }
-    if (debugPptSliceGeneric) {
+    if (Global.debugPptSliceGeneric) {
       System.out.println("after instantiate_invariants (pass " + pass + "), PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
   }
@@ -91,8 +97,8 @@ public class PptSliceGeneric extends PptSlice {
   // One can just use this one (and be sure to clear it out afterward).
   private Vector itrd_cache = new Vector(1);
   public void removeInvariant(Invariant inv) {
-    if (debugPptSliceGeneric)
-      System.out.println("PptSliceGeneric.removeInvariant(" + inv + ")" +
+    if (Global.debugPptSliceGeneric)
+      System.out.println("PptSliceGeneric.removeInvariant(" + inv.name() + ")" +
                          ((invs_to_remove_deferred != null)
                           ? " will be deferred"
                           : ""));

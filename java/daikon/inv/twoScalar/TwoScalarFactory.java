@@ -3,18 +3,16 @@ package daikon.inv.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 
-// I think this is likely to disappear, except possibly as a place to keep
-// common data like minimum and maximum.
+import utilMDE.*;
 
 public class TwoScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static void instantiate(PptSlice ppt, int pass) {
-    // Not really the right place for this test
-    if (!((ppt.var_infos[0].type.dimensions() == 0)
-	  && (ppt.var_infos[1].type.dimensions() == 0)))
-      return;
+
+    Assert.assert((!ppt.var_infos[0].type.isArray())
+                  && (!ppt.var_infos[1].type.isArray()));
 
     if (pass == 1) {
       IntComparison.instantiate(ppt);
