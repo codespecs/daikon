@@ -7,6 +7,23 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.6 (5 April 2002):
+
+MergeESC tool inserts Daikon output into Java source files as ESC/Java
+comments.
+
+Invariant Diff can compute set difference, union, and xor.  It can produce
+output in the new InvMap format, and can read that format.  New flags
+enable specification of custom comparators.
+
+dfej's "-daikon-omit" flag can be a regular expression.
+
+Daikon takes a --config_option flag to specify configuration settings.
+
+Ajax tool bug fixes.
+
+Improved installation and troubleshooting instructions.
+
 2.3.5 (1 March 2002):
 
 Add --files_from command-line argument to Daikon.
