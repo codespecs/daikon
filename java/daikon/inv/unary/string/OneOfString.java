@@ -109,15 +109,27 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
+    // ... but still ...
+    // format   \typeof(other) = "package.SomeClass;"
+    //   as     \typeof(other) == \type(package.SomeClass)
+
     boolean is_type = varname.startsWith("\\typeof");
     for (int i=0; i<num_elts; i++) {
       if (i>0) result += " || ";
-      result += varname + " == "
-        + (is_type
-           ? ((elts[i].equals("null"))
-              ? "\\typeof(null)"
-              : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")")
-           : "\"" + UtilMDE.quote( elts[0] ) + "\"" );
+      result += varname + " == ";
+      if (!is_type) {
+	result += "\"" + UtilMDE.quote( elts[i] ) + "\"";
+      } else {
+	if (elts[i].equals("null")) {
+	  result += "\\typeof(null)";
+	} else {
+	  if (varname.startsWith("[")) {
+	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
+	  } else {
+	    result += "\\type(" + elts[i] + ")";
+	  }
+	}
+      }
     }
     return result;
 
