@@ -7,6 +7,8 @@ import daikon.derive.ternary.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.stringsequence.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
@@ -115,14 +117,6 @@ public class PptTopLevel
   /** Debug tracer for data flow. **/
   public static final Logger debugFlow =
     Logger.getLogger ("daikon.flow.flow");
-
-  /** Debug tracer for start of suppression. **/
-  public static final Logger debugSuppressInit =
-    Logger.getLogger ("daikon.suppress.init");
-
-  /** Debug tracer for suppression. **/
-  public static final Logger debugSuppress =
-    Logger.getLogger ("daikon.suppress.suppress");
 
   /** Debug tracer for up-merging equality sets.  **/
   public static final Logger debugMerge =
@@ -995,9 +989,6 @@ public class PptTopLevel
     if (debugFlow.isLoggable(Level.FINE)) {
       debugFlow.fine ("<<<< Doing add_and_flow() for " + name());
     }
-    if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<<< Doing add_and_flow() for " + name());
-    }
 
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
@@ -1049,11 +1040,6 @@ public class PptTopLevel
     //       debugFlow.fine ("Add for " + this.name);
     //     }
 
-    if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<< Doing add for " + name());
-      // debugSuppress.fine ("    with vt " + vt);
-    }
-
     if (debugFlow.isLoggable(Level.FINE)) {
       debugFlow.fine ("<<< Doing add for " + name());
       debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
@@ -1066,11 +1052,6 @@ public class PptTopLevel
       if (Global.debugInfer.isLoggable(Level.FINE)) {
         Global.debugInfer.fine ("Instantiated views first time for " + this);
       }
-    }
-
-    if (!initiatedSuppression &&
-        values_num_samples >= Daikon.suppress_samples_min) {
-      initiateSuppression();
     }
 
     if (Daikon.use_equality_optimization) {
@@ -1100,106 +1081,9 @@ public class PptTopLevel
       }
     }
 
-    Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
-
-    int checkCount = 0;
-    Invariants invsFlowed = new Invariants();
-
-    while (viewsToCheck.size() > 0) {
-      checkCount++;
-
-      if (debugSuppress.isLoggable(Level.FINE)) {
-        debugSuppress.fine ("  Checkcount: " + checkCount);
-      }
-
-      Set weakenedInvs = new LinkedHashSet();
-      // Add to all the views
-      for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
-        PptSlice view = (PptSlice) itor.next();
-        if (view.invs.size() == 0) {
-          continue;
-        }
-        weakenedInvs.addAll (view.add(vt, count));
-      }
-
-      viewsToCheck = new LinkedHashSet();
-      // Checking of recently unsuppressed invariants done here.  For
-      // every invariant that got unsuppressed: 1) Check if other
-      // invariants still suppress it; 2) Check if the current vt
-      // falsifies it (by placing it in viewsToCheck, which is checked
-      // on the subsequent loop).  Remember that this.invariants can
-      // suppress invariants in lower ppts, so we only do (2) for
-      // unsuppressed invariants in this.invariants.
-
-      for (Iterator itor = weakenedInvs.iterator(); itor.hasNext(); ) {
-        Invariant inv = (Invariant) itor.next();
-
-        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn()) && inv.numSuppressees() > 0) {
-          debugSuppress.fine (" Inv " + inv.repr() +
-                               " was falsified or weakened with suppressees");
-          inv.log (" Inv " + inv.repr() +
-                   " was falsified or weakened with suppressees");
-        }
-        // Try to resuppress the weakened inv
-        // Why is this useful?  There may be isSameFormula comparisons
-        // among suppressors such that the weakened form of the inv
-        // qualifies (e.g. LowerBound)
-        if (!inv.is_false() && inv.getSuppressor() == null) {
-          if (attemptSuppression (inv, true)) {
-            if (debugSuppress.isLoggable(Level.FINE)) {
-              debugSuppress.fine ("Suppressor re-suppressed");
-            }
-            if (inv.logOn()) {
-              inv.log ("Suppressor " + inv.format()
-                       + " re-suppressed, sample count: "
-                       + inv.ppt.num_samples());
-            }
-          }
-        }
-
-        if (inv.numSuppressees() > 0) {
-
-          // Why copy?  Because we want to keep unlink() as an atomic
-          // operation that removes the SuppressionLink from the
-          // suppressor's suppressed field.  Without copying, we get a
-          // ConcurrentModifiecationException.
-          Set suppressees = new LinkedHashSet(inv.getSuppressees());
-
-          for (Iterator iSuppressees = suppressees.iterator();
-               iSuppressees.hasNext(); ) {
-            SuppressionLink sl = (SuppressionLink) iSuppressees.next();
-            Invariant invSuppressed = sl.getSuppressee();
-            sl.unlink();
-            Assert.assertTrue (invSuppressed.getSuppressor() == null);
-            if (debugSuppress.isLoggable(Level.FINE) || invSuppressed.logOn()) {
-              debugSuppress.fine ("  Attempting re-suppression of: " + invSuppressed.repr());
-              invSuppressed.log ("  Attempting re-suppression of: " + invSuppressed.repr());
-            }
-            PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
-            if (attemptSuppression (invSuppressed, true)) {
-              if (debugSuppress.isLoggable(Level.FINE) || invSuppressed.logOn()) {
-                debugSuppress.fine ("  Re-suppressed by " + invSuppressed.getSuppressor());
-                invSuppressed.log ("  Re-suppressed by " + invSuppressed.getSuppressor() +
-                                   " samples: " + inv.ppt.num_samples());
-              }
-            } else if (suppressedPpt == this) {
-              // If invSuppressed didn't get resuppressed, we have to check values
-              debugSuppress.fine ("  Will re-check because in same ppt");
-              if (invSuppressed.logOn()) {
-                invSuppressed.log ("  Will re-check because in same ppt");
-              }
-              viewsToCheck.add (invSuppressed.ppt);
-            } else {
-              // Do nothing because suppressedParent is a child of this,
-              // and will be checked in good time.
-            }
-          }
-        }
-      }
-    }
-
     for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
+      view.add (vt, count);
       if (view.invs.size() == 0) {
         itor.remove();
         if (Global.debugInfer.isLoggable(Level.FINE)) {
@@ -1217,11 +1101,6 @@ public class PptTopLevel
       }
     }
 
-    if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine (">>> End of add for " + name());
-    }
-
-    // System.out.println("About to call ModBitTracker.add for " + name() + " (current size " + mbtracker.num_samples() + ")" + " <= " + vt.toString());
     mbtracker.add(vt, count);
 
     return new ArrayList();
@@ -1289,15 +1168,12 @@ public class PptTopLevel
   }
 
   /**
-   * Add the sample to the equality sets and invariants at this
-   * program point.  This version is specific to the bottom up
-   * processing mechanism.  Any invariants that were suppressed by
-   * invariants that were weakened or falsified by this sample also
-   * are presented the sample.
+   * Add the sample to the equality sets, dynamic constants and
+   * invariants at this program point.  This version is specific to
+   * the bottom up processing mechanism.
    *
    * This routine also instantiates slices/invariants on the first
-   * call for the ppt and initiates suppression when enough samples
-   * have been seen to warrant it.
+   * call for the ppt.
    *
    * @param vt the set of values for this to see
    * @param count the number of samples that vt represents
@@ -1312,15 +1188,6 @@ public class PptTopLevel
 
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars,
                       name);
-
-    if (debugSuppress.isLoggable(Level.FINE)) {
-      debugSuppress.fine ("<<< Doing add for " + name());
-      debugSuppress.fine ("    with vt " + vt);
-    }
-    if (debugFlow.isLoggable(Level.FINE)) {
-      debugFlow.fine ("<<< Doing add for " + name());
-      debugFlow.fine ("    with vt " + vt.toString(this.var_infos));
-    }
 
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
@@ -1357,12 +1224,6 @@ public class PptTopLevel
       debugFlow.fine ("  Instantiating views for the first time");
       if (!Daikon.dkconfig_use_dynamic_constant_optimization)
         instantiate_views_and_invariants();
-    }
-
-    // Initiate suppression if we have seen enough samples to warrant it
-    if (!initiatedSuppression &&
-        values_num_samples >= Daikon.suppress_samples_min) {
-      initiateSuppression();
     }
 
     // Add the samples to all of the equality sets, breaking sets as required
@@ -1430,98 +1291,23 @@ public class PptTopLevel
 
     values_num_samples += count;
 
-    // System.out.println("About to call ModBitTracker.add for " + name() + " (current size " + mbtracker.num_samples() + ")" + " <= " + vt.toString());
     mbtracker.add(vt, count);
 
-    // System.out.println("About to call ValueSet.add for " + name() + " <= " + vt.toString());
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
         ValueSet vs = value_sets[i];
         vs.add(vt.vals[i]);
-        // System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
       } else {
         ValueSet vs = value_sets[i];
-        // System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
       }
     }
 
-    // Add the sample to each slice/invariant and keep track of the
-    // list of weakened/destroyed invariants.  If the weakened
-    // invariants suppressed any other invariants, each of the
-    // suppressees must be checked.  First try and resuppress it.  If
-    // that fails, add it to a list of unsuppressed invariants.  and
-    // add the sample to those invariants.  Continue iteratively until
-    // there are no more slices to check.
-
-    // Add the sample to each slice and keep track of any weakened or
-    // destroyed invariants
-    Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
-    for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if (view.invs.size() == 0)
+    // Add the sample to each slice
+    for (Iterator i = views_iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      if (slice.invs.size() == 0)
         continue;
-      weakened_invs.addAll (view.add(vt, count));
-    }
-    Set all_weakened_invs = new LinkedHashSet();
-
-    // List of unsuppressed invariants
-    List unsuppressed_invs = new ArrayList();
-
-    // while new weakened invariants are left, process them
-    while (weakened_invs.size() > 0) {
-
-      // Keep track of all of weakened invariants
-      all_weakened_invs.addAll (weakened_invs);
-
-      // foreach weakened/destroyed invariant
-      for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
-
-        // Get current invariant and its list of suppression links
-        Invariant inv = (Invariant) itor.next();
-
-        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn())
-            && inv.numSuppressees() > 0) {
-          inv.log (debugSuppress, " Inv " + inv.repr() +
-                   " was falsified or weakened with suppressees");
-        }
-
-        // Try and suppress the weakened invariant (its new weakened
-        // state might allow suppression, where its previous state did not)
-        if (!inv.is_false() && inv.getSuppressor() == null) {
-          if (attemptSuppression (inv, true)) {
-            if (inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-              inv.log ("Weakened invariant suppressed");
-          }
-        }
-
-        if (inv.numSuppressees() > 0) {
-          Set suppressees = new LinkedHashSet(inv.getSuppressees());
-
-          // Loop through each invariant suppressed by this one and attempt
-          // to resuppress it clearing out the existing suppressions at the
-          // same time.  If not resuppressed, add it to the list
-          // of unsuppressed invariants.
-          for (Iterator isup = suppressees.iterator(); isup.hasNext(); ) {
-            SuppressionLink sl = (SuppressionLink) isup.next();
-            Invariant sup_inv = sl.getSuppressee();
-            sl.unlink();
-            if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-              sup_inv.log (debugSuppress, "Attempting resuppression");
-            if (attemptSuppression (sup_inv, true)) {
-              if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-                sup_inv.log (debugSuppress, "Re-suppressed by "
-                             + sup_inv.getSuppressor());
-            } else {
-              unsuppressed_invs.add (sup_inv);
-            }
-          }
-        }
-      }
-
-      // Add the sample to each unsuppressed invariant and get back the list
-      // of any that were weakened by the sample.
-      weakened_invs.clear();
-      weakened_invs.addAll (inv_add (unsuppressed_invs, vt, count));
+      weakened_invs.addAll (slice.add(vt, count));
     }
 
     // Create any newly unsuppressed invariants
@@ -1552,84 +1338,19 @@ public class PptTopLevel
       }
     }
 
-
     // Add sample to all conditional ppts.  This is probably not fully
     // implemented in V3
     for (Iterator itor = cond_iterator(); itor.hasNext() ; ) {
       PptConditional pptcond = (PptConditional) itor.next();
       pptcond.add(vt, count);
-      // TODO: Check for no more invariants on pptcond?
     }
 
     if (debugNISStats.isLoggable (Level.FINE))
       NIS.dump_stats (debugNISStats, this);
 
-    return (all_weakened_invs);
+    return (weakened_invs);
   }
 
-  /*
-    // OLD VERSION
-    // Initially, viewsToCheck are all of the slices
-
-    // While there are views to check
-    while (viewsToCheck.size() > 0) {
-
-      // Add the sample to each slice and keep track of any weakened or
-      // destroyed invariants
-      Set weakened_invs = new LinkedHashSet();
-      for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
-        PptSlice view = (PptSlice) itor.next();
-        if (view.invs.size() == 0)
-          continue;
-        weakened_invs.addAll (view.add(vt, count));
-      }
-
-      // Initialize an empty slice set, the program points that include
-      // invariants that are now unsuppressed are added below.
-      viewsToCheck = new LinkedHashSet();
-
-      // foreach weakened/destroyed invariant
-      for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
-
-        // Get current invariant and its list of suppression links
-        Invariant inv = (Invariant) itor.next();
-        Set suppressees = new LinkedHashSet(inv.getSuppressees());
-        if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn())
-          && suppressees.size() > 0)
-          inv.log (debugSuppress, " Inv " + inv.repr() +
-                   " was falsified or weakened with suppressees");
-
-        // Try and suppress the weakened invariant (its new weakened
-        // state might allow suppression, where its previous state did not)
-        if (!inv.falsified && inv.getSuppressor() == null) {
-          if (attemptSuppression (inv, true)) {
-            if (inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-              inv.log ("Weakened invariant suppressed");
-          }
-        }
-
-        // Loop through each invariant suppressed by this one and attempt
-        // to resuppress it clearing out the existing suppressions at the
-        // same time.  If not resuppressed, add its ppt to the
-        // list of ppts to apply samples to.
-        for (Iterator isup = suppressees.iterator(); isup.hasNext(); ) {
-          SuppressionLink sl = (SuppressionLink) isup.next();
-          Invariant sup_inv = sl.getSuppressee();
-          sl.unlink();
-          if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-            sup_inv.log (debugSuppress, "Attempting resuppression");
-          if (attemptSuppression (sup_inv, true)) {
-            if (sup_inv.logOn() || debugSuppress.isLoggable(Level.FINE))
-              sup_inv.log (debugSuppress, "Re-suppressed by "
-                            + sup_inv.getSuppressor());
-          } else {
-            viewsToCheck.add (sup_inv.ppt);
-          }
-        }
-      }
-    }
-
-  */
 
   /**
    * Adds a sample to each invariant in the list.  Returns the list of
@@ -1900,22 +1621,6 @@ public class PptTopLevel
       Assert.assertTrue (local_slice.invs.size() > 0);
       return (null);
     }
-  }
-
-  /** Returns the number of suppressed invariants at this ppt. **/
-  public int suppressed_invariant_cnt() {
-
-    int suppress_cnt = 0;
-
-    for (Iterator j = views_iterator(); j.hasNext(); ) {
-      PptSlice slice = (PptSlice) j.next();
-      for (int k = 0; k < slice.invs.size(); k++) {
-        Invariant inv = (Invariant) slice.invs.get (k);
-        if (inv.getSuppressor() != null)
-          suppress_cnt++;
-      }
-    }
-    return (suppress_cnt);
   }
 
   /** Returns the number of true invariants at this ppt. **/
@@ -2447,13 +2152,25 @@ public class PptTopLevel
   }
 
   /**
-   * Returns whether or not v1 is a subset of v2.
+   * Looks up the slice for v1.  If the slice does not exist, one is
+   * created (but not added into the list of slices for this ppt).
    */
-  public boolean is_subset (VarInfo v1, VarInfo v2) {
+  public PptSlice get_temp_slice (VarInfo v) {
 
-    // Find the slice for v1 and v2.  If no slice exists, create it,
-    // but don't add it to the slices for this ppt.  It only exists
-    // as a temporary home for the invariant we are looking for below.
+    PptSlice slice = findSlice (v);
+    if (slice == null)
+      slice = new PptSlice1 (this, v);
+
+    return (slice);
+  }
+
+  /**
+   * Looks up the slice for v1 and v2.  They do not have to be
+   * in order.  If the slice does not exist, one  is created (but
+   * not added into the list of slices for this ppt).
+   */
+  public PptSlice get_temp_slice (VarInfo v1, VarInfo v2) {
+
     PptSlice slice = findSlice_unordered (v1, v2);
     if (slice == null) {
       if (v1.varinfo_index <= v2.varinfo_index)
@@ -2462,14 +2179,159 @@ public class PptTopLevel
         slice = new PptSlice2 (this, v2, v1);
     }
 
+    return (slice);
+  }
+
+  /**
+   * If the proto invariant is true over the specified variable returns
+   * DiscardInfo indicating that the proto invariant implies imp_inv.
+   * Otherwise returns null
+   */
+  public DiscardInfo check_implied (Invariant imp_inv, VarInfo v,
+                                    Invariant proto) {
+
+    // If there is no proto invariant, we can't look for it.  This happens
+    // if the invariant is not enabled.
+    if (proto == null)
+      return (null);
+
+    // Get the slice and instantiate the possible antecedent oer it
+    PptSlice slice = get_temp_slice (v);
+    Invariant antecedent_inv = proto.instantiate (slice);
+    if (antecedent_inv == null)
+      return (null);
+
+    // Check to see if the antecedent is true
+    if (slice.is_inv_true (antecedent_inv))
+      return new DiscardInfo (imp_inv, DiscardCode.obvious, "Implied by " +
+                              antecedent_inv.format());
+
+    return (null);
+  }
+
+  /**
+   * If the proto invariant is true over the leader of the specified
+   * variable returns DiscardInfo indicating that the proto invariant
+   * implies imp_inv.  Otherwise returns null
+   */
+  public DiscardInfo check_implied_canonical (Invariant imp_inv, VarInfo v,
+                                              Invariant proto) {
+
+    VarInfo leader = v.canonicalRep();
+
+    DiscardInfo di = check_implied (imp_inv, leader, proto);
+    if (di == null)
+      return (null);
+
+    // Build a new discardString that includes the variable equality
+    String reason = di.discardString();
+    if (leader != v)
+      reason += " and (" + leader + "==" + v + ")";
+
+    return new DiscardInfo (imp_inv, DiscardCode.obvious, reason);
+  }
+  /**
+   * If the proto invariant is true over the specified variables returns
+   * DiscardInfo indicating that the proto invariant implies imp_inv.
+   * Otherwise returns null
+   */
+  public DiscardInfo check_implied (Invariant imp_inv, VarInfo v1, VarInfo v2,
+                                    Invariant proto) {
+
+    // If there is no proto invariant, we can't look for it.  This happens
+    // if the invariant is not enabled.
+    if (proto == null)
+      return (null);
+
+    // Get the slice and instantiate the possible antecedent oer it
+    PptSlice slice = get_temp_slice (v1, v2);
+    Invariant antecedent_inv = proto.instantiate (slice);
+    if (antecedent_inv == null)
+      return (null);
+
+    // Permute the antecedent if necessary
+    if (v1.varinfo_index > v2.varinfo_index)
+      antecedent_inv = antecedent_inv.permute (permute_swap);
+
+    // Check to see if the antecedent is true
+    if (slice.is_inv_true (antecedent_inv))
+      return new DiscardInfo (imp_inv, DiscardCode.obvious, "Implied by " +
+                              antecedent_inv.format());
+
+    return (null);
+  }
+
+  public boolean check_implied (DiscardInfo di, VarInfo v1,
+                                VarInfo v2, Invariant proto) {
+
+    DiscardInfo di2 = check_implied (di.inv, v1, v2, proto);
+    if (di2 == null)
+      return (false);
+
+    di.add_implied (di2.discardString());
+    return (true);
+  }
+
+
+  /**
+   * If the proto invariant is true over the leader of each specified
+   * variables returns DiscardInfo indicating that the proto invariant
+   * implies imp_inv.  Otherwise returns null
+   */
+  public DiscardInfo check_implied_canonical (Invariant imp_inv, VarInfo v1,
+                                              VarInfo v2, Invariant proto) {
+
+    VarInfo leader1 = v1.canonicalRep();
+    VarInfo leader2 = v2.canonicalRep();
+
+    DiscardInfo di = check_implied (imp_inv, leader1, leader2, proto);
+    if (di == null)
+      return (null);
+
+    // If the variables match the leader, the current reason is good
+    if ((leader1 == v1) && (leader2 == v2))
+      return (di);
+
+    // Build a new discardString that includes the variable equality
+    String reason = di.discardString();
+    if (leader1 != v1)
+      reason += " and (" + leader1 + "==" + v1 + ")";
+    if (leader2 != v2)
+      reason += " and (" + leader2 + "==" + v2 + ")";
+
+    return new DiscardInfo (imp_inv, DiscardCode.obvious, reason);
+  }
+
+  public boolean check_implied_canonical (DiscardInfo di, VarInfo v1,
+                                          VarInfo v2, Invariant proto) {
+
+    DiscardInfo di2 = check_implied_canonical (di.inv, v1, v2, proto);
+    if (di2 == null)
+      return (false);
+
+    di.add_implied (di2.discardString());
+    return (true);
+  }
+
+
+  /**
+   * Returns whether or not v1 is a subset of v2.
+   */
+  public boolean is_subset (VarInfo v1, VarInfo v2) {
+
+    // Find the slice for v1 and v2.  If no slice exists, create it,
+    // but don't add it to the slices for this ppt.  It only exists
+    // as a temporary home for the invariant we are looking for below.
+    PptSlice slice = get_temp_slice (v1, v2);
+
     // Create the invariant we are looking for
     Invariant inv = null;
     if ((v1.rep_type == ProglangType.INT_ARRAY)) {
       Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
-      inv = SubSet.instantiate (slice);
+      inv = SubSet.get_proto().instantiate (slice);
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
       Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
-      inv = SubSetFloat.instantiate (slice);
+      inv = SubSetFloat.get_proto().instantiate (slice);
     }
 
     if (inv == null)
@@ -2496,40 +2358,42 @@ public class PptTopLevel
     if (slice == null)
       return (false);
 
-    // Determine the class of the invariant we are looking for
-    Class inv_class = null;
+    // Get a prototype of the invariant we are looking for
+    Invariant proto = null;
     if (v1.rep_type.isScalar()) {
       Assert.assertTrue (v2.rep_type.isScalar());
-      inv_class = IntEqual.class;
+      proto = IntEqual.get_proto();
     } else if (v1.rep_type.isFloat()) {
       Assert.assertTrue (v2.rep_type.isFloat());
-      inv_class  = FloatEqual.class;
+      proto = FloatEqual.get_proto();
     } else if (v1.rep_type == ProglangType.STRING) {
       Assert.assertTrue (v2.rep_type == ProglangType.STRING);
-      inv_class = StringEqual.class;
+      proto = StringEqual.get_proto();
     } else if ((v1.rep_type == ProglangType.INT_ARRAY)) {
       Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
-      inv_class = SeqSeqIntEqual.class;
+      proto = SeqSeqIntEqual.get_proto();
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
       Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
-      inv_class = SeqSeqFloatEqual.class;
+      proto = SeqSeqFloatEqual.get_proto();
     } else if ((v1.rep_type == ProglangType.STRING_ARRAY)) {
       Assert.assertTrue (v2.rep_type == ProglangType.STRING_ARRAY);
-      inv_class = SeqSeqStringEqual.class;
+      proto = SeqSeqStringEqual.get_proto();
     } else {
       Assert.assertTrue (false, "unexpected type " + v1.rep_type);
     }
+    Assert.assertTrue (proto != null);
+    Assert.assertTrue (proto.valid_types (slice.var_infos));
 
-    // Look for the invariant by its class name.  Since equality invariants
-    // have no state, this is a completely sufficient search
-    Invariant inv = slice.find_inv_by_class (inv_class);
-    return (inv != null);
+    // Return whether or not the invariant is true in the slice
+    Invariant inv = proto.instantiate (slice);
+    if (inv == null)
+      return (false);
+    return (slice.is_inv_true (inv));
   }
 
   /**
    * Returns true if (v1+v1_shift) <= (v2+v2_shift) is known
    * to be true.  Returns false otherwise.  Integers only.
-   * JHP: turn on the < checks!
    */
   public boolean is_less_equal (VarInfo v1, int v1_shift,
                                        VarInfo v2, int v2_shift) {
@@ -2545,10 +2409,9 @@ public class PptTopLevel
       slice = findSlice (v1, v2);
       if (slice != null) {
         if (v1_shift <= v2_shift) {
-          inv = IntLessEqual.instantiate (slice);
+          inv = IntLessEqual.get_proto().instantiate (slice);
         } else if (v1_shift == (v2_shift + 1)) {
-        // Invariant inv = IntLessThan.instantiate (slice);
-        // return (slice.is_inv_true (inv));
+          inv = IntLessThan.get_proto().instantiate (slice);
         } else { //  no invariant over v1 and v2 shows ((v1 + 2) <= v2)
         }
       }
@@ -2556,10 +2419,9 @@ public class PptTopLevel
       slice = findSlice (v2, v1);
       if (slice != null) {
         if (v1_shift <= v2_shift) {
-          inv = IntGreaterEqual.instantiate (slice);
+          inv = IntGreaterEqual.get_proto().instantiate (slice);
         } else if (v1_shift == (v2_shift + 1)) {
-          // inv = IntGreaterThan.instantiate (slice);
-          // return (slice.is_inv_true (inv));
+          inv = IntGreaterThan.get_proto().instantiate (slice);
         } else { //  no invariant over v1 and v2 shows ((v2 + 2) <= v1)
         }
       }
@@ -2585,22 +2447,16 @@ public class PptTopLevel
     // Find the slice for v1 and v2.  If no slice exists, create it,
     // but don't add it to the slices for this ppt.  It only exists
     // as a temporary home for the invariant we are looking for below.
-    PptSlice slice = findSlice_unordered (v1, v2);
-    if (slice == null) {
-      if (v1.varinfo_index <= v2.varinfo_index)
-        slice = new PptSlice2 (this, v1, v2);
-      else
-        slice = new PptSlice2 (this, v2, v1);
-    }
+    PptSlice slice = get_temp_slice (v1, v2);
 
     // Create the invariant we are looking for.
     Invariant inv = null;
     if ((v1.rep_type == ProglangType.INT_ARRAY)) {
       Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
-        inv = SubSequence.instantiate (slice);
+        inv = SubSequence.get_proto().instantiate (slice);
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
       Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
-      inv = SubSequenceFloat.instantiate (slice);
+      inv = SubSequenceFloat.get_proto().instantiate (slice);
     } else {
       Assert.assertTrue (false, "unexpected type " + v1.rep_type);
     }
@@ -2611,6 +2467,58 @@ public class PptTopLevel
     // If the varinfos are out of order swap
     if (v1.varinfo_index > v2.varinfo_index)
       inv = inv.permute (permute_swap);
+
+    return (slice.is_inv_true (inv));
+  }
+
+  /**
+   * Returns true if varr is empty.  Supports ints, doubles, and
+   * strings.
+   */
+  public boolean is_empty(VarInfo varr) {
+
+    // Find the slice for varr.  If no slice exists, create it, but
+    // don't add it to the slices for this ppt.  It only exists as a
+    // temporary home for the invariant we are looking for below.
+    PptSlice slice = findSlice (varr);
+    if (slice == null) {
+      slice = new PptSlice1 (this, varr);
+    }
+
+    // Create a one of invariant with an empty array as its only
+    // value.
+    Invariant inv = null;
+    if ((varr.rep_type == ProglangType.INT_ARRAY)) {
+      OneOfSequence oos = (OneOfSequence)
+                            OneOfSequence.get_proto().instantiate (slice);
+      if (oos != null) {
+        long[][] one_of = new long[1][];
+        one_of[0] = new long[0];
+        oos.set_one_of_val (one_of);
+        inv = oos;
+      }
+    } else if (varr.rep_type == ProglangType.DOUBLE_ARRAY) {
+      OneOfFloatSequence oos = (OneOfFloatSequence)
+                    OneOfFloatSequence.get_proto().instantiate (slice);
+      if (oos != null) {
+        double[][] one_of = new double[1][];
+        one_of[0] = new double[0];
+        oos.set_one_of_val (one_of);
+        inv = oos;
+      }
+    } else if (varr.rep_type == ProglangType.STRING_ARRAY) {
+      OneOfStringSequence oos = (OneOfStringSequence)
+                        OneOfStringSequence.get_proto().instantiate (slice);
+      if (oos != null) {
+        String[][] one_of = new String[1][];
+        one_of[0] = new String[0];
+        oos.set_one_of_val (one_of);
+        inv = oos;
+      }
+    }
+
+    if (inv == null)
+      return (false);
 
     return (slice.is_inv_true (inv));
   }
@@ -2803,6 +2711,11 @@ public class PptTopLevel
 
     if (debug.isLoggable(Level.FINE))
       debug.fine (views.size() - old_num_views + " new views for " + name());
+
+    // Remove any invariants that are suppressed.  This needs to occur
+    // here rather than during instantiate because we need to have created
+    // all possible suppressors.
+    NIS.remove_suppressed_invs (this);
 
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
@@ -3139,115 +3052,6 @@ public class PptTopLevel
   }
 
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Manipulating invariants and suppression
-  ///
-
-  private boolean initiatedSuppression = false;
-
-  /**
-   * Starts suppression by attempting to suppress all invariants.
-   * Called at the start of inferencing.  Requires that this and its
-   * parents have already has instantiated invariants.
-   *
-   * Precondition: Invariants already instantiated
-   * @see daikon.suppress.SuppressionFactory
-   **/
-  public void initiateSuppression() {
-    if (!initiatedSuppression) {
-      suppressAll (true);
-      initiatedSuppression = true;
-    }
-  }
-
-  /**
-   * Attempt to suppress all unsuppressed invariants.  Requires that
-   * this and its parents have already has instantiated
-   * invariants. Can be called repeatedly to refresh suppression, but
-   * this is an expensive operation.
-   *
-   * Precondition: Invariants already instantiated
-   * @param in_process  should be set to true if samples are still being
-   *                    processed. false otherwise (ie, at the end).
-   *                    This is used to defer suppression on certain invariants
-   *                    that lose important internal state information when
-   *                    suppressed.
-   *
-   * @see daikon.suppress.SuppressionFactory
-   **/
-  public void suppressAll (boolean in_process) {
-    if (Daikon.dkconfig_use_suppression_optimization) {
-      if (debugSuppressInit.isLoggable(Level.FINE)) {
-        debugSuppressInit.fine ("SuppressAll for: " + name());
-      }
-      List invs = getInvariants();
-      for (Iterator i = invs.iterator(); i.hasNext(); ) {
-        Invariant inv = (Invariant) i.next();
-        if (inv.getSuppressor() == null) {
-          attemptSuppression (inv, in_process);
-        }
-      }
-      if (debugSuppressInit.isLoggable(Level.FINE)) {
-        debugSuppressInit.fine ("  Suppressed invariants:");
-        for (Iterator i = invs.iterator(); i.hasNext(); ) {
-          Invariant inv = (Invariant) i.next();
-          if (inv.getSuppressor() != null) {
-            debugSuppressInit.fine (" y " + inv.repr());
-          } else {
-            debugSuppressInit.fine (" n " + inv.repr());
-          }
-        }
-        debugSuppressInit.fine ("  end of suppressed invariants:");
-      }
-    }
-  }
-
-
-
-  /**
-   * Try to suppress one invariant.  Links the invariant to a
-   * SuppressionLink if suppression succeeds.
-   * Precondition: Invariants already instantiated.  inv not already suppressed.
-   * @param inv         the Invariant to attempt suppression on, which has to
-   *                    be a member of this.
-   * @param in_process  should be set to true if samples are still being
-   *                    processed. false otherwise (ie, at the end).
-   *                    This is used to defer suppression on certain invariants
-   *                    that lose important internal state information when
-   *                    suppressed.
-   * @return true if invariant was suppressed
-   * @see daikon.suppress.SuppressionFactory
-   **/
-  public boolean attemptSuppression (Invariant inv, boolean in_process) {
-
-    if (Daikon.dkconfig_use_suppression_optimization) {
-
-      // Don't suppress until we've seen the minimum number of samples
-      if ((Daikon.suppress_samples_min > num_samples()) && in_process)
-        return (false);
-
-      if (inv.getSuppressor() != null) {
-        System.err.println ("Error: the invariant " + inv.format() +
-                            " already has a suppressor");
-        Assert.assertTrue (inv.getSuppressor() == null);
-      }
-      if (in_process && !inv.inProcessSuppressOk()) {
-        inv.log ("No suppression search- inProcessSuppressOk is false");
-        return (false);
-      }
-      SuppressionFactory[] factories = inv.getSuppressionFactories();
-      for (int i = 0; i < factories.length; i++) {
-        // Assert.assertTrue(factories[i] != null, "factories[" + i + "] == null for " + inv.format());
-        SuppressionLink sl = factories[i].generateSuppressionLink (inv);
-        if (sl != null) {
-          sl.link();
-          inv.log ("Generated link with: " + sl);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -4159,6 +3963,7 @@ public class PptTopLevel
         rel.child.mergeInvs();
     }
 
+    //Fmt.pf ("Merging ppt " + name + " with " + children.size() + " children");
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine ("Processing ppt " + name());
 
@@ -4394,7 +4199,6 @@ public class PptTopLevel
         continue;
       if (suppressed_invs.get (child) != null)
         continue;
-      // Fmt.pf ("Creating suppressed invariants for " + child.name);
       suppressed_invs.put (child, NIS.create_suppressed_invs (child));
     }
 
@@ -4691,10 +4495,6 @@ public class PptTopLevel
 
     System.out.println ("Removing child invariants at " + name());
 
-    // Do suppressions first, so that we don't lose any suppressions
-    // when eliminating invariants
-    suppressAll (false);
-
     List /*PptSlice*/ slices_to_remove = new ArrayList();
 
     // Loop through each slice
@@ -4783,20 +4583,6 @@ public class PptTopLevel
     log.fine (slices.size() + descr + " slices with " + inv_cnt
                 + " invariants");
 
-  }
-
-  /** Prints out any suppressed invariants at the ppt and their suppressors. **/
-  public void print_suppressed_invs (Logger log) {
-
-    for (Iterator j = views_iterator(); j.hasNext(); ) {
-      PptSlice slice = (PptSlice) j.next();
-      for (int k = 0; k < slice.invs.size(); k++ ) {
-        Invariant inv = (Invariant) slice.invs.get(k);
-        if (inv.getSuppressor() != null)
-          log.fine (" : " + inv.format() + " suppressed by : "
-                      + inv.getSuppressor());
-      }
-    }
   }
 
   /**
@@ -4992,11 +4778,11 @@ public class PptTopLevel
     // This is almost directly copied from PptSlice2's instantiation
     // of factories
     if (rep_is_scalar) {
-      invEquals = IntEqual.instantiate (newSlice);
+      invEquals = IntEqual.get_proto().instantiate (newSlice);
     } else if ((rep == ProglangType.STRING)) {
-      invEquals = StringEqual.instantiate (newSlice);
+      invEquals = StringEqual.get_proto().instantiate (newSlice);
     } else if ((rep == ProglangType.INT_ARRAY)) {
-      invEquals = SeqSeqIntEqual.instantiate (newSlice);
+      invEquals = SeqSeqIntEqual.get_proto().instantiate (newSlice);
     } else if ((rep == ProglangType.STRING_ARRAY)) {
       // JHP commented out to see what diffs are coming from here (5/3/3)
 //         invEquals = SeqComparisonString.instantiate (newSlice, true);
@@ -5006,9 +4792,9 @@ public class PptTopLevel
 //         debugPostProcess.fine ("  seqStringEqual");
     } else if (Daikon.dkconfig_enable_floats) {
       if (rep_is_float) {
-        invEquals = FloatEqual.instantiate (newSlice);
+        invEquals = FloatEqual.get_proto().instantiate (newSlice);
       } else if (rep == ProglangType.DOUBLE_ARRAY) {
-        invEquals = SeqSeqFloatEqual.instantiate (newSlice);
+        invEquals = SeqSeqFloatEqual.get_proto().instantiate (newSlice);
       }
     } else {
       throw new Error ("No known Comparison invariant to convert equality into");
@@ -5016,16 +4802,8 @@ public class PptTopLevel
 
 
     if (invEquals != null) {
-      SuppressionLink sl = SelfSuppressionFactory.getInstance().generateSuppressionLink (invEquals);
-      if (sl != null) {
-        // System.out.println (invEquals + "suppressed by " + sl);
-      } else {
         newSlice.addInvariant (invEquals);
-        // System.out.println ("created equality " + invEquals.format());
-      }
     } else {
-      // System.out.println ("Can't create equality for " + v1.name.name() + ", "
-      //                      + v2.name.name());
       if (newSlice.invs.size() == 0)
         newSlice.parent.removeSlice (newSlice);
     }
@@ -5309,9 +5087,6 @@ public class PptTopLevel
     /** number of instantiated slices **/
     public int instantiated_slice_cnt = 0;
 
-    /** number of suppressed invariants **/
-    public int suppress_cnt = 0;
-
     /** total number of global invariants that have flowed **/
     public int tot_invs_flowed = 0;
 
@@ -5352,7 +5127,6 @@ public class PptTopLevel
       inv_cnt = ppt.invariant_cnt();
       instantiated_slice_cnt = ppt.instantiated_slice_cnt;
       instantiated_inv_cnt = ppt.instantiated_inv_cnt;
-      suppress_cnt = ppt.suppressed_invariant_cnt();
       tot_invs_flowed = global_weakened_invs.size();
       invs_to_flow = global_weakened_invs.size() - global_weakened_start_index;
       if (ppt.constants != null)
@@ -5369,7 +5143,7 @@ public class PptTopLevel
       log.fine ("Program Point : Sample Cnt: Equality Cnt : Var Cnt : "
                 + " Vars/Equality : Const Slice Cnt :  "
                 + " Slice /  Inv Cnt : Instan Slice / Inv Cnt "
-                + ": Suppressed : Memory (bytes) : Time (msecs) ");
+                + " Memory (bytes) : Time (msecs) ");
     }
 
     void dump (Logger log) {
@@ -5393,7 +5167,6 @@ public class PptTopLevel
                         + inv_cnt + " : "
                         + instantiated_slice_cnt + "/"
                         + instantiated_inv_cnt + " : "
-                        + suppress_cnt + " : "
                         + tot_invs_flowed + "/"
                         + invs_to_flow + ": "
                         + memory + ": "
@@ -5411,13 +5184,10 @@ public class PptTopLevel
           PptSlice slice = (PptSlice) j.next();
           for (int k = 0; k < slice.invs.size(); k++) {
             Invariant inv = (Invariant) slice.invs.get (k);
-            String suppress = "";
-            if (inv.getSuppressor() != null)
-              suppress = "(suppressed) ";
             String falsify = "";
             if (inv.is_false())
               falsify = "(falsified) ";
-            log.fine (" : " + suppress + falsify + inv.format());
+            log.fine (" : " + falsify + inv.format());
           }
         }
       }
@@ -5471,7 +5241,6 @@ public class PptTopLevel
       int instantiated_inv_cnt = 0;
       int slice_cnt = 0;
       int instantiated_slice_cnt = 0;
-      int suppress_cnt = 0;
       long memory= 0;
       if (slist != null) {
         sample_cnt = slist.size();
@@ -5487,7 +5256,6 @@ public class PptTopLevel
           slice_cnt += stats.slice_cnt;
           instantiated_inv_cnt += stats.instantiated_inv_cnt;
           instantiated_slice_cnt += stats.instantiated_slice_cnt;
-          suppress_cnt += stats.suppress_cnt;
           memory += stats.memory;
         }
         avg_equality_cnt = avg_equality_cnt / sample_cnt;
@@ -5503,7 +5271,6 @@ public class PptTopLevel
                   + dfmt.format ((double) avg_inv_cnt / sample_cnt) + " : "
                   + dfmt.format ((double) instantiated_slice_cnt/sample_cnt) +"/"
                   + dfmt.format ((double) instantiated_inv_cnt/sample_cnt) + ": "
-                  + dfmt.format ((double) suppress_cnt/sample_cnt) + ": "
                   + dfmt.format ((double) memory / sample_cnt) + ": "
                   + dfmt.format ((double) time / sample_cnt));
       if (show_details) {
@@ -5522,7 +5289,6 @@ public class PptTopLevel
                         + stats.inv_cnt + " : "
                         + stats.instantiated_slice_cnt + "/"
                         + stats.instantiated_inv_cnt + " : "
-                        + stats.suppress_cnt + " : "
                         + stats.memory + ": "
                         + stats.time);
         }
