@@ -1622,7 +1622,11 @@ Print usage message.
 @item -d
 Display the tree of differing invariants (default).  Invariants that are
 the same in file1 and file2 are not printed.  At least one of the
-invariants must be justified.
+invariants must be justified.  Does not print "uninteresting" invariants
+(currently some OneOf and Bound invariants).
+
+@item -u
+Include "uninteresting" invariants in the tree of differing invariants.
 
 @item -a
 Display the tree of all invariants.  Includes invariants that are the
