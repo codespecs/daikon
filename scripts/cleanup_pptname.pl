@@ -10,17 +10,13 @@ my $pptfilename = $ARGV[0];
 $pptfilename =~ s/:::/./;
 $pptfilename =~ s/Ljava.lang././;
 foreach my $token (@unwanted) {
-    while ( $pptfilename =~ /$token/) {
-	$pptfilename =~ s/$token//;
-    }
+    $pptfilename =~ s/$token//g;
 }
 $pptfilename =~ s/</./;
 $pptfilename =~ s/>/./;
 $pptfilename =~ s/\(\s*(\S+)\s*\)/_$1_/;
 
 #replace two or more dots in a row with just one dot
-while ($pptfilename =~ /\.\.+/) {
-    $pptfilename =~ s/\.\.+/\./;
-}
+$pptfilename =~ s/\.\.+/\./g;
 
 print $pptfilename;
