@@ -34,6 +34,11 @@ public abstract class Invariant
   public static final Category debugPrint = Category.getInstance ("daikon.inv.Invariant.print");
 
   /**
+   * Debug tracer for printing equality invariants
+   **/
+  public static final Category debugPrintEquality = Category.getInstance ("daikon.inv.Invariant.print");
+
+  /**
    * Debug tracer for isWorthPrinting() checks.
    **/
   public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.inv.Invariant.isWorthPrinting");
