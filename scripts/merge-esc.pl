@@ -263,6 +263,7 @@ END {
 		    $inv =~ s/\[[^][]+\.\.[^][]+\]/[*]/g;
 		    my @mods = split(/ /, $inv);
 		    @mods = grep(!/\.class$/, @mods);
+		    @mods = grep(!/\~/, @mods);
 		    @mods = grep(!/\[[^*]+\]/, @mods);
 		    for my $field (@final_fields) {
 		      @mods = grep(!/^this.$field$/, @mods);
