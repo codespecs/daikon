@@ -57,11 +57,16 @@ public final class Daikon {
   public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
   // public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
 
-  // When true, perform output using Invariant.format_esc(), which formats
-  // invariants slightly diferently
-  public static boolean esc_output = false;
-  // public static boolean esc_output = true;
-
+  // Set what output style to use.  NORMAL is the default; ESC style
+  // is based on JML; SIMPLIFY style uses first order logical
+  // expressions with lots of parens
+  public static final int OUTPUT_STYLE_NORMAL = 0;
+  public static final int OUTPUT_STYLE_ESC = 1;
+  public static final int OUTPUT_STYLE_SIMPLIFY = 2;
+  public static int output_style = OUTPUT_STYLE_NORMAL;
+  // public static int output_style = OUTPUT_STYLE_ESC;
+  // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
+  
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
   // public static boolean output_num_samples = true;
@@ -89,6 +94,7 @@ public final class Daikon {
     + "    --prob_limit pct  Sets the probability limit for justifying invariants." + lineSep
     + "                        The default is 1%.  Smaller values yield stronger filtering." + lineSep
     + "    --esc_output      Write output in ESC-like format." + lineSep
+    + "    --simplify_output Write output in ESC-like format." + lineSep
     + "    --output_num_samples      Output numbers of values and samples for" + lineSep
     + "				       invariants and program points; for debugging." + lineSep
     ;
@@ -111,12 +117,14 @@ public final class Daikon {
     final String suppress_post_SWITCH = "suppress_post";
     final String prob_limit_SWITCH = "prob_limit";
     final String esc_output_SWITCH = "esc_output";
+    final String simplify_output_SWITCH = "simplify_output";
     final String output_num_samples_SWITCH = "output_num_samples";
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
@@ -133,7 +141,9 @@ public final class Daikon {
 	} else if (prob_limit_SWITCH.equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else if (esc_output_SWITCH.equals(option_name)) {
-	  esc_output = true;
+	  output_style = OUTPUT_STYLE_ESC;
+	} else if (simplify_output_SWITCH.equals(option_name)) {
+	  output_style = OUTPUT_STYLE_SIMPLIFY;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
 	  output_num_samples = true;
 	} else {
