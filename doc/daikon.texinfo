@@ -239,6 +239,10 @@ Front ends
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 
+Java front end Chicory
+
+* Chicory options::             
+
 Source-based Java front end dfej
 
 * dfej options::                
@@ -3283,87 +3287,69 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 @cindex Java front end
 @cindex Chicory (Daikon front end for Java)
 
-[[TODO:  write this section of the manual]]
+The Daikon front end for Java, named Chicory, executes Java programs,
+creates data trace (@file{.dtrace}) files, and optionally runs Daikon on
+them.  Chicory is named after the chicory plant, whose root is sometimes
+used as a coffee substitute or flavor enhancer.
 
-Chicory is named after the chicory plant,
-whose root is sometimes used as a coffee substitute or flavor enhancer.
+To use Chicory, run your program as you normally would, but replace 
+replace the @command{java} command with @command{java daikon.Chicory}.  For
+instance, if you usually run
+@example
+java mypackage.MyClass arg1 arg2 arg3
+@end example
+@noindent
+then instead you would run
+@example
+java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
+@end example
+@noindent
+To create file @file{MyClass.dtrace} in the current directory.
+Furthermore, a single command can both create a trace file and run Daikon:
+@example
+java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
+@end example
+@noindent
+See below for more options.
 
+That's all there is to it!  Chicory does not require you to perform
+separate instrumentation or compilation steps, as @command{dfej} does.
+However, you must have compiled your program with debugging information
+enabled (the @option{-g} command-line switch to @command{javac}).
+Chicory produces no output for any components of the program under test
+that were not compiled with debugging information.
 
-
-
-
-@node    Source-based Java front end dfej, C front end Kvasir, Java front end Chicory, Front ends
-@section Source-based Java front end dfej
-
-@cindex front end for Java, source-based
-@cindex Java front end, source-based
-@cindex dfej (Daikon front end for Java)
-
-This section contains details about dfej, the source-based Daikon front
-end for Java.
-
-For brief information about running dfej, see @ref{Instrumenting Java programs}.
-For information about installing dfej, see @ref{Installing dfej}.
-The @command{dfej} usage message also contains some usage information;
-run @command{dfej --help} to see it.
-
-@command{dfej} works on Java code that corresponds to versions 1.0--1.4
-of the Java language between, from 1.0 to 1.4.  @command{dfej} does not
-work on Java 5.0.
-
-The Chicory front end for Java (@pxref{Java front end Chicory}) works on
-all versions of the Java language, including Java 5.0.
-Another advantage of Chicory is that Chicory is much easier to use.
-dfej's advantage over Chicory is in terms of performance:  code
-instrumented by dfej tends to run faster than code instrumented by
-Chicory.  Since Chicory is about as fast as Daikon itself (and Chicory's
-speed will increase in future releases), Chicory is not the bottleneck.
-Thus, we recommend the use of Chicory over dfej in most circumstances.
-For more details on Chicory, see @ref{Java front end Chicory}.
-
-@command{dfej} has two effects:
-@itemize @bullet
-@item
-dfej writes instrumented versions of the files, by default in directory
-@file{daikon-instrumented/}
-@item
-dfej creates declaration files named
-@file{@var{filename1}.decls}, etc., by default in directory
-@file{daikon-output/}
-@end itemize
-
+Chicory supports all versions of Java, including Java 5.0.  Chicory's
+functionality is very similar to that of the @command{dfej} tool, and
+Chicory supports most of the same command-line options.  However,
+Chicory has two substantial advantages over dfej:  Chicory is much
+easier to use, and dfej only supports Java 1.4 and earlier.
 
 @menu
-* dfej options::                
-* Scope of instrumentation::    
-* Refined runtime types::       
+* Chicory options::             
 @end menu
 
-@node    dfej options, Scope of instrumentation, Source-based Java front end dfej, Source-based Java front end dfej
-@subsection dfej options
+@node    Chicory options,  , Java front end Chicory, Java front end Chicory
+@subsection Chicory options
 
-The simplest way to invoke dfej is simply to supply it with a list of
-Java files:
+Chicory is invoked as follows:
 @example
-      dfej @var{filename1}.java @var{filename2}.java @var{...}
+java daikon.Chicory @var{classname} @var{args}");
 @end example
+where
+@example
+java @var{classname} @var{args}
+@end example
+is a valid invocation of Java.
 
-dfej also accepts the following options, which should be provided before
-the first Java file name.
-@c
-@c The options can be divided into the following
-@c categories:
-@c @table @b
-@c @item where (in what directory) to produce output
-@c 
-@c @end table
-@c
-@c Details of the options are as follows.  
-When conflicting options are specified, the last one
-takes precedence.
+This section lists the optional command-line arguments to Chicory, which
+appear before the @var{classname} on the Chicory command line.
 
 
 @table @option
+@item --help
+Print a help message.
+
 @item --debug
 Produce debugging information.
 
@@ -3407,42 +3393,11 @@ is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.
 
-@c @item +daikon_loops
-@c Produce data trace output for loop invariants.
-@c @emph{This option has no effect:  loop invariants are not currently supported.}
-@c 
-@c @item -daikon_loops
-@c Do not produce data trace output for loop invariants (default).
-
-@item --instrument
-Produce tracing output (default).
-
-@item --no-instrument
-Do not produce tracing output.
-
 @item --linked-lists
-Render linked-lists as vectors (default).
+Render linked lists as vectors (default).
 
 @item --no-linked-lists
-Do not render linked-lists as vectors.
-
-@item +daikon_context
-Produce context sensitive output.
-
-@item -daikon_context
-Do not produce context sensitive output (default).
-
-@item --exceptions
-Produce data trace output for exceptions.
-
-@item --no-exceptions
-Do not produce data trace output for exceptions (default).
-
-@item +daikon_classhier
-Produce class hierarchy data.
-
-@item -daikon_classhier
-Do not produce class hierarchy data (default).
+Do not render linked lists as vectors.
 
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only produce trace output for matching classes/procedures.  Cannot be used
@@ -3525,6 +3480,126 @@ instead of overwritten.  Compressed data trace files may not be appended
 to.  In some cases you may find a single large data trace file more
 convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
+
+@item --output-dir=@var{directory}
+Write the trace output (@file{.dtrace}) to this directory.  The default
+is the current directory.
+(Not supported by @command{dfej}, only Chicory.)
+
+@item --daikon
+@itemx --daikon=@var{args}
+After creating a data dtrace (@file{.dtrace}) file, run Daikon on it,
+passing the specified arguments, if any, to Daikon.
+(Not supported by @command{dfej}, only Chicory.)
+
+@end table
+
+
+
+
+@node    Source-based Java front end dfej, C front end Kvasir, Java front end Chicory, Front ends
+@section Source-based Java front end dfej
+
+@cindex front end for Java, source-based
+@cindex Java front end, source-based
+@cindex dfej (Daikon front end for Java)
+
+This section contains details about dfej, the source-based Daikon front
+end for Java.
+
+@command{dfej} has two effects:
+@itemize @bullet
+@item
+dfej writes instrumented versions of the files, by default in directory
+@file{daikon-instrumented/}
+@item
+dfej creates declaration files named
+@file{@var{filename1}.decls}, etc., by default in directory
+@file{daikon-output/}
+@end itemize
+
+For brief information about running dfej, see @ref{Instrumenting Java programs}.
+For information about installing dfej, see @ref{Installing dfej}.
+The @command{dfej} usage message also contains some usage information;
+run @command{dfej --help} to see it.
+
+@command{dfej} works on Java code that corresponds to versions 1.0--1.4
+of the Java language.  @command{dfej} does not work on Java 5.0.
+
+The Chicory front end for Java (@pxref{Java front end Chicory}) works on
+all versions of the Java language, including Java 5.0.
+Another advantage of Chicory is that Chicory is much easier to use.
+dfej's advantage over Chicory is in terms of performance:  code
+instrumented by dfej tends to run slightly faster than code instrumented by
+Chicory.  Since Chicory is about as fast as Daikon itself (and Chicory's
+speed will increase in future releases), Chicory is not the bottleneck.
+Thus, we recommend the use of Chicory over dfej in most circumstances.
+For more details on Chicory, see @ref{Java front end Chicory}.
+
+
+@menu
+* dfej options::                
+* Scope of instrumentation::    
+* Refined runtime types::       
+@end menu
+
+@node    dfej options, Scope of instrumentation, Source-based Java front end dfej, Source-based Java front end dfej
+@subsection dfej options
+
+The simplest way to invoke dfej is simply to supply it with a list of
+Java files:
+@example
+      dfej @var{filename1}.java @var{filename2}.java @var{...}
+@end example
+
+dfej options should be provided before the first Java file name.  dfej
+accepts all Chicory arguments (@pxref{Chicory options}), and also the
+following additional options.
+@c
+@c The options can be divided into the following
+@c categories:
+@c @table @b
+@c @item where (in what directory) to produce output
+@c 
+@c @end table
+@c
+@c Details of the options are as follows.  
+When conflicting options are specified, the last one
+takes precedence.
+
+
+@table @option
+@c @item +daikon_loops
+@c Produce data trace output for loop invariants.
+@c @emph{This option has no effect:  loop invariants are not currently supported.}
+@c 
+@c @item -daikon_loops
+@c Do not produce data trace output for loop invariants (default).
+
+@item --instrument
+Produce tracing output (default).
+
+@item --no-instrument
+Do not produce tracing output.
+
+@item +daikon_context
+Produce context sensitive output.
+
+@item -daikon_context
+Do not produce context sensitive output (default).
+
+@item --exceptions
+Produce data trace output for exceptions.
+
+@item --no-exceptions
+Do not produce data trace output for exceptions (default).
+
+@item +daikon_classhier
+Produce class hierarchy data.
+
+@item -daikon_classhier
+Do not produce class hierarchy data (default).
+
 
 @item --decls-dir=@var{decldir}
 Specifies the directory in which to create
@@ -3663,15 +3738,14 @@ variable DTRACELIMITTERMINATE is set to "true", then the instrumented
 program halts (with exit code 1) when the specified number of records is
 output.
 
-Note that recent version of the JDK do not allow Java programs to
+Note that recent versions of the JDK do not allow Java programs to
 inspect environment variables.  So if you're generating a
 @file{.dtrace} from a Java class, you may need to pass the environment
 variable directly as an argument to Java.  For example:
 
-@example
+@smallexample
 java -classpath daikon-instrumented:$CLASSPATH -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
-@end example
-@noindent
+@end smallexample
 
 
 @node    Scope of instrumentation, Refined runtime types, dfej options, Source-based Java front end dfej
@@ -3804,14 +3878,11 @@ comment immediately before the declared type (but after any modifiers like
 @cindex front end for C
 @cindex C front end
 
-
-Daikon's older C front end, known as dfec (@pxref{Source-based C front
-end dfec}), works by rewriting the
-source code for your C program.  To avoid some of the limitations of
-this approach, Daikon's new front end for C, named Kvasir, instead
-works by examining the operation of an unmodified binary at
-runtime.  Kvasir is named after the Norse god of knowledge and beet
-juice.
+Daikon's front end for C, named Kvasir, instead works by examining the
+operation of an unmodified binary at runtime.  (By contrast, Daikon's
+older C front end, known as dfec (@pxref{Source-based C front end
+dfec}), works by rewriting the source code for your C program.)  Kvasir
+is named after the Norse god of knowledge and beet juice.
 
 Kvasir is based on the Valgrind dynamic program supervision framework
 (which is best known for its memory error detection tool).  Using
@@ -3869,6 +3940,7 @@ just say
 @example
 kvasir-dtrace ./program -option input.file
 @end example
+@noindent
 As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
 directory containing @file{program.decls} and @file{program.dtrace}
@@ -4026,12 +4098,7 @@ directory as the target program.
 @node Kvasir limitations,  , Kvasir options, C front end Kvasir
 @subsection Kvasir limitations
 
-@c Be sure to remove this once it becomes out of date
-@c (This version number should be automatically updated, though.)
-As of Daikon version 3.1.7, Kvasir is still in an active stage of
-development.  While it works well on many programs, it does not yet
-support all of the options that the older dfec did, nor all of its
-features.  This subsection lists some of the known limitations of the
+This subsection lists some of the known limitations of the
 current Kvasir release; if you encounter any problems other than listed
 here, please report them as bugs (@pxref{Reporting bugs}).  The
 limitations are listed roughly in decreasing order of severity.
@@ -4039,14 +4106,13 @@ limitations are listed roughly in decreasing order of severity.
 @itemize @bullet
 
 @item
-Kvasir-traced programs take longer (often a good fraction of a second)
+Kvasir-traced programs a while (often a good fraction of a second)
 to start.  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.
 
 @item
 Kvasir does not support C++ (dfec had small but unreliable C++ support).
-The next feature that we plan to implement for Kvasir is
-support for C++, but we want to first gauge the demand for this feature.
+We want to first gauge the demand for this feature.
 Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
 feel that this addition will benefit your experience with Daikon.
 
@@ -4064,9 +4130,10 @@ multidimensional arrays into multiple single-dimensional arrays.
 
 @item
 Not all of the options of the source-based dfec are supported.
-Pointer type disambiguation is not
-supported.  Variable comparability information (as supplied by the
-Lackwit tool) is not supported.  The depth to which nested structures
+Variable comparability information is not supported.
+(dfec used the Lackwit tool, but it did not scale and often produced
+incorrect output.)
+The depth to which nested structures
 are explored is fixed.  Of the environment variables obeyed by dfec,
 only @code{DTRACEAPPEND} is recognized.
 
