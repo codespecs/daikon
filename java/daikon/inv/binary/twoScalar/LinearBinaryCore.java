@@ -14,6 +14,12 @@ public final class LinearBinaryCore
 
   // y == ax + b; first argument is x, second is y
   public double a, b;
+  // The above form rules out vertical lines.  We could also state
+  // this invariant like "ax + by = 1".  This would make swapping
+  // easier and allow for vertical lines; however, it would rule out
+  // 45-degree ("x == y") lines.  For now, I guess we leave it as-is,
+  // but presumably we can arrange to not use this invariant on equal
+  // variables, whereas we might use it on constant variables.
 
   public Invariant wrapper;
 
@@ -46,6 +52,7 @@ public final class LinearBinaryCore
   public void swap() {
     // was a swap
     if (a == 0) {
+      // can't swap horizontal line into vertical
       Assert.assert(b == 0);
     } else {
       a = 1 / a;   // a' =  1/a
