@@ -79,6 +79,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     Assert.assert(legalRepType(rep_type),
                   "Unsupported representation type " + rep_type.format() + " for variable " + name);
 
+    // Ensure that the type and rep type are somewhat consistent
+    Assert.assert(type.dimensions() >= rep_type.dimensions(),
+		  "Types dimensions incompatibility: " + type + " vs. " + rep_type);
+
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.

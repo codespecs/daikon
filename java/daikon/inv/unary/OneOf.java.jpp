@@ -114,6 +114,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     is_boolean = (var().type == ProglangType.BOOLEAN);
     is_hashcode = var().type.isObject() || var().type.isArray();
 #elif defined(ELT)
+    Assert.assert(var().type.dimensions() > 0, "ProglangType dimensions must be nonzero for EltOneOf");
     is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 #endif

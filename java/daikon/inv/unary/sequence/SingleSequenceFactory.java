@@ -14,7 +14,7 @@ public final class SingleSequenceFactory {
 
     VarInfo var = ppt.var_infos[0];
     Assert.assert(var.rep_type == ProglangType.INT_ARRAY);
-
+    Assert.assert(var.type.dimensions() > 0);
 
     Vector result = new Vector();
     if (pass == 1) {
