@@ -123,7 +123,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
 	if (elts[i].equals("null")) {
 	  result += "\\typeof(null)";
 	} else {
-	  if (varname.startsWith("[")) {
+	  if (elts[i].startsWith("[")) {
 	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
 	  } else {
 	    result += "\\type(" + elts[i] + ")";
