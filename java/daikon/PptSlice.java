@@ -35,12 +35,6 @@ public abstract class PptSlice
 
   public static final String lineSep = Global.lineSep;
 
-  /**
-   * Whether this particular program point is debugged.
-   * Set via editing Globals.debuggedPptSliceSpecific
-   **/
-  public boolean debugged;
-
   /** Debug tracer **/
   public static final Logger debug = Logger.getLogger("daikon.PptSlice");
 
@@ -58,7 +52,7 @@ public abstract class PptSlice
 
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
-  public int arity;
+  public abstract int arity();
 
   /**
    * The invariants contained in this slice.
@@ -99,11 +93,6 @@ public abstract class PptSlice
   public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
   public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
 
-  // This holds keys (interned) and elements of different types, depending on
-  // the concrete child of PptSlice.
-  // ValueTracker values_cache; // [INCR]
-  // Vector  values_order; // [INCR]
-
   /* [INCR]
   // These are used only when the values_cache has been set to null.
   int num_samples_post_cache = -2222;
@@ -127,13 +116,10 @@ public abstract class PptSlice
     for (int i=0; i<var_infos.length-1; i++) {
       Assert.assertTrue(var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index);
     }
-    arity = var_infos.length;
+    Assert.assertTrue(this instanceof PptSliceEquality || arity() == var_infos.length);
     invs = new Invariants();
     invs_to_flow = new Invariants();
     invs_changed = new Invariants();
-
-    // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
-    debugged = (Global.isDebuggedPptSlice(this));
 
     if (debugGeneral.isLoggable(Level.FINE)) {
       debugGeneral.fine (ArraysMDE.toString(var_infos));
@@ -218,7 +204,7 @@ public abstract class PptSlice
     for (int i = 0; i < all_except_here; i++) {
       int[] flow = higher.ints[i];
       boolean all = true;       // below, all controls whether to return
-      for (int j = 0; all && (j < arity); j++) {
+      for (int j = 0; all && (j < arity()); j++) {
         int varinfo_index = var_infos[j].varinfo_index;
         int var_flow_to = flow[varinfo_index];
         boolean flows = (var_flow_to != -1);
@@ -297,8 +283,8 @@ public abstract class PptSlice
   protected void addToOnePO(PptTopLevel adj,
                             VarInfo[] slice_vis)
   {
-    Assert.assertTrue(slice_vis.length == arity);
-    for (int i = 0; i < arity; i++) {
+    Assert.assertTrue(slice_vis.length == arity());
+    for (int i = 0; i < arity(); i++) {
       Assert.assertTrue (slice_vis[i].type == this.var_infos[i].type);
     }
 
@@ -533,9 +519,9 @@ public abstract class PptSlice
         // slice.repCheck();  // Can do, but commented out for performance
 
         // Compute the permutation
-        int[] permutation = new int[slice.arity];
+        int[] permutation = new int[slice.arity()];
         // Do the permutation to map variables from this to lower slice
-        for (int i=0; i < arity; i++) {
+        for (int i=0; i < arity(); i++) {
           // slice.var_infos is small, so this call is relatively inexpensive
           permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
         }
@@ -646,24 +632,6 @@ public abstract class PptSlice
     throw new Error("Don't remove view from a slice.");
   }
 
-  /* [INCR]
-  public void clear_cache() {
-    // Don't do check_modbits()!  We might have only partially filled up
-    // the cache.  Do this at call sites where appropriate.
-    // Assert.assertTrue(check_modbits());
-
-    if (values_cache != null) {
-      if (invs.size != 0) {
-        num_samples_post_cache = num_samples();
-        num_mod_samples_post_cache = num_mod_samples();
-        num_values_post_cache = num_values();
-      }
-      values_cache = null;
-      values_order = null;
-    }
-  }
-  */
-
   /**
    * Set the number of samples of this ppt to be at least count.
    **/
@@ -673,7 +641,7 @@ public abstract class PptSlice
 
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
-  public abstract int num_mod_samples();
+  // public abstract int num_mod_samples();
   public abstract int num_values();
 
   boolean check_modbits () {
@@ -725,8 +693,8 @@ public abstract class PptSlice
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
-      if (slice1.arity != slice2.arity) {
-        return slice2.arity - slice1.arity;
+      if (slice1.arity() != slice2.arity()) {
+        return slice2.arity() - slice1.arity();
       }
       return slice1.varNames(slice1.var_infos)
         .compareTo(slice2.varNames(slice2.var_infos));
@@ -748,8 +716,8 @@ public abstract class PptSlice
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
-      if (slice1.arity != slice2.arity) {
-        return slice2.arity - slice1.arity;
+      if (slice1.arity() != slice2.arity()) {
+        return slice2.arity() - slice1.arity();
       }
       return slice1.name().compareTo(slice2.name());
     }
@@ -959,12 +927,7 @@ public abstract class PptSlice
   }
 
 
-  public void clone_values_cache_from (PptSlice slice, int[] permute) {
-    throw new Error("Shouldn't get called");
-  }
-
   public void log (String msg) {
-
     Debug.log (getClass(), this, msg);
   }
 
@@ -998,11 +961,11 @@ public abstract class PptSlice
     // As long as the variables are in the same order at the Global ppt,
     // there should be no permutation necessary between the global
     // and local slice (and thus global_vis should already be sorted)
-    for (int i = 0; i < arity - 1; i++) {
+    for (int i = 0; i < arity() - 1; i++) {
       if (global_vis[i].varinfo_index > global_vis[i+1].varinfo_index) {
         System.out.println ("localvars = " + VarInfo.toString(local_vis));
         System.out.println ("Globalvars = " + VarInfo.toString(global_vis));
-        for (int j = 0; j < arity; j++)
+        for (int j = 0; j < arity(); j++)
           System.out.print (local_vis[j].varinfo_index + "/"
                             + global_vis[j].varinfo_index + " ");
         System.out.println ();

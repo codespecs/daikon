@@ -29,6 +29,10 @@ public class PptSlice0
      super(parent, new VarInfo[0]);
   }
 
+  public final int arity() {
+    return 0;
+  }
+
   // Make a fake slice whose variables are the same as the ones in
   // sliceTemplate, but marked as prestate (i.e., orig(x) rather than x).
   public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {

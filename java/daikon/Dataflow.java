@@ -968,8 +968,8 @@ public class Dataflow
       int[] flow_ints = ppt.invflow_transforms[i];
 
       // Add to slice's partial order
-      VarInfo[] vis_adj = new VarInfo[slice.arity];
-      for (int j = 0; j < slice.arity; j++) {
+      VarInfo[] vis_adj = new VarInfo[slice.arity()];
+      for (int j = 0; j < slice.arity(); j++) {
         int slice_index = slice.var_infos[j].varinfo_index;
         int adj_index = flow_ints[slice_index];
         if (adj_index == -1) {
@@ -985,8 +985,8 @@ public class Dataflow
     // Handle the PptConditionals // XXX untested code
     for (Iterator i = slice.parent.views_cond.iterator(); i.hasNext(); ) {
       PptConditional adj_ppt = (PptConditional) i.next();
-      VarInfo[] vis_adj = new VarInfo[slice.arity];
-      for (int j = 0; j < slice.arity; j++) {
+      VarInfo[] vis_adj = new VarInfo[slice.arity()];
+      for (int j = 0; j < slice.arity(); j++) {
         int slice_index = slice.var_infos[j].varinfo_index;
         int adj_index = slice_index;
         vis_adj[j] = adj_ppt.var_infos[adj_index];

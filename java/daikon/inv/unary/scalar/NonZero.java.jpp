@@ -107,7 +107,7 @@ public class NONZERO
     if (!dkconfig_enabled)
       return null;
 
-    if (debug.isLoggable(Level.FINE) || ppt.debugged) {
+    if (debug.isLoggable(Level.FINE)) {
       debug.fine (NONZEROSTRING + ".instantiate(" + ppt.name() + ")");
     }
 
@@ -166,7 +166,7 @@ public class NONZERO
 
   public InvariantStatus add_modified(PRIMITIVE v, int count) {
     if (v == 0) {
-      if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
+      if (logOn() || debug.isLoggable(Level.FINE)) {
         log (debug, "destroy (value = " + v + ")");
       }
       return InvariantStatus.FALSIFIED;

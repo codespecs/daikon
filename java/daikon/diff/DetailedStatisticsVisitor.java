@@ -171,7 +171,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     }
 
 
-    int arity = inv.ppt.arity;
+    int arity = inv.ppt.arity();
     switch (arity) {
     case 0:
       type = interesting ? TYPE_NULLARY_INTERESTING :

@@ -1911,7 +1911,7 @@ public class PptTopLevel
 
     for (Iterator j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = (PptSlice) j.next();
-      for (int i = 0; i < slice.arity; i++) {
+      for (int i = 0; i < slice.arity(); i++) {
         if ((constants != null) && constants.is_constant (slice.var_infos[i])){
           const_cnt++;
           break;
@@ -1928,7 +1928,7 @@ public class PptTopLevel
 
     for (Iterator j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = (PptSlice) j.next();
-      for (int i = 0; i < slice.arity; i++) {
+      for (int i = 0; i < slice.arity(); i++) {
         if ((constants != null) && constants.is_constant (slice.var_infos[i])){
           const_cnt += slice.invs.size();
           break;
@@ -2217,7 +2217,7 @@ public class PptTopLevel
 
     //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
     //        PptSlice slice = (PptSlice) itor.next();
-    //        if ((slice.arity == 1) && slice.usesVar(vi))
+    //        if ((slice.arity() == 1) && slice.usesVar(vi))
     //          return (PptSlice1) slice;
     //      }
     //      return null;
@@ -2234,7 +2234,7 @@ public class PptTopLevel
 
     //      for (Iterator itor = views_iterator(); itor.hasNext(); ) {
     //        PptSlice slice = (PptSlice) itor.next();
-    //        if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
+    //        if ((slice.arity() == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
     //          return (PptSlice2) slice;
     //      }
     //      return null;
@@ -2256,7 +2256,7 @@ public class PptTopLevel
     return (PptSlice1)findSlice(new VarInfo [] {v});
     //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
     //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity == 1) && (v == view.var_infos[0]))
+    //        if ((view.arity() == 1) && (v == view.var_infos[0]))
     //          return (PptSlice1) view;
     //      }
     //      return null;
@@ -2277,7 +2277,7 @@ public class PptTopLevel
     return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
     //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
     //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity == 2)
+    //        if ((view.arity() == 2)
     //            && (v1 == view.var_infos[0])
     //            && (v2 == view.var_infos[1]))
     //          return (PptSlice2) view;
@@ -2314,7 +2314,7 @@ public class PptTopLevel
     return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
     //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
     //        PptSlice view = (PptSlice) itor.next();
-    //        if ((view.arity == 3)
+    //        if ((view.arity() == 3)
     //            && (v1 == view.var_infos[0])
     //            && (v2 == view.var_infos[1])
     //            && (v3 == view.var_infos[2]))
@@ -2896,7 +2896,7 @@ public class PptTopLevel
     for (int i=0; i<unary_views.size(); i++) {
       PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
       // System.out.println("set_dynamic_constant_slots " + unary_view.name + " " + views.contains(unary_view));
-      Assert.assertTrue(unary_view.arity == 1);
+      Assert.assertTrue(unary_view.arity() == 1);
       // If this view has been installed in the views slot (ie, it has not
       // been eliminated already).
       if (views.contains(unary_view)) {
@@ -2936,7 +2936,7 @@ public class PptTopLevel
   void set_equal_to_slots(Vector binary_views, int vi_index_min, int vi_index_limit) {
     for (int i=0; i<binary_views.size(); i++) {
       PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
-      Assert.assertTrue(binary_view.arity == 2);
+      Assert.assertTrue(binary_view.arity() == 2);
 
       if (binary_view.debugged) {
         System.out.println("Binary view " + binary_view.name() + " has "
@@ -4020,18 +4020,18 @@ public class PptTopLevel
     for (Iterator iSlices = slices.iterator();
          iSlices.hasNext(); ) {
       PptSlice slice = (PptSlice) iSlices.next();
-      VarInfo[] newVis = new VarInfo[slice.arity];
-      if (slice.arity == 2 &&
+      VarInfo[] newVis = new VarInfo[slice.arity()];
+      if (slice.arity() == 2 &&
           slice.var_infos[0].equalitySet == slice.var_infos[1].equalitySet) {
         // Actually a postPorcessed equality
         continue;
       }
       boolean needPivoting = false;
-      for (int i = 0; i < slice.arity; i++) {
+      for (int i = 0; i < slice.arity(); i++) {
         needPivoting = needPivoting || slice.var_infos[i].canonicalRep() != slice.var_infos[i];
       }
       if (!needPivoting) continue;
-      for (int i = 0; i < slice.arity; i++) {
+      for (int i = 0; i < slice.arity(); i++) {
         newVis[i] = slice.var_infos[i].canonicalRep();
       }
       PptSlice newSlice = slice.cloneAndPivot(newVis);
@@ -5248,7 +5248,7 @@ public class PptTopLevel
       slice_loop:
       for (Iterator jj = ppt.views_iterator(); jj.hasNext(); ) {
         PptSlice slice = (PptSlice) jj.next();
-        if (slice.arity != 3)
+        if (slice.arity() != 3)
           continue;
         for (int kk = 0; kk < slice.var_infos.length; kk++) {
           if (!slice.var_infos[kk].is_global()) {
@@ -5306,7 +5306,7 @@ public class PptTopLevel
       // Loop through each ternary slice
       for (Iterator jj = ppt.views_iterator(); jj.hasNext(); ) {
         PptSlice slice = (PptSlice) jj.next();
-        if (slice.arity != 3)
+        if (slice.arity() != 3)
           continue;
 
         inv_list_cnt++;
@@ -5618,7 +5618,7 @@ public class PptTopLevel
         for (Iterator j = ppt.views_iterator(); j.hasNext(); ) {
           PptSlice slice = (PptSlice) j.next();
           StringBuffer sb = new StringBuffer();
-          for (int k = 0; k < slice.arity; k++) {
+          for (int k = 0; k < slice.arity(); k++) {
             VarInfo v = slice.var_infos[k];
             sb.append (v.name.name() + "/" + v.equalitySet.getVars().size()
                       + "/" + v.file_rep_type + " ");

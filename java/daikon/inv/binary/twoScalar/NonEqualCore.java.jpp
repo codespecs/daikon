@@ -35,6 +35,9 @@ import utilMDE.*;
 import java.io.Serializable;
 import java.util.*;
 import java.lang.Math;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 
 public final class CLASSNAME
   implements Serializable, Cloneable
@@ -90,13 +93,13 @@ public final class CLASSNAME
   }
 
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    if (wrapper.ppt.debugged) {
-      System.out.println(CLASSSTRING + wrapper.ppt.varNames() + ".add_modified("
+    if (wrapper.ppt.debug.isLoggable(Level.FINE)) {
+      wrapper.ppt.debug.fine(CLASSSTRING + wrapper.ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
     if (EQUAL (v1, v2)) {
-      if (wrapper.ppt.debugged) {
-        System.out.println(CLASSSTRING + ".destroy()");
+      if (wrapper.ppt.debug.isLoggable(Level.FINE)) {
+        wrapper.ppt.debug.fine(CLASSSTRING + ".destroy()");
       }
       return InvariantStatus.FALSIFIED;
     }

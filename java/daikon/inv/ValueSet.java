@@ -72,6 +72,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
       super(max_values);
     }
     public void add(Object v1) {
+      Assert.assertTrue(v1 != null);
       add(UtilMDE.hash(((Long) v1).longValue()));
     }
   }

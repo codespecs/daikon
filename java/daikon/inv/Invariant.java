@@ -541,9 +541,9 @@ public abstract class Invariant
                             )
   {
     // Check some sanity conditions
-    Assert.assertTrue(new_ppt.arity == ppt.arity);
-    Assert.assertTrue(permutation.length == ppt.arity);
-    for (int i=0; i < ppt.arity; i++) {
+    Assert.assertTrue(new_ppt.arity() == ppt.arity());
+    Assert.assertTrue(permutation.length == ppt.arity());
+    for (int i=0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
       // We used to check that all 3 types were equal, but we can't do
@@ -599,9 +599,9 @@ public abstract class Invariant
   {
     // Check some sanity conditions
     Assert.assertTrue(falsified);
-    Assert.assertTrue(new_ppt.arity == ppt.arity);
-    Assert.assertTrue(permutation.length == ppt.arity);
-    for (int i=0; i < ppt.arity; i++) {
+    Assert.assertTrue(new_ppt.arity() == ppt.arity());
+    Assert.assertTrue(permutation.length == ppt.arity());
+    for (int i=0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
       // We used to check that all 3 types were equal, but we can't do

@@ -29,6 +29,10 @@ public class PptSliceEquality
      super(parent, parent.var_infos);
   }
 
+  public final int arity() {
+    throw new Error("Don't call arity on PptSliceEquality");
+  }
+
 
   void init_po() {
     throw new Error("Shouldn't get called");
@@ -466,7 +470,7 @@ public class PptSliceEquality
       if (parent.findSlice_unordered (soFar) == null) {
         // If slice is already there, no need to clone.
 
-        if (parent.is_slice_ok (soFar, slice.arity)) {
+        if (parent.is_slice_ok (soFar, slice.arity())) {
           PptSlice newSlice = slice.cloneAndPivot(soFar);
           // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
           if (Debug.logOn()) {

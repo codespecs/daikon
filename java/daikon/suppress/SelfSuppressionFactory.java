@@ -67,9 +67,9 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     PptSlice slice = inv.ppt;
 
     SuppressionTemplate supTemplate
-      = (slice.arity == 1 ? supTemplate1
-         : slice.arity == 2 ? supTemplate2
-         : slice.arity == 3 ? supTemplate3
+      = (slice.arity() == 1 ? supTemplate1
+         : slice.arity() == 2 ? supTemplate2
+         : slice.arity() == 3 ? supTemplate3
          : null);
     supTemplate.resetResults();
     supTemplate.set(0, inv.getClass(), slice.var_infos);

@@ -324,7 +324,7 @@ public class CLASSNAME
 
   // Look up a previously instantiated invariant.
   public static CLASSNAME find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity == 3);
+    Assert.assertTrue(ppt.arity() == 3);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof CLASSNAME)
@@ -339,7 +339,7 @@ public class CLASSNAME
     Vector result = new Vector();
     for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
-      if ((view.arity == 3) && view.usesVar(vi)) {
+      if ((view.arity() == 3) && view.usesVar(vi)) {
         CLASSNAME lt = CLASSNAME.find(view);
         if (lt != null) {
           result.add(lt);

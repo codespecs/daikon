@@ -180,7 +180,7 @@ public class Modulus
 
   // Look up a previously instantiated invariant.
   public static Modulus find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity() == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof Modulus)

@@ -10,6 +10,9 @@ import daikon.derive.unary.*;
 import utilMDE.*;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 
 /**
  * Represents lexical invariants between two strings.  Prints as
@@ -60,7 +63,7 @@ public final class StringComparison
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (debugStringComparison || ppt.debugged) {
+    if (debugStringComparison) {
       System.out.println("StringComparison.instantiate(" + ppt.name() + ")"
                          + ", seqvar1=" + seqvar1
                          + ", seqvar2=" + seqvar2);
@@ -85,7 +88,7 @@ public final class StringComparison
         VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
         VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-        if (debugStringComparison || ppt.debugged) {
+        if (debugStringComparison) {
           System.out.println("StringComparison.instantiate: "
                              + "min1=" + min1
                              + ", max1=" + max1
@@ -137,7 +140,7 @@ public final class StringComparison
   // Look up a previously instantiated StringComparison relationship.
   // Should this implementation be made more efficient?
   public static StringComparison find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity() == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof StringComparison)
@@ -184,7 +187,7 @@ public final class StringComparison
   }
 
   public InvariantStatus add_modified(String v1, String v2, int count) {
-    if (ppt.debugged) {
+    if (ppt.debug.isLoggable(Level.FINE)) {
       System.out.println("StringComparison" + ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
@@ -209,18 +212,18 @@ public final class StringComparison
 
   // // Temporary, for debugging
   // public void destroy() {
-  //   if (debugStringComparison || ppt.debugged) {
+  //   if (debugStringComparison) {
   //     System.out.println("StringComparison.destroy(" + ppt.name() + ")");
   //   }
   //   super.destroy();
   // }
 
   public void add(String v1, String v2, int mod_index, int count) {
-    if (ppt.debugged) {
-      System.out.println("StringComparison" + ppt.varNames() + ".add("
-                         + v1 + "," + v2
-                         + ", mod_index=" + mod_index + ")"
-                         + ", count=" + count + ")");
+    if (ppt.debug.isLoggable(Level.FINE)) {
+      ppt.debug.fine ("StringComparison" + ppt.varNames() + ".add("
+                      + v1 + "," + v2
+                      + ", mod_index=" + mod_index + ")"
+                      + ", count=" + count + ")");
     }
     super.add(v1, v2, mod_index, count);
   }

@@ -142,15 +142,6 @@ public final class Daikon {
    **/
   public static boolean dkconfig_df_bottom_up = true;
 
-  /**
-   * False if any top-down processing is in effect.
-   * If so, then an invariant/slice may not see every sample, and certain
-   * statistics maintained at the slice are not valid.
-   * TODO: When Jeff checks in his code with PptMap.global, then this
-   * variable's setting needs to be updated.
-   **/
-  public static boolean slices_see_all_samples = true;
-
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
@@ -354,14 +345,6 @@ public final class Daikon {
 
     // Only for assertion checks
     isInferencing = true;
-    slices_see_all_samples = (dkconfig_df_bottom_up
-                              // TODO: Jeff should uncomment
-                              // && all_ppts.getGlobal() != null
-                              );
-    // As of 10/22/2003, uncommenting this line leads to no user-visible
-    // differences.  (This is before Jeff uncommented the getGlobal above,
-    // but it bodes well.)
-    // slices_see_all_samples = false;
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);

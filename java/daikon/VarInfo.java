@@ -658,7 +658,7 @@ public final class VarInfo
       }
       Assert.assertTrue(inv.ppt.var_infos[0] == this);
       Assert.assertTrue(inv.isExact());
-      if ((inv.ppt.arity == 2) && (inv.ppt.var_infos[1] == other)) {
+      if ((inv.ppt.arity() == 2) && (inv.ppt.var_infos[1] == other)) {
         return true;
       }
     }
@@ -676,7 +676,7 @@ public final class VarInfo
       Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
       Assert.assertTrue(inv.ppt.var_infos[0] == this);
       Assert.assertTrue(inv.isExact());
-      if ((inv.ppt.arity == 3)
+      if ((inv.ppt.arity() == 3)
           && (inv.ppt.var_infos[1] == other1)
           && (inv.ppt.var_infos[2] == other2)) {
         return true;

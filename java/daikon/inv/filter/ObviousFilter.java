@@ -13,7 +13,7 @@ import daikon.PptSlice;
 public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    // if ((invariant.ppt.arity == 1) || IsEqualityComparison.it.accept(invariant)) {
+    // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();
     if (discard != null)
       invariant.log ("discard because " + discard.discardString());

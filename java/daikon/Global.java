@@ -196,50 +196,9 @@ public final class Global {
   // Can't change to log4j; uses special outputter
   public final static boolean debugPrintDtrace = false;
 
-  // (Earlier, this variable was used only if debugPptSliceSpecific is set.)
-  // Variables must appear in the correct order.
-  public final static String[][] debuggedPptSliceSpecific
-    = {
-      // { "arg", "orig(arg)" },
-      // { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" },
-      // { "list.class" },
-      // { "this.theArray[orig(this.front)+1..]", "this.theArray[this.front..]" },
-      // { "this.theArray[this.front..]", "this.theArray[orig(this.front)+1..]" },
-      // { "this.topOfStack", "this.theArray[]" },
-      // { "this.theArray[]", "this.topOfStack" },
-      // { "other.begins", "orig(other.begins)" },
-      // { "orig(other.begins)", "other.begins" },
-      // { "return" },
-      // { "return.class" },
-      // { "root1", "root2" },
-      // { "min(this.diskLocation[0..toPeg])", "min(this.diskLocation[])" },
-      // { "min(this.diskLocation[])", "min(this.diskLocation[0..toPeg])" },
-      // { "min(this.denom)" },
-      // { "this.denom" },
-      // { "size(this.begins[])", "size(this.ends[])" },
-      // { "this.theArray[]" },
-      // { "this.theArray[this.topOfStack+1..]" },
-    };
-
-  // used only if debugPrintDtrace is true.  User need not set this.
+  // used only if debugPrintDtrace is true.  Users need not set this.
   public static PrintWriter dtraceWriter = null;
 
-
-  // This may be expensive and so should only be called infrequently.
-  public final static boolean isDebuggedPptSlice(PptSlice slice) {
-    String[][] dpss = debuggedPptSliceSpecific;
-  outer:
-    for (int i=0; i<dpss.length; i++) {
-      if (dpss[i].length == slice.arity) {
-        for (int j=0; j<slice.arity; j++) {
-          if (!dpss[i][j].equals(slice.var_infos[j].name.name()))
-            continue outer;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
 
   //Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat ();

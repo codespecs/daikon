@@ -13,19 +13,16 @@ The correct way to build the system is to run 'make'.
   #define PPTSLICE1STRING "PptSlice1"
   #define NUM_TM 2
   #define ARITY 1
-  #define VALUETRACKER1 ValueTracker.ValueTracker1
 #elif defined(ARITY2)
   #define PPTSLICE1 PptSlice2
   #define PPTSLICE1STRING "PptSlice2"
   #define NUM_TM 4
   #define ARITY 2
-  #define VALUETRACKER1 ValueTracker.ValueTracker2
 #elif defined(ARITY3)
   #define PPTSLICE1 PptSlice3
   #define PPTSLICE1STRING "PptSlice3"
   #define NUM_TM 8
   #define ARITY 3
-  #define VALUETRACKER1 ValueTracker.ValueTracker3
 #else
   #error "One of ARITY1, ARITY2, or ARITY3 must be defined"
 #endif
@@ -86,14 +83,15 @@ public final class PPTSLICE1
   public VarInfo var_info;
 #endif
 
-  // These fields are valid only if Daikon.slices_see_all_samples is true.
-  /** Records the distinct values (tuples) seen at this slice.
-   * Null if instantiate_invariants has not yet been called. **/
-  private VALUETRACKER1 values_cache;
-  /** Number of modified samples observed. **/
-  private int mod_samples = 0;
-  /** Number of unmodified samples observed. **/
-  private int unmod_samples = 0;
+  // These are commented out (and all uses of them are commented out), but
+  // they are retained in case someday we wish to reinstate them for some
+  // debugging purpose.  Note, however, that they aren't accurate:  a slice
+  // does not necessarily see all samples (because the slice might be
+  // instantiated after some samples have already been processed).
+  // /** Number of modified samples observed. **/
+  // private int mod_samples = 0;
+  // /** Number of unmodified samples observed. **/
+  // private int unmod_samples = 0;
 
   /**
    * Create a new PPTSLICE1.  Warning: do not rearrange the contents
@@ -108,15 +106,7 @@ public final class PPTSLICE1
 #endif
     Dataflow.init_pptslice_po(this);
 
-    // 44 is used here because that's the most amount of values needed to be seen by some
-    // of the Invariants before they become justified
-    // values_cache = new ValueTracker(44);
-
-    /* [INCR]
-    // values_cache = new HashMap();
-    // values_order  = new Vector();
-    */ // [INCR]
-    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
+    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("Created " + PPTSLICE1STRING + " " + this.name());
     if (Debug.logOn())
       Debug.log (getClass(), this, "Created");
@@ -141,12 +131,16 @@ public final class PPTSLICE1
   }
 #endif
 
+  public final int arity() {
+    return ARITY;
+  }
+
   void instantiate_invariants() {
     // This test should be done by caller (PptTopLevel):
     // if (isControlled()) return;
 
     // Instantiate invariants
-    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
+    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiate_invariants for " + name() + ": originally " + invs.size() + " invariants in " + invs);
     if (Debug.logOn())
       log ("instantiate invariants");
@@ -243,10 +237,10 @@ public final class PPTSLICE1
       }
     }
 
-    if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
+    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
       debug.info("after instantiate_invariants " + PPTSLICE1STRING + " " + name() + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
-    if ((this.debugged  || debugSpecific.isLoggable(Level.FINE)) && (invs.size() > 0)) {
+    if ((debugSpecific.isLoggable(Level.FINE)) && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.get(i);
@@ -257,18 +251,18 @@ public final class PPTSLICE1
 
   }
 
-  /**
-   * Set the number of samples for this slice to be at least count.
-   **/
-  public void set_samples (int count) {
-    // Don't call num_samples(), because slices_see_all_samples is false.
-    int old_num_samples = mod_samples + unmod_samples;
-    if (old_num_samples >= count) return;
-    // Distribute the new samples equally among the buckets.
-    double ratio = ((double)count)/old_num_samples;
-    mod_samples *= ratio;
-    unmod_samples = count - mod_samples;
-  }
+  // /**
+  //  * Set the number of samples for this slice to be at least count.
+  //  **/
+  // public void set_samples (int count) {
+  //   // Don't call num_samples(), because slices_see_all_samples is false.
+  //   int old_num_samples = mod_samples + unmod_samples;
+  //   if (old_num_samples >= count) return;
+  //   // Distribute the new samples equally among the buckets.
+  //   double ratio = ((double)count)/old_num_samples;
+  //   mod_samples *= ratio;
+  //   unmod_samples = count - mod_samples;
+  // }
 
   // I could introduce another accessor that uses
   // UtilMDE.intersectionCardinalityAtLeast(), which might be more
@@ -277,30 +271,24 @@ public final class PPTSLICE1
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. **/
   public int num_samples() {
-    if (Daikon.slices_see_all_samples) {
-      return mod_samples + unmod_samples;
-    } else {
-      // return an approximation
+    // return an approximation
 #if defined(ARITY1)
-        int num_slice_samples = parent.num_samples(var_info);
+    int num_slice_samples = parent.num_samples(var_info);
 #elif defined(ARITY2)
-        int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
+    int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
 #elif defined(ARITY3)
-        int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
-                                                   var_infos[2]);
+    int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
+                                               var_infos[2]);
 #endif
-      if (false) {
-        if (mod_samples + unmod_samples != num_slice_samples) {
-        System.out.println("num_samples(" + name() + "): "
-            + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
-#if defined(ARITY1)
-        System.out.println ("mbtracker.num_samples() = "
-                            + parent.mbtracker.num_samples());
-#endif
-        }
-      }
-      return num_slice_samples;
-    }
+//       if (mod_samples + unmod_samples != num_slice_samples) {
+//         System.out.println("num_samples(" + name() + "): "
+//           + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
+// #if defined(ARITY1)
+//         System.out.println ("mbtracker.num_samples() = "
+//                             + parent.mbtracker.num_samples());
+// #endif
+//       }
+    return num_slice_samples;
   }
 
   /**
@@ -347,20 +335,6 @@ public final class PPTSLICE1
     throw new Error("to be implemented");
   }
 #endif
-
-  /**
-   * The number of modified, non-missing samples.
-   * Don't use this; use num_samples instead.
-   **/
-  public int num_mod_samples() {
-    if (Daikon.slices_see_all_samples) {
-      return mod_samples;
-    } else {
-      throw new Error("to be implemented");
-    }
-  }
-
-  // public int num_missing() { return values_cache.num_missing; }
 
   // Accessing data
   int num_vars() {
@@ -537,10 +511,10 @@ public final class PPTSLICE1
 #if defined (ARITY1)
   public void add_val (Object val1, int mod1, int count) {
 
-    if (mod1 == ValueTuple.MODIFIED)
-      mod_samples += count;
-    else
-      unmod_samples += count;
+    // if (mod1 == ValueTuple.MODIFIED)
+    //   mod_samples += count;
+    // else
+    //   unmod_samples += count;
 
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
@@ -571,10 +545,10 @@ public final class PPTSLICE1
                        && (mod2 != ValueTuple.MISSING_FLOW
                        && mod2 != ValueTuple.MISSING_NONSENSICAL));
 
-    if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED)
-      mod_samples += count;
-    else
-      unmod_samples += count;
+    // if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED)
+    //   mod_samples += count;
+    // else
+    //   unmod_samples += count;
     if (Debug.logDetail())
       Debug.log (getClass(), this, "mod1 = " + mod1 + " mod2 = " + mod2
                  + " count = " + count);
@@ -644,10 +618,10 @@ public final class PPTSLICE1
                         && (mod3 != ValueTuple.MISSING_FLOW
                         && mod3 != ValueTuple.MISSING_NONSENSICAL));
 
-    if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED || mod3 == ValueTuple.MODIFIED)
-      mod_samples += count;
-    else
-      unmod_samples += count;;
+    // if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED || mod3 == ValueTuple.MODIFIED)
+    //   mod_samples += count;
+    // else
+    //   unmod_samples += count;;
 
     // Debug print add info
     if (Debug.logDetail())
@@ -693,7 +667,7 @@ public final class PPTSLICE1
 
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (Global.debugStatistics.isLoggable(Level.FINE) || this.debugged || debugSpecific.isLoggable(Level.FINE))
+    if (Global.debugStatistics.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiated_invariant: " + invariant.format()
                  // [INCR] + "; " + "already_seen_all=" + already_seen_all
                  );
@@ -864,14 +838,14 @@ public final class PPTSLICE1
     int[] permutation = PptTopLevel.build_permute (argNewVarInfos, vis_sorted);
 
     // Assert sorted
-    for (int i = 0; i < arity - 1; i++) {
+    for (int i = 0; i < ARITY - 1; i++) {
       Assert.assertTrue (vis_sorted[i].varinfo_index
                          <= vis_sorted[i+1].varinfo_index);
     }
 
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     // Assert that the permutation represents the rearrangement
-    for (int i=0; i < arity; i++) {
+    for (int i=0; i < ARITY; i++) {
       // the variable that used to be at position "i" is now found at
       // position permutation[i].
       VarInfo oldvi = argNewVarInfos[i];
@@ -888,9 +862,9 @@ public final class PPTSLICE1
     // preserved
     PPTSLICE1 result = new PPTSLICE1 (this.parent, vis_sorted);
 
-    // Set sample counts
-    result.mod_samples = this.mod_samples;
-    result.unmod_samples = this.unmod_samples;
+    // // Set sample counts
+    // result.mod_samples = this.mod_samples;
+    // result.unmod_samples = this.unmod_samples;
 
     // re-parent the invariants and copy them out.  Don't copy any that
     // are duplicated (exactly) at the global slice.
@@ -959,17 +933,10 @@ public final class PPTSLICE1
 
       slice = new PPTSLICE1 (ppt, vis_sorted);
 
-      // Set sample counts
-      slice.mod_samples = mod_samples;
-      slice.unmod_samples = unmod_samples;
+      // // Set sample counts
+      // slice.mod_samples = mod_samples;
+      // slice.unmod_samples = unmod_samples;
 
-      // Set ValueTracker
-      if (values_cache == null) {
-        slice.values_cache = null;
-      } else {
-        slice.values_cache = (VALUETRACKER1) this.values_cache.clone();
-        slice.values_cache.permute (permute);
-      }
       ppt.addSlice (slice);
     }
 
@@ -1120,9 +1087,9 @@ public final class PPTSLICE1
         return;
       }
 
-      // Update sample count info
-      mod_samples += cslice.mod_samples;
-      unmod_samples += cslice.unmod_samples;
+      // // Update sample count info
+      // mod_samples += cslice.mod_samples;
+      // unmod_samples += cslice.unmod_samples;
 
       // Build the permutation array from child to parent slice
       int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
@@ -1278,13 +1245,4 @@ public final class PPTSLICE1
     }
   }
 
-  /**
-   * Initialize the values cache for this slice from the specified
-   * slice
-   */
-  public void clone_values_cache_from (PptSlice slice, int[] permute) {
-
-    values_cache = (VALUETRACKER1) ((PPTSLICE1) slice).values_cache.clone();
-    values_cache.permute (permute);
-  }
 }

@@ -416,18 +416,18 @@ public class DynamicConstants implements Serializable {
           Invariant inv = (Invariant) slice.invs.get (j);
           inv.log ("created, falsified = " + inv.falsified);
           if (!inv.falsified)
-            true_inv_cnt[slice.arity]++;
+            true_inv_cnt[slice.arity()]++;
         }
         if (!ppt.is_slice_global (slice.var_infos) && slice.invs.size() > 0) {
-          non_gslice_cnt[slice.arity]++;
-          non_ginv_cnt[slice.arity] += slice.invs.size();
+          non_gslice_cnt[slice.arity()]++;
+          non_ginv_cnt[slice.arity()] += slice.invs.size();
         }
         if (slice.invs.size() > 0)
-          slice_cnt[slice.arity]++;
-        inv_cnt[slice.arity] += slice.invs.size();
+          slice_cnt[slice.arity()]++;
+        inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
           StringBuffer sb = new StringBuffer();
-          for (int j = 0; j < slice.arity; j++) {
+          for (int j = 0; j < slice.arity(); j++) {
             VarInfo v = slice.var_infos[j];
             sb.append (v.name.name() + " [" + v.file_rep_type +"] ["
                         + v.comparability + "] ");
@@ -684,11 +684,11 @@ public class DynamicConstants implements Serializable {
       for (int i = 0; i < new_views.size(); i++) {
         PptSlice slice = (PptSlice) new_views.get (i);
         if (slice.invs.size() > 0)
-          slice_cnt[slice.arity]++;
-        inv_cnt[slice.arity] += slice.invs.size();
+          slice_cnt[slice.arity()]++;
+        inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
           StringBuffer sb = new StringBuffer();
-          for (int j = 0; j < slice.arity; j++) {
+          for (int j = 0; j < slice.arity(); j++) {
             VarInfo v = slice.var_infos[j];
             sb.append (v.name.name() + " [" + v.file_rep_type +"] ["
                         + v.comparability + "] ");

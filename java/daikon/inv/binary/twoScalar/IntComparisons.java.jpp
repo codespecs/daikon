@@ -344,7 +344,7 @@ public final class INTEQUAL
 
   public static INTEQUAL instantiate(PptSlice ppt) {
 
-    if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
+    if (logOn() || debug.isLoggable(Level.FINE)) {
       Debug.log (debug, INTEQUAL.class, ppt, "Attempt Instantiate");
     }
 
@@ -378,7 +378,7 @@ public final class INTEQUAL
     #endif
   #endif
 
-      if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
+      if (logOn() || debug.isLoggable(Level.FINE)) {
         Debug.log (debug, INTEQUAL.class, ppt,
                "seqvar1=" + ((seqvar1 == null) ? "null" : seqvar1.name.name())
            + ", seqvar2=" + ((seqvar2 == null) ? "null" : seqvar2.name.name()));
@@ -446,7 +446,7 @@ invariants.
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debug.isLoggable(Level.FINE) || ppt.debugged) {
+      if (debug.isLoggable(Level.FINE)) {
         debug.fine (INTEQUALstring + ".instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
@@ -512,7 +512,7 @@ invariants.
   // Look up a previously instantiated INTEQUAL relationship.
   // Should this implementation be made more efficient?
   public static INTEQUAL find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity == 2);
+    Assert.assertTrue(ppt.arity() == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof INTEQUAL)
@@ -629,7 +629,7 @@ invariants.
 
   // // Temporary, for debugging
   // public void destroy() {
-  //   if (debug.isLoggable(Level.FINE) || ppt.debugged) {
+  //   if (debug.isLoggable(Level.FINE)) {
   //     System.out.println(INTEQUALstring + ".destroy(" + ppt.name() + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
@@ -638,11 +638,11 @@ invariants.
   // }
 
   public InvariantStatus add(Object v1, Object v2, int mod_index, int count) {
-    if (ppt.debugged) {
-      System.out.println(INTEQUALstring + ppt.varNames() + ".add("
-                         + v1 + "," + v2
-                         + ", mod_index=" + mod_index + ")"
-                         + ", count=" + count + ")");
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine(INTEQUALstring + ppt.varNames() + ".add("
+                 + v1 + "," + v2
+                 + ", mod_index=" + mod_index + ")"
+                 + ", count=" + count + ")");
     }
     return super.add(v1, v2, mod_index, count);
   }
