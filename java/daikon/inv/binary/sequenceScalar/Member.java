@@ -70,7 +70,7 @@ public final class Member
     return super.isObviousStatically (vis);
   }
 
-  /* [INCR]  
+  /* [INCR]
   // Like isObviousMember, but also checks everything equal to the given
   // variables.
   public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
@@ -520,9 +520,9 @@ public final class Member
       new MemberSuppressionFactory1();
 
     private MemberSuppressionFactory1() {
-      template = new SuppressionTemplate();
-      template.invTypes = new Class[1];
-      template.varInfos = new VarInfo[][] {new VarInfo[2]};
+      supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[1];
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[2]};
     }
 
     public static SuppressionFactory getInstance() {
@@ -533,7 +533,7 @@ public final class Member
       return theInstance;
     }
 
-    private transient SuppressionTemplate template;
+    private transient SuppressionTemplate supTemplate;
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       Assert.assertTrue (arg instanceof Member);
@@ -546,17 +546,17 @@ public final class Member
         // This should never get instantiated
       }
 
-      template.resetResults();
-      template.varInfos[0][0] = sclSequence;
-      template.varInfos[0][1] =  seqvar;
+      supTemplate.resetResults();
+      supTemplate.varInfos[0][0] = sclSequence;
+      supTemplate.varInfos[0][1] =  seqvar;
       // Shouldn't happen, because isObvious should
       // have handled it, but in case it does, no big deal, just say no suppression
       if (sclSequence == seqvar) return null;
       {
-        template.invTypes[0] = PairwiseIntComparison.class;
-        SuppressionLink sl = byTemplate (template, inv);
+        supTemplate.invTypes[0] = PairwiseIntComparison.class;
+        SuppressionLink sl = byTemplate (supTemplate, inv);
         if (sl != null) {
-          String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+          String comparator = ((PairwiseIntComparison) supTemplate.results[0]).getComparator();
           if (comparator.indexOf ("==") != -1 ||
               comparator.indexOf ("?") != -1) {
             return sl;
@@ -566,15 +566,15 @@ public final class Member
 
       {
         // Try to see if SubSet invariant is there
-        template.resetResults();
-        template.invTypes[0] = SubSet.class;
-        SuppressionLink sl = byTemplate (template, inv);
+        supTemplate.resetResults();
+        supTemplate.invTypes[0] = SubSet.class;
+        SuppressionLink sl = byTemplate (supTemplate, inv);
         if (sl != null) {
           // First transformed var in first invariant
-          VarInfo transSclSequence = template.transforms[0][0];
+          VarInfo transSclSequence = supTemplate.transforms[0][0];
           // Second transformed var in first invariant
-          VarInfo transSeqvar = template.transforms[0][1];
-          SubSet subSet = (SubSet) template.results[0];
+          VarInfo transSeqvar = supTemplate.transforms[0][1];
+          SubSet subSet = (SubSet) supTemplate.results[0];
           if ((subSet.var1_in_var2 && subSet.var1() == transSclSequence) ||
               (subSet.var2_in_var1 && subSet.var2() == transSclSequence)) {
             if (debug.isDebugEnabled()) {
@@ -589,15 +589,15 @@ public final class Member
 
       {
         // Failed on finding the right SubSet invariant.  Now try SubSequence
-        template.resetResults();
-        template.invTypes[0] = SubSequence.class;
-        SuppressionLink sl = byTemplate (template, inv);
+        supTemplate.resetResults();
+        supTemplate.invTypes[0] = SubSequence.class;
+        SuppressionLink sl = byTemplate (supTemplate, inv);
         if (sl != null) {
           // First transformed var in first invariant
-          VarInfo transSclSequence = template.transforms[0][0];
+          VarInfo transSclSequence = supTemplate.transforms[0][0];
           // Second transformed var in first invariant
-          VarInfo transSeqvar = template.transforms[0][1];
-          SubSequence subSeq = (SubSequence) template.results[0];
+          VarInfo transSeqvar = supTemplate.transforms[0][1];
+          SubSequence subSeq = (SubSequence) supTemplate.results[0];
           if ((subSeq.var1_in_var2 && subSeq.var1() == transSclSequence) ||
               (subSeq.var2_in_var1 && subSeq.var2() == transSclSequence)) {
             return sl;

@@ -289,7 +289,7 @@ public class SubSequenceFloat
           ((rep1 == ProglangType.STRING_ARRAY)
            && (rep2 == ProglangType.STRING_ARRAY))
           )) return false;
-        
+
     if (debug.isDebugEnabled()) {
       debug.debug("isObviousSubSequence " +
                   subvar.name.name() + "in " + supervar.name.name());
@@ -414,7 +414,7 @@ public class SubSequenceFloat
           if (start1 == true && start2 == true) {
             if (shift1 <= shift2) return true;
           } else if (start1 == false && start2 == false) {
-            if (shift1 >= shift2) return true;            
+            if (shift1 >= shift2) return true;
           }
         }
       } else {
@@ -529,7 +529,7 @@ public class SubSequenceFloat
       debug.debug ("Checking isObviousSubSequenceDynamically " +
                    subvar.name.name() + " in " + supervar.name.name());
     }
-    
+
     if (isObviousSubSequence (subvar, supervar)) return true;
     debug.debug ("  not isObviousSubSequence(statically)");
 
@@ -785,13 +785,13 @@ public class SubSequenceFloat
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       SubSequenceFloat inv = (SubSequenceFloat) arg;
 
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {PairwiseIntComparison.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {PairwiseIntComparison.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
 
-      SuppressionLink result = byTemplate (template, inv);
+      SuppressionLink result = byTemplate (supTemplate, inv);
       if (result != null) {
-        String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+        String comparator = ((PairwiseIntComparison) supTemplate.results[0]).getComparator();
         if (comparator.indexOf("==") > -1) {
           return result;
         }

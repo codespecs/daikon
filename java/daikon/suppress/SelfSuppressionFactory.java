@@ -38,12 +38,12 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
   }
 
   private SelfSuppressionFactory() {
-    template = new SuppressionTemplate();
-    template.invTypes = new Class[1];
-    template.varInfos = new VarInfo[1][];
+    supTemplate = new SuppressionTemplate();
+    supTemplate.invTypes = new Class[1];
+    supTemplate.varInfos = new VarInfo[1][];
   }
-  
-  private transient SuppressionTemplate template;
+
+  private transient SuppressionTemplate supTemplate;
 
   public SuppressionLink generateSuppressionLink (Invariant inv) {
     if (debug.isDebugEnabled()) {
@@ -52,29 +52,29 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     }
 
     PptSlice slice = inv.ppt;
-  
-    template.resetResults();
-    template.invTypes[0] = inv.getClass();
-    template.varInfos[0] = slice.var_infos;
-    slice.parent.fillSuppressionTemplate (template, false);
+
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = inv.getClass();
+    supTemplate.varInfos[0] = slice.var_infos;
+    slice.parent.fillSuppressionTemplate (supTemplate, false);
     // Yeah, the argument has to be false, because otherwise we'll
     // suppress ourselves in the same ppt
-    if (template.filled && template.results[0].isSameFormula(inv)) {
-      Assert.assertTrue (template.transforms[0][0] != template.varInfos[0][0]);
+    if (supTemplate.filled && supTemplate.results[0].isSameFormula(inv)) {
+      Assert.assertTrue (supTemplate.transforms[0][0] != supTemplate.varInfos[0][0]);
       if (debug.isDebugEnabled()) {
         debug.debug ("  Self template filled:");
         debug.debug ("  suppressee: " + inv.repr());
         debug.debug ("      in ppt: " + inv.ppt.parent.name);
-        debug.debug ("  with      : " + template.results[0].repr());
-        debug.debug ("      in ppt: " + template.results[0].ppt.parent.name);
+        debug.debug ("  with      : " + supTemplate.results[0].repr());
+        debug.debug ("      in ppt: " + supTemplate.results[0].ppt.parent.name);
       }
-      return linkFromTemplate (template, inv);
+      return linkFromTemplate (supTemplate, inv);
     } else {
-      if (template.filled) {
+      if (supTemplate.filled) {
         debug.debug ("Not same formula, returning null");
       }
       return null;
-    }    
+    }
   }
 
 

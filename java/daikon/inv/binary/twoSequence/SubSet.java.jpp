@@ -323,13 +323,13 @@ public class SUBSET
       Assert.assertTrue (arg instanceof SubSet);
       SubSet inv = (SubSet) arg;
 
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {PairwiseIntComparison.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {PairwiseIntComparison.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
 
-      SuppressionLink result = byTemplate (template, inv);
+      SuppressionLink result = byTemplate (supTemplate, inv);
       if (result != null) {
-        String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+        String comparator = ((PairwiseIntComparison) supTemplate.results[0]).getComparator();
         if (comparator.indexOf("=") > -1 ||
             comparator.indexOf("?") > -1) {
           return result;

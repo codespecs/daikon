@@ -159,24 +159,24 @@ public class FunctionBinaryFloat
       FunctionBinary inv = (FunctionBinary) arg;
 
       // We will make a template for all possible constants.
-      SuppressionTemplate template = new SuppressionTemplate();
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
 
-      template.invTypes = new Class[] {OneOfFloat.class};
-      template.varInfos = new VarInfo [][] {new VarInfo[1]};
+      supTemplate.invTypes = new Class[] {OneOfFloat.class};
+      supTemplate.varInfos = new VarInfo [][] {new VarInfo[1]};
 
       VarInfo[] vis = new VarInfo[] {inv.var1(), inv.var2(), inv.var3()};
       for (int i = 0; i < vis.length; i++) {
-        template.varInfos[0][0] = vis[i];
-        template.resetResults();
-        inv.ppt.parent.fillSuppressionTemplate (template);
-        if (template.results[0] != null) {
-          OneOf suppressor = (OneOf) template.results[0];
+        supTemplate.varInfos[0][0] = vis[i];
+        supTemplate.resetResults();
+        inv.ppt.parent.fillSuppressionTemplate (supTemplate);
+        if (supTemplate.results[0] != null) {
+          OneOf suppressor = (OneOf) supTemplate.results[0];
           if (suppressor.num_elts() <= 1) {
             List suppressors = new ArrayList();
             suppressors.add (suppressor);
             SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
             if (debug.isDebugEnabled()) {
-              debug.debug ("Success: " + template.results[0].repr());
+              debug.debug ("Success: " + supTemplate.results[0].repr());
             }
             return sl;
           }

@@ -57,13 +57,13 @@ public abstract class SuppressionFactory implements Serializable {
    * Generate a SuppressionLink by asking an inv's PptTopLevel to fill
    * in the template.  If the template filling is successful, return a
    * SuppressionLink.  Else return null.
-   * @param template The template to fill
+   * @param supTemplate The template to fill
    * @param inv the Invariant that is potentially being suppressed.
    * @return can be null.
    **/
-  protected SuppressionLink byTemplate (SuppressionTemplate template, Invariant inv) {
-    if (inv.ppt.parent.fillSuppressionTemplate(template)) {
-      return linkFromTemplate (template, inv);
+  protected SuppressionLink byTemplate (SuppressionTemplate supTemplate, Invariant inv) {
+    if (inv.ppt.parent.fillSuppressionTemplate(supTemplate)) {
+      return linkFromTemplate (supTemplate, inv);
     } else {
         return null;
     }
@@ -75,14 +75,14 @@ public abstract class SuppressionFactory implements Serializable {
    * byTemplate method is inappropriate for them (e.g. a
    * SuppressionLink might not be generated for all filled templates,
    * so a Factory scans a list of filled templates).
-   * @param template a filled template.
+   * @param supTemplate a filled template.
    * @param inv the Invariant that is being suppressed
    **/
-  protected SuppressionLink linkFromTemplate (SuppressionTemplate template,
+  protected SuppressionLink linkFromTemplate (SuppressionTemplate supTemplate,
                                               Invariant inv) {
-    Assert.assertTrue (template.filled, "Template must be filled");
+    Assert.assertTrue (supTemplate.filled, "Template must be filled");
     List suppressors = new ArrayList();
-    suppressors.addAll (Arrays.asList(template.results));
+    suppressors.addAll (Arrays.asList(supTemplate.results));
     SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
     return sl;
   }
@@ -102,70 +102,70 @@ public abstract class SuppressionFactory implements Serializable {
 
   public SuppressionLink findLessEqual (VarInfo v1, VarInfo v2,
                                         Invariant inv, int interval) {
-    
+
     {
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {IntLessThan.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
-      inv.ppt.parent.fillSuppressionTemplate(template);
-      if (template.filled) {
-        IntLessThan resultInv = (IntLessThan) template.results[0];
-        VarInfo leftResult = template.transforms[0][0];
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {IntLessThan.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
+      inv.ppt.parent.fillSuppressionTemplate(supTemplate);
+      if (supTemplate.filled) {
+        IntLessThan resultInv = (IntLessThan) supTemplate.results[0];
+        VarInfo leftResult = supTemplate.transforms[0][0];
         if (leftResult == resultInv.var1()
             && interval <= 0) {
           // && resultInv.interval >= interval) {
           // Not used because having IntComparison invariants keep
           // track of their interval makes them weakening invariants,
           // which hurts performance.
-          return linkFromTemplate (template, inv);
+          return linkFromTemplate (supTemplate, inv);
         }
       }
     }
 
     {
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {IntLessEqual.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
-      inv.ppt.parent.fillSuppressionTemplate(template);
-      if (template.filled) {
-        IntLessEqual resultInv = (IntLessEqual) template.results[0];
-        VarInfo leftResult = template.transforms[0][0];
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {IntLessEqual.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
+      inv.ppt.parent.fillSuppressionTemplate(supTemplate);
+      if (supTemplate.filled) {
+        IntLessEqual resultInv = (IntLessEqual) supTemplate.results[0];
+        VarInfo leftResult = supTemplate.transforms[0][0];
         if (leftResult == resultInv.var1()
             && interval <= 0) {
           // && resultInv.interval >= interval) {
-          return linkFromTemplate (template, inv);
+          return linkFromTemplate (supTemplate, inv);
         }
       }
     }
 
     {
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {IntGreaterThan.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
-      inv.ppt.parent.fillSuppressionTemplate(template);
-      if (template.filled) {
-        IntGreaterThan resultInv = (IntGreaterThan) template.results[0];
-        VarInfo leftResult = template.transforms[0][0];
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {IntGreaterThan.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
+      inv.ppt.parent.fillSuppressionTemplate(supTemplate);
+      if (supTemplate.filled) {
+        IntGreaterThan resultInv = (IntGreaterThan) supTemplate.results[0];
+        VarInfo leftResult = supTemplate.transforms[0][0];
         if (leftResult == resultInv.var2()
             && interval <= 0) {
           // && resultInv.interval >= interval) {
-          return linkFromTemplate (template, inv);
+          return linkFromTemplate (supTemplate, inv);
         }
       }
     }
 
     {
-      SuppressionTemplate template = new SuppressionTemplate();
-      template.invTypes = new Class[] {IntGreaterEqual.class};
-      template.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
-      inv.ppt.parent.fillSuppressionTemplate(template);
-      if (template.filled) {
-        IntGreaterEqual resultInv = (IntGreaterEqual) template.results[0];
-        VarInfo leftResult = template.transforms[0][0];
+      SuppressionTemplate supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[] {IntGreaterEqual.class};
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {v1, v2}};
+      inv.ppt.parent.fillSuppressionTemplate(supTemplate);
+      if (supTemplate.filled) {
+        IntGreaterEqual resultInv = (IntGreaterEqual) supTemplate.results[0];
+        VarInfo leftResult = supTemplate.transforms[0][0];
         if (leftResult == resultInv.var2()
             && interval <= 0) {
           // && resultInv.interval >= interval) {
-          return linkFromTemplate (template, inv);
+          return linkFromTemplate (supTemplate, inv);
         }
       }
     }

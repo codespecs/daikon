@@ -93,14 +93,14 @@ public abstract class SingleSequence
 
         // Since we know f(a[i..j]) is true, searching for f(a[]) is
         // sufficient, since it cannot be the case that !f(a[]).
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {inv.getClass()}; // Has to be same type as inv
-        template.varInfos = new VarInfo[][] {new VarInfo[] {orig}};
+        SuppressionTemplate supTemplate = new SuppressionTemplate();
+        supTemplate.invTypes = new Class[] {inv.getClass()}; // Has to be same type as inv
+        supTemplate.varInfos = new VarInfo[][] {new VarInfo[] {orig}};
 
 
-        inv.ppt.parent.fillSuppressionTemplate (template);
-        if (template.filled) {
-          SingleSequence  suppressor = (SingleSequence) template.results[0];
+        inv.ppt.parent.fillSuppressionTemplate (supTemplate);
+        if (supTemplate.filled) {
+          SingleSequence  suppressor = (SingleSequence) supTemplate.results[0];
           if (debug.isDebugEnabled()) {
             debug.debug ("  Successful template fill for " + inv.format());
             debug.debug ("             with              " + suppressor.format());
@@ -109,7 +109,7 @@ public abstract class SingleSequence
             if (debug.isDebugEnabled()) {
               debug.debug ("  Generating link");
             }
-            return linkFromTemplate (template, inv);
+            return linkFromTemplate (supTemplate, inv);
           } else {
             if (debug.isDebugEnabled()) {
               debug.debug ("  But no link made");

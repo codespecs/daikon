@@ -29,12 +29,12 @@ public class PptSlice0
   }
 
   // Make a fake slice whose variables are the same as the ones in
-  // TEMPLATE, but marked as prestate (i.e., orig(x) rather than x).
-  public static PptSlice makeFakePrestate(PptSlice template) {
-    PptSlice0 fake = new PptSlice0(template.parent);
-    fake.var_infos = new VarInfo[template.var_infos.length];
+  // sliceTemplate, but marked as prestate (i.e., orig(x) rather than x).
+  public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {
+    PptSlice0 fake = new PptSlice0(sliceTemplate.parent);
+    fake.var_infos = new VarInfo[sliceTemplate.var_infos.length];
     for (int i=0; i < fake.var_infos.length; i++) {
-      fake.var_infos[i] = VarInfo.origVarInfo(template.var_infos[i]);
+      fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
     }
     return fake;
   }

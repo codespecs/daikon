@@ -2035,41 +2035,41 @@ public class PptTopLevel
   /**
    * Attempt to fill a given SuppressionTemplate with invariants.  If
    * successful, returns true.  Called by SuppressionFactory's.
-   * @param template Template to fill.  Modified by this method.
+   * @param supTemplate Template to fill.  Modified by this method.
    **/
-  public boolean fillSuppressionTemplate (SuppressionTemplate template) {
-    return fillSuppressionTemplate (template, true);
+  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate) {
+    return fillSuppressionTemplate (supTemplate, true);
   }
 
 
   /**
    * Attempt to fill a given SuppressionTemplate with invariants.  If
    * successful, returns true.  Called by SuppressionFactory's.
-   * @param template Template to fill.  Modified by this method.
+   * @param supTemplate Template to fill.  Modified by this method.
    * @param checkSelf Whether to check in this ppt.  When false, skip
    * scanning this ppt.  This is useful for detecting identical
    * invariants (due to weakening) across ppts.
    **/
-  public boolean fillSuppressionTemplate (SuppressionTemplate template,
+  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate,
                                           boolean checkSelf) {
     // We do two loops for performance: attempt to fill locally, then
     // attempt to fill using upper ppts.
 
     boolean firstLoopFilled = false;
-    template.filled = false;
-    template.results = new Invariant[template.invTypes.length];
-    template.transforms = new VarInfo[template.invTypes.length][];
-    Assert.assertTrue (template.invTypes.length == template.varInfos.length,
+    supTemplate.filled = false;
+    supTemplate.results = new Invariant[supTemplate.invTypes.length];
+    supTemplate.transforms = new VarInfo[supTemplate.invTypes.length][];
+    Assert.assertTrue (supTemplate.invTypes.length == supTemplate.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
     debugSuppressFill.debug ("Starting template fill");
 
     if (checkSelf) {
       firstLoop:
       // debugSuppressFill.debug ("  Entering first loop");
-      for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-        template.results[iInvs] = null;
-        Class clazz = template.invTypes[iInvs];
-        VarInfo[] varInfos = template.varInfos[iInvs];
+      for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
+        supTemplate.results[iInvs] = null;
+        Class clazz = supTemplate.invTypes[iInvs];
+        VarInfo[] varInfos = supTemplate.varInfos[iInvs];
         PptSlice slice = this.findSlice_unordered (varInfos);
         if (slice != null) {
           // Here's where we actually find the potential invariant.  There are
@@ -2081,8 +2081,8 @@ public class PptTopLevel
             Invariant.findUnsuppressed (clazz, slice);
           if (inv != null) {
             firstLoopFilled = true;
-            template.results[iInvs] = inv;
-            template.transforms[iInvs] = template.varInfos[iInvs];
+            supTemplate.results[iInvs] = inv;
+            supTemplate.transforms[iInvs] = supTemplate.varInfos[iInvs];
           }
         }
       }
@@ -2100,8 +2100,8 @@ public class PptTopLevel
 
     // debugSuppressFill.debug ("  Entering second loop: ");
     secondLoop:
-    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-      Class clazz = template.invTypes[iInvs];
+    for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
+      Class clazz = supTemplate.invTypes[iInvs];
       //       if (debugSuppressFill.isDebugEnabled()) {
       //         debugSuppressFill.debug ("  InvType: " + clazz);
       //       }
@@ -2109,12 +2109,12 @@ public class PptTopLevel
         // debugSuppressFill.debug ("  No dataflow_ppts");
         break;
       }
-      if (template.results[iInvs] != null) {
+      if (supTemplate.results[iInvs] != null) {
         // debugSuppressFill.debug ("  Already filled");
         continue secondLoop;
       }
 
-      VarInfo[] varInfos = template.varInfos[iInvs];
+      VarInfo[] varInfos = supTemplate.varInfos[iInvs];
 
       forEachTransform:
       // Transform the VarInfos for each upper ppt
@@ -2144,8 +2144,8 @@ public class PptTopLevel
             Invariant.find (clazz, slice) :
             Invariant.findUnsuppressed (clazz, slice);
           if (inv != null) {
-            template.results[iInvs] = inv;
-            template.transforms[iInvs] = newVarInfos;
+            supTemplate.results[iInvs] = inv;
+            supTemplate.transforms[iInvs] = newVarInfos;
           }
         }
       }
@@ -2153,14 +2153,14 @@ public class PptTopLevel
 
     // Only for checking if template got filled
     thirdLoop:
-    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-      if (template.results[iInvs] == null) {
+    for (int iInvs = 0; iInvs < supTemplate.invTypes.length; iInvs++) {
+      if (supTemplate.results[iInvs] == null) {
         debugSuppressFill.debug ("  Unsuccessful template fill");
         return false;
       }
     }
 
-    template.filled = true;
+    supTemplate.filled = true;
         debugSuppressFill.debug ("  Successful template fill");
     return true;
   }
