@@ -138,7 +138,7 @@ public final class Diff {
 
   // Returns a tree of corresponding program points, and corresponding
   // invariants at each program point.  This tree can be walked to
-  // determine differences between the sets of invaraints.
+  // determine differences between the sets of invariants.
   public static RootNode diffPptMap(PptMap map1, PptMap map2) {
     RootNode root = new RootNode();
 
