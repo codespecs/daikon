@@ -577,19 +577,19 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   //   return false;
   // }
 
-  static boolean compatible(VarInfo[] vis1, VarInfo[] vis2) {
+  static boolean comparable(VarInfo[] vis1, VarInfo[] vis2) {
     if (vis1.length != vis2.length)
       return false;
 
     for (int i=0; i<vis1.length; i++)
-      if (!vis1[i].compatible(vis2[i]))
+      if (!vis1[i].comparable(vis2[i]))
 	return false;
 
     return true;
   }
 
   // simplistic implementation, just checks that the names are the same
-  boolean compatible(VarInfo other) {
+  boolean comparable(VarInfo other) {
     if (this.name != other.name)
       return false;
     Assert.assert(type.equals(other.type), "type matches");

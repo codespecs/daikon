@@ -33,7 +33,7 @@ public final class TwoSequenceFactory {
       VarComparability compar1 = var1.comparability.elementType();
       VarComparability compar2 = var2.comparability.elementType();
       // The "name" arguments here are wrong.
-      if (! VarComparability.compatible(var1.name, compar1, var2.name, compar2)) {
+      if (! VarComparability.comparable(var1.name, compar1, var2.name, compar2)) {
         return null;
       }
     }

@@ -51,7 +51,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     if (! Daikon.ignore_comparability) {
       VarComparability sclcompar = sclvar.comparability;
       VarComparability seqindexcompar = seqvar.comparability.indexType(0);
-      if (! VarComparability.compatible(sclvar.name, sclcompar,
+      if (! VarComparability.comparable(sclvar.name, sclcompar,
                                         VarInfoName.parse("seqvar.name.indexName0"), seqindexcompar)) {
         return null;
       }

@@ -41,7 +41,7 @@ public final class SequenceStringFactory {
     if (Daikon.check_program_types
         && (! seqvar.type.elementType().castable(sclvar.type))) {
       if (debugSequenceStringFactory) {
-        System.out.println("Incompatible types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
+        System.out.println("Non-castable types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
       }
       return null;
     }

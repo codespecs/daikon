@@ -29,7 +29,7 @@ public final class TwoScalarFactory {
     // System.out.println("These have castable program types: :  "
     //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
     if (! Daikon.ignore_comparability) {
-      if (! VarComparability.compatible(var1, var2)) {
+      if (! VarComparability.comparable(var1, var2)) {
         return null;
       }
     }

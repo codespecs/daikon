@@ -22,7 +22,7 @@ public class VarComparabilityTest extends TestCase {
   final static int EXPLICIT = VarComparability.EXPLICIT;
 
   boolean comp(VarComparability v1, VarComparability v2) {
-    return VarComparability.compatible(v1, v2);
+    return VarComparability.comparable(v1, v2);
   }
 
   VarComparability parsei(String rep) {
