@@ -3616,7 +3616,7 @@ option, we create the @file{daikon-output/@var{myprog}.disambig} file,
 which we can then edit and feed back to dfec to change how the pointer
 is instrumented.
 @example
-  dfec @var{...options...} --disambig @var{myprog}.cc
+  dfec @var{...options...} --disambig @var{myprog}.c
 @end example
 
 This creates the @file{daikon-output/@var{myprog}.disambig} file.  It
@@ -3651,7 +3651,7 @@ option causes dfec to open the existing
 @file{daikon-output/@var{myprog}.disambig} file, reading the definitions
 you gave, and changing the instrumentation accordingly:
 @example
-  dfec @var{...options...} --disambig @var{myprog}.cc
+  dfec @var{...options...} --disambig @var{myprog}.c
 @end example
 
 This means that bar will be instrumented as a @samp{P}ointer to a
