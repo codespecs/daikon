@@ -204,9 +204,8 @@ function process_line ($line, $tb) {
 
     $pos = strpos ($line, "]@ ");
     if ($pos <= 0) {
-      $pos = strpos ($line, "...@ ");
-      if ($pos > 0)
-        $pos += 2;
+      if (ereg ("\.\.\. *@ ", $line))
+        $pos = strpos ($line, " @ ");
       else
         $pos = strpos ($line, ".@");
     }
