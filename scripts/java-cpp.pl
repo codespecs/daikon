@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-06-13 16:31:13 mernst>
+# Time-stamp: <2002-07-10 09:09:12 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -135,6 +135,8 @@ sub run_cpp {
     s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/;
 
     ## Remove extra horizontal space
+    # Remove all trailing space
+    s/[ \t]+\n/\n/g;
     # Remove space after package name
     s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
     # convert "(Foo )" to "(Foo)"
@@ -143,11 +145,16 @@ sub run_cpp {
     s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
     # convert "a. foo (" to "a.foo("
     # (Note single spaces, lowercase first letter.)
-    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) \(/$1.$2(/g;
+    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) \(/$1.$2\(/g;
+    # convert " instanceof long [])" to " instanceof long[])"
+    s/( instanceof \w+) ((\[\])*\))/$1$2/g;
 
     ## Remove extra vertical space
     # compress out duplicate blank lines
     s/\n\n\n+/\n\n/g;
+    # This does not work:  it applies to *every* paragraph.
+    # # compress out blank lines at end (due to the above, this can be simpler)
+    # s/\n\n\z/\n/;
     # Remove newline after "if" statement
     # if no open curly brace or semicolon but 2 newlines.
     if (/^[ \t]*if[ \t]*\([^\n\{;]*\n\n\z/) {
