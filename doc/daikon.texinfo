@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 3.1.3
+@center Daikon version 3.1.4
 
 @sp 1
-@c Daikon version 3.1.3 date
-@center September 1, 2004
+@c Daikon version 3.1.4 date
+@center October 1, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.3, released September 1, 2004.
+@c It describes Daikon version 3.1.4, released October 1, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -86,7 +86,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 3.1.3, released September 1, 2004.
+It describes Daikon version 3.1.4, released October 1, 2004.
 @end ifnottex
 
 @menu
@@ -3787,7 +3787,7 @@ to append to rather than overwrite the @file{program.dtrace} file.
 
 @c Be sure to remove this once it becomes out of date
 @c (This version number should be automatically updated, though.)
-As of Daikon version 3.1.3, Kvasir is still in an active stage of
+As of Daikon version 3.1.4, Kvasir is still in an active stage of
 development. While it works well on many programs, it does not yet
 support all of the options that the older dfec did, nor all of its
 features. This subsection lists some of the known limitations of the
@@ -5896,6 +5896,16 @@ The options are:
 @item --format @var{name}
 Produce output in the given format.  See @ref{Invariant syntax}.
 
+@item --no_reflection
+Do not use reflection to find information about the classes being
+instrumented.  This allows Annnotate to run without having access
+to the class files.  Since the class files are necessary to generate ``also''
+tags, those tags will be left out when this option is chosen.
+
+@item --max_invariants_pp @var{count}
+Output at most ``count'' invariants per program point (which ones are chosen
+is not specified).
+
 @item --wrap_xml
 Each invariant is printed using the given format (ESC, JML or DBC),
 but the invariant expression is wrapped inside xml tags, along with other
@@ -7243,7 +7253,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 3.1.3, released September 1, 2004.
+This manual describes Daikon version 3.1.4, released October 1, 2004.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
