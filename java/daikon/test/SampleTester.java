@@ -29,6 +29,10 @@ public class SampleTester extends TestCase {
 
   public static final Logger debug
                                 = Logger.getLogger("daikon.test.SampleTester");
+  public static final Logger debug_progress
+                      = Logger.getLogger("daikon.test.SampleTester.progress");
+
+  static boolean first_decl = true;
   String fname;
   LineNumberReader fp;
   PptMap all_ppts;
@@ -145,6 +149,10 @@ public class SampleTester extends TestCase {
       fail ("Input file SampleTester.commands missing." +
            " (Should be in daikon.test and it must be within the classpath)");
 
+    // Fmt.pf ("pow (0, 0) = " + MathMDE.pow (0, 0));
+    // for (int jj = 2; jj <= 64*1024; jj = jj*2)
+    //   Fmt.pf ("pow (3, %s) = %s / %s", "" + jj, "" + Math.pow (6.0, jj), "" + Math.pow (4.0, jj));
+
     SampleTester ts = new SampleTester();
     ts.proc_sample_file (input_file);
   }
@@ -192,7 +200,10 @@ public class SampleTester extends TestCase {
    */
   private void proc_decl (String decl_file) throws IOException {
 
+    debug_progress.fine ("Processing " + decl_file);
+
     // Read in the specified file
+    PptTopLevel.global = null;
     Set decl_files = new HashSet(1);
     decl_files.add (new File(decl_file));
     all_ppts = FileIO.read_declaration_files (decl_files);
@@ -201,6 +212,10 @@ public class SampleTester extends TestCase {
     Dataflow.init_partial_order (all_ppts);
     PptTopLevel.init (all_ppts);
     Daikon.setupEquality (all_ppts);
+    if (first_decl) {
+      Daikon.setup_NISuppression();
+      first_decl = false;
+    }
 
     ppt = null;
   }
@@ -264,6 +279,7 @@ public class SampleTester extends TestCase {
     String[] da = data.split ("  *");
     if (da.length != vars.length)
       parse_error ("number of data elements doesn't match var elements");
+    debug_progress.fine ("data: " + Debug.toString (da));
 
     VarInfo[] vis = ppt.var_infos;
     int vals_array_size = vis.length;
@@ -306,7 +322,7 @@ public class SampleTester extends TestCase {
    * Processes a string of possibly multiple assertions.  If any are false,
    * throws an error
    */
-  private void proc_assertions (String assertions) {
+  private void proc_assertions (String assertions) throws IOException {
 
     String[] aa = assertions.split ("\\) *");
     for (int i = 0; i < aa.length; i++) {
@@ -318,7 +334,7 @@ public class SampleTester extends TestCase {
    * Processes a single assertion.  If the assertion is false, throws
    * an error
    */
-  private void proc_assert (String assertion) {
+  private void proc_assert (String assertion) throws IOException {
 
     // Look for negation
     boolean negate = false;
@@ -328,13 +344,28 @@ public class SampleTester extends TestCase {
       assert_string = assert_string.substring(1);
     }
 
-    // Get the assertion name and arguments
-    assert_string = assert_string.replaceFirst ("\\)$", "");
-    String[] aa = assert_string.split (" *\\( *");
-    if (aa.length != 2)
-      parse_error ("invalid assertion");
-    String name = aa[0];
-    String[] args = aa[1].trim().split (", *");
+    // Create a tokenizer over the assertion string
+    StrTok stok = new StrTok (assert_string);
+    stok.commentChar ('#');
+    stok.quoteChar ('"');
+    stok.set_error_handler ( new StrTok.Error() {
+        public void tok_error(String s) {parse_error(s);}});
+    // Fmt.pf ("Tokenizing string '%s'", assert_string);
+
+    // Get the assertion name
+    String name = stok.nextToken();
+
+    // Get the arguments (enclosed in parens, separated by commas)
+    stok.need ("(");
+    List args = new ArrayList(10);
+    do {
+      String arg = stok.nextToken();
+      if (!stok.word() && !stok.qstring())
+        parse_error (Fmt.spf ("%s found where argument expected", arg));
+      args.add (arg);
+    } while (stok.nextToken() == ",");
+    if (stok.token() != ")")
+      parse_error (Fmt.spf ("%s found where ')' expected", stok.token()));
 
     // process the specific assertion
     boolean result = false;
@@ -344,6 +375,10 @@ public class SampleTester extends TestCase {
         debug.setLevel (Level.FINE);
         proc_inv_assert (args);
       }
+    } else if (name.equals ("show_invs")) {
+      result = proc_show_invs_assert (args);
+    } else if (name.equals ("constant")) {
+      result = proc_constant_assert (args);
     } else
       parse_error ("unknown assertion: " + name);
 
@@ -361,33 +396,36 @@ public class SampleTester extends TestCase {
    * arguments are the variables.  This needs to be expanded to specify
    * more information for invariants with state.
    */
-  private boolean proc_inv_assert (String[] args) {
+  private boolean proc_inv_assert (List /*String*/ args) {
 
-    if ((args.length < 2) || (args.length > 4))
-      parse_error ("bad argument count for invariant assertion");
+    if ((args.size() < 2) || (args.size() > 4))
+      parse_error ("bad argument count (" + args.size() +
+                    ") for invariant assertion");
 
     Class cls = null;
     String format = null;
 
-    // If the first argument is a string
-    if (args[0].startsWith ("\"")) {
-      format = args[0].substring(1,args[0].length()-1);
-      debug.fine (Fmt.spf ("Looking for format: '%s'", format));
+    // If the first argument is a quoted string
+    String arg0 = (String) args.get(0);
+    if (arg0.startsWith ("\"")) {
+      format = arg0.substring(1, arg0.length()-1);
+      debug.fine (Fmt.spf ("Looking for format: '%s' in ppt %s", format, ppt));
     } else { // must be a classname
       try {
-        cls = Class.forName (args[0]);
+        cls = Class.forName (arg0);
       } catch (Exception e) {
-        throw new RuntimeException ("Can't find class " + args[0] + " - " + e);
+        throw new RuntimeException ("Can't find class " + arg0 + " - " + e);
       }
       debug.fine ("Looking for " + cls);
     }
+
     // Build a vis to match the specified variables
-    VarInfo[] vis = new VarInfo[args.length-1];
+    VarInfo[] vis = new VarInfo[args.size()-1];
     for (int i = 0; i < vis.length; i++) {
-      vis[i] = ppt.find_var_by_name (args[i+1]);
+      vis[i] = ppt.find_var_by_name ((String) args.get(i+1));
       if (vis[i] == null)
         parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
-                              args[i+1], ppt.name()));
+                              args.get(i+1), ppt.name()));
     }
     PptSlice slice = ppt.findSlice (vis);
     if (slice == null)
@@ -403,6 +441,64 @@ public class SampleTester extends TestCase {
       debug.fine (Fmt.spf ("trace %s: %s", inv.getClass(), inv.format()));
     }
     return (false);
+  }
+
+  /**
+   * Prints out all of the invariants in the slice identified by the
+   * argumens (each of which should be a valid variable name for this ppt).
+   * always returns true.
+   */
+  private boolean proc_show_invs_assert (List /*String*/ args) {
+
+    if ((args.size() < 1) || (args.size() > 3))
+      parse_error ("bad argument count (" + args.size() +
+                    ") for show_invs");
+
+    Class cls = null;
+    String format = null;
+
+    // Build a vis to match the specified variables
+    VarInfo[] vis = new VarInfo[args.size()];
+    for (int i = 0; i < vis.length; i++) {
+      vis[i] = ppt.find_var_by_name ((String) args.get(i));
+      if (vis[i] == null)
+        parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
+                              args.get(i), ppt.name()));
+    }
+    PptSlice slice = ppt.findSlice (vis);
+    if (slice == null) {
+      Fmt.pf ("No invariants found for vars: %s", Debug.toString(vis));
+      return (true);
+    }
+
+    // Look for a matching invariant in the slices invariant list
+    for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Fmt.pf ("found %s: %s", inv.getClass(), inv.format());
+    }
+    return (true);
+  }
+
+  /**
+   * The constant assertion returns true if all of its arguments are constants
+   * Each argument is variable name and at least one variable number must be
+   * specified.
+   */
+  private boolean proc_constant_assert (List /*String*/ args) {
+
+    if (args.size() < 1)
+      parse_error ("Must be at least one argument for constant assertion");
+
+    for (Iterator i = args.iterator(); i.hasNext(); ) {
+      String arg = (String) i.next();
+      VarInfo v = ppt.find_var_by_name (arg);
+      if (v == null)
+        parse_error (Fmt.spf ("Variable '%s' not found at ppt %s",
+                            arg, ppt.name()));
+      if (!ppt.constants.is_constant (v))
+        return (false);
+    }
+    return (true);
   }
 
   private void parse_error (String msg) {
