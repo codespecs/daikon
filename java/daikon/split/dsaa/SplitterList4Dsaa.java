@@ -14,6 +14,12 @@ public class SplitterList4Dsaa {
 	SplitterList.put("LinkedListItr.advance", new Splitter[] {
 	    new LinkedListItrSplitter_advance()});
 
+	SplitterList.put("LinkedListItr.isPastEnd", new Splitter[] {
+	    new LinkedListItrSplitter_isPastEnd()});
+
+	SplitterList.put("LinkedListItr.retrieve", new Splitter[] {
+	    new LinkedListItrSplitter_retrieve()});
+
 	SplitterList.put("InsertionSort.sort", new Splitter[] {
 	    new InsertionSortSplitter_sort1_0(),
 		new InsertionSortSplitter_sort1_1(),
@@ -66,8 +72,20 @@ public class SplitterList4Dsaa {
 	SplitterList.put("StackAr.topAndPop", new Splitter[] {
 	    new StackArSplitter_topAndPop()});
 
+	SplitterList.put("StackAr.isEmpty", new Splitter[] {
+	    new StackArSplitter_isEmpty()});
+
+	SplitterList.put("StackAr.isFull", new Splitter[] {
+	    new StackArSplitter_isFull()});
+
 	SplitterList.put("CursorListItr.advance", new Splitter[] {
 	    new CursorListItrSplitter_advance()});
+
+	SplitterList.put("CursorListItr.isPastEnd", new Splitter[] {
+	    new CursorListItrSplitter_isPastEnd()});
+
+	SplitterList.put("CursorListItr.retrieve", new Splitter[] {
+	    new CursorListItrSplitter_retrieve()});
 
 	SplitterList.put("IntegerList.find", new Splitter[] {
 	    new IntegerListSplitter_find()});
@@ -115,6 +133,12 @@ public class SplitterList4Dsaa {
 
 	SplitterList.put("BinarySearchTree.size", new Splitter[] {
 	    new BinarySearchTreeSplitter_size1()});
+
+	SplitterList.put("BinarySearchTree.elementAt", new Splitter[] {
+	    new BinarySearchTreeSplitter_elementAt()});
+
+	SplitterList.put("BinarySearchTree.isEmpty", new Splitter[] {
+	    new BinarySearchTreeSplitter_isEmpty()});
 
 	SplitterList.put("StackLi.pop", new Splitter[] {
 	    new StackLiSplitter_pop()});
@@ -189,6 +213,9 @@ public class SplitterList4Dsaa {
 	SplitterList.put("LinkedList.remove", new Splitter[] {
 	    new LinkedListSplitter_remove()});
 
+	SplitterList.put("LinkedList.isEmpty", new Splitter[] {
+	    new LinkedListSplitter_isEmpty()});
+
 	SplitterList.put("Sample2.main", new Splitter[] {
 	    new Sample2Splitter_main()});
 
@@ -246,6 +273,12 @@ public class SplitterList4Dsaa {
 	SplitterList.put("QueueAr.makeEmpty", new Splitter[] {
 	    new QueueArSplitter_makeEmpty()});
 
+	SplitterList.put("QueueAr.isEmpty", new Splitter[] {
+	    new QueueArSplitter_isEmpty()});
+
+	SplitterList.put("QueueAr.isFull", new Splitter[] {
+	    new QueueArSplitter_isFull()});
+
 	SplitterList.put("CursorList.alloc", new Splitter[] {
 	    new CursorListSplitter_alloc()});
 
@@ -255,14 +288,23 @@ public class SplitterList4Dsaa {
 	SplitterList.put("CursorList.length", new Splitter[] {
 	    new CursorListSplitter_length()});
 
+	SplitterList.put("SortedList.isEmpty", new Splitter[] {
+	    new SortedListSplitter_isEmpty()});
+
 	SplitterList.put("SortedListItr.advance", new Splitter[] {
 	    new SortedListItrSplitter_advance()});
+
+	SplitterList.put("SortedListItr.isPastEnd", new Splitter[] {
+	    new SortedListItrSplitter_isPastEnd()});
 
 	SplitterList.put("OrderedList.insert", new Splitter[] {
 	    new OrderedListSplitter_insert()});
 
 	SplitterList.put("OrderedList.remove", new Splitter[] {
 	    new OrderedListSplitter_remove()});
+
+	SplitterList.put("OrderedList.isEmpty", new Splitter[] {
+	    new OrderedListSplitter_isEmpty()});
 
     }
 }
