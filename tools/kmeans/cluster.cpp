@@ -68,8 +68,11 @@ void Cluster::calculateMeans(void) {
   for (int i = 0; i < numpoints; i++) {
     float *tempdata = points[i]->getData();
     for(int j = 0; j < dimensions; j++) {
-      meandata[j] += tempdata[j]/numpoints;
+      meandata[j] += tempdata[j];
     }
+  }
+  for (int i = 0; i < dimensions; i++) {
+    meandata[j]  = meandata[j]/numpoints;
   }
 }
 
