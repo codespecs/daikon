@@ -18,7 +18,7 @@ public class DtraceECTester {
         }
         ArrayList al = new ArrayList();
 
-        for (Iterator i = mrs.valuesIter(); i.hasNext();) {
+        for (Iterator i = mrs.valuesIter(); i.hasNext(); ) {
             al.add (i.next());
         }
         al = dec.patchValues (al);

@@ -8603,7 +8603,7 @@ public class JavaParser implements JavaParserConstants {
         jj_expentry[i] = jj_lasttokens[i];
       }
       boolean exists = false;
-      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements();) {
+      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements(); ) {
         int[] oldentry = (int[])(enum.nextElement());
         if (oldentry.length == jj_expentry.length) {
           exists = true;

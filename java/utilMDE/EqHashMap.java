@@ -222,12 +222,12 @@ public final class EqHashMap extends AbstractMap implements Map, Cloneable,
 	Entry tab[] = table;
 
 	if (value==null) {
-	    for (int i = tab.length ; i-- > 0 ;)
+	    for (int i = tab.length ; i-- > 0 ; )
 		for (Entry e = tab[i] ; e != null ; e = e.next)
 		    if (e.value==null)
 			return true;
 	} else {
-	    for (int i = tab.length ; i-- > 0 ;)
+	    for (int i = tab.length ; i-- > 0 ; )
 		for (Entry e = tab[i] ; e != null ; e = e.next)
 		    if (value.equals(e.value))
 			return true;
@@ -292,7 +292,7 @@ public final class EqHashMap extends AbstractMap implements Map, Cloneable,
 	threshold = (int)(newCapacity * loadFactor);
 	table = newMap;
 
-	for (int i = oldCapacity ; i-- > 0 ;) {
+	for (int i = oldCapacity ; i-- > 0 ; ) {
 	    for (Entry old = oldMap[i] ; old != null ; ) {
 		Entry e = old;
 		old = old.next;

@@ -461,7 +461,7 @@ public final class WeakHasherMap extends AbstractMap implements Map {
 
 	public int hashCode() {
 	    int h = 0;
-	    for (Iterator i = hashEntrySet.iterator(); i.hasNext();) {
+	    for (Iterator i = hashEntrySet.iterator(); i.hasNext(); ) {
 		Map.Entry ent = (Map.Entry)i.next();
 		WeakKey wk = (WeakKey)ent.getKey();
 		Object v;
