@@ -382,6 +382,8 @@ use-%:
 
 ## For debugging the Makefile.
 showvars:
+	@echo JAVAC = ${JAVAC}
+	@echo JAVA = ${JAVA}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
 
