@@ -1,8 +1,8 @@
 #!/uns/bin/perl
 # checkargs -- check number of args in function calls
-# Michael D. Ernst <mernst@cs.washington.edu>
-# http://sdg.lcs.mit.edu/~mernst/software/checkargs.pm
-# Time-stamp: <2003-09-13 12:57:23 mernst>
+# Michael D. Ernst <mernst@csail.mit.edu>
+# http://pag.csail.mit.edu/~mernst/software/checkargs.pm
+# Time-stamp: <2004-05-08 11:18:42 mernst>
 
 package checkargs;
 require 5.004;			# uses "for my $var"
