@@ -3,10 +3,15 @@ Owner:        adonovan <adonovan@lcs.mit.edu>, Jeremy <mistere>
 Tool:         Daikon
 Summary:      Array bounds fail in LinearBinaryCore.add_modified
 Severity:     Vexing
-Status:       New
+Status:       Closed
 Reproducible: Yes
 Description:
 
+[16-Mar-2002, mistere]: It was an overflow problem; apparently not
+many test suites we have used long fields, but BitSet fdoes.  Fixed in
+V2 of daikon.
+
+[adonovan]
 antlr.collections.impl.BitSet consistently causes Daikon to crash like
 this: Jeremy said he suspected arithmetic over/under-flow of numbers
 close to MAX_LONG causing wild array indices.
@@ -24,6 +29,9 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException
 
 --
 $Log$
-Revision 1.1  2002-03-15 00:46:26  adonovan
+Revision 1.2  2002-03-17 01:59:01  mistere
+changed bug0025
+
+Revision 1.1  2002/03/15 00:46:26  adonovan
 new bug0025
 
