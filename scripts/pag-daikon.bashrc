@@ -25,8 +25,10 @@ source ${INV}/scripts/daikon.bashrc
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
-export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}
+if [ -z "$DAIKON_LIBS" ]; then
+  export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
+  export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}
+fi
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
 # Remove duplicates so path and classpath don't get too long
