@@ -122,6 +122,17 @@ Installing Daikon:
 	      for instance, in csh place the following in your
 	      <tt>.cshrc</tt> file:<br>
               <tt>set path = (<em>parent</em>/daikon/java-front-end/src $path)</tt><br>
+          <li>Make sure that <tt>rt.jar</tt> is on your Java class path.
+              For instance, in csh place something like the following in your
+	      <tt>.cshrc</tt> file:<br>
+<pre>
+        setenv CLASSPATH ${CLASSPATH}:$HOME/lib/linux/jdk/jre/lib/rt.jar
+</pre>
+  <li>Add the Daikon Java files to your Java class path.  For instance, in
+      csh put the following in your <tt>.cshrc</tt> file:
+<pre>
+      setenv CLASSPATH <em>parent</em>/daikon/java:${CLASSPATH}
+
         </ol>
       <li><b>C front end</b>:
         Supporting files for the C front end are found in the 
