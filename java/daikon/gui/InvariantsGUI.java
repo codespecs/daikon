@@ -299,12 +299,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     JPanel filtersPanel = new JPanel();
     filtersPanel.setBorder( createBorder( "Property filters" ));
     filtersPanel.setLayout( new BoxLayout( filtersPanel, BoxLayout.Y_AXIS ));
-    filtersPanel.add( createFilterCheckBox( "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER ));
-    filtersPanel.add( createFilterCheckBox( "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER ));
-    filtersPanel.add( createFilterCheckBox( "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER ));
-    filtersPanel.add( createFilterCheckBox( "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER ));
-    filtersPanel.add( createFilterCheckBox( "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER ));
-    filtersPanel.add( createFilterCheckBox( "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER ));
+    for (Iterator iter = invariantFilters.getPropertyFiltersIterator(); iter.hasNext(); )
+      filtersPanel.add( createFilterCheckBox( (InvariantFilter) iter.next()));
     filtersPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
     filtersPanel.add( filterButtonsPanel );
     filtersPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
@@ -408,10 +404,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 					     title );
   }
 
-  JCheckBox createFilterCheckBox( String text, int id ) {
-    JCheckBox checkBox = new JCheckBox( text, true );
+  JCheckBox createFilterCheckBox( InvariantFilter invariantFilter ) {
+    JCheckBox checkBox = new JCheckBox( invariantFilter.getDescription(), true );
     checkBox.addActionListener( this );
-    checkBox.setName( new Integer( id ).toString());
     checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
     filterCheckBoxes.add( checkBox );
     return checkBox;
@@ -442,13 +437,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     //  Handle checkbox events involving filters
     else if (e.getSource().getClass() == JCheckBox.class) {
       JCheckBox checkBox = (JCheckBox) e.getSource();
-      String checkBoxText = checkBox.getText();
-      String checkBoxName = checkBox.getName();
-      if (checkBoxName != null) {	// One specific filter was selected or deselected
-	int filterID = new Integer( checkBoxName ).intValue();
-	invariantFilters.changeFilterSetting( filterID, checkBox.isSelected());
-	invariantsTablesPanel.updateInvariantsDisplay();
-      }
+      String filterDescription = checkBox.getText();
+      invariantFilters.changeFilterSetting( filterDescription, checkBox.isSelected());
+      invariantsTablesPanel.updateInvariantsDisplay();
     }
     //  Handle button events
     else if (e.getSource().getClass() == JButton.class) {
@@ -644,8 +635,10 @@ class InvariantTablesPanel implements TreeSelectionListener {
     headingLabel.setForeground( new Color( 50, 30, 100 ));
     headingLabel.setAlignmentX( .5f );
     JButton showVariablesButton = new JButton( "Show variables..." );
-    final InvariantTablesPanel invariantTablesPanel = this;	// need to declare this variable cause inner
-    // class actionPerformed() doesn't see "this"
+
+    // need to declare this variable cause inner class actionPerformed() doesn't see "this"
+    final InvariantTablesPanel invariantTablesPanel = this;
+
     showVariablesButton.addActionListener( new ActionListener() {
 	//  Make this an inner class so it can see topLevel
 	public void actionPerformed( ActionEvent e ) {
@@ -679,8 +672,10 @@ class InvariantTablesPanel implements TreeSelectionListener {
       InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
       tableModel.updateInvariantList( invariantFilters );
       JPanel panel = (JPanel) tables.get( i );
-      JScrollPane scrollPane = (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 );
-      resizeScrollPane( scrollPane );
+
+      if ((panel.getComponent( panel.getComponentCount() - 1 )).getClass() == JScrollPane.class)
+	resizeScrollPane( (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 ));
+
       tableHeights.set( i, new Integer( (int) panel.getPreferredSize().getHeight()));
     }
     panel.repaint();
@@ -796,7 +791,10 @@ class VariableSelectionDialog extends JDialog {
       }
 
     JButton cancelButton = new JButton( "Cancel" );
-    final VariableSelectionDialog variableSelectionDialog = this;	// wish I could use this$0
+
+    // need to declare this variable cause inner class actionPerformed() doesn't see "this"
+    final VariableSelectionDialog variableSelectionDialog = this;
+
     cancelButton.addActionListener( new ActionListener() {
 	public void actionPerformed( ActionEvent e ) {
 	  variableSelectionDialog.setVisible( false );
