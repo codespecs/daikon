@@ -497,7 +497,7 @@ target.
 
     <code>
       cd $inv/java <br>
-      cvs -q log -d ">Oct 1 2004" -N | cvs-log-summarize.pl <br>
+      cvs -q log -d ">2004-12-01" -N | cvs-log-summarize.pl <br>
     </code>
 
     <li> Set the distribution date and versions number.  The date will
@@ -530,15 +530,16 @@ target.
         make staging-to-www <br>
     </code> <p>
 
-    Note that <code>make staging-to-www</code> will automatically update the
-    version numbers in the source code and documentation from the file
-    <tt>doc/VERSION</tt>.  After doing so, it will correctly update
-    the version number in <tt>doc/VERSION</tt>.  This should not
-    require any hand intervention unless there is a problem near the
-    end of building the distribution and the <code>make dist</code>
-    command has to be run again after the version number has been
-    incremented.  In this case, simply edit <tt>doc/VERSION</tt> by
-    hand back to the correct version number before rebuilding. <p>
+    Note that <code>make staging-to-www</code> will automatically
+    update the version numbers in the source code and documentation
+    from the file <tt>doc/VERSION</tt>.  After doing so, it will
+    correctly update the version number in <tt>doc/VERSION</tt>.  This
+    should not require any hand intervention unless there is a problem
+    near the end of building the distribution and the <code>make
+    update-doc-dist-date-and-version </code> command has to be run
+    again after the version number has been incremented.  In this
+    case, simply edit <tt>doc/VERSION</tt> by hand back to the correct
+    version number before rebuilding. <p>
 
     <li> Commit any changes back to CVS <p>
 
