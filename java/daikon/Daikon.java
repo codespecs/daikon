@@ -66,7 +66,7 @@ public final class Daikon {
   public static int output_style = OUTPUT_STYLE_NORMAL;
   // public static int output_style = OUTPUT_STYLE_ESC;
   // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
-  
+
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
   // public static boolean output_num_samples = true;
@@ -84,19 +84,8 @@ public final class Daikon {
     + "    java daikon.Daikon [flags...] files..." + lineSep
     + "  Each file is a declaration file or a data trace file; the file type" + lineSep
     + "  is determined by the file name (containing \".decls\" or \".dtrace\")." + lineSep
-    + "  Flags:" + lineSep
-    + "    -h		     Print this usage message" + lineSep
-    + "    -r ppt_regexp     Only process program points matching the regexp" + lineSep
-    + "    -o inv_file       Serialize invariants to the specified file;" + lineSep
-    + "                        they can later be postprocessed, compared, etc." + lineSep
-    + "    --suppress_cont   Suppress display of implied invariants (by controlling ppt)." + lineSep
-    + "    --suppress_post   Suppress display of obvious postconditions on prestate." + lineSep
-    + "    --prob_limit pct  Sets the probability limit for justifying invariants." + lineSep
-    + "                        The default is 1%.  Smaller values yield stronger filtering." + lineSep
-    + "    --esc_output      Write output in ESC-like format." + lineSep
-    + "    --simplify_output Write output in ESC-like format." + lineSep
-    + "    --output_num_samples      Output numbers of values and samples for" + lineSep
-    + "				       invariants and program points; for debugging." + lineSep
+    + "  For a list of flags, see the Daikon manual, which appears in the " + lineSep
+    + "  Daikon distribution and also at http://sdg.lcs.mit.edu/daikon/." + lineSep
     ;
 
   /**

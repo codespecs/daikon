@@ -129,7 +129,7 @@ public final class FileIO {
         if (line.equals("none")) {
           varcomp_format = VarComparability.NONE;
         } else if (line.equals("implicit")) {
-          throw new Error("Implicit varcomparability not yet supported");
+          varcomp_format = VarComparability.IMPLICIT;
         } else if (line.equals("explicit")) {
           varcomp_format = VarComparability.EXPLICIT;
         } else {

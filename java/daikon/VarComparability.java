@@ -30,7 +30,7 @@ public abstract class VarComparability {
       // Should I return a dummy object that responds to VarComparability methods?
       return VarComparabilityNone.parse(rep, vartype);
     } else if (format == IMPLICIT) {
-      throw new Error("Not yet implemented");
+      return VarComparabilityImplicit.parse(rep, vartype);
     } else if (format == EXPLICIT) {
       return VarComparabilityExplicit.parse(rep, vartype);
     } else {
@@ -55,16 +55,17 @@ public abstract class VarComparability {
     if (type1 instanceof VarComparabilityNone) {
       return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
                                              name2, (VarComparabilityNone)type2);
-    // This class doesn't even exist yet!
-    // } else if (type1 instanceof VarComparabilityImplicit) {
-    //   throw new Error("Not yet implemented");
-    //   // return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
-    //   //                                        name2, (VarComparabilityNone)type2);
+    } else if (type1 instanceof VarComparabilityImplicit) {
+	return VarComparabilityImplicit.compatible(name1, (VarComparabilityImplicit)type1,
+						   name2, (VarComparabilityImplicit)type2);
     } else if (type1 instanceof VarComparabilityNone) {
+      return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
+                                             name2, (VarComparabilityNone)type2);
+    } else if (type1 instanceof VarComparabilityExplicit) {
       return VarComparabilityExplicit.compatible(name1, (VarComparabilityExplicit)type1,
                                              name2, (VarComparabilityExplicit)type2);
     } else {
-      throw new Error("What type is this? " + type1);
+      throw new Error("Unrecognized subtype of VarCmoparability: " + type1);
     }
   }
 
