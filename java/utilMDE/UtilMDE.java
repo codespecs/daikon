@@ -989,6 +989,28 @@ public final class UtilMDE {
 
 
   ///
+  /// Set
+  ///
+
+  /**
+   * Returns the object in this set that is equal to key.
+   * The Set abstraction doesn't provide this; it only provides "contains".
+   **/
+  public static Object getFromSet(Set set, Object key) {
+    if (key == null) {
+      return null;
+    }
+    for (Iterator itor = set.iterator(); itor.hasNext(); ) {
+      Object elt = itor.next();
+      if (key.equals(elt)) {
+        return elt;
+      }
+    }
+    return null;
+  }
+
+
+  ///
   /// Stream
   ///
 
