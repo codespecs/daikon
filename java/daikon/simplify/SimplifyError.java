@@ -1,5 +1,8 @@
 package daikon.simplify;
 
+/**
+ * Superclass of all runtime errors in this package.
+ **/
 public class SimplifyError
   extends RuntimeException
 {
