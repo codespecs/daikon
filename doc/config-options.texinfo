@@ -1,5 +1,10 @@
 @c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING
 
+@item daikon.Daikon.calc_possible_invs
+Boolean.  Just print the total number of possible invariants
+and exit
+The default value is `false'.
+
 @item daikon.Daikon.df_bottom_up
 Whether to use the bottom up implementation of the dataflow
 hierarchy.  This mechanism builds invariants initially
@@ -8,15 +13,42 @@ calculated by joining the invariants from each of their children
 points
 The default value is `true'.
 
+@item daikon.Daikon.disable_splitting
+Boolean.  Controls whether or not splitting based on the built-in
+splitting rules is disabled.  The built-in rules look for implications
+based on boolean return values and also when there are exactly two
+exit points from a method.
+The default value is `false'.
+
 @item daikon.Daikon.enable_floats
 Boolean.  Controls whether invariants are reported over floating-point
 values.
 The default value is `true'.
 
+@item daikon.Daikon.noInvariantGuarding
+If true no invariants will be guarded, guarding meaning that
+if a variable "can be missing" in a dtrace file that predicates
+are attached to invariants ensuring their values can be gather
+(for instance, if a.b "can be missing", and a.b == 5 is an
+invariant, then it is more properly declared as (a != null) ==>
+(a.b == 5))
+The default value is `false'.
+
 @item daikon.Daikon.output_conditionals
 Boolean.  Controls whether conditional program points (see Daikon
 manual) are displayed.
 The default value is `true'.
+
+@item daikon.Daikon.ppt_perc
+Integer. Percentage of ppts to process.  All ppts are sorted and
+the first dkconfig_ppt_perc ppts are included.  A percentage of
+100 (default) matches all ppts.
+The default value is `100'.
+
+@item daikon.Daikon.print_sample_totals
+Boolean.  Controls whether or not total samples read and processed
+are printed at the end of processing
+The default value is `false'.
 
 @item daikon.Daikon.progress_delay
 The amount of time to wait between updates of the progress
@@ -30,6 +62,19 @@ Unix shells, this can be set to an appropriate value by
 --config_option daikon.Daikon.progress_display_width=$COLUMNS
 The default value is `80'.
 
+@item daikon.Daikon.suppressSplitterErrors
+When true compilation errors during splitter file generation
+will not be reported to the user.
+The default value is `false'.
+
+@item daikon.Daikon.use_dynamic_constant_optimization
+Whether to use the dynamic constants optimization.  This
+optimization doesn't instantiate invariants over constant
+variables (ie, that that have only seen one value).  When the
+variable receives a second value, invariants are instantiated and
+are given the sample representing the previous constant value.
+The default value is `true'.
+
 @item daikon.Debug.logDetail
 Determines whether or not detailed info (such as from add_modified)
 is printed
@@ -38,6 +83,20 @@ The default value is `false'.
 @item daikon.Debug.showTraceback
 Determines whether or not traceback information is printed for each
 call to log.
+The default value is `false'.
+
+@item daikon.DynamicConstants.OneOf_only
+Boolean. If true only create OneOf invariants for variables that
+are constant for the entire run.  If false, all possible invariants
+are created between constants.  Note that setting this to true only
+fails to create invariants between constants.  Invariants between
+constants and non-constants are created regardless.
+
+A problem occurs with merging when this is turned on.  If a var_info
+is constant at one child slice, but not constant at the other child
+slice, interesting invariants may not be merged because they won't
+exist on the slice with the constant.  This is thus currently
+defaulted to false.
 The default value is `false'.
 
 @item daikon.FileIO.add_changed
@@ -56,12 +115,13 @@ Boolean.  If true, prints the unmatched procedure entries
 verbosely.
 The default value is `false'.
 
-@item daikon.PptSlice.remove_merged_invs
-Remove invariants at lower program points when a matching invariant is
-created at a higher program point. For experimental purposes only.
+@item daikon.PptSliceEquality.set_per_var
+Create one set for each variable.  This has the effect of turning
+the equality optimization off, without actually removing the sets
+themselves (which are presumed to exist in many parts of the code)
 The default value is `false'.
 
-@item daikon.PptTopLevel.dummy_invariant_level
+@item daikon.PptSplitter.dummy_invariant_level
 Integer. A value of zero indicates that dummy invariants should
 not be created. A value of one indicates that dummy invariants
 should be created only when no suitable condition was found in
@@ -75,6 +135,19 @@ combinations of conditions, and all pairwise combinations of exit
 points.  If false, create implications for only the first
 two conditions, and create implications only if there are
 exactly two exit points.
+The default value is `false'.
+
+@item daikon.PptTopLevel.remove_merged_invs
+Remove invariants at lower program points when a matching invariant is
+created at a higher program point. For experimental purposes only.
+The default value is `false'.
+
+@item daikon.PrintInvariants.print_inv_class
+Print invariant classsname with invariants in output of format()
+method.  Note that this only works with the Invariant.format() method;
+it doesn't have any effect on calls to format_using().  format() is
+used in debugging statements, and format_using() is used in typical
+output.
 The default value is `false'.
 
 @item daikon.derive.binary.SequenceFloatIntersection.enabled
@@ -204,6 +277,13 @@ The default value is `false'.
 Boolean.  True iff SequenceSum derived variables should be generated.
 The default value is `false'.
 
+@item daikon.inv.Invariant.confidence_limit
+Real number between 0 and 1.  The invariant is displayed only if
+the confidence that the invariant did not occur by chance is
+greater than this.  (May also be set
+via --conf_limit switch to Daikon; refer to manual.)
+The default value is `0.99'.
+
 @item daikon.inv.Invariant.fuzzy_ratio
 Real number between 0 and 0.1.  The maximum relative difference
 between two floats for fuzzy comparisons.  Larger values will
@@ -213,13 +293,6 @@ Specifically, if the equation 'abs (1 - f1/f2) <= perc' is true,
 then the two doubles (f1 and f2) will be treated as equal by
 Daikon.
 The default value is `1.0E-4'.
-
-@item daikon.inv.Invariant.probability_limit
-Real number between 0 and 1.  The invariant is displayed only if
-the probability that the invariant occurred by chance is
-less than this.  (May also be set
-via --prob_limit switch to Daikon; refer to manual.)
-The default value is `0.01'.
 
 @item daikon.inv.Invariant.simplify_define_predicates
 A boolean value. If true, Daikon's Simplify output (printed when
@@ -506,12 +579,36 @@ The default value is `false'.
 Boolean.  True iff StringComparison invariants should be considered.
 The default value is `true'.
 
+@item daikon.inv.binary.twoString.StringEqual.enabled
+Boolean.  True iff StringEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoString.StringGreaterEqual.enabled
+Boolean.  True iff StringGreaterEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoString.StringGreaterThan.enabled
+Boolean.  True iff StringGreaterThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoString.StringLessEqual.enabled
+Boolean.  True iff StringLessEqual invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoString.StringLessThan.enabled
+Boolean.  True iff StringLessThan invariants should be considered.
+The default value is `true'.
+
+@item daikon.inv.binary.twoString.StringNonEqual.enabled
+Boolean.  True iff StringNonEqual invariants should be considered.
+The default value is `true'.
+
 @item daikon.inv.ternary.threeScalar.FunctionBinary.enabled
-Boolean.  True iff FunctionBinary invariants should be considered.
+Boolean. True if FunctionBinary invariants should be considered.
 The default value is `true'.
 
 @item daikon.inv.ternary.threeScalar.FunctionBinaryFloat.enabled
-Boolean.  True iff FunctionBinaryFloat invariants should be considered.
+Boolean. True if FunctionBinaryFloat invariants should be considered.
 The default value is `true'.
 
 @item daikon.inv.ternary.threeScalar.LinearTernary.enabled
@@ -590,6 +687,18 @@ The default value is `3'.
 @item daikon.inv.unary.scalar.OneOfScalar.enabled
 Boolean.  True iff OneOf invariants should be considered.
 The default value is `true'.
+
+@item daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify
+Boolean. If true, invariants describing hashcode-typed variables
+as having any particular value will be completely omitted from
+Simplify-format output. If false, hashcodes will be formatted as
+the application of a "hashcode" uninterpreted function to an
+integer representing the bit pattern of the hashcode. One might
+wish to omit such invariants because the exact values of the
+hashcodes are usually uninteresting; this is the same reason they
+print in the native Daikon format, for instance, as "var has only
+one value" rather than "var == 150924732".
+The default value is `false'.
 
 @item daikon.inv.unary.scalar.OneOfScalar.size
 Positive integer.  Specifies the maximum set size for this type
@@ -696,6 +805,18 @@ The default value is `true'.
 Boolean.  True iff OneOf invariants should be considered.
 The default value is `true'.
 
+@item daikon.inv.unary.sequence.EltOneOf.omit_hashcode_values_Simplify
+Boolean. If true, invariants describing hashcode-typed variables
+as having any particular value will be completely omitted from
+Simplify-format output. If false, hashcodes will be formatted as
+the application of a "hashcode" uninterpreted function to an
+integer representing the bit pattern of the hashcode. One might
+wish to omit such invariants because the exact values of the
+hashcodes are usually uninteresting; this is the same reason they
+print in the native Daikon format, for instance, as "var has only
+one value" rather than "var == 150924732".
+The default value is `false'.
+
 @item daikon.inv.unary.sequence.EltOneOf.size
 Positive integer.  Specifies the maximum set size for this type
 of invariant (x is one of 'n' items).
@@ -750,10 +871,6 @@ to -1 and maximal_interesting to 2 would only permit output of
 EltUpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
 The default value is `-1'.
 
-@item daikon.inv.unary.sequence.EltwiseFloatComparison.enabled
-(no description provided)
-The default value is `true'.
-
 @item daikon.inv.unary.sequence.EltwiseFloatEqual.enabled
 Boolean.  True iff EltwiseIntComparison invariants should be considered.
 The default value is `true'.
@@ -772,10 +889,6 @@ The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltwiseFloatLessThan.enabled
 Boolean.  True iff EltwiseIntComparison invariants should be considered.
-The default value is `true'.
-
-@item daikon.inv.unary.sequence.EltwiseIntComparison.enabled
-(no description provided)
 The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltwiseIntEqual.enabled
@@ -818,6 +931,18 @@ The default value is `3'.
 @item daikon.inv.unary.sequence.OneOfSequence.enabled
 Boolean.  True iff OneOf invariants should be considered.
 The default value is `true'.
+
+@item daikon.inv.unary.sequence.OneOfSequence.omit_hashcode_values_Simplify
+Boolean. If true, invariants describing hashcode-typed variables
+as having any particular value will be completely omitted from
+Simplify-format output. If false, hashcodes will be formatted as
+the application of a "hashcode" uninterpreted function to an
+integer representing the bit pattern of the hashcode. One might
+wish to omit such invariants because the exact values of the
+hashcodes are usually uninteresting; this is the same reason they
+print in the native Daikon format, for instance, as "var has only
+one value" rather than "var == 150924732".
+The default value is `false'.
 
 @item daikon.inv.unary.sequence.OneOfSequence.size
 Positive integer.  Specifies the maximum set size for this type
@@ -973,7 +1098,7 @@ The default value is `true'.
 Boolean.  Enables indiscriminate splitting
 (see Daikon manual, @ref{Indiscriminate splitting},
 for an explanation of this technique).
-The default value is `false'.
+The default value is `true'.
 
 @item daikon.split.TimedProcess.compile_timeout
 Positive integer.  Specifies the Splitter compilation timeout, in
