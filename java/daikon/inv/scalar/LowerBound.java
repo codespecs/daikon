@@ -9,11 +9,9 @@ import java.util.*;
 // Automatically generated from Bound-cpp.java
 // *****
 
-
 // LowerBound >= 0 is implied by the variable being the length of an array or list.
 //         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
 // That affects only printing, I think.
-
 
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
@@ -22,7 +20,6 @@ import java.util.*;
 // than (say) twice the expected number of samples (under the assumption of
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
-
 
 class LowerBound  extends SingleScalar {
 
@@ -50,7 +47,7 @@ class LowerBound  extends SingleScalar {
   }
 
   public String repr_long() {
-    // doesn't include result of getProbability because this
+    // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "LowerBound"  + varNames() + ": "
       + "min1=" + min1 
@@ -128,7 +125,7 @@ class LowerBound  extends SingleScalar {
     //    as many elements as they ought to by chance alone, and at
     //    least 3.
 
-    // If I used Math.abs, the order of arguments to minus wouldn't matter.
+    // If I used Math.abs, the order of arguments to minus would not matter.
     int range =  (max  - min1 ) + 1;
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
 

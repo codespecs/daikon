@@ -9,12 +9,6 @@ import java.util.*;
 // Automatically generated from Bound-cpp.java
 // *****
 
-
-
-
-
-
-
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
 // naturally there are more instances of each value.
@@ -22,7 +16,6 @@ import java.util.*;
 // than (say) twice the expected number of samples (under the assumption of
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
-
 
 class UpperBound  extends SingleScalar {
 
@@ -50,7 +43,7 @@ class UpperBound  extends SingleScalar {
   }
 
   public String repr_long() {
-    // doesn't include result of getProbability because this
+    // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "UpperBound"  + varNames() + ": "
       + "max1=" + max1 
@@ -128,7 +121,7 @@ class UpperBound  extends SingleScalar {
     //    as many elements as they ought to by chance alone, and at
     //    least 3.
 
-    // If I used Math.abs, the order of arguments to minus wouldn't matter.
+    // If I used Math.abs, the order of arguments to minus would not matter.
     int range = - (min  - max1 ) + 1;
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
 

@@ -95,7 +95,7 @@ class LOWERBOUND extends SingleScalar {
   }
 
   public String repr_long() {
-    // doesn't include result of getProbability because this
+    // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return LOWERBOUNDSTR + varNames() + ": "
       + MINSTR + "1=" + MIN1
@@ -173,7 +173,7 @@ class LOWERBOUND extends SingleScalar {
     //    as many elements as they ought to by chance alone, and at
     //    least 3.
 
-    // If I used Math.abs, the order of arguments to minus wouldn't matter.
+    // If I used Math.abs, the order of arguments to minus would not matter.
     int range = SIGNADJUST(MAX - MIN1) + 1;
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
 
