@@ -125,7 +125,15 @@ public abstract class VarInfoName
     return false;
   }
 
-    // ============================================================
+  /**
+   * @return true if the given node is in a prestate context within
+   * this tree; the node must be a member of this tree.
+   **/
+  public boolean inPrestateContext(VarInfoName node) {
+    return (new NodeFinder(this, node)).inPre();
+  }
+  
+  // ============================================================
   // The usual Object methods
 
   public boolean equals(Object o) {
@@ -647,6 +655,65 @@ public abstract class VarInfoName
   }    
 
   /**
+   * Use to report whether a node is in a pre- or post-state context.
+   **/
+  public static class NodeFinder
+    extends AbstractVisitor
+  {
+    public NodeFinder(VarInfoName root, VarInfoName goal) {
+      this.goal = goal;
+      Object o = root.accept(this);
+      Assert.assert(o != null);
+    }
+    // state and accessors
+    private final VarInfoName goal;
+    private boolean pre;
+    public boolean inPre() {
+      return pre;
+    }
+    // visitor methods which get the job done
+    public Object visitSimple(Simple o) {
+      return (o == goal) ? goal : null;
+    }
+    public Object visitSizeOf(SizeOf o) {
+      return (o == goal) ? goal : super.visitSizeOf(o);
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      return (o == goal) ? goal : super.visitFunctionOf(o);
+    }
+    public Object visitTypeOf(TypeOf o) {
+      return (o == goal) ? goal : super.visitTypeOf(o);
+    }
+    public Object visitPrestate(Prestate o) {
+      pre = true;
+      return super.visitPrestate(o);
+    }
+    public Object visitPoststate(Poststate o) {
+      pre = false;
+      return super.visitPoststate(o);
+    }
+    public Object visitAdd(Add o) {
+      return (o == goal) ? goal : super.visitAdd(o);
+    }
+    public Object visitElements(Elements o) {
+      return (o == goal) ? goal : super.visitElements(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      if (o == goal) return goal;
+      if (o.sequence.accept(this) != null) return goal;
+      if (o.index.accept(this) != null) return goal;
+      return null;
+    }
+    public Object visitSlice(Slice o) {
+      if (o == goal) return goal;
+      if (o.sequence.accept(this) != null) return goal;
+      if ((o.i != null) & (o.i.accept(this) != null)) return goal;
+      if ((o.j != null) & (o.j.accept(this) != null)) return goal;
+      return null;
+    }
+  }
+
+  /**
    * Use to traverse a tree, find the first (elements ...) node, and
    * report whether it's in pre or post-state.
    **/
@@ -940,6 +1007,12 @@ public abstract class VarInfoName
 	throw new IllegalStateException();
       }
       Assert.assert(replace_with != null);
+
+      // If needy was in prestate, adjust bounds appropriately
+      if (root.inPrestateContext(needy)) {
+	if (!lower.isLiteralConstant()) lower = lower.applyPrestate();
+	if (!upper.isLiteralConstant()) upper = upper.applyPrestate();
+      }
 
       // replace needy
       VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
