@@ -124,6 +124,7 @@ Avoiding work for redundant invariants
 Testing
 
 * Unit testing::                
+* Regression tests::            
 
 Unit testing
 
@@ -134,6 +135,10 @@ Sample Testing
 
 * Assertions::                  
 * Example file::                
+
+Regression tests
+
+* Adding regression tests::     
 
 Analyzing historical versions of Daikon
 
@@ -1126,25 +1131,11 @@ the @option{--noequality} flag.
 @chapter Testing
 
 Daikon has two sets of tests: unit tests (@pxref{Unit testing}) and
-regression tests.  If there
+regression tests (@pxref{Regression tests}).  If there
 are any differences between the expected results and the ones you get,
 don't check in your changes until you understand which is the desired
 behavior and possibly update the goals.
 
-The regression tests run Daikon on many different inputs and compare
-Daikon's output to expected output.  They take an hour or longer to run.
-When you make a change, you should generally run the regression tests
-before checking it in.  Always run the regression tests when checking in
-any non-trivial change to the code.  If any has a non-zero size, then your
-edits have changed Daikon's output and you should not check in without
-carefully determining that the changes are intentional and desirable (and
-you should update the goal output files, so that the diffs are again zero).
-The regression tests appear in the @file{$inv/tests} directory.  Type
-@samp{make} in that directory to see a list of options.  Generally you
-will want to run @samp{make diffs} and ensure that the list of diff files
-that is created all have zero size.  You do not generally need to do
-@samp{make clean}, which forces re-instrumentation (a slow process) the
-next time you run the tests.
 
 Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the 
 @file{$inv/tests/kvasir-tests} directory. These tests run Daikon to ensure 
@@ -1158,9 +1149,10 @@ correct output, then run "@samp{make update-inv-goals}" to update the Daikon
 
 @menu
 * Unit testing::                
+* Regression tests::            
 @end menu
 
-@node    Unit testing,  , Testing, Testing
+@node    Unit testing, Regression tests, Testing, Testing
 @section Unit testing
 
 The unit tests are found in @file{invariants/java/daikon/test/}; they use
@@ -1389,6 +1381,84 @@ ppt: foo.f():::EXIT35
   assert: inv(daikon.inv.binary.twoScalar.IntGreaterEqual,x,y)
   assert: !inv("x <= y", x, y)
 @end example
+
+@node    Regression tests,  , Unit testing, Testing
+@section Regression tests
+
+The regression tests run Daikon on many different inputs and compare
+Daikon's output to expected output.  They take an hour or longer to run.
+When you make a change, you should generally run the regression tests
+before checking it in.  Always run the regression tests when checking in
+any non-trivial change to the code.  If any has a non-zero size, then your
+edits have changed Daikon's output and you should not check in without
+carefully determining that the changes are intentional and desirable (and
+you should update the goal output files, so that the diffs are again zero).
+The regression tests appear in the @file{$inv/tests} directory.  Type
+@samp{make} in that directory to see a list of options.  Generally you
+will want to run @samp{make diffs} and ensure that the list of diff files
+that is created all have zero size.  You do not generally need to do
+@samp{make clean}, which forces re-instrumentation (a slow process) the
+next time you run the tests.
+
+@menu
+* Adding regression tests::     
+@end menu
+
+@node Adding regression tests,  , Regression tests, Regression tests
+@subsection Adding regression tests
+
+Most Daikon regression tests appear in @file{$inv/tests/daikon-tests}.  Each
+test is placed in a separate directory.  That directory contains a
+simple makefile and the goal files for the tests.  The source files
+for the test are stored in @file{$inv/tests/sources}.  For example,
+the @file{StackAr} directory contains the following files in CVS:
+@example
+  Makefile
+  Stackar.spinfo-static.goal
+  StackAr.txt-daikon.goal
+  StackAr.txt-esc.goal
+  StackAr.txt-jml.goal
+  StackAr.txt-merge-esc.goal
+  StackAr.txt-merge-jml.goal
+  StackAr.txt-repair.goal
+@end example
+
+The Makefile must contain the following entries.
+
+@table @samp
+@item MAIN_CLASS
+Dot separated fully qualified name of the class that contains the main
+entry point for the test.  For example 
+MAIN_CLASS := DataStructures.StackArTester.
+
+@item include ../../Makefile.common
+This includes the common portion of the test makefiles that does most
+of the work.  See it for more information on the details of regression
+testing.
+
+@item instrument-files-revise:
+A target that writes the list of files to instrument.  For example
+@example
+  instrument-files-revise:
+      echo "DataStructures/StackAr.java" >| $@{INST_LIST_FILE@}
+@end example
+
+@end table
+
+The goal files are the expected results of running daikon and its
+associated tools.  The easiest way to create them is to simply create
+empty versions of each.  The execute 'make diffs' to run the test and
+produce results.  When the results are as expected execute 'make update-goals'
+to copy the results in to the goal files.  Release the test by committing
+the goal files, Makefile, and source files.
+
+The common makefile contains a number of other useful targers.  A brief
+explanation of each can be found by executing make without a target.
+
+The test can be added into the standard tests (either 'everything' or
+'quick' by adding the test the appropriate list in 
+@file{$inv/tests/daikon-tests/Makefile}.
+commands 
 
 
 @node    Historical, Index, Testing, Top
