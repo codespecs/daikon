@@ -224,6 +224,7 @@ public final class Global {
       // { "min(this.diskLocation[0..toPeg])", "min(this.diskLocation[])" },
       // { "min(this.diskLocation[])", "min(this.diskLocation[0..toPeg])" },
       // { "min(this.denom)" },
+      // { "this.denom" },
     };
 
   // used only if debugPrintDtrace is true.  User need not set this.
