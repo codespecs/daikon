@@ -2221,6 +2221,14 @@ public final class VarInfo
    **/
   public static final class IndexComparator
     implements Comparator, Serializable {
+    // This needs to be serializable because Equality invariants keep
+    // a TreeSet of variables sorted by theInstance.
+
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031204L;
+
     private IndexComparator() {
     }
 
