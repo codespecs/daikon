@@ -531,15 +531,15 @@ License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C/C++ front end.  If you hold such a license, send mail to
 @email{daikon@@pag.lcs.mit.edu} to obtain a patch to the EDG front end
-(version 2.44).  The patch file is named @file{dfec-src.tgz}.  To build
+(version 2.45).  The patch file is named @file{dfec-src.tgz}.  To build
 dfec for yourself, perform the following steps:
 @enumerate
-@item Unpack the EDG 2.44 source tree somewhere.
-@item Unpack @file{dfec-src.tgz} in the @file{release_2.44/src/}
+@item Unpack the EDG 2.45 source tree somewhere.
+@item Unpack @file{dfec-src.tgz} in the @file{release_2.45/src/}
 subdirectory.  This installs new Makefiles and adds the dfec source
 modifications.
-@item Run @command{make} from the @file{release_2.44/} subdirectory.
-This creates the dfec executable,  @file{release_2.44/bin/dfec}.
+@item Run @command{make} from the @file{release_2.45/} subdirectory.
+This creates the dfec executable,  @file{release_2.45/bin/dfec}.
 @end enumerate
 
 @end enumerate
@@ -566,6 +566,7 @@ from @url{http://jde.sunsite.dk}.
 Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
 path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @example
+  ;; Daikon Context GUI
   (add-to-list 'load-path "@var{parent}/daikon/emacs")
   (autoload 'daikon-context-gui "daikon-context-gui" "Daikon Context GUI" t)
   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
