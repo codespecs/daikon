@@ -9,17 +9,37 @@ use strict;
 $WARNING = 1;
 
 if (@ARGV < 1) {
-  die "Usage: lwpp-init.pl <lackwitdb> [filename.c] ...\n";
+  die "Usage: lwpp-init.pl <lackwitdb> [lhargs...] [filenames...]\n";
 }
 
-my ($lackwitdb, @files) = @ARGV;
-
-my $lhdefs =
-#    " -D__builtin_next_arg\\(arg\\)='{char*argc=(char*)arg;return argc+1;}' ";
-    " -D__builtin_next_arg\\(arg\\)='(((char*)arg)+1)' ";
-
+my $lackwitdb = shift @ARGV;
 # Check args
 -d $lackwitdb or die "$lackwitdb is not a directory\n";
+my $lhargs =
+    "-D__builtin_next_arg\\(arg\\)='(((char*)arg)+1)' ";
+my @files = ();
+
+my $doingargs=1;
+
+ARGPARSE: while (defined (my $arg = shift @ARGV)) {
+    $arg =~ s/([\'\"\$])/\\$1/g;
+    if (($doingargs)&&($arg =~ /^-/)) {
+	$lhargs .= "${arg} ";
+    } else {
+	$doingargs=0;
+	if ($arg =~ /^-/) {
+	    #is -l, skip it
+	    next ARGPARSE;
+	} else {
+	    if ($arg =~ /\.h$/) {
+		#is hfile, skip it
+		next ARGPARSE;
+	    }
+	}
+	#is cfile
+	push @files, $arg;
+    }
+}
 
 # Check that LACKWIT_HOME is set correctly, and that the required
 # files are present and readable
@@ -57,7 +77,7 @@ foreach my $file (@files) {
     }
     $lh_output = `lh -\$ -w $lhflags --gen_c_file_name $int_file $file`;
   } else {
-    $lh_output = `lh -w $lhdefs --gen_c_file_name $int_file $file`;
+    $lh_output = `lh -w $lhargs --gen_c_file_name $int_file $file`;
   }
   die "lh failed processing file $file:\n$lh_output\n" if ($CHILD_ERROR != 0);
   my $gcc_output = `gcc -c $int_file -o /dev/null 2>&1`;
