@@ -633,22 +633,23 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // case that i<=j or i>=j.  The variables also each have a shift, so the
   // test is really for whether (i+1)<=(j-1).
   // The test is either:  i<=j or i>=j.
-  public static boolean compare_vars(VarInfo scl_index, int scl_shift, VarInfo seq_index, int seq_shift, boolean test_lessequal) {
-    if (scl_index == seq_index) {
-      // same variable: B[I] in B[0..I] or B[I] in B[I..]
+  public static boolean compare_vars(VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
+    // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
+    if (vari == varj) {
+      // same variable
       return (test_lessequal
-              ? (scl_shift <= seq_shift)
-              : (scl_shift >= seq_shift));
+              ? (vari_shift <= varj_shift)
+              : (vari_shift >= varj_shift));
     }
-    // different variables: B[I] in B[0..J] or B[I] in B[J..]
-    Assert.assert(scl_index.ppt == seq_index.ppt);
-    PptSlice indices_ppt = scl_index.ppt.getView(scl_index, seq_index);
+    // different variables
+    Assert.assert(vari.ppt == varj.ppt);
+    PptSlice indices_ppt = vari.ppt.getView(vari, varj);
     if (indices_ppt == null)
       return false;
 
-    boolean scl_is_var1 = (scl_index == indices_ppt.var_infos[0]);
+    boolean vari_is_var1 = (vari == indices_ppt.var_infos[0]);
     LinearBinary lb = LinearBinary.find(indices_ppt);
-    long index_scl_minus_seq = -2222;          // valid only if lb != null
+    long index_vari_minus_seq = -2222;          // valid only if lb != null
     if (lb != null) {
       if (!lb.justified()) {
         lb = null;
@@ -656,84 +657,58 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         // Do not attempt to deal with anything but y=x+b.
         lb = null;
       } else {
+        System.out.println("jusified LinearBinary: " + lb.format());
         // lb.b is var2()-var1().
-        index_scl_minus_seq = (scl_is_var1 ? -lb.core.b : lb.core.b);
-        index_scl_minus_seq += scl_shift - seq_shift;
+        index_vari_minus_seq = (vari_is_var1 ? -lb.core.b : lb.core.b);
+        index_vari_minus_seq += vari_shift - varj_shift;
       }
     }
     // The LinearBinary gives more info than IntComparison would,
     // so only compute the IntComparison if no LinearBinary.
     IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
-    boolean scl_can_be_lt = false;		// valid only if ic != null
-    boolean scl_can_be_eq = false;		// valid only if ic != null
-    boolean scl_can_be_gt = false;		// valid only if ic != null
+    boolean vari_can_be_lt = false;		// valid only if ic != null
+    boolean vari_can_be_eq = false;		// valid only if ic != null
+    boolean vari_can_be_gt = false;		// valid only if ic != null
     if (ic != null) {
       if (! ic.justified()) {
         ic = null;
       } else {
-        scl_can_be_eq = ic.core.can_be_eq;
-        if (scl_is_var1) {
-          scl_can_be_lt = ic.core.can_be_lt;
-          scl_can_be_gt = ic.core.can_be_gt;
+        // System.out.println("justified IntComparison: " + ic.format());
+        vari_can_be_eq = ic.core.can_be_eq;
+        if (vari_is_var1) {
+          vari_can_be_lt = ic.core.can_be_lt;
+          vari_can_be_gt = ic.core.can_be_gt;
         } else {
-          scl_can_be_lt = ic.core.can_be_gt;
-          scl_can_be_gt = ic.core.can_be_lt;
+          vari_can_be_lt = ic.core.can_be_gt;
+          vari_can_be_gt = ic.core.can_be_lt;
         }
       }
     }
 
+    // System.out.println("test_lessequal=" + test_lessequal
+    //                    + ", vari_can_be_lt=" + vari_can_be_lt
+    //                    + ", vari_can_be_eq=" + vari_can_be_eq
+    //                    + ", vari_can_be_gt=" + vari_can_be_gt);
+
     if (test_lessequal) {
-      // different variables: B[I] in B[0..J]
       if (lb != null) {
-        return (index_scl_minus_seq <= 0);
+        return (index_vari_minus_seq <= 0);
       } else if (ic != null) {
-        // 4 cases:
-        // (a) B[I] in B[0..J]
-        // (b) B[I] in B[0..J-1]
-        // (c) B[I-1] in B[0..J]
-        // (d) B[I-1] in B[0..J-1]
-        // 4 possible comparisons:
-        // (e) I < J
-        // (f) I <= J
-        // (g) I >= J
-        // (h) I > J
-        // Combinations:  (filled in means true)
-        //   abcd
-        // e abcd
-        // f a cd
-        // g
-        // h
-        return ((scl_can_be_lt && ! scl_can_be_eq)
-                || (scl_can_be_lt && scl_can_be_eq
-                    && (scl_shift <= seq_shift)));
+        return ((vari_can_be_lt && vari_can_be_eq
+                    && (vari_shift <= varj_shift))
+                || ((vari_can_be_lt && ! vari_can_be_eq)
+                    && (vari_shift - 1 <= varj_shift)));
       } else {
         return false;
       }
     } else {
-      // different variables: B[I] in B[J..]
       if (lb != null) {
-        return (index_scl_minus_seq >= 0);
+        return (index_vari_minus_seq >= 0);
       } else if (ic != null) {
-        // 4 cases:
-        // (a) B[I] in B[J..]
-        // (b) B[I] in B[J+1..]
-        // (c) B[I-1] in B[J..]
-        // (d) B[I-1] in B[J+1..]
-        // 4 possible comparisons:
-        // (e) I < J
-        // (f) I <= J
-        // (g) I >= J
-        // (h) I > J
-        // Combinations:  (filled in means true)
-        //   abcd
-        // e
-        // f
-        // g a
-        // h abc
-        return ((scl_can_be_gt && (! scl_can_be_eq)
-                 && (scl_shift + 1 >= seq_shift))
-                || (scl_can_be_gt && scl_can_be_eq
-                    && (scl_shift == seq_shift)));
+        return ((vari_can_be_gt && vari_can_be_eq
+                 && (vari_shift >= varj_shift))
+                || (vari_can_be_gt && (! vari_can_be_eq)
+                    && (vari_shift + 1 >= varj_shift)));
       } else {
         return false;
       }
@@ -758,7 +733,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     boolean start2 = sss2.from_start;
 
     if (start1 == start2) {
-      return compare_vars(index1, shift1, index2, shift2, start1);
+      // This test is too sophisticated (that is, it is wrong):
+      //   return compare_vars(index1, shift1, index2, shift2, start1);
+      // A[i..] always overlaps with A[j..]:  they share the same last element!
+      return true;
     } else {
       // start1 != start2
       return compare_vars(index1, shift1, index2, shift2, start2);

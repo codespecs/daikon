@@ -114,7 +114,7 @@ public final class Member extends SequenceString  {
 
     // the sequence is B[0..J-1] or similar.  Get information about it.
     SequenceStringSubsequence  seqsss = (SequenceStringSubsequence ) seqvar.derived;
-    System.out.println("seqvar: " + seqvar.name);
+    // System.out.println("seqvar: " + seqvar.name);
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
     boolean seq_from_start = seqsss.from_start;
@@ -153,8 +153,10 @@ public final class Member extends SequenceString  {
         if (scl_from_start == seq_from_start) {
           VarInfo scl_index = sclsss.sclvar();
           int scl_shift = sclsss.index_shift;
-          if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
-                                   seq_from_start)) {
+          boolean comparison = VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
+                                                    seq_from_start);
+          // System.out.println("comparison="+comparison+" for obvious membership: " + sclvar.name + " " + seqvar.name);
+          if (comparison) {
             return true;
           }
         }

@@ -94,8 +94,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
           // greater than the max of the other.
           if (min1 && max2) {
             obvious_le = true;
+            // System.out.println("obvious_le: " + var1.name + " " + var2.name);
           } else if (max1 && min2) {
             obvious_ge = true;
+            // System.out.println("obvious_ge: " + var1.name + " " + var2.name);
           }
         }
       }

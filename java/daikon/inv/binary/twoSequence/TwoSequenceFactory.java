@@ -32,14 +32,20 @@ public final class TwoSequenceFactory {
         && (! var1.type.comparable(var2.type)))
       return null;
 
+    // System.out.println("TwoSequenceFactory(pass " + pass + ") " + ppt.name
+    //                    + "\n  super1 = " + super1.name + ", super2 = " + super2.name);
+
     Vector result = new Vector();
     if (pass == 1) {
-      // This test disabled because it resulted in preventing a comparison for
+      // This was test disabled because it resulted in preventing a comparison for
       // this.theArray[this.front..], this.theArray[orig(this.front)+1..]
       // which are actually equal.
-      if (false && super1 == super2) {
+      // I decided that the latter shouldn't even be generated -- we should
+      // know the relationship between "this.front" and
+      // "orig(this.front)+1" -- and re-enabled the test.
+      if (super1 == super2) {
         Global.implied_false_noninstantiated_invariants++;
-        System.out.println("No SeqComparison because same super for " + ppt.name);
+        // System.out.println("No SeqComparison because same super for " + ppt.name);
         LinearBinary lb = LinearBinary.find(ppt);
         if (lb != null)
           System.out.println("  " + lb.format());
@@ -52,6 +58,8 @@ public final class TwoSequenceFactory {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctions.length;
       } else {
+        Assert.assert(! super1.name.equals(super2.name));
+
         // NonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
 
