@@ -759,9 +759,9 @@ public final class VarInfo
   private boolean _isDerivedParamAndUninteresting() {
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\t\t\tname is " + name.name() + "\n");
-      PrintInvariants.debugFiltering.debug("\t\t\tisPrestate is " + String.valueOf(isPrestate()) + "\n");
-      PrintInvariants.debugFiltering.debug("\t\t\tname is prestate " + String.valueOf(name instanceof VarInfoName.Prestate) + "\n");
+      PrintInvariants.debugFiltering.debug("isDPAU: name is " + name.name() + "\n");
+      PrintInvariants.debugFiltering.debug("  isPrestate is " + String.valueOf(isPrestate()) + "\n");
+      PrintInvariants.debugFiltering.debug("  name is prestate " + String.valueOf(name instanceof VarInfoName.Prestate) + "\n");
     }
 
     if (isPrestate() || name instanceof VarInfoName.Prestate) {
@@ -772,7 +772,7 @@ public final class VarInfo
 
     if (aux.getFlag(VarInfoAux.IS_PARAM)) {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, IS_PARAM == true for " + name.name() + "\n");
+        PrintInvariants.debugFiltering.debug("  not interesting, IS_PARAM == true for " + name.name() + "\n");
       }
       return true;
     }
@@ -791,7 +791,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.debug ("TypeOf returning true");
-          PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, first dpf case\n");
+          PrintInvariants.debugFiltering.debug("  not interesting, first dpf case\n");
           return true;
         }
       }
@@ -800,7 +800,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.debug ("SizeOf returning true");
-          PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, second dpf case\n");
+          PrintInvariants.debugFiltering.debug("  not interesting, second dpf case\n");
           return true;
         }
       }
@@ -825,7 +825,7 @@ public final class VarInfo
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
         Global.debugSuppressParam.debug ("No orig variable for base, returning true ");
-        PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
+        PrintInvariants.debugFiltering.debug("  not interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
       if (base.isEqualTo(origBase)) {
@@ -833,13 +833,13 @@ public final class VarInfo
         return false;
       } else {
          Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-         PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
+         PrintInvariants.debugFiltering.debug("  didn't see equality in base\n");
         return true;
       }
       //       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       //       if (slice == null) {
       //         Global.debugSuppressParam.debug ("No slice for equality in base, so uninteresting");
-      //         PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
+      //         PrintInvariants.debugFiltering.debug("  equal inv in null slice\n");
       //         return true; // There can't be an equal invariant in a null slice
       //       }
       //       if (Global.debugSuppressParam.isDebugEnabled()) {
@@ -852,7 +852,7 @@ public final class VarInfo
       //       }
       //       if (!seenEqual) {
       //         Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
-      //         PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
+      //         PrintInvariants.debugFiltering.debug("  didn't see equality in base\n");
       //         return true;
       //       }
 
