@@ -3,14 +3,11 @@
 ## This file should be kept in synch with daikon.cshrc
 
 ## Set this directory to the directory containing "daikon".
-## TODO:  set only if not already set
-export DAIKONPARENT=/path/to/parent/of/daikon
-## TODO:  set only if not already set
-export DAIKONDIR=${DAIKONPARENT}/daikon
+export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
+export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 
 ## Set this directory to the directory containing the JDK.
-## TODO:  set only if not already set
-export JDKDIR=/g2/jdk1.3.1
+export JDKDIR=${JDKDIR:-/g2/jdk1.3.1}
 
 ## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
 ## you compile yourself.  Otherwise, you will run Daikon from the
@@ -20,11 +17,11 @@ export JDKDIR=/g2/jdk1.3.1
 ## the source distribution.
 # export DAIKONCLASS_SOURCES=1
 
-if (($?DAIKONCLASS_SOURCES) && ($DAIKONCLASS_SOURCES)) then
+if [ $DAIKONCLASS_SOURCES ]; then
   export CLASSPATH=$DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar:${CLASSPATH}
 else
   export CLASSPATH=$DAIKONDIR/daikon.jar:${CLASSPATH}
-endif
+fi
 
 ## Add the Daikon binaries to your path
 export PATH=$DAIKONDIR/bin:${JDKDIR}/bin:${PATH}
