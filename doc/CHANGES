@@ -47,7 +47,7 @@ dfej
 
   Documentation changes
 
-    Dcoumented that environment variable DTRACELIMITTERMINATE causes an
+    Documented that environment variable DTRACELIMITTERMINATE causes an
     exception to be thrown when the .dtrace file reaches the specified
     size; it does not forcibly terminate the program.
 
@@ -55,7 +55,7 @@ Chicory
 
   User changes
 
-    Changed behvaior of environment variable DTRACELIMITTERMINATE to cause
+    Changed behavior of environment variable DTRACELIMITTERMINATE to cause
     an exception to be thrown when the .dtrace file reaches the specified
     size, rather than forcibly terminating the program.
 
