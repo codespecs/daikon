@@ -26,7 +26,7 @@ public class Reverse
   public static Reverse instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new Reverse(ppt);
-  }  
+  }
 
   protected Invariant resurrect_done_swapped() {
     // "reverse of" is symmetric
@@ -40,8 +40,9 @@ public class Reverse
 
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
-    if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.JAVA) return format_java();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -50,15 +51,19 @@ public class Reverse
     return var1().name.name() + " is the reverse of " + var2().name.name();
   }
 
+  /* IOA */
+  public String format_ioa() {
+    return "Not valid for Sets or Arrays: " + format();
+  }
+
   public String format_java() {
     // ( (new StringBuffer (var1().name.name())).reverse().toString(
     //       ).equals (var2().name.name()))
     return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
 
-  /* IOA */
-  public String format_ioa() {
-    return "Not valid for Sets or Arrays: " + format();
+  public String format_jml() {
+    return "(new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals(" + var2().name.name() + ")";
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

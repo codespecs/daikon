@@ -110,6 +110,10 @@ public class SeqComparison
       return name1 + " " + comparator + " " + name2 + " ***";
     }
 
+    if (format == OutputFormat.JML) { // Must complete
+      String quantResult[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[] {var1().name,var2().name},true);
+      return quantResult[0] + quantResult[1] + comparator + quantResult[2] + quantResult[3];
+    }
     return format_unimplemented(format);
   }
 

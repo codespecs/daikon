@@ -75,6 +75,7 @@ public class SubSequence
     if (format == OutputFormat.IOA) return format_ioa();
     // disable simplify format for now; may be buggy
     // if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -175,6 +176,29 @@ public class SubSequence
 
     String result = "(IMPLIES " + sensible + " (AND " + length_stmt + " " + subseq_stmt + "))";
     return result;
+  }
+
+  public String format_jml() {
+    VarInfo subvar = (var1_in_var2 ? var1() : var2());
+    VarInfo supervar = (var2_in_var1 ? var1() : var2());
+
+    // Bound the following quantification
+    QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
+    VarInfoName superIndexName = ((VarInfoName [])superQuantifyReturn.bound_vars.get(0))[0];
+    String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
+
+    QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
+    VarInfoName subIndexName = ((VarInfoName [])subQuantifyReturn.bound_vars.get(0))[0];
+
+    // If indicies have same name modify the quantify return before forming string
+    if (superIndexName.equals(subIndexName)) { // could cause name conflict... unsure of what to do
+      // do something
+    }
+
+    String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
+
+    return superQuantifyResults[0] + subQuantifyResults[0] + superQuantifyResults[1] + " == " +
+      subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

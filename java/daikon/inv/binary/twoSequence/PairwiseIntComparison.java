@@ -81,6 +81,7 @@ public class PairwiseIntComparison
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -120,6 +121,14 @@ public class PairwiseIntComparison
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
+  }
+
+  public String format_jml() {
+    String comparator = core.format_comparator();
+    String quantResult[] =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
+	{ var1().name, var2().name }, true);
+    return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

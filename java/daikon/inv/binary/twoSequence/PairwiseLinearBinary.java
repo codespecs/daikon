@@ -74,6 +74,18 @@ public class PairwiseLinearBinary
       + quant1.getClosingExp();
   }
 
+  public String format_jml() {
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var1().name,var2().name});
+    VarInfoName var1indexed = ((VarInfoName [])(qret.bound_vars.get(0)))[0];
+    VarInfoName var2indexed = ((VarInfoName [])(qret.bound_vars.get(1)))[0];
+
+    String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
+
+    return quantResult[0] + core.format_using(OutputFormat.JML,
+					      var1indexed,
+					      var2indexed) + quantResult[3];
+  }
+
   public void add_modified(long[] x_arr, long[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       flowThis();
