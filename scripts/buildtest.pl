@@ -329,7 +329,7 @@ sub daikon_system_test {
     return 0;
   }
 
-  $command = "make RUN_JAVA=$RUN_JAVA $J2 -C $INV/tests/daikon-tests " .
+  $command = "make $J2 -C $INV/tests/daikon-tests " .
     "$TEST_SUITE &> daikon_system_test.out";
   `$command`;
   if ($CHILD_ERROR) {
