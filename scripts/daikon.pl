@@ -90,8 +90,12 @@ if ($cleanup) {
 # figure out the configuration
 
 $mainsrc = $runnable;
-$mainsrc =~ s/\./\//g;
-$mainsrc .= ".java";
+if ($runnable =~ s/\.java$//) {
+  # nothing to do
+} else {
+  $mainsrc =~ s/\./\//g;
+  $mainsrc .= ".java";
+}
 die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
 
 if ($output) {
@@ -171,18 +175,23 @@ symlink("$working/daikon-java", "daikon-java") or die("Could not make symlink 2"
 while (1) {
     # instrument the source files
     print "Instrumenting files...\n" if $verbose;
-    $dfejerr = system("dfej -classpath $cp_dot " . join(' ', sort (keys %interesting)));
+    $dfejcommand = "dfej -classpath $cp_dot " . join(' ', sort (keys %interesting));
+    $dfejoutput = `$dfejcommand`;
+    $dfejerr = $?;
     last if ($dfejerr);
 
     # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
-    $cp_work = "$working/daikon-java:$cp_lib:.":
-    $jikeserr = system("jikes -classpath $cp_work -depend -g -nowarn $working/daikon-java/$mainsrc");
+    $cp_work = "$working/daikon-java:$cp_lib:.";
+    $jikescommand = "jikes -classpath $cp_work -depend -g -nowarn $working/daikon-java/$mainsrc";
+    $jikesoutput = `$jikescommand`;
+    $jikeserr = $?;
     last if $jikeserr;
 
     # run the test suite / mainline
     print "Running your java program...\n" if $verbose;
-    $javaerr = system("java -classpath $cp_work $runnable $runnable_args");
+    $javaoutput = `java -classpath $cp_work $runnable $runnable_args`;
+    $javaerr = $?;
     last if $javaerr;
 
     # find the results
@@ -193,7 +202,8 @@ while (1) {
 
     # run modbit-munge
     print "Running modbit-munge...\n" if $verbose;
-    $mberr = system("modbit-munge.pl $dtrace");
+    $mboutput = `modbit-munge.pl $dtrace`;
+    $mberr = $?;
     last if $mberr;
 
     # run daikon
@@ -204,23 +214,50 @@ while (1) {
 
     # compress the output
     print "Compressing output...\n" if $verbose;
-    $gzerr = system("gzip $output.inv");
+    $gzoutput = `gzip $output.inv`;
+    $gzerr = $?;
     last if $gzerr;
 
     last;
 }
 
-unlink("daikon-java") or die("Could not unlink symlink 2");
-unlink("daikon-output") or die("Could not unlink symlink 1");
-system("rm -rf $working") && die("Could not remove working dir");
+# unlink("daikon-java") or die("Could not unlink symlink 2 (daikon-java)");
+# unlink("daikon-output") or die("Could not unlink symlink 1 (daikon-output)");
+# system("rm -rf $working") && die("Could not remove working dir");
 
-die("dfej error") if $dfejerr;
-die("jikes error") if $jikeserr;
-die("java test suite error") if $javaerr;
-die("missing output files") if $outerr;
-die("modbit error") if $mberr;
-die("daikon error") if $dkerr;
-die("gzip error") if $gzerr;
+if ($dfejerr) {
+  print $dfejoutput;
+  die("dfej error");
+}
+if ($jikeserr) {
+  print "jikes command: $jikescommand\n";
+  print "jikes output: $jikesoutput\n";
+  die("jikes error");
+}
+if ($javaerr) {
+  print $javaoutput;
+  die("java test suite error");
+}
+if ($outerr) {
+  if (! $dtrace) {
+    print "No data trace (.dtrace) file found.\n";
+  }
+  if (! $decls) {
+    print "No declaration (.decls) files found.\n";
+  }
+  die("missing output files");
+}
+if ($mberr) {
+  print $mboutput;
+  die("modbit error");
+}
+if ($dkerr) {
+  die("daikon error");
+}
+if ($gzerr) {
+  print $gzoutput;
+  die("gzip error");
+}
 
 # run the gui
 unless ($nogui) {
