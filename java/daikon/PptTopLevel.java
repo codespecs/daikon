@@ -2462,7 +2462,7 @@ public class PptTopLevel extends Ppt {
     out.println("===========================================================================");
     print_invariants(out);
 
-    if (Daikon.output_style == Daikon.OUTPUT_STYLE_NORMAL) {
+    if (Daikon.dkconfig_output_conditionals && Daikon.output_style == Daikon.OUTPUT_STYLE_NORMAL) {
       for (int i=0; i<views_cond.size(); i++) {
         PptConditional pcond = (PptConditional) views_cond.elementAt(i);
         pcond.print_invariants_maybe(out, all_ppts);

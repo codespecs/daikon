@@ -20,6 +20,8 @@ import utilMDE.*;
 public final class Daikon {
   public static final String lineSep = Global.lineSep;
 
+  public static boolean dkconfig_output_conditionals = true;
+
   // All these variables really need to be organized better.
 
   public final static boolean disable_splitting = false;
