@@ -1,7 +1,15 @@
 #!/usr/local/bin/perl
+# createspinfo.pl
 
-# Creates the splitter info file in two stages.  First creates the .conds file
-# and then creates the splitter info file from the .conds file.
+# Usage:
+#   createspinfo.pl file.java
+# This creates "file.java.spinfo", a splitter info file that can be
+# provided to Daikon on the command line in order to enable detection of
+# implications (conditional invariants).
+
+# This script creates the splitter info file in two stages.  First, it
+# creates a .conds file, and then it creates the splitter info file from
+# the .conds file.
 
 #creation of .conds file
 foreach $filename (@ARGV){

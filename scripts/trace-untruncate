@@ -8,7 +8,7 @@
 # after the last double-newline).
 
 # The script operates by side effect, changing the files whose names are
-# given on the command line; however, it leaves teh original versions in a
+# given on the command line; however, it leaves the original versions in a
 # backup file whose name has suffix ".bak".
 
 
