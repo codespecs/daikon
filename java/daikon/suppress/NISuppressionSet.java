@@ -204,7 +204,9 @@ public class NISuppressionSet {
    * Determines whether or not the suppression set is valid in the
    * specified slice.  The suppression set is valid if any of its
    * suppressions are valid.  A suppression is valid if all of its
-   * non-missing suppressors are true.
+   * suppressors are true.
+   *
+   * @see #is_instantiate_ok(PptSlice) for a check that considers missing
    */
   public boolean suppressed (PptSlice slice) {
 
@@ -217,7 +219,8 @@ public class NISuppressionSet {
    * of its suppressions are valid.  A suppression is valid if all of
    * its suppressors are true.
    *
-   * @see is_instantiate_ok() for a check that considers missing
+   * @see #is_instantiate_ok(PptTopLevel,VarInfo[]) for a check that
+   * considers missing
    */
   public boolean suppressed (PptTopLevel ppt, VarInfo[] var_infos) {
 
@@ -394,7 +397,9 @@ public class NISuppressionSet {
     for (int i = 0; i < suppression_set.length; i++) {
       new_suppressions.addAll (suppression_set[i].recurse_definition (ss));
     }
-    Assert.assertTrue (new_suppressions.size() > 0);
+    // This isn't necessarily true if the suppressee is of the same
+    // class but doesn't match due to variable swapping.
+    // Assert.assertTrue (new_suppressions.size() > 0);
 
     // Create a new suppression set with all of the suppressions.
     NISuppression[] new_array
@@ -407,6 +412,25 @@ public class NISuppressionSet {
     suppression_set = new_array;
   }
 
+  /**
+   * Swaps each suppressor and suppressee to the opposite variable
+   * order.  Valid only on unary and binary suppressors and suppressees
+   */
+  public NISuppressionSet swap() {
+
+    NISuppression[] swap_sups = new NISuppression[suppression_set.length];
+    for (int i = 0; i < swap_sups.length; i++) {
+      NISuppression std_sup = suppression_set[i];
+      NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
+      for (int j = 0; j < sors.length; j++) {
+        sors[j] = std_sup.suppressors[j].swap();
+      }
+      swap_sups[i] = new NISuppression (sors, std_sup.suppressee.swap());
+    }
+    NISuppressionSet new_ss = new NISuppressionSet (swap_sups);
+    // Fmt.pf ("Converted %s to %s", this, new_ss);
+    return (new_ss);
+  }
 
   /** Returns the suppressee **/
   public NISuppressee get_suppressee() {
