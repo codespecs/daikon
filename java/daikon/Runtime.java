@@ -50,7 +50,11 @@ public final class Runtime {
       e.printStackTrace();
       throw new Error("" + e);
     }
-    addShutdownHook();
+    if (supportsAddShutdownHook()) {
+      addShutdownHook();
+    } else {
+      System.err.println("Warning: .dtrace file may be incomplete if program is aborted");
+    }
     // System.out.println("...done calling setDtrace(" + filename + ")");
   }
 
@@ -64,6 +68,18 @@ public final class Runtime {
     if (dtrace == null) {
       // Jeremy used "daikon.dtrace.filename".
       setDtrace(System.getProperty("DTRACEFILE", default_filename));
+    }
+  }
+
+  private static boolean supportsAddShutdownHook() {
+    try {
+      Class rt = java.lang.Runtime.class;
+      rt.getMethod("addShutdownHook", new Class[] {
+	java.lang.Thread.class
+      });
+      return true;
+    } catch (Exception e) {
+      return false;
     }
   }
 
