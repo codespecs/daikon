@@ -228,6 +228,14 @@ public abstract class VarInfoName
   }
 
   /**
+   * @return true iff applySize will not throw an exception
+   * @see #applySize
+   **/
+  public boolean isApplySizeSafe() {
+    return (new ElementsFinder(this)).elems() != null;
+  }
+
+  /**
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
