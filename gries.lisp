@@ -59,7 +59,7 @@
 
 (defun test-p173-14.3 ()
   (with-invariants-log "p173-14.3.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (p173-14.3 (random-range -100 100) (random-range -100 100)))))
 
 ;; page 176:
@@ -74,7 +74,7 @@
 
 (defun test-p176 ()
   (with-invariants-log "p176.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (p176 (random-range -100 100) (random-range -100 100)))))
 
 
@@ -91,7 +91,7 @@
 
 (defun test-p177-14.8 ()
   (with-invariants-log "p177-14.8.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-14.8 (mod k 10) k)))))
 
@@ -106,7 +106,7 @@
 
 (defun test-p177-14.9 ()
   (with-invariants-log "p177-14.9.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-14.9 (mod k 10) k)))))
 
@@ -123,7 +123,7 @@
 
 (defun test-p177-1 ()
   (with-invariants-log "p177-1.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-1 (mod k 10) k)))))
 
@@ -139,7 +139,7 @@
 
 (defun test-p177-2 ()
   (with-invariants-log "p177-2.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
 	       (p177-2 (mod k 10) k)))))
 
@@ -158,7 +158,7 @@
 
 (defun test-p178-1b ()
   (with-invariants-log "p178-1b.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (p178-1b (random-range -100 100)))))
 
 
@@ -181,7 +181,7 @@
 
 (defun test-p180-15.1.1 ()
   (with-invariants-log "p180-15.1.1.inv"
-    (loop for i from 0 to 100
+    (loop for i from 1 to 100
 	  do (let* ((n (random-range 7 13))
 		    (b (make-array n)))
 	       (loop for j from 0 to (- n 1)
