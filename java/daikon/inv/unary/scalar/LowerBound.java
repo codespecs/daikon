@@ -139,7 +139,7 @@ public class LowerBound
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.min1  == oo.MINELT(), since the LowerBound
       // will never have a core.min1  that does not appear in the OneOf.
-      if (core.min1  <=  oo.min_elt_long()) {
+      if (core.min1  <=  oo. min_elt_long ()) {
         return true;
       }
     }
@@ -153,9 +153,11 @@ public class LowerBound
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
+
       } else if (core.min1  == 0) {
         // vshift == 0
         return true;
+
       }
     }
 

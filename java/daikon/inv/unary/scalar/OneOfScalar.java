@@ -92,6 +92,7 @@ public final class OneOfScalar
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
+
   }
 
   private void sort_rep() {
@@ -106,6 +107,7 @@ public final class OneOfScalar
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
+
   }
 
   public Object max_elt() {
@@ -116,6 +118,7 @@ public final class OneOfScalar
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[num_elts-1]);
+
   }
 
   public long min_elt_long() {
@@ -429,9 +432,11 @@ public final class OneOfScalar
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
+
     } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
+
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
