@@ -145,7 +145,7 @@ linked suppressions were removed along with their corresponding
 configuration options.
 
 The Range invariants (EqualMinusOne, EqualOne, EqualZero, GreaterEqual64,
-GreaterEqualZero, BooleanVal, Bound0_63, Even, amd PowerOfTwo) are now
+GreaterEqualZero, BooleanVal, Bound0_63, Even, and PowerOfTwo) are now
 checked on elements of arrays in addition to scalar variables.
 These are not normally visible (since they are implied by the Bound and
 OneOf invariants), but are used internally to suppress other invariants.
@@ -248,7 +248,7 @@ compiled under gcc 2.  (kmeans can be used to create splitting conditions
 via AI clustering; see section 'Cluster analysis for splitters' in the
 manual.)
 
-We have moved the daikon mailing lists (daikon-announce, daikon-discuss,
+We have moved the Daikon mailing lists (daikon-announce, daikon-discuss,
 and daikon-developers) from pag.csail.mit.edu to lists.csail.mit.edu.  Any
 changes to your subscription must be made at lists.csail.mit.edu.
 

@@ -274,6 +274,7 @@ Enhancing Daikon output
 * Configuration options::       
 * Conditional invariants::      
 * Enhancing conditional invariant detection::  
+* Loop invariants::             
 
 Configuration options
 
@@ -5372,6 +5373,7 @@ message.
 * Configuration options::       
 * Conditional invariants::      
 * Enhancing conditional invariant detection::  
+* Loop invariants::             
 @end menu
 
 @node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
@@ -5732,7 +5734,7 @@ PPT_NAME  simpleStack.isEmpty
 currentSize == 0
 @end smallexample
 
-@node    Enhancing conditional invariant detection,  , Conditional invariants, Enhancing Daikon output
+@node    Enhancing conditional invariant detection, Loop invariants, Conditional invariants, Enhancing Daikon output
 @section Enhancing conditional invariant detection
 
 The built-in mechanisms (@pxref{Conditional invariants}) have
@@ -5914,6 +5916,26 @@ of the samples but not over the entire data set.
 
 
 @end table
+
+
+
+@node    Loop invariants,  , Enhancing conditional invariant detection, Enhancing Daikon output
+@section Loop invariants
+
+@cindex loop invariants
+
+Daikon does not by default output loop invariants.  Daikon can detect
+invariants at any location where it is provided with variable values,
+but the front ends do not currently supply Daikon with variable values
+at loop heads.
+
+Here is one way to cause Daikon to produce loop invariants.  At the top
+of a loop (or at any other location in the program at which you would
+like to obtain invariants), insert a call to a dummy procedure that does
+not work but returns immediately.  Pass, as arguments to the dummy
+procedure, all variables of interest.  Daikon will produce (identical)
+preconditions and postconditions for the dummy procedure; these are
+properties that held at the call site.
 
 
 
@@ -7333,8 +7355,8 @@ such confusion.
 
 @cindex Lisp front end
 @cindex front end for Lisp
-@cindex loop heads, instrumenting
-@cindex instrumenting loop heads
+@c @cindex loop heads, instrumenting
+@c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
 @cindex Daikon 1
 
