@@ -205,7 +205,7 @@ public class StreetNumberSet
    * @requires !this.isEmpty()
    * @returns the maximal number in the set
    **/
-  private int max()
+  public int max()
   {
     checkRep();
 
