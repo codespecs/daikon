@@ -173,7 +173,7 @@ public final class Member extends SequenceString  {
     //   header.next in header.next.~ll~next~
     //   return.current in return.current.~ll~next~
     String sclname = sclvar.name.name(); // mistere adds: this code
-    String seqname = seqvar.name.name(); // looks pretty sketchy
+    String seqname = seqvar.name.name(); // looks pretty sketchy (XXX)
     int llpos = seqname.indexOf("~ll~");
     if (llpos != -1) {
       int tildepos = seqname.indexOf("~", llpos+5);
