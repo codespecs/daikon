@@ -160,7 +160,7 @@ grep {
     }
 } @txtesc;
 
-print "Houdini is generating likely invariants; please wait..";
+print "Houdini is generating likely invariants; please wait.." unless $output_file;
 
 # Iterative ("Houdini") looping
 while (1) {
@@ -183,7 +183,7 @@ while (1) {
     my @merge_slurped = slurpfile($sourcetmps[0]);
 
     # 5 Run ESC on the temp source files and slurp the results
-    print ".";
+    print "." unless $output_file;
     my $notdir_sourcetmp = join(" ", notdir(@sourcetmps));
     my @checked_sources = slurpfiles(@sourcetmps);
     my @escoutput = `cd $tmpdir && $escjava_executable $notdir_sourcetmp`;
