@@ -180,7 +180,7 @@ public class SUBSET
     if (Invariant.dkconfig_simplify_define_predicates)
       return format_simplify_defined();
     else
-      return format_unimplemented(OutputFormat.SIMPLIFY);
+      return format_simplify_explicit();
   }
 
   private String format_simplify_defined() {
@@ -204,6 +204,51 @@ public class SUBSET
     return "(subset " +
       sub_name[0] + " " + sub_name[1] + " " + sub_name[2] + " " +
       super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
+  }
+
+  private String format_simplify_explicit() {
+#if defined(SUB) || defined(SUBFLOAT)
+    VarInfo subvar = var1();
+    VarInfo supervar = var2();
+#else
+    VarInfo subvar = var2();
+    VarInfo supervar = var1();
+#endif
+    String[] sub_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(subvar.name);
+    String[] super_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(supervar.name);
+
+    if (sub_name == null || super_name == null) {
+      return "format_simplify can't handle one of these sequences: "
+        + format();
+    }
+
+    VarInfoName index1_vin =
+      VarInfoName.QuantHelper.getFreeIndex(subvar.name, supervar.name);
+    String index1 = index1_vin.simplify_name();
+    String index2 =
+      VarInfoName.QuantHelper.getFreeIndex(subvar.name, supervar.name,
+                                           index1_vin)
+      .simplify_name();
+
+    // (FORALL (a i j b ip jp)
+    //    (IFF (subset a i j b ip jp)
+    //         (FORALL (x)
+    //           (IMPLIES
+    //              (AND (<= i x) (<= x j))
+    //              (EXISTS (y)
+    //                  (AND (<= ip y) (<= y jp)
+    //                        (EQ (select (select elems a) x)
+    //                            (select (select elems b) y))))))))
+
+    return "(FORALL (" + index1 + ") (IMPLIES " + "(AND (<= " + sub_name[1]
+      + " " + index1 + ") (<= " + index1 + " " + sub_name[2] + "))"
+      + "(EXISTS (" + index2 + ")" + "(AND (<= " + super_name[1] + " "
+      + index2 + ") (<= " + index2 + " " + super_name[2]+ ")"
+      + "(EQ (select (select elems " + sub_name[0] + ") " + index1 + ") "
+      + "(select (select elems " + super_name[0] +") " + index2 + "))))))";
+
   }
 
   public String format_jml() {

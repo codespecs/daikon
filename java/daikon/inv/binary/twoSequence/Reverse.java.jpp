@@ -184,8 +184,45 @@ public class CLASSNAME
   }
 
   private String format_simplify_explicit() {
-    return "format_simplify() for Reverse needs to be implemented "
-      + "for the non-defined-predicate case";
+    VarInfo onevar = var1();
+    VarInfo othervar = var2();
+    String[] one_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(onevar.name);
+    String[] other_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(othervar.name);
+
+    if (one_name == null || other_name == null) {
+      return "format_simplify() can't handle one of these sequences: "
+        + format();
+    }
+
+    String index =
+      VarInfoName.QuantHelper.getFreeIndex(onevar.name, othervar.name)
+      .simplify_name();
+
+    // (FORALL (a i j b ip jp)
+    //  (IFF (|is-reverse-of| a i j b ip jp)
+    //   (AND (EQ (- j i) (- jp ip))
+    //        (<= 0 i)
+    //        (< j (arrayLength a))
+    //        (<= 0 ip)
+    //        (< jp (arrayLength b))
+    //     (FORALL (x)
+    //        (IMPLIES
+    //            (AND (<= 0 x) (< x (- j i)))
+    //            (EQ (select (select elems a) (+ i x))
+    //                (select (select elems b) (- jp x))))))))
+
+    return "(AND (EQ (- " + one_name[2] + " " + one_name[1] + ") (- "
+      + other_name[2] + " " + other_name[1] + ")) (<= 0 " + one_name[1]
+      + ") (< " + one_name[2] + " (arrayLength " + one_name[0]
+      + ")) (<= 0 " + other_name[1] + ") (< " + other_name[2]
+      + " (arrayLength " + other_name[0] + ")) (FORALL (" + index
+      + ") (IMPLIES (AND (<= 0 " + index + ") (< " + index + " (- "
+      + one_name[2] + " " + one_name[1] + "))) (EQ (select (select elems "
+      + one_name[0] + ") (+ " + one_name[1] + " " + index
+      + ")) (select (select elems " + other_name[0] + ") (- " + other_name[2]
+      + " " + index + "))))))";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
