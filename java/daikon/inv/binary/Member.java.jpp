@@ -170,95 +170,97 @@ public final class Member extends SEQUENCESCALAR {
       } else {
         // different variables: B[I] in B[0..J] or B[I] in B[J..]
         PptSlice indices_ppt = ppt.parent.getView(scl_index, seq_index);
-        boolean scl_is_var1 = (scl_index == indices_ppt.var_infos[0]);
-        LinearBinary lb = LinearBinary.find(indices_ppt);
-        long index_scl_minus_seq = -2222;          // valid only if lb != null
-        if (lb != null) {
-          if (!lb.justified()) {
-            lb = null;
-          } else if (lb.core.a != 1) {
-            // Do not attempt to deal with anything but y=x+b.
-            lb = null;
-          } else {
-            // lb.b is var2()-var1().
-            index_scl_minus_seq = (scl_is_var1 ? -lb.core.b : lb.core.b);
-            index_scl_minus_seq += scl_shift - seq_shift;
-          }
-        }
-        // The LinearBinary gives more info than IntComparison would,
-        // so only compute the IntComparison if no LinearBinary.
-        IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
-        boolean scl_can_be_lt = false;		// valid only if ic != null
-        boolean scl_can_be_eq = false;		// valid only if ic != null
-        boolean scl_can_be_gt = false;		// valid only if ic != null
-        if (ic != null) {
-          if (! ic.justified()) {
-            ic = null;
-          } else {
-            scl_can_be_eq = ic.core.can_be_eq;
-            if (scl_is_var1) {
-              scl_can_be_lt = ic.core.can_be_lt;
-              scl_can_be_gt = ic.core.can_be_gt;
+        if (indices_ppt != null) {
+          boolean scl_is_var1 = (scl_index == indices_ppt.var_infos[0]);
+          LinearBinary lb = LinearBinary.find(indices_ppt);
+          long index_scl_minus_seq = -2222;          // valid only if lb != null
+          if (lb != null) {
+            if (!lb.justified()) {
+              lb = null;
+            } else if (lb.core.a != 1) {
+              // Do not attempt to deal with anything but y=x+b.
+              lb = null;
             } else {
-              scl_can_be_lt = ic.core.can_be_gt;
-              scl_can_be_gt = ic.core.can_be_lt;
+              // lb.b is var2()-var1().
+              index_scl_minus_seq = (scl_is_var1 ? -lb.core.b : lb.core.b);
+              index_scl_minus_seq += scl_shift - seq_shift;
             }
           }
-        }
-
-        if (seq_from_start) {
-          // different variables: B[I] in B[0..J]
-          if (lb != null) {
-            if (index_scl_minus_seq <= 0)
-              return true;
-          } else if (ic != null) {
-            // 4 cases:
-            // (a) B[I] in B[0..J]
-            // (b) B[I] in B[0..J-1]
-            // (c) B[I-1] in B[0..J]
-            // (d) B[I-1] in B[0..J-1]
-            // 4 possible comparisons:
-            // (e) I < J
-            // (f) I <= J
-            // (g) I >= J
-            // (h) I > J
-            // Combinations:  (filled in means true)
-            //   abcd
-            // e abcd
-            // f a cd
-            // g
-            // h
-            if ((scl_can_be_lt && ! scl_can_be_eq)
-                || (scl_can_be_lt && scl_can_be_eq && (scl_shift < seq_shift)))
-              return true;
+          // The LinearBinary gives more info than IntComparison would,
+          // so only compute the IntComparison if no LinearBinary.
+          IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
+          boolean scl_can_be_lt = false;		// valid only if ic != null
+          boolean scl_can_be_eq = false;		// valid only if ic != null
+          boolean scl_can_be_gt = false;		// valid only if ic != null
+          if (ic != null) {
+            if (! ic.justified()) {
+              ic = null;
+            } else {
+              scl_can_be_eq = ic.core.can_be_eq;
+              if (scl_is_var1) {
+                scl_can_be_lt = ic.core.can_be_lt;
+                scl_can_be_gt = ic.core.can_be_gt;
+              } else {
+                scl_can_be_lt = ic.core.can_be_gt;
+                scl_can_be_gt = ic.core.can_be_lt;
+              }
+            }
           }
-        } else {
-          // different variables: B[I] in B[J..]
-          if (lb != null) {
-            if (index_scl_minus_seq >= 0)
-              return true;
-          } else if (ic != null) {
-            // 4 cases:
-            // (a) B[I] in B[J..]
-            // (b) B[I] in B[J+1..]
-            // (c) B[I-1] in B[J..]
-            // (d) B[I-1] in B[J+1..]
-            // 4 possible comparisons:
-            // (e) I < J
-            // (f) I <= J
-            // (g) I >= J
-            // (h) I > J
-            // Combinations:  (filled in means true)
-            //   abcd
-            // e
-            // f
-            // g a
-            // h abc
-            if ((scl_can_be_gt && (! scl_can_be_eq)
-                 && (scl_shift + 1 >= seq_shift))
-                || (scl_can_be_gt && scl_can_be_eq
-                    && (scl_shift == seq_shift)))
-              return true;
+
+          if (seq_from_start) {
+            // different variables: B[I] in B[0..J]
+            if (lb != null) {
+              if (index_scl_minus_seq <= 0)
+                return true;
+            } else if (ic != null) {
+              // 4 cases:
+              // (a) B[I] in B[0..J]
+              // (b) B[I] in B[0..J-1]
+              // (c) B[I-1] in B[0..J]
+              // (d) B[I-1] in B[0..J-1]
+              // 4 possible comparisons:
+              // (e) I < J
+              // (f) I <= J
+              // (g) I >= J
+              // (h) I > J
+              // Combinations:  (filled in means true)
+              //   abcd
+              // e abcd
+              // f a cd
+              // g
+              // h
+              if ((scl_can_be_lt && ! scl_can_be_eq)
+                  || (scl_can_be_lt && scl_can_be_eq && (scl_shift < seq_shift)))
+                return true;
+            }
+          } else {
+            // different variables: B[I] in B[J..]
+            if (lb != null) {
+              if (index_scl_minus_seq >= 0)
+                return true;
+            } else if (ic != null) {
+              // 4 cases:
+              // (a) B[I] in B[J..]
+              // (b) B[I] in B[J+1..]
+              // (c) B[I-1] in B[J..]
+              // (d) B[I-1] in B[J+1..]
+              // 4 possible comparisons:
+              // (e) I < J
+              // (f) I <= J
+              // (g) I >= J
+              // (h) I > J
+              // Combinations:  (filled in means true)
+              //   abcd
+              // e
+              // f
+              // g a
+              // h abc
+              if ((scl_can_be_gt && (! scl_can_be_eq)
+                   && (scl_shift + 1 >= seq_shift))
+                  || (scl_can_be_gt && scl_can_be_eq
+                      && (scl_shift == seq_shift)))
+                return true;
+            }
           }
         }
       } // end of different-variables case
