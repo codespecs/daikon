@@ -28,7 +28,6 @@ JAVA_FILES := $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-shi
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
-	daikon/test/split/SplitterFactoryTest.java \
 	utilMDE/MathMDE.java \
 	daikon/PptSlice1.java \
 	daikon/PptSlice2.java \
@@ -219,6 +218,14 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
 
 
+# These files cannot be generated until everything else has been compiled.
+AUTO_GENERATED_FILES_2 = \
+	daikon/test/split/SplitterFactoryTest.java \
+
+
+AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
+
+
 ###########################################################################
 ### Compilation targets
 ###
@@ -232,6 +239,7 @@ all:
 
 ## In general, don't use this; it misses some files
 all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
+	$(MAKE) all_pass2
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
@@ -239,6 +247,7 @@ all_directly: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
+	$(MAKE) all_pass2
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
@@ -246,6 +255,13 @@ all_except_daikon: ${JAVA_FILES_EXCEPT_DAIKON}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
+	$(MAKE) all_pass2
+
+all_pass2: ${AUTO_GENERATED_CLASSES_2}
+	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
+
+# all_pass2: ${AUTO_GENERATED_FILES_2}
+#	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
 
 all_except: all_except_daikon
 
@@ -277,7 +293,7 @@ daikon/Runtime.class: daikon/Runtime.java
 	${JAVAC_COMMAND} daikon/Runtime.java
 
 # No longer needed because symlink is created when setting the
-# JAVA_FILES variable
+# JAVA_FILES variable.
 #ajax:
 #	ln -s ajax-ship/ajax .
 
@@ -443,11 +459,11 @@ list_java_files:
 ### Automatically generated files
 ###
 
-## First, a file not generated via java-cpp
+## First, a file not generated via java-cpp.
 daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpDater.java
-	javac -classpath `pwd`:${CLASSPATH} $<
+	${JAVAC_COMMAND} $<
 	rm -f $@
-	java -classpath `pwd`:${CLASSPATH} daikon.test.split.SplitterFactoryTestUpDater
+	${JAVAC_COMMAND} daikon.test.split.SplitterFactoryTestUpDater
 	chmod -w $@
 
 # Create the auto-generated files with jpp
