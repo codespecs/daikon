@@ -310,15 +310,16 @@ public class DTraceWriter extends DaikonWriter
      */
     private Object getValue(Field classField, Object theObj)
     {
+        //if we dont have a real object, return NonsensicalValue
         if ((theObj == null) || (theObj instanceof NonsensicalObject))
             return nonsenseValue;
 
-        Class declaringClass = classField.getDeclaringClass();
+        Class fieldType = classField.getType();
 
         if (!classField.isAccessible())
             classField.setAccessible(true);
 
-        if (true)
+        /*if (true)
         {
             try {
                 Object val = classField.get (theObj);
@@ -329,14 +330,14 @@ public class DTraceWriter extends DaikonWriter
                                    theObj.getClass(), theObj);
                 throw new Error ("can't access field " + classField + ": " + e);
             }
-        }
+        }*/
 
         // System.out.printf ("declaring class = %s\n", declaringClass);
 
         // It seems easier (and it seems to work) to pass the normal
         // Integer, Float, etc wrappes back and let them be handled there
         // rather than wrapping them in our wrappers.
-        if (declaringClass.equals(int.class))
+        if (fieldType.equals(int.class))
         {
             try
             {
@@ -351,7 +352,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(long.class))
+        else if (fieldType.equals(long.class))
         {
             try
             {
@@ -366,7 +367,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(boolean.class))
+        else if (fieldType.equals(boolean.class))
         {
             try
             {
@@ -383,7 +384,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(float.class))
+        else if (fieldType.equals(float.class))
         {
             try
             {
@@ -398,7 +399,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(byte.class))
+        else if (fieldType.equals(byte.class))
         {
             try
             {
@@ -413,7 +414,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(char.class))
+        else if (fieldType.equals(char.class))
         {
             try
             {
@@ -428,7 +429,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(short.class))
+        else if (fieldType.equals(short.class))
         {
             try
             {
@@ -443,7 +444,7 @@ public class DTraceWriter extends DaikonWriter
                 throw new Error(e);
             }
         }
-        else if (declaringClass.equals(double.class))
+        else if (fieldType.equals(double.class))
         {
             try
             {
@@ -888,14 +889,14 @@ public class DTraceWriter extends DaikonWriter
         {
             outFile.print("nonsensical");
         }
-        else if (theValue instanceof Number)
+        /*else if (theValue instanceof Number)
         {
             outFile.print (theValue.toString());
         }
         else if (theValue instanceof Boolean)
         {
             outFile.print (theValue.toString());
-        }
+        }*/
         else
         {
             showObject(theValue);
