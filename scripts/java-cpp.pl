@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2002-11-23 19:25:16 mernst>
+# Time-stamp: <2002-11-23 20:51:10 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -169,8 +169,9 @@ sub unescape_comments ( $ ) {
     s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
-    # convert "long []" to "long[]" (for cast, prototype, or declaration)
-    s/((?:\(|(?:(?:,|public|private|protected)(?: static)? ))\w+) ((\[\])+)/$1$2/g;
+    # convert "long []" to "long[]" (for cast, prototype, or declaration).
+    # also "long[] " to "long[]".
+    s/((?:\(|^ *|(?:(?:,|public|private|protected)(?: static)? ))\w+(?:\[\])*) ([\[\)])/$1$2/gm;
     # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
     s/(\bnew \w+) (\()/$1$2/g;
     s/(\bnew \w+) (\[)/$1$2/g;
