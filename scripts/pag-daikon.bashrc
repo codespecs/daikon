@@ -13,15 +13,9 @@ export PAG=/afs/csail.mit.edu/group/pag
 export pag=${PAG}
 
 ## Set this directory to the directory containing the JDK.
-# Simplify to just the first branch after the AFS move is done.
-if [ -r /afs/csail/group/pag/software ]; then
-  export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
-else
-  export JDKDIR=${JDKDIR:-/g2/jdk}
-fi
+export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
 
-# Remove references to /g4 after AFS move is complete
-export PATH=/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/afs/csail/group/pag/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
+export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 
 source ${INV}/scripts/daikon.bashrc
@@ -46,19 +40,10 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 
 export DFEJ_VERBOSE=1
 
-# Update after AFS move
-if [ -e /afs/csail.mit.edu/u/m/mernst ]; then
-  alias bibfind='/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde'
-  export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
-elif [ -e /g2/users/mernst ]; then
-  alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
-  export BIBINPUTS=.:/g2/users/mernst/bib:..:
-elif [ -e /var/autofs/net/pag/g2/users/mernst ]; then
-  alias bibfind='/var/autofs/net/pag/g2/users/mernst/bin/Linux-i686/help .n .F /var/autofs/net/pag/g2/users/mernst/bib/bibroot.non-mde'
-  export BIBINPUTS=.:/var/autofs/net/pag/g2/users/mernst/bib:..:
-fi
+# Enable use of group bibliographies, and the "bibfind" command.
+alias bibfind='/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde'
+export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
 export VISUAL=${VISUAL:-emacsclient}
-
