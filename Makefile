@@ -84,7 +84,7 @@ help:
 compile: compile-java
 
 compile-java:
-	cd java && $(MAKE) all
+	cd java/daikon && $(MAKE) all
 
 ### Testing the code
 
