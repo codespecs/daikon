@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.19
+@center Daikon version 2.4.0
 
 @sp 1
-@c Daikon version 2.3.19 date
-@center November 2, 2002
+@c Daikon version 2.4.0 date
+@center December 1, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.19, released November 2, 2002.
+It describes Daikon version 2.4.0, released December 1, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.19, released November 2, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.19, released November 2, 2002.
+It describes Daikon version 2.4.0, released December 1, 2002.
 @end ifnottex
 
 @menu
@@ -481,7 +481,8 @@ Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
 to indicate the @var{daikonparent} directory and to perform any desired
 customizations.  (Alternately, you may place such customizations in your
 own @file{.cshrc} or @file{.bash_profile} file, just before and/or
-after the @samp{source ... daikon.@{ba,c@}shrc} line.)
+after the @samp{source ... daikon.cshrc} or @samp{source
+... daikon.bashrc} line.)
 @end enumerate
 
 @item
@@ -621,7 +622,6 @@ make
 This creates the file @file{daikon_runtime.o}; you will use it (and
 @file{daikon_runtime.h}, which also appears in @file{front-end/c})
 when compiling C and C++ programs in which you wish to detect invariants.
-
 @end enumerate
 
 For information about customizing the behavior of your instrumented
@@ -1241,8 +1241,8 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 
 The Daikon distribution includes sample Perl programs suitable for use
 with Daikon in the @file{examples/perl-examples} directory.
-@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
-support is stable and usable, but we intend to further improve and
+@footnote{Note for Daikon version 2.4.0, released December 1, 2002.
+The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
 suggestions, and problems.}
@@ -1521,8 +1521,8 @@ Perl programs must be instrumented twice. First they must be
 instrumented without type information.  Then, once the first
 instrumented version has been run to produce type information, they
 must be instrumented again taking the type information into account.
-@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
-support is stable and usable, but we intend to further improve and
+@footnote{Note for Daikon version 2.4.0, released December 1, 2002.
+The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
 suggestions, and problems.}
@@ -2207,7 +2207,7 @@ invariants must be justified.  Does not print "uninteresting" invariants
 Include "uninteresting" invariants in the tree of differing invariants.
 
 @item -y
-Include "unjustified" invariants. 
+Include (statistically) unjustified invariants. 
 
 @item -a
 Display the tree of all invariants.  Includes invariants that are the
@@ -3957,8 +3957,8 @@ equivalent file.
 This section contains details about dfepl, the Daikon front end for
 Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
 @ref{Instrumenting Perl programs}.
-@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
-support is stable and usable, but we intend to further improve and
+@footnote{Note for Daikon version 2.4.0, released December 1, 2002.
+The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
 suggestions, and problems.}
@@ -3971,7 +3971,7 @@ version 5.8).
 The @command{dfepl} command works by reading one or more Perl programs
 or modules, and writing instrumented versions of those files, by
 default to a subdirectory named @file{daikon-instrumented}. When run,
-these files programs or modules will themselves write more files: if
+these programs or modules will themselves write more files: if
 they were instrumented without type information, they will write files
 containing dynamically inferred type information (with the extension
 @file{.types}), by default to the @file{daikon-instrumented}
@@ -4289,7 +4289,7 @@ The configuration option name contains the
 Java classes in which it is defined.  (In the Daikon source code, the
 configuration value is stored in a variable whose name contains a
 @code{dkconfig_} prefix, but that should be irrelevant to users.)
-To learn more about a specific invariant or derived variables, see
+To learn more about a specific invariant or derived variable, see
 its source code.
 
 @table @asis
@@ -4724,7 +4724,7 @@ Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
 @url{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
 
-For Daikon version 3, also see 
+For Daikon version 2.4.0, also see 
 Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
 of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
 This document is available, as 
@@ -5853,7 +5853,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.19, released November 2, 2002.
+This manual describes Daikon version 2.4.0, released December 1, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

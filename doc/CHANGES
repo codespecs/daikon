@@ -9,6 +9,36 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.0 (1 December 2002):
+
+Daikon can detect invariants in Perl programs.  See the "Perl examples" and
+"Instrumenting Perl programs" sections of the manual.
+
+Three new mailing lists have been set up:
+  daikon-announce@pag.lcs.mit.edu
+  daikon-discuss@pag.lcs.mit.edu
+  daikon-developers@pag.lcs.mit.edu
+To subscribe, visit http://pag.lcs.mit.edu/mailman/listinfo.
+
+The Context GUI now shares the same look and feel as the Tree GUI.
+Furthermore, .dci files are no longer necessary for the Context GUI, and
+its setup has been somewhat simplified.
+
+The --no_suppress_cont option to Daikon and to PrintInvariants displays
+invariants even if they are implied by controlling program points.
+
+The -y option to Diff, includes (statistically) unjustified invariants.
+ 
+To customize the behavior of the C runtime system (for instance, to produce
+gzipped .dtrace files or to customize the runtime's behavior when it
+detects a memory error in your program), edit file
+$DAIKONDIR/front-end/c/daikon_runtime.h.
+
+The manual sections on dealing with variable comparability, large .dtrace
+files, and memory exhaustion have been revised and expanded.
+ 
+----------------
+
 2.3.18 (2 November 2002):
 
 Improved directions for building dfec (if you have a license to the EDG
