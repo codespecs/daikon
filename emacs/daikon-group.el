@@ -6,5 +6,8 @@
 
 (add-to-list 'auto-mode-alist '("\\.jpp\\'" . java-mode))
 
-(autoload 'cvs-update "pcl-cvs" nil t)
+(if (not (fboundp 'cvs-update))
+    (if (= 20 emacs-major-version)
+	(autoload 'cvs-update "pcl-cvs" nil t) ; Emacs 20
+      (autoload 'cvs-update "pcvs" nil t))) ; Emacs 21
 
