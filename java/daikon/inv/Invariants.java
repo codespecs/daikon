@@ -55,7 +55,7 @@ public final class Invariants extends Vector {
     return new LookupIterator(vi);
   }
 
-  // Return an Iterator of all the invariants that involve the specified
+  // Return a list of all the invariants that involve the specified
   // VarInfo.
   public Vector lookup_as_vector(VarInfo vi) {
     Vector result = new Vector();
