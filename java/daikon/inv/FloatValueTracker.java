@@ -30,38 +30,29 @@ public final class FloatValueTracker
   }
 
   public int num_values() {
-    if (values_cache != null) {
-      int result = ArraysMDE.indexOf(values_cache, 0);
-      if (result == -1) {
-        result = max_values;
-      }
-      return result;
-    } else {
+    if (values_cache == null) {
       return max_values;
     }
+    int result = ArraysMDE.indexOf(values_cache, 0);
+    if (result == -1) {
+      result = max_values;
+    }
+    return result;
   }
 
   public void add(double[] v1, double[] v2) {
     if (values_cache == null) return;
-    double av1 = 0;
-    for (int i = 0; i < v1.length; i++) {
-      av1 = av1 * 5 + v1[i];
-    }
-    double av2 = 0;
-    for (int i = 0; i < v2.length; i++) {
-      av2 = av2 * 7 + v2[i];
-    }
-    add(av1, av2);
+    add(UtilMDE.hashToDouble(UtilMDE.hashToDouble(v1), UtilMDE.hashToDouble(v2)));
   }
 
   public void add(double v1, double v2, double v3) {
     if (values_cache == null) return;
-    add(((v1 * 17) + v2 * 13) + v3);
+    add(UtilMDE.hashToDouble(v1, v2, v3));
   }
 
   public void add(double v1, double v2) {
     if (values_cache == null) return;
-    add((v1 * 23) * v2);
+    add(UtilMDE.hashToDouble(v1, v2));
   }
 
   public void add(double v1) {

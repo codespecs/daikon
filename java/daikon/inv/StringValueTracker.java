@@ -30,28 +30,19 @@ public final class StringValueTracker
   }
 
   public int num_values() {
-    if (values_cache != null) {
-      int result = ArraysMDE.indexOf(values_cache, null);
-      if (result == -1) {
-        result = max_values;
-      }
-      return result;
-    } else {
+    if (values_cache == null) {
       return max_values;
     }
+    int result = ArraysMDE.indexOf(values_cache, null);
+    if (result == -1) {
+      result = max_values;
+    }
+    return result;
   }
 
   public void add(String[] v1, String[] v2) {
     if (values_cache == null) return;
-    String av1 = "";
-    for (int i = 0; i < v1.length; i++) {
-      av1 = av1 + v1[i];
-    }
-    String av2 = "";
-    for (int i = 0; i < v2.length; i++) {
-      av2 = av2 + v2[i];
-    }
-    add(av1, av2);
+    add(ArraysMDE.toString(v1, false), ArraysMDE.toString(v2, false));
   }
 
   public void add(String v1, String v2, String v3) {
