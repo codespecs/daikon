@@ -138,7 +138,7 @@ public final class PPTSLICE1
     if (is_scalar) {
       new_invs = SingleScalarFactory.instantiate(this);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      new_invs = SingleScalarSequenceFactory.instantiate(this);
+      new_invs = SingleSequenceFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
       new_invs = SingleFloatFactory.instantiate(this);
