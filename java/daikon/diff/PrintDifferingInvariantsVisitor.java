@@ -1,5 +1,6 @@
 package daikon.diff;
 
+import org.apache.log4j.Logger;
 import daikon.inv.Invariant;
 import java.io.*;
 
@@ -8,6 +9,8 @@ import java.io.*;
  * Prints the differing invariant pairs.
  **/
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
+
+  public static final Logger debug = Logger.getLogger ("daikon.diff.DetailedStatisticsVisitor");
 
   private boolean printUninteresting;
 
@@ -43,13 +46,25 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
         rel == DetailedStatisticsVisitor.REL_DIFF_UNJUST1_UNJUST2 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST1 ||
         rel == DetailedStatisticsVisitor.REL_MISS_UNJUST2) {
+      if (debug.isDebugEnabled()) {
+        debug.debug (" Returning false");
+      }
+      
       return false;
     }
 
     if ((inv1 == null || !inv1.isWorthPrinting()) &&
         (inv2 == null || !inv2.isWorthPrinting())) {
+      if (debug.isDebugEnabled()) {
+        debug.debug (" Returning false");
+      }
       return false;
     }
+
+    
+      if (debug.isDebugEnabled()) {
+        debug.debug (" Returning true");
+      }
 
     return true;
   }

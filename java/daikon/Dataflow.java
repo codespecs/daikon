@@ -26,6 +26,11 @@ public class Dataflow
   /** Debug tracer for ppt initialization.   **/
   public static final Logger debugInit = Logger.getLogger("daikon.flow.init");
 
+  /**
+   * Indicate progress for FileIOProgress.
+   **/
+  public static String progress = "";
+  
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
   //
@@ -61,16 +66,20 @@ public class Dataflow
   {
     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
+      progress = "Initializing partial order for: " + ppt.ppt_name.toString();
       init_partial_order(ppt, all_ppts);
     }
+    progress = null;
 
     // Create or modify the data flow and invariant flow vectors.  We
     // *must* recompute all of them, rather than just the new ones.
     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel item = (PptTopLevel) i.next();
+      progress = "Initializing data flow order for: " + item.ppt_name.toString();
       create_ppt_dataflow(item);
       create_ppt_invflow(item);
     }
+    progress = null;
   }
 
   /**

@@ -3,6 +3,7 @@ package daikon.diff;
 import java.util.*;
 import daikon.*;
 import daikon.inv.*;
+import org.apache.log4j.Logger;
 
 /**
  * Computes A xor B, where A and B are the two sets of invariants.
@@ -11,6 +12,8 @@ public class XorVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
   private PptTopLevel currentPpt;
+
+  public static final Logger debug = Logger.getLogger ("daikon.diff.XorVisitor");
 
   /**
    * Every node has at least one non-null ppt.  Add one of the
@@ -32,6 +35,12 @@ public class XorVisitor extends DepthFirstVisitor {
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
+    if (debug.isDebugEnabled()) {
+      debug.debug ("visit: "
+                    + ((inv1 != null) ? inv1.ppt.parent.ppt_name.toString() : "NULL") + " "
+                    + ((inv1 != null) ? inv1.repr() : "NULL") + " - "
+                    + ((inv2 != null) ? inv2.repr() : "NULL"));
+    }
     if (shouldAddInv1(inv1, inv2)) {
       result.add(currentPpt, inv1);
     } else if (shouldAddInv2(inv1, inv2)) {

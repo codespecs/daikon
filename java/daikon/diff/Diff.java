@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.zip.*;
 import utilMDE.*;
 import gnu.getopt.*;
-
+import org.apache.log4j.Logger;
 
 /**
  * Diff is the main class for the invariant diff program.  The
@@ -33,6 +33,9 @@ import gnu.getopt.*;
  * it easy to extend the program, simply by writing a new Visitor.
  **/
 public final class Diff {
+
+  public static final Logger debug = Logger.getLogger ("daikon.diff.Diff");
+
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -115,7 +118,8 @@ public final class Diff {
 
     boolean optionSelected = false;
 
-    //    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+//     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.DEBUG);
 
     LongOpt[] longOpts = new LongOpt[] {
       new LongOpt(INV_SORT_COMPARATOR1_SWITCH,
@@ -479,7 +483,12 @@ public final class Diff {
       if (outputFile != null) {
         XorVisitor v = new XorVisitor();
         root.accept(v);
-        UtilMDE.writeObject(v.getResult(), outputFile);
+        InvMap resultMap = v.getResult();
+        UtilMDE.writeObject(resultMap, outputFile);
+        if (debug.isDebugEnabled()) {
+          debug.debug ("Result: " + resultMap.toString());
+        }
+
         // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");

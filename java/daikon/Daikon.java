@@ -266,6 +266,8 @@ public final class Daikon {
       System.out.println(release_string);
     }
 
+    fileio_progress.start();
+
     // Load declarations and splitters
     PptMap all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
@@ -590,7 +592,13 @@ public final class Daikon {
     try {
       System.out.print("Reading declaration files ");
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      if (debugTrace.isDebugEnabled()) {
+        debugTrace.debug ("Initializing partial order");
+      }
       Dataflow.init_partial_order(all_ppts);
+      if (debugTrace.isDebugEnabled()) {
+        debugTrace.debug ("Partial order initialized");
+      }
       all_ppts.trimToSize();
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
@@ -702,7 +710,11 @@ public final class Daikon {
     private String message() {
       File file = FileIO.data_trace_filename;
       if (file == null) {
-        return "[no status]";
+        if (Dataflow.progress == null) {
+          return "[no status]";
+        } else {
+          return Dataflow.progress;
+        }
       }
       LineNumberReader lnr = FileIO.data_trace_reader;
       String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
@@ -736,7 +748,6 @@ public final class Daikon {
       System.out.println("Processing trace data; reading "
                          + UtilMDE.nplural(dtrace_files.size(), "file")
                          + ":");
-      fileio_progress.start();
       FileIO.read_data_trace_files(dtrace_files, all_ppts, null);
       fileio_progress.stop();
       System.out.println();
