@@ -376,6 +376,9 @@ public abstract class SuppressionFactory implements Serializable {
     if (array_vi.derived == null) {
       // array_vi is a complete array
       VarInfo array_size_vi = array_vi.sequenceSize();
+      // we don't always derive sequenceSize variables
+      if (array_size_vi == null)
+        return null;
       return findUpperBound(inv, array_size_vi, 0);
     }
     Assert.assertTrue(array_vi.derived != null);
