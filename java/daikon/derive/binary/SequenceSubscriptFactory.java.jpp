@@ -82,7 +82,10 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     if (sclvar.derived != null)
       return null;
 
-    VarInfo seqsize = seqvar.sequenceSize().canonicalRep();
+    VarInfo seqsize = seqvar.sequenceSize();
+    if (seqsize != null) {
+      seqsize = seqsize.canonicalRep();
+    }
     // System.out.println("BinaryDerivation.instantiate: sclvar=" + sclvar.name
     //                    + ", sclvar_rep=" + sclvar.canonicalRep().name
     //                    + ", seqsize=" + seqsize.name
@@ -112,8 +115,11 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // nonsensical/missing.  Is that what I want?
     // Find an IntComparison relationship over the scalar and the sequence
     // size, if possible.
-    Assert.assert(sclvar.ppt == seqsize.ppt);
-    PptSlice compar_slice = sclvar.ppt.getView(sclvar, seqsize);
+    PptSlice compar_slice = null;
+    if (seqsize != null) {
+      Assert.assert(sclvar.ppt == seqsize.ppt);
+      compar_slice = sclvar.ppt.getView(sclvar, seqsize);
+    }
     if (compar_slice != null) {
       IntComparison compar = IntComparison.find(compar_slice);
       if (compar != null) {
