@@ -64,6 +64,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
+BCEL_DIR := /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java
 DIST_DIR := $(WWW_ROOT)/dist
 MIT_DIR  := $(WWW_ROOT)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
@@ -341,7 +342,7 @@ update-dist-version-file:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
-	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
@@ -457,6 +458,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR java/ajax-ship /tmp/daikon/java
 	rm -rf /tmp/daikon/java/ajax-ship/ajax
 	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
+	## BCEL (dependence on jhp directory should be fixed)
+	cd /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java && \
+	  cp -pR --parents org /tmp/daikon/java/
 
 	## JUnit
 	# This is wrong:
