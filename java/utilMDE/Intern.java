@@ -452,6 +452,13 @@ public final class Intern {
    * they are compared using their equals() methods.
    **/
   public static String[] intern(String[] a) {
+
+    // Make sure each element is already interned
+    if (Assert.enabled) {
+      for (int k = 0; k < a.length; k++)
+        Assert.assertTrue (a[k] == Intern.intern (a[k]));
+    }
+
     Object lookup = internedStringArrays.get(a);
     if (lookup != null) {
       WeakReference ref = (WeakReference)lookup;
