@@ -67,8 +67,8 @@ public final class CLASSNAME
   // the two that are furthest apart in order to compute a and b.
   final static int MINPAIRS = 4;
 
-  PRIMITIVE[] x_cache = new PRIMITIVE[MINPAIRS];
-  PRIMITIVE[] y_cache = new PRIMITIVE[MINPAIRS];
+  public PRIMITIVE[] x_cache = new PRIMITIVE[MINPAIRS];
+  public PRIMITIVE[] y_cache = new PRIMITIVE[MINPAIRS];
 
   public CLASSNAME(Invariant wrapper) {
     this.wrapper = wrapper;
@@ -104,10 +104,20 @@ public final class CLASSNAME
       }
     }
 
-
+    // swap the value caches
     PRIMITIVE[] tmp = x_cache;
     x_cache = y_cache;
     y_cache = tmp;
+
+    // swap min_x/min_y and max_x/max_y
+    PRIMITIVE tmp_val = max_x;
+    max_x = max_y;
+    max_y = tmp_val;
+    tmp_val = min_x;
+    min_x = min_y;
+    min_y = tmp_val;
+
+
   }
 
   /**
@@ -312,6 +322,7 @@ public final class CLASSNAME
         // Set a and b based on that pair
         if (max_i == -1) {
           values_seen--;
+          wrapper.log ("falsified, max_i = -1");
           return InvariantStatus.FALSIFIED;
         }
         // remember the min and max pairs
@@ -330,6 +341,7 @@ public final class CLASSNAME
         if (set_bi_linear(min_x, max_x, min_y, max_y) ==
             InvariantStatus.FALSIFIED) {
           values_seen--;
+          wrapper.log ("falsified, no set_bi_linear");
           return InvariantStatus.FALSIFIED;
         }
         min_a = a;
@@ -342,7 +354,7 @@ public final class CLASSNAME
 
         // Check all values against a and b.
         if (a == 0) {
-          debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") because a == 0");
+          wrapper.log ("falsified, a == 0");
           values_seen--;
           return InvariantStatus.FALSIFIED;
         }
@@ -362,6 +374,7 @@ public final class CLASSNAME
               debug.fine ("    ");
             }
             values_seen--;
+            wrapper.log ("falsified, point in cache doesn't match");
             return InvariantStatus.FALSIFIED;
           }
         }
@@ -372,8 +385,10 @@ public final class CLASSNAME
         PptSlice gslice = wrapper.ppt.find_global_slice
                                                   (wrapper.ppt.var_infos);
         if (gslice != null) {
-          if (gslice.contains_inv_exact (wrapper))
+          if (gslice.contains_inv_exact (wrapper)) {
+            wrapper.log ("removed, exists at global ppt");
             return InvariantStatus.FALSIFIED;
+          }
         }
       }
     } else {
@@ -497,8 +512,8 @@ public final class CLASSNAME
       // invariant would not have been instantiated).
       return false;
     }
-    result[0] = (y1-y0)/(x1-x0);
-    result[1] = (y0*x1-x0*y1)/(x1-x0);
+    result[0] = (y1-y0)/(double) (x1-x0);
+    result[1] = (y0*x1-x0*y1)/(double)(x1-x0);
     return true;
   }
 
@@ -515,6 +530,9 @@ public final class CLASSNAME
     }
     a = aAndB[0];
     b = aAndB[1];
+    wrapper.log (Fmt.spf ("x0=%s, x1=%s, y0=%s, y1=%s", "" + x0, "" + x1,
+                          "" + y0, "" + y1));
+    wrapper.log (Fmt.spf ("a=%s, b=%s,", "" + a, "" + b));
     return InvariantStatus.NO_CHANGE;
   }
 
