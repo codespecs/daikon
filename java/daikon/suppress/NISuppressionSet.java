@@ -241,6 +241,16 @@ public class NISuppressionSet {
    */
   public void instantiate (PptTopLevel ppt, VarInfo[] vis, List new_invs) {
 
+    NIS.new_invs_cnt++;
+
+    // If the suppressee will be falsified by the sample, don't bother
+    // to create it.
+    NISuppressee suppressee = suppression_set[0].suppressee;
+    if (suppressee.check (NIS.vt, vis) == InvariantStatus.FALSIFIED) {
+      NIS.false_invs_cnt++;
+      return;
+    }
+
     if (Assert.enabled) {
       for (int i = 0; i < vis.length; i++)
         Assert.assertTrue (!vis[i].missingOutOfBounds());
@@ -259,7 +269,6 @@ public class NISuppressionSet {
     }
 
     // Create the new invariant
-    NISuppressee suppressee = suppression_set[0].suppressee;
     Invariant inv = suppressee.instantiate (slice);
 
     if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
