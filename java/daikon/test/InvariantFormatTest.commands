@@ -446,7 +446,7 @@ Goal (simplify): format_simplify disabled
 ; SubSet currently unimplemented in JML
 
 ; a == b (string format)
-daikon.inv.binary.twoString.StringComparison
+daikon.inv.binary.twoString.StringEqual
 string string
 Goal (daikon): a == b
 Goal (java): a.equals(b)
@@ -541,7 +541,7 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 ; Testing binary sequenceString invariants
 
 ; a is in b
-daikon.inv.binary.sequenceString.Member
+daikon.inv.binary.sequenceString.MemberString
 string_array string
 Goal (daikon): b in a[]
 Goal (java): daikon.Quant.memberOf(b , a )
