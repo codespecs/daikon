@@ -436,6 +436,21 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
     Vector result = new Vector();
 
+    HashSet controlling_equalTo = new HashSet(); // Strings
+    {
+      Iterator controllers = ppt.controlling_ppts.iterator();
+      while (controllers.hasNext()) {
+        PptTopLevel controller = (PptTopLevel) controllers.next();
+        VarInfo controller_var = controller.findVar(name);
+        if (controller_var != null) {
+          Vector this_equalTo = controller_var.equal_to.equalTo();
+          for (int i=0; i<this_equalTo.size(); i++) {
+            controlling_equalTo.add(((VarInfo)this_equalTo.elementAt(i)).name);
+          }
+        }
+      }
+    }
+
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
       Assert.assert(vis[i].equal_to == vis[i].equal_to.equal_to);
@@ -443,6 +458,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         continue;
       VarInfo vi = vis[i];
       if (vi.equal_to != this)
+        continue;
+      if (controlling_equalTo.contains(vi.name))
         continue;
 
       // System.out.println("Considering " + vi.name);
