@@ -60,9 +60,9 @@ public class NISuppressor {
 
     // Create a sample invariant
     try {
-      Method instantiate = inv_class.getMethod ("instantiate",
-                                                new Class[] {PptSlice.class});
-      sample_inv = (Invariant)instantiate.invoke (null, new Object[] {null});
+      Method get_proto = inv_class.getMethod ("get_proto",
+                                                new Class[] {});
+      sample_inv = (Invariant) get_proto.invoke (null, new Object[] {});
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
                                   + inv_class.getName() + ": " + e);
@@ -105,27 +105,38 @@ public class NISuppressor {
 
     // Create a sample invariant
     try {
-      Method instantiate = null;
+      Method get_proto = null;
       boolean has_swap_param = false;
       try {
-        instantiate = inv_class.getMethod ("instantiate",
-                               new Class[] {PptSlice.class, boolean.class});
+        get_proto = inv_class.getMethod ("get_proto",
+                               new Class[] {boolean.class});
         has_swap_param = true;
-        sample_inv = (Invariant)instantiate.invoke (null,
-                                  new Object[] {null, Boolean.valueOf(swap)});
+        sample_inv = (Invariant)get_proto.invoke (null,
+                                  new Object[] {Boolean.valueOf(swap)});
       } catch (Exception e) {
       }
-      if (instantiate == null) {
-        instantiate = inv_class.getMethod ("instantiate",
-                               new Class[] {PptSlice.class});
-        sample_inv = (Invariant)instantiate.invoke (null, new Object[] {null});
+      if (get_proto == null) {
+        // Fmt.pf ("creating sample for class " + inv_class);
+        get_proto = inv_class.getMethod ("get_proto",
+                               new Class[] {});
+        sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
       }
     } catch (Exception e) {
-      throw new RuntimeException ("error instantiating invariant "
+      throw new RuntimeException ("error getting proto invariant "
                                   + inv_class.getName() + ": " + e);
     }
 
+    if (sample_inv == null)
+      Fmt.pf (inv_class.getName() + " is not enabled" );
     debug.fine ("Created " + this);
+  }
+
+  /**
+   * Returns whether or not this suppressor is enabled.  A suppressor
+   * is enabled if the invariant on which it depends is enabled.
+   */
+  public boolean is_enabled() {
+    return (sample_inv != null);
   }
 
   /**
@@ -162,6 +173,10 @@ public class NISuppressor {
     // Currently we only support unary and binary suppressors
     Assert.assertTrue (v3_index == -1);
     Assert.assertTrue (v1_index != -1);
+
+    // If the underlying invariant is not enabled, we can't possibly be true
+    if (!is_enabled())
+      return (state = NIS.INVALID);
 
     if (Debug.logDetail() && NIS.debug.isLoggable (Level.FINE))
       NIS.debug.fine ("checking suppressor " + this + " against inv "
@@ -204,7 +219,7 @@ public class NISuppressor {
       if (slice != null) {
         for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
           Invariant slice_inv = (Invariant) i.next();
-          if (match (slice_inv))
+          if (match_true (slice_inv))
             return (state = NIS.VALID);
         }
       }
@@ -213,7 +228,7 @@ public class NISuppressor {
         if (gslice != null) {
           for (Iterator i = gslice.invs.iterator(); i.hasNext(); ) {
             Invariant gslice_inv = (Invariant) i.next();
-            if (match (gslice_inv)) {
+            if (match_true (gslice_inv)) {
               if (NIS.debug.isLoggable (Level.FINE))
                 NIS.debug.fine ("suppressor matches global inv "
                           + gslice_inv.format() + " "+ !gslice_inv.is_false());
@@ -225,6 +240,10 @@ public class NISuppressor {
       return (state = NIS.INVALID);
 
     } else /* must be binary */ {
+      Assert.assertTrue ((v1_index < vis.length), "v1/len= "
+                         + v1_index + "/" + vis.length + " suppressor " + this);
+      Assert.assertTrue ((v2_index < vis.length), "v2/len= "
+                         + v2_index + "/" + vis.length + " suppressor " + this);
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
 
@@ -267,7 +286,7 @@ public class NISuppressor {
         for (Iterator i = slice.invs.iterator(); i.hasNext(); ) {
           Invariant slice_inv = (Invariant) i.next();
           // NIS.debug.fine (": processing inv " + slice_inv.format());
-          if (match (slice_inv)) {
+          if (match_true (slice_inv)) {
             if (NIS.debug.isLoggable (Level.FINE))
               NIS.debug.fine ("suppressor matches inv " + slice_inv.format()
                            + " " + !slice_inv.is_false());
@@ -280,7 +299,7 @@ public class NISuppressor {
         if (gslice != null) {
           for (Iterator i = gslice.invs.iterator(); i.hasNext(); ) {
             Invariant gslice_inv = (Invariant) i.next();
-            if (match (gslice_inv)) {
+            if (match_true (gslice_inv)) {
               if (NIS.debug.isLoggable (Level.FINE))
                 NIS.debug.fine ("suppressor matches global inv "
                           + gslice_inv.format() + " "+ !gslice_inv.is_false());
@@ -292,6 +311,18 @@ public class NISuppressor {
       NIS.debug.fine ("suppressor not found");
       return (state = NIS.INVALID);
     }
+  }
+
+  /**
+   * Returns true if inv matches this suppressor and the invariant
+   * is not falsified.
+   * @see #match(Invariant)
+   */
+  public boolean match_true (Invariant inv) {
+    if (NIS.dkconfig_antecedent_method)
+      return (match (inv) && !inv.is_false());
+    else
+      return (match (inv));
   }
 
   /**
@@ -314,16 +345,66 @@ public class NISuppressor {
     }
   }
 
+  /**
+   * Returns true if the suppressee matches this suppressor.  Currently
+   * only checks that the class matches but this will need to be expanded
+   * to check for a permutation match as well
+   */
+  public boolean match (NISuppressee sse) {
+    return (sse.sup_class == inv_class);
+  }
+
+  /**
+   * Returns a copy of this suppressor translated to match the variable
+   * order in sor.
+   */
+  public NISuppressor translate (NISuppressor sor) {
+
+    int new_v1 = sor.translate_index (v1_index);
+    int new_v2 = sor.translate_index (v2_index);
+    int new_v3 = sor.translate_index (v3_index);
+
+    if (new_v2 == -1)
+      return new NISuppressor (new_v1, inv_class);
+    else if (new_v3 == -1)
+      return new NISuppressor (new_v1, new_v2, inv_class);
+    else {
+      Assert.assertTrue (false, "Unexpected ternary suppressor");
+      return (null);
+    }
+  }
+
+  /** Returns the variable index that corresponds to index **/
+  private int translate_index (int index) {
+
+    if (index == 0)
+      return (v1_index);
+    else if (index == 1)
+      return (v2_index);
+    else if (index == 2)
+      return (v3_index);
+    else
+      return (index);
+  }
+
+
+  /** Returns the invariant class of this suppressor **/
   public Class get_inv_class() {
     return (inv_class);
   }
 
+  /** clears the state of this suppressor to NIS.none **/
   public void clear_state() {
     state = NIS.NONE;
   }
 
   static String[] varname = new String[] { "x", "y", "z" };
 
+  /**
+   * Returns a string representation of the suppressor.  Rather than show
+   * var indices as numbers, the variables x, y, and z are shown instead
+   * with indices 0, 1, and 2 respectively
+   */
   public String toString() {
 
     String cname = UtilMDE.unqualified_name (inv_class);
