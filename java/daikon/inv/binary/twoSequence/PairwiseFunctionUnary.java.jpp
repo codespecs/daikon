@@ -104,9 +104,28 @@ public class CLASSNAME
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.IOA) {
       return format_ioa();
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
     }
 
     return core.format_using(format, var1().name, var2().name);
+  }
+
+  public String format_simplify() {
+    if (!core.methodname[1].equals(""))
+      return format_unimplemented(OutputFormat.SIMPLIFY);
+    String[] form;
+    if (core.inverse) {
+      // var1[i] = fn(var2[i])
+      form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+        { var2().name, var1().name }, true); // elementwise
+    } else {
+      // var2[i] = fn(var1[i])
+      form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+        { var1().name, var2().name }, true); // elementwise
+    }
+    return form[0] + "(EQ (" + core.methodname[0] + " " + form[1]
+      + ") " + form[2] + ")" + form[3];
   }
 
   /* IOA */
