@@ -30,9 +30,10 @@ import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
 /**
- * Instruments a file to check invariant violations at runtime. Violated
- * invariants are stored in a list [...]. The control flow of the class remains
- * unchanged from the original.
+ * Instruments a file to check invariant violations at
+ * runtime. Violated invariants are stored in a list in
+ * daikon.tools.runtimechecker.Runtime. The control flow of the class
+ * remains unchanged from the original.
  *
  * @author Carlos Pacheco
  */
@@ -53,14 +54,17 @@ public class InstrumentHandler extends CommandHandler {
     // to the maximum number of invariants out annotate per program point.
     protected static int maxInvariantsPP = -1;
 
-    private static final String max_invariants_pp_SWITCH = "max_invariants_pp";
+    private static final String make_all_fields_publicSWITCH = "make_all_fields_public";
 
     // Whether should print debugging information as it is executing.
     private static String debug_SWITCH = "debug";
 
     public boolean handle(String[] args) {
 
-        Assert.assertTrue(args[0].equals("instrument"));
+        if (!args[0].equals("instrument")) {
+            System.err.println("Command (first argument) to instrumenter was not recognized.");
+            return false;
+        }
 
         // Create instrumented-classes dir.
         File outputDir = new File("instrumented-classes");
@@ -71,7 +75,7 @@ public class InstrumentHandler extends CommandHandler {
             System.err
                     .println("The directory \"instrumented-classes\" already exists. "
                             + "Please remove it before instrumenting.");
-            System.exit(1);
+            return false;
         }
 
         String[] realArgs = new String[args.length - 1];
@@ -79,6 +83,9 @@ public class InstrumentHandler extends CommandHandler {
             realArgs[i] = args[i + 1];
         }
         Arguments arguments = readArguments(realArgs);
+        if (arguments == errorWhileReadingArguments) {
+            return false;
+        }
 
         System.out.println("Reading invariant file: " + arguments.invFile);
         PptMap ppts = null;
@@ -158,6 +165,8 @@ public class InstrumentHandler extends CommandHandler {
         public List/* String */javaFileNames;
     }
 
+    private static Arguments errorWhileReadingArguments = new Arguments();
+
     private Arguments readArguments(String[] args) {
 
         LongOpt[] longopts = new LongOpt[] {
@@ -165,8 +174,8 @@ public class InstrumentHandler extends CommandHandler {
                         0),
                 new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                         null, 0),
-                new LongOpt(max_invariants_pp_SWITCH,
-                        LongOpt.REQUIRED_ARGUMENT, null, 0),
+                new LongOpt(make_all_fields_publicSWITCH,
+                        LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(debug_SWITCH, LongOpt.NO_ARGUMENT, null, 0) };
         Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
         int c;
@@ -178,34 +187,20 @@ public class InstrumentHandler extends CommandHandler {
 
                 if (debug_SWITCH.equals(option_name)) {
                     debug.setLevel(Level.FINE);
-                } else if (max_invariants_pp_SWITCH.equals(option_name)) {
-                    try {
-                        maxInvariantsPP = Integer.parseInt(g.getOptarg());
-                    } catch (NumberFormatException e) {
-                        System.err
-                                .println("Annotate: found the --max_invariants_pp option "
-                                        + "followed by an invalid numeric argument. Annotate "
-                                        + "will run without the option.");
-                        maxInvariantsPP = -1;
-                    }
+                } else if (make_all_fields_publicSWITCH.equals(option_name)) {
+                    InstrumentVisitor.makeAllFieldsPublic = true;
                 } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
                     Global.debugAll = true;
                 } else if (Daikon.debug_SWITCH.equals(option_name)) {
                     LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
                 } else {
-                    throw new RuntimeException("Unknown long option received: "
-                            + option_name);
+                    System.err.println("Unknown long option received: "
+                                       + option_name);
                 }
                 break;
-            case 'h':
-                usageMessage();
-                System.exit(1);
-                break;
-            case '?':
-                break; // getopt() already printed an error
             default:
-                System.out.println("getopt() returned " + c);
-                break;
+                System.out.println("unrecognized option" + c);
+                return errorWhileReadingArguments;
             }
         }
         // The index of the first non-option argument -- the name of the
@@ -214,27 +209,25 @@ public class InstrumentHandler extends CommandHandler {
         if (argindex >= args.length) {
             System.out
                     .println("Error: No .inv file or .java file arguments supplied.");
-            usageMessage();
-            System.exit(1);
+            return errorWhileReadingArguments;
         }
         String invfile = args[argindex];
         argindex++;
         if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
             System.out.println("Error: first argument must be a"
                     + "file ending in .inv or .inv.gz.");
-            System.exit(1);
+            return errorWhileReadingArguments;
         }
         if (argindex >= args.length) {
             System.out.println("Error: No .java file arguments supplied.");
-            usageMessage();
-            System.exit(1);
+            return errorWhileReadingArguments;
         }
         List/* String */javaFileNames = new ArrayList();
         for (; argindex < args.length; argindex++) {
             String javafile = args[argindex];
             if (!javafile.endsWith(".java")) {
                 System.out.println("File does not end in .java: " + javafile);
-                System.exit(1);
+                return errorWhileReadingArguments;
             }
             javaFileNames.add(javafile);
         }
@@ -244,32 +237,6 @@ public class InstrumentHandler extends CommandHandler {
         ret.javaFileNames = javaFileNames;
         return ret;
     }
-
-//     private void compile(List/* String */javaFileNames, String extraClasspath) {
-
-//         try {
-
-//             System.out
-//                     .println("Executing command: "
-//                             + "javac "
-//                             + (extraClasspath.equals("") ? ""
-//                                     : ("-classpath " + extraClasspath
-//                                             + File.pathSeparator + "<original classpath>"))
-//                             + " " + UtilMDE.join(javaFileNames, " "));
-
-//             // [[ TODO: let user give extra arguments to this call ]]
-//             eclat.util.Command.exec("javac "
-//                     + (extraClasspath.equals("") ? "" : ("-classpath "
-//                             + extraClasspath + File.pathSeparator + System
-//                             .getProperty("java.class.path"))) + " "
-//                     + UtilMDE.join(javaFileNames, " "));
-
-//         } catch (Throwable e) {
-//             System.err.println("javac command failed.");
-//             // [[ TODO; improve error message. ]]
-//             System.exit(1);
-//         }
-//     }
 
     /**
      * The wrapped result of parsing a .java source file. The packageName and

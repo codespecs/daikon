@@ -307,6 +307,7 @@ Enhancing conditional invariant detection
 Tools
 
 * Annotate::                    
+* Runtime-check instrumenter::  
 * InvariantChecker::            
 * LogicalCompare::              
 
@@ -6085,11 +6086,12 @@ distribution and are not described elsewhere in the manual.
 
 @menu
 * Annotate::                    
+* Runtime-check instrumenter::  
 * InvariantChecker::            
 * LogicalCompare::              
 @end menu
 
-@node    Annotate, InvariantChecker, Tools, Tools
+@node    Annotate, Runtime-check instrumenter, Tools, Tools
 @section Annotate
 
 @cindex Annotate tool
@@ -6164,8 +6166,102 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
+@node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
+@section Runtime-check instrumenter
 
-@node    InvariantChecker, LogicalCompare, Annotate, Tools
+The instrumenter modifies the methods and constructors of a class to check
+invariants as the class executes. To instrument class
+@code{ubs/BoundedStack.java} with the invariants in the invariant file
+@code{BoundedStack.inv.gz}, you type:
+
+@example
+java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
+@end example
+
+For a list of options, type
+
+@example
+java daikon.tools.runtimechecker.Main help
+@end example
+
+The result of the @code{instrument} command is a new directory
+@code{instrumented-classes} containing a new version of
+@code{BoundedStack.java}, instrumented to check invariants at runtime.
+
+The instrumented class will reference classes in the
+@code{daikon.tools.runtimechecker} package, so those classes must be
+present in the classpath when the class is used.
+
+Invariants are evaluated at the program points at which they should hold. ``Evaluating an invariant'' means 
+executing an expression that evaluates to @code{true} if the invariant holds and @code{false}
+if the invariant doesn't hold.
+Three things can happen when evaluating an invariant:
+
+@itemize @bullet
+@item
+It evaluates to @code{true}, which means that the invariant holds.
+Program execution continues normally.
+
+@item
+It evaluates to @code{false}, which means that the invariant doesn't
+hold. In this case the corresponding
+@code{daikon.tools.runtimechecker.Property} is added to a list in the
+class @code{daikon.tools.runtimechecker.Runtime}. A programmer can
+obtain the growing list of violated invariants through the method
+@code{daikon.tools.runtimechecker.Runtime.getViolations()}. (See
+that class for other useful methods).
+
+@item
+A throwable is thrown when evaluating the invariant. In this case, the
+  throwable is added to the list
+@code{daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors}.
+  The throwable is not rethrown.
+
+@end itemize
+
+
+As suggested above, the instrumented class handles violations silently: it simply adds them
+to a list in the class @code{daikon.tools.runtimechecker.Runtime.}
+In other words,
+no "invariant violation" exceptions are thrown, and the violated
+invariants can only be obtained dynamically from class
+@code{daikon.tools.runtimechecker.Runtime}.
+
+The following code snippet contains a method @code{callMethod()} which
+presumably calls one of the methods in the instrumented class.
+The code detects if any violations occurred, and if so, prints 
+a message.
+
+@example
+
+daikon.tools.runtimechecker.Runtime.resetViolations();
+daikon.tools.runtimechecker.Runtime.resetErrors();
+
+callMethod();
+
+List<Violation> vs = daikon.tools.runtimechecker.Runtime.getViolations();
+
+if (!vs.isEmpty())
+  System.out.println("Violations occurred.");
+
+@end example
+
+In addition, the instrumenter adds the following two methods to the
+instrumented class:
+
+@itemize @bullet
+@item
+
+@code{isDaikonInstrumented()}. Returns true (you can imagine calling
+this method to see if the class has been instrumented).
+
+@item
+
+@code{getDaikonInvariants()}. Returns the array of properties being checked.
+@end itemize
+
+
+@node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools
 @section InvariantChecker
 
 @cindex InvariantChecker tool

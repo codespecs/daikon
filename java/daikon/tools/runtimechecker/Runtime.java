@@ -10,38 +10,43 @@ import java.util.List;
  */
 public class Runtime {
 
-    private static List/* Violation */violations = new ArrayList/* Violation */();
+    /**
+     * A list of throwables seen when attempting to evaluate properties.
+     */
+    public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<Throwable>();
 
-    public static synchronized List/*<Violation>*/ getViolations() {
-	List/*<Violation>*/ retval = new ArrayList/*<Violation>*/();
+    private static List<Violation> violations = new ArrayList<Violation>();
+
+    /**
+     * Returns the list of violations.
+     */
+    public static synchronized List<Violation> getViolations() {
+	List<Violation> retval = new ArrayList<Violation>();
 	for (int i = 0 ; i < violations.size() ; i++) {
 	    retval.add((Violation)violations.get(i));
 	}
 	return retval;
     }
 
+    /**
+     * Empty the violations list.
+     */
     public static synchronized void resetViolations() {
 	violations = new ArrayList();
     }
 
+    /**
+     * True if the violations list is empty.
+     */
     public static synchronized boolean violationsEmpty() {
 	return violations.isEmpty();
     }
 
+    /**
+     * Add a violation to the violations list.
+     */
     public static synchronized void violationsAdd(Violation v) {
 	violations.add(v);
     }
-
-    private static List errors = new ArrayList();
-
-    public static synchronized void resetErrors() {
-	errors = new ArrayList();
-    }
-
-    public static synchronized boolean errorsEmpty() {
-	return errors.isEmpty();
-    }
-
-    public static List/* Throwable */internalInvariantEvaluationErrors = new ArrayList();
 
 }

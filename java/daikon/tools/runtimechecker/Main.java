@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Main extends CommandHandler {
 
-    protected void usageMessage(List/*<CommandHandler>*/ handlers) {
+    protected void usageMessage(List<CommandHandler> handlers) {
         for (int i = 0 ; i < handlers.size() ; i++) {
             CommandHandler h = (CommandHandler)handlers.get(i);
             h.usageMessage();
@@ -18,13 +18,13 @@ public class Main extends CommandHandler {
 
     public void nonStaticMain(String[] args) {
 
-        List/*<CommandHandler>*/ handlers = new ArrayList/*<CommandHandler>*/();
+        List<CommandHandler> handlers = new ArrayList<CommandHandler>();
         handlers.add(new InstrumentHandler());
 
         if (args.length < 1) {
             System.err.println("No command given.");
             System.err
-                    .println("For more help, invoke the instrumenter with \"help\" as its sole argument.");
+                .println("For more help, invoke the instrumenter with \"help\" as its sole argument.");
             System.exit(1);
         }
         if (args[0].toUpperCase().equals("HELP") || args[0].equals("?")) {
@@ -41,25 +41,34 @@ public class Main extends CommandHandler {
 
         boolean success = false;
 
-        for (int i = 0 ; i < handlers.size() ; i++) {
-            CommandHandler h = (CommandHandler)handlers.get(i);
-            if (h.handles(command)) {
-                success = h.handle(args);
-                if (!success) {
-                    System.err
+        CommandHandler h = null;
+        try {
+
+            for (int i = 0 ; i < handlers.size() ; i++) {
+                h = (CommandHandler)handlers.get(i);
+                if (h.handles(command)) {
+                    success = h.handle(args);
+                    if (!success) {
+                        System.err
                             .println("The command you issued returned a failing status flag.");
-                    h.usageMessage();
+                    }
+                    break;
                 }
-                break;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Exception thrown while handling command:" + e);
+            e.printStackTrace();
+            success = false;
+        } finally {
+            if (!success) {
+                System.err.println("The instrumenter failed.");
+                h.usageMessage();
+                System.exit(1);
+            } else {
+                System.exit(0);
             }
         }
-
-        if (!success) {
-            System.exit(1);
-        } else {
-            System.exit(0);
-        }
-
     }
 
     public static void main(String[] args) {

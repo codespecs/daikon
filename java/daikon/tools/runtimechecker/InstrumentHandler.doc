@@ -12,3 +12,9 @@ instrument INV_FILE [ JAVA_FILES ]
     
      Example use:
      java daikon.tools.runtimecheker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
+
+
+OPTIONS
+
+     --make_all_fields_public      Make all declared fields public in the
+                                   instrumented class.

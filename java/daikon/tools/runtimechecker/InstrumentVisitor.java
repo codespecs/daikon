@@ -23,15 +23,15 @@ import daikon.inv.OutputFormat;
 import daikon.tools.jtb.*;
 
 /**
- * Visitor pattern that instruments a Java source file to check invariant
- * violations at runtime.
+ * Visitor that instruments a Java source file (i.e. adds code at
+ * certain places) to check invariant violations at runtime.
  */
 public class InstrumentVisitor extends DepthFirstVisitor {
 
     // If true, instrumented will make all fields of the class
     // visible. The reason for doing this is so that invariants over
     // potentially inaccessible object fields can be evaluated.
-    boolean makeAllFieldsVisible = false;
+    public static boolean makeAllFieldsPublic = false;
 
     // The map containing the invariants.
     private final PptMap pptmap;
@@ -42,10 +42,15 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // returns unique values for unique Properties, then I should be
     // able to use hashcode. So: make sure that the statements above
     // are all correct, and then use hashcode. ]]
-    private Map/*<String, String>*/ xmlStringToIndex = new HashMap/*<String,String>*/();
+    private Map<String, String> xmlStringToIndex = new HashMap<String,String>();
 
     private int varNumCounter = 0;
 
+
+    /**
+     * Create a visitor that will insert code to check the invariants
+     * contained in pptmap.
+     */
     public InstrumentVisitor(PptMap pptmap) {
         this.pptmap = pptmap;
 
@@ -57,7 +62,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 		continue;
 	    }
 
-            List/*Invariant*/ invList = filterInvariants(daikon.tools.jtb.Ast.getInvariants(ppt, pptmap));
+            List<Invariant> invList = filterInvariants(daikon.tools.jtb.Ast.getInvariants(ppt, pptmap));
             for (Iterator invI = invList.iterator() ; invI.hasNext() ; ) {
                 Invariant inv = (Invariant)invI.next();
 
@@ -67,33 +72,63 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 	}
     }
 
+    /**
+     * If makeAllFieldsPublic == true, then it makes this field
+     * declaration public.
+     */
     public void visit(FieldDeclaration fd) {
         super.visit(fd);
         /**
          * Grammar production for ClassOrInterfaceBodyDeclaration:
          * f0 -> Initializer()
-         *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+         *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers)
+         *                       | ConstructorDeclaration() | FieldDeclaration(modifiers)
+         *                       | MethodDeclaration(modifiers) )
          *       | ";"
          */
-        NodeSequence seq = (NodeSequence)fd.getParent().getParent();
-        Modifiers modifiers = (Modifiers)seq.elementAt(0);
-        Vector modifierVector = modifiers.f0.nodes;
 
-	Vector/*NodeChoice*/ newModifiers = new Vector();
-	for (int i = 0 ; i < modifierVector.size() ; i++) {
-	    NodeChoice nc = (NodeChoice)modifierVector.get(i);
-	    NodeToken token = (NodeToken)nc.choice;
-	    if (!token.tokenImage.equals("public")
-		&& !token.tokenImage.equals("protected")
-		&& !token.tokenImage.equals("private")) {
-		newModifiers.add(token);
-	    }
-	}
+        if (makeAllFieldsPublic) {
+            NodeSequence seq = (NodeSequence)fd.getParent().getParent();
+            Modifiers modifiers = (Modifiers)seq.elementAt(0);
+            Vector modifierVector = modifiers.f0.nodes;
 
-	newModifiers.add(new NodeToken("public"));
-        modifiers.f0.nodes = newModifiers;
+
+            Vector<Node> newModifiers = new Vector<Node>();
+            for (int i = 0 ; i < modifierVector.size() ; i++) {
+                NodeChoice nc = (NodeChoice)modifierVector.get(i);
+                NodeToken token = (NodeToken)nc.choice;
+                if (!token.tokenImage.equals("public")
+                    && !token.tokenImage.equals("protected")
+                    && !token.tokenImage.equals("private")) {
+                    newModifiers.add(token);
+                }
+            }
+
+            newModifiers.add(new NodeToken("public"));
+            modifiers.f0.nodes = newModifiers;
+        }
     }
 
+    /**
+     * Adds the following new methods:
+     *
+     * checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time)
+     *   Checks the class invariants.
+     * checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time)
+     *   Check the object invariants
+     * isDaikonInstrumented()
+     *   returns true (you can imagine calling this method to see if the class has been
+     *   instrumented).
+     * getDaikonInvariants()
+     *   Returns th array of properties being checked.
+     *
+     * Adds the following field:
+     *
+     * daikon.tools.runtimechecker.Property[] daikonProperties
+     *   The properties being checked.
+     *
+     * Add code that initializes the properties array.
+     */
     public void visit(ClassOrInterfaceBody clazz) {
         super.visit(clazz);
 
@@ -118,15 +153,19 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     /**
+     * Adds code to check class invariants and preconditions on entry
+     * (but not object invariants, because there's no object yet!).
      *
+     * Adds code to check postcontiions, class and object invariants
+     * on exit.
      */
     public void visit(ConstructorDeclaration ctor) {
         super.visit(ctor);
 
         // Find declared throwables.
-        List/* String */declaredThrowables = getDeclaredThrowables(ctor.f3);
+        List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
 
-        Vector/* PptTopLevel */matching_ppts = Ast.getMatches(pptmap, ctor);
+        Vector<PptTopLevel> matching_ppts = Ast.getMatches(pptmap, ctor);
 
         StringBuffer code = new StringBuffer();
 
@@ -146,7 +185,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
             PptTopLevel ppt = (PptTopLevel) i.next();
             if (ppt.ppt_name.isEnterPoint()) {
-                List/* Invariant */preconditions = filterInvariants(Ast
+                List<Invariant> preconditions = filterInvariants(Ast
                         .getInvariants(ppt, pptmap));
                 appendInvariantChecks(preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
             }
@@ -208,7 +247,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
 
         // Find declared throwables.
-        List/* String */declaredThrowables = getDeclaredThrowables(method.f3);
+        List<String> declaredThrowables = getDeclaredThrowables(method.f3);
 
         Vector/* PptTopLevel */matching_ppts = Ast.getMatches(pptmap, method);
         String name = Ast.getName(method);
@@ -237,7 +276,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
             PptTopLevel ppt = (PptTopLevel) i.next();
             if (ppt.ppt_name.isEnterPoint()) {
-                List/* Invariant */preconditions = filterInvariants(Ast
+                List<Invariant> preconditions = filterInvariants(Ast
                         .getInvariants(ppt, pptmap));
                 appendInvariantChecks(preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
             }
@@ -325,7 +364,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // vioTime can be the name of a variable (which should be in scope)
     // or a string, but if it's a string, then you should write it as
     // something like: \"<ENTER>\"
-    private void appendInvariantChecks(List/* Invariant */invs,
+    private void appendInvariantChecks(List<Invariant> invs,
             StringBuffer code, String vioTime) {
         for (Iterator i = invs.iterator(); i.hasNext();) {
             Invariant inv = (Invariant) i.next();
@@ -462,7 +501,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String objectPptname = classname + ":::OBJECT";
         PptTopLevel objectPpt = pptmap.get(objectPptname);
         if (objectPpt != null) {
-            List/* Invariant */objectInvariants = filterInvariants(Ast
+            List<Invariant> objectInvariants = filterInvariants(Ast
                     .getInvariants(objectPpt, pptmap));
             appendInvariantChecks(objectInvariants, code, "time");
         }
@@ -481,7 +520,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String classPptname = classname + ":::CLASS";
         PptTopLevel classPpt = pptmap.get(classPptname);
         if (classPpt != null) {
-            List/* Invariant */classInvariants = filterInvariants(Ast
+            List<Invariant> classInvariants = filterInvariants(Ast
                     .getInvariants(classPpt, pptmap));
             appendInvariantChecks(classInvariants, code, "time");
         }
@@ -492,9 +531,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                                                             code.toString());
     }
 
-    private static List/* Invariant */filterInvariants(
-            List/* Invariant */invariants) {
-        List/* Invariant */survivors = new ArrayList();
+    private static List<Invariant> filterInvariants(
+            List<Invariant> invariants) {
+        List<Invariant> survivors = new ArrayList<Invariant>();
         for (Iterator i = invariants.iterator(); i.hasNext();) {
             Invariant inv = (Invariant) i.next();
 
@@ -519,8 +558,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         return survivors;
     }
 
-    private static List/* String */getDeclaredThrowables(NodeOptional nodeOpt) {
-        List/* String */declaredThrowables = new ArrayList();
+    private static List<String> getDeclaredThrowables(NodeOptional nodeOpt) {
+        List<String> declaredThrowables = new ArrayList();
         if (nodeOpt.present()) {
             NodeSequence seq = (NodeSequence) nodeOpt.node;
             // There should only be two elements: "throws" and NameList
@@ -549,10 +588,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     //    orders catch clauses in the order in which they appear in
     //    declaredThrowable. This can cause compilation to fail. ]]
     private void exitChecks(StringBuffer code,
-            Vector/* PptTopLevel */matching_ppts, PptMap pptmap,
-	   List/*String*/ declaredThrowables, boolean isStatic) {
+            Vector<PptTopLevel> matching_ppts, PptMap pptmap,
+	   List<String> declaredThrowables, boolean isStatic) {
 
-	List/*String*/ declaredThrowablesLocal = new ArrayList(declaredThrowables);
+	List<String> declaredThrowablesLocal = new ArrayList(declaredThrowables);
 	declaredThrowablesLocal.remove("java.lang.RuntimeException");
 	declaredThrowablesLocal.remove("RuntimeException");
 	declaredThrowablesLocal.remove("java.lang.Error");
@@ -588,7 +627,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             PptTopLevel ppt = (PptTopLevel) i.next();
             if (ppt.ppt_name.isExitPoint()
 		&& ppt.ppt_name.isCombinedExitPoint()) {
-                List/* Invariant */postconditions = filterInvariants(Ast
+                List<Invariant> postconditions = filterInvariants(Ast
 								     .getInvariants(ppt, pptmap));
                 appendInvariantChecks(postconditions, code, "daikon.tools.runtimechecker.Violation.Time.onExit");
             }
@@ -606,11 +645,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     private void checkPreconditions(StringBuffer code,
-            Vector/* PptTopLevel */matching_ppts, PptMap pptmap) {
+            Vector<PptTopLevel> matching_ppts, PptMap pptmap) {
         for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
             PptTopLevel ppt = (PptTopLevel) i.next();
             if (ppt.ppt_name.isEnterPoint()) {
-                List/* Invariant */preconditions = filterInvariants(Ast
+                List<Invariant> preconditions = filterInvariants(Ast
                         .getInvariants(ppt, pptmap));
                 appendInvariantChecks(preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
             }
@@ -626,7 +665,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             // this transformation on a character list than by pattern
             // matching against a String.
             char[] chars = daikonrep.toCharArray();
-            List/* Character */charList = new ArrayList();
+            List<Character> charList = new ArrayList();
             for (int j = 0; j < chars.length; j++) {
                 char c = chars[j];
                 if ((c == '\"') || (c == '\\')) {
