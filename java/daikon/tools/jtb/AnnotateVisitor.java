@@ -108,6 +108,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     try {
       line = reader.readLine();
     } catch (IOException e) {
+      try {
+        reader.close();
+      } catch (IOException e2) {
+        // ignore second exception
+      }
       throw new Error(e);
     }
     while (line != null) {
@@ -115,9 +120,18 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       try {
         line = reader.readLine();
       } catch (IOException e) {
+        try {
+          reader.close();
+        } catch (IOException e2) {
+          // ignore second exception
+        }
         throw new Error(e);
       }
-
+    }
+    try {
+      reader.close();
+    } catch (IOException e) {
+      throw new Error(e);
     }
 
     this.ppts = ppts;

@@ -521,11 +521,11 @@ public class Ast {
             comment.beginLine = node.beginLine;
             comment.beginColumn = node.beginColumn;
           }
-          if (first) {
-            //addFirstSpecial(node, comment);
-          } else {
-            //node.addSpecial(comment);
-          }
+          // if (first) {
+          //   //addFirstSpecial(node, comment);
+          // } else {
+          //   //node.addSpecial(comment);
+          // }
           // System.out.println("comment (" + comment.beginLine + "," + comment.beginColumn + ") = " + comment.tokenImage + "; node (" + node.beginLine + "," + node.beginColumn + ")= " + node.tokenImage);
         }
       }
