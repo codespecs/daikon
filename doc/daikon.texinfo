@@ -219,6 +219,7 @@ Java front end dfej
 C/C++ front end dfec
 
 * dfec command-line arguments::  
+* Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
@@ -609,7 +610,11 @@ make
 This creates the file @file{daikon_runtime.o}; you will use it (and
 @file{daikon_runtime.h}, which also appears in @file{front-end/c})
 when compiling C and C++ programs in which you wish to detect invariants.
+
 @end enumerate
+
+For information about customizing the behavior of your instrumented
+programs, @pxref{Daikon runtime customization}.
 
 @menu
 * dfec EDG sources::            
@@ -3026,12 +3031,13 @@ you can run Daikon:
 
 @menu
 * dfec command-line arguments::  
+* Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
 @end menu
 
-@node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
+@node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
 @subsection dfec command-line arguments
 
 This section describes dfec's command-line options.
@@ -3152,6 +3158,7 @@ is a variable declared with multiple sets of square brackets after it, e.g.:
 @example
   int foo[5][10];
 @end example
+@noindent
 This is necessary if the program under analysis performs operations that
 assume that its sub-arrays appear in contiguous blocks of memory (that
 is, that @code{foo[3][0]} appears immediately after  @code{foo[2][9]});
@@ -3175,6 +3182,7 @@ functions defined in @file{file2.c}, you would instrument as follows:
 @example
   dfec file1.c -l file2.c file1.h file2.h
 @end example
+@noindent
 This is the only command-line switch that can be used in the midst of the
 list of filenames; it may be specified multiple times.
 
@@ -3218,7 +3226,36 @@ address-of-array operations in the older, pcc-style manner.
 @end table
 
 
-@node    Pointer type disambiguation, Instrumentation scope, dfec command-line arguments, C/C++ front end dfec
+@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, C/C++ front end dfec
+@subsection Daikon runtime customization
+
+@cindex dfec customizations
+@cindex Daikon C runtime customizations
+@cindex daikon_runtime.h file
+Many Daikon customization options appear in file
+@file{$DAIKONDIR/front-end/c/daikon_runtime.h}.
+The comments in @file{daikon_runtime.h} explain how to enable and use
+each option.
+Some examples of the options are:
+
+@itemize @bullet
+@item
+The instrumented program can have the capability to produce gzipped
+(compressed) @file{.dtrace} files.  (This option requires zlib to be
+available on your system.)
+@item
+You can allocate extra space at the ends of arrays, so that your
+program can continue despite (some) memory errors.  You can customize
+what error code is returned if your program contains a memory error
+and is terminated by the Daikon runtime.  You can (dangerously) tell
+the Daikon runtime not to check for specific memory errors.
+@item
+You can turn specific Daikon warnings on and off.
+@end itemize
+
+
+
+@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, C/C++ front end dfec
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -3482,6 +3519,7 @@ you can place
 extern "C"
 #endif
 @end example
+@noindent
 in front of the function definition (and declaration).
 This will not affect calls from within the file, nor will it affect
 compilation of the program, but it will enable dfec to process it.
@@ -3585,10 +3623,12 @@ There is a large section of these near the end of the file.  In the case of
 extern int DAIKON_foo(DaikonSmartPointer<char> arg1, DaikonSmartPointer<char> arg2);
 #define foo DAIKON_foo
 @end example
+@noindent
 You can find the section to add this in by searching for
 @example
 /* add other user-overloaded functions here */
 @end example
+@noindent
 Be sure to place the declaration and macro definition before the @code{#endif}
 signifying the end of the !COMPILING_DAIKON_RUNTIME block.  If you put the
 macro definition outside this block, then the runtime library will fail to
@@ -3669,6 +3709,7 @@ headers; for instance, do not do the following:
        ...
        char *getenv(const char *name);
 @end example
+
 The reason is that dfec expects every C file to contain either only
 code and declarations that are instrumented (with respect to smart
 pointer tracking), or no code that is instrumented (with respect to
@@ -3698,6 +3739,7 @@ contains the following test on line 179 (in textutils version 2.0):
 @example
   (current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
 @end example
+@noindent
 However, Linux's header files defines @samp{off_t} as @samp{__quad_t},
 and @file{/usr/include/bits/types.h} defines @samp{__quad_t} as
 follows:
@@ -3725,6 +3767,7 @@ a local copy of @file{bits/types.h}:
   mkdir -p $DFECDIR/bits
   cp -p /usr/include/bits/types.h $DFECDIR/bits/types.h
 @end example
+@noindent
 and then edit @file{$DFECDIR/bits/types.h} to remove all but the
 second line of the above snippet.  This will define @samp{__quad_t} as
 @samp{long long int} instead of as a struct.  dfec uses files found
@@ -4149,6 +4192,7 @@ If you get an error such as
   jtb.ParseException: Encountered ";" at line 253, column 8.
   Was expecting one of: "abstract" ...
 @end example
+@noindent
 then you may have encountered a bug in the JTB library on which
 CreateSpinfo is built.  It does not permit empty declarations in a
 class body.  Remove the extra semicolon in your Java file (at the
@@ -4807,6 +4851,7 @@ If Lackwit gives an error of the form
 @example
 sh: lwpp-init.pl: not found
 @end example
+@noindent
 then you have not correctly installed the dfec distribution
 (@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
 in the directory referred to by environment variable DFECDIR.  (That
@@ -4886,6 +4931,7 @@ A program instrumented by dfec may produce a message such as
 @example
 daikon_runtime: attempted to access index 5 of a 4-length array!
 @end example
+@noindent
 Such a message indicates that there is an error in your program.  Your
 program attempts to read or write memory beyond the end of an array.
 You should fix this error before proceeding to try to detect
