@@ -402,38 +402,38 @@ public class CLASSNAME
       return null;
     }
 
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    VarInfo v3 = inv.var3();
+    VarInfo resultVar = inv.resultVar();
+    VarInfo argVar1 = inv.argVar1();
+    VarInfo argVar2 = inv.argVar2();
 
     SuppressionTemplate st = equality_min_max_template;
     SuppressionLink eq_sl;
 
-    // Suppress "v1 = min(v2, v3) by "v1 == v2 && v1 <= v3".
-    // Suppress "v1 = max(v2, v3) by "v1 == v2 && v3 <= v1".
-    st.set(0, EQUALITY.class, v1, v2);
+    // Suppress "r = min(arg1, arg2) by "r == arg1 && r <= arg2".
+    // Suppress "r = max(arg1, arg2) by "r == arg1 && arg2 <= r".
+    st.set(0, EQUALITY.class, resultVar, argVar1);
     eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
     if (eq_sl != null) {
       SuppressionLink le_sl;
       if (inv.core.methodNumber == 7) // min
-        le_sl = SuppressionFactory.findLessEqualInt(inv, v1, v3, 0);
+        le_sl = SuppressionFactory.findLessEqualInt(inv, resultVar, argVar2, 0);
       else
-        le_sl = SuppressionFactory.findLessEqualInt(inv, v3, v1, 0);
+        le_sl = SuppressionFactory.findLessEqualInt(inv, argVar2, resultVar, 0);
       if (le_sl != null) {
         return SuppressionLink.combine(eq_sl, le_sl);
       }
     }
 
-    // Suppress "v1 = min(v2, v3) by "v1 == v3 && v1 <= v2".
-    // Suppress "v1 = max(v2, v3) by "v1 == v3 && v2 <= v1".
-    st.set(0, EQUALITY.class, v1, v3);
+    // Suppress "r = min(arg1, arg2) by "r == arg2 && r <= arg1".
+    // Suppress "r = max(arg1, arg2) by "r == arg2 && arg1 <= r".
+    st.set(0, EQUALITY.class, resultVar, argVar2);
     eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
     if (eq_sl != null) {
       SuppressionLink le_sl;
       if (inv.core.methodNumber == 7) // min
-        le_sl = SuppressionFactory.findLessEqualInt(inv, v1, v2, 0);
+        le_sl = SuppressionFactory.findLessEqualInt(inv, resultVar, argVar1, 0);
       else
-        le_sl = SuppressionFactory.findLessEqualInt(inv, v2, v1, 0);
+        le_sl = SuppressionFactory.findLessEqualInt(inv, argVar1, resultVar, 0);
       if (le_sl != null) {
         return SuppressionLink.combine(eq_sl, le_sl);
       }
