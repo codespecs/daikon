@@ -136,6 +136,7 @@ kvasir/kvasir/Makefile.in:
 	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
 	ln -s valgrind-kvasir kvasir
 	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
+	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasircomp
 	touch $@
 
 kvasir/config.status: kvasir/kvasir/Makefile.in
