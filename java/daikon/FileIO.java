@@ -766,7 +766,7 @@ public final class FileIO {
         }
 
         // Only do leaves in bottom up
-        if (Daikon.df_bottom_up && ppt.ppt_name.isCombinedExitPoint())
+        if (Daikon.dkconfig_df_bottom_up && ppt.ppt_name.isCombinedExitPoint())
           return;
 
         // // Add invocation counts
@@ -802,7 +802,7 @@ public final class FileIO {
           start = System.currentTimeMillis();
         }
 
-        if (Daikon.df_bottom_up)
+        if (Daikon.dkconfig_df_bottom_up)
           ppt.add_bottom_up (vt, 1);
         else
           ppt.add_and_flow(vt, 1);

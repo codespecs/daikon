@@ -413,7 +413,7 @@ public abstract class PptSlice
 
     // No flow is required in bottom up processing, simply remove the dead
     // invariants and return the list of weakened invariants.
-    if (Daikon.df_bottom_up) {
+    if (Daikon.dkconfig_df_bottom_up) {
       removeInvariants(to_remove);
       List result = new ArrayList (invs_changed);
       invs_to_flow.clear();

@@ -54,7 +54,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
 
     // No self suppression in bottom up approach.  In the long run this
     // would be much better fixed by not including this factory
-    if (Daikon.df_bottom_up) {
+    if (Daikon.dkconfig_df_bottom_up) {
       inv.log ("Ignoring self suppression in bottom up");
       return (null);
     }

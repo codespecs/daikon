@@ -124,7 +124,7 @@ public final class VarInfo
     if (derived != null) {
       if (derived.missingOutOfBounds())
         return (true);
-      if (Daikon.df_bottom_up)
+      if (Daikon.dkconfig_df_bottom_up)
         return (false);
       if (po_lower == null)
         return (false);
