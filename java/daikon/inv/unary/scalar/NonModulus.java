@@ -67,12 +67,15 @@ public class NonModulus
     updateResults();
     String name = var().name.name_using(format, var());
 
-    if (no_result_yet) {
-      return name + " != ? (mod ?) ***";
+    if (format == OutputFormat.DAIKON) {
+      if (no_result_yet) {
+        return name + " != ? (mod ?) ***";
+      }
+      return name + " != " + remainder + "  (mod " + modulus + ")";
     }
 
-    if (format == OutputFormat.DAIKON) {
-      return name + " != " + remainder + "  (mod " + modulus + ")";
+    if (no_result_yet) {
+      return format_too_few_samples(format, null);
     }
 
     if (format == OutputFormat.IOA) {
@@ -84,6 +87,12 @@ public class NonModulus
         || format == OutputFormat.DBCJAVA) {
 
       return name + " % " + modulus + " != " + remainder;
+    }
+
+    if (format == OutputFormat.SIMPLIFY) {
+      return "(NEQ (MOD " + var().name.simplify_name() + " "
+        + simplify_format_long(modulus) + ") "
+        + simplify_format_long(remainder) + ")";
     }
 
     return format_unimplemented(format);
