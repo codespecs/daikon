@@ -174,7 +174,6 @@ public abstract class CLASSNAME extends BinaryInvariant {
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
-    // [INCR] Assert.assertTrue(!finished);
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
@@ -195,7 +194,6 @@ public abstract class CLASSNAME extends BinaryInvariant {
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
-    // [INCR] Assert.assertTrue(!finished);
     PRIMITIVE v1 = GET_VAL (val1);
     PRIMITIVE v2 = GET_VAL (val2);
     if (mod_index == 0) {

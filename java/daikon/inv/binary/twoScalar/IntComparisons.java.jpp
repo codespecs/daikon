@@ -1107,12 +1107,6 @@ invariants.
   } // isObviousDynamically
 
 #if defined(EQUAL) || defined(EQUALFLOAT)
-  /* [INCR]
-  public boolean hasNonCanonicalVariable() {
-    VarInfo[] vis = ppt.var_infos;
-    return ! (vis[0].isCanonical() || vis[1].isCanonical());
-  }
-  */ // ... [INCR]
 #endif
 
 #if defined (LESSTHAN) || defined (GREATERTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHANFLOAT)

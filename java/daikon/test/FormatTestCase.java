@@ -607,7 +607,6 @@ class FormatTestCase {
     VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
                                           arrayModifier), type, type,
                         /* comparability = */ null, VarInfoAux.getDefault());
-    // [INCR] result.equal_to = result;   // make it canonical
     return result;
   }
 
@@ -685,7 +684,6 @@ class FormatTestCase {
    * Invariant. It reads the appropriate sample data from the commands
    * reader and parses the data appropriately
    *
-   * @param classToTest the class of the invariant being tested
    * @param commands the input file for the commands
    * @param samples the list to which the samples are to be added
    **/

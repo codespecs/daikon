@@ -120,7 +120,6 @@ public abstract class CLASSNAME extends BinaryInvariant {
   public InvariantStatus check(Object val1, Object val2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
-    // Assert.assertTrue(!finished); // [INCR]
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
     PRIMITIVE v2 = GETVAL (val2);
     if (v1 == null) {
@@ -136,11 +135,9 @@ public abstract class CLASSNAME extends BinaryInvariant {
   public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
-    // Assert.assertTrue(!finished); // [INCR]
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
     PRIMITIVE v2 = GETVAL (val2);
     if (v1 == null) {
-      // ppt.var_infos[seq_index].canBeNull = true; // [INCR]
     } else if (mod_index == 0) {
       return add_unmodified(v1, v2, count);
     } else {

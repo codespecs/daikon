@@ -43,12 +43,6 @@ public abstract class Ppt
 
   public VarInfo[] var_infos;
 
-  // [INCR] the views and cond_views fields and their corresponding
-  // add/remove view methods were never used on a Ppt, always
-  // on PptTopLevel, so move their declaration there.  (In fact they
-  // don't make sense in PptSlice, so PptTopLevel is a better place
-  // anyway.)
-
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
     for (int i=0; i < var_infos.length; i++) {
@@ -56,32 +50,6 @@ public abstract class Ppt
     }
   }
 
-  /** Number of samples, not including missing values. */
-  // public abstract int num_samples(); // [[INCR]]
-
-  /**
-   * Number of samples with mod bit set for at least one variable.  In
-   * other words, this is recording tuplemod information, not regular mod
-   * information.
-   **/
-  // public abstract int num_mod_samples(); // [[INCR]]
-  // public abstract int num_values(); // [[INCR]]
-  // public abstract int num_missing
-
-  // Perhaps also optionally provide an array of the Ppts.
-  // That might be more direct, and it's not all that much
-  // space (no more than used up by the iterator, etc., and
-  // it need only be updated once.
-
-
-  // This might include derived variables as well, or it might not.  Or
-  // maybe it always does, and I elsewhere do something to extend the
-  // ValueTuple appropriately.
-  /** This might queue up data or it might process it immediately. */
-  // This does something like the following, probably:
-  //   this_var_values = this_fn_var_values[ppt_name];
-  //   this_var_values[these_values] = this_var_values.get(these_values, 0) + 1;
-  //   this_fn_samples[ppt_name] = this_fn_samples.get(ppt_name, 0) + 1;
   /**
    * Give sample data to this ppt to process.
    * @return a List of Invariants that have weakened due to the
@@ -90,35 +58,6 @@ public abstract class Ppt
   abstract List add(ValueTuple vt, int count);
 
   protected static final List emptyList = new ArrayList();
-
-  // This is rather confused.  I need a better notion of exactly what is
-  // going on.
-  // /**
-  //  * Force processing of the data.  This might involve computing
-  //  * invariants, notifying views of the arrival of data, etc.
-  //  * A view might call this on its parent in order to update itself.
-  //  * Or, it might be used before deriving new variables.
-  //  */
-  // abstract void process();
-
-  // /**
-  //  * Returns whether the ValueTuple appears in this map.
-  //  * This can be more efficient than @link{count} because, for
-  //  * views, it can stop after finding one occurrence.
-  //  */
-  // abstract boolean contains(ValueTuple vt);
-
-  // /** Returns the number of occurrences of this ValueTuple in the map. */
-  // abstract int count(ValueTuple vt);
-
-  // /**
-  //  * This oughtn't return a Set because it might be expensive to produce
-  //  * such a thing (with no duplicates, that is).  And it might not even be
-  //  * possible to return this set if we have already discarded some info.
-  //  *
-  //  * Maybe have another method that does return a Set.
-  //  */
-  // abstract Iterator entrySet();
 
   public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();

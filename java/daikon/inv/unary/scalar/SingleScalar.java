@@ -31,7 +31,6 @@ public abstract class SingleScalar
   public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    // [INCR] Assert.assertTrue(!finished);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
       return add_unmodified(value, count);
@@ -44,7 +43,6 @@ public abstract class SingleScalar
   public InvariantStatus check(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    // [INCR] Assert.assertTrue(!finished);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
       return add_unmodified(value, count);

@@ -75,9 +75,6 @@ public final class CLASSNAME extends BinaryDerivationFactory {
 
     // Now we finally can derive
 
-    // Assert.assertTrue(var1.isCanonical()); // [INCR]
-    // Assert.assertTrue(var2.isCanonical()); // [INCR]
-
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (var1.ppt + ": " + var1.name + " and " +
                    var2.name + " are worth deriving from");

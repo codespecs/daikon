@@ -44,9 +44,6 @@ public final class SequencesConcatFactory extends BinaryDerivationFactory {
     // We don't want concats of arrays with themselves
     if (var1.name.equals (var2.name)) return null;
 
-    // Assert.assertTrue(var1.isCanonical()); // [INCR]
-    // Assert.assertTrue(var2.isCanonical()); // [INCR]
-
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (var1.ppt + ": " + var1.name + " and " + var2.name + " are worth deriving from");
       debug.fine ("Types are: " + var1.type + " " + var2.type);

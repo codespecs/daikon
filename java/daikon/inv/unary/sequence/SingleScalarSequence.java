@@ -33,10 +33,8 @@ public abstract class SingleScalarSequence
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     Assert.assertTrue(Intern.isInterned(val));
     // System.out.println("SingleScalarSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
-    // [INCR] Assert.assertTrue(!finished);
     long[] value = (long[]) val;
     if (value == null) {
-      // ppt.var_infos[0].canBeNull = true; // [[INCR]]
       return InvariantStatus.NO_CHANGE;
     } else if (mod_index == 0) {
       return add_unmodified(value, count);

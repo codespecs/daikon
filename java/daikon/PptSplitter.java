@@ -317,7 +317,6 @@ public class PptSplitter implements Serializable {
         // This test doesn't seem to be productive.  (That comment may date
         // from the time that all not-worth-printing invariants were
         // already eliminated.)
-        // if (! same_inv.isControlled()) // [INCR]
         parent.joiner_view.addInvariant(same_inv);
       }
     }

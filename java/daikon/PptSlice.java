@@ -90,22 +90,6 @@ public abstract class PptSlice
   public final Collection po_lower;
   public final Map po_lower_vis;
 
-  /* [INCR]
-  // These are used only when the values_cache has been set to null.
-  int num_samples_post_cache = -2222;
-  int num_mod_samples_post_cache = -2222;
-  int num_values_post_cache = -2222;
-  */
-
-  /* [INCR] ...
-  // This is rather a hack and should be removed later.
-  // True if we've seen all values and are performing add() based on values
-  // already in the values_cache; so add() should not add its arguments to
-  // values_cache.
-  public boolean already_seen_all = false;
-  //... [INCR] */
-
-
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
     this.parent = parent;
     this.var_infos = var_infos;
@@ -253,33 +237,6 @@ public abstract class PptSlice
     slices.add(slice_vis);
   }
 
-  /* [INCR]
-  // When non-null, removeInvariants adds to this list instead of actually
-  // removing.  (We might need to defer removal because we're currently
-  // iterating over the invariants by index rather than using an Iterator.)
-  private Vector invs_to_remove_deferred = null;
-  // This to avoid constructing a new Vector every time through add().
-  // One can just use this one (and be sure to clear it out afterward).
-  private Vector itrd_cache = new Vector(1);
-
-  // Avoid constructing a new Vector every time through this function.
-  void defer_invariant_removal() {
-    invs_to_remove_deferred = itrd_cache;
-    Assert.assertTrue(invs_to_remove_deferred.size() == 0);
-  }
-
-  void undefer_invariant_removal() {
-    // I need to have invs_to_remove_deferred null, or
-    // else removeInvariants just adds to that list!!
-    // The old value is still available in itrd_cache.
-    invs_to_remove_deferred = null;
-    if (itrd_cache.size() > 0) {
-      removeInvariants(itrd_cache);
-      itrd_cache.clear();
-    }
-  }
-  */
-
   public abstract void addInvariant(Invariant inv);
 
   /** This method actually removes the invariant from its PptSlice. **/
@@ -289,6 +246,8 @@ public abstract class PptSlice
 
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
+    if (Debug.logOn())
+      inv.log ("Removed from slice: " + inv.format());
     boolean removed = invs.remove(inv);
     if (Assert.enabled && !removed)
       Assert.assertTrue (removed, "inv " + inv + " not in ppt " + name());
@@ -607,31 +566,6 @@ public abstract class PptSlice
 
   boolean check_modbits () {
     Assert.assertTrue(invs.size() > 0);
-    /* [INCR] (we no longer track num_values)
-    if (num_mod_samples() < num_values()) {
-      String message = "Bad mod bits in dtrace file:" + lineSep
-        + "num_mod_samples()=" + num_mod_samples()
-        + ", num_samples()=" + num_samples()
-        + ", num_values()=" + num_values() + lineSep
-        + "for " + name() + lineSep
-        + "Consider running modbit-munge.pl" + lineSep
-        // + ((values_cache == null)
-        //    ? "Values cache has been cleared" + lineSep
-        //    : "Values cache has not been cleared")
-        ;
-      if (! Daikon.disable_modbit_check_message) {
-        System.out.println(message);
-        // [INCR]
-        if (values_cache != null) {
-          System.out.println("To do:  Dump values_cache");
-          // This is probably specific to the specializers of PptSlice.
-          // values_cache.dump();
-        }
-      }
-      if (! Daikon.disable_modbit_check_error)
-        throw new Error(message);
-    }
-    */ // ... [INCR]
     return true;
   }
 

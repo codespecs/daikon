@@ -113,9 +113,6 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       return null;
     }
 
-    // Assert.assertTrue(sclvar.isCanonical()); // [INCR]
-    // Assert.assertTrue(seqvar.isCanonical()); // [INCR]
-
     if (! seqvar.indexCompatible(sclvar)) {
       if (debug != null) debug.log ("variables are not comparable");
       return null;
@@ -133,11 +130,6 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     }
 
     VarInfo seqsize = seqvar.sequenceSize();
-    /* [INCR]
-    if (seqsize != null) {
-      seqsize = seqsize.canonicalRep();
-    }
-    */
     // System.out.println("BinaryDerivation.instantiate: sclvar=" + sclvar.name
     //                    + ", sclvar_rep=" + sclvar.canonicalRep().name
     //                    + ", seqsize=" + seqsize.name
@@ -231,46 +223,6 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // SUPPRESS DERIVED VARIABLE: a[i-1] where i==1
     // SUPPRESS DERIVED VARIABLE: a[..i] where i==1
     // SUPPRESS DERIVED VARIABLE: a[..i-1] where i==1
-    /* [INCR] ...
-    if (sclvar.isConstant()) {
-      long scl_constant = ((Long) sclvar.constantValue()).longValue();
-      // System.out.println("It is constant (" + scl_constant + "): " + sclvar.name);
-      if (scl_constant < 0) {
-        Global.nonsensical_suppressed_derived_variables += 6;
-        debug.log ("Ignoring because " + sclvar.name.name() + " == "
-                   + scl_constant);
-        return null;
-      }
-      if (scl_constant == 0) {
-        Global.tautological_suppressed_derived_variables += 3;
-        Global.nonsensical_suppressed_derived_variables += 2;
-        if (enable_subsequence) {
-          BinaryDerivation bder[] = new BinaryDerivation[] {
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true)};
-          debug.log ("Found derivation " + bder);
-          return (bder);
-        } else {
-          debug.log ("enable_subsequence false");
-          return (null);
-        }
-      }
-      if (scl_constant == 1) {
-        Global.tautological_suppressed_derived_variables += 3;
-        if (enable_subsequence) {
-          BinaryDerivation bder[] = new BinaryDerivation[] {
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false),
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false),
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true),
-          };
-          debug.log ("Found derivations " + bder);
-          return (bder);
-        } else {
-          debug.log ("enable_subsequence false");
-          return (null);
-        }
-      }
-    }
-    */ // ... [INCR]
 
     // Commented out:  seems to be eliminating desired invariants.
     if (false) {

@@ -115,11 +115,6 @@ public final class VarInfo
   /** Whether and how derived.  Null if this is not derived. **/
   public Derivation derived;
 
-  /** Vector of Derivation objects. **/
-  /* [INCR] is now computed on the fly by derivees() method
-  public Vector derivees;
-  */
-
   /**
    * Returns whether or not we have encountered to date any missing values
    * due to array indices being out of bounds.  This can happen with both
@@ -167,29 +162,7 @@ public final class VarInfo
     return (false);
   }
 
-  // Reinstating this in the way Mike and I discussed
-  // We don't know about canBeMissing or canBeNull anymore, since we
-  // see data incrementally, instead of slurping it all first.
-  // [[INCR]] ....
   public boolean canBeMissing = false;
-  // public boolean canBeNull = false;    // relevant only for arrays, really
-  // .... [[INCR]]
-
-  // It can be expensive to find an arbitrary invariant.  These fields
-  // cache invariants that we want to be able to look up quickly.
-
-  // Eventually, isCanonical will be restored, but we haven't decided how yet.
-  /* [INCR]
-  // Only public so that PptTopLevel can access it.
-  // Clients should use isCanonical() or canonicalRep() or equalTo().
-  public VarInfo equal_to;      // the canonical representative to which
-                                // this variable is equal; may be itself;
-                                // should not be null.
-  [INCR] */
-  /* [INCR]
-  public boolean is_dynamic_constant;  // required if dynamic_constant==null
-  public Object dynamic_constant;
-  [INCR] */
 
   /**
    * Which equality group this belongs to.  Replaces equal_to.  Never null
@@ -202,10 +175,6 @@ public final class VarInfo
 
   // DO NOT TEST EQUALITY!  ONLY USE ITS .name SLOT!!   -MDE 3/9/2001
   public VarInfo postState;     // non-null if this is an orig() variable
-
-  // Does not include equal_to, which is dealt with elsewhere.
-  // An invariant is only listed on the first VarInfo, not all VarInfos.
-  // public Vector exact_nonunary_invariants; // [INCR]
 
   /**
    * @exception RuntimeException if representation invariant on this is broken
@@ -292,10 +261,6 @@ public final class VarInfo
     value_index = -1;
     varinfo_index = -1;
 
-    // derivees = new Vector(3); // [INCR]
-
-    // exact_nonunary_invariants = new Vector(2); // [INCR]
-
     canBeMissing = false;
   }
 
@@ -331,11 +296,6 @@ public final class VarInfo
     return result;
   }
 
-  // I *think* I don't need to implement VarInfo.clone(), as the
-  // java.lang.Object version is sufficient.
-  // protected Object clone() { ... }
-  // ^^^ [INCR] Not sure if this is true anymore, or ever where we clone VarInfos
-
   // I'm not currently using this because doing this would prevent any new
   // variable derivation [why?], and I do want such derivation to occur.
   // Furthermore, I don't want to try to deal with figuring out what
@@ -355,13 +315,6 @@ public final class VarInfo
         e.printStackTrace();
         throw new Error(e.toString());
       }
-      // a_new[i].canBeMissing = false; // [[INCR]]
-      // I must set this; even though the specified variables will still
-      // be equal, they may have a different canonical representative.
-      // a_new[i].equal_to = null; // [INCR]
-      // this doesn't really need to be set; if non-null, it's guaranteed
-      // to be the same in the child
-      // a_new[i].dynamic_constant = null;
       a_new[i].ppt = null;
     }
     // I need to fix both of these slots:
@@ -376,18 +329,6 @@ public final class VarInfo
         a_new[i].derived = deriv_new;
       }
     }
-    /* [INCR]
-    for (int i=0; i<a_new.length; i++) {
-      Vector derivees_old = a_old[i].derivees;
-      Vector derivees_new = new Vector(derivees_old.size());
-      for (int j=0; j<derivees_old.size(); j++) {
-        Derivation deriv_old = (Derivation) derivees_old.elementAt(j);
-        Derivation deriv_new = (Derivation) deriv_map.get(deriv_old);
-        Assert.assertTrue(deriv_new != null);
-        derivees_new.add(deriv_new);
-      }
-    }
-    [INCR] */
     return a_new;
   }
 
@@ -610,32 +551,16 @@ public final class VarInfo
       + ",ppt=" + ppt.name()
       + ",canBeMissing=" + canBeMissing
       + (",equal_to=" + (equalitySet==null ? "null" : equalitySet.toString()))
-      /* [INCR]
       + ",isCanonical()=" + isCanonical()
-      */ // [INCR]
       + ">";
   }
 
-  /* [INCR]
-  public boolean isConstant() {
-    return (isStaticConstant() || isDynamicConstant());
-  }
-  public boolean isDynamicConstant() {
-    // return (dynamic_constant != null);
-    return is_dynamic_constant;
-  }
-  */ // ... [INCR]
   public boolean isStaticConstant() {
-    // return (static_constant_value != null);
     return is_static_constant;
   }
   public Object constantValue() {
     if (isStaticConstant()) {
       return static_constant_value;
-    /* [INCR]
-    } else if (isDynamicConstant()) {
-      return dynamic_constant;
-    */ // ... [INCR]
     } else {
       throw new Error("Variable " + name + " is not constant");
     }
@@ -651,44 +576,6 @@ public final class VarInfo
       return true;
     return name.isAllPrestate();
   }
-
-  /* [INCR] ...
-  public boolean hasExactInvariant(VarInfo other) {
-    Assert.assertTrue(this.varinfo_index < other.varinfo_index);
-    for (int i=0; i<exact_nonunary_invariants.size(); i++) {
-      Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
-      if (inv.ppt.var_infos[0] != this) {
-        System.out.println("Problem: " + inv.ppt.var_infos[0].name + ", " + this.name + " in " + this.ppt.name() + ", " + inv.ppt.name());
-      }
-      Assert.assertTrue(inv.ppt.var_infos[0] == this);
-      Assert.assertTrue(inv.isExact());
-      if ((inv.ppt.arity() == 2) && (inv.ppt.var_infos[1] == other)) {
-        return true;
-      }
-    }
-    return false;
-  }
-  */ // ... [INCR]
-
-  /* [INCR] ...
-  public boolean hasExactInvariant(VarInfo other1, VarInfo other2) {
-    Assert.assertTrue(this.varinfo_index < other1.varinfo_index);
-    Assert.assertTrue(other1.varinfo_index < other2.varinfo_index);
-    Assert.assertTrue(this.ppt == other1.ppt);
-    Assert.assertTrue(this.ppt == other2.ppt);
-    for (int i=0; i<exact_nonunary_invariants.size(); i++) {
-      Invariant inv = (Invariant) exact_nonunary_invariants.elementAt(i);
-      Assert.assertTrue(inv.ppt.var_infos[0] == this);
-      Assert.assertTrue(inv.isExact());
-      if ((inv.ppt.arity() == 3)
-          && (inv.ppt.var_infos[1] == other1)
-          && (inv.ppt.var_infos[2] == other2)) {
-        return true;
-      }
-    }
-    return false;
-  }
-  */ // ... [INCR]
 
   public boolean isDerived() {
     return (derived != null);
@@ -933,18 +820,6 @@ public final class VarInfo
   }
 
 
-  /* [[INCR]] ....
-  // We don't know this anymore, since we see data incrementally,
-  // instead of all at once.
-  public boolean canBeMissingCheck() {
-    return (canBeMissing
-            && (Daikon.invariants_check_canBeMissing
-                || (Daikon.invariants_check_canBeMissing_arrayelt
-                    // Probably bad to repeat this all the time at runtime.
-                    && (name.name().indexOf("[") != -1)))); // XXX ???
-  }
-  */ // .... [[INCR]]
-
   /** Convenience methods that return information from the ValueTuple. **/
   public int getModified(ValueTuple vt) {
     if (is_static_constant)
@@ -1090,227 +965,6 @@ public final class VarInfo
 
     return false;
   }
-
-
-
-  /**
-   * Returns all other variables that are equal to this variable.
-   * Returns a fresh Vector.
-   * The result Vector does not include this.
-   * Also see @link{equalToNonobvious}.
-   **/
-  /* [INCR] ...
-  public Vector equalTo() {
-    // should only call this for canonical variables
-    Assert.assertTrue(isCanonical());
-
-    Vector result = new Vector();
-
-    VarInfo[] vis = ppt.var_infos;
-    for (int i=0; i<vis.length; i++) {
-      Assert.assertTrue(vis[i].equal_to == vis[i].equal_to.equal_to);
-      if (i == varinfo_index)
-        continue;
-      if (vis[i].equal_to == this)
-        result.add(vis[i]);
-    }
-
-    return result;
-  }
-  */ // ... [INCR]
-
-  /* [INCR] ...
-  // Returns a list of variables that are equal to this one, but are not
-  // "obviously" equal to this one.
-  // This is called only while printing invariants.
-  public Vector equalToNonobvious() {
-    // should only call this for canonical variables
-    Assert.assertTrue(isCanonical());
-
-    Vector result = new Vector();
-
-    HashSet controlling_equalTo = new HashSet(); // of VarInfoName
-    {
-      // The point of this iteration is to pull out all the variables
-      // in program points above this that are equal to this (in the
-      // upper program point).  When we see these variables in
-      // this.ppt, they are "obviously" equal to this.
-      Iterator controllers = ppt.controlling_ppts.pptIterator();
-      while (controllers.hasNext()) {
-        PptTopLevel controller = (PptTopLevel) controllers.next();
-        VarInfo controller_var = controller.findVar(name);
-        if (controller_var != null) {
-          // System.out.println("Considering " + name + " in " + controller.name);
-          // This can fail if there are no :::OBJECT program points in the .dtrace file.
-          if (controller_var.equal_to != null) { // XXX is this a good thing?
-            Vector this_equalTo = controller_var.equal_to.equalTo();
-            for (int i=0; i<this_equalTo.size(); i++) {
-              controlling_equalTo.add(((VarInfo)this_equalTo.elementAt(i)).name);
-            }
-          }
-        }
-      }
-    }
-
-    VarInfo[] vis = ppt.var_infos;
-    for (int i=0; i<vis.length; i++) {
-      Assert.assertTrue(vis[i].equal_to == vis[i].equal_to.equal_to);
-      if (i == varinfo_index)
-        continue;
-      VarInfo vi = vis[i];
-      if (vi.equal_to != this)
-        continue;
-      if (controlling_equalTo.contains(vi.name)) {
-        if (PrintInvariants.debugPrintEquality.isLoggable(Level.FINE)) {
-          PrintInvariants.debugPrintEquality.fine ("Obviously equal because of controlling ppt: " + vi.name.name());
-        }
-        continue;
-      }
-
-      // System.out.println("Considering " + vi.name);
-
-      // Special cases of variables to omit.
-
-      // Variables that both are one less than something else
-      // (or generalized, the same shift from something else).
-      if ((name instanceof VarInfoName.Add) && (vi.name instanceof VarInfoName.Add) &&
-          ((((VarInfoName.Add) name).amount) == (((VarInfoName.Add) vi.name).amount))) {
-        continue;
-      }
-
-      {
-        // An element b.class is omitted if:
-        //  * "b.class" is non-canonical
-        //    We know this because we are only examining non-canonical
-        //    variables which are equal to this, which is canonical.
-        //  * "b" is non-canonical
-        //  * there exists an a such that a=b (ie, equal_to slot of "b"'s
-        //     varinfo is non-null); also, assert that "a.class" is in equalTo
-
-        VarInfoName sansclassname = null;
-        if (vi.name instanceof VarInfoName.TypeOf) {
-           sansclassname = ((VarInfoName.TypeOf) vi.name).term;
-        } else if (vi.isPrestate()) {
-          VarInfoName post = vi.postState.name;
-          if (post instanceof VarInfoName.TypeOf) {
-            // parent of "orig(x.class)" is "orig(x)"
-            sansclassname = ((VarInfoName.TypeOf) post).term.applyPrestate();
-          }
-        }
-
-        if (sansclassname != null) {
-          // System.out.println("Considering .class: " + vi.name + "sansclass=" + sansclassname);
-
-          // "sansclass" is "b" in the above comment; "vi" is "b.class".
-          // don't bother to intern, as findVar doesn't need it.
-          VarInfo sansclass = ppt.findVar(sansclassname);
-          Assert.assertTrue(sansclass != null);
-          if (! sansclass.isCanonical()) {
-            // We will omit vi.
-            VarInfo a = sansclass.equal_to;
-            VarInfo a_class;
-            if (a.name instanceof VarInfoName.Prestate) {
-              VarInfoName.Prestate a_name = (VarInfoName.Prestate) a.name;
-              a_class = ppt.findVar(a_name.term.applyTypeOf());
-            } else {
-              a_class = ppt.findVar(a.name.applyTypeOf());
-            }
-            Assert.assertTrue(a_class != null);
-            Assert.assertTrue(a_class.equal_to == this);
-            continue;
-          }
-        }
-      }
-
-      // If derived from non-canonical, omit.
-      // (This can happen for "size(...)" varables, which are always
-      // introduced so that sequenceSize() will not fail.)
-      if ((vi.derived != null)
-          && vi.derived.isDerivedFromNonCanonical()) {
-        continue;
-      }
-
-      // If size of a non-canonical array, omit.
-      if ((vi.derived != null)
-          && (vi.derived instanceof SequenceLength)) {
-        // This is the size of an array; is that array non-canonical?
-
-        VarInfo seq_contents = ((SequenceLength) vi.derived).base;
-        VarInfoName seq_object_name = null;
-
-        // We expect the variable name to end with "[]", possibly wrapped
-        // in "orig()" and/or suffixed by ".class".
-        if (seq_contents.isPrestate()) {
-          VarInfoName unorig = seq_contents.postState.name;
-          // orig(a[].class) -> skip
-          if (unorig instanceof VarInfoName.TypeOf) continue;
-          // orig(a[]) -> orig(a)
-          if (unorig instanceof VarInfoName.Elements) {
-            seq_object_name = ((VarInfoName.Elements) unorig).term.applyPrestate();
-          }
-        } else {
-          // a[] -> a
-          if (seq_contents.name instanceof VarInfoName.Elements) {
-            seq_object_name = ((VarInfoName.Elements) seq_contents.name).term;
-          }
-        }
-
-        if (seq_object_name == null) {
-          // This can happen with e.g. this.seq[].field
-          // Used to be error; dfec actually does this though (?)
-          // System.out.println("equalToNonobvious: cannot handle sequence variable " + seq_contents.name);
-          seq_object_name = seq_contents.name;
-        }
-
-        VarInfo seq_object = ppt.findVar(seq_object_name);
-
-        // First part of test is for Lisp output files; shouldn't happen in general
-        if (seq_object != null && ! seq_object.isCanonical()) {
-          continue;
-        }
-      }
-
-      // For esc_output, dbc output, and java_output, omit noting that varibles are unmodified.
-      if (Daikon.output_style == OutputFormat.ESCJAVA
-          || Daikon.output_style == OutputFormat.ESCJAVA
-          || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
-        if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
-          continue;
-        }
-      }
-
-      // // In Java, "this" cannot be changed, so "this == orig(this)" is vacuous.
-      // // In fact, any comparison with "orig(this)" is vacuous.
-      // if ((name.name() == "this")  // interned
-      //     || (vi.name.name() == "orig(this)")) { // interned
-      //   continue;
-      // }
-
-      // Add any additional special cases here.
-
-      result.add(vi);
-    }
-
-    return result;
-  }
-  */ // ... [INCR]
-
-  // Shouldn't have any vacuous variables, so comment this out.
-  // /**
-  //  * Returns non-nil if this variable is derived from non-canonical variables.
-  //  * (We didn't know at the time we derived the variables that the derivees
-  //  * were non-canonical.)
-  //  * There might be other reasons for a variable never to appear, also;
-  //  * I will add them as I discover them.
-  //  */
-  // public boolean isVacuous() {
-  //   if (! isDerived())
-  //     return false;
-  //   // This shouldn't be happening, so comment it out to see the result.
-  //   // if (derived.isDerivedFromNonCanonical())
-  //   //   return true;
-  //   return false;
-  // }
 
   /** Return true if the two lists represent the same variables. **/
   // Dead code as of 6/2002 (and probably much earlier).
@@ -1527,14 +1181,6 @@ public final class VarInfo
     return simplifyFixup(name.simplify_name());
   }
 
-  /* [INCR]
-  // Debugging
-  public boolean isDerivedFromNonCanonical() {
-    return ((derived != null) && (derived.isDerivedFromNonCanonical()));
-  }
-  */
-
-
   ///////////////////////////////////////////////////////////////////////////
   /// IOA functions
   ///
@@ -1706,35 +1352,6 @@ public final class VarInfo
   }
 
 
-  /* // [INCR] Use isObviousSubSequence or find SubSequence invariants
-  public static boolean seqs_overlap(VarInfo seq1, VarInfo seq2) {
-    // Very limited implementation as of now.
-    VarInfo super1 = seq1.isDerivedSubSequenceOf();
-    VarInfo super2 = seq2.isDerivedSubSequenceOf();
-    Assert.assertTrue(super1 == super2);
-    SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) seq1.derived;
-    SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) seq2.derived;
-
-    Assert.assertTrue(sss1.seqvar() == sss2.seqvar());
-    VarInfo index1 = sss1.sclvar();
-    int shift1 = sss1.index_shift;
-    boolean start1 = sss1.from_start;
-    VarInfo index2 = sss2.sclvar();
-    int shift2 = sss2.index_shift;
-    boolean start2 = sss2.from_start;
-
-    if (start1 == start2) {
-      // This test is too sophisticated (that is, it is wrong):
-      //   return compare_vars(index1, shift1, index2, shift2, start1);
-      // A[i..] always overlaps with A[j..]:  they share the same last element!
-      return true;
-    } else {
-      // start1 != start2
-      return compare_vars(index1, shift1, index2, shift2, start2);
-    }
-  }
-  */ // [INCR]
-
   // takes an "orig()" var and gives a VarInfoName for a variable or
   // expression in the post-state which is equal to this one.
   public VarInfoName postStateEquivalent() {
@@ -1761,19 +1378,6 @@ public final class VarInfo
                       + (post ? "post" : "pre") + "StateEquivalent(" + name + ")");
     }
 
-    // First look for equality invariants
-    /* [INCR]
-    Assert.assertTrue(isCanonical());
-    Vector equal_vars = equalTo();
-    for (int i=0; i<equal_vars.size(); i++) {
-      VarInfo vi = (VarInfo)equal_vars.elementAt(i);
-      if (post != vi.isPrestate()) {
-        return vi.name;
-      }
-    }
-    */ // ... [INCR]
-
-    // Didn't find an exactly equal variable; try LinearBinary.
     {
       Vector lbs = LinearBinary.findAll(this);
       for (int i=0; i<lbs.size(); i++) {
@@ -2036,7 +1640,7 @@ public final class VarInfo
    * invariant that ensures that this object is available for access
    * to variables that reference it, such as fields.
    **/
-  public Invariant createGuardingPredicate(PptTopLevel ppt) {
+  public Invariant createGuardingPredicate() {
     // Later for the array, make sure index in bounds
     if (type.isArray() || type.isObject()) {
       // For now associating with the variable's PptSlice

@@ -268,32 +268,6 @@ public class CLASSNAME
           log ("Obvious- Obvious sub sequence with " + inv.format());
           return new DiscardInfo(this, DiscardCode.obvious, "Invariant holds over a supersequence");
         }
-
-        /* [INCR]
-        boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
-        if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
-        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
-        PptSlice2 slice_2seq = parent.findSlice(v1, v2);
-        if (slice_2seq == null) {
-          // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
-        } else  {
-          // slice_2seq != null
-          SUBSEQUENCE ss = SUBSEQUENCE.find(slice_2seq);
-          if (ss == null) {
-            // System.out.println("NoDuplicates.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
-          } else {
-            // System.out.println("NoDuplicates.isObviousImplied: found SubSequence: " + ss.repr());
-            if (this_var_first
-                ? ss.var1_in_var2
-                : ss.var2_in_var1) {
-              discardCode = DiscardCode.obvious;
-              discardString = "This sequence is a subsequence of "+inv.ppt.var_infos[0].name.name()+" for which"+
-                               "the invariant holds.";
-              return true;
-            }
-          }
-        }
-        */ // ... [INCR]
       }
     }
 

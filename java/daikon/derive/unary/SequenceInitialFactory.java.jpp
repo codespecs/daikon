@@ -54,21 +54,6 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     int lowerbound = -2;
     int upperbound = 1;
 
-    // If the length is constant, adjust the bounds accordingly.
-    /* [INCR]
-    VarInfo lengthvar = vi.sequenceSize();
-    if (lengthvar != null && lengthvar.isConstant()) {
-      int length_constant = ((Long) lengthvar.constantValue()).intValue();
-      if (length_constant == 0) {
-        Global.tautological_suppressed_derived_variables += 4;
-        return null;
-      } else if (length_constant <= 4) {
-        lowerbound = 0;
-        upperbound = length_constant - 1;
-      }
-    }
-    */ // [INCR]
-
     boolean suppress_zero = false;
     // We know that var.~ll~[0] == var and var.~ll~.field[0] == var.field.
     if (vi.isClosure()) {

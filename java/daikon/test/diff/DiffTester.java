@@ -47,9 +47,6 @@ public class DiffTester extends TestCase {
                                  ProglangType.INT,
                                  (VarComparability)null, // null Comparability
                                  VarInfoAux.getDefault());
-    // INCR: equal_to no longer exists!
-    // // VarInfo.isCanonical() insists that equal_to be non-null.
-    // result.equal_to = result;
     return result;
   }
 
@@ -83,7 +80,6 @@ public class DiffTester extends TestCase {
         newPptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
       PptTopLevel ppt2 =
         newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
-      // ppt1.combined_exit = ppt2; // [INCR]
       ppts4.add(ppt1);
       ppts4.add(ppt2);
     }
@@ -265,47 +261,6 @@ public class DiffTester extends TestCase {
     Assert.assertEquals(printTree(ref), printTree(diff));
   }
 
-  /* [INCR] This needs to be reinstated, but right now there is a problem
-     with both EXIT and EXIT19 being considered a main exit point.
-  public void testPpts4Empty() {
-    RootNode diff = diffSome.diffPptMap(ppts4, empty);
-
-    RootNode ref = new RootNode();
-    PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       null);
-    ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       null);
-    ref.add(node);
-
-    Assert.assertEquals(printTree(ref), printTree(diff));
-  }
-
-
-  public void testPpts4EmptyAll() {
-    RootNode diff = diffAll.diffPptMap(ppts4, empty);
-
-    RootNode ref = new RootNode();
-    PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       null);
-    ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
-       null);
-    ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       null);
-    ref.add(node);
-
-    Assert.assertEquals(printTree(ref), printTree(diff));
-  }
-  */ // INCR
 
   public void testPpts1Ppts1() {
     RootNode diff = diffSome.diffPptMap(ppts1, ppts1);
@@ -327,26 +282,6 @@ public class DiffTester extends TestCase {
 
     Assert.assertEquals(printTree(ref), printTree(diff));
   }
-
-  /* [INCR] This needs to be reinstated, but right now there is a problem
-     with both EXIT and EXIT19 being considered a main exit point.
-  public void testPpts4Ppts4() {
-    RootNode diff = diffSome.diffPptMap(ppts4, ppts4);
-
-    RootNode ref = new RootNode();
-    PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
-    ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
-    ref.add(node);
-
-    Assert.assertEquals(printTree(ref), printTree(diff));
-  }
-  */ // INCR
 
   public void testPpts1Ppts2() {
     RootNode diff = diffSome.diffPptMap(ppts1, ppts2);

@@ -32,7 +32,6 @@ public abstract class SingleString
   public InvariantStatus add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    // [INCR] Assert.assertTrue(!finished);
     String value = (String) val;
     if (mod_index == 0) {
       return add_unmodified(value, count);

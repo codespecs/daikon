@@ -138,10 +138,6 @@ public final class UnionInvariants {
     for (Iterator i = source.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
 
-      /* [INCR] ...
-      if (! ppt.has_samples())
-        continue;
-      */ // ... [INCR]
       if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0))
         continue;
 

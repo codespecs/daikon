@@ -129,29 +129,6 @@ public final class CLASSNAME
     return super.isObviousStatically (vis);
   }
 
-  /* [INCR]
-  // Like isObviousMember, but also checks everything equal to the given
-  // variables.
-  public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
-    Assert.assertTrue(sclvar.isCanonical());
-    Assert.assertTrue(seqvar.isCanonical());
-    Vector scl_equalto = sclvar.equalTo();
-    scl_equalto.add(0, sclvar);
-    Vector seq_equalto = seqvar.equalTo();
-    seq_equalto.add(0, seqvar);
-
-    for (int sclidx=0; sclidx<scl_equalto.size(); sclidx++) {
-      for (int seqidx=0; seqidx<seq_equalto.size(); seqidx++) {
-        VarInfo this_sclvar = (VarInfo) scl_equalto.elementAt(sclidx);
-        VarInfo this_seqvar = (VarInfo) seq_equalto.elementAt(seqidx);
-        if (isObviousMember(this_sclvar, this_seqvar))
-          return true;
-      }
-    }
-    return isObviousMember (sclvar, seqvar);
-  }
-  */ // [INCR]
-
   /**
    * Check whether sclvar is a member of seqvar can be determined
    * statically.

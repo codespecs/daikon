@@ -238,23 +238,8 @@ public class ExtractConsequent {
    **/
   public static void extract_consequent_maybe(PptTopLevel ppt,
                                               PptMap all_ppts) {
-    /* [INCR]
-    if (! ppt.has_samples()) {
-      return;
-    }
-
-    if ((ppt.numViews() == 0) && (ppt.implication_view.invs.size() == 0)) {
-      return;
-    }
-
-    // if ((ppt.combined_exit != null)) {
-    // return;
-    // }
-    */ // [INCR]
-
     ppt.simplify_variable_names();
 
-    // [INCR] Invariants invs = ppt.implication_view.invs;
     Invariants invs = new Invariants();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());

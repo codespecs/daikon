@@ -56,9 +56,6 @@ public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
     if (!seq1.type.base().equals(seq2.type.base()))
       return null;
 
-    // Assert.assertTrue(seq1.isCanonical()); // [INCR]
-    // Assert.assertTrue(seq2.isCanonical()); // [INCR]
-
     // For now, do nothing if the sequences are derived.
     if ((seq1.derived != null) || (seq2.derived != null))
       return null;
