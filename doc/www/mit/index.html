@@ -533,6 +533,14 @@ target.
         <br>
     </code> <p>
 
+    Another good source of information is to examine the cvs logs over the
+    last month: <p>
+
+    <code>
+      cd $inv/java <br>
+      cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl <br>
+    </code> <p>
+
     <li> Make the distribution and update the website. <p>
 
     <code>
