@@ -11,9 +11,8 @@ import java.util.logging.Logger;
 import jtb.ParseException;
 
 /**
- * This class creates Splitters from a .spinfo file. The public method is
- * read_spinfofile( spinfofilename ), which returns the SplitterObjects for
- * each Ppt.
+ * This class contains static method read_spinfofile( spinfofilename ),
+ * which creates Splitters from a .spinfo file.
  **/
 public class SplitterFactory {
 
@@ -291,7 +290,7 @@ public class SplitterFactory {
   /**
    * Print out a message if the debugPptSplit variable is set to "true."
    **/
-  static void debugPrintln(String s) {
+  private static void debugPrintln(String s) {
     Global.debugSplit.fine(s);
   }
 

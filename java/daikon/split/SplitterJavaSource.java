@@ -11,8 +11,8 @@ import jtb.visitor.*;
 import java.util.regex.*;
 
 /**
- * SplitterJavaSource writes the splitter java file's contents to a string buffer
- * for a given condition, Ppt and StatementReplacer.
+ * SplitterJavaSource writes the splitter Java file's contents to a string
+ * buffer for a given condition, Ppt, and StatementReplacer.
  */
 class SplitterJavaSource {
 
@@ -93,7 +93,7 @@ class SplitterJavaSource {
     skipLine();
     add("  public boolean valid() { ");
     writeValidBody();
-    add(" } ");
+    add("  } ");
     skipLine();
     add("  public boolean test(ValueTuple vt) { ");
     writeTestBody();
@@ -161,10 +161,10 @@ class SplitterJavaSource {
       for (int i = 1; i < vars.length; i++) {
         fileText.append(" && ("  + vars[0].getFieldName() + " != null)");
       }
-      fileText.append(";");
-    }
-    else {
-      fileText.append("return false;");
+      add(";");
+    } else {
+      add("    /* no variables were found */");
+      add("    return false;");
     }
   }
 

@@ -24,7 +24,8 @@ import daikon.tools.jtb.*;
  * a call to "makeReplacements(someMethod(a/3, b))" would yield:
  * "(a/3) + 2*((b) + 1) + 5"
  *
- * Once made from ReplaceStatements, a replacer can be used on a series of statements.
+ * Once made from ReplaceStatements, a replacer can be used on a series of
+ * statements.
  */
 class StatementReplacer extends DepthFirstVisitor {
 
@@ -43,15 +44,17 @@ class StatementReplacer extends DepthFirstVisitor {
 
   private static final String lineSep = System.getProperty("line.separator");
 
- /**
-  * Creates a new instance of StatementReplacer that makes the
-  * replacements specified by the ReplaceStatements of replaceStatements.
-  * @param replaceStatements a list of ReplaceStatements specifying the
-  *  replacements to be made by this.
-  */
+  /**
+   * Creates a new instance of StatementReplacer that makes the
+   * replacements specified by the ReplaceStatements of replaceStatements.
+   * @param replaceStatements a list of ReplaceStatements specifying the
+   *  replacements to be made by this.
+   */
   public StatementReplacer(List replaceStatements) {
     statementMap = new ReplaceStatementMap(replaceStatements);
   }
+
+ static final int MAXREPLACEMENTS = 10;
 
   /**
    * Makes the replacements in statement that are designated by this.
@@ -60,22 +63,33 @@ class StatementReplacer extends DepthFirstVisitor {
    *  the replacements should be made.
    * @return statement with the correct replacements made.
    */
-  public String makeReplacements(String expression)
-   throws ParseException {
+  public String makeReplacements(String expression) throws ParseException {
+    // originalExpression and replacements detect loops.  Gross.
+    String originalExpression = expression;
+    int replacements = 0;
     String replacedExpression = expression;
     do {
       expression = replacedExpression;
       // expression must be re-parsed with every loop because the
       // syntax tree is made invalid when visited by this.
+      // TODO: This removes spaces, turning "a instanceof B" into "ainstanceofB"
+      // System.out.println("about to call getJtbTree on: " + expression);
       Node root = Visitors.getJtbTree(expression);
       try {
         root.accept(this);
         replacedExpression = Ast.print(root);
+        replacements++;
       } catch (IllegalStateException e) {
-       throw new ParseException(e.getMessage());
+        throw new ParseException(e.getMessage());
       }
-    } while (! replacedExpression.equals(expression));
-    return replacedExpression;
+    } while ((replacements < MAXREPLACEMENTS)
+             && (! replacedExpression.equals(expression)));
+    if (replacements >= MAXREPLACEMENTS) {
+      return originalExpression;
+    } else {
+      // System.out.println("makeReplacements(" + originalExpression + ") ==> " + replacedExpression);
+      return replacedExpression;
+    }
   }
 
  /**
@@ -92,17 +106,17 @@ class StatementReplacer extends DepthFirstVisitor {
   */
   public void visit(PrimaryExpression n) {
     if (! matchFound) {
-     ReplaceStatement replaceStatement = null;
-     NodeToken firstToken = null;
-     List /*String*/ newArgs = null;
-     if (isNonThisMethod(n)) {
-        replaceStatement = statementMap.get(getNonThisName(n));
-        firstToken = ((Name) n.f0.f0.choice).f0;
-        newArgs = getNonThisArgs(n);
+      ReplaceStatement replaceStatement = null;
+      NodeToken firstToken = null;
+      List /*String*/ newArgs = null;
+      if (isNonThisMethod(n)) {
+         replaceStatement = statementMap.get(getNonThisName(n));
+         firstToken = ((Name) n.f0.f0.choice).f0;
+         newArgs = getNonThisArgs(n);
       } else if (isThisDotMethod(n)) {
-       replaceStatement = statementMap.get(getThisName(n));
-       firstToken = (NodeToken) n.f0.f0.choice;
-       newArgs = getArgs(n);
+        replaceStatement = statementMap.get(getThisName(n));
+        firstToken = (NodeToken) n.f0.f0.choice;
+        newArgs = getArgs(n);
       }
       if (replaceStatement != null && firstToken != null) {
         List /*String*/ oldArgs = getParameterNames(replaceStatement.getParameters());
@@ -130,12 +144,12 @@ class StatementReplacer extends DepthFirstVisitor {
   /**
    * Returns a List of the parameter names (as Strings) of the
    * MethodParameters of params.
-   * @param params the MethodParameters' who's names are desired.
+   * @param params the MethodParameters' whose names are desired.
    */
-  private List /*String*/ getParameterNames(MethodParameter[] params) {
+  private List /*String*/ getParameterNames(ReplaceStatement.MethodParameter[] params) {
     List args = new ArrayList();
     for(int i = 0; i < params.length; i++) {
-      args.add(params[i].getName());
+      args.add(params[i].name);
     }
     return args;
   }

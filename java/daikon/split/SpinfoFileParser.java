@@ -11,15 +11,18 @@ import jtb.ParseException;
  * SpinfoFileParser parses a .spinfo file.  This file uses the term "ppt
  * section" and "replace section" to describe what is refered to as a
  * "Program Point Section" and "replacement sections" in Daikon User's
- * Manual, respectively.
+ * Manual, respectively.  A "ppt statement" is a single line from a
+ * "ppt section."
  */
 class SpinfoFileParser {
 
-  /** The path of the file being parsed. */
+  /** The path of the file being parsed.
+   * This is used only for debugging output.
+   **/
   private String spinfoFileName;
 
   /**
-   * The path to directory in which the java files for the
+   * The directory in which the java files for the
    * splitters are kept.
    */
   private String tempDir;
@@ -50,7 +53,7 @@ class SpinfoFileParser {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
-      LineNumberReader reader = UtilMDE.LineNumberFileReader(spinfoFile.toString());
+      LineNumberReader reader = UtilMDE.LineNumberFileReader(spinfoFile);
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
@@ -85,49 +88,50 @@ class SpinfoFileParser {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
    * @throws IOException if an I/O error occurs
    */
-  public void parseFile(LineNumberReader spinfoFile)
-    throws IOException {
+  public void parseFile(LineNumberReader spinfoFile) throws IOException {
     List /*ReplaceStatement*/ replaceStatements = new ArrayList();
     List /*List<String>*/ pptSections = new ArrayList();
-      try {
-        String line = spinfoFile.readLine();
-        while(line != null) {
-          line = line.trim();
-          if (line.equals("REPLACE")) {
-            handleReplaceStatements(spinfoFile, replaceStatements);
-          } else if (line.startsWith("PPT_NAME")) {
-            line = line.substring("PPT_NAME".length()).trim();
-            handlePptStatements(spinfoFile, pptSections, line);
-          } else if (! (isComment(line) || line.equals(""))) {
-            throw new
-              RuntimeException("Illegal file format in: " + spinfoFileName + lineSep +
-                               "at: " + spinfoFile.getLineNumber() + lineSep +
-                               line);
-          }
-          line = spinfoFile.readLine();
+    try {
+      String line = spinfoFile.readLine();
+      while (line != null) {
+        line = line.trim();
+        if (isComment(line) || line.equals("")) {
+          // nothing to do
+        } else if (line.equals("REPLACE")) {
+          readReplaceStatements(spinfoFile, replaceStatements);
+        } else if (line.startsWith("PPT_NAME")) {
+          line = line.substring("PPT_NAME".length()).trim();
+          readPptStatements(spinfoFile, pptSections, line);
+        } else {
+          throw new
+            RuntimeException("Illegal file format in: " + spinfoFileName + lineSep +
+                             "at: " + spinfoFile.getLineNumber() + lineSep +
+                             line);
         }
-      } catch (IOException ioe) {
-        //  System.err.println(ioe);
-        System.err.println("Error in " +  spinfoFileName + lineSep +
-                           " at line number " + spinfoFile.getLineNumber() +
-                           " of .spinfo file");
-        throw new RuntimeException(ioe);
-      } catch (ParseException e) {
-        //  System.err.println(ioe);
-        System.err.println("Error in " +  spinfoFileName + lineSep +
-                           " at line number " + spinfoFile.getLineNumber() +
-                           " of .spinfo file");
-        throw new RuntimeException(e);
+        line = spinfoFile.readLine();
       }
-      statementReplacer = new StatementReplacer(replaceStatements);
-      splitterObjects = createSplitterObjects(pptSections);
+    } catch (IOException ioe) {
+      //  System.err.println(ioe);
+      System.err.println("Error in " +  spinfoFileName + lineSep +
+                         " at line number " + spinfoFile.getLineNumber() +
+                         " of .spinfo file");
+      throw new RuntimeException(ioe);
+    } catch (ParseException e) {
+      //  System.err.println(ioe);
+      System.err.println("Error in " +  spinfoFileName + lineSep +
+                         " at line number " + spinfoFile.getLineNumber() +
+                         " of .spinfo file");
+      throw new RuntimeException(e);
+    }
+    statementReplacer = new StatementReplacer(replaceStatements);
+    splitterObjects = createSplitterObjects(pptSections);
   }
 
 
 
 
   /**
-   * Handles a group of replace statement lines. The method declaration
+   * Reads a group of replace statement lines. The method declaration
    * and the return statement of a replace statement is placed in a
    * ReplaceStatement. The ReplaceStatements are then placed into
    * replaceStatements.
@@ -135,14 +139,13 @@ class SpinfoFileParser {
    * @param replaceStatements the List into which the ReplaceStatements
    *  are added.
    */
-  private void handleReplaceStatements(LineNumberReader spinfoFile,
+  private void readReplaceStatements(LineNumberReader spinfoFile,
                                        List replaceStatements)
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
-    while (methodDeclaration != null &&
-           (! methodDeclaration.trim().equals(""))) {
+    while (! isBlank(methodDeclaration)) {
       String returnStatement = spinfoFile.readLine();
-      if (returnStatement == null || returnStatement.trim().equals("")) {
+      if (isBlank(returnStatement)) {
         throw new RuntimeException("MalFormed .spinfo file in: " +
                                    spinfoFileName + lineSep +
                                    (spinfoFile.getLineNumber() - 1) + lineSep +
@@ -157,7 +160,7 @@ class SpinfoFileParser {
   }
 
   /**
-   * Handles a group of Ppt statements (statements following the line "PPT_NAME...").
+   * Reads a group of Ppt statements (statements following the line "PPT_NAME...").
    * All the lines between firstLine and the first empty line are placed into a
    * list and then this list is placed in to pptSections.
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
@@ -166,7 +169,7 @@ class SpinfoFileParser {
    * @param firstLine the first line of the pptSection.
    * @throws IOException if an I/O error occurs.
    */
-  private void handlePptStatements(LineNumberReader spinfoFile,
+  private void readPptStatements(LineNumberReader spinfoFile,
                                    List pptSections,
                                    String pptName)
     throws IOException {
@@ -198,7 +201,9 @@ class SpinfoFileParser {
         SplitterObject splitObj = null;
         for (int j = 1; j < pptSection.size(); j++) {
           String pptStatement = (String) pptSection.get(j);
-          if (isFormatting(pptStatement)) {
+          if (isComment(pptStatement)) {
+            // nothing to do
+          } else if (isFormatting(pptStatement)) {
             if (splitObj == null) {
               throw new
                 RuntimeException("Malformed Spinfo file: " + spinfoFileName + lineSep +
@@ -207,7 +212,7 @@ class SpinfoFileParser {
             } else {
               setFormatting(splitObj, pptStatement.trim());
             }
-          } else if (! isComment(pptStatement)) {
+          } else {
             splitObj = new SplitterObject(pptName, pptStatement.trim(), tempDir);
             splittersForThisPpt.add(splitObj);
           }
@@ -244,24 +249,27 @@ class SpinfoFileParser {
   }
 
   /**
-   * Returns whether the line is a formatting command.
-   * line is a formatting command by if line is indented with
-   * a tab, "\t", or spaces, " ".  Formatting command are described
-   * in the daikon spinfo file specification and are always indented.
+   * Returns whether the line is blank (or null).
    */
-  private static boolean isFormatting(String line) {
-    return (line.startsWith("\t") || line.startsWith(" "));
+  private static boolean isBlank(String line) {
+    return (line == null) || line.trim().equals("");
   }
 
   /**
-   * Returns whether the line is a comment line.
-   * line is a comment by if line starts with a "#".
-   * Comments are provided for in the daikon spinfo
-   * file specification and always begin with "#".
+   * Returns whether the line is a spinfo file comment line.
+   * A line is a comment if it starts with a (possibly indented) "#".
    */
   private static boolean isComment(String line) {
-    String test = line.trim();
-    return (test.startsWith("#"));
+    return (line.trim().startsWith("#"));
+  }
+
+  /**
+   * Returns whether the line is a spinfo file formatting command.
+   * A line is a formatting command if line is indented with
+   * a tab, "\t", or spaces, " ".
+   */
+  private static boolean isFormatting(String line) {
+    return (line.startsWith("\t") || line.startsWith(" "));
   }
 
 }

@@ -7,13 +7,12 @@ import org.apache.oro.text.regex.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-/**
- * SplitterList maps from a program point name to an array of Splitter
- * objects that should be used when splitting that program point.
- * Invariant:  each of those splitters should be non-instantiated (each is
- * a factory, not an instantiated splitter).
- **/
+// SplitterList maps from a program point name to an array of Splitter
+// objects that should be used when splitting that program point.
+// Invariant:  each of those splitters should be non-instantiated (each is
+// a factory, not an instantiated splitter).
 // It's a shame to have to hard-code for each program point name.
+
 public abstract class SplitterList
 {
   // This causes problems right now, probably due to classloading
@@ -25,16 +24,15 @@ public abstract class SplitterList
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  // "@ref{}" produces a cross-reference in the Daikon manual.  It must
+  // "@ref{}" produces a cross-reference in the printed manual.  It must
   // *not* come at the beginning of a line, or Javadoc will get confused.
   /**
    * Boolean.  Enables indiscriminate splitting
    * (see Daikon manual, @ref{Indiscriminate splitting},
    * for an explanation of this technique).
    **/
-  public static boolean dkconfig_all_splitters = false;
+  public static boolean dkconfig_all_splitters = true;
 
-  // keys are program point names
   // maps from string to Splitter[]
   private static final HashMap ppt_splitters = new HashMap();
   // These aren't "PatternMatcher" and "PatternCompiler" because we want
@@ -97,19 +95,86 @@ public abstract class SplitterList
     return (Splitter[]) ppt_splitters.get(pptname);
   }
 
-  /// An old comment on a previous implementation said the following; I
-  /// should see whether it is still true.
-  // This returns a list of all the splitters that are applicable to the
-  // program point named "name".  The list is constructed by looking up
-  // various parts of "name" in the SplitterList hashtable.
-  // This routine tries the name first, then the base of the name, then the
-  // class, then the empty string.  For instance, if the program point name is
-  // "Foo.bar(IZ)V:::EXIT2", then it tries, in order:
-  //   "Foo.bar(IZ)V:::EXIT2"
-  //   "Foo.bar(IZ)V"
-  //   "Foo.bar"
-  //   "Foo"
-  //   ""
+  //   // This returns a list of all the splitters that are applicable to the
+  //   // program point named "name".  The list is constructed by looking up
+  //   // various parts of "name" in the SplitterList hashtable.
+  //
+  //   // This routine tries the name first, then the base of the name, then the
+  //   // class, then the empty string.  For instance, if the program point name is
+  //   // "Foo.bar(IZ)V:::EXIT2", then it tries, in order:
+  //   //   "Foo.bar(IZ)V:::EXIT2"
+  //   //   "Foo.bar(IZ)V"
+  //   //   "Foo.bar"
+  //   //   "Foo"
+  //   //   ""
+  //
+  //   public static Splitter[] get(String pptName) {
+  //     String pptName_ = pptName;        // debugging
+  //     Splitter[] result;
+  //     Vector splitterArrays = new Vector();
+  //     Vector splitters = new Vector();
+  //
+  //     result = get_raw(pptName);
+  //     if (result != null)
+  //       splitterArrays.addElement(result);
+  //
+  //     {
+  //       int tag_index = pptName.indexOf(FileIO.ppt_tag_separator);
+  //       if (tag_index != -1) {
+  //         pptName = pptName.substring(0, tag_index);
+  //         result = get_raw(pptName);
+  //         if (result != null)
+  //           splitterArrays.addElement(result);
+  //       }
+  //     }
+  //
+  //     int lparen_index = pptName.indexOf('(');
+  //     {
+  //       if (lparen_index != -1) {
+  //         pptName = pptName.substring(0, lparen_index);
+  //         result = get_raw(pptName);
+  //         if (result != null)
+  //           splitterArrays.addElement(result);
+  //       }
+  //     }
+  //     {
+  //       // The class pptName runs up to the last dot before any open parenthesis.
+  //       int dot_limit = (lparen_index == -1) ? pptName.length() : lparen_index;
+  //       int dot_index = pptName.lastIndexOf('.', dot_limit - 1);
+  //       if (dot_index != -1) {
+  //         pptName = pptName.substring(0, dot_index);
+  //         result = get_raw(pptName);
+  //         if (result != null)
+  //           splitterArrays.addElement(result);
+  //       }
+  //     }
+  //
+  //     // Empty string means always applicable.
+  //     result = get_raw("");
+  //     if (result != null)
+  //       splitterArrays.addElement(result);
+  //
+  //     if (splitterArrays.size() == 0) {
+  //       if (Global.debugPptSplit) {
+  //         System.out.println("SplitterList.get found no splitters for " + pptName);
+  //         return null;
+  //       }
+  //     } else {
+  //       Splitter[] tempsplitters;
+  //       int counter = 0;
+  //       for (int i = 0; i < splitterArrays.size(); i++) {
+  //         tempsplitters = (Splitter[])splitterArrays.elementAt(i);
+  //         for (int j = 0; j < tempsplitters.length; j++) {
+  //           splitters.addElement(tempsplitters[j]);
+  //           counter++;
+  //         }
+  //       }
+  //       if (Global.debugPptSplit)
+  //         System.out.println("SplitterList.get found " + counter + " splitters for " + pptName);
+  //     }
+  //     return (Splitter[])splitters.toArray(new Splitter[0]);
+  //   }
+  //////////////////////
 
   /*
    * Return the splitters associated with this program point name.

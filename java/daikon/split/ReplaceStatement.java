@@ -1,12 +1,12 @@
 package daikon.split;
 
-import java.util.*;
+import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.tools.jtb.*;
-import jtb.JavaParser;
-import jtb.ParseException;
+import utilMDE.Assert;
 import java.io.*;
+import java.util.*;
 
 
 /**
@@ -60,17 +60,21 @@ class ReplaceStatement {
     // Must remove any prefixes of the method name so that the java parser
     // can parse it correctly.
     int openParenIndex = methodDeclaration.indexOf('(');
-    int index = methodDeclaration.lastIndexOf('.', openParenIndex);
-    if (index != -1) {
-      methodName = methodDeclaration.substring(0, index + 1);
-      methodDeclaration = methodDeclaration.substring(index + 1);
+    int dotIndex = methodDeclaration.lastIndexOf('.', openParenIndex);
+    if (dotIndex != -1) {
+      methodName = methodDeclaration.substring(0, dotIndex + 1);
+      methodDeclaration = methodDeclaration.substring(dotIndex + 1);
     }
     String replaceClass = "class c { void " + methodDeclaration + "{}}";
     Reader input = new StringReader(replaceClass);
     JavaParser parser = new JavaParser(input);
     Node root = parser.CompilationUnit();
     MethodDeclarationParser visitor = new MethodDeclarationParser();
-    root.accept(visitor); // sets methodName and parameters.
+    // Sets methodName and parameters.
+    // But also seems to depend on methodName being set already...
+    root.accept(visitor);
+    Assert.assertTrue(methodName != null);
+    Assert.assertTrue(parameters != null);
   }
 
   /**
@@ -102,11 +106,11 @@ class ReplaceStatement {
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());
     }
-    return methodName + "(" + params + "), " + returnStatement;
+    return "<ReplaceStatement: " + methodName + "(" + params + "), " + returnStatement + ">";
   }
 
   /**
-   * MethodDeclarationParser is jtb syntax tree visitor for extracting
+   * MethodDeclarationParser is a JTB syntax tree visitor for extracting
    * the name and arguments from a method declaration.  For example
    * from "someMethod(int x, int y)".  "someMethod", "int x", and "int y"
    * would be extracted.
@@ -115,9 +119,6 @@ class ReplaceStatement {
 
     /** The parameters of the method. */
     private List /*MethodParameter*/ methodParamList;
-
-    /** True iff presently visiting the parameters of the method. */
-    private boolean enteredParameters = false;
 
     /**
      * Creates a new instance of MethodDeclarationParser.
@@ -143,4 +144,18 @@ class ReplaceStatement {
       parameters = (MethodParameter[]) params.toArray(new MethodParameter[0]);
     }
   }
+
+  /**
+   * MethodParameter is a simple immutable ADT for representing
+   * the name and type of a method parameter.
+   */
+  public class MethodParameter {
+    public String type;
+    public String name;
+    public MethodParameter(String name, String type) {
+      this.name = name;
+      this.type = type;
+    }
+  }
+
 }

@@ -38,7 +38,7 @@ public final class CallerContextSplitter
     caller_varinfo = ppt.findVar(CALLER_INDICATOR_NAME);
     this.ids = ids;
     this.condition = condition;
-    // instantiated = true;
+    instantiated = true;
   }
 
   /**

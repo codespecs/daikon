@@ -22,7 +22,7 @@ public final class SplitterExample
 
   public SplitterExample(Ppt ppt) {
     x_varinfo = ppt.findVar("X");
-    // instantiated = true;
+    instantiated = true;
   }
 
   public Splitter instantiate(Ppt ppt) {

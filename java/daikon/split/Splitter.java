@@ -20,13 +20,16 @@ import java.io.Serializable;
  * condition is applicable.
  **/
 
+// Should not be "implements Serializable":  the classes are created on
+// demand, so the class doesn't exist when a serialized object is being
+// re-read.
 public abstract class Splitter
-  //  implements Serializable
+  implements Serializable
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  // static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020122L;
 
   /**
    * Creates a splitter "factory" that should only be used for creating new
@@ -45,15 +48,14 @@ public abstract class Splitter
    */
   public abstract Splitter instantiate(Ppt ppt);
 
-  // For debugging.  Commented out to avoid need to change serialVersionUID.
-  // protected boolean instantiated = false;
-  // /**
-  //  * Returns true for an instantiated (non-"factory") splitter.
-  //  * Clients also need to check valid().
-  //  **/
-  // public boolean instantiated() {
-  //   return instantiated;
-  // }
+  protected boolean instantiated = false;
+  /**
+   * Returns true for an instantiated (non-"factory") splitter.
+   * Clients also need to check valid().
+   **/
+  public boolean instantiated() {
+    return instantiated;
+  }
 
   /**
    * Returns true or false according to whether this was instantiated
