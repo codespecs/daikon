@@ -7,7 +7,7 @@ BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/pag.bi
 BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
 MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
-
+PERLLIB := $(HOME)/research/invariants/scripts:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 ###########################################################################
 
 html: HTML
