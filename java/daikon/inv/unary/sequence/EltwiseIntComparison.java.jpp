@@ -40,8 +40,6 @@ public abstract class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030109L;
 
-  public static boolean dkconfig_enabled = true;
-
   abstract public boolean hasSeenNonTrivialSample();
 
   protected CLASSNAME(PptSlice ppt) {
