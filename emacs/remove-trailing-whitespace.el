@@ -1,16 +1,21 @@
 ;; This file removes trailing whitespace from source code; the trailing
 ;; whitespace serves no purpose.
 
-(add-hook 'c-mode-hook '(lambda () (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace)))
-(add-hook 'java-mode-hook '(lambda () (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace)))
+(defun add-whitespace-hooks ()
+  (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace))
+
+(add-hook 'c-mode-hook 'add-whitespace-hooks)
+(add-hook 'java-mode-hook 'add-whitespace-hooks)
 
 ;; Customize the tests if desired.
 (defun maybe-remove-trailing-whitespace ()
-  "Remove trailing whitespace from all lines in the file,
+  "Remove trailing whitespace and newlines from all lines in the file,
 unless the file is maintained by someone else."
   (if (not (and (buffer-file-name)
 		(emacs-source-file-p (buffer-file-name))))
-      (remove-trailing-whitespace)))
+      (progn
+	(remove-trailing-whitespace)
+	(remove-trailing-newlines))))
 
 (defun emacs-source-file-p (filename)
   "Return t if FILENAME is an Emacs source file."
@@ -34,5 +39,14 @@ unless the file is maintained by someone else."
 	(if (or (= match-begin (point-min))
 		(not (= ?< (char-syntax (char-after (1- match-begin))))))
 	    (replace-match "")))))
+  ;; Return nil so this can be used as a write-{file,contents}-hook
+  nil)
+
+(defun remove-trailing-newlines ()
+  "Remove trailing blank lines from the file.  Does not modify point."
+  (interactive)
+  (goto-char (point-max))
+  (if (re-search-backward "\\([^\n]\n\\)\n+\\'" nil t)
+      (replace-match "\\1"))
   ;; Return nil so this can be used as a write-{file,contents}-hook
   nil)

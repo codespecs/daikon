@@ -3,6 +3,10 @@
 
 (load "c-set-basic-offset")
 (load "remove-trailing-whitespace")
+(defun unset-indent-tabs-mode ()
+  (setq indent-tabs-mode nil))
+(add-hook 'java-mode-hook 'unset-indent-tabs-mode)
+(add-hook 'c-mode-hook 'unset-indent-tabs-mode)
 
 (add-to-list 'auto-mode-alist '("\\.jpp\\'" . java-mode))
 (add-to-list 'auto-mode-alist '("\\.java\\.goal\\'" . java-mode))
