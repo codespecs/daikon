@@ -2363,7 +2363,8 @@ passing the specified arguments, if any, to Daikon.
 @cindex front end for C
 @cindex C front end
 
-Daikon's front end for C, named Kvasir, executes C programs and creates  
+Daikon's front end for C, named Kvasir, executes C (and a reasonable subset 
+of C++) programs and creates  
 data trace (.dtrace) files by examining the operation of the binary at
 runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 
@@ -2535,6 +2536,13 @@ which belong to the same file as the variable.  Static variables
 declared within a particular function are only observed at program points 
 for that function.  This is a heuristic to reduce the amount of Kvasir
 output without greatly reducing the amount of useful output.
+
+@item --struct-depth=@var{N}
+
+For recursively-defined structures (structs or classes with members that
+are pointers to the same kind of struct or class), N (an integer between 
+0 and 100) specifies approximately how many levels of pointers to dereference. 
+This is useful for controlling the output of linked lists and trees. 
 
 @item --output-fifo
 
@@ -2949,12 +2957,8 @@ Linux operating system, and only on Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
 AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by recent
-versions of GCC@.  Two other limitations are not fundamental, but apply
-to the current version: first, the programs used by Kvasir should be
-compiled without optimization; and second, the programs should be
-written in C@.  (In the future, Kvasir will support C++ and possibly other
-languages that follow C calling conventions.)
-
+versions of GCC@.  Furthermore, the programs used by Kvasir should be
+compiled without optimization.
 
 This subsection lists some of the known limitations of the
 current Kvasir release; if you encounter any problems other than listed
@@ -2971,8 +2975,12 @@ run faster, try the @code{--ignore-globals} or @code{--limit-static-vars}
 options in order to limit the amount of generated output.
 
 @item
-Kvasir does not support C++.  If support for C++ is important to you,
-please send @email{daikon-developers@@lists.csail.mit.edu}, so that we
+Kvasir currently has only rudimentary support for C++.  It cannot print out 
+the contents of classes which are not defined in the user's program 
+(i.e. it can properly output a C-string represented as @code{char*} but not 
+the contents of the C++ @code{string} class).
+If support for C++ is important to you, please send email to 
+@email{daikon-developers@@lists.csail.mit.edu}, so that we
 can increase its priority on our to-do list.
 
 @item
