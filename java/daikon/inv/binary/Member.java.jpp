@@ -127,9 +127,7 @@ public final class CLASSNAME
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
-    VarInfo seqvar = vis[seq_first ? 0 : 1];
-    VarInfo sclvar = vis[seq_first ? 1 : 0];
-    if (isObviousMember(sclvar, seqvar)) {
+    if (isObviousMember(sclvar(vis), seqvar(vis))) {
       log ("scalar is obvious member of");
       return new DiscardInfo(this, DiscardCode.obvious, sclvar().name.name()
                         + " is an obvious member of " + seqvar().name.name());
