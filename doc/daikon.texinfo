@@ -192,6 +192,7 @@ Problems running Daikon
 Other problems
 
 * Large dtrace files::          
+* Font errors from running GUI::  
 
 Reporting bugs
 
@@ -636,6 +637,7 @@ javac daikon-instrumented/DataStructures/StackAr.java
 @item Trace file generation (step 5)
 @example
 java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
+@end example
 
 @c cd daikon-output
 @c modbit-munge.pl StackAr.dtrace
@@ -1896,9 +1898,10 @@ Any output generated before the out-of-memory error is perfectly valid.
 
 @menu
 * Large dtrace files::          
+* Font errors from running GUI::  
 @end menu
 
-@node    Large dtrace files,  , Other problems, Other problems
+@node    Large dtrace files, Font errors from running GUI, Other problems, Other problems
 @subsection Large data trace (.dtrace) files
 
 Running code instrumented by dfej can result in very large
@@ -1951,6 +1954,37 @@ files.  There are several solutions to this problem.
     the regular expression are processed.  This can take the place of the
     @command{trace-purge-fns.pl} script.
 @end enumerate
+
+
+
+@node    Font errors from running GUI,  , Large dtrace files, Other problems
+@subsection Font errors from running GUI
+
+When running the GUI on Linux, you may get font errors such as the following:
+
+@example
+Font specified in font.properties not found [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+Font specified in font.properties not found [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+Font specified in font.properties not found [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+Font specified in font.properties not found [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+Font specified in font.properties not found [--symbol-medium-r-normal--*-%d-*-*-p-*-adobe-fontspecific]
+@end example
+
+These errors are harmless; the GUI should still run correctly.  To
+prevent these errors from appearing in the future, take the following
+steps:
+
+@itemize @bullet
+@item Find out where your jdk root directory is.  In general, the jdk root directory
+is where you run java from: JDK_ROOT/bin/java.
+@item Edit JDK_ROOT/jre/lib/font.properties, and comment out all lines
+with the offending fonts.  For example, to eliminate the error messages
+shown above, one would comment out all lines containing "fontspecific".
+@end itemize
+
+If you don't have permission to edit font.properties, please contact
+your system administrator.
+
 
 
 @node    Reporting bugs, Known bugs, Other problems, Troubleshooting
