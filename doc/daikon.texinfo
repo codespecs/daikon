@@ -505,12 +505,12 @@ with other Daikon users and developers.
 In the directory where you want to install Daikon (we'll call this
 the @var{daikonparent} directory), unpack the distribution; for example:
 @example
-tar zxvf daikon-source.tar.gz
+tar zxvf daikon.tar.gz
 @end example
 @noindent
 or
 @example
-unzip daikon-source.zip
+unzip daikon.zip
 @end example
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
