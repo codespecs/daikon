@@ -2525,11 +2525,19 @@ public class PptTopLevel extends Ppt {
 
     // System.out.println("This = " + this + ", Name(2) = " + name + " = " + ppt_name);
     String better_name = name;
-    int init_pos = better_name.indexOf(".<init>");
-    if (init_pos != -1) {
-      String classname = better_name.substring(0, init_pos);
-      better_name = classname + "." + classname
-        + better_name.substring(init_pos+7);
+    {
+      // Replace <init> with name of class
+      int init_pos = better_name.indexOf(".<init>");
+      if (init_pos != -1) {
+	String before = better_name.substring(0, init_pos);
+	String after = better_name.substring(init_pos+7);
+	String classname = before;
+	int lastdot = before.lastIndexOf('.'); // Not corrent for inners, but oh well
+	if (lastdot >= 0) {
+	  classname = before.substring(lastdot+1);
+	}
+	better_name = before + "." + classname + after;
+      }
     }
     int open_paren_pos = better_name.indexOf("(");
     if ((open_paren_pos != -1)
