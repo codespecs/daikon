@@ -123,11 +123,10 @@ sub daikon_output_spec {
     } elsif ($t eq "num") {
         return ["", "", "double", "double", \&output_num, {}];
     } elsif ($t eq "str") {
-        # It seems that if you use strings in an array, Daikon works
-        # better if you say the representation type is
-        # "java.lang.String", though in other cases just "String"
-        # works fine.
-        return ["", "", "String", "java.lang.String", \&output_string, {}];
+        # The Daikon name for a string is "java.lang.String",
+        # even if in languages other than Java.
+        return ["", "", "java.lang.String", "java.lang.String",
+                \&output_string, {}];
     } elsif (ref($t)) {
         if ($t->[0] eq "array") {
             if ($single) {
