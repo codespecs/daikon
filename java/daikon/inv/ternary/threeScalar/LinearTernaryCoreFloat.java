@@ -23,7 +23,7 @@ public final class LinearTernaryCoreFloat
   final static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat");
 
   // z == ax + by + c; first argument is x, second is y, third is z
-  public double a, b, c;
+  public double a = 0, b = 0, c = 0;
 
   public Invariant wrapper;
 
@@ -66,18 +66,27 @@ public final class LinearTernaryCoreFloat
     pclever[permutation[0]] = clever[0];
     pclever[permutation[1]] = clever[1];
     pclever[permutation[2]] = clever[2];
-    if (pclever[2] == 0) {
-      // We can't handle this form.  Need to change "z = ax + by + c"
-      // style into "az + by + cz = 1", so that we can zero out
-      // any term we wish.
-      values_seen = 0;
-      a = b = c = 0;
-      System.err.println("Warning; ternary invariant had a bad day.");
-    } else {
-      double d = -1.0 / pclever[2];
-      a = pclever[0] * d;
-      b = pclever[1] * d;
-      c = c * d;
+    if (values_seen >= MINTRIPLES) {
+      // Seen enough values, so permuting a, b, c is useful
+      // This is needed so we don't have div by 0 errors
+      //      if (pclever[2] == 0) {
+      if (a == 0 || b == 0) { // Means a bit more than above, but this
+                              // should be okay
+        // Can't handle this form once rotated.  But if we've seen
+        // enough values, yet a or b is zero, then this is covered by
+        // a LinearBinary or a constant, so let me just destroy myself
+        values_seen = Integer.MAX_VALUE;
+        a = b = c = 0;
+        if (debug.isDebugEnabled()) {
+          debug.debug ("  Ternary invariant destroyed because a or b = 0");
+        }
+        return;
+      } else {
+        double d = -1.0 / pclever[2];
+        a = pclever[0] * d;
+        b = pclever[1] * d;
+        c = c * d;
+      }
     }
     // Fix caches
     double[][] caches = new double[3][];

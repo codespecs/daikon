@@ -27,7 +27,7 @@ public final class ThreeFloatFactory {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt) {
+  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -54,7 +54,7 @@ public final class ThreeFloatFactory {
     Assert.assertTrue(var1.compatible(var3));
 
     { // previously only if (pass == 2)
-
+      // FIXME for equality
       Vector result = new Vector();
       for (int var_order = FunctionBinaryCoreFloat.order_symmetric_start;
            var_order <= FunctionBinaryCoreFloat.order_symmetric_max;
