@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-07-10 09:09:12 mernst>
+# Time-stamp: <2002-07-10 17:29:30 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -130,7 +130,7 @@ sub run_cpp {
     s/JAVACPP_SINGLEQUOTE/\'/g;
 
     # Convert string concatenation ("a" + "b") single string ("ab").
-    s/"  ?\+ "//g;
+    while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
     # Remove "# 22" lines.
     s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/;
 
@@ -139,6 +139,10 @@ sub run_cpp {
     s/[ \t]+\n/\n/g;
     # Remove space after package name
     s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
+    # Remove all extra spaces in import list
+    while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
+    # convert " );" to ");"; requires "=" somewhere earlier in line
+    s/(=.*[^ \t\n]) (\);\n)/$1$2/g;
     # convert "(Foo )" to "(Foo)"
     s/\((\b[A-Za-z]\w*) \)/($1)/g;
     # convert "a .b" to "a.b".
