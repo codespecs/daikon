@@ -149,8 +149,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       return;
     }
 
-    if ((is_boolean && (num_elts == 1))
-        || (is_hashcode && (num_elts == 2))) {
+    if (is_hashcode && (num_elts == 1)) {
       destroy();
       return;
     }

@@ -203,7 +203,6 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       destroy();
       return;
     }
-
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {

@@ -364,14 +364,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       destroy();
       return;
     }
-#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE)
-    if ((is_boolean && (num_elts == 1))
-        || (is_hashcode && (num_elts == 2))) {
+#if defined(SEQUENCE)
+    if (is_hashcode && (num_elts == 1)) {
       destroy();
       return;
     }
 #endif
 #if defined(SCALAR) || defined(ELT)
+    if ((is_boolean && (num_elts == 1))
+        || (is_hashcode && (num_elts == 2))) {
+      destroy();
+      return;
+    }
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {

@@ -214,7 +214,6 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       destroy();
       return;
     }
-
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
