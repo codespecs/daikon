@@ -58,6 +58,8 @@ public class RandomSelector {
 
     /** @param num_elts The number of elements intended to be selected
      * from the input elements
+     *
+     * Sets 'number_to_take' = num_elts
      **/
     public RandomSelector (int num_elts) {
         this (num_elts, new Random());
@@ -65,8 +67,10 @@ public class RandomSelector {
 
 
     /** @param num_elts The number of elements intended to be selected
-     * from the oncoming Iteration. Same as 'number_to_take'
+     * from the input elements.
      * @param r The seed to give for random number generation.
+     *
+     * Sets 'number_to_take' = num_elts
      **/
     public RandomSelector (int num_elts, Random r) {
         values = new ArrayList();
@@ -87,11 +91,17 @@ public class RandomSelector {
         generator = r;
     }
 
-    /** Increments the number of observed_elements, then
-     * with probability 1 / observed_elements, the Object 'next' will
-     * be added to current_values. If the size of current_values exceeds
-     * number_to_take, then one of the existing current_values will
-     * be removed at random.
+    /** <P>When in fixed sample mode, increments the number of
+     * observed elements i by 1, then with probability k / i, the
+     * Object 'next' will be added to the currently selected values
+     * 'current_values' where k is equal to 'number_to_take'. If the
+     * size of current_values exceeds number_to_take, then one of the
+     * existing elements in current_values will be removed at random.
+     *
+     *
+     * <P>When in probability mode, adds next to 'current_values' with
+     * probability equal to 'keep_probability'.
+     *
      **/
     public void accept (Object next) {
 
@@ -124,7 +134,7 @@ public class RandomSelector {
 
     /** Returns current_values, modifies none  **/
     public List getValues() {
-        // avoid concurrent mod errors
+        // avoid concurrent mod errors and rep exposure
         ArrayList ret = new ArrayList();
         ret.addAll (values);
         return ret;
