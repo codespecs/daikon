@@ -124,23 +124,23 @@ public final class Diff {
     RootNode root = diffPptMap(map1, map2);
 
     if (stats) {
-      StatisticsVisitor v = new StatisticsVisitor();
+      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
       root.accept(v);
       System.out.println(v.format());
     }
-
+    
     if (printDiff) {
       PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
         (System.out, verbose, printUninteresting, considerJustification);
       root.accept(v);
     }
-
+    
     if (printAll) {
       PrintAllVisitor v = new PrintAllVisitor(System.out, verbose);
       root.accept(v);
     }
-
- }
+    
+  }
 
 
   // Returns a tree of corresponding program points, and corresponding

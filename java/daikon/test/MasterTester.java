@@ -18,6 +18,7 @@ public class MasterTester extends TestCase {
   public static Test suite() {
     TestSuite result = new TestSuite();
     result.addTest(new TestSuite(DiffTester.class));
+    result.addTest(new TestSuite(DetailedStatisticsVisitorTester.class));    
     result.addTest(new TestSuite(InvariantTester.class));
     result.addTest(new TestSuite(LinearTernaryCoreTest.class));
     result.addTest(new TestSuite(VarInfoNameTest.class));

@@ -60,10 +60,15 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
       (!inv1Justified && inv2Justified);
   }
 
-  private static boolean interestingDifference(Invariant inv1,
-                                               Invariant inv2) {
-    return StatisticsVisitor.interestingDifference(inv1, inv2);
+  // Returns true if the difference between the two invariants is
+  // considered "interesting".
+  static boolean interestingDifference(Invariant inv1,
+                                       Invariant inv2) {
+    // Use the non-null invariant
+    Invariant inv = (inv1 != null) ? inv1 : inv2;
+    return inv.isInteresting();
   }
+
 
   protected void printInvariant(Invariant inv, InvNode node) {
     super.printInvariant(inv, node);
