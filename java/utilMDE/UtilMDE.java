@@ -709,6 +709,7 @@ public final class UtilMDE {
   /**
    * An Iterator that returns first the elements returned by its first
    * argument, then the elements returned by its second argument.
+   * Like MergedIterator, but specialized for the case of two arguments.
    **/
   public static final class MergedIterator2 implements Iterator {
     Iterator itor1, itor2;
@@ -735,6 +736,7 @@ public final class UtilMDE {
   /**
    * An Iterator that returns the elements in each of its argument
    * Iterators, in turn.  The argument is an Iterator of Iterators.
+   * Like MergedIterator2, but generlaized to arbitrary number of iterators.
    **/
   public static final class MergedIterator implements Iterator {
     Iterator itorOfItors;
