@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        mharder <mharder>
+Owner:        mharder <mharder@lcs.mit.edu>, adonovan@lcs.mit.edu
 Tool:         daikon-bug
 Summary:      can't find invariants tree even though INV is set
 Severity:     Lethal
@@ -19,6 +19,9 @@ However, INV is set:
 
 --
 $Log$
-Revision 1.1  2002-03-13 02:32:54  mharder
+Revision 1.2  2002-03-13 02:36:34  mharder
+changed bug0022
+
+Revision 1.1  2002/03/13 02:32:54  mharder
 new bug0022
 
