@@ -25,7 +25,7 @@ public class InvariantTester extends TestCase {
 
   public void testClassVarnameComparator() {
     Comparator c = new Invariant.ClassVarnameComparator();
-    
+
     VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y") };
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice2(ppt, vars);
@@ -61,7 +61,7 @@ public class InvariantTester extends TestCase {
     inv5 = Implication.makeImplication(ppt, inv1, inv3, false);
     Assert.assertTrue(c.compare(inv4, inv5) > 0);
 
-    
+
     VarInfo[] vars2 = { newIntVarInfo("x"), newIntVarInfo("z") };
     PptTopLevel ppt2 = new PptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);
@@ -73,7 +73,68 @@ public class InvariantTester extends TestCase {
     ppt2 = new PptTopLevel("Foo:::OBJECT", vars2);
     slice2 = new PptSlice2(ppt2, vars2);
     inv2 = FunctionUnary.instantiate(slice2, null, null, false);
-    Assert.assertTrue(c.compare(inv1, inv2) > 0);    
+    Assert.assertTrue(c.compare(inv1, inv2) > 0);
+  }
+
+  public void test_prob_is_ge() {
+    Assert.assertTrue(Invariant.prob_is_ge(0, 11) == 1);
+    Assert.assertTrue(Invariant.prob_is_ge(1, 11) == 1);
+    Assert.assertTrue(Invariant.prob_is_ge(2, 11) == .9);
+    Assert.assertTrue(Invariant.prob_is_ge(3, 11) == .8);
+    Assert.assertTrue(Invariant.prob_is_ge(9, 11) == .2);
+    Assert.assertTrue(Invariant.prob_is_ge(10, 11) == .1);
+    Assert.assertTrue(Invariant.prob_is_ge(11, 11) == 0);
+    Assert.assertTrue(Invariant.prob_is_ge(20, 11) == 0);
+  }
+
+  public void test_prob_and() {
+
+    Assert.assert(Invariant.prob_and(0, 0) == 0);
+    Assert.assert(Invariant.prob_and(0, 1) == 1);
+    Assert.assert(Invariant.prob_and(1, 0) == 1);
+    Assert.assert(Invariant.prob_and(1, 1) == 1);
+    Assert.assert(Invariant.prob_and(0, .5) == .5);
+    Assert.assert(Invariant.prob_and(.5, 0) == .5);
+    Assert.assert(Invariant.prob_and(1, .5) == 1);
+    Assert.assert(Invariant.prob_and(.5, 1) == 1);
+    Assert.assert(Invariant.prob_and(0, .1) == .1);
+    Assert.assert(Invariant.prob_and(.1, 0) == .1);
+    Assert.assert(Invariant.prob_and(1, .1) == 1);
+    Assert.assert(Invariant.prob_and(.1, 1) == 1);
+    Assert.assert(Invariant.prob_and(.5, .5) == .75);
+    Assert.assert(Invariant.prob_and(.1, .9) == .91);
+    Assert.assert(Invariant.prob_and(.9, .1) == .91);
+
+    Random r = new Random(20010907);
+    for (int i=0; i<100; i++) {
+      double x = r.nextDouble();
+      double y = r.nextDouble();
+      double z = r.nextDouble();
+      double r1 = Invariant.prob_and(x, y, z);
+      double r2 = Invariant.prob_and(x, Invariant.prob_and(y, z));
+      double r3 = Invariant.prob_and(Invariant.prob_and(x, y), z);
+      Assert.assert(Math.abs(r1-r2) < .000001);
+      Assert.assert(Math.abs(r1-r3) < .000001);
+      Assert.assert(Math.abs(r2-r3) < .000001);
+    }
+  }
+
+  public void test_prob_or() {
+    Assert.assert(Invariant.prob_or(0, 0) == 0);
+    Assert.assert(Invariant.prob_or(0, 1) == 0);
+    Assert.assert(Invariant.prob_or(1, 0) == 0);
+    Assert.assert(Invariant.prob_or(1, 1) == 1);
+    Assert.assert(Invariant.prob_or(0, .5) == 0);
+    Assert.assert(Invariant.prob_or(.5, 0) == 0);
+    Assert.assert(Invariant.prob_or(1, .5) == .5);
+    Assert.assert(Invariant.prob_or(.5, 1) == .5);
+    Assert.assert(Invariant.prob_or(0, .1) == 0);
+    Assert.assert(Invariant.prob_or(.1, 0) == 0);
+    Assert.assert(Invariant.prob_or(1, .1) == .1);
+    Assert.assert(Invariant.prob_or(.1, 1) == .1);
+    Assert.assert(Invariant.prob_or(.5, .5) == .5);
+    Assert.assert(Invariant.prob_or(.1, .9) == .1);
+    Assert.assert(Invariant.prob_or(.9, .1) == .1);
   }
 
 }
