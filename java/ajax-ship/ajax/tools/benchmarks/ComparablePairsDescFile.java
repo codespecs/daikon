@@ -210,9 +210,9 @@ class ComparablePairsDescFile {
 
                     lineNum++;
 
-                    if (packageName != null) {
-                        methodName = packageName + "." + methodName;
-                    }
+                    // if (packageName != null) {
+                    //     methodName = packageName + "." + methodName;
+                    // }
 
                     int offsetIndex;
 
@@ -363,9 +363,9 @@ class ComparablePairsDescFile {
 				    if (lastBaseDot > -1) {
 				      String staticClassName = baseVar.substring(0, lastBaseDot);
 
-				      if (packageName != null) {
-					  staticClassName = packageName + "." + staticClassName;
-				      }
+                                      // if (packageName != null) {
+                                      //     staticClassName = packageName + "." + staticClassName;
+                                      // }
 
 				      JBCClass staticClass = owner.getAppLoader().getClass(staticClassName);
 
