@@ -40,7 +40,7 @@
 #define ONEOFSCALAR EltOneOf
 #define ONEOFSCALARSTR "EltOneOf"
 #define SINGLESCALAR SingleSequence
-#define TOSTRING(x) x
+#define TOSTRING(x) ((!var().type.isIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
 #define NAME var().name + " elements"
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
