@@ -184,59 +184,99 @@ public class InvariantDoclet
     out.println("@c BEGIN AUTO-GENERATED INVARIANTS LISTING");
     out.println();
 
+    // Function binary values
+    String last_fb = "";
+    String fb_type = "";
+    String permutes = "";
+    String last_comment = "";
+    int permute_cnt = 0;
+
     TreeSet list = new TreeSet();
     gather_derived_classes (cd, list);
     for (Iterator itor = list.iterator(); itor.hasNext(); ) {
       ClassDoc dc = (ClassDoc) itor.next();
-      if (!dc.isAbstract()) {
+      if (dc.isAbstract())
+        continue;
+      if (dc.qualifiedName().indexOf (".test.") != -1)
+        continue;
+
+      // setup the comment for info
+      String comment = dc.commentText();
+      // Do not indent the blocks; the extra spacing throws off Info.
+      // comment = "    " + comment;
+      // comment = UtilMDE.replaceString (comment, "\n", "\n   ");
+      // Remove leading spaces, which throw off Info.
+      UtilMDE.replaceString (comment, "\n ", "\n");
+      comment = UtilMDE.replaceString (comment, "{", "@{");
+      comment = UtilMDE.replaceString (comment, "}", "@}");
+      comment = UtilMDE.replaceString (comment, "<br>", "@*");
+      comment = UtilMDE.replaceString (comment, "<p>", "@*@*");
+
+      if (dc.name().startsWith ("FunctionBinary")) {
+        String[] parts = dc.name().split ("[._]");
+        String fb_function = parts[1];
+        String fb_permute = parts[2];
+        if (last_fb.equals (fb_function)) {
+          permutes += ", " + fb_permute;
+          permute_cnt++;
+        } else /* new type of function binary */ {
+          if (last_fb != "") {
+            out.println ();
+            out.println ("@item " + fb_type + "." + last_fb + "_@{" + permutes
+                       + "@}");
+            out.println (last_comment);
+            Assert.assertTrue ((permute_cnt == 3) || (permute_cnt == 6));
+            if (permute_cnt == 3)
+              out.println ("Since the function is symmetric, only the "
+                           + "permutations xyz, yxz, and zxy are checked. ");
+            else
+              out.println ("Since the function is non-symmetric, all six "
+                           + "permutations of the variables are checked");
+          }
+          last_fb = fb_function;
+          permutes = fb_permute;
+          last_comment = comment;
+          fb_type = parts[0];
+          permute_cnt = 1;
+        }
+      } else {
         out.println ();
         out.println ("@item " + dc.name());
-        String comment = dc.commentText();
-        // Do not indent the blocks; the extra spacing throws off Info.
-        // comment = "    " + comment;
-        // comment = UtilMDE.replaceString (comment, "\n", "\n   ");
-        // Remove leading spaces, which throw off Info.
-        UtilMDE.replaceString (comment, "\n ", "\n");
-        comment = UtilMDE.replaceString (comment, "{", "@{");
-        comment = UtilMDE.replaceString (comment, "}", "@}");
-        comment = UtilMDE.replaceString (comment, "<br>", "@*");
-        comment = UtilMDE.replaceString (comment, "<p>", "@*@*");
         out.println (comment);
+      }
 
-        //Note if this invariant is turned off by default
-        if (find_enabled (dc) == 0) {
-          out.println ();
-          out.println("This invariant is not enabled by default.  "
-                      + "See the configuration option");
-          out.println(dc + ".enabled");
+      //Note if this invariant is turned off by default
+      if (find_enabled (dc) == 0) {
+        out.println ();
+        out.println("This invariant is not enabled by default.  "
+                    + "See the configuration option");
+        out.println(dc + ".enabled");
+      }
+
+      //get a list of any other configuration variables
+      Vector fields = find_fields (dc, Configuration.PREFIX);
+      for (int i = 0; i < fields.size(); i++) {
+        FieldDoc f =   (FieldDoc) fields.get (i);
+        if (f.name().equals (Configuration.PREFIX + "enabled")) {
+          fields.remove (i);
+          break;
         }
+      }
 
-        //get a list of any other configuration variables
-        Vector fields = find_fields (dc, Configuration.PREFIX);
+      //note the other configuration variables
+
+      if (fields.size() > 0) {
+        out.println();
+        out.println("See also the following configuration option"
+                    + (fields.size() > 1 ? "s" : "") + ":");
+        out.println("    @itemize @bullet");
         for (int i = 0; i < fields.size(); i++) {
-          FieldDoc f =   (FieldDoc) fields.get (i);
-          if (f.name().equals (Configuration.PREFIX + "enabled")) {
-            fields.remove (i);
-            break;
-          }
+          out.print("    @item ");
+          FieldDoc f = (FieldDoc) fields.get (i);
+          out.println(UtilMDE.replaceString(f.qualifiedName(),
+                                            Configuration.PREFIX, ""));
         }
-
-        //note the other configuration variables
-
-        if (fields.size() > 0) {
-          out.println();
-          out.println("See also the following configuration option"
-                      + (fields.size() > 1 ? "s" : "") + ":");
-          out.println("    @itemize @bullet");
-          for (int i = 0; i < fields.size(); i++) {
-            out.print("    @item ");
-            FieldDoc f = (FieldDoc) fields.get (i);
-            out.println(UtilMDE.replaceString(f.qualifiedName(),
-                                              Configuration.PREFIX, ""));
-          }
-          out.println("    @end itemize");
-        }
-
+        out.println("    @end itemize");
       }
     }
 
