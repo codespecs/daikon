@@ -4220,10 +4220,29 @@ pointer tracking), or no code that is instrumented (with respect to
 smart pointer tracking).  User code is so instrumented, but library
 functions are not, so you should use the declaration in
 @file{stdlib.h} rather than repeating it in your own code.
+
 @item
 @command{dfec} redefines certain functions defined in system headers.
 If your program tries to define these as macros or otherwise uses them
 in a non-standard way, you may experience trouble.
+
+@item
+Instrumented programs must not use nested structures or enums that are
+declared inside procedures.
+You should raise all nested structures to
+the top level (and after raising them, remove any
+``static'' modifier, which is not relevant to top-level definitions).
+
+You should also separate all declarations from uses:
+@example
+  enum { make, user } current_access;
+@end example
+Separate the declaration from the use:
+@example
+  enum current_access_type { make, user };
+  current_access_type current_access;
+@end example
+
 @end enumerate
 
 
@@ -5716,12 +5735,31 @@ using an unsupported version of gcc.  In particular, when you run
 dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
 2.96; @xref{gcc version}.
 
+@cindex ?: operator, types of operands
+
 dfec is sometimes confused by the conditional expression (@samp{?:})
 operator, saying that the two sides are of different types.  If either
 of the reported types involve ``DaikonSmartPointer'', then try
 rewriting the expression using a conditional statement (@samp{if
-... else}).  Otherwise, add an appropriate cast to give the two
-arms of the conditional expression the same type.
+... else}).
+@c Take care, because in C it is illegal to insert statements in the middle
+@c of a list of declarations.
+Otherwise, add an appropriate cast to give the two
+arms of the conditional expression the same type.  For example, change
+@example
+  char * mystring = ...;
+  foo ? "literal" : mystring;
+@end example
+to
+@example
+  char * mystring = ...;
+  foo ? (char *)"literal" : mystring;
+@end example
+or perhaps to
+@example
+  char * mystring = ...;
+  foo ? strdup("literal") : mystring;
+@end example
 
 
 @menu
@@ -5797,6 +5835,18 @@ buffer to comment out the @samp{#line} directives:
 @node    Compiler problems, Linker problems, Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
 @subsubsection Compiler problems
 
+When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
+where @file{myfile.cc} was created by dfec from @file{myfile.c}), g++
+produces error messages referring to lines of the original file
+@file{myfile.c}.  If to investigate some error you need error messages
+that refer to the instrumented code, remove all the @samp{#line}
+directives from the instrumented code.  For example, run this command
+in the @file{daikon-instrumented} directory:
+@example
+  perl -pi -e 's|^(#line.*)$|/* $1 */|' *.cc
+@end example
+
+
 @cindex DaikonSmartPointer errors in compilation of instrumented code
 @cindex function not defined errors in compilation of instrumented code
 
@@ -5810,6 +5860,17 @@ will not match and the compiler will complain about a missing
 function.  The solution is to remove the @samp{void *} from the function
 declaration in the uninstrumented code, thus making the function
 declaration consistent with the use.
+
+@cindex template-argument uses local type errors
+@cindex local type in template-argument error
+
+An error of the form ``template-argument ... uses local type'' is
+probably due to use of a nested (local) structure declaration; raise
+the declaration to top level in your C program.
+
+An error of the form @samp{`__T142459136' was not declared in this
+scope} likely means that you simultaneously declared and used an enum
+or other type.  Separate the declaration from the use.
 
 
 @node    Linker problems,  , Compiler problems, Compilation and linking of instrumented code problems
