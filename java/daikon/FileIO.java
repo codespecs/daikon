@@ -88,15 +88,11 @@ public final class FileIO
 
   // Logging Categories
 
-  /**
-   * Debug tracer for reading
-   **/
+  /** Debug tracer for reading **/
   public static final Category debugRead =
     Category.getInstance ("daikon.FileIO.read");
 
-  /**
-   * Debug tracer for printing
-   **/
+  /** Debug tracer for printing **/
   public static final Category debugPrint =
     Category.getInstance ("daikon.FileIO.printDtrace");
 
@@ -479,13 +475,9 @@ public final class FileIO
   public static LineNumberReader data_trace_reader;
   public static File data_trace_filename;
 
-  /**
-   * Read data from .dtrace file.
-   **/
-  public static void read_data_trace_file(File filename,
-					  PptMap all_ppts)
-    throws IOException
-  {
+  /** Read data from .dtrace file. **/
+  public static void read_data_trace_file(File filename, PptMap all_ppts)
+    throws IOException {
     int pptcount = 1;
 
     if (debugRead.isDebugEnabled()) {
@@ -993,7 +985,6 @@ public final class FileIO
 	*/
       }
     }
-
   }
 
   // Add derived variables
@@ -1071,6 +1062,5 @@ public final class FileIO
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException
   }
-
 
 }

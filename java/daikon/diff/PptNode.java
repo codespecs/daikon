@@ -9,9 +9,7 @@ import utilMDE.*;
  **/
 public class PptNode extends Node {
 
-  /**
-   * Either ppt1 or ppt2 may be null, but not both.
-   **/
+  /** Either ppt1 or ppt2 may be null, but not both. **/
   public PptNode(PptTopLevel ppt1, PptTopLevel ppt2) {
     super(new Pair(ppt1, ppt2));
     Assert.assert(!(ppt1 == null && ppt2 == null),

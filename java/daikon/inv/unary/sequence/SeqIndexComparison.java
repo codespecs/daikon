@@ -88,7 +88,7 @@ public final class SeqIndexComparison
   public String repr() {
     return "SeqIndexComparison" + varNames() + ": "
       + core.repr()
-      + ",no_invariant=" + no_invariant;
+      + ",falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -147,7 +147,7 @@ public final class SeqIndexComparison
   public void add_modified(long [] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
-      if (no_invariant)
+      if (falsified)
         return;
     }
   }
@@ -189,7 +189,7 @@ public final class SeqIndexComparison
   //   if (other instanceof IntComparison) {
   //     return core.isExclusiveFormula(((IntComparison) other).core);
   //   }
-  //   if (other instanceof NonEqual) {
+  //   if (other instanceof IntNonEqual) {
   //     return isExact();
   //   }
   //   return false;

@@ -232,7 +232,7 @@ public final class Member
 
   public String repr() {
     return "Member" + varNames() + ": "
-      + "no_invariant=" + no_invariant;
+      + "falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -242,14 +242,12 @@ public final class Member
       return format_java();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
-
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
     } else if (format == OutputFormat.JML) {
       return format_jml();
-
     } else {
       return format_unimplemented(format);
     }
@@ -306,7 +304,7 @@ public final class Member
   }
 
   protected double computeProbability() {
-    if (no_invariant)
+    if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else
       return Invariant.PROBABILITY_JUSTIFIED;
@@ -318,4 +316,3 @@ public final class Member
     return true;
   }
 }
-

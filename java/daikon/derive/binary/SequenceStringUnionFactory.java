@@ -43,4 +43,3 @@ public final class SequenceStringUnionFactory  extends BinaryDerivationFactory {
 	new SequenceStringUnion (seq1, seq2) };
   }
 }
-

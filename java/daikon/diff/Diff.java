@@ -45,14 +45,12 @@ public final class Diff {
 
   // added to disrupt the tree when bug hunting -LL
   private static boolean treeManip = false;
-  
+
   // this is set only when the manip flag is set "-z"
   private static PptMap manip1 = null;
   private static PptMap manip2 = null;
 
-  /**
-   * The long command line options
-   **/
+  /** The long command line options **/
   private static final String INV_SORT_COMPARATOR1_SWITCH =
     "invSortComparator1";
   private static final String INV_SORT_COMPARATOR2_SWITCH =
@@ -61,9 +59,7 @@ public final class Diff {
     "invPairComparator";
 
 
-  /**
-   * Determine which ppts should be paired together in the tree.
-   **/
+  /** Determine which ppts should be paired together in the tree. **/
   private static final Comparator PPT_COMPARATOR = new Ppt.NameComparator();
 
   /**
@@ -145,7 +141,6 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           invSortComparator2Classname = g.getOptarg();
-
         } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
           if (invPairComparatorClassname != null) {
             throw new Error("multiple --" + INV_PAIR_COMPARATOR_SWITCH +
@@ -187,11 +182,11 @@ public final class Diff {
       case 'x':
         optionSelected = true;
         xor = true;
-        break;        
+        break;
       case 'n':
         optionSelected = true;
         union = true;
-        break;        
+        break;
       case 'o':
         if (outputFile != null) {
           throw new Error
@@ -201,7 +196,7 @@ public final class Diff {
         outputFile = new File(outputFilename);
         if (! UtilMDE.canCreateAndWrite(outputFile)) {
           throw new Error("Cannot write to file " + outputFile);
-        }        
+        }
         break;
       case 'j':
         continuousJustification = true;
@@ -302,7 +297,7 @@ public final class Diff {
       manip2 = FileIO.read_serialized_pptmap(new File(manipB),
                                              false // use saved config
                                              );
-      
+
       // get the xor from these two manips
       RootNode manipRoot = diff.diffPptMap (manip1, manip2);
       XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
@@ -315,8 +310,8 @@ public final class Diff {
       // be a hack of a design, but as far as I can tell,
       // it's quite hard to build a PptMap from scratch
       // due to the creational patterns invovled. -LL
-      
-      
+
+
       // form the root with tree manips
       RootNode root = diff.diffPptMap (map1, map2);
 
@@ -340,19 +335,19 @@ public final class Diff {
         mapAr[j++] = FileIO.read_serialized_pptmap(new File (fileName),
                                                    false);
       }
-      
+
       // Cascade a lot of the different invariants into one map,
       // and then put them into map1, map2
-      
+
       // Initialize it all
       RootNode root = null;
       MultiDiffVisitor v1 = new MultiDiffVisitor (mapAr[0]);
-      
+
       for (int i = 1; i < mapAr.length; i++) {
         root = diff.diffPptMap (mapAr[i], v1.currMap);
         root.accept (v1);
       }
-      
+
       // now take the final result for the MultiDiffVisitor
       // and use it along side a null empty map
       PptMap map1 = v1.currMap;
@@ -554,7 +549,7 @@ public final class Diff {
     Assert.assert(ppt1 == null || ppt2 == null ||
                   PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
                   "Program points do not correspond");
-    
+
     List invs1;
     if (ppt1 != null) {
       invs1 = (List) map1.get(ppt1);
@@ -572,7 +567,7 @@ public final class Diff {
         // remember, only want to mess with the second list
         invs2 = findCondPpt (manip1, ppt1);
         List tmpList = findCondPpt (manip2, ppt1);
-	        
+
         invs2.addAll (tmpList);
         // must call sort or it won't work! -LL after much debugging
         Collections.sort(invs2, invSortComparator2);
@@ -590,8 +585,8 @@ public final class Diff {
       InvNode invNode = new InvNode(inv1, inv2);
       pptNode.add(invNode);
     }
-    
-    return pptNode;    
+
+    return pptNode;
   }
 
   private boolean isCond (PptTopLevel ppt) {
@@ -602,9 +597,9 @@ public final class Diff {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
     String targetName = ppt.name;
-    
+
     String targ = targetName.substring (0, targetName.indexOf(';'));
-    
+
     for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
       String somePptName = (String) i.next();
       // A conditional Ppt always contains the normal Ppt
@@ -641,26 +636,20 @@ public final class Diff {
       return cmp;
     } else {
       return defaultComparator;
-    }    
+    }
   }
 
-  /**
-   * Use the comparator for sorting the first set.
-   **/
+  /** Use the comparator for sorting the first set. **/
   public void setInvSortComparator1(Comparator c) {
     invSortComparator1 = c;
   }
 
-  /**
-   * Use the comparator for sorting the second set.
-   **/
+  /** Use the comparator for sorting the second set. **/
   public void setInvSortComparator2(Comparator c) {
     invSortComparator2 = c;
   }
 
-  /**
-   * Use the comparator for creating the pair tree.
-   **/
+  /** Use the comparator for creating the pair tree. **/
   public void setInvPairComparator(Comparator c) {
     invPairComparator = c;
   }

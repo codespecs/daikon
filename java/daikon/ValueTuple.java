@@ -19,10 +19,7 @@ import utilMDE.*;
  **/
 public final class ValueTuple implements Cloneable {
 
-  /**
-   * Debug tracer
-   **/
-
+  /** Debug tracer **/
   public static Category debug = Category.getInstance ("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.

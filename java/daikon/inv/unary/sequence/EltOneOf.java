@@ -96,7 +96,6 @@ public final class EltOneOf
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
-
   }
 
   private void sort_rep() {
@@ -111,7 +110,6 @@ public final class EltOneOf
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
-
   }
 
   public Object max_elt() {
@@ -122,7 +120,20 @@ public final class EltOneOf
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[num_elts-1]);
+  }
 
+  public long min_elt_long() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+    return elts[0];
+  }
+
+  public long max_elt_long() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+    return elts[num_elts-1];
   }
 
   // Assumes the other array is already sorted
@@ -153,7 +164,7 @@ public final class EltOneOf
 
   public String repr() {
     return "EltOneOf"  + varNames() + ": "
-      + "no_invariant=" + no_invariant
+      + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
@@ -442,11 +453,9 @@ public final class EltOneOf
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
@@ -465,7 +474,7 @@ public final class EltOneOf
   public boolean isObviousImplied() {
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    PptTopLevel pptt = ppt.parent;
     for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {
@@ -591,4 +600,3 @@ public final class EltOneOf
   }
 
 }
-

@@ -94,8 +94,8 @@ public class NoDuplicates
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 
-      //     \A i : type, j : type(   i \in X 
-      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + 
+      //     \A i : type, j : type(   i \in X
+      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
 	//         /\ j \ in X
 	" /\\ " + quant.getMembershipRestriction(1) +
 	//           i.field = j.field
@@ -121,8 +121,8 @@ public class NoDuplicates
 
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (fakeVarOrig, fakeVarOrig);
 
-      //     \A i : type, j : type(   i \in X 
-      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) + 
+      //     \A i : type, j : type(   i \in X
+      return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
 	//         /\ j \ in X
 	" /\\ " + quant.getMembershipRestriction(1) +
 	//           i.field = j.field
@@ -134,7 +134,7 @@ public class NoDuplicates
 
     } else {
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var(), var());
-    
+
       //     \A i, j(                 i \in X /\ j \ in X
       return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
 	" /\\ " + quant.getMembershipRestriction(1) +
@@ -142,7 +142,7 @@ public class NoDuplicates
 	" /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
 	//  =>      i           =       j           )
 	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
-      
+
     }
 
   }
@@ -164,7 +164,7 @@ public class NoDuplicates
   }
 
   protected double computeProbability() {
-    if (no_invariant) {
+    if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
       return Math.pow(.9, elts);
@@ -176,7 +176,7 @@ public class NoDuplicates
     // For every other NoDuplicates at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
-    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof NoDuplicates) && (inv != this) && inv.enoughSamples()) {

@@ -116,7 +116,7 @@ public final class LinearTernaryCore
 	set_tri_linear(maxsep_indices);
 
 	// Check all values against a, b, and c.
-        if (!wrapper.no_invariant) {
+        if (!wrapper.falsified) {
           // If one of these coefficients is zero, this should be a
           // LinearBinary, not a LinearTernary, term.  (It might not show up
           // as LinearBinary because there might not have been enough samples;
@@ -300,7 +300,7 @@ public final class LinearTernaryCore
   }
 
   public double computeProbability() {
-    if (wrapper.no_invariant)
+    if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     return Invariant.prob_is_ge(values_seen, MINTRIPLES);
   }

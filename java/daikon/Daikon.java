@@ -32,8 +32,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.3.8";
-  public final static String release_date = "May 11, 2002";
+  public final static String release_version = "2.3.10";
+  public final static String release_date = "June 10, 2002";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -155,9 +155,7 @@ public final class Daikon {
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer **/
   public static final Category debugTrace = Category.getInstance ("daikon.Daikon");
 
   static String usage =

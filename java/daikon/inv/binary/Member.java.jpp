@@ -269,7 +269,7 @@ public final class Member
 
   public String repr() {
     return "Member" + varNames() + ": "
-      + "no_invariant=" + no_invariant;
+      + "falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -345,7 +345,7 @@ public final class Member
   }
 
   protected double computeProbability() {
-    if (no_invariant)
+    if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else
       return Invariant.PROBABILITY_JUSTIFIED;
@@ -357,10 +357,3 @@ public final class Member
     return true;
   }
 }
-
-
-#if 0
-// Local Variables:
-// mode: java
-// End:
-#endif

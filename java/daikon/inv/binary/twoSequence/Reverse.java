@@ -35,7 +35,7 @@ public class Reverse
 
   public String repr() {
     return "Reverse" + varNames() + ": "
-      + "no_invariant=" + no_invariant;
+      + "falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -78,7 +78,7 @@ public class Reverse
 
 
   protected double computeProbability() {
-    if (no_invariant)
+    if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else
       return Invariant.PROBABILITY_JUSTIFIED;

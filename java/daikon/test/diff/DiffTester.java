@@ -218,8 +218,6 @@ public class DiffTester extends TestCase {
       imps2.add(ppt);
     }
 
-
-
   }
 
   public void testEmptyEmpty() {

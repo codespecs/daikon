@@ -99,7 +99,6 @@ public final class OneOfSequence
       throw new Error("Represents " + num_elts + " elements");
 
     return elts[0];
-
   }
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
@@ -114,7 +113,6 @@ public final class OneOfSequence
     sort_rep();
 
     return elts[0];
-
   }
 
   public Object max_elt() {
@@ -123,7 +121,6 @@ public final class OneOfSequence
     sort_rep();
 
     return elts[num_elts-1];
-
   }
 
   // Assumes the other array is already sorted
@@ -154,7 +151,7 @@ public final class OneOfSequence
 
   public String repr() {
     return "OneOfSequence"  + varNames() + ": "
-      + "no_invariant=" + no_invariant
+      + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
@@ -454,7 +451,6 @@ public final class OneOfSequence
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
-
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
@@ -564,4 +560,3 @@ public final class OneOfSequence
   }
 
 }
-

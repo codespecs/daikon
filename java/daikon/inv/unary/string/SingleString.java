@@ -26,7 +26,7 @@ public abstract class SingleString
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
   public void add(String value, int mod_index, int count) {
-    Assert.assert(! no_invariant);
+    Assert.assert(! falsified);
     Assert.assert((mod_index >= 0) && (mod_index < 2));
     if (mod_index == 0) {
       add_unmodified(value, count);
@@ -36,7 +36,7 @@ public abstract class SingleString
   }
 
   /**
-   * This method need not check for no_invariant;
+   * This method need not check for falsified;
    * that is done by the caller.
    **/
   public abstract void add_modified(String value, int count);

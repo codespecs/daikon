@@ -55,7 +55,7 @@ public final class EltNonZero
 
   public String repr() {
     return "EltNonZero" + varNames() + ": "
-      + !no_invariant + ",min=" + min + ",max=" + max;
+      + !falsified + ",min=" + min + ",max=" + max;
   }
 
   public String format_using(OutputFormat format) {
@@ -142,7 +142,7 @@ public final class EltNonZero
   }
 
   protected double computeProbability() {
-    Assert.assert(! no_invariant);
+    Assert.assert(! falsified);
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  (Perhaps only
     // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
@@ -203,7 +203,7 @@ public final class EltNonZero
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
-    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZero) && (inv != this) && inv.enoughSamples()) {

@@ -35,7 +35,6 @@ public class MatchCountVisitor extends PrintAllVisitor {
 	PptTopLevel ppt = node.getPpt1();
 	if (! (ppt instanceof PptConditional)) return;
 	else super.visit (node);
-
     }
 
   public void visit(InvNode node) {
@@ -75,9 +74,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     }
   }
 
-  /**
-   * Returns true if the pair of invariants should be printed
-   **/
+  /** Returns true if the pair of invariants should be printed **/
   protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);

@@ -71,7 +71,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   private boolean continuousJustification;
 
   public DetailedStatisticsVisitor(boolean continuousJustification) {
-    this.continuousJustification = continuousJustification; 
+    this.continuousJustification = continuousJustification;
   }
 
   public void visit(InvNode node) {
@@ -110,7 +110,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a continuous value.  If one invariant is
    * justified but the other is unjustified, the table entry is
    * incremented by the difference in justifications.
-   **/  
+   **/
   private void addFrequencyContinuous(Invariant inv1, Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
@@ -121,9 +121,9 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
       freq[type][relationship] += calculateProbabilityDifference(inv1, inv2);
       break;
     default:
-      freq[type][relationship]++;      
+      freq[type][relationship]++;
     }
-    
+
   }
 
 
@@ -227,7 +227,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   public String repr() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-    
+
     for (int type=0; type < NUM_TYPES; type++) {
       for (int rel=0; rel < NUM_RELATIONSHIPS; rel++) {
         pw.println(String.valueOf(type) + "\t" + String.valueOf(rel) + "\t" +
@@ -238,13 +238,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     return sw.toString();
   }
 
-  /**
-   * Returns a human-readable table of its data.
-   **/
+  /** Returns a human-readable table of its data. **/
   public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-    
+
     pw.println("STATISTICS");
     pw.print("       ");
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {

@@ -55,11 +55,12 @@ public abstract class Invariant
 
   // Has to be public so wrappers can read it.
   /**
-   * True exactly if the invariant is guaranteed never to hold (and should
-   * be either in the process of being destroyed or about to be
-   * destroyed.  This should never be set directly; instead, call destroy().
+   * True exactly if the invariant has been falsified:  it is guaranteed
+   * never to hold (and should be either in the process of being destroyed
+   * or about to be destroyed.  This should never be set directly; instead,
+   * call destroy().
    **/
-  public boolean no_invariant = false;
+  public boolean falsified = false;
 
   /**
    * True if we've seen all values and should ignore further add() methods.
@@ -167,11 +168,11 @@ public abstract class Invariant
    * be confident that the property "x!=0" is not a coincidence.
    * <p>
    *
-   * This method need not check the value of variable no_invariant, as the
+   * This method need not check the value of field "falsified", as the
    * caller does that.
    **/
   public double getProbability() {
-    if (no_invariant)
+    if (falsified)
       return PROBABILITY_NEVER;
     double result = computeProbability();
     if (result > PROBABILITY_NEVER) {
@@ -200,7 +201,7 @@ public abstract class Invariant
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return (!no_invariant) && enoughSamples()
+    return (!falsified) && enoughSamples()
       && (getProbability() <= dkconfig_probability_limit);
   }
 
@@ -231,7 +232,7 @@ public abstract class Invariant
    * @see flow
    **/
   public void destroy() {
-    no_invariant = true;
+    falsified = true;
     PptSlice.debugFlow.debug("Invariant destoroyed " + format() + " at " + ppt.parent.name);
     // ppt.removeInvariant(this);
   }
@@ -285,7 +286,7 @@ public abstract class Invariant
 			     )
   {
     // Check some sanity conditions
-    Assert.assert(no_invariant);
+    Assert.assert(falsified);
     Assert.assert(new_ppt.arity == ppt.arity);
     Assert.assert(permutation.length == ppt.arity);
     for (int i=0; i < ppt.arity; i++) {
@@ -301,7 +302,7 @@ public abstract class Invariant
     result = (Invariant) this.clone();
 
     // Fix up the fields
-    result.no_invariant = false;
+    result.falsified = false;
     result.ppt = new_ppt;
     // Let subclasses fix what they need to
     result = result.resurrect_done(permutation);
@@ -500,8 +501,8 @@ public abstract class Invariant
           if (name1.equals(name2)) {
             continue;
           }
-          int name1in2 = ((PptTopLevel)inv2.ppt.parent).indexOf(name1);
-          int name2in1 = ((PptTopLevel)inv1.ppt.parent).indexOf(name2);
+          int name1in2 = inv2.ppt.parent.indexOf(name1);
+          int name2in1 = inv1.ppt.parent.indexOf(name2);
           int cmp1 = (name1in2 == -1) ? 0 : vis1[i].varinfo_index - name1in2;
           int cmp2 = (name2in1 == -1) ? 0 : vis2[i].varinfo_index - name2in1;
           int cmp = MathMDE.sign(cmp1) + MathMDE.sign(cmp2);
@@ -933,7 +934,7 @@ public abstract class Invariant
    **/
   /*
   public boolean isImpliedPostcondition() {
-    PptTopLevel topLevel = (PptTopLevel) ppt.parent;
+    PptTopLevel topLevel = ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
       Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator(); // unstable
       while (entryInvariants.hasNext()) {
@@ -948,7 +949,7 @@ public abstract class Invariant
 
   private boolean isWorthPrinting_PostconditionPrestate()
   {
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    PptTopLevel pptt = ppt.parent;
 
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
       if (pptt.entry_ppt != null) {
@@ -1002,7 +1003,7 @@ public abstract class Invariant
     if (debugIsWorthPrinting.isDebugEnabled()) {
       debugIsWorthPrinting.debug("find_controlling_invariants: " + format());
     }
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    PptTopLevel pptt = ppt.parent;
 
     // Try to match inv against all controlling invariants
     Iterator controllers = pptt.controlling_ppts.iterator();

@@ -60,12 +60,12 @@ public final class NonEqualCore
 
   public void add_modified(long v1, long v2, int count) {
     if (wrapper.ppt.debugged) {
-      System.out.println("NonEqual" + wrapper.ppt.varNames() + ".add_modified("
+      System.out.println("NonEqualCore" + wrapper.ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
     if (v1 == v2) {
       if (wrapper.ppt.debugged) {
-        System.out.println("NonEqual.destroy()");
+        System.out.println("NonEqualCore.destroy()");
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -79,7 +79,7 @@ public final class NonEqualCore
   }
 
   public double computeProbability() {
-    if (wrapper.no_invariant)
+    if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     else if ((min1 > max2) || (max1 < min2))
       return Invariant.PROBABILITY_UNJUSTIFIED;

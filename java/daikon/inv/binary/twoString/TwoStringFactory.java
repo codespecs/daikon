@@ -46,7 +46,7 @@ public final class TwoStringFactory {
       // if (var1.isConstant() || var2.isConstant()) {
       //   Global.subexact_noninstantiated_invariants += 1;
       // } else {
-      //   result.add(NonEqual.instantiate(ppt));
+      //   result.add(StringNonEqual.instantiate(ppt));
       // }
 
     return result;

@@ -166,29 +166,19 @@ public final class Global {
     Logger.setupLogs(debugAll ? Logger.DEBUG : Logger.INFO);
   }
 
-  /**
-   * Category for debugging statistics output
-   **/
+  /** Category for debugging statistics output **/
   public static final Category debugStatistics = Category.getInstance("daikon.statistics");
 
-  /**
-   * Category for debugging Simplify output
-   **/
+  /** Category for debugging Simplify output **/
   public static final Category debugSimplify = Category.getInstance("daikon.simplify");
 
-  /**
-   * Category for debugging derived vars
-   **/
+  /** Category for debugging derived vars **/
   public static Category debugDerive = Category.getInstance("daikon.derive");
 
-  /**
-   * Category for debugging splitting
-   **/
+  /** Category for debugging splitting **/
   public static Category debugSplit = Category.getInstance("daikon.split");
 
-  /**
-   * Category for debugging inferences
-   **/
+  /** Category for debugging inferences **/
   public static Category debugInfer = Category.getInstance("daikon.infer");
 
 
@@ -262,6 +252,5 @@ public final class Global {
     }
     return false;
   }
-
 
 }

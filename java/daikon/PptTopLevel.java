@@ -24,12 +24,27 @@ import org.apache.log4j.Category;
 
 import utilMDE.*;
 
+
 /**
- * All information about a single program point.  A Ppt may also
- * represent just part of the data: a disjunction (see PptConditional).
- * This probably doesn't do any direct computation, instead deferring
- * that to its views that are slices and that actually contain the
- * invariants.
+ * All information about a single program point.
+ * A Ppt may also represent just part of the data: see PptConditional.
+ * <p>
+ * PptTopLevel doesn't do any direct computation, instead deferring that
+ * to its views that are slices and that actually contain the invariants.
+ * <p>
+ * The data layout is as follows:
+ * <ul>
+ * <li>A PptMap is a collection of PptTopLevel objects.
+ * <li>A PptTopLevel contains PptSlice objects, one for each set of
+ * variables at the program point.  For instance, if a PptTopLevel has
+ * variables a, b, and c, then it has three PptSlice1 objects (one for a;
+ * one for b; and one for c), three PptSlice2 objects (one for a,b; one for
+ * a,c; and one for b,c), and one PptSlice3 object (for a,b,c).
+ * <li>A PptSlice object contains invariants.  When a sample (a tuple of
+ * variable values) is fed to a PptTopLevel, it in turn feeds it to all the
+ * slices, which feed it to all the invariants, which act on it
+ * appropriately.
+ * </ul>
  **/
 public class PptTopLevel
   extends Ppt
@@ -50,21 +65,15 @@ public class PptTopLevel
    **/
   public static boolean dkconfig_pairwise_implications = false;
 
-  /**
-   * Main debug tracer
-   **/
+  /** Main debug tracer **/
   public static final Category debug =
     Category.getInstance ("daikon.PptTopLevel");
 
-  /**
-   * Debug tracer for equalTo checks
-   **/
+  /** Debug tracer for equalTo checks **/
   public static final Category debugEqualTo =
     Category.getInstance ("daikon.PptTopLevel.equalTo");
 
-  /**
-   * Debug tracer for addImplications.
-   **/
+  /** Debug tracer for addImplications. **/
   public static final Category debugAddImplications =
     Category.getInstance ("daikon.PptTopLevel.addImplications");
 
@@ -227,6 +236,7 @@ public class PptTopLevel
     return var_infos.length;
   }
 
+  // Appears to be used only in the memory monitor.
   public int num_array_vars() {
     int num_arrays=0;
     for (int i=0; i<var_infos.length; i++)
@@ -322,7 +332,7 @@ public class PptTopLevel
 
   // This is here because I think it doesn't make sense to derive except
   // from a PptTopLevel (and possibly a PptConditional?).  Perhaps move it
-  // later.
+  // to another class later.
 
   public static boolean worthDerivingFrom(VarInfo vi) {
     // This prevents derivation from ever occurring on
@@ -423,12 +433,14 @@ public class PptTopLevel
     derivation_indices[0] = var_infos.length + result.size();
 
     if (Global.debugDerive.isDebugEnabled()) {
-      Global.debugDerive.debug(name + ": derived " + result.size() + " new variables; "
-                         + "new derivation_indices: "
-                         + ArraysMDE.toString(derivation_indices));
+      Global.debugDerive.debug(name + ": derived " + result.size()
+			       + " new variables; "
+			       + "new derivation_indices: "
+			       + ArraysMDE.toString(derivation_indices));
       // Alternately, and probably more usefully
       for (int i=0; i<result.size(); i++) {
-        System.out.println("  " + ((Derivation)result.elementAt(i)).getVarInfo().name);
+        Global.debugDerive.debug
+	  ("  " + ((Derivation)result.elementAt(i)).getVarInfo().name);
       }
     }
     return result;
@@ -469,8 +481,8 @@ public class PptTopLevel
 	continue;
       }
       for (int di=0; di<unary.length; di++) {
-	UnaryDerivationFactory d = unary[di];
-        UnaryDerivation[] uderivs = d.instantiate(vi);
+	UnaryDerivationFactory udf = unary[di];
+        UnaryDerivation[] uderivs = udf.instantiate(vi);
         if (uderivs != null) {
           for (int udi=0; udi<uderivs.length; udi++) {
             UnaryDerivation uderiv = uderivs[udi];
@@ -484,11 +496,11 @@ public class PptTopLevel
       }
     }
 
-    // I want to get all pairs such that at least one of the elements is
-    // under consideration, but I want to generate each such pair only
-    // once.  This probably isn't the most efficient technique, but it's
-    // probably adequate and is not excessively complicated or excessively
-    // slow.
+    // I want to get all pairs of variables such that at least one of the
+    // variables is under consideration, but I want to generate each such
+    // pair only once.  This probably isn't the most efficient technique,
+    // but it's probably adequate and is not excessively complicated or
+    // excessively slow.
     for (int i1=0; i1<var_infos.length; i1++) {
       VarInfo vi1 = var_infos[i1];
       if (!worthDerivingFrom(vi1)) {
@@ -497,9 +509,18 @@ public class PptTopLevel
         }
 	continue;
       }
+      // This guarantees that at least one of the variables is under
+      // consideration.
+      // target1 indicates whether the first variable is under consideration.
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
-      int i2_limit = (target1 ? var_infos.length : vi_index_limit);
+      int i2_min, i2_limit;
+      if (target1) {
+        i2_min = i1+1;
+        i2_limit = var_infos.length;
+      } else {
+        i2_min = Math.max(i1+1, vi_index_min);
+        i2_limit = vi_index_limit;
+      }
       // if (Global.debugDerive.isDebugEnabled())
       //   Global.debugDerive.debug("i1=" + i1
       //                      + ", i2_min=" + i2_min
@@ -513,9 +534,6 @@ public class PptTopLevel
           }
           continue;
         }
-	// if ((!target1) && (ArraysMDE.indexOfEq(var_infos, vi2) == -1))
-	//   // Do nothing if neither of these variables is under consideration.
-	//   continue;
 	for (int di=0; di<binary.length; di++) {
 	  BinaryDerivationFactory d = binary[di];
           BinaryDerivation[] bderivs = d.instantiate(vi1, vi2);
@@ -828,6 +846,12 @@ public class PptTopLevel
 
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
+  /**
+   * When one is looking for a particular invariant, typically one should
+   * use the dynamic_constant or canBeMissing slots, which cache the
+   * invariants of most interest, instead of calling function to get the
+   * slice and then looking for the invariant in the slice.
+   **/
   public PptSlice1 findSlice(VarInfo v) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
@@ -837,6 +861,12 @@ public class PptTopLevel
     return null;
   }
 
+  /**
+   * When one is looking for a particular invariant, typically one should
+   * use the dynamic_constant or canBeMissing slots, which cache the
+   * invariants of most interest, instead of calling function to get the
+   * slice and then looking for the invariant in the slice.
+   **/
   public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
     Assert.assert(v1.varinfo_index < v2.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
@@ -849,6 +879,10 @@ public class PptTopLevel
     return null;
   }
 
+  /**
+   * Like findSlice, but it is not required that the variables be supplied
+   * in order of varinfo_index.
+   **/
   public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
     Assert.assert(v1.varinfo_index != v2.varinfo_index);
     if (v1.varinfo_index < v2.varinfo_index) {
@@ -858,6 +892,12 @@ public class PptTopLevel
     }
   }
 
+  /**
+   * When one is looking for a particular invariant, typically one should
+   * use the dynamic_constant or canBeMissing slots, which cache the
+   * invariants of most interest, instead of calling function to get the
+   * slice and then looking for the invariant in the slice.
+   **/
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     Assert.assert(v1.varinfo_index < v2.varinfo_index);
     Assert.assert(v2.varinfo_index < v3.varinfo_index);
@@ -872,6 +912,10 @@ public class PptTopLevel
     return null;
   }
 
+  /**
+   * Like findSlice, but it is not required that the variables be supplied
+   * in order of varinfo_index.
+   **/
   public PptSlice3 findSlice_unordered(VarInfo v1, VarInfo v2, VarInfo v3) {
     // bubble sort is easier than 3 levels of if-then-else
     VarInfo tmp;
@@ -926,9 +970,7 @@ public class PptTopLevel
 			   + ", vi_index_limit=" + vi_index_limit
 			   + ", var_infos.length=" + var_infos.length);
 
-    // It might pay to instantiate views for variables one at a time, to
-    // save work.  I'm not sure, but it does seem plausible.
-    // This test prevents that for now.
+    // This test prevents instantiate views for variables one at a time.
     Assert.assert(var_infos.length == vi_index_limit);
 
     if (vi_index_min == vi_index_limit)
@@ -1659,6 +1701,12 @@ public class PptTopLevel
         }
       }
     }
+
+    // This line seems to cause non-determinism for implications
+    // Run daikon on the dtrace files in:
+    // ~mharder/research/reports/thesis/example-specdiff/gcd/delta/nondeterminism
+    // Run on all, vs. all except 73.dtrace.  Nondeterministically, a
+    // difference will appear and disappear
     implication_view.invs.removeAll(to_remove);
 
 
@@ -1770,11 +1818,11 @@ public class PptTopLevel
   // Determine which elements of invs1 are the same as elements of invs2.
   // Result elements are Invariants.
   Vector same_invariants(Invariants invs1, Invariants invs2) {
-    Vector result = new Vector();
     SortedSet ss1 = new TreeSet(icfp);
     ss1.addAll(invs1);
     SortedSet ss2 = new TreeSet(icfp);
     ss2.addAll(invs2);
+    Vector result = new Vector();
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
       Pair pair = (Pair) opi.next();
       if (pair.a != null && pair.b != null) {
@@ -1790,7 +1838,7 @@ public class PptTopLevel
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Locating implied (same) invariants
+  /// Locating implied (same) invariants via the simplify theorem-prover
   ///
 
   // Created upon first use, then saved
@@ -1881,7 +1929,7 @@ public class PptTopLevel
   }
 
   /**
-   * Use the Simplify theorem prover to flag invariants which are
+   * Use the Simplify theorem prover to flag invariants that are
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
@@ -1892,7 +1940,7 @@ public class PptTopLevel
     // expressible in Simplify
     Invariant[] invs;
     {
-      // Replace parwise equality with an equivalence sets
+      // Replace parwise equality with an equivalence set
       Collection all = InvariantFilters.addEqualityInvariants(invariants_vector());
       Vector printing = new Vector(); // [Invariant]
       for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
@@ -1976,7 +2024,7 @@ public class PptTopLevel
 	  continue;
 	}
 	// We could also consider testing if the controlling invariant
-	// was removed by Simplify, but what would be point be?  Also,
+	// was removed by Simplify, but what would the point be?  Also,
 	// these "intermediate goals" might help out Simplify.
 	all_cont.append("\t\t");
 	all_cont.append(fmt);
@@ -1984,8 +2032,9 @@ public class PptTopLevel
 	// If this is the :::OBJECT ppt, also restate all of them in
 	// orig terms, since we the conditions also held upon entry.
 	if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-	  // XXX This isn't such a hot thing to do, but it isn't that
-	  // hard, and seems to work.
+	  // XXX Side-effecting the invariant to change its ppt (and then
+	  // to change it back afterward) isn't such a hot thing to do, but
+	  // it isn't that hard, and seems to work.
 	  PptSlice saved = inv.ppt;
 	  PptSlice orig = new PptSlice0(saved.parent);
 	  orig.var_infos = new VarInfo[saved.var_infos.length];
@@ -2015,7 +2064,7 @@ public class PptTopLevel
       return;
     }
 
-    // Work from back to front, and flag things which are redundant
+    // Work from back to front, and flag things that are redundant
     boolean[] present = new boolean[invs.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length-1; checking >= 0; checking--) {

@@ -47,7 +47,7 @@ public abstract class SequenceString
   }
 
   public void add(String[] v1, String v2, int mod_index, int count) {
-    Assert.assert(! no_invariant);
+    Assert.assert(! falsified);
     Assert.assert((mod_index >= 0) && (mod_index < 4));
     if (v1 == null) {
       // ppt.var_infos[seq_index].canBeNull = true; // [[INCR]]
@@ -59,7 +59,7 @@ public abstract class SequenceString
   }
 
   /**
-   * This method need not check for no_invariant;
+   * This method need not check for falsified;
    * that is done by the caller.
    **/
   public abstract void add_modified(String[] v1, String v2, int count);

@@ -45,7 +45,7 @@ public class PairwiseLinearBinary
 
   public String repr() {
     return "PairwiseLinearBinary" + varNames() + ": "
-      + "no_invariant=" + no_invariant
+      + "falsified=" + falsified
       + "; " + core.repr();
   }
 
@@ -88,7 +88,7 @@ public class PairwiseLinearBinary
       long y = y_arr[i];
 
       core.add_modified(x, y, count);
-      if (no_invariant) {
+      if (falsified) {
         // destroy() must have already been called
         return;
       }

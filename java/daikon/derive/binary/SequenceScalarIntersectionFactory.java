@@ -55,4 +55,3 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
 	new SequenceScalarIntersection (seq1, seq2) };
   }
 }
-

@@ -11,14 +11,14 @@ import org.apache.log4j.Category;
 //  Ppt:  abstract base class
 //  PptTopLevel:  pointed to by top-level PptMap object.  Contains all variables
 //    and all data for those variables.
-// These Ppts are called "Views":
 //  PptConditional:  contains only value tuples satisfying some condition.
 //    Probably doesn't make sense for parent to be a PptSlice.
 //  PptSlice:  contains a subset of variables.  Probably doesn't contain its
 //    own data structure with all the values, but depends on its parent
 //    (which may be any type of Ppt except a PptSlice, which wouldn't
 //    make good sense).
-// Actually, right now we assume all Views are Slices, which is a problem.
+// Originally, both PptConditional and PptSlice were called "Views"; but
+// presently (6/2002), only Slices are called Views.
 
 
 // Ppt is an abstract base class rather than an interface in part because
@@ -142,36 +142,37 @@ public abstract class Ppt
     return null;
   }
 
-  /**
-   * @deprecated June 15, 2001
-   **/
+  /** @deprecated June 15, 2001 **/
     public VarInfo findVar(String name) {
       return findVar(VarInfoName.parse(name));
     }
 
-  // Argument is a list of PptTopLevel objects.
-  // Result does NOT include static constants, as it will be used to
-  // index into ValueTuple, which omits static constants.
+  /**
+   * Return a list of all variables that appear in every Ppt in ppts.
+   * The result does NOT include static constants, as it will be used to
+   * index into ValueTuple, which omits static constants.
+   * @param ppts a vector of PptTopLevel objects.
+   **/
   public static final VarInfo[] common_vars(List ppts) {
-    Assert.assert(ppts.size() >= 1);
-    if (ppts.size() == 1) {
-      return ((PptTopLevel) ppts.get(0)).var_infos;
-    }
     Vector result = new Vector();
+    Assert.assert(ppts.size() > 1);
+    // First, get all the variables from the first program point.
     {
       PptTopLevel ppt = (PptTopLevel) ppts.get(0);
       VarInfo[] vars = ppt.var_infos;
       for (int i=0; i<vars.length; i++) {
         if (vars[i].isStaticConstant())
           continue;
-
         result.add(vars[i]);
       }
     }
+    // Now, for each subsequent program point, remove variables that don't
+    // appear in it.
     for (int i=1; i<ppts.size(); i++) {
       PptTopLevel ppt = (PptTopLevel) ppts.get(i);
       VarInfo[] vars = ppt.var_infos;
       // Remove from result any variables that do not occur in vars
+      VARLOOP:
       for (int rindex=result.size()-1; rindex>=0; rindex--) {
         VarInfo rvar = (VarInfo) result.get(rindex);
         boolean found = false;
@@ -179,13 +180,10 @@ public abstract class Ppt
           VarInfo vvar = vars[vindex];
           if (rvar.comparable2(vvar)) {
             // do not remove
-            found = true;
-            break;
+            continue VARLOOP;
           }
         }
-        if (! found) {
-          result.remove(rindex);
-        }
+        result.remove(rindex);
       }
     }
     return (VarInfo[]) result.toArray(new VarInfo[result.size()]);

@@ -24,6 +24,8 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SequencesPredicate.dkconfig_enabled;
+    debug.debug ("Trying to instantiate");
+
     if (!enabled) return null;
 
     if (!(var1.rep_type.isArray()) ||
@@ -32,12 +34,11 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     }
 
 
-
-    //
-    //      if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
-    //        return null;
-    //      }
-
+    // if (SequencesPredicate.dkconfig_boolOnly) {
+    //   if (!(var2.file_rep_type == ProglangType.BOOLEAN_ARRAY)) {
+    //     return null;
+    //   }
+    // }
 
 
     if (var1.derived != null || var2.derived != null) {
@@ -53,14 +54,20 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
 
     /*
 
-    if (!(var1.name instanceof VarInfoName.Field) ||
-	!(var2.name instanceof VarInfoName.Field))   return null;
-    
-    VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
-    VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
+    if (SequencesPredicate.dkconfig_fieldOnly) {
 
-    // Must be from same original data structure
-    if (!name1.term.equals(name2.term)) return null;
+      if (!(var1.name instanceof VarInfoName.Field) ||
+	  !(var2.name instanceof VarInfoName.Field))   return null;
+
+      VarInfoName.Field name1 = (VarInfoName.Field) var1.name;
+      VarInfoName.Field name2 = (VarInfoName.Field) var2.name;
+
+      // Must be from same original data structure
+      if (!name1.term.equals(name2.term)) return null;
+
+    } else {
+      // There may be predications that aren't of the x.a and x.b type
+    }
 
     // Now we finally can derive
 
@@ -82,6 +89,8 @@ public final class SequencesPredicateFactory  extends BinaryDerivationFactory {
     return new BinaryDerivation[] {
       new SequencesPredicate (var1, var2, 0, "false"),
       new SequencesPredicate (var1, var2, 1, "true"),
+      new SequencesPredicate (var1, var2, 1, "true"),
+      //new SequencesPredicate (var1, var2, 0, "nonNull", false),
     };
   }
 

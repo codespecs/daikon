@@ -22,7 +22,7 @@ class SimplifyFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    PptTopLevel topLevel = (PptTopLevel) invariant.ppt.parent;
+    PptTopLevel topLevel = invariant.ppt.parent;
 
     // Using previousTopLevel is a hack for speed.  If the current topLevel is
     // the same as previousTopLevel, then we are looking at an invariant from

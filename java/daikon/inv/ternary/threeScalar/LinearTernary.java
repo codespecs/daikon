@@ -209,7 +209,7 @@ public class LinearTernary
 
   public String repr() {
     return "LinearTernary" + varNames() + ": "
-      + "no_invariant=" + no_invariant
+      + "falsified=" + falsified
       + "; " + core.repr();
   }
 

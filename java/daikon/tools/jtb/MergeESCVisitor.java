@@ -570,7 +570,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         System.out.println("Warning: MergeESC: skipping Variable " + varname + " at " + ppt);
       } else {
         Assert.assert(vi != null);
-        PptSlice1 slice = ppt.getView(vi);
+        PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           EltNonZero enz = EltNonZero.find(slice);
           if (enz != null) {
@@ -610,7 +610,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         System.out.println("Variable not found: " + varname + " at " + ppt);
       } else {
         Assert.assert(vi != null);
-        PptSlice1 slice = ppt.getView(vi);
+        PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           System.out.println("Slice for " + vi.name.name());
           {

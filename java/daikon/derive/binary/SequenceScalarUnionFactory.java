@@ -43,4 +43,3 @@ public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
 	new SequenceScalarUnion (seq1, seq2) };
   }
 }
-

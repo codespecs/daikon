@@ -2,9 +2,9 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
 import daikon.derive.unary.SequenceLength;
-
+import utilMDE.*;
+import java.util.Iterator;
 
 public class Modulus
   extends SingleScalar
@@ -76,7 +76,7 @@ public class Modulus
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
       throw new Error("Modulus = 1");
-      // Assert.assert(no_invariant);
+      // Assert.assert(falsified);
       // // We already know this probability fails
       // return;
     } else if (no_values_seen) {
@@ -165,6 +165,17 @@ public class Modulus
     }
 
     return false;
+  }
+
+  // Look up a previously instantiated invariant.
+  public static Modulus find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof Modulus)
+        return (Modulus) inv;
+    }
+    return null;
   }
 
 }

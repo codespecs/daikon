@@ -57,7 +57,7 @@ public abstract class Splitter
 
   /**
    * Returns true or false according to whether the values in the specified
-   * VarTuple satisfy the condition represented by this Splitter.
+   * ValueTuple satisfy the condition represented by this Splitter.
    */
   public abstract boolean test(ValueTuple vt);
 

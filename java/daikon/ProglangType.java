@@ -149,9 +149,7 @@ public final class ProglangType
     }
   }
 
-  /**
-   * Convert a file representation type to an internal representation type.
-   **/
+  /** Convert a file representation type to an internal representation type. **/
   public ProglangType fileTypeToRepType() {
     if ((base == BASE_HASHCODE) || (base == BASE_BOOLEAN)
         || (base == BASE_LONG) || (base == BASE_SHORT))
@@ -178,8 +176,8 @@ public final class ProglangType
   }
 
 
-  // THIS CODE IS A HOT SPOT (~33% of runtime):
-  // t_base must be interned
+  // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
+  /** @param t_base must be interned **/
   private static ProglangType find(String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
 //    Assert.assert(t_base == t_base.intern());

@@ -50,16 +50,12 @@ public class LinearBinary
 
   public String repr() {
     return "LinearBinary" + varNames() + ": "
-      + "no_invariant=" + no_invariant
+      + "falsified=" + falsified
       + "; " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
     return core.format_using(format, var1().name, var2().name);
-  }
-
-  public String format_reversed_using(OutputFormat format) {
-    return core.format_reversed_using(format, var1().name, var2().name);
   }
 
   // XXX core needs to change to do flow

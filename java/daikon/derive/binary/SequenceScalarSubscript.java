@@ -92,4 +92,3 @@ public final class SequenceScalarSubscript
   }
 
 }
-

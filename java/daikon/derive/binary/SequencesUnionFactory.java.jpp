@@ -72,10 +72,3 @@ public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
 	new SCALARSEQUENCESUNION(seq1, seq2) };
   }
 }
-
-
-#if 0
-// Local Variables:
-// mode: java
-// End:
-#endif

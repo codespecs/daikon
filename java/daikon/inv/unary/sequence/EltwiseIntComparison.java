@@ -53,7 +53,7 @@ public class EltwiseIntComparison
   public String repr() {
     return "EltwiseIntComparison" + varNames() + ": "
       + core.repr()
-      + ",no_invariant=" + no_invariant;
+      + ",falsified=" + falsified;
   }
 
 
@@ -90,7 +90,7 @@ public class EltwiseIntComparison
       result = result + ") => " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
     } else {
       // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
-      result = result + 
+      result = result +
 	quant.getVarName(0) + "+1 = " + quant.getVarName(1) +
 	") => " +
 	quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
@@ -125,7 +125,7 @@ public class EltwiseIntComparison
   public void add_modified(long [] a, int count) {
     for (int i=1; i<a.length; i++) {
       core.add_modified(a[i-1], a[i], count);
-      if (no_invariant)
+      if (falsified)
         return;
     }
   }
@@ -172,7 +172,7 @@ public class EltwiseIntComparison
   //   if (other instanceof IntComparison) {
   //     return core.isExclusiveFormula(((IntComparison) other).core);
   //   }
-  //   if (other instanceof NonEqual) {
+  //   if (other instanceof IntNonEqual) {
   //     return isExact();
   //   }
   //   return false;

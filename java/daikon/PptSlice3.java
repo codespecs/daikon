@@ -15,8 +15,8 @@ import utilMDE.*;
 // it is automatically generated from PptSlice.java.jpp
 // *****
 
-// This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
-// is similar and mostly subsumed by VarValues.)
+// This file looks a *lot* like part of PptTopLevel.
+// (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
 public final class PptSlice3 
   extends PptSlice
@@ -37,6 +37,8 @@ public final class PptSlice3
 
   // values_cache maps (interned) values to 8-element arrays of
   // [uuu, uum, umu, umm, muu, mum, mmu, mmm].
+  // That is, the first element is (unmod,unmod,unmod);
+  // the second element is (unmod,unmod,mod); etc.
 
   int[] tm_total = new int[8 ];  // "tm" stands for "tuplemod"
 
@@ -157,6 +159,12 @@ public final class PptSlice3
   /// Manipulating values
   ///
 
+  /**
+   * This procedure accepts a sample (a ValueTuple), extracts the values
+   * from it, casts them to the proper types, and passes them along to the
+   * invariants proper.  (The invariants accept typed values rather than a
+   * ValueTuple that encapsulates objects of any type whatever.)
+   **/
   void add(ValueTuple full_vt, int count) {
     Assert.assert(! no_invariants);
     Assert.assert(invs.size() > 0);
@@ -259,7 +267,7 @@ public final class PptSlice3
       long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }
     } else {
@@ -271,19 +279,6 @@ public final class PptSlice3
     flow_and_remove_falsified();
   }
 
-  // void process() {
-  //   throw new Error("To implement");
-  // }
-
-  // boolean contains(ValueTuple vt) {
-  //   return values_cache.containsKey(vt);
-  // }
-
-  // Iterator entrySet() {
-  //   return values_cache.entrySet().iterator();
-  // }
-
-  // Perhaps it will be more efficient to do addInvariants, one day.
   public void addInvariant(Invariant invariant) {
     Assert.assert(invariant != null);
     invs.add(invariant);
@@ -321,11 +316,11 @@ public final class PptSlice3
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       }
@@ -335,4 +330,3 @@ public final class PptSlice3
   }
 
 }
-

@@ -99,7 +99,7 @@ public final class FunctionUnaryCore
   }
 
   public double computeProbability() {
-    if (wrapper.no_invariant)
+    if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     // For now, only depend on number of samples.
     // But if this prob = 0, should depend on the function as well.

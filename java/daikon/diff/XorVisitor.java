@@ -35,7 +35,7 @@ public class XorVisitor extends DepthFirstVisitor {
     if (shouldAddInv1(inv1, inv2)) {
       result.get(currentPpt).add(inv1);
     } else if (shouldAddInv2(inv1, inv2)) {
-      result.get(currentPpt).add(inv2);      
+      result.get(currentPpt).add(inv2);
     }
   }
 
@@ -49,11 +49,9 @@ public class XorVisitor extends DepthFirstVisitor {
     return ((inv2 != null && inv2.justified()) &&
             (inv1 == null || !inv1.justified()));
   }
-  
 
-  /**
-   * Returns the InvMap generated as a result of the traversal.
-   **/
+
+  /** Returns the InvMap generated as a result of the traversal. **/
   public InvMap getResult() {
     return result;
   }

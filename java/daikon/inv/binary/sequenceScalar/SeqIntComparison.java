@@ -101,7 +101,7 @@ public final class SeqIntComparison
   public String repr() {
     return "SeqIntComparison" + varNames() + ": "
       + core.repr()
-      + ",no_invariant=" + no_invariant;
+      + ",falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -158,7 +158,7 @@ public final class SeqIntComparison
   public void add_modified(long [] a, long x, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
-      if (no_invariant)
+      if (falsified)
         return;
     }
   }
@@ -200,7 +200,7 @@ public final class SeqIntComparison
   //   if (other instanceof IntComparison) {
   //     return core.isExclusiveFormula(((IntComparison) other).core);
   //   }
-  //   if (other instanceof NonEqual) {
+  //   if (other instanceof IntNonEqual) {
   //     return isExact();
   //   }
   //   return false;
@@ -212,7 +212,7 @@ public final class SeqIntComparison
     // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
 
     // Look for the same property over a supersequence of this one.
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    PptTopLevel pptt = ppt.parent;
     for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
       if (inv == this) {

@@ -164,7 +164,7 @@ public class SeqComparison
   }
 
   protected double computeProbability() {
-    if (no_invariant) {
+    if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
       // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());

@@ -78,9 +78,9 @@ public final class TwoSequenceFactory {
 
         Assert.assert(super1.name != super2.name);
 
-        // NonEqual.instantiate(ppt);
+        // SeqNonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
-
+        result.add(SubSet.instantiate(ppt));
         result.add(PairwiseIntComparison.instantiate(ppt));
         result.add(PairwiseLinearBinary.instantiate(ppt));
         for (int i=0; i<2; i++) {

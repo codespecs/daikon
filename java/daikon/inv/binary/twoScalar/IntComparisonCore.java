@@ -6,7 +6,6 @@ import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 
-// Also see NonEqual
 public final class IntComparisonCore
   implements Serializable, Cloneable
 {
@@ -138,7 +137,7 @@ public final class IntComparisonCore
   // this method and not dropping out all variables whose values are ever
   // missing.
   public double computeProbability() {
-    if (wrapper.no_invariant) {
+    if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, values_cache.num_values());

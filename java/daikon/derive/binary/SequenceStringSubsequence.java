@@ -135,4 +135,3 @@ public final class SequenceStringSubsequence
   }
 
 }
-

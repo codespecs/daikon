@@ -1,11 +1,7 @@
 package daikon.config;
 
 import java.lang.reflect.Field;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,15 +52,17 @@ public final class Configuration
    **/
   private Configuration() {
     InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
+    // System.out.println("CONFIGURABLE_LIST stream: " + stream);
     Assert.assert(stream != null, "Cannot load list of configurable "
 		  + "fields from '" + CONFIGURABLE_LIST + "'");
     try {
 
-      BufferedReader lines = new BufferedReader(new InputStreamReader(stream));
+      LineNumberReader lines = new LineNumberReader(new BufferedReader(new InputStreamReader(stream)));
       String line;
       while ((line = lines.readLine()) != null) {
 	line = line.trim();
 	if (line.length() == 0) continue;    // skip blank lines
+        if (line.charAt(0) == '#') continue; // skip comments
 
 	int n = line.lastIndexOf('.');
 	String classname = line.substring(0, n);
@@ -77,9 +75,12 @@ public final class Configuration
 	  Assert.assert(value != null);
 	  unparsed = String.valueOf(value);
 	} catch (Exception e) {
-	  throw new Error("List of configurable fields in '"
-			  + CONFIGURABLE_LIST + "' is out of date: " + e);
-	}
+          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e;
+	  throw new Error(message);
+	} catch (Error e) {     // especially NoClassDefFoundError
+          String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e;
+	  throw new Error(message);
+        }
 	addRecord(classname, fieldname, unparsed);
       }
 

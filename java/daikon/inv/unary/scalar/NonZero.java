@@ -29,12 +29,15 @@ public class NonZero
 
   private static boolean debugNonZero = false;
 
+  /** Smallest value seen so far. **/
   long min = Long.MAX_VALUE;
+  /** Largest value seen so far. **/
   long max = Long.MIN_VALUE;
+  /** Maximum value ever used for max-min in probability calculation. **/
   long range_max = 50;
 
   // If nonzero, use this as the range instead of the actual range.
-  // This lets one use a specified probability of nonzero (say, 1/10
+  // This lets one use a specified probability of nonzeroness (say, 1/10
   // for pointers).
   long override_range = 0;
   boolean pointer_type = false;
@@ -61,7 +64,7 @@ public class NonZero
 
   public String repr() {
     return "NonZero" + varNames() + ": "
-      + !no_invariant + ",min=" + min + ",max=" + max;
+      + !falsified + ",min=" + min + ",max=" + max;
   }
 
   private String zero() { return pointer_type ? "null" : "0"; }
@@ -93,8 +96,6 @@ public class NonZero
   }
 
   public void add_modified(long v, int count) {
-    // The min and max tests will simultaneously succeed exactly once (for
-    // the first value).
     if (v == 0) {
       if (debugNonZero || ppt.debugged) {
         System.out.println("NonZero.destroy(" + ppt.name + ")");
@@ -103,32 +104,31 @@ public class NonZero
       destroy();
       return;
     }
+    // The min and max tests will simultaneously succeed exactly once (for
+    // the first value).
     if (v < min) min = v;
     if (v > max) max = v;
   }
 
   protected double computeProbability() {
-    Assert.assert(! no_invariant);
-    // Maybe just use 0 as the min or max instead, and see what happens:
-    // see whether the "nonzero" invariant holds anyway.  (Perhaps only
-    // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
-    // the non-zeroness.)  In that case, do still check for no values yet
-    // received.
-    if ((override_range == 0) && ((min > 0) || (max < 0)))
+    Assert.assert(! falsified);
+    if ((override_range == 0) && ((min > 0) || (max < 0))) {
+      // Maybe just use 0 as the min or max instead, and see what happens:
+      // see whether the "nonzero" invariant holds anyway.  (Perhaps only
+      // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
+      // the non-zeroness.)  In that case, do still check for no values yet
+      // received.
       return Invariant.PROBABILITY_UNJUSTIFIED;
-    else {
+    } else {
       long range;
       if (override_range != 0) {
         range = override_range;
       } else {
         long modulus = 1;
         {
-          for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-            Invariant inv = (Invariant) itor.next();
-            if ((inv instanceof Modulus) && inv.enoughSamples()) {
-              modulus = ((Modulus) inv).modulus;
-              break;
-            }
+          Modulus mi = Modulus.find(ppt);
+          if (mi != null) {
+            modulus = mi.modulus;
           }
         }
         // Perhaps I ought to check that it's possible (given the modulus
@@ -161,7 +161,7 @@ public class NonZero
 
     // For every EltNonZero at this program point, see if this variable is
     // an obvious member of that sequence.
-    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltNonZero) && inv.enoughSamples()) {
@@ -184,7 +184,7 @@ public class NonZero
 
         // For each sequence variable, if var is an obvious member, and
         // the sequence has the same invariant, then this one is obvious.
-        PptTopLevel pptt = (PptTopLevel) ppt.parent;
+        PptTopLevel pptt = ppt.parent;
         for (int i=0; i<pptt.var_infos.length; i++) {
           VarInfo vi = pptt.var_infos[i];
           if (Member.isObviousMember(var, vi)) {

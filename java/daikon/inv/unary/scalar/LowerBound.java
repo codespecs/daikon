@@ -17,17 +17,13 @@ import java.util.*;
 // it is automatically generated from Bound.java.jpp
 // *****
 
-// One reason not to combine LowerBound and Upperbound is that they have
-// separate justifications:  one may be justified when the other is not.
-
-// What should we do if there are few values in the range?
-// This can make justifying that invariant easier, because with few values
-// naturally there are more instances of each value.
-// This might also make justifying that invariant harder, because to get more
-// than (say) twice the expected number of samples (under the assumption of
-// uniform distribution) requires many samples.
-// Which of these dominates?  Is the behavior what I want?
-
+/**
+ * LowerBound  represents the invariant 'x >  c', where c is a constant.
+ * <p>
+ * One reason not to combine LowerBound and UpperBound into a single range
+ * invariant is that they have separate justifications:  one may be
+ * justified when the other is not.
+ **/
 public class LowerBound 
   extends SingleScalar 
 {
@@ -45,17 +41,17 @@ public class LowerBound
   /**
    * Long integer.  Together with maximal_interesting, specifies the
    * range of the computed constant that is "intersting" --- the range
-   * that should be reported.  For instance, setting this to -1 and
-   * maximal_interesting to 2 would only permit output of LowerBound 
-   * invariants whose cutoff was one of (-1,0,1,2).
+   * that should be reported.  For instance, setting minimal_interesting
+   * to -1 and maximal_interesting to 2 would only permit output of
+   * LowerBound  invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
    * Long integer.  Together with minimal_interesting, specifies the
    * range of the computed constant that is "intersting" --- the range
-   * that should be reported.  For instance, setting
-   * minimal_interesting to -1 and this to 2 would only permit output
-   * of LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+   * that should be reported.  For instance, setting minimal_interesting
+   * to -1 and maximal_interesting to 2 would only permit output of
+   * LowerBound  invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
@@ -128,6 +124,7 @@ public class LowerBound
     return core.isSameFormula(((LowerBound) other).core);
   }
 
+  // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   public boolean isInteresting() {
     return (-1 < core.min1  && core.min1  < 2);
   }
@@ -140,9 +137,9 @@ public class LowerBound
     }
     OneOfScalar  oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.min1  == oo. min_elt (), since the LowerBound
+      // We could also use core.min1  == oo.MINELT(), since the LowerBound
       // will never have a core.min1  that does not appear in the OneOf.
-      if (core.min1  <=  ((Long)oo. min_elt ()).longValue()) {
+      if (core.min1  <=  oo.min_elt_long()) {
         return true;
       }
     }
@@ -156,17 +153,15 @@ public class LowerBound
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
-
       } else if (core.min1  == 0) {
         // vshift == 0
         return true;
-
       }
     }
 
     // For each sequence variable, if this is an obvious member/subsequence, and
     // it has the same invariant, then this one is obvious.
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    PptTopLevel pptt = ppt.parent;
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
 
@@ -210,4 +205,3 @@ public class LowerBound
   }
 
 }
-

@@ -18,8 +18,8 @@ import utilMDE.*;
 // it is automatically generated from PptSlice.java.jpp
 // *****
 
-// This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
-// is similar and mostly subsumed by VarValues.)
+// This file looks a *lot* like part of PptTopLevel.
+// (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
 public final class PptSlice1 
   extends PptSlice
@@ -38,7 +38,6 @@ public final class PptSlice1
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
 
-  // Used to have default access; why?
   public VarInfo var_info;
 
   // values_cache maps (interned) values to 2-element arrays of
@@ -164,6 +163,12 @@ public final class PptSlice1
   /// Manipulating values
   ///
 
+  /**
+   * This procedure accepts a sample (a ValueTuple), extracts the values
+   * from it, casts them to the proper types, and passes them along to the
+   * invariants proper.  (The invariants accept typed values rather than a
+   * ValueTuple that encapsulates objects of any type whatever.)
+   **/
   void add(ValueTuple full_vt, int count) {
     Assert.assert(! no_invariants);
     Assert.assert(invs.size() > 0);
@@ -231,7 +236,7 @@ public final class PptSlice1
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
@@ -239,7 +244,7 @@ public final class PptSlice1
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING) {
@@ -248,7 +253,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.get(i));
         SingleString inv = (SingleString) invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -256,7 +261,7 @@ public final class PptSlice1
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -264,14 +269,14 @@ public final class PptSlice1
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value, mod1, count);
       }
     } else {
@@ -282,19 +287,6 @@ public final class PptSlice1
     flow_and_remove_falsified();
   }
 
-  // void process() {
-  //   throw new Error("To implement");
-  // }
-
-  // boolean contains(ValueTuple vt) {
-  //   return values_cache.containsKey(vt);
-  // }
-
-  // Iterator entrySet() {
-  //   return values_cache.entrySet().iterator();
-  // }
-
-  // Perhaps it will be more efficient to do addInvariants, one day.
   public void addInvariant(Invariant invariant) {
     Assert.assert(invariant != null);
     invs.add(invariant);
@@ -321,7 +313,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (rep == ProglangType.DOUBLE) {
@@ -332,7 +324,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (rep == ProglangType.STRING) {
@@ -343,7 +335,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (rep == ProglangType.INT_ARRAY) {
@@ -354,7 +346,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -365,7 +357,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (rep == ProglangType.STRING_ARRAY) {
@@ -376,7 +368,7 @@ public final class PptSlice1
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else {
@@ -388,4 +380,3 @@ public final class PptSlice1
   }
 
 }
-

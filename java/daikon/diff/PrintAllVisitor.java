@@ -10,14 +10,14 @@ import daikon.inv.Invariant;
  * identical invariants.
  **/
 public class PrintAllVisitor extends DepthFirstVisitor {
-  
+
   private static DecimalFormat PROBABILITY_FORMAT =
     new DecimalFormat("0.####");
 
   private PrintStream ps;
   private boolean verbose;
   private boolean printEmptyPpts;
-  
+
   /**
    * Stores the output generated when visiting invariant nodes.  This
    * output cannot be printed directly to the print stream, because
@@ -45,14 +45,14 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     if (bufOutput.length() > 0 || printEmptyPpts) {
       Ppt ppt1 = node.getPpt1();
       Ppt ppt2 = node.getPpt2();
-      
+
       ps.print("<");
       if (ppt1 == null) {
         ps.print((String) null);
       } else {
         ps.print(ppt1.name);
       }
-      
+
       if (ppt1 == null || ppt2 == null || !ppt1.name.equals(ppt2.name)) {
         ps.print(", ");
         if (ppt2 == null) {
@@ -101,7 +101,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   /**
    * Prints an invariant, including its printability and possibly its
    * probability.  Example: "argv != null {0.0001+}"
-   * 
+   *
    **/
   protected void printInvariant(Invariant inv) {
     if (verbose) {
@@ -115,7 +115,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       printProbability(inv);
       printPrintability(inv);
       bufPrint("}");
-    }    
+    }
   }
 
   /**
@@ -132,9 +132,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     bufPrint(PROBABILITY_FORMAT.format(prob));
   }
 
-  /**
-   * Prints '+' if the invariant is worth printing, '-' otherwise.
-   **/
+  /** Prints '+' if the invariant is worth printing, '-' otherwise. **/
   private void printPrintability(Invariant inv) {
     if (inv.isWorthPrinting()) {
       bufPrint("+");
@@ -142,7 +140,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       bufPrint("-");
     }
   }
-  
+
   // "prints" by appending to a string buffer
   protected void bufPrint(String s) {
     bufOutput.append(s);
@@ -153,6 +151,6 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
   protected void bufPrintln() {
     bufOutput.append(Global.lineSep);
-  }  
+  }
 
 }

@@ -9,11 +9,17 @@ import java.util.*;
 import utilMDE.*;
 
 /**
- * This is a view on the full data (and maybe it does cacheing for a
- * while).  This will be efficient for iteration (albeit with
- * repetition), but inefficient for lookup (because we'd have to
- * iterate over all entries -- or at least all keys -- to find any
- * such instance, but we need to find them all to give a good result).
+ * A Slice is a view of some of the variables for a program point.  A
+ * program point (that is, PptTopLevel) does not directly contain
+ * invariants.  Instead, slices contain the invariants that involve (all)
+ * the Slice's variables.
+ * <p>
+ * Suppose a program point has variables A, B, C, and D.
+ * There would be 4 unary slices -- one each for variables A, B, C, and D.
+ * There would be 6 binary slices -- for {A,B}, {A,C}, {A,D}, {B,C}, {B,D},
+ * and {C,D}.
+ * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and
+ * {B,C,D}.
  **/
 
 public abstract class PptSlice
@@ -32,9 +38,7 @@ public abstract class PptSlice
    **/
   public boolean debugged;
 
-  /**
-   * Debug tracer
-   **/
+  /** Debug tracer **/
   public static final Category debug = Category.getInstance("daikon.PptSlice");
   public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
   public static final Category debugFlow = Category.getInstance("daikon.PptSlice.flow");
@@ -294,7 +298,7 @@ public abstract class PptSlice
     ArrayList to_remove = new ArrayList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
-      if (inv.no_invariant) {
+      if (inv.falsified) {
 	to_remove.add(inv);
       }
     }
@@ -351,7 +355,7 @@ public abstract class PptSlice
       for_each_invariant:
 	for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
 	  Invariant inv = (Invariant) i.next();
-	  if (! inv.no_invariant) {
+	  if (! inv.falsified) {
 	    inv.destroy();
 	  }
 	  // debug

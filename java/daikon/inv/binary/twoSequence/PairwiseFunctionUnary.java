@@ -85,7 +85,7 @@ public class PairwiseFunctionUnary
       long y = y_arr[i];
 
       core.add_modified(x, y, count);
-      if (no_invariant)
+      if (falsified)
         return;
     }
   }

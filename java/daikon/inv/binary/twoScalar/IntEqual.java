@@ -20,7 +20,6 @@ import java.util.*;
 // it is automatically generated from IntComparisons.java.jpp
 // *****
 
-// Also see NonEqual
 public final class IntEqual 
   extends TwoScalar implements Comparison 
 {
@@ -208,7 +207,7 @@ public final class IntEqual
   // this method and not dropping out all variables whose values are ever
   // missing.
   public double computeProbability() {
-    if (no_invariant) {
+    if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     }
     // Should perhaps check number of samples and be unjustified if too few
@@ -283,6 +282,7 @@ public final class IntEqual
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
+    // a+c=b+c is implied, because a=b must have also been reported.
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
 	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 
@@ -296,4 +296,3 @@ public final class IntEqual
   */ // ... [INCR]
 
 }
-

@@ -99,7 +99,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     PptSlice compar_slice = null;
     if (seqsize != null) {
       Assert.assert(sclvar.ppt == seqsize.ppt);
-      compar_slice = sclvar.ppt.getView(sclvar, seqsize);
+      compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
     }
     if (compar_slice != null) {
       if ((sclvar.varinfo_index < seqsize.varinfo_index)
@@ -194,7 +194,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     // SUPPRESS DERIVED VARIABLE: a[..i-1] where i<0 can be true
     // SUPPRESS DERIVED VARIABLE: a[i..] where i<0 can be true
     // SUPPRESS DERIVED VARIABLE: a[i+1..] where i<-1 can be true
-    PptSlice unary_slice = sclvar.ppt.getView(sclvar);
+    PptSlice unary_slice = sclvar.ppt.findSlice(sclvar);
     if (unary_slice != null) {
       LowerBound lb_inv = LowerBound.find(unary_slice);
       if (lb_inv != null) {
@@ -295,4 +295,3 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
   }
 
 }
-

@@ -104,7 +104,7 @@ public class CommonSequence
   }
 
   protected double computeProbability() {
-    if (no_invariant) {
+    if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
       return Math.pow(.9, elts);

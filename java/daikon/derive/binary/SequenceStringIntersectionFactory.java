@@ -55,4 +55,3 @@ public final class SequenceStringIntersectionFactory  extends BinaryDerivationFa
 	new SequenceStringIntersection (seq1, seq2) };
   }
 }
-

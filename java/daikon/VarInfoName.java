@@ -27,9 +27,8 @@ import java.lang.reflect.*;
 public abstract class VarInfoName
   implements Serializable, Comparable
 {
-  /**
-   * Debugging Category
-   **/
+
+  /** Debugging Category **/
   public static Category debug = Category.getInstance("daikon.VarInfoName");
 
   // We are Serializable, so we specify a version to allow changes to
@@ -459,9 +458,7 @@ public abstract class VarInfoName
   // ============================================================
   // Static inner classes that form the expression langugage
 
-  /**
-   * A simple identifier like "a", "this.foo", etc.
-   **/
+  /** A simple identifier like "a", "this.foo", etc. **/
   public static class Simple extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -660,9 +657,7 @@ public abstract class VarInfoName
     return applyFunctionOfN(function, Arrays.asList(vars));
   }
 
-  /**
-   * A function over a term, like "sum(argument)"
-   **/
+  /** A function over a term, like "sum(argument)" **/
   public static class FunctionOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -714,9 +709,7 @@ public abstract class VarInfoName
   }
 
 
-  /**
-   * A function of two variables
-   **/
+  /** A function of two variables **/
   public static class FunctionOfN extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -887,9 +880,7 @@ public abstract class VarInfoName
     return (new Field(this, field)).intern();
   }
 
-  /**
-   * A 'getter' operation for some field, like a[i].foo
-   **/
+  /** A 'getter' operation for some field, like a[i].foo **/
   public static class Field extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -959,9 +950,7 @@ public abstract class VarInfoName
     return (new TypeOf(this)).intern();
   }
 
-  /**
-   * The type of the term, like "term.class"
-   **/
+  /** The type of the term, like "term.class" **/
   public static class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1021,9 +1010,7 @@ public abstract class VarInfoName
     }
   }
 
-  /**
-   * The prestate value of a term, like "orig(term)"
-   **/
+  /** The prestate value of a term, like "orig(term)" **/
   public static class Prestate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1146,9 +1133,7 @@ public abstract class VarInfoName
     return (new Add(this, amount)).intern();
   }
 
-  /**
-   * An integer amount more or less than some other value
-   **/
+  /** An integer amount more or less than some other value **/
   public static class Add extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1204,16 +1189,12 @@ public abstract class VarInfoName
     }
   }
 
-  /**
-   * Returns a name for the decrement of this term, like "this-1".
-   **/
+  /** Returns a name for the decrement of this term, like "this-1". **/
   public VarInfoName applyDecrement() {
     return applyAdd(-1);
   }
 
-  /**
-   * Returns a name for the increment of this term, like "this+1".
-   **/
+  /** Returns a name for the increment of this term, like "this+1". **/
   public VarInfoName applyIncrement() {
     return applyAdd(+1);
   }
@@ -1226,9 +1207,7 @@ public abstract class VarInfoName
     return (new Elements(this)).intern();
   }
 
-  /**
-   * The elements of a container, like "term[]"
-   **/
+  /** The elements of a container, like "term[]" **/
   public static class Elements extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1352,9 +1331,7 @@ public abstract class VarInfoName
     return sequence.applySize().applyAdd(i);
   }
 
-  /**
-   * An element from a sequence, like "sequence[index]"
-   **/
+  /** An element from a sequence, like "sequence[index]" **/
   public static class Subscript extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1430,9 +1407,7 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
-  /**
-   * A slice of elements from a sequence, like "sequence[i..j]"
-   **/
+  /** A slice of elements from a sequence, like "sequence[i..j]" **/
   public static class Slice extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1502,14 +1477,10 @@ public abstract class VarInfoName
   }
 
 
-  /**
-   * Accept the actions of a visitor
-   **/
+  /** Accept the actions of a visitor **/
   public abstract Object accept(Visitor v);
 
-  /**
-   * Visitor framework for processing of VarInfoNames
-   **/
+  /** Visitor framework for processing of VarInfoNames **/
   public static interface Visitor {
     public Object visitSimple(Simple o);
     public Object visitSizeOf(SizeOf o);

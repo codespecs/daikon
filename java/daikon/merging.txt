@@ -13,7 +13,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 (2) Make a backup of your current version of the trunk
 
   cd $inv
-  tar cvfz daikon.ver3.tar.gz daikon.ver3/
+  tar cfz daikon.ver3.tar.gz daikon.ver3/
 
 (3) Update V3 using cvs.  Construct the date token for the first -j
     switch using the topmost (most recent) entry from the merge
@@ -21,6 +21,8 @@ branch of the $inv/java/daikon part of the repository into the trunk
 
   cd $inv/daikon.ver3
   cvs up -j "ENGINE_V2_PATCHES:10-Mar-2002 16:33" -j ENGINE_V2_PATCHES
+  make tags
+  date
 
 (4) Add a line to the top of the merge history (at the bottom of this
     file) noting the precise time you ran the cvs command in step 3.
@@ -43,6 +45,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+Fri Jun 14 16:41:28 EDT 2002 by MDE
 Wed Jun  5 15:01:52 EDT 2002 by TNW (renamed files in branch and trunk)
 Tue Jun  4 11:12:51 EDT 2002 by MDE
 Mon May 20 18:15:44 EDT 2002 by JWN

@@ -265,7 +265,7 @@ public class PrintInvariants {
             unmodified_orig_vars.add(vi_orig);
           } else {
             // out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
-            PptSlice1 view = ppt.getView(vi);
+            PptSlice1 view = ppt.findSlice(vi);
             // out.println("View " + view + " num_values=" + ((view!=null)?view.num_values():0));
             // The test "((view != null) && (view.num_values() > 0))" is
             // fallacious becuase the view might have been removed (is now
@@ -633,7 +633,7 @@ public class PrintInvariants {
       // Redundancy is separate from worth printing for now, but it
       // probably should not be, in general.
       if (Daikon.suppress_redundant_invariants_with_simplify &&
-	  ((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
+	  inv.ppt.parent.redundant_invs.contains(inv)) {
 	daikon.simplify.SessionManager.debugln("Redundant: " + inv.format());
 	continue;
       }

@@ -233,9 +233,7 @@ public final class Runtime {
 
   // Lifted directly from utilMDE/UtilMDE.java, but repeated here to make
   // this class self-contained.
-  /**
-   * Quote \, ", \n, and \r characters in the target; return a new string.
-   **/
+  /** Quote \, ", \n, and \r characters in the target; return a new string. **/
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape (or escaped) character was seen right before

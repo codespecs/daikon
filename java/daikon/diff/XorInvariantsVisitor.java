@@ -9,17 +9,17 @@ import java.util.*;
  * standard Diff on two PptMaps, that is, finds the set of
  * Invariants in the XOR set of two PptMaps.  However, while
  * those XOR Invariants were the end product of standard diff,
- * this visitor is useful when the XOR set is a means to an 
+ * this visitor is useful when the XOR set is a means to an
  * end, since you get back a data structure containing the
  * XOR set. <P> Currently, this visitor actually modifies
  * the first of the two PptMaps.  This might be an undesirable
  * design call, but creating a PptMap from scratch is difficult
- * given the constraining creational pattern in place. 
+ * given the constraining creational pattern in place.
  *
  * @author Lee Lin 2/21/2002
  **/
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
-    
+
     PptTopLevel lastPpt = null;
 
     public XorInvariantsVisitor (PrintStream ps, boolean verbose,
@@ -31,7 +31,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
     public void visit (PptNode node) {
 	lastPpt = node.getPpt1();
 	super.visit(node);
-	
+
     }
 
     public void visit (InvNode node) {
@@ -46,7 +46,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 		PptSlice someSlice = inv2.ppt;
 		VarInfo[] vars = someSlice.var_infos;
 	    slice_loop:
-		for (Iterator itor = lastPpt.views.iterator() ; 
+		for (Iterator itor = lastPpt.views.iterator() ;
 		     itor.hasNext() ; ) {
 		    PptSlice view = (PptSlice) itor.next();
 		    for (int i = 0; i < view.var_infos.length; i++) {
@@ -54,19 +54,19 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 			Vector v = vars[i].equalTo();
 			if (!v.contains(view.var_infos[i])) continue slice_loop;
 			// if it got here, these must be the same
-			// slices! 
+			// slices!
 			view.addInvariant (inv2);
 			System.out.println ("MATCH! " + inv2.format_java());
 		    }
 		}
 	    }
 	    */
-	    
-	
+
+
 	}
 	else {
 	    // otherwise gotta remove this "bad" one from both
-	    if (inv2 != null) 
+	    if (inv2 != null)
 		inv2.ppt.invs.remove (inv2);
 	    if (inv1 != null)
 		inv1.ppt.invs.remove (inv1);
@@ -76,7 +76,6 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 	    else System.out.println ("CHUCKED " + inv1.format_java());
 	    */
 	}
-
     }
 }
 

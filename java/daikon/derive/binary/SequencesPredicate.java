@@ -18,7 +18,6 @@ import org.apache.log4j.Category;
  * predicate if we know that both sequences came from the same
  * original data structure.  Derived type is the same as that of
  * the first sequence.
- *
  **/
 
 public final class SequencesPredicate
@@ -29,10 +28,7 @@ public final class SequencesPredicate
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /**
-   * Debug tracer
-   *
-   **/
+  /** Debug tracer **/
   public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesPredicate");
 
   // Variables starting with dkconfig_ should only be set via the
@@ -42,19 +38,36 @@ public final class SequencesPredicate
    **/
   public static boolean dkconfig_enabled = false;
 
+  /**
+   * Boolean.  True if we should only generate derivations on fields
+   * of the same data structure.
+   **/
+  public static boolean dkconfig_fieldOnly = true;
+
+  /**
+   * Boolean.  True if we should only generate derivations on boolean
+   * predicates.
+   **/
+  public static boolean dkconfig_boolOnly = true;
+
+
   public VarInfo var1() { return base1; }
   public VarInfo var2() { return base2; }
 
   /**
    * What value to predicate on.
-   *
    **/
   private long choose;
 
   /**
+   * Whether we keep or discard values that match this.choose.
+   **/
+  private boolean keep;
+
+
+  /**
    * What this predication is called (e.g. for choose == 0 and 1, use "false"
    * and "true").
-   *
    **/
   private String name;
 
@@ -64,6 +77,15 @@ public final class SequencesPredicate
    * @param vi2 The two variables this is based on
    **/
   public SequencesPredicate (VarInfo vi1, VarInfo vi2, long argChoose, String argName) {
+    this (vi1, vi2, argChoose, argName, true);
+  }
+
+  /**
+   * Create a new SequencesJoin derivation.
+   * @param vi1
+   * @param vi2 The two variables this is based on
+   **/
+  public SequencesPredicate (VarInfo vi1, VarInfo vi2, long argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
     name = argName;
@@ -158,7 +180,6 @@ public final class SequencesPredicate
       throw new RuntimeException("Invalid input arrays");
     }
 
-
   }
 
 
@@ -181,7 +202,6 @@ public final class SequencesPredicate
     // Hack to prevent recursion
     return "[SequencesPredicate of " + var1().name + " " +
       var2().name + " for " + name + "]";
-
   }
 
   public boolean isSameFormula(Derivation other) {

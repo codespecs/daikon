@@ -18,8 +18,8 @@ import utilMDE.*;
 // it is automatically generated from PptSlice.java.jpp
 // *****
 
-// This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
-// is similar and mostly subsumed by VarValues.)
+// This file looks a *lot* like part of PptTopLevel.
+// (That is fine; its purpose is similar and mostly subsumed by VarValues.)
 
 public final class PptSlice2 
   extends PptSlice
@@ -165,6 +165,12 @@ public final class PptSlice2
   /// Manipulating values
   ///
 
+  /**
+   * This procedure accepts a sample (a ValueTuple), extracts the values
+   * from it, casts them to the proper types, and passes them along to the
+   * invariants proper.  (The invariants accept typed values rather than a
+   * ValueTuple that encapsulates objects of any type whatever.)
+   **/
   void add(ValueTuple full_vt, int count) {
     Assert.assert(! no_invariants);
     Assert.assert(invs.size() > 0);
@@ -250,7 +256,7 @@ public final class PptSlice2
       String value2 = (String) val2;
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (string1 || string2) {
@@ -262,7 +268,7 @@ public final class PptSlice2
       long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
@@ -270,7 +276,7 @@ public final class PptSlice2
       long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
@@ -278,7 +284,7 @@ public final class PptSlice2
       long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
@@ -286,7 +292,7 @@ public final class PptSlice2
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.get(i);
-	if (inv.no_invariant) continue;
+	if (inv.falsified) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else {
@@ -297,19 +303,6 @@ public final class PptSlice2
     flow_and_remove_falsified();
   }
 
-  // void process() {
-  //   throw new Error("To implement");
-  // }
-
-  // boolean contains(ValueTuple vt) {
-  //   return values_cache.containsKey(vt);
-  // }
-
-  // Iterator entrySet() {
-  //   return values_cache.entrySet().iterator();
-  // }
-
-  // Perhaps it will be more efficient to do addInvariants, one day.
   public void addInvariant(Invariant invariant) {
     Assert.assert(invariant != null);
     invs.add(invariant);
@@ -345,11 +338,11 @@ public final class PptSlice2
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(value1, value2, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (string1 || string2) {
@@ -366,11 +359,11 @@ public final class PptSlice2
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(value1, value2, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (array1 && (!array2)) {
@@ -385,11 +378,11 @@ public final class PptSlice2
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if ((!array1) && array2) {
@@ -404,11 +397,11 @@ public final class PptSlice2
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       } else if (array1 && array2) {
@@ -423,11 +416,11 @@ public final class PptSlice2
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
               inv.add(val1, val2, mi, tm_array[mi]);
-              if (inv.no_invariant)
+              if (inv.falsified)
                 break;
             }
           }
-          if (inv.no_invariant)
+          if (inv.falsified)
             break;
         }
       }
@@ -437,4 +430,3 @@ public final class PptSlice2
   }
 
 }
-

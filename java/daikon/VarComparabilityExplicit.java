@@ -199,9 +199,7 @@ public final class VarComparabilityExplicit
 
 
 
-  /**
-   * Split on whitespace and return an array of the resulting words, interned.
-   **/
+  /** Split on whitespace and return an array of the resulting words, interned. **/
   static final String[] ws_split_to_interned_array(String s) {
     PatternMatcher re_matcher = Global.regexp_matcher;
 

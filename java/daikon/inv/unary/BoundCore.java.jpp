@@ -300,10 +300,3 @@ public class LOWERBOUNDCORE
   }
 
 }
-
-
-#if 0
-// Local Variables:
-// mode: java
-// End:
-#endif

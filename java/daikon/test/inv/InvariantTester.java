@@ -30,6 +30,7 @@ public class InvariantTester extends TestCase {
 
     Configuration.getInstance().apply
       ("daikon.inv.binary.twoScalar.FunctionUnary.enabled = 1");
+
     inv1 = FunctionUnary.instantiate(slice, null, null, false);
     Assert.assertTrue(c.compare(inv1, inv1) == 0);
 
@@ -48,10 +49,10 @@ public class InvariantTester extends TestCase {
 
     inv3 = LinearBinary.instantiate(slice);
     Assert.assertTrue(c.compare(inv3, inv1) > 0);
-    
-    inv4 = NonEqual.instantiate(slice);
+
+    inv4 = IntNonEqual.instantiate(slice);
     Assert.assertTrue(c.compare(inv1, inv4) < 0);
-         
+
     inv5 = Implication.makeImplication(ppt, inv1, inv2, false);
     inv6 = Implication.makeImplication(ppt, inv1, inv3, false);
     Assert.assertTrue(c.compare(inv5, inv6) < 0);
@@ -71,7 +72,7 @@ public class InvariantTester extends TestCase {
     inv5 = Implication.makeImplication(ppt, inv2, inv4, false);
     inv6 = Implication.makeImplication(ppt, inv4, inv1, false);
     Assert.assertTrue(c.compare(inv5, inv6) < 0);
-    
+
 
     VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);

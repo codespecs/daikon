@@ -174,7 +174,7 @@ public final class LinearBinaryCore
   }
 
   public double computeProbability() {
-    if (wrapper.no_invariant)
+    if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     return Invariant.prob_is_ge(values_seen, MINPAIRS);
   }

@@ -10,7 +10,6 @@ import utilMDE.*;
 
 import java.util.*;
 
-// Also see NonEqual
 public final class StringComparison
   extends TwoString
   implements Comparison

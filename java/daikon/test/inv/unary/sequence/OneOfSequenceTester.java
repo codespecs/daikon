@@ -75,5 +75,4 @@ public class OneOfSequenceTester extends TestCase {
     assertTrue(!inv1.isSameFormula(inv2));
   }
 
-
 }

@@ -9,6 +9,7 @@ import daikon.inv.unary.sequence.EltOneOf;
 import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
+import org.apache.log4j.Category;
 import java.util.*;
 import utilMDE.*;
 
@@ -19,6 +20,9 @@ public class SubSequence
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
+
+  private static final Category debug =
+    Category.getInstance("daikon.inv.binary.twoSequence.SubSequence");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -63,7 +67,7 @@ public class SubSequence
     return "SubSequence" + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
-      + ",no_invariant=" + no_invariant;
+      + ",falsified=" + falsified;
   }
 
   public String format_using(OutputFormat format) {
@@ -205,7 +209,7 @@ public class SubSequence
 
 
   protected double computeProbability() {
-    if (no_invariant)
+    if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else if (var1_in_var2 && var2_in_var1)
       return Invariant.PROBABILITY_UNJUSTIFIED;
@@ -218,12 +222,37 @@ public class SubSequence
     return isObviousDerived(subvar, supervar);
   }
 
+  /**
+   * Returns true if the two original variables are related in a way
+   * that makes subsequence or subset detection not informative.
+   **/
   // This is abstracted out so it can be called by SuperSequence as well.
   public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-    // System.out.println("static SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() + " " + supervar.isDerivedSubSequenceOf());
+
+    if (debug.isDebugEnabled()) {
+      debug.debug("static SubSequence.isObviousDerived(" + subvar.name +
+		  ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() +
+		  " " + supervar.isDerivedSubSequenceOf());
+    }
+
+    // For unions and intersections, it probably doesn't make sense to
+    // do subsequence or subset detection.  This is mainly to prevent
+    // invariants of the form (x subset of union(x, y)) but this means
+    // we also miss those of the form (z subset of union(x,y)) which
+    // might be useful.  Subsequence, however, seems totally useless
+    // on unions and intersections.
+    if (supervar.derived instanceof SequenceScalarIntersection ||
+	supervar.derived instanceof SequenceScalarUnion ||
+	subvar.derived instanceof SequenceScalarIntersection ||
+	subvar.derived instanceof SequenceScalarUnion ) {
+      debug.debug ("Returning true because of union or intersection");
+      return true;
+    }
+
 
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == null)
+      // If it's not a union, intersection or a subsequence, it's not obvious
       return false;
 
     if (subvar_super == supervar) {
@@ -231,6 +260,7 @@ public class SubSequence
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
       return true;
     }
+
 
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super == supervar_super) {
@@ -271,6 +301,7 @@ public class SubSequence
       }
 
     }
+
 
     /// To finish later.
     // VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
@@ -361,7 +392,7 @@ public class SubSequence
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {
             //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
-            //   Assert.assert(ppt.parent.getView(supervar_part, subvar) == null);
+            //   Assert.assert(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {
               SubSequence ss = SubSequence.find(ss_ppt);

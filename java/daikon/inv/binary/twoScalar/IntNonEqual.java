@@ -20,7 +20,6 @@ import java.util.*;
 // it is automatically generated from IntComparisons.java.jpp
 // *****
 
-// Also see NonEqual
 public final class IntNonEqual 
   extends TwoScalar  
 {
@@ -221,7 +220,7 @@ public final class IntNonEqual
   // this method and not dropping out all variables whose values are ever
   // missing.
   public double computeProbability() {
-    if (no_invariant) {
+    if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     }
     // Should perhaps check number of samples and be unjustified if too few
@@ -317,7 +316,7 @@ public final class IntNonEqual
 //         }
 //         // Now "varconst" and "varnonconst" are set.
 //         long valconst = ((Long) varconst.constantValue()).longValue();
-//         PptSlice1 nonconstslice = ((PptTopLevel)ppt.parent).findSlice(varnonconst);
+//         PptSlice1 nonconstslice = ppt.parent.findSlice(varnonconst);
 //         if (nonconstslice != null) {
 //           if (can_be_lt) {
 //             UpperBound ub = UpperBound.find(nonconstslice);
@@ -371,7 +370,7 @@ public final class IntNonEqual
 //         EltUpperBound ub = null;
 //         boolean shorter1 = false;
 //         boolean shorter2 = false;
-//         PptTopLevel parent = (PptTopLevel)ppt.parent;
+//         PptTopLevel parent = ppt.parent;
 //         if (SubSequence.isObviousDerived(ss1.base, ss2.base)) {
 //           lb = EltLowerBound.find(parent.findSlice(ss2.base));
 //           ub = EltUpperBound.find(parent.findSlice(ss2.base));
@@ -415,7 +414,7 @@ public final class IntNonEqual
 //
 //       // For each sequence variable, if this is an obvious member, and
 //       // it has the same invariant, then this one is obvious.
-//       PptTopLevel pptt = (PptTopLevel) ppt.parent;
+//       PptTopLevel pptt = ppt.parent;
 //       for (int i=0; i<pptt.var_infos.length; i++) {
 //         VarInfo vi = pptt.var_infos[i];
 //         if (Member.isObviousMember(var1, vi)) {
@@ -451,4 +450,3 @@ public final class IntNonEqual
   } // isObviousImplied
 
 }
-

@@ -256,8 +256,8 @@ public class SplitterFactory {
   static Pattern splitter_classname_pattern;
   static {
     try {
-      splitter_classname_pattern = re_compiler.compile("\\s*([^" +
-						       File.separator + "]*)\\.java");
+      splitter_classname_pattern
+        = re_compiler.compile("\\s*([^" + UtilMDE.quote(File.separator) + "]*)\\.java");
     } catch (MalformedPatternException me) {
       System.err.println("Error while compiling javafile_pattern in SplitterFactory");
       me.printStackTrace();

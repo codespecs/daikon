@@ -10,7 +10,6 @@ import java.util.Iterator;
 // holds for all (a[i], b[i]) pairs.
 
 
-// Also see NonEqual
 public class PairwiseIntComparison
   extends TwoSequence
 {
@@ -136,7 +135,7 @@ public class PairwiseIntComparison
       long v1 = a1[i];
       long v2 = a2[i];
       core.add_modified(v1, v2, count);
-      if (no_invariant)
+      if (falsified)
         return;
     }
   }

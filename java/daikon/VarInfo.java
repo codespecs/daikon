@@ -18,8 +18,8 @@ import java.io.IOException;
  * point.  This object doesn't hold the value of the variable at a
  * particular step of the program point, but can get the value it
  * holds when given a ValueTuple using the getValue() method.  VarInfo
- * also includes info on the variable's name, its declared type, its
- * file representation type, its internal type and its comparability.
+ * also includes info about the variable's name, its declared type, its
+ * file representation type, its internal type, and its comparability.
  **/
 public final class VarInfo
   implements Cloneable, Serializable
@@ -41,9 +41,7 @@ public final class VarInfo
    **/
   public VarInfoName name;      // interned
 
-  /**
-   * Type as declared in the program.
-   **/
+  /** Type as declared in the program. **/
   public ProglangType type;      // interned
 
   /**
@@ -53,13 +51,13 @@ public final class VarInfo
   public ProglangType file_rep_type;      // interned
 
   /**
-   * Type as internally stored.  This is an interface detail.
+   * Type as internally stored.  This is an interface detail and is never
+   * visible to clients.
+   * @see ProglangType.fileTypeToRepType()
    **/
   public ProglangType rep_type;      // interned
 
-  /**
-   * Comparability info
-   **/
+  /** Comparability info **/
   public VarComparability comparability;
 
   // Obtaining values
@@ -70,8 +68,8 @@ public final class VarInfo
   public int varinfo_index;
 
   /**
-   * The actual value that this variable would point to in a
-   * ValueTuple
+   * The index in a ValueTuple.  It can differ from varinfo_index due to
+   * constants (and possibly other factors).
    **/
   public int value_index;	// index in lists of values, VarTuple objects
                                 // (-1 iff is_static_constant or not yet set)
@@ -94,14 +92,10 @@ public final class VarInfo
 
   // Derived variables
 
-  /**
-   * Whether and how derived.  Null if this is not derived.
-   **/
+  /** Whether and how derived.  Null if this is not derived. **/
   public Derivation derived;
 
-  /**
-   * Vector of Derivation objects
-   **/
+  /** Vector of Derivation objects **/
   /* [INCR] is now computed on the fly by derivees() method
   public Vector derivees;
   */
@@ -182,6 +176,8 @@ public final class VarInfo
 
   static boolean legalFileRepType(ProglangType file_rep_type) {
     return (legalRepType(file_rep_type)
+            // The below types are converted into one of the rep types
+            // by ProglangType.fileTypeToRepType().
             || (file_rep_type == ProglangType.HASHCODE)
             || (file_rep_type == ProglangType.HASHCODE_ARRAY)
             || ((file_rep_type.dimensions() <= 1)
@@ -228,7 +224,7 @@ public final class VarInfo
     postState = vi.postState;
   }
 
-  // Create the prestate, or "orig()", version of the variable.
+  /** Create the prestate, or "orig()", version of the variable. **/
   public static VarInfo origVarInfo(VarInfo vi) {
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.file_rep_type,
@@ -605,6 +601,7 @@ public final class VarInfo
   //    }
   // .... [[INCR]]
 
+  /** Convenience methods that return information from the ValueTuple. **/
   public int getModified(ValueTuple vt) {
     if (is_static_constant)
       return ValueTuple.STATIC_CONSTANT;
@@ -616,10 +613,9 @@ public final class VarInfo
   public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
 
   /**
-   * Get the value of this variable at a particular step (i.e. ValueTuple)
-   * @param vt The ValueTuple from which to extract the value
+   * Get the value of this variable from a particular sample (ValueTuple)
+   * @param vt the ValueTuple from which to extract the value
    **/
-
   public Object getValue(ValueTuple vt) {
     if (is_static_constant)
       return static_constant_value;
@@ -630,8 +626,7 @@ public final class VarInfo
   public long getIntValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      // Use a distinguished value to indicate when things are going wrong.
-      return 222222;
+      throw new Error(this + ".getIntValue(" + vt + ")");
     }
     return ((Long)raw).longValue();
   }
@@ -639,8 +634,7 @@ public final class VarInfo
   public int getIndexValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      // Use a distinguished value to indicate when things are going wrong.
-      return 222222;
+      throw new Error(this + ".getIndexValue(" + vt + ")");
     }
     return ((Long)raw).intValue();
   }
@@ -656,12 +650,7 @@ public final class VarInfo
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      // I am temporarily experimenting with throwing an error instead.
-      // // Perhaps use some distinguished value here, so
-      // // that I have some indication when things are going wrong.
-      // // return 0;
-      // return new int[0];
-      throw new Error(this + "getIntArrayValue(" + vt + ")");
+      throw new Error(this + ".getIntArrayValue(" + vt + ")");
     }
     return (long[])raw;
   }
@@ -724,7 +713,7 @@ public final class VarInfo
   */ // ... [INCR]
 
   /* [INCR] ...
-  // Like equalTo, but drops out things which can be inferred to be equal
+  // Like equalTo, but drops out things that can be inferred to be equal
   // to the first.  This is called only while printing invariants.
   public Vector equalToNonobvious() {
     // should only call this for canonical variables
@@ -898,6 +887,8 @@ public final class VarInfo
   //   return false;
   // }
 
+  /** Return true if the two lists represent the same variables. **/
+  // Dead code as of 6/2002 (and probably much earlier).
   static boolean comparable2(VarInfo[] vis1, VarInfo[] vis2) {
     if (vis1.length != vis2.length)
       return false;
@@ -909,6 +900,11 @@ public final class VarInfo
     return true;
   }
 
+  /**
+   * Return true if the argument VarInfo represents the same variable as
+   * this.  Used when combining multiple program points into one, to find
+   * the common variables.
+   **/
   // simplistic implementation, just checks that the names are the same
   boolean comparable2(VarInfo other) {
     if (this.name != other.name)
@@ -925,8 +921,11 @@ public final class VarInfo
     return true;
   }
 
-  // Returns the VarInfo for the sequence from which this was derived,
-  // or null if this wasn't derived from a sequence.
+  /**
+   * Returns the VarInfo for the sequence from which this was derived,
+   * or null if this wasn't derived from a sequence.
+   * Only works for scalars.
+   **/
   public VarInfo isDerivedSequenceMember() {
     if (derived == null)
       return null;
@@ -949,14 +948,17 @@ public final class VarInfo
   }
 
   public boolean isDerivedSequenceMinMaxSum() {
-    return (derived != null)
-      && ((derived instanceof SequenceMax) ||
-	  (derived instanceof SequenceMin) ||
-	  (derived instanceof SequenceSum));
+    return ((derived != null)
+            && ((derived instanceof SequenceMax)
+                || (derived instanceof SequenceMin)
+                || (derived instanceof SequenceSum)));
   }
 
-  // Return the original sequence variable from which this derived sequence
-  // was derived.
+  /**
+   * Return the original sequence variable from which this derived sequence
+   * was derived.
+   * Only works for sequences.
+   **/
   public VarInfo isDerivedSubSequenceOf() {
     // System.out.println("isDerivedSubSequenceOf(" + name + "); derived=" + derived);
 
@@ -1070,23 +1072,17 @@ public final class VarInfo
   /// IOA functions
   ///
 
-  /**
-   * return true if declared type is Set (IOA syntax)
-   **/
+  /** return true if declared type is Set (IOA syntax) **/
   public boolean isIOASet() {
     return type.base().startsWith("Set");
   }
 
-  /**
-   * return true if declared type is Set (IOA syntax)
-   **/
+  /** return true if declared type is Set (IOA syntax) **/
   public boolean isIOAArray() {
     return type.base().startsWith("Array");
   }
 
-  /**
-   * return declared element type (in string) of IOA Set or Array
-   **/
+  /** return declared element type (in string) of IOA Set or Array **/
   public String elementTypeIOA() {
     String result;
     int begin;
@@ -1101,9 +1097,7 @@ public final class VarInfo
     return type.base().substring(begin, end);
   }
 
-  /**
-   * return declared domain type (in string) of an IOA Array
-   **/
+  /** return declared domain type (in string) of an IOA Array **/
   public String domainTypeIOA() {
     String result;
     if (this.isIOAArray()) {
@@ -1139,7 +1133,7 @@ public final class VarInfo
     }
     // different variables
     Assert.assert(vari.ppt == varj.ppt);
-    PptSlice indices_ppt = vari.ppt.getView(vari, varj);
+    PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
     if (indices_ppt == null)
       return false;
 
@@ -1278,6 +1272,11 @@ public final class VarInfo
     return otherStateEquivalent(false);
   }
 
+  /**
+   * Return some variable in the other state (pre-state if this is
+   * post-state, or vice versa) that equals this one, or null if no equal
+   * variable exists.
+   **/
   public VarInfoName otherStateEquivalent(boolean post) {
 
     // Below is equivalent to:
@@ -1334,22 +1333,16 @@ public final class VarInfo
   }
 
 
-  /**
-   * Debug tracer
-   **/
-
+  /** Debug tracer **/
   private static final Category debug = Category.getInstance ("daikon.VarInfo");
 
 
-  /**
-   * Debug tracer for simplifying expressions
-   **/
-
+  /** Debug tracer for simplifying expressions **/
   private static final Category debugSimplifyExpression = Category.getInstance ("daikon.VarInfo.simplifyExpression");
 
   /**
-   * Change the name of this VarInfo into a more simplified form,
-   * which is easier to read on display.  Don't call this during
+   * Change the name of this VarInfo by side effect into a more simplified
+   * form, which is easier to read on display.  Don't call this during
    * processing, as I think the system assumes that names don't change
    * over time (?).
    **/

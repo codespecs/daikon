@@ -26,7 +26,7 @@ public abstract class SingleStringSequence
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public void add(String[] value, int mod_index, int count) {
-    Assert.assert(! no_invariant);
+    Assert.assert(! falsified);
     Assert.assert((mod_index >= 0) && (mod_index < 2));
     Assert.assert(Intern.isInterned(value));
     // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
@@ -40,7 +40,7 @@ public abstract class SingleStringSequence
   }
 
   /**
-   * This method need not check for no_invariant;
+   * This method need not check for falsified;
    * that is done by the caller.
    **/
   public abstract void add_modified(String[] value, int count);
