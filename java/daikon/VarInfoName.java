@@ -417,7 +417,10 @@ public abstract class VarInfoName
       return term.name() + "[" + index + "]";
     }
     protected String esc_name_impl() {
-      return "\\elements(" + term.esc_name() + ")"; // XXX
+      throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements");
+    }
+    protected String esc_name_impl(String index) {
+      return term.name() + "[" + index + "]";
     }
     protected String simplify_name_impl() {
       return "(elements " + term.simplify_name() + ")";
@@ -433,13 +436,19 @@ public abstract class VarInfoName
    **/
   public VarInfoName applySubscript(VarInfoName index) {
     Assert.assert(index != null);
-    // a[] -> a[index]
-    // orig(a[]) -> orig(a[post(index)])
+    // orig(a[]) . orig(index) -> orig(a[index])
+    // orig(a[]) . index       -> orig(a[post(index)])
+    // a[]       . orig(index) -> a[orig(index)]
+    // a[]       . index       -> a[index]
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
     Assert.assert(elems != null);
-    if (finder.inPre() && !(index instanceof Prestate)) {
-      index = index.applyPrestate();
+    if (finder.inPre()) {
+      if (index instanceof Prestate) {
+	index = ((Prestate) index).term; // #1
+      } else {
+	index = index.applyPoststate();  // #2
+      }
     }
     Replacer r = new Replacer(elems, (new Subscript(elems, index)).intern());
     return r.replace(this).intern();
@@ -461,7 +470,7 @@ public abstract class VarInfoName
       return sequence.name_impl(index.name());
     }
     protected String esc_name_impl() {
-      return sequence.esc_name() + "sel" + index.esc_name(); // XXX
+      return sequence.esc_name_impl(index.esc_name());
     }
     protected String simplify_name_impl() {
       return "(select " + sequence.simplify_name() + " " + index.simplify_name() + ")";
@@ -570,7 +579,7 @@ public abstract class VarInfoName
 				);
     }
     protected String esc_name_impl() {
-      return sequence.esc_name() + "[i..j]"; // XXX
+      throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl() {
       return "(select " + sequence.simplify_name() + " " + "i..j)";
@@ -578,47 +587,6 @@ public abstract class VarInfoName
     public Object accept(Visitor v) {
       return v.visitSlice(this);
     }
-  }
-
-  /**
-   * Return an array of two strings:
-   * an esc forall quantifier, and
-   * the expression for the element at index i of the array
-   **/
-  public String[] esc_forall() {
-    String[] index_range = null; // XXX index_range();
-    if (index_range.length != 3) {
-      throw new Error("index_range failed for " + name());
-    }
-    return new String[] {
-      "\\forall int i; (" + index_range[0] + " <= i && i <= " + index_range[1] + ") ==> ",
-      index_range[2],
-    };
-  }
-
-  /**
-   * Return an array of three strings:
-   * an esc forall quantifier, and
-   * the expressions for the elements at index i of the two arrays
-   **/
-  public static String[] esc_forall_2(VarInfo var1, VarInfo var2) {
-    String[] index_range1 = var1.index_range();
-    String[] index_range2 = var2.index_range();
-    Assert.assert(index_range1.length == 3, "no index_range: " + var1.name);
-    Assert.assert(index_range2.length == 3, "no index_range: " + var2.name);
-    String[] esc_forall1 = var1.esc_forall();
-    String elt2 = index_range2[2];
-    if (! index_range1[0].equals(index_range2[0])) {
-      int i_pos = elt2.lastIndexOf("[i]");
-      elt2 = elt2.substring(0, i_pos+2)
-        + "-" + index_range1[0] + "+" + index_range2[0] + "]"
-        + elt2.substring(i_pos+3);
-    }
-    return new String[] {
-      esc_forall1[0],
-      esc_forall1[1],
-      elt2,
-    };
   }
 
   // ============================================================
@@ -726,53 +694,6 @@ public abstract class VarInfoName
   }
 
   /**
-   * A quantifier visitor can be used to search a tree and return all
-   * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
-   * nodes (variable names).  This is useful for restating the name in
-   * terms of a quantification.
-   **/
-  public static class QuantifierHelper
-    extends AbstractVisitor
-  {
-    public QuantifierHelper(VarInfoName root) {
-      root.accept(this);
-    }
-
-    // state and accessors
-    private List simples; // List[Simple]
-    private List unquant; // List[Elements || Slice]
-
-    public Iterator simples() {
-      return Collections.unmodifiableCollection(simples).iterator();
-    }
-    public Iterator unquants() {
-      return Collections.unmodifiableCollection(unquant).iterator();
-    }
-
-    // visitor methods which get the job done
-    public Object visitSimple(Simple o) {
-      simples.add(o);
-      return super.visitSimple(o);
-    }
-    public Object visitElements(Elements o) {
-      unquant.add(o);
-      return super.visitElements(o);
-    }
-    public Object visitSubscript(Subscript o) {
-      o.index.accept(this);
-      // don't visit the sequence; it is fixed with an exact
-      // subscript, so we don't want to include it in the results
-      return o.sequence.term.accept(this);
-    }
-    public Object visitSlice(Slice o) {
-      o.i.accept(this);
-      o.j.accept(this);
-      // visit the sequence, since it needs to be quantified
-      return o.sequence.accept(this);
-    }
-  }
-
-  /**
    * A Replacer is a Visitor which makes a copy of a tree, but
    * replaces some node (and it's children) with another.
    **/
@@ -838,6 +759,280 @@ public abstract class VarInfoName
     }
   }
 
+  /**
+   * A quantifier visitor can be used to search a tree and return all
+   * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
+   * nodes (variable names).  This is useful for restating the name in
+   * terms of a quantification.
+   **/
+  public static class QuantifierVisitor
+    extends AbstractVisitor
+  {
+    public QuantifierVisitor(VarInfoName root) {
+      Assert.assert(root != null);
+      simples = new HashSet();
+      unquant = new HashSet();
+      root.accept(this);
+    }
+
+    // state and accessors
+    private Set simples; // [Simple]
+    private Set unquant; // [Elements || Slice]
+
+    /**
+     * @return Collection of simple identifiers used in this
+     * expression (so that they can be checked for conflict with the
+     * quantifier variable name).
+     **/
+    public Set simples() {
+      return Collections.unmodifiableSet(simples);
+    }
+    /**
+     * @return Collection of the nodes under the root which need
+     * quantification.  (The values are either of type Elements or
+     * Slice).
+     **/
+    public Set unquants() {
+      return Collections.unmodifiableSet(unquant);
+    }
+
+    // visitor methods which get the job done
+    public Object visitSimple(Simple o) {
+      simples.add(o);
+      return super.visitSimple(o);
+    }
+    public Object visitElements(Elements o) {
+      unquant.add(o);
+      return super.visitElements(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      o.index.accept(this);
+      // don't visit the sequence; it is fixed with an exact
+      // subscript, so we don't want to include it in the results
+      return o.sequence.term.accept(this);
+    }
+    public Object visitSlice(Slice o) {
+      unquant.add(this);
+      o.i.accept(this);
+      o.j.accept(this);
+      // don't visit the sequence; we will replace the slice with the
+      // subscript, so we want to leave the elements alone
+      return o.sequence.term.accept(this);
+    }
+  }
+
+  public static class QuantHelper {
+
+    // <root, needy, index> -> <root', lower, upper>
+    public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
+      Assert.assert(root != null);
+      Assert.assert(needy != null);
+      Assert.assert(index != null);
+      Assert.assert((needy instanceof Elements) || (needy instanceof Slice));
+
+      VarInfoName root_prime, lower, upper;
+
+      VarInfoName replace_with;
+      if (needy instanceof Elements) {
+	VarInfoName sequence = ((Elements) needy).term;
+	root_prime = sequence.applySubscript(index);
+	lower = parse("0");
+	upper = sequence.applySize().applyDecrement();
+      } else if (needy instanceof Slice) {
+	Slice slice = (Slice) needy;
+	root_prime = slice.sequence.applySubscript(index);
+	lower = slice.i;
+	upper = slice.j;
+      } else {
+	// placate javac
+	return null;
+      }
+
+      Assert.assert(root_prime != null);
+      Assert.assert(lower != null);
+      Assert.assert(upper != null);
+
+      return new VarInfoName[] { root_prime, lower, upper };
+    }
+
+    // <root*> -> <<root', index, lower, upper>?*>
+    public static VarInfoName[][] quantify(VarInfoName[] roots) {
+      Assert.assert(roots != null);
+
+      VarInfoName[][] result = new VarInfoName[roots.length][];
+
+      // a Set[Simples] representing all of the simple identifiers
+      // used by these roots
+      Set simples = new HashSet();
+
+      // build helper for each roots
+      QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
+      for (int i=0; i < roots.length; i++) {
+	helper[i] = new QuantifierVisitor(roots[i]);
+	simples.addAll(helper[i].simples());
+      }
+
+      // choose names for the indicies which don't conflict, and then
+      // replace the right stuff in the term
+      char tmp = 'i';
+      for (int i=0; i < roots.length; i++) {
+	List uq = new ArrayList(helper[i].unquants());
+	if (uq.size() > 0) {
+	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
+	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
+
+	  VarInfoName idx = (new Simple(String.valueOf(tmp++))).intern();
+	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
+
+	  result[i] = replace(roots[i], uq_elt, idx);
+	}
+      }
+
+      return result;
+    }
+
+    // <root*> -> <string string*>
+    public static String[] format_esc(VarInfoName[] roots) {
+      Assert.assert(roots != null);
+	
+      VarInfoName[][] intermediate = quantify(roots);
+
+      // build the "\forall ..." predicate
+      String[] result = new String[roots.length+1];
+      StringBuffer forall;
+      {
+	forall = new StringBuffer("\\forall int ");
+	// i,j,...
+	boolean comma = false;
+	for (int i=0; i < intermediate.length; i++) {
+	  if (intermediate[i] != null) {
+	    if (comma) { forall.append(", "); }
+	    forall.append(intermediate[i][1]); // 1 = index
+	    comma = true;
+	  }
+	}
+	forall.append("; (");
+	boolean andand = false;
+	// ai <= i && i <= bi && aj <= j && j <= bj && ...
+	for (int i=0; i < intermediate.length; i++) {
+	  if (intermediate[i] != null) {
+	  if (andand) { forall.append(" && "); }
+	    forall.append(intermediate[i][2].esc_name()); // 2 = lower
+	    forall.append(" <= ");
+	    forall.append(intermediate[i][1].esc_name()); // 1 = index
+	    forall.append(" && ");
+	    forall.append(intermediate[i][1].esc_name()); // 1 = index
+	    forall.append(" <= ");
+	    forall.append(intermediate[i][3].esc_name()); // 3 = lower
+	    andand = true;
+	  }
+	}
+	forall.append(") ==> ");
+      }
+      result[0] = forall.toString();
+
+      // stringify the terms
+      for (int i=0; i < roots.length; i++) {
+	if (intermediate[i] != null) {
+	  result[i+1] = intermediate[i][0].esc_name(); // 0 = root'
+	} else {
+	  result[i+1] = roots[i].esc_name();
+	}
+      }
+
+      return result;
+    }
+
+  }
+
 }
 
 
+//    /**
+//     * @return three-element array indicating upper and lower (inclusive)
+//     * bounds of the range of this array variable, and a canonical element at
+//     * index i.
+//     **/
+//    public String[] index_range() {
+//      String working_name = name.esc_name();
+//      String pre_wrapper = "";
+//      String post_wrapper = "";
+//      while (working_name.startsWith("\\") && working_name.endsWith(")")) {
+//        int open_paren_pos = working_name.indexOf("(");
+//        pre_wrapper += working_name.substring(0, open_paren_pos+1);
+//        post_wrapper += ")";
+//        working_name = working_name.substring(open_paren_pos+1, working_name.length()-1);
+//      }
+//      String minindex;
+//      String maxindex;
+//      String arrayname;
+//      if (working_name.endsWith("[]")) {
+//        minindex = "";
+//        maxindex = "";
+//        arrayname = working_name.substring(0, working_name.length()-2);
+//      } else if (! working_name.endsWith("]")) {
+//        minindex = "";
+//        maxindex = "";
+//        arrayname = working_name;
+//      } else {
+//        int open_bracket_pos = working_name.lastIndexOf("[");
+//        arrayname = working_name.substring(0, open_bracket_pos);
+//        String subscripts = working_name.substring(open_bracket_pos+1, working_name.length()-1);
+//        int dots_pos = subscripts.indexOf("..");
+//        if (dots_pos == -1) {
+//          throw new Error("can't find \"..\" in " + working_name);
+//        }
+//        minindex = subscripts.substring(0, dots_pos);
+//        maxindex = subscripts.substring(dots_pos+2);
+
+//      }
+//      if (minindex.equals("")) minindex = "0";
+//      if (maxindex.equals("")) maxindex = arrayname + ".length-1";
+//      String arrayelt = pre_wrapper + arrayname + "[i]" + post_wrapper;
+//      // System.out.println("index_range: " + name + " ( = " + esc_name + " ) ");
+//      // System.out.println("    => " + minindex + ", " + maxindex + ", " + arrayelt);
+
+//      return new String[] { minindex, maxindex, arrayelt };
+//    }
+
+
+//    /**
+//     * Return an array of two strings:
+//     * an esc forall quantifier, and
+//     * the expression for the element at index i of the array
+//     **/
+//    public String[] esc_forall() {
+//      String[] index_range = index_range();
+//      if (index_range.length != 3) {
+//        throw new Error("index_range failed for " + name());
+//      }
+//      return new String[] {
+//        "\\forall int i; (" + index_range[0] + " <= i && i <= " + index_range[1] + ") ==> ",
+//        index_range[2],
+//      };
+//    }
+
+//    /**
+//     * Return an array of three strings:
+//     * an esc forall quantifier, and
+//     * the expressions for the elements at index i of the two arrays
+//     **/
+//    public static String[] esc_forall_2(VarInfo var1, VarInfo var2) {
+//      String[] index_range1 = var1.index_range();
+//      String[] index_range2 = var2.index_range();
+//      Assert.assert(index_range1.length == 3, "no index_range: " + var1.name);
+//      Assert.assert(index_range2.length == 3, "no index_range: " + var2.name);
+//      String[] esc_forall1 = var1.esc_forall();
+//      String elt2 = index_range2[2];
+//      if (! index_range1[0].equals(index_range2[0])) {
+//        int i_pos = elt2.lastIndexOf("[i]");
+//        elt2 = elt2.substring(0, i_pos+2)
+//          + "-" + index_range1[0] + "+" + index_range2[0] + "]"
+//          + elt2.substring(i_pos+3);
+//      }
+//      return new String[] {
+//        esc_forall1[0],
+//        esc_forall1[1],
+//        elt2,
+//      };
+//    }
