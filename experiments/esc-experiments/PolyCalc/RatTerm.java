@@ -1,4 +1,4 @@
-package ps1;
+package PolyCalc;
 
 /** RatTerm is an immutable record type representing a term in a
     polynomial expression.  The term has the form coeff * x^expt.

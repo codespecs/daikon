@@ -1,4 +1,4 @@
-package ps1;
+package PolyCalc;
 
 import javax.swing.*;
 import java.awt.*;

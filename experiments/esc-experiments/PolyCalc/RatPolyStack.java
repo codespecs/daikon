@@ -1,4 +1,4 @@
-package ps1;
+package PolyCalc;
 
 /** simple cons cell record type. */
 class Cons {
