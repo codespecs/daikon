@@ -35,14 +35,17 @@ public final class Runtime {
   // about.
   public static PrintStream dtrace;
 
-  public static void setDtrace(String filename) {
+  public static void setDtrace(String filename, boolean append) {
     // System.out.println("calling setDtrace(" + filename + ")...");
     try {
       File file = new File(filename);
       File parent = file.getParentFile();
       if (parent != null) parent.mkdirs();
-      OutputStream os = new FileOutputStream(file);
+      OutputStream os = new FileOutputStream(filename, append);
       if (filename.endsWith(".gz")) {
+        if (append)
+          throw new Error("DTRACEAPPEND environment variable is set."
+                          + "\nCannot append to gzipped dtrace file " + filename);
         os = new GZIPOutputStream(os);
       }
       dtrace = new PrintStream(new BufferedOutputStream(os, 8192));
@@ -67,7 +70,9 @@ public final class Runtime {
   public static void setDtraceMaybe(String default_filename) {
     if (dtrace == null) {
       // Jeremy used "daikon.dtrace.filename".
-      setDtrace(System.getProperty("DTRACEFILE", default_filename));
+      String filename = System.getProperty("DTRACEFILE", default_filename);
+      boolean append = System.getProperty("DTRACEAPPEND") != null;
+      setDtrace(filename, append);
     }
   }
 

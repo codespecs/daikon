@@ -2054,12 +2054,17 @@ call dfej like so:
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
+@cindex DTRACEAPPEND environment variable
+@cindex environment variable DTRACEAPPEND
 @item -tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{CLASSNAME}.dtrace}).  The filename is relative
 to the current directory at runtime, or is absolute.  If the DTRACEFILE
 environment variable is set when the instrumented program is run, it
-overrides this default.
+overrides this default.  Furthermore, if the DTRACEAPPEND environment
+variable is set to any value, the dtrace file will be appended to
+instead of overwritten; this feature does not work with compressed data
+trace files.
 
 @item -declsfiledir=@var{decldir}
 Specifies the directory in which to create
