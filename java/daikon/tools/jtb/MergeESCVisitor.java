@@ -90,6 +90,26 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f1 -> UnmodifiedClassDeclaration()
    */
   public void visit(ClassDeclaration n) {
+    handleClassDecl(n, n.f0, n.f1);
+  }
+  /**
+   * f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
+   * f1 -> UnmodifiedClassDeclaration()
+   */
+  public void visit(NestedClassDeclaration n) {
+    handleClassDecl(n, n.f0, n.f1);
+  }
+
+  // Common handler for both outer and inner classes
+  private void handleClassDecl(Node n,
+			       NodeListOptional f0,
+			       UnmodifiedClassDeclaration f1)
+  {
+    // Store and restore field names because we must deal with
+    // visiting inner classes (which have their own fields)
+    String[] old_owned = ownedFieldNames;
+    String[] old_final = finalFieldNames;
+
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor();
       n.accept(cfv);
@@ -97,10 +117,12 @@ class MergeESCVisitor extends DepthFirstVisitor {
       finalFieldNames = cfv.finalFieldNames();
     }
 
-    n.f0.accept(this);
-    n.f1.accept(this);
-  }
+    f0.accept(this);
+    f1.accept(this);
 
+    ownedFieldNames = old_owned;
+    finalFieldNames = old_final;
+  }
 
   // Insert object invariants for this class.
   // Insert owner assertions for fields.
@@ -118,7 +140,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
     n.f3.accept(this);
     n.f4.accept(this);
 
-    Vector objectInvariants = new Vector();
+    // Dead code
+    // Vector objectInvariants = new Vector();
 
     String classname = Ast.getClassName(n);
     if (classname.endsWith(".")) {
@@ -302,7 +325,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
         continue;
       } else if ((inv.indexOf(".format_esc() needs to be implemented: ") != -1)
                  || (inv.indexOf('~') != -1)
-                 || (inv.indexOf("\\new") != -1)) {
+                 || (inv.indexOf("\\new") != -1)
+		 || (inv.indexOf(".toString ") != -1)
+		 || (inv.endsWith(".toString"))) {
         // inexpressible invariant; need to check flag and output it
         continue;
       } else if (inv.startsWith("modifies ")) {

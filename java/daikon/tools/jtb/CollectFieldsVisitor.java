@@ -4,9 +4,14 @@ import java.util.*;
 import syntaxtree.*;
 import visitor.*;
 import daikon.*;
+import utilMDE.Assert;
 
-// Method "fieldDeclarations" returns a list of all FieldDeclarations
-// declared in this class or in nested/inner classes.
+// // Method "fieldDeclarations" returns a list of all FieldDeclarations
+// // declared in this class or in nested/inner classes.
+//
+// This visitor previously included nested classes, but that didn't
+// seem like the right thing to do; we should treat each class
+// individually.
 
 class CollectFieldsVisitor extends DepthFirstVisitor {
 
@@ -91,6 +96,22 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     return finalNamesArray;
   }
 
+  // Don't continue into nested classes, but do
+  // explore them if they are the root.
+  private boolean in_class = false;
+  public void visit(ClassDeclaration n) {
+    Assert.assert(! in_class);
+    in_class = true;
+    super.visit(n);
+    in_class = false;
+  }
+  public void visit(NestedClassDeclaration n) {
+    if (! in_class) {
+      in_class = true;
+      super.visit(n);
+      in_class = false;
+    }
+  }
 
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*

@@ -2,6 +2,7 @@ package daikon.tools.jtb;
 
 import java.io.*;
 import gnu.getopt.*;
+import org.apache.log4j.Category;
 import daikon.*;
 import utilMDE.*;
 import syntaxtree.*;
@@ -57,6 +58,7 @@ class MergeESC {
 
   public final static String lineSep = System.getProperty("line.separator");
 
+  public static final Category debug = Category.getInstance(MergeESC.class.getName());
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -75,6 +77,8 @@ class MergeESC {
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "hs", longopts);
     int c;
@@ -83,10 +87,15 @@ class MergeESC {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-        throw new RuntimeException("Unknown long option received: " +
-                                   option_name);
-        // Unnecessary because of exception thrown above.
-        // break;
+	if (Daikon.debugAll_SWITCH.equals(option_name)) {
+	  Global.debugAll = true;
+	} else if (Daikon.debug_SWITCH.equals(option_name)) {
+	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
+	} else {
+	  throw new RuntimeException("Unknown long option received: " +
+				     option_name);
+	}
+        break;
       case 'h':
         System.out.println(usage);
         System.exit(1);
@@ -144,6 +153,8 @@ class MergeESC {
       File outputFile = new File(javafile + "-escannotated");
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
+
+      debug.debug("Processing file " + javafile);
 
       // Annotate the file
       applyVisitor(input, output,

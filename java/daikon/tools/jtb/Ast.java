@@ -4,7 +4,6 @@ package daikon.tools.jtb;
 
 import syntaxtree.*;
 import visitor.*;
-import junit.framework.Assert;
 import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
@@ -12,6 +11,7 @@ import java.util.*;
 // import org.apache.regexp.*;
 import JavaParser;
 import ParseException;
+import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import utilMDE.ArraysMDE;
 
@@ -454,10 +454,14 @@ public class Ast {
         // fully-qualified names.
         String pptFullMethodName = ppt_name.getFullMethodName();
         int lparen = pptFullMethodName.indexOf('(');
-        Assert.assert(lparen > 0);
         int rparen = pptFullMethodName.indexOf(')');
+        Assert.assert(lparen > 0);
         Assert.assert(rparen > lparen);
-        String ppt_args_string = pptFullMethodName.substring(lparen+1, rparen);
+        String ppt_args_string = UtilMDE.
+	  arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
+	Assert.assert(ppt_args_string.startsWith("("), ppt_args_string);
+	Assert.assert(ppt_args_string.endsWith(")"), ppt_args_string);
+	ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
         String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
         if ((ppt_args.length == 1)
             && (ppt_args[0].equals(""))) {
@@ -476,6 +480,7 @@ public class Ast {
             // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
             continue;
           }
+	  // Is the below test necessary since we do arglistFromJvm above?
           String ppt_arg_nonjvm = utilMDE.UtilMDE.classnameFromJvm(ppt_arg);
           if ((ppt_arg_nonjvm != null) && typeMatch(ppt_arg_nonjvm, paramtype)) {
             // System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
@@ -488,8 +493,10 @@ public class Ast {
           // System.out.println("Unmatched; continuing");
           continue;
         }
-        // System.out.println("getMatch succeeded: " + ppt.name);
-        result.add(ppt);
+        MergeESC.debug.debug("Ast.getMatch succeeded: " + ppt.name
+			     + " to " + classname + "." + methodname
+			     + "(" + UtilMDE.join(param_types, ",") + ")");
+	result.add(ppt);
       }
     }
     return result;
@@ -868,7 +875,7 @@ public class Ast {
       return new String[0];
     }
     // Ignore first three, and last, lines
-    utilMDE.Assert.assert(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
+    Assert.assert(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name but not in invs[1].
     // utilMDE.Assert.assert(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);
     Assert.assert(invs[2].startsWith("    Variables: "));
