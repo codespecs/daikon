@@ -91,6 +91,20 @@ sub aref_compare {
     }
 }
 
+sub maybe_maybe_int {
+    my($x) = @_;
+    my $which = $x % 4;
+    if ($which == 0) {
+        return "";
+    } elsif ($which == 1) {
+        return \ "";
+    } elsif ($which == 2) {
+        return \$x;
+    } else {
+        return \ ($x + 1);
+    }
+}
+
 for my $v (5,1,12,-3,2,13,-5,-1,2,55,0,1,-4,-1,42,32768,-32768,3,5) {
     print "|$v| = ", my_abs($v), "\n";
 }
@@ -149,4 +163,8 @@ for my $i (0 .. $#refs) {
     for my $j (0 .. $#refs) {
         aref_compare($refs[$i], $refs[$j]);
     }
+}
+
+for my $i (0 .. 20) {
+    scalar maybe_maybe_int($i);
 }
