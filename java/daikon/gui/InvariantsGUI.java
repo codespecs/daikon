@@ -3,6 +3,7 @@ package daikon.gui;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.filter.*;
+import utilMDE.*;
 
 import java.io.*;
 import java.util.*;
@@ -59,9 +60,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
     public DefaultTreeModel constructTreeModel( String fileName ) {
 	PptMap pptMap = getPptMapFromFile( fileName );
-	
+
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
-	
+
 	//  Create the first level of the tree:  classes
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
@@ -71,10 +72,11 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    DefaultMutableTreeNode classNode = getChildByName( root, className );
 	    if (classNode == null) {
 		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+                Assert.assert(className != null);
 		root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
 	    }
 	}
-	
+
 	//  Create the second level of the tree: method names OR class-level ppt.
 	//  If the ppt is associated with a method, then create the method node which will
 	//  later contain entry and exit ppt's as children.  If the ppt is a class-level
@@ -82,6 +84,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	//  right away.
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
+            Assert.assert(name != null);
 	    PptName pptName = new PptName( name );
 	    String className = pptName.getFullClassName();
 	    DefaultMutableTreeNode classNode = getChildByName( root, className );
@@ -93,17 +96,25 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 		DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
 		if (programPointNode == null) {
 		    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+                    Assert.assert(topLevel != null);
 		    classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 		}
-	    }
-	    else {		// is a regular method ppt
+	    } else {		// is a regular method ppt
 		String methodName = pptName.getFullMethodName();
+                if (methodName == null) {
+                    System.out.println("No method name: " + name);
+                }
 		DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-		if (methodNode == null) 
-		    classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+		if (methodNode == null) {
+                    if (methodName != null) {
+                        classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+                    } else {
+                        classNode.add( new DefaultMutableTreeNode( className )); // Create a node for this method
+                    }
+                }
 	    }
 	}
-	
+
 	//  Create the third level of the tree:  method entry and exit points
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
@@ -127,9 +138,10 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    //  after ENTER and before EXIT97.
 	    if (programPointNode == null) {
 		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-		if (methodNode.getChildCount() == 0)
+		if (methodNode.getChildCount() == 0) {
+                    Assert.assert(topLevel != null);
 		    methodNode.add( new DefaultMutableTreeNode( topLevel ));
-		else {
+                } else {
 		    int exitNumber = pptName.getPointSubscript();
 		    int childIndex;
 		    for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
@@ -138,6 +150,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 			if (currentChildExitNumber > exitNumber)
 			    break;
 		    }
+                    Assert.assert(topLevel != null);
 		    methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
 		}
 	    } else
@@ -145,7 +158,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	}
 
 	//  TODO:  Sort the method nodes within a class.  Sort according to a method's exit number.
-	
+
 	return new DefaultTreeModel( root );
     }
 
@@ -174,8 +187,13 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
 	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
-	    if (child.toString().equals( name ))
+            if (child == null) {
+                System.out.println("Null child");
+            } else if (child.toString() == null) {
+                System.out.println("Null toString() for child of type " + child.getClass());
+            } else if (child.toString().equals( name )) {
 		return child;
+            }
 	}
 	return null;
     }
@@ -197,7 +215,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
- 
+
 	JPanel topPanel = new JPanel();	// includes control panel and tree
 	topPanel.setLayout( new BoxLayout( topPanel, BoxLayout.Y_AXIS ));
 	//	topPanel.add( controlPanel );
@@ -368,7 +386,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 										     BorderFactory.createEtchedBorder()),
 						 title );
     }
-    
+
     JCheckBox createFilterCheckBox( String text, int id ) {
 	JCheckBox checkBox = new JCheckBox( text, true );
 	checkBox.addActionListener( this );
@@ -464,7 +482,7 @@ class InvFileFilter extends FileFilter {
 	else
 	    return false;
     }
-    
+
     public String getDescription() {
         return ".inv files";
     }
@@ -484,7 +502,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
     List tableHeights = new ArrayList();
     List tableModels = new ArrayList();
     int currentTableIndex;	// used by scrollToTable methods
-    
+
     public InvariantTablesPanel( TreeSelectionModel treeSelectionModel, InvariantFilters invariantFilters, JList variablesList ) {
 	this.scrollPane.setViewportView( panel );
 	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
@@ -651,7 +669,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	int height = table.getPreferredSize().height + table.getRowHeight();
 	scrollPane.setPreferredSize( new Dimension( width, height ));
     }
-    
+
     void scrollToCurrentTable() {
 	int height = 0;
 	for (int i=0; i < currentTableIndex; i++)
@@ -695,7 +713,7 @@ class VariableSelectionDialog extends JDialog {
 		variablesPanel.add( checkBox );
 		variableCheckBoxes.add( checkBox );
 	    }
-	
+
         JButton cancelButton = new JButton( "Cancel" );
 	final VariableSelectionDialog variableSelectionDialog = this;	// wish I could use this$0
         cancelButton.addActionListener( new ActionListener() {
@@ -769,7 +787,7 @@ class InvariantTableModel extends AbstractTableModel {
     public Class getColumnClass( int column ) {
 	return columnClasses[ column ];
     }
-    
+
     public void updateInvariantList( InvariantFilters invariantFilters ) {
 	filteredInvariants = new ArrayList();
 	for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
