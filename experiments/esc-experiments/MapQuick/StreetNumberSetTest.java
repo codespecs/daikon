@@ -137,7 +137,39 @@ public class StreetNumberSetTest extends TestCase {
       j++;
     }
   }
-    
+
+
+  public void testEquals1() {
+    StreetNumberSet s1 = new StreetNumberSet("1-7");
+    StreetNumberSet s2 = new StreetNumberSet("1-7");
+    assertEquals("'1-7'is not equal to '1-7'", s1, s2);
+  }
+
+  public void testEquals2() {
+    StreetNumberSet s1 = new StreetNumberSet("1-7");
+    StreetNumberSet s2 = new StreetNumberSet("3-5,1,7");
+    assertEquals("'3-5,1,7'is not equal to '1-7'", s1, s2);
+  }
+
+  public void testEquals3() {
+    StreetNumberSet s1 = new StreetNumberSet("1-7");
+    assertEquals("'1-7'is equal to null", s1, null);
+    assertEquals("'1-7'is equal to a String", s1, "Foo");
+  }
+
+  public void testEquals4() {
+    StreetNumberSet s1 = new StreetNumberSet("1-7");
+    StreetNumberSet s3 = new StreetNumberSet("3-7");
+    assert("'1-7' equals '3-7'", !s1.equals(s3));
+    assert("'3-7' equals '1-7'", !s3.equals(s1));
+  }
+  
+  public void testHashCode() {
+    StreetNumberSet s1 = new StreetNumberSet("1-7");
+    StreetNumberSet s2 = new StreetNumberSet("3-5,1,7");
+    assertEquals("hashCode for '1-7' is not the same as hashCode for '3-5,1,7'",
+                 s1.hashCode(), s2.hashCode());
+  }
 
   
   // Tell JUnit what order to run the tests in
@@ -154,6 +186,11 @@ public class StreetNumberSetTest extends TestCase {
       suite.addTest(new StreetNumberSetTest("testOrderMixedParity"));
       suite.addTest(new StreetNumberSetTest("testOrderMixedParity2"));
       suite.addTest(new StreetNumberSetTest("testOrderRigorous"));
+      suite.addTest(new StreetNumberSetTest("testEquals1"));
+      suite.addTest(new StreetNumberSetTest("testEquals2"));
+      suite.addTest(new StreetNumberSetTest("testEquals3"));
+      suite.addTest(new StreetNumberSetTest("testEquals4"));
+      suite.addTest(new StreetNumberSetTest("testHashCode"));
       return suite;
     }
   
