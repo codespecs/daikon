@@ -44,6 +44,39 @@ ppt: foo.f():::EXIT35
   assert: inv("x == (y << z)", x, y, z)
 
 #
+# Test binary suppressions
+#
+decl: daikon/test/SampleTester.decls
+ppt: foo.f():::EXIT35
+  vars: x y 
+  data: - 1
+  data: 1 1 
+  assert: inv ("x == y", x, y)
+  assert: !inv ("x >= y", x, y)
+  data: 2 1 
+  assert: inv ("x >= y", x, y)
+
+#
+# Test recursive suppressions
+#
+decl: daikon/test/SampleTester.decls
+ppt: foo.f():::EXIT35
+  vars: x y z
+  data: - 1 -
+  data: - - 1
+  data: 1 1 1
+  assert: inv ("x == y", x, y)
+  assert: inv ("y == z", y, z)
+  assert: !inv ("y >= z", y, z)
+  assert: !inv ("x == (java.lang.Math.max(y, z))", x, y, z)
+  data: 2 2 1
+  assert: inv("y >= z", y, z)
+  assert: !inv ("x == (java.lang.Math.max(y, z))", x, y, z)
+  data: 2 1 2
+  assert: !inv("y >= z", y, z)
+  assert: inv ("x == (java.lang.Math.max(y, z))", x, y, z)
+
+#
 # test flowing of global invariants
 #
 decl: daikon/test/SampleTesterGlobal.decls
