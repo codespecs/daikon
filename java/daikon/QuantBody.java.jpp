@@ -72,7 +72,7 @@ The correct way to build the system is to run 'make'.
   #define CAST_TYPE double
 #endif
 
-#if (defined(INT) || defined(LONG))
+#if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 
   /**
    * Pairwise divides
@@ -125,6 +125,10 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
+
+#endif
+
+#if (defined(INT) || defined(LONG))
 
   /**
    * Pairwise bitwise complement
@@ -637,6 +641,9 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
+/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, _TYPE elt) {
+  return eltsLEQ(arr, elt);
+}
 
 #if (defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
 /*@ pure */ public static boolean eltsLEQ(_TYPE[] arr, COMPATIBLE elt) {
@@ -645,6 +652,10 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
+/*@ pure */ public static boolean eltsLTE(_TYPE[] arr, COMPATIBLE elt) {
+  return eltsLEQ(arr, elt);
+}
+
 #endif
 
 #endif
@@ -1284,6 +1295,11 @@ The correct way to build the system is to run 'make'.
   }
   return true;
 }
+
+/*@ pure */ public static boolean indexLTE(_TYPE[] seq) {
+  return indexLEQ(seq);
+}
+
 
 /**
  * indexGT
