@@ -6,7 +6,7 @@ export LC_ALL=${LC_ALL:-en_US}
 export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
 export DAIKONDIR=${DAIKONPARENT}/invariants
 
-if [ ! -d "${DAIKONDIR}" ] then
+if [ ! -d "${DAIKONDIR}" ]; then
   echo "*****"
   echo "pag-daikon.bashrc cannot find ${DAIKONDIR}"
   echo "Please check out Daikon to correct this problem."
@@ -14,7 +14,7 @@ if [ ! -d "${DAIKONDIR}" ] then
   # Default to Michael Ernst's version of Daikon, just so references to
   # ${INV} don't die, preventing this script from completing.  This is not
   # tested.
-  if [ -d /afs/csail.mit.edu/u/m/mernst/research/invariants ] then
+  if [ -d /afs/csail.mit.edu/u/m/mernst/research/invariants ]; then
     export DAIKONDIR=/afs/csail.mit.edu/u/m/mernst/research/invariants
   fi
 fi
