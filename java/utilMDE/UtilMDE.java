@@ -34,9 +34,11 @@ public final class UtilMDE {
   public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)));
+      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)),
+                                          "ISO-8859-1");
     } else {
-      file_reader = new FileReader(filename);
+      file_reader = new InputStreamReader(new FileInputStream(filename),
+                                          "ISO-8859-1");
     }
     return new BufferedReader(file_reader);
   }
@@ -54,9 +56,11 @@ public final class UtilMDE {
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
     if (filename.endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)), "ISO-8859-1");
+      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(filename)),
+                                          "ISO-8859-1");
     } else {
-      file_reader = new FileReader(filename);
+      file_reader = new InputStreamReader(new FileInputStream(filename),
+                                          "ISO-8859-1");
     }
     return new LineNumberReader(file_reader);
   }
