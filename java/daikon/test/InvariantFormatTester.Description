@@ -41,4 +41,12 @@ java daikon.test.InvariantFormatTester --generate_goals
 Note that this test is included in the set of tests performed by the master tester, and
 so it is not necessary to seperately run this test except to generate goal files.
 
+When creating a new invariant to test with this framework, you must create a (public) constructor
+for that invariant to be constructed from a PptSlice (restatement: a method "public <invariant name>(PptSlice)"
+must exist) or else this framework will not be able to instantiate the invariant.
+
+Furthermore, this framework cannot parse complex types from files unless they contain a
+"public (Object) valueOf(String s)" function. Otherwise the program has no was of knowing how
+to create such an object from a string. All primitives and the String type are already recognized.
+
 If you have further questions or comments (or bug reports), email amdunn@mit.edu
