@@ -213,14 +213,19 @@ doc-jdk-lookup: doc
 
 ../doc/config-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
-		--texinfo ../doc/config-options.texinfo \
+		--texinfo $@ \
 		$(JAVADOC_PACKAGES)
 
 doc-dkconfig: ../doc/config-options.texinfo
 
+daikon/config/configurable.txt: $(JAVA_FILES)
+	javadoc -doclet daikon.config.ParameterDoclet \
+		--list $@ \
+		$(JAVADOC_PACKAGES)
+
 ../doc/category-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDocletCategory \
-		--texinfo ../doc/category-options.texinfo \
+		--texinfo $@ \
 		$(JAVADOC_PACKAGES)
 
 doc-category: ../doc/category-options.texinfo
