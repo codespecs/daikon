@@ -1,0 +1,2 @@
+#!/bin/sh
+$DAIKONDIR/valgrind-kvasir/inst/bin/valgrind --skin=dfec-v2 "$@"
