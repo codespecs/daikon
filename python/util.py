@@ -122,6 +122,10 @@ def same_elements_setwise(seq1, seq2):
     s2.sort()
     return s1 == s2
 
+def format_as_set(seq1):
+    result = `seq1`
+    return "{" + result[1:-1] + "}"
+
 ## Could be useful, I guess.
 # def intersects(seq1, seq2):
 #     """Return true if sequences seq1 and seq2 contain any element in common."""
