@@ -558,13 +558,13 @@ public class DeclWriter extends DaikonWriter
         String name = field.getName();
         int modifiers = field.getModifiers();
 
-        if (Modifier.isStatic(modifiers))
+        if (offset.length() > 0) //already starting with "this"
         {
-            offset = offset + field.getDeclaringClass().getName() + ".";
             outFile.print(offset + name);
         }
-        else if (offset.length() > 0) //already starting with "this"
+        else if (Modifier.isStatic(modifiers))
         {
+            offset = offset + field.getDeclaringClass().getName() + ".";
             outFile.print(offset + name);
         }
         else

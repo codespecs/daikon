@@ -1034,14 +1034,14 @@ public class DTraceWriter extends DaikonWriter
     private String traceClassVar(Field field, String offset, Object val)
     {
         String fieldName = field.getName();
-        if (Modifier.isStatic(field.getModifiers()))
+        if (offset.length() > 0)
+        {
+            outFile.print(offset + fieldName);
+        }
+        else if (Modifier.isStatic(field.getModifiers()))
         {
             offset = offset + field.getDeclaringClass().getName() + ".";
             outFile.print(offset + field.getName());
-        }
-        else if (offset.length() > 0)
-        {
-            outFile.print(offset + fieldName);
         }
         else
         {
