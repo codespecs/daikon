@@ -87,7 +87,6 @@ public abstract class PptSlice
    * PptSlice partial ordering is a direct function of VarInfo partial
    * ordering, and is the minimal nearest set of slices which are
    * higher for all VarInfos.
-   * @see po_higher
    **/
   public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
   public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
@@ -202,7 +201,13 @@ public abstract class PptSlice
   }
 
   /**
-   * ...
+   * Adds the given "slice" as one that is immediately lower in the
+   * partial ordering, thus modifying po_lower and po_lower_vis.  The
+   * argument is not a PptSlice because slices come and go over time.
+   * Instead, it is specified as a PptTopLevel a subset of its
+   * variables.
+   *
+   * @see po_lower, po_lower_vis
    **/
   protected void addToOnePO(PptTopLevel adj,
 			    VarInfo[] slice_vis)
@@ -356,6 +361,17 @@ public abstract class PptSlice
 	for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
 	  Invariant inv = (Invariant) i.next();
 	  if (! inv.falsified) {
+	    // The invariant must be destroyed before it can be
+	    // resurrected.  The invariant objects that flow are
+	    // provided by the invariants that are falsified or change
+	    // formula.  Depending on the characteristics of the
+	    // invariant, the item to flow may or may not have been
+	    // destroyed.  Invariants that do not compute any
+	    // constants will often just flow themselves directly,
+	    // which means that inv will be falsified.  On the other
+	    // hand, invariants with weaken-able computed constants
+	    // will flow a close of themselves before they weaken.  In
+	    // that case, inv will not yet have been falsified.
 	    inv.destroy();
 	  }
 	  // debug

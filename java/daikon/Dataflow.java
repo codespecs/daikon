@@ -397,7 +397,8 @@ public class Dataflow
   /** Our own record type for programming ease */
   static final class VarAndSource {
     public final VarInfo var; // variable at the head of a search path
-    public final int source;  // its source index in receiving_ppt.var_infos
+    public final int source;  // var's source index in var_infos from the ppt
+                              // where the flow computation originated.
     public VarAndSource(VarInfo _var, int _source) {
       var = _var;
       source = _source;
@@ -483,7 +484,9 @@ public class Dataflow
 					     boolean all_steps,
 					     boolean higher)
   {
-    // First element in worklist is the full receiving_ppt
+    // Create the worklist 'first' to contain all variables in ppt.
+    // That way, the result will be the flow from the whole program
+    // point.
     int nvis = ppt.var_infos.length;
     List first = new ArrayList(nvis);
     for (int i = 0; i < nvis; i++) {
@@ -495,15 +498,20 @@ public class Dataflow
 
 
   /**
-   * Compute a flow path for one ppt.  Can go higher or lower, and
-   * either just one step up or all paths to completion.
+   * Compute a flow path for a portion of one ppt.  Can go higher or
+   * lower, and either just one step up or all paths to completion.
+   *
+   * @param start subset of ppt's VarInfos to use as the starting
+   * point for the flow computation.
    **/
   public static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
 					     VarInfo[] start,
 					     boolean all_steps,
 					     boolean higher)
   {
-    // First element in worklist is the full receiving_ppt
+    // We could assert that start's VarInfos are from ppt.
+
+    // Construct the worklist 'first' from the argument 'start'.
     List first = new ArrayList(start.length);
     for (int i = 0; i < start.length; i++) {
       first.add(new VarAndSource(start[i], start[i].varinfo_index));
@@ -512,6 +520,13 @@ public class Dataflow
     return compute_ppt_flow(ppt, first, all_steps, higher);
   }
 
+  /**
+   * Compute a flow path for a portion of one ppt.  Can go higher or
+   * lower, and either just one step up or all paths to completion.
+   *
+   * @param start subset of ppt's VarInfos to use as the starting
+   * point for the flow computation.
+   **/
   private static PptsAndInts compute_ppt_flow(PptTopLevel ppt,
 					      List start, // [VarAndSource]
 					      boolean all_steps,
@@ -537,7 +552,7 @@ public class Dataflow
       // Our worklist is the heads of paths flowing up from "ppt".
       // (The worklist elements are actually VarAndSource objects.)
       // We store the vars which specify the head and the original
-      // indices in receiving_ppt that flow up to the head.
+      // indices in ppt that flow up to the head.
       LinkedList worklist = new LinkedList(); // element type is List[VarAndSource]
       worklist.add(start);
 
@@ -549,7 +564,7 @@ public class Dataflow
         // A null element appears only if all_steps is false.
 	if (head == null) break;
 
-	// Add a flow from receiving_ppt to head
+	// Add a flow from ppt to head
 	Assert.assert(head.size() >= 1);
 	PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
 	int[] flow_transform = new int[nvis];
@@ -620,7 +635,9 @@ public class Dataflow
    * <li> H.arity == this.arity
    * <li> exist i,j s.t. this.var_infos[i] :[ H.var_infos[j]  (lower in po)
    * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
-   * <li> Nonces are respected
+   * <li> Nonces are respected.  That is, for each slice in H that
+   * results from this initialization, the path from here to there
+   * follows the same nonces on each step.
    * </ul>
    *
    * <p> This method is called whenever a PptSlice is instantiated.
