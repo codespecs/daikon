@@ -554,6 +554,35 @@ updates very difficult.  One way to fix a DOS-style file is to do <tt>(setq
 buffer-file-coding-system nil)</tt> in Emacs, then save the file.
 <p>
 
+Local variables should have the most restrictive scope possible.  For
+instance, don't do this:
+<pre>
+  int x;
+  ...
+  for () {
+    ...
+    x = ...;
+    ...
+  }
+</pre>
+Instead, do this:
+<pre>
+  for () {
+    ...
+    int x = ...;
+    ...
+  }
+</pre>
+Loop-carried dependences (the variable is sometimes set on one loop
+iteration and used on the next one before being re-set) are the only reason
+to declare, external to a loop, a variable that is set in the loop;
+reducing scopes makes it clear that there are no loop-carried dependences.
+Likewise, if two loops both use a temporary variable, you should declare
+two separate variables rather than reusing the same one, to indicate that
+there are no inter-loop dependences.
+<p>
+
+
 <h4><a name="perl">Perl</a></h4>
 
 <ol>
