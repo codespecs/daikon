@@ -1770,15 +1770,15 @@ public class PptTopLevel extends Ppt {
 		  + " constant=" + vi.isConstant()
 		  + " canonical=" + vi.isCanonical()
 		  + " equal_to=" + vi.equal_to.name);
-        if (slice1 == null) {
-          out.println(", no slice");
-        } else {
-          out.println(" slice=" + slice1
-		      + "=" + slice1.name
-		      + " num_values=" + slice1.num_values()
-		      + " num_samples=" + slice1.num_samples());
-          // slice1.values_cache.dump();
-        }
+        // if (slice1 == null) {
+        //   out.println(", no slice");
+        // } else {
+        //   out.println(" slice=" + slice1
+        //               + "=" + slice1.name
+        //               + " num_values=" + slice1.num_values()
+        //               + " num_samples=" + slice1.num_samples());
+        //   // slice1.values_cache.dump();
+        // }
       }
     }
 
@@ -1819,7 +1819,7 @@ public class PptTopLevel extends Ppt {
 		      nplural(slice1.num_values(), "value") + ", " +
                       nplural(slice1.num_samples(), "sample") + ")");
           } else {
-            sb.append("\t\t(no slice)");
+            // sb.append("\t\t(no slice)");
           }
           out.println(sb.toString());
         }
