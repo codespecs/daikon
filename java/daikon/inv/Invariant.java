@@ -125,24 +125,6 @@ public abstract class Invariant
    **/
   public boolean flowed = false;
 
-
-  // Should this just be a public field?  Probably yes for performance, but
-  // not now.
-  /**
-   * The SuppressionLink to the Invariants that suppress this.  null if
-   * unsuppressed.  Clones of this have this field set to null.
-   **/
-  private SuppressionLink suppressor;
-
-  /**
-   * Set of SuppressionLinks this suppresses (perhaps in conjunction
-   * with some other invariants).  Each link holds a suppressed
-   * invariant.
-   * As a space optimization, is permitted to be null (meaning empty).
-   * Clones of this have this field set to empty.
-   **/
-  private Set/*[SuppressionLink]*/ suppressees;
-
   // Whether an invariant is a guarding predicate, that is, creately solely
   // for the purpose of ensuring invariants with variables that can be missing
   // do not cause exceptions when tested
@@ -412,9 +394,7 @@ public abstract class Invariant
   // have the caller do that.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
-    suppressor = null;
     flowed = false;
-    suppressees = null;
   }
 
   /**
@@ -438,15 +418,12 @@ public abstract class Invariant
   }
 
   /**
-   * Do nothing special, except disconnect the clone from
-   * this.suppressor and this.suppressees.  Overridden to remove
+   * Do nothing special, Overridden to remove
    * exception from declaration
    **/
   public Object clone() {
     try {
       Invariant result = (Invariant) super.clone();
-      result.suppressor = null;
-      result.suppressees = null;
       result.flowed = false;
       return result;
     } catch (CloneNotSupportedException e) {
@@ -577,6 +554,8 @@ public abstract class Invariant
    * of the non always-comparable variables is returned.
    */
   public VarComparability get_comparability() {
+
+    // Assert.assertTrue (ppt != null, "class " + getClass());
 
     // Return the first variable that is not always-comparable
     for (int i = 0; i < ppt.var_infos.length; i++) {
@@ -1208,18 +1187,6 @@ public abstract class Invariant
   }
 
   /**
-   * Look up a previously instantiated Invariant but only if unsuppressed.
-   **/
-  public static Invariant findUnsuppressed(Class invclass, PptSlice ppt) {
-    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-      Invariant inv = (Invariant) itor.next();
-      if (inv.getClass() == invclass && inv.getSuppressor() == null)
-        return inv;
-    }
-    return null;
-  }
-
-  /**
    * Returns the set of non-instantiating suppressions for this invariant.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
@@ -1337,8 +1304,7 @@ public abstract class Invariant
    * Return true if this invariant is necessarily true from a fact
    * that can be determined statically (i.e., the decls files) (e.g.,
    * by being from a certain derivation).  Intended to be overridden
-   * by subclasses.  Should only do static checking, because
-   * suppression should do the dynamic checking.
+   * by subclasses.
    *
    * <p> This method is final because children of Invariant should be
    * extending isObviousStatically(VarInfo[]) because it is more
@@ -1593,18 +1559,6 @@ public abstract class Invariant
   public boolean isAllPrestate() {
     return ppt.allPrestate();
   }
-
-  /**
-   * @return true if is is ok to suppress this invariant while samples
-   * are being processed.  Should be overriden by those invariants for
-   * which this is not ok (which are those that keep internal state
-   * information that would be lost if they were suppressed)
-   */
-  public boolean inProcessSuppressOk() {
-    return true;
-  }
-
-
 
   // The notion of "interesting" embodied by this method is
   // unclear. You'd probably be better off using
@@ -1880,102 +1834,82 @@ public abstract class Invariant
   }
 
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Suppression
-  ///
-
-  /**
-   * Get the SuppressionLink that is suppressing this.
-   * @return can be null if there is no suppressor.
-   **/
-  public SuppressionLink getSuppressor () {
-    return suppressor;
-  }
-
-  /**
-   * Set the suppressor for this.
-   **/
-  public void setSuppressor (SuppressionLink sl) {
-    suppressor = sl;
-  }
-
-  /** The number of suppressees of this. **/
-  public int numSuppressees() {
-    if (suppressees == null) {
-      return 0;
-    }
-    return suppressees.size();
-  }
-
-  /**
-   * Get the SuppressionLinks that this is suppressing.
-   * Returns an unmodifiable collection.
-   * @return never null.
-   **/
-  public Set getSuppressees () {
-    if (suppressees == null) {
-      return Collections.EMPTY_SET;
-    }
-    return Collections.unmodifiableSet (suppressees);
-  }
-
-  /**
-   * Add a suppressee to this's suppressed list.
-   * @param sl The link to add.  Must not already be linked to.
-   **/
-  public void addSuppressee (SuppressionLink sl) {
-    if (suppressees == null) {
-      suppressees = new LinkedHashSet(1);
-    }
-    Assert.assertTrue (!(suppressees.contains(sl)));
-    suppressees.add (sl);
-  }
-
-  /**
-   * Remove a suppressee from this's suppressed list.
-   * @param sl The link to remove.  Must be part of this.suppresses.
-   **/
-  public void removeSuppressee (SuppressionLink sl) {
-    Assert.assertTrue (suppressees.contains(sl));
-    suppressees.remove (sl);
-  }
-
-  private static final SuppressionFactory[] defaultSuppressionFactories =
-    new SuppressionFactory[] {
-      SelfSuppressionFactory.getInstance()
-    };
-
-  /**
-   * The typical implementation calls super.getSuppressionFactories,
-   * then augments that with additional factories specific to the
-   * implementing class.  This method should be cheap such as
-   * returning a static variable, which is set in advance.
-   **/
-  public SuppressionFactory[] getSuppressionFactories() {
-    return defaultSuppressionFactories;
-  }
-
   /**
    * Instantiates an invariant of the same class on the specified
    * slice.  Must be overridden in each class.  Must be used rather
    * than clone so that checks in instantiate for reasonable invariants
    * are done.
-   * @return the new invariant or null if the invariant is not reasonable
+   * @return the new invariant
    */
-  public Invariant instantiate_dyn (PptSlice slice) {
+  protected Invariant instantiate_dyn (PptSlice slice) {
     Assert.assertTrue (false, "no instantiate_dyn for class " + getClass());
     return (null);
   }
 
   /**
+   * Returns whether or not this class of invariants are currently
+   * enabled
+   */
+  public boolean enabled() {
+    Assert.assertTrue (false, "no enabled for class " + getClass());
+    return (false);
+  }
+
+
+  /**
    * Returns whether or not the invariant is valid over the specified
    * types.
    */
-  public boolean valid_types (ProglangType[] rep_types) {
+  // public boolean valid_types (ProglangType[] rep_types) {
+  //  Assert.assertTrue (false, "no valid_types for class " + getClass());
+  //  return (false);
+  // }
+
+  /**
+   * Returns whether or not the invariant is valid over the basic types
+   * in vis.  This only checks basic types (scalar, string, array, etc)
+   * and should match the basic superclasses of invariant (SingleFloat,
+   * SingleScalarSequence, ThreeScalar, etc).  More complex checks
+   * that depend on variable details can be implemented in instantiate_ok()
+   *
+   * @see #instantiate_ok(VarInfo[])
+   */
+  public boolean valid_types (VarInfo[] vis) {
     Assert.assertTrue (false, "no valid_types for class " + getClass());
     return (false);
   }
 
+  /**
+   * Checks to see if the invariant can reasonably be instantiated over
+   * the specified variables.  Checks details beyond what is provided
+   * by valid_types.  This should never be called without calling
+   * valid_types first (implementations should be able to presume that
+   * valid_types is true).
+   *
+   * @see #valid_types(VarInfo[])
+   */
+  public boolean instantiate_ok (VarInfo[] vis) {
+    return (true);
+  }
+
+  /**
+   * Instantiates this invariant over the specified slice.  The slice
+   * must not be null and its variables must be valid for this type of
+   * invariant.  Returns null if the invariant is not enabled or if the
+   * invariant is not reasonable over the specified variables.  Otherwise
+   * returns the new invariant
+   */
+  public Invariant instantiate (PptSlice slice) {
+
+    Assert.assertTrue (slice != null);
+    Assert.assertTrue (valid_types(slice.var_infos));
+    if (!enabled() || !instantiate_ok (slice.var_infos))
+      return (null);
+    Invariant inv = instantiate_dyn (slice);
+    Assert.assertTrue (inv != null);
+    Assert.assertTrue (inv.ppt != null, "invariant class " + inv.getClass());
+    return (inv);
+  }
 
   /**
    * Adds the specified sample to the invariant and returns the result.
@@ -2014,13 +1948,6 @@ public abstract class Invariant
    * Check the rep invariants of this.
    **/
   public void repCheck() {
-    if (suppressor != null) suppressor.repCheck();
-    if (suppressees != null) {
-      for (Iterator i = suppressees.iterator(); i.hasNext(); ) {
-        SuppressionLink sl = (SuppressionLink) i.next();
-        sl.repCheck();
-      }
-    }
   }
 
   /**
