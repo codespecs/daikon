@@ -6,6 +6,9 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+
+import java.io.*;
 
 /**
  * Standard methods for setting up logging with Log4j.
@@ -39,6 +42,7 @@ public class Logger {
     Category.getRoot().addAppender (app);
     Category.getRoot().setPriority(p);
     Category.getRoot().debug ("Installed logger at priority " + p);
+
   }
 
   /**
@@ -63,6 +67,24 @@ public class Logger {
    **/
   public static void setPriority (String s, Priority p) {
     Category.getInstance(s).setPriority(p);
+    if (s.equals (PrintInvariants.debugFiltering.getName())
+        && PrintInvariants.debugFiltering.isDebugEnabled()) {
+      // Set up filter logging to go to a file.  It's better that way.
+      PrintInvariants.debugFiltering.setAdditivity(false);
+      PrintInvariants.debugFiltering.removeAllAppenders();
+      FileAppender fa = null;
+      try {
+        fa = new FileAppender( new PatternLayout("%m"),
+                               "filtering_transcript", true);
+      }
+      catch (IOException ioe) {
+        System.err.println("Warning; unable to open file filtering_transcript");
+      }
+      if (fa != null) {
+        PrintInvariants.debugFiltering.addAppender(fa);
+        fa.activateOptions();
+      }
+    }
   }
 
 }

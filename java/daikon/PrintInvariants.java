@@ -39,25 +39,6 @@ public class PrintInvariants {
    **/
   public static final Category debugFiltering = Category.getInstance("daikon.filtering");
 
-  // Set up filter logging to go to a file.  It's better that way.
-  static {
-    if (debugFiltering.isDebugEnabled()) {
-      debugFiltering.setAdditivity(false);
-      debugFiltering.removeAllAppenders();
-      FileAppender fa = null;
-      try {
-        fa = new FileAppender( new PatternLayout("%m"), "filtering_transcript", true);
-      }
-      catch (IOException ioe) {
-	System.err.println("Warning; unable to open file filtering_transcript");
-      }
-      if (fa != null) {
-	debugFiltering.addAppender(fa);
-	fa.activateOptions();
-      }
-    }
-  }
-
   public static final String lineSep = Global.lineSep;
 
   /**
