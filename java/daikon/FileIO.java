@@ -819,7 +819,7 @@ public final class FileIO {
                         + "\n  Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name);
       }
-      if (!line.equals(vi.name.name())) {
+      if (!VarInfoName.parse(line).equals(vi.name)) {
         throw new Error("Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name
                         + " at " + data_trace_filename + " line " + reader.getLineNumber()
