@@ -332,7 +332,10 @@ public class Debug {
    */
 
   public static void log (Logger debug, Class inv_class, Ppt ppt, String msg) {
-    log (debug, inv_class, ppt, ppt.var_infos, msg);
+    if (ppt == null)
+      log (debug, inv_class, ppt, null, msg);
+    else
+      log (debug, inv_class, ppt, ppt.var_infos, msg);
   }
 
   /**
@@ -532,7 +535,7 @@ public class Debug {
   public static boolean ppt_match (Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
-      return (strContainsElem (ppt.name(), debugTrackPpt));
+      return ((ppt != null) && strContainsElem (ppt.name(), debugTrackPpt));
     }
     return (true);
   }
@@ -692,8 +695,10 @@ public class Debug {
               out += " (missing)";
             if (v.missingOutOfBounds())
               out += " (out of bounds)";
-            if (!v.isCanonical())
-              out += " (leader=" + v.canonicalRep().name.name() + ")";
+            if (v.equalitySet != null) {
+              if (!v.isCanonical())
+                out += " (leader=" + v.canonicalRep().name.name() + ")";
+            }
             // out += " mod=" + mod;
             out += ": ";
           }
@@ -715,6 +720,8 @@ public class Debug {
       return ArraysMDE.toString ((String[])val);
     else if (val instanceof double[])
       return ArraysMDE.toString ((double[])val);
+    else if (val instanceof VarInfo[])
+      return VarInfo.toString((VarInfo[]) val);
     else
       return (val.toString());
   }
