@@ -24,24 +24,25 @@ use File::Find;
 use Cwd 'getcwd';
 
 my $verbose = 0;
-my $perl = $^X;
+my $perl = $EXECUTABLE_NAME;
 
+my $use_types = 0;
 my @types_files = ();
 my $types_search = undef;
+
 my $accessors_search = undef;
 
-my $instr_basedir = "daikon-instrumented";
-my $types_basedir = undef;
+my $instr_basedir = undef; # defaults to daikon-{untyped,instrumented}
+                           # depending on whether we have type information.
+my $types_basedir = undef; # default to daikon-instrumented
 my $decls_basedir = "daikon-output";
 my $dtrace_basedir = "daikon-output";
 
-#my $instr_style = "tree";
-my $types_style = "tree";
-my $decls_style = "tree";
-my $dtrace_style = "tree";
+my $types_style = undef; # defaults to tree
+my $decls_style = undef; # now always matches types_style
+my $dtrace_style = "combined";
 
 my $types_append = 1;
-my $decls_append = 0;
 my $dtrace_append = 0;
 
 my $absolute = undef;
@@ -56,8 +57,18 @@ my $list_depth = 3;
 
 sub careful_system {
     my @cmd = @_;
+    die unless @cmd > 1; # Avoid the shell
     if ($verbose) {
-        print join(" ", @cmd), "\n";
+        my @nice_args = @cmd;
+        # So that our output looks like make or shell script output,
+        # do an approximation to shell quoting on the verbose
+        # output. Note that because we always use the multi-arg form
+        # of system, we don't have to worry about shell-escaping the
+        # actual args we pass to the command, which is convenient.
+        for my $arg (@nice_args) {
+            $arg = "'$arg'" if $arg =~ / /;
+        }
+        print join(" ", @nice_args), "\n";
     }
     my $result = system(@cmd);
     if ($result != 0) {
@@ -106,10 +117,10 @@ my $parsed =
                          "decls-style=s" => \$decls_style,
                          "dtrace-style=s" => \$dtrace_style,
                          "types-append!" => \$types_append,
-                         "decls-append!" => \$decls_append,
                          "dtrace-append!" => \$dtrace_append,
+                         "use-types|T" => \$use_types,
                          "types-file|t=s" => \@types_files,
-                         "types-dir|T:s" => \$types_search,
+                         "types-dir:s" => \$types_search,
                          "accessors-dir|A:s" => \$accessors_search,
                          "verbose|v+" => \$verbose,
                          "absolute!" => \$absolute,
@@ -124,6 +135,23 @@ my $parsed =
                         );
 
 exit(1) unless $parsed;
+
+if (@types_files or defined($types_search)) {
+    $use_types = 1;
+} elsif ($use_types) {
+    $types_search = "daikon-instrumented";
+}
+
+if (not defined($instr_basedir)) {
+    if ($use_types) {
+        $instr_basedir = "daikon-instrumented";
+    } else {
+        $instr_basedir = "daikon-untyped";
+        if (not defined($types_basedir)) {
+            $types_basedir = "daikon-instrumented";
+        }
+    }
+}
 
 $types_basedir = $instr_basedir if not defined($types_basedir);
 
@@ -155,9 +183,22 @@ if ($dtrace_absolute) {
     $dtrace_basedir = rel2abs($dtrace_basedir);
 }
 
-#unless ($instr_style =~ /^tree|flat|combined\z/) {
-#    die "instr-style should be one of tree, flat, or combined\n";
-#}
+if (!defined($types_style) and defined($decls_style)) {
+    unless ($decls_style =~ /^tree|flat|combined\z/) {
+        die "decls-style should be one of tree, flat, or combined\n";
+    }
+    $types_style = $decls_style;
+} elsif (defined($types_style) and !defined($decls_style)) {
+    unless ($types_style =~ /^tree|flat|combined\z/) {
+        die "types-style should be one of tree, flat, or combined\n";
+    }
+    $decls_style = $types_style;
+} elsif (!defined($types_style) and !defined($decls_style)) {
+    $types_style = $decls_style = "tree";
+} elsif ($types_style ne $decls_style) {
+    die "Distinct types-style '$types_style' and decls-style '$decls_style'";
+    die " arent' currently supported.";
+}
 
 unless ($types_style =~ /^tree|flat|combined\z/) {
     die "types-style should be one of tree, flat, or combined\n";
@@ -183,10 +224,6 @@ if ($list_depth < 0) {
     die "list_depth should be non-negative\n";
 }
 
-if (defined($types_search) and $types_search eq "") {
-    $types_search = $types_basedir;
-}
-
 if (defined($accessors_search) and $accessors_search eq "") {
     $accessors_search = ".";
 }
@@ -203,19 +240,39 @@ if ($verbose) {
 my $types = "";
 for my $tfile (@types_files) {
     if (-e $tfile) {
-        $types .= ",$tfile";
+        $types .= ",-t,$tfile";
     } else {
         warn "Types file $tfile does not exist\n";
     }
 }
 my $output_opt = ",-O,$types_basedir,$types_style,$types_append";
-$output_opt .= ",$decls_basedir,$decls_style,$decls_append";
 $output_opt .= ",$dtrace_basedir,$dtrace_style,$dtrace_append";
 $output_opt .= ",-D,$reference_depth,$accessor_depth,$list_depth";
 
-$types = ",-t" . $types if $types;
 my $deparse_opt = "-MO=DeparseDaikon$types$output_opt";
 my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
+
+my $local_types;
+my %types_converted;
+
+sub try_local_types {
+    my($dir, $fname) = @_;
+    print STDERR "Looking for types in $dir/$fname\n" if $verbose;
+    if (-e "$dir/$fname") {
+        $local_types .= ",-t,$dir/$fname";
+        if (not $types_converted{file_id("$dir/$fname")}++) {
+            (my $decls_fname = $fname) =~ s/\.types$/.decls/;
+            types_to_decls("$dir/$fname", "$decls_basedir/$decls_fname");
+        }
+    }
+}
+
+sub types_to_decls {
+    my($types_name, $decls_name) = @_;
+    careful_system($perl, $perl_lib, "-MDaikon::Output",
+                   "-e", 'Daikon::Output::types_file_to_decls_file('.
+                   '$ARGV[0], $ARGV[1])', $types_name, $decls_name);
+}
 
 sub process_file_relative_to {
     my($prog, $dir) = @_;
@@ -230,8 +287,13 @@ sub process_file_relative_to {
     }
 
     if (! -d $instr_basedir) {
-        mkdir($instr_basedir)
+        mkpath($instr_basedir)
           or die "Can't create directory $instr_basedir: $!\n";
+    }
+
+    if (defined($types_search) and ! -d $decls_basedir) {
+        mkpath($decls_basedir)
+          or die "Can't create directory $decls_basedir: $!\n";
     }
 
     my $inplace = file_id($instr_basedir) eq file_id(".");
@@ -247,32 +309,36 @@ sub process_file_relative_to {
     } else {
         $from = $prog;
     }
-    my $more_opts = "";
-    my $bprog = dirname($prog) . "/" . basename($prog, ".pm");
-    (my $pack = $bprog) =~ s[/][::]g;
-    if (defined $types_search) {
-        # If what they specified was a file, look at it directly?
-        print STDERR "Looking at $types_search/combined.types\n" if $verbose;
-        if (-e "$types_search/combined.types") {
-            $more_opts .= ",-t,$types_search/combined.types";
-        }
-        print STDERR "Looking at $types_search/$bprog.types\n" if $verbose;
-        if (-e "$types_search/$bprog.types") {
-            $more_opts .= ",-t,$types_search/$bprog.types";
-        }
+    my($bprog, $pack, $combined);
+    if ($prog =~ /\.plx?$/) {
+        my $progname = basename($prog, ".plx", ".pl");
+        $combined = "$progname-combined";
+        $bprog = "";
+        $pack = "$progname-main";
+    } else {
+        $combined = "combined";
+        $bprog = dirname($prog) . "/" . basename($prog, ".pm");
+        ($pack = $bprog) =~ s[/][::]g;
         $pack =~ s[\.::][]g;
-        print STDERR "Looking at $types_search/$pack.types\n" if $verbose;
-        if (-e "$types_search/$pack.types") {
-            $more_opts .= ",-t,$types_search/$pack.types";
+    }
+    $local_types = "";
+    if (defined $types_search) {
+        try_local_types($types_search, "$combined.types");
+        try_local_types($types_search, "$bprog.types") if $bprog ne "";
+        try_local_types($types_search, "$pack.types");
+        if ($types eq "" and $local_types eq "") {
+            die "No type files found for $prog\n";
         }
     }
+    my $more_opts = $local_types;
     if (defined $accessors_search) {
-        print STDERR "Looking at $accessors_search/$bprog.accessors\n"
-          if $verbose;
-        if (-e "$accessors_search/$bprog.accessors") {
-            $more_opts .= ",-a,$accessors_search/$bprog.accessors";
+        if ($bprog ne "") {
+            print STDERR "Looking at $accessors_search/$bprog.accessors\n"
+                if $verbose;
+            if (-e "$accessors_search/$bprog.accessors") {
+                $more_opts .= ",-a,$accessors_search/$bprog.accessors";
+            }
         }
-        $pack =~ s[\.::][]g;
         print STDERR "Looking at $accessors_search/$pack.accessors\n"
           if $verbose;
         if (-e "$accessors_search/$pack.accessors") {
