@@ -382,13 +382,6 @@ public class CLASSNAME
                   subvar.name.name() + "in " + supervar.name.name());
     }
 
-    // If either subvar or supervar is null the result will not be used, so we can just
-    // return [null,null]
-    if (subvar==null || supervar==null) {
-      Object[] result = {null,null};
-      return result;
-    }
-
     // Standard discard reason/string
     DiscardCode discardCode = DiscardCode.obvious;
     String discardString = subvar.name.name()+" obvious subset/subsequence of "+supervar.name.name();
