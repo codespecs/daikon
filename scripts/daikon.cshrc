@@ -2,7 +2,7 @@
 ## Daikon initialization file for C shell (csh and tcsh) users.
 ## This file should be kept in synch with daikon.bashrc.
 
-## Set this directory to the directory containing "daikon".
+## Set DAIKONPARENT to the directory containing "daikon/".
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR $DAIKONPARENT/daikon
 
@@ -39,3 +39,8 @@ setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
 ## determines which variables can be sensibly compared to one another.
 setenv AJAX_DIR $DAIKONDIR/java/ajax-ship
+
+
+# Uncomment this if you install Lackwit.
+# ## Indicates where Lackwit can find its libraries (and binaries).
+# setenv LACKWIT_HOME $DAIKONDIR/front-end/c/lackwit

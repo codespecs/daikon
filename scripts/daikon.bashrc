@@ -2,7 +2,7 @@
 ## Daikon initialization file for Bourne shell (bash) users.
 ## This file should be kept in synch with daikon.cshrc
 
-## Set this directory to the directory containing "daikon".
+## Set DAIKONPARENT to the directory containing "daikon/".
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 
@@ -40,3 +40,8 @@ export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
 ## determines which variables can be sensibly compared to one another.
 export AJAX_DIR=$DAIKONDIR/java/ajax-ship
+
+
+# Uncomment this if you install Lackwit
+# ## Indicates where Lackwit can find its libraries (and binaries).
+# export LACKWIT_HOME=$DAIKONDIR/front-end/c/lackwit
