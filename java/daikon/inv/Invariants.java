@@ -22,6 +22,13 @@ public final class Invariants
     super();
   }
 
+  /**
+   * Copy constructor.
+   **/
+  public Invariants(Invariants arg) {
+    super(arg);
+  }
+
   /** Implementation of lookup_as_iterator. **/
   public final class LookupIterator implements Iterator {
     Iterator invs_enum = iterator();

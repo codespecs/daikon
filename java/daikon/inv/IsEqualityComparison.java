@@ -8,6 +8,7 @@ import utilMDE.*;
  *  * the Invariant is a Comparison (which reports <, >, =, <=, or >=)
  *  * the relationship reported by the comparison is = (not <, <=, >, or >=)
  * </pre>
+ * This does not consider PairwiseIntComparison to be an equality invariant.
  **/
 public final class IsEqualityComparison implements Filter {
 

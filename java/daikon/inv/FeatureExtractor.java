@@ -236,7 +236,7 @@ public class FeatureExtractor {
       Iterator goodppts =
         FileIO.read_serialized_pptmap(new File(args[i]), false).iterator();
       while(goodppts.hasNext()) {
-        Vector temp = ((PptTopLevel) goodppts.next()).invariants_vector();
+        List temp = ((PptTopLevel) goodppts.next()).getInvariants();
         for (int j = 0; j < temp.size(); j++)
           good.add(((Invariant) temp.get(j)).format_using(OutputFormat.JAVA));
       }
@@ -246,7 +246,7 @@ public class FeatureExtractor {
       Iterator badppts =
         FileIO.read_serialized_pptmap(new File(args[i+1]), false).iterator();
       while(badppts.hasNext()) {
-        Vector temp = ((PptTopLevel) badppts.next()).invariants_vector();
+        List temp = ((PptTopLevel) badppts.next()).getInvariants();
         for (int j = 0; j < temp.size(); j++)
           bad.add((Invariant) temp.get(j));
       }

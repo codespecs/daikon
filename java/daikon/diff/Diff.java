@@ -469,13 +469,13 @@ public final class Diff {
 
     for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
-      List invs = ppt.invariants_vector();
+      List invs = ppt.getInvariants();
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (Iterator i2 = ppt.views_cond.iterator(); i2.hasNext(); ) {
           PptConditional pptCond = (PptConditional) i2.next();
-          List invsCond = pptCond.invariants_vector();
+          List invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
       }
@@ -605,7 +605,7 @@ public final class Diff {
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals (somePptName)) {
         PptTopLevel repl = manip.get (somePptName);
-        return repl.invariants_vector();
+        return repl.getInvariants();
       }
     }
     System.out.println ("Oh no!!!");

@@ -12,11 +12,21 @@ import org.apache.log4j.Category;
 import utilMDE.Assert;
 import utilMDE.MathMDE;
 import daikon.*;
+import daikon.suppress.*;
 
-// Base implementation for Invariant objects.
-// Intended to be subclassed but not to be directly instantiated.
-// I should probably rename this to "Invariant" and get rid of that interface.o
 
+/**
+ * Base implementation for Invariant objects.  Intended to be
+ * subclassed but not to be directly instantiated.  Rules/assumptions
+ * for invariants:
+ *
+ * <li> For each program point's set of VarInfos, there exists exactly
+ * ONE invariant of its type.  For example, between variables a and b
+ * at PptTopLevel T, there will not be two instances of invariant I(a,
+ * b).
+ *
+ *
+ **/
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
 {
@@ -68,6 +78,21 @@ public abstract class Invariant
    * call destroy().
    **/
   public boolean falsified = false;
+
+
+  // Should this just be a public field?  Probably yes for performance, but
+  // not now.
+  /**
+   * The invariant that suppresses this.  Can be null if unsuppressed.
+   **/
+  private SuppressionLink suppressor;
+
+  /**
+   * The set of invariants that this suppresses.  Never null, but can
+   * be empty.  The only time this would share a set of suppressees
+   * with another Invariant is if the Invariant was a clone of this.
+   **/
+  private Set suppressees;
 
   /**
    * True if we've seen all values and should ignore further add() methods.
@@ -230,6 +255,8 @@ public abstract class Invariant
   // have the caller do that.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
+    suppressor = null;
+    suppressees = new HashSet();
   }
 
   /**
@@ -240,7 +267,13 @@ public abstract class Invariant
    **/
   public void destroy() {
     falsified = true;
-    PptSlice.debugFlow.debug("Invariant destroyed " + format() + " at " + ppt.parent.name);
+    if (PptSlice.debugFlow.isDebugEnabled()) {
+      PptSlice.debugFlow.debug("Invariant destroyed " + format() + " at " + ppt.parent.name);
+    }
+
+    // [INCR] Commented out because removeInvariant removes this from
+    // the pptslice.  In V3, this happens after invariants are
+    // checked.  Plus, destroy() may be called during such removal.
     // ppt.removeInvariant(this);
   }
 
@@ -249,7 +282,7 @@ public abstract class Invariant
    * Has to be public because of wrappers (?); do not call from outside world.
    * @see destroy
    **/
-  public void flow(Invariant flowed) {
+  private void flow(Invariant flowed) {
     ppt.addToFlow(flowed);
   }
 
@@ -259,7 +292,7 @@ public abstract class Invariant
    * Nice point of control in case we later have to tweak things when
    * flowing ourselves.
    **/
-  public void flowThis() {
+  private void flowThis() {
     flow(this);
   }
 
@@ -267,17 +300,44 @@ public abstract class Invariant
    * Essentially the same as flow(this.clone()).  Useful way to flow
    * oneself without much hassle (as long as internal state is still
    * OK).  Nice point of control in case we later have to tweak things
-   * when flowing outselves.
+   * when flowing outselves.  This method and destroy() are made
+   * private because both of them require a call to addToChanged() for
+   * correct suppression.
    **/
-  public void flowClone() {
+  private void flowClone() {
     Invariant flowed = (Invariant) this.clone();
     flow(flowed);
+  }
+
+  /**
+   * Destroy this, add this to the list of Invariants to flow, and add
+   * this to list of falsified or weakened invariants.
+   **/
+  public void destroyAndFlow () {
+    flowThis();
+    destroy();
+    ppt.addToChanged (this);
+  }
+
+  /**
+   * Add a copy of this to the list of Invariants to flow, and add
+   * this to list of falsified or weakened invariants.  Why is this
+   * different from flowClone?  Because the Invariant to flow is a
+   * clone of this, but the Invariant that's weakened is this.  The
+   * former is needed for flow, the latter for suppression.
+   **/
+  public void cloneAndFlow() {
+    flowClone();
+    ppt.addToChanged (this);
   }
 
   /** Do nothing special.  Overridden to remove exception from declaration */
   protected Object clone() {
     try {
-      return super.clone();
+      Invariant result = (Invariant) super.clone();
+      result.suppressor = null;
+      result.suppressees = new HashSet();
+      return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can never happen
     }
@@ -683,17 +743,34 @@ public abstract class Invariant
   }
 
 
-  // This is a little grody; stick with code cut-and-paste for now.
-  // // Look up a previously instantiated Invariant.
-  // // Should this implementation be made more efficient?
-  // public static Invariant find(Class invclass, PptSlice ppt) {
-  //   for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-  //     Invariant inv = (Invariant) itor.next();
-  //     if (inv instanceof invclass)
-  //       return inv;
-  //   }
-  //   return null;
-  // }
+  /**
+   * Look up a previously instantiated Invariant.  Should this
+   * implementation be made more efficient?  Yes, because it's used in
+   * suppression.  We should somehow index invariants by their type.
+   **/
+
+  public static Invariant find(Class invclass, PptSlice ppt) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv.getClass() == invclass)
+        return inv;
+    }
+    return null;
+  }
+
+  /**
+   * Look up a previously instantiated Invariant but only if
+   * unsuppressed.  
+   **/
+
+  public static Invariant findUnsuppressed(Class invclass, PptSlice ppt) {
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv.getClass() == invclass && inv.getSuppressor() == null)
+        return inv;
+    }
+    return null;
+  }
 
 
 
@@ -1225,6 +1302,69 @@ public abstract class Invariant
                     "but compareTo() returned 0");
 
       return result;
+    }
+  }
+
+
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Suppression
+  ///
+
+  /**
+   * Get the SuppressionLink that is suppressing this.
+   * @return can be null if there is no suppressor.
+   **/
+  public SuppressionLink getSuppressor () {
+    return suppressor;
+  }
+
+  /**
+   * Set the suppressor for this.
+   **/
+  public void setSuppressor (SuppressionLink sl) {
+    suppressor = sl;
+  }
+
+  /**
+   * Get the SuppressionLinks that this is suppressing.
+   * @return can be null if there are no suppressees
+   **/
+  public Set getSuppressees () {
+    return Collections.unmodifiableSet (suppressees);
+  }
+
+  /**
+   * Add a suppressee to this's suppressed list.
+   * @param sl The link to add.  Must not already be linked to.
+   **/
+  public void addSuppressee (SuppressionLink sl) {
+    Assert.assertTrue (!(suppressees.contains(sl)));
+    suppressees.add (sl);
+  }
+
+  /**
+   * Remove a suppressee from this's suppressed list.
+   * @param sl The link to remove.  Must be part of this.suppresses.
+   **/
+  public void removeSuppressee (SuppressionLink sl) {
+    Assert.assertTrue (suppressees.contains(sl));
+    suppressees.remove (sl);
+  }
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return new SuppressionFactory[0];
+  }
+
+  /**
+   * Check the rep invariants of this.
+   **/
+  public void repCheck() {
+    if (suppressor != null) suppressor.repCheck();
+    for (Iterator i = suppressees.iterator(); i.hasNext(); ) {
+      SuppressionLink sl = (SuppressionLink) i.next();
+      sl.repCheck();
     }
   }
 

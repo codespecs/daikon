@@ -237,7 +237,7 @@ public class ConvertInvToDci
 
                 // Extracts out the invariants for the method, class, and point
                 PptTopLevel pptvalues = (PptTopLevel)ppt.get(pptName);
-                for (Iterator iter1 = pptvalues.invariants_vector().iterator();
+                for (Iterator iter1 = pptvalues.getInvariants().iterator();
                     iter1.hasNext(); )
                 {
                     Invariant inv = (Invariant)iter1.next();

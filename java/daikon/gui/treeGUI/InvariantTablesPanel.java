@@ -120,7 +120,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
     //                  System.out.print( topLevel.var_infos[i].name + " " );
     //          System.out.println();
 
-    List invariants = new ArrayList( topLevel.invariants_vector());
+    List invariants = new ArrayList( topLevel.getInvariants());
     InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
     TableSorter sorter = new TableSorter( tableModel );
     JTable table = new JTable( sorter );
