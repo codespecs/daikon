@@ -819,6 +819,8 @@ public abstract class VarInfoName
   // ============================================================
   // Quantification for formatting in ESC or Simplify
 
+  private static final boolean debug_quantify = false;
+
   /**
    * A quantifier visitor can be used to search a tree and return all
    * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
@@ -853,6 +855,9 @@ public abstract class VarInfoName
      * Slice).
      **/
     public Set unquants() {
+      if (debug_quantify) {
+	System.out.println("unquants: " + unquant);
+      }
       return Collections.unmodifiableSet(unquant);
     }
 
@@ -864,6 +869,11 @@ public abstract class VarInfoName
     public Object visitElements(Elements o) {
       unquant.add(o);
       return super.visitElements(o);
+    }
+    public Object visitSizeOf(SizeOf o) {
+      // don't visit the sequence; we aren't using the elements of it,
+      // just the length, so we don't want to include it in the results
+      return o.sequence.term.accept(this);
     }
     public Object visitSubscript(Subscript o) {
       o.index.accept(this);
@@ -951,6 +961,10 @@ public abstract class VarInfoName
     public static QuantifyReturn quantify(VarInfoName[] roots) {
       Assert.assert(roots != null);
 
+      if (debug_quantify) {
+	System.out.println("roots: " + Arrays.asList(roots).toString());
+      }
+
       // create empty result
       QuantifyReturn result = new QuantifyReturn();
       result.root_primes = new VarInfoName[roots.length];
@@ -980,6 +994,12 @@ public abstract class VarInfoName
 
 	  VarInfoName idx = (new Simple(String.valueOf(tmp++))).intern();
 	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
+
+	  if (debug_quantify) {
+	    System.out.println("root: " + roots[i]);
+	    System.out.println("uq_elt: " + uq_elt);
+	    System.out.println("idx: " + idx);
+	  }
 
 	  // call replace and unpack results
 	  VarInfoName[] replace_result = replace(roots[i], uq_elt, idx);
