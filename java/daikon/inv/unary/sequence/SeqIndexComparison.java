@@ -43,8 +43,9 @@ public final class SeqIndexComparison extends SingleSequence {
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type.baseIsIntegral())
+    if (! elt_type.baseIsIntegral()) {
       return null;
+    }
 
     return new SeqIndexComparison(ppt);
   }
@@ -80,7 +81,7 @@ public final class SeqIndexComparison extends SingleSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long [] a, int count) {
