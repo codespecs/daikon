@@ -248,8 +248,146 @@ sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
 min_or_max_re = re.compile("^(min|max)\((.*)\)$")
 
 
+integral_types = ("int", "char", "float", "double", "integral")
+
+# A type is:
+#  * a string (for scalar types), or
+#  * a tuple of (base_type, dimensionality), for array types
 def types_compatible(type1, type2):
-    return type1 == type2
+    return ((type1 == type2)
+            or ((type1 == "integral") and (type2 in integral_types))
+            or ((type2 == "integral") and (type1 in integral_types)))
+
+
+def valid_var_type(var_type):
+    return ((type(var_type) == types.StringType)
+            or ((type(var_type) == types.TupleType)
+                and (len(var_type) == 2)
+                and (type(var_type[0]) == types.StringType)
+                and (type(var_type[1]) == types.IntType)))
+
+def is_array_var_type(var_type):
+    return type(var_type) == types.TupleType
+
+def parse_vartype(str):
+    dimensions = 0
+    while str[-2:] == "[]":
+        dimensions = dimensions+1
+        str = str[:-2]
+    if dimensions == 0:
+        return str
+    else:
+        return (str, dimensions)
+
+ws_regexp = re.compile(r'[ \t]+')
+
+# A Lackwit type is:
+#  * for scalar types:  a tuple of comparable variables
+#  * for array types:  a tuple of 'array', a list of variables comparable to
+#    the element type, and some number of lists variables comparable to the
+#    index types
+#  * special:  a tuple of "alias", a name, and a Lackwit type.
+#    This means to treat this variable as if it has the specified name.
+#  * special:  the string "always" means always comparable
+
+def is_lackwit_type(lt):
+    return ((lt == "always")
+            or ((type(lt) == types.TupleType)
+                and (((lt[0] == "array")
+                      and (len(lt) >= 3))
+                     or ((lt[0] == "alias")
+                         and (len(lt) == 3)
+                         and (type(lt[1]) == types.StringType)
+                         and is_lackwit_type(lt[2]))
+                     or true)))
+
+
+def lackwit_type_alias_name(lt):
+    if (lt == "always"):
+        return None
+    elif (lt[0] == "alias"):
+        return lackwit_type_alias_name(lt[2]) or lt[1]
+    else:
+        return None
+
+
+def lackwit_type_element_type(lt):
+    head = lt[0]
+    if (head == 'array'):
+        return lt[1]
+    elif (head == 'alias'):
+        return lackwit_type_element_type(lt[2])
+    else:
+        raise "Not an array Lackwit type: " + `lt`
+
+def lackwit_type_element_type_alias(vi):
+    assert isinstance(vi, var_info)
+    lt = vi.lackwit_type
+    seq_var_name = lackwit_type_alias_name(lt) or vi.name
+    return ("alias", "%s-element" % seq_var_name,
+            lackwit_type_element_type(lt))
+
+def lackwit_type_index_type(lt, dim):
+    head = lt[0]
+    if (head == 'array'):
+        return lt[dim+1]                # indices start at third elt (index 2)
+    elif (head == 'alias'):
+        return lackwit_type_index_type(lt[2], dim)
+    else:
+        raise "Not an array Lackwit type: " + `lt`
+
+def lackwit_type_index_type_alias(vi, dim):
+    assert isinstance(vi, var_info)
+    lt = vi.lackwit_type
+    seq_var_name = lackwit_type_alias_name(lt) or vi.name
+    return ("alias", "%s-index%d" % (seq_var_name, dim),
+            lackwit_type_index_type(lt, dim))
+
+
+def parse_lackwit_vartype(raw_str, vartype):
+    if is_array_var_type(vartype):
+        # The lackwit type is of the form
+        #  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
+        dims = vartype[1]
+        assert dims > 0
+        match = re.compile("^\(([^)]*)\)" + ("\[\(?([^\])]*)\)?\]" * dims) + "$").match(raw_str)
+        assert match != None
+        assert len(match.groups()) == dims+1
+        result = ("array",) + tuple(map(lambda substr: tuple(ws_regexp.split(substr)),
+                                       match.groups()))
+        return result
+    else:
+        # scalar variable
+        if raw_str[0] == '(':
+            raw_str = raw_str[1:]
+            assert raw_str[-1] == ')'
+            raw_str = raw_str[:-1]
+        return tuple(ws_regexp.split(raw_str))
+
+def lackwit_types_compatible(name1, type1, name2, type2):
+    # print "lackwit_types_compatible", name1, type1, name2, type2
+    assert type(name1) == types.StringType
+    assert type(name2) == types.StringType
+    if (type1 == "always") or (type2 == "always"):
+        return true
+
+    assert type(type1) == types.TupleType
+    assert type(type2) == types.TupleType
+    while type1[0] == "alias":
+        name1 = type1[1]
+        type1 = type1[2]
+        assert type(name1) == types.StringType
+        assert type(type1) == types.TupleType
+    while type2[0] == "alias":
+        name2 = type2[1]
+        type2 = type2[2]
+        assert type(name2) == types.StringType
+        assert type(type2) == types.TupleType
+
+    in12 = name1 in type2
+    in21 = name2 in type1
+    assert in12 == in21
+    return in12
 
 
 class var_info:
@@ -258,6 +396,8 @@ class var_info:
     #  name                # string
     #  type                # type information:  a string, not an
                                   #   unpicklable object like types.IntType
+    #  lackwit_type	   # lackwit type information, or var_info (meaning
+                           #   to treat this variable like that one)
     #  index               # index in lists of variables
 
     # Info about derived variables: derivees from this and derivers of this.
@@ -281,14 +421,16 @@ class var_info:
                                 #   the variable itself is not on this list
 
 
-    def __init__(self, name, var_type, index, is_derived=false):
+    def __init__(self, name, var_type, lackwit_type, index, is_derived=false):
         assert type(name) == types.StringType
         assert type(index) == types.IntType
-        assert type(var_type) == types.StringType
+        assert valid_var_type(var_type)
+        assert is_lackwit_type(lackwit_type)
 
         self.name = name                # string
         self.type = var_type            # type information:  a string, not an
                                         #   unpicklable object like types.IntType
+        self.lackwit_type = lackwit_type
         self.index = index              # index in lists of variables
 
         # info about derived variables: derivees from this and derivers of this
@@ -311,6 +453,7 @@ class var_info:
         assert len(state.keys()) == 9
         self.name = state['name']
         self.type = state['type']
+        self.lackwit_type = state['lackwit_type']
         self.index = state['index']
         self.derived = state['derived']
         self.derived_len = state['derived_len']
@@ -323,7 +466,7 @@ class var_info:
         return "<var %s %s>" % (self.name, self.type)
 
     def is_sequence(self):
-        return self.type == 'ListType'
+        return is_array_var_type(self.type)
 
     def canonical_var(self):
         """Return index of the canonical variable that is always equal to this one.
@@ -364,7 +507,7 @@ def merge_var_infos(filename, sub_fn_var_infos):
             var_infos = []
             sub_var_infos = sub_fn_var_infos[fname]
             for vi in sub_var_infos:
-                var_infos.append(var_info(vi.name, vi.type, len(var_infos)))
+                var_infos.append(var_info(vi.name, vi.type, vi.lackwit_type, len(var_infos)))
 	    fn_var_infos[fname] = var_infos
             fn_var_values[fname] = {}
 	else:
@@ -686,7 +829,8 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
     # sequence, not a subsequence (sequence slice) we have added
     if (seq_var_info.derived_len == None and not seq_var_info.is_derived):
         name_size = "size(%s)" % (seq_var_info.name,)
-        seq_len_var_info = var_info(name_size, "int", len(var_infos), true)
+        index_lackwit_type = lackwit_type_index_type_alias(seq_var_info, 1)
+        seq_len_var_info = var_info(name_size, "int", index_lackwit_type, len(var_infos), true)
         var_infos.append(seq_len_var_info)
         seq_var_info.derived_len = len(var_infos)-1
         if debug_derive:
@@ -737,9 +881,11 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     seqvar = seq_var_info.name
 
     # Add sum, min, and max (unconditionally)
-    var_infos.append(var_info("sum(%s)" % (seqvar,), "int", len(var_infos), true))
-    var_infos.append(var_info("min(%s)" % (seqvar,), "int", len(var_infos), true))
-    var_infos.append(var_info("max(%s)" % (seqvar,), "int", len(var_infos), true))
+    lackwit_elt_type = lackwit_type_element_type_alias(seq_var_info)
+
+    var_infos.append(var_info("sum(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
+    var_infos.append(var_info("min(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
+    var_infos.append(var_info("max(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
     for new_values in var_new_values.values():
         this_seq = new_values[seqidx]
         if this_seq == None:
@@ -770,7 +916,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
         len_min = min(2, len_min)
         if len_min > 0:
             for i in range(0, len_min):
-                var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", len(var_infos), true))
+                var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
             for new_values in var_new_values.values():
                 for i in range(0, len_min):
                     seq = new_values[seqidx]
@@ -781,7 +927,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
                     new_values.append(elt_val)
             if len_min != seq_len_inv.max:
                 for i in range(-len_min, 0):
-                    var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", len(var_infos), true))
+                    var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
                 for new_values in var_new_values.values():
                     for i in range(-len_min, 0):
                         seq = new_values[seqidx]
@@ -803,10 +949,12 @@ def introduce_from_sequence_sequence_pass2(var_infos, var_new_values, i1, i2):
 def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, sclidx):
     assert len(var_infos) == len(var_new_values.values()[0])
 
-    seqvar = var_infos[seqidx].name
-    sclvar = var_infos[sclidx].name
-    scl_inv = var_infos[sclidx].invariant
-    seq_size_idx = var_infos[seqidx].derived_len
+    seq_info = var_infos[seqidx]
+    scl_info = var_infos[sclidx]
+    seq_name = seq_info.name
+    scl_name = scl_info.name
+    scl_inv = scl_info.invariant
+    seq_size_idx = seq_info.derived_len
 
     ## This makes absoulely no sense; I've left it commented out only
     ## so I don't get tempted to do something so silly again.
@@ -821,18 +969,18 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     # Another check for scalar being the size of this sequence: sclidx may
     # not be canonical, but seq_size_idx certainly is, because
     # we don't call the introduction functions with non-canonical arguments.
-    assert var_infos[sclidx].is_canonical()
+    assert scl_info.is_canonical()
     if seq_size_idx != 'known_var':
         if sclidx == var_infos[seq_size_idx].canonical_var():
             return
 
     #     if seq_size_idx == 'no_var':
-    #         print "sequence %s (size: no_var) and scalar %s (index: %d) unrelated" % (seqvar, sclvar, sclidx)
+    #         print "sequence %s (size: no_var) and scalar %s (index: %d) unrelated" % (seq_name, scl_name, sclidx)
     #     else:
-    #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %d) unrelated" % (seqvar, var_infos[seq_size_idx].name, seq_size_idx, sclvar, sclidx)
+    #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %d) unrelated" % (seq_name, var_infos[seq_size_idx].name, seq_size_idx, scl_name, sclidx)
 
     # For now, do nothing if the scalar is itself derived.
-    if var_infos[sclidx].is_derived:
+    if scl_info.is_derived:
         return
 
     # If the scalar is a known constant, record that.
@@ -850,15 +998,16 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     scalar_value_1 = not(sclconst == None or sclconst > 1)
 
     # Add subsequences
-    if not var_infos[seqidx].invariant.can_be_None and not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
-        full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), "ListType", len(var_infos), true)
+    if not seq_info.invariant.can_be_None and not seq_info.is_derived and not scl_info.invariant.can_be_None:
+        lackwit_seq_type = ("alias", seq_name, seq_info.lackwit_type)
+        full_var_info = var_info("%s[0..%s]" % (seq_name, scl_name), seq_info.type, lackwit_seq_type, len(var_infos), true)
         # 'known_var' means there is a known value, but no variable
         # holds that particular value.
         full_var_info.derived_len = 'known_var' # length is 1 more than var[sclidx]
         var_infos.append(full_var_info)
         assert (not scalar_value_1) or sclconst == 1
         if not scalar_value_1:
-            less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), "ListType", len(var_infos), true)
+            less_one_var_info = var_info("%s[0..%s-1]" % (seq_name, scl_name), seq_info.type, lackwit_seq_type, len(var_infos), true)
             less_one_var_info.derived_len = sclidx
             var_infos.append(less_one_var_info)
         for new_values in var_new_values.values():
@@ -877,17 +1026,18 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
                     new_value_less_one = None
                 new_values.append(new_value_less_one)
             if debug_derive:
-                print "seq %s = %s (len = %d), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
+                print "seq %s = %s (len = %d), scl %s = %s, new_value_less_one = %s" % (seq_name, seq, len(seq), scl_name, scl, new_value_less_one)
 
     # Add scalars
     # Determine whether it is constant; if so, ignore.
     # Perhaps also check that it is within range at least once
     # (or even every time); if not, not very interesting.
-    if ((not var_infos[seqidx].is_derived)
+    if ((not seq_info.is_derived)
         and (not scalar_value_1)
         and (seq_size_idx != 'known_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
-        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), "int", len(var_infos), true))
+        lackwit_elt_type = lackwit_type_element_type_alias(seq_info)
+        var_infos.append(var_info("%s[%s]" % (seq_name, scl_name), "int", lackwit_elt_type, len(var_infos), true))
         for new_values in var_new_values.values():
             this_seq = new_values[seqidx]
             this_scl = new_values[sclidx]
@@ -1143,6 +1293,8 @@ def read_data_trace_file_declarations(filename, fn_regexp=None):
     # Not using processed_lines dictionary appears to be marginally faster.
     # processed_lines = {}                # hashtable of tag lines seen so far
     while (line != ""):         # line == "" when we hit end of file
+        if debug_read:
+            print "rdtfd line", line
         if (line == "\n") or (line[0] == '#'):
             line = file.readline()
         elif (line == "DECLARE\n"):
@@ -1171,7 +1323,9 @@ def init_ftn_call_ct():
 # separating the implementations is clearer, even if there's a bit of
 # duplication.
 def process_declaration(file, this_fn_var_infos, fn_regexp=None):
-    # We have just read the "DECLARATION" line.
+    # We have just read the "DECLARE" line.
+    if debug_read:
+        print "process_declaration entered"
     line = file.readline()
     if (fn_regexp and not fn_regexp.search(line)):
         while (line != "\n") and (line != ""):
@@ -1180,6 +1334,8 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
 
     assert line[-1] == "\n"
     program_point = line[:-1]
+    if debug_read:
+        print "process_declaration", program_point
     (tag_sans_suffix, tag_suffix) = (string.split(program_point, ":::", 1) + [""])[0:2]
     if tag_suffix == "BEGIN":
         functions.append(tag_sans_suffix)
@@ -1192,8 +1348,13 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
         varname = line[:-1]
         line = file.readline()
         assert line[-1] == "\n"
-        vartype = line[:-1]
-        these_var_infos.append(var_info(varname, vartype, len(these_var_infos)))
+        vartype = parse_vartype(line[:-1])
+        line = file.readline()
+        assert line[-1] == "\n"
+        var_comparable = parse_lackwit_vartype(line[:-1], vartype)
+        if debug_read:
+            print "var for", program_point, varname, vartype
+        these_var_infos.append(var_info(varname, vartype, var_comparable, len(these_var_infos)))
         line = file.readline()
 
     assert not(this_fn_var_infos.has_key(program_point))
@@ -1227,7 +1388,7 @@ def after_processing_all_declarations():
             these_var_infos = fn_var_infos[ppt]
             for callee in fn_invocations.keys():
                 calls_var_name = "calls(%s)" % callee
-                these_var_infos.append(var_info(calls_var_name, "int", len(these_var_infos)))
+                these_var_infos.append(var_info(calls_var_name, "integral", "always", len(these_var_infos)))
                 these_values.append(fn_invocations[callee])
                 current_var_index = current_var_index + 1
 
@@ -1239,7 +1400,7 @@ def after_processing_all_declarations():
         these_var_infos = fn_var_infos[ppt]
         begin_ppt = ppt_sans_suffix + ":::BEGIN"
         for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
-            these_var_infos.append(var_info(vi.name + "_orig", vi.type, len(these_var_infos)))
+            these_var_infos.append(var_info(vi.name + "_orig", vi.type, ("alias", vi.name, vi.lackwit_type), len(these_var_infos)))
 
 
 
@@ -1324,8 +1485,8 @@ def read_data_trace_file(filename, fn_regexp=None):
             this_var_modified = (line == "1\n")
 
             this_var_type = this_var_info.type
-            if (this_var_type == "ListType"):
-                # variable is a sequence
+            if is_array_var_type(this_var_type):
+                # variable is an array
                 this_value = string.split(this_value, " ")
                 if len(this_value) > 0 and this_value[-1] == "":
                     # Cope with trailing spaces on the line
@@ -1342,32 +1503,25 @@ def read_data_trace_file(filename, fn_regexp=None):
                     this_value = None
                 else:
                     for seq_elem in range(0, len(this_value)):
-                        # dumb to copy this [code from below, I guess]: fix it
-                        if integer_re.match(this_value[seq_elem]):
-                            this_value[seq_elem] = int(this_value[seq_elem])
-                        elif float_re.match(this_value[seq_elem]):
-                            this_value[seq_elem] = float(this_value[seq_elem])
-                        elif this_value[seq_elem] == "uninit":
+                        if this_value[seq_elem] == "uninit":
                             this_value[seq_elem] = None
                         elif this_value[seq_elem] == "NIL":
                             # HACK
                             this_value[seq_elem] = 0
                         else:
-                            raise "What value in " + filename + "? " + `this_value[seq_elem]`
+                            assert integer_re.match(this_value[seq_elem])
+                            this_value[seq_elem] = int(this_value[seq_elem])
                     this_value = tuple(this_value)
             else:
                 assert this_var_type == "int"
-                if integer_re.match(this_value):
-                    this_value = int(this_value)
-                elif float_re.match(this_value):
-                    this_value = float(this_value)
-                elif this_value == "uninit":
+                if this_value == "uninit":
                     this_value = None
                 elif this_value == "NIL":
                     # HACK
                     this_value = 0
                 else:
-                    raise "What value in " + filename + "?"
+                    assert integer_re.match(this_value)
+                    this_value = int(this_value)
 	    these_values.append(this_value)
 
         line = file.readline()
@@ -1544,7 +1698,7 @@ def all_numeric_invariants(fn_regexp=None):
             assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
             for i in range(0,derivation_index[1]):
                 vi = var_infos[i]
-                assert vi.type != "ListType" or vi.derived_len != None or not vi.is_canonical()
+                assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical()
             if debug_derive:
                 print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
@@ -1626,7 +1780,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         i = indices[j]
         this_var_info = var_infos[i]
         this_dict = dicts[j]
-        if this_var_info.type == "ListType":
+        if is_array_var_type(this_var_info.type):
             this_inv = single_sequence_numeric_invariant(this_dict, (this_var_info,))
         else:
             this_inv = single_scalar_numeric_invariant(this_dict, (this_var_info,))
@@ -1664,6 +1818,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             if not vi2.is_canonical():
                 continue
             if not types_compatible(vi1.type, vi2.type):
+                continue
+            if not lackwit_types_compatible(vi1.name, vi1.lackwit_type, vi2.name, vi2.lackwit_type):
                 continue
             inv2 = vi2.invariant
             if inv2.can_be_None:
@@ -4349,7 +4505,7 @@ def get_global_var_list():
 #         for var in var_info_list:
 #             # original values of parameters should be considered derived?
 #             if string.find(var.name, "_orig") == -1:
-#                 if var.type == "ListType":
+#                 if is_array_var_type(var.type):
 #                     if var.name in params:
 #                         fn_stats.orig_num_seq_params = fn_stats.orig_num_seq_params + 1
 #                     elif var.name in globals:
@@ -4388,7 +4544,7 @@ def get_global_var_list():
 #                     fn_stats.total_num_values_pair = fn_stats.total_num_values_pair + var.invariants[i].values
 #                     fn_stats.total_num_invs_pair = fn_stats.total_num_invs_pair + 1
 # 
-#             if var.type == "ListType":
+#             if is_array_var_type(var.type):
 #                     fn_stats.total_num_seq = fn_stats.total_num_seq + 1
 #             else:
 #                     fn_stats.total_num_scl = fn_stats.total_num_scl + 1
