@@ -3,6 +3,10 @@ Todo list sorted in approximate order of importance.
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
 
+  - Prmitives are at least sometimes printing as hashcodes rather than
+    as their primitive values.  See diffs in $inv/tests/daikon-tests/fib.
+    [jhp]
+
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
@@ -94,7 +98,7 @@ Completed Tasks
     update daikon.jar to be a valid java agent for Chicory so users don't
     need ChicoryPremain.
     
-      - variables declared as Object whose actual type is Number or
+  - variables declared as Object whose actual type is Number or
     Boolean will print their values as a Number or boolean and
     not as a hashcode.  We need to distinguish between these
     and objects used as wrapper internally (as Eric originally
@@ -111,8 +115,8 @@ Completed Tasks
     work fine right now).  
     [etf will work on this]
     
-    2/10/05 etf: dTraceWriter.getValue now changes primitives to PrimitiveWrappers
-    printValue now correctly prints PrimitiveWrappers
+    2/10/05 etf: dTraceWriter.getValue now changes primitives to 
+    PrimitiveWrappers.  printValue now correctly prints PrimitiveWrappers
 
 
 
