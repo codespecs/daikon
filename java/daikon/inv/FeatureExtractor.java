@@ -707,6 +707,7 @@ public final class FeatureExtractor {
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++)
+        if (!(all[i].getAbsolutePath().indexOf("test") > -1))
           answer.addAll(getInvariantClasses(all[i]));
     } else if (top.getName().endsWith(".class")) {
       String name = top.getAbsolutePath();
