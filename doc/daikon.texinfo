@@ -97,8 +97,7 @@ It describes Daikon version 4.0.0, released February 7, 2005.
 @menu
 * Introduction::                
 * Installing Daikon::           
-* Example use::                 
-* Detecting invariants::        
+* Running Daikon::              
 * Daikon output::               
 * GUIs::                        
 * Front ends::                  
@@ -133,54 +132,35 @@ Windows requirements for running Daikon
 
 * Cygwin environment variables::  
 
-Example use of Daikon
+Running Daikon
 
-* Step-by-step instructions::   
-* Summary of Daikon use::       
-* Automating the process::      
+* Detecting invariants in Java programs::  
+* Detecting invariants in C programs::  
+* Detecting invariants in Perl programs::  
+* Detect invariants::           
+
+Detecting invariants in Java programs
+
+* StackAr example::             
 * Understanding the invariants::  
-* Second Java example::         
+
+StackAr example
+
+* Understanding the invariants::  
+
+Detecting invariants in C programs
+
 * C examples::                  
-* Perl examples::               
-
-Dfec examples
-
-* Dfec C examples summary::     
 * Dealing with large examples::  
 
-Using Daikon to detect invariants
+Detecting invariants in Perl programs
 
-* Instrumentation::             
-* Run the instrumented program::  
-* Detect invariants::           
-* All-in-one script::           
-
-Instrumentation
-
-* Instrumenting Java programs::  
-* Instrumenting C programs::    
 * Instrumenting Perl programs::  
-
-Instrumenting C programs
-
-* Instrumenting C programs with Kvasir::  
-* Instrumenting C programs with dfec::  
-
-Run the instrumented program
-
-* Run Java::                    
-
-Details on running instrumented Java programs
-
-* Java applets::                
+* Perl examples::               
 
 Detect invariants in the data trace files
 
 * Command line options::        
-
-All-in-one script daikon.pl
-
-* daikon.pl arguments::         
 
 Daikon output
 
@@ -238,10 +218,35 @@ Java front end Chicory
 
 Source-based Java front end dfej
 
+* Instrumenting Java programs::  
+* StackAr example with dfej::   
+* Step-by-step instructions::   
 * dfej options::                
+* Run Java::                    
 * Scope of instrumentation::    
 * Refined runtime types::       
 * Installing dfej::             
+* All-in-one script::           
+
+StackAr example with dfej
+
+* Summary of Daikon use::       
+* Automating the process::      
+* Second Java example::         
+
+Step-by-step instructions
+
+* Summary of Daikon use::       
+* Automating the process::      
+* Second Java example::         
+
+Details on running instrumented Java programs
+
+* Java applets::                
+
+All-in-one script daikon.pl
+
+* daikon.pl arguments::         
 
 C front end Kvasir
 
@@ -252,12 +257,18 @@ C front end Kvasir
 
 Source-based C front end dfec
 
+* Instrumenting C programs with dfec::  
+* dfec examples::               
 * dfec command-line arguments::  
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
 * Installing dfec::             
+
+dfec examples
+
+* Dfec C examples summary::     
 
 Pointer type disambiguation
 
@@ -485,19 +496,19 @@ you may send mail to the list asking to be added.
 @end table
 
 
-@node    Installing Daikon, Example use, Introduction, Top
+@node    Installing Daikon, Running Daikon, Introduction, Top
 @chapter Installing Daikon
 @cindex installing Daikon
 
 Daikon is written in Java.  In order to run Daikon, all you really need
 is the @file{daikon.jar} file, which is included in the distribution.
 Place @file{daikon.jar} on your classpath so that Java can find it, and
-you are done!
+you are ready to use Daikon!
 
 This section gives step-by-step instructions for installing Daikon.
-@xref{Requirements}, for a few additional requirements running Daikon
-(in short, you must be able to run Java programs, because Daikon is
-written in Java).  Differences between various versions of Daikon appear
+@xref{Requirements}, for a few additional requirements for running Daikon
+--- in short, you must be able to run Java programs, because Daikon is
+written in Java.  Differences between various versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
 
 @enumerate
@@ -511,12 +522,14 @@ or as a zip file from
 The two files contain the same information; you only need one of them.
 For example, you could use one of the following sets of commands:
 @example
+cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
 tar zxvf daikon.tar.gz
 @end example
 @noindent
 or
 @example
+cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.zip
 unzip daikon.zip
 @end example
@@ -524,11 +537,10 @@ unzip daikon.zip
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
-Set up your environment.  You can either arrange for @file{daikon.jar}
-to be on your Java classpath, or you can follow these three steps:
-@enumerate
-@item Make your shell initialization file source the appropriate
-Daikon environment file.
+Set up your environment.  You need to arrange for @file{daikon.jar} to
+be on your Java classpath.  One easy way to do this is to make your
+shell initialization file set the DAIKONPARENT environment variable and
+source the appropriate Daikon environment file.
 @itemize 
 @item
 @cindex C shell
@@ -537,7 +549,8 @@ Daikon environment file.
 If you use the csh or tcsh shell, add the
 following to your @file{.cshrc} file:
 @example
-source @var{daikonparent}/daikon/bin/daikon.cshrc
+setenv DAIKONPARENT @var{daikonparent}
+source $DAIKONPARENT/daikon/bin/daikon.cshrc
 @end example
 @noindent
 @item
@@ -546,23 +559,18 @@ source @var{daikonparent}/daikon/bin/daikon.cshrc
 If you use the bash shell, add the following to your
 @file{.bash_profile} file:
 @example
-source @var{daikonparent}/daikon/bin/daikon.bashrc
+export DAIKONPARENT=@var{daikonparent}
+source $DAIKONPARENT/daikon/bin/daikon.bashrc
 @end example
 @end itemize
+@noindent
 
-@item
-Edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
-to indicate the @var{daikonparent} directory and to perform any desired
-customizations.  (Alternately, you may place such customizations in your
-own @file{.cshrc} or @file{.bash_profile} file, just before and/or
-after the @samp{source ... daikon.cshrc} or @samp{source
-... daikon.bashrc} line.)
+After editing your shell initialization file, either execute commands
+you placed in it, or else log out and log back in to achieve the same
+effect.
 
-@item
-Execute the @command{source} command you placed in your shell
-initialization file, or else log out and log back in to achieve the
-same effect.
-@end enumerate
+You can examine the appropriate Daikon environment file to learn of
+other variables you can customize.
 
 @item
 Optionally, build various executables used by Daikon, such as Kvasir
@@ -616,7 +624,7 @@ In order to run Daikon, you must have a Java 5.0 (or later) JVM
 
 You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
-need a Java compiler such as @command{javac} or @command{jikes}.  If you
+need a Java compiler such as @command{javac}.  If you
 wish to analyze C or C++ programs, you need a C or C++ compiler such as
 @command{gcc}.
 
@@ -723,129 +731,106 @@ in their dotfiles or various wrappers.)
 @c @uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
 
 
-@node    Example use, Detecting invariants, Installing Daikon, Top
-@chapter Example use of Daikon
-@cindex example use of Daikon
+@node    Running Daikon, Daikon output, Installing Daikon, Top
+@chapter Running Daikon
 
-This chapter gives step-by-step instructions for running Daikon on a
-sample Java program, @file{StackAr.java}.  @xref{Second Java example}, for
-another Java example.  @xref{C examples}, for C examples.
-@xref{Detecting invariants}, for complete details about running
-Daikon.
+Detecting invariants involves two steps:
+@enumerate
+@item
+Obtain a data trace file by running your program under the control of a
+front end (also known as an instrumenter) that records information about
+varible values.  You can run your program over an input of your own
+choosing, such as regression tests or a typical user input session.
+
+@item
+Run the Daikon invariant detector over the data trace files
+(@pxref{Detect invariants}).  This detects invariants in the data trace
+files.  You can display the invariants textually or via a graphical user
+interface.
+@end enumerate
+@noindent
+Often, you can run a single command that performs both steps.
+
+This section briefly describes how to obtain data traces for Java, C,
+and Perl programs, and how to run Daikon.
+A front end for the IOA programming language is distributed separately
+(see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
+An earlier version of Daikon included a Lisp front end, but it is no
+longer supported.
 
 
 @menu
-* Step-by-step instructions::   
-* Summary of Daikon use::       
-* Automating the process::      
-* Understanding the invariants::  
-* Second Java example::         
-* C examples::                  
-* Perl examples::               
+* Detecting invariants in Java programs::  
+* Detecting invariants in C programs::  
+* Detecting invariants in Perl programs::  
+* Detect invariants::           
 @end menu
 
-@node    Step-by-step instructions, Summary of Daikon use, Example use, Example use
-@section Step-by-step instructions
+@node    Detecting invariants in Java programs, Detecting invariants in C programs, Running Daikon, Running Daikon
+@section Detecting invariants in Java programs
 
-@c We recommend you run Daikon on Unix, but it can also be run on Windows.
+In order to detect invariants in a Java program, you run the
+program using the Chicory front end to create a data trace file, then
+run Daikon itself to detect invariants.
+With the @option{--daikon} option to Chicory, a single command performs
+both steps.
 
-You need to perform three basic tasks:  instrument the target program
-(steps 1-4), run the instrumented program to create a data trace file
-(steps 5-7), and run Daikon over the data trace file to produce
-invariants (steps 8-9).
-
-You must first install Daikon if you haven't done so already; see
-@ref{Installing Daikon}.  If you have any trouble with these
-instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
-
-
-@enumerate
-@item Change to the directory containing the StackAr program.  (The
-directory contains the @file{DataStructures} directory.)
+For example, if you usually run
 @example
-cd examples/StackAr
+java mypackage.MyClass arg1 arg2 arg3
+@end example
+@noindent
+then instead you would run
+@example
+java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
-@item Compile the original version of the program.  You must use the
-@option{-g} flag to include debugging information in the compiled classfiles.
-You may compile with any Java compiler you like (such as javac), but
-your code must be compilable with the @command{jikes} Java compiler (see
-@uref{http://www.ibm.com/developerworks/oss/jikes/}).
+
+@menu
+* StackAr example::             
+* Understanding the invariants::  
+@end menu
+
+@node    StackAr example, Understanding the invariants, Detecting invariants in Java programs, Detecting invariants in Java programs
+@subsection StackAr example
+
+The Daikon distribution contains some example programs that will help
+you get practice in running Daikon.
+
+To detect invariants in the StackAr program, perform the following steps
+
+@enumerate
+@item Compile the program with debugging symbols enabled --- the
+@option{-g} switch to @command{javac}.  (The program and test suite
+appear in the @file{DataStructures} subdirectory directory.)
 @example
+cd examples/StackAr
 javac -g DataStructures/*.java
 @end example
 
-
-@item Instrument the @file{StackAr.java} file.
-@example
-dfej DataStructures/StackAr.java
-@end example
-@noindent
-(These instructions assume you have the current working directory (".")
-in your CLASSPATH@.  If that is not the case, then run @command{dfej
--ajaxap=.}  instead of @command{dfej}.)
-
-We instrument only this one file because we are only interested in the
-invariants of the StackAr class, not the other classes in the program.
-
-This command creates two directories, @file{daikon-instrumented} and
-@file{daikon-output}.  It creates an instrumented version of
-@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
-It creates a declaration file at
-@file{daikon-output/DataStructures/StackAr.decls}.
-
-@item Compile the instrumented version of StackAr.java.
-@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
-(This step requires "." to be on your classpath.)
+@item Run the program under the control of the Chicory front end, in
+order to create a @file{StackAr.dtrace} file.
 
 @example
-javac daikon-instrumented/DataStructures/StackAr.java
+java daikon.Chicory DataStructures.StackArTester
 @end example
-
-@item Run the StackAr test suite, using the instrumented
-@file{StackAr.class} class file instead of the original (but the
-original version of all other files):
-
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
-
-This will generate a trace file at
-@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
-a few seconds to a few minutes, depending on the speed of your
-computer.
-
-@item Change to the @file{daikon-output} directory to analyze
-the output.
-
-@example
-cd daikon-output
-@end example
-
-@c @item Due to a bug in the Java front end, there can be problems in the
-@c trace file.  Run the @command{modbit-munge} script to fix these problems:
-@c @table @r
-@c @item Unix
-@c @t{modbit-munge.pl StackAr.dtrace}
-@c @item Windows
-@c @t{modbit-munge.bat StackAr.dtrace}
-@c @end table
 
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
-     StackAr.dtrace
+java daikon.Daikon -o StackAr.inv StackAr.dtrace
 @end example
 
-The invariants are printed to standard output, and a binary
-representation of the invariants is written to
-@file{StackAr.inv}.
+Alternately, you can combine thie step and the previous one into a
+single command:
+@example
+java daikon.Chicory DataStructures.StackArTester
+@end example
 
-@item Examine the invariants.  There are five ways to do this.
+In either case, the invariants are printed to standard output, and a binary
+representation of the invariants is written to @file{StackAr.inv}.
+
+There are five ways to do this.
 @itemize @bullet
 @item Examine the output from running Daikon.  (You may find it
 convenient to capture the output in a file; add @command{> StackAr.txt}
@@ -887,65 +872,14 @@ applicable to the current location (class or method).  For details on
 running the Context GUI, see @ref{Context GUI}.  
 
 @end itemize
-
 @end enumerate
 
-@node    Summary of Daikon use, Automating the process, Step-by-step instructions, Example use
-@section Summary of Daikon use
+@menu
+* Understanding the invariants::  
+@end menu
 
-The steps above can be divided into three stages:
-
-@itemize @bullet
-@item Instrumentation (steps 1-4)
-@example
-cd examples/StackAr
-javac -g DataStructures/*.java
-dfej DataStructures/StackAr.java
-javac daikon-instrumented/DataStructures/StackAr.java
-@end example
-
-@c @item Trace file generation (steps 5-7)
-
-@item Trace file generation (step 5)
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.StackArTester
-@end example
-
-(On Windows, use ``;'' as the path separator.)
-
-@c cd daikon-output
-@c modbit-munge.pl StackAr.dtrace
-@c @end example
-
-@item Invariant detection (steps 6-8)
-@example
-cd daikon-output
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
-     StackAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
-@end example
-
-@end itemize
-
-@node    Automating the process, Understanding the invariants, Summary of Daikon use, Example use
-@section Automating the process
-
-The script @command{daikon.pl} automates all steps of the invariant
-detection process.
-
-@example
-cd examples/StackAr
-daikon.pl DataStructures.StackArTester
-@end example
-
-This command instruments your program, generates a trace file, and
-displays the invariants in the Tree GUI@.  Currently, this script only works
-on Unix.  For more details, @xref{All-in-one script}.
-
-
-@node    Understanding the invariants, Second Java example, Automating the process, Example use
-@section Understanding the invariants
+@node    Understanding the invariants,  , StackAr example, Detecting invariants in Java programs
+@subsection Understanding the invariants
 
 This section examines some of the invariants for the StackAr example.
 For more help interpreting invariants, see @ref{Interpreting output}.
@@ -1007,68 +941,50 @@ array, the elements of the array, and @code{topOfStack} are not
 modified by this method --- this method is an "observer".  The
 last invariant is not particularly interesting.
 
-@node    Second Java example, C examples, Understanding the invariants, Example use
-@section A second Java example
 
-A second example is located in the @file{examples/QueueAr} subdirectory.
-Run this sample using the following steps:
 
-@itemize @bullet
-@item Instrumentation (steps 1-4)
-@example
-cd examples/QueueAr
-javac -g DataStructures/*.java
-dfej DataStructures/QueueAr.java
-javac daikon-instrumented/DataStructures/QueueAr.java
-@end example
 
-@c @item Trace file generation (steps 5-7)
-@item Trace file generation (step 5)
-@example
-java -classpath "daikon-instrumented:$CLASSPATH" \
-     DataStructures.QueueArTester
-@c cd daikon-output
-@c modbit-munge.pl QueueAr.dtrace
-@end example
+@node    Detecting invariants in C programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Running Daikon
+@section Detecting invariants in C programs
 
-(On Windows, use ``;'' as the path separator.)
+The C front end is named Kvasir.
+To use Kvasir with your program, first make sure that your program has
+been compiled with DWARF-2 format debugging information, such as by
+giving the @option{-gdwarf-2} flag to GCC when compiling.  Then, run your
+program as usual, but prepend @command{kvasir-dtrace} to the command line.
 
-@item Invariant detection (steps 6-8)
-@example
-cd daikon-output
-java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls \
-     QueueAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
-@end example
+For more information about Kvasir, including more detailed
+documentation on its command-line options, see @ref{C
+front end Kvasir}.
 
-@end itemize
+@menu
+* C examples::                  
+* Dealing with large examples::  
+@end menu
 
-@node    C examples, Perl examples, Second Java example, Example use
-@section C examples
+@node    C examples, Dealing with large examples, Detecting invariants in C programs, Detecting invariants in C programs
+@subsection C examples
 
 The Daikon distribution comes with several example C programs in the
-@file{examples} directory to enable users to become familiar
-with Daikon.
-There are two sets of examples, corresponding to the two supplied C
-front ends.  Examples intended for use with the binary-based front end
-Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
-older source-based front end dfec are in a subdirectory
-@file{dfec-examples}.  It should be possible to instrument the dfec
-examples with Kvasir, though we will not give directions here.
-Instrumenting the Kvasir examples with dfec is not recommended (and is
-not likely to work).
+@file{examples/kvasir-examples} directory to enable users to become
+familiar with running Daikon on C programs.
 
-In order to detect invariants over C programs, you must
-install either Kvasir, the binary-based front end for C programs (for
-Linux/x86 only) or dfec, the source-based Daikon front end for C; see
-@ref{Installing Kvasir} or @ref{Installing dfec} respectively.
+@c There are two sets of examples, corresponding to the two supplied C
+@c front ends.  Examples intended for use with the binary-based front end
+@c Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
+@c older source-based front end dfec are in a subdirectory
+@c @file{dfec-examples}.  It should be possible to instrument the dfec
+@c examples with Kvasir, though we will not give directions here.
+@c Instrumenting the Kvasir examples with dfec is not recommended (and is
+@c not likely to work).
 
-@subsection Kvasir examples
+In order to detect invariants over C programs, you must first install
+Kvasir; see @ref{Installing Kvasir}.
 
 To detect invariants for a program with Kvasir, you need to perform
-three basic tasks: compile the target program (step 1), run the
-instrumented program to create a data trace file (step 2), and run
-Daikon over the data trace file to produce invariants (steps 3-4).
+two basic tasks:  run the program under Kvasir to create a data strace
+file (steps 1--2), and run
+Daikon over the data trace file to produce invariants (steps 3--4).
 The following instructions are for the wordplay example.
 
 @enumerate
@@ -1135,142 +1051,15 @@ instructions}, there are several ways to do this:
 @itemize 
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
-@item Use the Daikon Tree GUI to browse the invariants.
-@item Use the Daikon Context GUI to browse the invariants.
+@item Use the Daikon Tree GUI to browse the invariants.  (Deprecated.)
 @end itemize
 @noindent
 For help understanding the invariants, see @ref{Interpreting output}.
 
 @end enumerate
 
-@subsection Dfec examples
 
-To detect invariants for a program with dfec, you need to perform three basic
-tasks: instrument the target program (steps 1-3), run the instrumented
-program to create a data trace file (step 4), and run Daikon over the
-data trace file to produce invariants (steps 5-6).  The following
-instructions are for the print_tokens example.  The other examples can
-be run in exactly the same manner.
-
-@enumerate
-@item Change to the directory containing the print_tokens program.
-@example
-cd $DAIKONDIR/examples/dfec-examples/print_tokens
-@end example
-
-@item Instrument the program using dfec, the C front end.
-Run the front end over all the C source files and
-the user-created header files they depend on.
-@example
-dfec print_tokens.c stream.h tokens.h
-@end example
-@noindent
-This command creates two directories, @file{daikon-instrumented}
-and @file{daikon-output}.  It creates an instrumented and preprocessed
-version of @file{print_tokens.c} at
-@file{daikon-instrumented/print_tokens.cc}.  It 
-creates a declaration file at @file{daikon-output/print_tokens.decls}.
-
-@quotation
-Note for Windows users:
-Under Windows, you must insert in the source file a gcc-specific
-@samp{__attribute__} for the @samp{_ctype_} variable, which is used in
-our test suite.  Run the following commands:
-@example
-alias fix="sed -f $DFECDIR/fix.sed"
-(cd daikon-instrumented; \
-  fix print_tokens.cc > fixed.cc;
-  mv fixed.cc print_tokens.cc)
-@end example
-@end quotation
-
-@item Compile and link the instrumented program to create the
-executable @file{print_tokens} in the current directory.
-
-@example
-g++ -g -w -o print_tokens.exe \
-    daikon-instrumented/print_tokens.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-
-@item Run the print_tokens test suite.  First set the DTRACEAPPEND
-environment variable, so that a final @file{.dtrace} file contains
-information from all runs, rather than each run overwriting the file
-so that it contains only information from the last run.  (For more
-details about the DTRACEAPPEND environment variable, see @ref{dfej
-options} and @ref{dfec command-line arguments}.)
-
-If you use the bash shell, run the following commands:
-@example
-export DTRACEAPPEND=1
-sh tests.sh
-@end example
-
-If you use the csh or tcsh shell, run the following commands:
-@example
-setenv DTRACEAPPEND 1
-sh tests.sh
-@end example
-
-These commands create a data trace file at
-@file{daikon-output/print_tokens.dtrace}.
-
-@item Run Daikon on the trace file.
-@example
-java -Xmx256m daikon.Daikon -o print_tokens.inv \
-     daikon-output/print_tokens.decls \
-     daikon-output/print_tokens.dtrace
-@end example
-@noindent
-The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{print_tokens.inv}.
-
-@item Examine the invariants.  As described in the Daikon manual, there are
-several ways to do this:
-@itemize 
-@item Examine the output from running Daikon.
-@item Use the PrintInvariants program to display the invariants.
-@item Use the Daikon Tree GUI to browse the invariants.
-@item Use the Daikon Context GUI to browse the invariants.
-@end itemize
-@noindent
-For help understanding the invariants, see @ref{Interpreting output}.
-
-@end enumerate
-
-@menu
-* Dfec C examples summary::     
-* Dealing with large examples::  
-@end menu
-
-@node    Dfec C examples summary, Dealing with large examples, C examples, C examples
-@subsection Dfec C examples summary
-
-The above steps can be divided into three stages:
-
-Instrumentation (Steps 1-3)
-@example
-cd $DAIKONDIR/examples/dfec-examples/print_tokens
-dfec print_tokens.c stream.h tokens.h
-g++ -g -w -o print_tokens daikon-instrumented/print_tokens.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-
-Trace File Generation (Step 4)
-@example
-export DTRACEAPPEND=1
-sh tests.sh
-@end example
-
-Invariant Detection (Step 5)
-@example
-java -Xmx256m daikon.Daikon -o print_tokens.inv \
-     daikon-output/print_tokens.decls \
-     daikon-output/print_tokens.dtrace
-@end example
-
-
-@node    Dealing with large examples,  , Dfec C examples summary, C examples
+@node    Dealing with large examples,  , C examples, Detecting invariants in C programs
 @subsection Dealing with large examples
 
 Beware that several of the C example programs require significant
@@ -1311,23 +1100,71 @@ depends on both the length of the test run and the size of the program
 structures).  For more techniques for using Daikon with large programs
 and long program runs, see @ref{Large dtrace files}.
 
-@node Perl examples,  , C examples, Example use
-@section Perl examples
 
-The Daikon distribution includes sample Perl programs suitable for use
-with Daikon in the @file{examples/perl-examples} directory.
 
-To use the Daikon Perl front end, you need to have installed Daikon
-(see @ref{Installing Daikon}), and you need version 5.8 or later of
-Perl.
 
-The Perl front end requires a few extra steps to run compared with the
-Java and C front ends, because Perl programs don't pre-specify the
-types of their variables.  Using the Perl front end is a two-pass
+@node    Detecting invariants in Perl programs, Detect invariants, Detecting invariants in C programs, Running Daikon
+@section Detecting invariants in Perl programs
+
+The Daikon front end for Perl is called dfepl.
+
+Using the Perl front end is a two-pass
 process: first you must run the annotated program so that the runtime
 system can dynamically infer the kind of data stored in each variable,
 and then you must re-annotate and re-run the program with the added
-type information. 
+type information.
+This is necessary because Perl programs don't declare the
+types of their variables. 
+
+dfepl requires version 5.8 or later of Perl.
+
+@menu
+* Instrumenting Perl programs::  
+* Perl examples::               
+@end menu
+
+
+@node Instrumenting Perl programs, Perl examples, Detecting invariants in Perl programs, Detecting invariants in Perl programs
+@subsection Instrumenting Perl programs
+
+Perl programs must be instrumented twice.  First they must be
+instrumented without type information.  Then, once the first
+instrumented version has been run to produce type information, they
+must be instrumented again taking the type information into account.
+
+To instrument a stand-alone Perl program, invoke @command{dfepl} with
+the name of the program as an argument.
+
+@example
+dfepl program.pl
+@end example
+
+To instrument a Perl module or a collection of modules, invoke
+@command{dfepl} either with the name of each module, or with the name
+of a directory containing the modules.  To instrument all the modules
+in the current directory, give @command{dfepl} the argument @file{.}.
+For instance, if the current directory contains a module
+@code{Acme::Trampoline} in @file{Acme/Trampoline.pm} and another
+module @code{Acme::Date} in @file{Acme/Date.pm}, they can be annotated
+by either of the following two commands:
+
+@example
+dfepl Acme/Trampoline.pm Acme/Date.pm
+dfepl .
+@end example
+
+Once type information is available, run the instrumentation command
+again with the @option{-T} or @option{-t} options added to use the
+produced type information.
+
+For more information about dfepl, see @ref{Perl front end dfepl}.
+
+
+@node Perl examples,  , Instrumenting Perl programs, Detecting invariants in Perl programs
+@subsection Perl examples
+
+The Daikon distribution includes sample Perl programs suitable for use
+with Daikon in the @file{examples/perl-examples} directory.
 
 Here are step-by-step instructions for examining a simple module,
 @file{Birthday.pm}, as used by a test script @file{test-bday.pl}.
@@ -1447,337 +1284,8 @@ were declared, but since every stand-alone program uses the
 @code{main} package, the name of the program is prepended to the
 @file{.decls} file name to avoid collisions.
 
-@node    Detecting invariants, Daikon output, Example use, Top
-@chapter Using Daikon to detect invariants
 
-Detecting invariants involves three steps:
-@enumerate
-@item
-Run @command{dfej}, @command{dfec}, or @command{dfepl} to instrument
-the target program
-(@pxref{Instrumentation}).
-This modifies a copy of the target program so that, in addition to
-performing its original task, it also writes variable values to a data
-trace file.
-
-@item
-Run the instrumented program in the usual way, probably using a test
-suite (@pxref{Run the instrumented program}).  This creates data trace
-files.
-
-@item
-Run the Daikon invariant detector over the data trace files
-(@pxref{Detect invariants}).  This detects invariants in the data trace
-files.  You can display the invariants textually or via a graphical user
-interface.
-@end enumerate
-
-
-
-@menu
-* Instrumentation::             
-* Run the instrumented program::  
-* Detect invariants::           
-* All-in-one script::           
-@end menu
-
-@node    Instrumentation, Run the instrumented program, Detecting invariants, Detecting invariants
-@section Instrumentation
-
-Instrumentation performs two actions:
-@itemize @bullet
-@item
-Instrumentation adds instructions to the target program so that, in
-addition to performing its original task, it also writes variable values
-to a data trace file.  The changes are made to a copy of the target
-program; your original version is not modified.
-@item
-Instrumentation creates declaration files that describe the format of
-the data trace files.  For instance, these declaration files describe
-the names of procedures and variables that appear in the data trace file.
-@end itemize
-
-Five instrumenters are part of Daikon:  Chicory and @command{dfej} for
-Java programs, Kvasir and @command{dfec} for C and C++, and
-@command{dfepl} for Perl.  The letters @command{dfe} in some of the
-names stand for ``Daikon front end'', and @command{j}, @command{c}, and
-@command{pl} abbreviate ``Java'', ``C'', and ``Perl''.
-For more details about these instrumenters, @xref{Front ends}.
-
-A front end for the IOA programming language is distributed separately
-(see @uref{http://theory.csail.mit.edu/tds/ioa.html}).
-An earlier version of Daikon included a Lisp front end, but it is no
-longer supported.
-
-@menu
-* Instrumenting Java programs::  
-* Instrumenting C programs::    
-* Instrumenting Perl programs::  
-@end menu
-
-@node    Instrumenting Java programs, Instrumenting C programs, Instrumentation, Instrumentation
-@subsection Instrumenting Java programs
-
-To instrument Java source programs, simply invoke @command{dfej}, the
-Daikon front end for Java, on them:
-@example
-      dfej @var{filename1}.java @var{filename2}.java @var{...}
-@end example
-
-After running dfej, compile the instrumented version of the code, which
-by default appears in the @file{daikon-instrumented/} directory.
-
-The Daikon front end for Java has two effects:
-@itemize @bullet
-@item
-dfej writes instrumented versions of the files to a
-@file{daikon-instrumented/} directory.
-@item
-dfej creates declaration files named @file{@var{filename1}.decls}, etc.@
-in a @file{daikon-output/} directory.
-@end itemize
-
-For more information about dfej, see @ref{Source-based Java front end dfej}.
-
-
-@node    Instrumenting C programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
-@subsection Instrumenting C programs
-
-There are two ways to instrument C programs.  Compiled programs
-originally written in C can be instrumented on the fly using the
-Kvasir tool, or C programs in source code form can be instrumented
-with the @command{dfec} tool.  We recommend use of Kvasir.
-Kvasir can only be used on Linux/x86, but when it's available, it's
-usually easier to use and more reliable.
-
-@menu
-* Instrumenting C programs with Kvasir::  
-* Instrumenting C programs with dfec::  
-@end menu
-
-@node    Instrumenting C programs with Kvasir, Instrumenting C programs with dfec, Instrumenting C programs, Instrumenting C programs
-@subsubsection Instrumenting C programs with Kvasir
-
-To use Kvasir with your program, first make sure that your program has
-been compiled with DWARF-2 format debugging information, such as by
-giving the @option{-gdwarf-2} flag to GCC when compiling.  Then, run your
-program as usual, but prepend @command{kvasir-dtrace} to the command line.
-For more information about Kvasir, including more detailed
-documentation on its command-line options, see @ref{C
-front end Kvasir}.
-
-@node    Instrumenting C programs with dfec,  , Instrumenting C programs with Kvasir, Instrumenting C programs
-@subsubsection Instrumenting C programs with dfec
-
-To instrument C source, invoke @command{dfec} on all the source and
-header files at once:
-@example
-dfec @var{...options...} @var{myprog}.c
-@end example
-@strong{Important:}  dfec may only be run on ANSI/ISO C, not on K&R C
-or other dialects (@pxref{C program requirements})
-
-You may want to specify one or more command-line options;
-see @ref{dfec command-line arguments}.
-
-After dfec is run, you must compile the instrumented source, linking
-it with the object file for the Daikon runtime library and the stdc++
-library.  By default, dfec places instrumented source in the
-@file{daikon-instrumented/} directory.
-@example
-g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-@noindent
-In addition, you may want to specify the @option{-w} flag to g++, to
-suppress warnings.  dfec's output is valid C++ but may cause g++ to
-issue warnings.
-
-The Daikon front end for C has three effects:
-@itemize @bullet
-@item
-dfec writes instrumented versions of the files to a
-@file{daikon-instrumented/} directory 
-@item
-dfec creates declaration files named
-@file{@var{myprog}.decls}, etc.@: in a
-@file{daikon-output/} directory.
-@item
-optionally, dfec may create a pointer
-type disambiguation file named
-@file{@var{myprog}.disambig} in the
-same directory as the @file{@var{myprog}.decls}
-file.
-@end itemize
-
-For more information about dfec, including more detailed documentation
-on its command-line options, see @ref{Source-based C front end dfec}.
-
-
-@c <ol>
-@c      <tt>dfec</tt> is written in Perl.  If Perl is not available, you may
-@c      instead use <tt>dfec.sh</tt>, which is written in sh shell script.<p>
-@c 
-@c      The Daikon C front end:
-@c      <ol>
-@c        <li>copies your original files to @file{<i>myprog1.c</i>.uninst},
-@c 	   etc.<br>
-@c        <li>overwrites the original files with instrumented versions
-@c        <li>creates declaration files named @file{<i>myprog1.c</i>.decls}, etc.
-@c      </ol>
-@c      You may wish to perform this operation with a copy of your program,
-@c      to safeguard your original source code.<p>
-@c 
-@c      If you supply the @option{-d <i>directory</i>} argument (before
-@c      the file names), then the instrumented source files are placed in the
-@c      specified directory instead (and no backup files need be made).
-@c  <li>Create or modify a @file{Makefile}.  Either:
-@c    <ul>
-@c      <li>If you have no @file{Makefile}, copy @file{Makefile-sample}
-@c          to @file{Makefile} and add the names of your source files to its
-@c          <tt>OBJS</tt>, and edit its <tt>EXEC</tt> executable name.
-@c      <li>If you have a @file{Makefile}, add @file{dump_trace.o} to the
-@c          list of object files that need to be created (and linked to create
-@c          your executable).
-@c    </ul>
-@c  <li>Create an instrumented executable by building your program in the
-@c      usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
-@c </ol>
-
-@node Instrumenting Perl programs,  , Instrumenting C programs, Instrumentation
-@subsection Instrumenting Perl programs
-
-Perl programs must be instrumented twice.  First they must be
-instrumented without type information.  Then, once the first
-instrumented version has been run to produce type information, they
-must be instrumented again taking the type information into account.
-
-To instrument a stand-alone Perl program, invoke @command{dfepl} with
-the name of the program as an argument.
-
-@example
-dfepl program.pl
-@end example
-
-To instrument a Perl module or a collection of modules, invoke
-@command{dfepl} either with the name of each module, or with the name
-of a directory containing the modules.  To instrument all the modules
-in the current directory, give @command{dfepl} the argument @file{.}.
-For instance, if the current directory contains a module
-@code{Acme::Trampoline} in @file{Acme/Trampoline.pm} and another
-module @code{Acme::Date} in @file{Acme/Date.pm}, they can be annotated
-by either of the following two commands:
-
-@example
-dfepl Acme/Trampoline.pm Acme/Date.pm
-dfepl .
-@end example
-
-Once type information is available, run the instrumentation command
-again with the @option{-T} or @option{-t} options added to use the
-produced type information.
-
-For more information about dfepl, see @ref{Perl front end dfepl}.
-
-@node    Run the instrumented program, Detect invariants, Instrumentation, Detecting invariants
-@section Run the instrumented program
-
-To create data trace files, run the instrumented program over some test
-suite of your own choosing, such as regression tests or a typical user
-input session.  You can run the instrumented program in just the same
-way you did before; the only behavioral change is writing a
-@file{.dtrace} file.  Only one @file{.dtrace} file is created, even
-though multiple @file{.decls} files might have been created (one for
-each source file) when the program was instrumented.
-
-By default, the instrumented Java or C program creates its @file{.dtrace}
-file in the @file{daikon-output/} subdirectory of the current directory,
-and it defaults to overwriting any previously existing @file{.dtrace} file.
-
-@c    For C
-@c  programs, however, you can set the DTRACEAPPEND environmental variable,
-@c  which will cause each subsequent run of the program to append to the
-@c  @file{.dtrace} file, which is useful if your test suite requires multiple
-@c  invocations of the program.
-
-Environment variables DTRACEFILE and DTRACEAPPEND can override the
-default behaviors.  For details, see @ref{dfej options} and @ref{dfec
-command-line arguments}.
-
-@c After running your program, run @command{bin/modbit-munge.pl} on the
-@c resulting @file{.dtrace} files:
-@c @example
-@c modbit-munge.pl @var{myprog}.dtrace
-@c @end example
-@c @noindent
-@c This step fixes up some potential problems that may appear in the
-@c @file{.dtrace} file.
-
-
-@menu
-* Run Java::                    
-@end menu
-
-@node    Run Java,  , Run the instrumented program, Run the instrumented program
-@subsection Details on running instrumented Java programs
-
-After instrumentation, there are two versions of your Java program:
-the original version, which is unmodified, and the instrumented
-version, which appears in the @file{daikon-instrumented/} directory.
-Make sure that the @file{daikon-instrumented/} directory appears on
-your class path before the directory containing the original Java
-code.  You can do this by running the program from that directory, if
-@file{.} (the current directory) appears early on your class path, or
-you can add the @file{daikon-instrumented/} directory to your class
-path explicitly.  (To be able to run the instrumented program from a
-directory other than the parent of the @file{daikon-instrumented/}
-directory, an absolute path to the @file{daikon-instrumented/} should
-be used).
-
-
-@menu
-* Java applets::                
-@end menu
-
-@node    Java applets,  , Run Java, Run Java
-@subsubsection Java applets
-
-In order to run an applet, you must take two additional steps.
-
-@enumerate
-@item
-Copy or link all class files, jar files, input files, and html files
-that your applet needs to the @file{daikon-instrumented/} directory.  This
-includes the @file{daikon/java} directory itself.  For example, to
-create a link to the @file{daikon/java} directory, type (while in the
-@file{daikon-instrumented/} directory):
-@example
-ln -s $DAIKONDIR/java/daikon .
-@end example
-
-@item
-By default, the Java 2 applet security model does not allow applets to
-write files.  To get around this so that Daikon can write its @file{.dtrace}
-files, create a file named @file{javaPolicy} in the @file{daikon-instrumented/}
-directory that contains the text
-@example
-grant @{
-    permission java.io.FilePermission
-      "<<ALL FILES>>", "read, write, delete, execute";
-@};
-@end example
-@noindent
-Do not use this policy file with untrusted applets.
-
-@item
-Finally, run the applet:
-@example
-       appletviewer -J-Djava.security.policy=javaPolicy @var{html-file}
-@end example
-@end enumerate
-
-
-@node    Detect invariants, All-in-one script, Run the instrumented program, Detecting invariants
+@node    Detect invariants,  , Detecting invariants in Perl programs, Running Daikon
 @section Detect invariants in the data trace files
 
 Run the Daikon invariant detector via the command
@@ -2055,123 +1563,8 @@ current directory.
 @end table
 
 
-@node    All-in-one script,  , Detect invariants, Detecting invariants
-@section All-in-one script daikon.pl
 
-The @command{daikon.pl} script automates all steps of the invariant
-detection process:  instrumentation, trace file generation, and
-invariant display.  However, it has several limitations: it only works
-with programs written in Java, it doesn't allow all of the optional
-features of Daikon to be controlled, and it depends on external
-programs that may not be present on non-Unix systems.  It is not
-the preferred way to run Daikon, but some users may find it helpful
-for quick testing, or for use from automated scripts.
-
-Running @command{daikon.pl} without without any arguments will display usage information:
-@example
-% daikon.pl
-Usage: daikon.pl [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
-Options:
-  -o, --output FILE   Save invariants in FILE.inv
-  ...
-@end example
-
-You must supply at least the name of a "main" class that provides
-the method @code{public static void main(String[] args)}.
-@command{daikon.pl} runs this class to exercise your program.
-
-@c <!--
-@c <h2><a xname="example">Example</a></h2>
-@c 
-@c You can try an example provided by the staff:
-@c <pre>
-@c   athena% cd ~/6.170
-@c   athena% mkdir daikon-testing; cd daikon-testing
-@c   athena% cp -rp /mit/6.170/handouts/daikon/example .
-@c   athena% daikon --verbose xxx
-@c </pre>
-@c This will run <tt>xxx</tt>, detect invariants for the program, and
-@c display the daikon Tree GUI to browse the results.  See the <a
-@c href="#interpret-output">interpreting the output</a> section below for
-@c details on the meaning of the invariants.
-@c 
-@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file that
-@c contains the invariants in a special format, and a
-@c <tt>.src.tar.gz</tt> file that contains a snapshot of the program
-@c source.  You may specify names for these files using the <tt>--output
-@c <i>file</i></tt> parameter to daikon.  For example <tt>--output
-@c mytest</tt> will create <tt>mytest.inv</tt> and
-@c <tt>mytest.src.tar.gz</tt>.
-@c 
-@c <p>If your main class requires arguments, you may place them after the
-@c class name, just as if you were running <tt>java</tt> instead of
-@c <tt>daikon</tt>.
-@c -->
-
-@menu
-* daikon.pl arguments::         
-@end menu
-
-@node    daikon.pl arguments,  , All-in-one script, All-in-one script
-@subsection Command line options for daikon.pl
-
-@table @option
-@item -i @var{file}
-@itemx --instrument @var{file}
-Only instrument FILE@.  Can be specified multiple times.
-Otherwise, all files that are used by the main file are instrumented.
-
-@item -o @var{file}
-@itemx --output @var{file}
-Save invariants in @file{@var{file}.inv} and source in
-@file{@var{file}.src.tar.gz}.  If no name 
-is given, a name is automatically generated and used.
-
-@item -t
-@itemx --textfile
-Save a textual listing of invariants to a @file{.txt} file.
-
-@item -n
-@itemx --nogui
-Create the invariants file (and @file{.txt} file,
-if @option{-t} is given), but do not start the Tree GUI@.
-
-@item --daikonarg @var{arg}
-Supply additional argument(s) to Daikon proper.
-Can be specified multiple times.
-Warning:  be careful with quoting, as the argument is supplied directly
-to the shell and may be viewed as multiple arguments or reinterpreted
-(which may or may not be what you want).
-
-@item -v
-@itemx --verbose
-Display progress messages while running.
-
-@item -c
-@itemx --cleanup
-Remove files left over from an interrupted session before starting.
-Should be used only when @command{daikon.pl} detects left-over files and instructs
-you to use this option.
-
-@item --nocleanup
-Do not remove temporary files when exiting.
-This option is intended for debugging.
-
-@item -s
-@itemx --src
-Make an archive of the source code for later reference.  All the code
-that is instrumented will be recorded in the compressed tarfile
-@file{@var{file}.src.tar.gz}, where @var{file} is the name that was
-supplied via the @option{-o} or @option{--output} arguments.
-
-@item -d
-@itemx --debug
-Print extra debugging information.
-@end table
-
-
-
-@node    Daikon output, GUIs, Detecting invariants, Top
+@node    Daikon output, GUIs, Running Daikon, Top
 @chapter Daikon output
 
 
@@ -3112,7 +2505,7 @@ This chapter describes several front ends that are part of Daikon.  It
 is relatively easy to build your own front end, if these do not serve
 your purpose; we are aware of a number of users who have done so.  For
 more information about building a new front end, @xref{File formats},
-and @xref{Instrumentation}.
+and @xref{Front ends}.
 
 
 @menu
@@ -3387,15 +2780,452 @@ speed will increase in future releases), Chicory is not the bottleneck.
 Thus, we recommend the use of Chicory over dfej in most circumstances.
 For more details on Chicory, see @ref{Java front end Chicory}.
 
+Instrumentation with dfej performs two actions:
+@itemize @bullet
+@item
+Instrumentation adds instructions to the target program so that, in
+addition to performing its original task, it also writes variable values
+to a data trace file.  The changes are made to a copy of the target
+program; your original version is not modified.
+@item
+Instrumentation creates declaration files that describe the format of
+the data trace files.  For instance, these declaration files describe
+the names of procedures and variables that appear in the data trace file.
+@end itemize
+
 
 @menu
+* Instrumenting Java programs::  
+* StackAr example with dfej::   
+* Step-by-step instructions::   
 * dfej options::                
+* Run Java::                    
 * Scope of instrumentation::    
 * Refined runtime types::       
 * Installing dfej::             
+* All-in-one script::           
 @end menu
 
-@node    dfej options, Scope of instrumentation, Source-based Java front end dfej, Source-based Java front end dfej
+
+@node    Instrumenting Java programs, StackAr example with dfej, Source-based Java front end dfej, Source-based Java front end dfej
+@subsection Instrumenting Java programs
+
+To instrument Java source programs, simply invoke @command{dfej}, the
+Daikon front end for Java, on them:
+@example
+      dfej @var{filename1}.java @var{filename2}.java @var{...}
+@end example
+
+After running dfej, compile the instrumented version of the code, which
+by default appears in the @file{daikon-instrumented/} directory.
+
+The Daikon front end for Java has two effects:
+@itemize @bullet
+@item
+dfej writes instrumented versions of the files to a
+@file{daikon-instrumented/} directory.
+@item
+dfej creates declaration files named @file{@var{filename1}.decls}, etc.@
+in a @file{daikon-output/} directory.
+@end itemize
+
+For more information about dfej, see @ref{Source-based Java front end dfej}.
+
+
+@node    StackAr example with dfej, Step-by-step instructions, Instrumenting Java programs, Source-based Java front end dfej
+@subsection StackAr example with dfej
+
+@c We recommend you run Daikon on Unix, but it can also be run on Windows.
+
+You need to perform three basic tasks:  instrument the target program
+(steps 1-4), run the instrumented program to create a data trace file
+(steps 5-7), and run Daikon over the data trace file to produce
+invariants (steps 8-9).
+
+You must first install Daikon if you haven't done so already; see
+@ref{Installing Daikon}.  If you have any trouble with these
+instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
+
+
+@enumerate
+@item Change to the directory containing the StackAr program.  (The
+directory contains the @file{DataStructures} directory.)
+@example
+cd examples/StackAr
+@end example
+
+@item Compile the original version of the program.  You must use the
+@option{-g} flag to include debugging information in the compiled classfiles.
+You may compile with any Java compiler you like (such as javac), but
+your code must be compilable with the @command{jikes} Java compiler (see
+@uref{http://www.ibm.com/developerworks/oss/jikes/}).
+@example
+javac -g DataStructures/*.java
+@end example
+
+
+@item Instrument the @file{StackAr.java} file.
+@example
+dfej DataStructures/StackAr.java
+@end example
+@noindent
+(These instructions assume you have the current working directory (".")
+in your CLASSPATH@.  If that is not the case, then run @command{dfej
+-ajaxap=.}  instead of @command{dfej}.)
+
+We instrument only this one file because we are only interested in the
+invariants of the StackAr class, not the other classes in the program.
+
+This command creates two directories, @file{daikon-instrumented} and
+@file{daikon-output}.  It creates an instrumented version of
+@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
+It creates a declaration file at
+@file{daikon-output/DataStructures/StackAr.decls}.
+
+@item Compile the instrumented version of StackAr.java.
+@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
+(This step requires "." to be on your classpath.)
+
+@example
+javac daikon-instrumented/DataStructures/StackAr.java
+@end example
+
+@item Run the StackAr test suite, using the instrumented
+@file{StackAr.class} class file instead of the original (but the
+original version of all other files):
+
+@example
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
+@end example
+
+(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
+
+This will generate a trace file at
+@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
+a few seconds to a few minutes, depending on the speed of your
+computer.
+
+@item Change to the @file{daikon-output} directory to analyze
+the output.
+
+@example
+cd daikon-output
+@end example
+
+@c @item Due to a bug in the Java front end, there can be problems in the
+@c trace file.  Run the @command{modbit-munge} script to fix these problems:
+@c @table @r
+@c @item Unix
+@c @t{modbit-munge.pl StackAr.dtrace}
+@c @item Windows
+@c @t{modbit-munge.bat StackAr.dtrace}
+@c @end table
+
+@item Run Daikon on the trace file.
+
+@example
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
+@end example
+
+The invariants are printed to standard output, and a binary
+representation of the invariants is written to
+@file{StackAr.inv}.
+
+@item Examine the invariants; for a
+description of how to do this, @xref{StackAr example}.
+
+@end enumerate
+
+@menu
+* Summary of Daikon use::       
+* Automating the process::      
+* Second Java example::         
+@end menu
+
+Summary of Daikon use:
+
+The steps above can be divided into three stages:
+
+@itemize @bullet
+@item Instrumentation (steps 1-4)
+@example
+cd examples/StackAr
+javac -g DataStructures/*.java
+dfej DataStructures/StackAr.java
+javac daikon-instrumented/DataStructures/StackAr.java
+@end example
+
+@c @item Trace file generation (steps 5-7)
+
+@item Trace file generation (step 5)
+@example
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
+@end example
+
+(On Windows, use ``;'' as the path separator.)
+
+@c cd daikon-output
+@c modbit-munge.pl StackAr.dtrace
+@c @end example
+
+@item Invariant detection (steps 6-8)
+@example
+cd daikon-output
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
+java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+@end example
+
+@end itemize
+
+
+@node    Step-by-step instructions, dfej options, StackAr example with dfej, Source-based Java front end dfej
+@subsection Step-by-step instructions
+
+@c We recommend you run Daikon on Unix, but it can also be run on Windows.
+
+You need to perform three basic tasks:  instrument the target program
+(steps 1-4), run the instrumented program to create a data trace file
+(steps 5-7), and run Daikon over the data trace file to produce
+invariants (steps 8-9).
+
+You must first install Daikon if you haven't done so already; see
+@ref{Installing Daikon}.  If you have any trouble with these
+instructions, see @ref{Troubleshooting}, or try the @ref{Index}.
+
+
+@enumerate
+@item Change to the directory containing the StackAr program.  (The
+directory contains the @file{DataStructures} directory.)
+@example
+cd examples/StackAr
+@end example
+
+@item Compile the original version of the program.  You must use the
+@option{-g} flag to include debugging information in the compiled classfiles.
+You may compile with any Java compiler you like (such as javac), but
+your code must be compilable with the @command{jikes} Java compiler (see
+@uref{http://www.ibm.com/developerworks/oss/jikes/}).
+@example
+javac -g DataStructures/*.java
+@end example
+
+
+@item Instrument the @file{StackAr.java} file.
+@example
+dfej DataStructures/StackAr.java
+@end example
+@noindent
+(These instructions assume you have the current working directory (".")
+in your CLASSPATH@.  If that is not the case, then run @command{dfej
+-ajaxap=.}  instead of @command{dfej}.)
+
+We instrument only this one file because we are only interested in the
+invariants of the StackAr class, not the other classes in the program.
+
+This command creates two directories, @file{daikon-instrumented} and
+@file{daikon-output}.  It creates an instrumented version of
+@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
+It creates a declaration file at
+@file{daikon-output/DataStructures/StackAr.decls}.
+
+@item Compile the instrumented version of StackAr.java.
+@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
+(This step requires "." to be on your classpath.)
+
+@example
+javac daikon-instrumented/DataStructures/StackAr.java
+@end example
+
+@item Run the StackAr test suite, using the instrumented
+@file{StackAr.class} class file instead of the original (but the
+original version of all other files):
+
+@example
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
+@end example
+
+(On Windows, use @samp{;%CLASSPATH%} instead of @samp{:$CLASSPATH}.)
+
+This will generate a trace file at
+@file{daikon-output/StackAr.dtrace}.  This could take anywhere from
+a few seconds to a few minutes, depending on the speed of your
+computer.
+
+@item Change to the @file{daikon-output} directory to analyze
+the output.
+
+@example
+cd daikon-output
+@end example
+
+@c @item Due to a bug in the Java front end, there can be problems in the
+@c trace file.  Run the @command{modbit-munge} script to fix these problems:
+@c @table @r
+@c @item Unix
+@c @t{modbit-munge.pl StackAr.dtrace}
+@c @item Windows
+@c @t{modbit-munge.bat StackAr.dtrace}
+@c @end table
+
+@item Run Daikon on the trace file.
+
+@example
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
+@end example
+
+The invariants are printed to standard output, and a binary
+representation of the invariants is written to
+@file{StackAr.inv}.
+
+@item Examine the invariants.  There are five ways to do this.
+@itemize @bullet
+@item Examine the output from running Daikon.  (You may find it
+convenient to capture the output in a file; add @command{> StackAr.txt}
+to the end of the command that runs Daikon.)
+
+@item Use the PrintInvariants program to display the invariants.
+
+@example
+java daikon.PrintInvariants StackAr.inv
+@end example
+
+For more options to the PrintInvariants program, @xref{Printing
+invariants}.
+
+@item Use the Annotate program to insert the invariants as comments
+into the Java source program.
+
+@example
+cd ..
+java daikon.tools.jtb.Annotate daikon-output/StackAr.inv \
+     DataStructures/StackAr.java
+@end example
+
+Now examine file @file{DataStructures/StackAr.java-escannotated}.
+For more information about the Annotate program, @xref{Annotate}.
+
+@item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
+contains a tree that hierarchically organizes program points according
+to their class and method.  Using the GUI, you can look at invariants
+for only the methods and program points you care about.
+
+@example
+java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+@end example
+
+@item Use the Daikon Context GUI to browse the invariants.  As you move
+the cursor in an editor window, the Context GUI displays the invariants
+applicable to the current location (class or method).  For details on
+running the Context GUI, see @ref{Context GUI}.  
+
+@end itemize
+
+@end enumerate
+
+@menu
+* Summary of Daikon use::       
+* Automating the process::      
+* Second Java example::         
+@end menu
+
+@node    Summary of Daikon use, Automating the process, Step-by-step instructions, Step-by-step instructions
+@subsubsection Summary of Daikon use
+
+The steps above can be divided into three stages:
+
+@itemize @bullet
+@item Instrumentation (steps 1-4)
+@example
+cd examples/StackAr
+javac -g DataStructures/*.java
+dfej DataStructures/StackAr.java
+javac daikon-instrumented/DataStructures/StackAr.java
+@end example
+
+@c @item Trace file generation (steps 5-7)
+
+@item Trace file generation (step 5)
+@example
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.StackArTester
+@end example
+
+(On Windows, use ``;'' as the path separator.)
+
+@c cd daikon-output
+@c modbit-munge.pl StackAr.dtrace
+@c @end example
+
+@item Invariant detection (steps 6-8)
+@example
+cd daikon-output
+java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+     StackAr.dtrace
+java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+@end example
+
+@end itemize
+
+
+@node    Automating the process, Second Java example, Summary of Daikon use, Step-by-step instructions
+@subsubsection Automating the process
+
+The script @command{daikon.pl} automates all steps of the invariant
+detection process.
+
+@example
+cd examples/StackAr
+daikon.pl DataStructures.StackArTester
+@end example
+
+This command instruments your program, generates a trace file, and
+displays the invariants in the Tree GUI@.  Currently, this script only works
+on Unix.  For more details, @xref{All-in-one script}.
+
+
+@node    Second Java example,  , Automating the process, Step-by-step instructions
+@subsubsection A second Java example
+
+A second example is located in the @file{examples/QueueAr} subdirectory.
+Run this sample using the following steps:
+
+@itemize @bullet
+@item Instrumentation (steps 1-4)
+@example
+cd examples/QueueAr
+javac -g DataStructures/*.java
+dfej DataStructures/QueueAr.java
+javac daikon-instrumented/DataStructures/QueueAr.java
+@end example
+
+@c @item Trace file generation (steps 5-7)
+@item Trace file generation (step 5)
+@example
+java -classpath "daikon-instrumented:$CLASSPATH" \
+     DataStructures.QueueArTester
+@c cd daikon-output
+@c modbit-munge.pl QueueAr.dtrace
+@end example
+
+(On Windows, use ``;'' as the path separator.)
+
+@item Invariant detection (steps 6-8)
+@example
+cd daikon-output
+java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls \
+     QueueAr.dtrace
+java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
+@end example
+
+@end itemize
+
+@node    dfej options, Run Java, Step-by-step instructions, Source-based Java front end dfej
 @subsection dfej options
 
 The simplest way to invoke dfej is simply to supply it with a list of
@@ -3619,7 +3449,66 @@ java -classpath daikon-instrumented:$CLASSPATH \
 @end example
 
 
-@node    Scope of instrumentation, Refined runtime types, dfej options, Source-based Java front end dfej
+@node    Run Java, Scope of instrumentation, dfej options, Source-based Java front end dfej
+@subsection Details on running instrumented Java programs
+
+After instrumentation, there are two versions of your Java program:
+the original version, which is unmodified, and the instrumented
+version, which appears in the @file{daikon-instrumented/} directory.
+Make sure that the @file{daikon-instrumented/} directory appears on
+your class path before the directory containing the original Java
+code.  You can do this by running the program from that directory, if
+@file{.} (the current directory) appears early on your class path, or
+you can add the @file{daikon-instrumented/} directory to your class
+path explicitly.  (To be able to run the instrumented program from a
+directory other than the parent of the @file{daikon-instrumented/}
+directory, an absolute path to the @file{daikon-instrumented/} should
+be used).
+
+
+@menu
+* Java applets::                
+@end menu
+
+@node    Java applets,  , Run Java, Run Java
+@subsubsection Java applets
+
+In order to run an applet, you must take two additional steps.
+
+@enumerate
+@item
+Copy or link all class files, jar files, input files, and html files
+that your applet needs to the @file{daikon-instrumented/} directory.  This
+includes the @file{daikon/java} directory itself.  For example, to
+create a link to the @file{daikon/java} directory, type (while in the
+@file{daikon-instrumented/} directory):
+@example
+ln -s $DAIKONDIR/java/daikon .
+@end example
+
+@item
+By default, the Java 2 applet security model does not allow applets to
+write files.  To get around this so that Daikon can write its @file{.dtrace}
+files, create a file named @file{javaPolicy} in the @file{daikon-instrumented/}
+directory that contains the text
+@example
+grant @{
+    permission java.io.FilePermission
+      "<<ALL FILES>>", "read, write, delete, execute";
+@};
+@end example
+@noindent
+Do not use this policy file with untrusted applets.
+
+@item
+Finally, run the applet:
+@example
+       appletviewer -J-Djava.security.policy=javaPolicy @var{html-file}
+@end example
+@end enumerate
+
+
+@node    Scope of instrumentation, Refined runtime types, Run Java, Source-based Java front end dfej
 @subsection Controlling what classes are instrumented
 
 Only the specified Java files are instrumented; other files are
@@ -3743,7 +3632,7 @@ comment immediately before the declared type (but after any modifiers like
 @c @end example
 
 
-@node    Installing dfej,  , Refined runtime types, Source-based Java front end dfej
+@node    Installing dfej, All-in-one script, Refined runtime types, Source-based Java front end dfej
 @subsection Installing dfej, the Daikon front end for Java
 
 @cindex installing dfej
@@ -3827,6 +3716,123 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 
 
 @end itemize
+
+
+@node    All-in-one script,  , Installing dfej, Source-based Java front end dfej
+@subsection All-in-one script daikon.pl
+
+The @command{daikon.pl} script automates all steps of the invariant
+detection process:  instrumentation, trace file generation, and
+invariant display.  However, it has several limitations: it only works
+with programs written in Java, it doesn't allow all of the optional
+features of Daikon to be controlled, and it depends on external
+programs that may not be present on non-Unix systems.  It is not
+the preferred way to run Daikon, but some users may find it helpful
+for quick testing, or for use from automated scripts.
+
+Running @command{daikon.pl} without without any arguments will display usage information:
+@example
+% daikon.pl
+Usage: daikon.pl [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
+Options:
+  -o, --output FILE   Save invariants in FILE.inv
+  ...
+@end example
+
+You must supply at least the name of a "main" class that provides
+the method @code{public static void main(String[] args)}.
+@command{daikon.pl} runs this class to exercise your program.
+
+@c <!--
+@c <h2><a xname="example">Example</a></h2>
+@c 
+@c You can try an example provided by the staff:
+@c <pre>
+@c   athena% cd ~/6.170
+@c   athena% mkdir daikon-testing; cd daikon-testing
+@c   athena% cp -rp /mit/6.170/handouts/daikon/example .
+@c   athena% daikon --verbose xxx
+@c </pre>
+@c This will run <tt>xxx</tt>, detect invariants for the program, and
+@c display the daikon Tree GUI to browse the results.  See the <a
+@c href="#interpret-output">interpreting the output</a> section below for
+@c details on the meaning of the invariants.
+@c 
+@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file that
+@c contains the invariants in a special format, and a
+@c <tt>.src.tar.gz</tt> file that contains a snapshot of the program
+@c source.  You may specify names for these files using the <tt>--output
+@c <i>file</i></tt> parameter to daikon.  For example <tt>--output
+@c mytest</tt> will create <tt>mytest.inv</tt> and
+@c <tt>mytest.src.tar.gz</tt>.
+@c 
+@c <p>If your main class requires arguments, you may place them after the
+@c class name, just as if you were running <tt>java</tt> instead of
+@c <tt>daikon</tt>.
+@c -->
+
+@menu
+* daikon.pl arguments::         
+@end menu
+
+@node    daikon.pl arguments,  , All-in-one script, All-in-one script
+@subsubsection Command line options for daikon.pl
+
+@table @option
+@item -i @var{file}
+@itemx --instrument @var{file}
+Only instrument FILE@.  Can be specified multiple times.
+Otherwise, all files that are used by the main file are instrumented.
+
+@item -o @var{file}
+@itemx --output @var{file}
+Save invariants in @file{@var{file}.inv} and source in
+@file{@var{file}.src.tar.gz}.  If no name 
+is given, a name is automatically generated and used.
+
+@item -t
+@itemx --textfile
+Save a textual listing of invariants to a @file{.txt} file.
+
+@item -n
+@itemx --nogui
+Create the invariants file (and @file{.txt} file,
+if @option{-t} is given), but do not start the Tree GUI@.
+
+@item --daikonarg @var{arg}
+Supply additional argument(s) to Daikon proper.
+Can be specified multiple times.
+Warning:  be careful with quoting, as the argument is supplied directly
+to the shell and may be viewed as multiple arguments or reinterpreted
+(which may or may not be what you want).
+
+@item -v
+@itemx --verbose
+Display progress messages while running.
+
+@item -c
+@itemx --cleanup
+Remove files left over from an interrupted session before starting.
+Should be used only when @command{daikon.pl} detects left-over files and instructs
+you to use this option.
+
+@item --nocleanup
+Do not remove temporary files when exiting.
+This option is intended for debugging.
+
+@item -s
+@itemx --src
+Make an archive of the source code for later reference.  All the code
+that is instrumented will be recorded in the compressed tarfile
+@file{@var{file}.src.tar.gz}, where @var{file} is the name that was
+supplied via the @option{-o} or @option{--output} arguments.
+
+@item -d
+@itemx --debug
+Print extra debugging information.
+@end table
+
+
 
 
 @node C front end Kvasir, Source-based C front end dfec, Source-based Java front end dfej, Front ends
@@ -4124,7 +4130,7 @@ optimization.
 
 
 @node    Installing Kvasir,  , Kvasir limitations, C front end Kvasir
-@subsection Installing Kvasir, the binary-based Daikon front end for C
+@subsection Installing Kvasir
 
 @cindex installing Kvasir
 @cindex Kvasir installation
@@ -4169,8 +4175,16 @@ Kvasir, see @ref{C front end Kvasir}.
 This section describes dfec, the Daikon source-based front end for C@.
 A binary-based front end for C, named Kvasir, is also available
 (@pxref{C front end Kvasir}), and is preferable in most circumstances.
-For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
+
+@c TODO: repetitive
+There are two ways to instrument C programs.  Compiled programs
+originally written in C can be instrumented on the fly using the
+Kvasir tool, or C programs in source code form can be instrumented
+with the @command{dfec} tool.  We recommend use of Kvasir.
+Kvasir can only be used on Linux/x86, but it is
+usually easier to use and more reliable.
+
 
 Recall that dynamic invariant detection over a C program requires
 three steps:
@@ -4190,6 +4204,19 @@ first step.  If you have trouble, see @ref{dfec requirements}.
 @c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
 @c @file{daikon_runtime.o}.
+
+Instrumentation with dfec performs two actions:
+@itemize @bullet
+@item
+Instrumentation adds instructions to the target program so that, in
+addition to performing its original task, it also writes variable values
+to a data trace file.  The changes are made to a copy of the target
+program; your original version is not modified.
+@item
+Instrumentation creates declaration files that describe the format of
+the data trace files.  For instance, these declaration files describe
+the names of procedures and variables that appear in the data trace file.
+@end itemize
 
 To instrument a C file, run @command{dfec} on it.  dfec produces
 instrumented source as well as a @file{.decls} file.  @command{dfec}
@@ -4255,6 +4282,8 @@ java daikon.Daikon daikon-output/myprog.decls \
 @end example
 
 @menu
+* Instrumenting C programs with dfec::  
+* dfec examples::               
 * dfec command-line arguments::  
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
@@ -4263,7 +4292,215 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Installing dfec::             
 @end menu
 
-@node    dfec command-line arguments, Daikon runtime customization, Source-based C front end dfec, Source-based C front end dfec
+
+@node    Instrumenting C programs with dfec, dfec examples, Source-based C front end dfec, Source-based C front end dfec
+@subsection Instrumenting C programs with dfec
+
+To instrument C source, invoke @command{dfec} on all the source and
+header files at once:
+@example
+dfec @var{...options...} @var{myprog}.c
+@end example
+@strong{Important:}  dfec may only be run on ANSI/ISO C, not on K&R C
+or other dialects (@pxref{C program requirements})
+
+You may want to specify one or more command-line options;
+see @ref{dfec command-line arguments}.
+
+After dfec is run, you must compile the instrumented source, linking
+it with the object file for the Daikon runtime library and the stdc++
+library.  By default, dfec places instrumented source in the
+@file{daikon-instrumented/} directory.
+@example
+g++ -g -o @var{myprog} daikon-instrumented/@var{myprog}.cc \
+    $DFECDIR/daikon_runtime.o
+@end example
+@noindent
+In addition, you may want to specify the @option{-w} flag to g++, to
+suppress warnings.  dfec's output is valid C++ but may cause g++ to
+issue warnings.
+
+The Daikon front end for C has three effects:
+@itemize @bullet
+@item
+dfec writes instrumented versions of the files to a
+@file{daikon-instrumented/} directory 
+@item
+dfec creates declaration files named
+@file{@var{myprog}.decls}, etc.@: in a
+@file{daikon-output/} directory.
+@item
+optionally, dfec may create a pointer
+type disambiguation file named
+@file{@var{myprog}.disambig} in the
+same directory as the @file{@var{myprog}.decls}
+file.
+@end itemize
+
+For more information about dfec, including more detailed documentation
+on its command-line options, see @ref{Source-based C front end dfec}.
+
+
+@c <ol>
+@c      <tt>dfec</tt> is written in Perl.  If Perl is not available, you may
+@c      instead use <tt>dfec.sh</tt>, which is written in sh shell script.<p>
+@c 
+@c      The Daikon C front end:
+@c      <ol>
+@c        <li>copies your original files to @file{<i>myprog1.c</i>.uninst},
+@c 	   etc.<br>
+@c        <li>overwrites the original files with instrumented versions
+@c        <li>creates declaration files named @file{<i>myprog1.c</i>.decls}, etc.
+@c      </ol>
+@c      You may wish to perform this operation with a copy of your program,
+@c      to safeguard your original source code.<p>
+@c 
+@c      If you supply the @option{-d <i>directory</i>} argument (before
+@c      the file names), then the instrumented source files are placed in the
+@c      specified directory instead (and no backup files need be made).
+@c  <li>Create or modify a @file{Makefile}.  Either:
+@c    <ul>
+@c      <li>If you have no @file{Makefile}, copy @file{Makefile-sample}
+@c          to @file{Makefile} and add the names of your source files to its
+@c          <tt>OBJS</tt>, and edit its <tt>EXEC</tt> executable name.
+@c      <li>If you have a @file{Makefile}, add @file{dump_trace.o} to the
+@c          list of object files that need to be created (and linked to create
+@c          your executable).
+@c    </ul>
+@c  <li>Create an instrumented executable by building your program in the
+@c      usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
+@c </ol>
+
+
+@node    dfec examples, dfec command-line arguments, Instrumenting C programs with dfec, Source-based C front end dfec
+@subsection dfec examples
+
+To detect invariants for a program with dfec, you need to perform three basic
+tasks: instrument the target program (steps 1-3), run the instrumented
+program to create a data trace file (step 4), and run Daikon over the
+data trace file to produce invariants (steps 5-6).  The following
+instructions are for the print_tokens example.  The other examples can
+be run in exactly the same manner.
+
+@enumerate
+@item Change to the directory containing the print_tokens program.
+@example
+cd $DAIKONDIR/examples/dfec-examples/print_tokens
+@end example
+
+@item Instrument the program using dfec, the C front end.
+Run the front end over all the C source files and
+the user-created header files they depend on.
+@example
+dfec print_tokens.c stream.h tokens.h
+@end example
+@noindent
+This command creates two directories, @file{daikon-instrumented}
+and @file{daikon-output}.  It creates an instrumented and preprocessed
+version of @file{print_tokens.c} at
+@file{daikon-instrumented/print_tokens.cc}.  It 
+creates a declaration file at @file{daikon-output/print_tokens.decls}.
+
+@quotation
+Note for Windows users:
+Under Windows, you must insert in the source file a gcc-specific
+@samp{__attribute__} for the @samp{_ctype_} variable, which is used in
+our test suite.  Run the following commands:
+@example
+alias fix="sed -f $DFECDIR/fix.sed"
+(cd daikon-instrumented; \
+  fix print_tokens.cc > fixed.cc;
+  mv fixed.cc print_tokens.cc)
+@end example
+@end quotation
+
+@item Compile and link the instrumented program to create the
+executable @file{print_tokens} in the current directory.
+
+@example
+g++ -g -w -o print_tokens.exe \
+    daikon-instrumented/print_tokens.cc \
+    $DFECDIR/daikon_runtime.o
+@end example
+
+@item Run the print_tokens test suite.  First set the DTRACEAPPEND
+environment variable, so that a final @file{.dtrace} file contains
+information from all runs, rather than each run overwriting the file
+so that it contains only information from the last run.  (For more
+details about the DTRACEAPPEND environment variable, see @ref{dfej
+options} and @ref{dfec command-line arguments}.)
+
+If you use the bash shell, run the following commands:
+@example
+export DTRACEAPPEND=1
+sh tests.sh
+@end example
+
+If you use the csh or tcsh shell, run the following commands:
+@example
+setenv DTRACEAPPEND 1
+sh tests.sh
+@end example
+
+These commands create a data trace file at
+@file{daikon-output/print_tokens.dtrace}.
+
+@item Run Daikon on the trace file.
+@example
+java -Xmx256m daikon.Daikon -o print_tokens.inv \
+     daikon-output/print_tokens.decls \
+     daikon-output/print_tokens.dtrace
+@end example
+@noindent
+The invariants are printed to standard out, and a binary representation
+of the invariants is written to @file{print_tokens.inv}.
+
+@item Examine the invariants.  As described in the Daikon manual, there are
+several ways to do this:
+@itemize 
+@item Examine the output from running Daikon.
+@item Use the PrintInvariants program to display the invariants.
+@item Use the Daikon Tree GUI to browse the invariants.
+@item Use the Daikon Context GUI to browse the invariants.
+@end itemize
+@noindent
+For help understanding the invariants, see @ref{Interpreting output}.
+
+@end enumerate
+
+@menu
+* Dfec C examples summary::     
+@end menu
+
+@node    Dfec C examples summary,  , dfec examples, dfec examples
+@subsubsection Dfec C examples summary
+
+The above steps can be divided into three stages:
+
+Instrumentation (Steps 1-3)
+@example
+cd $DAIKONDIR/examples/dfec-examples/print_tokens
+dfec print_tokens.c stream.h tokens.h
+g++ -g -w -o print_tokens daikon-instrumented/print_tokens.cc \
+    $DFECDIR/daikon_runtime.o
+@end example
+
+Trace File Generation (Step 4)
+@example
+export DTRACEAPPEND=1
+sh tests.sh
+@end example
+
+Invariant Detection (Step 5)
+@example
+java -Xmx256m daikon.Daikon -o print_tokens.inv \
+     daikon-output/print_tokens.decls \
+     daikon-output/print_tokens.dtrace
+@end example
+
+
+
+@node    dfec command-line arguments, Daikon runtime customization, dfec examples, Source-based C front end dfec
 @subsection dfec command-line arguments
 
 @c dfec option -- do not rename (yet)
@@ -8187,7 +8424,7 @@ Toshiba.
 
 This chapter contains information about the file format of Daikon's data
 trace and declaration files.  It is of most information to those who
-wish to write a front end (@pxref{Instrumentation}), enabling Daikon to
+wish to write a front end (@pxref{Front ends}), enabling Daikon to
 detect invariants in another programming language.
 
 Data trace files contain runtime values for variables at particular program
@@ -8617,7 +8854,7 @@ a program that sums the values in an integer array.
 @subsection Example declaration file
 
 This is part of the file @file{StackAr.decls}, a declaration file for
-the @file{StackAr.java} program (@pxref{Example use}).
+the @file{StackAr.java} program (@pxref{StackAr example}).
 
 @example
 DECLARE
@@ -8711,10 +8948,11 @@ int
 @subsection Example data trace file
 
 This is part of file @file{StackAr.dtrace}, which you can create by
-running the instrumented @file{StackAr.java} program (@pxref{Example
-use}).  This excerpt contains only the first two calls to @code{push}
-and the first return from @code{push}, along with the associated object
-program point records; omitted records are indicated by ellipses.
+running the instrumented @file{StackAr.java} program (@pxref{StackAr
+example}).  This excerpt contains only the first two calls to
+@code{push} and the first return from @code{push}, along with the
+associated object program point records; omitted records are indicated
+by ellipses.
 
 
 @example
