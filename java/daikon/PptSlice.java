@@ -758,10 +758,10 @@ public abstract class PptSlice
       for (int i=0; i<var_infos.length; i++) {
         try {
           debugGuarding.fine ("  var_info[" + i +
-                              "] name in JML = " +
-                              var_infos[i].name.name_using(OutputFormat.JML));
+                              "] name = " +
+                              var_infos[i].name.name());
         } catch (UnsupportedOperationException e) {
-          debugGuarding.fine ("  Part of PptSlice cannot be JML formatted.");
+          debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
         }
       }
       //      debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
@@ -785,9 +785,9 @@ public abstract class PptSlice
       if (debugGuarding.isLoggable(Level.FINE)) {
         if (guardingPredicate != null) {
           debugGuarding.fine ("  Predicate: " +
-                              guardingPredicate.format_using(OutputFormat.JML));
+                              guardingPredicate.format());
           debugGuarding.fine ("  Consequent: " +
-                              inv.format_using(OutputFormat.JML));
+                              inv.format());
         } else {
           debugGuarding.fine ("  No implication needed");
         }
@@ -802,9 +802,9 @@ public abstract class PptSlice
 
         if (debugGuarding.isLoggable(Level.FINE)) {
           debugGuarding.fine ("Adding " +
-                           guardingImplication.format_using(OutputFormat.JML));
+                           guardingImplication.format());
           debugGuarding.fine ("Removing " +
-                           inv.format_using(OutputFormat.JML));
+                           inv.format());
         }
       }
     }
