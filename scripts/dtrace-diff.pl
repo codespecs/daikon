@@ -1,18 +1,25 @@
 #!/usr/bin/env perl
 
-# dtrace-diff
+# dtrace-diff.pl
 # arguments:  dtrace-diff declsfile dtrace1 dtrace2
-# outputs differences that aren't hashcodes.
+# Outputs differences that aren't hashcodes.
+# Optionally also ignores differences in exit ppt numbers.
 
 use English;
 use strict;
 $WARNING = 1;
 
+my $ignore_exitno = 0;
 
+if ($ARGV[0] eq "--ignore_exitno") {
+  $ignore_exitno = 1;
+  shift @ARGV;
+}
+
+if (scalar(@ARGV) != 3) {
+  die "Usage: $0 [--ignore-exitno] <declsname> <dtrace1> <dtrace2>\n";
+}
 my ($declsname, $dtaname, $dtbname) = @ARGV;
-
-($declsname && $dtaname && $dtbname) or die
-    "Usage: $0 <declsname> <dtrace1> <dtrace2>\n";
 
 # load decls file
 my $gdeclshash = load_decls($declsname);
@@ -65,7 +72,8 @@ sub gzopen ( $$ ) {
 
 
 sub load_decls ( $ ) {
-# loads the decls file given by $1 into a hash, returns a ref
+# Loads the decls file given by $1 into a hash, returns a ref.
+# The hash maps from ppt name to list of lines.
     my ($mydeclsname) = @_;
 #    open DECLS, $mydeclsname or die "couldn't open decls \"$decls\"\n";
     my $decls = gzopen(\*DECLS, $mydeclsname);
@@ -88,13 +96,13 @@ sub load_decls ( $ ) {
 	    $$declshash{$currppt} = $lhashref;
 	    $ppt_seen = 1;
 	} elsif (($l eq "VarComparability") && !$ppt_seen) {
-	    #it's ok to have a VarComparability as the first thing
-	    #in the decls file.  Read the type of comparability,
-	    #then move on.
+	    # It's ok to have a VarComparability as the first thing
+	    # in the decls file.  Read the type of comparability,
+	    # then move on.
 	    $l = getline($decls);
 	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
-	    #it's ok to have a ListImplementors in the decls file.
-	    #Read the type of comparability, then move on.
+	    # It's ok to have a ListImplementors in the decls file.
+	    # Read the type of comparability, then move on.
 	    $l = getline($decls);
 	} elsif ($l) {
 	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
@@ -105,7 +113,9 @@ sub load_decls ( $ ) {
 }
 
 sub load_ppt ( $$ ) {
-# loads a single ppt from a dtrace fh given by $1
+# Loads a single ppt from a dtrace fh given by $1.
+# Returns a "ppt_trace_info": a 3-element array of pptname, line number in
+# file, and hash mapping varname to array of value and modbit.
     my ($dtfh, $dtfhname) = @_;
     my $pptname = getline($dtfh);
     while ((defined $pptname) && ($pptname eq "")) {
@@ -152,7 +162,8 @@ sub print_ppt ( $ ) {
 }
 
 sub cmp_ppts ( $$$ ) {
-# compares the two ppts given by $2 and $3 according to the decls $1
+# Compares, according to the decls $1, the two ppts given by $2 and $3.
+# Arguments 2 and 3 are "ppt_trace_info" objects (see load_ppt for definition).
     my ($declshash, $ppta, $pptb) = @_;
     if ($$ppta[0] ne $$pptb[0]) {
 	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] .
@@ -255,6 +266,7 @@ sub cmp_dtracen ( $$$ ) {
 	  cmp_ppts($declshash, $ppta, $pptb);
 	  next PPT;
       }
+      die "Execution cannot reach this point";
   }
 
     close \*DTA;
