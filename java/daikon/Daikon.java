@@ -1661,6 +1661,8 @@ public final class Daikon {
     debugProgress.fine ("Time spent on non-implication postprocessing: "
                         + stopwatch.format());
 
+    isInferencing = false;
+
     // Add implications
     stopwatch.reset();
     fileio_progress.clear();
