@@ -2,6 +2,7 @@ package daikon;
 
 import daikon.split.*;
 import utilMDE.Assert;
+import java.util.*;
 
 // Information about a disjunctive program point that represents just part
 // of the data.
@@ -73,7 +74,7 @@ public final class PptConditional
     super.add(vt, count);
   }
 
-  void add(ValueTuple vt, int count) {
+  public List add(ValueTuple vt, int count) {
     // This try block may be a very inefficient way to do this computation.
     // Perhaps figure out another way, or invalidate the whole PptConditional
     // if any exception is thrown.
@@ -81,11 +82,12 @@ public final class PptConditional
     try {
       boolean splitter_test = splitter.test(vt);
       if (splitter_inverse ? (! splitter_test) : splitter_test)
-        super.add(vt, count);
+        return super.add(vt, count);
     } catch (Exception e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
     }
+    return emptyList;
   }
 
   private void writeObject(java.io.ObjectOutputStream out)

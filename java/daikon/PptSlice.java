@@ -325,31 +325,20 @@ public abstract class PptSlice
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
-   * @param invsFlowed after this method, holds the Invariants that
-   * flowed.
+   * @return a List of Invariants that weakened due to the processing.
    **/
-  abstract void add (ValueTuple full_vt, int count, Invariants infsFlowed);
-
-
-  /**
-   * This procedure accepts a sample (a ValueTuple), extracts the values
-   * from it, casts them to the proper types, and passes them along to the
-   * invariants proper.
-   **/
-  void add (ValueTuple full_vt, int count) {
-    add (full_vt, count, new Invariants());
-  }
+  abstract List add (ValueTuple full_vt, int count);
 
   /**
    * Flow falsified invariants to lower ppts, and remove them from
    * this ppt.
    * @param invsFlowed After this method, holds the Invariants that
    * flowed.  Never null.
+   * @return the List of weakened invariants.
    **/
-  protected void flow_and_remove_falsified(Invariants invsFlowed) {
+  protected List flow_and_remove_falsified() {
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
-    invsFlowed.clear();
     for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
       Invariant inv = (Invariant) iFalsified.next();
       if (inv.falsified) {
@@ -396,7 +385,7 @@ public abstract class PptSlice
       if (debugFlow.isDebugEnabled()) {
         debugFlow.debug ("No invariants to flow");
       }
-      return;
+      return new ArrayList();
     }
 
     // XXXX Currently, we flow invariants to all immediately-lower
@@ -477,9 +466,10 @@ public abstract class PptSlice
         }
       }
     }
-    invsFlowed.addAll  (invs_changed);
+    List result = new ArrayList (invs_changed);
     invs_to_flow.clear();
     invs_changed.clear();
+    return result;
   }
 
   void addView(Ppt slice) {

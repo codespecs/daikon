@@ -4,6 +4,8 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+import java.util.*;
+
 // This is a fake PptSlice for use with Implication invariants.
 
 public class PptSlice0
@@ -38,11 +40,7 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
-  void add(ValueTuple vt, int count) {
-    throw new Error("Shouldn't get called");
-  }
-
-  void add(ValueTuple vt, int count, Invariants invsFlowed) {
+  public List add(ValueTuple vt, int count) {
     throw new Error("Shouldn't get called");
   }
 

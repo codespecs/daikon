@@ -723,7 +723,7 @@ public class PptTopLevel
    * @param vt the set of values for this to see
    * @param count the number of samples that vt represents
    **/
-  void add(ValueTuple vt, int count) {
+  public List add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars, name);
 
@@ -775,8 +775,7 @@ public class PptTopLevel
           continue;
         }
         if (!view.no_invariants) {
-          view.add(vt, count, invsFlowed);
-          weakenedInvs.addAll (invsFlowed);
+          weakenedInvs.addAll (view.add(vt, count));
         }
       }
 
@@ -860,6 +859,7 @@ public class PptTopLevel
       debugSuppress.debug (">>> End of add for " + name);
     }
 
+    return new ArrayList();
   }
 
   /**

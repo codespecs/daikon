@@ -84,7 +84,14 @@ public abstract class Ppt
   //   this_var_values = this_fn_var_values[ppt_name];
   //   this_var_values[these_values] = this_var_values.get(these_values, 0) + 1;
   //   this_fn_samples[ppt_name] = this_fn_samples.get(ppt_name, 0) + 1;
-  abstract void add(ValueTuple vt, int count);
+  /**
+   * Give sample data to this ppt to process.
+   * @return a List of Invariants that have weakened due to the
+   * processing of the sample.
+   **/
+  abstract List add(ValueTuple vt, int count);
+
+  protected static final List emptyList = new ArrayList();
 
   // This is rather confused.  I need a better notion of exactly what is
   // going on.

@@ -186,7 +186,7 @@ public final class PptSlice2
    * @param invsFlowed after this method, holds the Invariants that
    * flowed.
    **/
-  void add(ValueTuple full_vt, int count, Invariants invsFlowed) {
+  public List add(ValueTuple full_vt, int count) {
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -206,7 +206,7 @@ public final class PptSlice2
     int mod1 = full_vt.getModified(vi1);
     if (mod1 == ValueTuple.MISSING) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
-      return;
+      return emptyList;
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi1.is_static_constant);
@@ -217,7 +217,7 @@ public final class PptSlice2
     int mod2 = full_vt.getModified(vi2);
     if (mod2 == ValueTuple.MISSING) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
-      return;
+      return emptyList;
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi2.is_static_constant);
@@ -351,7 +351,7 @@ public final class PptSlice2
     }
 
     // undefer_invariant_removal(); [INCR]
-    flow_and_remove_falsified(invsFlowed);
+    return flow_and_remove_falsified();
   }
 
   public void addInvariant(Invariant invariant) {
