@@ -256,12 +256,19 @@ public final class CLASSNAME
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
+      double result
+        = 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
+      // if ((result < 0) || (result > 1))
+      //  System.err.println ("bad result: vs.max=" + vs.max() + " vs.min="
+      //                      + vs.min() + " conf="
+      //                      + confidence_one_elt_nonzero() + " range="
+      //                      + (vs.max() - vs.min() + 1)/ 1);
+      return (result);
     }
   }
 
   private double confidence_one_elt_nonzero() {
-    PRIMITIVE range;
+    double range;
     if (is_pointer()) {
       range = 3;
     } else {
@@ -282,7 +289,7 @@ public final class CLASSNAME
       // constraints) for the value to be zero; otherwise, the modulus
       // constraint implies non-zero.
       VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-      range = (vs.max() - vs.min() + 1) / modulus;
+      range = ((double)vs.max() - (double)vs.min() + 1) / modulus;
     }
     return 1.0/range;
   }

@@ -360,7 +360,7 @@ public abstract class Invariant
                       || (result == CONFIDENCE_NEVER)
                       // This can be expensive, so comment out.
                       // , getClass().getName() + ": " + repr() + ", result=" + result
-                      );
+                      , "unexpected conf value: " + result);
     return result;
   }
 
