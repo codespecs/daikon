@@ -19,18 +19,26 @@
     This invariant is not enabled by default.  See the configuration option
     daikon.inv.unary.stringsequence.CommonStringSequence.enabled
 @item DummyInvariant
-    This is a special invariant used internally by Daikon.  It is used
-    for invariants whose meaning Daikon doesn't understand: all it can
-    do is print itself. They're used to make invariants corresponding
-    to splitting conditions.
+    This is a special invariant used internally by Daikon to represent
+    invariants whose meaning Daikon doesn't understand. The only
+    operation that can be performed on a DummyInvariant is to print it.
+    For instance, dummy invariants can be created to correspond to
+    splitting conditions, when no other invariant in Daikon's grammar
+    is equivalent to the condition.
+   
+    To use dummy invariants for splitting conditions, the configuration
+    option daikon.PptTopLevel.dummy_invariant_level must be set, and
+    formatting information must be supplied in the splitter info file.
 @item EltLowerBound
-    Represents the invariant 'x[] > c' where c is a constant and x[] is
-    each element of a long[] sequence.  Prints as 'x[] elements > c'
+    Represents the invariant that each element of a long[] sequence is
+    greater than or equal to a constant. Prints as 'x[] elements >=
+    c'
 
     See also the configuration options daikon.inv.unary.sequence.EltLowerBound.minimal_interesting and daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
 @item EltLowerBoundFloat
-    Represents the invariant 'x[] > c' where c is a constant and x[] is
-    each element of a double[] sequence.  Prints as 'x[] elements > c'
+    Represents the invariant that each element of a double[] sequence is
+    greater than or equal to a constant. Prints as 'x[] elements >=
+    c'
 
     See also the configuration options daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting and daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
 @item EltNonZero
@@ -61,13 +69,15 @@
 
     See also configuration option daikon.inv.unary.stringsequence.EltOneOfString.size
 @item EltUpperBound
-    Represents the invariant 'x[] < c' where c is a constant and x[] is
-    each element of a long[] sequence.  Prints as 'x[] elements < c'
+    Represents the invariant that each element of a long[] sequence is
+    less than or equal to a constant. Prints as 'x[] elements <=
+    c'
 
     See also the configuration options daikon.inv.unary.sequence.EltUpperBound.minimal_interesting and daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
 @item EltUpperBoundFloat
-    Represents the invariant 'x[] < c' where c is a constant and x[] is
-    each element of a double[] sequence.  Prints as 'x[] elements < c'
+    Represents the invariant that each element of a double[] sequence is
+    less than or equal to a constant. Prints as 'x[] elements <=
+    c'
 
     See also the configuration options daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting and daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
 @item EltwiseFloatEqual
@@ -201,12 +211,12 @@
     Represents a Linear invariant (ie, z = ax + by + c) over three double
     scalars.
 @item LowerBound
-    Represents the invariant 'x > c', where c is a constant and x is
+    Represents the invariant 'x >= c', where c is a constant and x is
     a long scalar.
 
     See also the configuration options daikon.inv.unary.scalar.LowerBound.minimal_interesting and daikon.inv.unary.scalar.LowerBound.maximal_interesting
 @item LowerBoundFloat
-    Represents the invariant 'x > c', where c is a constant and x is
+    Represents the invariant 'x >= c', where c is a constant and x is
     a double scalar.
 
     See also the configuration options daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting and daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
@@ -260,8 +270,8 @@
     Represents long scalars that take on only a few distinct values.  Prints
     as either "x == c" (when there is only one value), "x one of @{c1, c2, c3@}"
     (when there are multiple values), or "x has only one value" (when x is
-    a hashcode (pointer) - this is because a pointer value doesn't have much
-    meaning)
+    a hashcode (pointer) - this is because the numerical value of the
+    hashcode (pointer) is uninteresting).
 
     See also configuration option daikon.inv.unary.scalar.OneOfScalar.size
 @item OneOfSequence
@@ -324,8 +334,8 @@
     as "y[] = a * x[] + b"
 @item Positive
     Represents the invariant 'x > 0' where x is a long scalar.  This exists
-    only as an example for the purposes of the manaul.  It isn't actually
-    used (it is replaced by the more general invariant LowerBound.
+    only as an example for the purposes of the manual.  It isn't actually
+    used (it is replaced by the more general invariant LowerBound).
 @item Reverse
     Represents two long sequences where one is in the reverse order
     of the other.  Prints as "x[] is the reverse of y[]"
@@ -406,12 +416,12 @@
     This invariant is not enabled by default.  See the configuration option
     daikon.inv.binary.twoSequence.SubSetFloat.enabled
 @item UpperBound
-    Represents the invariant 'x < c', where c is a constant and x is
+    Represents the invariant 'x <= c', where c is a constant and x is
     a long scalar.
 
     See also the configuration options daikon.inv.unary.scalar.UpperBound.minimal_interesting and daikon.inv.unary.scalar.UpperBound.maximal_interesting
 @item UpperBoundFloat
-    Represents the invariant 'x < c', where c is a constant and x is
+    Represents the invariant 'x <= c', where c is a constant and x is
     a double scalar.
 
     See also the configuration options daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting and daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
