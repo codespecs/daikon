@@ -1,19 +1,15 @@
-12/14/1999 by Josh
+12/14/1999 by Josh Kataoka
+(updated 01/24/2001)
 
 I have added five files in this directory. All of them are required
 for generating splitters.
 
-rmcomm
-  Usage: rmcomm < originalsourcecode > outputfile
-  This command removes all comment lines from a Java source code which
-  is given through the standard input stream and output the resulted
-  source code to the standard output stream.
-  'originalsorucecode' is the original source code which may contains
-  some comment lines. This results in getting a comment line free
-  source code as 'outputfile.'
+First of all, please remove all comment lines from the target source codes.
+(cpp will do this task.)  The following scripts assume that coment lines
+have been removed.
 
-extractconds.pl
-  Usage: extractconds.pl javasourcecode
+extractcond.pl
+  Usage: extractcond.pl javasourcecode
   This Perl script extracts conditional expressions from a Java source
   code. This generates a file which contains conditional
   expressions. e.g. if you pass a filename 'foo.java' as an argument,
@@ -41,4 +37,20 @@ splitter.sh
   to designate a particular package name for generated splitters.
 
 gensplitterinit.pl
-  * Now preparing *
+  Input: 
+    - class name ('-c' option)
+      You have to choose a class name for the splitter list. The default
+      value is "SplitterListForSomething."
+    - package name ('-p' option)
+      You have to choose a package name for the splitter list. The
+      default value is "daikon.split."
+    - splitter list ('-l' option)
+      You have to specify a splitter list, which includes all splitter
+      file names. The default value is "splitter.lst."
+      The simple way to generate this list is to do:
+      % ls -1 *.java > splitter.lst
+      in a directory which only contains required splitters.
+  Output:
+    - splitter initiator source
+      This class only has the static initiative. So everything has been
+      done when the object is created. This initiate all splitters.
