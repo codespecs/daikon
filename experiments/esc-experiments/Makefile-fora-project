@@ -84,6 +84,7 @@ clean: reset-scratch
 	@echo \#\#\# clean
 	@echo
 	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
+	rm -rf ${PACKAGE}
 
 #esc: StackAr.esc
 
@@ -183,6 +184,9 @@ merge:
 
 # Used to depend on ${PROJECT}.txt-esc, but that's not quite right.
 ${PROJECT}.esc: ${SOURCE_TO_DFEJ}
+	@echo
+	@echo \#\#\# esc
+	@echo
 	escjava -suggest ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
 
 esc-clean:
