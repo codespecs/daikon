@@ -256,9 +256,9 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	## Front ends
 	mkdir /tmp/daikon/front-end
 
-	# C/C++ instrumenter
-	mkdir /tmp/daikon/front-end/c
-	cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
+	# # C/C++ instrumenter
+	# mkdir /tmp/daikon/front-end/c
+	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
 	# Example files
 	cp -pR examples /tmp/daikon
