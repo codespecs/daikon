@@ -149,11 +149,22 @@ junit:
 ## Automatically generated files
 
 
+# Use this rule if you do not have cpp or for some other reason do not want
+# to refresh the automatically generated .java files.  You should not do
+# this if those files are not up-to-date (that is, if you have modified the
+# .jpp files).  It is safe to do this with a distrubution that you have
+# just unpacked.
+avoid-jpp:
+	@echo "Any recent changes in the .jpp files will not get propagated."
+	touch ${AUTO_GENERATED_FILES}
+
+
 # ":=" does not work here; the variables get expanded too soon.
 # "-e" means exit immediately if any error, rather than returning 
 # the status of the last command.
 
-JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
+# This rule does not work with make 3.77, but does work with make 3.78.
+JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@) || (rm -f $@ && false)
 # Like the above, but also makes a backup file
 # JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
@@ -165,7 +176,6 @@ JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 ## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
 # JAVA_CPP_START = (cp -pf $@ $@-bak; set -e; java-cpp $<
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
-
 
 PptSlice1.java: PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
