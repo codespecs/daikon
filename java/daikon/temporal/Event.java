@@ -18,7 +18,7 @@ package daikon.temporal;
  * be able to determine if another event B shares its type (two events A and B
  * share type if invariants involving event A would be interested in the
  * occurrence (or absence) of event B) and it must be able to determine
- * if B matches A (if they are compatible events - that is, either they are
+ * if B matches A (if they are compatible events -- that is, either they are
  * the same basic event or one is a sample event which includes as its part
  * the other event). FIXME: Make this clearer.
  *

@@ -441,7 +441,7 @@ public abstract class PptSlice
         VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
 
         for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          Assert.assertTrue(slice_vis[iSliceVis].type == 
+          Assert.assertTrue(slice_vis[iSliceVis].type ==
                             this.var_infos[iSliceVis].type);
         }
 
@@ -492,7 +492,7 @@ public abstract class PptSlice
         // Ensure the slice exists.
         PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
         // slice.repCheck();  // Can do, but commented out for performance
-    
+
         // Compute the permutation
         int[] permutation = new int[slice.arity];
         // Do the permutation to map variables from this to lower slice
@@ -703,7 +703,7 @@ public abstract class PptSlice
     List invariantsToGuard = new ArrayList();
 
     if (debugGuarding.isDebugEnabled()) {
-      debugGuarding.debug("PptSlice.guardInvariants init: " + this.parent.ppt_name); 
+      debugGuarding.debug("PptSlice.guardInvariants init: " + this.parent.ppt_name);
       debugGuarding.debug("  I have " + invs.size() + " invariants");
       for (int i=0; i<var_infos.length; i++) {
         try {
@@ -742,7 +742,7 @@ public abstract class PptSlice
           debugGuarding.debug("  No implication needed");
         }
       }
-        
+
       if (guardingPredicate != null) {
         guardingImplication =
           GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
@@ -784,9 +784,9 @@ public abstract class PptSlice
       for (Iterator iLowerSlices = slices_vis.iterator();
            iLowerSlices.hasNext(); ) {
         VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
-        
+
         for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          if (slice_vis[iSliceVis].type != 
+          if (slice_vis[iSliceVis].type !=
               this.var_infos[iSliceVis].type) {
             System.err.println ("RepCheck failure: " +
                                 var_infos[iSliceVis].name.name() +
@@ -819,7 +819,7 @@ public abstract class PptSlice
    * invariants that this holds.  Return a new PptSlice that's like
    * this except with the above replacement, along with correct flow
    * pointers for varInfos.  In this method, unlike cloneAllPivots,
-   * this.var_infos are their leaders - we are creating new
+   * this.var_infos are their leaders -- we are creating new
    * PptSlices for duplication during inferencing.
    * @pre leader is part of this.var_infos
    * @param leader The var to replace

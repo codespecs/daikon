@@ -560,8 +560,8 @@ class FormatTestCase {
   }
 
   /**
-   * This function parses a format string - a space seperated list of
-   * types - and determines the types of objects to be collected
+   * This function parses a format string -- a space separated list of
+   * types -- and determines the types of objects to be collected
    *
    * @param typeNames the type string for an invariant
    * @return an array of ProglangTypes representing the data in typeNames

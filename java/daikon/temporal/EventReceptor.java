@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * This class captures behavior common to all members of the scope/invariant
- * tree - they all have a parent (possibly null), they all receive events,
+ * tree -- they all have a parent (possibly null), they all receive events,
  * they may have special behavior if their parent closes or opens, etc.
  * It also provides some utility code for treewalks and for handling
  * duplications (a part of the dynamic instantiation process).

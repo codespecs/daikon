@@ -694,7 +694,7 @@ public class PptTopLevel
     //     }
 
     // Doable, but commented out for efficiency
-    // repCheck(); 
+    // repCheck();
 
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars);
@@ -754,7 +754,7 @@ public class PptTopLevel
    **/
   public List add(ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
-    // repCheck(); 
+    // repCheck();
 
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assertTrue(vt.size() == var_infos.length - num_static_constant_vars, name);
@@ -945,7 +945,7 @@ public class PptTopLevel
    * those invariants.
    **/
   public void instantiate_views_and_invariants() {
-    if (debug.isDebugEnabled()) 
+    if (debug.isDebugEnabled())
       debug.debug("instantiate_views_and_invariants for " + name);
 
     // Now make all of the views (and thus candidate invariants)
@@ -1009,7 +1009,7 @@ public class PptTopLevel
    **/
   public void removeSlice (PptSlice slice) {
     Object o = views.remove(Arrays.asList(slice.var_infos));
-    Assert.assertTrue (o != null);    
+    Assert.assertTrue (o != null);
   }
 
   /**
@@ -1272,7 +1272,7 @@ public class PptTopLevel
 
     // Unary slices/invariants.
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
-    for (int i=vi_index_min; i<vi_index_limit; i++) {      
+    for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
 
       // Debug
@@ -1340,7 +1340,7 @@ public class PptTopLevel
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
         if (!var1.isCanonical()) continue;
-      
+
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var1.isStaticConstant()) continue;
@@ -1413,53 +1413,94 @@ public class PptTopLevel
    * Return a slice that contains the given VarInfos (creating if
    * needed).  It is incumbent on the caller that the slice be either
    * filled with one or more invariants, or else removed from the
-   * views collection.
+   * views collection.<p>
+   *
+   * When the arity of the slice is known, call one of the overloaded
+   * definitions of get_or_instantiate_slice that takes (one or more)
+   * VarInfo arguments; they are more efficient.
+   *
+   * @param vis array of VarInfo objects; is not used internally
+   *      (so the same value can be passed in repeatedly)
    **/
   public PptSlice get_or_instantiate_slice(VarInfo[] vis) {
-    PptSlice result = findSlice_unordered(vis);
-    if (result != null) return result;
-
     switch (vis.length) {
-    case 1: {
-      VarInfo vi = vis[0];
-      // We may do inference over static constants
-      // Assert.assertTrue(! vi.isStaticConstant());
-      result = new PptSlice1(this, vi);
-      break;
-    }
-    case 2: {
-      VarInfo v1 = vis[0];
-      VarInfo v2 = vis[1];
-      // We may do inference over static constants
-      // Assert.assertTrue(! v1.isStaticConstant());
-      // Assert.assertTrue(! v2.isStaticConstant());
-      VarInfo tmp;
-      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
-      result = new PptSlice2(this, v1, v2);
-      break;
-    }
-    case 3: {
-      VarInfo v1 = vis[0];
-      VarInfo v2 = vis[1];
-      VarInfo v3 = vis[2];
-      // We may do inference over static constants
-      // Assert.assertTrue(! v1.isStaticConstant());
-      // Assert.assertTrue(! v2.isStaticConstant());
-      // Assert.assertTrue(! v3.isStaticConstant());
-      VarInfo tmp;
-      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
-      if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
-      if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
-      result = new PptSlice3(this, v1, v2, v3);
-      break;
-    }
+    case 1:
+      return get_or_instantiate_slice(vis[0]);
+    case 2:
+      return get_or_instantiate_slice(vis[0], vis[1]);
+    case 3:
+      return get_or_instantiate_slice(vis[0], vis[1], vis[2]);
     default:
       throw new IllegalArgumentException("bad length = " + vis.length);
     }
+  }
+
+
+  /**
+   * Return a slice that contains the given VarInfos (creating if
+   * needed).  It is incumbent on the caller that the slice be either
+   * filled with one or more invariants, or else removed from the
+   * views collection.
+   **/
+  public PptSlice get_or_instantiate_slice(VarInfo vi) {
+    PptSlice result = findSlice(vi);
+    if (result != null) return result;
+
+    // We may do inference over static constants
+    // Assert.assertTrue(! vi.isStaticConstant());
+    result = new PptSlice1(this, vi);
 
     addSlice(result);
     return result;
   }
+
+  /**
+   * Return a slice that contains the given VarInfos (creating if
+   * needed).  It is incumbent on the caller that the slice be either
+   * filled with one or more invariants, or else removed from the
+   * views collection.
+   **/
+  public PptSlice get_or_instantiate_slice(VarInfo v1, VarInfo v2) {
+    VarInfo tmp;
+    if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+
+    PptSlice result = findSlice(v1, v2);
+    if (result != null) return result;
+
+    // We may do inference over static constants
+    // Assert.assertTrue(! v1.isStaticConstant());
+    // Assert.assertTrue(! v2.isStaticConstant());
+    result = new PptSlice2(this, v1, v2);
+
+    addSlice(result);
+    return result;
+  }
+
+  /**
+   * Return a slice that contains the given VarInfos (creating if
+   * needed).  It is incumbent on the caller that the slice be either
+   * filled with one or more invariants, or else removed from the
+   * views collection.
+   **/
+  public PptSlice get_or_instantiate_slice(VarInfo v1, VarInfo v2, VarInfo v3) {
+    VarInfo tmp;
+    if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+    if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
+    if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+
+    PptSlice result = findSlice(v1, v2, v3);
+    if (result != null) return result;
+
+    // We may do inference over static constants
+    // Assert.assertTrue(! v1.isStaticConstant());
+    // Assert.assertTrue(! v2.isStaticConstant());
+    // Assert.assertTrue(! v3.isStaticConstant());
+    result = new PptSlice3(this, v1, v2, v3);
+
+    addSlice(result);
+    return result;
+  }
+
 
   /* [INCR] ... We can't know this anymore
   // Set the dynamic_constant slots of all the new variables.

@@ -49,7 +49,7 @@ public abstract class Derivation
    **/
   // I don't provide separate computeModified and computeValue
   // functions: they aren't so useful, and the same computation must
-  // usually be done in both functions.  
+  // usually be done in both functions.
   // A value whose derivation doesn't make sense is considered
   // MISSING_NONSENSICAL, not MISSING_FLOW.
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
@@ -57,7 +57,7 @@ public abstract class Derivation
   /**
    * Get the VarInfo that this would represent.  However,
    * the VarInfo can't be used to obtain values without further
-   * modification - use computeValueAndModified() for this.
+   * modification -- use computeValueAndModified() for this.
    * @see Derivation#computeValueAndModified
    **/
   public VarInfo getVarInfo() {

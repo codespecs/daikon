@@ -18,11 +18,13 @@ import java.util.*;
 // this does all the canonicalizing, etc.
 /**
  * Keeps track of sets of variables that are equal.<p>
- * 
+ *
  * During checking, Equality keeps track of VarInfos that are
  * comparable and equal, so we only need to instantiate (other)
  * invariants for one member of each Equal set, the leader.  See
- * equality notes in this directory.  During postProcessing, each
+ * equality notes in this directory.<p>
+ *
+ * During postProcessing, each
  * instance of Equality instantiates into displaying several equality
  * Comparison invariants ("x == y", "x == z").  Equality invariants
  * have leaders, which are the canonical forms of their variables.  In
@@ -440,27 +442,25 @@ public final class Equality
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
     VarInfo[] vars = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
-    VarInfo[] sliceVars = new VarInfo[2];
     if (debugPostProcess.isDebugEnabled()) {
       debugPostProcess.debug ("Doing postProcess: " + this.format_daikon());
       debugPostProcess.debug ("  at: " + this.ppt.parent.ppt_name);
     }
-    sliceVars[0] = leader();
-    ProglangType rep = sliceVars[0].rep_type;
+    VarInfo leader = leader();
+    ProglangType rep = leader.rep_type;
     boolean rep_is_scalar = rep.isScalar();
     boolean rep_is_float = rep.isFloat();
 
     if (debugPostProcess.isDebugEnabled()) {
-      debugPostProcess.debug ("  var1: " + sliceVars[0].name.name());
+      debugPostProcess.debug ("  var1: " + leader.name.name());
     }
     for (int i = 0; i < vars.length; i++) {
-      sliceVars[1] = vars[i];
-      if (sliceVars[1] == sliceVars[0]) continue;
+      if (vars[i] == leader) continue;
       if (debugPostProcess.isDebugEnabled()) {
-        debugPostProcess.debug ("  var2: " + sliceVars[1].name.name());
+        debugPostProcess.debug ("  var2: " + vars[i].name.name());
       }
 
-      PptSlice newSlice = parent.get_or_instantiate_slice (sliceVars);
+      PptSlice newSlice = parent.get_or_instantiate_slice (leader, vars[i]);
 
       newSlice.set_samples (this.numSamples());
       Invariant invEquals = null;

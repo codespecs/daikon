@@ -734,7 +734,7 @@ public final class VarInfo
     if (isDerivedParamAndUninterestingCached != null) {
       return isDerivedParamAndUninterestingCached.booleanValue();
     } else {
-      isDerivedParamAndUninterestingCached = 
+      isDerivedParamAndUninterestingCached =
         _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
       return isDerivedParamAndUninterestingCached.booleanValue();
     }
@@ -973,7 +973,7 @@ public final class VarInfo
   public VarInfo canonicalRep() {
     return equalitySet.leader();
   }
-  
+
   /**
    * Returns all other variables that are equal to this variable.
    * Returns a fresh Vector.
@@ -1867,7 +1867,7 @@ public final class VarInfo
     // Later for the array, make sure index in bounds
     if (type.isArray() || type.isObject()) {
       // For now associating with the variable's PptSlice
-      PptSlice associateWith = ppt.get_or_instantiate_slice(new VarInfo [] {this});
+      PptSlice associateWith = ppt.get_or_instantiate_slice(this);
 
       Invariant prevInstantiation;
       try {
@@ -2056,7 +2056,7 @@ public final class VarInfo
   /**
    * Compare names by index.
    **/
-  public static final class IndexComparator 
+  public static final class IndexComparator
     implements Comparator, Serializable {
     private IndexComparator() {
     }
