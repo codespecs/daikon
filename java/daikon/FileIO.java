@@ -40,12 +40,16 @@ public final class FileIO {
 
   // Program point name tags
   public final static String ppt_tag_separator = ":::";
-  public final static String enter_tag = ppt_tag_separator + "ENTER";
+  public final static String enter_suffix = "ENTER";
+  public final static String enter_tag = ppt_tag_separator + enter_suffix;
   // This does not necessarily appear at the end of the program point name;
   // a number may follow it.
-  public final static String exit_tag = ppt_tag_separator + "EXIT";
-  public final static String object_tag = ppt_tag_separator + "OBJECT";
-  public final static String class_static_tag = ppt_tag_separator + "CLASS";
+  public final static String exit_suffix = "EXIT";
+  public final static String exit_tag = ppt_tag_separator + exit_suffix;
+  public final static String object_suffix = "OBJECT";
+  public final static String object_tag = ppt_tag_separator + object_suffix;
+  public final static String class_static_suffix = "CLASS";
+  public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
 
 
 /// Variables
