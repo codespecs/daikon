@@ -45,21 +45,13 @@ JDKDIR ?= /afs/csail/group/pag/software/pkg/jdk
 
 # Files to copy to the website
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
-				    anoncvs.html download/index.html download/doc/index.html \
-					pubs-sources/abstract-headfoot.html \
-					pubs-sources/abstract-headfoot-testsubject.html  \
-					pubs-sources/index-headfoot.html \
-					pubs-sources/fix-homedir-tilde.pl \
-				    pubs-sources/Makefile
+				    anoncvs.html download/index.html download/doc/index.html
 
 # Staging area for the distribution
 STAGING_DIST := $(INV_DIR)/dist
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
-
-# The crosscompile is stored here
-#MINGW_TOOLS := /var/autofs/net/pag/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1
 
 MINGW_TOOLS := /afs/csail/group/pag/software/pkg/mingw32-linux-x86-glibc-2.1
 
@@ -244,6 +236,11 @@ staging: doc/CHANGES update-doc-dist-date-and-version
 	cp -pR doc/images $(STAGING_DIST)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIST)/download/doc
 	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIST)
+	# Build pubs and copy the results
+	@echo "]2;Building Pubs"
+	cd doc/www && make pubs
+	install -d $(STAGING_DIST)/pubs
+	cp -pR doc/www/pubs/* $(STAGING_DIST)/pubs
 	# Build static dfej and copy to staging dir
 	@echo "]2;Building static dfej"
 	$(MAKE) static-dfej-linux-x86
@@ -263,8 +260,8 @@ staging: doc/CHANGES update-doc-dist-date-and-version
 	tar tzf $(STAGING_DIST)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
 	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
 	# Delete the tmp files
-	/bin/rm -rf /tmp/daikon /tmp/dfej.tar daikon.dist daikon.tar daikon.zip \
-			   /tmp/old_tar.txt
+	cd /tmp && /bin/rm -rf /daikon dfej.tar daikon.dist daikon.tar daikon.zip \
+							old_tar.txt new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
