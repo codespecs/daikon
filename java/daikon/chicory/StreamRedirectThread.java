@@ -48,8 +48,10 @@ public class StreamRedirectThread extends Thread
 
     private final Reader in;
     private final Writer out;
+    private final PrintStream outWriter;
 
     private static final int BUFFER_SIZE = 2048;
+    //private static final int BUFFER_SIZE = 1;
 
     /**
      * Set up for copy.
@@ -62,6 +64,8 @@ public class StreamRedirectThread extends Thread
         super(name);
         this.in = new InputStreamReader(in);
         this.out = new OutputStreamWriter(out);
+        this.outWriter = new PrintStream(out);
+        
         setPriority(Thread.MAX_PRIORITY - 1);
     }
 
@@ -72,12 +76,18 @@ public class StreamRedirectThread extends Thread
     {
         try
         {
+            BufferedReader br = new BufferedReader(in);
+            
             char[] cbuf = new char[BUFFER_SIZE];
             int count;
-            while ((count = in.read(cbuf, 0, BUFFER_SIZE)) >= 0)
-            {
-                out.write(cbuf, 0, count);
+            
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                outWriter.println(line);
             }
+
+            
+
             out.flush();
         }
         catch (IOException exc)

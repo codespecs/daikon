@@ -21,9 +21,6 @@ Todo list sorted in approximate order of importance.
   - Switch over the regression tests to chicory, leaving dfej as a
     user option.  Checkin the changed goal files.
 
-  - Fix the output/err stream redirection to flush on each line feed
-    so we see results in real time.
-
   - Add dtrace goal files (perhaps limited to some reasonable number
     of lines) to the regression tests.  This will allow us to see
     more quickly when a Chicory change causes dtrace diffs.
@@ -65,3 +62,8 @@ Completed Tasks
     Feb 07 2005 jhp - Moved everything actually used to the single
     directory $inv/daikon/chicory.  Chicory.java itself was placed in
     the directly in $inv/daikon.
+    
+    
+   - Fix the output/err stream redirection to flush on each line feed
+    so we see results in real time.
+    2/9/05: fixed this by using BufferedInput and PrintStream
