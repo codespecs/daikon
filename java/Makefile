@@ -317,6 +317,8 @@ JAVADOC_FLAGS = -d doc \
 # Note that this excludes Ajax
 JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
+javadoc: doc
+
 doc: $(JAVA_FILES) doc-dkconfig
 	mkdir -p doc
 	# This requires that jdk/lib/tools.jar be on your classpath
