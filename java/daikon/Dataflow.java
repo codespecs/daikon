@@ -5,6 +5,8 @@ import java.util.*;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import daikon.PptTopLevel;
+import daikon.Child;
 
 /**
  * A collection of code that configures and assists the dataflow
@@ -26,6 +28,10 @@ public class Dataflow
 
   /** Debug tracer for ppt initialization.   **/
   public static final Logger debugInit = Logger.getLogger("daikon.flow.init");
+
+  /** Debug tracer for ppt invariant merging **/
+  public static final Logger debugMerge = Logger.getLogger
+                                                ("daikon.flow.merge");
 
   /**
    * Indicate progress for FileIOProgress.
@@ -420,6 +426,7 @@ public class Dataflow
                                         FileIO.object_suffix // point
                                         );
           Assert.assertTrue(objname.isObjectInstanceSynthetic());
+          debugInit.fine ("Looking for object ppt: " + objname);
           PptTopLevel object_ppt = ppts.get(objname);
           if (object_ppt != null) {
             debugInit.fine ("  whose type is known (success)");
@@ -1060,6 +1067,277 @@ public class Dataflow
         out.println();
       }
 
+    }
+  }
+
+  /**
+   * Class that represents relations in the ppt hierarchy from objects
+   * to methods on that object
+   */
+
+  static public class ObjectMethodRel extends PptRelation {
+
+    ObjectMethodRel (PptTopLevel parent, PptTopLevel child) {
+      super (parent, child);
+      if ((parent == null) || (child == null))
+        return;
+
+      // Connect each 'this' variable between parent and child
+      // Note that these should be the only variables whose names match
+      relate_same_name();
+    }
+  }
+
+  /**
+   * Class that represents relations in the ppt hierarchy from classes
+   * to objects that contain static members.
+   */
+  static public class ClassObjectRel extends PptRelation {
+
+    ClassObjectRel (PptTopLevel parent, PptTopLevel child) {
+      super (parent, child);
+      if ((parent == null) || (child == null))
+        return;
+
+      // Connect each static variable between parent and child
+      // Note that these should be the only variables whose names match
+      relate_same_name();
+    }
+  }
+  /**
+   * Class that represents relations in the ppt hierarchy from objects
+   * to users of those objects (eg, from the object B to the method
+   * A.foo (B arg))
+   *
+   * Note that only the fields of the object (eg, this.x, this.y)
+   * and not the object itself (eg, this) are substituted in this
+   * fashion.
+   *
+   * While it could be argued that a pointer to an object of type
+   * T and the 'this' pointer in an object of type T are analogous,
+   * they are really not the same.  The pointer is a reference to
+   * the object while 'this' is really the object itself.  The
+   * relationship is also not intuitive when looking at the
+   * invariants.  For example, assume that every reference to T at
+   * all ppts was not null.  This invariant would print as 'this
+   * != null.'  The invariant is both confusing (since in a normal
+   * context 'this' can never be null) and it is not obvious that
+   * it implies that all references to the object are not NULL.
+   */
+  static public class ObjectUserRel extends PptRelation {
+
+    ObjectUserRel (PptTopLevel parent, PptTopLevel child, VarInfo arg) {
+      super (parent, child);
+      if ((parent == null) || (child == null))
+        return;
+
+      // Connect each each field in arg between parent and child.  Do this
+      // by substituting args name for this in the parent and then looking
+      // for a name match in the child
+      for (int i = 0; i < parent.var_infos.length; i++) {
+        VarInfo vp = parent.var_infos[i];
+        if (vp.name.equals (VarInfoName.THIS))
+          continue;
+        VarInfoName parent_name = vp.name.replaceAll
+                                    (VarInfoName.THIS, arg.name);
+        for (int j = 0; j < child.var_infos.length; j++) {
+          VarInfo vc = child.var_infos[j];
+          if (parent_name == vc.name) {
+            child_to_parent_map.put (vc, vp);
+            parent_to_child_map.put (vp, vc);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Class that represents relations in the ppt hierarchy from enter
+   * points to exit points over orig variables.
+   */
+  static public class EnterExitRel extends PptRelation {
+
+    EnterExitRel (PptTopLevel parent, PptTopLevel child) {
+      super (parent, child);
+      if ((parent == null) || (child == null))
+        return;
+
+      // Look for orig versions of each parent variable in the child
+      for (int i = 0; i < parent.var_infos.length; i++) {
+        VarInfo vp = parent.var_infos[i];
+        VarInfoName orig_name = vp.name.applyPrestate();
+        for (int j = 0; j < child.var_infos.length; j++) {
+          VarInfo vc = child.var_infos[j];
+          if (orig_name == vc.name) {
+            child_to_parent_map.put (vc, vp);
+            parent_to_child_map.put (vp, vc);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Class that represents relations in the ppt hierarchy from combined
+   * exit points to individual exit points(normally referred to as
+   * exitNN where NN is the line number of the exit point).
+   */
+
+  static public class CombinedExitExitNNRel extends PptRelation {
+
+    CombinedExitExitNNRel (PptTopLevel parent, PptTopLevel child) {
+      super (parent, child);
+      if ((parent == null) || (child == null))
+        return;
+
+      // Create the parent-child variable map.  This one is easy as the
+      // variables should match exactly
+      Assert.assertTrue (parent.var_infos.length == child.var_infos.length);
+      for (int i = 0; i < parent.var_infos.length; i++) {
+        VarInfo vc = child.var_infos[i];
+        VarInfo vp = parent.var_infos[i];
+        Assert.assertTrue (vc.name.name().equals (vp.name.name()));
+        child_to_parent_map.put (vc, vp);
+        parent_to_child_map.put (vp, vc);
+      }
+    }
+
+  }
+
+  /**
+   * Initialize the hierarchical relationship between ppts.  Specifically
+   * process each ppt, find its parent(s) in the partial order, and fill
+   * this point into the children field in the parent.  Note that children
+   * contains only the immediate descendants of the ppt.
+   */
+  public static void init_hierarchy (PptMap all_ppts) {
+
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      PptName pname = ppt.ppt_name;
+      PptRelation rel = null;
+      debugInit.fine ("Processing ppt " + pname);
+
+      // If this is an object ppt, parent is the class point
+      if (pname.isObjectInstanceSynthetic()) {
+        PptTopLevel parent = all_ppts.get (pname.makeClassStatic());
+        if (parent != null)
+          rel = new ClassObjectRel (parent, ppt);
+
+      // Else if it is an enter point and not a constructor, parent is object
+      } else if (pname.isEnterPoint() && !pname.isConstructor()) {
+        PptTopLevel parent = all_ppts.get (pname.makeObject());
+        if (parent != null)
+          rel = new ObjectMethodRel (parent, ppt);
+
+      // Else if a combined exit point, parent is object
+      } else if (pname.isCombinedExitPoint()) {
+        PptTopLevel parent = all_ppts.get (pname.makeObject());
+        if (parent != null)
+         rel = new ObjectMethodRel (parent, ppt);
+
+      // Else if an exitNN point, parent is combined exit point
+      } else if (pname.isExitPoint()) {
+        PptTopLevel parent = all_ppts.get (pname.makeExit());
+        if (parent != null)
+          rel = new CombinedExitExitNNRel (parent, ppt);
+      }
+
+      // If a relation was created, connect it into its ppts
+      if (rel != null) {
+        rel.connect();
+        debugInit.fine ("-- ppt parent is " + rel.parent.ppt_name +
+            " with connections [" + rel.parent_to_child_var_string() + "]");
+      } else {
+        debugInit.fine (" -- no ppt parent");
+      }
+
+      // Connect combined exit points to enter points over orig variables
+      if (pname.isCombinedExitPoint()) {
+        PptTopLevel enter = all_ppts.get (pname.makeEnter());
+        if (enter != null) {
+          rel = new EnterExitRel (enter, ppt);
+          rel.connect();
+          debugInit.fine (" -- exit to enter " + enter.name +
+             " with connections [" + rel.parent_to_child_var_string() + "]");
+        } else {
+          debugInit.fine ("-- No matching enter for exit");
+        }
+      }
+
+      // For all points, look for vars of a declared type that we have
+      // a corresponding OBJECT ppt.  Essentially these are all of the
+      // users of an object.  Don't match if the variable already has
+      // a parent (since the parent will provide the link back to the
+      // object) For each variable of this type that we find, setup a
+      // parent child relationship with its corresponding OBJECT
+      // variables.
+      //
+      // For example, consider class A with fields x and y and method
+      // B.foo (A arg1, A arg2).  We will setup two relations to this
+      // ppt -- one from A to b.foo.arg1 and one from A to b.foo.arg2.
+      // in each we will equate A.x with arg.x and A.y with arg.y.
+      //
+      // We skip variables named exactly 'this' so that we don't setup a
+      // recursive relationship from the object to itself.
+
+      debugInit.fine ("-- Looking for variables with an OBJECT ppt");
+      for (int j = 0; j < ppt.var_infos.length; j++) {
+        VarInfo vc = ppt.var_infos[j];
+        String dstr = "-- -- var '" + vc.name.name() + "' - ";
+        if (ppt.has_parent (vc)) {
+          debugInit.fine (dstr + " Skipping, already has a parent");
+          continue;
+        }
+        if (vc.name.equals (VarInfoName.THIS)) {
+          debugInit.fine (dstr + " skipping, name is 'this'");
+          continue;
+        }
+        PptTopLevel object_ppt = vc.find_object_ppt (all_ppts);
+        if (object_ppt != null) {
+          rel = new ObjectUserRel (object_ppt, ppt, vc);
+          rel.connect();
+          debugInit.fine (dstr + " Connected to Object ppt " + object_ppt.name
+             + " with connections [" + rel.parent_to_child_var_string() +"]");
+        } else
+          debugInit.fine (dstr + " No object ppt");
+      }
+    }
+
+    // Debug print the hierarchy is a more readable manner
+    if (debugInit.isLoggable(Level.FINE)) {
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        if (ppt.parents.size() == 0)
+          ppt.debug_print_tree (debugInit, 0, null);
+      }
+    }
+
+    // Debug print the equality sets for each ppt
+    if (debugInit.isLoggable(Level.FINE)) {
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        debugInit.fine (ppt.name + " equality sets: "
+                        + ppt.equality_sets_txt());
+      }
+    }
+  }
+
+  /**
+   * Creates upper program points by merging together the invariants
+   * from all of the lower points
+   */
+
+  public static void createUpperPpts (PptMap all_ppts) {
+
+    // Process each ppt that doesn't have a parent
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      if (ppt.parents.size() == 0) {
+        ppt.mergeInvs();
+      }
     }
   }
 
