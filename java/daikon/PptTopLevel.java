@@ -1035,12 +1035,9 @@ public class PptTopLevel
       for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
         PptSlice view = (PptSlice) itor.next();
         if (view.invs.size() == 0) {
-          // System.err.println("No invs for " + view.name);
           continue;
         }
-        if (!view.no_invariants) {
-          weakenedInvs.addAll (view.add(vt, count));
-        }
+        weakenedInvs.addAll (view.add(vt, count));
       }
 
       viewsToCheck = new HashSet();
@@ -1060,9 +1057,11 @@ public class PptTopLevel
         // ConcurrentModifiecationException.
         Set suppressees = new HashSet(inv.getSuppressees());
 
-        if (debugSuppress.isDebugEnabled() && suppressees.size() > 0) {
+        if ((debugSuppress.isDebugEnabled() || inv.logOn()) && suppressees.size() > 0) {
           debugSuppress.debug (" Inv " + inv.repr() +
                                " was falsified or weakened with suppressees");
+          inv.log (" Inv " + inv.repr() +
+                   " was falsified or weakened with suppressees");
         }
         // Try to resuppress the weakened inv
         // Why is this useful?  There may be isSameFormula comparisons
@@ -1071,7 +1070,10 @@ public class PptTopLevel
         if (!inv.falsified && inv.getSuppressor() == null) {
           if (attemptSuppression (inv, true)) {
             if (debugSuppress.isDebugEnabled()) {
-              debugSuppress.debug ("Suppressor res-suppressed");
+              debugSuppress.debug ("Suppressor re-suppressed");
+            }
+            if (inv.logOn()) {
+              inv.log ("Suppressor " + inv.repr() + " re-suppressed, sample count: " + inv.ppt.num_samples());
             }
           }
         }
@@ -1082,17 +1084,23 @@ public class PptTopLevel
           Invariant invSuppressed = sl.getSuppressee();
           sl.unlink();
           Assert.assertTrue (invSuppressed.getSuppressor() == null);
-          if (debugSuppress.isDebugEnabled()) {
+          if (debugSuppress.isDebugEnabled() || invSuppressed.logOn()) {
             debugSuppress.debug ("  Attempting re-suppression of: " + invSuppressed.repr());
+            invSuppressed.log ("  Attempting re-suppression of: " + invSuppressed.repr());
           }
           PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
           if (attemptSuppression (invSuppressed, true)) {
-            if (debugSuppress.isDebugEnabled()) {
+            if (debugSuppress.isDebugEnabled() || invSuppressed.logOn()) {
               debugSuppress.debug ("  Re-suppressed by " + invSuppressed.getSuppressor());
+              invSuppressed.log ("  Re-suppressed by " + invSuppressed.getSuppressor() +
+                       " samples: " + inv.ppt.num_samples());
             }
           } else if (suppressedPpt == this) {
             // If invSuppressed didn't get resuppressed, we have to check values
             debugSuppress.debug ("  Will re-check because in same ppt");
+            if (invSuppressed.logOn()) {
+              invSuppressed.log ("  Will re-check because in same ppt");
+            }
             viewsToCheck.add (invSuppressed.ppt);
           } else {
             // Do nothing because suppressedParent is a child of this,
@@ -1666,7 +1674,7 @@ public class PptTopLevel
    * VarInfo arguments; they are more efficient.
    *
    * @param vis array of VarInfo objects; is not used internally
-   *      (so the same value can be passed in repeatedly)
+   *      (so the same value can be passed in repeatedly).  Can be unsorted.
    **/
   public PptSlice get_or_instantiate_slice(VarInfo[] vis) {
     switch (vis.length) {
