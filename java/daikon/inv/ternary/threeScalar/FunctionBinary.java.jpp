@@ -90,6 +90,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     super (ppt);
   }
 
+  // check_modified relies on func having no side effects.
   abstract PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2);
   abstract boolean is_symmetric();
   abstract String[] get_method_name();
@@ -196,9 +197,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Apply the specified sample to the function, returning the result
    * The caller is responsible for permuting the arguments
    */
-  public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,
+  public InvariantStatus check_ordered (PRIMITIVE result, PRIMITIVE arg1,
                                       PRIMITIVE arg2, int count) {
-
+    // This implementation relies on func having no side effects.
     try {
       if (!EQUAL (result, func (arg1, arg2)))
         return InvariantStatus.FALSIFIED;
@@ -206,6 +207,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+  /**
+   * Apply the specified sample to the function, returning the result
+   * The caller is responsible for permuting the arguments
+   */
+  public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,
+                                      PRIMITIVE arg2, int count) {
+    return check_ordered(result, arg1, arg2, count);
   }
 
   /**

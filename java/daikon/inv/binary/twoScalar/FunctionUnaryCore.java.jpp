@@ -94,7 +94,7 @@ public final class CLASSNAME
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
   }
 
-  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     boolean ok = false;
     ok = (inverse
           ? (x == (FUNCTIONS.invokeUnary(methodNumber, y)))
@@ -104,6 +104,10 @@ public final class CLASSNAME
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+    return check_modified(x, y, count);
   }
 
   public double computeConfidence() {

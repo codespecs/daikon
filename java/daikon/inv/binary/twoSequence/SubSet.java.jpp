@@ -211,22 +211,24 @@ public class SUBSET
     return "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
   }
 
+  public InvariantStatus check_modified(LONG[] a1, LONG[] a2, int count) {
+#if (defined(SUB) || defined(SUBFLOAT))
+    if (!IS_SUBSET(a1, a2))
+#else
+    if (!IS_SUBSET(a2, a1))
+    #endif
+    {
+      return InvariantStatus.FALSIFIED;
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add_modified(LONG[] a1, LONG[] a2, int count) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (ArraysMDE.toString(a1));
       debug.fine (ArraysMDE.toString(a2));
     }
-
-    #if (defined(SUB) || defined(SUBFLOAT))
-    if (!IS_SUBSET(a1, a2))
-    #else
-    if (!IS_SUBSET(a2, a1))
-    #endif
-    {
-      debug.fine ("Falsified 1");
-      return InvariantStatus.FALSIFIED;
-    }
-    return InvariantStatus.NO_CHANGE;
+    return check_modified(a1, a2, count);
   }
 
   protected double computeConfidence() {

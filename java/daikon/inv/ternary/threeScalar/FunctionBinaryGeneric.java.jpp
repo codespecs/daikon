@@ -128,6 +128,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (FUNC (arg1, arg2));
   }
 
+  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
+                                      PRIMITIVE z, int count) {
+    return (check_ordered (result, arg1, arg2, count));
+  }
+
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     return (add_ordered (result, arg1, arg2, count));

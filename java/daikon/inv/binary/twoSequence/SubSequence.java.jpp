@@ -309,7 +309,21 @@ public class CLASSNAME
       " == " + subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
+  public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+    return checkOrAddModified(a1, a2, count, false);
+  }
+
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+    return checkOrAddModified(a1, a2, count, true);
+  }
+
+  /**
+   * @param add true when a1 and a2 are to be added to this.
+   */
+  private InvariantStatus checkOrAddModified(PRIMITIVE[] a1,
+                                             PRIMITIVE[] a2,
+                                             int count,
+                                             boolean add) {
     Assert.assertTrue(var1_in_var2 || var2_in_var1);
 
     boolean new_var1_in_var2 = var1_in_var2;
@@ -332,8 +346,10 @@ public class CLASSNAME
     }
 
     // changed == true but not dead yet
-    var1_in_var2 = new_var1_in_var2;
-    var2_in_var1 = new_var2_in_var1;
+    if (add) {
+      var1_in_var2 = new_var1_in_var2;
+      var2_in_var1 = new_var2_in_var1;
+    }
     return InvariantStatus.WEAKENED;
   }
 

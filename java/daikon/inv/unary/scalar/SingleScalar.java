@@ -41,6 +41,19 @@ public abstract class SingleScalar
     }
   }
 
+
+  public InvariantStatus check(Object val, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    // [INCR] Assert.assertTrue(!finished);
+    long value = ((Long) val).longValue();
+    if (mod_index == 0) {
+      return add_unmodified(value, count);
+    } else {
+      return add_modified(value, count);
+    }
+  }
+
   /**
    * This method need not check for falsified;
    * that is done by the caller.
@@ -53,6 +66,12 @@ public abstract class SingleScalar
    **/
   public InvariantStatus add_unmodified(long value, int count) {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
+    return InvariantStatus.NO_CHANGE;
+  }
+
+  public abstract InvariantStatus check_modified(long value, int count);
+
+  public InvariantStatus check_unmodified(long value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

@@ -41,6 +41,19 @@ public abstract class SingleFloat
     }
   }
 
+
+  public InvariantStatus check(Object val, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    // [INCR] Assert.assertTrue(!finished);
+    double value = ((Double) val).doubleValue();
+    if (mod_index == 0) {
+      return check_unmodified(value, count);
+    } else {
+      return check_modified(value, count);
+    }
+  }
+
   /**
    * This method need not check for falsified;
    * that is done by the caller.
@@ -53,6 +66,14 @@ public abstract class SingleFloat
    **/
   public InvariantStatus add_unmodified(double value, int count) {
     // System.out.println("SingleFloat.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
+    return InvariantStatus.NO_CHANGE;
+  }
+
+
+  public abstract InvariantStatus check_modified(double value, int count);
+
+
+  public InvariantStatus check_unmodified(double value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

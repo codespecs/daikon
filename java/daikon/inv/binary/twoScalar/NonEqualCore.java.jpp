@@ -92,6 +92,13 @@ public final class CLASSNAME
     max2 = tmp;
   }
 
+  public InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
+    if (EQUAL (v1, v2)) {
+      return InvariantStatus.FALSIFIED;
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     if (wrapper.ppt.debug.isLoggable(Level.FINE)) {
       wrapper.ppt.debug.fine(CLASSSTRING + wrapper.ppt.varNames() + ".add_modified("

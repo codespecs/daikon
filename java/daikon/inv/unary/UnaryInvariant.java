@@ -32,4 +32,6 @@ public abstract class UnaryInvariant
 
   public abstract InvariantStatus add(Object val, int mod_index, int count);
 
+  public abstract InvariantStatus check(Object val1, int mod_index, int count);
+
 }

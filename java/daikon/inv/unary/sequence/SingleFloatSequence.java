@@ -42,6 +42,21 @@ public abstract class SingleFloatSequence
     return InvariantStatus.NO_CHANGE;
   }
 
+
+  public InvariantStatus check(Object val, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    Assert.assertTrue(Intern.isInterned(val));
+    double[] value = (double[]) val;
+    if (value == null) {
+    } else if (mod_index == 0) {
+      return check_unmodified(value, count);
+    } else {
+      return check_modified(value, count);
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   /**
    * This method need not check for falsified;
    * that is done by the caller.
@@ -53,6 +68,12 @@ public abstract class SingleFloatSequence
    * Subclasses can override this.
    **/
   public InvariantStatus add_unmodified(double[] value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+
+  public abstract InvariantStatus check_modified(double[] value, int count);
+
+  public InvariantStatus check_unmodified(double[] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

@@ -49,6 +49,21 @@ public abstract class SequenceString
     return ppt.var_infos[scl_index];
   }
 
+  public InvariantStatus check(Object val1, Object val2, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    // [INCR] Assert.assertTrue(!finished);
+    String[] v1 = (String[]) val1;
+    String v2 = (String) val2;
+    if (v1 == null) {
+    } else if (mod_index == 0) {
+      return check_unmodified(v1, v2, count);
+    } else {
+      return check_modified(v1, v2, count);
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
@@ -62,6 +77,13 @@ public abstract class SequenceString
     } else {
       return add_modified(v1, v2, count);
     }
+    return InvariantStatus.NO_CHANGE;
+  }
+
+  public abstract InvariantStatus check_modified(String[] v1, String v2, int count);
+
+
+  public InvariantStatus check_unmodified(String[] v1, String v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

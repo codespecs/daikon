@@ -41,6 +41,18 @@ public abstract class SingleString
     }
   }
 
+  public InvariantStatus check(Object val, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    String value = (String) val;
+    if (mod_index == 0) {
+      return check_unmodified(value, count);
+    } else {
+      return check_modified(value, count);
+    }
+  }
+
+
   /**
    * This method need not check for falsified;
    * that is done by the caller.
@@ -54,5 +66,13 @@ public abstract class SingleString
   public InvariantStatus add_unmodified(String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
+
+  public abstract InvariantStatus check_modified(String value, int count);
+
+  public InvariantStatus check_unmodified(String value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+
+
 
 }

@@ -159,6 +159,20 @@ public class CLASSNAME
     return pre_buf.toString();
   }
 
+  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
+    if (intersect==null) {
+      return InvariantStatus.NO_CHANGE;
+    } else {
+      for (int i = 0; i < a.length; i++) {
+        if (INDEXOF (intersect, a[i]) != -1) {
+          return InvariantStatus.NO_CHANGE;
+        }
+      }
+      return InvariantStatus.FALSIFIED;
+    }
+  }
+
+
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
     // System.out.println ("common: " + ArraysMDE.toString (a));
     if (intersect==null) {
@@ -166,7 +180,7 @@ public class CLASSNAME
       return InvariantStatus.NO_CHANGE;
     } else {
       PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
-      int    size = 0;
+      int size = 0;
       for (int i=0; i<a.length; i++) {
 
         // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
@@ -182,7 +196,7 @@ public class CLASSNAME
         }
       }
       if (size==0) {
-        VarInfo var = var();
+        VarInfo var = var(); // DEAD CODE?
         return InvariantStatus.FALSIFIED;
       }
 

@@ -170,6 +170,10 @@ public class CLASSNAME
       + form[3];
   }
 
+  public InvariantStatus check_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
+    return ((CLASSNAME) clone()).add_modified(x_arr, y_arr, count);
+  }
+
   public InvariantStatus add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       return InvariantStatus.FALSIFIED;

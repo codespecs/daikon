@@ -81,7 +81,18 @@ public final class StringComparisonCore
     obvious_can_be_ge = tmp;
   }
 
+  public InvariantStatus check_modified(String v1, String v2, int count) {
+    return checkOrAddModified(v1, v2, count, false);
+  }
+
   public InvariantStatus add_modified(String v1, String v2, int count) {
+    return checkOrAddModified(v1, v2, count, true);
+  }
+
+  /**
+   * @param add true if v1 and v2 are to be added to this false otherwise.
+   */
+  private InvariantStatus checkOrAddModified(String v1, String v2, int count, boolean add) {
     if ((v1 == null) || (v2 == null)) {
       return InvariantStatus.FALSIFIED;
     }
@@ -121,9 +132,11 @@ public final class StringComparisonCore
       return InvariantStatus.FALSIFIED;
     }
 
-    can_be_eq = new_can_be_eq;
-    can_be_lt = new_can_be_lt;
-    can_be_gt = new_can_be_gt;
+    if (add) {
+      can_be_eq = new_can_be_eq;
+      can_be_lt = new_can_be_lt;
+      can_be_gt = new_can_be_gt;
+    }
     return InvariantStatus.WEAKENED;
   }
 

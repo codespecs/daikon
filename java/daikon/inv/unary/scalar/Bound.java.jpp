@@ -396,24 +396,36 @@ public class LOWERBOUND
   public InvariantStatus add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //              + "add(" + value + ", " + modified + ", " + count + ")");
-    #ifndef IS_ELT
-      return core.add_modified(value, count);
-    #else
-      boolean changed = false;
-      InvariantStatus status = InvariantStatus.NO_CHANGE;
-      for (int i=0; i<value.length; i++) {
-        if (!changed && core.wouldChange (value[i])) {
-          changed = true;
-          status = InvariantStatus.WEAKENED;
-        }
-        if (core.add_modified(value[i], count) ==
-            InvariantStatus.FALSIFIED) {
-          return InvariantStatus.FALSIFIED;
-        }
+#ifndef IS_ELT
+    return core.add_modified(value, count);
+#else
+    boolean changed = false;
+    InvariantStatus status = InvariantStatus.NO_CHANGE;
+    for (int i=0; i<value.length; i++) {
+      if (!changed && core.wouldChange (value[i])) {
+        changed = true;
+        status = InvariantStatus.WEAKENED;
       }
-      return status;
+      if (core.add_modified(value[i], count) ==
+          InvariantStatus.FALSIFIED) {
+        return InvariantStatus.FALSIFIED;
+      }
+    }
+    return status;
 #endif
+  }
 
+  public InvariantStatus check_modified(LONG value, int count) {
+#ifndef IS_ELT
+    return core.check(value);
+#else
+    for (int i = 0; i < value.length; i++) {
+      if (core.check(value[i]) == InvariantStatus.WEAKENED) {
+        return InvariantStatus.WEAKENED;
+      }
+    }
+    return InvariantStatus.NO_CHANGE;
+#endif
   }
 
   public boolean enoughSamples() {

@@ -40,12 +40,15 @@ public class Positive
     return var().name.name() + " > 0";
   }
 
-  // This is called when a new sample is encountered
-  public InvariantStatus add_modified(long v, int count) {
+  public InvariantStatus check_modified(long v, int count) {
     if (v <= 0) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+  public InvariantStatus add_modified(long v, int count) {
+    return check_modified(v, count);
   }
 
   protected double computeConfidence() {

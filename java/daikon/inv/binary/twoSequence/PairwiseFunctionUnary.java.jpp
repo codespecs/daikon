@@ -142,6 +142,22 @@ public class CLASSNAME
       + quant1.getClosingExp();
   }
 
+  public InvariantStatus check_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
+    if (x_arr.length != y_arr.length) {
+      return InvariantStatus.FALSIFIED;
+    }
+    int len = x_arr.length;
+    for (int i=0; i<len; i++) {
+      PRIMITIVE x  = x_arr[i];
+      PRIMITIVE y = y_arr[i];
+
+      if (core.check_modified(x, y, count) == InvariantStatus.FALSIFIED) {
+        return InvariantStatus.FALSIFIED;
+      }
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       // destroyAndFlow();

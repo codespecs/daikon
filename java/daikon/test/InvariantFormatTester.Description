@@ -49,7 +49,9 @@ Goal (ioa): a >= -6
 Goal (jml): a >= -6
 Goal (simplify): (>= |a| -6)
 
-Note that the spacing on the goal lines is exact, that is, no extra spaces are allowed and no spaces are allowed to be missing. So the exact format is again:
+Note that the spacing on the goal lines is exact, that is, no extra
+spaces are allowed and no spaces are allowed to be missing. So the
+exact format is again:
 
 Goal<1 space>(<format name>):<1 space><goal text>
 

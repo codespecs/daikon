@@ -45,6 +45,26 @@ public abstract class SingleStringSequence
     return InvariantStatus.NO_CHANGE;
   }
 
+  public InvariantStatus check(Object val, int mod_index, int count) {
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    Assert.assertTrue(Intern.isInterned(val));
+    String[] value = (String[]) val;
+    if (value == null) {
+      return InvariantStatus.NO_CHANGE;
+    } else if (mod_index == 0) {
+      return check_unmodified(value, count);
+    } else {
+      return check_modified(value, count);
+    }
+  }
+
+  public abstract InvariantStatus check_modified(String[] value, int count);
+
+  public InvariantStatus check_unmodified(String[] value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+
   /**
    * This method need not check for falsified;
    * that is done by the caller.

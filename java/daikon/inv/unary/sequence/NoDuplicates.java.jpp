@@ -224,25 +224,32 @@ public class CLASSNAME
     return format_unimplemented(OutputFormat.DBCJAVA);
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
     // if (logDetail())
     //   log ("sample " + ArraysMDE.toString (a));
     for (int i=1; i<a.length; i++) {
       for (int j = 0; j < i; j++) {
         if (EQUAL (a[i], a[j])) {
-          if (debug.isLoggable(Level.FINE)) {
-            debug.fine ("Destroying myself with: " + var().name.repr());
-            debug.fine (ArraysMDE.toString(a));
-          }
           return InvariantStatus.FALSIFIED;
         }
       }
     }
-
-    if (a.length > 1)
-      elts += 1;
     return InvariantStatus.NO_CHANGE;
   }
+
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+    InvariantStatus status = check_modified(a, count);
+    if (status == InvariantStatus.NO_CHANGE && a.length > 1) {
+      elts += 1;
+    } else if (debug.isLoggable(Level.FINE) &&
+               status == InvariantStatus.FALSIFIED) {
+      debug.fine ("Destroying myself with: " + var().name.repr());
+      debug.fine (ArraysMDE.toString(a));
+    }
+    return status;
+  }
+
+
 
   protected double computeConfidence() {
     // num_no_dup_values() would be more appropriate

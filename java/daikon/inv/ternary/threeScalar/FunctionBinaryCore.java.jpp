@@ -127,6 +127,36 @@ public final class CLASSNAME
     Assert.assertTrue(false, "Could not find new ordering");
   }
 
+ public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+    PRIMITIVE result;
+    PRIMITIVE arg1;
+    PRIMITIVE arg2;
+
+    if (var_order == order_xyz) {
+      result = x; arg1 = y; arg2 = z;
+    } else if (var_order == order_yxz) {
+      result = y; arg1 = x; arg2 = z;
+    } else if (var_order == order_zxy) {
+      result = z; arg1 = x; arg2 = y;
+    } else if (var_order == order_xzy) {
+      result = x; arg1 = z; arg2 = y;
+    } else if (var_order == order_yzx) {
+      result = y; arg1 = z; arg2 = x;
+    } else if (var_order == order_zyx) {
+      result = z; arg1 = y; arg2 = x;
+    } else {
+      throw new Error("Bad var_order: " + var_order);
+    }
+    try {
+      if (!EQUAL (result, FUNCTIONS.invokeBinary(methodNumber, arg1, arg2))) {
+        return InvariantStatus.FALSIFIED;
+        }
+    } catch (Exception e) {
+      return InvariantStatus.FALSIFIED;
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     PRIMITIVE result;
     PRIMITIVE arg1;

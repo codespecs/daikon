@@ -278,6 +278,10 @@ public class CLASSNAME
     return core.isFlowable();
   }
 
+  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
+    return ((CLASSNAME) clone()).add_modified(x, y, z, count);
+  }
+
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     return core.add_modified(x, y, z, count);
   }

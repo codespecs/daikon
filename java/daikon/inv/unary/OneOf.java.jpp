@@ -1492,9 +1492,36 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT)
 
   public InvariantStatus add_modified(INT[] a, int count) {
+    return runValue(a, count, true);
+  }
+
+  public InvariantStatus check_modified(INT[] a, int count) {
+    return runValue(a, count, false);
+  }
+
+#else
+
+  public InvariantStatus add_modified(INT a, int count) {
+    return runValue(a, count, true);
+  }
+
+  public InvariantStatus check_modified(INT a, int count) {
+    return runValue(a, count, false);
+  }
+
+#endif
+
+#if defined(IS_ELT)
+
+  private InvariantStatus runValue(INT[] a, int count, boolean mutate) {
     InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
     for (int ai=0; ai <a.length; ai++) {
-      InvariantStatus status = add_mod_elem(a[ai], count);
+      InvariantStatus status = null;
+      if (mutate) {
+        status = add_mod_elem(a[ai], count);
+      } else {
+        status = check_mod_elem(a[ai], count);
+      }
       if (status == InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
       } else if (status == InvariantStatus.WEAKENED) {
@@ -1506,10 +1533,15 @@ public final class ONEOFSCALAR
 
 #else
 
-  public InvariantStatus add_modified(INT v, int count) {
-    InvariantStatus status = add_mod_elem(v, count);
+  private InvariantStatus runValue(INT v, int count, boolean mutate) {
+    InvariantStatus status;
+    if (mutate) {
+      status = add_mod_elem(v, count);
+    } else {
+      status = check_mod_elem(v, count);
+    }
     if (status == InvariantStatus.FALSIFIED) {
-      if (logOn()) {
+      if (logOn() && mutate) {
         StringBuffer eltString = new StringBuffer();
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING (elts[i]) + " ");
@@ -1523,12 +1555,28 @@ public final class ONEOFSCALAR
   }
 #endif
 
+
   /**
    * Adds a single sample to the invariant.  Returns
    * the appropriate InvariantStatus from the result
    * of adding the sample to this.
    */
   public InvariantStatus add_mod_elem (INT v, int count) {
+    InvariantStatus status = check_mod_elem(v, count);
+    if (status == InvariantStatus.WEAKENED) {
+      elts[num_elts] = v;
+      num_elts++;
+    }
+    return status;
+  }
+
+
+  /**
+   * Checks a single sample to the invariant.  Returns
+   * the appropriate InvariantStatus from the result
+   * of adding the sample to this.
+   */
+  public InvariantStatus check_mod_elem (INT v, int count) {
 
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
@@ -1544,34 +1592,30 @@ public final class ONEOFSCALAR
       return (InvariantStatus.FALSIFIED);
     }
 
-    #if defined(STRING) || defined(ELTSTRING)
-      if (is_type() && (num_elts == 1)) {
-        return (InvariantStatus.FALSIFIED);
-      }
-    #elif defined(SEQUENCE)
-      if (is_hashcode && (num_elts == 1)) {
-        return (InvariantStatus.FALSIFIED);
-      }
-    #elif defined(SCALAR) || defined(ELT)
-      if ((is_boolean && (num_elts == 1)) || (is_hashcode && (num_elts == 2))) {
-        return (InvariantStatus.FALSIFIED);
-      }
+#if defined(STRING) || defined(ELTSTRING)
+    if (is_type() && (num_elts == 1)) {
+      return (InvariantStatus.FALSIFIED);
+    }
+#elif defined(SEQUENCE)
+    if (is_hashcode && (num_elts == 1)) {
+      return (InvariantStatus.FALSIFIED);
+    }
+#elif defined(SCALAR) || defined(ELT)
+    if ((is_boolean && (num_elts == 1)) || (is_hashcode && (num_elts == 2))) {
+      return (InvariantStatus.FALSIFIED);
+    }
 
-      if (is_hashcode && (num_elts == 1)) {
-        // Permit two object values only if one of them is null
-        if ((elts[0] != 0) && (v != 0)) {
-          return (InvariantStatus.FALSIFIED);
-        }
+    if (is_hashcode && (num_elts == 1)) {
+      // Permit two object values only if one of them is null
+      if ((elts[0] != 0) && (v != 0)) {
+        return (InvariantStatus.FALSIFIED);
       }
-    #endif
+    }
+#endif
 
-    elts[num_elts] = v;
-    num_elts++;
+
     return (InvariantStatus.WEAKENED);
   }
-
-
-
 
 #if defined(IS_ELT)
   // It is possible to have seen many (array) samples, but no (INT)

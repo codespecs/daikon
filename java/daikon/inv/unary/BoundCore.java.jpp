@@ -263,6 +263,15 @@ public class LOWERBOUNDCORE
     return InvariantStatus.NO_CHANGE;
   }
 
+  public InvariantStatus check(PRIMITIVE value) {
+    if (value LT MIN1) {
+      return InvariantStatus.WEAKENED;
+    } else {
+      return InvariantStatus.NO_CHANGE;
+    }
+  }
+
+
   public boolean enoughSamples() {
     return samples > required_samples;
   }

@@ -164,21 +164,28 @@ public class NONZERO
     return format_unimplemented(format);
   }
 
-  public InvariantStatus add_modified(PRIMITIVE v, int count) {
+  public InvariantStatus check_modified(PRIMITIVE v, int count) {
     if (v == 0) {
-      if (logOn() || debug.isLoggable(Level.FINE)) {
-        log (debug, "destroy (value = " + v + ")");
-      }
       return InvariantStatus.FALSIFIED;
+    } else {
+      return InvariantStatus.NO_CHANGE;
     }
+  }
+
+  public InvariantStatus add_modified(PRIMITIVE v, int count) {
+    InvariantStatus status = check_modified(v, count);
+//     if ((logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) &&
+//         status == InvariantStatus.FALSIFIED) {
+//       log (debug, "destroy (value = " + v + ")");
+//     }
     // The min and max tests will simultaneously succeed exactly once (for
     // the first value).
     if (v < min) min = v;
     if (v > max) max = v;
 
-    if (logDetail())
+    if (logDetail() && status == InvariantStatus.NO_CHANGE)
       log ("add_modified (" + v + ")");
-    return InvariantStatus.NO_CHANGE;
+    return status;
   }
 
   protected double computeConfidence() {

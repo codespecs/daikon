@@ -57,6 +57,22 @@ public abstract class CLASSNAME
     return ppt.var_infos[2];
   }
 
+  public InvariantStatus check(Object val1, Object val2, Object val3, int mod_index, int count) {
+    // Tests for whether a value is missing should be performed before
+    // making this call, so as to reduce overall work.
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 8));
+    // [INCR] Assert.assertTrue(!finished);
+    PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
+    PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
+    PRIMITIVE v3 = ((NUMWRAPPER) val3).LONGVALUE();
+    if (mod_index == 0) {
+      return check_unmodified(v1, v2, v3, count);
+    } else {
+      return check_modified(v1, v2, v3, count);
+    }
+  }
+
   public InvariantStatus add(Object val1, Object val2, Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
@@ -71,6 +87,14 @@ public abstract class CLASSNAME
     } else {
       return add_modified(v1, v2, v3, count);
     }
+  }
+
+
+  public abstract InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count);
+
+
+  public InvariantStatus check_unmodified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**

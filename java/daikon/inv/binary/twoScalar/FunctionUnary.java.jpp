@@ -90,6 +90,10 @@ public class CLASSNAME
     return core.format_using(format, var1().name, var1(), var2().name, var2());
   }
 
+  public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
+    return core.check_modified(x, y, count);
+  }
+
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     return core.add_modified(x, y, count);
   }

@@ -32,4 +32,6 @@ public abstract class TernaryInvariant
 
   public abstract InvariantStatus add(Object val1, Object val2, Object val3, int mod_index, int count);
 
+  public abstract InvariantStatus check(Object val1, Object val2, Object val3, int mod_index, int count);
+
 }

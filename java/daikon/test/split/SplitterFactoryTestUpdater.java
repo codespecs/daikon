@@ -123,49 +123,18 @@ public class SplitterFactoryTestUpdater {
       if (fileNames[i].endsWith(".java")) {
         StringBuffer command = new StringBuffer();
         String fileName  = fileNames[i];
-        moveFile(fileName);
-        classNames.add(fileName.substring(fileName.lastIndexOf('/') + 1 , fileName.length()-".java".length()));
+        moveFile(tempDir.getPath() + "/" + fileName,
+                 targetDir + fileName + ".goal");
+        String className =
+          fileName.substring(fileName.lastIndexOf('/') + 1 ,
+                             fileName.length()-".java".length());
+        classNames.add(className);
       }
     }
   }
 
-  // This method should have a cleaner interface:  it would be better to
-  // have a method that just moves a file, rather than combining it with a
-  // method that also has knowledge about the destination directory and
-  // adding ".goal".  Furthermore, that cleaner interface seems to already
-  // exist in the form of File.renameTo(); the code should either use
-  // File.renameTo, or document why it doesn't.
-  /**
-   * moves the file named fileName from the tempDir to the target dir and adds
-   * ".goal" to the end of its name.
-   */
-  private static void moveFile(String fileName) {
-    String newFileName = targetDir + fileName + ".goal";
-    fileName = tempDir.getPath() + "/" + fileName;
-    String command = "mv " + fileName + " " + newFileName;
-    try {
-      Process process = commander.exec(command);
-      process.waitFor();
-      BufferedReader error =
-        new BufferedReader(new InputStreamReader(process.getErrorStream()));
-      String s;
-      StringBuffer errorMessage = new StringBuffer();
-      try {
-        while ((s = error.readLine()) != null) {
-          errorMessage.append(s);
-        }
-      } catch (IOException ioe) {
-        System.out.println("TimedProcess: " + ioe.toString());
-      }
-      if (! errorMessage.toString().trim().equals("")) {
-        System.out.println(errorMessage.toString());
-      }
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-    catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  private static void moveFile(String from, String to) {
+      (new File(from)).renameTo(new File(to));
   }
 
   /**

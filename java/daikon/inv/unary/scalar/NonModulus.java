@@ -119,6 +119,10 @@ public class NonModulus
     results_accurate = true;
   }
 
+  public InvariantStatus check_modified(long value, int count) {
+    return InvariantStatus.NO_CHANGE;
+  }
+
   // XXX have to deal with flowing this; maybe it should live at all ppts?
   public InvariantStatus add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))

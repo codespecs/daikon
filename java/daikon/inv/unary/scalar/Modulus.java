@@ -93,6 +93,42 @@ public class Modulus
     return format_unimplemented(format);
   }
 
+  public InvariantStatus check_modified(long value, int count) {
+    if (modulus == 1) {
+      // We shouldn't ever get to this case; the invariant should have been
+      // destroyed instead.
+      throw new Error("Modulus = 1");
+    } else if (no_samples_seen) {
+      return InvariantStatus.NO_CHANGE;
+    } else if (value == value1) {
+      // no new information, so nothing to do
+      return InvariantStatus.NO_CHANGE;
+    } else if (modulus == 0) {
+      // only one value seen so far
+      // REACHABLE?
+      if (modulus == 1) {
+        return InvariantStatus.FALSIFIED;
+      }
+    } else {
+      long new_modulus_long = Math.abs(MathMDE.gcd(modulus, value1 - value));
+      int new_modulus;
+      if (new_modulus_long > Integer.MAX_VALUE
+          || (new_modulus_long < Integer.MIN_VALUE)) {
+        new_modulus = 1;
+      } else {
+        new_modulus = (int) new_modulus_long;
+        Assert.assertTrue(new_modulus > 0);
+      }
+      if (new_modulus != modulus) {
+        if (new_modulus == 1) {
+          return InvariantStatus.FALSIFIED;
+        }
+      }
+    }
+    Assert.assertTrue(modulus != 1);
+    return InvariantStatus.NO_CHANGE;
+  }
+
   public InvariantStatus add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
@@ -111,6 +147,7 @@ public class Modulus
     } else if (modulus == 0) {
       // only one value seen so far
       long new_modulus = Math.abs(value1 - value);
+
       if (new_modulus == 1) {
         return InvariantStatus.FALSIFIED;
       }
@@ -138,6 +175,9 @@ public class Modulus
     Assert.assertTrue(modulus != 1);
     return InvariantStatus.NO_CHANGE;
   }
+
+  //  public InvariantStatus check_modified(long value, int count) {}
+
 
   protected double computeConfidence() {
     if (modulus == 1)

@@ -262,17 +262,19 @@ public class CLASSNAME
       + form[3];
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
-    if (a.length >= 2)
-      seenNonTrivialSample = true;
+  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (!COMPARATOR (a[i-1], a[i])) {
-        // System.out.println ("destroy " + i + COMPARATORSTRING
-        //                    + ArraysMDE.toString (a));
         return InvariantStatus.FALSIFIED;
       }
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+    if (a.length >= 2)
+      seenNonTrivialSample = true;
+    return check_modified(a, count);
   }
 
   // Perhaps check whether all the arrays of interest have length 0 or 1.

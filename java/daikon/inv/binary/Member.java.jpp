@@ -554,15 +554,21 @@ public final class CLASSNAME
   }
 #endif
 
-  public InvariantStatus add_modified(SCALAR[] a, SCALAR i, int count) {
+  public InvariantStatus check_modified(SCALAR[] a, SCALAR i, int count) {
     if (INDEXOF(a, i) == -1) {
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Member destroyed:  " + format() + " because " + i +
-                     " not in " + ArraysMDE.toString(a));
-      }
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
+  }
+
+
+  public InvariantStatus add_modified(SCALAR[] a, SCALAR i, int count) {
+    if (debug.isLoggable(Level.FINE) &&
+        check_modified(a, i, count) == InvariantStatus.FALSIFIED) {
+      debug.fine ("Member destroyed:  " + format() + " because " + i +
+                  " not in " + ArraysMDE.toString(a));
+    }
+    return check_modified(a, i, count);
   }
 
   protected double computeConfidence() {

@@ -31,6 +31,20 @@ public abstract class TwoString
     return ppt.var_infos[1];
   }
 
+  public InvariantStatus check(Object val1, Object val2, int mod_index, int count) {
+    // Tests for whether a value is missing should be performed before
+    // making this call, so as to reduce overall work.
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    String v1 = (String) val1;
+    String v2 = (String) val2;
+    if (mod_index == 0) {
+      return check_unmodified(v1, v2, count);
+    } else {
+      return check_modified(v1, v2, count);
+    }
+  }
+
   public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
@@ -44,6 +58,13 @@ public abstract class TwoString
     } else {
       return add_modified(v1, v2, count);
     }
+  }
+
+  public abstract InvariantStatus check_modified(String v1, String v2, int count);
+
+
+  public InvariantStatus check_unmodified(String v1, String v2, int count) {
+    return InvariantStatus.NO_CHANGE;
   }
 
   /**

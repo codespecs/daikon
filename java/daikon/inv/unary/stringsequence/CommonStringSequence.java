@@ -75,6 +75,26 @@ public class CommonStringSequence
     return (printIntersect() + " \\in " + vname);
   }
 
+  public InvariantStatus check_modified(String[] a, int count) {
+    if (intersect==null) {
+      return InvariantStatus.NO_CHANGE;
+    } else {
+      String[] tmp = new String[intersect.length];
+      int    size = 0;
+      for (int i=1; i<a.length; i++)
+        if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
+            ((size==0) ||
+             (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
+          tmp[size++] = a[i];
+
+      if (size==0) {
+        return InvariantStatus.FALSIFIED;
+      }
+    }
+    return InvariantStatus.NO_CHANGE;
+  }
+
+
   public InvariantStatus add_modified(String[] a, int count) {
     if (intersect==null) {
       intersect = a;

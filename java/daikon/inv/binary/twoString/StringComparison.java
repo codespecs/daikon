@@ -186,6 +186,10 @@ public final class StringComparison
   //return format_unimplemented(format);
   }
 
+  public InvariantStatus check_modified(String v1, String v2, int count) {
+    return core.check_modified(v1, v2, count);
+  }
+
   public InvariantStatus add_modified(String v1, String v2, int count) {
     if (ppt.debug.isLoggable(Level.FINE)) {
       System.out.println("StringComparison" + ppt.varNames() + ".add_modified("

@@ -47,6 +47,8 @@ public abstract class BinaryInvariant
     return this;
   }
 
+  public abstract InvariantStatus check(Object val1, Object val2, int mod_index, int count);
+
   public abstract InvariantStatus add(Object val1, Object val2, int mod_index, int count);
 
 }
