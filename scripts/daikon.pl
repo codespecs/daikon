@@ -15,6 +15,7 @@ sub usage() {
 	"  -v, --verbose       Display progress messages\n",
 	"  -c, --cleanup       Remove files left over from an interrupted session before starting\n",
 	"  -n, --nogui         Do not start the gui\n",
+	"  -s, --src           Make an archive of the source for later reference\n",
 	"\n",
 	"Example:\n",
 	"  daikon --output test1 packfoo.MyTestSuite 200\n",
@@ -44,6 +45,7 @@ GetOptions("output=s" => \$output,
 	   "verbose" => \$verbose,
 	   "cleanup" => \$cleanup,
 	   "nogui" => \$nogui,
+	   "src" => \$src,
 	   ) or usagedie();
 
 $runnable = shift @ARGV  or usagedie();
@@ -88,7 +90,7 @@ if ($cleanup) {
 # figure out the configuration
 
 $mainsrc = $runnable;
-$mainsrc =~ s/\./\//;
+$mainsrc =~ s/\./\//g;
 $mainsrc .= ".java";
 die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
 
@@ -137,6 +139,7 @@ for $fname (find("*.u")) {
 }
 
 # create a tarball of the source under inspection
+if ($src) {
 print "Creating source archive...\n" if $verbose;
 
 $manifest = tmpnam();
@@ -150,6 +153,7 @@ close(MANIFEST);
 $err = system("tar cf - $TAR_MANIFEST_TAG $manifest | gzip > $output.src.tar.gz");
 unlink($manifest) or die("Could not unlink source manifest");
 die("Could not archive source") if $err;
+}
 
 # setup scratch folders
 print "Preparing to instrument files...\n" if $verbose;
@@ -172,7 +176,7 @@ while (1) {
 
     # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
-    $cp_work = $cp_lib . ":$working/daikon-java";
+    $cp_work = "$working/daikon-java:$cp_lib:.":
     $jikeserr = system("jikes -classpath $cp_work -depend -g -nowarn $working/daikon-java/$mainsrc");
     last if $jikeserr;
 
