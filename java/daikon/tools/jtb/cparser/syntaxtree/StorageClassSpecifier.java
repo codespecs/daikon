@@ -6,7 +6,7 @@ package daikon.tools.jtb.cparser.syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> ( <AUTO> | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
+ * f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
  */
 public class StorageClassSpecifier implements Node {
    public NodeChoice f0;

@@ -61,7 +61,7 @@ public interface Visitor {
    public void visit(DeclarationSpecifiers n);
 
    /**
-    * f0 -> ( <AUTO> | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
+    * f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
     */
    public void visit(StorageClassSpecifier n);
 

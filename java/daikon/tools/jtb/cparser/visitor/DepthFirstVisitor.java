@@ -96,7 +96,7 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> ( <AUTO> | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
+    * f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
     */
    public void visit(StorageClassSpecifier n) {
       n.f0.accept(this);

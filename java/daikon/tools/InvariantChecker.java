@@ -73,7 +73,7 @@ public class InvariantChecker {
    * Termination of the program with a message to the user is indicated by
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
-   * @see Daikon.TerminationMessage
+   * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args)
     throws FileNotFoundException, StreamCorruptedException,

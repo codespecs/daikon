@@ -52,7 +52,7 @@ public final class UnionInvariants {
    * Termination of the program with a message to the user is indicated by
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
-   * @see Daikon.TerminationMessage
+   * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(String[] args) throws Exception {
     File inv_file = null;

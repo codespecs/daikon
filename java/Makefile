@@ -514,8 +514,9 @@ javadoc: doc
 
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
+	#echo "JDOC_FILES: ${JDOC_FILES}"
 	# This requires that jdk/lib/tools.jar be on your classpath
-	javadoc $(JAVADOC_FLAGS) $(JDOC_FILES)
+	javadoc -J-Xmx200m $(JAVADOC_FLAGS) $(JDOC_FILES)
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
