@@ -5,6 +5,6 @@
     <classpathentry kind="lib" path="lib/junit.jar"/>
     <classpathentry kind="lib" path="lib/jakarta-oro.jar"/>
     <classpathentry kind="lib" path="lib/java-getopt.jar"/>
-    <classpathentry kind="lib" path="/home/mernst/java/jdk/lib/tools.jar"/>
+    <classpathentry kind="lib" path="/g2/users/mernst/java/jdk/lib/tools.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
