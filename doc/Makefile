@@ -37,11 +37,11 @@ images/dfepl-flow.png: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html images/dfepl-flow.png
+html: daikon.html
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
-daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-menu
+daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-menu images/dfepl-flow.png
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|;' daikon.html
 
