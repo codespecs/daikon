@@ -62,6 +62,8 @@ public class Logger {
 
   public static void setupLogs(Priority p) {
     setupLogs (p, "@ %20.20c: %m%n");
+    // By default, take up 20 spaces min, and 20 spaces max for
+    // %c = Category. %m = message, %n = newline
   }
 
   /**
