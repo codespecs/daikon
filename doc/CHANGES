@@ -9,6 +9,18 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.7 (30 April 2003):
+
+The perl front end (dfepl) has been significantly enhanced.  An
+additional Perl example has been added.  See the "Perl examples" and
+"Instrumenting Perl programs" sections of the manual for more
+information.
+
+The manual has been reformatted and edited in a number of areas to improve
+clarity and readability.  
+
+----------------
+
 2.4.6 (24 April 2003):
 
 Floating-point quantities can be considered equal even if they differ
