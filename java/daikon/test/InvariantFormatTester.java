@@ -37,8 +37,9 @@ public class InvariantFormatTester extends TestCase
 {
 
   /**
-   * Maximum file size that can currently be examined by the program, at this
-   * point it is essentially arbitrary, but a length had to be chosen
+   * Maximum file size that can currently be examined by the program.
+   * It is arbitrary, but a length must be supplied to
+   * LineNumberReader.mark().
    */
   private static final int MAX_FILE_SIZE = 262144;
 
