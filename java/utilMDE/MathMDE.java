@@ -125,6 +125,7 @@ public final class MathMDE {
 
   /** Return the greatest common divisor of the two arguments. */
   public static int  gcd(int  a, int  b) {
+    // Euclid's method
     if (b == 0)
       return 0;
     while (b != 0) {
@@ -137,6 +138,7 @@ public final class MathMDE {
 
   /** Return the greatest common divisor of the elements of int  array a. */
   public static int  gcd(int [] a) {
+    // Euclid's method
     if (a.length == 0) {
       return 0;
     }
@@ -154,6 +156,7 @@ public final class MathMDE {
    * between the elements of int  array a.
    **/
   public static int  gcd_differences(int [] a) {
+    // Euclid's method
     if (a.length < 2) {
       return 0;
     }
@@ -170,6 +173,7 @@ public final class MathMDE {
 
   /** Return the greatest common divisor of the two arguments. */
   public static long  gcd(long  a, long  b) {
+    // Euclid's method
     if (b == 0)
       return 0;
     while (b != 0) {
@@ -182,6 +186,7 @@ public final class MathMDE {
 
   /** Return the greatest common divisor of the elements of long  array a. */
   public static long  gcd(long [] a) {
+    // Euclid's method
     if (a.length == 0) {
       return 0;
     }
@@ -199,6 +204,7 @@ public final class MathMDE {
    * between the elements of long  array a.
    **/
   public static long  gcd_differences(long [] a) {
+    // Euclid's method
     if (a.length < 2) {
       return 0;
     }
