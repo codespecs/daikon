@@ -1,0 +1,108 @@
+#!/uns/bin/perl -w
+
+## Previous named "reduce-traces".
+
+# Given a directory containing trace files, copy them to a new directory,
+# including only data for functions matching the regular expression.  This
+# can effectively split large trace files into a multiplicity of smallers
+# ones.  This might save on time spent reading input files.
+
+# Watch out:  if there are non-trace files in the directory, this can barf.
+
+use strict;
+use Carp;
+use checkargs;
+
+my $orig_dir = "/projects/se/people/jake/replace_traces";
+# my $orig_dir = "/homes/fish/mernst/tmp/trace-test";
+
+# my $new_dir = "/projects/se/people/jake/replace_traces_makepat";
+
+# reduce_traces_dir($fn_regexp, $orig_dir, $new_dir);
+
+# print tags_in_dir("/homes/gws/mernst/tmp/trace-test/");
+
+my @fn_names = tags_fn_names(tags_in_dir($orig_dir));
+print STDERR "Got ", scalar(@fn_names), " function names: ", join(' ', @fn_names), "\n";
+
+if (! -d "$orig_dir/split")
+{ mkdir("$orig_dir/split", 0775); }
+
+# This is a really dumb implementation; better would be to read each file
+# once and send each line of the input to the appropriate output file.
+# (Reimplement only if this doesn't finish overnight...)
+
+for my $fn_name (@fn_names)
+{ if (! -d "$orig_dir/split/$fn_name")
+    { mkdir("$orig_dir/split/$fn_name", 0775); }
+  print STDERR "Working on $fn_name\n";
+  # Can't use "^$fn_name:::" because the colons look like variable specifiers
+  reduce_traces_dir("^" . $fn_name . ":::", $orig_dir, "$orig_dir/split/$fn_name"); }
+
+
+###########################################################################
+### Subroutines
+###
+
+sub tags_in_dir ( $ )
+{ my ($dir) = check_args(1, @_);
+  opendir(DIR, $dir) || die "can't opendir $dir: $!";
+  my $file;
+  my %tags = ();
+  while (defined($file = readdir(DIR)))
+    { if (! (-f "$dir/$file"))
+	{ next; }
+      open(INPUT, "$dir/$file") ||  die "can't read from $dir/$file: $!";
+      my $line;
+      while (defined($line = <INPUT>))
+	{ chomp($line);
+	  if ($line !~ /\t/)
+	    { $tags{$line} = 1; } }
+      close(INPUT); }
+  closedir DIR;
+  return sort keys %tags;
+}
+
+sub tags_fn_names ( @ )
+{ my (@tags) = check_args_at_least(0, @_);
+  my %fn_names = ();
+  for my $tag (@tags)
+    { if ($tag !~ s/:::.*$//)
+	{ croak "No colons in tag: $tag"; }
+      $fn_names{$tag} = 1; }
+  return sort keys %fn_names;
+}
+
+
+sub reduce_traces_dir ( $$$ )
+{ my ($fn_regexp, $orig_dir, $new_dir) = check_args(3, @_);
+
+  if ($orig_dir eq $new_dir)
+    { croak "Don't try to overwrite old files in $orig_dir"; }
+
+  opendir(DIR, $orig_dir) || die "can't opendir $orig_dir: $!";
+  my $orig_file;
+  while (defined($orig_file = readdir(DIR)))
+    { if (! (-f "$orig_dir/$orig_file"))
+	{ next; }
+      # print STDERR "Opening $orig_dir/$orig_file\n";
+      open(INPUT, "$orig_dir/$orig_file") ||  die "can't read from $orig_dir/$orig_file: $!";
+      open(OUTPUT, "> $new_dir/$orig_file") ||  die "can't write to $new_dir/$orig_file: $!";
+      my $line = <INPUT>;
+      while (defined($line))
+	{ if ($line =~ /\t/)
+	    { croak "Shouldn't find tab in tag line: $line"; }
+	  # Perhaps faster to separate into two bodies to avoid repeating the
+	  # test; but probably doesn't make that much difference overall.
+	  # I wish I could use "/o", but fn_regexp differs per call
+	  # to this function.
+	  my $do_output = ($line =~ /$fn_regexp/);
+	  if ($do_output) { print OUTPUT $line; }
+	  $line = <INPUT>;
+	  while (defined($line) && ($line =~ /\t/))
+	    { if ($do_output) { print OUTPUT $line; }
+	      $line = <INPUT>; } }
+      close(INPUT);
+      close(OUTPUT); }
+  closedir DIR;
+}
