@@ -695,7 +695,7 @@ path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @example
   ;; Daikon Context GUI
   (add-to-list 'load-path (substitute-in-file-name "$DAIKONDIR/emacs"))
-  (autoload 'daikon-context-gui "daikon-gui" "Daikon Context GUI" t)
+  (autoload 'daikon-context-gui "daikon-context-gui" "Daikon Context GUI" t)
   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
 @end example
 @end enumerate
