@@ -139,6 +139,7 @@ $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
 ## Java front end
 
 dist-dfej: dist-dfej-solaris
+	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
 
 dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
 
