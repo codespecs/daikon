@@ -146,6 +146,12 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/TwoSequenceFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactory.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
+	daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java \
+	daikon/derive/ternary/SequenceFloatArbitrarySubsequence.java \
+	daikon/derive/ternary/SequenceStringArbitrarySubsequence.java \
+	daikon/derive/ternary/SequenceScalarArbitrarySubsequenceFactory.java \
+	daikon/derive/ternary/SequenceFloatArbitrarySubsequenceFactory.java \
+	daikon/derive/ternary/SequenceStringArbitrarySubsequenceFactory.java \
 	daikon/derive/binary/SequenceScalarSubscript.java \
 	daikon/derive/binary/SequenceFloatSubscript.java \
 	daikon/derive/binary/SequenceStringSubscript.java \
@@ -780,6 +786,24 @@ daikon/inv/binary/twoSequence/TwoSequenceFactory.java: daikon/inv/binary/twoSequ
 
 daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java: daikon/inv/binary/twoSequence/TwoSequenceFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+
+daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java: daikon/derive/ternary/SequenceArbitrarySubsequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+daikon/derive/ternary/SequenceFloatArbitrarySubsequence.java: daikon/derive/ternary/SequenceArbitrarySubsequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=FLOAT)
+
+daikon/derive/ternary/SequenceStringArbitrarySubsequence.java: daikon/derive/ternary/SequenceArbitrarySubsequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+daikon/derive/ternary/SequenceScalarArbitrarySubsequenceFactory.java: daikon/derive/ternary/SequenceArbitrarySubsequenceFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+daikon/derive/ternary/SequenceFloatArbitrarySubsequenceFactory.java: daikon/derive/ternary/SequenceArbitrarySubsequenceFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=FLOAT)
+
+daikon/derive/ternary/SequenceStringArbitrarySubsequenceFactory.java: daikon/derive/ternary/SequenceArbitrarySubsequenceFactory.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 daikon/derive/binary/SequenceScalarSubscript.java: daikon/derive/binary/SequenceSubscript.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
