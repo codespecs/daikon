@@ -33,10 +33,41 @@ public final class ArraysMDE {
    * Return the smallest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    **/
+  public static double min(double[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(double[])");
+    double result = a[0];
+    for (int i=1; i<a.length; i++)
+      result = Math.min(result, a[i]);
+    return result;
+  }
+
+  /**
+   * Return the smallest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
   public static Integer min(Integer[] a) {
     if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Integer[])");
     Integer result = a[0];	// to return a value actually in the array
+    int result_int = result.intValue();	// for faster comparison
+    for (int i=1; i<a.length; i++) {
+      if (a[i].intValue() < result_int) {
+	result = a[i];
+	result_int = result.intValue();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Return the smallest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static Double min(Double[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Double[])");
+    Double result = a[0];	// to return a value actually in the array
     int result_int = result.intValue();	// for faster comparison
     for (int i=1; i<a.length; i++) {
       if (a[i].intValue() < result_int) {
@@ -60,6 +91,19 @@ public final class ArraysMDE {
     return result;
   }
 
+    /**
+   * Return the largest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static double max(double[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(double[])");
+    double result = a[0];
+    for (int i=1; i<a.length; i++)
+      result = Math.max(result, a[i]);
+    return result;
+  }
+
   /**
    * Return the largest value in the array.
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
@@ -68,6 +112,24 @@ public final class ArraysMDE {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
     Integer result = a[0];	// to return a value actually in the array
+    int result_int = result.intValue();	// for faster comparison
+    for (int i=1; i<a.length; i++) {
+      if (a[i].intValue() > result_int) {
+	result = a[i];
+	result_int = result.intValue();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Return the largest value in the array.
+   * @throws ArrayIndexOutOfBoundsException if the array has length 0
+   **/
+  public static Double max(Double[] a) {
+    if (a.length == 0)
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Double[])");
+    Double result = a[0];	// to return a value actually in the array
     int result_int = result.intValue();	// for faster comparison
     for (int i=1; i<a.length; i++) {
       if (a[i].intValue() > result_int) {
@@ -126,7 +188,7 @@ public final class ArraysMDE {
    **/
   public static Long min(Long[] a) {
     if (a.length == 0)
-      throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Long[])");
     Long result = a[0];	// to return a value actually in the array
     long result_long = result.longValue();	// for faster comparison
     for (int i=1; i<a.length; i++) {
@@ -370,6 +432,19 @@ public final class ArraysMDE {
 
   /**
    * Searches for the first occurence of the given element in the array.
+   * @return the first index containing the specified element,
+   *    or -1 if the element is not found in the array.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   **/
+  public static int indexOf(double[] a, double elt) {
+     for (int i=0; i<a.length; i++)
+      if (elt == a[i])
+	return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first occurence of the given element in the array.
    * @return the first index i containing the specified element,
    *    such that minindex <= i < indexlimit,
    *    or -1 if the element is not found in the array.
@@ -433,6 +508,21 @@ public final class ArraysMDE {
    * @see java.lang.String#indexOf(java.lang.String)
    **/
   public static int indexOf(int[] a, int[] sub) {
+    int a_index_max = a.length - sub.length + 1;
+    for (int i=0; i<=a_index_max; i++)
+      if (isSubarray(a, sub, i))
+	return i;
+    return -1;
+  }
+
+  /**
+   * Searches for the first subsequence of the array that matches the given array elementwise.
+   * @return the first index containing the specified element,
+   *    or -1 if the element is not found in the array.
+   * @see java.util.Vector#indexOf(java.lang.Object)
+   * @see java.lang.String#indexOf(java.lang.String)
+   **/
+   public static int indexOf(double[] a, double[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i=0; i<=a_index_max; i++)
       if (isSubarray(a, sub, i))
@@ -563,11 +653,19 @@ public final class ArraysMDE {
     if (b == null) return a;
     long[] result = new long[a.length + b.length];
 
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+   public static double[] concat(double[] a, double[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    double[] result = new double[a.length + b.length];
 
     System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
-
-
     return result;
   }
 
@@ -648,6 +746,17 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    **/
   public static boolean isSubarray(long[] a, long[] sub, int a_offset) {
+    int a_len = a.length - a_offset;
+    int sub_len = sub.length;
+    if (a_len < sub_len)
+      return false;
+    for (int i=0; i<sub_len; i++)
+      if (sub[i] != a[a_offset+i])
+	return false;
+    return true;
+  }
+
+    public static boolean isSubarray(double[] a, double[] sub, int a_offset) {
     int a_len = a.length - a_offset;
     int sub_len = sub.length;
     if (a_len < sub_len)
@@ -758,6 +867,23 @@ public final class ArraysMDE {
    * @see java.util.Vector#toString
    **/
   public static String toString(long[] a) {
+    if (a == null) {
+      return "null";
+    }
+    StringBuffer sb = new StringBuffer();
+    sb.append("[");
+    if (a.length > 0) {
+      sb.append(a[0]);
+      for (int i=1; i<a.length; i++) {
+	sb.append(", ");
+        sb.append(a[i]);
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
+    public static String toString(double[] a) {
     if (a == null) {
       return "null";
     }
@@ -934,7 +1060,7 @@ public final class ArraysMDE {
     Set setBigger = new HashSet();
 
     for (int i = 0; i < bigger.length; i++) {
-      setBigger.add (new Long(bigger[i]));
+      setBigger.add(new Long(bigger[i]));
     }
 
     for (int i = 0; i < smaller.length; i++) {
@@ -945,6 +1071,28 @@ public final class ArraysMDE {
     return true;
   }
 
+  // This implementation is O(n^2) when the smaller really is a subset, but
+  // might be quicker when it is not.  Sorting both sets has (minimum
+  // and maximum) running time of Theta(n log n).
+  /**
+   * Whether smaller is a subset of bigger.  The implmentation is to
+   * use collections because we want to take advantage of HashSet's
+   * constant time membership tests.
+   **/
+  public static boolean isSubset(double[] smaller, double[] bigger) {
+    Set setBigger = new HashSet();
+
+    for (int i = 0; i < bigger.length; i++) {
+      setBigger.add(new Double(bigger[i]));
+    }
+
+    for (int i = 0; i < smaller.length; i++) {
+      Double elt = new Double(smaller[i]);
+      if (!setBigger.contains(elt)) return false;
+    }
+
+    return true;
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Array comparators
@@ -985,6 +1133,29 @@ public final class ArraysMDE {
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
         long tmp = a1[i] - a2[i];
+        if (tmp != 0) {
+          if (tmp < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+          } else if (tmp > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+          } else {
+            return (int) tmp;
+          }
+        }
+      }
+      return a1.length - a2.length;
+    }
+  }
+
+   public static final class DoubleArrayComparatorLexical implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      double[] a1 = (double[])o1;
+      double[] a2 = (double[])o2;
+      int len = Math.min(a1.length, a2.length);
+      for (int i=0; i<len; i++) {
+        double tmp = a1[i] - a2[i];
         if (tmp != 0) {
           if (tmp < Integer.MIN_VALUE) {
             return Integer.MIN_VALUE;

@@ -265,6 +265,13 @@ public final class Intern {
     return l;
   }
 
+  // Interns a long.
+  // A no-op.  Provided for completeness, so we can intern() any type
+  // used in OneOf.java.jpp.
+  public static double intern(double l) {
+    return l;
+  }
+
   /**
    * Intern (canonicalize) an Integer.
    * Returns a canonical representation for the Integer.
