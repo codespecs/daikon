@@ -105,7 +105,10 @@ public final class Runtime {
   // List object.
   // The instrumentation code sets and checks this; it's more efficient
   // to do that once, rather than on every call to print.
+  // This variable should not be modified unless the lock on
+  // daikon.Runtime.dtrace is held.
   public static int ps_count = 0;
+
   public static int dtraceLimit = Integer.MAX_VALUE; // a number of records
   public static int printedRecords = 0;
   public static boolean dtraceLimitTerminate = false;
@@ -122,26 +125,32 @@ public final class Runtime {
 
   // Ensures that no more dtrace output will occur.  May terminate Java.
   public static void noMoreOutput() {
-    // The shutdown hook is synchronized on this, so close it up
-    // ourselves, lest the call to System.exit cause deadlock.
-    dtrace.println();
-    dtrace.println("# EOF (added by no_more_output)");
-    dtrace.close();
-    // Don't set dtrace to null, because if we continue running, there will
-    // be many attempts to synchronize on it.  (Is that a performance
-    // bottleneck, if we continue running?)
-    // dtrace = null;
-    dtrace_closed = true;
+    // The incrementRecords method (which calls this) is called inside a
+    // synchronized block, but re-synchronize just to be sure, or in case
+    // this is called from elsewhere.
+    synchronized ( daikon.Runtime.dtrace ) {
+      // The shutdown hook is synchronized on this, so close it up
+      // ourselves, lest the call to System.exit cause deadlock.
+      dtrace.println();
+      dtrace.println("# EOF (added by no_more_output)");
+      dtrace.close();
 
-    if (dtraceLimitTerminate) {
-      System.err.println("Printed " + printedRecords + " records.  Exiting.");
-      System.exit(1);
-    } else {
-      // By default, no special output if the system continues to run.
-      // System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
-      // prevent any future output
-      no_dtrace = true;
-      ps_count++;
+      // Don't set dtrace to null, because if we continue running, there will
+      // be many attempts to synchronize on it.  (Is that a performance
+      // bottleneck, if we continue running?)
+      // dtrace = null;
+      dtrace_closed = true;
+
+      if (dtraceLimitTerminate) {
+        System.err.println("Printed " + printedRecords + " records.  Exiting.");
+        System.exit(1);
+      } else {
+        // By default, no special output if the system continues to run.
+        // System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");
+        // prevent any future output
+        no_dtrace = true;
+        ps_count++;
+      }
     }
   }
 
