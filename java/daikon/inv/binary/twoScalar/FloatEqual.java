@@ -193,6 +193,44 @@ public final class FloatEqual
     return false;
   }
 
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.  We only check if this.ppt.var_infos imply
+   *  obviousness rather than the cartesian product on the equality
+   *  set.
+   **/
+  public VarInfo[] isObviousStatically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousStatically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousStatically_SomeInEquality();
+    }
+  }
+
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.  We only check if this.ppt.var_infos imply
+   *  obviousness rather than the cartesian product on the equality
+   *  set.
+   **/
+  public VarInfo[] isObviousDynamically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousDynamically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousDynamically_SomeInEquality();
+    }
+  }
+
   public boolean isObviousDynamically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];

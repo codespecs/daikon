@@ -253,11 +253,43 @@ public class SeqComparisonFloat
     return false;
   }
 
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.
+   **/
+  public VarInfo[] isObviousStatically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousStatically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousStatically_SomeInEquality();
+    }
+  }
+
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.
+   **/
+  public VarInfo[] isObviousDynamically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousDynamically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousDynamically_SomeInEquality();
+    }
+  }
+
   public boolean isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
-    // It's a postProceesed equality
-    if (var1.equalitySet == var2.equalitySet) return false; 
     if ((SubSequenceFloat.isObviousSubSequence(var1, var2))
         || (SubSequenceFloat.isObviousSubSequence(var2, var1))) {
       return true;
@@ -266,8 +298,6 @@ public class SeqComparisonFloat
   }
   
   public boolean isObviousDynamically(VarInfo[] vis) {
-    // It's a postProceesed equality
-    if (vis[0].equalitySet == vis[1].equalitySet) return false; 
     PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
     if (ppt != null) {
        PairwiseFloatComparison pic = PairwiseFloatComparison.find(ppt);

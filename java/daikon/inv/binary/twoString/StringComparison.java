@@ -217,4 +217,38 @@ public final class StringComparison
     return false;
   }
 
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.
+   **/
+  public VarInfo[] isObviousStatically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousStatically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousStatically_SomeInEquality();
+    }
+  }
+
+  /**
+   *  Since this invariant can be a postProcessed equality, we have to
+   *  handle isObvious especially to avoid circular isObvious
+   *  relations.
+   **/
+  public VarInfo[] isObviousDynamically_SomeInEquality() {
+    if (var1().equalitySet == var2().equalitySet) {
+      if (isObviousDynamically (this.ppt.var_infos)) {
+        return this.ppt.var_infos;
+      } else {
+        return null;
+      }
+    } else {
+      return super.isObviousDynamically_SomeInEquality();
+    }
+  }
+
 }
