@@ -114,7 +114,8 @@ public final class FunctionUnaryCore
     String argname = (inverse ? vname2 : vname1).name_using(format);
     String resultname = (inverse ? vname1 : vname2).name_using(format);
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.IOA))
+	|| (format == OutputFormat.IOA)
+	|| (format == OutputFormat.JML))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

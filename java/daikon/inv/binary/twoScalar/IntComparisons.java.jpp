@@ -268,7 +268,7 @@ public final class INTEQUAL
 #elif defined(NONEQUAL)
       if (format == OutputFormat.IOA) comparator = "~=";
 #endif
-      return var1name + " " + comparator + " " + var2().name.name();
+      return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

@@ -157,6 +157,7 @@ public final class IntLessThan
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
     return new IntGreaterThan (ppt);
+
   }
 
   // Look up a previously instantiated IntLessThan  relationship.
@@ -187,7 +188,7 @@ public final class IntLessThan
     {
       String comparator = "<" ;
 
-      return var1name + " " + comparator + " " + var2().name.name();
+      return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -245,6 +246,7 @@ public final class IntLessThan
   public boolean isExact() {
 
     return false;
+
   }
 
   // // Temporary, for debugging
@@ -447,6 +449,7 @@ public final class IntLessThan
 //     }
 
     return false;
+
   } // isObviousImplied
 
 }

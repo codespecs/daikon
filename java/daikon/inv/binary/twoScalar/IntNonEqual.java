@@ -155,6 +155,7 @@ public final class IntNonEqual
 
     // we don't care if things swap; we have symmetry
     return this;
+
   }
 
   // Look up a previously instantiated IntNonEqual  relationship.
@@ -187,7 +188,7 @@ public final class IntNonEqual
 
       if (format == OutputFormat.IOA) comparator = "~=";
 
-      return var1name + " " + comparator + " " + var2().name.name();
+      return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -245,6 +246,7 @@ public final class IntNonEqual
   public boolean isExact() {
 
     return false;
+
   }
 
   // // Temporary, for debugging
@@ -447,6 +449,7 @@ public final class IntNonEqual
 //     }
 
     return false;
+
   } // isObviousImplied
 
 }

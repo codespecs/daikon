@@ -157,6 +157,7 @@ public final class IntGreaterEqual
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
     return new IntLessEqual (ppt);
+
   }
 
   // Look up a previously instantiated IntGreaterEqual  relationship.
@@ -187,7 +188,7 @@ public final class IntGreaterEqual
     {
       String comparator = ">=" ;
 
-      return var1name + " " + comparator + " " + var2().name.name();
+      return var1name + " " + comparator + " " + var2name;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -245,6 +246,7 @@ public final class IntGreaterEqual
   public boolean isExact() {
 
     return false;
+
   }
 
   // // Temporary, for debugging
@@ -453,6 +455,7 @@ public final class IntGreaterEqual
 //     }
 
     return false;
+
   } // isObviousImplied
 
 }
