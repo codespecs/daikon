@@ -193,6 +193,7 @@ AUTO_GENERATED_FILES = \
 ###
 
 default: all
+compile: all
 
 # "-S" means do not continue after errors.
 all:
