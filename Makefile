@@ -485,9 +485,9 @@ mingw_exe: dfej-src/build_mingw_dfej/src/dfej.exe
 ## So as a hack, move them aside and then replace them.
 
 dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/src/*.h
-	rename .o .mingw-saved.o dfej-src/dfej/src/*.o
+	-rename .o .mingw-saved.o dfej-src/dfej/src/*.o
 	(cd dfej-src/build_mingw_dfej; export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH}; $(MAKE))
-	rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
+	-rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 	cp -p dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
