@@ -68,7 +68,7 @@ public class SplitterFactory {
         String ppt_name = splitterObjects[i][0].getPptName();
         PptTopLevel ppt = findPpt(ppt_name, all_ppts);
         if (ppt == null) {
-          System.out.println("Couldn't find ppt " + ppt_name + "in decls file; used in splitter file " + infofile.getName());
+          System.out.println("Couldn't find ppt " + ppt_name + " in decls file; used in splitter file " + infofile.getName());
         } else {
           loadSplitters(splitterObjects[i], ppt, statementReplacer);
         }
