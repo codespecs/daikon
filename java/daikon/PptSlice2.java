@@ -39,6 +39,11 @@ public final class PptSlice2
 
   int[] tm_total = new int[4];  // "tm" stands for "tuplemod"
 
+  /**
+   * Create a new PptSlice2 .  Warning: do not rearrange the contents
+   * of var_infos once this has been created, as flow order is already
+   * set up after construction.
+   **/
   public PptSlice2(PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assertTrue(var_infos.length == 2);
@@ -59,7 +64,7 @@ public final class PptSlice2
     this(parent, new VarInfo[] { var_info1, var_info2 });
   }
 
-  void instantiate_invariants() {
+  void instantiate_invariants(boolean excludeEquality) {
     Assert.assertTrue(!no_invariants);
 
     // This test should be done by caller (PptTopLevel):
@@ -78,34 +83,34 @@ public final class PptSlice2
     boolean rep1_is_float  = rep1.isFloat();
     boolean rep2_is_float  = rep2.isFloat();
     if (rep1_is_scalar && rep2_is_scalar) {
-      new_invs = TwoScalarFactory.instantiate(this);
+      new_invs = TwoScalarFactory.instantiate(this, excludeEquality);
     } else if ((rep1 == ProglangType.STRING)
         && (rep2 == ProglangType.STRING)) {
-      new_invs = TwoStringFactory.instantiate(this);
+      new_invs = TwoStringFactory.instantiate(this, excludeEquality);
     } else if ((rep1 == ProglangType.INT)
                && (rep2 == ProglangType.INT_ARRAY)) {
-      new_invs = SequenceScalarFactory.instantiate(this);
+      new_invs = SequenceScalarFactory.instantiate(this, excludeEquality);
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT)) {
-      new_invs = SequenceScalarFactory.instantiate(this);
+      new_invs = SequenceScalarFactory.instantiate(this, excludeEquality);
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT_ARRAY)) {
-      new_invs = TwoSequenceFactory.instantiate(this);
+      new_invs = TwoSequenceFactory.instantiate(this, excludeEquality);
     } else if (Daikon.dkconfig_enable_floats
                && rep1_is_float && rep2_is_float) {
-      new_invs = TwoFloatFactory.instantiate(this);
+      new_invs = TwoFloatFactory.instantiate(this, excludeEquality);
     } else if (Daikon.dkconfig_enable_floats
                && (rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-      new_invs = SequenceFloatFactory.instantiate(this);
+      new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
     } else if (Daikon.dkconfig_enable_floats
                && (rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE)) {
-    new_invs = SequenceFloatFactory.instantiate(this);
+    new_invs = SequenceFloatFactory.instantiate(this, excludeEquality);
     } else if (Daikon.dkconfig_enable_floats
                && (rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
-    new_invs = TwoSequenceFactoryFloat.instantiate(this);
+    new_invs = TwoSequenceFactoryFloat.instantiate(this, excludeEquality);
     } else {
       // Do nothing; do not even complain
     }
@@ -131,6 +136,13 @@ public final class PptSlice2
       }
     }
 
+  }
+
+  /**
+   * Set the number of samples for this slice to be at least count.
+   **/
+  public void set_samples (int count) {
+    if (tm_total[0] < count) tm_total[0] = count;
   }
 
   // These accessors are for abstract methods declared in Ppt
@@ -268,6 +280,8 @@ public final class PptSlice2
     boolean string2 = vi2.rep_type == ProglangType.STRING;
     boolean array1 = vi1.rep_type.isArray();
     boolean array2 = vi2.rep_type.isArray();
+    boolean stringArray1 = vi1.rep_type == ProglangType.STRING_ARRAY;
+    boolean stringArray2 = vi2.rep_type == ProglangType.STRING_ARRAY;
     if (string1 && string2) {
       String value1 = (String) val1;
       String value2 = (String) val2;
@@ -337,7 +351,7 @@ public final class PptSlice2
         if (inv.getSuppressor() != null) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
-    } else if (array1 && array2) {
+    } else if (array1 && array2 && !stringArray1 && !stringArray2) {
       long[] value1 = (long[]) val1;
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
@@ -543,4 +557,124 @@ public final class PptSlice2
     */ // ... [INCR]
   }
 
+  /**
+   * @see daikon.PptSlice
+   **/
+  protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
+    VarInfo[] newVarInfos = new VarInfo[arity];
+    // rename the VarInfo references to subsitute newLeader for leader
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i] == leader) {
+        newVarInfos[i] = newLeader;
+      } else {
+        newVarInfos[i] = var_infos[i];
+      }
+    }
+    // Why not just clone?  Because then index order wouldn't be
+    // preserved
+    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
+    PptSlice2 result = new PptSlice2(this.parent, newVarInfos);
+
+    // Why do we have to pick out the permutation again?  Because we
+    // sort it above by index order
+    int[] permutation = new int[arity];
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i] == leader) {
+        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, newLeader);
+      } else {
+        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, var_infos[i]);
+      }
+      Assert.assertTrue (permutation[i] != -1);
+    }
+
+    // re-parent the invariants and copy them out
+    List newInvs = new LinkedList();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Assert.assertTrue (inv.ppt == this);
+      Invariant newInv = inv.transfer (result, permutation);
+      newInvs.add (newInv);
+      Assert.assertTrue (newInv != inv);
+      Assert.assertTrue (newInv.ppt == result);
+      Assert.assertTrue (inv.ppt == this);
+    }
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
+    result.invs.addAll (newInvs);
+    if (PptSliceEquality.debug.isDebugEnabled()) {
+      PptSliceEquality.debug.debug ("cloneOnePivot: newInvs " + invs);
+    }
+    result.repCheck();
+    return result;
+  }
+
+  /**
+   * @see daikon.PptSlice
+   **/
+  protected PptSlice cloneAllPivots () {
+    // No need to do it if this is a slice for equality
+    if (this.var_infos.length == 2 &&
+        this.var_infos[0].equalitySet ==
+          this.var_infos[1].equalitySet) {
+      return this;
+    }
+    VarInfo[] newVarInfos = new VarInfo[this.var_infos.length];
+    boolean pivoted = false;
+    for (int i = 0; i < this.var_infos.length; i++) {
+      VarInfo vi = this.var_infos[i];
+      if (vi.canonicalRep() != vi) {
+        pivoted = true;
+        newVarInfos[i] = vi.canonicalRep();
+      } else {
+        newVarInfos[i] = vi;
+      }
+    }
+    if (!pivoted) return this;
+
+    // Why not just clone?  Because then index order wouldn't be
+    // preserved
+    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
+    PptSlice2 result = new PptSlice2(this.parent, newVarInfos);
+
+    // Why do we have to pick out the permutation again?  Because we
+    // sort it above by index order
+    int[] permutation = new int[arity];
+    for (int i = 0; i < var_infos.length; i++) {
+      permutation[i] = ArraysMDE.indexOfEq (newVarInfos,
+                                            var_infos[i].canonicalRep());
+      Assert.assertTrue (permutation[i] != -1);
+    }
+
+    // re-parent the invariants and copy them out
+    List newInvs = new LinkedList();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Assert.assertTrue (inv.ppt == this);
+      if (Equality.debugPostProcess.isDebugEnabled()) {
+        Equality.debugPostProcess.debug ("before: " + inv.repr());
+      }
+      Invariant newInv = inv.transfer (result, permutation);
+      if (Equality.debugPostProcess.isDebugEnabled()) {
+        Equality.debugPostProcess.debug ("after: " + newInv.repr());
+      }
+      newInvs.add (newInv);
+      Assert.assertTrue (newInv != inv);
+      Assert.assertTrue (newInv.ppt == result);
+      Assert.assertTrue (inv.ppt == this);
+    }
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
+    result.invs.addAll (newInvs);
+    if (Equality.debugPostProcess.isDebugEnabled()) {
+      Equality.debugPostProcess.debug ("cloneAllPivots: newInvs " + invs);
+    }
+    result.repCheck();
+    return result;
+  }
 }

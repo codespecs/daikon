@@ -176,18 +176,35 @@ public abstract class PptSlice
     return false;
   }
 
+  private transient Dataflow.PptsAndInts controlling_cached = null;
+
   /**
    * @return true iff there is a slice higher in the PO relative to
    * this.  This call is relatively expensive.
    **/
-  public boolean isControlled()
+  public boolean isControlled() {
+    Dataflow.PptsAndInts controlling = getControlling();
+    return controlling.ppts.length > 0;
+  }
+
+  /**
+   * Return an array of PptsAndInts from which invariants can flow to
+   * this.  This call is expensive but is cached.
+   **/
+  public Dataflow.PptsAndInts getControlling()
   {
+    if (controlling_cached != null) return controlling_cached;
+
+
     Dataflow.PptsAndInts higher =
       Dataflow.compute_ppt_flow(parent,
                                 var_infos,
                                 false, // just one step
                                 true   // higher
                                 );
+
+    List resultPpts = new LinkedList();
+    List resultFlows = new LinkedList();
 
     // We always have at least one path, since the dataflow result
     // includes 'here' as its last element -- we ignore the 'here'
@@ -211,12 +228,17 @@ public abstract class PptSlice
            + (all ? "yes" : "no"));
       }
       if (all) {
-        return true;
+        resultPpts.add (higher.ppts[i]);
+        resultFlows.add (flow);
       }
     }
-
-    return false;
+    controlling_cached =
+      new Dataflow.PptsAndInts ((PptTopLevel[]) resultPpts.toArray (new PptTopLevel[0]),
+                                (int[][]) resultFlows.toArray (new int[0][]));
+    return controlling_cached;
   }
+
+
 
   /**
    * Adds the given "slice" as one that is immediately lower in the
@@ -231,6 +253,10 @@ public abstract class PptSlice
                             VarInfo[] slice_vis)
   {
     Assert.assertTrue(slice_vis.length == arity);
+    for (int i = 0; i < arity; i++) {
+      Assert.assertTrue (slice_vis[i].type == this.var_infos[i].type);
+    }
+
 
     // Collection private_po = lower ? private_po_lower : private_po_higher;
     // Map private_po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
@@ -308,9 +334,6 @@ public abstract class PptSlice
    * Invariant objects as they are falsified.
    **/
   public void addToFlow(Invariant inv) {
-    if (debugFlow.isDebugEnabled()) {
-      debugFlow.debug(inv.repr() + " at " + parent.name + " added to flow");
-    }
     invs_to_flow.add(inv);
   }
 
@@ -340,6 +363,8 @@ public abstract class PptSlice
    * @return the List of weakened invariants.
    **/
   protected List flow_and_remove_falsified() {
+    repCheck();  // Can do, but commented out for performance
+
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
     for (Iterator iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
@@ -352,6 +377,7 @@ public abstract class PptSlice
     if (debugFlow.isDebugEnabled() && to_remove.size() > 0 ) {
       debugFlow.debug ("Flowing and removing falsified for: " + this);
       debugFlow.debug ("To remove: " + to_remove);
+      debugFlow.debug ("To flow: " + invs_to_flow);
     }
 
     // The following is simply for error checking
@@ -386,7 +412,7 @@ public abstract class PptSlice
     // Flow newly-generated stuff
     if (invs_to_flow.size() == 0) {
       if (debugFlow.isDebugEnabled()) {
-        debugFlow.debug ("No invariants to flow");
+        debugFlow.debug ("No invariants to flow for " + this);
       }
       return new ArrayList();
     }
@@ -408,13 +434,67 @@ public abstract class PptSlice
       PptTopLevel lower = (PptTopLevel) iPptLower.next();
       // For all of the slices
       List slices_vis = (List) private_po_lower_vis.get(lower);
+      for_each_slice:
       for (Iterator iLowerSlices = slices_vis.iterator();
            iLowerSlices.hasNext(); ) {
         VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
+
+        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
+          Assert.assertTrue(slice_vis[iSliceVis].type == 
+                            this.var_infos[iSliceVis].type);
+        }
+
+
+        Assert.assertTrue (slice_vis.length == this.var_infos.length);
+
+        if (Daikon.use_equality_set) {
+          // Why clone?  Because we'll be doing clobbers to transform these
+          // into leaders.
+          VarInfo[] old_slice_vis = slice_vis;
+          slice_vis = new VarInfo[slice_vis.length];
+          System.arraycopy(old_slice_vis, 0, slice_vis, 0, slice_vis.length);
+          // Convert the lower VarInfos into their leaders
+          for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
+            slice_vis[iSliceVis] = (slice_vis[iSliceVis].equalitySet).leader();
+            if (!slice_vis[iSliceVis].isCanonical()) {
+              System.err.println ("Error, the variable " +
+                                  slice_vis[iSliceVis].name.name() +
+                                  " is not canonical");
+              System.err.println ("in ppt " + this);
+              throw new Error();
+            }
+          }
+          // Arrays.sort (slice_vis, VarInfo.IndexComparator.getInstance());
+        }
+
+        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
+          Assert.assertTrue(slice_vis[iSliceVis].type == 
+                            this.var_infos[iSliceVis].type);
+        }
+
+        // Check because of equality.  If two VarInfos in this
+        // PptSlice map to the same VarInfos in this PptSlice, we do
+        // not flow the invariant.  Instead, when inequality is seen
+        // at the lower's PptTopLevel, we instantiate slices.
+        if (slice_vis.length >= 2) {
+          if (slice_vis[0] == slice_vis[1]) {
+            continue for_each_slice;
+          }
+          if (slice_vis.length >= 3) {
+            if (slice_vis[2] == slice_vis[1] ||
+                slice_vis[2] == slice_vis[0]) {
+              continue for_each_slice;
+            }
+          }
+        }
+
         // Ensure the slice exists.
         PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
+        slice.repCheck();  // Can do, but commented out for performance
+    
         // Compute the permutation
         int[] permutation = new int[slice.arity];
+        // Do the permutation to map variables from this to lower slice
         for (int i=0; i < arity; i++) {
           // slice.var_infos is small, so this call is relatively inexpensive
           permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
@@ -454,7 +534,8 @@ public abstract class PptSlice
             // Maybe add that as rep invariant up above?
           //            if (item.getClass() == inv.getClass()) {
           if (Invariant.find (inv.getClass(), slice) != null) {
-            if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
+            if (debugFlow.isDebugEnabled())
+              debugFlow.debug("  except it was already there");
             continue for_each_invariant;
           }
           // Let it be reborn
@@ -505,6 +586,13 @@ public abstract class PptSlice
   }
   */
 
+  /**
+   * Set the number of samples of this ppt to be at least count.
+   **/
+  public void set_samples (int count) {
+
+  }
+
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
   public abstract int num_mod_non_missing_samples();
@@ -542,7 +630,13 @@ public abstract class PptSlice
     return true;
   }
 
-  abstract void instantiate_invariants();
+  /**
+   * Instantiate invariants on the VarInfos this slice contains.
+   * @param excludeEquality Do not instantiate invariants that are
+   * negated or made obvious by the fact that any two VarInfos are
+   * equal.
+   **/
+  abstract void instantiate_invariants(boolean excludeEquality);
 
   /**
    * This class is used for comparing PptSlice objects.
@@ -673,9 +767,90 @@ public abstract class PptSlice
   /// Miscellaneous
 
   public void repCheck() {
+
+    for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {
+      PptTopLevel lower = (PptTopLevel) iPptLower.next();
+      // For all of the slices
+      List slices_vis = (List) private_po_lower_vis.get(lower);
+      for_each_slice:
+
+      for (Iterator iLowerSlices = slices_vis.iterator();
+           iLowerSlices.hasNext(); ) {
+        VarInfo[] slice_vis = (VarInfo[]) iLowerSlices.next();
+        
+        for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
+          if (slice_vis[iSliceVis].type != 
+              this.var_infos[iSliceVis].type) {
+            System.err.println ("RepCheck failure: " +
+                                var_infos[iSliceVis].name.name() +
+                                " and " +
+                                slice_vis[iSliceVis].name.name() +
+                                " have different types");
+            System.err.println ("in ppt " + this);
+            throw new Error();
+          }
+        }
+      }
+    }
+
+    for (int i = 0; i < var_infos.length; i++) {
+      for (int j = i+1; j < var_infos.length; j++) {
+        Assert.assertTrue (var_infos[i] != var_infos[j]);
+      }
+    }
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       inv.repCheck();
+      Assert.assertTrue (inv.ppt == this);
     }
   }
+
+  // This method is used *during* inferencing to create invariants
+  // that are checked.
+  /**
+   * Clone self and replace leader with newLeader.  Do the same in all
+   * invariants that this holds.  Return a new PptSlice that's like
+   * this except with the above replacement, along with correct flow
+   * pointers for varInfos.  In this method, unlike cloneAllPivots,
+   * this.var_infos are their leaders - we are creating new
+   * PptSlices for duplication during inferencing.
+   * @pre leader is part of this.var_infos
+   * @param leader The var to replace
+   * @param newLeader The varInfos to replace (in order) each
+   * occurance of leader.
+   * @return a new PptSlice that satisfies the characteristics above.
+   **/
+  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
+    throw new Error ("Should be implemented");
+  }
+
+  // This method is used after inferencing, during postProcessing, to
+  // pivot PptSlices to hold leaders only, after Equality sets have
+  // themselves pivoted.
+  /**
+   * Clone self and replace non leader varInfos with leaders.  Do the
+   * same in all invariants that this holds.  Return a new PptSlice
+   * that's like this except with the above replacement, along with
+   * correct flow pointers for varInfos.  In this method, unlike
+   * cloneOnePivot, this.var_infos may not be their leaders.  We are
+   * pivoting to restore this condition.
+   * @pre this.var_infos members may not be their leaders
+   * @return a new PptSlice that satisfies the characteristics above.
+   **/
+  protected PptSlice cloneAllPivots () {
+    throw new Error ("Should be implemented");
+  }
+
+
+  /**
+   * For debugging only.
+   **/
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < var_infos.length; i++) {
+      sb.append (" " + var_infos[i].name.name());
+    }
+    return this.getClass().getName() + ": " + parent.ppt_name + " " + sb;
+  }
+
 }

@@ -38,6 +38,11 @@ public final class PptSlice3
 
   int[] tm_total = new int[8];  // "tm" stands for "tuplemod"
 
+  /**
+   * Create a new PptSlice3 .  Warning: do not rearrange the contents
+   * of var_infos once this has been created, as flow order is already
+   * set up after construction.
+   **/
   public PptSlice3(PptTopLevel parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assertTrue(var_infos.length == 3);
@@ -58,7 +63,7 @@ public final class PptSlice3
     this(parent, new VarInfo[] { var_info1, var_info2, var_info3 });
   }
 
-  void instantiate_invariants() {
+  void instantiate_invariants(boolean excludeEquality) {
     Assert.assertTrue(!no_invariants);
 
     // This test should be done by caller (PptTopLevel):
@@ -76,12 +81,12 @@ public final class PptSlice3
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
-      new_invs = ThreeScalarFactory.instantiate(this);
+      new_invs = ThreeScalarFactory.instantiate(this, excludeEquality);
     } else if (Daikon.dkconfig_enable_floats
                && (rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE)
                && (rep3 == ProglangType.DOUBLE)) {
-      new_invs = ThreeFloatFactory.instantiate(this);
+      new_invs = ThreeFloatFactory.instantiate(this, excludeEquality);
     } else {
       // Do nothing; do not even complain
     }
@@ -107,6 +112,13 @@ public final class PptSlice3
       }
     }
 
+  }
+
+  /**
+   * Set the number of samples for this slice to be at least count.
+   **/
+  public void set_samples (int count) {
+    if (tm_total[0] < count) tm_total[0] = count;
   }
 
   // These accessors are for abstract methods declared in Ppt
@@ -367,4 +379,124 @@ public final class PptSlice3
     */ // ... [INCR]
   }
 
+  /**
+   * @see daikon.PptSlice
+   **/
+  protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
+    VarInfo[] newVarInfos = new VarInfo[arity];
+    // rename the VarInfo references to subsitute newLeader for leader
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i] == leader) {
+        newVarInfos[i] = newLeader;
+      } else {
+        newVarInfos[i] = var_infos[i];
+      }
+    }
+    // Why not just clone?  Because then index order wouldn't be
+    // preserved
+    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
+    PptSlice3 result = new PptSlice3(this.parent, newVarInfos);
+
+    // Why do we have to pick out the permutation again?  Because we
+    // sort it above by index order
+    int[] permutation = new int[arity];
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i] == leader) {
+        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, newLeader);
+      } else {
+        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, var_infos[i]);
+      }
+      Assert.assertTrue (permutation[i] != -1);
+    }
+
+    // re-parent the invariants and copy them out
+    List newInvs = new LinkedList();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Assert.assertTrue (inv.ppt == this);
+      Invariant newInv = inv.transfer (result, permutation);
+      newInvs.add (newInv);
+      Assert.assertTrue (newInv != inv);
+      Assert.assertTrue (newInv.ppt == result);
+      Assert.assertTrue (inv.ppt == this);
+    }
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
+    result.invs.addAll (newInvs);
+    if (PptSliceEquality.debug.isDebugEnabled()) {
+      PptSliceEquality.debug.debug ("cloneOnePivot: newInvs " + invs);
+    }
+    result.repCheck();
+    return result;
+  }
+
+  /**
+   * @see daikon.PptSlice
+   **/
+  protected PptSlice cloneAllPivots () {
+    // No need to do it if this is a slice for equality
+    if (this.var_infos.length == 2 &&
+        this.var_infos[0].equalitySet ==
+          this.var_infos[1].equalitySet) {
+      return this;
+    }
+    VarInfo[] newVarInfos = new VarInfo[this.var_infos.length];
+    boolean pivoted = false;
+    for (int i = 0; i < this.var_infos.length; i++) {
+      VarInfo vi = this.var_infos[i];
+      if (vi.canonicalRep() != vi) {
+        pivoted = true;
+        newVarInfos[i] = vi.canonicalRep();
+      } else {
+        newVarInfos[i] = vi;
+      }
+    }
+    if (!pivoted) return this;
+
+    // Why not just clone?  Because then index order wouldn't be
+    // preserved
+    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
+    PptSlice3 result = new PptSlice3(this.parent, newVarInfos);
+
+    // Why do we have to pick out the permutation again?  Because we
+    // sort it above by index order
+    int[] permutation = new int[arity];
+    for (int i = 0; i < var_infos.length; i++) {
+      permutation[i] = ArraysMDE.indexOfEq (newVarInfos,
+                                            var_infos[i].canonicalRep());
+      Assert.assertTrue (permutation[i] != -1);
+    }
+
+    // re-parent the invariants and copy them out
+    List newInvs = new LinkedList();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Assert.assertTrue (inv.ppt == this);
+      if (Equality.debugPostProcess.isDebugEnabled()) {
+        Equality.debugPostProcess.debug ("before: " + inv.repr());
+      }
+      Invariant newInv = inv.transfer (result, permutation);
+      if (Equality.debugPostProcess.isDebugEnabled()) {
+        Equality.debugPostProcess.debug ("after: " + newInv.repr());
+      }
+      newInvs.add (newInv);
+      Assert.assertTrue (newInv != inv);
+      Assert.assertTrue (newInv.ppt == result);
+      Assert.assertTrue (inv.ppt == this);
+    }
+    // Set sample counts
+    for (int i = 0; i < tm_total.length; i++) {
+      result.tm_total[i] = this.tm_total[i];
+    }
+
+    result.invs.addAll (newInvs);
+    if (Equality.debugPostProcess.isDebugEnabled()) {
+      Equality.debugPostProcess.debug ("cloneAllPivots: newInvs " + invs);
+    }
+    result.repCheck();
+    return result;
+  }
 }
