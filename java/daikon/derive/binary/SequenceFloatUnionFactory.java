@@ -13,15 +13,15 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceFloatUnionFactory extends BinaryDerivationFactory {
+public final class SequenceFloatUnionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
     if (! SequenceFloatUnion.dkconfig_enabled) {
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.DOUBLE_ARRAY)
-        || (seq2.rep_type != ProglangType.DOUBLE_ARRAY)) {
+    if ((seq1.rep_type != ProglangType.DOUBLE_ARRAY )
+        || (seq2.rep_type != ProglangType.DOUBLE_ARRAY )) {
       return null;
     }
 
@@ -37,6 +37,6 @@ public final class SequenceFloatUnionFactory extends BinaryDerivationFactory {
       return null;
 
     return new BinaryDerivation[] {
-      new SequenceFloatUnion(seq1, seq2) };
+      new SequenceFloatUnion (seq1, seq2) };
   }
 }
