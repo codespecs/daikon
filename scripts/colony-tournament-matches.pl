@@ -132,31 +132,17 @@ if (! defined($numrepetitions)) {
 
 
 # A breadth-first tournament in order to make
-# parallel executions on multiple machines more worthwhile.
-
-#Instead of
-
-#team1 team2
-#team1 team2
-#team1 team3
-#team1 team3
-#team2 team3
-#team2 team3
-
-#You get
-
-#team1 team2
-#team1 team3
-#team2 team3
-#team1 team2
-#team1 team3
-#team2 team3
+# tournaments with high repetitions more worthwhile
+# if the tournament must be stopped in the middle.
+# For exameple, stopping a tournament with 5 reptitions 40%
+# of the way through provides 2 full tournaments instead of 2/5 
+# of a tournament 5 times.
 for (my $count = 0; $count < $numrepetitions; $count++) {
   for (my $i1=0; $i1<$num_teams; $i1++) {
     my $team1 = $teams[$i1];
     for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
       my $team2 = $teams[$i2];
-      if ($prev_matches[$i1][$i2] < $count) {
+      if ($prev_matches[$i1][$i2] <= $count) {
 	print "$team1 $team2\n";
       }
     }
