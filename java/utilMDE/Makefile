@@ -32,7 +32,7 @@ tags:
 	etags ${ALL_JAVA_FILES}
 
 # Run Jikes unconditionally.
-# This "set" form doesn't seem to work for me.
+# This "set" form doesn't seem to work for me (maybe needs to be export?).
 test:	clean all
 	set JAVA_COMPILER=NONE; java utilMDE.TestUtilMDE
 
@@ -43,21 +43,6 @@ doc: $(JAVA_FILES)
 	touch doc
 	jdk-add-munged-anchor-names-no-bak doc/utilMDE/*.html
 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
-
-# Old version
-# # I do this in another directory to prevent javadoc from getting confused
-# # by the -cpp.java files, which aren't legal Java source.
-# doc: $(JAVA_FILES)
-# 	rm -rf /tmp/utilMDE-doc
-# 	mkdir -p /tmp/utilMDE-doc/utilMDE
-# 	cp -p $(JAVA_FILES) /tmp/utilMDE-doc/utilMDE
-# 	mkdir -p doc
-# 	javadoc -sourcepath /tmp/utilMDE-doc -d doc utilMDE
-# 	# makes "doc" (the target of this rule) look up to date
-# 	touch doc
-# 	jdk-add-munged-anchor-names-no-bak doc/utilMDE/*.html
-# 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
-# 	rm -rf /tmp/utilMDE-doc
 
 audit:
 	(cd ..; maudit utilMDE)
@@ -87,7 +72,7 @@ showvars:
 
 JAVA_CPP = java-cpp.pl $< -DDEFINEDVAR > $@
 
-MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp MathMDE-nonmodulus.java.jpp  MathMDE-help.java.jpp MathMDE-helpend.java.jpp
+MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp MathMDE-nonmodulus.java.jpp MathMDE-help.java.jpp MathMDE-helpend.java.jpp
 	-mv -f $@ $@-bak
 	java-cpp.pl $< > $@
 	chmod -w $@
