@@ -12,9 +12,10 @@ import daikon.inv.unary.stringsequence.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.simplify.*;
 import daikon.split.*;
-import daikon.split.dsaa.*;
-import daikon.split.griesLisp.*;
-import daikon.split.weissDsaaMDE.*;
+//import daikon.split.dsaa.*;
+//import daikon.split.griesLisp.*;
+//import daikon.split.weissDsaaMDE.*;
+import daikon.newsplit.*;
 import daikon.split.misc.*;
 
 import java.io.*;
@@ -1396,31 +1397,39 @@ public class PptTopLevel extends Ppt {
   // This apparently can't appear in PptConditional, lest it never get called.
   // I guess PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless GriesLisp has been instantiated already.
-  static {
+  /*
+    static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
-
+    
     if (! Daikon.disable_splitting) {
-      new MiscSplitters();
-      new GriesLisp();
-      new WeissDsaaMDE();
-      // These are outdated; they look for "field" instead of "this.field".
-      // new SplitterList4Dsaa();
+    //new MiscSplitters();
+    
+    SplitterList.put(".*", new Splitter[] {
+    new ReturnTrueSplitter(),
+    });
+    
+    //new GriesLisp();
+    //new WeissDsaaMDE();
+    // These are outdated; they look for "field" instead of "this.field".
+    // new SplitterList4Dsaa();
     }
-  }
+    }
+  */
 
   public void addConditions(Splitter[] splits) {
-    if ((splits == null) || (splits.length == 0)) {
+    int len = splits.length;
+    if ((splits == null) || (len == 0)) {
       if (Global.debugPptSplit)
         System.out.println("No splits for " + name);
       return;
     }
 
-    Vector pconds_vector = new Vector(2 * splits.length);
-    for (int i=0; i<splits.length; i++) {
+    Vector pconds_vector = new Vector(2 * len);
+    for (int i=0; i<len; i++) {
       PptConditional cond1 = new PptConditional(this, splits[i], false);
       if (! cond1.splitter_valid()) {
-        if (Global.debugPptSplit)
+	  if (Global.debugPptSplit)
           System.out.println("Splitter not valid: " + cond1.name);
         continue;
       }
