@@ -60,7 +60,7 @@ foreach my $filename (@to_cluster) {
     my $outfile = "$filename.cluster";
     #this is for kmeans clustering
     if ($algorithm eq "km") {
-	$command = $command . " $ENV{INV}/scripts/kmeans $filename $ncluster > $outfile; ";
+	$command = $command . " $ENV{INV}/tools/kmeans/kmeans $filename $ncluster > $outfile; ";
     } else {
 	#this is for hierarchical clustering
 	$command = $command . " difftbl $filename | cluster -w | clgroup -n $ncluster > $outfile; ";
@@ -106,7 +106,7 @@ close SPINFO;
 #run daikon with cluster spinfo file and cluster dtrace file.
 $dtrace_file =~ /(.*)\.dtrace/;
 my $new_dtrace = "$1_new.dtrace";
-my $invfile = "result$ncluster.inv";
+my $invfile = "$algorithm-$ncluster.inv";
 $command = "java -Xmx512m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $decls_new $new_dtrace";
 print "$command\n";
 system($command);
@@ -117,7 +117,6 @@ my $textout = $1;
 $command = "java daikon.PrintInvariants --java_output $invfile > $textout";
 print "\n$command\n";
 system($command);
-system ("ls");
 
 #clean up results
 $command = "$ENV{INV}/scripts/extract_implications.pl -o cluster-$algorithm-$ncluster.spinfo $textout";
@@ -127,11 +126,6 @@ unlink($textout);
 
 #remove all temporary files
 &remove_temporary_files();
-
-system($command);
-
-exit 0;
-
 
 ###########################################################################
 ### Subroutines
