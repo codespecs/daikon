@@ -4419,6 +4419,25 @@ Print additional information about what @command{dfepl} is doing,
 including external commands invoked.
 @end table
 
+@node CSV front end convertcsv.pl,  , C/C++ front end dfec, Front ends
+@section Comma-separated-value front end convertcsv.pl
+
+@cindex csv files
+@cindex comma-separated-value files
+
+To convert a csv file (that is, a file in which values are separated by
+commas) into a @file{.dtrace} file (and a @file{.decls} file) to be used
+by Daikon, run the @command{convertcsv.pl} program found in the
+@file{$DAIKONDIR/bin} directory.  For example,
+@example
+  convertcsv.pl myfile.csv
+@end example
+@noindent
+produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
+@command{convertcsv.pl} without any arguments in order to see a usage
+message.
+
+
 @node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
 
@@ -4960,7 +4979,9 @@ Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
 @uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
 
-For Daikon version 2.4.5, also see 
+For Daikon version
+@c line break to avoid automatically updating the version number
+3, also see 
 Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
 of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
 This document is available, as 
