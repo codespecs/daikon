@@ -1,4 +1,4 @@
-.;# (You can read this in -*- lisp -*- mode)
+;# (You can read this in -*- lisp -*- mode)
 ;# Tests for the parsing and printing routines
 ;# x
 ; parse p x
