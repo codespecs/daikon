@@ -639,6 +639,11 @@ public final class MathMDE {
    * The result contains no duplicates and is in order.
    **/
   public static int[] missing_numbers(int[] nums) {
+    { // avoid modifying parameter
+      int[] nums_copy = new int[nums.length];
+      System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+      nums = nums_copy;
+    }
     Arrays.sort(nums);
     int min = nums[0];
     int max = nums[nums.length-1];
@@ -685,6 +690,11 @@ public final class MathMDE {
 
     MissingNumbersIteratorInt(int[] nums, boolean add_ends) {
       this.add_ends = add_ends;
+      { // avoid modifying parameter
+        int[] nums_copy = new int[nums.length];
+        System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+        nums = nums_copy;
+      }
       Arrays.sort(nums);
       current_index = 0;
       current_nonmissing = nums[current_index];
@@ -882,6 +892,11 @@ public final class MathMDE {
    * The result contains no duplicates and is in order.
    **/
   public static long[] missing_numbers(long[] nums) {
+    { // avoid modifying parameter
+      long[] nums_copy = new long[nums.length];
+      System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+      nums = nums_copy;
+    }
     Arrays.sort(nums);
     long min = nums[0];
     long max = nums[nums.length-1];
@@ -928,6 +943,11 @@ public final class MathMDE {
 
     MissingNumbersIteratorLong(long[] nums, boolean add_ends) {
       this.add_ends = add_ends;
+      { // avoid modifying parameter
+        long[] nums_copy = new long[nums.length];
+        System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+        nums = nums_copy;
+      }
       Arrays.sort(nums);
       current_index = 0;
       current_nonmissing = nums[current_index];

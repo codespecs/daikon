@@ -14,6 +14,11 @@ The correct way to build the system is to run 'make'.
    * The result contains no duplicates and is in order.
    **/
   public static INT[] missing_numbers(INT[] nums) {
+    { // avoid modifying parameter
+      INT[] nums_copy = new INT[nums.length];
+      System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+      nums = nums_copy;
+    }
     Arrays.sort(nums);
     INT min = nums[0];
     INT max = nums[nums.length-1];
@@ -61,6 +66,11 @@ The correct way to build the system is to run 'make'.
 
     MissingNumbersIteratorINT(INT[] nums, boolean add_ends) {
       this.add_ends = add_ends;
+      { // avoid modifying parameter
+        INT[] nums_copy = new INT[nums.length];
+        System.arraycopy(nums, 0, nums_copy, 0, nums.length);
+        nums = nums_copy;
+      }
       Arrays.sort(nums);
       current_index = 0;
       current_nonmissing = nums[current_index];
