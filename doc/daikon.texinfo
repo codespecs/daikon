@@ -3285,8 +3285,8 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 
 [[TODO:  write this section of the manual]]
 
-Chicory is named after a flowering perennial herb whose root is
-sometimes used as a substitute for coffee.
+Chicory is named after the chicory plant,
+whose root is sometimes used as a coffee substitute or flavor enhancer.
 
 
 
