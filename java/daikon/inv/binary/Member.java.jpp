@@ -741,6 +741,10 @@ public final class CLASSNAME
         debug.fine ("  Sclvar is not from a sequence");
         return null;
       }
+      if (!(sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT)) {
+        debug.fine ("  Sclvar is a sequence elt other than a subscript");
+        return null;
+      }
       SEQUENCESCALARSUBSCRIPT sssc = (SEQUENCESCALARSUBSCRIPT) inv.sclvar().derived;
       VarInfo leftIndex = sssc.sclvar();
       VarInfo seqvar = inv.seqvar();
