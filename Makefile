@@ -11,8 +11,9 @@ LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
 DOC_FILES := dtrace-format.txt Makefile daikon.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
-SCRIPT_FILES := modbit-munge.pl java-cpp lines-from
+SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
+DAIKON_JAVA_FILES := $(shell find daikon \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 
 MERNST_DIR := /g2/users/mernst
 INV_DIR := $(MERNST_DIR)/research/invariants
@@ -120,7 +121,7 @@ $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
-daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
+daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES)
 	html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
