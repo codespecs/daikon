@@ -31,9 +31,16 @@ public class CmdCheck
 	s.input.flush();
 
 	// read the answer
-	result = s.output.readLine();           // the real result
+	// first, the real result
+	result = s.output.readLine();           
 	Assert.assert(!result.startsWith("Bad input:"), result);
-	Assert.assert("".equals(s.output.readLine())); // eat blank line
+	if (result.equals("Abort (core dumped)")) {
+	  throw new SimplifyError(result);
+	}
+	// then, a blank line
+	String blank = s.output.readLine();
+	Assert.assert("".equals(blank), "Not a blank line '" + blank +
+		      "' after output '" + result + "'");
       }
 
       // expect "##: [Inv|V]alid."
