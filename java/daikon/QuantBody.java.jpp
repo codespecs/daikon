@@ -506,6 +506,17 @@ The correct way to build the system is to run 'make'.
   return retval;
 }
 
+/*@ pure */ public static _TYPE[] slice(_TYPE[] seq, long start , int end) {
+  return slice(seq, (int)start, end);
+}
+/*@ pure */ public static _TYPE[] slice(_TYPE[] seq, int start , long end) {
+  return slice(seq, start, (int)end);
+}
+/*@ pure */ public static _TYPE[] slice(_TYPE[] seq, long start , long end) {
+  return slice(seq, (int)start, (int)end);
+}
+
+
 /**
  * eltsEqual
  */
