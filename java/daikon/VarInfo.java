@@ -25,6 +25,10 @@ public final class VarInfo
 {
 
   // Name and type
+
+  /**
+   * Expression of this variable's name.
+   **/
   public VarInfoName name;      // interned
 
   /**
@@ -38,7 +42,6 @@ public final class VarInfo
    **/
   public ProglangType file_rep_type;
 
-
   /**
    * Type as internally stored.  This is an interface detail.
    **/
@@ -50,7 +53,11 @@ public final class VarInfo
   public VarComparability comparability;
 
   // Obtaining values
-  public int varinfo_index;	// index in lists of VarInfo objects
+
+  /**
+   * The index in lists of VarInfo objects.
+   **/
+  public int varinfo_index;
 
   /**
    * The actual value that this variable would point to in a
@@ -65,6 +72,28 @@ public final class VarInfo
                                 // once upon a time (still?):
   				//   (static_constant_value != null)
                                 //   iff (value_index == -1)
+
+  // Partial ordering relationships between variables
+
+  // Keep private, modifiable copies and public read-onlny copies
+  private final Collection _po_higher = new ArrayList(2);
+  private final Collection _po_lower = new ArrayList(2);
+
+  /**
+   * Variables immediately higher in the partial order (compared to this).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are VarInfos.  Contains no duplicates.
+   * @see po_lower
+   **/
+  public final Collection po_higher = Collections.unmodifiableCollection(_po_higher);
+
+  /**
+   * Variables immediately lower in the partial order (compared to this).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are VarInfos.  Contains no duplicates.
+   * @see po_higher
+   **/
+  public final Collection po_lower = Collections.unmodifiableCollection(_po_lower);
 
   // Derived variables
 
@@ -260,12 +289,21 @@ public final class VarInfo
     return true;
   }
 
-  private Object checkNull (Object o) {
-    return (o == null) ? "null" : o;
+  /**
+   * Ensures that parent is in this.po_higher and this in in parent.po_lower.
+   **/
+  public void addHigherPO(VarInfo parent) {
+    if (this._po_higher.contains(parent)) {
+      Assert.assert(parent._po_lower.contains(this));
+      return;
+    }
+    Assert.assert(! parent._po_lower.contains(this));
+    this._po_higher.add(parent);
+    parent._po_lower.add(this);
   }
 
   public String repr() {
-    return "<VarInfo " + checkNull(name) + ": "
+    return "<VarInfo " + name + ": "
       + "type=" + type
       + ",file_rep_type=" + file_rep_type
       + ",rep_type=" + rep_type
@@ -274,7 +312,7 @@ public final class VarInfo
       + ",varinfo_index=" + varinfo_index
       + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
-      + ",derived=" + checkNull (derived)
+      + ",derived=" + derived
       + ",derivees=" + derivees
       + ",ppt=" + ppt
       + ",equal_to=" + equal_to
@@ -492,6 +530,8 @@ public final class VarInfo
 
     HashSet controlling_equalTo = new HashSet(); // of VarInfoName
     {
+      // [INCR] ...
+      /*
       Iterator controllers = ppt.controlling_ppts.iterator();
       while (controllers.hasNext()) {
         PptTopLevel controller = (PptTopLevel) controllers.next();
@@ -507,6 +547,8 @@ public final class VarInfo
 	  }
         }
       }
+      */
+      // ... [INCR]
     }
 
     VarInfo[] vis = ppt.var_infos;
