@@ -2342,6 +2342,8 @@ of the variables in the variables list.
 The Daikon Context GUI displays invariants for the Java or C code displayed
 in a text editor or code browser; as the cursor moves, the invariant
 display is updated.
+(Before using the Context GUI, you must follow the installation
+instructions; @pxref{Installing the Context GUI}.)
 
 @c Force a paragraph break so the image is on its own line.
 @*

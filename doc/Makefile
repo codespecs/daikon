@@ -27,13 +27,13 @@ html-chap: daikon_manual_html/daikon.html
 
 # The "subdir" flag does not copy over images aren't copied, so the
 # pathnames become incorrect.  I need to copy them over myself.
-# Images are in the order of appearance in the manual (search for
-# "@image"; this list is updated by hand (unfortunately).
+# Images are in the order of appearance in the manual (search for "@image",
+# except daikon-logo.jpg; this list is updated by hand (unfortunately).
 daikon_manual_html/daikon.html: daikon.texinfo
 	rm -rf daikon_manual_html/*
 	texi2html -split chapter -subdir daikon_manual_html $<
 	mkdir daikon_manual_html/images
-	cp -p images/daikon-logo.jpg images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
+	cp -p images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
 
 daikon.dvi: daikon.texinfo
 	texi2dvi $<
