@@ -55,11 +55,18 @@ public abstract class ValueSet extends LimitedSizeIntSet
   /** track the specified object **/
   public abstract void add(Object v1);
 
+  /** add stats from the specified value set */
+  protected abstract void add_stats (ValueSet other);
+
+  /** returns a short description of the values seen **/
+  public abstract String repr_short();
+
   public void add(ValueSet other) {
     if (this.getClass() != other.getClass()) {
       throw new Error("ValueSet type mismatch: " + this.getClass() + " " + other.getClass());
     }
     addAll(other);
+    add_stats (other);
   }
 
   public static class ValueSetScalar extends ValueSet {
@@ -68,13 +75,36 @@ public abstract class ValueSet extends LimitedSizeIntSet
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    long min_val = Long.MAX_VALUE;
+    long max_val = Long.MIN_VALUE;
+
     public ValueSetScalar(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
       Assert.assertTrue(v1 != null);
-      add(UtilMDE.hash(((Long) v1).longValue()));
+      long val = ((Long) v1).longValue();
+      min_val = Math.min (min_val, val);
+      max_val = Math.max (max_val, val);
+      add(UtilMDE.hash(val));
     }
+
+    protected void add_stats (ValueSet other) {
+      ValueSetScalar vs = (ValueSetScalar) other;
+      min_val = Math.min (min_val, vs.min_val);
+      max_val = Math.max (max_val, vs.max_val);
+    }
+
+    public long min() { return (min_val); }
+    public long max() { return (max_val); }
+
+    public String repr_short() {
+      if (size() > 0)
+        return (size() + " values " + min_val + ".." + max_val);
+      else
+        return ("0 values");
+    }
+
   }
 
   public static class ValueSetFloat extends ValueSet {
@@ -83,12 +113,35 @@ public abstract class ValueSet extends LimitedSizeIntSet
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    double min_val = Double.MAX_VALUE;
+    double max_val = -Double.MAX_VALUE;
+
     public ValueSetFloat(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
-      add(UtilMDE.hash(((Double) v1).doubleValue()));
+      double val = ((Double) v1).doubleValue();
+      min_val = Math.min (min_val, val);
+      max_val = Math.max (max_val, val);
+      add(UtilMDE.hash(val));
     }
+
+    protected void add_stats (ValueSet other) {
+      ValueSetFloat vs = (ValueSetFloat) other;
+      min_val = Math.min (min_val, vs.min_val);
+      max_val = Math.max (max_val, vs.max_val);
+    }
+
+    public double min() { return (min_val); }
+    public double max() { return (max_val); }
+
+    public String repr_short() {
+      if (size() > 0)
+        return (size() + " values " + min_val + ".." + max_val);
+      else
+        return ("0 values");
+    }
+
   }
 
   public static class ValueSetScalarArray extends ValueSet {
@@ -97,12 +150,48 @@ public abstract class ValueSet extends LimitedSizeIntSet
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    long min_val = Long.MAX_VALUE;
+    long max_val = Long.MIN_VALUE;
+    int elem_cnt = 0;
+    int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
+
     public ValueSetScalarArray(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
-    	add(UtilMDE.hash((long[]) v1));
+      long[] val = (long[]) v1;
+      if (val != null) {
+        for (int i = 0; i < val.length; i++) {
+          min_val = Math.min (min_val, val[i]);
+          max_val = Math.max (max_val, val[i]);
+        }
+        elem_cnt += val.length;
+        if (val.length > 1)
+          multi_arr_cnt++;
+      }
+      add(UtilMDE.hash((long[]) v1));
     }
+
+    protected void add_stats (ValueSet other) {
+      ValueSetScalarArray vs = (ValueSetScalarArray) other;
+      min_val = Math.min (min_val, vs.min_val);
+      max_val = Math.max (max_val, vs.max_val);
+      elem_cnt += vs.elem_cnt;
+      multi_arr_cnt += vs.multi_arr_cnt;
+    }
+
+    public long min() { return (min_val); }
+    public long max() { return (max_val); }
+    public int elem_cnt() { return (elem_cnt); }
+    public int multi_arr_cnt() { return (multi_arr_cnt); }
+
+    public String repr_short() {
+      if (size() > 0)
+        return (size() + " values " + min_val + ".." + max_val);
+      else
+        return ("0 values");
+    }
+
   }
 
   public static class ValueSetFloatArray extends ValueSet {
@@ -111,12 +200,48 @@ public abstract class ValueSet extends LimitedSizeIntSet
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    double min_val = Long.MAX_VALUE;
+    double max_val = Long.MIN_VALUE;
+    int elem_cnt = 0;
+    int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
+
     public ValueSetFloatArray(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
-      add(UtilMDE.hash((double[]) v1));
+      double[] val = (double[]) v1;
+      if (val != null) {
+        for (int i = 0; i < val.length; i++) {
+          min_val = Math.min (min_val, val[i]);
+          max_val = Math.max (max_val, val[i]);
+        }
+        elem_cnt += val.length;
+        if (val.length > 1)
+          multi_arr_cnt++;
+      }
+      add(UtilMDE.hash(val));
     }
+
+    protected void add_stats (ValueSet other) {
+      ValueSetFloatArray vs = (ValueSetFloatArray) other;
+      min_val = Math.min (min_val, vs.min_val);
+      max_val = Math.max (max_val, vs.max_val);
+      elem_cnt += vs.elem_cnt;
+      multi_arr_cnt += vs.multi_arr_cnt;
+    }
+
+    public double min() { return (min_val); }
+    public double max() { return (max_val); }
+    public int elem_cnt() { return (elem_cnt); }
+    public int multi_arr_cnt() { return (multi_arr_cnt); }
+
+    public String repr_short() {
+      if (size() > 0)
+        return (size() + " values " + min_val + ".." + max_val);
+      else
+        return ("0 values");
+    }
+
   }
 
   public static class ValueSetString extends ValueSet {
@@ -131,6 +256,13 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public void add(Object v1) {
       add(UtilMDE.hash((String) v1));
     }
+
+    protected void add_stats (ValueSet other) {
+    }
+
+    public String repr_short() {
+      return (size() + " values ");
+    }
   }
 
   public static class ValueSetStringArray extends ValueSet {
@@ -139,12 +271,34 @@ public abstract class ValueSet extends LimitedSizeIntSet
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20031017L;
 
+    int elem_cnt = 0;
+    int multi_arr_cnt = 0;  // number of arrays with 2 or more elements
+
     public ValueSetStringArray(int max_values) {
       super(max_values);
     }
     public void add(Object v1) {
-      add(UtilMDE.hash((String[]) v1));
+      String[] val = (String[]) v1;
+      if (val != null) {
+        elem_cnt += val.length;
+        if (val.length > 1)
+          multi_arr_cnt++;
+      }
+      add(UtilMDE.hash(val));
     }
+
+    protected void add_stats (ValueSet other) {
+      ValueSetStringArray vs = (ValueSetStringArray) other;
+      elem_cnt += vs.elem_cnt;
+      multi_arr_cnt += vs.multi_arr_cnt;
+    }
+    public int elem_cnt() { return (elem_cnt); }
+    public int multi_arr_cnt() { return (multi_arr_cnt); }
+
+    public String repr_short() {
+      return (size() + " values ");
+    }
+
   }
 
 
