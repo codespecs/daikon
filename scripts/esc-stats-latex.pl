@@ -10,7 +10,7 @@
 use English;
 use Carp;
 
-my @types = ("invariant","set","requires","modifies","ensures","exsures","also_req","also_mods","also_ens","also_exs");
+my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes =
     (EVU => "/*@",   # Expressible Verified Unique
@@ -24,7 +24,7 @@ my %prefixes =
 # ignore @types, @categories, %prefixes
 
 
-my $invdir = "/g2/users/mernst/research/invariants";
+my $invdir = $ENV{'INV'} or "/g2/users/mernst/research/invariants";
 
 print "Class   & NCNB LOC & Verified & Unverified & Inexpressible & Redundant & Total reported & Missing & Precision & Recall \\\\ \\hline\n";
 
