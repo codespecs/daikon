@@ -1,5 +1,5 @@
 # Crontab for daikonbuildtest user
-# Runs on beet.
+# Runs on parsnip.
 
 # To initiate this crontab, run the crontab command on this file.
 # Henceforth, this file will nightly be updated and its commands
@@ -13,4 +13,4 @@ AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 02 1 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab
 55 1 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
 0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest 
-#02 15 * * * $AFS $HOME/research/invariants/scripts/buildtest
+02 15 * * * $AFS $HOME/research/invariants/scripts/buildtest
