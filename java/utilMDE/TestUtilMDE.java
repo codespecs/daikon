@@ -1042,6 +1042,14 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(Arrays.equals(UtilMDE.split("foo", ','), new String[] { "foo" }));
     assertTrue(Arrays.equals(UtilMDE.split("", ','), new String[] { "" }));
     assertTrue(Arrays.equals(UtilMDE.split(",foo,", ','), new String[] { "", "foo", "" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo,bar,baz", ","), new String[] { "foo", "bar", "baz" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo", ","), new String[] { "foo" }));
+    assertTrue(Arrays.equals(UtilMDE.split("", ","), new String[] { "" }));
+    assertTrue(Arrays.equals(UtilMDE.split(",foo,", ","), new String[] { "", "foo", "" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo, bar, baz", ", "), new String[] { "foo", "bar", "baz" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo", ", "), new String[] { "foo" }));
+    assertTrue(Arrays.equals(UtilMDE.split("", ", "), new String[] { "" }));
+    assertTrue(Arrays.equals(UtilMDE.split(", foo, ", ", "), new String[] { "", "foo", "" }));
 
     assertTrue(UtilMDE.join(new String[] { "foo", "bar", "baz" }, ", ").equals("foo, bar, baz"));
     assertTrue(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));

@@ -613,12 +613,36 @@ public final class UtilMDE {
   /**
    * Return an array of Strings representing the characters between
    * successive instances of the delimiter character.
+   * Always returns an array of length at least 1 (it might contain only the
+   * empty string).
    **/
   public static String[] split(String s, char delim) {
     Vector result = new Vector();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
       result.add(s.substring(0, delimpos));
       s = s.substring(delimpos+1);
+    }
+    result.add(s);
+    String[] result_array = new String[result.size()];
+    result.copyInto(result_array);
+    return result_array;
+  }
+
+  /**
+   * Return an array of Strings representing the characters between
+   * successive instances of the delimiter String.
+   * Always returns an array of length at least 1 (it might contain only the
+   * empty string).
+   **/
+  public static String[] split(String s, String delim) {
+    int delimlen = delim.length();
+    if (delimlen == 0) {
+      throw new Error("Second argument to split was empty.");
+    }
+    Vector result = new Vector();
+    for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
+      result.add(s.substring(0, delimpos));
+      s = s.substring(delimpos+delimlen);
     }
     result.add(s);
     String[] result_array = new String[result.size()];
