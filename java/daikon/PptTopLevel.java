@@ -4062,31 +4062,31 @@ public class PptTopLevel
     // Get all of the binary relationships from the first child's
     // equality sets.
     PptRelation c1 = (PptRelation) children.get(0);
-    Set eset = c1.get_child_equalities_as_parent();
-    debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + eset);
+    Map emap = c1.get_child_equalities_as_parent();
+    debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + emap);
 
     // Loop through the remaining children, intersecting the equal
     // variables and incrementing the sample count as we go
     for (int i = 1; i < children.size(); i++) {
       PptRelation rel = (PptRelation) children.get(i);
-      List eq_new = new ArrayList (rel.get_child_equalities_as_parent());
-      for (Iterator j = eset.iterator(); j.hasNext(); ) {
+      Map eq_new = rel.get_child_equalities_as_parent();
+      for (Iterator j = emap.keySet().iterator(); j.hasNext(); ) {
         VarInfo.Pair curpair = (VarInfo.Pair) j.next();
-        int index = eq_new.indexOf (curpair);
-        if (index == -1)
+        VarInfo.Pair newpair = (VarInfo.Pair) eq_new.get (curpair);
+        if (newpair == null)
           j.remove();
         else
-          curpair.samples += ((VarInfo.Pair) eq_new.get (index)).samples;
+          curpair.samples += newpair.samples;
       }
     }
     if (debugMerge.isLoggable (Level.FINE)) {
       debugMerge.fine ("Found equality pairs ");
-      for (Iterator i = eset.iterator(); i.hasNext(); )
+      for (Iterator i = emap.keySet().iterator(); i.hasNext(); )
         debugMerge.fine ("-- " + (VarInfo.Pair) i.next());
     }
 
     // Build actual equality sets that match the pairs we found
-    equality_view.instantiate_from_pairs (eset);
+    equality_view.instantiate_from_pairs (emap.keySet());
     if (debugMerge.isLoggable (Level.FINE)) {
       debugMerge.fine ("Built equality sets ");
       for (int i = 0; i < equality_view.invs.size(); i++) {
@@ -4099,15 +4099,20 @@ public class PptTopLevel
     Assert.assertTrue (views.size() == 0);
 
     // Create unary views and related invariants
+    List unary_slices = new ArrayList();
     for (int i = 0; i < equality_view.invs.size(); i++) {
       Equality e = (Equality) equality_view.invs.get (i);
       VarInfo vi = e.leader();
       PptSlice1 slice1 = new PptSlice1 (this, vi);
       slice1.merge_invariants();
-      addSlice (slice1);
+      unary_slices.add (slice1);
     }
+    addSlices (unary_slices);
+    if (debugMerge.isLoggable(Level.FINE))
+      debug_print_slice_info (debugMerge, "unary", unary_slices);
 
     // Create binary views and related invariants
+    List binary_slices = new ArrayList();
     for (int i = 0; i < equality_view.invs.size(); i++) {
       Equality e1 = (Equality) equality_view.invs.get (i);
       VarInfo v1 = e1.leader();
@@ -4117,13 +4122,18 @@ public class PptTopLevel
         PptSlice2 slice2 = new PptSlice2 (this, v1, v2);
         slice2.merge_invariants();
         if (slice2.invs.size() > 0)
-          addSlice (slice2);
+          binary_slices.add (slice2);
       }
     }
+    addSlices (binary_slices);
+    if (debugMerge.isLoggable(Level.FINE))
+      debug_print_slice_info (debugMerge, "binary", binary_slices);
+
 
     // Create ternary views and related invariants.  Since there
     // are no ternary array invariants, those slices don't need to
     // be created.
+    List ternary_slices = new ArrayList();
     for (int i = 0; i < equality_view.invs.size(); i++) {
       Equality e1 = (Equality) equality_view.invs.get (i);
       VarInfo v1 = e1.leader();
@@ -4144,13 +4154,43 @@ public class PptTopLevel
           PptSlice3 slice3 = new PptSlice3 (this, v1, v2, v3);
           slice3.merge_invariants();
           if (slice3.invs.size() > 0)
-            addSlice (slice3);
+            ternary_slices.add (slice3);
         }
       }
     }
+    addSlices (ternary_slices);
+    if (debugMerge.isLoggable(Level.FINE))
+      debug_print_slice_info (debugMerge, "ternary", ternary_slices);
 
     // Mark this ppt as merged, so we don't process it multiple times
     invariants_merged = true;
+  }
+
+  /**
+   * Cleans up the ppt so that its invariants can be merged from other
+   * ppts.  Not normally necessary unless the merge is taking place over
+   * multiple ppts maps based on different data.  This allows a ppt to
+   * have its invariants recalculated.
+   */
+  public void clean_for_merge() {
+    equality_view = null;
+    for (int i = 0; i < var_infos.length; i++)
+      var_infos[i].equalitySet = null;
+    views = new HashMap();
+    // parents = new ArrayList();
+    // children = new ArrayList();
+    invariants_merged = false;
+  }
+
+  public void debug_print_slice_info (Logger debug, String descr,
+                                      List /*PptSlice*/ slices) {
+
+    int inv_cnt = 0;
+    for (int i = 0; i < slices.size(); i++)
+      inv_cnt += ((PptSlice) slices.get(i)).invs.size();
+    debug.fine (slices.size() + descr + " slices with " + inv_cnt
+                + " invariants");
+
   }
 
 }
