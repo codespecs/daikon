@@ -50,7 +50,7 @@ BEGIN {
   } elsif ($action eq "-random-prop") {
     $random = 1;
     $random_frac = `prop-modified.pl @ARGV`;
-    chomp($random_frac);
+    $random_frac = dos_chomp($random_frac);
     # print STDERR "prop-modified = $random_frac for @ARGV\n"
   } elsif ($action eq "-random-half") {
     $random = 1;
@@ -88,18 +88,18 @@ if (/^$/) {
   if ($debug) { print STDERR "[blank line]\n"; }
 } elsif (! defined($ppt)) {
   $ppt = $_;
-  chomp($ppt);
+  $ppt = dos_chomp($ppt);
   if ($debug) { print STDERR "ppt = $ppt\n"; }
 } elsif (! defined($var)) {
   $var = $_;
-  chomp($var);
+  $var = dos_chomp($var);
   if ($var =~ /^[0-9]+$/) {
     die "Bad variable name $var in ppt $ppt";
   }
   if ($debug) {  print STDERR "var = $var\n"; }
 } elsif (! defined($val)) {
   $val = $_;
-  chomp($val);
+  $val = dos_chomp($val);
   if ($debug) {  print STDERR "val = $val\n"; }
   if ($var eq "this_invocation_nonce") {
     undef($var);
@@ -107,7 +107,7 @@ if (/^$/) {
   }
 } else {
   $mod = $_;
-  chomp($mod);
+  $mod = dos_chomp($mod);
   if ($debug) {  print STDERR "mod = $mod\n"; }
   if (! (($mod eq "0") || ($mod eq "1") || ($mod eq "2"))) {
     die "Bad modbit $mod for variable $var with value $val in ppt $ppt";
@@ -152,6 +152,14 @@ if (/^$/) {
   undef($var);
   undef($val);
   undef($mod);
+}
+
+sub dos_chomp( $ ) {
+  my ($arg) = @_;
+  if ($arg !~ s/\r\n$//) {
+    chomp($arg);
+  }
+  return $arg;
 }
 
 END {
