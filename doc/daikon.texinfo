@@ -3083,14 +3083,21 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 
 @item --flatten-mdas
 Ensures that each multi-dimensional array in the instrumented program will be
-allocated as a single contiguous block of memory.  This is necessary if the
-program under analysis assumes that its multi-dimensional array variables
-are contiguous blocks of memory (e.g., clearing them with memset(),
-manually calculating addresses of elements in the array using memory offsets
-from the first element, etc.).  However, this will remove padding at the
-beginnings and ends of subarrays and diminish the ability of the runtime
-library to report array overflow errors, so this option should only be
-specified if necessary.
+allocated as a single contiguous block of memory.  A multi-dimensional array
+is a variable declared with multiple sets of square brackets after it, e.g.:
+@example
+  int foo[3][2];
+  char bar[3][8][3];
+@end example
+This is necessary if the program under analysis performs operations that
+assume that its
+multi-dimensional array variables are contiguous blocks of memory (e.g.,
+clearing them with memset(), manually calculating addresses of elements
+in the array using memory offsets from the first element, etc.).
+However, this will remove padding at the beginnings and ends of
+subarrays and diminish the ability of the runtime library to report
+array overflow errors, so this option should only be specified if
+necessary.
 
 @item --help
 Displays a usage message.
