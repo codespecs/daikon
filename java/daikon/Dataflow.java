@@ -59,18 +59,43 @@ public class Dataflow
    **/
   public static void init_partial_order(PptMap all_ppts)
   {
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+    init_partial_order (all_ppts.asCollection(), all_ppts);
+  }
+
+  /**
+   * Process a set of appts by adding orig and derived variables,
+   * relating variables to other program points, and fixing all
+   * necessary pre-computed flows.  (Calls
+   * init_partial_order(PptTopLevel, PptMap) for each ppt in turn.)
+   * @param ppts a Collection of PptTopLevels to init
+   **/
+  public static void init_partial_order(Collection ppts, PptMap all_ppts)
+  {
+    for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       init_partial_order(ppt, all_ppts);
     }
+
+    // Create or modify the data flow and invariant flow vectors.  We
+    // *must* recompute all of them, rather than just the new ones.
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel item = (PptTopLevel) i.next();
+      create_ppt_dataflow(item);
+      create_ppt_invflow(item);
+    }
   }
 
+  // Why is the following private?  Because it no longer does
+  // create_ppt_dataflow and create_ppt_invflow, which are necessary
+  // after the initi process.  Why?  Because it's more efficient to do
+  // these after every batch of ppts, since they *must* be redone over
+  // all the ppts.
   /**
    * Process the ppt by adding orig and derived variables, relating
    * variables to other program points, and fixing all necessary
    * pre-computed flows.
    **/
-  public static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
+  private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
   {
     // Let's punt this one, because we want to deprecate EXITnn
     // Set up EXIT points to control EXITnn points
@@ -100,14 +125,6 @@ public class Dataflow
     // Set up derived variables
     create_derived_variables(ppt, all_ppts);
 
-    // Create or modify the data flow and invariant flow vectors.  We
-    // recompute all of them, instead of trying to figure out exactly
-    // what might have changed.
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel item = (PptTopLevel) i.next();
-      create_ppt_dataflow(item);
-      create_ppt_invflow(item);
-    }
   }
 
   /**

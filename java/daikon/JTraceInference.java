@@ -14,6 +14,8 @@ package daikon;
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -108,8 +110,12 @@ class JTraceInference extends Thread
                 VarInfo[] vi_array =
                     (VarInfo[])var_infos.toArray(new VarInfo[0]);
                 PptTopLevel ppt = new PptTopLevel(pptname, vi_array);
+                // FIXME: Toh added this so the code compiles.  This
+                // should instead use Alan's batching method.
                 all_ppts.add(ppt);
-                Dataflow.init_partial_order(ppt, all_ppts);
+                Set set = new HashSet();
+                set.add (ppt);
+                Dataflow.init_partial_order(set, all_ppts);
                 break;
             }
 
