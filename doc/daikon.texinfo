@@ -1,4 +1,4 @@
-\input texinfo   @c -*-texinfo-*-
+input texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename daikon.info
 @settitle The Daikon Invariant Detector User Manual
@@ -2207,6 +2207,7 @@ invariants must be justified.  Does not print "uninteresting" invariants
 Include "uninteresting" invariants in the tree of differing invariants.
 
 @item -y
+@item --ignore_unjustified
 Include (statistically) unjustified invariants. 
 
 @item -a
