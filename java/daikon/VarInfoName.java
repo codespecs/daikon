@@ -2512,7 +2512,7 @@ public abstract class VarInfoName
     }
     public static String[] format_esc(VarInfoName[] roots, boolean elementwise) {
       // The call to format_esc is now handled by the combined formatter format_java_style
-      return format_java_style(roots,elementwise,true,OutputFormat.ESCJAVA);
+      return format_java_style(roots, elementwise, true, OutputFormat.ESCJAVA);
     }
 
     // <root*> -> <string string*>
@@ -2529,8 +2529,8 @@ public abstract class VarInfoName
     public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
       return format_jml(roots, elementwise, true);
     }
-    public static String[] format_jml(VarInfoName[] roots, boolean elementwise,boolean forall) {
-       return format_java_style(roots,elementwise,forall,OutputFormat.JML);
+    public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
+       return format_java_style(roots, elementwise, forall, OutputFormat.JML);
     }
 
     //////////////////////////
@@ -2590,13 +2590,13 @@ public abstract class VarInfoName
       return result;
     }
 
-    // Important Note: The java quantification style actually makes no sense as is.
+    // Important Note: The Java quantification style actually makes no sense as is.
     // The resultant quantifications are statements as opposed to expressions, and
     // thus no value can be derived from them. This must be fixed before the java
     // statements are of any value. However, the ESC and JML quantifications are fine
-    // because they actually produce expressions with values
+    // because they actually produce expressions with values.
 
-    // <root*> -> <string string*>
+    // <root*> -> <string string* string>
     /**
      * Given a list of roots, return a String array where the first
      * element is a Java-style quantification over newly-introduced
@@ -2614,48 +2614,48 @@ public abstract class VarInfoName
     // This set of functions quantifies in the same manner to the ESC quantification, except that
     // JML names are used instead of ESC names, and minor formatting changes are incorporated
     public static String[] format_jml(QuantifyReturn qret) {
-      return format_java_style(qret,false,true,OutputFormat.JML);
+      return format_java_style(qret, false, true, OutputFormat.JML);
     }
-    public static String[] format_jml(QuantifyReturn qret,boolean elementwise) {
-      return format_java_style(qret,elementwise,true,OutputFormat.JML);
+    public static String[] format_jml(QuantifyReturn qret, boolean elementwise) {
+      return format_java_style(qret, elementwise, true, OutputFormat.JML);
     }
-    public static String[] format_jml(QuantifyReturn qret,boolean elementwise,boolean forall) {
-      return format_java_style(qret,elementwise,forall,OutputFormat.JML);
+    public static String[] format_jml(QuantifyReturn qret, boolean elementwise, boolean forall) {
+      return format_java_style(qret, elementwise, forall, OutputFormat.JML);
     }
 
     // This set of functions assists in quantification for all of the java style
-    // output formats, that is, java, ESC, and JML. It does the actual work behind
+    // output formats, that is, Java, ESC, and JML. It does the actual work behind
     // those formatting functions. This function was meant to be called only through
     // the other public formatting functions.
     //
-    // The OutputFormat muse be one of those three previously mentioned.
-    // Also, if the java format is selected, forall must be true.
+    // The OutputFormat must be one of those three previously mentioned.
+    // Also, if the Java format is selected, forall must be true.
 
-    protected static String[] format_java_style(VarInfoName[] roots,OutputFormat format) {
+    protected static String[] format_java_style(VarInfoName[] roots, OutputFormat format) {
       return format_java_style(roots, false, true, format);
     }
-    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise,OutputFormat format) {
+    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise, OutputFormat format) {
       return format_java_style(roots, elementwise, true, format);
     }
-    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise,boolean forall,OutputFormat format) {
+    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise, boolean forall, OutputFormat format) {
       Assert.assert(roots != null);
 
       QuantifyReturn qret = quantify(roots);
 
-      return format_java_style(qret,elementwise,forall,format);
+      return format_java_style(qret, elementwise, forall, format);
     }
 
     // This form allows the indicies and bounds to be modified before quantification
-    protected static String[] format_java_style(QuantifyReturn qret,OutputFormat format) {
-      return format_java_style(qret,false,true,format);
+    protected static String[] format_java_style(QuantifyReturn qret, OutputFormat format) {
+      return format_java_style(qret, false, true, format);
     }
-    protected static String[] format_java_style(QuantifyReturn qret,boolean elementwise,OutputFormat format) {
-      return format_java_style(qret,elementwise,true,format);
+    protected static String[] format_java_style(QuantifyReturn qret, boolean elementwise, OutputFormat format) {
+      return format_java_style(qret, elementwise, true, format);
     }
-    protected static String[] format_java_style(QuantifyReturn qret,boolean elementwise,boolean forall,OutputFormat format) {
+    protected static String[] format_java_style(QuantifyReturn qret, boolean elementwise, boolean forall, OutputFormat format) {
       // build the "\forall ..." predicate
       String[] result = new String[qret.root_primes.length+2];
-      StringBuffer int_list, conditions,closing;
+      StringBuffer int_list, conditions, closing;
       {
 	// "i, j, ..."
 	int_list = new StringBuffer();
@@ -2670,10 +2670,10 @@ public abstract class VarInfoName
 	    int_list.append(", ");
 	    conditions.append(" && ");
 	  }
-	  closing.append(quant_increment(idx,i,format));
+	  closing.append(quant_increment(idx, i, format));
 
-	  int_list.append(quant_var_initial_state(idx,low,format));
-	  conditions.append(quant_execution_condition(low,idx,high,format));
+	  int_list.append(quant_var_initial_state(idx, low, format));
+	  conditions.append(quant_execution_condition(low, idx, high, format));
 
 	  if (elementwise && (i >= 1)) {
 	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
@@ -2683,7 +2683,7 @@ public abstract class VarInfoName
 	    else
 	       conditions.append(" && ");
 
-	    conditions.append(quant_element_conditions(_idx,_low,idx,low,format));
+	    conditions.append(quant_element_conditions(_idx, _low, idx, low, format));
 	  }
 	}
       }
@@ -2698,11 +2698,6 @@ public abstract class VarInfoName
 		    closing + quant_step_terminator(format));
       result[result.length-1] = ")";
 
-      // if (forall)
-      // result[0] = "\\forall int " + int_list + "; " + conditions + "; ";
-      // else
-      // result[0] = "\\exists int " + int_list + "; " + conditions + "; ";
-
       // stringify the terms
       for (int i=0; i < qret.root_primes.length; i++) {
 	result[i+1] = qret.root_primes[i].name_using(format);
@@ -2710,22 +2705,22 @@ public abstract class VarInfoName
 
       return result;
     }
-     // This set of functions are helper functions to the quantification function.
-     //
+
+
+    // This set of functions are helper functions to the quantification function.
 
     /**
      * This function creates a string that represents how to increment the variables involved
      * in quantification. Since the increment is not stated explicitly in the JML and ESC
      * formats this function merely returns an empty string for those formats.
      */
-    protected static String quant_increment(VarInfoName idx,int i,OutputFormat format) {
+    protected static String quant_increment(VarInfoName idx, int i, OutputFormat format) {
       if (format != OutputFormat.JAVA) {
 	return "";
       } else {
 	if (i != 0) {
-	  return (", " + idx.java_name() + " ++");
-	}
-	else {
+	  return (", " + idx.java_name() + "++");
+	} else {
 	  return (idx.java_name() + "++");
 	}
       }
