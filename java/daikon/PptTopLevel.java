@@ -640,7 +640,8 @@ public class PptTopLevel
    * @return a Vector of VarInfo
    **/
 
-  // Formerly known as "deriveVariablesOnePass"
+  // Formerly known as "deriveVariablesOnePass", but now there's only
+  // ever one pass.
   private Derivation[] derive(int vi_index_min,
                               int vi_index_limit)
   {
