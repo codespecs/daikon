@@ -779,7 +779,7 @@ public abstract class PptSlice
   // iterating over the contained invariants and replace the invariants
   // that require guarding with their guarded counterparts. The guarded
   // invariants are put into the joiner view of the PptTopLevel that
-  // contains the PptSlice where the invariant was originally located
+  // contains the PptSlice where the invariant was originally located.
   public void guardInvariants() {
     List invariantsToGuard = new ArrayList();
 
@@ -795,8 +795,8 @@ public abstract class PptSlice
           debugGuarding.fine ("  Part of PptSlice cannot be formatted.");
         }
       }
-      //      debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
-      //       debugGuarding.fine (Arrays.asList(var_infos).toString());
+      // debugGuarding.fine ("In guardInvariants, the VarInfos for the PptSlice: ");
+      // debugGuarding.fine (Arrays.asList(var_infos).toString());
     }
 
     // If this slice is to be deleted, then don't guard it
