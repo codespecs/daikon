@@ -12,8 +12,8 @@ JAVAC ?= jikes -g +E +F
 
 
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
-DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.jpp' -print)
-UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.jpp' -print)
+DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
+UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 TAG_FILES := ${DAIKON_TAG_FILES} ${UTILMDE_TAG_FILES}
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
@@ -119,6 +119,7 @@ tests:
 
 showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo TAG_FILES = $(TAG_FILES)
 
 list_java_files:
 	@echo $(JAVA_FILES)
