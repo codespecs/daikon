@@ -283,8 +283,8 @@ The following commands create and populate the
     chmod +rx ~ ~/research
     chmod -R g+r invariants
     chmod g+x `find invariants -type d -print`
-    cd invariants/java/daikon
-    cvs update -r ENGINE_V2_PATCHES
+    cd invariants
+    make setup-v2-and-v3
     make
 </pre>
 (This ensures that you use Daikon version 2, rather than
