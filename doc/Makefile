@@ -1,16 +1,21 @@
-all: info html html-chap ps pdf
+all: config-options invariants-doc info html html-chap ps pdf
 
 
 info: daikon.info
 
-daikon.info: daikon.texinfo config-options.texinfo .fix-menu
+daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo \
+			 .fix-menu
 	makeinfo $<
 
-config-options.texinfo:
+config-options:
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
+invariants-doc:
+	cd ../java && $(MAKE) ../doc/invariants-doc.texinfo
+
 # Always remake config-options.texinfo (../java/Makefile is more discerning)
-.PHONY : config-options.texinfo
+.PHONY : config-options
+.PHONY : invariants-doc
 
 # Don't want to make this a target of other rules because it updates the modification date.
 # Make forces me to double the dollar signs in the Perl code.
@@ -25,7 +30,7 @@ html: daikon.html
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
-daikon.html: daikon.texinfo .fix-menu
+daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-menu
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|;' daikon.html
 
@@ -41,7 +46,7 @@ daikon_manual_html/daikon.html: daikon.texinfo
 	mkdir daikon_manual_html/images
 	cp -p images/gui-InvariantsDisplay-small.jpg images/gui-ControlPanel.jpg images/context-gui.jpg daikon_manual_html/images
 
-daikon.dvi: daikon.texinfo
+daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	texi2dvi $<
 
 ps: daikon.ps

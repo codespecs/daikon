@@ -184,6 +184,7 @@ Interpreting Daikon output
 * Program points::              
 * Variable names::              
 * Invariant syntax::            
+* Invariant list::              
 
 Variable names
 
@@ -2016,6 +2017,7 @@ Diff}) programs to print the results.)
 * Program points::              
 * Variable names::              
 * Invariant syntax::            
+* Invariant list::              
 @end menu
 
 @node    Program points, Variable names, Interpreting output, Interpreting output
@@ -2201,7 +2203,7 @@ The value of @code{a[i]} in the post-state.
 @end table
 
 
-@node    Invariant syntax,  , Variable names, Interpreting output
+@node    Invariant syntax, Invariant list, Variable names, Interpreting output
 @subsection Invariant syntax
 
 Daikon's default format is a mix of Java, mathematical logic, and some
@@ -2230,6 +2232,20 @@ variable can be reported as unmodified but not have only one value
 because the variable is never modified during any execution of the
 procedure, but has different values on different invocations of the
 procedure.
+
+@node   Invariant list,  , Invariant syntax, Interpreting output
+@subsection Invariant list
+
+The following is a list of all of the invariants that Daikon detects.
+Each invariant has a configuration enable switch.  By default most invariants
+are enabled.  Any that are not enabled by default are indicated below.
+Some invariants also have additional configuration switches that control 
+their behavior.  These are indicated below as well. @xref{Configuration 
+options}.
+
+@table @asis
+@include invariants-doc.texinfo
+@end table
 
 
 @node    Printing invariants, Invariant Diff, Interpreting output, Daikon output

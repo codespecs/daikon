@@ -164,6 +164,16 @@
   Boolean.  True iff SequenceSum derived variables should be generated.
   The default value is `false'.
 
+@item daikon.inv.Invariant.fuzzy_ratio
+  Real number between 0 and 0.1.  The maximum percentage difference
+ between two floats for fuzzy comparisons.  Larger values will
+ result in floats that are relatively farther apart being treated
+ as equal.  A value of 0 essentially disables fuzzy comparisons.
+ Specifically, if the equation 'abs (1 - f1/f2) <= perc' is true,
+ then the two doubles (f1 and f2) will be treated as equal by
+ daikon.
+  The default value is `1.0E-4'.
+
 @item daikon.inv.Invariant.probability_limit
   Real number between 0 and 1.  The probability that the invariant
  occurred by chance must be less than this in order for it to be
