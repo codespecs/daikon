@@ -1,9 +1,17 @@
-
 #!/uns/bin/python1.5
 # invariants.py -- detect patterns in collections of data
 # Michael Ernst <mernst@cs.washington.edu>
 
 # For some additional documentation, see invariants.py.doc.
+
+# To run optimized, run Python with -O flag, and optionally do:
+#   invariants.no_ternary_invariants = 1
+#   invariants.no_invocation_counts = 1
+
+
+###########################################################################
+### Packages, constants
+###
 
 # Built-in Python modules
 import glob, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
@@ -15,6 +23,7 @@ import util
 
 true = (1==1)
 false = (1==0)
+
 
 ###########################################################################
 ### Variables
@@ -131,7 +140,7 @@ def init_diff_globals():
     diff_to_ct[g_unary_different] = 0
     diff_to_ct[g_pair_same] = 0
     diff_to_ct[g_pair_different] = 0
-    
+
 def print_inv_diff_tracking():
     print "General inv diffs:"
     print "  one constrained, one is not - ", diff_to_ct[inv_one_cons]
@@ -1694,7 +1703,8 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                 value = "= %s" % (vi.invariant.min,) # this value may be a sequence
             else:
                 value = ""
-            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value
+            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value, "\t(%d values)" % (vi.invariant.values,)
+
         # Single invariants
         for vi in var_infos:
             if not vi.is_canonical():
@@ -3620,8 +3630,32 @@ def diff_var_infos(var_infos1, var_infos2):
 
     # var_infos1.sort(var_info_name_compare)
     # var_infos2.sort(var_info_name_compare)
-    assert len(var_infos1) == len(var_infos2)
-    assert var_infos_compatible(var_infos1, var_infos2)
+
+    # It is not necessarily the case that the var_infos contain exactly the
+    # same variables.  In particular, one of the data seets may have
+    # resulted in derivation of variables not derived by the other data
+    # set.  As an example, consider
+    #   invariants.diff_files('/projects/se/people/mernst/replace_outputs/replace.main.4000.19981220.pkl','/projects/se/people/mernst/replace_outputs/replace.main.4500.19990103.pkl')
+    # In that case, we must eliminate the extra var_infos.
+
+    if ((len(var_infos1) != len(var_infos2))
+        or not var_infos_compatible(var_infos1, var_infos2)):
+        if len(var_infos1) > len(var_infos2):
+            # Guess that var_infos1 only contains extra var_infos
+            var_infos1 = list(var_infos1)
+            for i in range(0, len(var_infos2)):
+                while var_info_name_compare(var_infos1[i], var_infos2[i]):
+                    del var_infos1[i:i+1]
+            if ((len(var_infos1) != len(var_infos2))
+                or not var_infos_compatible(var_infos1, var_infos2)):
+                raise "var_infos still incompatible"
+        # Should duplicate the above code block for the case of
+        # len(var_infos2) > len(var_infos2) or just generalize it.
+        raise "var_infos incompatible"
+
+   assert len(var_infos1) == len(var_infos2)
+   assert var_infos_compatible(var_infos1, var_infos2)
+
 
     print len(var_infos1), "var_infos:"
 
@@ -3675,10 +3709,14 @@ def diff_var_infos(var_infos1, var_infos2):
             if (not in1) and (not in2):
                 continue
             if in1 and not in2:
+                if invs1[j].is_unconstrained():
+                    continue
                 print "First group contains invariant:", invs1[j].format((vi1.name, var_infos1[j].name))
                 pair_different = pair_different + 1
                 continue
             if in2 and not in1:
+                if invs2[j].is_unconstrained():
+                    continue
                 print "Second group contains invariant:", invs2[j].format((vi2.name, var_infos2[j].name))
                 pair_different = pair_different + 1
                 continue
@@ -3803,8 +3841,9 @@ def find_violations(condition, fn_regexp=None):
     name matches the regular expression.
     The condition is a Python expression (a string) using symbolic
     variable names (that is, the variable names used in the program).
-    Example call:
+    Example calls:
       find_violations("lj <= j", "makepat:::END")
+      find_violations("*j_orig == *j - 1", "plclose:::END")
     """
 
     if type(fn_regexp) == types.StringType:
@@ -4044,7 +4083,10 @@ class stats:
         print "    Total number of individual values:     ", self.total_num_values_ind
         print "    Average number of individual values:   ", round(float(self.total_num_values_ind) / float(self.total_num_scl + self.total_num_seq), 2)
         print "    Total number of pairs of values:       ", self.total_num_values_pair
-        print "    Average number of pairs of values:     ", round(float(self.total_num_values_pair) / float(self.total_num_invs_pair), 2)
+        if self.total_num_values_pair == 0:
+            print "    Average number of pairs of values:     0.00"
+        else:
+            print "    Average number of pairs of values:     ", round(float(self.total_num_values_pair) / float(self.total_num_invs_pair), 2)
         print ""
         print "    Original number scalar parameters:     ", "%3i" % self.orig_num_scl_params
         print "    Original number scalar locals:         ", "%3i" % self.orig_num_scl_locals
@@ -4147,13 +4189,13 @@ def begin_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_begin_time = time.clock()
     fn_stats.fn_begin_time_wall = time.time()
-    
+
 
 def end_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_end_time = time.clock()
     fn_stats.fn_end_time_wall = time.time()
-    
+
 def print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engine_end_time_wall):
     print "Invariant Engine Stats"
     print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
@@ -4167,7 +4209,7 @@ def print_stats(engine_begin_time, engine_end_time, engine_begin_time_wall, engi
     seconds = int(total_secs % 60)
     print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
     print "CPU time in secs: ", total_secs
-    print "Wall time in secs: ", total_secs_wall  
+    print "Wall time in secs: ", total_secs_wall
     fn_names = fn_to_stats.keys()
     fn_names.sort()
     for fn_name in fn_names:
