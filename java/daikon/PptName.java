@@ -186,7 +186,7 @@ public class PptName
       return "";
     int non_digit;
     for (non_digit=FileIO.exit_suffix.length(); non_digit<point.length(); non_digit++) {
-      if (! point.charAt(non_digit).isDigit())
+      if (! Character.isDigit(point.charAt(non_digit)))
         break;
     }
     return point.substring(FileIO.exit_suffix.length(), non_digit);
