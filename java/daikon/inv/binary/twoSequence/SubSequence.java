@@ -109,22 +109,40 @@ public class SubSequence extends TwoSequence {
       bS = "(+ (- " + bH + " " + bL + ") 1)";
     }
 
-    // If the span of A is no more than the span of B, and the span of
-    // A is non-negative, then there exists an offset in B, where (1)
-    // the offset doesn't cause the matching to push past the end of B
-    // and (2) and for all indices less than the span of A, the
-    // elements starting from A_low and B_low+offset are equal.
+    // This invariant would not have been given data if a value was
+    // missing - for example, if a slice had a negative length.  We
+    // must predicate this invariant on the values being sensible.
+
+    String sensible = "(AND (>= " + aS + " 0) (>= " + bS + " 0))";
+
+    // This invariant would have been falsified if the subsequence A
+    // length was ever zero.  Also, this invariant would have been
+    // falsified if the subsequence A was ever longer than the
+    // supersequence B.
+
+    String length_stmt = "(AND (NEQ " + aS + " 0) (>= " + bS + " " + aS + "))";
+
+    // Subsequence means that there exists an offset in supersequence
+    // B, where (1) the offset is non-negative, (2) the offset doesn't
+    // cause the matching to push past the end of B, and (3) for all
+    // indices less than the span of subsequence A, (4) the elements
+    // starting from A_low and B_low+offset are equal.
 
     String index = "|__index|";
     String shift = "|__shift|";
-    String result = 
+    String subseq_stmt = 
       "(EXISTS (" + shift + ") (AND " +
-      "(>= " + aS + " 0) (>= " + bS + " " + aS + ") " + // ??
-      "(<= 0 " + shift + ") (< " + shift + " (- " + bS + " " + aS + ")) " +
-      "(FORALL (" + index + ") (IMPLIES (AND " + "(<= 0 " + index + ") (< " + index + " " + aS + ")) " +
+      "(<= 0 " + shift + ") " +                          // 1
+      "(<= (+ " + shift + " " + aS + ") " + bS + ") " +  // 2
+      "(FORALL (" + index + ") (IMPLIES (AND " + "(<= 0 " + index + ") (< " + index + " " + aS + ")) " + // 3
       "(EQ " +
       UtilMDE.replaceString(aE, aI, "(+ " + aL + " " + index + ")") + " " +
-      UtilMDE.replaceString(bE, bI, "(+ (+ " + bL + " " + index +") |/|)") + ")))))";
+      UtilMDE.replaceString(bE, bI, "(+ (+ " + bL + " " + index +") " + shift + ")") + ")))))";
+
+    // So, when this in sensible, we know that both the length and
+    // subseq statements hold.
+
+    String result = "(IMPLIES " + sensible + " (AND " + length_stmt + " " + subseq_stmt + "))";
     return result;
   }
 
