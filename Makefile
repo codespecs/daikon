@@ -32,7 +32,6 @@ dist: invariants.tar.gz
 
 # Also creates a directory called "dist"
 invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
-	if (test -d dist); then rm -rf dist-`date +'%y%m%d'`; mv -f dist dist-`date +'%y%m%d'`; fi
 	mkdir invariants
 	cp -p $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) invariants
 	cp -p README-dist invariants/README
@@ -40,10 +39,13 @@ invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-d
 	cp -p $(EDG_FILES) invariants
 	cp -p $(EDG_DIR)/Makefile invariants/Makefile-sample
 	echo "0" > invariants/label.txt
+	date > invariants/VERSION
+	chgrp -R invariants invariants
 	rm -rf invariants.tar
 	tar cvf invariants.tar invariants
-	mv invariants dist
-	chmod -R uog-w dist
+	chmod -R uog-w invariants/*
+	if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
+	mv invariants dist-`date +'%y%m%d'`
 
 invariants.tar.gz: invariants.tar
 	rm -rf invariants.tar.gz
