@@ -169,6 +169,32 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     Arrays.sort(elts, 0, num_elts COMPARATOR_ARG);
   }
 
+  public Object min_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+#if defined(SCALAR) || defined(ELT)
+    // Not sure whether interning is necessary (or just returning an Integer
+    // would be sufficient), but just in case...
+    return Intern.internedLong(elts[0]);
+#else
+    return elts[0];
+#endif
+  }
+
+  public Object max_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+#if defined(SCALAR) || defined(ELT)
+    // Not sure whether interning is necessary (or just returning an Integer
+    // would be sufficient), but just in case...
+    return Intern.internedLong(elts[num_elts-1]);
+#else
+    return elts[num_elts-1];
+#endif
+  }
+
   // Assumes the other array is already sorted
   public boolean compare_rep(int num_other_elts, INT[] other_elts) {
     if (num_elts != num_other_elts)
