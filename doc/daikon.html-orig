@@ -629,6 +629,45 @@ output, however.)
 
 <h2><a name="other-problems"></a>Other problems</h2>
 
+<h3><a name="large-dtrace"></a>Large .dtrace files</h3>
+
+Running code instrumented by dfej can result in very large
+<tt>.dtrace</tt> files.  This can be a problem because writing the large
+files can slow the target programs substantially, because the large files
+may fill up your disk, or because Daikon is unable to process the large
+files.  There are three solutions to this problem.
+
+<ol>
+  <li>
+    If you wish to instrument fewer methods, you can use the 
+    <pre>
+      -daikon_omit=<i>STRING</i>
+    </pre>
+    argument to dfej.  (Run dfej without any arguments to see a list of its
+    options.)  Dfej will not produce data trace output for classes or
+    procedures that match the STRING.  Running the instrumented program
+    will result in a smaller <tt>.dtrace</tt> file that contains fewer
+    records.
+  <li>
+    You can pare down an existing <tt>.dtrace</tt> file using the
+    <tt>invariants/scripts/trace-purge-fns.pl</tt> and
+    <tt>trace-purge-vars.pl</tt> scripts.
+    These remove (or retain) certain program points, or certain variables, from
+    .dtrace files.  Removing program points obviously makes Daikon ignore them;
+    removing variables can eliminate certain large uses of memory or keep
+    Daikon from doing uninteresting comparisons.
+  <li>
+    To make Daikon ignore some program points, use its
+    <pre>
+      -r <i>PPT_REGEXP</i>
+    </pre>
+    argument.  (Run "<tt>java daikon.Daikon</tt>" to see a list of
+    arguments.)  With the -r flag, only program points matching the regular
+    expression are processed.  This can take the place of the
+    trace-purge-fns.pl script.
+</ol>
+<p>
+
 
 <hr>
 <h1><a name="more-help">Getting more help</a></h1>
