@@ -90,7 +90,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
     }
-    Map multiMap = new HashMap(); /* comparable -> List[VarInfo]*/
+    Map multiMap = new LinkedHashMap(); /* comparable -> List[VarInfo]*/
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);

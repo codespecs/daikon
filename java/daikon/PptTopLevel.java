@@ -261,7 +261,7 @@ public class PptTopLevel
   // mark_implied_via_simplify.  Contents are either Invariant
   // objects, or, in the case of Equality invariants, the canonical
   // VarInfo for the equality.
-  public Set redundant_invs = new HashSet(0);
+  public Set redundant_invs = new LinkedHashSet(0);
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
     super(name);
@@ -286,7 +286,7 @@ public class PptTopLevel
     }
 
     // values = new VarValuesOrdered(); // [[INCR]]
-    views = new HashMap();
+    views = new LinkedHashMap();
     views_cond = new Vector();
 
     num_declvars = var_infos.length;
@@ -1052,7 +1052,7 @@ public class PptTopLevel
 
     values_num_samples += count;
 
-    Set viewsToCheck = new HashSet(viewsAsCollection());
+    Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
 
     int checkCount = 0;
     Invariants invsFlowed = new Invariants();
@@ -1064,7 +1064,7 @@ public class PptTopLevel
         debugSuppress.fine ("  Checkcount: " + checkCount);
       }
 
-      Set weakenedInvs = new HashSet();
+      Set weakenedInvs = new LinkedHashSet();
       // Add to all the views
       for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
         PptSlice view = (PptSlice) itor.next();
@@ -1074,7 +1074,7 @@ public class PptTopLevel
         weakenedInvs.addAll (view.add(vt, count));
       }
 
-      viewsToCheck = new HashSet();
+      viewsToCheck = new LinkedHashSet();
       // Checking of recently unsuppressed invariants done here.  For
       // every invariant that got unsuppressed: 1) Check if other
       // invariants still suppress it; 2) Check if the current vt
@@ -1089,7 +1089,7 @@ public class PptTopLevel
         // operation that removes the SuppressionLink from the
         // suppressor's suppressed field.  Without copying, we get a
         // ConcurrentModifiecationException.
-        Set suppressees = new HashSet(inv.getSuppressees());
+        Set suppressees = new LinkedHashSet(inv.getSuppressees());
 
         if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn()) && suppressees.size() > 0) {
           debugSuppress.fine (" Inv " + inv.repr() +
@@ -1236,14 +1236,14 @@ public class PptTopLevel
     // V3 behavior, so we don't want to spend time on it now.
 
     // Initially, viewsToCheck are all of the slices
-    Set viewsToCheck = new HashSet(viewsAsCollection());
+    Set viewsToCheck = new LinkedHashSet(viewsAsCollection());
 
     // While there are views to check
     while (viewsToCheck.size() > 0) {
 
       // Add the sample to each slice and keep track of any weakened or
       // destroyed invariants
-      Set weakened_invs = new HashSet();
+      Set weakened_invs = new LinkedHashSet();
       for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
         PptSlice view = (PptSlice) itor.next();
         if (view.invs.size() == 0)
@@ -1253,14 +1253,14 @@ public class PptTopLevel
 
       // Initialize an empty slice set, the program points that include
       // invariants that are now unsuppressed are added below.
-      viewsToCheck = new HashSet();
+      viewsToCheck = new LinkedHashSet();
 
       // foreach weakened/destroyed invariant
       for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
 
         // Get current invariant and its list of suppression links
         Invariant inv = (Invariant) itor.next();
-        Set suppressees = new HashSet(inv.getSuppressees());
+        Set suppressees = new LinkedHashSet(inv.getSuppressees());
         if ((debugSuppress.isLoggable(Level.FINE) || inv.logOn())
           && suppressees.size() > 0)
           inv.log (debugSuppress, " Inv " + inv.repr() +
@@ -3000,9 +3000,9 @@ public class PptTopLevel
       }
     }
 
-    HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
+    HashMap canonical_inv = new LinkedHashMap(); // Invariant -> Invariant
     {
-      HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
+      HashMap inv_group = new LinkedHashMap(); // Invariant -> HashSet[Invariant]
 
       // Problem: I am not iterating through the invariants in any particular
       // order that will guarantee that I don't see A and B, then C and D,
@@ -3038,7 +3038,7 @@ public class PptTopLevel
             canonical_inv.put(impl.consequent(), canon);
             HashSet hs = (HashSet) inv_group.get(canon);
             if (hs == null) {
-              hs = new HashSet();
+              hs = new LinkedHashSet();
               inv_group.put(canon, hs);
             }
             hs.add(impl.predicate());
@@ -3450,10 +3450,10 @@ public class PptTopLevel
     // the (now deprecated) controlling_ppts relationship.
 
     // Form the closure of the controllers; each element is a Ppt
-    Set closure = new HashSet();
+    Set closure = new LinkedHashSet();
     {
-      // Set working = new HashSet(controlling_ppts); // [INCR]
-      Set working = new HashSet();
+      // Set working = new LinkedHashSet(controlling_ppts); // [INCR]
+      Set working = new LinkedHashSet();
       while (!working.isEmpty()) {
         PptTopLevel ppt = (PptTopLevel) working.iterator().next();
         working.remove(ppt);
@@ -3768,7 +3768,7 @@ public class PptTopLevel
   public Set getParamVars() {
     if (paramVars != null) return paramVars;
 
-    paramVars = new HashSet();
+    paramVars = new LinkedHashSet();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo var = var_infos[i];
       if (var.aux.getFlag(VarInfoAux.IS_PARAM) && !var.isPrestate()) {
