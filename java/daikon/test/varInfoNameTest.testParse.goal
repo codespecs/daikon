@@ -10,7 +10,10 @@ x
 ;# x[]
 ; parse p x[]
 p = x[]
-;# esc_name p is not expressable
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= x.length-1) ==> 
+	x[i]
+)
 ; simplify_name p
 (select elems x)
 ;# x.class
@@ -23,7 +26,10 @@ p = x.class
 ;# x[].class
 ; parse p x[].class
 p = x[].class
-;# esc_name p is not expressable
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= x.length-1) ==> 
+	\typeof(x[i])
+)
 ; simplify_name p
 (typeof (select elems x))
 ;# this.field
@@ -36,7 +42,10 @@ this.field
 ;# this.field[]
 ; parse p this.field[]
 p = this.field[]
-;# esc_name p is not expressable
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= this.field.length-1) ==> 
+	this.field[i]
+)
 ; simplify_name p
 (select elems (select field this))
 ;# this.field.class
@@ -49,6 +58,9 @@ p = this.field.class
 ;# this.field[].class
 ; parse p this.field[].class
 p = this.field[].class
-;# esc_name p is not expressable
+; quantify_esc_name p
+(\forall int i; (0 <= i && i <= this.field.length-1) ==> 
+	\typeof(this.field[i])
+)
 ; simplify_name p
 (typeof (select elems (select field this)))

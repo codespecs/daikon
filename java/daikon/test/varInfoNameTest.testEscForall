@@ -1,0 +1,11 @@
+;# (You can read this in -*- lisp -*- mode)
+;# Tests for printing esc forall statments
+
+;# orig(a[0..x])
+parse a a
+elements a a
+parse z 0
+parse x x
+slice s a z x
+prestate o s
+quantify_esc_name o

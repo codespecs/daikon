@@ -20,6 +20,7 @@ public class VarInfoNameTest
   }
 
   public void testParse() { run("testParse"); }
+  public void testEscForall() { run("testEscForall"); }
 
   private void run(String name) {
     String file = "varInfoNameTest." + name;

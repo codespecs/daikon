@@ -1,0 +1,19 @@
+;# (You can read this in -*- lisp -*- mode)
+;# Tests for printing esc forall statments
+;# orig(a[0..x])
+; parse a a
+a = a
+; elements a a
+a = a[]
+; parse z 0
+z = 0
+; parse x x
+x = x
+; slice s a z x
+s = a[0..x]
+; prestate o s
+o = orig(a[0..x])
+; quantify_esc_name o
+(\forall int i; (0 <= i && i <= orig(x)) ==> 
+	\old(a[i])
+)
