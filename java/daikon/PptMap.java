@@ -149,4 +149,15 @@ public class PptMap
     return "PptMap: " + nameToPpt.toString();
   }
 
+  /**
+   * Blow away any PptTopLevels that never saw any samples (to reclaim space)
+   **/
+  public void removeUnsampled() {
+    Iterator iter = nameToPpt.values().iterator();
+    while (iter.hasNext()) {
+      PptTopLevel ppt = (PptTopLevel)iter.next();
+      if (ppt.getSamplesSeen() == 0)
+        iter.remove();
+    }
+  }
 }
