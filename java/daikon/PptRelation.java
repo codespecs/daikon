@@ -112,14 +112,7 @@ public class PptRelation implements Serializable {
 
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vp = parent.var_infos[i];
-      for (int j = 0; j < child.var_infos.length; j++) {
-        VarInfo vc = child.var_infos[j];
-        if (vp.name.name().equals (vc.name.name())) {
-          child_to_parent_map.put (vc, vp);
-          parent_to_child_map.put (vp, vc);
-          break;
-        }
-      }
+      relate (vp, vp.name);
     }
   }
 
@@ -162,7 +155,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns the child variable that correspondes to parentVar.  Returns
+   * Returns the child variable that corresponds to parentVar.  Returns
    * null if there is no corresponding variable
    */
 
@@ -226,6 +219,28 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Relates parent_var to a variable in child that matches name.
+   *
+   * @param parent_var      The parent variable being matched
+   * @param name            The name to look for in child variables.
+   *
+   * @return true if there was a matching variable, false otherwise.
+   */
+
+  private boolean relate (VarInfo parent_var, VarInfoName name) {
+
+    for (int j = 0; j < child.var_infos.length; j++) {
+      VarInfo vc = child.var_infos[j];
+      if (name == vc.name) {
+        child_to_parent_map.put (vc, parent_var);
+        parent_to_child_map.put (parent_var, vc);
+        return (true);
+      }
+    }
+    return (false);
+  }
+
+  /**
    * Returns a relation in the ppt hierarchy from an object (parent) to a
    * method (child) on that object
    */
@@ -268,18 +283,14 @@ public class PptRelation implements Serializable {
    *
    * Note that only the fields of the object (eg, this.x, this.y)
    * and not the object itself (eg, this) are substituted in this
-   * fashion.
+   * fashion.  That is because the object and references to it are
+   * really not the same.
    *
-   * While it could be argued that a pointer to an object of type
-   * T and the 'this' pointer in an object of type T are analogous,
-   * they are really not the same.  The pointer is a reference to
-   * the object while 'this' is really the object itself.  The
-   * relationship is also not intuitive when looking at the
-   * invariants.  For example, assume that every reference to T at
-   * all ppts was not null.  This invariant would print as 'this
-   * != null.'  The invariant is both confusing (since in a normal
-   * context 'this' can never be null) and it is not obvious that
-   * it implies that all references to the object are not NULL.
+   * For example, assume that every reference to T at all ppts was not
+   * null.  This invariant would print as 'this != null.'  The
+   * invariant is both confusing (since in a normal context 'this' can
+   * never be null) and it is not obvious that it implies that all
+   * references to the object are not NULL.
    *
    * @param parent Ppt of the object definition
    * @param child Ppt of a user of parent's object
@@ -302,14 +313,7 @@ public class PptRelation implements Serializable {
         continue;
       VarInfoName parent_name = vp.name.replaceAll
                                   (VarInfoName.THIS, arg.name);
-      for (int j = 0; j < child.var_infos.length; j++) {
-        VarInfo vc = child.var_infos[j];
-        if (parent_name == vc.name) {
-          rel.child_to_parent_map.put (vc, vp);
-          rel.parent_to_child_map.put (vp, vc);
-          break;
-        }
-      }
+      rel.relate (vp, parent_name);
     }
     return (rel);
   }
@@ -331,14 +335,7 @@ public class PptRelation implements Serializable {
       if (vp.derived != null)
         continue;
       VarInfoName orig_name = vp.name.applyPrestate().intern();
-      for (int j = 0; j < child.var_infos.length; j++) {
-        VarInfo vc = child.var_infos[j];
-        if (orig_name == vc.name) {
-          rel.child_to_parent_map.put (vc, vp);
-          rel.parent_to_child_map.put (vp, vc);
-          break;
-        }
-      }
+      rel.relate (vp, orig_name);
     }
 
     // Look for orig versions of derived variables in the child.  This is
@@ -430,13 +427,27 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation (parent, child, MERGE_CHILD);
 
+    // assert that parent vars match child vars
+    if (parent.var_infos.length != child.var_infos.length) {
+      System.out.println ("newMergeChildRel: in ppt " + parent.ppt_name
+                          + " vars don't match");
+      System.out.println ("parent vars= "+ VarInfo.toString (parent.var_infos));
+      System.out.println ("child vars=  "+ VarInfo.toString (child.var_infos));
+      Assert.assertTrue (parent.var_infos.length == child.var_infos.length);
+    }
+
     // Create the parent-child variable map.  This one is easy as the
     // variables should match exactly
-    Assert.assertTrue (parent.var_infos.length == child.var_infos.length);
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      Assert.assertTrue (vc.name.name().equals (vp.name.name()));
+      if (!vc.name.name().equals (vp.name.name())) {
+        System.out.println ("newMergeChildRel: in ppt " + parent.ppt_name
+                            + " var " + vc.name.name() + " doesn't match");
+        System.out.println ("par vars  = "+VarInfo.toString (parent.var_infos));
+        System.out.println ("child vars= "+VarInfo.toString (child.var_infos));
+        Assert.assertTrue (vc.name.name().equals (vp.name.name()));
+      }
       rel.child_to_parent_map.put (vc, vp);
       rel.parent_to_child_map.put (vp, vc);
     }
@@ -502,12 +513,12 @@ public class PptRelation implements Serializable {
         }
       }
 
-      // For all points, look for vars of a declared type that we have
+      // For all points, look for vars of a declared type for which we have
       // a corresponding OBJECT ppt.  Essentially these are all of the
-      // users of an object.  Don't match if the variable already has
+      // users of the object.  Don't match if the variable already has
       // a parent (since the parent will provide the link back to the
       // object) For each variable of this type that we find, setup a
-      // parent child relationship with its corresponding OBJECT
+      // parent-child relationship with its corresponding OBJECT
       // variables.
       //
       // For example, consider class A with fields x and y and method
@@ -534,7 +545,7 @@ public class PptRelation implements Serializable {
         if (object_ppt != null) {
           if (object_ppt == ppt) {
             debug.fine (dstr + " skipping, OBJECT (" + object_ppt
-                              + ")is the same as this");
+                              + ") is the same as this");
             continue;
           }
           rel = PptRelation.newObjectUserRel (object_ppt, ppt, vc);
@@ -545,7 +556,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Debug print the hierarchy is a more readable manner
+    // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("PPT Hierarchy");
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
