@@ -10,7 +10,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   // final static boolean debugLinearBinaryCore = true;
 
   // y == ax + b; first argument is x, second is y
-  public long a, b;
+  public double a, b;
 
   Invariant wrapper;
 
@@ -64,12 +64,17 @@ public final class LinearBinaryCore implements java.io.Serializable {
 	set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
 	// Check all values against a and b.
         if (!wrapper.no_invariant) {
+          if (a == 0) {
+              wrapper.destroy();
+              return;
+          }
           for (int i=0; i<MINPAIRS; i++) {
             // I should permit a fudge factor here.
             if (y_cache[i] != a*x_cache[i]+b) {
               if (debugLinearBinaryCore) {
-                System.out.println("Suppressing " + "LinearBinaryCore" + " at index " + i + ": "
+                System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
                                    + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
+                System.out.println("    ");
               }
               wrapper.destroy();
               return;
@@ -81,7 +86,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
       // Check the new value against a and b.
       if (y != a*x+b) {
         if (debugLinearBinaryCore) {
-          System.out.println("Suppressing " + "LinearBinaryCore" + " at new value: "
+          System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
         wrapper.destroy();
@@ -124,11 +129,36 @@ public final class LinearBinaryCore implements java.io.Serializable {
       + ",values_seen=" + values_seen;
   }
 
-  public static String format(String x, String y, long a, long b) {
-    // For efficiency, I could use a single StringBuffer here.
-    String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
-    String a_rep = (a==1) ? "" : ("" + a + " * ");
-    return y + " == " + a_rep + x + b_rep;
+  // Format one term of an equation.
+  // Variable "first" indicates whether this is the leading term
+  // Variable "var" is the name of the variable; may be null for the constant term.
+  public static String formatTerm(double coeff, String var, boolean first) {
+    if (coeff == 0)
+      return "";
+    String sign;
+    if (coeff < 0) {
+      if (first) {
+        sign = "- ";
+      } else {
+        sign = " - ";
+      }
+      coeff = -coeff;
+    } else if (first) {
+      sign = "";
+    } else {
+      sign = " + ";
+    }
+    String coeff_string = (coeff == (int)coeff) ? "" + (int)coeff : "" + coeff;
+    if (var == null)
+      return sign + coeff_string;
+    if (coeff == 1)
+      return sign + var;
+    else
+      return sign + coeff_string + " * " + var;
+  }
+
+  public static String format(String x, String y, double a, double b) {
+    return y + " == " + formatTerm(a, x, true) + formatTerm(b, null, false);
   }
 
   public String format(String x, String y) {
