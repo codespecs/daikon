@@ -141,8 +141,12 @@ sub cmp_ppts {
 	} elsif (not defined $lb) {
 	    print "${varname} \@ ${pptname} undefined in ${dtb}\n";
 	} elsif ($$varl[1] eq "double") {
-	    $difference = abs($$la[0] - $$lb[0]);
-	    if (($difference <= 0.00001) && ($difference > 0)) {
+	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
+		$difference = !($$la[0] eq $$lb[0]);
+	    } else {
+		$difference = (abs($$la[0] - $$lb[0]) > 0.00001)
+	    }
+	    if ($difference) {
 		print "${varname} \@ ${pptname} floating-point difference:\n"
 		    . "  \"" . $$la[0] . "\" in ${dta}\n"
 			. "  \"" . $$lb[0] . "\" in ${dtb}\n";
