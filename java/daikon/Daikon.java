@@ -881,7 +881,9 @@ public final class Daikon {
           break;
           //
         case '?' :
-          break; // getopt() already printed an error
+          // break; // getopt() already printed an error
+          System.out.println(usage);
+          throw new Daikon.TerminationMessage();
           //
         default :
           System.out.print("getopt() returned " + c + lineSep);
