@@ -397,7 +397,8 @@ public class DynamicConstants implements Serializable {
     // Create any ternary invariants that are suppressed when one
     // of the variables is a constant.  Currently, only LinearTernary
     // falls into this list (It is suppressed by (x = C) && (Ay + Bz = D))
-    instantiate_constant_suppressions (noncons, all_list);
+    if (NIS.dkconfig_enabled)
+      instantiate_constant_suppressions (noncons, all_list);
   }
 
   /**
@@ -637,16 +638,6 @@ public class DynamicConstants implements Serializable {
     // slices that ended up with zero invariants
     ppt.addViews (new_views);
 
-    // Attempt to suppress any new invariants
-    if (Daikon.suppress_samples_min <= ppt.num_samples()) {
-      for (int i = 0; i < new_views.size(); i++) {
-        PptSlice slice = (PptSlice) new_views.get (i);
-        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-          Invariant inv = (Invariant) j.next();
-          ppt.attemptSuppression (inv, true);
-        }
-      }
-    }
   }
 
   public void instantiate_constant_suppressions (List /*Constant*/ new_noncons,
@@ -723,12 +714,12 @@ public class DynamicConstants implements Serializable {
           // invariant and the constant value
           Invariant lt = null;
           if (con1.vi.file_rep_type.isIntegral()) {
-            lt = LinearTernary.instantiate (slice);
+            lt = LinearTernary.get_proto().instantiate (slice);
             if (lt != null)
               ((LinearTernary) lt).setup ((LinearBinary) lb, con1.vi,
                         ((Long) con1.val).longValue());
           } else /* must be float */ {
-            lt = LinearTernaryFloat.instantiate (slice);
+            lt = LinearTernaryFloat.get_proto().instantiate (slice);
             if (lt != null)
               ((LinearTernaryFloat) lt).setup ((LinearBinaryFloat) lb, con1.vi,
                         ((Double) con1.val).doubleValue());
@@ -777,7 +768,7 @@ public class DynamicConstants implements Serializable {
               continue;
             slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
 
-            lt = LinearTernary.instantiate (slice);
+            lt = LinearTernary.get_proto().instantiate (slice);
             if (lt != null)
               sts = ((LinearTernary) lt).setup (oo, con1.vi,
                         ((Long) con1.val).longValue(),
@@ -788,7 +779,7 @@ public class DynamicConstants implements Serializable {
             if (oo == null)
               continue;
             slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
-            lt = LinearTernaryFloat.instantiate (slice);
+            lt = LinearTernaryFloat.get_proto().instantiate (slice);
             if (lt != null)
               sts = ((LinearTernaryFloat) lt).setup (oo, con1.vi,
                         ((Double) con1.val).doubleValue(),
@@ -963,6 +954,12 @@ public class DynamicConstants implements Serializable {
    */
   public List/*PptSlice*/ create_constant_invs() {
 
+    // Turn off track logging so that we don't get voluminous messages
+    // each time this is called
+    boolean debug_on = Logger.getLogger("daikon.Debug").isLoggable(Level.FINE);
+    if (debug_on)
+      LogHelper.setLevel ("daikon.Debug", Level.OFF);
+
     // Get constant leaders
     List/*Constant*/ leaders = new ArrayList(100);
     for (int i = 0; i < con_list.size(); i++) {
@@ -1016,6 +1013,9 @@ public class DynamicConstants implements Serializable {
         }
       }
     }
+
+    if (debug_on)
+      LogHelper.setLevel ("daikon.Debug", Level.FINE);
 
     return (new_views);
   }
@@ -1073,19 +1073,19 @@ public class DynamicConstants implements Serializable {
     ProglangType rep_type = con.vi.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
-      inv = OneOfScalar.instantiate (slice1);
+      inv = OneOfScalar.get_proto().instantiate (slice1);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      inv = OneOfSequence.instantiate (slice1);
+      inv = OneOfSequence.get_proto().instantiate (slice1);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
-      inv = OneOfFloat.instantiate (slice1);
+      inv = OneOfFloat.get_proto().instantiate (slice1);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE_ARRAY) {
-      inv = OneOfFloatSequence.instantiate (slice1);
+      inv = OneOfFloatSequence.get_proto().instantiate (slice1);
     } else if (rep_type == ProglangType.STRING) {
-      inv = OneOfString.instantiate (slice1);
+      inv = OneOfString.get_proto().instantiate (slice1);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      inv = OneOfStringSequence.instantiate (slice1);
+      inv = OneOfStringSequence.get_proto().instantiate (slice1);
     } else {
       // Do nothing; do not even complain
     }
@@ -1093,165 +1093,6 @@ public class DynamicConstants implements Serializable {
 
     // Add the value to it
     slice1.add_val_bu (con.val, ValueTuple.MODIFIED, con.count);
-  }
-
-  /**
-   * Instantiate views and invariants over the specified list of
-   * non-constants.  Views are created over each variable in the
-   * non-constant list crossed with itself and each constant variable.
-   *
-   * NOT USED, KEPT FOR REFERENCE ONLY!!
-   */
-  private void old_instantiate_views (List /*Constant*/ noncons) {
-
-    if (debug.isLoggable (Level.FINE)) {
-      debug.fine ("instantiating over " + noncons.size() + " non-constants: "
-                  + noncons);
-      debug.fine (con_list.size() + " remaining constants: " + con_list);
-    }
-
-    // Remove any new non-constants that are not leaders
-    for (Iterator i = noncons.iterator(); i.hasNext(); ) {
-      Constant con = (Constant) i.next();
-      if (!con.vi.isCanonical())
-        i.remove();
-    }
-
-    if (debug.isLoggable (Level.FINE))
-      debug.fine ("instantiating over " + noncons.size()
-                  + " non-constants leaders: " + noncons);
-
-    // Create a list of constant leaders + the new noncon leaders
-    List cons = new ArrayList();
-    for (int i = 0; i < con_list.size(); i++) {
-      Constant con = (Constant) con_list.get(i);
-      if (con.vi.isCanonical())
-        cons.add (con);
-    }
-    for (int i = 0; i < noncons.size(); i++ )
-      cons.add (noncons.get(i));
-
-    // any new views created
-    Vector new_views = new Vector();
-
-    int mod = ValueTuple.MODIFIED;
-
-    // Unary slices/invariants
-    for (int i = 0; i < noncons.size(); i++) {
-      Constant con = (Constant) noncons.get(i);
-      if (!ppt.is_slice_ok (con.vi))
-        continue;
-      PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
-      slice1.instantiate_invariants();
-      if (con.val != null)
-        slice1.add_val (con.val, mod, con.count);
-      new_views.add (slice1);
-    }
-
-    // Binary slices/invariants
-    for (int i = 0; i < noncons.size(); i++) {
-      Constant con1 = (Constant) noncons.get(i);
-      for (int j = 0; j < cons.size(); j++) {
-        Constant con2 = (Constant) cons.get(j);
-        Constant c1 = con1;
-        Constant c2 = con2;
-        if (con2.vi.varinfo_index < con1.vi.varinfo_index) {
-          c1 = con2;
-          c2 = con1;
-        }
-        if (!ppt.is_slice_ok (c1.vi, c2.vi))
-          continue;
-        PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
-        slice2.instantiate_invariants();
-        if (c1.val != null && c2.val != null)
-          slice2.add_val (c1.val, c2.val, mod, mod, con1.count);
-        new_views.add (slice2);
-      }
-    }
-
-    // Ternary slices/invariants
-    for (int i = 0; i < noncons.size(); i++) {
-      Constant con1 = (Constant) noncons.get(i);
-      for (int j = 0; j < cons.size(); j++) {
-        Constant con2 = (Constant) cons.get(j);
-        for (int k = 0; k < cons.size(); k++) {
-          Constant con3 = (Constant) cons.get (k);
-          Constant[] con_arr = {con1, con2, con3};
-          Arrays.sort (con_arr, ConIndexComparator.getInstance());
-          Assert.assertTrue ((con_arr[0].vi.varinfo_index
-                              <= con_arr[1].vi.varinfo_index) &&
-                             (con_arr[1].vi.varinfo_index
-                              <= con_arr[2].vi.varinfo_index));
-          if (!ppt.is_slice_ok (con_arr[0].vi, con_arr[1].vi, con_arr[2].vi))
-            continue;
-
-          PptSlice3 slice3 = new PptSlice3 (ppt, con_arr[0].vi, con_arr[1].vi,
-                                            con_arr[2].vi);
-          slice3.instantiate_invariants();
-          if ((con_arr[0].val != null) && (con_arr[1].val != null)
-              && (con_arr[2].val != null))
-            slice3.add_val (con_arr[0].val, con_arr[1].val, con_arr[2].val,
-                            mod, mod, mod, con_arr[0].count);
-          new_views.add (slice3);
-        }
-      }
-    }
-
-    // Make sure that all of these slices are new
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      PptSlice current = ppt.findSlice (slice.var_infos);
-      Assert.assertTrue (current == null, "Slice " + current
-                                          + " already exists");
-    }
-
-    // Debug print the created slies
-    if (debug.isLoggable (Level.FINE)) {
-      int[] slice_cnt = {0, 0, 0, 0};
-      int[] inv_cnt = {0, 0, 0, 0};
-      for (int i = 0; i < new_views.size(); i++) {
-        PptSlice slice = (PptSlice) new_views.get (i);
-        if (slice.invs.size() > 0)
-          slice_cnt[slice.arity()]++;
-        inv_cnt[slice.arity()] += slice.invs.size();
-        if (Debug.logDetail()) {
-          StringBuffer sb = new StringBuffer();
-          for (int j = 0; j < slice.arity(); j++) {
-            VarInfo v = slice.var_infos[j];
-            sb.append (v.name.name() + " [" + v.file_rep_type +"] ["
-                        + v.comparability + "] ");
-          }
-          debug.fine ("Adding slice over " + sb + ": with " + slice.invs.size()
-                      + " invariants");
-        }
-      }
-      for (int i = 1; i <= 3; i++)
-        debug.fine ("Added " + slice_cnt[i] + " slice" + i + "s with "
-                    + inv_cnt[i] + " invariants");
-    }
-
-    // Remove any false invariants
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
-        if (inv.is_false())
-          j.remove();
-      }
-    }
-
-    // Add the new slices to the top level ppt
-    ppt.addViews (new_views);
-
-    // Attempt to suppress any new invariants
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
-        ppt.attemptSuppression (inv, true);
-      }
-    }
-
   }
 
 
