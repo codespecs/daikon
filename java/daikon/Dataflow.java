@@ -22,7 +22,6 @@ public class Dataflow
   public static void main(String[] args)
     throws Exception
   {
-    Logger.setupLogs();
     // debug.setPriority(Logger.DEBUG);
 
     String outf = "Dataflow_testing.txt";

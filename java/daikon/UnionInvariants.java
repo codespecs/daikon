@@ -37,8 +37,6 @@ public class UnionInvariants {
   public static void main(String[] args)
     throws Exception
   {
-    daikon.Logger.setupLogs(daikon.Logger.INFO);
-
     File inv_file = null;
 
     LongOpt[] longopts = new LongOpt[] {

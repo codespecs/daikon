@@ -160,6 +160,12 @@ public final class Global {
 
   public static boolean debugAll = false;
 
+  static {
+    // Set up debug traces.
+    // Better to do this here than in each separate program.
+    Logger.setupLogs(debugAll ? Logger.DEBUG : Logger.INFO);
+  }
+
   /**
    * Category for debugging statistics output
    **/

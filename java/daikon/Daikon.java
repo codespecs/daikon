@@ -187,9 +187,6 @@ public final class Daikon {
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3];    // [File]
 
-    // Set up debug traces
-    Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
-
     if (! noversion_output) {
       System.out.println(release_string);
     }
