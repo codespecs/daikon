@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Utilities for interning objects.
  */
-public class Intern {
+public final class Intern {
 
   ///////////////////////////////////////////////////////////////////////////
   /// Strings
@@ -36,6 +36,10 @@ public class Intern {
       return (value == intern((Integer) value));
     } else if (value instanceof int[]) {
       return (value == intern((int[]) value));
+    } else if (value instanceof Double) {
+      return (value == intern((Double) value));
+    } else if (value instanceof double[]) {
+      return (value == intern((double[]) value));
     } else if (value instanceof Object[]) {
       return (value == intern((Object[]) value));
     } else {
@@ -55,7 +59,7 @@ public class Intern {
    * This is the obvious implementation that uses intValue() for the hashCode.
    * @see Hasher
    */
-  private static class IntegerHasher implements Hasher {
+  private static final class IntegerHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return a1.equals(a2);
     }
@@ -70,11 +74,10 @@ public class Intern {
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
    */
-  private static class IntArrayHasher implements Hasher {
+  private static final class IntArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((int[])a1, (int[])a2);
     }
-    final static int FACTOR = 23;
     public int hashCode(Object o) {
       int[] a = (int[])o;
       int result = 0;
@@ -85,16 +88,56 @@ public class Intern {
     }
   }
 
+  private final static int FACTOR = 23;
+  // private static final double DOUBLE_FACTOR = 65537;
+  private final static double DOUBLE_FACTOR = 263;
+
+  /**
+   * Hasher object which hashes and compares Doubles.
+   * @see Hasher
+   */
+  private static final class DoubleHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return a1.equals(a2);
+    }
+    public int hashCode(Object o) {
+      Double d = (Double) o;
+      // Could add "... % Integer.MAX_VALUE" here; is that good to do?
+      long result = Math.round(d.doubleValue() * DOUBLE_FACTOR);
+      return (int) (result % Integer.MAX_VALUE);
+    }
+  }
+
+  /**
+   * Hasher object which hashes and compares double[] objects according
+   * to their contents.
+   * @see Hasher, java.util.Arrays.equals
+   */
+  private static final class DoubleArrayHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return java.util.Arrays.equals((double[])a1, (double[])a2);
+    }
+    public int hashCode(Object o) {
+      double[] a = (double[])o;
+      double running = 0;
+      for (int i=0; i<a.length; i++) {
+        running = running * FACTOR + a[i] * DOUBLE_FACTOR;
+      }
+      // Could add "... % Integer.MAX_VALUE" here; is that good to do?
+      long result = Math.round(running);
+      return (int) (result % Integer.MAX_VALUE);
+    }
+  }
+
   /**
    * Hasher object which hashes and compares Object[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
    */
-  private static class ObjectArrayHasher implements Hasher {
+  private static final class ObjectArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
       return java.util.Arrays.equals((Object[])a1, (Object[])a2);
     }
-    final static int FACTOR = 23;
     public int hashCode(Object o) {
       Object[] a = (Object[])o;
       int result = 0;
@@ -111,20 +154,28 @@ public class Intern {
 
   private static WeakHasherMap internedIntegers;
   private static WeakHasherMap internedIntArrays;
+  private static WeakHasherMap internedDoubles;
+  private static WeakHasherMap internedDoubleArrays;
   private static WeakHasherMap internedObjectArrays;
 
   static {
     internedIntegers = new WeakHasherMap(new IntegerHasher());
     internedIntArrays = new WeakHasherMap(new IntArrayHasher());
+    internedDoubles = new WeakHasherMap(new DoubleHasher());
+    internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
     internedObjectArrays = new WeakHasherMap(new ObjectArrayHasher());
   }
 
   // For testing only
   public static int numIntegers() { return internedIntegers.size(); }
   public static int numIntArrays() { return internedIntArrays.size(); }
+  public static int numDoubles() { return internedDoubles.size(); }
+  public static int numDoubleArrays() { return internedDoubleArrays.size(); }
   public static int numObjectArrays() { return internedObjectArrays.size(); }
   public static Iterator integers() { return internedIntegers.keySet().iterator(); }
   public static Iterator intArrays() { return internedIntArrays.keySet().iterator(); }
+  public static Iterator doubles() { return internedDoubles.keySet().iterator(); }
+  public static Iterator doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
   public static Iterator objectArrays() { return internedObjectArrays.keySet().iterator(); }
 
   /**
@@ -177,6 +228,55 @@ public class Intern {
   }
 
   /**
+   * Intern (canonicalize) a Double.
+   * Returns a canonical representation for the Double.
+   */
+  public static Double intern(Double a) {
+    Object lookup = internedDoubles.get(a);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (Double)ref.get();
+    } else {
+      internedDoubles.put(a, new WeakReference(a));
+      return a;
+    }
+  }
+
+  // Not sure whether this convenience method is really worth it.
+  /** Returns an interned Double with value i. */
+  public static Double internedDouble(double d) {
+    return intern(new Double(d));
+  }
+
+  // Not sure whether this convenience method is really worth it.
+  /** Returns an interned Double with value parsed from the string. */
+  public static Double internedDouble(String s) {
+    return internedDouble(Double.parseDouble(s));
+  }
+
+
+  // I might prefer to have the intern methods first check using a straight
+  // eq hashing, which would be more efficient if the array is already
+  // interned.  (How frequent do I expect that to be, and how much would
+  // that really improve performance even in that case?)
+
+  /**
+   * Intern (canonicalize) an double[].
+   * Returns a canonical representation for the double[] array.
+   * Arrays are compared according to their elements.
+   */
+  public static double[] intern(double[] a) {
+    Object lookup = internedDoubleArrays.get(a);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (double[])ref.get();
+    } else {
+      internedDoubleArrays.put(a, new WeakReference(a));
+      return a;
+    }
+  }
+
+  /**
    * Intern (canonicalize) an Object[].
    * Returns a canonical representation for the Object[] array.
    * Arrays are compared according to their elements.
@@ -210,7 +310,7 @@ public class Intern {
   // // Note: this comparator imposes orderings that are inconsistent with equals.
   // // That is, it may return 0 if the arrays are not equal (but do contain
   // // identical numbers).
-  // static class IntArrayComparator implements Comparator {
+  // static final class IntArrayComparator implements Comparator {
   //   public int compare(Object o1, Object o2) {
   //     if (o1 == o2)
   //       return 0;
@@ -232,7 +332,7 @@ public class Intern {
   // // Note: this comparator imposes orderings that are inconsistent with equals.
   // // That is, it may return 0 if the arrays are not equal (but do contain
   // // identical objects).
-  // static class ObjectArrayComparator implements Comparator {
+  // static final class ObjectArrayComparator implements Comparator {
   //   public int compare(Object o1, Object o2) {
   //     if (o1 == o2)
   //       return 0;
@@ -291,7 +391,7 @@ public class Intern {
   // // Create an ArrayWrapper which redefines equal (and hash) to act the
   // // way I want them to.
 
-  // static class IntArrayWrapper {
+  // static final class IntArrayWrapper {
   //   private int[] a;
   //   IntArrayWrapper(int[] a_) {
   //     a = a_;
@@ -309,7 +409,7 @@ public class Intern {
   //   }
   // }
 
-  // static class ObjectArrayWrapper {
+  // static final class ObjectArrayWrapper {
   //   private Object[] a;
   //   ObjectArrayWrapper(Object[] a_) {
   //     a = a_;

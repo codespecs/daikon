@@ -23,7 +23,9 @@ import java.util.*;
  * as keys, but should be used with care.  For instance, it generally
  * should not be used when the keys are Integer objects.
  * I could also use a version of HashMap that takes a Hasher argument,
- * but for this special case, this code is faster.
+ * but for this special case, this code is faster.<p>
+ *
+ * Original comment for HashMap follows:<p>
  *
  * Hash table based implementation of the <tt>Map</tt> interface.  This
  * implementation provides all of the optional map operations, and permits
@@ -100,7 +102,7 @@ import java.util.*;
  * @since JDK1.2
  */
 
-public class EqHashMap extends AbstractMap implements Map, Cloneable,
+public final class EqHashMap extends AbstractMap implements Map, Cloneable,
 					 java.io.Serializable {
     /**
      * The hash table data.
@@ -578,7 +580,7 @@ public class EqHashMap extends AbstractMap implements Map, Cloneable,
     /**
      * HashMap collision list entry.
      */
-    private static class Entry implements Map.Entry {
+    private static final class Entry implements Map.Entry {
 	int hash;
 	Object key;
 	Object value;
@@ -635,7 +637,7 @@ public class EqHashMap extends AbstractMap implements Map, Cloneable,
     private static final int VALUES = 1;
     private static final int ENTRIES = 2;
 
-    private class HashIterator implements Iterator {
+    private final class HashIterator implements Iterator {
 	Entry[] table = EqHashMap.this.table;
 	int index = table.length;
 	Entry entry = null;

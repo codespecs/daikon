@@ -2,14 +2,15 @@
 
 package utilMDE;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 import java.util.zip.*;
+import java.lang.reflect.*;
 // import Assert;
 
 // Yes, I know the name is very close to that of the package.
 /** Utility functions that do not belong elsewhere in the utilMDE package. */
-public class UtilMDE {
+public final class UtilMDE {
 
   ///
   /// Array
@@ -50,6 +51,33 @@ public class UtilMDE {
     return new LineNumberReader(file_reader);
   }
 
+  ///
+  /// Class
+  ///
+
+  private static HashMap primitiveClasses = new HashMap(8);
+  static {
+    primitiveClasses.put("boolean", Boolean.TYPE);
+    primitiveClasses.put("byte", Byte.TYPE);
+    primitiveClasses.put("char", Character.TYPE);
+    primitiveClasses.put("double", Double.TYPE);
+    primitiveClasses.put("float", Float.TYPE);
+    primitiveClasses.put("int", Integer.TYPE);
+    primitiveClasses.put("long", Long.TYPE);
+    primitiveClasses.put("short", Short.TYPE);
+  }
+
+  /**
+   * Like @link{Class.forName(String)}, but works when the string
+   * represents a primitive type, too.
+   */
+  public static Class classForName(String className) throws ClassNotFoundException {
+    Object result = primitiveClasses.get(className);
+    if (result != null)
+      return (Class) result;
+    else
+      return Class.forName(className);
+  }
 
   ///
   /// Classpath
@@ -79,7 +107,7 @@ public class UtilMDE {
   // Someone must have already written this.  Right?
 
   // Deals with exactly one "*" in name.
-  public static class WildcardFilter implements FilenameFilter {
+  public static final class WildcardFilter implements FilenameFilter {
     String prefix;
     String suffix;
     public WildcardFilter(String filename) {
@@ -98,14 +126,37 @@ public class UtilMDE {
 
 
   ///
+  /// HashMap
+  ///
+
+  // In Python, inlining this gave a 10x speed improvement.
+  // Will the same be true for Java?
+  /**
+   * Increment the Integer which is indexed by key in the HashMap.
+   * If the key isn't in the HashMap, it is added.
+   * Throws an error if the key is in the HashMap but maps to a non-Integer.
+   */
+  public Object incrementHashMap(HashMap hm, Object key, int count) {
+    Object old = hm.get(key);
+    int new_total;
+    if (old == null) {
+      new_total = count;
+    } else {
+      new_total = ((Integer) old).intValue() + count;
+    }
+    return hm.put(key, new Integer(new_total));
+  }
+
+
+  ///
   /// Iterator
   ///
 
-  // Making these functions didn't work because I couldn't get their
-  // arguments into a scope that Java was happy with.
+  // Making these classes into functions didn't work because I couldn't get
+  // their arguments into a scope that Java was happy with.
 
   /** Converts an Enumeration into an Iterator. */
-  public static class EnumerationIterator implements Iterator {
+  public static final class EnumerationIterator implements Iterator {
     Enumeration e;
     public EnumerationIterator(Enumeration e_) { e = e_; }
     public boolean hasNext() { return e.hasMoreElements(); }
@@ -114,7 +165,7 @@ public class UtilMDE {
   }
 
   /** Converts an Iterator into an Enumeration. */
-  public static class IteratorEnumeration implements Enumeration {
+  public static final class IteratorEnumeration implements Enumeration {
     Iterator itor;
     public IteratorEnumeration(Iterator itor_) { itor = itor_; }
     public boolean hasMoreElements() { return itor.hasNext(); }
@@ -126,7 +177,7 @@ public class UtilMDE {
    * An Iterator that returns first the elements returned by its first
    * argument, then the elements returned by its second argument.
    */
-  public static class MergedIterator2 implements Iterator {
+  public static final class MergedIterator2 implements Iterator {
     Iterator itor1, itor2;
     public MergedIterator2(Iterator itor1_, Iterator itor2_) {
       itor1 = itor1_; itor2 = itor2_;
@@ -152,7 +203,7 @@ public class UtilMDE {
    * An Iterator that returns the elements in each of its argument
    * Iterators, in turn.  The argument is an Iterator of Iterators.
    */
-  public static class MergedIterator implements Iterator {
+  public static final class MergedIterator implements Iterator {
     Iterator itorOfItors;
     public MergedIterator(Iterator itorOfItors_) {itorOfItors = itorOfItors_; }
 
@@ -175,7 +226,7 @@ public class UtilMDE {
     }
   }
 
-  public static class FilteredIterator implements Iterator {
+  public static final class FilteredIterator implements Iterator {
     Iterator itor;
     Filter filter;
 
@@ -207,6 +258,73 @@ public class UtilMDE {
       throw new UnsupportedOperationException();
     }
   }
+
+
+  ///
+  /// Method
+  ///
+
+  // maps from a string of arg names to an array of Class objects.
+  static HashMap args_seen = new HashMap();
+
+  public static Method methodForName(String method)
+    throws ClassNotFoundException, NoSuchMethodException, SecurityException {
+
+    int oparenpos = method.indexOf('(');
+    int dotpos = method.lastIndexOf('.', oparenpos);
+    int cparenpos = method.indexOf(')', oparenpos);
+    if ((dotpos == -1) || (oparenpos == -1) || (cparenpos == -1)) {
+      throw new Error("malformed method name should contain a period, open paren, and close paren: " + method + " <<" + dotpos + "," + oparenpos + "," + cparenpos + ">>");
+    }
+    for (int i=cparenpos+1; i<method.length(); i++) {
+      if (! Character.isWhitespace(method.charAt(i))) {
+        throw new Error("malformed method name should contain only whitespace following close paren");
+      }
+    }
+
+    String classname = method.substring(0,dotpos);
+    String methodname = method.substring(dotpos+1, oparenpos);
+    String all_argnames = method.substring(oparenpos+1, cparenpos).trim();
+    Class[] argclasses = (Class[]) args_seen.get(all_argnames);;
+    if (argclasses == null) {
+      String[] argnames;
+      if (all_argnames.equals("")) {
+        argnames = new String[0];
+      } else {
+        argnames = split(all_argnames, ',');
+      }
+
+      argclasses = new Class[argnames.length];
+      for (int i=0; i<argnames.length; i++) {
+        String argname = argnames[i].trim();
+        int numbrackets = 0;
+        while (argname.endsWith("[]")) {
+          argname = argname.substring(0, argname.length()-2);
+          numbrackets++;
+        }
+        if (numbrackets > 0) {
+          argname = "L" + argname + ";";
+          while (numbrackets>0) {
+            argname = "[" + argname;
+            numbrackets--;
+          }
+        }
+        // System.out.println("argname " + i + " = " + argname + " for method " + method);
+        argclasses[i] = classForName(argname);
+      }
+      args_seen.put(all_argnames, argclasses);
+    }
+    return methodForName(classname, methodname, argclasses);
+  }
+
+  public static Method methodForName(String classname, String methodname, Class[] params)
+    throws ClassNotFoundException, NoSuchMethodException, SecurityException {
+
+    Class c = Class.forName(classname);
+    Method m = c.getDeclaredMethod(methodname, params);
+    return m;
+  }
+
 
 
   ///
@@ -293,6 +411,24 @@ public class UtilMDE {
     return result.toString();
   }
 
+  // Consider writing another version of this that takes a String second
+  // argument.  Little change to implementation should be required, since
+  // indexOf can take a String as argument.
+  /**
+   * Return an array of Strings representing the characters between
+   * successive instances of the delimiter character.
+   */
+  public static String[] split(String s, char delim) {
+    Vector result = new Vector();
+    for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
+      result.add(s.substring(0, delimpos));
+      s = s.substring(delimpos+1);
+    }
+    result.add(s);
+    String[] result_array = new String[result.size()];
+    result.copyInto(result_array);
+    return result_array;
+  }
 
   /**
    * Concatenate the string representations of the objects, placing the
@@ -321,6 +457,143 @@ public class UtilMDE {
       sb.append(delim).append(v.elementAt(i));
     return sb.toString();
   }
+
+  // Inspired by the function of the same name in Ajax (but independent code).
+  /**
+   * Quote \, ", \n, and \r characters in the target; return a new string.
+   */
+  public static String quote(String orig) {
+    StringBuffer sb = new StringBuffer();
+    // The previous escape character was seen right before this position.
+    int post_esc = 0;
+    int orig_len = orig.length();
+    for (int i=0; i<orig_len; i++) {
+      char c = orig.charAt(i);
+      switch (c) {
+      case '\"':
+      case '\\':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append('\\');
+        post_esc = i;
+        break;
+      case '\n':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\n");
+        post_esc = i+1;
+        break;
+      case '\r':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\r");
+        post_esc = i+1;
+        break;
+      }
+    }
+    if (sb.length() == 0)
+      return orig;
+    sb.append(orig.substring(post_esc));
+    return sb.toString();
+  }
+
+  // The overhead of this is too high to call in quote(String)
+  public static String quote(Character ch) {
+    char c = ch.charValue();
+    switch (c) {
+    case '\"':
+      return("\\\"");
+    case '\\':
+      return("\\\\");
+    case '\n':
+      return("\\n");
+    case '\r':
+      return("\\r");
+    default:
+      return new String(new char[] { c });
+    }
+  }
+
+  /**
+   * Replace "\\", "\"", "\n", and "\r" sequences by their one-character
+   * equivalents.  All other backslashes are removed.
+   */
+  public static String unquote(String orig) {
+    StringBuffer sb = new StringBuffer();
+    // The previous escape character was seen just before this position.
+    int post_esc = 0;
+    int this_esc = orig.indexOf('\\');
+    while (this_esc != -1) {
+      if (this_esc == orig.length()) {
+        sb.append(orig.substring(post_esc, this_esc+1));
+        post_esc = this_esc+1;
+        break;
+      }
+      switch (orig.charAt(this_esc+1)) {
+      case 'n':
+        sb.append(orig.substring(post_esc, this_esc));
+        sb.append('\n');
+        post_esc = this_esc+2;
+        break;
+      case 'r':
+        sb.append(orig.substring(post_esc, this_esc));
+        sb.append('\r');
+        post_esc = this_esc+2;
+        break;
+      case '\\':
+        // This is not in the default case because the search would find
+        // the quoted backslash.  Here we incluce the first backslash in
+        // the output, but not the first.
+        sb.append(orig.substring(post_esc, this_esc+1));
+        post_esc = this_esc+2;
+        break;
+      default:
+        sb.append(orig.substring(post_esc, this_esc));
+        post_esc = this_esc+1;
+        break;
+      }
+      this_esc = orig.indexOf('\\', post_esc);
+    }
+    if (post_esc == 0)
+      return orig;
+    sb.append(orig.substring(post_esc));
+    return sb.toString();
+  }
+
+  // Use the built-in String.trim()!
+  // /** Return the string with all leading and trailing whitespace stripped. */
+  // public static String trimWhitespace(String s) {
+  //   int len = s.length();
+  //   if (len == 0)
+  //     return s;
+  //   int first_non_ws = 0;
+  //   int last_non_ws = len-1;
+  //   while ((first_non_ws < len) && Character.isWhitespace(s.charAt(first_non_ws)))
+  //     first_non_ws++;
+  //   if (first_non_ws == len)
+  //     return "";
+  //   while (Character.isWhitespace(s.charAt(last_non_ws)))
+  //     last_non_ws--;
+  //   if ((first_non_ws == 0) && (last_non_ws == len))
+  //     return s;
+  //   else
+  //     return s.substring(first_non_ws, last_non_ws+1);
+  // }
+  // // // Testing:
+  // // assert(UtilMDE.trimWhitespace("foo").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace(" foo").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace("    foo").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace("foo ").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace("foo    ").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace("  foo   ").equals("foo"));
+  // // assert(UtilMDE.trimWhitespace("  foo  bar   ").equals("foo  bar"));
+  // // assert(UtilMDE.trimWhitespace("").equals(""));
+  // // assert(UtilMDE.trimWhitespace("   ").equals(""));
+
+
 
 
   ///

@@ -2,7 +2,7 @@ package utilMDE;
 import java.util.*;
 
 /** Mathematical utilities. */
-public class MathMDE {
+public final class MathMDE {
 
 
   ///
@@ -330,7 +330,7 @@ public class MathMDE {
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
    */
-  static class MissingNumbersIterator implements Iterator {
+  static final class MissingNumbersIterator implements Iterator {
     int[] nums;
     Iterator nums_itor;
     int current_nonmissing;

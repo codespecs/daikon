@@ -17,7 +17,7 @@ public final class Assert {
     assert(b, null);
   }
   /** Error class for failed assertions. */
-  public static class AssertionException extends Error {
+  public static final class AssertionException extends Error {
     public AssertionException(String s) {
       super(s);
     }

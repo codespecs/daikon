@@ -107,7 +107,7 @@ import utilMDE.Hasher;
  * @see		java.lang.ref.WeakReference
  */
 
-public class WeakHasherMap extends AbstractMap implements Map {
+public final class WeakHasherMap extends AbstractMap implements Map {
 
     /* A WeakHashMap is implemented as a HashMap that maps WeakKeys to values.
        Because we don't have access to the innards of the HashMap, the various
@@ -140,7 +140,7 @@ public class WeakHasherMap extends AbstractMap implements Map {
 	else return new WeakKey(k, q);
     }
 
-    private class WeakKey extends WeakReference {
+    private final class WeakKey extends WeakReference {
 	private int hash;	/* Hashcode of key, stored here since the key
 				   may be tossed by the GC */
 
@@ -347,7 +347,7 @@ public class WeakHasherMap extends AbstractMap implements Map {
 
     /* Internal class for entries */
     // This can't be static, again because of dependence on hasher.
-    private class Entry implements Map.Entry {
+    private final class Entry implements Map.Entry {
 	private Map.Entry ent;
 	private Object key;	/* Strong reference to key, so that the GC
 				   will leave it alone as long as this Entry
@@ -395,7 +395,7 @@ public class WeakHasherMap extends AbstractMap implements Map {
 
 
     /* Internal class for entry sets */
-    private class EntrySet extends AbstractSet {
+    private final class EntrySet extends AbstractSet {
 	Set hashEntrySet = hash.entrySet();
 
 	public Iterator iterator() {

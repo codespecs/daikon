@@ -11,20 +11,24 @@ import java.util.*;
 // Digest.java
 // EqHashMap.java
 // Hasher.java
+// Intern.java
 // MathMDE.java
+// OrderedPairIterator.java
 // TestUtilMDE.java
 // UtilMDE.java
 // WeakHasherMap.java
 
 /** Test code for the utilMDE package. */
-public class TestUtilMDE {
+public final class TestUtilMDE {
 
   public static void main(String[] args) {
     testTestUtilMDE();
     testArraysMDE();
     testEqHashMap();
     testHasher();
+    testIntern();
     testMathMDE();
+    testOrderedPairIterator();
     testUtilMDE();
     testWeakHasherMap();
     System.out.println("All utilMDE tests succeeded.");
@@ -338,6 +342,40 @@ public class TestUtilMDE {
     // public static class ObjectArrayComparatorLexical implements Comparator
     // public static class ObjectArrayComparatorLengthFirst implements Comparator
 
+  }
+
+  public static void testEqHashMap() {
+  }
+
+  public static void testHasher() {
+
+    /// To check (maybe some of these are done already).
+    /// All of these methods are in Intern; should the tests appear in
+    /// testIntern() or here?
+    // public static void internStrings(String[] a) {
+    // public static boolean isInterned(Object value) {
+    // public static int numIntegers()
+    // public static int numIntArrays()
+    // public static int numDoubles()
+    // public static int numDoubleArrays()
+    // public static int numObjectArrays()
+    // public static Iterator integers()
+    // public static Iterator intArrays()
+    // public static Iterator doubles()
+    // public static Iterator doubleArrays()
+    // public static Iterator objectArrays()
+    // public static Integer intern(Integer a)
+    // public static Integer internedInteger(int i)
+    // public static Integer internedInteger(String s)
+    // public static int[] intern(int[] a)
+    // public static Double intern(Double a)
+    // public static Double internedDouble(int i)
+    // public static Double internedDouble(String s)
+    // public static double[] intern(double[] a)
+    // public static Object[] intern(Object[] a)
+
+
+
     // private static class IntArrayHasher implements Hasher
     // private static class ObjectArrayHasher implements Hasher
     // public static int[] intern(int[] a)
@@ -406,10 +444,7 @@ public class TestUtilMDE {
 
   }
 
-  public static void testEqHashMap() {
-  }
-
-  public static void testHasher() {
+  public static void testIntern() {
   }
 
   public static void testMathMDE() {
@@ -631,6 +666,51 @@ public class TestUtilMDE {
 
   }
 
+  public static void testOrderedPairIterator() {
+    final int NULL = -2222;
+
+    Vector ones = new Vector();
+    for (int i=1; i<=30; i++)
+      ones.add(new Integer(i));
+    Vector twos = new Vector();
+    for (int i=2; i<=30; i+=2)
+      twos.add(new Integer(i));
+    Vector threes = new Vector();
+    for (int i=3; i<=30; i+=3)
+      threes.add(new Integer(i));
+
+    // I've replaced the nulls by 0 in order to permit the array elements
+    // to be ints instead of Integers.
+
+    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), ones.iterator()),
+                               new int[][] { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25}, {26, 26}, {27, 27}, {28, 28}, {29, 29}, {30, 30}, });
+
+    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), twos.iterator()),
+                               new int[][] { {1, NULL}, {2, 2}, {3, NULL}, {4, 4}, {5, NULL}, {6, 6}, {7, NULL}, {8, 8}, {9, NULL}, {10, 10}, {11, NULL}, {12, 12}, {13, NULL}, {14, 14}, {15, NULL}, {16, 16}, {17, NULL}, {18, 18}, {19, NULL}, {20, 20}, {21, NULL}, {22, 22}, {23, NULL}, {24, 24}, {25, NULL}, {26, 26}, {27, NULL}, {28, 28}, {29, NULL}, {30, 30}, });
+
+    compareOrderedPairIterator(new OrderedPairIterator(twos.iterator(), ones.iterator()),
+                               new int[][] { {NULL, 1}, {2, 2}, {NULL, 3}, {4, 4}, {NULL, 5}, {6, 6}, {NULL, 7}, {8, 8}, {NULL, 9}, {10, 10}, {NULL, 11}, {12, 12}, {NULL, 13}, {14, 14}, {NULL, 15}, {16, 16}, {NULL, 17}, {18, 18}, {NULL, 19}, {20, 20}, {NULL, 21}, {22, 22}, {NULL, 23}, {24, 24}, {NULL, 25}, {26, 26}, {NULL, 27}, {28, 28}, {NULL, 29}, {30, 30}, });
+
+    compareOrderedPairIterator(new OrderedPairIterator(ones.iterator(), threes.iterator()),
+                               new int[][] { {1, NULL}, {2, NULL}, {3, 3}, {4, NULL}, {5, NULL}, {6, 6}, {7, NULL}, {8, NULL}, {9, 9}, {10, NULL}, {11, NULL}, {12, 12}, {13, NULL}, {14, NULL}, {15, 15}, {16, NULL}, {17, NULL}, {18, 18}, {19, NULL}, {20, NULL}, {21, 21}, {22, NULL}, {23, NULL}, {24, 24}, {25, NULL}, {26, NULL}, {27, 27}, {28, NULL}, {29, NULL}, {30, 30}, });
+
+    compareOrderedPairIterator(new OrderedPairIterator(twos.iterator(), threes.iterator()),
+                               new int[][] { {2, NULL}, {NULL, 3}, {4, NULL}, {6, 6}, {8, NULL}, {NULL, 9}, {10, NULL}, {12, 12}, {14, NULL}, {NULL, 15}, {16, NULL}, {18, 18}, {20, NULL}, {NULL, 21}, {22, NULL}, {24, 24}, {26, NULL}, {NULL, 27}, {28, NULL}, {30, 30}, });
+
+  }
+
+  public static void compareOrderedPairIterator(OrderedPairIterator opi, int[][] ints) {
+    int pairno = 0;
+    while (opi.hasNext()) {
+      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0] + "," + ints[pairno][1] + ">");
+      assert((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
+      assert((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));
+      pairno++;
+    }
+    assert(pairno == ints.length);
+  }
+
   public static void testUtilMDE() {
 
     // public static BufferedReader BufferedFileReader(String filename)
@@ -708,6 +788,27 @@ public class TestUtilMDE {
 
     }
 
+    // public static Method methodForName(String methodname) throws ClassNotFoundException {
+//
+    // essentially I am just testing whether the return is erroneous
+    try {
+      assert(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String, java.lang.String, java.lang.Class[])"));
+      assert(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String,java.lang.String,java.lang.Class[])"));
+      assert(null != UtilMDE.methodForName("java.lang.Math.min(int,int)"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Error(e.toString());
+    }
+    try {
+      java.lang.reflect.Method m = UtilMDE.methodForName("utilMDE.UtilMDE.methodForName()");
+    } catch (NoSuchMethodException e) {
+      // nothing to do; this is the expected case
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Error(e.toString());
+    }
+
+
     // public static boolean propertyIsTrue(Properties p, String key)
     // public static String appendProperty(Properties p, String key, String value)
     // public static String setDefault(Properties p, String key, String value)
@@ -720,6 +821,11 @@ public class TestUtilMDE {
 
     // public static void internStrings(String[] a)
 
+    assert(Arrays.equals(UtilMDE.split("foo,bar,baz", ','), new String[] { "foo", "bar", "baz" }));
+    assert(Arrays.equals(UtilMDE.split("foo", ','), new String[] { "foo" }));
+    assert(Arrays.equals(UtilMDE.split("", ','), new String[] { "" }));
+    assert(Arrays.equals(UtilMDE.split(",foo,", ','), new String[] { "", "foo", "" }));
+
     assert(UtilMDE.join(new String[] { "foo", "bar", "baz" }, ", ").equals("foo, bar, baz"));
     assert(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));
     assert(UtilMDE.join(new String[] { }, ", ").equals(""));
@@ -727,6 +833,29 @@ public class TestUtilMDE {
     Vector potpourri = new Vector();
     potpourri.add("day"); potpourri.add(new Integer(2)); potpourri.add("day");
     assert(UtilMDE.join(potpourri, " ").equals("day 2 day"));
+
+    assert(UtilMDE.quote("foobar").equals("foobar"));
+    assert(UtilMDE.quote("").equals(""));
+    assert(UtilMDE.quote("\\").equals("\\\\"));
+    assert(UtilMDE.quote("\\\n\r\"").equals("\\\\\\n\\r\\\""));
+    assert(UtilMDE.quote("split\nlines").equals("split\\nlines"));
+    assert(UtilMDE.quote("\\relax").equals("\\\\relax"));
+    assert(UtilMDE.quote("\"hello\"").equals("\\\"hello\\\""));
+    assert(UtilMDE.quote("\"hello\" \"world\"").equals("\\\"hello\\\" \\\"world\\\""));
+
+    assert(UtilMDE.unquote("foobar").equals("foobar"));
+    assert(UtilMDE.unquote("").equals(""));
+    assert(UtilMDE.unquote("\\\\").equals("\\"));
+    assert(UtilMDE.unquote("\\\"").equals("\""));
+    assert(UtilMDE.unquote("\\n").equals("\n"));
+    assert(UtilMDE.unquote("\\r").equals("\r"));
+    assert(UtilMDE.unquote("split\\nlines").equals("split\nlines"));
+    assert(UtilMDE.unquote("\\\\\\n").equals("\\\n"));
+    assert(UtilMDE.unquote("\\n\\r").equals("\n\r"));
+    assert(UtilMDE.unquote("\\\\\\n\\r\\\"").equals("\\\n\r\""));
+    assert(UtilMDE.unquote("\\\\relax").equals("\\relax"));
+    assert(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
+    assert(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
 
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)

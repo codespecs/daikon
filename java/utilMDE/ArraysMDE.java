@@ -8,7 +8,7 @@ import java.util.*;
  * Utilities for manipulating arrays.
  * This complements @link{java.util.Arrays}.
  */
-public class ArraysMDE {
+public final class ArraysMDE {
 
   ///////////////////////////////////////////////////////////////////////////
   /// min, max
@@ -466,6 +466,24 @@ public class ArraysMDE {
    * @see java.util.Vector#toString
    */
   public static String toString(Object[] a) {
+    return toString(a, false);
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   */
+  public static String toStringQuoted(Object[] a) {
+    return toString(a, true);
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   */
+  public static String toString(Object[] a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -475,7 +493,13 @@ public class ArraysMDE {
       sb.append(a[0]);
       for (int i=1; i<a.length; i++) {
 	sb.append(", ");
-	sb.append(a[i]);
+        if (quoted) {
+          sb.append('\"');
+          sb.append(UtilMDE.quote((String)a[i]));
+          sb.append('\"');
+        } else {
+          sb.append(a[i]);
+        }
       }
     }
     sb.append("]");
@@ -497,7 +521,7 @@ public class ArraysMDE {
       sb.append(a[0]);
       for (int i=1; i<a.length; i++) {
 	sb.append(", ");
-	sb.append(a[i]);
+        sb.append(a[i]);
       }
     }
     sb.append("]");
@@ -519,7 +543,7 @@ public class ArraysMDE {
       sb.append(a[0]);
       for (int i=1; i<a.length; i++) {
 	sb.append(", ");
-	sb.append(a[i]);
+        sb.append(a[i]);
       }
     }
     sb.append("]");
@@ -538,6 +562,13 @@ public class ArraysMDE {
     return true;
   }
 
+  public static boolean sorted_descending(int[] a) {
+    for (int i=0; i<a.length-1; i++)
+      if (a[i+1] > a[i])
+	return false;
+    return true;
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Array comparators
@@ -548,7 +579,7 @@ public class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    */
-  public static class IntArrayComparatorLexical implements Comparator {
+  public static final class IntArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
@@ -569,7 +600,7 @@ public class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    */
-  public static class ObjectArrayComparatorLexical implements Comparator {
+  public static final class ObjectArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
@@ -593,7 +624,7 @@ public class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical numbers).
    */
-  public static class IntArrayComparatorLengthFirst implements Comparator {
+  public static final class IntArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
@@ -617,7 +648,7 @@ public class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    */
-  public static class ObjectArrayComparatorLengthFirst implements Comparator {
+  public static final class ObjectArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
