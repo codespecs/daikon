@@ -88,7 +88,7 @@ public class RandomSelector {
                 //                System.out.println ("ACCEPTED " + keep_probability );
             }
             else {
-                //System.out.println ("didn't accept " + keep_probability );
+                // System.out.println ("didn't accept " + keep_probability );
             }
             return;
         }

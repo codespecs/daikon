@@ -1514,7 +1514,7 @@ private final void ReInitRounds()
 {
    int i;
    jjround = 0x80000001;
-   for (i = 52; i-- > 0;)
+   for (i = 52; i-- > 0; )
       jjrounds[i] = 0x80000000;
 }
 public void ReInit(JavaCharStream stream, int lexState)
