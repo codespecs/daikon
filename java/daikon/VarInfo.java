@@ -687,12 +687,33 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    **/
   public String esc_name()
   {
-    // "return" -> "\result"
-    if ("return".equals(name)) {
-      return "\\result";
+    String pre_wrapper = "";
+    String post_wrapper = "";
+    String result = name;
+    String previous_result = "";
+
+    while (!result.equals(previous_result)) {
+      previous_result = result;
+
+      // "orig(var)" -> "\old(var)"
+      if (result.startsWith("orig(") && result.endsWith(")")) {
+        pre_wrapper += "\\old(";
+        result = result.substring(5, result.length()-1);
+        post_wrapper = ")" + post_wrapper;
+      }
+
+      // "var.class" -> "\typeof(var)"
+      if (result.endsWith(".class")) {
+        pre_wrapper += "\\typeof(";
+        result = result.substring(0, result.length() - 6);
+        post_wrapper = ")" + post_wrapper;
+      }
     }
 
-    String result = name;
+    // "return" -> "\result"
+    if ("return".equals(name)) {
+      result = "\\result";
+    }
 
     // "size(array[])" -> "array.length"
     {
@@ -708,12 +729,65 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       }
     }
 
-    // "orig(var)" -> "\old(var)"
-    if (result.startsWith("orig(")) {
-      result = "\\old" + result.substring(4);
-    }
+    return pre_wrapper + result + post_wrapper;
+  }
 
-    return result;
+  /**
+   * @return two-element array indicating upper and lower bounds of the
+   * range of this array variable.
+   **/
+  public String[] index_range() {
+    String esc_name = esc_name();
+    String pre_wrapper = "";
+    String post_wrapper = "";
+    while (esc_name.startsWith("\\") && esc_name.endsWith(")")) {
+      int open_paren_pos = esc_name.indexOf("(");
+      pre_wrapper += esc_name.substring(0, open_paren_pos+1);
+      post_wrapper += ")";
+      esc_name = esc_name.substring(open_paren_pos+1, esc_name.length()-1);
+    }
+    if (! esc_name.endsWith("]")) {
+      throw new Error("No trailing ']' in " + esc_name + ", originally " + esc_name());
+    }
+    String minindex;
+    String maxindex;
+    String arrayname;
+    if (esc_name.endsWith("[]")) {
+      minindex = "";
+      maxindex = "";
+      arrayname = esc_name.substring(0, esc_name.length()-2);
+    } else {
+      int open_bracket_pos = esc_name.lastIndexOf("[");
+      arrayname = esc_name.substring(0, open_bracket_pos);
+      String subscripts = esc_name.substring(open_bracket_pos+1, esc_name.length()-1);
+      int dots_pos = subscripts.indexOf("..");
+      if (dots_pos == -1) {
+        throw new Error("can't find \"..\" in " + esc_name);
+      }
+      minindex = subscripts.substring(0, dots_pos);
+      maxindex = subscripts.substring(dots_pos+2);
+
+    }
+    if (minindex.equals("")) minindex = "0";
+    if (maxindex.equals("")) maxindex = arrayname + ".length";
+    String arrayelt = pre_wrapper + arrayname + "[i]" + post_wrapper;
+    return new String[] { minindex, maxindex, arrayelt };
+  }
+
+  /**
+   * Return an array of two strings:
+   * an esc forall quantifier, and
+   * the expression for the element at index i of the array
+   **/
+  public String[] esc_forall() {
+    String[] index_range = index_range();
+    if (index_range.length != 3) {
+      throw new Error("index_range failed for " + name);
+    }
+    return new String[] {
+      "\\forall int i; (" + index_range[0] + " <= i & i <= " + index_range[1] + ") ==> ",
+      index_range[2],
+    };
   }
 
 }
