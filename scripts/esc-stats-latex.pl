@@ -144,15 +144,15 @@ for my $file (@ARGV) {
       # Rows: Object, Requires, Modifies, Ensures
       $ver{$type} += $evu;
       $unver{$type} += $enu;
-      $inexp{$type} += $iu;
-      $redun{$type} += $evr + $enr + $ir;
+      $inexp{$type} += $iu + $ir;
+      $redun{$type} += $evr + $enr;
       $miss{$type} += $a;
     } else {
       if (exists($printed_types{$type})) {
 	$verified += $evu;
 	$unverified += $enu;
-	$inexpressible += $iu;
-	$redundant += $evr + $enr + $ir;
+	$inexpressible += $iu + $ir;
+	$redundant += $evr + $enr;
 	$missing += $a;
       }
     }
