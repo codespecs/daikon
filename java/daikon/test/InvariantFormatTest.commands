@@ -407,7 +407,7 @@ Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputF
 Goal (ioa): Not valid for Sets or Arrays: a[] is the reverse of b[]
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == b[b.length-1-i])
 Goal (dbc): quant.Quant.isReverse(a, b)
-Goal (simplify): format_simplify() for Reverse needs to be implemented for the non-defined-predicate case
+Goal (simplify): (AND (EQ (- (- (arrayLength |a|) 1) 0) (- (- (arrayLength |b|) 1) 0)) (<= 0 0) (< (- (arrayLength |a|) 1) (arrayLength |a|)) (<= 0 0) (< (- (arrayLength |b|) 1) (arrayLength |b|)) (FORALL (|c|) (IMPLIES (AND (<= 0 |c|) (< |c| (- (- (arrayLength |a|) 1) 0))) (EQ (select (select elems |a|) (+ 0 |c|)) (select (select elems |b|) (- (- (arrayLength |b|) 1) |c|))))))
 
 ; a is subsequence of b
 daikon.inv.binary.twoSequence.SubSequence
@@ -545,6 +545,7 @@ Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format
 Goal (esc): 2 * a + 3 * b - c - 6 == 0
 Goal (ioa): 2 * a + 3 * b - c - 6 = 0
 Goal (jml): 2 * a + 3 * b - c - 6 == 0
+Goal (dbc): 2 * a + 3 * b - c - 6 == 0
 Goal (simplify): (EQ 0 (+ (+ (* 2 |a|) (* 3 |b|) (* -1 |c|)) -6))
 1
 1
@@ -573,6 +574,7 @@ Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format
 Goal (esc): a - b - c == 0
 Goal (ioa): a - b - c = 0
 Goal (jml): a - b - c == 0
+Goal (dbc): a - b - c == 0
 Goal (simplify): (EQ 0 (+ |a| (* -1 |b|) (* -1 |c|)))
 0
 0
