@@ -157,8 +157,9 @@
   (loop for var+type in var+type-list
 	do (let* ((var (car var+type))
 		  (type (cdr var+type)))
-	     (format *decl-output-stream* "~a~%~a~%~a~%"
+	     (format *decl-output-stream* "~a~%~a~%~a~%~a~%"
 		     var
+		     (type-name-format type)
 		     (type-name-format type)
 		     (lackwit-type-format var))))
   (format ostream "~%")

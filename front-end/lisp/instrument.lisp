@@ -363,7 +363,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 	    (decode-universal-time (get-universal-time))
 	  (declare (ignore weekday dstp time-zone))
 	  (format *decl-output-stream* "# Written ~s ~a ~s ~2,'0d:~2,'0d:~2,'0d~%~%"
-		  date (aref ext::abbrev-month-table month) year hour min sec))
+		  date (aref ext::abbrev-month-table (1- month)) year hour min sec))
 	(let ((eof nil)
 	      (eof-marker (gensym)))
 	  (loop while (not eof)
