@@ -310,6 +310,7 @@ Problems with dfej
 
 * dfej installation problems::  
 * dfej invocation problems::    
+* dfej javac problems::         
 
 Problems running dfej
 
@@ -830,7 +831,7 @@ dfej under Cygwin, you must use gcc 2.95.3; @pxref{Installing dfej}.)
 
 There is an incompatibility between Cygwin and programs compiled for
 Windows.  (The incompatibility does not exist if the program was
-compiled for Cygwin).  The incompatibility is that Windows programs
+compiled for Cygwin.)  The incompatibility is that Windows programs
 use the semicolon (@samp{;}) as their path separator (for instance,
 for CLASSPATH), but Unix and Cygwin programs use the colon (@samp{:})
 as their path separator.  The dfej executable compiled on Cygwin seems
@@ -5757,6 +5758,7 @@ possible that some filenames (including the one contained in
 @menu
 * dfej installation problems::  
 * dfej invocation problems::    
+* dfej javac problems::         
 @end menu
 
 @node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
@@ -5793,7 +5795,7 @@ Ast *>::pair (Ast *&, void *)'
 We do not yet have a fix, but if you find one, please let us know.
 
 
-@node    dfej invocation problems,  , dfej installation problems, dfej problems
+@node    dfej invocation problems, dfej javac problems, dfej installation problems, dfej problems
 @subsection Problems running dfej
 
 @cindex dfej, runs slowly
@@ -5850,18 +5852,6 @@ file or a file that is not a @file{.jar} Java archive.  You should adjust
 your CLASSPATH to remove the offending file.  This warning has no effect
 on the operation of dfej, however.
 
-@cindex duplicate definition, in instrumented Java file
-
-While compiling files instrumented by dfej, if you get an error like
-@example
-Duplicate declaration of local variable "this_invocation_nonce".
-Duplicate declaration of method "daikonPrintArrayMissing"
-    in type "StackAr".
-@end example
-@noindent
-then you have instrumented an already-instrumented file.  Remove the
-instrumented version and re-run dfej on the original version.  (If you
-are using the Daikon regression tests, run @command{make clean}.)
 
 @menu
 * Ajax errors::                 
@@ -5936,6 +5926,44 @@ lstat("a/sources/sources", st_mode=S_IFLNK|0777, st_size=53, ...) = 0
 @noindent
 Removing the link identified, in this case @file{.../sources/sources},
 should solve the problem.
+
+
+
+@node    dfej javac problems,  , dfej invocation problems, dfej problems
+@subsection Problems compiling dfej output
+
+@cindex javac errors on dfej output
+
+@cindex duplicate definition, in instrumented Java file
+
+While compiling files instrumented by dfej, if you get an error like
+@example
+Duplicate declaration of local variable "this_invocation_nonce".
+Duplicate declaration of method "daikonPrintArrayMissing"
+    in type "StackAr".
+@end example
+@noindent
+then you have instrumented an already-instrumented file.  Remove the
+instrumented version and re-run dfej on the original version.  (If you
+are using the Daikon regression tests, run @command{make clean}.)
+
+@cindex package and variable with same name
+@cindex variable and package with same name
+
+You should avoid giving a package and a variable the same name,
+because of a problem with the standard javac compiler that is exposed
+when dfej instruments inner classes.  Suppose that a package and a
+variable are both named @samp{link}.  When the compiler sees
+@samp{link.foo}, it doesn't know whether to interpret that as field
+@samp{foo} of the variable @samp{link}, or as class @samp{foo} of the
+package @samp{link}.  The compiler should just try both, but it
+doesn't:  it only tries the variable.
+
+In the future, we plan to make dfej to work around this javac problem.  
+In the meanwhile, you can avoid the problem by not using the same name for a
+package and a variable.  Reusing such names is considered bad style anyway,
+because the name @samp{link.foo} is ambiguous to people as well as to the
+compiler.
 
 
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
