@@ -537,6 +537,7 @@ public class PptSplitter implements Serializable {
     }
 
     // Prune out implications over non-canonical invariants
+    // TODO: Why not avoid introducing them in the first place?
 
     Vector to_remove = new Vector();
     for (Iterator itor = parent.joiner_view.invs.iterator(); itor.hasNext(); ){
