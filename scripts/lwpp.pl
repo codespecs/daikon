@@ -20,7 +20,7 @@ if (@ARGV != 2) {
   die "Usage: lwpp.pl <lackwitdb> <filename.decls>\n";
 }
 
-my ($lackwitdb, $decls) = @ARGV;
+my ($lackwitdb, $outfn) = @ARGV;
 
 # Check that LACKWIT_HOME is set correctly
 my $lackwit_home = $ENV{LACKWIT_HOME};
@@ -29,23 +29,28 @@ my $lackwit_home = $ENV{LACKWIT_HOME};
 $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
 
-open DECLS, $decls or die "Can't open $decls: $!\n";
+my $backupdecls = $outfn . ".nonlackwit";
+system("mv -f $outfn $backupdecls")
+    and die "Couldn't back up $outfn!\n";
+open DECLS, $backupdecls or die "Can't open $backupdecls: $!\n";
+open OUT, ">$outfn" or die "Can't open $outfn for write: $!\n";
 
-print "VarComparability\n";
-print "implicit\n";
-print "\n";
+print OUT "VarComparability\n";
+print OUT "implicit\n";
+print OUT "\n";
 
 # maps explicit types (a string of space-separated comparable
 # variables) to implicit types (integers)
 my %implicit_types = ();
 
 while (<DECLS>) {
-  print;
+  print OUT;
 
   if (/DECLARE/) {
     
     # show progress
-    print STDERR '.';
+    #actually, no, don't
+    #print STDERR '.';
 
     # variables at this program point that Daikon finds interesting,
     # namely parameters and global variables
@@ -82,7 +87,7 @@ while (<DECLS>) {
     $ppt =~ /^.*\.(.*)\(/;
     my $function = $1;
 
-    print "$ppt\n";
+    print OUT "$ppt\n";
 
     # process the variable declarations, one at a time
     while(my $variable = shift @ppt_declaration) {
@@ -92,9 +97,9 @@ while (<DECLS>) {
       # throw away the old comparability information
       shift @ppt_declaration;
 
-      print "$variable\n";
-      print "$declared_type\n";
-      print "$representation_type\n";
+      print OUT "$variable\n";
+      print OUT "$declared_type\n";
+      print OUT "$representation_type\n";
 
       if (is_array_element($variable)) {
         print_implicit_type($variable, $function, \%interesting_variables);
@@ -104,19 +109,19 @@ while (<DECLS>) {
         print_implicit_type($variable, $function, \%interesting_variables);
       }
       
-      print "\n";
+      print OUT "\n";
     }
   }
-  print "\n";
+  print OUT "\n";
 }
 
-print STDERR "\n";
+#print STDERR "\n";
 
-print "# Implicit Type to Explicit Type\n";
+print OUT "# Implicit Type to Explicit Type\n";
 foreach my $implicit_type (sort {$a <=> $b;} values %implicit_types) {
   my %explicit_types = reverse %implicit_types;
   my $explicit_type = $explicit_types{$implicit_type};
-  printf "# %3s : $explicit_type\n", $implicit_type;
+  printf OUT "# %3s : $explicit_type\n", $implicit_type;
 }
 
 
@@ -241,7 +246,7 @@ sub print_array_index_types {
 
     my $implicit_type = get_implicit_type(%comparable_variables);
     
-    print "[" . $implicit_type . "]";
+    print OUT "[" . $implicit_type . "]";
   }
 }
 
@@ -268,7 +273,7 @@ sub print_implicit_type {
   }
 
   my $implicit_type = get_implicit_type(%comparable_variables);
-  print $implicit_type;
+  print OUT $implicit_type;
 }
 
 
