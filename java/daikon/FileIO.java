@@ -571,7 +571,7 @@ public final class FileIO {
       count++;
     return count;
   }
-  
+
   // We stash values here to be examined/printed later.  Used to be
   // for debugging only, but now also used for Daikon progress output.
   public static LineNumberReader data_trace_reader;
@@ -594,8 +594,11 @@ public final class FileIO {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
     data_trace_reader = reader;
     data_trace_filename = filename;
-    if (Daikon.dkconfig_progress_delay != -1)
+    if (Daikon.dkconfig_progress_delay != -1) {
+      // avoid divide-by-zero for display while lines are being counted
+      data_trace_total_lines = 1;
       data_trace_total_lines = count_lines(filename);
+    }
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
