@@ -20,7 +20,7 @@ import junit.framework.*;
  * The test are configured from the InvariantFormatTest.commands file
  * and errors that occur are written to the InvariantFormatTest.diffs
  * file. More detail on the expected formats of these files is in
- * InvariantFormatTester.Description.
+ * Daikon developer manual
  **/
 public class InvariantFormatTester extends TestCase
 {
