@@ -12,6 +12,8 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := modbit-munge.pl modbit-munge.bat java-cpp.pl daikon.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS \) -prune -o -type f -print)
+WWW_DIR := /home/httpd/html/daikon/
 
 MERNST_DIR := /g2/users/mernst
 # This is the current directory!  Maybe I don't need a variable for it.
@@ -91,7 +93,7 @@ DISTTESTDIR := /tmp/daikon.dist
 dist-test: dist-notest dist-test-no-update-dist
 
 # A very simple test:  just verify that the distributed system compiles.
-dist-test-no-update-dist: dist-ensure-directory
+dist-test-no-update-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
@@ -114,9 +116,9 @@ cvs-test:
 
 dist: dist-test
 
-dist-ensure-directory: $(DIST_DIR)
+dist-ensure-directory-exists: $(DIST_DIR)
 
-dist-notest: dist-ensure-directory $(DIST_DIR_PATHS)
+dist-notest: dist-ensure-directory-exists $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir 
 	$(MAKE) -n dist-dfej
 
@@ -125,7 +127,7 @@ dist-force:
 	-rm -f daikon-source.tar.gz daikon-jar.tar.gz
 	$(MAKE) dist
 
-update-dist-dir: dist-ensure-directory
+update-dist-dir: dist-ensure-directory-exists
 	cd doc && $(MAKE) html html-chap
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
@@ -140,6 +142,11 @@ update-dist-dir: dist-ensure-directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 
 	update-link-dates $(DIST_DIR)/index.html
+
+www:
+	cd doc/www && cp -Ppf $(WWW_FILES) $(WWW_DIR)
+
+.PHONY: www
 
 daikon.jar: $(DAIKON_JAVA_FILES)
 	-rm -rf daikon.jar /tmp/daikon-jar
@@ -271,6 +278,8 @@ dist-dfec-linux:
 
 ## Java front end
 
+$(DFEJ_DIR)/src/dfej:
+	cd $(DFEJ_DIR) && $(MAKE)
 
 ## Don't distribute executables for now
 dist-dfej: dist-dfej-linux-x86 dist-dfej-windows
@@ -297,10 +306,11 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-# To create build_mingw, I did:
+# To create build_mingw_dfej, I did:
 # 	cd dfej && $(MAKE) distclean
 # 	mkdir build_mingw_dfej
-# 	setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc
+# 	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
+#	cd dfej && ./configure
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
 
 
@@ -315,7 +325,7 @@ mingw_exe: dfej-src/build_mingw_dfej/src/dfej.exe
 
 dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/src/*.h
 	rename .o .mingw-saved.o dfej-src/dfej/src/*.o
-	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE); 
+	(cd dfej-src/build_mingw_dfej; export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH}; $(MAKE))
 	rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
@@ -354,6 +364,10 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 # build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run 
 # it.  You should at least get the Daikon usage message.
 
+
+###########################################################################
+### Utilities
+###
 
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
