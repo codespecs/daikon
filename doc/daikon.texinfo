@@ -2540,9 +2540,17 @@ output without greatly reducing the amount of useful output.
 @item --struct-depth=@var{N}
 
 For recursively-defined structures (structs or classes with members that
-are pointers to the same kind of struct or class), N (an integer between 
+are pointers to the SAME TYPE of struct or class), N (an integer between 
 0 and 100) specifies approximately how many levels of pointers to dereference. 
 This is useful for controlling the output of linked lists and trees. 
+
+@item --total-depth=@var{N}
+
+For recursively-defined structures (structs or classes with members that
+are structs or classes or pointers to structs or classes of ANY TYPE), 
+N (an integer between 0 and 100) specifies approximately how many levels
+of pointers to dereference.  This is useful for controlling the output
+of complex data structures with many references to other structures.
 
 @item --output-fifo
 
@@ -2973,15 +2981,26 @@ second).  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir 
 run faster, try the @code{--ignore-globals} or @code{--limit-static-vars} 
 options in order to limit the amount of generated output.
+However, please keep in mind that, when running simultaneously with
+Daikon using the @option{--output-fifo} option, Kvasir can generate
+output data much faster than Daikon can process it.  Thus, it is not the
+performance bottleneck in the entire invariant detection system.
 
 @item
-Kvasir currently has only rudimentary support for C++.  It cannot print out 
-the contents of classes which are not defined in the user's program 
-(i.e. it can properly output a C-string represented as @code{char*} but not 
-the contents of the C++ @code{string} class).
-If support for C++ is important to you, please send email to 
-@email{daikon-developers@@lists.csail.mit.edu}, so that we
-can increase its priority on our to-do list.
+Kvasir currently has rudimentary support for C++.  It outputs C++ classes
+like C structs, generates @code{:::OBJECT} and @code{:::CLASS} invariants 
+(@pxref{Program points}), treats member functions like regular
+functions with an extra @code{this} pointer parameter, and
+correctly outputs static class member variables.  However, 
+it cannot print out the contents of classes which are not defined in the
+user's program (e.g. it can properly output a C-string represented as 
+@code{char*} but not the contents of the C++ @code{string} class).
+Kvasir can only recognize classes which have member function
+declarations located outside of the class body like in typical C++ style
+instead of inside the class body like in Java style.  
+If further support for more C++ features is important to you,
+please send email to @email{daikon-developers@@lists.csail.mit.edu},
+so that we can increase its priority on our to-do list.
 
 @item
 Kvasir always prints the contents of structures according to their
@@ -2999,9 +3018,7 @@ multidimensional arrays into multiple single-dimensional arrays.
 Not all of the options of the source-based dfec are supported.
 Variable comparability information is not supported.
 (dfec used the Lackwit tool, but it did not scale and often produced
-incorrect output.)
-The depth to which nested structures
-are explored is fixed.  Of the environment variables obeyed by dfec,
+incorrect output.)  Of the environment variables obeyed by dfec,
 only @env{DTRACEAPPEND} is recognized.
 
 @item
@@ -7325,6 +7342,8 @@ You can reduce the number of variables that are output by instrumented
 code.  Do this by reducing the class/structure instrumentation depth.
 @itemize
 @item With dfej, use the @option{--nesting-depth=@var{N}} option.
+@item With Kvasir, use the @option{--struct-depth=@var{N}} or the 
+@option{--total-depth=@var{N}} option.
 @item With dfec, use the @option{--struct-depth=@var{N}} option.
 @end itemize
 
