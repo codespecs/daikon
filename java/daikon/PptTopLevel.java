@@ -2023,7 +2023,7 @@ public class PptTopLevel extends Ppt {
     // Maybe this test isn't even necessary, but will be subsumed by others
     // (as all the invariants will be unjustified).
     if (! has_samples()) {
-      System.out.println("No samples for " + name);
+      out.println("No samples for " + name);
       return;
     }
     if ((views.size() == 0) && (implication_view.invs.size() == 0)) {
@@ -2066,7 +2066,7 @@ public class PptTopLevel extends Ppt {
     // }
 
 
-    // System.out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
+    // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
     out.println("===========================================================================");
     print_invariants(out);
@@ -2182,7 +2182,7 @@ public class PptTopLevel extends Ppt {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
-            // System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
+            // out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             PptSlice1 view = getView(vi);
             if ((view != null) && (view.num_values() > 0)) {
               // Using only the isPrimitive test is wrong.  We should suppress
@@ -2293,7 +2293,9 @@ public class PptTopLevel extends Ppt {
           case Daikon.OUTPUT_STYLE_ESC:
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-              if (vi.rep_type.isArray()) {
+	      if (other.isDerivedSequenceMinMaxSum())
+		break;
+	      if (vi.rep_type.isArray()) {
 		String[] form =
 		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 		    { vi.name, other.name }, true); // elementwise
@@ -2332,6 +2334,8 @@ public class PptTopLevel extends Ppt {
 	  case Daikon.OUTPUT_STYLE_SIMPLIFY:
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	      if (other.isDerivedSequenceMinMaxSum())
+		break;
               if (vi.rep_type.isArray()) {
                 // String[] forall = VarInfo.esc_forall_2(vi, other);
                 // out.println("(" + forall[0] + "(" + forall[1] + " == " + forall[2] + "))");
@@ -2380,8 +2384,18 @@ public class PptTopLevel extends Ppt {
 
       // isWorthPrinting checks many conditions for suppression
       if (! inv.isWorthPrinting()) {
-	// System.out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
+	// out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
 	continue;
+      }      
+
+      if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL) {
+	// don't print out invariants with min(), max(), or sum() variables
+	boolean mms = false;
+	VarInfo[] varbls = inv.ppt.var_infos;
+	for (int v=0; !mms && v<varbls.length; v++) {
+	  mms |= varbls[v].isDerivedSequenceMinMaxSum();
+	}
+	if (mms) { continue; }
       }
 
       String inv_rep;
