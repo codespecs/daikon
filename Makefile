@@ -193,6 +193,11 @@ test-staged-dist: $(STAGING_DIST)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
+	# test basic operation (Chicory/Daikon)
+	cd $(DISTTESTDIR)/daikon/examples/StackAr && \
+	  javac -g `find . -name '*.java'` && \
+	  java -cp .:$(DISTTESTDIR)/daikon/daikon.jar -ea daikon.Chicory \
+		--daikon DataStructures/StackArTester
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -466,6 +471,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR java/ajax-ship /tmp/daikon/java
 	rm -rf /tmp/daikon/java/ajax-ship/ajax
 	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
+    ## BCEL
+	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
 
 	## JUnit
 	# This is wrong:
