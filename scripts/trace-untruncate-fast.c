@@ -39,12 +39,12 @@ main(int argc, char **argv)
 
     progname = argv[0];
 
-    if(argc < 2)
+    if (argc < 2)
 	usage();
 
-    for(ii=1; ii<argc; ++ii)
+    for (ii=1; ii<argc; ++ii)
     {
-	if(argv[ii][0] == '-')
+	if (argv[ii][0] == '-')
 	    usage();
 	else
 	    if (untrunc(argv[ii]))
@@ -67,7 +67,7 @@ untrunc(const char *filename)
 
     fprintf(stderr, "Untruncating %s...\n", filename);
 
-    if((fp = fopen(filename, "r+")) == NULL)
+    if ((fp = fopen(filename, "r+")) == NULL)
     {
         fprintf(stderr, "%s: can't open file `%s': %s.\n",
 		progname, filename, strerror(errno));
@@ -75,26 +75,26 @@ untrunc(const char *filename)
     }
 
     ret = fseek(fp, 0, SEEK_END);
-    if(ret != 0) { perror("fseek"); return 1; }
+    if (ret != 0) { perror("fseek"); return 1; }
 
-    for(;;)
+    for (;;)
     {
 	char buf[CHUNK];
 	int count;
 
 	ret = fseek(fp, -CHUNK*sizeof(char), SEEK_CUR);
-	if(ret != 0) { perror("fseek"); return 1; }
+	if (ret != 0) { perror("fseek"); return 1; }
 	ret = fread(buf, CHUNK*sizeof(char), 1, fp); // at end of chunk
-	if(ret == 0) { perror("fread"); return 1; }
+	if (ret == 0) { perror("fread"); return 1; }
 
-	for(count = CHUNK-1; count > 0; --count)
-	    if((buf[count] == '\n') && (buf[count-1] == '\n'))
+	for (count = CHUNK-1; count > 0; --count)
+	    if ((buf[count] == '\n') && (buf[count-1] == '\n'))
 		break;
 
-	if(count > 0)
+	if (count > 0)
 	{
 	    ret = fseek(fp, -(CHUNK-count)*sizeof(char), SEEK_CUR);
-	    if(ret != 0) { perror("fseek"); return 1; }
+	    if (ret != 0) { perror("fseek"); return 1; }
 	    break;
 	}
     }
@@ -102,7 +102,7 @@ untrunc(const char *filename)
     fputs("\n// EOF\n", fp);
 
     ret = ftruncate(fileno(fp), ftell(fp));
-    if(ret != 0) { perror("fseek"); return 1; }
+    if (ret != 0) { perror("fseek"); return 1; }
 
     fclose(fp);
 

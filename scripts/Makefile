@@ -3,6 +3,11 @@ all: difftbl cluster clgroup kmeans trace-untruncate-fast
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
 
+TAGS: tags
+
+tags:
+	etags `find . | grep -v '~\|/CVS\|^\.$$\|^\./[kx]means$$'`
+
 HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 

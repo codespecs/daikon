@@ -254,7 +254,7 @@ foreach my $filename (@ARGV) {
 	$sub = $subs[$i];
 	$sub =~ s/(\(|\?|\))/$1/;
 	$replace_expr = $subs[$i+1];
-	$replace_expr =~ s/\s*return(.*)\s*;\s*$/$1/;
+	$replace_expr =~ s/\s*return\s*(.*)\s*;\s*$/ $1/;
 	$replace = $replace."\n".$sub."\n".$replace_expr;
     }
 
