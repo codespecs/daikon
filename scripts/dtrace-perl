@@ -28,7 +28,7 @@ unless (exists $ENV{"DAIKONDIR"}) {
 my @locs = ('daikon-instrumented', 'lib/daikon-instrumented',
             'blib/lib/daikon-instrumented', '../blib/lib/daikon-instrumented');
 
-my $perl = $^X;
+my $perl = $EXECUTABLE_NAME;
 my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
 
 my @args = ($perl_lib, @ARGV);
@@ -42,7 +42,7 @@ for my $loc (@locs) {
 
 unshift @args, $perl;
 
-print join(" ", @args), "\n";
+print STDERR join(" ", @args), "\n";
 
 my $result = system(@args);
 
