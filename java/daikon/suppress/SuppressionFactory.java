@@ -135,6 +135,9 @@ public abstract class SuppressionFactory implements Serializable {
    **/
   public static SuppressionLink findLessEqualInt (Invariant inv, VarInfo v1, VarInfo v2, int interval) {
 
+    if (Debug.logOn())
+      inv.log ("v1=" + v1.name() + " v2=" + v2.name() + " interval=" + interval);
+
     SuppressionTemplate supTemplate = supTemplate_findLessEqualInt;
 
     // Why is looking for LessThan necessary?  Shouldn't LessEqual subsume that?
