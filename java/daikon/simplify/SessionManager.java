@@ -60,7 +60,8 @@ public class SessionManager
     Assert.assertTrue(worker != null, "Cannot use closed SessionManager");
     Assert.assertTrue(pending == null, "Cannot queue requests");
     if (debug.isLoggable(Level.FINE)) {
-      System.err.println("Running command " + command + "\n called from\n");
+      System.err.println("Running command " + command);
+      System.err.println(" called from");
       Throwable t = new Throwable();
       t.printStackTrace();
       System.err.flush();

@@ -20,6 +20,8 @@ import utilMDE.*;
 public final class FeatureExtractor {
   private FeatureExtractor() { throw new Error("do not instantiate"); }
 
+  private static final String lineSep = Global.lineSep;
+
   // See end of file for static variable declaration
 
   // Main reads the input files, extracts features and then
@@ -34,13 +36,19 @@ public final class FeatureExtractor {
   //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =
-  "\tArguments:\n\t-u FileName:\tan invMap inv file with useful invariants\n" +
-    "\t-n FileName:\tan invMap inv file with nonuseful invariants\n" +
-    "\t-o FileName:\toutput file name *Required\n" +
-    "\t-t Type:\tType is one of {SVMlight, SVMfu, C5}\n" +
-    "\t-s FileName:\tname of output file for invariant descriptions\n" +
-    "\t[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)\n" +
-    "\t[-p] \t\tdo not output if no positive feature vectors are present\n";
+    UtilMDE.join(
+      new String[] {
+        "Arguments:",
+        "-u FileName:\tan invMap inv file with useful invariants",
+        "-n FileName:\tan invMap inv file with nonuseful invariants",
+        "-o FileName:\toutput file name *Required",
+        "-t Type:\tType is one of {SVMlight, SVMfu, C5}",
+        "-s FileName:\tname of output file for invariant descriptions",
+        "[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)",
+        "[-p] \t\tdo not output if no positive feature vectors are present"
+      },
+      lineSep);
+
 
   public static void main(String[] args)
     throws IOException, ClassNotFoundException, IllegalAccessException,
@@ -51,7 +59,7 @@ public final class FeatureExtractor {
     // 3)  print in proper format the labeling and if asked the descriptions
 
     if (args.length == 0) {
-      System.out.print(USAGE);
+      System.out.println(USAGE);
       System.exit(0);
     }
 
@@ -279,30 +287,30 @@ public final class FeatureExtractor {
     //    System.out.println(numbersToNames.get(new IntDoublePair(2784, 0.0)));
 
     // Now make the .names part
-    names.write("|Beginning of .names file\n");
-    // names.write("GoodBad.\n\nGoodBad: 1, -1.\n");
-    names.write("good, bad.\n");
+    names.write("|Beginning of .names file" + lineSep);
+    // names.write("GoodBad." + lineSep + lineSep + "GoodBad: 1, -1." + lineSep);
+    names.write("good, bad." + lineSep);
     for (Iterator all = allFeatures.iterator(); all.hasNext(); ) {
       IntDoublePair current = (IntDoublePair) all.next();
       if (numbersToNames.containsKey(current)) {
         String currentName = (String) numbersToNames.get(current);
         if (currentName.endsWith("Bool"))
-          names.write(currentName + ":0.0, 1.0.\n");
+          names.write(currentName + ":0.0, 1.0." + lineSep);
         else if (currentName.endsWith("Float"))
-          names.write(currentName + ": continuous.\n");
+          names.write(currentName + ": continuous." + lineSep);
         else if (currentName.endsWith("Int"))
-          //          names.write(currentName + ": discrete.\n");
-          names.write(currentName + ": continuous.\n");
+          //          names.write(currentName + ": discrete." + lineSep);
+          names.write(currentName + ": continuous." + lineSep);
         else throw new IOException("All feature names must end with one of " +
-                                   "Float, Bool, or Int.\nError: " +
-                                   currentName + "\n");
+                                   "Float, Bool, or Int." + lineSep + "Error: " +
+                                   currentName + lineSep);
       }
       else
         throw new IOException("Feature " + current.number +
                               " not included in .names file");
-      //names.write(current.number + ": continuous.\n");
+      //names.write(current.number + ": continuous." + lineSep);
     }
-    names.write("|End of .names file\n");
+    names.write("|End of .names file" + lineSep);
     names.close();
 
     FileWriter output = new FileWriter(outputFile);
@@ -333,7 +341,7 @@ public final class FeatureExtractor {
       //  for (Iterator iter = allFets.iterator(); iter.hasNext();) {
       //  IntDoublePair meh = (IntDoublePair) iter.next();
       //  if (temp.contains(new Integer(meh.number)))
-      //  throw new RuntimeException("\nFound duplicate feature: "+meh.number);
+      //  throw new RuntimeException(lineSep + "Found duplicate feature: "+meh.number);
       //  temp.add(new Integer(meh.number));
       //  }
       // End Debugging Code
@@ -369,14 +377,14 @@ public final class FeatureExtractor {
 //       } */// end debug code
 
       Assert.assertTrue(allFeatures.size() == allFets.size(),
-                        "\nExpected number of features: "+allFeatures.size() +
-                        "\nActual number of features: "+allFets.size());
+                        lineSep + "Expected number of features: "+allFeatures.size() +
+                        lineSep + "Actual number of features: "+allFets.size());
 
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         output.write(df.format(fet.value) + ",");
       }
-      output.write(label + "\n");
+      output.write(label + lineSep);
     }
   }
 
@@ -411,8 +419,8 @@ public final class FeatureExtractor {
         if (fet.value > THRESHOLD)
           output.write(fet.number + ":" + df.format(fet.value) + " ");
       }
-      output.write("\n");
-      output.write("#  " + ((String) strings.get(i)) + "\n");
+      output.write(lineSep);
+      output.write("#  " + ((String) strings.get(i)) + lineSep);
     }
   }
 
@@ -424,7 +432,7 @@ public final class FeatureExtractor {
     FileWriter output = new FileWriter(outputFile);
     // Now add all the features in SVMfu format to output
     // first size
-    output.write((usefulFeatures.size() + nonusefulFeatures.size()) + "\n");
+    output.write((usefulFeatures.size() + nonusefulFeatures.size()) + lineSep);
     // first the useful
     printSVMfuDataOutput(usefulFeatures, "1 ", output);
     // and now non useful
@@ -446,7 +454,7 @@ public final class FeatureExtractor {
         output.write(fet.number + " " + df.format(fet.value) + " ");
       }
       output.write(label);
-      output.write("\n");
+      output.write(lineSep);
     }
   }
 
@@ -457,9 +465,9 @@ public final class FeatureExtractor {
                                        File outputFile) throws IOException {
     FileWriter output = new FileWriter(outputFile);
     for (int i = 0; i < usefulStrings.size(); i++)
-      output.write((String) usefulStrings.get(i) + "\n");
+      output.write((String) usefulStrings.get(i) + lineSep);
     for (int i = 0; i < nonusefulStrings.size(); i++)
-      output.write((String) nonusefulStrings.get(i) + "\n");
+      output.write((String) nonusefulStrings.get(i) + lineSep);
     output.close();
   }
 
@@ -476,7 +484,7 @@ public final class FeatureExtractor {
         br.readLine();
       else {
         vectors.add(line);
-        line += "\n" + br.readLine();
+        line += lineSep + br.readLine();
         outputData.add(line);
       }
     }
@@ -484,7 +492,7 @@ public final class FeatureExtractor {
 
     FileWriter fw = new FileWriter(output);
     for (Iterator i = outputData.iterator(); i.hasNext(); )
-      fw.write((String) i.next() + "\n");
+      fw.write((String) i.next() + lineSep);
     fw.close();
   }
 
@@ -499,9 +507,9 @@ public final class FeatureExtractor {
     br.close();
 
     FileWriter fw = new FileWriter(output);
-    fw.write(vectors.size() + "\n");
+    fw.write(vectors.size() + lineSep);
     for (Iterator i = vectors.iterator(); i.hasNext(); )
-      fw.write((String) i.next() + "\n");
+      fw.write((String) i.next() + lineSep);
     fw.close();
   }
 
@@ -614,7 +622,7 @@ public final class FeatureExtractor {
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||
             (VarInfo.class.isAssignableFrom(current))) {
-          //          System.out.print("Class " + name + " loaded\n");
+          //          System.out.print("Class " + name + " loaded" + lineSep);
           answer.add(current);
         }
       }
@@ -759,11 +767,16 @@ public final class FeatureExtractor {
   public static final class CombineFiles {
 
     private static String USAGE =
-      "\tArguments:\n\t-i FileName:\ta SVMfu or C5 input file (with .data)\n" +
-      "\t-t Type:\tFormat, one of C5 or SVMfu\n" +
-      "\t-o FileName:\toutput file name (with.data)\n" +
-      "\t[-n] repeat:\tif present then the number of positive and negative\n" +
-      "\t\tvectors will be roughtly normalized (by repeats).\n";
+    UtilMDE.join(
+      new String[] {
+        "Arguments:",
+        "-i FileName:\ta SVMfu or C5 input file (with .data)",
+        "-t Type:\tFormat, one of C5 or SVMfu",
+        "-o FileName:\toutput file name (with.data)",
+        "[-n] repeat:\tif present then the number of positive and negative",
+        "\tvectors will be roughtly normalized (by repeats)."
+      },
+      lineSep);
 
     public static void main(String[] args)
       throws IOException, ClassNotFoundException {
@@ -870,14 +883,14 @@ public final class FeatureExtractor {
       // first calculate size and write the header for SVMfu
       int size = negrepeat * negvectors.size() + posrepeat * posvectors.size();
       if (type.equals("SVMfu"))
-        fw.write(size + "\n");
+        fw.write(size + lineSep);
       // now write the data
       for (int repeat = 0; repeat < negrepeat; repeat++)
         for (Iterator i = negvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
+          fw.write((String) i.next() + " " + lineSep);
       for (int repeat = 0; repeat < posrepeat; repeat++)
         for (Iterator i = posvectors.iterator(); i.hasNext(); )
-          fw.write((String) i.next() + " \n");
+          fw.write((String) i.next() + " " + lineSep);
       fw.close();
 
       // Print a summary of positives and negatives to stdout.
@@ -893,9 +906,14 @@ public final class FeatureExtractor {
   public static final class ClassifyInvariants {
 
     private static String USAGE =
-      "\tArguments:\n\t-d FileName:\tSVMfu or C5 training data (with .data)\n"+
-      "\t-s FileName:\tSVMfu or C5 test data (with .data)\n" +
-      "\t-t Type:\tFormat, one of C5 or SVMfu\n";
+    UtilMDE.join(
+      new String[] {
+        "Arguments:",
+        "-d FileName:\tSVMfu or C5 training data (with .data)",
+        "-s FileName:\tSVMfu or C5 test data (with .data)",
+        "-t Type:\tFormat, one of C5 or SVMfu"
+      },
+      lineSep);
 
     public static void main(String[] args)
       throws IOException, ClassNotFoundException {
@@ -994,10 +1012,10 @@ public final class FeatureExtractor {
 //     FileWriter fw = new FileWriter(output);
 //     for (int repeat = 0; repeat < negrepeat; repeat++)
 //       for (Iterator i = negvectors.iterator(); i.hasNext(); )
-//         fw.write((String) i.next() + " \n");
+//         fw.write((String) i.next() + " " + lineSep);
 //     for (int repeat = 0; repeat < posrepeat; repeat++)
 //       for (Iterator i = posvectors.iterator(); i.hasNext(); )
-//         fw.write((String) i.next() + " \n");
+//         fw.write((String) i.next() + " " + lineSep);
 //     fw.close();
 
 //     // Print a summary of positives and negatives to stdout.
@@ -1017,7 +1035,7 @@ public final class FeatureExtractor {
         String answer = first.substring(first.indexOf(" ") + 1) +
           shift(second);
         answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
-        fw.write(answer + label + "\n");
+        fw.write(answer + label + lineSep);
       }
   }
 

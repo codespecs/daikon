@@ -26,6 +26,8 @@ public class VarInfoNameTest
   extends TestCase
 {
 
+  private static final String lineSep = daikon.Global.lineSep;
+
   // for convenience
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
@@ -52,7 +54,7 @@ public class VarInfoNameTest
 
     // put output into actual
     List _actual = new ArrayList();
-    StringTokenizer tok = new StringTokenizer(out.toString(), "\r\n");
+    StringTokenizer tok = new StringTokenizer(out.toString(), lineSep);
     while (tok.hasMoreTokens()) {
       _actual.add(tok.nextToken());
     }
@@ -79,7 +81,7 @@ public class VarInfoNameTest
     for (int i=0; i < goal.length; i++) {
       String goal_line = goal[i];
       if (i >= actual.length) {
-        fail("Diff error:\nActual had too few lines, starting with goal line:\n\t" + goal_line);
+        fail("Diff error:" + lineSep + "Actual had too few lines, starting with goal line:" + lineSep + "\t" + goal_line);
       }
       String actual_line = actual[i];
       if (!goal_line.equals(actual_line)) {
@@ -92,11 +94,11 @@ public class VarInfoNameTest
             goals += ">";
             actuals += ">";
           }
-          goals += "\t" + goal[j] + "\n";
-          actuals += "\t" + actual[j] + "\n";
+          goals += "\t" + goal[j] + lineSep;
+          actuals += "\t" + actual[j] + lineSep;
         }
-        fail("Diff error:\nDifferent output encountered.  Expected:\n" +
-             goals + "Received:\n" + actuals + " on line: " + i);
+        fail("Diff error:" + lineSep + "Different output encountered.  Expected:" + lineSep +
+             goals + "Received:" + lineSep + actuals + " on line: " + i);
       }
     }
     if (actual.length > goal.length) {
@@ -104,9 +106,9 @@ public class VarInfoNameTest
       for (int i = goal.length; i < actual.length; i++) {
         extra.append ("\t");
         extra.append (actual[i]);
-        extra.append ("\n");
+        extra.append (lineSep);
       }
-      fail("Diff error:\nActual had extra lines:\n" +
+      fail("Diff error:" + lineSep + "Actual had extra lines:" + lineSep +
            extra.toString());
 
     }

@@ -69,7 +69,7 @@ public class Annotate {
   //    simply omitted.
   //  * With -s flag, use // comments; by default, use /* comments.
 
-  public static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.getProperty("line.separator");
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 

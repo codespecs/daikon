@@ -674,25 +674,25 @@ public abstract class Invariant
    **/
   public static final class OutputFormat
   {
-    /* The standard, concise Daikon output format */
+    /** The standard, concise Daikon output format */
     public static final OutputFormat DAIKON = new OutputFormat("Daikon");
-    /* ESC/Java's annotation language */
+    /** ESC/Java's annotation language */
     public static final OutputFormat ESCJAVA = new OutputFormat("ESC/Java");
-    /* Simplify theorem prover */
+    /** Simplify theorem prover */
     public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
-    /* IOA language */
+    /** IOA language */
     public static final OutputFormat IOA = new OutputFormat("IOA");
-    /* IOA language, sans invariant numbering */
+    /** IOA language, sans invariant numbering */
     public static final OutputFormat IOATEST = new OutputFormat("IOA_test");
-    /* Java boolean expression */
+    /** Java boolean expression */
     public static final OutputFormat JAVA = new OutputFormat("Java");
-    /* Java Modeling Language */
+    /** Java Modeling Language */
     public static final OutputFormat JML = new OutputFormat("JML");
-    /* Design-By-Contract for Java (used by Parasoft JContract) */
+    /** Design-By-Contract for Java (used by Parasoft JContract) */
     public static final OutputFormat DBCJAVA = new OutputFormat("DBC/Java");
-    /* Data Structure Repair Format */
+    /** Data Structure Repair Format */
     public static final OutputFormat REPAIR = new OutputFormat("Repair");
-    /* Whole names as single C/Java style indentifiers (currently just
+    /** Whole names as single C/Java style indentifiers (currently just
      * for single VarInfoNames) */
     public static final OutputFormat IDENTIFIER
       = new OutputFormat("Identifier");
@@ -865,8 +865,8 @@ public abstract class Invariant
     }
     for (int i = 0; i < s.length(); i++) {
       char c = s.charAt(i);
-      if (c == '\n')
-        buf.append("\\n");
+      if (c == '\n')            // not lineSep
+        buf.append("\\n");      // not lineSep
       else if (c == '\r')
         buf.append("\\r");
       else if (c == '\t')
@@ -1072,7 +1072,7 @@ public abstract class Invariant
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\t\t----------------\n");
+//        PrintInvariants.debugFiltering.fine ("\t\t----------------" + lineSep);
 //      }
 
     Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
@@ -1103,7 +1103,7 @@ public abstract class Invariant
         VarInfoName viname = name_extractor.getFromSecond(elt);
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString() + "\n");
+//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString() + lineSep);
 //      }
 
         intersection = all_vars_names1.contains(viname);
@@ -1120,8 +1120,8 @@ public abstract class Invariant
 
     // the type, formula, and vars all matched
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format() + "\n");
-//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format() + "\n");
+//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format() + lineSep);
+//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format() + lineSep);
 //      }
     return true;
   }
@@ -1586,12 +1586,12 @@ public abstract class Invariant
       // of the form f(a, a, a) because of equality sets.
       // Assert.assertTrue(result != 0
       //                   , "isSameInvariant() returned false "
-      //                   + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
-      //                   + "but format().compareTo() returned 0:\n"
-      //                   + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
-      //                   + "    " + inv1.ppt.parent.name + "\n"
-      //                   + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
-      //                   + "    " + inv1.ppt.parent.name + "\n"
+      //                   + "(isSameFormula returned " + inv1.isSameFormula(inv2) + ")," + lineSep
+      //                   + "but format().compareTo() returned 0:" + lineSep
+      //                   + "  " + inv1.format() + lineSep + "      "  + inv1.repr() + lineSep
+      //                   + "    " + inv1.ppt.parent.name + lineSep
+      //                   + "  " + inv2.format() + lineSep + "      "  + inv2.repr() + lineSep
+      //                   + "    " + inv1.ppt.parent.name + lineSep
       //                  );
 
       return result;

@@ -40,6 +40,8 @@ public final class FileIO {
                                                         + class_static_suffix;
   public static final String global_suffix = "GLOBAL";
 
+  private static final String lineSep = Global.lineSep;
+
   /** Total number of samples read in. */
   public static int samples_considered = 0;
 
@@ -528,10 +530,10 @@ public final class FileIO {
         read_data_trace_file(file, all_ppts, processor);
       } catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer")) {
-          System.out.print(
+          System.out.println(
             file.getName()
               + " has a corrupt gzip trailer.  "
-              + "All possible data was recovered.\n");
+              + "All possible data was recovered.");
         } else {
           throw e;
         }
@@ -935,8 +937,8 @@ public final class FileIO {
           "Unexpected end of file at "
             + data_trace_filename
             + " line "
-            + reader.getLineNumber()
-            + "\n  Expected variable "
+            + reader.getLineNumber() + lineSep
+            + "  Expected variable "
             + vi.name.name()
             + ", got "
             + line
@@ -972,8 +974,8 @@ public final class FileIO {
           "Unexpected end of file at "
             + data_trace_filename
             + " line "
-            + reader.getLineNumber()
-            + "\n  Expected value for variable "
+            + reader.getLineNumber() + lineSep
+            + "  Expected value for variable "
             + vi.name.name()
             + ", got "
             + line
@@ -987,8 +989,8 @@ public final class FileIO {
           "Unexpected end of file at "
             + data_trace_filename
             + " line "
-            + reader.getLineNumber()
-            + "\n  Expected modbit for variable "
+            + reader.getLineNumber() + lineSep
+            + "  Expected modbit for variable "
             + vi.name.name()
             + ", got "
             + line
@@ -1000,8 +1002,8 @@ public final class FileIO {
       }
       int mod = ValueTuple.parseModified(line);
 
-      // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()
-      //                   + "\n  for variable " + vi.name.name()
+      // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber());
+      // System.out.pringln("  for variable " + vi.name.name()
       //                   + " for program point " + ppt.name());
 
       // MISSING_FLOW is only found during flow algorithm
@@ -1039,16 +1041,11 @@ public final class FileIO {
         if (!(value_rep.equals("nonsensical")
           || value_rep.equals("uninit") // backward compatibility (9/27/2002)
           || value_rep.equals("missing"))) {
-          System.out.println(
-            "\nModbit indicates missing value for variable "
-              + vi.name.name()
-              + " with value \""
-              + value_rep
-              + "\";\n  text of value should be \"nonsensical\""
-              + " or \"uninit\" at "
-              + data_trace_filename
-              + " line "
-              + reader.getLineNumber());
+          System.out.println();
+          System.out.println("Modbit indicates missing value for variable "
+              + vi.name.name() + " with value \"" + value_rep + "\";");
+          System.out.println("  text of value should be \"nonsensical\" or \"uninit\" at "
+              + data_trace_filename + " line " + reader.getLineNumber());
           System.exit(1);
         } else {
           // Keep track of variables that can be missing
@@ -1292,7 +1289,7 @@ public final class FileIO {
       throw new IOException("Error while loading inv file: " + e);
     } catch (InvalidClassException e) {
       throw new IOException(
-        "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file.\n"
+        "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file." + lineSep
           + e.toString());
     }
     // } catch (StreamCorruptedException e) { // already extends IOException

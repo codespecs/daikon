@@ -29,6 +29,8 @@ public final class VarInfo implements Cloneable, Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020629L;
 
+  private static final String lineSep = Global.lineSep;
+
   /** Debug missing vals. **/
   public static final Logger debugMissing =
     Logger.getLogger("daikon.VarInfo.missing");
@@ -500,13 +502,13 @@ public final class VarInfo implements Cloneable, Serializable {
   private boolean _isDerivedParamAndUninteresting() {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       PrintInvariants.debugFiltering.fine(
-        "isDPAU: name is " + name.name() + "\n");
+        "isDPAU: name is " + name.name() + lineSep);
       PrintInvariants.debugFiltering.fine(
-        "  isPrestate is " + String.valueOf(isPrestate()) + "\n");
+        "  isPrestate is " + String.valueOf(isPrestate()) + lineSep);
       PrintInvariants.debugFiltering.fine(
         "  name is prestate "
           + String.valueOf(name instanceof VarInfoName.Prestate)
-          + "\n");
+          + lineSep);
     }
 
     if (isPrestate() || name instanceof VarInfoName.Prestate) {
@@ -519,7 +521,7 @@ public final class VarInfo implements Cloneable, Serializable {
       PrintInvariants.debugFiltering.fine(
         "  not interesting, IS_PARAM == true for "
           + name.name()
-          + "\n");
+          + lineSep);
       return true;
     }
     if (Global.debugSuppressParam.isLoggable(Level.FINE)) {
@@ -540,7 +542,7 @@ public final class VarInfo implements Cloneable, Serializable {
           && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.fine("TypeOf returning true");
           PrintInvariants.debugFiltering.fine(
-            "  not interesting, first dpf case\n");
+            "  not interesting, first dpf case" + lineSep);
           return true;
         }
       }
@@ -551,7 +553,7 @@ public final class VarInfo implements Cloneable, Serializable {
           && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppressParam.fine("SizeOf returning true");
           PrintInvariants.debugFiltering.fine(
-            "  not interesting, second dpf case\n");
+            "  not interesting, second dpf case" + lineSep);
           return true;
         }
       }
@@ -579,7 +581,7 @@ public final class VarInfo implements Cloneable, Serializable {
         Global.debugSuppressParam.fine(
           "No orig variable for base, returning true ");
         PrintInvariants.debugFiltering.fine(
-          "  not interesting, no orig variable for base\n");
+          "  not interesting, no orig variable for base" + lineSep);
         return true; // There can't be an equal invariant without orig
       }
       if (base.isEqualTo(origBase)) {
@@ -590,7 +592,7 @@ public final class VarInfo implements Cloneable, Serializable {
         Global.debugSuppressParam.fine(
           "Didn't see equality in base, so uninteresting");
         PrintInvariants.debugFiltering.fine(
-          "  didn't see equality in base\n");
+          "  didn't see equality in base" + lineSep);
         return true;
       }
 

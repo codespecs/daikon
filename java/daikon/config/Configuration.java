@@ -122,7 +122,7 @@ public final class Configuration
       lines.close();
 
     } catch (IOException e) {
-      throw new ConfigException("Cannot read from stream.\n" + e);
+      throw new ConfigException("Cannot read from stream." + daikon.Global.lineSep + e);
     }
   }
 

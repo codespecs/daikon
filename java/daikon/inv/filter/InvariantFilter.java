@@ -7,6 +7,10 @@ import daikon.inv.*;
 public abstract class InvariantFilter {
   boolean isOn;
 
+  // Protected so subclasses can use it.
+  protected static final String lineSep = daikon.Global.lineSep;
+
+
   public InvariantFilter( boolean isOn ) {
     this.isOn = isOn;
   }

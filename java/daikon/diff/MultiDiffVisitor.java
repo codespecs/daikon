@@ -175,12 +175,15 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             ArrayList al = (ArrayList) lastMap.get(key);
             // don't print anything if there are no selective invariants
             if (al.size() == 0) continue;
-            System.out.println ("\n" + key + "*****************\n");
+            System.out.println ();
+            System.out.println (key + "*****************");
+            System.out.println ();
             for (int ii = 0; ii < al.size(); ii++) {
                 System.out.println (al.get(ii));
             }
         }
-        System.out.println ("\n");
+        System.out.println ();
+        System.out.println ();
     }
 
      /** Prints everything in the goodList, outputs as spinfo. */
@@ -259,7 +262,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String thisPpt = pToke.nextToken();
 
             if (! lastPpt.equals (thisPpt)) {
-                out.println ("\nPPT_NAME " + thisPpt);
+                out.println ();
+                out.println ("PPT_NAME " + thisPpt);
 
                 lastPpt = thisPpt;
             }

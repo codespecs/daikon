@@ -126,8 +126,8 @@ public class SplitterFactory {
                                  statementReplacer);
         file = splitterWriter.getFileText();
       } catch (ParseException e) {
-        System.out.println("Error in SplitterFactory while writing splitter java file for: " + lineSep +
-                           splitObj.condition() + " cannot be parsed.");
+        System.out.println("Error in SplitterFactory while writing splitter java file for: ");
+        System.out.println(splitObj.condition() + " cannot be parsed.");
         continue;
       }
       String fileAddress = tempdir + fileName;

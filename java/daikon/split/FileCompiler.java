@@ -75,8 +75,8 @@ public final class FileCompiler {
     try {
       return new TimedProcess(commander.exec(command), command);
     } catch (IOException e) {
-      System.err.println("IOException while compiling " + filename + lineSep
-                         + e.toString());
+      System.err.println("IOException while compiling " + filename);
+      System.err.println(e.toString());
     }
     return null;
   }
@@ -98,8 +98,8 @@ public final class FileCompiler {
       try {
         return new TimedProcess( commander.exec(command), command);
       } catch (IOException e) {
-        System.err.println("IOException while compiling files" + lineSep
-                           + e.toString());
+        System.err.println("IOException while compiling files");
+        System.err.println(e.toString());
       }
     }
     return null;

@@ -19,9 +19,9 @@ public class ControlledInvariantFilter extends InvariantFilter {
 
   private boolean isWorthPrinting(Invariant inv) {
     // if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-    //  PrintInvariants.debugFiltering.fine ("\tCalling IWP on " + inv.format() + " for reference\n");
+    //  PrintInvariants.debugFiltering.fine ("\tCalling IWP on " + inv.format() + " for reference" + lineSep);
     //  inv.isWorthPrinting();
-    //  PrintInvariants.debugFiltering.fine ("\tdone\n");
+    //  PrintInvariants.debugFiltering.fine ("\tdone" + lineSep);
     // }
 
 
@@ -46,13 +46,13 @@ public class ControlledInvariantFilter extends InvariantFilter {
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       if (!inv.enoughSamples()) {
-        PrintInvariants.debugFiltering.fine ("\t\tnot enough samples " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tnot enough samples " + inv.format() + lineSep);
       }
       if (inv.isObvious() != null) {
-        PrintInvariants.debugFiltering.fine ("\t\tis obvious " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tis obvious " + inv.format() + lineSep);
       }
       if (!inv.justified()) {
-        PrintInvariants.debugFiltering.fine ("\t\tnot justified " + inv.format() + "\n");
+        PrintInvariants.debugFiltering.fine ("\t\tnot justified " + inv.format() + lineSep);
       }
     }
     return (InvariantFilters.isWorthPrintingFilter_sansControlledCheck()

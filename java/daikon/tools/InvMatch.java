@@ -110,7 +110,7 @@ public class InvMatch {
 
     List /*InvTranslate*/ best_translation
       = best_translation (valid_translations);
-    Fmt.pf ("\nBest Translation");
+    Fmt.pf (Global.lineSep + "Best Translation");
     for (Iterator i = best_translation.iterator(); i.hasNext(); ) {
       InvTranslate xlate = (InvTranslate) i.next();
       Fmt.pf ("  %s", xlate);

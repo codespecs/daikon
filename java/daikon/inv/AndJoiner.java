@@ -57,7 +57,7 @@ public class AndJoiner
     DiscardInfo rightObvious = right.isObviousDynamically(vis);
     if (leftObvious != null && rightObvious != null) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                                           "Left obvious: " + leftObvious.discardString() + "\n"
+                                           "Left obvious: " + leftObvious.discardString() + Global.lineSep
                                            + "Right obvious: " + rightObvious.discardString());
     }
     return null;
@@ -68,7 +68,7 @@ public class AndJoiner
     DiscardInfo rightObvious = right.isObviousStatically(vis);
     if (leftObvious != null && rightObvious != null) {
       DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
-                                           "Left obvious: " + leftObvious.discardString() + "\n"
+                                           "Left obvious: " + leftObvious.discardString() + Global.lineSep
                                            + "Right obvious: " + rightObvious.discardString());
       return result;
     } else {

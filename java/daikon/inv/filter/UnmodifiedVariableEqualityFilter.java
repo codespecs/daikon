@@ -16,12 +16,12 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("\tEntering UmVEF.shouldDiscard\n");
+      PrintInvariants.debugFiltering.fine ("\tEntering UmVEF.shouldDiscard" + lineSep);
     }
 
     if (!IsEqualityComparison.it.accept(invariant)) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-        PrintInvariants.debugFiltering.fine ("\tUnmodVarEqF thinks this isn't an equality comparison\n");
+        PrintInvariants.debugFiltering.fine ("\tUnmodVarEqF thinks this isn't an equality comparison" + lineSep);
       }
       return false;
     }
@@ -31,23 +31,23 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     VarInfo var2 = comp.var2();
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("compared " + var1.name.applyPrestate() + " to " + var2.name.toString() + "\n");
+      PrintInvariants.debugFiltering.fine ("compared " + var1.name.applyPrestate() + " to " + var2.name.toString() + lineSep);
     }
 
     if (var1.name.applyPrestate().equals(var2.name)) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-        PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
+        PrintInvariants.debugFiltering.fine ("\t(yes...)" + lineSep);
       }
       return true ;
     }
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("compared " + var2.name.applyPrestate() + " to " + var1.name.toString() + "\n");
+      PrintInvariants.debugFiltering.fine ("compared " + var2.name.applyPrestate() + " to " + var1.name.toString() + lineSep);
     }
 
     if (var2.name.applyPrestate().equals(var1.name)) {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-        PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
+        PrintInvariants.debugFiltering.fine ("\t(yes...)" + lineSep);
       }
       return true;
     }

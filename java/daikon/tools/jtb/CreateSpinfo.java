@@ -35,7 +35,7 @@ public class CreateSpinfo {
 //  The method printSpinfoFile prints out these expressions and
 //  replace statements in splitter info file format.
 
-  public static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.getProperty("line.separator");
 
   public static final Logger debug =
     Logger.getLogger("daikon.tools.jtb.CreateSpinfo");

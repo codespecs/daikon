@@ -297,11 +297,9 @@ public final class Diff {
            (diff.invSortComparator2.getClass().toString()))) ||
         (!(diff.invSortComparator1.getClass().toString().equals
            (diff.invPairComparator.getClass().toString())))) {
-      String warning = "You are using different comparators to sort or " +
-        "pair up invariants.\nThis may cause misalignment of invariants " +
-        "and may cause Diff to\nwork incorectly.  Make sure you know what " +
-        "you are doing!\n";
-      System.out.println(warning);
+      System.out.println("You are using different comparators to sort or pair up invariants.");
+      System.out.println("This may cause misalignment of invariants and may cause Diff to");
+      System.out.println("work incorectly.  Make sure you know what you are doing!");
     }
 
     // The index of the first non-option argument -- the name of the

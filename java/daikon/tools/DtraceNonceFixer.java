@@ -26,6 +26,18 @@ import utilMDE.*;
 
 public class DtraceNonceFixer {
 
+  private static final String lineSep = System.getProperty("line.separator");
+
+  private static String usage =
+    UtilMDE.join(
+      new String[] {
+        "Usage: DtraceNonceFixer FILENAME",
+        "FILENAME is the dtrace file that will be modified so that the invocation",
+        "nonces are consistent.  The output file will be FILENAME_fixed and another",
+        "output included nonces for OBJECT and CLASS invocations called FILENAME_all_fixed "
+        },
+      lineSep);
+
   public static void main (String[] args) {
     if (args.length != 1) {
       printUsage();
@@ -114,14 +126,14 @@ public class DtraceNonceFixer {
     //    System.out.println (invo);
 
     StringBuffer sb = new StringBuffer();
-    StringTokenizer st = new StringTokenizer (invo, "\n");
+    StringTokenizer st = new StringTokenizer (invo, lineSep);
 
     if (!st.hasMoreTokens()) {
       return sb.toString();
     }
 
     // First line is the program point name
-    sb.append (st.nextToken()).append("\n");
+    sb.append (st.nextToken()).append(lineSep);
 
     // There is a chance that this is not really an invocation
     // but a EOF shutdown hook instead.
@@ -133,17 +145,17 @@ public class DtraceNonceFixer {
     String line = st.nextToken();
     if (line.equals ("this_invocation_nonce")) {
       // modify the next line to include the new nonce
-      sb.append(line).append("\n").append(newNonce).append("\n");
+      sb.append(line).append(lineSep).append(newNonce).append(lineSep);
       // throw out the next token, because it will be the old nonce
       st.nextToken();
     }
     else {
       // otherwise create the required this_invocation_nonce line
-      sb.append ("this_invocation_nonce\n").append(newNonce).append("\n");
+      sb.append ("this_invocation_nonce" + lineSep).append(newNonce).append(lineSep);
     }
 
     while (st.hasMoreTokens()) {
-      sb.append (st.nextToken()).append("\n");
+      sb.append (st.nextToken()).append(lineSep);
     }
 
     return sb.toString();
@@ -154,7 +166,7 @@ public class DtraceNonceFixer {
   /** Returns the nonce of the invocation 'invo' or -1 if the
    * String 'this_invocation_nonce' is not found in invo */
   private static int peekNonce (String invo) {
-    StringTokenizer st = new StringTokenizer(invo, "\n");
+    StringTokenizer st = new StringTokenizer(invo, lineSep);
     while (st.hasMoreTokens()) {
       String line = st.nextToken();
       if (line.equals ("this_invocation_nonce")) {
@@ -177,14 +189,14 @@ public class DtraceNonceFixer {
       if (line.trim().equals ("")) {
         break;
       }
-      sb.append(line.trim()).append ("\n");
+      sb.append(line.trim()).append (lineSep);
     }
     return sb.toString();
   }
 
   private static void printUsage() {
     System.out.println ("Usage: DtraceNonceFixer filename" +
-                        "\n\nfilename is the dtrace that will be modified so that the invocation nonces are consistent.  The output will be filename + \"_fixed\" and another output included nonces for OBJECT and CLASS invocations called filename + \"_all_fixed\" ");
+                        lineSep + lineSep + "filename is the dtrace that will be modified so that the invocation nonces are consistent.  The output will be filename + \"_fixed\" and another output included nonces for OBJECT and CLASS invocations called filename + \"_all_fixed\" ");
   }
 
 

@@ -12,6 +12,8 @@ import java.io.*;
 
 public final class Runtime {
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   // Constructor
   private Runtime() {
     throw new Error("Do not create instances of Runtime");
@@ -182,8 +184,8 @@ public final class Runtime {
       OutputStream os = new FileOutputStream(filename, append);
       if (filename.endsWith(".gz")) {
         if (append)
-          throw new Error("DTRACEAPPEND environment variable is set."
-                          + "\nCannot append to gzipped dtrace file " + filename);
+          throw new Error("DTRACEAPPEND environment variable is set." + lineSep
+                          + "Cannot append to gzipped dtrace file " + filename);
         os = new GZIPOutputStream(os);
       }
       dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
@@ -353,11 +355,11 @@ public final class Runtime {
         sb.append('\\');
         post_esc = i;
         break;
-      case '\n':
+      case '\n':                // not lineSep
         if (post_esc < i) {
           sb.append(orig.substring(post_esc, i));
         }
-        sb.append("\\n");
+        sb.append("\\n");       // not lineSep
         post_esc = i+1;
         break;
       case '\r':
@@ -386,8 +388,8 @@ public final class Runtime {
       return "\\\"";
     case '\\':
       return "\\\\";
-    case '\n':
-      return "\\n";
+    case '\n':                  // not lineSep
+      return "\\n";             // not lineSep
     case '\r':
       return "\\r";
     default:
@@ -860,8 +862,8 @@ public final class Runtime {
       char c = ((Character)a[0]).charValue();
       if (c == '\r')
         ps.print("\\r");
-      else if (c == '\n')
-        ps.print("\\n");
+      else if (c == '\n')       // not lineSep
+        ps.print("\\n");        // not lineSep
       else
         ps.print(c);
     }
@@ -883,8 +885,8 @@ public final class Runtime {
       char c = ((Character)v.get(i)).charValue();
       if (c == '\r')
         ps.print("\\r");
-      else if (c == '\n')
-        ps.print("\\n");
+      else if (c == '\n')       // not lineSep
+        ps.print("\\n");        // not lineSep
       else
         ps.print(c);
     }

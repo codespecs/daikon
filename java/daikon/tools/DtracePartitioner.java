@@ -14,6 +14,8 @@ public class DtracePartitioner
   implements Partitioner, Iterator
 {
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   // reading from the file as a lazy iterator
   private BufferedReader br;
   // the name of the Daikon trace file
@@ -67,7 +69,7 @@ public class DtracePartitioner
       if (line.trim().equals ("")) {
         break;
       }
-      sb.append(line.trim()).append ("\n");
+      sb.append(line.trim()).append (lineSep);
     }
     return sb.toString();
   }
@@ -141,7 +143,7 @@ public class DtracePartitioner
         Integer key = new Integer (invoNonce);
         String enterInvo = (String) nonceMap.get (key);
         if (enterInvo != null) {
-          nonceMap.put (key, enterInvo + "\n" + nextInvo);
+          nonceMap.put (key, enterInvo + lineSep + nextInvo);
           unreturned.remove (enterInvo);
         }
       }
@@ -166,7 +168,7 @@ public class DtracePartitioner
   }
 
   private int calcNonce (String invocation) {
-    StringTokenizer st = new StringTokenizer (invocation, "\n");
+    StringTokenizer st = new StringTokenizer (invocation, lineSep);
     while (st.hasMoreTokens()) {
       String line = st.nextToken();
       if (line.equals ("this_invocation_nonce"))

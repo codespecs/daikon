@@ -111,6 +111,8 @@ public class InvariantAddAndCheckTester extends TestCase {
   private static final String commandsFileName = "daikon/test/inv/InvariantTest.commands";
   private static final String diffFileName = "daikon/test/inv/InvariantTest.diffs";
 
+  private static final String lineSep = Global.lineSep;
+
 
   /**
    * This function allows this test to be run from the command line
@@ -469,9 +471,9 @@ public class InvariantAddAndCheckTester extends TestCase {
         String commandLine = getNextLine(commands).trim();
         int lineNumber = commands.getLineNumber();
         if (InvariantAddAndCheckTester.isComment(commandLine)) {
-          results.append(commandLine + "\n");
+          results.append(commandLine + lineSep);
         } else if (isTestTerminator(commandLine)) {
-          results.append(commandLine + "\n\n");
+          results.append(commandLine + lineSep + lineSep);
           break;
         } else if (isAddCommand(commandLine) ||
                    isCheckCommand(commandLine)) {
@@ -510,7 +512,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
 
       if (generatingCommands) {
-        results.append(className + "\n");
+        results.append(className + lineSep);
       }
 
       // Instantiate variables to be used as the names in the
@@ -534,7 +536,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Assert.assertTrue(getArity(invariantToTest.getClass()) == types.length);
 
       if (generatingCommands) {
-        results.append(typeString + "\n");
+        results.append(typeString + lineSep);
       }
       return false;
     }
@@ -569,9 +571,9 @@ public class InvariantAddAndCheckTester extends TestCase {
         resultStatus = getAddStatus(params);
       }
       if (resultStatus != goalStatus) {
-        results.append("Error on line " + lineNumber + ":\n" +
-                       "Expected  InvariantStatus: " + goalStatus + "\n" +
-                       "Found InvariantStatus: " + resultStatus + "\n");
+        results.append("Error on line " + lineNumber + ":" + lineSep +
+                       "Expected  InvariantStatus: " + goalStatus + lineSep +
+                       "Found InvariantStatus: " + resultStatus + lineSep);
       }
     }
 
@@ -599,7 +601,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         goalStatus = getAddStatus(params);
       }
       String invariantFormat = getInvariantFormat();
-      results.append(command + argDivider + " " + goalStatus.toString() + argDivider + " " + invariantFormat + "\n");
+      results.append(command + argDivider + " " + goalStatus.toString() + argDivider + " " + invariantFormat + lineSep);
     }
 
     /**

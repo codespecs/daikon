@@ -32,7 +32,7 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 
 class AnnotateVisitor extends DepthFirstVisitor {
 
-  public static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.getProperty("line.separator");
 
   public static final String JML_START_COMMENT = "/*@" + lineSep;
   public static final String JML_END_COMMENT = "@*/" + lineSep;

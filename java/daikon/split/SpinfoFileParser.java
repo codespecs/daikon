@@ -112,14 +112,14 @@ class SpinfoFileParser {
       }
     } catch (IOException ioe) {
       //  System.err.println(ioe);
-      System.err.println("Error in " +  spinfoFileName + lineSep +
-                         " at line number " + spinfoFile.getLineNumber() +
+      System.err.println("Error in " +  spinfoFileName);
+      System.err.println(" at line number " + spinfoFile.getLineNumber() +
                          " of .spinfo file");
       throw new RuntimeException(ioe);
     } catch (ParseException e) {
       //  System.err.println(ioe);
-      System.err.println("Error in " +  spinfoFileName + lineSep +
-                         " at line number " + spinfoFile.getLineNumber() +
+      System.err.println("Error in " +  spinfoFileName);
+      System.err.println(" at line number " + spinfoFile.getLineNumber() +
                          " of .spinfo file");
       throw new RuntimeException(e);
     }

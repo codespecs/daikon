@@ -61,7 +61,7 @@ public final class PrintInvariants {
   /** Debug tracer for variable bound information. **/
   public static final Logger debugBound  = Logger.getLogger ("daikon.bound");
 
-  public static final String lineSep = Global.lineSep;
+  private static final String lineSep = Global.lineSep;
 
   /** Whether we are doing output for testing.  Used only for IOA output. **/
   public static boolean test_output = false;
@@ -294,7 +294,8 @@ public final class PrintInvariants {
       return;
     }
 
-    System.out.println("\nDISCARDED INVARIANTS:");
+    System.out.println();
+    System.out.println("DISCARDED INVARIANTS:");
     // DiscReasonMap.debug(discPpt);
 
     // Makes things faster if a ppt is specified
@@ -307,7 +308,7 @@ public final class PrintInvariants {
         String toPrint = "";
         toPrint += print_reasons_from_ppt(ppt,ppts);
 
-        StringTokenizer st = new StringTokenizer(toPrint,"\n");
+        StringTokenizer st = new StringTokenizer(toPrint, lineSep);
         if (st.countTokens() > 2)
           System.out.print(toPrint);
         else {
@@ -334,7 +335,7 @@ public final class PrintInvariants {
 
       // A little hack so that PptTopLevels without discarded Invariants of
       // interest don't get their names printed
-      StringTokenizer st = new StringTokenizer(toPrint.toString(),"\n");
+      StringTokenizer st = new StringTokenizer(toPrint.toString(), lineSep);
       if (st.countTokens() > 2) {
         System.out.print(toPrint.toString());
       }
@@ -361,7 +362,7 @@ public final class PrintInvariants {
           if (propFilter instanceof ObviousFilter) {
             di = nextInv.isObvious();
             if (nextInv.logOn())
-              nextInv.log ("DiscardInfo's stuff: " + di.className() + "\n"
+              nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
                            + di.format());
           } else if (propFilter instanceof UnjustifiedFilter) {
             di = new DiscardInfo(nextInv, DiscardCode.bad_confidence,
@@ -384,12 +385,12 @@ public final class PrintInvariants {
     String toPrint = "";
     Iterator fullInvItor = ppt.invariants_iterator();
     String dashes = "--------------------------------------------"
-                  + "-------------------------------\n";
+                  + "-------------------------------" + lineSep;
 
     if (!(ppt instanceof PptConditional)) {
       toPrint += "==============================================="
-              + "============================\n";
-      toPrint += (ppt.name()+"\n");
+              + "============================" + lineSep;
+      toPrint += (ppt.name() + lineSep);
     }
 
     Iterator matchesIter = DiscReasonMap.returnMatches_from_ppt
@@ -398,7 +399,7 @@ public final class PrintInvariants {
     StringBuffer sb = new StringBuffer();
     while (matchesIter.hasNext()) {
       DiscardInfo nextInfo = (DiscardInfo) matchesIter.next();
-      sb.append(dashes + nextInfo.format() + "\n");
+      sb.append(dashes + nextInfo.format() + lineSep);
     }
 
     // In case the user is interested in conditional ppt's
@@ -424,9 +425,9 @@ public final class PrintInvariants {
    */
   public static void discReasonSetup(String arg) {
     print_discarded_invariants = true;
-    usage = "Usage: <class-name><<var1>,<var2>,,,,>@<ppt.name()>\n"+
-            "or use --disc_reason \"all\" to show all discarded Invariants\n"+
-            "e.g.: OneOf<x>@foo():::ENTER\n";
+    usage = "Usage: <class-name><<var1>,<var2>,,,,>@<ppt.name()>" + lineSep +
+            "or use --disc_reason \"all\" to show all discarded Invariants" + lineSep +
+            "e.g.: OneOf<x>@foo():::ENTER" + lineSep;
 
     // Will print all discarded Invariants in this case
     if (arg==null || arg.length()==0 || arg.equals("all"))
@@ -454,13 +455,13 @@ public final class PrintInvariants {
     // User wants to specify the variable names of interest
     if (firstChar=='<') {
       if (temp.length() < 2)
-        throw new IllegalArgumentException("Missing '>'\n"+usage);
+        throw new IllegalArgumentException("Missing '>'" + lineSep +usage);
       if (temp.indexOf('>',1) == -1)
-        throw new IllegalArgumentException("Missing '>'\n"+usage);
+        throw new IllegalArgumentException("Missing '>'" + lineSep +usage);
       StringTokenizer parenTokens = new StringTokenizer(temp,"<>");
       if ((temp.indexOf('@')==-1 && parenTokens.countTokens() > 0)
           || (temp.indexOf('@')>-1 && parenTokens.countTokens() > 2))
-        throw new IllegalArgumentException("Too many brackets\n"+usage);
+        throw new IllegalArgumentException("Too many brackets" + lineSep +usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(),",");
       if (vars.hasMoreTokens()) {
         discVars = vars.nextToken();
@@ -473,7 +474,7 @@ public final class PrintInvariants {
         return;
       else {
         if (temp.charAt(temp.indexOf('>')+1) != '@')
-          throw new IllegalArgumentException("Must have '@' after '>'\n"+usage);
+          throw new IllegalArgumentException("Must have '@' after '>'" + lineSep +usage);
         else
           temp = temp.substring(temp.indexOf('>')+1);
       }
@@ -482,8 +483,7 @@ public final class PrintInvariants {
     // If it made it this far, the first char of temp has to be '@'
     Assert.assertTrue(temp.charAt(0) == '@');
     if (temp.length()==1)
-      throw new IllegalArgumentException("Must provide ppt name after '@'\n"
-                                         +usage);
+      throw new IllegalArgumentException("Must provide ppt name after '@'" + lineSep +usage);
     discPpt = temp.substring(1);
   }
 
@@ -924,7 +924,7 @@ public final class PrintInvariants {
         }
       }
 
-    } else if (Daikon.output_style==OutputFormat.REPAIR) { 
+    } else if (Daikon.output_style==OutputFormat.REPAIR) {
 	inv_rep = inv.format_using(Daikon.output_style);
         if (inv_rep.indexOf ("$noprinttest") != -1) {
 	    return;
@@ -1010,8 +1010,8 @@ public final class PrintInvariants {
     }
     if (debugFiltering.isLoggable(Level.FINE)) {
       debugFiltering.fine ("----------------------------------------"
-        + "--------------------------------------------------------\n");
-      debugFiltering.fine (ppt.name() + "\n\n");
+        + "--------------------------------------------------------" + lineSep);
+      debugFiltering.fine (ppt.name() + lineSep + lineSep);
     }
 
     // Count statistics (via Global) on variables (canonical, missing, etc.)
@@ -1095,7 +1095,7 @@ public final class PrintInvariants {
         Invariant current_inv = (Invariant)inv_iter.next();
         if (current_inv instanceof Equality) {
           debugFiltering.fine ("Found Equality that says "
-                                + current_inv.format() + "\n");
+                                + current_inv.format() + lineSep);
         }
       }
     }

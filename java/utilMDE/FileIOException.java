@@ -35,8 +35,9 @@ public class FileIOException extends IOException {
     if (reader == null || fileName == null) {
       return super.toString();
     } else {
-      return "\nError: " + super.toString() + " on line " + reader.getLineNumber() +
-        " of file " + fileName;
+      return "Error: " + super.toString()
+        + " on line " + reader.getLineNumber()
+        + " of file " + fileName;
     }
   }
 

@@ -18,6 +18,7 @@ import java.util.*;
  **/
 public class MatchCountVisitor2 extends PrintAllVisitor {
 
+
   // invariants found by the splitting
   private HashSet cnt = new HashSet();
   // target set of invariants
@@ -284,7 +285,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
       }
     }
 
-    System.out.println ("\n\n\nNOT FOUND: ");
+    System.out.println (lineSep + lineSep + lineSep + "NOT FOUND: ");
     for (Iterator i = targSet.iterator(); i.hasNext(); ) {
       String str = (String) i.next();
       if (!correctSet.contains (str)) {
@@ -292,7 +293,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
       }
     }
 
-    System.out.println ("\n\n\nWRONG_REPORTS: ");
+    System.out.println (lineSep + lineSep + lineSep + "WRONG_REPORTS: ");
     //        for (Iterator i = incorrectSet.iterator(); i.hasNext(); ) {
     for (Iterator i = cnt.iterator(); i.hasNext(); ) {
       String str = (String) i.next();
@@ -305,7 +306,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     for (Iterator i = goodMap.keySet().iterator(); i.hasNext(); ) {
       String ppt = (String) i.next();
-      System.out.println ("\n*****************" + ppt);
+      System.out.println (lineSep + "*****************" + ppt);
       for (Iterator j = ((HashSet) goodMap.get(ppt)).iterator();
            j.hasNext();) {
         System.out.println (j.next());

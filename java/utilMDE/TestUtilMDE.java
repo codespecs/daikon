@@ -1696,12 +1696,12 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.unescapeNonJava("").equals(""));
     assertTrue(UtilMDE.unescapeNonJava("\\\\").equals("\\"));
     assertTrue(UtilMDE.unescapeNonJava("\\\"").equals("\""));
-    assertTrue(UtilMDE.unescapeNonJava("\\n").equals("\n"));
+    assertTrue(UtilMDE.unescapeNonJava("\\n").equals("\n")); // not lineSep
     assertTrue(UtilMDE.unescapeNonJava("\\r").equals("\r"));
     assertTrue(UtilMDE.unescapeNonJava("split\\nlines")
                .equals("split\nlines"));
-    assertTrue(UtilMDE.unescapeNonJava("\\\\\\n").equals("\\\n"));
-    assertTrue(UtilMDE.unescapeNonJava("\\n\\r").equals("\n\r"));
+    assertTrue(UtilMDE.unescapeNonJava("\\\\\\n").equals("\\\n")); // not lineSep
+    assertTrue(UtilMDE.unescapeNonJava("\\n\\r").equals("\n\r")); // not lineSep
     assertTrue(UtilMDE.unescapeNonJava("\\\\\\n\\r\\\"").equals("\\\n\r\""));
     assertTrue(UtilMDE.unescapeNonJava("\\\\relax").equals("\\relax"));
     assertTrue(UtilMDE.unescapeNonJava("\\\"hello\\\"").equals("\"hello\""));

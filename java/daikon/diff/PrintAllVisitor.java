@@ -11,6 +11,10 @@ import daikon.inv.Invariant;
  **/
 public class PrintAllVisitor extends DepthFirstVisitor {
 
+  // Protected so subclasses can use it.
+  protected static final String lineSep = Global.lineSep;
+
+
   protected static boolean HUMAN_OUTPUT = false;
 
 

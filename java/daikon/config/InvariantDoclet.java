@@ -15,6 +15,8 @@ import utilMDE.*;
 public class InvariantDoclet
 {
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   /**
    * Entry point for this doclet (invoked by javadoc).
    **/
@@ -157,7 +159,7 @@ public class InvariantDoclet
     out.println (prefix + cd + is_abstract);
     String comment = cd.commentText();
     comment = "         " + comment;
-    comment = UtilMDE.replaceString (comment, "\n", "\n        ");
+    comment = UtilMDE.replaceString (comment, lineSep, lineSep + "        ");
     out.println (comment);
 
     //put out each derived class
@@ -204,7 +206,7 @@ public class InvariantDoclet
       // comment = "    " + comment;
       // comment = UtilMDE.replaceString (comment, "\n", "\n   ");
       // Remove leading spaces, which throw off Info.
-      UtilMDE.replaceString (comment, "\n ", "\n");
+      UtilMDE.replaceString (comment, lineSep + " ", lineSep);
       comment = UtilMDE.replaceString (comment, "{", "@{");
       comment = UtilMDE.replaceString (comment, "}", "@}");
       comment = UtilMDE.replaceString (comment, "<br>", "@*");

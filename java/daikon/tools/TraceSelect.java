@@ -282,7 +282,8 @@ public class TraceSelect {
     }
 
     private static void printUsage () {
-	System.out.println ("USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...\nExample: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
+	System.out.println ("USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...");
+        System.out.println ("Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 	System.exit(0);
     }
 }

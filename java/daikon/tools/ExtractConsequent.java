@@ -22,7 +22,7 @@ import daikon.inv.Invariant.OutputFormat;
 public class ExtractConsequent {
 
   public static final Logger debug = Logger.getLogger ("daikon.ExtractConsequent");
-  public static final String lineSep = Global.lineSep;
+  private static final String lineSep = Global.lineSep;
   private static Perl5Matcher re_matcher = new Perl5Matcher();
   private static Perl5Compiler re_compiler = new Perl5Compiler();
 
@@ -205,7 +205,8 @@ public class ExtractConsequent {
       }
 
       if (allConds.size() > 0) {
-        pw.println("\nPPT_NAME " + pptname);
+        pw.println();
+        pw.println("PPT_NAME " + pptname);
         Iterator condsIter = allConds.iterator();
         while (condsIter.hasNext())
           pw.println(condsIter.next());
@@ -219,13 +220,13 @@ public class ExtractConsequent {
   static String combineDummy(String inv, String daikonStr, String ioa, String esc,
                              String simplify) {
     StringBuffer combined = new StringBuffer(inv);
-    combined.append("\n\tDAIKON_FORMAT ");
+    combined.append(lineSep + "\tDAIKON_FORMAT ");
     combined.append(daikonStr);
-    combined.append("\n\tIOA_FORMAT ");
+    combined.append(lineSep + "\tIOA_FORMAT ");
     combined.append(ioa);
-    combined.append("\n\tESC_FORMAT ");
+    combined.append(lineSep + "\tESC_FORMAT ");
     combined.append(esc);
-    combined.append("\n\tSIMPLIFY_FORMAT ");
+    combined.append(lineSep + "\tSIMPLIFY_FORMAT ");
     combined.append(simplify);
     return combined.toString();
   }

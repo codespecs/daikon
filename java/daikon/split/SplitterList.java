@@ -66,8 +66,8 @@ public abstract class SplitterList
       Assert.assertTrue(! ppt_splitters.containsKey(pptname));
       // Assert.assertTrue(! ppt_splitters.containsKey(pptname),
       //               "SplitterList already contains " + pptname
-      //               + " which maps to\n " + ArraysMDE.toString(get_raw(pptname))
-      //               + "\n which is " + formatSplitters(get_raw(pptname)));
+      //               + " which maps to" + lineSep + " " + ArraysMDE.toString(get_raw(pptname))
+      //               + lineSep + " which is " + formatSplitters(get_raw(pptname)));
       ppt_splitters.put(pptname, splits);
     }
   }
@@ -239,7 +239,7 @@ public abstract class SplitterList
         if (!splitters.isEmpty()) {
           for (j = 0; j < splitters.size(); j++) {
             if ((tempsplitter.condition().trim()).equals( ((Splitter)splitters.elementAt(j)).condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition() + " \n");
+              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
               duplicate = true;
               break;
             }

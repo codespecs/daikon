@@ -15,6 +15,8 @@ import utilMDE.*;
 public class ParameterDoclet
 {
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   /**
    * Entry point for this doclet (invoked by javadoc).
    **/
@@ -154,7 +156,7 @@ public class ParameterDoclet
       //  [desc]
       out.println("@item " + field);
       // Remove leading spaces, which throw off Info.
-      desc = UtilMDE.replaceString (desc, "\n ", "\n");
+      desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
       out.println(desc);
       out.println(defstr);
       out.println();

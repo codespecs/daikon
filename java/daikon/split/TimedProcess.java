@@ -108,10 +108,10 @@ public class TimedProcess {
     public void run() {
       try {
         int exit = p.exitValue();
-        // System.out.println("\nProcess " + command + "\nexited with status " + exit);
+        // System.out.println(); System.out.println("Process " + command + lineSep + "exited with status " + exit);
       } catch (IllegalThreadStateException ie) {
-        System.out.println("Process " + command + "\nterminated after "
-                           + waitTime + " seconds");
+        System.out.println("Process " + command);
+        System.out.println("terminated after " + waitTime + " seconds");
       }
       p.destroy();
       timer.cancel();

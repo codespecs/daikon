@@ -3186,7 +3186,7 @@ public class PptTopLevel extends Ppt {
     result.append("Slices for: " + this.ppt_name);
     for (Iterator i = viewsAsCollection().iterator(); i.hasNext();) {
       PptSlice slice = (PptSlice) i.next();
-      result.append("\n" + slice.toString());
+      result.append(Global.lineSep + slice.toString());
     }
     return result.toString();
   }

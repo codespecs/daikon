@@ -40,7 +40,7 @@ public class InsertCommentFormatter
   //    column shifting being done, applies only to specified line
 
 
-  public static final String lineSep = System.getProperty("line.separator");
+  private static final String lineSep = System.getProperty("line.separator");
 
   public InsertCommentFormatter(Vector comments) {
     this.comments = comments;

@@ -16,6 +16,8 @@ public class CmdCheck
 {
   public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");
 
+  private static final String lineSep = System.getProperty("line.separator");
+
   public final String proposition;
   public boolean valid = false;
   public boolean unknown = false;
@@ -66,7 +68,7 @@ public class CmdCheck
         if (result.equals("Counterexample:")) {
           // Suck in the counterexample, if given
           do {
-            counterexample += result + "\n";
+            counterexample += result + lineSep;
             result = s.readLine();
             if (result == null) {
               throw new SimplifyError("Probable core dump");

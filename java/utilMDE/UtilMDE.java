@@ -1169,7 +1169,7 @@ public final class UtilMDE {
         if (post_esc < i) {
           sb.append(orig.substring(post_esc, i));
         }
-        sb.append("\\n");
+        sb.append("\\n");       // not lineSep
         post_esc = i+1;
         break;
       case '\r':

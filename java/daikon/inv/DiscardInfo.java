@@ -72,7 +72,9 @@ public final class DiscardInfo {
   }
 
   public String format() {
-    return discardFormat + "\n" + discardCode + "\n" + discardString;
+    return (discardFormat + Global.lineSep
+            + discardCode + Global.lineSep
+            + discardString);
   }
 
   /**

@@ -77,9 +77,9 @@ public final class LogHelper {
 
   public static class DaikonLogFormatter extends SimpleFormatter {
     public String format(LogRecord record) {
-      // // By default, take up 20 spaces min, and 20 spaces max for
+      // // By default, take up 20 spaces min, and 20 spaces max for logger.
       // // %c = Logger. %m = message, %n = newline
-      // // Example: "@daikon.Daikon: This is a message \n"
+      // // Example output: "@ daikon.Daikon: This is a message"
       // setupLogs (l, "@ %20.20c: %m%n");
 
       String loggerName = record.getLoggerName() + ":";

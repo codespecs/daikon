@@ -534,7 +534,7 @@ public class PptSplitter implements Serializable {
         for (Iterator cand_itor=hs.iterator(); cand_itor.hasNext(); ) {
           Invariant candidate = (Invariant) cand_itor.next();
           String candidate_formatted = candidate.format();
-          // System.out.println("Comparing:" + lineSep + "    " + candidate_formatted + lineSep + "    " + canon_new_formatted);
+          // System.out.println("Comparing:" + lineSep + "    " + candidate_formatted); System.out.println("    " + canon_new_formatted);
           // It is also desirable to be over the prestate;
           // but that is only true for variables that are modified.
           // A variable without "orig()" is fine if it's not modified.

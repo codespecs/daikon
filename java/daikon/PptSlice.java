@@ -32,7 +32,8 @@ public abstract class PptSlice
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  public static final String lineSep = Global.lineSep;
+  // Permit subclasses to use it.
+  protected static final String lineSep = Global.lineSep;
 
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger("daikon.PptSlice");

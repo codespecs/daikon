@@ -29,6 +29,8 @@ import utilMDE.Intern;
  **/
 class FormatTestCase {
 
+  private static final String lineSep = Global.lineSep;
+
   /**
    * An inner class that represents a particular test on the invariant
    * represented by a FormatTestCase object. This is used so this code
@@ -158,9 +160,9 @@ class FormatTestCase {
      **/
     public String getDiffString() {
       if (resultCache != null && !resultCache.equals(goalOutput)) {
-        return "Error on line " + goalLineNumber + ":\n" +
-          "Expected result:\n" + goalOutput + "\n" +
-          "Returned result:\n" + resultCache;
+        return "Error on line " + goalLineNumber + ":" + lineSep +
+          "Expected result:" + lineSep + goalOutput + lineSep +
+          "Returned result:" + lineSep + resultCache;
       }
       return "";
     }
@@ -227,12 +229,12 @@ class FormatTestCase {
       for (int j=currentLine; j<currentGoalLineNumber; j++) {
         currentLineOfText = theInputFile.readLine();
         if (parseGoal(currentLineOfText) == null)
-          output.append(currentLineOfText + "\n");
+          output.append(currentLineOfText + lineSep);
       }
       output.append(GOAL_PREFIX + " (" + current.getFormatString() + "): " +
                     current.createTestOutput(invariantToTest));
       if (i != testCases.size()-1)
-        output.append("\n");
+        output.append(lineSep);
       currentLine = currentGoalLineNumber;
     }
 
@@ -271,7 +273,7 @@ class FormatTestCase {
       currentDiffString = ((SingleOutputTestCase)testCases.get(i)).getDiffString();
       result.append(currentDiffString);
       if (i != testCases.size() && currentDiffString != "") // "interned"
-        result.append("\n\n");
+        result.append(lineSep + lineSep);
     }
 
     return result.toString();
@@ -792,8 +794,8 @@ class FormatTestCase {
 
   //            // Debug code
 
-  //            // System.out.println("**********\n" + toBeParsed + "\n" +
-  //            // arrayFunctionParams[1] + "\n**********\n");
+  //            // System.out.println("**********" + lineSep + toBeParsed + lineSep +
+  //            // arrayFunctionParams[1] + lineSep + "**********" + lineSep);
 
   //            try {
   //              // Get the result
@@ -966,7 +968,7 @@ class FormatTestCase {
       // Debug code
 
       //        System.out.println("Sample #" + (i+1) + " of " + samples.size());
-      //        System.out.println("P0: " + params[0] + "\nP1: " + params[1]);
+      //        System.out.println("P0: " + params[0] + lineSep + "P1: " + params[1]);
       //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " + params[0].getClass().getComponentType());
       //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " + params[1].getClass().getComponentType());
 
@@ -993,7 +995,7 @@ class FormatTestCase {
       catch (InvocationTargetException e) {
         StringWriter target_backtrace = new StringWriter();
         e.getTargetException().printStackTrace(new PrintWriter(target_backtrace));
-        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "):\nSTART TARGETEXCEPTION=\n" + target_backtrace.toString() + "\nEND TARGETEXCEPTION\n" + e.toString());
+        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "):" + lineSep + "START TARGETEXCEPTION=" + lineSep + target_backtrace.toString() + lineSep + "END TARGETEXCEPTION" + lineSep + e.toString());
       } catch (Exception e) {
         throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "): " + e.toString());
       }

@@ -23,7 +23,7 @@ import utilMDE.UtilMDE;
 public final class UnionInvariants {
   private UnionInvariants() { throw new Error("do not instantiate"); }
 
-  public static final String lineSep = Global.lineSep;
+  private static final String lineSep = Global.lineSep;
 
   // Non-empty program points in the input files must be distinct.
   private static String usage =

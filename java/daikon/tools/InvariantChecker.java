@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class InvariantChecker {
   private InvariantChecker() { throw new Error("do not instantiate"); }
 
-  public static final String lineSep = Global.lineSep;
+  private static final String lineSep = Global.lineSep;
 
   public static final Logger debug
     = Logger.getLogger ("daikon.tools.InvariantChecker");

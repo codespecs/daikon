@@ -566,7 +566,7 @@ public class PptSliceEquality
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
       result.append (inv.repr());
-      result.append ("\n");
+      result.append (lineSep);
     }
     result.append ("  ]");
     return result.toString();
