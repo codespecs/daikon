@@ -354,21 +354,24 @@ public class LOWERBOUND
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //              + "add(" + value + ", " + modified + ", " + count + ")");
-
-    core.changed = false;
-
     #ifndef IS_ELT
+      if (core.wouldChange (value)) {
+        cloneAndFlow();
+      }
       core.add_modified(value, count);
     #else
+      boolean changed = false;
       for (int i=0; i<value.length; i++) {
+        if (!changed && core.wouldChange (value[i])) {
+          cloneAndFlow();
+          changed = true;
+        }
         core.add_modified(value[i], count);
         if (falsified)
           return;
       }
     #endif
 
-    if (core.changed)
-      cloneAndFlow();
   }
 
   public boolean enoughSamples() {
@@ -529,6 +532,13 @@ public class LOWERBOUND
         return (LOWERBOUND) inv;
     }
     return null;
+  }
+
+  /**
+   * Not okay because this keeps track of samples seen at certain min/max values.
+   **/
+  public boolean inProcessSuppressOk() {
+    return false;
   }
 
 }
