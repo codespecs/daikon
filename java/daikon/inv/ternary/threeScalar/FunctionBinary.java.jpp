@@ -93,6 +93,9 @@ public class CLASSNAME
       VarInfo argresult = ppt.var_infos[indices[0]];
       VarInfo arg1 = ppt.var_infos[indices[1]];
       VarInfo arg2 = ppt.var_infos[indices[2]];
+      if (logOn())
+        Debug.log (CLASSNAME.class, ppt, "Instantiate vars "
+                  + indices[0] + ", " + indices[1] + ", " + indices[2]);
       if (debug.isDebugEnabled())
         debug.debug(CLASSSTRING + ".instantiate(" + ppt.name + ", "
                     + methodname + " (#" + methodNumber + "), "
@@ -145,6 +148,9 @@ public class CLASSNAME
     core.add_modified(x, y, z, count);
   }
 
+  public boolean inProcessSuppressOk() {
+    return core.inProcessSuppressOk();
+  }
 
   protected double computeProbability() {
     return core.computeProbability();
