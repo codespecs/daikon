@@ -224,20 +224,6 @@ sub is_struct_field {
   return $variable =~ /->/ || $variable =~ /\./;
 }
 
-sub _get_comparable_variables {
-  my ($variable, $function, $interesting_variables) = @_;
-
-  my $key = "$variable $function " . (join ' ', %{$interesting_variables});
-  if (exists $cache{$key}) {
-    return split ' ', $cache{$key};
-  }
-
-  my %retval = _get_comparable_variables(@_);
-  $cache{$key} = join ' ', %retval;
-  return %retval;
-
-}
-
 sub get_comparable_variables {
   my ($variable, $function, $interesting_variables) = @_;
 
