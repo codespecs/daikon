@@ -115,7 +115,7 @@ public final class NonEqual extends TwoScalar {
         return true;
       }
     }
-    return true;
+    return false;
   }
 
 }

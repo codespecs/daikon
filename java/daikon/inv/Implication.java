@@ -35,8 +35,12 @@ public class Implication extends Invariant {
   }
 
   protected double computeProbability() {
-    return Math.min(predicate.computeProbability(),
-                    consequent.computeProbability());
+    double pred_prob = predicate.computeProbability();
+    double cons_prob = consequent.computeProbability();
+    if ((pred_prob > PROBABILITY_UNJUSTIFIED)
+        || (cons_prob > PROBABILITY_UNJUSTIFIED))
+      return Math.max(pred_prob, cons_prob);
+    return 1-(1-pred_prob)*(1-cons_prob);
   }
 
   public String repr() {

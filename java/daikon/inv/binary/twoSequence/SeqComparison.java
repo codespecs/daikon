@@ -2,6 +2,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 
@@ -16,6 +17,8 @@ class SeqComparison extends TwoSequence implements Comparison {
   boolean can_be_eq = false;
   boolean can_be_lt = false;
   boolean can_be_gt = false;
+
+  int num_sc_samples = 0;
 
   protected SeqComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
@@ -46,21 +49,21 @@ class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String format() {
-    String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-    String comparison = (can_be_eq ? "=" : "");
-    if (!(can_be_eq || can_be_gt || can_be_lt))
-      comparison = "?cmp?";
-
-    return var1().name + " " + inequality + comparison + " " + var2().name
+    // System.out.println("Calling SeqComparison.format for: " + repr());
+    String comparator = IntComparisonCore.format_comparator(can_be_lt, can_be_eq, can_be_gt);
+    return var1().name + " " + comparator + " " + var2().name
       + " (lexically)";
   }
 
 
   public void add_modified(long[] v1, long[] v2, int count) {
+    /// This does not do the right thing; I really want to avoid comparisons
+    /// if one is missing, but not if one is zero-length.
     // Don't make comparisons with empty arrays.
     if ((v1.length == 0) || (v2.length == 0)) {
       return;
     }
+    num_sc_samples += count;
 
     int comparison = comparator.compare(v1, v2);
     // System.out.println("SeqComparison(" + var1().name + "," + var2().name + "): "
@@ -84,8 +87,9 @@ class SeqComparison extends TwoSequence implements Comparison {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, ppt.num_values());
+    } else if (num_sc_samples == 0) {
+      return Invariant.PROBABILITY_UNKNOWN;
     } else {
-      // TODO: What if there were no samples yet?
       return Invariant.PROBABILITY_JUSTIFIED;
     }
   }

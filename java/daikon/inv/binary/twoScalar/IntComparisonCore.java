@@ -107,9 +107,13 @@ public final class IntComparisonCore implements java.io.Serializable {
   // the full formatted thing...
   /** Return a comparator such as "<=" or ">" or "=". **/
   public String format_comparator() {
-    if (can_be_eq || can_be_gt || can_be_lt) {
-      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-      String comparison = (can_be_eq ? "=" : "");
+    return format_comparator(can_be_lt, can_be_eq, can_be_gt);
+  }
+
+  public static String format_comparator(boolean lt, boolean eq, boolean gt) {
+    if (lt || eq || gt) {
+      String inequality = (lt ? "<" : gt ? ">" : "");
+      String comparison = (eq ? "=" : "");
       // if (debugIntComparison) {
       //   System.out.println(repr()
       //                      + "; inequality=\"" + inequality + "\""
