@@ -1,10 +1,12 @@
 #!/usr/bin/env perl
 
 # context-spinfo.pl -- Read dfej's context-sensitivity .map files and
-# produce a spinfo file from them to stdout.
+# produce a spinfo file from them to stdout.  NOTE: This script is
+# deprecated in favor of passing .map files directly into Daikon,
+# which now creates splitters itself directly from the map files.
 
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-11 16:49:42 mistere>
+# Time-stamp: <2002-03-18 12:35:19 mistere>
 
 use Carp;
 use File::Find;
