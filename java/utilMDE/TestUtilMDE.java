@@ -435,7 +435,7 @@ public final class TestUtilMDE extends TestCase {
       assert(caclf.compare(a2, a8) < 0);
       assert(cacl.compare(a8, a3) < 0);
       assert(caclf.compare(a8, a3) < 0);
-      assert(cacl.compare(a3, a8) < 0);
+      assert(cacl.compare(a3, a8) > 0);
       assert(caclf.compare(a3, a8) > 0);
     }
 
