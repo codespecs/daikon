@@ -4,7 +4,7 @@ DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress --suppress_redun
 all: birthday.inv standalone.inv
 
 clean:
-	rm -rf daikon-untyped daikon-instrumented daikon-output
+	rm -rf birthday.inv standalone.inv daikon-untyped daikon-instrumented daikon-output
 
 birthday.inv: daikon-output/Birthday.decls daikon-output/test_bday-combined.dtrace
 	$(DAIKON) $^ -o $@
