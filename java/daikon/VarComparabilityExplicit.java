@@ -93,10 +93,11 @@ public final class VarComparabilityExplicit extends VarComparability implements 
       this.base = base;
       this.dim = dim;
     }
-    // We never print this, but name() is used for equality checks
-    protected String name_impl() {
-      return base.name() + "-index" + dim;
+    // repr() is used for equality checks
+    protected String repr_impl() {
+      return "IndexVar{" + dim + "}[" + base.repr() + "]";
     }
+    protected String name_impl() { throw new UnsupportedOperationException(); }
     protected String esc_name_impl() { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl() { throw new UnsupportedOperationException(); }
     public Object accept(VarInfoName.Visitor v) { throw new UnsupportedOperationException(); }
