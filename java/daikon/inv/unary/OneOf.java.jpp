@@ -910,7 +910,7 @@ public final class ONEOFSCALAR
     String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
 #elif defined(IS_SCALAR)
-    String varname = var().name.jml_name();
+    String varname = var().name.JMLElementCorrector().jml_name();
 #endif
     String result;
 #if defined(STRING) || defined(ELTSTRING)
