@@ -157,7 +157,7 @@ cvs-test:
 # daikon-source.tar".
 # The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
 # to work, so supply explicit "-S" flag instead.)
-dist: 
+dist:
 	$(MAKE) -S dist-and-test
 
 # Both make and test the distribution.
@@ -195,7 +195,7 @@ update-dist-dir: dist-ensure-directory-exists
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
 	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
 	# a method or class with more than 0xFFFF bytecodes.
-	cd java/daikon && $(MAKE) all_via_javac 
+	cd java/daikon && $(MAKE) all_via_javac
 	cd java/daikon && $(MAKE) junit
 	$(MAKE) update-dist-doc
 	$(MAKE) www
@@ -393,7 +393,7 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 	rm -rf /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
 
-	## Log4j is a loss; can't include source because its build 
+	## Log4j is a loss; can't include source because its build
 	## configuration is so weird that it cannot be easily integrated.
 	mkdir /tmp/daikon/java/lib
 	cp -p java/lib/log4j.jar /tmp/daikon/java/lib
@@ -406,13 +406,13 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
 	# Java instrumenter
-	# The -h option saves symbolic links as real files, to avoid problem 
+	# The -h option saves symbolic links as real files, to avoid problem
 	# with the fact that I've made dfej into a symbolic link.
 	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar --exclude '*.o' --exclude 'src/dfej' --exclude 'src.tar' dfej)
 	# (cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java; rm /tmp/dfej.tar)
 	# For debugging
 	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java)
-	# the subsequence rm -rf shouldn't be necessary one day, 
+	# the subsequence rm -rf shouldn't be necessary one day,
 	# but for the time being (and just in case)...
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
 	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES); rm -rf )
@@ -538,13 +538,13 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
 ## Michael Harder <mharder@MIT.EDU>):
-# 1.  Get the mingw32 cross-compiler for Linux.  Details are avaliable at: 
-# http://www.mingw.org/mingwfaq.shtml#faq-cross.  A pre-built version for 
-# Linux is available at: 
+# 1.  Get the mingw32 cross-compiler for Linux.  Details are avaliable at:
+# http://www.mingw.org/mingwfaq.shtml#faq-cross.  A pre-built version for
+# Linux is available at:
 # http://www.devolution.com/~slouken/SDL/Xmingw32/mingw32-linux-x86-glibc-2.1.tar.gz
 # 
-# 2.  Extract mingw32-linux-x86-glibc-2.1.tar.gz.  The cross compiler tools 
-# are in cross-tools/bin.  The tools start with "i386-mingw32msvc-".  These 
+# 2.  Extract mingw32-linux-x86-glibc-2.1.tar.gz.  The cross compiler tools
+# are in cross-tools/bin.  The tools start with "i386-mingw32msvc-".  These
 # tools need to be in your path when you build the Windows binary (including
 # when you configure the Windows binary).
 # 
@@ -555,17 +555,17 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 # 
 # mkdir build_mingw; cd build_mingw
 # 
-# 4.  Run the dfej configure script, with a target platform of 
+# 4.  Run the dfej configure script, with a target platform of
 # "i386-mingw32msvc".  Assume the dfej source is at ~/daikon/java-front-end.
 # 
-# ~/daikon/java-front-end/configure --prefix=/tmp/dfej_Xmingw 
+# ~/daikon/java-front-end/configure --prefix=/tmp/dfej_Xmingw
 # --host=i386-mingw32msvc
 # 
-# Add additional arguments to configure as desired.  I don't know what the 
+# Add additional arguments to configure as desired.  I don't know what the
 # "--prefix" flag is for, but they use it in the jikes INSTALL instructions.
 # 
-# 5.  Run "make".  This should make the Windows binary at 
-# build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run 
+# 5.  Run "make".  This should make the Windows binary at
+# build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run
 # it.  You should at least get the Daikon usage message.
 
 
@@ -604,11 +604,10 @@ use-%: daikon-is-symlink
 	[ -e tests.$* ]
 	rm -f java/daikon
 	ln -s ../daikon.$* java/daikon
-	$(MAKE) tags
+	$(MAKE) tags >& /dev/null &
 	rm -f tests
 	ln -s tests.$* tests
 
 daikon-is-symlink:
 	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
 	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
-
