@@ -47,7 +47,7 @@ public final class SequenceScalarFactory {
       }
     }
     if (! Daikon.ignore_comparability) {
-      if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName()"), seqvar.comparability.elementType(),
+      if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName"), seqvar.comparability.elementType(),
                                         sclvar.name, sclvar.comparability)) {
         return null;
       }

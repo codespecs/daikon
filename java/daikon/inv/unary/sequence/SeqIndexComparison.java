@@ -48,8 +48,8 @@ public final class SeqIndexComparison extends SingleSequence {
     }
     VarComparability elt_compar = seqvar.comparability.elementType();
     VarComparability index_compar = seqvar.comparability.indexType(0);
-    if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName()"), elt_compar,
-                                      VarInfoName.parse("seqvar.name.indexName(0)"), index_compar)) {
+    if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName"), elt_compar,
+                                      VarInfoName.parse("seqvar.name.indexName0"), index_compar)) {
       return null;
     }
 

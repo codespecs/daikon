@@ -52,7 +52,7 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       VarComparability sclcompar = sclvar.comparability;
       VarComparability seqindexcompar = seqvar.comparability.indexType(0);
       if (! VarComparability.compatible(sclvar.name, sclcompar,
-                                        VarInfoName.parse("seqvar.name.indexName(0)"), seqindexcompar)) {
+                                        VarInfoName.parse("seqvar.name.indexName0"), seqindexcompar)) {
         return null;
       }
     }
