@@ -381,14 +381,39 @@ tags:
 ###
 
 findbugs: .findbugs-output
+.PHONY: findbugs
 
 .findbugs-output: ../daikon.jar
 	rm -f findbugs-output
-	~/tmp/findbugs-0.7.4/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
+	~mernst/tmp/findbugs-0.7.4/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
-# This target doesn't seem to work.  Why?
-../daikon.jar:
+../daikon.jar: ${JAVA_FILES}
 	cd .. && $(MAKE) daikon.jar
+
+checkstyle: checkstyle-cs checkstyle-sun
+checkstyle-cs: .checkstyle-cschecks-output
+checkstyle-sun: .checkstyle-sunchecks-output
+.PHONY: checkstyle checkstyle-cs checkstyle-sun
+
+.checkstyle-sunchecks-output: ${JAVA_FILES}
+	  java \
+	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
+	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
+	    -Dbasedir=/g2/users/mernst/java/checkstyle-3.4/docs \
+	    -jar ~mernst/java/checkstyle-3.4/checkstyle-all-3.4.jar \
+	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
+	    -r daikon | tee .checkstyle-sunchecks-output
+
+.checkstyle-cschecks-output: ${JAVA_FILES}
+	  java \
+	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
+	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
+	    -Dtranslation.severity=error \
+	    -Dindent.severity=error \
+	    -jar /g2/users/mernst/java/checkstyle-3.4/checkstyle-all-3.4.jar \
+	    -c /g2/users/mernst/java/checkstyle-3.4/docs/checkstyle_checks.xml \
+	    -r daikon | tee .checkstyle-cschecks-output
+
 
 lint:	jlint
 
@@ -459,7 +484,7 @@ doc-jdk-lookup: doc
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
 ../doc/invariants-doc.texinfo: $(JAVA_FILES)
-	javadoc -doclet daikon.config.InvariantDoclet \
+	javadoc -quiet -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -470,7 +495,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # having both . and pwd on CLASSPATH:  classes are found twice resulting in
 # a duplicate class warning.
 ../doc/config-options.texinfo: $(JAVA_FILES)
-	javadoc -doclet daikon.config.ParameterDoclet \
+	javadoc -quiet -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -483,7 +508,7 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(JAVA_FILES)
-	javadoc -doclet daikon.config.ParameterDocletCategory \
+	javadoc -quiet -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
