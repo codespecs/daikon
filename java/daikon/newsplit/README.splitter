@@ -5,10 +5,11 @@ Conditional invariants are invariants which are true only part of the
 time.  For instance, for a function which computes the absolute value
 of a number, the postcondition is 
 
-if arg < 0, then return.value = -arg 
-else return.value = arg.  
+  if arg < 0
+    then return == -arg 
+    else return == arg
 
-In this case, the invariant "return.value == -arg" is a conditional
+In this case, the invariant "return == -arg" is a conditional
 invariant because it depends on the condition "arg < 0" being true.
 To detect conditional invariants, Daikon splits the data trace into
 parts based on some predicate (in this case "arg < 0").  Invariant
@@ -57,6 +58,11 @@ is
 
 PPT_NAME, <ppt name>
 CONDITIONS, cond1, cond2, cond3 ...
+
+[[Describe what sorts of expressions are permitted as conditions.  For
+example, only conditions that are themselves invariants?  Any Java
+expression whatever?  Also note that they should be of boolean type.]]
+
 
 ===========
 REPLACEMENT
