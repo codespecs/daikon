@@ -68,7 +68,7 @@ public class SplitterFactory {
   /** Matches the variable names of arguments inside function calls. **/
   static Pattern arg_pattern;
   static Pattern octothorpe_pattern; // "#"
-  static Substitution octothorpe_subst = new Perl5Substitution("#");
+  static Substitution octothorpe_subst = new StringSubstitution("#");
 
   static {
     try {
@@ -440,7 +440,8 @@ public class SplitterFactory {
         String condition = curSplitterObject.condition();
         String test_string = condition;
 
-        String splitter_fname = splittername + "_" + (guid++);
+        guid++;
+        String splitter_fname = splittername + "_" + guid;
         int lastIndex = splitter_fname.indexOf(File.separator);
         curSplitterObject.setClassName(splitter_fname.substring(lastIndex + 1));
         String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1);
