@@ -18,16 +18,11 @@ Further documentation can be found in:
 
 3.2.0 (Feb 1 2005)
 
+The 3.2.0 version of Daikon introduces substantial enhancements in a
+variety of areas ...
+
 Daikon's licensing terms have been liberalized.  Daikon is now distributed
 without restrictions under an MIT/BSD-style license.
-
-Hopefully, this release will include:
- * David Cok's Eclipse plug-in
- * Eric Fellheimer's Java front end
- * incremental operation for both the new Java front end and for Kvasir
- * Jeff Perkins's dynamic comparability analysis
- * Carlos's run-time checker
- * Annotate should respect whitespace (Carlos will make this change)
 
 The dfej front end for Java outputs more variables; in particular, you may
 notice slightly more "foo.class" variables that give the run-time type of
@@ -42,6 +37,16 @@ any declaration in a .dtrace file must precede all samples for that program
 point.
 [Note (either here or in the manual) the consequences of this, notably that
 it enables incremental operation.]
+
+Hopefully, this release will include:
+ * Daikon supports Java 5 (also known as Java 1.5)
+ * Annotate should respect whitespace (Carlos will make this change)
+ * Carlos's run-time checker
+ * Eric Fellheimer's Java front end
+ * incremental operation for both the new Java front end and for Kvasir
+ * David Cok's Eclipse plug-in
+ * Jeff Perkins's dynamic comparability analysis [this one might not be
+   reasonable by February 1]
 
 ---------------------------------
 
