@@ -17,7 +17,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.0.1
+4.0.1 (Feb 13 2005)
 
 Daikon
 
@@ -27,6 +27,8 @@ Daikon
       daikon.FileIO.unmatched_procedure_entries_quiet
 
 ---------------------------------
+
+4.0.0 (Feb 7 2005)
 
 The 4.0.0 version of Daikon introduces many substantial enhancements.
 These improvements include:
