@@ -22,6 +22,7 @@ public class NonZero extends SingleScalar {
 
   long min = Long.MAX_VALUE;
   long max = Long.MIN_VALUE;
+  long range_max = 50;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
@@ -79,6 +80,9 @@ public class NonZero extends SingleScalar {
     // The min and max tests will simultaneoulsy succeed exactly once (for
     // the first value).
     if (v == 0) {
+      if (debugNonZero || ppt.debugged) {
+        System.out.println("NonZero.destroy(" + ppt.name + ")");
+      }
       destroy();
       return;
     }
@@ -115,6 +119,10 @@ public class NonZero extends SingleScalar {
         // constraint implies non-zero.
         range = (max - min + 1) / modulus;
       }
+      if ((range_max != 0) && (range > range_max)) {
+        range = range_max;
+      }
+
       double probability_one_elt_nonzero = 1 - 1.0/range;
       // This could underflow; so consider doing
       //   double log_probability = self.samples*math.log(probability);
@@ -162,6 +170,7 @@ public class NonZero extends SingleScalar {
             if (other_slice != null) {
               SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
+                // System.out.println("NonZero.isObviousImplied true due to: " + sine.format()");
                 return true;
               }
             }
