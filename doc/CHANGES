@@ -28,6 +28,8 @@ A bug in dfej, the front end for Java, has been fixed.  The bug could
 cause errors in programs that used variables named "ps", "depth", or
 "prefix".
 
+The "Quit" command of the tree GUI now works again.
+
 The Kvasir C front end now supports command line options for
 controlling what output is produced and where it is written.  See the
 manual for a list.
@@ -41,9 +43,8 @@ Daikon now has improved support for reading trace data from the
 standard input or a named pipe, and the Kvasir C front end has support
 for writing to a pipe. Used together, these features can remove the
 need for an intermediate trace file, allowing Daikon to operate on
-larger or longer-running programs. [This should refer to a manual
-section, which I plan to write Tuesday, explaining how to use these
-features.]
+larger or longer-running programs. For more details, see section 
+10.4.4 of the manual, "Reading trace data on the fly".
 
 ---------------------------------
 
