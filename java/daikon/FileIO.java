@@ -61,7 +61,7 @@ public final class FileIO {
    * Total number of samples passed to process_sample().  This should
    * exactly match the number processed except for dataflow optimizations
    * in process_sample() (which have the end result of processing the
-   * sample without the work)
+   * sample without the work).
    */
   public static int samples_processed = 0;
 
@@ -103,6 +103,15 @@ public final class FileIO {
 
   /** Boolean.  When true, don't print unmatched procedure entries. **/
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
+
+  /**
+   * Boolean.  When true, suppress (rather than re-throw) IOExceptions.
+   * This permits Daikon to continue even if there is a malformed trace
+   * file.  Use this with care:  in general, it is better to fix the
+   * problem that caused a bad trace file, rather than to suppress the
+   * exception.
+   **/
+  public static boolean dkconfig_continue_after_ioexception = false;
 
 /// Variables
 
@@ -740,9 +749,16 @@ public final class FileIO {
           if ((e instanceof EOFException) || (reader.readLine() == null)) {
             System.out.println ();
             System.out.println ("WARNING: Unexpected EOF while processing "
-                          + " trace file - last record of trace file ignored");
+                          + "trace file - last record of trace file ignored");
             break;
-          } else /* not an eof error */ {
+          } else if (dkconfig_continue_after_ioexception) {
+            System.out.println ();
+            System.out.println ("WARNING: IOException while processing "
+                          + "trace file - record ignored");
+            e.printStackTrace(System.out);
+            System.out.println ();
+            continue;
+          } else {
             throw e;
           }
         }
@@ -1019,6 +1035,10 @@ public final class FileIO {
              && Global.regexp_matcher.contains(line, Daikon.var_omit_regexp)) {
         line = reader.readLine(); // value
         line = reader.readLine(); // modbit
+        if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
+          throw new FileIOException("Bad modbit",
+                                    reader, data_trace_filename);
+        }
         line = reader.readLine(); // next variable name
       }
 
@@ -1027,7 +1047,6 @@ public final class FileIO {
                                   + ", got " + line
                                   + " for program point " + ppt.name(),
                                   reader, data_trace_filename);
-
       }
       line = reader.readLine();
       if (line == null) {
