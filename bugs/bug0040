@@ -4,9 +4,21 @@ Cc:           mernst
 Tool:         dfej
 Summary:      Does not build with mingw
 Severity:     Vexing
-Status:       New
+Status:       Open
 Reproducible: Yes
 Description:
+
+[adonovan]
+I have made a quick fix: if the WIN32_FILE_SYSTEM cpp symbol is set, it
+exits with an error.  This at least will let it compile on Win32.
+
+BTW What is the correct symbol to use?  Or should I be using autoconf to
+do things properly?
+
+Does Mingw32 have the POSIX.2 regex_XXX calls?
+
+
+[mernst]
 mingw does not like the use of "regex"; a typical failure is
 
   i386-mingw32msvc-g++ -g -Wall -DJIKES_DEBUG -DHAVE_CONFIG_H -I. -I/g2/users/mernst/research/invariants/dfej/src -I.     -g -O2 -c -o ast.o `test -f /g2/users/mernst/research/invariants/dfej/src/ast.cpp || echo '/g2/users/mernst/research/invariants/dfej/src/'`/g2/users/mernst/research/invariants/dfej/src/ast.cpp
@@ -25,6 +37,9 @@ where to find the regular expression library.
 
 --
 $Log$
-Revision 1.1  2002-04-03 17:10:15  mernst
+Revision 1.2  2002-04-05 16:14:18  adonovan
+changed bug0040
+
+Revision 1.1  2002/04/03 17:10:15  mernst
 new bug0040
 
