@@ -13,6 +13,7 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl \
+	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
@@ -176,9 +177,11 @@ dist:
 # Both make and test the distribution.
 # (Must make it first in order to test it!)
 dist-and-test: dist-notest test-the-dist
+	@echo "***** New or removed files:"
+	tar tzf daikon.tar.gz | sort | diff -u0 prev-release-contents - | grep -v '^--- \|^\+\+\+ -\|^@'
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit documentation changes."
-	@echo "(See Sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
+	@echo "(See sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
 	@echo "*****"
 
 dist-ensure-directory-exists: $(DIST_DIR)
@@ -189,18 +192,27 @@ dist-ensure-directory-exists: $(DIST_DIR)
 # ("doc/CHANGES" goes even before that, because
 # update-doc-dist-date-and-version changes its modification date.)
 
-dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java $(DIST_DIR_PATHS)
+dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java prev-versions $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
+# These versions are for comparison, to permit checking for added/removed files.
+# This rule does NOT depend on "daikon.tar" or "daikon.tar.gz"; we don't want
+# them re-made.
+prev-release-contents:
+	rm -f prev-release-contents
+	tar tzf daikon.tar.gz | sort > prev-release-contents
+
 doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.texinfo
+	@echo "***************************************************************************"
 	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
-	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/config-options.texinfo doc/config-options.texinfo"
-	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/invariants-doc.texinfo doc/invariants-doc.texinfo"
+	@echo "     diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
+	@echo "     diff -u /home/httpd/html/daikon/dist/doc/config-options.texinfo doc/config-options.texinfo"
+	@echo "     diff -u /home/httpd/html/daikon/dist/doc/invariants-doc.texinfo doc/invariants-doc.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
+	@echo "***************************************************************************"
 	@exit 1
 
 # Is this the right way to do this?

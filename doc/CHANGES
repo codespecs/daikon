@@ -9,6 +9,26 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.6 (24 April 2003):
+
+Floating-point quantities can be considered equal even if they differ
+slightly (say, due to floating-point roundoff).  Configuration option
+daikon.inv.Invariant.fuzzy_ratio sets the ratio by which floating-point
+numbers may differ and still be considered equal; a value of 0 disables
+these approximate comparisons.
+
+A new front end for csv (comma-separated-value) files is provided; run
+program convertcsv.pl, which appears in the bin/ directory.
+
+The manual now contains a list of all invariants that Daikon detects, with
+a short description of each.  Recall that users can add their own
+(possibly domain-specific) invariants.
+
+Other parts of the manual have been enhanced, such as descriptions of
+variable names and dealing with too-large datasets.
+
+----------------
+
 2.4.5 (1 April 2003):
 
 "Dummy invariants" permit properties that are not in Daikon's grammar to be

@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.4.5
+@center Daikon version 2.4.6
 
 @sp 1
-@c Daikon version 2.4.5 date
-@center April 1, 2003
+@c Daikon version 2.4.6 date
+@center April 24, 2003
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2003
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.4.5, released April 1, 2003.
+It describes Daikon version 2.4.6, released April 24, 2003.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.4.5, released April 1, 2003.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.4.5, released April 1, 2003.
+It describes Daikon version 2.4.6, released April 24, 2003.
 @end ifnottex
 
 @menu
@@ -215,6 +215,7 @@ Front ends
 * Java front end dfej::         
 * C/C++ front end dfec::        
 * Perl front end dfepl::        
+* CSV front end convertcsv.pl::  
 
 Java front end dfej
 
@@ -1320,7 +1321,7 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 
 The Daikon distribution includes sample Perl programs suitable for use
 with Daikon in the @file{examples/perl-examples} directory.
-@footnote{Note for Daikon version 2.4.5, released April 1, 2003.
+@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
 The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
@@ -1600,7 +1601,7 @@ Perl programs must be instrumented twice. First they must be
 instrumented without type information.  Then, once the first
 instrumented version has been run to produce type information, they
 must be instrumented again taking the type information into account.
-@footnote{Note for Daikon version 2.4.5, released April 1, 2003.
+@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
 The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
@@ -1832,17 +1833,10 @@ Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
 
-@item --prob_limit @var{pct}
+@item --prob_limit @var{val}
 Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
 filtering.
-
-@item --fuzzy @var{pct}
-Set the limit of the percentage difference between two floats for
-fuzzy comparisons.  @var{pct} must be between 0 and 0.1; the default
-is 0.0001 (0.01%).  Larger values will result in floats that are relatively
-farther apart being treated as equal.  A value of 0 essentially disables
-fuzzy comparisons.
 
 @item --esc_output
 Write output in ESC-like format.
@@ -2786,6 +2780,7 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 * Java front end dfej::         
 * C/C++ front end dfec::        
 * Perl front end dfepl::        
+* CSV front end convertcsv.pl::  
 @end menu
 
 @node    Java front end dfej, C/C++ front end dfec, Front ends, Front ends
@@ -4127,7 +4122,7 @@ equivalent file.
 @end example
 
 
-@node Perl front end dfepl,  , C/C++ front end dfec, Front ends
+@node Perl front end dfepl, CSV front end convertcsv.pl, C/C++ front end dfec, Front ends
 @section Perl front end dfepl
 
 @cindex front end for Perl
@@ -4137,7 +4132,7 @@ equivalent file.
 This section contains details about dfepl, the Daikon front end for
 Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
 @ref{Instrumenting Perl programs}.
-@footnote{Note for Daikon version 2.4.5, released April 1, 2003.
+@footnote{Note for Daikon version 2.4.6, released April 24, 2003.
 The Perl support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
@@ -4419,7 +4414,7 @@ Print additional information about what @command{dfepl} is doing,
 including external commands invoked.
 @end table
 
-@node CSV front end convertcsv.pl,  , C/C++ front end dfec, Front ends
+@node CSV front end convertcsv.pl,  , Perl front end dfepl, Front ends
 @section Comma-separated-value front end convertcsv.pl
 
 @cindex csv files
@@ -6162,7 +6157,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.4.5, released April 1, 2003.
+This manual describes Daikon version 2.4.6, released April 24, 2003.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
