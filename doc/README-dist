@@ -1,2 +1,9 @@
-This is the distribution of the Daikon invariant detector.
-For documentation, see the file doc/daikon.html.
+This is the distribution of the Daikon invariant detector,
+Daikon version 2.5.0, released August 17, 2001
+
+For documentation, see the Daikon Invariant Detector User Manual,
+which is available in a variety of formats:
+  doc/daikon.html
+  doc/daikon.ps
+  doc/daikon.pdf
+  doc/daikon
