@@ -2,7 +2,6 @@ package daikon.simplify;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 
 /** InvariantLemmas are Lemmas created by printing a Daikon invariant
  * in Simplify format, sometimes with some hacks.

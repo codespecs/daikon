@@ -9,7 +9,6 @@ import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.inv.binary.twoScalar.*;

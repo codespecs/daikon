@@ -2,7 +2,7 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import java.io.*;
 import java.util.*;
 

@@ -78,6 +78,7 @@
   #define INTEQUALstring "IntEqual"
   #define EQUALS(a,b) (a == b)
   #define EQUALSstring "=="
+  #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseIntEqual
   #define DEBUGINTEQUAL debugIntEqual
   #define SEQINTEQUAL seqIntEqual
@@ -86,6 +87,7 @@
   #define INTEQUALstring "FloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
   #define EQUALSstring "=="
+  #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseFloatEqual
   #define DEBUGINTEQUAL debugIntEqual
   #define SEQINTEQUAL seqIntEqual
@@ -94,6 +96,7 @@
   #define INTEQUALstring "StringEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
   #define EQUALSstring "=="
+  #define INVEQUALSstring "=="
 // #define PAIRWISE_COMPARE PairwiseStringEqual
   #define DEBUGINTEQUAL debugStringEqual
   #define SEQINTEQUAL seqStringEqual
@@ -103,6 +106,7 @@
   #define INTEQUALstring "IntNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALSstring "!="
+  #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
   #define SEQINTEQUAL seqIntNonEqual
 #elif defined(NONEQUALFLOAT)
@@ -110,6 +114,7 @@
   #define INTEQUALstring "FloatNonEqual"
   #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
   #define EQUALSstring "!="
+  #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
   #define SEQINTEQUAL seqIntNonEqual
 #elif defined (NONEQUALSTRING)
@@ -117,6 +122,7 @@
   #define INTEQUALstring "StringNonEqual"
   #define EQUALS(a,b) (a != b)
   #define EQUALSstring "!="
+  #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugStringNonEqual
   #define SEQINTEQUAL seqIntStringEqual
 
@@ -126,6 +132,7 @@
   #define INTEQUALstring "IntLessThan"
   #define EQUALS(a,b) (a < b)
   #define EQUALSstring "<"
+  #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseIntLessThan
   #define DEBUGINTEQUAL debugIntLessThan
   #define SEQINTEQUAL seqIntLessThan
@@ -135,6 +142,7 @@
   #define INTEQUALstring "FloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
   #define EQUALSstring "<"
+  #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseFloatLessThan
   #define DEBUGINTEQUAL debugIntLessThan
   #define SEQINTEQUAL seqIntLessThan
@@ -144,6 +152,7 @@
   #define INTEQUALstring "StringLessThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) < 0))
   #define EQUALSstring "<"
+  #define INVEQUALSstring ">"
   // #define PAIRWISE_COMPARE PairwiseStringLessThan
   #define DEBUGINTEQUAL debugStringLessThan
   #define SEQINTEQUAL seqStringLessThan
@@ -154,6 +163,7 @@
   #define INTEQUALstring "IntLessEqual"
   #define EQUALS(a,b) (a <= b)
   #define EQUALSstring "<="
+  #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseIntLessEqual
   #define DEBUGINTEQUAL debugIntLessEqual
   #define SEQINTEQUAL seqIntLessEqual
@@ -163,6 +173,7 @@
   #define INTEQUALstring "FloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
   #define EQUALSstring "<="
+  #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseFloatLessEqual
   #define DEBUGINTEQUAL debugIntLessEqual
   #define SEQINTEQUAL seqIntLessEqual
@@ -172,6 +183,7 @@
   #define INTEQUALstring "StringLessEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) <= 0))
   #define EQUALSstring "<="
+  #define INVEQUALSstring ">="
   // #define PAIRWISE_COMPARE PairwiseStringLessEqual
   #define DEBUGINTEQUAL debugStringLessEqual
   #define SEQINTEQUAL seqStringLessEqual
@@ -182,6 +194,7 @@
   #define INTEQUALstring "IntGreaterThan"
   #define EQUALS(a,b) (a > b)
   #define EQUALSstring ">"
+  #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseIntGreaterThan
   #define DEBUGINTEQUAL debugIntGreaterThan
   #define SEQINTEQUAL seqIntGreaterThan
@@ -191,6 +204,7 @@
   #define INTEQUALstring "FloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
   #define EQUALSstring ">"
+  #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseFloatGreaterThan
   #define DEBUGINTEQUAL debugIntGreaterThan
   #define SEQINTEQUAL seqIntGreaterThan
@@ -200,6 +214,7 @@
   #define INTEQUALstring "StringGreaterThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
   #define EQUALSstring ">"
+  #define INVEQUALSstring "<"
   // #define PAIRWISE_COMPARE PairwiseStringGreaterThan
   #define DEBUGINTEQUAL debugStringGreaterThan
   #define SEQINTEQUAL seqStringGreaterThan
@@ -210,6 +225,7 @@
   #define INTEQUALstring "IntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
   #define EQUALSstring ">="
+  #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseIntGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
   #define SEQINTEQUAL seqIntGreaterEqual
@@ -220,6 +236,7 @@
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseFloatGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
   #define SEQINTEQUAL seqIntGreaterEqual
@@ -230,6 +247,7 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) >= 0))
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
+  #define INVEQUALSstring "<="
   // #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
   #define DEBUGINTEQUAL debugStringGreaterEqual
   #define SEQINTEQUAL seqStringGreaterEqual
@@ -292,6 +310,7 @@ package daikon.inv.binary.twoScalar;
 #endif
 
 import daikon.*;
+import daikon.VarInfoName.Simple;
 import daikon.inv.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.scalar.*;
@@ -552,6 +571,46 @@ public final class INTEQUAL
   }
 
   public String format_using(OutputFormat format) {
+    if (format == OutputFormat.REPAIR)
+    {
+      boolean lefthasfield=var1().name.name().indexOf(".")!=-1;
+      boolean righthasfield=var2().name.name().indexOf(".")!=-1;
+      String comparator = EQUALSstring;
+
+        String var1name;
+        String var2name;
+        if (lefthasfield) {
+          /* No flip necessary */
+          var1name=var1().name.repair_name(var1());
+          if (var2().name instanceof Simple)
+            var2name=((Simple)var2().name).repair_name(var2(),false);
+          else
+            var2name=var2().name.repair_name(var2());
+        } else if (righthasfield) {
+          /* Need to flip */
+          comparator = INVEQUALSstring;
+          var1name=var2().name.repair_name(var2());
+          if (var1().name instanceof Simple)
+            var2name=((Simple)var1().name).repair_name(var1(),false);
+          else
+            var2name=var1().name.repair_name(var1());
+        } else {
+          /* Need to rewrite lefthand side */
+          var1name=var1().name.repair_name(var1());
+          if (var2().name instanceof Simple)
+            var2name=((Simple)var2().name).repair_name(var2(),false);
+          else
+            var2name=var2().name.repair_name(var2());
+        }
+      #if defined(EQUAL_OP)
+        comparator = "=";
+      #elif defined(NONEQUAL_OP)
+        comparator = "!=";
+      #endif
+
+      return var1name + " " + comparator + " " + var2name;
+    }
+
     String var1name = var1().name.name_using(format, var1());
     String var2name = var2().name.name_using(format, var2());
 
@@ -569,26 +628,6 @@ public final class INTEQUAL
       #endif
       return var1name + " " + comparator + " " + var2name;
     }
-
-    if (format == OutputFormat.REPAIR)
-    {
-      String comparator = EQUALSstring;
-      #if defined(EQUAL_OP)
-        comparator = "=";
-      #elif defined(NONEQUAL_OP)
-        comparator = "!=";
-      #endif
-
-      #if (defined(EQUAL_OP)||defined(NONEQUAL_OP))
-      if (var1name.indexOf(".")!=-1)
-        return var1name + " " + comparator + " " + var2name;
-      else
-        return var2name + " " + comparator + " " + var1name;
-      #else
-        return var1name + " " + comparator + " " + var2name;
-      #endif
-    }
-
 
     if (format.isJavaFamily()) {
       #if defined(EQUALFLOAT)
@@ -939,16 +978,16 @@ public final class INTEQUAL
    * variables that implies > or <
    *  a * x + b * y + c == 0
    *
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) ==> y > x 
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) ==> y < x 
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) ==> y > x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) ==> y < x
    *
    *
    * Returns null if this is not true.  Appropriate DiscardInfo otherwise.
    */
    //old
-   //   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x 
+   //   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x
    //   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
-   
+
   private DiscardInfo lb_implies (VarInfo[] vis) {
 
     // Look for a linear binary invariant over the same variables

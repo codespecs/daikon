@@ -3,7 +3,7 @@ package daikon.test;
 import junit.framework.*;
 
 import daikon.*;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.*;
 
 public class LinearTernaryCoreTest
@@ -118,7 +118,7 @@ public class LinearTernaryCoreTest
     one_test_format(-1, 1, -2, 0, "- x + y - 2 * z == 0");
     one_test_format(-1, -1, 2, 3, "- x - y + 2 * z + 3 == 0");
     one_test_format(3, -2, 0, -3, "3 * x - 2 * y - 3 == 0");
-    //hmmm, we can't actually have this test because there are never any double coeffs, they're not 
+    //hmmm, we can't actually have this test because there are never any double coeffs, they're not
     //calculated as such and are converted to ints
   //  one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
     one_test_format(3.0, -2.0, 2.0, -3.0, "3 * x - 2 * y + 2 * z - 3 == 0");

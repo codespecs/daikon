@@ -28,7 +28,6 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -737,7 +736,7 @@ public final class CLASSNAME
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
       return formatTerm(format, a, x, vix, true)
-        + formatTerm(format, b, y, viy, false) 
+        + formatTerm(format, b, y, viy, false)
         + formatTerm(format, c, null, null, false)
         + eq + "0";
     }
@@ -751,12 +750,12 @@ public final class CLASSNAME
   public static String format_simplify(String str_x, String str_y,
                                        double a, double b, double c) {
 
-    
+
       int ia = (int) a;
       int ib = (int) b;
       int ic = (int) c;
-      
-      
+
+
       String str_a, str_b, str_c;
       if (ia == a && ib == b && ic == c) {
         // integer
@@ -778,14 +777,14 @@ public final class CLASSNAME
         str_b = Invariant.simplify_format_double(b);
         str_c = Invariant.simplify_format_double(c);
       }
-  
+
       // ax + by + c = 0
-              
+
       String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
       String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
-      String str_axby = "(+ " +  str_ax + " " + str_by + ")"; 
+      String str_axby = "(+ " +  str_ax + " " + str_by + ")";
       String str_axpc = (c == 0.0) ? str_axby : "(+ " + str_axby + " " + str_c + ")";
-     
+
       return "(EQ 0 " + str_axpc + ")";
   }
 
@@ -799,7 +798,7 @@ public final class CLASSNAME
     }
   }
 
-  // Format as "x = cy+d" instead of as "y = ax+b". [now that we print in standard format, is 
+  // Format as "x = cy+d" instead of as "y = ax+b". [now that we print in standard format, is
   // there a point to this method?
   public String format_reversed_using(OutputFormat format,
                                       VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {

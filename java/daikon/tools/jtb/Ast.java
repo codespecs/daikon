@@ -2,7 +2,7 @@
 
 package daikon.tools.jtb;
 
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import daikon.inv.Invariant;
 import daikon.inv.Equality;
 import daikon.inv.filter.*;

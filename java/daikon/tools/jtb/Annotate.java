@@ -1,8 +1,7 @@
 package daikon.tools.jtb;
 
 import daikon.*;
-import daikon.inv.filter.JMLCompilerWorkaroundFilter;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import utilMDE.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;

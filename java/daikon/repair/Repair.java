@@ -179,8 +179,12 @@ public class Repair {
     }
 
     int varcount=0;
+    public String getQuantifierVar(String var) {
+        return var+(varcount++);
+    }
+
     public String getQuantifierVar() {
-        return "i"+(varcount++);
+        return getQuantifierVar("i");
     }
 
     /** This method generates the current quantifier string. */
@@ -291,8 +295,9 @@ public class Repair {
 	if (forceset)
 	    return setname;
 	else {
-	    appendQuantifier(programvar,setname);
-	    return programvar;
+            String quantifiervar=getQuantifierVar(escapeString(programvar));
+	    appendQuantifier(quantifiervar,setname);
+	    return quantifiervar;
 	}
     }
 
@@ -414,6 +419,9 @@ public class Repair {
 	    int location=str.indexOf("[]");
 	    str=str.substring(0,location)+"*"+str.substring(location+2,str.length());
 	}
+        if (str.equals("char"))
+            return "byte";
+
 	return str;
     }
 

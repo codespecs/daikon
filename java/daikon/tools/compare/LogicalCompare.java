@@ -7,7 +7,6 @@ import utilMDE.UtilMDE;
 import daikon.*;
 import daikon.config.Configuration;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;

@@ -1,6 +1,6 @@
 package daikon;
 
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import daikon.derive.*;         // see dbc_name_impl(VarInfo v)
 import daikon.derive.unary.*;   // see dbc_name_impl(VarInfo v)
 import daikon.derive.binary.*;  // see dbc_name_impl(VarInfo v)
@@ -677,9 +677,13 @@ public abstract class VarInfoName
     }
 
     protected String repair_name_impl(VarInfo v) {
+      return repair_name(v,true);
+    }
+
+    public String repair_name(VarInfo v, boolean needrelation) {
 	if ("return".equals(name))
 	    return "$noprint(return)";
-	if (Repair.getType(v.ppt, name).equals("int")) {
+	if (v.name==this&&needrelation) {
 	    Repair.getRepair().addSpecial();
 	    return "s_quant."+Repair.getRepair().getRelation(name,v.ppt);
 	} else

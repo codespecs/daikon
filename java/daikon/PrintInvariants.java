@@ -9,7 +9,7 @@ import utilMDE.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;

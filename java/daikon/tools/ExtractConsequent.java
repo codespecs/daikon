@@ -8,7 +8,6 @@ import utilMDE.UtilMDE;
 import org.apache.oro.text.regex.*;
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 
 /**
  * Extract the consequents of all Implication invariants that are predicated

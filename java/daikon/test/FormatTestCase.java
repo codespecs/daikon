@@ -4,7 +4,7 @@ import utilMDE.*;
 import daikon.*;
 
 import daikon.inv.Invariant;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 
 import daikon.inv.unary.UnaryInvariant;
 import daikon.inv.binary.BinaryInvariant;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import daikon.Daikon;
 import daikon.VarInfo;
 import daikon.ProglangType;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 

@@ -5,7 +5,6 @@ import daikon.*;
 import daikon.config.Configuration;
 
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;

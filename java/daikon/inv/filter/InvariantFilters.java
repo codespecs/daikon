@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.PptMap;
 import daikon.VarInfo;
 import daikon.PrintInvariants;

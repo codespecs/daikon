@@ -2,7 +2,6 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import java.util.*;
 import utilMDE.*;

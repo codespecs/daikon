@@ -16,7 +16,7 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.sequenceString.*;
 import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.OutputFormat;
 import daikon.config.Configuration;
 
 import java.util.*;
