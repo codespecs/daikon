@@ -3695,21 +3695,22 @@ public class PptTopLevel extends Ppt {
       }
       if (pv == null)
         return (null);
-      if (!pv.isCanonical() && (cv == slice.var_infos[j])) {
-        // Fmt.pf ("relations = " + rel.parent_to_child_var_string());
-        Fmt.pf("pv.equalitySet = " + pv.equalitySet);
-        Fmt.pf("cv.equalitySet = " + cv.equalitySet);
-        Assert.assertTrue(
-          pv.isCanonical(),
-          "parent variable "
-            + pv.name.name()
-            + " for child variable "
-            + cv.name.name()
-            + " is not canonical "
-            + " child = "
-            + rel.child.name
-            + " parent = "
-            + rel.parent.name);
+
+      // Make sure that the parent equality set is a subset of the child
+      // equality set
+      if (Assert.enabled) {
+        for (Iterator k = pv.equalitySet.getVars().iterator(); k.hasNext();) {
+          VarInfo test_pv = (VarInfo) k.next();
+          VarInfo test_cv = rel.childVar (test_pv);
+          if (test_cv.canonicalRep() != cv.canonicalRep()) {
+            Fmt.pf("pv.equalitySet = " + pv.equalitySet);
+            Fmt.pf("cv.equalitySet = " + cv.equalitySet);
+            Assert.assertTrue (false, "parent variable " + test_pv
+                               + " child " + test_cv
+                               + " is not in the same child equality set as "
+                               + cv);
+          }
+        }
       }
       if (!pv.isCanonical())
         pv = pv.canonicalRep();
