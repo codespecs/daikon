@@ -89,6 +89,10 @@ public abstract class VarComparability {
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
+  /**
+   * Returns true if this is comparable to everything else.
+   */
+  public abstract boolean alwaysComparable();
 
   /** Returns whether two variables are comparable. **/
   public static boolean comparable(VarInfo v1, VarInfo v2) {
