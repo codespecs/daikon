@@ -39,7 +39,7 @@ public class Reverse
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
 	!result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for because order has no meaning: " +
+	debug.debug ("Not instantitating for Reverse because order has no meaning: " +
 		     result.var1().name + " and " + result.var2().name);
       }
       return null;

@@ -19,7 +19,7 @@ public class PairwiseLinearBinary
    **/
   public static boolean dkconfig_enabled = true;
 
-  LinearBinaryCore core;
+  public LinearBinaryCore core;
 
   protected PairwiseLinearBinary(PptSlice ppt) {
     super(ppt);
@@ -69,8 +69,8 @@ public class PairwiseLinearBinary
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-			  quant1.getVarIndexed(0),
-			  quant2.getVarIndexed(0))
+			  quant1.getVarName(0),
+			  quant2.getVarName(0))
       + quant1.getClosingExp();
   }
 

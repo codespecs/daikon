@@ -136,7 +136,8 @@ public final class ProglangType
 
   /**
    * Like parse, but does certain conversions for representation types, in
-   * order to return representation types.
+   * order to return real file representation types even if the
+   * file contains something slightly different than the prescribed format.
    **/
   public static ProglangType rep_parse(String rep) {
     ProglangType candidate = parse(rep);

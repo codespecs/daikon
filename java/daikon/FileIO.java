@@ -37,7 +37,6 @@ public final class FileIO
 
 /// Constants
 
-  final static String comment_prefix = "//";
   final static String declaration_header = "DECLARE";
   // Program point name tags
   public final static String ppt_tag_separator = ":::";
@@ -94,6 +93,14 @@ public final class FileIO
   /** Debug tracer for printing **/
   public static final Category debugPrint =
     Category.getInstance ("daikon.FileIO.printDtrace");
+
+  // Utilities
+  // The Daikon manual states that "#" is the comment starter, but
+  // some code assumes "//", so permit both (at least temporarily).
+  // final static String comment_prefix = "//";
+  private static final boolean isComment(String s) {
+    return s.startsWith("//") || s.startsWith("#");
+  }
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -156,7 +163,8 @@ public final class FileIO
     for ( ; line != null; line = reader.readLine()) {
       if (debugRead.isDebugEnabled())
 	debugRead.debug("read_declaration_file line: " + line);
-      if (line.equals("") || line.startsWith("//") || line.startsWith("#"))	continue;
+      if (line.equals("") || isComment(line))
+	continue;
       if (line.equals(declaration_header)) {
 	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
 	// ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
@@ -185,7 +193,7 @@ public final class FileIO
 	  line = reader.readLine();
 	  if (line == null || line.equals(""))
 	    break;
-	  if (line.startsWith("//"))
+	  if (isComment(line))
 	    continue;
 	  ProglangType.list_implementors.add(line.intern());
 	}
@@ -196,9 +204,9 @@ public final class FileIO
       // Read the rest of this entry (until we find a blank line).
       if (debugRead.isDebugEnabled())
 	debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
-      while ((line != null) && (!line.equals("")) && !line.startsWith("//")) {
+      while ((line != null) && (!line.equals("")) && (!isComment(line))) {
 	System.out.println("Unrecognized paragraph contains line = `" + line + "'");
-	System.out.println("" + (line != null) + " " + (line.equals("")) + " " + !line.startsWith("//"));
+	System.out.println("" + (line != null) + " " + (line.equals("")) + " " + (isComment(line)));
 	if (line == null)
 	  throw new IllegalStateException();
 	line = reader.readLine();
@@ -396,16 +404,15 @@ public final class FileIO
 ///
 
   static final class Invocation {
-    String fn_name;		// not interned:  not worth the bother
-
+    PptTopLevel ppt;      // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
-    // ValueTuple value;
     Object[] vals;
     int[] mods;
 
-    Invocation(String fn_name, Object[] vals, int[] mods) {
-      Assert.assert(!fn_name.equals(""));
-      this.fn_name = fn_name;
+    static Object canonical_hashcode = new Object();
+
+    Invocation(PptTopLevel ppt, Object[] vals, int[] mods) {
+      this.ppt = ppt;
       this.vals = vals;
       this.mods = mods;
     }
@@ -415,13 +422,15 @@ public final class FileIO
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
 
-      pw.println("  " + fn_name);
+      pw.println("  " + ppt.fn_name());
       pw.print("    ");
       for (int j=0; j<vals.length; j++) {
         if (j != 0)
           pw.print(", ");
         Object val = vals[j];
-        if (val instanceof int[])
+        if (val == canonical_hashcode)
+          pw.print("<address>");
+        else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
           pw.print((String)val);
@@ -431,6 +440,27 @@ public final class FileIO
       pw.println();
 
       return sw.toString();
+    }
+
+    // Could store rather than recomputing, but it doesn't seem worth it.
+    public String fn_name() {
+      return ppt.fn_name();
+    }
+
+    /** Change uses of hashcodes to canonical_hashcode. **/
+    public Invocation canonicalize() {
+      Object[] new_vals = new Object[vals.length];
+      System.arraycopy(vals, 0, new_vals, 0, vals.length);
+      VarInfo[] vis = ppt.var_infos;
+      // Warning: abstraction violation!
+      for (int i=0; i<vis.length; i++) {
+        VarInfo vi = vis[i];
+        if ((vi.value_index != -1)
+            && (vi.file_rep_type == ProglangType.HASHCODE)) {
+          new_vals[vi.value_index] = canonical_hashcode;
+        }
+      }
+      return new Invocation(ppt, new_vals, mods);
     }
 
     // Return true if the invocations print the same
@@ -539,7 +569,7 @@ public final class FileIO
     // try {
       // "line_" is uninterned, "line" is interned
       for (String line_ = reader.readLine(); line_ != null; line_ = reader.readLine()) {
-        if (line_.equals("") || (line_.startsWith(comment_prefix))) {
+        if (line_.equals("") || isComment(line_)) {
           continue;
         }
 
@@ -708,38 +738,50 @@ public final class FileIO
                          + " times.");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
-        print_invocations(call_hashmap.values());
+        if (dkconfig_verbose_unmatched_procedure_entries) {
+          // Print the invocations in sorted order.
+          TreeSet keys = new TreeSet(call_hashmap.keySet());
+          ArrayList invocations = new ArrayList();
+          for (Iterator itor = keys.iterator(); itor.hasNext(); ) {
+            invocations.add(call_hashmap.get(itor.next()));
+          }
+          print_invocations_verbose(invocations);
+        } else {
+          print_invocations_grouped(call_hashmap.values());
+        }
       }
 
       if (!call_stack.empty()) {
         System.out.println("Remaining call stack:");
-        print_invocations(call_stack);
+        if (dkconfig_verbose_unmatched_procedure_entries) {
+          print_invocations_verbose(call_stack);
+        } else {
+          print_invocations_grouped(call_stack);
+        }
       }
       System.out.println("End of report for procedures not returned from.");
     }
   }
 
-  private static void print_invocations(Collection invocations) {
-    if (dkconfig_verbose_unmatched_procedure_entries) {
-      print_invocations_verbose(invocations);
-    } else {
-      print_invocations_grouped(invocations);
-    }
-  }
-
-  private static void print_invocations_verbose(Collection invocations) {
+  /** Print all the invocations in the collection, in order. **/
+  static void print_invocations_verbose(Collection invocations) {
     for (Iterator i = invocations.iterator(); i.hasNext(); ) {
       Invocation invok = (Invocation) i.next();
       System.out.println(invok.format());
     }
   }
 
-  private static void print_invocations_grouped(Collection invocations) {
+  /**
+   * Print the invocations in the collection, in no particular order, but
+   * suppressing duplicates.
+   **/
+  static void print_invocations_grouped(Collection invocations) {
     // Maps an Invocation to its frequency
     Map counter = new HashMap();
 
     for (Iterator i = invocations.iterator(); i.hasNext(); ) {
       Invocation invok = (Invocation) i.next();
+      invok = invok.canonicalize();
       if (counter.containsKey(invok)) {
         Integer oldCount = (Integer) counter.get(invok);
         Integer newCount = new Integer(oldCount.intValue() + 1);
@@ -752,7 +794,7 @@ public final class FileIO
     for (Iterator i = counter.keySet().iterator(); i.hasNext(); ) {
       Invocation invok = (Invocation) i.next();
       Integer count = (Integer) counter.get(invok);
-      System.out.println(count + " instance" + ((count.intValue() == 1) ? "" : "s") + " of:");
+      System.out.println(UtilMDE.nplural(count.intValue(), "instance") + " of:");
       System.out.println(invok.format());
     }
   }
@@ -910,8 +952,9 @@ public final class FileIO
   {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.fn_name();
-    if (ppt.ppt_name.isEnterPoint()) {
-      Invocation invok = new Invocation(fn_name, vals, mods);
+    String ppt_name = ppt.name;
+    if (ppt_name.endsWith(enter_tag)) {
+      Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
         call_stack.push(invok);
       } else {
@@ -949,11 +992,11 @@ public final class FileIO
                             + ppt.name);
           }
           invoc = (Invocation) call_stack.pop();
-          while (invoc.fn_name != fn_name) {
+          while (invoc.fn_name() != fn_name) {
             // Should also mark as a function that made an exceptional exit
             // at runtime.
             System.err.println("Exceptional exit from function " + fn_name
-                               + ", expected to first exit from " + invoc.fn_name
+                               + ", expected to first exit from " + invoc.fn_name()
                                + ((data_trace_filename == null) ? "" :
 				  "; at " + data_trace_filename + " line "
 				  + data_trace_reader.getLineNumber())

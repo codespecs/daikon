@@ -34,7 +34,7 @@ public class PairwiseIntComparison
 
   final static boolean debugPairwiseIntComparison = false;
 
-  IntComparisonCore core;
+  public IntComparisonCore core;
 
   protected PairwiseIntComparison(PptSlice ppt) {
     super(ppt);
@@ -106,7 +106,7 @@ public class PairwiseIntComparison
 
   public String format_daikon() {
     String comparator = core.format_comparator();
-    return var1().name + " " + comparator + " " + var2().name
+    return var1().name.name() + " " + comparator + " " + var2().name.name()
       + " (elementwise)";
   }
 

@@ -183,8 +183,9 @@ public final class ValueTuple implements Cloneable {
   Object getValue(VarInfo vi) { return vi.getValue(this); }
 
   /**
-   * Get the value at the val_index.  Note: the VarInfo form is
-   * preferred
+   * Get the value at the val_index.
+   * Note: For clients, getValue(VarInfo) is preferred to getValue(int).
+   * @see #getValue(VarInfo)
    **/
   Object getValue(int val_index) { return vals[val_index]; }
 

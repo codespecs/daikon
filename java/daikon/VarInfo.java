@@ -604,6 +604,7 @@ public final class VarInfo
   /**
    * Cached value for isDerivedParam()
    **/
+  // Boolean rather than boolean so we can use "null" to indicate "not yet set".
   public Boolean isDerivedParamCached = null;
 
   /**
@@ -616,8 +617,8 @@ public final class VarInfo
    * related from the names alone.
    **/
   public boolean isDerivedParam() {
-    if (isDerivedParamCached != null) return isDerivedParamCached.booleanValue();
-
+    if (isDerivedParamCached != null)
+      return isDerivedParamCached.booleanValue();
 
     boolean result = false;
     if (aux.getFlag(VarInfoAux.IS_PARAM)) result = true;

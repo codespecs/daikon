@@ -440,7 +440,7 @@ public abstract class Invariant
     }
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
-      + "needs to be implemented: " + format();
+      + " needs to be implemented: " + format();
   }
 
   /**
@@ -1112,7 +1112,8 @@ public abstract class Invariant
         VarInfo var1 = vars1[i];
         VarInfo var2 = vars2[i];
         int compare = var1.name.compareTo(var2.name);
-        if (compare != 0) return compare;
+        if (compare != 0)
+          return compare;
       }
 
       // All the variable names matched

@@ -22,7 +22,7 @@ public class FunctionBinary
 
   public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinary");
 
-  FunctionBinaryCore core;
+  public FunctionBinaryCore core;
 
   protected FunctionBinary(PptSlice ppt, String methodname, Method function, int var_order) {
     super(ppt);

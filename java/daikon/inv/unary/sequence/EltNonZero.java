@@ -73,7 +73,7 @@ public final class EltNonZero
   }
 
   public String format_daikon() {
-    return var().name + " elements != " + (pointer_type ? "null" : "0");
+    return var().name.name() + " elements != " + (pointer_type ? "null" : "0");
   }
 
   // We are a special case where a ghost field can actually talk about
@@ -139,7 +139,7 @@ public final class EltNonZero
   /* IOA */
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
-    String result = quant.getQuantifierExp() + quant.getVarName(0) + " \\in " +
+    String result = quant.getQuantifierExp() + quant.getVarName(0).ioa_name() + " \\in " +
       var().name.ioa_name() + " => " + quant.getVarIndexed(0) + "~=";
     if (pointer_type) {
       return result + "null" + quant.getClosingExp();

@@ -187,11 +187,13 @@ public final class SequencesPredicate
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
     VarInfo var2 = var2();
-    return new VarInfo(VarInfoName.applyFunctionOfN("predicateSlice",
-						    new VarInfoName[] {var1.name,
-								       var2.name,
-								       new VarInfoName.Simple(name)
-						    }).applyElements(),
+    VarInfoName new_name
+      = VarInfoName.applyFunctionOfN("predicateSlice",
+                                     new VarInfoName[] {var1.name,
+                                                        var2.name,
+                                                        new VarInfoName.Simple(name)
+                                     }).applyElements();
+    return new VarInfo(new_name,
 		       var1.type,
 		       var1.file_rep_type,
 		       var1.comparability,

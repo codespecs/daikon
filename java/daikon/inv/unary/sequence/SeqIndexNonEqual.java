@@ -46,7 +46,7 @@ public final class SeqIndexNonEqual
     VarInfo seqvar = ppt.var_infos[0];
 
     if (debugSeqIndexNonEqual) {
-      System.out.println("SeqIndexNonEqual instantiated: " + seqvar.name);
+      System.out.println("SeqIndexNonEqual instantiated: " + seqvar.name.name());
     }
 
     // Don't compare indices to object addresses.
@@ -116,7 +116,7 @@ public final class SeqIndexNonEqual
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
 
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarName(0) + " ~= " +
+      " => " + quant.getVarName(0).ioa_name() + " ~= " +
       quant.getVarIndexed(0) + quant.getClosingExp();
   }
   public String format_simplify() {

@@ -133,41 +133,6 @@ public class InvariantFormatTester extends TestCase
     // should all be comparable)
     Daikon.ignore_comparability = true;
 
-    // Not being configured by a config file anymore
-
-//      // Get the configuration file, each line details a format
-//      InputStream configFile =
-//        InvariantFormatTester.class.getResourceAsStream("InvariantFormatTester.config");
-
-//      if (configFile == null) {
-//        throw new RuntimeException("Configuration file not found," +
-//                                   " invariant format test cannot be performed");
-//      }
-
-//      BufferedReader inputReader =
-//        new BufferedReader(new InputStreamReader(configFile));
-//      String currentLine = "";
-
-//      boolean noTestFailed = true;
-//      boolean runResult;
-
-//      try {
-
-//        while (currentLine != null) {
-//          currentLine = inputReader.readLine();
-//          if (currentLine != null) {
-//            runResult = run(); // Perform one format's test
-
-//            // Note: do not write: noTestFailed = noTestFailed && run(currentLine)
-//            // or else run will not execute when a test has already failed
-//            noTestFailed = noTestFailed && runResult;
-//          }
-//        }
-//      }
-//      catch (IOException e) {
-//        throw new RuntimeException(e.toString());
-//      }
-
     // run the actual test
 
     if (!execute()) {

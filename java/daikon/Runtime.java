@@ -37,6 +37,8 @@ public final class Runtime {
   /// Timestamps
   ///
 
+  // This is used as this_invocation_nonce (and is incremented after use).
+  // Uses of it should be synchronized (probably on dtrace).
   public static int time = 0;
 
 
@@ -93,8 +95,20 @@ public final class Runtime {
   // run in different files depending on the class the information is
   // about.
   public static PrintStreamWithThrottle dtrace;
+  // daikon.Daikon should never load daikon.Runtime; but sometimes it
+  // happens, due to reflective loading of the target program that gets the
+  // instrumented target program.  The instrumented program has a static
+  // block that invokes daikon.Runtime.
+  public static boolean no_dtrace = false;
+    // This initializer doesn't work because findLoadedClass is a protected
+    // method, so instead make clients set no_dtrace explicitly.
+    // = (ClassLoader.getSystemClassLoader().findLoadedClass("daikon.Daikon")
+    //    != null);
 
   public static void setDtrace(String filename, boolean append) {
+    if (no_dtrace) {
+      throw new Error("setDtrace called when no_dtrace was specified");
+    }
     // System.out.println("calling setDtrace(" + filename + ")...");
     try {
       File file = new File(filename);
@@ -129,7 +143,7 @@ public final class Runtime {
    **/
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
-    if (dtrace == null) {
+    if ((dtrace == null) && (! no_dtrace)) {
       // Jeremy used "daikon.dtrace.filename".
       String filename = System.getProperty("DTRACEFILE", default_filename);
       boolean append = System.getProperty("DTRACEAPPEND") != null;
@@ -163,7 +177,8 @@ public final class Runtime {
 	    synchronized (daikon.Runtime.dtrace)
 	    {
 	      dtrace.println();
-	      dtrace.println("// EOF"); // this lets us know we didn't lose any
+              // this lets us know we didn't lose any
+	      dtrace.println("# EOF due to daikon.Runtime.addShutdownHook");
 	      dtrace.close();
 	    }
           }

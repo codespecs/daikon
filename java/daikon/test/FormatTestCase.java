@@ -260,7 +260,7 @@ class FormatTestCase {
     for (int i=0; i<testCases.size(); i++) {
       currentDiffString = ((SingleOutputTestCase)testCases.get(i)).createDiffString();
       result.append(currentDiffString);
-      if (i != testCases.size() && currentDiffString != "")
+      if (i != testCases.size() && currentDiffString != "") // "interned"
 	result.append("\n\n");
     }
 
@@ -482,7 +482,7 @@ class FormatTestCase {
    * @return an array of VarInfo objects that have the types corresponding to those
    *         in types
    */
-  private static VarInfo [] getVarInfos(Class classToTest,ProglangType types[]) {
+  private static VarInfo [] getVarInfos(Class classToTest, ProglangType types[]) {
     int numInfos = getArity(classToTest);
 
     if (numInfos == -1)
@@ -892,7 +892,7 @@ class FormatTestCase {
       //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " + params[0].getClass().getComponentType());
       //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " + params[1].getClass().getComponentType());
 
-      //        for (int y=0;y<sampleSize;y++) {
+      //        for (int y=0; y<sampleSize; y++) {
       //          try {
       //            if (params[y].getClass().isArray()) {
       //              System.out.print("P" + y + " array representation: ");

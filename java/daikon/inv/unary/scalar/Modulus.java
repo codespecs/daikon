@@ -57,7 +57,7 @@ public class Modulus
     String name = var().name.name_using(format);
 
     if (format == OutputFormat.DAIKON) {
-      return var().name + " == " + remainder + "  (mod " + modulus + ")";
+      return var().name.name() + " == " + remainder + "  (mod " + modulus + ")";
     }
 
     if (format == OutputFormat.IOA) {
@@ -65,7 +65,7 @@ public class Modulus
     }
 
     if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
-      return var().name + " % " + modulus + " == " + remainder;
+      return var().name.name() + " % " + modulus + " == " + remainder;
     }
 
     return format_unimplemented(format);

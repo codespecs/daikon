@@ -21,10 +21,10 @@ daikon.inv.unary.scalar.Modulus
 int
 Goal (daikon): a == 1  (mod 3)
 Goal (java): a % 3 == 1
-Goal (esc): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java)needs to be implemented: a == 1  (mod 3)
+Goal (esc): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: a == 1  (mod 3)
 Goal (ioa): mod(a, 3) = 1
 Goal (jml): a % 3 == 1
-Goal (simplify): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:Simplify)needs to be implemented: a == 1  (mod 3)
+Goal (simplify): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:Simplify) needs to be implemented: a == 1  (mod 3)
 1
 4
 7
@@ -35,10 +35,10 @@ daikon.inv.unary.scalar.NonModulus
 int
 Goal (daikon): a != 2  (mod 5)
 Goal (java): a % 5 != 2
-Goal (esc): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputFormat:ESC/Java)needs to be implemented: a != 2  (mod 5)
+Goal (esc): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputFormat:ESC/Java) needs to be implemented: a != 2  (mod 5)
 Goal (ioa): mod(a, 5) ~= 2
 Goal (jml): a % 5 != 2
-Goal (simplify): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputFormat:Simplify)needs to be implemented: a != 2  (mod 5)
+Goal (simplify): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputFormat:Simplify) needs to be implemented: a != 2  (mod 5)
 0
 1
 3
@@ -128,7 +128,7 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.EltNonZero
 int_array
 Goal (daikon): a[] elements != 0
-Goal (java): warning: method daikon.inv.unary.sequence.EltNonZero.format(OutputFormat:Java)needs to be implemented: a[] elements != 0
+Goal (java): warning: method daikon.inv.unary.sequence.EltNonZero.format(OutputFormat:Java) needs to be implemented: a[] elements != 0
 Goal (esc): \nonnullelements(a)
 Goal (ioa): \A i : Int (i \in a => a[i]~=0)
 Goal (jml): \nonnullelements(a)
@@ -161,9 +161,9 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.EltwiseIntComparison
 int_array
 Goal (daikon): a[] sorted by <
-Goal (java): warning: method daikon.inv.unary.sequence.EltwiseIntComparison.format(OutputFormat:Java)needs to be implemented: a[] sorted by <
+Goal (java): warning: method daikon.inv.unary.sequence.EltwiseIntComparison.format(OutputFormat:Java) needs to be implemented: a[] sorted by <
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1) ==> ((i+1 == j) ==> (a[i] < a[j])))
-Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in ai+1 = j) => a[i] = a[j])
+Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ i+1 = j) => a[i] = a[j])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; ((i+1 == j) ==> (a[i] < a[j]))
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1))) (IMPLIES (EQ (+ i 1) j) (< (select (select elems |a|) |i|) (select (select elems |a|) |j|)))))
 [1 2 3 5 7 8 9 100]
@@ -172,11 +172,11 @@ Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLen
 daikon.inv.unary.sequence.NoDuplicates
 int_array
 Goal (daikon): a[] contains no duplicates
-Goal (java): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:Java)needs to be implemented: a[] contains no duplicates
-Goal (esc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java)needs to be implemented: a[] contains no duplicates
+Goal (java): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:Java) needs to be implemented: a[] contains no duplicates
+Goal (esc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: a[] contains no duplicates
 Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ a[i] = a[j]) => i = j)
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; (i != j) ==> (a[i] != a[j]))
-Goal (simplify): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:Simplify)needs to be implemented: a[] contains no duplicates
+Goal (simplify): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:Simplify) needs to be implemented: a[] contains no duplicates
 [1 55 2 -123 873 24 99 239]
 
 ; OneOfSequence not currently implemented
@@ -186,7 +186,7 @@ Goal (simplify): warning: method daikon.inv.unary.sequence.NoDuplicates.format(O
 daikon.inv.unary.sequence.SeqIndexComparison
 int_array
 Goal (daikon): a[i] > i
-Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexComparison.format(OutputFormat:Java)needs to be implemented: a[i] > i
+Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexComparison.format(OutputFormat:Java) needs to be implemented: a[i] > i
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] >i)
@@ -197,7 +197,7 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 daikon.inv.unary.sequence.SeqIndexNonEqual
 int_array
 Goal (daikon): a[i] != i
-Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexNonEqual.format(OutputFormat:Java)needs to be implemented: a[i] != i
+Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexNonEqual.format(OutputFormat:Java) needs to be implemented: a[i] != i
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (ioa): \A i : Int (i \in a => i ~= a[i])
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] != i)
@@ -226,7 +226,7 @@ daikon.inv.unary.stringsequence.EltOneOfString
 string_array
 Goal (daikon): a[] elements one of { "gnirtStset", "testString" }
 Goal (java): (for (int i == 0; (i <= a.length-1; i++)(a[i] == "gnirtStset" || a[i] == "testString"))
-Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (warning: method daikon.inv.unary.stringsequence.EltOneOfString.format(OutputFormat:ESC/Java)needs to be implemented: a[] elements one of { "gnirtStset", "testString" }))
+Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (warning: method daikon.inv.unary.stringsequence.EltOneOfString.format(OutputFormat:ESC/Java) needs to be implemented: a[] elements one of { "gnirtStset", "testString" }))
 Goal (ioa): \A i : Int (i \in a => i = "gnirtStset") \/ (i = "testString")))
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == "gnirtStset" || a[i] == "testString")
 Goal (simplify): format_simplify class daikon.inv.unary.stringsequence.EltOneOfString cannot express Strings
@@ -314,7 +314,7 @@ Goal (simplify): (EQ |b| (+ (* -3.0 |a|) 1.0))
 daikon.inv.binary.twoSequence.PairwiseIntComparison
 int_array int_array
 Goal (daikon): a[] > b[] (elementwise)
-Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntComparison.format(OutputFormat:Java)needs to be implemented: a[] > b[] (elementwise)
+Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntComparison.format(OutputFormat:Java) needs to be implemented: a[] > b[] (elementwise)
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] > b[j]))
 Goal (ioa): \A i : Int (a[i] > b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] > b[j])
@@ -327,18 +327,18 @@ daikon.inv.binary.twoSequence.Reverse
 int_array int_array
 Goal (daikon): a[] is the reverse of b[]
 Goal (java): ( (new StringBuffer (a[])).reverse().toString().equals (b[])
-Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputFormat:ESC/Java)needs to be implemented: a[] is the reverse of b[]
+Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputFormat:ESC/Java) needs to be implemented: a[] is the reverse of b[]
 Goal (ioa): Not valid for Sets or Arrays: a[] is the reverse of b[]
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == b[b.length-1-i])
-Goal (simplify): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputFormat:Simplify)needs to be implemented: a[] is the reverse of b[]
+Goal (simplify): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputFormat:Simplify) needs to be implemented: a[] is the reverse of b[]
 
 ; a is subsequence of b
 ; Error in formatting currently, fix later
 daikon.inv.binary.twoSequence.SubSequence
 int_array int_array
 Goal (daikon): b[] is a subsequence of a[]
-Goal (java): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:Java)needs to be implemented: b[] is a subsequence of a[]
-Goal (esc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:ESC/Java)needs to be implemented: b[] is a subsequence of a[]
+Goal (java): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:Java) needs to be implemented: b[] is a subsequence of a[]
+Goal (esc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:ESC/Java) needs to be implemented: b[] is a subsequence of a[]
 Goal (ioa): b \subseteq a
 Goal (jml): (\exists int i; 0 <= i && i <= b.length-1; (\forall int i; 0 <= i && i <= a.length-1; b[i+j] == a[i]))
 Goal (simplify): (IMPLIES (AND (>= (+ (- (- (arrayLength |b|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |a|) 1) 0) 1) 0)) (AND (AND (NEQ (+ (- (- (arrayLength |b|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |a|) 1) 0) 1) (+ (- (- (arrayLength |b|) 1) 0) 1))) (EXISTS (|__shift|) (AND (<= 0 |__shift|) (<= (+ |__shift| (+ (- (- (arrayLength |b|) 1) 0) 1)) (+ (- (- (arrayLength |a|) 1) 0) 1)) (FORALL (|__index|) (IMPLIES (AND (<= 0 |__index|) (< |__index| (+ (- (- (arrayLength |b|) 1) 0) 1))) (EQ (select (select elems |b|) (+ 0 |__index|)) (select (select elems |a|) (+ (+ 0 |__index|) |__shift|)))))))))
@@ -377,7 +377,7 @@ Goal (simplify): (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLe
 daikon.inv.binary.sequenceScalar.SeqIntComparison
 int_array int
 Goal (daikon): a[] elements > b
-Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntComparison.format(OutputFormat:Java)needs to be implemented: a[] elements > b
+Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntComparison.format(OutputFormat:Java) needs to be implemented: a[] elements > b
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > b))
 Goal (ioa): \A i : Int (i \in a => a[i]>b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] > b)
@@ -407,11 +407,11 @@ Goal (simplify): (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLe
 daikon.inv.ternary.threeScalar.LinearTernary
 int int int
 Goal (daikon): c == 2 * a + 3 * b - 6
-Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java)needs to be implemented: c == 2 * a + 3 * b - 6
+Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == 2 * a + 3 * b - 6
 Goal (esc): c == 2 * a + 3 * b - 6
 Goal (ioa): c == 2 * a + 3 * b - 6
 Goal (jml): c == 2 * a + 3 * b - 6
-Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Simplify)needs to be implemented: c == 2 * a + 3 * b - 6
+Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Simplify) needs to be implemented: c == 2 * a + 3 * b - 6
 1
 1
 -1

@@ -329,7 +329,7 @@ public class VarInfoNameDriver {
       Assert.assert(args.length >= 4);
       String func = args[1];
       List function_vars = new Vector();
-      for (int x=2;x<args.length;x++)
+      for (int x=2; x<args.length; x++)
 	function_vars.add((VarInfoName)vars.get(args[x]));
       VarInfoName result = VarInfoName.applyFunctionOfN(func,function_vars);
       vars.put(args[0], result);
@@ -356,10 +356,10 @@ public class VarInfoNameDriver {
     public void handle(Map vars, String[] args, PrintStream out) {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
-      for (int x=0;x<args.length;x++)
+      for (int x=0; x<args.length; x++)
 	roots[x] = (VarInfoName)vars.get(args[x]);
       String result[] = VarInfoName.QuantHelper.format_jml(roots);
-      for (int x=0;x<result.length;x++)
+      for (int x=0; x<result.length; x++)
 	out.println(result[x]);
     }
   }
@@ -370,10 +370,10 @@ public class VarInfoNameDriver {
     public void handle(Map vars, String[] args, PrintStream out) {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
-      for (int x=0;x<args.length;x++)
+      for (int x=0; x<args.length; x++)
 	roots[x] = (VarInfoName)vars.get(args[x]);
-      String result[] = VarInfoName.QuantHelper.format_jml(roots,true);
-      for (int x=0;x<result.length;x++)
+      String result[] = VarInfoName.QuantHelper.format_jml(roots, true);
+      for (int x=0; x<result.length; x++)
 	out.println(result[x]);
     }
   }
@@ -384,10 +384,10 @@ public class VarInfoNameDriver {
     public void handle(Map vars, String[] args, PrintStream out) {
       Assert.assert(args.length >= 1);
       VarInfoName roots[] = new VarInfoName [args.length];
-      for (int x=0;x<args.length;x++)
+      for (int x=0; x<args.length; x++)
 	roots[x] = (VarInfoName)vars.get(args[x]);
-      String result[] = VarInfoName.QuantHelper.format_jml(roots,false,false);
-      for (int x=0;x<result.length;x++)
+      String result[] = VarInfoName.QuantHelper.format_jml(roots, false, false);
+      for (int x=0; x<result.length; x++)
 	out.println(result[x]);
     }
   }

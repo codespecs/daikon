@@ -181,7 +181,7 @@ public final class SequencesJoin
 						     var1.comparability);
 
     return new VarInfo(VarInfoName.applyFunctionOfN("join",
-						      new VarInfoName[] {var1.name, var2.name}),
+                                                    new VarInfoName[] {var1.name, var2.name}).applyElements(),
 		       decltype,
 		       ProglangType.HASHCODE_ARRAY,
 		       comparability,

@@ -20,7 +20,7 @@ public class FunctionUnary
    **/
   public static boolean dkconfig_enabled = true;
 
-  FunctionUnaryCore core;
+  public FunctionUnaryCore core;
 
   protected FunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
     super(ppt);

@@ -88,12 +88,14 @@ public class SubSet
   }
 
   public String format() {
+    String v1 = var1().name.name();
+    String v2 = var2().name.name();
     if (var1_in_var2 && var2_in_var1) {
-      return var1().name + " is a {sub,super}set of " + var2().name;
+      return v1 + " is a {sub,super}set of " + v2;
     } else {
-      VarInfo subvar = (var1_in_var2 ? var1() : var2());
-      VarInfo supervar = (var1_in_var2 ? var2() : var1());
-      return subvar.name + " is a subset of " + supervar.name;
+      String subvar = (var1_in_var2 ? v1 : v2);
+      String supervar = (var1_in_var2 ? v2 : v1);
+      return subvar + " is a subset of " + supervar;
     }
   }
 

@@ -131,7 +131,7 @@ public final class SeqIndexComparison
 
     String comparator = core.format_comparator_ioa();
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarName(0) + " " + comparator + " " +
+      " => " + quant.getVarName(0).ioa_name() + " " + comparator + " " +
       quant.getVarIndexed(0) + quant.getClosingExp();
   }
 

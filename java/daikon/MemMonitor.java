@@ -22,16 +22,20 @@ public class MemMonitor implements Runnable {
     keep_going = true;
     max_mem_usage = 0;
 
-    long initial_mem_load = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+    long initial_mem_load = mem_usage();
     fout.println("Initial memory load, " + initial_mem_load);
     fout.println("Format: pptName, peak_mem_usage, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars");
     fout.close();
   }
 
+  private long mem_usage() {
+    return (java.lang.Runtime.getRuntime().totalMemory()
+            - java.lang.Runtime.getRuntime().freeMemory());
+  }
+
   public void run() {
     while (keep_going) {
-      long cur_mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-      max_mem_usage = (max_mem_usage>cur_mem_usage) ? max_mem_usage : cur_mem_usage;
+      max_mem_usage = Math.max(max_mem_usage, mem_usage());
     }
 
     fout.close();
@@ -49,7 +53,7 @@ public class MemMonitor implements Runnable {
     fout.print(num_static_vars + ", " + num_orig_vars + ", " + num_scalar_vars + ", ");
     fout.println(num_array_vars + ", " + num_derived_scalar_vars + ", " + num_derived_array_vars);
 
-    max_mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+    max_mem_usage = mem_usage();
     fout.close();
   }
 

@@ -165,6 +165,11 @@ public final class Daikon {
   /** Debug tracer **/
   public static final Category debugTrace = Category.getInstance ("daikon.Daikon");
 
+  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
+  // test-run) time.  This might have to change when JTrace is used.
+  static { daikon.Runtime.no_dtrace = true; }
+
+
   static String usage =
     UtilMDE.join(new String[] {
       release_string,

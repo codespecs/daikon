@@ -41,8 +41,9 @@ public abstract class VarInfoName
   /**
    * Given the standard String representation of a variable name (from
    * a decls file), return the corresponding VarInfoName.  This cannot
-   * handle generalized expressions, so name.equals(parse(e.name()))
-   * is not certain to be true.
+   * parse all VarInfoNames (as one example, derived variables) that
+   * it can output:  name.equals(parse(e.name())) is not certain to
+   * be true, because parse might throw an error.
    **/
   public static VarInfoName parse(String name) {
     // x.class
@@ -284,7 +285,8 @@ public abstract class VarInfoName
     Object lookup = internTable.get(this);
     if (lookup != null) {
       WeakReference ref = (WeakReference)lookup;
-      return (VarInfoName)ref.get();
+      VarInfoName result = (VarInfoName)ref.get();
+      return result;
     } else {
       internTable.put(this, new WeakReference(this));
       return this;
@@ -352,6 +354,10 @@ public abstract class VarInfoName
   // ============================================================
   // Special producers, or other helpers
 
+  /**
+   * Replace the first instances of node by replacement, in the data
+   * structure rooted at this.
+   **/
   public VarInfoName replace(VarInfoName node, VarInfoName replacement) {
     if (node == replacement)
       return this;
@@ -359,6 +365,10 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
+  /**
+   * Replace all instances of node by replacement, in the data structure
+   * rooted at this.
+   **/
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
     if (node == replacement)
       return this;
@@ -382,6 +392,9 @@ public abstract class VarInfoName
     return (other == this) || ((other != null) && (this.repr().equals(other.repr())));
   }
 
+  // This should be safe even in the absence of caching, because "repr()"
+  // returns a new string each time, but it is equal() to any other
+  // returned string, so their hashCode()s should be the same.
   public int hashCode() {
     return repr().hashCode();
   }
@@ -394,11 +407,8 @@ public abstract class VarInfoName
   }
 
   public String toString() {
-    // Too much code uses the implicit toString when it really wants
-    // name().  Eventually change this to repr() and hunt down diffs
-    // in the regression tests and fix the other code.
-    return name();
-    // return repr();
+    // Code should not use the implicit toString when it really wants name().
+    return repr();
   }
 
 
@@ -406,12 +416,11 @@ public abstract class VarInfoName
   // IOA
 
   /**
-   * Format this in IOA format, and remove all "this." and
-   * "classname".
-   * @param classname the String to remove
+   * Format this in IOA format.
    **/
   public String ioaFormatVar(String varname) {
-    /*    int this_index = varname.indexOf("this.");
+    /*
+    int this_index = varname.indexOf("this.");
     int class_index = varname.indexOf(classname+".");
     String ioa_name = varname;
 
@@ -428,7 +437,8 @@ public abstract class VarInfoName
       this_index = ioa_name.indexOf("this.");
       class_index = ioa_name.indexOf(classname+".");
       }
-      return ioa_name;*/
+    return ioa_name;
+    */
     return varname;
   }
 
@@ -500,6 +510,10 @@ public abstract class VarInfoName
 	return simplify_name_impl(name, prestate);
       }
     }
+    // Names must be either a legal C/Java style identifier, or
+    // surrounded by vertical bars (Simplify's quoting mechanism);
+    // other than that, they only have to be consistent within one
+    // execution of Daikon.
     protected static String simplify_name_impl(String s, boolean prestate) {
       if (s.startsWith("~") && s.endsWith("~")) {
 	s = s.substring(1, s.length()-2) + ":closure";
@@ -627,16 +641,16 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for a function over this object; form is like
-   * "sum(this)".
+   * Returns a name for a unary function applied to this object.
+   * The result is like "sum(this)".
    **/
   public VarInfoName applyFunction(String function) {
     return (new FunctionOf(function, this)).intern();
   }
 
   /**
-   * Returns a name for a function of two arguments;
-   * form is like "sum(var1, var2))".
+   * Returns a name for a function applied to more than one argument.
+   * The result is like "sum(var1, var2)".
    * @param function the name of the function
    * @param vars The arguments to the function, of type VarInfoName
    **/
@@ -645,8 +659,8 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for a function of two arguments;
-   * form is like "sum(var1, var2))".
+   * Returns a name for a function of more than one argument.
+   * The result is like "sum(var1, var2)".
    * @param function the name of the function
    * @param vars The arguments to the function
    **/
@@ -815,7 +829,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * Intersection of two sequences.  Extends FunctionOfTwo, and the
+   * Intersection of two sequences.  Extends FunctionOfN, and the
    * only change is that it does special formatting for IOA.
    **/
   public static class Intersection extends FunctionOfN {
@@ -844,7 +858,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * Union of two sequences.  Extends FunctionOfTwo, and the
+   * Union of two sequences.  Extends FunctionOfN, and the
    * only change is that it does special formatting for IOA.
    **/
   public static class Union extends FunctionOfN {
@@ -867,13 +881,13 @@ public abstract class VarInfoName
 
   /**
    * Returns a 'getter' operation for some field of this name, like
-   * a[i].foo if this is a[i].
+   * a.foo if this is a.
    **/
   public VarInfoName applyField(String field) {
     return (new Field(this, field)).intern();
   }
 
-  /** A 'getter' operation for some field, like a[i].foo **/
+  /** A 'getter' operation for some field, like a.foo **/
   public static class Field extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -936,14 +950,14 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for a the type of this object; form is like
+   * Returns a name for the type of this object; form is like
    * "this.class" or "\typeof(this)".
    **/
   public VarInfoName applyTypeOf() {
     return (new TypeOf(this)).intern();
   }
 
-  /** The type of the term, like "term.class" **/
+  /** The type of the term, like "term.class" or "\typeof(term)". **/
   public static class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1003,7 +1017,7 @@ public abstract class VarInfoName
     }
   }
 
-  /** The prestate value of a term, like "orig(term)" **/
+  /** The prestate value of a term, like "orig(term)" or "\old(term)" **/
   public static class Prestate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1126,7 +1140,7 @@ public abstract class VarInfoName
     return (new Add(this, amount)).intern();
   }
 
-  /** An integer amount more or less than some other value **/
+  /** An integer amount more or less than some other value, like "x+2". **/
   public static class Add extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1238,7 +1252,7 @@ public abstract class VarInfoName
       return term.ioa_name() + "[" + index + "]";
     }
     protected String java_name_impl() {
-      /* throw new UnsupportedOperationException("JAVA cannot format an unquantified sequence of elements" +
+      /* throw new UnsupportedOperationException("Java cannot format an unquantified sequence of elements" +
 	 " [repr=" + repr() + "]");
       */
       // For now, do return the default implementation.
@@ -1456,7 +1470,7 @@ public abstract class VarInfoName
       return result;
     }
     protected String java_name_impl() {
-      //throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
+      //throw new UnsupportedOperationException("Java cannot format an unquantified slice of elements");
       // For now, return the default implementation.
       return name_impl();
     }
@@ -1510,7 +1524,7 @@ public abstract class VarInfoName
   /**
    * Traverse the tree elements that have exactly one branch (so the
    * traversal order doesn't matter).  Visitors need to implement
-   * methods for traversing elements (e.g. FunctionOfTwo) with more
+   * methods for traversing elements (e.g. FunctionOfN) with more
    * than one branch.
    **/
   public static abstract class AbstractVisitor
@@ -1572,15 +1586,13 @@ public abstract class VarInfoName
     extends AbstractVisitor
   {
     /**
-     * Creates a new NodeFinder but also tests if goal is in root or its children.
-     * Throws an assertion error if not.
-     * @param root The root of the tree to search
-     * @param goal The goal to find
+     * Creates a new NodeFinder.
+     * @param root the root of the tree to search
+     * @param goal the goal to find
      **/
     public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
-      Object o = root.accept(this);
-      Assert.assert(o != null);
+      Assert.assert(root.accept(this) != null);
     }
     // state and accessors
     private final VarInfoName goal;
@@ -1891,6 +1903,7 @@ public abstract class VarInfoName
   /**
    * Use to collect all elements in a tree into an inorder-traversal
    * list.  Result includes the root element.
+   * All methods return null; to obtain the result, call nodes().
    **/
   public static class InorderFlattener
     extends AbstractVisitor
@@ -1902,6 +1915,7 @@ public abstract class VarInfoName
     // state and accessors
     private final List result = new ArrayList();
 
+    /** Method returning the actual results (the nodes in order). **/
     public List nodes() {
       return Collections.unmodifiableList(result);
     }
@@ -1986,7 +2000,9 @@ public abstract class VarInfoName
     }
 
     // state and accessors
+    /** @see #simples() **/
     private Set simples; // [Simple]
+    /** @see #unquants() **/
     private Set unquant; // [Elements || Slice]
 
     /**
@@ -1999,9 +2015,16 @@ public abstract class VarInfoName
     }
     /**
      * @return Collection of the nodes under the root that need
-     * quantification.  (The values are either of type Elements or
-     * Slice).
+     * quantification.  Each node represents an array; in particular,
+     * the values are either of type Elements or Slice.
      **/
+    // Here are some inputs and the corresponding output sets:
+    //  terms[index].elts[num]   ==> { }
+    //  terms[index].elts[]      ==> { terms[index].elts[] }
+    //  terms[].elts[]           ==> { terms[], terms[].elts[] }
+    //  ary[row][col]            ==> { }
+    //  ary[row][]               ==> { ary[row][] }
+    //  ary[][]                  ==> { ary[], ary[][] }
     public Set unquants() {
       if (QuantHelper.debug.isDebugEnabled()) {
 	QuantHelper.debug.debug("unquants: " + unquant);
@@ -2019,12 +2042,18 @@ public abstract class VarInfoName
       return super.visitElements(o);
     }
 
+    public Object visitFunctionOf(FunctionOf o) {
+      simples.add(o);
+      return null;
+      //return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // We only use one of them because we don't want double quantifiers
+    }
     /**
      * We do *not* want to pull out array members of FunctionOfN
      * because a FunctionOfN creates a black-box array with respect to
-     * quantification.  (also, otherwise, there may be two or more
+     * quantification.  (Also, otherwise, there may be two or more
      * arrays that are returned, making the quantification engine
-     * think it's working with 2-d arrays)
+     * think it's working with 2-d arrays.)
      **/
     public Object visitFunctionOfN(FunctionOfN o) {
       simples.add(o);
@@ -2053,12 +2082,14 @@ public abstract class VarInfoName
     }
   }
 
+  // ============================================================
+  // Quantification for formatting in ESC or Simplify:  QuantHelper
 
   /**
    * Helper for writing parts of quantification expressions.
    * Formatting methods in invariants call the formatting methods in
    * this class to get commonly-used parts, like how universal
-   * quanitifiers look like in the different formatting schemes.
+   * quanitifiers look in the different formatting schemes.
    **/
   public static class QuantHelper {
 
@@ -2085,6 +2116,12 @@ public abstract class VarInfoName
       protected String repr_impl() {
 	return "Free[" + super.repr_impl() + "]";
       }
+      protected String jml_name_impl() {
+	return super.jml_name_impl();
+      }
+      // protected String esc_name_impl() {
+      //   return super.esc_name_impl();
+      // }
       protected String simplify_name_impl(boolean prestate) {
 	return super.simplify_name_impl(false);
       }
@@ -2095,8 +2132,10 @@ public abstract class VarInfoName
      * Replaces a needy (unquantified term) with its subscripted
      * equivalent, using the given index variable.
      *
-     * @param root the root of the expression to be modified
-     * @param needy the term to be subscripted (must be of type Elements or Slice)
+     * @param root the root of the expression to be modified.
+     * Substitution occurs only in the subtree reachable from root.
+     * @param needy the term to be subscripted (must be of type Elements or
+     * Slice)
      * @param index the variable to place in the subscript
      *
      * @return a 3-element array consisting of the new root, the lower
@@ -2166,8 +2205,9 @@ public abstract class VarInfoName
     }
 
     // <root*> -> <root'*, <index, lower, upper>*>
+    // (The lengths of root* and root'* are the same; not sure about <i,l,u>*.)
     /**
-     * Given a list of roots, changes all Elements or Slice terms to
+     * Given a list of roots, changes all Elements and Slice terms to
      * Subscripts by inserting a new free variable; also return bounds
      * for the new variables.
      **/
@@ -2197,7 +2237,7 @@ public abstract class VarInfoName
 	simples.addAll(helper[i].simples());
       }
 
-      // choose names for the indicies that don't conflict, and then
+      // choose names for the indices that don't conflict, and then
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i=0; i < roots.length; i++) {
@@ -2211,6 +2251,9 @@ public abstract class VarInfoName
 	    QuantHelper.debug.debug("uq_elts: " + uq.toString());
 	  }
 
+          // We assume that the input was one unquantified sequence
+          // variable.  If uq has more than one element, then the
+          // sequence had more than one dimension.
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
 
 	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
@@ -2237,7 +2280,7 @@ public abstract class VarInfoName
     }
 
     /**
-     * It's too complex (and error prone). to hold quantification
+     * It's too complex (and error prone) to hold quantification
      * results for IOA in a string array; so we create a helper object
      * that has accessors.  Otherwise this works just like a
      * format_ioa method here would work.
@@ -2303,7 +2346,7 @@ public abstract class VarInfoName
       }
 
       public String getMembershipRestriction(int num) {
-	return getVarName(num) + " \\in " + setNames[num].ioa_name();
+	return getVarName(num).ioa_name() + " \\in " + setNames[num].ioa_name();
       }
 
       public String getClosingExp() {
@@ -2316,8 +2359,8 @@ public abstract class VarInfoName
 	return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
       }
 
-      public VarInfoName getVarIndexed (int num) {
-	return qret.root_primes[num];
+      public String getVarIndexed (int num) {
+	return qret.root_primes[num].ioa_name();
       }
 
     }
@@ -2470,73 +2513,6 @@ public abstract class VarInfoName
     public static String[] format_esc(VarInfoName[] roots, boolean elementwise) {
       // The call to format_esc is now handled by the combined formatter format_java_style
       return format_java_style(roots,elementwise,true,OutputFormat.ESCJAVA);
-
-      //        Assert.assert(roots != null);
-
-      //        QuantifyReturn qret = quantify(roots);
-
-      //        // build the "\forall ..." predicate
-      //        String[] result = new String[roots.length+2];
-      //        StringBuffer int_list, conditions;
-      //        {
-      //          // "i, j, ..."
-      //          int_list = new StringBuffer();
-      //          // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
-      //          // if elementwise, also do "(i-ai) == (b-bi) && ..."
-      //          conditions = new StringBuffer();
-      //          for (int i=0; i < qret.bound_vars.size(); i++) {
-      //            VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-      //            VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-      //            if (i != 0) {
-      //              int_list.append(", ");
-      //              conditions.append(" && ");
-      //            }
-      //            int_list.append(idx.esc_name());
-      //            conditions.append(low.esc_name());
-      //            conditions.append(" <= ");
-      //            conditions.append(idx.esc_name());
-      //            conditions.append(" && ");
-      //            conditions.append(idx.esc_name());
-      //            conditions.append(" <= ");
-      //            conditions.append(high.esc_name());
-      //            if (elementwise && (i >= 1)) {
-      //              VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-      //              VarInfoName _idx = _boundv[0], _low = _boundv[1];
-      //              conditions.append(" && ");
-      //              if (ZERO.equals(_low)) {
-      //                conditions.append(_idx);
-      //              } else {
-      //                conditions.append("(");
-      //                conditions.append(_idx.esc_name());
-      //                conditions.append("-(");
-      //                conditions.append(_low.esc_name());
-      //                conditions.append("))");
-      //              }
-      //              conditions.append(" == ");
-      //              if (ZERO.equals(low)) {
-      //                conditions.append(idx.esc_name());
-      //              } else {
-      //                conditions.append("(");
-      //                conditions.append(idx.esc_name());
-      //                conditions.append("-(");
-      //                conditions.append(low.esc_name());
-      //                conditions.append("))");
-      //              }
-      //            }
-      //          }
-      //        }
-      //        if (forall)
-      //          result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
-      //        else
-      //          result[0] = "(\\exists int " + int_list + "; (" + conditions + ") && ";
-      //        result[result.length-1] = ")";
-
-      //        // stringify the terms
-      //        for (int i=0; i < roots.length; i++) {
-      //          result[i+1] = qret.root_primes[i].esc_name();
-      //        }
-
-      //        return result;
     }
 
     // <root*> -> <string string*>
@@ -2555,72 +2531,6 @@ public abstract class VarInfoName
     }
     public static String[] format_jml(VarInfoName[] roots, boolean elementwise,boolean forall) {
        return format_java_style(roots,elementwise,forall,OutputFormat.JML);
-
-       //         Assert.assert(roots != null);
-
-       //         QuantifyReturn qret = quantify(roots);
-
-       //         //build the "\forall ..." predicate
-       //         String[] result = new String[roots.length+2];
-       //         StringBuffer int_list, conditions;
-       //         {
-       //           // "i, j, ..."
-       //           int_list = new StringBuffer();
-       //           // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
-       //           // if elementwise, also do "(i-ai) == (b-bi) && ..."
-       //           conditions = new StringBuffer();
-       //           for (int i=0; i < qret.bound_vars.size(); i++) {
-       //             VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-       //             VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-       //             if (i != 0) {
-       //               int_list.append(", ");
-       //               conditions.append(" && ");
-       //             }
-       //             int_list.append(idx.jml_name());
-       //             conditions.append(low.jml_name());
-       //             conditions.append(" <= ");
-       //             conditions.append(idx.jml_name());
-       //             conditions.append(" && ");
-       //             conditions.append(idx.jml_name());
-       //             conditions.append(" <= ");
-       //             conditions.append(high.jml_name());
-       //             if (elementwise && (i >= 1)) {
-       //               VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-       //               VarInfoName _idx = _boundv[0], _low = _boundv[1];
-       //               conditions.append(" && ");
-       //               if (ZERO.equals(_low)) {
-       //                 conditions.append(_idx);
-       //               } else {
-       //                 conditions.append("(");
-       //                 conditions.append(_idx.jml_name());
-       //                 conditions.append("-(");
-       //                 conditions.append(_low.jml_name());
-       //                 conditions.append("))");
-       //               }
-       //               conditions.append(" == ");
-       //               if (ZERO.equals(low)) {
-       //                 conditions.append(idx.jml_name());
-       //               } else {
-       //                 conditions.append("(");
-       //                 conditions.append(idx.jml_name());
-       //                 conditions.append("-(");
-       //                 conditions.append(low.jml_name());
-       //                 conditions.append("))");
-       //               }
-       //             }
-       //           }
-       //         }
-       //         if (forall)
-       //           result[0] = "\\forall int " + int_list + "; " + conditions + "; ";
-       //         else
-       //           result[0] = "\\exists int " + int_list + "; " + conditions + "; ";
-
-       //        // stringify the terms
-       //         for (int i=0; i < roots.length; i++) {
-       //           result[i+1] = qret.root_primes[i].jml_name();
-       //         }
-
-       //         return result;
     }
 
     //////////////////////////
@@ -2689,7 +2599,7 @@ public abstract class VarInfoName
     // <root*> -> <string string*>
     /**
      * Given a list of roots, return a String array where the first
-     * element is a JAVA-style quantification over newly-introduced
+     * element is a Java-style quantification over newly-introduced
      * bound variables, the last element is a closer, and the other
      * elements are java-named strings for the provided roots (with
      * sequences subscripted by one of the new bound variables).
@@ -2699,76 +2609,6 @@ public abstract class VarInfoName
     }
     public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
       return format_java_style(roots, false, true, OutputFormat.JAVA);
-
-      //        Assert.assert(roots != null);
-      //        QuantifyReturn qret = quantify(roots);
-
-      //        // build the "\forall ..." predicate
-      //        String[] result = new String[roots.length+2];
-      //        StringBuffer int_list, conditions, closing;
-      //        {
-      //          // "i, j, ..."
-      //          int_list = new StringBuffer();
-      //          // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
-      //          // if elementwise, also do "(i-ai) == (b-bi) && ..."
-      //          conditions = new StringBuffer();
-      //          closing = new StringBuffer();
-      //          for (int i=0; i < qret.bound_vars.size(); i++) {
-      //            VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-      //            VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-      //            if (i != 0) {
-      //              int_list.append(", ");
-      //              conditions.append(" && ");
-      //              closing.append(", ");
-      //              closing.append(idx.java_name());
-      //              closing.append(" ++");
-      //            } else {
-      //              closing.append(idx.java_name());
-      //              closing.append("++");
-      //            }
-      //            int_list.append(idx.java_name());
-      //            int_list.append(" == ");
-      //            int_list.append(low.java_name());
-
-      //            conditions.append(idx.java_name());
-      //            conditions.append(" <= ");
-      //            conditions.append(high.java_name());
-
-      //            if (elementwise && (i >= 1)) {
-      //              VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-      //              VarInfoName _idx = _boundv[0], _low = _boundv[1];
-      //              conditions.append(" || ");
-      //              if (ZERO.equals(_low)) {
-      //                conditions.append(_idx);
-      //              } else {
-      //                conditions.append("(");
-      //                conditions.append(_idx.java_name());
-      //                conditions.append("-(");
-      //                conditions.append(_low.java_name());
-      //                conditions.append("))");
-      //              }
-      //              conditions.append(" == ");
-      //              if (ZERO.equals(low)) {
-      //                conditions.append(idx.java_name());
-      //              } else {
-      //                conditions.append("(");
-      //                conditions.append(idx.java_name());
-      //                conditions.append("-(");
-      //                conditions.append(low.java_name());
-      //                conditions.append("))");
-      //              }
-      //            }
-      //          }
-      //        }
-      //        result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")";
-      //        result[result.length-1] = ")";
-
-      //        // stringify the terms
-      //        for (int i=0; i < roots.length; i++) {
-      //          result[i+1] = qret.root_primes[i].java_name();
-      //        }
-
-      //        return result;
     }
 
     // This set of functions quantifies in the same manner to the ESC quantification, except that
@@ -2933,7 +2773,7 @@ public abstract class VarInfoName
       StringBuffer conditions = new StringBuffer();
 
       if (ZERO.equals(_low)) {
-	conditions.append(_idx);
+	conditions.append(_idx.name_using(format));
       } else {
 	conditions.append("(");
 	conditions.append(_idx.name_using(format));

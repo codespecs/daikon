@@ -1,6 +1,5 @@
 package daikon.split;
 
-import java.lang.*;
 import java.io.*;
 import java.util.*;
 
@@ -15,7 +14,7 @@ import java.util.*;
 
 public final class FileCompiler {
 
-  public static Runtime commander = Runtime.getRuntime();
+  public static Runtime commander = java.lang.Runtime.getRuntime();
 
   /**
    * String.  Specifies which Java compiler is used to compile

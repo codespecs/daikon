@@ -96,10 +96,37 @@ public abstract class Ppt
   //  */
   // abstract void process();
 
+  // /**
+  //  * Returns whether the ValueTuple appears in this map.
+  //  * This can be more efficient than @link{count} because, for
+  //  * views, it can stop after finding one occurrence.
+  //  */
+  // abstract boolean contains(ValueTuple vt);
+
+  // /** Returns the number of occurrences of this ValueTuple in the map. */
+  // abstract int count(ValueTuple vt);
+
+  // /**
+  //  * This oughtn't return a Set because it might be expensive to produce
+  //  * such a thing (with no duplicates, that is).  And it might not even be
+  //  * possible to return this set if we have already discarded some info.
+  //  *
+  //  * Maybe have another method that does return a Set.
+  //  */
+  // abstract Iterator entrySet();
+
+  /**
+   * The name of the function represented by this program point;
+   * the program point name up to the ":::" separator.
+   **/
   String fn_name() {
     return Ppt.fn_name(name);
   }
 
+  /**
+   * The name of the function represented by the specified program point name;
+   * the program point name up to the ":::" separator.
+   **/
   static String fn_name(String ppt_name) {
     int fn_name_end = ppt_name.indexOf(FileIO.ppt_tag_separator);
     if (fn_name_end == -1)
@@ -113,10 +140,10 @@ public abstract class Ppt
     if (infos.length == 0) {
       sb.append("<implication slice>");
     } else {
-      sb.append(infos[0].name);
+      sb.append(infos[0].name.name());
       for (int i=1; i<infos.length; i++) {
         sb.append(", ");
-        sb.append(infos[i].name);
+        sb.append(infos[i].name.name());
       }
     }
     sb.append(")");

@@ -46,8 +46,8 @@ public class NoDuplicates
     // Don't instantiate if the variable can't have dupliates
     if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       if (debug.isDebugEnabled()) {
-	debug.debug ("Not instantitating for because dupliates has no meaning: " +
-		     result.var().name);
+	debug.debug ("Not instantitating for because duplicates has no meaning: " +
+		     result.var().name.name());
       }
       return null;
     }
@@ -65,7 +65,7 @@ public class NoDuplicates
     }
 
     if (format == OutputFormat.DAIKON) {
-      return var().name + " contains no duplicates";
+      return var().name.name() + " contains no duplicates";
     }
 
     if (format == OutputFormat.IOA) {
@@ -79,7 +79,7 @@ public class NoDuplicates
       VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
       VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
 
-      return quantResult[0] + "(" + index1 + " != " + index2 + ") ==> (" + quantResult[1] + " != " +
+      return quantResult[0] + "(" + index1.jml_name() + " != " + index2.jml_name() + ") ==> (" + quantResult[1] + " != " +
 	quantResult[2] + ")" + quantResult[3];
     }
 
@@ -120,13 +120,13 @@ public class NoDuplicates
 	//         /\ j \ in X
 	" /\\ " + quant.getMembershipRestriction(1) +
 	//           i.field = j.field
-	" /\\ " + quant.getVarName(0) + "." + fieldName + " = " + quant.getVarName(1) + "." + fieldName +
+	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName + " = " + quant.getVarName(1).ioa_name() + "." + fieldName +
 	//           i.pred = value
-	" /\\ " + quant.getVarName(0) + "." + predicateName + " = " + predicateValue +
+	" /\\ " + quant.getVarName(0).ioa_name() + "." + predicateName + " = " + predicateValue +
 	//           j.pred = value
-	" /\\ " + quant.getVarName(1) + "." + predicateName + " = " + predicateValue +
+	" /\\ " + quant.getVarName(1).ioa_name() + "." + predicateName + " = " + predicateValue +
 	//  =>      i           =       j           )
-	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else if (var().isDerived() && var().derived instanceof SequencesJoin) {
       SequencesJoin derivation = (SequencesJoin) var().derived;
@@ -150,11 +150,11 @@ public class NoDuplicates
 	//         /\ j \ in X
 	" /\\ " + quant.getMembershipRestriction(1) +
 	//           i.field = j.field
-	" /\\ " + quant.getVarName(0) + "." + fieldName1 + " = " + quant.getVarName(1) + "." + fieldName1 +
+	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName1 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName1 +
 	//           i.field = j.field
-	" /\\ " + quant.getVarName(0) + "." + fieldName2 + " = " + quant.getVarName(1) + "." + fieldName2 +
+	" /\\ " + quant.getVarName(0).ioa_name() + "." + fieldName2 + " = " + quant.getVarName(1).ioa_name() + "." + fieldName2 +
 	//  =>      i           =       j           )
-	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else {
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var(), var());
@@ -165,7 +165,7 @@ public class NoDuplicates
 	//           X[i] = X[j]
 	" /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
 	//  =>      i           =       j           )
-	") => " + quant.getVarName(0) + " = " + quant.getVarName(1) + quant.getClosingExp();
+	") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     }
 

@@ -143,9 +143,4 @@ public class MatchCountVisitor extends PrintAllVisitor {
 	return (double) recall.size() / cnt.size();
     }
 
-
 }
-
-
-
-

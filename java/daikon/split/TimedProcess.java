@@ -20,7 +20,7 @@ public class TimedProcess {
   Process p;
   boolean finished; //keep track of whether the process if finished or not.
   long waitTime;
-  Runtime commander = Runtime.getRuntime();
+  Runtime commander = java.lang.Runtime.getRuntime();
   BufferedReader error;
   StringBuffer errorMessage;
 

@@ -121,7 +121,7 @@ class JTraceInference extends Thread
 
 	    case CT_NoData:
 		JTrace.println(JTrace.V_INFO, "<NoData>");
-		for(;;)
+		for (;;)
 		    try {
 			currentThread().sleep(100); // sleep and try again
 			break;
@@ -270,7 +270,7 @@ class JTraceInference extends Thread
 
     // called from another thread:
     public void			joinX() { // join, but suppress failure
-	for(;;)
+	for (;;)
 	    try {
 		join(); // wait for thread to exit
 		return;

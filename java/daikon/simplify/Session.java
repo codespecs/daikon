@@ -2,7 +2,7 @@ package daikon.simplify;
 
 import java.io.*;
 import java.util.*;
-    
+
 import utilMDE.Assert;
 
 /**
@@ -27,7 +27,7 @@ public class Session
     try {
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
-      process = Runtime.getRuntime().exec("Simplify -nosc");
+      process = java.lang.Runtime.getRuntime().exec("Simplify -nosc");
       SessionManager.debugln("Session: exec ok");
 
       SessionManager.debugln("Session: prompt off");
@@ -47,7 +47,7 @@ public class Session
 
       // set up result stream
       output = new BufferedReader(new InputStreamReader(is));
-      
+
     } catch (IOException e) {
       throw new SimplifyError(e.toString());
     }

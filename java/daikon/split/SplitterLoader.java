@@ -7,7 +7,7 @@ import java.lang.reflect.*;
 /**
  * Reads in and loads compiled Java source and returns a Java Object
  **/
-public class SplitterLoader extends ClassLoader{
+public class SplitterLoader extends ClassLoader {
 
   /**
    * read in the bytes of the .class file

@@ -26,7 +26,7 @@ public class PairwiseFunctionUnary
    **/
   public static boolean dkconfig_enabled = true;
 
-  FunctionUnaryCore core;
+  public FunctionUnaryCore core;
 
   protected PairwiseFunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
     super(ppt);
@@ -82,8 +82,8 @@ public class PairwiseFunctionUnary
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-			  quant1.getVarIndexed(0),
-			  quant2.getVarIndexed(0))
+			  quant1.getVarName(0),
+			  quant2.getVarName(0))
       + quant1.getClosingExp();
   }
 

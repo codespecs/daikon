@@ -2234,18 +2234,14 @@ public class PptTopLevel
   }
 
 
-
   ///////////////////////////////////////////////////////////////////////////
   /// Parameter VarInfo processing
   ///
-
 
   /**
    * Cached (VarInfoName) parameters
    **/
   private Set paramVars = null;
-
-
 
   /**
    * Returns variables in this Ppt that are parameters.
@@ -2256,15 +2252,12 @@ public class PptTopLevel
     paramVars = new HashSet();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo var = var_infos[i];
-      if (var.aux.getFlag(VarInfoAux.IS_PARAM)) paramVars.add (var.name);
+      if (var.aux.getFlag(VarInfoAux.IS_PARAM)) {
+        paramVars.add(var.name);
+      }
     } // We should cache paramedVars in PptToplevel
     return paramVars;
   }
-
-
-
-
-
 
 
   ///////////////////////////////////////////////////////////////////////////

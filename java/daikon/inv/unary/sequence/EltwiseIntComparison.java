@@ -73,9 +73,9 @@ public class EltwiseIntComparison
 			 + ";comparison=\"" + core.format_comparator() + "\"");
     }
     if (core.can_be_eq && !(core.can_be_lt || core.can_be_gt)) {
-      return var().name + " elements are equal";
+      return var().name.name() + " elements are equal";
     } else {
-      return (var().name + " sorted by " + core.format_comparator());
+      return (var().name.name() + " sorted by " + core.format_comparator());
     }
   }
 
@@ -92,7 +92,7 @@ public class EltwiseIntComparison
     } else {
       // i \in X /\ j \in X /\ i+1 = j => X[i] = X[j]
       result = result +
-	quant.getVarName(0) + "+1 = " + quant.getVarName(1) +
+	" /\\ " + quant.getVarName(0).ioa_name() + "+1 = " + quant.getVarName(1).ioa_name() +
 	") => " +
 	quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1);
     }

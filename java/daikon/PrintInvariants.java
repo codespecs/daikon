@@ -22,6 +22,10 @@ public class PrintInvariants {
 
   public static final String lineSep = Global.lineSep;
 
+  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
+  // test-run) time.  This might have to change when JTrace is used.
+  static { daikon.Runtime.no_dtrace = true; }
+
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
@@ -236,7 +240,7 @@ public class PrintInvariants {
     if (Daikon.output_num_samples || (Daikon.output_style == OutputFormat.ESCJAVA)) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++)
-        out.print(" " + ppt.var_infos[i].name);
+        out.print(" " + ppt.var_infos[i].name.name());
       out.println();
     }
     //System.out.println("entering print_sample_data\n");
@@ -297,7 +301,7 @@ public class PrintInvariants {
         out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
           VarInfo vi = (VarInfo)modified_vars.elementAt(i);
-          out.print(" " + vi.name);
+          out.print(" " + vi.name.name());
         }
         out.println();
       }
@@ -305,14 +309,14 @@ public class PrintInvariants {
         out.print("      Modified primitive arguments:");
         for (int i=0; i<modified_primitive_args.size(); i++) {
           VarInfo vi = (VarInfo)modified_primitive_args.elementAt(i);
-          out.print(" " + vi.name);
+          out.print(" " + vi.name.name());
         }
         out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
         for (int i=0; i<unmodified_vars.size(); i++)
-          out.print(" " + ((VarInfo)unmodified_vars.elementAt(i)).name);
+          out.print(" " + ((VarInfo)unmodified_vars.elementAt(i)).name.name());
         out.println();
       }
     }
@@ -467,7 +471,7 @@ public class PrintInvariants {
       for (int j=0; j<equal_vars.size(); j++) {
 	VarInfo other = (VarInfo) equal_vars.elementAt(j);
 	sb.append(" == "); // "interned"
-	sb.append(other.name);
+	sb.append(other.name.name());
 	if (obviously_equal.contains(other)) {
 	  sb.append(" (obviously)");
 	}
