@@ -530,7 +530,13 @@ target.
     <code>
         cd $inv/doc <br>
         diff -b -u -s --from-file /home/httpd/html/daikon/dist/doc *.texinfo 
+
         <br>
+    </code> <p>
+    or on afs <p>
+    <code>
+        cd $inv/doc <br>
+        diff -b -u -s --from-file /var/autofs/net/pag/home/httpd/html/daikon/dist/doc *.texinfo 
     </code> <p>
 
     Another good source of information is to examine the cvs logs over the
@@ -543,8 +549,17 @@ target.
 
     <li> Make the distribution and update the website. <p>
 
+    On red hat: <p>
     <code>
         cd $inv <br>
+        make dist <br>
+    </code> <p>
+
+    On debian, set group to invariants <p>
+    <code>
+        cd $inv <br>
+        sudo perl -e '$( = $) = "14127 14127 14128"; $< = $> = 15313; \ <br>
+            system "xterm"' <br>
         make dist <br>
     </code> <p>
 
