@@ -343,10 +343,14 @@ public final class ProglangType
     // This only needs to deal with representation types, not with all
     // types in the underlying programming language.
 
+
+
     if (dimensions == 0) {
       if (base == BASE_STRING) {
-        if (value.equals("null"))
+        if (value.equals("null")) {
+          // Fmt.pf ("dimensions = 0, base = string");
           return null;
+        }
         if (! (value.startsWith("\"") && value.endsWith("\""))) {
           System.out.println("Unquoted string value: " + value);
         }
@@ -400,8 +404,10 @@ public final class ProglangType
 
       value = value.trim();
 
-      if (value.equals("null"))
+      if (value.equals("null")) {
+        // Fmt.pf ("dimensions = 1");
         return null;
+      }
 
       // Try requiring the square brackets around arrays (permits
       // distinguishing between null and an array containing just null).

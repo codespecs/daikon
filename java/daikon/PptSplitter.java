@@ -246,10 +246,13 @@ public class PptSplitter implements Serializable {
         // Find the corresponding slice
         PptSlice cslice = child_ppt.findSlice (cvis_sorted);
         if (cslice == null) {
-          if (eq_inv != null)
+          if (eq_inv != null) {
+            for (int i = 0; i < cvis_sorted.length; i++)
+              Fmt.pf ("con val = " + child_ppt.constants.all_vars[cvis_sorted[i].varinfo_index]);
             Assert.assertTrue (eq_inv == null, "found eq_inv " + eq_inv + " @"
                              + eq_inv.ppt + " but can't find slice for "
                              + VarInfo.toString (cvis_sorted));
+          }
           continue;
         }
 
@@ -597,14 +600,8 @@ public class PptSplitter implements Serializable {
 
     List /*VarInfo[]*/ result = new ArrayList();
 
-    // Create an array of leaders at the parent to build slices over
-    Invariants parent_eq_invs = parent.equality_view.invs;
-    VarInfo[] leaders = new VarInfo[parent_eq_invs.size()];
-    for (int i = 0; i < parent_eq_invs.size(); i++) {
-      leaders[i] = ((Equality) parent_eq_invs.get(i)).leader();
-      Assert.assertTrue (leaders[i] != null);
-    }
-    Arrays.sort (leaders, VarInfo.IndexComparator.getInstance());
+    // Get an array of leaders at the parent to build slices over
+    VarInfo[] leaders = parent.equality_view.get_leaders_sorted();
 
     // Create unary views
     List unary_slices = new ArrayList();
