@@ -763,6 +763,8 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
+    Daikon.progress = "Finished reading " + filename.getName();
+
     data_trace_filename = null;
     data_trace_reader = null;
   }
