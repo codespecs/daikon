@@ -302,9 +302,9 @@ public final class Runtime {
   public static final void print_Object(java.io.PrintStream ps, Object x) {
     if (x == null) {
       ps.print("null");
-      return;
+    } else {
+      ps.print(java.lang.System.identityHashCode(x));
     }
-    ps.print(java.lang.System.identityHashCode(x));
   }
 
   // augmentation of print_Object above
@@ -313,6 +313,16 @@ public final class Runtime {
       ps.print("null");
     } else {
       print_String(ps, classnameFromJvm(x.getClass().getName()));
+    }
+  }
+
+  public static final void println_class_and_modbit(java.io.PrintStream ps, Object x) {
+    if (x == null) {
+      ps.println("nonsensical");
+      ps.println("2");          // "missing"
+    } else {
+      println_String(ps, classnameFromJvm(x.getClass().getName()));
+      ps.println("1");          // "modified"
     }
   }
 
@@ -461,6 +471,7 @@ public final class Runtime {
     ps.println(']');
   }
 
+  // Deprecated
   // Print an array of the classes of the elements.
   public static final void println_array_Object_eltclass(java.io.PrintStream ps, Object[] a) {
     if (a == null) {
@@ -479,6 +490,29 @@ public final class Runtime {
   }
 
   // Print an array of the classes of the elements.
+  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, Object[] a) {
+    if (a == null) {
+      ps.println("nonsensical");
+      ps.println("2");          // "missing"
+      return;
+    }
+    boolean any_null = false;
+    ps.print('[');
+    if (a.length > 0) {
+      print_class(ps, a[0]);
+      any_null = (a[0] == null);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        print_class(ps, a[i]);
+        any_null |= (a[i] == null);
+      }
+    }
+    ps.println(']');
+    ps.println("1");          // "modified"
+  }
+
+  // Deprecated.
+  // Print an array of the classes of the elements.
   public static final void println_array_Object_eltclass(java.io.PrintStream ps, List v) {
     if (v == null) {
       ps.println("null");
@@ -494,6 +528,29 @@ public final class Runtime {
       }
     }
     ps.println(']');
+  }
+
+  // Print an array of the classes of the elements.
+  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, List v) {
+    if (v == null) {
+      ps.println("nonsensical");
+      ps.println("2");          // "missing"
+      return;
+    }
+    boolean any_null = false;
+    ps.print('[');
+    int size = v.size();
+    if (size > 0) {
+      print_class(ps, v.get(0));
+      any_null = (v.get(0) == null);
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        print_class(ps, v.get(i));
+        any_null |= (v.get(i) == null);
+      }
+    }
+    ps.println(']');
+    ps.println("1");          // "modified"
   }
 
   // The parsing routines can't deal with "missing" in the middle of an
