@@ -26,6 +26,7 @@ public class Ast {
 
   private static final String lineSep = System.getProperty("line.separator");
 
+
   ///////////////////////////////////////////////////////////////////////////
   /// Visitors
   ///
@@ -33,24 +34,8 @@ public class Ast {
   // Reads an AST from the input stream, applies the visitor to the AST,
   // reformats only to insert comments, and writes the resulting AST to the
   // output stream.
-  public static void applyVisitorInsertComments(String javafilename, Writer output,
+  public static void applyVisitorInsertComments(String javafilename, Node root, Writer output,
                                                 AnnotateVisitor visitor) {
-    Reader input = null;
-    try {
-      input = new FileReader(javafilename);
-    } catch (FileNotFoundException e) {
-      throw new Error(e);
-    }
-
-    JavaParser parser = new JavaParser(input);
-    Node root = null;
-    try {
-      root = parser.CompilationUnit();
-    }
-    catch (ParseException e) {
-      e.printStackTrace();
-      throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
-    }
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
     PrintWriter writer = null;
@@ -177,14 +162,18 @@ public class Ast {
   }
 
   public static String getType(FormalParameter p) {
+
+    p.accept(new TreeFormatter());
+
     String type = print(p.f1);
-    String name = print(p.f2);
+    String name = print(p.f3);
 
     // print() removes whitespace around brackets, so this test is safe.
     while (name.endsWith("[]")) {
       type += "[]";
       name = name.substring(0, name.length()-2);
     }
+
     return type;
   }
 
@@ -234,11 +223,18 @@ public class Ast {
   // Return the fully qualified name of the class containing the node.
   // (The result does not include the trailing period, though it did once.)
   // <package>.<class>*.<method>
-  public static String getClassName(Node n) {
+  public static String getClassName(Node d) {
+
+    ClassOrInterfaceDeclaration n =
+      (d instanceof ClassOrInterfaceDeclaration)
+      ? (ClassOrInterfaceDeclaration)d
+      : (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, d);
+
     String packageName;
     CompilationUnit unit
-      = (CompilationUnit) ((n instanceof CompilationUnit) ? n
-                           : getParent(CompilationUnit.class, n));
+      = (CompilationUnit)getParent(CompilationUnit.class, n);
+//       = (CompilationUnit) ((n instanceof CompilationUnit) ? n
+//                            : getParent(CompilationUnit.class, n));
     String getPackage = getPackage(unit);
     if (getPackage != null) {
       packageName = getPackage + ".";
@@ -248,13 +244,13 @@ public class Ast {
 
     String className = "";
     // Need to double-check this logic.
-    if (n instanceof TypeDeclaration) {
-      // use the ClassDeclaration, the InterfaceDeclaration, or the ";"
-      n = ((TypeDeclaration)n).f0.choice;
-    }
-    if (n instanceof ClassOrInterfaceDeclaration) {
-      className = ((ClassOrInterfaceDeclaration)n).f1.tokenImage + ".";
-    }
+//     if (n instanceof TypeDeclaration) {
+//       // use the ClassDeclaration, the InterfaceDeclaration, or the ";"
+//       n = ((TypeDeclaration)n).f0.choice;
+//     }
+//     if (n instanceof ClassOrInterfaceDeclaration) {
+      className = (n).f1.tokenImage + ".";
+//    }
 //     if (n instanceof InterfaceDeclaration) {
 //       n = ((InterfaceDeclaration)n).f1; // use the UnmodifiedInterfaceDeclaration
 //     }
@@ -610,128 +606,6 @@ public class Ast {
   /// PptMap manipulation
   ///
 
-  // Result is a Vector of PptTopLevel elements
-  public static Vector getMatches(PptMap ppts, MethodDeclaration methdecl) {
-    String classname = getClassName(methdecl);
-    String methodname = getName(methdecl);
-    List method_params = getParameters(methdecl);
-    return getMatches(ppts, classname, methodname, method_params);
-  }
-
-  // Result is a Vector of PptTopLevel elements
-  public static Vector getMatches(PptMap ppts, ConstructorDeclaration constrdecl) {
-    String classname = getClassName(constrdecl);
-    // String constrname = getName(constrdecl);
-    List constr_params = getParameters(constrdecl);
-    return getMatches(ppts, classname, "<init>", constr_params);
-  }
-
-  public static Vector getMatches(PptMap ppts, Node n) {
-    if (n instanceof MethodDeclaration) {
-      return getMatches(ppts, (MethodDeclaration) n);
-    } else if (n instanceof ConstructorDeclaration) {
-      return getMatches(ppts, (ConstructorDeclaration) n);
-    } else {
-      throw new Error("Bad type in Ast.getMatches: " + n);
-    }
-  }
-
-  // Result is a Vector of PptTopLevel elements
-  public static Vector getMatches(PptMap ppts, String classname, String methodname, List method_params) {
-    boolean debug_getMatches = false;
-
-    if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
-    if (methodname.equals("<init>")) {
-      int dotpos = classname.lastIndexOf('.');
-      if (dotpos == -1) {
-        methodname = classname;
-      } else {
-        methodname = classname.substring(dotpos + 1);
-      }
-      if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
-    }
-
-    Vector result = new Vector();
-
-    String[] param_types = new String[method_params.size()];
-    {
-      int i = 0;
-      for (Iterator itor = method_params.iterator(); itor.hasNext(); i++) {
-        FormalParameter fp = (FormalParameter) itor.next();
-        param_types[i] = getType(fp);
-      }
-    }
-
-    if (debug_getMatches) System.out.println("getMatch goal = " + classname + " " + methodname);
-    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      PptName ppt_name = ppt.ppt_name;
-      if (debug_getMatches) System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getMethodName() + ")");
-      if (classname.equals(ppt_name.getFullClassName())
-          && methodname.equals(ppt_name.getMethodName())) {
-        if (debug_getMatches) System.out.println("getMatch: class name and method name match candidate; now check args");
-        // Class name and method name match.  Now check whether args match.
-        // This is complicated by the fact that JTB doesn't give us
-        // fully-qualified names.
-        String pptFullMethodName = ppt_name.getSignature();
-        if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
-        int lparen = pptFullMethodName.indexOf('(');
-        int rparen = pptFullMethodName.indexOf(')');
-        Assert.assertTrue(lparen > 0);
-        Assert.assertTrue(rparen > lparen);
-        String ppt_args_string = pptFullMethodName.substring(lparen+1, rparen);
-        String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
-        if ((ppt_args.length == 1)
-            && (ppt_args[0].equals(""))) {
-          ppt_args = new String[0];
-        }
-        if (ppt_args.length != param_types.length) {
-          if (debug_getMatches) System.out.println("arg lengths mismatch: " + ppt_args.length + ", " + param_types.length);
-          continue;
-        }
-        boolean unmatched = false;
-        for (int i=0; i < ppt_args.length; i++) {
-          String ppt_arg = ppt_args[i];
-          String paramtype = param_types[i];
-          if (debug_getMatches) System.out.println("Comparing " + ppt_arg + " to " + paramtype + ":");
-          if (typeMatch(ppt_arg, paramtype)) {
-            if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
-            continue;
-          }
-          if ((ppt_arg != null) && typeMatch(ppt_arg, paramtype)) {
-            if (debug_getMatches) System.out.println("Match at arg position " + i + ": " + ppt_arg + " " + paramtype);
-            continue;
-          }
-          if (debug_getMatches) System.out.println("Mismatch at arg position " + i + ": " + ppt_arg + " " + paramtype);
-          unmatched = true;
-          break;
-        }
-        if (unmatched) {
-          if (debug_getMatches) System.out.println("Unmatched; continuing");
-          continue;
-        }
-        result.add(ppt);
-      }
-    }
-    if (debug_getMatches) System.out.println("getMatch => " + result);
-    return result;
-  }
-
-  // Return true if the strings are equal, or if abbreviated is a suffix
-  // of goal.  This wouldn't be necessary if we did full type resolution.
-  static boolean typeMatch(String goal, String abbreviated) {
-    // System.out.println("Comparing " + goal + " to " + abbreviated);
-    if (abbreviated.equals(goal)) {
-      return true;
-    }
-    // If abbreviated is missing the leading package name, permit a match
-    if (goal.endsWith(abbreviated)
-        && (goal.charAt(goal.length() - abbreviated.length() - 1) == '.')) {
-      return true;
-    }
-    return false;
-  }
-
   ///////////////////////////////////////////////////////////////////////////
   /// Reflection
   ///
@@ -1020,9 +894,9 @@ public class Ast {
   // Returns the parameters of the method, as a list of
   // FormalParameter objects.  Returns an empty list if there are no
   // parameters.
-  public static List getParameters(MethodDeclaration m) {
+  public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List parameters = new ArrayList();
+      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -1121,6 +995,22 @@ public class Ast {
   public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
     return p.f1.elements();
   }
+
+  // Return true if the strings are equal, or if abbreviated is a suffix
+  // of goal.  This wouldn't be necessary if we did full type resolution.
+  static boolean typeMatch(String pptTypeString, String astTypeString) {
+    // System.out.println("Comparing " + pptTypeString + " to " + astTypeString);
+    if (astTypeString.equals(pptTypeString)) {
+      return true;
+    }
+    // If astTypeString is missing the leading package name, permit a match
+    if (pptTypeString.endsWith(astTypeString)
+        && (pptTypeString.charAt(pptTypeString.length() - astTypeString.length() - 1) == '.')) {
+      return true;
+    }
+    return false;
+  }
+
 
   /** Return true if this is the main method for this class. **/
   public static boolean isMain(MethodDeclaration md) {

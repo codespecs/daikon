@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import java.io.*;
 import java.util.*;
 
+import jtb.*;
+import jtb.syntaxtree.*;
+
 /**
  * Merge Daikon-generated invariants into Java source code as
  * ESC/JML/DBC annotations.
@@ -265,12 +268,29 @@ public class Annotate {
       debug.fine ("Processing file " + javafilename);
 
       // Annotate the file
+    Reader input = null;
+    try {
+      input = new FileReader(javafilename);
+    } catch (FileNotFoundException e) {
+      throw new Error(e);
+    }
+
+    JavaParser parser = new JavaParser(input);
+    Node root = null;
+    try {
+      root = parser.CompilationUnit();
+    }
+    catch (ParseException e) {
+      e.printStackTrace();
+      throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
+    }
+
       try {
-        Ast.applyVisitorInsertComments(javafilename, output,
-                   new AnnotateVisitor(javafilename, ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
+        Ast.applyVisitorInsertComments(javafilename, root, output,
+                   new AnnotateVisitor(javafilename, root, ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
                                        maxInvariantsPP));
       } catch (Error e) {
-        if (e.getMessage().startsWith("Didn't find class ")) {
+        if (e.getMessage() != null && e.getMessage().startsWith("Didn't find class ")) {
           throw new Daikon.TerminationMessage(e.getMessage() + "." + lineSep
             + "Be sure to compile Java classes before calling Annotate.");
         }

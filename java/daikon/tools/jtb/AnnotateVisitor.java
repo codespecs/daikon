@@ -63,9 +63,10 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   private String[] notContainsNullFieldNames;  // list of fields in this and related classes
   private HashMap elementTypeFieldNames; // list of fields in this and related classes
 
-
+  private PptNameMatcher pptMatcher;
 
   public AnnotateVisitor(String javafilename,
+                         Node root,
                          PptMap ppts,
                          boolean slashslash,
                          boolean insert_inexpressible,
@@ -74,6 +75,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
                          int maxInvariantsPP) {
 
     initialize(javafilename,
+               root,
                ppts,
                slashslash,
                insert_inexpressible,
@@ -84,12 +86,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   private void initialize(String javafilename,
+                          Node root,
                           PptMap ppts,
                           boolean slashslash,
                           boolean insert_inexpressible,
                           boolean lightweight,
                           boolean useReflection,
                           int maxInvariantsPP) {
+
+    this.pptMatcher = new PptNameMatcher(root);
 
     // Read in the java file into a list of Strings.
     this.javaFileLines = new ArrayList/*String*/();
@@ -255,13 +260,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     elementTypeFieldNames = old_elementType;
   }
 
-  /**
-   * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
-   * f1 -> Type()
-   * f2 -> VariableDeclarator()
-   * f3 -> ( "," VariableDeclarator() )*
-   * f4 -> ";"
-   */
   public void visit(FieldDeclaration n) {
     super.visit(n);             // call "accept(this)" on each field
 
@@ -269,6 +267,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     if (Daikon.output_format == OutputFormat.DBCJAVA) { return; }
 
     if (! Ast.contains(n.f0, "public")) {
+//       n.accept(new TreeFormatter());
+//       String nString = Ast.print(n);
+//       System.out.println("@@@");
+//       Node n2 = n.getParent().getParent(); n2.accept(new TreeFormatter());
+//       System.out.println("@@@" + Ast.print(n2));
       addComment(n.getParent().getParent(), "/*@ spec_public */ ");
     }
   }
@@ -278,7 +281,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;
 
-    Vector matching_ppts = Ast.getMatches(ppts, n);
+    List<PptTopLevel> matching_ppts = null;
+    if (n instanceof MethodDeclaration) {
+      matching_ppts = pptMatcher.getMatches(ppts, (MethodDeclaration)n);
+    } else if (n instanceof ConstructorDeclaration) {
+      matching_ppts = pptMatcher.getMatches(ppts, (ConstructorDeclaration)n);
+    } else {
+      throw new Error("Node must be MethodDeclaration or ConstructorDeclaration");
+    }
+
     for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       String prefix;
@@ -296,10 +307,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
 
-  HashMap get_exceptions(PptMap ppts, Node n) {
+  HashMap get_exceptions(PptMap ppts, ConstructorDeclaration n) {
     HashMap result = new HashMap();
 
-    Vector matching_ppts = Ast.getMatches(ppts, n);
+    List<PptTopLevel>  matching_ppts = pptMatcher.getMatches(ppts, n);
+
     for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       String prefix;
