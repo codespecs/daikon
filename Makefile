@@ -472,6 +472,8 @@ $(DFEJ_DIR)/src/dfej:
 ## Don't distribute executables for now
 
 # Make the current dfej the one used by the PAG group
+# (Warning:  As of 7/3/2002 the DIST_PAG_BIN_DIR version is not used by
+# $inv/tests/Makefile.common!)
 dist-dfej-pag: $(DFEJ_DIR)/src/dfej
 	cp -pf $< $(DIST_PAG_BIN_DIR)
 
