@@ -36,21 +36,23 @@ public class Positive
     super(ppt);
   }
 
+  private static Positive proto;
+
   /** Returns the prototype invariant **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new Positive (null);
+    if (proto == null)
+      proto = new Positive (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  /** instantiate an invariant on the specified slice **/
-  public static Positive instantiate(PptSlice ppt) {
-    return new Positive(ppt);
+    return new Positive(slice);
   }
 
   // A printed representation for user output

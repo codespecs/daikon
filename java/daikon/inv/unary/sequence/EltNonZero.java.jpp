@@ -22,6 +22,8 @@ The correct way to build the system is to run 'make'.
   #define ELTUPPERBOUND EltUpperBound
   #define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
+  #define EQUAL_ONE EltRangeInt.EqualOne
+  #define EQUAL_MINUS_ONE EltRangeInt.EqualMinusOne
   #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif defined(TYPEDOUBLE)
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
@@ -37,6 +39,8 @@ The correct way to build the system is to run 'make'.
   #define ELTUPPERBOUND EltUpperBoundFloat
   #define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
   #define SEQUENCESCALARARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
+  #define EQUAL_ONE EltRangeFloat.EqualOne
+  #define EQUAL_MINUS_ONE EltRangeFloat.EqualMinusOne
   #define VALUE_SET ValueSet.ValueSetFloatArray
 #endif
 
@@ -46,6 +50,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.ValueSet;
 import daikon.suppress.*;
@@ -90,24 +95,23 @@ public final class CLASSNAME
     super(ppt);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new CLASSNAME (null);
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return proto;
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate (PptSlice slice) {
-    if (!dkconfig_enabled)
-      return null;
-
-    CLASSNAME result = new CLASSNAME( slice);
-    return result;
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME (slice);
   }
 
   /**
@@ -299,6 +303,23 @@ public final class CLASSNAME
       return super_result;
     }
 
+    VarInfo v1 = vis[0];
+
+    // (a[] == []) ==> a[] != 0
+    if (ppt.parent.is_empty (v1)) {
+      return new DiscardInfo (this, DiscardCode.obvious, v1 + "is empty");
+    }
+
+    // (a[] > 0) v (a[] < 0) ==> a[] != 0
+    ELTLOWERBOUND lb = (ELTLOWERBOUND) ppt.parent.find_inv_by_class
+                                                    (vis, ELTLOWERBOUND.class);
+    if ((lb != null) && (lb.min() > 0))
+      return new DiscardInfo (this, DiscardCode.obvious, v1 + " > " + lb.min());
+    ELTUPPERBOUND ub = (ELTUPPERBOUND) ppt.parent.find_inv_by_class
+                                                    (vis, ELTUPPERBOUND.class);
+    if ((ub != null) && (ub.max() < 0))
+      return new DiscardInfo (this, DiscardCode.obvious, v1 + " < " + ub.max());
+
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
@@ -306,7 +327,6 @@ public final class CLASSNAME
       debug.fine ("Testing isObviousDynamically for " + vis[0].name.name());
     }
 
-    VarInfo v1 = vis[0];
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -321,15 +341,6 @@ public final class CLASSNAME
         if (parent.is_subsequence (v1, v2))
           return new DiscardInfo (this, DiscardCode.obvious, v1.name.name() +
                                   " is a subsequence of " + v2.name.name());
-
-        /*
-        // JHP: remove this
-        if (SubSequence.isObviousSubSequenceDynamically(this, v1, v2)) {
-          String discardString = v1.name.name() + " is a subsequence of " + v2.name.name() + " for which the invariant holds";
-          Fmt.pf ("is obvious for %s: %s", format(), discardString);
-          return new DiscardInfo(this, DiscardCode.obvious, discardString);
-        }
-        */
       }
     }
 
@@ -347,100 +358,27 @@ public final class CLASSNAME
     return null;
   }
 
+  /** NI suppressions, initialized in get_ni_suppressions() **/
+  private static NISuppressionSet suppressions = null;
 
-  // Create separate suppression factories for considering an array size (a
-  // single array index limit) and two
-  #define FACTORY_INVCLASS  CLASSNAME
-  #define FACTORY_CNT       3
-  #define FACTORY1          empty_array_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[1]}
-  #define FACTORY2          eltoneof_suppress
-  #define FACTORY2_INV_CNT  1
-  #define FACTORY2_VAR_INFO {new VarInfo[1]}
-  #define FACTORY3          bound_suppress
-  #define FACTORY3_INV_CNT  1
-  #define FACTORY3_VAR_INFO {new VarInfo[1]}
-  #include "daikon/inv/suppressionFactory.java.jpp"
+  /** returns the ni-suppressions for CLASSNAME **/
+  public NISuppressionSet get_ni_suppressions() {
+    if (suppressions == null) {
+      NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
 
-  public static SuppressionLink empty_array_suppress (CLASSNAME inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-    VarInfo array_vi = inv.var();
-    return sfact.findEmptyArray(inv, array_vi);
-  }
+      // suppressor definitions (used in suppressions below)
+      NISuppressor v_eq_one = new NISuppressor (0, EQUAL_ONE.class);
+      NISuppressor v_eq_minus_one = new NISuppressor (0, EQUAL_MINUS_ONE.class);
 
-  private static transient SuppressionTemplate supTemplate_eltoneof = new SuppressionTemplate(1);
-  private static transient SuppressionTemplate supTemplate_eltbound = new SuppressionTemplate(1);
-
-  public static SuppressionLink eltoneof_suppress  (CLASSNAME inv,
-                  SuppressionTemplate _supTemplate, SuppressionFactory sfact) {
-    VarInfo var = inv.var();
-
-    if (inv.logOn())
-      inv.log ("eltoneof_suppress");
-    if (inv.logOn())
-      inv.log ("seeking ELTONEOF:" + var.name.name() + " elements == ??");
-
-    SuppressionTemplate supTemplate = supTemplate_eltoneof;
-
-    supTemplate.set(0, ELTONEOF.class, var);
-
-    // Find a match
-    SuppressionLink sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
-
-    if (inv.logOn())
-      inv.log ("found candidate " + sl);
-
-    if (sl == null)
-      return null;
-    ELTONEOF oos = (ELTONEOF) supTemplate.results[0];
-    if (oos.num_elts() == 0)
-      return null;
-    for (int i=0; i<oos.num_elts(); i++) {
-      if (((NUMWRAPPER) oos.elt(i)).PRIMITIVEVALUE == 0)
-        return null;
+      suppressions = new NISuppressionSet (new NISuppression[] {
+          // v == 1 ==> v != 0
+          new NISuppression (v_eq_one, suppressee),
+          // v == -1 ==> v != 0
+          new NISuppression (v_eq_minus_one, suppressee),
+        });
     }
 
-    return sl;
-  }
-
-  public static SuppressionLink bound_suppress  (CLASSNAME inv,
-                  SuppressionTemplate _supTemplate, SuppressionFactory sfact) {
-    VarInfo var = inv.var();
-
-    if (inv.logOn())
-      inv.log ("bound_suppress");
-
-    SuppressionTemplate supTemplate = supTemplate_eltbound;
-    SuppressionLink sl;
-
-    if (inv.logOn())
-      inv.log ("seeking " + var.name.name() + " elements <= -1");
-    supTemplate.set(0, ELTLOWERBOUND.class, var);
-    sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      if (inv.logOn())
-        inv.log ("found candidate " + sl);
-      ELTLOWERBOUND elb = (ELTLOWERBOUND) supTemplate.results[0];
-      if (elb.min() > 0) {
-        return sl;
-      }
-    }
-
-    if (inv.logOn())
-      inv.log ("seeking " + var.name.name() + " elements >= 1");
-    supTemplate.set(0, ELTUPPERBOUND.class, var);
-    sl = SuppressionFactory.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      if (inv.logOn())
-        inv.log ("found candidate " + sl);
-      ELTUPPERBOUND eub = (ELTUPPERBOUND) supTemplate.results[0];
-      if (eub.max() < 0) {
-        return sl;
-      }
-    }
-
-    return null;
+    return (suppressions);
   }
 
 }

@@ -60,32 +60,37 @@ public class CLASSNAME
     super(ppt);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new CLASSNAME (null));
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return proto;
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** Reverse only makes sense on ordered arrays **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    // Check to see that both arrays are ordered
+    if (!vis[0].aux.getFlag(VarInfoAux.HAS_ORDER) ||
+        !vis[1].aux.getFlag(VarInfoAux.HAS_ORDER))
+      return (false);
+
+    return (true);
   }
 
   /** instantiates the invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
-
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate (PptSlice slice) {
-    if (!dkconfig_enabled) return null;
-    CLASSNAME result = new CLASSNAME(slice);
-    // Don't instantiate if the variables can't have order
-    if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Not instantitating for" + CLASSSTRING + " because order has no meaning: " +
-                     result.var1().name + " and " + result.var2().name);
-      }
-      return null;
-    }
-    return result;
+    return (new CLASSNAME(slice));
   }
 
   protected Invariant resurrect_done_swapped() {

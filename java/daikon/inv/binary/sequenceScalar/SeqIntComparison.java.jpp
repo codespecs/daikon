@@ -1,7 +1,7 @@
 #if 0
-Do not attempt to compile this file with a Java compiler such as javac.
-You first need to preprocess it with cpp, the C preprocessor.
-The correct way to build the system is to run 'make'.
+  // Do not attempt to compile this file with a Java compiler such as javac.
+  // You first need to preprocess it with cpp, the C preprocessor.
+  // The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
@@ -15,6 +15,10 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY INT_ARRAY
   #define ELTONEOF EltOneOf
   #define SUBSEQUENCE SubSequence
+  #define EQUAL_CLASS SeqIntEqual
+  #define LESS_THAN_CLASS SeqIntLessThan
+  #define GREATER_THAN_CLASS SeqIntGreaterThan
+  #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS SequenceFloat
   #define PRIMITIVE double
@@ -22,6 +26,10 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY DOUBLE_ARRAY
   #define ELTONEOF EltOneOfFloat
   #define SUBSEQUENCE SubSequenceFloat
+  #define EQUAL_CLASS SeqFloatEqual
+  #define LESS_THAN_CLASS SeqFloatLessThan
+  #define GREATER_THAN_CLASS SeqFloatGreaterThan
+  #define VALUE_SET ValueSet.ValueSetFloatArray
 #endif
 
 #if defined(EQUAL)
@@ -164,78 +172,81 @@ public final class SEQINTEQUAL
     super(ppt);
   }
 
+  private static SEQINTEQUAL proto;
+
   /** Returns the prototype invariant for SEQINTEQUAL **/
   public static Invariant get_proto () {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new SEQINTEQUAL (null));
+    if (proto == null)
+      proto = new SEQINTEQUAL (null);
+    return (proto);
   }
 
-  /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static SEQINTEQUAL instantiate (PptSlice slice) {
+  /** Non-equal SeqIntComparison is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!dkconfig_enabled) return null;
+    if (!valid_types (vis))
+      return (false);
 
     VarInfo seqvar = null;
     VarInfo sclvar = null;
-    if (slice.var_infos[0].rep_type == ProglangType.PROGLANGTYPEARRAY) {
-      seqvar = slice.var_infos[0];
-      sclvar = slice.var_infos[1];
+    if (vis[0].rep_type == ProglangType.PROGLANGTYPEARRAY) {
+      seqvar = vis[0];
+      sclvar = vis[1];
     } else {
-      seqvar = slice.var_infos[1];
-      sclvar = slice.var_infos[0];
+      seqvar = vis[1];
+      sclvar = vis[0];
     }
 
     Assert.assertTrue(sclvar.rep_type == ProglangType.PROGLANGTYPESCALAR);
     Assert.assertTrue(seqvar.rep_type == ProglangType.PROGLANGTYPEARRAY);
 
-    /*
-    // This code is removed because these sorts of static checks
-    // can't be reliability performed with equality sets (just
-    // because the these variables are statically obvious, does not
-    // imply that all members are.  Eventually this should be moved
-    // to isObviousStatically()
+    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      if (!seqvar.type.elementIsIntegral())
+        return false;
+    #endif
+
+    return (true);
+  }
+
+  /** instantiates the invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new SEQINTEQUAL (slice);
+  }
+
+  /**
+   * Checks to see if the comparison is obvious statically.  Makes the
+   * following checks <pre>
+   *
+   *    max(A[]) op A[]
+   *    min(A[]) op A[]
+   * </pre>
+   *
+   * JHP: Note that these are not strict implications, these are merely
+   * uninteresting comparisons (except when op is GreaterEqual for max
+   * and LessEqual for min)
+   */
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     SequenceMin seqmin = null;
     SequenceMax seqmax = null;
     VarInfo sclseq = null;
-    if (sclvar.derived instanceof SequenceMin) {
-      seqmin = (SequenceMin) sclvar.derived;
+    if (sclvar(vis).derived instanceof SequenceMin) {
+      seqmin = (SequenceMin) sclvar(vis).derived;
       sclseq = seqmin.base;
-    } else if (sclvar.derived instanceof SequenceMax) {
-      seqmax = (SequenceMax) sclvar.derived;
+    } else if (sclvar(vis).derived instanceof SequenceMax) {
+      seqmax = (SequenceMax) sclvar(vis).derived;
       sclseq = seqmax.base;
     }
-    if (seqvar == sclseq) {
-      return null;
+    if (seqvar(vis) == sclseq) {
+      return new DiscardInfo (this, DiscardCode.obvious,
+                              sclvar(vis).name.name() + " is min/max ");
     }
-    */
-
-    /* Don't think it's needed now (tests all pass), maybe this is something not tested?
-    boolean obvious_lt = false;
-    boolean obvious_le = false;
-    boolean obvious_gt = false;
-    boolean obvious_ge = false;
-    if ((sclseq != null) && (SUBSEQUENCE.isObviousSubSequence(seqvar, sclseq))) {
-      // System.out.println("SeqIntComparison instantiate; is obvious derived: " + seqvar.name + " " + sclvar.name + " " + sclseq.name);
-      obvious_le = (seqmin != null);
-      obvious_ge = (seqmax != null);
-    }
-    // if (sclseq != null) {
-    //   System.out.println("SeqIntComparison instantiate: " + seqvar.name + " " + sclvar.name + " " + sclseq.name + " obvious_le=" + obvious_le + ", obvious_ge=" + obvious_ge);
-    // }
-    */
-
-    //    Assert.assertTrue(seqvar.eltsCompatible(sclvar));
-    #if !(defined(EQUAL) || defined(EQUALFLOAT))
-    if (!seqvar.type.elementIsIntegral())
-      return null;
-    #endif
-    return new SEQINTEQUAL (slice);
+    return (null);
   }
 
   public Object clone() {
@@ -317,30 +328,33 @@ public final class SEQINTEQUAL
   }
 
   protected double computeConfidence() {
-    // num_values may be more appropriate, because there may be samples
-    // but no values if the arrays are of length 0.
-    // if (ppt.num_values() == 0) {
-    //   return CONFIDENCE_UNJUSTIFIED;
-    // }
-    if (ppt.num_samples() == 0) {
+
+    // If there are no samples over our variables, its unjustified
+    if (ppt.num_samples() == 0)
+      return CONFIDENCE_UNJUSTIFIED;
+
+    // If the array never has any elements, its unjustified
+    VALUE_SET vs = (VALUE_SET) seqvar().get_value_set();
+    if (vs.elem_cnt() == 0) {
       return CONFIDENCE_UNJUSTIFIED;
     }
     #if (defined(EQUAL) || defined(EQUALFLOAT))
-    // It's an equality invariant.  I ought to use the actual ranges somehow.
-    // Actually, I can't even use this .5 test because it can make
-    // equality non-transitive.
-    // return Math.pow(.5, ppt.num_samples());
-    return Invariant.CONFIDENCE_JUSTIFIED;
+      // It's an equality invariant.  I ought to use the actual ranges somehow.
+      // Actually, I can't even use this .5 test because it can make
+      // equality non-transitive.
+      // return Math.pow(.5, ppt.num_samples());
+      return Invariant.CONFIDENCE_JUSTIFIED;
     #else
-    return 1 - Math.pow(.5, ppt.num_samples());
+      // return 1 - Math.pow(.5, vs.elem_cnt());
+      return 1 - Math.pow(.5, ppt.num_samples());
     #endif
   }
 
   public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
-    return true;
+      return true;
     #else
-    return false;
+      return false;
     #endif
   }
 
@@ -363,33 +377,29 @@ public final class SEQINTEQUAL
     return null;
   }
 
-
-
-  // Copied from IntComparison.
-  // public boolean isExclusiveFormula(Invariant other)
-  // {
-  //   if (other instanceof IntComparison) {
-  //     return core.isExclusiveFormula(((IntComparison) other).core);
-  //   }
-  //   if (other instanceof IntNonEqual) {
-  //     return isExact();
-  //   }
-  //   return false;
-  // }
-
-
-  // Initially copied from IntComparison.
+  /**
+   * Checks to see if this is obvious over the specified variables.
+   * Implements the following checks: <pre>
+   *
+   *  (x op B[]) ^ (B[] subsequence A[]) ==> (x op A[])
+   *  (A[] == [])                        ==> (x op A[])
+   *
+   */
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
     }
 
-    // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
     VarInfo seqvar = seqvar(vis);
     VarInfo sclvar = sclvar(vis);
+    //Debug.log (getClass(), ppt, vis, "Considering  over" + seqvar.name.name()
+    //           + " and " + sclvar.name.name());
 
-    // Look for the same property over a supersequence of this one.
+    // Look for the same property over a supersequence of this one.  This
+    // doesn't need to explicitly ignore oher members of the equality set
+    // because those members won't have any invariants over them.
     PptTopLevel pptt = ppt.parent;
     for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
@@ -398,21 +408,33 @@ public final class SEQINTEQUAL
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
-        Object[] obvDeriv = SUBSEQUENCE.isObviousSubSequence (seqvar(), other.seqvar());
-        if (isSameFormula(other)
-            && (sclvar() == other.sclvar())
-            && obvDeriv[1]!=null) {
-          DiscardCode discardCode = (DiscardCode) obvDeriv[0];
-          String discardString = (String) obvDeriv[1];
-          return new DiscardInfo(this, (DiscardCode) obvDeriv[0], (String) obvDeriv[1]);
+        // Fmt.pf ("considering %s seqvar=%s, other=%s", other.format(),
+        // seqvar().name.name(), other.seqvar().name.name());
+        if (pptt.is_subsequence (seqvar(), other.seqvar())
+            && (sclvar(vis) == other.sclvar())) {
+          // Fmt.pf ("is subsequence");
+          return new DiscardInfo(this, DiscardCode.obvious, seqvar().name.name()
+                                 + " is a subsequence of "
+                                 + other.seqvar().name.name() + " and "
+                                 + other.format() + " holds");
         }
       }
+    }
+
+    // JHP: handled in confidence test now
+    // (A[] == []) ==> A[] op x
+    if (false) {
+      if (pptt.is_empty (seqvar))
+        return new DiscardInfo (this, DiscardCode.obvious, "The sequence "
+                                + seqvar.name.name() + " is always empty");
     }
 
     if (isExact()) {
       return null;
     }
 
+    // JHP: these presume that this invariant is true and should thus be
+    // moved to uninteresting or removed.
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
       // Sequence length tests
       SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
@@ -430,60 +452,8 @@ public final class SEQINTEQUAL
       #endif
     }
 
-    #if defined(LESSEQUAL) || defined(GREATEREQUAL)
-      { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-        SeqIntEqual ie = SeqIntEqual.find(ppt);
-        if ((ie != null) /* && ie.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x = y implies x <= y or x >= y");
-        }
-      }
-    #endif
-
-    #if defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT)
-      { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-        SeqFloatEqual ie = SeqFloatEqual.find(ppt);
-        if ((ie != null) /* && ie.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x = y implies x <= y or x >= y");
-        }
-      }
-    #endif
-
-    #if defined(LESSEQUAL)
-      { // If we know x<y, then x<=y is uninteresting
-        SeqIntLessThan ilt = SeqIntLessThan.find(ppt);
-        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x < y implies x <= y");
-        }
-      }
-    #endif
-
-    #if defined(LESSEQUALFLOAT)
-      { // If we know x<y, then x<=y is uninteresting
-        SeqFloatLessThan ilt = SeqFloatLessThan.find(ppt);
-        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x < y implies x <= y");
-        }
-      }
-    #endif
-
-    #if defined(GREATEREQUAL)
-      { // If we know x>y, then x>=y is uninteresting
-        SeqIntGreaterThan igt = SeqIntGreaterThan.find(ppt);
-        if ((igt != null) /* && igt.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x > y implies x >= y");
-        }
-      }
-    #endif
-
-    #if defined(GREATEREQUALFLOAT)
-      { // If we know x>y, then x>=y is uninteresting
-        SeqFloatGreaterThan igt = SeqFloatGreaterThan.find(ppt);
-        if ((igt != null) /* && igt.enoughSamples() */ ) {
-          return new DiscardInfo(this, DiscardCode.obvious, "x > y implies x >= y");
-        }
-      }
-    #endif
-
+    // JHP: this presumes that this invariant is true and should thus be
+    // moved to uninteresting or removed.
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
       if (seqslice != null) {
@@ -494,71 +464,53 @@ public final class SEQINTEQUAL
       }
     }
 
-    // For each other sequence variable, if it is a supersequence of this
-    // one and it has the same invariant, then this one is obvious.
-    for (int i=0; i<pptt.var_infos.length; i++) {
-      VarInfo vi = pptt.var_infos[i];
-      if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, seqvar, vi)) {
-        PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar);
-        if (other_slice != null) {
-          SEQINTEQUAL other_sic = SEQINTEQUAL.find(other_slice);
-          if ((other_sic != null) && other_sic.enoughSamples()) {
-            return new DiscardInfo(this, DiscardCode.obvious, "Obvious implied by " + other_sic.format());
-          }
-        }
-      }
-    }
-
-
-    // {
-    //   if (sclvar.isDerived() && ((sclvar.derived instanceof SequenceMin)
-    //                              || (sclvar.derived instanceof SequenceMax))) {
-    //     SequenceMin seqmin = null;
-    //     SequenceMin seqmax = null;
-    //     VarInfo sclseq;
-    //     if (sclvar.derived instanceof SequenceMin) {
-    //       seqmin = (SequenceMin sclvar.derived);
-    //       sclseq = seqmin.base;
-    //     } else if (sclvar.derived instanceof SequenceMax) {
-    //       seqmax = (SequenceMax sclvar.derived);
-    //       sclseq = seqmax.base;
-    //     } else {
-    //       throw new Error("Can't happen");
-    //     }
-    //     if (seqvar.equal_to == sclseq.equal_to) {
-    //       return true;
-    //     }
-    //     if (seqvar.isEqualToObviousMember
-    //
-    //     // Sequence max/min tests
-    //   // This might never get invoked, as equality is printed out specially.
-    //   SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
-    //
-    //   VarInfo sclseq = (scl_seqlen == null) ? null : scl_seqlen.base;
-    //
-    //
-    //   if ((sclseq != null)
-    //       && (seqvar.equal_to == sclseq.equal_to)) {
-    //     // lengths of equal arrays being compared
-    //     return true;
-    //   }
     return null;
   }
 
-  // Create separate suppression factories for considering an array size (a
-  // single array index limit)
-  #define FACTORY_INVCLASS  SEQINTEQUAL
-  #define FACTORY_CNT       1
-  #define FACTORY1          empty_array_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[1]}
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
-  public static SuppressionLink empty_array_suppress (SEQINTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-    VarInfo array_vi = inv.seqvar();
-    return sfact.findEmptyArray(inv, array_vi);
+  /**
+   * Returns a list of non-instantiating suppressions for this invariant.
+   */
+  public NISuppressionSet get_ni_suppressions() {
+    return (suppressions);
   }
 
+  /** definition of this invariant (the suppressee) **/
+  private static NISuppressee suppressee
+    = new NISuppressee (SEQINTEQUAL.class, 2);
+
+  // suppressor definitions (used in suppressions below)
+  private static NISuppressor v1_eq_v2
+    = new NISuppressor (0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_gt_v2
+    = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
+  private static NISuppressor v1_lt_v2
+    = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+
+  // NI Suppressions for each type of comparison
+  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 >= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 > v2 => v1 >= v2
+        new NISuppression (v1_gt_v2, suppressee),
+
+      });
+  #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 <= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 < v2 => v1 <= v2
+        new NISuppression (v1_lt_v2, suppressee),
+
+      });
+  #else
+    private static NISuppressionSet suppressions = null;
+  #endif
 
 }

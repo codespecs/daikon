@@ -31,9 +31,23 @@ public class CommonStringSequence
     super(ppt);
   }
 
-  public static CommonStringSequence instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    return new CommonStringSequence(ppt);
+  private static CommonStringSequence proto;
+
+  /** Returns the prototype invariant for CommonStringSequence **/
+  public static Invariant get_proto() {
+    if (proto == null)
+      proto = new CommonStringSequence (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CommonStringSequence (slice);
   }
 
   // Don't write clone, because this.intersect is read-only

@@ -68,7 +68,6 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -100,34 +99,22 @@ public final class CLASSNAME
     super(ppt);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new CLASSNAME (null));
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
+  }
+
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate (PptSlice slice) {
-    if (!dkconfig_enabled) return null;
-
-    VarInfo seqvar = null;
-    VarInfo sclvar = null;
-    if (slice.var_infos[0].rep_type == PROGLANG_INT_ARRAY) {
-      seqvar = slice.var_infos[0];
-      sclvar = slice.var_infos[1];
-    } else {
-      seqvar = slice.var_infos[1];
-      sclvar = slice.var_infos[0];
-    }
-
-    Assert.assertTrue(sclvar.rep_type == PROGLANG_INT);
-    Assert.assertTrue(seqvar.rep_type == PROGLANG_INT_ARRAY);
-
+  protected Invariant instantiate_dyn (PptSlice slice) {
     return new CLASSNAME (slice);
   }
 
@@ -178,25 +165,23 @@ public final class CLASSNAME
     VarInfo seqvar_super = seqvar.isDerivedSubSequenceOf();
     if ((seqvar_super != sclvar_seq)
         && (seqvar_super != sclseqsuper)) {
-      // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):"
-      //                    + " isDerivedSubSequenceOf() != " + sclvar_seq.name);
       return false;
     }
-
 
     // If the scalar is a positional element of the sequence from which
     // the sequence at hand was derived, then any relationship will be
     // (mostly) obvious by comparing the length of the sequence to the
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
-
-
     if (seqvar.derived instanceof SEQ_SUBSEQUENCE ||
         seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+
+      // Determine the left index/shift and right index/shift of the
+      // subsequence.  If the left VarInfo is null, the sequence starts
+      // at the beginning.  If the right VarInfo is null, the sequence stops
+      // at the end.
       VarInfo seq_left_index = null, seq_right_index = null;
-      // I'm careful not to access foo_shift unless foo_var has been set
-      // to a non-null value, but Java is too stupid to recognize that.
-      int seq_left_shift = 0xdead, seq_right_shift = 0xbeef;
+      int seq_left_shift = 0, seq_right_shift = 0;
       if (seqvar.derived instanceof SEQ_SUBSEQUENCE) {
         // the sequence is B[0..J-1] or similar.  Get information about it.
         SEQ_SUBSEQUENCE seqsss
@@ -219,14 +204,15 @@ public final class CLASSNAME
         Assert.assertTrue(false);
       }
 
+      // if the scalar is a a subscript (b[i])
       if (sclvar.derived instanceof SEQ_SUBSCRIPT) {
-        // B[I] in B[0..J]
 
         SEQ_SUBSCRIPT sclsss = (SEQ_SUBSCRIPT) sclvar.derived;
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
-        // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
 
+        // determine if the scalar index is statically included in the
+        // left/right sequence
         boolean left_included = false, right_included = false;
         if (seq_left_index == null)
           left_included = true;
@@ -240,8 +226,9 @@ public final class CLASSNAME
         }
         if (left_included && right_included)
           return true;
+
+      // else if the scalar is a specific positional element (eg, b[0])
       } else if (sclvar.derived instanceof SEQUENCEINITIAL) {
-        // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
         // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
         SEQUENCEINITIAL sclse = (SEQUENCEINITIAL) sclvar.derived;
@@ -249,46 +236,18 @@ public final class CLASSNAME
         if (((scl_index == 0) && seq_left_index == null)
             || ((scl_index == -1) && seq_right_index == null))
           // It might not be true, because the array could be empty;
-          // but if the array isn't empty, then it's obvious.
+          // but if the array isn't empty, then it's obvious.  The empty
+          // array case is ok, because the variable itself would be
+          // destroyed in that case.
           return true;
+
+      // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
         Object[] obv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return (obv[1] != null);
       }
     }
-
-    /// I need to test this code!
-    // Now do tests over variable name, to avoid invariants like:
-    //   header.next in header.~ll~next~
-    //   header.next.element in header.~ll~next~.element
-    //   header.next in header.next.~ll~next~
-    //   return.current in return.current.~ll~next~
-    String sclname = sclvar.name.name(); // mistere adds: this code
-    String seqname = seqvar.name.name(); // looks pretty sketchy (XXX)
-    int llpos = seqname.indexOf("~ll~");
-    if (llpos != -1) {
-      int tildepos = seqname.indexOf("~", llpos+5);
-      if (tildepos != -1) {
-        int midsize = tildepos-llpos-4;
-        int lastsize = seqname.length()-tildepos-1;
-        if (seqname.regionMatches(0, sclname, 0, llpos)
-            && (((tildepos == seqname.length() - 1)
-                 && (llpos == sclname.length()))
-                || (seqname.regionMatches(llpos+4, sclname, llpos, midsize)
-                    && seqname.regionMatches(tildepos+1, sclname, tildepos-4, lastsize))))
-          // isObviousImplied: to do
-          return true;
-      }
-    }
-
-    // int lastdot = sclvar.lastIndexOf(".");
-    // if (lastdot != -1) {
-    //   if (sclname.substring(0, lastdot).equals(seqname.substring(0, lastdot))
-    //       && seqname.substring(lastdot).equals("~ll~" + sclname.substring(lastdot) + "~")) {
-    //     return true;
-    //   }
-    // }
 
     return false;
   }
@@ -417,18 +376,6 @@ public final class CLASSNAME
 
     VarInfo scl_var = sclvar (vis);
     VarInfo seq_var = seqvar (vis);
-
-    //
-    // JHP: For now don't check other elements in the equality set so that we
-    // match up better with the old suppression code.
-    if ((scl_var != sclvar()) || (seq_var != seqvar())) {
-      Debug.log (getClass(), ppt.parent, vis,
-                 "non-leader check: " + scl_var.name.name()
-                 + " " + seq_var.name.name()
-                 + " " + ppt.var_infos[0].name.name()
-                 + " " + ppt.var_infos[1].name.name());
-      return (null);
-    }
 
     // Check for subscript in subsequence
     DiscardInfo di = subscript_in_subsequence (vis);

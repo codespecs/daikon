@@ -119,22 +119,23 @@ public class CLASSNAME
     super(ppt);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new CLASSNAME (null));
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-
-    return new CLASSNAME(ppt);
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME (slice);
   }
 
   protected Invariant resurrect_done_swapped() {

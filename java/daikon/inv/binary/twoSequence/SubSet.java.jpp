@@ -14,12 +14,16 @@ The correct way to build the system is to run 'make'.
   #define SUBSEQUENCE SubSequence
   #define IS_SUBSET(a,b) ArraysMDE.isSubset(a,b)
   #define BASE_IS_TYPE baseIsScalar()
+  #define PAIRWISE_EQ PairwiseIntEqual
+  #define SEQSEQ_EQ SeqSeqIntEqual
 #elif (defined(SUBFLOAT) || defined(SUPFLOAT))
   #define TWOSEQUENCE TwoSequenceFloat
   #define LONG double
   #define SUBSEQUENCE SubSequenceFloat
   #define IS_SUBSET(a,b) Global.fuzzy.isSubset(a,b)
   #define BASE_IS_TYPE baseIsFloat()
+  #define SEQSEQ_EQ SeqSeqFloatEqual
+  #define PAIRWISE_EQ PairwiseFloatEqual
 #endif
 
 #if defined(SUB)
@@ -82,30 +86,33 @@ public class SUBSET
     super(ppt);
   }
 
+  private static SUBSET proto;
+
   /** Returns the prototype invariant for SUBSET **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new SUBSET (null));
+    if (proto == null)
+      proto = (new SUBSET (null));
+    return (proto);
   }
 
-  /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static SUBSET instantiate (PptSlice slice) {
-    if (!dkconfig_enabled) return null;
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    VarInfo var1 = slice.var_infos[0];
-    VarInfo var2 = slice.var_infos[1];
+    if (!valid_types (vis))
+      return (false);
 
     #if 0
-      // This code is removed because these sorts of static checks
+      // JHP: This code is removed because these sorts of static checks
       // can't be reliability performed with equality sets (just because
       // the leaders are obvious subsets, does not imply that all members
       // are.  Eventually this should be moved to isObviousStatically()
 
+      VarInfo var1 = vis[0];
+      VarInfo var2 = vis[1];
       // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
       //                    + ((SubSet.isObviousDerived(var1(), var2()))
       //                       || (SubSet.isObviousDerived(var2(), var1()))));
@@ -121,10 +128,11 @@ public class SUBSET
       }
     #endif
 
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Instantiating " + var1.name + " and " + var2.name);
-    }
+    return (true);
+  }
 
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
     return new SUBSET (slice);
   }
 
@@ -354,51 +362,29 @@ public class SUBSET
     return true;
   }
 
-  private static SuppressionFactory[] suppressionFactories = null;
+  /** NI suppressions, initialized in get_ni_suppressions() **/
+  private static NISuppressionSet suppressions = null;
 
-  public SuppressionFactory[] getSuppressionFactories() {
-    if (suppressionFactories == null) {
-      SuppressionFactory[] supers = super.getSuppressionFactories();
-      suppressionFactories = new SuppressionFactory[supers.length + 1];
-      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
-      suppressionFactories[supers.length] = SUBSETSuppressionFactory.getInstance();
-    }
-    return suppressionFactories;
-  }
+  /** returns the ni-suppressions for SUBSET **/
+  public NISuppressionSet get_ni_suppressions() {
+    if (suppressions == null) {
+      NISuppressee suppressee = new NISuppressee (SUBSET.class, 2);
 
-  /**
-   * Suppression generator for SubSet type invariants.  When A and B
-   * are subsets of each other, they're just equal, so no need to check
-   * them.  Replaces isObviousImplied.
-   **/
+      // suppressor definitions (used in suppressions below)
+      NISuppressor v1_eq_v2 = new NISuppressor (0, 1, SEQSEQ_EQ.class);
+      NISuppressor v1_pw_eq_v2 = new NISuppressor (0, 1, PAIRWISE_EQ.class);
 
-  static class SUBSETSuppressionFactory extends SuppressionFactory {
-
-    public static final Logger debug = Logger.getLogger ("daikon.suppress.factories." + SUBSETSTRING + "SuppressionFactory");
-
-    private static final SUBSETSuppressionFactory theInstance =
-      new SUBSETSuppressionFactory();
-
-    public static SuppressionFactory getInstance() {
-      return theInstance;
+      // sub/super set suppressions.  We have both SeqSeq and Pairwise
+      // as suppressions because each can be enabled separately.
+      suppressions = new NISuppressionSet (new NISuppression[] {
+          // a[] == b[] ==> a[] sub/superset b[]
+          new NISuppression (v1_eq_v2, suppressee),
+          // a[] == b[] ==> a[] sub/superset b[]
+          new NISuppression (v1_pw_eq_v2, suppressee),
+        });
     }
 
-    private Object readResolve() {
-      return theInstance;
-    }
-
-    private transient SuppressionTemplate supTemplate = new SuppressionTemplate(1);
-
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof SUBSET);
-      SUBSET inv = (SUBSET) arg;
-
-      supTemplate.set(0, PairwiseIntEqual.class, inv.var1(), inv.var2());
-
-      SuppressionLink result = linkFromUnfilledTemplate (supTemplate, inv);
-      return result;
-    }
-
+    return (suppressions);
   }
 
 }

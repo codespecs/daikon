@@ -165,38 +165,43 @@ public class CLASSNAME extends SUPERCLASS {
    **/
   public static boolean dkconfig_enabled = true;
 
+  private CLASSNAME () {
+    super (null);
+  }
+
   protected CLASSNAME (PptSlice slice) {
     super (slice);
-    if (slice != null)
-      Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
+    Assert.assertTrue (slice != null);
+    Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
   }
+
+  private static CLASSNAME proto  = null;
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    // Fmt.pf ("get_proto in " + STRING(CLASSNAME));
-    if (!dkconfig_enabled)
-      return (null);
-    return new CLASSNAME (null);
+    if (proto == null)
+      proto = new CLASSNAME ();
+    return (proto);
   }
 
-  /** Instantiate the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  /** returns whether or not we are enabled **/
+  public boolean enabled() {
+    return (dkconfig_enabled);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled)
-      return null;
+  /** Check that SeqIndex comparisons make sense over these vars **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
 
     // Don't compare indices to object addresses.
-    VarInfo seqvar = ppt.var_infos[0];
-    ProglangType elt_type = seqvar.type.elementType();
-    if (! elt_type.BASEISTYPE()) {
-      Debug.log (CLASSNAME.class, ppt, "No instantiate, !elt_type."
-                + STRING(BASEISTYPE));
-      return null;
-    }
+    ProglangType elt_type = vis[0].file_rep_type.elementType();
+    if (!elt_type.BASEISTYPE())
+      return (false);
 
+    // Make sure that the indices are comparable to the elements
+    VarInfo seqvar = vis[0];
     VarComparability elt_compar,index_compar;
     if (seqvar.comparability != null) {
       elt_compar = seqvar.comparability.elementType();
@@ -205,53 +210,49 @@ public class CLASSNAME extends SUPERCLASS {
       elt_compar = null;
       index_compar = null;
     }
-
     if (! VarComparability.comparable (
                 VarInfoName.parse ("seqvar.name.elementName"), elt_compar,
                 VarInfoName.parse ("seqvar.name.indexName0"), index_compar)) {
-      Debug.log (CLASSNAME.class, ppt, "No instantiate -- elt compr = "
-                  + elt_compar + " index_compar = " + index_compar);
-      return null;
+      return (false);
     }
 
-    if (Debug.logOn())
-      Debug.log (CLASSNAME.class, ppt, "Instantiated");
-    return new CLASSNAME(ppt);
+    return (true);
   }
 
+  /** Instantiate the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME (slice);
+  }
+
+  /** NI suppressions, initialized in get_ni_suppressions() **/
+  private static NISuppressionSet suppressions = null;
+
+  /** returns the ni-suppressions for CLASSNAME **/
   public NISuppressionSet get_ni_suppressions() {
+    if (suppressions == null) {
+      NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
+
+      // suppressor definitions (used in suppressions below)
+      NISuppressor v1_eq_v2 = new NISuppressor (0, SEQ_INDEX_EQUAL.class);
+      NISuppressor v1_gt_v2 = new NISuppressor (0,SEQ_INDEX_GREATERTHAN.class);
+      NISuppressor v1_lt_v2 = new NISuppressor (0, SEQ_INDEX_LESSTHAN.class);
+
+      suppressions = new NISuppressionSet(new NISuppression[]{
+        #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+          // (v1[i] == i) ==> v1[i] <= i
+          new NISuppression (v1_eq_v2, suppressee),
+          // (v1[i] < i) ==> v1[i] <= i
+          new NISuppression (v1_lt_v2, suppressee),
+        #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+          // (v1[i] == i) ==> v1[i] >= i
+          new NISuppression (v1_eq_v2, suppressee),
+          // (v1[i] > i) ==> v1[i] >= i
+          new NISuppression (v1_gt_v2, suppressee),
+        #endif
+        });
+    }
     return (suppressions);
   }
-
-  /** definition of this invariant (the suppressee) **/
-  private static NISuppressee suppressee
-    = new NISuppressee (CLASSNAME.class, 1);
-
-  // suppressor definitions (used in suppressions below)
-  #if !(defined(EQUAL) || defined(LESSTHAN) || defined(GREATERTHAN))
-    private static NISuppressor v1_eq_v2
-      = new NISuppressor (0, SEQ_INDEX_EQUAL.class);
-    private static NISuppressor v1_gt_v2
-      = new NISuppressor (0, SEQ_INDEX_GREATERTHAN.class);
-    private static NISuppressor v1_lt_v2
-      = new NISuppressor (0, SEQ_INDEX_LESSTHAN.class);
-  #endif
-
-  private static NISuppressionSet suppressions =
-    new NISuppressionSet (new NISuppression[] {
-    #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
-      // (v1[i] == i) ==> v1[i] <= i
-      new NISuppression (v1_eq_v2, suppressee),
-      // (v1[i] < i) ==> v1[i] <= i
-      new NISuppression (v1_lt_v2, suppressee),
-    #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-      // (v1[i] == i) ==> v1[i] >= i
-      new NISuppression (v1_eq_v2, suppressee),
-      // (v1[i] > i) ==> v1[i] >= i
-      new NISuppression (v1_gt_v2, suppressee),
-
-    #endif
-    });
 
   protected Invariant resurrect_done_swapped() {
     #if defined(SYMMETRIC_OP)

@@ -63,22 +63,23 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new CLASSNAME (null));
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
   }
 
-  /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-
-    return instantiate (slice);
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    return new CLASSNAME(ppt);
+  /** Instantiates the invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME (slice);
   }
 
   public Object clone() {

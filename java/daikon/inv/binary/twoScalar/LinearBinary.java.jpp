@@ -59,30 +59,38 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  /** returns a prototype CLASSNAME invariant **/
+  private static CLASSNAME proto;
+
+  /** Returns a prototype CLASSNAME invariant **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new CLASSNAME (null);
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
   }
 
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return (instantiate (slice));
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static CLASSNAME instantiate (PptSlice slice) {
-    if (!dkconfig_enabled) return null;
+  /** LinearBinary is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
 
     #if defined (TYPELONG)
       // Don't look for linearbinary over hashcodes and booleans
-      if (!slice.var_infos[0].file_rep_type.isIntegral()
-          || !slice.var_infos[1].file_rep_type.isIntegral())
-        return null;
+      if (!vis[0].file_rep_type.isIntegral()
+          || !vis[1].file_rep_type.isIntegral())
+        return false;
     #endif
 
-    if (slice.debug.isLoggable(Level.FINE)) {
-      slice.debug.fine (CLASSSTRING + ".instantiate(" + slice.name() + ")");
-    }
+    return (true);
+  }
+
+  /** Instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

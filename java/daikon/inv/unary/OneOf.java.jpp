@@ -307,21 +307,22 @@ public final class ONEOFSCALAR
     num_elts = 0;
   }
 
+  private static ONEOFSCALAR proto;
+
   /** Returns the prototype invariant for ONEOFSCALAR **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new ONEOFSCALAR (null);
+    if (proto == null)
+      proto = new ONEOFSCALAR (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static ONEOFSCALAR instantiate (PptSlice slice) {
-    if (!dkconfig_enabled)
-      return null;
     return new ONEOFSCALAR(slice);
   }
 
@@ -1924,6 +1925,17 @@ public final class ONEOFSCALAR
     result.log ("Merged '" + result.format() + "' from " + invs.size()
                 + " child invariants");
     return (result);
+  }
+
+  /**
+   * Setup the invariant with the specified elements.  Normally
+   * used when searching for a specified OneOf
+   */
+  public void set_one_of_val (INT[] vals) {
+
+    num_elts = vals.length;
+    for (int i = 0; i < num_elts; i++)
+      elts[i] = Intern.intern (vals[i]);
   }
 
   /**

@@ -80,21 +80,17 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     static int[] arg2_bound = ARG2_BOUND;
   #endif
 
+  private static CNAME(FUNCTION,PERM_NAME) proto;
+
+  /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new CNAME(FUNCTION,PERM_NAME) (null));
+    if (proto == null)
+      proto = new CNAME(FUNCTION,PERM_NAME) (null);
+    return (proto);
   }
 
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate (PptSlice slice) {
-    if (!dkconfig_enabled)
-      return (null);
-    if ((slice != null) && !slice.var_infos[0].file_rep_type.IS_INTEGRAL)
-      return (null);
+  /** instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
     return (new CNAME(FUNCTION,PERM_NAME) (slice));
   }
 
@@ -327,8 +323,8 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         new NISuppression (result_eq_0, arg1_lt_arg2, arg2_ne_0, suppressee),
       #endif
 
-        // (r == 1) && (arg1 == arg2) && (arg2 != 0)
-        new NISuppression (result_eq_1, arg1_eq_arg2, arg2_ne_0, suppressee),
+        // (arg1 == arg2) && (arg2 != 0) && (r == 1)
+        new NISuppression (arg1_eq_arg2, arg2_ne_0, result_eq_1, suppressee),
 
         // (r == arg1) && (arg2 == 1) ==> r = arg1 / arg2
         new NISuppression (result_eq_arg1, arg2_eq_1, suppressee),
@@ -375,11 +371,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (r == arg1) && (arg2 boolean) && (arg2==0 ==> arg1==0)
         // x = x * 0 is true if x == 0
         // x = x * 1 is true for all x
-        new NISuppression (result_eq_arg1, arg2_boolean, arg2_track0_arg1,
+        new NISuppression (arg2_boolean, arg2_track0_arg1, result_eq_arg1,
                            suppressee),
 
         // (r == arg2) && (arg1 boolean) && (arg1==0 ==> arg2=0)
-        new NISuppression (result_eq_arg2, arg1_boolean, arg1_track0_arg2,
+        new NISuppression (result_eq_arg2, arg1_track0_arg2, arg1_boolean,
                            suppressee),
       #endif
       });
@@ -420,8 +416,8 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (r == 1) && (arg1 boolean) && (arg1==0 <==> arg2==0) && (arg2 >= 0)
         // 1 = pow (0, arg2) true iff (arg2 == 0)
         // 1 = pow (1, arg2) true when arg2 valid exponent
-        new NISuppression (result_eq_1, arg1_boolean, arg1_track0_arg2,
-                           arg2_ge_0, suppressee),
+        new NISuppression (arg1_track0_arg2, arg2_ge_0, arg1_boolean,
+                           result_eq_1, suppressee),
 
 
         // (r == arg1) && (r boolean) && (arg2 > 0)
@@ -448,14 +444,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (result boolean) && (arg1=0 <==> r=0) && (arg2 == 1)
         // 0 = min (arg1, 1), true when (arg1 == 0)
         // 1 = min (arg1, 1), true when (arg1 > 0)
-        new NISuppression (result_boolean, result_track0_arg1,
-                           arg1_track0_result, arg2_eq_1, arg1_ge_0,
-                           suppressee),
+        new NISuppression (result_track0_arg1, arg1_track0_result,
+                           result_boolean, arg1_ge_0, arg2_eq_1, suppressee),
 
         // (result boolean) && (arg2=0 <==> r=0) && (arg1 == 1)
-        new NISuppression (result_boolean, result_track0_arg2,
-                           arg2_track0_result, arg1_eq_1, arg2_ge_0,
-                           suppressee),
+        new NISuppression (result_track0_arg2, arg2_track0_result,
+                           result_boolean, arg2_ge_0, arg1_eq_1, suppressee),
       #endif
       });
 
@@ -636,10 +630,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         new NISuppression (result_eq_arg1, arg1_eq_arg2, result_ge_0, suppressee),
 
         // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
-        new NISuppression (result_eq_arg1, arg2_eq_0, result_ge_0, suppressee),
+        new NISuppression (result_eq_arg1, result_ge_0, arg2_eq_0, suppressee),
 
         // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
-        new NISuppression (result_eq_arg2, arg1_eq_0, result_ge_0, suppressee),
+        new NISuppression (result_eq_arg2, result_ge_0, arg1_eq_0, suppressee),
 
         // (r == 1) && (arg2 == 1)        ==> r = gcd (arg1, art2)
         new NISuppression (result_eq_1, arg2_eq_1, suppressee),
@@ -656,7 +650,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (r == arg2) && (arg2 boolean) && (arg2==0 ==> arg1==0)
         // 0 = gcd (arg1, 0) true when (arg1 == 0)
         // 1 = gcd (arg1, 1) always true
-        new NISuppression (result_eq_arg2, arg2_boolean, arg2_track0_arg1,
+        new NISuppression (result_eq_arg2, arg2_track0_arg1, arg2_boolean,
                            suppressee),
 
         // (r == arg1) && (arg1 boolean) && (arg1==0 ==> arg2==0)
@@ -708,11 +702,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
                            suppressee),
 
         // (r == arg1) && (arg2 == 0) && (r is boolean) ==> r = arg1 | arg2
-        new NISuppression (result_eq_arg1, arg2_eq_0, result_boolean,
+        new NISuppression (result_eq_arg1, result_boolean, arg2_eq_0,
                            suppressee),
 
         // (r == arg2) && (arg1 == 0) && (r is boolean) ==> r = arg1 | arg2
-        new NISuppression (result_eq_arg2, arg1_eq_0, result_boolean,
+        new NISuppression (result_eq_arg2, result_boolean, arg1_eq_0,
                            suppressee),
 
         // (r == 1) && (arg1 == 1) && (arg2 boolean)
@@ -729,15 +723,15 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       = new NISuppressionSet (new NISuppression[] {
 
         // (r == 0) && (arg1 == arg2) && (arg1 boolean) ==> r = arg1 ^ arg2
-        new NISuppression (result_eq_0, arg1_eq_arg2, arg1_boolean,
+        new NISuppression (arg1_eq_arg2, arg1_boolean, result_eq_0,
                            suppressee),
 
         // (r == arg1) && (arg2 == 0) && (result boolean) ==> r = arg1 ^ arg2
-        new NISuppression (result_eq_arg1, arg2_eq_0, result_boolean,
+        new NISuppression (result_eq_arg1, result_boolean, arg2_eq_0,
                            suppressee),
 
         // (r == arg2) && (arg1 == 0) && (result boolean)==> r = arg1 ^ arg2
-        new NISuppression (result_eq_arg2, arg1_eq_0, result_boolean,
+        new NISuppression (result_eq_arg2, result_boolean, arg1_eq_0,
                            suppressee),
 
       });
@@ -774,10 +768,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 }
 
 #undef PERMUTATION
-#undef PERM_NAME 
-#undef result 
-#undef arg1   
-#undef arg2   
-#undef result_index 
-#undef arg1_index   
-#undef arg2_index   
+#undef PERM_NAME
+#undef result
+#undef arg1
+#undef arg2
+#undef result_index
+#undef arg1_index
+#undef arg2_index

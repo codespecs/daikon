@@ -66,7 +66,6 @@
   #define INT(x) String ## x
   #define SEQSEQINTEQUAL SeqSeqStringEqual
   #define SEQ_SUBSCRIPT SequenceStringSubscript
-  #define NO_DUPS NoDuplicatesString
   #define INT_TYPE String
   #define ONEOF OneOfString
   #define LESS_THAN_CLASS StringLessThan
@@ -95,7 +94,7 @@
   #define INTEQUALstring "StringEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
   #define EQUALSstring "=="
-  #define PAIRWISE_COMPARE PairwiseStringEqual
+// #define PAIRWISE_COMPARE PairwiseStringEqual
   #define DEBUGINTEQUAL debugStringEqual
   #define SEQINTEQUAL seqStringEqual
 
@@ -145,7 +144,7 @@
   #define INTEQUALstring "StringLessThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) < 0))
   #define EQUALSstring "<"
-  #define PAIRWISE_COMPARE PairwiseStringLessThan
+  // #define PAIRWISE_COMPARE PairwiseStringLessThan
   #define DEBUGINTEQUAL debugStringLessThan
   #define SEQINTEQUAL seqStringLessThan
 
@@ -173,7 +172,7 @@
   #define INTEQUALstring "StringLessEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) <= 0))
   #define EQUALSstring "<="
-  #define PAIRWISE_COMPARE PairwiseStringLessEqual
+  // #define PAIRWISE_COMPARE PairwiseStringLessEqual
   #define DEBUGINTEQUAL debugStringLessEqual
   #define SEQINTEQUAL seqStringLessEqual
 
@@ -201,7 +200,7 @@
   #define INTEQUALstring "StringGreaterThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
   #define EQUALSstring ">"
-  #define PAIRWISE_COMPARE PairwiseStringGreaterThan
+  // #define PAIRWISE_COMPARE PairwiseStringGreaterThan
   #define DEBUGINTEQUAL debugStringGreaterThan
   #define SEQINTEQUAL seqStringGreaterThan
 
@@ -231,7 +230,7 @@
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) >= 0))
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
-  #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
+  // #define PAIRWISE_COMPARE PairwiseStringGreaterEqual
   #define DEBUGINTEQUAL debugStringGreaterEqual
   #define SEQINTEQUAL seqStringGreaterEqual
 #else
@@ -294,18 +293,13 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-#ifdef IS_STRING
-  import daikon.inv.unary.string.*;
-#else
-  import daikon.inv.unary.scalar.*;
-  #ifdef NONEQUAL_OP
-    import daikon.inv.unary.sequence.*;
-  #else
-    import daikon.inv.binary.twoSequence.*;
-  #endif
-  import daikon.derive.unary.*;
-  import daikon.derive.binary.*;
-#endif
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.derive.unary.*;
+import daikon.derive.binary.*;
 import daikon.suppress.*;
 
 import utilMDE.*;
@@ -346,100 +340,48 @@ public final class INTEQUAL
    super(ppt);
   }
 
-  /**
-   * Returns the prototype invariant for INTEQUAL
-   */
+  private static INTEQUAL proto;
+
+  /** Returns the prototype invariant for INTEQUAL **/
   public static INTEQUAL get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new INTEQUAL (null);
+    if (proto == null)
+      proto = new INTEQUAL (null);
+    return (proto);
   }
 
-  /**
-   * Returns whether or not the specified types are valid for INTEQUAL.
-   */
-  public boolean valid_types (ProglangType[] rep_types) {
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
 
-    if (rep_types.length != 2)
+  /** Returns whether or not the specified var types are valid for INTEQUAL **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
       return (false);
 
-    #if defined(IS_INT)
-      if (!rep_types[0].isScalar() || !rep_types[1].isScalar())
-        return (false);
+    #if defined (IS_INT)
       #if defined (EQUAL)
         return (true);
       #elif defined (NONEQUAL)
         if (dkconfig_integral_only)
-          return (rep_types[0].isIntegral() && rep_types[1].isIntegral());
+          return (vis[0].file_rep_type.isIntegral()
+                  && vis[1].file_rep_type.isIntegral());
         return (true);
       #else
-        return (rep_types[0].isIntegral() && rep_types[1].isIntegral());
+        return (vis[0].file_rep_type.isIntegral()
+                && vis[1].file_rep_type.isIntegral());
       #endif
-    #elif defined (IS_FLOAT)
-      if (!rep_types[0].isFloat() || !rep_types[1].isFloat())
-        return (false);
-      return (true);
     #else
-      if ((rep_types[0] != ProglangType.STRING)
-          || (rep_types[1] != ProglangType.STRING))
-        return (false);
-      return (true);
-    #endif
-  }
-
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  // JHP: clean up instantiation checks and remove valid_types()
-  public static INTEQUAL instantiate(PptSlice ppt) {
-
-    if (logOn() || debug.isLoggable(Level.FINE)) {
-      Debug.log (debug, INTEQUAL.class, ppt, "Attempt Instantiate");
-    }
-
-    if (!dkconfig_enabled) return null;
-
-    // Make sure the null case doesn't crash.  Null is passed when the
-    // invariant is used for non-standard purposes.
-    if (ppt == null)
-      return new INTEQUAL(ppt);
-
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
-    VarInfo seqvar1 = var1.isDerivedSequenceMember();
-    VarInfo seqvar2 = var2.isDerivedSequenceMember();
-
     // for strings, only check equality unless both vars are integral
     #if defined (IS_STRING) && !defined (EQUALSTRING)
-      if (!(var1.type.isIntegral() && var2.type.isIntegral()))
-        return null;
+      if (!(vis[0].type.isIntegral() && vis[1].type.isIntegral()))
+        return false;
+      return (true);
+     #else
+      return (true);
      #endif
-
-    #if !defined (IS_STRING)
-
-
-  #if !(defined(EQUAL) || defined(EQUALFLOAT))
-    #if (defined(NONEQUAL))
-      if (dkconfig_integral_only == true) {
-        if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
-          return null;
-        }
-      }
-    #else
-      if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
-        return null;
-      }
     #endif
-  #endif
-
-      if (logOn() || debug.isLoggable(Level.FINE)) {
-        Debug.log (debug, INTEQUAL.class, ppt,
-               "seqvar1=" + ((seqvar1 == null) ? "null" : seqvar1.name.name())
-           + ", seqvar2=" + ((seqvar2 == null) ? "null" : seqvar2.name.name()));
-      }
-  #endif // not string
-
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
   #if 0
@@ -455,7 +397,7 @@ public final class INTEQUAL
   #endif
 
   #if 0
-    // This code is also removed because these sorts of static checks
+    // JHP: This code is also removed because these sorts of static checks
     // can't be reliability performed with equality sets (just because
     // the leader is size-1 doesn't imply that each member is size-1
 
@@ -481,8 +423,7 @@ public final class INTEQUAL
 #endif
 
 #if 0
-This code needs to be re-inserted later, to avoid instantiation of certain
-invariants.
+    // JHP: this needs to be looked and moved to static obvious
 
     boolean only_eq = false;
     boolean obvious_lt = false;
@@ -548,7 +489,11 @@ invariants.
     }
 #endif
 
-    return new INTEQUAL(ppt);
+  }
+
+  /** Instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new INTEQUAL (slice);
   }
 
 #ifdef EQUAL_OP
@@ -850,6 +795,12 @@ invariants.
 #endif
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+
+    // JHP: We might consider adding a check over bounds.   If
+    // x < c and y > c then we know that x < y.  Similarly for
+    // x > c and y < c.  We could also substitute oneof for
+    // one or both of the bound checks.
+
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -874,130 +825,38 @@ invariants.
     // Find the slice that corresponds to vis
     PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
 
-    // If there is a matching slice
-    if (ppt != null) {
+    DiscardInfo di = null;
 
-      #if (defined (NONEQUAL_OP))
-        // If we know x<y or x>y, then x!=y is uninteresting
-        LESS_THAN_CLASS ilt = LESS_THAN_CLASS.find(ppt);
-        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious,
-                        n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2);
-        }
-        GREATER_THAN_CLASS igt = GREATER_THAN_CLASS.find(ppt);
-        if ((igt != null) /* && igt.enoughSamples() */ ) {
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious,
-                        n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2);
-        }
-      #endif
+    #if defined(PAIRWISE_COMPARE)
+      // Check for the same invariant over enclosing arrays
+      di = pairwise_implies (vis);
+      if (di != null)
+        return (di);
+    #endif
 
-      #if defined(LESSEQUAL_OP) || defined (GREATEREQUAL_OP)
-        // && !defined(LESSEQUAL) && !defined(GREATEREQUAL)
-        // If we know x=y, then any x<=y or x>=y comparison is uninteresting
-        EQUAL_CLASS ie = EQUAL_CLASS.find(ppt);
-        if ((ie != null) /* && ie.enoughSamples() */ ) {
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious, n1 + "==" + n2
-                        + " --> " + n1 + ">=" + n2 + " and " + n1 + "<=" + n2);
-        }
-      #endif
+    #if defined(EQUAL_OP)
+      // Check for size(A[]) == Size(B[]) where A[] == B[]
+      di = array_eq_implies (vis);
+      if (di != null)
+        return (di);
+    #endif
 
-      #if defined(LESSEQUAL_OP)
-        // && !defined(LESSEQUAL)
-        // If we know x<y, then x<=y is uninteresting
-        LESS_THAN_CLASS ilt = LESS_THAN_CLASS.find(ppt);
-        if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious, n1 + "<" + n2
-                      + " --> " + n1 + "<=" + n2);
-        }
-      #endif
-
-      #if defined(GREATEREQUAL_OP)
-        // && !defined(GREATEREQUAL)
-        // If we know x>y, then x>=y is uninteresting
-        GREATER_THAN_CLASS igt = GREATER_THAN_CLASS.find(ppt);
-        if ((igt != null) /* && igt.enoughSamples() */ ) {
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious, n1 + ">" + n2
-                                   + " --> " + n1 + ">=" + n2);
-        }
-      #endif
-
-
-      #if defined(LESS) || defined(GREATER)
-        // If we know y=x+c, then any x<y or x>y comparison is uninteresting
-        LinearBinary lb = LinearBinary.find(ppt);
-        if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
-          Assert.assertTrue(lb.core.b != 0);
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious, n1 + " and " + n2
-                                  + " already satisfy " + lb.format());
-        }
-      #endif
-
-      #if defined(LESSFLOAT) || defined(GREATERFLOAT)
-        // If we know y=x+c, then any x<y or x>y comparison is uninteresting
-        LinearBinaryFloat lb = LinearBinaryFloat.find(ppt);
-        if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
-          Assert.assertTrue(lb.core.b != 0);
-          String n1 = var1.name.name();
-          String n2 = var2.name.name();
-          return new DiscardInfo(this, DiscardCode.obvious, n1 + " and " + n2
-                                 + " already satisfy " + lb.format());
-        }
-      #endif
-    }
-
-// #ifndef EQUAL
-//     { // Check for comparisons against constants
-//       if (var1.isConstant() || (var2.isConstant())) {
-//         // One of the two variables is constant.  Figure out which one.
-//         VarInfo varconst;
-//         VarInfo varnonconst;
-//         boolean var1const = var1.isConstant();
-//         boolean can_be_lt;
-//         boolean can_be_gt;
-//         if (var1const) {
-//           varconst = var1;
-//           varnonconst = var2;
-//           can_be_lt = core.can_be_gt;
-//           can_be_gt = core.can_be_lt;
-//         } else {
-//           varconst = var2;
-//           varnonconst = var1;
-//           can_be_lt = core.can_be_lt;
-//           can_be_gt = core.can_be_gt;
-//         }
-//         // Now "varconst" and "varnonconst" are set.
-//         long valconst = ((Long) varconst.constantValue()).longValue();
-//         PptSlice1 nonconstslice = ppt.parent.findSlice(varnonconst);
-//         if (nonconstslice != null) {
-//           if (can_be_lt) {
-//             UpperBound ub = UpperBound.find(nonconstslice);
-//             if ((ub != null) && ub.enoughSamples() && ub.max() < valconst) {
-//               return true;
-//             }
-//           } else {
-//             LowerBound lb = LowerBound.find(nonconstslice);
-//             if ((lb != null) && lb.enoughSamples() && lb.min() > valconst) {
-//               return true;
-//             }
-//           }
-//         }
-//       }
-//     }
-// #endif
+    #if defined(NONEQUAL_OP) && defined(NO_DUPS)
+      // (A[] no dups) ^ (i != j) ==> a[i] != a[j]
+      di = no_dups_implies (vis);
+      if (di != null)
+        return (di);
+    #endif
 
     #if defined (IS_NUMERIC)
+
+      #if defined (LESSTHAN_OP) || defined (GREATERTHAN_OP)
+        // Check for a linear binary that implies > or <
+        di = lb_implies (vis);
+        if (di != null)
+          return (di);
+      #endif
+
     { // Sequence length tests
       SequenceLength sl1 = null;
       if (var1.isDerived() && (var1.derived instanceof SequenceLength))
@@ -1057,146 +916,149 @@ invariants.
         }
       #endif
     }
-
-    // If any of the vars are both constants, or if one is
-    // a constant and the other has a bound,we are not
-    // interested in any IntComparisons
-
-    /* PptSlice1 slice1 = this.ppt.parent.findSlice(var1());
-    if (slice1 != null) {
-      PptSlice1 slice2 = this.ppt.parent.findSlice(var2());
-      if (slice2 != null) {
-        ONEOF oo1 = ONEOF.find(slice1);
-        // Check if var1 is constant
-        if ((oo1 != null) && (oo1.num_elts() == 1)) {
-          LOWERBOUND lb = LOWERBOUND.find(slice2);
-          if ((lb != null)  && lb.justified() && lb.enoughSamples() && !lb.hasUninterestingConstant()) {
-            if (logOn())
-              log ("Discarded because constant var and LOWERBOUND found. Bound is " + lb.min());
-            return true;
-          }
-          UPPERBOUND ub = UPPERBOUND.find(slice2);
-          if ((ub != null) && ub.justified() && ub.enoughSamples() && !ub.hasUninterestingConstant()) {
-            if (logOn())
-              log ("Discarded because constant var and UPPERBOUND found. Bound is " + ub.max());
-            return true;
-          }
-        }
-        ONEOF oo2 = ONEOF.find(slice2);
-        // Check if var2 is constant
-        if ((oo2 != null) && (oo2.num_elts() == 1)) {
-          // Case where both var1 and var2 are constants
-          if ((oo1 != null) && (oo1.num_elts() == 1)) {
-            if (logOn())
-              log ("Discarded because both variables are constants.");
-            return true;
-          }
-          LOWERBOUND lb2 = LOWERBOUND.find(slice1);
-          if ((lb2 != null) && lb2.justified() && lb2.enoughSamples() && !lb2.hasUninterestingConstant()) {
-            if (logOn())
-              log ("Discarded because LOWERBOUND and constant var found. Bound is " + lb2.min());
-            return true;
-          }
-          UPPERBOUND ub2 = UPPERBOUND.find(slice1);
-          if ((ub2 != null) && ub2.justified() && ub2.enoughSamples() && !ub2.hasUninterestingConstant()) {
-            log ("Discarded because UPPERBOUND and constant var found. Bound is " + ub2.max());
-            return true;
-          }
-        }
-      }
-      }*/
-
-//     { // Sequence sum tests
-//       SequenceSum ss1 = null;
-//       if (var1.isDerived() && (var1.derived instanceof SequenceSum))
-//         ss1 = (SequenceSum) var1.derived;
-//       SequenceSum ss2 = null;
-//       if (var2.isDerived() && (var2.derived instanceof SequenceSum))
-//         ss2 = (SequenceSum) var2.derived;
-//       if ((ss1 != null) && (ss2 != null)) {
-//         EltLowerBound lb = null;
-//         EltUpperBound ub = null;
-//         boolean shorter1 = false;
-//         boolean shorter2 = false;
-//         PptTopLevel parent = ppt.parent;
-//         if (SubSequence.isObviousDerived(ss1.base, ss2.base)) {
-//           lb = EltLowerBound.find(parent.findSlice(ss2.base));
-//           ub = EltUpperBound.find(parent.findSlice(ss2.base));
-//           shorter1 = true;
-//         } else if (SubSequence.isObviousDerived(ss2.base, ss1.base)) {
-//           lb = EltLowerBound.find(parent.findSlice(ss1.base));
-//           ub = EltUpperBound.find(parent.findSlice(ss1.base));
-//           shorter2 = true;
-//         }
-//         if ((lb != null) && (!lb.enoughSamples()))
-//           lb = null;
-//         if ((ub != null) && (!ub.enoughSamples()))
-//           ub = null;
-//         // We are comparing sum(a) to sum(b).
-//         boolean shorter_can_be_lt;
-//         boolean shorter_can_be_gt;
-//         if (shorter1) {
-//           shorter_can_be_lt = core.can_be_lt;
-//           shorter_can_be_gt = core.can_be_gt;
-//         } else {
-//           shorter_can_be_lt = core.can_be_gt;
-//           shorter_can_be_gt = core.can_be_lt;
-//         }
-//         if (shorter_can_be_lt
-//             && (lb != null) && ((lb.min() > 0)
-//                                 || (core.can_be_eq && lb.min() == 0))) {
-//           return true;
-//         }
-//         if (shorter_can_be_gt
-//             && (ub != null) && ((ub.max() < 0)
-//                                 || (core.can_be_eq && ub.max() == 0))) {
-//           return true;
-//         }
-//       }
-//     }
-
-//     {
-//       // (Is this test ever true?  Aren't SeqINTEQUAL and
-//       // INTEQUAL instantiated at the same time?  Apparently not:  see
-//       // the printStackTrace below.
-//
-//       // For each sequence variable, if this is an obvious member, and
-//       // it has the same invariant, then this one is obvious.
-//       PptTopLevel pptt = ppt.parent;
-//       for (int i=0; i<pptt.var_infos.length; i++) {
-//         VarInfo vi = pptt.var_infos[i];
-//         if (Member.isObviousMember(var1, vi)) {
-//           PptSlice2 other_slice = pptt.findSlice_unordered(vi, var2);
-//           if (other_slice != null) {
-//             SeqINTEQUAL sic = SeqINTEQUAL.find(other_slice);
-//             if ((sic != null)
-//                 && sic.enoughSamples()) {
-//               // This DOES happen; verify by running on replace.c
-//               // System.out.println("Surprise:  this can happen (var1 in INTEQUAL).");
-//               // new Error().printStackTrace();
-//               return true;
-//             }
-//           }
-//         }
-//         if (Member.isObviousMember(var2, vi)) {
-//           PptSlice2 other_slice = pptt.findSlice_unordered(vi, var1);
-//           if (other_slice != null) {
-//             SeqINTEQUAL sic = SeqINTEQUAL.find(other_slice);
-//             if ((sic != null)
-//                 && sic.enoughSamples()) {
-//               // This DOES happen
-//               // System.out.println("Surprise:  this can happen (var2 in " + INTEQUALstring + ").");
-//               // new Error().printStackTrace();
-//               return true;
-//             }
-//           }
-//         }
-//       }
-//     }
     #endif
 
     return null;
   } // isObviousDynamically
+
+#if defined(IS_NUMERIC) && (defined(LESSTHAN_OP) || defined(GREATERTHAN_OP))
+  /**
+   * Checks to see if there is a linear binary relationship between the
+   * variables that implies > or <
+   *
+   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x
+   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
+   *
+   * Returns null if this is not true.  Appropriate DiscardInfo otherwise.
+   */
+  private DiscardInfo lb_implies (VarInfo[] vis) {
+
+    // Look for a linear binary invariant over the same variables
+    LINEARBINARY lb = (LINEARBINARY) ppt.parent.find_inv_by_class
+                                                    (vis, LINEARBINARY.class);
+    if ((lb == null) || !lb.isActive())
+      return (null);
+
+    // Only 'a == 1' implies a less than or greater than relationship
+    if (lb.core.a != 1.0)
+      return (null);
+
+    // The b coefficient determines less than or greater than
+    if (EQUALS (lb.core.b, 0))
+      return (null);
+
+    return new DiscardInfo (this, DiscardCode.obvious, "implied by "
+                            + lb.format());
+  }
+#endif
+
+#if defined(PAIRWISE_COMPARE)
+  /**
+   * If both variables are subscripts and the underlying arrays have the
+   * same invariant, then this invariant is implied:
+   *
+   *     (x[] op y[]) ^ (i == j) ==> (x[i] op y[j])
+   */
+  private DiscardInfo pairwise_implies (VarInfo[] vis) {
+
+    VarInfo v1 = vis[0];
+    VarInfo v2 = vis[1];
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same shift
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    if  (der1.index_shift != der2.index_shift)
+      return (null);
+
+    // Make sure that the indices are equal
+    if (!ppt.parent.is_equal (der1.sclvar().canonicalRep(),
+                              der2.sclvar().canonicalRep())) {
+      return (null);
+    }
+
+    // See if the same relationship holds over the arrays
+    Invariant proto = PAIRWISE_COMPARE.get_proto();
+    DiscardInfo di = ppt.parent.check_implied_canonical (this,
+                                der1.seqvar(), der2.seqvar(), proto);
+    return (di);
+  }
+#endif
+
+#if defined(EQUAL_OP)
+  /**
+   * If the equality is between two array size variables, check to see if
+   * the underlying arrays are equal:
+   *
+   *   (x[] = y[]) ==> size(x[]) = size(y[])
+   */
+  private DiscardInfo array_eq_implies (VarInfo[] vis) {
+
+    // Make sure v1 and v2 are size(array) with the same shift
+    VarInfo v1 = vis[0];
+    if (!v1.isDerived() || !(v1.derived instanceof SequenceLength))
+      return (null);
+    VarInfo v2 = vis[1];
+    if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
+      return (null);
+    if (!v1.derived.isSameFormula (v2.derived))
+      return (null);
+
+    VarInfo seqvar1 = v1.derived.getBases()[0];
+    VarInfo seqvar2 = v2.derived.getBases()[0];
+    if (ppt.parent.is_equal (seqvar1, seqvar2))
+      return new DiscardInfo (this, DiscardCode.obvious, "Implied by " +
+                              seqvar1 + " == " + seqvar2 + " and "
+                              + var1() + " == " + v1 + " and "
+                              + var2() + " == " + v2);
+
+    return (null);
+  }
+#endif
+
+#if defined(NONEQUAL_OP) && defined(NO_DUPS)
+  /**
+   * Suppress NonEqual invariants where both variables are subscripts
+   * from the same array and the array has no duplicates:
+   *
+   *    (A[] has no dups) ^ (i != j) ==> a[i] != a[j]
+   */
+  private DiscardInfo no_dups_implies (VarInfo[] vis) {
+
+    // Make sure v1 and v2 are SEQ_SUBSCRIPT from the same array
+    VarInfo v1 = vis[0];
+    VarInfo v2 = vis[1];
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+      return (null);
+    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+
+    // The sequence vars must be equal (or the same)
+    if (!ppt.parent.is_equal (der1.seqvar().canonicalRep(),
+                              der2.seqvar().canonicalRep()))
+      return (null);
+
+    // The subscripts must be non_equal
+    DiscardInfo di1 = ppt.parent.check_implied_canonical (this, der1.sclvar(),
+                                        der2.sclvar(), IntNonEqual.get_proto());
+    if (di1 == null)
+      return (null);
+
+    // The array must have no-dups
+    DiscardInfo di2 = ppt.parent.check_implied_canonical (this, der1.seqvar(),
+                                                          NO_DUPS.get_proto());
+    if (di2 == null)
+      return (null);
+
+    return new DiscardInfo (this, DiscardCode.obvious, di1.discardString()
+                            + " and " + di2.discardString());
+  }
+#endif
 
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
@@ -1213,14 +1075,11 @@ invariants.
     = new NISuppressee (INTEQUAL.class, 2);
 
   // suppressor definitions (used in suppressions below)
-  private static NISuppressor v1_eq_v2
-    = new NISuppressor (0, 1, EQUAL_CLASS.class);
-  private static NISuppressor v1_gt_v2
-    = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
-  private static NISuppressor v1_lt_v2
-    = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+  private static NISuppressor
+    v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class),
+    v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class),
+    v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
 
-  // NI Suppressions for each type of comparison
   #if defined(GREATEREQUAL_OP)
     private static NISuppressionSet suppressions =
       new NISuppressionSet (new NISuppression[] {
@@ -1232,7 +1091,6 @@ invariants.
         new NISuppression (v1_gt_v2, suppressee),
 
       });
-  // NI Suppressions for each type of comparison
   #elif defined(LESSEQUAL_OP)
     private static NISuppressionSet suppressions =
       new NISuppressionSet (new NISuppression[] {
@@ -1244,581 +1102,16 @@ invariants.
         new NISuppression (v1_lt_v2, suppressee),
 
       });
+  #elif defined(NONEQUAL_OP)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+        // v1 < v2 => v1 != v2
+        new NISuppression (v1_lt_v2, suppressee),
+        // v1 > v2 => v1 != v2
+        new NISuppression (v1_gt_v2, suppressee),
+      });
   #else
     private static NISuppressionSet suppressions = null;
   #endif
-
-#if defined(EQUAL) || defined(EQUALFLOAT)
-#endif
-
-#if defined (LESSTHAN) || defined (GREATERTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHANFLOAT)
-
-  /**
-   * Suppression in the form y = x + b ==> y EQUALSstring x (where b EQUALSstring 0).
-   */
-  public static SuppressionLink lb_suppress (INTEQUAL inv,
-                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression by LinearBinary (x = y + c)");
-
-    // Setup to look for LinearBinary over our variables
-    supTemplate.resetResults();
-    supTemplate.set(0, LINEARBINARY.class, inv.var1(), inv.var2());
-
-    // look for invariants that match our template
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-
-      LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
-
-      // If the invariant isn't active, we can't use it
-      if (!lb.isActive())
-        return (null);
-
-      // Only 'a == 1' implies a less than or greater than relationship
-      if (lb.core.a != 1.0)
-        return (null);
-
-      // b determines whether we are greater than or less than
-      if (EQUALS (lb.core.b, 0))
-        return (null);
-
-      if (logOn() || debug.isLoggable(Level.FINE)) {
-        inv.log (debug, " Suppressed by " + lb.format());
-      }
-    }
-    return (sl);
-  }
-  /**
-   * Suppression in the form y = x-1 + b ==> y EQUALSstring x
-   * (where b EQUALSstring 1).
-   */
-  public static SuppressionLink lb_offset_suppress (INTEQUAL inv,
-                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression by LinearBinary (x = size(y)-1 + c)");
-
-    boolean v1_shift = false;
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    SequenceLength v1_size = null;
-    if (v1.isDerived() && (v1.derived instanceof SequenceLength))
-      v1_size = (SequenceLength) v1.derived;
-    SequenceLength v2_size = null;
-    if (v2.isDerived() && (v2.derived instanceof SequenceLength))
-      v2_size = (SequenceLength) v2.derived;
-
-    // If neither is a size(array[]) this doesn't apply
-    if ((v1_size == null) && (v2_size == null))
-      return (null);
-
-    // Determine which var (if any) is shifted (shift == -1).  We are
-    // only interested in cases where only one of the arguments is
-    // shifted.  If both are shifted, then there should be a
-    // suppression directly from the same comparison on the unshifted
-    // versions.
-    if ((v1_size != null) && (v2_size != null)) {
-      if (v1_size.isSameFormula (v2_size))
-        return (null);
-      v1_shift = v1_size.shift == -1;
-    } else if ((v1_size != null) && (v1_size.shift == -1)) {
-      v1_shift = true;
-    } else if ((v2_size != null) && (v2_size.shift == -1)) {
-      v1_shift = false;
-    } else {
-      return (null);
-    }
-
-    // Setup to look for LinearBinary on the unshifted variable
-    supTemplate.resetResults();
-    if (v1_shift) {
-      SequenceLength sl = new SequenceLength (v1_size.base, 0);
-      VarInfo v = sl.getVarInfo();
-      v = inv.ppt.parent.findVar (v.name);
-      supTemplate.set(0, LINEARBINARY.class, v, v2);
-    } else {
-      SequenceLength sl = new SequenceLength (v2_size.base, 0);
-      VarInfo v = sl.getVarInfo();
-      v = inv.ppt.parent.findVar (v.name);
-      supTemplate.set(0, LINEARBINARY.class, v1, v);
-    }
-
-    // look for invariants that match our template
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-
-      LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
-
-      // If the invariant isn't active, we can't use it
-      if (!lb.isActive())
-        return (null);
-
-      // Only 'a == 1' implies a less than or greater than relationship
-      if (lb.core.a != 1.0)
-        return (null);
-
-      // b determines whether we are greater than or less than
-      if (v1_shift) {
-        if (EQUALS (lb.core.b, -1))
-          return (null);
-      } else {
-        if (EQUALS (lb.core.b, 1))
-          return (null);
-      }
-
-      if (logOn() || debug.isLoggable(Level.FINE)) {
-        inv.log (debug, " Suppressed by " + lb.format() + " v1_shift = "
-                + v1_shift + " equals = " + EQUALSstring);
-      }
-    }
-    return (sl);
-  }
-
-#endif
-
-  // It appears as though some special stuff happens with Bounds and
-  // OneOf's, so I'll leave the next 3 suppressions out for now and
-  // come back to it later. -Jelani 7/30/2003
-#if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(NONEQUAL) || defined(NONEQUALFLOAT) || defined(IS_STRING))
-  /**
-   * Suppression in the form x LESSTHAN a and y GREATERTHAN b and a LESSTHAN b ==> x LESSTHAN y
-   */
-  public static SuppressionLink bound_suppress (INTEQUAL inv,
-                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of the form ((x cmp a) ^ (y inverse_cmp b) ^ (a cmp b) ==> x cmp y)");
-
-    // Setup to look for Bound's
-    supTemplate.resetResults();
-    supTemplate.set(0, UPPER_BD.class, inv.var1());
-    supTemplate.set(1, LOWER_BD.class, inv.var2());
-
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      UPPER_BD ub = (UPPER_BD) supTemplate.results[0];
-      LOWER_BD lb = (LOWER_BD) supTemplate.results[1];
-
-      // Check to make sure the Bounds have actually been set
-      if ((lb.ppt.num_samples() == 0) || (ub.ppt.num_samples() == 0))
-        return null;
-
-      INT_TYPE max = ub.UB_MAX;
-      INT_TYPE min = lb.LB_MIN;
-
-      if (! EQUALS(max, min) )
-        return null;
-
-    }
-    return sl;
-  }
-#endif
-
-  #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(NONEQUAL) || defined(NONEQUALFLOAT) || defined (IS_STRING))
-  /**
-   * Suppression in the form x one of A={a,b,c} and y GREATERTHAN d and maxA LESSTHAN d ==> x LESSTHAN y
-   */
-  public static SuppressionLink bound_one_of_suppress (INTEQUAL inv,
-                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of the form ((x cmp a) ^ (y inverse_cmp b) ^ (a cmp b) ==> x cmp y)");
-
-    // Setup to look for Bound's
-    supTemplate.resetResults();
-    supTemplate.set(0, ONEOF.class, inv.var1());
-    supTemplate.set(1, LOWER_BD.class, inv.var2());
-
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      ONEOF oo = (ONEOF) supTemplate.results[0];
-      LOWER_BD lb = (LOWER_BD) supTemplate.results[1];
-
-      // Check to make sure the Bound has actually been set
-      if ((lb.ppt.num_samples() == 0) || (oo.num_elts() == 0))
-        return null;
-
-      INT_TYPE[] elts = oo.getElts();
-
-      // Find the max (or min for GreaterThan-type invariants) of
-      // the OneOf set
-      INT_TYPE max = elts[0];
-      if (oo.num_elts() > 1) {
-        for (int i=1; i<elts.length; i++) {
-          if (EQUALS(max, elts[i]))
-            max = elts[i];
-        }
-      }
-
-      INT_TYPE min = lb.LB_MIN;
-
-      if (! EQUALS(max, min) )
-        return null;
-
-    }
-    return sl;
-  }
-#endif
-
-  /**
-   * Suppression in the form x one of A={a, b, c} and y one of B={d,
-   * e, f} and m EQUALSstring n for all m in A,<br> n in B ==> x
-   * EQUALSstring y
-   */
-  public static SuppressionLink one_of_suppress (INTEQUAL inv,
-                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of the form ((x one of A={a,b,c}) ^ (y one of B={d,e,f}) ^ (m cmp n for all" +
-                "m in A, n in B)) ==> x cmp y");
-
-    // Setup to look for OneOf's over our variables
-    supTemplate.resetResults();
-    supTemplate.set(0, ONEOF.class, inv.var1());
-    supTemplate.set(1, ONEOF.class, inv.var2());
-
-    // look for invariants that match our template
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-
-      ONEOF oo1 = (ONEOF) supTemplate.results[0];
-      ONEOF oo2 = (ONEOF) supTemplate.results[1];
-
-      #if (defined(EQUAL) || defined(EQUALFLOAT))
-      // Not interested if both variables are not constants
-      if ((oo1.num_elts() != 1) || (oo2.num_elts() != 1))
-        return (null);
-      #endif
-
-      INT_TYPE[] elts1 = oo1.getElts();
-      INT_TYPE[] elts2 = oo2.getElts();
-
-      #if !(defined(EQUAL) || defined(EQUALFLOAT))
-      // The EQUALSstring relationship must hold on all combinations
-      // of constants that the vars are equal to.  This could be made
-      // asymptotically faster by first sorting both arrays, but since
-      // OneOf arrays are never bigger than length 3, it's not worth
-      // it
-      for (int i=0; i < elts1.length; i++) {
-        for (int j=0; j < elts2.length; j++) {
-          if (! EQUALS(elts1[i], elts2[j]) )
-            return (null);
-        }
-      }
-      #else
-      if (! EQUALS(elts1[0], elts2[0]) )
-        return (null);
-      #endif
-
-      if (logOn() || debug.isLoggable(Level.FINE)) {
-        inv.log (debug, " Suppressed by " + oo1.format() + " and " + oo2.format());
-      }
-    }
-    return (sl);
-    }
-
-#if !defined (NOTEQUAL) && !defined (NOTEQUALFLOAT) && !defined(IS_STRING)
-  /**
-   * Suppress 'x[n] cmp y[n]' by 'x[] cmp y[]'.
-   */
-  public static SuppressionLink pairwise_suppress(INTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression by 'x[] cmp y[] (elementwise)'");
-
-    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same subscript
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
-    if ((der1.sclvar() != der2.sclvar())
-        || (der1.index_shift != der2.index_shift))
-      return (null);
-
-    #if (defined(NONEQUAL) || defined(NONEQUALFLOAT))
-    return null;
-    #else
-    // Build a template for PAIRWISE_COMPARE
-    supTemplate.set(0, PAIRWISE_COMPARE.class, der1.seqvar(), der2.seqvar());
-
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (logOn() && (sl!=null)) {
-      PAIRWISE_COMPARE pw = (PAIRWISE_COMPARE) supTemplate.results[0];
-      inv.log ("Suppressed by '" + pw.format() +"'");
-    }
-    return (sl);
-    #endif
-  }
-#endif
-
-#if defined(EQUAL)
-
-  /**
-   * Suppress 'size(x[]) == size(y[])' by 'x[] == y[]'.
-   */
-
-  public static SuppressionLink seqlen_suppress (INTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of 'size(x[]) == size(y[])' "
-                + "by 'x[] == y[]'");
-
-    // Make sure v1 and v2 are size(array) with the same shift
-    VarInfo v1 = inv.var1();
-    if (!v1.isDerived() || !(v1.derived instanceof SequenceLength))
-      return (null);
-    VarInfo v2 = inv.var2();
-    if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
-      return (null);
-    if (!v1.derived.isSameFormula (v2.derived))
-      return (null);
-
-    // Build a template for arr1 == arr2 of the correct type
-    supTemplate.resetResults();
-    VarInfo bv1 = v1.derived.getBases()[0];
-    VarInfo bv2 = v2.derived.getBases()[0];
-    if (bv1.rep_type.baseIsString())
-      supTemplate.set(0, SeqSeqStringEqual.class, bv1, bv2);
-    else if (bv1.rep_type.baseIsFloat())
-      supTemplate.set(0, SeqSeqFloatEqual.class, bv1, bv2);
-    else
-      supTemplate.set(0, SeqSeqIntEqual.class, bv1, bv2);
-    if (logOn())
-      inv.log ("Suppression Template - " + supTemplate.searchString());
-
-    // Invariants must match and represent equality
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl == null)
-      inv.log ("invariant not suppressed (SeqComparison not found)");
-    return (sl);
-  }
-
-  /**
-   * Suppress 'x[a] == y[a]' by 'x[] == y[]' when a is the same variable.
-   */
-
-  public static SuppressionLink seq_equal_suppress (INTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of 'x[a] == y[a])' "
-                + "by 'x[] == y[]'");
-
-    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same subscript
-    VarInfo v1 = inv.var1();
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    VarInfo v2 = inv.var2();
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
-    if ((der1.sclvar() != der2.sclvar())
-        || (der1.index_shift != der2.index_shift))
-      return (null);
-
-    // Build a template for lexical comparison
-    supTemplate.set(0, SEQSEQINTEQUAL.class, der1.seqvar(), der2.seqvar());
-
-    // Matching invariants must represent equality
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      SEQSEQINTEQUAL seq = (SEQSEQINTEQUAL) supTemplate.results[0];
-      if (logOn())
-        inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"
-                + seq.format() +"'");
-      if (!seq.isEqual())
-        sl = null;
-    }
-    return (sl);
-  }
-  /**
-   * Suppress 'x[a] == y[b]' by 'x[] == y[]' and 'a == b'.
-   */
-
-  public static SuppressionLink seq_sub_equal_suppress (INTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression of 'x[a] == y[b])' "
-                + "by 'x[] == y[]' and 'a == b'");
-
-    // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same shift
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
-    if (der1.index_shift != der2.index_shift)
-      return (null);
-
-    // Build a template for sequences being equal
-    supTemplate.set(0, SEQSEQINTEQUAL.class, der1.seqvar(), der2.seqvar());
-
-    // Build a template for the subscripts being equal
-    supTemplate.set(1, INTEQUAL.class, der1.sclvar(), der2.sclvar());
-
-    // Matching sequence invariants must represent equality.  The INTEQUAL
-    // invariant for the subscripts only exists if they are equal.
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      SEQSEQINTEQUAL seq = (SEQSEQINTEQUAL) supTemplate.results[0];
-      if (logOn()) {
-        Invariant eq = supTemplate.results[1];
-        inv.log ((seq.isEqual() ? "" : "Not ") + "suppressed by '"
-                + seq.format() +"'" + " and '" + eq.format() + "'");
-      }
-      if (!seq.isEqual())
-        sl = null;
-    }
-    return (sl);
-  }
-
-#endif
-
-#if defined(NONEQUAL) || defined(NONEQUALFLOAT)
-
-  /**
-   * Suppress invariants of the form 'x[n] != x[p]' by the
-   * 'x[] contains no duplicates' invariant, along with 'n != p'
-   */
-
-  public static SuppressionLink nodups_suppress (INTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    if (logOn())
-      inv.log ("Considering suppression by NoDuplicates");
-
-    // Make sure v1 and v2 are SEQ_SUBSCRIPT from the same array
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
-      return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
-    if (der1.seqvar() != der2.seqvar())
-      return (null);
-
-    // Build a template for NO_DUPS
-    supTemplate.set(0, NO_DUPS.class, der1.seqvar());
-
-    // Build a template for the subscripts being different
-    // Note that INTEQUAL is defined as IntNonEqual (or float) here
-    supTemplate.set(1, INTEQUAL.class, der1.sclvar(), der2.sclvar());
-
-    // Any match suppresses
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    return (sl);
-  }
-#endif
-
-#if 0
-  // The following creates the correct factories based on the comparison
-  // type.  This is the only place where it is necessary to know all of the
-  // suppressions that can be used on a particular type.  The code above can
-  // safely define suppressions independent of one another
-#endif
-
-#define FACTORY_INVCLASS INTEQUAL
-
-#if defined(NONEQUAL) || defined(NONEQUALFLOAT)
-
-  // Create a suppression factory for nodups and constant
-  #define FACTORY_CNT       1
-  #define FACTORY1          nodups_suppress
-  #define FACTORY1_INV_CNT  2
-  #define FACTORY1_VAR_INFO {new VarInfo[1], new VarInfo[2]}
-  #if 0
-    // #define FACTORY2          one_of_suppress
-    // #define FACTORY2_INV_CNT  2
-    // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-  #endif
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
-#elif defined (LESSTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
-
-  // Create a suppression factory for linear binary, constant, and pairwise
-  #define FACTORY_CNT       3
-  #define FACTORY1          lb_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[2]}
-  #define FACTORY2          pairwise_suppress
-  #define FACTORY2_INV_CNT  1
-  #define FACTORY2_VAR_INFO {new VarInfo[2]}
-  #define FACTORY3          lb_offset_suppress
-  #define FACTORY3_INV_CNT  1
-  #define FACTORY3_VAR_INFO {new VarInfo[2]}
-  #if 0
-    // #define FACTORY3          bound_suppress
-    // #define FACTORY3_INV_CNT  2
-    // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-    // #define FACTORY4          bound_one_of_suppress
-    // #define FACTORY4_INV_CNT  2
-    // #define FACTORY4_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-    // #define FACTORY3          one_of_suppress
-    // #define FACTORY3_INV_CNT  2
-    // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-  #endif
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
-#elif defined (LESSEQUAL) || defined (LESSEQUALFLOAT) || defined (GREATEREQUAL) || defined (GREATEREQUALFLOAT)
-
-  // Create a suppression factory for pairwise and constant
-  #define FACTORY_CNT       1
-  #define FACTORY1          pairwise_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[2]}
-  #if 0
-    // #define FACTORY2          bound_suppress
-    // #define FACTORY2_INV_CNT  2
-    // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-    // #define FACTORY3          bound_one_of_suppress
-    // #define FACTORY3_INV_CNT  2
-    // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-    // #define FACTORY2          one_of_suppress
-    // #define FACTORY2_INV_CNT  2
-    // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-  #endif
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
-#elif defined (EQUAL)
-
-  // Create suppression factory for pairwise, seqlen, seq_equal, seq_sub_equal, and constant
-  #define FACTORY_CNT       4
-  #define FACTORY1          pairwise_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[2]}
-  #define FACTORY2          seqlen_suppress
-  #define FACTORY2_INV_CNT  1
-  #define FACTORY2_VAR_INFO {new VarInfo[2]}
-  #define FACTORY3          seq_equal_suppress
-  #define FACTORY3_INV_CNT  1
-  #define FACTORY3_VAR_INFO {new VarInfo[2]}
-  #define FACTORY4          seq_sub_equal_suppress
-  #define FACTORY4_INV_CNT  2
-  #define FACTORY4_VAR_INFO {new VarInfo[2], new VarInfo[2]}
-  #if 0
-    // #define FACTORY5          one_of_suppress
-    // #define FACTORY5_INV_CNT  2
-    // #define FACTORY5_VAR_INFO {new VarInfo[1], new VarInfo[1]}
-  #endif
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
-#endif
-
-
 
 }

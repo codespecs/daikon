@@ -92,28 +92,23 @@ public class NONZERO
     super(ppt);
   }
 
+  private static NONZERO proto;
+
   /** Returns the prototype invariant for NONZERO **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new NONZERO (null);
+    if (proto == null)
+      proto = new NONZERO (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-  public static NONZERO instantiate (PptSlice slice) {
-    if (!dkconfig_enabled)
-      return null;
-
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine (NONZEROSTRING + ".instantiate(" + slice.name() + ")");
-    }
-
-    NONZERO result = new NONZERO (slice);
-
-    return result;
+    return new NONZERO (slice);
   }
 
   private String zero(OutputFormat format) {

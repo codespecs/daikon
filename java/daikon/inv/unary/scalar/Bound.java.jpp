@@ -248,16 +248,32 @@ public class LOWERBOUND
     core = new LOWERBOUNDCORE(this);
   }
 
+  private static LOWERBOUND proto;
+
   /** Returns the prototype invariant for LOWERBOUND **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new LOWERBOUND (null);
+    if (proto == null)
+      proto = new LOWERBOUND (null);
+    return (proto);
   }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** LOWERBOUND is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    return (vis[0].file_rep_type.BASE_IS_INTEGRAL);
+    }
 
   /** instantiate an invariant on the specified slice **/
   public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+    return new LOWERBOUND (slice);
   }
 
   public Object clone() {
@@ -265,15 +281,6 @@ public class LOWERBOUND
     result.core = (LOWERBOUNDCORE) core.clone();
     result.core.wrapper = result;
     return result;
-  }
-
-  public static LOWERBOUND instantiate(PptSlice slice) {
-    if (!dkconfig_enabled)
-      return null;
-    if (!slice.var_infos[0].file_rep_type.BASE_IS_INTEGRAL) {
-      return (null);
-    }
-    return new LOWERBOUND (slice);
   }
 
   public PRIMITIVE MIN() {

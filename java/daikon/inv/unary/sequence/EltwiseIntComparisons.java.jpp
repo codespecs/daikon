@@ -155,33 +155,37 @@ public class CLASSNAME
     super(ppt);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new CLASSNAME (null);
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** Non-equality CLASSNAME invariants are only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      if (!vis[0].type.baseIsIntegral())
+        return (false);
+    #endif
+
+    return (true);
   }
 
   /** Instantiate the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    // Don't compute ordering relationships over object addresses for
-    // elements of a Vector.  (But do compute equality/constant!)
-
-    // This check was before contained in the core
-#if !(defined(EQUAL) || defined(EQUALFLOAT))
-    if (!ppt.var_infos[0].type.baseIsIntegral()) {
-      // System.out.println ("Didn't instantiate " + COMPARATORSTRING);
-      Global.partially_implied_invariants++;
-      return null;
-    }
-#endif
-    // System.out.println ("Instantiate " + COMPARATORSTRING);
-    return new CLASSNAME(ppt);
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   public Object clone() {

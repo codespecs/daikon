@@ -14,10 +14,17 @@
   #define ONEOF_ZERO InvDef.elts_zero
   #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
+  #define ONEOF_ONE InvDef.elts_one
   #define SEQ_SUBSCRIPT SequenceScalarSubscript
-  #define EQUALITY IntEqual
   #define NONZERO NonZero
   #define BASE_IS_TYPE isIntegral()
+  #define EQUAL_ONE  RangeInt.EqualOne
+  #define EQUAL_MINUS_ONE  RangeInt.EqualMinusOne
+  #define EQUAL_ZERO RangeInt.EqualZero
+  #define GREATER_EQUAL_ZERO RangeInt.GreaterEqualZero
+  #define EQUALITY IntEqual
+  #define LESS_EQUAL IntLessEqual
+  #define BOUND0_63 RangeInt.Bound0_63
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME NumericFloat
   #define SUPERCLASS TwoFloat
@@ -28,10 +35,18 @@
   #define ONEOF_ZERO InvDef.elts_zero_float
   #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one_float
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
+  #define ONEOF_ONE InvDef.elts_one_float
   #define SEQ_SUBSCRIPT SequenceFloatSubscript
   #define EQUALITY FloatEqual
   #define NONZERO NonZeroFloat
   #define BASE_IS_TYPE isFloat()
+  #define EQUAL_ONE  RangeFloat.EqualOne
+  #define EQUAL_MINUS_ONE  RangeFloat.EqualMinusOne
+  #define EQUAL_ZERO RangeFloat.EqualZero
+  #define GREATER_EQUAL_ZERO RangeFloat.GreaterEqualZero
+  #define EQUALITY FloatEqual
+  #define LESS_EQUAL FloatLessEqual
+  #define BOUND0_63 RangeFloat.Bound0_63
 #elif defined(TYPELONGSEQ)
   #define SEQ
   #define CLASSNAME PairwiseNumericInt
@@ -44,8 +59,15 @@
   #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
+  #define EQUAL_ONE  EltRangeInt.EqualOne
+  #define EQUAL_MINUS_ONE  EltRangeInt.EqualMinusOne
+  #define EQUAL_ZERO EltRangeInt.EqualZero
+  #define GREATER_EQUAL_ZERO EltRangeInt.GreaterEqualZero
   #define EQUALITY PairwiseIntEqual
+  #define LESS_EQUAL PairwiseIntLessEqual
+  #define BOUND0_63 EltRangeInt.Bound0_63
   #define NONZERO EltNonZero
+  #define GREATER_EQUAL_ZERO EltRangeInt.GreaterEqualZero
   #define BASE_IS_TYPE baseIsIntegral()
 #elif defined(TYPEDOUBLESEQ)
   #define SEQ
@@ -59,8 +81,14 @@
   #define ONEOF_PLUS_MINUS_ONE InvDef.elts_plus_minus_one_float
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
+  #define EQUAL_ONE  EltRangeFloat.EqualOne
+  #define EQUAL_MINUS_ONE  EltRangeFloat.EqualMinusOne
+  #define EQUAL_ZERO EltRangeFloat.EqualZero
+  #define GREATER_EQUAL_ZERO EltRangeFloat.GreaterEqualZero
   #define EQUALITY PairwiseFloatEqual
+  #define LESS_EQUAL PairwiseFloatLessEqual
   #define NONZERO EltNonZeroFloat
+  #define GREATER_EQUAL_ZERO EltRangeFloat.GreaterEqualZero
   #define BASE_IS_TYPE baseIsFloat()
 #else
   #error "TYPELONG, TYPEDOUBLE, TYPELONGSEQ, or TYPEDOUBLESEQ  must be defined"
@@ -120,24 +148,21 @@ public abstract class CLASSNAME extends SUPERCLASS {
     this.swap = swap;
   }
 
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
   /**
    * Returns true if it is ok to instantiate a numeric invariant over the
    * specified slice.
    */
-  public static boolean instantiate_ok (PptSlice ppt, boolean swap) {
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    // Make sure we always create when ppt is null
-    if (ppt == null)
-      return (true);
-
-    if (!dkconfig_enabled) return false;
-
-    // base type must match for invariant to make sense.
-    ProglangType type1 = ppt.var_infos[0].file_rep_type;
-    ProglangType type2 = ppt.var_infos[1].file_rep_type;
+    // base type must be integral
+    ProglangType type1 = vis[0].file_rep_type;
+    ProglangType type2 = vis[1].file_rep_type;
     if (!type1.BASE_IS_TYPE || !type2.BASE_IS_TYPE) {
-      if (Debug.logOn())
-        Debug.log (CLASSNAME.class, ppt, "not created - not a numeric type");
       return (false);
     }
 
@@ -146,6 +171,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   public boolean isExact() {
     return true;
+  }
+
+  public String repr() {
+    return UtilMDE.unqualified_name (getClass()) + ": " + format() +
+      (swap ? " [swapped]" : " [unswapped]");
   }
 
   /**
@@ -423,30 +453,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
                               + inv.format()));
   }
 
-  /**
-   * Returns a suppression definition that includes the specified antecedent
-   * and also for arrays addes a second antecedent that specifies that the
-   * two arrays must be of equal size.  This second antecedent must be added
-   * whenever the suppression is based on one of the arguments having a
-   * constant value (eg, x[] & y[] = 0 is implied by y elements = 0 only
-   * if the length of x[] and y[] are the same.  Note that we cannot always
-   * find an invariant for the lengths being equal.  In that case null is
-   * returned.
-   *
-   * NOTE: this is not currently used.  It has been replaced with a dynamic
-   * obvious check.
-   */
-  public SuppressionDef array_suppression (InvDef antecedent) {
-
-    #if (defined (SEQ))
-      return new SuppressionDef (antecedent,
-            new InvDef (var1().sequenceSize(), var2().sequenceSize(),
-                        EQUALITY.class));
-    #else
-      return new SuppressionDef (antecedent);
-    #endif
-  }
-
 #if defined (SEQ)
   /**
    * Returns an invariant that is true when the size(v1) == size(v2).
@@ -545,36 +551,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (new InvDef[][] {});
   }
 
-  /**
-   * Returns a list of all of the numeric invariants instantiated
-   * for the specified slice.
-   */
-  /* JHP: delete this
-  public static List instantiate_all (PptSlice slice) {
-
-    List result = new ArrayList();
-    result.add (Divides.instantiate (slice, false));
-    result.add (Divides.instantiate (slice, true));
-    result.add (Square.instantiate (slice, false));
-    result.add (Square.instantiate (slice, true));
-    #if defined(TYPELONG) || defined(TYPELONGSEQ)
-      result.add (BitwiseComplement.instantiate (slice));
-      result.add (BitwiseSubset.instantiate (slice, false));
-      result.add (BitwiseSubset.instantiate (slice, true));
-    #endif
-    #if defined (TYPELONG) || defined (TYPEDOUBLE)
-      result.add (ZeroTrack.instantiate (slice, false));
-      result.add (ZeroTrack.instantiate (slice, true));
-    #endif
-    #if defined (TYPELONG)
-      result.add (BitwiseAndZero.instantiate (slice));
-      result.add (ShiftZero.instantiate (slice, false));
-      result.add (ShiftZero.instantiate (slice, true));
-    #endif
-    return (result);
-  }
-  */
-
   public static List get_proto_all() {
 
     List result = new ArrayList();
@@ -599,6 +575,26 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (result);
   }
 
+  // suppressor definitions, used by many of the classes below
+  protected static NISuppressor
+    var1_eq_0       = new NISuppressor (0, EQUAL_ZERO.class),
+    var2_eq_0       = new NISuppressor (1, EQUAL_ZERO.class),
+    var1_ge_0       = new NISuppressor (0, GREATER_EQUAL_ZERO.class),
+    var2_ge_0       = new NISuppressor (1, GREATER_EQUAL_ZERO.class),
+    var1_eq_1       = new NISuppressor (0, EQUAL_ONE.class),
+    var2_eq_1       = new NISuppressor (1, EQUAL_ONE.class),
+    var1_eq_minus_1 = new NISuppressor (0, EQUAL_MINUS_ONE.class),
+    var2_eq_minus_1 = new NISuppressor (1, EQUAL_MINUS_ONE.class),
+    var1_ne_0       = new NISuppressor (0, NONZERO.class),
+    var2_ne_0       = new NISuppressor (1, NONZERO.class),
+    var1_eq_var2    = new NISuppressor (0, 1, EQUALITY.class),
+    var1_le_var2    = new NISuppressor (0, 1, LESS_EQUAL.class);
+
+  #if defined(TYPELONG) || defined(TYPELONGSEQ)
+    protected static NISuppressor var2_valid_shift =
+      new NISuppressor (1, BOUND0_63.class);
+  #endif
+
   //
   // Int and Float Numeric Invariants
   //
@@ -617,20 +613,19 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    private static Divides proto = new Divides (null, false);
+    private static Divides proto_swap = new Divides (null, true);
+
     public static Invariant get_proto (boolean swap) {
-      if (!dkconfig_enabled)
-        return (null);
-      return new Divides (null, swap);
+      if (swap) {
+        return (proto_swap);
+      } else {
+        return (proto);
+      }
     }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok(slice, swap)) return null;
+    protected Invariant instantiate_dyn (PptSlice slice) {
       return new Divides (slice, swap);
-    }
-
-    public static Divides instantiate(PptSlice ppt, boolean swap) {
-      if (!instantiate_ok(ppt, swap)) return null;
-      return new Divides (ppt, swap);
     }
 
     public String get_format_str (OutputFormat format) {
@@ -670,22 +665,41 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     #endif
 
-    public SuppressionFactory[] getSuppressionFactories() {
-      return new SuppressionFactory[] {
-        #if !defined (SEQ)
-          // suppress if var2 == 1 or -1
-          new SuppressionDef (new InvDef (var2(), ONEOF.class,
-                                         ONEOF_PLUS_MINUS_ONE)),
-          // suppress if var1 == 0
-          new SuppressionDef (new InvDef (var1(), ONEOF.class, ONEOF_ZERO),
-                              new InvDef (var2(), NONZERO.class)),
-        #endif
-        // suppress if var1 == var2, var2 != 0
-        new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class),
-                            new InvDef (var2(), NONZERO.class)),
-
-      };
+    /**
+     * Returns a list of non-instantiating suppressions for this invariant.
+     */
+    public NISuppressionSet get_ni_suppressions() {
+      if (swap) return (suppressions_swap);
+      else return (suppressions);
     }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (Divides.class, false);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        #if !defined (SEQ)
+          // These suppressions are only valid on scalars because the length
+          // of var1 and var2 must also be the same and there is no suppressor
+          // for that.
+
+          // var2 == 1 ==> var1 % var2 == 0
+          new NISuppression (var2_eq_1, suppressee),
+
+          // var2 == -1 ==> var1 % var2 == 0
+          new NISuppression (var2_eq_minus_1, suppressee),
+
+          // (var1 == 0) ^ (var2 != 0) ==> var1 % var2 == 0
+          new NISuppression (var1_eq_0, var2_ne_0, suppressee),
+        #endif
+
+        // (var1 == var2) ^ (var2 != 0) ==> var1 % var2 == 0
+        new NISuppression (var1_eq_var2, var2_ne_0, suppressee),
+
+      });
+    private static NISuppressionSet suppressions_swap = suppressions.swap();
 
   }
 
@@ -703,20 +717,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    private static Square proto = new Square (null, false);
+    private static Square proto_swap = new Square (null, true);
+
     public static Invariant get_proto (boolean swap) {
-      if (!dkconfig_enabled)
-        return (null);
-      return new Square (null, swap);
+      if (swap) return proto_swap;
+      else return proto;
     }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok(slice, swap)) return null;
+    protected Invariant instantiate_dyn (PptSlice slice) {
       return new Square (slice, swap);
-    }
-
-    public static Square instantiate(PptSlice ppt, boolean swap) {
-      if (!instantiate_ok(ppt, swap)) return null;
-      return new Square (ppt, swap);
     }
 
     public String get_format_str (OutputFormat format) {
@@ -737,6 +747,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS (x, y*y));
     }
+
+    // Note there are no NI Suppressions for Square.  Two obvious
+    // suppressions are:
+    //
+    //      (var2 == 1) ^ (var1 == 1)  ==> var1 = var2*var2
+    //      (var2 == 0) ^ (var1 == 0)  ==> var1 = var2*var2
+    //
+    // But all of the antecedents would be constants, so we would
+    // never need to create this slice, so there is no reason to create
+    // these.
+
   }
 
   /**
@@ -753,20 +774,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    private static ZeroTrack proto = new ZeroTrack (null, false);
+    private static ZeroTrack proto_swap = new ZeroTrack (null, true);
+
     public static Invariant get_proto (boolean swap) {
-      if (!dkconfig_enabled)
-        return (null);
-      return new ZeroTrack (null, swap);
+      if (swap) return proto_swap;
+      else return proto;
     }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok(slice, swap)) return null;
+    protected Invariant instantiate_dyn (PptSlice slice) {
       return new ZeroTrack (slice, swap);
-    }
-
-    public static ZeroTrack instantiate(PptSlice ppt, boolean swap) {
-      if (!instantiate_ok(ppt, swap)) return null;
-      return new ZeroTrack (ppt, swap);
     }
 
     public String get_format_str (OutputFormat format) {
@@ -776,21 +793,34 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("(%var1% == 0) ==> (%var2% == 0)");
     }
 
-    /**
-     * This is only interesting for suppressions.
-     */
-    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
-
-      return new DiscardInfo (this, DiscardCode.obvious,
-                              "Interesting only for suppressions");
-    }
-
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       if (x == 0)
         return (y == 0);
       else
         return (true);
     }
+
+    /** Returns a list of non-instantiating suppressions for this invariant. */
+    public NISuppressionSet get_ni_suppressions() {
+      if (swap) return (suppressions_swap);
+      else return (suppressions);
+    }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (ZeroTrack.class, false);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+        // (var1 == var2) ==> (var1=0 ==> var2=0)
+        new NISuppression (var1_eq_var2, suppressee),
+        // (var1 != 0)    ==> (var1=0 ==> var2=0)
+        new NISuppression (var1_ne_0, suppressee),
+        // (var2 == 0) ==> (var1=0 ==> var2=0)
+        new NISuppression (var2_eq_0, suppressee),
+      });
+    private static NISuppressionSet suppressions_swap = suppressions.swap();
+
   }
 
 #if defined(TYPELONG) || defined(TYPELONGSEQ)
@@ -809,20 +839,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
+    private static BitwiseComplement proto;
+
     public static Invariant get_proto() {
-      if (!dkconfig_enabled)
-        return (null);
-      return new BitwiseComplement (null);
+      if (proto == null)
+        proto = new BitwiseComplement (null);
+      return (proto);
     }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok (slice, false)) return null;
+    protected Invariant instantiate_dyn (PptSlice slice) {
       return new BitwiseComplement (slice);
-    }
-
-    public static BitwiseComplement instantiate(PptSlice ppt) {
-      if (!instantiate_ok (ppt, false)) return null;
-      return new BitwiseComplement (ppt);
     }
 
     public boolean is_symmetric() {
@@ -861,22 +887,18 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    private static BitwiseSubset proto = new BitwiseSubset (null, false);
+    private static BitwiseSubset proto_swap = new BitwiseSubset (null, true);
+
     public static Invariant get_proto (boolean swap) {
-      if (!dkconfig_enabled)
-        return (null);
-      return new BitwiseSubset (null, swap);
+      if (swap) return proto_swap;
+      else return proto;
     }
 
     public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok (slice, swap)) return null;
       return new BitwiseSubset (slice, swap);
     }
-    /*
-    public static BitwiseSubset instantiate(PptSlice ppt, boolean swap) {
-      if (!instantiate_ok (ppt, swap)) return null;
-      return new BitwiseSubset (ppt, swap);
-    }
-    */
+
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
@@ -912,19 +934,30 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     #endif
 
-
-    public SuppressionFactory[] getSuppressionFactories() {
-      return new SuppressionFactory[] {
-        #if !defined(SEQ)
-          // suppress if var2 == 0
-          new SuppressionDef (new InvDef (var2(), ONEOF.class, ONEOF_ZERO)),
-          // suppress if var1 == -1 (all of its bits are on)
-          new SuppressionDef (new InvDef (var1(),ONEOF.class,ONEOF_MINUS_ONE)),
-        #endif
-        // suppress if var1 == var2
-        new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class)),
-      };
+    /** Returns a list of non-instantiating suppressions for this invariant. */
+    public NISuppressionSet get_ni_suppressions() {
+      if (swap) return (suppressions_swap);
+      else return (suppressions);
     }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (BitwiseSubset.class, false);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+        #if !defined(SEQ)
+          // (var2 == 0) ==> var1 = (var2 | var1)
+          new NISuppression (var2_eq_0, suppressee),
+
+          // (var1 == -1) ==> var1 = (var2 | var1)
+          new NISuppression (var1_eq_minus_1, suppressee),
+        #endif
+        // (var1 == var2) ==> var1 = (var2 | var1)
+        new NISuppression (var1_eq_var2, suppressee),
+
+      });
+    private static NISuppressionSet suppressions_swap = suppressions.swap();
   }
 
   /**
@@ -941,20 +974,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
+    private static BitwiseAndZero proto;
+
     public static Invariant get_proto () {
-      if (!dkconfig_enabled)
-        return (null);
-      return new BitwiseAndZero (null);
+      if (proto == null)
+        proto = new BitwiseAndZero (null);
+      return (proto);
     }
 
     public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok(slice, false)) return null;
       return new BitwiseAndZero (slice);
-    }
-
-    public static BitwiseAndZero instantiate(PptSlice ppt) {
-      if (!instantiate_ok(ppt, false)) return null;
-      return new BitwiseAndZero (ppt);
     }
 
     public String get_format_str (OutputFormat format) {
@@ -978,12 +1007,26 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return ((x & y) == 0);
     }
 
-    /** This is only interesting for suppressions. */
-    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
-
-      return new DiscardInfo (this, DiscardCode.obvious,
-                              "Interesting only for suppressions");
+    /** Returns a list of non-instantiating suppressions for this invariant. */
+    public NISuppressionSet get_ni_suppressions() {
+      return (suppressions);
     }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (BitwiseAndZero.class, 2);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+        #if !defined(SEQ)
+          // (var1 == 0) ==> (var1 & var2) == 0
+          new NISuppression (var1_eq_0, suppressee),
+
+          // (var2 == 0) ==> (var1 & var2) == 0
+          new NISuppression (var2_eq_0, suppressee),
+
+        #endif
+      });
   }
 
   /**
@@ -1000,20 +1043,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
+    private static ShiftZero proto = new ShiftZero (null, false);
+    private static ShiftZero proto_swap = new ShiftZero (null, true);
+
     public static Invariant get_proto (boolean swap) {
-      if (!dkconfig_enabled)
-        return (null);
-      return new ShiftZero (null, swap);
+      if (swap) return proto_swap;
+      else return proto;
     }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
-      if (!instantiate_ok(slice, swap)) return null;
+    protected Invariant instantiate_dyn (PptSlice slice) {
       return new ShiftZero (slice, swap);
-    }
-
-    public static ShiftZero instantiate(PptSlice ppt, boolean swap) {
-      if (!instantiate_ok(ppt, swap)) return null;
-      return new ShiftZero (ppt, swap);
     }
 
     public String get_format_str (OutputFormat format) {
@@ -1034,12 +1073,23 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return ((x >> y) == 0);
     }
 
-    /** This is only interesting for suppressions. */
-    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
-
-      return new DiscardInfo (this, DiscardCode.obvious,
-                              "Interesting only for suppressions");
+    /** Returns a list of non-instantiating suppressions for this invariant. */
+    public NISuppressionSet get_ni_suppressions() {
+      if (swap) return (suppressions_swap);
+      else return (suppressions);
     }
+
+    /** definition of this invariant (the suppressee) (unswapped) **/
+    private static NISuppressee suppressee
+      = new NISuppressee (ShiftZero.class, false);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+          // (var1>=0) ^ (var1<=var2) ^ (0<=var2<=63) ==> (var1 >> var2) == 0
+          new NISuppression (var1_ge_0, var1_le_var2, var2_valid_shift,
+                             suppressee),
+      });
+    private static NISuppressionSet suppressions_swap = suppressions.swap();
   }
 
 #endif

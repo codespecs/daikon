@@ -46,24 +46,31 @@ public class NonModulus
     super(ppt);
   }
 
+  private static NonModulus proto;
+
   /** Returns the prototype invariant for NonModulus **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new NonModulus (null);
+    if (proto == null)
+      proto = new NonModulus (null);
+    return (proto);
+  }
+
+  /** NonModulus is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    return (vis[0].file_rep_type.baseIsIntegral());
+  }
+
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
-  }
-
-  public static NonModulus instantiate (PptSlice slice) {
-
-    if (!dkconfig_enabled)
-      return (null);
-    if (!slice.var_infos[0].file_rep_type.baseIsIntegral())
-      return (null);
+  protected Invariant instantiate_dyn (PptSlice slice) {
     return new NonModulus (slice);
   }
 

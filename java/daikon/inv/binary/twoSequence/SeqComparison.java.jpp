@@ -62,11 +62,11 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_TYPE baseIsString()
   #define BASE_IS_SCALAR baseIsString()
   #define SEQ_SUBSEQUENCE SequenceStringSubsequence
-  #define PAIRWISECOMP_EQ PairwiseStringEqual
-  #define PAIRWISECOMP_LT PairwiseStringLessThan
-  #define PAIRWISECOMP_GT PairwiseStringGreaterThan
-  #define PAIRWISECOMP_LE PairwiseStringLessEqual
-  #define PAIRWISECOMP_GE PairwiseStringGreaterEqual
+  // #define PAIRWISECOMP_EQ PairwiseStringEqual
+  // #define PAIRWISECOMP_LT PairwiseStringLessThan
+  // #define PAIRWISECOMP_GT PairwiseStringGreaterThan
+  // #define PAIRWISECOMP_LE PairwiseStringLessEqual
+  // #define PAIRWISECOMP_GE PairwiseStringGreaterEqual
   #define SEQCOMPAR_EQ SeqSeqStringEqual
   #define SEQCOMPAR_LT SeqSeqStringLessThan
   #define SEQCOMPAR_GT SeqSeqStringGreaterThan
@@ -100,7 +100,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
   #define EQUALSIOAstring "="
-  #define PAIRWISEINTEQUAL PairwiseStringEqual
+  // #define PAIRWISEINTEQUAL PairwiseStringEqual
 #elif defined(LESSTHAN)
   #define SEQSEQINTEQUAL SeqSeqIntLessThan
   #define SEQSEQINTEQUALstring "SeqSeqIntLessThan"
@@ -130,7 +130,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring "<"
   #define EQUALSstringDBC "lexLT"
   #define EQUALSIOAstring "<"
-  #define PAIRWISEINTEQUAL PairwiseStringLessThan
+  // #define PAIRWISEINTEQUAL PairwiseStringLessThan
 #elif defined(GREATERTHAN)
   #define SEQSEQINTEQUAL SeqSeqIntGreaterThan
   #define SEQSEQINTEQUALstring "SeqSeqIntGreaterThan"
@@ -160,7 +160,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring ">"
   #define EQUALSstringDBC "lexGT"
   #define EQUALSIOAstring ">"
-  #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
+  // #define PAIRWISEINTEQUAL PairwiseStringGreaterThan
 #elif defined(LESSEQUAL)
   #define SEQSEQINTEQUAL SeqSeqIntLessEqual
   #define SEQSEQINTEQUALstring "SeqSeqIntLessEqual"
@@ -190,7 +190,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring "<="
   #define EQUALSstringDBC "lexLTE"
   #define EQUALSIOAstring "<="
-  #define PAIRWISEINTEQUAL PairwiseStringLessEqual
+  // #define PAIRWISEINTEQUAL PairwiseStringLessEqual
 #elif defined(GREATEREQUAL)
   #define SEQSEQINTEQUAL SeqSeqIntGreaterEqual
   #define SEQSEQINTEQUALstring "SeqSeqIntGreaterEqual"
@@ -220,7 +220,7 @@ The correct way to build the system is to run 'make'.
   #define EQUALSstring ">="
   #define EQUALSstringDBC "lexGTE"
   #define EQUALSIOAstring ">="
-  #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
+  // #define PAIRWISEINTEQUAL PairwiseStringGreaterEqual
 #endif
 
 #if defined (EQUAL) || defined(EQUALFLOAT) || defined (EQUALSTRING)
@@ -241,10 +241,8 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-#ifdef NUMERIC
 import daikon.suppress.*;
 import daikon.derive.binary.*;
-#endif
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -304,49 +302,56 @@ public class SEQSEQINTEQUAL
 
   #endif
 
+  private static SEQSEQINTEQUAL proto;
+
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new SEQSEQINTEQUAL (null, true));
+    if (proto == null)
+      proto = new SEQSEQINTEQUAL (null, true);
+    return (proto);
   }
 
-  /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-
-    return instantiate (slice);
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static SEQSEQINTEQUAL instantiate (PptSlice slice) {
+  /** Non-Equal SeqComparison is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!dkconfig_enabled) return null;
+    if (!valid_types (vis))
+      return (false);
 
-    VarInfo var1 = slice.var_infos[0];
-    VarInfo var2 = slice.var_infos[1];
+    VarInfo var1 = vis[0];
+    VarInfo var2 = vis[1];
     ProglangType type1 = var1.type;
     ProglangType type2 = var2.type;
 
+
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-    // This intentonally checks dimensions(), not pseudoDimensions.
-    boolean only_eq = (! ((type1.dimensions() == 1)
-                          && type1.BASE_IS_TYPE
-                          && (type2.dimensions() == 1)
-                          && type2.BASE_IS_TYPE));
-    if (only_eq) return null;
+      // This intentonally checks dimensions(), not pseudoDimensions.
+      boolean only_eq = (! ((type1.dimensions() == 1)
+                            && type1.BASE_IS_TYPE
+                            && (type2.dimensions() == 1)
+                            && type2.BASE_IS_TYPE));
+      if (only_eq)
+        return (false);
+
+      // non equality comparisons don't make sense if the arrays aren't ordered
+      if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER)
+        || !var2.aux.getFlag(VarInfoAux.HAS_ORDER))
+        return (false);
+
     #endif
 
-    SEQSEQINTEQUAL result;
-    if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
-        && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      result = new SEQSEQINTEQUAL(slice, true);
-    } else {
-      #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-        return null;
-      #else
-        result = new SEQSEQINTEQUAL(slice, false);
-      #endif
-    }
-    return result;
+    return (true);
+  }
+
+  /** Instantiates the invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    boolean has_order = slice.var_infos[0].aux.getFlag(VarInfoAux.HAS_ORDER)
+                      && slice.var_infos[1].aux.getFlag(VarInfoAux.HAS_ORDER);
+    return (new SEQSEQINTEQUAL(slice, has_order));
   }
 
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
@@ -567,6 +572,7 @@ public class SEQSEQINTEQUAL
     if (super_result != null) {
       return super_result;
     }
+    Assert.assertTrue (ppt != null);
 
     #ifdef NUMERIC
 
@@ -575,14 +581,12 @@ public class SEQSEQINTEQUAL
       if (logOn())
         debug.log ("Checking IsObviousDynamically");
 
-      PptSlice ppt = this.ppt.parent.findSlice_unordered (vis);
-      if (ppt!=null) {
-        Invariant pic = PAIRWISEINTEQUAL.find(ppt);
-        if (pic != null) {
-          if (logOn())
-            debug.log ("Obvious Dynamic from " + pic.format() + " (pairwise)");
-          return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + pic.format());
-        }
+      // Check to see if the same Pairwise invariant exists
+      DiscardInfo di = new DiscardInfo (this, DiscardCode.obvious, "");
+      if (ppt.parent.check_implied (di, vis[0], vis[1],
+                                              PAIRWISEINTEQUAL.get_proto())) {
+        di.add_implied_vis (vis);
+        return (di);
       }
 
       // If either variable is a subsequence and the original arrays
@@ -597,21 +601,21 @@ public class SEQSEQINTEQUAL
         arr2 = ((SEQ_SUBSEQUENCE) v2.derived).seqvar();
       if (!isEqual() && ((arr1 != v1) || (arr2 != v2))) {
         VarInfo[] avis = new VarInfo [] {arr1, arr2};
-        ppt = this.ppt.parent.findSlice_unordered (avis);
-        if (ppt != null) {
-          PAIRWISECOMP_EQ picEQ = PAIRWISECOMP_EQ.find(ppt);
+        PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
+        if (slice != null) {
+          PAIRWISECOMP_EQ picEQ = PAIRWISECOMP_EQ.find(slice);
           if (picEQ != null)
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picEQ.format());
-          PAIRWISECOMP_LT picLT = PAIRWISECOMP_LT.find(ppt);
+          PAIRWISECOMP_LT picLT = PAIRWISECOMP_LT.find(slice);
           if (picLT != null)
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picLT.format());
-          PAIRWISECOMP_GT picGT = PAIRWISECOMP_GT.find(ppt);
+          PAIRWISECOMP_GT picGT = PAIRWISECOMP_GT.find(slice);
           if (picGT != null)
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picGT.format());
-          PAIRWISECOMP_LE picLE = PAIRWISECOMP_LE.find(ppt);
+          PAIRWISECOMP_LE picLE = PAIRWISECOMP_LE.find(slice);
           if (picLE != null)
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picLE.format());
-          PAIRWISECOMP_GE picGE = PAIRWISECOMP_GE.find(ppt);
+          PAIRWISECOMP_GE picGE = PAIRWISECOMP_GE.find(slice);
           if (picGE != null)
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picGE.format());
         }
@@ -627,17 +631,17 @@ public class SEQSEQINTEQUAL
         VarInfo[] avis = {arr1, arr2};
         debug.log ("looking for " + avis[0].name.name()
              + " " + avis[1].name.name());
-        ppt = this.ppt.parent.findSlice_unordered (avis);
-        debug.log ("Found ppt " + ppt);
-        if (ppt != null) {
-          for (Iterator i = ppt.invs.iterator(); i.hasNext(); )
+        PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
+        debug.log ("Found ppt " + slice);
+        if (slice != null) {
+          for (Iterator i = slice.invs.iterator(); i.hasNext(); )
             debug.log ("-- invariant " + ((Invariant) i.next()).format());
           List found = new ArrayList();
-          found.add (SEQSEQ_EQ.find(ppt));
-          found.add (SEQSEQ_LT.find(ppt));
-          found.add (SEQSEQ_GT.find(ppt));
-          found.add (SEQSEQ_LE.find(ppt));
-          found.add (SEQSEQ_GE.find(ppt));
+          found.add (SEQSEQ_EQ.find(slice));
+          found.add (SEQSEQ_LT.find(slice));
+          found.add (SEQSEQ_GT.find(slice));
+          found.add (SEQSEQ_LE.find(slice));
+          found.add (SEQSEQ_GE.find(slice));
           for (int i = 0; i < found.size(); i++) {
             Invariant inv = (Invariant) found.get (i);
             if (inv != null) {
@@ -656,6 +660,7 @@ public class SEQSEQINTEQUAL
           || SUBSEQUENCE.isObviousSubSequenceDynamically (this, v2, v1)) {
           if (logOn())
             debug.log ("Obvious SubSequence Dynamically");
+          Assert.assertTrue (ppt != null);
           return new DiscardInfo(this, DiscardCode.obvious, "Both vars are derived and one is a subsequence "
                                  + "of the other");
         }
@@ -697,157 +702,28 @@ public class SEQSEQINTEQUAL
     return null;
   }
 
-#ifdef NUMERIC
+  /**
+   * Returns a list of non-instantiating suppressions for this invariant.
+   */
+  public NISuppressionSet get_ni_suppressions() {
+    return (suppressions);
+  }
 
-  // Create a suppression factory for pairwise and lexical
-  #if defined(EQUAL_OP) || defined(LESSEQUAL_OP) || defined(GREATEREQUAL_OP)
-    #define FACTORY_INVCLASS  SEQSEQINTEQUAL
-    #define FACTORY_CNT       2
-    #define FACTORY1          pairwise_suppress
-    #define FACTORY1_INV_CNT  1
-    #define FACTORY1_VAR_INFO {new VarInfo[2]}
-    #define FACTORY2          lexical_suppress
-    #define FACTORY2_INV_CNT  1
-    #define FACTORY2_VAR_INFO {new VarInfo[2]}
-    #include "daikon/inv/suppressionFactory.java.jpp"
+  /** Definition of this invariant (the suppressee) **/
+  private static NISuppressee suppressee
+    = new NISuppressee (SEQSEQINTEQUAL.class, 2);
+
+  #if defined(PAIRWISEINTEQUAL)
+    // Suppressor definitions (used in suppressions below)
+    private static NISuppressor
+      v1_pw_v2 = new NISuppressor (0, 1, PAIRWISEINTEQUAL.class);
+
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+        // pairwise => lexical
+        new NISuppression (v1_pw_v2, suppressee),
+      });
   #else
-    #define FACTORY_INVCLASS  SEQSEQINTEQUAL
-    #define FACTORY_CNT       1
-    #define FACTORY1          pairwise_suppress
-    #define FACTORY1_INV_CNT  1
-    #define FACTORY1_VAR_INFO {new VarInfo[2]}
-    #include "daikon/inv/suppressionFactory.java.jpp"
+    private static NISuppressionSet suppressions = null;
   #endif
-
-  /**
-   * Suppression of lexical comparison by elementwise comparison for all
-   * comparison operators except ==.  This can occur in two ways: <ol>
-   *
-   *    <li> The same arrays have the same elementwise comparison
-   *
-   *    <li> Subsequences of arrays with the same starting and ending
-   *    index have the same element wise comparison over the entire
-   *    array.  Note that both the start and end must match becaue of
-   *    the way that lexical comparisons handle arrays of unequal length
-   *    (the longer one is greater)
-   *</ol>
-   *
-   * Note that all of these look for the entire arrays as a pairwise
-   * comparison.  It is arguable that we should look for other enclosing
-   * subsequences as well.
-   */
-
-  public static SuppressionLink pairwise_suppress (SEQSEQINTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-
-    if (logOn())
-      inv.log ("Considering suppression by PairwiseComparison (x[], y[])");
-
-    // This is not done for equals since the two comparisons are the
-    // same in that case
-    if (inv.isEqual())
-      return (null);
-
-    // Build the suppression template based on the arguments
-    if (!v1.isDerived() && !v2.isDerived()) {
-      supTemplate.set (0, PAIRWISEINTEQUAL.class, v1, v2);
-    } else if (v1.isDerived() && v2.isDerived()) {
-
-      // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
-      if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
-        return (null);
-      if (!(v2.derived instanceof SEQ_SUBSEQUENCE))
-        return (null);
-      SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-      SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
-      if ((der1.sclvar() != der2.sclvar())
-        || (der1.from_start != der2.from_start)
-        || (der1.index_shift != der2.index_shift))
-        return (null);
-      supTemplate.set (0, PAIRWISEINTEQUAL.class, der1.seqvar(), der2.seqvar());
-    } else // can't be matching subsequence
-      return (null);
-
-    // Any matches must have the same state as this one
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    if (sl != null) {
-      PAIRWISEINTEQUAL pw = (PAIRWISEINTEQUAL) supTemplate.results[0];
-      if (pw == null) {
-        System.out.println ("pairwise_suppress: Unexpected null in supTemplate.results[0]");
-        return (null);
-      }
-
-      if (logOn())
-        inv.log (((sl != null) ? " " : " Not ") + " Suppressed by '"
-                  + pw.format() + "'");
-    }
-    return (sl);
-  }
-
-  /**
-   * Suppression of lexical subsequence comparison by lexical
-   * comparison over the entire sequence.  Each subsequence must have
-   * the same beginning and ending indices.  The beginning index must
-   * match because the subsequence will be completely different if
-   * they start at a different spot.  The end index must also match
-   * because lexical comparisons will create different results if the
-   * sequences are not of the same length (even, if for example, the
-   * sequence would be otherwise equal.
-   *
-   * Note that only the entire arrays is searched for.  It is arguable
-   * that we should look for other enclosing subsequences as well.
-   *
-   * Note also that this suppression is not valid for < and >.  These
-   * can be true for a supersequence but not for a subsequence (because
-   * the subsequence can be ==)
-   *
-   * We should also expand this to include cases where the indices are
-   * not the same variable but are equal.
-   */
-
-  public static SuppressionLink lexical_suppress (SEQSEQINTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-
-    if (logOn())
-      inv.log ("Consider subsequence suppression by SeqComparison (x[], y[])");
-
-    // Each var must be a subsequence with the same indices
-    if (!v1.isDerived() || !v2.isDerived())
-      return (null);
-    if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
-      return (null);
-    if (!(v2.derived instanceof SEQ_SUBSEQUENCE))
-      return (null);
-    SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
-    if ((der1.sclvar() != der2.sclvar())
-      || (der1.from_start != der2.from_start)
-      || (der1.index_shift != der2.index_shift))
-      return (null);
-    supTemplate.set (0, SEQSEQINTEQUAL.class, der1.seqvar(), der2.seqvar());
-
-    // Look for a matching SeqComparison
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    SEQSEQINTEQUAL seqcmp = (SEQSEQINTEQUAL) supTemplate.results[0];
-    if (sl != null) {
-      if (seqcmp == null) {
-        System.out.println (SEQSEQINTEQUALstring +
-                            "Unexpected null in supTemplate.results[0]");
-        return (null);
-      }
-
-      if (logOn())
-        inv.log ("== " + ((sl != null) ? " " : " Not ") + " Suppressed by '"
-                  + seqcmp.format() + "'");
-    }
-    return (sl);
-  }
-
-#endif
 }

@@ -50,6 +50,7 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
+import daikon.suppress.NIS;
 import java.util.*;
 import utilMDE.*;
 
@@ -83,34 +84,40 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
+  private static CLASSNAME proto;
+
   /** Returns the prototype invariant for CLASSNAME **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new CLASSNAME (null);
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
   }
 
-  /** Instantiate the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled)
-      return null;
+  /** LinearTernary is only valid on non-constant integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    // Don't create for non-numeric types (booleans and hashcodes)
-    if ((ppt != null) && !ppt.var_infos[0].file_rep_type.IS_INTEGRAL)
-      return (null);
+    if (!valid_types (vis))
+      return (false);
+
+    // make sure the variables are integral
+    if (!vis[0].file_rep_type.IS_INTEGRAL
+        || !vis[1].file_rep_type.IS_INTEGRAL
+        || !vis[2].file_rep_type.IS_INTEGRAL)
+      return (false);
 
     // Don't create if any of the variables are constant.
     // DynamicConstants will create this from LinearBinary
     // and the constant value if/when all of its variables are non-constant
-    PptTopLevel parent = ppt.parent;
-    if (parent.is_constant (ppt.var_infos[0])
-        || parent.is_constant(ppt.var_infos[1])
-        || parent.is_constant (ppt.var_infos[2]))
-      return (null);
+    PptTopLevel parent = vis[0].ppt;
+    if (NIS.dkconfig_enabled && (parent.is_constant (vis[0])
+                                 || parent.is_constant(vis[1])
+                                 || parent.is_constant (vis[2])))
+      return (false);
 
     /*
     // JHP: This code is removed because these sorts of static checks
@@ -269,8 +276,12 @@ public class CLASSNAME
     }
     */
 
-    CLASSNAME result = new CLASSNAME(ppt);
-    return result;
+    return (true);
+  }
+
+  /** Instantiate the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME (slice);
   }
 
   public Object clone() {

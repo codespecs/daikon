@@ -15,6 +15,9 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_SCALAR baseIsScalar()
   #define SUBSEQUENCE SubSequence
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
+  #define EQUAL_CLASS PairwiseIntEqual
+  #define GREATER_THAN_CLASS PairwiseIntGreaterThan
+  #define LESS_THAN_CLASS PairwiseIntLessThan
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
@@ -22,6 +25,9 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_SCALAR baseIsFloat()
   #define SUBSEQUENCE SubSequenceFloat
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
+  #define EQUAL_CLASS PairwiseFloatEqual
+  #define GREATER_THAN_CLASS PairwiseFloatGreaterThan
+  #define LESS_THAN_CLASS PairwiseFloatLessThan
 #endif
 
 #if defined(EQUAL)
@@ -140,6 +146,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 
@@ -182,16 +189,37 @@ public class PAIRWISEINTEQUAL
     super(ppt);
   }
 
+  private static PAIRWISEINTEQUAL proto;
+
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return (new PAIRWISEINTEQUAL ((PptSlice) null));
+    if (proto == null)
+      proto = new PAIRWISEINTEQUAL ((PptSlice) null);
+    return (proto);
+  }
+
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** PAIRWISEINTEQUAL is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      if (!(vis[0].type.ELEMENTISTYPE && vis[1].type.ELEMENTISTYPE))
+        return false;
+    #endif
+
+    return (true);
   }
 
   /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return (new PAIRWISEINTEQUAL(slice));
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -202,21 +230,6 @@ public class PAIRWISEINTEQUAL
   }
   #endif
 
-  public static PAIRWISEINTEQUAL instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-
-    VarInfo var1 = ppt.var_infos[0];
-    VarInfo var2 = ppt.var_infos[1];
-
-    #if !(defined(EQUAL) || defined(EQUALFLOAT))
-    if (! (var1.type.ELEMENTISTYPE && var2.type.ELEMENTISTYPE)) {
-      return null;
-    }
-    #endif
-    PAIRWISEINTEQUAL result;
-    result = new PAIRWISEINTEQUAL(ppt);
-    return result;
-  }
 
   public DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var1 = vis[0];
@@ -245,41 +258,59 @@ public class PAIRWISEINTEQUAL
     return super.isObviousStatically (vis);
   }
 
-  #if (defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
-  // Suppress <= by < or ==, and >= by > or ==
   public DiscardInfo isObviousDynamically (VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
     }
 
-    PptSlice ppt = this.ppt.parent.findSlice(vis);
-
-    if (ppt == null)
-      return null;
-
-    PAIRWISEEQ_SUPP picEQ = PAIRWISEEQ_SUPP.find(ppt);
-    if (picEQ!=null) {
-      if (logDetail() || debug.isLoggable(Level.FINE))
-        log (debug, format_daikon() + " implied by ==");
-      return new DiscardInfo(this, DiscardCode.obvious, "Implied by ==");
-    }
-
-    PAIRWISELT_SUPP picLT = PAIRWISELT_SUPP.find(ppt);
-    if (picLT!=null) {
-      if (logDetail() || debug.isLoggable(Level.FINE))
-        #if (defined(LESSEQUAL) || defined(LESSEQUALFLOAT))
-        log (debug, format_daikon() + " implied by <");
-        #else
-        log(debug, format_daikon() + "implied by >");
-        #endif
-      return new DiscardInfo(this, DiscardCode.obvious, "<= (resp. >=) implied by < (resp. >)");
-    }
+    // Subsequence invariants are implied by the same invariant over
+    // the supersequence
+    DiscardInfo di = superseq_implies (vis);
+    if (di != null)
+      return (di);
 
     return null;
 
     }
-  #endif
+
+  /**
+   * Checks to see if the same invariant exists over supersequences of
+   * these variables:
+   *
+   *    (A[] op B[]) ^ (i == j)  ==> A[i..] op B[j..]
+   *    (A[] op B[]) ^ (i == j)  ==> A[..i] op B[..j]
+   */
+  private DiscardInfo superseq_implies (VarInfo[] vis) {
+
+    // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
+    VarInfo v1 = vis[0];
+    VarInfo v2 = vis[1];
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
+      return (null);
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
+      return (null);
+    SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
+    SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
+    if ((der1.from_start != der2.from_start)
+        || (der1.index_shift != der2.index_shift))
+      return (null);
+
+    // Make sure the subscripts are equal
+    DiscardInfo di = new DiscardInfo (this, DiscardCode.obvious, "");
+    if (!ppt.parent.check_implied_canonical (di, der1.sclvar(), der2.sclvar(),
+                                             IntEqual.get_proto()))
+      return (null);
+
+    // See if the super-sequences have the same invariant
+    if (!ppt.parent.check_implied_canonical (di, der1.seqvar(), der2.seqvar(),
+                                             PAIRWISEINTEQUAL.get_proto()))
+      return (null);
+
+    // Add in the vis variables to di reason (if they are different)
+    di.add_implied_vis (vis);
+    return (di);
+  }
 
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
@@ -431,52 +462,47 @@ public class PAIRWISEINTEQUAL
     return null;
   }
 
-  // Create a suppression factory for pairwise
-  #define FACTORY_INVCLASS  PAIRWISEINTEQUAL
-  #define FACTORY_CNT       1
-  #define FACTORY1          pairwise_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[2]}
-  #include "daikon/inv/suppressionFactory.java.jpp"
-
   /**
-   * Suppress 'x[n..] cmp y[n..] (elementwise)' or 'x[..n] cmp y[..n]
-   * (elementwise)' by 'x[] cmp y[] (elementwise)'.
+   * Returns a list of non-instantiating suppressions for this invariant.
    */
-  public static SuppressionLink pairwise_suppress (PAIRWISEINTEQUAL inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
-      return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
-      return (null);
-    SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
-    if ((der1.sclvar() != der2.sclvar())
-        || (der1.from_start != der2.from_start)
-        || (der1.index_shift != der2.index_shift))
-      return (null);
-
-    // Build the template and look for matches
-    supTemplate.set (0, PAIRWISEINTEQUAL.class, der1.seqvar(), der2.seqvar());
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-
-    // Any matches must have the same state as this one
-    if (sl != null) {
-      PAIRWISEINTEQUAL pw = (PAIRWISEINTEQUAL) supTemplate.results[0];
-      if (pw == null) {
-        System.out.println (PAIRWISEINTEQUALstring + ".pairwise_suppress: "
-                            + "Unexpected null in supTemplate.results[0]");
-        return (null);
-      }
-
-      if (logOn())
-        inv.log (((sl != null) ? "" : "Not ") + " Suppressed by '"
-                  + pw.format() + "'");
-    }
-    return (sl);
+  public NISuppressionSet get_ni_suppressions() {
+    return (suppressions);
   }
+
+  /** Definition of this invariant (the suppressee) **/
+  private static NISuppressee suppressee
+    = new NISuppressee (PAIRWISEINTEQUAL.class, 2);
+
+  // Suppressor definitions (used in suppressions below)
+  private static NISuppressor
+    v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class),
+    v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class),
+    v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+
+  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 >= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 > v2 => v1 >= v2
+        new NISuppression (v1_gt_v2, suppressee),
+
+      });
+  #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet (new NISuppression[] {
+
+        // v1 == v2 => v1 <= v2
+        new NISuppression (v1_eq_v2, suppressee),
+
+        // v1 < v2 => v1 <= v2
+        new NISuppression (v1_lt_v2, suppressee),
+
+      });
+  #else
+    private static NISuppressionSet suppressions = null;
+  #endif
+
 }

@@ -117,6 +117,26 @@ public abstract class CLASSNAME extends SUPERCLASS {
     super (ppt);
   }
 
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** FunctionBinary is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
+
+    if (!valid_types (vis))
+      return (false);
+
+    // Make sure that each variable is integral (not boolean or hashcode)
+    if (!vis[0].file_rep_type.IS_INTEGRAL
+        || !vis[1].file_rep_type.IS_INTEGRAL
+        || !vis[2].file_rep_type.IS_INTEGRAL)
+      return (false);
+
+    return (true);
+  }
+
   // check_modified relies on func having no side effects.
   abstract PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2);
   abstract boolean is_symmetric();
@@ -142,6 +162,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   private static void build_func_list() {
 
+    // Reflection seems to confuse clover
+    ///CLOVER:OFF
+
     // Build the map of functions to array of instances for that function
     debug.fine ("Processing " + #CLASSNAME);
     functions = new LinkedHashMap();
@@ -149,6 +172,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     for (int ii = 0; ii < subclasses.length; ii++) {
       Class subc = subclasses[ii];
       String function = subc.getName();
+      if (function.indexOf ("CLOVER") >= 0)
+        continue;
       function = function.replaceFirst (".*FunctionBinary\\$", "");
       function = function.replaceFirst ("_.*", "");
       if (function.equals ("SubClass"))
@@ -164,11 +189,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
       try {
         Constructor con = subc.getDeclaredConstructor (new Class[] {});
         fb = (CLASSNAME) con.newInstance (new Object[] {});
-
-        // Field var_order_field = subc.getDeclaredField ("var_order");
-        // var_order = var_order_field.getInt (null);
-        // Field func_id_field = subc.getDeclaredField ("function_id");
-        // func_id_field.setInt (null, func_list.size() - 1);
       }  catch (Exception e) {
         throw new Error (" can't create instance for " + subc.getName()
                         + ": '" + e + "' ii = " + ii);
@@ -179,6 +199,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       debug.fine ("Adding " + function + " " + fb.getClass().getName()
                   + " " + fb.get_var_order() + " " + fb.get_function_id());
     }
+  ///CLOVER:ON
   }
 
 #if 0
@@ -228,8 +249,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public static List get_proto_all() {
 
     List result = new ArrayList();
-    if (!dkconfig_enabled)
-      return (result);
 
     // If this is the first call
     if (functions == null) {
@@ -237,47 +256,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     // Get the proto invariant for all of the subclasses and return them
-    if (dkconfig_enabled) {
-      for (int ii = 0; ii < func_list.size(); ii++) {
-        CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
-        for (int jj = 1; jj < fb_arr.length; jj++) {
-          CLASSNAME fb = fb_arr[jj];
-          if (fb != null) {
-            result.add (fb);
-          }
-        }
-      }
-    }
-    return (result);
-  }
-
-  /**
-   * Returns all FunctionBinary non-instantiating suppression sets
-   * as a list of NISuppressionSet.
-   */
-  public static /*NISuppressionSet */ List get_all_ni_suppressions() {
-
-    // If this is the first call
-    if (functions == null) {
-      build_func_list();
-    }
-
-    List result = new ArrayList();
-    if (!dkconfig_enabled)
-      return (result);
-
-    // Find each class and get its suppressions
     for (int ii = 0; ii < func_list.size(); ii++) {
       CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
       for (int jj = 1; jj < fb_arr.length; jj++) {
-        if (fb_arr[jj] != null) {
-          NISuppressionSet ss = fb_arr[jj].get_ni_suppressions();
-          if (ss != null)
-            result.add (ss);
+        CLASSNAME fb = fb_arr[jj];
+        if (fb != null) {
+          result.add (fb);
         }
       }
     }
-
     return (result);
   }
 
@@ -526,175 +513,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     return null;
   }
-
-
-  /**
-   * Suppress 'z = func(x, y)' by 'z == x == y' where func is bitwiseAnd,
-   * bitwiseOr, min, max, or gcd.  equality_suppress_args_samevar is used
-   * when x and y are the same variable; equality_suppress_distinct_args
-   * works when x and y are distinct.  This is necessary because there are
-   * assertions elsewhere that don't allow us to include the same invariant
-   * twice as a suppressor.  And that is what happens if x, y, and z
-   * actually refer to the same variable:  we get var == var and var == var
-   * as our two suppressors.
-   **/
-  public static SuppressionLink equality_suppress_repeated_arg (CLASSNAME inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // If the variables are not all the same, give up and let the second
-    // factory handle this.
-    if ((inv.var1() != inv.var2()) || (inv.var2() != inv.var3()))
-      return (null);
-
-    // Build the tempmlate and look for matches
-    supTemplate.set (0, EQUALITY.class, inv.var2(), inv.var3());
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    return (sl);
-  }
-
-  // TODO: This should be a Javadoc link.
-  /**
-   * See comment for equality_suppress_repeated_arg.
-   **/
-  public static SuppressionLink equality_suppress_distinct_args (CLASSNAME inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    // If all the variables are the same, let
-    // equality_suppress_repeated_arg handle it.  (Actually, this should
-    // never get called in that case, right?)
-    if ((inv.var1() == inv.var2()) && (inv.var2() == inv.var3()))
-      return (null);
-
-    // Pick pairs of variables that don't match
-    VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
-    VarInfo v3 = inv.var3();
-    if (v1 == v3) {
-      VarInfo tmp = v2;
-      v2 = v3;
-      v3 = tmp;
-    }
-
-    // Build the template and look for matches
-    supTemplate.set (0, EQUALITY.class, v1, v2);
-    supTemplate.set (1, EQUALITY.class, v2, v3);
-    SuppressionLink sl = sfact.linkFromUnfilledTemplate (supTemplate, inv);
-    return (sl);
-  }
-
-  // Only for getting the equality part, not other parts of the full
-  // suppression.
-  private static SuppressionTemplate equality_min_max_template
-                                                = new SuppressionTemplate(1);
-
-  // Suppress "a = min(a, b)" or "a = max(a, b)".
-  public static SuppressionLink equality_suppress_min_max (CLASSNAME inv,
-                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
-
-    VarInfo resultVar = inv.resultVar();
-    VarInfo argVar1 = inv.argVar1();
-    VarInfo argVar2 = inv.argVar2();
-
-    SuppressionTemplate st = equality_min_max_template;
-    SuppressionLink eq_sl;
-
-    // Suppress "r = min(arg1, arg2) by "r == arg1 && r <= arg2".
-    // Suppress "r = max(arg1, arg2) by "r == arg1 && arg2 <= r".
-    st.set(0, EQUALITY.class, resultVar, argVar1);
-    eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
-    if (eq_sl != null) {
-      SuppressionLink le_sl;
-      if (inv.isMinimum())
-        le_sl = SuppressionFactory.findLessEqualInt(inv, resultVar, argVar2,0);
-      else
-        le_sl = SuppressionFactory.findLessEqualInt(inv, argVar2, resultVar,0);
-      if (le_sl != null) {
-        return SuppressionLink.combine(eq_sl, le_sl);
-      }
-    }
-
-    // Suppress "r = min(arg1, arg2) by "r == arg2 && r <= arg1".
-    // Suppress "r = max(arg1, arg2) by "r == arg2 && arg1 <= r".
-    st.set(0, EQUALITY.class, resultVar, argVar2);
-    eq_sl = SuppressionFactory.linkFromUnfilledTemplate(st, inv);
-    if (eq_sl != null) {
-      SuppressionLink le_sl;
-      if (inv.isMinimum())
-        le_sl = SuppressionFactory.findLessEqualInt(inv, resultVar, argVar1, 0);
-      else
-        le_sl = SuppressionFactory.findLessEqualInt(inv, argVar1, resultVar, 0);
-      if (le_sl != null) {
-        return SuppressionLink.combine(eq_sl, le_sl);
-      }
-    }
-
-    return null;
-  }
-
-
-// This (incorrect) SuppressionFactory for FunctionBinary invariants
-// suppresses all FunctionBinary such that one of the members is a
-// constant.  This isn't correct for suppression, since constants
-// don't logiclaly imply FunctionBinary.  However, a FunctionBinary invariant
-// that results from constant components is uninteresting, so this
-// should later be used in filtering for printing.
-/*
-  static class FunctionBinarySuppressionFactory extends SuppressionFactory {
-
-    public static final Logger debug = Logger.getLogger ("daikon.suppress.factories.FunctionBinarySuppressionFactory");
-
-    public static final FunctionBinarySuppressionFactory theInstance =
-      new FunctionBinarySuppressionFactory();
-
-    private FunctionBinarySuppressionFactory() {
-
-    }
-
-    public static SuppressionFactory getInstance() {
-      return theInstance;
-    }
-
-    public Object readResolve() {
-      return theInstance;
-    }
-
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Attempting to generate suppression link for: " + arg.repr());
-      }
-
-      Assert.assertTrue (arg instanceof FunctionBinary);
-
-      FunctionBinary inv = (FunctionBinary) arg;
-
-      // We will make a template for all possible constants.
-      SuppressionTemplate supTemplate = new SuppressionTemplate();
-
-      supTemplate.invTypes = new Class[] {ONEOF.class};
-      supTemplate.varInfos = new VarInfo [][] {new VarInfo[1]};
-
-      VarInfo[] vis = new VarInfo[] {inv.var1(), inv.var2(), inv.var3()};
-      for (int i = 0; i < vis.length; i++) {
-        supTemplate.varInfos[0][0] = vis[i];
-        supTemplate.resetResults();
-        supTemplate.fill(inv.ppt.parent);
-        if (supTemplate.results[0] != null) {
-          OneOf suppressor = (OneOf) supTemplate.results[0];
-          if (suppressor.num_elts() <= 1) {
-            List suppressors = new ArrayList();
-            suppressors.add (suppressor);
-            SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
-            if (debug.isLoggable(Level.FINE)) {
-              debug.fine ("Success: " + supTemplate.results[0].repr());
-            }
-            return sl;
-          }
-        }
-      }
-      return null;
-    }
-  }
-*/
 
 
 #if 0

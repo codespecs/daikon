@@ -63,9 +63,23 @@ public class CLASSNAME
     super(ppt);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    return new CLASSNAME(ppt);
+  private static CLASSNAME proto;
+
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (proto == null)
+      proto = new CLASSNAME (null);
+    return (proto);
+  }
+
+  /** returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   // this.intersect is read-only, so don't clone it

@@ -48,12 +48,12 @@ public abstract class CLASSNAME
   }
 
   /** Returns whether or not the specified types are valid **/
-  public boolean valid_types (ProglangType[] rep_types) {
+  public final boolean valid_types (VarInfo[] vis) {
 
-    return ((rep_types.length == 3)
-            && rep_types[0].IS_SCALAR
-            && rep_types[1].IS_SCALAR
-            && rep_types[2].IS_SCALAR);
+    return ((vis.length == 3)
+            && vis[0].file_rep_type.IS_SCALAR
+            && vis[1].file_rep_type.IS_SCALAR
+            && vis[2].file_rep_type.IS_SCALAR);
   }
 
   public VarInfo var1() {

@@ -40,34 +40,31 @@ public class Modulus
     super(ppt);
   }
 
+  private static Modulus proto;
+
   /** Returns the prototype invariant for Modulus **/
   public static Invariant get_proto() {
-    if (!dkconfig_enabled)
-      return (null);
-    return new Modulus (null);
+    if (proto == null)
+      proto = new Modulus (null);
+    return (proto);
   }
 
-  /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
-    return instantiate (slice);
+  /** Returns whether or not this invariant is enabled **/
+  public boolean enabled() {
+    return dkconfig_enabled;
   }
 
-  public static Modulus instantiate(PptSlice slice) {
+  /** Modulus is only valid on integral types **/
+  public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!dkconfig_enabled)
-      return (null);
-    VarInfo x = slice.var_infos[0];
-    if (!x.file_rep_type.baseIsIntegral())
-      return (null);
+    if (!valid_types (vis))
+      return (false);
 
-    // JHP: This should be moved to Static Obvious
-    if ((x.derived instanceof SequenceLength)
-         && (((SequenceLength) x.derived).shift != 0)) {
-      // do not instantiate x-1 = a (mod b).  Instead, choose a different a.
-      Global.implied_noninstantiated_invariants += 1;
-      return null;
-    }
+    return (vis[0].file_rep_type.baseIsIntegral());
+  }
 
+  /** Instantiate an invariant on the specified slice **/
+  protected Invariant instantiate_dyn (PptSlice slice) {
     return new Modulus (slice);
   }
 
@@ -256,6 +253,29 @@ public class Modulus
         return (Modulus) inv;
     }
     return null;
+  }
+
+  /**
+   * Checks to see if this is obvious over the specified variables.
+   * Implements the following checks: <pre>
+   *
+   *    size(x[]) = r (mod m) ==> size(x[])-1 = (r-1) (mod m)
+   * </pre>
+   **/
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+
+    // Do not show x-1 = a (mod b).  There must be a different mod
+    // invariant over x.  JHP: This should really find the invariant rather
+    // than presuming it is true.
+    VarInfo x = vis[0];
+    if ((x.derived instanceof SequenceLength)
+         && (((SequenceLength) x.derived).shift != 0)) {
+      return (new DiscardInfo (this, DiscardCode.obvious, "The invariant "
+                          + format()  + " is implied by a mod invariant "
+                          + "over " + x.name.name() + " without the offset"));
+
+    }
+    return (null);
   }
 
 }
