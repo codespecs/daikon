@@ -2040,10 +2040,33 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Interface used by mark_implied_via_simplify to determine what
+   * invaraints should be considered during the logical redundancy
+   * tests.
+   **/
+  public static interface SimplifyInclusionTester {
+    public boolean include(Invariant inv);
+  }
+
+  /**
    * Use the Simplify theorem prover to flag invaraints which are
-   * logically implied by others.
+   * logically implied by others.  Considers only invariants which
+   * pass isWorthPrinting.
    **/
   public void mark_implied_via_simplify() {
+    mark_implied_via_simplify(new SimplifyInclusionTester() {
+	public boolean include(Invariant inv) {
+	  return inv.isWorthPrinting();
+	}
+      });
+  }
+
+  /**
+   * Use the Simplify theorem prover to flag invaraints which are
+   * logically implied by others.  Uses the provided test interface to
+   * determine if an invariant is within the domain of inspection.
+   **/
+  public void mark_implied_via_simplify(SimplifyInclusionTester test) {
     SessionManager.debugln("Simplify checking " + ppt_name);
 
     // Create the list of invariants from this ppt which are
@@ -2055,7 +2078,7 @@ public class PptTopLevel extends Ppt {
       Vector printing = new Vector(); // [Invariant]
       for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
 	Invariant inv = (Invariant) _invs.next();
-	if (inv.isWorthPrinting()) {
+	if (test.include(inv)) { // think: inv.isWorthPrinting()
 	  String fmt = inv.format_simplify();
 	  if (fmt.indexOf("format_simplify") < 0) {
 	    printing.add(inv);
@@ -2105,7 +2128,7 @@ public class PptTopLevel extends Ppt {
 	if (inv instanceof Implication) {
 	  continue;
 	}
-	if (!inv.isWorthPrinting()) {
+	if (!test.include(inv)) { // think: !inv.isWorthPrinting()
 	  continue;
 	}
 	String fmt = inv.format_simplify();
@@ -2161,7 +2184,7 @@ public class PptTopLevel extends Ppt {
 	    Iterator _invs = InvariantFilters.addEqualityInvariants(OBJ.invariants_vector()).iterator();
 	    while(_invs.hasNext()) {
 	      Invariant inv = (Invariant) _invs.next();
-	      if (!inv.isWorthPrinting()) {
+	      if (!test.include(inv)) { // think: !inv.isWorthPrinting()
 		continue;
 	      }
 	      String fmt = inv.format_simplify();
