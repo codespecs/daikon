@@ -16,6 +16,9 @@ import java.io.*;
 
 public class DiffTester extends TestCase {
 
+  private Diff diffSome;
+  private Diff diffAll;
+
   private PptMap empty;
   private PptMap ppts1;
   private PptMap ppts2;
@@ -41,6 +44,9 @@ public class DiffTester extends TestCase {
   public DiffTester(String name) {
     super(name);
     
+    diffSome = new Diff();
+    diffAll = new Diff(true);
+
     empty = new PptMap();
 
     ppts1 = new PptMap();
@@ -177,13 +183,13 @@ public class DiffTester extends TestCase {
   }
 
   public void testEmptyEmpty() {
-    RootNode diff = Diff.diffPptMap(empty, empty);
+    RootNode diff = diffSome.diffPptMap(empty, empty);
     RootNode ref = new RootNode();
     Assert.assertEquals(printTree(ref), printTree(diff));
   }
 
   public void testEmptyPpts1() {
-    RootNode diff = Diff.diffPptMap(empty, ppts1);
+    RootNode diff = diffSome.diffPptMap(empty, ppts1);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -204,7 +210,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testPpts1Empty() {
-    RootNode diff = Diff.diffPptMap(ppts1, empty);
+    RootNode diff = diffSome.diffPptMap(ppts1, empty);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -225,7 +231,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testPpts4Empty() {
-    RootNode diff = Diff.diffPptMap(ppts4, empty);
+    RootNode diff = diffSome.diffPptMap(ppts4, empty);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -242,8 +248,30 @@ public class DiffTester extends TestCase {
   }
 
 
+  public void testPpts4EmptyAll() {
+    RootNode diff = diffAll.diffPptMap(ppts4, empty);
+
+    RootNode ref = new RootNode();
+    PptNode node;
+    node = new PptNode
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       null);
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
+       null);
+    ref.add(node);
+    node = new PptNode
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       null);
+    ref.add(node);
+
+    Assert.assertEquals(printTree(ref), printTree(diff));
+  }
+
+
   public void testPpts1Ppts1() {
-    RootNode diff = Diff.diffPptMap(ppts1, ppts1);
+    RootNode diff = diffSome.diffPptMap(ppts1, ppts1);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -264,7 +292,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testPpts4Ppts4() {
-    RootNode diff = Diff.diffPptMap(ppts4, ppts4);
+    RootNode diff = diffSome.diffPptMap(ppts4, ppts4);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -281,7 +309,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testPpts1Ppts2() {
-    RootNode diff = Diff.diffPptMap(ppts1, ppts2);
+    RootNode diff = diffSome.diffPptMap(ppts1, ppts2);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -302,7 +330,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testPpts1Ppts3() {
-    RootNode diff = Diff.diffPptMap(ppts1, ppts3);
+    RootNode diff = diffSome.diffPptMap(ppts1, ppts3);
 
     RootNode ref = new RootNode();
     PptNode node;
@@ -324,7 +352,7 @@ public class DiffTester extends TestCase {
 
 
   public void testInvs1Empty() {
-    RootNode diff = Diff.diffPptMap(invs1, empty);
+    RootNode diff = diffSome.diffPptMap(invs1, empty);
 
     RootNode ref = new RootNode();
 
@@ -356,7 +384,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testInvs1Invs1() {
-    RootNode diff = Diff.diffPptMap(invs1, invs1);
+    RootNode diff = diffSome.diffPptMap(invs1, invs1);
 
     RootNode ref = new RootNode();
 
@@ -388,7 +416,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testInvs1Invs2() {
-    RootNode diff = Diff.diffPptMap(invs1, invs2);
+    RootNode diff = diffSome.diffPptMap(invs1, invs2);
 
     RootNode ref = new RootNode();
 
@@ -420,7 +448,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testInvs1Invs3() {
-    RootNode diff = Diff.diffPptMap(invs1, invs3);
+    RootNode diff = diffSome.diffPptMap(invs1, invs3);
 
     RootNode ref = new RootNode();
 
@@ -452,7 +480,7 @@ public class DiffTester extends TestCase {
   }
 
   public void testNullaryInvs() {
-    RootNode root = Diff.diffPptMap(imps1, imps2);
+    RootNode root = diffSome.diffPptMap(imps1, imps2);
   }
 
   public void testNonModulus() {
@@ -466,7 +494,7 @@ public class DiffTester extends TestCase {
     v.add(slice);
     map.add(ppt);
 
-    RootNode diff = Diff.diffPptMap(map, map);
+    RootNode diff = diffSome.diffPptMap(map, map);
   }
 
   private static String printTree(RootNode root) {
