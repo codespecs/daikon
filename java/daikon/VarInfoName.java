@@ -1085,8 +1085,20 @@ public abstract class VarInfoName
 
       // If needy was in prestate, adjust bounds appropriately
       if (root.inPrestateContext(needy)) {
-	if (!lower.isLiteralConstant()) lower = lower.applyPrestate();
-	if (!upper.isLiteralConstant()) upper = upper.applyPrestate();
+	if (!lower.isLiteralConstant()) {
+	  if (lower instanceof Poststate) {
+	    lower = ((Poststate) lower).term;
+	  } else {
+	    lower = lower.applyPrestate();
+	  }
+	}
+	if (!upper.isLiteralConstant()) {
+	  if (upper instanceof Poststate) {
+	    upper = ((Poststate) upper).term;
+	  } else {
+	    upper = upper.applyPrestate();
+	  }
+	}
       }
 
       // replace needy
