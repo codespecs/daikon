@@ -9,6 +9,7 @@ www-dist:
 	cd .. && $(MAKE) www-dist
 
 pubs:
+	mkdir -p pubs
 	cd pubs && $(MAKE) -f ../pubs-sources/Makefile html
 
 .PHONY: pubs

@@ -26,7 +26,7 @@ index.html:
 	../pubs-sources/fix-homedir-tilde.pl $@
 
 # Creates *-abstract.html files.
-abstracts: abstracts-methodology abstracts-testsubject
+abstracts: abstracts-invariantdetection abstracts-methodology abstracts-testsubject
 
 abstracts-invariantdetection:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -to abstracts-unsplit.html -linknames ${MDEWWW}/pubs/link-names -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
