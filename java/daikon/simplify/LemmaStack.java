@@ -3,6 +3,10 @@ package daikon.simplify;
 import java.util.Vector;
 import java.util.Stack;
 import java.util.Random;
+import java.util.TreeSet;
+import java.util.SortedSet;
+import java.util.Iterator;
+import daikon.simplify.SimpUtil;
 import utilMDE.*;
 
 /**
@@ -319,11 +323,11 @@ public class LemmaStack {
     int spliceOut = -1;
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma lem = (Lemma)lemmas.elementAt(i);
-      if (lemmas.elementAt(i) == bad) {
+      if (lem == bad) {
         spliceOut = i;
       } else {
         try {
-          assume((Lemma)lemmas.elementAt(i));
+          assume(lem);
         } catch (TimeoutException e) {
           throw new SimplifyError("Timeout in contradiction removal");
         }
@@ -371,6 +375,41 @@ public class LemmaStack {
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma l = (Lemma)lemmas.elementAt(i);
       out.println("(BG_PUSH " + l.formula + ")");
+    }
+  }
+
+  private static SortedSet ints_seen = new TreeSet();
+
+  /** Keep track that we've seen this number in formulas, for the sake
+   * of assumeOrdering */
+  public static void noticeInt(long i) {
+    ints_seen.add(new Long(i));
+  }
+
+  public static void clearInts() {
+    ints_seen = new TreeSet();
+  }
+
+  /** For all the integers we've seen, tell Simplify about the
+   * ordering between them */
+  public void pushOrdering() throws SimplifyError {
+    Iterator longs_it = ints_seen.iterator();
+    long last_long = Long.MIN_VALUE;
+    while (longs_it.hasNext()) {
+      long l = ((Long)longs_it.next()).longValue();
+      if (l == Long.MIN_VALUE)
+        continue;
+      Assert.assertTrue(l != last_long);
+      String formula = "(< " + SimpUtil.formatInteger(last_long) + " " +
+        SimpUtil.formatInteger(l) + ")";
+      Lemma lem = new Lemma(last_long + " < " + l, formula);
+      pushLemma(lem);
+      if (l > -32000 && l < 32000) {
+        String eq_formula = "(EQ " + l + " " + SimpUtil.formatInteger(l) + ")";
+        Lemma eq_lem = new Lemma(l + " == " + l, eq_formula);
+        pushLemma(eq_lem);
+      }
+      last_long = l;
     }
   }
 }

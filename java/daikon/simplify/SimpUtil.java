@@ -7,7 +7,6 @@ import utilMDE.Assert;
  **/
 public class SimpUtil
 {
-
   public static void assert_well_formed(String s) {
     if (!Assert.enabled) {
       return;
@@ -51,4 +50,34 @@ public class SimpUtil
 //       Assert.assertTrue(paren == 0, "unbalanced parens in '" + s + "'");
   }
 
+  /**
+   * Represent a Java long integer as an uninterpreted function
+   * applied to 6 moderately sized integers, to work around Simplify's
+   * numeric limitations. The first integer is a sign, and the rest
+   * are 13-bit (base 8192) limbs in order from most to least
+   * significant.
+   **/
+  public static String formatInteger(long i) {
+    int sign;
+    int limbs[] = new int[5]; // limbs[0] is most significant
+    if (i == 0) {
+      sign = limbs[0] = limbs[1] = limbs[2] = limbs[3] = limbs[4] = 0;
+    } else if (i == Long.MIN_VALUE) {
+      sign = -1;
+      limbs[0] = 2048;
+      limbs[1] = limbs[2] = limbs[3] = limbs[4] = 0;
+    } else {
+      sign = 1;
+      if (i < 0) {
+        sign = -1;
+        i = -i;
+      }
+      for (int j = 4; j >= 0; j--) {
+        limbs[j] = (int)(i % 8192);
+        i /= 8192;
+      }
+    }
+    return "(|long-int| " + sign + " " + limbs[0] + " " + limbs[1] + " "
+      + limbs[2] + " " + limbs[3] + " " + limbs[4] + ")";
+  }
 }
