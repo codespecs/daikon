@@ -38,11 +38,11 @@ sub load_decls {
 	    my $lhashref = {};
 	    while (my $varname = getline(DECLS)) {
 		(defined (my $dtype = getline(DECLS)))
-		    or die "malformed decls file\n";
+		    or die "malformed decls file";
 		(defined (my $rtype = getline(DECLS)))
-		    or die "malformed decls file\n";
+		    or die "malformed decls file";
 		(defined (my $ltype = getline(DECLS)))
-		    or die "malformed decls file\n";
+		    or die "malformed decls file";
 		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
 	    }
 	    $$declshash{$currppt} = $lhashref;
@@ -52,7 +52,7 @@ sub load_decls {
 	    #then move on.
 	    $l = getline(DECLS);
 	} elsif ($l) {
-	    die "malformed decls file\n";
+	    die "malformed decls file";
 	}
 	$firstppt = 0;
     }
@@ -74,9 +74,9 @@ sub load_ppt {
 
     while (my $varname = getline($dtfh)) {
 	(defined (my $varval = getline($dtfh)))
-	    or die "malformed dtrace file\n";
+	    or die "malformed dtrace file";
 	(defined (my $modbit = getline($dtfh)))
-	    or die "malformed dtrace file\n";
+	    or die "malformed dtrace file";
 	die "duplicate entry in dtracefile for var $varname at $pptname\n"
 	    if (defined $$ppthash{$varname});
 	$$ppthash{$varname} = [$varval, $modbit];
