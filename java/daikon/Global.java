@@ -37,6 +37,17 @@ public final class Global {
 
   public final static Random random = new Random();
 
+  /* Expected behavior when changing modbits:
+    -changed       Set modbits to 1 iff the printed representation has changed.
+    
+    -addchanged    Set modbits to 1 if the printed representation has changed.
+                   Leave other modbits as is.  This is the default.
+		   
+    Set this boolean to true if you want the "addchanged" behavior. Set to 
+    False if you want the "changed" behavior
+  */
+  public final static boolean addChanged = true;
+  
 
   ///////////////////////////////////////////////////////////////////////////
   /// Variables
@@ -161,7 +172,11 @@ public final class Global {
   public final static boolean debugPptSlice = false;
   public final static boolean debugPptSliceGeneric = false;
   public final static boolean debugPptSliceSpecific = false;
-
+  //print out a new dtrace file with changed modbits
+  public final static boolean debugPrintDtrace = false;
+  
+ 
+  
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
