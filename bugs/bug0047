@@ -1,0 +1,25 @@
+Version:      $Id$
+Owner:        Mike <mernst>
+Cc:           Jeremy <mistere>
+Tool:         MergeESC
+Summary:      Inner class constructor invariants are not merged
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+[mistere]
+MergeESC is failing to merge requires and ensures clauses for inner
+class constructors.  I suspect it is a program point name matching
+problem.
+
+The test case is MapQuick.  Edit the Makefile to only instrument the
+PriorityQueue class.  PriorityQueue$Entry is the problematic inner
+class.  The precondition "value != null" is in the txt-daikon output
+but is not merged.
+
+--
+$Log$
+Revision 1.1  2002-04-28 13:28:16  mistere
+new bug0047
+
