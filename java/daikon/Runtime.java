@@ -127,7 +127,11 @@ public final class Runtime {
     dtrace.println();
     dtrace.println("# EOF (added by no_more_output)");
     dtrace.close();
-    dtrace = null;
+    // Don't set dtrace to null, because if we continue running, there will
+    // be many attempts to synchronize on it.  (Is that a performance
+    // bottleneck, if we continue running?)
+    // dtrace = null;
+    dtrace_closed = true;
 
     if (dtraceLimitTerminate) {
       System.err.println("Printed " + printedRecords + " records.  Exiting.");
@@ -145,6 +149,7 @@ public final class Runtime {
   // run in different files depending on the class the information is
   // about.
   public static PrintStream dtrace;
+  public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
   // happens, due to reflective loading of the target program that gets the
   // instrumented target program.  The instrumented program has a static
@@ -220,7 +225,7 @@ public final class Runtime {
   private static void addShutdownHook() {
     java.lang.Runtime.getRuntime().addShutdownHook(new Thread() {
         public void run() {
-          if (dtrace != null) {
+          if (! dtrace_closed) {
 
             // When the program being instrumented exits, the buffers
             // of the "dtrace" (PrintStream) object are not flushed,
