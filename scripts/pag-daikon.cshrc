@@ -35,3 +35,9 @@ setenv DFEJ_VERBOSE 1
 setenv BIBINPUTS .:/g2/users/mernst/bib:..:
 alias bibfind /g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde
 
+setenv EDITOR emacsclient
+setenv ALTERNATE_EDITOR emacs
+setenv VISUAL emacsclient
+
+# So that Eclipse is always started from the same directory.
+# alias eclipse 'eclipse -data $HOME/.eclipse''

@@ -37,3 +37,10 @@ export DFEJ_VERBOSE=1
 
 export BIBINPUTS=.:/g2/users/mernst/bib:..:
 alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
+
+export EDITOR=emacsclient
+export ALTERNATE_EDITOR=emacs
+export VISUAL=emacsclient
+
+# So that Eclipse is always started from the same directory.
+# alias eclipse='eclipse -data $HOME/.eclipse'
