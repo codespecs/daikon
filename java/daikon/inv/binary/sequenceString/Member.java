@@ -6,23 +6,24 @@ import utilMDE.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import java.util.*;
 
-public final class Member extends SequenceString {
+public final class Member extends SequenceString  {
 
   public final static boolean debugMember = false;
   // public final static boolean debugMember = true;
 
   protected Member(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.STRING);
-    Assert.assert(seqvar().rep_type == ProglangType.STRING_ARRAY);
+    Assert.assert(sclvar().rep_type == ProglangType.STRING );
+    Assert.assert(seqvar().rep_type == ProglangType.STRING_ARRAY );
   }
 
   public static Member instantiate(PptSlice ppt, boolean seq_first) {
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
-    if (isObviousMember(sclvar, seqvar)) {
+    if (isEqualToObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
       if (debugMember) {
         System.out.println("Member not instantiated (obvious): "
@@ -36,6 +37,33 @@ public final class Member extends SequenceString {
                          + sclvar.name + " in " + seqvar.name);
     }
     return new Member(ppt, seq_first);
+  }
+
+  public boolean isObviousImplied() {
+    VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
+    VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
+    return isEqualToObviousMember(sclvar, seqvar);
+  }
+
+  // Like isObviousMember, but also checks everything equal to the given
+  // variables.
+  public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
+    Assert.assert(sclvar.isCanonical());
+    Assert.assert(seqvar.isCanonical());
+    Vector scl_equalto = sclvar.equalTo();
+    scl_equalto.add(0, sclvar);
+    Vector seq_equalto = seqvar.equalTo();
+    seq_equalto.add(0, seqvar);
+
+    for (int sclidx=0; sclidx<scl_equalto.size(); sclidx++) {
+      for (int seqidx=0; seqidx<seq_equalto.size(); seqidx++) {
+        VarInfo this_sclvar = (VarInfo) scl_equalto.elementAt(sclidx);
+        VarInfo this_seqvar = (VarInfo) seq_equalto.elementAt(seqidx);
+        if (isObviousMember(this_sclvar, this_seqvar))
+          return true;
+      }
+    }
+    return false;
   }
 
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
@@ -68,30 +96,27 @@ public final class Member extends SequenceString {
     if (seqvar.isDerivedSubSequenceOf() != sclvar_seq)
       return false;
 
-
     // If the scalar is a positional element of the sequence from which
     // the sequence at hand was derived, then any relationship will be
     // (mostly) obvious by comparing the length of the sequence to the
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
 
-
     // [Do I need to treat sclvar_seq.derived in {SequenceMin, SequenceMax}
     // specially?]
-
 
     // B[I] in B[0..J]
     // I need to compare I to J.  This is a stop-gap that does only
     // a bit of that.
     // Need to completely cover the cases of
-    // SequenceInitial and SequenceStringSubscript.
+    // SequenceInitial and SequenceStringSubscript .
 
-    SequenceStringSubsequence seqsss = (SequenceStringSubsequence) seqvar.derived;
+    SequenceStringSubsequence  seqsss = (SequenceStringSubsequence ) seqvar.derived;
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
 
-    if (sclvar.derived instanceof SequenceStringSubscript) {
-      SequenceStringSubscript sclsss = (SequenceStringSubscript) sclvar.derived;
+    if (sclvar.derived instanceof SequenceStringSubscript ) {
+      SequenceStringSubscript  sclsss = (SequenceStringSubscript ) sclvar.derived;
       VarInfo scl_index = sclsss.sclvar();
       int scl_shift = sclsss.index_shift;
       if ((scl_index == seq_index)
@@ -140,7 +165,6 @@ public final class Member extends SequenceString {
     return false;
   }
 
-
   public String repr() {
     double probability = getProbability();
     return "Member" + varNames() + ": "
@@ -156,8 +180,7 @@ public final class Member extends SequenceString {
     }
   }
 
-
-  public void add_modified(String[] a, String i, int count) {
+  public void add_modified(String [] a, String  i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debugMember) {
         System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
@@ -167,7 +190,6 @@ public final class Member extends SequenceString {
     }
   }
 
-
   protected double computeProbability() {
     if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
@@ -176,4 +198,3 @@ public final class Member extends SequenceString {
   }
 
 }
-

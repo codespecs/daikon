@@ -17,6 +17,9 @@ TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'spli
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
 # are up-to-date.
 AUTO_GENERATED_FILES = \
+	PptSlice1.java \
+	PptSlice2.java \
+	PptSlice3.java \
 	inv/unary/scalar/LowerBound.java \
 	inv/unary/scalar/UpperBound.java \
 	inv/unary/scalar/OneOfScalar.java \
@@ -25,9 +28,8 @@ AUTO_GENERATED_FILES = \
 	inv/unary/sequence/EltOneOf.java \
 	inv/unary/stringsequence/EltOneOfString.java \
 	inv/unary/stringsequence/OneOfStringSequence.java \
-	PptSlice1.java \
-	PptSlice2.java \
-	PptSlice3.java
+	inv/binary/sequenceScalar/Member.java \
+	inv/binary/sequenceString/Member.java
 
 all:	all_directly
 
@@ -150,6 +152,12 @@ inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf-cpp.java
 
 inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRINGSEQUENCE)
+
+inv/binary/sequenceScalar/Member.java: inv/binary/Member-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+inv/binary/sequenceString/Member.java: inv/binary/Member-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 PptSlice1.java: PptSlice-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)

@@ -1,4 +1,32 @@
-package daikon.inv.binary.sequenceScalar;
+#if !(defined(SCALAR) || defined(STRING))
+#error "One of SCALAR or STRING should be defined"
+#endif
+
+#if defined(SCALAR)
+#define SEQUENCESCALAR SequenceScalar
+#define SEQUENCESCALARPKG sequenceScalar
+#undef SCALAR
+#define SCALAR long
+#define PROGLANG_INT ProglangType.INT
+#define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
+#define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
+#define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
+#elif defined(STRING)
+#define SEQUENCESCALAR SequenceString
+#define SEQUENCESCALARPKG sequenceString
+#undef SCALAR
+#define SCALAR String
+#define THIS_UNDEF_OF_STRING is because string is defined to "1" in cpp.
+#undef STRING
+#define PROGLANG_INT ProglangType.STRING
+#define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
+#define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
+#define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
+#else
+#error "One of SCALAR or STRING should be defined"
+#endif
+
+package daikon.inv.binary.SEQUENCESCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
@@ -8,15 +36,15 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import java.util.*;
 
-public final class Member extends SequenceScalar  {
+public final class Member extends SEQUENCESCALAR {
 
   public final static boolean debugMember = false;
   // public final static boolean debugMember = true;
 
   protected Member(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
-    Assert.assert(sclvar().rep_type == ProglangType.INT );
-    Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY );
+    Assert.assert(sclvar().rep_type == PROGLANG_INT);
+    Assert.assert(seqvar().rep_type == PROGLANG_INT_ARRAY);
   }
 
   public static Member instantiate(PptSlice ppt, boolean seq_first) {
@@ -96,27 +124,30 @@ public final class Member extends SequenceScalar  {
     if (seqvar.isDerivedSubSequenceOf() != sclvar_seq)
       return false;
 
+
     // If the scalar is a positional element of the sequence from which
     // the sequence at hand was derived, then any relationship will be
     // (mostly) obvious by comparing the length of the sequence to the
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
 
+
     // [Do I need to treat sclvar_seq.derived in {SequenceMin, SequenceMax}
     // specially?]
+
 
     // B[I] in B[0..J]
     // I need to compare I to J.  This is a stop-gap that does only
     // a bit of that.
     // Need to completely cover the cases of
-    // SequenceInitial and SequenceScalarSubscript .
+    // SequenceInitial and SEQUENCESCALARSUBSCRIPT.
 
-    SequenceScalarSubsequence  seqsss = (SequenceScalarSubsequence ) seqvar.derived;
+    SEQUENCESCALARSUBSEQUENCE seqsss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
 
-    if (sclvar.derived instanceof SequenceScalarSubscript ) {
-      SequenceScalarSubscript  sclsss = (SequenceScalarSubscript ) sclvar.derived;
+    if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
+      SEQUENCESCALARSUBSCRIPT sclsss = (SEQUENCESCALARSUBSCRIPT) sclvar.derived;
       VarInfo scl_index = sclsss.sclvar();
       int scl_shift = sclsss.index_shift;
       if ((scl_index == seq_index)
@@ -165,6 +196,7 @@ public final class Member extends SequenceScalar  {
     return false;
   }
 
+
   public String repr() {
     double probability = getProbability();
     return "Member" + varNames() + ": "
@@ -180,7 +212,8 @@ public final class Member extends SequenceScalar  {
     }
   }
 
-  public void add_modified(long [] a, long  i, int count) {
+
+  public void add_modified(SCALAR[] a, SCALAR i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debugMember) {
         System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
@@ -189,6 +222,7 @@ public final class Member extends SequenceScalar  {
       return;
     }
   }
+
 
   protected double computeProbability() {
     if (no_invariant)
