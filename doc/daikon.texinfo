@@ -33,7 +33,14 @@
 @titlepage
 @sp 10
 @c Could also use @title, @subtitle, @author here.
-@center @titlefont{The Daikon Invariant Detector User Manual}
+@center @titlefont{Daikon Invariant Detector User Manual}
+
+@sp 2
+@center Daikon version 2.5.0
+
+@sp 1
+@c Daikon version 2.5.0 date
+@center August 17, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -317,7 +324,7 @@ setenv CLASSPATH @var{parent}/daikon/java:
 The distribution includes compiled @file{.class} files, so you do not
 need to compile them yourself; but you may do so by typing @command{make}
 in any directory under @file{@var{parent}/daikon/java/}.  In order to
-compile Daikon, you will need the C preprocessor @command{cpp}.
+compile Daikon, you need the C preprocessor @command{cpp}.
 @end itemize
 
 @item
