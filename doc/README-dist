@@ -10,6 +10,25 @@ Proceedings of the 19th International Conference on Software Engineering
 http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html
 
 
+Installing the invariant detection engine
+=========================================
+
+1. Download the invariants.tar.gz file.
+2. In the directory where you want to install it, unpack the tarfile:
+     tar zxvf invariants.tar.gz
+   This creates an invariants/ subdirectory.
+3. Set the environment variable INVARIANTS_HOME to point the directory.
+   In csh:
+     setenv INVARIANTS_HOME /directory/goes/here
+   In sh:
+     INVARIANTS_HOME=/directory/goes/here
+     export INVARIANTS_HOME
+4. If you want to detect invariants in C code, download the appropriate
+   version of the C front end and rename it to edgcpfe.
+5. If you don't already have the Python programming language installed,
+   download it from http://www.python.org/.
+
+
 Using the invariant detection engine
 ====================================
 
@@ -26,63 +45,19 @@ There are three different front ends -- for C, Java, and Lisp -- which add
 instrumentation instructions.
 
 C front end:
-
- a. Run the instrumentor on your source files by issuing:
-   instrumentor <filename1>.c <filename2>.c ...
- b. The results of this run are that:
-   i) The instrumented source files are now labelled <filename1>.c
-<filename2>.c ...
-   ii) There is a declaration file associated with each source file labelled
-<filename>.c.decls.
-   iii) The original, uninstrumented files are renamed as <filename1>.c.uninst.
- c. Add your instrumented source files to the Makefile.  Alternatively, use your own
-makefile and edit it to include "dump_trace.c".
+ a. Run the instrumentor on your C source files:
+      instrumentor <filename1> <filename2> ...
+    The instrumentor:
+     * copies your original files to <filename1>.uninst
+     * overwrites the original files with instrumented versions
+     * creates declaration files named <filename>.c.decls
+    You may wish to perform this operation with a copy of your program,
+    to safeguard your original source code.
+ c. Create or modify a Makefile.  Either:
+     * add "dump_trace.c" to your Makefile, or
+     * add your source files to Makefile-sample
  d. Build your program in the usual way, perhaps by running "make"; this
     creates an instrumented executable.
-
-  [[
-    To use the latest and (possibly) greatest, get the (Solaris) binary from
-      ~jake/research/invariant/vortex/C++/front-end/release/bin/edgcpfe
-    and use dump_trace.h and dump-trace.o from
-      ~jake/research/invariant/vortex/C++/front-end/release/dump_trace_src
-    You will also need a file label.txt which contains a single integer.
-  ]]
-
-  [[
-    Here is a set of directions from Jake Cockrell <jake@cs.washington.edu>.
-    I was once told that the above didn't work, but these did.  (Someone
-    please tell me what is wrong with the above, or that nothing is wrong
-    with it, so we can merge these different instructions.)
-
-      The main directory you will be working out of is:
-      /projects/se/people/jake/invariants/vortex/C++/front-end/release
-
-      The executable is run out of the directory release/bin like this
-      edgcpfe --c -D__ANSIC__ -D__sparc <filename>.c
-
-      It produces your instrumented file <filename>.int.c
-
-      Move this file to /release/dump_trace_src.  Open the Makefile (I know
-      this is gross) and change the first two lines so that it is building
-      <filename>.int.c and writing to <filename>.exe.
-
-      gmake in this directory and you have your instrumented executable.
-      Everytime you run this, you'll get a trace file with variable values for
-      that run.  Collect a bunch of these and you can run the invariant engine
-      on them.  
-
-      You can find the invariant engine here:
-      ~jake/research/invariant/invariants/invariants.py
-
-      you can just copy this.  run 'python' in the directory you copied
-      invariants.py.  enter the command 'import invariants' to load the code.
-      Then enter 'invariants.read_invs('<directory where your trace files
-      are>/*.trace', 1).  This will read in all the trace file data.  Finally,
-      type 'invariants.all_numeric_invariants()'.  This will output all the
-      invariants detected for each instrumentation point.  You might want to
-      pipe this output to a file, or run python through emacs so you can just
-      save it that way.
-  ]]
 
 Lisp front end:
   (load "load-all")
@@ -94,8 +69,11 @@ Lisp front end:
   ;; run all test-* functions; each test-* function creates one *.dtrace file
   (test-all)
 
-  ;; For efficiency, you might want to compile the Lisp files and run the
-  ;; compiled versions.
+  For efficiency, you might want to compile the Lisp files and run the
+  compiled versions:
+    (compile-all)	;; only needs to be done once (ever)
+    (load-all)		;; only needs to be done explicitly after compiling
+
 
 Java front end:
   This is still under development.
@@ -115,6 +93,9 @@ the Lisp and Java front ends) or a .trace file (for the C front end).  Run
 the program over some test suite in order to create a collection of trace
 files.
 
+When running a program in C, you will need a file label.txt which contains
+a single integer.  (One is provided in the distribution.)
+
 
 Step 3:  Detect invariants in the data trace files
 --------------------------------------------------
@@ -127,17 +108,18 @@ Python from http://www.python.org/.
 
 In Python, issue the following commands:
 
-  import invariants		# load the invariants.py file
-  invariants.read_invs('p*.dtrace', 'clear first')	# read the trace files
-  invariants.all_numeric_invariants()	# compute and print invariants
+  import invariants			      # load the invariants.py file
+  invariants.read_declarations('*.decls',1)   # read the function declarations
+  invariants.read_data_traces('p*.dtrace')    # read the trace files
+  invariants.all_numeric_invariants()	      # compute and print invariants
 
-read_invs takes an optional regular expression for function names, so that
-only certain functions are processed.  (This can make the invariant
-detection engine run faster.)  For details, see its documentation string in
-its definition in invariants.py.
+The three functions above each take an optional regular expression for
+program point, so that only certain program points are processed.  (This
+can make the invariant detection engine run faster.)  For details, see
+the documentation strings in their definitions in invariants.py.
 
 To do all this from a single shell command, do the following:
-  python -O -c "__debug__ = 0; import invariants; invariants.read_invs('$inv/jake/testsuite/replace/traces/*.trace',1); invariants.all_numeric_invariants()"
+  python -O -c "__debug__ = 0; import invariants; invariants.read_declarations('*.decls',1); invariants.read_data_traces('p*.dtrace'); invariants.all_numeric_invariants()"
 
 In the output, the "_orig" suffix refers to the original value of a formal
 parameter, for parameters possibly modified in the function body.
@@ -145,7 +127,3 @@ parameter, for parameters possibly modified in the function body.
 the instrumentation was inserted; invariants are program-point-specific.
 There is some redundancy in the output (e.g., both "Z = max(Y, X)" and
 "Z = max(X, Y)" are reported, as are both "Y > X" and "X < Y").
-
-
-
-
