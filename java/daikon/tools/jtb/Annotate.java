@@ -20,7 +20,7 @@ import java.io.*;
  * .java files are left unmodified.)
  * <p>
  **/
-class Annotate {
+public class Annotate {
 
   // ESC format: Invariants are inserted as follows:
   //  * invariants at method entry become "requires"
