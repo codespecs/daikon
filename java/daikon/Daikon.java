@@ -87,10 +87,13 @@ public final class Daikon {
       System.exit(1);
     }
 
+    final String suppress_cont_SWITCH = "suppress_cont";
+    final String suppress_post_SWITCH = "suppress_post";
+    final String prob_limit_SWITCH = "prob_limit";
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt("suppress_cont", LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("suppress_post", LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("prob_limit", LongOpt.REQUIRED_ARGUMENT, null, 0)
+      new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
     int c;
@@ -99,11 +102,11 @@ public final class Daikon {
       case 0:
 	// got a long option
 	String option_name = longopts[g.getLongind()].getName();
-	if ("suppress_cont".equals(option_name)) {
+	if (suppress_cont_SWITCH.equals(option_name)) {
 	  suppress_implied_controlled_invariants = true;
-	} else if ("suppress_pre".equals(option_name)) {
+	} else if (suppress_post_SWITCH.equals(option_name)) {
 	  suppress_implied_postcondition_over_prestate_invariants = true;
-	} else if ("prob_limit".equals(option_name)) {
+	} else if (prob_limit_SWITCH.equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
