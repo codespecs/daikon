@@ -36,11 +36,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.0
+@center Daikon version 2.3.1
 
 @sp 1
-@c Daikon version 2.3.0 date
-@center September 11, 2001
+@c Daikon version 2.3.1 date
+@center October  8, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,7 +59,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon invariant detector</h1>
 
 This is the manual for the Daikon invariant detector.
-It describes Daikon version 2.3.0, released September 11, 2001.
+It describes Daikon version 2.3.1, released October  8, 2001.
 
 @end html
 
@@ -3281,7 +3281,7 @@ Daikon homepage, @url{http://sdg.lcs.mit.edu/daikon/}.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.0, released September 11, 2001.
+This manual describes Daikon version 2.3.1, released October  8, 2001.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

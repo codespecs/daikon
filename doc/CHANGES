@@ -1,17 +1,17 @@
 History of Daikon changes
 
-This file lists significant user-visible changes to Daikon.
-For documentation of Daikon, see the Daikon manual.  Its source is file
-daikon.texinfo; formatted, it appears as daikon.html, daikon.info,
-daikon.dvi, daikon.ps, or daikon.pdf.
+This file lists significant user-visible changes to Daikon.  (Many other
+changes are not noted here.)  For documentation of Daikon, see the Daikon
+manual.  Its source is file daikon.texinfo; formatted, it appears as
+daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
-2.3.1:
+2.3.1 (8 October 2001):
 
 Added Context GUI, which shows relevant invariants in a separate window as
 you browse code in a text editor.
 
 Added many index entries to manual.
 
-23 June 2001:
+2.3.0 (11 September 2001):
 
 Added linear ternary invariants, of the form z = ax + by + c.
