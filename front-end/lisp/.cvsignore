@@ -1,0 +1,7 @@
+*.decls
+*.dtrace
+*.invs
+*.invs-goal
+xi*.lisp
+*-instrumented.lisp
+gries-instrumented.decls-orig
