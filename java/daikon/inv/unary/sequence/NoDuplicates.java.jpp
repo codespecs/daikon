@@ -2,12 +2,10 @@
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
-
-
 #endif
 
 #if !(defined(TYPEDOUBLE) || defined(TYPELONG))
-#error "TYPEDOUBLE or TYPELONG must be defined"
+  #error "TYPEDOUBLE or TYPELONG must be defined"
 #endif
 
 
@@ -267,27 +265,28 @@ public class CLASSNAME
           return true;
         }
 
-        /** // [INCR]
+        /* [INCR]
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
-        PptSlice2 slice_2seq = parent.findSlice_unordered(v1, v2);
+        if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
+        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
+        PptSlice2 slice_2seq = parent.findSlice(v1, v2);
         if (slice_2seq == null) {
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
-        } else if (slice_2seq.num_samples() > 0) {
+        } else  {
           // slice_2seq != null
           SUBSEQUENCE ss = SUBSEQUENCE.find(slice_2seq);
           if (ss == null) {
             // System.out.println("NoDuplicates.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
-          } else if (ss.justified()) {
+          } else {
             // System.out.println("NoDuplicates.isObviousImplied: found SubSequence: " + ss.repr());
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
-              debug.debug ("Returning true because: " + ss.repr());
               return true;
             }
           }
         }
-        **/ // [INCR]
+        */ // ... [INCR]
       }
     }
 

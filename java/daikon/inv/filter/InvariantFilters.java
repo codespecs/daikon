@@ -288,7 +288,7 @@ public class InvariantFilters {
    **/
   public static List addEqualityInvariants( List invariants ) {
 
-    return invariants; // INCR
+    return invariants;
 
     /* [INCR]
     if (invariants.isEmpty())

@@ -115,7 +115,7 @@ public final class Equality
   /**
    * Return the canonical VarInfo of this.  Note that the leader never
    * changes.
-   * @return the canonical VarInfo of this.
+   * @return the canonical VarInfo of this
    **/
   public VarInfo leader() {
     if (leaderCache == null) {
@@ -321,7 +321,7 @@ public final class Equality
         if (var == leader) continue;
         String[] form =
           VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-            { leader().name, var.name }, true); // elementwise
+            { leader.name, var.name }, true); // elementwise
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
         result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);

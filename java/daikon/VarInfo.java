@@ -7,16 +7,14 @@ import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.VarInfoName.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.binary.twoScalar.*;
-import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
-import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Represents information about a particular variable for a program
@@ -106,7 +104,7 @@ public final class VarInfo
   public Vector derivees;
   */
 
-  // Reinstating this in the way Mike and I discussed
+  // Reinstating this in the way Mike and I discussed.
   // We don't know about canBeMissing or canBeNull anymore, since we
   // see data incrementally, instead of slurping it all first.
   // [[INCR]] ....
@@ -124,11 +122,11 @@ public final class VarInfo
   public VarInfo equal_to;      // the canonical representative to which
                                 // this variable is equal; may be itself;
                                 // should not be null.
-  */
+  [INCR] */
   /* [INCR]
   public boolean is_dynamic_constant;  // required if dynamic_constant==null
   public Object dynamic_constant;
-  */
+  [INCR] */
 
   /**
    * Which equality group this belongs to.  Replaces equal_to.  Never null
@@ -325,7 +323,7 @@ public final class VarInfo
         derivees_new.add(deriv_new);
       }
     }
-    */
+    [INCR] */
     return a_new;
   }
 
@@ -557,7 +555,7 @@ public final class VarInfo
     // return (dynamic_constant != null);
     return is_dynamic_constant;
   }
-  */
+  */ // ... [INCR]
   public boolean isStaticConstant() {
     // return (static_constant_value != null);
     return is_static_constant;
@@ -568,7 +566,7 @@ public final class VarInfo
     /* [INCR]
     } else if (isDynamicConstant()) {
       return dynamic_constant;
-    */
+    */ // ... [INCR]
     } else {
       throw new Error("Variable " + name + " is not constant");
     }
@@ -868,17 +866,17 @@ public final class VarInfo
   }
 
 
-  // [[INCR]] ....
+  /* [[INCR]] ....
   // We don't know this anymore, since we see data incrementally,
   // instead of all at once.
-  //    public boolean canBeMissingCheck() {
-  //      return (canBeMissing
-  //              && (Daikon.invariants_check_canBeMissing
-  //                  || (Daikon.invariants_check_canBeMissing_arrayelt
-  //                      // Probably bad to repeat this all the time at runtime.
-  //                      && (name.name().indexOf("[") != -1)))); // XXX ???
-  //    }
-  // .... [[INCR]]
+  public boolean canBeMissingCheck() {
+    return (canBeMissing
+            && (Daikon.invariants_check_canBeMissing
+                || (Daikon.invariants_check_canBeMissing_arrayelt
+                    // Probably bad to repeat this all the time at runtime.
+                    && (name.name().indexOf("[") != -1)))); // XXX ???
+  }
+  */ // .... [[INCR]]
 
   /** Convenience methods that return information from the ValueTuple. **/
   public int getModified(ValueTuple vt) {
@@ -1193,7 +1191,7 @@ public final class VarInfo
       }
 
       // For esc_output and java_output, omit noting that varibles are unmodified.
-      if (Daikon.output_style == OutputFormat.ESC || Daikon.output_style == OutputFormat.JAVA) {
+      if (Daikon.output_style == OutputFormat.ESCJAVA || Daikon.output_style == OutputFormat.JAVA) {
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }
@@ -1442,9 +1440,9 @@ public final class VarInfo
   }
 
   /**
-   * A wrapper you would put around VarInfoName.simplify_name() that
-   * uses VarInfo information to guess whether "obj" should logically
-   * be treated as just the hash code of "obj", rather than the whole
+   * A wrapper around VarInfoName.simplify_name() that also uses
+   * VarInfo information to guess whether "obj" should logically be
+   * treated as just the hash code of "obj", rather than the whole
    * object.
    **/
   public String simplifyFixup(String str) {
@@ -1526,7 +1524,6 @@ public final class VarInfo
    *  This is a dynamic check, and so must not be called while Daikon is
    *  inferencing.
    **/
-
   public static boolean compare_vars(VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
     Assert.assertTrue (!Daikon.isInferencing);
     // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
@@ -1703,7 +1700,7 @@ public final class VarInfo
         return vi.name;
       }
     }
-    */
+    */ // ... [INCR]
 
     // Didn't find an exactly equal variable; try LinearBinary.
     {

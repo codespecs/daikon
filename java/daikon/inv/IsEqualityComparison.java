@@ -4,10 +4,10 @@ import utilMDE.*;
 
 /** This Filter returns true if its argument is an Invariant which satisfies
  * the following conditions:
- * <pre>
- *  * the Invariant is a Comparison (which reports <, >, =, <=, or >=)
- *  * the relationship reported by the comparison is = (not <, <=, >, or >=)
- * </pre>
+ * <ul>
+ *  <li> the Invariant is a Comparison (which reports <, >, =, <=, or >=)
+ *  <li> the relationship reported by the comparison is = (not <, <=, >, or >=)
+ * </ul>
  * This does not consider PairwiseIntComparison to be an equality invariant.
  **/
 public final class IsEqualityComparison implements Filter {

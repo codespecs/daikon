@@ -16,9 +16,9 @@ import daikon.suppress.*;
 
 
 /**
- * Base implementation for Invariant objects.  Intended to be
- * subclassed but not to be directly instantiated.  Rules/assumptions
- * for invariants:
+ * Base implementation for Invariant objects.
+ * Intended to be subclassed but not to be directly instantiated.
+ * Rules/assumptions for invariants:
  *
  * <li> For each program point's set of VarInfos, there exists exactly
  * no more than one invariant of its type.  For example, between
@@ -935,10 +935,8 @@ public abstract class Invariant
   }
 
   /**
-   * Look up a previously instantiated Invariant but only if
-   * unsuppressed.
+   * Look up a previously instantiated Invariant but only if unsuppressed.
    **/
-
   public static Invariant findUnsuppressed(Class invclass, PptSlice ppt) {
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -1315,16 +1313,15 @@ public abstract class Invariant
   }
 
 
-  // [INCR] ...
   /**
    * @return true if this invariant is controlled by another invariant
    **/
-  /*
+  /* [INCR]
   public boolean isControlled() {
     Vector controllers = this.find_controlling_invariants();
     return (controllers.size() > 0);
   }
-  */
+  */ // ... [INCR]
 
   /**
    * @return true if this invariant is only over prestate variables .
@@ -1340,7 +1337,7 @@ public abstract class Invariant
    * point invariant orig(x)+3=orig(y), then this methods returns
    * true.
    **/
-  /*
+  /*  [INCR]
   public boolean isImpliedPostcondition() {
     PptTopLevel topLevel = ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
@@ -1382,12 +1379,12 @@ public abstract class Invariant
     }
     return true;
   }
-  */
+  */ // ... [INCR]
 
   /**
    * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().
    **/
-  /*
+  /*  [INCR]
   private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
     new DefaultIsSameInvariantNameExtractor() {
         public VarInfoName getFromFirst(VarInfo var)
@@ -1399,7 +1396,7 @@ public abstract class Invariant
    * Returns a Vector[Invariant] which are the sameInvariant as this,
    * drawn from the invariants of this.ppt.parent.controllers.
    **/
-  /*
+  /*  [INCR]
   public Vector find_controlling_invariants()
   {
     // We used to assume there was at most one of these, but that
@@ -1441,9 +1438,9 @@ public abstract class Invariant
 
     return results;
   }
-  */
+  */ // ... [INCR]
   // For reproducible results when debugging
-  /*
+  /*  [INCR]
   static Comparator invComparator = new Invariant.ClassVarnameComparator();
   public Vector find_controlling_invariants_sorted() {
     Vector unsorted = find_controlling_invariants();
@@ -1454,8 +1451,7 @@ public abstract class Invariant
       result.add(invs[i]);
     return result;
   }
-  */
-  // ... [INCR]
+  */ // ... [INCR]
 
 
   // The notion of "interesting" embodied by this method is

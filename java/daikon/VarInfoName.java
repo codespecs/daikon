@@ -417,7 +417,7 @@ public abstract class VarInfoName
     Replacer r = new Replacer(node, replacement);
 
     // This code used to loop as long as node was in result, but this isn't
-    // necessary - all occurances are replaced by replacer.
+    // necessary -- all occurances are replaced by replacer.
 
     result = r.replace(result).intern();
     return result;

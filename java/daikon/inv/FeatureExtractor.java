@@ -40,7 +40,7 @@ public final class FeatureExtractor {
   //   -o FileName:   output file name *Required
   //   -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
   //   -s FileName:   name of output file for invariant descriptions
-  //  -r repeats:    number of combinations of feature vectors
+  //   -r repeats:    number of combinations of feature vectors
   //   -p             do not output if no positive feature vectors are present
 
   private static String USAGE =

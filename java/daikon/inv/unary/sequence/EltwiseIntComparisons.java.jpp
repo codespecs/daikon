@@ -5,7 +5,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
-#error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
+  #error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
 #if defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL)
@@ -369,19 +369,20 @@ public class CLASSNAME
     }
 
     {
-    // some relations imply others as follows: < -> <=, > -> >=
-    // == -> <=, >=
+      // some relations imply others as follows: < -> <=, > -> >=
+      // == -> <=, >=
 
-    // This code lets through some implied invariants, here is how:
-    // In the ESC, JML, Java modes of output, the invariants are guarded before
-    // printing.  This guarding makes some of the invariants that are searched for
-    // (example, NoDuplicates) unable to be found since it won't find something of
-    // the form (a -> NoDuplicates).  This can cause cases to exist, for example,
-    // the invariants (a -> b[] sorted by !=), (a -> b[] has no duplicates) existing
-    // in the same ppt where one is obviously implied by the other. I am not sure
-    // currently of the best way with dealing with this, but I am going to allow
-    // these other invariants to exist for now because they are not wrong, just
-    // obvious.
+      // This code lets through some implied invariants, here is how:
+      // In the ESC, JML, Java modes of output, the invariants are guarded
+      // before printing.  This guarding makes some of the invariants that
+      // are searched for (example, NoDuplicates) unable to be found since it
+      // won't find something of the form (a -> NoDuplicates).  This can
+      // cause cases to exist, for example, the invariants (a -> b[] sorted
+      // by !=), (a -> b[] has no duplicates) existing in the same ppt where
+      // one is obviously implied by the other. I am not sure currently of
+      // the best way with dealing with this, but I am going to allow these
+      // other invariants to exist for now because they are not wrong, just
+      // obvious.
 
       Iterator invs = ppt.invs.iterator();
       while (invs.hasNext()) {

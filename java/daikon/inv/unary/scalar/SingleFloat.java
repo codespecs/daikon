@@ -55,7 +55,7 @@ public abstract class SingleFloat
     return;
   }
 
-  // This has no additional suppression factories from Invariant's.
+  // This has no additional suppression factories beyond those of Invariant.
 }
 
 

@@ -328,7 +328,7 @@ public final class Daikon {
 
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
-  // Return an array of {decls, dtrace, spinfo, map} filenames; each array
+  // Return an array of {decls, dtrace, spinfo, map} files; each array
   // element is a set.
   private static Set[] read_options(String args[])
   {

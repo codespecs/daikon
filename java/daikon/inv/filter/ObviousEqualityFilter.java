@@ -95,7 +95,7 @@ class ObviousEqualityFilter extends InvariantFilter {
         return true;
       }
     }
-    */
+    */ // ... [INCR]
 
 //        VarInfo[] variables = invariant.ppt.var_infos; // note: only 2 variables
 //        for (int i = 0; i < variables.length; i++) {

@@ -13,7 +13,7 @@ class OnlyConstantVariablesFilter extends InvariantFilter {
       return false;
     }
 
-    return false; // INCR
+    return false;
 
     /* [INCR]
     if (invariant instanceof Implication) {

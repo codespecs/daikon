@@ -12,7 +12,7 @@ class NonCanonicalVariablesFilter extends InvariantFilter {
   //  not an equality Comparison invariant.  We need to keep equality Comparison
   //  invariants so that later on, Equality invariants will be made out of them.
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    return false; // INCR
+    return false;
     /* [INCR]
     if (invariant instanceof Implication) {
       return ((Implication)invariant).consequent().hasNonCanonicalVariable();

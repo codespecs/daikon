@@ -22,15 +22,14 @@ public class Implication
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020722L;
 
+  public Invariant predicate() { return left; }
+  public Invariant consequent() { return right; }
   public boolean iff;
 
   protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
     super(ppt, predicate, consequent);
     this.iff = iff;
   }
-
-  public Invariant predicate() { return left; }
-  public Invariant consequent() { return right; }
 
   /**
    * Creates a new Implication Invariant from the predicate,
@@ -114,7 +113,6 @@ public class Implication
   }
 
   /* [INCR]
-
   public boolean hasOnlyConstantVariables() {
     // The old version of this code only looked at the predicate, but
     // it was almost never used, since the OnlyConstantVariablesFilter
@@ -125,7 +123,7 @@ public class Implication
     return consequent.hasOnlyConstantVariables()
       || predicate.hasOnlyConstantVariables();
   }
-  */
+  */ // ... [INCR]
 
   // An implication is only interesting if both the predicate and
   // consequent are interesting

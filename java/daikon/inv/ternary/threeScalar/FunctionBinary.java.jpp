@@ -7,7 +7,7 @@ The correct way to build the system is to run 'make'.
 
 
 #if !(defined(TYPELONG) || defined(TYPEDOUBLE))
-#error "TYPELONG OR DOUBLETYPE must be defined"
+  #error "TYPELONG OR DOUBLETYPE must be defined"
 #endif
 
 #if defined(TYPELONG)
@@ -20,8 +20,8 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "FunctionBinary"
   #define OP_LIST * / % << >> >>> & && ^ | ||
   #define FUNCTION_LIST min max gcd pow
-  #elif defined(TYPEDOUBLE)
-#define CLASSNAME FunctionBinaryFloat
+#elif defined(TYPEDOUBLE)
+  #define CLASSNAME FunctionBinaryFloat
   #define CORECLASSNAME FunctionBinaryCoreFloat
   #define PRIMITIVE double
   #define SUPERCLASS ThreeFloat

@@ -5,37 +5,41 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(TYPELONG) || defined(TYPEDOUBLE))
-#error "TYPELONG or TYPEDOUBLE must be defined"
+  #error "TYPELONG or TYPEDOUBLE must be defined"
 #endif
 
 #if defined(TYPELONG)
-#define CLASSNAME SingleScalarSequenceFactory
-#define ONEOFSEQUENCE OneOfSequence
-#define ELTONEOF EltOneOf
-#define ELTNONZERO EltNonZero
-#define NODUPLICATES NoDuplicates
-// #define ELTWISEINTCOMPARISON EltwiseIntComparison
-#define ELTLOWERBOUND EltLowerBound
-#define ELTUPPERBOUND EltUpperBound
-#define SEQINDEXCOMPARISON SeqIndexComparison
-#define SEQINDEXNONEQUAL SeqIndexNonEqual
-#define ARRAY_TYPE INT_ARRAY
-#define ISTYPE elementIsIntegral()
-#define COMMONSEQUENCE CommonSequence
+  #define CLASSNAME SingleScalarSequenceFactory
+  #define ONEOFSEQUENCE OneOfSequence
+  #define ELTONEOF EltOneOf
+  #define ELTNONZERO EltNonZero
+  #define NODUPLICATES NoDuplicates
+  #if 0
+    // #define ELTWISEINTCOMPARISON EltwiseIntComparison
+  #endif
+  #define ELTLOWERBOUND EltLowerBound
+  #define ELTUPPERBOUND EltUpperBound
+  #define SEQINDEXCOMPARISON SeqIndexComparison
+  #define SEQINDEXNONEQUAL SeqIndexNonEqual
+  #define ARRAY_TYPE INT_ARRAY
+  #define ISTYPE elementIsIntegral()
+  #define COMMONSEQUENCE CommonSequence
 #elif defined(TYPEDOUBLE)
-#define CLASSNAME SingleFloatSequenceFactory
-#define ONEOFSEQUENCE OneOfFloatSequence
-#define ELTONEOF EltOneOfFloat
-#define ELTNONZERO EltNonZeroFloat
-#define NODUPLICATES NoDuplicatesFloat
-// #define ELTWISEINTCOMPARISON EltwiseFloatComparison
-#define ELTLOWERBOUND EltLowerBoundFloat
-#define ELTUPPERBOUND EltUpperBoundFloat
-#define SEQINDEXCOMPARISON SeqIndexComparisonFloat
-#define SEQINDEXNONEQUAL SeqIndexNonEqualFloat
-#define ARRAY_TYPE DOUBLE_ARRAY
-#define ISTYPE elementIsFloat()
-#define COMMONSEQUENCE CommonFloatSequence
+  #define CLASSNAME SingleFloatSequenceFactory
+  #define ONEOFSEQUENCE OneOfFloatSequence
+  #define ELTONEOF EltOneOfFloat
+  #define ELTNONZERO EltNonZeroFloat
+  #define NODUPLICATES NoDuplicatesFloat
+  #if 0
+  // #define ELTWISEINTCOMPARISON EltwiseFloatComparison
+  #endif
+  #define ELTLOWERBOUND EltLowerBoundFloat
+  #define ELTUPPERBOUND EltUpperBoundFloat
+  #define SEQINDEXCOMPARISON SeqIndexComparisonFloat
+  #define SEQINDEXNONEQUAL SeqIndexNonEqualFloat
+  #define ARRAY_TYPE DOUBLE_ARRAY
+  #define ISTYPE elementIsFloat()
+  #define COMMONSEQUENCE CommonFloatSequence
 #endif
 
 

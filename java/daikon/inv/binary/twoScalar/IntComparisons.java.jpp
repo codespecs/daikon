@@ -1,9 +1,10 @@
-
 #if 0
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
+#endif
 
+#if 0
 This file is the source for all scalar (integer) and float simple two
 variable  comparisons.  One of the defines immediately below must be
 defined in the Makefile to specify which version should be built.
@@ -11,7 +12,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
 #endif
 
 #if !(defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(NONEQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
-#error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, NONEQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
+  #error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, NONEQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
 #if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) \
@@ -206,17 +207,17 @@ public final class INTEQUAL
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
-#if (defined(NONEQUAL))
+  #if (defined(NONEQUAL))
     if (dkconfig_integral_only == true) {
       if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
         return null;
       }
     }
-#else
+  #else
     if (! (var1.file_rep_type.ISTYPE && var2.file_rep_type.ISTYPE)) {
       return null;
     }
-#endif
+  #endif
 #endif
 
     if (debug.isDebugEnabled() || ppt.debugged) {
@@ -266,7 +267,7 @@ invariants.
     boolean obvious_le = false;
     boolean obvious_ge = false;
 
-    // Commented out temporarily (October 24, 2001)
+    // Commented out temporarily (October 24, 2001).
     if (false && (seqvar1 != null) && (seqvar2 != null)) {
       Derivation deriv1 = var1.derived;
       Derivation deriv2 = var2.derived;
