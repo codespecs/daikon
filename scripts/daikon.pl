@@ -61,6 +61,17 @@ sub find {
     return @result;
 }
 
+sub which {
+    my $command = shift;
+    my @result;
+    open(LINES, "which $command |");
+    while ($line = <LINES>) {
+	chomp $line;
+	push @result, $line;
+    }
+    return @result;
+}
+
 # do cleanup first
 
 if ($cleanup) {
@@ -85,8 +96,7 @@ $mainsrc .= ".java";
 die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
 
 # check to see that we have jikes avaiable
-$error = system("jikes");
-die ("Put jikes in your path before using this tool") if $error;
+die ("Put jikes in your path before using this tool") unless which('jikes');
 
 # check the program make sure it starts out with no errors
 $cp = "$DAIKON_WRAPPER_CLASSPATH:.";
