@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        mistere <mistere>
+Owner:        Jeremy <mistere>
 Tool:         Daikon
 Summary:      RFE: Report variables all equal to same constant directly; do no report equal to selves and one is constant.
 Severity:     RFE
@@ -7,8 +7,22 @@ Status:       New
 Reproducible: Yes
 Description:
 
+If the invariants "x == 5" and "y == 5" are true, Daikon should (for
+ease of use) report
+  x == 5
+  y == 5
+instead of
+  x == y
+  x == 5
+
+That is, it should report equal to a constant directly; it should not report
+variables equal to others when they are both constants.
+
 --
 $Log$
-Revision 1.1  2002-03-13 20:44:11  mistere
+Revision 1.2  2002-03-13 20:45:59  mistere
+I hate vi.
+
+Revision 1.1  2002/03/13 20:44:11  mistere
 new bug0023
 
