@@ -311,7 +311,8 @@ case "$1" in
         echo "$progname: Show a bug report."
         BUGFILE=`printf "bug%04i" "$2"`
         [ -f "$BUGFILE" ] || die "no such bugfile \`$BUGFILE'."
-        more $BUGFILE
+        # more $BUGFILE # bad for emacs shell mode
+        cat $BUGFILE
         ;;
     list)
         echo "$progname: List bug reports."
