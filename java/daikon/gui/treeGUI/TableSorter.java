@@ -20,7 +20,7 @@ package daikon.gui.treeGUI; // For simplicity, adjust the package.  -Melissa
  *
  * @version 1.5 12/17/97
  * @author Philip Milne
- */
+ **/
 
 import java.util.*;
 

@@ -193,7 +193,7 @@ public final class CLASSNAME
       // the points in a triple are nearby, then roundoff errors in the
       // computation of the slope can be non-negligible.
 
-      //skip points we've already seen
+      // skip points we've already seen
       for (int i=0; i<values_seen; i++)
         if (def_points[i].equals (x, y, z))
           return;
@@ -201,7 +201,7 @@ public final class CLASSNAME
       def_points[values_seen] = new Point (x, y, z);
       values_seen++;
 
-      //if we've seen enough values to create the equation
+      // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
 
         // Find the three points with the maximum separation
@@ -211,7 +211,7 @@ public final class CLASSNAME
           return;
         }
 
-        //calculate the coefficients of the equation (a, b, c)
+        // calculate the coefficients of the equation (a, b, c)
         double coef[];
         try {
           coef = calc_tri_linear (def_points);
@@ -323,7 +323,7 @@ public final class CLASSNAME
                        + b + ")");
         return (true);
       } else {
-        return false;
+        return (false);
       }
     } else { // this point doesn't increase the separation
 
@@ -349,15 +349,15 @@ public final class CLASSNAME
       // small x1-x2 might result in 0, even if x1-x2!=0.
     #endif
 
-  //make sure both points are specified
-  if ((p1 == null) || (p2 == null)) {
-    return (0);
-  }
+    // make sure both points are specified
+    if ((p1 == null) || (p2 == null)) {
+      return (0);
+    }
 
-  double xsep = (p1.x - p2.x);
-  double ysep = (p1.y - p2.y);
-  double zsep = (p1.z - p2.z);
-  return xsep*xsep + ysep*ysep + zsep*zsep;
+    double xsep = (p1.x - p2.x);
+    double ysep = (p1.y - p2.y);
+    double zsep = (p1.z - p2.z);
+    return xsep*xsep + ysep*ysep + zsep*zsep;
   }
 
   /**
@@ -365,9 +365,10 @@ public final class CLASSNAME
    * places them as the first three elements of pa.
    *
    * @param pa  Array of points.  Must have at least 3 elements.  Can be any
-   *            length and can contain nulls (which will be ignored).  Will
-   *            be modified so that the first three elements contain the
-   *            points with the maximum total separation.
+   *            length and can contain nulls (which will be ignored).
+   *            Is side-effected so that the first three elements contain the
+   *            points with the maximum total separation; this may introduce
+   *            duplicates into the array.
    *
    * @return the maximum separation found.
    */
@@ -408,11 +409,11 @@ public final class CLASSNAME
       }
     }
 
-  pa[0] = p1;
-  pa[1] = p2;
-  pa[2] = p3;
+    pa[0] = p1;
+    pa[1] = p2;
+    pa[2] = p3;
 
-  return (max_separation);
+    return (max_separation);
   }
 
 

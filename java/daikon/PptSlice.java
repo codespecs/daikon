@@ -581,15 +581,15 @@ public abstract class PptSlice
     return result;
   }
 
-  void addView(Ppt slice) {
+  void addSlice(Ppt slice) {
     throw new Error("Don't add views on a slice.");
   }
 
-  void addViews(Vector slices) {
+  void addSlices(Vector slices) {
     throw new Error("Don't add views on a slice.");
   }
 
-  void removeView(Ppt slice) {
+  void removeSlice(Ppt slice) {
     throw new Error("Don't remove view from a slice.");
   }
 

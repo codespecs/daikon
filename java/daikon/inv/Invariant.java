@@ -91,13 +91,13 @@ public abstract class Invariant
   public static boolean dkconfig_simplify_define_predicates = false;
 
   /**
-   * Real number between 0 and 0.1.  The maximum percentage difference
+   * Real number between 0 and 0.1.  The maximum relative difference
    * between two floats for fuzzy comparisons.  Larger values will
    * result in floats that are relatively farther apart being treated
    * as equal.  A value of 0 essentially disables fuzzy comparisons.
    * Specifically, if the equation 'abs (1 - f1/f2) <= perc' is true,
    * then the two doubles (f1 and f2) will be treated as equal by
-   * daikon.
+   * Daikon.
    */
   public static double dkconfig_fuzzy_ratio = 0.0001;
 

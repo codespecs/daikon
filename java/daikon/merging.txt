@@ -54,7 +54,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
   date +"%d-%b-%Y %H:%M:%S"
 
 (7) Add a line to the top of the merge history (at the bottom of this
-    file) noting the precise time you ran the cvs command in step 3.
+    file) noting the precise time you ran the cvs command in step 6.
 
 (8) Use PCL-CVS (or some other, less-capable tool) to fix all
     conflicts created during the merge, so that the project compiles.
@@ -79,7 +79,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
   make diffs
 
 (11) Commit the files under $inv/daikon.ver3 to CVS, using a log
-     message that communicates the time you ran step 3 (which is the
+     message that communicates the time you ran step 6 (which is the
      same as the time at the top of the merge history).  Be sure to
      commit your changes to this file (merging.txt), as well.
 
@@ -88,6 +88,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+25-Apr-2003 13:42:18 by JHP
 20-Apr-2003 08:05:46 by MDE
 23-Jan-2003 01:29:52 by SMcC
 20-Jan-2003 19:38:39 by AMD

@@ -1,5 +1,29 @@
 package daikon.tools.compare;
 
+/* This is a standalone program that compares the invariants from two
+ * versions of (and/or runs of) a program, and determines using
+ * Simplify whether the invariants from one logically imply the
+ * invariants from the other. These are referred to below as the
+ * "test" and "application" invariants, and the conditions that are
+ * checked is that the each test precondition (ENTER point invariant)
+ * must be implied some combination of application preconditions, and
+ * that each application postcondition (EXIT point invariant) muse be
+ * implied by some combination of test postconditions and application
+ * preconditions.
+ */
+
+/* This tool doesn't yet have a proper command line interface; in
+ * particular, it only compares the program points for a single
+ * function on an invocation. At the moment, a typical invocation
+ * might look like:
+ *
+ * java daikon.tools.compare.LogicalCompare app.inv test.inv
+ *      foo():::ENTER foo():::EXIT 33
+ *
+ * where 33 is a set of flags in binary. Feel free to complain to the
+ * author (smcc) about this if you want to use the program
+ * yourself. */
+
 import java.util.*;
 import java.io.*;
 import org.apache.log4j.Logger;
@@ -32,6 +56,8 @@ public class LogicalCompare {
 //       "      Suppress display of obvious postconditions on prestate.",
 //       "  --" + Daikon.suppress_redundant_SWITCH,
 //       "      Suppress display of logically redundant invariants."}, lineSep);
+  // Throw out invariants which can't be formatted for Simplify. But
+  // noisily, since we should be able to handle most invariants now.
   private static Vector filterSimplifyFormat(Vector/*<Invariant>*/ invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
@@ -46,6 +72,8 @@ public class LogicalCompare {
     return new_invs;
   }
 
+  // Throw out invariants that are probably not true in general, and
+  // represent only a limitation of the way a program was tested.
   private static Vector filterTrueHeuristics(Vector/*<Invariant>*/ invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
@@ -64,19 +92,22 @@ public class LogicalCompare {
     return new_invs;
   }
 
+  // This is a modified version of the method with the same name from
+  // the DerivedParameterFilter, with an exception for invariants
+  // indicating that variables are unchanged (except that that
+  // excpetion is currently turned off)
   private static boolean shouldDiscardInvariant( Invariant inv ) {
     for (int i = 0; i < inv.ppt.var_infos.length; i++) {
       VarInfo vi = inv.ppt.var_infos[i];
       // ppt has to be a PptSlice, not a PptTopLevel
-      PrintInvariants.debugFiltering.debug("\tconsidering DPF for " + vi.name.name() + "\n");
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
         if (IsEqualityComparison.it.accept( inv )) {
           Comparison comp = (Comparison)inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();
-          boolean vars_are_same = var1.name.applyPrestate().equals(var2.name) || var2.name.applyPrestate().equals(var1.name);
-          PrintInvariants.debugFiltering.debug("\t\tvars are same? " + String.valueOf(vars_are_same) + "\n");
+          boolean vars_are_same = var1.name.applyPrestate().equals(var2.name)
+            || var2.name.applyPrestate().equals(var1.name);
           //if (vars_are_same) return false;
         }
 //         if (inv instanceof OneOf || inv instanceof OneOfString ||
@@ -89,6 +120,10 @@ public class LogicalCompare {
     return false;
   }
 
+  // Throw out invariants that represent implementation details of a
+  // routine, rather than facts about its externally visible
+  // behavior. At the mooment, essentially replicates the
+  // DerivedParameterFilter.
   private static Vector filterRemoveImplementation(Vector invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
@@ -99,6 +134,7 @@ public class LogicalCompare {
     return new_invs;
   }
 
+  // Throw out implication invariants.
   private static Vector filterRemoveImplications(Vector/*<Invariant>*/ invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
@@ -109,6 +145,8 @@ public class LogicalCompare {
     return new_invs;
   }
 
+  // Translate a vector of Invariants into a vector of Lemmas, without
+  // changing the invariants.
   private static Vector translateStraight(Vector/*<Invariant>*/ invs) {
     Vector/*<Lemma>*/ lemmas = new Vector();
     for (int i = 0; i < invs.size(); i++) {
@@ -118,6 +156,9 @@ public class LogicalCompare {
     return lemmas;
   }
 
+  // Translate a vector of Invariants into a vector of Lemmas,
+  // discarding any invariants that represent only facts about a
+  // routine's prestate.
   private static Vector translateRemovePre(Vector/*<Invariant>*/ invs) {
     Vector/*<Lemma>*/ lemmas = new Vector();
     for (int i = 0; i < invs.size(); i++) {
@@ -128,6 +169,10 @@ public class LogicalCompare {
     return lemmas;
   }
 
+  // Translate a vector of Invariants into a vector of Lemmas, adding
+  // orig(...) to each variable so that the invariant will be true
+  // about the precondition of a routine when it is examined in the
+  // poststate context.
   private static Vector translateAddOrig(Vector/*<Invariant>*/ invs) {
     Vector/*<Lemma>*/ lemmas = new Vector();
     for (int i = 0; i < invs.size(); i++) {
@@ -139,6 +184,8 @@ public class LogicalCompare {
 
   private static LemmaStack lemmas;
 
+  // Print a vector of invariants and their Simplift translations, for
+  // debugging purposes.
   private static void printInvariants(Vector/*<Invariant>*/ invs) {
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
@@ -152,6 +199,9 @@ public class LogicalCompare {
     }
   }
 
+  // Check that each of the invariants in CONSEQUENCES follows from
+  // zero or more of the invariants in ASSUMPTIONS. Returns the number
+  // of invariants that can't be proven to follow.
   private static int evaluateImplications(Vector assumptions,
                                           Vector consequences)
   throws SimplifyError {

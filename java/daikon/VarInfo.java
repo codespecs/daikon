@@ -761,7 +761,6 @@ public final class VarInfo
 
 
   private boolean _isDerivedParamAndUninteresting() {
-
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug("isDPAU: name is " + name.name() + "\n");
       PrintInvariants.debugFiltering.debug("  isPrestate is " + String.valueOf(isPrestate()) + "\n");
