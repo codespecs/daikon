@@ -18,20 +18,6 @@ public abstract class VarInfoName
   implements Serializable, Comparable
 {
 
-  // It would be nice if a generalized form of the mechanics of
-  // interning were abstracted out somewhere.
-  private static final WeakHashMap internTable = new WeakHashMap();
-  public VarInfoName intern() {
-    Object lookup = internTable.get(this);
-    if (lookup != null) {
-      WeakReference ref = (WeakReference)lookup;
-      return (VarInfoName)ref.get();
-    } else {
-      internTable.put(this, new WeakReference(this));
-      return this;
-    }
-  }
-
   /**
    * Given the standard String representation of a variable name (from
    * a decls file), return the corresponding VarInfoName.  This cannot
@@ -98,12 +84,53 @@ public abstract class VarInfoName
   private String simplify_name_cached = null;
   protected abstract String simplify_name_impl();
 
+  // It would be nice if a generalized form of the mechanics of
+  // interning were abstracted out somewhere.
+  private static final WeakHashMap internTable = new WeakHashMap();
+  public VarInfoName intern() {
+    Object lookup = internTable.get(this);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (VarInfoName)ref.get();
+    } else {
+      internTable.put(this, new WeakReference(this));
+      return this;
+    }
+  }
+
+  // ============================================================
+  // The usual Object methods
+
+  public boolean equals(Object o) {
+    return (o instanceof VarInfoName) && equals((VarInfoName) o);
+  }
+
+  public boolean equals(VarInfoName other) {
+    return (other == this) || ((other != null) && (this.name().equals(other.name())));
+  }
+
+  public int hashCode() {
+    return name().hashCode();
+  }
+
+  public int compareTo(Object o) {
+    return name().compareTo(((VarInfoName) o).name());
+  }
+
+  public String toString() {
+    return name();
+  }
+
+  // ============================================================
+  // Static inner classes which form the expression langugage
+
   /**
    * A simple identifier like "a", "this.foo", etc.
    **/
   public static class Simple extends VarInfoName {
     public final String name;
     public Simple(String name) {
+      Assert.assert(name != null);
       this.name = name;
     }
     protected String name_impl() {
@@ -126,6 +153,9 @@ public abstract class VarInfoName
       }
       return prefix + working + suffix;
     }
+    public Object accept(Visitor v) {
+      return v.visitSimple(this);
+    }
   }
 
   /**
@@ -143,6 +173,7 @@ public abstract class VarInfoName
   public static class SizeOf extends VarInfoName {
     public final VarInfoName sequence;
     public SizeOf(VarInfoName sequence) {
+      Assert.assert(sequence != null);
       this.sequence = sequence;
     }
     protected String name_impl() {
@@ -153,6 +184,9 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl() {
       return "(arrayLength " + sequence.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitSizeOf(this);
     }
   }
 
@@ -171,6 +205,8 @@ public abstract class VarInfoName
     public final String function;
     public final VarInfoName argument;
     public FunctionOf(String function, VarInfoName argument) {
+      Assert.assert(function != null);
+      Assert.assert(argument != null);
       this.function = function;
       this.argument = argument;
     }
@@ -182,6 +218,9 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl() {
       return "(" + function + " " + argument.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitFunctionOf(this);
     }
   }
 
@@ -199,6 +238,7 @@ public abstract class VarInfoName
   public static class TypeOf extends VarInfoName {
     public final VarInfoName term;
     public TypeOf(VarInfoName term) {
+      Assert.assert(term != null);
       this.term = term;
     }
     protected String name_impl() {
@@ -209,6 +249,9 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl() {
       return "(typeof " + term.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitTypeOf(this);
     }
   }
 
@@ -226,6 +269,7 @@ public abstract class VarInfoName
   public static class Prestate extends VarInfoName {
     public final VarInfoName term;
     public Prestate(VarInfoName term) {
+      Assert.assert(term != null);
       this.term = term;
     }
     protected String name_impl() {
@@ -235,8 +279,10 @@ public abstract class VarInfoName
       return "\\old(" + term.esc_name() + ")";
     }
     protected String simplify_name_impl() {
-       // XXX Is this right ???
       return "(orig " + term.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitPrestate(this);
     }
   }
 
@@ -256,6 +302,38 @@ public abstract class VarInfoName
   //        + s.substring(rparenpos+1);
 
   /**
+   * Returns a name for a the poststate value of this object; form is
+   * like "new(this)" or "\new(this)".
+   **/
+  public VarInfoName applyPoststate() {
+    return (new Poststate(this)).intern();
+  }
+
+  /**
+   * The poststate value of a term, like "new(term)".  Only used
+   * within prestate, so like "orig(this.myArray[new(index)]".
+   **/
+  public static class Poststate extends VarInfoName {
+    public final VarInfoName term;
+    public Poststate(VarInfoName term) {
+      Assert.assert(term != null);
+      this.term = term;
+    }
+    protected String name_impl() {
+      return "post(" + term.name() + ")";
+    }
+    protected String esc_name_impl() {
+      return "\\new(" + term.esc_name() + ")";
+    }
+    protected String simplify_name_impl() {
+      return "(post " + term.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitPoststate(this);
+    }
+  }
+
+  /**
    * Returns a name for the decrement of this term, like "this-1".
    **/
   public VarInfoName applyDecrement() {
@@ -268,16 +346,50 @@ public abstract class VarInfoName
   public static class Decrement extends VarInfoName {
     public final VarInfoName term;
     public Decrement(VarInfoName term) {
+      Assert.assert(term != null);
       this.term = term;
     }
     protected String name_impl() {
       return term.name() + "-1";
     }
     protected String esc_name_impl() {
-      return term.name() + "-1";
+      return term.esc_name() + "-1";
     }
     protected String simplify_name_impl() {
-      return "(- " + term.name() + " 1)";
+      return "(- " + term.simplify_name() + " 1)";
+    }
+    public Object accept(Visitor v) {
+      return v.visitDecrement(this);
+    }
+  }
+
+  /**
+   * Returns a name for the increment of this term, like "this+1".
+   **/
+  public VarInfoName applyIncrement() {
+    return (new Increment(this)).intern();
+  }
+
+  /**
+   * One more than some other value
+   **/
+  public static class Increment extends VarInfoName {
+    public final VarInfoName term;
+    public Increment(VarInfoName term) {
+      Assert.assert(term != null);
+      this.term = term;
+    }
+    protected String name_impl() {
+      return term.name() + "+1";
+    }
+    protected String esc_name_impl() {
+      return term.esc_name() + "+1";
+    }
+    protected String simplify_name_impl() {
+      return "(+ " + term.simplify_name() + " 1)";
+    }
+    public Object accept(Visitor v) {
+      return v.visitIncrement(this);
     }
   }
 
@@ -295,18 +407,23 @@ public abstract class VarInfoName
   public static class Elements extends VarInfoName {
     public final VarInfoName term;
     public Elements(VarInfoName term) {
+      Assert.assert(term != null);
       this.term = term;
     }
     protected String name_impl() {
-      return term.name() + "[]";
+      return name_impl("");
+    }
+    protected String name_impl(String index) {
+      return term.name() + "[" + index + "]";
     }
     protected String esc_name_impl() {
-       // XXX Is this right ???
-      return "\\elements(" + term.esc_name() + ")";
+      return "\\elements(" + term.esc_name() + ")"; // XXX
     }
     protected String simplify_name_impl() {
-       // XXX Is this right ???
       return "(elements " + term.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitElements(this);
     }
   }
 
@@ -315,31 +432,42 @@ public abstract class VarInfoName
    * "this[i]"
    **/
   public VarInfoName applySubscript(VarInfoName index) {
+    Assert.assert(index != null);
     // a[] -> a[index]
-    return (new Subscript(this, index)).intern();
+    // orig(a[]) -> orig(a[post(index)])
+    ElementsFinder finder = new ElementsFinder(this);
+    Elements elems = finder.elems();
+    Assert.assert(elems != null);
+    if (finder.inPre() && !(index instanceof Prestate)) {
+      index = index.applyPrestate();
+    }
+    Replacer r = new Replacer(elems, (new Subscript(elems, index)).intern());
+    return r.replace(this).intern();
   }
 
   /**
    * An element from a sequence, like "sequence[index]"
    **/
   public static class Subscript extends VarInfoName {
-    public final VarInfoName sequence;
+    public final Elements sequence;
     public final VarInfoName index;
-    public Subscript(VarInfoName sequence, VarInfoName index) {
+    public Subscript(Elements sequence, VarInfoName index) {
+      Assert.assert(sequence != null);
+      Assert.assert(index != null);
       this.sequence = sequence;
       this.index = index;
     }
     protected String name_impl() {
-       // XXX Is this right ???
-      return null;
+      return sequence.name_impl(index.name());
     }
     protected String esc_name_impl() {
-      // XXX Is this right ???
-      return null;
+      return sequence.esc_name() + "sel" + index.esc_name(); // XXX
     }
     protected String simplify_name_impl() {
-      // XXX Is this right ???
-      return null;
+      return "(select " + sequence.simplify_name() + " " + index.simplify_name() + ")";
+    }
+    public Object accept(Visitor v) {
+      return v.visitSubscript(this);
     }
   }
 
@@ -399,6 +527,60 @@ public abstract class VarInfoName
 //    }
 
   /**
+   * Returns a name for a slice of element selected from a sequence,
+   * like "this[i..j]".  If an endpoint is null, it means "from the
+   * start" or "to the end".
+   **/
+  public VarInfoName applySlice(VarInfoName i, VarInfoName j) {
+    // a[] -> a[index]
+    // orig(a[]) -> orig(a[post(index)])
+    ElementsFinder finder = new ElementsFinder(this);
+    Elements elems = finder.elems();
+    Assert.assert(elems != null);
+    if (finder.inPre()) {
+      if ((i != null) && !(i instanceof Prestate)) {
+	i = i.applyPrestate();
+      }
+      if ((j != null) && !(j instanceof Prestate)) {
+	j = j.applyPrestate();
+      }
+    }
+    Replacer r = new Replacer(finder.elems(), (new Slice(elems, i, j)).intern());
+    return r.replace(this).intern();
+  }
+
+  /**
+   * An slice of elements from a sequence, like "sequence[i..j]"
+   **/
+  public static class Slice extends VarInfoName {
+    public final Elements sequence;
+    public final VarInfoName i, j;
+    public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
+      Assert.assert(sequence != null);
+      Assert.assert((i != null) || (j != null));
+      this.sequence = sequence;
+      this.i = i;
+      this.j = j;
+    }
+    protected String name_impl() {
+      return sequence.name_impl("" +
+				((i == null) ? "0" : i.name()) +
+				".." +
+				((j == null) ? ""  : j.name())
+				);
+    }
+    protected String esc_name_impl() {
+      return sequence.esc_name() + "[i..j]"; // XXX
+    }
+    protected String simplify_name_impl() {
+      return "(select " + sequence.simplify_name() + " " + "i..j)";
+    }
+    public Object accept(Visitor v) {
+      return v.visitSlice(this);
+    }
+  }
+
+  /**
    * Return an array of two strings:
    * an esc forall quantifier, and
    * the expression for the element at index i of the array
@@ -439,96 +621,223 @@ public abstract class VarInfoName
     };
   }
 
-  // public static boolean isOrigVarName(String s) {
-  //   return ((s.startsWith("orig(") && s.endsWith(")"))
-  //           || (s.startsWith("\\old(") && s.endsWith(")")));
-  // }
+  // ============================================================
+  // Visitor framework for easier processing
 
-//    // takes an "orig()" var and gives a pair of [name, esc_name] for a
-//    // variable or expression in the post-state which is equal to this one.
-//    public String[] postStateEquivalent() {
-//      return otherStateEquivalent(true);
-//    }
+  public abstract Object accept(Visitor v);
 
-//    public String[] preStateEquivalent() {
-//      return otherStateEquivalent(false);
-//    }
-
-//    public String[] otherStateEquivalent(boolean post) {
-
-//      // Below is equivalent to:
-//      // Assert.assert(post == isOrigVar());
-//      if (post != isOrigVar()) {
-//        throw new Error("Shouldn't happen (should it?): "
-//                        + (post ? "post" : "pre") + "StateEquivalent(" + name + ")");
-//        // return new String[] { name, esc_name };
-//      }
-
-//      Assert.assert(isCanonical());
-//      Vector equal_vars = null; // XXX equalTo();
-//      for (int i=0; i<equal_vars.size(); i++) {
-//        VarInfo vi = (VarInfo)equal_vars.elementAt(i);
-//        if (post != vi.isOrigVar()) {
-//          // System.out.println("postStateEquivalent(" + name + ") = " + vi.name);
-//          return new String[] { vi.name.name(), vi.name.esc_name() };
-//        }
-//      }
-
-//      // Didn't find an exactly equal variable; try LinearBinary.
-//      // (Should also try other exact invariants.)
-//      {
-//        Vector lbs = LinearBinary.findAll(this);
-//        for (int i=0; i<lbs.size(); i++) {
-//          LinearBinary lb = (LinearBinary) lbs.elementAt(i);
-//          String lb_format = null;
-//          String lb_format_esc = null;
-//          if (this.equals(lb.var2())
-//              && (post != lb.var1().isOrigVar())) {
-//            lb_format = lb.format();
-//            lb_format_esc = lb.format_esc();
-//          } else if (this.equals(lb.var1())
-//                     && (post != lb.var2().isOrigVar())) {
-//            if ((lb.core.a == 1) || (lb.core.a == -1)) {
-//              lb_format = lb.format_reversed();
-//              lb_format_esc = lb.format_esc_reversed();
-//            }
-//          }
-//          if (lb_format != null) {
-//            int eq_pos;
-//            eq_pos = lb_format.indexOf(" == "); // "interned"
-//            Assert.assert(eq_pos != -1);
-//            lb_format = lb_format.substring(eq_pos + 4);
-//            eq_pos = lb_format_esc.indexOf(" == "); // "interned"
-//            Assert.assert(eq_pos != -1);
-//            lb_format_esc = lb_format_esc.substring(eq_pos + 4);
-//            return new String[] { lb_format, lb_format_esc };
-//          }
-//        }
-//      }
-
-//      // Can't find post-state equivalent.
-//      return null;
-//    }
-
-
-  public boolean equals(Object o) {
-    return (o instanceof VarInfoName) && equals((VarInfoName) o);
+  public static interface Visitor {
+    public Object visitSimple(Simple o);
+    public Object visitSizeOf(SizeOf o);
+    public Object visitFunctionOf(FunctionOf o);
+    public Object visitTypeOf(TypeOf o);
+    public Object visitPrestate(Prestate o);
+    public Object visitPoststate(Poststate o);
+    public Object visitIncrement(Increment o);
+    public Object visitDecrement(Decrement o);
+    public Object visitElements(Elements o);
+    public Object visitSubscript(Subscript o);
+    public Object visitSlice(Slice o);
   }
 
-  public boolean equals(VarInfoName other) {
-    return (other == this) || ((other != null) && (this.name().equals(other.name())));
+  /**
+   * Traverse the tree elements which have exactly one branch (so the
+   * traversal order doesn't matter).
+   **/
+  public static abstract class AbstractVisitor
+    implements Visitor
+  {
+    public Object visitSimple(Simple o) {
+      // nothing to do; leaf node
+      return null;
+    }
+    public Object visitSizeOf(SizeOf o) {
+      return o.sequence.accept(this);
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      return o.argument.accept(this);
+    }
+    public Object visitTypeOf(TypeOf o) {
+      return o.term.accept(this);
+    }
+    public Object visitPrestate(Prestate o) {
+      return o.term.accept(this);
+    }
+    public Object visitPoststate(Poststate o) {
+      return o.term.accept(this);
+    }
+    public Object visitIncrement(Increment o) {
+      return o.term.accept(this);
+    }
+    public Object visitDecrement(Decrement o) {
+      return o.term.accept(this);
+    }
+    public Object visitElements(Elements o) {
+      return o.term.accept(this);
+    }
+    // leave abstract; traversal order and return values matter
+    public abstract Object visitSubscript(Subscript o);
+    // leave abstract; traversal order and return values matter
+    public abstract Object visitSlice(Slice o);
+  }
+    
+  /**
+   * Use to traverse a tree, find the first (elements ...) node, and
+   * report whether it's in pre or post-state.
+   **/
+  public static class ElementsFinder
+    extends AbstractVisitor
+  {
+    public ElementsFinder (VarInfoName name) {
+      elems = (Elements) name.accept(this);
+    }
+
+    // state and accessors
+    private boolean pre = false;
+    private Elements elems = null;
+
+    public boolean inPre() {
+      return pre;
+    }
+    public Elements elems() {
+      return elems;
+    }
+
+    // visitor methods which get the job done
+    public Object visitPrestate(Prestate o) {
+      pre = true;
+      return super.visitPrestate(o);
+    }
+    public Object visitPoststate(Poststate o) {
+      pre = false;
+      return super.visitPoststate(o);
+    }
+    public Object visitElements(Elements o) {
+      return o;
+    }
+    public Object visitSubscript(Subscript o) {
+      // I don't think we can get here in practice
+      throw new UnsupportedOperationException();
+    }
+    public Object visitSlice(Slice o) {
+      // I don't think we can get here in practice
+      throw new UnsupportedOperationException();
+    }
   }
 
-  public int hashCode() {
-    return name().hashCode();
+  /**
+   * A quantifier visitor can be used to search a tree and return all
+   * unquantified sequences (e.g. a[] or a[i..j], and also all Simple
+   * nodes (variable names).  This is useful for restating the name in
+   * terms of a quantification.
+   **/
+  public static class QuantifierHelper
+    extends AbstractVisitor
+  {
+    public QuantifierHelper(VarInfoName root) {
+      root.accept(this);
+    }
+
+    // state and accessors
+    private List simples; // List[Simple]
+    private List unquant; // List[Elements || Slice]
+
+    public Iterator simples() {
+      return Collections.unmodifiableCollection(simples).iterator();
+    }
+    public Iterator unquants() {
+      return Collections.unmodifiableCollection(unquant).iterator();
+    }
+
+    // visitor methods which get the job done
+    public Object visitSimple(Simple o) {
+      simples.add(o);
+      return super.visitSimple(o);
+    }
+    public Object visitElements(Elements o) {
+      unquant.add(o);
+      return super.visitElements(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      o.index.accept(this);
+      // don't visit the sequence; it is fixed with an exact
+      // subscript, so we don't want to include it in the results
+      return o.sequence.term.accept(this);
+    }
+    public Object visitSlice(Slice o) {
+      o.i.accept(this);
+      o.j.accept(this);
+      // visit the sequence, since it needs to be quantified
+      return o.sequence.accept(this);
+    }
   }
 
-  public int compareTo(Object o) {
-    return name().compareTo((VarInfoName) o);
-  }
+  /**
+   * A Replacer is a Visitor which makes a copy of a tree, but
+   * replaces some node (and it's children) with another.
+   **/
+  public static class Replacer
+    extends AbstractVisitor
+  {
+    private final VarInfoName old;
+    private final VarInfoName _new;
+    public Replacer(VarInfoName old, VarInfoName _new) {
+      this.old = old;
+      this._new = _new;
+    }
 
-  public String toString() {
-    return name();
+    public VarInfoName replace(VarInfoName root) {
+      return (VarInfoName) root.accept(this);
+    }
+
+    public Object visitSimple(Simple o) {
+      return (o == old) ? _new : o;
+    }
+    public Object visitSizeOf(SizeOf o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitSizeOf(o)).applySize();
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitFunctionOf(o)).applyFunction(o.function);
+    }
+    public Object visitTypeOf(TypeOf o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitTypeOf(o)).applyTypeOf();
+    }
+    public Object visitPrestate(Prestate o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitPrestate(o)).applyPrestate();
+    }
+    public Object visitPoststate(Poststate o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitPoststate(o)).applyPoststate();
+    }
+    public Object visitIncrement(Increment o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitIncrement(o)).applyIncrement();
+    }
+    public Object visitDecrement(Decrement o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitDecrement(o)).applyDecrement();
+    }
+    public Object visitElements(Elements o) {
+      return (o == old) ? _new :
+	((VarInfoName) super.visitElements(o)).applyElements();
+    }
+    public Object visitSubscript(Subscript o) {
+      return (o == old) ? _new :
+	((VarInfoName) o.sequence.accept(this)).
+	applySubscript((VarInfoName) o.index.accept(this));
+    }
+    public Object visitSlice(Slice o) {
+      return (o == old) ? _new :
+	((VarInfoName) o.sequence.accept(this)).
+	applySlice((VarInfoName) o.i.accept(this),
+		   (VarInfoName) o.j.accept(this));
+    }
   }
 
 }
+
+
