@@ -17,6 +17,8 @@ public class MasterTester extends TestCase {
 
   public static Test suite() {
     TestSuite result = new TestSuite();
+    result.addTest(new TestSuite(TestUtilMDE.class));
+
     // To determine what should be in this list:
     //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
 
