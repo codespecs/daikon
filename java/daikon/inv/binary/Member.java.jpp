@@ -536,11 +536,25 @@ public final class CLASSNAME
   }
 
   public String format_simplify() {
-    // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { seqvar().name, sclvar().name });
-    return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
+    if (Invariant.dkconfig_simplify_define_predicates) {
+      String[] seq_name =
+        VarInfoName.QuantHelper.simplifyNameAndBounds(seqvar().name);
+      String scalar_name = sclvar().name.simplify_name();
+      if (seq_name == null) {
+        return "format_simplify can't handle this sequence: "
+          + format();
+      }
+      return "(member " + scalar_name + " " +
+        seq_name[0] + " " + seq_name[1] + " " + seq_name[2] + ")";
+    } else {
+      // "exists x in a..b : P(x)" gets written as
+      // "!(forall x in a..b : !P(x))"
+      String[] form =
+        VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+          { seqvar().name, sclvar().name });
+      return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
+        + form[3] + ")";
+    }
   }
 #endif
 
