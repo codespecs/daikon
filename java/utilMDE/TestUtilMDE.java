@@ -54,7 +54,7 @@ public final class TestUtilMDE extends TestCase {
      if (! result)
        System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
                           + ", " + ArraysMDE.toString(a2));
-     assert(result);
+     assertTrue(result);
 //      assert(Arrays.equals(a1, a2),
 //  	   "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
    }
@@ -109,16 +109,16 @@ public final class TestUtilMDE extends TestCase {
 
   public static void testArraysMDE() {
     // public static int min(int[] a)
-    assert(ArraysMDE.min(new int[] { 1,2,3 }) == 1);
-    assert(ArraysMDE.min(new int[] { 2,33,1 }) == 1);
-    assert(ArraysMDE.min(new int[] { 3,-2,1 }) == -2);
-    assert(ArraysMDE.min(new int[] { 3 }) == 3);
+    assertTrue(ArraysMDE.min(new int[] { 1,2,3 }) == 1);
+    assertTrue(ArraysMDE.min(new int[] { 2,33,1 }) == 1);
+    assertTrue(ArraysMDE.min(new int[] { 3,-2,1 }) == -2);
+    assertTrue(ArraysMDE.min(new int[] { 3 }) == 3);
 
     // public static int max(int[] a)
-    assert(ArraysMDE.max(new int[] { 1,2,3 }) == 3);
-    assert(ArraysMDE.max(new int[] { 2,33,1 }) == 33);
-    assert(ArraysMDE.max(new int[] { 3,-2,1 }) == 3);
-    assert(ArraysMDE.max(new int[] { 3 }) == 3);
+    assertTrue(ArraysMDE.max(new int[] { 1,2,3 }) == 3);
+    assertTrue(ArraysMDE.max(new int[] { 2,33,1 }) == 33);
+    assertTrue(ArraysMDE.max(new int[] { 3,-2,1 }) == 3);
+    assertTrue(ArraysMDE.max(new int[] { 3 }) == 3);
 
     // public static int[] min_max(int[] a)
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 1,2,3 }),
@@ -131,31 +131,31 @@ public final class TestUtilMDE extends TestCase {
 			 new int[] { 3,3 });
 
     // public static int sum(int[] a)
-    assert(0 == ArraysMDE.sum(new int[0]));
-    assert(10 == ArraysMDE.sum(new int[] {10}));
-    assert(10 == ArraysMDE.sum(new int[] {1, 2, 3, 4}));
+    assertTrue(0 == ArraysMDE.sum(new int[0]));
+    assertTrue(10 == ArraysMDE.sum(new int[] {10}));
+    assertTrue(10 == ArraysMDE.sum(new int[] {1, 2, 3, 4}));
 
     // public static int sum(int[][] a)
-    assert(0 == ArraysMDE.sum(new int[0][0]));
-    assert(78  == ArraysMDE.sum
+    assertTrue(0 == ArraysMDE.sum(new int[0][0]));
+    assertTrue(78  == ArraysMDE.sum
            (new int[][] {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}));
 
     // public static double sum(double[] a)
-    assert(0 == ArraysMDE.sum(new double[0]));
-    assert(3.14 == ArraysMDE.sum(new double[] {3.14}));
-    assert(8.624 == ArraysMDE.sum(new double[] {3.14, 2.718, -1.234, 4}));
+    assertTrue(0 == ArraysMDE.sum(new double[0]));
+    assertTrue(3.14 == ArraysMDE.sum(new double[] {3.14}));
+    assertTrue(8.624 == ArraysMDE.sum(new double[] {3.14, 2.718, -1.234, 4}));
 
     // public static double sum(double[][] a)
-    assert(0 == ArraysMDE.sum(new double[0][0]));
-    assert(79.5  == ArraysMDE.sum(new double[][] {{1.1, 2.2, 3.3, 4.4},
+    assertTrue(0 == ArraysMDE.sum(new double[0][0]));
+    assertTrue(79.5  == ArraysMDE.sum(new double[][] {{1.1, 2.2, 3.3, 4.4},
                                                   {5.5, 6, 7, 8},
                                                   {9, 10, 11, 12}}));
 
     // public static int element_range(int[] a)
-    assert(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
-    assert(ArraysMDE.element_range(new int[] { 2,33,1 }) == 32);
-    assert(ArraysMDE.element_range(new int[] { 3,-2,1 }) == 5);
-    assert(ArraysMDE.element_range(new int[] { 3 }) == 0);
+    assertTrue(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
+    assertTrue(ArraysMDE.element_range(new int[] { 2,33,1 }) == 32);
+    assertTrue(ArraysMDE.element_range(new int[] { 3,-2,1 }) == 5);
+    assertTrue(ArraysMDE.element_range(new int[] { 3 }) == 0);
 
     // public static int indexOf(Object[] a, Object elt)
     // public static int indexOfEq(Object[] a, Object elt)
@@ -163,22 +163,22 @@ public final class TestUtilMDE extends TestCase {
       Integer[] a = new Integer[10];
       for (int i=0; i<a.length; i++)
 	a[i] = new Integer(i);
-      assert(ArraysMDE.indexOf(a, new Integer(-1)) == -1);
-      assert(ArraysMDE.indexOf(a, new Integer(0)) == 0);
-      assert(ArraysMDE.indexOf(a, new Integer(7)) == 7);
-      assert(ArraysMDE.indexOf(a, new Integer(9)) == 9);
-      assert(ArraysMDE.indexOf(a, new Integer(10)) == -1);
-      assert(ArraysMDE.indexOf(a, new Integer(20)) == -1);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(-1)) == -1);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(0)) == 0);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(7)) == 7);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(9)) == 9);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(10)) == -1);
+      assertTrue(ArraysMDE.indexOf(a, new Integer(20)) == -1);
 
-      assert(ArraysMDE.indexOfEq(a, new Integer(-1)) == -1);
-      assert(ArraysMDE.indexOfEq(a, new Integer(0)) == -1);
-      assert(ArraysMDE.indexOfEq(a, new Integer(7)) == -1);
-      assert(ArraysMDE.indexOfEq(a, new Integer(9)) == -1);
-      assert(ArraysMDE.indexOfEq(a, new Integer(10)) == -1);
-      assert(ArraysMDE.indexOfEq(a, new Integer(20)) == -1);
-      assert(ArraysMDE.indexOfEq(a, a[0]) == 0);
-      assert(ArraysMDE.indexOfEq(a, a[7]) == 7);
-      assert(ArraysMDE.indexOfEq(a, a[9]) == 9);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(-1)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(0)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(7)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(9)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(10)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, new Integer(20)) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, a[0]) == 0);
+      assertTrue(ArraysMDE.indexOfEq(a, a[7]) == 7);
+      assertTrue(ArraysMDE.indexOfEq(a, a[9]) == 9);
     }
 
     // public static int indexOf(int[] a, int elt)
@@ -186,12 +186,12 @@ public final class TestUtilMDE extends TestCase {
       int[] a = new int[10];
       for (int i=0; i<a.length; i++)
 	a[i] = i;
-      assert(ArraysMDE.indexOf(a, -1) == -1);
-      assert(ArraysMDE.indexOf(a, 0) == 0);
-      assert(ArraysMDE.indexOf(a, 7) == 7);
-      assert(ArraysMDE.indexOf(a, 9) == 9);
-      assert(ArraysMDE.indexOf(a, 10) == -1);
-      assert(ArraysMDE.indexOf(a, 20) == -1);
+      assertTrue(ArraysMDE.indexOf(a, -1) == -1);
+      assertTrue(ArraysMDE.indexOf(a, 0) == 0);
+      assertTrue(ArraysMDE.indexOf(a, 7) == 7);
+      assertTrue(ArraysMDE.indexOf(a, 9) == 9);
+      assertTrue(ArraysMDE.indexOf(a, 10) == -1);
+      assertTrue(ArraysMDE.indexOf(a, 20) == -1);
     }
 
     // public static int indexOf(boolean[] a, boolean elt)
@@ -199,21 +199,21 @@ public final class TestUtilMDE extends TestCase {
       boolean[] a = new boolean[10];
       for (int i=0; i<a.length; i++)
 	a[i] = false;
-      assert(ArraysMDE.indexOf(a, true) == -1);
-      assert(ArraysMDE.indexOf(a, false) == 0);
+      assertTrue(ArraysMDE.indexOf(a, true) == -1);
+      assertTrue(ArraysMDE.indexOf(a, false) == 0);
       a[9] = true;
-      assert(ArraysMDE.indexOf(a, true) == 9);
-      assert(ArraysMDE.indexOf(a, false) == 0);
+      assertTrue(ArraysMDE.indexOf(a, true) == 9);
+      assertTrue(ArraysMDE.indexOf(a, false) == 0);
       a[7] = true;
-      assert(ArraysMDE.indexOf(a, true) == 7);
-      assert(ArraysMDE.indexOf(a, false) == 0);
+      assertTrue(ArraysMDE.indexOf(a, true) == 7);
+      assertTrue(ArraysMDE.indexOf(a, false) == 0);
       a[0] = true;
-      assert(ArraysMDE.indexOf(a, true) == 0);
-      assert(ArraysMDE.indexOf(a, false) == 1);
+      assertTrue(ArraysMDE.indexOf(a, true) == 0);
+      assertTrue(ArraysMDE.indexOf(a, false) == 1);
       for (int i=0; i<a.length; i++)
 	a[i] = true;
-      assert(ArraysMDE.indexOf(a, true) == 0);
-      assert(ArraysMDE.indexOf(a, false) == -1);
+      assertTrue(ArraysMDE.indexOf(a, true) == 0);
+      assertTrue(ArraysMDE.indexOf(a, false) == -1);
     }
 
     // public static int indexOf(Object[] a, Object[] sub)
@@ -234,28 +234,28 @@ public final class TestUtilMDE extends TestCase {
       Integer[] e2 = new Integer[] { new Integer(2), new Integer(3), new Integer(4), new Integer(5) };
       Integer[] f2 = new Integer[] { new Integer(7), new Integer(8), new Integer(9) };
 
-      assert(ArraysMDE.indexOf(a, b) == 0);
-      assert(ArraysMDE.indexOfEq(a, b) == 0);
-      assert(ArraysMDE.indexOf(a, c) == 0);
-      assert(ArraysMDE.indexOfEq(a, c) == 0);
-      assert(ArraysMDE.indexOf(a, c2) == 0);
-      assert(ArraysMDE.indexOfEq(a, c2) == -1);
-      assert(ArraysMDE.indexOf(a, d) == 1);
-      assert(ArraysMDE.indexOfEq(a, d) == 1);
-      assert(ArraysMDE.indexOf(a, d2) == 1);
-      assert(ArraysMDE.indexOfEq(a, d2) == -1);
-      assert(ArraysMDE.indexOf(a, e) == 2);
-      assert(ArraysMDE.indexOfEq(a, e) == 2);
-      assert(ArraysMDE.indexOf(a, e2) == 2);
-      assert(ArraysMDE.indexOfEq(a, e2) == -1);
-      assert(ArraysMDE.indexOf(a, f) == 7);
-      assert(ArraysMDE.indexOfEq(a, f) == 7);
-      assert(ArraysMDE.indexOf(a, f2) == 7);
-      assert(ArraysMDE.indexOfEq(a, f2) == -1);
-      assert(ArraysMDE.indexOf(a, g) == 7);
-      assert(ArraysMDE.indexOfEq(a, g) == -1);
-      assert(ArraysMDE.indexOf(a, h) == -1);
-      assert(ArraysMDE.indexOfEq(a, h) == -1);
+      assertTrue(ArraysMDE.indexOf(a, b) == 0);
+      assertTrue(ArraysMDE.indexOfEq(a, b) == 0);
+      assertTrue(ArraysMDE.indexOf(a, c) == 0);
+      assertTrue(ArraysMDE.indexOfEq(a, c) == 0);
+      assertTrue(ArraysMDE.indexOf(a, c2) == 0);
+      assertTrue(ArraysMDE.indexOfEq(a, c2) == -1);
+      assertTrue(ArraysMDE.indexOf(a, d) == 1);
+      assertTrue(ArraysMDE.indexOfEq(a, d) == 1);
+      assertTrue(ArraysMDE.indexOf(a, d2) == 1);
+      assertTrue(ArraysMDE.indexOfEq(a, d2) == -1);
+      assertTrue(ArraysMDE.indexOf(a, e) == 2);
+      assertTrue(ArraysMDE.indexOfEq(a, e) == 2);
+      assertTrue(ArraysMDE.indexOf(a, e2) == 2);
+      assertTrue(ArraysMDE.indexOfEq(a, e2) == -1);
+      assertTrue(ArraysMDE.indexOf(a, f) == 7);
+      assertTrue(ArraysMDE.indexOfEq(a, f) == 7);
+      assertTrue(ArraysMDE.indexOf(a, f2) == 7);
+      assertTrue(ArraysMDE.indexOfEq(a, f2) == -1);
+      assertTrue(ArraysMDE.indexOf(a, g) == 7);
+      assertTrue(ArraysMDE.indexOfEq(a, g) == -1);
+      assertTrue(ArraysMDE.indexOf(a, h) == -1);
+      assertTrue(ArraysMDE.indexOfEq(a, h) == -1);
     }
 
 
@@ -272,13 +272,13 @@ public final class TestUtilMDE extends TestCase {
       int[] g = new int[] { a[7], 22, a[9] };
       int[] h = new int[] { a[7], a[8], a[9], 10 };
 
-      assert(ArraysMDE.indexOf(a, b) == 0);
-      assert(ArraysMDE.indexOf(a, c) == 0);
-      assert(ArraysMDE.indexOf(a, d) == 1);
-      assert(ArraysMDE.indexOf(a, e) == 2);
-      assert(ArraysMDE.indexOf(a, f) == 7);
-      assert(ArraysMDE.indexOf(a, g) == -1);
-      assert(ArraysMDE.indexOf(a, h) == -1);
+      assertTrue(ArraysMDE.indexOf(a, b) == 0);
+      assertTrue(ArraysMDE.indexOf(a, c) == 0);
+      assertTrue(ArraysMDE.indexOf(a, d) == 1);
+      assertTrue(ArraysMDE.indexOf(a, e) == 2);
+      assertTrue(ArraysMDE.indexOf(a, f) == 7);
+      assertTrue(ArraysMDE.indexOf(a, g) == -1);
+      assertTrue(ArraysMDE.indexOf(a, h) == -1);
     }
 
     // public static int indexOf(boolean[] a, boolean[] sub)
@@ -303,18 +303,18 @@ public final class TestUtilMDE extends TestCase {
 
 
     // static String toString(int[] a)
-    assert(ArraysMDE.toString(new int[] { }).equals("[]"));
-    assert(ArraysMDE.toString(new int[] { 0 }).equals("[0]"));
-    assert(ArraysMDE.toString(new int[] { 0,1,2 }).equals("[0, 1, 2]"));
+    assertTrue(ArraysMDE.toString(new int[] { }).equals("[]"));
+    assertTrue(ArraysMDE.toString(new int[] { 0 }).equals("[0]"));
+    assertTrue(ArraysMDE.toString(new int[] { 0,1,2 }).equals("[0, 1, 2]"));
 
     // public static boolean sorted(int[] a)
-    assert(ArraysMDE.sorted(new int[] { 0,1,2 }));
-    assert(ArraysMDE.sorted(new int[] { 0,1,2,2,3,3 }));
-    assert(ArraysMDE.sorted(new int[] { }));
-    assert(ArraysMDE.sorted(new int[] { 0 }));
-    assert(ArraysMDE.sorted(new int[] { 0,1 }));
-    assert(!ArraysMDE.sorted(new int[] { 1,0 }));
-    assert(!ArraysMDE.sorted(new int[] { 0,1,2,1,2,3 }));
+    assertTrue(ArraysMDE.sorted(new int[] { 0,1,2 }));
+    assertTrue(ArraysMDE.sorted(new int[] { 0,1,2,2,3,3 }));
+    assertTrue(ArraysMDE.sorted(new int[] { }));
+    assertTrue(ArraysMDE.sorted(new int[] { 0 }));
+    assertTrue(ArraysMDE.sorted(new int[] { 0,1 }));
+    assertTrue(!ArraysMDE.sorted(new int[] { 1,0 }));
+    assertTrue(!ArraysMDE.sorted(new int[] { 0,1,2,1,2,3 }));
 
     // public static class IntArrayComparatorLexical implements Comparator
     // public static class IntArrayComparatorLengthFirst implements Comparator
@@ -330,50 +330,50 @@ public final class TestUtilMDE extends TestCase {
       int[] a6 = new int[] { 0,1,5,3,4 };
       int[] a7 = new int[] { 1,2,3,4 };
 
-      assert(iacl.compare(a0, a1) == 0);
-      assert(iaclf.compare(a0, a1) == 0);
-      assert(iacl.compare(a1, a0) == 0);
-      assert(iaclf.compare(a1, a0) == 0);
-      assert(iacl.compare(a1, a2) < 0);
-      assert(iaclf.compare(a1, a2) < 0);
-      assert(iacl.compare(a2, a1) > 0);
-      assert(iaclf.compare(a2, a1) > 0);
-      assert(iacl.compare(a2, a3) < 0);
-      assert(iaclf.compare(a2, a3) < 0);
-      assert(iacl.compare(a3, a2) > 0);
-      assert(iaclf.compare(a3, a2) > 0);
-      assert(iacl.compare(a3, a4) < 0);
-      assert(iaclf.compare(a3, a4) < 0);
-      assert(iacl.compare(a4, a3) > 0);
-      assert(iaclf.compare(a4, a3) > 0);
-      assert(iacl.compare(a4, a5) == 0);
-      assert(iaclf.compare(a4, a5) == 0);
-      assert(iacl.compare(a5, a4) == 0);
-      assert(iaclf.compare(a5, a4) == 0);
-      assert(iacl.compare(a5, a6) < 0);
-      assert(iaclf.compare(a5, a6) < 0);
-      assert(iacl.compare(a6, a5) > 0);
-      assert(iaclf.compare(a6, a5) > 0);
-      assert(iacl.compare(a6, a7) < 0);
-      assert(iaclf.compare(a6, a7) > 0);
-      assert(iacl.compare(a7, a6) > 0);
-      assert(iaclf.compare(a7, a6) < 0);
-      assert(iacl.compare(a1, a4) < 0);
-      assert(iaclf.compare(a1, a4) < 0);
-      assert(iacl.compare(a4, a1) > 0);
-      assert(iaclf.compare(a4, a1) > 0);
-      assert(iacl.compare(a2, a4) < 0);
-      assert(iaclf.compare(a2, a4) < 0);
-      assert(iacl.compare(a4, a2) > 0);
-      assert(iaclf.compare(a4, a2) > 0);
-      assert(iacl.compare(a6, a4) > 0);
-      assert(iaclf.compare(a6, a4) > 0);
-      assert(iacl.compare(a4, a6) < 0);
-      assert(iaclf.compare(a4, a6) < 0);
-      assert(iacl.compare(a7, a4) > 0);
-      assert(iaclf.compare(a7, a4) < 0);
-      assert(iacl.compare(a4, a7) < 0);
-      assert(iaclf.compare(a4, a7) > 0);
+      assertTrue(iacl.compare(a0, a1) == 0);
+      assertTrue(iaclf.compare(a0, a1) == 0);
+      assertTrue(iacl.compare(a1, a0) == 0);
+      assertTrue(iaclf.compare(a1, a0) == 0);
+      assertTrue(iacl.compare(a1, a2) < 0);
+      assertTrue(iaclf.compare(a1, a2) < 0);
+      assertTrue(iacl.compare(a2, a1) > 0);
+      assertTrue(iaclf.compare(a2, a1) > 0);
+      assertTrue(iacl.compare(a2, a3) < 0);
+      assertTrue(iaclf.compare(a2, a3) < 0);
+      assertTrue(iacl.compare(a3, a2) > 0);
+      assertTrue(iaclf.compare(a3, a2) > 0);
+      assertTrue(iacl.compare(a3, a4) < 0);
+      assertTrue(iaclf.compare(a3, a4) < 0);
+      assertTrue(iacl.compare(a4, a3) > 0);
+      assertTrue(iaclf.compare(a4, a3) > 0);
+      assertTrue(iacl.compare(a4, a5) == 0);
+      assertTrue(iaclf.compare(a4, a5) == 0);
+      assertTrue(iacl.compare(a5, a4) == 0);
+      assertTrue(iaclf.compare(a5, a4) == 0);
+      assertTrue(iacl.compare(a5, a6) < 0);
+      assertTrue(iaclf.compare(a5, a6) < 0);
+      assertTrue(iacl.compare(a6, a5) > 0);
+      assertTrue(iaclf.compare(a6, a5) > 0);
+      assertTrue(iacl.compare(a6, a7) < 0);
+      assertTrue(iaclf.compare(a6, a7) > 0);
+      assertTrue(iacl.compare(a7, a6) > 0);
+      assertTrue(iaclf.compare(a7, a6) < 0);
+      assertTrue(iacl.compare(a1, a4) < 0);
+      assertTrue(iaclf.compare(a1, a4) < 0);
+      assertTrue(iacl.compare(a4, a1) > 0);
+      assertTrue(iaclf.compare(a4, a1) > 0);
+      assertTrue(iacl.compare(a2, a4) < 0);
+      assertTrue(iaclf.compare(a2, a4) < 0);
+      assertTrue(iacl.compare(a4, a2) > 0);
+      assertTrue(iaclf.compare(a4, a2) > 0);
+      assertTrue(iacl.compare(a6, a4) > 0);
+      assertTrue(iaclf.compare(a6, a4) > 0);
+      assertTrue(iacl.compare(a4, a6) < 0);
+      assertTrue(iaclf.compare(a4, a6) < 0);
+      assertTrue(iacl.compare(a7, a4) > 0);
+      assertTrue(iaclf.compare(a7, a4) < 0);
+      assertTrue(iacl.compare(a4, a7) < 0);
+      assertTrue(iaclf.compare(a4, a7) > 0);
     }
 
     // Here I can only sensibly compare for equal vs. nonequal.
@@ -395,60 +395,60 @@ public final class TestUtilMDE extends TestCase {
       String[] a7 = new String[] { "1","2","3","4" };
       String[] a8 = new String[] { "0","1",null,"3","4" };
 
-      assert(cacl.compare(a0, a1) == 0);
-      assert(caclf.compare(a0, a1) == 0);
-      assert(cacl.compare(a1, a0) == 0);
-      assert(caclf.compare(a1, a0) == 0);
-      assert(cacl.compare(a1, a2) < 0);
-      assert(caclf.compare(a1, a2) < 0);
-      assert(cacl.compare(a2, a1) > 0);
-      assert(caclf.compare(a2, a1) > 0);
-      assert(cacl.compare(a2, a3) < 0);
-      assert(caclf.compare(a2, a3) < 0);
-      assert(cacl.compare(a3, a2) > 0);
-      assert(caclf.compare(a3, a2) > 0);
-      assert(cacl.compare(a3, a4) < 0);
-      assert(caclf.compare(a3, a4) < 0);
-      assert(cacl.compare(a4, a3) > 0);
-      assert(caclf.compare(a4, a3) > 0);
-      assert(cacl.compare(a4, a5) == 0);
-      assert(caclf.compare(a4, a5) == 0);
-      assert(cacl.compare(a5, a4) == 0);
-      assert(caclf.compare(a5, a4) == 0);
-      assert(cacl.compare(a5, a6) < 0);
-      assert(caclf.compare(a5, a6) < 0);
-      assert(cacl.compare(a6, a5) > 0);
-      assert(caclf.compare(a6, a5) > 0);
-      assert(cacl.compare(a6, a7) < 0);
-      assert(caclf.compare(a6, a7) > 0);
-      assert(cacl.compare(a7, a6) > 0);
-      assert(caclf.compare(a7, a6) < 0);
-      assert(cacl.compare(a1, a4) < 0);
-      assert(caclf.compare(a1, a4) < 0);
-      assert(cacl.compare(a4, a1) > 0);
-      assert(caclf.compare(a4, a1) > 0);
-      assert(cacl.compare(a2, a4) < 0);
-      assert(caclf.compare(a2, a4) < 0);
-      assert(cacl.compare(a4, a2) > 0);
-      assert(caclf.compare(a4, a2) > 0);
-      assert(cacl.compare(a6, a4) > 0);
-      assert(caclf.compare(a6, a4) > 0);
-      assert(cacl.compare(a4, a6) < 0);
-      assert(caclf.compare(a4, a6) < 0);
-      assert(cacl.compare(a7, a4) > 0);
-      assert(caclf.compare(a7, a4) < 0);
-      assert(cacl.compare(a8, a1) > 0);
-      assert(caclf.compare(a8, a1) > 0);
-      assert(cacl.compare(a1, a8) < 0);
-      assert(caclf.compare(a1, a8) < 0);
-      assert(cacl.compare(a8, a2) < 0);
-      assert(caclf.compare(a8, a2) > 0);
-      assert(cacl.compare(a2, a8) > 0);
-      assert(caclf.compare(a2, a8) < 0);
-      assert(cacl.compare(a8, a3) < 0);
-      assert(caclf.compare(a8, a3) < 0);
-      assert(cacl.compare(a3, a8) > 0);
-      assert(caclf.compare(a3, a8) > 0);
+      assertTrue(cacl.compare(a0, a1) == 0);
+      assertTrue(caclf.compare(a0, a1) == 0);
+      assertTrue(cacl.compare(a1, a0) == 0);
+      assertTrue(caclf.compare(a1, a0) == 0);
+      assertTrue(cacl.compare(a1, a2) < 0);
+      assertTrue(caclf.compare(a1, a2) < 0);
+      assertTrue(cacl.compare(a2, a1) > 0);
+      assertTrue(caclf.compare(a2, a1) > 0);
+      assertTrue(cacl.compare(a2, a3) < 0);
+      assertTrue(caclf.compare(a2, a3) < 0);
+      assertTrue(cacl.compare(a3, a2) > 0);
+      assertTrue(caclf.compare(a3, a2) > 0);
+      assertTrue(cacl.compare(a3, a4) < 0);
+      assertTrue(caclf.compare(a3, a4) < 0);
+      assertTrue(cacl.compare(a4, a3) > 0);
+      assertTrue(caclf.compare(a4, a3) > 0);
+      assertTrue(cacl.compare(a4, a5) == 0);
+      assertTrue(caclf.compare(a4, a5) == 0);
+      assertTrue(cacl.compare(a5, a4) == 0);
+      assertTrue(caclf.compare(a5, a4) == 0);
+      assertTrue(cacl.compare(a5, a6) < 0);
+      assertTrue(caclf.compare(a5, a6) < 0);
+      assertTrue(cacl.compare(a6, a5) > 0);
+      assertTrue(caclf.compare(a6, a5) > 0);
+      assertTrue(cacl.compare(a6, a7) < 0);
+      assertTrue(caclf.compare(a6, a7) > 0);
+      assertTrue(cacl.compare(a7, a6) > 0);
+      assertTrue(caclf.compare(a7, a6) < 0);
+      assertTrue(cacl.compare(a1, a4) < 0);
+      assertTrue(caclf.compare(a1, a4) < 0);
+      assertTrue(cacl.compare(a4, a1) > 0);
+      assertTrue(caclf.compare(a4, a1) > 0);
+      assertTrue(cacl.compare(a2, a4) < 0);
+      assertTrue(caclf.compare(a2, a4) < 0);
+      assertTrue(cacl.compare(a4, a2) > 0);
+      assertTrue(caclf.compare(a4, a2) > 0);
+      assertTrue(cacl.compare(a6, a4) > 0);
+      assertTrue(caclf.compare(a6, a4) > 0);
+      assertTrue(cacl.compare(a4, a6) < 0);
+      assertTrue(caclf.compare(a4, a6) < 0);
+      assertTrue(cacl.compare(a7, a4) > 0);
+      assertTrue(caclf.compare(a7, a4) < 0);
+      assertTrue(cacl.compare(a8, a1) > 0);
+      assertTrue(caclf.compare(a8, a1) > 0);
+      assertTrue(cacl.compare(a1, a8) < 0);
+      assertTrue(caclf.compare(a1, a8) < 0);
+      assertTrue(cacl.compare(a8, a2) < 0);
+      assertTrue(caclf.compare(a8, a2) > 0);
+      assertTrue(cacl.compare(a2, a8) > 0);
+      assertTrue(caclf.compare(a2, a8) < 0);
+      assertTrue(cacl.compare(a8, a3) < 0);
+      assertTrue(caclf.compare(a8, a3) < 0);
+      assertTrue(cacl.compare(a3, a8) > 0);
+      assertTrue(caclf.compare(a3, a8) > 0);
     }
 
   }
@@ -555,47 +555,47 @@ public final class TestUtilMDE extends TestCase {
 
   public static void testIntern() {
     Integer i = Intern.internedInteger("1234");
-    assert(Intern.isInterned(i));
-    assert(i.intValue() == 1234);
+    assertTrue(Intern.isInterned(i));
+    assertTrue(i.intValue() == 1234);
     i = Intern.internedInteger("0x12ab");
-    assert(Intern.isInterned(i));
-    assert(i.intValue() == 0x12ab);
+    assertTrue(Intern.isInterned(i));
+    assertTrue(i.intValue() == 0x12ab);
 
     Long l = Intern.internedLong("12345678");
-    assert(Intern.isInterned(l));
-    assert(l.intValue() == 12345678);
+    assertTrue(Intern.isInterned(l));
+    assertTrue(l.intValue() == 12345678);
     l = Intern.internedLong("0x1234abcd");
-    assert(Intern.isInterned(l));
-    assert(l.intValue() == 0x1234abcd);
+    assertTrue(Intern.isInterned(l));
+    assertTrue(l.intValue() == 0x1234abcd);
   }
 
   public static void testMathMDE() {
 
     // int negate(int a)
-    assert(MathMDE.negate(3) == -3);
-    assert(MathMDE.negate(-22) == 22);
-    assert(MathMDE.negate(0) == 0);
+    assertTrue(MathMDE.negate(3) == -3);
+    assertTrue(MathMDE.negate(-22) == 22);
+    assertTrue(MathMDE.negate(0) == 0);
 
     // int bitwiseComplement(int a)
-    assert(MathMDE.bitwiseComplement(3) == -4);
-    assert(MathMDE.bitwiseComplement(-22) == 21);
-    assert(MathMDE.bitwiseComplement(0) == -1);
+    assertTrue(MathMDE.bitwiseComplement(3) == -4);
+    assertTrue(MathMDE.bitwiseComplement(-22) == 21);
+    assertTrue(MathMDE.bitwiseComplement(0) == -1);
 
     // int sign(int a)
-    assert(MathMDE.sign(3) == 1);
-    assert(MathMDE.sign(-22) == -1);
-    assert(MathMDE.sign(0) == 0);
+    assertTrue(MathMDE.sign(3) == 1);
+    assertTrue(MathMDE.sign(-22) == -1);
+    assertTrue(MathMDE.sign(0) == 0);
 
     // int pow(int base, int expt)
     try {
-      assert(MathMDE.pow(3, 3) == 27);
-      assert(MathMDE.pow(-5, 5) == -3125);
-      assert(MathMDE.pow(22, 0) == 1);
-      assert(MathMDE.pow(4, 6) == 4096);
-      assert(MathMDE.pow(1, 222222) == 1);
-      assert(MathMDE.pow(-2, 25) == -33554432);
+      assertTrue(MathMDE.pow(3, 3) == 27);
+      assertTrue(MathMDE.pow(-5, 5) == -3125);
+      assertTrue(MathMDE.pow(22, 0) == 1);
+      assertTrue(MathMDE.pow(4, 6) == 4096);
+      assertTrue(MathMDE.pow(1, 222222) == 1);
+      assertTrue(MathMDE.pow(-2, 25) == -33554432);
       // This is beyond the precision.  Maybe return a long instead of an int?
-      // assert(MathMDE.pow(-3, 25) == ...);
+      // assertTrue(MathMDE.pow(-3, 25) == ...);
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error(e.toString());
@@ -607,48 +607,48 @@ public final class TestUtilMDE extends TestCase {
       } catch (Exception e) {
 	exception = true;
       }
-      assert(exception);
+      assertTrue(exception);
     }
 
 
     // int gcd(int a, int b)
-    assert(MathMDE.gcd(2, 50) == 2);
-    assert(MathMDE.gcd(50, 2) == 2);
-    assert(MathMDE.gcd(12, 144) == 12);
-    assert(MathMDE.gcd(144, 12) == 12);
-    assert(MathMDE.gcd(96, 144) == 48);
-    assert(MathMDE.gcd(144, 96) == 48);
-    assert(MathMDE.gcd(10, 25) == 5);
-    assert(MathMDE.gcd(25, 10) == 5);
-    assert(MathMDE.gcd(17, 25) == 1);
-    assert(MathMDE.gcd(25, 17) == 1);
+    assertTrue(MathMDE.gcd(2, 50) == 2);
+    assertTrue(MathMDE.gcd(50, 2) == 2);
+    assertTrue(MathMDE.gcd(12, 144) == 12);
+    assertTrue(MathMDE.gcd(144, 12) == 12);
+    assertTrue(MathMDE.gcd(96, 144) == 48);
+    assertTrue(MathMDE.gcd(144, 96) == 48);
+    assertTrue(MathMDE.gcd(10, 25) == 5);
+    assertTrue(MathMDE.gcd(25, 10) == 5);
+    assertTrue(MathMDE.gcd(17, 25) == 1);
+    assertTrue(MathMDE.gcd(25, 17) == 1);
 
     // int gcd(int[] a)
-    assert(MathMDE.gcd(new int[] {2, 50}) == 2);
-    assert(MathMDE.gcd(new int[] {12, 144}) == 12);
-    assert(MathMDE.gcd(new int[] {96, 144}) == 48);
-    assert(MathMDE.gcd(new int[] {10, 25}) == 5);
-    assert(MathMDE.gcd(new int[] {100, 10, 25}) == 5);
-    assert(MathMDE.gcd(new int[] {768, 324}) == 12);
-    assert(MathMDE.gcd(new int[] {2400, 48, 36}) == 12);
-    assert(MathMDE.gcd(new int[] {2400, 72, 36}) == 12);
+    assertTrue(MathMDE.gcd(new int[] {2, 50}) == 2);
+    assertTrue(MathMDE.gcd(new int[] {12, 144}) == 12);
+    assertTrue(MathMDE.gcd(new int[] {96, 144}) == 48);
+    assertTrue(MathMDE.gcd(new int[] {10, 25}) == 5);
+    assertTrue(MathMDE.gcd(new int[] {100, 10, 25}) == 5);
+    assertTrue(MathMDE.gcd(new int[] {768, 324}) == 12);
+    assertTrue(MathMDE.gcd(new int[] {2400, 48, 36}) == 12);
+    assertTrue(MathMDE.gcd(new int[] {2400, 72, 36}) == 12);
 
     // int gcd_differences(int[] a)
     // Weak set of tests, derived directly from those of "int gcd(int[] a)".
-    assert(MathMDE.gcd_differences(new int[] {0, 2, 52}) == 2);
-    assert(MathMDE.gcd_differences(new int[] {0, 12, 156}) == 12);
-    assert(MathMDE.gcd_differences(new int[] {0, 96, 240}) == 48);
-    assert(MathMDE.gcd_differences(new int[] {0, 10, 35}) == 5);
-    assert(MathMDE.gcd_differences(new int[] {0, 100, 110, 135}) == 5);
-    assert(MathMDE.gcd_differences(new int[] {0, 768, 1092}) == 12);
-    assert(MathMDE.gcd_differences(new int[] {0, 2400, 2448, 2484}) == 12);
-    assert(MathMDE.gcd_differences(new int[] {0, 2400, 2472, 2508}) == 12);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 2, 52}) == 2);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 12, 156}) == 12);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 96, 240}) == 48);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 10, 35}) == 5);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 100, 110, 135}) == 5);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 768, 1092}) == 12);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 2400, 2448, 2484}) == 12);
+    assertTrue(MathMDE.gcd_differences(new int[] {0, 2400, 2472, 2508}) == 12);
 
     // int mod_positive(int x, int y)
-    assert(MathMDE.mod_positive(33, 5) == 3);
-    assert(MathMDE.mod_positive(-33, 5) == 2);
-    assert(MathMDE.mod_positive(33, -5) == 3);
-    assert(MathMDE.mod_positive(-33, -5) == 2);
+    assertTrue(MathMDE.mod_positive(33, 5) == 3);
+    assertTrue(MathMDE.mod_positive(-33, 5) == 2);
+    assertTrue(MathMDE.mod_positive(33, -5) == 3);
+    assertTrue(MathMDE.mod_positive(-33, -5) == 2);
 
     // int[] missing_numbers(int[] nums)
     assert_arrays_equals(MathMDE.missing_numbers(new int[] { 3,4,5,6,7,8 }),
@@ -838,11 +838,11 @@ public final class TestUtilMDE extends TestCase {
     while (opi.hasNext()) {
       Pair pair = (Pair) opi.next();
       // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0] + "," + ints[pairno][1] + ">");
-      assert((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
-      assert((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));
+      assertTrue((pair.a == null) || (((Integer)(pair.a)).intValue() == ints[pairno][0]));
+      assertTrue((pair.b == null) || (((Integer)(pair.b)).intValue() == ints[pairno][1]));
       pairno++;
     }
-    assert(pairno == ints.length);
+    assertTrue(pairno == ints.length);
   }
 
   public static void testUtilMDE() {
@@ -1006,9 +1006,9 @@ public final class TestUtilMDE extends TestCase {
 //
     // essentially I am just testing whether the return is erroneous
     try {
-      assert(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String, java.lang.String, java.lang.Class[])"));
-      assert(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String,java.lang.String,java.lang.Class[])"));
-      assert(null != UtilMDE.methodForName("java.lang.Math.min(int,int)"));
+      assertTrue(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String, java.lang.String, java.lang.Class[])"));
+      assertTrue(null != UtilMDE.methodForName("utilMDE.UtilMDE.methodForName(java.lang.String,java.lang.String,java.lang.Class[])"));
+      assertTrue(null != UtilMDE.methodForName("java.lang.Math.min(int,int)"));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error(e.toString());
@@ -1028,56 +1028,56 @@ public final class TestUtilMDE extends TestCase {
     // public static String setDefault(Properties p, String key, String value)
     // public static void streamCopy(java.io.InputStream from, java.io.OutputStream to)
 
-    assert(UtilMDE.replaceString("hello dolly well hello dolly", " ", "  ").equals("hello  dolly  well  hello  dolly"));
-    assert(UtilMDE.replaceString("  hello  dolly well hello dolly  ", " ", "  ").equals("    hello    dolly  well  hello  dolly    "));
-    assert(UtilMDE.replaceString("hello dolly well hello dolly", "ll", "y").equals("heyo doyy wey heyo doyy"));
-    assert(UtilMDE.replaceString("hello dolly well hello dolly", "q", "xxx").equals("hello dolly well hello dolly"));
+    assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", " ", "  ").equals("hello  dolly  well  hello  dolly"));
+    assertTrue(UtilMDE.replaceString("  hello  dolly well hello dolly  ", " ", "  ").equals("    hello    dolly  well  hello  dolly    "));
+    assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", "ll", "y").equals("heyo doyy wey heyo doyy"));
+    assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", "q", "xxx").equals("hello dolly well hello dolly"));
 
     // public static void internStrings(String[] a)
 
-    assert(Arrays.equals(UtilMDE.split("foo,bar,baz", ','), new String[] { "foo", "bar", "baz" }));
-    assert(Arrays.equals(UtilMDE.split("foo", ','), new String[] { "foo" }));
-    assert(Arrays.equals(UtilMDE.split("", ','), new String[] { "" }));
-    assert(Arrays.equals(UtilMDE.split(",foo,", ','), new String[] { "", "foo", "" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo,bar,baz", ','), new String[] { "foo", "bar", "baz" }));
+    assertTrue(Arrays.equals(UtilMDE.split("foo", ','), new String[] { "foo" }));
+    assertTrue(Arrays.equals(UtilMDE.split("", ','), new String[] { "" }));
+    assertTrue(Arrays.equals(UtilMDE.split(",foo,", ','), new String[] { "", "foo", "" }));
 
-    assert(UtilMDE.join(new String[] { "foo", "bar", "baz" }, ", ").equals("foo, bar, baz"));
-    assert(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));
-    assert(UtilMDE.join(new String[] { }, ", ").equals(""));
-    assert(UtilMDE.join(new Integer[] { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) }, "").equals("01234"));
+    assertTrue(UtilMDE.join(new String[] { "foo", "bar", "baz" }, ", ").equals("foo, bar, baz"));
+    assertTrue(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));
+    assertTrue(UtilMDE.join(new String[] { }, ", ").equals(""));
+    assertTrue(UtilMDE.join(new Integer[] { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) }, "").equals("01234"));
     Vector potpourri = new Vector();
     potpourri.add("day"); potpourri.add(new Integer(2)); potpourri.add("day");
-    assert(UtilMDE.join(potpourri, " ").equals("day 2 day"));
+    assertTrue(UtilMDE.join(potpourri, " ").equals("day 2 day"));
 
-    assert(UtilMDE.quote("foobar").equals("foobar"));
-    assert(UtilMDE.quote("").equals(""));
-    assert(UtilMDE.quote("\\").equals("\\\\"));
-    assert(UtilMDE.quote("\\\n\r\"").equals("\\\\\\n\\r\\\""));
-    assert(UtilMDE.quote("split\nlines").equals("split\\nlines"));
-    assert(UtilMDE.quote("\\relax").equals("\\\\relax"));
-    assert(UtilMDE.quote("\"hello\"").equals("\\\"hello\\\""));
-    assert(UtilMDE.quote("\"hello\" \"world\"").equals("\\\"hello\\\" \\\"world\\\""));
+    assertTrue(UtilMDE.quote("foobar").equals("foobar"));
+    assertTrue(UtilMDE.quote("").equals(""));
+    assertTrue(UtilMDE.quote("\\").equals("\\\\"));
+    assertTrue(UtilMDE.quote("\\\n\r\"").equals("\\\\\\n\\r\\\""));
+    assertTrue(UtilMDE.quote("split\nlines").equals("split\\nlines"));
+    assertTrue(UtilMDE.quote("\\relax").equals("\\\\relax"));
+    assertTrue(UtilMDE.quote("\"hello\"").equals("\\\"hello\\\""));
+    assertTrue(UtilMDE.quote("\"hello\" \"world\"").equals("\\\"hello\\\" \\\"world\\\""));
 
-    assert(UtilMDE.unquote("foobar").equals("foobar"));
-    assert(UtilMDE.unquote("").equals(""));
-    assert(UtilMDE.unquote("\\\\").equals("\\"));
-    assert(UtilMDE.unquote("\\\"").equals("\""));
-    assert(UtilMDE.unquote("\\n").equals("\n"));
-    assert(UtilMDE.unquote("\\r").equals("\r"));
-    assert(UtilMDE.unquote("split\\nlines").equals("split\nlines"));
-    assert(UtilMDE.unquote("\\\\\\n").equals("\\\n"));
-    assert(UtilMDE.unquote("\\n\\r").equals("\n\r"));
-    assert(UtilMDE.unquote("\\\\\\n\\r\\\"").equals("\\\n\r\""));
-    assert(UtilMDE.unquote("\\\\relax").equals("\\relax"));
-    assert(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
-    assert(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
+    assertTrue(UtilMDE.unquote("foobar").equals("foobar"));
+    assertTrue(UtilMDE.unquote("").equals(""));
+    assertTrue(UtilMDE.unquote("\\\\").equals("\\"));
+    assertTrue(UtilMDE.unquote("\\\"").equals("\""));
+    assertTrue(UtilMDE.unquote("\\n").equals("\n"));
+    assertTrue(UtilMDE.unquote("\\r").equals("\r"));
+    assertTrue(UtilMDE.unquote("split\\nlines").equals("split\nlines"));
+    assertTrue(UtilMDE.unquote("\\\\\\n").equals("\\\n"));
+    assertTrue(UtilMDE.unquote("\\n\\r").equals("\n\r"));
+    assertTrue(UtilMDE.unquote("\\\\\\n\\r\\\"").equals("\\\n\r\""));
+    assertTrue(UtilMDE.unquote("\\\\relax").equals("\\relax"));
+    assertTrue(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
+    assertTrue(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
 
-    assert(UtilMDE.rpad("", 5).equals("     "));
-    assert(UtilMDE.rpad("abcd", 5).equals("abcd "));
-    assert(UtilMDE.rpad("abcde", 5).equals("abcde"));
-    assert(UtilMDE.rpad("abcdef", 5).equals("abcde"));
-    assert(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
-    assert(UtilMDE.rpad(10, 5).equals("10   "));
-    assert(UtilMDE.rpad(3.14, 5).equals("3.14 "));
+    assertTrue(UtilMDE.rpad("", 5).equals("     "));
+    assertTrue(UtilMDE.rpad("abcd", 5).equals("abcd "));
+    assertTrue(UtilMDE.rpad("abcde", 5).equals("abcde"));
+    assertTrue(UtilMDE.rpad("abcdef", 5).equals("abcde"));
+    assertTrue(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
+    assertTrue(UtilMDE.rpad(10, 5).equals("10   "));
+    assertTrue(UtilMDE.rpad(3.14, 5).equals("3.14 "));
 
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)
