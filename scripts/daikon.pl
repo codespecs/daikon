@@ -34,6 +34,9 @@ use Getopt::Long;
 $TAR_MANIFEST_TAG = $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -I for athena tar
 $DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} || '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
 
+$cp_lib = $DAIKON_WRAPPER_CLASSPATH;
+$cp_dot = $cp_lib . ':.';
+
 # read options from command line
 
 GetOptions("output=s" => \$output,
@@ -101,8 +104,7 @@ die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
 die ("Put jikes in your path before using this tool") unless which('jikes');
 
 # check the program make sure it starts out with no errors
-$cp = "$DAIKON_WRAPPER_CLASSPATH:.";
-$error = system("jikes -classpath $cp -depend -nowrite -nowarn $mainsrc");
+$error = system("jikes -classpath $cp_dot -depend -nowrite -nowarn $mainsrc");
 die ("Fix compiler errors before running daikon") if $error;
 
 # come up with a list of files which we need to care about
@@ -111,7 +113,7 @@ print "Building dependency list...\n" if $verbose;
 die (".u files already exist; try running with --cleanup option") if (find("*.u"));
 
 %interesting = (); # keys are interesting java file names
-system("jikes -classpath $cp -depend -nowrite -nowarn +M $mainsrc") && die ("Unexpected jikes error");
+system("jikes -classpath $cp_dot -depend -nowrite -nowarn +M $mainsrc") && die ("Unexpected jikes error");
 for $fname (find("*.u")) {
     open (U, $fname);
     while ($u = <U>) {
@@ -157,18 +159,18 @@ symlink("$working/daikon-java", "daikon-java") or die("Could not make symlink 2"
 while (1) {
     # instrument the source files
     print "Instrumenting files...\n" if $verbose;
-    $dfejerr = system('dfej ' . join(' ', sort (keys %interesting)));
+    $dfejerr = system("dfej -classpath $cp_dot " . join(' ', sort (keys %interesting)));
     last if ($dfejerr);
 
     # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
-    $cp = "$DAIKON_WRAPPER_CLASSPATH:$working/daikon-java";
-    $jikeserr = system("jikes -classpath $cp -depend -g -nowarn $working/daikon-java/$mainsrc");
+    $cp_work = $cp_lib . ":$working/daikon-java";
+    $jikeserr = system("jikes -classpath $cp_work -depend -g -nowarn $working/daikon-java/$mainsrc");
     last if $jikeserr;
 
     # run the test suite / mainline
     print "Running your java program...\n" if $verbose;
-    $javaerr = system("java -classpath $cp $runnable $runnable_args");
+    $javaerr = system("java -classpath $cp_work $runnable $runnable_args");
     last if $javaerr;
 
     # find the results
@@ -183,7 +185,7 @@ while (1) {
     # run daikon
     print "Running invariant detector...\n" if $verbose;
     $output_to = $textfile ? "$output.txt" : '/dev/null';
-    $dkerr = system("java daikon.Daikon -o $output.inv $decls $dtrace > $output_to");
+    $dkerr = system("java -classpath $cp_lib daikon.Daikon -o $output.inv $decls $dtrace > $output_to");
     last if $dkerr;
 
     # compress the output
@@ -208,5 +210,5 @@ die("gzip error") if $gzerr;
 # run the gui
 unless ($nogui) {
     print "Starting the gui...\n" if $verbose;
-    system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv.gz");
+    system("java -classpath $cp_lib daikon.gui.InvariantsGUI $output.inv.gz");
 }
