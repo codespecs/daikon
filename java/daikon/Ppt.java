@@ -165,5 +165,12 @@ public abstract class Ppt {
     return sb.toString();
   }
 
+  public VarInfo findVar(String name) {
+    for (int i=0; i<var_infos.length; i++) {
+      if (var_infos[i].name.equals(name))
+        return var_infos[i];
+    }
+    return null;
+  }
 
 }

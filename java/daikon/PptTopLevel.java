@@ -631,7 +631,8 @@ class PptTopLevel extends Ppt {
     for (int i=1; i<=derivation_passes; i++)
       derivation_indices[i] = 0;
     derivation_indices[0] = 0;
-    instantiate_views(0, num_tracevars);
+    // Not num_tracevars because we also care about _orig, etc.
+    instantiate_views(0, var_infos.length);
 
     // Eventually, integrate derivation and inference.  That will require
     // incrementally adding new variables, slices, and invariants.  For
@@ -891,6 +892,11 @@ class PptTopLevel extends Ppt {
                          + ", vi_index_limit=" + vi_index_limit
                          + ", var_infos.length=" + var_infos.length);
 
+    // It might pay to instantiate views for variables one at a time, to
+    // save work.  I'm not sure, but it does seem plausible.
+    Assert.assert(var_infos.length == vi_index_limit);
+
+
     // Stage invariant detection:
     //  1. unary constant (skip if canBeMissing)
     //  2. binary equal
@@ -916,12 +922,6 @@ class PptTopLevel extends Ppt {
     // used only for debugging
     int old_num_vars = var_infos.length;
     int old_num_views = views.size();
-
-    // [When is this not true?  I don't get it!  (But things do seem to
-    //  work now...) ]
-    // This is not always true; the assert was to check it.
-    // Assert.assert(var_infos.length == vi_index_limit);
-
 
     /// 1. unary constant
 
@@ -969,13 +969,13 @@ class PptTopLevel extends Ppt {
       }
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
       int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
-      int i2_limit = (target1 ? var_infos.length : vi_index_limit);
-      // System.out.println("instantiate_views"
-      //                    + "(" + vi_index_min + "," + vi_index_limit + ")"
-      //                    + "i1=" + i1
-      //                    + ", i2_min=" + i2_min
-      //                    + ", i2_limit=" + i2_limit);
-      for (int i2=i2_min; i2<i2_limit; i2++) {
+      if (debugInfer)
+        System.out.println("instantiate_views"
+                           + "(" + vi_index_min + "," + vi_index_limit + ")"
+                           + " i1=" + i1
+                           + ", i2_min=" + i2_min
+                           );
+      for (int i2=i2_min; i2<vi_index_limit; i2++) {
         if (var_infos[i2].canBeMissing) {
           if (debugDerive) {
             System.out.println(var_infos[i2].name + " can be missing");
