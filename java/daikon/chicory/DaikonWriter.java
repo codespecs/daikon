@@ -85,10 +85,14 @@ public class DaikonWriter
             String short_name = method.getName();
             int lastPeriod = short_name.lastIndexOf(".");
             // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
-            //                   short_name, name, lastPeriod);
+              //                 short_name, name, lastPeriod);
+            
+            
             if (lastPeriod < 0)
-                name = name.replace (" " + short_name + "(",
-                                 " " + short_name + "." + short_name + "(");
+            {
+                name = name.replace (short_name + "(",
+                                 short_name + "." + short_name + "(");
+            }
             else
             {
                 short_name = short_name.substring(lastPeriod + 1);
