@@ -3252,7 +3252,7 @@ public abstract class VarInfoName
      * additional strings, after the roots but before the closer, with
      * the names of the index variables.
      **/
-    // XXX This argument list is starting to get out of hand -smcc
+    // XXX This argument list is starting to get out of hand. -smcc
     public static String[] format_simplify(VarInfoName[] roots) {
       return format_simplify(roots, false, false, false, false);
     }

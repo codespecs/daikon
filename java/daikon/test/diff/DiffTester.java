@@ -192,12 +192,12 @@ public class DiffTester extends TestCase {
       Invariant inv1 = LowerBound.instantiate(slicex);
       Invariant inv2 = Modulus.instantiate(slicex);
       Invariant inv3 = UpperBound.instantiate(slicex);
-      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false);
-      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false);
-      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false);
-      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false);
-      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false);
-      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false);
+      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false, null, null);
+      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false, null, null);
+      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false, null, null);
+      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false, null, null);
+      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false, null, null);
+      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false, null, null);
       imps1.add(ppt);
     }
 
@@ -211,12 +211,12 @@ public class DiffTester extends TestCase {
       Invariant inv1 = LowerBound.instantiate(slicex);
       Invariant inv2 = Modulus.instantiate(slicex);
       Invariant inv3 = UpperBound.instantiate(slicex);
-      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false);
-      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false);
-      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false);
-      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false);
-      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false);
-      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false);
+      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false, null, null);
+      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false, null, null);
+      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false, null, null);
+      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false, null, null);
+      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false, null, null);
+      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false, null, null);
       imps2.add(ppt);
     }
 

@@ -64,6 +64,8 @@ public final class CLASSNAME
   public Invariant wrapper;
 
   public CLASSNAME(Invariant wrapper, String[] methodname, int methodNumber, boolean inverse) {
+    Assert.assertTrue(methodname != null);
+    Assert.assertTrue(methodname.length == 2);
     this.wrapper = wrapper;
     this.methodname = methodname;
     this.inverse = inverse;

@@ -36,9 +36,9 @@ public class ConsequentCVFSortComparatorTester extends TestCase {
     Invariant B = NonZero.instantiate(sliceb);
     Invariant C = NonZero.instantiate(slicec);
     Invariant D = NonZero.instantiate(sliced);
-    Invariant A_B = Implication.makeImplication(P,A,B,false);
-    Invariant A_C = Implication.makeImplication(P,A,C,false);
-    Invariant B_C = Implication.makeImplication(P,B,C,false);
+    Invariant A_B = Implication.makeImplication(P,A,B,false,null,null);
+    Invariant A_C = Implication.makeImplication(P,A,C,false,null,null);
+    Invariant B_C = Implication.makeImplication(P,B,C,false,null,null);
 
     Comparator c = new ConsequentCVFSortComparator();
 

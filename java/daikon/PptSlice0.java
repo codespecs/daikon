@@ -71,7 +71,18 @@ public class PptSlice0
   // Really a HashSet<ImplicationByFormatWrapper>.
   // This should not be transient:  more implications can be created during
   // printing, for instance due to guarding.
-  private /* [INCR] transient */ HashSet invariantsSeen = new HashSet();
+  private transient HashSet invariantsSeen = new HashSet();
+
+  // In lieu of a readResolve method.
+  private void initInvariantsSeen() {
+    if (invariantsSeen == null) {
+      invariantsSeen = new HashSet();
+      for (Iterator itor = invs.iterator(); itor.hasNext(); ) {
+        Implication inv = (Implication) itor.next();
+        invariantsSeen.add(new ImplicationByFormatWrapper(inv));
+      }
+    }
+  }
 
   void init_po() {
     throw new Error("Shouldn't get called");
@@ -80,12 +91,16 @@ public class PptSlice0
   public void addInvariant(Invariant inv) {
     Assert.assertTrue(inv != null);
     // The assertion on the next line used to be commented out; why? -smcc
+    // (The reason is that PptSlice0 can contain other joiners than implications,
+    // such as "and" or "or".  I don't think this feature is used rigth now.  -MDE)
     Assert.assertTrue(inv instanceof Implication);
     invs.add(inv);
+    initInvariantsSeen();
     invariantsSeen.add(new ImplicationByFormatWrapper((Implication)inv));
   }
 
   public boolean hasImplication(Implication imp) {
+    initInvariantsSeen();
     return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));
   }
 
@@ -97,11 +112,19 @@ public class PptSlice0
     static final long serialVersionUID = 20021113L;
 
     private Implication theImp;
+    private String format;
 
     public ImplicationByFormatWrapper(Implication theImp) {
       this.theImp = theImp;
+      this.format = theImp.format();
     }
 
+    // Abstracted out to permit use of a cached value
+    private String format() {
+      return format;
+    }
+
+    // For efficiency, I could cache the hashCode and check it first.
     public boolean equals(Object o) {
       if (o == null || !(o instanceof ImplicationByFormatWrapper))
         return false;
@@ -109,12 +132,12 @@ public class PptSlice0
       // It seems like a bit of a hack to use format() this way, but the
       // check this is replacing (used to be in makeImplication())
       // compared two invariants by their format() values, so I'm
-      // assuming there's some good reason -SMcC
-      return theImp.format().equals(other.theImp.format());
+      // assuming there's some good reason. -SMcC
+      return format().equals(other.format());
     }
 
     public int hashCode() {
-      return theImp.format().hashCode();
+      return format().hashCode();
     }
   }
 

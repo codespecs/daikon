@@ -527,7 +527,7 @@ public final class CLASSNAME
   }
 
   // XXX this "#ifdef SCALAR" test seems unlikely to have its original
-  // meaning, since it's currently always true -smcc
+  // meaning, since it's currently always true. -smcc
 #ifdef SCALAR
   public String format_esc() {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"

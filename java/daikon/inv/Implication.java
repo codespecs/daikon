@@ -2,6 +2,7 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.inv.DiscardInfo;
+import daikon.suppress.SuppressionLink;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -26,17 +27,20 @@ public class Implication
   static final long serialVersionUID = 20030822L;
 
   /** the original predicate invariant from its original conditional ppt*/
-  public Invariant orig_left;
+  private Invariant orig_left;
   /** the original consequent invariant from its original conditional ppt*/
-  public Invariant orig_right;
+  private Invariant orig_right;
 
   public Invariant predicate() { return left; }
   public Invariant consequent() { return right; }
   public boolean iff;
 
-  protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
+  protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent,
+                        boolean iff, Invariant orig_predicate, Invariant orig_consequent) {
     super(ppt, predicate, consequent);
     this.iff = iff;
+    this.orig_left = orig_predicate;
+    this.orig_right = orig_consequent;
   }
 
   /**
@@ -49,7 +53,9 @@ public class Implication
    public static Implication makeImplication(PptTopLevel ppt,
                                              Invariant predicate,
                                              Invariant consequent,
-                                             boolean iff)
+                                             boolean iff,
+                                             Invariant orig_predicate,
+                                             Invariant orig_consequent)
   {
     if (predicate.isSameInvariant(consequent)) {
       PptSplitter.debug.fine ("Not creating implication " + predicate +
@@ -80,7 +86,8 @@ public class Implication
     if (PptSplitter.debug.isLoggable (Level.FINE))
       PptSplitter.debug.fine ("Creating implication " + predicate + " ==> "
                             + consequent);
-    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff);
+    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff,
+                                         orig_predicate, orig_consequent);
     return result;
   }
 
@@ -236,6 +243,18 @@ public class Implication
 
   public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
+  }
+
+  public SuppressionLink consequentSuppressor() {
+    SuppressionLink result = orig_right.getSuppressor();
+    if (result != null) {
+      if (logOn()) {
+          orig_right.log ("Implication " + this +
+                          " consequent suppressed by "
+                          + orig_right.getSuppressor());
+      }
+    }
+    return result;
   }
 
   /**

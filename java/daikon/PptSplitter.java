@@ -139,6 +139,16 @@ public class PptSplitter implements Serializable {
     add_implications_pair (false);
   }
 
+  // For debugging
+  public static Stopwatch stopwatch_possible_slices = new Stopwatch(false);
+  public static Stopwatch stopwatch_children_loop = new Stopwatch(false);
+  public static Stopwatch stopwatch_same_invs = new Stopwatch(false);
+  public static Stopwatch stopwatch_add_implications_1 = new Stopwatch(false);
+  public static Stopwatch stopwatch_add_implications_2 = new Stopwatch(false);
+  public static Stopwatch stopwatch_add_implications_2_indexof = new Stopwatch(false);
+  public static Stopwatch stopwatch_add_implications_2_add_implication = new Stopwatch(false);
+  public static Stopwatch stopwatch_add_implications_3 = new Stopwatch(false);
+
   /**
    * Given a pair of conditional program points, form implications from the
    * invariants true at each one.  The algorithm divides the invariants
@@ -185,7 +195,10 @@ public class PptSplitter implements Serializable {
     Vector different_invs_vec = new Vector();
 
     // Loop through each possible parent slice
+    stopwatch_possible_slices.start();
     List slices = possible_slices();
+    stopwatch_possible_slices.stop();
+
     slice_loop:
     for (Iterator itor = slices.iterator(); itor.hasNext(); ) {
       VarInfo[] vis = (VarInfo[]) itor.next();
@@ -201,6 +214,7 @@ public class PptSplitter implements Serializable {
       // Daikon.debugProgress.fine ("    slice: " + pslice.name());
 
       // Loop through each child ppt
+      stopwatch_children_loop.start();
       for (int childno = 0; childno < num_children; childno++) {
         PptTopLevel child_ppt = ppts[childno];
 
@@ -269,12 +283,16 @@ public class PptSplitter implements Serializable {
         }
       } // children loop
 
+      stopwatch_children_loop.stop();
+
       // If neither child slice has invariants there is nothing to do
       if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
         if (pslice.invs.size() == 0)
           parent.removeSlice (pslice);
         continue;
       }
+
+      stopwatch_same_invs.start();
 
       if ((pslice.invs.size() == 0) && Debug.logDetail())
         debug.fine ("PptSplitter: created new slice " +
@@ -288,8 +306,12 @@ public class PptSplitter implements Serializable {
 
       // Add any invariants that are different to the list
       different_invs_vec.addAll (different_invariants (invs[0], invs[1]));
+
+      stopwatch_same_invs.stop();
+
     } // slice_loop: slices.iterator() loop
 
+    stopwatch_add_implications_1.start();
 
     // This is not tested.
     if (add_nonimplications) {
@@ -351,6 +373,8 @@ public class PptSplitter implements Serializable {
     }
     different_invs_vec.addAll(dummies);
 
+    stopwatch_add_implications_1.stop();
+
     // If there are no exclusive conditions, we can do nothing here
     if (exclusive_invs_vec.size() == 0) {
       if (debug.isLoggable(Level.FINE)) {
@@ -359,6 +383,7 @@ public class PptSplitter implements Serializable {
       return;
     }
 
+    stopwatch_add_implications_2.start();
 
     // Create array versions of each
     Invariant[][] exclusive_invariants
@@ -400,17 +425,25 @@ public class PptSplitter implements Serializable {
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
         if (diff1 != null) {
+          stopwatch_add_implications_2_indexof.start();
           int index1 = ArraysMDE.indexOf(excls1, diff1);
+          stopwatch_add_implications_2_indexof.stop();
           if ((index1 == -1) || (index1 > i)) {
             boolean iff = (index1 != -1);
+            stopwatch_add_implications_2_add_implication.start();
             add_implication (parent, excl1, diff1, iff, orig_invs);
+            stopwatch_add_implications_2_add_implication.stop();
           }
         }
         if (diff2 != null) {
+          stopwatch_add_implications_2_indexof.start();
           int index2 = ArraysMDE.indexOf(excls2, diff2);
+          stopwatch_add_implications_2_indexof.stop();
           if ((index2 == -1) || (index2 > i)) {
             boolean iff = (index2 != -1);
+            stopwatch_add_implications_2_add_implication.start();
             add_implication (parent, excl2, diff2, iff, orig_invs);
+            stopwatch_add_implications_2_add_implication.stop();
           }
         }
       }
@@ -421,6 +454,9 @@ public class PptSplitter implements Serializable {
       for (Iterator i = parent.joiner_view.invs.iterator(); i.hasNext(); )
         debug.fine ("-- " + i.next());
     }
+
+    stopwatch_add_implications_2.stop();
+    stopwatch_add_implications_3.start();
 
     // Invariant -> Invariant
     HashMap canonical_inv = new LinkedHashMap();
@@ -565,6 +601,8 @@ public class PptSplitter implements Serializable {
         debug.fine ("-- " + imp);
       }
     }
+
+    stopwatch_add_implications_3.stop();
 
   } // add_implications_pair
 
@@ -720,16 +758,21 @@ public class PptSplitter implements Serializable {
                                Invariant consequent, boolean iff,
                                Map orig_invs) {
 
+    Invariant orig_pred = (Invariant) orig_invs.get (predicate);
+    Invariant orig_cons = (Invariant) orig_invs.get (consequent);
+    Assert.assertTrue (orig_pred != null);
+    Assert.assertTrue (orig_cons != null);
+    // System.out.println("add_implication:");
+    // System.out.println("  predicate = " + predicate.format());
+    // System.out.println("  consequent= " + consequent.format());
+    // System.out.println("  orig_pred = " + orig_pred.format());
+    // System.out.println("  orig_cons = " + orig_cons.format());
     Implication imp = Implication.makeImplication (ppt, predicate, consequent,
-                                                   iff);
+                                                   iff, orig_pred, orig_cons);
     if (imp == null)
       return;
 
-    imp.orig_left = (Invariant) orig_invs.get (imp.left);
-    imp.orig_right = (Invariant) orig_invs.get (imp.right);
-    Assert.assertTrue (imp.orig_left != null);
-    Assert.assertTrue (imp.orig_right != null);
-    ppt.joiner_view.invs.add (imp);
+    ppt.joiner_view.addInvariant (imp);
   }
 
   /**

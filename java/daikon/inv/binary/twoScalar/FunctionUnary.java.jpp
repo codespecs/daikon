@@ -31,7 +31,7 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import java.lang.reflect.*;
-
+import utilMDE.Assert;
 
 
 /**
@@ -61,6 +61,7 @@ public class CLASSNAME
 
   protected CLASSNAME(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
+    Assert.assertTrue(methodname != null);
     core = new CORECLASS(this, methodname, methodNumber, inverse);
   }
 

@@ -13,7 +13,7 @@ public class GuardingImplication
   static final long serialVersionUID = 20020725L;
 
   private GuardingImplication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
-    super(ppt, predicate, consequent, iff);
+    super(ppt, predicate, consequent, iff, null, null);
   }
 
   // Trying to figure out a better way to enforce this, but for now, do not

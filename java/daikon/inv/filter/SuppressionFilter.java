@@ -18,11 +18,7 @@ public class SuppressionFilter extends InvariantFilter {
   boolean shouldDiscardInvariant( Invariant inv ) {
     if (inv instanceof Implication) {
       Implication imp = (Implication) inv;
-      if (imp.orig_right.getSuppressor() != null) {
-        if (imp.logOn())
-          imp.orig_right.log ("Implication " + imp +
-                              " consequent suppressed by "
-                              + imp.orig_right.getSuppressor());
+      if (imp.consequentSuppressor() != null) {
         return (true);
       }
     }

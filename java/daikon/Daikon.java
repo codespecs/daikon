@@ -297,6 +297,7 @@ public final class Daikon {
   // test-run) time.  This might have to change when JTrace is used.
   static { daikon.Runtime.no_dtrace = true; }
 
+  private static Stopwatch stopwatch = new Stopwatch();
 
   static String usage =
     UtilMDE.join(new String[] {
@@ -743,7 +744,7 @@ public final class Daikon {
 
   private static PptMap load_decls_files(Set decl_files)
   {
-    elapsedTime(); // reset timer
+    stopwatch.reset();
     try {
       System.out.print("Reading declaration files ");
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
@@ -759,7 +760,7 @@ public final class Daikon {
       e.printStackTrace();
       throw new Error(e.toString());
     } finally {
-      debugTrace.fine ("Time spent on read_declaration_files: " + elapsedTime());
+      debugProgress.fine ("Time spent on read_declaration_files: " + stopwatch.format());
     }
   }
 
@@ -767,7 +768,7 @@ public final class Daikon {
                                         Set spinfo_files // [File]
                                         )
   {
-    elapsedTime(); // reset timer
+    stopwatch.reset();
     if (!dkconfig_disable_splitting && spinfo_files.size() > 0) {
       try {
         System.out.print("Reading splitter info files ");
@@ -780,7 +781,7 @@ public final class Daikon {
         e.printStackTrace();
         throw new Error(e.toString());
       } finally {
-        debugTrace.fine ("Time spent on load_spinfo_files: " + elapsedTime());
+        debugProgress.fine ("Time spent on load_spinfo_files: " + stopwatch.format());
       }
     }
   }
@@ -789,7 +790,7 @@ public final class Daikon {
                                      Set map_files // [File]
                                      )
   {
-    elapsedTime(); // reset timer
+    stopwatch.reset();
     if (!dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist
@@ -797,7 +798,7 @@ public final class Daikon {
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(map_files.size(), "file"));
       System.out.println(")");
-      debugTrace.fine ("Time spent on load_map_files: " + elapsedTime());
+      debugProgress.fine ("Time spent on load_map_files: " + stopwatch.format());
     }
   }
 
@@ -912,7 +913,7 @@ public final class Daikon {
       new Thread((Runnable) monitor).start();
     }
 
-    elapsedTime(); // reset timer
+    stopwatch.reset();
 
     // Preprocessing
     setupEquality (all_ppts);
@@ -937,7 +938,7 @@ public final class Daikon {
       e.printStackTrace();
       throw new Error(e.toString());
     } finally {
-      debugTrace.fine ("Time spent on read_data_trace_files: " + elapsedTime());
+      debugProgress.fine ("Time spent on read_data_trace_files: " + stopwatch.format());
     }
 
     if (monitor != null) {
@@ -960,6 +961,8 @@ public final class Daikon {
     }
 
     // Postprocessing
+
+    stopwatch.reset();
 
     // Post process dynamic constants
     if (use_dynamic_constant_optimization) {
@@ -1009,7 +1012,10 @@ public final class Daikon {
     }
     debugProgress.fine ("Suppress for printing ... done");
 
+    debugProgress.fine ("Time spent on non-implication postprocessing: " + stopwatch.format());
+
     // Add implications
+    stopwatch.reset();
     System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
@@ -1017,7 +1023,15 @@ public final class Daikon {
       // debugProgress.fine ("  Adding Implications for " + ppt.name);
       ppt.addImplications();
     }
-    debugProgress.fine ("Adding Implications ... done");
+    debugProgress.fine ("Time spent adding implications: " + stopwatch.format());
+    debugProgress.fine ("  adding implications: possible slices = " + PptSplitter.stopwatch_possible_slices.format());
+    debugProgress.fine ("  adding implications: children_loop = " + PptSplitter.stopwatch_children_loop.format());
+    debugProgress.fine ("  adding implications: same_invs = " + PptSplitter.stopwatch_same_invs.format());
+    debugProgress.fine ("  adding implications: add_implications_1 = " + PptSplitter.stopwatch_add_implications_1.format());
+    debugProgress.fine ("  adding implications: add_implications_2 = " + PptSplitter.stopwatch_add_implications_2.format());
+    debugProgress.fine ("  adding implications: add_implications_2_indexop = " + PptSplitter.stopwatch_add_implications_2_indexof.format());
+    debugProgress.fine ("  adding implications: add_implications_2_add_implication = " + PptSplitter.stopwatch_add_implications_2_add_implication.format());
+    debugProgress.fine ("  adding implications: add_implications_3 = " + PptSplitter.stopwatch_add_implications_3.format());
 
 
     // debug print suppressed invariants
@@ -1035,14 +1049,14 @@ public final class Daikon {
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
-    elapsedTime(); // reset timer
+    stopwatch.reset();
     for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
       System.out.flush();
     }
-    System.out.println(elapsedTime());
+    System.out.println(stopwatch.format());
   }
 
   public static void setupEquality (PptMap allPpts) {
@@ -1079,15 +1093,6 @@ public final class Daikon {
       }
     }
 
-  }
-
-  private static long elapsedTime_timer = System.currentTimeMillis();
-  private static String elapsedTime() {
-    long now = System.currentTimeMillis();
-    double elapsed = (now - elapsedTime_timer) / 1000.0;
-    String result = (new java.text.DecimalFormat("#.#")).format(elapsed) + "s";
-    elapsedTime_timer = now;
-    return result;
   }
 
   // Not yet used in version 3 (?).
