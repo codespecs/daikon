@@ -85,13 +85,13 @@ public class PptMap
     } catch (Exception e) {
       String errorMessage = "";
       if (e.getClass() == FileNotFoundException.class)
-	errorMessage = "Error: Invariants object file not found.";
+	errorMessage = "Error: Invariants object file not found: " + fileName;
       else if (e.getClass() == StreamCorruptedException.class)
-	errorMessage = "Error: Invariants object file is corrupted.";
+	errorMessage = "Error: Invariants object file is corrupted: " + fileName;
       else if (e.getClass() == InvalidClassException.class)
-	errorMessage = "Error: Invalid invariants object file.  Make sure the invariants\nobject file was made with your latest version of daikon.";
+	errorMessage = "Error: Invalid invariants object file: " + fileName + "\nMake sure the file was made with your current version of Daikon.";
       else
-	errorMessage = "Unknown error: " + e.getClass() + InvariantsGUI.PLEASE_REPORT_ERROR_STRING;
+	errorMessage = "Unknown error while reading invariants object file " + fileName + ": " + e.getClass() + InvariantsGUI.PLEASE_REPORT_ERROR_STRING;
       throw new IOException( errorMessage );
     }
   }
