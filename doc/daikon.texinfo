@@ -6228,6 +6228,11 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
+KNOWN BUG. In Daikon v. 3.2.0, we have updated the Java parser
+to accept Java 1.5 syntax. An error in the new parser may
+produce illegal Java in the annotated file, if the source file to be
+annotated includes logical shift operators. @xref{Known bugs}.
+
 
 @node    Runtime-check instrumenter, InvariantChecker, Annotate, Tools
 @section Runtime-check instrumenter (runtimechecker)
@@ -6351,6 +6356,10 @@ this method to see if the class has been instrumented).
 @code{getDaikonInvariants()}.  Returns the array of properties being checked.
 @end itemize
 
+KNOWN BUG. In Daikon v. 3.2.0, we have updated the Java parser
+to accept Java 1.5 syntax. An error in the new parser may
+produce illegal Java in the instrumented file, if the source file to be
+instrumented includes logical shift operators. @xref{Known bugs}.
 
 @node    InvariantChecker, LogicalCompare, Runtime-check instrumenter, Tools
 @section InvariantChecker
@@ -7710,7 +7719,26 @@ You may also wish to take advantage of the Daikon mailing lists
 @c The following problems are already known.  (You may report them again,
 @c to encourage us to fix them faster, if the problems are important to you.)
 
+@itemize @bullet
+@item
+This problem affects @ref{Annotate} and the @ref{Runtime-check
+instrumenter}, which output Java source code. If
+the java file to be annotated/instrumented uses logical
+shift operators (@code{>>}, @code{<<}, and @code{>>>}), the 
+annotated/instrumented java may contain extra brackets in these
+operators. For example, the expression @code{x << y} in the input source
+file may erroneously be translated as @code{x <<<<<< y} in the
+annotated/instrumented file.
 
+This error's presence will be immediately apparent if you try to compile
+the annotated/instrumented file and it fails to compile because the
+extra brackets make it syntactically illegal. In this case, the best
+solution we can recommend is that you manually fix the occurrence of the
+logical shift operator.
+
+This error is caused by a bug in the parser generator that generates
+Daikon's Java parser. We expect it will be fixed by the next release.
+@end itemize
 
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
