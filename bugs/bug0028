@@ -1,0 +1,44 @@
+Version:      $Id$
+Owner:        Jeremy <mistere>, Mike <mernst>, Alan <adonovan>
+Tool:         dfej
+Summary:      dfej includes confusing pseudo-variable .size when printing arrays of Collections
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+Reproduce using RatPoly:
+
+  cd $inv/tests/daikon-tests/RatPoly
+  make instrument
+  emacs $inv/tests/daikon-tests/RatPoly/scratch/PolyCalc/RatPoly.decls
+
+In the decls for this ppt, we see:
+
+  PolyCalc.RatPoly.divAndRem(LPolyCalc/RatPoly;)[LPolyCalc/RatPoly;:::EXIT503
+  ...
+  return[].terms.wrapped.size
+  int[]
+  int[]
+  ...
+
+The return value of that method is a 1-dimensional array, and each
+element has a terms field that holds an ArrayList named wrapped.  I
+believe that since dfej cannot output the 2D array with the elements
+of wrapped, it is choosing to just output the inner array sizes as a
+".size" pseudo-field instead.  Comments in dfej source tend to
+indicate this as well (search for ".size" (with quotes) in
+daikon-new-methods.cpp).
+
+This confuses ESC/Java, since there is no size field.  I assume that
+Ajax is also similarly confused.  I suggest that we drop the size
+field, and live with the absence of inner array dimensions until we
+get real 2D arrays being instrumented.
+
+Do we agree?
+
+--
+$Log$
+Revision 1.1  2002-03-26 09:48:49  mistere
+new bug0028
+
