@@ -4080,7 +4080,8 @@ For additional help troubleshooting dfec, @xref{dfec problems}.
 
 @command{dfec} only instruments ANSI/ISO C programs.  (More
 specifically, @command{dfec} only instruments programs that are both
-legal C and legal C++.)  @command{dfec} does not support K&R C or
+legal C and legal C++.  This is essentially the same as C, but
+avoiding C++ keywords.)  @command{dfec} does not support K&R C or
 other non-ANSI/ISO C dialects.  Before running @command{dfec}, you
 should ensure that your code is legal ANSI/ISO C (and legal ANSI/ISO
 C++) and that it compiles cleanly.
@@ -4181,10 +4182,14 @@ identifiers, such as ``string''.
 Any use of any of these words as identifiers must be changed.
 
 @item nested enums
+@cindex template-argument uses local type error
 In C, enums that appear inside structs have global scope and can be
 accessed anywhere in the program.  When converting to C++, you will
 have to raise the enum to top level (or else use a qualified name,
 which may not work with your C compiler).
+(The error message @samp{template-argument `...' 
+uses local type `...'} may indicate this problem.
+
 @end table
 
 
@@ -5587,6 +5592,18 @@ code (with g++) and linking the resulting compiled files.  (In some
 cases, compiling and linking may be performed by a single command line
 invocation, but the two steps are still logically distinct.)
 
+The file and line numbers on g++ error messages may sometimes be
+misleading, because dfec creates @file{.cc} files in which @file{.c} C
+files and @file{.h} header files have been inserted.  Error messages
+are given in terms of the original files.  Often this indicates the
+problem but in other cases, you may wish to know which line in the
+@file{.cc} file is the wrong one.  In that case, remove or comment out
+all the @samp{#line} directives from the @file{.cc} file and
+re-compile.  In Emacs, run this command from the @file{.cc} file
+buffer to comment out the @samp{#line} directives:
+@example
+(replace-regexp "^\\(#line.*\\)$" "/* \\1 */" nil nil nil)
+@end example
 
 
 @menu
@@ -6311,9 +6328,10 @@ to correct the problem.  Unfortunately, we cannot make any guarantees of
 support, or any other guarantees regarding the software.  As a condition
 of use, you agree to promptly communicate any changes, improvements, or
 enhancements to the authors for inclusion in a future release under
-these same conditions.  If you do not agree to this license, please do
+these same conditions, and to prompty report any errors, problems, or bugs.
+If you do not agree to this license, please do
 not use or examine the software.  Other licensing terms are available;
-send mail to @email{mernst@@pag.lcs.mit.edu}.
+send mail to @email{mernst@@lcs.mit.edu}.
 
 Note that the front ends discussed in this manual are separate
 programs, and some are made available under different licenses.  All
