@@ -236,4 +236,3 @@ public final class LinearBinaryCore implements java.io.Serializable {
   }
 
 }
-

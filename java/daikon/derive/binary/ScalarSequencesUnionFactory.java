@@ -24,8 +24,8 @@ public final class ScalarSequencesUnionFactory  extends BinaryDerivationFactory 
       return null;
     }
 
-    // Intersect only sets with the same declared element type 
-    if (!seq1.type.base().equals(seq2.type.base())) 
+    // Intersect only sets with the same declared element type
+    if (!seq1.type.base().equals(seq2.type.base()))
       return null;
 
     Assert.assert(seq1.isCanonical());

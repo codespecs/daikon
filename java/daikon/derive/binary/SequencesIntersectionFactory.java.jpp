@@ -51,8 +51,8 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
       return null;
     }
 
-    // Intersect only sets with the same declared element type 
-    if (!seq1.type.base().equals(seq2.type.base())) 
+    // Intersect only sets with the same declared element type
+    if (!seq1.type.base().equals(seq2.type.base()))
       return null;
 
     Assert.assert(seq1.isCanonical());
@@ -73,5 +73,3 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
 // mode: java
 // End:
 #endif
-
-
