@@ -483,11 +483,13 @@ public final class ProglangType
             return (null);
           else if (value_strings[i].equals("null"))
             result[i] = 0;
-          else if (value_strings[i].equals("NaN"))
+          else if (value_strings[i].equalsIgnoreCase("NaN"))
             result[i] = Double.NaN;
-          else if (value_strings[i].equals("Infinity"))
+          else if (value_strings[i].equalsIgnoreCase("Infinity") ||
+                   value_strings[i].equals("inf"))
             result[i] = Double.POSITIVE_INFINITY;
-          else if (value_strings[i].equals("-Infinity"))
+          else if (value_strings[i].equalsIgnoreCase("-Infinity") ||
+                   value_strings[i].equals("-inf"))
             result[i] = Double.NEGATIVE_INFINITY;
           else
             result[i] = Double.parseDouble(value_strings[i]);
