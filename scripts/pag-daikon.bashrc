@@ -12,7 +12,7 @@ export DAIKONCLASS_SOURCES=1
 
 ## Set this directory to the directory containing the JDK.
 # Simplify to just the first branch after the AFS move is done.
-if [ -e /afs/csail/group/pag ]; then
+if [ -e /afs/csail/group/pag/software ]; then
   export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
 else
   export JDKDIR=${JDKDIR:-/g2/jdk}
